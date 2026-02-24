@@ -26,9 +26,12 @@ ts_project(
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
         "//project/zemn.me/hook",
+        "//ts",
         "//ts/future",
         "//ts/future/react-query",
+        "//ts/google/people",
         "//ts/next.js/types/next-compiled",
+        "//ts/option",
         "//ts/react/lang",
     ],
 )

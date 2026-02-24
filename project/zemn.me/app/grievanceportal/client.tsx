@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen';
 import style from '#root/project/zemn.me/app/grievanceportal/style.module.css';
+import { useGetExactContactByEmail } from '#root/project/zemn.me/hook/useGetExactContactByEmail.js';
 import {
 	useGetGrievances,
 	usePostGrievances,
@@ -14,6 +15,9 @@ import {
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import { future_and_then, future_or_else } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
+import { displayPersonName } from '#root/ts/google/people/display.js';
+import { isDefined } from '#root/ts/guard.js';
+import { None, option_and_then_flatten, option_from_maybe_undefined, option_unwrap_or } from '#root/ts/option/types.js';
 import { PrettyDateTime } from '#root/ts/react/lang/date.js';
 
 interface GrievanceEditorProps {
@@ -34,7 +38,6 @@ function clientTimeZone(): string {
 
 function makeDefaultGrievance(): NewGrievance {
 	return {
-		name: '',
 		description: '',
 		priority: 1,
 		timeZone: clientTimeZone(),
@@ -55,7 +58,6 @@ const severityMap = new Map<number, string>([
 ]);
 
 const grievanceSchema = z.object({
-	name: z.string(),
 	description: z.string(),
 	priority: z.coerce.number<number>().min(1).max(10),
 });
@@ -97,6 +99,48 @@ function parseCreatedDate(
 	}
 }
 
+function GrievanceAuthorLabel(props: {
+	readonly name?: string | null;
+	readonly poster?: Grievance['poster'] | null;
+}) {
+	const contact = useGetExactContactByEmail(
+		option_from_maybe_undefined(props.poster?.email_address),
+		new Set([
+			"names",
+			"nicknames",
+		])
+	);
+
+	if (props.name !== undefined && props.name !== null) {
+		return <>{props.name}</>;
+	}
+
+	const posterNameArray = [
+		props.poster?.given_name,
+		props.poster?.family_name,
+	].filter(isDefined);
+
+	const posterName = posterNameArray.length > 0 ? posterNameArray.join(" ") : undefined;
+
+	const contactName = option_unwrap_or(
+		contact(
+			() => None,
+			person => option_and_then_flatten(
+				person,
+				person => displayPersonName(person)
+			)
+		),
+		undefined,
+	);
+
+	const fallback = contactName
+		?? posterName
+		?? props.poster?.email_address
+		?? props.poster?.sub;
+
+	return fallback ? <>{fallback}</> : null;
+}
+
 function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 	const create = usePostGrievances(Authorization);
 	const grievancesQuery = useGetGrievances(Authorization);
@@ -131,7 +175,12 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 				const createdAt = parseCreatedDate(g.created, g.timeZone);
 				return (
 					<li key={g.id}>
-						<strong>{g.name}</strong>
+						<strong>
+							<GrievanceAuthorLabel
+								name={g.name}
+								poster={g.poster}
+							/>
+						</strong>
 						{' ('}
 						{severityMap.get(g.priority) ?? `level ${g.priority}`}
 						{')'}
@@ -172,11 +221,6 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 			>
 				<fieldset>
 					<legend>New Grievance</legend>
-					<p className={style.formField}>
-						<label>
-							Name <input {...register('name')} />
-						</label>
-					</p>
 					<p className={style.formField}>
 						<label>
 							Description{' '}

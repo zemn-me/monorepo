@@ -708,10 +708,27 @@ components:
         phoneNumber:
           $ref: "#/components/schemas/PhoneNumber"
 
+    GrievancePoster:
+      type: object
+      required:
+        - sub
+      properties:
+        sub:
+          $ref: '#/components/schemas/OIDCSubject'
+          description: OIDC subject identifier for the poster.
+        email_address:
+          type: string
+          format: email
+          description: Email address of the user who submitted the grievance.
+        given_name:
+          type: string
+          description: Poster’s given/first name(s).
+        family_name:
+          type: string
+          description: Poster’s surname(s).
     Grievance:
       type: object
       required:
-        - name
         - description
         - priority
         - created
@@ -721,6 +738,13 @@ components:
           format: uuid
         name:
           type: string
+          deprecated: true
+          description: Deprecated; use `poster` for attribution instead.
+        poster:
+          allOf:
+            - $ref: '#/components/schemas/GrievancePoster'
+          nullable: true
+          description: Poster identity details; null for legacy entries.
         description:
           type: string
         priority:
@@ -736,12 +760,13 @@ components:
     NewGrievance:
       type: object
       required:
-        - name
         - description
         - priority
       properties:
         name:
           type: string
+          deprecated: true
+          description: Deprecated; use `poster` for attribution instead.
         description:
           type: string
         priority:

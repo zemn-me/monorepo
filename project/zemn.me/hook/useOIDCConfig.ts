@@ -22,6 +22,7 @@ export function useOIDCConfig(issuer: string) {
 						...config.scopes_supported,
 						'https://www.googleapis.com/auth/contacts',
 						"https://www.googleapis.com/auth/contacts.readonly",
+						"email",
 					])]
 
 					return config;
