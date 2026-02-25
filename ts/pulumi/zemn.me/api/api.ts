@@ -68,6 +68,19 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                         hashKey: "id",
                 }, { parent: this, protect: args.protectDatabases });
 
+                const usersTable = new aws.dynamodb.Table(`${name}-users`, {
+                        attributes: [{
+                                name: "id",
+                                type: "S",
+                        }, {
+                                name: "when",
+                                type: "S",
+                        }],
+                        billingMode: "PAY_PER_REQUEST",
+                        hashKey: "id",
+                        rangeKey: "when",
+                }, { parent: this, protect: args.protectDatabases });
+
 		const lambdaRole = new aws.iam.Role(`${name}-lambda-role`, {
 			assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
 				Service: "lambda.amazonaws.com",
@@ -75,8 +88,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			managedPolicyArns: [aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole],
                         inlinePolicies: [{
                                 name: `${name}-dynamodb-inline-policy`,
-                                policy: Pulumi.all([dynamoTable.arn, grievancesTable.arn]).apply(
-                                        ([settingsArn, grievancesArn]) =>
+                                policy: Pulumi.all([dynamoTable.arn, grievancesTable.arn, usersTable.arn]).apply(
+                                        ([settingsArn, grievancesArn, usersArn]) =>
                                                 JSON.stringify({
                                                         Version: "2012-10-17",
                                                         Statement: [
@@ -90,7 +103,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                                                                                 "dynamodb:Scan",
                                                                         ],
                                                                         Effect: "Allow",
-                                                                        Resource: [settingsArn, grievancesArn],
+                                                                        Resource: [settingsArn, grievancesArn, usersArn],
                                                                 },
                                                         ],
                                                 })
@@ -149,6 +162,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                                         CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
                                         DYNAMODB_TABLE_NAME: dynamoTable.name,
                                         GRIEVANCES_TABLE_NAME: grievancesTable.name,
+                                        USERS_TABLE_NAME: usersTable.name,
                                         TWILIO_SHARED_SECRET: args.twilioSharedSecret,
                                         OIDC_JWT_KMS_KEY_ID: oidcKey.keyId,
                                         OIDC_JWT_PUBLIC_KEY: oidcPublicKey,
@@ -233,6 +247,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                         callboxPhoneNumber: args.callboxPhoneNumber,
                         dynamoDBTableName: dynamoTable.name,
                         grievancesTableName: grievancesTable.name,
+                        usersTableName: usersTable.name,
                 });
     }
 }

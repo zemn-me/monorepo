@@ -15,10 +15,7 @@ import (
 
 type contextKey string
 
-const SubjectKey contextKey = "oidc_subject"
-const EmailKey contextKey = "oidc_email"
-const GivenNameKey contextKey = "oidc_given_name"
-const FamilyNameKey contextKey = "oidc_family_name"
+const IDTokenKey contextKey = "oidc_id_token"
 const securitySchemeOIDC = "OIDC"
 const (
 	googleIssuer        = "https://accounts.google.com"
@@ -32,32 +29,67 @@ type issuerClient struct {
 	clientID string
 }
 
+type IDToken struct {
+	Subject    string `json:"sub"`
+	Issuer     string `json:"iss"`
+	Email      string `json:"email"`
+	GivenName  string `json:"given_name"`
+	FamilyName string `json:"family_name"`
+}
+
+// IDTokenFromContext retrieves the OIDC ID token claims from the context if present.
+func IDTokenFromContext(ctx context.Context) (*IDToken, bool) {
+	v := ctx.Value(IDTokenKey)
+	token, ok := v.(*IDToken)
+	return token, ok
+}
+
 // SubjectFromContext retrieves the subject ID from the context if present.
 func SubjectFromContext(ctx context.Context) (string, bool) {
-	v := ctx.Value(SubjectKey)
-	s, ok := v.(string)
-	return s, ok
+	token, ok := IDTokenFromContext(ctx)
+	if !ok || token == nil {
+		return "", false
+	}
+	return token.Subject, true
 }
+
+// IssuerFromContext retrieves the issuer from the context if present.
+func IssuerFromContext(ctx context.Context) (string, bool) {
+	token, ok := IDTokenFromContext(ctx)
+	if !ok || token == nil {
+		return "", false
+	}
+	return token.Issuer, true
+}
+
+// ScopeResolver resolves scopes for a verified token subject.
+var ScopeResolver func(ctx context.Context, issuer, subject string) ([]string, error)
 
 // EmailFromContext retrieves the email address from the context if present.
 func EmailFromContext(ctx context.Context) (string, bool) {
-	v := ctx.Value(EmailKey)
-	s, ok := v.(string)
-	return s, ok
+	token, ok := IDTokenFromContext(ctx)
+	if !ok || token == nil {
+		return "", false
+	}
+	return token.Email, true
 }
 
 // GivenNameFromContext retrieves the given name from the context if present.
 func GivenNameFromContext(ctx context.Context) (string, bool) {
-	v := ctx.Value(GivenNameKey)
-	s, ok := v.(string)
-	return s, ok
+	token, ok := IDTokenFromContext(ctx)
+	if !ok || token == nil {
+		return "", false
+	}
+	return token.GivenName, true
 }
 
 // FamilyNameFromContext retrieves the family name from the context if present.
 func FamilyNameFromContext(ctx context.Context) (string, bool) {
-	v := ctx.Value(FamilyNameKey)
-	s, ok := v.(string)
-	return s, ok
+	token, ok := IDTokenFromContext(ctx)
+	if !ok || token == nil {
+		return "", false
+	}
+	return token.FamilyName, true
 }
 
 // suuper basic oidc auth that only checks if it's me via Google.
@@ -96,24 +128,36 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 			continue
 		}
 
+		if len(ai.Scopes) > 0 {
+			if ScopeResolver == nil {
+				joined = errors.Join(joined, fmt.Errorf("issuer %s: scope resolver not configured", candidate.issuer))
+				continue
+			}
+			scopes, err := ScopeResolver(ctx, candidate.issuer, verifiedToken.Subject)
+			if err != nil {
+				joined = errors.Join(joined, fmt.Errorf("issuer %s: scope resolve: %w", candidate.issuer, err))
+				continue
+			}
+			if err := requireScopeList(scopes, ai.Scopes); err != nil {
+				joined = errors.Join(joined, fmt.Errorf("issuer %s: scope check: %w", candidate.issuer, err))
+				continue
+			}
+		}
+
 		r := ai.RequestValidationInput.Request
-		ctx = context.WithValue(r.Context(), SubjectKey, verifiedToken.Subject)
-		var claims struct {
-			Email      string `json:"email"`
-			GivenName  string `json:"given_name"`
-			FamilyName string `json:"family_name"`
+		idToken := &IDToken{
+			Subject: verifiedToken.Subject,
+			Issuer:  candidate.issuer,
 		}
-		if err := verifiedToken.Claims(&claims); err == nil {
-			if claims.Email != "" {
-				ctx = context.WithValue(ctx, EmailKey, claims.Email)
+		if err := verifiedToken.Claims(idToken); err == nil {
+			if idToken.Subject == "" {
+				idToken.Subject = verifiedToken.Subject
 			}
-			if claims.GivenName != "" {
-				ctx = context.WithValue(ctx, GivenNameKey, claims.GivenName)
-			}
-			if claims.FamilyName != "" {
-				ctx = context.WithValue(ctx, FamilyNameKey, claims.FamilyName)
+			if idToken.Issuer == "" {
+				idToken.Issuer = candidate.issuer
 			}
 		}
+		ctx = context.WithValue(r.Context(), IDTokenKey, idToken)
 		*ai.RequestValidationInput.Request = *r.WithContext(ctx)
 		return nil
 	}
@@ -197,4 +241,22 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	add(googleIssuer, googleClientID)
 
 	return candidates
+}
+
+func requireScopeList(available []string, required []string) error {
+	if len(required) == 0 {
+		return nil
+	}
+
+	seen := map[string]struct{}{}
+	for _, s := range available {
+		seen[s] = struct{}{}
+	}
+	for _, needed := range required {
+		if _, ok := seen[needed]; !ok {
+			return fmt.Errorf("missing required scope %q", needed)
+		}
+	}
+
+	return nil
 }

@@ -11,10 +11,12 @@ import (
 func TestGrievanceCRUD(t *testing.T) {
 	s := newTestServer()
 	email := "tester@example.com"
-	ctx := context.WithValue(context.Background(), auth.EmailKey, email)
-	ctx = context.WithValue(ctx, auth.SubjectKey, "tester-subject")
-	ctx = context.WithValue(ctx, auth.GivenNameKey, "Testy")
-	ctx = context.WithValue(ctx, auth.FamilyNameKey, "McTestface")
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Subject:    "tester-subject",
+		Email:      email,
+		GivenName:  "Testy",
+		FamilyName: "McTestface",
+	})
 	// create
 	tz := "America/Los_Angeles"
 	body := NewGrievance{Description: "bar", Priority: 5, TimeZone: &tz}
