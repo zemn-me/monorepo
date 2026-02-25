@@ -46,11 +46,12 @@ var _ DynamoDBClient = (*dynamodb.Client)(nil)
 
 // Server holds the DynamoDB client and table names.
 type Server struct {
-	ddb                 DynamoDBClient
-	settingsTableName   string
-	grievancesTableName string
-	usersTableName      string
-	rt                  *chi.Mux
+	ddb                  DynamoDBClient
+	settingsTableName    string
+	grievancesTableName  string
+	usersTableName       string
+	keyRequestsTableName string
+	rt                   *chi.Mux
 	http.Handler
 	log                *log.Logger
 	twilioSharedSecret string
@@ -110,6 +111,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
 	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
 	usersTableName := os.Getenv("USERS_TABLE_NAME")
+	keyRequestsTableName := os.Getenv("CALLBOX_KEY_TABLE_NAME")
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -121,12 +123,13 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	r.Use(mw)
 
 	s := &Server{
-		log:                 log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
-		ddb:                 dynamodb.NewFromConfig(cfg),
-		settingsTableName:   settingsTableName,
-		grievancesTableName: grievancesTableName,
-		usersTableName:      usersTableName,
-		twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
+		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
+		ddb:                  dynamodb.NewFromConfig(cfg),
+		settingsTableName:    settingsTableName,
+		grievancesTableName:  grievancesTableName,
+		usersTableName:       usersTableName,
+		keyRequestsTableName: keyRequestsTableName,
+		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
@@ -235,6 +238,17 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 		},
 		{
 			Name: s.usersTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.keyRequestsTableName,
 			Attrs: []types.AttributeDefinition{
 				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},

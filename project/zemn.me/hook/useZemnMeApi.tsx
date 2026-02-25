@@ -162,3 +162,7 @@ export function useDeleteAdminUser(id_token: string) {
 		},
 	});
 }
+
+export function usePostMeKey(id_token: string) {
+	return useZemnMeApi(id_token).useMutation("post", "/me/key");
+}
