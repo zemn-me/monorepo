@@ -1155,6 +1155,24 @@ paths:
                     type: array
                     items:
                       type: string
+  /me/key:
+    post:
+      summary: Request callbox unlock.
+      security:
+        - OIDC: [callbox_key]
+      responses:
+        "200":
+          description: Recorded unlock request.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [subject, when]
+                properties:
+                  subject:
+                    type: string
+                  when:
+                    type: string
   /admin/users:
     get:
       summary: List users

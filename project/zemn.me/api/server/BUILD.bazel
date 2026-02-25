@@ -43,6 +43,7 @@ go_library(
         "imports.go",
         "jwks.go",
         "jwt.go",
+        "key_requests.go",
         "kms.go",
         "oidc.go",
         "oidc_configuration.go",

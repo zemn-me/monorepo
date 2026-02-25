@@ -15,13 +15,14 @@ import (
 
 func newTestServer() *Server {
 	return &Server{
-		log:                 log.New(io.Discard, "", 0),
-		twilioSharedSecret:  "secret",
-		settingsTableName:   "settings",
-		grievancesTableName: "grievances",
-		usersTableName:      "users",
-		ddb:                 &inMemoryDDB{},
-		sendText:            func(_ context.Context, _, _, _ string) error { return nil },
+		log:                  log.New(io.Discard, "", 0),
+		twilioSharedSecret:   "secret",
+		settingsTableName:    "settings",
+		grievancesTableName:  "grievances",
+		usersTableName:       "users",
+		keyRequestsTableName: "keys",
+		ddb:                  &inMemoryDDB{},
+		sendText:             func(_ context.Context, _, _, _ string) error { return nil },
 	}
 }
 
@@ -49,6 +50,38 @@ func TestHandleEntryViaCode(t *testing.T) {
 	}
 
 	digits := "12345"
+	rq := GetPhoneHandleEntryRequestObject{
+		Params: GetPhoneHandleEntryParams{
+			Digits: &digits,
+		},
+	}
+
+	rs, err := s.handleEntryViaCode(context.Background(), rq)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+	if !strings.Contains(xmlData, "<Play") {
+		t.Errorf("expected play element, got %s", xmlData)
+	}
+}
+
+func TestHandleEntryViaCodeWithKeyRequest(t *testing.T) {
+	s := newTestServer()
+	if err := s.recordKeyRequest(context.Background(), "thomas"); err != nil {
+		t.Fatalf("record key request: %v", err)
+	}
+
+	digits := "00000"
 	rq := GetPhoneHandleEntryRequestObject{
 		Params: GetPhoneHandleEntryParams{
 			Digits: &digits,

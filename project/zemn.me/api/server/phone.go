@@ -272,6 +272,14 @@ func (s *Server) notifyPartyModeEntry(ctx context.Context) error {
 }
 
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
+	if ok, rec, err := s.hasRecentKeyRequest(ctx, 5*time.Minute); err == nil && ok {
+		s.log.Printf("Allowed access via web key request (subject=%s).", rec.Subject)
+		doc, response := twiml.CreateDocument()
+		response.CreateElement("Play").SetText(nook_phone_yes)
+		response.CreateElement("Play").CreateAttr("digits", "9w9")
+		return TwimlResponse{Document: doc}, nil
+	}
+
 	codes, err := s.getLatestEntryCodes(ctx)
 	if err != nil {
 		return
