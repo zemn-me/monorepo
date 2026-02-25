@@ -51,6 +51,7 @@ go_library(
         "server.go",
         "sms.go",
         "token_exchange.go",
+        "users.go",
         "uuid.go",
         "webfinger.go",
     ],
@@ -101,6 +102,7 @@ go_test(
         "smoke_test.go",
         "time_test.go",
         "token_exchange_test.go",
+        "users_test.go",
     ],
     embed = [":server"],
     deps = [

@@ -188,6 +188,9 @@ components:
             **Nonce** to bind client session to the ID Token and mitigate replay.
             If the RP supplied a nonce in the auth request, this **must** be present
             and equal. OPs should not transform it.
+        scope:
+          type: string
+          description: Space-delimited OAuth scopes granted to this subject.
         acr:
           type: string
           description: >
@@ -751,6 +754,63 @@ components:
         timeZone:
           type: string
           description: Client IANA time zone
+    User:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Local OIDC subject used by zemn.me
+        email:
+          type: string
+          format: email
+        issuer:
+          $ref: '#/components/schemas/OIDCIssuer'
+        provider:
+          type: string
+          format: uri
+        audience:
+          $ref: '#/components/schemas/OAuthClientId'
+        remoteSubject:
+          $ref: '#/components/schemas/OIDCSubject'
+        name:
+          type: string
+        givenName:
+          type: string
+        familyName:
+          type: string
+        picture:
+          type: string
+          format: uri
+        emailVerified:
+          type: boolean
+        scopes:
+          type: array
+          items:
+            type: string
+    NewUser:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+        scopes:
+          type: array
+          items:
+            type: string
+    UpdateUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        scopes:
+          type: array
+          items:
+            type: string
 
 paths:
   /phone/init:
@@ -813,7 +873,7 @@ paths:
       description: >
         Return the current callbox settings.
       security:
-        - OIDC: []
+        - OIDC: [callbox_settings_write]
       requestBody:
         required: true
         content:
@@ -838,7 +898,7 @@ paths:
       description: >
         Returns the current settings for the callbox.
       security:
-        - OIDC: []
+        - OIDC: [callbox_settings_read]
       responses:
         "500":
           description: >
@@ -859,7 +919,7 @@ paths:
     get:
       summary: Returns the current phone number for the callbox.
       security:
-        - OIDC: []
+        - OIDC: [callbox_settings_read]
       responses:
         "200":
           description: It worked!
@@ -871,7 +931,7 @@ paths:
   /grievances:
     get:
       security:
-        - OIDC: []
+        - OIDC: [grievance_portal]
       responses:
         "200":
           description: List grievances
@@ -883,7 +943,7 @@ paths:
                   $ref: '#/components/schemas/Grievance'
     post:
       security:
-        - OIDC: []
+        - OIDC: [grievance_portal]
       requestBody:
         required: true
         content:
@@ -901,7 +961,7 @@ paths:
   /grievance/{id}:
     get:
       security:
-        - OIDC: []
+        - OIDC: [grievance_portal]
       parameters:
         - name: id
           in: path
@@ -917,7 +977,7 @@ paths:
                 $ref: '#/components/schemas/Grievance'
     put:
       security:
-        - OIDC: []
+        - OIDC: [grievance_portal]
       parameters:
         - name: id
           in: path
@@ -941,7 +1001,7 @@ paths:
           description: Not found
     delete:
       security:
-        - OIDC: []
+        - OIDC: [grievance_portal]
       parameters:
         - name: id
           in: path
@@ -998,7 +1058,7 @@ paths:
     get:
       summary: Returns the caller's OIDC subject ID.
       security:
-        - OIDC: []
+        - OIDC: [admin_uid_read]
       responses:
         "200":
           description: The subject identifier.
@@ -1010,6 +1070,80 @@ paths:
                 properties:
                   uid:
                     type: string
+  /admin/users:
+    get:
+      summary: List users
+      security:
+        - OIDC: [admin_users_read]
+      responses:
+        "200":
+          description: Users configured for token exchange.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a user by email
+      security:
+        - OIDC: [admin_users_manage]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        "200":
+          description: Created user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /admin/users/{id}:
+    put:
+      summary: Update a user
+      security:
+        - OIDC: [admin_users_manage]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        "200":
+          description: Updated user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Not found
+    delete:
+      summary: Delete a user
+      security:
+        - OIDC: [admin_users_manage]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted user.
+          content:
+            application/json:
+              schema:
+                type: string
   /.well-known/webfinger:
     get:
       tags: [Discovery]

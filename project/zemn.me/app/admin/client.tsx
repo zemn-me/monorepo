@@ -492,6 +492,9 @@ export default function Admin() {
 		option_and_then(idToken, Authorization => (
 			<>
 				<p>You are logged in.</p>
+				<p>
+					<Link href="/admin/users">Manage users</Link>
+				</p>
 				<DisplayAdminUid Authorization={Authorization} />
 				<DisplayPhoneNumber Authorization={Authorization} />
 				<SettingsEditor Authorization={Authorization} />

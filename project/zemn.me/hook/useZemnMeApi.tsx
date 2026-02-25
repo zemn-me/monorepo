@@ -52,9 +52,32 @@ export function useGetAdminUid(Authorization: string) {
 	});
 }
 
+export function useGetAdminUsers(Authorization: string) {
+	const fetchClient = useFetchClient(Authorization);
+	return useQuery({
+		queryKey: ["get", "/admin/users", Authorization],
+		queryFn: async () => {
+			const resp = await fetchClient.GET("/admin/users");
+			if (!resp.data) {
+				throw new Error("/admin/users returned unexpected payload");
+			}
+			return resp.data;
+		},
+		enabled: Authorization !== "",
+	});
+}
+
 function useinvalidateGrievances() {
 	const queryClient = useQueryClient();
 	return () => void queryClient.invalidateQueries({ queryKey: ["get", "/grievances"] });
+}
+
+function useinvalidateAdminUsers() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ["get", "/admin/users"],
+		});
 }
 
 export function usePostGrievances(Authorization: string) {
@@ -68,5 +91,26 @@ export function useDeleteGrievances(Authorization: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(Authorization).useMutation("delete", "/grievance/{id}", {
 		onSuccess: () => void invalidateGrievances(),
+	});
+}
+
+export function usePostAdminUsers(Authorization: string) {
+	const invalidateAdminUsers = useinvalidateAdminUsers();
+	return useZemnMeApi(Authorization).useMutation("post", "/admin/users", {
+		onSuccess: () => void invalidateAdminUsers(),
+	});
+}
+
+export function usePutAdminUser(Authorization: string) {
+	const invalidateAdminUsers = useinvalidateAdminUsers();
+	return useZemnMeApi(Authorization).useMutation("put", "/admin/users/{id}", {
+		onSuccess: () => void invalidateAdminUsers(),
+	});
+}
+
+export function useDeleteAdminUser(Authorization: string) {
+	const invalidateAdminUsers = useinvalidateAdminUsers();
+	return useZemnMeApi(Authorization).useMutation("delete", "/admin/users/{id}", {
+		onSuccess: () => void invalidateAdminUsers(),
 	});
 }

@@ -49,6 +49,7 @@ type Server struct {
 	ddb                 DynamoDBClient
 	settingsTableName   string
 	grievancesTableName string
+	usersTableName      string
 	rt                  *chi.Mux
 	http.Handler
 	log                *log.Logger
@@ -108,6 +109,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
 	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
+	usersTableName := os.Getenv("USERS_TABLE_NAME")
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -123,6 +125,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		ddb:                 dynamodb.NewFromConfig(cfg),
 		settingsTableName:   settingsTableName,
 		grievancesTableName: grievancesTableName,
+		usersTableName:      usersTableName,
 		twilioSharedSecret:  os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
@@ -221,6 +224,15 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 		},
 		{
 			Name: s.grievancesTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+		},
+		{
+			Name: s.usersTableName,
 			Attrs: []types.AttributeDefinition{
 				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
 			},
