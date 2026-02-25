@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -93,6 +94,11 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		verifiedToken, err := verifier.Verify(ctx, auth)
 		if err != nil {
 			joined = errors.Join(joined, fmt.Errorf("issuer %s: verify token: %w", candidate.issuer, err))
+			continue
+		}
+
+		if err := requireScopes(verifiedToken, ai.Scopes); err != nil {
+			joined = errors.Join(joined, fmt.Errorf("issuer %s: scope check: %w", candidate.issuer, err))
 			continue
 		}
 
@@ -197,4 +203,34 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	add(googleIssuer, googleClientID)
 
 	return candidates
+}
+
+func requireScopes(token *oidc.IDToken, required []string) error {
+	if len(required) == 0 {
+		return nil
+	}
+
+	var claims struct {
+		Scope string   `json:"scope"`
+		Scp   []string `json:"scp"`
+	}
+	if err := token.Claims(&claims); err != nil {
+		return fmt.Errorf("read scope claims: %w", err)
+	}
+
+	available := map[string]struct{}{}
+	for _, s := range strings.Fields(claims.Scope) {
+		available[s] = struct{}{}
+	}
+	for _, s := range claims.Scp {
+		available[s] = struct{}{}
+	}
+
+	for _, needed := range required {
+		if _, ok := available[needed]; !ok {
+			return fmt.Errorf("missing required scope %q", needed)
+		}
+	}
+
+	return nil
 }
