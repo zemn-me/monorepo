@@ -34,7 +34,7 @@ import {
 import { e164 } from '#root/ts/zod/e164.js';
 
 interface SettingsEditorProps {
-	readonly Authorization: string;
+	readonly id_token: string;
 }
 
 type CallboxSettings = components['schemas']['CallboxSettings'];
@@ -109,8 +109,8 @@ function maybeMessage(m: string | undefined) {
 	return m;
 }
 
-function SettingsEditor({ Authorization }: SettingsEditorProps) {
-	const $api = useZemnMeApi(Authorization);
+function SettingsEditor({ id_token }: SettingsEditorProps) {
+	const $api = useZemnMeApi(id_token);
 	const idbase = useId();
 	const id = (...s: string[]) => [idbase, ...s].join('/');
 
@@ -121,7 +121,7 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 		'/callbox/settings',
 		{
 			headers: {
-				Authorization,
+				Authorization: id_token,
 			},
 		},
 	] as const;
@@ -229,7 +229,7 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 				setLastSubmittedSnapshot(normalizeSettingsSnapshot(d));
 				void mutateRemoteSettings.mutate({
 					headers: {
-						Authorization: Authorization,
+						Authorization: id_token,
 					},
 					body: d,
 				});
@@ -400,14 +400,14 @@ function SettingsEditor({ Authorization }: SettingsEditorProps) {
 }
 
 function DisplayPhoneNumber({
-	Authorization,
+	id_token,
 }: {
-	readonly Authorization: string;
+	readonly id_token: string;
 }) {
 	const $api = useZemnMeApi();
 	const pn = queryResult(
 		$api.useQuery('get', '/phone/number', {
-			headers: { Authorization },
+			headers: { Authorization: id_token },
 		})
 	);
 
@@ -436,11 +436,11 @@ function DisplayPhoneNumber({
 }
 
 function DisplayAdminUid({
-	Authorization,
+	id_token,
 }: {
-	readonly Authorization: string;
+	readonly id_token: string;
 }) {
-	const uidQuery = useGetAdminUid(Authorization);
+	const uidQuery = useGetAdminUid(id_token);
 	const uid = queryResult(uidQuery);
 
 	const el = option_and_then(uid, r =>
@@ -489,12 +489,15 @@ export default function Admin() {
 	);
 
 	return option_unwrap_or(
-		option_and_then(idToken, Authorization => (
+		option_and_then(idToken, id_token => (
 			<>
 				<p>You are logged in.</p>
-				<DisplayAdminUid Authorization={Authorization} />
-				<DisplayPhoneNumber Authorization={Authorization} />
-				<SettingsEditor Authorization={Authorization} />
+				<p>
+					<Link href="/admin/users">Manage users</Link>
+				</p>
+				<DisplayAdminUid id_token={id_token} />
+				<DisplayPhoneNumber id_token={id_token} />
+				<SettingsEditor id_token={id_token} />
 			</>
 		)),
 		login

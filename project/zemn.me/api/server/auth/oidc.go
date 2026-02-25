@@ -16,6 +16,7 @@ import (
 type contextKey string
 
 const SubjectKey contextKey = "oidc_subject"
+const IssuerKey contextKey = "oidc_issuer"
 const EmailKey contextKey = "oidc_email"
 const GivenNameKey contextKey = "oidc_given_name"
 const FamilyNameKey contextKey = "oidc_family_name"
@@ -38,6 +39,16 @@ func SubjectFromContext(ctx context.Context) (string, bool) {
 	s, ok := v.(string)
 	return s, ok
 }
+
+// IssuerFromContext retrieves the issuer from the context if present.
+func IssuerFromContext(ctx context.Context) (string, bool) {
+	v := ctx.Value(IssuerKey)
+	s, ok := v.(string)
+	return s, ok
+}
+
+// ScopeResolver resolves scopes for a verified token subject.
+var ScopeResolver func(ctx context.Context, issuer, subject string) ([]string, error)
 
 // EmailFromContext retrieves the email address from the context if present.
 func EmailFromContext(ctx context.Context) (string, bool) {
@@ -96,8 +107,25 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 			continue
 		}
 
+		if len(ai.Scopes) > 0 {
+			if ScopeResolver == nil {
+				joined = errors.Join(joined, fmt.Errorf("issuer %s: scope resolver not configured", candidate.issuer))
+				continue
+			}
+			scopes, err := ScopeResolver(ctx, candidate.issuer, verifiedToken.Subject)
+			if err != nil {
+				joined = errors.Join(joined, fmt.Errorf("issuer %s: scope resolve: %w", candidate.issuer, err))
+				continue
+			}
+			if err := requireScopeList(scopes, ai.Scopes); err != nil {
+				joined = errors.Join(joined, fmt.Errorf("issuer %s: scope check: %w", candidate.issuer, err))
+				continue
+			}
+		}
+
 		r := ai.RequestValidationInput.Request
 		ctx = context.WithValue(r.Context(), SubjectKey, verifiedToken.Subject)
+		ctx = context.WithValue(ctx, IssuerKey, candidate.issuer)
 		var claims struct {
 			Email      string `json:"email"`
 			GivenName  string `json:"given_name"`
@@ -197,4 +225,22 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	add(googleIssuer, googleClientID)
 
 	return candidates
+}
+
+func requireScopeList(available []string, required []string) error {
+	if len(required) == 0 {
+		return nil
+	}
+
+	seen := map[string]struct{}{}
+	for _, s := range available {
+		seen[s] = struct{}{}
+	}
+	for _, needed := range required {
+		if _, ok := seen[needed]; !ok {
+			return fmt.Errorf("missing required scope %q", needed)
+		}
+	}
+
+	return nil
 }
