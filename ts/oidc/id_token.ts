@@ -73,6 +73,7 @@ export const OidcIdTokenClaimsSchema = z
 		// Per-flow extras:
 		at_hash: z.string().optional(),
 		c_hash: z.string().optional(),
+		jti: z.string().optional(),
 		name: z.string().optional(),
 		given_name: z.string().optional(),
 		family_name: z.string().optional(),

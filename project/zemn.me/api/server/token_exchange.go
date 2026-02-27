@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/coreos/go-oidc"
+	"github.com/google/uuid"
 )
 
 // exchange a Google id_token for an api.zemn.me refresh_token.
@@ -118,23 +119,25 @@ func issuerFromToken(raw string) (OIDCIssuer, error) {
 
 var zemnMeClient = "zemn.me"
 
-type mappedIdentity struct {
-	Subject       OIDCSubject
-	Picture       string
-	GivenName     string
-	FamilyName    string
-	Name          string
-	Email         string
-	EmailVerified *bool
-}
-
-func strPtrIfNonEmpty(value string) *string {
-	if value == "" {
+func hardcodedScopesForSubject(subject OIDCSubject) []string {
+	switch subject {
+	case "thomas":
+		return []string{
+			"admin_uid_read",
+			"admin_users_read",
+			"admin_users_manage",
+			"callbox_settings_read",
+			"callbox_settings_write",
+			"grievance_portal",
+		}
+	case "keng":
+		return []string{
+			"grievance_portal",
+		}
+	default:
 		return nil
 	}
-	return &value
 }
-
 func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenRequestObject) (ro PostOauth2TokenResponseObject, err error) {
 	if request.Body == nil {
 		e := "missing request body"
@@ -210,45 +213,50 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
 
-	mappedIdentity, err := mapRemoteSubject(ctx, provider, cfg, rawToken)
+	resolvedUser, err := s.translateUpstreamUser(ctx, provider, cfg, rawToken, issuer)
 	if err != nil {
 		s.log.Printf("Token exchange failed for issuer=%s: %v", issuer, err)
 		return
 	}
 
-	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s", issuer, mappedIdentity.Subject)
+	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s", issuer, resolvedUser.LocalID)
 
 	apiBase, err := ApiRoot()
 	if err != nil {
 		return
 	}
 
-	expiresAt := time.Now().Add(time.Hour * 24 * 30)
+	now := time.Now()
+	expiresAt := now.Add(time.Hour * 24 * 30)
+	jti := uuid.NewString()
 
-	ourToken, err := s.IssueIdToken(ctx, IdToken{
-		Aud:           zemnMeClient,
-		Iat:           time.Now().Unix(),
-		Sub:           mappedIdentity.Subject,
-		Iss:           apiBase.String(),
-		Exp:           expiresAt.Unix(),
-		Picture:       strPtrIfNonEmpty(mappedIdentity.Picture),
-		GivenName:     strPtrIfNonEmpty(mappedIdentity.GivenName),
-		FamilyName:    strPtrIfNonEmpty(mappedIdentity.FamilyName),
-		Name:          strPtrIfNonEmpty(mappedIdentity.Name),
-		Email:         strPtrIfNonEmpty(mappedIdentity.Email),
-		EmailVerified: mappedIdentity.EmailVerified,
-	})
+	claims := IdToken{
+		Aud: OAuthClientId(zemnMeClient),
+		Iat: now.Unix(),
+		Sub: resolvedUser.LocalID,
+		Iss: OIDCIssuer(apiBase.String()),
+		Exp: expiresAt.Unix(),
+		Jti: &jti,
+	}
+
+	ourToken, err := s.IssueIdToken(ctx, claims)
 	if err != nil {
 		return
 	}
 
 	expiresInSeconds := time.Until(expiresAt) / time.Second
+	scopeStr := strings.Join(resolvedUser.Scopes, " ")
+	var responseScope *string
+	if scopeStr != "" {
+		responseScope = &scopeStr
+	}
 
 	ro = PostOauth2Token200JSONResponse{
 		AccessToken:     ourToken,
 		ExpiresIn:       int(expiresInSeconds),
 		IssuedTokenType: UrnIetfParamsOauthTokenTypeIdToken,
 		TokenType:       "Bearer",
+		Scope:           responseScope,
 	}
 
 	return
@@ -272,7 +280,27 @@ func audienceSummary(audience *TokenExchangeRequest_Audience) string {
 	return s
 }
 
-func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstreamIssuerConfig, rawToken string) (mappedIdentity, error) {
+type upstreamIDTokenClaims struct {
+	Email         string `json:"email"`
+	EmailVerified *bool  `json:"email_verified"`
+	Name          string `json:"name"`
+	GivenName     string `json:"given_name"`
+	FamilyName    string `json:"family_name"`
+	Picture       string `json:"picture"`
+}
+
+type mappedUser struct {
+	LocalID OIDCSubject
+	Scopes  []string
+}
+
+func (s *Server) translateUpstreamUser(
+	ctx context.Context,
+	provider *oidc.Provider,
+	cfg *upstreamIssuerConfig,
+	rawToken string,
+	issuer OIDCIssuer,
+) (mappedUser, error) {
 	var lastErr error
 	for audience, subjectMappings := range cfg.Audience {
 		verifier := provider.Verifier(&oidc.Config{ClientID: string(audience)})
@@ -283,30 +311,88 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 			continue
 		}
 
-		upstreamClaims := upstreamIdentityClaims(token)
+		var claims upstreamIDTokenClaims
+		if err := token.Claims(&claims); err != nil {
+			lastErr = err
+			continue
+		}
+		if claims.EmailVerified != nil && !*claims.EmailVerified {
+			lastErr = fmt.Errorf("email is not verified")
+			continue
+		}
 
+		rec, err := s.maybeResolveUserFromTable(ctx, tokenExchangeUserDetails{
+			Issuer:        string(issuer),
+			Provider:      cfg.Provider,
+			Audience:      string(audience),
+			RemoteSubject: token.Subject,
+			Email:         claims.Email,
+			Name:          claims.Name,
+			GivenName:     claims.GivenName,
+			FamilyName:    claims.FamilyName,
+			Picture:       claims.Picture,
+			EmailVerified: claims.EmailVerified,
+		})
+		if err != nil {
+			lastErr = err
+			continue
+		}
+		if rec != nil {
+			return mappedUser{
+				LocalID: OIDCSubject(rec.Id),
+				Scopes:  append([]string(nil), rec.Scopes...),
+			}, nil
+		}
 		if subject, ok := subjectMappings[OIDCSubject(token.Subject)]; ok {
-			return mappedIdentity{
-				Subject:       subject,
-				Picture:       upstreamClaims.Picture,
-				GivenName:     upstreamClaims.GivenName,
-				FamilyName:    upstreamClaims.FamilyName,
-				Name:          upstreamClaims.Name,
-				Email:         upstreamClaims.Email,
-				EmailVerified: upstreamClaims.EmailVerified,
+			scopes := hardcodedScopesForSubject(subject)
+			if s.usersTableName != "" {
+				rec := userRecordFromTokenExchange(subject, tokenExchangeUserDetails{
+					Issuer:        string(issuer),
+					Provider:      cfg.Provider,
+					Audience:      string(audience),
+					RemoteSubject: token.Subject,
+					Email:         claims.Email,
+					Name:          claims.Name,
+					GivenName:     claims.GivenName,
+					FamilyName:    claims.FamilyName,
+					Picture:       claims.Picture,
+					EmailVerified: claims.EmailVerified,
+					Scopes:        scopes,
+				}, scopes)
+				if err := s.putUserRecord(ctx, rec); err != nil {
+					return mappedUser{}, err
+				}
+			}
+			return mappedUser{
+				LocalID: subject,
+				Scopes:  append([]string(nil), scopes...),
 			}, nil
 		}
 
 		for _, mapped := range subjectMappings {
 			if mapped == OIDCSubject(token.Subject) {
-				return mappedIdentity{
-					Subject:       mapped,
-					Picture:       upstreamClaims.Picture,
-					GivenName:     upstreamClaims.GivenName,
-					FamilyName:    upstreamClaims.FamilyName,
-					Name:          upstreamClaims.Name,
-					Email:         upstreamClaims.Email,
-					EmailVerified: upstreamClaims.EmailVerified,
+				scopes := hardcodedScopesForSubject(mapped)
+				if s.usersTableName != "" {
+					rec := userRecordFromTokenExchange(mapped, tokenExchangeUserDetails{
+						Issuer:        string(issuer),
+						Provider:      cfg.Provider,
+						Audience:      string(audience),
+						RemoteSubject: token.Subject,
+						Email:         claims.Email,
+						Name:          claims.Name,
+						GivenName:     claims.GivenName,
+						FamilyName:    claims.FamilyName,
+						Picture:       claims.Picture,
+						EmailVerified: claims.EmailVerified,
+						Scopes:        scopes,
+					}, scopes)
+					if err := s.putUserRecord(ctx, rec); err != nil {
+						return mappedUser{}, err
+					}
+				}
+				return mappedUser{
+					LocalID: mapped,
+					Scopes:  append([]string(nil), scopes...),
 				}, nil
 			}
 		}
@@ -315,32 +401,8 @@ func mapRemoteSubject(ctx context.Context, provider *oidc.Provider, cfg *upstrea
 	}
 
 	if lastErr != nil {
-		return mappedIdentity{}, fmt.Errorf("token verification failed: %w", lastErr)
+		return mappedUser{}, fmt.Errorf("token verification failed: %w", lastErr)
 	}
 
-	return mappedIdentity{}, errors.New("token verification failed")
-}
-
-func upstreamIdentityClaims(token *oidc.IDToken) mappedIdentity {
-	var tokenClaims struct {
-		Picture       string `json:"picture"`
-		GivenName     string `json:"given_name"`
-		FamilyName    string `json:"family_name"`
-		Name          string `json:"name"`
-		Email         string `json:"email"`
-		EmailVerified *bool  `json:"email_verified"`
-	}
-
-	if err := token.Claims(&tokenClaims); err != nil {
-		return mappedIdentity{}
-	}
-
-	return mappedIdentity{
-		Picture:       tokenClaims.Picture,
-		GivenName:     tokenClaims.GivenName,
-		FamilyName:    tokenClaims.FamilyName,
-		Name:          tokenClaims.Name,
-		Email:         tokenClaims.Email,
-		EmailVerified: tokenClaims.EmailVerified,
-	}
+	return mappedUser{}, errors.New("token verification failed")
 }

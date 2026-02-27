@@ -9,7 +9,7 @@ import (
 
 func TestGetAdminUid(t *testing.T) {
 	s := newTestServer()
-	ctx := context.WithValue(context.Background(), auth.SubjectKey, "12345")
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{Subject: "12345"})
 	resp, err := s.GetAdminUid(ctx, GetAdminUidRequestObject{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

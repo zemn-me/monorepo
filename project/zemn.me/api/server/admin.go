@@ -8,11 +8,11 @@ import (
 
 // GetAdminUid returns the OIDC subject ID associated with the request.
 func (s *Server) GetAdminUid(ctx context.Context, rq GetAdminUidRequestObject) (GetAdminUidResponseObject, error) {
-	sub, ok := auth.SubjectFromContext(ctx)
-	if !ok {
+	info, ok := auth.UserInfoFromContext(ctx)
+	if !ok || info == nil || info.Subject == "" {
 		return nil, nil
 	}
 	return GetAdminUid200JSONResponse{
-		Uid: sub,
+		Uid: info.Subject,
 	}, nil
 }
