@@ -105,10 +105,18 @@ func (s Server) listGrievances(ctx context.Context) ([]Grievance, error) {
 }
 
 func (s Server) createGrievance(ctx context.Context, g NewGrievance) (Grievance, error) {
-	sub, _ := auth.SubjectFromContext(ctx)
-	posterEmail, _ := auth.EmailFromContext(ctx)
-	givenName, _ := auth.GivenNameFromContext(ctx)
-	familyName, _ := auth.FamilyNameFromContext(ctx)
+	var (
+		sub         string
+		posterEmail string
+		givenName   string
+		familyName  string
+	)
+	if token, ok := auth.UserInfoFromContext(ctx); ok && token != nil {
+		sub = token.Subject
+		posterEmail = token.Email
+		givenName = token.GivenName
+		familyName = token.FamilyName
+	}
 	tzName, tzLoc, err := resolveTimeZone(g.TimeZone, "")
 	if err != nil {
 		return Grievance{}, err
