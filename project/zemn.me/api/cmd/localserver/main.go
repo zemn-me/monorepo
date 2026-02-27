@@ -59,6 +59,7 @@ func main() {
 	mustSetEnv("DYNAMODB_ENDPOINT", ddbAddress)
 	mustSetEnv("DYNAMODB_TABLE_NAME", "table1")
 	mustSetEnv("GRIEVANCES_TABLE_NAME", "table2")
+	mustSetEnv("USERS_TABLE_NAME", "table3")
 
 	srv, err := apiserver.NewServer(context.Background(), apiserver.NewServerOptions{
 		LocalStack: true,

@@ -16,6 +16,7 @@ ts_project(
     deps = [
         "//project/zemn.me/app",
         "//project/zemn.me/app/admin",
+        "//project/zemn.me/app/admin/users",
         "//project/zemn.me/app/article",
         "//project/zemn.me/app/article/2014/csp",
         "//project/zemn.me/app/article/2019/cors",

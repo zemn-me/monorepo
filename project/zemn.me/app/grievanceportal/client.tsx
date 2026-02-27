@@ -18,7 +18,7 @@ import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { PrettyDateTime } from '#root/ts/react/lang/date.js';
 
 interface GrievanceEditorProps {
-	readonly Authorization: string;
+	readonly id_token: string;
 }
 
 type Grievance = components['schemas']['Grievance'];
@@ -108,9 +108,9 @@ function GrievanceAuthorLabel(props: {
 	return displayName ? <>{displayName}</> : null;
 }
 
-function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
-	const create = usePostGrievances(Authorization);
-	const grievancesQuery = useGetGrievances(Authorization);
+function GrievanceEditor({ id_token }: GrievanceEditorProps) {
+	const create = usePostGrievances(id_token);
+	const grievancesQuery = useGetGrievances(id_token);
 	const grievances_a = future_or_else(useQueryFuture(grievancesQuery), e =>
 			(e as object) instanceof Error
 				? (e as Error)
@@ -179,7 +179,7 @@ function GrievanceEditor({ Authorization }: GrievanceEditorProps) {
 							timeZone: clientTimeZone(),
 						};
 						void create.mutate({
-							headers: { Authorization },
+							headers: { Authorization: id_token },
 							body,
 						});
 						reset(makeDefaultGrievance());
@@ -261,10 +261,10 @@ export default function GrievancePortal() {
 			<p className={style.hearts}>we can fix it!</p>
 			{
 				fut_idToken(
-					Authorization => (
+					id_token => (
 						<>
 							<p>You are logged in.</p>
-							<GrievanceEditor Authorization={Authorization} />
+							<GrievanceEditor id_token={id_token} />
 						</>
 					),
 					() => loginSection,
