@@ -12,6 +12,7 @@ import (
 type inMemoryDDB struct {
 	records    []SettingsRecord
 	grievances map[string]grievanceRecord
+	users      map[string]userRecord
 }
 
 func (db inMemoryDDB) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
@@ -58,6 +59,17 @@ func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, o
 		db.grievances[rec.Id] = rec
 		return &dynamodb.PutItemOutput{}, nil
 	}
+	if in.TableName != nil && *in.TableName == "users" {
+		var rec userRecord
+		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+			return nil, err
+		}
+		if db.users == nil {
+			db.users = map[string]userRecord{}
+		}
+		db.users[rec.Id] = rec
+		return &dynamodb.PutItemOutput{}, nil
+	}
 	var rec SettingsRecord
 	if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
 		return nil, err
@@ -82,6 +94,21 @@ func (db *inMemoryDDB) GetItem(ctx context.Context, in *dynamodb.GetItemInput, o
 		}
 		return &dynamodb.GetItemOutput{Item: item}, nil
 	}
+	if in.TableName != nil && *in.TableName == "users" {
+		if db.users == nil {
+			return &dynamodb.GetItemOutput{}, nil
+		}
+		id := in.Key["id"].(*types.AttributeValueMemberS).Value
+		rec, ok := db.users[id]
+		if !ok {
+			return &dynamodb.GetItemOutput{}, nil
+		}
+		item, err := attributevalue.MarshalMap(rec)
+		if err != nil {
+			return nil, err
+		}
+		return &dynamodb.GetItemOutput{Item: item}, nil
+	}
 	return &dynamodb.GetItemOutput{}, nil
 }
 
@@ -93,6 +120,13 @@ func (db *inMemoryDDB) DeleteItem(ctx context.Context, in *dynamodb.DeleteItemIn
 		}
 		return &dynamodb.DeleteItemOutput{}, nil
 	}
+	if in.TableName != nil && *in.TableName == "users" {
+		if db.users != nil {
+			id := in.Key["id"].(*types.AttributeValueMemberS).Value
+			delete(db.users, id)
+		}
+		return &dynamodb.DeleteItemOutput{}, nil
+	}
 	return &dynamodb.DeleteItemOutput{}, nil
 }
 
@@ -100,6 +134,17 @@ func (db *inMemoryDDB) Scan(ctx context.Context, in *dynamodb.ScanInput, optFns 
 	if in.TableName != nil && *in.TableName == "grievances" {
 		var items []map[string]types.AttributeValue
 		for _, rec := range db.grievances {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+		return &dynamodb.ScanOutput{Items: items}, nil
+	}
+	if in.TableName != nil && *in.TableName == "users" {
+		var items []map[string]types.AttributeValue
+		for _, rec := range db.users {
 			item, err := attributevalue.MarshalMap(rec)
 			if err != nil {
 				return nil, err

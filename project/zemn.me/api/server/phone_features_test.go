@@ -19,6 +19,7 @@ func newTestServer() *Server {
 		twilioSharedSecret:  "secret",
 		settingsTableName:   "settings",
 		grievancesTableName: "grievances",
+		usersTableName:      "users",
 		ddb:                 &inMemoryDDB{},
 		sendText:            func(_ context.Context, _, _, _ string) error { return nil },
 	}
@@ -229,7 +230,7 @@ func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
 	s := newTestServer()
 	party := true
 	if err := s.postNewSettings(context.Background(), CallboxSettings{
-		PartyMode: &party,
+		PartyMode:     &party,
 		FallbackPhone: "+15550001111",
 	}); err != nil {
 		t.Fatalf("failed to seed settings: %v", err)
