@@ -885,7 +885,7 @@ components:
 
 paths:
   /phone/init:
-    POST:
+    post:
       summary: Entry point for Twilio callbox phone number.
       parameters:
         - name: secret
@@ -937,6 +937,58 @@ paths:
               schema:
                 type: string
 
+
+  /callbox:
+    post:
+      summary: Unlock the callbox.
+      security:
+        - OIDC: [callbox_key]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [open]
+              properties:
+                open:
+                  type: boolean
+      responses:
+        "200":
+          description: Recorded unlock request.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [subject, when]
+                properties:
+                  subject:
+                    type: string
+                  when:
+                    type: string
+    get:
+      summary: Get callbox door status.
+      security:
+        - OIDC: [callbox_key]
+      responses:
+        "200":
+          description: Current inferred door-open status.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [open]
+                properties:
+                  open:
+                    type: boolean
+                  lastOpenedAt:
+                    type: string
+                  openUntil:
+                    type: string
+                  source:
+                    type: string
+                  subject:
+                    type: string
 
 
   /callbox/settings:
