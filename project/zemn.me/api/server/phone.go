@@ -237,6 +237,9 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 		if notifyErr := s.notifyPartyModeEntry(ctx); notifyErr != nil {
 			s.log.Printf("Party mode notification failed: %v", notifyErr)
 		}
+		if recordErr := s.recordDoorOpenSignal(ctx, "party_mode", ""); recordErr != nil {
+			s.log.Printf("failed to record party mode door-open signal: %v", recordErr)
+		}
 		doc, response := twiml.CreateDocument()
 
 		response.CreateElement("Play").SetText(nook_phone_yes)
@@ -272,6 +275,17 @@ func (s *Server) notifyPartyModeEntry(ctx context.Context) error {
 }
 
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
+	if ok, rec, err := s.hasRecentKeyRequest(ctx, 5*time.Minute); err == nil && ok {
+		s.log.Printf("Allowed access via web key request (subject=%s).", rec.Subject)
+		if recordErr := s.recordDoorOpenSignal(ctx, "web_key_request", rec.Subject); recordErr != nil {
+			s.log.Printf("failed to record web key door-open signal: %v", recordErr)
+		}
+		doc, response := twiml.CreateDocument()
+		response.CreateElement("Play").SetText(nook_phone_yes)
+		response.CreateElement("Play").CreateAttr("digits", "9w9")
+		return TwimlResponse{Document: doc}, nil
+	}
+
 	codes, err := s.getLatestEntryCodes(ctx)
 	if err != nil {
 		return
@@ -299,6 +313,9 @@ func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryR
 	}
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
+	if recordErr := s.recordDoorOpenSignal(ctx, "entry_code", ""); recordErr != nil {
+		s.log.Printf("failed to record code-entry door-open signal: %v", recordErr)
+	}
 
 	doc, response := twiml.CreateDocument()
 	response.CreateElement("Play").SetText(nook_phone_yes)

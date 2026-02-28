@@ -13,6 +13,7 @@ type inMemoryDDB struct {
 	records    []SettingsRecord
 	grievances map[string]grievanceRecord
 	users      map[string]userRecord
+	keyRecords []KeyRequestRecord
 }
 
 func (db inMemoryDDB) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
@@ -37,6 +38,29 @@ func (db *inMemoryDDB) DescribeTable(ctx context.Context, params *dynamodb.Descr
 }
 
 func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+	if in.TableName != nil && *in.TableName == "keys" {
+		if len(db.keyRecords) == 0 {
+			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
+		}
+		id := ""
+		if v, ok := in.ExpressionAttributeValues[":id"]; ok {
+			if s, ok := v.(*types.AttributeValueMemberS); ok {
+				id = s.Value
+			}
+		}
+		for i := len(db.keyRecords) - 1; i >= 0; i-- {
+			rec := db.keyRecords[i]
+			if id != "" && rec.Id != id {
+				continue
+			}
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{item}}, nil
+		}
+		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
+	}
 	if len(db.records) == 0 {
 		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
 	}
@@ -48,6 +72,14 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 }
 
 func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "keys" {
+		var rec KeyRequestRecord
+		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+			return nil, err
+		}
+		db.keyRecords = append(db.keyRecords, rec)
+		return &dynamodb.PutItemOutput{}, nil
+	}
 	if in.TableName != nil && *in.TableName == "grievances" {
 		var rec grievanceRecord
 		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {

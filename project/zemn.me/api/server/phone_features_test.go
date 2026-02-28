@@ -11,17 +11,19 @@ import (
 
 	"github.com/beevik/etree"
 	"github.com/twilio/twilio-go/twiml"
+	"github.com/zemn-me/monorepo/project/zemn.me/api/server/auth"
 )
 
 func newTestServer() *Server {
 	return &Server{
-		log:                 log.New(io.Discard, "", 0),
-		twilioSharedSecret:  "secret",
-		settingsTableName:   "settings",
-		grievancesTableName: "grievances",
-		usersTableName:      "users",
-		ddb:                 &inMemoryDDB{},
-		sendText:            func(_ context.Context, _, _, _ string) error { return nil },
+		log:                  log.New(io.Discard, "", 0),
+		twilioSharedSecret:   "secret",
+		settingsTableName:    "settings",
+		grievancesTableName:  "grievances",
+		usersTableName:       "users",
+		keyRequestsTableName: "keys",
+		ddb:                  &inMemoryDDB{},
+		sendText:             func(_ context.Context, _, _, _ string) error { return nil },
 	}
 }
 
@@ -71,6 +73,54 @@ func TestHandleEntryViaCode(t *testing.T) {
 	}
 	if !strings.Contains(xmlData, "<Play") {
 		t.Errorf("expected play element, got %s", xmlData)
+	}
+}
+
+func TestHandleEntryViaCodeWithKeyRequest(t *testing.T) {
+	s := newTestServer()
+	if err := s.recordKeyRequest(context.Background(), "thomas"); err != nil {
+		t.Fatalf("record key request: %v", err)
+	}
+
+	digits := "00000"
+	rq := GetPhoneHandleEntryRequestObject{
+		Params: GetPhoneHandleEntryParams{
+			Digits: &digits,
+		},
+	}
+
+	rs, err := s.handleEntryViaCode(context.Background(), rq)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+	if !strings.Contains(xmlData, "<Play") {
+		t.Errorf("expected play element, got %s", xmlData)
+	}
+	open, rec, remaining, err := s.currentDoorOpenStatus(context.Background(), doorOpenDuration)
+	if err != nil {
+		t.Fatalf("door status: %v", err)
+	}
+	if !open {
+		t.Fatalf("expected door to be open")
+	}
+	if rec == nil || rec.Source != "web_key_request" {
+		t.Fatalf("expected web key source, got %+v", rec)
+	}
+	if rec.Subject != "thomas" {
+		t.Fatalf("expected key-request subject recorded")
+	}
+	if remaining <= 0 || remaining > doorOpenDuration {
+		t.Fatalf("unexpected remaining duration: %v", remaining)
 	}
 }
 
@@ -261,6 +311,77 @@ func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
 	}
 	if gotBody != "Callbox party mode entry." {
 		t.Fatalf("unexpected body: %q", gotBody)
+	}
+	open, rec, _, err := s.currentDoorOpenStatus(context.Background(), doorOpenDuration)
+	if err != nil {
+		t.Fatalf("door status: %v", err)
+	}
+	if !open {
+		t.Fatalf("expected door to be open")
+	}
+	if rec == nil || rec.Source != "party_mode" {
+		t.Fatalf("expected party mode source, got %+v", rec)
+	}
+}
+
+func TestGetCallbox(t *testing.T) {
+	s := newTestServer()
+	if err := s.recordDoorOpenSignal(context.Background(), "entry_code", ""); err != nil {
+		t.Fatalf("record door signal: %v", err)
+	}
+
+	resp, err := s.GetCallbox(context.Background(), GetCallboxRequestObject{})
+	if err != nil {
+		t.Fatalf("get key status: %v", err)
+	}
+	jsonResp, ok := resp.(GetCallbox200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", resp)
+	}
+	if !jsonResp.Open {
+		t.Fatalf("expected open=true")
+	}
+	if jsonResp.OpenUntil == nil || *jsonResp.OpenUntil == "" {
+		t.Fatalf("expected openUntil when door is open")
+	}
+	if jsonResp.Source == nil || *jsonResp.Source != "entry_code" {
+		t.Fatalf("unexpected source: %#v", jsonResp.Source)
+	}
+}
+
+func TestPostCallboxStoresSubjectFromUserInfo(t *testing.T) {
+	s := newTestServer()
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{Subject: "integration-test-local"})
+
+	body := PostCallboxJSONRequestBody{Open: true}
+	resp, err := s.PostCallbox(ctx, PostCallboxRequestObject{Body: &body})
+	if err != nil {
+		t.Fatalf("post me key: %v", err)
+	}
+	jsonResp, ok := resp.(PostCallbox200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", resp)
+	}
+	if jsonResp.Subject != "integration-test-local" {
+		t.Fatalf("unexpected subject: %q", jsonResp.Subject)
+	}
+
+	statusResp, err := s.GetCallbox(ctx, GetCallboxRequestObject{})
+	if err != nil {
+		t.Fatalf("get callbox: %v", err)
+	}
+	status, ok := statusResp.(GetCallbox200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected status response type: %T", statusResp)
+	}
+	if !status.Open {
+		t.Fatalf("expected open=true after post")
+	}
+	if status.Source == nil || *status.Source != "web_key_request" {
+		t.Fatalf("unexpected source after post: %#v", status.Source)
+	}
+	if status.Subject == nil || *status.Subject != "integration-test-local" {
+		t.Fatalf("unexpected subject after post: %#v", status.Subject)
 	}
 }
 

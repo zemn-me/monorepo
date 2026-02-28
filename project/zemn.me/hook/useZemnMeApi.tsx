@@ -139,6 +139,14 @@ function useinvalidateMeScopes() {
 		});
 }
 
+function useinvalidateCallboxStatus() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ["get", "/callbox"],
+		});
+}
+
 export function usePostGrievances(id_token: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(id_token).useMutation("post", "/grievances", {
@@ -184,4 +192,50 @@ export function useDeleteAdminUser(id_token: string) {
 			void invalidateMeScopes();
 		},
 	});
+}
+
+export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
+	const token = id_token(
+		v => v,
+		() => undefined,
+		() => undefined,
+	);
+	const invalidateCallboxStatus = useinvalidateCallboxStatus();
+	return useZemnMeApi(token).useMutation("post", "/callbox", {
+		onSuccess: () => void invalidateCallboxStatus(),
+	});
+}
+
+export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(id_token(
+		v => v,
+		() => undefined,
+		() => undefined,
+	));
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: ["get", "/callbox", jti(
+			v => v,
+			() => undefined,
+			() => undefined,
+		)],
+		queryFn: async () => {
+			const resp = await fetchClient.GET("/callbox");
+			if (!resp.data) {
+				throw new Error("/callbox returned unexpected payload");
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false,
+		),
+		refetchInterval: 1000,
+	});
+
+	return future_declare_dependency(
+		id_token,
+		useQueryFuture(q)
+	)
 }
