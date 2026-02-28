@@ -13,6 +13,7 @@ const navLinks = [
 	{ href: "/admin", label: "Admin", requiredScope: "admin_users_manage" },
 	{ href: "/admin/users", label: "Users", requiredScope: "admin_users_manage" },
 	{ href: "/grievanceportal", label: "Grievance portal", requiredScope: "grievance_portal" },
+	{ href: "/key", label: "Key", requiredScope: "callbox_key" },
 ];
 
 export function GladeMenu() {
