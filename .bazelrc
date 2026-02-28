@@ -126,4 +126,8 @@ common --experimental_remote_cache_compression_threshold=100
 common --java_runtime_version=remotejdk_17
 
 common --check_direct_dependencies=error
+# in regular usage, don't use all of the host ram for bazel.
+common --local_resources=memory=HOST_RAM*.5
+# in ci use it all
+common:ci --local_resources=memory=HOST_RAM
 
