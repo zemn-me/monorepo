@@ -526,7 +526,7 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.3"
+RUFF_VERSION = "0.15.4"
 
 # For Apple Silicon macOS
 http_archive(
