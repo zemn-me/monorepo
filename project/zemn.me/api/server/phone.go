@@ -162,6 +162,11 @@ func (s *Server) postPhoneInit(ctx context.Context, rq PostPhoneInitRequestObjec
 		return
 	}
 
+	rs, err = s.handleEntryViaWebKey(ctx)
+	if err != nil || rs != nil {
+		return
+	}
+
 	salutation, err := Salutation(time.Now())
 	if err != nil {
 		return
@@ -225,6 +230,38 @@ func removeDuplicateDigits(input string) string {
 	return string(result)
 }
 
+func (s *Server) allowEntryViaWebKey(ctx context.Context) (rec *KeyRequestRecord, ok bool, err error) {
+	ok, rec, err = s.hasRecentKeyRequest(ctx, 5*time.Minute)
+	return rec, ok, err
+}
+
+func (s *Server) handleEntryViaWebKey(ctx context.Context) (rsp PostPhoneInitResponseObject, err error) {
+	rec, ok, err := s.allowEntryViaWebKey(ctx)
+	if err != nil || !ok {
+		return nil, err
+	}
+	return s.unlockViaWebKey(ctx, rec), nil
+}
+
+func (s *Server) unlockViaWebKey(ctx context.Context, rec *KeyRequestRecord) TwimlResponse {
+	s.log.Printf("Allowed access via web key request (subject=%s).", rec.Subject)
+	return s.recordAndUnlock(ctx, "web_key_request", rec.Subject, "web key")
+}
+
+func unlockTwimlResponse() TwimlResponse {
+	doc, response := twiml.CreateDocument()
+	response.CreateElement("Play").SetText(nook_phone_yes)
+	response.CreateElement("Play").CreateAttr("digits", "9w9")
+	return TwimlResponse{Document: doc}
+}
+
+func (s *Server) recordAndUnlock(ctx context.Context, source, subject, logLabel string) TwimlResponse {
+	if recordErr := s.recordDoorOpenSignal(ctx, source, subject); recordErr != nil {
+		s.log.Printf("failed to record %s door-open signal: %v", logLabel, recordErr)
+	}
+	return unlockTwimlResponse()
+}
+
 func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRequestObject) (rs PostPhoneInitResponseObject, err error) {
 	var success bool
 	success, err = s.inPartyMode(ctx)
@@ -237,15 +274,7 @@ func (s *Server) handleEntryViaPartyMode(ctx context.Context, rq PostPhoneInitRe
 		if notifyErr := s.notifyPartyModeEntry(ctx); notifyErr != nil {
 			s.log.Printf("Party mode notification failed: %v", notifyErr)
 		}
-		if recordErr := s.recordDoorOpenSignal(ctx, "party_mode", ""); recordErr != nil {
-			s.log.Printf("failed to record party mode door-open signal: %v", recordErr)
-		}
-		doc, response := twiml.CreateDocument()
-
-		response.CreateElement("Play").SetText(nook_phone_yes)
-		response.CreateElement("Play").CreateAttr("digits", "9w9")
-
-		return TwimlResponse{Document: doc}, nil
+		return s.recordAndUnlock(ctx, "party_mode", "", "party mode"), nil
 	}
 
 	return
@@ -275,15 +304,10 @@ func (s *Server) notifyPartyModeEntry(ctx context.Context) error {
 }
 
 func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rsp GetPhoneHandleEntryResponseObject, err error) {
-	if ok, rec, err := s.hasRecentKeyRequest(ctx, 5*time.Minute); err == nil && ok {
-		s.log.Printf("Allowed access via web key request (subject=%s).", rec.Subject)
-		if recordErr := s.recordDoorOpenSignal(ctx, "web_key_request", rec.Subject); recordErr != nil {
-			s.log.Printf("failed to record web key door-open signal: %v", recordErr)
-		}
-		doc, response := twiml.CreateDocument()
-		response.CreateElement("Play").SetText(nook_phone_yes)
-		response.CreateElement("Play").CreateAttr("digits", "9w9")
-		return TwimlResponse{Document: doc}, nil
+	if rec, ok, err := s.allowEntryViaWebKey(ctx); err == nil && ok {
+		return s.unlockViaWebKey(ctx, rec), nil
+	} else if err != nil {
+		return nil, err
 	}
 
 	codes, err := s.getLatestEntryCodes(ctx)
@@ -313,15 +337,7 @@ func (s *Server) handleEntryViaCode(ctx context.Context, rq GetPhoneHandleEntryR
 	}
 
 	s.log.Printf("Allowed access via code entry: %+q", digits)
-	if recordErr := s.recordDoorOpenSignal(ctx, "entry_code", ""); recordErr != nil {
-		s.log.Printf("failed to record code-entry door-open signal: %v", recordErr)
-	}
-
-	doc, response := twiml.CreateDocument()
-	response.CreateElement("Play").SetText(nook_phone_yes)
-	response.CreateElement("Play").CreateAttr("digits", "9w9")
-
-	return TwimlResponse{Document: doc}, nil
+	return s.recordAndUnlock(ctx, "entry_code", "", "code-entry"), nil
 }
 
 func (s *Server) handleEntryViaAuthorizer(ctx context.Context, rq GetPhoneHandleEntryRequestObject) (rs GetPhoneHandleEntryResponseObject, err error) {
