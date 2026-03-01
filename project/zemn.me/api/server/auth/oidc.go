@@ -18,8 +18,6 @@ type contextKey string
 const IDTokenKey contextKey = "oidc_id_token"
 const securitySchemeOIDC = "OIDC"
 const (
-	googleIssuer        = "https://accounts.google.com"
-	googleClientID      = "845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com"
 	zemnMeClientID      = "zemn.me"
 	defaultTestClientID = "integration-test-client"
 )
@@ -188,8 +186,6 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 		}
 		add(envProvider, clientID)
 	}
-
-	add(googleIssuer, googleClientID)
 
 	return candidates
 }
