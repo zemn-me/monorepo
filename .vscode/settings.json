@@ -16,12 +16,6 @@
 	},
 	"json.validate.enable": true,
 	"editor.formatOnType": true,
-	"[typescript]": {
-		"source.fixAll.eslint": "explicit",
-	},
-	"[javascript]": {
-		"source.fixAll.eslint": "explicit",
-	},
 	"[jsonc]": {
 		"editor.formatOnSave": true,
 	},
@@ -53,8 +47,9 @@
 	"eslint.format.enable": true,
 	"eslint.experimental.useFlatConfig": true,
 	"eslint.onIgnoredFiles": "warn",
+	"eslint.run": "onSave",
 	"editor.codeActionsOnSave": {
-		"source.fixAll": "always"
+		"source.fixAll.eslint": "always"
 	},
 	"go.goroot": "${workspaceFolder}/dist/${workspaceFolderBasename}/external/go_sdk",
 	"go.toolsEnvVars": {
