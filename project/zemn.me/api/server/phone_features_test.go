@@ -324,6 +324,38 @@ func TestHandleEntryViaPartyModeSendsText(t *testing.T) {
 	}
 }
 
+func TestPostPhoneInitWithKeyRequestSkipsPreamble(t *testing.T) {
+	s := newTestServer()
+	if err := s.recordKeyRequest(context.Background(), "thomas"); err != nil {
+		t.Fatalf("record key request: %v", err)
+	}
+
+	rs, err := s.postPhoneInit(context.Background(), PostPhoneInitRequestObject{
+		Params: PostPhoneInitParams{
+			Secret: "secret",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	resp, ok := rs.(TwimlResponse)
+	if !ok {
+		t.Fatalf("expected TwimlResponse, got %T", rs)
+	}
+
+	xmlData, err := twiml.ToXML(resp.Document)
+	if err != nil {
+		t.Fatalf("failed to encode xml: %v", err)
+	}
+	if strings.Contains(xmlData, "<Gather") || strings.Contains(xmlData, "Enter entry code now, or hold.") {
+		t.Fatalf("expected key unlock without preamble, got %s", xmlData)
+	}
+	if !strings.Contains(xmlData, "<Play") {
+		t.Fatalf("expected unlock twiml, got %s", xmlData)
+	}
+}
+
 func TestGetCallbox(t *testing.T) {
 	s := newTestServer()
 	if err := s.recordDoorOpenSignal(context.Background(), "entry_code", ""); err != nil {
