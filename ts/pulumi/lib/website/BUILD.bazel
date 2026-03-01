@@ -16,7 +16,6 @@ ts_project(
         "//:node_modules/mime",
         "//ts",
         "//ts/pulumi/lib",
-        "//ts/pulumi/lib/expire_on_delete",
     ],
 )
 

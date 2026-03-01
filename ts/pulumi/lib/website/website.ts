@@ -10,7 +10,6 @@ import mime from 'mime';
 import * as guard from '#root/ts/guard.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
-import { S3ExpireOnDeletePolicy } from '#root/ts/pulumi/lib/expire_on_delete/expire_on_delete.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 function relative(from: string, to: string): string {
@@ -211,13 +210,6 @@ export class Website extends pulumi.ComponentResource {
 			}
 		);
 
-		new S3ExpireOnDeletePolicy(`${name}_expire_on_delete`, {
-			bucketId: bucket.id,
-			expirationDays: 20,
-		}, { parent: this })
-
-		// upload files
-
 		const getS3Key = (dest: string) => {
 			// x.html files should be served without the .html extension.
 			const htmlExt = '.html';
@@ -260,6 +252,7 @@ export class Website extends pulumi.ComponentResource {
 							tags,
 						},
 						{
+							retainOnDelete: true,
 							parent: this,
 						}
 					)
