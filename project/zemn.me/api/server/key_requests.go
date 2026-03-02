@@ -14,7 +14,7 @@ import (
 
 const callboxKeyPartition = "CALLBOX_KEY_REQUESTS"
 const callboxDoorOpenPartition = "CALLBOX_DOOR_OPEN_EVENTS"
-const doorOpenDuration = 4 * time.Minute
+const doorOpenDuration = 2 * time.Minute
 
 type KeyRequestRecord struct {
 	Id      string `dynamodbav:"id"`
