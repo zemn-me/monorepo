@@ -14,6 +14,8 @@ function postBackToOpener() {
 		throw new Error("missing opener 😭");
 
 	opener.postMessage(payload, location.origin);
+	opener.focus();
+	window.close();
 }
 
 export default function Callback() {
