@@ -239,6 +239,7 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		Exp: expiresAt.Unix(),
 		Jti: &jti,
 	}
+	claims = applyProfileClaimsToIDToken(claims, resolvedUser.Profile)
 
 	ourToken, err := s.IssueIdToken(ctx, claims)
 	if err != nil {
@@ -290,9 +291,81 @@ type upstreamIDTokenClaims struct {
 	Picture       string `json:"picture"`
 }
 
+type profileClaims struct {
+	Email         string
+	EmailVerified *bool
+	Name          string
+	GivenName     string
+	FamilyName    string
+	Picture       string
+}
+
 type mappedUser struct {
 	LocalID OIDCSubject
 	Scopes  []string
+	Profile profileClaims
+}
+
+func strPtrIfNonEmpty(value string) *string {
+	if value == "" {
+		return nil
+	}
+	return &value
+}
+
+func firstNonEmpty(values []string) string {
+	for _, value := range values {
+		if value != "" {
+			return value
+		}
+	}
+	return ""
+}
+
+func resolveProfileClaims(upstream upstreamIDTokenClaims, rec *userRecord) profileClaims {
+	claims := profileClaims{
+		Email:         upstream.Email,
+		EmailVerified: upstream.EmailVerified,
+		Name:          upstream.Name,
+		GivenName:     upstream.GivenName,
+		FamilyName:    upstream.FamilyName,
+		Picture:       upstream.Picture,
+	}
+
+	if rec == nil {
+		return claims
+	}
+
+	if claims.Email == "" {
+		claims.Email = firstNonEmpty(rec.Emails)
+	}
+	if claims.Name == "" {
+		claims.Name = rec.Name
+	}
+	if claims.GivenName == "" {
+		claims.GivenName = rec.GivenName
+	}
+	if claims.FamilyName == "" {
+		claims.FamilyName = rec.FamilyName
+	}
+	if claims.Picture == "" {
+		claims.Picture = rec.Picture
+	}
+	if claims.EmailVerified == nil {
+		claims.EmailVerified = rec.EmailVerified
+	}
+
+	return claims
+}
+
+func applyProfileClaimsToIDToken(token IdToken, profile profileClaims) IdToken {
+	token.Picture = strPtrIfNonEmpty(profile.Picture)
+	token.GivenName = strPtrIfNonEmpty(profile.GivenName)
+	token.FamilyName = strPtrIfNonEmpty(profile.FamilyName)
+	token.Name = strPtrIfNonEmpty(profile.Name)
+	token.Email = strPtrIfNonEmpty(profile.Email)
+	token.EmailVerified = profile.EmailVerified
+	return token
 }
 
 func (s *Server) translateUpstreamUser(
@@ -342,6 +415,7 @@ func (s *Server) translateUpstreamUser(
 			return mappedUser{
 				LocalID: OIDCSubject(rec.Id),
 				Scopes:  append([]string(nil), rec.Scopes...),
+				Profile: resolveProfileClaims(claims, rec),
 			}, nil
 		}
 		if subject, ok := subjectMappings[OIDCSubject(token.Subject)]; ok {
@@ -367,6 +441,7 @@ func (s *Server) translateUpstreamUser(
 			return mappedUser{
 				LocalID: subject,
 				Scopes:  append([]string(nil), scopes...),
+				Profile: resolveProfileClaims(claims, nil),
 			}, nil
 		}
 
@@ -394,6 +469,7 @@ func (s *Server) translateUpstreamUser(
 				return mappedUser{
 					LocalID: mapped,
 					Scopes:  append([]string(nil), scopes...),
+					Profile: resolveProfileClaims(claims, nil),
 				}, nil
 			}
 		}
