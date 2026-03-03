@@ -111,9 +111,7 @@ export default function KeyPageClient() {
 				}
 
 				onClick={() => {
-					void postKey.mutate({
-						body: { open: true },
-					});
+					void postKey.mutate();
 				}}
 
 				type="button"
