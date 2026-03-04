@@ -1,11 +1,11 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
 import { useMemo } from 'react';
 
 import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
-import { Future, future_and_then, future_declare_dependency } from "#root/ts/future/future.js";
+import { Future, future_and_then, future_declare_dependency, resolve } from "#root/ts/future/future.js";
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
 import { watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
 
@@ -29,6 +29,14 @@ export function useFetchClient(id_token?: string) {
 			}),
 		[id_token],
 	);
+}
+
+export function useFetchClientFuture<A, B>(id_token: Future<string, A, B>) {
+	return future_declare_dependency(id_token, resolve(useFetchClient(id_token(
+		v => v,
+		() => undefined,
+		() => undefined
+	))));
 }
 
 export function useZemnMeApi(id_token?: string) {
@@ -195,16 +203,47 @@ export function useDeleteAdminUser(id_token: string) {
 }
 
 export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
-	const token = id_token(
-		v => v,
-		() => undefined,
-		() => undefined,
-	);
+	const fetchClient = useFetchClientFuture(id_token);
 	const invalidateCallboxStatus = useinvalidateCallboxStatus();
-	return useZemnMeApi(token).useMutation("post", "/callbox", {
-		onSuccess: () => void invalidateCallboxStatus(),
-	});
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationKey: ['post', '/callbox', id_token(
+			tok => extractIdTokenJti(tok),
+			() => undefined,
+			() => undefined
+		)],
+
+		mutationFn: fetchClient(
+			cl => () => cl.POST("/callbox", {
+				body: {
+					open: true
+				}
+			}),
+			() => () => Promise.reject(new Error("no auth")),
+			() => () => Promise.reject(new Error("no auth")),
+		),
+
+		onSuccess: () => {
+			// eagerly assume the query will succeed.
+			queryClient.setQueryData(
+				["get", "/callbox", id_token(
+					tok => extractIdTokenJti(tok),
+					() => undefined,
+					() => undefined
+				)],
+				(): GetCallboxStatusSuccessResponse => ({
+					open: true,
+				})
+			);
+
+			// sync with server
+			invalidateCallboxStatus();
+		}
+	})
 }
+
+export type GetCallboxStatusSuccessResponse = paths["/callbox"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(id_token(
