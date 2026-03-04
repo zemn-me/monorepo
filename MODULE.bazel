@@ -337,12 +337,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "e15f7c6e997bcbafeee9221e558dd07b12aa237c"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "250fa008cc653e7e7b185a3c9968cf1560802141"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "c7dca7ee0a90539fb6e6b622f210ea1e425748c7aadf19d51862cb90cfc039ec",
+    sha256 = "16e1f8c3887a74702aea43f1ca505a4efe413f6c23b9f1a34b5a88caa829ea8f",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
