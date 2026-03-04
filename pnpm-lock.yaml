@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.46.5
-    version: 43.46.5(typanion@3.14.0)
+    specifier: 43.46.6
+    version: 43.46.6(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -17109,8 +17109,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.46.5(typanion@3.14.0):
-    resolution: {integrity: sha512-bGH4ry/QLLWhgbqS/nFgJT/BGNEvNxFRnAPC0K8tfivXYTwZxaLQU7Th4w4BkXVdtWLAcbcRKI5g4c8oJ5rwOw==}
+  /renovate@43.46.6(typanion@3.14.0):
+    resolution: {integrity: sha512-NcCH3EMTa6CjnEY6PPuRihU0R1/JEhP/76brM/q0NuLFHkmltRo6VYUPny9+wxxbeZeHJys3+WxH0ZaJq6SQLQ==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17220,7 +17220,7 @@ packages:
       semver-stable: 3.0.0
       semver-utils: 1.1.4
       shlex: 3.0.0
-      simple-git: 3.32.1
+      simple-git: 3.32.2
       slugify: 1.6.6
       source-map-support: 0.5.21
       strip-json-comments: 5.0.3
@@ -17809,8 +17809,8 @@ packages:
     dev: true
     optional: true
 
-  /simple-git@3.32.1:
-    resolution: {integrity: sha512-Hz+lu+B1hxbGq6j+r45l789BHrc0DkhwoIrMjxKzSw9+9eFwUdfqgNe4Oe9R7vaTvy/dBl5/c5ZcDu7HO00cbg==}
+  /simple-git@3.32.2:
+    resolution: {integrity: sha512-n/jhNmvYh8dwyfR6idSfpXrFazuyd57jwNMzgjGnKZV/1lTh0HKvPq20v4AQ62rP+l19bWjjXPTCdGHMt0AdrQ==}
     dependencies:
       '@kwsites/file-exists': 1.1.1
       '@kwsites/promise-deferred': 1.1.1
