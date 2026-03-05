@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.46.6
-    version: 43.46.6(typanion@3.14.0)
+    specifier: 43.46.7
+    version: 43.46.7(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -17109,8 +17109,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.46.6(typanion@3.14.0):
-    resolution: {integrity: sha512-NcCH3EMTa6CjnEY6PPuRihU0R1/JEhP/76brM/q0NuLFHkmltRo6VYUPny9+wxxbeZeHJys3+WxH0ZaJq6SQLQ==}
+  /renovate@43.46.7(typanion@3.14.0):
+    resolution: {integrity: sha512-cvGk0sQ3LOw+GwPcn11u3gfm0u8PSvFhEN7vF0jrlQdwo6/tsdjSl/tmFSIeEzeuLRwZWUsuzIt3GPxJl39ucw==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -19812,7 +19812,7 @@ packages:
     resolution: {integrity: sha512-6gRk4NY/Jvg67xn7OzJuxLRsGgiXBaPUQplVJ/9l99uIugxh4FTOewYz5ic8WScj7Xx/2WvhENiQKwkK9RpE4w==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      sax: 1.4.4
+      sax: 1.5.0
     dev: true
 
   /xtend@4.0.2:
