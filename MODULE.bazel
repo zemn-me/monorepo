@@ -454,13 +454,13 @@ http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2025c"
+TZ_VERSION = "2026a"
 
 http_archive(
     name = "com_github_eggbert_tz",
     build_file_content = """
 exports_files(glob(["**/*"]))""",
-    integrity = "sha256-pucdlWvOjoM2A7nArJv9BOuCRDPFBA2gCbJ5zFpdoyM=",
+    integrity = "sha256-jWgbVIAs1/qXbkfDLqKjmNB0PDMdGygNP9ndZJ0Y0TU=",
     strip_prefix = "tz-" + TZ_VERSION,
     # auto-integrity
     url = "https://github.com/eggert/tz/archive/refs/tags/" + TZ_VERSION + ".zip",
