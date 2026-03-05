@@ -29,8 +29,8 @@ dependencies:
     specifier: 16.1.6
     version: 16.1.6
   '@openai/codex':
-    specifier: 0.106.0
-    version: 0.106.0
+    specifier: 0.107.0
+    version: 0.107.0
   '@plausible-analytics/tracker':
     specifier: 0.4.4
     version: 0.4.4
@@ -3961,61 +3961,61 @@ packages:
     resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
     dev: true
 
-  /@openai/codex@0.106.0:
-    resolution: {integrity: sha512-GgzVs+mOaJfAFalI+QqEXcuJuBODhIg217g+B5jg6HMujux3Q4yeSki57x8MD/DJ43hRq9X1DTyZL/345Bo0Ag==}
+  /@openai/codex@0.107.0:
+    resolution: {integrity: sha512-bAHmp4I3YNEqeR5U+LA5yViecDTlLVAJ+EGo8h647f0DClEWxFtyKXzyBJQ/kcL1G3bzstOTcuVpTdjhvJoe6g==}
     engines: {node: '>=16'}
     hasBin: true
     optionalDependencies:
-      '@openai/codex-darwin-arm64': /@openai/codex@0.106.0-darwin-arm64
-      '@openai/codex-darwin-x64': /@openai/codex@0.106.0-darwin-x64
-      '@openai/codex-linux-arm64': /@openai/codex@0.106.0-linux-arm64
-      '@openai/codex-linux-x64': /@openai/codex@0.106.0-linux-x64
-      '@openai/codex-win32-arm64': /@openai/codex@0.106.0-win32-arm64
-      '@openai/codex-win32-x64': /@openai/codex@0.106.0-win32-x64
+      '@openai/codex-darwin-arm64': /@openai/codex@0.107.0-darwin-arm64
+      '@openai/codex-darwin-x64': /@openai/codex@0.107.0-darwin-x64
+      '@openai/codex-linux-arm64': /@openai/codex@0.107.0-linux-arm64
+      '@openai/codex-linux-x64': /@openai/codex@0.107.0-linux-x64
+      '@openai/codex-win32-arm64': /@openai/codex@0.107.0-win32-arm64
+      '@openai/codex-win32-x64': /@openai/codex@0.107.0-win32-x64
     dev: false
 
-  /@openai/codex@0.106.0-darwin-arm64:
-    resolution: {integrity: sha512-icTUe8ZKRH2RqO2qS/FPNLMP1TloxbfM/5RxGRjh2xkd8wXDvYFeEnP2siKKLISFT49+oIbT0phUeSPR2Tlg4A==}
+  /@openai/codex@0.107.0-darwin-arm64:
+    resolution: {integrity: sha512-g8u0nsns9JaHNYehVuw1eSL/83BSuBsmdOo2rrEU0D1rKI/QoIQSv6S6offZnQFerCHeqj0LabxYzqUTBzEh0g==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [darwin]
     dev: false
     optional: true
 
-  /@openai/codex@0.106.0-darwin-x64:
-    resolution: {integrity: sha512-i9/V2CEfH3QlhZkA/iG/Sw8eR8I8uvH23AoIrd91/LbFX77aAjzg7rSdshU6thhdy2fhiyPjKq23/bVk5cvh5g==}
+  /@openai/codex@0.107.0-darwin-x64:
+    resolution: {integrity: sha512-uDCfszYS/9RL6fMBqnLyFloBCa/Lgvqjt/P2izrByRANlHZG4Nwn1Sayn7v2TugvOJ5fBPZMRcaloqfjowmdEQ==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [darwin]
     dev: false
     optional: true
 
-  /@openai/codex@0.106.0-linux-arm64:
-    resolution: {integrity: sha512-l/xmB0w+LTf9c/0CLEkQclUfPNsOlPENR0lxiATSv9vGaQdCi/P3MEI+L1iOMWn2Nx7o04foCfkSJiKV38n4DQ==}
+  /@openai/codex@0.107.0-linux-arm64:
+    resolution: {integrity: sha512-iAPYuXfACBSjVf4DPkN8YFawFGXPORzm7hDJhkzqqQvXRSyeZDaVkdT81FhaNIjm1rcaMnMDGJn2M+tOwmGy0w==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
     dev: false
     optional: true
 
-  /@openai/codex@0.106.0-linux-x64:
-    resolution: {integrity: sha512-cVNGR8nlnW4V+2ofDt8+Q1mbR7JwxZGvSWjXJ+9GvEt0DBEO0Q5KRIsJa6iSYqTcH6V5oBcTFiK//+HDbTaFNQ==}
+  /@openai/codex@0.107.0-linux-x64:
+    resolution: {integrity: sha512-h9SG15CrNihjHwSiYBU3dxMWH2r9fQIBPxFIpWnSUnjE5/YaXusbJQEvC+5u+g6CzUXX40fFsm3gVWV9uzX7Og==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [linux]
     dev: false
     optional: true
 
-  /@openai/codex@0.106.0-win32-arm64:
-    resolution: {integrity: sha512-8CBtM8Nr4gDqQNKl4VK/+vRv9Mj+Et0pMZqEKFXZ+3Vwovs3lFDsuDET4XQ1trk11UejFNpPCk9Tle9P99hGTw==}
+  /@openai/codex@0.107.0-win32-arm64:
+    resolution: {integrity: sha512-LHGQA2h/L72NRFcdIjKN/+V2nFXfuHDSQcI1Qdt9/7fUdcpb/pqN1n7U5rujccuTCf0ihk4XhGywAwiwPsjmWA==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [win32]
     dev: false
     optional: true
 
-  /@openai/codex@0.106.0-win32-x64:
-    resolution: {integrity: sha512-fF1AKwRDf6t54OmEgMf3JyaJrFWUozeYBa3W/0P6LkaTfCz68zrajL5yO78mhf/rf9eAb83PIkvej0EHBzTheQ==}
+  /@openai/codex@0.107.0-win32-x64:
+    resolution: {integrity: sha512-Iq1UOxj2El/syo8abN0/7Z6ICIVTW7tY9DJbdx01wjQYbi6Ecb8e66iTNFq65Mingq7vG7QWvYGyLycVztHFuw==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
