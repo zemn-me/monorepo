@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.55.1
-    version: 43.55.1(typanion@3.14.0)
+    specifier: 43.55.3
+    version: 43.55.3(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -9510,8 +9510,8 @@ packages:
     engines: {node: '>=18.0'}
     dev: true
 
-  /cronstrue@3.12.0:
-    resolution: {integrity: sha512-k9oiM4G7U1GEEktOGfZabldP0gtFWTsaRVqq9X06ifytr73mpSYYdt+zGZBeS5lRCsqMfq0y7oSHycWGIJSo6g==}
+  /cronstrue@3.13.0:
+    resolution: {integrity: sha512-M06cKwRIN46AyuM8BOmF1HUkBTkd3/h7uYImnrH1T3wtRKBGOibVo3jZ42VheEvx8LtgZbG/4GI35vfIxYxMug==}
     hasBin: true
     dev: true
 
@@ -14887,13 +14887,6 @@ packages:
       brace-expansion: 2.0.2
     dev: true
 
-  /minimatch@10.2.3:
-    resolution: {integrity: sha512-Rwi3pnapEqirPSbWbrZaa6N3nmqq4Xer/2XooiOKyV3q12ML06f7MOuc5DVH8ONZIFhwIYQ3yzPH4nt7iWHaTg==}
-    engines: {node: 18 || 20 || >=22}
-    dependencies:
-      brace-expansion: 5.0.2
-    dev: true
-
   /minimatch@10.2.4:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
@@ -17104,8 +17097,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.55.1(typanion@3.14.0):
-    resolution: {integrity: sha512-clVjUXNba/DaE4k6bBrPjdW2iezbyYOQMXnLf2uiMn6N1WIpC5kpc6UT5+QMIuenz5kHEs4vNUP8MxfUD+jK/Q==}
+  /renovate@43.55.3(typanion@3.14.0):
+    resolution: {integrity: sha512-W9UoMS1Jo5n8/bDDAjySAHRi3jlHEiCzPBS16eUKrsncsZPTb0uhwpwHxMOe8IHGBCUJMRxBq407NRDkSvVwYQ==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -17159,7 +17152,7 @@ packages:
       commander: 14.0.3
       conventional-commits-detector: 1.0.3
       croner: 10.0.1
-      cronstrue: 3.12.0
+      cronstrue: 3.13.0
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.2
@@ -17193,7 +17186,7 @@ packages:
       luxon: 3.7.2
       markdown-it: 14.1.1
       markdown-table: 3.0.4
-      minimatch: 10.2.3
+      minimatch: 10.2.4
       moo: 0.5.2
       ms: 2.1.3
       neotraverse: 0.6.18
