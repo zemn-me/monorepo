@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.59.2
-    version: 43.59.2(typanion@3.14.0)
+    specifier: 43.59.3
+    version: 43.59.3(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -3831,8 +3831,8 @@ packages:
       '@octokit/openapi-types': 27.0.0
     dev: true
 
-  /@one-ini/wasm@0.2.0:
-    resolution: {integrity: sha512-n+L/BvrwKUn7q5O3wHGo+CJZAqfewh38+37sk+eBzv/39lM9pPgPRd4sOZRvSRzo0ukLxzyXso4WlGj2oKZ5hA==}
+  /@one-ini/wasm@0.2.1:
+    resolution: {integrity: sha512-TUqERXGNTifZ9y2g3wPxQrw3HpHv/02DsW3D90T9x0hhonrL1ZqpSmNrU2XkoIq0fP1N6gZfVQzy2Fw1ZvGBNg==}
     dev: true
 
   /@openai/codex@0.111.0:
@@ -9629,14 +9629,14 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
 
-  /editorconfig@3.0.1:
-    resolution: {integrity: sha512-k5NZM2XNIJfH/omUv0SRYaiLae4VRwg1ILW6xLOjuP4AQGAGcvzNij5imJ+m1rbzDIH0ov6EbH53BW96amFXpQ==}
+  /editorconfig@3.0.2:
+    resolution: {integrity: sha512-T0ix8GhtxyKVfUFEcvdNDt3YGqlwkFHbD4/5bgFUDgFmxhI/cSRAeJ87/Sz//Cq8Eam6JX/e23RkoFO71P7aAA==}
     engines: {node: '>=20'}
     hasBin: true
     dependencies:
-      '@one-ini/wasm': 0.2.0
+      '@one-ini/wasm': 0.2.1
       commander: 14.0.3
-      minimatch: 10.0.1
+      minimatch: 10.2.4
       semver: 7.7.4
     dev: true
 
@@ -14495,13 +14495,6 @@ packages:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
     dev: true
 
-  /minimatch@10.0.1:
-    resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
-    engines: {node: 20 || >=22}
-    dependencies:
-      brace-expansion: 2.0.2
-    dev: true
-
   /minimatch@10.2.4:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
@@ -16717,8 +16710,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.59.2(typanion@3.14.0):
-    resolution: {integrity: sha512-2E9jHWL6TCJBRohjqZhBvFMsDmoot6wo4kiodztoNAwAhcy+a1T18Ngfb0fFYPNcC75pJxn3+yRRpW5IOamExA==}
+  /renovate@43.59.3(typanion@3.14.0):
+    resolution: {integrity: sha512-GNfHwXGUa5FrzO4nCgyAYXMUAGQFrhCvQtLz8e/FW+hOILZWYzqWRKUQ2idWcn+ckAW3HflPDa5Fqe593U2xdA==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16777,7 +16770,7 @@ packages:
       dequal: 2.0.3
       detect-indent: 7.0.2
       diff: 8.0.3
-      editorconfig: 3.0.1
+      editorconfig: 3.0.2
       email-addresses: 5.0.0
       emoji-regex: 10.6.0
       emojibase: 17.0.0
