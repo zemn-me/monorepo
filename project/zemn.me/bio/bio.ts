@@ -857,12 +857,20 @@ export const Bio = {
 					tags: [work, security, writing],
 				},
 				{
-				url: url`https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt`,
+					url: url`https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt`,
 					date: date(13, 'feb', 2026),
 					title: en`Introducing Lockdown Mode and Elevated Risk labels in ChatGPT`,
 					id: "68408DCB-0B05-451B-8CED-DAD64CDE41B7",
 					description: en`Blog post summarising a fully sandboxed mode for chatgpt which mitigates impacts from Prompt Injection.`,
 					tags: [work, security],
+				},
+				{
+					url: url`https://openai.com/index/designing-agents-to-resist-prompt-injection/`,
+					date: date(11, 'mar', 2026),
+					title: en`Designing AI agents to resist prompt injection`,
+					id: "f26d0898-3e7f-4429-9ba6-9868f85f4367",
+					description: en`Blog post on how prompt injection attacks are becoming more like social engineering and how we can design AI agents to be more resistant to them.`,
+					tags: [work, security, writing],
 				}
 
         ],
