@@ -7,6 +7,7 @@
 manifest:
   modules_mapping:
     4c842c94c09923bae9e4__mypyc: mypy
+    81d243bd2c585b0f4821__mypyc: charset_normalizer
     IPython: ipython
     OpenSSL: pyopenssl
     aioquic: aioquic
@@ -166,4 +167,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 45d9e0dfcf6282a38998bd78d1be53402e10cf6701fdc900ff60323e9eea0a28
+integrity: b33bc425ab4bb6166486af1befb88439d8db4868e142d37e4576a750169e9b64
