@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.60.4
-    version: 43.60.4(typanion@3.14.0)
+    specifier: 43.60.5
+    version: 43.60.5(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -5263,7 +5263,7 @@ packages:
   /@renovatebot/detect-tools@1.2.8:
     resolution: {integrity: sha512-TDHJeRQxFPzaZuUSNBqWLmg0MBTion3E4Tz6bTZFll4ZyjWm0OyJ+u4sYb8whSjVryjRwCK0vALAq65TFNKg3A==}
     dependencies:
-      fs-extra: 11.3.3
+      fs-extra: 11.3.4
       toml-eslint-parser: 0.12.0
       upath: 2.0.1
       zod: 3.25.76
@@ -5295,7 +5295,7 @@ packages:
       '@renovatebot/osv-offline-db': 2.2.0
       adm-zip: 0.5.16
       debug: 4.4.3(supports-color@10.2.2)
-      fs-extra: 11.3.3
+      fs-extra: 11.3.4
       got: 14.6.6
       luxon: 3.7.2
     transitivePeerDependencies:
@@ -14719,8 +14719,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /node-html-parser@7.0.2:
-    resolution: {integrity: sha512-DxodLVh7a6JMkYzWyc8nBX9MaF4M0lLFYkJHlWOiu7+9/I6mwNK9u5TbAMC7qfqDJEPX9OIoWA2A9t4C2l1mUQ==}
+  /node-html-parser@7.1.0:
+    resolution: {integrity: sha512-iJo8b2uYGT40Y8BTyy5ufL6IVbN8rbm/1QK2xffXU/1a/v3AAa0d1YAoqBNYqaS4R/HajkWIpIfdE6KcyFh1AQ==}
     dependencies:
       css-select: 5.2.2
       he: 1.2.0
@@ -16604,8 +16604,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.60.4(typanion@3.14.0):
-    resolution: {integrity: sha512-/vEe+CKPJNNkFThamTvMTS2Kzf4mBiRWcTNrWF6xizv2HKADxU9cckyCaDBr1Y5pUyeGwP9STxnh+5P+wqWwZw==}
+  /renovate@43.60.5(typanion@3.14.0):
+    resolution: {integrity: sha512-ibDZRRpBBa1SxYeGZpyt99HFAdA0RgTWux7I7D+Sy8Raf3QIm8J3m68ghpSPFuKgdVVW3J+rSYiybbwp5G+D/Q==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16697,7 +16697,7 @@ packages:
       moo: 0.5.3
       ms: 2.1.3
       neotraverse: 0.6.18
-      node-html-parser: 7.0.2
+      node-html-parser: 7.1.0
       p-all: 5.0.1
       p-map: 7.0.4
       p-queue: 9.1.0
