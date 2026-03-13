@@ -218,8 +218,8 @@ dependencies:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.105.4)
   temporal-polyfill:
-    specifier: 0.3.0
-    version: 0.3.0
+    specifier: 0.3.1
+    version: 0.3.1
   to-vfile:
     specifier: 8.0.0
     version: 8.0.0
@@ -18041,14 +18041,14 @@ packages:
       - react-native-b4a
     dev: true
 
-  /temporal-polyfill@0.3.0:
-    resolution: {integrity: sha512-qNsTkX9K8hi+FHDfHmf22e/OGuXmfBm9RqNismxBrnSmZVJKegQ+HYYXT+R7Ha8F/YSm2Y34vmzD4cxMu2u95g==}
+  /temporal-polyfill@0.3.1:
+    resolution: {integrity: sha512-3Ceqnjxa7nQ1VGRjehALmP9LdiJqalmoYh6o22s8skP+ZN6df1cTN/7h+p0k4v357pFsQN94gtJoxV6fqvlijA==}
     dependencies:
-      temporal-spec: 0.3.0
+      temporal-spec: 0.3.1
     dev: false
 
-  /temporal-spec@0.3.0:
-    resolution: {integrity: sha512-n+noVpIqz4hYgFSMOSiINNOUOMFtV5cZQNCmmszA6GiVFVRt3G7AqVyhXjhCSmowvQn+NsGn+jMDMKJYHd3bSQ==}
+  /temporal-spec@0.3.1:
+    resolution: {integrity: sha512-B4TUhezh9knfSIMwt7RVggApDRJZo73uZdj8AacL2mZ8RP5KtLianh2MXxL06GN9ESYiIsiuoLQhgVfwe55Yhw==}
     dev: false
 
   /terser-webpack-plugin@5.4.0(@swc/core@1.15.18)(esbuild@0.27.3)(webpack@5.105.4):
