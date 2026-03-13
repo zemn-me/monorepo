@@ -133,6 +133,7 @@ func hardcodedScopesForSubject(subject OIDCSubject) []string {
 		}
 	case "keng":
 		return []string{
+			"callbox_key",
 			"grievance_portal",
 		}
 	default:
