@@ -218,8 +218,8 @@ dependencies:
     specifier: 5.0.0
     version: 5.0.0(webpack@5.105.4)
   temporal-polyfill:
-    specifier: 0.3.1
-    version: 0.3.1
+    specifier: 0.3.2
+    version: 0.3.2
   to-vfile:
     specifier: 8.0.0
     version: 8.0.0
@@ -18032,8 +18032,8 @@ packages:
       - react-native-b4a
     dev: true
 
-  /temporal-polyfill@0.3.1:
-    resolution: {integrity: sha512-3Ceqnjxa7nQ1VGRjehALmP9LdiJqalmoYh6o22s8skP+ZN6df1cTN/7h+p0k4v357pFsQN94gtJoxV6fqvlijA==}
+  /temporal-polyfill@0.3.2:
+    resolution: {integrity: sha512-TzHthD/heRK947GNiSu3Y5gSPpeUDH34+LESnfsq8bqpFhsB79HFBX8+Z834IVX68P3EUyRPZK5bL/1fh437Eg==}
     dependencies:
       temporal-spec: 0.3.1
     dev: false
