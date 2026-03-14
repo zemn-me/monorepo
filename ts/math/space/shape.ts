@@ -12,11 +12,12 @@ import { map, Vector } from '#root/ts/math/vec';
 /**
  * Generates a square as a set of lines
  */
-export const square = (center: Point2D, radius: number): Line2D<4> => [
+export const square = (center: Point2D, radius: number): Vector<number, Point2D> => [
 	sub<1, 2>(center, point<2>(-radius, -radius)),
 	sub<1, 2>(center, point<2>(-radius, +radius)),
 	sub<1, 2>(center, point<2>(+radius, +radius)),
 	sub<1, 2>(center, point<2>(+radius, -radius)),
+	sub<1, 2>(center, point<2>(-radius, -radius)),
 ];
 
 /**
@@ -28,13 +29,17 @@ export const cube = (
 ): Vector<number, Line3D> => {
 	const [[cx], [cy], [cz]] = center;
 
-	const sq3d: Line3D<4> = map<4, Point2D, Point3D>(
+	const sq3d = map(
 		square(point<2>(cx, cy), radius),
 		(pt): Point3D => [...pt, [0]]
 	);
 
 	const front = map(sq3d, pt => add<1, 3>(pt, point<3>(0, 0, cz + radius)));
 	const back = map(sq3d, pt => add<1, 3>(pt, point<3>(0, 0, -(cz + radius))));
+	const connectors: Line3D<2>[] = [0, 1, 2, 3].map(index => [
+		front[index]!,
+		back[index]!,
+	]);
 
-	return [front, back];
+	return [front, back, ...connectors];
 };

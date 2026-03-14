@@ -5,19 +5,18 @@ import type { z } from "zod";
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
 import { ProgressCircle } from "#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js";
 import { usePosterDisplayName } from "#root/project/zemn.me/hook/usePosterDisplayName.js";
-import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
+import { useClearZemnMeAuth, useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { future_and_then, future_error, future_flatten_then, future_resolve } from "#root/ts/future/future.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
 import { background } from "#root/ts/promise/ignore_result.js";
 
-	const progressRatio = (
-		min: number, max: number, now: number
-	) => {
-		const range = max - min;
-		const norm = now - min;
-		return norm / range;
-	}
-
+const progressRatio = (
+	min: number, max: number, now: number
+) => {
+	const range = max - min;
+	const norm = now - min;
+	return norm / range;
+};
 
 interface TimeLeftIndicatorProps {
 	readonly start: Date;
@@ -37,19 +36,19 @@ function TimeLeftIndicator(
 			);
 			return () => clearInterval(interval);
 		}
-	)
+	);
 
 	const done = now >= end.getTime();
 	const progress = progressRatio(
 		start.getTime(),
 		end.getTime(),
 		+now,
-	)
+	);
 	const clampedProgress = Math.min(1, Math.max(0, progress));
 
 	return <ProgressCircle className={style.indicator} loss progress={
 		done ? 1 : clampedProgress
-	} />
+	} />;
 }
 
 type OidcIdTokenClaims = z.infer<typeof OidcIdTokenClaimsSchema>;
@@ -61,6 +60,11 @@ function InlineLoginContent({ claims }: { readonly claims: OidcIdTokenClaims }) 
 		family_name: claims.family_name,
 		sub: claims.sub,
 	});
+	const clearZemnMeAuth = useClearZemnMeAuth();
+
+	const logout = <button aria-label="Log out" onClick={() => { clearZemnMeAuth(); }}>
+		↺
+	</button>;
 
 	return displayName
 		? <span className={style.loggedIn}>
@@ -73,13 +77,13 @@ function InlineLoginContent({ claims }: { readonly claims: OidcIdTokenClaims }) 
 				: undefined}
 			<span className={style.loggedInText}>Logged in as <i>{displayName}</i></span>
 			<sup><TimeLeftIndicator
-			end={new Date(claims.exp * 1000)}
-			start={new Date(claims.iat * 1000)}
-			/></sup >.
+				end={new Date(claims.exp * 1000)}
+				start={new Date(claims.iat * 1000)}
+			/></sup>.
+			{logout}
 		</span>
 		: <>Logged in.</>;
 }
-
 
 export function InlineLogin() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
@@ -97,9 +101,9 @@ export function InlineLogin() {
 
 			return r.success
 				? future_resolve(r.data)
-				: future_error(r.error)
+				: future_error(r.error);
 		}
-	))
+	));
 
 	const loginButton = (error: boolean) => <button
 		className={
@@ -124,7 +128,6 @@ export function InlineLogin() {
 		)}
 	</button>;
 
-
 	return idTokenData(
 		f => <InlineLoginContent claims={f} />,
 		() => loginButton(false),
@@ -133,5 +136,5 @@ export function InlineLogin() {
 			console.error(err);
 			return loginButton(true);
 		},
-	)
+	);
 }
