@@ -63,7 +63,7 @@ function InlineLoginContent({ claims }: { readonly claims: OidcIdTokenClaims }) 
 	});
 	const clearZemnMeAuth = useClearZemnMeAuth();
 
-	const logout = <button onClick={() => { void clearZemnMeAuth() }}>
+	const logout = <button aria-label="Log out" onClick={() => { void clearZemnMeAuth() }}>
 		↺
 	</button>
 

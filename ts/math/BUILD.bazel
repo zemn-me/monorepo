@@ -82,5 +82,8 @@ ts_project(
         ":math",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/math/canvas/braille",
+        "//ts/math/mesh",
+        "//ts/math/space/render",
     ],
 )
