@@ -448,8 +448,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.64.0
-    version: 43.64.0(typanion@3.14.0)
+    specifier: 43.64.1
+    version: 43.64.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -8112,10 +8112,6 @@ packages:
 
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
-
-  /auth-header@1.0.0:
-    resolution: {integrity: sha512-CPPazq09YVDUNNVWo4oSPTQmtwIzHusZhQmahCKvIsk0/xH6U3QsMAv3sM+7+Q0B1K2KJ/Q38OND317uXs4NHA==}
-    dev: true
 
   /available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -16617,8 +16613,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.64.0(typanion@3.14.0):
-    resolution: {integrity: sha512-Ex6yviB39/oefUcLfFGpTnHiCZhat1KIsR24OCFRyFl3AZ9SWDfroUbNgHHjbpJfX/1JGeDJLoXipoXNPXKDmw==}
+  /renovate@43.64.1(typanion@3.14.0):
+    resolution: {integrity: sha512-4rfCLjzIfjoCOxIPNNkmRhT4+f+QpK4QV/tDxNqYqaUuwCKNtuEeYavKFSwYfAnqT5gmN+1w3uXK3R2kbZ/OnQ==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16662,7 +16658,6 @@ packages:
       ae-cvss-calculator: 1.0.11
       agentkeepalive: 4.6.0
       async-mutex: 0.5.0
-      auth-header: 1.0.0
       aws4: 1.13.2
       azure-devops-node-api: 15.1.2
       bunyan: 1.8.15
