@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "hook",
@@ -57,6 +57,24 @@ bazel_lint(
     visibility = ["//:__subpackages__"],
 )
 
+ts_project(
+    name = "hook_tests",
+    srcs = ["useZemnMeAuth_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":hook",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["useZemnMeAuth_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":hook_tests"],
+)
+
 filegroup(
     name = "all_ts_srcs",
     srcs = [
@@ -74,6 +92,7 @@ filegroup(
         "useSearchContact.ts",
         "useZemnMeApi.tsx",
         "useZemnMeAuth.tsx",
+        "useZemnMeAuth_test.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
