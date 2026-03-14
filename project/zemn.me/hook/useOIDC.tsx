@@ -34,6 +34,8 @@ async function fetchEntropy(): Promise<string> {
 	return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
+export const useOIDCQueryKeyPrefix = 'use-oidc';
+
 export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	id_token: Future<string, void, Error>,
 	access_token: Future<string, void, Error>,
@@ -85,7 +87,7 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 	// very close but we need to abstract and pipeline this more cleanly.
 
 	const callbackQuery = useQuery({
-		queryKey: ['use-oidc', ...cacheKeyArgs],
+		queryKey: [useOIDCQueryKeyPrefix, ...cacheKeyArgs],
 		gcTime: Infinity, // don't evict auth tokens
 		queryFn: targetURL(
 			u => async () => {
