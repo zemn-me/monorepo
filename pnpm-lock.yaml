@@ -295,8 +295,8 @@ devDependencies:
     specifier: 3.3.0
     version: 3.3.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/pulumi':
-    specifier: 3.220.0
-    version: 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 3.225.1
+    version: 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
   '@schemastore/package':
     specifier: 0.0.10
     version: 0.0.10
@@ -3929,6 +3929,15 @@ packages:
       '@opentelemetry/api': 1.9.0
     dev: true
 
+  /@opentelemetry/core@1.28.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-ZLwRMV+fNDpVmF2WYUdBHlq0eOWtEaUJSusrzjGnBt7iSRvfjFE3RXYUZJrqou/wIDWV0DwQ5KIfYe9WXg9Xqw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/semantic-conventions': 1.27.0
+
   /@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-OOCM2C/QIURhJMuKaekP3TRBxBKxG/TWWA0TL2J6nXUtDnuCtccy49LUJF8xPFXMX+0LMcxFpCo8M9cGY1W6rQ==}
     engines: {node: '>=14'}
@@ -3947,6 +3956,20 @@ packages:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.40.0
     dev: true
+
+  /@opentelemetry/exporter-trace-otlp-grpc@0.55.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-ohIkCLn2Wc3vhhFuf1bH8kOXHMEdcWiD847x7f3Qfygc+CGiatGLzQYscTcEYsWGMV22gVwB/kVcNcx5a3o8gA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+    dependencies:
+      '@grpc/grpc-js': 1.14.3
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-grpc-exporter-base': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-transformer': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base': 1.28.0(@opentelemetry/api@1.9.0)
 
   /@opentelemetry/exporter-trace-otlp-http@0.213.0(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-tnRmJD39aWrE/Sp7F6AbRNAjKHToDkAqBi6i0lESpGWz3G+f4bhVAV6mgSXH2o18lrDVJXo6jf9bAywQw43wRA==}
@@ -4070,6 +4093,28 @@ packages:
       '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.0)
     dev: true
 
+  /@opentelemetry/otlp-exporter-base@0.55.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-iHQI0Zzq3h1T6xUJTVFwmFl5Dt5y1es+fl4kM+k5T/3YvmVyeYkSiF+wHCg6oKrlUAJfk+t55kaAu3sYmt7ZYA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-transformer': 0.55.0(@opentelemetry/api@1.9.0)
+
+  /@opentelemetry/otlp-grpc-exporter-base@0.55.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-gebbjl9FiSp52igWXuGjcWQKfB6IBwFGt5z1VFwTcVZVeEZevB6bJIqoFrhH4A02m7OUlpJ7l4EfRi3UtkNANQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+    dependencies:
+      '@grpc/grpc-js': 1.14.3
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-exporter-base': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-transformer': 0.55.0(@opentelemetry/api@1.9.0)
+
   /@opentelemetry/otlp-transformer@0.213.0(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-RSuAlxFFPjeK4d5Y6ps8L2WhaQI6CXWllIjvo5nkAlBpmq2XdYWEBGiAbOF4nDs8CX4QblJDv5BbMUft3sEfDw==}
     engines: {node: ^18.19.0 || >=20.6.0}
@@ -4085,6 +4130,21 @@ packages:
       '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.0)
       protobufjs: 7.5.4
     dev: true
+
+  /@opentelemetry/otlp-transformer@0.55.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-kVqEfxtp6mSN2Dhpy0REo1ghP4PYhC1kMHQJ2qVlO99Pc+aigELjZDfg7/YKmL71gR6wVGIeJfiql/eXL7sQPA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/api-logs': 0.55.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-logs': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-metrics': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base': 1.28.0(@opentelemetry/api@1.9.0)
+      protobufjs: 7.5.4
 
   /@opentelemetry/propagator-b3@1.30.1(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-oATwWWDIJzybAZ4pO76ATN5N6FFbOA1otibAVlS8v90B4S1wClnhRUk7K+2CHAwN1JKYuj4jh/lpCEG5BAqFuQ==}
@@ -4157,6 +4217,16 @@ packages:
       '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.0)
     dev: true
 
+  /@opentelemetry/resources@1.28.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-cIyXSVJjGeTICENN40YSvLDAq4Y2502hGK3iN7tfdynQLKWb3XWZQEkPc+eSx47kiy11YeFAlYkEfXwR1w8kfw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.27.0
+
   /@opentelemetry/resources@1.30.1(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-5UxZqiAgLYGFjS4s9qm5mBVo433u+dSPUFWVWXmLAD4wB65oMCoXaJP1KJa9DIYYMeHu3z4BZcStG3LC593cWA==}
     engines: {node: '>=14'}
@@ -4191,6 +4261,27 @@ packages:
       '@opentelemetry/semantic-conventions': 1.40.0
     dev: true
 
+  /@opentelemetry/sdk-logs@0.55.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-TSx+Yg/d48uWW6HtjS1AD5x6WPfLhDWLl/WxC7I2fMevaiBuKCuraxTB8MDXieCNnBI24bw9ytyXrDCswFfWgA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.4.0 <1.10.0'
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/api-logs': 0.55.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+
+  /@opentelemetry/sdk-metrics@1.28.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-43tqMK/0BcKTyOvm15/WQ3HLr0Vu/ucAl/D84NO7iSlv6O4eOprxSHa3sUtmYkaZWHqdDJV0AHVz/R6u4JALVQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.3.0 <1.10.0'
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+
   /@opentelemetry/sdk-metrics@2.6.0(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-CicxWZxX6z35HR83jl+PLgtFgUrKRQ9LCXyxgenMnz5A1lgYWfAog7VtdOvGkJYyQgMNPhXQwkYrDLujk7z1Iw==}
     engines: {node: ^18.19.0 || >=20.6.0}
@@ -4201,6 +4292,17 @@ packages:
       '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.0)
     dev: true
+
+  /@opentelemetry/sdk-trace-base@1.28.0(@opentelemetry/api@1.9.0):
+    resolution: {integrity: sha512-ceUVWuCpIao7Y5xE02Xs3nQi0tOGmMea17ecBdwtCvdo9ekmO+ijc9RFDgfifMl7XCBf41zne/1POM3LqSTZDA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.27.0
 
   /@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0):
     resolution: {integrity: sha512-jVPgBbH1gCy2Lb7X0AVQ8XAfgg0pJ4nvl8/IiQA6nxOsPvS+0zMJaFSs2ltXe0J6C8dqjcnpyqINDJmU30+uOg==}
@@ -4427,7 +4529,7 @@ packages:
   /@pulumi/aws@6.68.0(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-uehJNSviSq3garkLXsy1zZzI7V6clBDQq8G83PSpNfdePdGeKtuRoxMSsuqkgpGkue+cGjoxJtC6QwdtzgaKBQ==}
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
       mime: 2.6.0
     transitivePeerDependencies:
       - supports-color
@@ -4438,7 +4540,7 @@ packages:
   /@pulumi/aws@7.23.0(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-tRyG4cwTQQ+88gb2TwejLWXW4TvuC72zlrNpCm2BBTnBp6YaZRT23xLFTYK8GN37fjzglmoVE9DF4yYMPvt17g==}
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
       mime: 2.6.0
     transitivePeerDependencies:
       - supports-color
@@ -4453,7 +4555,7 @@ packages:
       '@pulumi/aws': 7.23.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker': 4.11.0(ts-node@10.9.2)(typescript@5.5.4)
       '@pulumi/docker-build': 0.0.14(ts-node@10.9.2)(typescript@5.5.4)
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
       '@types/aws-lambda': 8.10.161
       docker-classic: /@pulumi/docker@3.6.1(ts-node@10.9.2)(typescript@5.5.4)
       mime: 2.6.0
@@ -4468,7 +4570,7 @@ packages:
     resolution: {integrity: sha512-o1omwSERsuqsAt7jhokjpF/TOrtx60oimc9u9YdwMIHG+s4WIzLokSDzlgiQMVNVkWWypFOZyWp1Dhvi32NXgQ==}
     deprecated: Inadvertently published.
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -4478,7 +4580,7 @@ packages:
   /@pulumi/docker-build@0.0.14(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-dLCta3BOrYRxHyp22QnVh06qlSiSORtmIypcQ6yb4+GZ2+ThbML06pINyERc5ClgJXGQFSVTtuWhMSiurTWU2w==}
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -4488,7 +4590,7 @@ packages:
   /@pulumi/docker@3.6.1(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-BZME50QkT556v+LvmTXPT8ssB2xxNkp9+msB5xYFEnUnWcdGAx5yUysQw70RJCb+U0GbkJSbxtlgMJgOQf/now==}
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -4499,7 +4601,7 @@ packages:
   /@pulumi/docker@4.11.0(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-NUXMCWL3VBtlclC4u7G9LcToCQGiR/wOuRdKHzAqbn0nzaVuPV3NlDZIz7CpcHL/mGGIQ00/HnLGCA8lC1kSFA==}
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -4511,7 +4613,7 @@ packages:
     resolution: {integrity: sha512-5QZelNAR1VkvbP9AFPCJUv2jQTgTAe0B/ed197ZucOpuL0HR/m27ggElW3RxE96qP5GXtd9KArU5SFcoVZ05yA==}
     dependencies:
       '@npmcli/package-json': 6.2.0
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
       '@types/express': 4.17.25
     transitivePeerDependencies:
       - supports-color
@@ -4519,8 +4621,8 @@ packages:
       - typescript
     dev: false
 
-  /@pulumi/pulumi@3.220.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-WfFu4Qv5r/9uv4bh6jxZPKLc945RtdjIq29mDa6c9sIXzQtRtv/Voo58E6u6lhA1RKaK+ocymqgykZ6QV7OnGQ==}
+  /@pulumi/pulumi@3.225.1(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-0wvk04tzXWyU+GmnCilay/WER4HvZGgCwpbbtndj2a8ZlFuJItujqa76m9luIMk3B3+dTJGMobylYN5rZfKOVQ==}
     engines: {node: '>=20'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
@@ -4535,6 +4637,7 @@ packages:
       '@logdna/tail-file': 2.2.0
       '@npmcli/arborist': 9.4.1
       '@opentelemetry/api': 1.9.0
+      '@opentelemetry/exporter-trace-otlp-grpc': 0.55.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-zipkin': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.55.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-grpc': 0.55.0(@opentelemetry/api@1.9.0)
@@ -4567,7 +4670,7 @@ packages:
   /@pulumi/random@4.19.1(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-gDotQyxtl+pcJb4oaGfbi6PsK8OtzjBmF1D8PYLvr13kCup98KTIIv/8wF2xbgbFf7ljJn3EblADxZ0u8AC/Dg==}
     dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
+      '@pulumi/pulumi': 3.225.1(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
       - supports-color
       - ts-node
