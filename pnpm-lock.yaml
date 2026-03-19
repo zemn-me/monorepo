@@ -26,8 +26,8 @@ dependencies:
     specifier: 3.1.1
     version: 3.1.1
   '@next/eslint-plugin-next':
-    specifier: 16.1.6
-    version: 16.1.6
+    specifier: 16.1.7
+    version: 16.1.7
   '@openai/codex':
     specifier: 0.115.0
     version: 0.115.0
@@ -382,8 +382,8 @@ devDependencies:
     specifier: 9.39.4
     version: 9.39.4
   eslint-config-next:
-    specifier: 16.1.6
-    version: 16.1.6(@typescript-eslint/parser@8.57.1)(eslint@9.39.4)(typescript@5.5.4)
+    specifier: 16.1.7
+    version: 16.1.7(@typescript-eslint/parser@8.57.1)(eslint@9.39.4)(typescript@5.5.4)
   eslint-config-prettier:
     specifier: 10.1.8
     version: 10.1.8(eslint@9.39.4)
@@ -3405,8 +3405,8 @@ packages:
   /@next/env@14.2.35:
     resolution: {integrity: sha512-DuhvCtj4t9Gwrx80dmz2F4t/zKQ4ktN8WrMwOuVzkJfBilwAwGr6v16M5eI8yCuZ63H9TTuEU09Iu2HqkzFPVQ==}
 
-  /@next/eslint-plugin-next@16.1.6:
-    resolution: {integrity: sha512-/Qq3PTagA6+nYVfryAtQ7/9FEr/6YVyvOtl6rZnGsbReGLf0jZU6gkpr1FuChAQpvV46a78p4cmHOVP8mbfSMQ==}
+  /@next/eslint-plugin-next@16.1.7:
+    resolution: {integrity: sha512-v/bRGOJlfRCO+NDKt0bZlIIWjhMKU8xbgEQBo+rV9C8S6czZvs96LZ/v24/GvpEnovZlL4QDpku/RzWHVbmPpA==}
     dependencies:
       fast-glob: 3.3.1
 
@@ -9960,8 +9960,8 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
 
-  /eslint-config-next@16.1.6(@typescript-eslint/parser@8.57.1)(eslint@9.39.4)(typescript@5.5.4):
-    resolution: {integrity: sha512-vKq40io2B0XtkkNDYyleATwblNt8xuh3FWp8SpSz3pt7P01OkBFlKsJZ2mWt5WsCySlDQLckb1zMY9yE9Qy0LA==}
+  /eslint-config-next@16.1.7(@typescript-eslint/parser@8.57.1)(eslint@9.39.4)(typescript@5.5.4):
+    resolution: {integrity: sha512-FTq1i/QDltzq+zf9aB/cKWAiZ77baG0V7h8dRQh3thVx7I4dwr6ZXQrWKAaTB7x5VwVXlzoUTyMLIVQPLj2gJg==}
     peerDependencies:
       eslint: '>=9.0.0'
       typescript: '>=3.3.1'
@@ -9969,7 +9969,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@next/eslint-plugin-next': 16.1.6
+      '@next/eslint-plugin-next': 16.1.7
       eslint: 9.39.4
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.4)
