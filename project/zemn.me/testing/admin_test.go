@@ -177,6 +177,105 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	}
 }
 
+
+func TestOIDCCallbackRefocusesOpenerInsteadOfOtherTab(t *testing.T) {
+	root, err := nextServerRoot()
+	if err != nil {
+		t.Fatalf("could not find next server root: %v", err)
+	}
+	driver, err := seleniumpkg.New()
+	if err != nil {
+		t.Fatalf("driver: %v", err)
+	}
+	defer driver.Close()
+
+	adminURL := root
+	adminURL.Path = "/admin"
+
+	if err := driver.Get(adminURL.String()); err != nil {
+		t.Fatalf("navigate admin: %v", err)
+	}
+
+	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+		t.Fatalf("oidc login readiness: %v", err)
+	}
+
+	currentHandle, err := driver.CurrentWindowHandle()
+	if err != nil {
+		t.Fatalf("current window handle: %v", err)
+	}
+
+	openResult, err := driver.ExecuteScript(`
+		const tab = window.open(arguments[0], 'oidc-focus-distractor');
+		if (!tab) {
+			return 'failed';
+		}
+		tab.focus();
+		return 'ok';
+	`, []any{adminURL.String()})
+	if err != nil {
+		t.Fatalf("open distractor tab: %v", err)
+	}
+	if openResult != "ok" {
+		t.Fatalf("open distractor tab result: %v", openResult)
+	}
+
+	if _, err := waitForNewWindow(driver, []string{currentHandle}, 10*time.Second); err != nil {
+		t.Fatalf("wait for distractor tab: %v", err)
+	}
+
+	if err := driver.SwitchWindow(currentHandle); err != nil {
+		t.Fatalf("switch back to admin page: %v", err)
+	}
+
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatalf("oidc login: %v", err)
+	}
+
+	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+		t.Fatalf("wait for login text: %v", err)
+	}
+
+	focusStateAny, err := driver.ExecuteScript(`
+		const distractor = window.open('', 'oidc-focus-distractor');
+		if (!distractor) {
+			return { openerHasFocus: document.hasFocus(), distractorHasFocus: null, distractorMissing: true };
+		}
+		return {
+			openerHasFocus: document.hasFocus(),
+			distractorHasFocus: distractor.document.hasFocus(),
+			distractorMissing: false,
+		};
+	`, nil)
+	if err != nil {
+		t.Fatalf("read focus state: %v", err)
+	}
+
+	focusState, ok := focusStateAny.(map[string]any)
+	if !ok {
+		t.Fatalf("unexpected focus state payload: %#v", focusStateAny)
+	}
+
+	if missing, _ := focusState["distractorMissing"].(bool); missing {
+		t.Fatalf("distractor tab missing from named window lookup")
+	}
+
+	openerHasFocus, _ := focusState["openerHasFocus"].(bool)
+	if !openerHasFocus {
+		t.Fatalf("expected opener tab to have focus after callback close; got %#v", focusState)
+	}
+
+	distractorHasFocus, ok := focusState["distractorHasFocus"].(bool)
+	if !ok {
+		t.Fatalf("missing distractor focus state: %#v", focusState)
+	}
+	if distractorHasFocus {
+		t.Fatalf("expected distractor tab to be unfocused after callback close; got %#v", focusState)
+	}
+
+	_, _ = driver.ExecuteScript(`window.open('', 'oidc-focus-distractor')?.close();`, nil)
+}
+
 func expectElementText(driver selenium.WebDriver, selector string, expected string, timeout time.Duration) error {
 	elem, err := waitForElement(driver, selenium.ByCSSSelector, selector, timeout)
 	if err != nil {

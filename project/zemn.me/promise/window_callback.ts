@@ -52,6 +52,7 @@ export function useWindowCallback(target: URL): Promise<string> {
 			window.removeEventListener('message', handler);
 
 			opened?.close();
+			window.focus();
 
 			if (!event.data.href) {
 				reject(new InvalidCallbackMessageError());
