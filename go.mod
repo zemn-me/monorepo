@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
@@ -41,7 +41,7 @@ require (
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.3
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 	golang.org/x/tools v0.43.0
 	golang.org/x/tools/gopls v0.17.1
 	honnef.co/go/tools v0.6.1
