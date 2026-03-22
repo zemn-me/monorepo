@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { frontmatter as articleCsp } from '#root/mdx/article/2014/csp.js';
 import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
+import { frontmatter as articleFakePlants } from '#root/mdx/article/2026/fake_plants.js';
 import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
 import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
@@ -181,6 +182,12 @@ export const Bio = {
 			...canonicaliseArticleMetadata(articleMissing),
 			tags: [writing],
 			url: new RelativeURL('/article/2024/missing'),
+		},
+		{
+			id: 'bb15e86a-46a2-410c-993b-b520e601e537',
+			...canonicaliseArticleMetadata(articleFakePlants),
+			tags: [writing],
+			url: new RelativeURL('/article/2026/fake_plants'),
 		},
 		{
 			id: 'ab290485-ae49-4455-af28-674d5fb00fa8',
