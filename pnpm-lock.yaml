@@ -283,8 +283,8 @@ devDependencies:
     specifier: 7.2.0
     version: 7.2.0
   '@fortawesome/react-fontawesome':
-    specifier: 3.2.0
-    version: 3.2.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@19.2.4)
+    specifier: 3.3.0
+    version: 3.3.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@19.2.4)
   '@microsoft/api-documenter':
     specifier: 7.29.7
     version: 7.29.7(@types/node@24.12.0)
@@ -2501,8 +2501,8 @@ packages:
       '@fortawesome/fontawesome-common-types': 7.2.0
     dev: true
 
-  /@fortawesome/react-fontawesome@3.2.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@19.2.4):
-    resolution: {integrity: sha512-E9Gu1hqd6JussVO26EC4WqRZssXMnQr2ol7ZNWkkFOH8jZUaxDJ9Z9WF9wIVkC+kJGXUdY3tlffpDwEKfgQrQw==}
+  /@fortawesome/react-fontawesome@3.3.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@19.2.4):
+    resolution: {integrity: sha512-EHmHeTf8WgO29sdY3iX/7ekE3gNUdlc2RW6mm/FzELlHFKfTrA9S4MlyquRR+RRCRCn8+jXfLFpLGB2l7wCWyw==}
     engines: {node: '>=20'}
     peerDependencies:
       '@fortawesome/fontawesome-svg-core': ~6 || ~7
