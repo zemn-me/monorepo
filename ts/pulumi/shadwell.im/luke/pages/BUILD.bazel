@@ -8,6 +8,8 @@ ts_project(
     srcs = [
         "_app.tsx",
         "index.tsx",
+        "wikitree.tsx",
+        "rankIconReferences.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -33,6 +35,8 @@ filegroup(
     srcs = [
         "_app.tsx",
         "index.tsx",
+        "wikitree.tsx",
+        "rankIconReferences.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
