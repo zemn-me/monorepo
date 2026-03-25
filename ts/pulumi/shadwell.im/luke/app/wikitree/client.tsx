@@ -1,6 +1,8 @@
-import Head from 'next/head';
+'use client';
+
+import * as d3 from 'd3';
 import { FormEvent, PointerEvent, useEffect, useMemo, useRef, useState, WheelEvent } from 'react';
-import { RANK_IMAGE_RULES } from './rankIconReferences';
+import { RANK_IMAGE_RULES } from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/rankIconReferences.js';
 
 type RelationName = 'father' | 'mother' | 'child';
 
@@ -124,8 +126,6 @@ interface DragState {
 	moved: boolean;
 }
 
-type ScriptLoadState = 'idle' | 'loading' | 'ready' | 'failed';
-
 const RELATIONS: readonly RelationDefinition[] = [
 	{ prop: 'P22', name: 'father', color: '#3923d6' },
 	{ prop: 'P25', name: 'mother', color: '#ff4848' },
@@ -162,8 +162,6 @@ const LEGACY_WIKIDATA_CACHE_KEY = 'luke-shadwell-im:wikitree:wikidata:v2';
 const WIKIDATA_CACHE_KEY_PREFIX = 'luke-shadwell-im:wikitree:wikidata:v3:';
 const WIKIDATA_CACHE_SCHEMA_VERSION = 2;
 const WIKIDATA_CACHE_TTL_MS = 2 * 24 * 60 * 60 * 1000;
-const FORCE_SCRIPT_ID = 'd3-force-canvas-cdn';
-const FORCE_SCRIPT_URL = 'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
 const ABSOLUTE_MIN_SCALE = 0.01;
 const MAX_SCALE = 3.2;
 const ZOOM_OUT_BREADTH_FACTOR = 1.2;
@@ -322,32 +320,6 @@ function minZoomScaleForChart(nodes: readonly SimNode[], width: number, height: 
 	const targetHeight = Math.max(1, height - padding);
 	const fitScale = Math.min(targetWidth / bounds.contentWidth, targetHeight / bounds.contentHeight, MAX_SCALE);
 	return clamp(fitScale / ZOOM_OUT_BREADTH_FACTOR, ABSOLUTE_MIN_SCALE, MAX_SCALE);
-}
-
-function ensureD3Loaded() {
-	return new Promise<void>((resolve, reject) => {
-		if (typeof window === 'undefined') {
-			reject(new Error('Window unavailable'));
-			return;
-		}
-		if ((window as { d3?: unknown }).d3) {
-			resolve();
-			return;
-		}
-		const existing = document.getElementById(FORCE_SCRIPT_ID);
-		if (existing) {
-			existing.addEventListener('load', () => resolve(), { once: true });
-			existing.addEventListener('error', () => reject(new Error('Failed to load D3 script.')));
-			return;
-		}
-		const script = document.createElement('script');
-		script.id = FORCE_SCRIPT_ID;
-		script.src = FORCE_SCRIPT_URL;
-		script.async = true;
-		script.onload = () => resolve();
-		script.onerror = () => reject(new Error('Failed to load D3 script.'));
-		document.head.appendChild(script);
-	});
 }
 
 function normaliseQid(input: string) {
@@ -1492,7 +1464,6 @@ export default function WikiTreePage() {
 		retryAt: null,
 	});
 	const [clockNow, setClockNow] = useState(() => Date.now());
-	const [scriptLoadState, setScriptLoadState] = useState<ScriptLoadState>('idle');
 	const depths = useDepths(graph);
 	const retryCountdownSeconds =
 		loadingState.rateLimited && loadingState.retryAt
@@ -1665,28 +1636,6 @@ export default function WikiTreePage() {
 	}, [graph]);
 
 	useEffect(() => {
-		if (scriptLoadState !== 'idle') {
-			return;
-		}
-		let cancelled = false;
-		void ensureD3Loaded()
-			.then(() => {
-				if (!cancelled) {
-					setScriptLoadState('ready');
-				}
-			})
-			.catch(() => {
-				if (!cancelled) {
-					setScriptLoadState('failed');
-				}
-			});
-		setScriptLoadState('loading');
-		return () => {
-			cancelled = true;
-		};
-	}, [scriptLoadState]);
-
-	useEffect(() => {
 		if (!graph || !canvasRef.current || !viewportRef.current) {
 			return;
 		}
@@ -1696,7 +1645,6 @@ export default function WikiTreePage() {
 		if (!context) {
 			return;
 		}
-		const d3 = (window as { d3?: { [key: string]: any } }).d3;
 		const orderedNodes = Object.values(graph.nodes).sort((a, b) => a.id.localeCompare(b.id));
 		const existingNodePositions = new Map(
 			nodesRef.current.map(node => [
@@ -1752,20 +1700,17 @@ export default function WikiTreePage() {
 			transformRef.current = fitNodesToCanvas(initialNodes, boundsWidth, boundsHeight);
 		}
 
-		const simulation =
-			d3
-				? d3.forceSimulation(initialNodes)
-						.force(
-							'link',
-							d3.forceLink(initialLinks)
-								.id((node: { id: string }) => node.id)
-								.distance((link: { relation: RelationName }) => (link.relation === 'child' ? 170 : 156))
-								.strength(0.78)
-						)
-						.force('charge', d3.forceManyBody().strength(-2200))
-						.force('center', d3.forceCenter(boundsWidth / 2, boundsHeight / 2))
-						.force('collision', d3.forceCollide((node: { radius: number }) => node.radius + 7).strength(0.78))
-				: null;
+		const simulation = d3.forceSimulation(initialNodes)
+			.force(
+				'link',
+				d3.forceLink(initialLinks)
+					.id((node: { id: string }) => node.id)
+					.distance((link: { relation: RelationName }) => (link.relation === 'child' ? 170 : 156))
+					.strength(0.78)
+			)
+			.force('charge', d3.forceManyBody().strength(-2200))
+			.force('center', d3.forceCenter(boundsWidth / 2, boundsHeight / 2))
+			.force('collision', d3.forceCollide((node: { radius: number }) => node.radius + 7).strength(0.78));
 		simulationRef.current = simulation;
 
 		const createLabelElement = () => {
@@ -1990,12 +1935,10 @@ export default function WikiTreePage() {
 			}
 			setCanvasSize(canvas);
 			canvasViewportRef.current = newBounds;
-			if (simulation && d3) {
-				simulation.force('center', d3.forceCenter(newBounds.width / 2, newBounds.height / 2));
-				simulation.force('x', d3.forceX(newBounds.width / 2).strength(0.02));
-				simulation.force('y', d3.forceY(newBounds.height / 2).strength(0.02));
-				simulation.alpha(0.4).restart();
-			}
+			simulation.force('center', d3.forceCenter(newBounds.width / 2, newBounds.height / 2));
+			simulation.force('x', d3.forceX(newBounds.width / 2).strength(0.02));
+			simulation.force('y', d3.forceY(newBounds.height / 2).strength(0.02));
+			simulation.alpha(0.4).restart();
 			scheduleRender();
 		});
 		observer.observe(viewport);
@@ -2013,7 +1956,7 @@ export default function WikiTreePage() {
 				drawRequestRef.current = 0;
 			}
 		};
-	}, [activeHighlight, depths, graph, scriptLoadState, searchQuery]);
+	}, [activeHighlight, depths, graph, searchQuery]);
 
 	useEffect(() => {
 		scheduleRender();
@@ -2166,13 +2109,6 @@ export default function WikiTreePage() {
 
 	return (
 		<>
-			<Head>
-				<title>WikiTree for Luke Shadwell</title>
-				<meta
-					content="React recreation of the classic GeneaWiki Wikidata family tree explorer."
-					name="description"
-				/>
-			</Head>
 			<div className="page">
 				<div className="chrome">
 					<div className="brand">luke.shadwell.im</div>
@@ -2236,8 +2172,6 @@ export default function WikiTreePage() {
 								</p>
 							)}
 							{error ? <p className="error">{error}</p> : null}
-							{scriptLoadState === 'loading' ? <p>Loading enhanced layout…</p> : null}
-							{scriptLoadState === 'failed' ? <p>Using built-in layout fallback.</p> : null}
 						</div>
 					</section>
 
