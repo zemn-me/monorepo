@@ -232,12 +232,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/factoriolab/factoriolab
 # 	refs-from=main
-FACTORIOLAB_COMMIT = "42d4024fd72adf538d9d67b67f2349edc3bb91cc"
+FACTORIOLAB_COMMIT = "02d9d981f678d041f667ecb1d4d7496c0ea6951c"
 
 http_archive(
     name = "com_github_factoriolab",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-qix0nn1MbEDmK+QhL5JUQlDmXk/XCKtgYX77CKFh8Ns=",
+    integrity = "sha256-VKRIy8fUO9tFwTD5Fu3qRr0s8Qr5+J4NrlGp0bAy5nQ=",
     strip_prefix = "factoriolab-" + FACTORIOLAB_COMMIT,
     # auto-integrity
     url = "https://github.com/factoriolab/factoriolab/archive/" + FACTORIOLAB_COMMIT + ".zip",
@@ -337,12 +337,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "51f2337123fbac92a1c4beae739f1fd6edd4199e"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "8f38ddf2bfefb326d40f5ddaaa51360cb050720c"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "ea6204b3613245178debdd582f06ae9ae926987ff7012796d0da8977d6ad04a9",
+    sha256 = "b7ef86ae9e56823a465055c209cb9d603fff298a8b8502d41e597a212799bba0",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
@@ -526,7 +526,7 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.6"
+RUFF_VERSION = "0.15.7"
 
 # For Apple Silicon macOS
 http_archive(
