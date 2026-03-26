@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//ts/pulumi/shadwell.im/luke:__subpackages__"])
 
@@ -7,8 +7,11 @@ ts_project(
     name = "wikitree",
     srcs = [
         "client.tsx",
+        "constants.ts",
+        "highlight.ts",
         "page.tsx",
         "rankIconReferences.ts",
+        "types.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -25,6 +28,24 @@ ts_project(
     ],
 )
 
+ts_project(
+    name = "wikitree_tests",
+    srcs = ["highlight_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":wikitree",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["highlight_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":wikitree_tests"],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -34,8 +55,12 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
+        "constants.ts",
+        "highlight.ts",
+        "highlight_test.ts",
         "page.tsx",
         "rankIconReferences.ts",
+        "types.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
