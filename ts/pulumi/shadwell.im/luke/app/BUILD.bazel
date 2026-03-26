@@ -19,6 +19,7 @@ ts_project(
         "//:node_modules/react-dom",
         "//ts/next.js",
         "//ts/next.js/types/next-compiled",
+        "//ts/pulumi/shadwell.im/luke/app/wikitree",  # keep
     ],
 )
 
