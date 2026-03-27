@@ -454,8 +454,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.87.0
-    version: 43.87.0(typanion@3.14.0)
+    specifier: 43.87.1
+    version: 43.87.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -16748,8 +16748,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.87.0(typanion@3.14.0):
-    resolution: {integrity: sha512-pWivwZxQ+GdM9CQwXyOdiWyQfls0LYoswfBIvnsGYdI2wxsiI4/7uR3vpMn3AYPD655OZrxyPkeueT3B5Dig2w==}
+  /renovate@43.87.1(typanion@3.14.0):
+    resolution: {integrity: sha512-5wS4huXjSQSULJrdHAkTJwplTLTgVdtZFlCWITmng2dHslw5uO/DOVIwEvqp5IWOG8wHEUub2GEkzpshHMYKWw==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16853,7 +16853,7 @@ packages:
       remark-gfm: 4.0.1
       remark-github: 12.0.0
       safe-stable-stringify: 2.5.0
-      sax: 1.5.0
+      sax: 1.6.0
       semver: 7.7.4
       semver-stable: 3.0.0
       semver-utils: 1.1.4
@@ -17096,11 +17096,6 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
-
-  /sax@1.5.0:
-    resolution: {integrity: sha512-21IYA3Q5cQf089Z6tgaUTr7lDAyzoTPx5HRtbhsME8Udispad8dC/+sziTNugOEx54ilvatQ9YCzl4KQLPcRHA==}
-    engines: {node: '>=11.0.0'}
-    dev: true
 
   /sax@1.6.0:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
