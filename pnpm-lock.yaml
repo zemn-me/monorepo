@@ -454,8 +454,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.91.2
-    version: 43.91.2(typanion@3.14.0)
+    specifier: 43.91.3
+    version: 43.91.3(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -9059,8 +9059,8 @@ packages:
     engines: {node: '>=18.0'}
     dev: true
 
-  /cronstrue@3.13.0:
-    resolution: {integrity: sha512-M06cKwRIN46AyuM8BOmF1HUkBTkd3/h7uYImnrH1T3wtRKBGOibVo3jZ42VheEvx8LtgZbG/4GI35vfIxYxMug==}
+  /cronstrue@3.14.0:
+    resolution: {integrity: sha512-XnW4vuK/jPJjmTyDWiej1Zq36Od7ITwxaV2O1pzHZuyMVvdy7NAvyvIBzybt+idqSpfqYuoDG7uf/ocGtJVWxA==}
     hasBin: true
     dev: true
 
@@ -16650,8 +16650,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.91.2(typanion@3.14.0):
-    resolution: {integrity: sha512-qMnU9PNhcXdaZNIeauJ5Ff6zn+J51DaDQT9vCBbi/oV6jXWsxz5qEB29sSv4YPz0Sekn7JniWskAHXxmadGiTg==}
+  /renovate@43.91.3(typanion@3.14.0):
+    resolution: {integrity: sha512-R21qAXXOqtQVdrRPQE4yfznZsBniKq0EFwt7mOetV0D/cOd+lmoZ/l7BqCgdVxHl9Buq488vZttYidd5sz/gVw==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16704,7 +16704,7 @@ packages:
       commander: 14.0.3
       conventional-commits-detector: 1.0.3
       croner: 10.0.1
-      cronstrue: 3.13.0
+      cronstrue: 3.14.0
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.2
