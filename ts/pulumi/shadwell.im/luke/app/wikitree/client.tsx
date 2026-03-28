@@ -3,250 +3,65 @@
 import * as d3 from 'd3-force';
 import { FormEvent, PointerEvent, useEffect, useMemo, useRef, useState, WheelEvent } from 'react';
 
-import { RANK_IMAGE_RULES } from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/rankIconReferences.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
-
-type RelationName = 'father' | 'mother' | 'child';
-
-interface RelationDefinition {
-	readonly prop: 'P22' | 'P25' | 'P40';
-	readonly name: RelationName;
-	readonly color: string;
-}
-
-type RankIcon =
-	| { type: 'emoji'; value: string }
-	| { type: 'image'; src: string };
-
-type HighlightFilterId =
-	| 'none'
-	| 'anglicanPriest'
-	| 'anyNobleTitle'
-	| 'living'
-	| 'politician'
-	| 'monarchNobleTitle'
-	| 'military'
-	| 'rightHonourable';
-
-interface HighlightFlags {
-	readonly anglicanPriest: boolean;
-	readonly anyNobleTitle: boolean;
-	readonly living: boolean;
-	readonly politician: boolean;
-	readonly military: boolean;
-	readonly monarchNobleTitle: boolean;
-	readonly rightHonourable: boolean;
-}
-
-interface EntityNode {
-	readonly id: string;
-	readonly label: string;
-	readonly rankIcon?: RankIcon;
-	readonly rankLabel?: string;
-	readonly branchLabel?: string;
-	readonly imageUrl?: string;
-	readonly highlightFlags: HighlightFlags;
-	readonly url: string;
-}
-
-interface EntityEdge {
-	readonly from: string;
-	readonly to: string;
-	readonly relation: RelationName;
-	readonly color: string;
-}
-
-interface GraphData {
-	readonly edges: readonly EntityEdge[];
-	readonly excessiveNodes: boolean;
-	readonly nodes: Readonly<Record<string, EntityNode>>;
-	readonly rootId: string;
-}
-
-interface LoadingState {
-	readonly loaded: number;
-	readonly loading: boolean;
-	readonly queued: number;
-	readonly rateLimited: boolean;
-	readonly retryAt: number | null;
-}
-
-interface SimNode {
-	id: string;
-	label: string;
-	rankIcon?: RankIcon;
-	rankLabel?: string;
-	branchLabel?: string;
-	imageUrl?: string;
-	highlightFlags: HighlightFlags;
-	url: string;
-	x: number;
-	y: number;
-	depth: number;
-	fx: number | null;
-	fy: number | null;
-	radius: number;
-}
-
-interface SimEdge {
-	source: string | SimNode;
-	target: string | SimNode;
-	relation: RelationName;
-	color: string;
-}
-
-interface CachedEntityRecord {
-	readonly expiresAt: number;
-	readonly schemaVersion?: number;
-	readonly value: unknown;
-}
-
-type CachedEntityValue = {
-	readonly claims?: Record<string, readonly unknown[]>;
-	readonly id?: string;
-	readonly labels?: {
-		readonly en?: {
-			readonly value?: string;
-		};
-	};
-};
-
-interface ViewportTransform {
-	x: number;
-	y: number;
-	scale: number;
-}
-
-interface DragState {
-	mode: 'pan' | 'node';
-	node?: SimNode;
-	panX: number;
-	panY: number;
-	pointerId: number;
-	startX: number;
-	startY: number;
-	moved: boolean;
-}
-
-const RELATIONS: readonly RelationDefinition[] = [
-	{ prop: 'P22', name: 'father', color: '#3923d6' },
-	{ prop: 'P25', name: 'mother', color: '#ff4848' },
-	{ prop: 'P40', name: 'child', color: '#7a7a7a' },
-];
-
-const NODE_LIMIT_OPTIONS = [
-	30,
-	100,
-	150,
-	200,
-	250,
-	500,
-	750,
-	1000,
-	1250,
-	1500,
-	1750,
-	2000,
-	2250,
-	2500,
-	2750,
-	3000,
-	3500,
-	4000,
-	4500,
-	5000,
-	7500,
-	10000,
-] as const;
-const DEFAULT_MAX_NODES = NODE_LIMIT_OPTIONS[0];
-const DEFAULT_QID = 'Q42';
-const LEGACY_WIKIDATA_CACHE_KEY = 'luke-shadwell-im:wikitree:wikidata:v2';
-const WIKIDATA_CACHE_KEY_PREFIX = 'luke-shadwell-im:wikitree:wikidata:v3:';
-const WIKIDATA_CACHE_SCHEMA_VERSION = 2;
-const WIKIDATA_CACHE_TTL_MS = 2 * 24 * 60 * 60 * 1000;
-const ABSOLUTE_MIN_SCALE = 0.01;
-const MAX_SCALE = 3.2;
-const ZOOM_OUT_BREADTH_FACTOR = 1.2;
-const DETAIL_LABEL_SCALE_THRESHOLD = 0.5;
-const CLUSTER_LABEL_RADIUS_PX = 118;
-const CLUSTER_LABEL_MIN_NODES = 4;
-const CLUSTER_LABEL_MIN_SHARE = 0.6;
-const CLUSTER_LABEL_VIEWPORT_MARGIN = 84;
-const BASE_NODE_RADIUS = 14;
-const MILITARY_RANK_PROPERTY = 'P410';
-const MILITARY_BRANCH_PROPERTIES = ['P241', 'P463'] as const;
-const FALLBACK_RANK_ICON = '🪖';
-const IMAGE_PROPERTY = 'P18';
-const DATE_OF_BIRTH_PROPERTY = 'P569';
-const DATE_OF_DEATH_PROPERTY = 'P570';
-const OCCUPATION_PROPERTY = 'P106';
-const NOBLE_TITLE_PROPERTY = 'P97';
-const HONORIFIC_PREFIX_PROPERTY = 'P511';
-const PARTICIPATED_IN_CONFLICT_PROPERTY = 'P607';
-const SUBCLASS_OF_PROPERTY = 'P279';
-const WIKIDATA_REQUEST_INTERVAL_MS = 120;
-const WIKIDATA_MAX_RETRIES = 5;
-const WIKIDATA_BATCH_SIZE = 20;
-const CACHEABLE_CLAIM_PROPERTIES = [
-	'P22',
-	'P25',
-	'P40',
-	MILITARY_RANK_PROPERTY,
-	...MILITARY_BRANCH_PROPERTIES,
-	IMAGE_PROPERTY,
+import {
+	ABSOLUTE_MIN_SCALE,
+	BASE_NODE_RADIUS,
+	CACHEABLE_CLAIM_PROPERTIES,
+	CLUSTER_LABEL_MIN_NODES,
+	CLUSTER_LABEL_MIN_SHARE,
+	CLUSTER_LABEL_RADIUS_PX,
+	CLUSTER_LABEL_VIEWPORT_MARGIN,
 	DATE_OF_BIRTH_PROPERTY,
 	DATE_OF_DEATH_PROPERTY,
-	OCCUPATION_PROPERTY,
-	NOBLE_TITLE_PROPERTY,
+	DEFAULT_MAX_NODES,
+	DEFAULT_QID,
+	DETAIL_LABEL_SCALE_THRESHOLD,
+	FALLBACK_RANK_ICON,
+	HIGHLIGHT_FILTERS,
 	HONORIFIC_PREFIX_PROPERTY,
+	IMAGE_PROPERTY,
+	LEGACY_WIKIDATA_CACHE_KEY,
+	MAX_SCALE,
+	MILITARY_BRANCH_PROPERTIES,
+	MILITARY_RANK_PROPERTY,
+	NOBLE_TITLE_PROPERTY,
+	NODE_LIMIT_OPTIONS,
+	OCCUPATION_PROPERTY,
 	PARTICIPATED_IN_CONFLICT_PROPERTY,
+	RELATIONS,
 	SUBCLASS_OF_PROPERTY,
-] as const;
-
-const HIGHLIGHT_FILTERS: readonly {
-	readonly id: HighlightFilterId;
-	readonly label: string;
-	readonly description: string;
-}[] = [
-	{ id: 'none', label: 'All people', description: 'Show the full graph without extra highlighting.' },
-	{
-		id: 'anglicanPriest',
-		label: 'Anglican priest',
-		description: 'Highlight people with occupation Anglican priest.',
-	},
-	{
-		id: 'anyNobleTitle',
-		label: 'Any noble title',
-		description: 'Highlight people who have any noble title value or any honorific prefix.',
-	},
-	{
-		id: 'living',
-		label: 'Living',
-		description:
-			'Highlight people with a date of birth, no date of death, and birth less than 100 years ago.',
-	},
-	{
-		id: 'politician',
-		label: 'Politician',
-		description: 'Highlight people with occupation politician.',
-	},
-	{
-		id: 'monarchNobleTitle',
-		label: 'Monarchy',
-		description: 'Highlight people with a monarch noble title or the honorific prefix Royal Highness.',
-	},
-	{
-		id: 'military',
-		label: 'Military',
-		description:
-			'Highlight people with a military branch, participated in conflict, or military, police or special rank.',
-	},
-	{
-		id: 'rightHonourable',
-		label: 'The Right Honourable',
-		description: 'Highlight people with the honorific prefix The Right Honourable.',
-	},
-] as const;
+	WIKIDATA_BATCH_SIZE,
+	WIKIDATA_CACHE_KEY_PREFIX,
+	WIKIDATA_CACHE_SCHEMA_VERSION,
+	WIKIDATA_CACHE_TTL_MS,
+	WIKIDATA_MAX_RETRIES,
+	WIKIDATA_REQUEST_INTERVAL_MS,
+	ZOOM_OUT_BREADTH_FACTOR,
+} from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/constants.js';
+import {
+	isNodeHighlighted,
+	matchesHighlightFilter,
+	matchesSearchQuery,
+	normaliseSearchQuery,
+} from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/highlight.js';
+import { RANK_IMAGE_RULES } from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/rankIconReferences.js';
+import type {
+	CachedEntityRecord,
+	CachedEntityValue,
+	DragState,
+	EntityEdge,
+	EntityNode,
+	GraphData,
+	HighlightFilterId,
+	HighlightFlags,
+	LoadingState,
+	RankIcon,
+	RelationName,
+	SimEdge,
+	SimNode,
+	ViewportTransform,
+} from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/types.js';
+import { Link } from '#root/ts/react/next/Link/index.js';
 
 let nextWikidataRequestAt = 0;
 function clamp(value: number, min: number, max: number) {
@@ -1113,51 +928,6 @@ function useDepths(graph: GraphData | null) {
 		}
 		return depths;
 	}, [graph]);
-}
-
-function matchesHighlightFilter(node: Pick<EntityNode, 'highlightFlags'>, filterId: HighlightFilterId) {
-	switch (filterId) {
-		case 'anglicanPriest':
-			return node.highlightFlags.anglicanPriest;
-		case 'anyNobleTitle':
-			return node.highlightFlags.anyNobleTitle;
-		case 'living':
-			return node.highlightFlags.living;
-		case 'politician':
-			return node.highlightFlags.politician;
-		case 'military':
-			return node.highlightFlags.military;
-		case 'monarchNobleTitle':
-			return node.highlightFlags.monarchNobleTitle;
-		case 'rightHonourable':
-			return node.highlightFlags.rightHonourable;
-		case 'none':
-		default:
-			return false;
-	}
-}
-
-function normaliseSearchQuery(value: string) {
-	return value.trim().toLowerCase();
-}
-
-function matchesSearchQuery(node: Pick<EntityNode, 'id' | 'label'>, searchQuery: string) {
-	const normalizedQuery = normaliseSearchQuery(searchQuery);
-	if (!normalizedQuery) {
-		return false;
-	}
-	return (
-		node.label.toLowerCase().includes(normalizedQuery) ||
-		node.id.toLowerCase().includes(normalizedQuery)
-	);
-}
-
-function isNodeHighlighted(
-	node: Pick<EntityNode, 'highlightFlags' | 'id' | 'label'>,
-	filterId: HighlightFilterId,
-	searchQuery: string
-) {
-	return matchesHighlightFilter(node, filterId) || matchesSearchQuery(node, searchQuery);
 }
 
 function extractFamilyName(label: string) {
