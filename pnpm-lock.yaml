@@ -454,8 +454,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.91.3
-    version: 43.91.3(typanion@3.14.0)
+    specifier: 43.91.4
+    version: 43.91.4(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -16650,8 +16650,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.91.3(typanion@3.14.0):
-    resolution: {integrity: sha512-R21qAXXOqtQVdrRPQE4yfznZsBniKq0EFwt7mOetV0D/cOd+lmoZ/l7BqCgdVxHl9Buq488vZttYidd5sz/gVw==}
+  /renovate@43.91.4(typanion@3.14.0):
+    resolution: {integrity: sha512-tOAw1rFtQyAlvAOgG3n7kAijxGvCY5NpuN1AVGaysmY3W24CqaacOU/B9kfggLJKDE8GufbcqBYr9LHg7TlJTA==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16770,7 +16770,7 @@ packages:
       url-join: 5.0.0
       validate-npm-package-name: 7.0.2
       xmldoc: 2.0.3
-      yaml: 2.8.2
+      yaml: 2.8.3
       zod: 4.3.6
     optionalDependencies:
       better-sqlite3: 12.8.0
@@ -19362,12 +19362,6 @@ packages:
   /yaml-ast-parser@0.0.43:
     resolution: {integrity: sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==}
     dev: false
-
-  /yaml@2.8.2:
-    resolution: {integrity: sha512-mplynKqc1C2hTVYxd0PU2xQAc22TI1vShAYGksCCfxbn/dFwnHTNi1bvYsBTkhdUNtGIf5xNOg938rrSSYvS9A==}
-    engines: {node: '>= 14.6'}
-    hasBin: true
-    dev: true
 
   /yaml@2.8.3:
     resolution: {integrity: sha512-AvbaCLOO2Otw/lW5bmh9d/WEdcDFdQp2Z2ZUH3pX9U2ihyUY0nvLv7J6TrWowklRGPYbB/IuIMfYgxaCPg5Bpg==}
