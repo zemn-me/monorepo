@@ -10,7 +10,7 @@ export default function Layout({ children }: Props) {
 	return (
 		<html>
 			<body>
-				<HeaderTagsAppRouter domain="lulu.computer"/>
+				<HeaderTagsAppRouter />
 				{children}
 			</body>
 		</html>
