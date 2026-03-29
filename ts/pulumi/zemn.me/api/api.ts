@@ -68,6 +68,19 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                         hashKey: "id",
                 }, { parent: this, protect: args.protectDatabases });
 
+                const analyticsTable = new aws.dynamodb.Table(`${name}-analytics`, {
+                        attributes: [{
+                                name: "id",
+                                type: "S",
+                        }, {
+                                name: "when",
+                                type: "S",
+                        }],
+                        billingMode: "PAY_PER_REQUEST",
+                        hashKey: "id",
+                        rangeKey: "when",
+                }, { parent: this, protect: args.protectDatabases });
+
                 const usersTable = new aws.dynamodb.Table(`${name}-users`, {
                         attributes: [{
                                 name: "id",
@@ -98,11 +111,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
 				Service: "lambda.amazonaws.com",
 			}),
-			managedPolicyArns: [aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole],
+                        managedPolicyArns: [aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole],
                         inlinePolicies: [{
                                 name: `${name}-dynamodb-inline-policy`,
-                                policy: Pulumi.all([dynamoTable.arn, grievancesTable.arn, usersTable.arn, keyRequestsTable.arn]).apply(
-                                        ([settingsArn, grievancesArn, usersArn, keyArn]) =>
+                                policy: Pulumi.all([dynamoTable.arn, analyticsTable.arn, grievancesTable.arn, usersTable.arn, keyRequestsTable.arn]).apply(
+                                        ([settingsArn, analyticsArn, grievancesArn, usersArn, keyArn]) =>
                                                 JSON.stringify({
                                                         Version: "2012-10-17",
                                                         Statement: [
@@ -116,7 +129,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
                                                                                 "dynamodb:Scan",
                                                                         ],
                                                                         Effect: "Allow",
-                                                                        Resource: [settingsArn, grievancesArn, usersArn, keyArn],
+                                                                        Resource: [settingsArn, analyticsArn, grievancesArn, usersArn, keyArn],
                                                                 },
                                                         ],
                                                 })
@@ -171,9 +184,10 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			environment: {
 				variables: {
 					ARE_VARIABLES_ACTUALLY_BEING_SET: "yes!",
-					...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
+                                        ...(PERSONAL_PHONE_NUMBER !== undefined ? { PERSONAL_PHONE_NUMBER } : {}),
                                         CALLBOX_PHONE_NUMBER: args.callboxPhoneNumber,
                                         DYNAMODB_TABLE_NAME: dynamoTable.name,
+                                        ANALYTICS_TABLE_NAME: analyticsTable.name,
                                         GRIEVANCES_TABLE_NAME: grievancesTable.name,
                                         USERS_TABLE_NAME: usersTable.name,
                                         CALLBOX_KEY_TABLE_NAME: keyRequestsTable.name,

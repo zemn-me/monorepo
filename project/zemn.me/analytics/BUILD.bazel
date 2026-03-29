@@ -1,0 +1,52 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "analytics",
+    srcs = [
+        "analytics.ts",
+        "index.ts",
+    ],
+    visibility = [
+        "//project/zemn.me:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@types/node",
+        "//project/zemn.me/api:ts_client_dts",
+        "//project/zemn.me/constants",
+    ],
+)
+
+ts_project(
+    name = "analytics_tests",
+    srcs = ["analytics_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":analytics",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "analytics_test",
+    srcs = ["analytics_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":analytics_tests"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "analytics.ts",
+        "analytics_test.ts",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
