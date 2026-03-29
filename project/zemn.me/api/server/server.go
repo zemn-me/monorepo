@@ -8,6 +8,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
@@ -47,6 +48,7 @@ var _ DynamoDBClient = (*dynamodb.Client)(nil)
 // Server holds the DynamoDB client and table names.
 type Server struct {
 	ddb                  DynamoDBClient
+	analyticsTableName   string
 	settingsTableName    string
 	grievancesTableName  string
 	usersTableName       string
@@ -109,11 +111,13 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}
 
 	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+	analyticsTableName := os.Getenv("ANALYTICS_TABLE_NAME")
 	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
 	usersTableName := os.Getenv("USERS_TABLE_NAME")
 	keyRequestsTableName := os.Getenv("CALLBOX_KEY_TABLE_NAME")
 
 	r := chi.NewRouter()
+	r.Use(analyticsRequestContext)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions, http.MethodPatch},
@@ -125,6 +129,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	s := &Server{
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
+		analyticsTableName:   analyticsTableName,
 		settingsTableName:    settingsTableName,
 		grievancesTableName:  grievancesTableName,
 		usersTableName:       usersTableName,
@@ -146,8 +151,65 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	auth.ScopeResolver = s.resolveScopes
 
-	s.Handler = HandlerFromMux(NewStrictHandler(s, nil), r)
+	baseHandler := HandlerFromMux(NewStrictHandler(s, nil), r)
+	s.Handler = analyticsBeaconHandler(baseHandler)
 	return s, nil
+}
+
+func analyticsBeaconHandler(next http.Handler) http.Handler {
+	analyticsHandler := analyticsBeaconOriginMiddleware(next)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/analytics/beacon" {
+			analyticsHandler.ServeHTTP(w, r)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func analyticsBeaconOriginMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if !analyticsBeaconOriginAllowed(origin) {
+			http.Error(w, "origin not allowed", http.StatusForbidden)
+			return
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Add("Vary", "Access-Control-Request-Method")
+		w.Header().Add("Vary", "Access-Control-Request-Headers")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func analyticsBeaconOriginAllowed(origin string) bool {
+	if origin == "" {
+		return false
+	}
+
+	u, err := url.Parse(origin)
+	if err != nil {
+		return false
+	}
+
+	switch u.Scheme {
+	case "https":
+		return u.Host == "zemn.me" || u.Host == "www.zemn.me" || u.Host == "localhost"
+	case "http":
+		return u.Hostname() == "localhost" || u.Hostname() == "127.0.0.1" || u.Hostname() == "::1"
+	default:
+		return false
+	}
 }
 
 func provisionSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
@@ -216,6 +278,17 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 	}
 
 	specs := []tableSpec{
+		{
+			Name: s.analyticsTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
 		{
 			Name: s.settingsTableName,
 			Attrs: []types.AttributeDefinition{

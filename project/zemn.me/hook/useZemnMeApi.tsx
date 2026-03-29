@@ -9,6 +9,26 @@ import { Future, future_and_then, future_declare_dependency, resolve } from "#ro
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
 import { watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
 
+export type AnalyticsEvent = paths["/analytics/beacon"]["post"]["requestBody"]["content"]["application/json"];
+
+export async function sendAnalyticsBeacon(
+	event: AnalyticsEvent,
+): Promise<boolean> {
+	const client = createFetchClient<paths>({
+		baseUrl: ZEMN_ME_API_BASE,
+	});
+	const response = await client.POST("/analytics/beacon", {
+		body: event,
+		credentials: "omit",
+		keepalive: true,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	return response.response.ok;
+}
+
 function extractIdTokenJti(id_token: string) {
 	const parsed = watchOutParseIdToken.safeParse(id_token);
 	if (!parsed.success) {
