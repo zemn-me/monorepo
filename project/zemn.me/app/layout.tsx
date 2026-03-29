@@ -6,6 +6,7 @@ import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
+import { AnalyticsPageBeacon } from '#root/project/zemn.me/app/analytics.js';
 import { Providers } from '#root/project/zemn.me/app/providers.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
 import Glade from '#root/project/zemn.me/components/Glade/glade.js';
@@ -53,10 +54,11 @@ export function RootLayout({ children }: Props) {
 						rel="apple-touch-icon"
 						type="image/svg+xml"
 					/>
-					<HeaderTagsAppRouter cspPolicy={csp} domain="zemn.me" />
+					<HeaderTagsAppRouter cspPolicy={csp} />
 				</head>
 				<body className={lora.className}>
 					<ReactQueryDevtools initialIsOpen={false} />
+					<AnalyticsPageBeacon />
 					<Glade>
 					{children}
 					</Glade>

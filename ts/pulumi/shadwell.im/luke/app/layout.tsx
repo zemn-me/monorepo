@@ -27,7 +27,7 @@ export function RootLayout({ children }: Props) {
 	return (
 		<html>
 			<body>
-				<HeaderTagsAppRouter cspPolicy={pageCsp} domain="luke.shadwell.im" />
+				<HeaderTagsAppRouter cspPolicy={pageCsp} />
 				{children}
 			</body>
 		</html>

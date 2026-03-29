@@ -43,6 +43,10 @@ out naturally...
 If your tests take too long, you can use `bazel query` to pick a more specific
 set of tests!
 
+- For *features*, prefer integration tests over all other tests. In that sense,
+always test the feature works as intended rather than the *code* works as
+intended.
+
 - Avoid introducing or relying on custom `window.*` globals to communicate
   state to tests; prefer observing behaviour through the DOM, network
   responses, or existing APIs instead.
