@@ -4,30 +4,12 @@ import createClient from "openapi-react-query";
 import { useMemo } from 'react';
 
 import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
+export { sendAnalyticsBeacon } from "#root/project/zemn.me/client/analytics.js";
+export type { AnalyticsEvent } from "#root/project/zemn.me/client/analytics.js";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 import { Future, future_and_then, future_declare_dependency, resolve } from "#root/ts/future/future.js";
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
 import { watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
-
-export type AnalyticsEvent = paths["/analytics/beacon"]["post"]["requestBody"]["content"]["application/json"];
-
-export async function sendAnalyticsBeacon(
-	event: AnalyticsEvent,
-): Promise<boolean> {
-	const client = createFetchClient<paths>({
-		baseUrl: ZEMN_ME_API_BASE,
-	});
-	const response = await client.POST("/analytics/beacon", {
-		body: event,
-		credentials: "omit",
-		keepalive: true,
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
-
-	return response.response.ok;
-}
 
 function extractIdTokenJti(id_token: string) {
 	const parsed = watchOutParseIdToken.safeParse(id_token);

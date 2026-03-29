@@ -1,7 +1,7 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts/next.js:rules.bzl", "next_project")
 
-package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 next_project(
     name = "next",

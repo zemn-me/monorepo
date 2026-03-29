@@ -1,5 +1,276 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
+
+service_test(
+    name = "analytics_integration_test",
+    flaky = True,
+    services = [
+        ":anna_itest_service",
+        ":availability_itest_service",
+        ":baby_itest_service",
+        ":eggs_itest_service",
+        ":kate_itest_service",
+        ":luke_itest_service",
+        ":lulu_itest_service",
+        ":lucy_itest_service",
+        ":pleaseintroducemetoyourdog_itest_service",
+        "//java/software/amazon/dynamodb:dynamodb",
+        "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
+    ],
+    test = ":analytics_itest_test",
+)
+
+py_binary(
+    name = "baby_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/baby.computer:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/baby.computer:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "baby_itest_service",
+    args = [
+        "ts/pulumi/baby.computer",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":baby_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "eggs_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/eggsfordogs.com:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/eggsfordogs.com:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "eggs_itest_service",
+    args = [
+        "ts/pulumi/eggsfordogs.com",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":eggs_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "lulu_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/lulu.computer:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/lulu.computer:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "lulu_itest_service",
+    args = [
+        "ts/pulumi/lulu.computer",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":lulu_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "pleaseintroducemetoyourdog_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/pleaseintroducemetoyour.dog:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/pleaseintroducemetoyour.dog:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "pleaseintroducemetoyourdog_itest_service",
+    args = [
+        "ts/pulumi/pleaseintroducemetoyour.dog",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":pleaseintroducemetoyourdog_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "anna_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/shadwell.im/anna:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/shadwell.im/anna:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "anna_itest_service",
+    args = [
+        "ts/pulumi/shadwell.im/anna",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":anna_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "kate_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/shadwell.im/kate:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/shadwell.im/kate:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "kate_itest_service",
+    args = [
+        "ts/pulumi/shadwell.im/kate",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":kate_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "lucy_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/shadwell.im/lucy:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/shadwell.im/lucy:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "lucy_itest_service",
+    args = [
+        "ts/pulumi/shadwell.im/lucy",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":lucy_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "luke_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/shadwell.im/luke:dev",
+        "//ts/pulumi/testing/inject_api_iservice",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/shadwell.im/luke:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "luke_itest_service",
+    args = [
+        "ts/pulumi/shadwell.im/luke",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":luke_itest_bin",
+    http_health_check_address = "http://localhost:$${PORT}/wikitree",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+py_binary(
+    name = "availability_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice"],
+    data = [
+        "//ts/pulumi/testing/inject_api_iservice",
+        "//ts/pulumi/zemn.me/availability:dev",
+    ],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/zemn.me/availability:dev)",
+    },
+    main = "//ts/pulumi/testing/inject_api_iservice:inject_api_iservice.py",
+    visibility = ["//:__subpackages__"],
+)
+
+itest_service(
+    name = "availability_itest_service",
+    args = [
+        "ts/pulumi/zemn.me/availability",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":availability_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
+)
+
+go_test(
+    name = "analytics_itest_test",
+    srcs = ["analytics_integration_test.go"],
+    tags = ["manual"],  # keep; needs integration testing harness.
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+    ],
+)
 
 ts_project(
     name = "testing",
@@ -22,4 +293,17 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "testing_test",
+    srcs = ["analytics_integration_test.go"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+    ],
 )

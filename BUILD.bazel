@@ -233,6 +233,7 @@ py_venv(
         "//py/ipynb:ipynb_bin",
         "//py/time/hemisphere:hemisphere_bin",
         "//ts/pulumi/lib/oci/example/python:python_bin",
+        "//ts/pulumi/testing/inject_api_iservice",
     ],
 )
 
