@@ -1,6 +1,5 @@
 import Head from 'next/head';
 
-import { AnalyticsInitializer } from '#root/ts/next.js/component/AnalyticsInitializer/AnalyticsInitializer.js';
 import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.js';
 
 export * as config from '#root/ts/next.js/next.config.js';
@@ -51,7 +50,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		"'self'",
 		'https://*.google-analytics.com',
 		'https://*.doubleclick.net',
-		'https://plausible.io',
 	]),
 
 	// temp disabled
@@ -75,16 +73,13 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 
 interface HeaderTagsProps {
 	readonly cspPolicy?: CspPolicy;
-	readonly domain: string;
 }
 
 export function HeaderTagsPagesRouter({
-	domain,
 	cspPolicy = DefaultContentSecurityPolicy,
 }: HeaderTagsProps) {
 	return (
 		<>
-			<AnalyticsInitializer domain={domain} />
 			<DeclareTrustedTypesPolicy/>
 			<Head>
 				<meta
@@ -113,11 +108,9 @@ export function HeaderTagsPagesRouter({
 
 export function HeaderTagsAppRouter({
 	cspPolicy = DefaultContentSecurityPolicy,
-	domain,
 }: HeaderTagsProps) {
 	return (
 		<>
-			<AnalyticsInitializer domain={domain} />
 			<DeclareTrustedTypesPolicy/>
 			<meta
 				content={Object.entries(cspPolicy)

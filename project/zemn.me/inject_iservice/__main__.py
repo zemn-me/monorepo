@@ -40,9 +40,8 @@ def main() -> None:
 
 	port_map = AssignedPorts.model_validate(json.loads(assigned))
 
-	os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = (
-		"http://localhost:" + str(port_map.api_service_port)
-	)
+	api_base = "http://localhost:" + str(port_map.api_service_port)
+	os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = api_base
 
 	if not use_prod_env:
 		issuer = None

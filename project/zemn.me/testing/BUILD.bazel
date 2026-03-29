@@ -67,6 +67,7 @@ go_test(
     name = "testing_test",
     srcs = [
         "admin_test.go",
+        "analytics_test.go",
         "go_basic_test.go",
         "grievance_portal_test.go",
         "integration_helpers_test.go",
@@ -75,6 +76,10 @@ go_test(
     deps = [
         "//go/seleniumutil",
         "//project/zemn.me/testing/oidc",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
         "@com_github_tebeka_selenium//:selenium",
         "@com_github_tebeka_selenium//log",
     ],

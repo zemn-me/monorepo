@@ -18,6 +18,10 @@ import (
 type ServicePorts struct {
 	NextServerPort string `json:"@@//project/zemn.me:itest_service"`
 	APIPort        string `json:"@@//project/zemn.me/api/cmd/localserver:localserver_itest_service"`
+	// Analytics are not rendered anywhere yet, so the itest reads DynamoDB
+	// directly to verify ingest. Once analytics are visible in the product, this
+	// can go away and the test should assert on the UI instead.
+	DynamoDBPort   string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
 	OIDCProvider   string `json:"@@//project/zemn.me/testing:oidc_provider_itest_service"`
 }
 
@@ -53,6 +57,21 @@ func apiRoot() (url.URL, error) {
 	return url.URL{
 		Scheme: "http",
 		Host:   "localhost:" + ports.APIPort,
+	}, nil
+}
+
+func dynamoDBRoot() (url.URL, error) {
+	ports, err := servicePorts()
+	if err != nil {
+		return url.URL{}, err
+	}
+	if ports.DynamoDBPort == "" {
+		return url.URL{}, fmt.Errorf("dynamodb port not found in ASSIGNED_PORTS")
+	}
+
+	return url.URL{
+		Scheme: "http",
+		Host:   "localhost:" + ports.DynamoDBPort,
 	}, nil
 }
 

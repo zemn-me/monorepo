@@ -33,6 +33,7 @@ go_library(
     srcs = [
         "TestRemoveDuplicateDigits.go",
         "admin.go",
+        "analytics.go",
         "api.gen.go",
         "callbox_settings.go",
         "constants.go",
@@ -95,6 +96,7 @@ go_test(
     srcs = [
         "admin_test.go",
         "allow_empty_digits_test.go",
+        "analytics_test.go",
         "cors_test.go",
         "grievances_test.go",
         "in_memory_ddb_test.go",
@@ -113,6 +115,8 @@ go_test(
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
         "@com_github_beevik_etree//:etree",
+        "@com_github_go_chi_chi_v5//:chi",
+        "@com_github_go_chi_cors//:cors",
         "@com_github_google_uuid//:uuid",
         "@com_github_twilio_twilio_go//twiml",
     ],
