@@ -4,6 +4,8 @@ import createClient from "openapi-react-query";
 import { useMemo } from 'react';
 
 import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
+export { sendAnalyticsBeacon } from "#root/project/zemn.me/client/analytics.js";
+export type { AnalyticsEvent } from "#root/project/zemn.me/client/analytics.js";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 import { Future, future_and_then, future_declare_dependency, resolve } from "#root/ts/future/future.js";
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";

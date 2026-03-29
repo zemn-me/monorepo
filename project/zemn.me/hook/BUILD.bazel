@@ -4,6 +4,7 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "hook",
     srcs = [
+        "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
         "useGetExactContactByPhoneNumber.ts",
@@ -32,6 +33,7 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
+        "//project/zemn.me/client",
         "//project/zemn.me/constants",
         "//project/zemn.me/promise",
         "//third_party/com/googleapis/people:ts_client",
@@ -60,6 +62,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
         "useGetExactContactByPhoneNumber.ts",

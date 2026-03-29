@@ -11,6 +11,7 @@ import (
 
 type inMemoryDDB struct {
 	records    []SettingsRecord
+	analytics  []analyticsEventRecord
 	grievances map[string]grievanceRecord
 	users      map[string]userRecord
 	keyRecords []KeyRequestRecord
@@ -78,6 +79,14 @@ func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, o
 			return nil, err
 		}
 		db.keyRecords = append(db.keyRecords, rec)
+		return &dynamodb.PutItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "analytics" {
+		var rec analyticsEventRecord
+		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+			return nil, err
+		}
+		db.analytics = append(db.analytics, rec)
 		return &dynamodb.PutItemOutput{}, nil
 	}
 	if in.TableName != nil && *in.TableName == "grievances" {
