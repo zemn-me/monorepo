@@ -18,6 +18,7 @@ func newTestServer() *Server {
 	return &Server{
 		log:                  log.New(io.Discard, "", 0),
 		twilioSharedSecret:   "secret",
+		analyticsTableName:   "analytics",
 		settingsTableName:    "settings",
 		grievancesTableName:  "grievances",
 		usersTableName:       "users",

@@ -882,6 +882,112 @@ components:
       properties:
         id:
           type: string
+    AnalyticsPage:
+      type: object
+      properties:
+        urlPath:
+          type: string
+        title:
+          type: string
+        referrer:
+          type: string
+          format: uri
+        utmSource:
+          type: string
+        utmMedium:
+          type: string
+        utmCampaign:
+          type: string
+        utmTerm:
+          type: string
+        utmContent:
+          type: string
+    AnalyticsContext:
+      type: object
+      properties:
+        screen:
+          $ref: '#/components/schemas/AnalyticsDimensions'
+        viewport:
+          $ref: '#/components/schemas/AnalyticsDimensions'
+        locale:
+          type: string
+        timeZone:
+          type: string
+        userAgent:
+          type: string
+    AnalyticsDimensions:
+      type: object
+      required:
+        - width
+        - height
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+    AnalyticsPerformance:
+      type: object
+      properties:
+        navigationType:
+          type: string
+        loadMs:
+          type: number
+        lcpMs:
+          type: number
+        cls:
+          type: number
+        inpMs:
+          type: number
+    AnalyticsEngagement:
+      type: object
+      properties:
+        activeMs:
+          type: integer
+        totalMs:
+          type: integer
+        scrollDepthPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+        visibilityState:
+          type: string
+    AnalyticsEvent:
+      type: object
+      required:
+        - eventName
+        - eventTime
+        - eventId
+        - sessionId
+      properties:
+        eventName:
+          type: string
+        eventTime:
+          type: string
+          format: date-time
+        eventId:
+          type: string
+        sessionId:
+          type: string
+        anonymousId:
+          type: string
+        page:
+          $ref: '#/components/schemas/AnalyticsPage'
+        context:
+          $ref: '#/components/schemas/AnalyticsContext'
+        performance:
+          $ref: '#/components/schemas/AnalyticsPerformance'
+        engagement:
+          $ref: '#/components/schemas/AnalyticsEngagement'
+        properties:
+          type: object
+          additionalProperties: true
+    AnalyticsAccepted:
+      type: object
+      required:
+        - accepted
+      properties:
+        accepted:
+          type: boolean
 
 paths:
   /phone/init:
@@ -1152,6 +1258,23 @@ paths:
               schema:
                 type: string
                 enum: [OK]
+
+  /analytics/beacon:
+    post:
+      summary: Store an anonymous analytics event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticsEvent'
+      responses:
+        "202":
+          description: Analytics event accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsAccepted'
 
   /.well-known/security.txt:
     get:

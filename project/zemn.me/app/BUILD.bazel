@@ -4,6 +4,7 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "app",
     srcs = [
+        "analytics.tsx",
         "eeg.tsx",
         "layout.tsx",
         "not-found.tsx",
@@ -33,6 +34,7 @@ ts_project(
         "//:node_modules/react-dom",
         "//:node_modules/schema-dts",
         "//:node_modules/zod",
+        "//project/zemn.me/analytics",
         "//project/zemn.me/bio",
         "//project/zemn.me/components/DividerHeading",
         "//project/zemn.me/components/Glade",
@@ -60,6 +62,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "analytics.tsx",
         "eeg.tsx",
         "layout.tsx",
         "not-found.tsx",
