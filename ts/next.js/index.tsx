@@ -38,8 +38,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		"'self'",
 		"'unsafe-inline'",
 		'data:',
-		'https://*.google-analytics.com',
-		'https://*.g.doubleclick.net',
 	]),
 	'font-src': new Set([
 		"'self'",
@@ -48,8 +46,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	]),
 	'connect-src': new Set([
 		"'self'",
-		'https://*.google-analytics.com',
-		'https://*.doubleclick.net',
 	]),
 
 	// temp disabled
@@ -59,7 +55,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
-		'https://*.google-analytics.com',
 		...(isDevMode
 			? (["'unsafe-inline'", "'unsafe-eval'"] as const)
 			: ([] as const)),
