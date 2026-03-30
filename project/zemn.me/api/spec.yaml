@@ -28,10 +28,14 @@ components:
       type: string
       description: >
         The unique never reused identifier for a user.
+      example: user_2f7a3b91c8d24a7f
     OAuthClientId:
       type: string
+      description: OAuth 2.0 client identifier registered with the provider.
+      example: zemn-web
     TokenExchangeTokenType: # just the supported ones!
       type: string
+      description: Token type identifiers accepted by the token exchange endpoint.
       enum:
         - urn:ietf:params:oauth:token-type:access_token
         - urn:ietf:params:oauth:token-type:id_token
@@ -43,6 +47,7 @@ components:
       properties:
         grant_type:
           $ref: '#/components/schemas/OAuthGrantType'
+          example: urn:ietf:params:oauth:grant-type:token-exchange
         resource:
           description: Optional resource indicator (can repeat)
           nullable: true
@@ -86,9 +91,20 @@ components:
         client_id:
           type: string
           nullable: true
+          description: OAuth client identifier when using `client_secret_post`.
+          example: zemn-web
         client_secret:
           type: string
           nullable: true
+          description: OAuth client secret when using `client_secret_post`.
+      example:
+        grant_type: urn:ietf:params:oauth:grant-type:token-exchange
+        subject_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        subject_token_type: urn:ietf:params:oauth:token-type:id_token
+        requested_token_type: urn:ietf:params:oauth:token-type:access_token
+        audience: https://api.zemn.me
+        scope: callbox_key grievance_portal
+        client_id: zemn-web
 
     TokenResponse:
       description: OAuth 2.0 successful token response (RFC6749/RFC8693)
@@ -107,11 +123,22 @@ components:
           example: urn:ietf:params:oauth:token-type:access_token
         token_type:
           type: string
+          description: Token usage type understood by the client, typically `Bearer`.
           example: Bearer
         expires_in:
           type: integer
+          description: Lifetime of the returned token, in seconds.
+          example: 3600
         scope:
           type: string
+          description: Space-delimited scopes granted in the issued token.
+          example: callbox_key grievance_portal
+      example:
+        access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        issued_token_type: urn:ietf:params:oauth:token-type:access_token
+        token_type: Bearer
+        expires_in: 3600
+        scope: callbox_key grievance_portal
 
     OAuthError:
       description: RFC6749 error response
@@ -123,11 +150,18 @@ components:
           enum: [invalid_request, invalid_client, invalid_grant, unauthorized_client, unsupported_grant_type, invalid_scope]
         error_description:
           type: string
+          description: Human-readable detail intended to help the client fix the request.
+          example: subject_token_type is required
         error_uri:
           type: string
           format: uri
+          description: URL with more information about the error condition.
+      example:
+        error: invalid_request
+        error_description: subject_token_type is required
     OAuthGrantType: # just the supported ones!
       type: string
+      description: OAuth grant type supported by this endpoint.
       enum:
         - urn:ietf:params:oauth:grant-type:token-exchange
     IdToken:
@@ -371,9 +405,16 @@ components:
       properties:
         rel:
           type: string
+          description: Registered or extension relation describing the linked resource.
+          example: http://openid.net/specs/connect/1.0/issuer
         href:
           type: string
           format: uri
+          description: Absolute URL for the related resource.
+          example: https://api.zemn.me
+      example:
+        rel: http://openid.net/specs/connect/1.0/issuer
+        href: https://api.zemn.me
     JRD:
       description: |
         JSON Resource Descriptor (JRD) as defined in [RFC 6415](https://datatracker.ietf.org/doc/html/rfc6415).
@@ -383,27 +424,56 @@ components:
       properties:
         subject:
           type: string
+          description: Identifier that was looked up, usually a URL or `acct:` URI.
+          example: acct:alice@zemn.me
         links:
           type: array
           items: { $ref: '#/components/schemas/Link' }
+      example:
+        subject: acct:alice@zemn.me
+        links:
+          - rel: http://openid.net/specs/connect/1.0/issuer
+            href: https://api.zemn.me
     JWK:
       type: object
       required: [kty, alg, use, crv, x, y, kid]
       properties:
         kty:
           type: string
+          description: Key type.
+          example: EC
         alg:
           type: string
+          description: Algorithm intended for this key.
+          example: ES256
         use:
           type: string
+          description: Public key use.
+          example: sig
         crv:
           type: string
+          description: Elliptic curve name for EC keys.
+          example: P-256
         x:
           type: string
+          description: Base64url-encoded x coordinate.
+          example: f83OJ3D2xF4Q...
         y:
           type: string
+          description: Base64url-encoded y coordinate.
+          example: x_FEzRu9m4w6...
         kid:
           type: string
+          description: Key identifier used for key selection and rotation.
+          example: main-2026-01
+      example:
+        kty: EC
+        alg: ES256
+        use: sig
+        crv: P-256
+        x: f83OJ3D2xF4Q...
+        y: x_FEzRu9m4w6...
+        kid: main-2026-01
     JWKS:
       type: object
       required: [keys]
@@ -411,6 +481,16 @@ components:
         keys:
           type: array
           items: { $ref: '#/components/schemas/JWK' }
+          description: Public signing keys currently published by the issuer.
+      example:
+        keys:
+          - kty: EC
+            alg: ES256
+            use: sig
+            crv: P-256
+            x: f83OJ3D2xF4Q...
+            y: x_FEzRu9m4w6...
+            kid: main-2026-01
     OIDCConfiguration:
       type: object
       description: |
@@ -520,21 +600,39 @@ components:
           items: { type: string }
         claims_parameter_supported:
           type: boolean
+          description: Whether the authorization request supports the OIDC `claims` parameter.
         request_parameter_supported:
           type: boolean
+          description: Whether signed request objects may be passed by value in the `request` parameter.
         request_uri_parameter_supported:
           type: boolean
+          description: Whether signed request objects may be passed by reference in the `request_uri` parameter.
         require_request_uri_registration:
           type: boolean
+          description: Whether `request_uri` values must be pre-registered.
         service_documentation:
           type: string
           format: uri
+          description: Human-readable documentation URL for this provider.
         op_policy_uri:
           type: string
           format: uri
+          description: URL of the provider's relying-party policy.
         op_tos_uri:
           type: string
           format: uri
+          description: URL of the provider's terms of service.
+      example:
+        issuer: https://api.zemn.me
+        authorization_endpoint: https://api.zemn.me/oauth2/authorize
+        token_endpoint: https://api.zemn.me/oauth2/token
+        jwks_uri: https://api.zemn.me/.well-known/jwks.json
+        userinfo_endpoint: https://api.zemn.me/oauth2/userinfo
+        scopes_supported: [openid, profile, email, callbox_key]
+        response_types_supported: [code]
+        grant_types_supported: [urn:ietf:params:oauth:grant-type:token-exchange]
+        subject_types_supported: [public]
+        id_token_signing_alg_values_supported: [ES256]
     TwilioCallRequest:
       type: object
       description: Parameters sent by Twilio in requests to your webhook for handling a call.
@@ -617,7 +715,16 @@ components:
         Digits:
           type: string
           nullable: true
-          description: digits entered by user.
+          description: Digits entered by the caller in response to a prompt.
+      example:
+        CallSid: CA1234567890abcdef1234567890abcd
+        AccountSid: AC1234567890abcdef1234567890abcd
+        From: "+14155550123"
+        To: "+14155559876"
+        CallStatus: in-progress
+        ApiVersion: "2010-04-01"
+        Direction: inbound
+        Digits: "56734"
       required:
         - CallSid
         - AccountSid
@@ -633,6 +740,9 @@ components:
       properties:
         phoneNumber:
           $ref: "#/components/schemas/PhoneNumber"
+      description: Authorizer contact that may approve visitor entry over the phone.
+      example:
+        phoneNumber: "+14155550123"
     PhoneNumber:
       description: A single E.164 phone number.
       example: "+447823423420"
@@ -652,6 +762,9 @@ components:
       properties:
         code:
           $ref: "#/components/schemas/EntryCode"
+      description: Entry code currently accepted by the callbox.
+      example:
+        code: "56734"
 
     CallboxSettings:
       description: >
@@ -693,6 +806,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/EntryCodeEntry"
+      example:
+        partyMode: false
+        authorizers:
+          - phoneNumber: "+14155550123"
+          - phoneNumber: "+14155550124"
+        fallbackPhone: "+14155550999"
+        entryCodes:
+          - code: "56734"
+          - code: "48192"
 
 
     Error:
@@ -705,6 +827,8 @@ components:
         cause:
           type: string
           example: Too many concurrent requests.
+      example:
+        cause: Too many concurrent requests.
     GetPhoneNumberResponse:
       description: >
         Object representing the current callbox phone number.
@@ -714,9 +838,12 @@ components:
       properties:
         phoneNumber:
           $ref: "#/components/schemas/PhoneNumber"
+      example:
+        phoneNumber: "+14155559876"
 
     GrievancePoster:
       type: object
+      description: Poster identity attached to a grievance when available.
       required:
         - sub
       properties:
@@ -733,8 +860,14 @@ components:
         family_name:
           type: string
           description: Poster’s surname(s).
+      example:
+        sub: user_2f7a3b91c8d24a7f
+        email_address: alex@example.com
+        given_name: Alex
+        family_name: Rivera
     Grievance:
       type: object
+      description: Stored grievance entry shown in the grievance portal.
       required:
         - description
         - priority
@@ -743,6 +876,7 @@ components:
         id:
           type: string
           format: uuid
+          description: Stable grievance identifier.
         name:
           type: string
           deprecated: true
@@ -754,18 +888,33 @@ components:
           description: Poster identity details; null for legacy entries.
         description:
           type: string
+          description: Free-form grievance text entered by the user.
         priority:
           type: integer
           minimum: 1
           maximum: 10
+          description: Relative urgency on a 1 to 10 scale.
         created:
           type: string
           format: date-time
+          description: When the grievance was created.
         timeZone:
           type: string
           description: Client IANA time zone
+      example:
+        id: 7b7d9e72-86cb-4df3-9520-a8c1372d7c1b
+        poster:
+          sub: user_2f7a3b91c8d24a7f
+          email_address: alex@example.com
+          given_name: Alex
+          family_name: Rivera
+        description: The intercom speaker is too quiet after 9pm.
+        priority: 6
+        created: "2026-03-28T19:14:22Z"
+        timeZone: America/Los_Angeles
     NewGrievance:
       type: object
+      description: Payload used to submit or replace a grievance.
       required:
         - description
         - priority
@@ -776,15 +925,22 @@ components:
           description: Deprecated; use `poster` for attribution instead.
         description:
           type: string
+          description: Free-form grievance text entered by the user.
         priority:
           type: integer
           minimum: 1
           maximum: 10
+          description: Relative urgency on a 1 to 10 scale.
         timeZone:
           type: string
           description: Client IANA time zone
+      example:
+        description: The intercom speaker is too quiet after 9pm.
+        priority: 6
+        timeZone: America/Los_Angeles
     User:
       type: object
+      description: User record available to the admin token-exchange API.
       required:
         - id
         - deletable
@@ -794,13 +950,16 @@ components:
           description: Local OIDC subject used by zemn.me
         deletable:
           type: boolean
+          description: Whether this user may currently be deleted.
         subjectIds:
           type: array
+          description: Subject identifiers for linked upstream identities.
           items:
             type: string
             format: uri
         emails:
           type: array
+          description: Email addresses associated with the user.
           items:
             type: string
             format: email
@@ -809,6 +968,7 @@ components:
         provider:
           type: string
           format: uri
+          description: Upstream provider URL for the linked identity.
         audience:
           $ref: '#/components/schemas/OAuthClientId'
         remoteSubject:
@@ -826,84 +986,145 @@ components:
           type: boolean
         scopes:
           type: array
+          description: Scopes that may be granted to tokens for this user.
           items:
             type: string
+      example:
+        id: user_2f7a3b91c8d24a7f
+        deletable: true
+        subjectIds:
+          - "https://accounts.google.com#1133557799"
+        emails:
+          - alex@example.com
+        issuer: https://accounts.google.com
+        provider: https://accounts.google.com
+        audience: zemn-web
+        remoteSubject: "1133557799"
+        name: Alex Rivera
+        givenName: Alex
+        familyName: Rivera
+        picture: https://example.com/avatar/alex.jpg
+        emailVerified: true
+        scopes: [callbox_key, grievance_portal]
     NewUser:
       type: object
+      description: Payload used to create a user that can participate in token exchange.
       required:
         - email
       properties:
         email:
           type: string
           format: email
+          description: Primary email address for the new user.
         scopes:
           type: array
+          description: Scopes the created user is allowed to request.
           items:
             type: string
+      example:
+        email: alex@example.com
+        scopes: [callbox_key, grievance_portal]
     UpdateUser:
       type: object
+      description: Self-service user update payload.
       properties:
         email:
           type: string
           format: email
+          description: Replacement primary email address.
         scopes:
           type: array
+          description: Replacement scope list for the current user.
           items:
             type: string
+      example:
+        email: alex@example.com
+        scopes: [grievance_portal]
     AdminUserUpdateRequest:
       type: object
+      description: Admin payload for replacing selected fields on a user record.
       required:
         - id
       properties:
         id:
           type: string
+          description: Local user identifier to update.
         emails:
           type: array
+          description: Full set of email addresses to store for the user.
           items:
             type: string
             format: email
         givenName:
           type: string
+          description: User's given name.
         familyName:
           type: string
+          description: User's family name.
         scopes:
           type: array
+          description: Full set of scopes allowed for the user.
           items:
             type: string
         subjectIds:
           type: array
+          description: Full set of linked upstream subject identifiers.
           items:
             type: string
             format: uri
+      example:
+        id: user_2f7a3b91c8d24a7f
+        emails: [alex@example.com]
+        givenName: Alex
+        familyName: Rivera
+        scopes: [callbox_key, grievance_portal]
+        subjectIds: ["https://accounts.google.com#1133557799"]
     AdminUserDeleteRequest:
       type: object
+      description: Admin payload identifying a user record to delete.
       required:
         - id
       properties:
         id:
           type: string
+          description: Local user identifier to delete.
+      example:
+        id: user_2f7a3b91c8d24a7f
     AnalyticsPage:
       type: object
+      description: Page-level metadata captured for an analytics event.
       properties:
         urlPath:
           type: string
+          description: Path component of the current page URL.
+          example: /grievances
         title:
           type: string
+          description: Browser page title at the time of the event.
+          example: Grievance Portal
         referrer:
           type: string
           format: uri
+          description: Referrer URL, if one was present.
+          example: https://zemn.me/
         utmSource:
           type: string
+          description: UTM source query parameter.
         utmMedium:
           type: string
+          description: UTM medium query parameter.
         utmCampaign:
           type: string
+          description: UTM campaign query parameter.
         utmTerm:
           type: string
+          description: UTM term query parameter.
         utmContent:
           type: string
+          description: UTM content query parameter.
     AnalyticsContext:
       type: object
+      description: Browser and device context captured alongside the event.
       properties:
         screen:
           $ref: '#/components/schemas/AnalyticsDimensions'
@@ -911,48 +1132,79 @@ components:
           $ref: '#/components/schemas/AnalyticsDimensions'
         locale:
           type: string
+          description: Browser locale, usually a BCP 47 language tag.
+          example: en-US
         timeZone:
           type: string
+          description: Browser-reported IANA time zone.
+          example: America/Los_Angeles
         userAgent:
           type: string
+          description: Raw browser user agent string.
     AnalyticsDimensions:
       type: object
+      description: Width and height pair measured in CSS pixels.
       required:
         - width
         - height
       properties:
         width:
           type: integer
+          description: Width in CSS pixels.
+          example: 1440
         height:
           type: integer
+          description: Height in CSS pixels.
+          example: 900
     AnalyticsPerformance:
       type: object
+      description: Performance timings and web-vitals style measurements for the page load.
       properties:
         navigationType:
           type: string
+          description: Navigation classification from the Performance API.
+          example: navigate
         loadMs:
           type: number
+          description: Total page load time in milliseconds.
+          example: 842.4
         lcpMs:
           type: number
+          description: Largest Contentful Paint in milliseconds.
+          example: 1280.5
         cls:
           type: number
+          description: Cumulative Layout Shift score.
+          example: 0.02
         inpMs:
           type: number
+          description: Interaction to Next Paint in milliseconds.
+          example: 86.7
     AnalyticsEngagement:
       type: object
+      description: Aggregate engagement data captured during the session.
       properties:
         activeMs:
           type: integer
+          description: Milliseconds the page was actively engaged with.
+          example: 18234
         totalMs:
           type: integer
+          description: Total milliseconds the page remained open.
+          example: 45221
         scrollDepthPercent:
           type: integer
           minimum: 0
           maximum: 100
+          description: Furthest scroll depth reached, from 0 to 100.
+          example: 75
         visibilityState:
           type: string
+          description: Final `document.visibilityState` observed when the event was sent.
+          example: visible
     AnalyticsEvent:
       type: object
+      description: Anonymous analytics beacon emitted by the frontend.
       required:
         - eventName
         - eventTime
@@ -961,15 +1213,25 @@ components:
       properties:
         eventName:
           type: string
+          description: Stable event name emitted by the client.
+          example: page_view
         eventTime:
           type: string
           format: date-time
+          description: Client timestamp for when the event occurred.
+          example: "2026-03-30T18:22:11.384Z"
         eventId:
           type: string
+          description: Unique identifier for this event payload.
+          example: evt_01HTZVK0M2G5X2DQ3R5K7R0T0A
         sessionId:
           type: string
+          description: Client-generated session identifier used to group events.
+          example: sess_01HTZVJH4Y9P72P0P8B7R8Q5JZ
         anonymousId:
           type: string
+          description: Longer-lived anonymous visitor identifier, if available.
+          example: anon_01HTZVJ8CN1F8XFW0HQN2NQ2TE
         page:
           $ref: '#/components/schemas/AnalyticsPage'
         context:
@@ -981,18 +1243,58 @@ components:
         properties:
           type: object
           additionalProperties: true
+          description: Event-specific custom properties.
+      example:
+        eventName: page_view
+        eventTime: "2026-03-30T18:22:11.384Z"
+        eventId: evt_01HTZVK0M2G5X2DQ3R5K7R0T0A
+        sessionId: sess_01HTZVJH4Y9P72P0P8B7R8Q5JZ
+        anonymousId: anon_01HTZVJ8CN1F8XFW0HQN2NQ2TE
+        page:
+          urlPath: /grievances
+          title: Grievance Portal
+          referrer: https://zemn.me/
+        context:
+          screen:
+            width: 1440
+            height: 900
+          viewport:
+            width: 1280
+            height: 742
+          locale: en-US
+          timeZone: America/Los_Angeles
+          userAgent: Mozilla/5.0
+        performance:
+          navigationType: navigate
+          loadMs: 842.4
+          lcpMs: 1280.5
+          cls: 0.02
+          inpMs: 86.7
+        engagement:
+          activeMs: 18234
+          totalMs: 45221
+          scrollDepthPercent: 75
+          visibilityState: visible
+        properties:
+          route: /grievances
     AnalyticsAccepted:
       type: object
+      description: Minimal acknowledgement returned once the beacon has been queued.
       required:
         - accepted
       properties:
         accepted:
           type: boolean
+          description: Whether the event was accepted for processing.
+          example: true
+      example:
+        accepted: true
 
 paths:
   /phone/init:
     post:
       summary: Entry point for Twilio callbox phone number.
+      description: Accepts the initial webhook Twilio sends when a visitor calls the callbox number.
       parameters:
         - name: secret
           in: query
@@ -1006,8 +1308,17 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               $ref: "#/components/schemas/TwilioCallRequest"
+            example:
+              CallSid: CA1234567890abcdef1234567890abcd
+              AccountSid: AC1234567890abcdef1234567890abcd
+              From: "+14155550123"
+              To: "+14155559876"
+              CallStatus: in-progress
+              ApiVersion: "2010-04-01"
+              Direction: inbound
   /phone/handleEntry:
     get:
+      description: Process keypad digits or dial callbacks while a visitor navigates the callbox flow.
       parameters:
         - name: secret
           in: query
@@ -1037,16 +1348,20 @@ paths:
       summary: Handles entering an authorizer for the callbox phone number.
       responses:
         "200":
-          description: It worked ig.
+          description: TwiML instructions for the next step in the call flow.
           content:
             application/xml:
               schema:
                 type: string
+              example: |
+                <?xml version="1.0" encoding="UTF-8"?>
+                <Response><Say>Please enter your code.</Say><Gather numDigits="5" /></Response>
 
 
   /callbox:
     post:
       summary: Unlock the callbox.
+      description: Record a door-open or door-close request initiated by an authenticated caller.
       security:
         - OIDC: [callbox_key]
       requestBody:
@@ -1059,6 +1374,9 @@ paths:
               properties:
                 open:
                   type: boolean
+                  description: "`true` to request the door be opened, `false` to request it be closed."
+              example:
+                open: true
       responses:
         "200":
           description: Recorded unlock request.
@@ -1070,10 +1388,16 @@ paths:
                 properties:
                   subject:
                     type: string
+                    description: Authenticated subject that made the request.
                   when:
                     type: string
+                    description: Timestamp when the request was recorded.
+              example:
+                subject: user_2f7a3b91c8d24a7f
+                when: "2026-03-30T18:31:54.902Z"
     get:
       summary: Get callbox door status.
+      description: Return the backend's best current view of whether the callbox door is open.
       security:
         - OIDC: [callbox_key]
       responses:
@@ -1087,14 +1411,25 @@ paths:
                 properties:
                   open:
                     type: boolean
+                    description: Whether the door is currently believed to be open.
                   lastOpenedAt:
                     type: string
+                    description: Most recent time the door was opened, if known.
                   openUntil:
                     type: string
+                    description: Time after which the door should be considered closed, if applicable.
                   source:
                     type: string
+                    description: Source that most recently updated the inferred state.
                   subject:
                     type: string
+                    description: Subject associated with the most recent state-changing request.
+              example:
+                open: true
+                lastOpenedAt: "2026-03-30T18:31:54.902Z"
+                openUntil: "2026-03-30T18:32:14.902Z"
+                source: manual_unlock
+                subject: user_2f7a3b91c8d24a7f
 
 
   /callbox/settings:
@@ -1147,6 +1482,7 @@ paths:
   /phone/number:
     get:
       summary: Returns the current phone number for the callbox.
+      description: Return the public Twilio number currently assigned to the callbox flow.
       security:
         - OIDC: [callbox_settings_read]
       responses:
@@ -1159,6 +1495,8 @@ paths:
 
   /grievances:
     get:
+      summary: List grievances.
+      description: Return all grievances visible to the authenticated grievance portal user.
       security:
         - OIDC: [grievance_portal]
       responses:
@@ -1171,6 +1509,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/Grievance'
     post:
+      summary: Create a grievance.
+      description: Create a new grievance entry on behalf of the authenticated user.
       security:
         - OIDC: [grievance_portal]
       requestBody:
@@ -1189,6 +1529,8 @@ paths:
 
   /grievance/{id}:
     get:
+      summary: Fetch a grievance.
+      description: Return a single grievance by its identifier.
       security:
         - OIDC: [grievance_portal]
       parameters:
@@ -1197,6 +1539,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Grievance identifier.
       responses:
         "200":
           description: A grievance
@@ -1205,6 +1548,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Grievance'
     put:
+      summary: Replace a grievance.
+      description: Replace the editable fields of an existing grievance.
       security:
         - OIDC: [grievance_portal]
       parameters:
@@ -1213,6 +1558,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Grievance identifier.
       requestBody:
         required: true
         content:
@@ -1229,6 +1575,8 @@ paths:
         "404":
           description: Not found
     delete:
+      summary: Delete a grievance.
+      description: Delete a grievance by identifier.
       security:
         - OIDC: [grievance_portal]
       parameters:
@@ -1237,6 +1585,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Grievance identifier.
       responses:
         "200":
           description: Deleted
@@ -1262,12 +1611,21 @@ paths:
   /analytics/beacon:
     post:
       summary: Store an anonymous analytics event.
+      description: Accept a single frontend analytics event for asynchronous processing.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AnalyticsEvent'
+            example:
+              eventName: page_view
+              eventTime: "2026-03-30T18:22:11.384Z"
+              eventId: evt_01HTZVK0M2G5X2DQ3R5K7R0T0A
+              sessionId: sess_01HTZVJH4Y9P72P0P8B7R8Q5JZ
+              page:
+                urlPath: /grievances
+                title: Grievance Portal
       responses:
         "202":
           description: Analytics event accepted.
@@ -1275,6 +1633,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AnalyticsAccepted'
+              example:
+                accepted: true
 
   /.well-known/security.txt:
     get:
@@ -1303,6 +1663,7 @@ paths:
   /admin/uid:
     get:
       summary: Returns the caller's OIDC subject ID.
+      description: Minimal authenticated identity endpoint useful for debugging and client bootstrap.
       security:
         - OIDC: []
       responses:
@@ -1316,9 +1677,13 @@ paths:
                 properties:
                   uid:
                     type: string
+                    description: Subject identifier from the authenticated token.
+              example:
+                uid: user_2f7a3b91c8d24a7f
   /me/scopes:
     get:
       summary: Returns the caller's OAuth scopes.
+      description: Return the scopes currently granted to the caller's access token.
       security:
         - OIDC: []
       responses:
@@ -1334,9 +1699,12 @@ paths:
                     type: array
                     items:
                       type: string
+              example:
+                scopes: [callbox_key, grievance_portal]
   /admin/users:
     get:
       summary: List users
+      description: Return user records that administrators may manage for token exchange.
       security:
         - OIDC: [admin_users_read]
       responses:
@@ -1350,6 +1718,7 @@ paths:
                   $ref: '#/components/schemas/User'
     post:
       summary: Create a user by email
+      description: Create a new manageable user record keyed by email address.
       security:
         - OIDC: [admin_users_manage]
       requestBody:
@@ -1368,6 +1737,7 @@ paths:
   /admin/user:
     put:
       summary: Update a user
+      description: Replace selected fields on an existing user record.
       security:
         - OIDC: [admin_users_manage]
       requestBody:
@@ -1387,6 +1757,7 @@ paths:
           description: Not found
     delete:
       summary: Delete a user
+      description: Delete an existing user record by local identifier.
       security:
         - OIDC: [admin_users_manage]
       requestBody:
@@ -1439,6 +1810,7 @@ paths:
     get:
       tags: [Discovery]
       summary: JSON Web Key Set
+      description: Publish the issuer's current public signing keys.
       operationId: getJWKS
       responses:
         '200':
@@ -1481,6 +1853,12 @@ paths:
           application/x-www-form-urlencoded:
             schema:
                 $ref: '#/components/schemas/TokenExchangeRequest'
+            example:
+              grant_type: urn:ietf:params:oauth:grant-type:token-exchange
+              subject_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+              subject_token_type: urn:ietf:params:oauth:token-type:id_token
+              requested_token_type: urn:ietf:params:oauth:token-type:access_token
+              scope: callbox_key
       responses:
         "200":
           description: Token issued
@@ -1488,15 +1866,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
+              example:
+                access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+                issued_token_type: urn:ietf:params:oauth:token-type:access_token
+                token_type: Bearer
+                expires_in: 3600
+                scope: callbox_key
         "400":
           description: OAuth error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OAuthError'
+              example:
+                error: invalid_request
+                error_description: subject_token_type is required
         "401":
           description: Client authentication failed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OAuthError'
+              example:
+                error: invalid_client
+                error_description: client authentication failed
