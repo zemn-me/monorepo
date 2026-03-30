@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { ClientProviders } from '#root/ts/next.js/component/ClientProviders/ClientProviders.js';
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
@@ -27,8 +28,10 @@ export function RootLayout({ children }: Props) {
 	return (
 		<html>
 			<body>
-				<HeaderTagsAppRouter cspPolicy={pageCsp} />
-				{children}
+				<ClientProviders>
+					<HeaderTagsAppRouter cspPolicy={pageCsp} />
+					{children}
+				</ClientProviders>
 			</body>
 		</html>
 	);

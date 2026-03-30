@@ -1,27 +1,41 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 
-import { useAnalyticsSessionId } from '#root/project/zemn.me/hook/useAnalyticsSessionId.js';
-import { sendAnalyticsBeacon } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
+import { publicFetchClient } from "#root/project/zemn.me/client/client.js";
+import { useDeviceId } from "#root/project/zemn.me/client/useDeviceId.js";
+
+export type AnalyticsEvent = paths["/analytics/beacon"]["post"]["requestBody"]["content"]["application/json"];
+
+export async function sendAnalyticsBeacon(event: AnalyticsEvent): Promise<boolean> {
+	const response = await publicFetchClient.POST("/analytics/beacon", {
+		body: event,
+		credentials: "omit",
+		keepalive: true,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	return response.response.ok;
+}
 
 function collectDimensions(width: number, height: number) {
 	return { width, height };
 }
 
-function collectPage() {
-	const params = new URLSearchParams(window.location.search);
-
+function collectPage(pathname: string, searchParams: URLSearchParams) {
 	return {
-		urlPath: window.location.pathname,
+		urlPath: pathname,
 		title: document.title,
 		referrer: document.referrer === '' ? undefined : document.referrer,
-		utmSource: params.get('utm_source') ?? undefined,
-		utmMedium: params.get('utm_medium') ?? undefined,
-		utmCampaign: params.get('utm_campaign') ?? undefined,
-		utmTerm: params.get('utm_term') ?? undefined,
-		utmContent: params.get('utm_content') ?? undefined,
+		utmSource: searchParams.get('utm_source') ?? undefined,
+		utmMedium: searchParams.get('utm_medium') ?? undefined,
+		utmCampaign: searchParams.get('utm_campaign') ?? undefined,
+		utmTerm: searchParams.get('utm_term') ?? undefined,
+		utmContent: searchParams.get('utm_content') ?? undefined,
 	};
 }
 
@@ -67,16 +81,18 @@ function collectEngagement() {
 
 export function AnalyticsPageBeacon() {
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
 	const lastSentKey = useRef<string | null>(null);
-	const sessionIdQuery = useAnalyticsSessionId();
+	const deviceID = useDeviceId();
 
 	useEffect(() => {
-		if (sessionIdQuery.data === undefined) {
+		if (deviceID === undefined) {
 			return;
 		}
 
-		const pageKey = `${pathname}?${window.location.search}`;
-		if (lastSentKey.current == pageKey) {
+		const search = searchParams.toString();
+		const pageKey = search === '' ? pathname : `${pathname}?${search}`;
+		if (lastSentKey.current === pageKey) {
 			return;
 		}
 		lastSentKey.current = pageKey;
@@ -85,13 +101,13 @@ export function AnalyticsPageBeacon() {
 			eventName: 'page_view',
 			eventTime: new Date().toISOString(),
 			eventId: crypto.randomUUID(),
-			sessionId: sessionIdQuery.data,
+			sessionId: deviceID,
 			context: collectContext(),
-			page: collectPage(),
+			page: collectPage(pathname, searchParams),
 			performance: collectPerformance(),
 			engagement: collectEngagement(),
 		});
-	}, [pathname, sessionIdQuery.data]);
+	}, [pathname, searchParams, deviceID]);
 
 	return null;
 }
