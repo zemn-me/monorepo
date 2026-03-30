@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
 import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 import { Future, future_and_then, future_declare_dependency, resolve } from "#root/ts/future/future.js";
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
+import { noop } from "#root/ts/noop.js";
 import { watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
 import { noop } from "#root/ts/noop.js";
 
