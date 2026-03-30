@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
 import type { paths } from "#root/project/zemn.me/api/api_client.gen.js";
 import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 import { Future, future_and_then, future_declare_dependency, resolve } from "#root/ts/future/future.js";
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
+import { noop } from "#root/ts/noop.js";
 import { watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
 
 export type AnalyticsEvent = paths["/analytics/beacon"]["post"]["requestBody"]["content"]["application/json"];
@@ -222,7 +223,12 @@ export function useDeleteAdminUser(id_token: string) {
 	});
 }
 
-export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
+export function usePostMeKey<A, B>(
+	id_token: Future<string, A, B>,
+	onMutate: () => void = noop,
+	onSuccess: () => void = noop,
+	onError: () => void = noop,
+) {
 	const fetchClient = useFetchClientFuture(id_token);
 	const invalidateCallboxStatus = useinvalidateCallboxStatus();
 	const queryClient = useQueryClient();
@@ -248,6 +254,7 @@ export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
 		),
 
 		onMutate: () => {
+			onMutate();
 			// eagerly assume the query will succeed.
 			queryClient.setQueryData(
 				["get", "/callbox", id_token(
@@ -265,7 +272,10 @@ export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
 		onSuccess: () => {
 			// sync with server
 			invalidateCallboxStatus();
-		}
+			onSuccess();
+		},
+
+		onError: onError,
 	})
 }
 
