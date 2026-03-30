@@ -1,5 +1,7 @@
 import Head from 'next/head';
+import { Suspense } from 'react';
 
+import { AnalyticsInitializer } from '#root/ts/next.js/component/AnalyticsInitializer/AnalyticsInitializer.js';
 import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.js';
 
 export * as config from '#root/ts/next.js/next.config.js';
@@ -26,6 +28,7 @@ type directives =
 export type CspPolicy = Partial<Record<directives, sourceList>>;
 
 const isDevMode = process.env.NODE_ENV === 'development';
+const analyticsAPIBase = (process.env["NEXT_PUBLIC_ZEMN_ME_API_BASE"] ?? "https://api.zemn.me") as SourceExpression;
 
 export const DefaultContentSecurityPolicy: CspPolicy = {
 	'base-uri': new Set(["'none'"]),
@@ -38,8 +41,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		"'self'",
 		"'unsafe-inline'",
 		'data:',
-		'https://*.google-analytics.com',
-		'https://*.g.doubleclick.net',
 	]),
 	'font-src': new Set([
 		"'self'",
@@ -48,8 +49,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	]),
 	'connect-src': new Set([
 		"'self'",
-		'https://*.google-analytics.com',
-		'https://*.doubleclick.net',
+		analyticsAPIBase,
 	]),
 
 	// temp disabled
@@ -59,7 +59,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'", // https://github.com/vercel/next.js/discussions/54907#discussioncomment-8178117
-		'https://*.google-analytics.com',
 		...(isDevMode
 			? (["'unsafe-inline'", "'unsafe-eval'"] as const)
 			: ([] as const)),
@@ -73,13 +72,20 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 
 interface HeaderTagsProps {
 	readonly cspPolicy?: CspPolicy;
+	readonly includeAnalytics?: boolean;
 }
 
 export function HeaderTagsPagesRouter({
 	cspPolicy = DefaultContentSecurityPolicy,
+	includeAnalytics = true,
 }: HeaderTagsProps) {
 	return (
 		<>
+			{includeAnalytics ? (
+				<Suspense fallback={null}>
+					<AnalyticsInitializer />
+				</Suspense>
+			) : null}
 			<DeclareTrustedTypesPolicy/>
 			<Head>
 				<meta
@@ -108,9 +114,15 @@ export function HeaderTagsPagesRouter({
 
 export function HeaderTagsAppRouter({
 	cspPolicy = DefaultContentSecurityPolicy,
+	includeAnalytics = true,
 }: HeaderTagsProps) {
 	return (
 		<>
+			{includeAnalytics ? (
+				<Suspense fallback={null}>
+					<AnalyticsInitializer />
+				</Suspense>
+			) : null}
 			<DeclareTrustedTypesPolicy/>
 			<meta
 				content={Object.entries(cspPolicy)
