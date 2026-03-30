@@ -3,8 +3,8 @@ import 'project/zemn.me/app/base.css';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Lora } from 'next/font/google';
-import { Metadata } from 'next/types';
-import { ReactNode } from 'react';
+import { Metadata, Viewport } from 'next/types';
+import { ReactNode, Suspense } from 'react';
 
 import { AnalyticsPageBeacon } from '#root/project/zemn.me/app/analytics.js';
 import { Providers } from '#root/project/zemn.me/app/providers.js';
@@ -58,7 +58,9 @@ export function RootLayout({ children }: Props) {
 				</head>
 				<body className={lora.className}>
 					<ReactQueryDevtools initialIsOpen={false} />
-					<AnalyticsPageBeacon />
+					<Suspense fallback={null}>
+						<AnalyticsPageBeacon />
+					</Suspense>
 					<Glade>
 					{children}
 					</Glade>
@@ -72,10 +74,6 @@ export function RootLayout({ children }: Props) {
 export default RootLayout;
 
 export const metadata: Metadata = {
-	themeColor: [
-		{ media: '(prefers-color-scheme: dark)', color: '#010' },
-		{ media: '(prefers-color-scheme: light)', color: '#fff' },
-	],
 	authors: [{ name: text(Bio.who.fullName), url: 'https://zemn.me' }],
 	metadataBase: new URL('https://zemn.me'),
 	twitter: {
@@ -96,4 +94,11 @@ export const metadata: Metadata = {
     alternates: {
         canonical: './',
     }
+};
+
+export const viewport: Viewport = {
+	themeColor: [
+		{ media: '(prefers-color-scheme: dark)', color: '#010' },
+		{ media: '(prefers-color-scheme: light)', color: '#fff' },
+	],
 };
