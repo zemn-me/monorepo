@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import React from 'react';
 
+import { ClientProviders, HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
+
 export interface Props {
 	readonly children?: ReactNode;
 }
@@ -8,7 +10,12 @@ export interface Props {
 export default function Layout({ children }: Props) {
 	return (
 		<html>
-			<body>{children}</body>
+			<body>
+				<ClientProviders>
+					<HeaderTagsAppRouter />
+					{children}
+				</ClientProviders>
+			</body>
 		</html>
 	);
 }
