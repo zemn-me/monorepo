@@ -4,11 +4,11 @@ import { Metadata } from 'next/types/index.js';
 import { ReactNode } from 'react';
 
 import {
+	ClientProviders,
 	CspPolicy,
 	DefaultContentSecurityPolicy,
 	HeaderTagsAppRouter,
 } from '#root/ts/next.js/index.js';
-import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders.js';
 
 const csp_policy: CspPolicy = {
 	...DefaultContentSecurityPolicy,

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import {
+	ClientProviders,
 	CspPolicy,
 	DefaultContentSecurityPolicy,
 	HeaderTagsAppRouter,
@@ -27,8 +28,10 @@ export function RootLayout({ children }: Props) {
 	return (
 		<html>
 			<body>
-				<HeaderTagsAppRouter cspPolicy={pageCsp} />
-				{children}
+				<ClientProviders>
+					<HeaderTagsAppRouter cspPolicy={pageCsp} />
+					{children}
+				</ClientProviders>
 			</body>
 		</html>
 	);
