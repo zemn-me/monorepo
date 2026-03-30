@@ -3,6 +3,7 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
+import { useWebHaptics } from "web-haptics/react";
 
 import style from '#root/project/zemn.me/app/key/style.module.css';
 import { ProgressCircle } from '#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js';
@@ -70,7 +71,13 @@ function OpenTimer({ start, end }: OpenTimerProps) {
 export default function KeyPageClient() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
-	const postKey = usePostMeKey(fut_idToken);
+	const { trigger } = useWebHaptics();
+	const postKey = usePostMeKey(
+		fut_idToken,
+		() => { void trigger("nudge") },
+		() => { void trigger("success") },
+		() => { void trigger("error") },
+	);
 	const doorStatus = useGetMeKeyStatus(fut_idToken);
 
 	const noAuth = () => <button
