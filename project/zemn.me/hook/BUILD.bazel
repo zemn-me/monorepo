@@ -33,6 +33,7 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/zod",
         "//project/zemn.me/api:ts_client_dts",
+        "//project/zemn.me/client",
         "//project/zemn.me/constants",
         "//project/zemn.me/promise",
         "//third_party/com/googleapis/people:ts_client",

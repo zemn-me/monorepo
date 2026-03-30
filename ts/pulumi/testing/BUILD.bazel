@@ -1,5 +1,40 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
+
+service_test(
+    name = "analytics_integration_test",
+    flaky = True,
+    services = [
+        "//ts/pulumi/baby.computer:itest_service",
+        "//ts/pulumi/eggsfordogs.com:itest_service",
+        "//ts/pulumi/lulu.computer:itest_service",
+        "//ts/pulumi/pleaseintroducemetoyour.dog:itest_service",
+        "//ts/pulumi/shadwell.im/anna:itest_service",
+        "//ts/pulumi/shadwell.im/kate:itest_service",
+        "//ts/pulumi/shadwell.im/lucy:itest_service",
+        "//ts/pulumi/shadwell.im/luke:itest_service",
+        "//ts/pulumi/zemn.me/availability:itest_service",
+        "//java/software/amazon/dynamodb:dynamodb",
+        "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
+    ],
+    test = ":analytics_itest_test",
+)
+
+go_test(
+    name = "analytics_itest_test",
+    srcs = ["analytics_integration_test.go"],
+    tags = ["manual"],  # keep; needs integration testing harness.
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+    ],
+)
 
 ts_project(
     name = "testing",
@@ -22,4 +57,17 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "testing_test",
+    srcs = ["analytics_integration_test.go"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+    ],
 )

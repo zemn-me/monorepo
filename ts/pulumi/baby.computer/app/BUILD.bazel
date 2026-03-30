@@ -20,6 +20,7 @@ ts_project(
         "//:node_modules/seedrandom",
         "//ts/math",
         "//ts/math/sim",
+        "//ts/next.js",
     ],
 )
 

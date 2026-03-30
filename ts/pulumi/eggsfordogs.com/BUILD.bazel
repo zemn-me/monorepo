@@ -1,4 +1,6 @@
+load("@rules_itest//private:itest.bzl", "itest_service")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
@@ -7,6 +9,30 @@ package(default_visibility = ["//ts/pulumi:__subpackages__"])
 next_project(
     name = "next",
     srcs = ["//ts/pulumi/eggsfordogs.com/app"],
+)
+
+py_binary(
+    name = "eggsfordogs_itest_bin",
+    srcs = ["//ts/pulumi/testing/inject_api_iservice:all_srcs"],
+    data = [":dev"],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath @@//ts/pulumi/eggsfordogs.com:dev)",
+    },
+    main = "inject_api_iservice.py",
+    visibility = ["//ts/pulumi/testing:__pkg__"],
+    deps = ["//ts/pulumi/testing/inject_api_iservice:inject_api_iservice_lib"],
+)
+
+itest_service(
+    name = "itest_service",
+    args = [
+        "ts/pulumi/eggsfordogs.com",
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = ":eggsfordogs_itest_bin",
+    deps = ["//project/zemn.me/api/cmd/localserver:localserver_itest_service"],
 )
 
 bazel_lint(
