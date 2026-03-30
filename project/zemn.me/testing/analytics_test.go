@@ -56,7 +56,7 @@ func TestAnalyticsBeaconIntegration(t *testing.T) {
 		t.Fatalf("home page load: %v (body snippet: %v)", err, body)
 	}
 
-	sessionID, err = waitForPersistedAnalyticsSessionID(driver, 10*time.Second)
+	sessionID, err = waitForPersistedDeviceID(driver, 10*time.Second)
 	if err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("analytics session not persisted: %v (body snippet: %v)", err, body)
@@ -69,12 +69,12 @@ func TestAnalyticsBeaconIntegration(t *testing.T) {
 	}
 }
 
-func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time.Duration) (string, error) {
+func waitForPersistedDeviceID(driver *seleniumpkg.Driver, timeout time.Duration) (string, error) {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
-		value, err := driver.ExecuteScript(`return window.localStorage.getItem("REACT_QUERY_OFFLINE_CACHE");`, nil)
+		value, err := driver.ExecuteScript(`return window.localStorage.getItem("zemn_device_id");`, nil)
 		if err == nil {
-			sessionID := analyticsSessionIDFromPersistedCache(value)
+			sessionID := analyticsSessionIDFromLocalStorage(value)
 			if sessionID != "" {
 				return sessionID, nil
 			}
@@ -82,36 +82,15 @@ func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time
 		time.Sleep(250 * time.Millisecond)
 	}
 
-	return "", fmt.Errorf("timed out waiting for persisted analytics session id")
+	return "", fmt.Errorf("timed out waiting for persisted device id")
 }
 
-func analyticsSessionIDFromPersistedCache(value any) string {
+func analyticsSessionIDFromLocalStorage(value any) string {
 	text, ok := value.(string)
-	if !ok || text == "" {
+	if !ok {
 		return ""
 	}
-
-	var persisted struct {
-		ClientState struct {
-			Queries []struct {
-				QueryKey []string `json:"queryKey"`
-				State    struct {
-					Data string `json:"data"`
-				} `json:"state"`
-			} `json:"queries"`
-		} `json:"clientState"`
-	}
-	if err := json.Unmarshal([]byte(text), &persisted); err != nil {
-		return ""
-	}
-
-	for _, query := range persisted.ClientState.Queries {
-		if len(query.QueryKey) == 1 && query.QueryKey[0] == "analytics_session_id" {
-			return query.State.Data
-		}
-	}
-
-	return ""
+	return text
 }
 
 func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.Duration) error {
@@ -135,8 +114,8 @@ func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.
 	var lastErr error
 	for time.Now().Before(deadline) {
 		out, err := client.Query(ctx, &dynamodb.QueryInput{
-			TableName: aws.String("table2"),
-			ConsistentRead: aws.Bool(true),
+			TableName:              aws.String("table2"),
+			ConsistentRead:         aws.Bool(true),
 			KeyConditionExpression: aws.String("id = :id"),
 			ExpressionAttributeValues: map[string]types.AttributeValue{
 				":id": &types.AttributeValueMemberS{Value: sessionID},

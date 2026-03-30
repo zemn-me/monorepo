@@ -54,7 +54,7 @@ export function RootLayout({ children }: Props) {
 						rel="apple-touch-icon"
 						type="image/svg+xml"
 					/>
-					<HeaderTagsAppRouter cspPolicy={csp} />
+					<HeaderTagsAppRouter cspPolicy={csp} includeAnalytics={false} />
 				</head>
 				<body className={lora.className}>
 					<ReactQueryDevtools initialIsOpen={false} />

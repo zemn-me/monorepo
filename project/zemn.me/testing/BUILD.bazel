@@ -10,6 +10,8 @@ service_test(
     flaky = True,
     services = [
         "//project/zemn.me:itest_service",
+        "//project/zemn.me/api/cmd/localserver:localserver_itest_service",
+        "//java/software/amazon/dynamodb:dynamodb",
         ":oidc_provider_itest_service",
     ],
     test = ":testing_test",
