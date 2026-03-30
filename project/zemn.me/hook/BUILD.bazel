@@ -4,7 +4,6 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "hook",
     srcs = [
-        "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
         "useGetExactContactByPhoneNumber.ts",
@@ -61,7 +60,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
         "useGetExactContactByPhoneNumber.ts",
