@@ -8,6 +8,7 @@ import { ZEMN_ME_API_BASE } from "#root/project/zemn.me/constants/constants.js";
 import { Future, future_and_then, future_declare_dependency, resolve } from "#root/ts/future/future.js";
 import { useQueryFuture } from "#root/ts/future/react-query/useQuery.js";
 import { watchOutParseIdToken } from "#root/ts/oidc/oidc.js";
+import { noop } from "#root/ts/noop.js";
 
 function extractIdTokenJti(id_token: string) {
 	const parsed = watchOutParseIdToken.safeParse(id_token);
@@ -202,7 +203,12 @@ export function useDeleteAdminUser(id_token: string) {
 	});
 }
 
-export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
+export function usePostMeKey<A, B>(
+	id_token: Future<string, A, B>,
+	onMutate: () => void = noop,
+	onSuccess: () => void = noop,
+	onError: () => void = noop,
+) {
 	const fetchClient = useFetchClientFuture(id_token);
 	const invalidateCallboxStatus = useinvalidateCallboxStatus();
 	const queryClient = useQueryClient();
@@ -228,6 +234,7 @@ export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
 		),
 
 		onMutate: () => {
+			onMutate();
 			// eagerly assume the query will succeed.
 			queryClient.setQueryData(
 				["get", "/callbox", id_token(
@@ -245,7 +252,10 @@ export function usePostMeKey<A, B>(id_token: Future<string, A, B>) {
 		onSuccess: () => {
 			// sync with server
 			invalidateCallboxStatus();
-		}
+			onSuccess();
+		},
+
+		onError: onError,
 	})
 }
 
