@@ -1,5 +1,6 @@
 'use client';
 
+import { useWebHaptics } from "web-haptics/react";
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
@@ -70,7 +71,13 @@ function OpenTimer({ start, end }: OpenTimerProps) {
 export default function KeyPageClient() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
-	const postKey = usePostMeKey(fut_idToken);
+	const { trigger } = useWebHaptics();
+	const postKey = usePostMeKey(
+		fut_idToken,
+		() => trigger("nudge"),
+		() => trigger("success"),
+		() => trigger("error"),
+	);
 	const doorStatus = useGetMeKeyStatus(fut_idToken);
 
 	const noAuth = () => <button

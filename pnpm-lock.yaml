@@ -244,6 +244,9 @@ dependencies:
   vfile:
     specifier: 6.0.3
     version: 6.0.3
+  web-haptics:
+    specifier: ^0.0.6
+    version: 0.0.6(react-dom@19.2.4)(react@19.2.4)
   zod:
     specifier: 4.3.6
     version: 4.3.6
@@ -18991,6 +18994,27 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
+    dev: false
+
+  /web-haptics@0.0.6(react-dom@19.2.4)(react@19.2.4):
+    resolution: {integrity: sha512-eCzcf1LDi20+Fr0x9V3OkX92k0gxEQXaHajmhXHitsnk6SxPeshv8TBtBRqxyst8HI1uf2FyFVE7QS3jo1gkrw==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+      svelte: '>=4'
+      vue: '>=3'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
     dev: false
 
   /web-streams-polyfill@3.3.3:
