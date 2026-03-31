@@ -1,4 +1,4 @@
-import { flow } from 'ramda';
+import { flow, map } from 'ramda';
 
 import * as cartesian from "#root/ts/math/cartesian.js";
 import { cartToHomog, homogToCart } from '#root/ts/math/conv.js';
@@ -61,6 +61,20 @@ export const camera = (
 		]
 	)
 
-
-
-
+export const project = (
+	camera: (pt: cartesian.Point3D) => cartesian.Point2D
+) => <T>(
+	points: (v: T) => cartesian.Point3D[]
+) => (objects: T[]) => map(
+	(v: T): [
+		pt: cartesian.Point2D[],
+		original: T
+	] => [
+		map(
+			(pt: cartesian.Point3D) => camera(pt),
+			points(v),
+		),
+		v
+	],
+	objects
+)
