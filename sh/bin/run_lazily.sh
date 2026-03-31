@@ -12,7 +12,8 @@ LAZY_CACHE_DIR="$WORKSPACE_ROOT/.script_cache"
 mkdir -p $LAZY_CACHE_DIR
 
 TARGET="$1"
-TARGET_SCRIPT_LOCATION="$LAZY_CACHE_DIR/$TARGET"
+TARGET_CACHE_PATH="${TARGET#//}"
+TARGET_SCRIPT_LOCATION="$LAZY_CACHE_DIR/$TARGET_CACHE_PATH"
 
 shift
 
@@ -25,5 +26,15 @@ fi
 
 mkdir -p "$(dirname $TARGET_SCRIPT_LOCATION)"
 
-$BAZEL run --ui_event_filters='-info,-stdout,-stderr' --script_path="$TARGET_SCRIPT_LOCATION" -- $TARGET > /dev/null 2>&1
+if ! $BAZEL run --ui_event_filters='-info,-stdout,-stderr' --script_path="$TARGET_SCRIPT_LOCATION" -- $TARGET > /dev/null 2>&1; then
+    rm -f "$TARGET_SCRIPT_LOCATION"
+    $BAZEL run --script_path="$TARGET_SCRIPT_LOCATION" -- $TARGET
+    exit $?
+fi
+
+if [[ ! -x "$TARGET_SCRIPT_LOCATION" ]]; then
+    echo "failed to materialize launcher for $TARGET" >&2
+    exit 1
+fi
+
 $TARGET_SCRIPT_LOCATION $@
