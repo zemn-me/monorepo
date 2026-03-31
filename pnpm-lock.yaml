@@ -149,8 +149,8 @@ dependencies:
     specifier: 15.0.4
     version: 15.0.4
   libphonenumber-js:
-    specifier: 1.12.40
-    version: 1.12.40
+    specifier: 1.12.41
+    version: 1.12.41
   lodash:
     specifier: 4.17.23
     version: 4.17.23
@@ -307,8 +307,8 @@ devDependencies:
     specifier: 3.220.0
     version: 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
   '@schemastore/package':
-    specifier: 0.0.10
-    version: 0.0.10
+    specifier: 1.0.2
+    version: 1.0.2
   '@swc/cli':
     specifier: 0.8.0
     version: 0.8.0(@swc/core@1.15.21)
@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.95.0
-    version: 43.95.0(typanion@3.14.0)
+    specifier: 43.99.0
+    version: 43.99.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -5394,8 +5394,8 @@ packages:
       - '@types/node'
     dev: true
 
-  /@schemastore/package@0.0.10:
-    resolution: {integrity: sha512-D3LxMCnkgsb4LO5sDKf6E+yahM2SqpEHmkqMPDSJis5Cy/j2MgWo/g/iq0lECK0mrPWfx3hqKm2ZJlqxwbRJQA==}
+  /@schemastore/package@1.0.2:
+    resolution: {integrity: sha512-3yN5vJh85BMmepl3PFipVQ4wKpybYgxQNiaTUkaKKVpwbSIdNB0U7Gb8qhmY9FEJC2Bbn2L2giigMybIzuF5kQ==}
     dev: true
 
   /@sec-ant/readable-stream@0.4.1:
@@ -13173,8 +13173,8 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  /libphonenumber-js@1.12.40:
-    resolution: {integrity: sha512-HKGs7GowShNls3Zh+7DTr6wYpPk5jC78l508yQQY3e8ZgJChM3A9JZghmMJZuK+5bogSfuTafpjksGSR3aMIEg==}
+  /libphonenumber-js@1.12.41:
+    resolution: {integrity: sha512-lsmMmGXBxXIK/VMLEj0kL6MtUs1kBGj1nTCzi6zgQoG1DEwqwt2DQyHxcLykceIxAnfE3hya7NuIh6PpC6S3fA==}
     dev: false
 
   /lie@3.3.0:
@@ -16650,8 +16650,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.95.0(typanion@3.14.0):
-    resolution: {integrity: sha512-Z3mbZDkNj4Y1zW5TtLhYr6rmF72ui1NOZT1mVVhyOONLElHFWPlZLXFjJZCehuzgCgKpNfKCNgDT49schGKrDw==}
+  /renovate@43.99.0(typanion@3.14.0):
+    resolution: {integrity: sha512-RpepD+W0Qzsz/y/8NDEbdWkKRG5vBbhTyLhpF8vz9oXZha/RLjG4tpDSjrKzuI6DjvFopBs0gY8DYBJE9A1WVA==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
