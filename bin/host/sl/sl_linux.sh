@@ -25,23 +25,61 @@ find_runfiles_root() {
   exit 1
 }
 
-RUNFILES_ROOT="$(find_runfiles_root)"
-SL_BINARY="${SL_BINARY_OVERRIDE:-${RUNFILES_ROOT}/+_repo_rules+sapling_linux_amd64/usr/bin/sl}"
-PYTHON_SO="${RUNFILES_ROOT}/+_repo_rules+ubuntu2004_libpython3_8/usr/lib/x86_64-linux-gnu/libpython3.8.so.1.0"
-LIBSSL_SO="${RUNFILES_ROOT}/+_repo_rules+ubuntu2004_libssl1_1/usr/lib/x86_64-linux-gnu/libssl.so.1.1"
-LIBCRYPTO_SO="${RUNFILES_ROOT}/+_repo_rules+ubuntu2004_libssl1_1/usr/lib/x86_64-linux-gnu/libcrypto.so.1.1"
-PY_MIN_MARKER="${RUNFILES_ROOT}/+_repo_rules+ubuntu2004_libpython3_8_minimal/usr/lib/python3.8/encodings/__init__.py"
-PY_STDLIB_MARKER="${RUNFILES_ROOT}/+_repo_rules+ubuntu2004_libpython3_8_stdlib/usr/lib/python3.8/dataclasses.py"
+find_python_home() {
+  local runfiles_root="$1"
+  local candidate
+  for candidate in \
+    "${runfiles_root}/rules_python++python+python_3_10_x86_64-unknown-linux-gnu" \
+    "${runfiles_root}/external/rules_python++python+python_3_10_x86_64-unknown-linux-gnu" \
+    "${runfiles_root}/_main/external/rules_python++python+python_3_10_x86_64-unknown-linux-gnu"
+  do
+    if [[ -d "${candidate}/lib/python3.10" ]]; then
+      echo "${candidate}"
+      return
+    fi
+  done
 
-PY_MIN_DIR="$(dirname "$(dirname "$PY_MIN_MARKER")")"
-PY_STDLIB_DIR="$(dirname "$PY_STDLIB_MARKER")"
+  if [[ "${runfiles_root}" == *"/execroot/_main/"* ]]; then
+    candidate="${runfiles_root%%/bazel-out/*}/external/rules_python++python+python_3_10_x86_64-unknown-linux-gnu"
+    if [[ -d "${candidate}/lib/python3.10" ]]; then
+      echo "${candidate}"
+      return
+    fi
+  fi
 
-export LD_LIBRARY_PATH="$(dirname "$PYTHON_SO"):$(dirname "$LIBSSL_SO"):$(dirname "$LIBCRYPTO_SO")${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-export PYTHONPATH="$PY_MIN_DIR:$PY_MIN_DIR/lib-dynload:$PY_STDLIB_DIR:$PY_STDLIB_DIR/lib-dynload${PYTHONPATH:+:$PYTHONPATH}"
+  echo "Unable to locate Python 3.10 runtime in ${runfiles_root}" >&2
+  exit 1
+}
 
 TARGET_WORKDIR="${BUILD_WORKING_DIRECTORY:-${BUILD_WORKSPACE_DIRECTORY:-}}"
 if [[ -n "${TARGET_WORKDIR}" && -d "${TARGET_WORKDIR}" ]]; then
   cd "${TARGET_WORKDIR}"
 fi
 
-exec "$SL_BINARY" "$@"
+# Force the Bazel-managed binary to answer directly instead of routing through
+# a long-lived chg server from a different Sapling build on the same machine.
+export CHGDISABLE="${CHGDISABLE:-1}"
+
+if [[ -n "${SL_BINARY_OVERRIDE:-}" ]]; then
+  exec "${SL_BINARY_OVERRIDE}" "$@"
+fi
+
+RUNFILES_ROOT="$(find_runfiles_root)"
+PYTHON_HOME="$(find_python_home "${RUNFILES_ROOT}")"
+export PYTHONHOME="${PYTHONHOME:-${PYTHON_HOME}}"
+export PYTHONPATH="${PYTHONPATH:-${PYTHON_HOME}/lib/python3.10:${PYTHON_HOME}/lib/python3.10/lib-dynload}"
+
+for BUILT_BINARY in \
+  "${RUNFILES_ROOT}/bin/host/sl/sl_linux_built_bin_wrapper.sh" \
+  "${RUNFILES_ROOT}/_main/bin/host/sl/sl_linux_built_bin_wrapper.sh" \
+  "${RUNFILES_ROOT}/bin/host/sl/sl_linux_built_bin" \
+  "${RUNFILES_ROOT}/_main/bin/host/sl/sl_linux_built_bin"
+do
+  if [[ -x "${BUILT_BINARY}" ]]; then
+    export RUNFILES_DIR="${RUNFILES_ROOT}"
+    exec "${BUILT_BINARY}" "$@"
+  fi
+done
+
+echo "Expected Bazel-built Sapling launcher in ${RUNFILES_ROOT}" >&2
+exit 1
