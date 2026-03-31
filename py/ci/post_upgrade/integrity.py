@@ -17,18 +17,64 @@ def _sha256_value(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def _split_concat_expr(expr: str) -> list[str]:
+    parts: list[str] = []
+    current: list[str] = []
+    in_string = False
+    escape = False
+    paren_depth = 0
+
+    for ch in expr:
+        if escape:
+            current.append(ch)
+            escape = False
+            continue
+        if ch == "\\" and in_string:
+            current.append(ch)
+            escape = True
+            continue
+        if ch == "\"":
+            current.append(ch)
+            in_string = not in_string
+            continue
+        if not in_string:
+            if ch == "(":
+                paren_depth += 1
+            elif ch == ")":
+                paren_depth -= 1
+            elif ch == "+" and paren_depth == 0:
+                parts.append("".join(current).strip())
+                current = []
+                continue
+        current.append(ch)
+
+    if current:
+        parts.append("".join(current).strip())
+    return [part for part in parts if part]
+
+
+def _resolve_token(token: str, var_values: dict[str, str]) -> str:
+    if token.startswith("\"") and token.endswith("\""):
+        return token[1:-1]
+    if token in var_values:
+        return var_values[token]
+
+    replace_match = re.fullmatch(
+        r'(?P<base>[A-Z0-9_]+|"(?:[^"\\]|\\.)*")\.replace\("(?P<old>(?:[^"\\]|\\.)*)",\s*"(?P<new>(?:[^"\\]|\\.)*)"\)',
+        token,
+    )
+    if replace_match:
+        base = _resolve_token(replace_match.group("base"), var_values)
+        return base.replace(replace_match.group("old"), replace_match.group("new"))
+
+    raise Exception(f"Unsupported URL token '{token}' in MODULE.bazel")
+
+
 def _resolve_expr(expr: str, var_values: dict[str, str]) -> str:
-    parts = [part.strip() for part in expr.split("+")]
+    parts = _split_concat_expr(expr)
     out = ""
     for part in parts:
-        if not part:
-            continue
-        if part.startswith("\"") and part.endswith("\""):
-            out += part[1:-1]
-        elif part in var_values:
-            out += var_values[part]
-        else:
-            raise Exception(f"Unsupported URL token '{part}' in MODULE.bazel")
+        out += _resolve_token(part, var_values)
     return out
 
 

@@ -59,6 +59,8 @@ use_repo(
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.9.0", dev_dependency = True)
 
@@ -77,6 +79,11 @@ python.toolchain(
     is_default = True,
     python_version = PYTHON_VERSION,
 )
+python.toolchain(
+    python_version = "3.10",
+)
+use_repo(python, "python_3_14")
+use_repo(python, "python_3_10")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
@@ -185,6 +192,17 @@ bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
 bazel_dep(name = "aspect_rules_py", version = "1.0.0")
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    name = "llvm_toolchain",
+    llvm_version = "19.1.6",
+)
+use_repo(
+    llvm,
+    "llvm_toolchain",
+    "llvm_toolchain_llvm",
+)
 
 # renovate:
 # 	datasource=git-refs
@@ -482,7 +500,11 @@ rust.toolchain(
     edition = "2021",
     versions = [RUST_VERSION],
 )
-use_repo(rust, "rust_toolchains")
+use_repo(
+    rust,
+    "rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools",
+    "rust_toolchains",
+)
 
 rust_host_tools.host_tools(
     name = "rust_host_tools_nightly",
@@ -577,75 +599,52 @@ http_archive(
 # 	versioning=loose
 # 	depName=facebook/sapling
 SAPLING_VERSION = "0.2.20241203-120811+a2174689"
-SAPLING_VERSION_URLENCODED = "0.2.20241203-120811%2Ba2174689"
-UBUNTU_2004_PYTHON38_VERSION = "3.8.10-0ubuntu1~20.04.18"
-UBUNTU_2004_OPENSSL11_VERSION = "1.1.1f-1ubuntu2.24"
+
+# renovate:
+# 	datasource=github-tags
+# 	versioning=semver
+# 	depName=openssl/openssl
+# 	extractVersion=^openssl-(?<version>.*)$
+OPENSSL_VERSION = "3.4.1"
 
 http_archive(
     name = "sapling_linux_amd64",
-    build_file_content = """exports_files(["usr/bin/sl"], visibility = ["//visibility:public"])""",
-    patch_cmds = ["tar -xJf data.tar.xz"],
-    sha256 = "742f92a178d245e63c6e435cf84d88da2f8cc5f4d1617e24154f86e8cc3e81c4",
-    type = "deb",
-    url = "https://github.com/facebook/sapling/releases/download/" + SAPLING_VERSION_URLENCODED + "/sapling_" + SAPLING_VERSION_URLENCODED + "_amd64.Ubuntu20.04.deb",
-)
-
-http_archive(
-    name = "ubuntu2004_libpython3_8",
-    build_file_content = """exports_files(["usr/lib/x86_64-linux-gnu/libpython3.8.so.1.0"], visibility = ["//visibility:public"])""",
-    patch_cmds = ["tar -xJf data.tar.xz"],
-    sha256 = "2a867022338c5838420113c20a17f22495bec31e2f200e073072571be0404a93",
-    type = "deb",
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/p/python3.8/libpython3.8_" + UBUNTU_2004_PYTHON38_VERSION + "_amd64.deb",
-)
-
-http_archive(
-    name = "ubuntu2004_libpython3_8_minimal",
     build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
 exports_files(
-    ["usr/lib/python3.8/encodings/__init__.py"],
+    [
+        "eden/scm/Makefile",
+        ".github/workflows/sapling-cli-ubuntu-22.04.Dockerfile",
+    ],
     visibility = ["//visibility:public"],
 )
 
 filegroup(
-    name = "python38_minimal",
-    srcs = glob(["usr/lib/python3.8/**"], allow_empty = True),
-    visibility = ["//visibility:public"],
+    name = "srcs",
+    srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
 )
 """,
-    patch_cmds = ["tar -xJf data.tar.xz"],
-    sha256 = "9c6f278dbc95c17fa594ab8da3a92c9e92741474170c406c4724ee822447142e",
-    type = "deb",
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/p/python3.8/libpython3.8-minimal_" + UBUNTU_2004_PYTHON38_VERSION + "_amd64.deb",
+    sha256 = "f05c5b08b914d2b2ab4788a55d2fd42f395b50d05fb284f4d120042122d77802",
+    strip_prefix = "sapling-" + SAPLING_VERSION.replace("+", "-"),
+    # auto-integrity
+    url = "https://github.com/facebook/sapling/archive/refs/tags/" + SAPLING_VERSION + ".tar.gz",
 )
 
 http_archive(
-    name = "ubuntu2004_libpython3_8_stdlib",
+    name = "sapling_openssl_src",
     build_file_content = """
-exports_files(
-    ["usr/lib/python3.8/dataclasses.py"],
-    visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 filegroup(
-    name = "python38_stdlib",
-    srcs = glob(["usr/lib/python3.8/**"], allow_empty = True),
-    visibility = ["//visibility:public"],
+    name = "all_srcs",
+    srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
 )
 """,
-    patch_cmds = ["tar -xJf data.tar.xz"],
-    sha256 = "2e37173e0f5b8b13e6d3fded96f1b1e32792b673e6cc4e6b0a2e927091e34fd2",
-    type = "deb",
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/p/python3.8/libpython3.8-stdlib_" + UBUNTU_2004_PYTHON38_VERSION + "_amd64.deb",
-)
-
-http_archive(
-    name = "ubuntu2004_libssl1_1",
-    build_file_content = """exports_files(["usr/lib/x86_64-linux-gnu/libssl.so.1.1", "usr/lib/x86_64-linux-gnu/libcrypto.so.1.1"], visibility = ["//visibility:public"])""",
-    patch_cmds = ["tar -xJf data.tar.xz"],
-    sha256 = "7cf39d70a639017d1dd7c8d36daa2258063608688e449fddf40ffdd46f992a78",
-    type = "deb",
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_" + UBUNTU_2004_OPENSSL11_VERSION + "_amd64.deb",
+    sha256 = "002a2d6b30b58bf4bea46c43bdd96365aaf8daa6c428782aa4feee06da197df3",
+    strip_prefix = "openssl-" + OPENSSL_VERSION,
+    # auto-integrity
+    url = "https://github.com/openssl/openssl/releases/download/openssl-" + OPENSSL_VERSION + "/openssl-" + OPENSSL_VERSION + ".tar.gz",
 )
 
 http_archive(
@@ -653,7 +652,8 @@ http_archive(
     build_file_content = """exports_files(["sl"], visibility = ["//visibility:public"])""",
     sha256 = "20878b44d5501396a35af3d44f3b91ad04260d02f71fb4637326e51e122225a7",
     strip_prefix = "sapling/" + SAPLING_VERSION + "/bin",
-    url = "https://github.com/facebook/sapling/releases/download/" + SAPLING_VERSION_URLENCODED + "/sapling_" + SAPLING_VERSION_URLENCODED + ".arm64_ventura.bottle.tar.gz",
+    # auto-integrity
+    url = "https://github.com/facebook/sapling/releases/download/" + SAPLING_VERSION.replace("+", "%2B") + "/sapling_" + SAPLING_VERSION.replace("+", "%2B") + ".arm64_ventura.bottle.tar.gz",
 )
 
 http_archive(
@@ -661,7 +661,8 @@ http_archive(
     build_file_content = """exports_files(["sl.exe"], visibility = ["//visibility:public"])""",
     sha256 = "857acaab26f9f932e9d6b47be37468a58666f12e48f32e2bf951f2f25bd28827",
     strip_prefix = "Sapling",
-    url = "https://github.com/facebook/sapling/releases/download/" + SAPLING_VERSION_URLENCODED + "/sapling_windows_" + SAPLING_VERSION_URLENCODED + "_amd64.zip",
+    # auto-integrity
+    url = "https://github.com/facebook/sapling/releases/download/" + SAPLING_VERSION.replace("+", "%2B") + "/sapling_windows_" + SAPLING_VERSION.replace("+", "%2B") + "_amd64.zip",
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")

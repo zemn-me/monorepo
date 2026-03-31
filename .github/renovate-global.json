@@ -38,10 +38,11 @@
 				"/^sh/bin/bazel$/"
 			],
 			"matchStrings": [
-				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:python-version|github-releases|github-tags))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
+				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:python-version|github-releases|github-tags))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)(?:\n#\\s*extractVersion\\s*=\\s*(?<extractVersion>.*))?\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
 			],
 			"datasourceTemplate": "{{{datasource}}}",
 			"currentValueTemplate": "{{{currentValue}}}",
+			"extractVersionTemplate": "{{{extractVersion}}}",
 			"versioningTemplate": "{{{versioning}}}",
 			"depNameTemplate": "{{{depName}}}"
 		},

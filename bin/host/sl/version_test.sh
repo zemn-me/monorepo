@@ -11,5 +11,11 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
   { echo>&2 "ERROR: cannot find $f"; exit 1; }; f=; set -e
 # --- end runfiles.bash initialization v3 ---
 
-SL_BINARY_OVERRIDE="$(rlocation "${SL_BINARY_OVERRIDE}")" \
-  "$(rlocation "${SL_BINARY}")" --version
+expected_version="$(cat "$(rlocation "${SL_EXPECTED_VERSION}")")"
+actual="$("$(rlocation "${SL_BINARY}")" --version 2>&1)"
+
+if [[ "${actual}" != *"${expected_version}"* ]]; then
+  echo "expected Sapling version ${expected_version}, got:" >&2
+  echo "${actual}" >&2
+  exit 1
+fi
