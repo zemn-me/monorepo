@@ -1,0 +1,17 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_library")
+
+py_library(
+    name = "python_stdlib",
+    srcs = [
+        "_compression.py",
+        "pipes.py",
+        "uu.py",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
