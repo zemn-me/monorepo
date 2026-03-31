@@ -1,3 +1,3 @@
 # sh learnings
 
-- `sl` from Ubuntu `.deb` is not self-contained: bundle matching `libpython` + python stdlib/minimal + `libssl1.1` in Bazel and set `LD_LIBRARY_PATH` + `PYTHONPATH` in the wrapper.
+- `sl` on Linux is compiled as a Bazel output from the upstream source archive; if the build fails, check the upstream Ubuntu 22.04 Dockerfile for missing host build tools.

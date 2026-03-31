@@ -1,10 +1,12 @@
+load("@npm//:yarn/package_json.bzl", yarn_bin = "bin")
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make", "make", "runnable_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 alias(
     name = "sl",
     actual = select({
-        "@bazel_tools//src/conditions:linux_x86_64": ":sl_linux",
+        "@bazel_tools//src/conditions:linux_x86_64": ":sl_linux_runtime",
         "@bazel_tools//src/conditions:darwin_arm64": "@sapling_darwin_arm64//:sl",
         "@bazel_tools//src/conditions:windows_x64": "@sapling_windows_amd64//:sl.exe",
         "//conditions:default": ":unsupported",
@@ -13,17 +15,106 @@ alias(
 )
 
 sh_binary(
+    name = "sl_python",
+    srcs = ["sl_python.sh"],
+)
+
+yarn_bin.yarn_binary(
+    name = "sl_yarn",
+)
+
+configure_make(
+    name = "sapling_openssl",
+    configure_command = "config",
+    configure_in_place = True,
+    configure_options = [
+        "no-shared",
+        "no-tests",
+    ],
+    lib_name = "openssl",
+    lib_source = "@sapling_openssl_src//:all_srcs",
+    out_lib_dir = "lib64",
+    out_static_libs = [
+        "libssl.a",
+        "libcrypto.a",
+    ],
+    targets = ["install_sw"],
+)
+
+make(
+    name = "sl_linux_built",
+    args = [
+        "PYTHON=`printenv EXT_BUILD_ROOT`/$(execpath :sl_python)",
+        "PYTHON3=`printenv EXT_BUILD_ROOT`/$(execpath :sl_python)",
+        "PYTHON_SYS_EXECUTABLE=`printenv EXT_BUILD_ROOT`/$(execpath :sl_python)",
+        "CARGO=`printenv EXT_BUILD_ROOT`/$(execpath @rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:cargo)",
+        "RUSTC=`printenv EXT_BUILD_ROOT`/$(execpath @rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:rustc)",
+    ],
+    build_data = [
+        "@llvm_toolchain_llvm//:clang",
+        "@llvm_toolchain_llvm//:include",
+        "@python_3_10//:python3",
+        ":sl_python",
+        ":sl_yarn",
+        "@llvm_toolchain_llvm//:libclang",
+        "@pip//setuptools:pkg",
+        "@rules_foreign_cc//toolchains/private:pkgconfig_tool",
+        "@rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:cargo",
+        "@rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:rust-lld",
+        "@rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:rust_std-x86_64-unknown-linux-gnu",
+        "@rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:rustc",
+        "@rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools//:rustc_lib",
+    ],
+    env = {
+        "BINDGEN_EXTRA_CLANG_ARGS": "-resource-dir `printenv EXT_BUILD_ROOT`/external/toolchains_llvm++llvm+llvm_toolchain_llvm/lib/clang/19 -isystem/usr/lib/gcc/x86_64-linux-gnu/11/include -isystem/usr/include/x86_64-linux-gnu -isystem/usr/include",
+        "CLANG_PATH": "`printenv EXT_BUILD_ROOT`/external/toolchains_llvm++llvm+llvm_toolchain_llvm/bin/clang",
+        "HERMETIC_PYTHON": "`printenv EXT_BUILD_ROOT`/$(execpath @python_3_10//:python3)",
+        "LIBCLANG_PATH": "`printenv EXT_BUILD_ROOT`/external/toolchains_llvm++llvm+llvm_toolchain_llvm/lib",
+        "LIBRARY_PATH": "`printenv EXT_BUILD_ROOT`/external/rules_python++python+python_3_10_x86_64-unknown-linux-gnu/lib",
+        "OPENSSL_STATIC": "1",
+        "PATH": "`printenv EXT_BUILD_ROOT`/external/rules_rust++rust+rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools/bin:/bin:/usr/bin:/usr/local/bin",
+        "PKG_CONFIG": "`printenv EXT_BUILD_ROOT`/$(execpath @rules_foreign_cc//toolchains/private:pkgconfig_tool)/bin/pkg-config",
+        "RUSTFLAGS": "-L native=`printenv EXT_BUILD_ROOT`/external/rules_python++python+python_3_10_x86_64-unknown-linux-gnu/lib -l dylib=python3.10",
+        "YARN": "`printenv EXT_BUILD_ROOT`/$(execpath :sl_yarn)",
+    },
+    lib_source = "@sapling_linux_amd64//:srcs",
+    out_binaries = ["sl"],
+    out_data_dirs = ["lib"],
+    tags = [
+        "local",
+        "no-remote",
+        "requires-network",
+    ],
+    targets = [
+        "-C eden/scm install-oss",
+    ],
+    deps = [
+        ":sapling_openssl",
+    ],
+)
+
+runnable_binary(
+    name = "sl_linux_built_bin",
+    binary = "sl",
+    foreign_cc_target = ":sl_linux_built",
+    tags = [
+        "local",
+        "no-remote",
+        "requires-network",
+    ],
+)
+
+sh_binary(
     name = "sl_linux",
     srcs = ["sl_linux.sh"],
+)
+
+sh_binary(
+    name = "sl_linux_runtime",
+    srcs = ["sl_linux.sh"],
     data = [
-        "@sapling_linux_amd64//:usr/bin/sl",
-        "@ubuntu2004_libpython3_8//:usr/lib/x86_64-linux-gnu/libpython3.8.so.1.0",
-        "@ubuntu2004_libpython3_8_minimal//:python38_minimal",
-        "@ubuntu2004_libpython3_8_minimal//:usr/lib/python3.8/encodings/__init__.py",
-        "@ubuntu2004_libpython3_8_stdlib//:python38_stdlib",
-        "@ubuntu2004_libpython3_8_stdlib//:usr/lib/python3.8/dataclasses.py",
-        "@ubuntu2004_libssl1_1//:usr/lib/x86_64-linux-gnu/libcrypto.so.1.1",
-        "@ubuntu2004_libssl1_1//:usr/lib/x86_64-linux-gnu/libssl.so.1.1",
+        ":sl_linux_built_bin",
+        "@python_3_10//:libpython",
     ],
 )
 
@@ -35,9 +126,13 @@ sh_binary(
 sh_test(
     name = "smoke",
     srcs = ["smoke.sh"],
-    data = [":sl"],
+    data = [
+        ":fake_sl_version.sh",
+        ":sl_linux",
+    ],
     env = {
-        "SL_BINARY": "$(rlocationpath :sl)",
+        "SL_BINARY": "$(rlocationpath :sl_linux)",
+        "SL_BINARY_OVERRIDE": "$(rlocationpath :fake_sl_version.sh)",
     },
     deps = [
         "@rules_shell//shell/runfiles",
