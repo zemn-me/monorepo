@@ -295,8 +295,8 @@ devDependencies:
     specifier: 3.3.0
     version: 3.3.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@19.2.4)
   '@microsoft/api-documenter':
-    specifier: 7.29.7
-    version: 7.29.7(@types/node@24.12.0)
+    specifier: 7.29.8
+    version: 7.29.8(@types/node@24.12.0)
   '@pulumi/aws':
     specifier: 6.68.0
     version: 6.68.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -3203,27 +3203,27 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-documenter@7.29.7(@types/node@24.12.0):
-    resolution: {integrity: sha512-hBI9sBwyhSNfLxSoP2IOZcFOwqYeRG6uRc5scEeBD2oaz+jrJ3mwe/amSiY4Dz/Q8RWCLCWHf1WYqabEmhMlug==}
+  /@microsoft/api-documenter@7.29.8(@types/node@24.12.0):
+    resolution: {integrity: sha512-c/E9FzYW4uIRqdLkfcfqevb8+wyXqgOscqzNx1uwYRd2v6Ys0+tOAJpmB4AYcS0SRN9ToEpnmkTb9p8SRrpvEQ==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.33.4(@types/node@24.12.0)
+      '@microsoft/api-extractor-model': 7.33.5(@types/node@24.12.0)
       '@microsoft/tsdoc': 0.16.0
-      '@rushstack/node-core-library': 5.20.3(@types/node@24.12.0)
-      '@rushstack/terminal': 0.22.3(@types/node@24.12.0)
-      '@rushstack/ts-command-line': 5.3.3(@types/node@24.12.0)
+      '@rushstack/node-core-library': 5.21.0(@types/node@24.12.0)
+      '@rushstack/terminal': 0.22.4(@types/node@24.12.0)
+      '@rushstack/ts-command-line': 5.3.4(@types/node@24.12.0)
       js-yaml: 4.1.1
       resolve: 1.22.11
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor-model@7.33.4(@types/node@24.12.0):
-    resolution: {integrity: sha512-u1LTaNTikZAQ9uK6KG1Ms7nvNedsnODnspq/gH2dcyETWvH4hVNGNDvRAEutH66kAmxA4/necElqGNs1FggC8w==}
+  /@microsoft/api-extractor-model@7.33.5(@types/node@24.12.0):
+    resolution: {integrity: sha512-Xh4dXuusndVQqVz4nEN9xOp0DyzsKxeD2FFJkSPg4arAjDSKPcy6cAc7CaeBPA7kF2wV1fuDlo2p/bNMpVr8yg==}
     dependencies:
       '@microsoft/tsdoc': 0.16.0
       '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.20.3(@types/node@24.12.0)
+      '@rushstack/node-core-library': 5.21.0(@types/node@24.12.0)
     transitivePeerDependencies:
       - '@types/node'
     dev: true
@@ -5340,8 +5340,8 @@ packages:
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
     dev: true
 
-  /@rushstack/node-core-library@5.20.3(@types/node@24.12.0):
-    resolution: {integrity: sha512-95JgEPq2k7tHxhF9/OJnnyHDXfC9cLhhta0An/6MlkDsX2A6dTzDrTUG18vx4vjc280V0fi0xDH9iQczpSuWsw==}
+  /@rushstack/node-core-library@5.21.0(@types/node@24.12.0):
+    resolution: {integrity: sha512-LFzN+1lyWROit/P8Md6yxAth7lLYKn37oCKJHirEE2TQB25NDUM7bALf0ar+JAtwFfRCH+D+DGOA7DAzIi2r+g==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -5370,24 +5370,24 @@ packages:
       '@types/node': 24.12.0
     dev: true
 
-  /@rushstack/terminal@0.22.3(@types/node@24.12.0):
-    resolution: {integrity: sha512-gHC9pIMrUPzAbBiI4VZMU7Q+rsCzb8hJl36lFIulIzoceKotyKL3Rd76AZ2CryCTKEg+0bnTj406HE5YY5OQvw==}
+  /@rushstack/terminal@0.22.4(@types/node@24.12.0):
+    resolution: {integrity: sha512-fhtLjnXCc/4WleVbVl6aoc7jcWnU6yqjS1S8WoaNREG3ycu/viZ9R/9QM7Y/b4CDvcXoiDyMNIay7JMwBptM3g==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
       '@types/node':
         optional: true
     dependencies:
-      '@rushstack/node-core-library': 5.20.3(@types/node@24.12.0)
+      '@rushstack/node-core-library': 5.21.0(@types/node@24.12.0)
       '@rushstack/problem-matcher': 0.2.1(@types/node@24.12.0)
       '@types/node': 24.12.0
       supports-color: 8.1.1
     dev: true
 
-  /@rushstack/ts-command-line@5.3.3(@types/node@24.12.0):
-    resolution: {integrity: sha512-c+ltdcvC7ym+10lhwR/vWiOhsrm/bP3By2VsFcs5qTKv+6tTmxgbVrtJ5NdNjANiV5TcmOZgUN+5KYQ4llsvEw==}
+  /@rushstack/ts-command-line@5.3.4(@types/node@24.12.0):
+    resolution: {integrity: sha512-MLkVKVEN6/2clKTrjN2B2KqKCuPxRwnNsWY7a+FCAq2EMdkj10cM8YgiBSMeGFfzM0mDMzargpHNnNzaBi9Whg==}
     dependencies:
-      '@rushstack/terminal': 0.22.3(@types/node@24.12.0)
+      '@rushstack/terminal': 0.22.4(@types/node@24.12.0)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
