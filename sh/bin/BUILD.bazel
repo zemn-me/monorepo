@@ -135,6 +135,11 @@ alias(
     actual = "@bindeps//:ripgrep__rg",
 )
 
+alias(
+    name = "sl",
+    actual = "//bin/host/sl",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],

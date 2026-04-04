@@ -1,0 +1,1 @@
+With `aspect_rules_ts` v3 and a custom `transpiler` (for example SWC), `ts_project` lint should target the main rule (`:name`), not `:name_typings` or `:name_types`; those helper targets no longer carry the lint aspect correctly.
