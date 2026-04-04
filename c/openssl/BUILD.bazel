@@ -1,0 +1,27 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
+load("//bzl:rules.bzl", "bazel_lint")
+
+package(default_visibility = ["//:__subpackages__"])
+
+configure_make(
+    name = "openssl",
+    configure_command = "config",
+    configure_in_place = True,
+    configure_options = [
+        "no-shared",
+        "no-tests",
+    ],
+    lib_name = "openssl",
+    lib_source = "@sapling_openssl_src//:all_srcs",
+    out_lib_dir = "lib64",
+    out_static_libs = [
+        "libssl.a",
+        "libcrypto.a",
+    ],
+    targets = ["install_sw"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

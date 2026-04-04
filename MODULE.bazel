@@ -59,6 +59,8 @@ use_repo(
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.9.0", dev_dependency = True)
 
@@ -77,6 +79,11 @@ python.toolchain(
     is_default = True,
     python_version = PYTHON_VERSION,
 )
+python.toolchain(
+    python_version = "3.10",
+)
+use_repo(python, "python_3_14")
+use_repo(python, "python_3_10")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
@@ -185,6 +192,17 @@ bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
 bazel_dep(name = "aspect_rules_py", version = "1.0.0")
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    name = "llvm_toolchain",
+    llvm_version = "19.1.6",
+)
+use_repo(
+    llvm,
+    "llvm_toolchain",
+    "llvm_toolchain_llvm",
+)
 
 # renovate:
 # 	datasource=git-refs
@@ -482,7 +500,11 @@ rust.toolchain(
     edition = "2021",
     versions = [RUST_VERSION],
 )
-use_repo(rust, "rust_toolchains")
+use_repo(
+    rust,
+    "rust_linux_x86_64__x86_64-unknown-linux-gnu__stable_tools",
+    "rust_toolchains",
+)
 
 rust_host_tools.host_tools(
     name = "rust_host_tools_nightly",
@@ -567,6 +589,57 @@ http_archive(
     build_file_content = "exports_files(['ruff.exe'])",
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-x86_64-pc-windows-msvc.zip",
 )
+
+###############################################################################
+#                                   sapling                                   #
+###############################################################################
+
+# renovate:
+# 	datasource=github-releases
+# 	versioning=loose
+# 	depName=facebook/sapling
+SAPLING_VERSION = "0.2.20241203-120811+a2174689"
+
+# OpenSSL support for the Bazel-built Linux Sapling package starts here.
+# renovate:
+# 	datasource=github-tags
+# 	versioning=semver
+# 	depName=openssl/openssl
+# 	extractVersion=^openssl-(?<version>.*)$
+OPENSSL_VERSION = "3.4.1"
+
+http_archive(
+    name = "sapling_linux_amd64",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
+)
+""",
+    sha256 = "f05c5b08b914d2b2ab4788a55d2fd42f395b50d05fb284f4d120042122d77802",
+    strip_prefix = "sapling-" + SAPLING_VERSION.replace("+", "-"),
+    # auto-integrity
+    url = "https://github.com/facebook/sapling/archive/refs/tags/" + SAPLING_VERSION + ".tar.gz",
+)
+
+http_archive(
+    name = "sapling_openssl_src",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
+)
+""",
+    sha256 = "002a2d6b30b58bf4bea46c43bdd96365aaf8daa6c428782aa4feee06da197df3",
+    strip_prefix = "openssl-" + OPENSSL_VERSION,
+    # auto-integrity
+    url = "https://github.com/openssl/openssl/releases/download/openssl-" + OPENSSL_VERSION + "/openssl-" + OPENSSL_VERSION + ".tar.gz",
+)
+# OpenSSL support for the Bazel-built Linux Sapling package ends here.
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
