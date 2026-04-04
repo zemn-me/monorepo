@@ -608,6 +608,13 @@ SAPLING_VERSION = "0.2.20241203-120811+a2174689"
 # 	extractVersion=^openssl-(?<version>.*)$
 OPENSSL_VERSION = "3.4.1"
 
+# renovate:
+# 	datasource=github-tags
+# 	versioning=semver
+# 	depName=madler/zlib
+# 	extractVersion=^v(?<version>.*)$
+ZLIB_VERSION = "1.3.1"
+
 http_archive(
     name = "sapling_linux_amd64",
     build_file_content = """
@@ -638,6 +645,22 @@ filegroup(
     strip_prefix = "openssl-" + OPENSSL_VERSION,
     # auto-integrity
     url = "https://github.com/openssl/openssl/releases/download/openssl-" + OPENSSL_VERSION + "/openssl-" + OPENSSL_VERSION + ".tar.gz",
+)
+
+http_archive(
+    name = "sapling_zlib_src",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
+)
+""",
+    sha256 = "17e88863f3600672ab49182f217281b6fc4d3c762bde361935e436a95214d05c",
+    strip_prefix = "zlib-" + ZLIB_VERSION,
+    # auto-integrity
+    url = "https://github.com/madler/zlib/archive/refs/tags/v" + ZLIB_VERSION + ".tar.gz",
 )
 # OpenSSL support for the Bazel-built Linux Sapling package ends here.
 

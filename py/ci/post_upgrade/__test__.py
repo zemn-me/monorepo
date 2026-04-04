@@ -68,6 +68,38 @@ http_archive(
         self.assertIn(f'sha256 = "{bazelish_sha256}"', updated)
         self.assertIn('integrity = "sha256-unchanged"', updated)
 
+    def test_updates_archive_after_multiline_build_file(self):
+        module_text = '''
+SAPLING_VERSION = "0.2.20260317-201835+0234c21f"
+
+http_archive(
+    name = "sapling_linux_amd64",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["**"]),
+)
+""",
+    sha256 = "old",
+    strip_prefix = "sapling-" + SAPLING_VERSION.replace("+", "-"),
+    # auto-integrity
+    url = "https://example.com/sapling/" + SAPLING_VERSION + ".tar.gz",
+)
+'''.lstrip()
+
+        payload = b"sapling-data"
+        updated = update_module_bazel_text(
+            module_text,
+            lambda url: payload,
+        )
+
+        self.assertIn(
+            f'sha256 = "{hashlib.sha256(payload).hexdigest()}"',
+            updated,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

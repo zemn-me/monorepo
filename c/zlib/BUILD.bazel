@@ -1,0 +1,18 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
+load("//bzl:rules.bzl", "bazel_lint")
+
+package(default_visibility = ["//:__subpackages__"])
+
+configure_make(
+    name = "zlib",
+    configure_in_place = True,
+    lib_name = "zlib",
+    lib_source = "@sapling_zlib_src//:all_srcs",
+    out_static_libs = ["libz.a"],
+    targets = ["install"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
