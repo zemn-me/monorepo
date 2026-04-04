@@ -1,8 +1,7 @@
 import React from 'react';
 
 import style from '#root/project/zemn.me/app/experiments/cv/page.module.css';
-import { accolade, Bio, comment, talk, work } from '#root/project/zemn.me/bio/bio.js';
-import priorities from '#root/project/zemn.me/bio/priority.json';
+import { accolade, Bio, comment, priorities, talk, work } from '#root/project/zemn.me/bio/bio.js';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
 import { isDefined, must } from '#root/ts/guard.js';

@@ -3,11 +3,14 @@ import { z } from 'zod';
 import { frontmatter as articleCsp } from '#root/mdx/article/2014/csp.js';
 import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
+import priorityIds from '#root/project/zemn.me/bio/priority.json';
 import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
 import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
 import * as time from '#root/ts/time/index.js';
 import { linkToHighlight } from '#root/ts/url/selection.js';
+
+export const priorities: readonly string[] = priorityIds;
 
 type Text = lang.Text;
 
