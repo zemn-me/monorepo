@@ -3,12 +3,12 @@ import 'ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
 import { Metadata } from 'next/types/index.js';
 import { ReactNode } from 'react';
 
+import { ClientProviders } from '#root/ts/next.js/component/ClientProviders/ClientProviders.js';
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
 	HeaderTagsAppRouter,
 } from '#root/ts/next.js/index.js';
-import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders.js';
 
 const csp_policy: CspPolicy = {
 	...DefaultContentSecurityPolicy,
