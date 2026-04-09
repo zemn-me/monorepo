@@ -5,7 +5,7 @@ import type { z } from "zod";
 import style from "#root/project/zemn.me/components/InlineLogin/inline_login.module.css";
 import { ProgressCircle } from "#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js";
 import { usePosterDisplayName } from "#root/project/zemn.me/hook/usePosterDisplayName.js";
-import { useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
+import { useClearZemnMeAuth, useZemnMeAuth } from "#root/project/zemn.me/hook/useZemnMeAuth.js";
 import { future_and_then, future_error, future_flatten_then, future_resolve } from "#root/ts/future/future.js";
 import { OidcIdTokenClaimsSchema } from "#root/ts/oidc/id_token.js";
 import { background } from "#root/ts/promise/ignore_result.js";
@@ -61,6 +61,11 @@ function InlineLoginContent({ claims }: { readonly claims: OidcIdTokenClaims }) 
 		family_name: claims.family_name,
 		sub: claims.sub,
 	});
+	const clearZemnMeAuth = useClearZemnMeAuth();
+
+	const logout = <button onClick={() => { void clearZemnMeAuth() }}>
+		↺
+	</button>
 
 	return displayName
 		? <span className={style.loggedIn}>
@@ -75,9 +80,9 @@ function InlineLoginContent({ claims }: { readonly claims: OidcIdTokenClaims }) 
 			<sup><TimeLeftIndicator
 			end={new Date(claims.exp * 1000)}
 			start={new Date(claims.iat * 1000)}
-			/></sup >.
+			/></sup >{logout}.
 		</span>
-		: <>Logged in.</>;
+		: <>Logged in {logout}.</>;
 }
 
 
