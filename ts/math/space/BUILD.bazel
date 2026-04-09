@@ -46,6 +46,8 @@ ts_project(
         ":space",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/math/camera",
+        "//ts/math/mesh",
         "//ts/math",
         "//ts/math/space/render",
     ],
