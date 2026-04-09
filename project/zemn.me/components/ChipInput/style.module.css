@@ -1,0 +1,20 @@
+.chipInput {
+	display: grid;
+	grid:
+		'chip-list input' /
+		auto 1fr;
+}
+
+.chipInput input::first-line {
+	color: red;
+}
+
+.chipList {
+	grid-area: chip-list;
+}
+
+.chipList .chip {
+	display: inline-block;
+	border: .2em solid var(--foreground-color);
+	padding: .4em;
+}
