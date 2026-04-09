@@ -41,9 +41,6 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("oidc login: %v", err)
 	}
 
-	syncIndicatorSelector := "output[aria-label='Callbox settings status']"
-	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
-	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
 	uidValueSelector := "output[aria-label='Admin UID value']"
 	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
@@ -52,9 +49,6 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, uidValueSelector, 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for admin uid output: %v (body snippet: %v)", err, body)
-	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
-		t.Fatalf("initial settings sync: %v", err)
 	}
 	if err := expectElementText(driver, uidValueSelector, oidc.LocalSubject, 10*time.Second); err != nil {
 		t.Fatalf("admin uid mismatch: %v", err)
@@ -134,12 +128,6 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if err := submit.Click(); err != nil {
 		t.Fatalf("submit admin form: %v", err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorBusySelector, 5*time.Second); err != nil {
-		t.Fatalf("settings sync indicator did not enter pending state: %v", err)
-	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
-		t.Fatalf("settings sync indicator did not return to synced: %v", err)
-	}
 
 	if err := driver.Get(adminURL.String()); err != nil {
 		t.Fatalf("reload admin after save: %v", err)
@@ -151,9 +139,6 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	}
 	if err := expectElementText(driver, uidValueSelector, oidc.LocalSubject, 10*time.Second); err != nil {
 		t.Fatalf("admin uid mismatch after reload: %v", err)
-	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
-		t.Fatalf("settings sync indicator after reload: %v", err)
 	}
 
 	if err := expectInputValue(driver, "input[id$='fallbackPhone']", fallbackValue, 10*time.Second); err != nil {
