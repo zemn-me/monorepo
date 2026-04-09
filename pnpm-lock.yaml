@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.104.6
-    version: 43.104.6(typanion@3.14.0)
+    specifier: 43.104.7
+    version: 43.104.7(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -7870,8 +7870,8 @@ packages:
     engines: {node: '>=12.0'}
     dev: true
 
-  /ae-cvss-calculator@1.0.11:
-    resolution: {integrity: sha512-Rhe/7hJ+9rFmDvcoIg2vNva1Lzm1gHZC5GJzhT6RceoCl9ZCK+fOl1cqKrvQsxSWoUITrt+ew73WPKpoDyilBQ==}
+  /ae-cvss-calculator@1.0.12:
+    resolution: {integrity: sha512-YVO+dhb8sZubNeL9pqSlN5hyZGC8hkAwnThnd3EimUGZtJEMeuy4kMb7zMCAsBiMr/RxklH0oY7DCsFV/B7peg==}
     dev: true
 
   /agent-base@6.0.2:
@@ -16531,8 +16531,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.104.6(typanion@3.14.0):
-    resolution: {integrity: sha512-RnYX/c9gWoYyMjdZVnz8dtDWNUjLaLArubZjYaCAezeGLVwFJHDqZkzrGR7fgrOmLgdxCt/Fu+FM+FzDAkqaMA==}
+  /renovate@43.104.7(typanion@3.14.0):
+    resolution: {integrity: sha512-+J1mvPMXsVojnhCeyzbv901w2LRrTwb/L3qUDsJ0qBNlleAlRqrK++TAUvkHCZ7DPvxUeQGjqej3JKlKH7G69g==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16573,7 +16573,7 @@ packages:
       '@sindresorhus/is': 7.2.0
       '@yarnpkg/core': 4.6.0(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
-      ae-cvss-calculator: 1.0.11
+      ae-cvss-calculator: 1.0.12
       agentkeepalive: 4.6.0
       async-mutex: 0.5.0
       aws4: 1.13.2
