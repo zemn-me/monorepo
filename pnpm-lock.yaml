@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.104.9
-    version: 43.104.9(typanion@3.14.0)
+    specifier: 43.104.11
+    version: 43.104.11(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -12970,14 +12970,14 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /jsonc-morph@0.3.2:
-    resolution: {integrity: sha512-FmHfnQ3OMs/+HosrGV8RHwerWXjTaco0hvBhn8+hP0gux06Jylynct4H0P+sjsK3QXRvN5zlq+SJxvXgfu8JfQ==}
+  /jsonc-morph@0.3.3:
+    resolution: {integrity: sha512-YljoHRXfZacx4utaktqGlz8p9xJJaV12WxciEpf4+g+8jVk0QNmxpxStkXVwjTnJZr9EAK4TT5TzdCO5M2i7rw==}
     dev: true
 
-  /jsonc-weaver@0.2.2:
-    resolution: {integrity: sha512-fDO1+8cpEFGlw42kvEqh/HAnXd47Lv19mWQaR30p2k6wOwfL4Dx/B2f8reaQepBc1aupBIOTwWmhThFUgv9zLQ==}
+  /jsonc-weaver@0.2.4:
+    resolution: {integrity: sha512-aIKK8SOg+TdBdeML4MB++phUEdS7KWZxuaPPjxUSat8Kc/2A+2AoxmAGhvbVajNjqsgSX4dhjfCJq3QlE/NSCg==}
     dependencies:
-      jsonc-morph: 0.3.2
+      jsonc-morph: 0.3.3
     dev: true
 
   /jsonfile@6.2.0:
@@ -16535,8 +16535,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.104.9(typanion@3.14.0):
-    resolution: {integrity: sha512-6pJkGCcXHWogdtuIf3VYb/2D2FGWRVECv1wwnLeve6EjCIA9RiYFukb/TaLSc6U6sOK7GoO1yc38rE1zMncJ8g==}
+  /renovate@43.104.11(typanion@3.14.0):
+    resolution: {integrity: sha512-Xa4PxjMZ/Vq72ktVkFo0EIk5I1zhmOTZBm9yQ3LuS2RnOAo/o1d5fMFsvINRLy/C8c9iXWLKcW/HA8dY1fSZNw==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16617,7 +16617,7 @@ packages:
       json-stringify-pretty-compact: 4.0.0
       json5: 2.2.3
       jsonata: 2.1.0
-      jsonc-weaver: 0.2.2
+      jsonc-weaver: 0.2.4
       klona: 2.0.6
       luxon: 3.7.2
       markdown-it: 14.1.1
