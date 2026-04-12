@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.110.5
-    version: 43.110.5(typanion@3.14.0)
+    specifier: 43.110.7
+    version: 43.110.7(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -16529,8 +16529,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.110.5(typanion@3.14.0):
-    resolution: {integrity: sha512-KQWQmGeG9N3BuIUMvuq0ILjZbwS6HPUOOMyLxr+X6BM7vmPgzF24/FYfB3pxYxeghgJPX2+iIyUiP8iwX/qjLw==}
+  /renovate@43.110.7(typanion@3.14.0):
+    resolution: {integrity: sha512-0Nups2Szvg+a5c8Y0zAnK2UIeJy2oM625xV9s5sK1pgcCH6rT2vNHeEugKhEAwfNKUm0eE4kZwJOfyHn+9mPmg==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16639,7 +16639,7 @@ packages:
       semver-utils: 1.1.4
       shlex: 3.0.0
       simple-git: 3.33.0
-      slugify: 1.6.8
+      slugify: 1.6.9
       source-map-support: 0.5.21
       strip-json-comments: 5.0.3
       toml-eslint-parser: 1.0.3
@@ -17259,8 +17259,8 @@ packages:
       is-fullwidth-code-point: 3.0.0
     dev: true
 
-  /slugify@1.6.8:
-    resolution: {integrity: sha512-HVk9X1E0gz3mSpoi60h/saazLKXKaZThMLU3u/aNwoYn8/xQyX2MGxL0ui2eaokkD7tF+Zo+cKTHUbe1mmmGzA==}
+  /slugify@1.6.9:
+    resolution: {integrity: sha512-vZ7rfeehZui7wQs438JXBckYLkIIdfHOXsaVEUMyS5fHo1483l1bMdo0EDSWYclY0yZKFOipDy4KHuKs6ssvdg==}
     engines: {node: '>=8.0.0'}
     dev: true
 
