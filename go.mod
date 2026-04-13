@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
@@ -44,7 +44,7 @@ require (
 	golang.org/x/sync v0.19.0
 	golang.org/x/tools v0.44.0
 	golang.org/x/tools/gopls v0.17.1
-	honnef.co/go/tools v0.6.1
+	honnef.co/go/tools v0.7.0
 )
 
 require (
@@ -117,7 +117,7 @@ require (
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20231108232855-2478ac86f678 // indirect
-	golang.org/x/mod v0.30.0 // indirect
+	golang.org/x/mod v0.31.0 // indirect
 	golang.org/x/oauth2 v0.33.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/telemetry v0.0.0-20241106142447-58a1122356f5 // indirect
