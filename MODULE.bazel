@@ -250,12 +250,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/factoriolab/factoriolab
 # 	refs-from=main
-FACTORIOLAB_COMMIT = "fd38d9c177f394b44b6eefe1a6e4288da6aea555"
+FACTORIOLAB_COMMIT = "72e618d53b99438212a75a65afda49ea06dfa6ad"
 
 http_archive(
     name = "com_github_factoriolab",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-QiJPv4pwIWPt9TwMRdgMB26uEnFEEeZTbLLA7dCSbNI=",
+    integrity = "sha256-NEWZQcNFRzqIeaBwTnKY6+yPaZZznfh60shB4opl3Sc=",
     strip_prefix = "factoriolab-" + FACTORIOLAB_COMMIT,
     # auto-integrity
     url = "https://github.com/factoriolab/factoriolab/archive/" + FACTORIOLAB_COMMIT + ".zip",
