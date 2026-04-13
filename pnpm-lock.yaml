@@ -143,8 +143,8 @@ dependencies:
     specifier: 6.2.2
     version: 6.2.2
   jscpd:
-    specifier: 4.0.8
-    version: 4.0.8
+    specifier: 4.0.9
+    version: 4.0.9
   json-schema-to-typescript:
     specifier: 15.0.4
     version: 15.0.4
@@ -3072,25 +3072,25 @@ packages:
   /@js-sdsl/ordered-map@4.4.2:
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
-  /@jscpd/badge-reporter@4.0.4:
-    resolution: {integrity: sha512-I9b4MmLXPM2vo0SxSUWnNGKcA4PjQlD3GzXvFK60z43cN/EIdLbOq3FVwCL+dg2obUqGXKIzAm7EsDFTg0D+mQ==}
+  /@jscpd/badge-reporter@4.0.5:
+    resolution: {integrity: sha512-SLVhP00R9lkQ//Ivaanfm7k0L9sewpBven670kk1uGec2SWUOa7MVQcuad/TV59KEZ73UIC1lXvi6O9hAnbpUw==}
     dependencies:
       badgen: 3.2.3
       colors: 1.4.0
       fs-extra: 11.3.4
     dev: false
 
-  /@jscpd/core@4.0.4:
-    resolution: {integrity: sha512-QGMT3iXEX1fI6lgjPH+x8eyJwhwr2KkpSF5uBpjC0Z5Xloj0yFTFLtwJT+RhxP/Ob4WYrtx2jvpKB269oIwgMQ==}
+  /@jscpd/core@4.0.5:
+    resolution: {integrity: sha512-Udvym21nWzxjYRVXwwpYNBqZ6b50QV2zHN3fFNzOPPg4cfQVYOZerILB7xNDUsXHC1PCr/N52Tq3q7AElvjWWA==}
     dependencies:
       eventemitter3: 5.0.4
     dev: false
 
-  /@jscpd/finder@4.0.4:
-    resolution: {integrity: sha512-qVUWY7Nzuvfd5OIk+n7/5CM98LmFroLqblRXAI2gDABwZrc7qS+WH2SNr0qoUq0f4OqwM+piiwKvwL/VDNn/Cg==}
+  /@jscpd/finder@4.0.5:
+    resolution: {integrity: sha512-/2VkRoVrrfya+51sitZo5I9MdwsRaPKB8X3L3khAYoHFXk4L/mUuG81RmGazDHjUIGg22ItlkQtwzorNZ2+aPw==}
     dependencies:
-      '@jscpd/core': 4.0.4
-      '@jscpd/tokenizer': 4.0.4
+      '@jscpd/core': 4.0.5
+      '@jscpd/tokenizer': 4.0.5
       blamer: 1.0.7
       bytes: 3.1.2
       cli-table3: 0.6.5
@@ -3101,18 +3101,18 @@ packages:
       pug: 3.0.4
     dev: false
 
-  /@jscpd/html-reporter@4.0.4:
-    resolution: {integrity: sha512-YiepyeYkeH74Kx59PJRdUdonznct0wHPFkf6FLQN+mCBoy6leAWCcOfHtcexnp+UsBFDlItG5nRdKrDSxSH+Kg==}
+  /@jscpd/html-reporter@4.0.5:
+    resolution: {integrity: sha512-drK2J8KyPIW9wvaElSIobZFp4dBO9GA++JW4gx3oihvLdDSp8qSo/CNqH47Dw0XkjQTxND3j/+Wz5JWvYRBgFQ==}
     dependencies:
       colors: 1.4.0
       fs-extra: 11.3.4
       pug: 3.0.4
     dev: false
 
-  /@jscpd/tokenizer@4.0.4:
-    resolution: {integrity: sha512-xxYYY/qaLah/FlwogEbGIxx9CjDO+G9E6qawcy26WwrflzJb6wsnhjwdneN6Wb0RNCDsqvzY+bzG453jsin4UQ==}
+  /@jscpd/tokenizer@4.0.5:
+    resolution: {integrity: sha512-WzRujQtN5WedxZVDKuoanxmKAFrxcLrHpcA6kaM4z8AhGtWXZ325yseqgL5TZ8OK7Auwu7kQLlqhfk05fGYG7A==}
     dependencies:
-      '@jscpd/core': 4.0.4
+      '@jscpd/core': 4.0.5
       reprism: 0.0.11
       spark-md5: 3.0.2
     dev: false
@@ -11040,11 +11040,6 @@ packages:
     resolution: {integrity: sha512-WWOec4aRI7YAykQ9+BHmzjyNlkfJFG8QLXnDTsLz/kZefq7qkzdfo4p6fkYYMIq1aj+gZcQs/1HQhQh3DPPxlQ==}
     dev: true
 
-  /gitignore-to-glob@0.3.0:
-    resolution: {integrity: sha512-mk74BdnK7lIwDHnotHddx1wsjMOFIThpLY3cPNniJ/2fA/tlLzHnFxIdR+4sLOu5KGgQJdij4kjJ2RoUNnCNMA==}
-    engines: {node: '>=4.4 <5 || >=6.9'}
-    dev: false
-
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -12679,28 +12674,27 @@ packages:
   /jsc-safe-url@0.2.4:
     resolution: {integrity: sha512-0wM3YBWtYePOjfyXQH5MWQ8H7sdk5EXSwZvmSLKk2RboVQ2Bu239jycHDz5J/8Blf3K0Qnoy2b6xD+z10MFB+Q==}
 
-  /jscpd-sarif-reporter@4.0.6:
-    resolution: {integrity: sha512-b9Sm3IPZ3+m8Lwa4gZa+4/LhDhlc/ZLEsLXKSOy1DANQ6kx0ueqZT+fUHWEdQ6m0o3+RIVIa7DmvLSojQD05ng==}
+  /jscpd-sarif-reporter@4.0.7:
+    resolution: {integrity: sha512-Q/VlfTI/Nbjc8dZ/2pDVIf1aRi2bM2CTYujcAoeYr7brRnS4o5ZeW86W8q7MM7cQu40gezlNckl+E9wKFSMFiA==}
     dependencies:
       colors: 1.4.0
       fs-extra: 11.3.4
       node-sarif-builder: 3.4.0
     dev: false
 
-  /jscpd@4.0.8:
-    resolution: {integrity: sha512-d2VNT/2Hv4dxT2/59He8Lyda4DYOxPRyRG9zBaOpTZAqJCVf2xLrBlZkT8Va6Lo9u3X2qz8Bpq4HrDi4JsrQhA==}
+  /jscpd@4.0.9:
+    resolution: {integrity: sha512-fp6Sh42W3mIPoQgZmgYmKDLQzEDnnX2vaGlTN4haILkB2vsi+ewcCHEtWR/2CR/QbsBvAvsNo8U5Sa+p9aHiGw==}
     hasBin: true
     dependencies:
-      '@jscpd/badge-reporter': 4.0.4
-      '@jscpd/core': 4.0.4
-      '@jscpd/finder': 4.0.4
-      '@jscpd/html-reporter': 4.0.4
-      '@jscpd/tokenizer': 4.0.4
+      '@jscpd/badge-reporter': 4.0.5
+      '@jscpd/core': 4.0.5
+      '@jscpd/finder': 4.0.5
+      '@jscpd/html-reporter': 4.0.5
+      '@jscpd/tokenizer': 4.0.5
       colors: 1.4.0
       commander: 5.1.0
       fs-extra: 11.3.4
-      gitignore-to-glob: 0.3.0
-      jscpd-sarif-reporter: 4.0.6
+      jscpd-sarif-reporter: 4.0.7
     dev: false
 
   /jsdom@20.0.3:
