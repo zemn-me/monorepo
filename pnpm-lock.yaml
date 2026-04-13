@@ -298,8 +298,8 @@ devDependencies:
     specifier: 7.29.11
     version: 7.29.11(@types/node@24.12.2)
   '@pulumi/aws':
-    specifier: 6.68.0
-    version: 6.68.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 7.24.0
+    version: 7.24.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/awsx':
     specifier: 3.4.0
     version: 3.4.0(ts-node@10.9.2)(typescript@5.5.4)
@@ -4434,17 +4434,6 @@ packages:
 
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
-
-  /@pulumi/aws@6.68.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-uehJNSviSq3garkLXsy1zZzI7V6clBDQq8G83PSpNfdePdGeKtuRoxMSsuqkgpGkue+cGjoxJtC6QwdtzgaKBQ==}
-    dependencies:
-      '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
-      mime: 2.6.0
-    transitivePeerDependencies:
-      - supports-color
-      - ts-node
-      - typescript
-    dev: true
 
   /@pulumi/aws@7.24.0(ts-node@10.9.2)(typescript@5.5.4):
     resolution: {integrity: sha512-Y+zV+uU3Mr+5kUaqsFbF0/lf9yc8TU1Kx1cgcqMbyUQTRBRyfpXb6lR3sBwC88z1DX/WFMrBCD+1bbwnS2fBbw==}
