@@ -1,7 +1,14 @@
 import React from 'react';
 
 import style from '#root/project/zemn.me/app/experiments/cv/page.module.css';
-import { accolade, Bio, comment, talk, work } from '#root/project/zemn.me/bio/bio.js';
+import {
+	accolade,
+	Bio,
+	comment,
+	eventHasStarted,
+	talk,
+	work,
+} from '#root/project/zemn.me/bio/bio.js';
 import priorities from '#root/project/zemn.me/bio/priority.json';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 import TimeEye from '#root/project/zemn.me/components/TimeEye/TimeEye.js';
@@ -20,6 +27,7 @@ const minPriorityRecord = '74086941-7c37-4f3e-af9b-4cc8e8bbc749';
 const minPriority = mustPriority(minPriorityRecord);
 
 const entries = Bio.timeline
+        .filter(event => eventHasStarted(event))
         .filter(e => mustPriority(e.id) >= minPriority)
         .sort((a, b) => (+a.date) - (+b.date))
         .toReversed();
@@ -112,7 +120,8 @@ function Header() {
 }
 
 function interestingEvents() { // memoize this
-	return Bio.timeline.filter(e => mustPriority(e.id) >= minPriority)
+	return Bio.timeline.filter(event => eventHasStarted(event))
+		.filter(e => mustPriority(e.id) >= minPriority)
 		.sort((a, b) => (+a.date) - (+b.date)).toReversed()
 }
 

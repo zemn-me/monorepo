@@ -54,6 +54,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "bio.ts",
+        "event_test.ts",
         "index.ts",
         "priority_sort.ts",
         "priority_test.ts",
@@ -64,7 +65,10 @@ filegroup(
 
 ts_project(
     name = "bio_tests",
-    srcs = ["priority_test.ts"],
+    srcs = [
+        "event_test.ts",
+        "priority_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":bio",
@@ -75,7 +79,10 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["priority_test.js"],
+    srcs = [
+        "event_test.js",
+        "priority_test.js",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [":bio_tests"],
 )

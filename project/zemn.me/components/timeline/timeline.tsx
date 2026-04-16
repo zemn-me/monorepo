@@ -251,6 +251,7 @@ export default function Timeline() {
 		() =>
 			groupBy(
 				Immutable.List(Bio.Bio.timeline)
+					.filter(event => Bio.eventHasStarted(event))
 					.map(event => {
 						// depending on locale there may be different numbers of months etc.
 						const month: ImmutableText = Text({
