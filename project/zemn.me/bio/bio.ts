@@ -80,6 +80,10 @@ export interface Event {
 	readonly supercedes?: string;
 }
 
+export function eventHasStarted(event: Event, now: Date = new Date()): boolean {
+	return event.date <= now;
+}
+
 // tags
 export const gaming = en`gaming`,
 	accolade = en`accolade`,
@@ -176,6 +180,14 @@ export const Bio = {
 		en`bazel`,
 	],
 	timeline: [
+		{
+			id: '431c28bb-a3ef-48a3-9c66-5e42fc4d954c',
+			description: en`Talk at DEF CON Singapore with Adrian Spânu on the present and future of prompt injection.`,
+			title: en`Beyond Prompt Injection: Agentic AI Attacks in the Real World`,
+			date: date(30, 'apr', 2026),
+			url: url`https://defcon.org/html/defcon-singapore/dc-singapore-talks.html#:~:text=Beyond%20Prompt%20Injection%3A%20Agentic%20AI%20Attacks%20in%20the%20Real%20World`,
+			tags: [talk, security],
+		},
 		{
 			id: 'cc77fee4-fdb1-443b-b7e2-7e8996ee5e0e',
 			...canonicaliseArticleMetadata(articleMissing),
