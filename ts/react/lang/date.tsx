@@ -14,7 +14,8 @@ export type SupportedDateInput = Temporal.ZonedDateTime | globalThis.Date;
 
 export interface DateProps {
 	readonly date: SupportedDateInput;
-	readonly className?: string
+	readonly className?: string;
+	readonly showExactTitle?: boolean;
 }
 
 function isTemporalZonedDateTime(value: SupportedDateInput): value is Temporal.ZonedDateTime {
@@ -135,7 +136,12 @@ export const Date = memo(function DateComponent(props: DateProps) {
 	}
 
 	return (
-		<time className={props.className} dateTime={zonedDate.toString()} lang={locale.toString()}>
+		<time
+			className={props.className}
+			dateTime={zonedDate.toString()}
+			lang={locale.toString()}
+			title={props.showExactTitle === false ? undefined : zonedDate.toString()}
+		>
 			{content}
 		</time>
 	);
@@ -151,7 +157,12 @@ export const MonthYear = memo(function MonthYearComponent(props: DateProps) {
 	const text = formatMonthYear(zonedDate, locale);
 
 	return (
-		<time className={props.className} dateTime={zonedDate.toString()} lang={locale.toString()}>{text}</time>
+		<time
+			className={props.className}
+			dateTime={zonedDate.toString()}
+			lang={locale.toString()}
+			title={props.showExactTitle === false ? undefined : zonedDate.toString()}
+		>{text}</time>
 	);
 });
 

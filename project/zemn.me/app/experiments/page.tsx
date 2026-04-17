@@ -12,6 +12,7 @@ const pages = {
 	"/experiments/toc": "Test renderer for table of contents generation.",
 	"/experiments/article": "Test renderer for MDX.",
 	"/experiments/cv": "Unfinished attempt to port my CV to my modern site.",
+	"/experiments/tweets": "Archive viewer for every old tweet.",
 
 }
 

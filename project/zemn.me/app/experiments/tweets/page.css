@@ -1,0 +1,99 @@
+.tweets-page {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	padding-block-end: 4rem;
+}
+
+.tweets-page-header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.tweets-title {
+	margin: 0;
+	font-size: clamp(1.5rem, 1rem + 1.2vw, 2.4rem);
+}
+
+.tweets-subtitle,
+.tweets-count {
+	margin: 0;
+	color: rgb(115, 115, 115);
+}
+
+.tweets-timeline {
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+}
+
+.tweet-card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1rem;
+	border: 1px solid rgb(225, 225, 225);
+	border-radius: 0.75rem;
+	background: rgb(255, 255, 255);
+}
+
+.tweet-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.5rem 1rem;
+}
+
+.tweet-permalink {
+	text-decoration: none;
+	color: inherit;
+}
+
+.tweet-permalink:hover {
+	text-decoration: underline;
+}
+
+.tweet-metrics {
+	display: flex;
+	gap: 0.8rem;
+	font-variant-numeric: tabular-nums;
+	color: rgb(99, 99, 99);
+	font-size: 0.95rem;
+}
+
+.tweet-text {
+	margin: 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	line-height: 1.45;
+}
+
+.tweet-media-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+	gap: 0.6rem;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.tweet-media-item {
+	position: relative;
+	border-radius: 0.6rem;
+	overflow: hidden;
+	background: rgb(245, 245, 245);
+}
+
+.tweet-media-image {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+@media (width <= 640px) {
+	.tweet-card {
+		padding: 0.8rem;
+	}
+}
