@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.115.0
-    version: 43.115.0(typanion@3.14.0)
+    specifier: 43.115.1
+    version: 43.115.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -5430,6 +5430,16 @@ packages:
       '@sigstore/bundle': 4.0.0
       '@sigstore/core': 3.2.0
       '@sigstore/protobuf-specs': 0.5.0
+
+  /@simple-git/args-pathspec@1.0.3:
+    resolution: {integrity: sha512-ngJMaHlsWDTfjyq9F3VIQ8b7NXbBLq5j9i5bJ6XLYtD6qlDXT7fdKY2KscWWUF8t18xx052Y/PUO1K1TRc9yKA==}
+    dev: true
+
+  /@simple-git/argv-parser@1.1.1:
+    resolution: {integrity: sha512-Q9lBcfQ+VQCpQqGJFHe5yooOS5hGdLFFbJ5R+R5aDsnkPCahtn1hSkMcORX65J2Z5lxSkD0lQorMsncuBQxYUw==}
+    dependencies:
+      '@simple-git/args-pathspec': 1.0.3
+    dev: true
 
   /@sinclair/typebox@0.27.10:
     resolution: {integrity: sha512-MTBk/3jGLNB2tVxv6uLlFh1iu64iYOQ2PbdOSK3NW8JZsmlaOh2q6sdtKowBhfw8QFLmYNzTW4/oK4uATIi6ZA==}
@@ -15240,8 +15250,8 @@ packages:
     resolution: {integrity: sha512-tkAQEw8ysMzmkhgw8k+1U/iPhWNhykKnSk4Rd5zLoPJCuJaGRPo6YposrZgaxHKzDHdDWWZvE/Sk7hsL2X/CpQ==}
     engines: {node: '>=18'}
 
-  /p-queue@9.1.1:
-    resolution: {integrity: sha512-yQS1vV2V7Q14MQrgD8jMNY5owPuGgVHVdSK8NqmKpOVajnjbaeMa6uLOzTALPtvJ7Vo4bw0BGsw7qfUT8z24Ig==}
+  /p-queue@9.1.2:
+    resolution: {integrity: sha512-ktsDOALzTYTWWF1PbkNVg2rOt+HaOaMWJMUnt7T3qf5tvZ1L8dBW3tObzprBcXNMKkwj+yFSLqHso0x+UFcJXw==}
     engines: {node: '>=20'}
     dependencies:
       eventemitter3: 5.0.4
@@ -16534,8 +16544,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.115.0(typanion@3.14.0):
-    resolution: {integrity: sha512-+FDfQulSaXBeRsoonh/VhJPgdx9EDgZvzjjFSY9C/0I3ipdgAyf1ybjB+9qlPt+k9csPgpSWRiDhI+65yc4TEg==}
+  /renovate@43.115.1(typanion@3.14.0):
+    resolution: {integrity: sha512-/yVF+u6zKqPgZvQ9zzIpcSydEmQAlrEoeXbJz+jwK/5RHPQ0Bxgtv3Rk5SloUTm6XjspfNsN+fBSfXlxb7XMOA==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16628,7 +16638,7 @@ packages:
       node-html-parser: 7.1.0
       p-all: 5.0.1
       p-map: 7.0.4
-      p-queue: 9.1.1
+      p-queue: 9.1.2
       p-throttle: 8.1.0
       parse-link-header: 2.0.0
       prettier: 3.8.1
@@ -16643,7 +16653,7 @@ packages:
       semver-stable: 3.0.0
       semver-utils: 1.1.4
       shlex: 3.0.0
-      simple-git: 3.33.0
+      simple-git: 3.35.2
       slugify: 1.6.9
       source-map-support: 0.5.21
       strip-json-comments: 5.0.3
@@ -17227,11 +17237,13 @@ packages:
     dev: true
     optional: true
 
-  /simple-git@3.33.0:
-    resolution: {integrity: sha512-D4V/tGC2sjsoNhoMybKyGoE+v8A60hRawKQ1iFRA1zwuDgGZCBJ4ByOzZ5J8joBbi4Oam0qiPH+GhzmSBwbJng==}
+  /simple-git@3.35.2:
+    resolution: {integrity: sha512-ZMjl06lzTm1EScxEGuM6+mEX+NQd14h/B3x0vWU+YOXAMF8sicyi1K4cjTfj5is+35ChJEHDl1EjypzYFWH2FA==}
     dependencies:
       '@kwsites/file-exists': 1.1.1
       '@kwsites/promise-deferred': 1.1.1
+      '@simple-git/args-pathspec': 1.0.3
+      '@simple-git/argv-parser': 1.1.1
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
