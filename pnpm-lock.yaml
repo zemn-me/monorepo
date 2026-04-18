@@ -463,17 +463,17 @@ devDependencies:
     specifier: 0.34.5
     version: 0.34.5
   stylelint:
-    specifier: 17.7.0
-    version: 17.7.0(typescript@5.5.4)
+    specifier: 17.8.0
+    version: 17.8.0(typescript@5.5.4)
   stylelint-config-css-modules:
     specifier: 4.6.0
-    version: 4.6.0(stylelint@17.7.0)
+    version: 4.6.0(stylelint@17.8.0)
   stylelint-config-recommended:
     specifier: 18.0.0
-    version: 18.0.0(stylelint@17.7.0)
+    version: 18.0.0(stylelint@17.8.0)
   stylelint-config-standard:
     specifier: 40.0.0
-    version: 40.0.0(stylelint@17.7.0)
+    version: 40.0.0(stylelint@17.8.0)
   svgo:
     specifier: 4.0.1
     version: 4.0.1
@@ -15603,13 +15603,13 @@ packages:
     dev: true
     optional: true
 
-  /postcss-safe-parser@7.0.1(postcss@8.5.8):
+  /postcss-safe-parser@7.0.1(postcss@8.5.10):
     resolution: {integrity: sha512-0AioNCJZ2DPYz5ABT6bddIqlhgwhpHZ/l65YAYo0BCIn0xiDpsnTHz0gnoTGk0OXZW0JRs+cDwL8u/teRdz+8A==}
     engines: {node: '>=18.0'}
     peerDependencies:
       postcss: ^8.4.31
     dependencies:
-      postcss: 8.5.8
+      postcss: 8.5.10
     dev: true
 
   /postcss-selector-parser@7.1.1:
@@ -15631,8 +15631,8 @@ packages:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  /postcss@8.5.8:
-    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
+  /postcss@8.5.10:
+    resolution: {integrity: sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.11
@@ -17705,36 +17705,36 @@ packages:
       client-only: 0.0.1
       react: 19.2.5
 
-  /stylelint-config-css-modules@4.6.0(stylelint@17.7.0):
+  /stylelint-config-css-modules@4.6.0(stylelint@17.8.0):
     resolution: {integrity: sha512-LIgfzNmpiwf/eDxQva2g1mj+mqDpvP1XwOKJC7DSWY/iCQAZdIKnY42jbXuY8thcFN4yM/uF1xfCyfd7fJKh6w==}
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      stylelint: 17.7.0(typescript@5.5.4)
+      stylelint: 17.8.0(typescript@5.5.4)
     optionalDependencies:
-      stylelint-scss: 7.0.0(stylelint@17.7.0)
+      stylelint-scss: 7.0.0(stylelint@17.8.0)
     dev: true
 
-  /stylelint-config-recommended@18.0.0(stylelint@17.7.0):
+  /stylelint-config-recommended@18.0.0(stylelint@17.8.0):
     resolution: {integrity: sha512-mxgT2XY6YZ3HWWe3Di8umG6aBmWmHTblTgu/f10rqFXnyWxjKWwNdjSWkgkwCtxIKnqjSJzvFmPT5yabVIRxZg==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^17.0.0
     dependencies:
-      stylelint: 17.7.0(typescript@5.5.4)
+      stylelint: 17.8.0(typescript@5.5.4)
     dev: true
 
-  /stylelint-config-standard@40.0.0(stylelint@17.7.0):
+  /stylelint-config-standard@40.0.0(stylelint@17.8.0):
     resolution: {integrity: sha512-EznGJxOUhtWck2r6dJpbgAdPATIzvpLdK9+i5qPd4Lx70es66TkBPljSg4wN3Qnc6c4h2n+WbUrUynQ3fanjHw==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^17.0.0
     dependencies:
-      stylelint: 17.7.0(typescript@5.5.4)
-      stylelint-config-recommended: 18.0.0(stylelint@17.7.0)
+      stylelint: 17.8.0(typescript@5.5.4)
+      stylelint-config-recommended: 18.0.0(stylelint@17.8.0)
     dev: true
 
-  /stylelint-scss@7.0.0(stylelint@17.7.0):
+  /stylelint-scss@7.0.0(stylelint@17.8.0):
     resolution: {integrity: sha512-H88kCC+6Vtzj76NsC8rv6x/LW8slBzIbyeSjsKVlS+4qaEJoDrcJR4L+8JdrR2ORdTscrBzYWiiT2jq6leYR1Q==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
@@ -17748,12 +17748,12 @@ packages:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
-      stylelint: 17.7.0(typescript@5.5.4)
+      stylelint: 17.8.0(typescript@5.5.4)
     dev: true
     optional: true
 
-  /stylelint@17.7.0(typescript@5.5.4):
-    resolution: {integrity: sha512-n/+4RheCRl+cecGnF+S/Adz59iCRaK9BVznJYB+a7GOksfwNzjiOPnYv17pTO0HgRse9IiqbMtekGNhOb2tVYQ==}
+  /stylelint@17.8.0(typescript@5.5.4):
+    resolution: {integrity: sha512-oHkld9T60LDSaUQ4CSVc+tlt9eUoDlxhaGWShsUCKyIL14boZfmK5bSphZqx64aiC5tCqX+BsQMTMoSz8D1zIg==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     dependencies:
@@ -17784,8 +17784,8 @@ packages:
       micromatch: 4.0.8
       normalize-path: 3.0.0
       picocolors: 1.1.1
-      postcss: 8.5.8
-      postcss-safe-parser: 7.0.1(postcss@8.5.8)
+      postcss: 8.5.10
+      postcss-safe-parser: 7.0.1(postcss@8.5.10)
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
       string-width: 8.2.0
