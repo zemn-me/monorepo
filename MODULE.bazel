@@ -686,14 +686,14 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/APIs-guru/openapi-directory
 # 	refs-from=main
-OPENAPI_DIRECTORY_COMMIT = "f7207cf0a5c56081d275ebae4cf615249323385d"
+OPENAPI_DIRECTORY_COMMIT = "f04b8d0bcd39c52e1cf3ad7a5fe744709832ae49"
 
 http_archive(
     name = "apis.guru",
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    integrity = "sha256-4PltcQE7b8EjFEl23UmIaYaImmyfCrNPcTueyZQ5nd4=",
+    integrity = "sha256-egvf+Tr8lNNzx+WW0kc5zIr/fZPE6LdagunAz34GBqE=",
     strip_prefix = "openapi-directory-" + OPENAPI_DIRECTORY_COMMIT,
     # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
