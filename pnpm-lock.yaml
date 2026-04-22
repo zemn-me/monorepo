@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.132.0
-    version: 43.132.0(typanion@3.14.0)
+    specifier: 43.132.1
+    version: 43.132.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -8409,8 +8409,8 @@ packages:
     resolution: {integrity: sha512-q6tR3RPqIB1pMiTRMFcZwuG5T8vwp+vUvEG0vuI6B+Rikh5BfPp2fQ82c925FOs+b0lcFQ8CFrL+KbilfZFhOQ==}
     dev: true
 
-  /better-sqlite3@12.8.0:
-    resolution: {integrity: sha512-RxD2Vd96sQDjQr20kdP+F+dK/1OUNiVOl200vKBZY8u0vTwysfolF6Hq+3ZK2+h8My9YvZhHsF+RSGZW2VYrPQ==}
+  /better-sqlite3@12.9.0:
+    resolution: {integrity: sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==}
     engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
     dependencies:
       bindings: 1.5.0
@@ -16543,8 +16543,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.132.0(typanion@3.14.0):
-    resolution: {integrity: sha512-xjzRWi9MNQz61HvypwHU6/x/GBfE7zOWq1tunNYMXky/fkYCdSEy7fr7tSaCvTi9+j6/JDO2juWcB9inwnE7JQ==}
+  /renovate@43.132.1(typanion@3.14.0):
+    resolution: {integrity: sha512-++QPmfb6jDXhnl6VenWwxHuCxe77vfkK3xkFNpxBIdpzvy2Ak6eKn6OR5sVW8kkru6Vn7TMQSozpZpH6o4hxSw==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16666,7 +16666,7 @@ packages:
       yaml: 2.8.3
       zod: 4.3.6
     optionalDependencies:
-      better-sqlite3: 12.8.0
+      better-sqlite3: 12.9.0
       openpgp: 6.3.0
       re2: 1.24.0
     transitivePeerDependencies:
