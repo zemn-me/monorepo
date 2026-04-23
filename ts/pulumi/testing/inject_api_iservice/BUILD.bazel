@@ -1,0 +1,41 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library")
+
+# gazelle:python_library_naming_convention $package_name$_lib
+
+py_binary(
+    name = "inject_api_iservice",
+    srcs = ["inject_api_iservice.py"],
+    visibility = [
+        "//:__pkg__",
+        "//ts/pulumi/testing:__pkg__",
+    ],
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+filegroup(
+    name = "all_srcs",
+    srcs = ["inject_api_iservice.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_library(
+    name = "inject_api_iservice_lib",
+    srcs = ["inject_api_iservice.py"],
+    visibility = [
+        "//:__pkg__",
+        "//:__subpackages__",
+    ],
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
