@@ -457,8 +457,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.137.0
-    version: 43.137.0(typanion@3.14.0)
+    specifier: 43.138.0
+    version: 43.138.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -5220,15 +5220,19 @@ packages:
       - immer
     dev: true
 
-  /@redis/client@5.11.0:
-    resolution: {integrity: sha512-GHoprlNQD51Xq2Ztd94HHV94MdFZQ3CVrpA04Fz8MVoHM0B7SlbmPEVIjwTbcv58z8QyjnrOuikS0rWF03k5dQ==}
-    engines: {node: '>= 18'}
+  /@redis/client@5.12.0(@opentelemetry/api@1.9.1):
+    resolution: {integrity: sha512-rFtRx68ZOtFO6aQwEfMaje3dh/x6BOr0kAauIiTimUw+A6RVbx5QVLbYHQXL+hlxondnm8dbNV6lsgzShg3yKQ==}
+    engines: {node: '>= 18.19.0'}
     peerDependencies:
       '@node-rs/xxhash': ^1.1.0
+      '@opentelemetry/api': '>=1 <2'
     peerDependenciesMeta:
       '@node-rs/xxhash':
         optional: true
+      '@opentelemetry/api':
+        optional: true
     dependencies:
+      '@opentelemetry/api': 1.9.1
       cluster-key-slot: 1.1.2
     dev: true
 
@@ -16543,8 +16547,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.137.0(typanion@3.14.0):
-    resolution: {integrity: sha512-+q3dIH3bn5zDJTOsP1hZh1ZU1aeOkYAWEGQt7ww+QU83PJrbPJbxc2NyrOILlFFt2H7st1QrgEg/xADvLjxwTA==}
+  /renovate@43.138.0(typanion@3.14.0):
+    resolution: {integrity: sha512-/k58sqQAMp86D1rT0xzMpsnWA7y3g+zLE/kTJlDxt2GHk89L4EN+wH9oN/UFjtoE9kPX+lCHWn/DBhgsdL70KQ==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -16575,7 +16579,7 @@ packages:
       '@opentelemetry/semantic-conventions': 1.40.0
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
-      '@redis/client': 5.11.0
+      '@redis/client': 5.12.0(@opentelemetry/api@1.9.1)
       '@renovatebot/detect-tools': 3.0.0
       '@renovatebot/good-enough-parser': 2.0.0
       '@renovatebot/osv-offline': 2.5.0
