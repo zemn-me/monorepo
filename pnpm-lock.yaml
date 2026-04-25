@@ -256,8 +256,8 @@ devDependencies:
     specifier: 3.0.1
     version: 3.0.1
   '@actions/github':
-    specifier: 9.1.0
-    version: 9.1.0
+    specifier: 9.1.1
+    version: 9.1.1
   '@babel/preset-typescript':
     specifier: 7.28.5
     version: 7.28.5(@babel/core@7.29.0)
@@ -511,8 +511,8 @@ packages:
       '@actions/io': 3.0.2
     dev: true
 
-  /@actions/github@9.1.0:
-    resolution: {integrity: sha512-u0hDGQeCS+7VNoLA8hYG65RLdPLMaPGfka0sZ0up7P0AiShqfX6xcuXNteGkQ7X7Tod7AMNwHd4p7DS63i8zzA==}
+  /@actions/github@9.1.1:
+    resolution: {integrity: sha512-tL5JbYOBZHc0ngEnCsaDcryUizIUIlQyIMwy1Wkx93H5HzbBJ7TbiPx2PnFjBwZW0Vh05JmfFZhecE6gglYegA==}
     dependencies:
       '@actions/http-client': 3.0.2
       '@octokit/core': 7.0.6
