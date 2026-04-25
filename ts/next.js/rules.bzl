@@ -29,7 +29,6 @@ def _next_next_config(name):
         ],
         deps = [
             "//ts/next.js/types/next-compiled",
-            "//:node_modules/source-map-loader",
         ],
     )
 
@@ -113,7 +112,7 @@ def next_project(
         name = "build",
         srcs = srcs,
         args = ["build", native.package_name(), "--no-lint"],
-        out_dirs = ["build"],
+        out_dirs = ["build", "out"],
     )
 
     bin.next_binary(
@@ -128,12 +127,9 @@ def next_project(
         args = ["start", native.package_name()],
     )
 
-    bin.next(
-        out_dirs = ["out"],
+    native.filegroup(
         name = "out",
-        srcs = [":build"] + srcs,
-        args = ["build", native.package_name()],
-        silent_on_success = True,
+        srcs = [":build"],
     )
 
     native.alias(

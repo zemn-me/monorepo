@@ -6,6 +6,7 @@
 
 export const reactStrictMode = true;
 export const swcMinify = true;
+export const distDir = 'build';
 
 export const eslint = {
 	// Warning: This allows production builds to successfully complete even if
@@ -15,23 +16,10 @@ export const eslint = {
 
 export const output = 'export';
 
-export const productionBrowserSourceMaps = true;
+export const productionBrowserSourceMaps = false;
 
 export const future = { webpack5: true };
 
-type StopGapConfigT = {
-	module: { rules: { test: RegExp; use: string[]; enforce: string }[] };
-};
-
 export const images = {
 	unoptimized: true
-};
-
-export const webpack = (config: StopGapConfigT) => {
-	config.module.rules.push({
-		test: /\.js$/,
-		use: ['source-map-loader'],
-		enforce: 'pre',
-	});
-	return config;
 };
