@@ -6,6 +6,7 @@ import * as Homog from '#root/ts/math/homog.js';
 import * as homog from '#root/ts/math/homog.js';
 import { defaultUp, lookAt } from "#root/ts/math/lookAt.js";
 import * as Matrix from '#root/ts/math/matrix.js';
+import * as Quaternion from '#root/ts/math/quaternion.js';
 
 export type FocalLength = number;
 
@@ -45,11 +46,12 @@ export const camera = (
 	// the camera at 0,0
 
 	flow(
-		lookAt(
-			position,
-			lookingAt,
-			up
-		).rotateVector(
+		Quaternion.rotateVector(
+			lookAt(
+				position,
+				lookingAt,
+				up
+			),
 			cartesian.sub<1, 3>(point, position)
 		),
 		[
@@ -60,7 +62,6 @@ export const camera = (
 			(p: homog.Point2D) => homogToCart<2>(p)
 		]
 	)
-
 
 
 
