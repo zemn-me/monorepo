@@ -250,12 +250,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/factoriolab/factoriolab
 # 	refs-from=main
-FACTORIOLAB_COMMIT = "72e618d53b99438212a75a65afda49ea06dfa6ad"
+FACTORIOLAB_COMMIT = "adc10aeefaba2c68b534546cd81305ef3ba2c017"
 
 http_archive(
     name = "com_github_factoriolab",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-NEWZQcNFRzqIeaBwTnKY6+yPaZZznfh60shB4opl3Sc=",
+    integrity = "sha256-j7KZhz/GedRR8UrQxYxeMdZuYKtEmRiJvVdFFz7wmhQ=",
     strip_prefix = "factoriolab-" + FACTORIOLAB_COMMIT,
     # auto-integrity
     url = "https://github.com/factoriolab/factoriolab/archive/" + FACTORIOLAB_COMMIT + ".zip",
@@ -355,12 +355,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "b8738140762644c8989c1e2e3738ceb9c724bce2"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "44221ceaea8da293f558ed1d5381be38a2039503"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "ae7b01b9b1827382b7fe785bac92043d6528dd09b3683f40908c25cb365c666a",
+    sha256 = "61443f8ab3bdd52fd230da650bc5da76a4c2fc09118f56540c6d77a45aab9728",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
@@ -494,7 +494,7 @@ rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_t
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.94.1"
+RUST_VERSION = "1.95.0"
 
 rust.toolchain(
     edition = "2021",
@@ -548,7 +548,7 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.10"
+RUFF_VERSION = "0.15.11"
 
 # For Apple Silicon macOS
 http_archive(
@@ -686,14 +686,14 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/APIs-guru/openapi-directory
 # 	refs-from=main
-OPENAPI_DIRECTORY_COMMIT = "f7207cf0a5c56081d275ebae4cf615249323385d"
+OPENAPI_DIRECTORY_COMMIT = "f04b8d0bcd39c52e1cf3ad7a5fe744709832ae49"
 
 http_archive(
     name = "apis.guru",
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    integrity = "sha256-4PltcQE7b8EjFEl23UmIaYaImmyfCrNPcTueyZQ5nd4=",
+    integrity = "sha256-egvf+Tr8lNNzx+WW0kc5zIr/fZPE6LdagunAz34GBqE=",
     strip_prefix = "openapi-directory-" + OPENAPI_DIRECTORY_COMMIT,
     # auto-integrity
     url = "https://github.com/APIs-guru/openapi-directory/archive/" + OPENAPI_DIRECTORY_COMMIT + ".tar.gz",
