@@ -9,6 +9,7 @@ const pages = {
 	"/experiments/cultist": "Mostly broken cultist simulator game board from the Covid-19 era.",
 	"/experiments/geometry_of_music": "Notes from reading the book Geometry of Music.",
 	"/experiments/frame": "Calculator for framing and sizing mattes.",
+	"/experiments/arena": "FPS-style SVG arena with pointer-lock camera controls.",
 	"/experiments/toc": "Test renderer for table of contents generation.",
 	"/experiments/article": "Test renderer for MDX.",
 	"/experiments/cv": "Unfinished attempt to port my CV to my modern site.",

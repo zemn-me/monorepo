@@ -26,7 +26,7 @@ require (
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/go-chi/cors v1.2.2
-	github.com/go-delve/delve v1.26.1
+	github.com/go-delve/delve v1.26.2
 	github.com/go-jose/go-jose/v4 v4.1.4
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
@@ -37,7 +37,7 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.6.0
 	github.com/oapi-codegen/runtime v1.4.0
 	github.com/sergi/go-diff v1.4.0
-	github.com/tdewolff/parse/v2 v2.8.11
+	github.com/tdewolff/parse/v2 v2.8.12
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.5
 	github.com/xeipuuv/gojsonschema v1.2.0
