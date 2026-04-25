@@ -8,6 +8,7 @@ ts_project(
         "cartesian.ts",
         "conv.ts",
         "degree.ts",
+        "dual_quaternion.ts",
         "euler_angle.ts",
         "homog.ts",
         "lookAt.ts",
@@ -32,6 +33,7 @@ jest_test(
     srcs = [
         "camera_test.js",
         "conv_test.js",
+        "dual_quaternion_test.js",
         "math_test.js",
         "quaternion_test.js",
     ],
@@ -54,6 +56,8 @@ filegroup(
         "conv.ts",
         "conv_test.ts",
         "degree.ts",
+        "dual_quaternion.ts",
+        "dual_quaternion_test.ts",
         "euler_angle.ts",
         "homog.ts",
         "lookAt.ts",
@@ -74,6 +78,7 @@ ts_project(
     srcs = [
         "camera_test.ts",
         "conv_test.ts",
+        "dual_quaternion_test.ts",
         "math_test.ts",
         "quaternion_test.ts",
     ],
