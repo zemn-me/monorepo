@@ -14,6 +14,11 @@ export const eslint = {
 	ignoreDuringBuilds: true,
 };
 
+export const typescript = {
+	// Bazel already runs tsc checks in dedicated targets.
+	ignoreBuildErrors: true,
+};
+
 export const output = 'export';
 
 export const productionBrowserSourceMaps = false;
