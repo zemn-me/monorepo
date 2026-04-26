@@ -16,12 +16,15 @@ import {
 	styleSegment,
 } from '#root/ts/math/wireframe_render.js';
 
-export type PlayerPose = YawPitchPose;
+export interface PlayerPose extends YawPitchPose {
+	readonly verticalVelocity: number;
+}
 
 export interface MovementInput {
 	readonly forward: number;
 	readonly strafe: number;
 	readonly sprint: boolean;
+	readonly jump: boolean;
 }
 
 export type WorldSegment = StyledSegment3D;
@@ -30,10 +33,13 @@ export type RenderedSegment = RenderedSegment2D;
 
 export const ARENA_EXTENT = 24;
 export const EYE_HEIGHT = 1.8;
+export const JUMP_VELOCITY = 6.5;
+export const GRAVITY = 18;
 export const DEFAULT_POSE: PlayerPose = {
 	position: point<3>(0, EYE_HEIGHT, -18),
 	yaw: 0,
 	pitch: 0,
+	verticalVelocity: 0,
 };
 
 const DEFAULT_FORWARD = point<3>(0, 0, 1);
@@ -70,15 +76,25 @@ export function stepPlayer(
 	const moveDirection = horizontalUnit(requested);
 	const speed = input.sprint ? 10 : 5;
 	const movement: Point3D = scale(moveDirection, speed * deltaSeconds) as Point3D;
-	const unclamped: Point3D = translate(pose.position, movement) as Point3D;
+	const onGround = pose.position[1]![0]! <= EYE_HEIGHT + 1e-6;
+	const jumpVelocity = input.jump && onGround ? JUMP_VELOCITY : pose.verticalVelocity;
+	const nextVerticalVelocity = jumpVelocity - (GRAVITY * deltaSeconds);
+	const verticalMovement = jumpVelocity * deltaSeconds;
+	const unclamped: Point3D = translate(
+		pose.position,
+		translate(movement, point<3>(0, verticalMovement, 0)) as Point3D
+	) as Point3D;
+	const nextY = Math.max(EYE_HEIGHT, unclamped[1]![0]!);
+	const landed = nextY === EYE_HEIGHT && nextVerticalVelocity < 0;
 
 	return {
 		...pose,
 		position: point<3>(
 			Math.max(-ARENA_EXTENT + 1, Math.min(ARENA_EXTENT - 1, x(unclamped))),
-			EYE_HEIGHT,
+			nextY,
 			Math.max(-ARENA_EXTENT + 1, Math.min(ARENA_EXTENT - 1, z(unclamped)))
 		),
+		verticalVelocity: landed ? 0 : nextVerticalVelocity,
 	};
 }
 

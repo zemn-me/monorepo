@@ -31,6 +31,7 @@ interface KeyState {
 	KeyA: boolean;
 	KeyS: boolean;
 	KeyD: boolean;
+	Space: boolean;
 	ShiftLeft: boolean;
 	ShiftRight: boolean;
 }
@@ -41,6 +42,7 @@ function initialKeys(): KeyState {
 		KeyA: false,
 		KeyS: false,
 		KeyD: false,
+		Space: false,
 		ShiftLeft: false,
 		ShiftRight: false,
 	};
@@ -55,6 +57,7 @@ function movementFromKeys(keys: KeyState) {
 		forward: Number(keys.KeyW) - Number(keys.KeyS),
 		strafe: Number(keys.KeyD) - Number(keys.KeyA),
 		sprint: keys.ShiftLeft || keys.ShiftRight,
+		jump: false,
 	};
 }
 
@@ -67,6 +70,7 @@ export function ArenaClient() {
 	const frameRef = useRef<number | null>(null);
 	const poseRef = useRef<PlayerPose>(DEFAULT_POSE);
 	const keysRef = useRef<KeyState>(initialKeys());
+	const jumpRequestedRef = useRef(false);
 	const draggingPointerIdRef = useRef<number | null>(null);
 	const lastDragPositionRef = useRef<{ x: number; y: number } | null>(null);
 	const lastAnimationTimeRef = useRef<number | null>(null);
@@ -88,6 +92,9 @@ export function ArenaClient() {
 					...keysRef.current,
 					[event.code]: true,
 				};
+				if (event.code === 'Space' && !event.repeat) {
+					jumpRequestedRef.current = true;
+				}
 				event.preventDefault();
 			}
 		}
@@ -123,9 +130,19 @@ export function ArenaClient() {
 			const previous = lastAnimationTimeRef.current ?? timestamp;
 			lastAnimationTimeRef.current = timestamp;
 			const deltaSeconds = Math.min((timestamp - previous) / 1000, 0.05);
-			const input = movementFromKeys(keysRef.current);
+			const input = {
+				...movementFromKeys(keysRef.current),
+				jump: jumpRequestedRef.current,
+			};
+			jumpRequestedRef.current = false;
 
-			if (input.forward !== 0 || input.strafe !== 0) {
+			if (
+				input.forward !== 0 ||
+				input.strafe !== 0 ||
+				input.jump ||
+				poseRef.current.position[1]![0]! > EYE_HEIGHT ||
+				poseRef.current.verticalVelocity !== 0
+			) {
 				const next = stepPlayer(poseRef.current, input, deltaSeconds);
 				poseRef.current = next;
 				setPose(next);
@@ -221,6 +238,7 @@ export function ArenaClient() {
 					<h1 className={style.title}>Pointer-lock wireframe arena</h1>
 					<p className={style.copy}>
 						Click the arena, then use <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> to move.
+						Press <kbd>Space</kbd> to jump.
 						The four suspended pyramids are rotated with the existing
 						<code>lookAt</code> quaternion logic so their tips face the cardinal
 						directions exactly.
@@ -232,7 +250,7 @@ export function ArenaClient() {
 						</div>
 						<div>
 							<dt>position</dt>
-							<dd>{pose.position[0]![0]!.toFixed(1)}, {EYE_HEIGHT.toFixed(1)}, {pose.position[2]![0]!.toFixed(1)}</dd>
+							<dd>{pose.position[0]![0]!.toFixed(1)}, {pose.position[1]![0]!.toFixed(1)}, {pose.position[2]![0]!.toFixed(1)}</dd>
 						</div>
 						<div>
 							<dt>yaw / pitch</dt>
