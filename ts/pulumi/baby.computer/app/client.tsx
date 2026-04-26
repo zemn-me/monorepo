@@ -1,175 +1,544 @@
-"use client";
-/**
- * @fileoverview simulation of a bunch of penguins.
- */
+'use client';
 
-import { useEffect, useState } from "react";
-import React from 'react';
-import random from 'seedrandom';
+import {
+	type CSSProperties,
+	type PointerEvent as ReactPointerEvent,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 
-import { Point, point, x, y, z } from "#root/ts/math/cartesian.js"
-import { airFriction, collisionPlaneZ0, earthGravity, fields, kilogram, SimulateField } from "#root/ts/math/sim/sim.js"
+import {
+	EYE_HEIGHT,
+	type MovementInput,
+	type PlayerPose,
+	projectWorldPoint,
+	type RenderedSegment,
+	renderScene,
+	stepPlayer,
+} from '#root/project/zemn.me/app/experiments/arena/scene.js';
+import { x, y, z } from '#root/ts/math/cartesian.js';
+import {
+	createPenguinWorld,
+	nearestVisiblePenguin,
+} from '#root/ts/pulumi/baby.computer/app/scene.js';
+import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
 
-const vector = point
+const world = createPenguinWorld();
+const LOOK_SENSITIVITY = 0.0025;
+const PITCH_LIMIT = Math.PI * 0.45;
+const INITIAL_VIEWPORT_WIDTH = 1200;
+const INITIAL_VIEWPORT_HEIGHT = 800;
+const MOTION_YAW_SENSITIVITY = Math.PI / 180;
+const MOTION_PITCH_SENSITIVITY = Math.PI / 270;
+const MEETING_DISTANCE = 2.4;
+const FIREWORK_COUNT = 6;
 
-const randomRange =
-	(rng: () => number) =>
-	(max: number) =>
-	(min: number) => {
-		const range = max - min;
-		const variance = rng() * range;
+type MotionBaseline = {
+	readonly beta: number;
+	readonly gamma: number;
+	readonly yaw: number;
+	readonly pitch: number;
+};
 
-		return min + variance;
-	}
+interface KeyState {
+	KeyW: boolean;
+	KeyA: boolean;
+	KeyS: boolean;
+	KeyD: boolean;
+	Space: boolean;
+	ShiftLeft: boolean;
+	ShiftRight: boolean;
+}
 
+function initialKeys(): KeyState {
+	return {
+		KeyW: false,
+		KeyA: false,
+		KeyS: false,
+		KeyD: false,
+		Space: false,
+		ShiftLeft: false,
+		ShiftRight: false,
+	};
+}
 
+function clampPitch(pitch: number): number {
+	return Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, pitch));
+}
 
-const kingPenguin =
-	(rng: () => number) =>
-	(position: Point<3>) => ({
-		mass: randomRange(rng)(
-			9
-		)(15) * kilogram,
-		species: 'King Penguin',
-		position,
-		icon: '🐧',
-		velocity: vector<3>(0, 0, 0)
-	})
+function wrapRadians(angle: number): number {
+	return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
 
-const adeliePenguin =
-	(rng: () => number) =>
-	(position: Point<3>) => ({
-		mass: randomRange(rng)(
-			5
-		)(7) * kilogram,
-		position,
-		species: 'Adelie Penguin',
-		icon: '🐧',
-		velocity: vector<3>(0, 0, 0)
-	})
+function normalizeDegrees(angle: number): number {
+	return ((angle + 540) % 360) - 180;
+}
 
+function movementFromKeys(keys: KeyState): MovementInput {
+	return {
+		forward: Number(keys.KeyW) - Number(keys.KeyS),
+		strafe: Number(keys.KeyD) - Number(keys.KeyA),
+		sprint: keys.ShiftLeft || keys.ShiftRight,
+		jump: false,
+	};
+}
 
-const newPenguin =
-	(rng: () => number) =>
-		(
-			rng() > 0.5 ?
-				adeliePenguin: kingPenguin
-		)(rng)
-
-const objects = (rng: () => number) =>
-	(nPenguins: number) =>
-		new Set([...Array(nPenguins)].map(() =>
-			newPenguin(
-				rng
-			)(
-				point<3>(
-					rng() * 1000,
-					rng() * 1000,
-					rng() * 5
-				)
-	 		)));
-
-const field = () => {
-	const f1 = fields(
-		earthGravity,
-		airFriction([[1]])
-	);
-
-	return fields(
-		f1,
-		collisionPlaneZ0,
-	)
+function formatAngle(radians: number): string {
+	return `${(radians * 180 / Math.PI).toFixed(0)}deg`;
 }
 
 export function PenguinSim() {
-	const [world, setWorld] =
-		useState(objects(random('baby.computer'))(100));
+	const viewportRef = useRef<SVGSVGElement | null>(null);
+	const frameRef = useRef<number | null>(null);
+	const poseRef = useRef<PlayerPose>(world.startPose);
+	const keysRef = useRef<KeyState>(initialKeys());
+	const jumpRequestedRef = useRef(false);
+	const draggingPointerIdRef = useRef<number | null>(null);
+	const lastDragPositionRef = useRef<{ x: number; y: number } | null>(null);
+	const lastAnimationTimeRef = useRef<number | null>(null);
+	const motionBaselineRef = useRef<MotionBaseline | null>(null);
+	const metPenguinsRef = useRef<Set<string>>(new Set());
+	const previousMetCountRef = useRef(0);
 
-	const tickTimeSeconds = 1 / 1000;
-	const tickTimeMilliseconds =
-		tickTimeSeconds * 1000;
+	const [locked, setLocked] = useState(false);
+	const [pose, setPose] = useState<PlayerPose>(world.startPose);
+	const [viewportSize, setViewportSize] = useState({
+		width: INITIAL_VIEWPORT_WIDTH,
+		height: INITIAL_VIEWPORT_HEIGHT,
+	});
+	const [segments, setSegments] = useState<RenderedSegment[]>(() =>
+		renderScene(
+			world.scene,
+			world.startPose,
+			INITIAL_VIEWPORT_WIDTH,
+			INITIAL_VIEWPORT_HEIGHT
+		)
+	);
+	const [motionEnabled, setMotionEnabled] = useState(false);
+	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
+	const [metCount, setMetCount] = useState(0);
+	const [fireworkTick, setFireworkTick] = useState(0);
 
 	useEffect(() => {
-		const ticker = setInterval(
-			() => setWorld(
-				SimulateField(
-					tickTimeSeconds,
-					world,
-					field()
-				)
-			)
-			, tickTimeMilliseconds);
+		const supportsMotion = typeof DeviceOrientationEvent !== 'undefined';
+		setMotionPermissionNeeded(
+			supportsMotion &&
+				typeof (
+					DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+						requestPermission?: () => Promise<'granted' | 'denied'>;
+					}
+				).requestPermission === 'function'
+		);
 
+		function onPointerLockChange() {
+			setLocked(document.pointerLockElement === viewportRef.current);
+		}
 
-		return () => clearInterval(ticker);
-	});
-
-	return <>
-		<svg viewBox={[0, 0, 1000, 1000].join(" ")}>
-			{
-				[...world].map(
-					object => <text
-						x={x(object.position)}
-					y={y(object.position)}>
-						{object.icon}
-					</text>
-				)
+		function onKeyDown(event: KeyboardEvent) {
+			if (event.code in keysRef.current) {
+				keysRef.current = {
+					...keysRef.current,
+					[event.code]: true,
+				};
+				if (event.code === 'Space' && !event.repeat) {
+					jumpRequestedRef.current = true;
+				}
+				event.preventDefault();
 			}
-		</svg>
-		<svg viewBox={[0, 0, 1000, 1000].join(" ")}>
-			{
-				[...world].map(
-					(object, i) => <text
-						key={i}
-						x={x(object.position)}
-					y={1000-z(object.position)}>
-						{object.icon}
-					</text>
-				)
+		}
+
+		function onKeyUp(event: KeyboardEvent) {
+			if (event.code in keysRef.current) {
+				keysRef.current = {
+					...keysRef.current,
+					[event.code]: false,
+				};
 			}
-		</svg>
+		}
 
+		function syncViewportSize() {
+			const bounds = viewportRef.current?.getBoundingClientRect();
+			if (bounds == null) {
+				return;
+			}
 
-		<table>
-			<thead>
-				<tr>
-					<td>
-					icon
-					</td>
-					<td>
-					species
-					</td>
-					<td>
-					mass (kg)
-					</td>
+			const width = Math.max(1, Math.round(bounds.width));
+			const height = Math.max(1, Math.round(bounds.height));
+			setViewportSize(current =>
+				current.width === width && current.height === height
+					? current
+					: { width, height }
+			);
+		}
 
-					<td colSpan={3}>
-					position (m)
-					</td>
+		function applyPose(next: PlayerPose) {
+			poseRef.current = next;
+			setPose(next);
+			setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
+		}
 
-					<td colSpan={3}>
-					velocity (m/s)
-					</td>
+		function onMouseMove(event: MouseEvent) {
+			if (document.pointerLockElement !== viewportRef.current) {
+				return;
+			}
 
-				</tr>
-			</thead>
-			<tbody>
-				{[...world].map(
-					(object, i) => <tr key={i}>
-						<td>{object.icon}</td>
-						<td>{object.species}</td>
-						<td>{object.mass}</td>
-						<td>{x(object.position)}</td>
-						<td>{y(object.position)}</td>
-						<td>{z(object.position)}</td>
+			applyPose({
+				...poseRef.current,
+				yaw: poseRef.current.yaw + (event.movementX * LOOK_SENSITIVITY),
+				pitch: clampPitch(
+					poseRef.current.pitch + (event.movementY * LOOK_SENSITIVITY)
+				),
+			});
+		}
 
-						<td>{x(object.velocity)}</td>
-						<td>{y(object.velocity)}</td>
-						<td>{z(object.velocity)}</td>
-					</tr>
-				)}
-			</tbody>
-		</table>
+		function onDeviceOrientation(event: DeviceOrientationEvent) {
+			if (!motionEnabled || locked) {
+				return;
+			}
 
-	</>
+			const beta = event.beta;
+			const gamma = event.gamma;
+			if (beta == null || gamma == null) {
+				return;
+			}
+
+			const baseline =
+				motionBaselineRef.current ?? {
+					beta,
+					gamma,
+					yaw: poseRef.current.yaw,
+					pitch: poseRef.current.pitch,
+				};
+			motionBaselineRef.current = baseline;
+
+			const yawDelta = normalizeDegrees(gamma - baseline.gamma) * MOTION_YAW_SENSITIVITY;
+			const pitchDelta = normalizeDegrees(beta - baseline.beta) * MOTION_PITCH_SENSITIVITY;
+			applyPose({
+				...poseRef.current,
+				yaw: wrapRadians(baseline.yaw + yawDelta),
+				pitch: clampPitch(baseline.pitch - pitchDelta),
+			});
+		}
+
+		function animate(timestamp: number) {
+			const previous = lastAnimationTimeRef.current ?? timestamp;
+			lastAnimationTimeRef.current = timestamp;
+			const deltaSeconds = Math.min((timestamp - previous) / 1000, 0.05);
+			const input = {
+				...movementFromKeys(keysRef.current),
+				jump: jumpRequestedRef.current,
+			};
+			jumpRequestedRef.current = false;
+
+			if (
+				input.forward !== 0 ||
+				input.strafe !== 0 ||
+				input.jump ||
+				poseRef.current.position[1]![0]! > EYE_HEIGHT ||
+				poseRef.current.verticalVelocity !== 0
+			) {
+				applyPose(stepPlayer(poseRef.current, input, deltaSeconds));
+			}
+
+			frameRef.current = window.requestAnimationFrame(animate);
+		}
+
+		document.addEventListener('pointerlockchange', onPointerLockChange);
+		window.addEventListener('keydown', onKeyDown);
+		window.addEventListener('keyup', onKeyUp);
+		window.addEventListener('mousemove', onMouseMove);
+		window.addEventListener('deviceorientation', onDeviceOrientation);
+		window.addEventListener('resize', syncViewportSize);
+		syncViewportSize();
+		frameRef.current = window.requestAnimationFrame(animate);
+
+		return () => {
+			document.removeEventListener('pointerlockchange', onPointerLockChange);
+			window.removeEventListener('keydown', onKeyDown);
+			window.removeEventListener('keyup', onKeyUp);
+			window.removeEventListener('mousemove', onMouseMove);
+			window.removeEventListener('deviceorientation', onDeviceOrientation);
+			window.removeEventListener('resize', syncViewportSize);
+			if (frameRef.current != null) {
+				window.cancelAnimationFrame(frameRef.current);
+			}
+		};
+	}, [locked, motionEnabled, viewportSize.height, viewportSize.width]);
+
+	useEffect(() => {
+		setSegments(renderScene(world.scene, pose, viewportSize.width, viewportSize.height));
+	}, [pose, viewportSize.height, viewportSize.width]);
+
+	useEffect(() => {
+		let changed = false;
+		const metPenguins = metPenguinsRef.current;
+
+		for (const penguin of world.penguins) {
+			const distance = Math.hypot(
+				x(penguin.position) - x(pose.position),
+				z(penguin.position) - z(pose.position)
+			);
+			if (distance <= MEETING_DISTANCE && !metPenguins.has(penguin.name)) {
+				metPenguins.add(penguin.name);
+				changed = true;
+			}
+		}
+
+		if (changed) {
+			setMetCount(metPenguins.size);
+		}
+	}, [pose]);
+
+	useEffect(() => {
+		if (metCount > previousMetCountRef.current) {
+			setFireworkTick(current => current + 1);
+		}
+
+		previousMetCountRef.current = metCount;
+	}, [metCount]);
+
+	function lockPointer() {
+		void viewportRef.current?.requestPointerLock();
+		viewportRef.current?.focus();
+	}
+
+	async function enableMotionLook() {
+		if (typeof DeviceOrientationEvent === 'undefined') {
+			return;
+		}
+
+		const eventType = DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+			requestPermission?: () => Promise<'granted' | 'denied'>;
+		};
+		if (typeof eventType.requestPermission === 'function') {
+			const permission = await eventType.requestPermission();
+			if (permission !== 'granted') {
+				return;
+			}
+		}
+
+		motionBaselineRef.current = null;
+		setMotionPermissionNeeded(false);
+		setMotionEnabled(true);
+	}
+
+	function handlePointerDown(event: ReactPointerEvent<SVGSVGElement>) {
+		viewportRef.current?.focus();
+
+		if (event.pointerType === 'mouse') {
+			lockPointer();
+			return;
+		}
+
+		draggingPointerIdRef.current = event.pointerId;
+		lastDragPositionRef.current = {
+			x: event.clientX,
+			y: event.clientY,
+		};
+		event.currentTarget.setPointerCapture(event.pointerId);
+	}
+
+	function handlePointerMove(event: ReactPointerEvent<SVGSVGElement>) {
+		if (draggingPointerIdRef.current !== event.pointerId || locked || motionEnabled) {
+			return;
+		}
+
+		const last = lastDragPositionRef.current;
+		if (last == null) {
+			lastDragPositionRef.current = {
+				x: event.clientX,
+				y: event.clientY,
+			};
+			return;
+		}
+
+		const deltaX = event.clientX - last.x;
+		const deltaY = event.clientY - last.y;
+		lastDragPositionRef.current = {
+			x: event.clientX,
+			y: event.clientY,
+		};
+
+		const next = {
+			...poseRef.current,
+			yaw: poseRef.current.yaw + (deltaX * LOOK_SENSITIVITY * 1.35),
+			pitch: clampPitch(
+				poseRef.current.pitch + (deltaY * LOOK_SENSITIVITY * 1.35)
+			),
+		};
+		poseRef.current = next;
+		setPose(next);
+		setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
+	}
+
+	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
+		if (draggingPointerIdRef.current === event.pointerId) {
+			draggingPointerIdRef.current = null;
+			lastDragPositionRef.current = null;
+		}
+	}
+
+	const visibleEncounter = nearestVisiblePenguin(
+		world.penguins,
+		pose,
+		viewportSize.width,
+		viewportSize.height
+	);
+	const encounter = visibleEncounter?.penguin ?? null;
+	const projectedBodies = world.penguinBodies
+		.map(body => {
+			const points = body.outline
+				.map(vertex =>
+					projectWorldPoint(
+						vertex,
+						pose,
+						viewportSize.width,
+						viewportSize.height
+					)
+				);
+
+			if (points.some(projected => projected == null)) {
+				return null;
+			}
+
+			const sortDepth = Math.hypot(
+				x(body.centre) - x(pose.position),
+				z(body.centre) - z(pose.position)
+			);
+
+			return {
+				points: points.map(projected => `${x(projected!)},${y(projected!)}`).join(' '),
+				sortDepth,
+			};
+		})
+		.filter(projected => projected != null)
+		.sort((left, right) => right.sortDepth - left.sortDepth);
+	const encounterAnchor = visibleEncounter?.anchor ?? null;
+
+	return (
+		<main className={style.shell}>
+			<section className={style.viewportWrap}>
+				<svg
+					aria-label="Penguin iceberg viewport"
+					className={style.viewport}
+					onPointerDown={handlePointerDown}
+					onPointerMove={handlePointerMove}
+					onPointerUp={handlePointerUp}
+					ref={viewportRef}
+					tabIndex={0}
+					viewBox={`0 0 ${viewportSize.width} ${viewportSize.height}`}
+				>
+					<defs>
+						<radialGradient cx="50%" cy="35%" id="iceGlow" r="75%">
+							<stop offset="0%" stopColor="#173b5a" />
+							<stop offset="62%" stopColor="#081521" />
+							<stop offset="100%" stopColor="#02070c" />
+						</radialGradient>
+					</defs>
+					<rect
+						fill="url(#iceGlow)"
+						height={viewportSize.height}
+						width={viewportSize.width}
+					/>
+						{projectedBodies.map((body, index) => (
+							<polygon
+								fill="#f6fbff"
+								key={`body:${index}:${body.points}`}
+								opacity={0.94}
+								points={body.points}
+							/>
+					))}
+					{segments.map((segment, index) => (
+						<line
+							key={`${index}:${segment.depth.toFixed(3)}`}
+							opacity={segment.opacity}
+							stroke={segment.stroke}
+							strokeLinecap="round"
+							strokeWidth={segment.width}
+							x1={segment.x1}
+							x2={segment.x2}
+							y1={segment.y1}
+							y2={segment.y2}
+						/>
+					))}
+					{encounter != null && encounterAnchor != null ? (
+						<foreignObject
+							className={style.encounterAnchor}
+							height={140}
+							width={260}
+							x={x(encounterAnchor) - 130}
+							y={y(encounterAnchor) - 126}
+						>
+							<div className={style.encounter}>
+								<h2>{encounter.name}</h2>
+								<p>
+									{encounter.species} penguin, {encounter.distance.toFixed(1)}m away.
+								</p>
+								<p>
+									{encounter.heightM.toFixed(2)}m tall, {encounter.massKg.toFixed(1)}kg.
+								</p>
+								<p>{encounter.blurb}</p>
+							</div>
+						</foreignObject>
+					) : null}
+					<line
+						className={style.crosshair}
+						x1={(viewportSize.width / 2) - 15}
+						x2={(viewportSize.width / 2) + 15}
+						y1={viewportSize.height / 2}
+						y2={viewportSize.height / 2}
+					/>
+					<line
+						className={style.crosshair}
+						x1={viewportSize.width / 2}
+						x2={viewportSize.width / 2}
+						y1={(viewportSize.height / 2) - 15}
+						y2={(viewportSize.height / 2) + 15}
+					/>
+				</svg>
+				<div className={style.overlay}>
+					<div className={style.overlayTop}>
+						<div className={style.controls}>
+							<button className={style.button} onClick={lockPointer} type="button">
+								{locked ? 'Pointer Locked' : 'Enter Iceberg'}
+							</button>
+							<button className={style.buttonSecondary} onClick={() => void enableMotionLook()} type="button">
+								{motionEnabled
+									? 'Motion Look Active'
+									: motionPermissionNeeded
+										? 'Enable Motion Look'
+										: 'Calibrate Motion Look'}
+							</button>
+						</div>
+						<div className={style.metCount}>
+							Penguins met:{' '}
+							<span className={style.metFraction} key={fireworkTick}>
+								{Array.from({ length: FIREWORK_COUNT }, (_, index) => (
+									<span
+										aria-hidden="true"
+										className={style.metSpark}
+										key={`${fireworkTick}:${index}`}
+										style={
+											{
+												['--spark-angle' as const]: `${(index / FIREWORK_COUNT) * 360}deg`,
+											} as CSSProperties
+										}
+									/>
+								))}
+								{metCount}/{world.penguins.length}
+							</span>
+						</div>
+					</div>
+					<div className={style.overlayStatus}>
+						{locked ? 'pointer locked' : motionEnabled ? 'motion look' : 'tap or click viewport'}
+						{' · '}
+						{pose.position[0]![0]!.toFixed(1)}, {pose.position[1]![0]!.toFixed(1)}, {pose.position[2]![0]!.toFixed(1)}
+						{' · '}
+						{formatAngle(pose.yaw)} / {formatAngle(pose.pitch)}
+					</div>
+				</div>
+			</section>
+		</main>
+	);
 }
