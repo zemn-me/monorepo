@@ -105,6 +105,20 @@ describe('zemn.me website', () => {
                                 await driver.quit();
                         }
                 });
+
+		it('/experiments/arena renders an svg viewport', async () => {
+			try {
+				await driver.get(`${origin}/experiments/arena`);
+
+				const viewport = await driver.findElement(By.css('[data-testid="arena-svg"]'));
+				const status = await driver.findElement(By.css('[data-testid="arena-status"]'));
+
+				expect(await viewport.getTagName()).toBe('svg');
+				expect(await status.getText()).toContain('click to lock pointer');
+			} finally {
+				await driver.quit();
+			}
+		});
         });
 
 });
