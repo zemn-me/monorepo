@@ -61,8 +61,8 @@ export class Component extends Pulumi.ComponentResource {
 		)
 
 		const luke = new Website(`${name}_luke_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/luke/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/luke/out',
+			index: 'ts/pulumi/shadwell.im/luke/build/index.html',
+			directory: 'ts/pulumi/shadwell.im/luke/build',
 			zoneId: args.zoneId,
 			domain: ['luke', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -71,8 +71,8 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const kate = new Website(`${name}_kate_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/kate/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/kate/out',
+			index: 'ts/pulumi/shadwell.im/kate/build/index.html',
+			directory: 'ts/pulumi/shadwell.im/kate/build',
 			zoneId: args.zoneId,
 			domain: ['kate', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -81,8 +81,8 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const anna = new Website(`${name}_anna_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/anna/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/anna/out',
+			index: 'ts/pulumi/shadwell.im/anna/build/index.html',
+			directory: 'ts/pulumi/shadwell.im/anna/build',
 			zoneId: args.zoneId,
 			domain: ['anna', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -92,8 +92,8 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const lucy = new Website(`${name}_lucy_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/lucy/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/lucy/out',
+			index: 'ts/pulumi/shadwell.im/lucy/build/index.html',
+			directory: 'ts/pulumi/shadwell.im/lucy/build',
 			zoneId: args.zoneId,
 			domain: ['lucy', args.domain].join('.'),
 			noIndex: args.noIndex,

@@ -112,7 +112,7 @@ def next_project(
         srcs = srcs,
         args = ["build", native.package_name(), "--no-lint"],
         env = {"NEXT_TELEMETRY_DISABLED": "1"},
-        out_dirs = ["build", "out"],
+        out_dirs = ["build"],
     )
 
     bin.next_binary(
@@ -129,12 +129,7 @@ def next_project(
         env = {"NEXT_TELEMETRY_DISABLED": "1"},
     )
 
-    native.filegroup(
-        name = "out",
-        srcs = [":build"],
-    )
-
     native.alias(
         name = name,
-        actual = "out",
+        actual = "build",
     )
