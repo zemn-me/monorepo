@@ -18,6 +18,7 @@ describe('arena scene', () => {
 			forward: 1,
 			strafe: 0,
 			sprint: false,
+			jump: false,
 		};
 		const moved = stepPlayer(
 			{
@@ -31,6 +32,57 @@ describe('arena scene', () => {
 
 		expect(moved.position[0]![0]!).toBeCloseTo(5, 5);
 		expect(moved.position[2]![0]!).toBeCloseTo(0, 5);
+	});
+
+	test('jumping applies an upward impulse', () => {
+		const jumped = stepPlayer(
+			{
+				...DEFAULT_POSE,
+				position: point<3>(0, DEFAULT_POSE.position[1]![0]!, 0),
+			},
+			{
+				forward: 0,
+				strafe: 0,
+				sprint: false,
+				jump: true,
+			},
+			0.1
+		);
+
+		expect(jumped.position[1]![0]!).toBeGreaterThan(DEFAULT_POSE.position[1]![0]!);
+		expect(jumped.verticalVelocity).toBeGreaterThan(0);
+	});
+
+	test('jumping eventually lands back at eye height', () => {
+		let pose = stepPlayer(
+			{
+				...DEFAULT_POSE,
+				position: point<3>(0, DEFAULT_POSE.position[1]![0]!, 0),
+			},
+			{
+				forward: 0,
+				strafe: 0,
+				sprint: false,
+				jump: true,
+			},
+			0.1
+		);
+
+		for (let i = 0; i < 30; i++) {
+			pose = stepPlayer(
+				pose,
+				{
+					forward: 0,
+					strafe: 0,
+					sprint: false,
+					jump: false,
+				},
+				0.1
+			);
+		}
+
+		expect(pose.position[1]![0]!).toBeCloseTo(DEFAULT_POSE.position[1]![0]!, 5);
+		expect(pose.verticalVelocity).toBe(0);
 	});
 
 	test('point straight ahead projects to screen centre', () => {

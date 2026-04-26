@@ -7,6 +7,7 @@ export interface YawPitchPose {
 	readonly position: Point3D;
 	readonly yaw: number;
 	readonly pitch: number;
+	readonly verticalVelocity?: number;
 }
 
 const DEFAULT_FORWARD = point<3>(0, 0, 1);
