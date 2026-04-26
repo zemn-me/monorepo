@@ -44,6 +44,17 @@ export function point<T extends number>(...p: Vector<T, number>): Point<T> {
 	return Matrix.fromVec(p);
 }
 
+export function translate<N extends number>(a: Point<N>, b: Point<N>): Point<N> {
+	return Matrix.add<1, N>(a, b) as Point<N>;
+}
+
+export function scale<N extends number>(value: Point<N>, scalar: number): Point<N> {
+	return Matrix.map<1, N, number, number>(
+		value,
+		coordinate => coordinate * scalar
+	) as Point<N>;
+}
+
 /**
  * Return the normal line of a line.
  */
