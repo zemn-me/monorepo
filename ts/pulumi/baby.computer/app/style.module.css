@@ -101,9 +101,11 @@
 	left: 1rem;
 	right: 1rem;
 	top: 1rem;
+	bottom: 1rem;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	justify-content: space-between;
 	gap: 0.65rem;
 	pointer-events: none;
 }
@@ -129,6 +131,40 @@
 	font-size: 0.82rem;
 	line-height: 1.4;
 	color: #d8effb;
+}
+
+.overlayBottom {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
+}
+
+.joystickBase {
+	width: 5.5rem;
+	height: 5.5rem;
+	border-radius: 999px;
+	border: 1px solid rgb(238 247 255 / 24%);
+	background: rgb(7 16 25 / 52%);
+	backdrop-filter: blur(8px);
+	box-shadow:
+		0 0.8rem 1.5rem rgb(0 0 0 / 25%),
+		inset 0 0 0 1px rgb(125 216 255 / 8%);
+	display: grid;
+	place-items: center;
+	touch-action: none;
+}
+
+.joystickThumb {
+	width: 2.3rem;
+	height: 2.3rem;
+	border-radius: 999px;
+	border: 1px solid rgb(238 247 255 / 28%);
+	background: linear-gradient(180deg, rgb(248 253 255 / 90%), rgb(143 214 242 / 68%));
+	box-shadow:
+		0 0.5rem 1rem rgb(0 0 0 / 28%),
+		inset 0 0 0 1px rgb(255 255 255 / 22%);
+	pointer-events: none;
 }
 
 .metCount {
@@ -207,6 +243,7 @@
 		left: 0.75rem;
 		right: 0.75rem;
 		top: 0.75rem;
+		bottom: 0.75rem;
 	}
 
 	.overlayTop {
@@ -220,5 +257,10 @@
 
 	.overlayStatus {
 		font-size: 0.75rem;
+	}
+
+	.joystickBase {
+		width: 5rem;
+		height: 5rem;
 	}
 }
