@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { Point, rectContaninsPoint } from '#root/ts/math/cartesian.js';
+import { Point, point, rectContaninsPoint, scale, translate } from '#root/ts/math/cartesian.js';
 import * as matrix from '#root/ts/math/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
@@ -356,6 +356,20 @@ describe('matrix', () => {
 		])('%#: (%p, %p) => %p', (a, b, o) => {
 			expect(matrix.add(a, b)).toEqual(o);
 		});
+	});
+});
+
+describe('cartesian', () => {
+	test('translate adds points component-wise', () => {
+		expect(translate(point<3>(1, 2, 3), point<3>(4, 5, 6))).toEqual(
+			point<3>(5, 7, 9)
+		);
+	});
+
+	test('scale multiplies each component by a scalar', () => {
+		expect(scale(point<3>(1, -2, 3), 2.5)).toEqual(
+			point<3>(2.5, -5, 7.5)
+		);
 	});
 });
 

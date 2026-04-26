@@ -51,13 +51,17 @@ describe('arena scene', () => {
 
 	test('visible geometry in front of the camera is rendered', () => {
 		const scene: WorldSegment[] = [
-			{
-				start: point<3>(-1, DEFAULT_POSE.position[1]![0]!, -10),
-				end: point<3>(1, DEFAULT_POSE.position[1]![0]!, -10),
-				stroke: '#fff',
-				width: 1,
-				opacity: 1,
-			},
+			Object.assign(
+				[
+					point<3>(-1, DEFAULT_POSE.position[1]![0]!, -10),
+					point<3>(1, DEFAULT_POSE.position[1]![0]!, -10),
+				] as const,
+				{
+					stroke: '#fff',
+					width: 1,
+					opacity: 1,
+				}
+			),
 		];
 		const rendered = renderScene(scene, DEFAULT_POSE, 800, 600);
 
