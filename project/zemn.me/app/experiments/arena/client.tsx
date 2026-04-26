@@ -25,6 +25,15 @@ const LOOK_SENSITIVITY = 0.0025;
 const PITCH_LIMIT = Math.PI * 0.45;
 const SVG_WIDTH = 1200;
 const SVG_HEIGHT = 800;
+const MOTION_YAW_SENSITIVITY = Math.PI / 180;
+const MOTION_PITCH_SENSITIVITY = Math.PI / 270;
+
+interface MotionBaseline {
+	beta: number;
+	gamma: number;
+	yaw: number;
+	pitch: number;
+}
 
 interface KeyState {
 	KeyW: boolean;
@@ -52,6 +61,14 @@ function clampPitch(pitch: number): number {
 	return Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, pitch));
 }
 
+function wrapRadians(angle: number): number {
+	return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+function normalizeDegrees(angle: number): number {
+	return ((angle + 540) % 360) - 180;
+}
+
 function movementFromKeys(keys: KeyState) {
 	return {
 		forward: Number(keys.KeyW) - Number(keys.KeyS),
@@ -74,14 +91,29 @@ export function ArenaClient() {
 	const draggingPointerIdRef = useRef<number | null>(null);
 	const lastDragPositionRef = useRef<{ x: number; y: number } | null>(null);
 	const lastAnimationTimeRef = useRef<number | null>(null);
+	const motionBaselineRef = useRef<MotionBaseline | null>(null);
 
 	const [locked, setLocked] = useState(false);
 	const [pose, setPose] = useState<PlayerPose>(DEFAULT_POSE);
 	const [segments, setSegments] = useState<RenderedSegment[]>(() =>
 		renderScene(scene, DEFAULT_POSE, SVG_WIDTH, SVG_HEIGHT)
 	);
+	const [motionAvailable, setMotionAvailable] = useState(false);
+	const [motionEnabled, setMotionEnabled] = useState(false);
+	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
 
 	useEffect(() => {
+		const supportsMotion = typeof DeviceOrientationEvent !== 'undefined';
+		setMotionAvailable(supportsMotion);
+		setMotionPermissionNeeded(
+			supportsMotion &&
+				typeof (
+					DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+						requestPermission?: () => Promise<'granted' | 'denied'>;
+					}
+				).requestPermission === 'function'
+		);
+
 		function onPointerLockChange() {
 			setLocked(document.pointerLockElement === viewportRef.current);
 		}
@@ -126,6 +158,41 @@ export function ArenaClient() {
 			setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
 		}
 
+		function onDeviceOrientation(event: DeviceOrientationEvent) {
+			if (!motionEnabled || locked) {
+				return;
+			}
+
+			const beta = event.beta;
+			const gamma = event.gamma;
+
+			if (beta == null || gamma == null) {
+				return;
+			}
+
+			const baseline =
+				motionBaselineRef.current ??
+				{
+					beta,
+					gamma,
+					yaw: poseRef.current.yaw,
+					pitch: poseRef.current.pitch,
+				};
+			motionBaselineRef.current = baseline;
+
+			const yawDelta = normalizeDegrees(gamma - baseline.gamma) * MOTION_YAW_SENSITIVITY;
+			const pitchDelta = normalizeDegrees(beta - baseline.beta) * MOTION_PITCH_SENSITIVITY;
+			const next = {
+				...poseRef.current,
+				yaw: wrapRadians(baseline.yaw + yawDelta),
+				pitch: clampPitch(baseline.pitch - pitchDelta),
+			};
+
+			poseRef.current = next;
+			setPose(next);
+			setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
+		}
+
 		function animate(timestamp: number) {
 			const previous = lastAnimationTimeRef.current ?? timestamp;
 			lastAnimationTimeRef.current = timestamp;
@@ -156,6 +223,7 @@ export function ArenaClient() {
 		window.addEventListener('keydown', onKeyDown);
 		window.addEventListener('keyup', onKeyUp);
 		window.addEventListener('mousemove', onMouseMove);
+		window.addEventListener('deviceorientation', onDeviceOrientation);
 		frameRef.current = window.requestAnimationFrame(animate);
 
 		return () => {
@@ -163,15 +231,36 @@ export function ArenaClient() {
 			window.removeEventListener('keydown', onKeyDown);
 			window.removeEventListener('keyup', onKeyUp);
 			window.removeEventListener('mousemove', onMouseMove);
+			window.removeEventListener('deviceorientation', onDeviceOrientation);
 			if (frameRef.current != null) {
 				window.cancelAnimationFrame(frameRef.current);
 			}
 		};
-	}, []);
+	}, [locked, motionEnabled]);
 
 	function lockPointer() {
 		void viewportRef.current?.requestPointerLock();
 		viewportRef.current?.focus();
+	}
+
+	async function enableMotionLook() {
+		if (typeof DeviceOrientationEvent === 'undefined') {
+			return;
+		}
+
+		const eventType = DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+			requestPermission?: () => Promise<'granted' | 'denied'>;
+		};
+		if (typeof eventType.requestPermission === 'function') {
+			const permission = await eventType.requestPermission();
+			if (permission !== 'granted') {
+				return;
+			}
+		}
+
+		motionBaselineRef.current = null;
+		setMotionPermissionNeeded(false);
+		setMotionEnabled(true);
 	}
 
 	function handlePointerDown(event: ReactPointerEvent<SVGSVGElement>) {
@@ -191,7 +280,7 @@ export function ArenaClient() {
 	}
 
 	function handlePointerMove(event: ReactPointerEvent<SVGSVGElement>) {
-		if (draggingPointerIdRef.current !== event.pointerId || locked) {
+		if (draggingPointerIdRef.current !== event.pointerId || locked || motionEnabled) {
 			return;
 		}
 		const last = lastDragPositionRef.current;
@@ -238,15 +327,34 @@ export function ArenaClient() {
 					<h1 className={style.title}>Pointer-lock wireframe arena</h1>
 					<p className={style.copy}>
 						Click the arena, then use <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> to move.
-						Press <kbd>Space</kbd> to jump.
+						Press <kbd>Space</kbd> to jump. On mobile, enable motion look to steer with the
+						accelerometer.
 						The four suspended pyramids are rotated with the existing
 						<code>lookAt</code> quaternion logic so their tips face the cardinal
 						directions exactly.
 					</p>
+					{motionAvailable ? (
+						<div className={style.mobileControls}>
+							<button
+								className={style.motionButton}
+								onClick={() => void enableMotionLook()}
+								type="button"
+							>
+								{motionEnabled
+									? 'Motion look active'
+									: motionPermissionNeeded
+										? 'Enable motion look'
+										: 'Calibrate motion look'}
+							</button>
+							<p className={style.motionNote}>
+								Keep the phone at your preferred neutral angle when enabling motion look.
+							</p>
+						</div>
+					) : null}
 					<dl className={style.telemetry} data-testid="arena-status">
 						<div>
 							<dt>mode</dt>
-							<dd>{locked ? 'pointer locked' : 'click to lock pointer'}</dd>
+							<dd>{locked ? 'pointer locked' : motionEnabled ? 'motion look' : 'tap or click viewport'}</dd>
 						</div>
 						<div>
 							<dt>position</dt>

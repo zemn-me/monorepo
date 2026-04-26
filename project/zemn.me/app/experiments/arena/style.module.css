@@ -8,19 +8,19 @@
 }
 
 .stage {
-	display: grid;
-	grid-template-columns: minmax(18rem, 28rem) minmax(0, 1fr);
-	gap: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
 	min-height: 100vh;
-	padding: 2rem;
+	padding: 1.5rem;
 	box-sizing: border-box;
 }
 
 .hud {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	gap: 1rem;
+	max-width: 54rem;
 }
 
 .label {
@@ -39,7 +39,7 @@
 
 .copy {
 	margin: 0;
-	max-width: 34rem;
+	max-width: 42rem;
 	font-size: 1.05rem;
 	line-height: 1.6;
 	color: #ead8a8;
@@ -63,10 +63,42 @@
 
 .telemetry {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 0.9rem;
 	margin: 0;
 	padding: 0;
+}
+
+.mobileControls {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.65rem;
+}
+
+.motionButton,
+.lockButton {
+	padding: 0.8rem 1.15rem;
+	border: 1px solid rgb(239 226 186 / 25%);
+	background: linear-gradient(180deg, #2a3123 0%, #191d15 100%);
+	color: inherit;
+	cursor: pointer;
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.motionButton:disabled,
+.lockButton:disabled {
+	opacity: 0.7;
+	cursor: default;
+}
+
+.motionNote {
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.5;
+	color: rgb(239 226 186 / 78%);
 }
 
 .telemetry div {
@@ -92,8 +124,8 @@
 .viewportWrap {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	gap: 1rem;
+	width: 100%;
 }
 
 .viewport {
@@ -122,24 +154,50 @@
 
 .lockButton {
 	align-self: flex-start;
-	padding: 0.8rem 1.15rem;
-	border: 1px solid rgb(239 226 186 / 25%);
-	background: linear-gradient(180deg, #2a3123 0%, #191d15 100%);
-	color: inherit;
-	cursor: pointer;
-	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
 }
 
 @media (max-width: 960px) {
 	.stage {
-		grid-template-columns: 1fr;
 		padding: 1rem;
 	}
 
 	.title {
 		max-width: none;
+	}
+
+	.telemetry {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	.stage {
+		padding-inline: 0;
+		padding-block: 1rem;
+		gap: 1rem;
+	}
+
+	.hud {
+		padding-inline: 1rem;
+	}
+
+	.copy {
+		max-width: none;
+	}
+
+	.viewportWrap {
+		gap: 0.75rem;
+	}
+
+	.viewport {
+		border-left: 0;
+		border-right: 0;
+		border-radius: 0;
+	}
+
+	.lockButton,
+	.motionButton {
+		margin-left: 1rem;
 	}
 
 	.telemetry {
