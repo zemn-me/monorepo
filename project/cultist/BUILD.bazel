@@ -5,18 +5,32 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "cultist",
-    srcs = ["index.ts"],
+    srcs = ["index.ts"],  # keep
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":action",
-        ":element",
-        ":history",
-        ":recipe",
-        ":types",
-        ":verb",
-        "//:node_modules/@types/uuid",
-        "//:node_modules/immutable",
-        "//project/cultist/state",
+        ":action",  # keep
+        ":element",  # keep
+        ":game",  # keep
+        ":history",  # keep
+        ":recipe",  # keep
+        ":types",  # keep
+        ":verb",  # keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/uuid",  # keep
+        "//:node_modules/immutable",  # keep
+        "//project/cultist/state",  # keep
     ],
+)
+
+ts_project(
+    name = "game",
+    srcs = ["game.ts"],
+)
+
+jest_test(
+    name = "game_test",
+    srcs = ["game_test.js"],
+    deps = [":cultist_tests"],
 )
 
 ts_project(
@@ -132,4 +146,26 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "game.ts",
+        "game_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "cultist_tests",
+    srcs = ["game_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":cultist",
+        ":game",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",  # keep
+        "//:node_modules/@types/node",
+    ],
 )
