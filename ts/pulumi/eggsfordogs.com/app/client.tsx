@@ -1,160 +1,225 @@
-
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import React from 'react';
-import seedrandom from 'seedrandom';
+import React, {
+	type PointerEvent as ReactPointerEvent,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 
-import { filter, fold, map, range, to_array } from '#root/ts/iter/iterable_functional.js';
-import { add, mul, Point, point, sub, x, y } from '#root/ts/math/cartesian.js';
-import { fields, SimulateField, wrap2 } from '#root/ts/math/sim/sim.js';
-import { and_then, None, Option, Some, unwrap_or } from '#root/ts/option/types.js';
+import { point, x, y, z } from '#root/ts/math/cartesian.js';
+import { perspective, projectWorldPoint, renderSegments } from '#root/ts/math/wireframe_render.js';
+import {
+	buildWorld,
+	DEFAULT_POSE,
+	isFacingPose,
+	type MovementInput,
+	type Particle,
+	ParticleType,
+	type PlayerPose,
+	stepCritters,
+	stepLook,
+	stepPlayer,
+} from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 
-type Vector<N extends number = number> = Point<N>;
-const vector = point;
-const sum = add;
-const scalar = (n: number) => vector<1>(n);
-
-enum ParticleType {
-	Egg,
-	Dog,
+interface KeyState {
+	readonly KeyW: boolean;
+	readonly KeyA: boolean;
+	readonly KeyS: boolean;
+	readonly KeyD: boolean;
+	readonly Space: boolean;
+	readonly ShiftLeft: boolean;
+	readonly ShiftRight: boolean;
 }
 
-type Particle = {
-	id: string;
-	position: Vector<2>;
-	velocity: Vector<2>;
-	mass: number;
-	radius: number;
-	type: ParticleType;
-};
+const INITIAL_VIEWPORT_WIDTH = 1280;
+const INITIAL_VIEWPORT_HEIGHT = 720;
 
-interface YardProps {
-	readonly particles: Set<Particle>;
-	readonly size: Vector<2>;
-}
-
-function icon(p: Particle): string {
-	switch (p.type) {
-		case ParticleType.Egg:
-			return "🥚"; //
-		case ParticleType.Dog:
-			return "🐕";
-	}
-}
-
-const sumAll = (pts: Vector<2>[]) =>
-	fold((p: Vector<2>, c: Vector<2>) => sum<1, 2>(p, c))(vector<2>(0, 0))(pts);
-
-const avg = (pts: Vector<2>[]): Vector<2> =>
-	mul<1, 2, 1, 1>(sumAll(pts), scalar(1 / pts.length));
-
-const centre = avg;
-
-
-function eggRoll(_: number, self: Particle, __: Set<Particle>): Vector<2> {
-	if (self.type !== ParticleType.Egg) return vector<2>(0, 0);
-	// Gentle random motion to simulate rolling
-	return vector<2>((Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5);
-}
-
-function dogHerd(_: number, self: Particle, all: Set<Particle>): Vector<2> {
-	if (self.type !== ParticleType.Dog) return vector<2>(0, 0);
-
-	const maybeEggs = map(all, v => v.type === ParticleType.Egg ? Some(v) : None);
-
-	const eggs = new Set(filter(maybeEggs));
-
-	if (eggs.size === 0) return vector<2>(0, 0);
-
-	const eggCentre = centre([...map(eggs, v => v.position)]);
-
-	// vector pointing at centre of the eggs
-	const toCentre = sub<1, 2>(eggCentre, self.position);
-
-	const mag = Math.hypot(x(toCentre), y(toCentre));
-	if (mag === 0) return vector<2>(0, 0);
-
-	return mul<1, 2, 1, 1>(toCentre, scalar(20 / mag));
-}
-
-const friction = (c: number) => (_: number, self: Particle): Vector =>
-	vector(-x(self.velocity) * c * self.radius, -y(self.velocity) * c * self.radius);
-
-function Yard(props: YardProps) {
-	return <svg style={{ width: "100vw", height: "100vh" }}>
-		<rect fill="#e6f2ff" height="100%" width="100%" />
-		{to_array(map(props.particles, p => <text key={p.id} style={{ textAnchor: "middle", fontSize: `${p.radius}` }} x={x(p.position)} y={y(props.size) - y(p.position)}>{icon(p)}</text>))}
-	</svg>;
-}
-
-function uuid(rng: () => number) {
-	const ramp = "abcdefghijklmnopqrstuvwxyz".split("");
-	return to_array(map(range(0, 10), () => ramp[Math.floor(rng() * ramp.length)])).join("");
-}
-
-function spawnEgg(rng: () => number, max: Vector<2>): Particle {
-	const radius = 10 + 10 * rng();
+function initialKeys(): KeyState {
 	return {
-		id: uuid(rng),
-		position: vector<2>(rng() * x(max), rng() * y(max)),
-		radius,
-		mass: 1,
-		type: ParticleType.Egg,
-		velocity: vector<2>(0, 0),
+		KeyW: false,
+		KeyA: false,
+		KeyS: false,
+		KeyD: false,
+		Space: false,
+		ShiftLeft: false,
+		ShiftRight: false,
 	};
 }
 
-function spawnDog(rng: () => number, max: Vector<2>): Particle {
-	const radius = 20;
+function movementFromKeys(keys: KeyState): MovementInput {
 	return {
-		id: uuid(rng),
-		position: vector<2>(rng() * x(max), rng() * y(max)),
-		radius,
-		mass: 3,
-		type: ParticleType.Dog,
-		velocity: vector<2>(0, 0),
+		forward: Number(keys.KeyW) - Number(keys.KeyS),
+		strafe: Number(keys.KeyD) - Number(keys.KeyA),
+		sprint: keys.ShiftLeft || keys.ShiftRight,
+		jump: keys.Space,
 	};
 }
 
-function spawnRandomParticle(rng: () => number, max: Vector<2>): Particle {
-	return rng() < 0.1 ? spawnDog(rng, max) : spawnEgg(rng, max);
-}
-
-const fieldA = fields(
-	friction(0.05),
-	eggRoll,
-);
-
-const field = fields(
-	fieldA,
-	dogHerd
-)
-
-function sim(dt: number, objects: Set<Particle>): Set<Particle> {
-	return new Set([...SimulateField(dt, objects, field)].map(
-		v => wrap2(vector<2>(0, 0), vector<2>(1000, 1000))(v)
-	));
-}
+function icon(type: ParticleType): string { return type === ParticleType.Egg ? '🥚' : '🐕'; }
 
 export function EggDogYardClient() {
-	const rng = seedrandom('eggdog');
-	const size = vector<2>(1000, 1000);
-	const maxDensity = (x(size) * y(size)) / 10000;
-	const [particles, setParticles] = useState(new Set(map(range(0, Math.round(rng() * maxDensity)), () => spawnRandomParticle(rng, size))));
-	const lastFrameTime = useRef<Option<number>>(None);
-
-	const onTick = useCallback<FrameRequestCallback>(() => {
-		const now = performance.now();
-		const dt = unwrap_or(and_then(lastFrameTime.current, last => now - last), 0);
-		lastFrameTime.current = Some(now);
-		setParticles(sim(dt / 1000, particles));
-	}, [particles]);
+	const world = useMemo(() => buildWorld(), []);
+	const viewportRef = useRef<SVGSVGElement | null>(null);
+	const poseRef = useRef<PlayerPose>(DEFAULT_POSE);
+	const keysRef = useRef<KeyState>(initialKeys());
+	const crittersRef = useRef<Particle[]>(world.critters);
+	const dragPointerIdRef = useRef<number | null>(null);
+	const lastDragRef = useRef<{ x: number; y: number } | null>(null);
+	const frameRef = useRef<number | null>(null);
+	const [viewport, setViewport] = useState({ width: INITIAL_VIEWPORT_WIDTH, height: INITIAL_VIEWPORT_HEIGHT });
+	const [pose, setPose] = useState<PlayerPose>(DEFAULT_POSE);
+	const [critters, setCritters] = useState<Particle[]>(world.critters);
+	const [locked, setLocked] = useState(false);
 
 	useEffect(() => {
-		const hnd = setInterval(onTick, 15);
-		return () => clearInterval(hnd);
-	}, [onTick]);
+		function syncViewport() {
+			const bounds = viewportRef.current?.getBoundingClientRect();
+			if (bounds == null) return;
+			setViewport({
+				width: Math.max(1, Math.round(bounds.width)),
+				height: Math.max(1, Math.round(bounds.height)),
+			});
+		}
 
-	return <Yard particles={particles} size={size} />;
+		function onPointerLockChange() {
+			setLocked(document.pointerLockElement === viewportRef.current);
+		}
+
+		function onKeyDown(event: KeyboardEvent) {
+			if (event.code in keysRef.current) {
+				keysRef.current = { ...keysRef.current, [event.code]: true };
+				event.preventDefault();
+			}
+		}
+
+		function onKeyUp(event: KeyboardEvent) {
+			if (event.code in keysRef.current) {
+				keysRef.current = { ...keysRef.current, [event.code]: false };
+			}
+		}
+
+		function onMouseMove(event: MouseEvent) {
+			if (document.pointerLockElement !== viewportRef.current) return;
+			const nextPose = stepLook(poseRef.current, event.movementX, event.movementY);
+			poseRef.current = nextPose;
+			setPose(nextPose);
+		}
+
+		let previous = performance.now();
+		const loop = (now: number) => {
+			const dt = Math.min(0.05, (now - previous) / 1000); previous = now;
+			const nextPose = stepPlayer(poseRef.current, movementFromKeys(keysRef.current), dt);
+			const nextCritters = stepCritters(crittersRef.current, dt, now / 1000);
+			poseRef.current = nextPose;
+			crittersRef.current = nextCritters;
+			setPose(nextPose);
+			setCritters(nextCritters);
+			frameRef.current = requestAnimationFrame(loop);
+		};
+
+		document.addEventListener('pointerlockchange', onPointerLockChange);
+		window.addEventListener('keydown', onKeyDown);
+		window.addEventListener('keyup', onKeyUp);
+		window.addEventListener('mousemove', onMouseMove);
+		window.addEventListener('resize', syncViewport);
+		syncViewport();
+		frameRef.current = requestAnimationFrame(loop);
+
+		return () => {
+			document.removeEventListener('pointerlockchange', onPointerLockChange);
+			window.removeEventListener('keydown', onKeyDown);
+			window.removeEventListener('keyup', onKeyUp);
+			window.removeEventListener('mousemove', onMouseMove);
+			window.removeEventListener('resize', syncViewport);
+			if (frameRef.current != null) cancelAnimationFrame(frameRef.current);
+		};
+	}, []);
+
+	function lockPointer() {
+		viewportRef.current?.focus();
+		void viewportRef.current?.requestPointerLock();
+	}
+
+	function handlePointerDown(event: ReactPointerEvent<SVGSVGElement>) {
+		viewportRef.current?.focus();
+		if (event.pointerType === 'mouse') {
+			lockPointer();
+			return;
+		}
+		dragPointerIdRef.current = event.pointerId;
+		lastDragRef.current = { x: event.clientX, y: event.clientY };
+		event.currentTarget.setPointerCapture(event.pointerId);
+	}
+
+	function handlePointerMove(event: ReactPointerEvent<SVGSVGElement>) {
+		if (locked || dragPointerIdRef.current !== event.pointerId) return;
+		const last = lastDragRef.current;
+		lastDragRef.current = { x: event.clientX, y: event.clientY };
+		if (last == null) return;
+		const nextPose = stepLook(
+			poseRef.current,
+			(event.clientX - last.x) * 1.35,
+			(event.clientY - last.y) * 1.35
+		);
+		poseRef.current = nextPose;
+		setPose(nextPose);
+	}
+
+	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
+		if (dragPointerIdRef.current === event.pointerId) {
+			dragPointerIdRef.current = null;
+			lastDragRef.current = null;
+		}
+	}
+
+	const projection = perspective(viewport.width, viewport.height, { focalScale: 0.75 });
+	const segments = renderSegments(world.scene, pose, projection);
+	const sprites = critters.map(critter => {
+		const raised = point<3>(x(critter.position), 1.1, z(critter.position));
+		const projected = projectWorldPoint(raised, pose, projection);
+		if (projected == null) return null;
+		const dx = x(raised) - x(pose.position);
+		const dy = y(raised) - y(pose.position);
+		const dz = z(raised) - z(pose.position);
+		const distance = Math.hypot(dx, dy, dz);
+		if (!isFacingPose(raised, pose)) return null;
+		const size = Math.max(12, Math.min(72, 300 / distance));
+		return { id: critter.id, emoji: icon(critter.type), projected, size, distance };
+	}).filter(sprite => sprite != null).sort((a, b) => b.distance - a.distance);
+
+	return <main style={{ background: '#d7e7c3', height: '100vh', overflow: 'hidden', position: 'relative' }}>
+		<svg
+			aria-label="Eggs for dogs yard"
+			onPointerDown={handlePointerDown}
+			onPointerMove={handlePointerMove}
+			onPointerUp={handlePointerUp}
+			ref={viewportRef}
+			style={{ display: 'block', height: '100vh', touchAction: 'none', width: '100vw' }}
+			tabIndex={0}
+			viewBox={`0 0 ${viewport.width} ${viewport.height}`}
+		>
+			<defs>
+				<linearGradient id="yardSky" x1="0" x2="0" y1="0" y2="1">
+					<stop offset="0%" stopColor="#9bd5ff" />
+					<stop offset="48%" stopColor="#f8e6a6" />
+					<stop offset="100%" stopColor="#7faa52" />
+				</linearGradient>
+			</defs>
+			<rect fill="url(#yardSky)" height={viewport.height} width={viewport.width} x={0} y={0} />
+			{segments.map((segment, index) => <line key={`${index}:${segment.depth}`} opacity={segment.opacity} stroke={segment.stroke} strokeLinecap="round" strokeWidth={segment.width} x1={segment.x1} x2={segment.x2} y1={segment.y1} y2={segment.y2} />)}
+			{sprites.map(sprite => <foreignObject height={sprite.size} key={sprite.id} width={sprite.size} x={x(sprite.projected) - (sprite.size / 2)} y={y(sprite.projected) - sprite.size}><div style={{ alignItems: 'center', display: 'flex', fontSize: `${sprite.size}px`, height: '100%', justifyContent: 'center', width: '100%' }}>{sprite.emoji}</div></foreignObject>)}
+			<line stroke="#3b3326" strokeLinecap="round" strokeWidth={1.5} x1={(viewport.width / 2) - 12} x2={(viewport.width / 2) + 12} y1={viewport.height / 2} y2={viewport.height / 2} />
+			<line stroke="#3b3326" strokeLinecap="round" strokeWidth={1.5} x1={viewport.width / 2} x2={viewport.width / 2} y1={(viewport.height / 2) - 12} y2={(viewport.height / 2) + 12} />
+		</svg>
+		<div style={{ display: 'flex', gap: '0.65rem', left: '1rem', position: 'absolute', top: '1rem' }}>
+			<button onClick={lockPointer} style={{ background: '#fff7d6', border: '1px solid rgb(59 51 38 / 24%)', borderRadius: '6px', color: '#3b3326', cursor: 'pointer', font: '700 0.82rem system-ui, sans-serif', padding: '0.65rem 0.8rem' }} type="button">
+				{locked ? 'Pointer locked' : 'Enter yard'}
+			</button>
+			<div style={{ background: 'rgb(255 247 214 / 82%)', border: '1px solid rgb(59 51 38 / 18%)', borderRadius: '6px', color: '#3b3326', font: '600 0.82rem system-ui, sans-serif', padding: '0.65rem 0.8rem' }}>
+				WASD to roam
+			</div>
+		</div>
+	</main>;
 }
