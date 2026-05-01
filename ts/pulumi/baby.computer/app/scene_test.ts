@@ -5,6 +5,7 @@ import {
 	createPenguinWorld,
 	nearestPenguin,
 	nearestVisiblePenguin,
+	targetedVisiblePenguin,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
 
 describe('baby.computer scene', () => {
@@ -63,4 +64,31 @@ describe('baby.computer scene', () => {
 		expect(visible).not.toBeNull();
 		expect(visible!.penguin.name).toBe('In Front');
 	});
+	test('targets the penguin nearest the crosshair within range', () => {
+		const world = createPenguinWorld();
+		const target = targetedVisiblePenguin(
+			world.penguins,
+			world.startPose,
+			1200,
+			800,
+			180
+		);
+
+		expect(target).not.toBeNull();
+		expect(target!.screenDistance).toBeLessThanOrEqual(180);
+	});
+
+	test('does not target penguins outside the allowed crosshair radius', () => {
+		const world = createPenguinWorld();
+		const target = targetedVisiblePenguin(
+			world.penguins,
+			world.startPose,
+			1200,
+			800,
+			5
+		);
+
+		expect(target).toBeNull();
+	});
+
 });
