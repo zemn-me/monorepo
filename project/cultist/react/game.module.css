@@ -1,0 +1,466 @@
+.game {
+	background: #f2efe7;
+	color: #201d18;
+	min-height: 100vh;
+}
+
+.topbar {
+	align-items: center;
+	background: #201d18;
+	color: #f7f1e3;
+	display: grid;
+	gap: 16px;
+	grid-template-columns: minmax(220px, 1fr) auto auto;
+	padding: 16px 20px;
+}
+
+.topbar h1,
+.topbar p,
+.verbHeader h2,
+.verbHeader p,
+.recipeBody h3,
+.recipeBody p,
+.card p,
+.log p {
+	margin: 0;
+}
+
+.topbar h1 {
+	font-size: 1.4rem;
+	font-weight: 700;
+}
+
+.topbar p {
+	color: #dbcaa4;
+	font-size: 0.95rem;
+	margin-top: 4px;
+}
+
+.clock,
+.controls {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.clock span {
+	border: 1px solid #645a49;
+	border-radius: 6px;
+	padding: 6px 8px;
+}
+
+.controls button,
+.recipe button {
+	background: #b23a2f;
+	border: 1px solid #7e261f;
+	border-radius: 6px;
+	color: #fffaf0;
+	cursor: pointer;
+	font: inherit;
+	min-height: 36px;
+	padding: 7px 10px;
+}
+
+.controls button:disabled,
+.recipe button:disabled {
+	background: #7d776c;
+	border-color: #6b655d;
+	cursor: default;
+}
+
+.table {
+	display: grid;
+	gap: 18px;
+	grid-template-columns: minmax(420px, 1fr) minmax(260px, 330px) minmax(260px, 340px);
+	padding: 18px;
+}
+
+.verbs {
+	display: grid;
+	gap: 18px;
+}
+
+.verbLane {
+	border-top: 3px solid #201d18;
+	padding-top: 10px;
+}
+
+.verbHeader {
+	align-items: start;
+	display: flex;
+	gap: 16px;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.verbHeader h2,
+.inventory h2,
+.log h2 {
+	font-size: 1rem;
+	letter-spacing: 0;
+	margin: 0;
+	text-transform: uppercase;
+}
+
+.verbHeader p {
+	color: #5d564a;
+	font-size: 0.9rem;
+	margin-top: 4px;
+}
+
+.verbHeader span {
+	background: #e0d3b4;
+	border-radius: 6px;
+	color: #3d352b;
+	flex: 0 0 auto;
+	padding: 5px 8px;
+}
+
+.operation {
+	background: #fffaf0;
+	border: 1px solid #c8b88e;
+	border-radius: 6px;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+.progress {
+	background: #d5c9ad;
+	border-radius: 999px;
+	height: 8px;
+	margin-top: 8px;
+	overflow: hidden;
+}
+
+.progress span {
+	background: #2f7d72;
+	display: block;
+	height: 100%;
+}
+
+.recipeList,
+.cards,
+.log ol {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.recipeList {
+	display: grid;
+	gap: 8px;
+}
+
+.recipe {
+	align-items: center;
+	background: #fffaf0;
+	border: 1px solid #c8b88e;
+	border-radius: 6px;
+	display: grid;
+	gap: 12px;
+	grid-template-columns: minmax(0, 1fr) auto;
+	padding: 10px;
+}
+
+.recipeBody {
+	min-width: 0;
+}
+
+.recipeBody h3 {
+	font-size: 0.98rem;
+}
+
+.recipeBody p {
+	color: #5d564a;
+	font-size: 0.88rem;
+	margin-top: 4px;
+}
+
+.recipeBody span,
+.blockedReason {
+	color: #75664b;
+	display: inline-block;
+	font-size: 0.82rem;
+	margin-top: 6px;
+}
+
+.blocked {
+	background: #e7dfcf;
+	border-color: #d6c8a9;
+	color: #6b6257;
+}
+
+.blockedReason {
+	max-width: 210px;
+}
+
+.inventory,
+.log {
+	border-top: 3px solid #201d18;
+	min-width: 0;
+	padding-top: 10px;
+}
+
+.cards {
+	display: grid;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.card {
+	background: #fffaf0;
+	border: 1px solid #b9aa82;
+	border-left-width: 5px;
+	border-radius: 6px;
+	padding: 10px;
+}
+
+.cardHeader {
+	align-items: center;
+	display: flex;
+	gap: 10px;
+	justify-content: space-between;
+}
+
+.cardHeader span {
+	background: #201d18;
+	border-radius: 999px;
+	color: #fffaf0;
+	font-size: 0.8rem;
+	min-width: 28px;
+	padding: 3px 7px;
+	text-align: center;
+}
+
+.card p {
+	color: #5d564a;
+	font-size: 0.86rem;
+	margin-top: 6px;
+}
+
+.ability {
+	border-left-color: #2f7d72;
+}
+
+.danger {
+	border-left-color: #b23a2f;
+}
+
+.lore {
+	border-left-color: #9f7f24;
+}
+
+.material {
+	border-left-color: #5f6f89;
+}
+
+.society {
+	border-left-color: #6b7d3b;
+}
+
+.aspects {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	margin: 8px 0 0;
+}
+
+.aspects div {
+	background: #ece4d2;
+	border-radius: 4px;
+	display: flex;
+	gap: 4px;
+	padding: 3px 5px;
+}
+
+.aspects dt,
+.aspects dd {
+	font-size: 0.76rem;
+	margin: 0;
+}
+
+.log ol {
+	display: grid;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.log li {
+	background: #fffaf0;
+	border: 1px solid #c8b88e;
+	border-radius: 6px;
+	padding: 10px;
+}
+
+.log li > span {
+	color: #75664b;
+	display: block;
+	font-size: 0.78rem;
+	margin-bottom: 3px;
+}
+
+.log strong {
+	display: block;
+}
+
+.log p {
+	color: #5d564a;
+	font-size: 0.86rem;
+	margin-top: 4px;
+}
+
+.log .logSource {
+	color: #75664b;
+	font-size: 0.78rem;
+	margin-top: 3px;
+}
+
+.logSource span {
+	color: #3d352b;
+	font-weight: 700;
+}
+
+.logCards {
+	display: grid;
+	gap: 6px;
+	margin: 9px 0 0;
+}
+
+.logCards > div {
+	align-items: start;
+	display: grid;
+	gap: 8px;
+	grid-template-columns: 32px minmax(0, 1fr);
+}
+
+.logCards dt {
+	color: #75664b;
+	font-size: 0.72rem;
+	font-weight: 700;
+	margin-top: 4px;
+	text-transform: uppercase;
+}
+
+.logCards dd {
+	margin: 0;
+	min-width: 0;
+}
+
+.logCardList {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.cardReference {
+	position: relative;
+}
+
+.cardReferenceName {
+	align-items: center;
+	background: #ece4d2;
+	border: 1px solid #d2c29b;
+	border-radius: 999px;
+	color: #3d352b;
+	cursor: help;
+	display: inline-flex;
+	font-size: 0.78rem;
+	gap: 4px;
+	line-height: 1.2;
+	max-width: 100%;
+	min-height: 26px;
+	padding: 4px 8px;
+}
+
+.cardReferenceName:focus {
+	outline: 2px solid #2f7d72;
+	outline-offset: 2px;
+}
+
+.cardReferenceCount {
+	color: #75664b;
+	font-size: 0.72rem;
+	font-weight: 700;
+}
+
+.cardTooltip {
+	bottom: calc(100% + 8px);
+	left: 0;
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	transform: translateY(4px);
+	transition:
+		opacity 120ms ease,
+		transform 120ms ease,
+		visibility 120ms ease;
+	visibility: hidden;
+	width: min(280px, 72vw);
+	z-index: 20;
+}
+
+.cardTooltip .card {
+	box-shadow: 0 10px 24px rgb(32 29 24 / 24%);
+}
+
+.cardReference:hover .cardTooltip,
+.cardReference:focus-within .cardTooltip {
+	opacity: 1;
+	transform: translateY(0);
+	visibility: visible;
+}
+
+.start {
+	border-left: 4px solid #5f6f89;
+}
+
+.result {
+	border-left: 4px solid #2f7d72;
+}
+
+.season {
+	border-left: 4px solid #9f7f24;
+}
+
+.ending {
+	border-left: 4px solid #201d18;
+}
+
+.log .danger {
+	border-left: 4px solid #b23a2f;
+}
+
+@media (max-width: 1100px) {
+	.table {
+		grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+	}
+
+	.log {
+		grid-column: 1 / -1;
+	}
+}
+
+@media (max-width: 760px) {
+	.topbar {
+		align-items: stretch;
+		grid-template-columns: 1fr;
+	}
+
+	.table {
+		grid-template-columns: 1fr;
+		padding: 12px;
+	}
+
+	.recipe {
+		align-items: stretch;
+		grid-template-columns: 1fr;
+	}
+
+	.blockedReason {
+		max-width: none;
+	}
+}

@@ -1,0 +1,142 @@
+﻿{
+	"elements": [
+		{  "id": "versionnews.2022.5.v.1",
+			"label": "2022.5.v.1 VIOLET",
+	"description": 
+"- Fix: You no longer need to restart the game to restore CONTINUE to the menu\n
+- Fix: Card ghost no longer disappears when card is removed from an additional slot\n
+- Fix: $remove command no longer breaks mods\n
+- Fix: correctly handling extends as well as inheritance in older mods\n",
+			"icon": "violet_a"
+			},
+						{  "id": "versionnews.2022.4.t.8",
+			"label": "2022.4.t.8 TARTUFFE",
+	"description": 
+"- Card ghost uses the mouse cursor, not the centre of a blocking card, to determine direction to seek in. This makes, ah, quite a difference to card placement feel.\n
+- Better handling of corrupt save files\n
+- More variety in the menu screen promo blocks\n
+- Fixed Exile content bugs: Velvet, Medusa, Book of Suns (which I thought had been fixed!)\n
+- OSX/GOG now works again\n
+- Substantial fixed and upgrades for modding. Many thanks to Chelnoque. More details in MODDING_README\n
+- Animations and images should work correctly in mods\n
+- Options Panel now better supports mod-driven config options (see /testcontent/core/settings/z_mod_config_demo.json)\n
+- More stable modding incompatibility / interoperability\n
+- More modding commands - see MODDING_README and /testcontent/core/settings/mod_ops_demo.json",
+			"icon": "dancerjobecdysisa"
+			},
+			{			"id": "versionnews.2022.4.s.1",
+			"label": "2022.4.s.1 SARGASSO",
+	"description": 
+	"- Quick fix for silliness with the starting dropzone alignment\n
+	- Fixed lots of Japanese loc garbling. Particular thanks to Clocq for their work on this!\n
+	- Console slot now allows stackables. \n
+- Fix for insane bug where game became unresponsive when you alt-tabbed out of the Mansus. (I caused this bug.) \n
+- Applied kibble to cat bowl to shut up cat. You don't think that's a bug but then you don't have to listen to this monster.",
+			"icon": "vaulteveningisles1"
+			},
+				{"id": "versionnews.2022.3.r1",
+			"label": "2022.3.q.1 RIGOLETTO",
+				"description": "- big token snap improvement (position wasn't updating when your pointer was above a ghost)\n
+- Tokens now drag from the cursor position where you pick 'em up \n
+- Right/double-click to send now goes reliably to closest token, if no window is open\n
+- Book of Suns in EXILE can now be assembled again, again.\n
+- Medusa now gives pentiments again.\n
+- Prev and next buttons for notes now show usable usefully again\n.
+- A once-stacked token returning to its stack after a window is closed will now merge with that stack.\n
+- Corpses now retain more effects from their previous lives (again).\n
+- Possible fix for Mac Monterey issues on GOG",
+"icon": "lunatic"},
+			{"id": "versionnews.2022.3.q1",
+			"label": "2022.3.q.1 QUIETPLACE",
+				"description": "- EXPERIMENTAL: Hold SHIFT and click multiple cards to drag them at once. \n
+- You can now drop cards in drop zones directly. I didn't think anyone would want to, but you do! You mad fools! So now you can!\n
+- Restored some visual flair to newly spawned verb tiles.\n
+- A little bit more proofing against one save-corruption scenario. \n
+- Tweaked zoom factors.\n
+- Fixed Sanskrit Text icon",
+"icon": "leoninetantrasanskrit"},
+		{"id": "versionnews.2022.3.p.1",
+			"label": "2022.3.p.1 PORIN",
+				"description": "- card ghosts more appropriately spectral\n
+- cursor key pan works again\n
+- edge scrolling (again) only works when you're holding a token.\n
+- added more flexibility to card placing, again\n
+- greedy slots will no longer try to double-grab at the end of their cycle\n
+- fixed embarrassingly long-standing but with Dancing for Heart Scars\n
+- releasing mouse button after a dragged card has been grabbed should no longer cause weirdness\n
+- slightly more robustness when mods are removed (no promises)\n",
+"icon": "loc.shrine.nameless"},
+		{"id": "versionnews.2022.3.o.1",
+			"label": "2022.3.o.1 ORFEO",
+				"description": "- Fix to prevent exhausted cards trying to stack with their unexhausted cousins\n
+- Fix to prevent cards returning to the same spot when another card is now there.\n
+- Basic fix for edge scrolling (I'll refine)\n
+- Fix (I hope) for Mansus cards getting stuck on return to the waking world.\n
+- Fix for very old bug in Priest DLC where a useless Refiring card appeared\n",
+"icon": "domicile.valletta"},
+		{"id": "versionnews.2022.3.n.1",
+			"label": "2022.3.n.1 NEWMOON",
+				"description": "- Cards at start of new game no longer annoyingly unaligned with grid.\n
+- Magnet slots now grab from tabletop->outputs->slots, in that order.\n
+- Cards you're dragging count as 'on the tabletop' for that priority :)\n
+- When a card decays at the exact moment it reaches a greedy slot, it no longer causes a confusing info popup.\n
+- Teeny border on elements in situation.\n
+- Fixes for some obscure save state problems\n",
+"icon": "vaultfloating1"},
+		{"id": "versionnews.2022.3.m.1",
+			"label": "2022.3.m.1 MARSYAS",
+				"description": "- **Overhaul of card placement and grid snap**\n
+- Cloud save works for new save file format\n
+- Fixed 'Canterville' crash\n
+- Fixed 'Leucrotta' issue with child slots eating cards on game load\n
+- Fixed Shattered/Burgeoning Risen summons\n
+- Experimentally removed experimental post-processing filter
+- Mansus exit portal no longer looks like a coder threw up on it\n",
+"icon": "rarity.heart"},				
+		{ "id": "versionnews.2022.3.l.3",
+			"label": "2022.3.l.3 LAKME",
+				"description": "- Drawing a second unique card no longer SCREWS UP THE SECOND CARD.\n
+				- Fixed 'Esau' card-vanishing bug.\n
+- Stacks of cards no longer calculate multiples of their aspect when determining if you can put em in a slot.\n
+- Fixed crash on exiting Mansus.\n
+- Reduced log spam.\n
+- Turned off some caching code which was making stacked cards misbehave.",
+"icon": "memory.joyful"
+			},						
+	{ "id": "versionnews.2022.3.k.1",
+			"label": "2022.3.k.1 KNOTGARDEN",
+				"description": "- If you visited the Mansus too often, your save would eventually eat your memory and crash. On brand but no fun. Fixed\n
+- Fixed another Mansus-related crash.\n
+- Fixed another angle on the 'Gryla' bug.\n
+- Stacked cards aspects don't show multiplied by stack total in the info window\n,
+- Double-click or right-click to send will now remember the card's original location.\n",
+"icon": "apostleforge.pillar2.dormant"
+			},
+								{ "id": "versionnews.2022.3.j.1",
+			"label": "2022.3.j.1 JENUFA",
+				"description": "- Fixed that bloody bug where everyone's Glover and Glover job was disappearing, and some similar issues.\n
+- Post-Mansus pause now definitely fixed. (It wasn't working if you quite reasonably pressed the space bar instead of N.)\n
+- Fixed clipping plane issue at farthest zoom\n
+- More consistent fix for 'Glugageggir' bug\n
+- Probable fix for game-breaking bug when game is played in English with Turkish regional settings in Windows. fml.\n",
+"icon": "locationbookdealer"
+			},
+							{ "id": "versionnews.2022.3.i.1",
+			"label": "2022.3.i.1 IRIS",
+				"description": "- Missing verb slots restored to verbs. \n
+- Increased distance of farthest zoom level\n
+- Cards now autostack in preference to dropzone.",
+"icon": "encirclingtantrasanskrit"
+			},
+						{ "id": "versionnews.2022.3.h.1",
+			"label": "2022.3.h.1 HAGITH",
+				"description": "- Fixed nasty set of 'Gryla'-related crashes around decaying cards \n
+- Game ending no longer crashes with default lorem ipsum text\n
+- Better logging for speed changes, so I can work out why pause still sometimes sticks",
+"icon": "apostlegrail.pillar1"
+			}
+		
+		]
+
+}
+

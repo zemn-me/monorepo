@@ -5,17 +5,55 @@ package(default_visibility = ["//visibility:public"])
 
 ts_project(
     name = "cultist",
-    srcs = ["index.ts"],
+    srcs = ["index.ts"],  # keep
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":action",
-        ":element",
-        ":history",
-        ":recipe",
+        ":action",  # keep
+        ":content",
+        ":element",  # keep
+        ":game",  # keep
+        ":history",  # keep
+        ":recipe",  # keep
+        ":types",  # keep
+        ":verb",  # keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/uuid",  # keep
+        "//:node_modules/immutable",  # keep
+        "//project/cultist/state",  # keep
+    ],
+)
+
+ts_project(
+    name = "game",
+    srcs = ["game.ts"],
+    deps = [
+        ":content",
         ":types",
-        ":verb",
-        "//:node_modules/@types/uuid",
-        "//:node_modules/immutable",
-        "//project/cultist/state",
+    ],
+)
+
+ts_project(
+    name = "content",
+    srcs = ["content.ts"],
+    deps = [":types"],
+)
+
+ts_project(
+    name = "content_node",
+    srcs = ["content_node.ts"],
+    deps = [
+        ":content",
+        "//:node_modules/@types/node",
+        "//project/cultist/content:core",
+    ],
+)
+
+jest_test(
+    name = "game_test",
+    srcs = ["game_test.js"],
+    deps = [
+        ":cultist_tests",
+        "//project/cultist/content:core",
     ],
 )
 
@@ -132,4 +170,29 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "content.ts",
+        "content_node.ts",
+        "game.ts",
+        "game_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "cultist_tests",
+    srcs = ["game_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":content_node",
+        ":cultist",
+        ":game",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",  # keep
+        "//:node_modules/@types/node",
+    ],
 )

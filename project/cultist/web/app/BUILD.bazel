@@ -1,0 +1,37 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "app",
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
+    assets = ["base.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//project/cultist/react",
+        "//ts/next.js/types/next-compiled",
+        "@monorepo//project/cultist:content_node",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
