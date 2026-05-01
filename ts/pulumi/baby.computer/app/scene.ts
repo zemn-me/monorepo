@@ -327,132 +327,132 @@ export function createPenguinWorld(): PenguinWorld {
 	const penguins: Penguin[] = [
 		penguin(
 			'Mabel',
-			'Adelie',
-			'Collects smooth pebbles and does not respect personal space.',
+			'Adélie (Pygoscelis adeliae)',
+			'Breeds on Antarctic coasts and is known for building pebble nests.',
 			4.8,
 			0.705,
 			point<3>(-15.5, 0, -7.5)
 		),
 		penguin(
 			'Dottie',
-			'Gentoo',
-			'Stares at the crack in the iceberg like it owes her money.',
+			'Gentoo (Pygoscelis papua)',
+			'Recognizable by a white head stripe and among the fastest swimming penguins.',
 			6.6,
 			0.825,
 			point<3>(10.5, 0, -11.8)
 		),
 		penguin(
 			'Wobble',
-			'Emperor',
-			'Very tall. Absolutely certain this is his iceberg now.',
+			'Emperor (Aptenodytes forsteri)',
+			'Tallest living penguin and famous for winter breeding on Antarctic sea ice.',
 			31.0,
 			1.18,
 			point<3>(15.2, 0, 11.2)
 		),
 		penguin(
 			'Pip',
-			'Little',
-			'Has discovered sliding and will not stop.',
+			'Little (Eudyptula minor)',
+			'Smallest penguin species, with blue-tinged plumage and coastal colonies.',
 			1.2,
 			0.34,
 			point<3>(-7.2, 0, 14.8)
 		),
 		penguin(
 			'Aunt Sleet',
-			'Chinstrap',
-			'Judges your footwork, but quietly appreciates the visit.',
+			'Chinstrap (Pygoscelis antarcticus)',
+			'Named for its thin black facial band and common around Antarctic islands.',
 			5.1,
 			0.72,
 			point<3>(1.1, 0, 3.1)
 		),
-		penguin(
-			'Rook',
-			'Adelie',
-			'Marches in tiny stern circles and then forgets why.',
-			4.5,
-			0.69,
-			point<3>(-19.2, 0, 4.6)
-		),
-		penguin(
-			'Purl',
-			'Little',
-			'Keeps trying to befriend the sea spray.',
-			1.1,
-			0.33,
-			point<3>(8.2, 0, 18.3)
-		),
-		penguin(
-			'Comet',
-			'Gentoo',
-			'Cuts diagonally across the ice as if late for something.',
-			6.9,
-			0.84,
-			point<3>(18.8, 0, -2.2)
-		),
-		penguin(
-			'Brine',
-			'Chinstrap',
-			'Looks windswept even when the air is still.',
-			4.9,
-			0.71,
-			point<3>(-2.8, 0, -15.2)
-		),
-		penguin(
-			'Halftone',
-			'Adelie',
-			'Will inspect your shoes with professional focus.',
-			5.0,
-			0.71,
-			point<3>(6.4, 0, 8.6)
-		),
-		penguin(
-			'Marchpane',
-			'Emperor',
-			'Stands apart from the colony and radiates ceremony.',
-			28.4,
-			1.14,
-			point<3>(-11.8, 0, 17.1)
-		),
-		penguin(
-			'Skiff',
-			'Gentoo',
-			'Seems deeply invested in a private navigation scheme.',
-			6.3,
-			0.81,
-			point<3>(21.5, 0, 7.1)
-		),
-		penguin(
-			'Flurry',
-			'Chinstrap',
-			'Keeps pausing mid-waddle to glare at the horizon.',
-			5.0,
-			0.72,
-			point<3>(-22.5, 0, -10.4)
-		),
-		penguin(
-			'Nori',
-			'Little',
-			'Moves like a dropped mitten skidding over polished ice.',
-			1.3,
-			0.34,
-			point<3>(12.6, 0, 22.4)
-		),
-		penguin(
-			'Ledger',
-			'Adelie',
-			'Keeps a suspiciously exact mental map of every pebble.',
-			4.7,
-			0.70,
-			point<3>(-0.6, 0, 20.6)
-		),
-		penguin(
-			'Tallow',
-			'Emperor',
-			'Occupies the ridge like a mildly disappointed monument.',
-			30.2,
-			1.17,
-			point<3>(4.4, 0, -21.5)
-		),
+			penguin(
+				'Rook',
+				'King (Aptenodytes patagonicus)',
+				'Second-largest penguin, nesting in dense colonies on subantarctic islands.',
+				13.2,
+				0.95,
+				point<3>(-19.2, 0, 4.6)
+			),
+			penguin(
+				'Purl',
+				'African (Spheniscus demersus)',
+				'Only African penguin species, breeding along South Africa and Namibia.',
+				3.2,
+				0.66,
+				point<3>(8.2, 0, 18.3)
+			),
+			penguin(
+				'Comet',
+				'Macaroni (Eudyptes chrysolophus)',
+				'Widespread crested penguin with bright yellow head plumes.',
+				5.4,
+				0.72,
+				point<3>(18.8, 0, -2.2)
+			),
+			penguin(
+				'Brine',
+				'Royal (Eudyptes schlegeli)',
+				'Breeds almost entirely on Macquarie Island and resembles macaroni penguins.',
+				5.8,
+				0.75,
+				point<3>(-2.8, 0, -15.2)
+			),
+			penguin(
+				'Halftone',
+				'Rockhopper (Eudyptes chrysocome)',
+				'Small crested species known for hopping over rocky shorelines.',
+				2.6,
+				0.54,
+				point<3>(6.4, 0, 8.6)
+			),
+			penguin(
+				'Marchpane',
+				'Fiordland crested (Eudyptes pachyrhynchus)',
+				'New Zealand endemic that nests in temperate rainforest near the coast.',
+				3.7,
+				0.61,
+				point<3>(-11.8, 0, 17.1)
+			),
+			penguin(
+				'Skiff',
+				'Snares (Eudyptes robustus)',
+				'Breeds only on the Snares Islands and forages widely at sea.',
+				3.5,
+				0.62,
+				point<3>(21.5, 0, 7.1)
+			),
+			penguin(
+				'Flurry',
+				'Humboldt (Spheniscus humboldti)',
+				'Pacific coastal penguin supported by the cold Humboldt Current.',
+				4.3,
+				0.67,
+				point<3>(-22.5, 0, -10.4)
+			),
+			penguin(
+				'Nori',
+				'Magellanic (Spheniscus magellanicus)',
+				'Breeds in Patagonia and migrates north along South American coasts.',
+				4.1,
+				0.69,
+				point<3>(12.6, 0, 22.4)
+			),
+			penguin(
+				'Ledger',
+				'Galápagos (Spheniscus mendiculus)',
+				'Only penguin naturally found at the Equator, limited to the Galápagos.',
+				2.4,
+				0.50,
+				point<3>(-0.6, 0, 20.6)
+			),
+			penguin(
+				'Tallow',
+				'Yellow-eyed (Megadyptes antipodes)',
+				'Rare New Zealand species with pale yellow eyes and a light head band.',
+				6.3,
+				0.76,
+				point<3>(4.4, 0, -21.5)
+			),
 	];
 
 	const penguinBodies = penguins.map((penguin, index) =>
