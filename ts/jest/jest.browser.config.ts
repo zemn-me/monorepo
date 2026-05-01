@@ -7,6 +7,7 @@ export default {
 	reporters: ['default'],
 	testMatch: ['**/*_test.js'],
 	moduleNameMapper: {
+		'\\.(css|less|sass|scss)$': '<rootDir>/ts/jest/style_mock.js',
 		'examples_jest/(.*)': '<rootDir>/$1',
 	},
 	// https://github.com/facebook/jest/issues/12889#issuecomment-1193908448
