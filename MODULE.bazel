@@ -355,12 +355,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "46d424e9a59a70b1415917cac94980698b4e4726"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "1a72b5a9c1990990a20bf3571a2382e9b2046fc3"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "25ee0ed4b4f61e1dc040d69ffff775c916cbd480b57cb2f9e0f1dac2c0489423",
+    sha256 = "4ed5d4aa277d0657c07b5fad882cc2d53d718c5eb2550a9935b24d9976a3d752",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
@@ -472,13 +472,13 @@ http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2026a"
+TZ_VERSION = "2026b"
 
 http_archive(
     name = "com_github_eggbert_tz",
     build_file_content = """
 exports_files(glob(["**/*"]))""",
-    integrity = "sha256-jWgbVIAs1/qXbkfDLqKjmNB0PDMdGygNP9ndZJ0Y0TU=",
+    integrity = "sha256-sl0TRzbwQyRVAbWb3G0ibbh7DXRS6aSxRbBMLtZ6Xbg=",
     strip_prefix = "tz-" + TZ_VERSION,
     # auto-integrity
     url = "https://github.com/eggert/tz/archive/refs/tags/" + TZ_VERSION + ".zip",
@@ -548,7 +548,7 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.11"
+RUFF_VERSION = "0.15.12"
 
 # For Apple Silicon macOS
 http_archive(
