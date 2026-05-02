@@ -248,8 +248,8 @@ dependencies:
     specifier: 0.0.6
     version: 0.0.6(react-dom@19.2.5)(react@19.2.5)
   zod:
-    specifier: 4.3.6
-    version: 4.3.6
+    specifier: 4.4.0
+    version: 4.4.0
 
 devDependencies:
   '@actions/core':
@@ -5280,7 +5280,7 @@ packages:
       fs-extra: 11.3.4
       toml-eslint-parser: 0.12.0
       upath: 2.0.1
-      zod: 4.3.6
+      zod: 4.4.0
     dev: true
 
   /@renovatebot/good-enough-parser@2.0.0:
@@ -10209,8 +10209,8 @@ packages:
       '@babel/parser': 7.29.2
       eslint: 9.39.4
       hermes-parser: 0.25.1
-      zod: 4.3.6
-      zod-validation-error: 4.0.2(zod@4.3.6)
+      zod: 4.4.0
+      zod-validation-error: 4.0.2(zod@4.4.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -19311,13 +19311,13 @@ packages:
     resolution: {integrity: sha512-raRj6r0gPzopFm5XWBJZr/NuV4EEnT4iE+U3dp5FV5pCb588Gmm3zLIp/j9yqqcMiHH8VNQlerLTgOqL7krh6w==}
     dev: true
 
-  /zod-validation-error@4.0.2(zod@4.3.6):
+  /zod-validation-error@4.0.2(zod@4.4.0):
     resolution: {integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
     dependencies:
-      zod: 4.3.6
+      zod: 4.4.0
     dev: true
 
   /zod@3.25.76:
@@ -19326,6 +19326,10 @@ packages:
 
   /zod@4.3.6:
     resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+    dev: true
+
+  /zod@4.4.0:
+    resolution: {integrity: sha512-932TE3dEKhhYkEZFv6meaxLaCyg1m6LSI0ETKCIyUqIim+KgIsB/kha/4CKwDEbYgMzS5QxAe2mtDPpaHLHdsQ==}
 
   /zustand@5.0.12(@types/react@18.3.28)(react@19.2.5)(use-sync-external-store@1.6.0):
     resolution: {integrity: sha512-i77ae3aZq4dhMlRhJVCYgMLKuSiZAaUPAct2AksxQ+gOtimhGMdXljRT21P5BNpeT4kXlLIckvkPM029OljD7g==}
