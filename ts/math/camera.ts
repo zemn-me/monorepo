@@ -7,6 +7,7 @@ import * as homog from '#root/ts/math/homog.js';
 import { defaultUp, lookAt } from "#root/ts/math/lookAt.js";
 import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
+import { and_then_flatten, Ok, type Result } from '#root/ts/result/result.js';
 
 export type FocalLength = number;
 
@@ -39,29 +40,32 @@ export const camera = (
 	point: cartesian.Point3D,
 	focalLength: number = 1,
 	up: cartesian.Point3D = defaultUp,
-): cartesian.Point2D =>
+): Result<cartesian.Point2D, Error> =>
 	// yeah so when you render a scene
 	// "from" a camera, you just transform
 	// the rest of the world and "keep"
 	// the camera at 0,0
 
-	flow(
-		Quaternion.rotateVector(
-			lookAt(
-				position,
-				lookingAt,
-				up
-			),
-			cartesian.sub<1, 3>(point, position)
+	and_then_flatten(
+		lookAt(
+			position,
+			lookingAt,
+			up
 		),
-		[
-			(pt: cartesian.Point3D) => cartToHomog<3>(pt),
-			(pt: homog.Point3D) => transform(
-				pt, focalLength
+		orientation => and_then_flatten(
+			Quaternion.rotateVector(
+				orientation,
+				cartesian.sub<1, 3>(point, position)
 			),
-			(p: homog.Point2D) => homogToCart<2>(p)
-		]
+			rotated => Ok(flow(
+				rotated,
+				[
+					(pt: cartesian.Point3D) => cartToHomog<3>(pt),
+					(pt: homog.Point3D) => transform(
+						pt, focalLength
+					),
+					(p: homog.Point2D) => homogToCart<2>(p)
+				]
+			))
+		)
 	)
-
-
-
