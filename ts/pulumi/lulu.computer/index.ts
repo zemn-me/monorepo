@@ -62,10 +62,10 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_lulu.computer`,
 			{
-				index: 'ts/pulumi/lulu.computer/out/index.html',
-				notFound: 'ts/pulumi/lulu.computer/out/index.html',
+				index: 'ts/pulumi/lulu.computer/build/index.html',
+				notFound: 'ts/pulumi/lulu.computer/build/index.html',
 				tags,
-				directory: 'ts/pulumi/lulu.computer/out',
+				directory: 'ts/pulumi/lulu.computer/build',
 				zoneId: zone.then(zone => zone.zoneId),
 				domain: domain.domainName.apply(domainName =>
 					[...(args.staging ? ['staging'] : []), domainName].join('.')

@@ -37,10 +37,10 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_eggsfordogs.com`,
 			{
-				index: 'ts/pulumi/eggsfordogs.com/out/index.html',
-				notFound: 'ts/pulumi/eggsfordogs.com/out/index.html',
+				index: 'ts/pulumi/eggsfordogs.com/build/index.html',
+				notFound: 'ts/pulumi/eggsfordogs.com/build/index.html',
 				tags,
-				directory: 'ts/pulumi/eggsfordogs.com/out',
+				directory: 'ts/pulumi/eggsfordogs.com/build',
 				zoneId: args.zoneId,
 				domain: domainName,
 				noIndex: args.staging,

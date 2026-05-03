@@ -54,9 +54,9 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_baby.computer`,
 			{
 				noCostAllocationTag: true,
-				index: 'ts/pulumi/baby.computer/out/index.html',
-				notFound: 'ts/pulumi/baby.computer/out/index.html',
-				directory: 'ts/pulumi/baby.computer/out',
+				index: 'ts/pulumi/baby.computer/build/index.html',
+				notFound: 'ts/pulumi/baby.computer/build/index.html',
+				directory: 'ts/pulumi/baby.computer/build',
 				zoneId: zone.then(zone => zone.zoneId),
 				domain: targetDomain,
 				noIndex: args.staging,
