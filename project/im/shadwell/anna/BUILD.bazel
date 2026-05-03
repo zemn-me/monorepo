@@ -5,7 +5,7 @@ package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
 
 next_project(
     name = "next",
-    srcs = ["//ts/pulumi/shadwell.im/anna/pages"],
+    srcs = ["//project/im/shadwell/anna/pages"],
 )
 
 bazel_lint(

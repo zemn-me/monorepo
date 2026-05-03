@@ -5,10 +5,10 @@ package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
 
 next_project(
     name = "next",
-    srcs = ["//ts/pulumi/shadwell.im/kate/pages"],
+    srcs = ["//project/im/shadwell/kate/pages"],
 )
 
-# bazel run //ts/pulumi/shadwell.im/kate
+# bazel run //project/im/shadwell/kate
 # to test the website.
 alias(
     name = "kate",
