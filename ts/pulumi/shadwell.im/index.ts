@@ -39,8 +39,8 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_thomas_shadwell_im_website`,
 			{
-				index: 'ts/pulumi/shadwell.im/thomas/index.html',
-				directory: 'ts/pulumi/shadwell.im/thomas/',
+				index: 'project/im/shadwell/thomas/index.html',
+				directory: 'project/im/shadwell/thomas/',
 				zoneId: args.zoneId,
 				domain: ['thomas', args.domain].join('.'),
 				noIndex: args.noIndex,
@@ -61,8 +61,8 @@ export class Component extends Pulumi.ComponentResource {
 		)
 
 		const luke = new Website(`${name}_luke_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/luke/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/luke/out',
+			index: 'project/im/shadwell/luke/out/index.html',
+			directory: 'project/im/shadwell/luke/out',
 			zoneId: args.zoneId,
 			domain: ['luke', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -71,8 +71,8 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const kate = new Website(`${name}_kate_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/kate/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/kate/out',
+			index: 'project/im/shadwell/kate/out/index.html',
+			directory: 'project/im/shadwell/kate/out',
 			zoneId: args.zoneId,
 			domain: ['kate', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -81,8 +81,8 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const anna = new Website(`${name}_anna_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/anna/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/anna/out',
+			index: 'project/im/shadwell/anna/out/index.html',
+			directory: 'project/im/shadwell/anna/out',
 			zoneId: args.zoneId,
 			domain: ['anna', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -92,8 +92,8 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const lucy = new Website(`${name}_lucy_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/lucy/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/lucy/out',
+			index: 'project/im/shadwell/lucy/out/index.html',
+			directory: 'project/im/shadwell/lucy/out',
 			zoneId: args.zoneId,
 			domain: ['lucy', args.domain].join('.'),
 			noIndex: args.noIndex,
