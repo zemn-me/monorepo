@@ -1,11 +1,15 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
 import {and_then,
+  and_then_flatten,
+  bind_result,
   Err,
   flatten,
   is_err,
   is_ok,
+  map_result,
   Ok,
+  pipe_result,
   result_and,
   result_collect,
   result_promise_transpose,
@@ -97,6 +101,44 @@ describe('Result Utilities', () => {
       const result = and_then(Err(error), (v: number) => v * 3);
       expect(is_err(result)).toBe(true);
       expect(unwrap_err(result)).toEqual(error);
+    });
+  });
+
+  describe('map_result', () => {
+    it('returns a curried mapper for pipeline-style use', () => {
+      const result = map_result((v: number) => v * 2)(Ok(3));
+      expect(unwrap(result)).toBe(6);
+    });
+  });
+
+  describe('bind_result', () => {
+    it('returns a curried flat-mapper for pipeline-style use', () => {
+      const result = bind_result((v: number) => v > 0 ? Ok(v * 2) : Err('bad'))(Ok(3));
+      expect(unwrap(result)).toBe(6);
+    });
+  });
+
+  describe('pipe_result', () => {
+    it('chains Result-returning functions from left to right', () => {
+      const result = pipe_result(
+        Ok(2),
+        v => Ok(v + 3),
+        v => Ok(v * 4),
+        v => Ok(`value:${v}`)
+      );
+
+      expect(unwrap(result)).toBe('value:20');
+    });
+
+    it('stops at the first Err', () => {
+      const result = pipe_result(
+        Ok(2),
+        v => Ok(v + 3),
+        () => Err('fail'),
+        () => Ok('never')
+      );
+
+      expect(unwrap_err(result)).toBe('fail');
     });
   });
 

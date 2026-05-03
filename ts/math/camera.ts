@@ -7,6 +7,8 @@ import * as homog from '#root/ts/math/homog.js';
 import { defaultUp, lookAt } from "#root/ts/math/lookAt.js";
 import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
+import { pipe } from '#root/ts/pipe.js';
+import { bind_result, map_result, type Result } from '#root/ts/result/result.js';
 
 export type FocalLength = number;
 
@@ -29,7 +31,6 @@ export const transform: (i: Homog.Point3D, f?: FocalLength) => Homog.Point2D = (
 
 export const Edges = Symbol();
 
-
 export const camera = (
 	position: cartesian.Point3D,
 	lookingAt: cartesian.Point3D,
@@ -39,29 +40,25 @@ export const camera = (
 	point: cartesian.Point3D,
 	focalLength: number = 1,
 	up: cartesian.Point3D = defaultUp,
-): cartesian.Point2D =>
-	// yeah so when you render a scene
-	// "from" a camera, you just transform
-	// the rest of the world and "keep"
-	// the camera at 0,0
-
-	flow(
-		Quaternion.rotateVector(
-			lookAt(
-				position,
-				lookingAt,
-				up
-			),
-			cartesian.sub<1, 3>(point, position)
+): Result<cartesian.Point2D, Error> =>
+	pipe(
+		lookAt(
+			position,
+			lookingAt,
+			up
 		),
-		[
-			(pt: cartesian.Point3D) => cartToHomog<3>(pt),
-			(pt: homog.Point3D) => transform(
-				pt, focalLength
-			),
-			(p: homog.Point2D) => homogToCart<2>(p)
-		]
+		bind_result(orientation => Quaternion.rotateVector(
+			orientation,
+			cartesian.sub<1, 3>(point, position)
+		)),
+		map_result(rotated => flow(
+			rotated,
+			[
+				(pt: cartesian.Point3D) => cartToHomog<3>(pt),
+				(pt: homog.Point3D) => transform(
+					pt, focalLength
+				),
+				(p: homog.Point2D) => homogToCart<2>(p)
+			]
+		))
 	)
-
-
-
