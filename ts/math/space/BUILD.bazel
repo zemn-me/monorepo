@@ -48,5 +48,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/math",
         "//ts/math/space/render",
+        "//ts/result",
     ],
 )

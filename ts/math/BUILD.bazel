@@ -28,6 +28,8 @@ ts_project(
         "//:node_modules/@types/ramda",
         "//:node_modules/ramda",
         "//ts",
+        "//ts/either",
+        "//ts/result",
     ],
 )
 
@@ -105,5 +107,6 @@ ts_project(
         ":math",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/result",
     ],
 )
