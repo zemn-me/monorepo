@@ -2,7 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 
 import { point } from '#root/ts/math/cartesian.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import { box, pyramid, rigidTransform } from '#root/ts/math/wireframe.js';
+import { box, octahedron, pyramid, rigidTransform, triangularPrism } from '#root/ts/math/wireframe.js';
 
 describe('wireframe', () => {
 	test('box returns the expected twelve edges', () => {
@@ -29,6 +29,31 @@ describe('wireframe', () => {
 		expect(edges).toContainEqual([
 			point<3>(1, 1, 0),
 			point<3>(0, 0, 5),
+		]);
+	});
+
+
+	test('octahedron has 12 edges and top vertex', () => {
+		const edges = octahedron(4);
+
+		expect(edges).toHaveLength(12);
+		expect(edges).toContainEqual([
+			point<3>(0, 2, 0),
+			point<3>(2, 0, 0),
+		]);
+	});
+
+	test('triangular prism creates linked front and back faces', () => {
+		const edges = triangularPrism(6, 4, 10);
+
+		expect(edges).toHaveLength(9);
+		expect(edges).toContainEqual([
+			point<3>(0, 2, 5),
+			point<3>(0, 2, -5),
+		]);
+		expect(edges).toContainEqual([
+			point<3>(-3, -2, 5),
+			point<3>(-3, -2, -5),
 		]);
 	});
 
