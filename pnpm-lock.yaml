@@ -415,8 +415,8 @@ devDependencies:
     specifier: 29.7.0
     version: 29.7.0
   jsdom:
-    specifier: 29.1.0
-    version: 29.1.0
+    specifier: 29.1.1
+    version: 29.1.1
   mime:
     specifier: 4.1.0
     version: 4.1.0
@@ -12851,8 +12851,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /jsdom@29.1.0:
-    resolution: {integrity: sha512-YNUc7fB9QuvSSQWfrH0xF+TyABkxUwx8sswgIDaCrw4Hol8BghdZDkITtZheRJeMtzWlnTfsM3bBBusRvpO1wg==}
+  /jsdom@29.1.1:
+    resolution: {integrity: sha512-ECi4Fi2f7BdJtUKTflYRTiaMxIB0O6zfR1fX0GXpUrf6flp8QIYn1UT20YQqdSOfk2dfkCwS8LAFoJDEppNK5Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
