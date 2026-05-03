@@ -9,6 +9,7 @@ import {
 	renderSegments,
 	type StyledSegment3D,
 } from '#root/ts/math/wireframe_render.js';
+import { unwrap } from '#root/ts/result/result.js';
 
 describe('wireframe_render', () => {
 	test('projectCameraPoint keeps a forward point at screen centre', () => {
@@ -29,7 +30,7 @@ describe('wireframe_render', () => {
 		};
 
 		expect(
-			projectWorldPoint(point<3>(0, 0, -1), pose, perspective(800, 600))
+			unwrap(projectWorldPoint(point<3>(0, 0, -1), pose, perspective(800, 600)))
 		).toBeNull();
 	});
 
@@ -46,7 +47,7 @@ describe('wireframe_render', () => {
 			),
 		];
 
-		const rendered = renderSegments(scene, pose, perspective(800, 600));
+		const rendered = unwrap(renderSegments(scene, pose, perspective(800, 600)));
 
 		expect(rendered).toHaveLength(1);
 		expect(rendered[0]!.x1).toBeLessThan(rendered[0]!.x2);

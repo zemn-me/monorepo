@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 
 import { point } from '#root/ts/math/cartesian.js';
+import { unwrap } from '#root/ts/result/result.js';
 import {
 	createPenguinWorld,
 	nearestPenguin,
@@ -36,7 +37,7 @@ describe('baby.computer scene', () => {
 
 	test('prefers the nearest penguin that is actually visible in the viewport', () => {
 		const world = createPenguinWorld();
-		const visible = nearestVisiblePenguin(
+		const visible = unwrap(nearestVisiblePenguin(
 			[
 				{
 					name: 'Behind You',
@@ -58,7 +59,7 @@ describe('baby.computer scene', () => {
 			world.startPose,
 			1200,
 			800
-		);
+		));
 
 		expect(visible).not.toBeNull();
 		expect(visible!.penguin.name).toBe('In Front');

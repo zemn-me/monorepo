@@ -18,6 +18,7 @@ import {
 	renderScene,
 	stepPlayer,
 } from '#root/project/zemn.me/app/experiments/arena/scene.js';
+import { is_err, unwrap, unwrap_err } from '#root/ts/result/result.js';
 import style from '#root/project/zemn.me/app/experiments/arena/style.module.css';
 
 const scene = createArenaScene();
@@ -95,9 +96,6 @@ export function ArenaClient() {
 
 	const [locked, setLocked] = useState(false);
 	const [pose, setPose] = useState<PlayerPose>(DEFAULT_POSE);
-	const [segments, setSegments] = useState<RenderedSegment[]>(() =>
-		renderScene(scene, DEFAULT_POSE, SVG_WIDTH, SVG_HEIGHT)
-	);
 	const [motionAvailable, setMotionAvailable] = useState(false);
 	const [motionEnabled, setMotionEnabled] = useState(false);
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
@@ -155,7 +153,6 @@ export function ArenaClient() {
 
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
 		}
 
 		function onDeviceOrientation(event: DeviceOrientationEvent) {
@@ -190,7 +187,6 @@ export function ArenaClient() {
 
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
 		}
 
 		function animate(timestamp: number) {
@@ -213,7 +209,6 @@ export function ArenaClient() {
 				const next = stepPlayer(poseRef.current, input, deltaSeconds);
 				poseRef.current = next;
 				setPose(next);
-				setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
 			}
 
 			frameRef.current = window.requestAnimationFrame(animate);
@@ -307,7 +302,6 @@ export function ArenaClient() {
 		};
 		poseRef.current = next;
 		setPose(next);
-		setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
 	}
 
 	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
@@ -317,7 +311,14 @@ export function ArenaClient() {
 		}
 	}
 
-	const forward = forwardFromPose(pose);
+	const segmentsResult = renderScene(scene, pose, SVG_WIDTH, SVG_HEIGHT);
+	const forwardResult = forwardFromPose(pose);
+	const renderError =
+		is_err(segmentsResult) ? unwrap_err(segmentsResult)
+		: is_err(forwardResult) ? unwrap_err(forwardResult)
+		: null;
+	const segments: RenderedSegment[] = is_err(segmentsResult) ? [] : unwrap(segmentsResult);
+	const forward = is_err(forwardResult) ? null : unwrap(forwardResult);
 
 	return (
 		<main className={style.shell}>
@@ -366,9 +367,18 @@ export function ArenaClient() {
 						</div>
 						<div>
 							<dt>forward</dt>
-							<dd>{forward[0]![0]!.toFixed(2)}, {forward[1]![0]!.toFixed(2)}, {forward[2]![0]!.toFixed(2)}</dd>
+							<dd>
+								{forward == null
+									? 'unavailable'
+									: `${forward[0]![0]!.toFixed(2)}, ${forward[1]![0]!.toFixed(2)}, ${forward[2]![0]!.toFixed(2)}`}
+							</dd>
 						</div>
 					</dl>
+					{renderError != null ? (
+						<p className={style.renderError}>
+							Render degraded: {renderError.message}
+						</p>
+					) : null}
 				</div>
 				<div className={style.viewportWrap}>
 					<svg

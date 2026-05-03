@@ -26,6 +26,7 @@ ts_project(
         "//:node_modules/react-dom",
         "//ts/math",
         "//ts/next.js/types/next-compiled",
+        "//ts/result",
     ],
 )
 
@@ -38,6 +39,7 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//ts/math",
+        "//ts/result",
     ],
 )
 

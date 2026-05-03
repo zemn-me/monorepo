@@ -3,7 +3,15 @@
  */
 
 import { point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
+import { pipe } from "#root/ts/pipe.js";
 import * as Quaternion from "#root/ts/math/quaternion.js";
+import {
+	and_then,
+	and_then_flatten,
+	Err,
+	Ok,
+	type Result,
+} from "#root/ts/result/result.js";
 
 export type DualQuaternion = <R>(selector: (real: Quaternion.Quaternion, dual: Quaternion.Quaternion) => R) => R;
 
@@ -12,6 +20,12 @@ export const from = (real: Quaternion.Quaternion, dual: Quaternion.Quaternion): 
 
 export const real = (dq: DualQuaternion): Quaternion.Quaternion => dq(real => real);
 export const dual = (dq: DualQuaternion): Quaternion.Quaternion => dq((_, dual) => dual);
+
+const mapResult = <T, E, O>(f: (value: T) => O) =>
+	(result: Result<T, E>): Result<O, E> => and_then(result, f);
+
+const bindResult = <T, E, O, OE>(f: (value: T) => Result<O, OE>) =>
+	(result: Result<T, E>): Result<O, E | OE> => and_then_flatten(result, f);
 
 const map = (dq: DualQuaternion, f: (q: Quaternion.Quaternion) => Quaternion.Quaternion): DualQuaternion =>
 	dq((r, d) => from(f(r), f(d)));
@@ -44,45 +58,60 @@ export const multiply = (lhs: DualQuaternion, rhs: DualQuaternion): DualQuaterni
 
 export const length = (dq: DualQuaternion): number => Quaternion.length(real(dq));
 
-export const normalize = (dq: DualQuaternion): DualQuaternion => {
+export const normalize = (dq: DualQuaternion): Result<DualQuaternion, Error> => {
 	const realLen = Quaternion.length(real(dq));
 	if (realLen === 0) {
-		throw new Error("Cannot normalize a dual quaternion with zero real length.");
+		return Err(new Error("Cannot normalize a dual quaternion with zero real length."));
 	}
-	return map(dq, q => Quaternion.from(
+	return Ok(map(dq, q => Quaternion.from(
 		Quaternion.x(q) / realLen,
 		Quaternion.y(q) / realLen,
 		Quaternion.z(q) / realLen,
 		Quaternion.w(q) / realLen,
-	));
+	)));
 };
 
-export const transformPoint = (dq: DualQuaternion, p: Point3D): Point3D => {
-	const rotation = Quaternion.normalize(real(dq));
-	const translationQuat = Quaternion.multiply(dual(dq), Quaternion.inverse(rotation));
-	const translation = point<3>(
-		2 * Quaternion.x(translationQuat),
-		2 * Quaternion.y(translationQuat),
-		2 * Quaternion.z(translationQuat)
+export const transformPoint = (dq: DualQuaternion, p: Point3D): Result<Point3D, Error> =>
+	pipe(
+		Quaternion.normalize(real(dq)),
+		bindResult(rotation => pipe(
+			Quaternion.inverse(rotation),
+			bindResult(inverseRotation => pipe(
+				Quaternion.rotateVector(rotation, p),
+				mapResult(rotated => {
+					const translationQuat = Quaternion.multiply(dual(dq), inverseRotation);
+					const translation = point<3>(
+						2 * Quaternion.x(translationQuat),
+						2 * Quaternion.y(translationQuat),
+						2 * Quaternion.z(translationQuat)
+					);
+					return point<3>(
+						x(rotated) + x(translation),
+						y(rotated) + y(translation),
+						z(rotated) + z(translation)
+					);
+				})
+			))
+		))
 	);
-	const rotated = Quaternion.rotateVector(rotation, p);
-	return point<3>(x(rotated) + x(translation), y(rotated) + y(translation), z(rotated) + z(translation));
-};
 
 export const fromRotationTranslation = (
 	rotation: Quaternion.Quaternion,
 	translation: Point3D
-): DualQuaternion => {
-	const unitRotation = Quaternion.normalize(rotation);
-	const translationQuaternion = Quaternion.from(x(translation), y(translation), z(translation), 0);
-	const dualPart = Quaternion.multiply(translationQuaternion, unitRotation);
-	return from(
-		unitRotation,
-		Quaternion.from(
-			Quaternion.x(dualPart) * 0.5,
-			Quaternion.y(dualPart) * 0.5,
-			Quaternion.z(dualPart) * 0.5,
-			Quaternion.w(dualPart) * 0.5
-		)
+): Result<DualQuaternion, Error> =>
+	pipe(
+		Quaternion.normalize(rotation),
+		mapResult(unitRotation => {
+			const translationQuaternion = Quaternion.from(x(translation), y(translation), z(translation), 0);
+			const dualPart = Quaternion.multiply(translationQuaternion, unitRotation);
+			return from(
+				unitRotation,
+				Quaternion.from(
+					Quaternion.x(dualPart) * 0.5,
+					Quaternion.y(dualPart) * 0.5,
+					Quaternion.z(dualPart) * 0.5,
+					Quaternion.w(dualPart) * 0.5
+				)
+			);
+		})
 	);
-};

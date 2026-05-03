@@ -11,6 +11,7 @@ import {
 	type WorldSegment,
 } from '#root/project/zemn.me/app/experiments/arena/scene.js';
 import { point } from '#root/ts/math/cartesian.js';
+import { unwrap } from '#root/ts/result/result.js';
 
 describe('arena scene', () => {
 	test('moving forward follows yaw', () => {
@@ -115,7 +116,7 @@ describe('arena scene', () => {
 				}
 			),
 		];
-		const rendered = renderScene(scene, DEFAULT_POSE, 800, 600);
+		const rendered = unwrap(renderScene(scene, DEFAULT_POSE, 800, 600));
 
 		expect(rendered).toHaveLength(1);
 		expect(rendered[0]!.x1).toBeLessThan(rendered[0]!.x2);
@@ -129,7 +130,7 @@ describe('arena scene', () => {
 			pitch: 0,
 		};
 		const worldAhead = point<3>(10, DEFAULT_POSE.position[1]![0]!, 0);
-		const projected = projectWorldPoint(worldAhead, pose, 800, 600);
+		const projected = unwrap(projectWorldPoint(worldAhead, pose, 800, 600));
 
 		expect(projected).not.toBeNull();
 		expect(projected![0]![0]!).toBeCloseTo(400, 5);
@@ -143,13 +144,13 @@ describe('arena scene', () => {
 			yaw: Math.PI / 2,
 			pitch: Math.PI / 6,
 		};
-		const forward = forwardFromPose(pose);
+		const forward = unwrap(forwardFromPose(pose));
 		const worldAhead = point<3>(
 			pose.position[0]![0]! + forward[0]![0]! * 10,
 			pose.position[1]![0]! + forward[1]![0]! * 10,
 			pose.position[2]![0]! + forward[2]![0]! * 10,
 		);
-		const projected = projectWorldPoint(worldAhead, pose, 800, 600);
+		const projected = unwrap(projectWorldPoint(worldAhead, pose, 800, 600));
 
 		expect(projected).not.toBeNull();
 		expect(projected![0]![0]!).toBeCloseTo(400, 5);
@@ -163,13 +164,13 @@ describe('arena scene', () => {
 			yaw: Math.PI,
 			pitch: 0,
 		};
-		const forward = forwardFromPose(pose);
+		const forward = unwrap(forwardFromPose(pose));
 		const worldAboveTarget = point<3>(
 			pose.position[0]![0]! + forward[0]![0]! * 10,
 			pose.position[1]![0]! + 5,
 			pose.position[2]![0]! + forward[2]![0]! * 10,
 		);
-		const projected = projectWorldPoint(worldAboveTarget, pose, 800, 600);
+		const projected = unwrap(projectWorldPoint(worldAboveTarget, pose, 800, 600));
 
 		expect(projected).not.toBeNull();
 		expect(projected![0]![0]!).toBeCloseTo(400, 5);
