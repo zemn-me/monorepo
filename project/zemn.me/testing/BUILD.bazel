@@ -35,7 +35,7 @@ ts_project(
     name = "ts",
     srcs = ["browser_test.ts"],
     data = [
-        "//project/zemn.me:out",
+        "//project/zemn.me:build",
     ],
     deps = [
         "//:node_modules/@bazel/runfiles",

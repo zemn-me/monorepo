@@ -10,7 +10,12 @@ import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
-const base = runfiles.resolveWorkspaceRelative('project/zemn.me/out');
+const resolveRunfilesPath = (candidate: string): string => {
+	const workspace = process.env.TEST_WORKSPACE ?? 'monorepo';
+	return runfiles.resolve(`${workspace}/${candidate}`);
+};
+
+const base = resolveRunfilesPath('project/zemn.me/build');
 
 const pathsThatMayError = new Set(['healthcheck/bad', 'poc/c/', 'callback']);
 
@@ -40,7 +45,7 @@ describe('zemn.me website', () => {
 
                         origin = `http://localhost:${addressInfo.port}`;
 
-                        const apiBin = runfiles.resolveWorkspaceRelative(
+                        const apiBin = resolveRunfilesPath(
                                 'project/zemn.me/api/cmd/localserver/localserver_/localserver'
                         );
                         apiProc = spawn(apiBin, {

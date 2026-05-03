@@ -29,7 +29,6 @@ def _next_next_config(name):
         ],
         deps = [
             "//ts/next.js/types/next-compiled",
-            "//:node_modules/source-map-loader",
         ],
     )
 
@@ -48,7 +47,6 @@ def _next_srcset(
         "//:node_modules/sharp",
         "//:package_json",
         "//ts/next.js/types/next-compiled",
-        "//:node_modules/@types/jest",  # might not need this
     ]
 
 def next_itest_service(
@@ -113,6 +111,7 @@ def next_project(
         name = "build",
         srcs = srcs,
         args = ["build", native.package_name(), "--no-lint"],
+        env = {"NEXT_TELEMETRY_DISABLED": "1"},
         out_dirs = ["build"],
     )
 
@@ -120,23 +119,17 @@ def next_project(
         name = "dev",
         data = srcs,
         args = ["dev", native.package_name()],
+        env = {"NEXT_TELEMETRY_DISABLED": "1"},
     )
 
     bin.next_binary(
         name = "start",
         data = [":build"] + srcs,
         args = ["start", native.package_name()],
-    )
-
-    bin.next(
-        out_dirs = ["out"],
-        name = "out",
-        srcs = [":build"] + srcs,
-        args = ["build", native.package_name()],
-        silent_on_success = True,
+        env = {"NEXT_TELEMETRY_DISABLED": "1"},
     )
 
     native.alias(
         name = name,
-        actual = "out",
+        actual = "build",
     )
