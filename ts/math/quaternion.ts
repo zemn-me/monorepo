@@ -2,7 +2,10 @@
  * @fileoverview Purely functional quaternion arithmetic implemented with Church notation.
  */
 
+import { either } from "#root/ts/either/either.js";
 import { magnitude, point, Point3D, x as pointX, y as pointY, z as pointZ } from "#root/ts/math/cartesian.js";
+import { Err, Ok, type Result } from "#root/ts/result/result.js";
+
 
 export type Quaternion<T = number> = <R>(selector: (x: T, y: T, z: T, w: T) => R) => R;
 
@@ -31,11 +34,11 @@ const zipQuaternion = (
 
 export const isVector = (q: Quaternion<number>): boolean => w(q) === 0;
 
-export const toVector = (q: Quaternion<number>): Point3D => {
+export const toVector = (q: Quaternion<number>): Result<Point3D, Error> => {
 	if (!isVector(q)) {
-		throw new Error("Cannot convert a non-vector quaternion to Point3D.");
+		return Err(new Error("Cannot convert a non-vector quaternion to Point3D."));
 	}
-	return point<3>(x(q), y(q), z(q));
+	return Ok(point<3>(x(q), y(q), z(q)));
 };
 
 export const add = (a: Quaternion, b: Quaternion): Quaternion =>
@@ -56,39 +59,45 @@ export const multiply = (a: Quaternion, b: Quaternion): Quaternion =>
 export const length = (q: Quaternion): number =>
 	Math.sqrt(q((x, y, z, w) => x * x + y * y + z * z + w * w));
 
-export const normalize = (q: Quaternion): Quaternion => {
+export const normalize = (q: Quaternion): Result<Quaternion, Error> => {
 	const l = length(q);
 	if (l === 0) {
-		throw new Error("Cannot normalize a quaternion with zero length.");
+		return Err(new Error("Cannot normalize a quaternion with zero length."));
 	}
-	return mapQuaternion(q, scalar => scalar / l);
+	return Ok(mapQuaternion(q, scalar => scalar / l));
 };
 
-export const inverse = (q: Quaternion): Quaternion => {
+export const inverse = (q: Quaternion): Result<Quaternion, Error> => {
 	const lenSq = q((x, y, z, w) => x * x + y * y + z * z + w * w);
 	if (lenSq === 0) {
-		throw new Error("Cannot invert a zero-length quaternion.");
+		return Err(new Error("Cannot invert a zero-length quaternion."));
 	}
-	return from(-x(q) / lenSq, -y(q) / lenSq, -z(q) / lenSq, w(q) / lenSq);
+	return Ok(from(-x(q) / lenSq, -y(q) / lenSq, -z(q) / lenSq, w(q) / lenSq));
 };
 
-export const rotateVector = (q: Quaternion, v: Point3D): Point3D => {
+export const rotateVector = (q: Quaternion, v: Point3D): Result<Point3D, Error> => {
 	const qv = from(pointX(v), pointY(v), pointZ(v), 0);
-	const rotated = multiply(multiply(q, qv), inverse(q));
-	return point<3>(x(rotated), y(rotated), z(rotated));
+	return either(
+		inverse(q),
+		error => Err(error),
+		qInverse => {
+			const rotated = multiply(multiply(q, qv), qInverse);
+			return Ok(point<3>(x(rotated), y(rotated), z(rotated)));
+		}
+	);
 };
 
-export const fromAxisAngle = (axis: Point3D, angle: number): Quaternion => {
+export const fromAxisAngle = (axis: Point3D, angle: number): Result<Quaternion, Error> => {
 	const halfAngle = angle * 0.5;
 	const s = Math.sin(halfAngle);
 	const axisLength = magnitude(axis);
 	if (axisLength === 0) {
-		throw new Error("Cannot construct a quaternion from a zero-length axis.");
+		return Err(new Error("Cannot construct a quaternion from a zero-length axis."));
 	}
-	return from(
+	return Ok(from(
 		pointX(axis) / axisLength * s,
 		pointY(axis) / axisLength * s,
 		pointZ(axis) / axisLength * s,
 		Math.cos(halfAngle)
-	);
+	));
 };

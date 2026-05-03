@@ -3,6 +3,7 @@ import { describe, expect, test } from "@jest/globals";
 import { point } from "#root/ts/math/cartesian.js";
 import * as DualQuaternion from "#root/ts/math/dual_quaternion.js";
 import * as Quaternion from "#root/ts/math/quaternion.js";
+import { is_err, unwrap, unwrap_err } from "#root/ts/result/result.js";
 
 describe("DualQuaternion arithmetic", () => {
 	test("addition", () => {
@@ -27,10 +28,10 @@ describe("DualQuaternion arithmetic", () => {
 	});
 
 	test("fromRotationTranslation and transformPoint", () => {
-		const rotation = Quaternion.fromAxisAngle(point<3>(0, 0, 1), Math.PI / 2);
+		const rotation = unwrap(Quaternion.fromAxisAngle(point<3>(0, 0, 1), Math.PI / 2));
 		const translation = point<3>(1, 2, 3);
-		const dq = DualQuaternion.fromRotationTranslation(rotation, translation);
-		const transformed = DualQuaternion.transformPoint(dq, point<3>(1, 0, 0));
+		const dq = unwrap(DualQuaternion.fromRotationTranslation(rotation, translation));
+		const transformed = unwrap(DualQuaternion.transformPoint(dq, point<3>(1, 0, 0)));
 
 		expect(transformed[0]![0]!).toBeCloseTo(1);
 		expect(transformed[1]![0]!).toBeCloseTo(3);
@@ -39,6 +40,8 @@ describe("DualQuaternion arithmetic", () => {
 
 	test("normalize rejects zero real part", () => {
 		const dq = DualQuaternion.from(Quaternion.from(0, 0, 0, 0), Quaternion.from(1, 0, 0, 0));
-		expect(() => DualQuaternion.normalize(dq)).toThrow("Cannot normalize a dual quaternion with zero real length.");
+		const result = DualQuaternion.normalize(dq);
+		expect(is_err(result)).toBe(true);
+		expect(unwrap_err(result).message).toBe("Cannot normalize a dual quaternion with zero real length.");
 	});
 });
