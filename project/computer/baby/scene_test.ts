@@ -5,7 +5,7 @@ import {
 	createPenguinWorld,
 	nearestPenguin,
 	nearestVisiblePenguin,
-} from '#root/ts/pulumi/baby.computer/app/scene.js';
+} from '#root/project/computer/baby/scene.js';
 
 describe('baby.computer scene', () => {
 	test('creates a populated penguin world', () => {

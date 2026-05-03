@@ -3,7 +3,7 @@
 import * as d3 from 'd3-force';
 import { FormEvent, PointerEvent, useEffect, useMemo, useRef, useState, WheelEvent } from 'react';
 
-import { RANK_IMAGE_RULES } from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/rankIconReferences.js';
+import { RANK_IMAGE_RULES } from '#root/project/im/shadwell/luke/app/wikitree/rankIconReferences.js';
 import { Link } from '#root/ts/react/next/Link/index.js';
 
 type RelationName = 'father' | 'mother' | 'child';

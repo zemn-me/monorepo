@@ -6,7 +6,7 @@ package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
 next_project(
     name = "next",
-    srcs = ["//ts/pulumi/lulu.computer/app"],
+    srcs = ["//project/computer/lulu"],
 )
 
 bazel_lint(

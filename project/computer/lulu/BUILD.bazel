@@ -41,3 +41,27 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+ts_project(
+    name = "lulu",
+    srcs = [
+        "client.tsx",
+        "layout.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":app",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/seedrandom",
+        "//:node_modules/react",
+        "//:node_modules/seedrandom",
+        "//ts/iter",
+        "//ts/math",
+        "//ts/math/sim",
+        "//ts/next.js",
+        "//ts/option",
+        "//ts/time",
+    ],
+)

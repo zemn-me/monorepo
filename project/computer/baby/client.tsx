@@ -21,8 +21,8 @@ import { x, y, z } from '#root/ts/math/cartesian.js';
 import {
 	createPenguinWorld,
 	nearestVisiblePenguin,
-} from '#root/ts/pulumi/baby.computer/app/scene.js';
-import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
+} from '#root/project/computer/baby/scene.js';
+import style from '#root/project/computer/baby/style.module.css';
 
 const world = createPenguinWorld();
 const LOOK_SENSITIVITY = 0.0025;
