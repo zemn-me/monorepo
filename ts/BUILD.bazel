@@ -13,12 +13,14 @@ ts_project(
     name = "ts",
     srcs = [
         "NewType.ts",
+        "church.ts",
         "errors.ts",
         "guard.ts",
         "guards.ts",
         "json.ts",
         "lens.ts",
         "noop.ts",
+        "pipe.ts",
         "result.ts",
         "result_types.ts",
         "safely.ts",
@@ -38,6 +40,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "NewType.ts",
+        "church.ts",
         "errors.ts",
         "guard.ts",
         "guards.ts",
@@ -45,6 +48,8 @@ filegroup(
         "lens.ts",
         "lens_test.ts",
         "noop.ts",
+        "pipe.ts",
+        "pipe_test.ts",
         "result.ts",
         "result_types.ts",
         "safely.ts",
@@ -58,7 +63,10 @@ filegroup(
 
 ts_project(
     name = "ts_tests",
-    srcs = ["lens_test.ts"],
+    srcs = [
+        "lens_test.ts",
+        "pipe_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":ts",
@@ -69,7 +77,10 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["lens_test.js"],
+    srcs = [
+        "lens_test.js",
+        "pipe_test.js",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [":ts_tests"],
 )

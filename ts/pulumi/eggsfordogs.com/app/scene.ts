@@ -6,6 +6,7 @@ import { point, Point3D, scale, translate, x, z } from '#root/ts/math/cartesian.
 import { defaultUp } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { type StyledSegment3D, styleSegment } from '#root/ts/math/wireframe_render.js';
+import { and_then, type Result, unwrap } from '#root/ts/result/result.js';
 
 export interface PlayerPose extends YawPitchPose {
 	readonly verticalVelocity: number;
@@ -114,9 +115,9 @@ export function stepPlayer(
 	input: MovementInput,
 	deltaSeconds: number
 ): PlayerPose {
-	const yawRotation = Quaternion.fromAxisAngle(defaultUp, pose.yaw);
-	const forward = horizontalUnit(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD));
-	const right = horizontalUnit(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT));
+	const yawRotation = unwrap(Quaternion.fromAxisAngle(defaultUp, pose.yaw));
+	const forward = horizontalUnit(unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD)));
+	const right = horizontalUnit(unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT)));
 	const requested = translate(scale(forward, input.forward), scale(right, input.strafe)) as Point3D;
 	const movement = scale(horizontalUnit(requested), (input.sprint ? 10 : 5) * deltaSeconds) as Point3D;
 	const onGround = pose.position[1]![0]! <= EYE_HEIGHT + 0.000001;
@@ -252,9 +253,11 @@ export function stepCritters(
 	});
 }
 
-export function isFacingPose(point3d: Point3D, pose: PlayerPose): boolean {
-	const forward = forwardFromPose(pose);
+export function isFacingPose(point3d: Point3D, pose: PlayerPose): Result<boolean, Error> {
 	const dx = x(point3d) - x(pose.position);
 	const dz = z(point3d) - z(pose.position);
-	return (dx * x(forward)) + (dz * z(forward)) > 0;
+	return and_then(
+		forwardFromPose(pose),
+		forward => (dx * x(forward)) + (dz * z(forward)) > 0
+	);
 }

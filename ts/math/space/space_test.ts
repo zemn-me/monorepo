@@ -9,6 +9,7 @@ import { sub } from '#root/ts/math/matrix';
 import * as quat from '#root/ts/math/quaternion.js';
 import { plot2D, plot3D } from '#root/ts/math/space/render/braille';
 import { cube, square } from '#root/ts/math/space/shape';
+import { unwrap } from '#root/ts/result/result.js';
 
 it('should render a square properly', () => {
 	expect(plot2D([square(point<2>(0, 0), 1)], 10)).toEqual(
@@ -107,7 +108,7 @@ it('should render a rotated cube properly', () => {
 	// translate the cube by the camera pos
 
 	const nc = c.map(ln => ln.map(pt =>
-		quat.rotateVector(orientation, sub<1, 3>(pt, cameraPt))
+		unwrap(quat.rotateVector(unwrap(orientation), sub<1, 3>(pt, cameraPt)))
 	));
 
 	expect(plot3D(nc, 1, 100)).toEqual(

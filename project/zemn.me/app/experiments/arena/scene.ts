@@ -15,6 +15,7 @@ import {
 	type StyledSegment3D,
 	styleSegment,
 } from '#root/ts/math/wireframe_render.js';
+import { type Result, unwrap } from '#root/ts/result/result.js';
 
 export interface PlayerPose extends YawPitchPose {
 	readonly verticalVelocity: number;
@@ -57,7 +58,7 @@ function horizontalUnit(point3d: Point3D): Point3D {
 	return point<3>(dx / length, 0, dz / length);
 }
 
-export function forwardFromPose(pose: Pick<PlayerPose, 'yaw' | 'pitch'>): Point3D {
+export function forwardFromPose(pose: Pick<PlayerPose, 'yaw' | 'pitch'>): Result<Point3D, Error> {
 	return cameraForwardFromPose(pose);
 }
 
@@ -66,9 +67,9 @@ export function stepPlayer(
 	input: MovementInput,
 	deltaSeconds: number
 ): PlayerPose {
-	const yawRotation = Quaternion.fromAxisAngle(defaultUp, pose.yaw);
-	const forward = horizontalUnit(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD));
-	const right = horizontalUnit(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT));
+	const yawRotation = unwrap(Quaternion.fromAxisAngle(defaultUp, pose.yaw));
+	const forward = horizontalUnit(unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD)));
+	const right = horizontalUnit(unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT)));
 	const requested: Point3D = translate(
 		scale(forward, input.forward),
 		scale(right, input.strafe)
@@ -106,7 +107,7 @@ function applyTransform(
 	width: number,
 	opacity: number
 ): WorldSegment[] {
-	return rigidTransform(segments, rotation, translation).map(
+	return unwrap(rigidTransform(segments, rotation, translation)).map(
 		([start, end]) => styleSegment([start, end], { stroke, width, opacity })
 	);
 }
@@ -229,7 +230,7 @@ export function createArenaScene(): WorldSegment[] {
 		scene.push(
 			...applyTransform(
 				pyramid(2.2, 2.8),
-				lookAt(point<3>(0, 0, 0), marker.direction, defaultUp),
+				unwrap(lookAt(point<3>(0, 0, 0), marker.direction, defaultUp)),
 				marker.position,
 				marker.stroke,
 				1.7,
@@ -268,7 +269,7 @@ export function projectWorldPoint(
 	pose: PlayerPose,
 	width: number,
 	height: number
-): Point2D | null {
+): Result<Point2D | null, Error> {
 	return projectProjectedWorldPoint(worldPoint, pose, perspective(width, height));
 }
 
@@ -277,6 +278,6 @@ export function renderScene(
 	pose: PlayerPose,
 	width: number,
 	height: number
-): RenderedSegment[] {
+): Result<RenderedSegment[], Error> {
 	return renderSegments(scene, pose, perspective(width, height));
 }
