@@ -10,6 +10,7 @@ import React, {
 
 import { point, x, y, z } from '#root/ts/math/cartesian.js';
 import { perspective, projectWorldPoint, renderSegments } from '#root/ts/math/wireframe_render.js';
+import { unwrap } from '#root/ts/result/result.js';
 import {
 	buildWorld,
 	DEFAULT_POSE,
@@ -175,16 +176,16 @@ export function EggDogYardClient() {
 	}
 
 	const projection = perspective(viewport.width, viewport.height, { focalScale: 0.75 });
-	const segments = renderSegments(world.scene, pose, projection);
+	const segments = unwrap(renderSegments(world.scene, pose, projection));
 	const sprites = critters.map(critter => {
 		const raised = point<3>(x(critter.position), 1.1, z(critter.position));
-		const projected = projectWorldPoint(raised, pose, projection);
+		const projected = unwrap(projectWorldPoint(raised, pose, projection));
 		if (projected == null) return null;
 		const dx = x(raised) - x(pose.position);
 		const dy = y(raised) - y(pose.position);
 		const dz = z(raised) - z(pose.position);
 		const distance = Math.hypot(dx, dy, dz);
-		if (!isFacingPose(raised, pose)) return null;
+		if (!unwrap(isFacingPose(raised, pose))) return null;
 		const size = Math.max(12, Math.min(72, 300 / distance));
 		return { id: critter.id, emoji: icon(critter.type), projected, size, distance };
 	}).filter(sprite => sprite != null).sort((a, b) => b.distance - a.distance);

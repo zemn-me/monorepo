@@ -18,6 +18,7 @@ import {
 	renderScene,
 	stepPlayer,
 } from '#root/project/zemn.me/app/experiments/arena/scene.js';
+import { unwrap } from '#root/ts/result/result.js';
 import style from '#root/project/zemn.me/app/experiments/arena/style.module.css';
 
 const scene = createArenaScene();
@@ -96,7 +97,7 @@ export function ArenaClient() {
 	const [locked, setLocked] = useState(false);
 	const [pose, setPose] = useState<PlayerPose>(DEFAULT_POSE);
 	const [segments, setSegments] = useState<RenderedSegment[]>(() =>
-		renderScene(scene, DEFAULT_POSE, SVG_WIDTH, SVG_HEIGHT)
+		unwrap(renderScene(scene, DEFAULT_POSE, SVG_WIDTH, SVG_HEIGHT))
 	);
 	const [motionAvailable, setMotionAvailable] = useState(false);
 	const [motionEnabled, setMotionEnabled] = useState(false);
@@ -155,7 +156,7 @@ export function ArenaClient() {
 
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
+			setSegments(unwrap(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT)));
 		}
 
 		function onDeviceOrientation(event: DeviceOrientationEvent) {
@@ -190,7 +191,7 @@ export function ArenaClient() {
 
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
+			setSegments(unwrap(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT)));
 		}
 
 		function animate(timestamp: number) {
@@ -213,7 +214,7 @@ export function ArenaClient() {
 				const next = stepPlayer(poseRef.current, input, deltaSeconds);
 				poseRef.current = next;
 				setPose(next);
-				setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
+				setSegments(unwrap(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT)));
 			}
 
 			frameRef.current = window.requestAnimationFrame(animate);
@@ -307,7 +308,7 @@ export function ArenaClient() {
 		};
 		poseRef.current = next;
 		setPose(next);
-		setSegments(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT));
+		setSegments(unwrap(renderScene(scene, next, SVG_WIDTH, SVG_HEIGHT)));
 	}
 
 	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
@@ -317,7 +318,7 @@ export function ArenaClient() {
 		}
 	}
 
-	const forward = forwardFromPose(pose);
+	const forward = unwrap(forwardFromPose(pose));
 
 	return (
 		<main className={style.shell}>

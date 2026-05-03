@@ -4,6 +4,12 @@
 
 import { point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
 import * as Quaternion from "#root/ts/math/quaternion.js";
+import {
+	and_then_flatten,
+	Err,
+	Ok,
+	type Result,
+} from "#root/ts/result/result.js";
 
 export type DualQuaternion = <R>(selector: (real: Quaternion.Quaternion, dual: Quaternion.Quaternion) => R) => R;
 
@@ -44,45 +50,60 @@ export const multiply = (lhs: DualQuaternion, rhs: DualQuaternion): DualQuaterni
 
 export const length = (dq: DualQuaternion): number => Quaternion.length(real(dq));
 
-export const normalize = (dq: DualQuaternion): DualQuaternion => {
+export const normalize = (dq: DualQuaternion): Result<DualQuaternion, Error> => {
 	const realLen = Quaternion.length(real(dq));
 	if (realLen === 0) {
-		throw new Error("Cannot normalize a dual quaternion with zero real length.");
+		return Err(new Error("Cannot normalize a dual quaternion with zero real length."));
 	}
-	return map(dq, q => Quaternion.from(
+	return Ok(map(dq, q => Quaternion.from(
 		Quaternion.x(q) / realLen,
 		Quaternion.y(q) / realLen,
 		Quaternion.z(q) / realLen,
 		Quaternion.w(q) / realLen,
-	));
+	)));
 };
 
-export const transformPoint = (dq: DualQuaternion, p: Point3D): Point3D => {
-	const rotation = Quaternion.normalize(real(dq));
-	const translationQuat = Quaternion.multiply(dual(dq), Quaternion.inverse(rotation));
-	const translation = point<3>(
-		2 * Quaternion.x(translationQuat),
-		2 * Quaternion.y(translationQuat),
-		2 * Quaternion.z(translationQuat)
+export const transformPoint = (dq: DualQuaternion, p: Point3D): Result<Point3D, Error> =>
+	and_then_flatten(
+		Quaternion.normalize(real(dq)),
+		rotation => and_then_flatten(
+			Quaternion.inverse(rotation),
+			inverseRotation => and_then_flatten(
+				Quaternion.rotateVector(rotation, p),
+				rotated => {
+					const translationQuat = Quaternion.multiply(dual(dq), inverseRotation);
+					const translation = point<3>(
+						2 * Quaternion.x(translationQuat),
+						2 * Quaternion.y(translationQuat),
+						2 * Quaternion.z(translationQuat)
+					);
+					return Ok(point<3>(
+						x(rotated) + x(translation),
+						y(rotated) + y(translation),
+						z(rotated) + z(translation)
+					));
+				}
+			)
+		)
 	);
-	const rotated = Quaternion.rotateVector(rotation, p);
-	return point<3>(x(rotated) + x(translation), y(rotated) + y(translation), z(rotated) + z(translation));
-};
 
 export const fromRotationTranslation = (
 	rotation: Quaternion.Quaternion,
 	translation: Point3D
-): DualQuaternion => {
-	const unitRotation = Quaternion.normalize(rotation);
-	const translationQuaternion = Quaternion.from(x(translation), y(translation), z(translation), 0);
-	const dualPart = Quaternion.multiply(translationQuaternion, unitRotation);
-	return from(
-		unitRotation,
-		Quaternion.from(
-			Quaternion.x(dualPart) * 0.5,
-			Quaternion.y(dualPart) * 0.5,
-			Quaternion.z(dualPart) * 0.5,
-			Quaternion.w(dualPart) * 0.5
-		)
+): Result<DualQuaternion, Error> =>
+	and_then_flatten(
+		Quaternion.normalize(rotation),
+		unitRotation => {
+			const translationQuaternion = Quaternion.from(x(translation), y(translation), z(translation), 0);
+			const dualPart = Quaternion.multiply(translationQuaternion, unitRotation);
+			return Ok(from(
+				unitRotation,
+				Quaternion.from(
+					Quaternion.x(dualPart) * 0.5,
+					Quaternion.y(dualPart) * 0.5,
+					Quaternion.z(dualPart) * 0.5,
+					Quaternion.w(dualPart) * 0.5
+				)
+			));
+		}
 	);
-};

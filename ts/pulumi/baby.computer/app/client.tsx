@@ -22,6 +22,7 @@ import {
 	createPenguinWorld,
 	nearestVisiblePenguin,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
+import { unwrap } from '#root/ts/result/result.js';
 import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
 
 const world = createPenguinWorld();
@@ -108,12 +109,12 @@ export function PenguinSim() {
 		height: INITIAL_VIEWPORT_HEIGHT,
 	});
 	const [segments, setSegments] = useState<RenderedSegment[]>(() =>
-		renderScene(
+		unwrap(renderScene(
 			world.scene,
 			world.startPose,
 			INITIAL_VIEWPORT_WIDTH,
 			INITIAL_VIEWPORT_HEIGHT
-		)
+		))
 	);
 	const [motionEnabled, setMotionEnabled] = useState(false);
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
@@ -175,7 +176,7 @@ export function PenguinSim() {
 		function applyPose(next: PlayerPose) {
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
+			setSegments(unwrap(renderScene(world.scene, next, viewportSize.width, viewportSize.height)));
 		}
 
 		function onMouseMove(event: MouseEvent) {
@@ -267,7 +268,7 @@ export function PenguinSim() {
 	}, [locked, motionEnabled, viewportSize.height, viewportSize.width]);
 
 	useEffect(() => {
-		setSegments(renderScene(world.scene, pose, viewportSize.width, viewportSize.height));
+		setSegments(unwrap(renderScene(world.scene, pose, viewportSize.width, viewportSize.height)));
 	}, [pose, viewportSize.height, viewportSize.width]);
 
 	useEffect(() => {
@@ -369,7 +370,7 @@ export function PenguinSim() {
 		};
 		poseRef.current = next;
 		setPose(next);
-		setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
+		setSegments(unwrap(renderScene(world.scene, next, viewportSize.width, viewportSize.height)));
 	}
 
 	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
@@ -379,23 +380,23 @@ export function PenguinSim() {
 		}
 	}
 
-	const visibleEncounter = nearestVisiblePenguin(
+	const visibleEncounter = unwrap(nearestVisiblePenguin(
 		world.penguins,
 		pose,
 		viewportSize.width,
 		viewportSize.height
-	);
+	));
 	const encounter = visibleEncounter?.penguin ?? null;
 	const projectedBodies = world.penguinBodies
 		.map(body => {
 			const points = body.outline
 				.map(vertex =>
-					projectWorldPoint(
+					unwrap(projectWorldPoint(
 						vertex,
 						pose,
 						viewportSize.width,
 						viewportSize.height
-					)
+					))
 				);
 
 			if (points.some(projected => projected == null)) {
