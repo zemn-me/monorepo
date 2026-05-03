@@ -1,0 +1,243 @@
+.shell {
+	min-height: 100vh;
+	background:
+		radial-gradient(circle at top, rgb(37 63 44 / 90%), transparent 48%),
+		linear-gradient(180deg, #0f120d 0%, #17110c 100%);
+	color: #efe2ba;
+	font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+}
+
+.stage {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	min-height: 100vh;
+	padding: 1.5rem;
+	box-sizing: border-box;
+}
+
+.hud {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	max-width: 54rem;
+}
+
+.label {
+	margin: 0;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: #99c970;
+}
+
+.title {
+	margin: 0;
+	font-size: clamp(2.5rem, 5vw, 4.6rem);
+	line-height: 0.95;
+	max-width: 8ch;
+}
+
+.copy {
+	margin: 0;
+	max-width: 42rem;
+	font-size: 1.05rem;
+	line-height: 1.6;
+	color: #ead8a8;
+}
+
+.eventPanel {
+	padding: 0.9rem 1rem;
+	border: 1px solid rgb(239 226 186 / 20%);
+	background: rgb(7 12 8 / 52%);
+	max-width: 42rem;
+}
+
+.eventDate {
+	margin: 0;
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+	font-size: 0.8rem;
+	letter-spacing: 0.08em;
+	color: #99c970;
+}
+
+.eventTitle {
+	margin: 0.3rem 0 0;
+	font-size: 1.3rem;
+	line-height: 1.25;
+}
+
+.eventDescription {
+	margin: 0.6rem 0 0;
+	line-height: 1.45;
+	color: #f2e6c6;
+}
+
+.copy code,
+.copy kbd,
+.telemetry {
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+}
+
+.copy kbd {
+	display: inline-block;
+	padding: 0.1rem 0.4rem;
+	margin: 0 0.1rem;
+	border: 1px solid rgb(239 226 186 / 35%);
+	border-radius: 999px;
+	background: rgb(239 226 186 / 8%);
+	font-size: 0.92em;
+}
+
+.telemetry {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 0.9rem;
+	margin: 0;
+	padding: 0;
+}
+
+.mobileControls {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.65rem;
+}
+
+.motionButton,
+.lockButton {
+	padding: 0.8rem 1.15rem;
+	border: 1px solid rgb(239 226 186 / 25%);
+	background: linear-gradient(180deg, #2a3123 0%, #191d15 100%);
+	color: inherit;
+	cursor: pointer;
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.motionButton:disabled,
+.lockButton:disabled {
+	opacity: 0.7;
+	cursor: default;
+}
+
+.motionNote {
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.5;
+	color: rgb(239 226 186 / 78%);
+}
+
+.telemetry div {
+	padding: 0.9rem 1rem;
+	border: 1px solid rgb(239 226 186 / 15%);
+	background: rgb(7 12 8 / 42%);
+	backdrop-filter: blur(8px);
+}
+
+.telemetry dt {
+	font-size: 0.78rem;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: #99c970;
+}
+
+.telemetry dd {
+	margin: 0.35rem 0 0;
+	font-size: 0.96rem;
+	line-height: 1.4;
+}
+
+.viewportWrap {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	width: 100%;
+}
+
+.viewport {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 3 / 2;
+	border: 1px solid rgb(239 226 186 / 15%);
+	box-shadow:
+		0 1.4rem 3rem rgb(0 0 0 / 35%),
+		inset 0 0 0 1px rgb(153 201 112 / 10%);
+	background: #050806;
+	touch-action: none;
+	cursor: crosshair;
+}
+
+.viewport:focus {
+	outline: 2px solid #99c970;
+	outline-offset: 4px;
+}
+
+.crosshair {
+	stroke: rgb(239 226 186 / 58%);
+	stroke-width: 1.6;
+	stroke-linecap: round;
+}
+
+.eventLabel {
+	fill: rgb(239 226 186 / 88%);
+	font-size: 14px;
+	paint-order: stroke;
+	stroke: rgb(13 17 24 / 85%);
+	stroke-width: 3px;
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+	pointer-events: none;
+}
+
+.lockButton {
+	align-self: flex-start;
+}
+
+@media (max-width: 960px) {
+	.stage {
+		padding: 1rem;
+	}
+
+	.title {
+		max-width: none;
+	}
+
+	.telemetry {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	.stage {
+		padding-inline: 0;
+		padding-block: 1rem;
+		gap: 1rem;
+	}
+
+	.hud {
+		padding-inline: 1rem;
+	}
+
+	.copy {
+		max-width: none;
+	}
+
+	.viewportWrap {
+		gap: 0.75rem;
+	}
+
+	.viewport {
+		border-left: 0;
+		border-right: 0;
+		border-radius: 0;
+	}
+
+	.lockButton,
+	.motionButton {
+		margin-left: 1rem;
+	}
+
+	.telemetry {
+		grid-template-columns: 1fr;
+	}
+}
