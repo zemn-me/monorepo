@@ -93,6 +93,8 @@ test --test_tag_filters=-do_not_run_on_main
 try-import .auth.bazelrc
 
 # BuildBuddy suggestions
+build --workspace_status_command=$(pwd)/workspace_status.sh
+
 test --noslim_profile
 test --experimental_profile_include_target_label
 test --experimental_profile_include_primary_output
@@ -130,4 +132,3 @@ common --check_direct_dependencies=error
 common --local_resources=memory=HOST_RAM*.5
 # in ci use it all
 common:ci --local_resources=memory=HOST_RAM
-
