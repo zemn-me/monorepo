@@ -21,6 +21,7 @@ import { x, y, z } from '#root/ts/math/cartesian.js';
 import {
 	createPenguinWorld,
 	nearestVisiblePenguin,
+	targetedVisiblePenguin,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
 import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
 
@@ -33,6 +34,8 @@ const MOTION_YAW_SENSITIVITY = Math.PI / 180;
 const MOTION_PITCH_SENSITIVITY = Math.PI / 270;
 const MEETING_DISTANCE = 2.4;
 const FIREWORK_COUNT = 6;
+const INTERACT_DISTANCE = 3.2;
+const INTERACT_SCREEN_DISTANCE = 120;
 
 type MotionBaseline = {
 	readonly beta: number;
@@ -119,6 +122,7 @@ export function PenguinSim() {
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
 	const [metCount, setMetCount] = useState(0);
 	const [fireworkTick, setFireworkTick] = useState(0);
+	const [lastTreatMessage, setLastTreatMessage] = useState<string | null>(null);
 
 	useEffect(() => {
 		const supportsMotion = typeof DeviceOrientationEvent !== 'undefined';
@@ -298,6 +302,23 @@ export function PenguinSim() {
 		previousMetCountRef.current = metCount;
 	}, [metCount]);
 
+
+	function tryGiveTreat() {
+		const targeted = targetedVisiblePenguin(
+			world.penguins,
+			poseRef.current,
+			viewportSize.width,
+			viewportSize.height,
+			INTERACT_SCREEN_DISTANCE
+		);
+		if (targeted == null || targeted.penguin.distance > INTERACT_DISTANCE) {
+			setLastTreatMessage('No penguin close enough to receive a treat.');
+			return;
+		}
+
+		setLastTreatMessage(`You gave ${targeted.penguin.name} a fish treat. 🐟`);
+	}
+
 	function lockPointer() {
 		void viewportRef.current?.requestPointerLock();
 		viewportRef.current?.focus();
@@ -327,6 +348,10 @@ export function PenguinSim() {
 		viewportRef.current?.focus();
 
 		if (event.pointerType === 'mouse') {
+			if (locked) {
+				tryGiveTreat();
+				return;
+			}
 			lockPointer();
 			return;
 		}
@@ -530,6 +555,8 @@ export function PenguinSim() {
 							</span>
 						</div>
 					</div>
+					<button className={style.treatButton} onClick={tryGiveTreat} type="button">Give treat</button>
+					{lastTreatMessage != null ? <div className={style.treatStatus}>{lastTreatMessage}</div> : null}
 					<div className={style.overlayStatus}>
 						{locked ? 'pointer locked' : motionEnabled ? 'motion look' : 'tap or click viewport'}
 						{' · '}

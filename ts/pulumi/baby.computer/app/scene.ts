@@ -612,3 +612,45 @@ export function nearestVisiblePenguin(
 
 	return nearest;
 }
+
+export interface TargetedPenguinEncounter extends VisiblePenguinEncounter {
+	readonly screenDistance: number;
+}
+
+export function targetedVisiblePenguin(
+	penguins: readonly Penguin[],
+	pose: PlayerPose,
+	width: number,
+	height: number,
+	maxScreenDistancePx: number
+): TargetedPenguinEncounter | null {
+	const centerX = width / 2;
+	const centerY = height / 2;
+	let target: TargetedPenguinEncounter | null = null;
+
+	for (const penguin of penguins) {
+		const anchor = projectWorldPoint(penguinCaptionAnchor(penguin), pose, width, height);
+		if (!projectedWithinViewport(anchor, width, height)) {
+			continue;
+		}
+
+		const distance = Math.hypot(
+			x(penguin.position) - x(pose.position),
+			z(penguin.position) - z(pose.position)
+		);
+		const screenDistance = Math.hypot(x(anchor) - centerX, y(anchor) - centerY);
+		if (screenDistance > maxScreenDistancePx) {
+			continue;
+		}
+
+		if (target == null || screenDistance < target.screenDistance || (screenDistance === target.screenDistance && distance < target.penguin.distance)) {
+			target = {
+				penguin: { ...penguin, distance },
+				anchor,
+				screenDistance,
+			};
+		}
+	}
+
+	return target;
+}
