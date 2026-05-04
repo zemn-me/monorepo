@@ -1,0 +1,33 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "tweets",
+    srcs = ["page.tsx"],
+    assets = ["page.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//:node_modules/zod",
+        "//project/zemn.me/components/Link",
+        "//ts/next.js/types/next-compiled",
+        "//ts/react/lang",
+        "//ts/twitter",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
