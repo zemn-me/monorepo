@@ -1,6 +1,7 @@
 import { point, Point3D } from '#root/ts/math/cartesian.js';
 import * as DualQuaternion from '#root/ts/math/dual_quaternion.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
+import { and_then, and_then_flatten, type Result, result_collect } from '#root/ts/result/result.js';
 
 export type Segment3D = readonly [start: Point3D, end: Point3D];
 
@@ -60,11 +61,19 @@ export function rigidTransform(
 	segments: readonly Segment3D[],
 	rotation: Quaternion.Quaternion,
 	translation: Point3D
-): Segment3D[] {
-	const transform = DualQuaternion.fromRotationTranslation(rotation, translation);
-
-	return segments.map(([start, end]) => [
-		DualQuaternion.transformPoint(transform, start),
-		DualQuaternion.transformPoint(transform, end),
-	] as const);
+): Result<Segment3D[], Error> {
+	return and_then_flatten(
+		DualQuaternion.fromRotationTranslation(rotation, translation),
+		transform => result_collect(
+			segments.map(([start, end]) =>
+				and_then_flatten(
+					DualQuaternion.transformPoint(transform, start),
+					nextStart => and_then(
+						DualQuaternion.transformPoint(transform, end),
+						nextEnd => [nextStart, nextEnd] as Segment3D
+					)
+				)
+			)
+		)
+	);
 }

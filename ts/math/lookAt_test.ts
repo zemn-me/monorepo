@@ -3,6 +3,7 @@ import { describe, expect, test } from '@jest/globals';
 import { point } from '#root/ts/math/cartesian.js';
 import { lookAt } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
+import { unwrap } from '#root/ts/result/result.js';
 
 function expectPointCloseTo(
 	actual: ReturnType<typeof point<3>>,
@@ -21,15 +22,15 @@ describe('lookAt', () => {
 		['east (+x)', point<3>(1, 0, 0)],
 		['west (-x)', point<3>(-1, 0, 0)],
 	] as const)('points a pyramid tip exactly %s', (...[, direction]) => {
-		const orientation = lookAt(
+		const orientation = unwrap(lookAt(
 			point<3>(0, 0, 0),
 			direction,
 			point<3>(0, 1, 0)
-		);
+		));
 		const pyramidTip = point<3>(0, 0, 1);
 
 		expectPointCloseTo(
-			Quaternion.rotateVector(orientation, pyramidTip),
+			unwrap(Quaternion.rotateVector(orientation, pyramidTip)),
 			direction
 		);
 	});

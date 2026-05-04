@@ -4,6 +4,9 @@ import {
 } from '#root/ts/math/camera_pose.js';
 import { point, Point2D, Point3D, x, y, z } from '#root/ts/math/cartesian.js';
 import type { Segment3D } from '#root/ts/math/wireframe.js';
+import { pipe } from '#root/ts/pipe.js';
+import { map_result, type Result, result_collect, zipped } from '#root/ts/result/result.js';
+
 
 export type StyledSegment3D = Segment3D & {
 	readonly stroke: string;
@@ -95,53 +98,66 @@ export function projectWorldPoint(
 	worldPoint: Point3D,
 	pose: YawPitchPose,
 	projection: Perspective
-): Point2D | null {
-	const cameraPoint = cameraSpacePointFromPose(worldPoint, pose);
-	if (z(cameraPoint) < projection.nearPlane) {
-		return null;
-	}
+): Result<Point2D | null, Error> {
+	return pipe(
+		cameraSpacePointFromPose(worldPoint, pose),
+		map_result(cameraPoint =>
+			z(cameraPoint) < projection.nearPlane
+				? null
+				: projectCameraPoint(cameraPoint, projection)
+		)
+	);
+}
 
-	return projectCameraPoint(cameraPoint, projection);
+function renderSegment(
+	segment: StyledSegment3D,
+	pose: YawPitchPose,
+	projection: Perspective
+): Result<RenderedSegment2D | null, Error> {
+	return zipped(
+		cameraSpacePointFromPose(segment[0], pose),
+		cameraSpacePointFromPose(segment[1], pose),
+		(start, end) => {
+			const clipped = clipSegmentToNearPlane(start, end, projection.nearPlane);
+			if (clipped == null) {
+				return null;
+			}
+
+			const [visibleStart, visibleEnd] = clipped;
+			const depth = (z(visibleStart) + z(visibleEnd)) / 2;
+			if (depth > projection.farPlane) {
+				return null;
+			}
+
+			const projectedStart = projectCameraPoint(visibleStart, projection);
+			const projectedEnd = projectCameraPoint(visibleEnd, projection);
+			const fade = 1 - Math.min(depth / projection.farPlane, 0.82);
+
+			return {
+				x1: x(projectedStart),
+				y1: y(projectedStart),
+				x2: x(projectedEnd),
+				y2: y(projectedEnd),
+				stroke: segment.stroke,
+				width: segment.width,
+				opacity: Math.max(0.14, segment.opacity * fade),
+				depth,
+			};
+		}
+	);
 }
 
 export function renderSegments(
 	segments: readonly StyledSegment3D[],
 	pose: YawPitchPose,
 	projection: Perspective
-): RenderedSegment2D[] {
-	const rendered: RenderedSegment2D[] = [];
-
-	for (const segment of segments) {
-		const start = cameraSpacePointFromPose(segment[0], pose);
-		const end = cameraSpacePointFromPose(segment[1], pose);
-		const clipped = clipSegmentToNearPlane(start, end, projection.nearPlane);
-
-		if (clipped == null) {
-			continue;
-		}
-
-		const [visibleStart, visibleEnd] = clipped;
-		const depth = (z(visibleStart) + z(visibleEnd)) / 2;
-
-		if (depth > projection.farPlane) {
-			continue;
-		}
-
-		const projectedStart = projectCameraPoint(visibleStart, projection);
-		const projectedEnd = projectCameraPoint(visibleEnd, projection);
-		const fade = 1 - Math.min(depth / projection.farPlane, 0.82);
-
-		rendered.push({
-			x1: x(projectedStart),
-			y1: y(projectedStart),
-			x2: x(projectedEnd),
-			y2: y(projectedEnd),
-			stroke: segment.stroke,
-			width: segment.width,
-			opacity: Math.max(0.14, segment.opacity * fade),
-			depth,
-		});
-	}
-
-	return rendered.sort((left, right) => right.depth - left.depth);
+): Result<RenderedSegment2D[], Error> {
+	return pipe(
+		result_collect(segments.map(segment => renderSegment(segment, pose, projection))),
+		map_result(rendered =>
+			rendered
+				.filter((segment): segment is RenderedSegment2D => segment != null)
+				.sort((left, right) => right.depth - left.depth)
+		)
+	);
 }

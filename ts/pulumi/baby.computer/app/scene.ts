@@ -9,6 +9,7 @@ import { defaultUp, lookAt } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { box, rigidTransform, type Segment3D } from '#root/ts/math/wireframe.js';
 import { styleSegment } from '#root/ts/math/wireframe_render.js';
+import { Err, is_err, Ok, type Result, unwrap, unwrap_err } from '#root/ts/result/result.js';
 
 export interface Penguin {
 	readonly name: string;
@@ -59,7 +60,7 @@ function applyTransform(
 	width: number,
 	opacity: number
 ): WorldSegment[] {
-	return rigidTransform(segments, rotation, translation).map(
+	return unwrap(rigidTransform(segments, rotation, translation)).map(
 		([start, end]) => worldSegment(start, end, stroke, width, opacity)
 	);
 }
@@ -303,7 +304,7 @@ function penguinScale(penguin: Penguin): number {
 function penguinSegments(penguin: Penguin, facing: Point3D): WorldSegment[] {
 	const position = penguin.position;
 	const scale = penguinScale(penguin);
-	const rotation = lookAt(point<3>(0, 0, 0), facing, defaultUp);
+	const rotation = unwrap(lookAt(point<3>(0, 0, 0), facing, defaultUp));
 	const scaled = scaledPenguinShape(scale);
 	return [
 		...applyTransform(scaled.body, rotation, position, PENGUIN_STROKE, 1.8 * scale, 0.96),
@@ -314,11 +315,11 @@ function penguinSegments(penguin: Penguin, facing: Point3D): WorldSegment[] {
 function penguinBody(penguin: Penguin, facing: Point3D): PenguinBody {
 	const position = penguin.position;
 	const shape = scaledPenguinShape(penguinScale(penguin));
-	const rotation = lookAt(point<3>(0, 0, 0), facing, defaultUp);
+	const rotation = unwrap(lookAt(point<3>(0, 0, 0), facing, defaultUp));
 	return {
 		centre: translate(position, point<3>(0, penguin.heightM * 0.55, 0)) as Point3D,
 		outline: shape.fill.map(vertex =>
-			translate(Quaternion.rotateVector(rotation, vertex), position) as Point3D
+			translate(unwrap(Quaternion.rotateVector(rotation, vertex)), position) as Point3D
 		),
 	};
 }
@@ -470,7 +471,7 @@ export function createPenguinWorld(): PenguinWorld {
 		...icebergSegments(),
 		...applyTransform(
 			box(5.5, 1.2, 4.5),
-			Quaternion.fromAxisAngle(defaultUp, Math.PI / 8),
+			unwrap(Quaternion.fromAxisAngle(defaultUp, Math.PI / 8)),
 			point<3>(-18.2, -0.45, 17.4),
 			ICE_DEEP_STROKE,
 			1.4,
@@ -478,7 +479,7 @@ export function createPenguinWorld(): PenguinWorld {
 		),
 		...applyTransform(
 			box(4.6, 0.9, 3.2),
-			Quaternion.fromAxisAngle(defaultUp, -Math.PI / 6),
+			unwrap(Quaternion.fromAxisAngle(defaultUp, -Math.PI / 6)),
 			point<3>(22.1, -0.6, -20.5),
 			ICE_DEEP_STROKE,
 			1.25,
@@ -486,7 +487,7 @@ export function createPenguinWorld(): PenguinWorld {
 		),
 		...applyTransform(
 			box(6.8, 1.1, 5.4),
-			Quaternion.fromAxisAngle(defaultUp, -Math.PI / 5),
+			unwrap(Quaternion.fromAxisAngle(defaultUp, -Math.PI / 5)),
 			point<3>(17.4, -0.5, 18.8),
 			ICE_DEEP_STROKE,
 			1.35,
@@ -494,7 +495,7 @@ export function createPenguinWorld(): PenguinWorld {
 		),
 		...applyTransform(
 			box(7.2, 1.3, 4.8),
-			Quaternion.fromAxisAngle(defaultUp, Math.PI / 7),
+			unwrap(Quaternion.fromAxisAngle(defaultUp, Math.PI / 7)),
 			point<3>(-24.4, -0.45, -14.8),
 			ICE_DEEP_STROKE,
 			1.45,
@@ -580,16 +581,20 @@ export function nearestVisiblePenguin(
 	pose: PlayerPose,
 	width: number,
 	height: number
-): VisiblePenguinEncounter | null {
+): Result<VisiblePenguinEncounter | null, Error> {
 	let nearest: VisiblePenguinEncounter | null = null;
 
 	for (const penguin of penguins) {
-		const anchor = projectWorldPoint(
+		const anchorResult = projectWorldPoint(
 			penguinCaptionAnchor(penguin),
 			pose,
 			width,
 			height
 		);
+		if (is_err(anchorResult)) {
+			return Err(unwrap_err(anchorResult));
+		}
+		const anchor = unwrap(anchorResult);
 		if (!projectedWithinViewport(anchor, width, height)) {
 			continue;
 		}
@@ -610,5 +615,5 @@ export function nearestVisiblePenguin(
 		}
 	}
 
-	return nearest;
+	return Ok(nearest);
 }

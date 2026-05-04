@@ -21,6 +21,7 @@ ts_project(
         "//project/zemn.me/app/experiments/arena",
         "//ts/joystick",
         "//ts/math",
+        "//ts/result",
     ],
 )
 
@@ -33,6 +34,7 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//ts/math",
+        "//ts/result",
     ],
 )
 
