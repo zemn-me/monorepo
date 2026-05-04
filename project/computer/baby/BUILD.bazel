@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts/next.js:rules.bzl", "next_project")
+
+package(default_visibility = ["//ts/pulumi/baby.computer:__subpackages__"])
+
+next_project(
+    name = "next",
+    srcs = ["//project/computer/baby/app"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
