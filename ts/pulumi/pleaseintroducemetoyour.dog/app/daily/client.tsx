@@ -1,4 +1,3 @@
-
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
@@ -139,8 +138,9 @@ export function DogsOfTheDay() {
 				</>
 			) : null}
 
-			{doggs.isSuccess ?
-				null : <h1>That’s all for today ‼️ Check back tomorrow 🐕</h1> }
+			{doggs.isSuccess ? null : (
+				<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>
+			)}
 
 			<footer>for baby 2016-{new Date().getFullYear()}</footer>
 		</>

@@ -11,4 +11,3 @@ test('answer uses jsdom', () => {
 	expect(element).not.toBeNull();
 	expect(answer()).toBe(42);
 });
-

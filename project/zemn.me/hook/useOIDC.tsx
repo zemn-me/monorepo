@@ -1,11 +1,21 @@
-import { QueryKey, SkipToken, skipToken, useQuery } from '@tanstack/react-query';
+import {
+	QueryKey,
+	SkipToken,
+	skipToken,
+	useQuery,
+} from '@tanstack/react-query';
 
 import { useOIDCConfig } from '#root/project/zemn.me/hook/useOIDCConfig.js';
-import {
-	useWindowCallback,
-} from '#root/project/zemn.me/promise/window_callback.js';
+import { useWindowCallback } from '#root/project/zemn.me/promise/window_callback.js';
 import { fixedTimeStringEquals } from '#root/ts/crypto/fixed_time_string_comparison.js';
-import { coincide_then, error, Future, future_and_then, future_flatten_then, resolve } from '#root/ts/future/future.js';
+import {
+	coincide_then,
+	error,
+	Future,
+	future_and_then,
+	future_flatten_then,
+	resolve,
+} from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
@@ -14,10 +24,9 @@ import * as option from '#root/ts/option/types.js';
 import { Err, Ok } from '#root/ts/result/result.js';
 import { Second } from '#root/ts/time/duration.js';
 
-
 export type OIDCImplicitRequest = Omit<
 	OIDCAuthenticationRequest,
-	'response_type'
+	| 'response_type'
 	| 'redirect_uri'
 	| 'state'
 	| 'nonce'
@@ -34,20 +43,25 @@ async function fetchEntropy(): Promise<string> {
 	return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
+export function useOIDC(
+	issuer: string,
+	params: OIDCImplicitRequest
+): [
 	id_token: Future<string, void, Error>,
 	access_token: Future<string, void, Error>,
 	promptForLogin: Future<() => Promise<void>, void, Error>,
 	/** can use to cache bust dependent queries */
-	cacheKey: QueryKey
+	cacheKey: QueryKey,
 ] {
 	const oidc_config = useOIDCConfig(issuer);
 
-	const entropy = useQueryFuture(useQuery({
-		queryKey: ['useoidc entropy', issuer],
-		queryFn: fetchEntropy,
-		staleTime: Infinity,
-	}));
+	const entropy = useQueryFuture(
+		useQuery({
+			queryKey: ['useoidc entropy', issuer],
+			queryFn: fetchEntropy,
+			staleTime: Infinity,
+		})
+	);
 
 	const authRq = future_and_then(
 		entropy,
@@ -57,29 +71,30 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 			redirect_uri: `${window.location.origin}/callback`,
 			state: e,
 			nonce: e,
-			scope: Array.from(new Set(['openid', ...params.scope.split(' ')])).join(' '),
+			scope: Array.from(
+				new Set(['openid', ...params.scope.split(' ')])
+			).join(' '),
 		})
-	)
+	);
 
-	const validated_authrq = future_flatten_then(coincide_then(
-		oidc_config, authRq,
-		(config, rq) =>
-			validateAuthenticationRequest(
-				rq, config
-			)(
+	const validated_authrq = future_flatten_then(
+		coincide_then(oidc_config, authRq, (config, rq) =>
+			validateAuthenticationRequest(rq, config)(
 				() => resolve(rq),
-				err => error(err),
+				err => error(err)
 			)
-	));
+		)
+	);
 
 	const targetURL = coincide_then(
-		oidc_config, validated_authrq,
+		oidc_config,
+		validated_authrq,
 		(config, params) => {
 			const u = new URL(config.authorization_endpoint);
-			u.search = (new URLSearchParams(params)).toString();
+			u.search = new URLSearchParams(params).toString();
 			return u;
 		}
-	)
+	);
 	const cacheKeyArgs: QueryKey = [issuer, params];
 
 	// very close but we need to abstract and pipeline this more cleanly.
@@ -96,82 +111,94 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 				const params = OIDCAuthenticationResponse.parse(
 					Object.fromEntries([
 						...href.searchParams,
-						...new URLSearchParams(
-							href.hash.slice(1)
-						),
+						...new URLSearchParams(href.hash.slice(1)),
 					])
 				);
 
-
 				// perform state validation
-				(await option.option_from_maybe_undefined(params.state)(
-					() => Err(new Error('missing state in authentication response')),
-					state => entropy(
-						async e => await fixedTimeStringEquals(e, state)
-							? Ok(undefined)
-							: Err(new Error(["invalid state:", state, "!=", e].join(" "))),
-						() => Err(new Error('this should never happen')),
-						() => Err(new Error('this should never happen')),
+				(
+					await option.option_from_maybe_undefined(params.state)(
+						() =>
+							Err(
+								new Error(
+									'missing state in authentication response'
+								)
+							),
+						state =>
+							entropy(
+								async e =>
+									(await fixedTimeStringEquals(e, state))
+										? Ok(undefined)
+										: Err(
+												new Error(
+													[
+														'invalid state:',
+														state,
+														'!=',
+														e,
+													].join(' ')
+												)
+											),
+								() =>
+									Err(new Error('this should never happen')),
+								() => Err(new Error('this should never happen'))
+							)
 					)
-				))(
-					e => { throw e },
-					() => { /* intentionally empty */ }
-				)
+				)(
+					e => {
+						throw e;
+					},
+					() => {
+						/* intentionally empty */
+					}
+				);
 
 				return params;
 			},
 			(() => skipToken) as () => SkipToken,
-			(() => skipToken) as () => SkipToken,
-
+			(() => skipToken) as () => SkipToken
 		),
 		staleTime: r =>
 			option.option_from_maybe_undefined(r.state.data)(
 				(/*None*/) => 0,
-				v => 'expires_in' in v && v.expires_in !== undefined
-					? parseInt(v.expires_in, 10) * Second
-					: 0,
+				v =>
+					'expires_in' in v && v.expires_in !== undefined
+						? parseInt(v.expires_in, 10) * Second
+						: 0
 			),
-		enabled: false
+		enabled: false,
 	});
 
 	const callbackQueryResult = useQueryFuture(callbackQuery);
 
-	const requestConsent = future_and_then(
-		targetURL, () => async () => {
-			const response = await callbackQuery.refetch();
-			if (response.error) {
-				throw response.error;
-			}
+	const requestConsent = future_and_then(targetURL, () => async () => {
+		const response = await callbackQuery.refetch();
+		if (response.error) {
+			throw response.error;
 		}
+	});
+
+	const callbackQueryResultWithHandledErrorCallback = future_flatten_then(
+		future_and_then(callbackQueryResult, resp =>
+			'error' in resp ? error(new Error(resp.error)) : resolve(resp)
+		)
 	);
 
-	const callbackQueryResultWithHandledErrorCallback = future_flatten_then(future_and_then(
-		callbackQueryResult,
-		resp => 'error' in resp
-			? error(new Error(resp.error))
-			: resolve(resp)
-	));
+	const id_token = future_flatten_then(
+		future_and_then(callbackQueryResultWithHandledErrorCallback, resp =>
+			resp.id_token !== undefined
+				? resolve(resp.id_token)
+				: error(new Error('missing id_token'))
+		)
+	);
 
+	const access_token = future_flatten_then(
+		future_and_then(callbackQueryResultWithHandledErrorCallback, resp =>
+			resp.access_token !== undefined
+				? resolve(resp.access_token)
+				: error(new Error('missing access_token'))
+		)
+	);
 
-	const id_token = future_flatten_then(future_and_then(
-		callbackQueryResultWithHandledErrorCallback,
-		resp => resp.id_token !== undefined
-			? resolve(resp.id_token)
-			: error(new Error('missing id_token'))
-	));
-
-	const access_token = future_flatten_then(future_and_then(
-		callbackQueryResultWithHandledErrorCallback,
-		resp => resp.access_token !== undefined
-			? resolve(resp.access_token)
-			: error(new Error('missing access_token'))
-	));
-
-
-	return [
-		id_token,
-		access_token,
-		requestConsent,
-		cacheKeyArgs,
-	] as const;
+	return [id_token, access_token, requestConsent, cacheKeyArgs] as const;
 }

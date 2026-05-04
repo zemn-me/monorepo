@@ -4,7 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useDeleteAdminUser, useGetAdminUsers, usePostAdminUsers, usePutAdminUser } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import {
+	useDeleteAdminUser,
+	useGetAdminUsers,
+	usePostAdminUsers,
+	usePutAdminUser,
+} from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 import { future_to_option } from '#root/ts/future/option/future_to_option.js';
 import {
@@ -26,7 +31,8 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 	const deleteUser = useDeleteAdminUser(id_token);
 	const gridStyle = {
 		display: 'grid',
-		gridTemplateColumns: 'minmax(10rem, 1fr) minmax(14rem, 1fr) minmax(12rem, 1fr) minmax(12rem, 1fr) minmax(18rem, 2fr) minmax(16rem, 1fr) auto',
+		gridTemplateColumns:
+			'minmax(10rem, 1fr) minmax(14rem, 1fr) minmax(12rem, 1fr) minmax(12rem, 1fr) minmax(18rem, 2fr) minmax(16rem, 1fr) auto',
 		gap: '0.5rem 1rem',
 		alignItems: 'center',
 	} as const;
@@ -55,7 +61,12 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 		minWidth: 0,
 	} as const;
 
-	const { register, handleSubmit, reset, formState: { errors } } = useForm<AddUserForm>({
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<AddUserForm>({
 		defaultValues: { email: '' },
 		resolver: zodResolver(addUserSchema),
 	});
@@ -82,7 +93,9 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 						{...register('email')}
 					/>
 					{errors.email?.message ? (
-						<output htmlFor="add-user-email">{errors.email.message}</output>
+						<output htmlFor="add-user-email">
+							{errors.email.message}
+						</output>
 					) : null}
 					<button type="submit">Add user</button>
 				</fieldset>
@@ -90,7 +103,10 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 			<section>
 				<h2>Users</h2>
 				<div aria-label="Users list" role="table" style={gridStyle}>
-					<div role="row" style={{ ...gridRowStyle, fontWeight: 600 }}>
+					<div
+						role="row"
+						style={{ ...gridRowStyle, fontWeight: 600 }}
+					>
 						<div role="columnheader">ID</div>
 						<div role="columnheader">Email</div>
 						<div role="columnheader">Given Name</div>
@@ -100,138 +116,174 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 						<div role="columnheader">Actions</div>
 					</div>
 					{(usersQuery.data ?? []).map(user => {
-						const emails = (user.emails ?? []).join(', ') || '(no email)';
-						const subjectIds = (user.subjectIds ?? []).join(', ') || '(no subjects)';
+						const emails =
+							(user.emails ?? []).join(', ') || '(no email)';
+						const subjectIds =
+							(user.subjectIds ?? []).join(', ') ||
+							'(no subjects)';
 						const givenName = user.givenName ?? '';
 						const familyName = user.familyName ?? '';
 						return (
-						<div key={user.id} role="row" style={gridRowStyle}>
-							<div role="cell"><code>{user.id}</code></div>
-							<div role="cell">
-								<label style={scopesLabelStyle}>
-									<span>Email</span>
-									<textarea
-										aria-label={`Emails for ${user.id}`}
-										defaultValue={emails === '(no email)' ? '' : emails}
-										onBlur={event => {
-											const nextEmails = event.currentTarget.value
-												.split(/[,\s]+/)
-												.map(s => s.trim())
-												.filter(Boolean);
-											void updateUser.mutate({
-												headers: { Authorization: id_token },
-												body: {
-													id: user.id,
-													emails: nextEmails,
+							<div key={user.id} role="row" style={gridRowStyle}>
+								<div role="cell">
+									<code>{user.id}</code>
+								</div>
+								<div role="cell">
+									<label style={scopesLabelStyle}>
+										<span>Email</span>
+										<textarea
+											aria-label={`Emails for ${user.id}`}
+											defaultValue={
+												emails === '(no email)'
+													? ''
+													: emails
+											}
+											onBlur={event => {
+												const nextEmails =
+													event.currentTarget.value
+														.split(/[,\s]+/)
+														.map(s => s.trim())
+														.filter(Boolean);
+												void updateUser.mutate({
+													headers: {
+														Authorization: id_token,
+													},
+													body: {
+														id: user.id,
+														emails: nextEmails,
+													},
+												});
+											}}
+											rows={2}
+											style={scopesInputStyle}
+										/>
+									</label>
+								</div>
+								<div role="cell">
+									<label style={scopesLabelStyle}>
+										<span>Given Name</span>
+										<input
+											aria-label={`Given name for ${user.id}`}
+											defaultValue={givenName}
+											onBlur={event => {
+												void updateUser.mutate({
+													headers: {
+														Authorization: id_token,
+													},
+													body: {
+														id: user.id,
+														givenName:
+															event.currentTarget.value.trim(),
+													},
+												});
+											}}
+											style={textInputStyle}
+										/>
+									</label>
+								</div>
+								<div role="cell">
+									<label style={scopesLabelStyle}>
+										<span>Family Name</span>
+										<input
+											aria-label={`Family name for ${user.id}`}
+											defaultValue={familyName}
+											onBlur={event => {
+												void updateUser.mutate({
+													headers: {
+														Authorization: id_token,
+													},
+													body: {
+														id: user.id,
+														familyName:
+															event.currentTarget.value.trim(),
+													},
+												});
+											}}
+											style={textInputStyle}
+										/>
+									</label>
+								</div>
+								<div role="cell">
+									<label style={scopesLabelStyle}>
+										<span>Scopes</span>
+										<textarea
+											aria-label={`Scopes for ${emails}`}
+											defaultValue={(
+												user.scopes ?? []
+											).join(' ')}
+											onBlur={event => {
+												const scopes =
+													event.currentTarget.value
+														.split(/\s+/)
+														.map(s => s.trim())
+														.filter(Boolean);
+												void updateUser.mutate({
+													headers: {
+														Authorization: id_token,
+													},
+													body: {
+														id: user.id,
+														scopes,
+													},
+												});
+											}}
+											rows={2}
+											style={scopesInputStyle}
+										/>
+									</label>
+								</div>
+								<div role="cell">
+									<label style={scopesLabelStyle}>
+										<span>Subject IDs</span>
+										<textarea
+											aria-label={`Subject IDs for ${user.id}`}
+											defaultValue={
+												subjectIds === '(no subjects)'
+													? ''
+													: subjectIds
+											}
+											onBlur={event => {
+												const nextSubjectIds =
+													event.currentTarget.value
+														.split(/[,\s]+/)
+														.map(s => s.trim())
+														.filter(Boolean);
+												void updateUser.mutate({
+													headers: {
+														Authorization: id_token,
+													},
+													body: {
+														id: user.id,
+														subjectIds:
+															nextSubjectIds,
+													},
+												});
+											}}
+											rows={2}
+											style={{
+												...scopesInputStyle,
+												...subjectIdsStyle,
+											}}
+										/>
+									</label>
+								</div>
+								<div role="cell">
+									<button
+										disabled={!user.deletable}
+										onClick={() => {
+											void deleteUser.mutate({
+												headers: {
+													Authorization: id_token,
 												},
+												body: { id: user.id },
 											});
 										}}
-										rows={2}
-										style={scopesInputStyle}
-									/>
-								</label>
+										type="button"
+									>
+										Remove
+									</button>
+								</div>
 							</div>
-							<div role="cell">
-								<label style={scopesLabelStyle}>
-									<span>Given Name</span>
-									<input
-										aria-label={`Given name for ${user.id}`}
-										defaultValue={givenName}
-										onBlur={event => {
-											void updateUser.mutate({
-												headers: { Authorization: id_token },
-												body: {
-													id: user.id,
-													givenName: event.currentTarget.value.trim(),
-												},
-											});
-										}}
-										style={textInputStyle}
-									/>
-								</label>
-							</div>
-							<div role="cell">
-								<label style={scopesLabelStyle}>
-									<span>Family Name</span>
-									<input
-										aria-label={`Family name for ${user.id}`}
-										defaultValue={familyName}
-										onBlur={event => {
-											void updateUser.mutate({
-												headers: { Authorization: id_token },
-												body: {
-													id: user.id,
-													familyName: event.currentTarget.value.trim(),
-												},
-											});
-										}}
-										style={textInputStyle}
-									/>
-								</label>
-							</div>
-							<div role="cell">
-								<label style={scopesLabelStyle}>
-									<span>Scopes</span>
-									<textarea
-										aria-label={`Scopes for ${emails}`}
-										defaultValue={(user.scopes ?? []).join(' ')}
-										onBlur={event => {
-											const scopes = event.currentTarget.value
-												.split(/\s+/)
-												.map(s => s.trim())
-												.filter(Boolean);
-											void updateUser.mutate({
-												headers: { Authorization: id_token },
-												body: {
-													id: user.id,
-													scopes,
-												},
-											});
-										}}
-										rows={2}
-										style={scopesInputStyle}
-									/>
-								</label>
-							</div>
-							<div role="cell">
-								<label style={scopesLabelStyle}>
-									<span>Subject IDs</span>
-									<textarea
-										aria-label={`Subject IDs for ${user.id}`}
-										defaultValue={subjectIds === '(no subjects)' ? '' : subjectIds}
-										onBlur={event => {
-											const nextSubjectIds = event.currentTarget.value
-												.split(/[,\s]+/)
-												.map(s => s.trim())
-												.filter(Boolean);
-											void updateUser.mutate({
-												headers: { Authorization: id_token },
-												body: {
-													id: user.id,
-													subjectIds: nextSubjectIds,
-												},
-											});
-										}}
-										rows={2}
-										style={{ ...scopesInputStyle, ...subjectIdsStyle }}
-									/>
-								</label>
-							</div>
-							<div role="cell">
-								<button
-									disabled={!user.deletable}
-									onClick={() => {
-										void deleteUser.mutate({
-											headers: { Authorization: id_token },
-											body: { id: user.id },
-										});
-									}}
-									type="button"
-								>
-									Remove
-								</button>
-							</div>
-						</div>
 						);
 					})}
 				</div>

@@ -1,7 +1,6 @@
-import { ZodError, ZodSafeParseResult } from "zod";
+import { ZodError, ZodSafeParseResult } from 'zod';
 
-import { Err, Ok, Result } from "#root/ts/result.js";
-
+import { Err, Ok, Result } from '#root/ts/result.js';
 
 export function resultFromZod<I>(
 	t: ZodSafeParseResult<I>

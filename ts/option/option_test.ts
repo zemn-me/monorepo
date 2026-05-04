@@ -12,7 +12,7 @@ import {
 	unwrap,
 	unwrap_or,
 	unwrap_or_else,
-	zip
+	zip,
 } from '#root/ts/option/types.js';
 
 const _: None = None;
@@ -48,8 +48,8 @@ describe('Option Utilities', () => {
 		});
 
 		it('does not get confused by undefined', () => {
-			expect(is_some(Some(undefined))).toBe(true)
-		})
+			expect(is_some(Some(undefined))).toBe(true);
+		});
 	});
 
 	describe('is_none', () => {
@@ -70,7 +70,9 @@ describe('Option Utilities', () => {
 		});
 
 		it('throws if called on None', () => {
-			expect(() => unwrap(None)).toThrow('Cannot unwrap Option; has no value.');
+			expect(() => unwrap(None)).toThrow(
+				'Cannot unwrap Option; has no value.'
+			);
 		});
 	});
 
@@ -95,7 +97,9 @@ describe('Option Utilities', () => {
 
 		it('calls the fallback function and returns its result if None', () => {
 			const fallbackFn = jest.fn(() => 'Fallback from function');
-			expect(unwrap_or_else(None, fallbackFn)).toBe('Fallback from function');
+			expect(unwrap_or_else(None, fallbackFn)).toBe(
+				'Fallback from function'
+			);
 			expect(fallbackFn).toHaveBeenCalledTimes(1);
 		});
 	});
@@ -171,7 +175,6 @@ describe('Option Utilities', () => {
 			expect(is_none(result)).toBe(true);
 		});
 	});
-
 
 	describe('from', () => {
 		it('returns Some(T) if value is defined', () => {

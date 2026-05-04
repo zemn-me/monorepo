@@ -48,31 +48,34 @@ class ErrBlueprintBook extends Error {
 
 export function Client() {
 	const [blueprintString, setBlueprintString] =
-		useState< Option<string>>(None);
-	const [depth, setDepth] = useState<Option <string>>(Some("3"));
+		useState<Option<string>>(None);
+	const [depth, setDepth] = useState<Option<string>>(Some('3'));
 	const depthInputLabel = useId();
 	const b64InputLabel = useId();
 	const outputLabel = useId();
 	const inputsString = [b64InputLabel, depthInputLabel].join(' ');
 
-	const depthInt = depth.and_then(d => Ok(ParseInt(d))).unwrap_or_else( () =>
-		Err( new Error("Please specify a depth of wall."))).flatten();
+	const depthInt = depth
+		.and_then(d => Ok(ParseInt(d)))
+		.unwrap_or_else(() => Err(new Error('Please specify a depth of wall.')))
+		.flatten();
 
-	const wrapper = blueprintString.and_then(v => safelyParseBlueprintString(v)).unwrap_or_else(() => Err(new Error("Please specify blueprint")));
+	const wrapper = blueprintString
+		.and_then(v => safelyParseBlueprintString(v))
+		.unwrap_or_else(() => Err(new Error('Please specify blueprint')));
 
-	const surrounded = depthInt.zip(wrapper)
+	const surrounded = depthInt
+		.zip(wrapper)
 		.and_then(([depth, wrapper]) => {
 			if (!('blueprint' in wrapper)) {
-				return Err(new ErrBlueprintBook())
+				return Err(new ErrBlueprintBook());
 			}
 
-			return Ok(blueprintSurroundedByWall(
-				wrapper.blueprint as Blueprint,
-				depth
-			))
-		}).flatten()
-
-
+			return Ok(
+				blueprintSurroundedByWall(wrapper.blueprint as Blueprint, depth)
+			);
+		})
+		.flatten();
 
 	return (
 		<Prose>
@@ -100,9 +103,7 @@ export function Client() {
 					Factorio blueprint (base64):{' '}
 					<textarea
 						id={b64InputLabel}
-						onChange={e =>
-							setBlueprintString(Some(e.target.value))
-						}
+						onChange={e => setBlueprintString(Some(e.target.value))}
 						spellCheck="false"
 						value={blueprintString.unwrap_or(undefined)}
 					/>
@@ -112,13 +113,19 @@ export function Client() {
 					Depth:{' '}
 					<input
 						id={depthInputLabel}
-						onChange={e => setDepth(Some(e.target.value ))}
+						onChange={e => setDepth(Some(e.target.value))}
 						value={depth.unwrap_or(undefined)}
 					/>
 				</label>
 
 				<output htmlFor={inputsString} id={outputLabel}>
-					{surrounded.and_then(output => <DisplayBlueprint blueprint={output} />).unwrap_or_else(e => <ErrorDisplay error={e} />)}
+					{surrounded
+						.and_then(output => (
+							<DisplayBlueprint blueprint={output} />
+						))
+						.unwrap_or_else(e => (
+							<ErrorDisplay error={e} />
+						))}
 				</output>
 			</form>
 		</Prose>

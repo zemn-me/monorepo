@@ -3,18 +3,20 @@ import { Metadata } from 'next/types';
 import Link from '#root/project/zemn.me/components/Link/index.js';
 
 const pages = {
-	"/experiments/emoji/flag": "Custom Country flag emoji generator.",
-	"/experiments/rays": "Renderer for ray/halo effects.",
-	"/experiments/factorio": "Some Factorio experiments.",
-	"/experiments/cultist": "Mostly broken cultist simulator game board from the Covid-19 era.",
-	"/experiments/geometry_of_music": "Notes from reading the book Geometry of Music.",
-	"/experiments/frame": "Calculator for framing and sizing mattes.",
-	"/experiments/arena": "FPS-style SVG arena with pointer-lock camera controls.",
-	"/experiments/toc": "Test renderer for table of contents generation.",
-	"/experiments/article": "Test renderer for MDX.",
-	"/experiments/cv": "Unfinished attempt to port my CV to my modern site.",
-
-}
+	'/experiments/emoji/flag': 'Custom Country flag emoji generator.',
+	'/experiments/rays': 'Renderer for ray/halo effects.',
+	'/experiments/factorio': 'Some Factorio experiments.',
+	'/experiments/cultist':
+		'Mostly broken cultist simulator game board from the Covid-19 era.',
+	'/experiments/geometry_of_music':
+		'Notes from reading the book Geometry of Music.',
+	'/experiments/frame': 'Calculator for framing and sizing mattes.',
+	'/experiments/arena':
+		'FPS-style SVG arena with pointer-lock camera controls.',
+	'/experiments/toc': 'Test renderer for table of contents generation.',
+	'/experiments/article': 'Test renderer for MDX.',
+	'/experiments/cv': 'Unfinished attempt to port my CV to my modern site.',
+};
 
 export function ExperimentsNav() {
 	return (
@@ -25,7 +27,6 @@ export function ExperimentsNav() {
 						<Link href={path}>{description}</Link>
 					</li>
 				))}
-
 			</ul>
 		</nav>
 	);

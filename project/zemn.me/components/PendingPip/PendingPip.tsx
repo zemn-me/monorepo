@@ -2,8 +2,16 @@
  * @fileoverview small pip for showing progress.
  */
 
-import { and_then as option_and_then, Option, unwrap_or as option_unwrap_or } from "#root/ts/option/types.js";
-import { Result, result_and, unwrap_or_else as result_unwrap_or_else } from "#root/ts/result/result.js";
+import {
+	and_then as option_and_then,
+	Option,
+	unwrap_or as option_unwrap_or,
+} from '#root/ts/option/types.js';
+import {
+	Result,
+	result_and,
+	unwrap_or_else as result_unwrap_or_else,
+} from '#root/ts/result/result.js';
 
 export interface PendingPipProps {
 	/**
@@ -18,7 +26,7 @@ export interface PendingPipProps {
 	 * if it is {@link Err}, a little cross is shown which can be tapped on to
 	 * see the error.
 	 */
-	value: Option<Option<Result<unknown, Error>>>
+	value: Option<Option<Result<unknown, Error>>>;
 }
 
 /**
@@ -29,24 +37,23 @@ export interface PendingPipProps {
  */
 export function PendingPip(props: PendingPipProps) {
 	return option_unwrap_or(
-		option_and_then(
-			props.value,
-			v => option_unwrap_or(
+		option_and_then(props.value, v =>
+			option_unwrap_or(
 				option_and_then(
 					v,
 					// content is loaded
-					result => result_unwrap_or_else(
-						result_and(
-							result,
-							<>✓</>
-						),
+					result =>
+						result_unwrap_or_else(
+							result_and(result, <>✓</>),
 
-						// loading failed
-						err => <details>
-							<summary>❌</summary>
-							{err.toString()}
-						</details>
-					)
+							// loading failed
+							err => (
+								<details>
+									<summary>❌</summary>
+									{err.toString()}
+								</details>
+							)
+						)
 				),
 				// if the inner option is None,
 				// the content is loading.
@@ -56,6 +63,5 @@ export function PendingPip(props: PendingPipProps) {
 		// if the outer option is None, render
 		// nothing,
 		null
-	)
+	);
 }
-

@@ -14,8 +14,6 @@ import { LogisticSection } from '#root/ts/factorio/logistic_section.js';
 import { ProgrammableSpeakerCircuitParameters } from '#root/ts/factorio/programmable_speaker_circuit_parameters.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 
-
-
 export const ControlBehavior = z.strictObject({
 	/**
 	 * CircuitCondition
@@ -216,9 +214,11 @@ export const ControlBehavior = z.strictObject({
 	 */
 	decider_conditions: DeciderCombinatorParameters.optional(),
 	/** Filter sections for combinators (Factorio 2.0). */
-	sections: z.strictObject({
-		sections: z.array(LogisticSection)
-	}).optional(),
+	sections: z
+		.strictObject({
+			sections: z.array(LogisticSection),
+		})
+		.optional(),
 	/**
 	 * ProgrammableSpeakerCircuitParameters
 	 */

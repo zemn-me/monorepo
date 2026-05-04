@@ -6,10 +6,9 @@ import { Add } from '#root/ts/typeadd.js';
  * Returns the type of an N-dimensional
  * homogenous coordinate.
  */
-export type Point<N extends number> =
-	Matrix.Matrix<1, Add<N, 1>>;
+export type Point<N extends number> = Matrix.Matrix<1, Add<N, 1>>;
 
-export type Point2D = Point<2>
+export type Point2D = Point<2>;
 export type Point3D = Point<3>;
 export type Line2D = Point2D[];
 export type Line3D = Point3D[];
@@ -18,13 +17,10 @@ export type Line3D = Point3D[];
  * For a given homogenous coordinate,
  * give its projective / multiplier value.
  */
-export const w =
-	<N extends number>(p: Point<N>): number =>
-		p[p.length - 1]![0];
+export const w = <N extends number>(p: Point<N>): number => p[p.length - 1]![0];
 
-export const nonw =
-	<N extends number>(p: Point<N>) =>
-		p.slice(0, p.length - 1) as Matrix.Matrix<1, N>
+export const nonw = <N extends number>(p: Point<N>) =>
+	p.slice(0, p.length - 1) as Matrix.Matrix<1, N>;
 
 export function pointToCart(p: Point2D): Cart.Point2D;
 export function pointToCart(p: Point3D): Cart.Point3D;

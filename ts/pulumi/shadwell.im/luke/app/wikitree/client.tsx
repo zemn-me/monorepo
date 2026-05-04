@@ -1,7 +1,15 @@
 'use client';
 
 import * as d3 from 'd3-force';
-import { FormEvent, PointerEvent, useEffect, useMemo, useRef, useState, WheelEvent } from 'react';
+import {
+	FormEvent,
+	PointerEvent,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	WheelEvent,
+} from 'react';
 
 import { RANK_IMAGE_RULES } from '#root/ts/pulumi/shadwell.im/luke/app/wikitree/rankIconReferences.js';
 import { Link } from '#root/ts/react/next/Link/index.js';
@@ -135,28 +143,8 @@ const RELATIONS: readonly RelationDefinition[] = [
 ];
 
 const NODE_LIMIT_OPTIONS = [
-	30,
-	100,
-	150,
-	200,
-	250,
-	500,
-	750,
-	1000,
-	1250,
-	1500,
-	1750,
-	2000,
-	2250,
-	2500,
-	2750,
-	3000,
-	3500,
-	4000,
-	4500,
-	5000,
-	7500,
-	10000,
+	30, 100, 150, 200, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500,
+	2750, 3000, 3500, 4000, 4500, 5000, 7500, 10000,
 ] as const;
 const DEFAULT_MAX_NODES = NODE_LIMIT_OPTIONS[0];
 const DEFAULT_QID = 'Q42';
@@ -208,7 +196,11 @@ const HIGHLIGHT_FILTERS: readonly {
 	readonly label: string;
 	readonly description: string;
 }[] = [
-	{ id: 'none', label: 'All people', description: 'Show the full graph without extra highlighting.' },
+	{
+		id: 'none',
+		label: 'All people',
+		description: 'Show the full graph without extra highlighting.',
+	},
 	{
 		id: 'anglicanPriest',
 		label: 'Anglican priest',
@@ -217,7 +209,8 @@ const HIGHLIGHT_FILTERS: readonly {
 	{
 		id: 'anyNobleTitle',
 		label: 'Any noble title',
-		description: 'Highlight people who have any noble title value or any honorific prefix.',
+		description:
+			'Highlight people who have any noble title value or any honorific prefix.',
 	},
 	{
 		id: 'living',
@@ -233,7 +226,8 @@ const HIGHLIGHT_FILTERS: readonly {
 	{
 		id: 'monarchNobleTitle',
 		label: 'Monarchy',
-		description: 'Highlight people with a monarch noble title or the honorific prefix Royal Highness.',
+		description:
+			'Highlight people with a monarch noble title or the honorific prefix Royal Highness.',
 	},
 	{
 		id: 'military',
@@ -244,7 +238,8 @@ const HIGHLIGHT_FILTERS: readonly {
 	{
 		id: 'rightHonourable',
 		label: 'The Right Honourable',
-		description: 'Highlight people with the honorific prefix The Right Honourable.',
+		description:
+			'Highlight people with the honorific prefix The Right Honourable.',
 	},
 ] as const;
 
@@ -267,7 +262,11 @@ function normalizeMaxNodes(raw: string | null) {
 	if (!Number.isInteger(parsed)) {
 		return DEFAULT_MAX_NODES;
 	}
-	return NODE_LIMIT_OPTIONS.includes(parsed as (typeof NODE_LIMIT_OPTIONS)[number]) ? parsed : DEFAULT_MAX_NODES;
+	return NODE_LIMIT_OPTIONS.includes(
+		parsed as (typeof NODE_LIMIT_OPTIONS)[number]
+	)
+		? parsed
+		: DEFAULT_MAX_NODES;
 }
 
 function measureNodeBounds(nodes: readonly SimNode[]) {
@@ -292,7 +291,11 @@ function measureNodeBounds(nodes: readonly SimNode[]) {
 	};
 }
 
-function fitNodesToCanvas(nodes: readonly SimNode[], width: number, height: number) {
+function fitNodesToCanvas(
+	nodes: readonly SimNode[],
+	width: number,
+	height: number
+) {
 	const bounds = measureNodeBounds(nodes);
 	if (!bounds) {
 		return { x: 0, y: 0, scale: 1 };
@@ -301,7 +304,11 @@ function fitNodesToCanvas(nodes: readonly SimNode[], width: number, height: numb
 	const targetWidth = Math.max(1, width - padding);
 	const targetHeight = Math.max(1, height - padding);
 	const scale = clamp(
-		Math.min(targetWidth / bounds.contentWidth, targetHeight / bounds.contentHeight, MAX_SCALE),
+		Math.min(
+			targetWidth / bounds.contentWidth,
+			targetHeight / bounds.contentHeight,
+			MAX_SCALE
+		),
 		ABSOLUTE_MIN_SCALE,
 		MAX_SCALE
 	);
@@ -312,7 +319,11 @@ function fitNodesToCanvas(nodes: readonly SimNode[], width: number, height: numb
 	};
 }
 
-function minZoomScaleForChart(nodes: readonly SimNode[], width: number, height: number) {
+function minZoomScaleForChart(
+	nodes: readonly SimNode[],
+	width: number,
+	height: number
+) {
 	const bounds = measureNodeBounds(nodes);
 	if (!bounds) {
 		return ABSOLUTE_MIN_SCALE;
@@ -320,8 +331,16 @@ function minZoomScaleForChart(nodes: readonly SimNode[], width: number, height: 
 	const padding = 140;
 	const targetWidth = Math.max(1, width - padding);
 	const targetHeight = Math.max(1, height - padding);
-	const fitScale = Math.min(targetWidth / bounds.contentWidth, targetHeight / bounds.contentHeight, MAX_SCALE);
-	return clamp(fitScale / ZOOM_OUT_BREADTH_FACTOR, ABSOLUTE_MIN_SCALE, MAX_SCALE);
+	const fitScale = Math.min(
+		targetWidth / bounds.contentWidth,
+		targetHeight / bounds.contentHeight,
+		MAX_SCALE
+	);
+	return clamp(
+		fitScale / ZOOM_OUT_BREADTH_FACTOR,
+		ABSOLUTE_MIN_SCALE,
+		MAX_SCALE
+	);
 }
 
 function normaliseQid(input: string) {
@@ -375,7 +394,9 @@ function readRetryAfterMs(response: Response) {
 		return seconds * 1000;
 	}
 	const dateMs = Date.parse(retryAfter);
-	return Number.isFinite(dateMs) ? Math.max(0, dateMs - Date.now()) : undefined;
+	return Number.isFinite(dateMs)
+		? Math.max(0, dateMs - Date.now())
+		: undefined;
 }
 
 function waitForDelay(delayMs: number, signal: AbortSignal) {
@@ -442,8 +463,15 @@ async function fetchEntities(
 		uncachedQids.push(qid);
 	}
 
-	for (let start = 0; start < uncachedQids.length; start += WIKIDATA_BATCH_SIZE) {
-		const batchQids = uncachedQids.slice(start, start + WIKIDATA_BATCH_SIZE);
+	for (
+		let start = 0;
+		start < uncachedQids.length;
+		start += WIKIDATA_BATCH_SIZE
+	) {
+		const batchQids = uncachedQids.slice(
+			start,
+			start + WIKIDATA_BATCH_SIZE
+		);
 		const params = new URLSearchParams({
 			action: 'wbgetentities',
 			format: 'json',
@@ -461,7 +489,8 @@ async function fetchEntities(
 			);
 			if (response.status === 429 || response.status === 503) {
 				const retryAfterMs =
-					readRetryAfterMs(response) ?? Math.min(8000, 600 * 2 ** attempt);
+					readRetryAfterMs(response) ??
+					Math.min(8000, 600 * 2 ** attempt);
 				const retryAt = Date.now() + retryAfterMs;
 				onRateLimitChange?.(true, retryAt);
 				nextWikidataRequestAt = retryAt;
@@ -470,7 +499,9 @@ async function fetchEntities(
 				continue;
 			}
 			if (!response.ok) {
-				throw new Error(`Wikidata request failed with ${response.status}`);
+				throw new Error(
+					`Wikidata request failed with ${response.status}`
+				);
 			}
 			const payload = (await response.json()) as {
 				readonly entities?: Record<string, CachedEntityValue>;
@@ -490,7 +521,9 @@ async function fetchEntities(
 		}
 		if (!completed) {
 			onRateLimitChange?.(false, null);
-			throw new Error('Wikidata rate limit persisted after multiple retries.');
+			throw new Error(
+				'Wikidata rate limit persisted after multiple retries.'
+			);
 		}
 	}
 
@@ -517,7 +550,10 @@ function setCacheStore(store: Record<string, CachedEntityRecord>) {
 		return;
 	}
 	try {
-		window.localStorage.setItem(LEGACY_WIKIDATA_CACHE_KEY, JSON.stringify(store));
+		window.localStorage.setItem(
+			LEGACY_WIKIDATA_CACHE_KEY,
+			JSON.stringify(store)
+		);
 	} catch {
 		// Ignore quota and serialization failures; caching is opportunistic.
 	}
@@ -572,10 +608,7 @@ function readCachedEntity(qid: string) {
 	return prunedValue;
 }
 
-function writeCachedEntity(
-	qid: string,
-	entity: CachedEntityValue
-) {
+function writeCachedEntity(qid: string, entity: CachedEntityValue) {
 	if (typeof window === 'undefined') {
 		return;
 	}
@@ -585,7 +618,10 @@ function writeCachedEntity(
 		value: pruneEntityForCache(entity),
 	};
 	try {
-		window.localStorage.setItem(cacheKeyForEntity(qid), JSON.stringify(record));
+		window.localStorage.setItem(
+			cacheKeyForEntity(qid),
+			JSON.stringify(record)
+		);
 	} catch {
 		// Ignore quota failures; caching is opportunistic.
 	}
@@ -620,14 +656,22 @@ function emojiIconFromLabel(_label: string): RankIcon {
 	return { type: 'emoji', value: FALLBACK_RANK_ICON };
 }
 
-function rankIconFromLabels(rankLabel?: string, branchLabel?: string): RankIcon | undefined {
+function rankIconFromLabels(
+	rankLabel?: string,
+	branchLabel?: string
+): RankIcon | undefined {
 	const normalizedRank = rankLabel ? normaliseRank(rankLabel) : undefined;
-	const normalizedBranch = branchLabel ? normaliseRank(branchLabel) : undefined;
+	const normalizedBranch = branchLabel
+		? normaliseRank(branchLabel)
+		: undefined;
 	for (const rule of RANK_IMAGE_RULES) {
 		if (!normalizedRank || !rule.rankMatch.test(normalizedRank)) {
 			continue;
 		}
-		if (rule.branchMatch && (!normalizedBranch || !rule.branchMatch.test(normalizedBranch))) {
+		if (
+			rule.branchMatch &&
+			(!normalizedBranch || !rule.branchMatch.test(normalizedBranch))
+		) {
 			continue;
 		}
 		return { type: 'image', src: rule.src };
@@ -684,7 +728,11 @@ function claimToTimeMs(claim: unknown) {
 	const year = Number(match[1]);
 	const month = Math.max(1, Number(match[2]));
 	const day = Math.max(1, Number(match[3]));
-	if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+	if (
+		!Number.isInteger(year) ||
+		!Number.isInteger(month) ||
+		!Number.isInteger(day)
+	) {
 		return undefined;
 	}
 	if (year < 1 || year > 9999 || month > 12 || day > 31) {
@@ -765,7 +813,9 @@ async function _resolveEntityLabel(
 	let label = labelCache.get(qid);
 	if (label === undefined) {
 		try {
-			const entity = (await fetchEntities([qid], signal, onRateLimitChange)).get(qid);
+			const entity = (
+				await fetchEntities([qid], signal, onRateLimitChange)
+			).get(qid);
 			label = entity?.labels?.en?.value ?? null;
 		} catch {
 			label = null;
@@ -784,7 +834,11 @@ async function resolveLabelsFromClaims(
 	const qids = claimIdsFromClaims(claims);
 	const missingQids = qids.filter(qid => !labelCache.has(qid));
 	if (missingQids.length > 0) {
-		const entities = await fetchEntities(missingQids, signal, onRateLimitChange);
+		const entities = await fetchEntities(
+			missingQids,
+			signal,
+			onRateLimitChange
+		);
 		for (const qid of missingQids) {
 			const entity = entities.get(qid);
 			labelCache.set(qid, entity?.labels?.en?.value ?? null);
@@ -823,7 +877,9 @@ async function isEntityOrSubclassOfLabel(
 		subclassCache.set(qid, true);
 		return true;
 	}
-	for (const parentId of claimIdsFromClaims(entity?.claims?.[SUBCLASS_OF_PROPERTY])) {
+	for (const parentId of claimIdsFromClaims(
+		entity?.claims?.[SUBCLASS_OF_PROPERTY]
+	)) {
 		if (
 			await isEntityOrSubclassOfLabel(
 				parentId,
@@ -851,8 +907,18 @@ async function resolveRankMetadata(
 	onRateLimitChange?: (rateLimited: boolean, retryAt: number | null) => void
 ): Promise<RankMetadata> {
 	const [rankLabels, branchLabels] = await Promise.all([
-		resolveLabelsFromClaims(rankClaims, signal, labelCache, onRateLimitChange),
-		resolveLabelsFromClaims(branchClaims, signal, labelCache, onRateLimitChange),
+		resolveLabelsFromClaims(
+			rankClaims,
+			signal,
+			labelCache,
+			onRateLimitChange
+		),
+		resolveLabelsFromClaims(
+			branchClaims,
+			signal,
+			labelCache,
+			onRateLimitChange
+		),
 	]);
 	const rankLabel = rankLabels[0];
 	const branchLabel = branchLabels[0];
@@ -860,7 +926,9 @@ async function resolveRankMetadata(
 		return {};
 	}
 	return {
-		rankIcon: rankLabel ? rankIconFromLabels(rankLabel, branchLabel) : undefined,
+		rankIcon: rankLabel
+			? rankIconFromLabels(rankLabel, branchLabel)
+			: undefined,
 		rankLabel,
 		branchLabel,
 	};
@@ -893,7 +961,10 @@ async function buildGraph(
 		});
 	};
 
-	const updateRateLimitState = (nextRateLimited: boolean, nextRetryAt: number | null) => {
+	const updateRateLimitState = (
+		nextRateLimited: boolean,
+		nextRetryAt: number | null
+	) => {
 		if (rateLimited === nextRateLimited && retryAt === nextRetryAt) {
 			return;
 		}
@@ -929,7 +1000,11 @@ async function buildGraph(
 		const batchIdSet = new Set<string>();
 		while (queued.length > 0 && batchIds.length < WIKIDATA_BATCH_SIZE) {
 			const currentId = queued.shift();
-			if (!currentId || seen.has(currentId) || batchIdSet.has(currentId)) {
+			if (
+				!currentId ||
+				seen.has(currentId) ||
+				batchIdSet.has(currentId)
+			) {
 				continue;
 			}
 			if (seen.size + batchIds.length >= nodeLimit) {
@@ -946,7 +1021,11 @@ async function buildGraph(
 			continue;
 		}
 
-		const entities = await fetchEntities(batchIds, signal, updateRateLimitState);
+		const entities = await fetchEntities(
+			batchIds,
+			signal,
+			updateRateLimitState
+		);
 		for (const currentId of batchIds) {
 			seen.add(currentId);
 			publishProgress();
@@ -967,8 +1046,12 @@ async function buildGraph(
 				updateRateLimitState
 			);
 			const firstImageClaim = (entity.claims?.[IMAGE_PROPERTY] ?? [])[0];
-			const imageFileName = firstImageClaim ? claimToString(firstImageClaim) : undefined;
-			const imageUrl = imageFileName ? fileNameToCommonsUrl(imageFileName) : undefined;
+			const imageFileName = firstImageClaim
+				? claimToString(firstImageClaim)
+				: undefined;
+			const imageUrl = imageFileName
+				? fileNameToCommonsUrl(imageFileName)
+				: undefined;
 			const occupationLabels = await resolveLabelsFromClaims(
 				entity.claims?.[OCCUPATION_PROPERTY],
 				signal,
@@ -981,14 +1064,20 @@ async function buildGraph(
 				labelCache,
 				updateRateLimitState
 			);
-			const hasHonorificPrefix = (entity.claims?.[HONORIFIC_PREFIX_PROPERTY]?.length ?? 0) > 0;
+			const hasHonorificPrefix =
+				(entity.claims?.[HONORIFIC_PREFIX_PROPERTY]?.length ?? 0) > 0;
 			const nobleTitleClaims = entity.claims?.[NOBLE_TITLE_PROPERTY];
 			const nobleTitleIds = claimIdsFromClaims(nobleTitleClaims);
-			let monarchNobleTitle = hasNormalizedLabel(honorificLabels, 'Royal Highness');
-			const hasMilitaryRank = (entity.claims?.[MILITARY_RANK_PROPERTY]?.length ?? 0) > 0;
+			let monarchNobleTitle = hasNormalizedLabel(
+				honorificLabels,
+				'Royal Highness'
+			);
+			const hasMilitaryRank =
+				(entity.claims?.[MILITARY_RANK_PROPERTY]?.length ?? 0) > 0;
 			const hasMilitaryBranch = branchClaims.length > 0;
 			const hasMilitaryConflict =
-				(entity.claims?.[PARTICIPATED_IN_CONFLICT_PROPERTY]?.length ?? 0) > 0;
+				(entity.claims?.[PARTICIPATED_IN_CONFLICT_PROPERTY]?.length ??
+					0) > 0;
 			const isLiving = isLikelyLivingPerson(
 				entity.claims?.[DATE_OF_BIRTH_PROPERTY],
 				entity.claims?.[DATE_OF_DEATH_PROPERTY]
@@ -1009,13 +1098,20 @@ async function buildGraph(
 				}
 			}
 			const highlightFlags: HighlightFlags = {
-				anglicanPriest: hasNormalizedLabel(occupationLabels, 'Anglican priest'),
+				anglicanPriest: hasNormalizedLabel(
+					occupationLabels,
+					'Anglican priest'
+				),
 				anyNobleTitle: nobleTitleIds.length > 0 || hasHonorificPrefix,
 				living: isLiving,
 				politician: hasNormalizedLabel(occupationLabels, 'politician'),
-				military: hasMilitaryRank || hasMilitaryBranch || hasMilitaryConflict,
+				military:
+					hasMilitaryRank || hasMilitaryBranch || hasMilitaryConflict,
 				monarchNobleTitle,
-				rightHonourable: hasNormalizedLabel(honorificLabels, 'The Right Honourable'),
+				rightHonourable: hasNormalizedLabel(
+					honorificLabels,
+					'The Right Honourable'
+				),
 			};
 
 			nodes[currentId] = {
@@ -1051,7 +1147,11 @@ async function buildGraph(
 							to: currentId,
 						});
 					}
-					if (!seen.has(relatedId) && !batchIdSet.has(relatedId) && !queued.includes(relatedId)) {
+					if (
+						!seen.has(relatedId) &&
+						!batchIdSet.has(relatedId) &&
+						!queued.includes(relatedId)
+					) {
 						if (seen.size + queued.length >= nodeLimit) {
 							excessiveNodes = true;
 							continue;
@@ -1072,7 +1172,7 @@ async function buildGraph(
 		retryAt: null,
 	});
 	const finalGraph = snapshotGraph();
-		emitGraphUpdate();
+	emitGraphUpdate();
 	return finalGraph;
 }
 
@@ -1091,7 +1191,10 @@ function useDepths(graph: GraphData | null) {
 			}
 			const currentDepth = depths.get(current) ?? 0;
 			for (const edge of graph.edges) {
-				if (edge.to === current && (edge.relation === 'father' || edge.relation === 'mother')) {
+				if (
+					edge.to === current &&
+					(edge.relation === 'father' || edge.relation === 'mother')
+				) {
 					if (!depths.has(edge.from)) {
 						depths.set(edge.from, currentDepth - 1);
 						queue.push(edge.from);
@@ -1115,7 +1218,10 @@ function useDepths(graph: GraphData | null) {
 	}, [graph]);
 }
 
-function matchesHighlightFilter(node: Pick<EntityNode, 'highlightFlags'>, filterId: HighlightFilterId) {
+function matchesHighlightFilter(
+	node: Pick<EntityNode, 'highlightFlags'>,
+	filterId: HighlightFilterId
+) {
 	switch (filterId) {
 		case 'anglicanPriest':
 			return node.highlightFlags.anglicanPriest;
@@ -1141,7 +1247,10 @@ function normaliseSearchQuery(value: string) {
 	return value.trim().toLowerCase();
 }
 
-function matchesSearchQuery(node: Pick<EntityNode, 'id' | 'label'>, searchQuery: string) {
+function matchesSearchQuery(
+	node: Pick<EntityNode, 'id' | 'label'>,
+	searchQuery: string
+) {
 	const normalizedQuery = normaliseSearchQuery(searchQuery);
 	if (!normalizedQuery) {
 		return false;
@@ -1157,7 +1266,10 @@ function isNodeHighlighted(
 	filterId: HighlightFilterId,
 	searchQuery: string
 ) {
-	return matchesHighlightFilter(node, filterId) || matchesSearchQuery(node, searchQuery);
+	return (
+		matchesHighlightFilter(node, filterId) ||
+		matchesSearchQuery(node, searchQuery)
+	);
 }
 
 function extractFamilyName(label: string) {
@@ -1180,10 +1292,21 @@ function rectanglesOverlap(
 	top: number,
 	right: number,
 	bottom: number,
-	placedRects: readonly { left: number; top: number; right: number; bottom: number }[]
+	placedRects: readonly {
+		left: number;
+		top: number;
+		right: number;
+		bottom: number;
+	}[]
 ) {
 	return placedRects.some(
-		rect => !(right < rect.left || left > rect.right || bottom < rect.top || top > rect.bottom)
+		rect =>
+			!(
+				right < rect.left ||
+				left > rect.right ||
+				bottom < rect.top ||
+				top > rect.bottom
+			)
 	);
 }
 
@@ -1194,7 +1317,10 @@ function drawClusterFamilyLabels(
 	width: number,
 	height: number
 ) {
-	if (transform.scale > DETAIL_LABEL_SCALE_THRESHOLD || nodes.length < CLUSTER_LABEL_MIN_NODES) {
+	if (
+		transform.scale > DETAIL_LABEL_SCALE_THRESHOLD ||
+		nodes.length < CLUSTER_LABEL_MIN_NODES
+	) {
 		return;
 	}
 
@@ -1279,7 +1405,9 @@ function drawClusterFamilyLabels(
 			}
 			for (let offsetX = -1; offsetX <= 1; offsetX++) {
 				for (let offsetY = -1; offsetY <= 1; offsetY++) {
-					const bucket = buckets.get(`${current.cellX + offsetX}:${current.cellY + offsetY}`);
+					const bucket = buckets.get(
+						`${current.cellX + offsetX}:${current.cellY + offsetY}`
+					);
 					if (!bucket) {
 						continue;
 					}
@@ -1330,14 +1458,18 @@ function drawClusterFamilyLabels(
 		if (
 			!dominantSurname ||
 			dominantCount < 3 ||
-			dominantCount < Math.ceil(clusterIndices.length * CLUSTER_LABEL_MIN_SHARE)
+			dominantCount <
+				Math.ceil(clusterIndices.length * CLUSTER_LABEL_MIN_SHARE)
 		) {
 			continue;
 		}
 
 		const matchingNodes = clusterIndices
 			.map(clusterIndex => visibleNodes[clusterIndex])
-			.filter((node): node is (typeof visibleNodes)[number] => !!node && node.surname === dominantSurname);
+			.filter(
+				(node): node is (typeof visibleNodes)[number] =>
+					!!node && node.surname === dominantSurname
+			);
 		if (matchingNodes.length < 3) {
 			continue;
 		}
@@ -1360,7 +1492,11 @@ function drawClusterFamilyLabels(
 		const heightHint = Math.max(28, maxY - minY + 32);
 		const text = dominantSurname.toUpperCase();
 		const fontSize = clamp(
-			Math.min(62, widthHint / Math.max(3, text.length * 0.58), heightHint * 0.6),
+			Math.min(
+				62,
+				widthHint / Math.max(3, text.length * 0.58),
+				heightHint * 0.6
+			),
 			18,
 			62
 		);
@@ -1379,8 +1515,16 @@ function drawClusterFamilyLabels(
 		});
 	}
 
-	candidates.sort((left, right) => right.count - left.count || right.fontSize - left.fontSize);
-	const placedRects: { left: number; top: number; right: number; bottom: number }[] = [];
+	candidates.sort(
+		(left, right) =>
+			right.count - left.count || right.fontSize - left.fontSize
+	);
+	const placedRects: {
+		left: number;
+		top: number;
+		right: number;
+		bottom: number;
+	}[] = [];
 
 	for (const candidate of candidates) {
 		let fontSize = candidate.fontSize;
@@ -1457,12 +1601,15 @@ function createPlaceholderGraph(rootId: string): GraphData {
 export default function WikiTreePage() {
 	const [inputValue, setInputValue] = useState(DEFAULT_QID);
 	const [requestedQid, setRequestedQid] = useState<string | null>(null);
-	const [selectedNodeLimit, setSelectedNodeLimit] = useState<number>(DEFAULT_MAX_NODES);
-	const [requestedNodeLimit, setRequestedNodeLimit] = useState<number>(DEFAULT_MAX_NODES);
+	const [selectedNodeLimit, setSelectedNodeLimit] =
+		useState<number>(DEFAULT_MAX_NODES);
+	const [requestedNodeLimit, setRequestedNodeLimit] =
+		useState<number>(DEFAULT_MAX_NODES);
 	const [selectedId, setSelectedId] = useState<string>(DEFAULT_QID);
 	const [error, setError] = useState<string | null>(null);
 	const [graph, setGraph] = useState<GraphData | null>(null);
-	const [activeHighlight, setActiveHighlight] = useState<HighlightFilterId>('none');
+	const [activeHighlight, setActiveHighlight] =
+		useState<HighlightFilterId>('none');
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [loadingState, setLoadingState] = useState<LoadingState>({
@@ -1510,7 +1657,9 @@ export default function WikiTreePage() {
 		if (!graph) {
 			return 0;
 		}
-		return Object.values(graph.nodes).filter(node => matchesSearchQuery(node, searchQuery)).length;
+		return Object.values(graph.nodes).filter(node =>
+			matchesSearchQuery(node, searchQuery)
+		).length;
 	}, [graph, searchQuery]);
 	const selectedIdRef = useRef(selectedId);
 	const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -1576,8 +1725,12 @@ export default function WikiTreePage() {
 
 	useEffect(() => {
 		const url = new URL(window.location.href);
-		const requestedQid = normaliseQid(url.searchParams.get('q') ?? DEFAULT_QID) || DEFAULT_QID;
-		const requestedNodeLimit = normalizeMaxNodes(url.searchParams.get('max'));
+		const requestedQid =
+			normaliseQid(url.searchParams.get('q') ?? DEFAULT_QID) ||
+			DEFAULT_QID;
+		const requestedNodeLimit = normalizeMaxNodes(
+			url.searchParams.get('max')
+		);
 		setInputValue(requestedQid);
 		setSelectedNodeLimit(requestedNodeLimit);
 		setRequestedNodeLimit(requestedNodeLimit);
@@ -1592,7 +1745,13 @@ export default function WikiTreePage() {
 		const controller = new AbortController();
 		setGraph(createPlaceholderGraph(requestedQid));
 		setError(null);
-		setLoadingState({ loaded: 0, loading: true, queued: 0, rateLimited: false, retryAt: null });
+		setLoadingState({
+			loaded: 0,
+			loading: true,
+			queued: 0,
+			rateLimited: false,
+			retryAt: null,
+		});
 
 		void buildGraph(
 			requestedQid,
@@ -1609,8 +1768,18 @@ export default function WikiTreePage() {
 				if (isAbortError(caught)) {
 					return;
 				}
-				setError(caught instanceof Error ? caught.message : 'Failed to load Wikidata graph.');
-				setLoadingState({ loaded: 0, loading: false, queued: 0, rateLimited: false, retryAt: null });
+				setError(
+					caught instanceof Error
+						? caught.message
+						: 'Failed to load Wikidata graph.'
+				);
+				setLoadingState({
+					loaded: 0,
+					loading: false,
+					queued: 0,
+					rateLimited: false,
+					retryAt: null,
+				});
 			});
 
 		return () => controller.abort();
@@ -1633,7 +1802,11 @@ export default function WikiTreePage() {
 		};
 		updateFullscreenState();
 		document.addEventListener('fullscreenchange', updateFullscreenState);
-		return () => document.removeEventListener('fullscreenchange', updateFullscreenState);
+		return () =>
+			document.removeEventListener(
+				'fullscreenchange',
+				updateFullscreenState
+			);
 	}, []);
 
 	useEffect(() => {
@@ -1654,7 +1827,9 @@ export default function WikiTreePage() {
 		if (!context) {
 			return;
 		}
-		const orderedNodes = Object.values(graph.nodes).sort((a, b) => a.id.localeCompare(b.id));
+		const orderedNodes = Object.values(graph.nodes).sort((a, b) =>
+			a.id.localeCompare(b.id)
+		);
 		const existingNodePositions = new Map(
 			nodesRef.current.map(node => [
 				node.id,
@@ -1670,9 +1845,11 @@ export default function WikiTreePage() {
 
 		const initialNodes: SimNode[] = orderedNodes.map((node, index) => {
 			const depth = depths.get(node.id) ?? 0;
-			const step = orderedNodes.length <= 1 ? 1 : index / orderedNodes.length;
-			const angle = step * Math.PI * 2 + (depth * 0.18);
-			const radius = (Math.min(boundsWidth, boundsHeight) * 0.28) + (index % 7) * 12;
+			const step =
+				orderedNodes.length <= 1 ? 1 : index / orderedNodes.length;
+			const angle = step * Math.PI * 2 + depth * 0.18;
+			const radius =
+				Math.min(boundsWidth, boundsHeight) * 0.28 + (index % 7) * 12;
 			const existingPosition = existingNodePositions.get(node.id);
 			return {
 				depth,
@@ -1685,10 +1862,18 @@ export default function WikiTreePage() {
 				rankIcon: node.rankIcon,
 				rankLabel: node.rankLabel,
 				branchLabel: node.branchLabel,
-				radius: BASE_NODE_RADIUS + (node.id === graph.rootId ? 2 : Math.max(0, 3 - Math.abs(depth))),
+				radius:
+					BASE_NODE_RADIUS +
+					(node.id === graph.rootId
+						? 2
+						: Math.max(0, 3 - Math.abs(depth))),
 				url: node.url,
-				x: existingPosition?.x ?? boundsWidth / 2 + Math.cos(angle) * radius,
-				y: existingPosition?.y ?? boundsHeight / 2 + Math.sin(angle) * radius + depth * 24,
+				x:
+					existingPosition?.x ??
+					boundsWidth / 2 + Math.cos(angle) * radius,
+				y:
+					existingPosition?.y ??
+					boundsHeight / 2 + Math.sin(angle) * radius + depth * 24,
 			};
 		});
 		const nodeIds = new Set(initialNodes.map(node => node.id));
@@ -1706,20 +1891,31 @@ export default function WikiTreePage() {
 		setCanvasSize(canvas);
 		canvasViewportRef.current = viewportBounds;
 		if (existingNodePositions.size === 0) {
-			transformRef.current = fitNodesToCanvas(initialNodes, boundsWidth, boundsHeight);
+			transformRef.current = fitNodesToCanvas(
+				initialNodes,
+				boundsWidth,
+				boundsHeight
+			);
 		}
 
-		const simulation = d3.forceSimulation<SimNode>(initialNodes)
+		const simulation = d3
+			.forceSimulation<SimNode>(initialNodes)
 			.force(
 				'link',
-				d3.forceLink<SimNode, SimEdge>(initialLinks)
+				d3
+					.forceLink<SimNode, SimEdge>(initialLinks)
 					.id((node: { id: string }) => node.id)
-					.distance((link: { relation: RelationName }) => (link.relation === 'child' ? 170 : 156))
+					.distance((link: { relation: RelationName }) =>
+						link.relation === 'child' ? 170 : 156
+					)
 					.strength(0.78)
 			)
 			.force('charge', d3.forceManyBody().strength(-2200))
 			.force('center', d3.forceCenter(boundsWidth / 2, boundsHeight / 2))
-			.force('collision', d3.forceCollide<SimNode>(node => node.radius + 7).strength(0.78));
+			.force(
+				'collision',
+				d3.forceCollide<SimNode>(node => node.radius + 7).strength(0.78)
+			);
 		simulationRef.current = simulation;
 
 		const createLabelElement = () => {
@@ -1769,7 +1965,10 @@ export default function WikiTreePage() {
 				}
 				visibleIds.add(node.id);
 				el.style.display = 'flex';
-				el.classList.toggle('isHighlighted', isNodeHighlighted(node, activeHighlight, searchQuery));
+				el.classList.toggle(
+					'isHighlighted',
+					isNodeHighlighted(node, activeHighlight, searchQuery)
+				);
 				const portraitHolder = el.children[0] as HTMLSpanElement;
 				const iconHolder = el.children[1] as HTMLSpanElement;
 				const textSpan = el.children[2] as HTMLSpanElement;
@@ -1777,7 +1976,9 @@ export default function WikiTreePage() {
 				iconHolder.textContent = '';
 				iconHolder.style.display = 'none';
 				portraitHolder.style.display = 'none';
-				const portraitImg = portraitHolder.querySelector('img') as HTMLImageElement | null;
+				const portraitImg = portraitHolder.querySelector(
+					'img'
+				) as HTMLImageElement | null;
 				if (portraitImg) {
 					portraitImg.src = '';
 				}
@@ -1801,7 +2002,9 @@ export default function WikiTreePage() {
 					iconHolder.style.display = 'inline-flex';
 					iconHolder.title = tooltip;
 				} else if (rankIcon?.type === 'image') {
-					let img = iconHolder.querySelector('img') as HTMLImageElement | null;
+					let img = iconHolder.querySelector(
+						'img'
+					) as HTMLImageElement | null;
 					if (!img) {
 						img = document.createElement('img');
 						img.className = 'nodeLabelIconImg';
@@ -1843,8 +2046,11 @@ export default function WikiTreePage() {
 			}
 			if (
 				!canvasViewportRef.current ||
-				Math.abs(canvasViewportRef.current.width - latestBounds.width) > 1 ||
-				Math.abs(canvasViewportRef.current.height - latestBounds.height) > 1
+				Math.abs(canvasViewportRef.current.width - latestBounds.width) >
+					1 ||
+				Math.abs(
+					canvasViewportRef.current.height - latestBounds.height
+				) > 1
 			) {
 				setCanvasSize(canvasRef.current);
 				canvasViewportRef.current = latestBounds;
@@ -1882,7 +2088,8 @@ export default function WikiTreePage() {
 				if (!Number.isFinite(source.x) || !Number.isFinite(target.x)) {
 					continue;
 				}
-				const selectedEdge = source.id === selected || target.id === selected;
+				const selectedEdge =
+					source.id === selected || target.id === selected;
 				const stroke = edge.color;
 				const midX = (source.x + target.x) / 2;
 				const midY = (source.y + target.y) / 2;
@@ -1891,10 +2098,17 @@ export default function WikiTreePage() {
 				const curveOffset = 0.06 * Math.sqrt(dx * dx + dy * dy);
 				ctx.beginPath();
 				ctx.moveTo(source.x, source.y);
-				ctx.quadraticCurveTo(midX + dy / 20, midY + curveOffset, target.x, target.y);
+				ctx.quadraticCurveTo(
+					midX + dy / 20,
+					midY + curveOffset,
+					target.x,
+					target.y
+				);
 				ctx.strokeStyle = stroke;
 				ctx.globalAlpha = selectedEdge ? 0.82 : 0.35;
-				ctx.lineWidth = selectedEdge ? 2.2 / transform.scale : 1.1 / transform.scale;
+				ctx.lineWidth = selectedEdge
+					? 2.2 / transform.scale
+					: 1.1 / transform.scale;
 				ctx.stroke();
 				ctx.globalAlpha = 1;
 			}
@@ -1902,9 +2116,17 @@ export default function WikiTreePage() {
 			for (const node of nodesRef.current) {
 				const isSelected = node.id === selected;
 				const isRoot = node.id === graph.rootId;
-				const isHighlighted = isNodeHighlighted(node, activeHighlight, searchQuery);
+				const isHighlighted = isNodeHighlighted(
+					node,
+					activeHighlight,
+					searchQuery
+				);
 				const radius = isRoot ? node.radius + 2 : node.radius;
-				const fill = isSelected ? '#2b2f4a' : isHighlighted ? '#fff4c9' : '#fdfdf8';
+				const fill = isSelected
+					? '#2b2f4a'
+					: isHighlighted
+						? '#fff4c9'
+						: '#fdfdf8';
 				const stroke = isRoot
 					? '#4d2be0'
 					: isSelected
@@ -1925,7 +2147,13 @@ export default function WikiTreePage() {
 			updateLabelLayer(transform);
 
 			ctx.restore();
-			drawClusterFamilyLabels(ctx, nodesRef.current, transform, latestBounds.width, latestBounds.height);
+			drawClusterFamilyLabels(
+				ctx,
+				nodesRef.current,
+				transform,
+				latestBounds.width,
+				latestBounds.height
+			);
 		};
 		drawRef.current = draw;
 
@@ -1944,9 +2172,18 @@ export default function WikiTreePage() {
 			}
 			setCanvasSize(canvas);
 			canvasViewportRef.current = newBounds;
-			simulation.force('center', d3.forceCenter(newBounds.width / 2, newBounds.height / 2));
-			simulation.force('x', d3.forceX(newBounds.width / 2).strength(0.02));
-			simulation.force('y', d3.forceY(newBounds.height / 2).strength(0.02));
+			simulation.force(
+				'center',
+				d3.forceCenter(newBounds.width / 2, newBounds.height / 2)
+			);
+			simulation.force(
+				'x',
+				d3.forceX(newBounds.width / 2).strength(0.02)
+			);
+			simulation.force(
+				'y',
+				d3.forceY(newBounds.height / 2).strength(0.02)
+			);
 			simulation.alpha(0.4).restart();
 			scheduleRender();
 		});
@@ -1998,7 +2235,10 @@ export default function WikiTreePage() {
 		}
 		event.preventDefault();
 		const rect = viewport.getBoundingClientRect();
-		const node = pickNode(event.clientX - rect.left, event.clientY - rect.top);
+		const node = pickNode(
+			event.clientX - rect.left,
+			event.clientY - rect.top
+		);
 		const nextDragState: DragState = {
 			mode: node ? 'node' : 'pan',
 			moved: false,
@@ -2013,12 +2253,10 @@ export default function WikiTreePage() {
 		if (nextDragState.node) {
 			nextDragState.node.fx = nextDragState.node.x;
 			nextDragState.node.fy = nextDragState.node.y;
-			const simulation = simulationRef.current as
-				| {
-						alphaTarget: (target: number) => unknown;
-						restart: () => unknown;
-				  }
-				| null;
+			const simulation = simulationRef.current as {
+				alphaTarget: (target: number) => unknown;
+				restart: () => unknown;
+			} | null;
 			simulation?.alphaTarget(0.35);
 			simulation?.restart();
 		}
@@ -2028,12 +2266,25 @@ export default function WikiTreePage() {
 	function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
 		const viewport = viewportRef.current;
 		const dragState = dragStateRef.current;
-		if (!viewport || !dragState || dragState.pointerId !== event.pointerId || !dragState.node && dragState.mode !== 'pan') {
+		if (
+			!viewport ||
+			!dragState ||
+			dragState.pointerId !== event.pointerId ||
+			(!dragState.node && dragState.mode !== 'pan')
+		) {
 			return;
 		}
 		const rect = viewport.getBoundingClientRect();
-		const world = worldFromViewportPoint(event.clientX - rect.left, event.clientY - rect.top);
-		dragState.moved = dragState.moved || Math.hypot(event.clientX - dragState.startX, event.clientY - dragState.startY) > 2;
+		const world = worldFromViewportPoint(
+			event.clientX - rect.left,
+			event.clientY - rect.top
+		);
+		dragState.moved =
+			dragState.moved ||
+			Math.hypot(
+				event.clientX - dragState.startX,
+				event.clientY - dragState.startY
+			) > 2;
 		if (dragState.mode === 'pan') {
 			transformRef.current = {
 				...transformRef.current,
@@ -2054,14 +2305,20 @@ export default function WikiTreePage() {
 	function handlePointerEnd(event: PointerEvent<HTMLDivElement>) {
 		const viewport = viewportRef.current;
 		const dragState = dragStateRef.current;
-		if (!viewport || !dragState || dragState.pointerId !== event.pointerId) {
+		if (
+			!viewport ||
+			!dragState ||
+			dragState.pointerId !== event.pointerId
+		) {
 			return;
 		}
 		viewport.releasePointerCapture(event.pointerId);
 		if (dragState.mode === 'node' && dragState.node) {
 			dragState.node.fx = null;
 			dragState.node.fy = null;
-			const simulation = simulationRef.current as { alphaTarget: (target: number) => unknown } | null;
+			const simulation = simulationRef.current as {
+				alphaTarget: (target: number) => unknown;
+			} | null;
 			simulation?.alphaTarget(0);
 			if (!dragState.moved) {
 				setSelectedId(dragState.node.id);
@@ -2112,8 +2369,11 @@ export default function WikiTreePage() {
 		}
 	}
 
-	const selectedNode = selectedId && graph ? graph.nodes[selectedId] : undefined;
-	const activeFilterMeta = HIGHLIGHT_FILTERS.find(filter => filter.id === activeHighlight) ?? HIGHLIGHT_FILTERS[0]!;
+	const selectedNode =
+		selectedId && graph ? graph.nodes[selectedId] : undefined;
+	const activeFilterMeta =
+		HIGHLIGHT_FILTERS.find(filter => filter.id === activeHighlight) ??
+		HIGHLIGHT_FILTERS[0]!;
 	const normalizedSearchQuery = normaliseSearchQuery(searchQuery);
 
 	return (
@@ -2129,8 +2389,9 @@ export default function WikiTreePage() {
 						<p className="eyebrow">GeneaWiki recreation</p>
 						<h1>Wikidata family tree explorer</h1>
 						<p className="lede">
-							This is a React rewrite of the old Magnus Manske GeneaWiki page. Enter a Wikidata
-							item id and it will pull parents and children into a browsable tree.
+							This is a React rewrite of the old Magnus Manske
+							GeneaWiki page. Enter a Wikidata item id and it will
+							pull parents and children into a browsable tree.
 						</p>
 					</section>
 
@@ -2139,7 +2400,9 @@ export default function WikiTreePage() {
 							<label className="inputGroup">
 								<span>Wikidata item</span>
 								<input
-									onChange={event => setInputValue(event.target.value)}
+									onChange={event =>
+										setInputValue(event.target.value)
+									}
 									placeholder="Q42"
 									type="text"
 									value={inputValue}
@@ -2148,7 +2411,11 @@ export default function WikiTreePage() {
 							<label className="inputGroup">
 								<span>Maximum people</span>
 								<select
-									onChange={event => setSelectedNodeLimit(Number(event.target.value))}
+									onChange={event =>
+										setSelectedNodeLimit(
+											Number(event.target.value)
+										)
+									}
 									value={selectedNodeLimit}
 								>
 									{NODE_LIMIT_OPTIONS.map(limit => (
@@ -2170,14 +2437,22 @@ export default function WikiTreePage() {
 						<div className="statusRow">
 							{loadingState.loading ? (
 								<p>
-									{loadingState.loaded}/{requestedNodeLimit} people loaded.{' '}
-									{loadingState.queued > 0 ? `${loadingState.queued} still loading.` : 'Loading...'}{' '}
-									{loadingState.rateLimited ? retryCountdownText : ''}
+									{loadingState.loaded}/{requestedNodeLimit}{' '}
+									people loaded.{' '}
+									{loadingState.queued > 0
+										? `${loadingState.queued} still loading.`
+										: 'Loading...'}{' '}
+									{loadingState.rateLimited
+										? retryCountdownText
+										: ''}
 								</p>
 							) : (
 								<p>
-									{Object.keys(graph?.nodes ?? {}).length}/{requestedNodeLimit} people loaded.
-									{graph?.excessiveNodes ? ' Maximum node limit reached; graph is incomplete.' : ''}
+									{Object.keys(graph?.nodes ?? {}).length}/
+									{requestedNodeLimit} people loaded.
+									{graph?.excessiveNodes
+										? ' Maximum node limit reached; graph is incomplete.'
+										: ''}
 								</p>
 							)}
 							{error ? <p className="error">{error}</p> : null}
@@ -2188,16 +2463,31 @@ export default function WikiTreePage() {
 						<div className="graphHeader">
 							<div>
 								<h2>Graph</h2>
-								<p>Drag to pan, wheel to zoom, drag nodes to reorganize.</p>
+								<p>
+									Drag to pan, wheel to zoom, drag nodes to
+									reorganize.
+								</p>
 							</div>
 							<div className="graphActions">
 								{graph ? (
-									<button className="secondary" onClick={() => void handleToggleFullscreen()} type="button">
-										{isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+									<button
+										className="secondary"
+										onClick={() =>
+											void handleToggleFullscreen()
+										}
+										type="button"
+									>
+										{isFullscreen
+											? 'Exit fullscreen'
+											: 'Fullscreen'}
 									</button>
 								) : null}
 								{selectedNode ? (
-									<Link href={selectedNode.url} rel="noreferrer" target="_blank">
+									<Link
+										href={selectedNode.url}
+										rel="noreferrer"
+										target="_blank"
+									>
 										Open {selectedNode.id}
 									</Link>
 								) : null}
@@ -2206,12 +2496,26 @@ export default function WikiTreePage() {
 										className="secondary"
 										onClick={() => {
 											setInputValue(selectedNode.id);
-											const url = new URL(window.location.href);
-											url.searchParams.set('q', selectedNode.id);
-											url.searchParams.set('max', String(requestedNodeLimit));
-											window.history.replaceState({}, '', url);
+											const url = new URL(
+												window.location.href
+											);
+											url.searchParams.set(
+												'q',
+												selectedNode.id
+											);
+											url.searchParams.set(
+												'max',
+												String(requestedNodeLimit)
+											);
+											window.history.replaceState(
+												{},
+												'',
+												url
+											);
 											setRequestedQid(selectedNode.id);
-											setRequestedNodeLimit(requestedNodeLimit);
+											setRequestedNodeLimit(
+												requestedNodeLimit
+											);
 										}}
 										type="button"
 									>
@@ -2225,13 +2529,18 @@ export default function WikiTreePage() {
 								<h3>Highlight</h3>
 								<p>{activeFilterMeta.description}</p>
 								<div className="filterSearchGroup">
-									<label className="filterSearchLabel" htmlFor="wikitree-highlight-search">
+									<label
+										className="filterSearchLabel"
+										htmlFor="wikitree-highlight-search"
+									>
 										Search highlight
 									</label>
 									<input
 										className="filterSearchInput"
 										id="wikitree-highlight-search"
-										onChange={event => setSearchQuery(event.target.value)}
+										onChange={event =>
+											setSearchQuery(event.target.value)
+										}
 										placeholder="Search people by name or QID"
 										type="search"
 										value={searchQuery}
@@ -2243,16 +2552,28 @@ export default function WikiTreePage() {
 									</p>
 								</div>
 							</div>
-							<div aria-label="Highlight filters" className="filterBar" role="toolbar">
+							<div
+								aria-label="Highlight filters"
+								className="filterBar"
+								role="toolbar"
+							>
 								{HIGHLIGHT_FILTERS.map(filter => (
 									<button
-										className={filter.id === activeHighlight ? 'filterChip active' : 'filterChip'}
+										className={
+											filter.id === activeHighlight
+												? 'filterChip active'
+												: 'filterChip'
+										}
 										key={filter.id}
-										onClick={() => setActiveHighlight(filter.id)}
+										onClick={() =>
+											setActiveHighlight(filter.id)
+										}
 										type="button"
 									>
 										{filter.label}
-										{filter.id !== 'none' ? ` (${highlightCounts.get(filter.id) ?? 0})` : ''}
+										{filter.id !== 'none'
+											? ` (${highlightCounts.get(filter.id) ?? 0})`
+											: ''}
 									</button>
 								))}
 							</div>
@@ -2270,22 +2591,37 @@ export default function WikiTreePage() {
 								onWheelCapture={handleWheel}
 								ref={viewportRef}
 							>
-								<canvas aria-label="Wikidata family graph" className="chartCanvas" ref={canvasRef} />
-								<div aria-hidden="true" className="labelLayer" ref={labelContainerRef} />
+								<canvas
+									aria-label="Wikidata family graph"
+									className="chartCanvas"
+									ref={canvasRef}
+								/>
+								<div
+									aria-hidden="true"
+									className="labelLayer"
+									ref={labelContainerRef}
+								/>
 								{Object.keys(graph.nodes).length === 0 ? (
-									<div className="chartOverlay">Loading graph…</div>
+									<div className="chartOverlay">
+										Loading graph…
+									</div>
 								) : null}
 								<div className="chartLegend">
 									<span>
-										<i className="legendSwatch father" /> father
+										<i className="legendSwatch father" />{' '}
+										father
 									</span>
 									<span>
-										<i className="legendSwatch mother" /> mother
+										<i className="legendSwatch mother" />{' '}
+										mother
 									</span>
 									<span>
-										<i className="legendSwatch child" /> child
+										<i className="legendSwatch child" />{' '}
+										child
 									</span>
-									<span className="legendRank">{FALLBACK_RANK_ICON} Rank</span>
+									<span className="legendRank">
+										{FALLBACK_RANK_ICON} Rank
+									</span>
 								</div>
 							</div>
 						)}

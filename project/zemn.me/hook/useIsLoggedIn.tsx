@@ -6,5 +6,5 @@ export function useIsLoggedIn(): boolean {
 		() => true,
 		() => false,
 		() => false
-	)
+	);
 }

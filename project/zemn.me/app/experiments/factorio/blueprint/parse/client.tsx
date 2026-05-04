@@ -12,13 +12,18 @@ import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
 import { resultFromZod } from '#root/ts/zod/_old_result_from_zod.js';
 
 export function Client() {
-	const [input, setInput] = useQueryState<string>("blueprint", parseAsString.withDefault(''));
+	const [input, setInput] = useQueryState<string>(
+		'blueprint',
+		parseAsString.withDefault('')
+	);
 	const b64InputLabel = useId();
 	const outputLabel = useId();
 	const inputsString = [b64InputLabel].join(' ');
 
-	const onBlueprintChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) =>
-		void setInput(e.target.value), [setInput]);
+	const onBlueprintChange = useCallback(
+		(e: ChangeEvent<HTMLTextAreaElement>) => void setInput(e.target.value),
+		[setInput]
+	);
 
 	return (
 		<Prose>
@@ -44,35 +49,41 @@ export function Client() {
 						</label>
 					</li>
 
-
 					<output htmlFor={inputsString}>
-						{Some(input).and_then(input =>
-							resultFromZod(BlueprintString.safeParse(input))
-								.and_then(output =>
-
-								<>
-									<li>
-										<label htmlFor={outputLabel}>
-											Blueprint:
-											<output
-												htmlFor={inputsString}
-												id={outputLabel}
-											>
-												<DisplayBlueprintWrapper
-													wrapper={output}
+						{Some(input)
+							.and_then(input =>
+								resultFromZod(BlueprintString.safeParse(input))
+									.and_then(output => (
+										<>
+											<li>
+												<label htmlFor={outputLabel}>
+													Blueprint:
+													<output
+														htmlFor={inputsString}
+														id={outputLabel}
+													>
+														<DisplayBlueprintWrapper
+															wrapper={output}
+														/>
+													</output>
+												</label>
+											</li>
+											<li>
+												JSON{' '}
+												<CopyToClipboard
+													text={() =>
+														JSON.stringify(output)
+													}
 												/>
-											</output>
-										</label>
-									</li>
-									<li>
-										JSON{' '}
-										<CopyToClipboard
-											text={() => JSON.stringify(output)}
-										/>
-										<PrettyJSON value={output} />
-									</li>
-								</>
-							).unwrap_or_else(e => <ErrorDisplay error={e} />)).unwrap_or(<>Please input a blueprint. </>)}
+												<PrettyJSON value={output} />
+											</li>
+										</>
+									))
+									.unwrap_or_else(e => (
+										<ErrorDisplay error={e} />
+									))
+							)
+							.unwrap_or(<>Please input a blueprint. </>)}
 					</output>
 				</ul>
 			</form>

@@ -20,5 +20,5 @@ export const productionBrowserSourceMaps = false;
 export const future = { webpack5: true };
 
 export const images = {
-	unoptimized: true
+	unoptimized: true,
 };

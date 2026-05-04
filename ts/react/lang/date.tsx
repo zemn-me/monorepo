@@ -1,32 +1,35 @@
-"use client";
+'use client';
 
-import { memo, ReactElement } from "react";
+import { memo, ReactElement } from 'react';
 import { Temporal } from 'temporal-polyfill';
 
-import { isDefined } from "#root/ts/guard.js";
-import { formatTimeZone } from "#root/ts/react/lang/format_time_zone.js";
-import { useLocale } from "#root/ts/react/lang/useLocale.js";
+import { isDefined } from '#root/ts/guard.js';
+import { formatTimeZone } from '#root/ts/react/lang/format_time_zone.js';
+import { useLocale } from '#root/ts/react/lang/useLocale.js';
 
-
-const DEFAULT_TIME_ZONE = "UTC";
+const DEFAULT_TIME_ZONE = 'UTC';
 
 export type SupportedDateInput = Temporal.ZonedDateTime | globalThis.Date;
 
 export interface DateProps {
 	readonly date: SupportedDateInput;
-	readonly className?: string
+	readonly className?: string;
 }
 
-function isTemporalZonedDateTime(value: SupportedDateInput): value is Temporal.ZonedDateTime {
+function isTemporalZonedDateTime(
+	value: SupportedDateInput
+): value is Temporal.ZonedDateTime {
 	return value instanceof Temporal.ZonedDateTime;
 }
 
-function normalizeToZonedDateTime(date: SupportedDateInput): Temporal.ZonedDateTime {
+function normalizeToZonedDateTime(
+	date: SupportedDateInput
+): Temporal.ZonedDateTime {
 	if (isTemporalZonedDateTime(date)) {
 		return date;
 	}
 	if (Number.isNaN(date.valueOf())) {
-		throw new RangeError("Invalid time value");
+		throw new RangeError('Invalid time value');
 	}
 	const instant = Temporal.Instant.from(date.toISOString());
 	return instant.toZonedDateTimeISO(DEFAULT_TIME_ZONE);
@@ -38,15 +41,21 @@ function normalizeToZonedDateTime(date: SupportedDateInput): Temporal.ZonedDateT
  */
 function selectLocale(language: string): Intl.Locale {
 	const base = new Intl.Locale(language);
-	return base.language === "en" ? new Intl.Locale("en-GB") : base;
+	return base.language === 'en' ? new Intl.Locale('en-GB') : base;
 }
 
 /**
  * Return the Intl‑generated parts needed to assemble a full date.
  */
-function getDateParts(date: Temporal.ZonedDateTime, locale: Intl.Locale): Intl.DateTimeFormatPart[] {
+function getDateParts(
+	date: Temporal.ZonedDateTime,
+	locale: Intl.Locale
+): Intl.DateTimeFormatPart[] {
 	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
-	return new Intl.DateTimeFormat(locale as any, { dateStyle: "full", timeZone: date.timeZoneId }).formatToParts(zonedDateToDate(date));
+	return new Intl.DateTimeFormat(locale as any, {
+		dateStyle: 'full',
+		timeZone: date.timeZoneId,
+	}).formatToParts(zonedDateToDate(date));
 }
 
 /**
@@ -54,26 +63,42 @@ function getDateParts(date: Temporal.ZonedDateTime, locale: Intl.Locale): Intl.D
  *   Friday, the 3rd of January 2024
  * (Chrome and Firefox disagree on the default en‑GB format, so we roll our own.)
  */
-function formatEnglish(parts: Intl.DateTimeFormatPart[], language: string): ReactElement | undefined {
-	const want = ["weekday", "day", "month", "year"] as const;
+function formatEnglish(
+	parts: Intl.DateTimeFormatPart[],
+	language: string
+): ReactElement | undefined {
+	const want = ['weekday', 'day', 'month', 'year'] as const;
 	type Part = (typeof want)[number];
 	const desired = new Set(want);
 
 	const fields = new Map(
 		parts
-			.map(p => (desired.has(p.type as Part) ? ([p.type as Part, p.value] as const) : undefined))
+			.map(p =>
+				desired.has(p.type as Part)
+					? ([p.type as Part, p.value] as const)
+					: undefined
+			)
 			.filter(isDefined)
 	);
 
 	if (fields.size !== want.length) return undefined;
 
-	const rule = new Intl.PluralRules(language, { type: "ordinal" }).select(+fields.get("day")!);
-	const suffix = { one: "st", two: "nd", few: "rd", other: "th", zero: "", many: "" }[rule];
+	const rule = new Intl.PluralRules(language, { type: 'ordinal' }).select(
+		+fields.get('day')!
+	);
+	const suffix = {
+		one: 'st',
+		two: 'nd',
+		few: 'rd',
+		other: 'th',
+		zero: '',
+		many: '',
+	}[rule];
 
 	return (
 		<>
-			{fields.get("weekday")}, the {fields.get("day")}
-			<sup>{suffix}</sup> of {fields.get("month")} {fields.get("year")}
+			{fields.get('weekday')}, the {fields.get('day')}
+			<sup>{suffix}</sup> of {fields.get('month')} {fields.get('year')}
 		</>
 	);
 }
@@ -82,15 +107,22 @@ function formatEnglish(parts: Intl.DateTimeFormatPart[], language: string): Reac
  * Append the correct ordinal marker (º or ª) to the day for Italian dates.
  */
 function appendItalianOrdinalMarker(parts: Intl.DateTimeFormatPart[]): void {
-	const dayIndex = parts.findIndex(p => p.type === "day");
+	const dayIndex = parts.findIndex(p => p.type === 'day');
 	if (dayIndex === -1) return;
 
-	const month = parts.find(p => p.type === "month");
+	const month = parts.find(p => p.type === 'month');
 	if (!month) return;
 
-	const marker = month.value.endsWith("a") ? "ª" : month.value.endsWith("o") ? "º" : "";
+	const marker = month.value.endsWith('a')
+		? 'ª'
+		: month.value.endsWith('o')
+			? 'º'
+			: '';
 	if (marker) {
-		parts[dayIndex] = { ...parts[dayIndex]!, value: parts[dayIndex]!.value + marker };
+		parts[dayIndex] = {
+			...parts[dayIndex]!,
+			value: parts[dayIndex]!.value + marker,
+		};
 	}
 }
 
@@ -98,16 +130,20 @@ function zonedDateToDate(date: Temporal.ZonedDateTime): Date {
 	return new globalThis.Date(date.epochMilliseconds);
 }
 
-
 /**
  * Month–year formatter (e.g. «June 2011»).
  * Uses the current locale’s long month name followed by the numeric year.
  */
-function formatMonthYear(date: Temporal.ZonedDateTime, locale: Intl.Locale): string {
+function formatMonthYear(
+	date: Temporal.ZonedDateTime,
+	locale: Intl.Locale
+): string {
 	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
-	return new Intl.DateTimeFormat(locale as any, { month: "long", year: "numeric", timeZone: date.timeZoneId }).format(
-		zonedDateToDate(date)
-	);
+	return new Intl.DateTimeFormat(locale as any, {
+		month: 'long',
+		year: 'numeric',
+		timeZone: date.timeZoneId,
+	}).format(zonedDateToDate(date));
 }
 
 /**
@@ -123,20 +159,24 @@ export const Date = memo(function DateComponent(props: DateProps) {
 	let content: ReactElement | undefined;
 
 	switch (locale.language) {
-		case "en":
+		case 'en':
 			content = formatEnglish(parts, language);
 			break;
-		case "it":
+		case 'it':
 			appendItalianOrdinalMarker(parts);
 			break;
 	}
 
 	if (content === undefined) {
-		content = <>{parts.map(p => p.value).join("")}</>;
+		content = <>{parts.map(p => p.value).join('')}</>;
 	}
 
 	return (
-		<time className={props.className} dateTime={zonedDate.toString()} lang={locale.toString()}>
+		<time
+			className={props.className}
+			dateTime={zonedDate.toString()}
+			lang={locale.toString()}
+		>
 			{content}
 		</time>
 	);
@@ -152,33 +192,47 @@ export const MonthYear = memo(function MonthYearComponent(props: DateProps) {
 	const text = formatMonthYear(zonedDate, locale);
 
 	return (
-		<time className={props.className} dateTime={zonedDate.toString()} lang={locale.toString()}>{text}</time>
+		<time
+			className={props.className}
+			dateTime={zonedDate.toString()}
+			lang={locale.toString()}
+		>
+			{text}
+		</time>
 	);
 });
 
-
 export interface PrettyDateTimeProps {
 	readonly date: Temporal.ZonedDateTime;
-	readonly className?: string
+	readonly className?: string;
 }
-
 
 /**
  *
  */
-export const PrettyDateTime = memo(function PrettyDateTime(props: PrettyDateTimeProps) {
+export const PrettyDateTime = memo(function PrettyDateTime(
+	props: PrettyDateTimeProps
+) {
 	const [language] = useLocale();
 	const locale = selectLocale(language);
 	const localTz = Temporal.Now.zonedDateTimeISO().timeZoneId;
 
-	const follower = props.date.timeZoneId
-		? <>(<Date date={props.date} /> in {formatTimeZone(props.date.timeZoneId)})</>
-		: null
+	const follower = props.date.timeZoneId ? (
+		<>
+			(<Date date={props.date} /> in{' '}
+			{formatTimeZone(props.date.timeZoneId)})
+		</>
+	) : null;
 
-	return <time className={props.className} dateTime={props.date.toString()} lang={locale.toString()}>
-		<Date date={props.date.withTimeZone(localTz)} /> {/* local time zone */}
-
-		{follower} {/* poster time zone */}
-
-	</time>
-})
+	return (
+		<time
+			className={props.className}
+			dateTime={props.date.toString()}
+			lang={locale.toString()}
+		>
+			<Date date={props.date.withTimeZone(localTz)} />{' '}
+			{/* local time zone */}
+			{follower} {/* poster time zone */}
+		</time>
+	);
+});

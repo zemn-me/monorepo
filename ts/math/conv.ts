@@ -29,17 +29,31 @@ export const Quaternion = {
 
 export const Cartestian = {
 	fromQuaternion(q: quaternion.Quaternion): cartesian.Point3D {
-		return [[quaternion.x(q)], [quaternion.y(q)], [quaternion.z(q)]] as const;
+		return [
+			[quaternion.x(q)],
+			[quaternion.y(q)],
+			[quaternion.z(q)],
+		] as const;
 	},
 };
 
 export const Euler = {
 	fromQuaternion(q: quaternion.Quaternion): euler_angle.EulerAngle {
-		const sinr_cosp = 2 * (quaternion.w(q) * quaternion.x(q) + quaternion.y(q) * quaternion.z(q));
-		const cosr_cosp = 1 - 2 * (quaternion.x(q) * quaternion.x(q) + quaternion.y(q) * quaternion.y(q));
+		const sinr_cosp =
+			2 *
+			(quaternion.w(q) * quaternion.x(q) +
+				quaternion.y(q) * quaternion.z(q));
+		const cosr_cosp =
+			1 -
+			2 *
+				(quaternion.x(q) * quaternion.x(q) +
+					quaternion.y(q) * quaternion.y(q));
 		const roll = Math.atan2(sinr_cosp, cosr_cosp);
 
-		const sinp = 2 * (quaternion.w(q) * quaternion.y(q) - quaternion.z(q) * quaternion.x(q));
+		const sinp =
+			2 *
+			(quaternion.w(q) * quaternion.y(q) -
+				quaternion.z(q) * quaternion.x(q));
 		let pitch;
 		if (Math.abs(sinp) >= 1) {
 			pitch = (Math.sign(sinp) * Math.PI) / 2;
@@ -47,26 +61,29 @@ export const Euler = {
 			pitch = Math.asin(sinp);
 		}
 
-		const siny_cosp = 2 * (quaternion.w(q) * quaternion.z(q) + quaternion.x(q) * quaternion.y(q));
-		const cosy_cosp = 1 - 2 * (quaternion.y(q) * quaternion.y(q) + quaternion.z(q) * quaternion.z(q));
+		const siny_cosp =
+			2 *
+			(quaternion.w(q) * quaternion.z(q) +
+				quaternion.x(q) * quaternion.y(q));
+		const cosy_cosp =
+			1 -
+			2 *
+				(quaternion.y(q) * quaternion.y(q) +
+					quaternion.z(q) * quaternion.z(q));
 		const yaw = Math.atan2(siny_cosp, cosy_cosp);
 
 		return new euler_angle.EulerAngle(pitch, yaw, roll);
 	},
 };
 
+export const homogToCart = <N extends number>(
+	pt: homogenous.Point<N>
+): cartesian.Point<N> =>
+	Matrix.map<1, N, number, number>(
+		homogenous.nonw<N>(pt),
+		v => v * homogenous.w<N>(pt)
+	);
 
-export const homogToCart =
-	<N extends number>(
-		pt: homogenous.Point<N>
-	): cartesian.Point<N> =>
-		Matrix.map<1, N, number, number>(
-			homogenous.nonw<N>(pt),
-			v => v * homogenous.w<N>(pt)
-		)
-
-export const cartToHomog =
-	<N extends number>(
-		pt: cartesian.Point<N>
-	): homogenous.Point<N> =>
-	[...pt, [1]] as homogenous.Point<N>
+export const cartToHomog = <N extends number>(
+	pt: cartesian.Point<N>
+): homogenous.Point<N> => [...pt, [1]] as homogenous.Point<N>;
