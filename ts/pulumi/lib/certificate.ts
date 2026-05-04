@@ -27,7 +27,7 @@ export interface Args {
 	 * Don't deploy a cost allocation tag.
 	 * AWS doesn't let you do this in one go.
 	 */
-	noCostAllocationTag?: boolean
+	noCostAllocationTag?: boolean;
 }
 
 /**
@@ -45,14 +45,15 @@ export class Certificate extends pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 
-		if (!args.noCostAllocationTag) new CostAllocationTag(
-			name,
-			{
-				status: 'Active',
-				tagKey: tag,
-			},
-			{ parent: this }
-		);
+		if (!args.noCostAllocationTag)
+			new CostAllocationTag(
+				name,
+				{
+					status: 'Active',
+					tagKey: tag,
+				},
+				{ parent: this }
+			);
 
 		const cert = new aws.acm.Certificate(
 			`${name}_cert`,

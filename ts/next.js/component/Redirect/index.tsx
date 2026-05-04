@@ -6,7 +6,7 @@ import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb.js';
 
 export interface Props {
 	readonly to: string;
-	readonly linkClassName?: string
+	readonly linkClassName?: string;
 }
 
 export default function Redirect({ to, ...props }: Props) {
@@ -19,7 +19,7 @@ export default function Redirect({ to, ...props }: Props) {
 				<meta content={`1; ${to}`} httpEquiv="refresh" />
 				<link href={to} rel="canonical" />
 			</Head>
-			<RedirectBlurb {...{to, ...props}}/>
+			<RedirectBlurb {...{ to, ...props }} />
 		</>
 	);
 }

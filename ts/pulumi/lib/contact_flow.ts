@@ -42,11 +42,11 @@ export class ContactFlow extends ComponentResource {
 
 	private static async validateEntryPointSet(
 		flow: ContactFlowLanguage
-	): Promise<Result <void, Error>> {
+	): Promise<Result<void, Error>> {
 		if (!flow.Actions.some(v => v.Identifier == flow.StartAction))
-			return Err( new Error(`Missing entry point ${flow.StartAction}`))
+			return Err(new Error(`Missing entry point ${flow.StartAction}`));
 
-		return Ok(undefined)
+		return Ok(undefined);
 	}
 
 	private static async validate(

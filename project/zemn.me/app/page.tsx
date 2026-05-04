@@ -60,23 +60,25 @@ export default function Main() {
 				</Prose>
 				<nav className={style.links}>
 					{Iterable(bio.Bio.links)
-						.map(v => [
-							"linkedin",
-							"github",
-							"bluesky",
-							"twitter"
-						].some(n => v[0].text == n)? Some(v): None)
+						.map(v =>
+							['linkedin', 'github', 'bluesky', 'twitter'].some(
+								n => v[0].text == n
+							)
+								? Some(v)
+								: None
+						)
 						.filter()
 						.map(([text, url]) => (
-						<Link
-							href={url.toString()}
-							key={url.toString()}
-							lang={lang.get(text)}
-							rel="me"
-						>
-							{lang.text(text)}
-						</Link>
-					)).to_array()}
+							<Link
+								href={url.toString()}
+								key={url.toString()}
+								lang={lang.get(text)}
+								rel="me"
+							>
+								{lang.text(text)}
+							</Link>
+						))
+						.to_array()}
 				</nav>
 			</header>
 			<section>
@@ -201,7 +203,9 @@ export default function Main() {
 			</section>
 
 			<script
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(ProfilePageSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(ProfilePageSchema),
+				}}
 				type="application/ld+json"
 			/>
 		</>

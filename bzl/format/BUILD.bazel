@@ -1,4 +1,35 @@
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
+load("@npm//:@biomejs/biome/package_json.bzl", biome_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
+
+package(default_visibility = ["//visibility:public"])
+
+_BIOME_CHECK_ARGS = [
+    "format",
+    "--config-path=biome.json",
+    "--files-ignore-unknown=true",
+    "--no-errors-on-unmatched",
+]
+
+_BIOME_FIX_ARGS = _BIOME_CHECK_ARGS + ["--write"]
+
+biome_bin.biome_binary(name = "biome")
+
+format_multirun(
+    name = "format",
+    css = ":biome",
+    css_check_args = _BIOME_CHECK_ARGS,
+    css_fix_args = _BIOME_FIX_ARGS,
+    graphql = ":biome",
+    graphql_check_args = _BIOME_CHECK_ARGS,
+    graphql_fix_args = _BIOME_FIX_ARGS,
+    html = ":biome",
+    html_check_args = _BIOME_CHECK_ARGS,
+    html_fix_args = _BIOME_FIX_ARGS,
+    javascript = ":biome",
+    javascript_check_args = _BIOME_CHECK_ARGS,
+    javascript_fix_args = _BIOME_FIX_ARGS,
+)
 
 bazel_lint(
     name = "bazel_lint",

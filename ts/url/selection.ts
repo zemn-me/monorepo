@@ -20,25 +20,23 @@
  * browser.  All terms are UTF-8 percent-decoded before matching.
  */
 export interface TextDirective {
-  /** Context immediately *before* {@link start}. */
-  prefix?: string;
-  /** The first text string to locate – this is mandatory. */
-  start: string;
-  /** Optional string that ends the match and creates a range. */
-  end?: string;
-  /** Context immediately *after* the matched text. */
-  suffix?: string;
+	/** Context immediately *before* {@link start}. */
+	prefix?: string;
+	/** The first text string to locate – this is mandatory. */
+	start: string;
+	/** Optional string that ends the match and creates a range. */
+	end?: string;
+	/** Context immediately *after* the matched text. */
+	suffix?: string;
 }
-
 
 /** Percent-encode a text-directive term, escaping “-”, “,” and “&” per spec. */
 function encodeTerm(term: string): string {
-  return encodeURIComponent(term)
-    .replace(/-/g, "%2D")
-    .replace(/,/g, "%2C")
-    .replace(/&/g, "%26");
+	return encodeURIComponent(term)
+		.replace(/-/g, '%2D')
+		.replace(/,/g, '%2C')
+		.replace(/&/g, '%26');
 }
-
 
 /**
  * Adds (or appends to) a `#:~:text=` fragment on the given {@link url},
@@ -54,31 +52,31 @@ function encodeTerm(term: string): string {
  * ```
  */
 export function linkToHighlight(url: URL, params: TextDirective): URL {
-  // Assemble the directive.
-  let directive = "text=";
+	// Assemble the directive.
+	let directive = 'text=';
 
-  if (params.prefix) directive += `${encodeTerm(params.prefix)}-,`;
-  directive += encodeTerm(params.start);
-  if (params.end) directive += `,${encodeTerm(params.end)}`;
-  if (params.suffix) directive += `,-${encodeTerm(params.suffix)}`;
+	if (params.prefix) directive += `${encodeTerm(params.prefix)}-,`;
+	directive += encodeTerm(params.start);
+	if (params.end) directive += `,${encodeTerm(params.end)}`;
+	if (params.suffix) directive += `,-${encodeTerm(params.suffix)}`;
 
-  // Work on a copy so callers get purity.
-  const out = new URL(url.toString());
+	// Work on a copy so callers get purity.
+	const out = new URL(url.toString());
 
-  // Handle existing fragments/directives.
-  const frag = out.hash.startsWith("#") ? out.hash.slice(1) : out.hash;
+	// Handle existing fragments/directives.
+	const frag = out.hash.startsWith('#') ? out.hash.slice(1) : out.hash;
 
-  if (frag.includes(":~:")) {
-    // Expand an existing fragment-directive block.
-    const [idPart, dirPart = ""] = frag.split(":~:");
-    out.hash = `${idPart}:~:${dirPart ? dirPart + "&" : ""}${directive}`;
-  } else if (frag) {
-    // Plain fragment present.
-    out.hash = `${frag}:~:${directive}`;
-  } else {
-    // No fragment at all.
-    out.hash = `#:~:${directive}`;
-  }
+	if (frag.includes(':~:')) {
+		// Expand an existing fragment-directive block.
+		const [idPart, dirPart = ''] = frag.split(':~:');
+		out.hash = `${idPart}:~:${dirPart ? dirPart + '&' : ''}${directive}`;
+	} else if (frag) {
+		// Plain fragment present.
+		out.hash = `${frag}:~:${directive}`;
+	} else {
+		// No fragment at all.
+		out.hash = `#:~:${directive}`;
+	}
 
-  return out;
+	return out;
 }

@@ -1,14 +1,18 @@
 .main {
-    display: grid;
+	display: grid;
 }
 
-.banner, .headerBgv {
-    grid-area: banner;
+.banner,
+.headerBgv {
+	grid-area: banner;
 	width: 100%;
 	height: 100%;
 }
 
-.banner { display: grid; pointer-events: none }
+.banner {
+	display: grid;
+	pointer-events: none;
+}
 
 .letterHead {
 	padding: 2em;
@@ -17,7 +21,7 @@
 	margin: auto;
 	display: grid;
 	grid:
-	    "    logo      " 2em
+		"    logo      " 2em
 		"    handle    " auto
 		"    fullName  " auto / auto;
 }
@@ -49,7 +53,7 @@
 }
 
 .content {
-    grid-area: content;
+	grid-area: content;
 	padding-top: 4em;
 }
 
@@ -58,34 +62,40 @@
 }
 
 @media (orientation: landscape) {
-    .main {
-        grid: " banner content " 100vh
-              " xxxxxx content " auto
-			  " xxxxxx footer  " auto
-              / 1fr    1fr           ;
-    }
+	.main {
+		grid:
+			" banner content " 100vh
+			" xxxxxx content " auto
+			" xxxxxx footer  " auto
+			/ 1fr 1fr;
+	}
 
-    /*
+	/*
        in this case, the banner should have a fixed
        position, otherwise we'll scroll past it and the layout
        will look weird.
     */
 
-    .headerBgv, .banner { position: sticky; top: 0 }
+	.headerBgv,
+	.banner {
+		position: sticky;
+		top: 0;
+	}
 }
 
 @media (orientation: portrait) {
-    .main {
-        grid: "banner" 100vh
-              "content" auto
-              "footer" auto
-              /1fr ;
-    }
+	.main {
+		grid:
+			"banner" 100vh
+			"content" auto
+			"footer" auto
+			/ 1fr;
+	}
 }
 
 .banner {
 	page-break-after: always; /* legacy WebKit/Blink */
-	break-after: page;        /* spec-compliant */
+	break-after: page; /* spec-compliant */
 }
 
 @page :first {
@@ -96,13 +106,13 @@
 	grid-area: footer;
 	display: grid;
 	grid:
-	    "title   title       title   title        title"
+		"title   title       title   title        title"
 		"....... left-spacer future  right-spacer ......." 6rem
 		"tagline tagline     tagline tagline      tagline"
 		"....... .......     ....... .......      ......." 1em
 		"copy 	 copy        copy    copy         copy"
 		"....... .......     ....... .......       ......." 4rem
-		/1fr     2rem        3rem    2rem          1fr
+		/ 1fr 2rem 3rem 2rem 1fr;
 }
 
 .copyright {
@@ -116,31 +126,31 @@
 .future {
 	grid-area: future;
 	width: 100%;
-	height: 100%
+	height: 100%;
 }
 
 .footer:before {
-    content: "\2013";
-    grid-area: left-spacer;
-    margin: auto;
+	content: "\2013";
+	grid-area: left-spacer;
+	margin: auto;
 }
 
 .tagline {
 	grid-area: tagline;
 }
 
-.tagline, .copyright {
+.tagline,
+.copyright {
 	max-width: 15em;
 	margin: auto;
 	text-align: center;
 }
 
 .footer:after {
-    content: "\2013";
-    grid-area: right-spacer;
-    margin: auto;
+	content: "\2013";
+	grid-area: right-spacer;
+	margin: auto;
 }
-
 
 .logoInline {
 	display: inline-block;

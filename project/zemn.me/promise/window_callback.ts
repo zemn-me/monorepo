@@ -17,7 +17,10 @@ type WindowCallbackMessage = {
 	href: string;
 };
 
-function isWindowCallbackMessage(value: unknown): value is WindowCallbackMessage { // codex wrote this and its bad but im not fixing rn
+function isWindowCallbackMessage(
+	value: unknown
+): value is WindowCallbackMessage {
+	// codex wrote this and its bad but im not fixing rn
 	return (
 		typeof value === 'object' &&
 		value !== null &&

@@ -95,20 +95,15 @@ it('should render a rotated 3d cube properly', () => {
 	);
 });
 
-
 it('should render a rotated cube properly', () => {
 	const c = cube(point<3>(0, 0, 0), 10);
 	const cameraPt = point<3>(5, 5, 5);
-	const orientation = lookAt(
-		cameraPt,
-		point<3>(0, 0, 0),
-		point<3>(0, 1, 0)
-	);
+	const orientation = lookAt(cameraPt, point<3>(0, 0, 0), point<3>(0, 1, 0));
 	// translate the cube by the camera pos
 
-	const nc = c.map(ln => ln.map(pt =>
-		quat.rotateVector(orientation, sub<1, 3>(pt, cameraPt))
-	));
+	const nc = c.map(ln =>
+		ln.map(pt => quat.rotateVector(orientation, sub<1, 3>(pt, cameraPt)))
+	);
 
 	expect(plot3D(nc, 1, 100)).toEqual(
 		`\

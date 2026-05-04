@@ -4,7 +4,7 @@
 	column-gap: 1.25em;
 }
 
-.prose>*:first-child {
+.prose > *:first-child {
 	/*
 		Otherwise column layout looks weird
 		as one column will have a gap, but
@@ -12,5 +12,3 @@
 	*/
 	margin-top: 0;
 }
-
-

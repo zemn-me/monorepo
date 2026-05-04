@@ -43,11 +43,28 @@ describe('Quaternion arithmetic', () => {
 
 		expect(Quaternion.length(normalizedQ)).toBeCloseTo(1);
 
-		const expectedNormalizedQ = Quaternion.from(0.18257, 0.36515, 0.54772, 0.7303);
-		expect(Quaternion.x(normalizedQ)).toBeCloseTo(Quaternion.x(expectedNormalizedQ), 4);
-		expect(Quaternion.y(normalizedQ)).toBeCloseTo(Quaternion.y(expectedNormalizedQ), 4);
-		expect(Quaternion.z(normalizedQ)).toBeCloseTo(Quaternion.z(expectedNormalizedQ), 4);
-		expect(Quaternion.w(normalizedQ)).toBeCloseTo(Quaternion.w(expectedNormalizedQ), 4);
+		const expectedNormalizedQ = Quaternion.from(
+			0.18257,
+			0.36515,
+			0.54772,
+			0.7303
+		);
+		expect(Quaternion.x(normalizedQ)).toBeCloseTo(
+			Quaternion.x(expectedNormalizedQ),
+			4
+		);
+		expect(Quaternion.y(normalizedQ)).toBeCloseTo(
+			Quaternion.y(expectedNormalizedQ),
+			4
+		);
+		expect(Quaternion.z(normalizedQ)).toBeCloseTo(
+			Quaternion.z(expectedNormalizedQ),
+			4
+		);
+		expect(Quaternion.w(normalizedQ)).toBeCloseTo(
+			Quaternion.w(expectedNormalizedQ),
+			4
+		);
 	});
 
 	test('fromAxisAngle ignores axis scale', () => {

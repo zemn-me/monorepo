@@ -32,35 +32,43 @@ export function RenderBlueprint({
 	height = 100,
 }: RenderBlueprintProps) {
 	const renderables = blueprint.entities ?? [];
-	const scaleX = and_then(resultFromZod(z
-		.tuple([z.number(), z.number()])
-		.safeParse(extent(renderables, v => v.position.x))), v => scaleLinear(v, [0, width]));
+	const scaleX = and_then(
+		resultFromZod(
+			z
+				.tuple([z.number(), z.number()])
+				.safeParse(extent(renderables, v => v.position.x))
+		),
+		v => scaleLinear(v, [0, width])
+	);
 
-	const scaleY = and_then(resultFromZod(
-		z
-			.tuple([z.number(), z.number()])
-			.safeParse(extent(renderables, v => v.position.y)))
-		, v => scaleLinear(v, [0, height]));
+	const scaleY = and_then(
+		resultFromZod(
+			z
+				.tuple([z.number(), z.number()])
+				.safeParse(extent(renderables, v => v.position.y))
+		),
+		v => scaleLinear(v, [0, height])
+	);
 
 	return (
 		<svg viewBox={`0 0 ${width} ${height}`} {...{ width, height }}>
-			{
-				unwrap_or_else(
-				and_then(
-					zip(scaleX, scaleY),
-					([scaleX, scaleY]) => <>
-{renderables.map(r => (
-				<circle
-					cx={scaleX(r.position.x)}
-					cy={scaleY(r.position.y)}
-					key={r.entity_number}
-					r="1"
-				/>
-			))}
+			{unwrap_or_else(
+				and_then(zip(scaleX, scaleY), ([scaleX, scaleY]) => (
+					<>
+						{renderables.map(r => (
+							<circle
+								cx={scaleX(r.position.x)}
+								cy={scaleY(r.position.y)}
+								key={r.entity_number}
+								r="1"
+							/>
+						))}
 					</>
-				), e => <ErrorDisplay error={e}/>)
-			}
-
+				)),
+				e => (
+					<ErrorDisplay error={e} />
+				)
+			)}
 		</svg>
 	);
 }
@@ -99,19 +107,25 @@ export function DisplayBlueprintWrapper({
 }
 
 export interface DisplayUpgradePlannerProps {
-	readonly planner: UpgradePlanner
+	readonly planner: UpgradePlanner;
 }
 
 export function DisplayUpgradePlanner({ planner }: DisplayUpgradePlannerProps) {
-	return <figure>
-		{Some(planner.label).from().and_then(l => <figcaption>{l}</figcaption>).unwrap_or(null)}
-		<ul>
-			{planner.settings.mappers.map(v => <li key={v.index}>
-				{v.from.name} → {v.to.name}
-			</li>)}
-		</ul>
-
-	</figure>
+	return (
+		<figure>
+			{Some(planner.label)
+				.from()
+				.and_then(l => <figcaption>{l}</figcaption>)
+				.unwrap_or(null)}
+			<ul>
+				{planner.settings.mappers.map(v => (
+					<li key={v.index}>
+						{v.from.name} → {v.to.name}
+					</li>
+				))}
+			</ul>
+		</figure>
+	);
 }
 
 export interface DisplayBlueprintBookProps {
@@ -149,11 +163,12 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 									book={blueprint.blueprint_book}
 								/>
 							) : null}
-							{
-								Some(blueprint.upgrade_planner).from()
-									.and_then(planner => <DisplayUpgradePlanner planner={planner} />)
-								.unwrap_or(null)
-							}
+							{Some(blueprint.upgrade_planner)
+								.from()
+								.and_then(planner => (
+									<DisplayUpgradePlanner planner={planner} />
+								))
+								.unwrap_or(null)}
 						</li>
 					))}
 				</ol>

@@ -9,11 +9,19 @@ import { useGetMeScopes } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 
 const navLinks = [
-	{ href: "/", label: "Home" },
-	{ href: "/admin", label: "Admin", requiredScope: "admin_users_manage" },
-	{ href: "/admin/users", label: "Users", requiredScope: "admin_users_manage" },
-	{ href: "/grievanceportal", label: "Grievance portal", requiredScope: "grievance_portal" },
-	{ href: "/key", label: "Key", requiredScope: "callbox_key" },
+	{ href: '/', label: 'Home' },
+	{ href: '/admin', label: 'Admin', requiredScope: 'admin_users_manage' },
+	{
+		href: '/admin/users',
+		label: 'Users',
+		requiredScope: 'admin_users_manage',
+	},
+	{
+		href: '/grievanceportal',
+		label: 'Grievance portal',
+		requiredScope: 'grievance_portal',
+	},
+	{ href: '/key', label: 'Key', requiredScope: 'callbox_key' },
 ];
 
 export function GladeMenu() {
@@ -24,16 +32,20 @@ export function GladeMenu() {
 	if (!isLoggedIn) return null;
 
 	const isLinkVisible = (requiredScope?: string) =>
-		requiredScope === undefined || fut_scopes(
+		requiredScope === undefined ||
+		fut_scopes(
 			scopes => scopes.includes(requiredScope),
 			() => false,
 			() => false
-		)
+		);
 
 	return (
 		<nav aria-label="Logged in navigation" className={style.hamburgerNav}>
 			<details className={style.hamburgerDetails}>
-				<summary aria-label="Open navigation menu" className={style.hamburgerButton}>
+				<summary
+					aria-label="Open navigation menu"
+					className={style.hamburgerButton}
+				>
 					<span className={style.hamburgerIconClosed}>
 						<FontAwesomeIcon icon={faBars} />
 					</span>
@@ -42,15 +54,17 @@ export function GladeMenu() {
 					</span>
 				</summary>
 				<div className={style.hamburgerMenu}>
-					{navLinks.filter(link => isLinkVisible(link.requiredScope)).map(link => (
-						<Link
-							className={style.hamburgerLink}
-							href={link.href}
-							key={link.href}
-						>
-							{link.label}
-						</Link>
-					))}
+					{navLinks
+						.filter(link => isLinkVisible(link.requiredScope))
+						.map(link => (
+							<Link
+								className={style.hamburgerLink}
+								href={link.href}
+								key={link.href}
+							>
+								{link.label}
+							</Link>
+						))}
 					<div className={style.inlineLoginCopy}>
 						<InlineLogin />
 					</div>

@@ -1,31 +1,35 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 
 export const frontmatter: {
-    layout?: string;
-    title?: string;
-    language?: string;
-    subtitle?: string;
-    tags?: string[];
-    date?: [number, string, number];
-    medium?: string;
+	layout?: string;
+	title?: string;
+	language?: string;
+	subtitle?: string;
+	tags?: string[];
+	date?: [number, string, number];
+	medium?: string;
 	description?: string;
-}
-
+};
 
 type MDXComponentTypes =
-	"a" | "blockquote" | "code" | "em" |
-	`h${1|2|3|4|5}` | "p" | "section";
+	| 'a'
+	| 'blockquote'
+	| 'code'
+	| 'em'
+	| `h${1 | 2 | 3 | 4 | 5}`
+	| 'p'
+	| 'section';
 
 interface MDXContentProps {
 	components?: {
-		[k in MDXComponentTypes]?: (props:
-			k extends keyof JSX.IntrinsicElements
+		[k in MDXComponentTypes]?: (
+			props: k extends keyof JSX.IntrinsicElements
 				? JSX.IntrinsicElements[k]
 				: never
-		) => ReactElement | null
-	}
+		) => ReactElement | null;
+	};
 }
 
-declare const MDXContent: (props: MDXContentProps) => ReactElement | null
+declare const MDXContent: (props: MDXContentProps) => ReactElement | null;
 
-export default MDXContent
+export default MDXContent;

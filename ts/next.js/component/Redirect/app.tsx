@@ -11,7 +11,7 @@ import { RedirectBlurb } from '#root/ts/next.js/component/Redirect/blurb.js';
 
 export interface Props {
 	readonly to: URL | string;
-	readonly linkClassName?: string
+	readonly linkClassName?: string;
 }
 
 export default function Redirect({ to, ...props }: Props) {

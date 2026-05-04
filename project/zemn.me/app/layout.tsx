@@ -1,7 +1,6 @@
-
 import 'project/zemn.me/app/base.css';
 
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
@@ -11,19 +10,22 @@ import { Providers } from '#root/project/zemn.me/app/providers.js';
 import { Bio } from '#root/project/zemn.me/bio/index.js';
 import Glade from '#root/project/zemn.me/components/Glade/glade.js';
 import { ZEMN_ME_API_BASE } from '#root/project/zemn.me/constants/constants.js';
-import { DefaultContentSecurityPolicy, HeaderTagsAppRouter, SourceExpression } from '#root/ts/next.js/index.js';
+import {
+	DefaultContentSecurityPolicy,
+	HeaderTagsAppRouter,
+	SourceExpression,
+} from '#root/ts/next.js/index.js';
 import { text } from '#root/ts/react/lang/index.js';
 
 export interface Props {
 	readonly children?: ReactNode;
 }
 
-
 const lora = Lora({
 	weight: ['400', '700'],
 	style: ['italic', 'normal'],
 	subsets: ['latin', 'latin-ext'],
-	display: 'swap'
+	display: 'swap',
 });
 
 const csp = {
@@ -31,40 +33,42 @@ const csp = {
 	'connect-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['connect-src']!,
 		'https://accounts.google.com',
-		"https://people.googleapis.com",
+		'https://people.googleapis.com',
 		'http://localhost:*' as 'https://localhost',
 		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		'https://www.googleapis.com', // dub-dub-dub?? what year is it?
 	]),
 	'img-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['img-src']!,
-		"https://*.googleusercontent.com",
+		'https://*.googleusercontent.com',
 	]),
-}
+};
 
 export function RootLayout({ children }: Props) {
 	return (
 		<>
-		<Providers>
-			<html>
-				<head>
-					<link href="/icon.svg" rel="icon" type="image/svg+xml" />
-					<link
-						href="/icon.svg"
-						rel="apple-touch-icon"
-						type="image/svg+xml"
-					/>
-					<HeaderTagsAppRouter cspPolicy={csp} />
-				</head>
-				<body className={lora.className}>
-					<ReactQueryDevtools initialIsOpen={false} />
-					<AnalyticsPageBeacon />
-					<Glade>
-					{children}
-					</Glade>
-				</body>
-			</html>
-		</Providers>
+			<Providers>
+				<html>
+					<head>
+						<link
+							href="/icon.svg"
+							rel="icon"
+							type="image/svg+xml"
+						/>
+						<link
+							href="/icon.svg"
+							rel="apple-touch-icon"
+							type="image/svg+xml"
+						/>
+						<HeaderTagsAppRouter cspPolicy={csp} />
+					</head>
+					<body className={lora.className}>
+						<ReactQueryDevtools initialIsOpen={false} />
+						<AnalyticsPageBeacon />
+						<Glade>{children}</Glade>
+					</body>
+				</html>
+			</Providers>
 		</>
 	);
 }
@@ -93,7 +97,7 @@ export const metadata: Metadata = {
 		default: 'zemn.me',
 		template: '%s ← zemn.me',
 	},
-    alternates: {
-        canonical: './',
-    }
+	alternates: {
+		canonical: './',
+	},
 };

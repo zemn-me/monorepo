@@ -3,9 +3,7 @@ import { Tuple } from '#root/ts/tuple.js';
 export type Vector<I extends number = number, T = number> = Tuple<T, I>;
 
 export function magnitude(v: Vector): number {
-	return Math.sqrt(
-		sum(
-		v.map(v => v ** 2)))
+	return Math.sqrt(sum(v.map(v => v ** 2)));
 }
 
 export function unit<N extends number>(v: Vector<N>): Vector<N> {
@@ -105,7 +103,7 @@ export const zip: {
 	): Iterable<[T1, T2]>;
 	<T1, T2>(
 		v1: Iterable<T1>,
-		v2: Iterable<T2>,
+		v2: Iterable<T2>
 	): Iterable<[T1 | undefined, T2 | undefined]>;
 	<T1, T2, T3>(
 		v1: Iterable<T1>,

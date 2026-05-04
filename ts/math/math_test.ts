@@ -1,11 +1,17 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { Point, point, rectContaninsPoint, scale, translate } from '#root/ts/math/cartesian.js';
+import {
+	Point,
+	point,
+	rectContaninsPoint,
+	scale,
+	translate,
+} from '#root/ts/math/cartesian.js';
 import * as matrix from '#root/ts/math/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
-expect(actual.length).toBe(expected.length);
+	expect(actual.length).toBe(expected.length);
 	actual.forEach((row, i) => {
 		row.forEach((v, k) => {
 			expect(v).toBeCloseTo(expected[i]![k]!);
@@ -367,20 +373,17 @@ describe('cartesian', () => {
 	});
 
 	test('scale multiplies each component by a scalar', () => {
-		expect(scale(point<3>(1, -2, 3), 2.5)).toEqual(
-			point<3>(2.5, -5, 7.5)
-		);
+		expect(scale(point<3>(1, -2, 3), 2.5)).toEqual(point<3>(2.5, -5, 7.5));
 	});
 });
 
 describe('vec', () => {
 	describe('.dot', () => {
-		test.each([[[1, 2, 3], [3, 2, 1], 10]])(
-			'.dot(%p, %p) => %p',
-			(a, b, o) => {
-				expect(vec.dot(a, b)).toEqual(o);
-			}
-		);
+		test.each([
+			[[1, 2, 3], [3, 2, 1], 10],
+		])('.dot(%p, %p) => %p', (a, b, o) => {
+			expect(vec.dot(a, b)).toEqual(o);
+		});
 	});
 
 	describe('.reverse', () => {
@@ -390,12 +393,11 @@ describe('vec', () => {
 	});
 
 	describe('.mul', () => {
-		test.each([[2, [3, 2, 1], [6, 4, 2]]])(
-			'.mul(%p, %p) => %p',
-			(a, b, o) => {
-				expect(vec.mul(a, b)).toEqual(o);
-			}
-		);
+		test.each([
+			[2, [3, 2, 1], [6, 4, 2]],
+		])('.mul(%p, %p) => %p', (a, b, o) => {
+			expect(vec.mul(a, b)).toEqual(o);
+		});
 	});
 });
 
@@ -406,10 +408,9 @@ describe('cartesian', () => {
 			[[[0], [0]], [[10], [10]], [[-1], [-1]], false],
 		] as [min: Point<2>, max: Point<2>, point: Point<2>, result: boolean][];
 
-		test.each(testCases)(
-			'rectContainsPoint(%p)(%p)(%p) → %p',
-			(min, max, point, result) =>
-				expect(rectContaninsPoint<2>(min)(max)(point)).toEqual(result)
-		);
+		test.each(
+			testCases
+		)('rectContainsPoint(%p)(%p)(%p) → %p', (min, max, point, result) =>
+			expect(rectContaninsPoint<2>(min)(max)(point)).toEqual(result));
 	});
 });

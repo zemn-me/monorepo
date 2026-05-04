@@ -1,6 +1,6 @@
-import { point, Point3D, x, y, z } from "#root/ts/math/cartesian.js";
-import { cross, dot, magnitude, normalise, sub } from "#root/ts/math/matrix.js";
-import * as Quaternion from "#root/ts/math/quaternion.js";
+import { point, Point3D, x, y, z } from '#root/ts/math/cartesian.js';
+import { cross, dot, magnitude, normalise, sub } from '#root/ts/math/matrix.js';
+import * as Quaternion from '#root/ts/math/quaternion.js';
 
 const EPSILON = 1e-6;
 
@@ -13,7 +13,11 @@ export const defaultUp = point<3>(0, 1, 0);
  *
  * So that it points from 'from' towards 'to', respecting the given 'up' vector.
  */
-export function lookAt(from: Point3D, to: Point3D, up: Point3D = defaultUp): Quaternion.Quaternion {
+export function lookAt(
+	from: Point3D,
+	to: Point3D,
+	up: Point3D = defaultUp
+): Quaternion.Quaternion {
 	const f0 = point<3>(0, 0, 1);
 	const u0 = defaultUp;
 	const f = normalise<3>(sub<1, 3>(to, from));
@@ -42,18 +46,20 @@ export function lookAt(from: Point3D, to: Point3D, up: Point3D = defaultUp): Qua
 	}
 	if (dotU < -1.0 + EPSILON) {
 		const fLen = magnitude(f);
-		const fUnit = (fLen > EPSILON)
-			? point<3>(x(f) / fLen, y(f) / fLen, z(f) / fLen)
-			: point<3>(0, 0, 1);
+		const fUnit =
+			fLen > EPSILON
+				? point<3>(x(f) / fLen, y(f) / fLen, z(f) / fLen)
+				: point<3>(0, 0, 1);
 		const qRoll = Quaternion.fromAxisAngle(fUnit, Math.PI);
 		return Quaternion.normalize(Quaternion.multiply(qRoll, qF));
 	}
 
 	const angleUp = Math.acos(dotU);
 	const fLen = magnitude(f);
-	const fUnit = (fLen > EPSILON)
-		? point<3>(x(f) / fLen, y(f) / fLen, z(f) / fLen)
-		: point<3>(0, 0, 1);
+	const fUnit =
+		fLen > EPSILON
+			? point<3>(x(f) / fLen, y(f) / fLen, z(f) / fLen)
+			: point<3>(0, 0, 1);
 
 	const qRoll = Quaternion.fromAxisAngle(fUnit, angleUp);
 	return Quaternion.normalize(Quaternion.multiply(qRoll, qF));

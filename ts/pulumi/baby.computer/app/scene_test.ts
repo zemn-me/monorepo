@@ -19,7 +19,9 @@ describe('baby.computer scene', () => {
 
 	test('heavier penguins are taller', () => {
 		const world = createPenguinWorld();
-		const sorted = [...world.penguins].sort((left, right) => left.massKg - right.massKg);
+		const sorted = [...world.penguins].sort(
+			(left, right) => left.massKg - right.massKg
+		);
 
 		expect(sorted[0]!.heightM).toBeLessThan(sorted.at(-1)!.heightM);
 		expect(sorted.at(-1)!.name).toBe('Wobble');

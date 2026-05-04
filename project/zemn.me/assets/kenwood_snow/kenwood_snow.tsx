@@ -1,6 +1,11 @@
-import { mp4, ogv, poster, webm } from '#root/project/zemn.me/public/kenwood_snow';
+import {
+	mp4,
+	ogv,
+	poster,
+	webm,
+} from '#root/project/zemn.me/public/kenwood_snow';
 
-export { poster }
+export { poster };
 
 /**
  * @returns A React element representing the Kenwood video asset
@@ -16,4 +21,3 @@ export function VideoSources() {
 		</>
 	);
 }
-

@@ -1,10 +1,10 @@
 import { flow } from 'ramda';
 
-import * as cartesian from "#root/ts/math/cartesian.js";
+import * as cartesian from '#root/ts/math/cartesian.js';
 import { cartToHomog, homogToCart } from '#root/ts/math/conv.js';
 import * as Homog from '#root/ts/math/homog.js';
 import * as homog from '#root/ts/math/homog.js';
-import { defaultUp, lookAt } from "#root/ts/math/lookAt.js";
+import { defaultUp, lookAt } from '#root/ts/math/lookAt.js';
 import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 
@@ -25,10 +25,7 @@ export const transform: (i: Homog.Point3D, f?: FocalLength) => Homog.Point2D = (
 	f = 1
 ) => Matrix.mul<4, 3, 1, 4>(matrix(f), i);
 
-
-
 export const Edges = Symbol();
-
 
 export const camera = (
 	position: cartesian.Point3D,
@@ -38,7 +35,7 @@ export const camera = (
 	 */
 	point: cartesian.Point3D,
 	focalLength: number = 1,
-	up: cartesian.Point3D = defaultUp,
+	up: cartesian.Point3D = defaultUp
 ): cartesian.Point2D =>
 	// yeah so when you render a scene
 	// "from" a camera, you just transform
@@ -47,21 +44,12 @@ export const camera = (
 
 	flow(
 		Quaternion.rotateVector(
-			lookAt(
-				position,
-				lookingAt,
-				up
-			),
+			lookAt(position, lookingAt, up),
 			cartesian.sub<1, 3>(point, position)
 		),
 		[
 			(pt: cartesian.Point3D) => cartToHomog<3>(pt),
-			(pt: homog.Point3D) => transform(
-				pt, focalLength
-			),
-			(p: homog.Point2D) => homogToCart<2>(p)
+			(pt: homog.Point3D) => transform(pt, focalLength),
+			(p: homog.Point2D) => homogToCart<2>(p),
 		]
-	)
-
-
-
+	);

@@ -10,13 +10,11 @@ import { chromiumPath } from '#root/ts/bin/host/chromium/path.js';
 
 // ensure our deps actually exist
 
-if (!statSync(chromeDriverPath).isFile()) throw new Error(
-	`Can't find chrome driver at ${chromeDriverPath}.`
-);
+if (!statSync(chromeDriverPath).isFile())
+	throw new Error(`Can't find chrome driver at ${chromeDriverPath}.`);
 
-if (!statSync(chromiumPath).isFile()) throw new Error(
-	`Can't find chrome at ${chromeDriverPath}.`
-);
+if (!statSync(chromiumPath).isFile())
+	throw new Error(`Can't find chrome at ${chromeDriverPath}.`);
 
 /**
  * @returns a Chrome ServiceBuilder injected with defaults.

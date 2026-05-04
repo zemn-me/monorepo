@@ -80,7 +80,7 @@ export function HeaderTagsPagesRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
-			<DeclareTrustedTypesPolicy/>
+			<DeclareTrustedTypesPolicy />
 			<Head>
 				<meta
 					content={Object.entries(cspPolicy)
@@ -111,7 +111,7 @@ export function HeaderTagsAppRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
-			<DeclareTrustedTypesPolicy/>
+			<DeclareTrustedTypesPolicy />
 			<meta
 				content={Object.entries(cspPolicy)
 					.map(([k, v]) => [k, ...v].join(' '))

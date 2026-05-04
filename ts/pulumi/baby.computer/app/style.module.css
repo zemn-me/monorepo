@@ -222,10 +222,7 @@
 		0 0 0.6rem rgb(247 253 255 / 92%),
 		0 0 1rem rgb(142 213 242 / 62%);
 	opacity: 0;
-	transform:
-		rotate(var(--spark-angle))
-		translateY(0)
-		scale(0.4);
+	transform: rotate(var(--spark-angle)) translateY(0) scale(0.4);
 	animation: metSparkBurst 720ms ease-out forwards;
 	pointer-events: none;
 }
@@ -233,10 +230,7 @@
 @keyframes metSparkBurst {
 	0% {
 		opacity: 0;
-		transform:
-			rotate(var(--spark-angle))
-			translateY(0)
-			scale(0.35);
+		transform: rotate(var(--spark-angle)) translateY(0) scale(0.35);
 	}
 
 	18% {
@@ -245,10 +239,7 @@
 
 	100% {
 		opacity: 0;
-		transform:
-			rotate(var(--spark-angle))
-			translateY(-1.7rem)
-			scale(1);
+		transform: rotate(var(--spark-angle)) translateY(-1.7rem) scale(1);
 	}
 }
 

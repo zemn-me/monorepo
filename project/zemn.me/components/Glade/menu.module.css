@@ -18,11 +18,13 @@
 	width: 2.5rem;
 	height: 2.5rem;
 	border-radius: 999px;
-	border: 1px solid color-mix(in srgb, var(--foreground-color) 40%, transparent);
+	border: 1px solid
+		color-mix(in srgb, var(--foreground-color) 40%, transparent);
 	background: color-mix(in srgb, var(--background-color) 80%, transparent);
 	color: var(--foreground-color);
 	cursor: pointer;
-	box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--foreground-color) 15%, transparent);
+	box-shadow: 0 0.5rem 1.5rem
+		color-mix(in srgb, var(--foreground-color) 15%, transparent);
 	position: relative;
 	user-select: none;
 	-webkit-user-select: none;
@@ -35,7 +37,9 @@
 	position: absolute;
 	inset: 0;
 	place-items: center;
-	transition: opacity 180ms ease, transform 180ms ease;
+	transition:
+		opacity 180ms ease,
+		transform 180ms ease;
 }
 
 .hamburgerIconOpen {
@@ -72,9 +76,11 @@
 	position: absolute;
 	right: 0;
 	background: color-mix(in srgb, var(--background-color) 90%, transparent);
-	border: 1px solid color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	border: 1px solid
+		color-mix(in srgb, var(--foreground-color) 20%, transparent);
 	border-radius: 0.75rem;
-	box-shadow: 0 0.75rem 2.5rem color-mix(in srgb, var(--foreground-color) 15%, transparent);
+	box-shadow: 0 0.75rem 2.5rem
+		color-mix(in srgb, var(--foreground-color) 15%, transparent);
 	box-sizing: border-box;
 }
 
@@ -86,6 +92,7 @@
 .inlineLoginCopy {
 	margin-top: 0.25rem;
 	padding-top: 0.5rem;
-	border-top: 1px solid color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	border-top: 1px solid
+		color-mix(in srgb, var(--foreground-color) 20%, transparent);
 	font-size: 0.9rem;
 }

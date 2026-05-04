@@ -4,7 +4,11 @@ import * as Quaternion from '#root/ts/math/quaternion.js';
 
 export type Segment3D = readonly [start: Point3D, end: Point3D];
 
-export function box(width: number, height: number, depth: number): readonly Segment3D[] {
+export function box(
+	width: number,
+	height: number,
+	depth: number
+): readonly Segment3D[] {
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;
 	const halfDepth = depth / 2;
@@ -61,10 +65,16 @@ export function rigidTransform(
 	rotation: Quaternion.Quaternion,
 	translation: Point3D
 ): Segment3D[] {
-	const transform = DualQuaternion.fromRotationTranslation(rotation, translation);
+	const transform = DualQuaternion.fromRotationTranslation(
+		rotation,
+		translation
+	);
 
-	return segments.map(([start, end]) => [
-		DualQuaternion.transformPoint(transform, start),
-		DualQuaternion.transformPoint(transform, end),
-	] as const);
+	return segments.map(
+		([start, end]) =>
+			[
+				DualQuaternion.transformPoint(transform, start),
+				DualQuaternion.transformPoint(transform, end),
+			] as const
+	);
 }

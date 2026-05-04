@@ -9,27 +9,15 @@ describe('wireframe', () => {
 		const edges = box(4, 6, 8);
 
 		expect(edges).toHaveLength(12);
-		expect(edges).toContainEqual([
-			point<3>(-2, -3, 4),
-			point<3>(2, -3, 4),
-		]);
-		expect(edges).toContainEqual([
-			point<3>(-2, 3, -4),
-			point<3>(-2, 3, 4),
-		]);
+		expect(edges).toContainEqual([point<3>(-2, -3, 4), point<3>(2, -3, 4)]);
+		expect(edges).toContainEqual([point<3>(-2, 3, -4), point<3>(-2, 3, 4)]);
 	});
 
 	test('pyramid places its tip along +z', () => {
 		const edges = pyramid(2, 5);
 
-		expect(edges).toContainEqual([
-			point<3>(-1, -1, 0),
-			point<3>(0, 0, 5),
-		]);
-		expect(edges).toContainEqual([
-			point<3>(1, 1, 0),
-			point<3>(0, 0, 5),
-		]);
+		expect(edges).toContainEqual([point<3>(-1, -1, 0), point<3>(0, 0, 5)]);
+		expect(edges).toContainEqual([point<3>(1, 1, 0), point<3>(0, 0, 5)]);
 	});
 
 	test('rigidTransform rotates and translates each endpoint', () => {

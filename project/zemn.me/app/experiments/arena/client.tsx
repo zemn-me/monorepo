@@ -1,6 +1,5 @@
 'use client';
 
-
 import {
 	type PointerEvent as ReactPointerEvent,
 	useEffect,
@@ -79,7 +78,7 @@ function movementFromKeys(keys: KeyState) {
 }
 
 function formatAngle(radians: number): string {
-	return `${(radians * 180 / Math.PI).toFixed(0)}deg`;
+	return `${((radians * 180) / Math.PI).toFixed(0)}deg`;
 }
 
 export function ArenaClient() {
@@ -145,13 +144,13 @@ export function ArenaClient() {
 				return;
 			}
 
-		const next = {
-			...poseRef.current,
-			yaw: poseRef.current.yaw + (event.movementX * LOOK_SENSITIVITY),
-			pitch: clampPitch(
-				poseRef.current.pitch + (event.movementY * LOOK_SENSITIVITY)
-			),
-		};
+			const next = {
+				...poseRef.current,
+				yaw: poseRef.current.yaw + event.movementX * LOOK_SENSITIVITY,
+				pitch: clampPitch(
+					poseRef.current.pitch + event.movementY * LOOK_SENSITIVITY
+				),
+			};
 
 			poseRef.current = next;
 			setPose(next);
@@ -170,18 +169,20 @@ export function ArenaClient() {
 				return;
 			}
 
-			const baseline =
-				motionBaselineRef.current ??
-				{
-					beta,
-					gamma,
-					yaw: poseRef.current.yaw,
-					pitch: poseRef.current.pitch,
-				};
+			const baseline = motionBaselineRef.current ?? {
+				beta,
+				gamma,
+				yaw: poseRef.current.yaw,
+				pitch: poseRef.current.pitch,
+			};
 			motionBaselineRef.current = baseline;
 
-			const yawDelta = normalizeDegrees(gamma - baseline.gamma) * MOTION_YAW_SENSITIVITY;
-			const pitchDelta = normalizeDegrees(beta - baseline.beta) * MOTION_PITCH_SENSITIVITY;
+			const yawDelta =
+				normalizeDegrees(gamma - baseline.gamma) *
+				MOTION_YAW_SENSITIVITY;
+			const pitchDelta =
+				normalizeDegrees(beta - baseline.beta) *
+				MOTION_PITCH_SENSITIVITY;
 			const next = {
 				...poseRef.current,
 				yaw: wrapRadians(baseline.yaw + yawDelta),
@@ -227,11 +228,17 @@ export function ArenaClient() {
 		frameRef.current = window.requestAnimationFrame(animate);
 
 		return () => {
-			document.removeEventListener('pointerlockchange', onPointerLockChange);
+			document.removeEventListener(
+				'pointerlockchange',
+				onPointerLockChange
+			);
 			window.removeEventListener('keydown', onKeyDown);
 			window.removeEventListener('keyup', onKeyUp);
 			window.removeEventListener('mousemove', onMouseMove);
-			window.removeEventListener('deviceorientation', onDeviceOrientation);
+			window.removeEventListener(
+				'deviceorientation',
+				onDeviceOrientation
+			);
 			if (frameRef.current != null) {
 				window.cancelAnimationFrame(frameRef.current);
 			}
@@ -248,9 +255,10 @@ export function ArenaClient() {
 			return;
 		}
 
-		const eventType = DeviceOrientationEvent as typeof DeviceOrientationEvent & {
-			requestPermission?: () => Promise<'granted' | 'denied'>;
-		};
+		const eventType =
+			DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+				requestPermission?: () => Promise<'granted' | 'denied'>;
+			};
 		if (typeof eventType.requestPermission === 'function') {
 			const permission = await eventType.requestPermission();
 			if (permission !== 'granted') {
@@ -280,7 +288,11 @@ export function ArenaClient() {
 	}
 
 	function handlePointerMove(event: ReactPointerEvent<SVGSVGElement>) {
-		if (draggingPointerIdRef.current !== event.pointerId || locked || motionEnabled) {
+		if (
+			draggingPointerIdRef.current !== event.pointerId ||
+			locked ||
+			motionEnabled
+		) {
 			return;
 		}
 		const last = lastDragPositionRef.current;
@@ -300,9 +312,9 @@ export function ArenaClient() {
 
 		const next = {
 			...poseRef.current,
-			yaw: poseRef.current.yaw + (deltaX * LOOK_SENSITIVITY * 1.4),
+			yaw: poseRef.current.yaw + deltaX * LOOK_SENSITIVITY * 1.4,
 			pitch: clampPitch(
-				poseRef.current.pitch + (deltaY * LOOK_SENSITIVITY * 1.4)
+				poseRef.current.pitch + deltaY * LOOK_SENSITIVITY * 1.4
 			),
 		};
 		poseRef.current = next;
@@ -324,14 +336,19 @@ export function ArenaClient() {
 			<section className={style.stage}>
 				<div className={style.hud}>
 					<p className={style.label}>SVG Arena</p>
-					<h1 className={style.title}>Pointer-lock wireframe arena</h1>
+					<h1 className={style.title}>
+						Pointer-lock wireframe arena
+					</h1>
 					<p className={style.copy}>
-						Click the arena, then use <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> to move.
-						Press <kbd>Space</kbd> to jump. On mobile, enable motion look to steer with the
-						accelerometer.
-						The four suspended pyramids are rotated with the existing
-						<code>lookAt</code> quaternion logic so their tips face the cardinal
-						directions exactly.
+						Click the arena, then use <kbd>W</kbd>
+						<kbd>A</kbd>
+						<kbd>S</kbd>
+						<kbd>D</kbd> to move. Press <kbd>Space</kbd> to jump. On
+						mobile, enable motion look to steer with the
+						accelerometer. The four suspended pyramids are rotated
+						with the existing
+						<code>lookAt</code> quaternion logic so their tips face
+						the cardinal directions exactly.
 					</p>
 					{motionAvailable ? (
 						<div className={style.mobileControls}>
@@ -347,26 +364,44 @@ export function ArenaClient() {
 										: 'Calibrate motion look'}
 							</button>
 							<p className={style.motionNote}>
-								Keep the phone at your preferred neutral angle when enabling motion look.
+								Keep the phone at your preferred neutral angle
+								when enabling motion look.
 							</p>
 						</div>
 					) : null}
 					<dl className={style.telemetry} data-testid="arena-status">
 						<div>
 							<dt>mode</dt>
-							<dd>{locked ? 'pointer locked' : motionEnabled ? 'motion look' : 'tap or click viewport'}</dd>
+							<dd>
+								{locked
+									? 'pointer locked'
+									: motionEnabled
+										? 'motion look'
+										: 'tap or click viewport'}
+							</dd>
 						</div>
 						<div>
 							<dt>position</dt>
-							<dd>{pose.position[0]![0]!.toFixed(1)}, {pose.position[1]![0]!.toFixed(1)}, {pose.position[2]![0]!.toFixed(1)}</dd>
+							<dd>
+								{pose.position[0]![0]!.toFixed(1)},{' '}
+								{pose.position[1]![0]!.toFixed(1)},{' '}
+								{pose.position[2]![0]!.toFixed(1)}
+							</dd>
 						</div>
 						<div>
 							<dt>yaw / pitch</dt>
-							<dd>{formatAngle(pose.yaw)} / {formatAngle(pose.pitch)}</dd>
+							<dd>
+								{formatAngle(pose.yaw)} /{' '}
+								{formatAngle(pose.pitch)}
+							</dd>
 						</div>
 						<div>
 							<dt>forward</dt>
-							<dd>{forward[0]![0]!.toFixed(2)}, {forward[1]![0]!.toFixed(2)}, {forward[2]![0]!.toFixed(2)}</dd>
+							<dd>
+								{forward[0]![0]!.toFixed(2)},{' '}
+								{forward[1]![0]!.toFixed(2)},{' '}
+								{forward[2]![0]!.toFixed(2)}
+							</dd>
 						</div>
 					</dl>
 				</div>
@@ -383,13 +418,22 @@ export function ArenaClient() {
 						viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
 					>
 						<defs>
-							<radialGradient cx="50%" cy="45%" id="arenaGlow" r="75%">
+							<radialGradient
+								cx="50%"
+								cy="45%"
+								id="arenaGlow"
+								r="75%"
+							>
 								<stop offset="0%" stopColor="#203b28" />
 								<stop offset="55%" stopColor="#0d1810" />
 								<stop offset="100%" stopColor="#050806" />
 							</radialGradient>
 						</defs>
-						<rect fill="url(#arenaGlow)" height={SVG_HEIGHT} width={SVG_WIDTH} />
+						<rect
+							fill="url(#arenaGlow)"
+							height={SVG_HEIGHT}
+							width={SVG_WIDTH}
+						/>
 						{segments.map((segment, index) => (
 							<line
 								key={`${index}:${segment.depth.toFixed(3)}`}
@@ -403,10 +447,26 @@ export function ArenaClient() {
 								y2={segment.y2}
 							/>
 						))}
-						<line className={style.crosshair} x1={585} x2={615} y1={400} y2={400} />
-						<line className={style.crosshair} x1={600} x2={600} y1={385} y2={415} />
+						<line
+							className={style.crosshair}
+							x1={585}
+							x2={615}
+							y1={400}
+							y2={400}
+						/>
+						<line
+							className={style.crosshair}
+							x1={600}
+							x2={600}
+							y1={385}
+							y2={415}
+						/>
 					</svg>
-					<button className={style.lockButton} onClick={lockPointer} type="button">
+					<button
+						className={style.lockButton}
+						onClick={lockPointer}
+						type="button"
+					>
 						{locked ? 'Pointer locked' : 'Enter arena'}
 					</button>
 				</div>

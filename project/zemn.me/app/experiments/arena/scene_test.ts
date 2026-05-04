@@ -49,7 +49,9 @@ describe('arena scene', () => {
 			0.1
 		);
 
-		expect(jumped.position[1]![0]!).toBeGreaterThan(DEFAULT_POSE.position[1]![0]!);
+		expect(jumped.position[1]![0]!).toBeGreaterThan(
+			DEFAULT_POSE.position[1]![0]!
+		);
 		expect(jumped.verticalVelocity).toBeGreaterThan(0);
 	});
 
@@ -81,7 +83,10 @@ describe('arena scene', () => {
 			);
 		}
 
-		expect(pose.position[1]![0]!).toBeCloseTo(DEFAULT_POSE.position[1]![0]!, 5);
+		expect(pose.position[1]![0]!).toBeCloseTo(
+			DEFAULT_POSE.position[1]![0]!,
+			5
+		);
 		expect(pose.verticalVelocity).toBe(0);
 	});
 
@@ -147,7 +152,7 @@ describe('arena scene', () => {
 		const worldAhead = point<3>(
 			pose.position[0]![0]! + forward[0]![0]! * 10,
 			pose.position[1]![0]! + forward[1]![0]! * 10,
-			pose.position[2]![0]! + forward[2]![0]! * 10,
+			pose.position[2]![0]! + forward[2]![0]! * 10
 		);
 		const projected = projectWorldPoint(worldAhead, pose, 800, 600);
 
@@ -167,7 +172,7 @@ describe('arena scene', () => {
 		const worldAboveTarget = point<3>(
 			pose.position[0]![0]! + forward[0]![0]! * 10,
 			pose.position[1]![0]! + 5,
-			pose.position[2]![0]! + forward[2]![0]! * 10,
+			pose.position[2]![0]! + forward[2]![0]! * 10
 		);
 		const projected = projectWorldPoint(worldAboveTarget, pose, 800, 600);
 

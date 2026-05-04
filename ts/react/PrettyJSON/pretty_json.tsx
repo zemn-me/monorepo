@@ -67,7 +67,7 @@ export const PrettyJSON: React.FC<Props> = function PrettyJSON({
 			{Object.entries(v).map(([k, v]) => (
 				<dl key={k} title={[k, ...path].reverse().join('.')}>
 					<details>
-						{ }
+						{}
 						<summary>
 							<dt>
 								<PrettyJSON

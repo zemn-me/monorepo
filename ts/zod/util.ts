@@ -14,6 +14,7 @@ export function resultFromZod<I>(
 	return Err(t.error);
 }
 
-export const Base64 = z.string()
+export const Base64 = z
+	.string()
 	.base64()
 	.transform(v => b64.toByteArray(v));

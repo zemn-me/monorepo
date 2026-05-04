@@ -68,7 +68,7 @@ function normalizeDegrees(angle: number): number {
 }
 
 function formatAngle(radians: number): string {
-	return `${(radians * 180 / Math.PI).toFixed(0)}deg`;
+	return `${((radians * 180) / Math.PI).toFixed(0)}deg`;
 }
 
 export function PenguinSim() {
@@ -105,8 +105,14 @@ export function PenguinSim() {
 	);
 	const [motionEnabled, setMotionEnabled] = useState(false);
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
-	const [moveJoystickInput, setMoveJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
-	const [lookJoystickInput, setLookJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
+	const [moveJoystickInput, setMoveJoystickInput] = useState<JoystickInput>({
+		x: 0,
+		y: 0,
+	});
+	const [lookJoystickInput, setLookJoystickInput] = useState<JoystickInput>({
+		x: 0,
+		y: 0,
+	});
 	const [metCount, setMetCount] = useState(0);
 	const [fireworkTick, setFireworkTick] = useState(0);
 
@@ -128,18 +134,25 @@ export function PenguinSim() {
 		syncMobileControls();
 		const subscribeToCoarsePointerChanges = (() => {
 			if ('addEventListener' in coarsePointerQuery) {
-				coarsePointerQuery.addEventListener('change', syncMobileControls);
+				coarsePointerQuery.addEventListener(
+					'change',
+					syncMobileControls
+				);
 				return () => {
-					coarsePointerQuery.removeEventListener('change', syncMobileControls);
+					coarsePointerQuery.removeEventListener(
+						'change',
+						syncMobileControls
+					);
 				};
 			}
 
-			const legacyCoarsePointerQuery = coarsePointerQuery as LegacyMediaQueryList;
+			const legacyCoarsePointerQuery =
+				coarsePointerQuery as LegacyMediaQueryList;
 			if (
 				typeof legacyCoarsePointerQuery.addListener !== 'function' ||
 				typeof legacyCoarsePointerQuery.removeListener !== 'function'
 			) {
-				return () => {};
+				return () => undefined;
 			}
 
 			legacyCoarsePointerQuery.addListener(syncMobileControls);
@@ -192,7 +205,14 @@ export function PenguinSim() {
 		function applyPose(next: PlayerPose) {
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
+			setSegments(
+				renderScene(
+					world.scene,
+					next,
+					viewportSize.width,
+					viewportSize.height
+				)
+			);
 		}
 
 		function onMouseMove(event: MouseEvent) {
@@ -202,9 +222,9 @@ export function PenguinSim() {
 
 			applyPose({
 				...poseRef.current,
-				yaw: poseRef.current.yaw + (event.movementX * LOOK_SENSITIVITY),
+				yaw: poseRef.current.yaw + event.movementX * LOOK_SENSITIVITY,
 				pitch: clampPitch(
-					poseRef.current.pitch + (event.movementY * LOOK_SENSITIVITY)
+					poseRef.current.pitch + event.movementY * LOOK_SENSITIVITY
 				),
 			});
 		}
@@ -220,17 +240,20 @@ export function PenguinSim() {
 				return;
 			}
 
-			const baseline =
-				motionBaselineRef.current ?? {
-					beta,
-					gamma,
-					yaw: poseRef.current.yaw,
-					pitch: poseRef.current.pitch,
-				};
+			const baseline = motionBaselineRef.current ?? {
+				beta,
+				gamma,
+				yaw: poseRef.current.yaw,
+				pitch: poseRef.current.pitch,
+			};
 			motionBaselineRef.current = baseline;
 
-			const yawDelta = normalizeDegrees(gamma - baseline.gamma) * MOTION_YAW_SENSITIVITY;
-			const pitchDelta = normalizeDegrees(beta - baseline.beta) * MOTION_PITCH_SENSITIVITY;
+			const yawDelta =
+				normalizeDegrees(gamma - baseline.gamma) *
+				MOTION_YAW_SENSITIVITY;
+			const pitchDelta =
+				normalizeDegrees(beta - baseline.beta) *
+				MOTION_PITCH_SENSITIVITY;
 			applyPose({
 				...poseRef.current,
 				yaw: wrapRadians(baseline.yaw + yawDelta),
@@ -243,7 +266,11 @@ export function PenguinSim() {
 			lastAnimationTimeRef.current = timestamp;
 			const deltaSeconds = Math.min((timestamp - previous) / 1000, 0.05);
 			const lookInput = lookJoystickInputRef.current;
-			if (!locked && !motionEnabled && (lookInput.x !== 0 || lookInput.y !== 0)) {
+			if (
+				!locked &&
+				!motionEnabled &&
+				(lookInput.x !== 0 || lookInput.y !== 0)
+			) {
 				const lookDelta = lookAngleDeltaFromJoystick(
 					lookInput,
 					deltaSeconds,
@@ -289,11 +316,17 @@ export function PenguinSim() {
 		frameRef.current = window.requestAnimationFrame(animate);
 
 		return () => {
-			document.removeEventListener('pointerlockchange', onPointerLockChange);
+			document.removeEventListener(
+				'pointerlockchange',
+				onPointerLockChange
+			);
 			window.removeEventListener('keydown', onKeyDown);
 			window.removeEventListener('keyup', onKeyUp);
 			window.removeEventListener('mousemove', onMouseMove);
-			window.removeEventListener('deviceorientation', onDeviceOrientation);
+			window.removeEventListener(
+				'deviceorientation',
+				onDeviceOrientation
+			);
 			window.removeEventListener('resize', syncViewportSize);
 			subscribeToCoarsePointerChanges();
 			if (frameRef.current != null) {
@@ -303,7 +336,14 @@ export function PenguinSim() {
 	}, [locked, motionEnabled, viewportSize.height, viewportSize.width]);
 
 	useEffect(() => {
-		setSegments(renderScene(world.scene, pose, viewportSize.width, viewportSize.height));
+		setSegments(
+			renderScene(
+				world.scene,
+				pose,
+				viewportSize.width,
+				viewportSize.height
+			)
+		);
 	}, [pose, viewportSize.height, viewportSize.width]);
 
 	useEffect(() => {
@@ -315,7 +355,10 @@ export function PenguinSim() {
 				x(penguin.position) - x(pose.position),
 				z(penguin.position) - z(pose.position)
 			);
-			if (distance <= MEETING_DISTANCE && !metPenguins.has(penguin.name)) {
+			if (
+				distance <= MEETING_DISTANCE &&
+				!metPenguins.has(penguin.name)
+			) {
 				metPenguins.add(penguin.name);
 				changed = true;
 			}
@@ -344,9 +387,10 @@ export function PenguinSim() {
 			return;
 		}
 
-		const eventType = DeviceOrientationEvent as typeof DeviceOrientationEvent & {
-			requestPermission?: () => Promise<'granted' | 'denied'>;
-		};
+		const eventType =
+			DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+				requestPermission?: () => Promise<'granted' | 'denied'>;
+			};
 		if (typeof eventType.requestPermission === 'function') {
 			const permission = await eventType.requestPermission();
 			if (permission !== 'granted') {
@@ -376,7 +420,11 @@ export function PenguinSim() {
 	}
 
 	function handlePointerMove(event: ReactPointerEvent<SVGSVGElement>) {
-		if (draggingPointerIdRef.current !== event.pointerId || locked || motionEnabled) {
+		if (
+			draggingPointerIdRef.current !== event.pointerId ||
+			locked ||
+			motionEnabled
+		) {
 			return;
 		}
 
@@ -398,14 +446,21 @@ export function PenguinSim() {
 
 		const next = {
 			...poseRef.current,
-			yaw: poseRef.current.yaw + (deltaX * LOOK_SENSITIVITY * 1.35),
+			yaw: poseRef.current.yaw + deltaX * LOOK_SENSITIVITY * 1.35,
 			pitch: clampPitch(
-				poseRef.current.pitch + (deltaY * LOOK_SENSITIVITY * 1.35)
+				poseRef.current.pitch + deltaY * LOOK_SENSITIVITY * 1.35
 			),
 		};
 		poseRef.current = next;
 		setPose(next);
-		setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
+		setSegments(
+			renderScene(
+				world.scene,
+				next,
+				viewportSize.width,
+				viewportSize.height
+			)
+		);
 	}
 
 	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
@@ -418,8 +473,8 @@ export function PenguinSim() {
 	function updateJoystickFromEvent(event: ReactPointerEvent<HTMLDivElement>) {
 		const bounds = event.currentTarget.getBoundingClientRect();
 		return normalizeJoystickOffset(
-			event.clientX - (bounds.left + (bounds.width / 2)),
-			event.clientY - (bounds.top + (bounds.height / 2)),
+			event.clientX - (bounds.left + bounds.width / 2),
+			event.clientY - (bounds.top + bounds.height / 2),
 			JOYSTICK_RADIUS_PX
 		);
 	}
@@ -436,7 +491,9 @@ export function PenguinSim() {
 		setLookJoystickInput(next);
 	}
 
-	function handleMoveJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+	function handleMoveJoystickPointerDown(
+		event: ReactPointerEvent<HTMLDivElement>
+	) {
 		moveJoystickPointerIdRef.current = event.pointerId;
 		event.currentTarget.setPointerCapture(event.pointerId);
 		const next = updateJoystickFromEvent(event);
@@ -444,7 +501,9 @@ export function PenguinSim() {
 		setMoveJoystickInput(next);
 	}
 
-	function handleMoveJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+	function handleMoveJoystickPointerMove(
+		event: ReactPointerEvent<HTMLDivElement>
+	) {
 		if (moveJoystickPointerIdRef.current !== event.pointerId) {
 			return;
 		}
@@ -454,7 +513,9 @@ export function PenguinSim() {
 		setMoveJoystickInput(next);
 	}
 
-	function handleMoveJoystickPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+	function handleMoveJoystickPointerEnd(
+		event: ReactPointerEvent<HTMLDivElement>
+	) {
 		if (moveJoystickPointerIdRef.current !== event.pointerId) {
 			return;
 		}
@@ -463,7 +524,9 @@ export function PenguinSim() {
 		resetMoveJoystick();
 	}
 
-	function handleLookJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+	function handleLookJoystickPointerDown(
+		event: ReactPointerEvent<HTMLDivElement>
+	) {
 		lookJoystickPointerIdRef.current = event.pointerId;
 		event.currentTarget.setPointerCapture(event.pointerId);
 		const next = updateJoystickFromEvent(event);
@@ -471,7 +534,9 @@ export function PenguinSim() {
 		setLookJoystickInput(next);
 	}
 
-	function handleLookJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+	function handleLookJoystickPointerMove(
+		event: ReactPointerEvent<HTMLDivElement>
+	) {
 		if (lookJoystickPointerIdRef.current !== event.pointerId) {
 			return;
 		}
@@ -481,7 +546,9 @@ export function PenguinSim() {
 		setLookJoystickInput(next);
 	}
 
-	function handleLookJoystickPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+	function handleLookJoystickPointerEnd(
+		event: ReactPointerEvent<HTMLDivElement>
+	) {
 		if (lookJoystickPointerIdRef.current !== event.pointerId) {
 			return;
 		}
@@ -499,15 +566,14 @@ export function PenguinSim() {
 	const encounter = visibleEncounter?.penguin ?? null;
 	const projectedBodies = world.penguinBodies
 		.map(body => {
-			const points = body.outline
-				.map(vertex =>
-					projectWorldPoint(
-						vertex,
-						pose,
-						viewportSize.width,
-						viewportSize.height
-					)
-				);
+			const points = body.outline.map(vertex =>
+				projectWorldPoint(
+					vertex,
+					pose,
+					viewportSize.width,
+					viewportSize.height
+				)
+			);
 
 			if (points.some(projected => projected == null)) {
 				return null;
@@ -519,7 +585,9 @@ export function PenguinSim() {
 			);
 
 			return {
-				points: points.map(projected => `${x(projected!)},${y(projected!)}`).join(' '),
+				points: points
+					.map(projected => `${x(projected!)},${y(projected!)}`)
+					.join(' '),
 				sortDepth,
 			};
 		})
@@ -552,13 +620,13 @@ export function PenguinSim() {
 						height={viewportSize.height}
 						width={viewportSize.width}
 					/>
-						{projectedBodies.map((body, index) => (
-							<polygon
-								fill="#f6fbff"
-								key={`body:${index}:${body.points}`}
-								opacity={0.94}
-								points={body.points}
-							/>
+					{projectedBodies.map((body, index) => (
+						<polygon
+							fill="#f6fbff"
+							key={`body:${index}:${body.points}`}
+							opacity={0.94}
+							points={body.points}
+						/>
 					))}
 					{segments.map((segment, index) => (
 						<line
@@ -584,10 +652,12 @@ export function PenguinSim() {
 							<div className={style.encounter}>
 								<h2>{encounter.name}</h2>
 								<p>
-									{encounter.species} penguin, {encounter.distance.toFixed(1)}m away.
+									{encounter.species} penguin,{' '}
+									{encounter.distance.toFixed(1)}m away.
 								</p>
 								<p>
-									{encounter.heightM.toFixed(2)}m tall, {encounter.massKg.toFixed(1)}kg.
+									{encounter.heightM.toFixed(2)}m tall,{' '}
+									{encounter.massKg.toFixed(1)}kg.
 								</p>
 								<p>{encounter.blurb}</p>
 							</div>
@@ -595,8 +665,8 @@ export function PenguinSim() {
 					) : null}
 					<line
 						className={style.crosshair}
-						x1={(viewportSize.width / 2) - 15}
-						x2={(viewportSize.width / 2) + 15}
+						x1={viewportSize.width / 2 - 15}
+						x2={viewportSize.width / 2 + 15}
 						y1={viewportSize.height / 2}
 						y2={viewportSize.height / 2}
 					/>
@@ -604,17 +674,25 @@ export function PenguinSim() {
 						className={style.crosshair}
 						x1={viewportSize.width / 2}
 						x2={viewportSize.width / 2}
-						y1={(viewportSize.height / 2) - 15}
-						y2={(viewportSize.height / 2) + 15}
+						y1={viewportSize.height / 2 - 15}
+						y2={viewportSize.height / 2 + 15}
 					/>
 				</svg>
 				<div className={style.overlay}>
 					<div className={style.overlayTop}>
 						<div className={style.controls}>
-							<button className={style.button} onClick={lockPointer} type="button">
+							<button
+								className={style.button}
+								onClick={lockPointer}
+								type="button"
+							>
 								{locked ? 'Pointer Locked' : 'Enter Iceberg'}
 							</button>
-							<button className={style.buttonSecondary} onClick={() => void enableMotionLook()} type="button">
+							<button
+								className={style.buttonSecondary}
+								onClick={() => void enableMotionLook()}
+								type="button"
+							>
 								{motionEnabled
 									? 'Motion Look Active'
 									: motionPermissionNeeded
@@ -624,27 +702,39 @@ export function PenguinSim() {
 						</div>
 						<div className={style.metCount}>
 							Penguins met:{' '}
-							<span className={style.metFraction} key={fireworkTick}>
-								{Array.from({ length: FIREWORK_COUNT }, (_, index) => (
-									<span
-										aria-hidden="true"
-										className={style.metSpark}
-										key={`${fireworkTick}:${index}`}
-										style={
-											{
-												['--spark-angle' as const]: `${(index / FIREWORK_COUNT) * 360}deg`,
-											} as CSSProperties
-										}
-									/>
-								))}
+							<span
+								className={style.metFraction}
+								key={fireworkTick}
+							>
+								{Array.from(
+									{ length: FIREWORK_COUNT },
+									(_, index) => (
+										<span
+											aria-hidden="true"
+											className={style.metSpark}
+											key={`${fireworkTick}:${index}`}
+											style={
+												{
+													['--spark-angle' as const]: `${(index / FIREWORK_COUNT) * 360}deg`,
+												} as CSSProperties
+											}
+										/>
+									)
+								)}
 								{metCount}/{world.penguins.length}
 							</span>
 						</div>
 					</div>
 					<div className={style.overlayStatus}>
-						{locked ? 'pointer locked' : motionEnabled ? 'motion look' : 'tap or click viewport'}
+						{locked
+							? 'pointer locked'
+							: motionEnabled
+								? 'motion look'
+								: 'tap or click viewport'}
 						{' · '}
-						{pose.position[0]![0]!.toFixed(1)}, {pose.position[1]![0]!.toFixed(1)}, {pose.position[2]![0]!.toFixed(1)}
+						{pose.position[0]![0]!.toFixed(1)},{' '}
+						{pose.position[1]![0]!.toFixed(1)},{' '}
+						{pose.position[2]![0]!.toFixed(1)}
 						{' · '}
 						{formatAngle(pose.yaw)} / {formatAngle(pose.pitch)}
 					</div>

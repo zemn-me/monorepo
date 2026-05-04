@@ -2,10 +2,11 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 import { RandomPet } from '@pulumi/random';
 
+import { ContactFlow } from '#root/ts/pulumi/lib/contact_flow.js';
 import {
-	ContactFlow,
-} from '#root/ts/pulumi/lib/contact_flow.js';
-import { ContactFlowAction, ContactFlowLanguage } from '#root/ts/pulumi/lib/contact_flow_language.js';
+	ContactFlowAction,
+	ContactFlowLanguage,
+} from '#root/ts/pulumi/lib/contact_flow_language.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 export interface Args {

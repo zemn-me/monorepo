@@ -2,10 +2,20 @@ import {
 	forwardFromPose,
 	type YawPitchPose,
 } from '#root/ts/math/camera_pose.js';
-import { point, Point3D, scale, translate, x, z } from '#root/ts/math/cartesian.js';
+import {
+	point,
+	Point3D,
+	scale,
+	translate,
+	x,
+	z,
+} from '#root/ts/math/cartesian.js';
 import { defaultUp } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import { type StyledSegment3D, styleSegment } from '#root/ts/math/wireframe_render.js';
+import {
+	type StyledSegment3D,
+	styleSegment,
+} from '#root/ts/math/wireframe_render.js';
 
 export interface PlayerPose extends YawPitchPose {
 	readonly verticalVelocity: number;
@@ -67,7 +77,10 @@ function seededRandom(seed: number): () => number {
 	};
 }
 
-function keepInYard(position: Point3D, velocity: Point3D): {
+function keepInYard(
+	position: Point3D,
+	velocity: Point3D
+): {
 	readonly position: Point3D;
 	readonly velocity: Point3D;
 } {
@@ -104,8 +117,8 @@ export function stepLook(
 ): PlayerPose {
 	return {
 		...pose,
-		yaw: pose.yaw + (movementX * sensitivity),
-		pitch: clampPitch(pose.pitch + (movementY * sensitivity)),
+		yaw: pose.yaw + movementX * sensitivity,
+		pitch: clampPitch(pose.pitch + movementY * sensitivity),
 	};
 }
 
@@ -115,13 +128,23 @@ export function stepPlayer(
 	deltaSeconds: number
 ): PlayerPose {
 	const yawRotation = Quaternion.fromAxisAngle(defaultUp, pose.yaw);
-	const forward = horizontalUnit(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD));
-	const right = horizontalUnit(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT));
-	const requested = translate(scale(forward, input.forward), scale(right, input.strafe)) as Point3D;
-	const movement = scale(horizontalUnit(requested), (input.sprint ? 10 : 5) * deltaSeconds) as Point3D;
+	const forward = horizontalUnit(
+		Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD)
+	);
+	const right = horizontalUnit(
+		Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT)
+	);
+	const requested = translate(
+		scale(forward, input.forward),
+		scale(right, input.strafe)
+	) as Point3D;
+	const movement = scale(
+		horizontalUnit(requested),
+		(input.sprint ? 10 : 5) * deltaSeconds
+	) as Point3D;
 	const onGround = pose.position[1]![0]! <= EYE_HEIGHT + 0.000001;
 	const jumpVelocity = input.jump && onGround ? 6.5 : pose.verticalVelocity;
-	const nextVerticalVelocity = jumpVelocity - (18 * deltaSeconds);
+	const nextVerticalVelocity = jumpVelocity - 18 * deltaSeconds;
 	const verticalMovement = jumpVelocity * deltaSeconds;
 	const unclamped = translate(
 		pose.position,
@@ -145,16 +168,48 @@ export function buildWorld(): World {
 	const scene: StyledSegment3D[] = [];
 	for (let row = -32; row <= 32; row += 2) {
 		scene.push(
-			styleSegment([point<3>(-32, 0, row), point<3>(32, 0, row)], { stroke: '#6f8f54', width: 0.75, opacity: 0.42 }),
-			styleSegment([point<3>(row, 0, -32), point<3>(row, 0, 32)], { stroke: '#9d8150', width: 0.55, opacity: 0.26 })
+			styleSegment([point<3>(-32, 0, row), point<3>(32, 0, row)], {
+				stroke: '#6f8f54',
+				width: 0.75,
+				opacity: 0.42,
+			}),
+			styleSegment([point<3>(row, 0, -32), point<3>(row, 0, 32)], {
+				stroke: '#9d8150',
+				width: 0.55,
+				opacity: 0.26,
+			})
 		);
 	}
 	for (const radius of [12, 22, 31]) {
 		scene.push(
-			styleSegment([point<3>(-radius, 0.02, -radius), point<3>(radius, 0.02, -radius)], { stroke: '#f4d47f', width: 1.25, opacity: 0.48 }),
-			styleSegment([point<3>(radius, 0.02, -radius), point<3>(radius, 0.02, radius)], { stroke: '#f4d47f', width: 1.25, opacity: 0.48 }),
-			styleSegment([point<3>(radius, 0.02, radius), point<3>(-radius, 0.02, radius)], { stroke: '#f4d47f', width: 1.25, opacity: 0.48 }),
-			styleSegment([point<3>(-radius, 0.02, radius), point<3>(-radius, 0.02, -radius)], { stroke: '#f4d47f', width: 1.25, opacity: 0.48 })
+			styleSegment(
+				[
+					point<3>(-radius, 0.02, -radius),
+					point<3>(radius, 0.02, -radius),
+				],
+				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
+			),
+			styleSegment(
+				[
+					point<3>(radius, 0.02, -radius),
+					point<3>(radius, 0.02, radius),
+				],
+				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
+			),
+			styleSegment(
+				[
+					point<3>(radius, 0.02, radius),
+					point<3>(-radius, 0.02, radius),
+				],
+				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
+			),
+			styleSegment(
+				[
+					point<3>(-radius, 0.02, radius),
+					point<3>(-radius, 0.02, -radius),
+				],
+				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
+			)
 		);
 	}
 
@@ -165,8 +220,12 @@ export function buildWorld(): World {
 		critters.push({
 			id: `egg-${i}`,
 			type: ParticleType.Egg,
-			position: point<3>((rng() * 56) - 28, 0, (rng() * 56) - 28),
-			velocity: point<3>(Math.cos(angle) * 0.35, 0, Math.sin(angle) * 0.35),
+			position: point<3>(rng() * 56 - 28, 0, rng() * 56 - 28),
+			velocity: point<3>(
+				Math.cos(angle) * 0.35,
+				0,
+				Math.sin(angle) * 0.35
+			),
 			phase: rng() * Math.PI * 2,
 		});
 	}
@@ -175,7 +234,7 @@ export function buildWorld(): World {
 		critters.push({
 			id: `dog-${i}`,
 			type: ParticleType.Dog,
-			position: point<3>((rng() * 56) - 28, 0, (rng() * 56) - 28),
+			position: point<3>(rng() * 56 - 28, 0, rng() * 56 - 28),
 			velocity: point<3>(Math.cos(angle) * 1.6, 0, Math.sin(angle) * 1.6),
 			phase: rng() * Math.PI * 2,
 		});
@@ -190,13 +249,16 @@ export function stepCritters(
 	timeSeconds: number
 ): Particle[] {
 	const eggs = critters.filter(critter => critter.type === ParticleType.Egg);
-	const eggCentre = eggs.length === 0
-		? point<3>(0, 0, 0)
-		: point<3>(
-			eggs.reduce((total, egg) => total + x(egg.position), 0) / eggs.length,
-			0,
-			eggs.reduce((total, egg) => total + z(egg.position), 0) / eggs.length
-		);
+	const eggCentre =
+		eggs.length === 0
+			? point<3>(0, 0, 0)
+			: point<3>(
+					eggs.reduce((total, egg) => total + x(egg.position), 0) /
+						eggs.length,
+					0,
+					eggs.reduce((total, egg) => total + z(egg.position), 0) /
+						eggs.length
+				);
 
 	return critters.map(critter => {
 		const wander = point<3>(
@@ -204,27 +266,46 @@ export function stepCritters(
 			0,
 			Math.sin(timeSeconds * 1.3 + critter.phase * 1.37)
 		);
-		const dogPush = critter.type === ParticleType.Egg
-			? critters
-				.filter(other => other.type === ParticleType.Dog)
-				.reduce((push, dog) => {
-					const away = point<3>(
-						x(critter.position) - x(dog.position),
-						0,
-						z(critter.position) - z(dog.position)
-					);
-					const distance = Math.max(1, Math.hypot(x(away), z(away)));
-					if (distance > 7) return push;
-					return translate(push, scale(horizontalUnit(away), (7 - distance) * 1.5)) as Point3D;
-				}, point<3>(0, 0, 0))
-			: point<3>(0, 0, 0);
-		const toEggs = critter.type === ParticleType.Dog
-			? scale(horizontalUnit(point<3>(
-				x(eggCentre) - x(critter.position),
-				0,
-				z(eggCentre) - z(critter.position)
-			)), 2.6)
-			: point<3>(0, 0, 0);
+		const dogPush =
+			critter.type === ParticleType.Egg
+				? critters
+						.filter(other => other.type === ParticleType.Dog)
+						.reduce(
+							(push, dog) => {
+								const away = point<3>(
+									x(critter.position) - x(dog.position),
+									0,
+									z(critter.position) - z(dog.position)
+								);
+								const distance = Math.max(
+									1,
+									Math.hypot(x(away), z(away))
+								);
+								if (distance > 7) return push;
+								return translate(
+									push,
+									scale(
+										horizontalUnit(away),
+										(7 - distance) * 1.5
+									)
+								) as Point3D;
+							},
+							point<3>(0, 0, 0)
+						)
+				: point<3>(0, 0, 0);
+		const toEggs =
+			critter.type === ParticleType.Dog
+				? scale(
+						horizontalUnit(
+							point<3>(
+								x(eggCentre) - x(critter.position),
+								0,
+								z(eggCentre) - z(critter.position)
+							)
+						),
+						2.6
+					)
+				: point<3>(0, 0, 0);
 		const acceleration = translate(
 			scale(wander, critter.type === ParticleType.Egg ? 0.9 : 1.2),
 			translate(dogPush, toEggs) as Point3D
@@ -232,15 +313,22 @@ export function stepCritters(
 		const damping = critter.type === ParticleType.Egg ? 0.9 : 0.82;
 		const maxSpeed = critter.type === ParticleType.Egg ? 2.7 : 4.4;
 		const nextVelocity = scale(
-			translate(critter.velocity, scale(acceleration, deltaSeconds)) as Point3D,
+			translate(
+				critter.velocity,
+				scale(acceleration, deltaSeconds)
+			) as Point3D,
 			Math.pow(damping, deltaSeconds)
 		) as Point3D;
 		const speed = Math.hypot(x(nextVelocity), z(nextVelocity));
-		const limitedVelocity = speed > maxSpeed
-			? scale(horizontalUnit(nextVelocity), maxSpeed) as Point3D
-			: nextVelocity;
+		const limitedVelocity =
+			speed > maxSpeed
+				? (scale(horizontalUnit(nextVelocity), maxSpeed) as Point3D)
+				: nextVelocity;
 		const next = keepInYard(
-			translate(critter.position, scale(limitedVelocity, deltaSeconds)) as Point3D,
+			translate(
+				critter.position,
+				scale(limitedVelocity, deltaSeconds)
+			) as Point3D,
 			limitedVelocity
 		);
 
@@ -256,5 +344,5 @@ export function isFacingPose(point3d: Point3D, pose: PlayerPose): boolean {
 	const forward = forwardFromPose(pose);
 	const dx = x(point3d) - x(pose.position);
 	const dz = z(point3d) - z(pose.position);
-	return (dx * x(forward)) + (dz * z(forward)) > 0;
+	return dx * x(forward) + dz * z(forward) > 0;
 }

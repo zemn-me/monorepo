@@ -19,11 +19,13 @@ export class DoSync extends Pulumi.ComponentResource {
 		new Copybara(
 			`${name}_copybara`,
 			{
-				configPath: runfiles.resolve("monorepo/ts/do-sync/copy.bara.sky"),
+				configPath: runfiles.resolve(
+					'monorepo/ts/do-sync/copy.bara.sky'
+				),
 				staging: args.staging,
-				args: ["default", "--force"]
+				args: ['default', '--force'],
 			},
-			{parent: this}
-		)
+			{ parent: this }
+		);
 	}
 }

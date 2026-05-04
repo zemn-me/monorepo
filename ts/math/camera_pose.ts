@@ -21,7 +21,9 @@ export function orientationFromYawPitch(
 	const rightAxis = Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT);
 	const pitchRotation = Quaternion.fromAxisAngle(rightAxis, pitch);
 
-	return Quaternion.normalize(Quaternion.multiply(pitchRotation, yawRotation));
+	return Quaternion.normalize(
+		Quaternion.multiply(pitchRotation, yawRotation)
+	);
 }
 
 export function inverseOrientationFromYawPitch(
@@ -31,10 +33,7 @@ export function inverseOrientationFromYawPitch(
 	return Quaternion.inverse(orientationFromYawPitch(yaw, pitch));
 }
 
-export function forwardFromYawPitch(
-	yaw: number,
-	pitch: number
-): Point3D {
+export function forwardFromYawPitch(yaw: number, pitch: number): Point3D {
 	return Quaternion.rotateVector(
 		orientationFromYawPitch(yaw, pitch),
 		DEFAULT_FORWARD

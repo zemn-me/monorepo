@@ -1,17 +1,14 @@
-
-
 interface AbstractConditionOperator {
-	Operator: string
-	Operands: string[]
+	Operator: string;
+	Operands: string[];
 }
 
 interface Equals extends AbstractConditionOperator {
-	Operator: "Equals"
-	Operands: string[]
+	Operator: 'Equals';
+	Operands: string[];
 }
 
-export type ConditionOperator = Equals
-
+export type ConditionOperator = Equals;
 
 export interface ActionBase {
 	Identifier: string;
@@ -25,26 +22,24 @@ export interface ActionBase {
 }
 
 export interface ErrorTransition<ErrorName extends string = string> {
-	NextAction: string,
-	ErrorType: ErrorName
+	NextAction: string;
+	ErrorType: ErrorName;
 }
 
 export interface ConditionTransition {
-	NextAction: string,
-	Condition: unknown // TBD
+	NextAction: string;
+	Condition: unknown; // TBD
 }
 
-
 interface ContactFlowActions {
-	GetParticipantInputAction: GetParticipantInputAction
-	EndFlowExecutionAction: EndFlowExecutionAction
-	MessageParticipantAction: MessageParticipantAction
-	InvokeLambdaFunctionAction:
-		InvokeLambdaFunctionAction
+	GetParticipantInputAction: GetParticipantInputAction;
+	EndFlowExecutionAction: EndFlowExecutionAction;
+	MessageParticipantAction: MessageParticipantAction;
+	InvokeLambdaFunctionAction: InvokeLambdaFunctionAction;
 }
 
 export interface GetParticipantInputAction extends ActionBase {
-	Type: 'GetParticipantInput',
+	Type: 'GetParticipantInput';
 	Parameters: {
 		/**
 		 *  A prompt ID or prompt ARN to play to the participant along with
@@ -52,35 +47,35 @@ export interface GetParticipantInputAction extends ActionBase {
 		 *  specified. Must be either statically defined or a single valid JSONPath
 		 *  identifier.
 		 */
-		PromptId?: string
+		PromptId?: string;
 		/**
 		 * An optional string that defines text to send to the participant along
 		 * with gathering input. May not be specified if PromptId or SSML is also
-		 * specified. May be defined statically or dynamically. 
+		 * specified. May be defined statically or dynamically.
 		 */
-		Text?: string
+		Text?: string;
 		/**
 		 * An optional string that defines SSML to send to the participant along
 		 * with gathering input. May not be specified if Text or PromptId is also
-		 * specified. May be defined statically or dynamically. 
+		 * specified. May be defined statically or dynamically.
 		 */
-		SSML?: string
+		SSML?: string;
 		/**
 		 * An external media source to play.
 		 */
 		Media?: {
-			Uri: string,
+			Uri: string;
 			/**
 			 * The source from which the message will be fetched. The only
 			 * supported type is S3.
 			 */
-			SourceType: "S3",
+			SourceType: 'S3';
 			/**
 			 * The type of the message to be played. The only supported type is
 			 * Audio.
 			 */
-			MediaType: "Audio"
-		},
+			MediaType: 'Audio';
+		};
 
 		/**
 		 * The number of seconds to wait for input to be collected before
@@ -88,9 +83,9 @@ export interface GetParticipantInputAction extends ActionBase {
 		 * timeout until the *first* DTMF digit is entered. Must be defined
 		 * statically, and must be a valid integer larger than zero.
 		 */
-		InputTimeoutSeconds?: string
+		InputTimeoutSeconds?: string;
 
-		StoreInput?: "True" | "False"
+		StoreInput?: 'True' | 'False';
 
 		/**
 		 * An object that defines how to validate customer inputs, required if and
@@ -100,7 +95,7 @@ export interface GetParticipantInputAction extends ActionBase {
 			/**
 			 * Optional, one of the ways to validate inputs, make sure that it's a
 			 * valid phone number. May not be specified if CustomValidation is
-			 * specified. 
+			 * specified.
 			 */
 			PhoneNumberValidation?: {
 				/**
@@ -108,35 +103,33 @@ export interface GetParticipantInputAction extends ActionBase {
 				 * (without the + and the country code), "E164" enforces
 				 * Participant actions 4074 Amazon Connect API Reference that the
 				 * customer input is a fully defined e.164 phone number. Must be
-				 * defined statically. 
+				 * defined statically.
 				 */
-				NumberFormat: "Local" | "E164",
+				NumberFormat: 'Local' | 'E164';
 				/**
 				 * If the number format is "Local", this must be defined. This is
 				 * the two letter country code to be associated with the input
-				 * number when validating.  Must be defined statically. 
+				 * number when validating.  Must be defined statically.
 				 */
-				CountryCode?: string
-			},
+				CountryCode?: string;
+			};
 
 			/**
 			 *  Optional, the other way to validate inputs. May not be specified if
-			 *  PhoneNumberValidation is specified. 
+			 *  PhoneNumberValidation is specified.
 			 */
 			CustomValidation?: {
 				/**
 				 * A number representing the maximum length of the input.  Must be
-				 * defined statically. 
+				 * defined statically.
 				 */
-				MaxLength: string
-			},
-
-
-		},
+				MaxLength: string;
+			};
+		};
 
 		/**
 		 * An optional object that defines how to encrypt the customer input.
-		 * May only be specified if "CustomValidation" is provided. 
+		 * May only be specified if "CustomValidation" is provided.
 		 */
 		InputEncryption?: {
 			/**
@@ -144,17 +137,16 @@ export interface GetParticipantInputAction extends ActionBase {
 			 * console for the purposes of customer input encryption. May be
 			 * specified statically or dynamically.
 			 */
-			EncryptionKeyId: string
+			EncryptionKeyId: string;
 
 			/**
 			 * The PEM definition of the public key to use to encrypt this
 			 * data. This key must be signed with the encryption key identified
 			 * by the EncryptionKeyId. May be specified statically or
-			 * dynamically. 
+			 * dynamically.
 			 */
-			Key?: string
-		},
-
+			Key?: string;
+		};
 
 		/**
 		 * An optional object to override default DTMF behavior for voice calls.
@@ -162,27 +154,26 @@ export interface GetParticipantInputAction extends ActionBase {
 		DTMFConfiguration?: {
 			/**
 			 * Up to five digits to serve as the terminating sequence when
-			 * gathering DTMF 
+			 * gathering DTMF
 			 */
-			InputTerminationSequence?: string
+			InputTerminationSequence?: string;
 
 			/**
 			 * "True" or "False". If "True", the "*" key doesn't cancel gathering
-			 * DTMF digits. 
+			 * DTMF digits.
 			 */
-			DisableCancelKey?: "True" | "False"
-		},
-
-	},
+			DisableCancelKey?: 'True' | 'False';
+		};
+	};
 
 	Transitions?: {
 		Errors: (
-			ErrorTransition<"NoMatchingConditon"> |
-			ErrorTransition<"NoMatchingError"> |
-			ErrorTransition<"InvalidPhoneNumber"> |
-			ErrorTransition<"InputTimeLimitExceeded">
-		)[]
-	}
+			| ErrorTransition<'NoMatchingConditon'>
+			| ErrorTransition<'NoMatchingError'>
+			| ErrorTransition<'InvalidPhoneNumber'>
+			| ErrorTransition<'InputTimeLimitExceeded'>
+		)[];
+	};
 }
 
 export interface EndFlowExecutionAction extends ActionBase {
@@ -248,10 +239,10 @@ export interface MessageParticipantAction extends ActionBase {
     }
  */
 export interface InvokeLambdaFunctionAction extends ActionBase {
-	Type: 'InvokeLambdaFunction',
+	Type: 'InvokeLambdaFunction';
 	Parameters: {
-		LambdaFunctionARN: string,
-		InvocationTimeLimitSeconds: string,
+		LambdaFunctionARN: string;
+		InvocationTimeLimitSeconds: string;
 		ResponseValidation: {
 			/**
 			 * Validates the response from the lambda is either a JSON map of
@@ -260,12 +251,12 @@ export interface InvokeLambdaFunctionAction extends ActionBase {
 			 * I would strongly argue that "JSON" is a misnomer here, as both
 			 * formats are definitely JSON.
 			 */
-			ResponseType: "STRING_MAP" | "JSON"
-		}
-	}
+			ResponseType: 'STRING_MAP' | 'JSON';
+		};
+	};
 }
 
-export type ContactFlowAction = ContactFlowActions[keyof ContactFlowActions]
+export type ContactFlowAction = ContactFlowActions[keyof ContactFlowActions];
 
 export interface ContactFlowLanguage {
 	Version: '2019-10-30';

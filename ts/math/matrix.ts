@@ -72,7 +72,7 @@ export function mul<
 	const I2 extends number,
 	const J2 extends number,
 >(m1: Matrix<I1, J1>, m2: Matrix<I2, J2>): Matrix<I2, J1> {
-	const [, /*i1*/ j1] = size(m1);
+	const [/*i1*/ , j1] = size(m1);
 	const [i2 /*, j2*/] = size(m2);
 
 	return vec.map(vec.New<J1>(j1), (_, i) =>
@@ -120,14 +120,7 @@ export function sub<I extends number, J extends number>(
  * For vector-shaped matricies, gives the equivilent magnitude.
  */
 export function magnitude(m: Matrix<1, number>): number {
-	return Math.sqrt(
-		vec.sum(
-			map(
-				m,
-				(v: number) => v ** 2
-			).flat()
-		)
-	);
+	return Math.sqrt(vec.sum(map(m, (v: number) => v ** 2).flat()));
 }
 
 export const length = magnitude;
@@ -143,9 +136,7 @@ export function unit<J extends number>(m: Matrix<1, J>): Matrix<1, J> {
 /**
  * For vector-shaped matricies, performs the dot operation.
  */
-export function dot<J extends number>(
-	m1: Matrix<1, J>,
-	m2: Matrix<1, J>) {
+export function dot<J extends number>(m1: Matrix<1, J>, m2: Matrix<1, J>) {
 	return vec.dot(m1.flat(), m2.flat());
 }
 
@@ -165,7 +156,7 @@ export function cross(
 	const cy = z1 * x2 - x1 * z2;
 	const cz = x1 * y2 - y1 * x2;
 
-	return [[cx], [ cy ], [ cz ]];
+	return [[cx], [cy], [cz]];
 }
 
 /**

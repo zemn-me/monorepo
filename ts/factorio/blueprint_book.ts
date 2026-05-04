@@ -57,7 +57,7 @@ export type BlueprintBook = z.infer<typeof BlueprintBookBase> & {
 		blueprint?: z.infer<typeof optionalBlueprint>;
 		blueprint_book?: BlueprintBook;
 		deconstruction_planner?: z.infer<typeof optionalDeconstructionPlanner>;
-		upgrade_planner?: z.infer<typeof optionalUpgradePlanner>
+		upgrade_planner?: z.infer<typeof optionalUpgradePlanner>;
 	}[];
 };
 

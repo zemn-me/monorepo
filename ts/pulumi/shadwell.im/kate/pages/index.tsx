@@ -5,39 +5,48 @@ import styles from './index.module.css';
 const trees = [
 	{
 		name: 'English oak',
-		description: 'Broad, sturdy crown with lobed leaves and acorns that feed wildlife.',
+		description:
+			'Broad, sturdy crown with lobed leaves and acorns that feed wildlife.',
 	},
 	{
 		name: 'Silver birch',
-		description: 'Pale peeling bark and a light canopy that lets wildflowers thrive below.',
+		description:
+			'Pale peeling bark and a light canopy that lets wildflowers thrive below.',
 	},
 	{
 		name: 'Scots pine',
-		description: 'Tall evergreen with orange plates of bark near the crown and blue-green needles.',
+		description:
+			'Tall evergreen with orange plates of bark near the crown and blue-green needles.',
 	},
 	{
 		name: 'Rowan (mountain ash)',
-		description: 'Feathery leaflets and bright red autumn berries loved by birds.',
+		description:
+			'Feathery leaflets and bright red autumn berries loved by birds.',
 	},
 	{
 		name: 'Field maple',
-		description: 'Small maple with rounded lobed leaves that turn golden in autumn.',
+		description:
+			'Small maple with rounded lobed leaves that turn golden in autumn.',
 	},
 	{
 		name: 'Hazel',
-		description: 'Multi-stemmed coppice tree with spring catkins and sweet nuts.',
+		description:
+			'Multi-stemmed coppice tree with spring catkins and sweet nuts.',
 	},
 	{
 		name: 'Hedgerow mix',
-		description: 'Hawthorn, blackthorn, and dog rose weaving wildlife corridors with blossom, hips, and sloes.',
+		description:
+			'Hawthorn, blackthorn, and dog rose weaving wildlife corridors with blossom, hips, and sloes.',
 	},
 	{
 		name: 'Wild cherry',
-		description: 'Clouds of white blossom in spring and glossy red cherries later in the year.',
+		description:
+			'Clouds of white blossom in spring and glossy red cherries later in the year.',
 	},
 	{
 		name: 'Aspen',
-		description: 'Heart-shaped leaves that shimmer and flutter with the lightest breeze.',
+		description:
+			'Heart-shaped leaves that shimmer and flutter with the lightest breeze.',
 	},
 ];
 
@@ -47,7 +56,11 @@ export default function Main() {
 			<Head>
 				<title>Kate&apos;s art</title>
 				<link href="https://fonts.googleapis.com" rel="preconnect" />
-				<link crossOrigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect" />
+				<link
+					crossOrigin="anonymous"
+					href="https://fonts.gstatic.com"
+					rel="preconnect"
+				/>
 				<link
 					href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap"
 					rel="stylesheet"
@@ -76,14 +89,19 @@ export default function Main() {
 						<p className={styles.eyebrow}>Kate&apos;s art</p>
 						<h1 className={styles.title}>Native trees of the UK</h1>
 						<p className={styles.lede}>
-							A handful of well-loved species, each with a little character note to enjoy.
+							A handful of well-loved species, each with a little
+							character note to enjoy.
 						</p>
 					</header>
 					<ul className={styles.grid}>
 						{trees.map(tree => (
 							<li className={styles.tile} key={tree.name}>
-								<div className={styles.tileName}>{tree.name}</div>
-								<p className={styles.tileCopy}>{tree.description}</p>
+								<div className={styles.tileName}>
+									{tree.name}
+								</div>
+								<p className={styles.tileCopy}>
+									{tree.description}
+								</p>
 							</li>
 						))}
 					</ul>

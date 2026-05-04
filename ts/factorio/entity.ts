@@ -22,7 +22,6 @@ import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter.js';
 import { Tags } from '#root/ts/factorio/tags.js';
 import { Uint8 } from '#root/ts/factorio/uint8.js';
 
-
 const EntityItemInventorySlot = z.strictObject({
 	/** Index of the inventory this stack lives in (Factorio 1-based). */
 	inventory: Int,
@@ -95,13 +94,14 @@ export const Entity = z.strictObject({
 	/**
 	 * Item requests by this entity, this is what defines the item-request-proxy when the blueprint is placed, optional. #Item request object
 	 */
-	items:
-		z.union([
+	items: z
+		.union([
 			z.array(ItemRequestObject),
 			ItemRequestObject,
 			z.array(EntityItemSlot),
 			EntityItemSlot,
-		]).optional(),
+		])
+		.optional(),
 	/**
 	 * Name of the recipe prototype this assembling machine is set to, optional, string.
 	 */
@@ -161,11 +161,10 @@ export const Entity = z.strictObject({
 	/**
 	 * Used by Prototype/LogisticContainer, optional. #Logistic filter object.
 	 */
-	request_filters:
-		z.union([
-			Something,
-			z.array(LogisticFilter),
-		]).optional().nullable(),
+	request_filters: z
+		.union([Something, z.array(LogisticFilter)])
+		.optional()
+		.nullable(),
 	request_missing_construction_materials: z.boolean().optional(),
 	use_filters: z.boolean().optional(),
 	'priority-list': z.array(EntityPriorityListEntry).optional(),
@@ -224,7 +223,7 @@ export const Entity = z.strictObject({
 	buffer_size: z.number().optional(),
 
 	recipe_quality: z.optional(Quality),
-	quality: Quality.optional()
+	quality: Quality.optional(),
 });
 
 export type Entity = z.TypeOf<typeof Entity>;

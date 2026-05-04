@@ -11,8 +11,17 @@
 .accent {
 	position: absolute;
 	inset: 0;
-	background: radial-gradient(circle at 10% 80%, rgba(75, 168, 128, 0.08), transparent 35%),
-		radial-gradient(circle at 90% 50%, rgba(103, 131, 226, 0.1), transparent 30%);
+	background:
+		radial-gradient(
+			circle at 10% 80%,
+			rgba(75, 168, 128, 0.08),
+			transparent 35%
+		),
+		radial-gradient(
+			circle at 90% 50%,
+			rgba(103, 131, 226, 0.1),
+			transparent 30%
+		);
 	filter: blur(8px);
 }
 
@@ -68,7 +77,10 @@
 	border-radius: 14px;
 	padding: 18px 16px 16px;
 	box-shadow: 0 8px 24px rgba(15, 31, 28, 0.08);
-	transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+	transition:
+		transform 140ms ease,
+		box-shadow 140ms ease,
+		border-color 140ms ease;
 }
 
 .tile:hover {

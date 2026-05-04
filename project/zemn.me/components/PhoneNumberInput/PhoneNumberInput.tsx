@@ -1,10 +1,15 @@
-import { type ChangeEventHandler, type FocusEventHandler, forwardRef, type Ref, useId } from "react";
+import {
+	type ChangeEventHandler,
+	type FocusEventHandler,
+	forwardRef,
+	type Ref,
+	useId,
+} from 'react';
 
-import { useGetExactContactByPhoneNumber } from "#root/project/zemn.me/hook/useGetExactContactByPhoneNumber.js";
-import { either } from "#root/ts/either/either.js";
-import { displayPersonName } from "#root/ts/google/people/display.js";
-import { None, option_and_then_flatten, Some } from "#root/ts/option/types.js";
-
+import { useGetExactContactByPhoneNumber } from '#root/project/zemn.me/hook/useGetExactContactByPhoneNumber.js';
+import { either } from '#root/ts/either/either.js';
+import { displayPersonName } from '#root/ts/google/people/display.js';
+import { None, option_and_then_flatten, Some } from '#root/ts/option/types.js';
 
 export type PhoneNumberInputProps = {
 	readonly name?: string;
@@ -13,10 +18,13 @@ export type PhoneNumberInputProps = {
 	readonly onBlur?: FocusEventHandler<HTMLInputElement>;
 	readonly disabled?: boolean;
 	readonly placeholder?: string;
-	readonly id?: string
+	readonly id?: string;
 };
 
-function _PhoneNumberInput(props: PhoneNumberInputProps, ref: Ref<HTMLInputElement>) {
+function _PhoneNumberInput(
+	props: PhoneNumberInputProps,
+	ref: Ref<HTMLInputElement>
+) {
 	const backupId = useId();
 	const {
 		name,
@@ -25,38 +33,31 @@ function _PhoneNumberInput(props: PhoneNumberInputProps, ref: Ref<HTMLInputEleme
 		onBlur,
 		disabled,
 		placeholder,
-		id = backupId
+		id = backupId,
 	} = props;
-
 
 	const contact = useGetExactContactByPhoneNumber(
 		Some(value),
-		new Set([
-			"names",
-			"nicknames",
-		])
+		new Set(['names', 'nicknames'])
 	);
 
 	const displayName = contact(
-			() => None, // ignore error for now
-			contact => option_and_then_flatten(
-				contact,
-				contact => displayPersonName(contact)
+		() => None, // ignore error for now
+		contact =>
+			option_and_then_flatten(contact, contact =>
+				displayPersonName(contact)
 			)
 	);
 
-
-
 	return (
 		<span>
-			{
-				either(
-					displayName,
-					() => null,
-					name =>
-						<label htmlFor={id}>({name})</label>,
+			{either(
+				displayName,
+				() => null,
+				name => (
+					<label htmlFor={id}>({name})</label>
 				)
-			}
+			)}
 			<input
 				disabled={disabled}
 				id={id}
@@ -71,6 +72,5 @@ function _PhoneNumberInput(props: PhoneNumberInputProps, ref: Ref<HTMLInputEleme
 		</span>
 	);
 }
-
 
 export const PhoneNumberInput = forwardRef(_PhoneNumberInput);

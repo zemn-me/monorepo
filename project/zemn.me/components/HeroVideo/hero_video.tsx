@@ -24,8 +24,8 @@ function first(dates: Date[]): Date {
 	if (!dates.length) {
 		throw new Error('No dates provided');
 	}
-	return dates.reduce(
-		(earliest, current) => (current < earliest ? current : earliest),
+	return dates.reduce((earliest, current) =>
+		current < earliest ? current : earliest
 	);
 }
 
@@ -77,7 +77,9 @@ const SEASON_START_MONTHS = {
  */
 export function useSeason(): Season {
 	// Provide a fallback for SSR by guessing northern hemisphere initially:
-	const [season, setSeason] = useState<Season>(() => getSeason(new Date(), undefined, true));
+	const [season, setSeason] = useState<Season>(() =>
+		getSeason(new Date(), undefined, true)
+	);
 
 	function scheduleNextCheck() {
 		const now = new Date();
@@ -143,32 +145,30 @@ function toDMS(deg: number, isLat: boolean): string {
 	const minutes = Math.floor(minutesFloat);
 	const seconds = ((minutesFloat - minutes) * 60).toFixed(1);
 
-	const direction = isLat
-		? deg >= 0 ? "N" : "S"
-		: deg >= 0 ? "E" : "W";
+	const direction = isLat ? (deg >= 0 ? 'N' : 'S') : deg >= 0 ? 'E' : 'W';
 
 	return `${degrees}°${minutes}′${seconds}″${direction}`;
 }
 
 interface RenderLatLngProps {
-	readonly latLng: readonly [number, number],
-	readonly className?: string
+	readonly latLng: readonly [number, number];
+	readonly className?: string;
 }
 
-function RenderLatLng({latLng, className}: RenderLatLngProps) {
+function RenderLatLng({ latLng, className }: RenderLatLngProps) {
 	const [lat, lng] = latLng;
-	return <Link className={className} href={`//maps.google.com?q=${encodeURIComponent(latLng.join(","))}`}>
-		{
-			[
-				toDMS(lat, true),
-				toDMS(lng, false)
-			].join(" ")
-		}
-	</Link>
+	return (
+		<Link
+			className={className}
+			href={`//maps.google.com?q=${encodeURIComponent(latLng.join(','))}`}
+		>
+			{[toDMS(lat, true), toDMS(lng, false)].join(' ')}
+		</Link>
+	);
 }
 
 export function HeroVideo(props: HeroVideoProps) {
-	const [captionToggled, setCaptionToggled ] = useState(false)
+	const [captionToggled, setCaptionToggled] = useState(false);
 	const season = useSeason();
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -176,27 +176,27 @@ export function HeroVideo(props: HeroVideoProps) {
 		posterSrc: string,
 		videoSources: JSX.Element,
 		caption?: string,
-		latLng?: LatLng
-	]
+		latLng?: LatLng,
+	];
 
 	const kenwoodSummerVideoSource: VideoChoice = [
 		kenwood.poster.src,
 		<kenwood.VideoSources key="summer-sources" />,
-		"Kenwood House Gardens",
-		[51.57139601074658, -0.16924392259112794]
+		'Kenwood House Gardens',
+		[51.57139601074658, -0.16924392259112794],
 	] as const;
 
 	const kenwoodWinterVideoSource: VideoChoice = [
 		kenwood_snow.poster.src,
 		<kenwood_snow.VideoSources key="winter-sources" />,
-		"Kenwood House",
-		[51.57122281677411, -0.16746393741998228]
+		'Kenwood House',
+		[51.57122281677411, -0.16746393741998228],
 	] as const;
 
 	const mistOnTheHillsVideoSource = [
 		mistOnTheHillsPoster.src,
 		<MistOnTheHillsVideoSources key="mist-sources" />,
-		"East Devon AONB",
+		'East Devon AONB',
 	] as const;
 
 	const [videoPoster, videoSource, caption, latlng] = {
@@ -218,26 +218,26 @@ export function HeroVideo(props: HeroVideoProps) {
 		(e: React.MouseEvent) => {
 			// prevent toggling if the user is selecting text.
 			const selection = document.getSelection();
-			if (selection?.type == "Range" && e.currentTarget.contains(selection.anchorNode)) return;
-			setCaptionToggled(v => !v)
-		}
-	, [ setCaptionToggled ] );
+			if (
+				selection?.type == 'Range' &&
+				e.currentTarget.contains(selection.anchorNode)
+			)
+				return;
+			setCaptionToggled(v => !v);
+		},
+		[setCaptionToggled]
+	);
 
 	/**
 	 * Prevent clicking the caption from toggling the caption.
 	 */
-	const captionOnClick = useCallback(
-		(e: React.MouseEvent) => {
-			e.stopPropagation();
-		}
-	, []);
-
+	const captionOnClick = useCallback((e: React.MouseEvent) => {
+		e.stopPropagation();
+	}, []);
 
 	return (
-		<figure className={classNames(
-			style.heroVideo,
-			props.className
-		)}
+		<figure
+			className={classNames(style.heroVideo, props.className)}
 			onClick={figureOnClick}
 		>
 			<Video
@@ -252,22 +252,18 @@ export function HeroVideo(props: HeroVideoProps) {
 				{videoSource}
 			</Video>
 
-			<figcaption className={
-				classNames(
+			<figcaption
+				className={classNames(
 					captionToggled ? style.toggled : undefined,
 					style.caption
-				)
-			}
-
+				)}
 				onClick={captionOnClick}
 			>
-				<div className={style.Title}>
-					{caption}
-				</div>
+				<div className={style.Title}>{caption}</div>
 
-				{latlng !== undefined ?
-					<RenderLatLng className={style.LatLng} latLng={latlng}/>
-				: null}
+				{latlng !== undefined ? (
+					<RenderLatLng className={style.LatLng} latLng={latlng} />
+				) : null}
 			</figcaption>
 		</figure>
 	);

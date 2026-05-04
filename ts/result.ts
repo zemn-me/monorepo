@@ -1,7 +1,6 @@
-import { NewType } from "#root/ts/NewType.js";
-import * as r from "#root/ts/result/result.js";
+import { NewType } from '#root/ts/NewType.js';
+import * as r from '#root/ts/result/result.js';
 import * as types from '#root/ts/result_types.js';
-
 
 /**
  * @deprecated please use {@link r}
@@ -11,19 +10,25 @@ export class impl<T> extends NewType<T> {
 	 * If this {@link Result} represents a failure ({@link Err}), returns
 	 * `true`, otherwise returns `false`.
 	 */
-	is_err<T, E>(this: Result<T, E>): this is Err<E> { return types.is_err(this.value) }
+	is_err<T, E>(this: Result<T, E>): this is Err<E> {
+		return types.is_err(this.value);
+	}
 
 	/**
 	 * If this {@link Result} represents a success ({@link Ok}), returns
 	 * `true`, otherwise returns `false`.
 	 */
-	is_ok<T, E>(this: Result<T, E>): this is Ok<T> { return types.is_ok(this.value) }
+	is_ok<T, E>(this: Result<T, E>): this is Ok<T> {
+		return types.is_ok(this.value);
+	}
 
 	/**
 	 * If this {@link Result} represents a success ({@link Ok}), return
 	 * the success value, or *throw an error*!
 	 */
-	unwrap<T, E>(this: Result<T, E>): T { return types.unwrap(this.value) }
+	unwrap<T, E>(this: Result<T, E>): T {
+		return types.unwrap(this.value);
+	}
 
 	/**
 	 * If this {@link Result} represents a success, return the success value.
@@ -32,14 +37,16 @@ export class impl<T> extends NewType<T> {
 	 * To do this while operating on the error value if there is an error, use
 	 * {@link unwrap_or_else}.
 	 */
-	unwrap_or<T, E>(this: Result<T, E>, fallback: T): T { return types.unwrap_or(this.value, fallback) }
+	unwrap_or<T, E>(this: Result<T, E>, fallback: T): T {
+		return types.unwrap_or(this.value, fallback);
+	}
 
 	/**
 	 * If this {@link Result} represents an error, return it – otherwise
 	 * *throw an error*!
 	 */
 	unwrap_err<E>(this: Result<unknown, E>): E {
-		return r.unwrap_err(this.value)
+		return r.unwrap_err(this.value);
 	}
 
 	/**
@@ -63,14 +70,17 @@ export class impl<T> extends NewType<T> {
 	 * even if not checked at runtime.
 	 */
 	unwrap_unchecked<V>(this: Ok<V>): V {
-		return r.unwrap_unchecked(this.value)
+		return r.unwrap_unchecked(this.value);
 	}
 
 	/**
 	 * If this {@link Result} represents a failure, modify the failure value.
 	 */
-	unwrap_or_else<T1, T2, E>(this: Result<T1, E>, fallback: (e: E) => T2): T1 | T2 {
-		return types.unwrap_or_else(this.value, fallback)
+	unwrap_or_else<T1, T2, E>(
+		this: Result<T1, E>,
+		fallback: (e: E) => T2
+	): T1 | T2 {
+		return types.unwrap_or_else(this.value, fallback);
 	}
 
 	/**
@@ -83,12 +93,12 @@ export class impl<T> extends NewType<T> {
 	/**
 	 * Transform two nested {@link Result}s into one Result.
 	 */
-	flatten<T, E1, E2>(this: Result<Result<T, E2>, E1>): Result<T, E1 | E2 > {
+	flatten<T, E1, E2>(this: Result<Result<T, E2>, E1>): Result<T, E1 | E2> {
 		if (this.is_ok()) return this.unwrap_unchecked();
 		// this is implied
 		// but the necessity of the type assertion
 		// makes me feel like I did something wrong.
-		return (this as Err<E1>);
+		return this as Err<E1>;
 	}
 
 	/**
@@ -96,8 +106,13 @@ export class impl<T> extends NewType<T> {
 	 * conditional
 	 * Result values.
 	 */
-	zip<T1, T2, E1, E2>(this: Result<T1, E1>, other: Result<T2, E2>): Result<[T1, T2], E1 | E2> {
-		return this.and_then(v => other.and_then(vv => [v, vv ] as [T1, T2])).flatten()
+	zip<T1, T2, E1, E2>(
+		this: Result<T1, E1>,
+		other: Result<T2, E2>
+	): Result<[T1, T2], E1 | E2> {
+		return this.and_then(v =>
+			other.and_then(vv => [v, vv] as [T1, T2])
+		).flatten();
 	}
 
 	/**
@@ -126,9 +141,7 @@ export class impl<T> extends NewType<T> {
 	as_promise<T, E>(this: Result<T, E>): Promise<T> {
 		if (this.is_err()) return Promise.reject(this.unwrap_err_unchecked());
 
-		return Promise.resolve(
-			(this as Ok<T>).unwrap_unchecked()
-		)
+		return Promise.resolve((this as Ok<T>).unwrap_unchecked());
 	}
 
 	/**
@@ -136,27 +149,26 @@ export class impl<T> extends NewType<T> {
 	 */
 	safely<T>(this: Ok<() => T>): Result<T, unknown> {
 		try {
-			return Ok(this.unwrap()())
+			return Ok(this.unwrap()());
 		} catch (e) {
-			return Err(e)
+			return Err(e);
 		}
 	}
 }
-
 
 /**
  * @deprecated please use {@link r}
  * Returns a {@link Result} that represents a success.
  */
 /*#__NO_SIDE_EFFECTS__*/ export function Ok<T>(v: T): Ok<T> {
-	return new impl(types.Ok(v))
+	return new impl(types.Ok(v));
 }
 
 /**
  * @deprecated please use {@link r}
  * A value which represents a successful operation.
  */
-export type Ok<T> = impl<types.Ok<T>>
+export type Ok<T> = impl<types.Ok<T>>;
 
 /**
  * @deprecated please use {@link r}
@@ -168,7 +180,7 @@ export type Err<E> = impl<types.Err<E>>;
  * @deprecated please use {@link r}
  * A value which can be either a success or an error.
  */
-export type Result<T, E = Error> = impl<types.Result<T, E>>
+export type Result<T, E = Error> = impl<types.Result<T, E>>;
 
 /**
  * @deprecated please use {@link r}
@@ -176,7 +188,5 @@ export type Result<T, E = Error> = impl<types.Result<T, E>>
  * with the given error.
  */
 /*#__NO_SIDE_EFFECTS__*/ export function Err<T>(v: T): Err<T> {
-	return new impl(types.Err(v))
+	return new impl(types.Err(v));
 }
-
-

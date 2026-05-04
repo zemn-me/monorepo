@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-export const ANALYTICS_SESSION_ID_QUERY_KEY = ["analytics_session_id"] as const;
+export const ANALYTICS_SESSION_ID_QUERY_KEY = ['analytics_session_id'] as const;
 
 export function useAnalyticsSessionId() {
 	return useQuery({

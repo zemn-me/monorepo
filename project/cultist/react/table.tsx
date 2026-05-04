@@ -58,30 +58,59 @@ export const Table: React.FC<Readonly<TableProps>> = ({
 
 			<Board onElementMove={onElementMove} state={state} />
 
-			{state.decks && state.decks.size > 0 ?
+			{state.decks && state.decks.size > 0 ? (
 				<figure>
 					<figcaption>Decks</figcaption>
 					<dl>
-						{[...map(state.decks.entries(), ([k, v]) => <Fragment key={k}>
-							<dl>{k}</dl>
-							<dd><dl>
-								{v.cards && v.cards.size > 0 ? <Fragment>
-									<dt>Cards</dt>
-									<dd><ol>{v.cards.map(card => <li>{card}</li>)}</ol></dd>
-								</Fragment> : null}
-							</dl>
-							<dl>
-								{v.eliminatedCards && v.eliminatedCards.size > 0 ? <Fragment>
-									<dt>Eliminated Cards</dt>
-									<dd><ol>{v.eliminatedCards.map(card => <li>{card}</li>)}</ol></dd>
-								</Fragment> : null}
-							</dl>
-
-							</dd>
-						</Fragment>)]}
+						{[
+							...map(state.decks.entries(), ([k, v]) => (
+								<Fragment key={k}>
+									<dl>{k}</dl>
+									<dd>
+										<dl>
+											{v.cards && v.cards.size > 0 ? (
+												<Fragment>
+													<dt>Cards</dt>
+													<dd>
+														<ol>
+															{v.cards.map(
+																card => (
+																	<li>
+																		{card}
+																	</li>
+																)
+															)}
+														</ol>
+													</dd>
+												</Fragment>
+											) : null}
+										</dl>
+										<dl>
+											{v.eliminatedCards &&
+											v.eliminatedCards.size > 0 ? (
+												<Fragment>
+													<dt>Eliminated Cards</dt>
+													<dd>
+														<ol>
+															{v.eliminatedCards.map(
+																card => (
+																	<li>
+																		{card}
+																	</li>
+																)
+															)}
+														</ol>
+													</dd>
+												</Fragment>
+											) : null}
+										</dl>
+									</dd>
+								</Fragment>
+							)),
+						]}
 					</dl>
 				</figure>
-				: null}
+			) : null}
 		</>
 	);
 };
@@ -228,7 +257,11 @@ export const Deck: React.FC<Readonly<DeckProps>> = ({ name, deck }) => (
 		{(deck.cards?.size ?? 0) > 0 ? (
 			<figure>
 				<figcaption>Cards</figcaption>
-				<ol>{deck.cards?.map(name => <li key={name}>{name}</li>)}</ol>
+				<ol>
+					{deck.cards?.map(name => (
+						<li key={name}>{name}</li>
+					))}
+				</ol>
 			</figure>
 		) : null}
 	</figure>

@@ -40,7 +40,9 @@ export function styleSegment(
 export function perspective(
 	width: number,
 	height: number,
-	options: Partial<Pick<Perspective, 'nearPlane' | 'farPlane' | 'focalScale'>> = {}
+	options: Partial<
+		Pick<Perspective, 'nearPlane' | 'farPlane' | 'focalScale'>
+	> = {}
 ): Perspective {
 	return {
 		width,
@@ -74,20 +76,23 @@ export function clipSegmentToNearPlane(
 		nearPlane
 	);
 
-	return z1 < nearPlane ? [clipped, end] as const : [start, clipped] as const;
+	return z1 < nearPlane
+		? ([clipped, end] as const)
+		: ([start, clipped] as const);
 }
 
 export function projectCameraPoint(
 	cameraPoint: Point3D,
 	projection: Perspective
 ): Point2D {
-	const focalPixels = Math.min(projection.width, projection.height) * projection.focalScale;
+	const focalPixels =
+		Math.min(projection.width, projection.height) * projection.focalScale;
 	const depth = Math.max(z(cameraPoint), projection.nearPlane);
 	const projectedScale = focalPixels / depth;
 
 	return point<2>(
-		(projection.width / 2) + (x(cameraPoint) * projectedScale),
-		(projection.height / 2) - (y(cameraPoint) * projectedScale)
+		projection.width / 2 + x(cameraPoint) * projectedScale,
+		projection.height / 2 - y(cameraPoint) * projectedScale
 	);
 }
 
@@ -114,7 +119,11 @@ export function renderSegments(
 	for (const segment of segments) {
 		const start = cameraSpacePointFromPose(segment[0], pose);
 		const end = cameraSpacePointFromPose(segment[1], pose);
-		const clipped = clipSegmentToNearPlane(start, end, projection.nearPlane);
+		const clipped = clipSegmentToNearPlane(
+			start,
+			end,
+			projection.nearPlane
+		);
 
 		if (clipped == null) {
 			continue;

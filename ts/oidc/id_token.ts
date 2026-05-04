@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Helpers
@@ -7,7 +7,7 @@ const NumericDate = z
 	.number()
 	.int()
 	.nonnegative()
-	.describe("Seconds since 1970-01-01T00:00:00Z");
+	.describe('Seconds since 1970-01-01T00:00:00Z');
 
 const Issuer = z
 	.string()
@@ -16,33 +16,30 @@ const Issuer = z
 		try {
 			const url = new URL(u);
 			return (
-				(
-					url.protocol === "https:" ||
-					url.protocol === "http:"
-				) &&
+				(url.protocol === 'https:' || url.protocol === 'http:') &&
 				!!url.hostname &&
-				url.username === "" &&
-				url.password === "" &&
-				url.search === "" &&
-				url.hash === ""
+				url.username === '' &&
+				url.password === '' &&
+				url.search === '' &&
+				url.hash === ''
 			);
 		} catch {
 			return false;
 		}
-	}, "iss must be an https URL with no query/fragment")
-	.describe("Issuer Identifier");
+	}, 'iss must be an https URL with no query/fragment')
+	.describe('Issuer Identifier');
 
 const Subject = z
 	.string()
 	// OIDC says ASCII and <= 255 chars. Zod can enforce length; ASCII check here is a pragmatic approximation.
 	.max(255)
 	// biome-ignore lint/suspicious/noControlCharactersInRegex: control characters are part of the token grammar
-	.refine(s => /^[\x00-\x7F]*$/.test(s), "sub must be ASCII")
-	.describe("Subject Identifier");
+	.refine(s => /^[\x00-\x7F]*$/.test(s), 'sub must be ASCII')
+	.describe('Subject Identifier');
 
 const Aud = z
 	.union([z.string(), z.array(z.string()).nonempty()])
-	.describe("Audience (string or non-empty array of strings)");
+	.describe('Audience (string or non-empty array of strings)');
 
 /**
  * Core OIDC ID Token claims schema (JWT Claims Set).
@@ -53,37 +50,36 @@ const Aud = z
  *   - auth_time: REQUIRED if max_age was used or auth_time was requested as essential.
  *   - at_hash/c_hash: REQUIRED in some hybrid/implicit cases (see below).
  */
-export const OidcIdTokenClaimsSchema = z
-	.object({
-		iss: Issuer,
-		sub: Subject,
-		aud: Aud,
+export const OidcIdTokenClaimsSchema = z.object({
+	iss: Issuer,
+	sub: Subject,
+	aud: Aud,
 
-		exp: NumericDate,
-		iat: NumericDate,
+	exp: NumericDate,
+	iat: NumericDate,
 
-		auth_time: NumericDate.optional(),
-		nonce: z.string().optional(),
+	auth_time: NumericDate.optional(),
+	nonce: z.string().optional(),
 
-		acr: z.string().optional(),
-		amr: z.array(z.string()).optional(),
+	acr: z.string().optional(),
+	amr: z.array(z.string()).optional(),
 
-		azp: z.string().optional(),
+	azp: z.string().optional(),
 
-		// Per-flow extras:
-		at_hash: z.string().optional(),
-		c_hash: z.string().optional(),
-		jti: z.string().optional(),
-		name: z.string().optional(),
-		given_name: z.string().optional(),
-		family_name: z.string().optional(),
-		middle_name: z.string().optional(),
-		nickname: z.string().optional(),
-		preferred_username: z.string().optional(),
-		picture: z.string().url().optional(),
-		email: z.string().email().optional(),
-		email_verified: z.boolean().optional(),
-	});
+	// Per-flow extras:
+	at_hash: z.string().optional(),
+	c_hash: z.string().optional(),
+	jti: z.string().optional(),
+	name: z.string().optional(),
+	given_name: z.string().optional(),
+	family_name: z.string().optional(),
+	middle_name: z.string().optional(),
+	nickname: z.string().optional(),
+	preferred_username: z.string().optional(),
+	picture: z.string().url().optional(),
+	email: z.string().email().optional(),
+	email_verified: z.boolean().optional(),
+});
 
 /**
  * Optional: add validation helpers for common RP checks that are *not* pure schema checks
@@ -100,7 +96,7 @@ export function validateIdTokenClaims(
 		requireAuthTime?: boolean;
 		// set if azp should be checked when present
 		requireAzpToMatchClientId?: boolean;
-	},
+	}
 ) {
 	const parsed = OidcIdTokenClaimsSchema.parse(claims);
 
@@ -109,7 +105,7 @@ export function validateIdTokenClaims(
 	}
 
 	const audOk =
-		typeof parsed.aud === "string"
+		typeof parsed.aud === 'string'
 			? parsed.aud === opts.clientId
 			: parsed.aud.includes(opts.clientId);
 	if (!audOk) {

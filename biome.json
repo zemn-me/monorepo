@@ -9,7 +9,13 @@
 			"!project/zemn.me/app/experiments/factorio/blueprint/book/myBlueprints.ts"
 		]
 	},
-	"formatter": { "enabled": true, "indentStyle": "tab" },
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 4,
+		"lineWidth": 80,
+		"useEditorconfig": true
+	},
 	"linter": {
 		"enabled": true,
 		"rules": { "recommended": false },
@@ -51,7 +57,18 @@
 			"!**/.venv"
 		]
 	},
-	"javascript": { "formatter": { "quoteStyle": "double" } },
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "asNeeded",
+			"bracketSameLine": false,
+			"bracketSpacing": true,
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"quoteStyle": "single",
+			"semicolons": "always",
+			"trailingCommas": "es5"
+		}
+	},
 	"overrides": [
 		{
 			"includes": ["**/*.{js,jsx,ts,tsx}"],

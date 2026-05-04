@@ -7,15 +7,16 @@ type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N
 	? R
 	: _TupleOf<T, N, [T, ...R]>;
 
- type StringToNumber<S extends string> =
-  S extends `${infer N extends number}` ? N : never;
+type StringToNumber<S extends string> = S extends `${infer N extends number}`
+	? N
+	: never;
 
+type TupleIndexStrings<N extends number> = keyof Omit<
+	Tuple<unknown, N>,
+	keyof []
+>;
 
-type TupleIndexStrings<N extends number>
-	= keyof Omit<
-		Tuple<unknown, N>,
-		keyof []
-	>
-
-export type TupleIndex<N extends number> = TupleIndexStrings<N> extends string ?
-	StringToNumber<TupleIndexStrings<N>> : never;
+export type TupleIndex<N extends number> =
+	TupleIndexStrings<N> extends string
+		? StringToNumber<TupleIndexStrings<N>>
+		: never;

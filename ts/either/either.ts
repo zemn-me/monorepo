@@ -19,8 +19,7 @@
  *   // msg === "Hello, Alice!"
  */
 /*#__NO_SIDE_EFFECTS__*/
-export type Either<L, R> =
-	<T>(onLeft: (l: L) => T, onRight: (r: R) => T) => T
+export type Either<L, R> = <T>(onLeft: (l: L) => T, onRight: (r: R) => T) => T;
 
 // if you are getting 'onRight is not a function' errors around here, it's
 // likely that you are using React and an Either function is being set as
@@ -33,8 +32,10 @@ export type Either<L, R> =
  * Example: const notFound = Left("User not found")
  */
 /*#__NO_SIDE_EFFECTS__*/
-export const Left = <L, R = never>(l: L): Either<L, R> =>
-	(onLeft, _onRight) => onLeft(l)
+export const Left =
+	<L, R = never>(l: L): Either<L, R> =>
+	(onLeft, _onRight) =>
+		onLeft(l);
 
 /**
  * Make a Right value.
@@ -43,8 +44,10 @@ export const Left = <L, R = never>(l: L): Either<L, R> =>
  * Example: const ok = Right(42)
  */
 /*#__NO_SIDE_EFFECTS__*/
-export const Right = <R, L = never>(r: R): Either<L, R> =>
-	(_onLeft, onRight) => onRight(r)
+export const Right =
+	<R, L = never>(r: R): Either<L, R> =>
+	(_onLeft, onRight) =>
+		onRight(r);
 
 export type Right<T, L = never> = Either<L, T>;
 export type Left<T, R = never> = Either<T, R>;
@@ -64,17 +67,20 @@ export const either = <L, R, T>(
 	e: Either<L, R>,
 	onLeft: (l: L) => T,
 	onRight: (r: R) => T
-): T => e(onLeft, onRight)
+): T => e(onLeft, onRight);
 
 /** True if the value is Left (often: “is error?”). */
 /*#__NO_SIDE_EFFECTS__*/
 export const is_left = <L, R>(e: Either<L, R>) =>
-	either(e, () => true, () => false)
+	either(
+		e,
+		() => true,
+		() => false
+	);
 
 /** True if the value is Right (often: “is success?”). */
 /*#__NO_SIDE_EFFECTS__*/
-export const is_right = <L, R>(e: Either<L, R>) =>
-	!is_left(e)
+export const is_right = <L, R>(e: Either<L, R>) => !is_left(e);
 
 /**
  * Transform the Right (success) value.
@@ -84,8 +90,10 @@ export const is_right = <L, R>(e: Either<L, R>) =>
  *   map(Left("x"),  n => n + 1) // still Left("x")
  */
 /*#__NO_SIDE_EFFECTS__*/
-export const map = <L, R, RR>(e: Either<L, R>, f: (r: R) => RR): Either<L, RR> =>
-	either(e, Left, r => Right(f(r)))
+export const map = <L, R, RR>(
+	e: Either<L, R>,
+	f: (r: R) => RR
+): Either<L, RR> => either(e, Left, r => Right(f(r)));
 
 /**
  * Transform the Left (error) value.
@@ -95,8 +103,10 @@ export const map = <L, R, RR>(e: Either<L, R>, f: (r: R) => RR): Either<L, RR> =
  *   map_left(Right(7),    _ => 0)           // still Right(7)
  */
 /*#__NO_SIDE_EFFECTS__*/
-export const map_left = <L, LL, R>(e: Either<L, R>, f: (l: L) => LL): Either<LL, R> =>
-	either(e, l => Left(f(l)), Right)
+export const map_left = <L, LL, R>(
+	e: Either<L, R>,
+	f: (l: L) => LL
+): Either<LL, R> => either(e, l => Left(f(l)), Right);
 
 /**
  * Transform both sides at once.
@@ -111,7 +121,11 @@ export const bimap = <L, LL, R, RR>(
 	fl: (l: L) => LL,
 	fr: (r: R) => RR
 ): Either<LL, RR> =>
-	either(e, l => Left(fl(l)), r => Right(fr(r)))
+	either(
+		e,
+		l => Left(fl(l)),
+		r => Right(fr(r))
+	);
 
 /**
  * Chain operations that may fail.
@@ -121,13 +135,12 @@ export const bimap = <L, LL, R, RR>(
 export const and_then = <L, R, RR>(
 	e: Either<L, R>,
 	f: (r: R) => Either<L, RR>
-): Either<L, RR> =>
-	either(e, Left, f)
+): Either<L, RR> => either(e, Left, f);
 
 /** Flatten nested Eithers: Right(Right(x)) → Right(x), Right(Left(e)) → Left(e). */
 /*#__NO_SIDE_EFFECTS__*/
 export const flatten = <L, R>(e: Either<L, Either<L, R>>): Either<L, R> =>
-	and_then(e, x => x)
+	and_then(e, x => x);
 
 /**
  * Get the Left value or a default.
@@ -141,7 +154,11 @@ export const flatten = <L, R>(e: Either<L, Either<L, R>>): Either<L, R> =>
  */
 /*#__NO_SIDE_EFFECTS__*/
 export const from_left = <L, R, D>(def: D, e: Either<L, R>): L | D =>
-	either<L, R, L | D>(e, l => l, () => def)
+	either<L, R, L | D>(
+		e,
+		l => l,
+		() => def
+	);
 
 /**
  * Get the Right value or a default.
@@ -154,4 +171,8 @@ export const from_left = <L, R, D>(def: D, e: Either<L, R>): L | D =>
  */
 /*#__NO_SIDE_EFFECTS__*/
 export const from_right = <L, R, D>(def: D, e: Either<L, R>): R | D =>
-	either<L, R, R | D>(e, () => def, r => r)
+	either<L, R, R | D>(
+		e,
+		() => def,
+		r => r
+	);

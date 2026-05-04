@@ -10,10 +10,9 @@ import {
 	Result,
 } from '#root/ts/result/result.js';
 
-
 export function oidcConfigURLForIssuer(issuer: URL | string) {
 	const u = new URL(issuer);
-	u.pathname = ".well-known/openid-configuration"
+	u.pathname = '.well-known/openid-configuration';
 
 	return u;
 }
@@ -22,28 +21,31 @@ export function oidcConfigURLForIssuer(issuer: URL | string) {
  * Parse a JSON string, then validate/shape it with `schema`.
  * Usage: const Parsed = stringToJSON(z.object({ ... }));
  */
-export const stringToJSON =
-  z.string().transform((s, ctx) => {
-    try {
-      return JSON.parse(s);
-    } catch {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Expected a valid JSON string.",
-      });
-      return z.NEVER;
-    }
-  })
-
+export const stringToJSON = z.string().transform((s, ctx) => {
+	try {
+		return JSON.parse(s);
+	} catch {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: 'Expected a valid JSON string.',
+		});
+		return z.NEVER;
+	}
+});
 
 type OpenIDProviderConfiguration = {
 	authorization_endpoint: string;
 	jwks_uri: string;
 };
 
-const openidConfigCache = new Map<string, Promise<Result<OpenIDProviderConfiguration, Error>>>();
+const openidConfigCache = new Map<
+	string,
+	Promise<Result<OpenIDProviderConfiguration, Error>>
+>();
 
-async function getOpenidConfig(issuer: URL): Promise<Result<OpenIDProviderConfiguration, Error>> {
+async function getOpenidConfig(
+	issuer: URL
+): Promise<Result<OpenIDProviderConfiguration, Error>> {
 	const key = issuer.toString();
 	const cached = openidConfigCache.get(key);
 	if (cached) {
@@ -55,10 +57,17 @@ async function getOpenidConfig(issuer: URL): Promise<Result<OpenIDProviderConfig
 			const wellKnown = new URL('', issuer);
 			const response = await fetch(wellKnown.toString());
 			if (!response.ok) {
-				return Err(new Error(`failed to fetch openid configuration (${response.status})`));
+				return Err(
+					new Error(
+						`failed to fetch openid configuration (${response.status})`
+					)
+				);
 			}
 			const json = await response.json();
-			if (typeof json.authorization_endpoint !== 'string' || typeof json.jwks_uri !== 'string') {
+			if (
+				typeof json.authorization_endpoint !== 'string' ||
+				typeof json.jwks_uri !== 'string'
+			) {
 				return Err(new Error('invalid openid configuration response'));
 			}
 			return Ok({
@@ -66,14 +75,15 @@ async function getOpenidConfig(issuer: URL): Promise<Result<OpenIDProviderConfig
 				jwks_uri: json.jwks_uri,
 			});
 		} catch (error) {
-			return Err(error instanceof Error ? error : new Error(String(error)));
+			return Err(
+				error instanceof Error ? error : new Error(String(error))
+			);
 		}
 	})();
 
 	openidConfigCache.set(key, configPromise);
 	return configPromise;
 }
-
 
 /**
  * Verifies an OIDC token given audience, issuer etc.
@@ -89,30 +99,30 @@ export async function verifyOIDCToken(
 	clockToleranceSeconds: number
 ) {
 	const config = getOpenidConfig(new URL(issuer));
-	const jwks = result_and_then(
-		await config,
-		c => createRemoteJWKSet(new URL(c.jwks_uri))
+	const jwks = result_and_then(await config, c =>
+		createRemoteJWKSet(new URL(c.jwks_uri))
 	);
 
-	return result_and_then(
-		jwks,
-		jwks => jwtVerify(
-			token,
-			jwks,
-			{ issuer, audience, clockTolerance: clockToleranceSeconds }
-		)
-	)
+	return result_and_then(jwks, jwks =>
+		jwtVerify(token, jwks, {
+			issuer,
+			audience,
+			clockTolerance: clockToleranceSeconds,
+		})
+	);
 }
 
 export const idTokenSchema = OidcIdTokenClaimsSchema;
-
 
 export type ID_Token = z.TypeOf<typeof idTokenSchema>;
 
 const base64UrlBytes = z.string().transform((value, ctx) => {
 	try {
 		const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
-		const padding = normalized.length % 4 === 0 ? '' : '='.repeat(4 - (normalized.length % 4));
+		const padding =
+			normalized.length % 4 === 0
+				? ''
+				: '='.repeat(4 - (normalized.length % 4));
 		return b64.toByteArray(normalized + padding);
 	} catch (_error) {
 		ctx.addIssue({
@@ -123,36 +133,35 @@ const base64UrlBytes = z.string().transform((value, ctx) => {
 	}
 });
 
-export const watchOutParseIdToken = z.string()
-	.transform(s => s.split("."))
-	.pipe(
-		z.tuple([z.string(), base64UrlBytes, z.string()])
-	).transform(
-		([, body]) => new TextDecoder().decode(body)
-	).pipe(
-		stringToJSON
-	).pipe(idTokenSchema);
-
+export const watchOutParseIdToken = z
+	.string()
+	.transform(s => s.split('.'))
+	.pipe(z.tuple([z.string(), base64UrlBytes, z.string()]))
+	.transform(([, body]) => new TextDecoder().decode(body))
+	.pipe(stringToJSON)
+	.pipe(idTokenSchema);
 
 export async function oidcAuthorizeUri(
-	nonce: string, state: string, callback: URL, clientId: string, issuer: URL) {
+	nonce: string,
+	state: string,
+	callback: URL,
+	clientId: string,
+	issuer: URL
+) {
 	const config = await getOpenidConfig(issuer);
 
-	return result_and_then(
-		config,
-		c => {
-			const base = new URL(c.authorization_endpoint);
+	return result_and_then(config, c => {
+		const base = new URL(c.authorization_endpoint);
 
-			base.search = new URLSearchParams({
-				response_type: 'id_token',
-				client_id: clientId,
-				redirect_uri: callback.toString(),
-				scope: 'openid',
-				nonce,
-				state,
-			}).toString();
+		base.search = new URLSearchParams({
+			response_type: 'id_token',
+			client_id: clientId,
+			redirect_uri: callback.toString(),
+			scope: 'openid',
+			nonce,
+			state,
+		}).toString();
 
-			return base;
-		}
-	)
+		return base;
+	});
 }

@@ -10,4 +10,3 @@ export default function Page() {
 export const metadata: Metadata = {
 	description: 'Redirect to my bluesky account',
 };
-

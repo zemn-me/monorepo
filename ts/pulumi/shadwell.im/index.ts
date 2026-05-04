@@ -55,10 +55,10 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				zoneId: args.zoneId,
 				displayname: ['thomas', args.domain].join('.'),
-				did: bskyDid
+				did: bskyDid,
 			},
-			{ parent: this}
-		)
+			{ parent: this }
+		);
 
 		const luke = new Website(`${name}_luke_shadwell_im_website`, {
 			index: 'ts/pulumi/shadwell.im/luke/build/index.html',

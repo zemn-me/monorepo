@@ -1,31 +1,31 @@
 {
-  "$schema": "https://json.schemastore.org/swcrc.json",
-  "jsc": {
-    "target": "es2022",
-    "parser": {
-      "tsx": true,
-      "syntax": "typescript",
-      "decorators": false
-    },
-    "transform": {
-      "react": {
-        "pragma": "React.createElement",
-        "pragmaFrag": "React.Fragment",
-        "runtime": "automatic",
-        "throwIfNamespace": true,
-        "development": false,
-        "useBuiltins": false
-      },
-      "optimizer": {
-        "globals": {
-          "vars": {
-            "__DEBUG__": "true"
-          }
-        }
-      }
-    }
-  },
-  "module": {
-    "type": "es6"
-  }
+	"$schema": "https://json.schemastore.org/swcrc.json",
+	"jsc": {
+		"target": "es2022",
+		"parser": {
+			"tsx": true,
+			"syntax": "typescript",
+			"decorators": false
+		},
+		"transform": {
+			"react": {
+				"pragma": "React.createElement",
+				"pragmaFrag": "React.Fragment",
+				"runtime": "automatic",
+				"throwIfNamespace": true,
+				"development": false,
+				"useBuiltins": false
+			},
+			"optimizer": {
+				"globals": {
+					"vars": {
+						"__DEBUG__": "true"
+					}
+				}
+			}
+		}
+	},
+	"module": {
+		"type": "es6"
+	}
 }

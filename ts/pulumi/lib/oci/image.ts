@@ -1,43 +1,49 @@
-import { createHash } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
+import { createHash } from 'node:crypto';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 import { local } from '@pulumi/command';
-import { all, ComponentResource, ComponentResourceOptions, Input, Output, output } from "@pulumi/pulumi";
-
+import {
+	all,
+	ComponentResource,
+	ComponentResourceOptions,
+	Input,
+	Output,
+	output,
+} from '@pulumi/pulumi';
 
 export interface OciImageArgs {
 	/**
 	 * The container repo to upload to.
 	 */
-	repository: Input<string>
+	repository: Input<string>;
 	/**
 	 * Token used to auth to the repo.
 	 */
-	token?: Input<string|undefined>
+	token?: Input<string | undefined>;
 	/**
 	 * Executable used to push the image — expected to be output of oci_push rule.
 	 */
-	push: Input<string>
+	push: Input<string>;
 	/**
 	 * Digest uniquely identifying the image.
 	 */
-	digest: Input<string>
+	digest: Input<string>;
 }
 
 /**
  * Filename picked up by crane when discovering
  * the auth file.
  */
-const authConfigFilename = "config.json"
+const authConfigFilename = 'config.json';
 
 interface ImageAuthObject {
 	auths: {
 		[uri: string]: {
-			auth: string
-		}
-	}
+			auth: string;
+		};
+	};
 }
 
 /**
@@ -60,28 +66,28 @@ async function createImageAuthFile(
 	const authData: ImageAuthObject = {
 		auths: {
 			[`https://${registry}`]: {
-				auth: token
+				auth: token,
 			},
 			// i dont know which is right so im just trying both
 			[`${registry}`]: {
-				auth: token
+				auth: token,
 			},
 		},
 	};
 
-	const fileContent = JSON.stringify(authData)
+	const fileContent = JSON.stringify(authData);
 
 	const hash = createHash('sha256').update(fileContent).digest('hex');
 
 	const tempDir = tmpdir();
 	const contentBasedDirName = hash;
 	const configDir = path.join(tempDir, contentBasedDirName);
-	await mkdir(configDir)
+	await mkdir(configDir);
 	const filePath = path.join(configDir, authConfigFilename);
 
 	await writeFile(filePath, JSON.stringify(authData));
 
-	return path.resolve(configDir)
+	return path.resolve(configDir);
 }
 
 /**
@@ -92,32 +98,35 @@ export class OCIImage extends ComponentResource {
 	/**
 	 * URI uniquely identifying the image as landed in the repo.
 	 */
-	uri: Output<string>
+	uri: Output<string>;
 	constructor(
 		name: string,
 		args: OciImageArgs,
 		opts?: ComponentResourceOptions
 	) {
-		super("ts:pulumi:lib:oci:ociimage",
-			name, args, opts,
+		super('ts:pulumi:lib:oci:ociimage', name, args, opts);
+
+		const authFile = all([args.token, args.repository]).apply(
+			([token, registry]) => {
+				if (!token || !registry) return;
+				return createImageAuthFile(token, registry);
+			}
 		);
 
-		const authFile = all([args.token, args.repository]).apply(([token, registry]) => {
-			if (!token || !registry) return;
-			return createImageAuthFile(token, registry)
-		});
-
-		const upload = new local.Command(`${name}_push`, {
-			environment: output(authFile).apply(f => ({
-				DOCKER_CONFIG: f,
-			}) as { [v: string]: string }),
-			interpreter: [
-				args.push,
-				"--repository",
-				args.repository
-			],
-			triggers: [ args.digest ]
-		}, { parent: this });
+		const upload = new local.Command(
+			`${name}_push`,
+			{
+				environment: output(authFile).apply(
+					f =>
+						({
+							DOCKER_CONFIG: f,
+						}) as { [v: string]: string }
+				),
+				interpreter: [args.push, '--repository', args.repository],
+				triggers: [args.digest],
+			},
+			{ parent: this }
+		);
 
 		this.uri = upload.stdout;
 

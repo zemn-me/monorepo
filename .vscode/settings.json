@@ -1,10 +1,7 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"html.autoClosingTags": false,
-	"editor.rulers": [
-		79,
-		210
-	],
+	"editor.rulers": [79, 210],
 	"editor.wordWrap": "bounded",
 	"editor.wordWrapColumn": 80,
 	"editor.wordBasedSuggestions": "off",
@@ -17,14 +14,14 @@
 	"json.validate.enable": true,
 	"editor.formatOnType": true,
 	"[jsonc]": {
-		"editor.formatOnSave": true,
+		"editor.formatOnSave": true
 	},
 	"[json]": {
-		"editor.formatOnSave": true,
+		"editor.formatOnSave": true
 	},
 	"[starlark]": {
 		"editor.defaultFormatter": "BazelBuild.vscode-bazel",
-		"editor.formatOnSave": true,
+		"editor.formatOnSave": true
 	},
 	"files.watcherExclude": {
 		"**/.git/objects/**": true,
@@ -38,9 +35,7 @@
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.formatOnSave": true
 	},
-	"githubPullRequests.ignoredPullRequestBranches": [
-		"main"
-	],
+	"githubPullRequests.ignoredPullRequestBranches": ["main"],
 	"task.allowAutomaticTasks": "on",
 	"rust-analyzer.procMacro.enable": true,
 	"eslint.enable": true,
@@ -59,9 +54,7 @@
 		"runtest": false
 	},
 	"gopls": {
-		"build.directoryFilters": [
-			"-dist",
-		],
+		"build.directoryFilters": ["-dist"],
 		"formatting.gofumpt": true,
 		"formatting.local": "github.com/zemn-me/monorepo",
 		"ui.completion.usePlaceholders": true,
@@ -74,7 +67,7 @@
 			"tidy": false,
 			"upgrade_dependency": false,
 			"vendor": false
-		},
+		}
 	},
 	"go.useLanguageServer": true,
 	"go.buildOnSave": "off",
@@ -98,18 +91,12 @@
 	"bazel.buildifierFixOnFormat": true,
 	"bazel.executable": "./sh/bin/bazel",
 	"mypy-type-checker.importStrategy": "useBundled",
-	"mypy-type-checker.args": [
-		"--python-executable=.venv/bin/python3"
-	],
+	"mypy-type-checker.args": ["--python-executable=.venv/bin/python3"],
 	"python.analysis.autoImportCompletions": true,
 	"python.analysis.typeCheckingMode": "basic",
 	"python.terminal.activateEnvInCurrentTerminal": true,
-	"javascript.preferences.autoImportFileExcludePatterns": [
-		"**/_*"
-	],
-	"typescript.preferences.autoImportFileExcludePatterns": [
-		"**/_*"
-	],
+	"javascript.preferences.autoImportFileExcludePatterns": ["**/_*"],
+	"typescript.preferences.autoImportFileExcludePatterns": ["**/_*"],
 	"bazel.buildifierExecutable": "./sh/bin/buildifier",
 	"python-envs.defaultEnvManager": "ms-python.python:system"
 }
