@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 
 /**
  * @fileoverview The main entry point for svgshot.

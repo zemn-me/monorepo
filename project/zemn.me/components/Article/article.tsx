@@ -6,7 +6,7 @@ import { schema } from '#root/project/zemn.me/bio/schema.js';
 import style from '#root/project/zemn.me/components/Article/style.module.css';
 import { tocSegment } from '#root/project/zemn.me/components/Article/toc_context.js'
 import { ArticleProps } from '#root/project/zemn.me/components/Article/types/article_types.js';
-import { Date } from '#root/ts/react/lang/date.js';
+import { Date as LocalizedDate } from '#root/ts/react/lang/date.js';
 import { Schema } from '#root/ts/schema.org/schema.js';
 import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 
@@ -14,7 +14,7 @@ export function Article(props: ArticleProps) {
 	const [toc, setToc] = useState<HTMLUListElement|null>(null);
 	return <div className={style.container}>
 		<article>
-			{props.date ? <Date date={nativeDateFromUnknownSimpleDate.parse(props.date)} /> : null}
+			{props.date ? <LocalizedDate date={nativeDateFromUnknownSimpleDate.parse(props.date)} /> : null}
 			<nav>
 				<ul ref={setToc}/>
 			</nav>
@@ -35,4 +35,3 @@ export function Article(props: ArticleProps) {
 		</article>
 	</div>
 }
-
