@@ -8,13 +8,20 @@ import React, {
 	useState,
 } from 'react';
 
+import {
+	initialMovementKeys,
+	type JoystickInput,
+	lookAngleDeltaFromJoystick,
+	type MovementKeyState,
+	movementInputFromControls,
+	normalizeJoystickOffset,
+} from '#root/ts/joystick/index.js';
 import { point, x, y, z } from '#root/ts/math/cartesian.js';
 import { perspective, projectWorldPoint, renderSegments } from '#root/ts/math/wireframe_render.js';
 import {
 	buildWorld,
 	DEFAULT_POSE,
 	isFacingPose,
-	type MovementInput,
 	type Particle,
 	ParticleType,
 	type PlayerPose,
@@ -23,39 +30,10 @@ import {
 	stepPlayer,
 } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 
-interface KeyState {
-	readonly KeyW: boolean;
-	readonly KeyA: boolean;
-	readonly KeyS: boolean;
-	readonly KeyD: boolean;
-	readonly Space: boolean;
-	readonly ShiftLeft: boolean;
-	readonly ShiftRight: boolean;
-}
-
 const INITIAL_VIEWPORT_WIDTH = 1280;
 const INITIAL_VIEWPORT_HEIGHT = 720;
-
-function initialKeys(): KeyState {
-	return {
-		KeyW: false,
-		KeyA: false,
-		KeyS: false,
-		KeyD: false,
-		Space: false,
-		ShiftLeft: false,
-		ShiftRight: false,
-	};
-}
-
-function movementFromKeys(keys: KeyState): MovementInput {
-	return {
-		forward: Number(keys.KeyW) - Number(keys.KeyS),
-		strafe: Number(keys.KeyD) - Number(keys.KeyA),
-		sprint: keys.ShiftLeft || keys.ShiftRight,
-		jump: keys.Space,
-	};
-}
+const JOYSTICK_RADIUS_PX = 36;
+const LOOK_JOYSTICK_SPEED = 2.2;
 
 function icon(type: ParticleType): string { return type === ParticleType.Egg ? '🥚' : '🐕'; }
 
@@ -63,17 +41,43 @@ export function EggDogYardClient() {
 	const world = useMemo(() => buildWorld(), []);
 	const viewportRef = useRef<SVGSVGElement | null>(null);
 	const poseRef = useRef<PlayerPose>(DEFAULT_POSE);
-	const keysRef = useRef<KeyState>(initialKeys());
+	const keysRef = useRef<MovementKeyState>(initialMovementKeys());
 	const crittersRef = useRef<Particle[]>(world.critters);
 	const dragPointerIdRef = useRef<number | null>(null);
 	const lastDragRef = useRef<{ x: number; y: number } | null>(null);
+	const moveJoystickPointerIdRef = useRef<number | null>(null);
+	const moveJoystickInputRef = useRef<JoystickInput>({ x: 0, y: 0 });
+	const lookJoystickPointerIdRef = useRef<number | null>(null);
+	const lookJoystickInputRef = useRef<JoystickInput>({ x: 0, y: 0 });
 	const frameRef = useRef<number | null>(null);
 	const [viewport, setViewport] = useState({ width: INITIAL_VIEWPORT_WIDTH, height: INITIAL_VIEWPORT_HEIGHT });
 	const [pose, setPose] = useState<PlayerPose>(DEFAULT_POSE);
 	const [critters, setCritters] = useState<Particle[]>(world.critters);
 	const [locked, setLocked] = useState(false);
+	const [mobileControls, setMobileControls] = useState(false);
+	const [moveJoystickInput, setMoveJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
+	const [lookJoystickInput, setLookJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
 
 	useEffect(() => {
+		const coarsePointerQuery = window.matchMedia('(pointer: coarse)');
+		const syncMobileControls = () => {
+			setMobileControls(coarsePointerQuery.matches);
+		};
+		syncMobileControls();
+		const unsubscribeCoarsePointerChanges = (() => {
+			if ('addEventListener' in coarsePointerQuery) {
+				coarsePointerQuery.addEventListener('change', syncMobileControls);
+				return () => {
+					coarsePointerQuery.removeEventListener('change', syncMobileControls);
+				};
+			}
+
+			coarsePointerQuery.addListener(syncMobileControls);
+			return () => {
+				coarsePointerQuery.removeListener(syncMobileControls);
+			};
+		})();
+
 		function syncViewport() {
 			const bounds = viewportRef.current?.getBoundingClientRect();
 			if (bounds == null) return;
@@ -110,7 +114,19 @@ export function EggDogYardClient() {
 		let previous = performance.now();
 		const loop = (now: number) => {
 			const dt = Math.min(0.05, (now - previous) / 1000); previous = now;
-			const nextPose = stepPlayer(poseRef.current, movementFromKeys(keysRef.current), dt);
+			const lookDelta = lookAngleDeltaFromJoystick(
+				lookJoystickInputRef.current,
+				dt,
+				LOOK_JOYSTICK_SPEED
+			);
+			const lookedPose = !locked && (lookDelta.x !== 0 || lookDelta.y !== 0)
+				? stepLook(poseRef.current, lookDelta.x, lookDelta.y, 1)
+				: poseRef.current;
+			const nextPose = stepPlayer(
+				lookedPose,
+				movementInputFromControls(keysRef.current, moveJoystickInputRef.current),
+				dt
+			);
 			const nextCritters = stepCritters(crittersRef.current, dt, now / 1000);
 			poseRef.current = nextPose;
 			crittersRef.current = nextCritters;
@@ -133,6 +149,7 @@ export function EggDogYardClient() {
 			window.removeEventListener('keyup', onKeyUp);
 			window.removeEventListener('mousemove', onMouseMove);
 			window.removeEventListener('resize', syncViewport);
+			unsubscribeCoarsePointerChanges();
 			if (frameRef.current != null) cancelAnimationFrame(frameRef.current);
 		};
 	}, []);
@@ -172,6 +189,69 @@ export function EggDogYardClient() {
 			dragPointerIdRef.current = null;
 			lastDragRef.current = null;
 		}
+	}
+
+	function updateJoystickFromEvent(event: ReactPointerEvent<HTMLDivElement>) {
+		const bounds = event.currentTarget.getBoundingClientRect();
+		return normalizeJoystickOffset(
+			event.clientX - (bounds.left + (bounds.width / 2)),
+			event.clientY - (bounds.top + (bounds.height / 2)),
+			JOYSTICK_RADIUS_PX
+		);
+	}
+
+	function resetMoveJoystick() {
+		const next = { x: 0, y: 0 };
+		moveJoystickInputRef.current = next;
+		setMoveJoystickInput(next);
+	}
+
+	function resetLookJoystick() {
+		const next = { x: 0, y: 0 };
+		lookJoystickInputRef.current = next;
+		setLookJoystickInput(next);
+	}
+
+	function handleMoveJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+		moveJoystickPointerIdRef.current = event.pointerId;
+		event.currentTarget.setPointerCapture(event.pointerId);
+		const next = updateJoystickFromEvent(event);
+		moveJoystickInputRef.current = next;
+		setMoveJoystickInput(next);
+	}
+
+	function handleMoveJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+		if (moveJoystickPointerIdRef.current !== event.pointerId) return;
+		const next = updateJoystickFromEvent(event);
+		moveJoystickInputRef.current = next;
+		setMoveJoystickInput(next);
+	}
+
+	function handleMoveJoystickPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+		if (moveJoystickPointerIdRef.current !== event.pointerId) return;
+		moveJoystickPointerIdRef.current = null;
+		resetMoveJoystick();
+	}
+
+	function handleLookJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+		lookJoystickPointerIdRef.current = event.pointerId;
+		event.currentTarget.setPointerCapture(event.pointerId);
+		const next = updateJoystickFromEvent(event);
+		lookJoystickInputRef.current = next;
+		setLookJoystickInput(next);
+	}
+
+	function handleLookJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+		if (lookJoystickPointerIdRef.current !== event.pointerId) return;
+		const next = updateJoystickFromEvent(event);
+		lookJoystickInputRef.current = next;
+		setLookJoystickInput(next);
+	}
+
+	function handleLookJoystickPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+		if (lookJoystickPointerIdRef.current !== event.pointerId) return;
+		lookJoystickPointerIdRef.current = null;
+		resetLookJoystick();
 	}
 
 	const projection = perspective(viewport.width, viewport.height, { focalScale: 0.75 });
@@ -218,8 +298,32 @@ export function EggDogYardClient() {
 				{locked ? 'Pointer locked' : 'Enter yard'}
 			</button>
 			<div style={{ background: 'rgb(255 247 214 / 82%)', border: '1px solid rgb(59 51 38 / 18%)', borderRadius: '6px', color: '#3b3326', font: '600 0.82rem system-ui, sans-serif', padding: '0.65rem 0.8rem' }}>
-				WASD to roam
+				{mobileControls ? 'Sticks to roam and look' : 'WASD to roam'}
 			</div>
 		</div>
+		{mobileControls ? (
+			<div style={{ alignItems: 'flex-end', bottom: '1rem', display: 'flex', justifyContent: 'space-between', left: '1rem', pointerEvents: 'none', position: 'absolute', right: '1rem' }}>
+				<div
+					onPointerCancel={handleMoveJoystickPointerEnd}
+					onPointerDown={handleMoveJoystickPointerDown}
+					onPointerMove={handleMoveJoystickPointerMove}
+					onPointerUp={handleMoveJoystickPointerEnd}
+					style={{ backdropFilter: 'blur(10px)', background: 'radial-gradient(circle at center, rgb(255 244 197 / 36%) 0, rgb(255 244 197 / 22%) 34%, rgb(110 140 72 / 44%) 70%, rgb(76 103 45 / 58%) 100%)', border: '1px solid rgb(59 51 38 / 18%)', borderRadius: '999px', boxShadow: 'inset 0 0 0 1px rgb(255 255 255 / 18%), 0 0.8rem 1.8rem rgb(0 0 0 / 12%)', height: '5.5rem', pointerEvents: 'auto', position: 'relative', touchAction: 'none', width: '5.5rem' }}
+				>
+					<div style={{ background: 'rgb(255 250 229 / 28%)', border: '1px solid rgb(59 51 38 / 14%)', borderRadius: '999px', height: '1.2rem', left: '50%', marginLeft: '-0.6rem', marginTop: '-0.6rem', position: 'absolute', top: '50%', width: '1.2rem' }} />
+					<div style={{ background: 'linear-gradient(180deg, rgb(255 251 239 / 94%) 0%, rgb(242 213 127 / 82%) 100%)', border: '1px solid rgb(59 51 38 / 24%)', borderRadius: '999px', boxShadow: '0 0.35rem 0.8rem rgb(0 0 0 / 20%), inset 0 0 0 1px rgb(255 255 255 / 35%)', height: '2.35rem', left: '50%', marginLeft: '-1.175rem', marginTop: '-1.175rem', position: 'absolute', top: '50%', transform: `translate(${moveJoystickInput.x * JOYSTICK_RADIUS_PX}px, ${moveJoystickInput.y * JOYSTICK_RADIUS_PX}px)`, width: '2.35rem' }} />
+				</div>
+				<div
+					onPointerCancel={handleLookJoystickPointerEnd}
+					onPointerDown={handleLookJoystickPointerDown}
+					onPointerMove={handleLookJoystickPointerMove}
+					onPointerUp={handleLookJoystickPointerEnd}
+					style={{ backdropFilter: 'blur(10px)', background: 'radial-gradient(circle at center, rgb(190 236 255 / 34%) 0, rgb(190 236 255 / 20%) 34%, rgb(130 166 124 / 40%) 70%, rgb(79 112 84 / 54%) 100%)', border: '1px solid rgb(59 51 38 / 18%)', borderRadius: '999px', boxShadow: 'inset 0 0 0 1px rgb(255 255 255 / 18%), 0 0.8rem 1.8rem rgb(0 0 0 / 12%)', height: '5.5rem', pointerEvents: 'auto', position: 'relative', touchAction: 'none', width: '5.5rem' }}
+				>
+					<div style={{ background: 'rgb(255 250 229 / 24%)', border: '1px solid rgb(59 51 38 / 14%)', borderRadius: '999px', height: '1.2rem', left: '50%', marginLeft: '-0.6rem', marginTop: '-0.6rem', position: 'absolute', top: '50%', width: '1.2rem' }} />
+					<div style={{ background: 'linear-gradient(180deg, rgb(240 250 255 / 94%) 0%, rgb(145 205 229 / 82%) 100%)', border: '1px solid rgb(59 51 38 / 24%)', borderRadius: '999px', boxShadow: '0 0.35rem 0.8rem rgb(0 0 0 / 20%), inset 0 0 0 1px rgb(255 255 255 / 35%)', height: '2.35rem', left: '50%', marginLeft: '-1.175rem', marginTop: '-1.175rem', position: 'absolute', top: '50%', transform: `translate(${lookJoystickInput.x * JOYSTICK_RADIUS_PX}px, ${lookJoystickInput.y * JOYSTICK_RADIUS_PX}px)`, width: '2.35rem' }} />
+				</div>
+			</div>
+		) : null}
 	</main>;
 }
