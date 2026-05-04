@@ -41,9 +41,10 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
         **kwargs
     )
 
-def ts_lint(name, **kwargs):
+def ts_lint(name, size = "small", **kwargs):
     biome_test(
         name = name,
+        size = size,
         **kwargs
     )
 
