@@ -1,4 +1,4 @@
-import { point, Point3D, x, y, z } from '#root/ts/math/cartesian.js';
+import { Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import { cross, dot, magnitude, normalise, sub } from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { and_then_flatten, Ok, type Result } from '#root/ts/result/result.js';

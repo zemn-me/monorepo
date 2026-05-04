@@ -1,6 +1,6 @@
 import { NewType } from '#root/ts/NewType.js';
 import * as types from '#root/ts/option/types.js';
-import { impl as resultImpl, Result } from '#root/ts/result.js';
+import { Result, impl as resultImpl } from '#root/ts/result.js';
 
 /**
  * @deprecated please use {@link types} instead

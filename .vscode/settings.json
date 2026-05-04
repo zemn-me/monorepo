@@ -14,9 +14,31 @@
 	"json.validate.enable": true,
 	"editor.formatOnType": true,
 	"[jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome",
 		"editor.formatOnSave": true
 	},
 	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[css]": {
+		"editor.defaultFormatter": "biomejs.biome",
 		"editor.formatOnSave": true
 	},
 	"[starlark]": {
@@ -38,13 +60,16 @@
 	"githubPullRequests.ignoredPullRequestBranches": ["main"],
 	"task.allowAutomaticTasks": "on",
 	"rust-analyzer.procMacro.enable": true,
+	"biome.lsp.bin": "./sh/bin/biome",
 	"eslint.enable": true,
 	"eslint.format.enable": true,
 	"eslint.experimental.useFlatConfig": true,
 	"eslint.onIgnoredFiles": "warn",
 	"eslint.run": "onSave",
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "always"
+		"source.fixAll.eslint": "always",
+		"source.fixAll.biome": "explicit",
+		"source.organizeImports.biome": "explicit"
 	},
 	"go.goroot": "${workspaceFolder}/dist/${workspaceFolderBasename}/external/go_sdk",
 	"go.toolsEnvVars": {

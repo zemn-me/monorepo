@@ -26,6 +26,7 @@ declare namespace webpack {
 
 declare module 'next/dist/compiled/webpack/webpack' {
 	const webpackExport: typeof webpack;
+
 	export { webpackExport as webpack };
 	export default webpackExport;
 

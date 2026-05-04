@@ -2,7 +2,7 @@ import {
 	cameraSpacePointFromPose,
 	type YawPitchPose,
 } from '#root/ts/math/camera_pose.js';
-import { point, Point2D, Point3D, x, y, z } from '#root/ts/math/cartesian.js';
+import { Point2D, Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import type { Segment3D } from '#root/ts/math/wireframe.js';
 import { pipe } from '#root/ts/pipe.js';
 import {

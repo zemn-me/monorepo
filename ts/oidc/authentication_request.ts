@@ -1,4 +1,4 @@
-import { enum as zenum, object, optional, output, string } from 'zod/v4-mini';
+import { object, optional, output, string, enum as zenum } from 'zod/v4-mini';
 
 /**
  * OpenID Connect Authentication Request

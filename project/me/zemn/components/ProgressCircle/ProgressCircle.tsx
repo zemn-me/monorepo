@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface ProgressCircleProps {
 	/**
 	 * Number between 0 and 1 representing the progress percentage.

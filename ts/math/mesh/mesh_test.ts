@@ -3,7 +3,7 @@ import { expect, it } from '@jest/globals';
 import { Iterable } from '#root/ts/iter/index.js';
 import { camera } from '#root/ts/math/camera.js';
 import { plot2D } from '#root/ts/math/canvas/braille/braille.js';
-import { point, Point2D, Point3D, x, y } from '#root/ts/math/cartesian.js';
+import { Point2D, Point3D, point, x, y } from '#root/ts/math/cartesian.js';
 import { Centre, cube, mesh2Edges } from '#root/ts/math/mesh/mesh.js';
 import { matLineToPoints } from '#root/ts/math/raster.js';
 import { unwrap } from '#root/ts/result/result.js';

@@ -3,8 +3,8 @@
  */
 
 import {
-	and_then as option_and_then,
 	Option,
+	and_then as option_and_then,
 	unwrap_or as option_unwrap_or,
 } from '#root/ts/option/types.js';
 import {

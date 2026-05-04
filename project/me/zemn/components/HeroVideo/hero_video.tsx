@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import * as kenwood from '#root/project/me/zemn/assets/kenwood/index.js';
 import * as kenwood_snow from '#root/project/me/zemn/assets/kenwood_snow/kenwood_snow.js';
 import {
-	poster as mistOnTheHillsPoster,
 	VideoSources as MistOnTheHillsVideoSources,
+	poster as mistOnTheHillsPoster,
 } from '#root/project/me/zemn/assets/mist_on_the_hills/mist_on_the_hills.js';
 import style from '#root/project/me/zemn/components/HeroVideo/style.module.css';
 import Link from '#root/project/me/zemn/components/Link/index.js';

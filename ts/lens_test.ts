@@ -3,8 +3,8 @@ import { describe, expect, it } from '@jest/globals';
 import {
 	Lens,
 	LensGet,
-	lensPromise,
 	LensSet,
+	lensPromise,
 	pipeLens,
 } from '#root/ts/lens.js';
 

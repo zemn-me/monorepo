@@ -3,9 +3,9 @@ import {
 	type YawPitchPose,
 } from '#root/ts/math/camera_pose.js';
 import {
-	point,
 	Point2D,
 	Point3D,
+	point,
 	scale,
 	translate,
 	x,

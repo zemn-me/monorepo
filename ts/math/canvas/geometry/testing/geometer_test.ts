@@ -10,8 +10,8 @@ import {
 import {
 	centre,
 	denormaliseLine2D,
-	length,
 	Line2D,
+	length,
 	toLineSegments,
 } from '#root/ts/math/cartesian.js';
 import { linesToPoints } from '#root/ts/math/raster.js';
