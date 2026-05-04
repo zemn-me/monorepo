@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -6,11 +7,13 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "config_node",
     srcs = ["jest.node.config.ts"],
+    data = ["style_mock.js"],
 )
 
 ts_project(
     name = "config_browser",
     srcs = ["jest.browser.config.ts"],
+    data = ["style_mock.js"],
     deps = [
         # needed for the jsdom plugin
         "//:node_modules/jest-environment-jsdom",
@@ -20,4 +23,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "style_mock_js",
+    srcs = ["style_mock.js"],
+    deps = [],
 )

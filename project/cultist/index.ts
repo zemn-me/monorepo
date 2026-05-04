@@ -2,6 +2,7 @@ export * as action from '#root/project/cultist/action.js';
 export { Action } from '#root/project/cultist/action.js';
 export * as aspects from '#root/project/cultist/aspects.js';
 export * as element from '#root/project/cultist/element.js';
+export * as game from '#root/project/cultist/game.js';
 export * as recipes from '#root/project/cultist/recipe.js';
 export * as save from '#root/project/cultist/save.js';
 export * as slots from '#root/project/cultist/slots.js';

@@ -1,0 +1,47 @@
+{
+  "recipes": [
+
+    {
+      "id": "dbarsacrossthesun",
+      "label": "Not 2",
+      "actionid": "explore",
+      "startdescription": "garbanzo",
+      "warmup": 2,
+	     "internaldeck": {
+                "spec": [
+                    "wainscothistories",
+                    "textbookfucine",
+                    "travellingatnight3",
+                    "locksmithsdream4",
+                    "treatiseonunderplaces"
+                ],
+                "draws": 5,
+                "defaultcard": "compensationb",
+                "resetonexhaustion": false
+            },
+   
+      "craftable":false
+    },
+	    {
+      "id": "om",
+      "label": "om",
+      "actionId": "work",
+      "startdescription": "om",
+      "warmup": 2,
+"effects":{"contentment":5},
+      "craftable":false
+    },
+    {
+      "id": "yorp",
+      "label": "yorp",
+      "actionId": "yorp",
+      "startdescription": "yorp",
+      "warmup": 2,
+      "craftable":false
+    }
+	
+	        
+
+
+  ]
+}
