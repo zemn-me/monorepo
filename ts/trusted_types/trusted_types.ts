@@ -1,11 +1,11 @@
-"use client";
+'use client';
 import memoize from 'memoizee';
 import { useEffect } from 'react';
 import { trustedTypes } from 'trusted-types';
 
 const trustedTypesPolicy = memoize(() =>
-	trustedTypes.createPolicy("default", {
-		createHTML: v => v
+	trustedTypes.createPolicy('default', {
+		createHTML: v => v,
 	})
 );
 
@@ -16,7 +16,7 @@ const trustedTypesPolicy = memoize(() =>
 export function dangerouslyDeclareSafeHTML(html: string) {
 	// below is needed because window can be
 	// undefined in next prerender.
-	const h = (trustedTypesPolicy().createHTML)(html)
+	const h = trustedTypesPolicy().createHTML(html);
 
 	return h;
 }
@@ -32,4 +32,3 @@ export function DeclareTrustedTypesPolicy() {
 	}, []);
 	return null;
 }
-

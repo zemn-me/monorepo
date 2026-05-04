@@ -10,7 +10,6 @@ export const openidConfiguration = object({
 	jwks_uri: url(),
 });
 
-export const openidConfigPathName = ".well-known/openid-configuration";
-
+export const openidConfigPathName = '.well-known/openid-configuration';
 
 export type OpenIDConfiguration = output<typeof openidConfiguration>;

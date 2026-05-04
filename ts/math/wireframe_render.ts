@@ -5,8 +5,12 @@ import {
 import { point, Point2D, Point3D, x, y, z } from '#root/ts/math/cartesian.js';
 import type { Segment3D } from '#root/ts/math/wireframe.js';
 import { pipe } from '#root/ts/pipe.js';
-import { map_result, type Result, result_collect, zipped } from '#root/ts/result/result.js';
-
+import {
+	map_result,
+	type Result,
+	result_collect,
+	zipped,
+} from '#root/ts/result/result.js';
 
 export type StyledSegment3D = Segment3D & {
 	readonly stroke: string;
@@ -43,7 +47,9 @@ export function styleSegment(
 export function perspective(
 	width: number,
 	height: number,
-	options: Partial<Pick<Perspective, 'nearPlane' | 'farPlane' | 'focalScale'>> = {}
+	options: Partial<
+		Pick<Perspective, 'nearPlane' | 'farPlane' | 'focalScale'>
+	> = {}
 ): Perspective {
 	return {
 		width,
@@ -77,20 +83,23 @@ export function clipSegmentToNearPlane(
 		nearPlane
 	);
 
-	return z1 < nearPlane ? [clipped, end] as const : [start, clipped] as const;
+	return z1 < nearPlane
+		? ([clipped, end] as const)
+		: ([start, clipped] as const);
 }
 
 export function projectCameraPoint(
 	cameraPoint: Point3D,
 	projection: Perspective
 ): Point2D {
-	const focalPixels = Math.min(projection.width, projection.height) * projection.focalScale;
+	const focalPixels =
+		Math.min(projection.width, projection.height) * projection.focalScale;
 	const depth = Math.max(z(cameraPoint), projection.nearPlane);
 	const projectedScale = focalPixels / depth;
 
 	return point<2>(
-		(projection.width / 2) + (x(cameraPoint) * projectedScale),
-		(projection.height / 2) - (y(cameraPoint) * projectedScale)
+		projection.width / 2 + x(cameraPoint) * projectedScale,
+		projection.height / 2 - y(cameraPoint) * projectedScale
 	);
 }
 
@@ -118,7 +127,11 @@ function renderSegment(
 		cameraSpacePointFromPose(segment[0], pose),
 		cameraSpacePointFromPose(segment[1], pose),
 		(start, end) => {
-			const clipped = clipSegmentToNearPlane(start, end, projection.nearPlane);
+			const clipped = clipSegmentToNearPlane(
+				start,
+				end,
+				projection.nearPlane
+			);
 			if (clipped == null) {
 				return null;
 			}
@@ -153,10 +166,14 @@ export function renderSegments(
 	projection: Perspective
 ): Result<RenderedSegment2D[], Error> {
 	return pipe(
-		result_collect(segments.map(segment => renderSegment(segment, pose, projection))),
+		result_collect(
+			segments.map(segment => renderSegment(segment, pose, projection))
+		),
 		map_result(rendered =>
 			rendered
-				.filter((segment): segment is RenderedSegment2D => segment != null)
+				.filter(
+					(segment): segment is RenderedSegment2D => segment != null
+				)
 				.sort((left, right) => right.depth - left.depth)
 		)
 	);

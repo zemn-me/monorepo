@@ -142,7 +142,10 @@ export const Bio = {
 		'thomas@openai.com',
 	],
 	links: [
-		[en`Google Knowledge Graph`, url`//www.google.com/search?kgmid=/g/11lw7w6zt8`],
+		[
+			en`Google Knowledge Graph`,
+			url`//www.google.com/search?kgmid=/g/11lw7w6zt8`,
+		],
 		[
 			lang.Text('en-GB', 'linkedin' as const),
 			url`//www.linkedin.com/in/thomas-shadwell-4b333b50`,
@@ -156,7 +159,7 @@ export const Bio = {
 		[lang.Text('en-GB', 'twitter' as const), url`//twitter.com/zemnmez`],
 		[lang.Text('en-GB', 'youtube' as const), url`//youtube.com/zemnmez`],
 		[en`twitch`, url`//twitch.tv/zemnmez`],
-		[en`forbes`, url`//www.forbes.com/profile/thomas-shadwell/`]
+		[en`forbes`, url`//www.forbes.com/profile/thomas-shadwell/`],
 	],
 	skills: [
 		en`Go`,
@@ -529,10 +532,8 @@ export const Bio = {
 			description: en`exploit using content security policy 1 to steal data on the web`,
 			priority: 9,
 			tags: [security, writing, disclosure],
-			...canonicaliseArticleMetadata(
-				articleCsp
-			),
-			url: new RelativeURL('/article/2014/csp')
+			...canonicaliseArticleMetadata(articleCsp),
+			url: new RelativeURL('/article/2014/csp'),
 		},
 		{
 			id: 'd4b51ac9-107c-4e83-b07f-0cffa34255f6',
@@ -746,7 +747,7 @@ export const Bio = {
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
 			description: en`Built out OpenAI's first Secure Development Lifecycle (SDLC); designed security primitives for OAI products including ChatGPT Canvas and Apple Intelligence. Work on Prompt Injection, Agentic Security & AI cyber risk.`,
-			employer: en`OpenAI`
+			employer: en`OpenAI`,
 		},
 		{
 			id: '94c6577b-372f-4842-b2c5-1438f16b2eab',
@@ -755,7 +756,7 @@ export const Bio = {
 			title: en`Member of Technical Staff, Security Product and Platform (PROP), OpenAI`,
 			url: url`https://openai.com`,
 			tags: [software, security, work, employment],
-			employer: en`OpenAI`
+			employer: en`OpenAI`,
 		},
 		{
 			id: '741b6fc1-5c5b-4319-aa9b-36f4b88d7f9a',
@@ -791,7 +792,7 @@ export const Bio = {
 			description: en`Year 12 work experience program at luxury hotel. Networking & technical support. Decompiled and reverse-engineered .net app for ease of provisioning corporate machines via batch scripts.`,
 			until: date(7, 'sep', 2009),
 			tags: [work, employment],
-			employer: en`The Grove Hotel`
+			employer: en`The Grove Hotel`,
 		},
 		{
 			id: 'fd4eccdd-b761-43b3-ad6e-a4b6b68db37c',
@@ -810,86 +811,97 @@ export const Bio = {
 		{
 			date: date(13, 'may', 2024),
 			title: en`GPT4o`,
-			url: linkToHighlight(url`https://openai.com/gpt-4o-contributions/`, {
-				start: "Thomas Shadwell",
-			}),
+			url: linkToHighlight(
+				url`https://openai.com/gpt-4o-contributions/`,
+				{
+					start: 'Thomas Shadwell',
+				}
+			),
 			id: 'b220c42b-6593-44cd-83e3-e26a4bf35c47',
 			description: en`Product security for OpenAI’s first multimodal model.`,
 		},
-                {
-                        date: date(3, 'oct', 2024),
-                        title: en`ChatGPT Canvas`,
-                        url: linkToHighlight(url`https://openai.com/index/introducing-canvas`, {
-                                start: "Thomas Shadwell",
-                        }),
-                        id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
-                        description: en`Security for AI pairing system for text.`,
-                },
-                {
-                        date: date(7, 'aug', 2025),
-                        title: en`GPT5`,
-						url: linkToHighlight(url`https://openai.com/index/introducing-gpt-5`, {
-							start: "Thomas Shadwell",
-						}),
-                        id: 'c0c4240c-344b-44f5-9788-4ace389f81ce',
-                        description: en`Security for OpenAI's next-generation model.`,
-                },
-                {
-                        date: date(18, 'oct', 2025),
-                        title: en`Panel Discussion: How Leading AI Platforms Approach Building Trustworthy Agents, AI Agent Security Summit SF`,
-						url: linkToHighlight(url`https://zenity.io/resources/events/ai-agent-security-summit-2025`, {
-							start: "Thomas Shadwell",
-						}),
-                        id: '11a2ca4e-d899-4a62-8e17-2d91082544ec',
-                        description: en`Panel representing OpenAI at the AI Agent Security summit at the Commonwealth Club of San Francisco.`,
-					tags: [talk, work, security],
-                },
+		{
+			date: date(3, 'oct', 2024),
+			title: en`ChatGPT Canvas`,
+			url: linkToHighlight(
+				url`https://openai.com/index/introducing-canvas`,
 				{
-					date: date(21, 'oct', 2025),
-					title: en`ChatGPT Atlas`,
-					description: en`AI enabled web-browser.`,
-					id: `32dda71c-fa45-4652-b09d-3635a27b8f55`,
-					url: url`https://chatgpt.com/atlas`,
-					tags: [work, security]
-				},
-				{
-					date: date(28, 'jan', 2026),
-					title: en`Preventing URL-Based Data Exfiltration in Language-Model Agents`,
-					id: "8f87f6ca-2446-4a04-8218-2aa2493cb77d",
-					description: en`Paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
-					url: url`https://cdn.openai.com/pdf/dd8e7875-e606-42b4-80a1-f824e4e11cf4/prevent-url-data-exfil.pdf`,
-					tags: [work, security, writing],
-				},
-				{
-					date: date(28, 'jan', 2026),
-					title: en`Keeping your data safe when an AI agent clicks a link`,
-					id: "1a8b03ca-415a-4e30-bf2c-1f9969779e1a",
-					description: en`Blog post summarising paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
-					url: url`https://openai.com/index/ai-agent-link-safety`,
-					tags: [work, security, writing],
-				},
-				{
-					url: url`https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt`,
-					date: date(13, 'feb', 2026),
-					title: en`Introducing Lockdown Mode and Elevated Risk labels in ChatGPT`,
-					id: "68408DCB-0B05-451B-8CED-DAD64CDE41B7",
-					description: en`Blog post summarising a fully sandboxed mode for chatgpt which mitigates impacts from Prompt Injection.`,
-					tags: [work, security],
-				},
-				{
-					url: url`https://openai.com/index/designing-agents-to-resist-prompt-injection/`,
-					date: date(11, 'mar', 2026),
-					title: en`Designing AI agents to resist prompt injection`,
-					id: "f26d0898-3e7f-4429-9ba6-9868f85f4367",
-					description: en`Blog post on how prompt injection attacks are becoming more like social engineering and how we can design AI agents to be more resistant to them.`,
-					tags: [work, security, writing],
+					start: 'Thomas Shadwell',
 				}
-
-        ],
-        who: {
-                handle: en`zemnmez`,
-                fullName: en`Thomas Neil James Shadwell`,
-                name: en`Thomas NJ Shadwell`,
+			),
+			id: 'c1e3a0c2-8430-4703-a53d-6fe4c26a83f1',
+			description: en`Security for AI pairing system for text.`,
+		},
+		{
+			date: date(7, 'aug', 2025),
+			title: en`GPT5`,
+			url: linkToHighlight(
+				url`https://openai.com/index/introducing-gpt-5`,
+				{
+					start: 'Thomas Shadwell',
+				}
+			),
+			id: 'c0c4240c-344b-44f5-9788-4ace389f81ce',
+			description: en`Security for OpenAI's next-generation model.`,
+		},
+		{
+			date: date(18, 'oct', 2025),
+			title: en`Panel Discussion: How Leading AI Platforms Approach Building Trustworthy Agents, AI Agent Security Summit SF`,
+			url: linkToHighlight(
+				url`https://zenity.io/resources/events/ai-agent-security-summit-2025`,
+				{
+					start: 'Thomas Shadwell',
+				}
+			),
+			id: '11a2ca4e-d899-4a62-8e17-2d91082544ec',
+			description: en`Panel representing OpenAI at the AI Agent Security summit at the Commonwealth Club of San Francisco.`,
+			tags: [talk, work, security],
+		},
+		{
+			date: date(21, 'oct', 2025),
+			title: en`ChatGPT Atlas`,
+			description: en`AI enabled web-browser.`,
+			id: `32dda71c-fa45-4652-b09d-3635a27b8f55`,
+			url: url`https://chatgpt.com/atlas`,
+			tags: [work, security],
+		},
+		{
+			date: date(28, 'jan', 2026),
+			title: en`Preventing URL-Based Data Exfiltration in Language-Model Agents`,
+			id: '8f87f6ca-2446-4a04-8218-2aa2493cb77d',
+			description: en`Paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
+			url: url`https://cdn.openai.com/pdf/dd8e7875-e606-42b4-80a1-f824e4e11cf4/prevent-url-data-exfil.pdf`,
+			tags: [work, security, writing],
+		},
+		{
+			date: date(28, 'jan', 2026),
+			title: en`Keeping your data safe when an AI agent clicks a link`,
+			id: '1a8b03ca-415a-4e30-bf2c-1f9969779e1a',
+			description: en`Blog post summarising paper describing the mechanism OpenAI products such as ChatGPT use to detect when an AI is communicating non-public data.`,
+			url: url`https://openai.com/index/ai-agent-link-safety`,
+			tags: [work, security, writing],
+		},
+		{
+			url: url`https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt`,
+			date: date(13, 'feb', 2026),
+			title: en`Introducing Lockdown Mode and Elevated Risk labels in ChatGPT`,
+			id: '68408DCB-0B05-451B-8CED-DAD64CDE41B7',
+			description: en`Blog post summarising a fully sandboxed mode for chatgpt which mitigates impacts from Prompt Injection.`,
+			tags: [work, security],
+		},
+		{
+			url: url`https://openai.com/index/designing-agents-to-resist-prompt-injection/`,
+			date: date(11, 'mar', 2026),
+			title: en`Designing AI agents to resist prompt injection`,
+			id: 'f26d0898-3e7f-4429-9ba6-9868f85f4367',
+			description: en`Blog post on how prompt injection attacks are becoming more like social engineering and how we can design AI agents to be more resistant to them.`,
+			tags: [work, security, writing],
+		},
+	],
+	who: {
+		handle: en`zemnmez`,
+		fullName: en`Thomas Neil James Shadwell`,
+		name: en`Thomas NJ Shadwell`,
 		firstName: en`Thomas`,
 		lastName: en`Shadwell`,
 	},

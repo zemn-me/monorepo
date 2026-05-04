@@ -22,7 +22,7 @@ export function renderBlueprintToBrailleString(
 ): string {
 	const renderables = [
 		...(b.entities ?? []),
-		...(includeTiles ? b.tiles ?? [] : []),
+		...(includeTiles ? (b.tiles ?? []) : []),
 	];
 	const xScale = scaleQuantize(
 		T2.parse(extent(renderables, v => v.position.x)),

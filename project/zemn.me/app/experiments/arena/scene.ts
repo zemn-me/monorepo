@@ -2,10 +2,23 @@ import {
 	forwardFromPose as cameraForwardFromPose,
 	type YawPitchPose,
 } from '#root/ts/math/camera_pose.js';
-import { point, Point2D, Point3D, scale, translate, x, z } from '#root/ts/math/cartesian.js';
+import {
+	point,
+	Point2D,
+	Point3D,
+	scale,
+	translate,
+	x,
+	z,
+} from '#root/ts/math/cartesian.js';
 import { defaultUp, lookAt } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import { box, pyramid, rigidTransform, type Segment3D } from '#root/ts/math/wireframe.js';
+import {
+	box,
+	pyramid,
+	rigidTransform,
+	type Segment3D,
+} from '#root/ts/math/wireframe.js';
 import {
 	perspective,
 	projectCameraPoint,
@@ -58,7 +71,9 @@ function horizontalUnit(point3d: Point3D): Point3D {
 	return point<3>(dx / length, 0, dz / length);
 }
 
-export function forwardFromPose(pose: Pick<PlayerPose, 'yaw' | 'pitch'>): Result<Point3D, Error> {
+export function forwardFromPose(
+	pose: Pick<PlayerPose, 'yaw' | 'pitch'>
+): Result<Point3D, Error> {
 	return cameraForwardFromPose(pose);
 }
 
@@ -68,18 +83,26 @@ export function stepPlayer(
 	deltaSeconds: number
 ): PlayerPose {
 	const yawRotation = unwrap(Quaternion.fromAxisAngle(defaultUp, pose.yaw));
-	const forward = horizontalUnit(unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD)));
-	const right = horizontalUnit(unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT)));
+	const forward = horizontalUnit(
+		unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD))
+	);
+	const right = horizontalUnit(
+		unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT))
+	);
 	const requested: Point3D = translate(
 		scale(forward, input.forward),
 		scale(right, input.strafe)
 	) as Point3D;
 	const moveDirection = horizontalUnit(requested);
 	const speed = input.sprint ? 10 : 5;
-	const movement: Point3D = scale(moveDirection, speed * deltaSeconds) as Point3D;
+	const movement: Point3D = scale(
+		moveDirection,
+		speed * deltaSeconds
+	) as Point3D;
 	const onGround = pose.position[1]![0]! <= EYE_HEIGHT + 1e-6;
-	const jumpVelocity = input.jump && onGround ? JUMP_VELOCITY : pose.verticalVelocity;
-	const nextVerticalVelocity = jumpVelocity - (GRAVITY * deltaSeconds);
+	const jumpVelocity =
+		input.jump && onGround ? JUMP_VELOCITY : pose.verticalVelocity;
+	const nextVerticalVelocity = jumpVelocity - GRAVITY * deltaSeconds;
 	const verticalMovement = jumpVelocity * deltaSeconds;
 	const unclamped: Point3D = translate(
 		pose.position,
@@ -91,9 +114,15 @@ export function stepPlayer(
 	return {
 		...pose,
 		position: point<3>(
-			Math.max(-ARENA_EXTENT + 1, Math.min(ARENA_EXTENT - 1, x(unclamped))),
+			Math.max(
+				-ARENA_EXTENT + 1,
+				Math.min(ARENA_EXTENT - 1, x(unclamped))
+			),
 			nextY,
-			Math.max(-ARENA_EXTENT + 1, Math.min(ARENA_EXTENT - 1, z(unclamped)))
+			Math.max(
+				-ARENA_EXTENT + 1,
+				Math.min(ARENA_EXTENT - 1, z(unclamped))
+			)
 		),
 		verticalVelocity: landed ? 0 : nextVerticalVelocity,
 	};
@@ -181,7 +210,7 @@ export function createArenaScene(): WorldSegment[] {
 			wallColor,
 			1.6,
 			0.85
-		),
+		)
 	);
 
 	const plinths = [
@@ -260,7 +289,11 @@ export function createArenaScene(): WorldSegment[] {
 	return scene;
 }
 
-export function projectPoint(cameraPoint: Point3D, width: number, height: number): Point2D {
+export function projectPoint(
+	cameraPoint: Point3D,
+	width: number,
+	height: number
+): Point2D {
 	return projectCameraPoint(cameraPoint, perspective(width, height));
 }
 
@@ -270,7 +303,11 @@ export function projectWorldPoint(
 	width: number,
 	height: number
 ): Result<Point2D | null, Error> {
-	return projectProjectedWorldPoint(worldPoint, pose, perspective(width, height));
+	return projectProjectedWorldPoint(
+		worldPoint,
+		pose,
+		perspective(width, height)
+	);
 }
 
 export function renderScene(

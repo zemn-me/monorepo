@@ -12,9 +12,8 @@ import style from '#root/ts/react/next/Link/Link.module.css';
 import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
 
 interface SpecialProps {
-	readonly href?: NextLinkProps['href']
-		| RelativeURL;
-	readonly styleless?: boolean
+	readonly href?: NextLinkProps['href'] | RelativeURL;
+	readonly styleless?: boolean;
 }
 
 export type LinkProps = Omit<
@@ -52,7 +51,6 @@ export const firstPartyOrigins = new Set([
  * isFirstPartyURL("https://zemn.me/ok") // true
  */
 function isFirstPartyURL(u: RelativeURL | string | UrlObject | URL): boolean {
-
 	if (u instanceof RelativeURL) return true;
 	// necessary because UrlObject is not compatible with browser's
 	// new URL().
@@ -64,20 +62,28 @@ function isFirstPartyURL(u: RelativeURL | string | UrlObject | URL): boolean {
 	);
 }
 
-export function Link({ href, className, styleless, rel, target, ...props }: LinkProps) {
+export function Link({
+	href,
+	className,
+	styleless,
+	rel,
+	target,
+	...props
+}: LinkProps) {
 	if (href !== undefined && !isFirstPartyURL(href)) {
 		rel = `${rel ?? ''} external`.trim();
 		target = '_blank';
 	}
 
-	className = classNames(className, styleless? style.styleless : undefined)
+	className = classNames(className, styleless ? style.styleless : undefined);
 
 	if (href instanceof RelativeURL) href = href.value;
 
 	// next Link has a strangely strident stance on providing the href parameter
 	// which we do not. if there is no href we just fall back to using an <a> tag.
 	// https://github.com/i18next/next-i18next/issues/599
-	if (href === undefined) return <a {...{ className, href, rel, target, ...props }} />;
+	if (href === undefined)
+		return <a {...{ className, href, rel, target, ...props }} />;
 	return <NextLink {...{ className, href, rel, target, ...props }} />;
 }
 

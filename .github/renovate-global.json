@@ -1,18 +1,11 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": [
-		"config:best-practices",
-		":maintainLockFilesWeekly"
-	],
+	"extends": ["config:best-practices", ":maintainLockFilesWeekly"],
 	"automerge": true,
 	"autodiscover": true,
-	"autodiscoverFilter": [
-		"zemn-me/monorepo"
-	],
+	"autodiscoverFilter": ["zemn-me/monorepo"],
 	"allowScripts": true,
-	"allowedCommands": [
-		"^\\./sh/postUpgrade\\.sh$"
-	],
+	"allowedCommands": ["^\\./sh/postUpgrade\\.sh$"],
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": "enabled",
@@ -22,12 +15,8 @@
 	"rangeStrategy": "pin",
 	"recreateWhen": "always",
 	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### v{{{release.version}}} \n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
-	"ignorePaths": [
-		"**/monorepo/dist/**"
-	],
-	"gitIgnoredAuthors": [
-		"zemnmez+renovate@gmail.com"
-	],
+	"ignorePaths": ["**/monorepo/dist/**"],
+	"gitIgnoredAuthors": ["zemnmez+renovate@gmail.com"],
 	"customManagers": [
 		{
 			"customType": "regex",
@@ -76,44 +65,28 @@
 	},
 	"packageRules": [
 		{
-			"matchDatasources": [
-				"custom.johnvansickle_ffmpeg_old_releases"
-			],
+			"matchDatasources": ["custom.johnvansickle_ffmpeg_old_releases"],
 			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)-(?:amd64|arm64|i686)-static\\.tar\\.xz$",
 			"versioning": "loose"
 		},
 		{
-			"matchDatasources": [
-				"custom.evermeet_ffmpeg_pub"
-			],
+			"matchDatasources": ["custom.evermeet_ffmpeg_pub"],
 			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\.zip$",
 			"versioning": "loose"
 		},
 		{
-			"matchManagers": [
-				"bazel-module"
-			],
-			"matchPackageNames": [
-				"rules_oci"
-			],
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_oci"],
 			"allowedVersions": "!/1.8.0$/"
 		},
 		{
-			"matchManagers": [
-				"github-actions"
-			],
-			"matchPackageNames": [
-				"jlumbroso/free-disk-space"
-			],
+			"matchManagers": ["github-actions"],
+			"matchPackageNames": ["jlumbroso/free-disk-space"],
 			"versioning": "loose"
 		},
 		{
-			"matchManagers": [
-				"npm"
-			],
-			"matchPackageNames": [
-				"twilio"
-			],
+			"matchManagers": ["npm"],
+			"matchPackageNames": ["twilio"],
 			"enabled": false
 		},
 		{
@@ -129,10 +102,7 @@
 				"bazelisk"
 			],
 			"postUpgradeTasks": {
-				"commands": [
-					"./sh/postUpgrade.sh",
-					"./sh/postUpgrade.sh"
-				],
+				"commands": ["./sh/postUpgrade.sh", "./sh/postUpgrade.sh"],
 				"executionMode": "branch",
 				"fileFilters": [
 					"Cargo.Bazel.lock",
@@ -151,15 +121,11 @@
 		},
 		{
 			"groupName": "pulumi_cli",
-			"matchPackageNames": [
-				"/pulumi_cli_.*/"
-			]
+			"matchPackageNames": ["/pulumi_cli_.*/"]
 		},
 		{
 			"groupName": "chromedriver",
-			"matchPackageNames": [
-				"/com_googleapis_storage_chromedriver.*/"
-			]
+			"matchPackageNames": ["/com_googleapis_storage_chromedriver.*/"]
 		}
 	]
 }

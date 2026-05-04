@@ -178,25 +178,26 @@ describe('blueprintSurroundedByWall', () => {
 
 describe('some problematic blueprints', () => {
 	test('spoilageToCarbonEnergyUpward', () => {
-		expect(() => BlueprintString.parse(spoilageToCarbonEnergyUpward)).not.toThrow();
+		expect(() =>
+			BlueprintString.parse(spoilageToCarbonEnergyUpward)
+		).not.toThrow();
 	});
 	test('automatedAquiloRunner', () => {
-		expect(() => BlueprintString.parse(automatedAquiloRunner)).not.toThrow();
+		expect(() =>
+			BlueprintString.parse(automatedAquiloRunner)
+		).not.toThrow();
 	});
 	test('spaceScience', () => {
 		expect(() => BlueprintString.parse(spaceScience)).not.toThrow();
 	});
 
-
 	test('cryoScience', () => {
 		expect(() => BlueprintString.parse(cryoScience)).not.toThrow();
 	});
 
-
 	test('balancers', () => {
 		expect(() => BlueprintString.parse(balancers)).not.toThrow();
 	});
-
 
 	test('power book', () => {
 		expect(() => BlueprintString.parse(powerBook)).not.toThrow();

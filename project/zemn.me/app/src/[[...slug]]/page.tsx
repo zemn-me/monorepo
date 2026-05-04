@@ -48,5 +48,5 @@ export async function generateStaticParams(): Promise<PageProps['params'][]> {
 	//
 	// next.js docs say that when accessing /, props will be {},
 	// but doing this causes a 404.
-	return githubSubpaths.map(v => ({ slug: v }))
+	return githubSubpaths.map(v => ({ slug: v }));
 }

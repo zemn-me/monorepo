@@ -148,7 +148,11 @@ export class QuaternionMultiply<
 				const q2 = this.quaternion;
 				const n = Quaternion.multiply(q1, q2);
 
-				const [nx = 0, ny = 0, nz = 0] = [Quaternion.x(n), Quaternion.y(n), Quaternion.z(n)];
+				const [nx = 0, ny = 0, nz = 0] = [
+					Quaternion.x(n),
+					Quaternion.y(n),
+					Quaternion.z(n),
+				];
 				return [[nx], [ny], [nz], [1]];
 			})
 		);
@@ -188,7 +192,11 @@ export class QuaternionRotate<
 				// technically incorrect. should be removed sometime.
 				const n = Quaternion.multiply(q1, rQ);
 
-				const [nx = 0, ny = 0, nz = 0] = [Quaternion.x(n), Quaternion.y(n), Quaternion.z(n)];
+				const [nx = 0, ny = 0, nz = 0] = [
+					Quaternion.x(n),
+					Quaternion.y(n),
+					Quaternion.z(n),
+				];
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);

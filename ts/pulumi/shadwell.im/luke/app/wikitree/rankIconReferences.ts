@@ -44,4 +44,5 @@ const BRITISH_ARMY_RANK_IMAGE_RULES: readonly RankImageRule[] = [
 	},
 ];
 
-export const RANK_IMAGE_RULES: readonly RankImageRule[] = BRITISH_ARMY_RANK_IMAGE_RULES;
+export const RANK_IMAGE_RULES: readonly RankImageRule[] =
+	BRITISH_ARMY_RANK_IMAGE_RULES;
