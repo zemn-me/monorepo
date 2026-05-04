@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//ts/pulumi/lulu.computer:__subpackages__"])
@@ -17,32 +17,41 @@ bazel_lint(
 ts_project(
     name = "lulu",
     srcs = [
-        "client.tsx",
-        "layout.tsx",
-        "page.tsx",
+        "scene.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/seedrandom",
-        "//:node_modules/react",
-        "//:node_modules/seedrandom",
-        "//ts/iter",
         "//ts/math",
-        "//ts/math/sim",
-        "//ts/next.js",
-        "//ts/option",
-        "//ts/time",
+        "//ts/result",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "client.tsx",
-        "layout.tsx",
-        "page.tsx",
+        "scene.ts",
+        "scene_test.ts",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["scene_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":lulu_tests"],
+)
+
+ts_project(
+    name = "lulu_tests",
+    srcs = ["scene_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":lulu",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//ts/math",
+        "//ts/result",
+    ],
 )
