@@ -10,7 +10,7 @@ genrule(
     ],
     outs = ["path.ts"],
     cmd_bash = """
-		echo '/* eslint-disable */' > $@
+		echo '/* biome-ignore-all lint: generated file */' > $@
 		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" >> $@
 		echo "export const chromiumPath = Runfiles.resolve('$(rlocationpath //bin/host/chromium)')" >> $@
 	""",

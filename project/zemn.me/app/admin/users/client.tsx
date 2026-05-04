@@ -63,7 +63,6 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 	return (
 		<>
 			<form
-				// eslint-disable-next-line @typescript-eslint/no-misused-promises
 				onSubmit={handleSubmit(data => {
 					void createUser.mutate({
 						headers: { Authorization: id_token },

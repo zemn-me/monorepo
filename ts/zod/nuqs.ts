@@ -2,7 +2,7 @@ import { createParser } from 'nuqs/server'
 import { z } from 'zod'
 
 export function createZodCodecParser<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
   Input extends z.ZodCoercedString<string> | z.ZodPipe<any, any>,
   Output extends z.ZodType
 >(
@@ -28,7 +28,7 @@ export const jsonCodec = <T extends z.core.$ZodType>(schema: T) =>
     decode: (jsonString, ctx) => {
       try {
         return JSON.parse(jsonString)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
       } catch (err: any) {
         ctx.issues.push({
           code: 'invalid_format',

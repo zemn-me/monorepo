@@ -2,7 +2,7 @@ const isSafeUrl = Symbol();
 
 const errInvalidProtocol = Symbol('error: invalid protocol');
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: interface merging is intentional
 export interface URL extends globalThis.URL {
 	[isSafeUrl]: true;
 }
@@ -34,7 +34,7 @@ export class Local extends Safe implements URL {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: interface merging is intentional
 export class URL extends Safe implements URL {
 	static New(params: TemplateStringsArray) {
 		const [url] = params;

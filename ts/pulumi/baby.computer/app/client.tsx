@@ -31,6 +31,7 @@ import {
 	type VisiblePenguinEncounter,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
 import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
+import { noop } from '#root/ts/noop.js';
 import {
 	and_then,
 	is_err,
@@ -177,7 +178,7 @@ export function PenguinSim() {
 				typeof legacyCoarsePointerQuery.addListener !== 'function' ||
 				typeof legacyCoarsePointerQuery.removeListener !== 'function'
 			) {
-				return () => {};
+				return noop;
 			}
 
 			legacyCoarsePointerQuery.addListener(syncMobileControls);

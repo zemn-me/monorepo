@@ -237,7 +237,7 @@ export function useLocalStorageItem<T>(lens: Lens<Promise<Storage>, Promise<T>>)
 			)
 
 
-			), () => { })
+			), () => { /* intentionally empty */ })
 	, [ controller ]);
 
 

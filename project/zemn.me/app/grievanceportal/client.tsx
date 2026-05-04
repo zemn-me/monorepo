@@ -233,8 +233,8 @@ export default function GrievancePortal() {
 	const handleLogin = () => {
 		void fut_promptForLogin(
 			prompt => prompt(),
-			() => { },
-			() => { },
+			() => { /* intentionally empty */ },
+			() => { /* intentionally empty */ },
 		)
 	};
 
