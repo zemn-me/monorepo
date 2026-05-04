@@ -1,14 +1,22 @@
-import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
+import { SkipToken, skipToken, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { components } from '#root/project/zemn.me/api/api_client.gen.js';
 import { useGoogleAuth } from '#root/project/zemn.me/hook/useGoogleAuth.js';
+import { useOIDCQueryKeyPrefix } from '#root/project/zemn.me/hook/useOIDC.js';
 import { useFetchClient } from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { future_and_then, future_declare_dependency } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { option_from_maybe_undefined } from '#root/ts/option/types.js';
 
 
+export const useZemnMeAuthQueryKeyPrefix = 'zemn-me-oidc-id-token';
 
+export function useClearZemnMeAuth() {
+	const client = useQueryClient();
+	return () => client.invalidateQueries({
+		predicate: q => q.queryKey[0] === useZemnMeAuthQueryKeyPrefix || q.queryKey[0] === useOIDCQueryKeyPrefix
+	})
+}
 
 
 export function useZemnMeAuth() {
@@ -30,7 +38,7 @@ export function useZemnMeAuth() {
 
 	const exchangedTokenRsp = useQueryFuture(useQuery({
 		gcTime: Infinity, // don't evict auth tokens
-		queryKey: ['zemn-me-oidc-id-token', ...cacheKey],
+		queryKey: [useZemnMeAuthQueryKeyPrefix, ...cacheKey],
 		queryFn: request_body(
 			body => () => apiFetchClient
 			.POST('/oauth2/token', {
