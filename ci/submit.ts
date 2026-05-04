@@ -19,7 +19,9 @@ async function main() {
 		console.log(Command('endgroup')({})());
 		refreshSummary = result1.summary.message;
 	} else {
-		console.log(Command('notice')({})('Pulumi refresh skipped (90% sample).'));
+		console.log(
+			Command('notice')({})('Pulumi refresh skipped (90% sample).')
+		);
 	}
 
 	const result2 = await stack.up({

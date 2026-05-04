@@ -1,11 +1,20 @@
 import { point, Point3D } from '#root/ts/math/cartesian.js';
 import * as DualQuaternion from '#root/ts/math/dual_quaternion.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import { and_then, and_then_flatten, type Result, result_collect } from '#root/ts/result/result.js';
+import {
+	and_then,
+	and_then_flatten,
+	type Result,
+	result_collect,
+} from '#root/ts/result/result.js';
 
 export type Segment3D = readonly [start: Point3D, end: Point3D];
 
-export function box(width: number, height: number, depth: number): readonly Segment3D[] {
+export function box(
+	width: number,
+	height: number,
+	depth: number
+): readonly Segment3D[] {
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;
 	const halfDepth = depth / 2;
@@ -64,16 +73,18 @@ export function rigidTransform(
 ): Result<Segment3D[], Error> {
 	return and_then_flatten(
 		DualQuaternion.fromRotationTranslation(rotation, translation),
-		transform => result_collect(
-			segments.map(([start, end]) =>
-				and_then_flatten(
-					DualQuaternion.transformPoint(transform, start),
-					nextStart => and_then(
-						DualQuaternion.transformPoint(transform, end),
-						nextEnd => [nextStart, nextEnd] as Segment3D
+		transform =>
+			result_collect(
+				segments.map(([start, end]) =>
+					and_then_flatten(
+						DualQuaternion.transformPoint(transform, start),
+						nextStart =>
+							and_then(
+								DualQuaternion.transformPoint(transform, end),
+								nextEnd => [nextStart, nextEnd] as Segment3D
+							)
 					)
 				)
 			)
-		)
 	);
 }

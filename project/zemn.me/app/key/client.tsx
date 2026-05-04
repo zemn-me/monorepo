@@ -3,14 +3,18 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
-import { useWebHaptics } from "web-haptics/react";
+import { useWebHaptics } from 'web-haptics/react';
 
 import style from '#root/project/zemn.me/app/key/style.module.css';
 import { ProgressCircle } from '#root/project/zemn.me/components/ProgressCircle/ProgressCircle.js';
-import { useGetMeKeyStatus, useGetMeScopes, usePostMeKey } from '#root/project/zemn.me/hook/useZemnMeApi.js';
+import {
+	useGetMeKeyStatus,
+	useGetMeScopes,
+	usePostMeKey,
+} from '#root/project/zemn.me/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/zemn.me/hook/useZemnMeAuth.js';
 
-const requiredScope = "callbox_key";
+const requiredScope = 'callbox_key';
 
 function progressRatio(min: number, max: number, now: number) {
 	const range = max - min;
@@ -18,7 +22,9 @@ function progressRatio(min: number, max: number, now: number) {
 	return norm / range;
 }
 
-function parseOpenUntil(openUntil: string | undefined): Temporal.ZonedDateTime | undefined {
+function parseOpenUntil(
+	openUntil: string | undefined
+): Temporal.ZonedDateTime | undefined {
 	if (!openUntil) return undefined;
 
 	try {
@@ -26,7 +32,9 @@ function parseOpenUntil(openUntil: string | undefined): Temporal.ZonedDateTime |
 	} catch {
 		try {
 			const instant = Temporal.Instant.from(openUntil);
-			return instant.toZonedDateTimeISO(Temporal.Now.zonedDateTimeISO().timeZoneId);
+			return instant.toZonedDateTimeISO(
+				Temporal.Now.zonedDateTimeISO().timeZoneId
+			);
 		} catch {
 			return undefined;
 		}
@@ -55,7 +63,7 @@ function OpenTimer({ start, end }: OpenTimerProps) {
 	const progress = progressRatio(
 		start.epochMilliseconds,
 		end.epochMilliseconds,
-		now,
+		now
 	);
 	const clampedProgress = Math.min(1, Math.max(0, progress));
 
@@ -74,72 +82,76 @@ export default function KeyPageClient() {
 	const { trigger } = useWebHaptics();
 	const postKey = usePostMeKey(
 		fut_idToken,
-		() => { void trigger("nudge") },
-		() => { void trigger("success") },
-		() => { void trigger("error") },
+		() => {
+			void trigger('nudge');
+		},
+		() => {
+			void trigger('success');
+		},
+		() => {
+			void trigger('error');
+		}
 	);
 	const doorStatus = useGetMeKeyStatus(fut_idToken);
 
-	const noAuth = () => <button
-		aria-label="Authenticate with OIDC"
-		disabled={fut_promptForLogin(
-			() => false,
-			() => true,
-			() => true,
-		)}
-		onClick={fut_promptForLogin(
-			v => () => void v(),
-			() => undefined,
-			() => undefined,
-		)}
+	const noAuth = () => (
+		<button
+			aria-label="Authenticate with OIDC"
+			disabled={fut_promptForLogin(
+				() => false,
+				() => true,
+				() => true
+			)}
+			onClick={fut_promptForLogin(
+				v => () => void v(),
+				() => undefined,
+				() => undefined
+			)}
 		>
 			Login with OIDC
 		</button>
+	);
 
 	return fut_idToken(
-		() => <section className={style.root}>
-			<button
-				aria-label="Unlock Door"
-				className={classNames(
-					style.lockButton,
-					doorStatus(
-						s => s.open ? style.lockButtonOpen : undefined,
-						() => undefined,
-						() => undefined
-					)
-				)}
-				disabled={
-					fut_scopes(
-						scopes => !scopes.includes(requiredScope) ||
+		() => (
+			<section className={style.root}>
+				<button
+					aria-label="Unlock Door"
+					className={classNames(
+						style.lockButton,
+						doorStatus(
+							s => (s.open ? style.lockButtonOpen : undefined),
+							() => undefined,
+							() => undefined
+						)
+					)}
+					disabled={fut_scopes(
+						scopes =>
+							!scopes.includes(requiredScope) ||
 							postKey.isPending,
 						() => true,
-						() => false,
-					)
-				}
-
-				onClick={() => {
-					void postKey.mutate();
-				}}
-
-				type="button"
-			>
-				<span>
-					{
-						doorStatus(
-							status => status.open ? "🔓" : "🔒",
-							(/*loading*/) => "⏳",
-							(/*error*/) => "⚠️",
-						)
-					}
-				</span>
-			</button>
-			{
-				doorStatus(
+						() => false
+					)}
+					onClick={() => {
+						void postKey.mutate();
+					}}
+					type="button"
+				>
+					<span>
+						{doorStatus(
+							status => (status.open ? '🔓' : '🔒'),
+							(/*loading*/) => '⏳',
+							(/*error*/) => '⚠️'
+						)}
+					</span>
+				</button>
+				{doorStatus(
 					status => {
 						if (!status.open) return null;
 						const openUntil = parseOpenUntil(status.openUntil);
 						const openedAt = parseOpenUntil(status.lastOpenedAt);
-						if (openUntil === undefined || openedAt === undefined) return null;
+						if (openUntil === undefined || openedAt === undefined)
+							return null;
 
 						return (
 							<div className={style.timerRow}>
@@ -148,11 +160,9 @@ export default function KeyPageClient() {
 						);
 					},
 					() => null,
-					() => null,
-				)
-			}
-			{
-				doorStatus(
+					() => null
+				)}
+				{doorStatus(
 					status => {
 						if (!status.open) {
 							return <p className={style.status}>Locked.</p>;
@@ -160,14 +170,16 @@ export default function KeyPageClient() {
 
 						return null;
 					},
-					() => <p className={style.status}>Checking lock status…</p>,
-					() => <p className={style.status}>Lock status unavailable.</p>,
-				)
-			}
-		</section>,
+					() => (
+						<p className={style.status}>Checking lock status…</p>
+					),
+					() => (
+						<p className={style.status}>Lock status unavailable.</p>
+					)
+				)}
+			</section>
+		),
 		noAuth,
-		noAuth,
-	)
-
-
+		noAuth
+	);
 }

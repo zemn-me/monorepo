@@ -9,12 +9,15 @@ const getLangs = () => {
 };
 
 export function useLocale() {
-	const [languages, setLanguages] = useState<readonly [string, ...string[]]>(['en-GB']);
+	const [languages, setLanguages] = useState<readonly [string, ...string[]]>([
+		'en-GB',
+	]);
 
 	useEffect(() => {
 		const listener = () => {
 			const languages = getLangs();
-			if (languages.length > 0) setLanguages(languages as [string, ...string[]]);
+			if (languages.length > 0)
+				setLanguages(languages as [string, ...string[]]);
 		};
 		window.addEventListener('languagechange', listener);
 		listener();

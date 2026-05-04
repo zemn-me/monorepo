@@ -2,7 +2,6 @@ import * as functional from '#root/ts/iter/iterable_functional.js';
 import { NewType } from '#root/ts/NewType.js';
 import { None, type Option, Some } from '#root/ts/option/option.js';
 
-
 export * as dict from '#root/ts/iter/dict.js';
 
 /**
@@ -195,19 +194,12 @@ export function reduce<I, R>(
 	f: (previousValue: R, currentValue: I, currentIndex: number) => R,
 	initialValue: R
 ) {
-	return functional.fold(
-		(
-			p: R,
-			[c, i]: [I, number],
-		) => f(p, c, i)
-	)(initialValue)(
-		enumerate(i)
-	)
+	return functional.fold((p: R, [c, i]: [I, number]) => f(p, c, i))(
+		initialValue
+	)(enumerate(i));
 }
 
 export { reduce as fold };
-
-
 
 /**
  * Walks a chain of values using a selector.
@@ -328,63 +320,64 @@ export function concat<T1, T2>(
 	i: Iterable<T1>,
 	i2: Iterable<T2>
 ): Iterable<T1 | T2> {
-	return functional.concat(i)(i2)
+	return functional.concat(i)(i2);
 }
 
-export function* zip2<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<readonly [Option<A>, Option<B>]> {
-	const [ai, bi] = [a, b].map(v => v[Symbol.iterator]()) as [Iterator<A>, Iterator<B>];
-	for (; ;) {
+export function* zip2<A, B>(
+	a: Iterable<A>,
+	b: Iterable<B>
+): Iterable<readonly [Option<A>, Option<B>]> {
+	const [ai, bi] = [a, b].map(v => v[Symbol.iterator]()) as [
+		Iterator<A>,
+		Iterator<B>,
+	];
+	for (;;) {
 		const [av, bv] = [ai.next(), bi.next()];
 		const ret = [
 			av.done ? Some(av.value) : None,
-			bv.done ? Some(bv.value) : None
+			bv.done ? Some(bv.value) : None,
 		] as const;
 
 		yield ret;
 
-		if (ret.every(v => v.is_none())) break
+		if (ret.every(v => v.is_none())) break;
 	}
 }
 
 export function* enumerate<T>(v: Iterable<T>): Iterable<[T, number]> {
 	let i = 0;
 	for (const vv of v) {
-		yield [vv, i++]
+		yield [vv, i++];
 	}
 }
 
-type _Iterable<T> = impl<Iterable<T>>
+type _Iterable<T> = impl<Iterable<T>>;
 
 class impl<T> extends NewType<T> {
 	map<I, O>(this: _Iterable<I>, f: (i: I) => O): _Iterable<O> {
-		return new impl(map(this.value, f))
+		return new impl(map(this.value, f));
 	}
 	filter<T>(this: _Iterable<Option<T>>): _Iterable<T> {
-		return new impl(
-			functional.filter<T>(
-				this.map(v =>
-					v.value
-				).value
-			)
-		)
+		return new impl(functional.filter<T>(this.map(v => v.value).value));
 	}
 	sort<T>(this: _Iterable<T>, compareFn?: (a: T, b: T) => number): impl<T[]> {
-		return new impl([...this.value].sort(compareFn))
+		return new impl([...this.value].sort(compareFn));
 	}
 
-	zip<T, T2>(this: _Iterable<T>, other: Iterable<T2>): impl<Iterable<readonly [Option<T>, Option<T2>]>> {
+	zip<T, T2>(
+		this: _Iterable<T>,
+		other: Iterable<T2>
+	): impl<Iterable<readonly [Option<T>, Option<T2>]>> {
 		return new impl(zip2(this.value, other));
 	}
 
 	flatten<T>(this: _Iterable<Iterable<T>>): _Iterable<T> {
-		return new impl(flatten(this.value))
+		return new impl(flatten(this.value));
 	}
 
-	enumerate<T>(this: _Iterable<T>): _Iterable<
-		[T, number]> {
-
-		return new impl(enumerate(this.value))
-		}
+	enumerate<T>(this: _Iterable<T>): _Iterable<[T, number]> {
+		return new impl(enumerate(this.value));
+	}
 
 	nth<T>(this: _Iterable<T>, n: number): Option<T> {
 		for (const [v, i] of this.enumerate().value) {
@@ -401,35 +394,28 @@ class impl<T> extends NewType<T> {
 		f: (previousValue: R, currentValue: I, currentIndex: number) => R,
 		initialValue: R
 	): R {
-		return reduce(this.value, f, initialValue)
+		return reduce(this.value, f, initialValue);
 	}
 
 	last<T>(this: _Iterable<T>): Option<T> {
-		return this.fold(
-			(_, c) => Some(c), None as Option<T>
-		)
+		return this.fold((_, c) => Some(c), None as Option<T>);
 	}
 
 	to_array<T>(this: _Iterable<T>): T[] {
-		return Array.from(this.value)
+		return Array.from(this.value);
 	}
 
 	first<T>(this: _Iterable<T>): Option<T> {
-		return this.nth(0)
+		return this.nth(0);
 	}
 
 	concat<T1, T2>(this: _Iterable<T1>, v: Iterable<T2>): _Iterable<T1 | T2> {
-		return new impl(
-			concat(this.value, v)
-		)
+		return new impl(concat(this.value, v));
 	}
-
-
 }
 
 function _Iterable<T>(v: Iterable<T>): _Iterable<T> {
-	return new impl(v)
+	return new impl(v);
 }
 
-
-export { _Iterable as Iterable }
+export { _Iterable as Iterable };

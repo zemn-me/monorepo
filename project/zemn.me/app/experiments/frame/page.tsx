@@ -1,13 +1,12 @@
-import { Metadata } from "next/types";
-import { Suspense } from "react";
+import { Metadata } from 'next/types';
+import { Suspense } from 'react';
 
-import { FrameClient } from "#root/project/zemn.me/app/experiments/frame/client.js";
-
+import { FrameClient } from '#root/project/zemn.me/app/experiments/frame/client.js';
 
 export default function Page() {
 	return (
 		<Suspense fallback={null}>
-			<FrameClient/>
+			<FrameClient />
 		</Suspense>
 	);
 }

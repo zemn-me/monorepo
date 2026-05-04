@@ -1,5 +1,3 @@
-
-
 export const Millisecond = 1;
 export const Second = 1000 * Millisecond;
 export const Minute = 60 * Second;

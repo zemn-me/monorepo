@@ -1,6 +1,11 @@
-import { mp4, ogv, poster, webm } from '#root/project/zemn.me/public/mist_on_the_hills.js';
+import {
+	mp4,
+	ogv,
+	poster,
+	webm,
+} from '#root/project/zemn.me/public/mist_on_the_hills.js';
 
-export { poster }
+export { poster };
 
 /**
  * @returns A React element representing the a video asset
@@ -16,4 +21,3 @@ export function VideoSources() {
 		</>
 	);
 }
-

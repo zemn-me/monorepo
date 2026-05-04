@@ -3,17 +3,15 @@
  * i dont really understand this because chatgpt generated it.
  */
 
-import { point, Point2D } from "#root/ts/math/cartesian.js";
-
+import { point, Point2D } from '#root/ts/math/cartesian.js';
 
 /**
  * Represents a point in 2D space.
  */
 interface Point {
-  x: number;
-  y: number;
+	x: number;
+	y: number;
 }
-
 
 /**
  * Generates points along a line from (x0, y0) to (x1, y1) using Bresenham's algorithm.
@@ -24,39 +22,38 @@ interface Point {
  * @returns An iterable of points along the line.
  */
 function* bresenhamLine(
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number
+	x0: number,
+	y0: number,
+	x1: number,
+	y1: number
 ): Iterable<Point> {
-  const dx = x1 - x0;
-  const dy = y1 - y0;
+	const dx = x1 - x0;
+	const dy = y1 - y0;
 
-  const absDx = Math.abs(dx);
-  const absDy = Math.abs(dy);
+	const absDx = Math.abs(dx);
+	const absDy = Math.abs(dy);
 
-  const steps = Math.max(absDx, absDy);
+	const steps = Math.max(absDx, absDy);
 
-  const xIncrement = dx / steps;
-  const yIncrement = dy / steps;
+	const xIncrement = dx / steps;
+	const yIncrement = dy / steps;
 
-  let x = x0;
-  let y = y0;
+	let x = x0;
+	let y = y0;
 
-const EPSILON = Number.EPSILON;
+	const EPSILON = Number.EPSILON;
 
-  for (let i = 0; i <= steps; i++) {
-    yield { x, y };
-    x += xIncrement;
-    y += yIncrement;
-  }
+	for (let i = 0; i <= steps; i++) {
+		yield { x, y };
+		x += xIncrement;
+		y += yIncrement;
+	}
 
-  // Ensure the last point is included
-  if (Math.abs(x - x1) >= EPSILON || Math.abs(y - y1) >= EPSILON) {
-    yield { x: x1, y: y1 };
-  }
+	// Ensure the last point is included
+	if (Math.abs(x - x1) >= EPSILON || Math.abs(y - y1) >= EPSILON) {
+		yield { x: x1, y: y1 };
+	}
 }
-
 
 /**
  * Converts a list of lines into an iterable of points using Bresenham's algorithm.
@@ -64,27 +61,24 @@ const EPSILON = Number.EPSILON;
  * @returns An iterable of points along all the lines.
  */
 export function* linesToPoints(
-  lines: Iterable<[[number, number], [number, number]]>
+	lines: Iterable<[[number, number], [number, number]]>
 ): Iterable<Point> {
-  for (const [[x0, y0], [x1, y1]] of lines) {
-    yield* bresenhamLine(x0, y0, x1, y1);
-  }
+	for (const [[x0, y0], [x1, y1]] of lines) {
+		yield* bresenhamLine(x0, y0, x1, y1);
+	}
 }
 
 /**
  * {@link linesToPoints} except accepting
  * Matrix form.
  */
-export function* matLineToPoints(
-	[[[x0], [y0]], [[x1], [y1]]]: [
-		Point2D, Point2D ]) {
-
+export function* matLineToPoints([[[x0], [y0]], [[x1], [y1]]]: [
+	Point2D,
+	Point2D,
+]) {
 	for (const { x, y } of bresenhamLine(x0, y0, x1, y1)) {
-		yield point<2>(x, y)
+		yield point<2>(x, y);
 	}
 
 	return;
-
 }
-
-

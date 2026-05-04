@@ -36,11 +36,16 @@ function collectContext() {
 }
 
 function collectPerformance() {
-	const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+	const navigation = performance.getEntriesByType('navigation')[0] as
+		| PerformanceNavigationTiming
+		| undefined;
 
 	return {
 		navigationType: navigation?.type,
-		loadMs: navigation?.loadEventEnd && navigation.loadEventEnd > 0 ? navigation.loadEventEnd : undefined,
+		loadMs:
+			navigation?.loadEventEnd && navigation.loadEventEnd > 0
+				? navigation.loadEventEnd
+				: undefined,
 	};
 }
 
@@ -55,11 +60,14 @@ function collectEngagement() {
 			Math.max(
 				0,
 				Math.round(
-					((window.scrollY + window.innerHeight)
-						/ Math.max(document.documentElement.scrollHeight, window.innerHeight))
-						* 100,
-				),
-			),
+					((window.scrollY + window.innerHeight) /
+						Math.max(
+							document.documentElement.scrollHeight,
+							window.innerHeight
+						)) *
+						100
+				)
+			)
 		),
 		visibilityState: document.visibilityState,
 	};

@@ -8,9 +8,7 @@ test('whether we need to bazel run //project/zemn.me/bio:priority_sort', () => {
 	const prioritySet = new Set<string>(priorities);
 
 	// intersection(allIds, prioritySet)
-	const intersection = new Set(
-		[...allIds].filter(id => prioritySet.has(id)),
-	);
+	const intersection = new Set([...allIds].filter(id => prioritySet.has(id)));
 
 	expect(intersection).toEqual(allIds);
 });

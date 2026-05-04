@@ -1,5 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-
+import { useQuery } from '@tanstack/react-query';
 
 export function useLocalSecret() {
 	return useQuery({
@@ -10,6 +9,6 @@ export function useLocalSecret() {
 			crypto.getRandomValues(bytes);
 
 			return bytes;
-		}
-	})
+		},
+	});
 }

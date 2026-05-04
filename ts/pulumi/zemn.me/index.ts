@@ -1,5 +1,5 @@
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
-import * as gcp from "@pulumi/gcp";
+import * as gcp from '@pulumi/gcp';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
@@ -16,10 +16,10 @@ export interface Args {
 	protectDatabases: boolean;
 	noIndex: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
-	gcpProjectId: Pulumi.Input<string>
-	callboxPhoneNumber: Pulumi.Input<string>
-	twilioSharedSecret: Pulumi.Input<string>
-	cloudWorkstations?: Pulumi.Input<boolean>
+	gcpProjectId: Pulumi.Input<string>;
+	callboxPhoneNumber: Pulumi.Input<string>;
+	twilioSharedSecret: Pulumi.Input<string>;
+	cloudWorkstations?: Pulumi.Input<boolean>;
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -33,7 +33,6 @@ export class Component extends Pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 
-
 		new CostAllocationTag(
 			`${name}_cost_tag`,
 			{
@@ -44,13 +43,17 @@ export class Component extends Pulumi.ComponentResource {
 		);
 
 		new LambdaHelloWorld(`${name}_fargate`, {
-			tags: args.tags
+			tags: args.tags,
 		});
 
-		const peopleService = new gcp.projects.Service("peopleservice", {
-			service: "people.googleapis.com",
-			disableOnDestroy: false,
-		}, { parent: this });
+		const peopleService = new gcp.projects.Service(
+			'peopleservice',
+			{
+				service: 'people.googleapis.com',
+				disableOnDestroy: false,
+			},
+			{ parent: this }
+		);
 
 		this.site = new Website(
 			`${name}_zemn_me`,
@@ -60,21 +63,22 @@ export class Component extends Pulumi.ComponentResource {
 				directory: 'project/zemn.me/build',
 				zoneId: args.zoneId,
 				domain: args.domain,
-                                noIndex: args.noIndex,
-                                email: false,
-                                otherTXTRecords: [
-                                        "google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag"
-                                ],
-                                tags,
-                                wellKnownOidcDomain: ['api', args.domain].join('.'),
-                        },
+				noIndex: args.noIndex,
+				email: false,
+				otherTXTRecords: [
+					'google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag',
+				],
+				tags,
+				wellKnownOidcDomain: ['api', args.domain].join('.'),
+			},
 			{
-				parent: this, dependsOn: [
+				parent: this,
+				dependsOn: [
 					// for using contacts
-					peopleService
-				]
+					peopleService,
+				],
 			}
-                );
+		);
 
 		const availability = new Website(
 			`${name}_availability_zemn_me_website`,
@@ -102,32 +106,42 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: true,
 				email: false,
 				noCostAllocationTag: true,
-				tags
+				tags,
 			},
-		{ parent: this })
+			{ parent: this }
+		);
 
 		new BlueskyDisplayNameClaim(
 			`${name}_bluesky_claim`,
 			{
 				zoneId: args.zoneId,
 				displayname: args.domain,
-				did: bskyDid
+				did: bskyDid,
 			},
-			{ parent: this}
-		)
+			{ parent: this }
+		);
 
-		new ApiZemnMe(`${name}_api`, {
-			domain: ['api', args.domain].join("."),
-			zoneId: args.zoneId,
-			callboxPhoneNumber: args.callboxPhoneNumber,
-			protectDatabases: args.protectDatabases,
-			twilioSharedSecret: args.twilioSharedSecret,
-		}, { parent: this, dependsOn: Static });
+		new ApiZemnMe(
+			`${name}_api`,
+			{
+				domain: ['api', args.domain].join('.'),
+				zoneId: args.zoneId,
+				callboxPhoneNumber: args.callboxPhoneNumber,
+				protectDatabases: args.protectDatabases,
+				twilioSharedSecret: args.twilioSharedSecret,
+			},
+			{ parent: this, dependsOn: Static }
+		);
 
-		if (args.cloudWorkstations) new GcpWorkstation(`${name}_workstation`, {
-			location: 'us-central1',
-			project: args.gcpProjectId,
-		}, { parent: this });
+		if (args.cloudWorkstations)
+			new GcpWorkstation(
+				`${name}_workstation`,
+				{
+					location: 'us-central1',
+					project: args.gcpProjectId,
+				},
+				{ parent: this }
+			);
 
 		super.registerOutputs({ site: this.site, availability, Static });
 	}

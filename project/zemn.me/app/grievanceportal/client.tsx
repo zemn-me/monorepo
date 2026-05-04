@@ -78,7 +78,9 @@ function parseCreatedDate(
 		return Temporal.Now.zonedDateTimeISO(fallbackZone);
 	}
 
-	const coerceToZone = (zoned: Temporal.ZonedDateTime): Temporal.ZonedDateTime =>
+	const coerceToZone = (
+		zoned: Temporal.ZonedDateTime
+	): Temporal.ZonedDateTime =>
 		timeZone ? zoned.withTimeZone(timeZone) : zoned;
 
 	try {
@@ -100,7 +102,11 @@ function GrievanceAuthorLabel(props: {
 	readonly name?: string | null;
 	readonly poster?: Grievance['poster'] | null;
 }) {
-	if (props.name !== undefined && props.name !== null && props.name.trim() !== "") {
+	if (
+		props.name !== undefined &&
+		props.name !== null &&
+		props.name.trim() !== ''
+	) {
 		return <>{props.name}</>;
 	}
 
@@ -112,22 +118,17 @@ function GrievanceEditor({ id_token }: GrievanceEditorProps) {
 	const create = usePostGrievances(id_token);
 	const grievancesQuery = useGetGrievances(id_token);
 	const grievances_a = future_or_else(useQueryFuture(grievancesQuery), e =>
-			(e as object) instanceof Error
-				? (e as Error)
-				: new Error(String(e))
+		(e as object) instanceof Error ? (e as Error) : new Error(String(e))
 	);
 
-	const grievances = future_and_then(grievances_a,
-		g => g === undefined? [] : g
-	)
-
+	const grievances = future_and_then(grievances_a, g =>
+		g === undefined ? [] : g
+	);
 
 	const [cachedGrievances, setCachedGrievances] = useState<Grievance[]>([]);
 
 	useEffect(() => {
-		future_and_then(
-			grievances, g => setCachedGrievances(g)
-		)
+		future_and_then(grievances, g => setCachedGrievances(g));
 	}, [grievances]);
 
 	const renderGrievanceItems = (items: GrievanceWithTimeZone[]) =>
@@ -215,13 +216,15 @@ function GrievanceEditor({ id_token }: GrievanceEditorProps) {
 					<input className={style.submitButton} type="submit" />
 				</fieldset>
 			</form>
-			{
-				grievances(
-					() => null,
-					() => <span>⌛</span>,
-					err => <span>Error: {err.message}</span>
+			{grievances(
+				() => null,
+				() => (
+					<span>⌛</span>
+				),
+				err => (
+					<span>Error: {err.message}</span>
 				)
-			}
+			)}
 			<ul className={style.grievanceList}>{renderedGrievances}</ul>
 		</>
 	);
@@ -233,20 +236,26 @@ export default function GrievancePortal() {
 	const handleLogin = () => {
 		void fut_promptForLogin(
 			prompt => prompt(),
-			() => { /* intentionally empty */ },
-			() => { /* intentionally empty */ },
-		)
+			() => {
+				/* intentionally empty */
+			},
+			() => {
+				/* intentionally empty */
+			}
+		);
 	};
 
 	const loginSection = (
 		<div>
 			<button
 				aria-label="Authenticate with OIDC"
-				disabled={!fut_promptForLogin(
-					() => true,
-					() => false,
-					() => false,
-				)}
+				disabled={
+					!fut_promptForLogin(
+						() => true,
+						() => false,
+						() => false
+					)
+				}
 				onClick={handleLogin}
 			>
 				Login with Google
@@ -254,23 +263,24 @@ export default function GrievancePortal() {
 		</div>
 	);
 
-
 	return (
 		<div className={style.wrapper}>
 			<h1 className={style.header}>💖 Grievance Portal 💖</h1>
 			<p className={style.hearts}>we can fix it!</p>
-			{
-				fut_idToken(
-					id_token => (
-						<>
-							<p>You are logged in.</p>
-							<GrievanceEditor id_token={id_token} />
-						</>
-					),
-					() => loginSection,
-					err => <>{loginSection} Error loading id_token: {err.message}</>,
+			{fut_idToken(
+				id_token => (
+					<>
+						<p>You are logged in.</p>
+						<GrievanceEditor id_token={id_token} />
+					</>
+				),
+				() => loginSection,
+				err => (
+					<>
+						{loginSection} Error loading id_token: {err.message}
+					</>
 				)
-			}
+			)}
 		</div>
 	);
 }

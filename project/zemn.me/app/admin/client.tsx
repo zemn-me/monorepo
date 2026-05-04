@@ -74,7 +74,9 @@ type NormalizedSettingsSnapshot = {
 	partyMode: boolean;
 };
 
-const normalizeSettingsSnapshot = (settings: CallboxSettings): NormalizedSettingsSnapshot => {
+const normalizeSettingsSnapshot = (
+	settings: CallboxSettings
+): NormalizedSettingsSnapshot => {
 	const authorizers = Array.isArray(settings.authorizers)
 		? settings.authorizers
 		: [];
@@ -82,7 +84,9 @@ const normalizeSettingsSnapshot = (settings: CallboxSettings): NormalizedSetting
 		? settings.entryCodes
 		: [];
 	const fallbackPhone =
-		typeof settings.fallbackPhone === 'string' ? settings.fallbackPhone : '';
+		typeof settings.fallbackPhone === 'string'
+			? settings.fallbackPhone
+			: '';
 
 	return {
 		authorizers: authorizers.map(({ phoneNumber }) => phoneNumber.trim()),
@@ -94,14 +98,14 @@ const normalizeSettingsSnapshot = (settings: CallboxSettings): NormalizedSetting
 
 const settingsSnapshotsEqual = (
 	a: NormalizedSettingsSnapshot,
-	b: NormalizedSettingsSnapshot,
+	b: NormalizedSettingsSnapshot
 ): boolean =>
 	a.fallbackPhone === b.fallbackPhone &&
-		a.partyMode === b.partyMode &&
-		a.authorizers.length === b.authorizers.length &&
-		a.authorizers.every((value, index) => value === b.authorizers[index]) &&
-		a.entryCodes.length === b.entryCodes.length &&
-		a.entryCodes.every((value, index) => value === b.entryCodes[index]);
+	a.partyMode === b.partyMode &&
+	a.authorizers.length === b.authorizers.length &&
+	a.authorizers.every((value, index) => value === b.authorizers[index]) &&
+	a.entryCodes.length === b.entryCodes.length &&
+	a.entryCodes.every((value, index) => value === b.entryCodes[index]);
 
 function maybeMessage(m: string | undefined) {
 	if (m === undefined) return null;
@@ -143,9 +147,8 @@ function SettingsEditor({ id_token }: SettingsEditorProps) {
 		[remoteSettingsQuery.data]
 	);
 
-	const [lastSubmittedSnapshot, setLastSubmittedSnapshot] = useState<
-		NormalizedSettingsSnapshot | null
-	>(null);
+	const [lastSubmittedSnapshot, setLastSubmittedSnapshot] =
+		useState<NormalizedSettingsSnapshot | null>(null);
 
 	const values = option_unwrap_or(
 		option_and_then(remoteSettings, r =>
@@ -182,7 +185,6 @@ function SettingsEditor({ id_token }: SettingsEditorProps) {
 		control, // control props comes from useForm (optional: if you are using FormProvider)
 		name: 'entryCodes', // unique name for your Field Array
 	});
-
 
 	const syncStatus: 'loading' | 'saving' | 'waiting' | 'error' | 'synced' =
 		(() => {
@@ -252,13 +254,23 @@ function SettingsEditor({ id_token }: SettingsEditorProps) {
 							<Controller
 								control={control}
 								{...register(`authorizers.${i}.phoneNumber`)}
-								render={({ field: { name, onChange, onBlur, value, ref } }) => <PhoneNumberInput
-									name={name}
-									onBlur={onBlur}
-									onChange={onChange}
-									ref={ref}
-									value={value}
-								/>}
+								render={({
+									field: {
+										name,
+										onChange,
+										onBlur,
+										value,
+										ref,
+									},
+								}) => (
+									<PhoneNumberInput
+										name={name}
+										onBlur={onBlur}
+										onChange={onChange}
+										ref={ref}
+										value={value}
+									/>
+								)}
 							/>
 
 							<button
@@ -344,14 +356,18 @@ function SettingsEditor({ id_token }: SettingsEditorProps) {
 					<Controller
 						control={control}
 						{...register(`fallbackPhone`)}
-						render={({ field: { name, onChange, onBlur, value, ref } }) => <PhoneNumberInput
-							id={id('fallbackPhone')}
-							name={name}
-							onBlur={onBlur}
-							onChange={onChange}
-							ref={ref}
-							value={value}
-						/>}
+						render={({
+							field: { name, onChange, onBlur, value, ref },
+						}) => (
+							<PhoneNumberInput
+								id={id('fallbackPhone')}
+								name={name}
+								onBlur={onBlur}
+								onChange={onChange}
+								ref={ref}
+								value={value}
+							/>
+						)}
 					/>
 
 					{errors.fallbackPhone ? (
@@ -398,11 +414,7 @@ function SettingsEditor({ id_token }: SettingsEditorProps) {
 	);
 }
 
-function DisplayPhoneNumber({
-	id_token,
-}: {
-	readonly id_token: string;
-}) {
+function DisplayPhoneNumber({ id_token }: { readonly id_token: string }) {
 	const $api = useZemnMeApi();
 	const pn = queryResult(
 		$api.useQuery('get', '/phone/number', {
@@ -414,7 +426,7 @@ function DisplayPhoneNumber({
 		result_unwrap_or_else(
 			result_and_then(r, ({ phoneNumber }) => (
 				<Link href={`tel:${phoneNumber}`}>
-					<PhoneNumberDisplay number={phoneNumber}/>
+					<PhoneNumberDisplay number={phoneNumber} />
 				</Link>
 			)),
 			({ cause }) => (
@@ -434,11 +446,7 @@ function DisplayPhoneNumber({
 	);
 }
 
-function DisplayAdminUid({
-	id_token,
-}: {
-	readonly id_token: string;
-}) {
+function DisplayAdminUid({ id_token }: { readonly id_token: string }) {
 	const uidQuery = useGetAdminUid(id_token);
 	const uid = queryResult(uidQuery);
 
@@ -457,7 +465,9 @@ function DisplayAdminUid({
 	return (
 		<fieldset>
 			<legend>UID</legend>
-			<output aria-label="Admin UID value">{option_unwrap_or(el, <>⏳</>)}</output>
+			<output aria-label="Admin UID value">
+				{option_unwrap_or(el, <>⏳</>)}
+			</output>
 		</fieldset>
 	);
 }
