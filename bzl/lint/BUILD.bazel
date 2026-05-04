@@ -1,14 +1,15 @@
-load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
+load("@npm//:@biomejs/biome/package_json.bzl", biome_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
 
-eslint_bin.eslint_binary(name = "eslint")
+biome_bin.biome_binary(name = "biome")
 
 bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
+        "biome.bzl",
         "linters.bzl",
     ],
 )

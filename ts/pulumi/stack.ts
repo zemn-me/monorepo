@@ -22,7 +22,7 @@ if (!fs.existsSync(pulumi_binary_path)) {
 }
 
 export async function program() {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	// biome-ignore lint/style/noCommonJs: this needs runtime require
 	require('ts/pulumi/index');
 }
 

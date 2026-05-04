@@ -129,7 +129,7 @@ export function InlineLogin() {
 		f => <InlineLoginContent claims={f} />,
 		() => loginButton(false),
 		err => {
-			// eslint-disable-next-line no-console
+			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 			console.error(err);
 			return loginButton(true);
 		},

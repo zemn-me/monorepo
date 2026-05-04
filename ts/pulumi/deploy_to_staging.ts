@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 /**
  * @fileoverview a test binary which deploys the Pulumi configuration
  * to staging and then destroys it.

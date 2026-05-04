@@ -36,7 +36,7 @@ const Subject = z
 	.string()
 	// OIDC says ASCII and <= 255 chars. Zod can enforce length; ASCII check here is a pragmatic approximation.
 	.max(255)
-	// eslint-disable-next-line no-control-regex
+	// biome-ignore lint/suspicious/noControlCharactersInRegex: control characters are part of the token grammar
 	.refine(s => /^[\x00-\x7F]*$/.test(s), "sub must be ASCII")
 	.describe("Subject Identifier");
 

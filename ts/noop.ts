@@ -1,3 +1,3 @@
 
 
-export function noop() { }
+export function noop() { /* intentionally empty */ }

@@ -20,7 +20,7 @@ const square: Scalable<SquareProps> = {
 	},
 };
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 const table: [Scalable<any>, string[], any, [number, number], any][] = [
 	[
 		square,

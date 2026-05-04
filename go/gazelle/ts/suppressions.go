@@ -12,7 +12,6 @@ var SuppressGazelleTypescriptFor = map[string]bool{
 	"ci/rollback.ts":                                          true,
 	"ci/submit.ts":                                            true,
 	"esbuild.config.mjs":                                      true,
-	"eslint.config.js":                                        true,
 	"go/gazelle/js/example/node/a.js":                         true,
 	"go/gazelle/js/example/node/inner/b.js":                   true,
 	"js/jest/jest_reporter.ts":                                true,
