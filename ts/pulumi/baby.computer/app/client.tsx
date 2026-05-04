@@ -10,19 +10,31 @@ import {
 
 import {
 	EYE_HEIGHT,
-	type MovementInput,
 	type PlayerPose,
 	projectWorldPoint,
 	type RenderedSegment,
 	renderScene,
 	stepPlayer,
 } from '#root/project/zemn.me/app/experiments/arena/scene.js';
+import {
+	initialMovementKeys,
+	type JoystickInput,
+	lookAngleDeltaFromJoystick,
+	movementInputFromControls,
+	type MovementKeyState,
+	normalizeJoystickOffset,
+} from '#root/ts/joystick/index.js';
 import { x, y, z } from '#root/ts/math/cartesian.js';
 import {
 	createPenguinWorld,
 	nearestVisiblePenguin,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
 import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
+
+type LegacyMediaQueryList = MediaQueryList & {
+	addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+	removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+};
 
 const world = createPenguinWorld();
 const LOOK_SENSITIVITY = 0.0025;
@@ -33,34 +45,14 @@ const MOTION_YAW_SENSITIVITY = Math.PI / 180;
 const MOTION_PITCH_SENSITIVITY = Math.PI / 270;
 const MEETING_DISTANCE = 2.4;
 const FIREWORK_COUNT = 6;
+const JOYSTICK_RADIUS_PX = 36;
+const LOOK_JOYSTICK_SPEED = 2.2;
 
-type MotionBaseline = {
+interface MotionBaseline {
 	readonly beta: number;
 	readonly gamma: number;
 	readonly yaw: number;
 	readonly pitch: number;
-};
-
-interface KeyState {
-	KeyW: boolean;
-	KeyA: boolean;
-	KeyS: boolean;
-	KeyD: boolean;
-	Space: boolean;
-	ShiftLeft: boolean;
-	ShiftRight: boolean;
-}
-
-function initialKeys(): KeyState {
-	return {
-		KeyW: false,
-		KeyA: false,
-		KeyS: false,
-		KeyD: false,
-		Space: false,
-		ShiftLeft: false,
-		ShiftRight: false,
-	};
 }
 
 function clampPitch(pitch: number): number {
@@ -75,15 +67,6 @@ function normalizeDegrees(angle: number): number {
 	return ((angle + 540) % 360) - 180;
 }
 
-function movementFromKeys(keys: KeyState): MovementInput {
-	return {
-		forward: Number(keys.KeyW) - Number(keys.KeyS),
-		strafe: Number(keys.KeyD) - Number(keys.KeyA),
-		sprint: keys.ShiftLeft || keys.ShiftRight,
-		jump: false,
-	};
-}
-
 function formatAngle(radians: number): string {
 	return `${(radians * 180 / Math.PI).toFixed(0)}deg`;
 }
@@ -92,17 +75,22 @@ export function PenguinSim() {
 	const viewportRef = useRef<SVGSVGElement | null>(null);
 	const frameRef = useRef<number | null>(null);
 	const poseRef = useRef<PlayerPose>(world.startPose);
-	const keysRef = useRef<KeyState>(initialKeys());
+	const keysRef = useRef<MovementKeyState>(initialMovementKeys());
 	const jumpRequestedRef = useRef(false);
 	const draggingPointerIdRef = useRef<number | null>(null);
 	const lastDragPositionRef = useRef<{ x: number; y: number } | null>(null);
 	const lastAnimationTimeRef = useRef<number | null>(null);
 	const motionBaselineRef = useRef<MotionBaseline | null>(null);
+	const moveJoystickPointerIdRef = useRef<number | null>(null);
+	const moveJoystickInputRef = useRef<JoystickInput>({ x: 0, y: 0 });
+	const lookJoystickPointerIdRef = useRef<number | null>(null);
+	const lookJoystickInputRef = useRef<JoystickInput>({ x: 0, y: 0 });
 	const metPenguinsRef = useRef<Set<string>>(new Set());
 	const previousMetCountRef = useRef(0);
 
 	const [locked, setLocked] = useState(false);
 	const [pose, setPose] = useState<PlayerPose>(world.startPose);
+	const [mobileControls, setMobileControls] = useState(false);
 	const [viewportSize, setViewportSize] = useState({
 		width: INITIAL_VIEWPORT_WIDTH,
 		height: INITIAL_VIEWPORT_HEIGHT,
@@ -117,6 +105,8 @@ export function PenguinSim() {
 	);
 	const [motionEnabled, setMotionEnabled] = useState(false);
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
+	const [moveJoystickInput, setMoveJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
+	const [lookJoystickInput, setLookJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
 	const [metCount, setMetCount] = useState(0);
 	const [fireworkTick, setFireworkTick] = useState(0);
 
@@ -130,6 +120,33 @@ export function PenguinSim() {
 					}
 				).requestPermission === 'function'
 		);
+
+		const coarsePointerQuery = window.matchMedia('(pointer: coarse)');
+		const syncMobileControls = () => {
+			setMobileControls(coarsePointerQuery.matches);
+		};
+		syncMobileControls();
+		const subscribeToCoarsePointerChanges = (() => {
+			if ('addEventListener' in coarsePointerQuery) {
+				coarsePointerQuery.addEventListener('change', syncMobileControls);
+				return () => {
+					coarsePointerQuery.removeEventListener('change', syncMobileControls);
+				};
+			}
+
+			const legacyCoarsePointerQuery = coarsePointerQuery as LegacyMediaQueryList;
+			if (
+				typeof legacyCoarsePointerQuery.addListener !== 'function' ||
+				typeof legacyCoarsePointerQuery.removeListener !== 'function'
+			) {
+				return () => {};
+			}
+
+			legacyCoarsePointerQuery.addListener(syncMobileControls);
+			return () => {
+				legacyCoarsePointerQuery.removeListener(syncMobileControls);
+			};
+		})();
 
 		function onPointerLockChange() {
 			setLocked(document.pointerLockElement === viewportRef.current);
@@ -225,8 +242,26 @@ export function PenguinSim() {
 			const previous = lastAnimationTimeRef.current ?? timestamp;
 			lastAnimationTimeRef.current = timestamp;
 			const deltaSeconds = Math.min((timestamp - previous) / 1000, 0.05);
+			const lookInput = lookJoystickInputRef.current;
+			if (!locked && !motionEnabled && (lookInput.x !== 0 || lookInput.y !== 0)) {
+				const lookDelta = lookAngleDeltaFromJoystick(
+					lookInput,
+					deltaSeconds,
+					LOOK_JOYSTICK_SPEED
+				);
+				applyPose({
+					...poseRef.current,
+					yaw: wrapRadians(poseRef.current.yaw + lookDelta.x),
+					pitch: clampPitch(poseRef.current.pitch + lookDelta.y),
+				});
+			}
+
 			const input = {
-				...movementFromKeys(keysRef.current),
+				...movementInputFromControls(
+					keysRef.current,
+					moveJoystickInputRef.current,
+					jumpRequestedRef.current
+				),
 				jump: jumpRequestedRef.current,
 			};
 			jumpRequestedRef.current = false;
@@ -260,6 +295,7 @@ export function PenguinSim() {
 			window.removeEventListener('mousemove', onMouseMove);
 			window.removeEventListener('deviceorientation', onDeviceOrientation);
 			window.removeEventListener('resize', syncViewportSize);
+			subscribeToCoarsePointerChanges();
 			if (frameRef.current != null) {
 				window.cancelAnimationFrame(frameRef.current);
 			}
@@ -377,6 +413,81 @@ export function PenguinSim() {
 			draggingPointerIdRef.current = null;
 			lastDragPositionRef.current = null;
 		}
+	}
+
+	function updateJoystickFromEvent(event: ReactPointerEvent<HTMLDivElement>) {
+		const bounds = event.currentTarget.getBoundingClientRect();
+		return normalizeJoystickOffset(
+			event.clientX - (bounds.left + (bounds.width / 2)),
+			event.clientY - (bounds.top + (bounds.height / 2)),
+			JOYSTICK_RADIUS_PX
+		);
+	}
+
+	function resetMoveJoystick() {
+		const next = { x: 0, y: 0 };
+		moveJoystickInputRef.current = next;
+		setMoveJoystickInput(next);
+	}
+
+	function resetLookJoystick() {
+		const next = { x: 0, y: 0 };
+		lookJoystickInputRef.current = next;
+		setLookJoystickInput(next);
+	}
+
+	function handleMoveJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+		moveJoystickPointerIdRef.current = event.pointerId;
+		event.currentTarget.setPointerCapture(event.pointerId);
+		const next = updateJoystickFromEvent(event);
+		moveJoystickInputRef.current = next;
+		setMoveJoystickInput(next);
+	}
+
+	function handleMoveJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+		if (moveJoystickPointerIdRef.current !== event.pointerId) {
+			return;
+		}
+
+		const next = updateJoystickFromEvent(event);
+		moveJoystickInputRef.current = next;
+		setMoveJoystickInput(next);
+	}
+
+	function handleMoveJoystickPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+		if (moveJoystickPointerIdRef.current !== event.pointerId) {
+			return;
+		}
+
+		moveJoystickPointerIdRef.current = null;
+		resetMoveJoystick();
+	}
+
+	function handleLookJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+		lookJoystickPointerIdRef.current = event.pointerId;
+		event.currentTarget.setPointerCapture(event.pointerId);
+		const next = updateJoystickFromEvent(event);
+		lookJoystickInputRef.current = next;
+		setLookJoystickInput(next);
+	}
+
+	function handleLookJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+		if (lookJoystickPointerIdRef.current !== event.pointerId) {
+			return;
+		}
+
+		const next = updateJoystickFromEvent(event);
+		lookJoystickInputRef.current = next;
+		setLookJoystickInput(next);
+	}
+
+	function handleLookJoystickPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+		if (lookJoystickPointerIdRef.current !== event.pointerId) {
+			return;
+		}
+
+		lookJoystickPointerIdRef.current = null;
+		resetLookJoystick();
 	}
 
 	const visibleEncounter = nearestVisiblePenguin(
@@ -538,6 +649,38 @@ export function PenguinSim() {
 						{formatAngle(pose.yaw)} / {formatAngle(pose.pitch)}
 					</div>
 				</div>
+				{mobileControls ? (
+					<div className={style.mobileControls}>
+						<div
+							className={style.joystick}
+							onPointerCancel={handleMoveJoystickPointerEnd}
+							onPointerDown={handleMoveJoystickPointerDown}
+							onPointerMove={handleMoveJoystickPointerMove}
+							onPointerUp={handleMoveJoystickPointerEnd}
+						>
+							<div
+								className={style.joystickThumb}
+								style={{
+									transform: `translate(${moveJoystickInput.x * JOYSTICK_RADIUS_PX}px, ${moveJoystickInput.y * JOYSTICK_RADIUS_PX}px)`,
+								}}
+							/>
+						</div>
+						<div
+							className={style.joystick}
+							onPointerCancel={handleLookJoystickPointerEnd}
+							onPointerDown={handleLookJoystickPointerDown}
+							onPointerMove={handleLookJoystickPointerMove}
+							onPointerUp={handleLookJoystickPointerEnd}
+						>
+							<div
+								className={style.joystickThumb}
+								style={{
+									transform: `translate(${lookJoystickInput.x * JOYSTICK_RADIUS_PX}px, ${lookJoystickInput.y * JOYSTICK_RADIUS_PX}px)`,
+								}}
+							/>
+						</div>
+					</div>
+				) : null}
 			</section>
 		</main>
 	);
