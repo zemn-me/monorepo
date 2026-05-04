@@ -18,6 +18,10 @@ this is a bazel monorepo. `bazel` is provided in `$PATH`. It maps to
 ./sh/bin/bazel. There are many tools in ./sh/bin that can be used and they are
 all added to $PATH.
 
+This checkout is Sapling-backed; use `sl amend` for amendments. Raw
+`git commit --amend` can leave `.git/sl` pointing at a Git node Sapling has not
+imported.
+
 A lot of your tools are run through bazel and therefore get confused by
 relative paths. Please use `$(pwd)/path/to/file` to get a relative path!
 

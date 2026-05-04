@@ -7,10 +7,10 @@ ts_project(
     name = "shadwell.im",
     srcs = ["index.ts"],
     data = [
-        "//ts/pulumi/shadwell.im/anna:next",
-        "//ts/pulumi/shadwell.im/kate:next",
-        "//ts/pulumi/shadwell.im/lucy:next",
-        "//ts/pulumi/shadwell.im/luke:next",
+        "//project/im/shadwell/anna:next",
+        "//project/im/shadwell/kate:next",
+        "//project/im/shadwell/lucy:next",
+        "//project/im/shadwell/luke:next",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
