@@ -1,0 +1,115 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_itest_service", "next_itest_service_dev", "next_project")
+
+package(default_visibility = ["//visibility:public"])
+
+# gazelle:exclude index.ts
+
+ts_project(
+    name = "ts",
+    assets = glob(
+        [
+            "**/*.css",
+            "**/*.svg",
+        ],
+        allow_empty = True,
+    ),
+    deps = [
+        "//project/me/zemn/app",
+        "//project/me/zemn/app/admin",
+        "//project/me/zemn/app/admin/users",
+        "//project/me/zemn/app/article",
+        "//project/me/zemn/app/article/2014/csp",
+        "//project/me/zemn/app/article/2019/cors",
+        "//project/me/zemn/app/article/2024/clean",
+        "//project/me/zemn/app/article/2024/missing",
+        "//project/me/zemn/app/callback",
+        "//project/me/zemn/app/experiments",
+        "//project/me/zemn/app/experiments/arena",
+        "//project/me/zemn/app/experiments/article",
+        "//project/me/zemn/app/experiments/cultist",
+        "//project/me/zemn/app/experiments/cv",
+        "//project/me/zemn/app/experiments/emoji/flag",
+        "//project/me/zemn/app/experiments/factorio",
+        "//project/me/zemn/app/experiments/factorio/blueprint/parse",
+        "//project/me/zemn/app/experiments/factorio/blueprint/request",
+        "//project/me/zemn/app/experiments/factorio/blueprint/wall",
+        "//project/me/zemn/app/experiments/frame",
+        "//project/me/zemn/app/experiments/geometry_of_music",
+        "//project/me/zemn/app/experiments/rays",
+        "//project/me/zemn/app/experiments/toc",
+        "//project/me/zemn/app/github",
+        "//project/me/zemn/app/grievanceportal",
+        "//project/me/zemn/app/healthcheck/bad",
+        "//project/me/zemn/app/healthz",
+        "//project/me/zemn/app/key",
+        "//project/me/zemn/app/src/[[...slug]]",
+        "//project/me/zemn/app/tool/elastictabs",
+        "//project/me/zemn/app/twitter",
+    ],
+)
+
+next_project(
+    name = "next",
+    srcs = [
+        ":ts",
+        "//project/me/zemn/public:files",
+    ],
+)
+
+next_itest_service(
+    name = "itest_service",
+    args = [
+        "project/me/zemn",
+    ],
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
+    http_health_check_address = "http://localhost:$${PORT}/healthz",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+next_itest_service_dev(
+    name = "itest_service_dev",
+    args = [
+        "project/me/zemn",
+    ],
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+next_itest_service_dev(
+    name = "itest_service_dev_prod_env",
+    args = [
+        "project/me/zemn",
+    ],
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_prod_env_bin",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+alias(
+    name = "zemn.me",
+    actual = ":itest_service_dev_prod_env",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/api_client.gen //project/me/zemn/api:ts_client_dts
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/api_client.gen.js //project/me/zemn/api:ts_client_dts
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)

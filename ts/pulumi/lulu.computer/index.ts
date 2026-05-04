@@ -5,6 +5,9 @@ import * as Pulumi from '@pulumi/pulumi';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
+const websiteBuildDirectory = 'project/computer/lulu/build';
+const indexDocument = `${websiteBuildDirectory}/index.html`;
+
 export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
@@ -62,10 +65,10 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_lulu.computer`,
 			{
-				index: 'ts/pulumi/lulu.computer/build/index.html',
-				notFound: 'ts/pulumi/lulu.computer/build/index.html',
+				index: indexDocument,
+				notFound: indexDocument,
 				tags,
-				directory: 'ts/pulumi/lulu.computer/build',
+				directory: websiteBuildDirectory,
 				zoneId: zone.then(zone => zone.zoneId),
 				domain: domain.domainName.apply(domainName =>
 					[...(args.staging ? ['staging'] : []), domainName].join('.')

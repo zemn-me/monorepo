@@ -1,0 +1,38 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "ZemnmezLogo",
+    srcs = [
+        "ZemnmezLogo.tsx",
+        "index.ts",
+    ],
+    assets = glob(
+        [
+            "**/*.css",
+        ],
+        allow_empty = True,
+    ),
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "//:base_defs",  #keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "ZemnmezLogo.tsx",
+        "index.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)

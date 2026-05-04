@@ -82,12 +82,52 @@ async function createImageAuthFile(
 	const tempDir = tmpdir();
 	const contentBasedDirName = hash;
 	const configDir = path.join(tempDir, contentBasedDirName);
-	await mkdir(configDir);
+	await mkdir(configDir, { recursive: true });
 	const filePath = path.join(configDir, authConfigFilename);
 
 	await writeFile(filePath, JSON.stringify(authData));
 
 	return path.resolve(configDir);
+}
+
+function imagePushInterpreter(
+	push: Input<string>,
+	repository: Input<string>,
+	digest: Input<string>
+): Output<string[]> {
+	return all([push, repository, digest]).apply(
+		([push, repository, digest]) => [
+			'sh',
+			'-c',
+			[
+				'set -u',
+				'stdout="$(mktemp)"',
+				'stderr="$(mktemp)"',
+				'cleanup() { rm -f "$stdout" "$stderr"; }',
+				'trap cleanup EXIT',
+				'if "$1" --repository "$2" >"$stdout" 2>"$stderr"; then',
+				'  cat "$stdout" >&2',
+				'  cat "$stderr" >&2',
+				'  printf "%s@%s\\n" "$2" "$3"',
+				'  exit 0',
+				'fi',
+				'status=$?',
+				'if grep -Eq "existing manifest: sha256:[0-9a-fA-F]+" "$stderr"; then',
+				'  cat "$stdout" >&2',
+				'  cat "$stderr" >&2',
+				'  printf "%s@%s\\n" "$2" "$3"',
+				'  exit 0',
+				'fi',
+				'cat "$stdout" >&2',
+				'cat "$stderr" >&2',
+				'exit "$status"',
+			].join('\n'),
+			'--',
+			push,
+			repository,
+			String(digest).trim(),
+		]
+	);
 }
 
 /**
@@ -122,7 +162,11 @@ export class OCIImage extends ComponentResource {
 							DOCKER_CONFIG: f,
 						}) as { [v: string]: string }
 				),
-				interpreter: [args.push, '--repository', args.repository],
+				interpreter: imagePushInterpreter(
+					args.push,
+					args.repository,
+					args.digest
+				),
 				triggers: [args.digest],
 			},
 			{ parent: this }
