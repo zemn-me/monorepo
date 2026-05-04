@@ -22,6 +22,10 @@ import {
 	createPenguinWorld,
 	nearestVisiblePenguin,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
+import {
+	mergeMovementInput,
+	type JoystickVector,
+} from '#root/ts/pulumi/baby.computer/app/controls.js';
 import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
 
 const world = createPenguinWorld();
@@ -33,6 +37,7 @@ const MOTION_YAW_SENSITIVITY = Math.PI / 180;
 const MOTION_PITCH_SENSITIVITY = Math.PI / 270;
 const MEETING_DISTANCE = 2.4;
 const FIREWORK_COUNT = 6;
+const JOYSTICK_RADIUS = 44;
 
 type MotionBaseline = {
 	readonly beta: number;
@@ -98,6 +103,8 @@ export function PenguinSim() {
 	const lastDragPositionRef = useRef<{ x: number; y: number } | null>(null);
 	const lastAnimationTimeRef = useRef<number | null>(null);
 	const motionBaselineRef = useRef<MotionBaseline | null>(null);
+	const joystickPointerIdRef = useRef<number | null>(null);
+	const joystickInputRef = useRef<JoystickVector>({ x: 0, y: 0 });
 	const metPenguinsRef = useRef<Set<string>>(new Set());
 	const previousMetCountRef = useRef(0);
 
@@ -119,6 +126,7 @@ export function PenguinSim() {
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
 	const [metCount, setMetCount] = useState(0);
 	const [fireworkTick, setFireworkTick] = useState(0);
+	const [joystickVector, setJoystickVector] = useState<JoystickVector>({ x: 0, y: 0 });
 
 	useEffect(() => {
 		const supportsMotion = typeof DeviceOrientationEvent !== 'undefined';
@@ -225,10 +233,10 @@ export function PenguinSim() {
 			const previous = lastAnimationTimeRef.current ?? timestamp;
 			lastAnimationTimeRef.current = timestamp;
 			const deltaSeconds = Math.min((timestamp - previous) / 1000, 0.05);
-			const input = {
+			const input = mergeMovementInput({
 				...movementFromKeys(keysRef.current),
 				jump: jumpRequestedRef.current,
-			};
+			}, joystickInputRef.current);
 			jumpRequestedRef.current = false;
 
 			if (
@@ -377,6 +385,51 @@ export function PenguinSim() {
 			draggingPointerIdRef.current = null;
 			lastDragPositionRef.current = null;
 		}
+	}
+
+	function updateJoystickFromPointer(clientX: number, clientY: number, target: Element) {
+		const bounds = target.getBoundingClientRect();
+		const centreX = bounds.left + (bounds.width / 2);
+		const centreY = bounds.top + (bounds.height / 2);
+		const deltaX = clientX - centreX;
+		const deltaY = clientY - centreY;
+		const distance = Math.hypot(deltaX, deltaY);
+		const scale = distance > JOYSTICK_RADIUS ? JOYSTICK_RADIUS / distance : 1;
+		const normalized = {
+			x: (deltaX * scale) / JOYSTICK_RADIUS,
+			y: (deltaY * scale) / JOYSTICK_RADIUS,
+		};
+		joystickInputRef.current = normalized;
+		setJoystickVector(normalized);
+	}
+
+	function releaseJoystick() {
+		joystickPointerIdRef.current = null;
+		joystickInputRef.current = { x: 0, y: 0 };
+		setJoystickVector({ x: 0, y: 0 });
+	}
+
+	function handleJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+		joystickPointerIdRef.current = event.pointerId;
+		event.currentTarget.setPointerCapture(event.pointerId);
+		updateJoystickFromPointer(event.clientX, event.clientY, event.currentTarget);
+	}
+
+	function handleJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+		if (joystickPointerIdRef.current !== event.pointerId) {
+			return;
+		}
+
+		updateJoystickFromPointer(event.clientX, event.clientY, event.currentTarget);
+	}
+
+	function handleJoystickPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+		if (joystickPointerIdRef.current !== event.pointerId) {
+			return;
+		}
+
+		event.currentTarget.releasePointerCapture(event.pointerId);
+		releaseJoystick();
 	}
 
 	const visibleEncounter = nearestVisiblePenguin(
@@ -536,6 +589,24 @@ export function PenguinSim() {
 						{pose.position[0]![0]!.toFixed(1)}, {pose.position[1]![0]!.toFixed(1)}, {pose.position[2]![0]!.toFixed(1)}
 						{' · '}
 						{formatAngle(pose.yaw)} / {formatAngle(pose.pitch)}
+					</div>
+					<div className={style.overlayBottom}>
+						<div
+							className={style.joystickBase}
+							onPointerCancel={handleJoystickPointerUp}
+							onPointerDown={handleJoystickPointerDown}
+							onPointerMove={handleJoystickPointerMove}
+							onPointerUp={handleJoystickPointerUp}
+						>
+							<div
+								className={style.joystickThumb}
+								style={
+									{
+										transform: `translate(${joystickVector.x * JOYSTICK_RADIUS}px, ${joystickVector.y * JOYSTICK_RADIUS}px)`,
+									} as CSSProperties
+								}
+							/>
+						</div>
 					</div>
 				</div>
 			</section>

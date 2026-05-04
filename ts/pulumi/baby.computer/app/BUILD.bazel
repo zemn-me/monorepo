@@ -5,6 +5,7 @@ ts_project(
     name = "app",
     srcs = [
         "client.tsx",
+        "controls.ts",
         "layout.tsx",
         "page.tsx",
         "scene.ts",
@@ -25,7 +26,10 @@ ts_project(
 
 ts_project(
     name = "app_tests",
-    srcs = ["scene_test.ts"],
+    srcs = [
+        "controls_test.ts",
+        "scene_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":app",
@@ -37,7 +41,10 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["scene_test.js"],
+    srcs = [
+        "controls_test.js",
+        "scene_test.js",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [":app_tests"],
 )
@@ -46,6 +53,8 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
+        "controls.ts",
+        "controls_test.ts",
         "layout.tsx",
         "page.tsx",
         "scene.ts",
