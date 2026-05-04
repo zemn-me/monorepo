@@ -28,8 +28,17 @@ import { x, y, z } from '#root/ts/math/cartesian.js';
 import {
 	createPenguinWorld,
 	nearestVisiblePenguin,
+	type VisiblePenguinEncounter,
 } from '#root/ts/pulumi/baby.computer/app/scene.js';
 import style from '#root/ts/pulumi/baby.computer/app/style.module.css';
+import {
+	and_then,
+	is_err,
+	type Result,
+	result_collect,
+	unwrap,
+	unwrap_err,
+} from '#root/ts/result/result.js';
 
 type LegacyMediaQueryList = MediaQueryList & {
 	addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
@@ -47,6 +56,11 @@ const MEETING_DISTANCE = 2.4;
 const FIREWORK_COUNT = 6;
 const JOYSTICK_RADIUS_PX = 36;
 const LOOK_JOYSTICK_SPEED = 2.2;
+
+interface ProjectedBody {
+	readonly points: string;
+	readonly sortDepth: number;
+}
 
 interface MotionBaseline {
 	readonly beta: number;
@@ -69,6 +83,38 @@ function normalizeDegrees(angle: number): number {
 
 function formatAngle(radians: number): string {
 	return `${(radians * 180 / Math.PI).toFixed(0)}deg`;
+}
+
+function projectedBodiesForPose(
+	pose: PlayerPose,
+	width: number,
+	height: number
+): Result<ProjectedBody[], Error> {
+	return and_then(
+		result_collect(
+			world.penguinBodies.map(body =>
+				and_then(
+					result_collect(body.outline.map(vertex => projectWorldPoint(vertex, pose, width, height))),
+					points => {
+						if (points.some(projected => projected == null)) {
+							return null;
+						}
+
+						return {
+							points: points.map(projected => `${x(projected!)},${y(projected!)}`).join(' '),
+							sortDepth: Math.hypot(
+								x(body.centre) - x(pose.position),
+								z(body.centre) - z(pose.position)
+							),
+						} satisfies ProjectedBody;
+					}
+				)
+			)
+		),
+		bodies => bodies
+			.filter((body): body is ProjectedBody => body != null)
+			.sort((left, right) => right.sortDepth - left.sortDepth)
+	);
 }
 
 export function PenguinSim() {
@@ -95,14 +141,6 @@ export function PenguinSim() {
 		width: INITIAL_VIEWPORT_WIDTH,
 		height: INITIAL_VIEWPORT_HEIGHT,
 	});
-	const [segments, setSegments] = useState<RenderedSegment[]>(() =>
-		renderScene(
-			world.scene,
-			world.startPose,
-			INITIAL_VIEWPORT_WIDTH,
-			INITIAL_VIEWPORT_HEIGHT
-		)
-	);
 	const [motionEnabled, setMotionEnabled] = useState(false);
 	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
 	const [moveJoystickInput, setMoveJoystickInput] = useState<JoystickInput>({ x: 0, y: 0 });
@@ -192,7 +230,6 @@ export function PenguinSim() {
 		function applyPose(next: PlayerPose) {
 			poseRef.current = next;
 			setPose(next);
-			setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
 		}
 
 		function onMouseMove(event: MouseEvent) {
@@ -300,11 +337,7 @@ export function PenguinSim() {
 				window.cancelAnimationFrame(frameRef.current);
 			}
 		};
-	}, [locked, motionEnabled, viewportSize.height, viewportSize.width]);
-
-	useEffect(() => {
-		setSegments(renderScene(world.scene, pose, viewportSize.width, viewportSize.height));
-	}, [pose, viewportSize.height, viewportSize.width]);
+	}, [locked, motionEnabled]);
 
 	useEffect(() => {
 		let changed = false;
@@ -405,7 +438,6 @@ export function PenguinSim() {
 		};
 		poseRef.current = next;
 		setPose(next);
-		setSegments(renderScene(world.scene, next, viewportSize.width, viewportSize.height));
 	}
 
 	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
@@ -490,41 +522,32 @@ export function PenguinSim() {
 		resetLookJoystick();
 	}
 
-	const visibleEncounter = nearestVisiblePenguin(
+	const segmentsResult = renderScene(
+		world.scene,
+		pose,
+		viewportSize.width,
+		viewportSize.height
+	);
+	const visibleEncounterResult = nearestVisiblePenguin(
 		world.penguins,
 		pose,
 		viewportSize.width,
 		viewportSize.height
 	);
+	const projectedBodiesResult = projectedBodiesForPose(
+		pose,
+		viewportSize.width,
+		viewportSize.height
+	);
+	const renderError =
+		is_err(segmentsResult) ? unwrap_err(segmentsResult)
+		: is_err(visibleEncounterResult) ? unwrap_err(visibleEncounterResult)
+		: is_err(projectedBodiesResult) ? unwrap_err(projectedBodiesResult)
+		: null;
+	const segments: RenderedSegment[] = is_err(segmentsResult) ? [] : unwrap(segmentsResult);
+	const visibleEncounter: VisiblePenguinEncounter | null = is_err(visibleEncounterResult) ? null : unwrap(visibleEncounterResult);
+	const projectedBodies: ProjectedBody[] = is_err(projectedBodiesResult) ? [] : unwrap(projectedBodiesResult);
 	const encounter = visibleEncounter?.penguin ?? null;
-	const projectedBodies = world.penguinBodies
-		.map(body => {
-			const points = body.outline
-				.map(vertex =>
-					projectWorldPoint(
-						vertex,
-						pose,
-						viewportSize.width,
-						viewportSize.height
-					)
-				);
-
-			if (points.some(projected => projected == null)) {
-				return null;
-			}
-
-			const sortDepth = Math.hypot(
-				x(body.centre) - x(pose.position),
-				z(body.centre) - z(pose.position)
-			);
-
-			return {
-				points: points.map(projected => `${x(projected!)},${y(projected!)}`).join(' '),
-				sortDepth,
-			};
-		})
-		.filter(projected => projected != null)
-		.sort((left, right) => right.sortDepth - left.sortDepth);
 	const encounterAnchor = visibleEncounter?.anchor ?? null;
 
 	return (
@@ -641,6 +664,11 @@ export function PenguinSim() {
 							</span>
 						</div>
 					</div>
+					{renderError != null ? (
+						<p className={style.overlayError}>
+							Render degraded: {renderError.message}
+						</p>
+					) : null}
 					<div className={style.overlayStatus}>
 						{locked ? 'pointer locked' : motionEnabled ? 'motion look' : 'tap or click viewport'}
 						{' · '}

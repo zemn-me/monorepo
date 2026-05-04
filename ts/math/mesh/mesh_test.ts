@@ -6,15 +6,16 @@ import { plot2D } from "#root/ts/math/canvas/braille/braille.js";
 import { point, Point2D, Point3D, x, y } from "#root/ts/math/cartesian.js"
 import { Centre, cube, mesh2Edges } from "#root/ts/math/mesh/mesh.js";
 import { matLineToPoints } from "#root/ts/math/raster.js";
+import { unwrap } from "#root/ts/result/result.js";
 
 it('should render a cube mesh', () => {
 	const c =
 		cube(point<3>(0, 0, 0), 1);
 	const cam = (pt: Point3D) =>
-		camera(
+		unwrap(camera(
 			point<3>(6, 2, 3),
 			c[Centre], pt
-		);
+		));
 
 	const l =
 		Iterable(

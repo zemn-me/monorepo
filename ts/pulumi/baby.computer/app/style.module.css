@@ -188,6 +188,19 @@
 		inset 0 0 0 1px rgb(255 255 255 / 35%);
 }
 
+.overlayError {
+	margin: 0;
+	padding: 0.7rem 0.9rem;
+	border: 1px solid rgb(255 209 190 / 24%);
+	border-radius: 0.8rem;
+	background: rgb(43 12 18 / 74%);
+	backdrop-filter: blur(10px);
+	font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+	font-size: 0.82rem;
+	line-height: 1.45;
+	color: #ffd6c4;
+}
+
 .metCount {
 	padding: 0.55rem 0.8rem;
 	border: 1px solid rgb(238 247 255 / 14%);

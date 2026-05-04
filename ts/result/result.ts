@@ -80,6 +80,53 @@ export function and_then_flatten<T, E, O, OE>(
 	return flatten(and_then(v, f))
 }
 
+/** Curried map for use in pipelines */
+export function map_result<T, O>(
+	f: (value: T) => O,
+): <E>(v: Result<T, E>) => Result<O, E> {
+	return v => and_then(v, f)
+}
+
+/** Curried flatMap/bind for use in pipelines */
+export function bind_result<T, O, OE>(
+	f: (value: T) => Result<O, OE>,
+): <E>(v: Result<T, E>) => Result<O, E | OE> {
+	return v => and_then_flatten(v, f)
+}
+
+export function pipe_result<A, E>(value: Result<A, E>): Result<A, E>;
+export function pipe_result<A, B, E1, E2>(
+	value: Result<A, E1>,
+	fn1: (input: A) => Result<B, E2>,
+): Result<B, E1 | E2>;
+export function pipe_result<A, B, C, E1, E2, E3>(
+	value: Result<A, E1>,
+	fn1: (input: A) => Result<B, E2>,
+	fn2: (input: B) => Result<C, E3>,
+): Result<C, E1 | E2 | E3>;
+export function pipe_result<A, B, C, D, E1, E2, E3, E4>(
+	value: Result<A, E1>,
+	fn1: (input: A) => Result<B, E2>,
+	fn2: (input: B) => Result<C, E3>,
+	fn3: (input: C) => Result<D, E4>,
+): Result<D, E1 | E2 | E3 | E4>;
+export function pipe_result<A, B, C, D, F, E1, E2, E3, E4, E5>(
+	value: Result<A, E1>,
+	fn1: (input: A) => Result<B, E2>,
+	fn2: (input: B) => Result<C, E3>,
+	fn3: (input: C) => Result<D, E4>,
+	fn4: (input: D) => Result<F, E5>,
+): Result<F, E1 | E2 | E3 | E4 | E5>;
+export function pipe_result(
+	value: Result<unknown, unknown>,
+	...fns: Array<(input: unknown) => Result<unknown, unknown>>
+): Result<unknown, unknown> {
+	return fns.reduce<Result<unknown, unknown>>(
+		(acc, fn) => and_then_flatten(acc, fn),
+		value
+	)
+}
+
 /** Flatten Result<Result<T,E2>,E1> → Result<T, E1|E2> */
 /*#__NO_SIDE_EFFECTS__*/ export function flatten<T, E1, E2>(
 	v: Result<Result<T, E2>, E1>
