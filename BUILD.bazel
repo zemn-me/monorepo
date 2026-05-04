@@ -206,7 +206,7 @@ py_venv(
     deps = [
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
-        "//project/zemn.me/inject_iservice:inject_iservice_bin",
+        "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci",
         "//py/ci/post_upgrade",
@@ -257,4 +257,4 @@ binary_with_args(
 
 # gazelle:resolve typescript typescript #root/third_party/com/googleapis/people/api_client.gen.js //third_party/com/googleapis/people:ts_client
 # gazelle:map_kind proto_library proto_library @com_google_protobuf//bazel:proto_library.bzl
-# gazelle:resolve typescript typescript #root/project/zemn.me/api/cmd/api/ApiZemnMeLambdaImage.js //project/zemn.me/api/cmd/api:oci_image
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/cmd/api/ApiZemnMeLambdaImage.js //project/me/zemn/api/cmd/api:oci_image

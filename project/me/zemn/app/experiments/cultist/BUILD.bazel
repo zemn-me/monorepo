@@ -1,0 +1,40 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "cultist",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//project/cultist/example",  # keep
+        "//project/cultist/react",  # keep
+        "//project/cultist/state",  # keep
+        "//ts/next.js/types/next-compiled",
+        "@monorepo//project/cultist:save",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)

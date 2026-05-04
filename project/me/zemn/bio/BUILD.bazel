@@ -1,0 +1,88 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_library")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "bio",
+    srcs = [
+        "bio.ts",
+        "index.ts",
+        "priority_sort.ts",
+        "schema.ts",
+    ],
+    resolve_json_module = True,
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":priority_json",  #keep
+        "//:node_modules/@types/node",
+        "//:node_modules/schema-dts",
+        "//:node_modules/zod",
+        "//mdx:mdx_js",  #keep
+        "//project/me/zemn/components/Article/types",
+        "//ts/iter",
+        "//ts/option",
+        "//ts/react/lang",
+        "//ts/time",
+        "//ts/url",
+        "@monorepo//ts/react/next/Link:relative_url",
+    ],
+)
+
+js_library(
+    name = "priority_json",
+    srcs = [
+        "priority.json",
+    ],
+)
+
+js_binary(
+    name = "priority_sort",
+    data = [
+        ":bio",
+    ],
+    entry_point = "priority_sort.js",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "bio.ts",
+        "event_test.ts",
+        "index.ts",
+        "priority_sort.ts",
+        "priority_test.ts",
+        "schema.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "bio_tests",
+    srcs = [
+        "event_test.ts",
+        "priority_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":bio",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = [
+        "event_test.js",
+        "priority_test.js",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [":bio_tests"],
+)

@@ -1,0 +1,39 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//mdx:rules.bzl", "mdx_files")
+load("//ts:rules.bzl", "ts_project")
+
+mdx_files(
+    name = "testarticle",
+    srcs = glob(
+        ["**/*.mdx"],
+        allow_empty = True,
+    ),
+)
+
+ts_project(
+    name = "article",
+    srcs = ["page.tsx"],
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        ":testarticle_js",  # keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//project/me/zemn/components/Article",
+        "//ts/next.js/types/next-compiled",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["page.tsx"],
+    visibility = ["//:__subpackages__"],
+)

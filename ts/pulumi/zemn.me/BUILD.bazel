@@ -5,7 +5,7 @@ ts_project(
     name = "zemn.me",
     srcs = ["index.ts"],
     data = [
-        "//project/zemn.me:next",
+        "//project/me/zemn:next",
         "//ts/pulumi/zemn.me/availability:next",
     ],
     visibility = ["//:__subpackages__"],
@@ -14,7 +14,7 @@ ts_project(
         "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
-        "//project/zemn.me/bio",
+        "//project/me/zemn/bio",
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
         "//ts/pulumi/zemn.me/api",

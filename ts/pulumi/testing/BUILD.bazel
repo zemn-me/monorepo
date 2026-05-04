@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "testing",
@@ -11,6 +11,13 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/pulumi",
     ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["pulumi_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":testing"],
 )
 
 filegroup(

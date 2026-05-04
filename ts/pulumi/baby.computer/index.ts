@@ -4,6 +4,9 @@ import * as Pulumi from '@pulumi/pulumi';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
+const websiteBuildDirectory = 'project/computer/baby/build';
+const indexDocument = `${websiteBuildDirectory}/index.html`;
+
 export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
@@ -54,9 +57,9 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_baby.computer`,
 			{
 				noCostAllocationTag: true,
-				index: 'ts/pulumi/baby.computer/build/index.html',
-				notFound: 'ts/pulumi/baby.computer/build/index.html',
-				directory: 'ts/pulumi/baby.computer/build',
+				index: indexDocument,
+				notFound: indexDocument,
+				directory: websiteBuildDirectory,
 				zoneId: zone.then(zone => zone.zoneId),
 				domain: targetDomain,
 				noIndex: args.staging,
