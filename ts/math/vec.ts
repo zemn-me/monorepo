@@ -22,7 +22,7 @@ export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
 ) => Vector<I, U> = (vec, c) =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	vec.map(c as any) as any;
 
 /**
@@ -51,7 +51,7 @@ export const reverse: <I extends number, T>(v: Vector<I, T>) => Iterable<T> =
 
 export const as: <T, L extends number>(
 	v: readonly T[] & { length: L }
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 ) => Vector<L, T> = v => v as any;
 
 export function New<N extends number>(length: number): Vector<N, unknown> {
@@ -88,7 +88,7 @@ const _zip: <T1, T2, T3>(
 	fb: T3
 ) => Iterable<[T1 | T3, T2 | T3]> = function* (v1, v2, fb) {
 	const [a, b] = [v1[Symbol.iterator](), v2[Symbol.iterator]()];
-	for (let i = 0; ; i++) {
+	for (;;) {
 		const [ar, br] = [a.next(), b.next()];
 		const left = ar.done ? fb : ar.value;
 		const right = br.done ? fb : br.value;
@@ -112,5 +112,5 @@ export const zip: {
 		v2: Iterable<T2>,
 		fb: T3
 	): Iterable<[T1 | T3, T2 | T3]>;
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 } = _zip as any;

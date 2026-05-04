@@ -33,7 +33,7 @@ export function pointToCart(p: Point3D | Point2D): Cart.Point2D | Cart.Point3D {
 	const a = p.map(([v]) => v);
 	const scale = a.pop();
 	if (!scale) throw new Error();
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	return a.map(n => [n! * scale]) as any;
 }
 
@@ -41,6 +41,6 @@ export function lineToCart(p: Line2D): Cart.Line2D;
 export function lineToCart(p: Line3D): Cart.Line3D;
 
 export function lineToCart(line: Line2D | Line3D): Cart.Line2D | Cart.Line3D {
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	return line.map((point: any) => pointToCart(point));
 }

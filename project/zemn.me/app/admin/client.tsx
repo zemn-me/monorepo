@@ -224,7 +224,6 @@ function SettingsEditor({ id_token }: SettingsEditorProps) {
 
 	return (
 		<form
-			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			onSubmit={handleSubmit(d => {
 				setLastSubmittedSnapshot(normalizeSettingsSnapshot(d));
 				void mutateRemoteSettings.mutate({

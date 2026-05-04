@@ -37,6 +37,10 @@ export interface ConditionTransition {
 
 interface ContactFlowActions {
 	GetParticipantInputAction: GetParticipantInputAction
+	EndFlowExecutionAction: EndFlowExecutionAction
+	MessageParticipantAction: MessageParticipantAction
+	InvokeLambdaFunctionAction:
+		InvokeLambdaFunctionAction
 }
 
 export interface GetParticipantInputAction extends ActionBase {
@@ -181,18 +185,10 @@ export interface GetParticipantInputAction extends ActionBase {
 	}
 }
 
-interface ContactFlowActions {
-	EndFlowExecutionAction: EndFlowExecutionAction
-}
-
 export interface EndFlowExecutionAction extends ActionBase {
 	Type: 'DisconnectParticipant';
 	Parameters: Record<string, never>;
 	Transitions?: Record<string, never>;
-}
-
-interface ContactFlowActions {
-	MessageParticipantAction: MessageParticipantAction
 }
 
 export interface MessageParticipantAction extends ActionBase {
@@ -222,11 +218,6 @@ export interface MessageParticipantAction extends ActionBase {
 	Transitions: {
 		NextAction: string;
 	};
-}
-
-interface ContactFlowActions {
-	InvokeLambdaFunctionAction:
-		InvokeLambdaFunctionAction
 }
 
 /**

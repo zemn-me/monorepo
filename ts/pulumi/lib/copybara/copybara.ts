@@ -34,7 +34,7 @@ export class SafeCommand extends ComponentResource {
 
         // Print logs to console
         all([this.stdout, this.stderr]).apply(([stdout, stderr]) =>
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
             console.log(stdout, stderr)
         );
     }
@@ -87,7 +87,7 @@ export class Copybara extends ComponentResource {
 
 
 		all([run.stdout, run.stderr]).apply(([a, b]) =>
-			// eslint-disable-next-line no-console
+			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 			console.log(a, b));
 
 

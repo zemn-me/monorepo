@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 /**
  * @fileoverview turn MDX files into tsx files.
  * @see https://v0.mdxjs.com/advanced/transform-content

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';

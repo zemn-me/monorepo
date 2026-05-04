@@ -8,7 +8,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { fixedTimeStringEquals } from "#root/ts/crypto/fixed_time_string_comparison.js";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 globalThis.crypto = webcrypto as any;
 
 

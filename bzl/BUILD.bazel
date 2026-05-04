@@ -1,10 +1,5 @@
-load("@npm//:eslint/package_json.bzl", "bin")
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//bzl:rules.bzl", "bazel_lint")
-
-bin.eslint_binary(
-    name = "eslint",
-)
 
 sh_binary(
     name = "run_all_affected_tests",
