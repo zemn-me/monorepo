@@ -5,14 +5,7 @@ package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
 
 next_project(
     name = "next",
-    srcs = ["//ts/pulumi/shadwell.im/luke/app"],
-)
-
-# bazel run //ts/pulumi/shadwell.im/luke
-# to test the website.
-alias(
-    name = "luke",
-    actual = ":dev",
+    srcs = ["//project/im/shadwell/anna/pages"],
 )
 
 bazel_lint(

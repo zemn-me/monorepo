@@ -9,7 +9,7 @@ ts_project(
         "types.d.ts",
     ],
     assets = ["index.module.css"],
-    visibility = ["//ts/pulumi/shadwell.im/kate:__pkg__"],
+    visibility = ["//project/im/shadwell/kate:__pkg__"],
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
@@ -29,7 +29,7 @@ filegroup(
         "index.tsx",
         "types.d.ts",
     ],
-    visibility = ["//ts/pulumi/shadwell.im/kate:__pkg__"],
+    visibility = ["//project/im/shadwell/kate:__pkg__"],
 )
 
 bazel_lint(
