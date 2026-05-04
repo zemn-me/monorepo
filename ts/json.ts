@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import { Err, Ok, Result } from "#root/ts/result.js";
 
 /**

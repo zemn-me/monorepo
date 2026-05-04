@@ -54,7 +54,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 
 	// temp disabled
 	//'require-trusted-types-for': new Set(["'script'"]),
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 	'trusted-types': new Set(['default', 'nextjs#bundler']) as any, // 🤷
 	'script-src': new Set([
 		"'self'",

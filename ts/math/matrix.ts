@@ -16,10 +16,10 @@ export const as: <
 	T = number,
 >(
 	v: readonly (readonly T[] & { length: I })[] & { length: J }
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 ) => Matrix<I, J, T> = v => v as any;
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 export const zero = as<0, 0>([] as any);
 
 /**
@@ -222,9 +222,9 @@ export type Multiply<
 	B extends Matrix<number, number, unknown>,
 	O = number,
 > = [A, B] extends [
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	Matrix<any, infer J1, unknown>,
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	Matrix<infer I2, any, unknown>,
 ]
 	? Matrix<I2, J1, O>
@@ -239,21 +239,21 @@ export type TransformTo<
 	Out extends Matrix<number, number, unknown>,
 	/*O = number*/
 > = [In, Out] extends [
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	Matrix<any, infer J1, unknown>,
 	Matrix<infer I2, infer J2, unknown>,
 ]
 	? J2 extends J1
-		? /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+		? /* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 			Matrix<I2, any>
 		: never // it isn't possible for these to be different
 	: never;
 
 export const size: <I extends number, J extends number>(
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	m: Matrix<I, J, any>
 ) => J extends 0 ? [undefined, J] : [I, J] = m =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	[m[0]?.length, m.length] as any;
 
 export const transpose: <I extends number, J extends number>(
@@ -285,7 +285,7 @@ export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
 
 	if (ij == 2) {
 		// actually not sure what the issue is here...
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 		const [[a, b], [c, d]] = m as any;
 		return a * d - b * c;
 	}

@@ -1,4 +1,4 @@
-/* eslint-disable react/forbid-elements */
+/* biome-ignore-all lint/correctness/noRestrictedElements: this module intentionally uses restricted elements */
 'use client';
 import { forwardRef } from "react";
 
