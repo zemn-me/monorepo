@@ -115,7 +115,7 @@ export function useOIDC(issuer: string, params: OIDCImplicitRequest): [
 					)
 				))(
 					e => { throw e },
-					() => { }
+					() => { /* intentionally empty */ }
 				)
 
 				return params;

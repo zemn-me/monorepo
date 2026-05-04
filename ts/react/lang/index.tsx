@@ -41,8 +41,7 @@ export const tag: (
 
 export const get = <L extends Language>(v: Text<L>): L => v.language;
 
-// https://github.com/typescript-eslint/typescript-eslint/issues/4062
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
+// biome-ignore lint/complexity/noUselessTypeConstraint: this keeps generic inference stable
 export const text = <T extends unknown>(v: Text<string, T>): T => v.text;
 
 export { useLocale } from '#root/ts/react/lang/useLocale.js';

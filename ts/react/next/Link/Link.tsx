@@ -1,5 +1,5 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable react/forbid-elements */
+/* biome-ignore-all lint/style/noRestrictedImports: this wrapper intentionally imports the restricted module */
+/* biome-ignore-all lint/correctness/noRestrictedElements: this module intentionally uses restricted elements */
 import type { UrlObject } from 'node:url';
 
 import classNames from 'classnames';

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import * as vec from '#root/ts/math/vec.js';
 
 export default function Home() {

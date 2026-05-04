@@ -60,12 +60,14 @@ ts_config(
 
 js_library(
     name = "base_defs",
-    srcs = ["Global.d.ts"],
+    srcs = ["Global.d.ts"],  # keep
+    deps = [],  # keep
 )
 
 exports_files(
     [
         "ruff.toml",
+        "biome.json",
         ".prettierrc.json",
         "package.json",
         "tsconfig.json",
@@ -108,30 +110,6 @@ npm_link_all_packages(name = "node_modules")
 
 go_version_sync(
     name = "go_version_sync",
-)
-
-js_library(
-    name = "eslintrc",
-    srcs = [
-        ":eslint.config.js",
-        "//:.gitignore",
-        "//:editorconfig",
-        "//:package_json",
-        "//:prettierrc",
-        "//:tsconfig",
-    ],
-    deps = [
-        "//:node_modules/@eslint/compat",
-        "//:node_modules/@eslint/js",
-        "//:node_modules/@next/eslint-plugin-next",
-        "//:node_modules/eslint-mdx",
-        "//:node_modules/eslint-plugin-jest",
-        "//:node_modules/eslint-plugin-mdx",
-        "//:node_modules/eslint-plugin-react",
-        "//:node_modules/eslint-plugin-react-hooks",
-        "//:node_modules/eslint-plugin-simple-import-sort",
-        "//:node_modules/typescript-eslint",
-    ],
 )
 
 # This rule fetches the metadata for python packages we depend on. That data is

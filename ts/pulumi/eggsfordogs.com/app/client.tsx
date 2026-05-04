@@ -29,6 +29,7 @@ import {
 	stepLook,
 	stepPlayer,
 } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
+import { noop } from '#root/ts/noop.js';
 
 const INITIAL_VIEWPORT_WIDTH = 1280;
 const INITIAL_VIEWPORT_HEIGHT = 720;
@@ -82,7 +83,7 @@ export function EggDogYardClient() {
 				typeof legacyCoarsePointerQuery.addListener !== 'function' ||
 				typeof legacyCoarsePointerQuery.removeListener !== 'function'
 			) {
-				return () => {};
+				return noop;
 			}
 
 			legacyCoarsePointerQuery.addListener(syncMobileControls);

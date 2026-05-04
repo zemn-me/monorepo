@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 class BazelReporter {
 	onRunComplete(
 		_: unknown,
@@ -14,4 +14,5 @@ class BazelReporter {
 	}
 }
 
+// biome-ignore lint/style/noCommonJs: Jest reporters are loaded through CommonJS.
 module.exports = BazelReporter;

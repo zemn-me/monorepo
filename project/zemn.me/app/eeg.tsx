@@ -1,4 +1,3 @@
-/* eslint-disable comma-spacing */
 'use client';
 
 import { useCallback, useEffect, useMemo } from 'react';

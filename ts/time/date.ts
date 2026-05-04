@@ -64,6 +64,7 @@ const OneTo31 = z.union([
 	z.literal(31)
 ]);
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this module exports a date schema named after the domain type.
 export const Date = z.union([
 	z.tuple([
 		OneTo31,
@@ -153,7 +154,6 @@ export function parse([d, m, y]: Date): globalThis.Date {
 }
 
 export const nativeDateFromUnknownSimpleDate = Date.transform(parse);
-
 
 
 
