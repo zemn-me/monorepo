@@ -42,6 +42,16 @@ alias(
 )
 
 alias(
+    name = "format",
+    actual = "//bzl/format",
+)
+
+alias(
+    name = "format.check",
+    actual = "//bzl/format:format.check",
+)
+
+alias(
     name = "pnpm",
     # bazel run -- //:pnpm --dir $PWD
     actual = "//sh/bin:pnpm",

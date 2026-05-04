@@ -45,11 +45,28 @@ describe('Quaternion arithmetic', () => {
 
 		expect(Quaternion.length(unwrap(normalizedQ))).toBeCloseTo(1);
 
-		const expectedNormalizedQ = Quaternion.from(0.18257, 0.36515, 0.54772, 0.7303);
-		expect(Quaternion.x(unwrap(normalizedQ))).toBeCloseTo(Quaternion.x(expectedNormalizedQ), 4);
-		expect(Quaternion.y(unwrap(normalizedQ))).toBeCloseTo(Quaternion.y(expectedNormalizedQ), 4);
-		expect(Quaternion.z(unwrap(normalizedQ))).toBeCloseTo(Quaternion.z(expectedNormalizedQ), 4);
-		expect(Quaternion.w(unwrap(normalizedQ))).toBeCloseTo(Quaternion.w(expectedNormalizedQ), 4);
+		const expectedNormalizedQ = Quaternion.from(
+			0.18257,
+			0.36515,
+			0.54772,
+			0.7303
+		);
+		expect(Quaternion.x(unwrap(normalizedQ))).toBeCloseTo(
+			Quaternion.x(expectedNormalizedQ),
+			4
+		);
+		expect(Quaternion.y(unwrap(normalizedQ))).toBeCloseTo(
+			Quaternion.y(expectedNormalizedQ),
+			4
+		);
+		expect(Quaternion.z(unwrap(normalizedQ))).toBeCloseTo(
+			Quaternion.z(expectedNormalizedQ),
+			4
+		);
+		expect(Quaternion.w(unwrap(normalizedQ))).toBeCloseTo(
+			Quaternion.w(expectedNormalizedQ),
+			4
+		);
 	});
 
 	test('fromAxisAngle ignores axis scale', () => {
@@ -62,16 +79,26 @@ describe('Quaternion arithmetic', () => {
 		expect(is_ok(fromUnit)).toBe(true);
 		expect(is_ok(fromScaled)).toBe(true);
 
-		expect(Quaternion.x(unwrap(fromScaled))).toBeCloseTo(Quaternion.x(unwrap(fromUnit)));
-		expect(Quaternion.y(unwrap(fromScaled))).toBeCloseTo(Quaternion.y(unwrap(fromUnit)));
-		expect(Quaternion.z(unwrap(fromScaled))).toBeCloseTo(Quaternion.z(unwrap(fromUnit)));
-		expect(Quaternion.w(unwrap(fromScaled))).toBeCloseTo(Quaternion.w(unwrap(fromUnit)));
+		expect(Quaternion.x(unwrap(fromScaled))).toBeCloseTo(
+			Quaternion.x(unwrap(fromUnit))
+		);
+		expect(Quaternion.y(unwrap(fromScaled))).toBeCloseTo(
+			Quaternion.y(unwrap(fromUnit))
+		);
+		expect(Quaternion.z(unwrap(fromScaled))).toBeCloseTo(
+			Quaternion.z(unwrap(fromUnit))
+		);
+		expect(Quaternion.w(unwrap(fromScaled))).toBeCloseTo(
+			Quaternion.w(unwrap(fromUnit))
+		);
 	});
 
 	test('fromAxisAngle rejects a zero axis', () => {
 		const axis = point<3>(0, 0, 0);
 		const result = Quaternion.fromAxisAngle(axis, Math.PI / 4);
 		expect(is_err(result)).toBe(true);
-		expect(unwrap_err(result).message).toBe('Cannot construct a quaternion from a zero-length axis.');
+		expect(unwrap_err(result).message).toBe(
+			'Cannot construct a quaternion from a zero-length axis.'
+		);
 	});
 });

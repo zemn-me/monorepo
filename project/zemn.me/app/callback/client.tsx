@@ -10,8 +10,7 @@ function postBackToOpener() {
 
 	const opener = window.opener;
 
-	if (window.opener === null)
-		throw new Error("missing opener 😭");
+	if (window.opener === null) throw new Error('missing opener 😭');
 
 	opener.postMessage(payload, location.origin);
 }
@@ -26,7 +25,14 @@ export default function Callback() {
 	}, []);
 
 	return (
-		<main style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+		<main
+			style={{
+				display: 'flex',
+				minHeight: '100vh',
+				alignItems: 'center',
+				justifyContent: 'center',
+			}}
+		>
 			<p>Authentication complete. You may close this window.</p>
 		</main>
 	);

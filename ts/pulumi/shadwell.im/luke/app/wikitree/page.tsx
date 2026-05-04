@@ -8,5 +8,6 @@ export default function Page() {
 
 export const metadata: Metadata = {
 	title: 'WikiTree for Luke Shadwell',
-	description: 'React recreation of the classic GeneaWiki Wikidata family tree explorer.',
+	description:
+		'React recreation of the classic GeneaWiki Wikidata family tree explorer.',
 };

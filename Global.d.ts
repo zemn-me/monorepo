@@ -39,6 +39,6 @@ declare module '*.png' {
 
 declare module 'remark-sectionize' {
 	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
-	const x: any
-	export default x
+	const x: any;
+	export default x;
 }

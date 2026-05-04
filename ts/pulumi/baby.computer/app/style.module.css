@@ -148,8 +148,13 @@
 	height: 5.5rem;
 	border-radius: 999px;
 	border: 1px solid rgb(238 247 255 / 18%);
-	background:
-		radial-gradient(circle at center, rgb(145 225 255 / 18%) 0, rgb(145 225 255 / 10%) 34%, rgb(5 12 20 / 54%) 70%, rgb(5 12 20 / 68%) 100%);
+	background: radial-gradient(
+		circle at center,
+		rgb(145 225 255 / 18%) 0,
+		rgb(145 225 255 / 10%) 34%,
+		rgb(5 12 20 / 54%) 70%,
+		rgb(5 12 20 / 68%) 100%
+	);
 	box-shadow:
 		inset 0 0 0 1px rgb(125 216 255 / 8%),
 		0 0.8rem 1.8rem rgb(0 0 0 / 20%);
@@ -182,7 +187,11 @@
 	margin-top: -1.175rem;
 	border-radius: 999px;
 	border: 1px solid rgb(238 247 255 / 28%);
-	background: linear-gradient(180deg, rgb(226 249 255 / 92%) 0%, rgb(133 213 247 / 78%) 100%);
+	background: linear-gradient(
+		180deg,
+		rgb(226 249 255 / 92%) 0%,
+		rgb(133 213 247 / 78%) 100%
+	);
 	box-shadow:
 		0 0.35rem 0.8rem rgb(0 0 0 / 25%),
 		inset 0 0 0 1px rgb(255 255 255 / 35%);
@@ -235,10 +244,7 @@
 		0 0 0.6rem rgb(247 253 255 / 92%),
 		0 0 1rem rgb(142 213 242 / 62%);
 	opacity: 0;
-	transform:
-		rotate(var(--spark-angle))
-		translateY(0)
-		scale(0.4);
+	transform: rotate(var(--spark-angle)) translateY(0) scale(0.4);
 	animation: metSparkBurst 720ms ease-out forwards;
 	pointer-events: none;
 }
@@ -246,10 +252,7 @@
 @keyframes metSparkBurst {
 	0% {
 		opacity: 0;
-		transform:
-			rotate(var(--spark-angle))
-			translateY(0)
-			scale(0.35);
+		transform: rotate(var(--spark-angle)) translateY(0) scale(0.35);
 	}
 
 	18% {
@@ -258,10 +261,7 @@
 
 	100% {
 		opacity: 0;
-		transform:
-			rotate(var(--spark-angle))
-			translateY(-1.7rem)
-			scale(1);
+		transform: rotate(var(--spark-angle)) translateY(-1.7rem) scale(1);
 	}
 }
 

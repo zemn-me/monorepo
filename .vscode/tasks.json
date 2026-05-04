@@ -4,21 +4,18 @@
 		{
 			"label": "Rust: rust-project.json",
 			"command": "${workspaceFolder}/sh/bin/bazel",
-			"args": [
-				"run",
-				"//.vscode:gen_rust_project"
-			],
+			"args": ["run", "//.vscode:gen_rust_project"],
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
 			"group": "build",
 			"problemMatcher": [],
-                        "presentation": {
-                                "reveal": "never",
-                                "group": "preprep",
-                                "close": true,
-                                "panel": "dedicated",
-                        }
+			"presentation": {
+				"reveal": "never",
+				"group": "preprep",
+				"close": true,
+				"panel": "dedicated"
+			}
 		},
 		{
 			"label": "Python: Venv",
@@ -29,14 +26,14 @@
 				"run",
 				"//.vscode:activate_venv"
 			],
-                        "options": {
-                                "cwd": "${workspaceFolder}"
-                        },
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
 			"presentation": {
 				"close": true,
 				"reveal": "never",
 				"group": "preprep",
-				"panel": "dedicated",
+				"panel": "dedicated"
 			},
 			"isBackground": true,
 			"problemMatcher": {
@@ -53,7 +50,7 @@
 				"background": {
 					"activeOnStart": true,
 					"beginsPattern": "^iBazel +\\[[^\\]]+\\]: Notifying of changes$",
-					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$",
+					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$"
 				}
 			}
 		},
@@ -70,7 +67,7 @@
 				"close": true,
 				"group": "preprep",
 				"reveal": "never",
-				"panel": "dedicated",
+				"panel": "dedicated"
 			},
 			"group": "build",
 			"runOptions": {

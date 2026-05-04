@@ -75,27 +75,27 @@ export interface Args {
 	 * Don't deploy a cost allocation tag.
 	 * AWS doesn't let you do this in one go.
 	 */
-	noCostAllocationTag?: boolean
+	noCostAllocationTag?: boolean;
 
 	tags?: pulumi.Input<Record<string, pulumi.Input<string>>>;
 
 	/**
 	 * Whether to set up email for this website.
 	 */
-	email: boolean
+	email: boolean;
 
-        /**
-         * Other TXT records to attach to the domain.
-         */
-        otherTXTRecords?: string[]
+	/**
+	 * Other TXT records to attach to the domain.
+	 */
+	otherTXTRecords?: string[];
 
-        /**
-         * Domain hosting OpenID Connect well-known resources.
-         * When provided, CloudFront will proxy
-         * `/.well-known/openid-configuration` and
-         * `/.well-known/jwks.json` to this origin.
-         */
-        wellKnownOidcDomain?: pulumi.Input<string>
+	/**
+	 * Domain hosting OpenID Connect well-known resources.
+	 * When provided, CloudFront will proxy
+	 * `/.well-known/openid-configuration` and
+	 * `/.well-known/jwks.json` to this origin.
+	 */
+	wellKnownOidcDomain?: pulumi.Input<string>;
 }
 
 // needed cause there's a cache policy limit of 20.
@@ -103,63 +103,63 @@ let noRobotsResponseHeadersPolicyCache: ResponseHeadersPolicy;
 let robotsResponseHeadersPolicyCache: ResponseHeadersPolicy;
 
 function noRobotsResponseHeadersPolicy() {
-	if (typeof noRobotsResponseHeadersPolicyCache == "undefined") {
+	if (typeof noRobotsResponseHeadersPolicyCache == 'undefined') {
 		noRobotsResponseHeadersPolicyCache = responseHeadersPolicy(
 			// reused because I'm already at the limit
-			"monorepo_pleaseintroducemetoyour-dog_pleaseintroducemetoyour_dog_website_response_headers",
+			'monorepo_pleaseintroducemetoyour-dog_pleaseintroducemetoyour_dog_website_response_headers',
 			true
-		)
+		);
 	}
 
-	return noRobotsResponseHeadersPolicyCache
+	return noRobotsResponseHeadersPolicyCache;
 }
 
 function robotsResponseHeadersPolicy() {
-	if (typeof robotsResponseHeadersPolicyCache == "undefined") {
+	if (typeof robotsResponseHeadersPolicyCache == 'undefined') {
 		robotsResponseHeadersPolicyCache = responseHeadersPolicy(
-			"monorepo_lulu_lulu-computer_response_headers",
+			'monorepo_lulu_lulu-computer_response_headers',
 			false
-		)
+		);
 	}
 
 	return robotsResponseHeadersPolicyCache;
 }
 
 function responseHeadersPolicy(name: string, noIndex: boolean) {
-		return new aws.cloudfront.ResponseHeadersPolicy(
-			// name re-used because we're already at the policy limit (20)
-			name,
-			{
-				securityHeadersConfig: {
-					contentTypeOptions: {
-						override: false,
-					},
-					frameOptions: {
-						frameOption: 'DENY',
-						override: false,
-					},
-					strictTransportSecurity: {
-						accessControlMaxAgeSec: 31536000,
-						override: false,
-						includeSubdomains: true,
-						preload: true,
-					},
+	return new aws.cloudfront.ResponseHeadersPolicy(
+		// name re-used because we're already at the policy limit (20)
+		name,
+		{
+			securityHeadersConfig: {
+				contentTypeOptions: {
+					override: false,
 				},
-				customHeadersConfig: {
-					items: [
-						...(noIndex
-							? [
-									{
-										header: 'x-robots-tag',
-										value: 'noindex',
-										override: false,
-									},
-								]
-							: []),
-					],
+				frameOptions: {
+					frameOption: 'DENY',
+					override: false,
 				},
-			}
-		);
+				strictTransportSecurity: {
+					accessControlMaxAgeSec: 31536000,
+					override: false,
+					includeSubdomains: true,
+					preload: true,
+				},
+			},
+			customHeadersConfig: {
+				items: [
+					...(noIndex
+						? [
+								{
+									header: 'x-robots-tag',
+									value: 'noindex',
+									override: false,
+								},
+							]
+						: []),
+				],
+			},
+		}
+	);
 }
 
 /**
@@ -176,14 +176,15 @@ export class Website extends pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 
-		if (!args.noCostAllocationTag) new CostAllocationTag(
-			`${name}_cost_tag`,
-			{
-				status: 'Active',
-				tagKey: tag,
-			},
-			{ parent: this }
-		);
+		if (!args.noCostAllocationTag)
+			new CostAllocationTag(
+				`${name}_cost_tag`,
+				{
+					status: 'Active',
+					tagKey: tag,
+				},
+				{ parent: this }
+			);
 
 		const certificate = new Certificate(
 			`${name}_certificate`,
@@ -203,7 +204,6 @@ export class Website extends pulumi.ComponentResource {
 			deriveBucketName(name),
 			{
 				tags,
-
 			},
 			{
 				parent: this,
@@ -346,155 +346,149 @@ export class Website extends pulumi.ComponentResource {
 		);
 
 		// response headers policy (http headers)
-		const responseHeadersPolicy =
-			args.noIndex
-				? noRobotsResponseHeadersPolicy()
-				: robotsResponseHeadersPolicy();
-
-
+		const responseHeadersPolicy = args.noIndex
+			? noRobotsResponseHeadersPolicy()
+			: robotsResponseHeadersPolicy();
 
 		// create the cloudfront
 
-                const origins: aws.types.input.cloudfront.DistributionOrigin[] = [
-                        {
-                                s3OriginConfig: {
-                                        originAccessIdentity:
-                                                originAccessIdentity.cloudfrontAccessIdentityPath,
-                                },
-                                domainName: bucket.bucketRegionalDomainName,
-                                originId: `${name}_cloudfront_distribution`,
-                        },
-                        ...(args.wellKnownOidcDomain
-                                ? [
-                                        {
-                                                domainName: args.wellKnownOidcDomain,
-                                                originId: `${name}_oidc_api`,
-                                                customOriginConfig: {
-                                                        originProtocolPolicy: 'https-only',
-                                                        httpPort: 80,
-                                                        httpsPort: 443,
-                                                        originSslProtocols: ['TLSv1.2'],
-                                                },
-                                        },
-                                ]
-                                : []),
-                ];
+		const origins: aws.types.input.cloudfront.DistributionOrigin[] = [
+			{
+				s3OriginConfig: {
+					originAccessIdentity:
+						originAccessIdentity.cloudfrontAccessIdentityPath,
+				},
+				domainName: bucket.bucketRegionalDomainName,
+				originId: `${name}_cloudfront_distribution`,
+			},
+			...(args.wellKnownOidcDomain
+				? [
+						{
+							domainName: args.wellKnownOidcDomain,
+							originId: `${name}_oidc_api`,
+							customOriginConfig: {
+								originProtocolPolicy: 'https-only',
+								httpPort: 80,
+								httpsPort: 443,
+								originSslProtocols: ['TLSv1.2'],
+							},
+						},
+					]
+				: []),
+		];
 
-                const orderedCacheBehaviors = args.wellKnownOidcDomain
-                        ? [
-                                {
-                                        pathPattern: '/.well-known/openid-configuration',
-                                        targetOriginId: `${name}_oidc_api`,
-                                        compress: true,
-                                        responseHeadersPolicyId: responseHeadersPolicy.id,
-                                        allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-                                        cachedMethods: ['GET', 'HEAD'],
-                                        forwardedValues: {
-                                                queryString: false,
-                                                cookies: { forward: 'none' },
-                                        },
-                                        viewerProtocolPolicy: 'redirect-to-https',
-                                        minTtl: 0,
-                                        defaultTtl: 0,
-                                        maxTtl: 0,
-                                },
-                                {
-                                        pathPattern: '/.well-known/jwks.json',
-                                        targetOriginId: `${name}_oidc_api`,
-                                        compress: true,
-                                        responseHeadersPolicyId: responseHeadersPolicy.id,
-                                        allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-                                        cachedMethods: ['GET', 'HEAD'],
-                                        forwardedValues: {
-                                                queryString: false,
-                                                cookies: { forward: 'none' },
-                                        },
-                                        viewerProtocolPolicy: 'redirect-to-https',
-                                        minTtl: 0,
-                                        defaultTtl: 0,
-                                        maxTtl: 0,
-                                },
-                        ]
-                        : undefined;
+		const orderedCacheBehaviors = args.wellKnownOidcDomain
+			? [
+					{
+						pathPattern: '/.well-known/openid-configuration',
+						targetOriginId: `${name}_oidc_api`,
+						compress: true,
+						responseHeadersPolicyId: responseHeadersPolicy.id,
+						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+						cachedMethods: ['GET', 'HEAD'],
+						forwardedValues: {
+							queryString: false,
+							cookies: { forward: 'none' },
+						},
+						viewerProtocolPolicy: 'redirect-to-https',
+						minTtl: 0,
+						defaultTtl: 0,
+						maxTtl: 0,
+					},
+					{
+						pathPattern: '/.well-known/jwks.json',
+						targetOriginId: `${name}_oidc_api`,
+						compress: true,
+						responseHeadersPolicyId: responseHeadersPolicy.id,
+						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+						cachedMethods: ['GET', 'HEAD'],
+						forwardedValues: {
+							queryString: false,
+							cookies: { forward: 'none' },
+						},
+						viewerProtocolPolicy: 'redirect-to-https',
+						minTtl: 0,
+						defaultTtl: 0,
+						maxTtl: 0,
+					},
+				]
+			: undefined;
 
-                const distribution = new aws.cloudfront.Distribution(
-                        `${name}_cloudfront_distribution`,
-                        {
-                                origins,
-                                ...(orderedCacheBehaviors
-                                        ? { orderedCacheBehaviors }
-                                        : {}),
-                                enabled: true,
-                                isIpv6Enabled: true,
-                                defaultRootObject: indexDocumentObject.key,
-                                // this is the host that the distribution will expect
-                                // (other than the default).
-                                aliases: [args.domain],
-                                // in the future we could maybe take a bunch of these as args, but
-                                // we're not overengineering today!
-                                // im sorry this bit kinda sucks
-                                ...(errorDocumentObject !== undefined
-                                        ? {
-                                                customErrorResponses: [
-                                                        {
-                                                                errorCode: 404,
-                                                                responseCode: 404,
-                                                                responsePagePath:
-                                                                        pulumi.interpolate`/${errorDocumentObject.key}`,
-                                                        },
-                                                ],
-                                        }
-                                        : {}),
-                                defaultCacheBehavior: {
-                                        compress: true,
-                                        responseHeadersPolicyId: responseHeadersPolicy.id,
-                                        // i dont think we use most of these but it's probably not
-                                        // important
-                                        allowedMethods: [
-                                                'DELETE',
-                                                'GET',
-                                                'HEAD',
-                                                'OPTIONS',
-                                                'PATCH',
-                                                'POST',
-                                                'PUT',
-                                        ],
-                                        cachedMethods: ['GET', 'HEAD'],
-                                        // i'm fairly sure this is correct, but the docs kinda suck
-                                        // on which of AWS's many IDs this might be and sapling histgrep
-                                        // is broken.
-                                        targetOriginId: `${name}_cloudfront_distribution`,
-                                        forwardedValues: {
-                                                queryString: false,
-                                                // I'm not using cookies for anything yet.
-                                                // and to be honest, i prefer localStorage.
-                                                cookies: {
-                                                        forward: 'none',
-                                                },
-                                        },
-                                        viewerProtocolPolicy: 'redirect-to-https',
-                                        minTtl: 0,
-                                        defaultTtl: 3600,
-                                        maxTtl: 86400,
-                                },
-                                restrictions: {
-                                        geoRestriction: {
-                                                restrictionType: 'none',
-                                        },
-                                },
-                                tags: mergeTags(tags, {
-                                        Environment: 'production',
-                                }),
-                                viewerCertificate: {
-                                        // important to use this so that it waits for the cert
-                                        // to come up
-                                        acmCertificateArn: certificate.validation.certificateArn,
-                                        sslSupportMethod: 'sni-only', // idk really what this does
-                                },
-                        },
-                        // creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
-                        { parent: this, deleteBeforeReplace: true }
-                );
+		const distribution = new aws.cloudfront.Distribution(
+			`${name}_cloudfront_distribution`,
+			{
+				origins,
+				...(orderedCacheBehaviors ? { orderedCacheBehaviors } : {}),
+				enabled: true,
+				isIpv6Enabled: true,
+				defaultRootObject: indexDocumentObject.key,
+				// this is the host that the distribution will expect
+				// (other than the default).
+				aliases: [args.domain],
+				// in the future we could maybe take a bunch of these as args, but
+				// we're not overengineering today!
+				// im sorry this bit kinda sucks
+				...(errorDocumentObject !== undefined
+					? {
+							customErrorResponses: [
+								{
+									errorCode: 404,
+									responseCode: 404,
+									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
+								},
+							],
+						}
+					: {}),
+				defaultCacheBehavior: {
+					compress: true,
+					responseHeadersPolicyId: responseHeadersPolicy.id,
+					// i dont think we use most of these but it's probably not
+					// important
+					allowedMethods: [
+						'DELETE',
+						'GET',
+						'HEAD',
+						'OPTIONS',
+						'PATCH',
+						'POST',
+						'PUT',
+					],
+					cachedMethods: ['GET', 'HEAD'],
+					// i'm fairly sure this is correct, but the docs kinda suck
+					// on which of AWS's many IDs this might be and sapling histgrep
+					// is broken.
+					targetOriginId: `${name}_cloudfront_distribution`,
+					forwardedValues: {
+						queryString: false,
+						// I'm not using cookies for anything yet.
+						// and to be honest, i prefer localStorage.
+						cookies: {
+							forward: 'none',
+						},
+					},
+					viewerProtocolPolicy: 'redirect-to-https',
+					minTtl: 0,
+					defaultTtl: 3600,
+					maxTtl: 86400,
+				},
+				restrictions: {
+					geoRestriction: {
+						restrictionType: 'none',
+					},
+				},
+				tags: mergeTags(tags, {
+					Environment: 'production',
+				}),
+				viewerCertificate: {
+					// important to use this so that it waits for the cert
+					// to come up
+					acmCertificateArn: certificate.validation.certificateArn,
+					sslSupportMethod: 'sni-only', // idk really what this does
+				},
+			},
+			// creating CloudFront Distribution: CNAMEAlreadyExists: One or more of the CNAMEs you provided are already associated with a different resource.
+			{ parent: this, deleteBeforeReplace: true }
+		);
 
 		// create the alias record that allows the distribution to be located
 		// from the DNS record.
@@ -524,9 +518,11 @@ export class Website extends pulumi.ComponentResource {
 					zoneId: args.zoneId,
 					name: pulumi.interpolate`_dmarc.${args.domain}`,
 					type: 'TXT',
-					records: pulumi.output(args.domain).apply(name => [
-						`v=DMARC1; p=none; rua=mailto:dmarc-reports@${name}; ruf=mailto:dmarc-failures@${name}; sp=none; adkim=s; aspf=s`,
-					]),
+					records: pulumi
+						.output(args.domain)
+						.apply(name => [
+							`v=DMARC1; p=none; rua=mailto:dmarc-reports@${name}; ruf=mailto:dmarc-failures@${name}; sp=none; adkim=s; aspf=s`,
+						]),
 					ttl: 300,
 				},
 				{ parent: this }
@@ -539,11 +535,11 @@ export class Website extends pulumi.ComponentResource {
 					name: args.domain,
 					type: 'MX',
 					records: [
-						"1 ASPMX.L.GOOGLE.COM",
-						"5 ALT1.ASPMX.L.GOOGLE.COM",
-						"5 ALT2.ASPMX.L.GOOGLE.COM",
-						"10 ALT3.ASPMX.L.GOOGLE.COM",
-						"10 ALT4.ASPMX.L.GOOGLE.COM",
+						'1 ASPMX.L.GOOGLE.COM',
+						'5 ALT1.ASPMX.L.GOOGLE.COM',
+						'5 ALT2.ASPMX.L.GOOGLE.COM',
+						'10 ALT3.ASPMX.L.GOOGLE.COM',
+						'10 ALT4.ASPMX.L.GOOGLE.COM',
 					],
 					ttl: 300,
 				},
@@ -562,7 +558,7 @@ export class Website extends pulumi.ComponentResource {
 					`google-site-verification=plPeQFN6n0_8HZ8hr3HMXbYHrU_Yh5wPP9OUwH0ErGY`,
 					`google-site-verification=byw27UvCg87CmNCBN_1gweAhrlxa_5TW-GDD_ht1lug`,
 					`v=spf1 include:_spf.google.com ~all`,
-					...args.otherTXTRecords ?? []
+					...(args.otherTXTRecords ?? []),
 				],
 				ttl: 1800,
 			},

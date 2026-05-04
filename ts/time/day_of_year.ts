@@ -1,5 +1,4 @@
-import { Day } from "#root/ts/time/duration.js";
-
+import { Day } from '#root/ts/time/duration.js';
 
 /**
  * For a given {@link Date}, returns the numeric day
@@ -9,6 +8,6 @@ import { Day } from "#root/ts/time/duration.js";
  */
 export function dayOfYear(d: Date) {
 	const yearStart = new Date(d.getFullYear(), 0, 1);
-	const diff = (+d) - (+yearStart);
+	const diff = +d - +yearStart;
 	return Math.ceil(diff / Day);
 }
