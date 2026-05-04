@@ -38,7 +38,7 @@ declare module '*.png' {
 }
 
 declare module 'remark-sectionize' {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 	const x: any
 	export default x
 }

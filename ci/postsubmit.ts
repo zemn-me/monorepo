@@ -34,9 +34,9 @@ class npmPackage {
 			this.publishScript,
 			[]
 		);
-		// eslint-disable-next-line no-console
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		if (o.stderr != '') console.error(o.stderr);
-		// eslint-disable-next-line no-console
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		if (o.stdout != '') console.error(o.stdout);
 		return this;
 	}
@@ -136,15 +136,15 @@ ${
 	});
 
 	if (errors.length) {
-		// eslint-disable-next-line no-console
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		console.error('Some errors occurred, they are as follows:');
-		// eslint-disable-next-line no-console
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		for (const error of errors) console.error(error);
 	}
 }
 
 main().catch(e => {
 	process.exitCode = 1;
-	// eslint-disable-next-line no-console
+	// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 	console.error(e);
 });

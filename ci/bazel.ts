@@ -128,7 +128,6 @@ async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
 		return resp.value;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	while (!done) {
 		const line = await take();
 		if (line === undefined) continue;
@@ -261,7 +260,7 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		AnnotateBazelLines(byLine(process.stderr))
 	)) {
 		if (!errorObserved && /^::error/.test(line)) errorObserved = true;
-		// eslint-disable-next-line no-console
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		console.log(line);
 	}
 
@@ -269,7 +268,7 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
 
 	if (errors.length > 0) {
-		// eslint-disable-next-line no-console
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		console.info('Failure.');
 		throw errors[0];
 	}

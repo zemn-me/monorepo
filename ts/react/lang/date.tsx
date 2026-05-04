@@ -45,7 +45,7 @@ function selectLocale(language: string): Intl.Locale {
  * Return the Intl‑generated parts needed to assemble a full date.
  */
 function getDateParts(date: Temporal.ZonedDateTime, locale: Intl.Locale): Intl.DateTimeFormatPart[] {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 	return new Intl.DateTimeFormat(locale as any, { dateStyle: "full", timeZone: date.timeZoneId }).formatToParts(zonedDateToDate(date));
 }
 
@@ -104,7 +104,7 @@ function zonedDateToDate(date: Temporal.ZonedDateTime): Date {
  * Uses the current locale’s long month name followed by the numeric year.
  */
 function formatMonthYear(date: Temporal.ZonedDateTime, locale: Intl.Locale): string {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 	return new Intl.DateTimeFormat(locale as any, { month: "long", year: "numeric", timeZone: date.timeZoneId }).format(
 		zonedDateToDate(date)
 	);
@@ -113,6 +113,7 @@ function formatMonthYear(date: Temporal.ZonedDateTime, locale: Intl.Locale): str
 /**
  * Full date component (e.g. «Friday, the 3rd of January 2024»).
  */
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this component's public API is named Date.
 export const Date = memo(function DateComponent(props: DateProps) {
 	const [language] = useLocale();
 	const locale = selectLocale(language);

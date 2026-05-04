@@ -191,8 +191,8 @@ var reExtractModule = regexp.MustCompile("@[^/]+/[^/]+|[^/]+")
 // for a given import string, which may be a node_modules related import string
 // returns the module name.
 //
-// For example, eslint-plugin-react/configs/recommended would be
-// eslint-plugin-react, but @react/dom/index.js would be @react/dom.
+// For example, some-package/configs/recommended would be some-package, but
+// @react/dom/index.js would be @react/dom.
 func nodeModulesModuleFromImportString(importString string) (moduleName string) {
 	return reExtractModule.FindString(importString)
 }

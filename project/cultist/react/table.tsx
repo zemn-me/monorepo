@@ -270,7 +270,7 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 		>
 			{/* needed to inject xmlns, not in types */}
 			<div
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as any)}
 				draggable="true"
 				onDragStart={onDragStart}

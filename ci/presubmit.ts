@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';

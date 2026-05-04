@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { Command, Summarize } from '#root/ts/github/actions/index.js';
 import * as Stack from '#root/ts/pulumi/stack.js';
 

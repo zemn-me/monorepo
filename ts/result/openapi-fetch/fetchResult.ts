@@ -3,7 +3,7 @@ import { ErrorResponse, ResponseObjectMap, SuccessResponse } from "openapi-types
 
 import { Err, Ok, Result } from "#root/ts/result/result.js";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 type FailureResponse<T extends Record<string | number, any>> =
         ErrorResponse<ResponseObjectMap<T>>;
 

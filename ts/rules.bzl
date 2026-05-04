@@ -2,7 +2,7 @@ load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("//bzl/lint:linters.bzl", "eslint_test")
+load("//bzl/lint:linters.bzl", "biome_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
@@ -42,7 +42,7 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
     )
 
 def ts_lint(name, **kwargs):
-    eslint_test(
+    biome_test(
         name = name,
         **kwargs
     )
@@ -55,7 +55,7 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     (lint tests).
 
     Note that there isn't a way to exempt specific files from aspect_rules_lint as I can see,
-    so deps which are invalid eslint files should instead use an /* eslint-disable */ comment.
+    so deps which are invalid Biome inputs should instead use a lint suppression comment.
 
     Args:
         name: build tag name
