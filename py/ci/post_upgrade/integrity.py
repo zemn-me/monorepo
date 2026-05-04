@@ -85,12 +85,67 @@ def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
         start = module_text.find("http_archive(", offset)
         if start == -1:
             break
-        end_match = re.search(r"^\s*\)\s*$", module_text[start:], re.MULTILINE)
-        if not end_match:
+        paren_index = start + len("http_archive")
+        if paren_index >= len(module_text) or module_text[paren_index] != "(":
+            raise Exception("Failed to find opening paren for http_archive block")
+
+        depth = 0
+        index = paren_index
+        in_string = False
+        string_delim = ""
+        triple_quoted = False
+        escape = False
+
+        while index < len(module_text):
+            if in_string:
+                if triple_quoted:
+                    if module_text.startswith(string_delim * 3, index):
+                        in_string = False
+                        triple_quoted = False
+                        index += 3
+                        continue
+                    index += 1
+                    continue
+
+                if escape:
+                    escape = False
+                    index += 1
+                    continue
+                if module_text[index] == "\\":
+                    escape = True
+                    index += 1
+                    continue
+                if module_text[index] == string_delim:
+                    in_string = False
+                    string_delim = ""
+                index += 1
+                continue
+
+            if module_text.startswith('"""', index) or module_text.startswith("'''", index):
+                in_string = True
+                string_delim = module_text[index]
+                triple_quoted = True
+                index += 3
+                continue
+            if module_text[index] in ('"', "'"):
+                in_string = True
+                string_delim = module_text[index]
+                triple_quoted = False
+                index += 1
+                continue
+            if module_text[index] == "(":
+                depth += 1
+            elif module_text[index] == ")":
+                depth -= 1
+                if depth == 0:
+                    end = index + 1
+                    blocks.append((start, end, module_text[start:end]))
+                    offset = end
+                    break
+            index += 1
+        else:
             raise Exception("Failed to find end of http_archive block")
-        end = start + end_match.end()
-        blocks.append((start, end, module_text[start:end]))
-        offset = end
+
     return blocks
 
 
