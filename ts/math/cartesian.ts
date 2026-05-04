@@ -1,9 +1,10 @@
 import * as Matrix from '#root/ts/math/matrix.js';
+
 import {
-	magnitude as vecMag,
 	map,
-	unit as vecUnit,
 	Vector,
+	magnitude as vecMag,
+	unit as vecUnit,
 } from '#root/ts/math/vec.js';
 export type Point<T extends number = number> = Matrix.Matrix<1, T>;
 export type Point2D = Point<2>;

@@ -2,7 +2,7 @@
  * @fileoverview Purely functional dual quaternion arithmetic backed by Church-encoded quaternions.
  */
 
-import { point, Point3D, x, y, z } from '#root/ts/math/cartesian.js';
+import { Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { pipe } from '#root/ts/pipe.js';
 import {

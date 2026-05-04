@@ -12,8 +12,8 @@ import {
 	initialMovementKeys,
 	type JoystickInput,
 	lookAngleDeltaFromJoystick,
-	movementInputFromControls,
 	type MovementKeyState,
+	movementInputFromControls,
 	normalizeJoystickOffset,
 } from '#root/ts/joystick/index.js';
 import { point, x, y, z } from '#root/ts/math/cartesian.js';
@@ -22,6 +22,7 @@ import {
 	projectWorldPoint,
 	renderSegments,
 } from '#root/ts/math/wireframe_render.js';
+import { noop } from '#root/ts/noop.js';
 import {
 	buildWorld,
 	DEFAULT_POSE,
@@ -33,7 +34,6 @@ import {
 	stepLook,
 	stepPlayer,
 } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
-import { noop } from '#root/ts/noop.js';
 import { unwrap } from '#root/ts/result/result.js';
 
 const INITIAL_VIEWPORT_WIDTH = 1280;

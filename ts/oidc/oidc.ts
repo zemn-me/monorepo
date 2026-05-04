@@ -4,10 +4,10 @@ import { z } from 'zod';
 
 import { OidcIdTokenClaimsSchema } from '#root/ts/oidc/id_token.js';
 import {
-	and_then as result_and_then,
 	Err,
 	Ok,
 	Result,
+	and_then as result_and_then,
 } from '#root/ts/result/result.js';
 
 export function oidcConfigURLForIssuer(issuer: URL | string) {

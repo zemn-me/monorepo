@@ -8,11 +8,11 @@ import {
 } from '#root/ts/either/either.js';
 import { isDefined } from '#root/ts/guard.js';
 import {
-	and_then as result_and_then,
 	Err,
-	flatten as result_flatten,
 	Ok,
 	Result,
+	and_then as result_and_then,
+	flatten as result_flatten,
 	result_promise_transpose,
 	unwrap_or as result_unwrap_or,
 	zipped as result_zipped,

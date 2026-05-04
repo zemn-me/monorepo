@@ -1,9 +1,25 @@
 load("@npm//:@biomejs/biome/package_json.bzl", biome_bin = "bin")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
 
 biome_bin.biome_binary(name = "biome")
+
+sh_test(
+    name = "biome_unsorted_imports_fail_test",
+    size = "small",
+    srcs = ["unsorted_imports_fail_test.sh"],
+    data = [
+        ":biome",
+        "//:biome.json",
+    ],
+    env = {
+        "BIOME_RUNFILE": "$(rlocationpath :biome)",
+        "BIOME_CONFIG": "$(rlocationpath //:biome.json)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
 
 bazel_lint(
     name = "bazel_lint",

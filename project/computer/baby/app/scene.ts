@@ -5,9 +5,9 @@ import {
 	type WorldSegment,
 } from '#root/project/me/zemn/app/experiments/arena/scene.js';
 import {
-	point,
 	Point2D,
 	Point3D,
+	point,
 	translate,
 	x,
 	y,
