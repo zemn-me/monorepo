@@ -56,6 +56,62 @@ export function pyramid(base: number, length: number): readonly Segment3D[] {
 	] as const;
 }
 
+
+export function octahedron(size: number): readonly Segment3D[] {
+	const half = size / 2;
+	const top = point<3>(0, half, 0);
+	const bottom = point<3>(0, -half, 0);
+	const east = point<3>(half, 0, 0);
+	const west = point<3>(-half, 0, 0);
+	const north = point<3>(0, 0, half);
+	const south = point<3>(0, 0, -half);
+
+	return [
+		[top, east],
+		[top, west],
+		[top, north],
+		[top, south],
+		[bottom, east],
+		[bottom, west],
+		[bottom, north],
+		[bottom, south],
+		[east, north],
+		[north, west],
+		[west, south],
+		[south, east],
+	] as const;
+}
+
+export function triangularPrism(
+	base: number,
+	height: number,
+	depth: number
+): readonly Segment3D[] {
+	const halfBase = base / 2;
+	const halfDepth = depth / 2;
+	const halfHeight = height / 2;
+
+	const frontApex = point<3>(0, halfHeight, halfDepth);
+	const frontLeft = point<3>(-halfBase, -halfHeight, halfDepth);
+	const frontRight = point<3>(halfBase, -halfHeight, halfDepth);
+
+	const backApex = point<3>(0, halfHeight, -halfDepth);
+	const backLeft = point<3>(-halfBase, -halfHeight, -halfDepth);
+	const backRight = point<3>(halfBase, -halfHeight, -halfDepth);
+
+	return [
+		[frontApex, frontLeft],
+		[frontLeft, frontRight],
+		[frontRight, frontApex],
+		[backApex, backLeft],
+		[backLeft, backRight],
+		[backRight, backApex],
+		[frontApex, backApex],
+		[frontLeft, backLeft],
+		[frontRight, backRight],
+	] as const;
+}
+
 export function rigidTransform(
 	segments: readonly Segment3D[],
 	rotation: Quaternion.Quaternion,
