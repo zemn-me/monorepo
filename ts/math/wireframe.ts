@@ -1,4 +1,4 @@
-import { point, Point3D } from '#root/ts/math/cartesian.js';
+import { Point3D, point } from '#root/ts/math/cartesian.js';
 import * as DualQuaternion from '#root/ts/math/dual_quaternion.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import {

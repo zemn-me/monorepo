@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 export interface Props {
 	readonly children?: ReactNode;

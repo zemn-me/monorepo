@@ -30,7 +30,13 @@ describe('wireframe_render', () => {
 		};
 
 		expect(
-			unwrap(projectWorldPoint(point<3>(0, 0, -1), pose, perspective(800, 600)))
+			unwrap(
+				projectWorldPoint(
+					point<3>(0, 0, -1),
+					pose,
+					perspective(800, 600)
+				)
+			)
 		).toBeNull();
 	});
 
@@ -47,7 +53,9 @@ describe('wireframe_render', () => {
 			),
 		];
 
-		const rendered = unwrap(renderSegments(scene, pose, perspective(800, 600)));
+		const rendered = unwrap(
+			renderSegments(scene, pose, perspective(800, 600))
+		);
 
 		expect(rendered).toHaveLength(1);
 		expect(rendered[0]!.x1).toBeLessThan(rendered[0]!.x2);

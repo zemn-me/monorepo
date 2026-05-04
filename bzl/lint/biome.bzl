@@ -3,11 +3,18 @@
 load("@aspect_rules_lint//lint/private:lint_aspect.bzl", "LintOptionsInfo", "OUTFILE_FORMAT", "filter_srcs", "noop_lint_action", "output_files", "patch_and_output_files", "should_visit")
 
 _MNEMONIC = "AspectRulesLintBiome"
+_CHECK_ARGS = [
+    "check",
+    "--formatter-enabled=false",
+    "--linter-enabled=true",
+    "--assist-enabled=true",
+    "--enforce-assist=true",
+]
 
 def _biome_action(ctx, executable, srcs, config, extra_inputs, stdout, exit_code = None, reporter = None, env = {}):
     outputs = [stdout]
     args = ctx.actions.args()
-    args.add("lint")
+    args.add_all(_CHECK_ARGS)
     args.add("--config-path", config)
     args.add("--no-errors-on-unmatched")
     if reporter:
@@ -47,7 +54,7 @@ def _biome_fix(ctx, executable, srcs, config, extra_inputs, patch, stdout, exit_
         output = patch_cfg,
         content = json.encode({
             "linter": executable.path,
-            "args": ["lint", "--write", "--config-path", config.path, "--no-errors-on-unmatched"] + [s.path for s in srcs],
+            "args": _CHECK_ARGS + ["--write", "--config-path", config.path, "--no-errors-on-unmatched"] + [s.path for s in srcs],
             "env": dict(env, **{
                 "BAZEL_BINDIR": ".",
             }),

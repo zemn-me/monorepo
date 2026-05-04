@@ -1,7 +1,5 @@
 import { Metadata } from 'next/types';
-
-import Content from '#root/mdx/article/2024/missing.js';
-import { frontmatter } from '#root/mdx/article/2024/missing.js';
+import Content, { frontmatter } from '#root/mdx/article/2024/missing.js';
 import { articleMetadata } from '#root/project/me/zemn/components/Article/article_metadata.js';
 import { MDXArticle } from '#root/project/me/zemn/components/Article/mdx_article.js';
 

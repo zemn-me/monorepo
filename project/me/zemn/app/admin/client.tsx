@@ -19,14 +19,14 @@ import { future_to_option } from '#root/ts/future/option/future_to_option.js';
 import {
 	and_then as option_and_then,
 	is_some as option_is_some,
-	Some,
 	unwrap as option_unwrap,
 	unwrap_or as option_unwrap_or,
+	Some,
 } from '#root/ts/option/types.js';
 import { queryResult } from '#root/ts/result/react-query/queryResult.js';
 import {
-	and_then as result_and_then,
 	Err,
+	and_then as result_and_then,
 	or_else as result_or_else,
 	unwrap_or as result_unwrap_or,
 	unwrap_or_else as result_unwrap_or_else,

@@ -1,4 +1,4 @@
-import { point, Point3D } from '#root/ts/math/cartesian.js';
+import { Point3D, point } from '#root/ts/math/cartesian.js';
 import { defaultUp } from '#root/ts/math/lookAt.js';
 import { sub } from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';

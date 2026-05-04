@@ -5,8 +5,8 @@
 import { either } from '#root/ts/either/either.js';
 import {
 	magnitude,
-	point,
 	Point3D,
+	point,
 	x as pointX,
 	y as pointY,
 	z as pointZ,

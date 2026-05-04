@@ -26,8 +26,8 @@ import {
 	initialMovementKeys,
 	type JoystickInput,
 	lookAngleDeltaFromJoystick,
-	movementInputFromControls,
 	type MovementKeyState,
+	movementInputFromControls,
 	normalizeJoystickOffset,
 } from '#root/ts/joystick/index.js';
 import { x, y, z } from '#root/ts/math/cartesian.js';

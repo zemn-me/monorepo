@@ -2,9 +2,9 @@ import {
 	add,
 	Line2D,
 	Line3D,
-	point,
 	Point2D,
 	Point3D,
+	point,
 	sub,
 } from '#root/ts/math/cartesian';
 import { map, Vector } from '#root/ts/math/vec';

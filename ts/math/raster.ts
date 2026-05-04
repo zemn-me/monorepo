@@ -3,7 +3,7 @@
  * i dont really understand this because chatgpt generated it.
  */
 
-import { point, Point2D } from '#root/ts/math/cartesian.js';
+import { Point2D, point } from '#root/ts/math/cartesian.js';
 
 /**
  * Represents a point in 2D space.
