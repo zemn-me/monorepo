@@ -68,6 +68,7 @@ export interface Event {
 	readonly since?: Date;
 	readonly description?: Text;
 	readonly tags?: readonly Tag[];
+	readonly address?: string;
 	readonly title: Text;
 	readonly url?: URL | RelativeURL;
 	readonly priority?: number;
@@ -184,12 +185,23 @@ export const Bio = {
 	],
 	timeline: [
 		{
+			id: '86c449a3-eb95-462e-9746-e99388376d31',
+			description: en`Talk at Real World AI Security (Stanford) with Adrian Spânu on the present and future of prompt injection.`,
+			address:
+				'Frances C. Arrillaga Alumni Center, 326 Galvez St, Stanford, CA 94305',
+			title: en`Beyond Prompt Injection: Agentic AI Attacks in the Real World`,
+			date: date(23, 'jun', 2026), // TBD
+			url: url`https://seclab.stanford.edu/RealWorldAIsec/`, // TBD
+			tags: [talk, work, security],
+		},
+		{
 			id: '431c28bb-a3ef-48a3-9c66-5e42fc4d954c',
 			description: en`Talk at DEF CON Singapore with Adrian Spânu on the present and future of prompt injection.`,
+			address: 'Marina Bay Sands, 10 Bayfront Ave, Singapore 018956',
 			title: en`Beyond Prompt Injection: Agentic AI Attacks in the Real World`,
 			date: date(30, 'apr', 2026),
 			url: url`https://defcon.org/html/defcon-singapore/dc-singapore-talks.html#:~:text=Beyond%20Prompt%20Injection%3A%20Agentic%20AI%20Attacks%20in%20the%20Real%20World`,
-			tags: [talk, security],
+			tags: [talk, work, security],
 		},
 		{
 			id: 'cc77fee4-fdb1-443b-b7e2-7e8996ee5e0e',
