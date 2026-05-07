@@ -14,6 +14,7 @@ import {
 } from '#root/ts/pulumi/lib/twilio/phone_number.js';
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
+import * as RNoMs from '#root/ts/pulumi/r.no.ms/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
@@ -261,6 +262,12 @@ export class Component extends Pulumi.ComponentResource {
 
 		new Baby.Component(
 			`${name}_baby`,
+			{ staging: args.staging, tags },
+			{ parent: this }
+		);
+
+		new RNoMs.Component(
+			`${name}_r_no_ms`,
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);

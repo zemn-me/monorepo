@@ -1,0 +1,56 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//project/ms/no/r:__subpackages__"])
+
+ts_project(
+    name = "app",
+    srcs = [
+        "client.tsx",
+        "layout.tsx",
+        "page.tsx",
+        "resistor.ts",
+    ],
+    assets = ["base.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+    ],
+)
+
+ts_project(
+    name = "app_tests",
+    srcs = ["resistor_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":app",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["resistor_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":app_tests"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "layout.tsx",
+        "page.tsx",
+        "resistor.ts",
+        "resistor_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
