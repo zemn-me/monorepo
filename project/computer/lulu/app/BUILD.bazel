@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//project/computer/lulu:__subpackages__"])
 
@@ -34,10 +34,30 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
+        "client_test.ts",
         "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["client_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":app_tests"],
+)
+
+ts_project(
+    name = "app_tests",
+    srcs = ["client_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":app",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )
 
 bazel_lint(

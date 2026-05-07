@@ -1,6 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import {
+	type PointerEvent as ReactPointerEvent,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import seedrandom from 'seedrandom';
 
 import {
@@ -27,6 +32,25 @@ import { dayOfYear } from '#root/ts/time/day_of_year.js';
 import { daysInYear } from '#root/ts/time/days_in_year.js';
 
 const a = () => date.parse([9, 'oct', 2022]);
+export const PHYSICS_TICK_SECONDS = 1 / 60;
+const PHYSICS_TICK_MILLISECONDS = PHYSICS_TICK_SECONDS * 1000;
+export const CAMERA_DRAG_RADIANS_PER_PIXEL = Math.PI / 480;
+
+export function cameraDragOffsetAfterDelta(
+	currentOffset: number,
+	horizontalDeltaPixels: number
+): number {
+	return (
+		currentOffset + horizontalDeltaPixels * CAMERA_DRAG_RADIANS_PER_PIXEL
+	);
+}
+
+export function cameraAngleFromInput(
+	naturalCameraAngle: number,
+	dragAngleOffset: number
+): number {
+	return naturalCameraAngle + dragAngleOffset;
+}
 
 // Computes the day of the year for the target date (e.g., 9th October)
 const yearlyCycleHigh = (targetDate: Date): number => dayOfYear(targetDate);
@@ -97,6 +121,16 @@ interface FishbowlProps {
 	readonly particles: Set<Particle>;
 	readonly size: Vector<2>;
 	readonly cameraAngle: number;
+	readonly isDraggingCamera: boolean;
+	readonly onCameraPointerDown: (
+		event: ReactPointerEvent<SVGSVGElement>
+	) => void;
+	readonly onCameraPointerEnd: (
+		event: ReactPointerEvent<SVGSVGElement>
+	) => void;
+	readonly onCameraPointerMove: (
+		event: ReactPointerEvent<SVGSVGElement>
+	) => void;
 }
 
 interface ViewportSize {
@@ -274,6 +308,11 @@ function Fishbowl(props: FishbowlProps) {
 	return (
 		<svg
 			aria-label="lulu.computer aquarium"
+			onLostPointerCapture={props.onCameraPointerEnd}
+			onPointerCancel={props.onCameraPointerEnd}
+			onPointerDown={props.onCameraPointerDown}
+			onPointerMove={props.onCameraPointerMove}
+			onPointerUp={props.onCameraPointerEnd}
 			role="img"
 			viewBox={`0 0 ${viewportSize.width} ${viewportSize.height}`}
 			style={{
@@ -281,6 +320,9 @@ function Fishbowl(props: FishbowlProps) {
 				height: '100vh',
 				display: 'block',
 				background: '#071923',
+				cursor: props.isDraggingCamera ? 'grabbing' : 'grab',
+				touchAction: 'none',
+				userSelect: 'none',
 			}}
 		>
 			<rect
@@ -486,28 +528,56 @@ export function FishbowlClient() {
 		);
 	});
 	const particlesRef = useRef(particles);
-	const lastFrameTime = useRef<number | null>(null);
+	const lastFrameTimeRef = useRef<number | null>(null);
+	const naturalCameraAngleRef = useRef(0);
+	const dragAngleOffsetRef = useRef(0);
+	const draggingCameraRef = useRef<{
+		readonly pointerId: number;
+		readonly lastX: number;
+	} | null>(null);
 	const [cameraAngle, setCameraAngle] = useState(0);
+	const [isDraggingCamera, setIsDraggingCamera] = useState(false);
 
 	useEffect(() => {
 		particlesRef.current = particles;
 	}, [particles]);
 
+	function syncCameraAngle() {
+		setCameraAngle(
+			cameraAngleFromInput(
+				naturalCameraAngleRef.current,
+				dragAngleOffsetRef.current
+			)
+		);
+	}
+
+	useEffect(() => {
+		const physicsInterval = window.setInterval(() => {
+			const nextParticles = sim(
+				PHYSICS_TICK_SECONDS,
+				particlesRef.current
+			);
+			particlesRef.current = nextParticles;
+			setParticles(nextParticles);
+		}, PHYSICS_TICK_MILLISECONDS);
+
+		return () => {
+			window.clearInterval(physicsInterval);
+		};
+	}, []);
+
 	useEffect(() => {
 		let animationFrame: number | null = null;
 
 		function animate(now: number) {
-			const previous = lastFrameTime.current ?? now;
-			lastFrameTime.current = now;
+			const previous = lastFrameTimeRef.current ?? now;
+			lastFrameTimeRef.current = now;
 			const dt = Math.min((now - previous) / 1000, 0.05);
 
 			if (dt > 0) {
-				const nextParticles = sim(dt, particlesRef.current);
-				particlesRef.current = nextParticles;
-				setParticles(nextParticles);
-				setCameraAngle(
-					current => current + CAMERA_ORBIT_RADIANS_PER_SECOND * dt
-				);
+				naturalCameraAngleRef.current +=
+					CAMERA_ORBIT_RADIANS_PER_SECOND * dt;
+				syncCameraAngle();
 			}
 
 			animationFrame = window.requestAnimationFrame(animate);
@@ -519,10 +589,66 @@ export function FishbowlClient() {
 			if (animationFrame != null) {
 				window.cancelAnimationFrame(animationFrame);
 			}
+			lastFrameTimeRef.current = null;
 		};
 	}, []);
 
+	function handleCameraPointerDown(event: ReactPointerEvent<SVGSVGElement>) {
+		if (event.pointerType === 'mouse' && event.button !== 0) {
+			return;
+		}
+
+		event.preventDefault();
+		draggingCameraRef.current = {
+			pointerId: event.pointerId,
+			lastX: event.clientX,
+		};
+		setIsDraggingCamera(true);
+		event.currentTarget.setPointerCapture(event.pointerId);
+	}
+
+	function handleCameraPointerMove(event: ReactPointerEvent<SVGSVGElement>) {
+		const drag = draggingCameraRef.current;
+		if (drag == null || drag.pointerId !== event.pointerId) {
+			return;
+		}
+
+		event.preventDefault();
+		const deltaX = event.clientX - drag.lastX;
+		draggingCameraRef.current = {
+			pointerId: event.pointerId,
+			lastX: event.clientX,
+		};
+
+		if (deltaX === 0) {
+			return;
+		}
+
+		dragAngleOffsetRef.current = cameraDragOffsetAfterDelta(
+			dragAngleOffsetRef.current,
+			deltaX
+		);
+		syncCameraAngle();
+	}
+
+	function handleCameraPointerEnd(event: ReactPointerEvent<SVGSVGElement>) {
+		if (draggingCameraRef.current?.pointerId !== event.pointerId) {
+			return;
+		}
+
+		draggingCameraRef.current = null;
+		setIsDraggingCamera(false);
+	}
+
 	return (
-		<Fishbowl cameraAngle={cameraAngle} particles={particles} size={size} />
+		<Fishbowl
+			cameraAngle={cameraAngle}
+			isDraggingCamera={isDraggingCamera}
+			onCameraPointerDown={handleCameraPointerDown}
+			onCameraPointerEnd={handleCameraPointerEnd}
+			onCameraPointerMove={handleCameraPointerMove}
+			particles={particles}
+			size={size}
+		/>
 	);
 }
