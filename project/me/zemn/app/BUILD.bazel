@@ -28,10 +28,8 @@ ts_project(
         "//:node_modules/@tanstack/react-query-persist-client",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/react-dom",
+        "//:node_modules/react-router",
         "//:node_modules/schema-dts",
         "//:node_modules/zod",
         "//project/me/zemn/bio",
@@ -46,10 +44,9 @@ ts_project(
         "//project/me/zemn/constants",
         "//project/me/zemn/hook",
         "//ts/iter",
-        "//ts/next.js",
-        "//ts/next.js/types/next-compiled",
         "//ts/option",
         "//ts/react/lang",
+        "//ts/remix",
     ],
 )
 

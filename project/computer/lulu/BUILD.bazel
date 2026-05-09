@@ -1,12 +1,26 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
-load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//ts/pulumi/lulu.computer:__subpackages__"])
 
-next_project(
+alias(
     name = "next",
-    srcs = ["//project/computer/lulu/app"],
+    actual = "//project/computer/lulu/app:remix",
+)
+
+alias(
+    name = "build",
+    actual = "//project/computer/lulu/app:build",
+)
+
+alias(
+    name = "dev",
+    actual = "//project/computer/lulu/app:dev",
+)
+
+alias(
+    name = "start",
+    actual = "//project/computer/lulu/app:start",
 )
 
 bazel_lint(

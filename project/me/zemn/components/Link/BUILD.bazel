@@ -17,7 +17,8 @@ ts_project(
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
         "//:node_modules/react",
-        "//ts/react/next/Link",
+        "//:node_modules/react-router",
+        "//ts/remix",
     ],
 )
 

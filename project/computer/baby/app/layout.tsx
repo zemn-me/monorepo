@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { Links, Meta, Scripts } from 'react-router';
 
 export interface Props {
 	readonly children?: ReactNode;
@@ -7,7 +8,14 @@ export interface Props {
 export default function Layout({ children }: Props) {
 	return (
 		<html>
-			<body>{children}</body>
+			<head>
+				<Meta />
+				<Links />
+			</head>
+			<body>
+				{children}
+				<Scripts />
+			</body>
 		</html>
 	);
 }

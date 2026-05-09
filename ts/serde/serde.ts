@@ -1,4 +1,4 @@
-import b64 from 'base64-js';
+import * as b64 from 'base64-js';
 
 import { Lens, LensGet, LensSet } from '#root/ts/lens.js';
 import { None, Option, Some, unwrap_or } from '#root/ts/option/types.js';

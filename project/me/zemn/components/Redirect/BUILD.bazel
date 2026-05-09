@@ -12,7 +12,8 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//ts/next.js/component/Redirect",
+        "//project/me/zemn/components/Link",
+        "//project/me/zemn/components/Prose",
     ],
 )
 

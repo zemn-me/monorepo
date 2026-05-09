@@ -1,6 +1,4 @@
-import { Metadata } from 'next/types/index.js';
-
-import { Link } from '#root/ts/react/next/Link/index.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 export default function Main() {
 	return (
@@ -9,10 +7,7 @@ export default function Main() {
 			<p>One day something will go here!</p>
 			<p>
 				Until then,{' '}
-				<Link href="https://twitter.com/zemnmez">
-					follow me on Twitter
-				</Link>
-				?
+				<a href="https://twitter.com/zemnmez">follow me on Twitter</a>?
 			</p>
 		</>
 	);

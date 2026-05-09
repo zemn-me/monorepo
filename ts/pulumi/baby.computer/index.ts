@@ -4,7 +4,7 @@ import * as Pulumi from '@pulumi/pulumi';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
-const websiteBuildDirectory = 'project/computer/baby/build';
+const websiteBuildDirectory = 'project/computer/baby/app/build/client';
 const indexDocument = `${websiteBuildDirectory}/index.html`;
 
 export interface Args {
@@ -58,7 +58,9 @@ export class Component extends Pulumi.ComponentResource {
 			{
 				noCostAllocationTag: true,
 				index: indexDocument,
-				notFound: indexDocument,
+				notFound: `${websiteBuildDirectory}/__spa-fallback.html`,
+				notFoundResponseCode: 200,
+				cleanIndexRoutes: true,
 				directory: websiteBuildDirectory,
 				zoneId: zone.then(zone => zone.zoneId),
 				domain: targetDomain,

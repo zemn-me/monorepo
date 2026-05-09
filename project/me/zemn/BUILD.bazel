@@ -1,13 +1,60 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
-load("//ts/next.js:rules.bzl", "next_itest_service", "next_itest_service_dev", "next_project")
+load("//ts/remix:rules.bzl", "remix_itest_service", "remix_itest_service_dev", "remix_project")
 
 package(default_visibility = ["//visibility:public"])
 
+# gazelle:ignore
 # gazelle:exclude index.ts
+# gazelle:exclude router
 
 ts_project(
     name = "ts",
+    srcs = [
+        "index.ts",
+        "react-router.config.ts",
+        "router/admin.tsx",
+        "router/admin-users.tsx",
+        "router/article.tsx",
+        "router/article-2014-csp.tsx",
+        "router/article-2019-cors.tsx",
+        "router/article-2024-clean.tsx",
+        "router/article-2024-missing.tsx",
+        "router/bluesky.tsx",
+        "router/callback.tsx",
+        "router/experiments.tsx",
+        "router/experiments-arena.tsx",
+        "router/experiments-article.tsx",
+        "router/experiments-cultist.tsx",
+        "router/experiments-cv.tsx",
+        "router/experiments-emoji-flag.tsx",
+        "router/experiments-factorio.tsx",
+        "router/experiments-factorio-blueprint.tsx",
+        "router/experiments-factorio-blueprint-book.tsx",
+        "router/experiments-factorio-blueprint-parse.tsx",
+        "router/experiments-factorio-blueprint-request.tsx",
+        "router/experiments-factorio-blueprint-wall.tsx",
+        "router/experiments-frame.tsx",
+        "router/experiments-geometry-of-music.tsx",
+        "router/experiments-rays.tsx",
+        "router/experiments-toc.tsx",
+        "router/github.tsx",
+        "router/grievanceportal.tsx",
+        "router/healthcheck-bad.tsx",
+        "router/healthz.tsx",
+        "router/home.tsx",
+        "router/key.tsx",
+        "router/linkedin.tsx",
+        "router/meta.ts",
+        "router/root.tsx",
+        "router/routes.ts",
+        "router/src.tsx",
+        "router/src-index.tsx",
+        "router/src-splat.tsx",
+        "router/tool-elastictabs.tsx",
+        "router/twitter.tsx",
+        "vite.config.ts",
+    ],
     assets = glob(
         [
             "**/*.css",
@@ -16,6 +63,10 @@ ts_project(
         allow_empty = True,
     ),
     deps = [
+        "//:node_modules/@react-router/dev",
+        "//:node_modules/nuqs",
+        "//:node_modules/react-router",
+        "//:node_modules/vite",
         "//project/me/zemn/app",
         "//project/me/zemn/app/admin",
         "//project/me/zemn/app/admin/users",
@@ -24,6 +75,7 @@ ts_project(
         "//project/me/zemn/app/article/2019/cors",
         "//project/me/zemn/app/article/2024/clean",
         "//project/me/zemn/app/article/2024/missing",
+        "//project/me/zemn/app/bluesky",
         "//project/me/zemn/app/callback",
         "//project/me/zemn/app/experiments",
         "//project/me/zemn/app/experiments/arena",
@@ -32,6 +84,8 @@ ts_project(
         "//project/me/zemn/app/experiments/cv",
         "//project/me/zemn/app/experiments/emoji/flag",
         "//project/me/zemn/app/experiments/factorio",
+        "//project/me/zemn/app/experiments/factorio/blueprint",
+        "//project/me/zemn/app/experiments/factorio/blueprint/book",
         "//project/me/zemn/app/experiments/factorio/blueprint/parse",
         "//project/me/zemn/app/experiments/factorio/blueprint/request",
         "//project/me/zemn/app/experiments/factorio/blueprint/wall",
@@ -44,25 +98,25 @@ ts_project(
         "//project/me/zemn/app/healthcheck/bad",
         "//project/me/zemn/app/healthz",
         "//project/me/zemn/app/key",
+        "//project/me/zemn/app/linkedin",
         "//project/me/zemn/app/src/[[...slug]]",
         "//project/me/zemn/app/tool/elastictabs",
         "//project/me/zemn/app/twitter",
+        "//ts/remix",
     ],
 )
 
-next_project(
+remix_project(
     name = "next",
     srcs = [
+        ":all_ts_srcs",
         ":ts",
         "//project/me/zemn/public:files",
     ],
 )
 
-next_itest_service(
+remix_itest_service(
     name = "itest_service",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
@@ -71,11 +125,8 @@ next_itest_service(
     ],
 )
 
-next_itest_service_dev(
+remix_itest_service_dev(
     name = "itest_service_dev",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
@@ -83,11 +134,8 @@ next_itest_service_dev(
     ],
 )
 
-next_itest_service_dev(
+remix_itest_service_dev(
     name = "itest_service_dev_prod_env",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_prod_env_bin",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
@@ -110,6 +158,50 @@ bazel_lint(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["index.ts"],
+    srcs = [
+        "index.ts",
+        "react-router.config.ts",
+        "router/admin.tsx",
+        "router/admin-users.tsx",
+        "router/article.tsx",
+        "router/article-2014-csp.tsx",
+        "router/article-2019-cors.tsx",
+        "router/article-2024-clean.tsx",
+        "router/article-2024-missing.tsx",
+        "router/bluesky.tsx",
+        "router/callback.tsx",
+        "router/experiments.tsx",
+        "router/experiments-arena.tsx",
+        "router/experiments-article.tsx",
+        "router/experiments-cultist.tsx",
+        "router/experiments-cv.tsx",
+        "router/experiments-emoji-flag.tsx",
+        "router/experiments-factorio.tsx",
+        "router/experiments-factorio-blueprint.tsx",
+        "router/experiments-factorio-blueprint-book.tsx",
+        "router/experiments-factorio-blueprint-parse.tsx",
+        "router/experiments-factorio-blueprint-request.tsx",
+        "router/experiments-factorio-blueprint-wall.tsx",
+        "router/experiments-frame.tsx",
+        "router/experiments-geometry-of-music.tsx",
+        "router/experiments-rays.tsx",
+        "router/experiments-toc.tsx",
+        "router/github.tsx",
+        "router/grievanceportal.tsx",
+        "router/healthcheck-bad.tsx",
+        "router/healthz.tsx",
+        "router/home.tsx",
+        "router/key.tsx",
+        "router/linkedin.tsx",
+        "router/meta.ts",
+        "router/root.tsx",
+        "router/routes.ts",
+        "router/src.tsx",
+        "router/src-index.tsx",
+        "router/src-splat.tsx",
+        "router/tool-elastictabs.tsx",
+        "router/twitter.tsx",
+        "vite.config.ts",
+    ],
     visibility = ["//:__subpackages__"],
 )

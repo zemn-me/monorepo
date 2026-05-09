@@ -48,10 +48,13 @@ export class Component extends Pulumi.ComponentResource {
 		const website = new Website(
 			`${name}_pleaseintroducemetoyour_dog_website`,
 			{
-				index: 'ts/pulumi/pleaseintroducemetoyour.dog/build/index.html',
+				index: 'ts/pulumi/pleaseintroducemetoyour.dog/app/build/client/index.html',
 				notFound:
-					'ts/pulumi/pleaseintroducemetoyour.dog/build/404.html',
-				directory: 'ts/pulumi/pleaseintroducemetoyour.dog/build',
+					'ts/pulumi/pleaseintroducemetoyour.dog/app/build/client/__spa-fallback.html',
+				notFoundResponseCode: 200,
+				cleanIndexRoutes: true,
+				directory:
+					'ts/pulumi/pleaseintroducemetoyour.dog/app/build/client',
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,

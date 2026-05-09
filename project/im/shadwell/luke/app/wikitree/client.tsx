@@ -10,9 +10,9 @@ import {
 	useState,
 	WheelEvent,
 } from 'react';
+import { Link } from 'react-router';
 
 import { RANK_IMAGE_RULES } from '#root/project/im/shadwell/luke/app/wikitree/rankIconReferences.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
 
 type RelationName = 'father' | 'mother' | 'child';
 
@@ -2428,7 +2428,7 @@ export default function WikiTreePage() {
 							<button type="submit">Load tree</button>
 							<Link
 								className="permalink"
-								href={`?q=${encodeURIComponent(normaliseQid(inputValue) || DEFAULT_QID)}&max=${selectedNodeLimit}`}
+								to={`?q=${encodeURIComponent(normaliseQid(inputValue) || DEFAULT_QID)}&max=${selectedNodeLimit}`}
 							>
 								Permalink
 							</Link>
@@ -2483,13 +2483,13 @@ export default function WikiTreePage() {
 									</button>
 								) : null}
 								{selectedNode ? (
-									<Link
+									<a
 										href={selectedNode.url}
 										rel="noreferrer"
 										target="_blank"
 									>
 										Open {selectedNode.id}
-									</Link>
+									</a>
 								) : null}
 								{graph?.excessiveNodes && selectedNode ? (
 									<button
