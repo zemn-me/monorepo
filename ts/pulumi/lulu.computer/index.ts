@@ -5,7 +5,7 @@ import * as Pulumi from '@pulumi/pulumi';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
-const websiteBuildDirectory = 'project/computer/lulu/build';
+const websiteBuildDirectory = 'project/computer/lulu/app/build/client';
 const indexDocument = `${websiteBuildDirectory}/index.html`;
 
 export interface Args {
@@ -66,7 +66,9 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_lulu.computer`,
 			{
 				index: indexDocument,
-				notFound: indexDocument,
+				notFound: `${websiteBuildDirectory}/__spa-fallback.html`,
+				notFoundResponseCode: 200,
+				cleanIndexRoutes: true,
 				tags,
 				directory: websiteBuildDirectory,
 				zoneId: zone.then(zone => zone.zoneId),

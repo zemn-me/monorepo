@@ -1,7 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 import { useAnalyticsSessionId } from '#root/project/me/zemn/hook/useAnalyticsSessionId.js';
 import { sendAnalyticsBeacon } from '#root/project/me/zemn/hook/useZemnMeApi.js';
@@ -74,7 +74,7 @@ function collectEngagement() {
 }
 
 export function AnalyticsPageBeacon() {
-	const pathname = usePathname();
+	const { pathname } = useLocation();
 	const lastSentKey = useRef<string | null>(null);
 	const sessionIdQuery = useAnalyticsSessionId();
 

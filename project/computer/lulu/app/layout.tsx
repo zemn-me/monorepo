@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
+import { Links, Meta, Scripts } from 'react-router';
 
-import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
+import { HeaderTags } from '#root/ts/remix/index.js';
 
 export interface Props {
 	readonly children?: ReactNode;
@@ -9,9 +10,14 @@ export interface Props {
 export default function Layout({ children }: Props) {
 	return (
 		<html>
+			<head>
+				<Meta />
+				<Links />
+				<HeaderTags />
+			</head>
 			<body>
-				<HeaderTagsAppRouter />
 				{children}
+				<Scripts />
 			</body>
 		</html>
 	);

@@ -12,17 +12,13 @@ ts_project(
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
         "//:node_modules/classnames",
-        "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/react-dom",
         "//:node_modules/zod",
         "//ts",
-        "//ts/next.js/types/next-compiled",
         "//ts/react/Video",
-        "//ts/react/next/Link",
         "//ts/reddit",
+        "//ts/remix",
     ],
 )
 

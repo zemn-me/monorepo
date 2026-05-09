@@ -1,4 +1,4 @@
-import b64 from 'base64-js';
+import * as b64 from 'base64-js';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { z } from 'zod';
 

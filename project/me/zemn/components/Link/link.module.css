@@ -10,3 +10,8 @@
 .link:link {
 	text-decoration-color: var(--link-color);
 }
+
+.styleless {
+	color: inherit;
+	text-decoration: none;
+}

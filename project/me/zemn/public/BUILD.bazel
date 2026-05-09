@@ -2,7 +2,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
 load("//js:rules.bzl", "js_library")
-load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//project/me/zemn:__subpackages__"])
 
@@ -29,50 +28,12 @@ transcode_web(
 js_library(
     name = "files",
     srcs = [
+        ":kenwood_media_sources",
+        ":kenwood_snow_video_sources",
+        ":mist_on_the_hills_video_sources",
+        "icon.svg",
         "wallpaper.jpg",
         "//project/me/zemn/public/poc",
-    ],
-)
-
-ts_project(
-    name = "kenwood",
-    srcs = ["kenwood.ts"],
-    assets = [
-        "kenwood.mp4",
-        "kenwood.webm",
-        "kenwood.ogv",
-        "kenwood.jpg",
-    ],
-    deps = [
-        "//:base_defs",  # one day this should probably be separate for next.js
-    ],
-)
-
-ts_project(
-    name = "kenwood_snow",
-    srcs = ["kenwood_snow.ts"],
-    assets = [
-        "kenwood_snow.mp4",
-        "kenwood_snow.webm",
-        "kenwood_snow.ogv",
-        "kenwood_snow.jpg",
-    ],
-    deps = [
-        "//:base_defs",  # one day this should probably be separate for next.js
-    ],
-)
-
-ts_project(
-    name = "mist_on_the_hills",
-    srcs = ["mist_on_the_hills.ts"],
-    assets = [
-        "mist_on_the_hills.mp4",
-        "mist_on_the_hills.webm",
-        "mist_on_the_hills.ogv",
-        "mist_on_the_hills.jpg",
-    ],
-    deps = [
-        "//:base_defs",
     ],
 )
 

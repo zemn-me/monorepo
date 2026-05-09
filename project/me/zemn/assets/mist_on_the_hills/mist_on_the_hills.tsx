@@ -1,11 +1,8 @@
-import {
-	mp4,
-	ogv,
-	poster,
-	webm,
-} from '#root/project/me/zemn/public/mist_on_the_hills.js';
+const mp4 = '/mist_on_the_hills.mp4';
+const webm = '/mist_on_the_hills.webm';
+const ogv = '/mist_on_the_hills.ogv';
 
-export { poster };
+export const poster = { src: '/mist_on_the_hills.jpg' } as const;
 
 /**
  * @returns A React element representing the a video asset
