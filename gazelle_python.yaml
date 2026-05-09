@@ -6,7 +6,7 @@
 ---
 manifest:
   modules_mapping:
-    0aca9ce3d91742c5b361__mypyc: mypy
+    0603b0f663efda90f95c__mypyc: mypy
     81d243bd2c585b0f4821__mypyc: charset_normalizer
     IPython: ipython
     OpenSSL: pyopenssl
@@ -16,6 +16,7 @@ manifest:
     argon2: argon2_cffi
     arrow: arrow
     asgiref: asgiref
+    ast_serialize: ast_serialize
     asttokens: asttokens
     async_lru: async_lru
     attr: attrs
@@ -167,4 +168,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: dc3f88542f1911e1a3ed9960e7ef6d0e1e22a08637a380c2596e22cbca882f6c
+integrity: 282867ad2af89599ccad5a7e5fea90482f408e1f8fa4036413d48820851091ad
