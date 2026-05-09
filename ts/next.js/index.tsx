@@ -1,5 +1,3 @@
-import Head from 'next/head';
-
 import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.js';
 
 export * as config from '#root/ts/next.js/next.config.js';
@@ -20,6 +18,7 @@ type directives =
 	| 'default-src'
 	| 'media-src'
 	| 'font-src'
+	| 'object-src'
 	| 'require-trusted-types-for'
 	| 'trusted-types';
 
@@ -73,37 +72,6 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 
 interface HeaderTagsProps {
 	readonly cspPolicy?: CspPolicy;
-}
-
-export function HeaderTagsPagesRouter({
-	cspPolicy = DefaultContentSecurityPolicy,
-}: HeaderTagsProps) {
-	return (
-		<>
-			<DeclareTrustedTypesPolicy />
-			<Head>
-				<meta
-					content={Object.entries(cspPolicy)
-						.map(([k, v]) => [k, ...v].join(' '))
-						.join('; ')}
-					httpEquiv="Content-Security-Policy"
-				/>
-
-				<meta
-					content="same-origin"
-					httpEquiv="Cross-Origin-Resource-Policy"
-				/>
-
-				<meta
-					content="same-origin"
-					httpEquiv="Cross-Origin-Opener-Policy"
-				/>
-				<meta content="nosniff" httpEquiv="X-Content-Type-Options" />
-
-				<meta content="no-referrer" name="referrer" />
-			</Head>
-		</>
-	);
 }
 
 export function HeaderTagsAppRouter({
