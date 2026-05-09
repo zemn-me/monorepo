@@ -44,7 +44,7 @@ export async function generateStaticParams(): Promise<PageProps['params'][]> {
 	// this technically seems to be wrong but i think
 	// next.js is confused
 	//
-	// docs: https://nextjs.org/docs/pages/building-your-application/routing/api-routes#optional-catch-all-api-routes
+	// docs: https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes#optional-catch-all-segments
 	//
 	// next.js docs say that when accessing /, props will be {},
 	// but doing this causes a 404.

@@ -2,13 +2,10 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "pages",
+    name = "app",
     srcs = [
-        "_app.tsx",
-        "index.tsx",
-    ],
-    assets = [
-        "base.css",
+        "layout.tsx",
+        "page.tsx",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -18,19 +15,16 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//project/me/zemn/bio",
-        "//ts/iter",
         "//ts/next.js",
         "//ts/next.js/types/next-compiled",
-        "//ts/react/next/Link",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "_app.tsx",
-        "index.tsx",
+        "layout.tsx",
+        "page.tsx",
     ],
     visibility = ["//:__subpackages__"],
 )
