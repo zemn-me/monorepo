@@ -6,7 +6,7 @@ package(default_visibility = ["//visibility:public"])
 next_project(
     name = "next",
     srcs = [
-        "//ts/pulumi/zemn.me/availability/pages",
+        "//ts/pulumi/zemn.me/availability/app",
     ],
 )
 

@@ -2,8 +2,6 @@
  * @fileoverview page to show my availability (for meetings etc)
  */
 
-import Head from 'next/head';
-
 import { Bio } from '#root/project/me/zemn/bio/bio.js';
 import { filter, flatten, map } from '#root/ts/iter/index.js';
 import { Link } from '#root/ts/react/next/Link/index.js';
@@ -57,28 +55,18 @@ const URL = gCalEmbedURL({
 
 export default function HomePage() {
 	return (
-		<>
-			<Head>
-				<meta
-					content="object-src https://calendar.google.com"
-					httpEquiv="Content-Security-Policy"
-				/>
-				<title>Thomas’ Availability</title>
-			</Head>
-			<main>
-				<p>
-					Occasionally, the below frame can have trouble loading due
-					to Google security checks. If that happens, please{' '}
-					<Link href={URL}>view on Google calendar</Link> directly
-					instead.
-				</p>
-				<p>
-					"All day" events are usually reminders, not times I am busy.
-					Google Calendar does not let you filter for busy / free
-					time.
-				</p>
-				<iframe src={URL} />
-			</main>
-		</>
+		<main>
+			<p>
+				Occasionally, the below frame can have trouble loading due to
+				Google security checks. If that happens, please{' '}
+				<Link href={URL}>view on Google calendar</Link> directly
+				instead.
+			</p>
+			<p>
+				"All day" events are usually reminders, not times I am busy.
+				Google Calendar does not let you filter for busy / free time.
+			</p>
+			<iframe src={URL} />
+		</main>
 	);
 }
