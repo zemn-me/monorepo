@@ -3,6 +3,7 @@ import { parseAsString, useQueryState } from 'nuqs';
 import { ChangeEvent, useCallback, useId, useMemo } from 'react';
 
 import { frameSizes } from '#root/project/me/zemn/app/experiments/frame/frame_sizes.js';
+import { useHydrated } from '#root/project/me/zemn/hook/useHydrated.js';
 import { Iterable } from '#root/ts/iter/index.js';
 import { NewType } from '#root/ts/NewType.js';
 import { None, Some } from '#root/ts/option/option.js';
@@ -15,6 +16,11 @@ const measurementConversions = {
 	mm: 1 / 1_000,
 	cm: 1 / 100,
 };
+
+const queryString = (defaultValue: string) =>
+	parseAsString
+		.withDefault(defaultValue)
+		.withOptions({ clearOnDefault: false });
 
 type Unit = keyof typeof measurementConversions;
 
@@ -297,9 +303,21 @@ function matteboardCuts({
 }
 
 export function FrameClient() {
-	const [frameWidthInput, setFrameWidthInput] = useQueryState<string>(
+	if (!useHydrated()) {
+		return (
+			<form>
+				<h1>Framing Calculator.</h1>
+			</form>
+		);
+	}
+
+	return <FrameClientForm />;
+}
+
+function FrameClientForm() {
+	const [frameWidthInput, setFrameWidthInput] = useQueryState(
 		'frame_width',
-		parseAsString.withDefault('17in')
+		queryString('17in')
 	);
 	const frameWidthInputId = useId();
 	const frameWidthChange = useCallback(
@@ -312,9 +330,9 @@ export function FrameClient() {
 		[frameWidthInput]
 	);
 
-	const [frameHeightInput, setFrameHeightInput] = useQueryState<string>(
+	const [frameHeightInput, setFrameHeightInput] = useQueryState(
 		'frame_height',
-		parseAsString.withDefault('24in')
+		queryString('24in')
 	);
 	const frameHeightInputId = useId();
 	const frameHeightChange = useCallback(
@@ -327,9 +345,9 @@ export function FrameClient() {
 		[frameHeightInput]
 	);
 
-	const [artWidthInput, setArtWidthInput] = useQueryState<string>(
+	const [artWidthInput, setArtWidthInput] = useQueryState(
 		'art_width',
-		parseAsString.withDefault('12in')
+		queryString('12in')
 	);
 	const artWidthInputId = useId();
 	const artWidthChange = useCallback(
@@ -342,9 +360,9 @@ export function FrameClient() {
 		[artWidthInput]
 	);
 
-	const [artHeightInput, setArtHeightInput] = useQueryState<string>(
+	const [artHeightInput, setArtHeightInput] = useQueryState(
 		'art_height',
-		parseAsString.withDefault('23.75in')
+		queryString('23.75in')
 	);
 	const artHeightInputId = useId();
 	const artHeightChange = useCallback(
@@ -357,9 +375,9 @@ export function FrameClient() {
 		[artHeightInput]
 	);
 
-	const [overlapAmountInput, setOverlapAmountInput] = useQueryState<string>(
+	const [overlapAmountInput, setOverlapAmountInput] = useQueryState(
 		'overlap_amount',
-		parseAsString.withDefault('1cm')
+		queryString('1cm')
 	);
 	const overlapAmountInputId = useId();
 	const overlapAmountChange = useCallback(
@@ -372,11 +390,10 @@ export function FrameClient() {
 		[overlapAmountInput]
 	);
 
-	const [minimumCutDepthInput, setMinimumCutDepthInput] =
-		useQueryState<string>(
-			'minimum_cut_depth',
-			parseAsString.withDefault('')
-		);
+	const [minimumCutDepthInput, setMinimumCutDepthInput] = useQueryState(
+		'minimum_cut_depth',
+		queryString('')
+	);
 	const minimumCutDepthInputId = useId();
 	const minimumCutDepthInputChange = useCallback(
 		(e: ChangeEvent<HTMLInputElement>) =>
@@ -544,6 +561,7 @@ export function FrameClient() {
 					<label htmlFor={frameWidthInputId}>
 						Width:
 						<input
+							aria-label="Frame width"
 							id={frameWidthInputId}
 							onChange={frameWidthChange}
 							pattern={reParseMeasurement.source}
@@ -553,6 +571,7 @@ export function FrameClient() {
 					<label htmlFor={frameHeightInputId}>
 						Height:
 						<input
+							aria-label="Frame height"
 							id={frameHeightInputId}
 							onChange={frameHeightChange}
 							pattern={reParseMeasurement.source}
@@ -573,6 +592,7 @@ export function FrameClient() {
 					<label htmlFor={artWidthInputId}>
 						Width:
 						<input
+							aria-label="Art width"
 							id={artWidthInputId}
 							onChange={artWidthChange}
 							pattern={reParseMeasurement.source}
@@ -582,6 +602,7 @@ export function FrameClient() {
 					<label htmlFor={artHeightInputId}>
 						Height:
 						<input
+							aria-label="Art height"
 							id={artHeightInputId}
 							onChange={artHeightChange}
 							pattern={reParseMeasurement.source}
@@ -602,6 +623,7 @@ export function FrameClient() {
 					<label htmlFor={overlapAmountInputId}>
 						<i>Amount of art to cover with matteboard. </i>
 						<input
+							aria-label="Overlap amount"
 							id={overlapAmountInputId}
 							onChange={overlapAmountChange}
 							pattern={reParseMeasurement.source}
@@ -611,6 +633,7 @@ export function FrameClient() {
 					<label htmlFor={minimumCutDepthInputId}>
 						<i>Minimum Cut Depth. </i>
 						<input
+							aria-label="Minimum cut depth"
 							id={minimumCutDepthInputId}
 							onChange={minimumCutDepthInputChange}
 							pattern={reParseMeasurement.source}

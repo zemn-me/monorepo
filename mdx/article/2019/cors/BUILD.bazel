@@ -15,9 +15,6 @@ mdx_files(
         allow_empty = True,
     ),
     visibility = ["//:__subpackages__"],
-    deps = [
-        "//:node_modules/next",
-    ],
 )
 
 bazel_lint(

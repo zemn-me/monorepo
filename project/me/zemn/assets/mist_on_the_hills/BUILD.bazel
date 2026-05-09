@@ -13,7 +13,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "@monorepo//project/me/zemn/public:mist_on_the_hills",
     ],
 )
 

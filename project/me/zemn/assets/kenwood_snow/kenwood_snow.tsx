@@ -1,11 +1,8 @@
-import {
-	mp4,
-	ogv,
-	poster,
-	webm,
-} from '#root/project/me/zemn/public/kenwood_snow';
+const mp4 = '/kenwood_snow.mp4';
+const webm = '/kenwood_snow.webm';
+const ogv = '/kenwood_snow.ogv';
 
-export { poster };
+export const poster = { src: '/kenwood_snow.jpg' } as const;
 
 /**
  * @returns A React element representing the Kenwood video asset

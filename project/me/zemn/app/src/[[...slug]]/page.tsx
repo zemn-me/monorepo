@@ -1,8 +1,7 @@
-import { Metadata } from 'next/types';
-
 import { Redirect } from '#root/project/me/zemn/components/Redirect/Redirect.js';
 import { githubRepoUrl } from '#root/ts/constants/constants.js';
 import { isDefined } from '#root/ts/guard.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 interface PageProps {
 	readonly params: { slug?: string[] };
@@ -41,12 +40,5 @@ export async function generateStaticParams(): Promise<PageProps['params'][]> {
 		['commits'],
 	];
 
-	// this technically seems to be wrong but i think
-	// next.js is confused
-	//
-	// docs: https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes#optional-catch-all-segments
-	//
-	// next.js docs say that when accessing /, props will be {},
-	// but doing this causes a 404.
 	return githubSubpaths.map(v => ({ slug: v }));
 }

@@ -5,7 +5,7 @@ import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
 import { ArticleProps } from '#root/project/me/zemn/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
-import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
+import { RelativeURL } from '#root/ts/remix/index.js';
 import * as time from '#root/ts/time/index.js';
 import { linkToHighlight } from '#root/ts/url/selection.js';
 

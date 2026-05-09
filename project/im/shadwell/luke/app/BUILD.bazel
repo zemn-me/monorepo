@@ -1,5 +1,9 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
+load("//ts/remix:rules.bzl", "remix_project")
+
+# gazelle:ignore
+# gazelle:exclude router
 
 package(default_visibility = ["//project/im/shadwell/luke:__subpackages__"])
 
@@ -8,19 +12,33 @@ ts_project(
     srcs = [
         "layout.tsx",
         "page.tsx",
+        "react-router.config.ts",
+        "router/page.tsx",
+        "router/root.tsx",
+        "router/routes.ts",
+        "router/wikitree.tsx",
+        "vite.config.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//:node_modules/@react-router/dev",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/react-dom",
+        "//:node_modules/react-router",
+        "//:node_modules/vite",
         "//project/im/shadwell/luke/app/wikitree",  # keep
-        "//ts/next.js",
-        "//ts/next.js/types/next-compiled",
+        "//ts/remix",
     ],
+)
+
+remix_project(
+    name = "remix",
+    srcs = [
+        ":all_ts_srcs",
+        ":app",
+    ],
+    visibility = ["//:__subpackages__"],
 )
 
 bazel_lint(
@@ -33,6 +51,12 @@ filegroup(
     srcs = [
         "layout.tsx",
         "page.tsx",
+        "react-router.config.ts",
+        "router/page.tsx",
+        "router/root.tsx",
+        "router/routes.ts",
+        "router/wikitree.tsx",
+        "vite.config.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

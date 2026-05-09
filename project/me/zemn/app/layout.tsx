@@ -1,36 +1,29 @@
-import 'project/me/zemn/app/base.css';
+import './base.css';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Lora } from 'next/font/google';
-import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
+import { Links, Meta, Scripts } from 'react-router';
 
 import { AnalyticsPageBeacon } from '#root/project/me/zemn/app/analytics.js';
 import { Providers } from '#root/project/me/zemn/app/providers.js';
 import { Bio } from '#root/project/me/zemn/bio/index.js';
 import Glade from '#root/project/me/zemn/components/Glade/glade.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
-import {
-	DefaultContentSecurityPolicy,
-	HeaderTagsAppRouter,
-	SourceExpression,
-} from '#root/ts/next.js/index.js';
 import { text } from '#root/ts/react/lang/index.js';
+import {
+	CspPolicy,
+	DefaultContentSecurityPolicy,
+	HeaderTags,
+	Metadata,
+} from '#root/ts/remix/index.js';
 
 export interface Props {
 	readonly children?: ReactNode;
 }
 
-const lora = Lora({
-	weight: ['400', '700'],
-	style: ['italic', 'normal'],
-	subsets: ['latin', 'latin-ext'],
-	display: 'swap',
-});
-
-const csp = {
+const csp: CspPolicy = {
 	...DefaultContentSecurityPolicy,
-	'connect-src': new Set<SourceExpression>([
+	'connect-src': new Set([
 		...DefaultContentSecurityPolicy['connect-src']!,
 		'https://accounts.google.com',
 		'https://people.googleapis.com',
@@ -38,7 +31,7 @@ const csp = {
 		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		'https://www.googleapis.com', // dub-dub-dub?? what year is it?
 	]),
-	'img-src': new Set<SourceExpression>([
+	'img-src': new Set([
 		...DefaultContentSecurityPolicy['img-src']!,
 		'https://*.googleusercontent.com',
 	]),
@@ -46,30 +39,39 @@ const csp = {
 
 export function RootLayout({ children }: Props) {
 	return (
-		<>
-			<Providers>
-				<html>
-					<head>
-						<link
-							href="/icon.svg"
-							rel="icon"
-							type="image/svg+xml"
-						/>
-						<link
-							href="/icon.svg"
-							rel="apple-touch-icon"
-							type="image/svg+xml"
-						/>
-						<HeaderTagsAppRouter cspPolicy={csp} />
-					</head>
-					<body className={lora.className}>
+		<html>
+			<head>
+				<Meta />
+				<Links />
+				<link href="https://fonts.googleapis.com" rel="preconnect" />
+				<link
+					crossOrigin="anonymous"
+					href="https://fonts.gstatic.com"
+					rel="preconnect"
+				/>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+					rel="stylesheet"
+				/>
+				<link href="/icon.svg" rel="icon" type="image/svg+xml" />
+				<link
+					href="/icon.svg"
+					rel="apple-touch-icon"
+					type="image/svg+xml"
+				/>
+				<HeaderTags cspPolicy={csp} />
+			</head>
+			<body>
+				<Providers>
+					<>
 						<ReactQueryDevtools initialIsOpen={false} />
 						<AnalyticsPageBeacon />
 						<Glade>{children}</Glade>
-					</body>
-				</html>
-			</Providers>
-		</>
+					</>
+				</Providers>
+				<Scripts />
+			</body>
+		</html>
 	);
 }
 

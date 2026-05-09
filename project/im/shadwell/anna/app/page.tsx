@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types';
+import { Metadata } from '#root/ts/remix/index.js';
 
 export const metadata: Metadata = {
 	title: 'Anna!',

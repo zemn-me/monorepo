@@ -1,11 +1,25 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
 
-next_project(
+alias(
     name = "next",
-    srcs = ["//project/im/shadwell/kate/app"],
+    actual = "//project/im/shadwell/kate/app:remix",
+)
+
+alias(
+    name = "build",
+    actual = "//project/im/shadwell/kate/app:build",
+)
+
+alias(
+    name = "dev",
+    actual = "//project/im/shadwell/kate/app:dev",
+)
+
+alias(
+    name = "start",
+    actual = "//project/im/shadwell/kate/app:start",
 )
 
 # bazel run //project/im/shadwell/kate

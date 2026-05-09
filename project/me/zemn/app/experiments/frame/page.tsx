@@ -1,7 +1,6 @@
-import { Metadata } from 'next/types';
 import { Suspense } from 'react';
-
 import { FrameClient } from '#root/project/me/zemn/app/experiments/frame/client.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 export default function Page() {
 	return (

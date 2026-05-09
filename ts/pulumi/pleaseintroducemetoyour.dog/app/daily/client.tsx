@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
 import { Video } from '#root/ts/react/Video/video.js';
 import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
 
@@ -29,9 +28,9 @@ function Post(post: z.TypeOf<typeof RedditPost>) {
 			onClick={onClick}
 		>
 			{post.permalink ? (
-				<Link href={'https://reddit.com' + post.permalink}>
+				<a href={'https://reddit.com' + post.permalink}>
 					<header>{post.title}</header>
-				</Link>
+				</a>
 			) : null}
 			{metadataMedia.length !== 0 ? (
 				<>

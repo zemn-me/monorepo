@@ -1,5 +1,3 @@
-import { Metadata } from 'next/types';
-
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
 import { ProfilePageSchema } from '#root/project/me/zemn/app/schema.js';
 import style from '#root/project/me/zemn/app/style.module.css';
@@ -14,6 +12,7 @@ import ZemnmezLogo from '#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLog
 import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
 import * as lang from '#root/ts/react/lang/index.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 function ZemnmezLogoInline() {
 	return <ZemnmezLogo className={style.logoInline} />;

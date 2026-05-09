@@ -1,6 +1,5 @@
-import { Metadata } from 'next/types';
-
 import GrievancePortal from '#root/project/me/zemn/app/grievanceportal/client.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 export default function Page() {
 	return <GrievancePortal />;

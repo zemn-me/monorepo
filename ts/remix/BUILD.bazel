@@ -1,0 +1,52 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "remix",
+    srcs = ["index.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts",
+        "//ts/trusted_types",
+    ],
+)
+
+ts_project(
+    name = "remix_tests",
+    srcs = ["index_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":remix",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["index_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":remix_tests"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "index.tsx",
+        "index_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
