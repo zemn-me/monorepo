@@ -1,6 +1,5 @@
-import { Metadata } from 'next/types';
-
 import WikiTreeClient from '#root/project/im/shadwell/luke/app/wikitree/client.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 export default function Page() {
 	return <WikiTreeClient />;

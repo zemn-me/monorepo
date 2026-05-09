@@ -38,10 +38,13 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_eggsfordogs.com`,
 			{
-				index: 'ts/pulumi/eggsfordogs.com/build/index.html',
-				notFound: 'ts/pulumi/eggsfordogs.com/build/index.html',
+				index: 'ts/pulumi/eggsfordogs.com/app/build/client/index.html',
+				notFound:
+					'ts/pulumi/eggsfordogs.com/app/build/client/__spa-fallback.html',
+				notFoundResponseCode: 200,
+				cleanIndexRoutes: true,
 				tags,
-				directory: 'ts/pulumi/eggsfordogs.com/build',
+				directory: 'ts/pulumi/eggsfordogs.com/app/build/client',
 				zoneId: args.zoneId,
 				domain: domainName,
 				noIndex: args.staging,

@@ -1,8 +1,9 @@
-import 'project/im/shadwell/kate/app/base.css';
+import './base.css';
 
 import { ReactNode } from 'react';
+import { Links, Meta, Scripts } from 'react-router';
 
-import { HeaderTagsAppRouter } from '#root/ts/next.js/index.js';
+import { HeaderTags } from '#root/ts/remix/index.js';
 
 export interface Props {
 	readonly children?: ReactNode;
@@ -22,9 +23,14 @@ export function RootLayout({ children }: Props) {
 					href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap"
 					rel="stylesheet"
 				/>
-				<HeaderTagsAppRouter />
+				<Meta />
+				<Links />
+				<HeaderTags />
 			</head>
-			<body>{children}</body>
+			<body>
+				{children}
+				<Scripts />
+			</body>
 		</html>
 	);
 }

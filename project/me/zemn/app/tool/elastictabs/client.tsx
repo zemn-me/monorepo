@@ -3,6 +3,7 @@ import { createParser, parseAsBoolean, useQueryState } from 'nuqs';
 import { MouseEvent, useCallback, useId, useMemo } from 'react';
 
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { useHydrated } from '#root/project/me/zemn/hook/useHydrated.js';
 import { elasticTabstops } from '#root/ts/text/tabwriter/tabwriter.js';
 
 const columnsInStringRow = (s: string) =>
@@ -30,9 +31,15 @@ const stringWithNL = createParser({
 		return decodeURIComponent(queryValue);
 	},
 	serialize(value) {
-		return encodeURIComponent(value);
+		return value;
 	},
-});
+})
+	.withDefault('')
+	.withOptions({ clearOnDefault: false });
+
+const queryBoolean = parseAsBoolean
+	.withDefault(false)
+	.withOptions({ clearOnDefault: false });
 
 function stretchDots(s: string) {
 	// .      |
@@ -51,18 +58,23 @@ function stretchDots(s: string) {
 const collapseSpaces = (s: string) => s.replace(/ +/g, '\t');
 
 export default function ElasticTabStopsClient() {
-	const [input, setInput] = useQueryState<string>(
-		'input',
-		stringWithNL.withDefault('')
-	);
-	const [collapseSpacesFlag, setCollapseSpacesFlag] = useQueryState<boolean>(
+	if (!useHydrated()) {
+		return <h1>Elastic Tabstops Online</h1>;
+	}
+
+	return <ElasticTabStopsClientForm />;
+}
+
+function ElasticTabStopsClientForm() {
+	const [input, setInput] = useQueryState('input', stringWithNL);
+	const [collapseSpacesFlag, setCollapseSpacesFlag] = useQueryState(
 		'collapseSpaces',
-		parseAsBoolean.withDefault(false)
+		queryBoolean
 	);
 
-	const [stretchDot, setStretchDot] = useQueryState<boolean>(
+	const [stretchDot, setStretchDot] = useQueryState(
 		'stretchDot',
-		parseAsBoolean.withDefault(false)
+		queryBoolean
 	);
 	const stretchDotId = useId();
 	const inputId = useId();
@@ -143,6 +155,7 @@ export default function ElasticTabStopsClient() {
 					}}
 				>
 					<input
+						aria-label="Stretch dot leaders"
 						checked={stretchDot}
 						id={stretchDotId}
 						onChange={e => void setStretchDot(e.target.checked)}
@@ -159,6 +172,7 @@ export default function ElasticTabStopsClient() {
 					}}
 				>
 					<input
+						aria-label="Collapse spaces to tabs"
 						checked={collapseSpacesFlag}
 						id={collapseSpacesInputId}
 						onChange={e =>
@@ -169,6 +183,7 @@ export default function ElasticTabStopsClient() {
 					Collapse spaces to tabs
 				</label>
 				<textarea
+					aria-label="Elastic tabstops input"
 					cols={inputColumns}
 					id={inputId}
 					onChange={e => void setInput(e.target.value)}
@@ -183,6 +198,7 @@ export default function ElasticTabStopsClient() {
 
 				<output htmlFor={inputIds.join(' ')}>
 					<textarea
+						aria-label="Elastic tabstops output"
 						cols={outputColumns}
 						disabled
 						placeholder="output"

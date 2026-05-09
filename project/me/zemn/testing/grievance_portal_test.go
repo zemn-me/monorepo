@@ -13,9 +13,9 @@ import (
 )
 
 func TestGrievancePortalHasNoErrors(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := webServerRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find web server root: %v", err)
 	}
 
 	portal := root
@@ -103,9 +103,9 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 
 func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
-	portalURL, err := nextServerRoot()
+	portalURL, err := webServerRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find web server root: %v", err)
 	}
 	portalURL.Path = "/grievanceportal"
 	if err := driver.Get(portalURL.String()); err != nil {

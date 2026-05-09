@@ -1,10 +1,24 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts/next.js:rules.bzl", "next_project")
 
-next_project(
+alias(
     name = "example",
-    srcs = ["//ts/next.js/testing/example/app"],
+    actual = "//ts/next.js/testing/example/app:remix",
+)
+
+alias(
+    name = "build",
+    actual = "//ts/next.js/testing/example/app:build",
+)
+
+alias(
+    name = "dev",
+    actual = "//ts/next.js/testing/example/app:dev",
+)
+
+alias(
+    name = "start",
+    actual = "//ts/next.js/testing/example/app:start",
 )
 
 bazel_lint(

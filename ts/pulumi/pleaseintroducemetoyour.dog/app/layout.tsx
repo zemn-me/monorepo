@@ -1,14 +1,14 @@
-import 'ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
+import './base.css';
 
-import { Metadata } from 'next/types/index.js';
 import { ReactNode } from 'react';
-
+import { Links, Meta, Scripts } from 'react-router';
+import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders.js';
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
-	HeaderTagsAppRouter,
-} from '#root/ts/next.js/index.js';
-import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders.js';
+	HeaderTags,
+	Metadata,
+} from '#root/ts/remix/index.js';
 
 const csp_policy: CspPolicy = {
 	...DefaultContentSecurityPolicy,
@@ -36,10 +36,15 @@ export interface Props {
 export function RootLayout({ children }: Props) {
 	return (
 		<html>
+			<head>
+				<Meta />
+				<Links />
+				<HeaderTags cspPolicy={csp_policy} />
+			</head>
 			<body>
 				<ClientProviders>
-					<HeaderTagsAppRouter cspPolicy={csp_policy} />
 					{children}
+					<Scripts />
 				</ClientProviders>
 			</body>
 		</html>

@@ -20,9 +20,9 @@ import (
 )
 
 func TestAnalyticsBeaconIntegration(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := webServerRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find web server root: %v", err)
 	}
 	apiBase, err := apiRoot()
 	if err != nil {

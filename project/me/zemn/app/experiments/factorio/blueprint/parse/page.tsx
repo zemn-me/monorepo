@@ -1,7 +1,6 @@
-import { Metadata } from 'next/types/index.js';
 import { Suspense } from 'react';
-
 import { Client } from '#root/project/me/zemn/app/experiments/factorio/blueprint/parse/client.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 export default function () {
 	return (

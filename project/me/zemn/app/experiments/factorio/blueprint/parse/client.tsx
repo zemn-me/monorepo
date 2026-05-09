@@ -3,6 +3,7 @@ import { parseAsString, useQueryState } from 'nuqs';
 import { ChangeEvent, useCallback, useId } from 'react';
 
 import { Prose } from '#root/project/me/zemn/components/Prose/prose.js';
+import { useHydrated } from '#root/project/me/zemn/hook/useHydrated.js';
 import { BlueprintString } from '#root/ts/factorio/blueprint_string.js';
 import { DisplayBlueprintWrapper } from '#root/ts/factorio/react/blueprint.js';
 import { Some } from '#root/ts/option/option.js';
@@ -12,9 +13,25 @@ import { PrettyJSON } from '#root/ts/react/PrettyJSON/pretty_json.js';
 import { resultFromZod } from '#root/ts/zod/_old_result_from_zod.js';
 
 export function Client() {
-	const [input, setInput] = useQueryState<string>(
+	if (!useHydrated()) {
+		return (
+			<Prose>
+				<h1>Factorio Blueprint Parser</h1>
+				<p>
+					This little experiment parses the Factorio blueprint format
+					so you can mess around with it.
+				</p>
+			</Prose>
+		);
+	}
+
+	return <ClientForm />;
+}
+
+function ClientForm() {
+	const [input, setInput] = useQueryState(
 		'blueprint',
-		parseAsString.withDefault('')
+		parseAsString.withDefault('').withOptions({ clearOnDefault: false })
 	);
 	const b64InputLabel = useId();
 	const outputLabel = useId();

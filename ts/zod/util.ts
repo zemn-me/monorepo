@@ -1,4 +1,4 @@
-import b64 from 'base64-js';
+import * as b64 from 'base64-js';
 import { ZodError, ZodSafeParseResult, z } from 'zod';
 
 import { Err, Ok, Result } from '#root/ts/result_types.js';

@@ -1,13 +1,14 @@
-import 'ts/pulumi/zemn.me/availability/app/base.css';
+import './base.css';
 
-import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
+import { Links, Meta, Scripts } from 'react-router';
 
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
-	HeaderTagsAppRouter,
-} from '#root/ts/next.js/index.js';
+	HeaderTags,
+	Metadata,
+} from '#root/ts/remix/index.js';
 
 export interface Props {
 	readonly children?: ReactNode;
@@ -22,9 +23,14 @@ export function RootLayout({ children }: Props) {
 	return (
 		<html>
 			<head>
-				<HeaderTagsAppRouter cspPolicy={cspPolicy} />
+				<Meta />
+				<Links />
+				<HeaderTags cspPolicy={cspPolicy} />
 			</head>
-			<body>{children}</body>
+			<body>
+				{children}
+				<Scripts />
+			</body>
 		</html>
 	);
 }

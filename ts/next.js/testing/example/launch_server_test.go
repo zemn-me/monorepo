@@ -15,6 +15,22 @@ import (
 
 var reLocalhost = regexp.MustCompile(`https?://localhost:\d+`)
 
+func runfilesWorkspaceRoot(t *testing.T) string {
+	t.Helper()
+
+	workspace := os.Getenv("TEST_WORKSPACE")
+	if workspace == "" {
+		workspace = "_main"
+	}
+
+	root, err := runfiles.Rlocation(workspace)
+	if err != nil {
+		t.Fatalf("could not find workspace root: %v", err)
+	}
+
+	return root
+}
+
 func TestLaunchDevServer(t *testing.T) {
 	absPath, err := runfiles.Rlocation(
 		os.Getenv("NEXT_SERVER_BINARY"),
@@ -24,6 +40,7 @@ func TestLaunchDevServer(t *testing.T) {
 	}
 
 	cmd := exec.Command(absPath)
+	cmd.Dir = runfilesWorkspaceRoot(t)
 
 	// ---- capture output ----------------------------------------------------
 	stdout, err := cmd.StdoutPipe()
@@ -79,6 +96,7 @@ func TestLaunchProdServer(t *testing.T) {
 	}
 
 	cmd := exec.Command(absPath)
+	cmd.Dir = runfilesWorkspaceRoot(t)
 
 	// ---- capture output ----------------------------------------------------
 	stdout, err := cmd.StdoutPipe()
