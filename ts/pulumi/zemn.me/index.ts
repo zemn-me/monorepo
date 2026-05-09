@@ -58,9 +58,11 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_zemn_me`,
 			{
-				index: 'project/me/zemn/build/index.html',
-				notFound: 'project/me/zemn/build/404.html',
-				directory: 'project/me/zemn/build',
+				index: 'project/me/zemn/build/client/index.html',
+				notFound: 'project/me/zemn/build/client/__spa-fallback.html',
+				notFoundResponseCode: 200,
+				cleanIndexRoutes: true,
+				directory: 'project/me/zemn/build/client',
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,
@@ -83,9 +85,12 @@ export class Component extends Pulumi.ComponentResource {
 		const availability = new Website(
 			`${name}_availability_zemn_me_website`,
 			{
-				index: 'ts/pulumi/zemn.me/availability/build/index.html',
-				notFound: 'ts/pulumi/zemn.me/availability/build/404.html',
-				directory: 'ts/pulumi/zemn.me/availability/build',
+				index: 'ts/pulumi/zemn.me/availability/app/build/client/index.html',
+				notFound:
+					'ts/pulumi/zemn.me/availability/app/build/client/__spa-fallback.html',
+				notFoundResponseCode: 200,
+				cleanIndexRoutes: true,
+				directory: 'ts/pulumi/zemn.me/availability/app/build/client',
 				zoneId: args.zoneId,
 				domain: ['availability', args.domain].join('.'),
 				noIndex: true, // args.noIndex,

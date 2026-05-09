@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
+import { Links, Meta, Scripts } from 'react-router';
 
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
-	HeaderTagsAppRouter,
-} from '#root/ts/next.js/index.js';
+	HeaderTags,
+} from '#root/ts/remix/index.js';
 
 const pageCsp: CspPolicy = {
 	...DefaultContentSecurityPolicy,
@@ -26,9 +27,14 @@ export interface Props {
 export function RootLayout({ children }: Props) {
 	return (
 		<html>
+			<head>
+				<Meta />
+				<Links />
+				<HeaderTags cspPolicy={pageCsp} />
+			</head>
 			<body>
-				<HeaderTagsAppRouter cspPolicy={pageCsp} />
 				{children}
+				<Scripts />
 			</body>
 		</html>
 	);

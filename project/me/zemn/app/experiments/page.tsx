@@ -1,6 +1,5 @@
-import { Metadata } from 'next/types';
-
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { Metadata } from '#root/ts/remix/index.js';
 
 const pages = {
 	'/experiments/emoji/flag': 'Custom Country flag emoji generator.',

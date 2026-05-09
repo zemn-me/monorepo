@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types';
+import { Metadata } from '#root/ts/remix/index.js';
 
 import styles from './page.module.css';
 

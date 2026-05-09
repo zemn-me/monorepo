@@ -67,6 +67,19 @@ export interface Args {
 	notFound?: string;
 
 	/**
+	 * The CloudFront response code to use when serving `notFound`.
+	 */
+	notFoundResponseCode?: 200 | 404;
+
+	/**
+	 * Upload nested `index.html` files at their clean route keys.
+	 *
+	 * For example, `about/index.html` becomes the S3 key `about`, matching the
+	 * key CloudFront requests for `/about` when using the S3 REST origin.
+	 */
+	cleanIndexRoutes?: boolean;
+
+	/**
 	 * Prevent search engines from indexing.
 	 */
 	noIndex: boolean;
@@ -213,6 +226,11 @@ export class Website extends pulumi.ComponentResource {
 		const getS3Key = (dest: string) => {
 			// x.html files should be served without the .html extension.
 			const htmlExt = '.html';
+			const indexHtml = '/index.html';
+
+			if (args.cleanIndexRoutes && dest.endsWith(indexHtml)) {
+				return dest.slice(0, -indexHtml.length);
+			}
 
 			if (dest.endsWith(htmlExt)) {
 				dest = dest.slice(0, -htmlExt.length);
@@ -433,7 +451,8 @@ export class Website extends pulumi.ComponentResource {
 							customErrorResponses: [
 								{
 									errorCode: 404,
-									responseCode: 404,
+									responseCode:
+										args.notFoundResponseCode ?? 404,
 									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
 								},
 							],

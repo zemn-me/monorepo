@@ -4,7 +4,6 @@
 
 import { Bio } from '#root/project/me/zemn/bio/bio.js';
 import { filter, flatten, map } from '#root/ts/iter/index.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
 
 interface QueryParamsObject {
 	[key: string]: string[] | undefined;
@@ -59,8 +58,7 @@ export default function HomePage() {
 			<p>
 				Occasionally, the below frame can have trouble loading due to
 				Google security checks. If that happens, please{' '}
-				<Link href={URL}>view on Google calendar</Link> directly
-				instead.
+				<a href={URL}>view on Google calendar</a> directly instead.
 			</p>
 			<p>
 				"All day" events are usually reminders, not times I am busy.

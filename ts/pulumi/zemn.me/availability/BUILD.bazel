@@ -1,13 +1,25 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts/next.js:rules.bzl", "next_project")
 
 package(default_visibility = ["//visibility:public"])
 
-next_project(
+alias(
     name = "next",
-    srcs = [
-        "//ts/pulumi/zemn.me/availability/app",
-    ],
+    actual = "//ts/pulumi/zemn.me/availability/app:remix",
+)
+
+alias(
+    name = "build",
+    actual = "//ts/pulumi/zemn.me/availability/app:build",
+)
+
+alias(
+    name = "dev",
+    actual = "//ts/pulumi/zemn.me/availability/app:dev",
+)
+
+alias(
+    name = "start",
+    actual = "//ts/pulumi/zemn.me/availability/app:start",
 )
 
 bazel_lint(

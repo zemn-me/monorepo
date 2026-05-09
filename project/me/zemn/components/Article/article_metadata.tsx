@@ -1,6 +1,5 @@
-import { Metadata } from 'next/types';
-
 import { ArticleProps } from '#root/project/me/zemn/components/Article/types/article_types.js';
+import { Metadata } from '#root/ts/remix/index.js';
 import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 
 export function articleMetadata({

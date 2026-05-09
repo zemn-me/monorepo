@@ -1,1 +1,1 @@
-This folder contains the static (next.js) content for https://pleaseintroducemetoyour.dog.
+This folder contains the static React Router content for https://pleaseintroducemetoyour.dog.

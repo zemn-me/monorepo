@@ -16,7 +16,7 @@ import (
 )
 
 type ServicePorts struct {
-	NextServerPort string `json:"@@//project/me/zemn:itest_service"`
+	WebServerPort string `json:"@@//project/me/zemn:itest_service"`
 	APIPort        string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
 	// Analytics are not rendered anywhere yet, so the itest reads DynamoDB
 	// directly to verify ingest. Once analytics are visible in the product, this
@@ -33,7 +33,7 @@ func servicePorts() (p ServicePorts, err error) {
 	return
 }
 
-func nextServerRoot() (u url.URL, err error) {
+func webServerRoot() (u url.URL, err error) {
 	ports, err := servicePorts()
 	if err != nil {
 		return
@@ -41,7 +41,7 @@ func nextServerRoot() (u url.URL, err error) {
 
 	return url.URL{
 		Scheme: "http",
-		Host:   "localhost:" + ports.NextServerPort,
+		Host:   "localhost:" + ports.WebServerPort,
 	}, nil
 }
 

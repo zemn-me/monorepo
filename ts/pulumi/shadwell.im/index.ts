@@ -61,8 +61,12 @@ export class Component extends Pulumi.ComponentResource {
 		);
 
 		const luke = new Website(`${name}_luke_shadwell_im_website`, {
-			index: 'project/im/shadwell/luke/build/index.html',
-			directory: 'project/im/shadwell/luke/build',
+			index: 'project/im/shadwell/luke/app/build/client/index.html',
+			notFound:
+				'project/im/shadwell/luke/app/build/client/__spa-fallback.html',
+			notFoundResponseCode: 200,
+			cleanIndexRoutes: true,
+			directory: 'project/im/shadwell/luke/app/build/client',
 			zoneId: args.zoneId,
 			domain: ['luke', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -71,8 +75,12 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const kate = new Website(`${name}_kate_shadwell_im_website`, {
-			index: 'project/im/shadwell/kate/build/index.html',
-			directory: 'project/im/shadwell/kate/build',
+			index: 'project/im/shadwell/kate/app/build/client/index.html',
+			notFound:
+				'project/im/shadwell/kate/app/build/client/__spa-fallback.html',
+			notFoundResponseCode: 200,
+			cleanIndexRoutes: true,
+			directory: 'project/im/shadwell/kate/app/build/client',
 			zoneId: args.zoneId,
 			domain: ['kate', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -81,8 +89,12 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const anna = new Website(`${name}_anna_shadwell_im_website`, {
-			index: 'project/im/shadwell/anna/build/index.html',
-			directory: 'project/im/shadwell/anna/build',
+			index: 'project/im/shadwell/anna/app/build/client/index.html',
+			notFound:
+				'project/im/shadwell/anna/app/build/client/__spa-fallback.html',
+			notFoundResponseCode: 200,
+			cleanIndexRoutes: true,
+			directory: 'project/im/shadwell/anna/app/build/client',
 			zoneId: args.zoneId,
 			domain: ['anna', args.domain].join('.'),
 			noIndex: args.noIndex,
@@ -92,8 +104,12 @@ export class Component extends Pulumi.ComponentResource {
 		});
 
 		const lucy = new Website(`${name}_lucy_shadwell_im_website`, {
-			index: 'project/im/shadwell/lucy/build/index.html',
-			directory: 'project/im/shadwell/lucy/build',
+			index: 'project/im/shadwell/lucy/app/build/client/index.html',
+			notFound:
+				'project/im/shadwell/lucy/app/build/client/__spa-fallback.html',
+			notFoundResponseCode: 200,
+			cleanIndexRoutes: true,
+			directory: 'project/im/shadwell/lucy/app/build/client',
 			zoneId: args.zoneId,
 			domain: ['lucy', args.domain].join('.'),
 			noIndex: args.noIndex,
