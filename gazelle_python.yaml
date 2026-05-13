@@ -82,6 +82,7 @@ manifest:
     ldap3: ldap3
     librt.base64: librt
     librt.internal: librt
+    librt.random: librt
     librt.strings: librt
     librt.time: librt
     librt.vecs: librt
@@ -168,4 +169,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 5f9bd81000d77fce37b8d3a40f8d3016e6d3b58885fb041070b319d2123c8589
+integrity: d0aa38d39e5ea4720f28149111d2c64b3dd421f65cc90bfee24895c3f84d457c
