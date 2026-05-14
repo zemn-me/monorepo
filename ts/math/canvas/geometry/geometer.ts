@@ -11,7 +11,7 @@
  */
 
 import * as cartesian from '#root/ts/math/cartesian.js';
-import * as matrix from '#root/ts/math/matrix.js';
+import * as matrix from '#root/ts/math/deprecated/matrix.js';
 
 /**
  * Generates a polyline for an n-gon.

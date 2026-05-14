@@ -47,6 +47,7 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//ts/math",
+        "//ts/math/deprecated",
         "//ts/math/space/render",
         "//ts/result",
     ],

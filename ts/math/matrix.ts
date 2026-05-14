@@ -1,336 +1,171 @@
-import * as vec from '#root/ts/math/vec.js';
-import { Vector } from '#root/ts/math/vec.js';
+import type { Multiply } from '#root/ts/math/type_math.js';
 
-// J is effectively the number of ROWS and I is the number of COLUMNS
-export type Matrix<
-	I extends number = number,
-	J extends number = number,
-	T = number,
-> = Vector<J, Vector<I, T>>;
-
-export type Square<IJ extends number, T = number> = Matrix<IJ, IJ, T>;
-
-export const as: <
-	I extends number = number,
-	J extends number = number,
-	T = number,
->(
-	v: readonly (readonly T[] & { length: I })[] & { length: J }
-	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-) => Matrix<I, J, T> = v => v as any;
-
-/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-export const zero = as<0, 0>([] as any);
-
-/**
- * Return a new matrix of given dimensions
- */
-export function New<I extends number, J extends number>(
-	i: I,
-	j: J
-): Matrix<I, J, unknown> {
-	return vec.map(vec.New(j), () => vec.New(i));
-}
-
-export const add: <const I extends number, const J extends number>(
-	m1: Matrix<I, J>,
-	m2: Matrix<I, J>
-) => Matrix<I, J> = <I extends number, J extends number>(
-	m1: Matrix<I, J>,
-	m2: Matrix<I, J>
-) => vec.map(m1, (row, i) => vec.add(row, m2[i]!));
-
-/**
- * Returns a row of a given matrix as an Iterable.
- * Where the row does not exist, the Iterable is of length 0.
- */
-export const row: <I extends number, J extends number, T>(
-	v: Matrix<I, J, T>,
-	r: number
-) => Iterable<T> = function* (v, i) {
-	const a = v[i];
-	if (!a) return;
-	for (let i = 0; i < a.length; i++) yield a[i]!;
+export type Content<W extends number, H extends number> = Array<number> & {
+	length: Multiply<W, H>;
 };
 
-export const rows: <I extends number, J extends number, T>(
-	v: Matrix<I, J, T>,
-	r: number
-) => Iterable<Vector<I, T>> = v => v;
+export type Matrix<W extends number = number, H extends number = number> = <T>(
+	f: (width: W, height: H, content: Content<W, H>) => T
+) => T;
 
-export const col: <I extends number, J extends number, T>(
-	v: Matrix<I, J, T>,
-	i: number
-) => Iterable<T> = function* (v, i) {
-	const [, jsize] = size(v);
-	for (let j = 0; j < jsize; j++) yield v[j]![i]!;
-};
-
-export function mul<
-	const I1 extends number,
-	const J1 extends number,
-	const I2 extends number,
-	const J2 extends number,
->(m1: Matrix<I1, J1>, m2: Matrix<I2, J2>): Matrix<I2, J1> {
-	const [/*i1*/ , j1] = size(m1);
-	const [i2 /*, j2*/] = size(m2);
-
-	return vec.map(vec.New<J1>(j1), (_, i) =>
-		vec.map(vec.New<I2>(i2!), (_, j) => vec.dot(row(m1, i), col(m2, j)))
-	);
+function make<const W extends number, const H extends number>(
+	width: W,
+	height: H,
+	content: Content<W, H>
+): Matrix<W, H> {
+	return f => f(width, height, content);
 }
 
-/**
- * Iterate over & enumerate a {@link Matrix}.
- * @param I -- the width of the input matrix.
- * @param J -- the height of the input matrix.
- * @param T -- the type of each value in the matrix.
- * @param O -- the output type of each point once mapped.
- * @param m {@link m} -- the matrix to iterate over.
- * @param f {@link f} -- a mapping function taking value, position and m.
- *
- */
-export const map: <I extends number, J extends number, T, O>(
-	m: Matrix<I, J, T>,
-	/**
-	 * A mapping function over a matrix.
-	 * @param v -- {@link v} the value at a point in the matrix.
-	 * @param pos -- {@link pos} the i, j position in the matrix.
-	 * @param matrix -- {@link matrix} the input matrix.
-	 */
-	f: (
-		v: T,
-		pos: readonly [i: number, j: number],
-		matrix: Matrix<I, J, T>
-	) => O
-) => Matrix<I, J, O> = (m, f) =>
-	vec.map(m, (row, j) => vec.map(row, (v, i) => f(v, [i, j], m)));
-
-export function sub<I extends number, J extends number>(
-	m1: Matrix<I, J, number>,
-	m2: Matrix<I, J, number>
-): Matrix<I, J, number> {
-	return add(
-		m1,
-		map(m2, v => -v)
-	);
-}
-
-/**
- * For vector-shaped matricies, gives the equivilent magnitude.
- */
-export function magnitude(m: Matrix<1, number>): number {
-	return Math.sqrt(vec.sum(map(m, (v: number) => v ** 2).flat()));
-}
-
-export const length = magnitude;
-
-/**
- * For vector-shaped matricies, gives the equivilent unit vector.
- */
-export function unit<J extends number>(m: Matrix<1, J>): Matrix<1, J> {
-	const mag = magnitude(m);
-	return map<1, J, number, number>(m, (v: number) => v / mag);
-}
-
-/**
- * For vector-shaped matricies, performs the dot operation.
- */
-export function dot<J extends number>(m1: Matrix<1, J>, m2: Matrix<1, J>) {
-	return vec.dot(m1.flat(), m2.flat());
-}
-
-export const normalise = unit;
-
-/**
- * For a vector3 analagous matrix, performs the cross operation.
- */
-export function cross(
-	m1: Matrix<1, 3, number>,
-	m2: Matrix<1, 3, number>
-): Matrix<1, 3, number> {
-	const [[x1], [y1], [z1]] = m1;
-	const [[x2], [y2], [z2]] = m2;
-
-	const cx = y1 * z2 - z1 * y2;
-	const cy = z1 * x2 - x1 * z2;
-	const cz = x1 * y2 - y1 * x2;
-
-	return [[cx], [cy], [cz]];
-}
-
-/**
- * Unsafely drops values in the matrix that do not make f return true.
- *
- * Unsafe in the sense that it may not return a valid matrix (since rows / cols might be incorrect)
- */
-export const filter: <T>(
-	m: Matrix<number, number, T>,
-	f: (
-		v: T,
-		pos: readonly [i: number, j: number],
-		matrix: Matrix<number, number, T>
-	) => boolean
-) => readonly (readonly T[])[] = (m, f) =>
-	m
-		.map((row, rowIndex) =>
-			row.filter((v, colIndex) => f(v, [colIndex, rowIndex], m))
-		)
-		.filter(row => row.length !== 0);
-
-export function is<T>(
-	v: readonly (readonly T[])[]
-): v is Matrix<number, number, T> {
-	// each row must be of the same size
-
-	return v.every((row, _, a) => row.length == a[0]!.length);
-}
-
-export function must<T>(
-	v: readonly (readonly T[])[]
-): asserts v is Matrix<number, number, T> {
-	if (!is(v)) throw new Error(`${JSON.stringify(v)} is not a valid matrix`);
-
-	return;
-}
-
-function isSquare<T>(m: readonly (readonly T[])[]): m is Square<number, T> {
-	return m.every(row => row.length == m.length);
-}
-
-function mustIsSquare<T>(
-	v: readonly (readonly T[])[]
-): asserts v is Square<number, T> {
-	if (!isSquare(v))
-		throw new Error(`${JSON.stringify(v)} is not a valid square matrix`);
-}
-
-/**
- * `Multiply` gives the type of the matrix made by multiplying 2 given matricies.
- */
-export type Multiply<
-	A extends Matrix<number, number, unknown>,
-	B extends Matrix<number, number, unknown>,
-	O = number,
-> = [A, B] extends [
-	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-	Matrix<any, infer J1, unknown>,
-	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-	Matrix<infer I2, any, unknown>,
-]
-	? Matrix<I2, J1, O>
-	: never;
-
-/**
- * `TransformTo` gives the type of the matrix that can be used to transform an input matrix
- * into an output matrix
- */
-export type TransformTo<
-	In extends Matrix<number, number, unknown>,
-	Out extends Matrix<number, number, unknown>,
-	/*O = number*/
-> = [In, Out] extends [
-	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-	Matrix<any, infer J1, unknown>,
-	Matrix<infer I2, infer J2, unknown>,
-]
-	? J2 extends J1
-		? /* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-			Matrix<I2, any>
-		: never // it isn't possible for these to be different
-	: never;
-
-export const size: <I extends number, J extends number>(
-	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-	m: Matrix<I, J, any>
-) => J extends 0 ? [undefined, J] : [I, J] = m =>
-	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
-	[m[0]?.length, m.length] as any;
-
-export const transpose: <I extends number, J extends number>(
-	m: Matrix<I, J>
-) => Matrix<J, I> = <I extends number, J extends number>(m: Matrix<I, J>) => {
-	const [i, j] = size(m);
-	const rows = vec.New<I>(i!);
-
-	return vec.map(rows, (_, rj) =>
-		vec.map(vec.New<J>(j), (__, vi) => m[vi]![rj]!)
-	);
-};
-
-/**
- * Returns an identity matrix of given dimensions
- */
-export const identity: <I extends number, J extends number>(
-	I: I,
-	J: J
-) => Matrix<I, J, 1 | 0> = <I extends number, J extends number>(i: I, j: J) =>
-	map(New<I, J>(i, j), (_, [i, j]) => +!(i - j) as 1 | 0);
-
-// https://www.mathsisfun.com/algebra/matrix-determinant.html
-export const determinant: <IJ extends number>(m: Square<IJ>) => number = m => {
-	const [ij] = size(m);
-
-	if (ij == 0) return 0;
-	if (ij == 1) return m[0]![0]!;
-
-	if (ij == 2) {
-		// actually not sure what the issue is here...
-		// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
-		const [[a, b], [c, d]] = m as any;
-		return a * d - b * c;
+function checkedContent<const W extends number, const H extends number>(
+	width: W,
+	height: H,
+	content: Array<number>
+): Content<W, H> {
+	const expectedLength = width * height;
+	if (content.length !== expectedLength) {
+		throw new Error(
+			`matrix content length ${content.length} does not match ${width} * ${height} = ${expectedLength}`
+		);
 	}
 
-	const top = m[0];
-	const rest = m.slice(1); // of length J - 1;
-	return top!.reduce((acc, cur, ind) => {
-		const mul = ind % 2 == 0 ? 1 : -1;
-		// remove every value in the same row
-		const nm = rest.map(row => row.filter((_, ri) => ri !== ind));
-		// this should give us a new matrix we can get the determinant for
-		return acc + cur * determinant(nm) * mul;
-	}, 0);
-};
+	return content as Content<W, H>;
+}
 
-//https://www.mathsisfun.com/algebra/matrix-inverse-minors-cofactors-adjugate.html
-export const minors: <IJ extends number>(s: Square<IJ>) => Square<IJ> = s =>
-	map(s, (_, [column, row], m) => {
-		// form a new matrix omitting the row and column of the selected value
-		const smaller = filter(
-			m,
-			(_, [sColumn, sRow]) => column !== sColumn && row !== sRow
-		);
+export function as<const W extends number, const H extends number>(
+	width: W,
+	height: H,
+	content: Content<W, H>
+): Matrix<W, H> {
+	return make(width, height, checkedContent(width, height, content));
+}
 
-		mustIsSquare(smaller);
+export function fromRows<const W extends number, const H extends number>(
+	rows: readonly (readonly number[] & { length: W })[] & { length: H }
+): Matrix<W, H> {
+	const height = rows.length as H;
+	const width = (rows[0]?.length ?? 0) as W;
+	const content: Array<number> = [];
 
-		return determinant(smaller);
+	for (let j = 0; j < height; j++) {
+		const row = rows[j]!;
+		if (row.length !== width) {
+			throw new Error(
+				`row ${j} has width ${row.length}; expected width ${width}`
+			);
+		}
+
+		for (let i = 0; i < width; i++) content.push(row[i]!);
+	}
+
+	return make(width, height, checkedContent(width, height, content));
+}
+
+export function fromFunction<const W extends number, const H extends number>(
+	width: W,
+	height: H,
+	f: (pos: readonly [i: number, j: number]) => number
+): Matrix<W, H> {
+	const content = new Array<number>(width * height);
+	let index = 0;
+	for (let j = 0; j < height; j++) {
+		for (let i = 0; i < width; i++) {
+			content[index] = f([i, j]);
+			index++;
+		}
+	}
+
+	return make(width, height, checkedContent(width, height, content));
+}
+
+export function size<W extends number, H extends number>(
+	m: Matrix<W, H>
+): [W, H] {
+	return m((width, height) => [width, height]);
+}
+
+export function width<W extends number, H extends number>(
+	m: Matrix<W, H>
+): W {
+	return m(width => width);
+}
+
+export function height<W extends number, H extends number>(
+	m: Matrix<W, H>
+): H {
+	return m((_, height) => height);
+}
+
+export function content<W extends number, H extends number>(
+	m: Matrix<W, H>
+): Content<W, H> {
+	return m((_, __, content) => content);
+}
+
+export function at<W extends number, H extends number>(
+	m: Matrix<W, H>,
+	i: number,
+	j: number
+): number | undefined {
+	return m((width, height, content) => {
+		if (i < 0 || j < 0 || i >= width || j >= height) return undefined;
+
+		return content[j * width + i];
+	});
+}
+
+export function toRows<W extends number, H extends number>(
+	m: Matrix<W, H>
+): number[][] {
+	return m((width, height, content) => {
+		const rows = new Array<Array<number>>(height);
+		for (let j = 0; j < height; j++) {
+			const start = j * width;
+			rows[j] = content.slice(start, start + width);
+		}
+
+		return rows;
+	});
+}
+
+export const map: <W extends number, H extends number>(
+	m: Matrix<W, H>,
+	f: (
+		v: number,
+		pos: readonly [i: number, j: number],
+		matrix: Matrix<W, H>
+	) => number
+) => Matrix<W, H> = (m, f) =>
+	m((width, height, content) => {
+		const mapped = new Array<number>(content.length);
+		let index = 0;
+		for (let j = 0; j < height; j++) {
+			for (let i = 0; i < width; i++) {
+				mapped[index] = f(content[index]!, [i, j], m);
+				index++;
+			}
+		}
+
+		return make(width, height, checkedContent(width, height, mapped));
 	});
 
-export const width: (m: Matrix) => number = m => m[0]?.length ?? 0;
-
-export const checkerboard: <I extends number, J extends number>(
-	m: Matrix<I, J>
-) => Matrix<I, J> = m =>
-	map(m, (n, [col, row]) => ((col + row) % 2 == 0 ? n : -n));
-
-/**
- * Returns the inverse of a matrix of given dimensions
- */
-export const inverse: <IJ extends number>(m: Square<IJ>) => Square<IJ> = <
-	IJ extends number,
->(
-	m: Square<IJ>
-) => {
-	const d = 1 / determinant(m);
-
-	return map(transpose(checkerboard(minors(m))), n => d * n);
-};
-
-/**
- * Convert a vector into matrix form.
- *
- * I'm sure there must be a name for this convention but I don't know it.
- */
-export function fromVec<L extends number, T>(v: Vector<L, T>): Matrix<1, L, T> {
-	return vec.map(v, v => [v]);
-}
+export const mapWithArrayMap: <W extends number, H extends number>(
+	m: Matrix<W, H>,
+	f: (
+		v: number,
+		pos: readonly [i: number, j: number],
+		matrix: Matrix<W, H>
+	) => number
+) => Matrix<W, H> = (m, f) =>
+	m((width, height, content) =>
+		make(
+			width,
+			height,
+			checkedContent(
+				width,
+				height,
+				content.map((value, index) =>
+					f(value, [index % width, Math.floor(index / width)], m)
+				)
+			)
+		)
+	);

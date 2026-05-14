@@ -13,6 +13,8 @@ const pages = {
 	'/experiments/frame': 'Calculator for framing and sizing mattes.',
 	'/experiments/arena':
 		'FPS-style SVG arena with pointer-lock camera controls.',
+	'/experiments/platonics':
+		'Stress test for a dense field of SVG platonic solids.',
 	'/experiments/toc': 'Test renderer for table of contents generation.',
 	'/experiments/article': 'Test renderer for MDX.',
 	'/experiments/cv': 'Unfinished attempt to port my CV to my modern site.',

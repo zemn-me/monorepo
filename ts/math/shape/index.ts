@@ -1,9 +1,9 @@
 import * as Camera from '#root/ts/math/camera.js';
 import * as Canvas from '#root/ts/math/canvas/index.js';
 import * as conv from '#root/ts/math/conv.js';
+import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import { EulerAngle } from '#root/ts/math/euler_angle.js';
 import * as Homog from '#root/ts/math/homog.js';
-import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { map } from '#root/ts/math/vec';
 

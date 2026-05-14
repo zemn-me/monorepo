@@ -9,6 +9,7 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/math",
         "//ts/math/canvas",
+        "//ts/math/deprecated",
     ],
 )
 

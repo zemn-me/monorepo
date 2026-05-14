@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -18,6 +19,7 @@ ts_project(
         "raster.ts",
         "scale.ts",
         "tuple.ts",
+        "type_math.ts",
         "vec.ts",
         "wireframe.ts",
         "wireframe_render.ts",
@@ -29,6 +31,7 @@ ts_project(
         "//:node_modules/ramda",
         "//ts",
         "//ts/either",
+        "//ts/math/deprecated",
         "//ts/result",
     ],
 )
@@ -42,7 +45,9 @@ jest_test(
         "dual_quaternion_test.js",
         "lookAt_test.js",
         "math_test.js",
+        "matrix_test.js",
         "quaternion_test.js",
+        "type_math_test.js",
         "wireframe_render_test.js",
         "wireframe_test.js",
     ],
@@ -75,11 +80,15 @@ filegroup(
         "lookAt_test.ts",
         "math_test.ts",
         "matrix.ts",
+        "matrix_map_bench.ts",
+        "matrix_test.ts",
         "quaternion.ts",
         "quaternion_test.ts",
         "raster.ts",
         "scale.ts",
         "tuple.ts",
+        "type_math.ts",
+        "type_math_test.ts",
         "vec.ts",
         "wireframe.ts",
         "wireframe_render.ts",
@@ -98,7 +107,9 @@ ts_project(
         "dual_quaternion_test.ts",
         "lookAt_test.ts",
         "math_test.ts",
+        "matrix_test.ts",
         "quaternion_test.ts",
+        "type_math_test.ts",
         "wireframe_render_test.ts",
         "wireframe_test.ts",
     ],
@@ -107,6 +118,24 @@ ts_project(
         ":math",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/math/deprecated",
         "//ts/result",
     ],
+)
+
+ts_project(
+    name = "matrix_map_bench_ts",
+    srcs = ["matrix_map_bench.ts"],
+    deps = [
+        ":math",
+        "//:node_modules/@types/node",
+        "//ts/math/deprecated",
+    ],
+)
+
+js_binary(
+    name = "matrix_map_bench",
+    data = [":matrix_map_bench_ts"],
+    entry_point = "matrix_map_bench.js",
+    tags = ["manual"],
 )

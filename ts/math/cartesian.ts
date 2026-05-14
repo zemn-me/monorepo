@@ -1,4 +1,4 @@
-import * as Matrix from '#root/ts/math/matrix.js';
+import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 
 import {
 	map,
@@ -127,7 +127,7 @@ export function z(p: [...Point<3>, ...unknown[]]): number {
 	return p[2]![0]!;
 }
 
-export { add, mul, sub } from '#root/ts/math/matrix.js';
+export { add, mul, sub } from '#root/ts/math/deprecated/matrix.js';
 
 /**
  * For a hyperrectangle of N dimensions defined by a minimum
