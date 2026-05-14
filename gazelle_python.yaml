@@ -6,7 +6,6 @@
 ---
 manifest:
   modules_mapping:
-    0603b0f663efda90f95c__mypyc: mypy
     81d243bd2c585b0f4821__mypyc: charset_normalizer
     IPython: ipython
     OpenSSL: pyopenssl
@@ -41,6 +40,7 @@ manifest:
     defusedxml: defusedxml
     executing: executing
     fastjsonschema: fastjsonschema
+    fb62009ad6f7d3457273__mypyc: mypy
     flask: flask
     fqdn: fqdn
     frida: frida
@@ -169,4 +169,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 7583ad7eaed76c609ccc290c3a0a2ee5a3cf6648c99c361fbdab2c3bb62143f3
+integrity: be1f21aea8f2f32449c1f02b8b9fb6495aaf009abeee56709e6061a87823ece7
