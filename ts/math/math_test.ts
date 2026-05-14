@@ -7,7 +7,7 @@ import {
 	scale,
 	translate,
 } from '#root/ts/math/cartesian.js';
-import * as matrix from '#root/ts/math/matrix.js';
+import * as matrix from '#root/ts/math/deprecated/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
 function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {

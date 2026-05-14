@@ -1,5 +1,5 @@
 import * as Cart from '#root/ts/math/cartesian.js';
-import * as Matrix from '#root/ts/math/matrix.js';
+import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import { Add } from '#root/ts/typeadd.js';
 
 /**

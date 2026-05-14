@@ -2,7 +2,7 @@ import * as d3Scale from 'd3-scale';
 import React from 'react';
 
 import { isDefined as defined, must } from '#root/ts/guard.js';
-import * as matrix from '#root/ts/math/matrix.js';
+import * as matrix from '#root/ts/math/deprecated/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 import * as svg from '#root/ts/svg/index.js';
 

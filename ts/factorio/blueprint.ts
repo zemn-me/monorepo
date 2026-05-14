@@ -14,7 +14,7 @@ import {
 	Point2D,
 	rectContaninsPoint,
 } from '#root/ts/math/cartesian.js';
-import { add } from '#root/ts/math/matrix.js';
+import { add } from '#root/ts/math/deprecated/matrix.js';
 import { extent } from '#root/ts/math/tuple.js';
 
 const BlueprintWire = z.tuple([

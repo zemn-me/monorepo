@@ -2,10 +2,10 @@ import { flow } from 'ramda';
 
 import * as cartesian from '#root/ts/math/cartesian.js';
 import { cartToHomog, homogToCart } from '#root/ts/math/conv.js';
+import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import * as Homog from '#root/ts/math/homog.js';
 import * as homog from '#root/ts/math/homog.js';
 import { defaultUp, lookAt } from '#root/ts/math/lookAt.js';
-import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { pipe } from '#root/ts/pipe.js';
 import {
