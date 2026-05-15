@@ -1,5 +1,4 @@
-import { Point3D, point } from '#root/ts/math/cartesian.js';
-import { sub } from '#root/ts/math/deprecated/matrix.js';
+import { Point3D, point, sub } from '#root/ts/math/cartesian.js';
 import { defaultUp } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { and_then_flatten, type Result } from '#root/ts/result/result.js';

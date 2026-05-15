@@ -11,7 +11,6 @@
  */
 
 import * as cartesian from '#root/ts/math/cartesian.js';
-import * as matrix from '#root/ts/math/deprecated/matrix.js';
 
 /**
  * Generates a polyline for an n-gon.
@@ -60,10 +59,10 @@ export function normal(
 	length: number
 ): cartesian.Line2D<2> {
 	const normalLine = cartesian.normal(l);
-	const normalVec = matrix.sub<1, 2>(normalLine[0], normalLine[1]);
+	const normalVec = cartesian.sub<1, 2>(normalLine[0], normalLine[1]);
 	const unitNormal = cartesian.unit<2>(normalVec);
-	const normalLength = matrix.mul<1, 2, 1, 1>(unitNormal, [[length]]);
-	return [p, matrix.add<1, 2>(p, normalLength)];
+	const normalLength = cartesian.scale<2>(unitNormal, length);
+	return [p, cartesian.add<1, 2>(p, normalLength)];
 }
 
 /**
@@ -140,7 +139,7 @@ export function annotate(
 
 	const textCentre = normal(l, cartesian.centre(l), columnHeight)[1];
 
-	const parallelVec = matrix.sub<1, 2>(l[1], l[0]);
+	const parallelVec = cartesian.sub<1, 2>(l[1], l[0]);
 
 	const parallelUnit = cartesian.unit<2>(parallelVec);
 
@@ -150,36 +149,36 @@ export function annotate(
 
 	const arrowLength = arrowArea / 2;
 
-	const leftArrowStartPt: cartesian.Point2D = matrix.add<1, 2>(
+	const leftArrowStartPt: cartesian.Point2D = cartesian.add<1, 2>(
 		leftCol[1],
-		matrix.mul<1, 2, 1, 1>(parallelUnit, [[props.arrowGap]])
+		cartesian.scale<2>(parallelUnit, props.arrowGap)
 	);
 
-	const leftArrowEndPt: cartesian.Point2D = matrix.add<1, 2>(
+	const leftArrowEndPt: cartesian.Point2D = cartesian.add<1, 2>(
 		leftArrowStartPt,
-		matrix.mul<1, 2, 1, 1>(parallelUnit, [[arrowLength]])
+		cartesian.scale<2>(parallelUnit, arrowLength)
 	);
 
 	const leftArrow: cartesian.Line2D<2> = [leftArrowStartPt, leftArrowEndPt];
 
-	const textStartPt: cartesian.Point2D = matrix.add<1, 2>(
+	const textStartPt: cartesian.Point2D = cartesian.add<1, 2>(
 		leftArrowEndPt,
-		matrix.mul<1, 2, 1, 1>(parallelUnit, [[props.textPadding]])
+		cartesian.scale<2>(parallelUnit, props.textPadding)
 	);
 
-	const textEndPt: cartesian.Point2D = matrix.add<1, 2>(
+	const textEndPt: cartesian.Point2D = cartesian.add<1, 2>(
 		textStartPt,
-		matrix.mul<1, 2, 1, 1>(parallelUnit, [[props.textWidth]])
+		cartesian.scale<2>(parallelUnit, props.textWidth)
 	);
 
-	const rightArrowStartPt: cartesian.Point2D = matrix.add<1, 2>(
+	const rightArrowStartPt: cartesian.Point2D = cartesian.add<1, 2>(
 		textEndPt,
-		matrix.mul<1, 2, 1, 1>(parallelUnit, [[props.textPadding]])
+		cartesian.scale<2>(parallelUnit, props.textPadding)
 	);
 
-	const rightArrowEndPt: cartesian.Point2D = matrix.add<1, 2>(
+	const rightArrowEndPt: cartesian.Point2D = cartesian.add<1, 2>(
 		rightArrowStartPt,
-		matrix.mul<1, 2, 1, 1>(parallelUnit, [[arrowLength]])
+		cartesian.scale<2>(parallelUnit, arrowLength)
 	);
 
 	const rightArrow: cartesian.Line2D<2> = [

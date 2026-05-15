@@ -1,6 +1,5 @@
 import { performance } from 'node:perf_hooks';
 
-import * as nestedMatrix from '#root/ts/math/deprecated/matrix.js';
 import * as matrix from '#root/ts/math/matrix.js';
 
 type Options = {
@@ -42,17 +41,6 @@ function readOptions(): Options {
 	};
 }
 
-function makeNestedMatrix(
-	width: number,
-	height: number
-): nestedMatrix.Matrix<number, number, number> {
-	return nestedMatrix.as(
-		Array.from({ length: height }, (_, j) =>
-			Array.from({ length: width }, (_, i) => (j * width + i) % 251)
-		)
-	);
-}
-
 function makeFlatMatrix(
 	width: number,
 	height: number
@@ -71,16 +59,6 @@ function mapValue(
 	return value * 1.0001 + i * 0.5 - j * 0.25;
 }
 
-function nestedChecksum(m: nestedMatrix.Matrix<number, number, number>): number {
-	const height = m.length;
-	const width = m[0]?.length ?? 0;
-	return (
-		(m[0]?.[0] ?? 0) +
-		(m[Math.floor(height / 2)]?.[Math.floor(width / 2)] ?? 0) +
-		(m[height - 1]?.[width - 1] ?? 0)
-	);
-}
-
 function flatChecksum(m: matrix.Matrix<number, number>): number {
 	return m((width, height, content) => {
 		const middle = Math.floor(height / 2) * width + Math.floor(width / 2);
@@ -93,38 +71,18 @@ function flatChecksum(m: matrix.Matrix<number, number>): number {
 	});
 }
 
-function rowsEqual(left: number[][], right: number[][]): boolean {
-	if (left.length !== right.length) return false;
-	for (let j = 0; j < left.length; j++) {
-		const leftRow = left[j]!;
-		const rightRow = right[j]!;
-		if (leftRow.length !== rightRow.length) return false;
-		for (let i = 0; i < leftRow.length; i++) {
-			if (leftRow[i] !== rightRow[i]) return false;
+function assertEquivalentOutputs(flatInput: matrix.Matrix<number, number>) {
+	const flatLoop = matrix.content(matrix.map(flatInput, mapValue));
+	const flatArrayMap = matrix.content(matrix.mapWithArrayMap(flatInput, mapValue));
+
+	if (flatLoop.length !== flatArrayMap.length) {
+		throw new Error('flat matrix map implementations returned different sizes');
+	}
+
+	for (let index = 0; index < flatLoop.length; index++) {
+		if (flatLoop[index] !== flatArrayMap[index]) {
+			throw new Error('flat matrix map implementations returned different values');
 		}
-	}
-
-	return true;
-}
-
-function assertEquivalentOutputs(
-	nestedInput: nestedMatrix.Matrix<number, number, number>,
-	flatInput: matrix.Matrix<number, number>
-) {
-	const expected = nestedMatrix.map(nestedInput, mapValue);
-	const flatLoop = matrix.toRows(matrix.map(flatInput, mapValue));
-	const flatArrayMap = matrix.toRows(
-		matrix.mapWithArrayMap(flatInput, mapValue)
-	);
-
-	if (!rowsEqual(expected, flatLoop)) {
-		throw new Error('flat matrix map output differs from nested matrix map');
-	}
-
-	if (!rowsEqual(expected, flatArrayMap)) {
-		throw new Error(
-			'flat matrix Array.map output differs from nested matrix map'
-		);
 	}
 }
 
@@ -171,16 +129,11 @@ function formatMs(n: number): string {
 
 function main() {
 	const options = readOptions();
-	const nestedInput = makeNestedMatrix(options.width, options.height);
 	const flatInput = makeFlatMatrix(options.width, options.height);
 
-	assertEquivalentOutputs(nestedInput, flatInput);
+	assertEquivalentOutputs(flatInput);
 
 	const benchmarks: Benchmark[] = [
-		{
-			name: 'deprecated matrix.map',
-			run: () => nestedChecksum(nestedMatrix.map(nestedInput, mapValue)),
-		},
 		{
 			name: 'flat matrix.map',
 			run: () => flatChecksum(matrix.map(flatInput, mapValue)),

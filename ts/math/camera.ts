@@ -2,7 +2,6 @@ import { flow } from 'ramda';
 
 import * as cartesian from '#root/ts/math/cartesian.js';
 import { cartToHomog, homogToCart } from '#root/ts/math/conv.js';
-import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import * as Homog from '#root/ts/math/homog.js';
 import * as homog from '#root/ts/math/homog.js';
 import { defaultUp, lookAt } from '#root/ts/math/lookAt.js';
@@ -15,12 +14,17 @@ import {
 } from '#root/ts/result/result.js';
 
 export type FocalLength = number;
+export type CameraMatrix = readonly [
+	readonly [1, 0, 0, 0],
+	readonly [0, 1, 0, 0],
+	readonly [0, 0, number, 0],
+];
 
 /**
  * Return a camera matrix given a particular focal length
  * representing a camera about (0, 0, 0)
  */
-export const matrix = (f: FocalLength): Matrix.Matrix<4, 3, number> => [
+export const matrix = (f: FocalLength): CameraMatrix => [
 	[1, 0, 0, 0],
 	[0, 1, 0, 0],
 	[0, 0, 1 / f, 0],
@@ -29,7 +33,7 @@ export const matrix = (f: FocalLength): Matrix.Matrix<4, 3, number> => [
 export const transform: (i: Homog.Point3D, f?: FocalLength) => Homog.Point2D = (
 	i,
 	f = 1
-) => Matrix.mul<4, 3, 1, 4>(matrix(f), i);
+) => [[cartesian.x(i)], [cartesian.y(i)], [cartesian.z(i) / f]];
 
 export const Edges = Symbol();
 
