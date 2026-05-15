@@ -1,5 +1,4 @@
 import * as cartesian from '#root/ts/math/cartesian.js';
-import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import * as euler_angle from '#root/ts/math/euler_angle.js';
 import * as homogenous from '#root/ts/math/homog.js';
 import * as quaternion from '#root/ts/math/quaternion.js';
@@ -22,18 +21,18 @@ export const Quaternion = {
 	},
 
 	fromPoint3D(pts: cartesian.Point3D): quaternion.Quaternion {
-		const [[x], [y], [z]] = pts!;
-		return quaternion.from(x!, y!, z!, 0);
+		return quaternion.from(
+			cartesian.x(pts),
+			cartesian.y(pts),
+			cartesian.z(pts),
+			0
+		);
 	},
 };
 
 export const Cartestian = {
 	fromQuaternion(q: quaternion.Quaternion): cartesian.Point3D {
-		return [
-			[quaternion.x(q)],
-			[quaternion.y(q)],
-			[quaternion.z(q)],
-		] as const;
+		return cartesian.point<3>(quaternion.x(q), quaternion.y(q), quaternion.z(q));
 	},
 };
 
@@ -79,10 +78,7 @@ export const Euler = {
 export const homogToCart = <N extends number>(
 	pt: homogenous.Point<N>
 ): cartesian.Point<N> =>
-	Matrix.map<1, N, number, number>(
-		homogenous.nonw<N>(pt),
-		v => v * homogenous.w<N>(pt)
-	);
+	cartesian.scale(homogenous.nonw<N>(pt), homogenous.w<N>(pt));
 
 export const cartToHomog = <N extends number>(
 	pt: cartesian.Point<N>

@@ -1,7 +1,7 @@
 import * as Camera from '#root/ts/math/camera.js';
 import * as Canvas from '#root/ts/math/canvas/index.js';
+import * as cartesian from '#root/ts/math/cartesian.js';
 import * as conv from '#root/ts/math/conv.js';
-import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import { EulerAngle } from '#root/ts/math/euler_angle.js';
 import * as Homog from '#root/ts/math/homog.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
@@ -64,7 +64,7 @@ export class Translate3D<T extends Canvas.Drawable3D>
 
 	public lines3D(): Homog.Line3D[] {
 		return map(this.target.lines3D(), line =>
-			map(line, point => Matrix.add<1, 4>(point, this.by))
+			map(line, point => cartesian.add<1, 4>(point, this.by))
 		);
 	}
 }

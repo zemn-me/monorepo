@@ -1,12 +1,11 @@
 import * as Cart from '#root/ts/math/cartesian.js';
-import * as Matrix from '#root/ts/math/deprecated/matrix.js';
 import { Add } from '#root/ts/typeadd.js';
 
 /**
  * Returns the type of an N-dimensional
  * homogenous coordinate.
  */
-export type Point<N extends number> = Matrix.Matrix<1, Add<N, 1>>;
+export type Point<N extends number> = Cart.Point<Add<N, 1>>;
 
 export type Point2D = Point<2>;
 export type Point3D = Point<3>;
@@ -20,7 +19,7 @@ export type Line3D = Point3D[];
 export const w = <N extends number>(p: Point<N>): number => p[p.length - 1]![0];
 
 export const nonw = <N extends number>(p: Point<N>) =>
-	p.slice(0, p.length - 1) as Matrix.Matrix<1, N>;
+	p.slice(0, p.length - 1) as Cart.Point<N>;
 
 export function pointToCart(p: Point2D): Cart.Point2D;
 export function pointToCart(p: Point3D): Cart.Point3D;

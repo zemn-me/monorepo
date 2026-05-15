@@ -1,6 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
 
-import * as deprecatedMatrix from '#root/ts/math/deprecated/matrix.js';
 import * as matrix from '#root/ts/math/matrix.js';
 import type { Multiply } from '#root/ts/math/type_math.js';
 
@@ -38,16 +37,18 @@ describe('matrix', () => {
 		]);
 	});
 
-	test('maps with the same position contract as the deprecated nested matrix map', () => {
-		const nested = deprecatedMatrix.as<3, 2>([
+	test('maps with stable flat matrix positions', () => {
+		const flat = matrix.fromRows([
 			[1, 2, 3],
 			[4, 5, 6],
 		] as const);
-		const flat = matrix.fromRows(nested);
 		const f = (value: number, [i, j]: readonly [number, number]) =>
 			value + i * 10 + j * 100;
 
-		const expected = deprecatedMatrix.map(nested, f);
+		const expected = [
+			[1, 12, 23],
+			[104, 115, 126],
+		];
 
 		expect(matrix.toRows(matrix.map(flat, f))).toEqual(expected);
 		expect(matrix.toRows(matrix.mapWithArrayMap(flat, f))).toEqual(expected);

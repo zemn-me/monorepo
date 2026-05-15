@@ -2,7 +2,6 @@ import * as d3Scale from 'd3-scale';
 import React from 'react';
 
 import { isDefined as defined, must } from '#root/ts/guard.js';
-import * as matrix from '#root/ts/math/deprecated/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 import * as svg from '#root/ts/svg/index.js';
 
@@ -120,26 +119,17 @@ export const Ticks: <N extends Num>(
 					// once we do that, we want to anchor the positions
 					// to the bottom instead of the top, so we take every
 					// position and subtract it from 100
-					// why am i doing this with matricies?
-					// I just want to be good at matricies someday...
-					const transform: matrix.Matrix<3, 3> = [
-						[1, 0, 0],
-						[0, -1, 0],
-						[0, -offset + 180, 1],
-					] as const;
+					// Apply that flip and shift directly to every point.
+					const transform = <L extends number>(
+						path: svg.Path<L>
+					): svg.Path<L> =>
+						vec.map<L, svg.Cartesian, svg.Cartesian>(
+							path,
+							([x, y]) => [x!, -y! - offset + 180] as svg.Cartesian
+						);
 
-					tickPath = svg.homog2Cart<2>(
-						matrix.mul<3, 2, 3, 3>(
-							svg.cart2Homog<2>(tickPath),
-							transform
-						)
-					);
-					textMiddlePos = svg.homog2Cart<1>(
-						matrix.mul<3, 1, 3, 3>(
-							svg.cart2Homog<1>(textMiddlePos),
-							transform
-						)
-					);
+					tickPath = transform<2>(tickPath);
+					textMiddlePos = transform<1>(textMiddlePos);
 				}
 
 				return (
