@@ -31,7 +31,6 @@ ts_project(
         "//:node_modules/ramda",
         "//ts",
         "//ts/either",
-        "//ts/math/deprecated",
         "//ts/result",
     ],
 )
@@ -118,7 +117,6 @@ ts_project(
         ":math",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
-        "//ts/math/deprecated",
         "//ts/result",
     ],
 )
@@ -129,7 +127,6 @@ ts_project(
     deps = [
         ":math",
         "//:node_modules/@types/node",
-        "//ts/math/deprecated",
     ],
 )
 

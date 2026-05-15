@@ -7,14 +7,24 @@ import {
 	scale,
 	translate,
 } from '#root/ts/math/cartesian.js';
-import * as matrix from '#root/ts/math/deprecated/matrix.js';
+import * as matrix from '#root/ts/math/matrix.js';
 import * as vec from '#root/ts/math/vec.js';
 
-function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
-	expect(actual.length).toBe(expected.length);
-	actual.forEach((row, i) => {
-		row.forEach((v, k) => {
-			expect(v).toBeCloseTo(expected[i]![k]!);
+function loose(rows: number[][]): matrix.Matrix<number, number> {
+	return matrix.fromRows(
+		rows as (number[] & { length: number })[] & { length: number }
+	);
+}
+
+function expectMatrixRowsSimilar(
+	actual: matrix.Matrix<number, number>,
+	expectedRows: number[][]
+) {
+	const actualRows = matrix.toRows(actual);
+	expect(actualRows.length).toBe(expectedRows.length);
+	actualRows.forEach((row, i) => {
+		row.forEach((value, k) => {
+			expect(value).toBeCloseTo(expectedRows[i]![k]!);
 		});
 	});
 }
@@ -22,346 +32,294 @@ function expectMatrixSimilar(actual: matrix.Matrix, expected: matrix.Matrix) {
 describe('matrix', () => {
 	test('width', () => {
 		expect(
-			matrix.width([
-				[1, 2],
-				[2, 1],
-			])
+			matrix.width(
+				loose([
+					[1, 2],
+					[2, 1],
+				])
+			)
 		).toEqual(2);
 	});
+
 	test('a checkerboard matrix', () => {
 		expect(
-			matrix.checkerboard([
-				[1, 2],
-				[3, 4],
-			])
+			matrix.toRows(
+				matrix.checkerboard(
+					loose([
+						[1, 2],
+						[3, 4],
+					])
+				)
+			)
 		).toEqual([
 			[1, -2],
 			[-3, 4],
 		]);
 	});
+
 	test('.minors', () => {
 		expect(
-			matrix.minors([
-				[3, 0, 2],
-				[2, 0, -2],
-				[0, 1, 1],
-			] as const)
+			matrix.toRows(
+				matrix.minors(
+					loose([
+						[3, 0, 2],
+						[2, 0, -2],
+						[0, 1, 1],
+					])
+				)
+			)
 		).toEqual([
 			[2, 2, 2],
 			[-2, 3, 3],
-			[-0, -10, 0], // dumb
+			[-0, -10, 0],
 		]);
 	});
-	describe('.identity', () => {
-		test.each([
-			[[1, 1], matrix.as<1, 1>([[1]] as const)],
+
+	test('.identity', () => {
+		const cases: [width: number, height: number, expected: number[][]][] = [
+			[1, 1, [[1]]],
 			[
-				[3, 3],
-				matrix.as<3, 3>([
+				3,
+				3,
+				[
 					[1, 0, 0],
 					[0, 1, 0],
 					[0, 0, 1],
-				] as const),
+				],
 			],
-
 			[
-				[2, 3],
-				matrix.as<2, 3>([
+				2,
+				3,
+				[
 					[1, 0],
 					[0, 1],
 					[0, 0],
-				] as const),
-			], //@ts-expect-error not sure how to fix rn
-		] as const)('%#: (%p) => %p', ([i, j], b) => {
-			expect(matrix.identity(i, j)).toEqual(b);
-		});
+				],
+			],
+		];
+
+		for (const [width, height, expected] of cases) {
+			expect(matrix.toRows(matrix.identity(width, height))).toEqual(expected);
+		}
 	});
 
-	describe('.transpose', () => {
-		test.each([
+	test('.transpose', () => {
+		const cases: [input: number[][], expected: number[][]][] = [
 			[
-				matrix.as<3, 2>([
+				[
 					[1, 2, 3],
 					[4, 5, 6],
-				] as const),
-
-				matrix.as<2, 3>([
+				],
+				[
 					[1, 4],
 					[2, 5],
 					[3, 6],
-				] as const),
+				],
 			],
+			[[[1, 2, 3]], [[1], [2], [3]]],
+		];
 
-			[
-				matrix.as<3, 1>([[1, 2, 3]] as const),
-
-				matrix.as<1, 3>([[1], [2], [3]] as const),
-			], // @ts-expect-error not sure how to fix rn
-		] as const)('%#: (%p) => %p', (a, b) => {
-			expect(matrix.transpose(a)).toEqual(b);
-		});
+		for (const [input, expected] of cases) {
+			expect(matrix.toRows(matrix.transpose(loose(input)))).toEqual(expected);
+		}
 	});
 
-	describe('.determinant', () => {
-		test.each([
-			[matrix.as<1, 1>([[1]] as const), 1],
-
+	test('.determinant', () => {
+		const cases: [input: number[][], expected: number][] = [
+			[[[1]], 1],
 			[
-				matrix.as([
+				[
 					[2, 0],
 					[0, 5],
-				] as const),
+				],
 				10,
 			],
-
 			[
-				matrix.as<2, 2>([
+				[
 					[3, 8],
 					[4, 6],
-				] as const),
-
+				],
 				-14,
 			],
-
 			[
-				matrix.as<3, 3>([
+				[
 					[6, 1, 1],
 					[4, -2, 5],
 					[2, 8, 7],
-				] as const),
-
+				],
 				-306,
 			],
-
 			[
-				matrix.as([
+				[
 					[6, -7],
 					[-2, 4],
-				] as const),
+				],
 				10,
-			], // @ts-expect-error not sure how to fix rn
-		] as const)('%#: (%p) => %p', (a, b) => {
-			expect(matrix.determinant(a)).toEqual(b);
-		});
+			],
+		];
+
+		for (const [input, expected] of cases) {
+			expect(matrix.determinant(loose(input))).toEqual(expected);
+		}
 	});
 
-	describe('.inverse', () => {
-		test.each([
-			//[matrix.zero, matrix.zero],
-
+	test('.inverse', () => {
+		const cases: [input: number[][], expected: number[][]][] = [
 			[
-				matrix.as([
+				[
 					[2, 0],
 					[0, 5],
-				] as const),
-
-				matrix.as([
+				],
+				[
 					[1 / 2, 0],
 					[0, 1 / 5],
-				] as const),
+				],
 			],
-
-			/*[
-				matrix.as<2, 2>([
-					[3, 3.5],
-					[3.2, 3.6],
-				] as const),
-
-				matrix.as<2, 2>([
-					[-9, 8.75],
-					[8, -7.5],
-				] as const),
-
-				// 1.12, -3.5
-				// -3.2, 1.25
-			],*/
 			[
-				matrix.as([
+				[
 					[3, 0, 2],
 					[2, 0, -2],
 					[0, 1, 1],
-				] as const),
-
-				matrix.as([
+				],
+				[
 					[0.2, 0.2, 0],
 					[-0.2, 0.3, 1],
 					[0.2, -0.3, 0],
-				] as const),
+				],
 			],
-
 			[
-				matrix.as<2, 2>([
+				[
 					[4, 7],
 					[2, 6],
-				] as const),
-
-				matrix.as<2, 2>([
+				],
+				[
 					[0.6, -0.7],
 					[-0.2, 0.4],
-				] as const),
-			], // @ts-expect-error not sure how to fix rn
-		] as const)('%#: (%p) => %p', (a, b) => {
-			expectMatrixSimilar(matrix.inverse(a), b);
-		});
+				],
+			],
+		];
 
-		test.each([
-			/*[
-				matrix.as<2, 2>([
-					[3, 3.5],
-					[3.2, 3.6],
-				] as const),
+		for (const [input, expected] of cases) {
+			expectMatrixRowsSimilar(matrix.inverse(loose(input)), expected);
+		}
+	});
 
-				matrix.as<2, 2>([
-					[-9, 8.75],
-					[8, -7.5],
-				] as const),
-
-				// 1.12, -3.5
-				// -3.2, 1.25
-			],*/
-
+	test('.inverse composes with multiplication to identity', () => {
+		const cases: number[][][] = [
 			[
-				matrix.as<2, 2>([
-					[4, 7],
-					[2, 6],
-				] as const),
+				[4, 7],
+				[2, 6],
 			],
 			[
-				matrix.as([
-					[20, 100, 2],
-					[0.2, -10, 1],
-					[4, 3, 1],
-				] as const),
-			], // @ts-expect-error not sure how to fix rn
-		] as const)('%#: %p * a => identity', a => {
-			const [ij = 0] = matrix.size(a);
-			expectMatrixSimilar(
-				matrix.mul(a, matrix.inverse(a)),
-				matrix.identity(ij, ij)
+				[20, 100, 2],
+				[0.2, -10, 1],
+				[4, 3, 1],
+			],
+		];
+
+		for (const inputRows of cases) {
+			const input = loose(inputRows);
+			const [ij = 0] = matrix.size(input);
+			expectMatrixRowsSimilar(
+				matrix.mul(input, matrix.inverse(input)),
+				matrix.toRows(matrix.identity(ij, ij))
 			);
-		});
+		}
 	});
 
-	describe('.transpose', () => {
-		test.each([
-			[
-				matrix.as<3, 2>([
-					[1, 2, 3],
-					[4, 5, 6],
-				]),
-
-				matrix.as<2, 3>([
-					[1, 4],
-					[2, 5],
-					[3, 6],
-				]),
-			],
-
-			[
-				matrix.as<3, 1>([[1, 2, 3]] as const),
-
-				matrix.as<1, 3>([[1], [2], [3]] as const),
-			], // @ts-expect-error not sure how to fix rn
-		] as const)('%#: (%p) => %p', (a, b) => {
-			expect(matrix.transpose(a)).toEqual(b);
-		});
-	});
-
-	describe('.col', () => {
-		test.each([
-			[
-				matrix.as<2, 3>([
+	test('.col', () => {
+		expect([
+			...matrix.col(
+				loose([
 					[1, 2],
 					[1, 4],
 					[6, 5],
-				] as const),
-				0,
-				[1, 1, 6],
-			],
-		])('%#: (%p, %p) => %p', (a, b, o) => {
-			expect([...matrix.col(a, b)]).toEqual(o);
-		});
+				]),
+				0
+			),
+		]).toEqual([1, 1, 6]);
 	});
 
-	describe('.row', () => {
-		test.each([
-			[matrix.as([[1]]), 0, [1]],
-			[matrix.as([[1]]), 1, []],
-			[matrix.as([[1]]), -1, []],
-			[matrix.as([[1]]), Infinity, []],
-		])('%#: (%p, %p) => %p', (a, b, o) => {
-			expect([...matrix.row(a, b)]).toEqual(o);
-		});
+	test('.row', () => {
+		const single = loose([[1]]);
+		const cases: [row: number, expected: number[]][] = [
+			[0, [1]],
+			[1, []],
+			[-1, []],
+			[Infinity, []],
+		];
 
-		test.each([
-			[
-				matrix.as<2, 3>([
+		for (const [row, expected] of cases) {
+			expect([...matrix.row(single, row)]).toEqual(expected);
+		}
+
+		expect([
+			...matrix.row(
+				loose([
 					[1, 2],
 					[1, 4],
 					[6, 5],
-				] as const),
-				0,
-				[1, 2],
-			],
-		])('(%p, %p) => %p', (a, b, o) => {
-			expect([...matrix.row(a, b)]).toEqual(o);
-		});
-	});
-
-	describe('.mul', () => {
-		test.each([
-			[
-				matrix.as<2, 1>([[6, 9]] as const),
-
-				matrix.as<2, 2>([
-					[0, 1],
-					[1, 0],
-				] as const),
-
-				matrix.as<2, 1>([[9, 6]] as const),
-			],
-			[
-				matrix.as<2, 2>([
-					[1, 0],
-					[0, 1],
-				] as const),
-
-				matrix.as<2, 2>([
-					[2, 4],
-					[10, 9],
-				] as const),
-
-				matrix.as<2, 2>([
-					[2, 4],
-					[10, 9],
-				] as const),
-			],
-		])('%#: (%p, %p) => %p', (a, b, o) => {
-			expect(matrix.mul(a, b)).toEqual(o);
-		});
-	});
-
-	describe('.add', () => {
-		test.each([
-			[
-				matrix.as([
-					[1, 2],
-					[3, 4],
-				] as const),
-
-				matrix.as([
-					[4, 3],
-					[2, 1],
-				] as const),
-
-				matrix.as([
-					[5, 5],
-					[5, 5],
 				]),
+				0
+			),
+		]).toEqual([1, 2]);
+	});
+
+	test('.mul', () => {
+		const cases: [
+			left: number[][],
+			right: number[][],
+			expected: number[][],
+		][] = [
+			[
+				[[6, 9]],
+				[
+					[0, 1],
+					[1, 0],
+				],
+				[[9, 6]],
 			],
-		])('%#: (%p, %p) => %p', (a, b, o) => {
-			expect(matrix.add(a, b)).toEqual(o);
-		});
+			[
+				[
+					[1, 0],
+					[0, 1],
+				],
+				[
+					[2, 4],
+					[10, 9],
+				],
+				[
+					[2, 4],
+					[10, 9],
+				],
+			],
+		];
+
+		for (const [left, right, expected] of cases) {
+			expect(matrix.toRows(matrix.mul(loose(left), loose(right)))).toEqual(
+				expected
+			);
+		}
+	});
+
+	test('.add', () => {
+		expect(
+			matrix.toRows(
+				matrix.add(
+					loose([
+						[1, 2],
+						[3, 4],
+					]),
+					loose([
+						[4, 3],
+						[2, 1],
+					])
+				)
+			)
+		).toEqual([
+			[5, 5],
+			[5, 5],
+		]);
 	});
 });
 
@@ -410,7 +368,7 @@ describe('cartesian', () => {
 
 		test.each(
 			testCases
-		)('rectContainsPoint(%p)(%p)(%p) → %p', (min, max, point, result) =>
+		)('rectContainsPoint(%p)(%p)(%p) -> %p', (min, max, point, result) =>
 			expect(rectContaninsPoint<2>(min)(max)(point)).toEqual(result));
 	});
 });

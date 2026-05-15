@@ -1,9 +1,8 @@
 import { expect, it } from '@jest/globals';
 
-import { point } from '#root/ts/math/cartesian';
+import { point, sub } from '#root/ts/math/cartesian';
 import { Cartestian, Quaternion } from '#root/ts/math/conv';
 import { degree } from '#root/ts/math/degree';
-import { sub } from '#root/ts/math/deprecated/matrix.js';
 import { EulerAngle } from '#root/ts/math/euler_angle';
 import { lookAt } from '#root/ts/math/lookAt.js';
 import * as quat from '#root/ts/math/quaternion.js';
