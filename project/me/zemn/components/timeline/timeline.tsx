@@ -6,6 +6,7 @@ import React, { ReactElement } from 'react';
 import * as Bio from '#root/project/me/zemn/bio/index.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { SectionLink } from '#root/project/me/zemn/components/SectionLink/SectionLink.js';
+import { splitEventsByStart } from '#root/project/me/zemn/components/timeline/events.js';
 import style from '#root/project/me/zemn/components/timeline/timeline.module.css';
 import * as lang from '#root/ts/react/lang/index.js';
 
@@ -240,6 +241,41 @@ function Year({
 	);
 }
 
+function FutureEvents({
+	months,
+}: {
+	readonly months: Immutable.OrderedMap<
+		ImmutableText,
+		Immutable.List<Bio.Event>
+	>;
+}) {
+	if (months.isEmpty()) return null;
+
+	return (
+		<div className={style.year}>
+			<div
+				aria-label="Upcoming"
+				className={style.yearIndicator}
+				lang="zxx"
+				title="Upcoming"
+			>
+				∞
+			</div>
+			<div aria-hidden="true" className={style.ageIndicator} />
+
+			<div className={style.content}>
+				{[...months].map(([month, events]) => (
+					<Month
+						events={events}
+						key={textToStringKey(month)}
+						month={month}
+					/>
+				))}
+			</div>
+		</div>
+	);
+}
+
 export default function Timeline() {
 	// this spread is just because Intl.DateTimeFormat expects a mutable array.
 
@@ -247,36 +283,51 @@ export default function Timeline() {
 
 	const locale = Intl.DateTimeFormat.supportedLocalesOf(locales)[0];
 
-	const years = React.useMemo(
-		() =>
-			groupBy(
-				Immutable.List(Bio.Bio.timeline)
-					.filter(event => Bio.eventHasStarted(event))
-					.map(event => {
-						// depending on locale there may be different numbers of months etc.
-						const month: ImmutableText = Text({
-							corpus: Intl.DateTimeFormat(locale, {
-								month: 'long',
-							}).format(event.date),
-							language: locale,
-						});
-						const year: ImmutableText = Text({
-							corpus: Intl.DateTimeFormat(locale, {
-								year: 'numeric',
-							}).format(event.date),
-							language: locale,
-						});
+	const { futureMonths, years } = React.useMemo(() => {
+		const split = splitEventsByStart(Bio.Bio.timeline);
 
-						return { ...event, month, year };
-					})
-					.sort((a, b) => +b.date - +a.date),
-				v => v.year
-			).map(v => groupBy(v, i => i.month)),
-		[locale]
-	);
+		const years = groupBy(
+			Immutable.List(split.started).map(event => {
+				// depending on locale there may be different numbers of months etc.
+				const month: ImmutableText = Text({
+					corpus: Intl.DateTimeFormat(locale, {
+						month: 'long',
+					}).format(event.date),
+					language: locale,
+				});
+				const year: ImmutableText = Text({
+					corpus: Intl.DateTimeFormat(locale, {
+						year: 'numeric',
+					}).format(event.date),
+					language: locale,
+				});
+
+				return { ...event, month, year };
+			}),
+			v => v.year
+		).map(v => groupBy(v, i => i.month));
+
+		const futureMonths = groupBy(
+			Immutable.List(split.future).map(event => {
+				const month: ImmutableText = Text({
+					corpus: Intl.DateTimeFormat(locale, {
+						month: 'long',
+						year: 'numeric',
+					}).format(event.date),
+					language: locale,
+				});
+
+				return { ...event, month };
+			}),
+			v => v.month
+		);
+
+		return { futureMonths, years };
+	}, [locale]);
 
 	return (
 		<>
+			<FutureEvents months={futureMonths} />
 			{[...years].map(([year, months]) => (
 				<Year key={textToStringKey(year)} months={months} year={year} />
 			))}

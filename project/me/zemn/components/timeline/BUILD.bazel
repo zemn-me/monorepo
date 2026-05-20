@@ -1,9 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "timeline",
     srcs = [
+        "events.ts",
         "index.tsx",
         "timeline.tsx",
     ],
@@ -29,10 +30,32 @@ ts_project(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "events.ts",
+        "events_test.ts",
         "index.tsx",
         "timeline.tsx",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "timeline_tests",
+    srcs = ["events_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":timeline",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//project/me/zemn/bio",
+        "//ts/react/lang",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["events_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":timeline_tests"],
 )
 
 bazel_lint(
