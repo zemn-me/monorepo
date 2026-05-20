@@ -134,6 +134,7 @@ export function useIsAutumn() {
 /** A sample component that references the new hooks. */
 export interface HeroVideoProps {
 	readonly className?: string;
+	readonly 'data-glade-banner'?: boolean;
 }
 
 type LatLng = readonly [latitude: number, longitude: number];
@@ -238,6 +239,7 @@ export function HeroVideo(props: HeroVideoProps) {
 	return (
 		<figure
 			className={classNames(style.heroVideo, props.className)}
+			data-glade-banner={props['data-glade-banner']}
 			onClick={figureOnClick}
 		>
 			<Video

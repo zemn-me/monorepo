@@ -1,45 +1,137 @@
-.newCV {
-	display: block;
+.page {
+	--foreground-color: #000;
+	--background-color: #fff;
+
+	min-height: 100vh;
+	padding: 2rem;
+	overflow: auto;
+	color: var(--foreground-color);
+	background: #f3f3f0;
+	font-family: Lora, Georgia, "Times New Roman", serif;
+}
+
+.modeSwitch {
+	width: min(210mm, 100%);
+	margin: 0 auto 1rem;
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+	text-transform: lowercase;
+}
+
+.modeTarget {
+	position: fixed;
+	inset: 0 auto auto 0;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
+
+.shortModeLink,
+.page:has(:global(#long):target) .longModeLink {
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.page:has(:global(#long):target) .shortModeLink {
+	font-weight: inherit;
+	text-decoration: underline;
 }
 
 .cv {
-	font-size: 80%;
-	width: 210mm;
-	height: 297mm;
+	box-sizing: border-box;
+	width: min(210mm, 100%);
+	min-height: 297mm;
 	margin: auto;
 	padding: 20mm 30mm;
-	border: 1px solid #000;
+	overflow: hidden;
+	background: var(--background-color);
+	border: 1px solid var(--foreground-color);
+	font-size: 80%;
+}
+
+.shortCV {
+	height: 297mm;
 	display: grid;
 	grid:
 		"header header header header header" min-content
 		"experience-title experience-title experience-title experience-title experience-title" min-content
 		". . . . ." 0.4fr
-		"experience experience experience experience experience" 7fr
+		"experience experience experience experience experience" minmax(0, 7fr)
 		"works-title works-title works-title works-title works-title" min-content
 		". . . . ." 0.4fr
-		"works works works works works" 1fr
+		"works works works works works" minmax(0, 1.2fr)
 		". . . . ." 0.4fr
-		"works2 works2 works2 works2 works2" 1fr
+		"works2 works2 works2 works2 works2" minmax(0, 1.2fr)
 		". . . . ." 0.4fr
 		"skills-title skills-title skills-title skills-title skills-title" min-content
 		". . . . ." 0.4fr
-		"skills skills skills skills skills" 1fr
+		"skills skills skills skills skills" minmax(0, 1fr)
 		". . . . ." 3em
 		". dash-left future dash-right ." 2em / 1fr 2em 1fr 2em 1fr;
 }
 
-.cv::before,
-.cv::after {
+.shortCV::before,
+.shortCV::after {
 	content: "\2013";
 	margin: auto;
 	opacity: 0.5;
 }
 
-.cv::before {
+.shortCV::before {
 	grid-area: dash-left;
 }
-.cv::after {
+
+.shortCV::after {
 	grid-area: dash-right;
+}
+
+.longCV {
+	display: none;
+	overflow: visible;
+}
+
+.page:has(:global(#long):target) .shortCV {
+	display: none;
+}
+
+.page:has(:global(#long):target) .longCV {
+	display: block;
+}
+
+.longCV .header {
+	margin-bottom: 2em;
+}
+
+.longCV .rule {
+	margin: 2.2em 0 1em;
+}
+
+.longCV .experience {
+	display: block;
+}
+
+.longCV .work,
+.longCV .note {
+	break-inside: avoid;
+}
+
+.longCV .work {
+	margin-bottom: 1em;
+}
+
+.longCV .notes {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1em 2em;
+	margin-bottom: 1em;
+	text-align: left;
+}
+
+.longCV .future {
+	display: block;
+	width: 3em;
+	height: 2.4em;
+	margin: 3em auto 0;
 }
 
 .header {
@@ -49,109 +141,56 @@
 	align-items: center;
 	grid:
 		"website icon date" min-content
-		"....... .... ...." 1em
-		"phone   name email" min-content
-		".....   .... ....." 2em / 1fr 1fr 1fr;
+		". . ." 1em
+		"phone name email" min-content
+		". . ." 2em / 1fr 1fr 1fr;
 }
 
 .website {
 	grid-area: website;
 }
+
 .headerIcon {
 	grid-area: icon;
+	width: 5.7em;
 	height: 2.5em;
 }
+
 .phone {
 	grid-area: phone;
 }
+
 .email {
 	grid-area: email;
 }
+
 .name {
 	grid-area: name;
+	margin: 0;
+	font-size: larger;
+	font-weight: inherit;
+	text-transform: lowercase;
 }
-.profileName {
-	grid-area: name;
-}
+
 .date {
 	grid-area: date;
-}
-
-.experience {
-	grid-area: experience;
-	display: grid;
-}
-
-.work {
-	display: grid;
-	grid:
-		"employer employer . start dash end" min-content
-		"position position . duration duration duration" min-content
-		". . . . . ." 0.1em
-		". content content . . ." min-content
-		". . . . . ." 1em / 1em 1fr 1em 4.5em 2em 4em;
-}
-
-.work::before {
-	content: " - ";
-	grid-area: dash;
-	justify-self: center;
-}
-.employer {
-	grid-area: employer;
-	font-weight: 700;
-	font-style: italic;
-}
-.position {
-	grid-area: position;
-}
-.start {
-	grid-area: start;
-	justify-self: end;
-	white-space: nowrap;
-	opacity: 0.6;
-}
-.end {
-	grid-area: end;
-	justify-self: end;
-	white-space: nowrap;
-	opacity: 0.6;
-}
-.duration {
-	grid-area: duration;
-	justify-self: end;
-	white-space: nowrap;
-	opacity: 0.4;
-}
-.content {
-	grid-area: content;
-}
-
-.work p {
-	margin: 0;
-}
-.work p + p {
-	margin-top: 1em;
-}
-.work ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-.work li + li {
-	margin-top: 1em;
 }
 
 .rule {
 	display: flex;
 	align-items: center;
+	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
+	text-align: center;
+	text-transform: lowercase;
 }
 
 .rule::before,
 .rule::after {
 	content: "";
 	flex: 1;
-	border-bottom: 1px solid;
+	border-bottom: 1px solid currentColor;
 }
 
 .rule span {
@@ -161,39 +200,257 @@
 .experienceTitle {
 	grid-area: experience-title;
 }
+
 .worksTitle {
 	grid-area: works-title;
 }
+
+.skillsTitle {
+	grid-area: skills-title;
+}
+
+.experience {
+	grid-area: experience;
+	display: grid;
+	align-content: start;
+}
+
+.work {
+	display: grid;
+	grid:
+		"employer employer . start dash end" min-content
+		"position position . duration duration duration" min-content
+		". . . . . ." 0.1em
+		". content content content content content" min-content
+		". . . . . ." 1em / 1em 1fr 1em 4.5em 1.5em 4.5em;
+}
+
+.work::before {
+	content: "-";
+	grid-area: dash;
+	justify-self: center;
+	opacity: 0.6;
+}
+
+.employer {
+	grid-area: employer;
+	font-weight: 700;
+	font-style: italic;
+}
+
+.position {
+	grid-area: position;
+}
+
+.start {
+	grid-area: start;
+	justify-self: end;
+	white-space: nowrap;
+	opacity: 0.6;
+}
+
+.end {
+	grid-area: end;
+	justify-self: end;
+	white-space: nowrap;
+	opacity: 0.6;
+}
+
+.duration {
+	grid-area: duration;
+	justify-self: end;
+	white-space: nowrap;
+	opacity: 0.4;
+}
+
+.content {
+	grid-area: content;
+}
+
+.content p {
+	margin: 0;
+}
+
+.content p::first-letter {
+	text-transform: uppercase;
+}
+
+.notes {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 0 1em;
+	align-items: start;
+	text-align: center;
+}
+
 .works {
 	grid-area: works;
 }
+
 .works2 {
 	grid-area: works2;
 }
+
+.note {
+	min-width: 0;
+	display: grid;
+	grid-template-rows: min-content 1fr;
+	gap: 0.35em;
+}
+
+.noteTitle {
+	color: inherit;
+	font-style: italic;
+	text-transform: lowercase;
+}
+
+.description {
+	margin: 0;
+	opacity: 0.7;
+}
+
 .skills {
 	grid-area: skills;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(7em, 1fr));
-	grid-auto-flow: dense;
+	gap: 0.35em 1em;
+	align-content: start;
 	align-items: center;
-	justify-items: stretch;
+	justify-items: center;
+	margin: 0;
+	padding: 0;
 	text-align: center;
+	list-style: none;
+	text-transform: lowercase;
 }
-.skills.works {
-	grid-gap: 0 1em;
-}
-.skillsTitle {
-	grid-area: skills-title;
-}
-.description {
-	grid-row: 2;
-	align-self: start;
-	opacity: 0.7;
-}
+
 .future {
 	grid-area: future;
+	width: 100%;
+	height: 100%;
+	margin: auto;
+	fill: var(--foreground-color);
 	stroke: none;
-	fill: #000 !important;
+}
+
+@media (max-width: 860px) {
+	.page {
+		padding: 0.75rem;
+	}
+
+	.cv {
+		min-height: auto;
+		padding: 1.25rem;
+		display: block;
+	}
+
+	.shortCV::before,
+	.shortCV::after,
+	.future {
+		display: none;
+	}
+
+	.header {
+		gap: 0.75em;
+		grid:
+			"icon" min-content
+			"name" min-content
+			"website" min-content
+			"email" min-content
+			"phone" min-content
+			"date" min-content / 1fr;
+		margin-bottom: 2rem;
+	}
+
+	.rule {
+		margin: 2rem 0 1rem;
+	}
+
+	.experience,
+	.notes,
+	.skills {
+		margin-bottom: 1rem;
+	}
+
+	.work {
+		grid:
+			"employer employer" min-content
+			"position position" min-content
+			"start end" min-content
+			"duration duration" min-content
+			"content content" min-content / 1fr 1fr;
+		gap: 0.25em 1em;
+		margin-bottom: 1.5em;
+	}
+
+	.work::before {
+		display: none;
+	}
+
+	.start {
+		justify-self: start;
+	}
+
+	.end,
+	.duration {
+		justify-self: end;
+	}
+
+	.notes {
+		grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+		gap: 1em;
+	}
+}
+
+@media print {
+	.modeSwitch,
+	.modeTarget {
+		display: none;
+	}
+
+	:global(body):has(.page) > :global(:not([data-glade-layout])) {
+		display: none !important;
+	}
+
+	:global([data-glade-layout]):has(.page),
+	:global([data-glade-content]):has(.page) {
+		display: block !important;
+	}
+
+	:global([data-glade-layout]):has(.page) :global([data-glade-banner]),
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) {
+		display: none !important;
+	}
+
+	:global([data-glade-content]):has(.page) {
+		padding: 0 !important;
+	}
+
+	.page {
+		min-height: auto;
+		padding: 0;
+		overflow: visible;
+		background: var(--background-color);
+	}
+
+	.cv {
+		width: 210mm;
+		min-height: 297mm;
+		margin: 0 auto;
+		border: 0;
+	}
+
+	.shortCV {
+		height: 297mm;
+		overflow: hidden;
+	}
+
+	.longCV {
+		height: auto;
+		overflow: visible;
+		box-decoration-break: clone;
+		-webkit-box-decoration-break: clone;
+	}
 }
 
 @page {

@@ -790,6 +790,9 @@ export const Bio = {
 			date: date(8, 'dec', 2010),
 			title: en`Assistant Obstetrician (shadow)`,
 			description: en`Work experience at the Royal Free Hospital NHS Trust. Spent time in world-leading virology department.`,
+			employer: en`Royal Free Hospital NHS Trust`,
+			tags: [science, work],
+			until: date(8, 'dec', 2010),
 		},
 		{
 			id: '0ce91f95-6bbf-4c9b-8142-9835c3c7cf4f',

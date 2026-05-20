@@ -50,14 +50,16 @@ export default function Glade(props: GladeProps) {
 	const pathname = usePathname();
 	const isHomepage = pathname == '/';
 	return (
-		<main className={style.main}>
-			<HeroVideo className={style.headerBgv} />
-			<header className={style.banner}>
+		<main className={style.main} data-glade-layout>
+			<HeroVideo className={style.headerBgv} data-glade-banner />
+			<header className={style.banner} data-glade-banner>
 				<LetterHead />
 				<GladeMenu />
 			</header>
-			<section className={style.content}>{props.children}</section>
-			<section className={style.footer}>
+			<section className={style.content} data-glade-content>
+				{props.children}
+			</section>
+			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>
 					<span>⁂</span>
 				</h2>
