@@ -217,6 +217,14 @@ const description = `Personal website and profile of ${lang.text(bio.Bio.who.ful
 export const metadata: Metadata = {
 	title,
 	description,
+	alternates: {
+		canonical: './',
+		types: {
+			'application/rss+xml': [
+				{ title: 'zemn.me timeline', url: '/timeline/rss.xml' },
+			],
+		},
+	},
 	openGraph: {
 		title,
 		description,
