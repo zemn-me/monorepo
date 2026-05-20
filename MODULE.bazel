@@ -17,7 +17,7 @@ oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 # Declare external images you need to pull, for example:
 oci.pull(
     name = "distroless_base",
-    digest = "sha256:c83f022002fc917a92501a8c30c605efdad3010157ba2c8998a2cbf213299201",
+    digest = "sha256:f2df8702d4dcc45ce76df6cbc14ad1975fcf88a04bd0e8947b6194264f9ab75e",
     image = "gcr.io/distroless/base",
     platforms = [
         "linux/amd64",
@@ -29,7 +29,7 @@ oci.pull(
 )
 oci.pull(
     name = "distroless_debian12",
-    digest = "sha256:9dce90e688a57e59ce473ff7bc4c80bc8fe52d2303b4d99b44f297310bbd2210",
+    digest = "sha256:58695f439f772a00009c8f6be4c183f824c1f556d74b313c30900f167e4772f8",
     image = "gcr.io/distroless/base-debian12",
     platforms = [
         "linux/amd64",
@@ -355,12 +355,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "69a2f879788c118e1d2dd7c34f6a8a8cf09b8cf1"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "b59174e0b0f5563761be31d94530bb659463781d"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "2099eb1eeb0c6587a36954d5fb2e86bd0df177bf7696436ee837e8db23f33e9c",
+    sha256 = "d26864f54831a2941cd00437ae41be9a7ae4e17dc7e3f084d471a3109609111b",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
@@ -548,7 +548,7 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.12"
+RUFF_VERSION = "0.15.13"
 
 # For Apple Silicon macOS
 http_archive(
