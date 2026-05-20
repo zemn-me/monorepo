@@ -125,5 +125,36 @@ describe('zemn.me website', () => {
 				await driver.quit();
 			}
 		});
+
+		it('timeline rss feed exports XML', async () => {
+			try {
+				const response = await fetch(`${origin}/timeline/rss.xml`);
+				const body = await response.text();
+
+				expect(response.status).toBe(200);
+				expect(body).toContain(
+					'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'
+				);
+				expect(body).toContain('<title>zemn.me timeline</title>');
+				expect(body).toContain('<item>');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('landing page advertises timeline rss feed', async () => {
+			try {
+				const response = await fetch(origin);
+				const body = await response.text();
+
+				expect(response.status).toBe(200);
+				expect(body).toContain('rel="alternate"');
+				expect(body).toContain('type="application/rss+xml"');
+				expect(body).toContain('href="https://zemn.me/timeline/rss.xml"');
+				expect(body).toContain('title="zemn.me timeline"');
+			} finally {
+				await driver.quit();
+			}
+		});
 	});
 });
