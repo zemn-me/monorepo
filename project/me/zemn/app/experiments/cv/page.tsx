@@ -1,142 +1,297 @@
-import React from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import style from '#root/project/me/zemn/app/experiments/cv/page.module.css';
 import {
 	accolade,
 	Bio,
+	type Event as BioEvent,
 	comment,
+	disclosure,
+	employment,
 	eventHasStarted,
+	type Tag,
 	talk,
 	work,
+	writing,
 } from '#root/project/me/zemn/bio/bio.js';
 import priorities from '#root/project/me/zemn/bio/priority.json';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import TimeEye from '#root/project/me/zemn/components/TimeEye/TimeEye.js';
-import { isDefined, must } from '#root/ts/guard.js';
-import { filter } from '#root/ts/iter/iterable_functional.js';
-import { None, Some } from '#root/ts/option/types.js';
 import { MonthYear } from '#root/ts/react/lang/date.js';
 
 const priorityMap = new Map<string, number>(
 	priorities.map((id, idx) => [id, priorities.length - idx])
 );
-const getPriority = (id: string): number | undefined => priorityMap.get(id);
-const mustPriority = (id: string): number => must(isDefined)(getPriority(id));
 
 const minPriorityRecord = '74086941-7c37-4f3e-af9b-4cc8e8bbc749';
-const minPriority = mustPriority(minPriorityRecord);
+const minPriority =
+	priorityMap.get(minPriorityRecord) ?? Number.NEGATIVE_INFINITY;
 
-const entries = Bio.timeline
-	.filter(event => eventHasStarted(event))
-	.filter(e => mustPriority(e.id) >= minPriority)
-	.sort((a, b) => +a.date - +b.date)
-	.toReversed();
+const nonExperienceWorkTags = [
+	accolade,
+	comment,
+	disclosure,
+	talk,
+	writing,
+] as const;
+const writingAndTalkTags = [comment, disclosure, talk, writing] as const;
 
-type Event = (typeof Bio.timeline)[number];
+type CVMode = 'long' | 'short';
 
-function Event({ event }: { readonly event: Event }) {
-	const start = (
-		'since' in event && event.since ? event.since : event.date
-	) as Date;
-	const end = 'until' in event ? event.until : undefined;
-	const employer = 'employer' in event ? event.employer : undefined;
+interface NoteSection {
+	readonly areaClassName?: string;
+	readonly events: readonly BioEvent[];
+	readonly id: string;
+	readonly title?: ReactNode;
+}
+
+interface CVContent {
+	readonly experience: readonly BioEvent[];
+	readonly noteSections: readonly NoteSection[];
+}
+
+function classNames(
+	...classes: readonly (false | string | undefined)[]
+): string {
+	return classes
+		.filter((className): className is string => typeof className === 'string')
+		.join(' ');
+}
+
+function priorityOf(event: BioEvent): number {
+	return priorityMap.get(event.id) ?? Number.NEGATIVE_INFINITY;
+}
+
+function byPriority(a: BioEvent, b: BioEvent): number {
+	return priorityOf(b) - priorityOf(a);
+}
+
+function averagePriority(events: readonly BioEvent[]): number {
+	if (events.length === 0) return Number.NEGATIVE_INFINITY;
+
+	const total = events.reduce((sum, event) => sum + priorityOf(event), 0);
+	return total / events.length;
+}
+
+function byAverageSectionPriority(
+	a: NoteSection,
+	b: NoteSection
+): number {
+	return averagePriority(b.events) - averagePriority(a.events);
+}
+
+function hasTag(event: BioEvent, tag: Tag): boolean {
+	return event.tags?.includes(tag) ?? false;
+}
+
+function hasAnyTag(event: BioEvent, tags: readonly Tag[]): boolean {
+	return tags.some(tag => hasTag(event, tag));
+}
+
+function startedPriorityEvents(): BioEvent[] {
+	return Bio.timeline
+		.filter(event => eventHasStarted(event))
+		.filter(event => priorityOf(event) >= minPriority)
+		.sort(byPriority);
+}
+
+function eventStart(event: BioEvent): Date {
+	return event.since ?? event.date;
+}
+
+function eventEnd(event: BioEvent): Date | undefined {
+	return event.until instanceof Date ? event.until : undefined;
+}
+
+function isExperience(event: BioEvent): boolean {
+	if (hasTag(event, employment)) return true;
+	if (!hasTag(event, work)) return false;
+	if (event.until === undefined) return false;
+	return !hasAnyTag(event, nonExperienceWorkTags);
+}
+
+function mergeSupersededEvents(events: readonly BioEvent[]): BioEvent[] {
+	const eventsById = new Map(events.map(event => [event.id, event]));
+
+	for (const event of events) {
+		if (event.supercedes === undefined) continue;
+
+		const superseded = eventsById.get(event.supercedes);
+		if (superseded === undefined) continue;
+
+		eventsById.set(event.id, {
+			...event,
+			since: eventStart(superseded),
+		});
+		eventsById.delete(event.supercedes);
+	}
+
+	return [...eventsById.values()];
+}
+
+const experienceEvents = mergeSupersededEvents(
+	startedPriorityEvents().filter(isExperience)
+).sort((a, b) => +eventStart(b) - +eventStart(a));
+
+const experienceEventIds = new Set(
+	experienceEvents.flatMap(event =>
+		event.supercedes === undefined
+			? [event.id]
+			: [event.id, event.supercedes]
+	)
+);
+
+const noteEvents = startedPriorityEvents().filter(
+	event => !experienceEventIds.has(event.id)
+);
+
+function shortContent(): CVContent {
+	const primaryNotes = noteEvents
+		.filter(event => event.description !== undefined)
+		.slice(0, 4);
+	const primaryNoteIds = new Set(primaryNotes.map(event => event.id));
+	const writingAndTalkNotes = noteEvents
+		.filter(event => !primaryNoteIds.has(event.id))
+		.filter(event => event.description !== undefined)
+		.filter(event => hasAnyTag(event, writingAndTalkTags))
+		.slice(0, 4);
+
+	return {
+		experience: experienceEvents.slice(0, 6),
+		noteSections: [
+			{
+				areaClassName: style.works,
+				events: primaryNotes,
+				id: 'short-primary',
+				title: 'selected highlights',
+			},
+			{
+				areaClassName: style.works2,
+				events: writingAndTalkNotes,
+				id: 'short-writing',
+			},
+		],
+	};
+}
+
+function longContent(): CVContent {
+	const talkNotes = noteEvents.filter(event => hasTag(event, talk));
+	const talkNoteIds = new Set(talkNotes.map(event => event.id));
+	const disclosureNotes = noteEvents.filter(
+		event => !talkNoteIds.has(event.id) && hasTag(event, disclosure)
+	);
+	const disclosureNoteIds = new Set(
+		disclosureNotes.map(event => event.id)
+	);
+	const writingNotes = noteEvents.filter(
+		event =>
+			!talkNoteIds.has(event.id) &&
+			!disclosureNoteIds.has(event.id) &&
+			hasTag(event, writing)
+	);
+	const writingNoteIds = new Set(writingNotes.map(event => event.id));
+	const accoladeNotes = noteEvents.filter(
+		event =>
+			!talkNoteIds.has(event.id) &&
+			!disclosureNoteIds.has(event.id) &&
+			!writingNoteIds.has(event.id) &&
+			hasTag(event, accolade)
+	);
+
+	return {
+		experience: experienceEvents,
+		noteSections: [
+			{
+				events: writingNotes,
+				id: 'long-writing',
+				title: 'writing',
+			},
+			{
+				events: talkNotes,
+				id: 'long-talks',
+				title: 'talks',
+			},
+			{
+				events: disclosureNotes,
+				id: 'long-disclosures',
+				title: 'disclosures',
+			},
+			{
+				events: accoladeNotes,
+				id: 'long-accolades',
+				title: 'accolades',
+			},
+		].sort(byAverageSectionPriority),
+	};
+}
+
+function cvContent(mode: CVMode): CVContent {
+	return mode === 'long' ? longContent() : shortContent();
+}
+
+function Year({ className, date }: DateProps) {
 	return (
-		<div className={style.work} key={event.id}>
-			{employer && <div className={style.employer}>{employer.text}</div>}
-			<div className={style.position}>{event.title.text}</div>
-
-			<MonthYear className={style.date} date={start} />
-
-			{end && (
-				<div className={style.end}>
-					{typeof end === 'string' ? (
-						'Ongoing'
-					) : (
-						<MonthYear date={end} />
-					)}
-				</div>
-			)}
-			{'description' in event && event.description && (
-				<span
-					className={`${style.timelineDescription} ${style.content}`}
-				>
-					<p>{event.description.text}</p>
-				</span>
-			)}
-		</div>
+		<time className={className} dateTime={date.toISOString()}>
+			{date.getUTCFullYear()}
+		</time>
 	);
 }
 
-function WorkItems() {
-	return (
-		<>
-			{entries
-				.filter(e => 'tags' in e && e.tags.includes(work))
-				.map(e => (
-					<Event event={e} key={e.id} />
-				))}
-		</>
-	);
+interface DateProps {
+	readonly className?: string;
+	readonly date: Date;
 }
 
-function OtherItems() {
-	return (
-		<>
-			{entries
-				.filter(e => 'tags' in e && !e.tags.includes(work))
-				.map(e => (
-					<React.Fragment key={e.id}>
-						<div>{e.title.text}</div>
-						{'description' in e && e.description && (
-							<div className={style.description}>
-								{e.description.text}
-							</div>
-						)}
-					</React.Fragment>
-				))}
-		</>
-	);
+function formatDuration(start: Date, end: Date): string {
+	const startMonth = start.getUTCFullYear() * 12 + start.getUTCMonth();
+	const endMonth = end.getUTCFullYear() * 12 + end.getUTCMonth();
+	const months = Math.max(0, endMonth - startMonth);
+
+	if (months === 0) return '< 1 month';
+	if (months < 12) return `${months} ${months === 1 ? 'month' : 'months'}`;
+
+	const years = Math.max(1, Math.round(months / 12));
+	return `${years} ${years === 1 ? 'year' : 'years'}`;
 }
 
-function OldCV() {
-	return (
-		<div className={`${style.cv} ${style.app}`}>
-			<div className={style.header}>
-				<Link
-					className={style.website}
-					href={Bio.officialWebsite.toString()}
-				>
-					zemn.me
-				</Link>
-				{<div className={style.email}>{Bio.email[0]}</div>}
-				<div className={style.phone}>+1 901 910 1110</div>
-				<TimeEye className={style.headerIcon} />
+function stripEmployerSuffix(title: string, employer: string): string {
+	const suffix = `, ${employer}`;
+	if (!title.endsWith(suffix)) return title;
+	return title.slice(0, -suffix.length);
+}
 
-				<MonthYear className={style.date} date={new Date()} />
+interface Role {
+	readonly employer?: string;
+	readonly position: string;
+}
 
-				<div className={`${style.profileName} ${style.name}`}>
-					{Bio.who.name.text}
-				</div>
-			</div>
-			<div className={`${style.rule} ${style.experienceTitle}`}>
-				<span>selected experience</span>
-			</div>
-			<div className={style.experience}>
-				<WorkItems />
-			</div>
-			<div className={`${style.rule} ${style.worksTitle}`}>
-				<span>of note</span>
-			</div>
-			<div className={`${style.skills} ${style.works}`}>
-				<OtherItems />
-			</div>
-		</div>
-	);
+function splitRole(event: BioEvent): Role {
+	if (event.employer !== undefined) {
+		return {
+			employer: event.employer.text,
+			position: stripEmployerSuffix(
+				event.title.text,
+				event.employer.text
+			),
+		};
+	}
+
+	const comma = event.title.text.lastIndexOf(',');
+	if (comma === -1) {
+		return {
+			position: event.title.text,
+		};
+	}
+
+	return {
+		employer: event.title.text.slice(comma + 1).trim(),
+		position: event.title.text.slice(0, comma).trim(),
+	};
 }
 
 function Header() {
 	return (
-		<div className={style.header}>
+		<header className={style.header}>
 			<Link
 				className={style.website}
 				href={Bio.officialWebsite.toString()}
@@ -144,156 +299,221 @@ function Header() {
 				{Bio.officialWebsite.host}
 			</Link>
 			<div className={style.email}>{Bio.email[0]}</div>
-			<div className={style.phone}>+1 901 910 1110</div>
-			<TimeEye className={style.headerIcon} />
+			<div className={style.phone}>phone on request</div>
+			<TimeEye aria-hidden className={style.headerIcon} />
 			<MonthYear className={style.date} date={new Date()} />
-			<div
-				className={`${style.profileName} ${style.name}`}
-				lang={Bio.who.name.language}
-			>
+			<h1 className={style.name} lang={Bio.who.name.language}>
 				{Bio.who.name.text}
-			</div>
-		</div>
+			</h1>
+		</header>
 	);
 }
 
-function interestingEvents() {
-	// memoize this
-	return Bio.timeline
-		.filter(event => eventHasStarted(event))
-		.filter(e => mustPriority(e.id) >= minPriority)
-		.sort((a, b) => +a.date - +b.date)
-		.toReversed();
-}
-
-function getValidWork() {
-	const workItems = new Map(
-		interestingEvents()
-			.filter(
-				e =>
-					'tags' in e &&
-					e.tags.includes(work) &&
-					mustPriority(e.id) >= minPriority
-			)
-			.map(e => [e.id, e])
-	);
-
-	const supercessions = filter(
-		[...workItems.values()].map(i =>
-			'supercedes' in i
-				? Some([i.id, i.supercedes] as [
-						typeof i.id,
-						typeof i.supercedes,
-					])
-				: None
-		)
-	);
-
-	for (const [replacementId, replacesId] of supercessions) {
-		const replacement = workItems.get(replacementId)!;
-		const replaces = workItems.get(replacesId)!;
-
-		workItems.set(replacesId, {
-			...replacement,
-			// then this 'super item' pretty much begins
-			// when the old item started
-			...('since' in replaces
-				? {
-						since: replaces.since,
-					}
-				: {}),
-		});
-
-		workItems.delete(replacesId);
-	}
-
-	return [...workItems.values()];
-}
-
-function Work() {
+function SectionRule({
+	areaClassName,
+	children,
+}: {
+	readonly areaClassName?: string;
+	readonly children: ReactNode;
+}) {
 	return (
-		<div className={style.newWork}>
-			{getValidWork().map(e => (
-				<Event event={e} key={e.id} />
+		<h2 className={classNames(style.rule, areaClassName)}>
+			<span>{children}</span>
+		</h2>
+	);
+}
+
+function ExperienceItem({ event }: { readonly event: BioEvent }) {
+	const start = eventStart(event);
+	const end = eventEnd(event);
+	const role = splitRole(event);
+
+	return (
+		<section className={style.work}>
+			{role.employer && (
+				<div className={style.employer}>{role.employer}</div>
+			)}
+			<div className={style.position}>{role.position}</div>
+			<Year className={style.start} date={start} />
+			<div className={style.end}>
+				{end === undefined ? 'Ongoing' : <Year date={end} />}
+			</div>
+			<div className={style.duration}>
+				{formatDuration(start, end ?? new Date())}
+			</div>
+			{event.description && (
+				<div className={style.content} lang={event.description.language}>
+					<p>{event.description.text}</p>
+				</div>
+			)}
+		</section>
+	);
+}
+
+function Experience({ events }: { readonly events: readonly BioEvent[] }) {
+	return (
+		<div className={style.experience}>
+			{events.map(event => (
+				<ExperienceItem event={event} key={event.id} />
 			))}
 		</div>
 	);
 }
 
-function Talks() {
+function EventTitle({
+	className,
+	event,
+}: {
+	readonly className?: string;
+	readonly event: BioEvent;
+}) {
+	const href =
+		event.url instanceof URL ? event.url.toString() : event.url?.value;
+	const title = (
+		<span lang={event.title.language}>{event.title.text}</span>
+	);
+
+	if (href === undefined) {
+		return <div className={className}>{title}</div>;
+	}
+
 	return (
-		<div>
-			{interestingEvents()
-				.filter(e => 'tags' in e && e.tags.includes(talk))
-				.map(e => (
-					<Event event={e} key={e.id} />
-				))}
+		<Link className={className} href={href}>
+			{title}
+		</Link>
+	);
+}
+
+function Note({ event }: { readonly event: BioEvent }) {
+	return (
+		<section className={style.note}>
+			<EventTitle className={style.noteTitle} event={event} />
+			{event.description && (
+				<p
+					className={style.description}
+					lang={event.description.language}
+				>
+					{event.description.text}
+				</p>
+			)}
+		</section>
+	);
+}
+
+function Notes({
+	areaClassName,
+	events,
+}: {
+	readonly areaClassName?: string;
+	readonly events: readonly BioEvent[];
+}) {
+	return (
+		<div className={classNames(style.notes, areaClassName)}>
+			{events.map(event => (
+				<Note event={event} key={event.id} />
+			))}
 		</div>
 	);
 }
 
-function Accolades() {
+function Skills() {
 	return (
-		<div>
-			{interestingEvents()
-				.filter(e => 'tags' in e && e.tags.includes(accolade))
-				.map(e => (
-					<Event event={e} key={e.id} />
-				))}
-		</div>
+		<ul className={style.skills}>
+			{Bio.skills.map(skill => (
+				<li key={skill.text} lang={skill.language}>
+					{skill.text}
+				</li>
+			))}
+		</ul>
 	);
 }
 
-function Coverage() {
+function FutureMark() {
 	return (
-		<div>
-			{interestingEvents()
-				.filter(e => 'tags' in e && e.tags.includes(comment))
-				.map(e => (
-					<Event event={e} key={e.id} />
-				))}
-		</div>
+		<svg
+			aria-hidden
+			className={style.future}
+			viewBox="0 0 446 348"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M174 0L54 120l33 32L207 33 174 0zm98 0l-32 33 119 119 33-32L272 0zm-49 59L109 174l114 114 115-114L223 59zM33 141L0 174l33 33 33-33-33-33zm380 0l-32 33 32 33 33-33-33-33zM87 195l-33 33 120 120 33-33L87 195zm272 0L240 315l32 33 120-120-33-33z"
+				vectorEffect="non-scaling-stroke"
+			/>
+		</svg>
 	);
 }
 
-/*
-function Disclosures() {Add commentMore actions
-	return <section>
-		<h2>Papers & Disclosures</h2>
-		<ol>
-			{entries().filter(e => 'tags' in e && [
-				writing, disclosure
-			].some(t => e.tags.includes(t))).map(e => <li key={e.id}>
-				<h3 lang={e.title.language}>{e.title.text}</h3>
-				{('description' in e && e.description) ? <p lang={e.description.language}>{e.description.text}</p> : null}
-			</li>)}
-		</ol>
-	</section>
-}
-*/
-
-function NewCV() {
+function ModeSwitch() {
 	return (
-		<div className={style.newCV}>
+		<nav aria-label="CV length" className={style.modeSwitch}>
+			<a className={style.shortModeLink} href="#short">
+				short
+			</a>
+			<a className={style.longModeLink} href="#long">
+				long
+			</a>
+		</nav>
+	);
+}
+
+function CV({
+	content,
+	mode,
+}: {
+	readonly content: CVContent;
+	readonly mode: CVMode;
+}) {
+	return (
+		<article
+			className={classNames(
+				style.cv,
+				mode === 'long' ? style.longCV : style.shortCV
+			)}
+		>
 			<Header />
-			<h2>Work</h2>
-			<Work />
-			{/* todo: titles */}
-			<h2>Talks</h2>
-			<Talks />
-			<h2>Accolades</h2>
-			<Accolades />
-			<h2>Coverage</h2>
-			<Coverage />
-		</div>
+			<SectionRule areaClassName={style.experienceTitle}>
+				selected experience
+			</SectionRule>
+			<Experience events={content.experience} />
+			{content.noteSections
+				.filter(section => section.events.length > 0)
+				.map((section, index) => (
+					<Fragment key={section.id}>
+						{section.title && (
+							<SectionRule
+								areaClassName={
+									index === 0
+										? style.worksTitle
+										: undefined
+								}
+							>
+								{section.title}
+							</SectionRule>
+						)}
+						<Notes
+							areaClassName={section.areaClassName}
+							events={section.events}
+						/>
+					</Fragment>
+				))}
+			<SectionRule areaClassName={style.skillsTitle}>
+				selected tools
+			</SectionRule>
+			<Skills />
+			<FutureMark />
+		</article>
 	);
 }
 
 export default function Page() {
 	return (
-		<div>
-			<NewCV />
-			<OldCV />
-		</div>
+		<main className={style.page}>
+			<span className={style.modeTarget} id="short" />
+			<span className={style.modeTarget} id="long" />
+			<ModeSwitch />
+			<CV content={cvContent('short')} mode="short" />
+			<CV content={cvContent('long')} mode="long" />
+		</main>
 	);
 }
