@@ -78,6 +78,19 @@ function fullStopIfNeeded(text: lang.Text): ReactElement | null {
 	return null;
 }
 
+function Publisher({ event: e }: { readonly event: Bio.Event }) {
+	if (e.publisher === undefined) return null;
+
+	return (
+		<>
+			<span className={style.publisher} lang={lang.get(e.publisher)}>
+				{e.publisher.text}
+			</span>
+			{fullStopIfNeeded(e.publisher)}{' '}
+		</>
+	);
+}
+
 /**
  * Injects the victorian title-dot if needed.
  * (it's a house-style thing I picked ages ago)
@@ -173,6 +186,7 @@ function Event({ event: e }: { readonly event: Bio.Event }) {
 				{/* this would be a <Corpus> but it looks ugly with the full stop inside the link. */}
 			</Link>
 			{fullStopIfNeeded(e.title)}{' '}
+			<Publisher event={e} />
 			{e.description ? (
 				<span lang={lang.get(e.description)}>
 					<Corpus>{e.description}</Corpus>
