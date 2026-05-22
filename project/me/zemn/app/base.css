@@ -95,3 +95,17 @@ body::selection {
 	background-color: var(--highlight-color);
 	color: var(--highlight-foreground-color);
 }
+
+@page {
+	margin: 0 0 12mm;
+
+	@bottom-right {
+		content: "Pg. " counter(page) "/" counter(pages);
+		padding-right: 2rem;
+		color: black;
+		font-family: Lora, Georgia, "Times New Roman", serif;
+		font-size: 8pt;
+		vertical-align: middle;
+		white-space: nowrap;
+	}
+}
