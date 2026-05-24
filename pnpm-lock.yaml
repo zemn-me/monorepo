@@ -38,8 +38,8 @@ dependencies:
     specifier: 1.2.8
     version: 1.2.8(@types/react-dom@18.3.7)(@types/react@18.3.29)(react-dom@19.2.6)(react@19.2.6)
   '@react-spring/rafz':
-    specifier: 10.0.3
-    version: 10.0.3
+    specifier: 10.0.4
+    version: 10.0.4
   '@standard-schema/spec':
     specifier: 1.1.0
     version: 1.1.0
@@ -5133,15 +5133,15 @@ packages:
       react-native: 0.84.1(@babel/core@7.29.0)(@types/react@18.3.29)(react@19.2.6)
     dev: true
 
-  /@react-spring/rafz@10.0.3:
-    resolution: {integrity: sha512-Ri2/xqt8OnQ2iFKkxKMSF4Nqv0LSWnxXT4jXFzBDsHgeeH/cHxTLupAWUwmV9hAGgmEhBmh5aONtj3J6R/18wg==}
+  /@react-spring/rafz@10.0.4:
+    resolution: {integrity: sha512-QK/vnFUpgVE1Wm4cvb1vDbhY6Xz4Ywfgkbr30hlXM3XAaMBWv08TWMorZhYb9T+gphHP45t7dUbUtp3r6k2nxA==}
 
   /@react-spring/shared@10.0.3(react@19.2.6):
     resolution: {integrity: sha512-geCal66nrkaQzUVhPkGomylo+Jpd5VPK8tPMEDevQEfNSWAQP15swHm+MCRG4wVQrQlTi9lOzKzpRoTL3CA84Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
-      '@react-spring/rafz': 10.0.3
+      '@react-spring/rafz': 10.0.4
       '@react-spring/types': 10.0.3
       react: 19.2.6
     dev: true
