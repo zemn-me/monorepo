@@ -28,6 +28,7 @@ bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
+        "public_assets.bzl",
         "rules.bzl",
     ],
     visibility = ["//:__subpackages__"],
