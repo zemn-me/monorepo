@@ -1,0 +1,20 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "public_assets",
+    embed = [":public_assets_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "public_assets_lib",
+    srcs = ["public_assets.go"],
+    importpath = "github.com/zemn-me/monorepo/go/next.js/cmd/public_assets",
+    visibility = ["//visibility:private"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

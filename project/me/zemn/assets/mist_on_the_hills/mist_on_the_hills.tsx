@@ -1,11 +1,11 @@
 import {
+	jpg,
 	mp4,
 	ogv,
-	poster,
 	webm,
-} from '#root/project/me/zemn/public/mist_on_the_hills.js';
+} from '#root/project/me/zemn/assets/mist_on_the_hills/sources.js';
 
-export { poster };
+export const poster = { src: jpg } as const;
 
 /**
  * @returns A React element representing the a video asset

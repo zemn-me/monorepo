@@ -1,19 +1,42 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/transcode_web:rules.bzl", "transcode_web")
 load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
 
 package(default_visibility = ["//project/me/zemn:__subpackages__"])
+
+transcode_web(
+    name = "mist_on_the_hills_video_sources",
+    src = "//video/2024/12/25:mist_on_the_hills.m4v",
+    out_base_name = "mist_on_the_hills",
+)
+
+hashed_public_assets(
+    name = "content_addressed",
+    assets = {
+        ":mist_on_the_hills_video_sources_mp4": "sources|mp4",
+        ":mist_on_the_hills_video_sources_webm": "sources|webm",
+        ":mist_on_the_hills_video_sources_ogv": "sources|ogv",
+        ":mist_on_the_hills_video_sources_jpg": "sources|jpg",
+    },
+    modules = {
+        "sources": "sources.ts",
+    },
+    public_dir = "sha256",
+    url_prefix = "/sha256/",
+)
 
 ts_project(
     name = "mist_on_the_hills",
     srcs = [
         "mist_on_the_hills.tsx",
+        ":content_addressed_generated",
     ],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "@monorepo//project/me/zemn/public:mist_on_the_hills",
     ],
 )
 
