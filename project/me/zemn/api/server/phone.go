@@ -95,12 +95,12 @@ func (t *TwimlResponse) SendHTTP(w http.ResponseWriter) (err error) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/xml")
-	w.Write([]byte(twiML))
 	code := t.Code
 	if code == 0 {
 		code = http.StatusOK
 	}
 	w.WriteHeader(code)
+	w.Write([]byte(twiML))
 	return
 }
 
