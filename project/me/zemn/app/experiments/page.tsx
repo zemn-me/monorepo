@@ -17,7 +17,7 @@ const pages = {
 		'Stress test for a dense field of SVG platonic solids.',
 	'/experiments/toc': 'Test renderer for table of contents generation.',
 	'/experiments/article': 'Test renderer for MDX.',
-	'/experiments/cv': 'Unfinished attempt to port my CV to my modern site.',
+	'/cv': 'CV.',
 };
 
 export function ExperimentsNav() {

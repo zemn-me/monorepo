@@ -3,7 +3,7 @@
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 import { useCallback } from 'react';
 
-import style from '#root/project/me/zemn/app/experiments/cv/page.module.css';
+import style from '#root/project/me/zemn/app/cv/page.module.css';
 
 const cvModes = ['short', 'long'] as const;
 type CVMode = (typeof cvModes)[number];
