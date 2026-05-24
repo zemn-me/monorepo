@@ -1,6 +1,11 @@
-import { mp4, ogv, poster, webm } from '#root/project/me/zemn/public/kenwood';
+import {
+	jpg,
+	mp4,
+	ogv,
+	webm,
+} from '#root/project/me/zemn/assets/kenwood/sources.js';
 
-export { poster };
+export const poster = { src: jpg } as const;
 
 /**
  * @returns A React element representing the Kenwood video asset
