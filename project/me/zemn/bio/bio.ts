@@ -193,7 +193,12 @@ export const Bio = {
 			title: en`Beyond Prompt Injection: Agentic AI Attacks in the Real World`,
 			publisher: en`Real World AI Security`,
 			date: date(23, 'jun', 2026), // TBD
-			url: url`https://seclab.stanford.edu/RealWorldAIsec/`, // TBD
+			url: linkToHighlight(
+				url`https://seclab.stanford.edu/RealWorldAIsec/`,
+				{
+					start: 'Thomas Shadwell',
+				}
+			),
 			tags: [talk, work, security],
 		},
 		{
