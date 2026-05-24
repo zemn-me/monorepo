@@ -19,7 +19,10 @@ jobs:
   Submit:
     permissions:
       id-token: write
-    concurrency: pulumi_production
+    concurrency:
+      group: pulumi_deploy
+      cancel-in-progress: false
+      queue: max
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     # Attempts to submit changes to production.
     runs-on: ubuntu-latest

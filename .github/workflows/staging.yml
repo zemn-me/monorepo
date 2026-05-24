@@ -22,7 +22,10 @@ jobs:
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
     # would make me pay while that thread waits to acquire the lock.
-    concurrency: pulumi_staging
+    concurrency:
+      group: pulumi_deploy
+      cancel-in-progress: false
+      queue: max
     # only bother with this when we reach the merge queue
 
     # Performs all offline testing.
