@@ -1,4 +1,9 @@
-import { mp4, ogv, poster, webm } from '#root/project/me/zemn/public/kenwood';
+import {
+	mp4,
+	ogv,
+	poster,
+	webm,
+} from '#root/project/me/zemn/assets/kenwood/sources.js';
 
 export { poster };
 

@@ -3,7 +3,7 @@ import {
 	ogv,
 	poster,
 	webm,
-} from '#root/project/me/zemn/public/mist_on_the_hills.js';
+} from '#root/project/me/zemn/assets/mist_on_the_hills/sources.js';
 
 export { poster };
 

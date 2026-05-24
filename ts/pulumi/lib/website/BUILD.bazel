@@ -13,6 +13,7 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/mime",
         "//:node_modules/@types/node",
+        "//:node_modules/file-type",
         "//:node_modules/mime",
         "//ts",
         "//ts/pulumi/lib",
