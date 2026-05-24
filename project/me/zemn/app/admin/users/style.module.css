@@ -1,0 +1,91 @@
+.usersTable {
+	display: grid;
+	grid-template-columns:
+		minmax(0, 0.9fr)
+		minmax(0, 1.1fr)
+		minmax(0, 0.8fr)
+		minmax(0, 0.8fr)
+		minmax(0, 1.3fr)
+		minmax(0, 1.1fr)
+		max-content;
+	gap: 0.5rem 1rem;
+	align-items: center;
+	width: 100%;
+	max-width: 100%;
+}
+
+.headerRow,
+.userRow {
+	display: contents;
+}
+
+.headerRow {
+	font-weight: 600;
+}
+
+.cell {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.fieldLabel {
+	display: grid;
+	gap: 0.25rem;
+	min-width: 0;
+}
+
+.labelText {
+	display: none;
+}
+
+.textArea,
+.textInput {
+	box-sizing: border-box;
+	width: 100%;
+	min-width: 0;
+}
+
+.textArea {
+	resize: vertical;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
+@media (max-width: 900px) {
+	.usersTable {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 1rem;
+	}
+
+	.headerRow {
+		display: none;
+	}
+
+	.userRow {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.75rem;
+		padding-block: 1rem;
+		border-block-start: 1px solid currentcolor;
+	}
+
+	.cell {
+		display: grid;
+		grid-template-columns: minmax(7rem, max-content) minmax(0, 1fr);
+		gap: 0.75rem;
+		align-items: start;
+	}
+
+	.cell::before {
+		content: attr(data-label);
+		font-weight: 600;
+	}
+}
+
+@media (max-width: 480px) {
+	.cell {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.25rem;
+	}
+}
