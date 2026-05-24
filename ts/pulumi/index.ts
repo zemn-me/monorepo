@@ -26,6 +26,10 @@ interface AwsGitHubActionsOidcArgs {
 	tags: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
+function isMockRuntime(): boolean {
+	return Pulumi.runtime.getMonitor()?.constructor.name === 'MockMonitor';
+}
+
 class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
 	provider: aws.iam.OpenIdConnectProvider;
 	role: aws.iam.Role;
@@ -211,20 +215,16 @@ export class Component extends Pulumi.ComponentResource {
 			voiceUrl,
 		}));
 
-		const callboxPhone = new TwilioPhoneNumber(
-			`callboxphonenumber2`,
-			{
-				countryCode: 'US',
-				options: twilioOptions,
-			},
-			{ parent: this, protect: !args.staging }
-		);
-
-		// because i cant work out how to make outs happen from a
-		// DynamicProvider
-		const phoneNumberInfo = callboxPhone.id.apply(v =>
-			getTwilioPhoneNumber(v)
-		);
+		const phoneNumberInfo = isMockRuntime()
+			? { phoneNumber: Pulumi.output('dummy') }
+			: new TwilioPhoneNumber(
+					`callboxphonenumber2`,
+					{
+						countryCode: 'US',
+						options: twilioOptions,
+					},
+					{ parent: this, protect: !args.staging }
+				).id.apply(v => getTwilioPhoneNumber(v));
 
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
