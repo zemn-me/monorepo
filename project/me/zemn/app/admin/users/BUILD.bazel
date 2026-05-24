@@ -7,10 +7,12 @@ ts_project(
         "client.tsx",
         "page.tsx",
     ],
+    assets = ["style.module.css"],
     visibility = [
         "//project/me/zemn:__subpackages__",
     ],
     deps = [
+        "//:base_defs",  # keep
         "//:node_modules/@hookform/resolvers",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",

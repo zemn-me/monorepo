@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import style from '#root/project/me/zemn/app/admin/users/style.module.css';
 import {
 	useDeleteAdminUser,
 	useGetAdminUsers,
@@ -29,37 +30,6 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 	const usersQuery = useGetAdminUsers(id_token);
 	const updateUser = usePutAdminUser(id_token);
 	const deleteUser = useDeleteAdminUser(id_token);
-	const gridStyle = {
-		display: 'grid',
-		gridTemplateColumns:
-			'minmax(10rem, 1fr) minmax(14rem, 1fr) minmax(12rem, 1fr) minmax(12rem, 1fr) minmax(18rem, 2fr) minmax(16rem, 1fr) auto',
-		gap: '0.5rem 1rem',
-		alignItems: 'center',
-	} as const;
-	const gridRowStyle = {
-		display: 'contents',
-	} as const;
-	const scopesLabelStyle = {
-		display: 'grid',
-		gap: '0.25rem',
-	} as const;
-	const scopesInputStyle = {
-		width: '100%',
-		minWidth: 0,
-		resize: 'vertical',
-		whiteSpace: 'pre-wrap',
-		overflowWrap: 'anywhere',
-	} as const;
-	const subjectIdsStyle = {
-		display: 'block',
-		whiteSpace: 'pre-wrap',
-		overflowWrap: 'anywhere',
-		wordBreak: 'break-word',
-	} as const;
-	const textInputStyle = {
-		width: '100%',
-		minWidth: 0,
-	} as const;
 
 	const {
 		register,
@@ -102,11 +72,12 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 			</form>
 			<section>
 				<h2>Users</h2>
-				<div aria-label="Users list" role="table" style={gridStyle}>
-					<div
-						role="row"
-						style={{ ...gridRowStyle, fontWeight: 600 }}
-					>
+				<div
+					aria-label="Users list"
+					className={style.usersTable}
+					role="table"
+				>
+					<div className={style.headerRow} role="row">
 						<div role="columnheader">ID</div>
 						<div role="columnheader">Email</div>
 						<div role="columnheader">Given Name</div>
@@ -124,13 +95,27 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 						const givenName = user.givenName ?? '';
 						const familyName = user.familyName ?? '';
 						return (
-							<div key={user.id} role="row" style={gridRowStyle}>
-								<div role="cell">
+							<div
+								className={style.userRow}
+								key={user.id}
+								role="row"
+							>
+								<div
+									className={style.cell}
+									data-label="ID"
+									role="cell"
+								>
 									<code>{user.id}</code>
 								</div>
-								<div role="cell">
-									<label style={scopesLabelStyle}>
-										<span>Email</span>
+								<div
+									className={style.cell}
+									data-label="Email"
+									role="cell"
+								>
+									<label className={style.fieldLabel}>
+										<span className={style.labelText}>
+											Email
+										</span>
 										<textarea
 											aria-label={`Emails for ${user.id}`}
 											defaultValue={
@@ -155,13 +140,19 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 												});
 											}}
 											rows={2}
-											style={scopesInputStyle}
+											className={style.textArea}
 										/>
 									</label>
 								</div>
-								<div role="cell">
-									<label style={scopesLabelStyle}>
-										<span>Given Name</span>
+								<div
+									className={style.cell}
+									data-label="Given Name"
+									role="cell"
+								>
+									<label className={style.fieldLabel}>
+										<span className={style.labelText}>
+											Given Name
+										</span>
 										<input
 											aria-label={`Given name for ${user.id}`}
 											defaultValue={givenName}
@@ -177,13 +168,19 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 													},
 												});
 											}}
-											style={textInputStyle}
+											className={style.textInput}
 										/>
 									</label>
 								</div>
-								<div role="cell">
-									<label style={scopesLabelStyle}>
-										<span>Family Name</span>
+								<div
+									className={style.cell}
+									data-label="Family Name"
+									role="cell"
+								>
+									<label className={style.fieldLabel}>
+										<span className={style.labelText}>
+											Family Name
+										</span>
 										<input
 											aria-label={`Family name for ${user.id}`}
 											defaultValue={familyName}
@@ -199,13 +196,19 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 													},
 												});
 											}}
-											style={textInputStyle}
+											className={style.textInput}
 										/>
 									</label>
 								</div>
-								<div role="cell">
-									<label style={scopesLabelStyle}>
-										<span>Scopes</span>
+								<div
+									className={style.cell}
+									data-label="Scopes"
+									role="cell"
+								>
+									<label className={style.fieldLabel}>
+										<span className={style.labelText}>
+											Scopes
+										</span>
 										<textarea
 											aria-label={`Scopes for ${emails}`}
 											defaultValue={(
@@ -228,13 +231,19 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 												});
 											}}
 											rows={2}
-											style={scopesInputStyle}
+											className={style.textArea}
 										/>
 									</label>
 								</div>
-								<div role="cell">
-									<label style={scopesLabelStyle}>
-										<span>Subject IDs</span>
+								<div
+									className={style.cell}
+									data-label="Subject IDs"
+									role="cell"
+								>
+									<label className={style.fieldLabel}>
+										<span className={style.labelText}>
+											Subject IDs
+										</span>
 										<textarea
 											aria-label={`Subject IDs for ${user.id}`}
 											defaultValue={
@@ -260,14 +269,15 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 												});
 											}}
 											rows={2}
-											style={{
-												...scopesInputStyle,
-												...subjectIdsStyle,
-											}}
+											className={style.textArea}
 										/>
 									</label>
 								</div>
-								<div role="cell">
+								<div
+									className={style.cell}
+									data-label="Actions"
+									role="cell"
+								>
 									<button
 										disabled={!user.deletable}
 										onClick={() => {
