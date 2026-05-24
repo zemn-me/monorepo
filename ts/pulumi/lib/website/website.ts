@@ -5,6 +5,7 @@ import * as aws from '@pulumi/aws';
 import { ResponseHeadersPolicy } from '@pulumi/aws/cloudfront';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
+import { fileTypeFromFile } from 'file-type';
 import mime from 'mime';
 
 import * as guard from '#root/ts/guard.js';
@@ -33,6 +34,14 @@ function relative(from: string, to: string): string {
 	}
 
 	return path.relative(f, t);
+}
+
+async function contentType(fPath: string): Promise<string> {
+	const detected = mime.getType(fPath) ?? (await fileTypeFromFile(fPath))?.mime;
+	if (detected == null) {
+		throw new Error(`couldn't get contentType of ${fPath}`);
+	}
+	return detected;
 }
 
 export interface Args {
@@ -244,10 +253,7 @@ export class Website extends pulumi.ComponentResource {
 						{
 							key: getS3Key(relative(args.directory, fPath)),
 							bucket: bucket.id,
-							contentType: guard.must(
-								guard.isNotNull,
-								() => `couldn't get contentType of ${fPath}`
-							)(mime.getType(fPath)),
+							contentType: contentType(fPath),
 							source,
 							tags,
 						},

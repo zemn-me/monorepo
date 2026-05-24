@@ -1,5 +1,7 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/transcode_web:rules.bzl", "transcode_web")
 load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
 
 package(default_visibility = ["//project/me/zemn:__subpackages__"])
 
@@ -8,18 +10,36 @@ exports_files([
     "kenwood.jpg",
 ])
 
+transcode_web(
+    name = "kenwood_media_sources",
+    src = ":kenwood.mp4",
+    out_base_name = "kenwood_web",
+)
+
+hashed_public_assets(
+    name = "content_addressed",
+    outs = ["sources.ts"],
+    assets = {
+        ":kenwood_media_sources_mp4": "mp4",
+        ":kenwood_media_sources_webm": "webm",
+        ":kenwood_media_sources_ogv": "ogv",
+        ":kenwood_media_sources_jpg": "jpg",
+    },
+    public_dir = "sha256",
+)
+
 ts_project(
     name = "kenwood",
     srcs = [
         "index.ts",
         "kenwood.tsx",
+        ":content_addressed_generated",
     ],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "@monorepo//project/me/zemn/public:kenwood",
     ],
 )
 
