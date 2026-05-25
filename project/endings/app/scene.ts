@@ -229,6 +229,11 @@ export function cueStatesAtProgress(rawProgress: number): StoryCueState[] {
 	});
 }
 
+export function storyTextCompleteAtProgress(rawProgress: number): boolean {
+	const progress = clampProgress(rawProgress);
+	return STORY_CUES.every(cue => cueOpacity(cue, progress) === 1);
+}
+
 function worldSegment(
 	start: Point3D,
 	end: Point3D,

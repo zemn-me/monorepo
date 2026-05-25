@@ -125,5 +125,28 @@ describe('zemn.me website', () => {
 				await driver.quit();
 			}
 		});
+
+		it('2026/endings shows a homepage back link after the story text renders', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/2026/endings`);
+				await driver.executeScript(
+					'window.scrollTo(0, document.documentElement.scrollHeight);'
+				);
+
+				const backLink = await driver.findElement(
+					By.css('a[aria-label="Back to homepage"]')
+				);
+				expect(await backLink.getText()).toBe('Back');
+
+				await backLink.click();
+				await driver.wait(
+					async () => (await driver.getCurrentUrl()) === `${origin}/`,
+					5000
+				);
+			} finally {
+				await driver.quit();
+			}
+		});
 	});
 });

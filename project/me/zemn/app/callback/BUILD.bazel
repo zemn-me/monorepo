@@ -5,6 +5,7 @@ ts_project(
     name = "callback",
     srcs = [
         "client.tsx",
+        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],
@@ -12,6 +13,7 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
+        "//project/me/zemn/app",
     ],
 )
 
@@ -19,6 +21,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
+        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],

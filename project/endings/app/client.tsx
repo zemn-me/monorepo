@@ -17,6 +17,7 @@ import {
 	type RenderedPolygon,
 	renderEndingsScene,
 	SCROLL_LENGTH_VH,
+	storyTextCompleteAtProgress,
 	type StoryCueState,
 	SVG_HEIGHT,
 	SVG_WIDTH,
@@ -116,6 +117,7 @@ export function EndingsClient() {
 		[pose, viewportSize.height, viewportSize.width]
 	);
 	const cues = useMemo(() => cueStatesAtProgress(progress), [progress]);
+	const storyTextComplete = storyTextCompleteAtProgress(progress);
 	const darkness = darknessAtProgress(progress);
 	const rendered = is_err(renderedResult) ? null : unwrap(renderedResult);
 	const renderError = is_err(renderedResult)
@@ -251,6 +253,15 @@ export function EndingsClient() {
 								{cue.text.replaceAll('--', '\u2013')}
 							</p>
 						))}
+						{storyTextComplete ? (
+							<a
+								aria-label="Back to homepage"
+								className={style.homeLink}
+								href="/"
+							>
+								Back
+							</a>
+						) : null}
 					</div>
 					{renderError != null ? (
 						<p className={style.renderError}>
