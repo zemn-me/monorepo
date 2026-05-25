@@ -7,6 +7,7 @@ import * as random from '@pulumi/random';
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
+import { GitHubActionsSecrets } from '#root/ts/pulumi/github_actions_secrets.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import {
 	getTwilioPhoneNumber,
@@ -135,6 +136,11 @@ export class Component extends Pulumi.ComponentResource {
 					{ tags },
 					{ parent: this }
 				);
+		const githubActionsSecrets = args.staging
+			? undefined
+			: new GitHubActionsSecrets(`${name}_github_actions_secrets`, {
+					parent: this,
+				});
 
 		new CostAllocationTag(
 			`${name}_cost_tag`,
@@ -302,6 +308,7 @@ export class Component extends Pulumi.ComponentResource {
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
 			eggsForDogsDotComZoneId,
 			githubActionsRoleArn: githubActionsOidc?.role.arn,
+			githubActionsSecrets,
 			githubOidcProviderArn: githubActionsOidc?.provider.arn,
 		});
 	}
