@@ -5,6 +5,7 @@ ts_project(
     name = "admin",
     srcs = [
         "client.tsx",
+        "layout.tsx",
         "page.tsx",
     ],
     visibility = [
@@ -19,6 +20,7 @@ ts_project(
         "//:node_modules/react-hook-form",
         "//:node_modules/zod",
         "//project/me/zemn/api:ts_client_dts",
+        "//project/me/zemn/app",
         "//project/me/zemn/components/Link",
         "//project/me/zemn/components/PendingPip",
         "//project/me/zemn/components/PhoneNumberDisplay",
@@ -42,6 +44,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
+        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],

@@ -3,7 +3,10 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "twitter",
-    srcs = ["page.tsx"],
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
@@ -12,6 +15,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//project/me/zemn/app",
         "//project/me/zemn/bio",
         "//project/me/zemn/components/Redirect",
         "//ts/next.js/types/next-compiled",
@@ -20,7 +24,10 @@ ts_project(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["page.tsx"],
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
     visibility = ["//:__subpackages__"],
 )
 

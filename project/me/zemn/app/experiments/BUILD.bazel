@@ -3,7 +3,10 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "experiments",
-    srcs = ["page.tsx"],
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
     assets = glob(
         [
             "**/*.css",
@@ -19,6 +22,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//project/me/zemn/app",
         "//project/me/zemn/components/Link",
         "//ts/next.js/types/next-compiled",
     ],
@@ -31,6 +35,9 @@ bazel_lint(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["page.tsx"],
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
     visibility = ["//:__subpackages__"],
 )
