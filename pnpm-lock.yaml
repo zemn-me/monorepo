@@ -116,8 +116,8 @@ dependencies:
     specifier: 3.3.3
     version: 3.3.3
   file-type:
-    specifier: 21.3.4
-    version: 21.3.4
+    specifier: 22.0.1
+    version: 22.0.1
   glob-promise:
     specifier: 6.0.7
     version: 6.0.7(glob@8.1.0)
@@ -9808,6 +9808,19 @@ packages:
       uint8array-extras: 1.5.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /file-type@22.0.1:
+    resolution: {integrity: sha512-ww5Mhre0EE+jmBvOXTmXAbEMuZE7uX4a3+oRCQFNj8w++g3ev913N6tXQz0XTXbueQ5TWQfm6BdaViEHHn8bhA==}
+    engines: {node: '>=22'}
+    dependencies:
+      '@tokenizer/inflate': 0.4.1
+      strtok3: 10.3.5
+      token-types: 6.1.2
+      uint8array-extras: 1.5.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
