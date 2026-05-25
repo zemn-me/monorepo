@@ -48,6 +48,18 @@ def go_mod_tidy():
 	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
 
 
+def sync_go_versions():
+	return bazel_run([
+		"@@//go/cmd/version_sync",
+		"--",
+		"-fix",
+		"-go-mod",
+		f"{wd}/go.mod",
+		"-module-bazel",
+		f"{wd}/MODULE.bazel",
+	])
+
+
 def maven_repin():
 	return bazel_run(["@maven//:pin", "--"], {
 		"REPIN": "1"
@@ -66,6 +78,7 @@ def bazel_update_modfile():
 	return bazel(["mod", "tidy"])
 
 def modify_non_bazel_lockfiles():
+	sync_go_versions()
 	go_mod_tidy()
 	autofix_all()
 
