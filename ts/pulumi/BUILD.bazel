@@ -26,6 +26,7 @@ ts_project(
     name = "pulumi",
     srcs = [
         "deploy_to_staging.ts",
+        "github_actions_secrets.ts",
         "index.ts",
         "preview.ts",
         "setMocks.ts",
@@ -41,6 +42,7 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@pulumi/random",
         "//:node_modules/@types/node",
@@ -61,6 +63,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "deploy_to_staging.ts",
+        "github_actions_secrets.ts",
         "index.ts",
         "preview.ts",
         "setMocks.ts",
