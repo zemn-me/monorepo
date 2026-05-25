@@ -80,6 +80,7 @@ def bazel_update_modfile():
 def modify_non_bazel_lockfiles():
 	sync_go_versions()
 	go_mod_tidy()
+	sync_go_versions()
 	autofix_all()
 
 def modify_bazel_lockfiles():

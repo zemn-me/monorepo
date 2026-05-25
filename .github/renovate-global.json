@@ -90,6 +90,13 @@
 			"enabled": false
 		},
 		{
+			"description": "Let the gomod manager bump the go directive in go.mod",
+			"matchManagers": ["gomod"],
+			"matchDepNames": ["go"],
+			"matchDepTypes": ["golang"],
+			"rangeStrategy": "bump"
+		},
+		{
 			"matchManagers": [
 				"cargo",
 				"bazel",
