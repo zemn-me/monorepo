@@ -21,6 +21,7 @@ import {
 	type StoryCueState,
 	SVG_HEIGHT,
 	SVG_WIDTH,
+	storyTextCompleteAtProgress,
 } from '#root/project/endings/app/scene.js';
 import style from '#root/project/endings/app/style.module.css';
 import { is_err, unwrap, unwrap_err } from '#root/ts/result/result.js';

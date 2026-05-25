@@ -9,6 +9,7 @@ import {
 	storyTextCompleteAtProgress,
 	SVG_HEIGHT,
 	SVG_WIDTH,
+	storyTextCompleteAtProgress,
 } from '#root/project/endings/app/scene.js';
 import { x, y, z } from '#root/ts/math/cartesian.js';
 import { unwrap } from '#root/ts/result/result.js';
