@@ -32,8 +32,8 @@ dependencies:
     specifier: 9.25.0
     version: 9.25.0(ts-node@10.9.2)(typescript@5.5.4)
   '@pulumi/random':
-    specifier: 4.20.0
-    version: 4.20.0(ts-node@10.9.2)(typescript@5.5.4)
+    specifier: 4.21.0
+    version: 4.21.0(ts-node@10.9.2)(typescript@5.5.4)
   '@radix-ui/react-tooltip':
     specifier: 1.2.8
     version: 1.2.8(@types/react-dom@18.3.7)(@types/react@18.3.29)(react-dom@19.2.6)(react@19.2.6)
@@ -4594,8 +4594,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@pulumi/random@4.20.0(ts-node@10.9.2)(typescript@5.5.4):
-    resolution: {integrity: sha512-2jBPt+lR6XI6p87ALtznasNKU7Da247nW2g2MPCjd1JHKJwvtjyNrD2c4Wd3jgQ+kdKyvtUfiguTPi06m8JKpQ==}
+  /@pulumi/random@4.21.0(ts-node@10.9.2)(typescript@5.5.4):
+    resolution: {integrity: sha512-k4JHqQFOKXWkbSLZtX37xBlRsurfgZbLd1Zib0cLSDP4Dt3uTllR3CBWfMLSnXJGAoTr9MlwyHCer/5tmSaF0Q==}
     dependencies:
       '@pulumi/pulumi': 3.220.0(ts-node@10.9.2)(typescript@5.5.4)
     transitivePeerDependencies:
