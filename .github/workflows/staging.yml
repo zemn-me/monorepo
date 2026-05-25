@@ -18,6 +18,7 @@ env:
 jobs:
   Staging:
     permissions:
+      contents: read
       id-token: write
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
@@ -44,6 +45,26 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: main
+      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
+        name: Acquire federated GCloud credentials for secrets.
+        id: secret_auth
+        continue-on-error: true
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+      - uses: 'google-github-actions/get-secretmanager-secrets@bc9c54b29fdffb8a47776820a7d26e77b379d262' # v3.0.0
+        if: steps.secret_auth.outcome == 'success'
+        name: Read CI secrets from Secret Manager
+        id: secrets
+        continue-on-error: true
+        with:
+          secrets: |-
+            buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
+            personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
+            pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
+            twilio_account_sid:extreme-cycling-441523-a9/github-actions-twilio-account-sid
+            twilio_api_key_sid:extreme-cycling-441523-a9/github-actions-twilio-api-key-sid
+            twilio_auth_token:extreme-cycling-441523-a9/github-actions-twilio-auth-token
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire GCloud credentials for first deploy.
         id: auth
@@ -72,14 +93,14 @@ jobs:
             --overwrite && \
             echo "::endgroup::"
         env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token || secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key || secrets.BUILDBUDDY_API_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid || secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid || secrets.TWILIO_API_KEY_SID }}
+          TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token || secrets.TWILIO_AUTH_TOKEN }}
           # i guess if you exfil this secret you can also call me instead
           # of making a security report 🤣
-          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
+          PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number || secrets.PERSONAL_PHONE_NUMBER }}
       - name: Switch back to candidate branch
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
@@ -103,9 +124,9 @@ jobs:
          --skip-bazel-tests \
          --dirty
         env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
+          PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token || secrets.PULUMI_SECRET }}
+          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key || secrets.BUILDBUDDY_API_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid || secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid || secrets.TWILIO_API_KEY_SID }}
+          TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token || secrets.TWILIO_AUTH_TOKEN }}
+          PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number || secrets.PERSONAL_PHONE_NUMBER }}
