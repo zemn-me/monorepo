@@ -8,6 +8,7 @@ import {
 	renderEndingsScene,
 	SVG_HEIGHT,
 	SVG_WIDTH,
+	storyTextCompleteAtProgress,
 } from '#root/project/endings/app/scene.js';
 import { x, y, z } from '#root/ts/math/cartesian.js';
 import { unwrap } from '#root/ts/result/result.js';
@@ -44,6 +45,11 @@ describe('endings scroll scene', () => {
 		const atBlack = cueStatesAtProgress(0.99);
 
 		expect(atBlack.map(cue => cue.opacity)).toEqual([1, 1, 1, 1, 1]);
+	});
+
+	test('marks story text complete only after the final line renders', () => {
+		expect(storyTextCompleteAtProgress(0.98)).toBe(false);
+		expect(storyTextCompleteAtProgress(0.99)).toBe(true);
 	});
 
 	test('reveals the last sentence only after blackout completes', () => {

@@ -2,7 +2,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "bluesky",
+    name = "endings",
     srcs = [
         "layout.tsx",
         "page.tsx",
@@ -15,9 +15,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//project/me/zemn/app",
-        "//project/me/zemn/bio",
-        "//project/me/zemn/components/Redirect",
+        "//project/endings/app",
         "//ts/next.js/types/next-compiled",
     ],
 )

@@ -1,6 +1,7 @@
 import { Metadata } from 'next/types';
 
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
+import { GladeLayout } from '#root/project/me/zemn/app/glade_layout.js';
 import { ProfilePageSchema } from '#root/project/me/zemn/app/schema.js';
 import style from '#root/project/me/zemn/app/style.module.css';
 import * as bio from '#root/project/me/zemn/bio/index.js';
@@ -25,7 +26,7 @@ function TimeEyeInline() {
 
 export default function Main() {
 	return (
-		<>
+		<GladeLayout>
 			<Eeg />
 			<header>
 				<Prose>
@@ -208,7 +209,7 @@ export default function Main() {
 				}}
 				type="application/ld+json"
 			/>
-		</>
+		</GladeLayout>
 	);
 }
 
