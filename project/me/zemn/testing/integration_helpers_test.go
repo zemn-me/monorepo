@@ -21,8 +21,8 @@ type ServicePorts struct {
 	// Analytics are not rendered anywhere yet, so the itest reads DynamoDB
 	// directly to verify ingest. Once analytics are visible in the product, this
 	// can go away and the test should assert on the UI instead.
-	DynamoDBPort   string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
-	OIDCProvider   string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
+	DynamoDBPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
+	OIDCProvider string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
 }
 
 func servicePorts() (p ServicePorts, err error) {
@@ -110,8 +110,7 @@ func testEndpointHasNoLogErrors(t *testing.T, ep string) {
 func filterErrorsWeDontCareAbout(in []log.Message) (out []log.Message) {
 	out = make([]log.Message, 0, len(in))
 	for _, l := range in {
-		if
-			strings.Contains(l.Message, "Ignoring Event: localhost") ||
+		if strings.Contains(l.Message, "Ignoring Event: localhost") ||
 			strings.Contains(l.Message, "source map") ||
 			strings.Contains(l.Message, "react-dev-overlay") {
 			continue
@@ -224,6 +223,21 @@ func waitForElement(driver selenium.WebDriver, by, value string, timeout time.Du
 		time.Sleep(250 * time.Millisecond)
 	}
 	return nil, fmt.Errorf("element %s:%s not found", by, value)
+}
+
+func waitForEnabledElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		elem, err := driver.FindElement(by, value)
+		if err == nil {
+			enabled, err := elem.IsEnabled()
+			if err == nil && enabled {
+				return elem, nil
+			}
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
+	return nil, fmt.Errorf("enabled element %s:%s not found", by, value)
 }
 
 func waitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
