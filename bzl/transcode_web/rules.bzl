@@ -66,6 +66,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         cmd = """
             $(location //bin/host/ffmpeg) -ss 00:00:00 \\
                 -i $(location """ + src + """) \\
+                -bitexact \\
                 -c:v png \\
                 -frames:v 1 \\
                 -loglevel error \\

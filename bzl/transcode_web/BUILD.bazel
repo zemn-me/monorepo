@@ -1,6 +1,68 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/transcode_web:rules.bzl", "transcode_web")
 
-# Empty!
+genrule(
+    name = "bitexact_source",
+    srcs = ["//bin/host/ffmpeg"],
+    outs = ["bitexact_source.mkv"],
+    cmd = """
+        $(location //bin/host/ffmpeg) -f lavfi \\
+            -i testsrc2=size=64x64:rate=5:duration=1 \\
+            -bitexact \\
+            -c:v ffv1 \\
+            -an \\
+            -loglevel error \\
+            $@
+    """,
+)
+
+transcode_web(
+    name = "bitexact_first",
+    src = ":bitexact_source",
+    max_bitrate = "200k",
+    out_base_name = "bitexact_first",
+    video_scale = "64:64",
+)
+
+transcode_web(
+    name = "bitexact_second",
+    src = ":bitexact_source",
+    max_bitrate = "200k",
+    out_base_name = "bitexact_second",
+    video_scale = "64:64",
+)
+
+sh_test(
+    name = "bitexact_test",
+    size = "small",
+    srcs = ["bitexact_test.sh"],
+    args = [
+        "$(location :bitexact_first_mp4)",
+        "$(location :bitexact_second_mp4)",
+        "mp4",
+        "$(location :bitexact_first_webm)",
+        "$(location :bitexact_second_webm)",
+        "webm",
+        "$(location :bitexact_first_ogv)",
+        "$(location :bitexact_second_ogv)",
+        "ogv",
+        "$(location :bitexact_first_png)",
+        "$(location :bitexact_second_png)",
+        "png",
+    ],
+    data = [
+        ":bitexact_first_mp4",
+        ":bitexact_first_ogv",
+        ":bitexact_first_png",
+        ":bitexact_first_webm",
+        ":bitexact_second_mp4",
+        ":bitexact_second_ogv",
+        ":bitexact_second_png",
+        ":bitexact_second_webm",
+    ],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = [
