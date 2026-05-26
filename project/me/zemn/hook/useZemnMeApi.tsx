@@ -262,24 +262,24 @@ export function usePostMeKey<A, B>(
 		],
 
 		mutationFn: fetchClient(
-			cl => () =>
+			cl => (open: boolean) =>
 				cl.POST('/callbox', {
 					body: {
-						open: true,
+						open,
 					},
 				}),
 			// i think in some edge cases this might happen
 			// in future this function will itself return a future
 			// so it can actuall never happen
-			() => {
+			() => (_open: boolean) => {
 				throw new Error('this should never happen');
 			},
-			() => {
+			() => (_open: boolean) => {
 				throw new Error('this should never happen');
 			}
 		),
 
-		onMutate: () => {
+		onMutate: open => {
 			onMutate();
 			// eagerly assume the query will succeed.
 			queryClient.setQueryData(
@@ -293,7 +293,7 @@ export function usePostMeKey<A, B>(
 					),
 				],
 				(): GetCallboxStatusSuccessResponse => ({
-					open: true,
+					open,
 				})
 			);
 		},
