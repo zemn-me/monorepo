@@ -40,7 +40,9 @@ plumbing.
 
 # tests
 
-don't forget to write tests!
+don't forget to write tests! But where it's ergonomic consider that you
+may be able to set the types in your code such that they validate those
+conditions without ever having to do a test! yippee!
 
 Changes must be tested via bazel test path/to/your/changes/...
 
