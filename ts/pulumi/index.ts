@@ -27,6 +27,16 @@ interface AwsGitHubActionsOidcArgs {
 	tags: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
+interface GitHubActionsAwsTrustGrant {
+	ref: string;
+	sid: string;
+	subject: string;
+	workflow: string;
+}
+
+const githubRepository = 'zemn-me/monorepo';
+const githubRepositoryId = '275403409';
+
 function isMockRuntime(): boolean {
 	return Pulumi.runtime.getMonitor()?.constructor.name === 'MockMonitor';
 }
@@ -51,46 +61,60 @@ class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
 				thumbprintLists: ['6938fd4d98bab03faadb97b34396831e3780aea1'],
 				url: githubOidcUrl,
 			},
-			{ parent: this }
+			{ parent: this, protect: true }
 		);
 
-		const githubAssumeRolePolicy = (
-			subjects: Pulumi.Input<Pulumi.Input<string>[]>
-		) =>
-			Pulumi.all([this.provider.arn, subjects]).apply(
-				([arn, subjectPatterns]) =>
-					JSON.stringify({
-						Version: '2012-10-17',
-						Statement: [
-							{
-								Effect: 'Allow',
-								Principal: { Federated: arn },
-								Action: 'sts:AssumeRoleWithWebIdentity',
-								Condition: {
-									StringEquals: {
-										'token.actions.githubusercontent.com:aud':
-											'sts.amazonaws.com',
-									},
-									StringLike: {
-										'token.actions.githubusercontent.com:sub':
-											subjectPatterns,
-									},
-								},
+		const githubAssumeRolePolicy = (grants: GitHubActionsAwsTrustGrant[]) =>
+			this.provider.arn.apply(arn =>
+				JSON.stringify({
+					Version: '2012-10-17',
+					Statement: grants.map(grant => ({
+						Sid: grant.sid,
+						Effect: 'Allow',
+						Principal: { Federated: arn },
+						Action: 'sts:AssumeRoleWithWebIdentity',
+						Condition: {
+							StringEquals: {
+								'token.actions.githubusercontent.com:aud':
+									'sts.amazonaws.com',
+								'token.actions.githubusercontent.com:repository':
+									githubRepository,
+								'token.actions.githubusercontent.com:repository_id':
+									githubRepositoryId,
+								'token.actions.githubusercontent.com:workflow':
+									grant.workflow,
 							},
-						],
-					})
+							StringLike: {
+								'token.actions.githubusercontent.com:ref':
+									grant.ref,
+								'token.actions.githubusercontent.com:sub':
+									grant.subject,
+							},
+						},
+					})),
+				})
 			);
 
 		this.role = new aws.iam.Role(
 			`${name}_role`,
 			{
 				assumeRolePolicy: githubAssumeRolePolicy([
-					'repo:zemn-me/monorepo:ref:refs/heads/main',
-					'repo:zemn-me/monorepo:ref:refs/heads/gh-readonly-queue/*',
+					{
+						ref: 'refs/heads/main',
+						sid: 'SubmitMain',
+						subject: `repo:${githubRepository}:ref:refs/heads/main`,
+						workflow: 'Submit',
+					},
+					{
+						ref: 'refs/heads/gh-readonly-queue/*',
+						sid: 'StagingMergeQueue',
+						subject: `repo:${githubRepository}:ref:refs/heads/gh-readonly-queue/*`,
+						workflow: 'Staging',
+					},
 				]),
 				tags: args.tags,
 			},
-			{ parent: this, protect: true }
+			{ dependsOn: this.provider, parent: this, protect: true }
 		);
 
 		new aws.iam.RolePolicyAttachment(
@@ -99,7 +123,7 @@ class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
 				role: this.role.name,
 				policyArn: 'arn:aws:iam::aws:policy/AdministratorAccess',
 			},
-			{ parent: this }
+			{ parent: this, protect: true }
 		);
 
 		this.registerOutputs({
