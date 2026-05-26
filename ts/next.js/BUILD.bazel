@@ -28,6 +28,7 @@ bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
+        "image_srcset.bzl",
         "public_assets.bzl",
         "rules.bzl",
     ],
