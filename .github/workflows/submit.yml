@@ -42,15 +42,12 @@ jobs:
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets...
         id: secret_auth
-        continue-on-error: true
         with:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
       - uses: 'google-github-actions/get-secretmanager-secrets@bc9c54b29fdffb8a47776820a7d26e77b379d262' # v3.0.0
-        if: steps.secret_auth.outcome == 'success'
         name: Read CI secrets from Secret Manager
         id: secrets
-        continue-on-error: true
         with:
           secrets: |-
             buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
@@ -80,15 +77,14 @@ jobs:
           ./.github/workflows/prepare_ci.sh
           $BAZEL run --config=ci --tool_tag=submit //ci:submit
         env:
-          NPM_TOKEN: ${{ steps.secrets.outputs.npm_token || secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.npm_token || secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ steps.secrets.outputs.npm_token }}
+          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.npm_token }}
           GITHUB_TOKEN: ${{ github.token }}
-          GH_PAT: ${{ secrets.GH_PAT }}
-          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key || secrets.BUILDBUDDY_API_KEY }}
-          PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token || secrets.PULUMI_SECRET }}
-          TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid || secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid || secrets.TWILIO_API_KEY_SID }}
-          TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token || secrets.TWILIO_AUTH_TOKEN }}
+          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
+          PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
+          TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
+          TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid }}
+          TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token }}
           # i guess if you exfil this secret you can also call me instead
           # of making a security report 🤣
-          PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number || secrets.PERSONAL_PHONE_NUMBER }}
+          PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number }}
