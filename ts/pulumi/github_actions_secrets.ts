@@ -99,7 +99,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 						project: gcpProjectId,
 						service,
 					},
-					{ parent: this }
+					{ parent: this, protect: true }
 				)
 		);
 
@@ -114,6 +114,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 			{
 				import: `projects/${gcpProjectId}/locations/global/workloadIdentityPools/${workloadIdentityPoolId}`,
 				parent: this,
+				protect: true,
 			}
 		);
 
@@ -152,6 +153,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 				dependsOn: services,
 				import: `projects/${gcpProjectId}/locations/global/workloadIdentityPools/${workloadIdentityPoolId}/providers/${workloadIdentityProviderId}`,
 				parent: this,
+				protect: true,
 			}
 		);
 
@@ -163,7 +165,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					role: 'roles/iam.workloadIdentityUser',
 					serviceAccountId: githubActionsServiceAccountName,
 				},
-				{ dependsOn: provider, parent: this }
+				{ dependsOn: provider, parent: this, protect: true }
 			);
 		}
 
@@ -172,7 +174,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 				const secret = new gcp.secretmanager.Secret(
 					`${name}_${secretId}`,
 					{
-						deletionProtection: false,
+						deletionProtection: true,
 						labels: {
 							component: 'github-actions',
 							repository: 'zemn-me-monorepo',
@@ -184,6 +186,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					{
 						dependsOn: services,
 						parent: this,
+						protect: true,
 					}
 				);
 
@@ -208,7 +211,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 						role: 'roles/secretmanager.secretAccessor',
 						secretId: secret.id,
 					},
-					{ dependsOn: provider, parent: secret }
+					{ dependsOn: provider, parent: secret, protect: true }
 				);
 			}
 		}
