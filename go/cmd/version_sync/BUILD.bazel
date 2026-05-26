@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 
@@ -13,6 +14,12 @@ go_library(
     importpath = "github.com/zemn-me/monorepo/go/cmd/version_sync",
     visibility = ["//visibility:private"],
     deps = ["@com_github_blang_semver_v4//:semver"],
+)
+
+go_test(
+    name = "version_sync_test",
+    srcs = ["main_test.go"],
+    embed = [":version_sync_lib"],
 )
 
 bazel_lint(
