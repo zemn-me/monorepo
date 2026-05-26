@@ -30,6 +30,9 @@ please run gazelle also! Or the presubmit will fail.
 For Biome lint safe fixes, including import sorting, run
 `./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
 
+Renovate-managed `http_archive` checksums are refreshed by post-upgrade only
+when `# auto-integrity` sits immediately before the `url`/`urls` line.
+
 # rules_itest services
 
 When adding background processes for integration tests, define them with
