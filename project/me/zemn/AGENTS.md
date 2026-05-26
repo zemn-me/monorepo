@@ -5,3 +5,4 @@
 - New `app/` route packages must also be added to the `//project/me/zemn:ts` deps list; Gazelle does not wire that Next aggregate automatically.
 - Glade opt-in routes use ordinary segment `layout.tsx` files; avoid route-group directories just to control Glade.
 - Content-addressed public assets should be declared next to the TS that imports them with `hashed_public_assets`; `project/me/zemn/public:content_addressed_public_assets` collects them from `//project/me/zemn:ts`.
+- For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.

@@ -59,6 +59,14 @@ func digestFile(path string) (string, error) {
 	return hex.EncodeToString(hash.Sum(nil)), nil
 }
 
+func digestFileName(path string) (string, error) {
+	digest, err := digestFile(path)
+	if err != nil {
+		return "", err
+	}
+	return digest + filepath.Ext(path), nil
+}
+
 func nextCount(args []string, index *int, name string) (int, error) {
 	if *index >= len(args) {
 		return 0, fmt.Errorf("missing %s count", name)
@@ -108,15 +116,15 @@ func runGenerate(args []string) error {
 		exportName := args[index+1]
 		index += 2
 
-		digest, err := digestFile(src)
+		digestName, err := digestFileName(src)
 		if err != nil {
 			return err
 		}
-		if err := copyFile(filepath.Join(publicDir, digest), src); err != nil {
+		if err := copyFile(filepath.Join(publicDir, digestName), src); err != nil {
 			return err
 		}
 
-		line := fmt.Sprintf("export const %s = %q;\n", exportName, urlPrefix+digest)
+		line := fmt.Sprintf("export const %s = %q;\n", exportName, urlPrefix+digestName)
 		file, err := os.OpenFile(module, os.O_WRONLY|os.O_APPEND, 0)
 		if err != nil {
 			return err

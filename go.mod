@@ -23,6 +23,7 @@ require (
 	github.com/beevik/etree v1.6.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.5.0+incompatible
+	github.com/deepteams/webp v1.2.2
 	github.com/getkin/kin-openapi v0.135.0
 	github.com/go-chi/chi/v5 v5.3.0
 	github.com/go-chi/cors v1.2.2
@@ -41,6 +42,7 @@ require (
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.9
 	github.com/xeipuuv/gojsonschema v1.2.0
+	golang.org/x/image v0.36.0
 	golang.org/x/sync v0.19.0
 	golang.org/x/tools v0.45.0
 	golang.org/x/tools/gopls v0.17.1
