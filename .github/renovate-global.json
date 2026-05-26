@@ -5,6 +5,7 @@
 	"autodiscover": true,
 	"autodiscoverFilter": ["zemn-me/monorepo"],
 	"allowScripts": true,
+	"allowedUnsafeExecutions": ["bazelModDeps"],
 	"allowedCommands": ["^\\./sh/postUpgrade\\.sh$"],
 	"configMigration": true,
 	"platformAutomerge": true,
