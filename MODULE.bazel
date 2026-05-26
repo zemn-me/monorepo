@@ -303,53 +303,64 @@ http_archive(
 )
 
 # renovate:
-# 	datasource=custom.johnvansickle_ffmpeg_old_releases
+# 	datasource=custom.johnvansickle_ffmpeg_release
 # 	versioning=loose
 # 	depName=ffmpeg-linux
-FFMPEG_LINUX_VERSION = "5.1.1"
+FFMPEG_LINUX_VERSION = "7.0.2"
 
 http_archive(
     name = "ffmpeg_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
+    sha256 = "abda8d77ce8309141f83ab8edf0596834087c52467f6badf376a6a2a4c87cf67",
     strip_prefix = "ffmpeg-" + FFMPEG_LINUX_VERSION + "-amd64-static",
-    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-amd64-static.tar.xz",
+    # auto-integrity
+    url = "https://www.johnvansickle.com/ffmpeg/releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-amd64-static.tar.xz",
 )
 
 http_archive(
     name = "ffmpeg_linux_i686",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "df4ff17a39758f9e3af2aafe337f2661711161ebade6b20516110ed207c6a94e",
+    sha256 = "d8f700bd46b4d43aee157a4924cd3aeaeaa09ce62d64bcc1c0824e69859a51ec",
     strip_prefix = "ffmpeg-" + FFMPEG_LINUX_VERSION + "-i686-static",
-    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-i686-static.tar.xz",
+    # auto-integrity
+    url = "https://www.johnvansickle.com/ffmpeg/releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-i686-static.tar.xz",
 )
 
 http_archive(
     name = "ffmpeg_linux_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "49f9beb7690afcbd4832d3577d9f0c87374d63c39cde5097dfd52d61b24b4855",
+    sha256 = "f4149bb2b0784e30e99bdda85471c9b5930d3402014e934a5098b41d0f7201b1",
     strip_prefix = "ffmpeg-" + FFMPEG_LINUX_VERSION + "-arm64-static",
-    url = "https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-arm64-static.tar.xz",
+    # auto-integrity
+    url = "https://www.johnvansickle.com/ffmpeg/releases/ffmpeg-" + FFMPEG_LINUX_VERSION + "-arm64-static.tar.xz",
 )
 
 # renovate:
 # 	datasource=custom.evermeet_ffmpeg_pub
 # 	versioning=loose
 # 	depName=ffmpeg-macos-x64
-FFMPEG_MACOS_X64_VERSION = "6.0"
+FFMPEG_MACOS_X64_VERSION = "8.1.1"
 
 http_archive(
     name = "ffmpeg_macos_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "9a810d222862a7230fd7035c91e32beb605af7501c3517580f2bc1eb8faddacc",
+    sha256 = "4610988e2f54c243c50da73a09e4e2c36d9bb77546f9aa6c84cb328dcb1a98c1",
+    # auto-integrity
     url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-" + FFMPEG_MACOS_X64_VERSION + ".zip",
 )
+
+# renovate:
+# 	datasource=custom.osxexperts_ffmpeg
+# 	versioning=loose
+# 	depName=ffmpeg-macos-arm64
+FFMPEG_MACOS_ARM64_VERSION = "8.1"
 
 http_archive(
     name = "ffmpeg_macos_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "15e67ff413d3d2436ddb3efd282344e50b8f1c6f834979b984371b90ebaf0449",
-    url = "https://www.osxexperts.net/ffmpeg6arm.zip",
+    sha256 = "ebb82529562b71170807bbc6b0e7eb4f0b13af8cbb0e085bb9e8f6fe709598ad",
+    # auto-integrity
+    url = "https://www.osxexperts.net/ffmpeg" + FFMPEG_MACOS_ARM64_VERSION.replace(".", "") + "arm.zip",
 )
 
 # Got no idea why but MS doesn't publish versions of this...

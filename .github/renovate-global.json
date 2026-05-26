@@ -28,7 +28,7 @@
 				"/^sh/bin/bazel$/"
 			],
 			"matchStrings": [
-				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:python-version|golang-version|github-releases|github-tags))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)(?:\n#\\s*extractVersion\\s*=\\s*(?<extractVersion>.*))?\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
+				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:python-version|golang-version|github-releases|github-tags|custom\\.[a-zA-Z0-9_.-]+))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)(?:\n#\\s*extractVersion\\s*=\\s*(?<extractVersion>.*))?\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
 			],
 			"datasourceTemplate": "{{{datasource}}}",
 			"currentValueTemplate": "{{{currentValue}}}",
@@ -55,24 +55,33 @@
 		}
 	],
 	"customDatasources": {
-		"johnvansickle_ffmpeg_old_releases": {
-			"defaultRegistryUrlTemplate": "https://www.johnvansickle.com/ffmpeg/old-releases/",
-			"format": "html"
+		"johnvansickle_ffmpeg_release": {
+			"defaultRegistryUrlTemplate": "https://johnvansickle.com/ffmpeg/release-readme.txt",
+			"format": "plain"
 		},
 		"evermeet_ffmpeg_pub": {
 			"defaultRegistryUrlTemplate": "https://evermeet.cx/pub/ffmpeg/",
 			"format": "html"
+		},
+		"osxexperts_ffmpeg": {
+			"defaultRegistryUrlTemplate": "https://www.osxexperts.net/",
+			"format": "plain"
 		}
 	},
 	"packageRules": [
 		{
-			"matchDatasources": ["custom.johnvansickle_ffmpeg_old_releases"],
-			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)-(?:amd64|arm64|i686)-static\\.tar\\.xz$",
+			"matchDatasources": ["custom.johnvansickle_ffmpeg_release"],
+			"extractVersion": "^\\s*version:\\s*(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s*$",
 			"versioning": "loose"
 		},
 		{
 			"matchDatasources": ["custom.evermeet_ffmpeg_pub"],
 			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\.zip$",
+			"versioning": "loose"
+		},
+		{
+			"matchDatasources": ["custom.osxexperts_ffmpeg"],
+			"extractVersion": "Download ffmpeg\\s+(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s+\\(Apple Silicon\\)",
 			"versioning": "loose"
 		},
 		{
