@@ -1,2 +1,66 @@
 #!/usr/bin/env bash
-"$(dirname ${BASH_SOURCE[0]})/run_lazily.sh" //sh/bin:go "${@}"
+set -euo pipefail
+
+SH_BINDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "$SH_BINDIR/../.." && pwd)"
+
+go_directive_version() {
+    awk '$1 == "go" { print "go" $2; exit }' "$WORKSPACE_ROOT/go.mod"
+}
+
+module_version() {
+    local module="$1"
+    awk -v module="$module" '$1 == module { print $2; exit }' "$WORKSPACE_ROOT/go.mod"
+}
+
+version_m_for_wrapper() {
+    if [[ "$#" -ne 3 || "$1" != "version" || "$2" != "-m" ]]; then
+        return 1
+    fi
+
+    local tool_path="$3"
+    local resolved_tool_path
+    resolved_tool_path="$(realpath -m "$tool_path" 2> /dev/null || printf '%s\n' "$tool_path")"
+
+    local import_path=""
+    local module_path=""
+    case "$resolved_tool_path" in
+        "$WORKSPACE_ROOT/sh/bin/dlv")
+            import_path="github.com/go-delve/delve/cmd/dlv"
+            module_path="github.com/go-delve/delve"
+            ;;
+        "$WORKSPACE_ROOT/sh/bin/goimports")
+            import_path="golang.org/x/tools/cmd/goimports"
+            module_path="golang.org/x/tools"
+            ;;
+        "$WORKSPACE_ROOT/sh/bin/gopls")
+            import_path="golang.org/x/tools/gopls"
+            module_path="golang.org/x/tools/gopls"
+            ;;
+        "$WORKSPACE_ROOT/sh/bin/staticcheck")
+            import_path="honnef.co/go/tools/cmd/staticcheck"
+            module_path="honnef.co/go/tools"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
+    local go_version
+    local version
+    go_version="$(go_directive_version)"
+    version="$(module_version "$module_path")"
+    if [[ -z "$go_version" || -z "$version" ]]; then
+        return 1
+    fi
+
+    printf '%s: %s\n' "$tool_path" "$go_version"
+    printf '\tpath\t%s\n' "$import_path"
+    printf '\tmod\t%s\t%s\n' "$module_path" "$version"
+}
+
+if version_m_for_wrapper "$@"; then
+    exit 0
+fi
+
+"$SH_BINDIR/run_lazily.sh" //sh/bin:go "${@}"
