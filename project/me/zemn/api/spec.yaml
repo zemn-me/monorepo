@@ -1360,7 +1360,7 @@ paths:
 
   /callbox:
     post:
-      summary: Unlock the callbox.
+      summary: Set callbox lock state.
       description: Record a door-open or door-close request initiated by an authenticated caller.
       security:
         - OIDC: [callbox_key]
@@ -1379,7 +1379,7 @@ paths:
                 open: true
       responses:
         "200":
-          description: Recorded unlock request.
+          description: Recorded callbox state request.
           content:
             application/json:
               schema:

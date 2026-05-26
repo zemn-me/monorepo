@@ -398,6 +398,11 @@ func TestPostCallboxStoresSubjectFromUserInfo(t *testing.T) {
 	if jsonResp.Subject != "integration-test-local" {
 		t.Fatalf("unexpected subject: %q", jsonResp.Subject)
 	}
+	if _, ok, err := s.allowEntryViaWebKey(ctx); err != nil {
+		t.Fatalf("check web key request: %v", err)
+	} else if !ok {
+		t.Fatalf("expected open request to allow web key entry")
+	}
 
 	statusResp, err := s.GetCallbox(ctx, GetCallboxRequestObject{})
 	if err != nil {
@@ -415,6 +420,58 @@ func TestPostCallboxStoresSubjectFromUserInfo(t *testing.T) {
 	}
 	if status.Subject == nil || *status.Subject != "integration-test-local" {
 		t.Fatalf("unexpected subject after post: %#v", status.Subject)
+	}
+}
+
+func TestPostCallboxLocksWhenOpenFalse(t *testing.T) {
+	s := newTestServer()
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{Subject: "integration-test-local"})
+
+	openBody := PostCallboxJSONRequestBody{Open: true}
+	if _, err := s.PostCallbox(ctx, PostCallboxRequestObject{Body: &openBody}); err != nil {
+		t.Fatalf("open callbox: %v", err)
+	}
+
+	closeBody := PostCallboxJSONRequestBody{Open: false}
+	resp, err := s.PostCallbox(ctx, PostCallboxRequestObject{Body: &closeBody})
+	if err != nil {
+		t.Fatalf("close callbox: %v", err)
+	}
+	jsonResp, ok := resp.(PostCallbox200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", resp)
+	}
+	if jsonResp.Subject != "integration-test-local" {
+		t.Fatalf("unexpected subject: %q", jsonResp.Subject)
+	}
+	if _, ok, err := s.allowEntryViaWebKey(ctx); err != nil {
+		t.Fatalf("check web key request: %v", err)
+	} else if ok {
+		t.Fatalf("expected close request to cancel web key entry")
+	}
+
+	statusResp, err := s.GetCallbox(ctx, GetCallboxRequestObject{})
+	if err != nil {
+		t.Fatalf("get callbox: %v", err)
+	}
+	status, ok := statusResp.(GetCallbox200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected status response type: %T", statusResp)
+	}
+	if status.Open {
+		t.Fatalf("expected open=false after close")
+	}
+	if status.OpenUntil != nil {
+		t.Fatalf("expected no openUntil after close, got %q", *status.OpenUntil)
+	}
+	if status.LastOpenedAt != nil {
+		t.Fatalf("expected no lastOpenedAt after close, got %q", *status.LastOpenedAt)
+	}
+	if status.Source == nil || *status.Source != "web_key_lock" {
+		t.Fatalf("unexpected source after close: %#v", status.Source)
+	}
+	if status.Subject == nil || *status.Subject != "integration-test-local" {
+		t.Fatalf("unexpected subject after close: %#v", status.Subject)
 	}
 }
 

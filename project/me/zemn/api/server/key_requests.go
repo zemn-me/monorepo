@@ -21,6 +21,7 @@ type KeyRequestRecord struct {
 	When    Time   `dynamodbav:"when"`
 	Subject string `dynamodbav:"subject"`
 	Source  string `dynamodbav:"source,omitempty"`
+	Active  *bool  `dynamodbav:"active,omitempty"`
 }
 
 type DoorOpenRecord struct {
@@ -28,6 +29,11 @@ type DoorOpenRecord struct {
 	When    Time   `dynamodbav:"when"`
 	Source  string `dynamodbav:"source"`
 	Subject string `dynamodbav:"subject,omitempty"`
+	Open    *bool  `dynamodbav:"open,omitempty"`
+}
+
+func boolPtr(v bool) *bool {
+	return &v
 }
 
 func (s Server) recordKeyRequest(ctx context.Context, subject string) error {
@@ -39,6 +45,30 @@ func (s Server) recordKeyRequest(ctx context.Context, subject string) error {
 		Id:      callboxKeyPartition,
 		When:    Now(),
 		Subject: subject,
+		Active:  boolPtr(true),
+	}
+	item, err := attributevalue.MarshalMap(rec)
+	if err != nil {
+		return err
+	}
+	_, err = s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
+		TableName: aws.String(s.keyRequestsTableName),
+		Item:      item,
+	})
+	return err
+}
+
+func (s Server) cancelKeyRequest(ctx context.Context, subject string) error {
+	if s.keyRequestsTableName == "" {
+		return errors.New("callbox key table not configured")
+	}
+
+	rec := KeyRequestRecord{
+		Id:      callboxKeyPartition,
+		When:    Now(),
+		Subject: subject,
+		Source:  "web_key_lock",
+		Active:  boolPtr(false),
 	}
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
@@ -52,6 +82,10 @@ func (s Server) recordKeyRequest(ctx context.Context, subject string) error {
 }
 
 func (s Server) recordDoorOpenSignal(ctx context.Context, source, subject string) error {
+	return s.recordDoorStateSignal(ctx, true, source, subject)
+}
+
+func (s Server) recordDoorStateSignal(ctx context.Context, open bool, source, subject string) error {
 	if s.keyRequestsTableName == "" {
 		return errors.New("callbox key table not configured")
 	}
@@ -60,6 +94,7 @@ func (s Server) recordDoorOpenSignal(ctx context.Context, source, subject string
 		When:    Now(),
 		Source:  source,
 		Subject: subject,
+		Open:    &open,
 	}
 	item, err := attributevalue.MarshalMap(rec)
 	if err != nil {
@@ -101,6 +136,10 @@ func (s Server) latestKeyRequest(ctx context.Context) (*KeyRequestRecord, error)
 	return &rec, nil
 }
 
+func doorOpenRecordIsOpen(rec *DoorOpenRecord) bool {
+	return rec.Open == nil || *rec.Open
+}
+
 func (s Server) latestDoorOpenSignal(ctx context.Context) (*DoorOpenRecord, error) {
 	if s.keyRequestsTableName == "" {
 		return nil, nil
@@ -135,6 +174,9 @@ func (s Server) hasRecentKeyRequest(ctx context.Context, within time.Duration) (
 	if err != nil || rec == nil {
 		return false, rec, err
 	}
+	if rec.Active != nil && !*rec.Active {
+		return false, rec, nil
+	}
 	return time.Since(rec.When.Time) <= within, rec, nil
 }
 
@@ -142,6 +184,9 @@ func (s Server) currentDoorOpenStatus(ctx context.Context, within time.Duration)
 	rec, err := s.latestDoorOpenSignal(ctx)
 	if err != nil || rec == nil {
 		return false, rec, 0, err
+	}
+	if !doorOpenRecordIsOpen(rec) {
+		return false, rec, 0, nil
 	}
 	remaining := within - time.Since(rec.When.Time)
 	if remaining <= 0 {
@@ -151,14 +196,32 @@ func (s Server) currentDoorOpenStatus(ctx context.Context, within time.Duration)
 }
 
 func (s Server) PostCallbox(ctx context.Context, rq PostCallboxRequestObject) (PostCallboxResponseObject, error) {
-	if rq.Body == nil || !rq.Body.Open {
-		return nil, errors.New("POST /callbox requires open=true")
+	if rq.Body == nil {
+		return nil, errors.New("POST /callbox requires a body")
 	}
 
 	info, ok := auth.UserInfoFromContext(ctx)
 	if !ok || info == nil || info.Subject == "" {
 		return nil, errors.New("missing subject in context")
 	}
+
+	if !rq.Body.Open {
+		if err := s.cancelKeyRequest(ctx, info.Subject); err != nil {
+			return nil, err
+		}
+		if err := s.recordDoorStateSignal(ctx, false, "web_key_lock", info.Subject); err != nil {
+			return nil, err
+		}
+		rec, err := s.latestDoorOpenSignal(ctx)
+		if err != nil || rec == nil {
+			return nil, errors.New("failed to read lock request")
+		}
+		return PostCallbox200JSONResponse{
+			Subject: rec.Subject,
+			When:    rec.When.String(),
+		}, nil
+	}
+
 	if err := s.recordKeyRequest(ctx, info.Subject); err != nil {
 		return nil, err
 	}
@@ -184,8 +247,10 @@ func (s Server) GetCallbox(ctx context.Context, rq GetCallboxRequestObject) (Get
 		Open: open,
 	}
 	if rec != nil {
-		last := rec.When.Time.UTC().Format(time.RFC3339)
-		resp.LastOpenedAt = &last
+		if doorOpenRecordIsOpen(rec) {
+			last := rec.When.Time.UTC().Format(time.RFC3339)
+			resp.LastOpenedAt = &last
+		}
 		source := rec.Source
 		resp.Source = &source
 		if rec.Subject != "" {

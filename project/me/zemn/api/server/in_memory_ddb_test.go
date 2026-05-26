@@ -14,7 +14,7 @@ type inMemoryDDB struct {
 	analytics  []analyticsEventRecord
 	grievances map[string]grievanceRecord
 	users      map[string]userRecord
-	keyRecords []KeyRequestRecord
+	keyRecords []map[string]types.AttributeValue
 }
 
 func (db inMemoryDDB) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
@@ -51,13 +51,10 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 		}
 		for i := len(db.keyRecords) - 1; i >= 0; i-- {
 			rec := db.keyRecords[i]
-			if id != "" && rec.Id != id {
+			if id != "" && keyTableRecordID(rec) != id {
 				continue
 			}
-			item, err := attributevalue.MarshalMap(rec)
-			if err != nil {
-				return nil, err
-			}
+			item := copyDynamoItem(rec)
 			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{item}}, nil
 		}
 		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
@@ -74,11 +71,7 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 
 func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 	if in.TableName != nil && *in.TableName == "keys" {
-		var rec KeyRequestRecord
-		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
-			return nil, err
-		}
-		db.keyRecords = append(db.keyRecords, rec)
+		db.keyRecords = append(db.keyRecords, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil
 	}
 	if in.TableName != nil && *in.TableName == "analytics" {
@@ -195,4 +188,20 @@ func (db *inMemoryDDB) Scan(ctx context.Context, in *dynamodb.ScanInput, optFns 
 		return &dynamodb.ScanOutput{Items: items}, nil
 	}
 	return &dynamodb.ScanOutput{}, nil
+}
+
+func keyTableRecordID(item map[string]types.AttributeValue) string {
+	id, ok := item["id"].(*types.AttributeValueMemberS)
+	if !ok {
+		return ""
+	}
+	return id.Value
+}
+
+func copyDynamoItem(item map[string]types.AttributeValue) map[string]types.AttributeValue {
+	copied := make(map[string]types.AttributeValue, len(item))
+	for key, value := range item {
+		copied[key] = value
+	}
+	return copied
 }

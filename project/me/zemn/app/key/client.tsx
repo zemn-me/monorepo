@@ -116,7 +116,11 @@ export default function KeyPageClient() {
 		() => (
 			<section className={style.root}>
 				<button
-					aria-label="Unlock Door"
+					aria-label={doorStatus(
+						status => (status.open ? 'Lock Door' : 'Unlock Door'),
+						() => 'Unlock Door',
+						() => 'Unlock Door'
+					)}
 					className={classNames(
 						style.lockButton,
 						doorStatus(
@@ -133,7 +137,13 @@ export default function KeyPageClient() {
 						() => false
 					)}
 					onClick={() => {
-						void postKey.mutate();
+						void postKey.mutate(
+							doorStatus(
+								status => !status.open,
+								() => true,
+								() => true
+							)
+						);
 					}}
 					type="button"
 				>

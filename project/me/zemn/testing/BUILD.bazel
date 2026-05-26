@@ -71,6 +71,7 @@ go_test(
         "go_basic_test.go",
         "grievance_portal_test.go",
         "integration_helpers_test.go",
+        "key_test.go",
     ],
     tags = ["manual"],  # keep; needs integration testing harness.
     deps = [
