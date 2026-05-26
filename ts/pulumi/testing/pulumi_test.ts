@@ -5,7 +5,6 @@ import * as pulumi from '@pulumi/pulumi';
 
 import {
 	githubActionsSecretAccessByWorkflow,
-	githubActionsSecretEnvVars,
 	githubActionsSecretIds,
 } from '#root/ts/pulumi/github_actions_secrets.js';
 import * as project from '#root/ts/pulumi/index.js';
@@ -14,33 +13,11 @@ import { mockResources } from '#root/ts/pulumi/setMocks.js';
 const workflowScopePrincipal = (workflowScope: string) =>
 	`principalSet://iam.googleapis.com/projects/845702659200/locations/global/workloadIdentityPools/github/attribute.workflow_scope/${workflowScope}`;
 
-function withSecretEnvVars(fn: () => Promise<void>) {
-	const envVarNames = Object.values(githubActionsSecretEnvVars);
-	const previousEnv = new Map(
-		envVarNames.map(envVar => [envVar, process.env[envVar]])
-	);
-	for (const envVar of envVarNames) {
-		process.env[envVar] = `test-${envVar}`;
-	}
-
-	return fn().finally(() => {
-		for (const [envVar, value] of previousEnv) {
-			if (value === undefined) {
-				delete process.env[envVar];
-			} else {
-				process.env[envVar] = value;
-			}
-		}
-	});
-}
-
 describe('pulumi', () => {
 	test('smoke', async () => {
 		mockResources.splice(0);
-		await withSecretEnvVars(async () => {
-			new project.Component('monorepo', { staging: false });
-			await pulumi.runtime.disconnect();
-		});
+		new project.Component('monorepo', { staging: false });
+		await pulumi.runtime.disconnect();
 
 		const githubProvider = mockResources.find(
 			resource =>
@@ -121,28 +98,6 @@ describe('pulumi', () => {
 			expect(secretIamMember.inputs).toMatchObject({
 				role: 'roles/secretmanager.secretAccessor',
 			});
-		}
-
-		const secretVersions = mockResources.filter(
-			resource =>
-				resource.type ===
-				'gcp:secretmanager/secretVersion:SecretVersion'
-		);
-		expect(secretVersions.map(resource => resource.name).sort()).toEqual(
-			Object.values(githubActionsSecretIds)
-				.map(
-					secretId =>
-						`monorepo_github_actions_secrets_${secretId}_initial_version`
-				)
-				.sort()
-		);
-		for (const secretVersion of secretVersions) {
-			expect(secretVersion.inputs).toMatchObject({
-				deletionPolicy: 'ABANDON',
-				secretDataWoVersion: 1,
-			});
-			expect(secretVersion.inputs['secretData']).toBeUndefined();
-			expect(secretVersion.inputs['secretDataWo']).toBeDefined();
 		}
 	});
 });

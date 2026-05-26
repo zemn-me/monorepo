@@ -15,6 +15,7 @@ export const githubActionsSecretIds = {
 	npmToken: 'github-actions-npm-token',
 	personalPhoneNumber: 'github-actions-personal-phone-number',
 	pulumiAccessToken: 'github-actions-pulumi-access-token',
+	readonlyBuildbuddyApiKey: 'github-actions-readonly-buildbuddy-api-key',
 	twilioAccountSid: 'github-actions-twilio-account-sid',
 	twilioApiKeySid: 'github-actions-twilio-api-key-sid',
 	twilioAuthToken: 'github-actions-twilio-auth-token',
@@ -29,7 +30,7 @@ type GitHubActionsWorkflowScope =
 	| 'submit';
 
 export const githubActionsSecretAccessByWorkflow = {
-	presubmit: [githubActionsSecretIds.buildbuddyApiKey],
+	presubmit: [githubActionsSecretIds.readonlyBuildbuddyApiKey],
 	renovate: [githubActionsSecretIds.ghPat],
 	staging: [
 		githubActionsSecretIds.buildbuddyApiKey,
@@ -51,27 +52,6 @@ export const githubActionsSecretAccessByWorkflow = {
 } as const satisfies Record<
 	GitHubActionsWorkflowScope,
 	readonly GitHubActionsSecretId[]
->;
-
-export const githubActionsSecretEnvVars = {
-	[githubActionsSecretIds.buildbuddyApiKey]: 'BUILDBUDDY_API_KEY',
-	[githubActionsSecretIds.ghPat]: 'GH_PAT',
-	[githubActionsSecretIds.npmToken]: 'NPM_TOKEN',
-	[githubActionsSecretIds.personalPhoneNumber]: 'PERSONAL_PHONE_NUMBER',
-	[githubActionsSecretIds.pulumiAccessToken]: 'PULUMI_ACCESS_TOKEN',
-	[githubActionsSecretIds.twilioAccountSid]: 'TWILIO_ACCOUNT_SID',
-	[githubActionsSecretIds.twilioApiKeySid]: 'TWILIO_API_KEY_SID',
-	[githubActionsSecretIds.twilioAuthToken]: 'TWILIO_AUTH_TOKEN',
-} as const satisfies Record<
-	GitHubActionsSecretId,
-	| 'BUILDBUDDY_API_KEY'
-	| 'GH_PAT'
-	| 'NPM_TOKEN'
-	| 'PERSONAL_PHONE_NUMBER'
-	| 'PULUMI_ACCESS_TOKEN'
-	| 'TWILIO_ACCOUNT_SID'
-	| 'TWILIO_API_KEY_SID'
-	| 'TWILIO_AUTH_TOKEN'
 >;
 
 const workloadIdentityPoolId = 'github';
@@ -231,31 +211,6 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					{ dependsOn: provider, parent: secret }
 				);
 			}
-		}
-
-		for (const [secretId, envVar] of Object.entries(
-			githubActionsSecretEnvVars
-		) as [GitHubActionsSecretId, string][]) {
-			const value = process.env[envVar];
-			if (value === undefined || value.length === 0) {
-				continue;
-			}
-
-			const secret = secrets.get(secretId);
-			if (secret === undefined) {
-				throw new Error(`missing GitHub Actions secret ${secretId}`);
-			}
-
-			new gcp.secretmanager.SecretVersion(
-				`${name}_${secretId}_initial_version`,
-				{
-					deletionPolicy: 'ABANDON',
-					secret: secret.id,
-					secretDataWo: pulumi.secret(value),
-					secretDataWoVersion: 1,
-				},
-				{ parent: secret }
-			);
 		}
 
 		this.registerOutputs({
