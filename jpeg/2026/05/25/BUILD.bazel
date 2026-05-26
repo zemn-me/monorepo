@@ -1,0 +1,36 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts/next.js:image_srcset.bzl", "responsive_image_srcset")
+
+package(default_visibility = ["//project/me/zemn:__subpackages__"])
+
+responsive_image_srcset(
+    name = "profile_photo",
+    src = "me.jpeg",
+    crop_scale = "1.25",
+    default_width = 480,
+    fit = "cover",
+    heights = [
+        160,
+        320,
+        480,
+        640,
+        960,
+        1200,
+    ],
+    jpeg_quality = 92,
+    sizes = "25vh",
+    webp_quality = 90,
+    widths = [
+        160,
+        320,
+        480,
+        640,
+        960,
+        1200,
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
