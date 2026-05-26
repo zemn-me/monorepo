@@ -75,6 +75,8 @@
 	"go.toolsEnvVars": {
 		"GOPACKAGESDRIVER": "${workspaceFolder}/sh/bin/gopackagesdriver"
 	},
+	"go.toolsManagement.autoUpdate": false,
+	"go.toolsManagement.checkForUpdates": "local",
 	"go.enableCodeLens": {
 		"runtest": false
 	},
