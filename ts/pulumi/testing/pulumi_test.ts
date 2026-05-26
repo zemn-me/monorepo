@@ -36,6 +36,15 @@ describe('pulumi', () => {
 		expect(githubProvider?.inputs['attributeCondition']).toContain(
 			'assertion.workflow_ref'
 		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.event_name == "pull_request"'
+		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.sub == "repo:zemn-me/monorepo:pull_request"'
+		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.ref.startsWith("refs/pull/")'
+		);
 		expect(githubProvider?.inputs['attributeMapping']).toMatchObject({
 			'attribute.repository': 'assertion.repository',
 			'attribute.repository_id': 'assertion.repository_id',
