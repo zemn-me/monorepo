@@ -13,6 +13,17 @@ import { mockResources } from '#root/ts/pulumi/setMocks.js';
 const workflowScopePrincipal = (workflowScope: string) =>
 	`principalSet://iam.googleapis.com/projects/845702659200/locations/global/workloadIdentityPools/github/attribute.workflow_scope/${workflowScope}`;
 
+const resourceInputText = (input: unknown) =>
+	typeof input === 'string' ? input : JSON.stringify(input);
+
+interface AwsAssumeRoleStatement {
+	Condition: {
+		StringEquals: Record<string, string>;
+		StringLike: Record<string, string>;
+	};
+	Sid: string;
+}
+
 describe('pulumi', () => {
 	test('smoke', async () => {
 		mockResources.splice(0);
@@ -108,5 +119,66 @@ describe('pulumi', () => {
 				role: 'roles/secretmanager.secretAccessor',
 			});
 		}
+
+		const awsIamRoles = mockResources.filter(
+			resource => resource.type === 'aws:iam/role:Role'
+		);
+		const githubActionsRole = awsIamRoles.find(
+			resource => resource.name === 'monorepo_github_actions_role'
+		);
+		const githubActionsRolePolicy = resourceInputText(
+			githubActionsRole?.inputs['assumeRolePolicy']
+		);
+		const awsTrustPolicy = JSON.parse(githubActionsRolePolicy) as {
+			Statement: AwsAssumeRoleStatement[];
+		};
+		const awsTrustStatements = Object.fromEntries(
+			awsTrustPolicy.Statement.map(statement => [statement.Sid, statement])
+		);
+		expect(Object.keys(awsTrustStatements).sort()).toEqual([
+			'StagingMergeQueue',
+			'SubmitMain',
+		]);
+		expect(
+			awsTrustStatements.SubmitMain.Condition.StringEquals
+		).toMatchObject({
+			'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+			'token.actions.githubusercontent.com:repository':
+				'zemn-me/monorepo',
+			'token.actions.githubusercontent.com:repository_id': '275403409',
+			'token.actions.githubusercontent.com:workflow': 'Submit',
+		});
+		expect(awsTrustStatements.SubmitMain.Condition.StringLike).toEqual({
+			'token.actions.githubusercontent.com:ref': 'refs/heads/main',
+			'token.actions.githubusercontent.com:sub':
+				'repo:zemn-me/monorepo:ref:refs/heads/main',
+		});
+		expect(
+			awsTrustStatements.StagingMergeQueue.Condition.StringEquals
+		).toMatchObject({
+			'token.actions.githubusercontent.com:repository':
+				'zemn-me/monorepo',
+			'token.actions.githubusercontent.com:repository_id': '275403409',
+			'token.actions.githubusercontent.com:workflow': 'Staging',
+		});
+		expect(
+			awsTrustStatements.StagingMergeQueue.Condition.StringLike
+		).toEqual({
+			'token.actions.githubusercontent.com:ref':
+				'refs/heads/gh-readonly-queue/*',
+			'token.actions.githubusercontent.com:sub':
+				'repo:zemn-me/monorepo:ref:refs/heads/gh-readonly-queue/*',
+		});
+
+		const awsRolePolicyAttachments = mockResources.filter(
+			resource =>
+				resource.type ===
+				'aws:iam/rolePolicyAttachment:RolePolicyAttachment'
+		);
+		expect(
+			awsRolePolicyAttachments.find(
+				resource => resource.name === 'monorepo_github_actions_admin'
+			)?.inputs['policyArn']
+		).toBe('arn:aws:iam::aws:policy/AdministratorAccess');
 	});
 });
