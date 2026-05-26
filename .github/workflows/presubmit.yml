@@ -74,7 +74,7 @@ jobs:
         continue-on-error: true
         with:
           secrets: |-
-            buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
+            readonly_buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-readonly-buildbuddy-api-key
       - name: Presubmit
         run: |
          ./.github/workflows/prepare_ci.sh && \
@@ -85,4 +85,4 @@ jobs:
          $BAZEL run --config=ci --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
          echo "::endgroup::"
         env:
-          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key || secrets.BUILDBUDDY_API_KEY }}
+          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.readonly_buildbuddy_api_key }}
