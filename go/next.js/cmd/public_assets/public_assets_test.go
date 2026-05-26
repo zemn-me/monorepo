@@ -30,19 +30,23 @@ func TestGenerateWritesModuleAndDigestFiles(t *testing.T) {
 	module := filepath.Join(dir, "sources.ts")
 	mp4 := filepath.Join(dir, "assets", "video.mp4")
 	jpg := filepath.Join(dir, "assets", "poster.jpg")
+	webp := filepath.Join(dir, "assets", "profile.webp")
 
 	writeTestFile(t, mp4, "video")
 	writeTestFile(t, jpg, "poster")
+	writeTestFile(t, webp, "profile")
 
 	if err := runGenerate([]string{
 		publicDir,
 		"/sha256/",
 		module,
-		"2",
+		"3",
 		mp4,
 		"mp4",
 		jpg,
 		"jpg",
+		webp,
+		"profile",
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -56,15 +60,17 @@ func TestGenerateWritesModuleAndDigestFiles(t *testing.T) {
 	for _, tc := range []struct {
 		exportName string
 		content    string
+		ext        string
 	}{
-		{exportName: "mp4", content: "video"},
-		{exportName: "jpg", content: "poster"},
+		{exportName: "mp4", content: "video", ext: ".mp4"},
+		{exportName: "jpg", content: "poster", ext: ".jpg"},
+		{exportName: "profile", content: "profile", ext: ".webp"},
 	} {
-		digest := sha256Hex(tc.content)
-		if _, err := os.Stat(filepath.Join(publicDir, digest)); err != nil {
+		digestName := sha256Hex(tc.content) + tc.ext
+		if _, err := os.Stat(filepath.Join(publicDir, digestName)); err != nil {
 			t.Fatalf("expected digest file for %s: %v", tc.exportName, err)
 		}
-		want := `export const ` + tc.exportName + ` = "/sha256/` + digest + `";`
+		want := `export const ` + tc.exportName + ` = "/sha256/` + digestName + `";`
 		if !strings.Contains(moduleContent, want) {
 			t.Fatalf("generated module missing %q in:\n%s", want, moduleContent)
 		}

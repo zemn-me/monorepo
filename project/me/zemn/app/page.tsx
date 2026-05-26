@@ -1,5 +1,9 @@
 import { Metadata } from 'next/types';
 
+import {
+	imageProps as profilePhoto,
+	pictureSources as profilePhotoSources,
+} from '#root/jpeg/2026/05/25/profile_photo.js';
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
 import { GladeLayout } from '#root/project/me/zemn/app/glade_layout.js';
 import { ProfilePageSchema } from '#root/project/me/zemn/app/schema.js';
@@ -29,6 +33,16 @@ export default function Main() {
 		<GladeLayout>
 			<Eeg />
 			<header>
+				<picture className={style.profilePhotoFrame}>
+					{profilePhotoSources.map(source => (
+						<source key={source.type} {...source} />
+					))}
+					<img
+						alt={lang.text(bio.Bio.who.fullName)}
+						className={style.profilePhoto}
+						{...profilePhoto}
+					/>
+				</picture>
 				<Prose>
 					<p>
 						I am an internationally recognised expert on computer

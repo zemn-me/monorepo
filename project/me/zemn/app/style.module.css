@@ -7,6 +7,22 @@
 	margin: auto;
 }
 
+.profilePhotoFrame {
+	display: block;
+	width: 25vh;
+	height: 25vh;
+	margin: 0 auto 4rem;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.profilePhoto {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
 .logoInline {
 	display: inline-block;
 	height: 1em;

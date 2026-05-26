@@ -27,6 +27,10 @@ relative paths. Please use `$(pwd)/path/to/file` to get a relative path!
 
 please run gazelle also! Or the presubmit will fail.
 
+When bumping `GO_VERSION`, keep `golang.org/x/tools/gopls` compatible with
+that Go release; stale `x/tools/internal/tokeninternal` code can fail on Go's
+private `go/token.FileSet` layout.
+
 For Biome lint safe fixes, including import sorting, run
 `./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
 
