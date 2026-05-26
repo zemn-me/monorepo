@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.24.3
+go 1.26.3
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
