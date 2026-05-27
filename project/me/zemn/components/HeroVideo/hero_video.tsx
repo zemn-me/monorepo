@@ -173,34 +173,39 @@ export function HeroVideo(props: HeroVideoProps) {
 	const season = useSeason();
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 
+	interface Poster {
+		readonly backgroundColor: string;
+		readonly src: string;
+	}
+
 	type VideoChoice = readonly [
-		posterSrc: string,
+		poster: Poster,
 		videoSources: JSX.Element,
 		caption?: string,
 		latLng?: LatLng,
 	];
 
 	const kenwoodSummerVideoSource: VideoChoice = [
-		kenwood.poster.src,
+		kenwood.poster,
 		<kenwood.VideoSources key="summer-sources" />,
 		'Kenwood House Gardens',
 		[51.57139601074658, -0.16924392259112794],
 	] as const;
 
 	const kenwoodWinterVideoSource: VideoChoice = [
-		kenwood_snow.poster.src,
+		kenwood_snow.poster,
 		<kenwood_snow.VideoSources key="winter-sources" />,
 		'Kenwood House',
 		[51.57122281677411, -0.16746393741998228],
 	] as const;
 
-	const mistOnTheHillsVideoSource = [
-		mistOnTheHillsPoster.src,
+	const mistOnTheHillsVideoSource: VideoChoice = [
+		mistOnTheHillsPoster,
 		<MistOnTheHillsVideoSources key="mist-sources" />,
 		'East Devon AONB',
 	] as const;
 
-	const [videoPoster, videoSource, caption, latlng] = {
+	const [poster, videoSource, caption, latlng] = {
 		[winter]: kenwoodWinterVideoSource,
 		// Technically incorrect, as it was filmed in December...
 		// i actually don't like this as much as I thought in practice
@@ -241,6 +246,7 @@ export function HeroVideo(props: HeroVideoProps) {
 			className={classNames(style.heroVideo, props.className)}
 			data-glade-banner={props['data-glade-banner']}
 			onClick={figureOnClick}
+			style={{ backgroundColor: poster.backgroundColor }}
 		>
 			<Video
 				autoPlay
@@ -248,7 +254,7 @@ export function HeroVideo(props: HeroVideoProps) {
 				loop
 				muted
 				playsInline
-				poster={videoPoster}
+				poster={poster.src}
 				ref={videoRef}
 			>
 				{videoSource}

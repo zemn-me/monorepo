@@ -2,6 +2,7 @@ import { Metadata } from 'next/types';
 
 import {
 	imageProps as profilePhoto,
+	averageColor as profilePhotoAverageColor,
 	pictureSources as profilePhotoSources,
 } from '#root/jpeg/2026/05/25/profile_photo.js';
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
@@ -33,7 +34,10 @@ export default function Main() {
 		<GladeLayout>
 			<Eeg />
 			<header>
-				<picture className={style.profilePhotoFrame}>
+				<picture
+					className={style.profilePhotoFrame}
+					style={{ backgroundColor: profilePhotoAverageColor }}
+				>
 					{profilePhotoSources.map(source => (
 						<source key={source.type} {...source} />
 					))}

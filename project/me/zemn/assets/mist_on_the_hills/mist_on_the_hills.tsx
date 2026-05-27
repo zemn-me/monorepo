@@ -1,11 +1,12 @@
 import {
 	jpg,
+	jpgAverageColor,
 	mp4,
 	ogv,
 	webm,
 } from '#root/project/me/zemn/assets/mist_on_the_hills/sources.js';
 
-export const poster = { src: jpg } as const;
+export const poster = { backgroundColor: jpgAverageColor, src: jpg } as const;
 
 /**
  * @returns A React element representing the a video asset

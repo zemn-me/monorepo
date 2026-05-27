@@ -5,7 +5,12 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
+	"mime"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -65,6 +70,56 @@ func digestFileName(path string) (string, error) {
 		return "", err
 	}
 	return digest + filepath.Ext(path), nil
+}
+
+var decodableImageMIMETypes = map[string]bool{
+	"image/gif":  true,
+	"image/jpeg": true,
+	"image/png":  true,
+}
+
+func isDecodableImage(path string) bool {
+	return decodableImageMIMETypes[mime.TypeByExtension(filepath.Ext(path))]
+}
+
+func averageColorHex(img image.Image) (string, error) {
+	bounds := img.Bounds()
+	pixelCount := uint64(bounds.Dx()) * uint64(bounds.Dy())
+	if pixelCount == 0 {
+		return "", fmt.Errorf("cannot average empty image")
+	}
+
+	var rSum, gSum, bSum uint64
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			r, g, b, _ := img.At(x, y).RGBA()
+			rSum += uint64(r)
+			gSum += uint64(g)
+			bSum += uint64(b)
+		}
+	}
+
+	toByte := func(sum uint64) uint64 {
+		average16 := (sum + pixelCount/2) / pixelCount
+		return (average16*255 + 32767) / 65535
+	}
+
+	return fmt.Sprintf("#%02x%02x%02x", toByte(rSum), toByte(gSum), toByte(bSum)), nil
+}
+
+func averageImageColorHex(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return "", err
+	}
+
+	return averageColorHex(img)
 }
 
 func nextCount(args []string, index *int, name string) (int, error) {
@@ -132,6 +187,18 @@ func runGenerate(args []string) error {
 		if _, err := file.WriteString(line); err != nil {
 			file.Close()
 			return err
+		}
+		if isDecodableImage(src) {
+			averageColor, err := averageImageColorHex(src)
+			if err != nil {
+				file.Close()
+				return err
+			}
+			line := fmt.Sprintf("export const %sAverageColor = %q;\n", exportName, averageColor)
+			if _, err := file.WriteString(line); err != nil {
+				file.Close()
+				return err
+			}
 		}
 		if err := file.Close(); err != nil {
 			return err
