@@ -34,6 +34,9 @@ private `go/token.FileSet` layout.
 For Biome lint safe fixes, including import sorting, run
 `./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
 
+Avoid `node_modules/.bin/pnpm` for surgical dependency edits; it can rewrite
+the v6 lockfile to a newer lock format.
+
 Renovate-managed `http_archive` checksums are refreshed by post-upgrade only
 when `# auto-integrity` sits immediately before the `url`/`urls` line.
 

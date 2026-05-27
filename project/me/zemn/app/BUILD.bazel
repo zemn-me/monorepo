@@ -11,7 +11,7 @@ ts_project(
         "not-found.tsx",
         "page.tsx",
         "providers.tsx",
-        "schema.ts",
+        "schema.tsx",
     ],
     assets = glob(
         [
@@ -33,7 +33,6 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//:node_modules/schema-dts",
         "//:node_modules/zod",
         "//jpeg/2026/05/25:profile_photo",
         "//project/me/zemn/bio",
@@ -52,6 +51,7 @@ ts_project(
         "//ts/next.js/types/next-compiled",
         "//ts/option",
         "//ts/react/lang",
+        "//ts/schema.org",
     ],
 )
 
@@ -72,7 +72,7 @@ filegroup(
         "not-found.tsx",
         "page.tsx",
         "providers.tsx",
-        "schema.ts",
+        "schema.tsx",
     ],
     visibility = ["//:__subpackages__"],
 )
