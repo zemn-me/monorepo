@@ -1,8 +1,10 @@
 package main
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
+	"image"
+	"image/color"
+	"image/jpeg"
+	"image/png"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,9 +21,55 @@ func writeTestFile(t *testing.T, path string, content string) {
 	}
 }
 
-func sha256Hex(content string) string {
-	digest := sha256.Sum256([]byte(content))
-	return hex.EncodeToString(digest[:])
+func writeJPEGTestFile(t *testing.T, path string, c color.Color) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(path), 0o777); err != nil {
+		t.Fatal(err)
+	}
+	file, err := os.Create(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+
+	img := image.NewRGBA(image.Rect(0, 0, 1, 1))
+	img.Set(0, 0, c)
+	if err := jpeg.Encode(file, img, nil); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func writePNGTestFile(t *testing.T, path string) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(path), 0o777); err != nil {
+		t.Fatal(err)
+	}
+	file, err := os.Create(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+
+	img := image.NewRGBA(image.Rect(0, 0, 2, 1))
+	img.Set(0, 0, color.RGBA{R: 255, A: 255})
+	img.Set(1, 0, color.RGBA{B: 255, A: 255})
+	if err := png.Encode(file, img); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestAverageColorHex(t *testing.T) {
+	img := image.NewRGBA(image.Rect(0, 0, 2, 1))
+	img.Set(0, 0, color.RGBA{R: 255, A: 255})
+	img.Set(1, 0, color.RGBA{B: 255, A: 255})
+
+	got, err := averageColorHex(img)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != "#800080" {
+		t.Fatalf("averageColorHex() = %q, want #800080", got)
+	}
 }
 
 func TestGenerateWritesModuleAndDigestFiles(t *testing.T) {
@@ -30,11 +78,11 @@ func TestGenerateWritesModuleAndDigestFiles(t *testing.T) {
 	module := filepath.Join(dir, "sources.ts")
 	mp4 := filepath.Join(dir, "assets", "video.mp4")
 	jpg := filepath.Join(dir, "assets", "poster.jpg")
-	webp := filepath.Join(dir, "assets", "profile.webp")
+	png := filepath.Join(dir, "assets", "profile.png")
 
 	writeTestFile(t, mp4, "video")
-	writeTestFile(t, jpg, "poster")
-	writeTestFile(t, webp, "profile")
+	writeJPEGTestFile(t, jpg, color.RGBA{R: 40, G: 80, B: 120, A: 255})
+	writePNGTestFile(t, png)
 
 	if err := runGenerate([]string{
 		publicDir,
@@ -45,7 +93,7 @@ func TestGenerateWritesModuleAndDigestFiles(t *testing.T) {
 		"mp4",
 		jpg,
 		"jpg",
-		webp,
+		png,
 		"profile",
 	}); err != nil {
 		t.Fatal(err)
@@ -59,18 +107,29 @@ func TestGenerateWritesModuleAndDigestFiles(t *testing.T) {
 
 	for _, tc := range []struct {
 		exportName string
-		content    string
-		ext        string
+		path       string
 	}{
-		{exportName: "mp4", content: "video", ext: ".mp4"},
-		{exportName: "jpg", content: "poster", ext: ".jpg"},
-		{exportName: "profile", content: "profile", ext: ".webp"},
+		{exportName: "mp4", path: mp4},
+		{exportName: "jpg", path: jpg},
+		{exportName: "profile", path: png},
 	} {
-		digestName := sha256Hex(tc.content) + tc.ext
+		digestName, err := digestFileName(tc.path)
+		if err != nil {
+			t.Fatal(err)
+		}
 		if _, err := os.Stat(filepath.Join(publicDir, digestName)); err != nil {
 			t.Fatalf("expected digest file for %s: %v", tc.exportName, err)
 		}
 		want := `export const ` + tc.exportName + ` = "/sha256/` + digestName + `";`
+		if !strings.Contains(moduleContent, want) {
+			t.Fatalf("generated module missing %q in:\n%s", want, moduleContent)
+		}
+	}
+
+	for _, want := range []string{
+		`export const jpgAverageColor = "`,
+		`export const profileAverageColor = "#800080";`,
+	} {
 		if !strings.Contains(moduleContent, want) {
 			t.Fatalf("generated module missing %q in:\n%s", want, moduleContent)
 		}

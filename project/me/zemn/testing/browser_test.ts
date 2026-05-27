@@ -126,6 +126,49 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('homepage hero has a poster-coloured fallback background', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/`);
+
+				const hero = await driver.findElement(By.css('figure'));
+				const styleAttribute = await hero.getAttribute('style');
+				expect(styleAttribute).toContain('background-color');
+
+				const backgroundColor = (await driver.executeScript(
+					'return getComputedStyle(arguments[0]).backgroundColor;',
+					hero
+				)) as string;
+				expect(backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+				expect(backgroundColor).not.toBe('transparent');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('homepage profile photo has a sampled fallback background', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/`);
+
+				const profilePhoto = await driver.findElement(
+					By.css('img[alt="Thomas Neil James Shadwell"]')
+				);
+				const frame = await profilePhoto.findElement(By.xpath('..'));
+				const styleAttribute = await frame.getAttribute('style');
+				expect(styleAttribute).toContain('background-color');
+
+				const backgroundColor = (await driver.executeScript(
+					'return getComputedStyle(arguments[0]).backgroundColor;',
+					frame
+				)) as string;
+				expect(backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+				expect(backgroundColor).not.toBe('transparent');
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('2026/endings shows a homepage back link after the story text renders', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
