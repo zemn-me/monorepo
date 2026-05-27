@@ -121,6 +121,7 @@ def responsive_image_srcset(
         crop_scale = None,
         public_dir = "sha256",
         default_width = None,
+        progressive_jpeg = False,
         visibility = None):
     """Generate responsive WebP/JPEG variants and a TypeScript srcset module.
 
@@ -139,6 +140,7 @@ def responsive_image_srcset(
         public_dir: Next public directory for content-addressed assets.
         default_width: Width to use for the fallback `src`; defaults to the
             largest generated width.
+        progressive_jpeg: Encode JPEG variants in progressive mode.
         visibility: Visibility for the generated TypeScript target.
     """
 
@@ -185,6 +187,7 @@ def responsive_image_srcset(
             fit = fit,
             crop_scale = crop_scale,
             quality = jpeg_quality,
+            progressive_jpeg = progressive_jpeg,
         )
         assets[":" + jpeg_target_name] = jpeg_export_name
 
@@ -243,6 +246,7 @@ def responsive_jpeg_srcset(
         crop_scale = None,
         public_dir = "sha256",
         default_width = None,
+        progressive_jpeg = False,
         visibility = None):
     responsive_image_srcset(
         name = name,
@@ -256,5 +260,6 @@ def responsive_jpeg_srcset(
         crop_scale = crop_scale,
         public_dir = public_dir,
         default_width = default_width,
+        progressive_jpeg = progressive_jpeg,
         visibility = visibility,
     )

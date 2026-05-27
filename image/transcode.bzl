@@ -15,6 +15,8 @@ def _transcode_img_impl(ctx):
         args.add("-crop_scale", ctx.attr.crop_scale)
     if ctx.attr.quality:
         args.add("-quality", ctx.attr.quality)
+    if ctx.attr.progressive_jpeg:
+        args.add("-progressive_jpeg")
 
     ctx.actions.run(
         outputs = [ctx.outputs.output],
@@ -42,10 +44,11 @@ _transcode_img_rule = rule(
         "fit": attr.string(doc = "Optional resize fit mode: contain or cover."),
         "crop_scale": attr.string(doc = "Optional inward crop factor for cover fit."),
         "quality": attr.int(doc = "Optional lossy output quality from 1 to 100."),
+        "progressive_jpeg": attr.bool(doc = "Encode JPEG output in progressive mode."),
     },
 )
 
-def transcode_img(name, src, output_file_name, width = None, height = None, fit = None, crop_scale = None, quality = None):
+def transcode_img(name, src, output_file_name, width = None, height = None, fit = None, crop_scale = None, quality = None, progressive_jpeg = False):
     """
     Transcode an image from one format to another.
 
@@ -57,6 +60,7 @@ def transcode_img(name, src, output_file_name, width = None, height = None, fit 
         fit: Optional resize fit mode: contain or cover.
         crop_scale: Optional inward crop factor for cover fit.
         quality: Optional lossy output quality from 1 to 100.
+        progressive_jpeg: Encode JPEG output in progressive mode.
     """
 
     kwargs = {}
@@ -70,6 +74,8 @@ def transcode_img(name, src, output_file_name, width = None, height = None, fit 
         kwargs["crop_scale"] = crop_scale
     if quality != None:
         kwargs["quality"] = quality
+    if progressive_jpeg:
+        kwargs["progressive_jpeg"] = progressive_jpeg
 
     _transcode_img_rule(
         name = name,

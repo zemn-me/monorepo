@@ -24,6 +24,7 @@ require (
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.5.0+incompatible
 	github.com/deepteams/webp v1.2.2
+	github.com/dlecorfec/progjpeg v1.0.0
 	github.com/getkin/kin-openapi v0.135.0
 	github.com/go-chi/chi/v5 v5.3.0
 	github.com/go-chi/cors v1.2.2

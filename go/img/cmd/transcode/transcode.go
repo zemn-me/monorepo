@@ -139,6 +139,7 @@ func init() {
 	flag.StringVar(&resizeOptions.Fit, "fit", "contain", "resize fit mode: contain or cover")
 	flag.Float64Var(&resizeOptions.CropScale, "crop_scale", 1, "crop inward by this factor before cover resize")
 	flag.IntVar(&encodeOptions.Quality, "quality", 0, "lossy output quality from 1 to 100; 0 uses encoder default")
+	flag.BoolVar(&encodeOptions.ProgressiveJPEG, "progressive_jpeg", false, "encode JPEG output in progressive mode")
 }
 
 func Do() (err error) {
