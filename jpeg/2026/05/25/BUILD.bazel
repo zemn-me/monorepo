@@ -18,6 +18,7 @@ responsive_image_srcset(
         1200,
     ],
     jpeg_quality = 92,
+    progressive_jpeg = True,
     sizes = "25vh",
     webp_quality = 90,
     widths = [

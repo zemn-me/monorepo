@@ -153,6 +153,30 @@ func TestEncodeJPEGClampsQuality(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertSize(t, decoded, 8, 8)
+	if got := jpegFrameMarker(t, out.Bytes()); got != 0xc0 {
+		t.Fatalf("got JPEG frame marker %#x, want baseline SOF0", got)
+	}
+}
+
+func TestEncodeProgressiveJPEG(t *testing.T) {
+	src := image.NewRGBA(image.Rect(0, 0, 8, 8))
+
+	var out bytes.Buffer
+	if err := mimeToEncoder["image/jpeg"](&out, src, EncodeOptions{
+		Quality:         80,
+		ProgressiveJPEG: true,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	decoded, err := jpeg.Decode(bytes.NewReader(out.Bytes()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSize(t, decoded, 8, 8)
+	if got := jpegFrameMarker(t, out.Bytes()); got != 0xc2 {
+		t.Fatalf("got JPEG frame marker %#x, want progressive SOF2", got)
+	}
 }
 
 func assertSize(t *testing.T, img image.Image, width, height int) {
@@ -168,4 +192,45 @@ func assertSize(t *testing.T, img image.Image, width, height int) {
 			height,
 		)
 	}
+}
+
+func jpegFrameMarker(t *testing.T, data []byte) byte {
+	t.Helper()
+
+	if len(data) < 4 || data[0] != 0xff || data[1] != 0xd8 {
+		t.Fatal("missing JPEG SOI marker")
+	}
+
+	for i := 2; i < len(data); {
+		if data[i] != 0xff {
+			t.Fatalf("missing JPEG marker at byte %d", i)
+		}
+		for i < len(data) && data[i] == 0xff {
+			i++
+		}
+		if i >= len(data) {
+			t.Fatal("truncated JPEG marker")
+		}
+
+		marker := data[i]
+		i++
+		switch marker {
+		case 0xc0, 0xc2:
+			return marker
+		case 0xd9, 0xda:
+			t.Fatalf("reached JPEG marker %#x before SOF marker", marker)
+		}
+
+		if i+2 > len(data) {
+			t.Fatal("truncated JPEG segment length")
+		}
+		segmentLen := int(data[i])<<8 | int(data[i+1])
+		if segmentLen < 2 {
+			t.Fatalf("invalid JPEG segment length %d", segmentLen)
+		}
+		i += segmentLen
+	}
+
+	t.Fatal("missing JPEG SOF marker")
+	return 0
 }
