@@ -51,14 +51,14 @@ export default function Glade(props: GladeProps) {
 	const isHomepage = pathname == '/';
 	return (
 		<main className={style.main} data-glade-layout>
+			<section className={style.content} data-glade-content>
+				{props.children}
+			</section>
 			<HeroVideo className={style.headerBgv} data-glade-banner />
 			<header className={style.banner} data-glade-banner>
 				<LetterHead />
 				<GladeMenu />
 			</header>
-			<section className={style.content} data-glade-content>
-				{props.children}
-			</section>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>
 					<span>⁂</span>
