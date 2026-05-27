@@ -2,7 +2,7 @@
 
 load("//image:transcode.bzl", "transcode_img")
 
-def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M", video_scale = "1280:720"):
+def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M", video_scale = "1280:720", progressive_jpeg = True):
     native.genrule(
         name = name + "_mp4",
         srcs = [src, "//bin/host/ffmpeg"],
@@ -79,6 +79,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         name = name + "_jpg",
         src = name + "_png",
         output_file_name = out_base_name + ".jpg",
+        progressive_jpeg = progressive_jpeg,
     )
 
     native.filegroup(

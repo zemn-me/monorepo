@@ -19,6 +19,7 @@ go_library(
     deps = [
         "//go/flag/flagutil",
         "@com_github_deepteams_webp//:webp",
+        "@com_github_dlecorfec_progjpeg//:progjpeg",
         "@org_golang_x_image//draw",
     ],
 )
