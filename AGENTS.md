@@ -37,6 +37,11 @@ For Biome lint safe fixes, including import sorting, run
 Renovate-managed `http_archive` checksums are refreshed by post-upgrade only
 when `# auto-integrity` sits immediately before the `url`/`urls` line.
 
+Avoid mutable archive URLs such as `latest` tags or moving release aliases;
+Bazel needs a stable integrity/hash for repository rules. For FFmpeg binary
+archives, pin BtbN dated monthly autobuild tags because their last monthly
+build is retained.
+
 # rules_itest services
 
 When adding background processes for integration tests, define them with
