@@ -615,14 +615,6 @@ http_archive(
 # 	depName=facebook/sapling
 SAPLING_VERSION = "0.2.20260522-084851+1e764c94"
 
-# OpenSSL support for the Bazel-built Linux Sapling package starts here.
-# renovate:
-# 	datasource=github-tags
-# 	versioning=semver
-# 	depName=openssl/openssl
-# 	extractVersion=^openssl-(?<version>.*)$
-OPENSSL_VERSION = "3.4.1"
-
 http_archive(
     name = "sapling_linux_amd64",
     build_file_content = """
@@ -638,23 +630,6 @@ filegroup(
     # auto-integrity
     url = "https://github.com/facebook/sapling/archive/refs/tags/" + SAPLING_VERSION + ".tar.gz",
 )
-
-http_archive(
-    name = "sapling_openssl_src",
-    build_file_content = """
-package(default_visibility = ["//visibility:public"])
-
-filegroup(
-    name = "all_srcs",
-    srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
-)
-""",
-    sha256 = "002a2d6b30b58bf4bea46c43bdd96365aaf8daa6c428782aa4feee06da197df3",
-    strip_prefix = "openssl-" + OPENSSL_VERSION,
-    # auto-integrity
-    url = "https://github.com/openssl/openssl/releases/download/openssl-" + OPENSSL_VERSION + "/openssl-" + OPENSSL_VERSION + ".tar.gz",
-)
-# OpenSSL support for the Bazel-built Linux Sapling package ends here.
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "copybara", version = "0.0.0-20240326-6485af6")
