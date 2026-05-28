@@ -621,7 +621,7 @@ SAPLING_VERSION = "0.2.20260522-084851+1e764c94"
 # 	versioning=semver
 # 	depName=openssl/openssl
 # 	extractVersion=^openssl-(?<version>.*)$
-OPENSSL_VERSION = "3.4.1"
+OPENSSL_VERSION = "3.6.2"
 
 http_archive(
     name = "sapling_linux_amd64",
