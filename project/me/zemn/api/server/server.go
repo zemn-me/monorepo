@@ -66,6 +66,9 @@ type Server struct {
 
 type NewServerOptions struct {
 	LocalStack bool
+	// AllowLocalhostAnalytics permits local development origins to post
+	// analytics beacons. Leave false for production.
+	AllowLocalhostAnalytics bool
 }
 
 // NewServer initialises the DynamoDB client and HTTP router.
@@ -153,12 +156,12 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	auth.ScopeResolver = s.resolveScopes
 
 	baseHandler := HandlerFromMux(NewStrictHandler(s, nil), r)
-	s.Handler = analyticsBeaconHandler(baseHandler)
+	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
 	return s, nil
 }
 
-func analyticsBeaconHandler(next http.Handler) http.Handler {
-	analyticsHandler := analyticsBeaconOriginMiddleware(next)
+func analyticsBeaconHandler(next http.Handler, allowLocalhostOrigin bool) http.Handler {
+	analyticsHandler := analyticsBeaconOriginMiddleware(next, allowLocalhostOrigin)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/analytics/beacon" {
@@ -170,10 +173,10 @@ func analyticsBeaconHandler(next http.Handler) http.Handler {
 	})
 }
 
-func analyticsBeaconOriginMiddleware(next http.Handler) http.Handler {
+func analyticsBeaconOriginMiddleware(next http.Handler, allowLocalhostOrigin bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		if !analyticsBeaconOriginAllowed(origin) {
+		if !analyticsBeaconOriginAllowed(origin, allowLocalhostOrigin) {
 			http.Error(w, "origin not allowed", http.StatusForbidden)
 			return
 		}
@@ -193,7 +196,7 @@ func analyticsBeaconOriginMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func analyticsBeaconOriginAllowed(origin string) bool {
+func analyticsBeaconOriginAllowed(origin string, allowLocalhostOrigin bool) bool {
 	if origin == "" {
 		return false
 	}
@@ -203,14 +206,21 @@ func analyticsBeaconOriginAllowed(origin string) bool {
 		return false
 	}
 
-	switch u.Scheme {
-	case "https":
-		if u.Host == "localhost" {
-			return true
-		}
-		return analyticsBeaconHostAllowed(u.Host)
-	case "http":
-		return u.Hostname() == "localhost" || u.Hostname() == "127.0.0.1" || u.Hostname() == "::1"
+	if analyticsBeaconLocalhostOrigin(u) {
+		return allowLocalhostOrigin
+	}
+
+	if u.Scheme != "https" {
+		return false
+	}
+
+	return analyticsBeaconHostAllowed(u.Host)
+}
+
+func analyticsBeaconLocalhostOrigin(u *url.URL) bool {
+	switch u.Hostname() {
+	case "localhost", "127.0.0.1", "::1":
+		return true
 	default:
 		return false
 	}
