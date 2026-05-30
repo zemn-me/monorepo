@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/tebeka/selenium"
+	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
@@ -38,6 +39,10 @@ func TestKeyPageUnlockedPadlockLocksAgain(t *testing.T) {
 	if err := unlockButton.Click(); err != nil {
 		t.Fatalf("click unlock button: %v", err)
 	}
+	if err := waitForText(driver, "unlocked", 30*time.Second); err != nil {
+		t.Fatalf("key history event: %v", err)
+	}
+	assertNoSevereBrowserLogs(t, driver)
 
 	lockButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Lock Door']", 30*time.Second)
 	if err != nil {
@@ -57,5 +62,19 @@ func TestKeyPageUnlockedPadlockLocksAgain(t *testing.T) {
 	time.Sleep(2 * time.Second)
 	if _, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Lock Door']"); err == nil {
 		t.Fatalf("door returned to unlocked state after refetch")
+	}
+}
+
+func assertNoSevereBrowserLogs(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	logs, err := driver.Log(log.Browser)
+	if err != nil {
+		t.Logf("browser log unavailable: %v", err)
+		return
+	}
+	for _, entry := range filterErrorsWeDontCareAbout(logs) {
+		if entry.Level == log.Severe {
+			t.Fatalf("browser console error: %s", entry.Message)
+		}
 	}
 }

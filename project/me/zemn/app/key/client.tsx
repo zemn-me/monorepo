@@ -1,20 +1,26 @@
 'use client';
 
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { useWebHaptics } from 'web-haptics/react';
 
 import style from '#root/project/me/zemn/app/key/style.module.css';
+import { PosterDisplayName } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
 import { ProgressCircle } from '#root/project/me/zemn/components/ProgressCircle/ProgressCircle.js';
 import {
+	type CallboxEvent,
+	useGetCallboxEventsForToken,
 	useGetMeKeyStatus,
 	useGetMeScopes,
 	usePostMeKey,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
+import { Date as LocalizedDate } from '#root/ts/react/lang/date.js';
 
 const requiredScope = 'callbox_key';
+const logsScope = 'callbox_key_logs_read';
+const keyEventPageSize = 32;
 
 function progressRatio(min: number, max: number, now: number) {
 	const range = max - min;
@@ -73,6 +79,95 @@ function OpenTimer({ start, end }: OpenTimerProps) {
 			loss
 			progress={done ? 1 : clampedProgress}
 		/>
+	);
+}
+
+function eventEmoji(event: CallboxEvent) {
+	return event.open ? '🔓' : '🔒';
+}
+
+function eventZonedDateTime(event: CallboxEvent) {
+	return Temporal.Instant.from(event.when).toZonedDateTimeISO(
+		Temporal.Now.zonedDateTimeISO().timeZoneId
+	);
+}
+
+interface KeyEventFeedProps {
+	readonly idToken?: string;
+}
+
+function KeyEventFeed({ idToken }: KeyEventFeedProps) {
+	const sentinelRef = useRef<HTMLDivElement | null>(null);
+	const query = useGetCallboxEventsForToken(idToken, keyEventPageSize);
+	const events = query.data?.pages.flatMap(page => page.events) ?? [];
+
+	useEffect(() => {
+		const sentinel = sentinelRef.current;
+		if (!sentinel) return;
+		const observer = new IntersectionObserver(
+			entries => {
+				const entry = entries[0];
+				if (
+					entry?.isIntersecting &&
+					query.hasNextPage &&
+					!query.isFetchingNextPage
+				) {
+					void query.fetchNextPage();
+				}
+			},
+			{ rootMargin: '75% 0px' }
+		);
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	}, [query.fetchNextPage, query.hasNextPage, query.isFetchingNextPage]);
+
+	if (query.isError && events.length === 0) {
+		return <p className={style.eventEmpty}>Could not load key history.</p>;
+	}
+
+	if (query.isPending && events.length === 0) {
+		return <p className={style.eventEmpty}>Loading key history…</p>;
+	}
+
+	if (events.length === 0) {
+		return <p className={style.eventEmpty}>No key history yet.</p>;
+	}
+
+	return (
+		<section className={style.eventFeed} aria-label="Key history">
+			<ol className={style.eventList}>
+				{events.map(event => (
+					<li className={style.eventRow} key={event.id}>
+						<span className={style.eventIcon} aria-hidden="true">
+							{eventEmoji(event)}
+						</span>
+						<span className={style.eventText}>
+							<span className={style.eventActor}>
+								<PosterDisplayName
+									fallback={event.actor}
+									poster={{
+										email_address: event.actorEmail,
+										given_name: event.actorGivenName,
+										family_name: event.actorFamilyName,
+									}}
+								/>
+							</span>
+							<span className={style.eventAction}>
+								{event.action}
+							</span>
+						</span>
+						<LocalizedDate
+							className={style.eventTime}
+							date={eventZonedDateTime(event)}
+							time
+						/>
+					</li>
+				))}
+			</ol>
+			<div className={style.eventSentinel} ref={sentinelRef}>
+				{query.isFetchingNextPage ? 'Loading…' : null}
+			</div>
+		</section>
 	);
 }
 
@@ -186,6 +281,20 @@ export default function KeyPageClient() {
 					() => (
 						<p className={style.status}>Lock status unavailable.</p>
 					)
+				)}
+				{fut_scopes(
+					scopes =>
+						scopes.includes(logsScope) ? (
+							<KeyEventFeed
+								idToken={fut_idToken(
+									token => token,
+									() => undefined,
+									() => undefined
+								)}
+							/>
+						) : null,
+					() => null,
+					() => null
 				)}
 			</section>
 		),

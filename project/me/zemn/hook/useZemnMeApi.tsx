@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+	useInfiniteQuery,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from '@tanstack/react-query';
 import createFetchClient from 'openapi-fetch';
 import createClient from 'openapi-react-query';
 import { useMemo } from 'react';
@@ -222,6 +227,14 @@ function useinvalidateCallboxStatus() {
 		});
 }
 
+function useinvalidateCallboxEvents() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/callbox/events'],
+		});
+}
+
 export function usePostGrievances(id_token: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(id_token).useMutation('post', '/grievances', {
@@ -277,6 +290,7 @@ export function usePostMeKey<A, B>(
 ) {
 	const fetchClient = useFetchClientFuture(id_token);
 	const invalidateCallboxStatus = useinvalidateCallboxStatus();
+	const invalidateCallboxEvents = useinvalidateCallboxEvents();
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -330,6 +344,7 @@ export function usePostMeKey<A, B>(
 		onSuccess: () => {
 			// sync with server
 			invalidateCallboxStatus();
+			invalidateCallboxEvents();
 			onSuccess();
 		},
 
@@ -339,6 +354,11 @@ export function usePostMeKey<A, B>(
 
 export type GetCallboxStatusSuccessResponse =
 	paths['/callbox']['get']['responses']['200']['content']['application/json'];
+
+export type GetCallboxEventsSuccessResponse =
+	paths['/callbox/events']['get']['responses']['200']['content']['application/json'];
+
+export type CallboxEvent = GetCallboxEventsSuccessResponse['events'][number];
 
 export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(
@@ -375,4 +395,36 @@ export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 	});
 
 	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function useGetCallboxEventsForToken(
+	id_token: string | undefined,
+	limit = 32
+) {
+	const fetchClient = useFetchClient(id_token);
+	const jti = useMemo(
+		() => (id_token ? extractIdTokenJti(id_token) : undefined),
+		[id_token]
+	);
+	return useInfiniteQuery({
+		queryKey: ['get', '/callbox/events', limit, jti],
+		queryFn: async ({ pageParam }) => {
+			const resp = await fetchClient.GET('/callbox/events', {
+				params: {
+					query: {
+						cursor: pageParam,
+						limit,
+					},
+				},
+			});
+			if (!resp.data) {
+				throw new Error('/callbox/events returned unexpected payload');
+			}
+			return resp.data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: lastPage => lastPage.nextCursor,
+		placeholderData: previousData => previousData,
+		enabled: Boolean(id_token),
+	});
 }

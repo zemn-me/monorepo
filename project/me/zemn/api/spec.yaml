@@ -816,6 +816,87 @@ components:
           - code: "56734"
           - code: "48192"
 
+    CallboxEvent:
+      description: A human-facing callbox state event.
+      type: object
+      required:
+        - id
+        - when
+        - open
+        - actor
+        - action
+      properties:
+        id:
+          type: string
+          description: Stable event identifier.
+        when:
+          type: string
+          format: date-time
+          description: Time when this callbox state event was recorded.
+        open:
+          type: boolean
+          description: Whether this event opened or locked the door.
+        actor:
+          type: string
+          description: Friendly name for the person or flow associated with the event.
+        actorEmail:
+          type: string
+          description: Email address for the actor, if known.
+        actorGivenName:
+          type: string
+          description: Given name for the actor, if known.
+        actorFamilyName:
+          type: string
+          description: Family name for the actor, if known.
+        action:
+          type: string
+          enum: [unlocked, locked]
+          description: Display action for this event.
+        source:
+          type: string
+          description: Backend source that produced the event.
+        subject:
+          type: string
+          description: Authenticated subject associated with the event, if known.
+      example:
+        id: "CALLBOX_DOOR_OPEN_EVENTS#2026-03-30T18:31:54.902Z[UTC]"
+        when: "2026-03-30T18:31:54.902Z"
+        open: true
+        actor: Thomas
+        actorEmail: thomas@example.com
+        actorGivenName: Thomas
+        actorFamilyName: Shadwell
+        action: unlocked
+        source: web_key_request
+        subject: thomas
+
+    CallboxEventsResponse:
+      description: Paginated callbox state events.
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/CallboxEvent"
+        nextCursor:
+          type: string
+          description: Opaque cursor for the next page of older events.
+      example:
+        events:
+          - id: "CALLBOX_DOOR_OPEN_EVENTS#2026-03-30T18:31:54.902Z[UTC]"
+            when: "2026-03-30T18:31:54.902Z"
+            open: true
+            actor: Thomas
+            actorEmail: thomas@example.com
+            actorGivenName: Thomas
+            actorFamilyName: Shadwell
+            action: unlocked
+            source: web_key_request
+            subject: thomas
+        nextCursor: eyJpZCI6IkNBTE...
+
 
     Error:
       description: >
@@ -1471,6 +1552,36 @@ paths:
                 openUntil: "2026-03-30T18:32:14.902Z"
                 source: manual_unlock
                 subject: user_2f7a3b91c8d24a7f
+
+  /callbox/events:
+    get:
+      summary: List callbox door events.
+      description: Return a paginated, newest-first feed of callbox lock and unlock events.
+      security:
+        - OIDC: [callbox_key_logs_read]
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Opaque cursor from a previous response.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 32
+          description: Maximum number of events to return.
+      responses:
+        "200":
+          description: Page of callbox events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallboxEventsResponse'
 
 
   /callbox/settings:
