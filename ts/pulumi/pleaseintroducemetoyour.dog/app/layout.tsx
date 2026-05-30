@@ -2,17 +2,20 @@ import 'ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
 
 import { Metadata } from 'next/types/index.js';
 import { ReactNode } from 'react';
-
+import { AnalyticsPageBeacon } from '#root/project/me/zemn/api/analytics/AnalyticsPageBeacon.js';
 import {
 	CspPolicy,
 	DefaultContentSecurityPolicy,
 	HeaderTagsAppRouter,
+	SourceExpression,
 } from '#root/ts/next.js/index.js';
 import { ClientProviders } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/clientProviders.js';
 
 const csp_policy: CspPolicy = {
 	...DefaultContentSecurityPolicy,
-	'connect-src': new Set([
+	'connect-src': new Set<SourceExpression>([
+		'https://api.zemn.me',
+		'http://localhost:*' as 'https://localhost',
 		'https://*.reddit.com',
 		'https://*.redd.it',
 		...(DefaultContentSecurityPolicy['connect-src'] ?? []),
@@ -39,6 +42,7 @@ export function RootLayout({ children }: Props) {
 			<body>
 				<ClientProviders>
 					<HeaderTagsAppRouter cspPolicy={csp_policy} />
+					<AnalyticsPageBeacon />
 					{children}
 				</ClientProviders>
 			</body>

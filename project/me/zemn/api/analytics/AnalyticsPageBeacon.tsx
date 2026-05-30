@@ -3,11 +3,25 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
-import { useAnalyticsSessionId } from '#root/project/me/zemn/hook/useAnalyticsSessionId.js';
-import { sendAnalyticsBeacon } from '#root/project/me/zemn/hook/useZemnMeApi.js';
+const analyticsSessionStorageKey = 'ZEMN_ANALYTICS_SESSION_ID';
 
-function collectDimensions(width: number, height: number) {
+interface AnalyticsPageBeaconProps {
+	readonly apiBase?: string;
+}
+
+function dimensions(width: number, height: number) {
 	return { width, height };
+}
+
+function analyticsSessionId() {
+	const stored = window.localStorage.getItem(analyticsSessionStorageKey);
+	if (stored) {
+		return stored;
+	}
+
+	const generated = crypto.randomUUID();
+	window.localStorage.setItem(analyticsSessionStorageKey, generated);
+	return generated;
 }
 
 function collectPage() {
@@ -27,8 +41,8 @@ function collectPage() {
 
 function collectContext() {
 	return {
-		screen: collectDimensions(window.screen.width, window.screen.height),
-		viewport: collectDimensions(window.innerWidth, window.innerHeight),
+		screen: dimensions(window.screen.width, window.screen.height),
+		viewport: dimensions(window.innerWidth, window.innerHeight),
 		locale: navigator.language,
 		timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 		userAgent: navigator.userAgent,
@@ -73,33 +87,35 @@ function collectEngagement() {
 	};
 }
 
-export function AnalyticsPageBeacon() {
+export function AnalyticsPageBeacon({
+	apiBase = process.env['NEXT_PUBLIC_ZEMN_ME_API_BASE'] ?? 'https://api.zemn.me',
+}: AnalyticsPageBeaconProps) {
 	const pathname = usePathname();
 	const lastSentKey = useRef<string | null>(null);
-	const sessionIdQuery = useAnalyticsSessionId();
 
 	useEffect(() => {
-		if (sessionIdQuery.data === undefined) {
-			return;
-		}
-
 		const pageKey = `${pathname}?${window.location.search}`;
-		if (lastSentKey.current == pageKey) {
+		if (lastSentKey.current === pageKey) {
 			return;
 		}
 		lastSentKey.current = pageKey;
 
-		void sendAnalyticsBeacon({
-			eventName: 'page_view',
-			eventTime: new Date().toISOString(),
-			eventId: crypto.randomUUID(),
-			sessionId: sessionIdQuery.data,
-			context: collectContext(),
-			page: collectPage(),
-			performance: collectPerformance(),
-			engagement: collectEngagement(),
+		void fetch(`${apiBase}/analytics/beacon`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				eventName: 'page_view',
+				eventTime: new Date().toISOString(),
+				eventId: crypto.randomUUID(),
+				sessionId: analyticsSessionId(),
+				context: collectContext(),
+				page: collectPage(),
+				performance: collectPerformance(),
+				engagement: collectEngagement(),
+			}),
 		});
-	}, [pathname, sessionIdQuery.data]);
+	}, [apiBase, pathname]);
 
 	return null;
 }
+

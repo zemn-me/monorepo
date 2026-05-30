@@ -25,7 +25,10 @@ genrule(
     outs = ["chrome_rlocation.go"],
     cmd_bash = """
 		echo "package selenium" >> $@
-		echo "const chromiumRlocationPath = \\`$(rlocationpath //bin/host/chromium)\\`" >> $@
+		p=$(rlocationpath //bin/host/chromium)
+		p=$${p#\\'}
+		p=$${p%\\'}
+		echo "const chromiumRlocationPath = \\`$${p}\\`" >> $@
 	""",
 )
 

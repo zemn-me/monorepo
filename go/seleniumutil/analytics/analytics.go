@@ -1,11 +1,11 @@
-package selenium_test
+package analytics
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
+	"net/url"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -19,27 +19,15 @@ import (
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
-func TestAnalyticsBeaconIntegration(t *testing.T) {
-	root, err := nextServerRoot()
-	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
-	}
-	apiBase, err := apiRoot()
-	if err != nil {
-		t.Fatalf("api root: %v", err)
-	}
+const analyticsSessionStorageKey = "ZEMN_ANALYTICS_SESSION_ID"
 
-	directSessionID := fmt.Sprintf("itest-direct-%d", time.Now().UnixNano())
-	if err := postAnalyticsEvent(t.Context(), apiBase.String()+"/analytics/beacon", root.String(), directSessionID); err != nil {
-		t.Fatalf("direct analytics post: %v", err)
-	}
-	if err := waitForAnalyticsRecord(t.Context(), directSessionID, 5*time.Second); err != nil {
-		t.Fatalf("direct analytics record not stored: %v", err)
-	}
+func AssertSiteSendsAnalytics(t *testing.T, siteLabel string) {
+	t.Helper()
 
-	sessionID := fmt.Sprintf("itest-%d", time.Now().UnixNano())
-	probeURL := root
-	probeURL.Path = "/"
+	root, err := serviceRoot(siteLabel)
+	if err != nil {
+		t.Fatalf("site root: %v", err)
+	}
 
 	driver, err := seleniumpkg.New()
 	if err != nil {
@@ -47,19 +35,15 @@ func TestAnalyticsBeaconIntegration(t *testing.T) {
 	}
 	defer driver.Close()
 
-	if err := driver.Get(probeURL.String()); err != nil {
+	if err := driver.Get(root.String()); err != nil {
 		t.Fatalf("navigate analytics probe: %v", err)
 	}
 
-	if err := waitForText(driver, "internationally recognised expert", 10*time.Second); err != nil {
-		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
-		t.Fatalf("home page load: %v (body snippet: %v)", err, body)
-	}
-
-	sessionID, err = waitForPersistedAnalyticsSessionID(driver, 10*time.Second)
+	sessionID, err := waitForAnalyticsSessionID(driver, 10*time.Second)
 	if err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
-		t.Fatalf("analytics session not persisted: %v (body snippet: %v)", err, body)
+		browserLogs, _ := driver.Log(log.Browser)
+		t.Fatalf("analytics session not persisted: %v (body snippet: %v, browser logs: %+v)", err, body, browserLogs)
 	}
 
 	if err := waitForAnalyticsRecord(t.Context(), sessionID, 15*time.Second); err != nil {
@@ -69,10 +53,37 @@ func TestAnalyticsBeaconIntegration(t *testing.T) {
 	}
 }
 
-func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time.Duration) (string, error) {
+func serviceRoot(label string) (url.URL, error) {
+	ports, err := assignedPorts()
+	if err != nil {
+		return url.URL{}, err
+	}
+	port := ports[label]
+	if port == "" {
+		return url.URL{}, fmt.Errorf("%s port not found in ASSIGNED_PORTS", label)
+	}
+
+	return url.URL{
+		Scheme: "http",
+		Host:   "localhost:" + port,
+	}, nil
+}
+
+func assignedPorts() (map[string]string, error) {
+	ports := map[string]string{}
+	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil {
+		return nil, err
+	}
+	return ports, nil
+}
+
+func waitForAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time.Duration) (string, error) {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
-		value, err := driver.ExecuteScript(`return window.localStorage.getItem("ZEMN_ANALYTICS_SESSION_ID");`, nil)
+		value, err := driver.ExecuteScript(
+			fmt.Sprintf(`return window.localStorage.getItem(%q);`, analyticsSessionStorageKey),
+			nil,
+		)
 		if err == nil {
 			if sessionID, ok := value.(string); ok && sessionID != "" {
 				return sessionID, nil
@@ -85,7 +96,7 @@ func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time
 }
 
 func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.Duration) error {
-	ddbRoot, err := dynamoDBRoot()
+	ddbRoot, err := serviceRoot("@@//java/software/amazon/dynamodb:dynamodb")
 	if err != nil {
 		return err
 	}
@@ -147,38 +158,4 @@ func valueOrEmpty(v *types.AttributeValueMemberS) string {
 		return ""
 	}
 	return v.Value
-}
-
-func postAnalyticsEvent(ctx context.Context, endpoint string, origin string, sessionID string) error {
-	body, err := json.Marshal(map[string]any{
-		"eventName": "integration_probe_http",
-		"eventTime": time.Now().UTC().Format(time.RFC3339Nano),
-		"eventId":   fmt.Sprintf("evt-%d", time.Now().UnixNano()),
-		"sessionId": sessionID,
-		"page": map[string]any{
-			"urlPath": "/",
-		},
-	})
-	if err != nil {
-		return err
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Origin", origin)
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusAccepted {
-		return fmt.Errorf("unexpected status: %s", resp.Status)
-	}
-
-	return nil
 }

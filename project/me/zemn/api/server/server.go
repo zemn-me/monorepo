@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -204,12 +205,31 @@ func analyticsBeaconOriginAllowed(origin string) bool {
 
 	switch u.Scheme {
 	case "https":
-		return u.Host == "zemn.me" || u.Host == "www.zemn.me" || u.Host == "localhost"
+		if u.Host == "localhost" {
+			return true
+		}
+		return analyticsBeaconHostAllowed(u.Host)
 	case "http":
 		return u.Hostname() == "localhost" || u.Hostname() == "127.0.0.1" || u.Hostname() == "::1"
 	default:
 		return false
 	}
+}
+
+func analyticsBeaconHostAllowed(host string) bool {
+	for _, domain := range []string{
+		"zemn.me",
+		"lulu.computer",
+		"baby.computer",
+		"pleaseintroducemetoyour.dog",
+		"eggsfordogs.com",
+	} {
+		if host == domain || strings.HasSuffix(host, "."+domain) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func provisionSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
