@@ -219,6 +219,7 @@ py_venv(
     deps = [
         "//bzl/versioning",
         "//ini/git/merge_drivers/bazel_lockfile",
+        "//project/me/zemn/api/analytics/inject_iservice:inject_iservice_bin",
         "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci",

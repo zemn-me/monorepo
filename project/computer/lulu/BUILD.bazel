@@ -1,12 +1,55 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "jest_test", "ts_project")
-load("//ts/next.js:rules.bzl", "next_project")
+load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
+
+# gazelle:exclude analytics_test.go
 
 package(default_visibility = ["//ts/pulumi/lulu.computer:__subpackages__"])
 
 next_project(
     name = "next",
     srcs = ["//project/computer/lulu/app"],
+)
+
+py_binary(
+    name = "inject_iservice_bin",
+    srcs = ["//project/me/zemn/api/analytics/inject_iservice:__main__.py"],
+    data = [":dev"],
+    env = {
+        "NEXTJS_BINARY": "$(rlocationpath :dev)",
+    },
+    main = "__main__.py",
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+next_itest_service(
+    name = "itest_service",
+    args = [
+        "project/computer/lulu",
+    ],
+    exe = ":inject_iservice_bin",
+    http_health_check_address = "http://localhost:$${PORT}/",
+    deps = ["//project/me/zemn/api/cmd/localserver:localserver_itest_service"],
+)
+
+service_test(
+    name = "analytics_integration_test",
+    flaky = True,
+    services = [":itest_service"],
+    test = ":analytics_test",
+)
+
+go_test(
+    name = "analytics_test",
+    srcs = ["analytics_test.go"],
+    tags = ["manual"],
+    deps = ["//go/seleniumutil/analytics"],
 )
 
 bazel_lint(

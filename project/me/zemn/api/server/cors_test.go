@@ -33,24 +33,32 @@ func TestCORS(t *testing.T) {
 }
 
 func TestAnalyticsBeaconCORSAllowsKnownOrigin(t *testing.T) {
-	rc := httptest.NewRecorder()
-
 	s, err := NewServer(t.Context(), NewServerOptions{})
 	if err != nil {
 		t.Fatalf("failed to create server: %v", err)
 	}
 
-	rq := httptest.NewRequest(http.MethodOptions, "/analytics/beacon", nil)
-	rq.Header.Set("Access-Control-Request-Method", http.MethodPost)
-	rq.Header.Set("Origin", "https://zemn.me")
-	s.ServeHTTP(rc, rq)
+	for _, origin := range []string{
+		"https://zemn.me",
+		"https://lulu.computer",
+		"https://baby.computer",
+		"https://pleaseintroducemetoyour.dog",
+		"https://staging.pleaseintroducemetoyour.dog",
+		"https://eggsfordogs.com",
+	} {
+		rc := httptest.NewRecorder()
+		rq := httptest.NewRequest(http.MethodOptions, "/analytics/beacon", nil)
+		rq.Header.Set("Access-Control-Request-Method", http.MethodPost)
+		rq.Header.Set("Origin", origin)
+		s.ServeHTTP(rc, rq)
 
-	if rc.Code != http.StatusOK {
-		t.Fatalf("expected status code %d, got %d", http.StatusOK, rc.Code)
-	}
+		if rc.Code != http.StatusOK {
+			t.Fatalf("%s: expected status code %d, got %d", origin, http.StatusOK, rc.Code)
+		}
 
-	if rc.Header().Get("Access-Control-Allow-Origin") != "*" {
-		t.Fatalf("unexpected allow origin header: %q", rc.Header().Get("Access-Control-Allow-Origin"))
+		if rc.Header().Get("Access-Control-Allow-Origin") != "*" {
+			t.Fatalf("%s: unexpected allow origin header: %q", origin, rc.Header().Get("Access-Control-Allow-Origin"))
+		}
 	}
 }
 

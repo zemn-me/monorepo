@@ -241,11 +241,46 @@ out = "chromium"
 )
 """
 
+chromium_mac_arm64_buildfile = """
+filegroup(
+name = "in_bin",
+srcs = [ "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing" ],
+data = glob(["chrome-mac-arm64/Google Chrome for Testing.app/**"], allow_empty=True),
+visibility = [ "//visibility:public" ]
+)
+"""
+
+chromium_mac_x64_buildfile = """
+filegroup(
+name = "in_bin",
+srcs = [ "chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing" ],
+data = glob(["chrome-mac-x64/Google Chrome for Testing.app/**"], allow_empty=True),
+visibility = [ "//visibility:public" ]
+)
+"""
+
 http_archive(
     name = "com_googleapis_storage_chromium_linux_x64",
     build_file_content = chromium_buildfile,
     sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
+    # auto-integrity
     url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
+)
+
+http_archive(
+    name = "com_googleapis_storage_chromium_mac_arm64",
+    build_file_content = chromium_mac_arm64_buildfile,
+    sha256 = "c30f54d81188231e8da6b06a01e5ba7fc7e7fe66d9708316a4f30f78f50d9202",
+    # auto-integrity
+    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/mac-arm64/chrome-mac-arm64.zip",
+)
+
+http_archive(
+    name = "com_googleapis_storage_chromium_mac_x64",
+    build_file_content = chromium_mac_x64_buildfile,
+    sha256 = "88ec927ec591dc6d1b80efac8e0b64edb418ade96bc4086be07f7c509e00203d",
+    # auto-integrity
+    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/mac-x64/chrome-mac-x64.zip",
 )
 
 # renovate:

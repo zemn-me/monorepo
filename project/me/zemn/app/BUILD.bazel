@@ -4,7 +4,6 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "app",
     srcs = [
-        "analytics.tsx",
         "eeg.tsx",
         "glade_layout.tsx",
         "layout.tsx",
@@ -36,6 +35,7 @@ ts_project(
         "//:node_modules/schema-dts",
         "//:node_modules/zod",
         "//jpeg/2026/05/25:profile_photo",
+        "//project/me/zemn/api/analytics",
         "//project/me/zemn/bio",
         "//project/me/zemn/components/DividerHeading",
         "//project/me/zemn/components/Glade",
@@ -65,7 +65,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "analytics.tsx",
         "eeg.tsx",
         "glade_layout.tsx",
         "layout.tsx",
