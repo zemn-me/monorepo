@@ -137,3 +137,83 @@ func TestPostAnalyticsBeaconStoresOriginFromContext(t *testing.T) {
 		t.Fatalf("unexpected origin: %#v", db.analytics[0])
 	}
 }
+
+func TestGetAdminAnalyticsEventsListsPaginatedEvents(t *testing.T) {
+	s := newTestServer()
+
+	events := []AnalyticsEvent{
+		{
+			EventName: "page_view",
+			EventTime: time.Date(2026, time.March, 29, 12, 34, 56, 0, time.UTC),
+			EventId:   "evt-1",
+			SessionId: "session-1",
+		},
+		{
+			EventName: "page_view",
+			EventTime: time.Date(2026, time.March, 30, 12, 34, 56, 0, time.UTC),
+			EventId:   "evt-2",
+			SessionId: "session-2",
+		},
+		{
+			EventName: "custom",
+			EventTime: time.Date(2026, time.March, 31, 12, 34, 56, 0, time.UTC),
+			EventId:   "evt-3",
+			SessionId: "session-3",
+		},
+	}
+	for _, event := range events {
+		if _, err := s.PostAnalyticsBeacon(context.Background(), PostAnalyticsBeaconRequestObject{
+			Body: &event,
+		}); err != nil {
+			t.Fatalf("post analytics beacon: %v", err)
+		}
+	}
+
+	limit := 2
+	first, err := s.GetAdminAnalyticsEvents(context.Background(), GetAdminAnalyticsEventsRequestObject{
+		Params: GetAdminAnalyticsEventsParams{
+			Limit: &limit,
+		},
+	})
+	if err != nil {
+		t.Fatalf("list analytics events: %v", err)
+	}
+
+	firstPage, ok := first.(GetAdminAnalyticsEvents200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", first)
+	}
+	if len(firstPage.Events) != 2 {
+		t.Fatalf("expected 2 events, got %d", len(firstPage.Events))
+	}
+	if firstPage.Events[0].Event.EventId != "evt-3" || firstPage.Events[1].Event.EventId != "evt-2" {
+		t.Fatalf("expected first page sorted newest-first, got %#v", firstPage.Events)
+	}
+	if firstPage.NextCursor == nil || *firstPage.NextCursor == "" {
+		t.Fatalf("expected next cursor")
+	}
+
+	second, err := s.GetAdminAnalyticsEvents(context.Background(), GetAdminAnalyticsEventsRequestObject{
+		Params: GetAdminAnalyticsEventsParams{
+			Cursor: firstPage.NextCursor,
+			Limit:  &limit,
+		},
+	})
+	if err != nil {
+		t.Fatalf("list analytics events second page: %v", err)
+	}
+
+	secondPage, ok := second.(GetAdminAnalyticsEvents200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", second)
+	}
+	if len(secondPage.Events) != 1 {
+		t.Fatalf("expected 1 event, got %d", len(secondPage.Events))
+	}
+	if secondPage.Events[0].Event.EventId != "evt-1" {
+		t.Fatalf("unexpected second page event: %#v", secondPage.Events)
+	}
+	if secondPage.NextCursor != nil {
+		t.Fatalf("unexpected next cursor: %q", *secondPage.NextCursor)
+	}
+}

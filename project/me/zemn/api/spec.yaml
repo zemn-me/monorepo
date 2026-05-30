@@ -1277,6 +1277,47 @@ components:
           visibilityState: visible
         properties:
           route: /grievances
+    AdminAnalyticsEvent:
+      type: object
+      description: Stored analytics event visible to administrators.
+      required:
+        - id
+        - when
+        - receivedAt
+        - event
+      properties:
+        id:
+          type: string
+          description: Session identifier used as the analytics table partition key.
+        when:
+          type: string
+          description: Analytics table sort key, formatted as event timestamp plus event id.
+          example: "2026-03-30T18:22:11.384Z#evt_01HTZVK0M2G5X2DQ3R5K7R0T0A"
+        receivedAt:
+          type: string
+          format: date-time
+          description: Server timestamp for when the beacon was stored.
+        origin:
+          type: string
+          description: Request Origin header captured during ingest.
+        sourceIp:
+          type: string
+          description: Source IP inferred from X-Forwarded-For or RemoteAddr during ingest.
+        event:
+          $ref: '#/components/schemas/AnalyticsEvent'
+    AdminAnalyticsEventsResponse:
+      type: object
+      description: Paginated stored analytics events.
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminAnalyticsEvent'
+        nextCursor:
+          type: string
+          description: Cursor to pass to the next request, if more events are available.
     AnalyticsAccepted:
       type: object
       description: Minimal acknowledgement returned once the beacon has been queued.
@@ -1734,6 +1775,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /admin/analytics/events:
+    get:
+      summary: List analytics events
+      description: Return a paginated stream of raw analytics events for administrators.
+      security:
+        - OIDC: [admin_analytics_read]
+      parameters:
+        - name: cursor
+          in: query
+          description: Cursor from a previous analytics events response.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of events to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+      responses:
+        "200":
+          description: Stored analytics events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAnalyticsEventsResponse'
   /admin/user:
     put:
       summary: Update a user
