@@ -49,6 +49,82 @@
 	width: 0.9rem;
 }
 
+.eventFeed {
+	margin: 2rem auto 0;
+	max-width: min(100%, 34rem);
+	text-align: left;
+}
+
+.eventList {
+	display: grid;
+	gap: 0.35rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.eventRow {
+	align-items: center;
+	border-block-end: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+	display: grid;
+	gap: 0.75rem;
+	grid-template-columns: 2rem minmax(0, 1fr) max-content;
+	min-height: 3.25rem;
+	padding: 0.55rem 0;
+}
+
+.eventIcon {
+	display: inline-grid;
+	font-size: 1.4rem;
+	line-height: 1;
+	place-items: center;
+}
+
+.eventText {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.45rem;
+	min-width: 0;
+}
+
+.eventActor {
+	font-weight: 650;
+	overflow-wrap: anywhere;
+}
+
+.eventAction {
+	color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.eventTime {
+	color: color-mix(in srgb, currentColor 62%, transparent);
+	font-size: 0.9rem;
+	white-space: nowrap;
+}
+
+.eventEmpty {
+	color: color-mix(in srgb, currentColor 68%, transparent);
+	margin-block: 2rem 0;
+}
+
+.eventSentinel {
+	color: color-mix(in srgb, currentColor 62%, transparent);
+	font-size: 0.9rem;
+	min-height: 3rem;
+	padding-block: 0.8rem;
+	text-align: center;
+}
+
+@media (max-width: 34rem) {
+	.eventRow {
+		grid-template-columns: 2rem minmax(0, 1fr);
+	}
+
+	.eventTime {
+		grid-column: 2;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.status,
 	.lockButton {

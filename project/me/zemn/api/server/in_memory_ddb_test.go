@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"sort"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -40,24 +41,57 @@ func (db *inMemoryDDB) DescribeTable(ctx context.Context, params *dynamodb.Descr
 
 func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 	if in.TableName != nil && *in.TableName == "keys" {
-		if len(db.keyRecords) == 0 {
-			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
-		}
 		id := ""
 		if v, ok := in.ExpressionAttributeValues[":id"]; ok {
 			if s, ok := v.(*types.AttributeValueMemberS); ok {
 				id = s.Value
 			}
 		}
-		for i := len(db.keyRecords) - 1; i >= 0; i-- {
-			rec := db.keyRecords[i]
+		var records []map[string]types.AttributeValue
+		for _, rec := range db.keyRecords {
 			if id != "" && keyTableRecordID(rec) != id {
 				continue
 			}
-			item := copyDynamoItem(rec)
-			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{item}}, nil
+			records = append(records, rec)
 		}
-		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
+		sort.SliceStable(records, func(i, j int) bool {
+			if aws.ToBool(in.ScanIndexForward) {
+				return keyTableRecordWhen(records[i]) < keyTableRecordWhen(records[j])
+			}
+			return keyTableRecordWhen(records[i]) > keyTableRecordWhen(records[j])
+		})
+		start := 0
+		if len(in.ExclusiveStartKey) > 0 {
+			startID := keyTableRecordID(in.ExclusiveStartKey)
+			startWhen := keyTableRecordWhen(in.ExclusiveStartKey)
+			for i, rec := range records {
+				if keyTableRecordID(rec) == startID && keyTableRecordWhen(rec) == startWhen {
+					start = i + 1
+					break
+				}
+			}
+		}
+		limit := len(records)
+		if in.Limit != nil && int(*in.Limit) < limit {
+			limit = int(*in.Limit)
+		}
+		var items []map[string]types.AttributeValue
+		end := start + limit
+		if end > len(records) {
+			end = len(records)
+		}
+		for _, rec := range records[start:end] {
+			items = append(items, copyDynamoItem(rec))
+		}
+		var lastEvaluatedKey map[string]types.AttributeValue
+		if end < len(records) && len(items) > 0 {
+			last := items[len(items)-1]
+			lastEvaluatedKey = map[string]types.AttributeValue{
+				"id":   last["id"],
+				"when": last["when"],
+			}
+		}
+		return &dynamodb.QueryOutput{Items: items, LastEvaluatedKey: lastEvaluatedKey}, nil
 	}
 	if len(db.records) == 0 {
 		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
@@ -196,6 +230,14 @@ func keyTableRecordID(item map[string]types.AttributeValue) string {
 		return ""
 	}
 	return id.Value
+}
+
+func keyTableRecordWhen(item map[string]types.AttributeValue) string {
+	when, ok := item["when"].(*types.AttributeValueMemberS)
+	if !ok {
+		return ""
+	}
+	return when.Value
 }
 
 func copyDynamoItem(item map[string]types.AttributeValue) map[string]types.AttributeValue {

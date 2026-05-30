@@ -21,8 +21,10 @@ ts_project(
         "//:node_modules/temporal-polyfill",
         "//:node_modules/web-haptics",
         "//project/me/zemn/app",
+        "//project/me/zemn/components/InlineLogin",
         "//project/me/zemn/components/ProgressCircle",
         "//project/me/zemn/hook",
+        "//ts/react/lang",
     ],
 )
 

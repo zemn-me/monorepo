@@ -4,6 +4,10 @@ Integration tests in this directory should mimic real user behaviour: drive the 
 
 - Group Selenium tests by surface area (e.g. `/admin`, `/grievanceportal`) instead of lumping them into a single file. Shared helpers can live alongside the tests in `*_helpers_test.go`.
 
+- The local OIDC provider advertises Google contact scopes for auth-flow
+  compatibility, but its access token is not a Google API token. Gate browser
+  Google API calls on the real Google issuer.
+
 
 ## Interacting with the UI
 

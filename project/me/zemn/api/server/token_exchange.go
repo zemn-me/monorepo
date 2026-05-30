@@ -129,6 +129,7 @@ func hardcodedScopesForSubject(subject OIDCSubject) []string {
 			"callbox_settings_read",
 			"callbox_settings_write",
 			"callbox_key",
+			"callbox_key_logs_read",
 			"grievance_portal",
 		}
 	case "keng":

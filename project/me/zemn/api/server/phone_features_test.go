@@ -8,7 +8,11 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/beevik/etree"
 	"github.com/twilio/twilio-go/twiml"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
@@ -472,6 +476,157 @@ func TestPostCallboxLocksWhenOpenFalse(t *testing.T) {
 	}
 	if status.Subject == nil || *status.Subject != "integration-test-local" {
 		t.Fatalf("unexpected subject after close: %#v", status.Subject)
+	}
+}
+
+func TestGetCallboxEventsReturnsFriendlyPaginatedEvents(t *testing.T) {
+	s := newTestServer()
+	ctx := context.Background()
+	when := func(v string) Time {
+		t.Helper()
+		parsed, err := time.Parse(time.RFC3339, v)
+		if err != nil {
+			t.Fatalf("parse time: %v", err)
+		}
+		return Time{Time: parsed}
+	}
+
+	if err := s.putUserRecord(ctx, userRecord{
+		Id:         "integration-test-local",
+		When:       Now(),
+		GivenName:  "Local",
+		FamilyName: "Person",
+	}); err != nil {
+		t.Fatalf("put user: %v", err)
+	}
+	for _, rec := range []DoorOpenRecord{
+		{
+			Id:     callboxDoorOpenPartition,
+			When:   when("2026-03-30T18:30:00Z"),
+			Source: "entry_code",
+			Open:   boolPtr(true),
+		},
+		{
+			Id:      callboxDoorOpenPartition,
+			When:    when("2026-03-30T18:31:00Z"),
+			Source:  "web_key_request",
+			Subject: "integration-test-local",
+			Open:    boolPtr(true),
+		},
+		{
+			Id:      callboxDoorOpenPartition,
+			When:    when("2026-03-30T18:32:00Z"),
+			Source:  "web_key_lock",
+			Subject: "integration-test-local",
+			Open:    boolPtr(false),
+		},
+	} {
+		item, err := attributevalue.MarshalMap(rec)
+		if err != nil {
+			t.Fatalf("marshal record: %v", err)
+		}
+		if _, err := s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
+			TableName: aws.String(s.keyRequestsTableName),
+			Item:      item,
+		}); err != nil {
+			t.Fatalf("put key record: %v", err)
+		}
+	}
+
+	limit := 2
+	resp, err := s.GetCallboxEvents(ctx, GetCallboxEventsRequestObject{
+		Params: GetCallboxEventsParams{Limit: &limit},
+	})
+	if err != nil {
+		t.Fatalf("get callbox events: %v", err)
+	}
+	page, ok := resp.(GetCallboxEvents200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", resp)
+	}
+	if len(page.Events) != 2 {
+		t.Fatalf("expected 2 events, got %d", len(page.Events))
+	}
+	if page.Events[0].Action != Locked || page.Events[0].Actor != "Local Person" {
+		t.Fatalf("unexpected newest event: %#v", page.Events[0])
+	}
+	if page.Events[0].ActorGivenName == nil || *page.Events[0].ActorGivenName != "Local" {
+		t.Fatalf("expected actor given name, got %#v", page.Events[0].ActorGivenName)
+	}
+	if page.Events[0].ActorFamilyName == nil || *page.Events[0].ActorFamilyName != "Person" {
+		t.Fatalf("expected actor family name, got %#v", page.Events[0].ActorFamilyName)
+	}
+	if page.Events[1].Action != Unlocked || page.Events[1].Actor != "Local Person" {
+		t.Fatalf("unexpected second event: %#v", page.Events[1])
+	}
+	if page.NextCursor == nil || *page.NextCursor == "" {
+		t.Fatalf("expected next cursor")
+	}
+
+	resp, err = s.GetCallboxEvents(ctx, GetCallboxEventsRequestObject{
+		Params: GetCallboxEventsParams{Cursor: page.NextCursor, Limit: &limit},
+	})
+	if err != nil {
+		t.Fatalf("get second page: %v", err)
+	}
+	page, ok = resp.(GetCallboxEvents200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected second response type: %T", resp)
+	}
+	if len(page.Events) != 1 {
+		t.Fatalf("expected 1 event, got %d", len(page.Events))
+	}
+	if page.Events[0].Actor != "Entry code" || page.Events[0].Action != Unlocked {
+		t.Fatalf("unexpected older event: %#v", page.Events[0])
+	}
+	if page.NextCursor != nil {
+		t.Fatalf("expected no cursor after final page, got %q", *page.NextCursor)
+	}
+}
+
+func TestGetCallboxEventsFallsBackToCurrentTokenProfile(t *testing.T) {
+	s := newTestServer()
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Subject:    "integration-test-local",
+		Email:      "local@example.com",
+		GivenName:  "Current",
+		FamilyName: "Caller",
+	})
+
+	rec := DoorOpenRecord{
+		Id:      callboxDoorOpenPartition,
+		When:    Now(),
+		Source:  "web_key_request",
+		Subject: "integration-test-local",
+		Open:    boolPtr(true),
+	}
+	item, err := attributevalue.MarshalMap(rec)
+	if err != nil {
+		t.Fatalf("marshal record: %v", err)
+	}
+	if _, err := s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
+		TableName: aws.String(s.keyRequestsTableName),
+		Item:      item,
+	}); err != nil {
+		t.Fatalf("put key record: %v", err)
+	}
+
+	resp, err := s.GetCallboxEvents(ctx, GetCallboxEventsRequestObject{})
+	if err != nil {
+		t.Fatalf("get callbox events: %v", err)
+	}
+	page, ok := resp.(GetCallboxEvents200JSONResponse)
+	if !ok {
+		t.Fatalf("unexpected response type: %T", resp)
+	}
+	if len(page.Events) != 1 {
+		t.Fatalf("expected 1 event, got %d", len(page.Events))
+	}
+	if page.Events[0].Actor != "Current Caller" {
+		t.Fatalf("unexpected actor: %#v", page.Events[0])
+	}
+	if page.Events[0].ActorEmail == nil || *page.Events[0].ActorEmail != "local@example.com" {
+		t.Fatalf("expected actor email, got %#v", page.Events[0].ActorEmail)
 	}
 }
 

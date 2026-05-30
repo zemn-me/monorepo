@@ -1,10 +1,13 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import type { z } from 'zod';
 
 import style from '#root/project/me/zemn/components/InlineLogin/inline_login.module.css';
 import { ProgressCircle } from '#root/project/me/zemn/components/ProgressCircle/ProgressCircle.js';
-import { usePosterDisplayName } from '#root/project/me/zemn/hook/usePosterDisplayName.js';
+import {
+	type PosterIdentity,
+	usePosterDisplayName,
+} from '#root/project/me/zemn/hook/usePosterDisplayName.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import {
 	future_and_then,
@@ -49,17 +52,29 @@ function TimeLeftIndicator({ start, end }: TimeLeftIndicatorProps) {
 
 type OidcIdTokenClaims = z.infer<typeof OidcIdTokenClaimsSchema>;
 
+export function PosterDisplayName({
+	fallback,
+	poster,
+}: {
+	readonly fallback?: ReactNode;
+	readonly poster?: PosterIdentity | null;
+}) {
+	const displayName = usePosterDisplayName(poster);
+	return displayName ? <>{displayName}</> : fallback;
+}
+
 function InlineLoginContent({
 	claims,
 }: {
 	readonly claims: OidcIdTokenClaims;
 }) {
-	const displayName = usePosterDisplayName({
+	const poster = {
 		email_address: claims.email,
 		given_name: claims.given_name,
 		family_name: claims.family_name,
 		sub: claims.sub,
-	});
+	};
+	const displayName = usePosterDisplayName(poster);
 
 	return displayName ? (
 		<span className={style.loggedIn}>
