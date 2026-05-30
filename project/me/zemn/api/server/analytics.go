@@ -3,11 +3,10 @@ package apiserver
 import (
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
-	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -20,6 +19,7 @@ import (
 type analyticsEventRecord struct {
 	Id         string         `dynamodbav:"id"`
 	When       string         `dynamodbav:"when"`
+	Feed       string         `dynamodbav:"feed,omitempty"`
 	ReceivedAt Time           `dynamodbav:"received_at"`
 	Origin     string         `dynamodbav:"origin,omitempty"`
 	SourceIp   string         `dynamodbav:"source_ip,omitempty"`
@@ -27,9 +27,16 @@ type analyticsEventRecord struct {
 }
 
 type analyticsRequestContextKey string
+type analyticsCursor struct {
+	Id   string `json:"id"`
+	When string `json:"when"`
+	Feed string `json:"feed"`
+}
 
 const analyticsSourceIPContextKey analyticsRequestContextKey = "analytics.source_ip"
 const analyticsOriginContextKey analyticsRequestContextKey = "analytics.origin"
+const analyticsFeed = "events"
+const analyticsFeedIndexName = "feed-when-index"
 const defaultAdminAnalyticsEventsLimit int32 = 25
 const maxAdminAnalyticsEventsLimit int32 = 100
 
@@ -45,6 +52,7 @@ func (s Server) PostAnalyticsBeacon(ctx context.Context, rq PostAnalyticsBeaconR
 	record := analyticsEventRecord{
 		Id:         rq.Body.SessionId,
 		When:       analyticsEventSortKey(*rq.Body),
+		Feed:       analyticsFeed,
 		ReceivedAt: Now(),
 		Origin:     analyticsOrigin(ctx),
 		SourceIp:   analyticsSourceIP(ctx),
@@ -80,60 +88,39 @@ func (s Server) GetAdminAnalyticsEvents(ctx context.Context, rq GetAdminAnalytic
 		limit = maxAdminAnalyticsEventsLimit
 	}
 
-	offset, err := decodeAnalyticsCursor(rq.Params.Cursor)
+	exclusiveStartKey, err := decodeAnalyticsCursor(rq.Params.Cursor)
 	if err != nil {
 		return nil, err
 	}
 
-	events, err := s.scanAdminAnalyticsEvents(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	sort.Slice(events, func(i, j int) bool {
-		return events[i].When > events[j].When
+	out, err := s.ddb.Query(ctx, &dynamodb.QueryInput{
+		TableName:              aws.String(s.analyticsTableName),
+		IndexName:              aws.String(analyticsFeedIndexName),
+		KeyConditionExpression: aws.String("feed = :feed"),
+		ExpressionAttributeValues: map[string]types.AttributeValue{
+			":feed": &types.AttributeValueMemberS{Value: analyticsFeed},
+		},
+		ExclusiveStartKey: exclusiveStartKey,
+		Limit:             aws.Int32(limit),
+		ScanIndexForward:  aws.Bool(false),
 	})
-
-	if offset > len(events) {
-		offset = len(events)
+	if err != nil {
+		return nil, err
 	}
-	end := offset + int(limit)
-	if end > len(events) {
-		end = len(events)
-	}
-	nextCursor := encodeAnalyticsCursor(end, len(events))
 
-	return GetAdminAnalyticsEvents200JSONResponse{
-		Events:     events[offset:end],
-		NextCursor: nextCursor,
-	}, nil
-}
-
-func (s Server) scanAdminAnalyticsEvents(ctx context.Context) ([]AdminAnalyticsEvent, error) {
-	events := []AdminAnalyticsEvent{}
-	var exclusiveStartKey map[string]types.AttributeValue
-	for {
-		out, err := s.ddb.Scan(ctx, &dynamodb.ScanInput{
-			TableName:         aws.String(s.analyticsTableName),
-			ExclusiveStartKey: exclusiveStartKey,
-		})
-		if err != nil {
+	events := make([]AdminAnalyticsEvent, 0, len(out.Items))
+	for _, item := range out.Items {
+		var record analyticsEventRecord
+		if err := attributevalue.UnmarshalMap(item, &record); err != nil {
 			return nil, err
 		}
-
-		for _, item := range out.Items {
-			var record analyticsEventRecord
-			if err := attributevalue.UnmarshalMap(item, &record); err != nil {
-				return nil, err
-			}
-			events = append(events, adminAnalyticsEventFromRecord(record))
-		}
-
-		if len(out.LastEvaluatedKey) == 0 {
-			return events, nil
-		}
-		exclusiveStartKey = out.LastEvaluatedKey
+		events = append(events, adminAnalyticsEventFromRecord(record))
 	}
+
+	return GetAdminAnalyticsEvents200JSONResponse{
+		Events:     events,
+		NextCursor: encodeAnalyticsCursor(out.LastEvaluatedKey),
+	}, nil
 }
 
 func adminAnalyticsEventFromRecord(record analyticsEventRecord) AdminAnalyticsEvent {
@@ -154,33 +141,59 @@ func optionalString(value string) *string {
 	return &value
 }
 
-func decodeAnalyticsCursor(cursor *string) (int, error) {
+func decodeAnalyticsCursor(cursor *string) (map[string]types.AttributeValue, error) {
 	if cursor == nil || *cursor == "" {
-		return 0, nil
+		return nil, nil
 	}
 
 	decoded, err := base64.RawURLEncoding.DecodeString(*cursor)
 	if err != nil {
-		return 0, fmt.Errorf("decode analytics cursor: %w", err)
+		return nil, fmt.Errorf("decode analytics cursor: %w", err)
 	}
 
-	offset, err := strconv.Atoi(string(decoded))
-	if err != nil {
-		return 0, fmt.Errorf("parse analytics cursor: %w", err)
+	var value analyticsCursor
+	if err := json.Unmarshal(decoded, &value); err != nil {
+		return nil, fmt.Errorf("parse analytics cursor: %w", err)
 	}
-	if offset < 0 {
-		return 0, fmt.Errorf("analytics cursor offset is negative")
+	if value.Id == "" || value.When == "" || value.Feed == "" {
+		return nil, fmt.Errorf("analytics cursor is missing key fields")
 	}
-	return offset, nil
+
+	return map[string]types.AttributeValue{
+		"id":   &types.AttributeValueMemberS{Value: value.Id},
+		"when": &types.AttributeValueMemberS{Value: value.When},
+		"feed": &types.AttributeValueMemberS{Value: value.Feed},
+	}, nil
 }
 
-func encodeAnalyticsCursor(nextOffset int, total int) *string {
-	if nextOffset >= total {
+func encodeAnalyticsCursor(lastEvaluatedKey map[string]types.AttributeValue) *string {
+	if len(lastEvaluatedKey) == 0 {
 		return nil
 	}
 
-	cursor := base64.RawURLEncoding.EncodeToString([]byte(strconv.Itoa(nextOffset)))
+	value := analyticsCursor{
+		Id:   attributeValueString(lastEvaluatedKey["id"]),
+		When: attributeValueString(lastEvaluatedKey["when"]),
+		Feed: attributeValueString(lastEvaluatedKey["feed"]),
+	}
+	if value.Id == "" || value.When == "" || value.Feed == "" {
+		return nil
+	}
+
+	encoded, err := json.Marshal(value)
+	if err != nil {
+		return nil
+	}
+	cursor := base64.RawURLEncoding.EncodeToString(encoded)
 	return &cursor
+}
+
+func attributeValueString(value types.AttributeValue) string {
+	s, ok := value.(*types.AttributeValueMemberS)
+	if !ok {
+		return ""
+	}
+	return s.Value
 }
 
 func analyticsRequestContext(next http.Handler) http.Handler {
