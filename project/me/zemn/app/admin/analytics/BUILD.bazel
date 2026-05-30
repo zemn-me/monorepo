@@ -1,0 +1,40 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "analytics",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    assets = ["style.module.css"],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = [
+        "//:base_defs",  # keep
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/me/zemn/api:ts_client_dts",
+        "//project/me/zemn/components/Link",
+        "//project/me/zemn/hook",
+        "//ts/future/option",
+        "//ts/option",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)

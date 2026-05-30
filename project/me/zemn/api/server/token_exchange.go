@@ -124,6 +124,7 @@ func hardcodedScopesForSubject(subject OIDCSubject) []string {
 	case "thomas", "integration-test-local":
 		return []string{
 			"admin_uid_read",
+			"admin_analytics_read",
 			"admin_users_read",
 			"admin_users_manage",
 			"callbox_settings_read",

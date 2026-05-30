@@ -19,6 +19,7 @@ ts_project(
         "//project/me/zemn/app",
         "//project/me/zemn/app/2026/endings",
         "//project/me/zemn/app/admin",
+        "//project/me/zemn/app/admin/analytics",
         "//project/me/zemn/app/admin/users",
         "//project/me/zemn/app/article",
         "//project/me/zemn/app/article/2014/csp",
@@ -106,7 +107,7 @@ next_itest_service_dev(
 )
 
 alias(
-    name = "zemn.me",
+    name = "zemn",
     actual = ":itest_service_dev_prod_env",
 )
 

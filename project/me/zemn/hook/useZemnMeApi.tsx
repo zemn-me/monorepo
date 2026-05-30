@@ -123,6 +123,35 @@ export function useGetAdminUsers(id_token: string) {
 	});
 }
 
+export function useGetAdminAnalyticsEvents(
+	id_token: string,
+	cursor?: string,
+	limit = 25
+) {
+	const fetchClient = useFetchClient(id_token);
+	const jti = useMemo(() => extractIdTokenJti(id_token), [id_token]);
+	return useQuery({
+		queryKey: ['get', '/admin/analytics/events', jti, cursor, limit],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/admin/analytics/events', {
+				params: {
+					query: {
+						cursor,
+						limit,
+					},
+				},
+			});
+			if (!resp.data) {
+				throw new Error(
+					'/admin/analytics/events returned unexpected payload'
+				);
+			}
+			return resp.data;
+		},
+		enabled: id_token !== '',
+	});
+}
+
 export function useGetMeScopes<L, E>(id_token: Future<string, L, E>) {
 	const fetchClient = useFetchClient(
 		id_token(

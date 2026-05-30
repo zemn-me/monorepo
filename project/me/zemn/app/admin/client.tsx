@@ -501,9 +501,6 @@ export default function Admin() {
 		option_and_then(idToken, id_token => (
 			<>
 				<p>You are logged in.</p>
-				<p>
-					<Link href="/admin/users">Manage users</Link>
-				</p>
 				<DisplayAdminUid id_token={id_token} />
 				<DisplayPhoneNumber id_token={id_token} />
 				<SettingsEditor id_token={id_token} />
