@@ -5,7 +5,7 @@ import { Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
-import { AnalyticsPageBeacon } from '#root/project/me/zemn/app/analytics.js';
+import { AnalyticsPageBeacon } from '#root/project/me/zemn/api/analytics/AnalyticsPageBeacon.js';
 import { Providers } from '#root/project/me/zemn/app/providers.js';
 import { Bio } from '#root/project/me/zemn/bio/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';

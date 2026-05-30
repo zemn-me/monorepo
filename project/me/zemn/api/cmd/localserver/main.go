@@ -64,7 +64,8 @@ func main() {
 	mustSetEnv("CALLBOX_KEY_TABLE_NAME", "table5")
 
 	srv, err := apiserver.NewServer(context.Background(), apiserver.NewServerOptions{
-		LocalStack: true,
+		LocalStack:              true,
+		AllowLocalhostAnalytics: true,
 	})
 	if err != nil {
 		log.Fatalf("failed to create server: %v", err)

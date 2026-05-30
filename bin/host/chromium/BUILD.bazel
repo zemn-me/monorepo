@@ -54,6 +54,8 @@ config_setting(
 alias(
     name = "chromium",
     actual = select({
+        ":darwin_arm64": "@com_googleapis_storage_chromium_mac_arm64//:in_bin",
+        ":darwin_x64": "@com_googleapis_storage_chromium_mac_x64//:in_bin",
         ":linux_x64": "@com_googleapis_storage_chromium_linux_x64//:in_bin",
         "//conditions:default": "@com_googleapis_storage_chromium_linux_x64//:in_bin",
     }),
