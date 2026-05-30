@@ -38,7 +38,7 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.7.0
 	github.com/oapi-codegen/runtime v1.4.1
 	github.com/sergi/go-diff v1.4.0
-	github.com/tdewolff/parse/v2 v2.8.12
+	github.com/tdewolff/parse/v2 v2.8.13
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.9
 	github.com/xeipuuv/gojsonschema v1.2.0
