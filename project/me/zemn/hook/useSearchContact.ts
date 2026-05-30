@@ -2,17 +2,22 @@ import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
 import parsePhoneNumber from 'libphonenumber-js';
 import createFetchClient from 'openapi-fetch';
 
+import { GOOGLE_ISSUER_DOMAIN } from '#root/project/me/zemn/constants/constants.js';
 import { useGoogleAuth } from '#root/project/me/zemn/hook/useGoogleAuth.js';
 import type {
 	components,
 	paths,
 } from '#root/third_party/com/googleapis/people/api_client.gen.js';
-import { future_declare_dependency } from '#root/ts/future/future.js';
+import {
+	future_declare_dependency,
+	future_resolve,
+} from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { PeopleFieldMask } from '#root/ts/google/people/display.js';
 import { Minute } from '#root/ts/time/duration.js';
 
 export type Person = components['schemas']['Person'];
+const googleIssuerDomain = 'https://accounts.google.com';
 
 // google contacts uses an absolutely mad non-spec canonical form
 // for searching contacts (assumedly andriod is NOT using this API).
@@ -38,33 +43,43 @@ export function useSearchContact(
 			'';
 	const [, fut_access_token] = useGoogleAuth([]);
 	const read_mask = [...readMask].join(',');
+	const canSearchGoogleContacts = GOOGLE_ISSUER_DOMAIN === googleIssuerDomain;
 
 	const fut2 = useQueryFuture(
 		useQuery({
-			queryKey: ['contacts-search', normalized_query, read_mask],
+			queryKey: [
+				'contacts-search',
+				GOOGLE_ISSUER_DOMAIN,
+				normalized_query,
+				read_mask,
+			],
 			staleTime: 2 * Minute,
-			queryFn: fut_access_token(
-				token => async () =>
-					createFetchClient<paths>({
-						baseUrl: 'https://people.googleapis.com',
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					})
-						.GET('/v1/people:searchContacts', {
-							params: {
-								query: {
-									query: normalized_query,
-									readMask: read_mask,
+			queryFn: canSearchGoogleContacts
+				? fut_access_token(
+						token => async () =>
+							createFetchClient<paths>({
+								baseUrl: 'https://people.googleapis.com',
+								headers: {
+									Authorization: `Bearer ${token}`,
 								},
-							},
-						})
-						.then(v => v.data?.results ?? []),
-				(() => skipToken) as () => SkipToken,
-				(() => skipToken) as () => SkipToken
-			),
+							})
+								.GET('/v1/people:searchContacts', {
+									params: {
+										query: {
+											query: normalized_query,
+											readMask: read_mask,
+										},
+									},
+								})
+								.then(v => v.data?.results ?? []),
+						(() => skipToken) as () => SkipToken,
+						(() => skipToken) as () => SkipToken
+					)
+				: skipToken,
 		})
 	);
+
+	if (!canSearchGoogleContacts) return future_resolve([]);
 
 	return future_declare_dependency(fut_access_token, fut2);
 }

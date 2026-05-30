@@ -14,6 +14,7 @@ export type SupportedDateInput = Temporal.ZonedDateTime | globalThis.Date;
 export interface DateProps {
 	readonly date: SupportedDateInput;
 	readonly className?: string;
+	readonly time?: boolean;
 }
 
 function isTemporalZonedDateTime(
@@ -49,13 +50,23 @@ function selectLocale(language: string): Intl.Locale {
  */
 function getDateParts(
 	date: Temporal.ZonedDateTime,
-	locale: Intl.Locale
+	locale: Intl.Locale,
+	time: boolean
 ): Intl.DateTimeFormatPart[] {
 	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 	return new Intl.DateTimeFormat(locale as any, {
 		dateStyle: 'full',
+		timeStyle: time ? 'short' : undefined,
 		timeZone: date.timeZoneId,
 	}).formatToParts(zonedDateToDate(date));
+}
+
+function getTimeText(date: Temporal.ZonedDateTime, locale: Intl.Locale): string {
+	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
+	return new Intl.DateTimeFormat(locale as any, {
+		timeStyle: 'short',
+		timeZone: date.timeZoneId,
+	}).format(zonedDateToDate(date));
 }
 
 /**
@@ -65,7 +76,8 @@ function getDateParts(
  */
 function formatEnglish(
 	parts: Intl.DateTimeFormatPart[],
-	language: string
+	language: string,
+	time: string | undefined
 ): ReactElement | undefined {
 	const want = ['weekday', 'day', 'month', 'year'] as const;
 	type Part = (typeof want)[number];
@@ -99,6 +111,7 @@ function formatEnglish(
 		<>
 			{fields.get('weekday')}, the {fields.get('day')}
 			<sup>{suffix}</sup> of {fields.get('month')} {fields.get('year')}
+			{time ? <> at {time}</> : null}
 		</>
 	);
 }
@@ -154,13 +167,17 @@ export const Date = memo(function DateComponent(props: DateProps) {
 	const [language] = useLocale();
 	const locale = selectLocale(language);
 	const zonedDate = normalizeToZonedDateTime(props.date);
-	const parts = getDateParts(zonedDate, locale);
+	const parts = getDateParts(zonedDate, locale, props.time ?? false);
 
 	let content: ReactElement | undefined;
 
 	switch (locale.language) {
 		case 'en':
-			content = formatEnglish(parts, language);
+			content = formatEnglish(
+				parts,
+				language,
+				props.time ? getTimeText(zonedDate, locale) : undefined
+			);
 			break;
 		case 'it':
 			appendItalianOrdinalMarker(parts);
