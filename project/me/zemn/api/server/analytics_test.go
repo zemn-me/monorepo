@@ -59,6 +59,9 @@ func TestPostAnalyticsBeaconStoresEvent(t *testing.T) {
 	if record.When != "2026-03-29T12:34:56Z#evt-123" {
 		t.Fatalf("unexpected sort key: %q", record.When)
 	}
+	if record.Feed != analyticsFeed {
+		t.Fatalf("unexpected analytics feed key: %q", record.Feed)
+	}
 	if record.SourceIp != "" {
 		t.Fatalf("unexpected source ip without request context: %q", record.SourceIp)
 	}

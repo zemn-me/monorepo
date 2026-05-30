@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"sort"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -39,6 +40,73 @@ func (db *inMemoryDDB) DescribeTable(ctx context.Context, params *dynamodb.Descr
 }
 
 func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+	if in.TableName != nil && *in.TableName == "analytics" {
+		feed := ""
+		if v, ok := in.ExpressionAttributeValues[":feed"]; ok {
+			if s, ok := v.(*types.AttributeValueMemberS); ok {
+				feed = s.Value
+			}
+		}
+
+		records := make([]analyticsEventRecord, 0, len(db.analytics))
+		for _, rec := range db.analytics {
+			if feed != "" && rec.Feed != feed {
+				continue
+			}
+			records = append(records, rec)
+		}
+		sort.Slice(records, func(i, j int) bool {
+			if in.ScanIndexForward != nil && *in.ScanIndexForward {
+				return records[i].When < records[j].When
+			}
+			return records[i].When > records[j].When
+		})
+
+		start := 0
+		if len(in.ExclusiveStartKey) > 0 {
+			cursorID := keyTableRecordID(in.ExclusiveStartKey)
+			cursorWhen := keyTableRecordWhen(in.ExclusiveStartKey)
+			for i, rec := range records {
+				if rec.Id == cursorID && rec.When == cursorWhen {
+					start = i + 1
+					break
+				}
+			}
+		}
+
+		limit := len(records)
+		if in.Limit != nil && *in.Limit > 0 && int(*in.Limit) < limit {
+			limit = int(*in.Limit)
+		}
+
+		end := start + limit
+		if end > len(records) {
+			end = len(records)
+		}
+
+		items := make([]map[string]types.AttributeValue, 0, end-start)
+		for _, rec := range records[start:end] {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+
+		var lastEvaluatedKey map[string]types.AttributeValue
+		if end < len(records) && end > start {
+			last := records[end-1]
+			lastEvaluatedKey = map[string]types.AttributeValue{
+				"id":   &types.AttributeValueMemberS{Value: last.Id},
+				"when": &types.AttributeValueMemberS{Value: last.When},
+				"feed": &types.AttributeValueMemberS{Value: last.Feed},
+			}
+		}
+		return &dynamodb.QueryOutput{
+			Items:            items,
+			LastEvaluatedKey: lastEvaluatedKey,
+		}, nil
+	}
 	if in.TableName != nil && *in.TableName == "keys" {
 		if len(db.keyRecords) == 0 {
 			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil

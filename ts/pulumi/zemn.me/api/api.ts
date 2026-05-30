@@ -100,8 +100,20 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						name: 'when',
 						type: 'S',
 					},
+					{
+						name: 'feed',
+						type: 'S',
+					},
 				],
 				billingMode: 'PAY_PER_REQUEST',
+				globalSecondaryIndexes: [
+					{
+						hashKey: 'feed',
+						name: 'feed-when-index',
+						projectionType: 'ALL',
+						rangeKey: 'when',
+					},
+				],
 				hashKey: 'id',
 				rangeKey: 'when',
 			},
@@ -190,6 +202,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 											Resource: [
 												settingsArn,
 												analyticsArn,
+												`${analyticsArn}/index/*`,
 												grievancesArn,
 												usersArn,
 												keyArn,
