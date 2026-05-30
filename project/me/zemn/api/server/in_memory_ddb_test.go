@@ -165,6 +165,50 @@ func (db *inMemoryDDB) DeleteItem(ctx context.Context, in *dynamodb.DeleteItemIn
 }
 
 func (db *inMemoryDDB) Scan(ctx context.Context, in *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+	if in.TableName != nil && *in.TableName == "analytics" {
+		var items []map[string]types.AttributeValue
+		start := 0
+		if len(in.ExclusiveStartKey) > 0 {
+			cursorID := keyTableRecordID(in.ExclusiveStartKey)
+			cursorWhen := keyTableRecordWhen(in.ExclusiveStartKey)
+			for i, rec := range db.analytics {
+				if rec.Id == cursorID && rec.When == cursorWhen {
+					start = i + 1
+					break
+				}
+			}
+		}
+
+		limit := len(db.analytics)
+		if in.Limit != nil && *in.Limit > 0 && int(*in.Limit) < limit {
+			limit = int(*in.Limit)
+		}
+
+		end := start + limit
+		if end > len(db.analytics) {
+			end = len(db.analytics)
+		}
+		for _, rec := range db.analytics[start:end] {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+
+		var lastEvaluatedKey map[string]types.AttributeValue
+		if end < len(db.analytics) && end > start {
+			last := db.analytics[end-1]
+			lastEvaluatedKey = map[string]types.AttributeValue{
+				"id":   &types.AttributeValueMemberS{Value: last.Id},
+				"when": &types.AttributeValueMemberS{Value: last.When},
+			}
+		}
+		return &dynamodb.ScanOutput{
+			Items:            items,
+			LastEvaluatedKey: lastEvaluatedKey,
+		}, nil
+	}
 	if in.TableName != nil && *in.TableName == "grievances" {
 		var items []map[string]types.AttributeValue
 		for _, rec := range db.grievances {
@@ -196,6 +240,14 @@ func keyTableRecordID(item map[string]types.AttributeValue) string {
 		return ""
 	}
 	return id.Value
+}
+
+func keyTableRecordWhen(item map[string]types.AttributeValue) string {
+	when, ok := item["when"].(*types.AttributeValueMemberS)
+	if !ok {
+		return ""
+	}
+	return when.Value
 }
 
 func copyDynamoItem(item map[string]types.AttributeValue) map[string]types.AttributeValue {

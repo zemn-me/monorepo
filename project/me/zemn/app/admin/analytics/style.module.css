@@ -1,0 +1,91 @@
+.page {
+	max-width: 72rem;
+	margin: 0 auto;
+	padding: 2rem 1rem 4rem;
+}
+
+.pageHeader {
+	display: flex;
+	align-items: end;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.pageHeader h1 {
+	margin: 0;
+}
+
+.pageHeader p {
+	margin: 0;
+}
+
+.eventCard {
+	border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+	border-radius: 8px;
+	padding: 1rem;
+	margin: 0 0 1rem;
+	background: color-mix(in srgb, Canvas 96%, currentColor);
+}
+
+.eventHeader {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.eventHeader h2 {
+	margin: 0;
+	font-size: 1.1rem;
+}
+
+.eventHeader p {
+	margin: 0.25rem 0 0;
+}
+
+.eventHeader code,
+.metaGrid code {
+	overflow-wrap: anywhere;
+}
+
+.metaGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: 0.75rem 1rem;
+	margin: 0 0 1rem;
+}
+
+.metaGrid dt {
+	font-size: 0.8rem;
+	font-weight: 700;
+}
+
+.metaGrid dd {
+	margin: 0.2rem 0 0;
+	overflow-wrap: anywhere;
+}
+
+.payload {
+	overflow: auto;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	max-height: 32rem;
+	padding: 1rem;
+	border-radius: 8px;
+	background: color-mix(in srgb, CanvasText 8%, Canvas);
+}
+
+.loadMore {
+	display: grid;
+	place-items: center;
+	min-height: 6rem;
+}
+
+@media (max-width: 44rem) {
+	.pageHeader,
+	.eventHeader {
+		display: block;
+	}
+}

@@ -17,6 +17,11 @@ const navLinks = [
 		requiredScope: 'admin_users_manage',
 	},
 	{
+		href: '/admin/analytics',
+		label: 'Analytics',
+		requiredScope: 'admin_analytics_read',
+	},
+	{
 		href: '/grievanceportal',
 		label: 'Grievance portal',
 		requiredScope: 'grievance_portal',
