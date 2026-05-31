@@ -1,19 +1,28 @@
 # gazelle:ignore
 
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
-exports_files(
-    ["deckgen.py"],
+py_library(
+    name = "deckgen",
+    srcs = ["deckgen.py"],
     visibility = ["//:__subpackages__"],
+    deps = ["@pip//genanki"],
 )
 
-sh_test(
+py_binary(
+    name = "deckgen_bin",
+    srcs = ["deckgen.py"],
+    main = "deckgen.py",
+    visibility = ["//:__subpackages__"],
+    deps = [":deckgen"],
+)
+
+py_test(
     name = "deckgen_test",
-    srcs = ["run_python_test.sh"],
-    data = [
-        "deckgen.py",
-        "deckgen_test.py",
-    ],
+    srcs = ["deckgen_test.py"],
+    main = "deckgen_test.py",
+    deps = [":deckgen"],
 )
 
 bazel_lint(
