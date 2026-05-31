@@ -4,37 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import style from '#root/project/me/zemn/components/Glade/menu.module.css';
 import { InlineLogin } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
-import { useIsLoggedIn } from '#root/project/me/zemn/hook/useIsLoggedIn.js';
 import { useGetMeScopes } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-
-const navLinks = [
-	{ href: '/', label: 'Home' },
-	{ href: '/admin', label: 'Admin', requiredScope: 'admin_users_manage' },
-	{
-		href: '/admin/users',
-		label: 'Users',
-		requiredScope: 'admin_users_manage',
-	},
-	{
-		href: '/admin/analytics',
-		label: 'Analytics',
-		requiredScope: 'admin_analytics_read',
-	},
-	{
-		href: '/grievanceportal',
-		label: 'Grievance portal',
-		requiredScope: 'grievance_portal',
-	},
-	{ href: '/key', label: 'Key', requiredScope: 'callbox_key' },
-];
+import { navSections } from '#root/project/me/zemn/navigation/navigation.js';
 
 export function GladeMenu() {
-	const isLoggedIn = useIsLoggedIn();
 	const [fut_idToken] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
-
-	if (!isLoggedIn) return null;
 
 	const isLinkVisible = (requiredScope?: string) =>
 		requiredScope === undefined ||
@@ -44,8 +20,17 @@ export function GladeMenu() {
 			() => false
 		);
 
+	const visibleSections = navSections
+		.map(section => ({
+			...section,
+			links: section.links.filter(link =>
+				isLinkVisible(link.requiredScope)
+			),
+		}))
+		.filter(section => section.links.length > 0);
+
 	return (
-		<nav aria-label="Logged in navigation" className={style.hamburgerNav}>
+		<nav aria-label="Site navigation" className={style.hamburgerNav}>
 			<details className={style.hamburgerDetails}>
 				<summary
 					aria-label="Open navigation menu"
@@ -59,17 +44,28 @@ export function GladeMenu() {
 					</span>
 				</summary>
 				<div className={style.hamburgerMenu}>
-					{navLinks
-						.filter(link => isLinkVisible(link.requiredScope))
-						.map(link => (
-							<Link
-								className={style.hamburgerLink}
-								href={link.href}
-								key={link.href}
-							>
-								{link.label}
-							</Link>
-						))}
+					{visibleSections.map(section => (
+						<section
+							aria-label={section.label}
+							className={style.hamburgerSection}
+							key={section.label}
+						>
+							<h2 className={style.hamburgerSectionLabel}>
+								{section.label}
+							</h2>
+							<div className={style.hamburgerLinks}>
+								{section.links.map(link => (
+									<Link
+										className={style.hamburgerLink}
+										href={link.href}
+										key={link.href}
+									>
+										{link.label}
+									</Link>
+								))}
+							</div>
+						</section>
+					))}
 					<div className={style.inlineLoginCopy}>
 						<InlineLogin />
 					</div>
