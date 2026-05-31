@@ -5,7 +5,13 @@ export * as config from '#root/ts/next.js/next.config.js';
 type scheme = 'https:' | 'data:' | 'blob:';
 type schemeSource = scheme;
 type hostSource = `${schemeSource}//${string}`;
-type keyword = 'none' | 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';
+type keyword =
+	| 'none'
+	| 'self'
+	| 'unsafe-inline'
+	| 'unsafe-eval'
+	| 'wasm-unsafe-eval'
+	| 'script';
 type keywordSource = `'${keyword}'`;
 export type SourceExpression = schemeSource | hostSource | keywordSource;
 type sourceList = Set<SourceExpression>;
