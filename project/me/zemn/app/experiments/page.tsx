@@ -15,6 +15,8 @@ const pages = {
 		'FPS-style SVG arena with pointer-lock camera controls.',
 	'/experiments/platonics':
 		'Stress test for a dense field of SVG platonic solids.',
+	'/experiments/pitch_training':
+		'Generated Anki decks for pitch recognition practice.',
 	'/experiments/toc': 'Test renderer for table of contents generation.',
 	'/experiments/article': 'Test renderer for MDX.',
 	'/cv': 'CV.',

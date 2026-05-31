@@ -1,0 +1,22 @@
+# gazelle:ignore
+
+load("//bzl:rules.bzl", "bazel_lint")
+
+exports_files(
+    ["deckgen.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+sh_test(
+    name = "deckgen_test",
+    srcs = ["run_python_test.sh"],
+    data = [
+        "deckgen.py",
+        "deckgen_test.py",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
