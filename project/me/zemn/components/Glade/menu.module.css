@@ -69,10 +69,11 @@
 	margin-top: 0.75rem;
 	padding: 0.75rem 1rem;
 	display: grid;
-	gap: 0.5rem;
+	gap: 0;
 	min-width: 0;
-	width: max-content;
-	max-width: calc(100vw - 3rem);
+	width: min(24rem, calc(100vw - 3rem));
+	max-height: min(70vh, calc(100vh - 5rem));
+	overflow-y: auto;
 	position: absolute;
 	right: 0;
 	background: color-mix(in srgb, var(--background-color) 90%, transparent);
@@ -82,16 +83,46 @@
 	box-shadow: 0 0.75rem 2.5rem
 		color-mix(in srgb, var(--foreground-color) 15%, transparent);
 	box-sizing: border-box;
+	scrollbar-gutter: stable;
+}
+
+.hamburgerSection {
+	display: grid;
+	gap: 0.35rem;
+}
+
+.hamburgerSection + .hamburgerSection {
+	margin-top: 0.6rem;
+	padding-top: 0.6rem;
+	border-top: 1px solid
+		color-mix(in srgb, var(--foreground-color) 16%, transparent);
+}
+
+.hamburgerSectionLabel {
+	margin: 0;
+	color: color-mix(in srgb, var(--foreground-color) 72%, transparent);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.hamburgerLinks {
+	display: grid;
+	gap: 0.35rem;
 }
 
 .hamburgerLink {
 	color: inherit;
-	letter-spacing: 0.02em;
+	letter-spacing: 0;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
 }
 
 .inlineLoginCopy {
-	margin-top: 0.25rem;
-	padding-top: 0.5rem;
+	margin-top: 0.6rem;
+	padding-top: 0.6rem;
 	border-top: 1px solid
 		color-mix(in srgb, var(--foreground-color) 20%, transparent);
 	font-size: 0.9rem;
