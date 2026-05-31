@@ -1,34 +1,19 @@
 import { Metadata } from 'next/types';
 
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { experimentLinks } from '#root/project/me/zemn/navigation/navigation.js';
 
-const pages = {
-	'/experiments/emoji/flag': 'Custom Country flag emoji generator.',
-	'/experiments/rays': 'Renderer for ray/halo effects.',
-	'/experiments/factorio': 'Some Factorio experiments.',
-	'/experiments/cultist':
-		'Mostly broken cultist simulator game board from the Covid-19 era.',
-	'/experiments/geometry_of_music':
-		'Notes from reading the book Geometry of Music.',
-	'/experiments/frame': 'Calculator for framing and sizing mattes.',
-	'/experiments/arena':
-		'FPS-style SVG arena with pointer-lock camera controls.',
-	'/experiments/platonics':
-		'Stress test for a dense field of SVG platonic solids.',
-	'/experiments/pitch_training':
-		'Generated Anki decks for pitch recognition practice.',
-	'/experiments/toc': 'Test renderer for table of contents generation.',
-	'/experiments/article': 'Test renderer for MDX.',
-	'/cv': 'CV.',
-};
+const pages = experimentLinks.filter(link => link.href !== '/experiments');
 
 export function ExperimentsNav() {
 	return (
 		<nav>
 			<ul>
-				{Object.entries(pages).map(([path, description]) => (
-					<li key={path}>
-						<Link href={path}>{description}</Link>
+				{pages.map(link => (
+					<li key={link.href}>
+						<Link href={link.href}>
+							{link.description ?? link.label}
+						</Link>
 					</li>
 				))}
 			</ul>

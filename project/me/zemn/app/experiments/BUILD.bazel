@@ -24,6 +24,7 @@ ts_project(
         "//:node_modules/react-dom",
         "//project/me/zemn/app",
         "//project/me/zemn/components/Link",
+        "//project/me/zemn/navigation",
         "//ts/next.js/types/next-compiled",
     ],
 )
