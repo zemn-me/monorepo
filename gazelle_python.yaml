@@ -27,9 +27,11 @@ manifest:
     brotli: brotli
     bs4: beautifulsoup4
     build: build
+    cached_property: cached_property
     certifi: certifi
     cffi: cffi
     charset_normalizer: charset_normalizer
+    chevron: chevron
     click: click
     colorama: colorama
     comm: comm
@@ -45,6 +47,8 @@ manifest:
     fqdn: fqdn
     frida: frida
     frida_tools: frida_tools
+    frozendict: frozendict
+    genanki: genanki
     h11: h11
     h2: h2
     hpack: hpack
@@ -169,4 +173,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 539cff5bcda9fa3b6090f65e242023e99291a215c82a86f2a9a318e0cfd996a5
+integrity: 5d15cb87df83b834f96f7aeba2c6f4118c8adaec0803f42b9b091b18aae1753a
