@@ -3,19 +3,19 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
 import random
-import shutil
-import sqlite3
 import struct
 import tempfile
 import wave
-import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
+
+import genanki
 
 
 AnswerMode = Literal["pitch-class", "pitch-with-octave"]
@@ -37,6 +37,7 @@ ENHARMONIC_NAMES = {
     11: ("B", "Cb"),
 }
 CREATED_SECONDS = 1760000000
+MODEL_ID = 1760000000002
 
 
 @dataclass(frozen=True)
@@ -178,243 +179,84 @@ def write_wav(path: Path, pitch: Pitch, spec: DeckSpec) -> None:
             wav.writeframesraw(struct.pack("<h", int(sample * envelope * amplitude * 32767)))
 
 
-def anki_id(base: int, index: int) -> int:
-    return base + index
-
-
 def guid(index: int) -> str:
     alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     rng = random.Random(index)
     return "".join(rng.choice(alphabet) for _ in range(10))
 
 
-def create_collection(path: Path, spec: DeckSpec, media_names: list[str]) -> None:
-    created_seconds = CREATED_SECONDS
-    created_ms = created_seconds * 1000
-    deck_id = 1760000000001
-    model_id = 1760000000002
-    connection = sqlite3.connect(path)
-    try:
-        connection.executescript(
-            """
-            create table col (
-                id integer primary key,
-                crt integer not null,
-                mod integer not null,
-                scm integer not null,
-                ver integer not null,
-                dty integer not null,
-                usn integer not null,
-                ls integer not null,
-                conf text not null,
-                models text not null,
-                decks text not null,
-                dconf text not null,
-                tags text not null
-            );
-            create table notes (
-                id integer primary key,
-                guid text not null,
-                mid integer not null,
-                mod integer not null,
-                usn integer not null,
-                tags text not null,
-                flds text not null,
-                sfld integer not null,
-                csum integer not null,
-                flags integer not null,
-                data text not null
-            );
-            create table cards (
-                id integer primary key,
-                nid integer not null,
-                did integer not null,
-                ord integer not null,
-                mod integer not null,
-                usn integer not null,
-                type integer not null,
-                queue integer not null,
-                due integer not null,
-                ivl integer not null,
-                factor integer not null,
-                reps integer not null,
-                lapses integer not null,
-                left integer not null,
-                odue integer not null,
-                odid integer not null,
-                flags integer not null,
-                data text not null
-            );
-            create table revlog (
-                id integer primary key,
-                cid integer not null,
-                usn integer not null,
-                ease integer not null,
-                ivl integer not null,
-                lastIvl integer not null,
-                factor integer not null,
-                time integer not null,
-                type integer not null
-            );
-            create index ix_notes_usn on notes (usn);
-            create index ix_cards_usn on cards (usn);
-            create index ix_revlog_usn on revlog (usn);
-            """
+def stable_id(namespace: str, offset: int = 0) -> int:
+    digest = hashlib.sha256(namespace.encode()).digest()
+    return int.from_bytes(digest[:6], "big") + offset
+
+
+def make_model() -> genanki.Model:
+    return genanki.Model(
+        MODEL_ID,
+        "Pitch Audio",
+        fields=[
+            {"name": "Audio"},
+            {"name": "Answer"},
+            {"name": "Midi"},
+        ],
+        templates=[
+            {
+                "name": "Recognition",
+                "qfmt": "<div class=prompt>{{Audio}}</div>",
+                "afmt": "{{FrontSide}}<hr id=answer><div class=answer>{{Answer}}</div>",
+            }
+        ],
+        css=".card{font-family:-apple-system,system-ui,sans-serif;font-size:28px;text-align:center;color:#172026;background:#f8fafc}.answer{font-weight:700}",
+        latex_pre="",
+        latex_post="",
+        sort_field_index=2,
+    )
+
+
+def note_guid(spec: DeckSpec, pitch: Pitch) -> str:
+    return guid(stable_id(f"{spec.deck_name}:{pitch.midi}"))
+
+
+def build_anki_deck(spec: DeckSpec, media_paths: list[Path]) -> genanki.Deck:
+    deck = genanki.Deck(stable_id(spec.deck_name), spec.deck_name, spec.description)
+    model = make_model()
+
+    for index, media_path in enumerate(media_paths):
+        pitch = midi_to_pitch(spec.lowest_midi + index)
+        deck.add_note(
+            genanki.Note(
+                model=model,
+                fields=[
+                    f"[sound:{media_path.name}]",
+                    answer_for_pitch(pitch, spec.answer_mode),
+                    str(pitch.midi),
+                ],
+                guid=note_guid(spec, pitch),
+                due=index + 1,
+            )
         )
 
-        model = {
-            str(model_id): {
-                "id": model_id,
-                "name": "Pitch Audio",
-                "type": 0,
-                "mod": created_seconds,
-                "usn": -1,
-                "sortf": 1,
-                "did": deck_id,
-                "tmpls": [
-                    {
-                        "name": "Recognition",
-                        "ord": 0,
-                        "qfmt": "<div class=prompt>{{Audio}}</div>",
-                        "afmt": "{{FrontSide}}<hr id=answer><div class=answer>{{Answer}}</div>",
-                    }
-                ],
-                "flds": [
-                    {"name": "Audio", "ord": 0, "sticky": False, "rtl": False},
-                    {"name": "Answer", "ord": 1, "sticky": False, "rtl": False},
-                    {"name": "Midi", "ord": 2, "sticky": False, "rtl": False},
-                ],
-                "css": ".card{font-family:-apple-system,system-ui,sans-serif;font-size:28px;text-align:center;color:#172026;background:#f8fafc}.answer{font-weight:700}",
-                "latexPre": "",
-                "latexPost": "",
-                "req": [[0, "all", [0, 1]]],
-            }
-        }
-        decks = {
-            str(deck_id): {
-                "id": deck_id,
-                "name": spec.deck_name,
-                "desc": spec.description,
-                "mod": created_seconds,
-                "usn": -1,
-                "dyn": 0,
-                "conf": 1,
-                "extendNew": 0,
-                "extendRev": 0,
-            }
-        }
-        dconf = {
-            "1": {
-                "id": 1,
-                "name": "Default",
-                "replayq": True,
-                "new": {"perDay": 20, "delays": [1.0, 10.0], "ints": [1, 4, 7]},
-                "rev": {"perDay": 200, "ease4": 1.3, "maxIvl": 36500},
-                "lapse": {"delays": [10.0], "mult": 0.0, "minInt": 1},
-            }
-        }
-        conf = {
-            "nextPos": 1,
-            "estTimes": True,
-            "activeDecks": [deck_id],
-            "curDeck": deck_id,
-            "newSpread": 0,
-        }
-        connection.execute(
-            "insert into col values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (
-                1,
-                created_seconds // 86400,
-                created_seconds,
-                created_ms,
-                11,
-                0,
-                -1,
-                0,
-                json.dumps(conf),
-                json.dumps(model),
-                json.dumps(decks),
-                json.dumps(dconf),
-                json.dumps({}),
-            ),
-        )
-
-        for index, media_name in enumerate(media_names):
-            pitch = midi_to_pitch(spec.lowest_midi + index)
-            note_id = anki_id(created_ms, index + 1)
-            card_id = anki_id(created_ms, index + 10_001)
-            answer = answer_for_pitch(pitch, spec.answer_mode)
-            fields = "\x1f".join((f"[sound:{media_name}]", answer, str(pitch.midi)))
-            connection.execute(
-                "insert into notes values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    note_id,
-                    guid(note_id),
-                    model_id,
-                    created_seconds,
-                    -1,
-                    "",
-                    fields,
-                    pitch.midi,
-                    pitch.midi,
-                    0,
-                    "",
-                ),
-            )
-            connection.execute(
-                "insert into cards values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    card_id,
-                    note_id,
-                    deck_id,
-                    0,
-                    created_seconds,
-                    -1,
-                    0,
-                    0,
-                    index + 1,
-                    0,
-                    2500,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    "",
-                ),
-            )
-
-        connection.commit()
-    finally:
-        connection.close()
+    return deck
 
 
 def build_deck(spec: DeckSpec, output: Path) -> None:
     with tempfile.TemporaryDirectory() as temp_name:
         temp = Path(temp_name)
-        media_names: list[str] = []
-        media_map: dict[str, str] = {}
+        media_paths: list[Path] = []
 
-        for index, midi in enumerate(range(spec.lowest_midi, spec.highest_midi + 1)):
+        for midi in range(spec.lowest_midi, spec.highest_midi + 1):
             pitch = midi_to_pitch(midi)
             media_name = f"pitch_{pitch.file_stem}_midi_{pitch.midi}.wav"
-            write_wav(temp / str(index), pitch, spec)
-            media_names.append(media_name)
-            media_map[str(index)] = media_name
-
-        collection = temp / "collection.anki2"
-        create_collection(collection, spec, media_names)
-        (temp / "media").write_text(json.dumps(media_map, sort_keys=True))
+            media_path = temp / media_name
+            write_wav(media_path, pitch, spec)
+            media_paths.append(media_path)
 
         output.parent.mkdir(parents=True, exist_ok=True)
         tmp_output = output.with_suffix(output.suffix + ".tmp")
-        with zipfile.ZipFile(tmp_output, "w", compression=zipfile.ZIP_STORED) as archive:
-            archive.write(collection, "collection.anki2")
-            archive.write(temp / "media", "media")
-            for index in range(len(media_names)):
-                archive.write(temp / str(index), str(index))
-        shutil.move(tmp_output, output)
+        deck = build_anki_deck(spec, media_paths)
+        package = genanki.Package(deck, media_files=[str(path) for path in media_paths])
+        package.write_to_file(tmp_output, timestamp=CREATED_SECONDS)
+        os.replace(tmp_output, output)
 
 
 def main() -> None:

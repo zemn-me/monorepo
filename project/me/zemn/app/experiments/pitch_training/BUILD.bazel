@@ -6,20 +6,20 @@ genrule(
     name = "pitch_classes_apkg",
     srcs = [
         "deck_pitch_classes.json",
-        "//py/anki:deckgen.py",
     ],
     outs = ["pitch_classes.apkg"],
-    cmd = "python3 $(location //py/anki:deckgen.py) --spec $(location deck_pitch_classes.json) --out $@",
+    cmd = "$(execpath //py/anki:deckgen_bin) --spec $(location deck_pitch_classes.json) --out $@",
+    tools = ["//py/anki:deckgen_bin"],
 )
 
 genrule(
     name = "piano_keys_apkg",
     srcs = [
         "deck_piano_keys.json",
-        "//py/anki:deckgen.py",
     ],
     outs = ["piano_keys.apkg"],
-    cmd = "python3 $(location //py/anki:deckgen.py) --spec $(location deck_piano_keys.json) --out $@",
+    cmd = "$(execpath //py/anki:deckgen_bin) --spec $(location deck_piano_keys.json) --out $@",
+    tools = ["//py/anki:deckgen_bin"],
 )
 
 hashed_public_assets(
