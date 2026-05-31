@@ -6,7 +6,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-from deckgen import DeckSpec, answer_for_pitch, build_deck, midi_to_pitch
+from py.anki.deckgen import DeckSpec, answer_for_pitch, build_deck, midi_to_pitch
 
 
 def test_answer_modes() -> None:
