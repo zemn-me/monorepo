@@ -29,6 +29,10 @@ const lora = Lora({
 
 const csp = {
 	...DefaultContentSecurityPolicy,
+	'script-src': new Set<SourceExpression>([
+		...DefaultContentSecurityPolicy['script-src']!,
+		"'wasm-unsafe-eval'",
+	]),
 	'connect-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['connect-src']!,
 		'https://accounts.google.com',
