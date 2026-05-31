@@ -131,6 +131,14 @@ copy_to_bin(
 
 npm_link_all_packages(name = "node_modules")
 
+genrule(
+    name = "sqljs_wasm",
+    srcs = ["//:node_modules/sql.js"],
+    outs = ["sql-wasm.wasm"],
+    cmd = "for package in $(locations //:node_modules/sql.js); do if [ -f $$package/dist/sql-wasm.wasm ]; then cp $$package/dist/sql-wasm.wasm $@; exit 0; fi; done; exit 1",
+    visibility = ["//visibility:public"],
+)
+
 go_version_sync(
     name = "go_version_sync",
 )

@@ -2,7 +2,7 @@ import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.
 
 export * as config from '#root/ts/next.js/next.config.js';
 
-type scheme = 'https:' | 'data:';
+type scheme = 'https:' | 'data:' | 'blob:';
 type schemeSource = scheme;
 type hostSource = `${schemeSource}//${string}`;
 type keyword = 'none' | 'self' | 'unsafe-inline' | 'unsafe-eval' | 'script';

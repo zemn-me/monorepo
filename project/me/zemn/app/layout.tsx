@@ -41,6 +41,11 @@ const csp = {
 		...DefaultContentSecurityPolicy['img-src']!,
 		'https://*.googleusercontent.com',
 	]),
+	'media-src': new Set<SourceExpression>([
+		...(DefaultContentSecurityPolicy['media-src'] ?? []),
+		"'self'",
+		'blob:',
+	]),
 };
 
 export function RootLayout({ children }: Props) {
