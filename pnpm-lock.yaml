@@ -433,8 +433,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.202.0
-    version: 43.202.0(typanion@3.14.0)
+    specifier: 43.202.1
+    version: 43.202.1(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -13788,8 +13788,8 @@ packages:
       '@types/node': 24.12.4
       long: 5.3.2
 
-  /protobufjs@8.4.1:
-    resolution: {integrity: sha512-oXf2UgIty8jnwfN4yvL1x79VLhL5uiKjZJbSGXGCIUmHmItTP4eS/UIlWDCeNx3seg+ujfn9vDlPMSrsh7wO+Q==}
+  /protobufjs@8.4.2:
+    resolution: {integrity: sha512-64rfNzkWOZAIazXzpBFPWq6F9up6gMvTzjE2oWIzApx2N/dqVUEE7+bCn2+40780dFVtKOUab8QfxJ6KJDWbqA==}
     engines: {node: '>=12.0.0'}
     dependencies:
       long: 5.3.2
@@ -14436,8 +14436,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.202.0(typanion@3.14.0):
-    resolution: {integrity: sha512-AwKGz6V7TrDMCayfhqO0e6udinW/4rqNszSFogUJiiZKRNXkzDASEZzt2dno+mgBkr7Ou0bxdHmVHnLKoXZ9lw==}
+  /renovate@43.202.1(typanion@3.14.0):
+    resolution: {integrity: sha512-rMYeXyvxCFqWOJbpR5qH2vJqfLTGudEieIvsVUHoK7a68TgyM2qABaMlTaUjS8wL38KKBDslEV4+0s5EkGlpKw==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
@@ -14535,7 +14535,7 @@ packages:
       p-throttle: 8.1.0
       parse-link-header: 2.0.0
       prettier: 3.8.1
-      protobufjs: 8.4.1
+      protobufjs: 8.4.2
       punycode: 2.3.1
       remark: 15.0.1
       remark-gfm: 4.0.1
