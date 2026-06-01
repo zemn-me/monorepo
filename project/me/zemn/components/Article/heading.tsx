@@ -1,5 +1,5 @@
 'use client';
-import { useContext } from 'react';
+import { Children, isValidElement, ReactNode, useContext, useId } from 'react';
 import { createPortal } from 'react-dom';
 
 import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context.js';
@@ -10,20 +10,60 @@ export interface HeadingProps extends BaseHeadingProps {
 	readonly level: 1 | 2 | 3 | 4 | 5;
 }
 
-export function Heading({ level, children, ...props }: HeadingProps) {
+function nodeText(node: ReactNode): string {
+	return Children.toArray(node)
+		.map(child => {
+			if (typeof child === 'string' || typeof child === 'number') {
+				return String(child);
+			}
+
+			if (
+				isValidElement<{ readonly children?: ReactNode }>(child) &&
+				child.props.children != null
+			) {
+				return nodeText(child.props.children);
+			}
+
+			return '';
+		})
+		.join(' ');
+}
+
+function idPart(value: string): string {
+	return value
+		.normalize('NFKD')
+		.toLowerCase()
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
+
+export function Heading({ level, children, id, ...props }: HeadingProps) {
 	const portal = useContext(tocSegment);
+	const reactId = useId();
+	const fallbackId = idPart(reactId) || 'heading';
+	const headingId =
+		id ?? `${idPart(nodeText(children)) || 'heading'}-${fallbackId}`;
+	const href = `#${encodeURIComponent(headingId)}`;
 
 	const element = {
-		1: <h1 {...{ children, ...props }} />,
-		2: <h2 {...{ children, ...props }} />,
-		3: <h3 {...{ children, ...props }} />,
-		4: <h4 {...{ children, ...props }} />,
-		5: <h5 {...{ children, ...props }} />,
+		1: <h1 {...{ children, id: headingId, ...props }} />,
+		2: <h2 {...{ children, id: headingId, ...props }} />,
+		3: <h3 {...{ children, id: headingId, ...props }} />,
+		4: <h4 {...{ children, id: headingId, ...props }} />,
+		5: <h5 {...{ children, id: headingId, ...props }} />,
 	}[level];
 	return (
 		<>
 			{element}
-			{portal !== null ? createPortal(<li>{children}</li>, portal) : null}
+			{portal !== null
+				? createPortal(
+						<li data-toc-heading-level={level}>
+							<a href={href}>{children}</a>
+						</li>,
+						portal
+					)
+				: null}
 		</>
 	);
 }

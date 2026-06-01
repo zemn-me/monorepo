@@ -9,6 +9,10 @@
 	grid-column: 1 / -1;
 }
 
+.container article {
+	counter-reset: article-paragraph;
+}
+
 /*
 	the article grid, and
 	elements which inherit
@@ -55,4 +59,118 @@
 
 .container li {
 	list-style: none;
+}
+
+.container article > time {
+	margin-block-end: 1.5rem;
+}
+
+.container nav ul,
+.container nav ol {
+	list-style: none;
+	margin: 0;
+	padding-inline-start: 0;
+	row-gap: 0.25em;
+}
+
+.container nav ul {
+	counter-reset: toc-h1 toc-h2 toc-h3 toc-h4 toc-h5;
+}
+
+.container nav li {
+	font-variant-numeric: tabular-nums;
+}
+
+.container nav li[data-toc-heading-level="1"] {
+	counter-increment: toc-h1;
+	counter-reset: toc-h2 toc-h3 toc-h4 toc-h5;
+}
+
+.container nav li[data-toc-heading-level="2"] {
+	counter-increment: toc-h2;
+	counter-reset: toc-h3 toc-h4 toc-h5;
+}
+
+.container nav li[data-toc-heading-level="3"] {
+	counter-increment: toc-h3;
+	counter-reset: toc-h4 toc-h5;
+}
+
+.container nav li[data-toc-heading-level="4"] {
+	counter-increment: toc-h4;
+	counter-reset: toc-h5;
+}
+
+.container nav li[data-toc-heading-level="5"] {
+	counter-increment: toc-h5;
+}
+
+.container nav li[data-toc-heading-level="2"] {
+	padding-inline-start: 0.8rem;
+}
+
+.container nav li[data-toc-heading-level="3"] {
+	padding-inline-start: 1.6rem;
+}
+
+.container nav li[data-toc-heading-level="4"] {
+	padding-inline-start: 2.4rem;
+}
+
+.container nav li[data-toc-heading-level="5"] {
+	padding-inline-start: 3.2rem;
+}
+
+.container nav a {
+	color: currentColor;
+	text-decoration-color: var(--link-color);
+}
+
+.container nav a::before {
+	margin-inline-end: 0.35rem;
+	opacity: 0.6;
+}
+
+.container nav li[data-toc-heading-level="1"] > a::before {
+	content: counter(toc-h1, upper-roman) ".";
+}
+
+.container nav li[data-toc-heading-level="2"] > a::before {
+	content: counter(toc-h2) ".";
+}
+
+.container nav li[data-toc-heading-level="3"] > a::before {
+	content: counter(toc-h2) "." counter(toc-h3) ".";
+}
+
+.container nav li[data-toc-heading-level="4"] > a::before {
+	content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) ".";
+}
+
+.container nav li[data-toc-heading-level="5"] > a::before {
+	content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "."
+		counter(toc-h5) ".";
+}
+
+.container article p {
+	counter-increment: article-paragraph;
+	position: relative;
+}
+
+.container article p::before {
+	color: currentColor;
+	content: counter(article-paragraph);
+	font-size: 0.625rem;
+	font-variant-numeric: tabular-nums;
+	font-weight: 700;
+	inline-size: 1.1rem;
+	inset-block-start: 0.35em;
+	inset-inline-end: calc(100% + 0.45rem);
+	line-height: 1;
+	opacity: 0.45;
+	pointer-events: none;
+	position: absolute;
+	text-align: end;
+	user-select: none;
+	white-space: nowrap;
 }
