@@ -404,26 +404,19 @@ export function EggDogYardClient() {
 					/>
 				))}
 				{sprites.map(sprite => (
-					<foreignObject
-						height={sprite.size}
+					<text
+						aria-hidden="true"
+						dominantBaseline="central"
+						fontFamily="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif"
+						fontSize={sprite.size}
 						key={sprite.id}
-						width={sprite.size}
-						x={x(sprite.projected) - sprite.size / 2}
-						y={y(sprite.projected) - sprite.size}
+						pointerEvents="none"
+						textAnchor="middle"
+						x={x(sprite.projected)}
+						y={y(sprite.projected) - sprite.size / 2}
 					>
-						<div
-							style={{
-								alignItems: 'center',
-								display: 'flex',
-								fontSize: `${sprite.size}px`,
-								height: '100%',
-								justifyContent: 'center',
-								width: '100%',
-							}}
-						>
-							{sprite.emoji}
-						</div>
-					</foreignObject>
+						{sprite.emoji}
+					</text>
 				))}
 				<line
 					stroke="#3b3326"
