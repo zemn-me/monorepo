@@ -8,8 +8,8 @@ onlyBuiltDependencies: []
 
 dependencies:
   '@commander-js/extra-typings':
-    specifier: 14.0.0
-    version: 14.0.0(commander@14.0.3)
+    specifier: 15.0.0
+    version: 15.0.0(commander@14.0.3)
   '@hookform/resolvers':
     specifier: 5.4.0
     version: 5.4.0(react-hook-form@7.76.1)
@@ -1965,10 +1965,10 @@ packages:
     dev: false
     optional: true
 
-  /@commander-js/extra-typings@14.0.0(commander@14.0.3):
-    resolution: {integrity: sha512-hIn0ncNaJRLkZrxBIp5AsW/eXEHNKYQBh0aPdoUqNgD+Io3NIykQqpKFyKcuasZhicGaEZJX/JBSIkZ4e5x8Dg==}
+  /@commander-js/extra-typings@15.0.0(commander@14.0.3):
+    resolution: {integrity: sha512-yeJlba62xqmkgELUsn7356MEnzLLu/fw2x4lofFqGnXh6YysRdEs2BaLeLtg1+KU0AXvMeqQvTTp+3hBEBK+EA==}
     peerDependencies:
-      commander: ~14.0.0
+      commander: ~15.0.0
     dependencies:
       commander: 14.0.3
     dev: false
