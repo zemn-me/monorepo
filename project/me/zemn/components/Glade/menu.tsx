@@ -1,5 +1,6 @@
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef } from 'react';
 
 import style from '#root/project/me/zemn/components/Glade/menu.module.css';
 import { InlineLogin } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
@@ -9,8 +10,25 @@ import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import { navSections } from '#root/project/me/zemn/navigation/navigation.js';
 
 export function GladeMenu() {
+	const detailsRef = useRef<HTMLDetailsElement | null>(null);
 	const [fut_idToken] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
+
+	useEffect(() => {
+		const onPointerDown = (event: PointerEvent) => {
+			const details = detailsRef.current;
+			if (!(event.target instanceof Node) || !details?.open) {
+				return;
+			}
+
+			if (!details.contains(event.target)) {
+				details.open = false;
+			}
+		};
+
+		document.addEventListener('pointerdown', onPointerDown);
+		return () => document.removeEventListener('pointerdown', onPointerDown);
+	}, []);
 
 	const isLinkVisible = (requiredScope?: string) =>
 		requiredScope === undefined ||
@@ -31,7 +49,7 @@ export function GladeMenu() {
 
 	return (
 		<nav aria-label="Site navigation" className={style.hamburgerNav}>
-			<details className={style.hamburgerDetails}>
+			<details className={style.hamburgerDetails} ref={detailsRef}>
 				<summary
 					aria-label="Open navigation menu"
 					className={style.hamburgerButton}
