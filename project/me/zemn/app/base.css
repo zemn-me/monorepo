@@ -71,6 +71,15 @@ button {
 	field-sizing: content;
 }
 
+code,
+kbd,
+pre,
+samp {
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+	font-weight: 300;
+	font-size: 0.95em;
+}
+
 input[type="text"] {
 	display: inline;
 	padding: 0;

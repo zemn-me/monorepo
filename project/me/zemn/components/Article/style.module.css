@@ -5,6 +5,11 @@
 	complex child elements which break
 */
 
+.container {
+	--article-grid-template: 1.75em repeat(12, minmax(0, 4em)) 1.75em;
+	--article-quote-indent: 1.25em;
+}
+
 .container li {
 	grid-column: 1 / -1;
 }
@@ -29,7 +34,10 @@
 .container :is(article, blockquote, section, ol, ul, nav) {
 	grid-column: 1 / -1;
 	display: grid;
-	grid-template-columns: 1.25em repeat(12, minmax(0, 4em)) 1.25em;
+	grid-template-columns: var(
+		--article-grid-template,
+		1.75em repeat(12, minmax(0, 4em)) 1.75em
+	);
 }
 
 /*
@@ -40,10 +48,23 @@
 	grid-column: 2 / span 12;
 }
 
+.container article > :is(blockquote, section) {
+	grid-column: 1 / -1;
+}
+
+.container blockquote {
+	font-style: italic;
+	margin: 0;
+}
+
+.container blockquote > * {
+	padding-inline-start: var(--article-quote-indent, 1.25em);
+}
+
 /*
 	block level elements
 */
-.container :is(p, h1, h2, h3, h4, h5, h6, time, hr, table, code) {
+.container :is(p, h1, h2, h3, h4, h5, h6, time, hr, table, pre, code) {
 	grid-column: 2 / span 12;
 }
 
