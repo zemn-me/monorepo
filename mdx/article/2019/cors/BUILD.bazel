@@ -1,5 +1,19 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//mdx:rules.bzl", "mdx_files")
+load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
+
+hashed_public_assets(
+    name = "content_addressed",
+    outs = ["sources.js"],
+    assets = {
+        ":cors_request_flow_on_the_web.png": "corsRequestFlowOnTheWeb",
+        ":no_gods_no_masters.png": "noGodsNoMasters",
+        ":non_cors_request_flow.png": "nonCorsRequestFlow",
+        ":web_origin_concept.png": "webOriginConcept",
+        ":world_before_cors.jpg": "worldBeforeCors",
+    },
+    public_dir = "sha256",
+)
 
 mdx_files(
     name = "cors",
@@ -7,17 +21,8 @@ mdx_files(
         ["**/*.mdx"],
         allow_empty = True,
     ),
-    assets = glob(
-        [
-            "**/*.jpg",
-            "**/*.png",
-        ],
-        allow_empty = True,
-    ),
+    assets = [":content_addressed_generated"],
     visibility = ["//:__subpackages__"],
-    deps = [
-        "//:node_modules/next",
-    ],
 )
 
 bazel_lint(
