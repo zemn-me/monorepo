@@ -1,7 +1,7 @@
 import 'project/me/zemn/app/base.css';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Lora } from 'next/font/google';
+import { IBM_Plex_Mono, Lora } from 'next/font/google';
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
@@ -23,6 +23,13 @@ export interface Props {
 const lora = Lora({
 	weight: ['400', '700'],
 	style: ['italic', 'normal'],
+	subsets: ['latin', 'latin-ext'],
+	display: 'swap',
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+	weight: '300',
+	style: 'normal',
 	subsets: ['latin', 'latin-ext'],
 	display: 'swap',
 });
@@ -56,7 +63,7 @@ export function RootLayout({ children }: Props) {
 	return (
 		<>
 			<Providers>
-				<html>
+				<html className={ibmPlexMono.className}>
 					<head>
 						<link
 							href="/icon.svg"
