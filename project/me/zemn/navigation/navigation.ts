@@ -20,6 +20,7 @@ export const pageLinks: readonly NavigationLink[] = [
 	{ href: '/', label: 'Home' },
 	{ href: '/cv', label: 'CV' },
 	{ href: '/article', label: 'Articles' },
+	{ href: '/availability', label: 'Availability' },
 	{ href: '/tool/elastictabs', label: 'Elastic Tabstops' },
 	{ href: '/2026/endings', label: 'Endings' },
 	{ href: '/src', label: 'Source' },
