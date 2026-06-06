@@ -6,8 +6,28 @@
 */
 
 .container {
-	--article-grid-template: 1.75em repeat(12, minmax(0, 4em)) 1.75em;
+	--article-grid-template: 1.75em repeat(12, minmax(0, 3em)) 1.75em;
 	--article-quote-indent: 1.25em;
+}
+
+@media print {
+	.container[data-article-layout="letter"] {
+		font-size: 10pt;
+	}
+}
+
+.container address[data-from],
+.container address[data-to] {
+	display: block;
+	white-space: pre-line;
+}
+
+.container address[data-from] {
+	text-align: right;
+}
+
+.container [data-letter-salutation] {
+	margin-block: 2em 1em;
 }
 
 .container li {
@@ -34,10 +54,11 @@
 .container :is(article, blockquote, section, ol, ul, nav) {
 	grid-column: 1 / -1;
 	display: grid;
+	justify-content: center;
 	grid-template-columns: var(
-		--article-grid-template,
-		1.75em repeat(12, minmax(0, 4em)) 1.75em
-	);
+			--article-grid-template,
+			1.75em repeat(12, minmax(0, 4em)) 1.75em
+		);
 }
 
 /*

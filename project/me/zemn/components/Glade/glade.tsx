@@ -78,7 +78,7 @@ export default function Glade(props: GladeProps) {
 					className={style.copyright}
 					lang={bio.Bio.who.fullName.language}
 				>
-					© {bio.Bio.who.fullName.text} <br /> {repoFirstCommitYear} —{' '}
+					© TNJS <br /> {repoFirstCommitYear} —{' '}
 					{new Date().getFullYear()} <br />
 					<InlineLogin />
 				</small>
