@@ -135,7 +135,7 @@ bazel_dep(name = "rules_go", version = "0.60.0", repo_name = "io_bazel_rules_go"
 bazel_dep(name = "gazelle", version = "0.47.0", repo_name = "bazel_gazelle")
 
 # Synced from go.mod by //:go_version_sync.
-GO_VERSION = "1.26.3"
+GO_VERSION = "1.26.4"
 
 go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.download(version = GO_VERSION)
@@ -405,12 +405,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "8bd8a9f435bfdf110625cd91a5b4b22ecd5d06d8"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "21b37190e6beb70bddf55ff54b92b4c1bbeae6d6"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "42cd1366ef1e5ae55574bd898ebc10bc2bb3e3ce14b234128218123b54e03b61",
+    sha256 = "3dda3c0be3443ba5e24152b961f8c15485749e04b449db02a2d93e8dd12f2725",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",

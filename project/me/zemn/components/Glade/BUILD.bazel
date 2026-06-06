@@ -47,13 +47,17 @@ filegroup(
         "glade.tsx",
         "glade_test.tsx",
         "menu.tsx",
+        "menu_test.tsx",
     ],
     visibility = ["//:__subpackages__"],
 )
 
 ts_project(
     name = "Glade_tests",
-    srcs = ["glade_test.tsx"],
+    srcs = [
+        "glade_test.tsx",
+        "menu_test.tsx",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":Glade",
@@ -68,7 +72,10 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["glade_test.js"],
+    srcs = [
+        "glade_test.js",
+        "menu_test.js",
+    ],
     jsdom = True,
     visibility = ["//:__subpackages__"],
     deps = [":Glade_tests"],

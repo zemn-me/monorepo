@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, ReactElement } from 'react';
+import { Fragment, memo, ReactElement } from 'react';
 import { Temporal } from 'temporal-polyfill';
 
 import { isDefined } from '#root/ts/guard.js';
@@ -69,13 +69,40 @@ function getTimeText(date: Temporal.ZonedDateTime, locale: Intl.Locale): string 
 	}).format(zonedDateToDate(date));
 }
 
+function englishOrdinalSuffix(day: number, language: string): string {
+	const rule = new Intl.PluralRules(language, { type: 'ordinal' }).select(day);
+	return {
+		one: 'st',
+		two: 'nd',
+		few: 'rd',
+		other: 'th',
+		zero: '',
+		many: '',
+	}[rule];
+}
+
+function OrdinalDay({
+	day,
+	language,
+}: {
+	readonly day: string;
+	readonly language: string;
+}) {
+	return (
+		<>
+			{day}
+			<sup>{englishOrdinalSuffix(+day, language)}</sup>
+		</>
+	);
+}
+
 /**
  * Build an English date in the form:
  *   Friday, the 3rd of January 2024
  * (Chrome and Firefox disagree on the default en‑GB format, so we roll our own.)
  */
 function formatEnglish(
-	parts: Intl.DateTimeFormatPart[],
+	parts: readonly Intl.DateTimeFormatPart[],
 	language: string,
 	time: string | undefined
 ): ReactElement | undefined {
@@ -95,25 +122,43 @@ function formatEnglish(
 
 	if (fields.size !== want.length) return undefined;
 
-	const rule = new Intl.PluralRules(language, { type: 'ordinal' }).select(
-		+fields.get('day')!
-	);
-	const suffix = {
-		one: 'st',
-		two: 'nd',
-		few: 'rd',
-		other: 'th',
-		zero: '',
-		many: '',
-	}[rule];
-
 	return (
 		<>
-			{fields.get('weekday')}, the {fields.get('day')}
-			<sup>{suffix}</sup> of {fields.get('month')} {fields.get('year')}
+			{fields.get('weekday')}, the{' '}
+			<OrdinalDay day={fields.get('day')!} language={language} /> of{' '}
+			{fields.get('month')} {fields.get('year')}
 			{time ? <> at {time}</> : null}
 		</>
 	);
+}
+
+export function formatDatePartsWithOrdinalDay(
+	parts: readonly Intl.DateTimeFormatPart[],
+	locale: Intl.Locale,
+	language: string = locale.toString()
+): ReactElement {
+	if (locale.language === 'en') {
+		return (
+			<>
+				{parts.map((part, index) =>
+					part.type === 'day' ? (
+						<Fragment key={index}>
+							<OrdinalDay day={part.value} language={language} />
+						</Fragment>
+					) : (
+						<Fragment key={index}>{part.value}</Fragment>
+					)
+				)}
+			</>
+		);
+	}
+
+	const partsWithOrdinal = [...parts];
+	if (locale.language === 'it') {
+		appendItalianOrdinalMarker(partsWithOrdinal);
+	}
+
+	return <>{partsWithOrdinal.map(part => part.value).join('')}</>;
 }
 
 /**
@@ -179,13 +224,10 @@ export const Date = memo(function DateComponent(props: DateProps) {
 				props.time ? getTimeText(zonedDate, locale) : undefined
 			);
 			break;
-		case 'it':
-			appendItalianOrdinalMarker(parts);
-			break;
 	}
 
 	if (content === undefined) {
-		content = <>{parts.map(p => p.value).join('')}</>;
+		content = formatDatePartsWithOrdinalDay(parts, locale, language);
 	}
 
 	return (
