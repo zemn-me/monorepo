@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -24,6 +24,13 @@ ts_project(
     ],
 )
 
+jest_test(
+    name = "tests",
+    srcs = ["index_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":lang_tests"],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -36,7 +43,19 @@ filegroup(
         "date.tsx",
         "format_time_zone.ts",
         "index.tsx",
+        "index_test.ts",
         "useLocale.tsx",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "lang_tests",
+    srcs = ["index_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":lang",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )

@@ -4,7 +4,6 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "cv",
     srcs = [
-        "client.tsx",
         "layout.tsx",
         "page.tsx",
     ],
@@ -17,7 +16,6 @@ ts_project(
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/nuqs",
         "//:node_modules/react",
         "//project/me/zemn/app",
         "//project/me/zemn/bio",
@@ -35,7 +33,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "client.tsx",
         "layout.tsx",
         "page.tsx",
     ],

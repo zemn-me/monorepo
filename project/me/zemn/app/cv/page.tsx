@@ -1,6 +1,5 @@
-import { Fragment, type ReactNode, Suspense } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
-import { ModeSwitch } from '#root/project/me/zemn/app/cv/client.js';
 import style from '#root/project/me/zemn/app/cv/page.module.css';
 import {
 	accolade,
@@ -35,9 +34,6 @@ const nonExperienceWorkTags = [
 	talk,
 	writing,
 ] as const;
-const writingAndTalkTags = [disclosure, talk, writing] as const;
-
-type CVMode = 'long' | 'short';
 
 interface NoteSection {
 	readonly areaClassName?: string;
@@ -151,35 +147,6 @@ const noteEvents = startedPriorityEvents().filter(
 	event => !experienceEventIds.has(event.id)
 );
 
-function shortContent(): CVContent {
-	const primaryNotes = noteEvents
-		.filter(event => event.description !== undefined)
-		.slice(0, 4);
-	const primaryNoteIds = new Set(primaryNotes.map(event => event.id));
-	const writingAndTalkNotes = noteEvents
-		.filter(event => !primaryNoteIds.has(event.id))
-		.filter(event => event.description !== undefined)
-		.filter(event => hasAnyTag(event, writingAndTalkTags))
-		.slice(0, 4);
-
-	return {
-		experience: experienceEvents.slice(0, 6),
-		noteSections: [
-			{
-				areaClassName: style.works,
-				events: primaryNotes,
-				id: 'short-primary',
-				title: 'selected highlights',
-			},
-			{
-				areaClassName: style.works2,
-				events: writingAndTalkNotes,
-				id: 'short-writing',
-			},
-		],
-	};
-}
-
 function longContent(): CVContent {
 	const coverageNotes = noteEvents
 		.filter(event => hasTag(event, comment))
@@ -258,10 +225,6 @@ function longContent(): CVContent {
 			},
 		].sort(byAverageSectionPriority),
 	};
-}
-
-function cvContent(mode: CVMode): CVContent {
-	return mode === 'long' ? longContent() : shortContent();
 }
 
 function Year({ className, date }: DateProps) {
@@ -523,37 +486,9 @@ function FutureMark() {
 	);
 }
 
-function ModeSwitchFallback() {
+function CV({ content }: { readonly content: CVContent }) {
 	return (
-		<nav
-			aria-label="CV length"
-			className={style.modeSwitch}
-			data-mode="long"
-		>
-			<span className={style.modeButton}>
-				short
-			</span>
-			<span aria-current="true" className={style.modeButton}>
-				long
-			</span>
-		</nav>
-	);
-}
-
-function CV({
-	content,
-	mode,
-}: {
-	readonly content: CVContent;
-	readonly mode: CVMode;
-}) {
-	return (
-		<article
-			className={classNames(
-				style.cv,
-				mode === 'long' ? style.longCV : style.shortCV
-			)}
-		>
+		<article className={classNames(style.cv, style.longCV)}>
 			<Header />
 			<SectionRule areaClassName={style.experienceTitle}>
 				selected experience
@@ -589,11 +524,7 @@ function CV({
 export default function Page() {
 	return (
 		<main className={style.page}>
-			<Suspense fallback={<ModeSwitchFallback />}>
-				<ModeSwitch />
-			</Suspense>
-			<CV content={cvContent('short')} mode="short" />
-			<CV content={cvContent('long')} mode="long" />
+			<CV content={longContent()} />
 		</main>
 	);
 }

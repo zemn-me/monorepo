@@ -11,6 +11,7 @@ import * as time from '#root/ts/time/index.js';
 import { linkToHighlight } from '#root/ts/url/selection.js';
 
 type Text = lang.Text;
+export type LinkCaption = Text | lang.TextSelection;
 
 const en = lang.tag('en-GB');
 const nl = lang.tag('nl');
@@ -33,7 +34,7 @@ export type Endpoint = Date | 'ongoing';
 export interface Bio {
 	readonly birthdate: Date;
 	readonly skills: readonly Text[];
-	readonly links: readonly (readonly [Text, URL])[];
+	readonly links: readonly (readonly [LinkCaption, URL])[];
 	readonly timeline: readonly Event[];
 	readonly who: Who;
 	readonly email?: readonly string[];
@@ -148,6 +149,13 @@ export const Bio = {
 		[
 			en`Google Knowledge Graph`,
 			url`//www.google.com/search?kgmid=/g/11lw7w6zt8`,
+		],
+		[
+			lang.TextSelection(
+				lang.Text('en-GB', 'CV' as const),
+				lang.Text('en-US', 'resume' as const)
+			),
+			url`https://zemn.me/cv`,
 		],
 		[
 			lang.Text('en-GB', 'linkedin' as const),
@@ -989,7 +997,7 @@ export const links = new Map(
 	Bio.links.map(
 		([name, href]) =>
 			[
-				lang.text(name),
+				lang.text(lang.resolveText(name)),
 				{
 					name: name,
 					href,
