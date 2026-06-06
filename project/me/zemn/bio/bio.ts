@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { frontmatter as articleCsp } from '#root/mdx/article/2014/csp.js';
 import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
+import { frontmatter as articleKasimir } from '#root/mdx/article/2026/kasimir/kasimir.js';
 import { ArticleProps } from '#root/project/me/zemn/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
 import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
@@ -210,6 +211,13 @@ export const Bio = {
 			date: date(30, 'apr', 2026),
 			url: url`https://defcon.org/html/defcon-singapore/dc-singapore-talks.html#:~:text=Beyond%20Prompt%20Injection%3A%20Agentic%20AI%20Attacks%20in%20the%20Real%20World`,
 			tags: [talk, work, security],
+		},
+		{
+			id: '0a5c0765-673b-4658-8b7c-d63f860fdebb',
+			...canonicaliseArticleMetadata(articleKasimir),
+			publisher: en`zemn.me`,
+			tags: [writing],
+			url: new RelativeURL('/article/2026/kasimir'),
 		},
 		{
 			id: 'cc77fee4-fdb1-443b-b7e2-7e8996ee5e0e',

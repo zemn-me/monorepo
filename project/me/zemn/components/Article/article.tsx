@@ -13,7 +13,7 @@ import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 export function Article(props: ArticleProps) {
 	const [toc, setToc] = useState<HTMLUListElement | null>(null);
 	return (
-		<div className={style.container}>
+		<div className={style.container} data-article-layout={props.layout}>
 			<article>
 				{props.date ? (
 					<LocalizedDate

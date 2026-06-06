@@ -31,6 +31,10 @@ export const pageLinks: readonly NavigationLink[] = [
 
 export const articleLinks: readonly NavigationLink[] = [
 	{
+		href: '/article/2026/kasimir',
+		label: 'Letter to Kasimir',
+	},
+	{
 		href: '/article/2024/clean',
 		label: 'The Hagiography of Clean',
 	},
