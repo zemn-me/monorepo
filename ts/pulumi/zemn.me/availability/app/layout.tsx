@@ -1,5 +1,3 @@
-import 'ts/pulumi/zemn.me/availability/app/base.css';
-
 import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 
@@ -15,7 +13,7 @@ export interface Props {
 
 const cspPolicy: CspPolicy = {
 	...DefaultContentSecurityPolicy,
-	'object-src': new Set(['https://calendar.google.com']),
+	'object-src': new Set(["'none'"]),
 };
 
 export function RootLayout({ children }: Props) {
@@ -34,6 +32,13 @@ export default RootLayout;
 export const metadata: Metadata = {
 	title: 'Thomas’ Availability',
 	authors: [{ name: 'zemnmez' }],
+	alternates: {
+		canonical: 'https://zemn.me/availability',
+	},
+	robots: {
+		index: false,
+		follow: false,
+	},
 	twitter: {
 		site: '@zemnmez',
 		creator: '@zemnnmez',

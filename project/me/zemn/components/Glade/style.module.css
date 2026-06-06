@@ -54,6 +54,7 @@
 
 .content {
 	grid-area: content;
+	min-width: 0;
 	padding-top: 4em;
 }
 
@@ -67,7 +68,7 @@
 			" banner content " 100vh
 			" xxxxxx content " auto
 			" xxxxxx footer  " auto
-			/ 1fr 1fr;
+			/ minmax(0, 1fr) minmax(0, 1fr);
 	}
 
 	/*
@@ -104,6 +105,8 @@
 
 .footer {
 	grid-area: footer;
+	position: relative;
+	z-index: 3;
 	display: grid;
 	grid:
 		"title   title       title   title        title"
@@ -113,6 +116,7 @@
 		"copy 	 copy        copy    copy         copy"
 		"....... .......     ....... .......       ......." 4rem
 		/ 1fr 2rem 3rem 2rem 1fr;
+	background-color: var(--background-color);
 }
 
 .copyright {
