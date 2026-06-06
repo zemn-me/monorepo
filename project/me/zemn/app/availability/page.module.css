@@ -1,0 +1,116 @@
+.page {
+	padding-inline: 1.25em;
+}
+
+.header {
+	max-width: 42em;
+	margin: 0 auto 1.5em;
+}
+
+.header h1 {
+	margin-block: 0 0.75em;
+}
+
+.header p {
+	margin-block: 0.5em;
+}
+
+.week {
+	display: grid;
+	grid-template-columns: minmax(4.75rem, max-content) repeat(7, minmax(8rem, 1fr));
+	gap: 1px;
+	width: 100%;
+	max-width: 72em;
+	margin: 0 auto;
+	border: 1px solid currentColor;
+	background: currentColor;
+}
+
+.ruler {
+	position: sticky;
+	left: 0;
+	z-index: 2;
+	background: var(--background-color);
+}
+
+.rulerHeader {
+	position: sticky;
+	top: 0;
+	z-index: 3;
+	min-height: calc(1lh + 1.5em);
+	border-bottom: 1px solid currentColor;
+	background: var(--background-color);
+}
+
+.rulerSlots {
+	position: relative;
+	height: calc(24 * var(--hour-height));
+	background-image: linear-gradient(currentColor 1px, transparent 1px);
+	background-size: 100% var(--hour-height);
+}
+
+.rulerLabel {
+	position: relative;
+	height: var(--hour-height);
+	padding: 0.25rem 0.5rem;
+	background: var(--background-color);
+	font-size: 0.75rem;
+	line-height: 1.25;
+	white-space: nowrap;
+}
+
+.day {
+	min-height: 28rem;
+	background: var(--background-color);
+}
+
+.dayHeader {
+	position: sticky;
+	top: 0;
+	z-index: 3;
+	padding: 0.75em;
+	border-bottom: 1px solid currentColor;
+	background: var(--background-color);
+}
+
+.slots {
+	display: grid;
+	grid-template-rows: repeat(1440, var(--minute-height));
+	height: calc(24 * var(--hour-height));
+	background-image: linear-gradient(currentColor 1px, transparent 1px);
+	background-size: 100% var(--hour-height);
+}
+
+.busy {
+	z-index: 1;
+	margin-inline: 0.45rem;
+	padding: 0.35rem 0.45rem;
+	border: 1px solid currentColor;
+	background: var(--highlight-color);
+	color: var(--highlight-foreground-color);
+	font-size: 0.78rem;
+	line-height: 1.25;
+	overflow: hidden;
+}
+
+.empty {
+	padding: 0.75em;
+	font-size: 0.85rem;
+}
+
+.error {
+	max-width: 72em;
+	margin: 1em auto 0;
+	padding: 0.75em;
+	border: 1px solid currentColor;
+}
+
+@media (max-width: 58rem) {
+	.page {
+		padding-inline: 0;
+	}
+
+	.week {
+		grid-template-columns: minmax(4.75rem, max-content) repeat(7, minmax(10rem, 1fr));
+	}
+}

@@ -54,6 +54,7 @@
 
 .content {
 	grid-area: content;
+	min-width: 0;
 	padding-top: 4em;
 }
 
@@ -67,7 +68,7 @@
 			" banner content " 100vh
 			" xxxxxx content " auto
 			" xxxxxx footer  " auto
-			/ 1fr 1fr;
+			/ minmax(0, 1fr) minmax(0, 1fr);
 	}
 
 	/*
