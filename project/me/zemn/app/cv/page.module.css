@@ -10,41 +10,13 @@
 	font-family: Lora, Georgia, "Times New Roman", serif;
 }
 
-.modeSwitch {
-	width: min(210mm, 100%);
-	margin: 0 auto 1rem;
-	display: flex;
-	justify-content: flex-end;
-	gap: 1rem;
-	text-transform: lowercase;
-}
-
-.modeButton {
-	padding: 0;
-	border: 0;
-	color: inherit;
-	background: transparent;
-	font: inherit;
-	text-decoration: underline;
-	text-transform: inherit;
-}
-
-.modeButton:is([aria-pressed="true"], [aria-current="true"]) {
-	font-weight: 700;
-	text-decoration: none;
-}
-
-button.modeButton {
-	cursor: pointer;
-}
-
 .cv {
 	box-sizing: border-box;
 	width: min(210mm, 100%);
 	min-height: 297mm;
 	margin: auto;
 	padding: 20mm 30mm;
-	overflow: hidden;
+	overflow: visible;
 	background: var(--background-color);
 	border: 1px solid var(--foreground-color);
 	font-size: 80%;
@@ -54,72 +26,9 @@ button.modeButton {
 	text-decoration: none;
 }
 
-.shortCV {
-	height: 297mm;
-	display: grid;
-	grid:
-		"header header header header header" min-content
-		"experience-title experience-title experience-title experience-title experience-title" min-content
-		". . . . ." 0.4fr
-		"experience experience experience experience experience" minmax(0, 7fr)
-		"works-title works-title works-title works-title works-title" min-content
-		". . . . ." 0.4fr
-		"works works works works works" minmax(0, 1.2fr)
-		". . . . ." 0.4fr
-		"works2 works2 works2 works2 works2" minmax(0, 1.2fr)
-		". . . . ." 3em
-		". dash-left future dash-right ." 2em / 1fr 2em 1fr 2em 1fr;
-}
-
-.shortCV::before,
-.shortCV::after {
-	content: "\2013";
-	margin: auto;
-	opacity: 0.5;
-}
-
-.shortCV::before {
-	grid-area: dash-left;
-}
-
-.shortCV::after {
-	grid-area: dash-right;
-}
-
-.shortCV .experience,
-.shortCV .notes {
-	min-height: 0;
-	overflow: hidden;
-}
-
-.shortCV .content,
-.shortCV .description {
-	overflow: hidden;
-}
-
-.shortCV .content {
-	max-height: 4.8em;
-}
-
-.shortCV .description {
-	max-height: 5.2em;
-}
-
-.shortCV .work:nth-child(n + 5) .content {
-	max-height: 2.5em;
-}
-
 .longCV {
-	display: none;
-	overflow: visible;
-}
-
-.page:has(.modeSwitch[data-mode="long"]) .shortCV {
-	display: none;
-}
-
-.page:has(.modeSwitch[data-mode="long"]) .longCV {
 	display: block;
+	overflow: visible;
 }
 
 .longCV .header {
@@ -355,20 +264,6 @@ button.modeButton {
 		display: block;
 	}
 
-	.shortCV {
-		height: auto;
-	}
-
-	.longCV {
-		display: none;
-	}
-
-	.page:has(.modeSwitch[data-mode="long"]) .longCV {
-		display: block;
-	}
-
-	.shortCV::before,
-	.shortCV::after,
 	.future {
 		display: none;
 	}
@@ -425,11 +320,6 @@ button.modeButton {
 }
 
 @media print {
-	.modeSwitch,
-	.modeButton {
-		display: none;
-	}
-
 	:global(body):has(.page) > :global(:not([data-glade-layout])) {
 		display: none !important;
 	}
@@ -461,12 +351,6 @@ button.modeButton {
 		margin: 0 auto;
 		padding: 20mm 30mm;
 		border: 0;
-	}
-
-	.shortCV {
-		height: calc(297mm - 12mm);
-		display: grid;
-		overflow: hidden;
 	}
 
 	.longCV {

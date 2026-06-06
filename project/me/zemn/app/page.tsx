@@ -7,6 +7,11 @@ import {
 } from '#root/jpeg/2026/05/25/profile_photo.js';
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
 import { GladeLayout } from '#root/project/me/zemn/app/glade_layout.js';
+import {
+	type LinksetLabel,
+	LinksetLink,
+	type LinksetText,
+} from '#root/project/me/zemn/app/linkset_link.js';
 import { ProfilePageSchema } from '#root/project/me/zemn/app/schema.js';
 import style from '#root/project/me/zemn/app/style.module.css';
 import * as bio from '#root/project/me/zemn/bio/index.js';
@@ -20,6 +25,40 @@ import ZemnmezLogo from '#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLog
 import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
 import * as lang from '#root/ts/react/lang/index.js';
+
+const homepageLinkNames = ['CV', 'linkedin', 'github', 'bluesky', 'twitter'];
+
+function linksetText(text: lang.Text): LinksetText {
+	return {
+		language: lang.get(text),
+		text: lang.text(text),
+	};
+}
+
+function linksetLabel(caption: bio.LinkCaption): LinksetLabel {
+	if (caption instanceof lang.TextType) return linksetText(caption);
+
+	return {
+		choices: caption.choices.map(linksetText),
+		defaultText: linksetText(caption.defaultText),
+	};
+}
+
+const homepageLinks = Iterable(bio.Bio.links)
+	.map(([caption, url]) =>
+		homepageLinkNames.some(n => lang.text(lang.resolveText(caption)) == n)
+			? Some({
+					label: linksetLabel(caption),
+					rel:
+						url.origin === bio.Bio.officialWebsite.origin
+							? undefined
+							: 'me',
+					url,
+				})
+			: None
+	)
+	.filter()
+	.to_array();
 
 function ZemnmezLogoInline() {
 	return <ZemnmezLogo className={style.logoInline} />;
@@ -78,26 +117,14 @@ export default function Main() {
 					</p>
 				</Prose>
 				<nav className={style.links}>
-					{Iterable(bio.Bio.links)
-						.map(v =>
-							['linkedin', 'github', 'bluesky', 'twitter'].some(
-								n => v[0].text == n
-							)
-								? Some(v)
-								: None
-						)
-						.filter()
-						.map(([text, url]) => (
-							<Link
-								href={url.toString()}
-								key={url.toString()}
-								lang={lang.get(text)}
-								rel="me"
-							>
-								{lang.text(text)}
-							</Link>
-						))
-						.to_array()}
+					{homepageLinks.map(({ label, rel, url }) => (
+						<LinksetLink
+							href={url.toString()}
+							key={url.toString()}
+							label={label}
+							rel={rel}
+						/>
+					))}
 				</nav>
 			</header>
 			<section>

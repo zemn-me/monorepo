@@ -36,7 +36,12 @@ export const schema: Person = {
 	sameAs: [
 		'https://www.wikidata.org/wiki/Q131339630',
 		...Iterable(Bio.links)
-			.map(([, u]) => u.toString())
+			.map(([, u]) =>
+				u.origin === Bio.officialWebsite.origin
+					? None
+					: Some(u.toString())
+			)
+			.filter()
 			.to_array(),
 	],
 	email: 'mailto:thomas@shadwell.im',
