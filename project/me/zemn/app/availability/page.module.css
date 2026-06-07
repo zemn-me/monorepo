@@ -98,6 +98,27 @@
 	white-space: nowrap;
 }
 
+.currentTimeMarker {
+	position: sticky;
+	left: 0;
+	z-index: 9;
+	height: 0;
+	color: currentColor;
+	pointer-events: none;
+}
+
+.currentTimeMarker::before {
+	position: absolute;
+	top: 0;
+	right: 0.45rem;
+	width: 0;
+	height: 0;
+	border-block: 0.35rem solid transparent;
+	border-left: 0.55rem solid currentColor;
+	content: "";
+	transform: translateY(-50%);
+}
+
 .dayHeader {
 	position: sticky;
 	top: 0;

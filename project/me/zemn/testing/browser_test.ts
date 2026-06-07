@@ -169,6 +169,42 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('availability shows a current-time marker in the ruler', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/availability`);
+
+				const marker = await driver.findElement(
+					By.css('[data-availability-current-time-marker]')
+				);
+				const currentMinute = Number(
+					await marker.getAttribute('data-availability-current-minute')
+				);
+				const expectedMinute = (await driver.executeScript(`
+					const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
+					const parts = new Intl.DateTimeFormat('en-GB', {
+						hour: '2-digit',
+						hour12: false,
+						hourCycle: 'h23',
+						minute: '2-digit',
+						timeZone,
+					}).formatToParts(new Date());
+					const byType = Object.fromEntries(parts.map(part => [part.type, part.value]));
+					return (Number(byType.hour) % 24) * 60 + Number(byType.minute);
+				`)) as number;
+				const minuteDelta = Math.abs(currentMinute - expectedMinute);
+				const wrappedMinuteDelta = Math.min(
+					minuteDelta,
+					1440 - minuteDelta
+				);
+
+				expect(Number.isFinite(currentMinute)).toBe(true);
+				expect(wrappedMinuteDelta).toBeLessThanOrEqual(1);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('2026/endings shows a homepage back link after the story text renders', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
