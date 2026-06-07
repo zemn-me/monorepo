@@ -122,6 +122,69 @@ func (d *Driver) SetTimezoneOverride(tz string) error {
 	return nil
 }
 
+// ExecuteChromiumCommand sends a Chrome DevTools Protocol command through
+// chromedriver.
+func (d *Driver) ExecuteChromiumCommand(cmd string, params map[string]any) error {
+	if d.WebDriver == nil {
+		return fmt.Errorf("web driver not initialized")
+	}
+	sessionID := d.SessionID()
+	if sessionID == "" {
+		return fmt.Errorf("missing session id")
+	}
+	payload := map[string]any{
+		"cmd":    cmd,
+		"params": params,
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("marshal chromium command payload: %w", err)
+	}
+
+	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
+	if err := d.postChromiumCommand(primary, body); err != nil {
+		var statusErr *httpStatusError
+		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
+			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
+			return d.postChromiumCommand(fallback, body)
+		}
+		return err
+	}
+	return nil
+}
+
+// SetLocaleOverride configures Chromium to report the provided locale.
+func (d *Driver) SetLocaleOverride(locale string) error {
+	if d.WebDriver == nil {
+		return fmt.Errorf("web driver not initialized")
+	}
+	sessionID := d.SessionID()
+	if sessionID == "" {
+		return fmt.Errorf("missing session id")
+	}
+	payload := map[string]any{
+		"cmd": "Emulation.setLocaleOverride",
+		"params": map[string]string{
+			"locale": locale,
+		},
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("marshal locale payload: %w", err)
+	}
+
+	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
+	if err := d.postChromiumCommand(primary, body); err != nil {
+		var statusErr *httpStatusError
+		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
+			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
+			return d.postChromiumCommand(fallback, body)
+		}
+		return err
+	}
+	return nil
+}
+
 type httpStatusError struct {
 	Code int
 	Body string

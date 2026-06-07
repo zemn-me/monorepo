@@ -1,0 +1,150 @@
+.page {
+	padding-inline: 1.25em;
+}
+
+.header {
+	max-width: 42em;
+	margin: 0 auto 1.5em;
+}
+
+.header h1 {
+	margin-block: 0 0.75em;
+}
+
+.header p {
+	margin-block: 0.5em;
+}
+
+.weekShell {
+	width: 100%;
+	max-width: 72em;
+	margin: 0 auto 2rem;
+}
+
+.weekScroller {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	max-height: calc(100dvh - 1rem);
+	overflow: auto;
+	overscroll-behavior: auto;
+	isolation: isolate;
+}
+
+.week {
+	--availability-day-width: 8rem;
+	position: relative;
+	display: grid;
+	grid-template-rows: auto auto repeat(1440, var(--minute-height));
+	gap: 1px;
+	width: 100%;
+	border: 1px solid currentColor;
+}
+
+.rulerHeader {
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 8;
+	grid-column: 1;
+	grid-row: 1 / 3;
+	background: var(--background-color);
+}
+
+.rulerLane,
+.dayLane {
+	position: relative;
+	background-image: linear-gradient(currentColor 1px, transparent 1px);
+	background-size: 100% var(--hour-height);
+}
+
+.rulerLane {
+	position: sticky;
+	left: 0;
+	z-index: 6;
+	background-color: var(--background-color);
+}
+
+.rulerLane::before,
+.dayLane::before {
+	position: absolute;
+	inset: 0;
+	background-image: repeating-linear-gradient(
+		to right,
+		currentColor 0 0.0625rem,
+		transparent 0.0625rem 0.85rem
+	);
+	content: "";
+	mask-image: repeating-linear-gradient(
+		to bottom,
+		transparent 0 calc(var(--hour-height) / 2 - 0.5px),
+		black calc(var(--hour-height) / 2 - 0.5px)
+			calc(var(--hour-height) / 2 + 0.5px),
+		transparent calc(var(--hour-height) / 2 + 0.5px)
+			var(--hour-height)
+	);
+	opacity: 0.35;
+	pointer-events: none;
+}
+
+.rulerLabel {
+	position: sticky;
+	left: 0;
+	z-index: 7;
+	padding: 0.25rem 0.5rem;
+	background: var(--background-color);
+	font-size: 0.75rem;
+	line-height: 1.25;
+	white-space: nowrap;
+}
+
+.dayHeader {
+	position: sticky;
+	top: 0;
+	z-index: 5;
+	display: grid;
+	gap: 0.15em;
+	padding: 0.75em;
+	background: var(--background-color);
+	box-sizing: border-box;
+}
+
+.dayHeaderDate {
+	font-size: 0.9em;
+}
+
+.busy {
+	z-index: 4;
+	margin-inline: 0.45rem;
+	padding: 0.35rem 0.45rem;
+	border: 1px solid currentColor;
+	background: var(--highlight-color);
+	color: var(--highlight-foreground-color);
+	font-size: 0.78rem;
+	line-height: 1.25;
+	overflow: hidden;
+}
+
+.empty {
+	z-index: 3;
+	padding: 0.75em;
+	background: var(--background-color);
+	font-size: 0.85rem;
+}
+
+.error {
+	max-width: 72em;
+	margin: 1em auto 0;
+	padding: 0.75em;
+	border: 1px solid currentColor;
+}
+
+@media (max-width: 58rem) {
+	.page {
+		padding-inline: 0;
+	}
+
+	.week {
+		--availability-day-width: 10rem;
+	}
+}
