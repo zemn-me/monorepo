@@ -433,8 +433,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.210.2
-    version: 43.210.2(typanion@3.14.0)
+    specifier: 43.212.0
+    version: 43.212.0(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -3116,7 +3116,7 @@ packages:
       agent-base: 7.1.4
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6(supports-color@10.2.2)
-      lru-cache: 11.5.0
+      lru-cache: 11.5.1
       socks-proxy-agent: 8.0.5
     transitivePeerDependencies:
       - supports-color
@@ -13895,8 +13895,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.210.2(typanion@3.14.0):
-    resolution: {integrity: sha512-QsyBGKS/fEAdPrRQr5+7GFz+LZ0EFxoY7su3XDN1tQHjCsu2q5H39klxA9bxQbRdnstitHUZ5yUtXfE/1c9U/A==}
+  /renovate@43.212.0(typanion@3.14.0):
+    resolution: {integrity: sha512-fFVnXI17yLogp27R01/hauladBD5En9wqHpGIAaOsFR0iSS/ajvnexYooatMtCqME3C8j4UQqZwNfFiDUToH9w==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
