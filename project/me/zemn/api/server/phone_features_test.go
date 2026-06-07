@@ -29,7 +29,6 @@ func newTestServer() *Server {
 		keyRequestsTableName: "keys",
 		ddb:                  &inMemoryDDB{},
 		sendText:             func(_ context.Context, _, _, _ string) error { return nil },
-		fetchCalendarICal:    func(_ context.Context, _ string) (string, error) { return "", nil },
 	}
 }
 

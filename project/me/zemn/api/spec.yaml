@@ -1760,38 +1760,6 @@ paths:
                 type: string
                 enum: [OK]
 
-  /calendar/ical/{email}:
-    get:
-      summary: Proxy a public Google Calendar iCal feed.
-      description: >
-        Re-serves a public Google Calendar iCal feed with the API server's CORS
-        headers so static browser clients can render availability without an iframe.
-      parameters:
-        - name: email
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: iCal feed contents.
-          content:
-            text/plain:
-              schema:
-                type: string
-        "404":
-          description: Calendar email is not in the site allowlist.
-          content:
-            text/plain:
-              schema:
-                type: string
-        "502":
-          description: Upstream calendar feed could not be loaded.
-          content:
-            text/plain:
-              schema:
-                type: string
-
   /analytics/beacon:
     post:
       summary: Store an anonymous analytics event.

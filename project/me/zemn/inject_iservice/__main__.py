@@ -21,13 +21,8 @@ from pydantic.config import ConfigDict
 
 
 class AssignedPorts(BaseModel):
-	api_service_port: Optional[str] = Field(
-		default=None,
+	api_service_port: str = Field(
 		alias="@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"
-	)
-	calendar_fixture_api_service_port: Optional[str] = Field(
-		default=None,
-		alias="@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"
 	)
 	oidc_provider_port: Optional[str] = Field(
 		default=None,
@@ -44,11 +39,8 @@ def main() -> None:
 		sys.exit("ASSIGNED_PORTS is not set")
 
 	port_map = AssignedPorts.model_validate(json.loads(assigned))
-	api_service_port = port_map.api_service_port or port_map.calendar_fixture_api_service_port
-	if not api_service_port:
-		sys.exit("API service port is not set in ASSIGNED_PORTS")
 
-	api_base = "http://localhost:" + str(api_service_port)
+	api_base = "http://localhost:" + str(port_map.api_service_port)
 	os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = api_base
 
 	if not use_prod_env:

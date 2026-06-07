@@ -11,7 +11,6 @@ ts_project(
         "not-found.tsx",
         "page.tsx",
         "providers.tsx",
-        "robots.ts",
         "schema.ts",
     ],
     assets = glob(
@@ -74,7 +73,6 @@ filegroup(
         "not-found.tsx",
         "page.tsx",
         "providers.tsx",
-        "robots.ts",
         "schema.ts",
     ],
     visibility = ["//:__subpackages__"],

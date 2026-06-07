@@ -1,12 +1,72 @@
+/**
+ * @fileoverview page to show my availability (for meetings etc)
+ */
+
+import { Bio } from '#root/project/me/zemn/bio/bio.js';
+import { filter, flatten, map } from '#root/ts/iter/index.js';
 import { Link } from '#root/ts/react/next/Link/index.js';
 
-const availabilityURL = 'https://zemn.me/availability';
+interface QueryParamsObject {
+	[key: string]: string[] | undefined;
+}
+
+type GCalQueryBoolean = '0' | '1';
+
+type GCalTab = 'week' | 'month' | 'agenda';
+
+interface CalendarConfigProps extends QueryParamsObject {
+	/**
+	 * A set of calendar sources to put on the calendar.
+	 */
+	src?: string[];
+
+	mode?: [GCalTab];
+
+	showCalendars?: [GCalQueryBoolean] | undefined;
+
+	title?: [string];
+
+	showTabs?: [GCalQueryBoolean];
+}
+
+const hasDefinedKey = (
+	kv: [string, string[] | undefined]
+): kv is [string, string[]] => typeof kv[1] !== 'undefined';
+
+// For ?src=1&src=1, URLSearchParams expects
+// [ [ "src", "1" ], [ "src", "1" ] ]
+// rather than
+// [ [ "src", "1" "1" ] ]
+const unrollKeys = (
+	v: Iterable<[string, string[]]>
+): Iterable<[string, string]> =>
+	flatten(map(v, ([k, v]) => map(v, v => [k, v])));
+
+const gCalEmbedURL = (props: CalendarConfigProps) =>
+	`https://calendar.google.com/calendar/u/0/embed?${new URLSearchParams([
+		...unrollKeys(filter(Object.entries(props), hasDefinedKey)),
+	]).toString()}`;
+
+const URL = gCalEmbedURL({
+	src: [...Bio.email],
+	mode: ['week'],
+	showCalendars: ['0'],
+});
 
 export default function HomePage() {
 	return (
 		<main>
-			<meta httpEquiv="refresh" content={`0; url=${availabilityURL}`} />
-			<Link href={availabilityURL}>Thomas' availability</Link>
+			<p>
+				Occasionally, the below frame can have trouble loading due to
+				Google security checks. If that happens, please{' '}
+				<Link href={URL}>view on Google calendar</Link> directly
+				instead.
+			</p>
+			<p>
+				"All day" events are usually reminders, not times I am busy.
+				Google Calendar does not let you filter for busy / free time.
+			</p>
+			<iframe src={URL} />
 		</main>
 	);
 }

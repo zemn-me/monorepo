@@ -99,11 +99,6 @@ export interface Args {
 	otherTXTRecords?: string[];
 
 	/**
-	 * Redirect all requests for this website to another URL.
-	 */
-	redirectTo?: pulumi.Input<string>;
-
-	/**
 	 * Domain hosting OpenID Connect well-known resources.
 	 * When provided, CloudFront will proxy
 	 * `/.well-known/openid-configuration` and
@@ -115,9 +110,6 @@ export interface Args {
 // needed cause there's a cache policy limit of 20.
 let noRobotsResponseHeadersPolicyCache: ResponseHeadersPolicy;
 let robotsResponseHeadersPolicyCache: ResponseHeadersPolicy;
-
-const cloudFrontFunctionName = (name: string) =>
-	[...name.replace(/[^a-zA-Z0-9-_]/g, '_')].slice(0, 64).join('');
 
 function noRobotsResponseHeadersPolicy() {
 	if (typeof noRobotsResponseHeadersPolicyCache == 'undefined') {
@@ -364,30 +356,6 @@ export class Website extends pulumi.ComponentResource {
 			? noRobotsResponseHeadersPolicy()
 			: robotsResponseHeadersPolicy();
 
-		const redirectFunction = args.redirectTo
-			? new aws.cloudfront.Function(
-					`${name}_redirect`,
-					{
-						runtime: 'cloudfront-js-1.0',
-						name: cloudFrontFunctionName(`${name}_redirect`),
-						publish: true,
-						code: pulumi.output(args.redirectTo).apply(
-							redirectTo => `function handler(event) {
-	return {
-		statusCode: 301,
-		statusDescription: 'Moved Permanently',
-		headers: {
-			location: { value: ${JSON.stringify(redirectTo)} },
-			'cache-control': { value: 'max-age=3600' },
-		},
-	};
-}`
-						),
-					},
-					{ parent: this }
-				)
-			: undefined;
-
 		// create the cloudfront
 
 		const origins: aws.types.input.cloudfront.DistributionOrigin[] = [
@@ -479,16 +447,6 @@ export class Website extends pulumi.ComponentResource {
 					: {}),
 				defaultCacheBehavior: {
 					compress: true,
-					...(redirectFunction
-						? {
-								functionAssociations: [
-									{
-										eventType: 'viewer-request',
-										functionArn: redirectFunction.arn,
-									},
-								],
-							}
-						: {}),
 					responseHeadersPolicyId: responseHeadersPolicy.id,
 					// i dont think we use most of these but it's probably not
 					// important

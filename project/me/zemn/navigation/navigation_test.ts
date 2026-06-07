@@ -51,7 +51,6 @@ it('includes public content and redirect pages', () => {
 		'/article/2019/cors',
 		'/article/2024/clean',
 		'/article/2024/missing',
-		'/availability',
 		'/bluesky',
 		'/cv',
 		'/github',

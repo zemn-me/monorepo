@@ -60,7 +60,6 @@ type Server struct {
 	twilioSharedSecret string
 	twilioClient       *twilio.RestClient
 	sendText           func(ctx context.Context, to, from, body string) error
-	fetchCalendarICal  calendarICalFetcher
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -144,7 +143,6 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
-		fetchCalendarICal: defaultCalendarICalFetcher(),
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
