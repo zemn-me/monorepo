@@ -7,6 +7,7 @@ import {
 	useMemo,
 	useState,
 } from 'react';
+import { Temporal } from 'temporal-polyfill';
 
 import { CALENDAR_EMAILS } from '#root/project/me/zemn/app/availability/calendar.js';
 import {
@@ -24,6 +25,7 @@ import { formatDatePartsWithOrdinalDay } from '#root/ts/react/lang/date.js';
 
 const HOUR_HEIGHT_REM = 4;
 const HOURS_PER_DAY = 24;
+const DAYS_PER_WEEK = 7;
 const MINUTES_PER_DAY = HOURS_PER_DAY * 60;
 const DAY_VIEW_START_HOUR = 5;
 const DAY_VIEW_START_MINUTE = DAY_VIEW_START_HOUR * 60;
@@ -31,7 +33,6 @@ const CALENDAR_GRID_ROW_OFFSET = 3;
 const VISIBLE_DAY_COUNT = 63;
 const DAY_COLUMN_MIN_WIDTH_REM = 8;
 
-const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 const hourMarks = Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
 	hour,
 	minute: hour * 60,
@@ -44,16 +45,19 @@ const halfHourMarks = Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
 type LocaleList = readonly [string, ...string[]];
 
 interface DayBucket {
-	readonly endsAt: Date;
+	readonly endsAt: Temporal.ZonedDateTime;
 	readonly events: readonly CalendarEvent[];
 	readonly key: string;
 	readonly dateLabel: ReactElement;
-	readonly startsAt: Date;
+	readonly startsAt: Temporal.ZonedDateTime;
 	readonly weekdayLabel: string;
 }
 
 function resolvedTimeZone() {
-	return Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
+	return (
+		Intl.DateTimeFormat().resolvedOptions().timeZone ??
+		Temporal.Now.zonedDateTimeISO().timeZoneId
+	);
 }
 
 function resolvedLocales(): LocaleList {
@@ -119,140 +123,70 @@ function timeFormatter(locales: LocaleList, timeZone: string) {
 }
 
 function hourLabels(
-	day: Date,
-	formatTime: Intl.DateTimeFormat,
-	timeZone: string
+	day: Temporal.ZonedDateTime,
+	formatTime: Intl.DateTimeFormat
 ) {
 	return Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
 		hour,
-		label: formatTime.format(addZonedHours(day, hour, timeZone)),
+		label: formatTime.format(zonedDateTimeToDate(addZonedHours(day, hour))),
 	}));
 }
 
-function wallMinuteOfDay(date: Date, timeZone: string) {
-	const parts = zonedParts(date, timeZone);
-	return parts.hour * 60 + parts.minute;
+function dateToZonedDateTime(date: Date, timeZone: string) {
+	return Temporal.Instant.from(date.toISOString()).toZonedDateTimeISO(timeZone);
 }
 
-function viewMinuteOfDay(date: Date, timeZone: string) {
+function zonedDateTimeToDate(date: Temporal.ZonedDateTime) {
+	return new globalThis.Date(date.epochMilliseconds);
+}
+
+function wallMinuteOfDay(date: Temporal.ZonedDateTime) {
+	return date.hour * 60 + date.minute;
+}
+
+function viewMinuteOfDay(date: Temporal.ZonedDateTime) {
 	return (
-		(wallMinuteOfDay(date, timeZone) -
-			DAY_VIEW_START_MINUTE +
-			MINUTES_PER_DAY) %
+		(wallMinuteOfDay(date) - DAY_VIEW_START_MINUTE + MINUTES_PER_DAY) %
 		MINUTES_PER_DAY
 	);
 }
 
-function millisecondsUntilNextMinute(date: Date) {
+function millisecondsUntilNextMinute(date: Temporal.ZonedDateTime) {
 	return Math.max(
 		1,
-		(60 - date.getSeconds()) * 1000 - date.getMilliseconds()
+		(60 - date.second) * 1000 - date.millisecond
 	);
 }
 
-function zonedDateFormatter(timeZone: string) {
-	return new Intl.DateTimeFormat('en-GB', {
-		day: '2-digit',
-		hour: '2-digit',
-		hour12: false,
-		hourCycle: 'h23',
-		minute: '2-digit',
-		month: '2-digit',
-		second: '2-digit',
-		timeZone,
-		weekday: 'short',
-		year: 'numeric',
+function weekStart(
+	timeZone: string,
+	locale: string,
+	now = Temporal.Now.zonedDateTimeISO(timeZone)
+) {
+	const weekday = now.dayOfWeek % 7;
+	const dayOffset =
+		(weekday - firstDayOfWeek(locale) + DAYS_PER_WEEK) % DAYS_PER_WEEK;
+
+	return now.subtract({ days: dayOffset }).with({
+		hour: DAY_VIEW_START_HOUR,
+		microsecond: 0,
+		millisecond: 0,
+		minute: 0,
+		nanosecond: 0,
+		second: 0,
 	});
 }
 
-function zonedParts(date: Date, timeZone: string) {
-	const parts = new Map(
-		zonedDateFormatter(timeZone)
-			.formatToParts(date)
-			.map(part => [part.type, part.value])
-	);
-
-	return {
-		day: Number(parts.get('day')),
-		hour: Number(parts.get('hour')) % 24,
-		minute: Number(parts.get('minute')),
-		month: Number(parts.get('month')),
-		second: Number(parts.get('second')),
-		weekday: weekdays.indexOf(
-			parts.get('weekday') as (typeof weekdays)[number]
-		),
-		year: Number(parts.get('year')),
-	};
+function addZonedHours(day: Temporal.ZonedDateTime, hours: number) {
+	return day.add({ hours });
 }
 
-function timeZoneOffset(date: Date, timeZone: string) {
-	const parts = zonedParts(date, timeZone);
-	return (
-		Date.UTC(
-			parts.year,
-			parts.month - 1,
-			parts.day,
-			parts.hour,
-			parts.minute,
-			parts.second
-		) - date.getTime()
-	);
-}
-
-function zonedDate(
-	year: number,
-	month: number,
-	day: number,
-	hour: number,
-	minute: number,
-	timeZone: string
-) {
-	const utcGuess = new Date(Date.UTC(year, month - 1, day, hour, minute));
-	return new Date(utcGuess.getTime() - timeZoneOffset(utcGuess, timeZone));
-}
-
-function weekStart(timeZone: string, locale: string, now = new Date()) {
-	const parts = zonedParts(now, timeZone);
-	const dayOffset =
-		(parts.weekday - firstDayOfWeek(locale) + weekdays.length) %
-		weekdays.length;
-
-	return zonedDate(
-		parts.year,
-		parts.month,
-		parts.day - dayOffset,
-		DAY_VIEW_START_HOUR,
-		0,
-		timeZone
-	);
-}
-
-function addZonedHours(day: Date, hours: number, timeZone: string) {
-	const parts = zonedParts(day, timeZone);
-	return zonedDate(
-		parts.year,
-		parts.month,
-		parts.day,
-		parts.hour + hours,
-		parts.minute,
-		timeZone
-	);
-}
-
-function addZonedDays(day: Date, days: number, timeZone: string) {
-	const parts = zonedParts(day, timeZone);
-	return zonedDate(
-		parts.year,
-		parts.month,
-		parts.day + days,
-		parts.hour,
-		parts.minute,
-		timeZone
-	);
+function addZonedDays(day: Temporal.ZonedDateTime, days: number) {
+	return day.add({ days });
 }
 
 function visibleDayRanges(
-	start: Date,
+	start: Temporal.ZonedDateTime,
 	locales: LocaleList,
 	timeZone: string,
 	dayCount: number
@@ -265,20 +199,21 @@ function visibleDayRanges(
 	const locale = new Intl.Locale(localeName);
 
 	return Array.from({ length: dayCount }, (_, i) => {
-		const startsAt = addZonedDays(start, i, timeZone);
-		const endsAt = addZonedDays(startsAt, 1, timeZone);
+		const startsAt = addZonedDays(start, i);
+		const endsAt = addZonedDays(startsAt, 1);
+		const startsAtDate = zonedDateTimeToDate(startsAt);
 
 		return {
 			dateLabel: formatDatePartsWithOrdinalDay(
-				formatDate.formatToParts(startsAt),
+				formatDate.formatToParts(startsAtDate),
 				locale,
 				localeName
 			),
 			endsAt,
 			events: [],
-			key: formatKey.format(startsAt),
+			key: formatKey.format(startsAtDate),
 			startsAt,
-			weekdayLabel: formatWeekday.format(startsAt),
+			weekdayLabel: formatWeekday.format(startsAtDate),
 		};
 	});
 }
@@ -289,7 +224,11 @@ function bucketBusyEvents(
 ): readonly DayBucket[] {
 	return days.map(day => ({
 		...day,
-		events: busyEventsForRange(events, day.startsAt, day.endsAt),
+		events: busyEventsForRange(
+			events,
+			zonedDateTimeToDate(day.startsAt),
+			zonedDateTimeToDate(day.endsAt)
+		),
 	}));
 }
 
@@ -314,23 +253,23 @@ function timeMarkStyle(
 
 function eventMinuteOfDay(
 	date: Date,
-	day: Date,
+	day: Temporal.ZonedDateTime,
 	timeZone: string,
 	boundary: 'start' | 'end'
 ) {
-	const dayStart = day.getTime();
-	const dayEnd = addZonedDays(day, 1, timeZone).getTime();
+	const dayStart = day.epochMilliseconds;
+	const dayEnd = addZonedDays(day, 1).epochMilliseconds;
 	if (date.getTime() <= dayStart) return 0;
 	if (date.getTime() >= dayEnd) return MINUTES_PER_DAY;
 
-	const minute = viewMinuteOfDay(date, timeZone);
+	const minute = viewMinuteOfDay(dateToZonedDateTime(date, timeZone));
 	return boundary === 'end' && minute === 0 ? MINUTES_PER_DAY : minute;
 }
 
 function eventStyle(
 	column: number,
 	event: CalendarEvent,
-	day: Date,
+	day: Temporal.ZonedDateTime,
 	timeZone: string
 ) {
 	const startsAtMinute = eventMinuteOfDay(
@@ -359,7 +298,7 @@ function BusyEvent({
 	timeZone,
 }: {
 	readonly column: number;
-	readonly day: Date;
+	readonly day: Temporal.ZonedDateTime;
 	readonly event: CalendarEvent;
 	readonly formatTime: Intl.DateTimeFormat;
 	readonly timeZone: string;
@@ -394,7 +333,7 @@ function CurrentTimeMarker({ minute }: { readonly minute: number }) {
 export function AvailabilityClient() {
 	const [locales, setLocales] = useState<LocaleList>(['en-US']);
 	const [timeZone, setTimeZone] = useState('UTC');
-	const [now, setNow] = useState<Date>();
+	const [now, setNow] = useState<Temporal.ZonedDateTime>();
 	const calendarBatches = future_collect_incremental(
 		useGetCalendarICals(CALENDAR_EMAILS).map(calendar =>
 			future_and_then(calendar, parseICalEvents)
@@ -414,8 +353,8 @@ export function AvailabilityClient() {
 		[locales, start, timeZone]
 	);
 	const rangeEnd = useMemo(
-		() => addZonedDays(start, VISIBLE_DAY_COUNT, timeZone),
-		[start, timeZone]
+		() => addZonedDays(start, VISIBLE_DAY_COUNT),
+		[start]
 	);
 	const events = calendarBatches(
 		value => value.flat(),
@@ -427,20 +366,24 @@ export function AvailabilityClient() {
 		() => false,
 		() => true
 	);
-	const busyEvents = busyEventsForRange(events, start, rangeEnd);
+	const busyEvents = busyEventsForRange(
+		events,
+		zonedDateTimeToDate(start),
+		zonedDateTimeToDate(rangeEnd)
+	);
 	const dayBuckets = useMemo(
 		() => bucketBusyEvents(busyEvents, days),
 		[busyEvents, days]
 	);
 	const rulerLabels = useMemo(
 		() =>
-			days[0] ? hourLabels(days[0].startsAt, formatTime, timeZone) : [],
-		[days, formatTime, timeZone]
+			days[0] ? hourLabels(days[0].startsAt, formatTime) : [],
+		[days, formatTime]
 	);
 	const calendarGridStyle = useMemo(() => gridStyle(VISIBLE_DAY_COUNT), []);
 	const currentTimeMinute = useMemo(
-		() => (now ? viewMinuteOfDay(now, timeZone) : undefined),
-		[now, timeZone]
+		() => (now ? viewMinuteOfDay(now) : undefined),
+		[now]
 	);
 
 	useEffect(() => {
@@ -452,7 +395,7 @@ export function AvailabilityClient() {
 		let timer: number | undefined;
 
 		const updateNow = () => {
-			const nextNow = new Date();
+			const nextNow = Temporal.Now.zonedDateTimeISO(timeZone);
 			setNow(nextNow);
 			timer = window.setTimeout(
 				updateNow,
@@ -467,7 +410,7 @@ export function AvailabilityClient() {
 				window.clearTimeout(timer);
 			}
 		};
-	}, []);
+	}, [timeZone]);
 
 	return (
 		<div className={style.page}>
