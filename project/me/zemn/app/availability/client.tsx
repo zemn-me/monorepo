@@ -20,7 +20,6 @@ import { formatDatePartsWithOrdinalDay } from '#root/ts/react/lang/date.js';
 
 const HOUR_HEIGHT_REM = 4;
 const HOURS_PER_DAY = 24;
-const DAYS_PER_WEEK = 7;
 const MINUTES_PER_DAY = HOURS_PER_DAY * 60;
 const DAY_VIEW_START_HOUR = 5;
 const DAY_VIEW_START_MINUTE = DAY_VIEW_START_HOUR * 60;
@@ -78,17 +77,6 @@ function resolvedLocales(): LocaleList {
 			locale => locale !== '' && locale !== primaryLocale
 		),
 	];
-}
-
-function firstDayOfWeek(locale: string) {
-	type WeekInfoLocale = Intl.Locale & {
-		readonly weekInfo?: { readonly firstDay?: number };
-	};
-
-	const firstDay = (new Intl.Locale(locale) as WeekInfoLocale).weekInfo
-		?.firstDay;
-
-	return typeof firstDay === 'number' ? firstDay % 7 : 1;
 }
 
 function weekdayFormatter(locales: LocaleList, timeZone: string) {
@@ -157,16 +145,12 @@ function millisecondsUntilNextMinute(date: Temporal.ZonedDateTime) {
 	return Math.max(1, (60 - date.second) * 1000 - date.millisecond);
 }
 
-function weekStart(
+function currentDayStart(
 	timeZone: string,
-	locale: string,
 	now = Temporal.Now.zonedDateTimeISO(timeZone)
 ) {
-	const weekday = now.dayOfWeek % 7;
-	const dayOffset =
-		(weekday - firstDayOfWeek(locale) + DAYS_PER_WEEK) % DAYS_PER_WEEK;
-
-	return now.subtract({ days: dayOffset }).with({
+	const zonedNow = now.withTimeZone(timeZone);
+	const startsAt = zonedNow.with({
 		hour: DAY_VIEW_START_HOUR,
 		microsecond: 0,
 		millisecond: 0,
@@ -174,6 +158,10 @@ function weekStart(
 		nanosecond: 0,
 		second: 0,
 	});
+
+	return zonedNow.hour * 60 + zonedNow.minute < DAY_VIEW_START_MINUTE
+		? startsAt.subtract({ days: 1 })
+		: startsAt;
 }
 
 function visibleDayRanges(
@@ -315,14 +303,13 @@ export function AvailabilityClient() {
 			future_and_then(calendar, parseICalEvents)
 		)
 	);
-	const locale = locales[0];
 	const formatTime = useMemo(
 		() => timeFormatter(locales, timeZone),
 		[locales, timeZone]
 	);
 	const start = useMemo(
-		() => weekStart(timeZone, locale),
-		[locale, timeZone]
+		() => currentDayStart(timeZone, now),
+		[now, timeZone]
 	);
 	const days = useMemo(
 		() => visibleDayRanges(start, locales, timeZone),
