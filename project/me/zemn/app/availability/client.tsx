@@ -32,6 +32,14 @@ const VISIBLE_DAY_COUNT = 63;
 const DAY_COLUMN_MIN_WIDTH_REM = 8;
 
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+const hourMarks = Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
+	hour,
+	minute: hour * 60,
+}));
+const halfHourMarks = Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
+	hour,
+	minute: hour * 60 + 30,
+}));
 
 type LocaleList = readonly [string, ...string[]];
 
@@ -294,6 +302,13 @@ function gridStyle(dayCount: number): CSSProperties {
 	} as CSSProperties;
 }
 
+function timeMarkStyle(minute: number, gridColumn: CSSProperties['gridColumn']) {
+	return {
+		gridColumn,
+		gridRow: `${minute + CALENDAR_GRID_ROW_OFFSET} / span 1`,
+	};
+}
+
 function eventMinuteOfDay(
 	date: Date,
 	day: Date,
@@ -495,6 +510,7 @@ export function AvailabilityClient() {
 						<div
 							className={style.rulerLane}
 							aria-hidden="true"
+							data-availability-ruler-lane
 							style={{
 								gridColumn: 1,
 								gridRow: `${CALENDAR_GRID_ROW_OFFSET} / span ${MINUTES_PER_DAY}`,
@@ -504,11 +520,45 @@ export function AvailabilityClient() {
 							<div
 								className={style.dayLane}
 								aria-hidden="true"
+								data-availability-day-lane
 								key={`${day.key}-lane`}
 								style={{
 									gridColumn: index + 2,
 									gridRow: `${CALENDAR_GRID_ROW_OFFSET} / span ${MINUTES_PER_DAY}`,
 								}}
+							/>
+						))}
+						{hourMarks.map(({ hour, minute }) => (
+							<div
+								className={style.dayHourLine}
+								aria-hidden="true"
+								data-availability-day-hour-line
+								key={`day-hour-line-${hour}`}
+								style={timeMarkStyle(
+									minute,
+									`2 / span ${VISIBLE_DAY_COUNT}`
+								)}
+							/>
+						))}
+						{halfHourMarks.map(({ hour, minute }) => (
+							<div
+								className={style.dayHalfHourLine}
+								aria-hidden="true"
+								data-availability-day-half-hour-line
+								key={`day-half-hour-line-${hour}`}
+								style={timeMarkStyle(
+									minute,
+									`2 / span ${VISIBLE_DAY_COUNT}`
+								)}
+							/>
+						))}
+						{halfHourMarks.map(({ hour, minute }) => (
+							<div
+								className={style.rulerHalfHourTick}
+								aria-hidden="true"
+								data-availability-ruler-half-hour-tick
+								key={`ruler-half-hour-tick-${hour}`}
+								style={timeMarkStyle(minute, 1)}
 							/>
 						))}
 						{rulerLabels.map(({ hour, label }) => (

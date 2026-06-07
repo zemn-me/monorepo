@@ -218,6 +218,83 @@ describe('zemn.me website', () => {
 				expect(await firstRulerLabel.getText()).toBe(
 					expectedFirstRulerLabel
 				);
+				const rulerGeometry = (await driver.executeScript(`
+					const week = document.querySelector('[aria-label="Availability calendar"]');
+					const labels = document.querySelectorAll('[data-availability-ruler-label]');
+					if (!(week instanceof HTMLElement) || labels.length < 5) {
+						throw new Error('availability ruler geometry unavailable');
+					}
+
+					const probe = document.createElement('div');
+					probe.style.position = 'absolute';
+					probe.style.height = getComputedStyle(week).getPropertyValue('--hour-height');
+					document.body.append(probe);
+					const hourHeight = probe.getBoundingClientRect().height;
+					probe.remove();
+
+					return {
+						actualFourHourDelta: labels[4].getBoundingClientRect().top - labels[0].getBoundingClientRect().top,
+						expectedFourHourDelta: hourHeight * 4,
+					};
+				`)) as {
+					actualFourHourDelta: number;
+					expectedFourHourDelta: number;
+				};
+				expect(
+					Math.abs(
+						rulerGeometry.actualFourHourDelta -
+							rulerGeometry.expectedFourHourDelta
+					)
+				).toBeLessThanOrEqual(1);
+				const lineGeometry = (await driver.executeScript(`
+					const rulerLane = document.querySelector('[data-availability-ruler-lane]');
+					const dayLane = document.querySelector('[data-availability-day-lane]');
+					const dayHalfHourLine = document.querySelector('[data-availability-day-half-hour-line]');
+					const hourLines = document.querySelectorAll('[data-availability-day-hour-line]');
+					const rulerHalfHourTick = document.querySelector('[data-availability-ruler-half-hour-tick]');
+					if (
+						!(rulerLane instanceof HTMLElement) ||
+						!(dayLane instanceof HTMLElement) ||
+						!(dayHalfHourLine instanceof HTMLElement) ||
+						!(rulerHalfHourTick instanceof HTMLElement) ||
+						hourLines.length < 5
+					) {
+						throw new Error('availability line geometry unavailable');
+					}
+					const dayLaneStyle = getComputedStyle(dayLane);
+					const dayHalfHourLineStyle = getComputedStyle(dayHalfHourLine);
+					const rulerHalfHourTickStyle = getComputedStyle(rulerHalfHourTick);
+
+					return {
+						actualFourHourDelta: hourLines[4].getBoundingClientRect().top - hourLines[0].getBoundingClientRect().top,
+						dayLaneBackgroundImage: getComputedStyle(dayLane).backgroundImage,
+						dayLaneBorderLeftStyle: dayLaneStyle.borderLeftStyle,
+						dayLaneBorderLeftWidth: dayLaneStyle.borderLeftWidth,
+						dayHalfHourBorderTopStyle: dayHalfHourLineStyle.borderTopStyle,
+						rulerLaneBackgroundImage: getComputedStyle(rulerLane).backgroundImage,
+						rulerHalfHourBorderTopStyle: rulerHalfHourTickStyle.borderTopStyle,
+					};
+				`)) as {
+					actualFourHourDelta: number;
+					dayLaneBackgroundImage: string;
+					dayLaneBorderLeftStyle: string;
+					dayLaneBorderLeftWidth: string;
+					dayHalfHourBorderTopStyle: string;
+					rulerLaneBackgroundImage: string;
+					rulerHalfHourBorderTopStyle: string;
+				};
+				expect(lineGeometry.dayLaneBackgroundImage).toBe('none');
+				expect(lineGeometry.dayLaneBorderLeftStyle).toBe('solid');
+				expect(lineGeometry.dayLaneBorderLeftWidth).not.toBe('0px');
+				expect(lineGeometry.dayHalfHourBorderTopStyle).toBe('dotted');
+				expect(lineGeometry.rulerLaneBackgroundImage).toBe('none');
+				expect(lineGeometry.rulerHalfHourBorderTopStyle).toBe('dotted');
+				expect(
+					Math.abs(
+						lineGeometry.actualFourHourDelta -
+							rulerGeometry.expectedFourHourDelta
+					)
+				).toBeLessThanOrEqual(1);
 				expect(Number.isFinite(currentMinute)).toBe(true);
 				expect(wrappedMinuteDelta).toBeLessThanOrEqual(1);
 			} finally {
