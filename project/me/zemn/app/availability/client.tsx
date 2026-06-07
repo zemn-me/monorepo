@@ -25,6 +25,8 @@ import { formatDatePartsWithOrdinalDay } from '#root/ts/react/lang/date.js';
 const HOUR_HEIGHT_REM = 4;
 const HOURS_PER_DAY = 24;
 const MINUTES_PER_DAY = HOURS_PER_DAY * 60;
+const DAY_VIEW_START_HOUR = 5;
+const DAY_VIEW_START_MINUTE = DAY_VIEW_START_HOUR * 60;
 const CALENDAR_GRID_ROW_OFFSET = 3;
 const VISIBLE_DAY_COUNT = 63;
 const DAY_COLUMN_MIN_WIDTH_REM = 8;
@@ -115,13 +117,22 @@ function hourLabels(
 ) {
 	return Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
 		hour,
-		label: formatTime.format(dayAtHour(day, hour, timeZone)),
+		label: formatTime.format(addZonedHours(day, hour, timeZone)),
 	}));
 }
 
-function minuteOfDay(date: Date, timeZone: string) {
+function wallMinuteOfDay(date: Date, timeZone: string) {
 	const parts = zonedParts(date, timeZone);
 	return parts.hour * 60 + parts.minute;
+}
+
+function viewMinuteOfDay(date: Date, timeZone: string) {
+	return (
+		(wallMinuteOfDay(date, timeZone) -
+			DAY_VIEW_START_MINUTE +
+			MINUTES_PER_DAY) %
+		MINUTES_PER_DAY
+	);
 }
 
 function millisecondsUntilNextMinute(date: Date) {
@@ -202,15 +213,22 @@ function weekStart(timeZone: string, locale: string, now = new Date()) {
 		parts.year,
 		parts.month,
 		parts.day - dayOffset,
-		0,
+		DAY_VIEW_START_HOUR,
 		0,
 		timeZone
 	);
 }
 
-function dayAtHour(day: Date, hour: number, timeZone: string) {
+function addZonedHours(day: Date, hours: number, timeZone: string) {
 	const parts = zonedParts(day, timeZone);
-	return zonedDate(parts.year, parts.month, parts.day, hour, 0, timeZone);
+	return zonedDate(
+		parts.year,
+		parts.month,
+		parts.day,
+		parts.hour + hours,
+		parts.minute,
+		timeZone
+	);
 }
 
 function addZonedDays(day: Date, days: number, timeZone: string) {
@@ -219,8 +237,8 @@ function addZonedDays(day: Date, days: number, timeZone: string) {
 		parts.year,
 		parts.month,
 		parts.day + days,
-		0,
-		0,
+		parts.hour,
+		parts.minute,
 		timeZone
 	);
 }
@@ -287,8 +305,7 @@ function eventMinuteOfDay(
 	if (date.getTime() <= dayStart) return 0;
 	if (date.getTime() >= dayEnd) return MINUTES_PER_DAY;
 
-	const parts = zonedParts(date, timeZone);
-	const minute = parts.hour * 60 + parts.minute;
+	const minute = viewMinuteOfDay(date, timeZone);
 	return boundary === 'end' && minute === 0 ? MINUTES_PER_DAY : minute;
 }
 
@@ -408,7 +425,7 @@ export function AvailabilityClient() {
 		[]
 	);
 	const currentTimeMinute = useMemo(
-		() => (now ? minuteOfDay(now, timeZone) : undefined),
+		() => (now ? viewMinuteOfDay(now, timeZone) : undefined),
 		[now, timeZone]
 	);
 
