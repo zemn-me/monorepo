@@ -8,7 +8,8 @@ import (
 )
 
 type AssignedPorts struct {
-	APIPort string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
+	APIPort         string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
+	CalendarAPIPort string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
 }
 
 func ApiRoot() (u *url.URL, err error) {
@@ -20,6 +21,9 @@ func ApiRoot() (u *url.URL, err error) {
 	var assignedPorts AssignedPorts
 	if err = json.Unmarshal([]byte(ports), &assignedPorts); err != nil {
 		return
+	}
+	if assignedPorts.APIPort == "" {
+		assignedPorts.APIPort = assignedPorts.CalendarAPIPort
 	}
 
 	if assignedPorts.APIPort == "" {

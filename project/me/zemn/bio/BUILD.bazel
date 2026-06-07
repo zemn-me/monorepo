@@ -8,6 +8,7 @@ ts_project(
     name = "bio",
     srcs = [
         "bio.ts",
+        "calendar_emails.ts",
         "index.ts",
         "priority_sort.ts",
         "schema.ts",
@@ -45,6 +46,21 @@ js_binary(
     entry_point = "priority_sort.js",
 )
 
+js_binary(
+    name = "calendar_emails",
+    data = [
+        ":bio",
+    ],
+    entry_point = "calendar_emails.js",
+)
+
+genrule(
+    name = "calendar_emails_json",
+    outs = ["calendar_emails.json"],
+    cmd = "BAZEL_BINDIR=$(BINDIR) $(location :calendar_emails) > $@",
+    tools = [":calendar_emails"],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -54,6 +70,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "bio.ts",
+        "calendar_emails.ts",
         "event_test.ts",
         "index.ts",
         "priority_sort.ts",
