@@ -93,6 +93,49 @@ export const future_flatten_then = <Then, Loading1, Error1, Loading2, Error2>(
 		error1 => error(error1)
 	);
 
+export function future_collect<Then, Loading, Error>(
+	futures: readonly Future<Then, Loading, Error>[]
+): Future<readonly Then[], Loading, Error> {
+	return futures.reduce<Future<readonly Then[], Loading, Error>>(
+		(collected, next) =>
+			coincide_then(collected, next, (values, value) => [
+				...values,
+				value,
+			]),
+		resolve([])
+	);
+}
+
+export function future_collect_incremental<Then, Loading, Error>(
+	futures: readonly Future<Then, Loading, Error>[]
+): Future<readonly Then[], Loading, Error> {
+	const values: Then[] = [];
+	const loadings: Loading[] = [];
+	const errors: Error[] = [];
+
+	for (const future of futures) {
+		future(
+			value => values.push(value),
+			value => loadings.push(value),
+			value => errors.push(value)
+		);
+	}
+
+	if (errors.length > 0) {
+		return error(errors[0]!);
+	}
+
+	if (values.length > 0) {
+		return resolve(values);
+	}
+
+	if (loadings.length > 0) {
+		return loading(loadings[0]!);
+	}
+
+	return resolve(values);
+}
+
 export const coincide_then = <
 	Then1,
 	Loading1,
