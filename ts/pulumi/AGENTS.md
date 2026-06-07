@@ -9,5 +9,3 @@ After migration, protect the GCP WIF and Secret Manager resources that CI requir
 The AWS GitHub Actions role is intentionally admin for now, but its trust policy must stay pinned to the Submit workflow on `refs/heads/main` and the Staging workflow on merge-queue refs.
 
 AWS GitHub OIDC trust policies should use AWS-documented GitHub keys like `repository_id`, `workflow`, `ref`, and `sub`; do not copy GCP-only owner claim checks into AWS.
-
-CloudFront Function physical names only allow `[a-zA-Z0-9-_]`; set explicit sanitized names for resources derived from domains.

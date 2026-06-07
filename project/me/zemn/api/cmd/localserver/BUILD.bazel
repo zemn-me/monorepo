@@ -35,20 +35,3 @@ itest_service(
         "//java/software/amazon/dynamodb",
     ],
 )
-
-itest_service(
-    name = "localserver_calendar_fixture_itest_service",
-    args = [
-        "--address",
-        ":$${PORT}",
-    ],
-    autoassign_port = True,
-    env = {
-        "ZEMN_TEST_CALENDAR_ICAL_ROLLING_FIXTURE": "1",
-    },
-    exe = ":localserver",
-    http_health_check_address = "http://localhost:$${PORT}/healthz",
-    deps = [
-        "//java/software/amazon/dynamodb",
-    ],
-)

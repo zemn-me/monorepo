@@ -9,7 +9,7 @@ service_test(
     name = "integration_test",
     flaky = True,
     services = [
-        "//project/me/zemn:itest_service_calendar_fixture",
+        "//project/me/zemn:itest_service",
         ":oidc_provider_itest_service",
     ],
     test = ":testing_test",

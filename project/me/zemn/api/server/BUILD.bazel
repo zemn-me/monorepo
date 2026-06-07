@@ -23,12 +23,6 @@ go_oapi_codegen(
 )
 
 copy_file(
-    name = "calendar_emails_json",
-    src = "//project/me/zemn/bio:calendar_emails.json",
-    out = "calendar_emails.json",
-)
-
-copy_file(
     name = "security_txt",
     src = "//ts/pulumi/lib/website:security.txt",
     out = "security.txt",
@@ -41,7 +35,6 @@ go_library(
         "admin.go",
         "analytics.go",
         "api.gen.go",
-        "calendar.go",
         "callbox_settings.go",
         "constants.go",
         "date.go",
@@ -64,10 +57,7 @@ go_library(
         "uuid.go",
         "webfinger.go",
     ],
-    embedsrcs = [
-        "calendar_emails.json",
-        "security.txt",
-    ],
+    embedsrcs = ["security.txt"],
     importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/server",
     visibility = ["//visibility:public"],
     deps = [

@@ -9,13 +9,8 @@ from python.runfiles import runfiles
 
 
 class AssignedPorts(BaseModel):
-    api_service_port: str | None = Field(
-        default=None,
+    api_service_port: str = Field(
         alias="@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"
-    )
-    calendar_fixture_api_service_port: str | None = Field(
-        default=None,
-        alias="@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service",
     )
 
     model_config = ConfigDict(extra="ignore", populate_by_name=True)
@@ -27,14 +22,8 @@ def main() -> None:
         sys.exit("ASSIGNED_PORTS is not set")
 
     port_map = AssignedPorts.model_validate(json.loads(assigned))
-    api_service_port = (
-        port_map.api_service_port or port_map.calendar_fixture_api_service_port
-    )
-    if not api_service_port:
-        sys.exit("API service port is not set in ASSIGNED_PORTS")
-
     os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = (
-        "http://localhost:" + str(api_service_port)
+        "http://localhost:" + str(port_map.api_service_port)
     )
 
     nextjs_bin_rlocation = os.getenv("NEXTJS_BINARY")
@@ -54,3 +43,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
