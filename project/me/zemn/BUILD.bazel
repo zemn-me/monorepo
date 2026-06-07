@@ -27,6 +27,7 @@ ts_project(
         "//project/me/zemn/app/article/2024/clean",
         "//project/me/zemn/app/article/2024/missing",
         "//project/me/zemn/app/article/2026/kasimir",
+        "//project/me/zemn/app/availability",
         "//project/me/zemn/app/bluesky",
         "//project/me/zemn/app/callback",
         "//project/me/zemn/app/cv",
@@ -80,6 +81,19 @@ next_itest_service(
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+next_itest_service(
+    name = "itest_service_calendar_fixture",
+    args = [
+        "project/me/zemn",
+    ],
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
+    http_health_check_address = "http://localhost:$${PORT}/healthz",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service",
         "//project/me/zemn/testing:oidc_provider_itest_service",
     ],
 )
