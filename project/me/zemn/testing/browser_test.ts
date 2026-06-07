@@ -169,11 +169,27 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('availability shows a current-time marker in the ruler', async () => {
+		it('availability shows a 5am ruler with a current-time marker', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
 				await driver.get(`${origin}/availability`);
 
+				const firstRulerLabel = await driver.findElement(
+					By.css('[data-availability-ruler-label]')
+				);
+				const expectedFirstRulerLabel = (await driver.executeScript(`
+					const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+					const locales = [
+						intlLocale,
+						...navigator.languages.filter(locale => locale !== intlLocale),
+					].filter(locale => locale !== '');
+					const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
+					return new Intl.DateTimeFormat(locales, {
+						hour: 'numeric',
+						minute: '2-digit',
+						timeZone,
+					}).format(new Date(2020, 0, 1, 5, 0));
+				`)) as string;
 				const marker = await driver.findElement(
 					By.css('[data-availability-current-time-marker]')
 				);
@@ -190,7 +206,8 @@ describe('zemn.me website', () => {
 						timeZone,
 					}).formatToParts(new Date());
 					const byType = Object.fromEntries(parts.map(part => [part.type, part.value]));
-					return (Number(byType.hour) % 24) * 60 + Number(byType.minute);
+					const wallMinute = (Number(byType.hour) % 24) * 60 + Number(byType.minute);
+					return (wallMinute - 5 * 60 + 1440) % 1440;
 				`)) as number;
 				const minuteDelta = Math.abs(currentMinute - expectedMinute);
 				const wrappedMinuteDelta = Math.min(
@@ -198,6 +215,9 @@ describe('zemn.me website', () => {
 					1440 - minuteDelta
 				);
 
+				expect(await firstRulerLabel.getText()).toBe(
+					expectedFirstRulerLabel
+				);
 				expect(Number.isFinite(currentMinute)).toBe(true);
 				expect(wrappedMinuteDelta).toBeLessThanOrEqual(1);
 			} finally {
