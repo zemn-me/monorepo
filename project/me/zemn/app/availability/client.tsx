@@ -119,6 +119,18 @@ function hourLabels(
 	}));
 }
 
+function minuteOfDay(date: Date, timeZone: string) {
+	const parts = zonedParts(date, timeZone);
+	return parts.hour * 60 + parts.minute;
+}
+
+function millisecondsUntilNextMinute(date: Date) {
+	return Math.max(
+		1,
+		(60 - date.getSeconds()) * 1000 - date.getMilliseconds()
+	);
+}
+
 function zonedDateFormatter(timeZone: string) {
 	return new Intl.DateTimeFormat('en-GB', {
 		day: '2-digit',
@@ -328,9 +340,25 @@ function BusyEvent({
 	);
 }
 
+function CurrentTimeMarker({ minute }: { readonly minute: number }) {
+	return (
+		<div
+			aria-hidden="true"
+			className={style.currentTimeMarker}
+			data-availability-current-time-marker
+			data-availability-current-minute={minute}
+			style={{
+				gridColumn: 1,
+				gridRow: `${minute + CALENDAR_GRID_ROW_OFFSET} / span 1`,
+			}}
+		/>
+	);
+}
+
 export function AvailabilityClient() {
 	const [locales, setLocales] = useState<LocaleList>(['en-US']);
 	const [timeZone, setTimeZone] = useState('UTC');
+	const [now, setNow] = useState<Date>();
 	const calendarBatches = future_collect_incremental(
 		useGetCalendarICals(CALENDAR_EMAILS).map(calendar =>
 			future_and_then(calendar, parseICalEvents)
@@ -379,10 +407,35 @@ export function AvailabilityClient() {
 		() => gridStyle(VISIBLE_DAY_COUNT),
 		[]
 	);
+	const currentTimeMinute = useMemo(
+		() => (now ? minuteOfDay(now, timeZone) : undefined),
+		[now, timeZone]
+	);
 
 	useEffect(() => {
 		setLocales(resolvedLocales());
 		setTimeZone(resolvedTimeZone());
+	}, []);
+
+	useEffect(() => {
+		let timer: number | undefined;
+
+		const updateNow = () => {
+			const nextNow = new Date();
+			setNow(nextNow);
+			timer = window.setTimeout(
+				updateNow,
+				millisecondsUntilNextMinute(nextNow)
+			);
+		};
+
+		updateNow();
+
+		return () => {
+			if (timer !== undefined) {
+				window.clearTimeout(timer);
+			}
+		};
 	}, []);
 
 	return (
@@ -456,6 +509,9 @@ export function AvailabilityClient() {
 								{label}
 							</div>
 						))}
+						{currentTimeMinute === undefined ? null : (
+							<CurrentTimeMarker minute={currentTimeMinute} />
+						)}
 						{dayBuckets.map((day, index) => (
 							day.events.map((event, i) => (
 								<BusyEvent
