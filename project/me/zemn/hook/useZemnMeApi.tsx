@@ -1,6 +1,7 @@
 import {
 	useInfiniteQuery,
 	useMutation,
+	useQueries,
 	useQuery,
 	useQueryClient,
 } from '@tanstack/react-query';
@@ -82,6 +83,37 @@ export function useZemnMeApi(id_token?: string) {
 	const fetchClient = useFetchClient(id_token);
 
 	return useMemo(() => createClient(fetchClient), [fetchClient]);
+}
+
+function calendarICalURL(email: string) {
+	return new URL(
+		`/calendar/ical/${encodeURIComponent(email)}`,
+		ZEMN_ME_API_BASE
+	).toString();
+}
+
+function getCalendarICalQuery(email: string) {
+	return {
+		queryKey: ['get', '/calendar/ical/{email}', email],
+		queryFn: async () => {
+			const response = await fetch(calendarICalURL(email));
+			if (!response.ok) {
+				throw new Error(`/calendar/ical/{email}: ${response.status}`);
+			}
+			return response.text();
+		},
+		enabled: email !== '',
+	};
+}
+
+export function useGetCalendarICal(email: string) {
+	return useQueryFuture(useQuery(getCalendarICalQuery(email)));
+}
+
+export function useGetCalendarICals(emails: readonly string[]) {
+	return useQueries({
+		queries: emails.map(email => getCalendarICalQuery(email)),
+	}).map(useQueryFuture);
 }
 
 export function useGetGrievances(id_token: string) {

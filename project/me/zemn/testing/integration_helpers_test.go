@@ -16,8 +16,10 @@ import (
 )
 
 type ServicePorts struct {
-	NextServerPort string `json:"@@//project/me/zemn:itest_service"`
-	APIPort        string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
+	NextServerPort         string `json:"@@//project/me/zemn:itest_service"`
+	CalendarNextServerPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
+	APIPort                string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
+	CalendarAPIPort        string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
 	// Analytics are not rendered anywhere yet, so the itest reads DynamoDB
 	// directly to verify ingest. Once analytics are visible in the product, this
 	// can go away and the test should assert on the UI instead.
@@ -28,6 +30,12 @@ type ServicePorts struct {
 func servicePorts() (p ServicePorts, err error) {
 	if err = json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &p); err != nil {
 		return
+	}
+	if p.NextServerPort == "" {
+		p.NextServerPort = p.CalendarNextServerPort
+	}
+	if p.APIPort == "" {
+		p.APIPort = p.CalendarAPIPort
 	}
 
 	return

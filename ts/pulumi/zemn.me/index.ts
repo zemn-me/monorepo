@@ -90,6 +90,7 @@ export class Component extends Pulumi.ComponentResource {
 				domain: ['availability', args.domain].join('.'),
 				noIndex: true, // args.noIndex,
 				email: false,
+				redirectTo: `https://${args.domain}/availability`,
 				tags,
 			},
 			{ parent: this }
