@@ -197,16 +197,8 @@ describe('zemn.me website', () => {
 					await marker.getAttribute('data-availability-current-minute')
 				);
 				const expectedMinute = (await driver.executeScript(`
-					const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
-					const parts = new Intl.DateTimeFormat('en-GB', {
-						hour: '2-digit',
-						hour12: false,
-						hourCycle: 'h23',
-						minute: '2-digit',
-						timeZone,
-					}).formatToParts(new Date());
-					const byType = Object.fromEntries(parts.map(part => [part.type, part.value]));
-					const wallMinute = (Number(byType.hour) % 24) * 60 + Number(byType.minute);
+					const now = new Date();
+					const wallMinute = now.getHours() * 60 + now.getMinutes();
 					return (wallMinute - 5 * 60 + 1440) % 1440;
 				`)) as number;
 				const minuteDelta = Math.abs(currentMinute - expectedMinute);
