@@ -35,7 +35,7 @@ require (
 	github.com/itchyny/gojq v0.12.17
 	github.com/nyaruka/phonenumbers v1.8.0
 	github.com/oapi-codegen/nethttp-middleware v1.1.2
-	github.com/oapi-codegen/oapi-codegen/v2 v2.7.0
+	github.com/oapi-codegen/oapi-codegen/v2 v2.7.1
 	github.com/oapi-codegen/runtime v1.4.1
 	github.com/sergi/go-diff v1.4.0
 	github.com/tdewolff/parse/v2 v2.8.13
