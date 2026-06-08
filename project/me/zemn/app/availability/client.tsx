@@ -302,7 +302,10 @@ function gridStyle(dayCount: number): CSSProperties {
 	} as CSSProperties;
 }
 
-function timeMarkStyle(minute: number, gridColumn: CSSProperties['gridColumn']) {
+function timeMarkStyle(
+	minute: number,
+	gridColumn: CSSProperties['gridColumn']
+) {
 	return {
 		gridColumn,
 		gridRow: `${minute + CALENDAR_GRID_ROW_OFFSET} / span 1`,
@@ -367,7 +370,8 @@ function BusyEvent({
 			data-availability-busy
 			style={eventStyle(column, event, day, timeZone)}
 		>
-			{formatTime.format(event.startsAt)} - {formatTime.format(event.endsAt)}
+			{formatTime.format(event.startsAt)} -{' '}
+			{formatTime.format(event.endsAt)}
 		</div>
 	);
 }
@@ -430,15 +434,10 @@ export function AvailabilityClient() {
 	);
 	const rulerLabels = useMemo(
 		() =>
-			days[0]
-				? hourLabels(days[0].startsAt, formatTime, timeZone)
-				: [],
+			days[0] ? hourLabels(days[0].startsAt, formatTime, timeZone) : [],
 		[days, formatTime, timeZone]
 	);
-	const calendarGridStyle = useMemo(
-		() => gridStyle(VISIBLE_DAY_COUNT),
-		[]
-	);
+	const calendarGridStyle = useMemo(() => gridStyle(VISIBLE_DAY_COUNT), []);
 	const currentTimeMinute = useMemo(
 		() => (now ? viewMinuteOfDay(now, timeZone) : undefined),
 		[now, timeZone]
@@ -474,10 +473,7 @@ export function AvailabilityClient() {
 		<div className={style.page}>
 			<header className={style.header}>
 				<h1>Thomas' availability</h1>
-				<p>
-					Timed blocks below are times I am probably busy. All-day
-					events are usually reminders, so they are left out.
-				</p>
+				<p>Timed blocks below are times I am probably busy.</p>
 			</header>
 			<div className={style.weekShell}>
 				<div
@@ -499,7 +495,10 @@ export function AvailabilityClient() {
 								className={style.dayHeader}
 								data-availability-day-header
 								key={day.key}
-								style={{ gridColumn: index + 2, gridRow: '1 / 3' }}
+								style={{
+									gridColumn: index + 2,
+									gridRow: '1 / 3',
+								}}
 							>
 								<span>{day.weekdayLabel}</span>
 								<span className={style.dayHeaderDate}>
@@ -579,7 +578,7 @@ export function AvailabilityClient() {
 						{currentTimeMinute === undefined ? null : (
 							<CurrentTimeMarker minute={currentTimeMinute} />
 						)}
-						{dayBuckets.map((day, index) => (
+						{dayBuckets.map((day, index) =>
 							day.events.map((event, i) => (
 								<BusyEvent
 									column={index + 2}
@@ -590,7 +589,7 @@ export function AvailabilityClient() {
 									timeZone={timeZone}
 								/>
 							))
-						))}
+						)}
 					</section>
 				</div>
 			</div>
