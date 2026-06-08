@@ -1,12 +1,8 @@
 'use client';
 
-import {
-	CSSProperties,
-	ReactElement,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import type { CSSProperties, ReactElement } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Temporal } from 'temporal-polyfill';
 
 import { CALENDAR_EMAILS } from '#root/project/me/zemn/app/availability/calendar.js';
 import {
@@ -29,61 +25,58 @@ const DAY_VIEW_START_HOUR = 5;
 const DAY_VIEW_START_MINUTE = DAY_VIEW_START_HOUR * 60;
 const CALENDAR_GRID_ROW_OFFSET = 3;
 const VISIBLE_DAY_COUNT = 63;
+const RULER_WIDTH_REM = 4.75;
 const DAY_COLUMN_MIN_WIDTH_REM = 8;
+const RULER_COLUMN = 1;
+const FIRST_DAY_COLUMN = 2;
+const DAY_COLUMNS = `${FIRST_DAY_COLUMN} / span ${VISIBLE_DAY_COUNT}`;
+const FULL_DAY_ROWS = `${CALENDAR_GRID_ROW_OFFSET} / span ${MINUTES_PER_DAY}`;
+const CALENDAR_GRID_STYLE = {
+	'--hour-height': `${HOUR_HEIGHT_REM}rem`,
+	'--minute-height': `${HOUR_HEIGHT_REM / 60}rem`,
+	gridTemplateColumns: `minmax(${RULER_WIDTH_REM}rem, max-content) repeat(${VISIBLE_DAY_COUNT}, minmax(var(--availability-day-width), 1fr))`,
+	minWidth: `calc(${RULER_WIDTH_REM}rem + ${
+		VISIBLE_DAY_COUNT * DAY_COLUMN_MIN_WIDTH_REM
+	}rem)`,
+} as CSSProperties;
 
-const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
-const hourMarks = Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
-	hour,
-	minute: hour * 60,
-}));
-const halfHourMarks = Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
-	hour,
-	minute: hour * 60 + 30,
-}));
+const minuteMarks = (minuteOffset: number) =>
+	Array.from(
+		{ length: HOURS_PER_DAY },
+		(_, hour) => hour * 60 + minuteOffset
+	);
+const HOUR_MARKS = minuteMarks(0);
+const HALF_HOUR_MARKS = minuteMarks(30);
 
 type LocaleList = readonly [string, ...string[]];
 
-interface DayBucket {
-	readonly endsAt: Date;
-	readonly events: readonly CalendarEvent[];
+interface DayRange {
+	readonly endsAt: Temporal.ZonedDateTime;
 	readonly key: string;
 	readonly dateLabel: ReactElement;
-	readonly startsAt: Date;
+	readonly startsAt: Temporal.ZonedDateTime;
 	readonly weekdayLabel: string;
 }
 
+interface DayBucket extends DayRange {
+	readonly events: readonly CalendarEvent[];
+}
+
 function resolvedTimeZone() {
-	return Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
+	return Temporal.Now.zonedDateTimeISO().timeZoneId;
 }
 
 function resolvedLocales(): LocaleList {
-	const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
-	const locales = [
-		intlLocale,
-		...navigator.languages.filter(locale => locale !== intlLocale),
-	].filter(locale => locale !== '');
-
-	const first = locales[0];
-	if (first !== undefined) {
-		return [first, ...locales.slice(1)];
-	}
-
-	if (navigator.languages.length > 0) {
-		return navigator.languages as LocaleList;
-	}
-
-	return [navigator.language || 'en-US'];
-}
-
-function firstDayOfWeek(locale: string) {
-	type WeekInfoLocale = Intl.Locale & {
-		readonly weekInfo?: { readonly firstDay?: number };
-	};
-
-	const firstDay = (new Intl.Locale(locale) as WeekInfoLocale).weekInfo
-		?.firstDay;
-
-	return typeof firstDay === 'number' ? firstDay % 7 : 1;
+	const primaryLocale =
+		Intl.DateTimeFormat().resolvedOptions().locale ||
+		navigator.language ||
+		'en-US';
+	return [
+		primaryLocale,
+		...navigator.languages.filter(
+			locale => locale !== '' && locale !== primaryLocale
+		),
+	];
 }
 
 function weekdayFormatter(locales: LocaleList, timeZone: string) {
@@ -119,144 +112,63 @@ function timeFormatter(locales: LocaleList, timeZone: string) {
 }
 
 function hourLabels(
-	day: Date,
-	formatTime: Intl.DateTimeFormat,
-	timeZone: string
+	day: Temporal.ZonedDateTime,
+	formatTime: Intl.DateTimeFormat
 ) {
-	return Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
-		hour,
-		label: formatTime.format(addZonedHours(day, hour, timeZone)),
+	return HOUR_MARKS.map(minute => ({
+		label: formatTime.format(toDate(day.add({ minutes: minute }))),
+		minute,
 	}));
 }
 
-function wallMinuteOfDay(date: Date, timeZone: string) {
-	const parts = zonedParts(date, timeZone);
-	return parts.hour * 60 + parts.minute;
+function toZonedDateTime(date: Date, timeZone: string) {
+	return Temporal.Instant.fromEpochMilliseconds(
+		date.getTime()
+	).toZonedDateTimeISO(timeZone);
 }
 
-function viewMinuteOfDay(date: Date, timeZone: string) {
+function toDate(date: Temporal.ZonedDateTime) {
+	return new globalThis.Date(date.epochMilliseconds);
+}
+
+function viewMinuteOfDay(date: Temporal.ZonedDateTime) {
 	return (
-		(wallMinuteOfDay(date, timeZone) -
+		(date.hour * 60 +
+			date.minute -
 			DAY_VIEW_START_MINUTE +
 			MINUTES_PER_DAY) %
 		MINUTES_PER_DAY
 	);
 }
 
-function millisecondsUntilNextMinute(date: Date) {
-	return Math.max(
-		1,
-		(60 - date.getSeconds()) * 1000 - date.getMilliseconds()
-	);
+function millisecondsUntilNextMinute(date: Temporal.ZonedDateTime) {
+	return Math.max(1, (60 - date.second) * 1000 - date.millisecond);
 }
 
-function zonedDateFormatter(timeZone: string) {
-	return new Intl.DateTimeFormat('en-GB', {
-		day: '2-digit',
-		hour: '2-digit',
-		hour12: false,
-		hourCycle: 'h23',
-		minute: '2-digit',
-		month: '2-digit',
-		second: '2-digit',
-		timeZone,
-		weekday: 'short',
-		year: 'numeric',
-	});
-}
-
-function zonedParts(date: Date, timeZone: string) {
-	const parts = new Map(
-		zonedDateFormatter(timeZone)
-			.formatToParts(date)
-			.map(part => [part.type, part.value])
-	);
-
-	return {
-		day: Number(parts.get('day')),
-		hour: Number(parts.get('hour')) % 24,
-		minute: Number(parts.get('minute')),
-		month: Number(parts.get('month')),
-		second: Number(parts.get('second')),
-		weekday: weekdays.indexOf(
-			parts.get('weekday') as (typeof weekdays)[number]
-		),
-		year: Number(parts.get('year')),
-	};
-}
-
-function timeZoneOffset(date: Date, timeZone: string) {
-	const parts = zonedParts(date, timeZone);
-	return (
-		Date.UTC(
-			parts.year,
-			parts.month - 1,
-			parts.day,
-			parts.hour,
-			parts.minute,
-			parts.second
-		) - date.getTime()
-	);
-}
-
-function zonedDate(
-	year: number,
-	month: number,
-	day: number,
-	hour: number,
-	minute: number,
-	timeZone: string
+function currentDayStart(
+	timeZone: string,
+	now = Temporal.Now.zonedDateTimeISO(timeZone)
 ) {
-	const utcGuess = new Date(Date.UTC(year, month - 1, day, hour, minute));
-	return new Date(utcGuess.getTime() - timeZoneOffset(utcGuess, timeZone));
-}
+	const zonedNow = now.withTimeZone(timeZone);
+	const startsAt = zonedNow.with({
+		hour: DAY_VIEW_START_HOUR,
+		microsecond: 0,
+		millisecond: 0,
+		minute: 0,
+		nanosecond: 0,
+		second: 0,
+	});
 
-function weekStart(timeZone: string, locale: string, now = new Date()) {
-	const parts = zonedParts(now, timeZone);
-	const dayOffset =
-		(parts.weekday - firstDayOfWeek(locale) + weekdays.length) %
-		weekdays.length;
-
-	return zonedDate(
-		parts.year,
-		parts.month,
-		parts.day - dayOffset,
-		DAY_VIEW_START_HOUR,
-		0,
-		timeZone
-	);
-}
-
-function addZonedHours(day: Date, hours: number, timeZone: string) {
-	const parts = zonedParts(day, timeZone);
-	return zonedDate(
-		parts.year,
-		parts.month,
-		parts.day,
-		parts.hour + hours,
-		parts.minute,
-		timeZone
-	);
-}
-
-function addZonedDays(day: Date, days: number, timeZone: string) {
-	const parts = zonedParts(day, timeZone);
-	return zonedDate(
-		parts.year,
-		parts.month,
-		parts.day + days,
-		parts.hour,
-		parts.minute,
-		timeZone
-	);
+	return zonedNow.hour * 60 + zonedNow.minute < DAY_VIEW_START_MINUTE
+		? startsAt.subtract({ days: 1 })
+		: startsAt;
 }
 
 function visibleDayRanges(
-	start: Date,
+	start: Temporal.ZonedDateTime,
 	locales: LocaleList,
-	timeZone: string,
-	dayCount: number
-) {
+	timeZone: string
+): readonly DayRange[] {
 	const formatWeekday = weekdayFormatter(locales, timeZone);
 	const formatDate = dateFormatter(locales, timeZone);
 	const formatKey = dayKeyFormatter(timeZone);
@@ -264,70 +176,70 @@ function visibleDayRanges(
 		Intl.DateTimeFormat.supportedLocalesOf(locales)[0] ?? 'en-US';
 	const locale = new Intl.Locale(localeName);
 
-	return Array.from({ length: dayCount }, (_, i) => {
-		const startsAt = addZonedDays(start, i, timeZone);
-		const endsAt = addZonedDays(startsAt, 1, timeZone);
+	return Array.from({ length: VISIBLE_DAY_COUNT }, (_, i) => {
+		const startsAt = start.add({ days: i });
+		const endsAt = startsAt.add({ days: 1 });
+		const startsAtDate = toDate(startsAt);
 
 		return {
 			dateLabel: formatDatePartsWithOrdinalDay(
-				formatDate.formatToParts(startsAt),
+				formatDate.formatToParts(startsAtDate),
 				locale,
 				localeName
 			),
 			endsAt,
-			events: [],
-			key: formatKey.format(startsAt),
+			key: formatKey.format(startsAtDate),
 			startsAt,
-			weekdayLabel: formatWeekday.format(startsAt),
+			weekdayLabel: formatWeekday.format(startsAtDate),
 		};
 	});
 }
 
 function bucketBusyEvents(
 	events: readonly CalendarEvent[],
-	days: readonly Omit<DayBucket, 'events'>[]
+	days: readonly DayRange[]
 ): readonly DayBucket[] {
 	return days.map(day => ({
 		...day,
-		events: busyEventsForRange(events, day.startsAt, day.endsAt),
+		events: busyEventsForRange(
+			events,
+			toDate(day.startsAt),
+			toDate(day.endsAt)
+		),
 	}));
 }
 
-function gridStyle(dayCount: number): CSSProperties {
-	return {
-		'--hour-height': `${HOUR_HEIGHT_REM}rem`,
-		'--minute-height': `${HOUR_HEIGHT_REM / 60}rem`,
-		gridTemplateColumns: `minmax(4.75rem, max-content) repeat(${dayCount}, minmax(var(--availability-day-width), 1fr))`,
-		minWidth: `calc(4.75rem + ${dayCount * DAY_COLUMN_MIN_WIDTH_REM}rem)`,
-	} as CSSProperties;
-}
-
-function timeMarkStyle(minute: number, gridColumn: CSSProperties['gridColumn']) {
+function timeMarkStyle(
+	minute: number,
+	gridColumn: CSSProperties['gridColumn'],
+	span = 1
+) {
 	return {
 		gridColumn,
-		gridRow: `${minute + CALENDAR_GRID_ROW_OFFSET} / span 1`,
+		gridRow: `${minute + CALENDAR_GRID_ROW_OFFSET} / span ${span}`,
 	};
 }
 
 function eventMinuteOfDay(
 	date: Date,
-	day: Date,
+	day: DayRange,
 	timeZone: string,
 	boundary: 'start' | 'end'
 ) {
-	const dayStart = day.getTime();
-	const dayEnd = addZonedDays(day, 1, timeZone).getTime();
-	if (date.getTime() <= dayStart) return 0;
-	if (date.getTime() >= dayEnd) return MINUTES_PER_DAY;
+	const epochMilliseconds = date.getTime();
+	const dayStart = day.startsAt.epochMilliseconds;
+	const dayEnd = day.endsAt.epochMilliseconds;
+	if (epochMilliseconds <= dayStart) return 0;
+	if (epochMilliseconds >= dayEnd) return MINUTES_PER_DAY;
 
-	const minute = viewMinuteOfDay(date, timeZone);
+	const minute = viewMinuteOfDay(toZonedDateTime(date, timeZone));
 	return boundary === 'end' && minute === 0 ? MINUTES_PER_DAY : minute;
 }
 
 function eventStyle(
 	column: number,
 	event: CalendarEvent,
-	day: Date,
+	day: DayRange,
 	timeZone: string
 ) {
 	const startsAtMinute = eventMinuteOfDay(
@@ -356,7 +268,7 @@ function BusyEvent({
 	timeZone,
 }: {
 	readonly column: number;
-	readonly day: Date;
+	readonly day: DayRange;
 	readonly event: CalendarEvent;
 	readonly formatTime: Intl.DateTimeFormat;
 	readonly timeZone: string;
@@ -364,10 +276,10 @@ function BusyEvent({
 	return (
 		<div
 			className={style.busy}
-			data-availability-busy
 			style={eventStyle(column, event, day, timeZone)}
 		>
-			{formatTime.format(event.startsAt)} - {formatTime.format(event.endsAt)}
+			{formatTime.format(event.startsAt)} -{' '}
+			{formatTime.format(event.endsAt)}
 		</div>
 	);
 }
@@ -377,12 +289,7 @@ function CurrentTimeMarker({ minute }: { readonly minute: number }) {
 		<div
 			aria-hidden="true"
 			className={style.currentTimeMarker}
-			data-availability-current-time-marker
-			data-availability-current-minute={minute}
-			style={{
-				gridColumn: 1,
-				gridRow: `${minute + CALENDAR_GRID_ROW_OFFSET} / span 1`,
-			}}
+			style={timeMarkStyle(minute, RULER_COLUMN)}
 		/>
 	);
 }
@@ -390,28 +297,23 @@ function CurrentTimeMarker({ minute }: { readonly minute: number }) {
 export function AvailabilityClient() {
 	const [locales, setLocales] = useState<LocaleList>(['en-US']);
 	const [timeZone, setTimeZone] = useState('UTC');
-	const [now, setNow] = useState<Date>();
+	const [now, setNow] = useState<Temporal.ZonedDateTime>();
 	const calendarBatches = future_collect_incremental(
 		useGetCalendarICals(CALENDAR_EMAILS).map(calendar =>
 			future_and_then(calendar, parseICalEvents)
 		)
 	);
-	const locale = locales[0];
 	const formatTime = useMemo(
 		() => timeFormatter(locales, timeZone),
 		[locales, timeZone]
 	);
 	const start = useMemo(
-		() => weekStart(timeZone, locale),
-		[locale, timeZone]
+		() => currentDayStart(timeZone, now),
+		[now, timeZone]
 	);
 	const days = useMemo(
-		() => visibleDayRanges(start, locales, timeZone, VISIBLE_DAY_COUNT),
+		() => visibleDayRanges(start, locales, timeZone),
 		[locales, start, timeZone]
-	);
-	const rangeEnd = useMemo(
-		() => addZonedDays(start, VISIBLE_DAY_COUNT, timeZone),
-		[start, timeZone]
 	);
 	const events = calendarBatches(
 		value => value.flat(),
@@ -423,26 +325,15 @@ export function AvailabilityClient() {
 		() => false,
 		() => true
 	);
-	const busyEvents = busyEventsForRange(events, start, rangeEnd);
 	const dayBuckets = useMemo(
-		() => bucketBusyEvents(busyEvents, days),
-		[busyEvents, days]
+		() => bucketBusyEvents(events, days),
+		[events, days]
 	);
 	const rulerLabels = useMemo(
-		() =>
-			days[0]
-				? hourLabels(days[0].startsAt, formatTime, timeZone)
-				: [],
-		[days, formatTime, timeZone]
+		() => (days[0] ? hourLabels(days[0].startsAt, formatTime) : []),
+		[days, formatTime]
 	);
-	const calendarGridStyle = useMemo(
-		() => gridStyle(VISIBLE_DAY_COUNT),
-		[]
-	);
-	const currentTimeMinute = useMemo(
-		() => (now ? viewMinuteOfDay(now, timeZone) : undefined),
-		[now, timeZone]
-	);
+	const currentTimeMinute = now ? viewMinuteOfDay(now) : undefined;
 
 	useEffect(() => {
 		setLocales(resolvedLocales());
@@ -453,7 +344,7 @@ export function AvailabilityClient() {
 		let timer: number | undefined;
 
 		const updateNow = () => {
-			const nextNow = new Date();
+			const nextNow = Temporal.Now.zonedDateTimeISO(timeZone);
 			setNow(nextNow);
 			timer = window.setTimeout(
 				updateNow,
@@ -468,38 +359,30 @@ export function AvailabilityClient() {
 				window.clearTimeout(timer);
 			}
 		};
-	}, []);
+	}, [timeZone]);
 
 	return (
 		<div className={style.page}>
 			<header className={style.header}>
 				<h1>Thomas' availability</h1>
-				<p>
-					Timed blocks below are times I am probably busy. All-day
-					events are usually reminders, so they are left out.
-				</p>
+				<p>Timed blocks below are times I am probably busy.</p>
 			</header>
 			<div className={style.weekShell}>
-				<div
-					className={style.weekScroller}
-					data-availability-week-scroller
-				>
+				<div className={style.weekScroller}>
 					<section
 						className={style.week}
 						aria-label="Availability calendar"
-						style={calendarGridStyle}
+						style={CALENDAR_GRID_STYLE}
 					>
-						<div
-							className={style.rulerHeader}
-							aria-hidden="true"
-							data-availability-ruler-header
-						/>
+						<div className={style.rulerHeader} aria-hidden="true" />
 						{dayBuckets.map((day, index) => (
 							<header
 								className={style.dayHeader}
-								data-availability-day-header
 								key={day.key}
-								style={{ gridColumn: index + 2, gridRow: '1 / 3' }}
+								style={{
+									gridColumn: FIRST_DAY_COLUMN + index,
+									gridRow: '1 / 3',
+								}}
 							>
 								<span>{day.weekdayLabel}</span>
 								<span className={style.dayHeaderDate}>
@@ -510,68 +393,51 @@ export function AvailabilityClient() {
 						<div
 							className={style.rulerLane}
 							aria-hidden="true"
-							data-availability-ruler-lane
 							style={{
-								gridColumn: 1,
-								gridRow: `${CALENDAR_GRID_ROW_OFFSET} / span ${MINUTES_PER_DAY}`,
+								gridColumn: RULER_COLUMN,
+								gridRow: FULL_DAY_ROWS,
 							}}
 						/>
 						{dayBuckets.map((day, index) => (
 							<div
 								className={style.dayLane}
 								aria-hidden="true"
-								data-availability-day-lane
 								key={`${day.key}-lane`}
 								style={{
-									gridColumn: index + 2,
-									gridRow: `${CALENDAR_GRID_ROW_OFFSET} / span ${MINUTES_PER_DAY}`,
+									gridColumn: FIRST_DAY_COLUMN + index,
+									gridRow: FULL_DAY_ROWS,
 								}}
 							/>
 						))}
-						{hourMarks.map(({ hour, minute }) => (
+						{HOUR_MARKS.map(minute => (
 							<div
 								className={style.dayHourLine}
 								aria-hidden="true"
-								data-availability-day-hour-line
-								key={`day-hour-line-${hour}`}
-								style={timeMarkStyle(
-									minute,
-									`2 / span ${VISIBLE_DAY_COUNT}`
-								)}
+								key={`h${minute}`}
+								style={timeMarkStyle(minute, DAY_COLUMNS)}
 							/>
 						))}
-						{halfHourMarks.map(({ hour, minute }) => (
+						{HALF_HOUR_MARKS.map(minute => (
 							<div
 								className={style.dayHalfHourLine}
 								aria-hidden="true"
-								data-availability-day-half-hour-line
-								key={`day-half-hour-line-${hour}`}
-								style={timeMarkStyle(
-									minute,
-									`2 / span ${VISIBLE_DAY_COUNT}`
-								)}
+								key={`m${minute}`}
+								style={timeMarkStyle(minute, DAY_COLUMNS)}
 							/>
 						))}
-						{halfHourMarks.map(({ hour, minute }) => (
+						{HALF_HOUR_MARKS.map(minute => (
 							<div
 								className={style.rulerHalfHourTick}
 								aria-hidden="true"
-								data-availability-ruler-half-hour-tick
-								key={`ruler-half-hour-tick-${hour}`}
-								style={timeMarkStyle(minute, 1)}
+								key={`t${minute}`}
+								style={timeMarkStyle(minute, RULER_COLUMN)}
 							/>
 						))}
-						{rulerLabels.map(({ hour, label }) => (
+						{rulerLabels.map(({ label, minute }) => (
 							<div
 								className={style.rulerLabel}
-								data-availability-ruler-label
-								key={hour}
-								style={{
-									gridColumn: 1,
-									gridRow: `${
-										hour * 60 + CALENDAR_GRID_ROW_OFFSET
-									} / span 60`,
-								}}
+								key={minute}
+								style={timeMarkStyle(minute, RULER_COLUMN, 60)}
 							>
 								{label}
 							</div>
@@ -579,18 +445,18 @@ export function AvailabilityClient() {
 						{currentTimeMinute === undefined ? null : (
 							<CurrentTimeMarker minute={currentTimeMinute} />
 						)}
-						{dayBuckets.map((day, index) => (
+						{dayBuckets.map((day, index) =>
 							day.events.map((event, i) => (
 								<BusyEvent
-									column={index + 2}
-									day={day.startsAt}
+									column={FIRST_DAY_COLUMN + index}
+									day={day}
 									event={event}
 									formatTime={formatTime}
 									key={`${day.key}-${event.startsAt.toISOString()}-${i}`}
 									timeZone={timeZone}
 								/>
 							))
-						))}
+						)}
 					</section>
 				</div>
 			</div>
