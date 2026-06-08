@@ -45,6 +45,10 @@ build is retained.
 After touching `MODULE.bazel`, run `./sh/bin/bazel test //:bazel_lint` and fix
 the buildifier output.
 
+For timezone-aware TypeScript calendar math, use `Temporal.ZonedDateTime`
+from `temporal-polyfill`; do not hand-roll offset or `Intl.formatToParts`
+arithmetic.
+
 # rules_itest services
 
 When adding background processes for integration tests, define them with
