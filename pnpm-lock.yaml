@@ -433,8 +433,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.212.4
-    version: 43.212.4(typanion@3.14.0)
+    specifier: 43.213.3
+    version: 43.213.3(typanion@3.14.0)
   sharp:
     specifier: 0.34.5
     version: 0.34.5
@@ -6606,7 +6606,7 @@ packages:
       hpagent: 1.2.0
       micromatch: 4.0.8
       p-limit: 2.3.0
-      semver: 7.8.1
+      semver: 7.8.2
       strip-ansi: 6.0.1
       tar: 7.5.16
       tinylogic: 2.0.0
@@ -7207,7 +7207,7 @@ packages:
   /builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
     dependencies:
-      semver: 7.8.1
+      semver: 7.8.2
     dev: true
 
   /bunyan@1.8.15:
@@ -8113,7 +8113,7 @@ packages:
       '@one-ini/wasm': 0.2.1
       commander: 14.0.3
       minimatch: 10.2.5
-      semver: 7.8.1
+      semver: 7.8.2
     dev: true
 
   /ee-first@1.1.1:
@@ -9188,7 +9188,7 @@ packages:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.8.1
+      semver: 7.8.2
       serialize-error: 7.0.1
     dev: true
 
@@ -13905,8 +13905,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.212.4(typanion@3.14.0):
-    resolution: {integrity: sha512-cFPgsu6xphv1RMUv1cTlzS+Zi+GzRZdGFM0vT4vJ9L3ZI0wyoY0HAU8h/Zn2KoR0hAyxJFeEHNFILFer8hgiOQ==}
+  /renovate@43.213.3(typanion@3.14.0):
+    resolution: {integrity: sha512-mt1epuF2Ww6CcsEQHx0Qvj4AggeQ7xxd+K/peWXGdjQs6lRR1oSjs3/yDlp1AZBybmnboETji1nKuN2z/QFbdA==}
     engines: {node: ^24.11.0, pnpm: ^10.0.0}
     hasBin: true
     dependencies:
