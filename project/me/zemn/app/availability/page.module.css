@@ -1,5 +1,6 @@
 .page {
 	padding-inline: 1.25em;
+	box-sizing: border-box;
 }
 
 .header {
@@ -36,7 +37,6 @@
 	position: relative;
 	display: grid;
 	grid-template-rows: auto auto repeat(1440, var(--minute-height));
-	gap: 1px;
 	width: 100%;
 	border: 1px solid currentColor;
 }
@@ -54,8 +54,6 @@
 .rulerLane,
 .dayLane {
 	position: relative;
-	background-image: linear-gradient(currentColor 1px, transparent 1px);
-	background-size: 100% var(--hour-height);
 }
 
 .rulerLane {
@@ -65,33 +63,42 @@
 	background-color: var(--background-color);
 }
 
-.rulerLane::before,
-.dayLane::before {
-	position: absolute;
-	inset: 0;
-	background-image: repeating-linear-gradient(
-		to right,
-		currentColor 0 0.0625rem,
-		transparent 0.0625rem 0.85rem
-	);
-	content: "";
-	mask-image: repeating-linear-gradient(
-		to bottom,
-		transparent 0 calc(var(--hour-height) / 2 - 0.5px),
-		black calc(var(--hour-height) / 2 - 0.5px)
-			calc(var(--hour-height) / 2 + 0.5px),
-		transparent calc(var(--hour-height) / 2 + 0.5px)
-			var(--hour-height)
-	);
-	opacity: 0.35;
+.dayLane {
+	border-left: 1px solid currentColor;
+}
+
+.dayHourLine,
+.dayHalfHourLine,
+.rulerHalfHourTick {
+	height: 0;
+	border-top: 1px solid currentColor;
 	pointer-events: none;
+}
+
+.dayHourLine,
+.dayHalfHourLine {
+	z-index: 2;
+}
+
+.dayHalfHourLine,
+.rulerHalfHourTick {
+	border-top-style: dotted;
+	opacity: 0.35;
+}
+
+.rulerHalfHourTick {
+	position: sticky;
+	left: 0;
+	z-index: 7;
+	background: var(--background-color);
 }
 
 .rulerLabel {
 	position: sticky;
+	border-top: 1px solid currentColor;
 	left: 0;
 	z-index: 7;
-	padding: 0.25rem 0.5rem;
+	text-align: right;
 	background: var(--background-color);
 	font-size: 0.75rem;
 	line-height: 1.25;
