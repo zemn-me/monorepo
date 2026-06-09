@@ -43,7 +43,7 @@ require (
 	github.com/twilio/twilio-go v1.30.9
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/image v0.41.0
-	golang.org/x/sync v0.20.0
+	golang.org/x/sync v0.21.0
 	golang.org/x/tools v0.45.0
 	golang.org/x/tools/gopls v0.22.0
 	honnef.co/go/tools v0.7.0
