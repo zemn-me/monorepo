@@ -27,12 +27,13 @@ const CALENDAR_GRID_ROW_OFFSET = 3;
 const VISIBLE_DAY_COUNT = 63;
 const RULER_WIDTH_REM = 4.75;
 const DAY_COLUMN_MIN_WIDTH_REM = 8;
-const RULER_COLUMN = 1;
+const RULER_STICKY_COLUMNS = '1 / -1';
 const FIRST_DAY_COLUMN = 2;
 const DAY_COLUMNS = `${FIRST_DAY_COLUMN} / span ${VISIBLE_DAY_COUNT}`;
 const FULL_DAY_ROWS = `${CALENDAR_GRID_ROW_OFFSET} / span ${MINUTES_PER_DAY}`;
 const CALENDAR_GRID_STYLE = {
 	'--hour-height': `${HOUR_HEIGHT_REM}rem`,
+	'--availability-ruler-width': `${RULER_WIDTH_REM}rem`,
 	'--minute-height': `${HOUR_HEIGHT_REM / 60}rem`,
 	gridTemplateColumns: `minmax(${RULER_WIDTH_REM}rem, max-content) repeat(${VISIBLE_DAY_COUNT}, minmax(var(--availability-day-width), 1fr))`,
 	minWidth: `calc(${RULER_WIDTH_REM}rem + ${
@@ -289,7 +290,7 @@ function CurrentTimeMarker({ minute }: { readonly minute: number }) {
 		<div
 			aria-hidden="true"
 			className={style.currentTimeMarker}
-			style={timeMarkStyle(minute, RULER_COLUMN)}
+			style={timeMarkStyle(minute, RULER_STICKY_COLUMNS)}
 		/>
 	);
 }
@@ -394,7 +395,7 @@ export function AvailabilityClient() {
 							className={style.rulerLane}
 							aria-hidden="true"
 							style={{
-								gridColumn: RULER_COLUMN,
+								gridColumn: RULER_STICKY_COLUMNS,
 								gridRow: FULL_DAY_ROWS,
 							}}
 						/>
@@ -430,14 +431,21 @@ export function AvailabilityClient() {
 								className={style.rulerHalfHourTick}
 								aria-hidden="true"
 								key={`t${minute}`}
-								style={timeMarkStyle(minute, RULER_COLUMN)}
+								style={timeMarkStyle(
+									minute,
+									RULER_STICKY_COLUMNS
+								)}
 							/>
 						))}
 						{rulerLabels.map(({ label, minute }) => (
 							<div
 								className={style.rulerLabel}
 								key={minute}
-								style={timeMarkStyle(minute, RULER_COLUMN, 60)}
+								style={timeMarkStyle(
+									minute,
+									RULER_STICKY_COLUMNS,
+									60
+								)}
 							>
 								{label}
 							</div>
