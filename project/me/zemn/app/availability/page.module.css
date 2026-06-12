@@ -48,6 +48,8 @@
 .currentTimeMarker {
 	position: sticky;
 	left: 0;
+	width: var(--availability-ruler-width);
+	box-sizing: border-box;
 }
 
 .rulerHeader,
@@ -60,7 +62,7 @@
 .rulerHeader {
 	top: 0;
 	z-index: 8;
-	grid-column: 1;
+	grid-column: 1 / -1;
 	grid-row: 1 / 3;
 }
 
