@@ -24,6 +24,20 @@ interface AwsAssumeRoleStatement {
 	Sid: string;
 }
 
+interface EcrLifecyclePolicy {
+	rules: {
+		action: {
+			type: string;
+		};
+		description: string;
+		selection: {
+			countNumber: number;
+			countType: string;
+			tagStatus: string;
+		};
+	}[];
+}
+
 describe('pulumi', () => {
 	test('smoke', async () => {
 		mockResources.splice(0);
@@ -184,5 +198,31 @@ describe('pulumi', () => {
 				resource => resource.name === 'monorepo_github_actions_admin'
 			)?.inputs['policyArn']
 		).toBe('arn:aws:iam::aws:policy/AdministratorAccess');
+
+		const apiImageLifecyclePolicy = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecr/lifecyclePolicy:LifecyclePolicy' &&
+				resourceInputText(resource.inputs['policy']).includes(
+					'Keep recent API images'
+				)
+		);
+		expect(apiImageLifecyclePolicy).toBeDefined();
+		const apiImageLifecycle = JSON.parse(
+			resourceInputText(apiImageLifecyclePolicy?.inputs['policy'])
+		) as EcrLifecyclePolicy;
+		expect(apiImageLifecycle.rules).toEqual([
+			{
+				rulePriority: 1,
+				description: 'Keep recent API images',
+				selection: {
+					tagStatus: 'untagged',
+					countType: 'imageCountMoreThan',
+					countNumber: 10,
+				},
+				action: {
+					type: 'expire',
+				},
+			},
+		]);
 	});
 });
