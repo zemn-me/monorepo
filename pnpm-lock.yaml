@@ -146,8 +146,8 @@ dependencies:
     specifier: 0.4.17
     version: 0.4.17
   npm:
-    specifier: 11.16.0
-    version: 11.16.0
+    specifier: 11.17.0
+    version: 11.17.0
   nuqs:
     specifier: 1.20.0
     version: 1.20.0(next@14.2.35)
@@ -4478,7 +4478,7 @@ packages:
       metro: 0.84.4
       metro-config: 0.84.4
       metro-core: 0.84.4
-      semver: 7.8.2
+      semver: 7.8.4
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -12376,8 +12376,8 @@ packages:
       unicorn-magic: 0.3.0
     dev: true
 
-  /npm@11.16.0:
-    resolution: {integrity: sha512-A74XL8OxmcegZDMWPkWb5bEQppg8HdYwW3rBD2sPoS4UQHVajfaxBkqyzLeJ3wR0kZ+5xoTjItxXaF7eIXUsyw==}
+  /npm@11.17.0:
+    resolution: {integrity: sha512-PurxiZexEHDTE4SSaLI3ZrnbAGiZfeyUcQcxcP5D+hfytNAze/D1IzDuInTn9XVLIbAQUnQuSPXJx02LHjLvQw==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
     dev: false
@@ -13341,7 +13341,7 @@ packages:
       react-refresh: 0.14.2
       regenerator-runtime: 0.13.11
       scheduler: 0.27.0
-      semver: 7.8.2
+      semver: 7.8.4
       stacktrace-parser: 0.1.11
       tinyglobby: 0.2.17
       whatwg-fetch: 3.6.20
@@ -14105,7 +14105,6 @@ packages:
     resolution: {integrity: sha512-rUCObTnP32Q08R2uuIrt7r9PlEonuTmtuXYcW6s5kjdlj3xbnwe+21yXptAUYcMAABLkYYTtnmzb3w3EDZfueA==}
     engines: {node: '>=10'}
     hasBin: true
-    dev: true
 
   /send@0.19.2:
     resolution: {integrity: sha512-VMbMxbDeehAxpOtWJXlcUS5E8iXh6QmN+BkRX1GARS3wRaXEEgzCcB10gTQazO42tpNIya8xIyNx8fll1OFPrg==}
