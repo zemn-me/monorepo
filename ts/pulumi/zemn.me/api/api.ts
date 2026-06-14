@@ -240,6 +240,30 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		new aws.ecr.LifecyclePolicy(
+			`${name}_repo_lifecycle`,
+			{
+				repository: repo.name,
+				policy: JSON.stringify({
+					rules: [
+						{
+							rulePriority: 1,
+							description: 'Keep recent API images',
+							selection: {
+								tagStatus: 'untagged',
+								countType: 'imageCountMoreThan',
+								countNumber: 10,
+							},
+							action: {
+								type: 'expire',
+							},
+						},
+					],
+				}),
+			},
+			{ parent: repo }
+		);
+
 		const auth = aws.ecr.getAuthorizationToken();
 
 		const imageCacheKey = `${repo.repositoryUrl}`;
