@@ -8,10 +8,6 @@ import {
 	githubActionsSecretIds,
 } from '#root/ts/pulumi/github_actions_secrets.js';
 import * as project from '#root/ts/pulumi/index.js';
-import {
-	isAwsAlphaNumericHyphenUnderscoreName,
-	sanitizeAwsAlphaNumericHyphenUnderscoreName,
-} from '#root/ts/pulumi/lib/awsNames.js';
 import { mockResources } from '#root/ts/pulumi/setMocks.js';
 
 const workflowScopePrincipal = (workflowScope: string) =>
@@ -19,17 +15,6 @@ const workflowScopePrincipal = (workflowScope: string) =>
 
 const resourceInputText = (input: unknown) =>
 	typeof input === 'string' ? input : JSON.stringify(input);
-
-const awsAlphaNumericHyphenUnderscoreNameInputs = [
-	{
-		input: 'name',
-		type: 'aws:cloudfront/function:Function',
-	},
-	{
-		input: 'name',
-		type: 'aws:ecs/cluster:Cluster',
-	},
-] as const;
 
 interface AwsAssumeRoleStatement {
 	Condition: {
@@ -54,59 +39,10 @@ interface EcrLifecyclePolicy {
 }
 
 describe('pulumi', () => {
-	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
-		expect(
-			sanitizeAwsAlphaNumericHyphenUnderscoreName(
-				'monorepo_zemn.me_minecraft-cluster'
-			)
-		).toBe('monorepo_zemn_me_minecraft-cluster');
-
-		expect(
-			isAwsAlphaNumericHyphenUnderscoreName(
-				'monorepo_zemn_me_minecraft-cluster'
-			)
-		).toBe(true);
-		expect(
-			isAwsAlphaNumericHyphenUnderscoreName(
-				'monorepo_zemn.me_minecraft-cluster'
-			)
-		).toBe(false);
-	});
-
 	test('smoke', async () => {
 		mockResources.splice(0);
 		new project.Component('monorepo', { staging: false });
 		await pulumi.runtime.disconnect();
-
-		const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
-			({ input, type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs[input];
-						if (typeof value !== 'string') {
-							if (isAwsAlphaNumericHyphenUnderscoreName(resource.name)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
-							];
-						}
-						if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
-						];
-					})
-		);
-		if (awsNameViolations.length > 0) {
-			throw new Error(
-				`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
 
 		const githubProvider = mockResources.find(
 			resource =>

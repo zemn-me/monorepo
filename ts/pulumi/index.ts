@@ -21,7 +21,6 @@ import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
-	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
 }
 
 interface AwsGitHubActionsOidcArgs {
@@ -269,8 +268,6 @@ export class Component extends Pulumi.ComponentResource {
 				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 				twilioSharedSecret: twilioSharedSecret.result,
-				minecraftOnDemand: !args.staging,
-				minecraftOperators: args.minecraftOperators ?? ['zemnmez'],
 			},
 			{ parent: this }
 		);
