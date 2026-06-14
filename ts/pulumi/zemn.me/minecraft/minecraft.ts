@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { sanitizeAwsAlphaNumericHyphenUnderscoreName } from '#root/ts/pulumi/lib/awsNames.js';
 import { mergeTags, TagSet, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 export interface Args {
@@ -277,6 +278,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const cluster = new aws.ecs.Cluster(
 			`${name}-cluster`,
 			{
+				name: sanitizeAwsAlphaNumericHyphenUnderscoreName(`${name}-cluster`),
 				settings: [{ name: 'containerInsights', value: 'enabled' }],
 				tags,
 			},
