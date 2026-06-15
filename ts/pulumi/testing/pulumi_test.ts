@@ -8,6 +8,20 @@ import {
 	githubActionsSecretIds,
 } from '#root/ts/pulumi/github_actions_secrets.js';
 import * as project from '#root/ts/pulumi/index.js';
+import {
+	isAwsAlphaNumericHyphenUnderscoreName,
+	isAwsEcsTaskFamilyName,
+	isAwsElbv2Name,
+	isAwsLambdaFunctionName,
+	isAwsLambdaStatementId,
+	isAwsTargetGroupName,
+	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsEcsTaskFamilyName,
+	sanitizeAwsElbv2Name,
+	sanitizeAwsLambdaFunctionName,
+	sanitizeAwsLambdaStatementId,
+	sanitizeAwsTargetGroupName,
+} from '#root/ts/pulumi/lib/awsNames.js';
 import { mockResources } from '#root/ts/pulumi/setMocks.js';
 
 const workflowScopePrincipal = (workflowScope: string) =>
@@ -15,6 +29,49 @@ const workflowScopePrincipal = (workflowScope: string) =>
 
 const resourceInputText = (input: unknown) =>
 	typeof input === 'string' ? input : JSON.stringify(input);
+
+const awsAlphaNumericHyphenUnderscoreNameInputs = [
+	{
+		input: 'name',
+		type: 'aws:cloudfront/function:Function',
+	},
+	{
+		input: 'name',
+		type: 'aws:ecs/cluster:Cluster',
+	},
+	{
+		input: 'name',
+		type: 'aws:ecs/service:Service',
+	},
+] as const;
+
+const awsElbv2NameInputs = [
+	{
+		type: 'aws:lb/loadBalancer:LoadBalancer',
+	},
+	{
+		type: 'aws:lb/targetGroup:TargetGroup',
+	},
+] as const;
+const awsEcsTaskDefinitionFamilyInputs = [
+	{
+		type: 'aws:ecs/taskDefinition:TaskDefinition',
+	},
+] as const;
+const awsLambdaFunctionNameInputs = [
+	{
+		type: 'aws:lambda/function:Function',
+	},
+] as const;
+const awsLambdaPermissionStatementIdInputs = [
+	{
+		type: 'aws:lambda/permission:Permission',
+	},
+] as const;
+const awsElbv2NameMaxLength = 32;
+const awsLambdaFunctionNameMaxLength = 64;
+const pulumiAutoNameRandomSuffixLength = 7;
+const awsElbv2NamePattern = /^[A-Za-z0-9-]+$/;
 
 interface AwsAssumeRoleStatement {
 	Condition: {
@@ -39,10 +96,456 @@ interface EcrLifecyclePolicy {
 }
 
 describe('pulumi', () => {
+	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
+		expect(
+			sanitizeAwsAlphaNumericHyphenUnderscoreName(
+				'monorepo_zemn.me_minecraft-cluster'
+			)
+		).toBe('monorepo_zemn_me_minecraft-cluster');
+
+		expect(
+			isAwsAlphaNumericHyphenUnderscoreName(
+				'monorepo_zemn_me_minecraft-cluster'
+			)
+		).toBe(true);
+		expect(
+			isAwsAlphaNumericHyphenUnderscoreName(
+				'monorepo_zemn.me_minecraft-cluster'
+			)
+		).toBe(false);
+
+		expect(sanitizeAwsTargetGroupName('monorepo_zemn.me_minecraft-tg')).toBe(
+			'monorepo-zemn-me-minecraft-tg'
+		);
+		expect(isAwsTargetGroupName('monorepo-zemn-me-minecraft-tg')).toBe(true);
+		expect(sanitizeAwsElbv2Name('monorepo_zemn.me_minecraft-nlb')).toBe(
+			'monorepo-zemn-me-minecraft-nlb'
+		);
+		expect(isAwsElbv2Name('monorepo-zemn-me-minecraft-nlb')).toBe(true);
+
+		expect(sanitizeAwsEcsTaskFamilyName('monorepo_zemn.me_minecraft')).toBe(
+			'monorepo_zemn_me_minecraft'
+		);
+		expect(isAwsEcsTaskFamilyName('monorepo_zemn_me_minecraft')).toBe(true);
+		expect(isAwsEcsTaskFamilyName('monorepo_zemn.me_minecraft')).toBe(false);
+
+		expect(sanitizeAwsLambdaFunctionName('monorepo_zemn.me_minecraft-wake')).toBe(
+			'monorepo_zemn_me_minecraft-wake'
+		);
+		expect(isAwsLambdaFunctionName('monorepo_zemn_me_minecraft-wake')).toBe(
+			true
+		);
+		expect(isAwsLambdaFunctionName('monorepo_zemn.me_minecraft-wake')).toBe(
+			false
+		);
+		expect(sanitizeAwsLambdaFunctionName('x'.repeat(65))).toHaveLength(64);
+
+		expect(
+			sanitizeAwsLambdaStatementId(
+				'monorepo_zemn.me_minecraft_eventbridge_permission'
+			)
+		).toBe('monorepo_zemn_me_minecraft_eventbridge_permission');
+		expect(
+			isAwsLambdaStatementId(
+				'monorepo_zemn_me_minecraft_eventbridge_permission'
+			)
+		).toBe(true);
+		expect(
+			isAwsLambdaStatementId(
+				'monorepo_zemn.me_minecraft_eventbridge_permission'
+			)
+		).toBe(false);
+		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
+	});
+
+	test('staging minecraft uses staging-specific resources', async () => {
+		mockResources.splice(0);
+		new project.Component('monorepo', { staging: true });
+		await pulumi.runtime.disconnect();
+
+		const minecraftLoadBalancer = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/loadBalancer:LoadBalancer' &&
+				resource.name.endsWith('_minecraft_nlb')
+		);
+		expect(minecraftLoadBalancer?.inputs['name']).toBe(
+			'zemn-me-minecraft-staging-nlb'
+		);
+
+		const minecraftTargetGroup = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/targetGroup:TargetGroup' &&
+				resource.name.endsWith('_minecraft_tg')
+		);
+		expect(minecraftTargetGroup?.inputs['name']).toBe(
+			'zemn-me-minecraft-staging-tg'
+		);
+
+		const minecraftCluster = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/cluster:Cluster' &&
+				resource.name.endsWith('_minecraft_cluster')
+		);
+		expect(minecraftCluster?.inputs['name']).toBe(
+			'zemn_me_minecraft_staging_cluster'
+		);
+
+		const minecraftTaskDefinition = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/taskDefinition:TaskDefinition' &&
+				resource.name.endsWith('_minecraft_task')
+		);
+		expect(minecraftTaskDefinition?.inputs['family']).toBe(
+			'zemn_me_minecraft_staging_task'
+		);
+
+		const minecraftService = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/service:Service' &&
+				resource.name.endsWith('_minecraft_service')
+		);
+		expect(minecraftService?.inputs['name']).toBe(
+			'zemn_me_minecraft_staging_service'
+		);
+
+		const minecraftWakeFunction = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name.endsWith('_minecraft_wake')
+		);
+		expect(minecraftWakeFunction?.inputs['name']).toBe(
+			'zemn_me_minecraft_staging_wake'
+		);
+
+		const minecraftEventbridgePermission = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/permission:Permission' &&
+				resource.name.endsWith('_minecraft_eventbridge_permission')
+		);
+		expect(minecraftEventbridgePermission?.inputs['statementId']).toBe(
+			'monorepo_zemn_me_minecraft_eventbridge_permission'
+		);
+
+		const minecraftRecords = mockResources.filter(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.includes('_minecraft_')
+		);
+		expect(minecraftRecords.length).toBeGreaterThan(0);
+		for (const record of minecraftRecords) {
+			expect(resourceInputText(record.inputs['name'])).toContain(
+				'staging.zemn.me'
+			);
+			expect(resourceInputText(record.inputs['name'])).not.toContain(
+				'minecraft.zemn.me'
+			);
+		}
+
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53/queryLog:QueryLog'
+			)
+		).toBe(false);
+		expect(
+			mockResources.some(resource => resource.type === 'aws:route53/zone:Zone')
+		).toBe(false);
+	});
+
+	test('staging resources are not protected', async () => {
+		mockResources.splice(0);
+		const protectedResources: string[] = [];
+		new project.Component(
+			'monorepo',
+			{ staging: true },
+			{
+				transformations: [
+					args => {
+						if (args.opts.protect === true) {
+							protectedResources.push(`${args.type} ${args.name}`);
+						}
+						return undefined;
+					},
+				],
+			}
+		);
+		await pulumi.runtime.disconnect();
+
+		expect(protectedResources).toEqual([]);
+	});
+
 	test('smoke', async () => {
 		mockResources.splice(0);
 		new project.Component('monorepo', { staging: false });
 		await pulumi.runtime.disconnect();
+
+		const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
+			({ input, type }) =>
+				mockResources
+					.filter(resource => resource.type === type)
+					.flatMap(resource => {
+						const value = resource.inputs[input];
+						if (typeof value !== 'string') {
+							if (isAwsAlphaNumericHyphenUnderscoreName(resource.name)) {
+								return [];
+							}
+
+							return [
+								`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
+							];
+						}
+						if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
+						];
+					})
+		);
+		if (awsNameViolations.length > 0) {
+			throw new Error(
+				`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const lambdaFunctionNameViolations = awsLambdaFunctionNameInputs.flatMap(
+			({ type }) =>
+				mockResources
+					.filter(resource => resource.type === type)
+					.flatMap(resource => {
+						const value = resource.inputs['name'];
+						if (typeof value === 'string') {
+							if (isAwsLambdaFunctionName(value)) {
+								return [];
+							}
+
+							return [
+								`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+							];
+						}
+
+						const implicitNamePrefix = `${resource.name}-`;
+						const implicitNameLength =
+							implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
+						if (
+							implicitNameLength <= awsLambdaFunctionNameMaxLength &&
+							isAwsAlphaNumericHyphenUnderscoreName(implicitNamePrefix)
+						) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set name to an explicit valid Lambda function name.`,
+						];
+					})
+		);
+		if (lambdaFunctionNameViolations.length > 0) {
+			throw new Error(
+				`AWS Lambda function name validation failed:\n${lambdaFunctionNameViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const lambdaPermissionStatementIdViolations =
+			awsLambdaPermissionStatementIdInputs.flatMap(({ type }) =>
+				mockResources
+					.filter(resource => resource.type === type)
+					.flatMap(resource => {
+						const value = resource.inputs['statementId'];
+						if (typeof value === 'string') {
+							if (isAwsLambdaStatementId(value)) {
+								return [];
+							}
+
+							return [
+								`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(value)} from its explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+							];
+						}
+
+						if (isAwsLambdaStatementId(resource.name)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set statementId to an explicit valid Lambda permission statement ID.`,
+						];
+					})
+			);
+		if (lambdaPermissionStatementIdViolations.length > 0) {
+			throw new Error(
+				`AWS Lambda permission statement ID validation failed:\n${lambdaPermissionStatementIdViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
+			mockResources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['name'];
+					if (typeof value === 'string') {
+						if (isAwsElbv2Name(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+						];
+					}
+
+					const implicitNamePrefix = `${resource.name}-`;
+					const implicitNameLength =
+						implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
+					if (
+						implicitNameLength <= awsElbv2NameMaxLength &&
+						awsElbv2NamePattern.test(implicitNamePrefix)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
+					];
+				})
+		);
+		if (elbv2NameViolations.length > 0) {
+			throw new Error(
+				`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const ecsTaskDefinitionFamilyViolations =
+			awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
+				mockResources
+					.filter(resource => resource.type === type)
+					.flatMap(resource => {
+						const value = resource.inputs['family'];
+						if (typeof value === 'string' && isAwsEcsTaskFamilyName(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					})
+			);
+		if (ecsTaskDefinitionFamilyViolations.length > 0) {
+			throw new Error(
+				`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const minecraftLoadBalancer = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/loadBalancer:LoadBalancer' &&
+				resource.name.endsWith('_minecraft_nlb')
+		);
+		expect(minecraftLoadBalancer?.inputs['name']).toBe(
+			'zemn-me-minecraft-production-nlb'
+		);
+
+		const minecraftTargetGroup = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/targetGroup:TargetGroup' &&
+				resource.name.endsWith('_minecraft_tg')
+		);
+		expect(minecraftTargetGroup?.inputs['name']).toBe(
+			'zemn-me-minecraft-production-tg'
+		);
+
+		const minecraftCluster = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/cluster:Cluster' &&
+				resource.name.endsWith('_minecraft_cluster')
+		);
+		expect(minecraftCluster?.inputs['name']).toBe(
+			'zemn_me_minecraft_production_cluster'
+		);
+
+		const minecraftTaskDefinition = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/taskDefinition:TaskDefinition' &&
+				resource.name.endsWith('_minecraft_task')
+		);
+		expect(minecraftTaskDefinition?.inputs['family']).toBe(
+			'zemn_me_minecraft_production_task'
+		);
+
+		const minecraftService = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/service:Service' &&
+				resource.name.endsWith('_minecraft_service')
+		);
+		expect(minecraftService?.inputs['name']).toBe(
+			'zemn_me_minecraft_production_service'
+		);
+
+		const minecraftWakeFunction = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name.endsWith('_minecraft_wake')
+		);
+		expect(minecraftWakeFunction?.inputs['name']).toBe(
+			'zemn_me_minecraft_production_wake'
+		);
+
+		const minecraftEventbridgePermission = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/permission:Permission' &&
+				resource.name.endsWith('_minecraft_eventbridge_permission')
+		);
+		expect(minecraftEventbridgePermission?.inputs['statementId']).toBe(
+			'monorepo_zemn_me_minecraft_eventbridge_permission'
+		);
+
+		const minecraftLogsPermission = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/permission:Permission' &&
+				resource.name.endsWith('_minecraft_logs_permission')
+		);
+		expect(minecraftLogsPermission?.inputs['statementId']).toBe(
+			'monorepo_zemn_me_minecraft_logs_permission'
+		);
+
+		const minecraftZone = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft_zone')
+		);
+		expect(minecraftZone?.inputs['name']).toBe('minecraft.zemn.me');
+
+		const minecraftZoneDelegation = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_zone_delegation')
+		);
+		expect(minecraftZoneDelegation?.inputs).toMatchObject({
+			name: 'minecraft.zemn.me',
+			type: 'NS',
+		});
+
+		const minecraftPublicRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_public_dns')
+		);
+		expect(minecraftPublicRecord?.inputs['name']).toBe('minecraft.zemn.me');
+
+		const minecraftServerRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_server_dns')
+		);
+		expect(minecraftServerRecord?.inputs['name']).toBe(
+			'server.minecraft.zemn.me'
+		);
+
+		const minecraftSrvRecords = mockResources.filter(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.includes('_minecraft_srv_dns_')
+		);
+		expect(minecraftSrvRecords.map(resource => resource.inputs['name'])).toEqual(
+			['_minecraft._tcp.minecraft.zemn.me']
+		);
 
 		const githubProvider = mockResources.find(
 			resource =>
