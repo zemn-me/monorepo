@@ -9,6 +9,10 @@ import Website from '#root/ts/pulumi/lib/website/website.js';
 import { ApiZemnMe } from '#root/ts/pulumi/zemn.me/api/api.js';
 import { GcpWorkstation } from '#root/ts/pulumi/zemn.me/forge/forge.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
+import {
+	type MinecraftEnvironmentName,
+	MinecraftOnDemand,
+} from '#root/ts/pulumi/zemn.me/minecraft/minecraft.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -20,6 +24,10 @@ export interface Args {
 	callboxPhoneNumber: Pulumi.Input<string>;
 	twilioSharedSecret: Pulumi.Input<string>;
 	cloudWorkstations?: Pulumi.Input<boolean>;
+	minecraftEnvironment?: MinecraftEnvironmentName;
+	minecraftManageDnsWake?: boolean;
+	minecraftOnDemand?: boolean;
+	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -121,6 +129,21 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const minecraft = args.minecraftOnDemand
+			? new MinecraftOnDemand(
+					`${name}_minecraft`,
+					{
+						zoneId: args.zoneId,
+						domain: args.domain,
+						environmentName: args.minecraftEnvironment ?? 'production',
+						manageDnsWake: args.minecraftManageDnsWake ?? true,
+						operators: args.minecraftOperators,
+						tags,
+					},
+					{ parent: this }
+				)
+			: undefined;
+
 		new ApiZemnMe(
 			`${name}_api`,
 			{
@@ -143,6 +166,6 @@ export class Component extends Pulumi.ComponentResource {
 				{ parent: this }
 			);
 
-		super.registerOutputs({ site: this.site, availability, Static });
+		super.registerOutputs({ site: this.site, availability, Static, minecraft });
 	}
 }
