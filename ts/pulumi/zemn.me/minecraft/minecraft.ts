@@ -3,6 +3,7 @@ import * as Pulumi from '@pulumi/pulumi';
 
 import {
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsElbv2Name,
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { mergeTags, TagSet, tagTrue } from '#root/ts/pulumi/lib/tags.js';
@@ -235,6 +236,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const loadBalancer = new aws.lb.LoadBalancer(
 			`${name}-nlb`,
 			{
+				name: sanitizeAwsElbv2Name(`${name}-nlb`),
 				loadBalancerType: 'network',
 				subnets: [subnet.id],
 				tags,

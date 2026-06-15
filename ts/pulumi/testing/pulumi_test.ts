@@ -10,8 +10,10 @@ import {
 import * as project from '#root/ts/pulumi/index.js';
 import {
 	isAwsAlphaNumericHyphenUnderscoreName,
+	isAwsElbv2Name,
 	isAwsTargetGroupName,
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsElbv2Name,
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { mockResources } from '#root/ts/pulumi/setMocks.js';
@@ -33,9 +35,17 @@ const awsAlphaNumericHyphenUnderscoreNameInputs = [
 	},
 ] as const;
 
-const awsTargetGroupNameMaxLength = 32;
+const awsElbv2NameInputs = [
+	{
+		type: 'aws:lb/loadBalancer:LoadBalancer',
+	},
+	{
+		type: 'aws:lb/targetGroup:TargetGroup',
+	},
+] as const;
+const awsElbv2NameMaxLength = 32;
 const pulumiAutoNameRandomSuffixLength = 7;
-const awsTargetGroupNamePattern = /^[A-Za-z0-9-]+$/;
+const awsElbv2NamePattern = /^[A-Za-z0-9-]+$/;
 
 interface AwsAssumeRoleStatement {
 	Condition: {
@@ -82,6 +92,10 @@ describe('pulumi', () => {
 			'monorepo-zemn-me-minecraft-tg'
 		);
 		expect(isAwsTargetGroupName('monorepo-zemn-me-minecraft-tg')).toBe(true);
+		expect(sanitizeAwsElbv2Name('monorepo_zemn.me_minecraft-nlb')).toBe(
+			'monorepo-zemn-me-minecraft-nlb'
+		);
+		expect(isAwsElbv2Name('monorepo-zemn-me-minecraft-nlb')).toBe(true);
 	});
 
 	test('smoke', async () => {
@@ -119,37 +133,39 @@ describe('pulumi', () => {
 			);
 		}
 
-		const targetGroupNameViolations = mockResources
-			.filter(resource => resource.type === 'aws:lb/targetGroup:TargetGroup')
-			.flatMap(resource => {
-				const value = resource.inputs['name'];
-				if (typeof value === 'string') {
-					if (isAwsTargetGroupName(value)) {
+		const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
+			mockResources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['name'];
+					if (typeof value === 'string') {
+						if (isAwsElbv2Name(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+						];
+					}
+
+					const implicitNamePrefix = `${resource.name}-`;
+					const implicitNameLength =
+						implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
+					if (
+						implicitNameLength <= awsElbv2NameMaxLength &&
+						awsElbv2NamePattern.test(implicitNamePrefix)
+					) {
 						return [];
 					}
 
 					return [
-						`aws:lb/targetGroup:TargetGroup resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because target group names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
 					];
-				}
-
-				const implicitNamePrefix = `${resource.name}-`;
-				const implicitNameLength =
-					implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
-				if (
-					implicitNameLength <= awsTargetGroupNameMaxLength &&
-					awsTargetGroupNamePattern.test(implicitNamePrefix)
-				) {
-					return [];
-				}
-
-				return [
-					`aws:lb/targetGroup:TargetGroup resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because target group names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid target group name.`,
-				];
-			});
-		if (targetGroupNameViolations.length > 0) {
+				})
+		);
+		if (elbv2NameViolations.length > 0) {
 			throw new Error(
-				`AWS target group name validation failed:\n${targetGroupNameViolations.map(violation => `- ${violation}`).join('\n')}`
+				`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
 			);
 		}
 
