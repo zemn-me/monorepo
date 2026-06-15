@@ -10,7 +10,9 @@ import {
 import * as project from '#root/ts/pulumi/index.js';
 import {
 	isAwsAlphaNumericHyphenUnderscoreName,
+	isAwsTargetGroupName,
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { mockResources } from '#root/ts/pulumi/setMocks.js';
 
@@ -30,6 +32,10 @@ const awsAlphaNumericHyphenUnderscoreNameInputs = [
 		type: 'aws:ecs/cluster:Cluster',
 	},
 ] as const;
+
+const awsTargetGroupNameMaxLength = 32;
+const pulumiAutoNameRandomSuffixLength = 7;
+const awsTargetGroupNamePattern = /^[A-Za-z0-9-]+$/;
 
 interface AwsAssumeRoleStatement {
 	Condition: {
@@ -71,6 +77,11 @@ describe('pulumi', () => {
 				'monorepo_zemn.me_minecraft-cluster'
 			)
 		).toBe(false);
+
+		expect(sanitizeAwsTargetGroupName('monorepo_zemn.me_minecraft-tg')).toBe(
+			'monorepo-zemn-me-minecraft-tg'
+		);
+		expect(isAwsTargetGroupName('monorepo-zemn-me-minecraft-tg')).toBe(true);
 	});
 
 	test('smoke', async () => {
@@ -105,6 +116,40 @@ describe('pulumi', () => {
 		if (awsNameViolations.length > 0) {
 			throw new Error(
 				`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const targetGroupNameViolations = mockResources
+			.filter(resource => resource.type === 'aws:lb/targetGroup:TargetGroup')
+			.flatMap(resource => {
+				const value = resource.inputs['name'];
+				if (typeof value === 'string') {
+					if (isAwsTargetGroupName(value)) {
+						return [];
+					}
+
+					return [
+						`aws:lb/targetGroup:TargetGroup resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because target group names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+					];
+				}
+
+				const implicitNamePrefix = `${resource.name}-`;
+				const implicitNameLength =
+					implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
+				if (
+					implicitNameLength <= awsTargetGroupNameMaxLength &&
+					awsTargetGroupNamePattern.test(implicitNamePrefix)
+				) {
+					return [];
+				}
+
+				return [
+					`aws:lb/targetGroup:TargetGroup resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because target group names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid target group name.`,
+				];
+			});
+		if (targetGroupNameViolations.length > 0) {
+			throw new Error(
+				`AWS target group name validation failed:\n${targetGroupNameViolations.map(violation => `- ${violation}`).join('\n')}`
 			);
 		}
 

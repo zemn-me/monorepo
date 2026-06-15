@@ -1,7 +1,10 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
-import { sanitizeAwsAlphaNumericHyphenUnderscoreName } from '#root/ts/pulumi/lib/awsNames.js';
+import {
+	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsTargetGroupName,
+} from '#root/ts/pulumi/lib/awsNames.js';
 import { mergeTags, TagSet, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 export interface Args {
@@ -242,6 +245,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const targetGroup = new aws.lb.TargetGroup(
 			`${name}-tg`,
 			{
+				name: sanitizeAwsTargetGroupName(`${name}-tg`),
 				port: minecraftPort,
 				protocol: 'TCP',
 				targetType: 'ip',
