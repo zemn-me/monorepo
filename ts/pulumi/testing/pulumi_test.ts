@@ -190,6 +190,28 @@ describe('pulumi', () => {
 		).toBe(false);
 	});
 
+	test('staging resources are not protected', async () => {
+		mockResources.splice(0);
+		const protectedResources: string[] = [];
+		new project.Component(
+			'monorepo',
+			{ staging: true },
+			{
+				transformations: [
+					args => {
+						if (args.opts.protect === true) {
+							protectedResources.push(`${args.type} ${args.name}`);
+						}
+						return undefined;
+					},
+				],
+			}
+		);
+		await pulumi.runtime.disconnect();
+
+		expect(protectedResources).toEqual([]);
+	});
+
 	test('smoke', async () => {
 		mockResources.splice(0);
 		new project.Component('monorepo', { staging: false });
