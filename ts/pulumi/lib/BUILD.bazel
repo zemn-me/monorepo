@@ -6,7 +6,6 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "lib",
     srcs = [
-        "awsNames.ts",
         "bluesky_username_claim.ts",
         "bucketName.ts",
         "certificate.ts",
@@ -39,7 +38,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "awsNames.ts",
         "bluesky_username_claim.ts",
         "bucketName.ts",
         "certificate.ts",

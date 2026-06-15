@@ -19,7 +19,6 @@ ts_project(
         "//ts/pulumi/lib/website",
         "//ts/pulumi/zemn.me/api",
         "//ts/pulumi/zemn.me/forge",
-        "//ts/pulumi/zemn.me/minecraft",
         "@monorepo//ts/pulumi/zemn.me/hello_world:ts",
     ],
 )

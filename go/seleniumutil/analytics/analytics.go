@@ -104,7 +104,6 @@ func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.
 	client := dynamodb.New(dynamodb.Options{
 		EndpointResolver: dynamodb.EndpointResolverFromURL(ddbRoot.String()),
 		Retryer:          aws.NopRetryer{},
-		Region:           "us-east-1",
 		Credentials: credentials.StaticCredentialsProvider{
 			Value: aws.Credentials{
 				AccessKeyID:     "LOCALSTACK",
