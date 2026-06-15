@@ -10,9 +10,11 @@ import {
 import * as project from '#root/ts/pulumi/index.js';
 import {
 	isAwsAlphaNumericHyphenUnderscoreName,
+	isAwsEcsTaskFamilyName,
 	isAwsElbv2Name,
 	isAwsTargetGroupName,
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsEcsTaskFamilyName,
 	sanitizeAwsElbv2Name,
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
@@ -41,6 +43,11 @@ const awsElbv2NameInputs = [
 	},
 	{
 		type: 'aws:lb/targetGroup:TargetGroup',
+	},
+] as const;
+const awsEcsTaskDefinitionFamilyInputs = [
+	{
+		type: 'aws:ecs/taskDefinition:TaskDefinition',
 	},
 ] as const;
 const awsElbv2NameMaxLength = 32;
@@ -96,6 +103,78 @@ describe('pulumi', () => {
 			'monorepo-zemn-me-minecraft-nlb'
 		);
 		expect(isAwsElbv2Name('monorepo-zemn-me-minecraft-nlb')).toBe(true);
+
+		expect(sanitizeAwsEcsTaskFamilyName('monorepo_zemn.me_minecraft')).toBe(
+			'monorepo_zemn_me_minecraft'
+		);
+		expect(isAwsEcsTaskFamilyName('monorepo_zemn_me_minecraft')).toBe(true);
+		expect(isAwsEcsTaskFamilyName('monorepo_zemn.me_minecraft')).toBe(false);
+	});
+
+	test('staging minecraft uses staging-specific resources', async () => {
+		mockResources.splice(0);
+		new project.Component('monorepo', { staging: true });
+		await pulumi.runtime.disconnect();
+
+		const minecraftLoadBalancer = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/loadBalancer:LoadBalancer' &&
+				resource.name.endsWith('_minecraft-nlb')
+		);
+		expect(minecraftLoadBalancer?.inputs['name']).toBe(
+			'zemn-me-minecraft-staging-nlb'
+		);
+
+		const minecraftTargetGroup = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/targetGroup:TargetGroup' &&
+				resource.name.endsWith('_minecraft-tg')
+		);
+		expect(minecraftTargetGroup?.inputs['name']).toBe(
+			'zemn-me-minecraft-staging-tg'
+		);
+
+		const minecraftCluster = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/cluster:Cluster' &&
+				resource.name.endsWith('_minecraft-cluster')
+		);
+		expect(minecraftCluster?.inputs['name']).toBe(
+			'zemn-me-minecraft-staging-cluster'
+		);
+
+		const minecraftTaskDefinition = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/taskDefinition:TaskDefinition' &&
+				resource.name.endsWith('_minecraft-task')
+		);
+		expect(minecraftTaskDefinition?.inputs['family']).toBe(
+			'zemn-me-minecraft-staging-task'
+		);
+
+		const minecraftRecords = mockResources.filter(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.includes('_minecraft-')
+		);
+		expect(minecraftRecords.length).toBeGreaterThan(0);
+		for (const record of minecraftRecords) {
+			expect(resourceInputText(record.inputs['name'])).toContain(
+				'staging.zemn.me'
+			);
+			expect(resourceInputText(record.inputs['name'])).not.toContain(
+				'minecraft.zemn.me'
+			);
+		}
+
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53/queryLog:QueryLog'
+			)
+		).toBe(false);
+		expect(
+			mockResources.some(resource => resource.type === 'aws:route53/zone:Zone')
+		).toBe(false);
 	});
 
 	test('smoke', async () => {
@@ -168,6 +247,105 @@ describe('pulumi', () => {
 				`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
 			);
 		}
+
+		const ecsTaskDefinitionFamilyViolations =
+			awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
+				mockResources
+					.filter(resource => resource.type === type)
+					.flatMap(resource => {
+						const value = resource.inputs['family'];
+						if (typeof value === 'string' && isAwsEcsTaskFamilyName(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					})
+			);
+		if (ecsTaskDefinitionFamilyViolations.length > 0) {
+			throw new Error(
+				`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
+			);
+		}
+
+		const minecraftLoadBalancer = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/loadBalancer:LoadBalancer' &&
+				resource.name.endsWith('_minecraft-nlb')
+		);
+		expect(minecraftLoadBalancer?.inputs['name']).toBe(
+			'zemn-me-minecraft-production-nlb'
+		);
+
+		const minecraftTargetGroup = mockResources.find(
+			resource =>
+				resource.type === 'aws:lb/targetGroup:TargetGroup' &&
+				resource.name.endsWith('_minecraft-tg')
+		);
+		expect(minecraftTargetGroup?.inputs['name']).toBe(
+			'zemn-me-minecraft-production-tg'
+		);
+
+		const minecraftCluster = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/cluster:Cluster' &&
+				resource.name.endsWith('_minecraft-cluster')
+		);
+		expect(minecraftCluster?.inputs['name']).toBe(
+			'zemn-me-minecraft-production-cluster'
+		);
+
+		const minecraftTaskDefinition = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/taskDefinition:TaskDefinition' &&
+				resource.name.endsWith('_minecraft-task')
+		);
+		expect(minecraftTaskDefinition?.inputs['family']).toBe(
+			'zemn-me-minecraft-production-task'
+		);
+
+		const minecraftZone = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft-zone')
+		);
+		expect(minecraftZone?.inputs['name']).toBe('minecraft.zemn.me');
+
+		const minecraftZoneDelegation = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft-zone-delegation')
+		);
+		expect(minecraftZoneDelegation?.inputs).toMatchObject({
+			name: 'minecraft.zemn.me',
+			type: 'NS',
+		});
+
+		const minecraftPublicRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft-public-dns')
+		);
+		expect(minecraftPublicRecord?.inputs['name']).toBe('minecraft.zemn.me');
+
+		const minecraftServerRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft-server-dns')
+		);
+		expect(minecraftServerRecord?.inputs['name']).toBe(
+			'server.minecraft.zemn.me'
+		);
+
+		const minecraftSrvRecords = mockResources.filter(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.includes('_minecraft-srv-dns-')
+		);
+		expect(minecraftSrvRecords.map(resource => resource.inputs['name'])).toEqual(
+			['_minecraft._tcp.minecraft.zemn.me']
+		);
 
 		const githubProvider = mockResources.find(
 			resource =>

@@ -3,6 +3,7 @@ import * as Pulumi from '@pulumi/pulumi';
 
 import {
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsEcsTaskFamilyName,
 	sanitizeAwsElbv2Name,
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
@@ -11,6 +12,8 @@ import { mergeTags, TagSet, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
+	environmentName: string;
+	manageDnsWake?: boolean;
 	operators?: Pulumi.Input<Pulumi.Input<string>[]>;
 	tags?: TagSet;
 }
@@ -80,8 +83,37 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 		const publicDomain = ['minecraft', args.domain].join('.');
-		const playerDomains = [args.domain, publicDomain];
-		const serverDomain = ['minecraft-server', args.domain].join('.');
+		const playerDomains = [publicDomain];
+		const serverDomain = ['server', publicDomain].join('.');
+		const physicalNamePrefix = sanitizeAwsElbv2Name(
+			`zemn-me-minecraft-${args.environmentName}`
+		);
+		const manageDnsWake = args.manageDnsWake ?? true;
+		const minecraftZone = manageDnsWake
+			? new aws.route53.Zone(
+					`${name}-zone`,
+					{
+						name: publicDomain,
+						tags,
+					},
+					{ parent: this }
+				)
+			: undefined;
+		const minecraftZoneId = minecraftZone?.zoneId ?? args.zoneId;
+
+		if (minecraftZone) {
+			new aws.route53.Record(
+				`${name}-zone-delegation`,
+				{
+					zoneId: args.zoneId,
+					name: publicDomain,
+					type: 'NS',
+					ttl: 300,
+					records: minecraftZone.nameServers,
+				},
+				{ parent: this }
+			);
+		}
 
 		const vpc = new aws.ec2.Vpc(
 			`${name}-vpc`,
@@ -236,7 +268,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const loadBalancer = new aws.lb.LoadBalancer(
 			`${name}-nlb`,
 			{
-				name: sanitizeAwsElbv2Name(`${name}-nlb`),
+				name: sanitizeAwsElbv2Name(`${physicalNamePrefix}-nlb`),
 				loadBalancerType: 'network',
 				subnets: [subnet.id],
 				tags,
@@ -247,7 +279,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const targetGroup = new aws.lb.TargetGroup(
 			`${name}-tg`,
 			{
-				name: sanitizeAwsTargetGroupName(`${name}-tg`),
+				name: sanitizeAwsTargetGroupName(`${physicalNamePrefix}-tg`),
 				port: minecraftPort,
 				protocol: 'TCP',
 				targetType: 'ip',
@@ -284,7 +316,9 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const cluster = new aws.ecs.Cluster(
 			`${name}-cluster`,
 			{
-				name: sanitizeAwsAlphaNumericHyphenUnderscoreName(`${name}-cluster`),
+				name: sanitizeAwsAlphaNumericHyphenUnderscoreName(
+					`${physicalNamePrefix}-cluster`
+				),
 				settings: [{ name: 'containerInsights', value: 'enabled' }],
 				tags,
 			},
@@ -331,7 +365,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				cpu: '1024',
 				memory: '2048',
 				executionRoleArn: executionRole.arn,
-				family: `${name}-minecraft`,
+				family: sanitizeAwsEcsTaskFamilyName(`${physicalNamePrefix}-task`),
 				networkMode: 'awsvpc',
 				requiresCompatibilities: ['FARGATE'],
 				taskRoleArn: taskRole.arn,
@@ -539,71 +573,73 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		const queryLogGroup = new aws.cloudwatch.LogGroup(
-			`${name}-dns-query-logs`,
-			{
-				name: `/aws/route53/${publicDomain}`,
-				retentionInDays: 3,
-				tags,
-			},
-			{ parent: this }
-		);
+		if (manageDnsWake) {
+			const queryLogGroup = new aws.cloudwatch.LogGroup(
+				`${name}-dns-query-logs`,
+				{
+					name: `/aws/route53/${publicDomain}`,
+					retentionInDays: 3,
+					tags,
+				},
+				{ parent: this }
+			);
 
-		const route53LogPolicy = new aws.cloudwatch.LogResourcePolicy(
-			`${name}-route53-query-log-policy`,
-			{
-				policyDocument: queryLogGroup.arn.apply(logGroupArn =>
-					JSON.stringify({
-						Version: '2012-10-17',
-						Statement: [
-							{
-								Effect: 'Allow',
-								Principal: { Service: 'route53.amazonaws.com' },
-								Action: ['logs:CreateLogStream', 'logs:PutLogEvents'],
-								Resource: `${logGroupArn}:*`,
-							},
-						],
-					})
-				),
-				policyName: `${name}-route53-query-logs`,
-			},
-			{ parent: this }
-		);
+			const route53LogPolicy = new aws.cloudwatch.LogResourcePolicy(
+				`${name}-route53-query-log-policy`,
+				{
+					policyDocument: queryLogGroup.arn.apply(logGroupArn =>
+						JSON.stringify({
+							Version: '2012-10-17',
+							Statement: [
+								{
+									Effect: 'Allow',
+									Principal: { Service: 'route53.amazonaws.com' },
+									Action: ['logs:CreateLogStream', 'logs:PutLogEvents'],
+									Resource: `${logGroupArn}:*`,
+								},
+							],
+						})
+					),
+					policyName: `${physicalNamePrefix}-route53-query-logs`,
+				},
+				{ parent: this }
+			);
 
-		new aws.route53.QueryLog(
-			`${name}-query-log`,
-			{
-				cloudwatchLogGroupArn: queryLogGroup.arn,
-				zoneId: args.zoneId,
-			},
-			{ parent: this, dependsOn: [route53LogPolicy] }
-		);
+			new aws.route53.QueryLog(
+				`${name}-query-log`,
+				{
+					cloudwatchLogGroupArn: queryLogGroup.arn,
+					zoneId: minecraftZoneId,
+				},
+				{ parent: this, dependsOn: [route53LogPolicy] }
+			);
 
-		const logsPermission = new aws.lambda.Permission(
-			`${name}-logs-permission`,
-			{
-				action: 'lambda:InvokeFunction',
-				function: wakeFunction.name,
-				principal: 'logs.amazonaws.com',
-				sourceArn: Pulumi.interpolate`${queryLogGroup.arn}:*`,
-			},
-			{ parent: this }
-		);
+			const logsPermission = new aws.lambda.Permission(
+				`${name}-logs-permission`,
+				{
+					action: 'lambda:InvokeFunction',
+					function: wakeFunction.name,
+					principal: 'logs.amazonaws.com',
+					sourceArn: Pulumi.interpolate`${queryLogGroup.arn}:*`,
+				},
+				{ parent: this }
+			);
 
-		new aws.cloudwatch.LogSubscriptionFilter(
-			`${name}-dns-query-filter`,
-			{
-				destinationArn: wakeFunction.arn,
-				filterPattern: 'minecraft',
-				logGroup: queryLogGroup.name,
-			},
-			{ parent: this, dependsOn: [logsPermission] }
-		);
+			new aws.cloudwatch.LogSubscriptionFilter(
+				`${name}-dns-query-filter`,
+				{
+					destinationArn: wakeFunction.arn,
+					filterPattern: 'minecraft',
+					logGroup: queryLogGroup.name,
+				},
+				{ parent: this, dependsOn: [logsPermission] }
+			);
+		}
 
 		new aws.route53.Record(
 			`${name}-server-dns`,
 			{
-				zoneId: args.zoneId,
+				zoneId: minecraftZoneId,
 				name: serverDomain,
 				type: 'A',
 				aliases: [
@@ -620,7 +656,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		new aws.route53.Record(
 			`${name}-public-dns`,
 			{
-				zoneId: args.zoneId,
+				zoneId: minecraftZoneId,
 				name: publicDomain,
 				type: 'A',
 				aliases: [
@@ -638,7 +674,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			new aws.route53.Record(
 				`${name}-srv-dns-${domain.replaceAll('.', '-')}`,
 				{
-					zoneId: args.zoneId,
+					zoneId: minecraftZoneId,
 					name: `_minecraft._tcp.${domain}`,
 					type: 'SRV',
 					ttl: 60,

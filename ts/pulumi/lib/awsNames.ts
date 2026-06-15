@@ -1,4 +1,5 @@
 const awsAlphaNumericHyphenUnderscoreNamePattern = /^[A-Za-z0-9_-]+$/;
+const awsEcsTaskFamilyNameMaxLength = 255;
 const awsElbv2NameMaxLength = 32;
 const awsElbv2NamePattern = /^[A-Za-z0-9-]+$/;
 
@@ -9,6 +10,20 @@ export function isAwsAlphaNumericHyphenUnderscoreName(name: string): boolean {
 export function sanitizeAwsAlphaNumericHyphenUnderscoreName(name: string): string {
 	const sanitized = name.replaceAll(/[^A-Za-z0-9_-]/g, '_');
 	return sanitized.length === 0 ? 'resource' : sanitized;
+}
+
+export function isAwsEcsTaskFamilyName(name: string): boolean {
+	return (
+		name.length <= awsEcsTaskFamilyNameMaxLength &&
+		isAwsAlphaNumericHyphenUnderscoreName(name)
+	);
+}
+
+export function sanitizeAwsEcsTaskFamilyName(name: string): string {
+	return sanitizeAwsAlphaNumericHyphenUnderscoreName(name).slice(
+		0,
+		awsEcsTaskFamilyNameMaxLength
+	);
 }
 
 export function isAwsTargetGroupName(name: string): boolean {

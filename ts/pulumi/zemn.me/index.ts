@@ -21,6 +21,8 @@ export interface Args {
 	callboxPhoneNumber: Pulumi.Input<string>;
 	twilioSharedSecret: Pulumi.Input<string>;
 	cloudWorkstations?: Pulumi.Input<boolean>;
+	minecraftEnvironment?: string;
+	minecraftManageDnsWake?: boolean;
 	minecraftOnDemand?: boolean;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
 }
@@ -130,6 +132,8 @@ export class Component extends Pulumi.ComponentResource {
 					{
 						zoneId: args.zoneId,
 						domain: args.domain,
+						environmentName: args.minecraftEnvironment ?? 'production',
+						manageDnsWake: args.minecraftManageDnsWake ?? true,
 						operators: args.minecraftOperators,
 						tags,
 					},
