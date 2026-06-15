@@ -11,3 +11,9 @@ The AWS GitHub Actions role is intentionally admin for now, but its trust policy
 AWS GitHub OIDC trust policies should use AWS-documented GitHub keys like `repository_id`, `workflow`, `ref`, and `sub`; do not copy GCP-only owner claim checks into AWS.
 
 CloudFront Function physical names only allow `[a-zA-Z0-9-_]`; set explicit sanitized names for resources derived from domains.
+
+ECS cluster physical names have the same `[A-Za-z0-9_-]` constraint; use the AWS name sanitizer instead of passing dotted component names through.
+
+Lambda function physical names allow `[A-Za-z0-9_-]` and max 64 chars; set explicit sanitized names for dotted component-derived functions.
+
+Lambda permission statement IDs derive from the logical name unless set; use explicit sanitized `statementId` for dotted component-derived permissions.
