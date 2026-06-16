@@ -23,6 +23,7 @@ export interface Args {
 }
 
 const minecraftPort = 25565;
+const minecraftServerImage = 'itzg/minecraft-server:latest';
 
 function wakeLambdaCode(): string {
 	return `
@@ -87,8 +88,9 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const tag = name;
 		const tags = mergeTags(args.tags, tagTrue(tag));
 		const publicDomain = ['minecraft', args.domain].join('.');
-		const playerDomains = [publicDomain];
+		const srvPlayerDomains = [args.domain, publicDomain];
 		const serverDomain = ['server', publicDomain].join('.');
+		const wakeNames = [publicDomain, `${publicDomain}.`];
 		const alphaNumericPhysicalNamePrefix =
 			sanitizeAwsAlphaNumericHyphenUnderscoreName(
 				`zemn_me_minecraft_${args.environmentName}`
@@ -388,7 +390,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 					return JSON.stringify([
 						{
 							name: 'minecraft',
-							image: 'itzg/minecraft-server:java21',
+							image: minecraftServerImage,
 							essential: true,
 							portMappings: [
 								{
@@ -550,14 +552,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 					variables: {
 						ECS_CLUSTER_NAME: cluster.name,
 						ECS_SERVICE_NAME: service.name,
-						WAKE_NAMES: playerDomains
-							.flatMap(domain => [
-								domain,
-								`${domain}.`,
-								`_minecraft._tcp.${domain}`,
-								`_minecraft._tcp.${domain}.`,
-							])
-							.join(','),
+						WAKE_NAMES: wakeNames.join(','),
 					},
 				},
 				tags,
@@ -715,11 +710,11 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		playerDomains.forEach(domain => {
+		srvPlayerDomains.forEach(domain => {
 			new aws.route53.Record(
 				resourceName(`srv_dns_${domain.replaceAll('.', '_')}`),
 				{
-					zoneId: minecraftZoneId,
+					zoneId: domain === args.domain ? args.zoneId : minecraftZoneId,
 					name: `_minecraft._tcp.${domain}`,
 					type: 'SRV',
 					ttl: 60,
