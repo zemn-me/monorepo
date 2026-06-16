@@ -56,11 +56,14 @@ type Server struct {
 	keyRequestsTableName string
 	rt                   *chi.Mux
 	http.Handler
-	log                *log.Logger
-	twilioSharedSecret string
-	twilioClient       *twilio.RestClient
-	sendText           func(ctx context.Context, to, from, body string) error
-	fetchCalendarICal  calendarICalFetcher
+	log                    *log.Logger
+	twilioSharedSecret     string
+	twilioClient           *twilio.RestClient
+	sendText               func(ctx context.Context, to, from, body string) error
+	fetchCalendarICal      calendarICalFetcher
+	minecraftRCON          minecraftRCONCommander
+	minecraftWake          minecraftWakeRequester
+	minecraftServerAddress string
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -144,7 +147,10 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
 			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
 		}),
-		fetchCalendarICal: defaultCalendarICalFetcher(),
+		fetchCalendarICal:      defaultCalendarICalFetcher(),
+		minecraftRCON:          minecraftRCONCommanderFromEnv(cfg),
+		minecraftWake:          minecraftWakeRequesterFromEnv(cfg),
+		minecraftServerAddress: minecraftServerAddressFromEnv(),
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)

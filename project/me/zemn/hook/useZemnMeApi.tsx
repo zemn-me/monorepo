@@ -267,6 +267,22 @@ function useinvalidateCallboxEvents() {
 		});
 }
 
+function useinvalidateMinecraftWhitelist() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/minecraft/whitelist'],
+		});
+}
+
+function useinvalidateMinecraftStatus() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/minecraft/status'],
+		});
+}
+
 export function usePostGrievances(id_token: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(id_token).useMutation('post', '/grievances', {
@@ -391,6 +407,190 @@ export type GetCallboxEventsSuccessResponse =
 	paths['/callbox/events']['get']['responses']['200']['content']['application/json'];
 
 export type CallboxEvent = GetCallboxEventsSuccessResponse['events'][number];
+
+export type GetMinecraftStatusSuccessResponse =
+	paths['/minecraft/status']['get']['responses']['200']['content']['application/json'];
+
+export type GetMinecraftWhitelistSuccessResponse =
+	paths['/minecraft/whitelist']['get']['responses']['200']['content']['application/json'];
+
+export type PostMinecraftWakeSuccessResponse =
+	paths['/minecraft/wake']['post']['responses']['202']['content']['application/json'];
+
+export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/minecraft/status',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/minecraft/status');
+			if (!resp.data) {
+				throw new Error('/minecraft/status returned unexpected payload');
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+		refetchInterval: 5000,
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function usePostMinecraftWake<A, B>(
+	id_token: Future<string, A, B>,
+	onSuccess: () => void = noop,
+	onError: () => void = noop
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateMinecraftStatus = useinvalidateMinecraftStatus();
+
+	return useMutation({
+		mutationKey: [
+			'post',
+			'/minecraft/wake',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+		mutationFn: fetchClient(
+			cl => async () => {
+				const resp = await cl.POST('/minecraft/wake');
+				if (!resp.data) {
+					const cause =
+						typeof resp.error === 'object' &&
+						resp.error !== null &&
+						'cause' in resp.error &&
+						typeof resp.error.cause === 'string'
+							? resp.error.cause
+							: '/minecraft/wake returned unexpected payload';
+					throw new Error(cause);
+				}
+				return resp.data;
+			},
+			() => () => {
+				throw new Error('this should never happen');
+			},
+			() => () => {
+				throw new Error('this should never happen');
+			}
+		),
+		onSuccess: () => {
+			invalidateMinecraftStatus();
+			onSuccess();
+		},
+		onError,
+	});
+}
+
+export function useGetMinecraftWhitelist<A, B>(
+	id_token: Future<string, A, B>
+) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/minecraft/whitelist',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/minecraft/whitelist');
+			if (!resp.data) {
+				throw new Error(
+					'/minecraft/whitelist returned unexpected payload'
+				);
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function usePutMinecraftWhitelist<A, B>(
+	id_token: Future<string, A, B>,
+	onSuccess: () => void = noop,
+	onError: () => void = noop
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateMinecraftWhitelist = useinvalidateMinecraftWhitelist();
+
+	return useMutation({
+		mutationKey: [
+			'put',
+			'/minecraft/whitelist',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+		mutationFn: fetchClient(
+			cl => async (username: string) => {
+				const resp = await cl.PUT('/minecraft/whitelist', {
+					body: { username },
+				});
+				if (!resp.data) {
+					const cause =
+						typeof resp.error === 'object' &&
+						resp.error !== null &&
+						'cause' in resp.error &&
+						typeof resp.error.cause === 'string'
+							? resp.error.cause
+							: '/minecraft/whitelist returned unexpected payload';
+					throw new Error(cause);
+				}
+				return resp.data;
+			},
+			() => (_username: string) => {
+				throw new Error('this should never happen');
+			},
+			() => (_username: string) => {
+				throw new Error('this should never happen');
+			}
+		),
+		onSuccess: () => {
+			invalidateMinecraftWhitelist();
+			onSuccess();
+		},
+		onError,
+	});
+}
 
 export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(

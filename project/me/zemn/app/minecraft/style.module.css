@@ -1,0 +1,226 @@
+.root {
+	margin: 0 auto;
+	max-width: 46rem;
+	padding: clamp(1.25rem, 4vw, 3rem) 1rem 3rem;
+}
+
+.headerBand {
+	align-items: center;
+	display: grid;
+	gap: 1.25rem;
+	grid-template-columns: minmax(7rem, 10rem) minmax(0, 1fr);
+	margin-block-end: 2rem;
+}
+
+.blockScene {
+	aspect-ratio: 1;
+	background:
+		linear-gradient(#6ca43c 0 0) 0 0 / 33.333% 33.333% no-repeat,
+		linear-gradient(#4f7f35 0 0) 50% 0 / 33.333% 33.333% no-repeat,
+		linear-gradient(#6ca43c 0 0) 100% 0 / 33.333% 33.333% no-repeat,
+		linear-gradient(#4f7f35 0 0) 0 50% / 33.333% 33.333% no-repeat,
+		linear-gradient(#6b4d32 0 0) 50% 50% / 33.333% 33.333% no-repeat,
+		linear-gradient(#4f7f35 0 0) 100% 50% / 33.333% 33.333% no-repeat,
+		linear-gradient(#8a6541 0 0) 0 100% / 33.333% 33.333% no-repeat,
+		linear-gradient(#6b4d32 0 0) 50% 100% / 33.333% 33.333% no-repeat,
+		linear-gradient(#575a60 0 0) 100% 100% / 33.333% 33.333% no-repeat;
+	inline-size: min(100%, 10rem);
+	overflow: hidden;
+	position: relative;
+}
+
+.blockScene::after {
+	background-image:
+		linear-gradient(to right, rgb(0 0 0 / 18%) 1px, transparent 1px),
+		linear-gradient(to bottom, rgb(0 0 0 / 18%) 1px, transparent 1px);
+	background-size: 33.333% 33.333%;
+	content: "";
+	inset: 0;
+	position: absolute;
+}
+
+.headerCopy {
+	min-width: 0;
+}
+
+.headerCopy h1 {
+	font-size: clamp(2.2rem, 11vw, 5.5rem);
+	font-weight: 850;
+	letter-spacing: 0;
+	line-height: 0.92;
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.headerCopy p {
+	color: color-mix(in srgb, currentColor 68%, transparent);
+	font-size: 1.1rem;
+	margin: 0.55rem 0 0;
+}
+
+.statusGrid {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: minmax(0, 1fr) max-content;
+	margin-block-end: 1.5rem;
+}
+
+.statusPanel,
+.joinPanel,
+.accessPanel {
+	align-items: center;
+	border-block: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	display: flex;
+	gap: 1rem;
+	min-height: 5.5rem;
+	padding-block: 1rem;
+}
+
+.joinPanel {
+	justify-content: end;
+}
+
+.accessPanel {
+	color: color-mix(in srgb, currentColor 78%, transparent);
+	justify-content: center;
+	text-align: center;
+}
+
+.accessPanel p {
+	margin: 0;
+}
+
+.panelIcon {
+	color: color-mix(in srgb, currentColor 65%, transparent);
+	font-size: 1.45rem;
+	inline-size: 1.5rem;
+}
+
+.statBlock {
+	display: grid;
+	gap: 0.15rem 0.65rem;
+	grid-template-columns: max-content minmax(0, 1fr);
+	min-width: 0;
+}
+
+.statValue {
+	font-size: 3rem;
+	font-weight: 800;
+	grid-row: span 2;
+	letter-spacing: 0;
+	line-height: 0.9;
+	min-width: 2ch;
+}
+
+.statLabel {
+	align-self: end;
+	color: color-mix(in srgb, currentColor 74%, transparent);
+	font-weight: 650;
+}
+
+.statusNote {
+	align-items: center;
+	color: color-mix(in srgb, currentColor 60%, transparent);
+	display: inline-flex;
+	font-size: 0.9rem;
+	gap: 0.35rem;
+}
+
+.primaryButton,
+.iconButton {
+	align-items: center;
+	background: var(--foreground-color);
+	border: 1px solid var(--foreground-color);
+	color: var(--background-color);
+	cursor: pointer;
+	display: inline-flex;
+	font: inherit;
+	font-weight: 700;
+	gap: 0.55rem;
+	justify-content: center;
+	min-height: 2.75rem;
+	padding: 0.65rem 0.9rem;
+	white-space: nowrap;
+}
+
+.primaryButton:disabled,
+.iconButton:disabled {
+	cursor: not-allowed;
+	opacity: 0.55;
+}
+
+.whitelistForm fieldset {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.whitelistForm legend {
+	font-size: 1.35rem;
+	font-weight: 780;
+	margin-block-end: 0.7rem;
+	padding: 0;
+}
+
+.whitelistForm label {
+	color: color-mix(in srgb, currentColor 70%, transparent);
+	display: block;
+	font-size: 0.95rem;
+	font-weight: 650;
+	margin-block-end: 0.35rem;
+}
+
+.inputRow {
+	display: grid;
+	gap: 0.65rem;
+	grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.inputRow input {
+	background: transparent;
+	border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+	color: inherit;
+	font: inherit;
+	min-height: 2.75rem;
+	min-width: 0;
+	padding: 0.55rem 0.7rem;
+}
+
+.inputRow input:focus {
+	border-color: currentColor;
+	outline: 2px solid color-mix(in srgb, currentColor 22%, transparent);
+	outline-offset: 2px;
+}
+
+.iconButton {
+	min-width: 7.75rem;
+}
+
+.whitelistForm output {
+	color: color-mix(in srgb, #d33 72%, currentColor);
+	display: block;
+	font-size: 0.92rem;
+	margin-block-start: 0.55rem;
+}
+
+@media (max-width: 38rem) {
+	.headerBand,
+	.statusGrid,
+	.inputRow {
+		grid-template-columns: 1fr;
+	}
+
+	.blockScene {
+		inline-size: 7.5rem;
+	}
+
+	.joinPanel {
+		justify-content: stretch;
+	}
+
+	.primaryButton,
+	.iconButton {
+		inline-size: 100%;
+		white-space: normal;
+	}
+}
