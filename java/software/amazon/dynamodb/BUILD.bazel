@@ -47,6 +47,7 @@ itest_service(
         "$${TMPDIR}",
         "--port",
         "$${PORT}",
+        "--sharedDb",
     ],
     autoassign_port = True,
     exe = ":bin",

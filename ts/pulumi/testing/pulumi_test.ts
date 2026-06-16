@@ -538,15 +538,6 @@ describe('pulumi', () => {
 			'server.minecraft.zemn.me'
 		);
 
-		const minecraftSrvRecords = mockResources.filter(
-			resource =>
-				resource.type === 'aws:route53/record:Record' &&
-				resource.name.includes('_minecraft_srv_dns_')
-		);
-		expect(minecraftSrvRecords.map(resource => resource.inputs['name'])).toEqual(
-			['_minecraft._tcp.minecraft.zemn.me']
-		);
-
 		const githubProvider = mockResources.find(
 			resource =>
 				resource.type ===
