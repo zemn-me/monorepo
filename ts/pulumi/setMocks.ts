@@ -21,5 +21,14 @@ void pulumi.runtime.setMocks({
 	},
 
 	// Mock function calls and return whatever input properties were provided.
-	call: (args: pulumi.runtime.MockCallArgs) => args.inputs,
+	call: (args: pulumi.runtime.MockCallArgs) => {
+		if (
+			args.token === 'aws:route53/getZone:getZone' &&
+			typeof args.inputs['zoneId'] === 'string'
+		) {
+			return { ...args.inputs, id: args.inputs['zoneId'] };
+		}
+
+		return args.inputs;
+	},
 });
