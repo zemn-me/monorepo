@@ -1,5 +1,6 @@
 import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
+import * as random from '@pulumi/random';
 
 import {
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
@@ -23,6 +24,7 @@ export interface Args {
 }
 
 const minecraftPort = 25565;
+const minecraftRconPort = 25575;
 const minecraftServerImage = 'itzg/minecraft-server:latest';
 
 function wakeLambdaCode(): string {
@@ -58,6 +60,11 @@ function logMessages(event) {
 }
 
 exports.handler = async event => {
+	if (event?.action === "wake") {
+		await scale(1, event.reason || "minecraft api wake");
+		return { wakeRequested: true };
+	}
+
 	if (event.source === "aws.ecs" && event["detail-type"] === "ECS Task State Change") {
 		if (event.detail?.lastStatus === "STOPPED") {
 			await scale(0, "minecraft task stopped");
@@ -77,7 +84,131 @@ exports.handler = async event => {
 `;
 }
 
+function rconBridgeLambdaCode(): string {
+	return `
+const net = require("node:net");
+
+const host = process.env.RCON_HOST;
+const port = Number(process.env.RCON_PORT || "25575");
+const password = process.env.RCON_PASSWORD;
+const timeoutMs = 5000;
+const usernamePattern = "[A-Za-z0-9_]{3,16}";
+const commandPattern = new RegExp("^(list|whitelist (add|remove) " + usernamePattern + ")$");
+
+function packet(id, type, body) {
+	const bodyBuffer = Buffer.from(body, "utf8");
+	const length = 4 + 4 + bodyBuffer.length + 2;
+	const buffer = Buffer.alloc(4 + length);
+	buffer.writeInt32LE(length, 0);
+	buffer.writeInt32LE(id, 4);
+	buffer.writeInt32LE(type, 8);
+	bodyBuffer.copy(buffer, 12);
+	return buffer;
+}
+
+function readPacket(socket) {
+	let buffer = Buffer.alloc(0);
+	return new Promise((resolve, reject) => {
+		const timer = setTimeout(() => {
+			cleanup();
+			reject(new Error("minecraft rcon read timed out"));
+		}, timeoutMs);
+
+		function cleanup() {
+			clearTimeout(timer);
+			socket.off("data", onData);
+			socket.off("error", onError);
+			socket.off("close", onClose);
+		}
+
+		function onError(error) {
+			cleanup();
+			reject(error);
+		}
+
+		function onClose() {
+			cleanup();
+			reject(new Error("minecraft rcon socket closed"));
+		}
+
+		function onData(chunk) {
+			buffer = Buffer.concat([buffer, chunk]);
+			if (buffer.length < 4) return;
+			const length = buffer.readInt32LE(0);
+			if (length < 10 || length > 4096) {
+				cleanup();
+				reject(new Error("invalid minecraft rcon packet size " + length));
+				return;
+			}
+			if (buffer.length < 4 + length) return;
+			const payload = buffer.subarray(4, 4 + length);
+			cleanup();
+			resolve({
+				id: payload.readInt32LE(0),
+				type: payload.readInt32LE(4),
+				body: payload.subarray(8, payload.length - 2).toString("utf8"),
+			});
+		}
+
+		socket.on("data", onData);
+		socket.once("error", onError);
+		socket.once("close", onClose);
+	});
+}
+
+function connect() {
+	return new Promise((resolve, reject) => {
+		const socket = net.connect({ host, port });
+		const timer = setTimeout(() => {
+			socket.destroy();
+			reject(new Error("minecraft rcon connect timed out"));
+		}, timeoutMs);
+		socket.once("connect", () => {
+			clearTimeout(timer);
+			resolve(socket);
+		});
+		socket.once("error", error => {
+			clearTimeout(timer);
+			reject(error);
+		});
+	});
+}
+
+exports.handler = async event => {
+	const command = String(event.command || "");
+	if (!commandPattern.test(command)) {
+		throw new Error("minecraft rcon command is not allowed");
+	}
+	if (!host || !password) {
+		throw new Error("minecraft rcon bridge is not configured");
+	}
+
+	const socket = await connect();
+	try {
+		socket.write(packet(1, 3, password));
+		const auth = await readPacket(socket);
+		if (auth.id === -1) {
+			throw new Error("minecraft rcon authentication failed");
+		}
+
+		socket.write(packet(2, 2, command));
+		const response = await readPacket(socket);
+		return { response: response.body };
+	} finally {
+		socket.end();
+	}
+};
+`;
+}
+
 export class MinecraftOnDemand extends Pulumi.ComponentResource {
+	public readonly rconBridgeFunctionArn: Pulumi.Output<string>;
+	public readonly rconBridgeFunctionName: Pulumi.Output<string>;
+	public readonly taskLogGroupArn: Pulumi.Output<string>;
+	public readonly taskLogGroupName: Pulumi.Output<string>;
+	public readonly wakeFunctionArn: Pulumi.Output<string>;
+	public readonly wakeFunctionName: Pulumi.Output<string>;
+
 	constructor(
 		name: string,
 		args: Args,
@@ -181,6 +312,57 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const rconBridgeSecurityGroup = new aws.ec2.SecurityGroup(
+			resourceName('rcon_bridge_sg'),
+			{
+				description: 'Minecraft RCON bridge Lambda egress',
+				vpcId: vpc.id,
+				egress: [],
+				tags,
+			},
+			{ parent: this }
+		);
+
+		const rconLoadBalancerSecurityGroup = new aws.ec2.SecurityGroup(
+			resourceName('rcon_nlb_sg'),
+			{
+				description: 'Minecraft internal RCON load balancer ingress',
+				vpcId: vpc.id,
+				ingress: [
+					{
+						protocol: 'tcp',
+						fromPort: minecraftRconPort,
+						toPort: minecraftRconPort,
+						securityGroups: [rconBridgeSecurityGroup.id],
+					},
+				],
+				egress: [
+					{
+						protocol: '-1',
+						fromPort: 0,
+						toPort: 0,
+						cidrBlocks: ['0.0.0.0/0'],
+						ipv6CidrBlocks: ['::/0'],
+					},
+				],
+				tags,
+			},
+			{ parent: this }
+		);
+
+		new aws.ec2.SecurityGroupRule(
+			resourceName('rcon_bridge_egress'),
+			{
+				type: 'egress',
+				securityGroupId: rconBridgeSecurityGroup.id,
+				protocol: 'tcp',
+				fromPort: minecraftRconPort,
+				toPort: minecraftRconPort,
+				cidrBlocks: ['10.42.0.0/16'],
+			},
+			{ parent: this }
+		);
+
 		const taskSecurityGroup = new aws.ec2.SecurityGroup(
 			resourceName('task_sg'),
 			{
@@ -193,6 +375,12 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 						toPort: minecraftPort,
 						cidrBlocks: ['0.0.0.0/0'],
 						ipv6CidrBlocks: ['::/0'],
+					},
+					{
+						protocol: 'tcp',
+						fromPort: minecraftRconPort,
+						toPort: minecraftRconPort,
+						securityGroups: [rconLoadBalancerSecurityGroup.id],
 					},
 				],
 				egress: [
@@ -324,6 +512,56 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const rconLoadBalancer = new aws.lb.LoadBalancer(
+			resourceName('rcon_nlb'),
+			{
+				name: sanitizeAwsElbv2Name(`${elbv2PhysicalNamePrefix}-rcon`),
+				internal: true,
+				loadBalancerType: 'network',
+				securityGroups: [rconLoadBalancerSecurityGroup.id],
+				subnets: [subnet.id],
+				tags,
+			},
+			{ parent: this }
+		);
+
+		const rconTargetGroup = new aws.lb.TargetGroup(
+			resourceName('rcon_tg'),
+			{
+				name: sanitizeAwsTargetGroupName(`${elbv2PhysicalNamePrefix}-rcon`),
+				port: minecraftRconPort,
+				protocol: 'TCP',
+				targetType: 'ip',
+				vpcId: vpc.id,
+				healthCheck: {
+					enabled: true,
+					healthyThreshold: 2,
+					interval: 30,
+					protocol: 'TCP',
+					unhealthyThreshold: 2,
+				},
+				tags,
+			},
+			{ parent: this }
+		);
+
+		new aws.lb.Listener(
+			resourceName('rcon_listener'),
+			{
+				loadBalancerArn: rconLoadBalancer.arn,
+				port: minecraftRconPort,
+				protocol: 'TCP',
+				defaultActions: [
+					{
+						type: 'forward',
+						targetGroupArn: rconTargetGroup.arn,
+					},
+				],
+				tags,
+			},
+			{ parent: this }
+		);
+
 		const cluster = new aws.ecs.Cluster(
 			resourceName('cluster'),
 			{
@@ -369,6 +607,17 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+		this.taskLogGroupArn = taskLogGroup.arn;
+		this.taskLogGroupName = taskLogGroup.name;
+
+		const rconPassword = new random.RandomPassword(
+			resourceName('rcon_password'),
+			{
+				length: 32,
+				special: false,
+			},
+			{ parent: this }
+		);
 
 		const taskDefinition = new aws.ecs.TaskDefinition(
 			resourceName('task'),
@@ -385,7 +634,8 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				containerDefinitions: Pulumi.all([
 					taskLogGroup.name,
 					args.operators ?? [],
-				]).apply(([logGroupName, operators]) => {
+					rconPassword.result,
+				]).apply(([logGroupName, operators, rconPasswordValue]) => {
 					const allowList = [...new Set(operators)];
 					return JSON.stringify([
 						{
@@ -396,6 +646,11 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 								{
 									containerPort: minecraftPort,
 									hostPort: minecraftPort,
+									protocol: 'tcp',
+								},
+								{
+									containerPort: minecraftRconPort,
+									hostPort: minecraftRconPort,
 									protocol: 'tcp',
 								},
 							],
@@ -419,6 +674,15 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 									value: '1200',
 								},
 								{ name: 'AUTOSTOP_PERIOD', value: '10' },
+								{ name: 'ENABLE_RCON', value: 'TRUE' },
+								{
+									name: 'RCON_PORT',
+									value: String(minecraftRconPort),
+								},
+								{
+									name: 'RCON_PASSWORD',
+									value: rconPasswordValue,
+								},
 								...(operators.length > 0
 									? [
 											{
@@ -487,6 +751,11 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 						containerPort: minecraftPort,
 						targetGroupArn: targetGroup.arn,
 					},
+					{
+						containerName: 'minecraft',
+						containerPort: minecraftRconPort,
+						targetGroupArn: rconTargetGroup.arn,
+					},
 				],
 				networkConfiguration: {
 					assignPublicIp: true,
@@ -502,6 +771,55 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				ignoreChanges: ['desiredCount'],
 			}
 		);
+
+		const rconBridgeRole = new aws.iam.Role(
+			resourceName('rcon_bridge_role'),
+			{
+				assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
+					Service: 'lambda.amazonaws.com',
+				}),
+				managedPolicyArns: [
+					aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole,
+					aws.iam.ManagedPolicy.AWSLambdaVPCAccessExecutionRole,
+				],
+				tags,
+			},
+			{ parent: this }
+		);
+
+		const rconBridgeFunction = new aws.lambda.Function(
+			resourceName('rcon_bridge'),
+			{
+				code: new Pulumi.asset.AssetArchive({
+					'index.js': new Pulumi.asset.StringAsset(
+						rconBridgeLambdaCode()
+					),
+				}),
+				handler: 'index.handler',
+				name: sanitizeAwsLambdaFunctionName(
+					`${alphaNumericPhysicalNamePrefix}_rcon_bridge`
+				),
+				role: rconBridgeRole.arn,
+				runtime: aws.lambda.Runtime.NodeJS20dX,
+				timeout: 10,
+				environment: {
+					variables: {
+						RCON_HOST: rconLoadBalancer.dnsName,
+						RCON_PASSWORD: rconPassword.result,
+						RCON_PORT: String(minecraftRconPort),
+					},
+				},
+				vpcConfig: {
+					securityGroupIds: [rconBridgeSecurityGroup.id],
+					subnetIds: [subnet.id],
+				},
+				tags,
+			},
+			{ parent: this }
+		);
+
+		this.rconBridgeFunctionArn = rconBridgeFunction.arn;
+		this.rconBridgeFunctionName = rconBridgeFunction.name;
 
 		const wakeRole = new aws.iam.Role(
 			resourceName('wake_role'),
@@ -559,6 +877,9 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+
+		this.wakeFunctionArn = wakeFunction.arn;
+		this.wakeFunctionName = wakeFunction.name;
 
 		const taskStoppedRule = new aws.cloudwatch.EventRule(
 			resourceName('task_stopped'),
@@ -727,8 +1048,14 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		this.registerOutputs({
 			clusterName: cluster.name,
 			publicDomain,
+			rconBridgeFunctionArn: this.rconBridgeFunctionArn,
+			rconBridgeFunctionName: this.rconBridgeFunctionName,
 			serverDomain,
 			serviceName: service.name,
+			taskLogGroupArn: this.taskLogGroupArn,
+			taskLogGroupName: this.taskLogGroupName,
+			wakeFunctionArn: this.wakeFunctionArn,
+			wakeFunctionName: this.wakeFunctionName,
 		});
 	}
 }

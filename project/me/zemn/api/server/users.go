@@ -17,22 +17,23 @@ import (
 )
 
 type userRecord struct {
-	Id            string   `dynamodbav:"id"`
-	When          Time     `dynamodbav:"when"`
-	Deleted       bool     `dynamodbav:"deleted,omitempty"`
-	Deletable     bool     `dynamodbav:"deletable,omitempty"`
-	SubjectIds    []string `dynamodbav:"subject_ids,omitempty"`
-	Emails        []string `dynamodbav:"emails,omitempty"`
-	Issuer        string   `dynamodbav:"issuer,omitempty"`
-	Provider      string   `dynamodbav:"provider,omitempty"`
-	Audience      string   `dynamodbav:"audience,omitempty"`
-	RemoteSubject string   `dynamodbav:"remote_subject,omitempty"`
-	Name          string   `dynamodbav:"name,omitempty"`
-	GivenName     string   `dynamodbav:"given_name,omitempty"`
-	FamilyName    string   `dynamodbav:"family_name,omitempty"`
-	Picture       string   `dynamodbav:"picture,omitempty"`
-	EmailVerified *bool    `dynamodbav:"email_verified,omitempty"`
-	Scopes        []string `dynamodbav:"scopes,omitempty"`
+	Id                string   `dynamodbav:"id"`
+	When              Time     `dynamodbav:"when"`
+	Deleted           bool     `dynamodbav:"deleted,omitempty"`
+	Deletable         bool     `dynamodbav:"deletable,omitempty"`
+	SubjectIds        []string `dynamodbav:"subject_ids,omitempty"`
+	Emails            []string `dynamodbav:"emails,omitempty"`
+	Issuer            string   `dynamodbav:"issuer,omitempty"`
+	Provider          string   `dynamodbav:"provider,omitempty"`
+	Audience          string   `dynamodbav:"audience,omitempty"`
+	RemoteSubject     string   `dynamodbav:"remote_subject,omitempty"`
+	Name              string   `dynamodbav:"name,omitempty"`
+	GivenName         string   `dynamodbav:"given_name,omitempty"`
+	FamilyName        string   `dynamodbav:"family_name,omitempty"`
+	Picture           string   `dynamodbav:"picture,omitempty"`
+	EmailVerified     *bool    `dynamodbav:"email_verified,omitempty"`
+	Scopes            []string `dynamodbav:"scopes,omitempty"`
+	MinecraftUsername string   `dynamodbav:"minecraft_username,omitempty"`
 }
 
 type tokenExchangeUserDetails struct {

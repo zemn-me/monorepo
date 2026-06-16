@@ -1,8 +1,16 @@
+import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
+
+type ApiScopes = components['schemas']['OAuthScopes'];
+
 export type RequiredScope =
-	| 'admin_analytics_read'
-	| 'admin_users_manage'
-	| 'callbox_key'
-	| 'grievance_portal';
+	keyof Pick<
+		ApiScopes,
+		| 'admin_analytics_read'
+		| 'admin_users_manage'
+		| 'callbox_key'
+		| 'grievance_portal'
+		| 'minecraft'
+	>;
 
 export interface NavigationLink {
 	readonly description?: string;
@@ -159,6 +167,7 @@ export const accountLinks: readonly NavigationLink[] = [
 		label: 'Grievance portal',
 		requiredScope: 'grievance_portal',
 	},
+	{ href: '/minecraft', label: 'Minecraft', requiredScope: 'minecraft' },
 	{ href: '/key', label: 'Key', requiredScope: 'callbox_key' },
 ];
 

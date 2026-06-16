@@ -103,7 +103,7 @@ components:
         subject_token_type: urn:ietf:params:oauth:token-type:id_token
         requested_token_type: urn:ietf:params:oauth:token-type:access_token
         audience: https://api.zemn.me
-        scope: callbox_key grievance_portal
+        scope: callbox_key grievance_portal minecraft
         client_id: zemn-web
 
     TokenResponse:
@@ -132,13 +132,13 @@ components:
         scope:
           type: string
           description: Space-delimited scopes granted in the issued token.
-          example: callbox_key grievance_portal
+          example: callbox_key grievance_portal minecraft
       example:
         access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
         issued_token_type: urn:ietf:params:oauth:token-type:access_token
         token_type: Bearer
         expires_in: 3600
-        scope: callbox_key grievance_portal
+        scope: callbox_key grievance_portal minecraft
 
     OAuthError:
       description: RFC6749 error response
@@ -164,6 +164,30 @@ components:
       description: OAuth grant type supported by this endpoint.
       enum:
         - urn:ietf:params:oauth:grant-type:token-exchange
+    OAuthScopes:
+      type: object
+      description: Known OAuth scope names used by zemn.me.
+      properties:
+        admin_uid_read:
+          type: boolean
+        admin_analytics_read:
+          type: boolean
+        admin_users_read:
+          type: boolean
+        admin_users_manage:
+          type: boolean
+        callbox_settings_read:
+          type: boolean
+        callbox_settings_write:
+          type: boolean
+        callbox_key:
+          type: boolean
+        callbox_key_logs_read:
+          type: boolean
+        grievance_portal:
+          type: boolean
+        minecraft:
+          type: boolean
     IdToken:
       type: object
       description: >
@@ -628,7 +652,7 @@ components:
         token_endpoint: https://api.zemn.me/oauth2/token
         jwks_uri: https://api.zemn.me/.well-known/jwks.json
         userinfo_endpoint: https://api.zemn.me/oauth2/userinfo
-        scopes_supported: [openid, profile, email, callbox_key]
+        scopes_supported: [openid, profile, email, callbox_key, minecraft]
         response_types_supported: [code]
         grant_types_supported: [urn:ietf:params:oauth:grant-type:token-exchange]
         subject_types_supported: [public]
@@ -897,6 +921,112 @@ components:
             subject: thomas
         nextCursor: eyJpZCI6IkNBTE...
 
+    MinecraftStatus:
+      description: Current Minecraft server status from RCON.
+      type: object
+      required:
+        - serverAddress
+        - serverState
+        - onlinePlayers
+        - rconReachable
+      properties:
+        serverAddress:
+          type: string
+          description: Address users should add in Minecraft.
+          example: zemn.me
+        serverState:
+          type: string
+          description: Current server state from the web API's perspective.
+          example: online
+        onlinePlayers:
+          type: integer
+          minimum: 0
+          description: Number of players currently online.
+          example: 2
+        maxPlayers:
+          type: integer
+          minimum: 0
+          description: Maximum player capacity reported by the server, if available.
+          example: 20
+        rconReachable:
+          type: boolean
+          description: Whether the API could reach the Minecraft server over RCON.
+          example: true
+        message:
+          type: string
+          description: Human-readable status detail.
+          example: There are 2 of a max of 20 players online
+
+    MinecraftLogEvent:
+      description: One Minecraft server log event delivered over the server-sent event stream.
+      type: object
+      required:
+        - id
+        - timestamp
+        - message
+      properties:
+        id:
+          type: string
+          description: Stable CloudWatch Logs event identifier.
+        timestamp:
+          type: string
+          format: date-time
+          description: Time the Minecraft server emitted the log event.
+        stream:
+          type: string
+          description: CloudWatch Logs stream name.
+        message:
+          type: string
+          description: Minecraft server log line.
+          example: "[12:34:56] [Server thread/INFO]: <zemnmez> hello"
+
+    MinecraftWake:
+      description: Result of requesting the Minecraft server to wake.
+      type: object
+      required:
+        - serverAddress
+        - wakeRequested
+      properties:
+        serverAddress:
+          type: string
+          description: Address users should add in Minecraft.
+          example: zemn.me
+        wakeRequested:
+          type: boolean
+          description: Whether the wake request was accepted.
+          example: true
+        message:
+          type: string
+          description: Human-readable wake detail.
+          example: Wake-up requested
+
+    MinecraftWhitelist:
+      description: The authenticated user's Minecraft whitelist state.
+      type: object
+      required:
+        - serverAddress
+      properties:
+        serverAddress:
+          type: string
+          description: Address users should add in Minecraft.
+          example: zemn.me
+        username:
+          type: string
+          description: Minecraft Java username currently associated with this account.
+          pattern: '^[A-Za-z0-9_]{3,16}$'
+          example: zemnmez
+
+    MinecraftWhitelistUpdate:
+      description: Update the authenticated user's Minecraft whitelist username.
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Minecraft Java username to add to the server whitelist.
+          pattern: '^[A-Za-z0-9_]{3,16}$'
+          example: zemnmez
 
     Error:
       description: >
@@ -1086,7 +1216,7 @@ components:
         familyName: Rivera
         picture: https://example.com/avatar/alex.jpg
         emailVerified: true
-        scopes: [callbox_key, grievance_portal]
+        scopes: [callbox_key, grievance_portal, minecraft]
     NewUser:
       type: object
       description: Payload used to create a user that can participate in token exchange.
@@ -1104,7 +1234,7 @@ components:
             type: string
       example:
         email: alex@example.com
-        scopes: [callbox_key, grievance_portal]
+        scopes: [callbox_key, grievance_portal, minecraft]
     UpdateUser:
       type: object
       description: Self-service user update payload.
@@ -1479,6 +1609,109 @@ paths:
                 <?xml version="1.0" encoding="UTF-8"?>
                 <Response><Say>Please enter your code.</Say><Gather numDigits="5" /></Response>
 
+  /minecraft/status:
+    get:
+      summary: Get Minecraft server status.
+      description: Return the current online player count from the Minecraft server over the secure RCON bridge.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "200":
+          description: Current Minecraft server status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftStatus'
+        "503":
+          description: Minecraft RCON is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/wake:
+    post:
+      summary: Wake the Minecraft server.
+      description: Request that the on-demand Minecraft server be started.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "202":
+          description: Wake request accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftWake'
+        "503":
+          description: Minecraft wake bridge is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/events:
+    get:
+      summary: Stream Minecraft server events.
+      description: Stream Minecraft server log lines as server-sent events. Each `minecraft.log` event contains a JSON-encoded `MinecraftLogEvent`.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "200":
+          description: Server-sent Minecraft log events.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        "503":
+          description: Minecraft event log stream is not currently configured.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/whitelist:
+    get:
+      summary: Get the caller's Minecraft whitelist username.
+      description: Return the Minecraft username currently associated with the authenticated account.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "200":
+          description: Current Minecraft whitelist state for the caller.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftWhitelist'
+    put:
+      summary: Set the caller's Minecraft whitelist username.
+      description: Associate one Minecraft username with the authenticated account and sync it to the server whitelist via RCON.
+      security:
+        - OIDC: [minecraft]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MinecraftWhitelistUpdate'
+      responses:
+        "200":
+          description: Updated Minecraft whitelist state for the caller.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftWhitelist'
+        "400":
+          description: Invalid username.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Minecraft RCON is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /callbox:
     post:

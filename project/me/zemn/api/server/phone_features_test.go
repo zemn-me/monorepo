@@ -20,16 +20,17 @@ import (
 
 func newTestServer() *Server {
 	return &Server{
-		log:                  log.New(io.Discard, "", 0),
-		twilioSharedSecret:   "secret",
-		analyticsTableName:   "analytics",
-		settingsTableName:    "settings",
-		grievancesTableName:  "grievances",
-		usersTableName:       "users",
-		keyRequestsTableName: "keys",
-		ddb:                  &inMemoryDDB{},
-		sendText:             func(_ context.Context, _, _, _ string) error { return nil },
-		fetchCalendarICal:    func(_ context.Context, _ string) (string, error) { return "", nil },
+		log:                    log.New(io.Discard, "", 0),
+		twilioSharedSecret:     "secret",
+		analyticsTableName:     "analytics",
+		settingsTableName:      "settings",
+		grievancesTableName:    "grievances",
+		usersTableName:         "users",
+		keyRequestsTableName:   "keys",
+		ddb:                    &inMemoryDDB{},
+		sendText:               func(_ context.Context, _, _, _ string) error { return nil },
+		fetchCalendarICal:      func(_ context.Context, _ string) (string, error) { return "", nil },
+		minecraftServerAddress: defaultMinecraftServerAddress,
 	}
 }
 
