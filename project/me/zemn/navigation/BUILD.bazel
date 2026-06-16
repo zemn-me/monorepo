@@ -5,7 +5,10 @@ ts_project(
     name = "navigation",
     srcs = ["navigation.ts"],
     visibility = ["//project/me/zemn:__subpackages__"],
-    deps = ["//:node_modules/@types/node"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//project/me/zemn/api:ts_client_dts",
+    ],
 )
 
 bazel_lint(

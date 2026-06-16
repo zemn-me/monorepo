@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import style from '#root/project/me/zemn/app/admin/users/style.module.css';
 import {
 	useDeleteAdminUser,
@@ -12,16 +13,25 @@ import {
 	usePutAdminUser,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import { future_to_option } from '#root/ts/future/option/future_to_option.js';
-import {
-	is_some as option_is_some,
-	unwrap as option_unwrap,
-	unwrap_or as option_unwrap_or,
-} from '#root/ts/option/types.js';
 
 const addUserSchema = z.object({
 	email: z.string().email(),
 });
+
+type ApiScopes = components['schemas']['OAuthScopes'];
+
+const availableScopes = [
+	'admin_uid_read',
+	'admin_analytics_read',
+	'admin_users_read',
+	'admin_users_manage',
+	'callbox_settings_read',
+	'callbox_settings_write',
+	'callbox_key',
+	'callbox_key_logs_read',
+	'grievance_portal',
+	'minecraft',
+] as const satisfies readonly (keyof ApiScopes)[];
 
 type AddUserForm = z.infer<typeof addUserSchema>;
 
@@ -70,6 +80,23 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 					<button type="submit">Add user</button>
 				</fieldset>
 			</form>
+			<section
+				aria-labelledby="available-scopes-heading"
+				className={style.scopeReference}
+			>
+				<h2 id="available-scopes-heading">Available scopes</h2>
+				<p>
+					Use these whitespace-separated names in each user&apos;s
+					Scopes field.
+				</p>
+				<ul className={style.scopeList}>
+					{availableScopes.map(scope => (
+						<li key={scope}>
+							<code>{scope}</code>
+						</li>
+					))}
+				</ul>
+			</section>
 			<section>
 				<h2>Users</h2>
 				<div
@@ -304,24 +331,33 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 
 export default function AdminUsersPageClient() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
-	const idToken = future_to_option(fut_idToken);
-	const promptForLogin = future_to_option(fut_promptForLogin);
-	const loginReady = option_is_some(promptForLogin);
-
-	if (!option_is_some(idToken)) {
-		return (
+	const loginPanel = fut_promptForLogin(
+		promptForLogin => (
 			<button
 				aria-label="Authenticate with OIDC"
-				disabled={!loginReady}
 				onClick={() => {
-					if (!loginReady) return;
-					void option_unwrap(promptForLogin)();
+					void promptForLogin();
 				}}
+				type="button"
 			>
 				Login with OIDC
 			</button>
-		);
-	}
+		),
+		() => (
+			<button aria-label="Authenticate with OIDC" disabled type="button">
+				Login with OIDC
+			</button>
+		),
+		() => (
+			<button aria-label="Authenticate with OIDC" disabled type="button">
+				Login with OIDC
+			</button>
+		)
+	);
 
-	return <UserEditor id_token={option_unwrap_or(idToken, '')} />;
+	return fut_idToken(
+		idToken => <UserEditor id_token={idToken} />,
+		() => loginPanel,
+		() => loginPanel
+	);
 }
