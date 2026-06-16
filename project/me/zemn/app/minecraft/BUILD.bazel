@@ -2,9 +2,10 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
-    name = "users",
+    name = "minecraft",
     srcs = [
         "client.tsx",
+        "layout.tsx",
         "page.tsx",
     ],
     assets = ["style.module.css"],
@@ -13,14 +14,14 @@ ts_project(
     ],
     deps = [
         "//:base_defs",  # keep
-        "//:node_modules/@hookform/resolvers",
+        "//:node_modules/@fortawesome/free-solid-svg-icons",
+        "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//:node_modules/react-hook-form",
-        "//:node_modules/zod",
-        "//project/me/zemn/api:ts_client_dts",
+        "//project/me/zemn/app",
         "//project/me/zemn/hook",
+        "//ts/future",
         "//ts/future/option",
         "//ts/option",
     ],
@@ -29,13 +30,13 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
-    visibility = ["//:__subpackages__"],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
+        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],

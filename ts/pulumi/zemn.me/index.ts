@@ -152,6 +152,15 @@ export class Component extends Pulumi.ComponentResource {
 				callboxPhoneNumber: args.callboxPhoneNumber,
 				protectDatabases: args.protectDatabases,
 				twilioSharedSecret: args.twilioSharedSecret,
+				minecraftRconBridgeFunctionArn:
+					minecraft?.rconBridgeFunctionArn,
+				minecraftRconBridgeFunctionName:
+					minecraft?.rconBridgeFunctionName,
+				minecraftLogGroupArn: minecraft?.taskLogGroupArn,
+				minecraftLogGroupName: minecraft?.taskLogGroupName,
+				minecraftServerAddress: args.domain,
+				minecraftWakeFunctionArn: minecraft?.wakeFunctionArn,
+				minecraftWakeFunctionName: minecraft?.wakeFunctionName,
 			},
 			{ parent: this, dependsOn: Static }
 		);

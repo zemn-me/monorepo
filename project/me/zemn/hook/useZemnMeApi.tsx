@@ -7,9 +7,12 @@ import {
 } from '@tanstack/react-query';
 import createFetchClient from 'openapi-fetch';
 import createClient from 'openapi-react-query';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import type { paths } from '#root/project/me/zemn/api/api_client.gen.js';
+import type {
+	components,
+	paths,
+} from '#root/project/me/zemn/api/api_client.gen.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import {
 	Future,
@@ -267,6 +270,22 @@ function useinvalidateCallboxEvents() {
 		});
 }
 
+function useinvalidateMinecraftWhitelist() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/minecraft/whitelist'],
+		});
+}
+
+function useinvalidateMinecraftStatus() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/minecraft/status'],
+		});
+}
+
 export function usePostGrievances(id_token: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(id_token).useMutation('post', '/grievances', {
@@ -391,6 +410,398 @@ export type GetCallboxEventsSuccessResponse =
 	paths['/callbox/events']['get']['responses']['200']['content']['application/json'];
 
 export type CallboxEvent = GetCallboxEventsSuccessResponse['events'][number];
+
+export type GetMinecraftStatusSuccessResponse =
+	paths['/minecraft/status']['get']['responses']['200']['content']['application/json'];
+
+export type GetMinecraftWhitelistSuccessResponse =
+	paths['/minecraft/whitelist']['get']['responses']['200']['content']['application/json'];
+
+export type PostMinecraftWakeSuccessResponse =
+	paths['/minecraft/wake']['post']['responses']['202']['content']['application/json'];
+
+export type MinecraftLogEvent =
+	components['schemas']['MinecraftLogEvent'];
+
+export type MinecraftEventStreamState =
+	| 'closed'
+	| 'connecting'
+	| 'error'
+	| 'open';
+
+const maxMinecraftLogEvents = 80;
+const minecraftEventsReconnectDelayMs = 3000;
+
+type ServerSentEvent = {
+	readonly data: string;
+	readonly event: string;
+	readonly id?: string;
+};
+
+function minecraftEventsURL() {
+	const url = new URL('/minecraft/events', ZEMN_ME_API_BASE);
+	return url.toString();
+}
+
+function parseMinecraftLogEvent(data: string) {
+	const parsed = JSON.parse(data) as Partial<MinecraftLogEvent>;
+	if (
+		typeof parsed.id !== 'string' ||
+		typeof parsed.timestamp !== 'string' ||
+		typeof parsed.message !== 'string'
+	) {
+		return undefined;
+	}
+	return parsed as MinecraftLogEvent;
+}
+
+function dispatchServerSentEvent(
+	block: string,
+	onEvent: (event: ServerSentEvent) => void
+) {
+	let eventName = 'message';
+	let id: string | undefined;
+	const data: string[] = [];
+
+	for (const rawLine of block.split('\n')) {
+		const line = rawLine.endsWith('\r') ? rawLine.slice(0, -1) : rawLine;
+		if (line === '' || line.startsWith(':')) continue;
+
+		const separator = line.indexOf(':');
+		const field = separator === -1 ? line : line.slice(0, separator);
+		let value = separator === -1 ? '' : line.slice(separator + 1);
+		if (value.startsWith(' ')) value = value.slice(1);
+
+		switch (field) {
+			case 'data':
+				data.push(value);
+				break;
+			case 'event':
+				eventName = value;
+				break;
+			case 'id':
+				id = value;
+				break;
+		}
+	}
+
+	if (data.length === 0) return;
+	onEvent({ data: data.join('\n'), event: eventName, id });
+}
+
+async function readServerSentEvents(
+	body: ReadableStream<Uint8Array>,
+	onEvent: (event: ServerSentEvent) => void
+) {
+	const reader = body.getReader();
+	const decoder = new TextDecoder();
+	let buffer = '';
+
+	try {
+		for (;;) {
+			const { value, done } = await reader.read();
+			if (done) break;
+			buffer += decoder
+				.decode(value, { stream: true })
+				.replaceAll('\r\n', '\n')
+				.replaceAll('\r', '\n');
+
+			let boundary = buffer.indexOf('\n\n');
+			while (boundary !== -1) {
+				dispatchServerSentEvent(buffer.slice(0, boundary), onEvent);
+				buffer = buffer.slice(boundary + 2);
+				boundary = buffer.indexOf('\n\n');
+			}
+		}
+
+		buffer += decoder.decode().replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+		if (buffer.trim() !== '') {
+			dispatchServerSentEvent(buffer, onEvent);
+		}
+	} finally {
+		reader.releaseLock();
+	}
+}
+
+function abortableDelay(ms: number, signal: AbortSignal) {
+	return new Promise<void>((resolve, reject) => {
+		const timeout = window.setTimeout(resolve, ms);
+		signal.addEventListener(
+			'abort',
+			() => {
+				window.clearTimeout(timeout);
+				reject();
+			},
+			{ once: true }
+		);
+	});
+}
+
+async function streamMinecraftEvents(
+	token: string,
+	onLogEvent: (event: MinecraftLogEvent) => void,
+	onState: (state: MinecraftEventStreamState) => void,
+	signal: AbortSignal
+) {
+	while (!signal.aborted) {
+		onState('connecting');
+		try {
+			const response = await fetch(minecraftEventsURL(), {
+				headers: { Authorization: token },
+				signal,
+			});
+			if (!response.ok) {
+				throw new Error(`/minecraft/events returned ${response.status}`);
+			}
+			if (!response.body) {
+				throw new Error('/minecraft/events returned no response body');
+			}
+
+			onState('open');
+			await readServerSentEvents(response.body, event => {
+				if (event.event === 'minecraft.error') {
+					throw new Error(event.data);
+				}
+				if (event.event !== 'minecraft.log') return;
+				const logEvent = parseMinecraftLogEvent(event.data);
+				if (logEvent !== undefined) {
+					onLogEvent(logEvent);
+				}
+			});
+		} catch {
+			if (signal.aborted) break;
+			onState('error');
+			await abortableDelay(minecraftEventsReconnectDelayMs, signal).catch(
+				() => undefined
+			);
+			continue;
+		}
+
+		await abortableDelay(minecraftEventsReconnectDelayMs, signal).catch(
+			() => undefined
+		);
+	}
+	onState('closed');
+}
+
+export function useMinecraftEvents<A, B>(
+	id_token: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = id_token(
+		v => v,
+		() => undefined,
+		() => undefined
+	);
+	const [events, setEvents] = useState<MinecraftLogEvent[]>([]);
+	const [streamState, setStreamState] =
+		useState<MinecraftEventStreamState>('closed');
+
+	useEffect(() => {
+		if (!enabled || token === undefined) {
+			setStreamState('closed');
+			return;
+		}
+
+		setEvents([]);
+		setStreamState('connecting');
+		const controller = new AbortController();
+		void streamMinecraftEvents(
+			token,
+			logEvent => {
+				setEvents(current => {
+					if (current.some(existing => existing.id === logEvent.id)) {
+						return current;
+					}
+					return [...current, logEvent].slice(-maxMinecraftLogEvents);
+				});
+			},
+			setStreamState,
+			controller.signal
+		);
+
+		return () => {
+			controller.abort();
+		};
+	}, [enabled, token]);
+
+	return { events, streamState };
+}
+
+export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/minecraft/status',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/minecraft/status');
+			if (!resp.data) {
+				throw new Error('/minecraft/status returned unexpected payload');
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+		refetchInterval: 5000,
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function usePostMinecraftWake<A, B>(
+	id_token: Future<string, A, B>,
+	onSuccess: () => void = noop,
+	onError: () => void = noop
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateMinecraftStatus = useinvalidateMinecraftStatus();
+
+	return useMutation({
+		mutationKey: [
+			'post',
+			'/minecraft/wake',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+		mutationFn: fetchClient(
+			cl => async () => {
+				const resp = await cl.POST('/minecraft/wake');
+				if (!resp.data) {
+					const cause =
+						typeof resp.error === 'object' &&
+						resp.error !== null &&
+						'cause' in resp.error &&
+						typeof resp.error.cause === 'string'
+							? resp.error.cause
+							: '/minecraft/wake returned unexpected payload';
+					throw new Error(cause);
+				}
+				return resp.data;
+			},
+			() => () => {
+				throw new Error('this should never happen');
+			},
+			() => () => {
+				throw new Error('this should never happen');
+			}
+		),
+		onSuccess: () => {
+			invalidateMinecraftStatus();
+			onSuccess();
+		},
+		onError,
+	});
+}
+
+export function useGetMinecraftWhitelist<A, B>(
+	id_token: Future<string, A, B>
+) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/minecraft/whitelist',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/minecraft/whitelist');
+			if (!resp.data) {
+				throw new Error(
+					'/minecraft/whitelist returned unexpected payload'
+				);
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function usePutMinecraftWhitelist<A, B>(
+	id_token: Future<string, A, B>,
+	onSuccess: () => void = noop,
+	onError: () => void = noop
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateMinecraftWhitelist = useinvalidateMinecraftWhitelist();
+
+	return useMutation({
+		mutationKey: [
+			'put',
+			'/minecraft/whitelist',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+		mutationFn: fetchClient(
+			cl => async (username: string) => {
+				const resp = await cl.PUT('/minecraft/whitelist', {
+					body: { username },
+				});
+				if (!resp.data) {
+					const cause =
+						typeof resp.error === 'object' &&
+						resp.error !== null &&
+						'cause' in resp.error &&
+						typeof resp.error.cause === 'string'
+							? resp.error.cause
+							: '/minecraft/whitelist returned unexpected payload';
+					throw new Error(cause);
+				}
+				return resp.data;
+			},
+			() => (_username: string) => {
+				throw new Error('this should never happen');
+			},
+			() => (_username: string) => {
+				throw new Error('this should never happen');
+			}
+		),
+		onSuccess: () => {
+			invalidateMinecraftWhitelist();
+			onSuccess();
+		},
+		onError,
+	});
+}
 
 export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(

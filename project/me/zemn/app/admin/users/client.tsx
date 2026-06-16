@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import style from '#root/project/me/zemn/app/admin/users/style.module.css';
 import {
 	useDeleteAdminUser,
@@ -22,6 +23,21 @@ import {
 const addUserSchema = z.object({
 	email: z.string().email(),
 });
+
+type ApiScopes = components['schemas']['OAuthScopes'];
+
+const availableScopes = [
+	'admin_uid_read',
+	'admin_analytics_read',
+	'admin_users_read',
+	'admin_users_manage',
+	'callbox_settings_read',
+	'callbox_settings_write',
+	'callbox_key',
+	'callbox_key_logs_read',
+	'grievance_portal',
+	'minecraft',
+] as const satisfies readonly (keyof ApiScopes)[];
 
 type AddUserForm = z.infer<typeof addUserSchema>;
 
@@ -70,6 +86,23 @@ function UserEditor({ id_token }: { readonly id_token: string }) {
 					<button type="submit">Add user</button>
 				</fieldset>
 			</form>
+			<section
+				aria-labelledby="available-scopes-heading"
+				className={style.scopeReference}
+			>
+				<h2 id="available-scopes-heading">Available scopes</h2>
+				<p>
+					Use these whitespace-separated names in each user&apos;s
+					Scopes field.
+				</p>
+				<ul className={style.scopeList}>
+					{availableScopes.map(scope => (
+						<li key={scope}>
+							<code>{scope}</code>
+						</li>
+					))}
+				</ul>
+			</section>
 			<section>
 				<h2>Users</h2>
 				<div

@@ -23,6 +23,13 @@ export interface Args {
 	 * Used to auth calls from twilio to the api server.
 	 */
 	twilioSharedSecret: Pulumi.Input<string>;
+	minecraftRconBridgeFunctionArn?: Pulumi.Input<string>;
+	minecraftRconBridgeFunctionName?: Pulumi.Input<string>;
+	minecraftLogGroupArn?: Pulumi.Input<string>;
+	minecraftLogGroupName?: Pulumi.Input<string>;
+	minecraftServerAddress?: Pulumi.Input<string>;
+	minecraftWakeFunctionArn?: Pulumi.Input<string>;
+	minecraftWakeFunctionName?: Pulumi.Input<string>;
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
@@ -227,6 +234,75 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 							})
 						),
 					},
+					...(args.minecraftRconBridgeFunctionArn === undefined
+						? []
+						: [
+								{
+									name: `${name}-minecraft-rcon-inline-policy`,
+									policy: Pulumi.output(
+										args.minecraftRconBridgeFunctionArn
+									).apply(arn =>
+										JSON.stringify({
+											Version: '2012-10-17',
+											Statement: [
+												{
+													Action: ['lambda:InvokeFunction'],
+													Effect: 'Allow',
+													Resource: arn,
+												},
+											],
+										})
+									),
+								},
+							]),
+					...(args.minecraftWakeFunctionArn === undefined
+						? []
+						: [
+								{
+									name: `${name}-minecraft-wake-inline-policy`,
+									policy: Pulumi.output(
+										args.minecraftWakeFunctionArn
+									).apply(arn =>
+										JSON.stringify({
+											Version: '2012-10-17',
+											Statement: [
+												{
+													Action: ['lambda:InvokeFunction'],
+													Effect: 'Allow',
+													Resource: arn,
+												},
+											],
+										})
+									),
+								},
+							]),
+					...(args.minecraftLogGroupArn === undefined
+						? []
+						: [
+								{
+									name: `${name}-minecraft-logs-inline-policy`,
+									policy: Pulumi.output(
+										args.minecraftLogGroupArn
+									).apply(arn =>
+										JSON.stringify({
+											Version: '2012-10-17',
+											Statement: [
+												{
+													Action: [
+														'logs:DescribeLogStreams',
+														'logs:FilterLogEvents',
+													],
+													Effect: 'Allow',
+													Resource: [
+														arn,
+														`${arn}:log-stream:*`,
+													],
+												},
+											],
+										})
+									),
+								},
+							]),
 				],
 			},
 			{ parent: this }
@@ -321,6 +397,30 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						USERS_TABLE_NAME: usersTable.name,
 						CALLBOX_KEY_TABLE_NAME: keyRequestsTable.name,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
+						...(args.minecraftRconBridgeFunctionName === undefined
+							? {}
+							: {
+									MINECRAFT_RCON_BRIDGE_FUNCTION_NAME:
+										args.minecraftRconBridgeFunctionName,
+								}),
+						...(args.minecraftServerAddress === undefined
+							? {}
+							: {
+									MINECRAFT_SERVER_ADDRESS:
+										args.minecraftServerAddress,
+								}),
+						...(args.minecraftWakeFunctionName === undefined
+							? {}
+							: {
+									MINECRAFT_WAKE_FUNCTION_NAME:
+										args.minecraftWakeFunctionName,
+								}),
+						...(args.minecraftLogGroupName === undefined
+							? {}
+							: {
+									MINECRAFT_LOG_GROUP_NAME:
+										args.minecraftLogGroupName,
+								}),
 						OIDC_JWT_KMS_KEY_ID: oidcKey.keyId,
 						OIDC_JWT_PUBLIC_KEY: oidcPublicKey,
 						...pick_env('TWILIO_ACCOUNT_SID'),
