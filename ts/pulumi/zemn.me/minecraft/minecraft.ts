@@ -5,10 +5,8 @@ import * as random from '@pulumi/random';
 import {
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
 	sanitizeAwsEcsTaskFamilyName,
-	sanitizeAwsElbv2Name,
 	sanitizeAwsLambdaFunctionName,
 	sanitizeAwsLambdaStatementId,
-	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { mergeTags, TagSet, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
@@ -30,15 +28,36 @@ const minecraftServerImage = 'itzg/minecraft-server:latest';
 function wakeLambdaCode(): string {
 	return `
 const zlib = require("node:zlib");
-const { ECSClient, UpdateServiceCommand } = require("@aws-sdk/client-ecs");
+const { ECSClient, DescribeTasksCommand, UpdateServiceCommand } = require("@aws-sdk/client-ecs");
+const { EC2Client, DescribeNetworkInterfacesCommand } = require("@aws-sdk/client-ec2");
+const { Route53Client, ChangeResourceRecordSetsCommand } = require("@aws-sdk/client-route-53");
 
 const ecs = new ECSClient({});
+const ec2 = new EC2Client({});
+const route53 = new Route53Client({});
 const cluster = process.env.ECS_CLUSTER_NAME;
 const service = process.env.ECS_SERVICE_NAME;
+const publicDnsHostedZoneId = normalizeHostedZoneId(process.env.PUBLIC_DNS_HOSTED_ZONE_ID || "");
+const publicDnsRecordNames = parseCsv(process.env.PUBLIC_DNS_RECORD_NAMES || "");
+const publicDnsStoppedAddress = process.env.PUBLIC_DNS_STOPPED_ADDRESS || "192.0.2.1";
+const privateDnsHostedZoneId = normalizeHostedZoneId(process.env.PRIVATE_DNS_HOSTED_ZONE_ID || "");
+const privateDnsRecordNames = parseCsv(process.env.PRIVATE_DNS_RECORD_NAMES || "");
+const privateDnsStoppedAddress = process.env.PRIVATE_DNS_STOPPED_ADDRESS || "10.42.0.254";
 const wakeNames = (process.env.WAKE_NAMES || "")
 	.split(",")
 	.map(v => v.trim().toLowerCase())
 	.filter(Boolean);
+
+function parseCsv(value) {
+	return value
+		.split(",")
+		.map(v => v.trim())
+		.filter(Boolean);
+}
+
+function normalizeHostedZoneId(value) {
+	return value.replace(/^\\/hostedzone\\//, "");
+}
 
 async function scale(desiredCount, reason) {
 	console.log(JSON.stringify({ desiredCount, reason }));
@@ -59,6 +78,97 @@ function logMessages(event) {
 	return payload.logEvents?.map(logEvent => logEvent.message ?? "") ?? [];
 }
 
+function networkInterfaceIdFromAttachments(attachments) {
+	for (const attachment of attachments || []) {
+		for (const detail of attachment.details || []) {
+			if (detail.name === "networkInterfaceId") {
+				return detail.value;
+			}
+		}
+	}
+	return undefined;
+}
+
+async function describeTaskNetworkInterfaceId(detail) {
+	if (!detail.taskArn) return undefined;
+	const response = await ecs.send(new DescribeTasksCommand({
+		cluster,
+		tasks: [detail.taskArn],
+	}));
+	return networkInterfaceIdFromAttachments(response.tasks?.[0]?.attachments);
+}
+
+function delay(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function taskAddresses(detail) {
+	const networkInterfaceId =
+		networkInterfaceIdFromAttachments(detail.attachments) ||
+		(await describeTaskNetworkInterfaceId(detail));
+
+	if (!networkInterfaceId) {
+		throw new Error("minecraft task network interface was not found");
+	}
+
+	let lastNetworkInterface;
+	for (let attempt = 0; attempt < 12; attempt += 1) {
+		const response = await ec2.send(new DescribeNetworkInterfacesCommand({
+			NetworkInterfaceIds: [networkInterfaceId],
+		}));
+		lastNetworkInterface = response.NetworkInterfaces?.[0];
+		if (
+			lastNetworkInterface?.PrivateIpAddress &&
+			lastNetworkInterface?.Association?.PublicIp
+		) {
+			return {
+				privateIp: lastNetworkInterface.PrivateIpAddress,
+				publicIp: lastNetworkInterface.Association.PublicIp,
+			};
+		}
+		await delay(1000);
+	}
+
+	if (!lastNetworkInterface?.PrivateIpAddress) {
+		throw new Error("minecraft task private IP was not found");
+	}
+	if (!lastNetworkInterface?.Association?.PublicIp) {
+		throw new Error("minecraft task public IP was not found");
+	}
+
+	return {
+		privateIp: lastNetworkInterface.PrivateIpAddress,
+		publicIp: lastNetworkInterface.Association.PublicIp,
+	};
+}
+
+async function updateDnsRecords(hostedZoneId, recordNames, address, reason) {
+	if (!hostedZoneId || recordNames.length === 0) return;
+
+	console.log(JSON.stringify({
+		address,
+		hostedZoneId,
+		reason,
+		recordNames,
+	}));
+
+	await route53.send(new ChangeResourceRecordSetsCommand({
+		HostedZoneId: hostedZoneId,
+		ChangeBatch: {
+			Comment: reason,
+			Changes: recordNames.map(name => ({
+				Action: "UPSERT",
+				ResourceRecordSet: {
+					Name: name,
+					Type: "A",
+					TTL: 30,
+					ResourceRecords: [{ Value: address }],
+				},
+			})),
+		},
+	}));
+}
+
 exports.handler = async event => {
 	if (event?.action === "wake") {
 		await scale(1, event.reason || "minecraft api wake");
@@ -66,8 +176,35 @@ exports.handler = async event => {
 	}
 
 	if (event.source === "aws.ecs" && event["detail-type"] === "ECS Task State Change") {
+		if (event.detail?.lastStatus === "RUNNING") {
+			const addresses = await taskAddresses(event.detail);
+			await updateDnsRecords(
+				publicDnsHostedZoneId,
+				publicDnsRecordNames,
+				addresses.publicIp,
+				"minecraft task running"
+			);
+			await updateDnsRecords(
+				privateDnsHostedZoneId,
+				privateDnsRecordNames,
+				addresses.privateIp,
+				"minecraft task running"
+			);
+		}
 		if (event.detail?.lastStatus === "STOPPED") {
 			await scale(0, "minecraft task stopped");
+			await updateDnsRecords(
+				publicDnsHostedZoneId,
+				publicDnsRecordNames,
+				publicDnsStoppedAddress,
+				"minecraft task stopped"
+			);
+			await updateDnsRecords(
+				privateDnsHostedZoneId,
+				privateDnsRecordNames,
+				privateDnsStoppedAddress,
+				"minecraft task stopped"
+			);
 		}
 		return;
 	}
@@ -226,10 +363,9 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			sanitizeAwsAlphaNumericHyphenUnderscoreName(
 				`zemn_me_minecraft_${args.environmentName}`
 			);
-		const elbv2PhysicalNamePrefix = sanitizeAwsElbv2Name(
-			`zemn-me-minecraft-${args.environmentName}`
-		);
 		const resourceName = (suffix: string) => `${name}_${suffix}`;
+		const hostedZoneArn = (zoneId: string) =>
+			`arn:aws:route53:::hostedzone/${zoneId.replace(/^\/hostedzone\//, '')}`;
 		const manageDnsWake = args.manageDnsWake ?? true;
 		const minecraftZone = manageDnsWake
 			? new aws.route53.Zone(
@@ -241,7 +377,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 					{ parent: this }
 				)
 			: undefined;
-		const minecraftZoneId = minecraftZone?.zoneId ?? args.zoneId;
+		const minecraftZoneId = minecraftZone?.id ?? args.zoneId;
 
 		if (minecraftZone) {
 			new aws.route53.Record(
@@ -323,33 +459,6 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		const rconLoadBalancerSecurityGroup = new aws.ec2.SecurityGroup(
-			resourceName('rcon_nlb_sg'),
-			{
-				description: 'Minecraft internal RCON load balancer ingress',
-				vpcId: vpc.id,
-				ingress: [
-					{
-						protocol: 'tcp',
-						fromPort: minecraftRconPort,
-						toPort: minecraftRconPort,
-						securityGroups: [rconBridgeSecurityGroup.id],
-					},
-				],
-				egress: [
-					{
-						protocol: '-1',
-						fromPort: 0,
-						toPort: 0,
-						cidrBlocks: ['0.0.0.0/0'],
-						ipv6CidrBlocks: ['::/0'],
-					},
-				],
-				tags,
-			},
-			{ parent: this }
-		);
-
 		new aws.ec2.SecurityGroupRule(
 			resourceName('rcon_bridge_egress'),
 			{
@@ -380,7 +489,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 						protocol: 'tcp',
 						fromPort: minecraftRconPort,
 						toPort: minecraftRconPort,
-						securityGroups: [rconLoadBalancerSecurityGroup.id],
+						securityGroups: [rconBridgeSecurityGroup.id],
 					},
 				],
 				egress: [
@@ -424,6 +533,30 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const privateDnsZone = new aws.route53.Zone(
+			resourceName('private_zone'),
+			{
+				name: `internal.${publicDomain}`,
+				vpcs: [{ vpcId: vpc.id }],
+				tags,
+			},
+			{ parent: this }
+		);
+
+		const rconDomain = `rcon.internal.${publicDomain}`;
+
+		new aws.route53.Record(
+			resourceName('rcon_dns'),
+			{
+				zoneId: privateDnsZone.id,
+				name: rconDomain,
+				type: 'A',
+				ttl: 30,
+				records: ['10.42.0.254'],
+			},
+			{ parent: this }
+		);
+
 		const fileSystem = new aws.efs.FileSystem(
 			resourceName('data'),
 			{
@@ -460,104 +593,6 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				fileSystemId: fileSystem.id,
 				securityGroups: [efsSecurityGroup.id],
 				subnetId: subnet.id,
-			},
-			{ parent: this }
-		);
-
-		const loadBalancer = new aws.lb.LoadBalancer(
-			resourceName('nlb'),
-			{
-				name: sanitizeAwsElbv2Name(`${elbv2PhysicalNamePrefix}-nlb`),
-				loadBalancerType: 'network',
-				subnets: [subnet.id],
-				tags,
-			},
-			{ parent: this }
-		);
-
-		const targetGroup = new aws.lb.TargetGroup(
-			resourceName('tg'),
-			{
-				name: sanitizeAwsTargetGroupName(`${elbv2PhysicalNamePrefix}-tg`),
-				port: minecraftPort,
-				protocol: 'TCP',
-				targetType: 'ip',
-				vpcId: vpc.id,
-				healthCheck: {
-					enabled: true,
-					healthyThreshold: 2,
-					interval: 30,
-					protocol: 'TCP',
-					unhealthyThreshold: 2,
-				},
-				tags,
-			},
-			{ parent: this }
-		);
-
-		new aws.lb.Listener(
-			resourceName('listener'),
-			{
-				loadBalancerArn: loadBalancer.arn,
-				port: minecraftPort,
-				protocol: 'TCP',
-				defaultActions: [
-					{
-						type: 'forward',
-						targetGroupArn: targetGroup.arn,
-					},
-				],
-				tags,
-			},
-			{ parent: this }
-		);
-
-		const rconLoadBalancer = new aws.lb.LoadBalancer(
-			resourceName('rcon_nlb'),
-			{
-				name: sanitizeAwsElbv2Name(`${elbv2PhysicalNamePrefix}-rcon`),
-				internal: true,
-				loadBalancerType: 'network',
-				securityGroups: [rconLoadBalancerSecurityGroup.id],
-				subnets: [subnet.id],
-				tags,
-			},
-			{ parent: this }
-		);
-
-		const rconTargetGroup = new aws.lb.TargetGroup(
-			resourceName('rcon_tg'),
-			{
-				name: sanitizeAwsTargetGroupName(`${elbv2PhysicalNamePrefix}-rcon`),
-				port: minecraftRconPort,
-				protocol: 'TCP',
-				targetType: 'ip',
-				vpcId: vpc.id,
-				healthCheck: {
-					enabled: true,
-					healthyThreshold: 2,
-					interval: 30,
-					protocol: 'TCP',
-					unhealthyThreshold: 2,
-				},
-				tags,
-			},
-			{ parent: this }
-		);
-
-		new aws.lb.Listener(
-			resourceName('rcon_listener'),
-			{
-				loadBalancerArn: rconLoadBalancer.arn,
-				port: minecraftRconPort,
-				protocol: 'TCP',
-				defaultActions: [
-					{
-						type: 'forward',
-						targetGroupArn: rconTargetGroup.arn,
-					},
-				],
-				tags,
 			},
 			{ parent: this }
 		);
@@ -745,18 +780,6 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				name: sanitizeAwsAlphaNumericHyphenUnderscoreName(
 					`${alphaNumericPhysicalNamePrefix}_service`
 				),
-				loadBalancers: [
-					{
-						containerName: 'minecraft',
-						containerPort: minecraftPort,
-						targetGroupArn: targetGroup.arn,
-					},
-					{
-						containerName: 'minecraft',
-						containerPort: minecraftRconPort,
-						targetGroupArn: rconTargetGroup.arn,
-					},
-				],
 				networkConfiguration: {
 					assignPublicIp: true,
 					securityGroups: [taskSecurityGroup.id],
@@ -804,7 +827,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				timeout: 10,
 				environment: {
 					variables: {
-						RCON_HOST: rconLoadBalancer.dnsName,
+						RCON_HOST: rconDomain,
 						RCON_PASSWORD: rconPassword.result,
 						RCON_PORT: String(minecraftRconPort),
 					},
@@ -833,19 +856,43 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				inlinePolicies: [
 					{
 						name: `${alphaNumericPhysicalNamePrefix}_ecs_scale`,
-						policy: JSON.stringify({
-							Version: '2012-10-17',
-							Statement: [
-								{
-									Effect: 'Allow',
-									Action: [
-										'ecs:UpdateService',
-										'ecs:DescribeServices',
-									],
-									Resource: '*',
-								},
-							],
-						}),
+						policy: Pulumi.all([
+							minecraftZoneId,
+							privateDnsZone.id,
+						]).apply(([publicZoneId, privateZoneId]) =>
+							JSON.stringify({
+								Version: '2012-10-17',
+								Statement: [
+									{
+										Effect: 'Allow',
+										Action: [
+											'ecs:UpdateService',
+											'ecs:DescribeServices',
+											'ecs:DescribeTasks',
+										],
+										Resource: '*',
+									},
+									{
+										Effect: 'Allow',
+										Action: ['ec2:DescribeNetworkInterfaces'],
+										Resource: '*',
+									},
+									{
+										Effect: 'Allow',
+										Action: [
+											'route53:ChangeResourceRecordSets',
+										],
+										Resource: [publicZoneId, privateZoneId]
+											.filter(
+												(zoneId): zoneId is string =>
+													typeof zoneId === 'string' &&
+													zoneId.length > 0
+											)
+											.map(hostedZoneArn),
+									},
+								],
+							})
+						),
 					},
 				],
 				tags,
@@ -870,6 +917,15 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 					variables: {
 						ECS_CLUSTER_NAME: cluster.name,
 						ECS_SERVICE_NAME: service.name,
+						PRIVATE_DNS_HOSTED_ZONE_ID: privateDnsZone.id,
+						PRIVATE_DNS_RECORD_NAMES: rconDomain,
+						PRIVATE_DNS_STOPPED_ADDRESS: '10.42.0.254',
+						PUBLIC_DNS_HOSTED_ZONE_ID: minecraftZoneId,
+						PUBLIC_DNS_RECORD_NAMES: [
+							publicDomain,
+							serverDomain,
+						].join(','),
+						PUBLIC_DNS_STOPPED_ADDRESS: '192.0.2.1',
 						WAKE_NAMES: wakeNames.join(','),
 					},
 				},
@@ -881,8 +937,8 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		this.wakeFunctionArn = wakeFunction.arn;
 		this.wakeFunctionName = wakeFunction.name;
 
-		const taskStoppedRule = new aws.cloudwatch.EventRule(
-			resourceName('task_stopped'),
+		const taskStateRule = new aws.cloudwatch.EventRule(
+			resourceName('task_state'),
 			{
 				eventPattern: Pulumi.all([
 					cluster.arn,
@@ -893,7 +949,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 						'detail-type': ['ECS Task State Change'],
 						detail: {
 							clusterArn: [clusterArn],
-							lastStatus: ['STOPPED'],
+							lastStatus: ['RUNNING', 'STOPPED'],
 							taskDefinitionArn: [taskDefinitionArn],
 						},
 					})
@@ -904,10 +960,10 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		);
 
 		new aws.cloudwatch.EventTarget(
-			resourceName('task_stopped_target'),
+			resourceName('task_state_target'),
 			{
 				arn: wakeFunction.arn,
-				rule: taskStoppedRule.name,
+				rule: taskStateRule.name,
 			},
 			{ parent: this }
 		);
@@ -918,7 +974,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				action: 'lambda:InvokeFunction',
 				function: wakeFunction.name,
 				principal: 'events.amazonaws.com',
-				sourceArn: taskStoppedRule.arn,
+				sourceArn: taskStateRule.arn,
 				statementId: sanitizeAwsLambdaStatementId(
 					resourceName('eventbridge_permission')
 				),
@@ -1003,15 +1059,13 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				zoneId: minecraftZoneId,
 				name: serverDomain,
 				type: 'A',
-				aliases: [
-					{
-						name: loadBalancer.dnsName,
-						zoneId: loadBalancer.zoneId,
-						evaluateTargetHealth: false,
-					},
-				],
+				ttl: 30,
+				records: ['192.0.2.1'],
 			},
-			{ parent: this }
+			{
+				parent: this,
+				deleteBeforeReplace: true,
+			}
 		);
 
 		new aws.route53.Record(
@@ -1020,15 +1074,13 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				zoneId: minecraftZoneId,
 				name: publicDomain,
 				type: 'A',
-				aliases: [
-					{
-						name: loadBalancer.dnsName,
-						zoneId: loadBalancer.zoneId,
-						evaluateTargetHealth: false,
-					},
-				],
+				ttl: 30,
+				records: ['192.0.2.1'],
 			},
-			{ parent: this }
+			{
+				parent: this,
+				deleteBeforeReplace: true,
+			}
 		);
 
 		srvPlayerDomains.forEach(domain => {
