@@ -163,23 +163,34 @@ describe('pulumi', () => {
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
 
-		const minecraftLoadBalancer = mockResources.find(
+		expect(
+			mockResources.some(
+				resource =>
+					resource.name.includes('_minecraft_') &&
+					resource.type.startsWith('aws:lb/')
+			)
+		).toBe(false);
+
+		const minecraftPrivateZone = mockResources.find(
 			resource =>
-				resource.type === 'aws:lb/loadBalancer:LoadBalancer' &&
-				resource.name.endsWith('_minecraft_nlb')
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft_private_zone')
 		);
-		expect(minecraftLoadBalancer?.inputs['name']).toBe(
-			'zemn-me-minecraft-staging-nlb'
+		expect(minecraftPrivateZone?.inputs['name']).toBe(
+			'internal.minecraft.staging.zemn.me'
 		);
 
-		const minecraftTargetGroup = mockResources.find(
+		const minecraftRconRecord = mockResources.find(
 			resource =>
-				resource.type === 'aws:lb/targetGroup:TargetGroup' &&
-				resource.name.endsWith('_minecraft_tg')
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_rcon_dns')
 		);
-		expect(minecraftTargetGroup?.inputs['name']).toBe(
-			'zemn-me-minecraft-staging-tg'
-		);
+		expect(minecraftRconRecord?.inputs).toMatchObject({
+			name: 'rcon.internal.minecraft.staging.zemn.me',
+			records: ['10.42.0.254'],
+			ttl: 30,
+			type: 'A',
+		});
 
 		const minecraftCluster = mockResources.find(
 			resource =>
@@ -247,7 +258,11 @@ describe('pulumi', () => {
 			)
 		).toBe(false);
 		expect(
-			mockResources.some(resource => resource.type === 'aws:route53/zone:Zone')
+			mockResources.some(
+				resource =>
+					resource.type === 'aws:route53/zone:Zone' &&
+					resource.name.endsWith('_minecraft_zone')
+			)
 		).toBe(false);
 	});
 
@@ -433,22 +448,21 @@ describe('pulumi', () => {
 			);
 		}
 
-		const minecraftLoadBalancer = mockResources.find(
-			resource =>
-				resource.type === 'aws:lb/loadBalancer:LoadBalancer' &&
-				resource.name.endsWith('_minecraft_nlb')
-		);
-		expect(minecraftLoadBalancer?.inputs['name']).toBe(
-			'zemn-me-minecraft-production-nlb'
-		);
+		expect(
+			mockResources.some(
+				resource =>
+					resource.name.includes('_minecraft_') &&
+					resource.type.startsWith('aws:lb/')
+			)
+		).toBe(false);
 
-		const minecraftTargetGroup = mockResources.find(
+		const minecraftPrivateZone = mockResources.find(
 			resource =>
-				resource.type === 'aws:lb/targetGroup:TargetGroup' &&
-				resource.name.endsWith('_minecraft_tg')
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft_private_zone')
 		);
-		expect(minecraftTargetGroup?.inputs['name']).toBe(
-			'zemn-me-minecraft-production-tg'
+		expect(minecraftPrivateZone?.inputs['name']).toBe(
+			'internal.minecraft.zemn.me'
 		);
 
 		const minecraftCluster = mockResources.find(
@@ -527,16 +541,36 @@ describe('pulumi', () => {
 				resource.type === 'aws:route53/record:Record' &&
 				resource.name.endsWith('_minecraft_public_dns')
 		);
-		expect(minecraftPublicRecord?.inputs['name']).toBe('minecraft.zemn.me');
+		expect(minecraftPublicRecord?.inputs).toMatchObject({
+			name: 'minecraft.zemn.me',
+			records: ['192.0.2.1'],
+			ttl: 30,
+			type: 'A',
+		});
 
 		const minecraftServerRecord = mockResources.find(
 			resource =>
 				resource.type === 'aws:route53/record:Record' &&
 				resource.name.endsWith('_minecraft_server_dns')
 		);
-		expect(minecraftServerRecord?.inputs['name']).toBe(
-			'server.minecraft.zemn.me'
+		expect(minecraftServerRecord?.inputs).toMatchObject({
+			name: 'server.minecraft.zemn.me',
+			records: ['192.0.2.1'],
+			ttl: 30,
+			type: 'A',
+		});
+
+		const minecraftRconRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_rcon_dns')
 		);
+		expect(minecraftRconRecord?.inputs).toMatchObject({
+			name: 'rcon.internal.minecraft.zemn.me',
+			records: ['10.42.0.254'],
+			ttl: 30,
+			type: 'A',
+		});
 
 		const githubProvider = mockResources.find(
 			resource =>
