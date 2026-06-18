@@ -33,6 +33,7 @@ type userRecord struct {
 	Picture           string   `dynamodbav:"picture,omitempty"`
 	EmailVerified     *bool    `dynamodbav:"email_verified,omitempty"`
 	Scopes            []string `dynamodbav:"scopes,omitempty"`
+	ProvisionedScopes []string `dynamodbav:"provisioned_scopes,omitempty"`
 	MinecraftUsername string   `dynamodbav:"minecraft_username,omitempty"`
 }
 
@@ -48,6 +49,10 @@ type tokenExchangeUserDetails struct {
 	Picture       string
 	EmailVerified *bool
 	Scopes        []string
+	// ProvisionedScopes is nil when token exchange should leave existing
+	// provider-managed scopes unchanged, and non-nil when it should replace
+	// them with the freshly computed provider scopes.
+	ProvisionedScopes *[]string
 }
 
 func toOptionalString(v string) *string {
@@ -90,8 +95,9 @@ func toOptionalStrings(values []string) *[]string {
 
 func userFromRecord(r userRecord) User {
 	var scopes *[]string
-	if len(r.Scopes) > 0 {
-		copied := append([]string(nil), r.Scopes...)
+	effectiveScopes := effectiveUserRecordScopes(r)
+	if len(effectiveScopes) > 0 {
+		copied := append([]string(nil), effectiveScopes...)
 		scopes = &copied
 	}
 
@@ -261,6 +267,18 @@ func ensureScope(scopes []string, scope string) []string {
 	return append(scopes, scope)
 }
 
+func mergeScopes(a []string, b []string) []string {
+	merged := append([]string(nil), a...)
+	for _, scope := range b {
+		merged = ensureScope(merged, scope)
+	}
+	return merged
+}
+
+func effectiveUserRecordScopes(rec userRecord) []string {
+	return mergeScopes(rec.Scopes, rec.ProvisionedScopes)
+}
+
 func userRecordFromNewUser(body NewUser) userRecord {
 	var scopes []string
 	if body.Scopes != nil {
@@ -298,6 +316,9 @@ func userRecordFromTokenExchange(localID OIDCSubject, details tokenExchangeUserD
 	}
 	if len(scopes) > 0 {
 		rec.Scopes = append([]string(nil), scopes...)
+	}
+	if details.ProvisionedScopes != nil {
+		rec.ProvisionedScopes = append([]string(nil), (*details.ProvisionedScopes)...)
 	}
 	return rec
 }
@@ -403,6 +424,9 @@ func mergeTokenExchangeDetails(rec *userRecord, details tokenExchangeUserDetails
 	}
 	if len(details.Scopes) > 0 {
 		rec.Scopes = append([]string(nil), details.Scopes...)
+	}
+	if details.ProvisionedScopes != nil {
+		rec.ProvisionedScopes = append([]string(nil), (*details.ProvisionedScopes)...)
 	}
 }
 
@@ -564,7 +588,7 @@ func (s Server) resolveScopes(ctx context.Context, issuer, remoteSubject string)
 			return nil, err
 		}
 		if rec != nil {
-			return append([]string(nil), rec.Scopes...), nil
+			return effectiveUserRecordScopes(*rec), nil
 		}
 	}
 
@@ -578,7 +602,7 @@ func (s Server) resolveScopes(ctx context.Context, issuer, remoteSubject string)
 			return nil, err
 		}
 		if rec != nil && !rec.Deleted {
-			return append([]string(nil), rec.Scopes...), nil
+			return effectiveUserRecordScopes(*rec), nil
 		}
 	}
 
