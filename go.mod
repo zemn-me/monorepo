@@ -44,7 +44,7 @@ require (
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.9
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/image v0.42.0
+	golang.org/x/image v0.43.0
 	golang.org/x/sync v0.21.0
 	golang.org/x/tools v0.45.0
 	golang.org/x/tools/gopls v0.22.0
