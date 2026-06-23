@@ -214,7 +214,7 @@ use_repo(
 # 	versioning=git
 # 	depName=https://github.com/openai/openai-openapi
 # 	refs-from=master
-OPENAI_OPENAPI_COMMIT = "2577b8c9a889a61c1163075c2e71e3812d80aa83"
+OPENAI_OPENAPI_COMMIT = "5162af98d3147432c14680df789e8e12d4891e6b"
 
 http_archive(
     name = "com_github_openai_openai_openapi",
