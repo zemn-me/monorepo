@@ -1,0 +1,60 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "mandarin_bench",
+    srcs = [
+        "cli.ts",
+        "csv.ts",
+        "data.ts",
+        "index.ts",
+        "openai.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+js_binary(
+    name = "cli",
+    data = [":mandarin_bench"],
+    entry_point = "cli.js",
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["mandarin_bench_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":mandarin_bench_tests"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "cli.ts",
+        "csv.ts",
+        "data.ts",
+        "index.ts",
+        "mandarin_bench_test.ts",
+        "openai.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "mandarin_bench_tests",
+    srcs = ["mandarin_bench_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":mandarin_bench",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
