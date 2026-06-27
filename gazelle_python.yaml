@@ -70,6 +70,7 @@ manifest:
     jsonschema: jsonschema
     jsonschema_specifications: jsonschema_specifications
     jupyter: jupyter_core
+    jupyter_builder: jupyter_builder
     jupyter_client: jupyter_client
     jupyter_console: jupyter_console
     jupyter_core: jupyter_core
@@ -172,4 +173,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 1b749622b630fd6e96abcede111ca7dbfb2181f9c91564f72b78156f71ea5a8c
+integrity: 98a3a9ac4e18023f6adea7f0fc44347a90da5e79050e450d83d68949dc655add

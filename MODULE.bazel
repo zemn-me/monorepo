@@ -407,12 +407,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/microsoft/json-schemas
 # 	refs-from=main
-MICROSOFT_JSON_SCHEMAS_COMMIT = "085bedb0a28a9dd41e7600e2bcd9bcb176107ef9"
+MICROSOFT_JSON_SCHEMAS_COMMIT = "03a2e97dbb393b802a07703243ab35c3a24fe9fb"
 
 http_archive(
     name = "microsoft_json_schemas",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "c505251c9c841a2fa0d433edf7dedf1088170438706eb930d13449ad294531c5",
+    sha256 = "8145879aea0bed061c54c248a835946c892cc5830398e936c3ebb2e3c886df4c",
     strip_prefix = "json-schemas-" + MICROSOFT_JSON_SCHEMAS_COMMIT,
     # auto-integrity
     url = "https://github.com/microsoft/json-schemas/archive/" + MICROSOFT_JSON_SCHEMAS_COMMIT + ".zip",
@@ -600,7 +600,7 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.17"
+RUFF_VERSION = "0.15.18"
 
 # For Apple Silicon macOS
 http_archive(
