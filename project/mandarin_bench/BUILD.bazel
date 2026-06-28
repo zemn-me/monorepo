@@ -1,0 +1,101 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "mandarin_bench",
+    srcs = [
+        "chart_data.ts",
+        "cli.ts",
+        "csv.ts",
+        "data.ts",
+        "index.ts",
+        "openai.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+js_binary(
+    name = "cli",
+    data = [":mandarin_bench"],
+    entry_point = "cli.js",
+)
+
+js_binary(
+    name = "chart_data",
+    data = [":mandarin_bench"],
+    entry_point = "chart_data.js",
+)
+
+genrule(
+    name = "chart_json",
+    srcs = glob(
+        [
+            "runs/openai_all_models_medium.jsonl",
+            "runs/judgements_gpt_5_5_medium.jsonl",
+        ],
+        allow_empty = True,
+    ),
+    outs = ["chart_data.json"],
+    cmd = """
+answers=""
+judgements=""
+for src in $(SRCS); do
+  case "$$src" in
+    *openai_all_models_medium.jsonl) answers="$$(pwd)/$$src" ;;
+    *judgements_gpt_5_5_medium.jsonl) judgements="$$(pwd)/$$src" ;;
+  esac
+done
+if [ -z "$$answers" ]; then
+  echo "Missing project/mandarin_bench/runs/openai_all_models_medium.jsonl" >&2
+  exit 1
+fi
+if [ -z "$$judgements" ]; then
+  echo "Missing project/mandarin_bench/runs/judgements_gpt_5_5_medium.jsonl" >&2
+  exit 1
+fi
+BAZEL_BINDIR=$(BINDIR) $(location :chart_data) --answers="$$answers" --judgements="$$judgements" --out="$$(pwd)/$@"
+    """,
+    tools = [":chart_data"],
+    visibility = ["//:__subpackages__"],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["mandarin_bench_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":mandarin_bench_tests"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "chart_data.ts",
+        "cli.ts",
+        "csv.ts",
+        "data.ts",
+        "index.ts",
+        "mandarin_bench_test.ts",
+        "openai.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "mandarin_bench_tests",
+    srcs = ["mandarin_bench_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":mandarin_bench",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)

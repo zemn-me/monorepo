@@ -1,4 +1,4 @@
-import { cloneElement, ReactElement } from 'react';
+import { cloneElement, type ReactElement } from 'react';
 
 import { Article } from '#root/project/me/zemn/components/Article/article.js';
 import {
@@ -31,16 +31,18 @@ type MDXComponentTypes =
 	| 'section';
 
 interface MDXContentProps {
-	components?: {
-		[k in MDXComponentTypes]?: (
+	components?: Partial<{
+		[k in MDXComponentTypes]: (
 			props: k extends keyof JSX.IntrinsicElements
 				? JSX.IntrinsicElements[k]
 				: never
 		) => ReactElement | null;
-	};
+	}> &
+		Record<string, unknown>;
 }
 
 export interface MDXArticleProps {
+	readonly components?: MDXContentProps['components'];
 	readonly frontmatter?: Frontmatter;
 	readonly children: ReactElement<MDXContentProps>;
 }
@@ -57,6 +59,7 @@ export function MDXArticle(props: MDXArticleProps) {
 					h5: H5,
 					a: Link,
 					section: Section,
+					...props.components,
 				},
 			})}
 		</Article>
