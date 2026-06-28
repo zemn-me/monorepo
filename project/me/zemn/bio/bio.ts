@@ -201,7 +201,7 @@ export const Bio = {
 				'Frances C. Arrillaga Alumni Center, 326 Galvez St, Stanford, CA 94305',
 			title: en`Beyond Prompt Injection: Agentic AI Attacks in the Real World`,
 			publisher: en`Real World AI Security`,
-			date: date(23, 'jun', 2026), // TBD
+			date: date(24, 'jun', 2026),
 			url: linkToHighlight(
 				url`https://seclab.stanford.edu/RealWorldAIsec/`,
 				{
