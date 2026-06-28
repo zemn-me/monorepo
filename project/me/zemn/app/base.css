@@ -28,12 +28,8 @@ body,
 }
 
 /*
-	Dark mode colours have been generated
-	by sampling light mode colours and
-	adjusting their lightness in the CIELAB
-	colour space.
-
-	See: https://colorizer.org/
+	Dark mode colours keep a low-lightness palette while shifting hue
+	toward the light foreground teal in CIELAB.
 */
 @media screen and (prefers-color-scheme: dark) {
 	:root {
@@ -42,13 +38,13 @@ body,
 		https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme
 		*/
 		color-scheme: dark;
-		--background-color: #010;
-		--foreground-color: #96a497;
-		--visited-link-color: #ad554b;
-		--error-color: #ad554b;
-		--link-color: #5b880a;
-		--highlight-color: #c7b26a;
-		--highlight-foreground-color: #010;
+		--background-color: #00130e;
+		--foreground-color: #8ca6a2;
+		--visited-link-color: #92635e;
+		--error-color: #92635e;
+		--link-color: #5e8645;
+		--highlight-color: #b7b58c;
+		--highlight-foreground-color: #00130e;
 	}
 }
 

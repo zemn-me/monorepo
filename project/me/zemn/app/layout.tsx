@@ -92,7 +92,7 @@ export default RootLayout;
 
 export const metadata: Metadata = {
 	themeColor: [
-		{ media: '(prefers-color-scheme: dark)', color: '#010' },
+		{ media: '(prefers-color-scheme: dark)', color: '#00130e' },
 		{ media: '(prefers-color-scheme: light)', color: '#fff' },
 	],
 	authors: [{ name: text(Bio.who.fullName), url: 'https://zemn.me' }],
