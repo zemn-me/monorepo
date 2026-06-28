@@ -8,6 +8,9 @@ you may not need to update this file at all.
 
 This file is reserved for short, pithy learnings that will save time in future.
 
+Code comments should explain durable intent; avoid anchoring them to transient
+previous states that will stop making sense after future edits.
+
 Final note before we get into the good stuff -- use a LOCAL AGENTS.md wherever
 possible. i.e. if the note is relevant to code in ts/pulumi, put the note in
 ts/pulumi/AGENTS.md instead.
