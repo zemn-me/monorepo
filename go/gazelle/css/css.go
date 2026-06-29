@@ -3,6 +3,7 @@ package css
 import (
 	"flag"
 	"fmt"
+	"os"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -21,6 +22,7 @@ import (
 
 const (
 	cssModuleSuffix    = ".module.css"
+	currentRelExtKey   = "css.current_rel"
 	rootTsConfigExtKey = "css.root_tsconfig"
 )
 
@@ -34,6 +36,7 @@ func (Language) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {}
 func (Language) CheckFlags(fs *flag.FlagSet, c *config.Config) error          { return nil }
 func (Language) KnownDirectives() []string                                    { return nil }
 func (Language) Configure(c *config.Config, rel string, f *rule.File) {
+	c.Exts[currentRelExtKey] = rel
 	if rel == "" {
 		ensureRootTsConfig(c)
 	}
@@ -193,6 +196,131 @@ func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.
 		})
 	}
 	return importSpecs
+}
+
+func cssModuleImportRepoPath(c *config.Config, module string) (string, bool) {
+	if !strings.HasSuffix(module, cssModuleSuffix) {
+		return "", false
+	}
+
+	rootConfig := ensureRootTsConfig(c)
+	var repoPath string
+	switch {
+	case strings.HasPrefix(module, "."):
+		rel, _ := c.Exts[currentRelExtKey].(string)
+		repoPath = path.Clean(path.Join(rel, module))
+	case strings.HasPrefix(module, "/"):
+		repoPath = path.Clean(strings.TrimPrefix(module, "/"))
+	default:
+		resolved, ok := resolveModuleToRepoPath(module, rootConfig)
+		if !ok {
+			return "", false
+		}
+		repoPath = resolved
+	}
+
+	if !strings.HasSuffix(repoPath, cssModuleSuffix) {
+		return "", false
+	}
+
+	if _, err := os.Stat(filepath.Join(c.RepoRoot, filepath.FromSlash(repoPath))); err != nil {
+		return "", false
+	}
+
+	return repoPath, true
+}
+
+type pathPattern struct {
+	prefix       string
+	suffix       string
+	replacements []string
+}
+
+func compilePathPatterns(m map[string][]string) []pathPattern {
+	patterns := make([]pathPattern, 0, len(m))
+	for pattern, replacements := range m {
+		first := strings.Index(pattern, "*")
+		last := strings.LastIndex(pattern, "*")
+
+		var prefix, suffix string
+		switch {
+		case first == -1:
+			prefix = pattern
+			suffix = ""
+		default:
+			prefix = pattern[:first]
+			suffix = pattern[last+1:]
+		}
+
+		patterns = append(patterns, pathPattern{
+			prefix:       prefix,
+			suffix:       suffix,
+			replacements: replacements,
+		})
+	}
+
+	return patterns
+}
+
+func (p pathPattern) resolve(module string) (string, bool) {
+	if !strings.HasPrefix(module, p.prefix) {
+		return "", false
+	}
+	if !strings.HasSuffix(module, p.suffix) {
+		return "", false
+	}
+
+	middle := module[len(p.prefix) : len(module)-len(p.suffix)]
+	for _, repl := range p.replacements {
+		resolved := strings.ReplaceAll(repl, "*", middle)
+		return resolved, true
+	}
+
+	return "", false
+}
+
+func resolveModuleToRepoPath(module string, conf tsconfig.TsConfigPartial) (string, bool) {
+	mappings := conf.PathMappings()
+	if len(mappings) == 0 {
+		return "", false
+	}
+
+	for _, pattern := range compilePathPatterns(mappings) {
+		resolved, ok := pattern.resolve(module)
+		if !ok {
+			continue
+		}
+
+		if base := conf.CompilerOptions.BaseURL; base != "" && base != "." {
+			resolved = path.Join(base, resolved)
+		}
+
+		resolved = strings.TrimPrefix(resolved, "./")
+		resolved = path.Clean(resolved)
+		if strings.HasPrefix(resolved, "dist/bin/") {
+			continue
+		}
+
+		return resolved, true
+	}
+
+	return "", false
+}
+
+func (Language) CrossResolve(c *config.Config, ix *resolve.RuleIndex, imp resolve.ImportSpec, lang string) []resolve.FindResult {
+	if lang != "typescript" || imp.Lang != "typescript" {
+		return nil
+	}
+
+	repoPath, ok := cssModuleImportRepoPath(c, imp.Imp)
+	if !ok {
+		return nil
+	}
+
+	return ix.FindRulesByImport(resolve.ImportSpec{
+		Lang: "css",
+		Imp:  repoPath,
+	}, "css")
 }
 
 func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
