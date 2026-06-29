@@ -16,6 +16,7 @@ import (
 	bzl "github.com/bazelbuild/buildtools/build"
 	"github.com/bazelbuild/rules_go/go/runfiles"
 
+	css "github.com/zemn-me/monorepo/go/gazelle/css"
 	ts "github.com/zemn-me/monorepo/go/gazelle/ts"
 )
 
@@ -64,10 +65,15 @@ func generateRulesOnly(t *testing.T, rel string, files []string) language.Genera
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
 	lang.Configure(cfg, "", nil)
 
 	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
 	lang.Configure(dirCfg, rel, nil)
 
 	args := language.GenerateArgs{
@@ -85,10 +91,15 @@ func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[st
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
 	lang.Configure(cfg, "", nil)
 
 	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
 	lang.Configure(dirCfg, rel, nil)
 
 	args := language.GenerateArgs{
@@ -98,13 +109,19 @@ func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[st
 		RegularFiles: files,
 	}
 
-	result := lang.GenerateRules(args)
+	cssResult := cssLang.GenerateRules(args)
+	tsResult := lang.GenerateRules(args)
 
-	idx := buildRuleIndex(t, cfg, lang, defaultIndexPackages())
+	idx := buildRuleIndex(t, cfg, lang, cssLang, defaultIndexPackages(), false)
 	all := make(map[string]*rule.Rule)
-	for i, generated := range result.Gen {
+	for _, generated := range cssResult.Gen {
 		all[generated.Name()] = generated
-		if imports := result.Imports[i]; imports != nil {
+		idx.AddRule(dirCfg, generated, rule.EmptyFile("", rel))
+	}
+	idx.Finish()
+	for i, generated := range tsResult.Gen {
+		all[generated.Name()] = generated
+		if imports := tsResult.Imports[i]; imports != nil {
 			lbl := label.New("", rel, generated.Name())
 			lang.Resolve(dirCfg, idx, nil, generated, imports, lbl)
 		}
@@ -118,10 +135,15 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
 	lang.Configure(cfg, "", nil)
 
 	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
 	lang.Configure(dirCfg, rel, nil)
 
 	args := language.GenerateArgs{
@@ -131,28 +153,33 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 		RegularFiles: files,
 	}
 
-	result := lang.GenerateRules(args)
+	cssResult := cssLang.GenerateRules(args)
+	tsResult := lang.GenerateRules(args)
 	var (
 		projectRule    *rule.Rule
 		projectImports interface{}
 	)
-	for i, generated := range result.Gen {
+	for i, generated := range tsResult.Gen {
 		if generated.Kind() == "ts_project" {
 			projectRule = generated
-			projectImports = result.Imports[i]
+			projectImports = tsResult.Imports[i]
 			break
 		}
 	}
 
 	if projectRule == nil {
-		t.Fatalf("expected to generate a ts_project rule, but got %d rules", len(result.Gen))
+		t.Fatalf("expected to generate a ts_project rule, but got %d rules", len(tsResult.Gen))
 	}
 
 	r := projectRule
 	imports := projectImports
 
 	lbl := label.New("", rel, r.Name())
-	idx := buildRuleIndex(t, cfg, lang, defaultIndexPackages())
+	idx := buildRuleIndex(t, cfg, lang, cssLang, defaultIndexPackages(), false)
+	for _, generated := range cssResult.Gen {
+		idx.AddRule(dirCfg, generated, rule.EmptyFile("", rel))
+	}
+	idx.Finish()
 
 	lang.Resolve(dirCfg, idx, nil, r, imports, lbl)
 
@@ -172,10 +199,15 @@ func defaultIndexPackages() []string {
 	}
 }
 
-func buildRuleIndex(t *testing.T, cfg *config.Config, lang ts.Language, packages []string) *resolve.RuleIndex {
+func buildRuleIndex(t *testing.T, cfg *config.Config, lang ts.Language, cssLang css.Language, packages []string, finish bool) *resolve.RuleIndex {
 	t.Helper()
 
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return lang }, lang)
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver {
+		if r.Kind() == "css_module" {
+			return cssLang
+		}
+		return lang
+	}, lang, cssLang)
 	for _, pkgRel := range packages {
 		ruleName := ruleNameForPackage(pkgRel)
 		if ruleName == "" {
@@ -189,7 +221,9 @@ func buildRuleIndex(t *testing.T, cfg *config.Config, lang ts.Language, packages
 		f := rule.EmptyFile("", pkgRel)
 		idx.AddRule(cfg, r, f)
 	}
-	idx.Finish()
+	if finish {
+		idx.Finish()
+	}
 	return idx
 }
 

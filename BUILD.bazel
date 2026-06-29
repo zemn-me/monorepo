@@ -191,6 +191,7 @@ gazelle_binary(
         "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
         "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
         "//go/gazelle/bazel",
+        "//go/gazelle/css",
         "//go/gazelle/ts",
         "//go/gazelle/ts/config",
         "//go/gazelle/js",

@@ -11,8 +11,8 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//project/me/zemn/components/Link:link_module_css",
         "//ts/next.js/component/Redirect",
+        "@monorepo//project/me/zemn/components/Link:link_module_css",
     ],
 )
 
