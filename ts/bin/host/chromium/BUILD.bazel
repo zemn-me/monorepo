@@ -10,16 +10,16 @@ genrule(
     ],
     outs = ["path.ts"],
     cmd_bash = """
+		chromium_rlocation=$(rlocationpath //bin/host/chromium)
 		echo '/* biome-ignore-all lint: generated file */' > $@
 		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" >> $@
-		echo "export const chromiumPath = Runfiles.resolve('$(rlocationpath //bin/host/chromium)')" >> $@
+		printf 'export const chromiumPath = Runfiles.resolve("%s")\\n' "$$chromium_rlocation" >> $@
 	""",
 )
 
 ts_project(
     name = "chromium",
     srcs = ["path.ts"],
-    data = ["//bin/host/chromium"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@bazel/runfiles",

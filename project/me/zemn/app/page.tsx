@@ -36,12 +36,13 @@ function linksetText(text: lang.Text): LinksetText {
 }
 
 function linksetLabel(caption: bio.LinkCaption): LinksetLabel {
-	if (caption instanceof lang.TextType) return linksetText(caption);
+	if ('choices' in caption)
+		return {
+			choices: caption.choices.map(linksetText),
+			defaultText: linksetText(caption.defaultText),
+		};
 
-	return {
-		choices: caption.choices.map(linksetText),
-		defaultText: linksetText(caption.defaultText),
-	};
+	return linksetText(caption);
 }
 
 const homepageLinks = Iterable(bio.Bio.links)
