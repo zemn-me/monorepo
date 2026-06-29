@@ -1,4 +1,7 @@
-import { cloneElement, ReactElement } from 'react';
+import {
+	cloneElement,
+	type ReactElement,
+} from 'react';
 
 import { Article } from '#root/project/me/zemn/components/Article/article.js';
 import {
@@ -31,34 +34,48 @@ type MDXComponentTypes =
 	| 'section';
 
 interface MDXContentProps {
-	components?: {
-		[k in MDXComponentTypes]?: (
+	components?: Partial<{
+		[k in MDXComponentTypes]: (
 			props: k extends keyof JSX.IntrinsicElements
 				? JSX.IntrinsicElements[k]
 				: never
 		) => ReactElement | null;
-	};
+	}> &
+		Record<string, unknown>;
 }
 
 export interface MDXArticleProps {
+	readonly components?: MDXContentProps['components'];
 	readonly frontmatter?: Frontmatter;
 	readonly children: ReactElement<MDXContentProps>;
 }
 
 export function MDXArticle(props: MDXArticleProps) {
+	const components = {
+		h1: H1,
+		h2: H2,
+		h3: H3,
+		h4: H4,
+		h5: H5,
+		a: Link,
+		section: Section,
+		...props.components,
+	};
+	const content =
+		typeof props.children.type === 'function'
+			? (
+					props.children.type as (props: MDXContentProps) => ReactElement
+				)({
+					...props.children.props,
+					components,
+				})
+			: cloneElement(props.children, {
+					components,
+				});
+
 	return (
 		<Article {...props.frontmatter}>
-			{cloneElement(props.children, {
-				components: {
-					h1: H1,
-					h2: H2,
-					h3: H3,
-					h4: H4,
-					h5: H5,
-					a: Link,
-					section: Section,
-				},
-			})}
+			{content}
 		</Article>
 	);
 }

@@ -6,6 +6,7 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "lang",
     srcs = [
+        "LocalizedText.tsx",
         "date.tsx",
         "format_time_zone.ts",
         "index.tsx",
@@ -40,6 +41,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "LocalizedText.tsx",
         "date.tsx",
         "format_time_zone.ts",
         "index.tsx",

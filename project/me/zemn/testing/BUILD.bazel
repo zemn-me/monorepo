@@ -58,9 +58,11 @@ jest_test(
     srcs = ["browser_test.js"],
     data = [
         ":ts",
+        "//bin/host/chromium",
         "//project/me/zemn/api/cmd/localserver",
         "//ts/oidc",
     ],
+    no_copy_to_bin = ["//bin/host/chromium"],
 )
 
 go_test(
