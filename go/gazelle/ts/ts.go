@@ -48,7 +48,6 @@ var (
 	defaultDeps           = []string{"//:node_modules/@types/node"}
 	nextShimDep           = "//ts/next.js/types/next-compiled"
 	builtinModulePrefix   = "node:"
-	cssModuleSuffix       = ".module.css"
 )
 
 type depSet map[string]struct{}
@@ -507,37 +506,6 @@ func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.
 	return specs
 }
 
-func cssModuleImportKey(c *config.Config, module string, from label.Label) (string, bool) {
-	if !strings.HasSuffix(module, cssModuleSuffix) {
-		return "", false
-	}
-
-	rootConfig := ensureRootTsConfig(c)
-	var repoPath string
-	switch {
-	case strings.HasPrefix(module, "."):
-		repoPath = path.Clean(path.Join(from.Pkg, module))
-	case strings.HasPrefix(module, "/"):
-		repoPath = path.Clean(strings.TrimPrefix(module, "/"))
-	default:
-		resolved, ok := resolveModuleToRepoPath(module, rootConfig)
-		if !ok {
-			return "", false
-		}
-		repoPath = resolved
-	}
-
-	if !strings.HasSuffix(repoPath, cssModuleSuffix) {
-		return "", false
-	}
-
-	if _, err := os.Stat(filepath.Join(c.RepoRoot, filepath.FromSlash(repoPath))); err != nil {
-		return "", false
-	}
-
-	return repoPath, true
-}
-
 func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
 	if imports == nil {
 		return
@@ -563,21 +531,6 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		if module == "" {
 			continue
 		}
-		if cssKey, ok := cssModuleImportKey(c, module, from); ok {
-			impSpec := resolve.ImportSpec{Lang: "css", Imp: cssKey}
-			if matches := ix.FindRulesByImportWithConfig(c, impSpec, "css"); len(matches) > 0 {
-				for _, m := range matches {
-					if m.IsSelfImport(from) {
-						continue
-					}
-					deps[formatLabel(m.Label, from)] = struct{}{}
-				}
-			}
-			continue
-		}
-		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
-			continue
-		}
 		if strings.HasPrefix(module, builtinModulePrefix) {
 			continue
 		}
@@ -596,6 +549,9 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 				}
 				deps[formatLabel(m.Label, from)] = struct{}{}
 			}
+		}
+		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
+			continue
 		}
 	}
 
