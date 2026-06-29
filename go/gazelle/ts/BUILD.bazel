@@ -43,6 +43,7 @@ go_test(
     ],
     deps = [
         ":ts",
+        "//go/gazelle/css",
         "@bazel_gazelle//config",
         "@bazel_gazelle//label",
         "@bazel_gazelle//language",

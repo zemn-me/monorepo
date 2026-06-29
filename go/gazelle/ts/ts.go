@@ -45,7 +45,6 @@ var (
 	importPattern         = regexp.MustCompile(`(?m)(?:^|\s)(?:import|export)\s+(?:[^;\n]*?\s+from\s+)?["']([^"']+)["']|require\(\s*["']([^"']+)["']\s*\)|import\(\s*["']([^"']+)["']\s*\)`)
 	jsdomDirectivePattern = regexp.MustCompile(`(?m)@jest-environment\s+jsdom`)
 	knownFileExtensions   = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
-	targetNamePattern     = regexp.MustCompile(`[^A-Za-z0-9_]+`)
 	defaultDeps           = []string{"//:node_modules/@types/node"}
 	nextShimDep           = "//ts/next.js/types/next-compiled"
 	builtinModulePrefix   = "node:"
@@ -346,20 +345,6 @@ func isTypeScriptFile(name string) bool {
 	return strings.HasSuffix(name, ".ts") || strings.HasSuffix(name, ".tsx")
 }
 
-func isCSSModuleFile(name string) bool {
-	return strings.HasSuffix(name, cssModuleSuffix)
-}
-
-func cssModuleRuleName(name string) string {
-	name = strings.TrimSpace(name)
-	name = targetNamePattern.ReplaceAllString(name, "_")
-	name = strings.Trim(name, "_")
-	if name == "" {
-		return "css_module"
-	}
-	return name
-}
-
 // Language implements a very small Gazelle extension that
 // generates ts_project rules for TypeScript files.
 type Language struct{}
@@ -466,15 +451,6 @@ func (Language) Kinds() map[string]rule.KindInfo {
 				"srcs": true,
 			},
 		},
-		"css_module": {
-			MergeableAttrs: map[string]bool{
-				"src":        true,
-				"visibility": true,
-			},
-			NonEmptyAttrs: map[string]bool{
-				"src": true,
-			},
-		},
 		"jest_test": {
 			MergeableAttrs: map[string]bool{
 				"srcs": true,
@@ -489,7 +465,6 @@ func (Language) Kinds() map[string]rule.KindInfo {
 
 func (Language) Loads() []rule.LoadInfo {
 	return []rule.LoadInfo{
-		{Name: "//css/module:rules.bzl", Symbols: []string{"css_module"}},
 		{Name: "//ts:rules.bzl", Symbols: []string{"jest_test", "ts_project"}},
 	}
 }
@@ -500,24 +475,6 @@ func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.
 	}
 
 	rootConfig := ensureRootTsConfig(c)
-
-	if r.Kind() == "css_module" {
-		src := r.AttrString("src")
-		if src == "" {
-			return nil
-		}
-
-		repoPath := path.Join(f.Pkg, src)
-		specs := moduleSpecsForRepoPath(rootConfig, repoPath)
-		importSpecs := make([]resolve.ImportSpec, 0, len(specs))
-		for _, spec := range specs {
-			importSpecs = append(importSpecs, resolve.ImportSpec{
-				Lang: "typescript",
-				Imp:  spec,
-			})
-		}
-		return importSpecs
-	}
 
 	if r.Kind() != "ts_project" {
 		return nil
@@ -550,8 +507,8 @@ func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.
 	return specs
 }
 
-func resolveCSSModuleImport(c *config.Config, module string, from label.Label) (string, bool) {
-	if !isCSSModuleFile(module) {
+func cssModuleImportKey(c *config.Config, module string, from label.Label) (string, bool) {
+	if !strings.HasSuffix(module, cssModuleSuffix) {
 		return "", false
 	}
 
@@ -570,7 +527,7 @@ func resolveCSSModuleImport(c *config.Config, module string, from label.Label) (
 		repoPath = resolved
 	}
 
-	if !isCSSModuleFile(repoPath) {
+	if !strings.HasSuffix(repoPath, cssModuleSuffix) {
 		return "", false
 	}
 
@@ -578,16 +535,7 @@ func resolveCSSModuleImport(c *config.Config, module string, from label.Label) (
 		return "", false
 	}
 
-	pkg := path.Dir(repoPath)
-	if pkg == "." {
-		pkg = ""
-	}
-	target := label.New("", pkg, cssModuleRuleName(path.Base(repoPath)))
-	if target.Equal(from) {
-		return "", false
-	}
-
-	return formatLabel(target, from), true
+	return repoPath, true
 }
 
 func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
@@ -615,8 +563,16 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		if module == "" {
 			continue
 		}
-		if dep, ok := resolveCSSModuleImport(c, module, from); ok {
-			deps[dep] = struct{}{}
+		if cssKey, ok := cssModuleImportKey(c, module, from); ok {
+			impSpec := resolve.ImportSpec{Lang: "css", Imp: cssKey}
+			if matches := ix.FindRulesByImportWithConfig(c, impSpec, "css"); len(matches) > 0 {
+				for _, m := range matches {
+					if m.IsSelfImport(from) {
+						continue
+					}
+					deps[formatLabel(m.Label, from)] = struct{}{}
+				}
+			}
 			continue
 		}
 		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
@@ -1025,19 +981,14 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	}
 
 	var (
-		srcs       []string
-		testSrcs   []string
-		cssModules []string
-		mainDeps   = newDepSet()
-		testDeps   = newDepSet()
+		srcs     []string
+		testSrcs []string
+		mainDeps = newDepSet()
+		testDeps = newDepSet()
 	)
 
 	needsJsdom := false
 	for _, f := range args.RegularFiles {
-		if isCSSModuleFile(f) {
-			cssModules = append(cssModules, f)
-			continue
-		}
 		if !isTypeScriptFile(f) {
 			continue
 		}
@@ -1085,9 +1036,7 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 
 	if len(srcs) == 0 {
 		if len(testSrcs) == 0 {
-			if len(cssModules) == 0 {
-				return language.GenerateResult{}
-			}
+			return language.GenerateResult{}
 		} else {
 			srcs = append(srcs, testSrcs...)
 			mainDeps = testDeps
@@ -1098,27 +1047,9 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 
 	sort.Strings(srcs)
 	sort.Strings(testSrcs)
-	sort.Strings(cssModules)
 
-	gen := make([]*rule.Rule, 0, len(cssModules)+3)
-	imports := make([]interface{}, 0, len(cssModules)+3)
-	for _, cssModule := range cssModules {
-		cssRule := rule.NewRule("css_module", cssModuleRuleName(cssModule))
-		cssRule.SetAttr("src", cssModule)
-		cssRule.SetAttr("visibility", []string{"//:__subpackages__"})
-		gen = append(gen, cssRule)
-		imports = append(imports, nil)
-	}
-
-	if len(srcs) == 0 && len(testSrcs) == 0 {
-		if len(gen) == 0 {
-			return language.GenerateResult{}
-		}
-		return language.GenerateResult{
-			Gen:     gen,
-			Imports: imports,
-		}
-	}
+	gen := make([]*rule.Rule, 0, 3)
+	imports := make([]interface{}, 0, 3)
 
 	name := filepath.Base(args.Dir)
 	r := rule.NewRule("ts_project", name)
