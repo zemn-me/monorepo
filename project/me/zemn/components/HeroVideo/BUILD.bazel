@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -12,7 +13,7 @@ ts_project(
     ),
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
-        "//:base_defs",  #keep
+        ":style_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
@@ -34,5 +35,11 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = ["hero_video.tsx"],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
     visibility = ["//:__subpackages__"],
 )

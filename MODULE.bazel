@@ -244,20 +244,24 @@ out = "chromium"
 """
 
 chromium_mac_arm64_buildfile = """
-filegroup(
-name = "in_bin",
-srcs = [ "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing" ],
-data = glob(["chrome-mac-arm64/Google Chrome for Testing.app/**"], allow_empty=True),
-visibility = [ "//visibility:public" ]
+load("@@//bin/host/chromium:mac_chromium.bzl", "mac_chromium")
+
+mac_chromium(
+    name = "in_bin",
+    executable_src = "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+    srcs = glob(["chrome-mac-arm64/Google Chrome for Testing.app/**"], allow_empty=True),
+    visibility = [ "//visibility:public" ],
 )
 """
 
 chromium_mac_x64_buildfile = """
-filegroup(
-name = "in_bin",
-srcs = [ "chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing" ],
-data = glob(["chrome-mac-x64/Google Chrome for Testing.app/**"], allow_empty=True),
-visibility = [ "//visibility:public" ]
+load("@@//bin/host/chromium:mac_chromium.bzl", "mac_chromium")
+
+mac_chromium(
+    name = "in_bin",
+    executable_src = "chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+    srcs = glob(["chrome-mac-x64/Google Chrome for Testing.app/**"], allow_empty=True),
+    visibility = [ "//visibility:public" ],
 )
 """
 
@@ -606,7 +610,7 @@ RUFF_VERSION = "0.15.20"
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-gfNyiG+3oAVpSTVsYV+miaCRz3mwtU7ZFMgQzbxthek=",
+    integrity = "sha256-y0HEhpDBE9wIRw5kEDzmXKFSScbONJXTrHkrMpqD6ME=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",
 )

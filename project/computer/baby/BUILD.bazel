@@ -1,6 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
@@ -67,6 +68,7 @@ ts_project(
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        ":style_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
@@ -108,4 +110,10 @@ jest_test(
     srcs = ["scene_test.js"],
     visibility = ["//:__subpackages__"],
     deps = [":baby_tests"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
 )

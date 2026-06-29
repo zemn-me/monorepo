@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -12,7 +13,7 @@ ts_project(
     assets = ["TimeEye.module.css"],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//:base_defs",  #keep
+        ":TimeEye_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
@@ -31,5 +32,11 @@ filegroup(
         "TimeEye.tsx",
         "index.ts",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "TimeEye_module_css",
+    src = "TimeEye.module.css",
     visibility = ["//:__subpackages__"],
 )

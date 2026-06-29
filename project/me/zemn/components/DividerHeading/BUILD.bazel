@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -7,7 +8,7 @@ ts_project(
     assets = ["index.module.css"],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//:base_defs",  # keep
+        ":index_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
@@ -23,4 +24,10 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+css_module(
+    name = "index_module_css",
+    src = "index.module.css",
+    visibility = ["//:__subpackages__"],
 )

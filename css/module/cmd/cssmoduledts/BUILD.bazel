@@ -1,0 +1,28 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "cssmoduledts",
+    embed = [":cssmoduledts_lib"],
+    importpath = "github.com/zemn-me/monorepo/css/module/cmd/cssmoduledts",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "cssmoduledts_test",
+    srcs = ["main_test.go"],
+    embed = [":cssmoduledts_lib"],
+)
+
+go_library(
+    name = "cssmoduledts_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/css/module/cmd/cssmoduledts",
+    visibility = ["//visibility:private"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
