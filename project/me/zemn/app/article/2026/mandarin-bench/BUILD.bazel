@@ -1,0 +1,82 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+genrule(
+    name = "chart_data_json",
+    srcs = ["//project/mandarin_bench:chart_inputs"],
+    outs = ["chart_data.json"],
+    cmd = """
+answers=""
+control_answers=""
+judgements=""
+control_judgements=""
+for src in $(SRCS); do
+  case "$$src" in
+    *human_controls.jsonl) control_answers="$$(pwd)/$$src" ;;
+    *human_control_judgements_gpt_5_5_medium.jsonl) control_judgements="$$(pwd)/$$src" ;;
+    *openai_all_models_medium.jsonl) answers="$$(pwd)/$$src" ;;
+    *judgements_gpt_5_5_medium.jsonl) judgements="$$(pwd)/$$src" ;;
+  esac
+done
+if [ -z "$$answers" ]; then
+  echo "Missing project/mandarin_bench/runs/openai_all_models_medium.jsonl" >&2
+  exit 1
+fi
+if [ -z "$$judgements" ]; then
+  echo "Missing project/mandarin_bench/runs/judgements_gpt_5_5_medium.jsonl" >&2
+  exit 1
+fi
+extra_args=""
+if [ -n "$$control_answers" ]; then
+  extra_args="$$extra_args --answers=$$control_answers"
+fi
+if [ -n "$$control_judgements" ]; then
+  extra_args="$$extra_args --judgements=$$control_judgements"
+fi
+BAZEL_BINDIR=$(BINDIR) $(location //project/mandarin_bench:chart_data) \
+  --answers="$$answers" \
+  --judgements="$$judgements" \
+  $$extra_args \
+  --out="$$(pwd)/$@"
+    """,
+    tools = ["//project/mandarin_bench:chart_data"],
+)
+
+ts_project(
+    name = "mandarin-bench",
+    srcs = [
+        "chart.tsx",
+        "page.tsx",
+        ":chart_data_json",
+    ],
+    assets = glob(
+        ["**/*.css"],
+        allow_empty = True,
+    ),
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//project/me/zemn/components/Article",
+        "//ts/next.js/types/next-compiled",
+        "//ts/react/lang",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "chart.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)

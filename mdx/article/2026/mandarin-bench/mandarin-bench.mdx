@@ -1,0 +1,178 @@
+---
+title: Mandarin Bench
+date:
+  - 26
+  - jun
+  - 2026
+tags:
+  - software
+  - writing
+language: en-GB
+description: Benchmarking language models against the last Qing imperial examination.
+---
+
+import { LocalizedParagraph } from '#root/ts/react/lang/LocalizedText.js';
+import { Text, TextSelection } from '#root/ts/react/lang/index.js';
+
+const paragraph = (english, chinese) =>
+	TextSelection(Text('en-GB', english), Text('zh-Hant', chinese));
+
+export const mandarinBenchCopy = {
+	intro1: paragraph(
+		'Mandarin Bench is a small historical benchmark built around the 1904 Guangxu 30 Jiachen Enke, the final Qing imperial examination round before the old examination system was abolished in 1905.',
+		'華文衡鑑是一個小型歷史基準，取材於光緒三十年甲辰恩科，即科舉制度於一九〇五年廢止之前最後一屆清代會試與殿試。'
+	),
+	intro2: paragraph(
+		'I used the fourteen available questions: thirteen metropolitan examination questions and the final palace examination policy edict. The task for the model is not to find a single right answer. It has to write as if it is sitting the exam: high-register written Chinese, no post-1904 hindsight, careful use of classical and historical precedent, and a direct answer to the policy or statecraft problem in front of it.',
+		'本基準採用現存十四題：會試十三題，以及最後殿試策問。模型的任務不是尋找唯一標準答案，而是如臨場應試般作文：使用高雅書面中文，不引入一九〇四年以後的後見之明，謹慎引用經史先例，並直接回應眼前的政策與治術問題。'
+	),
+	intro3: paragraph(
+		'The complete medium-effort answer sets were then judged by gpt-5.5 at medium effort against five criteria: historical grounding, question responsiveness, statecraft reasoning, classical register, and period discipline. Each answer can receive 25 points, so a complete submission is out of 350. Passing requires all fourteen answers and at least 70%.',
+		'完整的中等推理投入答案集，再由中等推理投入的 gpt-5.5 按五項標準評分：史實根據、切題程度、治術推理、文言格調、時代自律。每題最高二十五分，完整一卷總分三百五十分；及格須答滿十四題且至少取得七成。'
+	),
+	summary: paragraph(
+		'The chart ranks every complete submission in the generated judgement file. The failure line is not just a matter of missing answers: only fourteen-answer submissions that score at least 70% pass.',
+		'圖表按生成的評分檔排列所有完整答卷。及格線不只是有無缺答的問題：只有答滿十四題且總分至少達七成的答卷才算通過。'
+	),
+	control: paragraph(
+		'I do not yet include a human control in the chart. A useful control needs a complete human-authored answer set for all fourteen questions; a single surviving excerpt is source material, not a baseline. The most promising archival lead is 清代硃卷集成, but the first PDF I checked is a catalogue/index volume rather than the 1904 answer volume.',
+		'圖表目前尚未列入人工對照組。可用的對照組必須包含十四題完整的人工作答；單篇存世摘錄只能作為史料，不能作為基準線。目前最有希望的檔案線索是《清代硃卷集成》，但已檢視的第一冊 PDF 是目錄與索引冊，並非一九〇四年的答卷冊。'
+	),
+};
+
+<LocalizedParagraph>{mandarinBenchCopy.intro1}</LocalizedParagraph>
+
+<LocalizedParagraph>{mandarinBenchCopy.intro2}</LocalizedParagraph>
+
+<LocalizedParagraph>{mandarinBenchCopy.intro3}</LocalizedParagraph>
+
+<MandarinBenchChart />
+
+<LocalizedParagraph>{mandarinBenchCopy.summary}</LocalizedParagraph>
+
+## Answer Examples
+
+The raw answers are much longer than these snippets. These excerpts are from
+the saved benchmark run; the English translations are mine.
+
+### Human control
+
+<LocalizedParagraph>{mandarinBenchCopy.control}</LocalizedParagraph>
+
+### Best overall model: `gpt-5.4-2026-03-05` medium
+
+This was the top complete submission, at 336/350. Its best answers were not
+just fluent; they identified the institutional problem in the question and
+used the named precedents as evidence.
+
+**Best answer: Dynastic Center And Periphery, 25/25.**
+
+> 臣聞天下之勢，未有內可獨重而外可盡輕者，亦未有外可偏重而內可自輕者。何也？內者，朝廷之樞機；外者，國家之藩屏。樞機立，則號令畫一，而四方知所稟承；藩屏固，則邊鄙有備，而宗社有所維持。故外重者，得其利則足以捍患，失其道則尾大不掉；內重者，得其利則足以一統，失其道則權歸一室。周唐、秦魏之得失，跡雖異而理則同，皆在乎失其平而已。
+
+**Translation.** I have heard that in the ordering of the realm, the centre
+cannot alone be made weighty while the outside is made wholly light, nor can
+the outside be made too weighty while the centre weakens itself. The centre is
+the pivot of the court; the outside is the screen and shield of the state. If
+the pivot is set, commands are unified; if the shield is firm, the frontiers
+are protected. Thus a heavy outside can defend against danger when well used,
+but becomes unmanageable when misused; a heavy centre can unify the realm when
+well used, but hands power to one house when misused. The successes and
+failures of Zhou, Tang, Qin, and Wei differ in circumstance, but share the same
+principle: each lost balance.
+
+**Why it scored that way.** The judge gave it 5/5 on all five criteria. It
+does not treat "outer heavy" and "inner heavy" as a vague proverb. It names the
+relevant machinery: Zhou feudal enfeoffment, Tang military governorships, Qin
+commanderies and counties, and Wei central control of arms. The prose stays in
+an exam register while making a real institutional comparison.
+
+**Weakest answer: Western Diplomacy And Protectorates, 23/25.**
+
+> 臣聞國際相持，名與實每相反。中國之理政，往往以義制利；泰西之交涉，往往以利假義。蓋強國之圖弱國也，若遽然割取其地，則群強必爭，公論亦沸，守之且勞，費之且鉅；若託言保全其土地，維持其獨立，則可以掩兼并之跡，弭列國之疑，而商埠、稅權、借款、鐵路、礦山、租借、駐兵諸大利，皆可從容攫取。
+
+**Translation.** I have heard that in international contention, name and
+substance are often opposed. Chinese governance often uses righteousness to
+restrain profit; Western diplomacy often borrows righteousness to pursue
+profit. When strong states scheme against weak states, if they abruptly seize
+territory, the other powers will contend, public opinion will boil, and holding
+the land will be costly. If instead they speak of preserving territory and
+maintaining independence, they can hide annexation, quiet suspicion, and calmly
+take the real gains: treaty ports, tax rights, loans, railways, mines, leases,
+and garrisons.
+
+**Why it lost two points.** The judge still gave it 5/5 for historical
+grounding, classical register, and period discipline. It lost one point each
+on responsiveness and statecraft reasoning because the historical proof was
+stronger than the prescription: the answer explains protectorate logic well,
+but the policy programme at the end is mostly general self-strengthening, not
+a concrete sequence of late-Qing actions.
+
+### Worst overall model: `gpt-5-nano-2025-08-07` low
+
+This was the lowest complete submission, at 204/350. It answered all fourteen
+questions, but often wrote exam-shaped prose without enough precise historical
+content.
+
+**Best answer: Great Learning: Bright Virtue, 18/25.**
+
+> 夫大學之道，始於明德而後親民，至竟於至善。此義，自古聖人以為治國之本，乃以心之明光照見萬物之理，以仁義之倫感化百姓之心。夫明德，蓋在於克己推己，持盈守虛，以內觀之鏡照其身，外化為治民之德。
+
+**Translation.** The way of the Great Learning begins with manifesting bright
+virtue, then moves to caring for the people, and finally reaches the highest
+good. Since antiquity, sages have taken this as the foundation of governing:
+using the mind's brightness to illuminate the principles of things, and using
+the relations of humanity and righteousness to transform the people's hearts.
+Bright virtue lies in restraining the self and extending oneself to others,
+holding fullness and guarding emptiness, using inward reflection as a mirror
+for the body and outwardly transforming it into the virtue of governing people.
+
+**Why this was its best answer.** The judge gave it 18/25 because it at least
+covered the triad of `明明德`, `亲民`, and `止于至善`, and connected moral
+self-cultivation to government. It was capped by generic exegesis, missed the
+important `亲民` versus `新民` interpretive issue, used loose citations, and
+slipped into modern or awkward diction.
+
+**Weakest answer: Dynastic Center And Periphery, 10/25.**
+
+> 周唐外重內輕，秦魏外輕內重，各有得失論。夫天下之邦，外之重者，謂其以兵禮、威盟、遠方諸侯之輔，為政之資，亦以功名、威望收天下之人心；內之輕者，則宮闕不節、官吏疲弱、財賦不實、民心易散。
+
+**Translation.** Zhou and Tang were heavy outside and light inside; Qin and
+Wei were light outside and heavy inside, each with gains and losses. In a
+state, a heavy outside means using arms, rites, powerful alliances, and the
+support of distant lords as resources of government, and using achievement and
+prestige to win the hearts of the realm. A light inside means the palace is
+unregulated, officials are weak, revenues are unreal, and popular feeling is
+easily scattered.
+
+**Why it scored so poorly.** The judge gave it 10/25 because it missed the
+central institutional contrast. The prompt asks about regional power versus
+central consolidation: Zhou feudal states, Tang military governors, Qin
+commanderies and counties, and Wei's concentration of military power. This
+answer drifts into generic foreign policy and domestic administration, uses
+modern terms such as centralisation and diplomacy elsewhere in the essay, and
+barely uses the named dynasties as concrete evidence.
+
+## Reading The Results
+
+The best-scoring cluster was not the newest name in the model list. The
+highest score went to `gpt-5.4-2026-03-05` on medium effort, followed by
+`gpt-5.4` on low and medium effort. `gpt-5.5-2026-04-23` and `gpt-5.5` were
+close behind, but did not take first place in this run.
+
+The smaller models were much more mixed. `gpt-5-mini` on medium effort passed,
+but its low-effort run failed by a single percentage point. The nano models
+were worse: several complete nano submissions landed below 60%, mostly because
+they could produce plausible exam-shaped prose without sustaining the
+historical and policy discipline the rubric rewarded.
+
+There are obvious caveats. This is an LLM-judged benchmark, not a recovered
+Qing grading office. The judge was another OpenAI model, so model-family bias
+is possible. The rubric tries to reduce that by asking for criterion-level
+scores and by penalising post-1904 hindsight, but the result should be read as
+an operational benchmark: how well a model can write the kind of answer this
+exam demands, under a fixed judge and a fixed prompt.
+
+Still, I like the shape of the test. It is not a puzzle benchmark, and it is
+not a retrieval test. The candidate has to hold an old register, a historical
+frame, and a practical policy argument in its head at the same time. That is
+the sort of thing a real imperial examination was designed to make visible.

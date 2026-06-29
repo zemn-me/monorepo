@@ -65,7 +65,7 @@ interface CorpusProps {
 const sentanceTerminators = ['!', '.', '?', '…'];
 
 function needsFullStop(text: lang.Text): boolean {
-	if (text.locale.language !== 'en') return false;
+	if (new Intl.Locale(text.language).language !== 'en') return false;
 
 	if (sentanceTerminators.some(v => text.text.endsWith(v))) return false;
 

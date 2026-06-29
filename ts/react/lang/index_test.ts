@@ -23,6 +23,12 @@ describe('selectText', () => {
 		expect(text(resolveText(label))).toBe('CV');
 	});
 
+	it('selects same-language matches when regions differ', () => {
+		const title = selectText(Text('en-GB', 'Mandarin Bench'), Text('zh', '華文衡鑑'));
+
+		expect(text(resolveText(title, ['zh-CN']))).toBe('華文衡鑑');
+	});
+
 	it('resolves serializable text selections', () => {
 		const selection = TextSelection(cv, resume);
 
