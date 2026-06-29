@@ -45,9 +45,11 @@ var (
 	importPattern         = regexp.MustCompile(`(?m)(?:^|\s)(?:import|export)\s+(?:[^;\n]*?\s+from\s+)?["']([^"']+)["']|require\(\s*["']([^"']+)["']\s*\)|import\(\s*["']([^"']+)["']\s*\)`)
 	jsdomDirectivePattern = regexp.MustCompile(`(?m)@jest-environment\s+jsdom`)
 	knownFileExtensions   = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
+	targetNamePattern     = regexp.MustCompile(`[^A-Za-z0-9_]+`)
 	defaultDeps           = []string{"//:node_modules/@types/node"}
 	nextShimDep           = "//ts/next.js/types/next-compiled"
 	builtinModulePrefix   = "node:"
+	cssModuleSuffix       = ".module.css"
 )
 
 type depSet map[string]struct{}
@@ -344,6 +346,20 @@ func isTypeScriptFile(name string) bool {
 	return strings.HasSuffix(name, ".ts") || strings.HasSuffix(name, ".tsx")
 }
 
+func isCSSModuleFile(name string) bool {
+	return strings.HasSuffix(name, cssModuleSuffix)
+}
+
+func cssModuleRuleName(name string) string {
+	name = strings.TrimSpace(name)
+	name = targetNamePattern.ReplaceAllString(name, "_")
+	name = strings.Trim(name, "_")
+	if name == "" {
+		return "css_module"
+	}
+	return name
+}
+
 // Language implements a very small Gazelle extension that
 // generates ts_project rules for TypeScript files.
 type Language struct{}
@@ -382,9 +398,6 @@ func findExistingRule(args language.GenerateArgs, name string) *rule.Rule {
 	}
 
 	for _, existing := range args.File.Rules {
-		if existing.Kind() != "ts_project" {
-			continue
-		}
 		if existing.Name() == name {
 			return existing
 		}
@@ -453,6 +466,15 @@ func (Language) Kinds() map[string]rule.KindInfo {
 				"srcs": true,
 			},
 		},
+		"css_module": {
+			MergeableAttrs: map[string]bool{
+				"src":        true,
+				"visibility": true,
+			},
+			NonEmptyAttrs: map[string]bool{
+				"src": true,
+			},
+		},
 		"jest_test": {
 			MergeableAttrs: map[string]bool{
 				"srcs": true,
@@ -467,16 +489,39 @@ func (Language) Kinds() map[string]rule.KindInfo {
 
 func (Language) Loads() []rule.LoadInfo {
 	return []rule.LoadInfo{
+		{Name: "//css/module:rules.bzl", Symbols: []string{"css_module"}},
 		{Name: "//ts:rules.bzl", Symbols: []string{"jest_test", "ts_project"}},
 	}
 }
 
 func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
-	if r.Kind() != "ts_project" || f == nil {
+	if f == nil {
 		return nil
 	}
 
 	rootConfig := ensureRootTsConfig(c)
+
+	if r.Kind() == "css_module" {
+		src := r.AttrString("src")
+		if src == "" {
+			return nil
+		}
+
+		repoPath := path.Join(f.Pkg, src)
+		specs := moduleSpecsForRepoPath(rootConfig, repoPath)
+		importSpecs := make([]resolve.ImportSpec, 0, len(specs))
+		for _, spec := range specs {
+			importSpecs = append(importSpecs, resolve.ImportSpec{
+				Lang: "typescript",
+				Imp:  spec,
+			})
+		}
+		return importSpecs
+	}
+
+	if r.Kind() != "ts_project" {
+		return nil
+	}
 
 	files, err := expandSrcsExpr(c, f.Pkg, r.Attr("srcs"))
 	if err != nil || len(files) == 0 {
@@ -505,6 +550,46 @@ func (Language) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.
 	return specs
 }
 
+func resolveCSSModuleImport(c *config.Config, module string, from label.Label) (string, bool) {
+	if !isCSSModuleFile(module) {
+		return "", false
+	}
+
+	rootConfig := ensureRootTsConfig(c)
+	var repoPath string
+	switch {
+	case strings.HasPrefix(module, "."):
+		repoPath = path.Clean(path.Join(from.Pkg, module))
+	case strings.HasPrefix(module, "/"):
+		repoPath = path.Clean(strings.TrimPrefix(module, "/"))
+	default:
+		resolved, ok := resolveModuleToRepoPath(module, rootConfig)
+		if !ok {
+			return "", false
+		}
+		repoPath = resolved
+	}
+
+	if !isCSSModuleFile(repoPath) {
+		return "", false
+	}
+
+	if _, err := os.Stat(filepath.Join(c.RepoRoot, filepath.FromSlash(repoPath))); err != nil {
+		return "", false
+	}
+
+	pkg := path.Dir(repoPath)
+	if pkg == "." {
+		pkg = ""
+	}
+	target := label.New("", pkg, cssModuleRuleName(path.Base(repoPath)))
+	if target.Equal(from) {
+		return "", false
+	}
+
+	return formatLabel(target, from), true
+}
+
 func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
 	if imports == nil {
 		return
@@ -528,6 +613,10 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 
 	for module := range modules {
 		if module == "" {
+			continue
+		}
+		if dep, ok := resolveCSSModuleImport(c, module, from); ok {
+			deps[dep] = struct{}{}
 			continue
 		}
 		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
@@ -936,14 +1025,19 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 	}
 
 	var (
-		srcs     []string
-		testSrcs []string
-		mainDeps = newDepSet()
-		testDeps = newDepSet()
+		srcs       []string
+		testSrcs   []string
+		cssModules []string
+		mainDeps   = newDepSet()
+		testDeps   = newDepSet()
 	)
 
 	needsJsdom := false
 	for _, f := range args.RegularFiles {
+		if isCSSModuleFile(f) {
+			cssModules = append(cssModules, f)
+			continue
+		}
 		if !isTypeScriptFile(f) {
 			continue
 		}
@@ -991,17 +1085,40 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 
 	if len(srcs) == 0 {
 		if len(testSrcs) == 0 {
-			return language.GenerateResult{}
+			if len(cssModules) == 0 {
+				return language.GenerateResult{}
+			}
+		} else {
+			srcs = append(srcs, testSrcs...)
+			mainDeps = testDeps
+			testSrcs = nil
+			testDeps = newDepSet()
 		}
-
-		srcs = append(srcs, testSrcs...)
-		mainDeps = testDeps
-		testSrcs = nil
-		testDeps = newDepSet()
 	}
 
 	sort.Strings(srcs)
 	sort.Strings(testSrcs)
+	sort.Strings(cssModules)
+
+	gen := make([]*rule.Rule, 0, len(cssModules)+3)
+	imports := make([]interface{}, 0, len(cssModules)+3)
+	for _, cssModule := range cssModules {
+		cssRule := rule.NewRule("css_module", cssModuleRuleName(cssModule))
+		cssRule.SetAttr("src", cssModule)
+		cssRule.SetAttr("visibility", []string{"//:__subpackages__"})
+		gen = append(gen, cssRule)
+		imports = append(imports, nil)
+	}
+
+	if len(srcs) == 0 && len(testSrcs) == 0 {
+		if len(gen) == 0 {
+			return language.GenerateResult{}
+		}
+		return language.GenerateResult{
+			Gen:     gen,
+			Imports: imports,
+		}
+	}
 
 	name := filepath.Base(args.Dir)
 	r := rule.NewRule("ts_project", name)
@@ -1026,8 +1143,8 @@ func (Language) GenerateRules(args language.GenerateArgs) language.GenerateResul
 		r.SetAttr("srcs", srcs)
 	}
 
-	gen := []*rule.Rule{r}
-	imports := []interface{}{mainDeps}
+	gen = append(gen, r)
+	imports = append(imports, mainDeps)
 
 	allSrcs := append(append([]string{}, srcs...), testSrcs...)
 	fg := rule.NewRule("filegroup", "all_ts_srcs")

@@ -12,7 +12,8 @@ genrule(
     cmd_bash = """
 		echo '/* biome-ignore-all lint: generated file */' > $@
 		echo "import { runfiles as Runfiles } from '@bazel/runfiles';" >> $@
-		echo "export const chromiumPath = Runfiles.resolve('$(rlocationpath //bin/host/chromium)')" >> $@
+		CHROMIUM_RLOCATION=$(rlocationpath //bin/host/chromium)
+		printf 'export const chromiumPath = Runfiles.resolve(`%s`)\n' "$$CHROMIUM_RLOCATION" >> $@
 	""",
 )
 

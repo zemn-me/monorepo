@@ -262,6 +262,30 @@ func TestGenerateRulesExampleSimple(t *testing.T) {
 	assertContains(t, deps, "//:node_modules/@types/node")
 }
 
+func TestGenerateRulesAddsCSSModuleTarget(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/css_module"
+	files := []string{"consumer.ts", "style.module.css"}
+
+	rules := generateAndResolveAllRules(t, rel, files)
+
+	cssRule, ok := rules["style_module_css"]
+	if !ok {
+		t.Fatalf("expected style_module_css rule to be generated, rules: %v", rules)
+	}
+	if cssRule.Kind() != "css_module" {
+		t.Fatalf("style_module_css kind mismatch: got %s want css_module", cssRule.Kind())
+	}
+	if got := cssRule.AttrString("src"); got != "style.module.css" {
+		t.Fatalf("style_module_css src mismatch: got %q want style.module.css", got)
+	}
+
+	tsRule, ok := rules["css_module"]
+	if !ok {
+		t.Fatalf("expected css_module ts_project rule to be generated, rules: %v", rules)
+	}
+	assertContains(t, tsRule.AttrStrings("deps"), ":style_module_css")
+}
+
 func TestResolveAddsRepositoryDependencyFromAlias(t *testing.T) {
 	rel := "go/gazelle/ts/testdata/uses_option"
 	files := []string{"sample.ts"}

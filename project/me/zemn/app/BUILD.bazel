@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -23,6 +24,8 @@ ts_project(
     ),
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
+        ":not_found_module_css",
+        ":style_module_css",
         "//:node_modules/@tanstack/query-async-storage-persister",
         "//:node_modules/@tanstack/query-core",
         "//:node_modules/@tanstack/react-query",
@@ -77,5 +80,23 @@ filegroup(
         "robots.ts",
         "schema.ts",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "base_module_css",
+    src = "base.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "not_found_module_css",
+    src = "not-found.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
     visibility = ["//:__subpackages__"],
 )

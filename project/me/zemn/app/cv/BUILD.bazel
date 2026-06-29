@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -14,6 +15,7 @@ ts_project(
         "//project/me/zemn:__subpackages__",
     ],
     deps = [
+        ":page_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
@@ -36,5 +38,11 @@ filegroup(
         "layout.tsx",
         "page.tsx",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "page_module_css",
+    src = "page.module.css",
     visibility = ["//:__subpackages__"],
 )

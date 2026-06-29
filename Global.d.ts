@@ -1,14 +1,6 @@
 /**
  * Next.js only!
  */
-declare module '*.module.css' {
-	const content: Record<string, string>;
-	export default content;
-}
-
-/**
- * Next.js only!
- */
 declare module '*.css' {
 	export default undefined;
 }

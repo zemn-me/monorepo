@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
 
@@ -46,7 +47,7 @@ ts_project(
     ),
     visibility = ["//:__subpackages__"],
     deps = [
-        "//:base_defs",  # keep
+        ":style_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",
@@ -94,4 +95,10 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
 )
