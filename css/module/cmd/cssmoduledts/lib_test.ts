@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { declaration } from '#root/css/module/cmd/cssmoduledts/lib.mjs';
+import { declaration } from './lib.js';
 
 const output = declaration(
 	'test.module.css',
