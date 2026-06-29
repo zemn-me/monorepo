@@ -13,10 +13,14 @@ export class TextType<L extends Language = Language, Text = string> {
 	}
 }
 
-export type Text<L extends Language = Language, Text = string> = TextType<
-	L,
-	Text
->;
+export interface TextRecord<L extends Language = Language, Text = string> {
+	readonly language: L;
+	readonly text: Text;
+}
+
+export type Text<L extends Language = Language, Text = string> =
+	| TextType<L, Text>
+	| TextRecord<L, Text>;
 
 export function Text<L extends Language = Language, Text = string>(
 	language: L,
@@ -25,31 +29,47 @@ export function Text<L extends Language = Language, Text = string>(
 	return new TextType(language, text);
 }
 
-export type TextSelector<T extends Text = Text> = (
+export type TextSelector<T extends Text<string, unknown> = Text> = (
 	languages: readonly string[]
 ) => T;
 
 export interface TextSelectionType<
-	Default extends Text = Text,
-	Choices extends readonly Text[] = readonly Text[],
+	Default extends Text<string, unknown> = Text,
+	Choices extends readonly Text<string, unknown>[] = readonly Text[],
 > {
 	readonly choices: Choices;
 	readonly defaultText: Default;
 }
 
 export type TextSelection<
-	Default extends Text = Text,
-	Choices extends readonly Text[] = readonly Text[],
+	Default extends Text<string, unknown> = Text,
+	Choices extends readonly Text<string, unknown>[] = readonly Text[],
 > = TextSelectionType<Default, Choices>;
 
 export function TextSelection<
-	Default extends Text,
-	const Choices extends readonly Text[],
+	Default extends Text<string, unknown>,
+	const Choices extends readonly Text<string, unknown>[],
 >(
 	defaultText: Default,
 	...choices: Choices
 ): TextSelectionType<Default, Choices> {
-	return { choices, defaultText };
+	return {
+		choices: choices.map(toTextRecord) as unknown as Choices,
+		defaultText: toTextRecord(defaultText) as Default,
+	};
+}
+
+function isTextRecord(value: unknown): value is Text {
+	return (
+		typeof value === 'object' &&
+		value !== null &&
+		'language' in value &&
+		'text' in value
+	);
+}
+
+function toTextRecord<L extends Language, T>(value: Text<L, T>): TextRecord<L, T> {
+	return { language: value.language, text: value.text };
 }
 
 function canonicalLanguage(language: Language): string | undefined {
@@ -60,9 +80,17 @@ function canonicalLanguage(language: Language): string | undefined {
 	}
 }
 
+function localeLanguage(language: Language): string | undefined {
+	try {
+		return new Intl.Locale(language).language;
+	} catch {
+		return undefined;
+	}
+}
+
 function resolveTextSelection<
-	Default extends Text,
-	const Choices extends readonly Text[],
+	Default extends Text<string, unknown>,
+	const Choices extends readonly Text<string, unknown>[],
 >(
 	selection: TextSelectionType<Default, Choices>,
 	languages: readonly string[]
@@ -80,12 +108,21 @@ function resolveTextSelection<
 		if (text !== undefined) return text;
 	}
 
+	for (const language of languages) {
+		const requestedLanguage = localeLanguage(language);
+		if (requestedLanguage === undefined) continue;
+		const text = texts.find(
+			text => localeLanguage(text.language) === requestedLanguage
+		);
+		if (text !== undefined) return text;
+	}
+
 	return selection.defaultText;
 }
 
 export function selectText<
-	Default extends Text,
-	const Choices extends readonly Text[],
+	Default extends Text<string, unknown>,
+	const Choices extends readonly Text<string, unknown>[],
 >(
 	defaultText: Default,
 	...choices: Choices
@@ -95,13 +132,13 @@ export function selectText<
 	return languages => resolveTextSelection(selection, languages);
 }
 
-export function resolveText<T extends Text>(
+export function resolveText<T extends Text<string, unknown>>(
 	text: T | TextSelector<T>,
 	languages?: readonly string[]
 ): T;
 export function resolveText<
-	Default extends Text,
-	const Choices extends readonly Text[],
+	Default extends Text<string, unknown>,
+	const Choices extends readonly Text<string, unknown>[],
 >(
 	text: TextSelectionType<Default, Choices>,
 	languages?: readonly string[]
@@ -114,7 +151,7 @@ export function resolveText(
 	text: Text | TextSelector | TextSelectionType,
 	languages: readonly string[] = []
 ): Text {
-	if (text instanceof TextType) return text;
+	if (text instanceof TextType || isTextRecord(text)) return text;
 	if (typeof text === 'function') return text(languages);
 	return resolveTextSelection(text, languages);
 }

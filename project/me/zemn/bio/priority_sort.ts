@@ -35,10 +35,10 @@ interface TimelineEvent {
 async function loadBio(): Promise<TimelineEvent[]> {
 	return Bio.timeline.map(ev => ({
 		id: ev.id,
-		title: lang.text(ev.title),
+		title: lang.text(lang.resolveText(ev.title)),
 		desc:
 			'description' in ev && ev.description
-				? lang.text(ev.description)
+				? lang.text(lang.resolveText(ev.description))
 				: undefined,
 	}));
 }

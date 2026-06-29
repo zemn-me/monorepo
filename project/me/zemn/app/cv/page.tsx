@@ -18,6 +18,7 @@ import priorities from '#root/project/me/zemn/bio/priority.json';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import TimeEye from '#root/project/me/zemn/components/TimeEye/TimeEye.js';
 import { MonthYear } from '#root/ts/react/lang/date.js';
+import * as lang from '#root/ts/react/lang/index.js';
 
 const priorityMap = new Map<string, number>(
 	priorities.map((id, idx) => [id, priorities.length - idx])
@@ -258,32 +259,35 @@ function stripEmployerSuffix(title: string, employer: string): string {
 	return title.slice(0, -suffix.length);
 }
 
+function bioText(text: BioEvent['title']): lang.Text {
+	return lang.resolveText(text);
+}
+
 interface Role {
 	readonly employer?: string;
 	readonly position: string;
 }
 
 function splitRole(event: BioEvent): Role {
+	const title = bioText(event.title).text;
 	if (event.employer !== undefined) {
+		const employer = bioText(event.employer).text;
 		return {
-			employer: event.employer.text,
-			position: stripEmployerSuffix(
-				event.title.text,
-				event.employer.text
-			),
+			employer,
+			position: stripEmployerSuffix(title, employer),
 		};
 	}
 
-	const comma = event.title.text.lastIndexOf(',');
+	const comma = title.lastIndexOf(',');
 	if (comma === -1) {
 		return {
-			position: event.title.text,
+			position: title,
 		};
 	}
 
 	return {
-		employer: event.title.text.slice(comma + 1).trim(),
-		position: event.title.text.slice(0, comma).trim(),
+		employer: title.slice(comma + 1).trim(),
+		position: title.slice(0, comma).trim(),
 	};
 }
 
@@ -340,8 +344,11 @@ function ExperienceItem({ event }: { readonly event: BioEvent }) {
 				{formatDuration(start, end ?? new Date())}
 			</div>
 			{event.description && (
-				<div className={style.content} lang={event.description.language}>
-					<p>{event.description.text}</p>
+				<div
+					className={style.content}
+					lang={bioText(event.description).language}
+				>
+					<p>{bioText(event.description).text}</p>
 				</div>
 			)}
 		</section>
@@ -372,7 +379,9 @@ function EventTitle({
 	const title = citation ? (
 		<CitationTitle event={event} />
 	) : (
-		<span lang={event.title.language}>{event.title.text}</span>
+		<span lang={bioText(event.title).language}>
+			{bioText(event.title).text}
+		</span>
 	);
 
 	if (href === undefined) {
@@ -391,7 +400,7 @@ function needsFullStop(title: string): boolean {
 }
 
 function CitationTitle({ event }: { readonly event: BioEvent }) {
-	const title = event.title.text;
+	const title = bioText(event.title);
 	const publisher = event.publisher;
 
 	return (
@@ -399,21 +408,21 @@ function CitationTitle({ event }: { readonly event: BioEvent }) {
 			<span className={style.citationText}>
 				({eventStart(event).getUTCFullYear()}){' '}
 			</span>
-			<span className={style.citationText} lang={event.title.language}>
-				{title}
+			<span className={style.citationText} lang={title.language}>
+				{title.text}
 			</span>
 			{publisher && (
 				<>
 					<span className={style.citationText}>
-						{needsFullStop(title) ? '. ' : ' '}
+						{needsFullStop(title.text) ? '. ' : ' '}
 					</span>
 					<span
 						className={style.citationPublisher}
-						lang={publisher.language}
+						lang={bioText(publisher).language}
 					>
-						{publisher.text}
+						{bioText(publisher).text}
 					</span>
-					{needsFullStop(publisher.text) && (
+					{needsFullStop(bioText(publisher).text) && (
 						<span className={style.citationText}>.</span>
 					)}
 				</>
@@ -439,9 +448,9 @@ function Note({
 			{event.description && (
 				<p
 					className={style.description}
-					lang={event.description.language}
+					lang={bioText(event.description).language}
 				>
-					{event.description.text}
+					{bioText(event.description).text}
 				</p>
 			)}
 		</section>

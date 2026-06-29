@@ -12,6 +12,7 @@ ts_project(
         "index.ts",
         "priority_sort.ts",
         "schema.ts",
+        "translations.ts",
     ],
     resolve_json_module = True,
     visibility = ["//:__subpackages__"],
@@ -73,9 +74,11 @@ filegroup(
         "calendar_emails.ts",
         "event_test.ts",
         "index.ts",
+        "localization_test.ts",
         "priority_sort.ts",
         "priority_test.ts",
         "schema.ts",
+        "translations.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -84,6 +87,7 @@ ts_project(
     name = "bio_tests",
     srcs = [
         "event_test.ts",
+        "localization_test.ts",
         "priority_test.ts",
     ],
     visibility = ["//:__subpackages__"],
@@ -91,6 +95,7 @@ ts_project(
         ":bio",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/react/lang",
     ],
 )
 
@@ -98,6 +103,7 @@ jest_test(
     name = "tests",
     srcs = [
         "event_test.js",
+        "localization_test.js",
         "priority_test.js",
     ],
     visibility = ["//:__subpackages__"],

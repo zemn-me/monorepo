@@ -15,6 +15,7 @@ import {
 import { ProfilePageSchema } from '#root/project/me/zemn/app/schema.js';
 import style from '#root/project/me/zemn/app/style.module.css';
 import * as bio from '#root/project/me/zemn/bio/index.js';
+import * as translations from '#root/project/me/zemn/bio/translations.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { Prose } from '#root/project/me/zemn/components/Prose/prose.js';
@@ -25,6 +26,10 @@ import ZemnmezLogo from '#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLog
 import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
 import * as lang from '#root/ts/react/lang/index.js';
+import {
+	LocalizedParagraph,
+	LocalizedText,
+} from '#root/ts/react/lang/LocalizedText.js';
 
 const homepageLinkNames = ['CV', 'linkedin', 'github', 'bluesky', 'twitter'];
 
@@ -36,12 +41,13 @@ function linksetText(text: lang.Text): LinksetText {
 }
 
 function linksetLabel(caption: bio.LinkCaption): LinksetLabel {
-	if (caption instanceof lang.TextType) return linksetText(caption);
+	if ('choices' in caption)
+		return {
+			choices: caption.choices.map(linksetText),
+			defaultText: linksetText(caption.defaultText),
+		};
 
-	return {
-		choices: caption.choices.map(linksetText),
-		defaultText: linksetText(caption.defaultText),
-	};
+	return linksetText(caption);
 }
 
 const homepageLinks = Iterable(bio.Bio.links)
@@ -87,20 +93,22 @@ export default function Main() {
 					/>
 				</picture>
 				<Prose>
+					<LocalizedParagraph>
+						{translations.homepage_intro_security}
+					</LocalizedParagraph>
 					<p>
-						I am an internationally recognised expert on computer
-						security, with specialisms in web security, security
-						program (SSDLC) construction, and automated security
-						analysis.
+						<LocalizedText>
+							{translations.homepage_intro_openai_prefix}
+						</LocalizedText>
+						<Link href="https://openai.com">OpenAI</Link>
+						<LocalizedText>
+							{translations.homepage_intro_openai_suffix}
+						</LocalizedText>
 					</p>
 					<p>
-						I am a Member of Technical Staff at{' '}
-						<Link href="https://openai.com">OpenAI</Link>, where I
-						work on computer security.
-					</p>
-					<p>
-						I am interested in consulting on legal cases. For
-						business, email me at{' '}
+						<LocalizedText>
+							{translations.homepage_intro_legal_prefix}
+						</LocalizedText>
 						<Link
 							href={`mailto:?to=thomas@shadwell.im (${encodeURIComponent(
 								bio.Bio.who.fullName.text
@@ -111,10 +119,9 @@ export default function Main() {
 						</Link>
 						.
 					</p>
-					<p>
-						A selection of my work over the years can be found
-						below.
-					</p>
+					<LocalizedParagraph>
+						{translations.homepage_intro_selection}
+					</LocalizedParagraph>
 				</Prose>
 				<nav className={style.links}>
 					{homepageLinks.map(({ label, rel, url }) => (
@@ -132,37 +139,32 @@ export default function Main() {
 			</section>
 			<section className={style.about}>
 				<h2 className={dividerHeadingClass}>
-					<span lang="en-GB">About.</span>
+					<LocalizedText>
+						{translations.homepage_about_heading}
+					</LocalizedText>
 				</h2>
-				<Prose lang="en-GB">
-					<h3 id="website_design">The design of this website.</h3>
+				<Prose>
+					<h3 id="website_design">
+						<LocalizedText>
+							{translations.homepage_about_design_heading}
+						</LocalizedText>
+					</h3>
+					<LocalizedParagraph>
+						{translations.homepage_about_design_1}
+					</LocalizedParagraph>
+					<LocalizedParagraph>
+						{translations.homepage_about_design_2}
+					</LocalizedParagraph>
 					<p>
-						This website is a direct descendant of one I made in
-						2019. The core ideas come from very early on when I was
-						using the internet, and I didn't want to tell people
-						with my chosen username what kind of person I was. I
-						picked the username <Q single>zemnmez</Q> to be
-						something meaningless that people could fill with their
-						own ideas of who I was.
-					</p>
-					<p>
-						Similarly, when I made the website, I didn't want to
-						tell people directly about myself, so instead I made
-						this timeline to keep track of what I had done every
-						year. The number in roman numerals is my age that year.
-						It fulfilled another role as I was collecting my work to
-						apply for my US O1 visa, which requires proving that
-						you've done a lot of interesting things!
-					</p>
-					<p>
-						The background video (<Q single>hero video</Q>) in
-						summer is of a hidden area in the gardens of{' '}
+						<LocalizedText>
+							{translations.homepage_about_kenwood_1_prefix}
+						</LocalizedText>
 						<Link href="https://en.wikipedia.org/wiki/Kenwood_House">
 							Kenwood House
 						</Link>
-						, a beautiful stately home sandwiched between Highgate
-						and Hampstead in London where I grew up. It's located at
-						about{' '}
+						<LocalizedText>
+							{translations.homepage_about_kenwood_1_suffix}
+						</LocalizedText>
 						<Link
 							href="https://goo.gl/maps/JEAzn2kZgu6pyaNA6"
 							rel="nofollow"
@@ -172,79 +174,63 @@ export default function Main() {
 						</Link>
 						.
 					</p>
+					<LocalizedParagraph>
+						{translations.homepage_about_kenwood_2}
+					</LocalizedParagraph>
+					<LocalizedParagraph>
+						{translations.homepage_about_winter}
+					</LocalizedParagraph>
 					<p>
-						It used to be that there was a bench hidden under
-						overgrown bushes and a tree near the hydrangeas past the
-						orangery. I took a video from there one summer – I was
-						collecting photos and videos to remind me of home
-						because I knew I'd leave it behind someday to move to
-						the US.
-					</p>
-					<p>
-						In winter, a close-by location of Kenwood House in the
-						snow is shown.
-					</p>
-					<p>
-						The type and style itself was inspired by older,
-						pre-computer era typsetting such as the{' '}
+						<LocalizedText>
+							{translations.homepage_about_type_prefix}
+						</LocalizedText>
 						<Link href="https://assets.lloyds.com/assets/pdf-lloyds-acts-mar07lloydsact1871/1/pdf-lloyds-acts-Mar07LloydsAct1871.pdf">
 							Lloyd's Act 1871
 						</Link>
-						. Particular effort was put into trying to have content
-						fill horizontal space automatically, as seen in older
-						documents that try to make the most of the paper they're
-						printed on.
+						<LocalizedText>
+							{translations.homepage_about_type_suffix}
+						</LocalizedText>
 					</p>
 					<h3 id="logo_disambiguation">
-						What's the difference between <ZemnmezLogoInline /> and{' '}
-						<TimeEyeInline />?
+						<LocalizedText>
+							{translations.homepage_about_logo_heading_prefix}
+						</LocalizedText>
+						<ZemnmezLogoInline />
+						<LocalizedText>
+							{translations.homepage_about_logo_heading_middle}
+						</LocalizedText>
+						<TimeEyeInline />
+						<LocalizedText>
+							{translations.homepage_about_logo_heading_suffix}
+						</LocalizedText>
 					</h3>
+					<LocalizedParagraph>
+						{translations.homepage_about_logo_1}
+					</LocalizedParagraph>
+					<LocalizedParagraph>
+						{translations.homepage_about_logo_2}
+					</LocalizedParagraph>
+					<LocalizedParagraph>
+						{translations.homepage_about_time_eye_1}
+					</LocalizedParagraph>
 					<p>
-						The diamond logo (<ZemnmezLogoInline />) came out of
-						several years of wanting a way to express myself in art.
-						For a few years following, I changed logo annually based
-						how I'd felt the year prior, making logos with geometry
-						and construction lines.
-					</p>
-					<p>
-						When I eventually made the diamond logo, it ended up
-						looking a like an eye logo I'd made very early on in
-						2012. I liked it so much it came to represent the
-						persona I had since 2009. The logo itself is from much
-						later, probably around 2015.
-					</p>
-					<p>
-						The time eye logo (<TimeEyeInline />) was the later
-						(2019) creation, coming out of a specific need to
-						disambiguate between the published work I had as{' '}
-						<Q single>Thomas Shadwell</Q>, my real name, versus{' '}
-						<Q single>zemnmez</Q>, the persona I had used since
-						2009. It became necessary after I made the Forbes Under
-						30 list for my tax system hack in 2018. Before this
-						point I'd worked hard to try to keep the two identities
-						separate, but Forbes lists aren't really for online
-						personas.
-					</p>
-					<p>
-						The eye logo is a reference to the well-known{' '}
+						<LocalizedText>
+							{translations.homepage_about_eye_prefix}
+						</LocalizedText>
 						<Link href="https://en.wikipedia.org/wiki/Eye_of_Providence">
-							<Q single>eye of providence</Q>
+							<Q single>
+								<LocalizedText>
+									{translations.homepage_about_eye_link}
+								</LocalizedText>
+							</Q>
 						</Link>
-						, a symbol that represents human achievement as being
-						incomplete without God. I wanted it to reflect the idea
-						that, in a universe that might not have a God, we as
-						people have a responsibility to care for each other.
+						<LocalizedText>
+							{translations.homepage_about_eye_suffix}
+						</LocalizedText>
 					</p>
-					<p>
-						In having to make this distinction, for a short time the
-						work published as <Q single>zemnmez</Q> continued to
-						represent the things I was most proud of – an idealised
-						kind of self. But at Google, I started to publish
-						security research I was really proud of as both{' '}
-						<Q single>zemnmez</Q> and <Q single>Thomas Shadwell</Q>{' '}
-						The abstract ideas are still there, but now I'm more{' '}
-						<Q single>Thomas</Q> than I ever was. ☺
-					</p>
+					<LocalizedParagraph>
+						{translations.homepage_about_identity}
+					</LocalizedParagraph>
 				</Prose>
 			</section>
 

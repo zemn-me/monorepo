@@ -65,7 +65,7 @@ interface CorpusProps {
 const sentanceTerminators = ['!', '.', '?', '…'];
 
 function needsFullStop(text: lang.Text): boolean {
-	if (text.locale.language !== 'en') return false;
+	if (new Intl.Locale(text.language).language !== 'en') return false;
 
 	if (sentanceTerminators.some(v => text.text.endsWith(v))) return false;
 
@@ -79,14 +79,16 @@ function fullStopIfNeeded(text: lang.Text): ReactElement | null {
 }
 
 function Publisher({ event: e }: { readonly event: Bio.Event }) {
+	const languages = lang.useLocale();
 	if (e.publisher === undefined) return null;
+	const publisher = lang.resolveText(e.publisher, languages);
 
 	return (
 		<>
-			<span className={style.publisher} lang={lang.get(e.publisher)}>
-				{e.publisher.text}
+			<span className={style.publisher} lang={lang.get(publisher)}>
+				{publisher.text}
 			</span>
-			{fullStopIfNeeded(e.publisher)}{' '}
+			{fullStopIfNeeded(publisher)}{' '}
 		</>
 	);
 }
@@ -179,17 +181,24 @@ function groupBy<T, Q>(
 }
 
 function Event({ event: e }: { readonly event: Bio.Event }) {
+	const languages = lang.useLocale();
+	const description =
+		e.description === undefined
+			? undefined
+			: lang.resolveText(e.description, languages);
+	const title = lang.resolveText(e.title, languages);
+
 	return (
 		<article className={style.event}>
-			<Link href={e.url} id={e.id} lang={lang.get(e.title)}>
-				{e.title.text}
+			<Link href={e.url} id={e.id} lang={lang.get(title)}>
+				{title.text}
 				{/* this would be a <Corpus> but it looks ugly with the full stop inside the link. */}
 			</Link>
-			{fullStopIfNeeded(e.title)}{' '}
+			{fullStopIfNeeded(title)}{' '}
 			<Publisher event={e} />
-			{e.description ? (
-				<span lang={lang.get(e.description)}>
-					<Corpus>{e.description}</Corpus>
+			{description ? (
+				<span lang={lang.get(description)}>
+					<Corpus>{description}</Corpus>
 				</span>
 			) : null}{' '}
 			<SectionLink href={`#${e.id}`}>§{shortIdForEvent(e)}.</SectionLink>
