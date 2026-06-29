@@ -3,6 +3,7 @@ import type { Organization, Person } from 'schema-dts';
 import { Bio, employment } from '#root/project/me/zemn/bio/bio.js';
 import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
+import * as lang from '#root/ts/react/lang/index.js';
 
 export const schema: Person = {
 	'@type': 'Person',
@@ -14,8 +15,8 @@ export const schema: Person = {
 		.filter()
 		.map(v => ('until' in v ? None : Some(v)))
 		.filter()
+		.map(v => lang.text(lang.resolveText(v.title)))
 		.first()
-		.and_then(v => v.title.text)
 		.unwrap_or(undefined),
 	worksFor: Iterable(Bio.timeline)
 		.map(v => ('tags' in v && v.tags.includes(employment) ? Some(v) : None))
@@ -27,7 +28,7 @@ export const schema: Person = {
 		.map(
 			(v): Organization => ({
 				'@type': 'Organization',
-				name: v.employer.text,
+				name: lang.text(lang.resolveText(v.employer)),
 				url: 'url' in v ? v.url.toString() : undefined,
 			})
 		)

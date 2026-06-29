@@ -12,6 +12,7 @@ ts_project(
         "index.ts",
         "priority_sort.ts",
         "schema.ts",
+        "translations.ts",
     ],
     resolve_json_module = True,
     visibility = ["//:__subpackages__"],
@@ -76,6 +77,7 @@ filegroup(
         "priority_sort.ts",
         "priority_test.ts",
         "schema.ts",
+        "translations.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
