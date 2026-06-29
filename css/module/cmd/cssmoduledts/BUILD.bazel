@@ -1,53 +1,32 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_binary", "js_test")
-load("//ts:rules.bzl", "ts_project")
+load("//go:rules.bzl", "go_binary", "go_library")
 
-# gazelle:exclude lib_test.ts
-
-ts_project(
-    name = "project",
-    srcs = [
-        "lib.ts",
-        "main.ts",
-    ],
-    deps = [
-        "//:node_modules/@types/node",
-        "//:node_modules/lightningcss",
-    ],
-)
-
-ts_project(
-    name = "tests_js",
-    srcs = ["lib_test.ts"],
-    deps = [
-        ":project",
-        "//:node_modules/@types/node",
-    ],
-)
-
-js_binary(
+go_binary(
     name = "cssmoduledts",
-    data = [":project"],
-    entry_point = "main.js",
+    embed = [":cssmoduledts_lib"],
+    importpath = "github.com/zemn-me/monorepo/css/module/cmd/cssmoduledts",
     visibility = ["//visibility:public"],
 )
 
-js_test(
+go_test(
     name = "cssmoduledts_test",
-    data = [":tests_js"],
-    entry_point = "lib_test.js",
+    srcs = ["main_test.go"],
+    embed = [":cssmoduledts_lib"],
+)
+
+go_library(
+    name = "cssmoduledts_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/css/module/cmd/cssmoduledts",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_tdewolff_parse_v2//:parse",
+        "@com_github_tdewolff_parse_v2//css",
+    ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
-)
-
-filegroup(
-    name = "all_ts_srcs",
-    srcs = [
-        "lib.ts",
-        "main.ts",
-    ],
-    visibility = ["//:__subpackages__"],
 )
