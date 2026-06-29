@@ -1,6 +1,6 @@
 import { transform } from 'lightningcss';
 
-export function declaration(filename, css) {
+export function declaration(filename: string, css: string | Uint8Array): string {
 	const result = transform({
 		filename,
 		code: Buffer.from(css),
