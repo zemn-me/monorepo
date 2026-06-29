@@ -1,28 +1,44 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//go:rules.bzl", "go_binary", "go_library")
+load("//js:rules.bzl", "js_binary", "js_library", "js_test")
 
-go_binary(
+js_binary(
     name = "cssmoduledts",
-    embed = [":cssmoduledts_lib"],
-    importpath = "github.com/zemn-me/monorepo/css/module/cmd/cssmoduledts",
+    data = [
+        "lib.mjs",
+        "//:node_modules/lightningcss",
+    ],
+    entry_point = "main.mjs",
     visibility = ["//visibility:public"],
 )
 
-go_test(
+js_test(
     name = "cssmoduledts_test",
-    srcs = ["main_test.go"],
-    embed = [":cssmoduledts_lib"],
-)
-
-go_library(
-    name = "cssmoduledts_lib",
-    srcs = ["main.go"],
-    importpath = "github.com/zemn-me/monorepo/css/module/cmd/cssmoduledts",
-    visibility = ["//visibility:private"],
+    data = [
+        "lib.mjs",
+        "//:node_modules/lightningcss",
+    ],
+    entry_point = "lib_test.mjs",
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "lib_mjs",
+    srcs = ["lib.mjs"],
+    deps = ["//:node_modules/lightningcss"],
+)
+
+js_library(
+    name = "lib_test_mjs",
+    srcs = ["lib_test.mjs"],
+    deps = ["@monorepo//css/module/cmd/cssmoduledts:lib_mjs"],
+)
+
+js_library(
+    name = "main_mjs",
+    srcs = ["main.mjs"],
+    deps = ["@monorepo//css/module/cmd/cssmoduledts:lib_mjs"],
 )

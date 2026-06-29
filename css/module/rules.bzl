@@ -11,6 +11,9 @@ def _css_module_types_impl(ctx):
         inputs = [ctx.file.src],
         outputs = [out],
         arguments = [args],
+        env = {
+            "BAZEL_BINDIR": ".",
+        },
         mnemonic = "CssModuleTypes",
         progress_message = "Generating CSS module types for %{input}",
     )
