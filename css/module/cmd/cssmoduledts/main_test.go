@@ -25,7 +25,6 @@ func TestDeclarationUsesCSSParser(t *testing.T) {
 		[]byte(`readonly "composed": string;`),
 		[]byte(`readonly "explicit": string;`),
 		[]byte(`readonly "shell": string;`),
-		[]byte(`readonly [key: string]: string;`),
 		[]byte(`export default styles;`),
 	} {
 		if !bytes.Contains(output, want) {
@@ -35,5 +34,8 @@ func TestDeclarationUsesCSSParser(t *testing.T) {
 
 	if bytes.Contains(output, []byte(`readonly "external": string;`)) {
 		t.Fatalf("expected global class to be absent, got:\n%s", output)
+	}
+	if bytes.Contains(output, []byte(`readonly [key: string]: string;`)) {
+		t.Fatalf("expected declaration to only include classes present in the module, got:\n%s", output)
 	}
 }
