@@ -81,7 +81,6 @@ func declaration(data []byte) ([]byte, error) {
 
 	var out bytes.Buffer
 	out.WriteString("declare const styles: {\n")
-	out.WriteString("\treadonly [key: string]: string;\n")
 	for _, name := range names {
 		fmt.Fprintf(&out, "\treadonly %s: string;\n", strconv.Quote(name))
 	}

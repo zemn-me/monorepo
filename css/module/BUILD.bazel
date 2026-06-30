@@ -1,4 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
 
 exports_files(["rules.bzl"])
 
@@ -8,4 +10,26 @@ bazel_lint(
         "BUILD.bazel",
         "rules.bzl",
     ],
+)
+
+css_module(
+    name = "exact_keys_module_css",
+    src = "exact_keys.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "module",
+    srcs = ["exact_keys_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":exact_keys_module_css",
+        "//:node_modules/@types/node",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["exact_keys_test.ts"],
+    visibility = ["//:__subpackages__"],
 )
