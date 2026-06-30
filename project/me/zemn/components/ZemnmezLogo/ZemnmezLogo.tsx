@@ -9,7 +9,7 @@ export default ({
 	...props
 }: React.SVGProps<SVGSVGElement>) => (
 	<svg
-		className={classes(className, style.zemnmezLogo)}
+		className={classes(className, style.egg)}
 		height="348"
 		role="img"
 		viewBox="0 0 446 348"
