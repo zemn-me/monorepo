@@ -130,7 +130,7 @@ export default function Main() {
 			<section>
 				<Timeline />
 			</section>
-			<section className={style.about}>
+			<section>
 				<h2 className={dividerHeadingClass}>
 					<span lang="en-GB">About.</span>
 				</h2>
