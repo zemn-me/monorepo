@@ -4,6 +4,9 @@ import { frontmatter as articleCsp } from '#root/mdx/article/2014/csp.js';
 import { frontmatter as articleClean } from '#root/mdx/article/2024/clean.js';
 import { frontmatter as articleMissing } from '#root/mdx/article/2024/missing.js';
 import { frontmatter as articleKasimir } from '#root/mdx/article/2026/kasimir/kasimir.js';
+import {
+	frontmatter as articleMandarinBench,
+} from '#root/mdx/article/2026/mandarin-bench/mandarin-bench.js';
 import { ArticleProps } from '#root/project/me/zemn/components/Article/types/article_types.js';
 import * as lang from '#root/ts/react/lang/index.js';
 import { RelativeURL } from '#root/ts/react/next/Link/relative_url.js';
@@ -194,6 +197,13 @@ export const Bio = {
 		en`bazel`,
 	],
 	timeline: [
+		{
+			id: 'ac4f5232-f576-4a85-b1dc-c113b3eee61e',
+			...canonicaliseArticleMetadata(articleMandarinBench),
+			publisher: en`zemn.me`,
+			tags: [writing, software],
+			url: new RelativeURL('/article/2026/mandarin-bench'),
+		},
 		{
 			id: '86c449a3-eb95-462e-9746-e99388376d31',
 			description: en`Talk at Stanford with Adrian Spânu on the present and future of prompt injection.`,
