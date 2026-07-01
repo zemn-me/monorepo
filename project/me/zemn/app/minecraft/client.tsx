@@ -22,7 +22,12 @@ import {
 	usePutMinecraftWhitelist,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import type { Future } from '#root/ts/future/future.js';
+import {
+	type Future,
+	future_error,
+	future_loading,
+	future_resolve,
+} from '#root/ts/future/future.js';
 
 const minecraftScope = 'minecraft';
 const serverAddress = 'zemn.me';
@@ -77,6 +82,32 @@ function wakeStatusNote(
 		() => undefined,
 		() => undefined
 	);
+}
+
+function firstAvailableToken(
+	futures: readonly Future<string, void, Error>[]
+): Future<string, void, Error> {
+	const values: string[] = [];
+	const errors: Error[] = [];
+	let loading = false;
+
+	for (const future of futures) {
+		future(
+			value => values.push(value),
+			() => {
+				loading = true;
+			},
+			error => errors.push(error)
+		);
+	}
+
+	if (values.length > 0) {
+		return future_resolve(values[0]!);
+	}
+	if (loading) {
+		return future_loading(undefined);
+	}
+	return future_error(errors[0] ?? new Error('missing login token'));
 }
 
 function PlayerCount({
@@ -180,7 +211,14 @@ function MinecraftEventLog({
 }
 
 export default function MinecraftPageClient() {
-	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const [fut_googleIdToken, , fut_googlePromptForLogin] =
+		useZemnMeAuth('google');
+	const [fut_discordIdToken, , fut_discordPromptForLogin] =
+		useZemnMeAuth('discord');
+	const fut_idToken = firstAvailableToken([
+		fut_googleIdToken,
+		fut_discordIdToken,
+	]);
 	const fut_scopes = useGetMeScopes(fut_idToken);
 	const status = useGetMinecraftStatus(fut_idToken);
 	const whitelist = useGetMinecraftWhitelist(fut_idToken);
@@ -225,45 +263,79 @@ export default function MinecraftPageClient() {
 		wakeServer.mutate();
 	}, [hasMinecraftScope, wakeServer]);
 
-	const loginPanel = fut_promptForLogin(
+	const googleLoginButton = fut_googlePromptForLogin(
 		promptForLogin => (
-			<main className={style.root}>
-				<button
-					aria-label="Authenticate with OIDC"
-					className={style.primaryButton}
-					onClick={() => {
-						void promptForLogin();
-					}}
-					type="button"
-				>
-					Login with OIDC
-				</button>
-			</main>
+			<button
+				aria-label="Authenticate with OIDC"
+				className={style.primaryButton}
+				onClick={() => {
+					void promptForLogin();
+				}}
+				type="button"
+			>
+				Login with Google
+			</button>
 		),
 		() => (
-			<main className={style.root}>
-				<button
-					aria-label="Authenticate with OIDC"
-					className={style.primaryButton}
-					disabled
-					type="button"
-				>
-					Login with OIDC
-				</button>
-			</main>
+			<button
+				aria-label="Authenticate with OIDC"
+				className={style.primaryButton}
+				disabled
+				type="button"
+			>
+				Login with Google
+			</button>
 		),
 		() => (
-			<main className={style.root}>
-				<button
-					aria-label="Authenticate with OIDC"
-					className={style.primaryButton}
-					disabled
-					type="button"
-				>
-					Login with OIDC
-				</button>
-			</main>
+			<button
+				aria-label="Authenticate with OIDC"
+				className={style.primaryButton}
+				disabled
+				type="button"
+			>
+				Login with Google
+			</button>
 		)
+	);
+	const discordLoginButton = fut_discordPromptForLogin(
+		promptForLogin => (
+			<button
+				aria-label="Authenticate with Discord"
+				className={style.primaryButton}
+				onClick={() => {
+					void promptForLogin();
+				}}
+				type="button"
+			>
+				Login with Discord
+			</button>
+		),
+		() => (
+			<button
+				aria-label="Authenticate with Discord"
+				className={style.primaryButton}
+				disabled
+				type="button"
+			>
+				Login with Discord
+			</button>
+		),
+		() => (
+			<button
+				aria-label="Authenticate with Discord"
+				className={style.primaryButton}
+				disabled
+				type="button"
+			>
+				Login with Discord
+			</button>
+		)
+	);
+	const loginPanel = (
+		<main className={style.root}>
+			{discordLoginButton}
+			{googleLoginButton}
+		</main>
 	);
 
 	const accessPanel = (
