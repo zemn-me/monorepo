@@ -1,6 +1,7 @@
 import { cloneElement, ReactElement } from 'react';
 
 import { Article } from '#root/project/me/zemn/components/Article/article.js';
+import { CodeBlock } from '#root/project/me/zemn/components/Article/code_highlight.js';
 import {
 	H1,
 	H2,
@@ -28,6 +29,7 @@ type MDXComponentTypes =
 	| 'em'
 	| `h${1 | 2 | 3 | 4 | 5}`
 	| 'p'
+	| 'pre'
 	| 'section';
 
 interface MDXContentProps {
@@ -56,6 +58,7 @@ export function MDXArticle(props: MDXArticleProps) {
 					h4: H4,
 					h5: H5,
 					a: Link,
+					pre: CodeBlock,
 					section: Section,
 				},
 			})}
