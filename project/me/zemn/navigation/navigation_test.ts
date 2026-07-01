@@ -49,6 +49,7 @@ it('includes public content and redirect pages', () => {
 		'/article',
 		'/article/2014/csp',
 		'/article/2019/cors',
+		'/article/2020/icloud',
 		'/article/2024/clean',
 		'/article/2024/missing',
 		'/availability',

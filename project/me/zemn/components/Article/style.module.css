@@ -93,10 +93,18 @@
 	full width elements
 */
 .heroVideo,
-.container :is(img) {
+.container :is(img, picture, video) {
 	grid-column: 1 / -1;
 	width: 100%;
 	height: auto;
+}
+
+.container video {
+	justify-self: center;
+	max-height: 80vh;
+	max-width: 100%;
+	object-fit: contain;
+	width: auto;
 }
 
 .container li {
@@ -215,4 +223,54 @@
 	text-align: end;
 	user-select: none;
 	white-space: nowrap;
+}
+
+.container pre {
+	background: color-mix(in oklab, CanvasText 6%, Canvas);
+	border: 1px solid color-mix(in oklab, CanvasText 16%, transparent);
+	border-radius: 0.45rem;
+	overflow-wrap: anywhere;
+	overflow-x: hidden;
+	padding: 1rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.container pre code {
+	color: inherit;
+	display: block;
+	font-size: 0.9rem;
+	line-height: 1.55;
+	white-space: inherit;
+}
+
+.container :not(pre) > code {
+	background: color-mix(in oklab, CanvasText 7%, Canvas);
+	border-radius: 0.25em;
+	padding: 0.08em 0.24em;
+}
+
+.codeComment {
+	color: color-mix(in oklab, CanvasText 52%, Canvas);
+	font-style: italic;
+}
+
+.codeKeyword,
+.codeTag {
+	color: #9a3412;
+	font-weight: 650;
+}
+
+.codeLiteral,
+.codeNumber {
+	color: #0f766e;
+}
+
+.codeOperator,
+.codePunctuation {
+	color: color-mix(in oklab, CanvasText 72%, Canvas);
+}
+
+.codeString {
+	color: #166534;
 }

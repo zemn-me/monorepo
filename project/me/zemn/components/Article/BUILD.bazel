@@ -7,6 +7,7 @@ ts_project(
     srcs = [
         "article.tsx",
         "article_metadata.tsx",
+        "code_highlight.tsx",
         "heading.tsx",
         "mdx_article.tsx",
         "section.tsx",
@@ -67,6 +68,7 @@ filegroup(
     srcs = [
         "article.tsx",
         "article_metadata.tsx",
+        "code_highlight.tsx",
         "heading.tsx",
         "heading_test.tsx",
         "mdx_article.tsx",

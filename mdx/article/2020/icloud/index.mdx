@@ -1,24 +1,30 @@
-import { Head } from 'next/head';
+---
+layout: article
+title: How To Hack Apple ID
+language: en-GB
+description: Disclosure of a severe bug allowing client-side takeover of Apple's central Apple ID server.
+tags:
+    - security
+    - disclosure
+    - writing
+date: [13, aug, 2020]
+---
 
-<Head>
-    <meta name="tags" content="security, disclosure, writing"/>
-    <meta name="date" content="13 aug 2020"/>
-    <meta name="author" content="Thomas Neil James Shadwell"/>
-</Head>
+import {
+    exploitMobileMp4,
+    exploitMobileOgv,
+    exploitMobilePoster,
+    exploitMobileWebm,
+    valveDisclosure,
+} from '#root/mdx/article/2020/icloud/sources.js';
 
-How To Hack Apple ID
-====================
+# How To Hack Apple ID
 
-{/*<Description>Disclosure of a severe bug allowing client-side takeover of Apple's central AppleID server.</Description>*/}
-
-{/*
-
-<video style={{
-    borderRadius: "2rem",
-    width: "50%",
-    float: "right",
-    margin: "2rem"
-}} autoPlay loop muted src={require('./exploit_mobile.mp4')}/>
+<video autoPlay loop muted playsInline poster={exploitMobilePoster}>
+    <source src={exploitMobileMp4} type="video/mp4" />
+    <source src={exploitMobileWebm} type="video/webm" />
+    <source src={exploitMobileOgv} type="video/ogv" />
+</video>
 
 **Index by Vulnerability**
 
@@ -403,7 +409,7 @@ which part they thought was good (`https://icloud.com`) then I wouldn't be able
 to inject characters here. I think of this as 'baking in' our understanding of
 what a URL looks like and forcing it conform to that understanding.
 
-### Content Insecurity Policy {#content_insecurity_policy}
+### Content Insecurity Policy
 
 [Content Insecurity Policy]: #content_insecurity_policy
 [§4]: #content_insecurity_policy
@@ -477,7 +483,7 @@ most overengineered embed is a big, slightly off-white box.
 It's a big, slightly off-white box that's from fricken' `apple.com`, but still!
 
 
-### A Big, Slightly Off-White Box {#off_white_box}
+### A Big, Slightly Off-White Box
 
 [A Big, Slightly Off-White Box]: #url-parsing-my-old-friend
 
@@ -625,7 +631,7 @@ try {
 
 There are two outcomes of this code: (1) the function ft() gets run immediately or (2) it gets run after a timeout specified by `p.a.meta.FEConfiguration.applLoadDelay`. What's `ft()`? `ft()`, is, and I can't put this any other way -- a very beefy boy.
 
-### Analysing the 'Beefy Boy' {#analysing-the-beefy-boy}
+### Analysing the 'Beefy Boy'
 [Analysing the 'Beefy Boy']: #analysing-the-beefy-boy
 [§6]: #analysing-the-beefy-boy
 
@@ -776,13 +782,13 @@ child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["ready"],"
 
 Parent:
 
-> <- yeah bro im ready . lets do this
+> &lt;- yeah bro im ready . lets do this
 
 ```
 parent: pmrpc.{"jsonrpc":"2.0","id":"9BA799AA-6777-4DCC-A615-A8758C9E9CE2","result":true}
 ```
 
-> <- alright. i am calling myself "Sign In With Your Apple ID"
+> &lt;- alright. i am calling myself "Sign In With Your Apple ID"
 
 ```
 child: pmrpc.{"jsonrpc":"2.0","method":"ready","params":[{"iframeTitle":" Sign In with Your Apple ID"}],"id":"E0236187-9F33-42BC-AD1C-4F3866803C55"}
@@ -794,7 +800,7 @@ child: pmrpc.{"jsonrpc":"2.0","method":"ready","params":[{"iframeTitle":" Sign I
 parent : pmrpc.{"jsonrpc":"2.0","id":"E0236187-9F33-42BC-AD1C-4F3866803C55","result":true}
 ```
 
-> <- ok bro, let me know how i should configure the login dialog. that cool bro
+> &lt;- ok bro, let me know how i should configure the login dialog. that cool bro
 
 ```
 child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["config"],"id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD"}
@@ -806,7 +812,7 @@ child: pmrpc.{"jsonrpc":"2.0","method":"receivePingRequest","params":["config"],
 parent: pmrpc.{"jsonrpc":"2.0","id":"87A8E469-8A6B-4124-8BB0-1A1AB40416CD","result":true}
 ```
 
-> <- ok dude hit me with that config stuff
+> &lt;- ok dude hit me with that config stuff
 
 ```
 child: pmrpc.{"jsonrpc":"2.0","method":"config","params":[],"id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B"}
@@ -818,7 +824,7 @@ child: pmrpc.{"jsonrpc":"2.0","method":"config","params":[],"id":"252F2BC4-98E8-
 parent: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":{"data":{"features":{"rememberMe":true,"createLink":false,"iForgotLink":true,"pause2FA":false},"signInLabel":"Sign in to iCloud","serviceKey":"d39ba9916b7251055b22c7f910e2ea796ee65e98b2ddecea8f5dde8d9d1a815d","defaultAccountNameAutoFillDomain":"icloud.com","trustTokens":["HSARMTnl/S90E=SRVX"],"rememberMeLabel":"keep-me-signed-in","theme":"dark","waitAnimationOnAuthComplete":false,"logo":{"src":"data:image/png;base64,[ ... ]ErkJggg==","width":"100px"}}}}
 ```
 
-> <- and I'm out
+> &lt;- and I'm out
 
 ```
 parent sends: pmrpc.{"jsonrpc":"2.0","id":"252F2BC4-98E8-4254-9B19-FB8042A78E0B","result":true}
@@ -991,7 +997,7 @@ Our `nullPageCode` waits for a config indicating what the index of `idmsa.apple.
 ```
 
 
-### It's Not Always That You Need to Read The Spec, But That Always is *Today*. {#reading_the_spec}
+### It's Not Always That You Need to Read The Spec, But That Always is *Today*.
 
 [It's Not Always That You Need to Read The Spec, But That Always is Today.]: #reading_the_spec
 [§8]: #reading_the_spec
@@ -1066,7 +1072,7 @@ We've compromised the trust between `idmsa.apple.com` and iCloud. But there's mo
 
 If we manage to get XSS from the position we're in now, we could open a popup from our compromised, embedded page into a 'real' `idmsa.apple.com` page, and attack the popup from our embedded window. Once we've taken over the popup, we can use `window.location.assign('https://apple.com')` to destroy our entry in the user history so it's not possible for the user to see that they were ever on a non-apple website.
 
-### Stealing the Bank From an ATM {#stealing_the_bank_from_an_ATM}
+### Stealing the Bank From an ATM
 
 [Stealing the Bank From an ATM]: #stealing-the-bank-from-an-atm
 [§9]: #stealing-the-bank-from-an-atm
@@ -1635,7 +1641,7 @@ In short: I reported two bugs in late 2019, both of which were fixed within less
 18. *Tuesday, March 31st 2020*
     - Ask for more detailled instructions, because I can't find out how to set up my account and tax information (this is because my Apple Developers application has not yet been accepted)
 19. *Thursday, April 2nd 2020*
-    - Ask if this is being considered as a generic XSS (the [Apple Bug Bounty][Apple Bug Bounty Payouts] page quotes a $25,000 payout for "limited unauthorized control of an iCloud account" and $100,000 for "Broad unauthorized control of an iCloud account."[^4])
+    - Ask if this is being considered as a generic XSS (the [Apple Bug Bounty][Apple Bug Bounty Payouts] page quotes a $25,000 payout for "limited unauthorized control of an iCloud account" and $100,000 for "Broad unauthorized control of an iCloud account.")
 99. *Tuesday, April 28th*
     - Apple replies to request for more detailed instructions (it's the same thing, but re-worded)
 20. *May 13th 2020*
@@ -1730,7 +1736,7 @@ As `data:` URIs were part of the page they were loaded from, the decision was ma
 
 This created a new place that XSS could happen when attacker code gets into a page (what in the industry is called a 'sink'). Since the `data:` assset is part of the parent page, `<a href="data:text/html,<script>alert(1)</script>">click me!</a>` creates a link which runs Javascript code in the context of the parent domain -- it's XSS.
 
-Then, further down the line this was understood to be a mistake, or, at least, unnecessary. Not many people ever needed to make use of these synthetic pages inheriting the parent domain in a non-malicious way, so `data:` URIs got moved to a 'null' origin, and the XSS was solved perhaps. The <a href="#" onClick={() => { window.event.preventDefault(); alert(1) }}>pop-up</a> would still come up, but it'd just be sandboxed into being not all that worrying.
+Then, further down the line this was understood to be a mistake, or, at least, unnecessary. Not many people ever needed to make use of these synthetic pages inheriting the parent domain in a non-malicious way, so `data:` URIs got moved to a 'null' origin, and the XSS was solved perhaps. The `alert(1)` pop-up would still come up, but it'd just be sandboxed into being not all that worrying.
 
 I wasn't aware of this, and someone who I knew was sending this exact vulnerability to every program they had access to sent me a `data:` uri XSS of this kind that popped up `alert(1)`. I paid for it, and then, testing further realised that it had no security effect.
 
@@ -1771,7 +1777,7 @@ First, if you want to see any kind of compensation for your bug, you better have
 
 Now, I can't say *why* my last, and second $7,500 vulnerability reported to Valve is not disclosed to the public, *or* why the $750 payout below it is not disclosed to the public. That simply wouldn't be allowed.
 
-<img src={require('./valve_disclosure.png')} />
+<img src={valveDisclosure} />
 
 I *can* say that I reached out to the vulnerability disclosure platform myself and was informed that, probably, it's never going to become public. And I *think* I can say that the $7,500 disclosure ticket appears to have a draft of some kind of pinned disclosure notice that attempts to downplay the vulnerability's severity.
 
@@ -1789,7 +1795,7 @@ I just wanted to find something interesting and write about it. But, well, as yo
 
 I spent good months arguing about this one, and I still feel like it didn't get the severity rating it deserved, and I still haven't been paid for the two bugs I reported before this one!
 
-## Thanks, Farewell {#thanks_farewell}
+## Thanks, Farewell
 
 I've learned that it literally takes me a year to put together a disclosure I like. Sorry about that, but also, it's a lot more fulfilling to just go all in on one article.
 
@@ -1807,74 +1813,8 @@ Also shout out to all the people who looked at earlier versions of this doc: [Ta
 PS: Apple people: the bug IDs are: 724779810, 724415224 and 724779810
 
 
-*/}
 
-
-
-{/*
-[^3]:
-    Here's the list of example payouts [at the time of reporting][Apple Bug Bounty Payouts]:
-
-    > **Example Payouts**
-    >
-    > Bounty payments are determined by the level of access or execution obtained by the reported issue, modified by the quality of the report. Issues that are unique to designated developer or public betas, including regressions, can result in a 50% additional bonus if the issues were previously unknown to Apple. All security issues with significant impact to users will be considered for Apple Security Bounty payment, even if they do not fit the published bounty categories.
-    > 
-    > |   |    |    |
-    > | --- | --- | --- |
-    > | Unauthorized iCloud Account Access | $25,000 | Limited unauthorized control of an iCloud Account |
-    > | | $25,000 |  Limited unauthorized control of an iCloud account |
-    > | | $100,000 |  Broad unauthorized control of an iCloud account |
-    > | Physical Access to Device: Lock Screen bypass | $25,000 | Access to a small amount of sensitive data from the lock screen (but not including a list of installed apps or the layout of the home screen). |
-    > |  | $50,000 | Partial access to sensitive data from the lock screen. |
-    > |  | $100,000 | Broad access to sensitive data from the lock screen. |
-    > | Physical Access to Device: User Data Extraction | $100,000 | Partial extraction of sensitive data from the locked device after first unlock. |
-    > |   | $250,000 | Broad extraction of sensitive data from the locked device after first unlock. |
-    > | User-Installed App: Unauthorized Access to Sensitive Data | $25,000 | App access to a small amount of sensitive data normally protected by a TCC prompt. |
-    > |     | $50,000  | Partial app access to sensitive data normally protected by a TCC prompt. |
-    > |      | $100,000 | Broad app access to sensitive data normally protected by a TCC prompt or the platform sandbox. |
-    > | User-Installed App: Kernel Code Execution | $100,000 | Kernel code execution reachable from an app. |
-    > |    | $150,000 |  Kernel code execution reachable from an app, including PPL bypass or kernel PAC bypass. |
-    > | User-Installed App: CPU Side-Channel Attack | $250,000 | CPU side-channel attack allowing any sensitive data to be leaked from other processes or higher privilege levels. |
-    > | Network Attack with User Interaction: One-Click Unauthorized Access to Sensitive Data | $75,000  | One-click remote partial access to sensitive data. |
-    > |      | $150,000 | One-click remote broad access to sensitive data. |
-    > | Network Attack with User Interaction: One-Click Kernel Code Execution | $150,000 | One-click remote kernel code execution. | 
-    > |      | $250,000 | One-click remote kernel code execution, including PPL bypass or kernel PAC bypass. |
-    > | Network Attack without User Interaction: Zero-Click Radio to Kernel with Physical Proximity | $50,000 |  Zero-click code execution on a radio (e.g. baseband, Bluetooth or Wi-Fi) with only physical proximity, with no escalation to kernel. |
-    > |    | $200,000 | Zero-click partial access to sensitive data, with only physical proximity. |
-    > |    | $250,000 | Zero-click kernel code execution, with only physical proximity. |
-    > |  Network Attack without User Interaction: Zero-Click Unauthorized Access to Sensitive Data  | $100,000 | Zero-click attack that can turn on and collect information from a sensor (e.g., camera, microphone, or GPS). |
-    > |     | $250,000 | Zero-click partial access to sensitive data, without physical proximity. |
-    > |    | $500,000 | Zero-click broad access to sensitive data. |
-    > | Network Attack without User Interaction: Zero-Click Kernel Code Execution with Persistence and Kernel PAC Bypass | $1,000,000 | Zero-click remote chain with full kernel execution and persistence, including kernel PAC bypass, on latest shipping hardware. |
-    >
-    > *Notes and Definitions*
-    > 
-    > “One-click” refers to an exploit requiring user interaction to successfully gain access or execution. (For example, the user clicks a malicious link or opens a malicious file.)
-    >
-    > “Zero-click” refers to an exploit requiring no user interaction to successfully gain access or execution. (For example, being on a network or in proximity is sufficient.)
-    >
-    > “Sensitive data” access includes gaining a small amount (i.e., one or two items), partial access (i.e., some large number), or broad access (i.e., the full database) from Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data — or similar user data — that would normally be prevented by the system.
-    > 
-    > The top payouts in each category are reserved for high quality reports and are meant to reflect significant effort, and as such are applicable to issues that impact all or most Apple platforms, or that circumvent the full set of latest technology mitigations available. Payouts vary based on available hardware and software mitigations that must be bypassed for successful exploitation.
-    >
-    > There is a $5,000 minimum payout for all categories.
-    >
-    > |    | Topic | Maximum Payout |
-    > | -- | ----- | -------------- |
-    > | iCloud | Unauthorized access to iCloud account data on Apple Servers | $100,000 |
-    > |  Device attack via physical access | Lock screen bypass | $100,000 |
-    > |                                    | User Data Extraction | $250,000 |
-    > | Device attack via user-installed app | Unauthorized access to sensitive data** | $100,000 |
-    > |                                    | Kernel code execution | $150,000 |
-    > |                                    | CPU side channel attack | $250,000 |
-    > | Network attack with user interaction | One-click unauthorized access to sensitive data** | $150,000 |
-    > |                                 | One-click kernel code execution | $250,000|
-    > | Network attack without user interaction | Zero-click radio to kernel with physical proximity | $250,000 |
-    > |            | Zero-click unauthorized access to sensitive data** | $500,000 |
-    > | Zero-click kernel code execution with persistence and kernel PAC bypass | $1,000,000 |
-    > 
-    > ** Sensitive data includes contents of Contacts, Mail, Messages, Notes, Photos, or real-time or historical precise location data.
-*/}
 
 [Apple Bug Bounty]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
+[Apple Bug Bounty Payouts]: https://web.archive.org/web/20200104173530/https://developer.apple.com/security-bounty/
 [Apple Hall of Fame]: https://support.apple.com/en-gb/HT201536

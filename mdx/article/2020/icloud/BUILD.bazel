@@ -1,0 +1,40 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/transcode_web:rules.bzl", "transcode_web")
+load("//mdx:rules.bzl", "mdx_files")
+load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
+
+transcode_web(
+    name = "exploit_mobile_video_sources",
+    src = ":exploit_mobile.mp4",
+    out_base_name = "exploit_mobile_web",
+    video_scale = "720:1280",
+)
+
+hashed_public_assets(
+    name = "content_addressed",
+    outs = ["sources.js"],
+    assets = {
+        ":box.png": "box",
+        ":exploit_mobile_video_sources_jpg": "exploitMobilePoster",
+        ":exploit_mobile_video_sources_mp4": "exploitMobileMp4",
+        ":exploit_mobile_video_sources_ogv": "exploitMobileOgv",
+        ":exploit_mobile_video_sources_webm": "exploitMobileWebm",
+        ":valve_disclosure.png": "valveDisclosure",
+    },
+    public_dir = "sha256",
+)
+
+mdx_files(
+    name = "icloud",
+    srcs = glob(
+        ["**/*.mdx"],
+        allow_empty = True,
+    ),
+    assets = [":content_addressed_generated"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
