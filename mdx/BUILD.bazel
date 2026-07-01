@@ -1,5 +1,8 @@
+load("@npm//:prettier/package_json.bzl", prettier_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//mdx:rules.bzl", "mdx_files")
+
+prettier_bin.prettier_binary(name = "prettier")
 
 mdx_files(
     name = "mdx",
@@ -14,6 +17,7 @@ bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
+        "format.bzl",
         "rules.bzl",
     ],
 )
