@@ -68,3 +68,23 @@ it('preserves explicit heading ids for table-of-contents links', () => {
 	expect(link?.getAttribute('href')).toBe('#given-section');
 	expect(link?.textContent).toBe('Given Section');
 });
+
+it('uses inline heading id markers for table-of-contents links', () => {
+	act(() => {
+		root.render(
+			<TocHarness>
+				<H2>
+					<span data-heading-id="legacy_section" />
+					Legacy Section
+				</H2>
+			</TocHarness>
+		);
+	});
+
+	const heading = container.querySelector('h2');
+	const link = container.querySelector('li[data-toc-heading-level="2"] > a');
+
+	expect(heading?.id).toBe('legacy_section');
+	expect(link?.getAttribute('href')).toBe('#legacy_section');
+	expect(link?.textContent).toBe('Legacy Section');
+});
