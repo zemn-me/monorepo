@@ -392,9 +392,9 @@ dependencies = [
 
 [[package]]
 name = "cargo"
-version = "0.97.1"
+version = "0.97.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "17e884ee08e07c51a4ef6cb35894b29cdeb90616dedb16cde41e27874a8404e1"
+checksum = "8d51cfe527729385d4b7f73def856a959fcf436306fbd4c75aa5e1400feefa56"
 dependencies = [
  "anstream",
  "anstyle",
@@ -444,6 +444,7 @@ dependencies = [
  "os_info",
  "pasetors",
  "pathdiff",
+ "portable-atomic",
  "rand 0.10.1",
  "regex",
  "rusqlite",
