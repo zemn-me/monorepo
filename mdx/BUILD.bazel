@@ -1,6 +1,24 @@
+load("@npm//:prettier/package_json.bzl", prettier_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
 load("//md:rules.bzl", "md_files")
 load("//mdx:rules.bzl", "mdx_files")
+load("//ts:rules.bzl", "ts_project")
+
+prettier_bin.prettier_binary(name = "prettier")
+
+ts_project(
+    name = "format_headings_ts",
+    srcs = ["format_headings.ts"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+js_binary(
+    name = "format_headings",
+    data = [":format_headings_ts"],
+    entry_point = "format_headings.js",
+    visibility = ["//visibility:public"],
+)
 
 mdx_files(
     name = "mdx",
@@ -15,6 +33,7 @@ bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
+        "format.bzl",
         "rules.bzl",
     ],
 )
@@ -22,5 +41,11 @@ bazel_lint(
 md_files(
     name = "md",
     srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["format_headings.ts"],
     visibility = ["//:__subpackages__"],
 )
