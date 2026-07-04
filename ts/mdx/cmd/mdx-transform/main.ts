@@ -19,8 +19,202 @@ import { VFile } from 'vfile';
 import { map } from '#root/ts/iter/index.js';
 import { zip } from '#root/ts/math/vec.js';
 
+type HastNode = HastElement | HastParent | HastText;
+
+interface HastParent {
+	readonly type: string;
+	children?: HastNode[];
+}
+
+interface HastElement extends HastParent {
+	readonly type: 'element';
+	tagName: string;
+	properties?: Record<string, unknown>;
+	children?: HastNode[];
+}
+
+interface HastText {
+	readonly type: 'text';
+	value: string;
+}
+
 function collect(value: string, previous: string[]) {
 	return previous.concat([value]);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null;
+}
+
+function isParent(value: unknown): value is HastParent {
+	return isRecord(value) && Array.isArray(value.children);
+}
+
+function isElement(value: unknown, tagName?: string): value is HastElement {
+	return (
+		isRecord(value) &&
+		value.type === 'element' &&
+		typeof value.tagName === 'string' &&
+		(tagName === undefined || value.tagName === tagName)
+	);
+}
+
+function stringProperty(node: HastElement, name: string): string | undefined {
+	const value = node.properties?.[name];
+	return typeof value === 'string' ? value : undefined;
+}
+
+function hasProperty(node: HastElement, name: string): boolean {
+	return node.properties?.[name] !== undefined;
+}
+
+function isFootnotesSection(node: unknown): node is HastElement {
+	return (
+		isElement(node, 'section') &&
+		(hasProperty(node, 'dataFootnotes') ||
+			hasProperty(node, 'data-footnotes'))
+	);
+}
+
+function isFootnoteItem(node: unknown): node is HastElement {
+	return (
+		isElement(node, 'li') &&
+		stringProperty(node, 'id')?.startsWith('user-content-fn-') === true
+	);
+}
+
+function isFootnoteBackref(node: unknown): node is HastElement {
+	return isElement(node, 'a') && hasProperty(node, 'dataFootnoteBackref');
+}
+
+function replaceFootnoteBackrefs(node: HastNode) {
+	if (isFootnoteBackref(node)) {
+		node.children = [{ type: 'text', value: '↑' }];
+	}
+
+	if (!isParent(node)) return;
+
+	for (const child of node.children ?? []) {
+		replaceFootnoteBackrefs(child);
+	}
+}
+
+function findDeepestSectionWithRef(
+	node: HastNode,
+	refId: string,
+	currentSection?: HastElement
+): HastElement | undefined {
+	const nextSection =
+		isElement(node, 'section') && !isFootnotesSection(node)
+			? node
+			: currentSection;
+
+	if (isElement(node) && stringProperty(node, 'id') === refId) {
+		return nextSection;
+	}
+
+	if (!isParent(node)) {
+		return undefined;
+	}
+
+	for (const child of node.children ?? []) {
+		const section = findDeepestSectionWithRef(child, refId, nextSection);
+		if (section !== undefined) return section;
+	}
+
+	return undefined;
+}
+
+function cloneWithoutId(node: HastNode): HastNode {
+	if (!isElement(node)) return node;
+
+	const properties = { ...node.properties };
+	delete properties.id;
+
+	return {
+		...node,
+		properties,
+		children: node.children?.map(cloneWithoutId),
+	};
+}
+
+function createFootnotesSection(
+	label: HastNode | undefined,
+	items: HastElement[]
+): HastElement {
+	return {
+		type: 'element',
+		tagName: 'section',
+		properties: {
+			className: ['footnotes'],
+			dataFootnotes: true,
+		},
+		children: [
+			...(label === undefined ? [] : [label]),
+			{
+				type: 'element',
+				tagName: 'ol',
+				properties: {},
+				children: items,
+			},
+		],
+	};
+}
+
+function sectionFootnotes() {
+	return (tree: unknown) => {
+		if (!isParent(tree)) return;
+
+		const footnotesIndex = tree.children?.findIndex(isFootnotesSection);
+		if (footnotesIndex === undefined || footnotesIndex < 0) return;
+
+		const footnotes = tree.children?.[footnotesIndex];
+		if (!isFootnotesSection(footnotes)) return;
+
+		const label = footnotes.children?.find(child =>
+			isElement(child, 'h2')
+		);
+		const list = footnotes.children?.find(child => isElement(child, 'ol'));
+		if (!isElement(list, 'ol')) return;
+
+		const itemsBySection = new Map<HastElement, HastElement[]>();
+
+		for (const item of list.children ?? []) {
+			if (!isFootnoteItem(item)) continue;
+			replaceFootnoteBackrefs(item);
+
+			const footnoteId = stringProperty(item, 'id');
+			const refId = footnoteId?.replace(
+				'user-content-fn-',
+				'user-content-fnref-'
+			);
+			if (refId === undefined) continue;
+
+			const section = findDeepestSectionWithRef(tree, refId);
+			if (section === undefined) continue;
+
+			itemsBySection.set(section, [
+				...(itemsBySection.get(section) ?? []),
+				item,
+			]);
+		}
+
+		if (itemsBySection.size === 0) return;
+
+		let firstSection = true;
+		for (const [section, items] of itemsBySection) {
+			section.children = [
+				...(section.children ?? []),
+				createFootnotesSection(
+					firstSection ? label : cloneWithoutId(label),
+					items
+				),
+			];
+			firstSection = false;
+		}
+
+		tree.children?.splice(footnotesIndex, 1);
+	};
 }
 
 void new Command('mdx-transform')
@@ -71,6 +265,7 @@ void new Command('mdx-transform')
 							remarkMdxFrontmatter,
 							remarkSectionize,
 						],
+						rehypePlugins: [sectionFootnotes],
 					});
 
 					js.path = jsFile;

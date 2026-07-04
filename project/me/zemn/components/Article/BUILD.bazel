@@ -7,6 +7,7 @@ ts_project(
     srcs = [
         "article.tsx",
         "article_metadata.tsx",
+        "code_highlight.tsx",
         "heading.tsx",
         "mdx_article.tsx",
         "section.tsx",
@@ -22,6 +23,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//:node_modules/refractor",
         "//:node_modules/schema-dts",
         "//project/me/zemn/bio",
         "//project/me/zemn/components/Article/types",
@@ -40,7 +42,10 @@ bazel_lint(
 
 ts_project(
     name = "Article_tests",
-    srcs = ["heading_test.tsx"],
+    srcs = [
+        "code_highlight_test.tsx",
+        "heading_test.tsx",
+    ],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
         ":Article",
@@ -56,7 +61,10 @@ ts_project(
 jest_test(
     name = "tests",
     size = "small",
-    srcs = ["heading_test.js"],
+    srcs = [
+        "code_highlight_test.js",
+        "heading_test.js",
+    ],
     jsdom = True,
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [":Article_tests"],
@@ -67,6 +75,8 @@ filegroup(
     srcs = [
         "article.tsx",
         "article_metadata.tsx",
+        "code_highlight.tsx",
+        "code_highlight_test.tsx",
         "heading.tsx",
         "heading_test.tsx",
         "mdx_article.tsx",
