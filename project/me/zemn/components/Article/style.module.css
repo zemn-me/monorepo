@@ -8,6 +8,41 @@
 .container {
 	--article-grid-template: 1.75em repeat(12, minmax(0, 3em)) 1.75em;
 	--article-quote-indent: 1.25em;
+	--article-code-background: color-mix(
+		in oklab,
+		var(--highlight-color) 22%,
+		var(--background-color)
+	);
+	--article-code-border: color-mix(
+		in oklab,
+		var(--foreground-color) 18%,
+		transparent
+	);
+	--article-code-comment: color-mix(
+		in oklab,
+		var(--foreground-color) 58%,
+		var(--background-color)
+	);
+	--article-code-keyword: color-mix(
+		in oklab,
+		var(--link-color) 68%,
+		var(--foreground-color)
+	);
+	--article-code-literal: color-mix(
+		in oklab,
+		var(--visited-link-color) 62%,
+		var(--foreground-color)
+	);
+	--article-code-muted: color-mix(
+		in oklab,
+		var(--foreground-color) 72%,
+		var(--background-color)
+	);
+	--article-code-string: color-mix(
+		in oklab,
+		var(--visited-link-color) 78%,
+		var(--foreground-color)
+	);
 }
 
 @media print {
@@ -85,7 +120,7 @@
 /*
 	block level elements
 */
-.container :is(p, h1, h2, h3, h4, h5, h6, time, hr, table, pre, code) {
+.container :is(p, h1, h2, h3, h4, h5, h6, time, hr, table, pre, code, dl) {
 	grid-column: 2 / span 12;
 }
 
@@ -93,10 +128,18 @@
 	full width elements
 */
 .heroVideo,
-.container :is(img) {
+.container :is(img, picture, video) {
 	grid-column: 1 / -1;
 	width: 100%;
 	height: auto;
+}
+
+.container video {
+	justify-self: center;
+	max-height: 80vh;
+	max-width: 100%;
+	object-fit: contain;
+	width: auto;
 }
 
 .container li {
@@ -194,6 +237,44 @@
 		counter(toc-h5) ".";
 }
 
+.container ol[data-vulnerability-index] {
+	counter-reset: vulnerability-index;
+	margin-block: 0.5rem 2rem;
+	row-gap: 1.15rem;
+}
+
+.container ol[data-vulnerability-index] > li {
+	counter-increment: vulnerability-index;
+	display: block;
+	grid-column: 2 / span 12;
+	padding-inline-start: 2.35rem;
+	position: relative;
+}
+
+.container ol[data-vulnerability-index] > li::before {
+	content: counter(vulnerability-index, upper-roman) ".";
+	font-variant-numeric: tabular-nums;
+	font-weight: 650;
+	inset-inline-start: 0;
+	position: absolute;
+}
+
+.container ol[data-vulnerability-index] > li > [data-vulnerability-title] {
+	margin-block: 0 0.35rem;
+}
+
+.container ol[data-vulnerability-index] ul {
+	display: block;
+	margin-block: 0;
+	padding-inline-start: 1.1rem;
+}
+
+.container ol[data-vulnerability-index] ul > li {
+	display: list-item;
+	list-style: disc;
+	margin-block: 0.2rem;
+}
+
 .container article p {
 	counter-increment: article-paragraph;
 	position: relative;
@@ -215,4 +296,146 @@
 	text-align: end;
 	user-select: none;
 	white-space: nowrap;
+}
+
+.container dl {
+	display: grid;
+	margin-block: 1rem 1.5rem;
+	row-gap: 0.5rem;
+}
+
+.container dl > dt {
+	font-weight: 650;
+	margin-block-start: 0.75rem;
+}
+
+.container dl > dd {
+	margin-inline-start: 0;
+}
+
+.container dl > :is(dt, dd) > :first-child {
+	margin-block-start: 0;
+}
+
+.container dl > :is(dt, dd) > :last-child {
+	margin-block-end: 0;
+}
+
+.container article dl p {
+	counter-increment: none;
+}
+
+.container article dl p::before {
+	content: none;
+}
+
+.container article ol[data-vulnerability-index] p {
+	counter-increment: none;
+}
+
+.container article ol[data-vulnerability-index] p::before {
+	content: none;
+}
+
+.container section[data-footnotes] {
+	border-block-start: 1px solid var(--article-code-border);
+	font-size: 0.86em;
+	grid-column: 2 / span 12;
+	grid-template-columns: minmax(0, 1fr);
+	line-height: 1.45;
+	margin-block-start: 2rem;
+	padding-block-start: 0.85rem;
+}
+
+.container section[data-footnotes] > h2 {
+	block-size: 1px;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	inline-size: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.container section[data-footnotes] :is(ol, li, p) {
+	grid-column: 1 / -1;
+}
+
+.container section[data-footnotes] ol {
+	counter-reset: footnote;
+	display: block;
+	margin-block: 0;
+	padding-inline-start: 0;
+}
+
+.container section[data-footnotes] li {
+	counter-increment: footnote;
+	display: block;
+	list-style: none;
+	margin-block: 0.65rem;
+	padding-inline-start: 1.65rem;
+	position: relative;
+}
+
+.container section[data-footnotes] li::before {
+	content: counter(footnote) ".";
+	font-variant-numeric: tabular-nums;
+	font-weight: 650;
+	inset-block-start: 0.35rem;
+	inset-inline-start: 0;
+	position: absolute;
+}
+
+.container section[data-footnotes] p {
+	counter-increment: none;
+	margin-block: 0.35rem;
+}
+
+.container section[data-footnotes] p::before {
+	content: none;
+	display: none;
+}
+
+.container pre {
+	background: var(--article-code-background);
+	border: 1px solid var(--article-code-border);
+	border-radius: 0.45rem;
+	overflow-wrap: anywhere;
+	overflow-x: hidden;
+	padding: 1rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.container pre code {
+	color: inherit;
+	display: block;
+	font-size: 0.9rem;
+	line-height: 1.55;
+	white-space: inherit;
+}
+
+.codeComment {
+	color: var(--article-code-comment);
+	font-style: italic;
+}
+
+.codeKeyword,
+.codeTag {
+	color: var(--article-code-keyword);
+	font-weight: 650;
+}
+
+.codeLiteral,
+.codeNumber {
+	color: var(--article-code-literal);
+}
+
+.codeOperator,
+.codePunctuation {
+	color: var(--article-code-muted);
+}
+
+.codeString {
+	color: var(--article-code-string);
 }

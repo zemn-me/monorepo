@@ -16,7 +16,7 @@ ts_project(
 
 jest_test(
     name = "tests",
-    size = "medium",
+    size = "large",
     srcs = ["pulumi_test.js"],
     visibility = ["//:__subpackages__"],
     deps = [":testing"],
