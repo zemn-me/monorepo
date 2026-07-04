@@ -5,6 +5,10 @@ import { createPortal } from 'react-dom';
 import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context.js';
 
 type BaseHeadingProps = JSX.IntrinsicElements['h1'];
+type HeadingMarkerProps = {
+	readonly children?: ReactNode;
+	readonly 'data-heading-id'?: unknown;
+};
 
 export interface HeadingProps extends BaseHeadingProps {
 	readonly level: 1 | 2 | 3 | 4 | 5;
@@ -29,6 +33,26 @@ function nodeText(node: ReactNode): string {
 		.join(' ');
 }
 
+function nodeHeadingId(node: ReactNode): string | undefined {
+	for (const child of Children.toArray(node)) {
+		if (!isValidElement<HeadingMarkerProps>(child)) {
+			continue;
+		}
+
+		const headingId = child.props['data-heading-id'];
+		if (typeof headingId === 'string') {
+			return headingId;
+		}
+
+		const nestedHeadingId = nodeHeadingId(child.props.children);
+		if (nestedHeadingId !== undefined) {
+			return nestedHeadingId;
+		}
+	}
+
+	return undefined;
+}
+
 function idPart(value: string): string {
 	return value
 		.normalize('NFKD')
@@ -43,7 +67,9 @@ export function Heading({ level, children, id, ...props }: HeadingProps) {
 	const reactId = useId();
 	const fallbackId = idPart(reactId) || 'heading';
 	const headingId =
-		id ?? `${idPart(nodeText(children)) || 'heading'}-${fallbackId}`;
+		id ??
+		nodeHeadingId(children) ??
+		`${idPart(nodeText(children)) || 'heading'}-${fallbackId}`;
 	const href = `#${encodeURIComponent(headingId)}`;
 
 	const element = {
