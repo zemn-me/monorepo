@@ -1,6 +1,7 @@
 load("@npm//:@biomejs/biome/package_json.bzl", biome_bin = "bin")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -27,5 +28,12 @@ bazel_lint(
         "BUILD.bazel",
         "biome.bzl",
         "linters.bzl",
+        "markdown_references.bzl",
     ],
+)
+
+md_files(
+    name = "bzl_lint",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

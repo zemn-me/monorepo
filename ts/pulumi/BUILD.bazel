@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
@@ -79,4 +80,10 @@ genrule(
     cmd = """
 cp $< $@
     """,
+)
+
+md_files(
+    name = "ts_pulumi",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

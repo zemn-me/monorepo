@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
@@ -32,4 +33,10 @@ js_library(
     visibility = [
         "//:__subpackages__",
     ],
+)
+
+md_files(
+    name = "ts_do_sync",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -1,6 +1,7 @@
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:pkg.bzl", "pkg_zip")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = ["//ci:__subpackages__"])
 
@@ -27,4 +28,10 @@ pkg_zip(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "project_ck3_recursive_vassals",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

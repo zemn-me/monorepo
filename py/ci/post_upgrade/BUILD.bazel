@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
 py_library(
@@ -28,4 +29,10 @@ py_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "py_ci_post_upgrade",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -1,4 +1,5 @@
 load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
+load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_library")
 
 # Add rules here to build your software
@@ -85,9 +86,7 @@ exports_files(
         "tsconfig.json",
         ".gitignore",
         ".editorconfig",
-        "css_loader.d.ts",
         ".git",
-        "jsconfig.json",
     ],
     visibility = ["//visibility:public"],
 )
@@ -192,6 +191,7 @@ gazelle_binary(
         "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
         "//go/gazelle/bazel",
         "//go/gazelle/css",
+        "//go/gazelle/md",
         "//go/gazelle/ts",
         "//go/gazelle/ts/config",
         "//go/gazelle/js",
@@ -281,3 +281,19 @@ binary_with_args(
 # gazelle:resolve typescript typescript #root/third_party/com/googleapis/people/api_client.gen.js //third_party/com/googleapis/people:ts_client
 # gazelle:map_kind proto_library proto_library @com_google_protobuf//bazel:proto_library.bzl
 # gazelle:resolve typescript typescript #root/project/me/zemn/api/cmd/api/ApiZemnMeLambdaImage.js //project/me/zemn/api/cmd/api:oci_image
+
+md_files(
+    name = "md",
+    srcs = [
+        "AGENTS.md",
+        "README.md",
+        "SECURITY.md",
+    ],
+    refs = [
+        "//sh/bin:buildifier",
+        "//sh/bin:go",
+        "//sh/bin:pnpm",
+        "//sh/bin:bazel",
+    ],
+    visibility = ["//:__subpackages__"],
+)

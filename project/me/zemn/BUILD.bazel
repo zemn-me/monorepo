@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_itest_service", "next_itest_service_dev", "next_project")
 
@@ -139,5 +140,14 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "project_me_zemn",
+    srcs = [
+        "AGENTS.md",
+        "README.md",
+    ],
     visibility = ["//:__subpackages__"],
 )

@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -69,4 +70,11 @@ js_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["README.md"],
+    refs = ["//.github/workflows:presubmit.yml"],
+    visibility = ["//:__subpackages__"],
 )

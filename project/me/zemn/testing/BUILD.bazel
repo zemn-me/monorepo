@@ -1,6 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -89,5 +90,11 @@ go_test(
 filegroup(
     name = "all_ts_srcs",
     srcs = ["browser_test.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "project_me_zemn_testing",
+    srcs = ["AGENTS.md"],
     visibility = ["//:__subpackages__"],
 )

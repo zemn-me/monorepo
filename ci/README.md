@@ -1,6 +1,6 @@
 CI
 --
 
-For more detail, it's best to read [ci.yml].
+For more detail, it's best to read [presubmit.yml].
 
-[ci.yml]: /.github/workflows/ci.yml
+[presubmit.yml]: /.github/workflows/presubmit.yml

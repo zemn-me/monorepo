@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
 
@@ -54,5 +55,11 @@ filegroup(
         "index.ts",
         "kenwood.tsx",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "project_me_zemn_assets_kenwood",
+    srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
 )
