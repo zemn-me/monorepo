@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = [
@@ -56,4 +57,10 @@ npm_pkg(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "ts_knowitwhenyouseeit",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

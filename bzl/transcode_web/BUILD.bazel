@@ -1,6 +1,7 @@
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
+load("//md:rules.bzl", "md_files")
 
 genrule(
     name = "bitexact_source",
@@ -69,4 +70,10 @@ bazel_lint(
         "BUILD.bazel",
         "rules.bzl",
     ],
+)
+
+md_files(
+    name = "bzl_transcode_web",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

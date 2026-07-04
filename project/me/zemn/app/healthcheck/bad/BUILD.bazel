@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -27,4 +28,10 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "project_me_zemn_app_healthcheck_bad",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

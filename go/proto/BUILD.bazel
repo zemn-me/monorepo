@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
+load("//md:rules.bzl", "md_files")
 
 go_library(
     name = "proto_lib",
@@ -18,4 +19,10 @@ go_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "go_proto",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -41,8 +41,8 @@ Remote Caching
 -------------------------------------------------------------------------------
 
 The project is configured to use a BuildBuddy cache for faster build times. If
-you have an account, you can run `BUILDBUDDY_API_KEY=EDIT_AND_REPLACE
-./.github/workflows/bootstrap_remote_cache.sh` from the project root, and it
+you have an account, you can run BUILDBUDDY_API_KEY=EDIT_AND_REPLACE
+<./.github/workflows/bootstrap_remote_cache.sh> from the project root, and it
 will drop an .auth.bazelrc in there.
 
 Once that's done, edit the file and replace EDIT_AND_REPLACE with your

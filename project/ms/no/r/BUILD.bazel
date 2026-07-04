@@ -1,0 +1,13 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+
+md_files(
+    name = "project_ms_no_r",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

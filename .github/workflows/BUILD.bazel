@@ -1,5 +1,8 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//yml:test.bzl", "yaml_lint_test")
+
+exports_files(["presubmit.yml"])
 
 yaml_lint_test(
     name = "validation",
@@ -8,4 +11,10 @@ yaml_lint_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "github_workflows",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

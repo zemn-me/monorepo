@@ -1,6 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
@@ -74,5 +75,11 @@ ts_project(
 filegroup(
     name = "all_ts_srcs",
     srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "ts_pulumi_pleaseintroducemetoyour_dog",
+    srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
 )

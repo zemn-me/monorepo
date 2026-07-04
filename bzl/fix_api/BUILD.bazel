@@ -1,5 +1,6 @@
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 
 sh_binary(
     name = "fix_all",
@@ -10,4 +11,10 @@ sh_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "bzl_fix_api",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -1,3 +1,5 @@
+load("//md:rules.bzl", "md_files")
+
 "aliases for tasks so they dont get broken"
 
 load("//bzl:rules.bzl", "bazel_lint")
@@ -25,4 +27,10 @@ alias(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "vscode",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

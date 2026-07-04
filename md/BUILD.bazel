@@ -1,0 +1,13 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["rules.bzl"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)
