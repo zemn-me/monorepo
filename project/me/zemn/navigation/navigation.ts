@@ -52,6 +52,10 @@ export const articleLinks: readonly NavigationLink[] = [
 		label: 'Missing',
 	},
 	{
+		href: '/article/2020/icloud',
+		label: 'How to Hack Apple ID',
+	},
+	{
 		href: '/article/2019/cors',
 		label: 'If CORS is just a header...',
 	},
