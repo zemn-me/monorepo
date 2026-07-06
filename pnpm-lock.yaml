@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.250.0
-    version: 43.250.0(typanion@3.14.0)
+    specifier: 43.251.3
+    version: 43.251.3(typanion@3.14.0)
   sharp:
     specifier: 0.35.1
     version: 0.35.1
@@ -4826,7 +4826,7 @@ packages:
     resolution: {integrity: sha512-beysRwqyNh/6ETeeF6Qr1q9fVMc+j+oXT5vh2PaeX+ESm8j9Sw5ngtTxy5dHNZV+4rqywdz0qwEos623bB6Gew==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
-      fs-extra: 11.3.5
+      fs-extra: 11.3.6
       toml-eslint-parser: 1.0.3
       upath: 3.0.7
       zod: 4.4.3
@@ -4858,7 +4858,7 @@ packages:
       '@renovatebot/osv-offline-db': 3.0.4
       adm-zip: 0.5.17
       debug: 4.4.3(supports-color@10.2.2)
-      fs-extra: 11.3.5
+      fs-extra: 11.3.6
       got: 15.1.0
       luxon: 3.7.2
     transitivePeerDependencies:
@@ -6775,8 +6775,8 @@ packages:
     engines: {node: '>=12.0'}
     dev: true
 
-  /ae-cvss-calculator@1.0.12:
-    resolution: {integrity: sha512-YVO+dhb8sZubNeL9pqSlN5hyZGC8hkAwnThnd3EimUGZtJEMeuy4kMb7zMCAsBiMr/RxklH0oY7DCsFV/B7peg==}
+  /ae-cvss-calculator@1.0.13:
+    resolution: {integrity: sha512-QnPO1O5gZ/1NM+X4fbfqN/y5rImEZ8CSkbSk7Arv4RrmxPzxLXr9RSLmsQJykDtXFUXn9wHLxC0/fe/pO78t3w==}
     dev: true
 
   /agent-base@6.0.2:
@@ -13893,8 +13893,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.250.0(typanion@3.14.0):
-    resolution: {integrity: sha512-7V72yAkfFPQua8pLlFONGfW5byVLXEDLtVcSSioJMMPEgbZbMGRREDVE74hdxRQPIC9CHzzCeQuDdhKRmswRSA==}
+  /renovate@43.251.3(typanion@3.14.0):
+    resolution: {integrity: sha512-TAgaJGO3k5Knvgq5H8N4ETx6ksCmDj20JIxK9OIKVlWm7q6o5hI+osQqV1VjnfkpKe5rl9BRUu8ZvB+pfQDA/g==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -13936,7 +13936,7 @@ packages:
       '@yarnpkg/core': 4.9.0(typanion@3.14.0)
       '@yarnpkg/parsers': 3.0.3
       adm-zip: 0.5.17
-      ae-cvss-calculator: 1.0.12
+      ae-cvss-calculator: 1.0.13
       agentkeepalive: 4.6.0
       async-mutex: 0.5.0
       aws4: 1.13.2
