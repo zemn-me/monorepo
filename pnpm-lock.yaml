@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.251.3
-    version: 43.251.3(typanion@3.14.0)
+    specifier: 43.252.1
+    version: 43.252.1(typanion@3.14.0)
   sharp:
     specifier: 0.35.1
     version: 0.35.1
@@ -4842,8 +4842,8 @@ packages:
       moo: 0.5.3
     dev: true
 
-  /@renovatebot/osv-offline-db@3.0.4:
-    resolution: {integrity: sha512-VUwjP52OTICceWXjl2rVhMuNbBSuqsAVwgHpPXio6Kios0qUHsk7lKORt9bchat3BIFBf9tf7C1EiUEeoP5QYg==}
+  /@renovatebot/osv-offline-db@3.0.5:
+    resolution: {integrity: sha512-AGHe9dqmidu3ccckMXE8o5eI/eJvxflLr9u9rxBwNKb26NhQv0vTnm/TxOk6IRbsTdZWKHeWuCnyPhdVN8pJKw==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
       debug: 4.4.3(supports-color@10.2.2)
@@ -4851,11 +4851,11 @@ packages:
       - supports-color
     dev: true
 
-  /@renovatebot/osv-offline@3.0.4:
-    resolution: {integrity: sha512-O2GzqECIyNA3PMAqb/4Ez/n4PmEu54g8iEkteTHKaNYN2GKDwzp6UXA8sYqH+8qy/jbpQed1sKFimu0Z5iQ2Sg==}
+  /@renovatebot/osv-offline@3.0.5:
+    resolution: {integrity: sha512-RRg90Cce+A7tAmdbREZjVhSqgDFHYGm8qFnIwJOanozswfHpVk57yg7SSF11RjzGMpBV9j3HvgjtTYkMGCXMOg==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
-      '@renovatebot/osv-offline-db': 3.0.4
+      '@renovatebot/osv-offline-db': 3.0.5
       adm-zip: 0.5.17
       debug: 4.4.3(supports-color@10.2.2)
       fs-extra: 11.3.6
@@ -13893,8 +13893,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.251.3(typanion@3.14.0):
-    resolution: {integrity: sha512-TAgaJGO3k5Knvgq5H8N4ETx6ksCmDj20JIxK9OIKVlWm7q6o5hI+osQqV1VjnfkpKe5rl9BRUu8ZvB+pfQDA/g==}
+  /renovate@43.252.1(typanion@3.14.0):
+    resolution: {integrity: sha512-VMp8vXuiK5G2/rEInBZXj7M/hth4MG3URL4dyp0/iRYboRkqQ8t2Fmru6B59qk6gQ5+N6Wm4YwYSPGvzefAzhA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -13928,7 +13928,7 @@ packages:
       '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
       '@renovatebot/detect-tools': 4.0.8
       '@renovatebot/good-enough-parser': 2.0.1
-      '@renovatebot/osv-offline': 3.0.4
+      '@renovatebot/osv-offline': 3.0.5
       '@renovatebot/pep440': 5.0.0
       '@renovatebot/pgp': 1.3.14
       '@renovatebot/ruby-semver': 5.0.0
