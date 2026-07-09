@@ -94,6 +94,17 @@ it('keeps the menu open when tapping inside it', () => {
 	expect(details.open).toBe(true);
 });
 
+it('renders top content before site navigation sections', () => {
+	act(() => {
+		root.render(<GladeMenu topContent={<section>Article contents</section>} />);
+	});
+
+	const menu = container.querySelector('.hamburgerMenu')!;
+
+	expect(menu.firstElementChild?.textContent).toBe('Article contents');
+	expect(menu.children[1]?.querySelector('h2')?.textContent).toBe('Pages');
+});
+
 it('retracts the menu when tapping outside it', () => {
 	act(() => {
 		root.render(<GladeMenu />);

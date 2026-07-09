@@ -1,5 +1,6 @@
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { ReactNode } from 'react';
 import { useEffect, useRef } from 'react';
 
 import style from '#root/project/me/zemn/components/Glade/menu.module.css';
@@ -9,7 +10,11 @@ import { useGetMeScopes } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import { navSections } from '#root/project/me/zemn/navigation/navigation.js';
 
-export function GladeMenu() {
+export interface GladeMenuProps {
+	readonly topContent?: ReactNode;
+}
+
+export function GladeMenu({ topContent }: GladeMenuProps) {
 	const detailsRef = useRef<HTMLDetailsElement | null>(null);
 	const [fut_idToken] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
@@ -62,6 +67,7 @@ export function GladeMenu() {
 					</span>
 				</summary>
 				<div className={style.hamburgerMenu}>
+					{topContent}
 					{visibleSections.map(section => (
 						<section
 							aria-label={section.label}
