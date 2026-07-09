@@ -1449,7 +1449,7 @@
     "@@rules_oci+//oci:extensions.bzl%oci": {
       "general": {
         "bzlTransitiveDigest": "1RPoIyBW6YTaeX2F2b5rL6MwP3HBufo/QMmENbCpwk4=",
-        "usagesDigest": "JZeAy2tLitcl1x0E3aU4xPjLqSDdNOQSCDlI+sjs5ew=",
+        "usagesDigest": "USDLDgmCYgt9OK6X+/P5fjcqBeGcC7vzztjZgjdYQNA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -1546,7 +1546,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base-debian12",
-              "identifier": "sha256:e7e678c88c59e70e105a46549bb3fbfb3d732ee3b4afd3a19fdab2e15afaa6b3",
+              "identifier": "sha256:9c05cfd65f41c93a909ea67eb05b920a3b838780ea55df5421d48295d98ff957",
               "platform": "linux/amd64",
               "target_name": "distroless_debian12_linux_amd64",
               "bazel_tags": []
@@ -1559,7 +1559,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base-debian12",
-              "identifier": "sha256:e7e678c88c59e70e105a46549bb3fbfb3d732ee3b4afd3a19fdab2e15afaa6b3",
+              "identifier": "sha256:9c05cfd65f41c93a909ea67eb05b920a3b838780ea55df5421d48295d98ff957",
               "platform": "linux/arm64/v8",
               "target_name": "distroless_debian12_linux_arm64_v8",
               "bazel_tags": []
@@ -1572,7 +1572,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base-debian12",
-              "identifier": "sha256:e7e678c88c59e70e105a46549bb3fbfb3d732ee3b4afd3a19fdab2e15afaa6b3",
+              "identifier": "sha256:9c05cfd65f41c93a909ea67eb05b920a3b838780ea55df5421d48295d98ff957",
               "platform": "linux/arm/v7",
               "target_name": "distroless_debian12_linux_arm_v7",
               "bazel_tags": []
@@ -1585,7 +1585,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base-debian12",
-              "identifier": "sha256:e7e678c88c59e70e105a46549bb3fbfb3d732ee3b4afd3a19fdab2e15afaa6b3",
+              "identifier": "sha256:9c05cfd65f41c93a909ea67eb05b920a3b838780ea55df5421d48295d98ff957",
               "platform": "linux/s390x",
               "target_name": "distroless_debian12_linux_s390x",
               "bazel_tags": []
@@ -1598,7 +1598,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base-debian12",
-              "identifier": "sha256:e7e678c88c59e70e105a46549bb3fbfb3d732ee3b4afd3a19fdab2e15afaa6b3",
+              "identifier": "sha256:9c05cfd65f41c93a909ea67eb05b920a3b838780ea55df5421d48295d98ff957",
               "platform": "linux/ppc64le",
               "target_name": "distroless_debian12_linux_ppc64le",
               "bazel_tags": []
@@ -1612,7 +1612,7 @@
               "scheme": "https",
               "registry": "gcr.io",
               "repository": "distroless/base-debian12",
-              "identifier": "sha256:e7e678c88c59e70e105a46549bb3fbfb3d732ee3b4afd3a19fdab2e15afaa6b3",
+              "identifier": "sha256:9c05cfd65f41c93a909ea67eb05b920a3b838780ea55df5421d48295d98ff957",
               "platforms": {
                 "@@platforms//cpu:x86_64": "@distroless_debian12_linux_amd64",
                 "@@platforms//cpu:arm64": "@distroless_debian12_linux_arm64_v8",
