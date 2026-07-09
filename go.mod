@@ -9,14 +9,14 @@ require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
 	github.com/aws/aws-lambda-go v1.54.0
 	github.com/aws/aws-sdk-go-v2 v1.42.1
-	github.com/aws/aws-sdk-go-v2/config v1.32.27
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.26
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.50
-	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.78.2
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.59.2
-	github.com/aws/aws-sdk-go-v2/service/kms v1.53.6
-	github.com/aws/aws-sdk-go-v2/service/lambda v1.94.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.104.2
+	github.com/aws/aws-sdk-go-v2/config v1.32.28
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.27
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.51
+	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.79.0
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.60.0
+	github.com/aws/aws-sdk-go-v2/service/kms v1.54.0
+	github.com/aws/aws-sdk-go-v2/service/lambda v1.95.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.105.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.51.3
 	github.com/bazelbuild/bazel-watcher v0.29.0
@@ -36,7 +36,6 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/itchyny/gojq v0.12.17
 	github.com/nyaruka/phonenumbers v1.8.0
-	github.com/nyaruka/phonenumbers/v2 v2.0.2
 	github.com/oapi-codegen/nethttp-middleware v1.1.2
 	github.com/oapi-codegen/oapi-codegen/v2 v2.7.2
 	github.com/oapi-codegen/runtime v1.4.2
@@ -60,16 +59,16 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.30 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.30 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.31 // indirect
-	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.34.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.35.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.13 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.23 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.12.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.30 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.31 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.2.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.31.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.36.8 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.43.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.3.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.32.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.37.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.44.0 // indirect
 	github.com/aws/smithy-go v1.27.3 // indirect
 	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-2 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
