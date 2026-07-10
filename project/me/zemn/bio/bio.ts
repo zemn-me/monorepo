@@ -211,6 +211,15 @@ export const Bio = {
 			tags: [talk, work, security],
 		},
 		{
+			id: '5e49ca23-9b5f-4389-905a-f01ee90340da',
+			date: date(24, 'jun', 2026),
+			title: en`Beyond Prompt Injection: Agentic AI Attacks in the Real World`,
+			publisher: en`YouTube`,
+			description: en`Video of Stanford talk with Adrian Spânu on the present and future of prompt injection.`,
+			url: url`https://youtu.be/lgpz6oeHFKc?is=lNQBG14-WIGUWvHl`,
+			tags: [talk, work, security],
+		},
+		{
 			id: '431c28bb-a3ef-48a3-9c66-5e42fc4d954c',
 			description: en`Talk with Adrian Spânu on the present and future of prompt injection. One of the most attended talks at the conference. Q&A lasted for 2 hours.`,
 			address: 'Marina Bay Sands, 10 Bayfront Ave, Singapore 018956',
