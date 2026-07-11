@@ -44,7 +44,7 @@ require (
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.9
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/image v0.43.0
+	golang.org/x/image v0.44.0
 	golang.org/x/sync v0.22.0
 	golang.org/x/tools v0.47.1-0.20260707181000-a299dadba899
 	golang.org/x/tools/gopls v0.23.0
@@ -126,7 +126,7 @@ require (
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260625142307-59b4966ccb57 // indirect
-	golang.org/x/text v0.38.0 // indirect
+	golang.org/x/text v0.40.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	golang.org/x/vuln v1.4.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
