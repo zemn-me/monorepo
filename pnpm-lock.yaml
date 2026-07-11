@@ -146,8 +146,8 @@ dependencies:
     specifier: 0.4.17
     version: 0.4.17
   npm:
-    specifier: 11.18.0
-    version: 11.18.0
+    specifier: 12.0.0
+    version: 12.0.0
   nuqs:
     specifier: 1.20.0
     version: 1.20.0(next@14.2.35)
@@ -12558,9 +12558,9 @@ packages:
       unicorn-magic: 0.3.0
     dev: true
 
-  /npm@11.18.0:
-    resolution: {integrity: sha512-T67M4L5wNm0cZ7EBLErcEkY1SmzEW/WJ+SADBzsFUY1UdAPfFHXFQtZ6SEXiK0+vzXysCvAsepbMaBTwnrAD+w==}
-    engines: {node: ^20.17.0 || >=22.9.0}
+  /npm@12.0.0:
+    resolution: {integrity: sha512-qzvPQfNSY7louiM6rv7dL0hi5esBGLn1lLwxbdyL5XOIssWzoYMwn8xqvWhYcZL6onTkenYSxrtKxsFrFbUFyw==}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
     hasBin: true
     dev: false
     bundledDependencies:
@@ -12568,6 +12568,7 @@ packages:
       - '@npmcli/arborist'
       - '@npmcli/config'
       - '@npmcli/fs'
+      - '@npmcli/git'
       - '@npmcli/map-workspaces'
       - '@npmcli/metavuln-calculator'
       - '@npmcli/package-json'
@@ -12577,9 +12578,11 @@ packages:
       - '@sigstore/tuf'
       - abbrev
       - archy
+      - bin-links
       - cacache
       - chalk
       - ci-info
+      - diff
       - fastest-levenshtein
       - fs-minipass
       - glob
