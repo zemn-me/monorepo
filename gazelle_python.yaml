@@ -89,6 +89,7 @@ manifest:
     librt.internal: librt
     librt.random: librt
     librt.strings: librt
+    librt.threading: librt
     librt.time: librt
     librt.vecs: librt
     markupsafe: markupsafe
@@ -173,4 +174,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 23cfd563ab29b8f3c1ed31bb0d7c761a86d0e87f998c22d58b65d375a6635a22
+integrity: 8ad2a2940990ce5d03d9b8b73a3b127976255325dc377950bd04eded0320d65b
