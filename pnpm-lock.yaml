@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.259.3
-    version: 43.259.3(typanion@3.14.0)
+    specifier: 43.260.2
+    version: 43.260.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.1
     version: 0.35.1
@@ -4826,13 +4826,13 @@ packages:
       - supports-color
     dev: false
 
-  /@renovatebot/detect-tools@4.0.8:
-    resolution: {integrity: sha512-beysRwqyNh/6ETeeF6Qr1q9fVMc+j+oXT5vh2PaeX+ESm8j9Sw5ngtTxy5dHNZV+4rqywdz0qwEos623bB6Gew==}
+  /@renovatebot/detect-tools@4.0.10:
+    resolution: {integrity: sha512-hGIZahyyO3zahpr3a2kRkNvDVXwW1gZBN6YYbql6OXlN1gFRQz7/jgn+/ImtYvP84P4tQxc9U4jS5/Qurvl0Nw==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
       fs-extra: 11.3.6
       toml-eslint-parser: 1.0.3
-      upath: 3.0.7
+      upath: 3.0.8
       zod: 4.4.3
     dev: true
 
@@ -13901,8 +13901,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.259.3(typanion@3.14.0):
-    resolution: {integrity: sha512-feh1AkgvqOnu2hZZiT+25l7VCdkNYh3LL9KihilgfHNthdbNjR3ztVw4oSJQX9Kv3m1eGeZfGlAUBZD4f+c15g==}
+  /renovate@43.260.2(typanion@3.14.0):
+    resolution: {integrity: sha512-3iSqhrnWhkFaSW1LWP1/cbhHcSvFy8fjOmuPhifndCSr+GHBNm9sNlW/ETJS8H4qEYTF2WD/xZznRHG3DxS9BA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -13934,7 +13934,7 @@ packages:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
-      '@renovatebot/detect-tools': 4.0.8
+      '@renovatebot/detect-tools': 4.0.10
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.8
       '@renovatebot/pep440': 5.0.0
@@ -14017,7 +14017,7 @@ packages:
       strip-json-comments: 5.0.3
       toml-eslint-parser: 1.0.3
       tslib: 2.8.1
-      upath: 3.0.7
+      upath: 3.0.8
       url-join: 5.0.0
       validate-npm-package-name: 7.0.2
       xmldoc: 2.0.3
@@ -15644,8 +15644,8 @@ packages:
     resolution: {integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==}
     engines: {node: '>=4'}
 
-  /upath@3.0.7:
-    resolution: {integrity: sha512-VjBBquch25nUGMuVBpOb2Cj3gc8Kb7lJBqbsXR/0anZ/5uJsL14Kpth9JKfnBsckxCfgIp6hPvcvvmZ97R9X7g==}
+  /upath@3.0.8:
+    resolution: {integrity: sha512-YAsrLMIlhfSCm9rga5TZsJ1mXgahs7N0qOTokzU8mFz35hUrYMvVkaEPefI3rEb/vkAWAOj1Km/qdije9RC1kQ==}
     engines: {node: '>=20'}
     dev: true
 
