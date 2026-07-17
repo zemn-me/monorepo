@@ -436,8 +436,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.262.2
-    version: 43.262.2(typanion@3.14.0)
+    specifier: 43.263.4
+    version: 43.263.4(typanion@3.14.0)
   sharp:
     specifier: 0.35.1
     version: 0.35.1
@@ -13427,8 +13427,8 @@ packages:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
 
-  /re2@1.25.0:
-    resolution: {integrity: sha512-mtxKjWS+VYIt2ijgt6ohEdwzNlGPom1whyaEKJD40cBc/wqkO1vJoOyK539Qb8Xa9m4GA6hiPGDIbW/d3egSRQ==}
+  /re2@1.25.1:
+    resolution: {integrity: sha512-/OUvD2RHfRIJGSdKB67chVmvhMHiXB9Xb0gSnQbN6fimFM/c50r/gmxrXFlMKbZKJ5s8SYNqLAojE7GvbqEl7g==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
     dependencies:
       install-artifact-from-github: 1.7.0
@@ -13901,8 +13901,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.262.2(typanion@3.14.0):
-    resolution: {integrity: sha512-Fcrf6/tQm/83HjM0JLJFPlqc7M/xjWSzphHd5AlmzBqyR7WO8wPgypsYDtinc+D14LDHPZPKvBln3sFprLm4ig==}
+  /renovate@43.263.4(typanion@3.14.0):
+    resolution: {integrity: sha512-ReNNbNasEkEyWG2WVE4Ya+FHARHK0Pih0778olpCT/01uLtF14cJp6mc0JYcMDHHffhxAPCU8oPbCAbvsZz1cQ==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14025,7 +14025,7 @@ packages:
       zod: 4.4.3
     optionalDependencies:
       openpgp: 6.3.1
-      re2: 1.25.0
+      re2: 1.25.1
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@openpgp/web-stream-tools'
