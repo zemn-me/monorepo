@@ -22,7 +22,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//project/me/zemn/components/Article",
+        "//project/me/zemn/components/Article",  # keep
         "//ts/next.js/types/next-compiled",
     ],
 )

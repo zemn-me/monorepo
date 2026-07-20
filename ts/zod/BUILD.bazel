@@ -18,7 +18,7 @@ ts_project(
         "//:node_modules/base64-js",
         "//:node_modules/nuqs",
         "//:node_modules/zod",
-        "//ts",
+        "//ts",  # keep
     ],
 )
 

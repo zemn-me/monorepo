@@ -32,7 +32,7 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
-        "//ts/result",
+        "//ts/result",  # keep
     ],
 )
 
