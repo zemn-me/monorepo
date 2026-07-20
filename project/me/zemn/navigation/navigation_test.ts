@@ -2,8 +2,10 @@ import { expect, it } from '@jest/globals';
 
 import {
 	accountLinks,
+	articleLinks,
 	experimentLinks,
 	navSections,
+	releasedArticleLinks,
 } from '#root/project/me/zemn/navigation/navigation.js';
 
 function allMenuHrefs(): string[] {
@@ -49,7 +51,6 @@ it('includes public content and redirect pages', () => {
 		'/article',
 		'/article/2014/csp',
 		'/article/2019/cors',
-		'/article/2020/icloud',
 		'/article/2024/clean',
 		'/article/2024/missing',
 		'/availability',
@@ -63,6 +64,30 @@ it('includes public content and redirect pages', () => {
 	];
 
 	expect(expected.filter(href => !hrefs.has(href))).toEqual([]);
+});
+
+it('hides unreleased articles from the menu', () => {
+	expect(articleLinks).toContainEqual(
+		expect.objectContaining({
+			href: '/article/2020/icloud',
+			released: false,
+		})
+	);
+	expect(releasedArticleLinks.map(link => link.href)).not.toContain(
+		'/article/2020/icloud'
+	);
+	expect(allMenuHrefs()).not.toContain('/article/2020/icloud');
+});
+
+it('only includes released article links in the menu', () => {
+	const expected = articleLinks
+		.filter(link => link.released)
+		.map(link => link.href);
+	const actual = navSections.find(section => section.label === 'Articles')?.links.map(
+		link => link.href
+	);
+
+	expect(actual).toEqual(expected);
 });
 
 it('keeps private pages scoped', () => {

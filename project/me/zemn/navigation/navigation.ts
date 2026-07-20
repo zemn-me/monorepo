@@ -19,6 +19,10 @@ export interface NavigationLink {
 	readonly requiredScope?: RequiredScope;
 }
 
+export interface ArticleNavigationLink extends NavigationLink {
+	readonly released: boolean;
+}
+
 export interface NavigationSection {
 	readonly label: string;
 	readonly links: readonly NavigationLink[];
@@ -38,32 +42,42 @@ export const pageLinks: readonly NavigationLink[] = [
 	{ href: '/twitter', label: 'Twitter' },
 ];
 
-export const articleLinks: readonly NavigationLink[] = [
+export const articleLinks: readonly ArticleNavigationLink[] = [
 	{
 		href: '/article/2026/kasimir',
 		label: 'Letter to Kasimir',
+		released: true,
 	},
 	{
 		href: '/article/2024/clean',
 		label: 'The Hagiography of Clean',
+		released: true,
 	},
 	{
 		href: '/article/2024/missing',
 		label: 'Missing',
+		released: true,
 	},
 	{
 		href: '/article/2020/icloud',
 		label: 'How to Hack Apple ID',
+		released: false,
 	},
 	{
 		href: '/article/2019/cors',
 		label: 'If CORS is just a header...',
+		released: true,
 	},
 	{
 		href: '/article/2014/csp',
 		label: 'When Security Generates Insecurity',
+		released: true,
 	},
 ];
+
+export const releasedArticleLinks: readonly NavigationLink[] = articleLinks.filter(
+	link => link.released
+);
 
 export const experimentLinks: readonly NavigationLink[] = [
 	{
@@ -177,7 +191,7 @@ export const accountLinks: readonly NavigationLink[] = [
 
 export const navSections: readonly NavigationSection[] = [
 	{ label: 'Pages', links: pageLinks },
-	{ label: 'Articles', links: articleLinks },
+	{ label: 'Articles', links: releasedArticleLinks },
 	{ label: 'Experiments', links: experimentLinks },
 	{ label: 'Account', links: accountLinks },
 ];
