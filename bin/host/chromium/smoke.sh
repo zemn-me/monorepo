@@ -12,4 +12,4 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # --- end runfiles.bash initialization v3 ---
 
 
-$(rlocation $CHROMIUM_BINARY) --version
+"$(rlocation "$CHROMIUM_BINARY")" --version
