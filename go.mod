@@ -37,7 +37,7 @@ require (
 	github.com/itchyny/gojq v0.12.17
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/oapi-codegen/nethttp-middleware v1.1.2
-	github.com/oapi-codegen/oapi-codegen/v2 v2.7.2
+	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/sergi/go-diff v1.4.0
 	github.com/tdewolff/parse/v2 v2.8.13
@@ -46,7 +46,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/image v0.44.0
 	golang.org/x/sync v0.22.0
-	golang.org/x/tools v0.47.1-0.20260707181000-a299dadba899
+	golang.org/x/tools v0.48.0
 	golang.org/x/tools/gopls v0.23.0
 	honnef.co/go/tools v0.8.0-rc.1
 )
@@ -83,8 +83,8 @@ require (
 	github.com/fsnotify/fsevents v0.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
-	github.com/go-openapi/jsonpointer v0.22.5 // indirect
-	github.com/go-openapi/swag/jsonname v0.25.5 // indirect
+	github.com/go-openapi/jsonpointer v0.23.1 // indirect
+	github.com/go-openapi/swag/jsonname v0.26.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/golang/glog v1.2.5 // indirect
 	github.com/golang/mock v1.7.0-rc.1 // indirect
@@ -109,7 +109,7 @@ require (
 	github.com/segmentio/asm v1.2.1 // indirect
 	github.com/segmentio/encoding v0.5.4 // indirect
 	github.com/speakeasy-api/jsonpath v0.6.3 // indirect
-	github.com/speakeasy-api/openapi v1.19.2 // indirect
+	github.com/speakeasy-api/openapi v1.24.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect
@@ -122,10 +122,10 @@ require (
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/mod v0.37.0 // indirect
+	golang.org/x/mod v0.38.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/telemetry v0.0.0-20260625142307-59b4966ccb57 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/telemetry v0.0.0-20260708182218-49f421fb7959 // indirect
 	golang.org/x/text v0.40.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	golang.org/x/vuln v1.4.0 // indirect
