@@ -286,13 +286,18 @@ void new Command('mdx-transform')
 			);
 
 		await Promise.all([
-			...map(
-				map(
-					zip(zip(input, outputJs), outputMap),
-					([[i, j] = [], m]) =>
-						// each of these must be defined since all 3 arraysmust be same length.
-						[i!, j!, m!] as [string, string, string]
-				),
+				...map(
+					map(
+						zip(zip(input, outputJs), outputMap),
+						([inputAndJs, m]: [
+							[string, string] | undefined,
+							string | undefined,
+						]) => {
+							const [i, j] = inputAndJs ?? [];
+							// each of these must be defined since all 3 arrays must be same length.
+							return [i!, j!, m!] as [string, string, string];
+						}
+					),
 				async ([input, jsFile, mapFile]) => {
 					const js = await mdx.compile(await read(input), {
 						SourceMapGenerator: SourceMapGenerator,

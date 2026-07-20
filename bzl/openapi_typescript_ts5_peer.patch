@@ -1,0 +1,70 @@
+--- dist/transform/webhooks-object.mjs
++++ dist/transform/webhooks-object.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/index.mjs
++++ dist/transform/index.mjs
+@@ -2 +2 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/paths-object.mjs
++++ dist/transform/paths-object.mjs
+@@ -2 +2 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/header-object.mjs
++++ dist/transform/header-object.mjs
+@@ -2 +2 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/schema-object.mjs
++++ dist/transform/schema-object.mjs
+@@ -2 +2 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/responses-object.mjs
++++ dist/transform/responses-object.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/operation-object.mjs
++++ dist/transform/operation-object.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/components-object.mjs
++++ dist/transform/components-object.mjs
+@@ -3 +3 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/lib/utils.mjs
++++ dist/lib/utils.mjs
+@@ -5 +5 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/lib/ts.mjs
++++ dist/lib/ts.mjs
+@@ -2 +2 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/request-body-object.mjs
++++ dist/transform/request-body-object.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/response-object.mjs
++++ dist/transform/response-object.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/path-item-object.mjs
++++ dist/transform/path-item-object.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';
+--- dist/transform/parameters-array.mjs
++++ dist/transform/parameters-array.mjs
+@@ -1 +1 @@
+-import ts from 'typescript';
++import ts from 'typescript5';

@@ -21,12 +21,13 @@ ts_project(
         "//:node_modules/schema-dts",
         "//:node_modules/zod",
         "//mdx:mdx_js",  #keep
-        "//project/me/zemn/components/Article/types",
-        "//ts/iter",
-        "//ts/option",
-        "//ts/react/lang",
-        "//ts/time",
-        "//ts/url",
+        "//project/me/zemn/components/Article/types",  # keep
+        "//ts/iter",  # keep
+        "//ts/option",  # keep
+        "//ts/react/lang",  # keep
+        "//ts/react/next/Link",  # keep
+        "//ts/time",  # keep
+        "//ts/url",  # keep
         "@monorepo//ts/react/next/Link:relative_url",
     ],
 )
@@ -91,6 +92,7 @@ ts_project(
         ":bio",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/react/lang",  # keep
     ],
 )
 
