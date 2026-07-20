@@ -25,9 +25,9 @@ ts_project(
         "//ts/iter",
         "//ts/option",
         "//ts/react/lang",
+        "//ts/react/next/Link:relative_url",
         "//ts/time",
         "//ts/url",
-        "@monorepo//ts/react/next/Link:relative_url",
     ],
 )
 
