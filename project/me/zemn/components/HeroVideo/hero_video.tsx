@@ -205,16 +205,18 @@ export function HeroVideo(props: HeroVideoProps) {
 		'East Devon AONB',
 	] as const;
 
-	const [poster, videoSource, caption, latlng] = {
-		[winter]: kenwoodWinterVideoSource,
-		// Technically incorrect, as it was filmed in December...
-		// i actually don't like this as much as I thought in practice
-		// but keeping here for now because i do want *something* for
-		//spring
-		[spring]: mistOnTheHillsVideoSource,
-		[summer]: kenwoodSummerVideoSource,
-		[autumn]: kenwoodSummerVideoSource,
-	}[season];
+	const [poster, videoSource, caption, latlng] = (
+		{
+			[winter]: kenwoodWinterVideoSource,
+			// Technically incorrect, as it was filmed in December...
+			// i actually don't like this as much as I thought in practice
+			// but keeping here for now because i do want *something* for
+			//spring
+			[spring]: mistOnTheHillsVideoSource,
+			[summer]: kenwoodSummerVideoSource,
+			[autumn]: kenwoodSummerVideoSource,
+		} satisfies Record<Season, VideoChoice>
+	)[season];
 
 	useEffect(() => {
 		videoRef.current?.load();

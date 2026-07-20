@@ -8,14 +8,15 @@ ts_project(
     srcs = [
         "index.tsx",
         "next.config.ts",
-        "types_shim.ts",
+        "types_shim.d.ts",  # keep
+        "//ts/trusted_types:trusted_types_types",  # keep
     ],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//ts/trusted_types",
+        "//ts/trusted_types",  # keep
     ],
 )
 
@@ -41,7 +42,7 @@ filegroup(
         "config_validate_test.ts",
         "index.tsx",
         "next.config.ts",
-        "types_shim.ts",
+        "types_shim.d.ts",  # keep
     ],
     visibility = ["//:__subpackages__"],
 )

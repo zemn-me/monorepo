@@ -7,8 +7,8 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
-        "//ts/iter",
-        "//ts/math",
+        "//ts/iter",  # keep
+        "//ts/math",  # keep
     ],
 )
 

@@ -15,13 +15,14 @@ ts_project(
     visibility = ["//project/im/shadwell/kate:__pkg__"],
     deps = [
         ":page_module_css",
+        "//:base_defs",  # keep
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//ts/next.js",
+        "//ts/next.js",  # keep
         "//ts/next.js/types/next-compiled",
     ],
 )

@@ -10,8 +10,8 @@ ts_project(
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/base64-js",
-        "//ts",
-        "//ts/option",
+        "//ts",  # keep
+        "//ts/option",  # keep
     ],
 )
 

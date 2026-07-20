@@ -46,7 +46,9 @@ def _next_srcset(
         "//:node_modules/next",
         "//:node_modules/sharp",
         "//:package_json",
+        "//ts/next.js",
         "//ts/next.js/types/next-compiled",
+        "//ts/react/next/Link",
     ]
 
 def next_itest_service(
