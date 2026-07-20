@@ -112,6 +112,12 @@ npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependenc
 npm.npm_translate_lock(
     name = "npm",
     npmrc = "@@//:.npmrc",
+    patch_args = {
+        "openapi-typescript@7.13.0": ["-p0"],
+    },
+    patches = {
+        "openapi-typescript@7.13.0": ["//bzl:openapi_typescript_ts5_peer.patch"],
+    },
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )
@@ -125,6 +131,7 @@ rules_ts_ext = use_extension(
     dev_dependency = True,
 )
 rules_ts_ext.deps(
+    ts_integrity = "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==",
     ts_version_from = "//:package.json",
 )
 use_repo(rules_ts_ext, "npm_typescript")
