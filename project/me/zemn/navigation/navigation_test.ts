@@ -6,6 +6,7 @@ import {
 	experimentLinks,
 	navSections,
 	releasedArticleLinks,
+	toolLinks,
 } from '#root/project/me/zemn/navigation/navigation.js';
 
 function allMenuHrefs(): string[] {
@@ -23,7 +24,6 @@ it('includes the experiment route tree', () => {
 	const expected = [
 		'/experiments',
 		'/experiments/arena',
-		'/experiments/article',
 		'/experiments/cultist',
 		'/experiments/emoji/flag',
 		'/experiments/factorio',
@@ -37,33 +37,34 @@ it('includes the experiment route tree', () => {
 		'/experiments/pitch_training',
 		'/experiments/platonics',
 		'/experiments/rays',
-		'/experiments/toc',
 	];
 
 	expect(expected.filter(href => !hrefs.has(href))).toEqual([]);
+	expect(hrefs).not.toContain('/experiments/article');
+	expect(hrefs).not.toContain('/experiments/toc');
 });
 
 it('includes public content and redirect pages', () => {
 	const hrefs = new Set(allMenuHrefs());
 	const expected = [
 		'/',
-		'/2026/endings',
-		'/article',
 		'/article/2014/csp',
 		'/article/2019/cors',
 		'/article/2024/clean',
 		'/article/2024/missing',
 		'/availability',
-		'/bluesky',
 		'/cv',
-		'/github',
-		'/linkedin',
-		'/src',
 		'/tool/elastictabs',
-		'/twitter',
 	];
 
 	expect(expected.filter(href => !hrefs.has(href))).toEqual([]);
+	expect(hrefs).not.toContain('/2026/endings');
+	expect(hrefs).not.toContain('/article');
+	expect(hrefs).not.toContain('/bluesky');
+	expect(hrefs).not.toContain('/github');
+	expect(hrefs).not.toContain('/linkedin');
+	expect(hrefs).not.toContain('/src');
+	expect(hrefs).not.toContain('/twitter');
 });
 
 it('hides unreleased articles from the menu', () => {
@@ -88,6 +89,15 @@ it('only includes released article links in the menu', () => {
 	);
 
 	expect(actual).toEqual(expected);
+});
+
+it('puts tools in their own menu section', () => {
+	const actual = navSections.find(section => section.label === 'Tools')?.links.map(
+		link => link.href
+	);
+
+	expect(actual).toEqual(toolLinks.map(link => link.href));
+	expect(actual).toEqual(['/tool/elastictabs']);
 });
 
 it('keeps private pages scoped', () => {

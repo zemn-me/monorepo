@@ -31,15 +31,11 @@ export interface NavigationSection {
 export const pageLinks: readonly NavigationLink[] = [
 	{ href: '/', label: 'Home' },
 	{ href: '/cv', label: 'CV' },
-	{ href: '/article', label: 'Articles' },
 	{ href: '/availability', label: 'Availability' },
+];
+
+export const toolLinks: readonly NavigationLink[] = [
 	{ href: '/tool/elastictabs', label: 'Elastic Tabstops' },
-	{ href: '/2026/endings', label: 'Endings' },
-	{ href: '/src', label: 'Source' },
-	{ href: '/github', label: 'GitHub' },
-	{ href: '/linkedin', label: 'LinkedIn' },
-	{ href: '/bluesky', label: 'Bluesky' },
-	{ href: '/twitter', label: 'Twitter' },
 ];
 
 export const articleLinks: readonly ArticleNavigationLink[] = [
@@ -156,16 +152,6 @@ export const experimentLinks: readonly NavigationLink[] = [
 		label: 'Pitch Training',
 		description: 'Generated Anki decks for pitch recognition practice.',
 	},
-	{
-		href: '/experiments/toc',
-		label: 'Table of contents test',
-		description: 'Test renderer for table of contents generation.',
-	},
-	{
-		href: '/experiments/article',
-		label: 'MDX article test',
-		description: 'Test renderer for MDX.',
-	},
 ];
 
 export const accountLinks: readonly NavigationLink[] = [
@@ -191,6 +177,7 @@ export const accountLinks: readonly NavigationLink[] = [
 
 export const navSections: readonly NavigationSection[] = [
 	{ label: 'Pages', links: pageLinks },
+	{ label: 'Tools', links: toolLinks },
 	{ label: 'Articles', links: releasedArticleLinks },
 	{ label: 'Experiments', links: experimentLinks },
 	{ label: 'Account', links: accountLinks },
