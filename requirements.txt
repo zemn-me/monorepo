@@ -42,6 +42,10 @@ anyio==4.14.2 \
     # via
     #   httpx
     #   jupyter-server
+appnope==0.1.4 \
+    --hash=sha256:1de3860566df9caf38f01f86f65e0e13e379af54f9e4bee1e66b48f2efffd1ee \
+    --hash=sha256:502575ee11cd7a28c0205f379b525beefebab9d161b7c964670864014ed7213c
+    # via ipykernel
 argon2-cffi==25.1.0 \
     --hash=sha256:694ae5cc8a42f4c4e2bf2ca0e64e51e23a040c6a517a85074683d3959e1346c1 \
     --hash=sha256:fdc8b074db390fccb6eb4a3604ae7231f219aa669a2652e0f20e16ba513d5741
@@ -1177,10 +1181,8 @@ mistune==3.3.3 \
 mitmproxy==12.2.3 \
     --hash=sha256:df75ccd15ccb39ab55ce9dd4130312270e8ba208eb927a7cbe50cb52678ec722
     # via -r requirements.in
-mitmproxy-linux==0.12.9 \
-    --hash=sha256:94b10fee02aa42287739623cef921e1a53955005d45c9e2fa309ae9f0bf8d37d \
-    --hash=sha256:b4413e27c692f30036ad6d73432826e728ede026fac8e51651d0c545dd0177f2 \
-    --hash=sha256:ee842865a05f69196004ddcb29d50af0602361d9d6acee04f370f7e01c3674e8
+mitmproxy-macos==0.12.9 \
+    --hash=sha256:20e024fbfeeecbdb4ee2a1e8361d18782146777fdc1e00dcfecd52c22a3219bf
     # via mitmproxy-rs
 mitmproxy-rs==0.12.9 \
     --hash=sha256:1fb9fb4aac9ecb82e2c3c5c439ef5e4961be7934d80ade5e9a99c0a944b8ea2f \

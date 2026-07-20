@@ -19,8 +19,8 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/react-dom",
         "//project/cultist/example",  # keep
-        "//project/cultist/react",  # keep
-        "//project/cultist/state",  # keep
+        "//project/cultist/react",
+        "//project/cultist/state",
         "//ts/next.js/types/next-compiled",
         "@monorepo//project/cultist:save",
     ],

@@ -19,7 +19,6 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/react-hook-form",
         "//:node_modules/zod",
-        "//project/me/zemn/api:ts_client_dts",
         "//project/me/zemn/app",
         "//project/me/zemn/components/Link",
         "//project/me/zemn/components/PendingPip",
@@ -31,6 +30,7 @@ ts_project(
         "//ts/result",
         "//ts/result/react-query",
         "//ts/zod",
+        "@monorepo//project/me/zemn/api:ts_client_dts",
     ],
 )
 

@@ -32,10 +32,8 @@ ts_project(
         "//:node_modules/openapi-react-query",
         "//:node_modules/react",
         "//:node_modules/zod",
-        "//project/me/zemn/api:ts_client_dts",
         "//project/me/zemn/constants",
         "//project/me/zemn/promise",
-        "//third_party/com/googleapis/people:ts_client",
         "//ts",
         "//ts/crypto",
         "//ts/future",
@@ -49,6 +47,8 @@ ts_project(
         "//ts/result/react-query",
         "//ts/storage",
         "//ts/time",
+        "@monorepo//project/me/zemn/api:ts_client_dts",
+        "@monorepo//third_party/com/googleapis/people:ts_client",
     ],
 )
 

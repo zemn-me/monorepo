@@ -14,7 +14,7 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
         "//ts/pulumi/lib",
-        "//ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete:oci_image",
+        "@monorepo//ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete:oci_image",
     ],
 )
 

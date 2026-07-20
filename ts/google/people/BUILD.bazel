@@ -11,9 +11,9 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
-        "//third_party/com/googleapis/people:ts_client",
         "//ts/iter",
         "//ts/option",
+        "@monorepo//third_party/com/googleapis/people:ts_client",
     ],
 )
 
