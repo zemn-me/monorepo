@@ -15,6 +15,7 @@ ts_project(
     visibility = ["//project/im/shadwell/kate:__pkg__"],
     deps = [
         ":page_module_css",
+        "//:base_defs",  # keep
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",

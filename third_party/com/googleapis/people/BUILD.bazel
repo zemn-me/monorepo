@@ -13,6 +13,7 @@ genrule(
 oapi_ts.openapi_typescript(
     name = "ts_client_gen",
     srcs = [
+        "//:node_modules/typescript5",
         "openapi.yaml",
     ],
     outs = [

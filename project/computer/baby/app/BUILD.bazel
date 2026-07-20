@@ -19,6 +19,7 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         ":style_module_css",
+        "//:base_defs",  # keep
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",

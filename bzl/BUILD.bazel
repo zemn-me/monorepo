@@ -4,6 +4,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 exports_files([
     "bazel_watcher_proto_rule.patch",
     "curl_sys_link_curl.patch",
+    "openapi_typescript_ts5_peer.patch",
 ])
 
 sh_binary(

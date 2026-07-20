@@ -19,6 +19,7 @@ oapi_ts.openapi_typescript(
     name = "ts_client_gen",
     srcs = [
         "spec.yaml",
+        "//:node_modules/typescript5",
     ],
     outs = [
         "api_client.gen.d.ts",

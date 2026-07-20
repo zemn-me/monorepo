@@ -16,6 +16,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//mdx:mdx_js",  # keep
         "//project/me/zemn/components/Article",
         "//ts/next.js/types/next-compiled",
     ],

@@ -15,6 +15,7 @@ ts_project(
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//:base_defs",  # keep
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/seedrandom",

@@ -25,6 +25,7 @@ ts_project(
         "//ts/iter",
         "//ts/option",
         "//ts/react/lang",
+        "//ts/react/next/Link",  # keep
         "//ts/time",
         "//ts/url",
         "@monorepo//ts/react/next/Link:relative_url",
@@ -91,6 +92,7 @@ ts_project(
         ":bio",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/react/lang",  # keep
     ],
 )
 

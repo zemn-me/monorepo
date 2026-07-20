@@ -48,7 +48,7 @@ def ts_lint(name, size = "small", **kwargs):
         **kwargs
     )
 
-def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
+def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], validate = False, tsc = "//:typescript_tsc", **kwargs):
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
@@ -69,6 +69,8 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         preserve_jsx: passed to the aspect_rules_js ts_project rule
         tags: test tags
         lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
+        validate: passed to the aspect_rules_ts validator, disabled by default because TypeScript 7 no longer exposes the legacy compiler API it uses.
+        tsc: TypeScript compiler binary.
         **kwargs: passed to the ts_project rule
     """
     if srcs == None:
@@ -78,6 +80,9 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     # and all code is now esm.
     data = data + ["//:package_json"]
     srcs = srcs + ["//:package_json"]
+
+    if "//:node_modules/@types/node" not in deps:
+        deps = deps + ["//:node_modules/@types/node"]
 
     # swc injects this
     deps = deps + ["//:node_modules/regenerator-runtime"]
@@ -99,6 +104,8 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         allow_js = True,
         declaration_map = True,
         visibility = visibility,
+        validate = validate,
+        tsc = tsc,
         **kwargs
     )
 

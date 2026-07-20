@@ -1,4 +1,4 @@
-import 'ts/pulumi/setMocks';
+import '#root/ts/pulumi/setMocks.js';
 
 import { describe, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
