@@ -65,9 +65,12 @@ sh_test(
     name = "smoke",
     srcs = ["smoke.sh"],
     data = [":chromium"],
-    env = {
-        "CHROMIUM_BINARY": "$(rlocationpath :chromium)",
-    },
+    env = select({
+        ":darwin_arm64": {"CHROMIUM_BINARY": "+_repo_rules+com_googleapis_storage_chromium_mac_arm64/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"},
+        ":darwin_x64": {"CHROMIUM_BINARY": "+_repo_rules+com_googleapis_storage_chromium_mac_x64/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"},
+        ":linux_x64": {"CHROMIUM_BINARY": "+_repo_rules+com_googleapis_storage_chromium_linux_x64/chromium"},
+        "//conditions:default": {"CHROMIUM_BINARY": "+_repo_rules+com_googleapis_storage_chromium_linux_x64/chromium"},
+    }),
     deps = [
         "@rules_shell//shell/runfiles",
     ],

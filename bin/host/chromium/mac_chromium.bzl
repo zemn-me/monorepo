@@ -17,6 +17,7 @@ def _mac_chromium_impl(ctx):
         fail("executable_src was not present in srcs")
 
     return DefaultInfo(
+        executable = executable,
         files = depset([executable]),
         runfiles = ctx.runfiles(files = runfiles),
     )
@@ -27,5 +28,6 @@ mac_chromium = rule(
         "executable_src": attr.label(allow_single_file = True, mandatory = True),
         "srcs": attr.label_list(allow_files = True, mandatory = True),
     },
+    executable = True,
     toolchains = COPY_FILE_TO_BIN_TOOLCHAINS,
 )

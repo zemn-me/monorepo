@@ -13,6 +13,7 @@ manifest:
     aioquic: aioquic
     annotated_types: annotated_types
     anyio: anyio
+    appnope: appnope
     argon2: argon2_cffi
     arrow: arrow
     asgiref: asgiref
@@ -96,7 +97,7 @@ manifest:
     matplotlib_inline: matplotlib_inline
     mistune: mistune
     mitmproxy: mitmproxy
-    mitmproxy_linux: mitmproxy_linux
+    mitmproxy_macos: mitmproxy_macos
     mitmproxy_rs: mitmproxy_rs
     mpmath: mpmath
     msgpack: msgpack
@@ -174,4 +175,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 5cbf2fc7363ebc1e3f90f8015816dc0b60f1c70293e83050e4270cb8cac8a414
+integrity: 630acc9862b070a6ca92a43d9033e03e10d6f9b214f93b66c56f2943847b7061

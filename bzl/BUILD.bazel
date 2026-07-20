@@ -1,6 +1,8 @@
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//bzl:rules.bzl", "bazel_lint")
 
+exports_files(["curl_sys_link_curl.patch"])
+
 sh_binary(
     name = "run_all_affected_tests",
     srcs = ["run_affected_tests.sh"],

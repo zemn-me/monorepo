@@ -117,7 +117,7 @@ npm.npm_translate_lock(
 )
 use_repo(npm, "npm")
 
-bazel_dep(name = "aspect_rules_ts", version = "3.1.0")
+bazel_dep(name = "aspect_rules_ts", version = "3.8.10")
 
 rules_ts_ext = use_extension(
     "@aspect_rules_ts//ts:extensions.bzl",
@@ -571,6 +571,11 @@ use_repo(rust_host_tools, "rust_host_tools_nightly")
 register_toolchains("@rust_toolchains//:all")
 
 crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+crate.annotation(
+    crate = "curl-sys",
+    patch_args = ["-p1"],
+    patches = ["//bzl:curl_sys_link_curl.patch"],
+)
 crate.from_cargo(
     name = "cargo",
     cargo_lockfile = "//:Cargo.lock",
@@ -610,8 +615,9 @@ RUFF_VERSION = "0.15.22"
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-y0HEhpDBE9wIRw5kEDzmXKFSScbONJXTrHkrMpqD6ME=",
+    integrity = "sha256-ooga8m/R0Z9JMsTd8ecLTg789IUTxdrgglZOA/C0Z6M=",
     strip_prefix = "ruff-aarch64-apple-darwin",
+    # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",
 )
 
