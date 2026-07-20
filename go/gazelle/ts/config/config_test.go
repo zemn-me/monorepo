@@ -24,10 +24,6 @@ func TestParseFileCapturesPaths(t *testing.T) {
 		t.Fatalf("ParseFile: %v", err)
 	}
 
-	if conf.CompilerOptions.BaseURL == "" {
-		t.Fatalf("expected BaseURL to be set, got empty string")
-	}
-
 	paths := conf.PathMappings()
 	if len(paths) == 0 {
 		t.Fatalf("expected PathMappings to be populated")
@@ -38,7 +34,7 @@ func TestParseFileCapturesPaths(t *testing.T) {
 		t.Fatalf("expected #root/* mapping to exist")
 	}
 
-	if len(root) == 0 || root[0] != "*" {
-		t.Fatalf("expected #root/* mapping to contain \"*\", got %v", root)
+	if len(root) == 0 || root[0] != "./*" {
+		t.Fatalf("expected #root/* mapping to contain \"./*\", got %v", root)
 	}
 }

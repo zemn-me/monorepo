@@ -26,6 +26,7 @@ ts_project(
     deps = [
         ":not_found_module_css",
         ":style_module_css",
+        "//:base_defs",  # keep
         "//:node_modules/@tanstack/query-async-storage-persister",
         "//:node_modules/@tanstack/query-core",
         "//:node_modules/@tanstack/react-query",

@@ -165,6 +165,7 @@ func (p pathPattern) resolve(module string) (string, bool) {
 	middle := module[len(p.prefix) : len(module)-len(p.suffix)]
 	for _, repl := range p.replacements {
 		resolved := strings.ReplaceAll(repl, "*", middle)
+		resolved = strings.TrimPrefix(resolved, "./")
 		return resolved, true
 	}
 
@@ -906,6 +907,9 @@ func repoPathVariants(repoPath string) []string {
 }
 
 func matchReplacementPattern(replacement, value string) (string, bool) {
+	replacement = strings.TrimPrefix(replacement, "./")
+	value = strings.TrimPrefix(value, "./")
+
 	first := strings.Index(replacement, "*")
 	last := strings.LastIndex(replacement, "*")
 	if first == -1 {

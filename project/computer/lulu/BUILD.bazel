@@ -65,8 +65,8 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
-        "//ts/math",
-        "//ts/result",
+        "//ts/math",  # keep
+        "//ts/result",  # keep
     ],
 )
 
@@ -94,7 +94,7 @@ ts_project(
         ":lulu",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
-        "//ts/math",
-        "//ts/result",
+        "//ts/math",  # keep
+        "//ts/result",  # keep
     ],
 )

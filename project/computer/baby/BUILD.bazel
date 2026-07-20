@@ -69,14 +69,15 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         ":style_module_css",
+        "//:base_defs",  # keep
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//project/me/zemn/app/experiments/arena",
-        "//ts",
-        "//ts/joystick",
-        "//ts/math",
-        "//ts/result",
+        "//project/me/zemn/app/experiments/arena",  # keep
+        "//ts",  # keep
+        "//ts/joystick",  # keep
+        "//ts/math",  # keep
+        "//ts/result",  # keep
     ],
 )
 

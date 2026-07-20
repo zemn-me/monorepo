@@ -18,7 +18,7 @@ ts_project(
     deps = [
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
-        "//go/gazelle/ts/testdata/dependency",
+        "//go/gazelle/ts/testdata/dependency",  # keep
     ],
 )
 

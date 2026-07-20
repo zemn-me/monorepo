@@ -8,11 +8,11 @@ ts_project(
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/zod",
-        "//ts",
-        "//ts/result",
-        "//ts/serde",
-        "//ts/storage",
-        "//ts/zod",
+        "//ts",  # keep
+        "//ts/result",  # keep
+        "//ts/serde",  # keep
+        "//ts/storage",  # keep
+        "//ts/zod",  # keep
     ],
 )
 

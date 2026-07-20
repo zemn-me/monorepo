@@ -1,7 +1,10 @@
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//bzl:rules.bzl", "bazel_lint")
 
-exports_files(["curl_sys_link_curl.patch"])
+exports_files([
+    "curl_sys_link_curl.patch",
+    "openapi_typescript_ts5_peer.patch",
+])
 
 sh_binary(
     name = "run_all_affected_tests",

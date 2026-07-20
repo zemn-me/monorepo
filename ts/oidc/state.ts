@@ -17,13 +17,13 @@ const base64UrlEncode = (bytes: Uint8Array) =>
 		.replace(/\//g, '_')
 		.replace(/=+$/u, '');
 
-const base64UrlDecode = (value: string) => {
+const base64UrlDecode = (value: string): Uint8Array<ArrayBuffer> => {
 	const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
 	const padding =
 		normalized.length % 4 === 0
 			? ''
 			: '='.repeat(4 - (normalized.length % 4));
-	return b64.toByteArray(normalized + padding);
+	return Uint8Array.from(b64.toByteArray(normalized + padding));
 };
 
 const signatureMessage = (params: StateTokenParams) =>

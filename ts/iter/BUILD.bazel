@@ -17,8 +17,8 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
-        "//ts",
-        "//ts/option",
+        "//ts",  # keep
+        "//ts/option",  # keep
     ],
 )
 
