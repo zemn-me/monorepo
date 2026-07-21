@@ -112,12 +112,18 @@ npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependenc
 npm.npm_translate_lock(
     name = "npm",
     npmrc = "@@//:.npmrc",
+    patch_args = {
+        "openapi-typescript@7.13.0": ["-p0"],
+    },
+    patches = {
+        "openapi-typescript@7.13.0": ["//bzl:openapi_typescript_ts5_peer.patch"],
+    },
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )
 use_repo(npm, "npm")
 
-bazel_dep(name = "aspect_rules_ts", version = "3.8.10")
+bazel_dep(name = "aspect_rules_ts", version = "3.9.2")
 
 rules_ts_ext = use_extension(
     "@aspect_rules_ts//ts:extensions.bzl",
@@ -125,6 +131,7 @@ rules_ts_ext = use_extension(
     dev_dependency = True,
 )
 rules_ts_ext.deps(
+    ts_integrity = "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==",
     ts_version_from = "//:package.json",
 )
 use_repo(rules_ts_ext, "npm_typescript")
@@ -188,6 +195,7 @@ use_repo(
     "com_github_gorilla_websocket",
     "com_github_itchyny_gojq",
     "com_github_nyaruka_phonenumbers",
+    "com_github_nyaruka_phonenumbers_v2",
     "com_github_oapi_codegen_nethttp_middleware",
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",

@@ -16,13 +16,14 @@
 		"declaration": true,
 		"noImplicitOverride": true,
 		"forceConsistentCasingInFileNames": true,
-		"downlevelIteration": true,
 		"allowJs": true,
 		"declarationMap": true,
+		"skipLibCheck": true,
 		"lib": ["DOM", "ESNext"],
-		"baseUrl": ".",
+		"types": ["node"],
 		"paths": {
-			"#root/*": ["*", "dist/bin/*"]
+			"#root/*.js": ["./*.ts", "./dist/bin/*.d.ts", "./dist/bin/*.js"],
+			"#root/*": ["./*", "./dist/bin/*"]
 		}
 	},
 	"exclude": [
