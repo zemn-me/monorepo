@@ -3,7 +3,36 @@
 	"name": "monorepo",
 	"private": true,
 	"pnpm": {
-		"onlyBuiltDependencies": []
+		"onlyBuiltDependencies": [],
+		"packageExtensions": {
+			"openapi-typescript@7.13.0": {
+				"dependencies": {
+					"typescript5": "npm:typescript@5.5.4"
+				}
+			}
+		}
+	},
+	"optionalDependencies": {
+		"@typescript/typescript-aix-ppc64": "7.0.2",
+		"@typescript/typescript-darwin-arm64": "7.0.2",
+		"@typescript/typescript-darwin-x64": "7.0.2",
+		"@typescript/typescript-freebsd-arm64": "7.0.2",
+		"@typescript/typescript-freebsd-x64": "7.0.2",
+		"@typescript/typescript-linux-arm": "7.0.2",
+		"@typescript/typescript-linux-arm64": "7.0.2",
+		"@typescript/typescript-linux-loong64": "7.0.2",
+		"@typescript/typescript-linux-mips64el": "7.0.2",
+		"@typescript/typescript-linux-ppc64": "7.0.2",
+		"@typescript/typescript-linux-riscv64": "7.0.2",
+		"@typescript/typescript-linux-s390x": "7.0.2",
+		"@typescript/typescript-linux-x64": "7.0.2",
+		"@typescript/typescript-netbsd-arm64": "7.0.2",
+		"@typescript/typescript-netbsd-x64": "7.0.2",
+		"@typescript/typescript-openbsd-arm64": "7.0.2",
+		"@typescript/typescript-openbsd-x64": "7.0.2",
+		"@typescript/typescript-sunos-x64": "7.0.2",
+		"@typescript/typescript-win32-arm64": "7.0.2",
+		"@typescript/typescript-win32-x64": "7.0.2"
 	},
 	"devDependencies": {
 		"@actions/core": "3.0.1",
@@ -80,7 +109,9 @@
 		"tmp": "0.2.7",
 		"ts-node": "10.9.2",
 		"ts-toolbelt": "9.6.0",
-		"typescript": "5.5.4",
+		"typescript": "5.9.3",
+		"typescript5": "npm:typescript@5.5.4",
+		"typescript7": "npm:typescript@7.0.2",
 		"uuid": "14.0.1",
 		"yarn": "1.22.22"
 	},
