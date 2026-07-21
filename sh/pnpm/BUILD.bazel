@@ -9,10 +9,10 @@ sh_binary(
     data = [
         "@pnpm",
     ],
-    env = {
-        "PNPM_BINARY": "$(rootpath @pnpm)",
-    },
     visibility = ["//sh:__subpackages__"],
+    deps = [
+        "@rules_shell//shell/runfiles",
+    ],
 )
 
 bazel_lint(

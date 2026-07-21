@@ -1,7 +1,8 @@
-import 'ts/pulumi/setMocks';
+import '#root/ts/pulumi/setMocks.js';
 
 import { describe, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
+import { serializeFunction } from '@pulumi/pulumi/runtime/closure/serializeClosure.js';
 
 import {
 	githubActionsSecretAccessByWorkflow,
@@ -96,6 +97,10 @@ interface EcrLifecyclePolicy {
 }
 
 describe('pulumi', () => {
+	test('serializes closures with the installed TypeScript API', async () => {
+		await expect(serializeFunction(() => 42)).resolves.toBeDefined();
+	});
+
 	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
 		expect(
 			sanitizeAwsAlphaNumericHyphenUnderscoreName(
