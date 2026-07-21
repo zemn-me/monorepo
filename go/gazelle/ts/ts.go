@@ -538,7 +538,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		impSpec := resolve.ImportSpec{Lang: "typescript", Imp: module}
 		if override, ok := resolve.FindRuleWithOverride(c, impSpec, "typescript"); ok {
 			if !override.Equal(from) {
-				deps[formatLabel(override, from)] = struct{}{}
+				deps[formatLabel(override, from, c.RepoName)] = struct{}{}
 			}
 			continue
 		}
@@ -547,7 +547,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 				if m.IsSelfImport(from) {
 					continue
 				}
-				deps[formatLabel(m.Label, from)] = struct{}{}
+				deps[formatLabel(m.Label, from, c.RepoName)] = struct{}{}
 			}
 		}
 		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
@@ -576,7 +576,11 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 	r.SetAttr("deps", labels)
 }
 
-func formatLabel(target label.Label, from label.Label) string {
+func formatLabel(target label.Label, from label.Label, mainRepoName string) string {
+	if target.Repo != "" && target.Repo == mainRepoName {
+		target.Repo = ""
+		target.Canonical = false
+	}
 	if target.Pkg == from.Pkg {
 		return ":" + target.Name
 	}

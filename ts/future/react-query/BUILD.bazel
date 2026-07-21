@@ -8,8 +8,8 @@ ts_project(
     deps = [
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/node",
-        "//:node_modules/@types/react",  #keep
-        "//:node_modules/react",  #keep
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
         "//ts/future",
     ],
 )
