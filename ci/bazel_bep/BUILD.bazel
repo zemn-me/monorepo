@@ -1,0 +1,95 @@
+# gazelle:ignore
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_proto_library(
+    name = "action_cache_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/action_cache_proto",
+    proto = "@bazel_source//src/main/protobuf:action_cache_proto",
+)
+
+go_proto_library(
+    name = "failure_details_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/failure_details_proto",
+    proto = "@bazel_source//src/main/protobuf:failure_details_proto",
+)
+
+go_proto_library(
+    name = "option_filters_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/option_filters_proto",
+    proto = "@bazel_source//src/main/protobuf:option_filters_proto",
+)
+
+go_proto_library(
+    name = "command_line_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/command_line_proto",
+    proto = "@bazel_source//src/main/protobuf:command_line_proto",
+    deps = [":option_filters_go_proto"],
+)
+
+go_proto_library(
+    name = "strategy_policy_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/strategy_policy_proto",
+    proto = "@bazel_source//src/main/protobuf:strategy_policy_proto",
+)
+
+go_proto_library(
+    name = "invocation_policy_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/invocation_policy_proto",
+    proto = "@bazel_source//src/main/protobuf:invocation_policy_proto",
+    deps = [":strategy_policy_go_proto"],
+)
+
+go_proto_library(
+    name = "package_load_metrics_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/package_load_metrics_proto",
+    proto = "@bazel_source//src/main/java/com/google/devtools/build/lib/packages/metrics:package_load_metrics_proto",
+)
+
+go_proto_library(
+    name = "build_event_stream_go_proto",
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep/build_event_stream_proto",
+    proto = "@bazel_source//src/main/java/com/google/devtools/build/lib/buildeventstream/proto:build_event_stream_proto",
+    deps = [
+        ":action_cache_go_proto",
+        ":command_line_go_proto",
+        ":failure_details_go_proto",
+        ":invocation_policy_go_proto",
+        ":package_load_metrics_go_proto",
+    ],
+)
+
+go_library(
+    name = "bep_annotator_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/ci/bazel_bep",
+    visibility = ["//visibility:private"],
+    deps = [
+        ":build_event_stream_go_proto",
+        "@org_golang_google_protobuf//encoding/protodelim",
+        "@org_golang_google_protobuf//types/known/durationpb",
+    ],
+)
+
+go_binary(
+    name = "bep_annotator",
+    embed = [":bep_annotator_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "bep_annotator_test",
+    srcs = ["main_test.go"],
+    embed = [":bep_annotator_lib"],
+    deps = [
+        ":build_event_stream_go_proto",
+        "@org_golang_google_protobuf//encoding/protodelim",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
