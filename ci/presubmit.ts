@@ -96,15 +96,26 @@ const cmd = new Command('presubmit')
 							stdio: 'inherit',
 						}
 					)
-					.on('close', code =>
-						code == 0
-							? ok()
-							: error(
-									new Error(
-										`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
-									)
-								)
-					)
+					.on('close', code => {
+						if (code == 0) {
+							ok();
+							return;
+						}
+
+						console.log(
+							WorkflowCommand('error')({
+								file: 'go.mod',
+								title: 'go mod tidy failed',
+							})(
+								`Go mod tidy exited with ${code}. Run bazel run //sh/bin:go mod tidy and commit the resulting go.mod/go.sum changes.`
+							)
+						);
+						error(
+							new Error(
+								`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
+							)
+						);
+					})
 			)
 		);
 
