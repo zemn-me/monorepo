@@ -48,7 +48,7 @@ def ts_lint(name, size = "small", **kwargs):
         **kwargs
     )
 
-def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], tsc = "//:typescript_tsc", **kwargs):
+def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
@@ -69,7 +69,6 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         preserve_jsx: passed to the aspect_rules_js ts_project rule
         tags: test tags
         lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
-        tsc: TypeScript compiler binary.
         **kwargs: passed to the ts_project rule
     """
     if srcs == None:
@@ -106,7 +105,6 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         allow_js = True,
         declaration_map = True,
         visibility = visibility,
-        tsc = tsc,
         **kwargs
     )
 
