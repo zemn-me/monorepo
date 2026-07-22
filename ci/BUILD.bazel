@@ -35,10 +35,12 @@ js_binary(
     name = "presubmit",
     data = [
         ":ci",
+        "//ci/bazel_bep:bep_annotator",
         "//sh/bin:go",
     ],
     entry_point = "presubmit.js",
     env = {
+        "BAZEL_BEP_ANNOTATOR": "$(rlocationpath //ci/bazel_bep:bep_annotator)",
         "GO_BINARY_LOCATION": "$(rlocationpath //sh/bin:go)",
     },
 )
