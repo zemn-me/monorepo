@@ -1,5 +1,6 @@
 import '#root/ts/pulumi/setMocks.js';
 
+import { createRequire } from 'node:module';
 import { describe, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 import { serializeFunction } from '@pulumi/pulumi/runtime/closure/serializeClosure.js';
@@ -24,6 +25,8 @@ import {
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { mockResources } from '#root/ts/pulumi/setMocks.js';
+
+const require = createRequire(import.meta.url);
 
 const workflowScopePrincipal = (workflowScope: string) =>
 	`principalSet://iam.googleapis.com/projects/845702659200/locations/global/workloadIdentityPools/github/attribute.workflow_scope/${workflowScope}`;
@@ -97,6 +100,13 @@ interface EcrLifecyclePolicy {
 }
 
 describe('pulumi', () => {
+	test('loads its package-local TypeScript 5 compiler API', () => {
+		const typescript = require('@pulumi/pulumi/typescript-shim.js') as {
+			version: string;
+		};
+		expect(typescript.version).toBe('5.9.3');
+	});
+
 	test('serializes closures with the installed TypeScript API', async () => {
 		await expect(serializeFunction(() => 42)).resolves.toBeDefined();
 	});

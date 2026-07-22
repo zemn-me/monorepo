@@ -34,6 +34,10 @@ When bumping `GO_VERSION`, keep `golang.org/x/tools/gopls` compatible with
 that Go release; stale `x/tools/internal/tokeninternal` code can fail on Go's
 private `go/token.FileSet` layout.
 
+Keep TypeScript 7 as the canonical `typescript` package. Packages that still
+load the legacy compiler API (currently Pulumi) need a package-local TypeScript
+5 peer via pnpm `packageExtensions`; do not downgrade the root.
+
 For Biome lint safe fixes, including import sorting, run
 `./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
 

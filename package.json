@@ -5,6 +5,11 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [],
 		"packageExtensions": {
+			"@pulumi/pulumi@3.220.0": {
+				"dependencies": {
+					"typescript5": "npm:typescript@5.9.3"
+				}
+			},
 			"openapi-typescript@7.13.0": {
 				"dependencies": {
 					"typescript5": "npm:typescript@5.5.4"
@@ -107,11 +112,9 @@
 		"stylelint-config-standard": "40.0.0",
 		"svgo": "4.0.2",
 		"tmp": "0.2.7",
-		"ts-node": "10.9.2",
 		"ts-toolbelt": "9.6.0",
-		"typescript": "5.9.3",
+		"typescript": "7.0.2",
 		"typescript5": "npm:typescript@5.9.3",
-		"typescript7": "npm:typescript@7.0.2",
 		"uuid": "14.0.1",
 		"yarn": "1.22.22"
 	},

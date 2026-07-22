@@ -131,35 +131,6 @@ copy_to_bin(
 
 npm_link_all_packages(name = "node_modules")
 
-js_binary(
-    name = "typescript_tsc",
-    data = [
-        "//:node_modules/@typescript/typescript-aix-ppc64",
-        "//:node_modules/@typescript/typescript-darwin-arm64",
-        "//:node_modules/@typescript/typescript-darwin-x64",
-        "//:node_modules/@typescript/typescript-freebsd-arm64",
-        "//:node_modules/@typescript/typescript-freebsd-x64",
-        "//:node_modules/@typescript/typescript-linux-arm",
-        "//:node_modules/@typescript/typescript-linux-arm64",
-        "//:node_modules/@typescript/typescript-linux-loong64",
-        "//:node_modules/@typescript/typescript-linux-mips64el",
-        "//:node_modules/@typescript/typescript-linux-ppc64",
-        "//:node_modules/@typescript/typescript-linux-riscv64",
-        "//:node_modules/@typescript/typescript-linux-s390x",
-        "//:node_modules/@typescript/typescript-linux-x64",
-        "//:node_modules/@typescript/typescript-netbsd-arm64",
-        "//:node_modules/@typescript/typescript-netbsd-x64",
-        "//:node_modules/@typescript/typescript-openbsd-arm64",
-        "//:node_modules/@typescript/typescript-openbsd-x64",
-        "//:node_modules/@typescript/typescript-sunos-x64",
-        "//:node_modules/@typescript/typescript-win32-arm64",
-        "//:node_modules/@typescript/typescript-win32-x64",
-        "//:node_modules/typescript7",
-    ],
-    entry_point = "typescript_tsc.mjs",
-    visibility = ["//visibility:public"],
-)
-
 genrule(
     name = "sqljs_wasm",
     srcs = ["//:node_modules/sql.js"],
