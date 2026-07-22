@@ -30,6 +30,9 @@ relative paths. Please use `$(pwd)/path/to/file` to get a relative path!
 
 please run gazelle also! Or the presubmit will fail.
 
+Avoid `# gazelle:ignore` for new code wherever possible; teach Gazelle about
+the package with narrower directives or explicit BUILD metadata instead.
+
 When bumping `GO_VERSION`, keep `golang.org/x/tools/gopls` compatible with
 that Go release; stale `x/tools/internal/tokeninternal` code can fail on Go's
 private `go/token.FileSet` layout.
