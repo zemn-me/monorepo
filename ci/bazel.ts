@@ -1,10 +1,13 @@
 import child_process from 'node:child_process';
 import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+import { runfiles } from '@bazel/runfiles';
 
 import {
 	Command,
 	FilePositionParams,
-	Summarize,
 } from '#root/ts/github/actions/index.js';
 
 /**
@@ -112,87 +115,6 @@ async function* AnnotateNonCacheWarnings(lines: AsyncGenerator<string>) {
 	}
 }
 
-async function* AnnotateBuildCompletion(lines: AsyncGenerator<string>) {
-	const failures: string[] = [];
-
-	const it = lines[Symbol.asyncIterator]();
-	let done: boolean | undefined = false;
-
-	const take = async (): Promise<string | undefined> => {
-		const resp = await it.next();
-
-		done = resp.done;
-
-		if (done) return undefined;
-
-		return resp.value;
-	};
-
-	while (!done) {
-		const line = await take();
-		if (line === undefined) continue;
-		// parse block of success / failure notices
-		const match =
-			/^\s*(\/\/([^:]*):[^ ]+)\s+(?:\(cached\))? (PASSED|FAILED|NO STATUS) in ([\d.]+s?)/.exec(
-				line
-			);
-
-		if (match === null) {
-			yield line;
-			continue;
-		}
-
-		const [, tag, packageName, status, time] = match;
-
-		const buildFile = packageName + '/BUILD.bazel';
-
-		switch (status) {
-			case 'PASSED':
-				yield line;
-				/*
-				yield Command('notice')({
-					title: `${tag} passed in ${time}`,
-					file: buildFile,
-				})(line);
-				*/
-				break;
-			case 'FAILED': {
-				failures.push(tag!);
-				const nextLine = (await take())?.trim();
-				yield Command('error')({
-					title: `${tag} failed in ${time}`,
-					file: buildFile,
-				})(
-					line +
-						(nextLine !== undefined && nextLine
-							? `\n${await fs.readFile(nextLine)}`
-							: '')
-				);
-				break;
-			}
-			case 'NO STATUS':
-				yield Command('warning')({
-					title: `${tag} failed to build in ${time}`,
-					file: buildFile,
-				})(line);
-				break;
-			default:
-				yield line;
-				yield Command('error')({})(
-					`unknown build status: "${status}" in ${line}`
-				);
-		}
-	}
-
-	if (failures.length > 0)
-		await Summarize(`# Build failure.
-The failing tags can be retried on a local machine manually via:
-\`\`\`bash
-bazel test ${failures.join(' ')}
-\`\`\`
-`);
-}
-
 async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
 	for await (const line of lines) {
 		const m = /ERROR:(\s+[^:]+.bazel:\d+:\d+):\s+.*/.exec(line);
@@ -211,10 +133,8 @@ async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
 }
 
 export function AnnotateBazelLines(lines: AsyncGenerator<string>) {
-	return AnnotateBuildCompletion(
-		AnnotateBazelFailures(
-			AnnotateNonCacheWarnings(AnnotateDebugStatements(lines))
-		)
+	return AnnotateBazelFailures(
+		AnnotateNonCacheWarnings(AnnotateDebugStatements(lines))
 	);
 }
 
@@ -243,29 +163,73 @@ export async function* interleave<A, B>(
 }
 
 export async function Bazel(cwd: string, ...args: string[]) {
-	const process = child_process.spawn('bazelisk', args, { cwd });
+	const bepDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bazel-bep-'));
+	const bepFile = path.join(bepDir, 'build-events.bin');
+	const bazel = child_process.spawn(
+		'bazelisk',
+		[
+			...args,
+			`--build_event_binary_file=${bepFile}`,
+			'--build_event_binary_file_path_conversion=false',
+		],
+		{ cwd }
+	);
 
 	const exitCode = new Promise<number | null>(ok =>
-		process.on('close', e => ok(e))
+		bazel.on('close', e => ok(e))
 	);
 	const errors: Error[] = [];
-	process.addListener('error', e => errors.push(e));
+	bazel.addListener('error', e => errors.push(e));
 	/**
 	 * If a github actions error is observed in any line.
 	 */
 	let errorObserved = false;
 
 	for await (const line of interleave(
-		AnnotateBazelLines(byLine(process.stdout)),
-		AnnotateBazelLines(byLine(process.stderr))
+		AnnotateBazelLines(byLine(bazel.stdout)),
+		AnnotateBazelLines(byLine(bazel.stderr))
 	)) {
 		if (!errorObserved && /^::error/.test(line)) errorObserved = true;
 		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		console.log(line);
 	}
 
+	try {
+		const annotator = runfiles.resolve(
+			globalThis.process.env['BAZEL_BEP_ANNOTATOR'] ??
+				'monorepo/ci/bazel_bep/bep_annotator_/bep_annotator'
+		);
+		const annotations = child_process.spawn(annotator, [bepFile], { cwd });
+
+		annotations.addListener('error', e => errors.push(e));
+
+		for await (const line of byLine(annotations.stdout)) {
+			if (!errorObserved && /^::error/.test(line)) errorObserved = true;
+			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
+			console.log(line);
+		}
+
+		for await (const line of byLine(annotations.stderr)) {
+			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
+			console.error(line);
+		}
+
+		const annotationExitCode = await new Promise<number | null>(ok =>
+			annotations.on('close', ok)
+		);
+		if (annotationExitCode !== 0) {
+			errors.push(
+				new Error(`BEP annotator failed with exit code: ${annotationExitCode}`)
+			);
+		}
+	} catch (e) {
+		errors.push(e instanceof Error ? e : new Error(String(e)));
+	} finally {
+		await fs.rm(bepDir, { force: true, recursive: true });
+	}
+
 	if ((await exitCode) !== 0)
-		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
+		throw new Error(`Bazel failed with exit code: ${bazel.exitCode}`);
 
 	if (errors.length > 0) {
 		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
@@ -273,8 +237,8 @@ export async function Bazel(cwd: string, ...args: string[]) {
 		throw errors[0];
 	}
 
-	if (process.exitCode !== 0) {
-		throw new Error(`Bazel failed with exit code: ${process.exitCode}`);
+	if (bazel.exitCode !== 0) {
+		throw new Error(`Bazel failed with exit code: ${bazel.exitCode}`);
 	}
 
 	if (errorObserved) {
