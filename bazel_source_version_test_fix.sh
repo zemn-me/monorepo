@@ -9,6 +9,7 @@ fi
 
 bazel_version_file="${workspace}/.bazelversion"
 module_file="${workspace}/MODULE.bazel"
+# Keep both version declarations aligned at the newer stable release.
 bazel_version="$(tr -d '[:space:]' <"${bazel_version_file}")"
 bazel_source_version="$(
 	sed -n 's/^BAZEL_SOURCE_VERSION = "\([^"]*\)"$/\1/p' "${module_file}"
