@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	bzl "github.com/bazelbuild/buildtools/build"
 	bep "github.com/zemn-me/monorepo/ci/bazel_bep/build_event_stream_proto"
 	"google.golang.org/protobuf/encoding/protodelim"
 	"google.golang.org/protobuf/types/known/durationpb"
@@ -21,6 +22,7 @@ import (
 var (
 	buildBuddyURL = regexp.MustCompile(`https://[^\s"'<>]*buildbuddy[^\s"'<>]*`)
 	pathMention   = regexp.MustCompile(`(?:^|[\s"'(])((?:[A-Za-z]:)?/?[A-Za-z0-9._+@%=-][A-Za-z0-9._+@%=/,:-]*\.[A-Za-z0-9_+-]+)(?::(\d+))?(?::(\d+))?`)
+	severityLine  = regexp.MustCompile(`^\s*(DEBUG|WARNING|ERROR|FATAL):`)
 )
 
 type annotator struct {
@@ -99,15 +101,18 @@ func (a *annotator) annotations(event *bep.BuildEvent) []string {
 	var out []string
 
 	out = append(out, a.buildBuddyAnnotations(event)...)
+	out = append(out, a.progressAnnotations(event)...)
 
 	if id := event.GetId(); id != nil {
 		if target := id.GetTargetCompleted(); target != nil && event.GetCompleted() != nil && !event.GetCompleted().GetSuccess() {
 			label := target.GetLabel()
 			body := label + " failed to build"
-			out = append(out, command("error", params{
-				"file":  buildFileForLabel(label),
-				"title": body,
-			}, body))
+			p := params{"title": body}
+			if file, ok := a.workspaceRelativeFile(buildFileForLabel(label)); ok {
+				p["file"] = file
+				p["line"] = buildFileLine(a.workspace, label)
+			}
+			out = append(out, command("error", p, body))
 		}
 
 		if summaryID := id.GetTestSummary(); summaryID != nil && event.GetTestSummary() != nil {
@@ -138,6 +143,38 @@ func (a *annotator) annotations(event *bep.BuildEvent) []string {
 		}
 	}
 
+	return out
+}
+
+func (a annotator) progressAnnotations(event *bep.BuildEvent) []string {
+	progress := event.GetProgress()
+	if progress == nil {
+		return nil
+	}
+
+	var out []string
+	for _, text := range []string{progress.GetStderr(), progress.GetStdout()} {
+		for _, line := range strings.Split(text, "\n") {
+			match := severityLine.FindStringSubmatch(line)
+			if match == nil {
+				continue
+			}
+
+			level := strings.ToLower(match[1])
+			if level == "fatal" {
+				level = "error"
+			}
+			title := "Bazel " + strings.ToLower(match[1])
+			for _, location := range a.sourceLocations(line) {
+				out = append(out, command(level, params{
+					"col":   location.col,
+					"file":  location.file,
+					"line":  location.line,
+					"title": title,
+				}, line))
+			}
+		}
+	}
 	return out
 }
 
@@ -229,14 +266,13 @@ func (a annotator) testSummaryAnnotations(label string, summary *bep.TestSummary
 	logText := failedLogs(summary.GetFailed())
 	body := label + " " + status.String() + logText
 	title := label + " " + strings.ToLower(status.String()) + durationSuffix(summary.GetTotalRunDuration())
-	fallbackFile := buildFileForLabel(label)
-
-	out := []string{
-		command(level, params{
-			"file":  fallbackFile,
-			"title": title,
-		}, body),
+	fallback := params{"title": title}
+	if file, ok := a.workspaceRelativeFile(buildFileForLabel(label)); ok {
+		fallback["file"] = file
+		fallback["line"] = buildFileLine(a.workspace, label)
 	}
+
+	out := []string{command(level, fallback, body)}
 
 	for _, location := range a.sourceLocations(logText) {
 		out = append(out, command(level, params{
@@ -297,6 +333,9 @@ func (a annotator) sourceLocations(text string) []sourceLocation {
 			line: match[2],
 			col:  match[3],
 		}
+		if location.line == "" {
+			location.line = "1"
+		}
 		key := location.file + ":" + location.line + ":" + location.col
 		if seen[key] {
 			continue
@@ -309,29 +348,70 @@ func (a annotator) sourceLocations(text string) []sourceLocation {
 }
 
 func (a annotator) workspaceRelativeFile(candidate string) (string, bool) {
-	candidate = strings.Trim(candidate, ".,;")
+	candidate = strings.TrimRight(candidate, ".,;")
 	if candidate == "" || strings.Contains(candidate, "://") {
 		return "", false
 	}
 
-	var abs string
+	var candidates []string
 	if filepath.IsAbs(candidate) {
-		abs = filepath.Clean(candidate)
+		candidates = append(candidates, filepath.Clean(candidate))
 	} else {
-		abs = filepath.Join(a.workspace, filepath.Clean(candidate))
+		candidates = append(candidates, filepath.Join(a.workspace, filepath.Clean(candidate)))
 	}
 
-	rel, err := filepath.Rel(a.workspace, abs)
-	if err != nil || rel == "." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) || rel == ".." || filepath.IsAbs(rel) {
-		return "", false
+	for _, relative := range rebasedWorkspacePaths(candidate, filepath.Base(a.workspace)) {
+		candidates = append(candidates, filepath.Join(a.workspace, filepath.FromSlash(relative)))
 	}
 
-	info, err := os.Stat(abs)
-	if err != nil || info.IsDir() {
-		return "", false
+	seen := map[string]bool{}
+	for _, abs := range candidates {
+		abs = filepath.Clean(abs)
+		if seen[abs] {
+			continue
+		}
+		seen[abs] = true
+
+		rel, err := filepath.Rel(a.workspace, abs)
+		if err != nil || rel == "." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) || rel == ".." || filepath.IsAbs(rel) {
+			continue
+		}
+
+		info, err := os.Stat(abs)
+		if err != nil || info.IsDir() {
+			continue
+		}
+
+		return filepath.ToSlash(rel), true
 	}
 
-	return filepath.ToSlash(rel), true
+	return "", false
+}
+
+func rebasedWorkspacePaths(candidate, workspaceName string) []string {
+	path := filepath.ToSlash(filepath.Clean(candidate))
+	var paths []string
+
+	for _, marker := range []string{"/execroot/", ".runfiles/_main/", "/_main/"} {
+		start := strings.Index(path, marker)
+		if start < 0 {
+			continue
+		}
+		rest := path[start+len(marker):]
+		if marker == "/execroot/" {
+			_, rest, _ = strings.Cut(rest, "/")
+		}
+		if rest != "" {
+			paths = append(paths, rest)
+		}
+	}
+
+	repeatedWorkspace := "/" + workspaceName + "/" + workspaceName + "/"
+	if start := strings.LastIndex(path, repeatedWorkspace); start >= 0 {
+		paths = append(paths, path[start+len(repeatedWorkspace):])
+	}
+
+	return paths
 }
 
 func filePathFromURI(uri string) (string, bool) {
@@ -355,6 +435,45 @@ func buildFileForLabel(label string) string {
 	}
 
 	return pkg + "/BUILD.bazel"
+}
+
+func buildFileLine(workspace, label string) string {
+	if !strings.HasPrefix(label, "//") {
+		return "1"
+	}
+
+	withoutRepo := strings.TrimPrefix(label, "//")
+	pkg, target, hasTarget := strings.Cut(withoutRepo, ":")
+	if !hasTarget {
+		target = pkg
+		if slash := strings.LastIndex(target, "/"); slash >= 0 {
+			target = target[slash+1:]
+		}
+	}
+	if target == "" {
+		return "1"
+	}
+
+	filename := filepath.Join(workspace, filepath.FromSlash(buildFileForLabel(label)))
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return "1"
+	}
+
+	file, err := bzl.ParseBuild(filename, content)
+	if err != nil {
+		return "1"
+	}
+	rule := file.RuleNamed(target)
+	if rule == nil {
+		return "1"
+	}
+
+	start, _ := rule.Call.Span()
+	if start.Line < 1 {
+		return "1"
+	}
+	return fmt.Sprint(start.Line)
 }
 
 func durationSuffix(d *durationpb.Duration) string {
