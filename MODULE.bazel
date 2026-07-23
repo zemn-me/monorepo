@@ -467,7 +467,7 @@ PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.253.0"
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "4b2e9da6f2ee17d2e8173942df16b49c1fa3be05a1aac2855e373d4ca9a75b5e",
+    sha256 = "12d1d00e1a6411ab9af07a9afbd94ca234e889909281dc482ee2e466add28e3e",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
