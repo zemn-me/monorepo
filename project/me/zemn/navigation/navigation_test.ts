@@ -52,6 +52,7 @@ it('includes public content and redirect pages', () => {
 		'/article/2019/cors',
 		'/article/2024/clean',
 		'/article/2024/missing',
+		'/article/2026/mandarin-bench',
 		'/availability',
 		'/cv',
 		'/tool/elastictabs',
