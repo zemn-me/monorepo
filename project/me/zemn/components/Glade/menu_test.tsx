@@ -1,4 +1,11 @@
-import { afterEach, beforeAll, beforeEach, expect, it, jest } from '@jest/globals';
+import {
+	afterEach,
+	beforeAll,
+	beforeEach,
+	expect,
+	it,
+	jest,
+} from '@jest/globals';
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
@@ -37,28 +44,31 @@ interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 jest.unstable_mockModule(
 	'#root/project/me/zemn/components/Link/index.js',
 	() => ({
-		default: ({ children, styleless: _styleless, ...props }: MockLinkProps) => (
-			<a {...props}>{children}</a>
-		),
+		default: ({
+			children,
+			styleless: _styleless,
+			...props
+		}: MockLinkProps) => <a {...props}>{children}</a>,
 	})
 );
 
-jest.unstable_mockModule(
-	'#root/project/me/zemn/hook/useZemnMeApi.js',
-	() => ({
-		useGetMeScopes:
-			() =>
-			(onResolved: (scopes: readonly string[]) => unknown) =>
-				onResolved([]),
-	})
-);
+jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeApi.js', () => ({
+	useGetMeScopes:
+		() => (onResolved: (scopes: readonly string[]) => unknown) =>
+			onResolved([]),
+}));
 
-jest.unstable_mockModule(
-	'#root/project/me/zemn/hook/useZemnMeAuth.js',
-	() => ({
-		useZemnMeAuth: () => [undefined],
-	})
-);
+let isLoggedIn = false;
+
+jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeAuth.js', () => ({
+	useZemnMeAuth: () => [
+		(
+			onResolved: (token: string) => unknown,
+			_onRejected: () => unknown,
+			onPending: () => unknown
+		) => (isLoggedIn ? onResolved('token') : onPending()),
+	],
+}));
 
 let GladeMenu: () => JSX.Element;
 let container: HTMLDivElement;
@@ -69,6 +79,7 @@ beforeAll(async () => {
 });
 
 beforeEach(() => {
+	isLoggedIn = false;
 	container = document.createElement('div');
 	root = createRoot(container);
 	document.body.appendChild(container);
@@ -110,4 +121,30 @@ it('retracts the menu when tapping outside it', () => {
 
 	expect(details.open).toBe(false);
 	outside.remove();
+});
+
+it('hides availability when signed out', () => {
+	act(() => {
+		root.render(<GladeMenu />);
+	});
+
+	expect(
+		Array.from(container.querySelectorAll('a')).some(
+			link => link.textContent === 'Availability'
+		)
+	).toBe(false);
+});
+
+it('shows availability when signed in', () => {
+	isLoggedIn = true;
+
+	act(() => {
+		root.render(<GladeMenu />);
+	});
+
+	expect(
+		Array.from(container.querySelectorAll('a')).some(
+			link => link.textContent === 'Availability'
+		)
+	).toBe(true);
 });

@@ -2,20 +2,20 @@ import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 
 type ApiScopes = components['schemas']['OAuthScopes'];
 
-export type RequiredScope =
-	keyof Pick<
-		ApiScopes,
-		| 'admin_analytics_read'
-		| 'admin_users_manage'
-		| 'callbox_key'
-		| 'grievance_portal'
-		| 'minecraft'
-	>;
+export type RequiredScope = keyof Pick<
+	ApiScopes,
+	| 'admin_analytics_read'
+	| 'admin_users_manage'
+	| 'callbox_key'
+	| 'grievance_portal'
+	| 'minecraft'
+>;
 
 export interface NavigationLink {
 	readonly description?: string;
 	readonly href: string;
 	readonly label: string;
+	readonly requiresAuthentication?: boolean;
 	readonly requiredScope?: RequiredScope;
 }
 
@@ -31,7 +31,11 @@ export interface NavigationSection {
 export const pageLinks: readonly NavigationLink[] = [
 	{ href: '/', label: 'Home' },
 	{ href: '/cv', label: 'CV' },
-	{ href: '/availability', label: 'Availability' },
+	{
+		href: '/availability',
+		label: 'Availability',
+		requiresAuthentication: true,
+	},
 ];
 
 export const toolLinks: readonly NavigationLink[] = [
@@ -71,9 +75,8 @@ export const articleLinks: readonly ArticleNavigationLink[] = [
 	},
 ];
 
-export const releasedArticleLinks: readonly NavigationLink[] = articleLinks.filter(
-	link => link.released
-);
+export const releasedArticleLinks: readonly NavigationLink[] =
+	articleLinks.filter(link => link.released);
 
 export const experimentLinks: readonly NavigationLink[] = [
 	{
