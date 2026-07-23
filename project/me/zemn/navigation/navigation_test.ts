@@ -5,6 +5,7 @@ import {
 	articleLinks,
 	experimentLinks,
 	navSections,
+	pageLinks,
 	releasedArticleLinks,
 	toolLinks,
 } from '#root/project/me/zemn/navigation/navigation.js';
@@ -52,7 +53,6 @@ it('includes public content and redirect pages', () => {
 		'/article/2019/cors',
 		'/article/2024/clean',
 		'/article/2024/missing',
-		'/availability',
 		'/cv',
 		'/tool/elastictabs',
 	];
@@ -65,6 +65,14 @@ it('includes public content and redirect pages', () => {
 	expect(hrefs).not.toContain('/linkedin');
 	expect(hrefs).not.toContain('/src');
 	expect(hrefs).not.toContain('/twitter');
+});
+
+it('requires authentication for availability in the menu', () => {
+	expect(pageLinks.find(link => link.href === '/availability')).toEqual(
+		expect.objectContaining({
+			requiresAuthentication: true,
+		})
+	);
 });
 
 it('hides unreleased articles from the menu', () => {
@@ -84,17 +92,17 @@ it('only includes released article links in the menu', () => {
 	const expected = articleLinks
 		.filter(link => link.released)
 		.map(link => link.href);
-	const actual = navSections.find(section => section.label === 'Articles')?.links.map(
-		link => link.href
-	);
+	const actual = navSections
+		.find(section => section.label === 'Articles')
+		?.links.map(link => link.href);
 
 	expect(actual).toEqual(expected);
 });
 
 it('puts tools in their own menu section', () => {
-	const actual = navSections.find(section => section.label === 'Tools')?.links.map(
-		link => link.href
-	);
+	const actual = navSections
+		.find(section => section.label === 'Tools')
+		?.links.map(link => link.href);
 
 	expect(actual).toEqual(toolLinks.map(link => link.href));
 	expect(actual).toEqual(['/tool/elastictabs']);

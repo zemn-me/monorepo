@@ -13,6 +13,11 @@ export function GladeMenu() {
 	const detailsRef = useRef<HTMLDetailsElement | null>(null);
 	const [fut_idToken] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
+	const isLoggedIn = fut_idToken(
+		() => true,
+		() => false,
+		() => false
+	);
 
 	useEffect(() => {
 		const onPointerDown = (event: PointerEvent) => {
@@ -41,8 +46,10 @@ export function GladeMenu() {
 	const visibleSections = navSections
 		.map(section => ({
 			...section,
-			links: section.links.filter(link =>
-				isLinkVisible(link.requiredScope)
+			links: section.links.filter(
+				link =>
+					(!link.requiresAuthentication || isLoggedIn) &&
+					isLinkVisible(link.requiredScope)
 			),
 		}))
 		.filter(section => section.links.length > 0);
