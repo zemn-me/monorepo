@@ -543,6 +543,10 @@ http_archive(
 
 bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
 
+# renovate:
+# 	datasource=github-releases
+# 	versioning=semver
+# 	depName=bazelbuild/bazel
 BAZEL_SOURCE_VERSION = "8.7.0"
 
 http_archive(

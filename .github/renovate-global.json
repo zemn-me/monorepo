@@ -143,6 +143,11 @@
 		{
 			"groupName": "chromedriver",
 			"matchPackageNames": ["/com_googleapis_storage_chromedriver.*/"]
+		},
+		{
+			"description": "Keep the Bazel executable and downloaded Bazel source on the same release",
+			"groupName": "bazel",
+			"matchPackageNames": ["bazel", "bazelbuild/bazel"]
 		}
 	]
 }
