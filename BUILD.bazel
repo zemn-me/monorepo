@@ -18,6 +18,7 @@ load("@pip//:requirements.bzl", "all_whl_requirements")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/binary_with_args:binary_with_args.bzl", "binary_with_args")
@@ -101,6 +102,37 @@ sh_test(
         "WORKSPACE_STATUS": "$(rlocationpath //:workspace_status.sh)",
     },
     deps = ["@rules_shell//shell/runfiles"],
+)
+
+sh_test(
+    name = "bazel_source_version_test",
+    size = "small",
+    srcs = ["bazel_source_version_test.sh"],
+    data = [
+        ".bazelversion",
+        "MODULE.bazel",
+    ],
+    env = {
+        "BAZEL_SOURCE_MODULE": "$(rlocationpath //:MODULE.bazel)",
+        "BAZEL_VERSION_FILE": "$(rlocationpath //:.bazelversion)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+sh_binary(
+    name = "bazel_source_version_test.fix",
+    srcs = ["bazel_source_version_test_fix.sh"],
+)
+
+sh_test(
+    name = "bazel_source_version_fix_test",
+    size = "small",
+    srcs = ["bazel_source_version_fix_test.sh"],
+    data = [":bazel_source_version_test.fix"],
+    env = {
+        "BAZEL_SOURCE_VERSION_FIXER": "$(rlocationpath //:bazel_source_version_test.fix)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
 copy_to_bin(
