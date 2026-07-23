@@ -5,11 +5,6 @@ import path from 'node:path';
 
 import { runfiles } from '@bazel/runfiles';
 
-import {
-	Command,
-	FilePositionParams,
-} from '#root/ts/github/actions/index.js';
-
 /**
  * Drink bytes from the Readable, returning each line.
  */
@@ -41,101 +36,6 @@ async function* byLine(r: NodeJS.ReadableStream) {
 	// send any extra stuff that was never newline terminated.
 	const text = chunks.join('');
 	if (text.length !== 0) yield text;
-}
-
-function getWorkspaceRelativePath(path: string): FilePositionParams {
-	const m = /([^:]+)(?::(\d+))?(?::(\d+))?/.exec(path);
-
-	if (m === null) return {};
-
-	let [, filePath, line, column] = m;
-
-	const m2 =
-		/(?:.*bazel\/_bazel_runner\/[^/]+\/|.*runner\/work\/)(?:monorepo\/)*(.*)/.exec(
-			filePath!
-		);
-
-	if (m2 !== null) {
-		[, filePath] = m2;
-	}
-
-	return { file: filePath, line, col: column };
-}
-
-/*
-function buildTagToBuildFile(buildTag: string): string {
-	const m = /^\/\/([^:]+):(.*)/.exec(buildTag);
-
-	if (m === null) return buildTag;
-
-	const [, packagePath] = m;
-
-	return Path.join(packagePath, 'BUILD.bazel');
-}
-*/
-
-async function* AnnotateDebugStatements(lines: AsyncGenerator<string>) {
-	for await (const line of lines) {
-		const m = /^\s*DEBUG: ([^ ]+)(?: WARNING: (.*))?/g.exec(line);
-
-		if (m === null) {
-			yield line;
-			continue;
-		}
-
-		const [, filepath, warningMessage] = m;
-
-		if (warningMessage) {
-			yield Command('warning')({
-				...getWorkspaceRelativePath(filepath!),
-				title: warningMessage,
-			})(line);
-			continue;
-		}
-
-		yield Command('debug')(getWorkspaceRelativePath(filepath!))(line);
-	}
-}
-
-async function* AnnotateNonCacheWarnings(lines: AsyncGenerator<string>) {
-	for await (const line of lines) {
-		const m =
-			/\s+WARNING: Fetching from [^\s]+ without an integrity hash. The result will not be cached/g.exec(
-				line
-			);
-
-		if (m === null) {
-			yield line;
-			continue;
-		}
-
-		yield Command('error')({
-			file: 'MODULE.bazel',
-		})(line);
-	}
-}
-
-async function* AnnotateBazelFailures(lines: AsyncGenerator<string>) {
-	for await (const line of lines) {
-		const m = /ERROR:(\s+[^:]+.bazel:\d+:\d+):\s+.*/.exec(line);
-
-		if (m === null) {
-			yield line;
-			continue;
-		}
-
-		const [, filepath] = m;
-
-		yield Command('error')({
-			...getWorkspaceRelativePath(filepath!),
-		})(line);
-	}
-}
-
-export function AnnotateBazelLines(lines: AsyncGenerator<string>) {
-	return AnnotateBazelFailures(
-		AnnotateNonCacheWarnings(AnnotateDebugStatements(lines))
-	);
 }
 
 /**
@@ -186,10 +86,9 @@ export async function Bazel(cwd: string, ...args: string[]) {
 	let errorObserved = false;
 
 	for await (const line of interleave(
-		AnnotateBazelLines(byLine(bazel.stdout)),
-		AnnotateBazelLines(byLine(bazel.stderr))
+		byLine(bazel.stdout),
+		byLine(bazel.stderr)
 	)) {
-		if (!errorObserved && /^::error/.test(line)) errorObserved = true;
 		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		console.log(line);
 	}
