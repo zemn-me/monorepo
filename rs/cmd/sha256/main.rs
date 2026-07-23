@@ -32,7 +32,7 @@ fn act() -> Result<(), RunError> {
                 }
                 sha.update(&buffer[..bytes_read]);
             }
-            Ok(format!("{}  {}\n", hex::encode(sha.finalize()), &file_name))
+            Ok(format!("{}  {}\n", hex::encode(sha.finalize()), file_name))
         })
         .collect::<Result<Vec<String>, RunError>>()?
         .join("");
