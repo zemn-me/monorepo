@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import sharpT from 'sharp';
+import sharpT, { type JpegOptions } from 'sharp';
 
 import { doSync, JSONObject } from '#root/ts/do-sync/index.js';
 
@@ -10,7 +10,7 @@ const resized =
 
 const fn = async (a: string, b: number, c: string) => `${a}${b}${c}`;
 
-interface resizeOpts extends sharpT.JpegOptions, JSONObject {
+interface resizeOpts extends JpegOptions, JSONObject {
 	width: number;
 	height: number;
 }
