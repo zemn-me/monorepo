@@ -1,5 +1,10 @@
 use sha2::{Digest, Sha256};
-use std::{convert, env::args, fs::File, io};
+use std::{
+    convert,
+    env::args,
+    fs::File,
+    io::{self, Read},
+};
 
 #[allow(dead_code)]
 #[derive(Debug)]
@@ -18,7 +23,15 @@ fn act() -> Result<(), RunError> {
         .skip(1)
         .map(|file_name| -> Result<String, RunError> {
             let mut sha = Sha256::new();
-            io::copy(&mut File::open(&file_name)?, &mut sha)?;
+            let mut file = File::open(&file_name)?;
+            let mut buffer = [0; 64 * 1024];
+            loop {
+                let bytes_read = file.read(&mut buffer)?;
+                if bytes_read == 0 {
+                    break;
+                }
+                sha.update(&buffer[..bytes_read]);
+            }
             Ok(format!("{}  {}\n", hex::encode(sha.finalize()), &file_name))
         })
         .collect::<Result<Vec<String>, RunError>>()?
