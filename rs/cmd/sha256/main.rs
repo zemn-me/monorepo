@@ -19,7 +19,7 @@ fn act() -> Result<(), RunError> {
         .map(|file_name| -> Result<String, RunError> {
             let mut sha = Sha256::new();
             io::copy(&mut File::open(&file_name)?, &mut sha)?;
-            Ok(format!("{}  {}\n", hex::encode(sha.finalize()), &file_name))
+            Ok(format!("{}  {}\n", hex::encode(sha.finalize()), file_name))
         })
         .collect::<Result<Vec<String>, RunError>>()?
         .join("");
