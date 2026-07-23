@@ -580,7 +580,7 @@ rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_t
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.96.1"
+RUST_VERSION = "1.97.1"
 
 rust.toolchain(
     edition = "2021",
