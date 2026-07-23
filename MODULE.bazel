@@ -196,6 +196,7 @@ use_repo(
     "com_github_golang_protobuf",
     "com_github_google_uuid",
     "com_github_gorilla_websocket",
+    "com_github_itchyny_go_yaml",
     "com_github_itchyny_gojq",
     "com_github_nyaruka_phonenumbers",
     "com_github_oapi_codegen_nethttp_middleware",
@@ -446,12 +447,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_X64 = "3.220.0"
+PULUMI_CLI_VERSION_LINUX_X64 = "3.253.0"
 
 http_archive(
     name = "pulumi_cli_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "6f00c595e0c35821cd31903d7bb328a11c3c4bdad7acd59403fbb14cfcad45ff",
+    sha256 = "33161e521280e6c77395a46344dba5ff9c118a90df254801e662087143b4d1ac",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_X64 + "-linux-x64.tar.gz",
@@ -462,12 +463,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.220.0"
+PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.253.0"
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "4b2e9da6f2ee17d2e8173942df16b49c1fa3be05a1aac2855e373d4ca9a75b5e",
+    sha256 = "12d1d00e1a6411ab9af07a9afbd94ca234e889909281dc482ee2e466add28e3e",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
@@ -478,7 +479,7 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_X64 = "3.220.0"
+PULUMI_CLI_VERSION_DARWIN_X64 = "3.253.0"
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
@@ -494,7 +495,7 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_ARM64 = "3.220.0"
+PULUMI_CLI_VERSION_LINUX_ARM64 = "3.253.0"
 
 http_archive(
     name = "pulumi_cli_linux_arm64",
@@ -512,7 +513,7 @@ exports_files(glob(["**/*"], allow_empty=True))
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.220.0"
+PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.253.0"
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
@@ -528,7 +529,7 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_X64 = "3.220.0"
+PULUMI_CLI_VERSION_WINDOWS_X64 = "3.253.0"
 
 http_archive(
     name = "pulumi_cli_windows_x64",
