@@ -196,7 +196,6 @@ use_repo(
     "com_github_golang_protobuf",
     "com_github_google_uuid",
     "com_github_gorilla_websocket",
-    "com_github_itchyny_go_yaml",
     "com_github_itchyny_gojq",
     "com_github_nyaruka_phonenumbers",
     "com_github_oapi_codegen_nethttp_middleware",
@@ -315,12 +314,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/factoriolab/factoriolab
 # 	refs-from=main
-FACTORIOLAB_COMMIT = "7aff56fde2b912f4812750b17d552a5facc410df"
+FACTORIOLAB_COMMIT = "17024b008a90e9f8f8ef846edba6bd8e32f6833c"
 
 http_archive(
     name = "com_github_factoriolab",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-rfjX14Q+/LaxxEDtOTG91GUT/y99QXuVjhkgWsxdzls=",
+    integrity = "sha256-E0VcWGcmkWXri1O221YmW2FN1e2ivmh7OpZvzUCwsqo=",
     strip_prefix = "factoriolab-" + FACTORIOLAB_COMMIT,
     # auto-integrity
     url = "https://github.com/factoriolab/factoriolab/archive/" + FACTORIOLAB_COMMIT + ".zip",
@@ -484,7 +483,7 @@ PULUMI_CLI_VERSION_DARWIN_X64 = "3.253.0"
 http_archive(
     name = "pulumi_cli_darwin_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "21bb2c9bdbf560cdee07c205b808b3b904159837eed6b24552c958f7b3129eee",
+    sha256 = "afee83f8af2845556eb69cb92632211723860235ef224bac3b80f905820497a0",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_X64 + "-darwin-x64.tar.gz",
@@ -502,7 +501,7 @@ http_archive(
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    sha256 = "2600ee0f43d8cc3756d5ba96c31864f9b246961bb7f6d8ae467ed8c270c4f66b",
+    sha256 = "7d7074d67a76139226c163b2365f14fbd45d8e2251362a2e10dc4602b3b577ea",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "-linux-arm64.tar.gz",
@@ -518,7 +517,7 @@ PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.253.0"
 http_archive(
     name = "pulumi_cli_windows_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "3235e75278f664805519699046c57368f19a99b097142d6b6dce40fdd16a456b",
+    sha256 = "35e696bc4263e81cab4d7bd4500528a376ae79b9e22732ce204ffb54ad8af7dd",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "-windows-arm64.zip",
@@ -534,7 +533,7 @@ PULUMI_CLI_VERSION_WINDOWS_X64 = "3.253.0"
 http_archive(
     name = "pulumi_cli_windows_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "96874565920f0d7cce8cf5a6837bea5c62991c36a1f9be597272857ad28b290f",
+    sha256 = "3b5ec1964212021c2d8158b01884544e2aad69c73370b189ae574d3ce5a00b19",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "-windows-x64.zip",
