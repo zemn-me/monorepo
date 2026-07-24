@@ -109,6 +109,7 @@
 		{
 			"matchManagers": [
 				"cargo",
+				"npm",
 				"bazel",
 				"custom.regex",
 				"gomod",
@@ -131,7 +132,9 @@
 					"MODULE.bazel.lock",
 					"gazelle_python.yaml",
 					"go.sum",
-					"requirements.txt"
+					"requirements.txt",
+					"**/.release.lock",
+					"**/version/*"
 				],
 				"recreateWhen": "always"
 			}

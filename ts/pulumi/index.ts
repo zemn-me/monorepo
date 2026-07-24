@@ -1,3 +1,4 @@
+import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
@@ -7,6 +8,7 @@ import * as random from '@pulumi/random';
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { GitHubActionsSecrets } from '#root/ts/pulumi/github_actions_secrets.js';
+import { NpmPackage } from '#root/ts/pulumi/lib/npm/package.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import {
 	getTwilioPhoneNumber,
@@ -165,6 +167,25 @@ export class Component extends Pulumi.ComponentResource {
 			: new GitHubActionsSecrets(`${name}_github_actions_secrets`, {
 					parent: this,
 				});
+
+		if (!args.staging) {
+			new NpmPackage(
+				`${name}_do_sync_npm`,
+				{
+					archive: runfiles.resolve(
+						'monorepo/ts/do-sync/npm_pkg.tgz'
+					),
+					packageName: 'do-sync',
+					publish: runfiles.resolve(
+						'monorepo/ts/do-sync/npm_pkg.publish_/npm_pkg.publish'
+					),
+					versionFile: runfiles.resolve(
+						'monorepo/ts/do-sync/npm_pkg_version.version.txt'
+					),
+				},
+				{ parent: this }
+			);
+		}
 
 		new CostAllocationTag(
 			`${name}_cost_tag`,

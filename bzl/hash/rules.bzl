@@ -28,7 +28,12 @@ def _impl(ctx):
     ctx.actions.run_shell(
         outputs = [ctx.outputs.sha256],
         inputs = inputs + [ctx.executable.sha256_bin],
-        command = "{} $@ > {}".format(ctx.executable.sha256_bin.path, ctx.outputs.sha256.path),
+        # Output paths include the host platform configuration. Normalize them
+        # so committed hash locks compare identically on macOS and Linux CI.
+        command = "{} $@ | sed -E 's#bazel-out/[^/]+/bin/#bazel-out/k8-fastbuild/bin/#' > {}".format(
+            ctx.executable.sha256_bin.path,
+            ctx.outputs.sha256.path,
+        ),
         arguments = arguments,
     )
 
