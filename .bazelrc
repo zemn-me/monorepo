@@ -125,9 +125,15 @@ common --test_verbose_timeout_warnings
 
 
 common --experimental_remote_cache_compression_threshold=100
-common --java_runtime_version=remotejdk_17
+common --java_language_version=21
+common --java_runtime_version=remotejdk_21
+common --tool_java_language_version=21
+common --tool_java_runtime_version=remotejdk_21
 
 common --check_direct_dependencies=error
+# Bazel 9 no longer provides the native Java and C++ rules used by some older
+# external modules. Autoload their canonical external definitions.
+common --incompatible_autoload_externally=+@rules_java,+@rules_cc
 # in regular usage, don't use all of the host ram for bazel.
 common --local_resources=memory=HOST_RAM*.5
 # in ci use it all
