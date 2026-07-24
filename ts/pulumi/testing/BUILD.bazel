@@ -18,6 +18,11 @@ jest_test(
     name = "tests",
     size = "large",
     srcs = ["pulumi_test.js"],
+    data = [
+        "//ts/do-sync:npm_package",
+        "//ts/do-sync:npm_pkg.publish",
+        "//ts/do-sync:npm_pkg_version",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [":testing"],
 )

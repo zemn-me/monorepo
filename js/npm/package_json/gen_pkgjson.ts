@@ -32,9 +32,9 @@ const labelToNpmPackage = (label: string): string => {
         @npm//@ok/thing/file:test.txt -> @ok/thing
         @npm//ok-whatever:fuck -> ok-whatever
     */
-	const match = /^@npm\/\/(?::node_modules\/)?((?:@[^/:]+\/)?[^/:]+)/.exec(
-		label
-	);
+	const match =
+		/^@npm\/\/(?::node_modules\/)?((?:@[^/:]+\/)?[^/:]+)/.exec(label) ??
+		/^(?:@@?\/\/|\/\/):node_modules\/((?:@[^/:]+\/)?[^/:]+)/.exec(label);
 
 	if (match === null)
 		throw new Error(`${label} does not appear to be an NPM package.`);
@@ -110,7 +110,9 @@ const main = async () => {
 		deps_list
 			.toString()
 			.split('\n')
-			.filter(v => v.startsWith('@npm//'))
+			.filter(v =>
+				/^(?:@npm\/\/|@@?\/\/:node_modules\/|\/\/:node_modules\/)/.test(v)
+			)
 			.map(v => labelToNpmPackage(v))
 	);
 
@@ -139,7 +141,10 @@ const main = async () => {
 	}
 
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
-	const version = (await fs.readFile(opts.version)).toString();
+	const version = (await fs.readFile(opts.version))
+		.toString()
+		.trim()
+		.replace(/^v/, '');
 
 	const depData = {
 		dependencies: Object.fromEntries(runDeps),
@@ -151,7 +156,7 @@ const main = async () => {
 		...depData,
 		repository: {
 			type: 'git',
-			url: 'https://github.com/zemn-me/monorepo.git',
+			url: 'git+https://github.com/zemn-me/monorepo.git',
 			directory: opts.package_name,
 		},
 		bugs: {

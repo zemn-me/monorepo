@@ -42,7 +42,6 @@ export const githubActionsSecretAccessByWorkflow = {
 	],
 	submit: [
 		githubActionsSecretIds.buildbuddyApiKey,
-		githubActionsSecretIds.npmToken,
 		githubActionsSecretIds.personalPhoneNumber,
 		githubActionsSecretIds.pulumiAccessToken,
 		githubActionsSecretIds.twilioAccountSid,
@@ -53,6 +52,10 @@ export const githubActionsSecretAccessByWorkflow = {
 	GitHubActionsWorkflowScope,
 	readonly GitHubActionsSecretId[]
 >;
+
+const secretsPendingDeletion = new Set<GitHubActionsSecretId>([
+	githubActionsSecretIds.npmToken,
+]);
 
 const workloadIdentityPoolId = 'github';
 const workloadIdentityProviderId = 'my-repo';
@@ -179,10 +182,11 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 
 		const secrets = new Map(
 			Object.values(githubActionsSecretIds).map(secretId => {
+				const pendingDeletion = secretsPendingDeletion.has(secretId);
 				const secret = new gcp.secretmanager.Secret(
 					`${name}_${secretId}`,
 					{
-						deletionProtection: true,
+						deletionProtection: !pendingDeletion,
 						labels: {
 							component: 'github-actions',
 							repository: 'zemn-me-monorepo',
@@ -194,7 +198,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					{
 						dependsOn: services,
 						parent: this,
-						protect: true,
+						protect: !pendingDeletion,
 					}
 				);
 

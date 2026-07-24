@@ -260,6 +260,7 @@ py_venv(
     name = "venv",
     deps = [
         "//bzl/versioning",
+        "//bzl/versioning:release",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//project/me/zemn/api/analytics/inject_iservice:inject_iservice_bin",
         "//project/me/zemn/inject_iservice:inject_iservice_bin",

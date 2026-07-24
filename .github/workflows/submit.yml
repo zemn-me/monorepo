@@ -49,7 +49,6 @@ jobs:
         with:
           secrets: |-
             buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
-            npm_token:extreme-cycling-441523-a9/github-actions-npm-token
       - name: Upload to Bazel remote cache
         run: |
           ./.github/workflows/prepare_ci.sh
@@ -60,8 +59,6 @@ jobs:
           $BAZEL run --config=ci --tool_tag=upload-to-bazel-remote-cache //ci:presubmit -- --skip-pulumi-deploy
           echo "::endgroup::"
         env:
-          NPM_TOKEN: ${{ steps.secrets.outputs.npm_token }}
-          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.npm_token }}
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
   Submit:
     permissions:
@@ -98,7 +95,6 @@ jobs:
         with:
           secrets: |-
             buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
-            npm_token:extreme-cycling-441523-a9/github-actions-npm-token
             personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
             pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
             twilio_account_sid:extreme-cycling-441523-a9/github-actions-twilio-account-sid
@@ -124,8 +120,6 @@ jobs:
           ./.github/workflows/prepare_ci.sh
           $BAZEL run --config=ci --tool_tag=submit //ci:submit
         env:
-          NPM_TOKEN: ${{ steps.secrets.outputs.npm_token }}
-          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.npm_token }}
           GITHUB_TOKEN: ${{ github.token }}
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
