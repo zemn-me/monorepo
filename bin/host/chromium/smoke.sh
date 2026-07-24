@@ -12,4 +12,8 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # --- end runfiles.bash initialization v3 ---
 
 
+# Bazel shell-quotes rlocation paths containing spaces when expanding the
+# test environment.
+CHROMIUM_BINARY="${CHROMIUM_BINARY#\'}"
+CHROMIUM_BINARY="${CHROMIUM_BINARY%\'}"
 "$(rlocation "$CHROMIUM_BINARY")" --version

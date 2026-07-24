@@ -6,7 +6,6 @@ import * as random from '@pulumi/random';
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
-import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
 import { GitHubActionsSecrets } from '#root/ts/pulumi/github_actions_secrets.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import {
@@ -296,12 +295,6 @@ export class Component extends Pulumi.ComponentResource {
 
 		new Baby.Component(
 			`${name}_baby`,
-			{ staging: args.staging, tags },
-			{ parent: this }
-		);
-
-		new DoSync(
-			`${name}_do_sync`,
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);

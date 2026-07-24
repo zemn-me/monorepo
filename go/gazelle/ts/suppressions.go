@@ -48,8 +48,6 @@ var SuppressGazelleTypescriptFor = map[string]bool{
 	"project/cultist/verb.ts":                                 true,
 	"rs/ts/cmd/extract_imports/testing/a.ts":                  true,
 	"testing/typescript_basic_test.ts":                        true,
-	"ts/cmd/copybara/copybara.ts":                             true,
-	"ts/cmd/copybara/smoke_test.ts":                           true,
 	"ts/cmd/svgshot/index.ts":                                 true,
 	"ts/cmd/svgshot/lib.ts":                                   true,
 	"ts/cmd/svgshot/run.ts":                                   true,

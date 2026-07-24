@@ -1,4 +1,5 @@
 load("@npm//:stylelint/package_json.bzl", stylelint = "bin")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
 

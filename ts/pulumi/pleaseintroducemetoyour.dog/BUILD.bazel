@@ -22,7 +22,7 @@ py_binary(
     env = {
         "NEXTJS_BINARY": "$(rlocationpath :dev)",
     },
-    main = "__main__.py",
+    main = "//project/me/zemn/api/analytics/inject_iservice:__main__.py",
     deps = [
         "@pip//pydantic",
         "@rules_python//python/runfiles",
