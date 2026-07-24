@@ -11,8 +11,18 @@ ignore (
 	./node_modules
 )
 
+tool (
+	github.com/a-h/generate/cmd/schema-generate
+	github.com/bazelbuild/bazel-watcher/cmd/ibazel
+	github.com/go-delve/delve/cmd/dlv
+	github.com/itchyny/gojq/cmd/gojq
+	github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
+	golang.org/x/tools/cmd/goimports
+	golang.org/x/tools/gopls
+	honnef.co/go/tools/cmd/staticcheck
+)
+
 require (
-	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60
 	github.com/aws/aws-lambda-go v1.54.0
 	github.com/aws/aws-sdk-go-v2 v1.42.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.30
@@ -25,7 +35,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.105.2
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.51.3
-	github.com/bazelbuild/bazel-watcher v0.31.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
 	github.com/bazelbuild/rules_go v0.61.1
 	github.com/beevik/etree v1.7.0
@@ -35,15 +44,12 @@ require (
 	github.com/getkin/kin-openapi v0.142.0
 	github.com/go-chi/chi/v5 v5.3.1
 	github.com/go-chi/cors v1.2.2
-	github.com/go-delve/delve v1.27.0
 	github.com/go-jose/go-jose/v4 v4.1.4
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/itchyny/gojq v0.12.19
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
-	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/sergi/go-diff v1.4.0
 	github.com/tdewolff/parse/v2 v2.8.13
@@ -52,10 +58,18 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/image v0.44.0
 	golang.org/x/sync v0.22.0
-	golang.org/x/tools v0.48.0
-	golang.org/x/tools/gopls v0.23.0
 	google.golang.org/protobuf v1.36.11
-	honnef.co/go/tools v0.8.0-rc.1
+)
+
+require (
+	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60 // indirect
+	github.com/bazelbuild/bazel-watcher v0.31.0 // indirect
+	github.com/go-delve/delve v1.27.0 // indirect
+	github.com/itchyny/gojq v0.12.19 // indirect
+	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
+	golang.org/x/tools v0.48.0 // indirect
+	golang.org/x/tools/gopls v0.23.0 // indirect
+	honnef.co/go/tools v0.8.0-rc.1 // indirect
 )
 
 require (
@@ -100,7 +114,7 @@ require (
 	github.com/google/jsonschema-go v0.4.3 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/itchyny/go-yaml v0.0.0-20251001235044-fca9a0999f15
+	github.com/itchyny/go-yaml v0.0.0-20251001235044-fca9a0999f15 // indirect
 	github.com/itchyny/timefmt-go v0.1.8 // indirect
 	github.com/jaschaephraim/lrserver v0.0.0-20240306232639-afed386b3640 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
