@@ -36,7 +36,7 @@ require (
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.51.3
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
-	github.com/bazelbuild/rules_go v0.61.1
+	github.com/bazelbuild/rules_go v0.62.0
 	github.com/beevik/etree v1.7.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.5.0+incompatible
@@ -49,7 +49,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/nyaruka/phonenumbers/v2 v2.0.5
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/sergi/go-diff v1.4.0
