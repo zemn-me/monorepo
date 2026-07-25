@@ -42,6 +42,7 @@ export const githubActionsSecretAccessByWorkflow = {
 	],
 	submit: [
 		githubActionsSecretIds.buildbuddyApiKey,
+		githubActionsSecretIds.npmToken,
 		githubActionsSecretIds.personalPhoneNumber,
 		githubActionsSecretIds.pulumiAccessToken,
 		githubActionsSecretIds.twilioAccountSid,
@@ -223,7 +224,11 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 						role: 'roles/secretmanager.secretAccessor',
 						secretId: secret.id,
 					},
-					{ dependsOn: provider, parent: secret, protect: true }
+					{
+						dependsOn: provider,
+						parent: secret,
+						protect: !secretsPendingDeletion.has(secretId),
+					}
 				);
 			}
 		}
