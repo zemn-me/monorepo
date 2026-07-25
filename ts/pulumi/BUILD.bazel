@@ -35,10 +35,11 @@ ts_project(
     ],
     data = [
         ":pulumi_local",
+        "//js/npm:publish",
         "//project/im/shadwell/thomas",
         "//project/me/zemn:next",
         "//ts/do-sync:npm_package",
-        "//ts/do-sync:npm_pkg.publish",
+        "//ts/do-sync:npm_pkg",
         "//ts/do-sync:npm_pkg_version",
         "//ts/pulumi/zemn.me/availability:next",
         "//ts/pulumi/zemn.me/static",

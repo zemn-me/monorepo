@@ -176,8 +176,11 @@ export class Component extends Pulumi.ComponentResource {
 						'monorepo/ts/do-sync/npm_pkg.tgz'
 					),
 					packageName: 'do-sync',
+					packageDirectory: runfiles.resolve(
+						'monorepo/ts/do-sync/npm_pkg'
+					),
 					publish: runfiles.resolve(
-						'monorepo/ts/do-sync/npm_pkg.publish_/npm_pkg.publish'
+						'monorepo/js/npm/publish_/publish'
 					),
 					versionFile: runfiles.resolve(
 						'monorepo/ts/do-sync/npm_pkg_version.version.txt'

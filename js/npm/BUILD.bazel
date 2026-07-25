@@ -1,10 +1,26 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_library")
 
-# Nothing exported here. Yet!
+# The rules_js pkg_npm publisher uses npm bundled with the Node toolchain.
+# Keep publishing on the repository-pinned npm, which supports OIDC trusted
+# publishing.
+js_binary(
+    name = "publish",
+    data = ["//:node_modules/npm"],
+    entry_point = "publish.mjs",
+    visibility = ["//ts/pulumi:__pkg__"],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
         "rules.bzl",
     ],
+)
+
+js_library(
+    name = "publish_mjs",
+    srcs = ["publish.mjs"],
+    deps = [],
 )
