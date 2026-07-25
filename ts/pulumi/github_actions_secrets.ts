@@ -12,7 +12,6 @@ export const githubActionsSecretProject = gcpProjectId;
 export const githubActionsSecretIds = {
 	buildbuddyApiKey: 'github-actions-buildbuddy-api-key',
 	ghPat: 'github-actions-gh-pat',
-	npmToken: 'github-actions-npm-token',
 	personalPhoneNumber: 'github-actions-personal-phone-number',
 	pulumiAccessToken: 'github-actions-pulumi-access-token',
 	readonlyBuildbuddyApiKey: 'github-actions-readonly-buildbuddy-api-key',
@@ -42,7 +41,6 @@ export const githubActionsSecretAccessByWorkflow = {
 	],
 	submit: [
 		githubActionsSecretIds.buildbuddyApiKey,
-		githubActionsSecretIds.npmToken,
 		githubActionsSecretIds.personalPhoneNumber,
 		githubActionsSecretIds.pulumiAccessToken,
 		githubActionsSecretIds.twilioAccountSid,
@@ -53,10 +51,6 @@ export const githubActionsSecretAccessByWorkflow = {
 	GitHubActionsWorkflowScope,
 	readonly GitHubActionsSecretId[]
 >;
-
-const secretsPendingDeletion = new Set<GitHubActionsSecretId>([
-	githubActionsSecretIds.npmToken,
-]);
 
 const workloadIdentityPoolId = 'github';
 const workloadIdentityProviderId = 'my-repo';
@@ -183,11 +177,10 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 
 		const secrets = new Map(
 			Object.values(githubActionsSecretIds).map(secretId => {
-				const pendingDeletion = secretsPendingDeletion.has(secretId);
 				const secret = new gcp.secretmanager.Secret(
 					`${name}_${secretId}`,
 					{
-						deletionProtection: !pendingDeletion,
+						deletionProtection: true,
 						labels: {
 							component: 'github-actions',
 							repository: 'zemn-me-monorepo',
@@ -199,7 +192,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					{
 						dependsOn: services,
 						parent: this,
-						protect: !pendingDeletion,
+						protect: true,
 					}
 				);
 
@@ -224,11 +217,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 						role: 'roles/secretmanager.secretAccessor',
 						secretId: secret.id,
 					},
-					{
-						dependsOn: provider,
-						parent: secret,
-						protect: !secretsPendingDeletion.has(secretId),
-					}
+					{ dependsOn: provider, parent: secret, protect: true }
 				);
 			}
 		}
