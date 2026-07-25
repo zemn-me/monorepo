@@ -29,6 +29,7 @@ def npm_pkg(
         version_lock = None,
         api_lock = None,
         release_lock = None,
+        release_metadata = [],
         major_version = None,
         minor_version = None,
         patch_version = None,
@@ -114,7 +115,7 @@ def npm_pkg(
 
     exclude_all_external_rule(
         name = name + "_version_lock_files",
-        srcs = srcs + files + [dep_spec_name, readme],
+        srcs = srcs + files + release_metadata + [dep_spec_name, readme],
     )
 
     if release_lock:

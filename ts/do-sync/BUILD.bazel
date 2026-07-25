@@ -31,6 +31,7 @@ npm_pkg(
     pkg_json_base = "package.template.json",
     readme = "README.md",
     release_lock = ".release.lock",
+    release_metadata = ["package.template.json"],
     test_version_on_main = True,
     tgz = "npm_package",
     visibility = [
