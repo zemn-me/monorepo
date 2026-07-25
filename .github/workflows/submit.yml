@@ -118,7 +118,12 @@ jobs:
         # $BAZEL generated node_modules
         run: |
           ./.github/workflows/prepare_ci.sh
-          $BAZEL run --config=ci --tool_tag=submit //ci:submit
+          $BAZEL run \
+            --config=ci \
+            --run_env=ACTIONS_ID_TOKEN_REQUEST_TOKEN \
+            --run_env=ACTIONS_ID_TOKEN_REQUEST_URL \
+            --tool_tag=submit \
+            //ci:submit
         env:
           GITHUB_TOKEN: ${{ github.token }}
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
