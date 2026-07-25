@@ -4,17 +4,43 @@ load("//js:rules.bzl", "copy_to_bin", "pkg_npm")
 load("//js/api-extractor:rules.bzl", "api_extractor")
 load("//js/npm/package_json:rules.bzl", "package_json")
 
-def _exclude_all_external_rule(ctx):
+def _release_files_impl(ctx):
+    excluded_paths = {file.path: True for file in ctx.files.exclude}
     return DefaultInfo(files = depset([
         file
         for file in ctx.files.srcs
-        if file.owner.workspace_name == ""
+        if file.owner.workspace_name == "" and file.path not in excluded_paths
     ]))
 
-exclude_all_external_rule = rule(
-    implementation = _exclude_all_external_rule,
+_release_files = rule(
+    implementation = _release_files_impl,
     attrs = {
+        "exclude": attr.label_list(allow_files = True),
         "srcs": attr.label_list(allow_files = True),
+    },
+)
+
+def _release_files_test_impl(ctx):
+    release_paths = {file.path: True for file in ctx.attr.release_files[DefaultInfo].files.to_list()}
+    leaked = [
+        file.path
+        for file in ctx.files.forbidden
+        if file.path in release_paths
+    ]
+    script = "#!/bin/sh\n"
+    if leaked:
+        script += "echo 'forbidden files leaked into npm release inputs: {}' >&2\nexit 1\n".format(", ".join(leaked))
+    else:
+        script += "exit 0\n"
+    ctx.actions.write(ctx.outputs.executable, script, is_executable = True)
+    return DefaultInfo(executable = ctx.outputs.executable)
+
+_release_files_test = rule(
+    implementation = _release_files_test_impl,
+    test = True,
+    attrs = {
+        "forbidden": attr.label_list(allow_files = True),
+        "release_files": attr.label(mandatory = True),
     },
 )
 
@@ -112,9 +138,16 @@ def npm_pkg(
             visibility = visibility,
         )
 
-    exclude_all_external_rule(
+    _release_files(
         name = name + "_version_lock_files",
+        exclude = ["//:package_json"],
         srcs = srcs + files + [dep_spec_name, readme],
+    )
+
+    _release_files_test(
+        name = name + "_release_inputs_test",
+        forbidden = ["//:package_json"],
+        release_files = ":" + name + "_version_lock_files",
     )
 
     if release_lock:
