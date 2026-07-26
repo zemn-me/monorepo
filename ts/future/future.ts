@@ -1,3 +1,5 @@
+import type { UseQueryResult } from '@tanstack/react-query';
+
 /**
  * A value which hasn't arrived yet.
  */
@@ -52,6 +54,22 @@ export {
 	loading as future_loading,
 	resolve as future_resolve,
 };
+
+/**
+ * Convert a React Query result into a {@link Future}.
+ */
+export function useQueryFuture<Then, Error>(
+	result: UseQueryResult<Then, Error>
+): Future<Then, void, Error> {
+	switch (result.status) {
+		case 'success':
+			return resolve(result.data);
+		case 'pending':
+			return loading(undefined);
+		case 'error':
+			return error(result.error);
+	}
+}
 
 /**
  * Execute a {@link Future} with a set of handlers.
@@ -175,7 +193,7 @@ export const coincide_then = <
  *
  * This can be used when it's not possible to {@link future_and_then} pipeline
  * the future but they're co-dependent, such as when using useQuery (which
- * cannot have functions returned if using {@link localStorage}).
+ * cannot have functions returned if using `localStorage`).
  *
  * If you *don't* use this function to declare the dependency,
  * then the child future will often show a loading state if
@@ -189,7 +207,7 @@ export const coincide_then = <
 export function future_declare_dependency<T1, T2, L1, L2, E1, E2>(
 	parent: Future<T1, L1, E1>,
 	child: Future<T2, L2, E2>
-) {
+): Future<T2, L1 | L2, E1 | E2> {
 	return parent(
 		(/*parent_then*/) =>
 			child(

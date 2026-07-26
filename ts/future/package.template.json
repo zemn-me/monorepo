@@ -1,0 +1,15 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@zemnmez/future",
+	"description": "A tiny, purely functional TypeScript type for values that may be loading, resolved, or errored",
+	"main": "future.js",
+	"type": "module",
+	"types": "index.d.ts",
+	"author": "zemnmez",
+	"license": "MIT",
+	"keywords": ["typescript", "future", "react", "react-query", "functional"],
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	}
+}

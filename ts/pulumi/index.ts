@@ -177,6 +177,11 @@ export class Component extends Pulumi.ComponentResource {
 					resourceName: 'do_sync',
 				},
 				{
+					name: '@zemnmez/future',
+					path: 'ts/future',
+					resourceName: 'future',
+				},
+				{
 					name: 'knowitwhenyouseeit',
 					path: 'ts/knowitwhenyouseeit',
 					resourceName: 'knowitwhenyouseeit',

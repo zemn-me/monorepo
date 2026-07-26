@@ -313,6 +313,7 @@ describe('pulumi', () => {
 			.filter(resource => resource.name.endsWith('_npm_publish'));
 		expect(npmPublishCommands.map(resource => resource.name).sort()).toEqual([
 			'monorepo_do_sync_npm_publish',
+			'monorepo_future_npm_publish',
 			'monorepo_knowitwhenyouseeit_npm_publish',
 			'monorepo_result_npm_publish',
 		]);
