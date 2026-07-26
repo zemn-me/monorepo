@@ -63,7 +63,7 @@ require (
 
 require (
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60 // indirect
-	github.com/bazelbuild/bazel-watcher v0.31.0 // indirect
+	github.com/bazelbuild/bazel-watcher v0.32.0 // indirect
 	github.com/go-delve/delve v1.27.0 // indirect
 	github.com/itchyny/gojq v0.12.19 // indirect
 	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
