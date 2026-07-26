@@ -131,6 +131,16 @@ def npm_pkg(
         visibility = visibility,
     )
 
+    native.filegroup(
+        name = name + "_publish_data",
+        srcs = [
+            name,
+            name + "_tar",
+            name + "_version",
+        ],
+        visibility = visibility,
+    )
+
     if tgz != None:
         native.alias(
             name = tgz,

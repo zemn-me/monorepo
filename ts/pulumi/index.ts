@@ -169,25 +169,29 @@ export class Component extends Pulumi.ComponentResource {
 				});
 
 		if (!args.staging) {
-			new NpmPackage(
-				`${name}_do_sync_npm`,
+			const publisher = runfiles.resolve('monorepo/js/npm/publish_/publish');
+			for (const npmPackage of [
+				{ name: 'do-sync', path: 'ts/do-sync' },
 				{
-					archive: runfiles.resolve(
-						'monorepo/ts/do-sync/npm_pkg.tgz'
-					),
-					packageName: 'do-sync',
-					packageDirectory: runfiles.resolve(
-						'monorepo/ts/do-sync/npm_pkg'
-					),
-					publish: runfiles.resolve(
-						'monorepo/js/npm/publish_/publish'
-					),
-					versionFile: runfiles.resolve(
-						'monorepo/ts/do-sync/npm_pkg_version.version.txt'
-					),
+					name: 'knowitwhenyouseeit',
+					path: 'ts/knowitwhenyouseeit',
 				},
-				{ parent: this }
-			);
+			]) {
+				const target = `monorepo/${npmPackage.path}/npm_pkg`;
+				new NpmPackage(
+					`${name}_${npmPackage.name.replaceAll('-', '_')}_npm`,
+					{
+						archive: runfiles.resolve(`${target}.tgz`),
+						packageDirectory: runfiles.resolve(target),
+						packageName: npmPackage.name,
+						publish: publisher,
+						versionFile: runfiles.resolve(
+							`${target}_version.version.txt`
+						),
+					},
+					{ parent: this }
+				);
+			}
 		}
 
 		new CostAllocationTag(

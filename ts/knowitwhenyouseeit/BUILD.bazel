@@ -43,15 +43,19 @@ jest_test(
 npm_pkg(
     name = "npm_pkg",
     srcs = [":project"],
-    api_lock = ".api.lock",
     entry_point = "index.ts",
     major_version = "version/major",
     minor_version = "version/minor",
     patch_version = "version/patch",
     pkg_json_base = "package.template.json",
     readme = "README.md",
-    version_lock = ".version.lock",
-    visibility = ["//ci:__subpackages__"],
+    release_lock = ".release.lock",
+    test_version_on_main = True,
+    tgz = "npm_package",
+    visibility = [
+        "//ci:__subpackages__",
+        "//ts/pulumi:__subpackages__",
+    ],
 )
 
 bazel_lint(
