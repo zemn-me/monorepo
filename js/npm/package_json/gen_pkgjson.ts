@@ -154,6 +154,7 @@ const main = async () => {
 	const toMerge = {
 		version,
 		...depData,
+		homepage: `https://github.com/zemn-me/monorepo/tree/main/${opts.package_name}#readme`,
 		repository: {
 			type: 'git',
 			url: 'git+https://github.com/zemn-me/monorepo.git',
