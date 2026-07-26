@@ -14,53 +14,28 @@ would otherwise violate the [Rules of Hooks][rules-of-hooks]. A function that
 may fail can return a `Result`, while the component calls every hook
 unconditionally and uses `unwrap_or_else` to select its success or failure UI:
 
-```typescript
-import {
-	and_then,
-	Err,
-	Ok,
-	Result,
-	unwrap_or_else,
-} from '@zemnmez/result';
+```tsx
+import { and_then, Err, Ok, Result, unwrap_or_else } from '@zemnmez/result';
 
-interface Todo {
-	id: number;
-	title: string;
-}
+type Vector3 = readonly [x: number, y: number, z: number];
 
-async function fetchTodos(): Promise<Result<Todo[], Error>> {
-	try {
-		const response = await fetch('/api/todos');
-		if (!response.ok) {
-			return Err(new Error('The server could not load your todos.'));
-		}
-
-		return Ok((await response.json()) as Todo[]);
-	} catch (cause) {
-		return Err(
-			cause instanceof Error
-				? cause
-				: new Error('Could not connect to the server.', {
-						cause,
-					})
-		);
+function normalize([x, y, z]: Vector3): Result<Vector3, Error> {
+	const length = Math.hypot(x, y, z);
+	if (length === 0) {
+		return Err(new Error('Cannot normalize a zero-length vector.'));
 	}
+
+	return Ok([x / length, y / length, z / length]);
 }
 
-function TodoList({
-	todos,
-}: {
-	todos: Result<Todo[], Error>;
-}) {
+function UnitVector({ vector }: { vector: Vector3 }) {
 	const theme = useTheme();
 
 	return unwrap_or_else(
-		and_then(todos, todos => (
-			<ul className={theme.todoList}>
-				{todos.map(todo => (
-					<li key={todo.id}>{todo.title}</li>
-				))}
-			</ul>
+		and_then(normalize(vector), vector => (
+			<output className={theme.vector}>
+				{vector.map(value => value.toFixed(2)).join(', ')}
+			</output>
 		)),
 		error => (
 			<p className={theme.error}>{error.message}</p>
