@@ -3,6 +3,7 @@
 def _api_extractor_impl(ctx):
     config = ctx.actions.declare_file(ctx.label.name + ".json")
     report = ctx.outputs.report
+    extractor_report = ctx.actions.declare_file(ctx.label.name + ".api.md")
     rollup = ctx.outputs.public_trimmed_rollup
 
     # The generated config lives under bazel-out/.../bin/<package>. Walking
@@ -11,15 +12,20 @@ def _api_extractor_impl(ctx):
         [".."] * len(ctx.label.package.split("/")),
     )
     entry_point = "<projectFolder>/" + ctx.file.entry_point.short_path
-    report_folder = report.short_path[:report.short_path.rfind("/")]
+    extractor_report_folder = extractor_report.short_path[
+        :extractor_report.short_path.rfind("/")
+    ]
 
     ctx.actions.write(
         output = config,
         content = json.encode_indent({
             "apiReport": {
                 "enabled": True,
-                "reportFileName": report.basename,
-                "reportFolder": "<projectFolder>/" + report_folder,
+                # API Extractor requires report filenames to end in `.api.md`.
+                # Keep that tool-specific convention private so callers can
+                # retain stable Bazel output names.
+                "reportFileName": extractor_report.basename,
+                "reportFolder": "<projectFolder>/" + extractor_report_folder,
             },
             "compiler": {
                 "overrideTsconfig": {
@@ -63,12 +69,17 @@ def _api_extractor_impl(ctx):
             ],
             transitive = [depset(ctx.files.srcs)],
         ),
-        outputs = [report, rollup],
+        outputs = [extractor_report, rollup],
         mnemonic = "APIExtractor",
         progress_message = "Extracting the public TypeScript API for %{label}",
         env = {
             "BAZEL_BINDIR": ctx.var["BINDIR"],
         },
+    )
+
+    ctx.actions.symlink(
+        output = report,
+        target_file = extractor_report,
     )
 
     return [DefaultInfo(files = depset([report, rollup]))]
