@@ -314,6 +314,7 @@ describe('pulumi', () => {
 		expect(npmPublishCommands.map(resource => resource.name).sort()).toEqual([
 			'monorepo_do_sync_npm_publish',
 			'monorepo_knowitwhenyouseeit_npm_publish',
+			'monorepo_result_npm_publish',
 		]);
 		for (const command of npmPublishCommands) {
 			expect(command.inputs['environment']).toEqual({

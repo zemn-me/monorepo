@@ -48,7 +48,7 @@ def ts_lint(name, size = "small", **kwargs):
         **kwargs
     )
 
-def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
+def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, regenerator_runtime = True, tags = [], **kwargs):
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
@@ -67,6 +67,7 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         srcs: typescript source files
         tsconfig: the tsconfig file to use (defaults to //:tsconfig)
         preserve_jsx: passed to the aspect_rules_js ts_project rule
+        regenerator_runtime: include the SWC regenerator runtime dependency
         tags: test tags
         lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
         **kwargs: passed to the ts_project rule
@@ -85,8 +86,10 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     if "//:base_defs" not in deps:
         deps = deps + ["//:base_defs"]
 
-    # swc injects this
-    deps = deps + ["//:node_modules/regenerator-runtime"]
+    # SWC injects this when it lowers generators or async functions. Targets
+    # whose emitted JavaScript retains those native constructs can omit it.
+    if regenerator_runtime:
+        deps = deps + ["//:node_modules/regenerator-runtime"]
 
     _ts_project(
         name = name,

@@ -171,15 +171,25 @@ export class Component extends Pulumi.ComponentResource {
 		if (!args.staging) {
 			const publisher = runfiles.resolve('monorepo/js/npm/publish_/publish');
 			for (const npmPackage of [
-				{ name: 'do-sync', path: 'ts/do-sync' },
+				{
+					name: 'do-sync',
+					path: 'ts/do-sync',
+					resourceName: 'do_sync',
+				},
 				{
 					name: 'knowitwhenyouseeit',
 					path: 'ts/knowitwhenyouseeit',
+					resourceName: 'knowitwhenyouseeit',
+				},
+				{
+					name: '@zemnmez/result',
+					path: 'ts/result',
+					resourceName: 'result',
 				},
 			]) {
 				const target = `monorepo/${npmPackage.path}/npm_pkg`;
 				new NpmPackage(
-					`${name}_${npmPackage.name.replaceAll('-', '_')}_npm`,
+					`${name}_${npmPackage.resourceName}_npm`,
 					{
 						archive: runfiles.resolve(`${target}.tgz`),
 						packageDirectory: runfiles.resolve(target),
