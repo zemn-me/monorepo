@@ -42,6 +42,7 @@ ts_project(
         "//ts/knowitwhenyouseeit:npm_pkg_publish_data",
         "//ts/pulumi/zemn.me/availability:next",
         "//ts/pulumi/zemn.me/static",
+        "//ts/result:npm_pkg_publish_data",
     ],
     visibility = ["//:__subpackages__"],
     deps = [

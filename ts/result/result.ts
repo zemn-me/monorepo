@@ -1,21 +1,33 @@
-import {
-	Either,
-	either,
-	is_left,
-	is_right,
-	Left,
-	Right,
-} from '#root/ts/either/either.js';
+/**
+ * A successful value or an error, represented as a function that selects one
+ * of two continuations.
+ *
+ * Unlike a tagged object representation, a Result carries no runtime tag,
+ * class, constructor name, or symbol.
+ */
+export type Result<T, E> = <R>(
+	onErr: (error: E) => R,
+	onOk: (value: T) => R
+) => R;
 
-/** Result<T, E> ≡ Either<E, T> (error first, success second) */
-export type Result<T, E> = Either<E, T>;
+const match = <T, E, R>(
+	result: Result<T, E>,
+	onErr: (error: E) => R,
+	onOk: (value: T) => R
+): R => result(onErr, onOk);
+
+const either = <E, T, R>(
+	result: Result<T, E>,
+	onErr: (error: E) => R,
+	onOk: (value: T) => R
+): R => match(result, onErr, onOk);
 
 /** Constructors */
 export const Ok = /*#__NO_SIDE_EFFECTS__*/ <T, E = never>(v: T): Result<T, E> =>
-	Right<T, E>(v);
+	(_onErr, onOk) => onOk(v);
 export const Err = /*#__NO_SIDE_EFFECTS__*/ <E, T = never>(
 	e: E
-): Result<T, E> => Left<E, T>(e);
+): Result<T, E> => (onErr, _onOk) => onErr(e);
 
 /** Compatibility aliases (types) — corrected */
 export type Ok<T> = Result<T, never>;
@@ -23,9 +35,17 @@ export type Err<E> = Result<never, E>;
 
 /** Predicates */
 export const is_ok = /*#__NO_SIDE_EFFECTS__*/ <T, E>(v: Result<T, E>) =>
-	is_right(v);
+	match(
+		v,
+		() => false,
+		() => true
+	);
 export const is_err = /*#__NO_SIDE_EFFECTS__*/ <T, E>(v: Result<T, E>) =>
-	is_left(v);
+	match(
+		v,
+		() => true,
+		() => false
+	);
 
 /** Left value or throw if Ok */
 /*#__NO_SIDE_EFFECTS__*/ export function unwrap_err<T, E>(v: Result<T, E>): E {
