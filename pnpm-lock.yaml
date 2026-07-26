@@ -362,8 +362,8 @@ devDependencies:
     specifier: 6.68.0
     version: 6.68.0(typescript@5.9.3)
   '@pulumi/awsx':
-    specifier: 3.7.0
-    version: 3.7.0(typescript@5.9.3)
+    specifier: 3.8.0
+    version: 3.8.0(typescript@5.9.3)
   '@pulumi/pulumi':
     specifier: 3.253.0
     version: 3.253.0(typescript@5.9.3)
@@ -4041,8 +4041,8 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/aws@7.36.0(typescript@5.9.3):
-    resolution: {integrity: sha512-ba90eMECkq76+l3qNPZFpqtfUR36UwZifb7ELx2Gj0edYkNo3P4eSaDAd15Cc41oIiX6p4C/KcaaeNTu3eawVw==}
+  /@pulumi/aws@7.39.0(typescript@5.9.3):
+    resolution: {integrity: sha512-gJQIRipNmq7mqCQqiNNnTagTWLGwowjKekisChaqKwUTvJz2qTVMgHexYqoYExynvajJINwqTgc1UWC/InrIHw==}
     dependencies:
       '@pulumi/pulumi': 3.253.0(typescript@5.9.3)
       mime: 2.6.0
@@ -4052,11 +4052,11 @@ packages:
       - typescript
     dev: true
 
-  /@pulumi/awsx@3.7.0(typescript@5.9.3):
-    resolution: {integrity: sha512-nrCMm8DRcKLz8MFYK4nMnSejlorV4bdAlo/Pm66l7j92jnCi4SP/fZWiPX/1r2L4nVsh6hxrxeFf/lMOJaHEuw==}
+  /@pulumi/awsx@3.8.0(typescript@5.9.3):
+    resolution: {integrity: sha512-w8yGnRnIDbftDzm0yanK2TNEr9xu3cmSTtAhOXWD523woK7Ae3gKErxiPVTnqyiez3PeRvE8IhMM0pAtB0Sz1Q==}
     dependencies:
       '@aws-sdk/client-ecs': 3.1085.0
-      '@pulumi/aws': 7.36.0(typescript@5.9.3)
+      '@pulumi/aws': 7.39.0(typescript@5.9.3)
       '@pulumi/docker': 4.11.2(typescript@5.9.3)
       '@pulumi/docker-build': 0.0.14(typescript@5.9.3)
       '@pulumi/pulumi': 3.253.0(typescript@5.9.3)
