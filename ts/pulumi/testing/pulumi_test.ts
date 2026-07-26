@@ -308,6 +308,19 @@ describe('pulumi', () => {
 		new project.Component('monorepo', { staging: false });
 		await pulumi.runtime.disconnect();
 
+		const npmPublishCommands = mockResources
+			.filter(resource => resource.type === 'command:local:Command')
+			.filter(resource => resource.name.endsWith('_npm_publish'));
+		expect(npmPublishCommands.map(resource => resource.name).sort()).toEqual([
+			'monorepo_do_sync_npm_publish',
+			'monorepo_knowitwhenyouseeit_npm_publish',
+		]);
+		for (const command of npmPublishCommands) {
+			expect(command.inputs['environment']).toEqual({
+				NPM_CONFIG_PROVENANCE: 'true',
+			});
+		}
+
 		const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
 			({ input, type }) =>
 				mockResources
