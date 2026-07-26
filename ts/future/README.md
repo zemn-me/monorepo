@@ -74,4 +74,49 @@ const message = future(
 types. `future_flatten_then` flattens nested Futures, and `future_collect`
 combines several Futures into one.
 
+## Pipelines
+
+`future_and_then` and `future_flatten_then` compose Future-returning operations
+into a pipeline. Each operation receives the preceding resolved value, while a
+loading or error state stops the pipeline:
+
+```typescript
+import {
+	error,
+	Future,
+	future_and_then,
+	future_flatten_then,
+	resolve,
+} from '@zemnmez/future';
+
+interface User {
+	id: number;
+	name: string;
+}
+
+const findUser = (
+	id: number
+): Future<User, 'fetching user', 'user not found'> =>
+	id === 42
+		? resolve({ id, name: 'Deep Thought' })
+		: error('user not found');
+
+const displayName = (
+	user: User
+): Future<string, 'formatting name', 'missing name'> =>
+	user.name ? resolve(user.name) : error('missing name');
+
+const user = future_flatten_then(
+	future_and_then(resolve(42), findUser)
+);
+const name = future_flatten_then(
+	future_and_then(user, displayName)
+);
+// Future<
+//   string,
+//   'fetching user' | 'formatting name',
+//   'user not found' | 'missing name'
+// >
+```
+
 [result]: https://www.npmjs.com/package/@zemnmez/result
