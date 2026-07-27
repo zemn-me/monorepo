@@ -1,5 +1,7 @@
 # `@zemnmez/result`
 
+[View `@zemnmez/result` on npm](https://www.npmjs.com/package/@zemnmez/result)
+
 `@zemnmez/result` is a TypeScript implementation of Rust's
 [`Result<T, E>`][rust-result] type. A `Result` represents, exactly and in a
 type-safe manner, the result of a sequence of any number of operations that

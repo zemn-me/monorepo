@@ -1,5 +1,7 @@
 # `@zemnmez/future`
 
+[View `@zemnmez/future` on npm](https://www.npmjs.com/package/@zemnmez/future)
+
 `@zemnmez/future` is a tiny TypeScript type for a value that may be loading,
 resolved, or errored. A `Future<Then, Loading, Error>` represents all three
 states exactly and requires each state to be handled before its resolved value
