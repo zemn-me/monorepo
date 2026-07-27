@@ -16,6 +16,7 @@ type inMemoryDDB struct {
 	grievances map[string]grievanceRecord
 	users      map[string]userRecord
 	keyRecords []map[string]types.AttributeValue
+	journal    []map[string]types.AttributeValue
 }
 
 func (db inMemoryDDB) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
@@ -40,6 +41,19 @@ func (db *inMemoryDDB) DescribeTable(ctx context.Context, params *dynamodb.Descr
 }
 
 func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := ""
+		if value, ok := in.ExpressionAttributeValues[":id"].(*types.AttributeValueMemberS); ok {
+			id = value.Value
+		}
+		items := make([]map[string]types.AttributeValue, 0, len(db.journal))
+		for _, item := range db.journal {
+			if id == "" || keyTableRecordID(item) == id {
+				items = append(items, copyDynamoItem(item))
+			}
+		}
+		return &dynamodb.QueryOutput{Items: items}, nil
+	}
 	if in.TableName != nil && *in.TableName == "analytics" {
 		feed := ""
 		if v, ok := in.ExpressionAttributeValues[":feed"]; ok {
@@ -171,6 +185,18 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 }
 
 func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		when := keyTableRecordWhen(in.Item)
+		id := keyTableRecordID(in.Item)
+		for index, existing := range db.journal {
+			if keyTableRecordID(existing) == id && keyTableRecordWhen(existing) == when {
+				db.journal[index] = copyDynamoItem(in.Item)
+				return &dynamodb.PutItemOutput{}, nil
+			}
+		}
+		db.journal = append(db.journal, copyDynamoItem(in.Item))
+		return &dynamodb.PutItemOutput{}, nil
+	}
 	if in.TableName != nil && *in.TableName == "keys" {
 		db.keyRecords = append(db.keyRecords, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil

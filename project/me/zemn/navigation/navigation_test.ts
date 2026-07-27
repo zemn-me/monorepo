@@ -113,3 +113,11 @@ it('keeps private pages scoped', () => {
 		expect(link.requiredScope).toBeDefined();
 	}
 });
+
+it('gates the voice journal with its dedicated scope', () => {
+	expect(accountLinks).toContainEqual({
+		href: '/journal',
+		label: 'Journal',
+		requiredScope: 'journal',
+	});
+});

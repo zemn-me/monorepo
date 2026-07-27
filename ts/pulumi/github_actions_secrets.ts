@@ -12,6 +12,7 @@ export const githubActionsSecretProject = gcpProjectId;
 export const githubActionsSecretIds = {
 	buildbuddyApiKey: 'github-actions-buildbuddy-api-key',
 	ghPat: 'github-actions-gh-pat',
+	openaiApiKey: 'github-actions-openai-api-key',
 	personalPhoneNumber: 'github-actions-personal-phone-number',
 	pulumiAccessToken: 'github-actions-pulumi-access-token',
 	readonlyBuildbuddyApiKey: 'github-actions-readonly-buildbuddy-api-key',
@@ -33,6 +34,7 @@ export const githubActionsSecretAccessByWorkflow = {
 	renovate: [githubActionsSecretIds.ghPat],
 	staging: [
 		githubActionsSecretIds.buildbuddyApiKey,
+		githubActionsSecretIds.openaiApiKey,
 		githubActionsSecretIds.personalPhoneNumber,
 		githubActionsSecretIds.pulumiAccessToken,
 		githubActionsSecretIds.twilioAccountSid,
@@ -41,6 +43,7 @@ export const githubActionsSecretAccessByWorkflow = {
 	],
 	submit: [
 		githubActionsSecretIds.buildbuddyApiKey,
+		githubActionsSecretIds.openaiApiKey,
 		githubActionsSecretIds.personalPhoneNumber,
 		githubActionsSecretIds.pulumiAccessToken,
 		githubActionsSecretIds.twilioAccountSid,

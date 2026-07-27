@@ -18,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
@@ -43,8 +44,13 @@ type DynamoDBClient interface {
 	CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error)
 }
 
+type S3Client interface {
+	PutObject(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error)
+}
+
 // Ensure the real DynamoDB client implements the interface.
 var _ DynamoDBClient = (*dynamodb.Client)(nil)
+var _ S3Client = (*s3.Client)(nil)
 
 // Server holds the DynamoDB client and table names.
 type Server struct {
@@ -54,6 +60,8 @@ type Server struct {
 	grievancesTableName  string
 	usersTableName       string
 	keyRequestsTableName string
+	journalTableName     string
+	journalBucketName    string
 	rt                   *chi.Mux
 	http.Handler
 	log                    *log.Logger
@@ -65,6 +73,8 @@ type Server struct {
 	minecraftWake          minecraftWakeRequester
 	minecraftLogs          minecraftLogTailer
 	minecraftServerAddress string
+	journalAI              JournalAI
+	journalObjects         S3Client
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -124,6 +134,8 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
 	usersTableName := os.Getenv("USERS_TABLE_NAME")
 	keyRequestsTableName := os.Getenv("CALLBOX_KEY_TABLE_NAME")
+	journalTableName := os.Getenv("JOURNAL_TABLE_NAME")
+	journalBucketName := os.Getenv("JOURNAL_BUCKET_NAME")
 
 	r := chi.NewRouter()
 	r.Use(analyticsRequestContext)
@@ -143,6 +155,8 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		grievancesTableName:  grievancesTableName,
 		usersTableName:       usersTableName,
 		keyRequestsTableName: keyRequestsTableName,
+		journalTableName:     journalTableName,
+		journalBucketName:    journalBucketName,
 		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
@@ -153,6 +167,8 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		minecraftWake:          minecraftWakeRequesterFromEnv(cfg),
 		minecraftLogs:          minecraftLogTailerFromEnv(cfg),
 		minecraftServerAddress: minecraftServerAddressFromEnv(),
+		journalAI:              newOpenAIJournalAI(os.Getenv("OPENAI_API_KEY")),
+		journalObjects:         s3.NewFromConfig(cfg),
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
@@ -362,6 +378,17 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 		},
 		{
 			Name: s.keyRequestsTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.journalTableName,
 			Attrs: []types.AttributeDefinition{
 				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},

@@ -8,6 +8,7 @@ export type RequiredScope = keyof Pick<
 	| 'admin_users_manage'
 	| 'callbox_key'
 	| 'grievance_portal'
+	| 'journal'
 	| 'minecraft'
 >;
 
@@ -174,6 +175,7 @@ export const accountLinks: readonly NavigationLink[] = [
 		label: 'Grievance portal',
 		requiredScope: 'grievance_portal',
 	},
+	{ href: '/journal', label: 'Journal', requiredScope: 'journal' },
 	{ href: '/minecraft', label: 'Minecraft', requiredScope: 'minecraft' },
 	{ href: '/key', label: 'Key', requiredScope: 'callbox_key' },
 ];

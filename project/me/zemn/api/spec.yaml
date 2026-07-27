@@ -186,8 +186,109 @@ components:
           type: boolean
         grievance_portal:
           type: boolean
+        journal:
+          type: boolean
         minecraft:
           type: boolean
+    JournalCitation:
+      type: object
+      required: [entryId, segmentId]
+      properties:
+        entryId:
+          type: string
+        segmentId:
+          type: string
+    JournalTranscriptSegment:
+      type: object
+      required: [id, startSeconds, endSeconds, text]
+      properties:
+        id:
+          type: string
+        startSeconds:
+          type: number
+          format: double
+        endSeconds:
+          type: number
+          format: double
+        text:
+          type: string
+    JournalSummary:
+      type: object
+      required: [id, period, start, end, title, body, themes, citations]
+      properties:
+        id:
+          type: string
+        period:
+          type: string
+          enum: [entry, day, week, month, year]
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        title:
+          type: string
+        body:
+          type: string
+        themes:
+          type: array
+          items:
+            type: string
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+    JournalEntry:
+      type: object
+      required: [id, recordedAt, durationSeconds, transcript, summary]
+      properties:
+        id:
+          type: string
+        recordedAt:
+          type: string
+          format: date-time
+        durationSeconds:
+          type: number
+          format: double
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+    Journal:
+      type: object
+      required: [entries, summaries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummary'
+    JournalEntryCreate:
+      type: object
+      required: [audioBase64, contentType, durationSeconds, recordedAt, timeZone]
+      properties:
+        audioBase64:
+          type: string
+          description: Base64-encoded audio captured by the browser.
+        contentType:
+          type: string
+          enum: [audio/mp4, audio/mpeg, audio/ogg, audio/wav, audio/webm]
+        durationSeconds:
+          type: number
+          format: double
+          minimum: 0
+        recordedAt:
+          type: string
+          format: date-time
+        timeZone:
+          type: string
+          description: IANA time zone used to derive calendar summary periods.
     IdToken:
       type: object
       description: >
@@ -652,7 +753,7 @@ components:
         token_endpoint: https://api.zemn.me/oauth2/token
         jwks_uri: https://api.zemn.me/.well-known/jwks.json
         userinfo_endpoint: https://api.zemn.me/oauth2/userinfo
-        scopes_supported: [openid, profile, email, callbox_key, minecraft]
+        scopes_supported: [openid, profile, email, callbox_key, journal, minecraft]
         response_types_supported: [code]
         grant_types_supported: [urn:ietf:params:oauth:grant-type:token-exchange]
         subject_types_supported: [public]
@@ -1543,6 +1644,51 @@ components:
         accepted: true
 
 paths:
+  /journal:
+    get:
+      summary: Get the caller's voice journal.
+      description: Return transcript entries and citation-preserving time summaries.
+      security:
+        - OIDC: [journal]
+      responses:
+        "200":
+          description: The caller's journal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journal'
+  /journal/entries:
+    post:
+      summary: Create a voice journal entry.
+      description: Store audio, transcribe it with Whisper, and refresh entry, daily, weekly, monthly, and yearly GPT-5.6 summaries.
+      security:
+        - OIDC: [journal]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryCreate'
+      responses:
+        "201":
+          description: Created journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntry'
+        "400":
+          description: Invalid audio or time zone.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "502":
+          description: Transcription or summarization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /phone/init:
     post:
       summary: Entry point for Twilio callbox phone number.
