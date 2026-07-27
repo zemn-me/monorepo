@@ -1,6 +1,8 @@
 do-sync
 ========
 
+[View `do-sync` on npm](https://www.npmjs.com/package/do-sync)
+
 `do-sync` is a small library that allows certian kinds of async functions to be executed synchronously in node.
 
 Why Though? Isn't this a terrible idea?

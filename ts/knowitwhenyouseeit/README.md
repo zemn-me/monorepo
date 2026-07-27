@@ -2,6 +2,8 @@
 
 > provides functions to render client-side data but only if it matches a secure digest
 
+[View `knowitwhenyouseeit` on npm](https://www.npmjs.com/package/knowitwhenyouseeit)
+
 [![NPM](https://img.shields.io/npm/v/knowitwhenyouseeit.svg)](https://www.npmjs.com/package/knowitwhenyouseeit)
 
 ## Install
