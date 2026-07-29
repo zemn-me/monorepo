@@ -73,21 +73,21 @@ const message = future(
 ```
 
 `future_and_then` maps a resolved value while preserving the loading and error
-types. `future_flatten_then` flattens nested Futures, and `future_collect`
-combines several Futures into one.
+types. `future_coincide_then` chains a Future-returning operation, and
+`future_collect` combines several Futures into one.
 
 ## Pipelines
 
-`future_and_then` and `future_flatten_then` compose Future-returning operations
-into a pipeline. Each operation receives the preceding resolved value, while a
-loading or error state stops the pipeline:
+`future_coincide_then` composes Future-returning operations into a pipeline.
+Each operation receives the preceding resolved value, while a loading or error
+state stops the pipeline. The resulting Future includes the loading and error
+types from every operation:
 
 ```typescript
 import {
 	error,
 	Future,
-	future_and_then,
-	future_flatten_then,
+	future_coincide_then,
 	resolve,
 } from '@zemnmez/future';
 
@@ -108,12 +108,8 @@ const displayName = (
 ): Future<string, 'formatting name', 'missing name'> =>
 	user.name ? resolve(user.name) : error('missing name');
 
-const user = future_flatten_then(
-	future_and_then(resolve(42), findUser)
-);
-const name = future_flatten_then(
-	future_and_then(user, displayName)
-);
+const user = future_coincide_then(resolve(42), findUser);
+const name = future_coincide_then(user, displayName);
 // Future<
 //   string,
 //   'fetching user' | 'formatting name',
