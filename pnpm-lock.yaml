@@ -419,8 +419,8 @@ devDependencies:
     specifier: 3.0.3
     version: 3.0.3
   chalk:
-    specifier: 5.6.2
-    version: 5.6.2
+    specifier: 6.0.0
+    version: 6.0.0
   classnames:
     specifier: 2.5.1
     version: 2.5.1
@@ -7588,6 +7588,11 @@ packages:
   /chalk@5.6.2:
     resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+    dev: true
+
+  /chalk@6.0.0:
+    resolution: {integrity: sha512-2uNTXIuTTxk7ciZgAU1BQcgnchcG0xXnrs6jzkQfj9SsRa9M2s5zE8WT96hS6KmG4MzWHSrvH43DF1m4XRkrFg==}
+    engines: {node: '>=22'}
     dev: true
 
   /change-case@5.4.4:
