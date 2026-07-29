@@ -21,6 +21,9 @@ this is a bazel monorepo. `bazel` is provided in `$PATH`. It maps to
 ./sh/bin/bazel. There are many tools in ./sh/bin that can be used and they are
 all added to $PATH.
 
+Do not write directly to the default branch as a first resort. Create a branch
+and use a pull request unless the user explicitly requests a direct write.
+
 This checkout is Sapling-backed; use `sl amend` for amendments. Raw
 `git commit --amend` can leave `.git/sl` pointing at a Git node Sapling has not
 imported.
