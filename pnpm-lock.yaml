@@ -13,8 +13,8 @@ dependencies:
     specifier: 15.0.0
     version: 15.0.0(commander@15.0.0)
   '@hookform/resolvers':
-    specifier: 5.5.6
-    version: 5.5.6(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.83.0)(typanion@3.14.0)(zod@4.4.3)
+    specifier: 5.5.7
+    version: 5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.83.0)(typanion@3.14.0)(zod@4.4.3)
   '@jest/globals':
     specifier: 30.4.1
     version: 30.4.1
@@ -2248,8 +2248,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /@hookform/resolvers@5.5.6(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.83.0)(typanion@3.14.0)(zod@4.4.3):
-    resolution: {integrity: sha512-BVHhpGDbkUbvnAbtLLyp7+r1HzdjKQYYeEgaqOrec+b0bX6VKWLf91t1cjbxWnu+Ae8KTXZYp/7R6SZN4avPtg==}
+  /@hookform/resolvers@5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.83.0)(typanion@3.14.0)(zod@4.4.3):
+    resolution: {integrity: sha512-CyPCYV8/KlXfEXLWj8HHHhVsR/IZ6Ckm3b/a4fWtO/lRnRK1huqncb8LlAWrmpPRsse5glF5aVuDRMHEr3UGag==}
     peerDependencies:
       '@sinclair/typebox': '>=0.25.24'
       '@standard-schema/spec': ^1.0.0
@@ -2272,7 +2272,7 @@ packages:
       react-hook-form: ^7.55.0
       superstruct: '>=0.12.0'
       typanion: ^3.3.2
-      valibot: ^1.0.0 || ^1.0.0-beta.4 || ^1.0.0-rc
+      valibot: '>=0.31.0 || ^1.0.0-beta.4 || ^1.0.0-rc'
       vest: '>=3.0.0'
       yup: ^1.0.0
       zod: ^3.25.0 || ^4.0.0
