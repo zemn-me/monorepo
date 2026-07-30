@@ -1,0 +1,50 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "examples",
+    srcs = ["basic.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//ts/knowitwhenyouseeit:project",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "basic.ts",
+        "examples_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "examples_tests",
+    srcs = ["examples_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":examples",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+filegroup(
+    name = "readme_examples",
+    srcs = ["basic.ts"],
+    visibility = ["//ts/knowitwhenyouseeit:__pkg__"],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["examples_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":examples_tests"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

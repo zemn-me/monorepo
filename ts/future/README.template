@@ -1,0 +1,48 @@
+# `@zemnmez/future`
+
+[View `@zemnmez/future` on npm](https://www.npmjs.com/package/@zemnmez/future)
+
+`@zemnmez/future` is a tiny TypeScript type for a value that may be loading,
+resolved, or errored. A `Future<Then, Loading, Error>` represents all three
+states exactly and requires each state to be handled before its resolved value
+can be used.
+
+Like [`@zemnmez/result`][result], `Future` is implemented purely functionally.
+Advanced JavaScript and TypeScript compilers can inline its implementation, so
+no class names, property names, discriminants, or symbols identifying a Future
+need to remain in a minified bundle.
+
+## React Query
+
+`useQueryFuture` converts a React Query result into a `Future`. This is useful
+when a component should call all of its hooks unconditionally and select its
+loading, error, or resolved UI only after those hooks have run:
+
+```tsx file=examples/react-query.tsx replace=#root/ts/future/future.js:@zemnmez/future
+```
+
+## Usage
+
+Construct a Future with `resolve`, `loading`, or `error`, then handle its three
+possible states with `future`:
+
+```typescript file=examples/basic.ts replace=#root/ts/future/future.js:@zemnmez/future
+```
+
+`future_and_then` maps a resolved value while preserving the loading and error
+types. Combine `future_and_then` with `future_flatten_then` to chain an
+operation that returns another Future, and
+`future_collect` combines several Futures into one.
+
+## Pipelines
+
+`future_and_then` and `future_flatten_then` compose Future-returning operations
+into a pipeline.
+Each operation receives the preceding resolved value, while a loading or error
+state stops the pipeline. The resulting Future includes the loading and error
+types from every operation:
+
+```typescript file=examples/pipeline.ts replace=#root/ts/future/future.js:@zemnmez/future
+```
+
+[result]: https://www.npmjs.com/package/@zemnmez/result

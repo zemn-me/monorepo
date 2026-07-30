@@ -13,30 +13,7 @@ Why Though? Isn't this a terrible idea?
 Example
 -------
 
-```typescript
-import { doSync, AsyncFn, JSONObject } from 'do-sync';
-
-interface resizeOpts extends JSONObject {
-    width: number, height: number
-}
-
-interface resizeRet extends JSONObject {
-    width: number, height: number, blob: string,
-}
-
-const resize = doSync(async (target: string, { width, height, ...jpegOpions }: resizeOpts): Promise<resizeRet> => {
-    const sharp = require('sharp');
-    const blob = 
-        (await sharp(Buffer.from(target, 'base64'))
-            .resize(width, height)
-            .jpeg(jpegOpions)
-            .toBuffer()).toString('base64');
-    return { blob, width, height };
-})
-
-const myImage = resize('cool.png', {
-    width: 10, height: 10
-})
+```typescript file=examples/basic.ts replace=#root/ts/do-sync/index.js:do-sync
 ```
 
 This package is used to implement [image.macro], which dynamically resizes high-resolution images to multiple sizes at compilation time for use with webpack. It's a little rough around the edges, but works well and should provide some more concrete usage examples:
@@ -61,10 +38,7 @@ Footguns
 ### ENOBUFS
 `do-sync` uses a node subprocess and writes all code to STDIN. `child_process.spawnSync` has a default limit on STDIN input which can, if large JSON is transiting STDIN make your program explode. `doSync` takes an optional second parameter, `opts`, which has the same options as `spawnSync` -- the value is already very large (1GB), but you can set maxBuffer to something bigger if you encounter issues:
 
-```typescript
-doSync(myFunc, {
-    maxBuffer: 1024 * 1024 * 1024
-})
+```typescript file=examples/max-buffer.ts replace=#root/ts/do-sync/index.js:do-sync
 ```
 
 [image.macro]: https://github.com/Zemnmez/image.macro/blob/ab403a25ca517da8cb749d11c9248479beaebd71/src/resize.ts

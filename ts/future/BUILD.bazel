@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("//md:rules.bzl", "md_files")
+load("//md:rules.bzl", "md_files", "readme")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -32,6 +32,12 @@ npm_pkg(
         "//ci:__subpackages__",
         "//ts/pulumi:__subpackages__",
     ],
+)
+
+readme(
+    name = "readme",
+    examples = ["//ts/future/examples:readme_examples"],
+    template = "README.template",
 )
 
 jest_test(
@@ -68,6 +74,6 @@ bazel_lint(
 
 md_files(
     name = "ts_future",
-    srcs = ["README.md"],
+    srcs = [":readme"],
     visibility = ["//:__subpackages__"],
 )

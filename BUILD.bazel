@@ -262,6 +262,8 @@ py_venv(
         "//bzl/versioning",
         "//bzl/versioning:release",
         "//ini/git/merge_drivers/bazel_lockfile",
+        "//md:md_py",
+        "//md:readme_main",
         "//project/me/zemn/api/analytics/inject_iservice:inject_iservice_bin",
         "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",

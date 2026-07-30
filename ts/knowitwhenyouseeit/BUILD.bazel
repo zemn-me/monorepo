@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("//md:rules.bzl", "md_files")
+load("//md:rules.bzl", "md_files", "readme")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = [
@@ -12,6 +12,7 @@ ts_project(
     srcs = [
         "index.ts",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/bcryptjs",
         "//:node_modules/@types/node",
@@ -58,6 +59,12 @@ npm_pkg(
     ],
 )
 
+readme(
+    name = "readme",
+    examples = ["//ts/knowitwhenyouseeit/examples:readme_examples"],
+    template = "README.template",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -65,6 +72,6 @@ bazel_lint(
 
 md_files(
     name = "ts_knowitwhenyouseeit",
-    srcs = ["README.md"],
+    srcs = [":readme"],
     visibility = ["//:__subpackages__"],
 )
