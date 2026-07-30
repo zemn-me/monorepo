@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("//md:rules.bzl", "md_files")
+load("//md:rules.bzl", "md_files", "readme")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -31,6 +31,12 @@ npm_pkg(
     ],
 )
 
+readme(
+    name = "readme",
+    examples = ["//ts/result/examples:readme_examples"],
+    template = "README.template",
+)
+
 jest_test(
     name = "tests",
     srcs = [
@@ -49,7 +55,7 @@ bazel_lint(
 
 md_files(
     name = "ts_result",
-    srcs = ["README.md"],
+    srcs = [":readme"],
     visibility = ["//:__subpackages__"],
 )
 

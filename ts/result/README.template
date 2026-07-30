@@ -16,34 +16,7 @@ would otherwise violate the [Rules of Hooks][rules-of-hooks]. A function that
 may fail can return a `Result`, while the component calls every hook
 unconditionally and uses `unwrap_or_else` to select its success or failure UI:
 
-```tsx
-import { and_then, Err, Ok, Result, unwrap_or_else } from '@zemnmez/result';
-
-type Vector3 = readonly [x: number, y: number, z: number];
-
-function normalize([x, y, z]: Vector3): Result<Vector3, Error> {
-	const length = Math.hypot(x, y, z);
-	if (length === 0) {
-		return Err(new Error('Cannot normalize a zero-length vector.'));
-	}
-
-	return Ok([x / length, y / length, z / length]);
-}
-
-function UnitVector({ vector }: { vector: Vector3 }) {
-	const theme = useTheme();
-
-	return unwrap_or_else(
-		and_then(normalize(vector), vector => (
-			<output className={theme.vector}>
-				{vector.map(value => value.toFixed(2)).join(', ')}
-			</output>
-		)),
-		error => (
-			<p className={theme.error}>{error.message}</p>
-		)
-	);
-}
+```tsx file=examples/react.tsx replace=#root/ts/result/result.js:@zemnmez/result
 ```
 
 ## Implementation
@@ -64,15 +37,7 @@ runtime properties.
 that can itself fail. Curried `map_result` and `bind_result` work well in
 pipelines:
 
-```typescript
-import { bind_result, Err, Ok, unwrap } from '@zemnmez/result';
-
-const doubled = bind_result((value: number) =>
-	value >= 0 ? Ok(value * 2) : Err('negative')
-);
-
-const result = doubled(Ok(21));
-unwrap(result); // 42
+```typescript file=examples/basic.ts replace=#root/ts/result/result.js:@zemnmez/result
 ```
 
 `pipe_result` chains several Result-returning functions from left to right and

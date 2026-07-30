@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js/npm:rules.bzl", "npm_pkg")
-load("//md:rules.bzl", "md_files")
+load("//md:rules.bzl", "md_files", "readme")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
@@ -18,6 +18,12 @@ ts_project(
     name = "do-sync",
     srcs = glob(["**/*.ts"]),
     deps = DEPS,
+)
+
+readme(
+    name = "readme",
+    examples = ["//ts/do-sync/examples:readme_examples"],
+    template = "README.template",
 )
 
 npm_pkg(
@@ -46,6 +52,6 @@ bazel_lint(
 
 md_files(
     name = "ts_do_sync",
-    srcs = ["README.md"],
+    srcs = [":readme"],
     visibility = ["//:__subpackages__"],
 )
