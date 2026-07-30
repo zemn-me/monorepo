@@ -503,8 +503,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.285.1
-    version: 43.285.1(typanion@3.14.0)
+    specifier: 43.285.3
+    version: 43.285.3(typanion@3.14.0)
   sharp:
     specifier: 0.35.3
     version: 0.35.3(@types/node@24.13.3)
@@ -7476,7 +7476,7 @@ packages:
       minipass-collect: 2.0.1
       minipass-flush: 1.0.7
       minipass-pipeline: 1.2.4
-      p-map: 7.0.5
+      p-map: 7.0.6
       ssri: 13.0.1
 
   /cacheable-lookup@5.0.4:
@@ -13052,8 +13052,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /p-map@7.0.5:
-    resolution: {integrity: sha512-e8vJF4XdVkzqqSHguEMz41mQO1wKwxKm5ENrUJQUu9kLDCtn83cxbyHZcszr4QC5zEA7WffRRC4gsTecC7J9oA==}
+  /p-map@7.0.6:
+    resolution: {integrity: sha512-I4Prw6ivkd6p8PiYR1tXASOAOBzIJwu0TB7fqaX0c/8c3QAehNYmX57EijyGGGBt3c/BIowGwV03RVBtXvHEVg==}
     engines: {node: '>=18'}
 
   /p-queue@9.3.1:
@@ -14077,8 +14077,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.285.1(typanion@3.14.0):
-    resolution: {integrity: sha512-IPRzsK5Y/UGkxrO+RrvyKNdekC1/apFZR5eyBOjlOB/gvG2Jg36x8ugu2rrnP6sWZipoMEf+eaUz1oJ+3VMKUQ==}
+  /renovate@43.285.3(typanion@3.14.0):
+    resolution: {integrity: sha512-n0Oy5PapMFHsaXgtwGKMKF51Ce506TNEjHeOp3bhUxIsz1DqV2dPL8ozgBo4fD1F+LtoxD4uU1U3yvFo7HknlQ==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14172,7 +14172,7 @@ packages:
       neotraverse: 0.6.18
       node-html-parser: 7.1.0
       p-all: 5.0.1
-      p-map: 7.0.5
+      p-map: 7.0.6
       p-queue: 9.3.1
       p-throttle: 8.1.0
       parse-link-header: 2.0.0
