@@ -503,8 +503,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 43.286.1
-    version: 43.286.1(typanion@3.14.0)
+    specifier: 43.287.0
+    version: 43.287.0(typanion@3.14.0)
   sharp:
     specifier: 0.35.3
     version: 0.35.3(@types/node@24.13.3)
@@ -12688,7 +12688,7 @@ packages:
       semver: 7.8.5
       tar: 7.5.20
       tinyglobby: 0.2.17
-      undici: 8.7.0
+      undici: 8.9.0
       which: 7.0.0
     dev: true
     optional: true
@@ -14191,8 +14191,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@43.286.1(typanion@3.14.0):
-    resolution: {integrity: sha512-eiiBxNGsfVGHG5wD49Ffrh+aQK6LgWfxXRk7l8YLKhUJ7uMZn5k5mSenmodBGRSQTEuOCVChXJt+WD0ST8gPpg==}
+  /renovate@43.287.0(typanion@3.14.0):
+    resolution: {integrity: sha512-LCQnTIgoZME+92HUWB1LT4/Y9wn/YDIc/pHSEawm9tm72qleDWe1rJOTI4ntIlb5zyu/tTSrqBy3ZimUPgGs7A==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -15775,12 +15775,6 @@ packages:
   /undici@6.27.0:
     resolution: {integrity: sha512-YmfV3YnEDzXRC5lZ2jWtWWHKGUm1zIt8AhesR1tens+HTNv+YZlN/dp6G727LOvMJ8xjP9Be7Y2Sdr96LDm+pg==}
     engines: {node: '>=18.17'}
-
-  /undici@8.7.0:
-    resolution: {integrity: sha512-N7iQtfyLhIMOFgQubvmLV26svHpO0bqKnAiWotTQCVKCmWrcGbBotPuW1x+xwYZ2VHdSTVUfPQQnlEt1/LouTQ==}
-    engines: {node: '>=22.19.0'}
-    dev: true
-    optional: true
 
   /undici@8.9.0:
     resolution: {integrity: sha512-aWZpUj7XoGonMClx4gdDRfgBjqeA+F473aDmROQQbM9n6PRfK/u1q/a0X4wMTgcHfT8H6fpbt98PFuDUwFg2YA==}
