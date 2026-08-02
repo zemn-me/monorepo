@@ -31,7 +31,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.80.2
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.62.2
 	github.com/aws/aws-sdk-go-v2/service/kms v1.55.2
-	github.com/aws/aws-sdk-go-v2/service/lambda v1.100.2
+	github.com/aws/aws-sdk-go-v2/service/lambda v1.101.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.106.2
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.51.3
@@ -49,7 +49,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/nyaruka/phonenumbers/v2 v2.0.5
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/sergi/go-diff v1.4.0
