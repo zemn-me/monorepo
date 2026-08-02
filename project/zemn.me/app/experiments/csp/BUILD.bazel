@@ -1,0 +1,16 @@
+load("//ts:rules.bzl", "ts_project", "jest_test")
+
+ts_project(
+	name = "csp",
+	deps = [
+		"//:node_modules/zod",
+		"//:node_modules/@types/jest"
+	]
+)
+
+jest_test(
+    name = "test",
+	srcs = [ "csp_test.js" ],
+    data = [":csp"],
+)
+
