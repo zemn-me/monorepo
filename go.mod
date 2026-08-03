@@ -49,7 +49,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/nyaruka/phonenumbers/v2 v2.0.5
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/sergi/go-diff v1.4.0

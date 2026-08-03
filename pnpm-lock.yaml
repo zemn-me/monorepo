@@ -503,8 +503,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.4.3
-    version: 44.4.3(typanion@3.14.0)
+    specifier: 44.4.5
+    version: 44.4.5(typanion@3.14.0)
   sharp:
     specifier: 0.35.3
     version: 0.35.3(@types/node@24.13.3)
@@ -5028,7 +5028,7 @@ packages:
     resolution: {integrity: sha512-hGIZahyyO3zahpr3a2kRkNvDVXwW1gZBN6YYbql6OXlN1gFRQz7/jgn+/ImtYvP84P4tQxc9U4jS5/Qurvl0Nw==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
-      fs-extra: 11.3.6
+      fs-extra: 11.4.0
       toml-eslint-parser: 1.0.3
       upath: 3.0.8
       zod: 4.4.3
@@ -9525,8 +9525,8 @@ packages:
     resolution: {integrity: sha512-xYfnw62CKG8nLkZBfWbhWwDw02CHty86jfPcc2cr3ZfeuK9ysoVPPEUxf21bAD/rWAgk52SuBrLJlefNy8mvFg==}
     dev: true
 
-  /google-auth-library@10.9.0:
-    resolution: {integrity: sha512-xtvUqvINPhTaBm7nXqlYPcrMHJPm1lCNdSovxnKKhTm+4JsvQ+KGVYJViLoH9Yxu8w+T0Qv5HubzYT9BLrppJg==}
+  /google-auth-library@10.9.1:
+    resolution: {integrity: sha512-i1ydyHrqcIxXkWh/uBmVkzCvIuq5yiK2ATndIe5XxKholrG/MTYP9xGYka4sQhrbIAgGjL2B6NOE7rFaiF3fXw==}
     engines: {node: '>=18'}
     dependencies:
       base64-js: 1.5.1
@@ -14200,8 +14200,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.4.3(typanion@3.14.0):
-    resolution: {integrity: sha512-v1RIjmrTnAQdq9BqLwvB/++m31UGHtBEmIJ2kYQqzqv2XTkdreLrDTnTftgFjB+a8ajOlcn5TMIKUzIiBxApVA==}
+  /renovate@44.4.5(typanion@3.14.0):
+    resolution: {integrity: sha512-7Ti0qonp0IChNO/yaNpyVEEyT/28IFR7XzuntLX/e1HCYBwQ2qMCfSGOtvfF96YOMAprbfUAAFi0DkCEQWFJ5w==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14273,7 +14273,7 @@ packages:
       github-url-from-git: 1.5.0
       glob: 13.0.6
       global-agent: 3.0.0
-      google-auth-library: 10.9.0
+      google-auth-library: 10.9.1
       got: 14.6.6
       graph-data-structure: 4.5.0
       handlebars: 4.7.9
