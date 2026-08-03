@@ -169,6 +169,129 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('article index lists every released article and opens one', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/article`);
+
+				const heading = await driver.findElement(By.css('h1'));
+				expect(await heading.getText()).toBe('Articles.');
+
+				const menuButton = await driver.findElement(
+					By.css('summary[aria-label="Open navigation menu"]')
+				);
+				await menuButton.click();
+				const articleMenuLinks = await driver.findElements(
+					By.css('nav[aria-label="Site navigation"] a[href^="/article"]')
+				);
+				expect(
+					await Promise.all(
+						articleMenuLinks.map(async link => ({
+							href: await link.getAttribute('href'),
+							text: await link.getText(),
+						}))
+					)
+				).toEqual([{ href: `${origin}/article`, text: 'Articles' }]);
+				await menuButton.click();
+
+				const list = await driver.findElement(
+					By.css('ol[aria-label="Published articles"]')
+				);
+				const links = await list.findElements(By.css('a'));
+				expect(await Promise.all(links.map(link => link.getText()))).toEqual([
+					'Letter to Kasimir',
+					'The Hagiography of Clean',
+					'Missing',
+					"If CORS is just a header, why don't attackers just ignore it?",
+					'When Security Generates Insecurity',
+				]);
+
+				await links[0]!.click();
+				await driver.wait(
+					async () =>
+						(await driver.getCurrentUrl()) ===
+						`${origin}/article/2026/kasimir`,
+					5000
+				);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('experiment index lists every experiment and opens one', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/tool/elastictabs?input=hello`);
+				await driver.wait(
+					async () =>
+						(await driver.getCurrentUrl()) ===
+						`${origin}/experiments/elastictabs?input=hello`,
+					5000
+				);
+
+				await driver.get(`${origin}/experiments`);
+
+				const heading = await driver.findElement(By.css('h1'));
+				expect(await heading.getText()).toBe('Experiments.');
+
+				const list = await driver.findElement(
+					By.css('ol[aria-label="Experiments"]')
+				);
+				const links = await list.findElements(By.css('a'));
+				expect(await Promise.all(links.map(link => link.getText()))).toEqual([
+					'Rays',
+					'SVG Arena',
+					'Platonic Stress',
+					'Geometry of Music',
+					'Elastic Tabstops',
+					'Flag emoji',
+					'Framing calculator',
+					'Pitch Training',
+					'Factorio',
+					'Factorio blueprints',
+					'Blueprint parser',
+					'Requester chest generator',
+					'Blueprint wall generator',
+					'Blueprint book',
+					'Cultist simulator',
+				]);
+
+				const menuButton = await driver.findElement(
+					By.css('summary[aria-label="Open navigation menu"]')
+				);
+				await menuButton.click();
+				const experimentMenuLinks = await driver.findElements(
+					By.css(
+						'nav[aria-label="Site navigation"] a[href^="/experiments"]'
+					)
+				);
+				expect(
+					await Promise.all(
+						experimentMenuLinks.map(async link => ({
+							href: await link.getAttribute('href'),
+							text: await link.getText(),
+						}))
+					)
+				).toEqual([{ href: `${origin}/experiments`, text: 'Experiments' }]);
+				const omittedMenuLinks = await driver.findElements(
+					By.css(
+						'nav[aria-label="Site navigation"] a[href="/cv"], nav[aria-label="Site navigation"] a[href="/tool/elastictabs"]'
+					)
+				);
+				expect(omittedMenuLinks).toHaveLength(0);
+				await menuButton.click();
+
+				await links[0]!.click();
+				await driver.wait(
+					async () =>
+						(await driver.getCurrentUrl()) === `${origin}/experiments/rays`,
+					5000
+				);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('2026/endings shows a homepage back link after the story text renders', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });

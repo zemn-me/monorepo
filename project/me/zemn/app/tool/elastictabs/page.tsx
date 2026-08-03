@@ -1,17 +1,17 @@
-import { Metadata } from 'next/types';
-import { Suspense } from 'react';
+'use client';
 
-import ElasticTabStopsClient from '#root/project/me/zemn/app/tool/elastictabs/client.js';
+import { useEffect } from 'react';
 
 export default function Page() {
-	return (
-		<Suspense fallback={null}>
-			<ElasticTabStopsClient />
-		</Suspense>
-	);
-}
+	useEffect(() => {
+		const destination = new URL(
+			'/experiments/elastictabs',
+			window.location.origin
+		);
+		destination.search = window.location.search;
+		destination.hash = window.location.hash;
+		window.location.replace(destination);
+	}, []);
 
-export const metadata: Metadata = {
-	title: 'Elastic Tabstops Online',
-	description: 'align tabbed columns automatically online!',
-};
+	return null;
+}
