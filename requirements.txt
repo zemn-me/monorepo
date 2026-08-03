@@ -641,10 +641,6 @@ debugpy==1.8.21 \
     --hash=sha256:fe0744a12353406de0ae8ccff0d0a4a666f00801a3db8fd04e7a5f761cd520e8 \
     --hash=sha256:ffd932c6796afadab6993ec96745918a8cb2444dbd392074f769db5ea40ab440
     # via ipykernel
-decorator==5.3.1 \
-    --hash=sha256:4cbcdd55a6efadb9dbea26b858f4fb3264567b52d69ca0d25b721b553f60ea82 \
-    --hash=sha256:f47fe6fdbd2edd623ecfe36875d37aba411624e2670dd395dddae1358689bb3c
-    # via ipython
 defusedxml==0.7.1 \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
@@ -826,9 +822,9 @@ ipykernel==7.3.0 \
     #   jupyter
     #   jupyter-console
     #   jupyterlab
-ipython==9.15.0 \
-    --hash=sha256:515ad9c3cdf0c932a5a9f6245419e8aba706b7bd03c3e1d3a1c83d9351d6aa6e \
-    --hash=sha256:da2819ce2aa83135257df830660b1176d986c3d2876db24df01974fa955b2756
+ipython==9.16.0 \
+    --hash=sha256:3d02b96de2a59074d153b1ac1c3865de738df114e430e879e6e5ef100a4d470c \
+    --hash=sha256:d2f92587b1ef51d84f934dffe05fabb9255f0038ed0a21426f2ea761e39ad09a
     # via
     #   -r requirements.in
     #   ipykernel
