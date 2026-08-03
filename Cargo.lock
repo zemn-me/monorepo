@@ -411,7 +411,7 @@ dependencies = [
  "cargo-util",
  "cargo-util-schemas",
  "cargo-util-terminal",
- "clap 4.6.4",
+ "clap 4.6.5",
  "clap_complete",
  "color-print",
  "crates-io",
@@ -682,9 +682,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.6.4"
+version = "4.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d91e0c145792ef73a6ad36d27c75ac09f1832222a3c209689d90f534685ee5b7"
+checksum = "301b56658598e48f3648647ac6fc887be7e7108eddfa4e9b63fcf3ec58c0cadf"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -692,9 +692,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.6.2"
+version = "4.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f09628afdcc538b57f3c6341e9c8e9970f18e4a481690a64974d7023bd33548b"
+checksum = "94a65403d1a1bd28f7dc68eb8506e8874808ee5eecb59298de588e2e1407a078"
 dependencies = [
  "anstream",
  "anstyle",
@@ -709,7 +709,7 @@ version = "4.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b1f84a88507dbd05c695f2cb5e8558e747179134005e9893882dec964190ed89"
 dependencies = [
- "clap 4.6.4",
+ "clap 4.6.5",
  "clap_lex",
  "is_executable",
  "shlex",
@@ -3270,7 +3270,7 @@ name = "monorepo"
 version = "0.1.0"
 dependencies = [
  "cargo",
- "clap 4.6.4",
+ "clap 4.6.5",
  "hex",
  "rxp",
  "serde_json",
