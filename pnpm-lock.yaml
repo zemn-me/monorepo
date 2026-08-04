@@ -14,7 +14,7 @@ dependencies:
     version: 15.0.0(commander@15.0.0)
   '@hookform/resolvers':
     specifier: 5.5.7
-    version: 5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.83.0)(typanion@3.14.0)(zod@4.4.3)
+    version: 5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.84.0)(typanion@3.14.0)(zod@4.4.3)
   '@jest/globals':
     specifier: 30.4.1
     version: 30.4.1
@@ -175,8 +175,8 @@ dependencies:
     specifier: 0.32.0
     version: 0.32.0
   react-hook-form:
-    specifier: 7.83.0
-    version: 7.83.0(react@19.2.8)
+    specifier: 7.84.0
+    version: 7.84.0(react@19.2.8)
   refractor:
     specifier: 5.0.0
     version: 5.0.0
@@ -2147,7 +2147,7 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /@hookform/resolvers@5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.83.0)(typanion@3.14.0)(zod@4.4.3):
+  /@hookform/resolvers@5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.84.0)(typanion@3.14.0)(zod@4.4.3):
     resolution: {integrity: sha512-CyPCYV8/KlXfEXLWj8HHHhVsR/IZ6Ckm3b/a4fWtO/lRnRK1huqncb8LlAWrmpPRsse5glF5aVuDRMHEr3UGag==}
     peerDependencies:
       '@sinclair/typebox': '>=0.25.24'
@@ -2228,7 +2228,7 @@ packages:
       '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
       ajv: 8.20.0
-      react-hook-form: 7.83.0(react@19.2.8)
+      react-hook-form: 7.84.0(react@19.2.8)
       typanion: 3.14.0
       zod: 4.4.3
     dev: false
@@ -13608,8 +13608,8 @@ packages:
       react: 19.2.8
       scheduler: 0.27.0
 
-  /react-hook-form@7.83.0(react@19.2.8):
-    resolution: {integrity: sha512-AXt8cMCmx5a7u4uvpb2uRFVrWQhllI4pV+LSykxIac/hjt44TnQkmX9BKuQi2i+LDC62esmiLpilkav+kjVf/A==}
+  /react-hook-form@7.84.0(react@19.2.8):
+    resolution: {integrity: sha512-+hWvQP6GLco56mDwrbU4XnHix8t1z90ltZsDIrREl+jnQFQxYLX8oAzqe/Xn8nHpmoXTY5M6oEXrAhbP1qevNQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
