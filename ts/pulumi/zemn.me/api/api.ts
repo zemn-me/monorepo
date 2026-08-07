@@ -30,6 +30,8 @@ export interface Args {
 	minecraftServerAddress?: Pulumi.Input<string>;
 	minecraftWakeFunctionArn?: Pulumi.Input<string>;
 	minecraftWakeFunctionName?: Pulumi.Input<string>;
+	discordClientId?: Pulumi.Input<string>;
+	discordMinecraftGuildId?: Pulumi.Input<string>;
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
@@ -420,6 +422,17 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 							: {
 									MINECRAFT_LOG_GROUP_NAME:
 										args.minecraftLogGroupName,
+								}),
+						...(args.discordClientId === undefined
+							? {}
+							: {
+									DISCORD_CLIENT_ID: args.discordClientId,
+								}),
+						...(args.discordMinecraftGuildId === undefined
+							? {}
+							: {
+									DISCORD_MINECRAFT_GUILD_ID:
+										args.discordMinecraftGuildId,
 								}),
 						OIDC_JWT_KMS_KEY_ID: oidcKey.keyId,
 						OIDC_JWT_PUBLIC_KEY: oidcPublicKey,

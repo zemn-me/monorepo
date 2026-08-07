@@ -65,6 +65,10 @@ type Server struct {
 	minecraftWake          minecraftWakeRequester
 	minecraftLogs          minecraftLogTailer
 	minecraftServerAddress string
+	discordAPIBaseURL      string
+	discordClientID        string
+	discordMinecraftGuild  string
+	discordHTTPClient      *http.Client
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -153,6 +157,10 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		minecraftWake:          minecraftWakeRequesterFromEnv(cfg),
 		minecraftLogs:          minecraftLogTailerFromEnv(cfg),
 		minecraftServerAddress: minecraftServerAddressFromEnv(),
+		discordAPIBaseURL:      discordDefaultAPIBaseURL,
+		discordClientID:        strings.TrimSpace(os.Getenv("DISCORD_CLIENT_ID")),
+		discordMinecraftGuild:  strings.TrimSpace(os.Getenv("DISCORD_MINECRAFT_GUILD_ID")),
+		discordHTTPClient:      http.DefaultClient,
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)

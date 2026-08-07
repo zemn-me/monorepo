@@ -14,7 +14,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// exchange a Google id_token for an api.zemn.me refresh_token.
+// exchange an upstream token for an api.zemn.me id_token.
 
 const (
 	googleClientID   = "845702659200-q34u98lp91f1tqrqtadgsg78thp207sd.apps.googleusercontent.com"
@@ -169,15 +169,6 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		return
 	}
 
-	if request.Body.SubjectTokenType != UrnIetfParamsOauthTokenTypeIdToken {
-		e := fmt.Sprintf("unsupported subject token type: %s", request.Body.SubjectTokenType)
-		ro = PostOauth2Token400JSONResponse{
-			Error:            InvalidRequest,
-			ErrorDescription: &e,
-		}
-		return
-	}
-
 	requestedTokenType := UrnIetfParamsOauthTokenTypeIdToken
 	if request.Body.RequestedTokenType != nil {
 		requestedTokenType = *request.Body.RequestedTokenType
@@ -193,32 +184,29 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 		return
 	}
 
-	issuer, err := issuerFromToken(rawToken)
-	if err != nil {
-		err = fmt.Errorf("failed to determine token issuer: %w", err)
-		return
-	}
-
-	cfg, ok := upstreamOIDCIssuers[issuer]
-	if !ok {
-		err = fmt.Errorf("issuer is not supported: %s", issuer)
-		return
-	}
-
-	provider, err := oidc.NewProvider(ctx, cfg.Provider)
-	if err != nil {
-		err = fmt.Errorf("failed to create OIDC provider: %w", err)
-		return
-	}
-
 	var clientID string
 	if request.Body.ClientId != nil {
 		clientID = *request.Body.ClientId
 	}
 
-	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
+	var resolvedUser mappedUser
+	var issuer OIDCIssuer
 
-	resolvedUser, err := s.translateUpstreamUser(ctx, provider, cfg, rawToken, issuer)
+	switch request.Body.SubjectTokenType {
+	case UrnIetfParamsOauthTokenTypeIdToken:
+		issuer, resolvedUser, err = s.translateOIDCIDToken(ctx, rawToken, request, requestedTokenType, clientID)
+	case UrnIetfParamsOauthTokenTypeAccessToken:
+		issuer = discordIssuer
+		s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
+		resolvedUser, err = s.translateDiscordAccessToken(ctx, rawToken, clientID)
+	default:
+		e := fmt.Sprintf("unsupported subject token type: %s", request.Body.SubjectTokenType)
+		ro = PostOauth2Token400JSONResponse{
+			Error:            InvalidRequest,
+			ErrorDescription: &e,
+		}
+		return
+	}
 	if err != nil {
 		s.log.Printf("Token exchange failed for issuer=%s: %v", issuer, err)
 		return
@@ -226,6 +214,37 @@ func (s *Server) PostOauth2Token(ctx context.Context, request PostOauth2TokenReq
 
 	s.log.Printf("Token exchange success: issuer=%s mapped_subject=%s", issuer, resolvedUser.LocalID)
 
+	ro, err = s.issueTokenExchangeResponse(ctx, resolvedUser)
+	return
+}
+
+func (s *Server) translateOIDCIDToken(ctx context.Context, rawToken string, request PostOauth2TokenRequestObject, requestedTokenType TokenExchangeTokenType, clientID string) (OIDCIssuer, mappedUser, error) {
+	issuer, err := issuerFromToken(rawToken)
+	if err != nil {
+		return "", mappedUser{}, fmt.Errorf("failed to determine token issuer: %w", err)
+	}
+
+	cfg, ok := upstreamOIDCIssuers[issuer]
+	if !ok {
+		return "", mappedUser{}, fmt.Errorf("issuer is not supported: %s", issuer)
+	}
+
+	provider, err := oidc.NewProvider(ctx, cfg.Provider)
+	if err != nil {
+		return "", mappedUser{}, fmt.Errorf("failed to create OIDC provider: %w", err)
+	}
+
+	s.log.Printf("Token exchange: issuer=%s subject_type=%s requested=%s audience=%s client_id=%s", issuer, request.Body.SubjectTokenType, requestedTokenType, audienceSummary(request.Body.Audience), clientID)
+
+	resolvedUser, err := s.translateUpstreamUser(ctx, provider, cfg, rawToken, issuer)
+	if err != nil {
+		return "", mappedUser{}, err
+	}
+
+	return issuer, resolvedUser, nil
+}
+
+func (s *Server) issueTokenExchangeResponse(ctx context.Context, resolvedUser mappedUser) (ro PostOauth2TokenResponseObject, err error) {
 	apiBase, err := ApiRoot()
 	if err != nil {
 		return
@@ -418,7 +437,7 @@ func (s *Server) translateUpstreamUser(
 		if rec != nil {
 			return mappedUser{
 				LocalID: OIDCSubject(rec.Id),
-				Scopes:  append([]string(nil), rec.Scopes...),
+				Scopes:  effectiveUserRecordScopes(*rec),
 				Profile: resolveProfileClaims(claims, rec),
 			}, nil
 		}
