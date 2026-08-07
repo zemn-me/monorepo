@@ -14,6 +14,15 @@ const pick_env = <T extends string>(
 				[k]: process.env[k],
 			};
 
+const pick_secret_env = <T extends string>(
+	k: T
+): Record<never, never> | Record<T, Pulumi.Output<string>> =>
+	process.env[k] === undefined
+		? {}
+		: {
+				[k]: Pulumi.secret(process.env[k]),
+			};
+
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
@@ -167,6 +176,53 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this, protect: args.protectDatabases }
 		);
 
+		const journalTable = new aws.dynamodb.Table(
+			`${name}-journal`,
+			{
+				attributes: [
+					{ name: 'id', type: 'S' },
+					{ name: 'when', type: 'S' },
+				],
+				billingMode: 'PAY_PER_REQUEST',
+				hashKey: 'id',
+				rangeKey: 'when',
+			},
+			{ parent: this, protect: args.protectDatabases }
+		);
+
+		const journalBucket = new aws.s3.BucketV2(
+			`${name}-journal-audio`,
+			{},
+			{ parent: this, protect: args.protectDatabases }
+		);
+
+		new aws.s3.BucketServerSideEncryptionConfigurationV2(
+			`${name}-journal-audio-encryption`,
+			{
+				bucket: journalBucket.id,
+				rules: [
+					{
+						applyServerSideEncryptionByDefault: {
+							sseAlgorithm: 'AES256',
+						},
+					},
+				],
+			},
+			{ parent: journalBucket }
+		);
+
+		new aws.s3.BucketPublicAccessBlock(
+			`${name}-journal-audio-public-access`,
+			{
+				bucket: journalBucket.id,
+				blockPublicAcls: true,
+				blockPublicPolicy: true,
+				ignorePublicAcls: true,
+				restrictPublicBuckets: true,
+			},
+			{ parent: journalBucket }
+		);
+
 		const lambdaRole = new aws.iam.Role(
 			`${name}-lambda-role`,
 			{
@@ -185,6 +241,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 							grievancesTable.arn,
 							usersTable.arn,
 							keyRequestsTable.arn,
+							journalTable.arn,
 						]).apply(
 							([
 								settingsArn,
@@ -192,6 +249,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 								grievancesArn,
 								usersArn,
 								keyArn,
+								journalArn,
 							]) =>
 								JSON.stringify({
 									Version: '2012-10-17',
@@ -213,10 +271,26 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 												grievancesArn,
 												usersArn,
 												keyArn,
+												journalArn,
 											],
 										},
 									],
 								})
+						),
+					},
+					{
+						name: `${name}-journal-audio-inline-policy`,
+						policy: journalBucket.arn.apply(arn =>
+							JSON.stringify({
+								Version: '2012-10-17',
+								Statement: [
+									{
+										Action: ['s3:PutObject'],
+										Effect: 'Allow',
+										Resource: `${arn}/*`,
+									},
+								],
+							})
 						),
 					},
 					{
@@ -396,6 +470,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						GRIEVANCES_TABLE_NAME: grievancesTable.name,
 						USERS_TABLE_NAME: usersTable.name,
 						CALLBOX_KEY_TABLE_NAME: keyRequestsTable.name,
+						JOURNAL_TABLE_NAME: journalTable.name,
+						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 						...(args.minecraftRconBridgeFunctionName === undefined
 							? {}
@@ -426,6 +502,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						...pick_env('TWILIO_ACCOUNT_SID'),
 						...pick_env('TWILIO_AUTH_TOKEN'),
 						...pick_env('TWILIO_API_KEY_SID'),
+						...pick_secret_env('OPENAI_API_KEY'),
 					},
 				},
 			},
@@ -543,6 +620,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			dynamoDBTableName: dynamoTable.name,
 			grievancesTableName: grievancesTable.name,
 			usersTableName: usersTable.name,
+			journalTableName: journalTable.name,
+			journalBucketName: journalBucket.bucket,
 		});
 	}
 }

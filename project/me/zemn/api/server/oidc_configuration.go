@@ -50,7 +50,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		RequestObjectEncryptionEncValuesSupported:  emptyStrings,
 		RequestObjectSigningAlgValuesSupported:     emptyStrings,
 		ResponseModesSupported:                     emptyStrings,
-		ScopesSupported:                            &[]string{"openid", "profile", "email", "callbox_key", "grievance_portal", "minecraft"},
+		ScopesSupported:                            &[]string{"openid", "profile", "email", "callbox_key", "grievance_portal", "journal", "minecraft"},
 		TokenEndpointAuthMethodsSupported:          emptyAuth,
 		TokenEndpointAuthSigningAlgValuesSupported: emptyStrings,
 		UiLocalesSupported:                         emptyStrings,

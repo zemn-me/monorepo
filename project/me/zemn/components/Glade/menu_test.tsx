@@ -52,10 +52,12 @@ jest.unstable_mockModule(
 	})
 );
 
+let grantedScopes: readonly string[] = [];
+
 jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeApi.js', () => ({
 	useGetMeScopes:
 		() => (onResolved: (scopes: readonly string[]) => unknown) =>
-			onResolved([]),
+			onResolved(grantedScopes),
 }));
 
 let isLoggedIn = false;
@@ -80,9 +82,24 @@ beforeAll(async () => {
 
 beforeEach(() => {
 	isLoggedIn = false;
+	grantedScopes = [];
 	container = document.createElement('div');
 	root = createRoot(container);
 	document.body.appendChild(container);
+});
+
+it('shows the journal only to a user with the journal scope', () => {
+	isLoggedIn = true;
+	act(() => {
+		root.render(<GladeMenu />);
+	});
+	expect(container.querySelector('a[href="/journal"]')).toBeNull();
+
+	grantedScopes = ['journal'];
+	act(() => {
+		root.render(<GladeMenu />);
+	});
+	expect(container.querySelector('a[href="/journal"]')).not.toBeNull();
 });
 
 afterEach(() => {

@@ -30,6 +30,7 @@ const availableScopes = [
 	'callbox_key',
 	'callbox_key_logs_read',
 	'grievance_portal',
+	'journal',
 	'minecraft',
 ] as const satisfies readonly (keyof ApiScopes)[];
 

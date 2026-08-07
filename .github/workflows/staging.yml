@@ -57,6 +57,7 @@ jobs:
         with:
           secrets: |-
             buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
+            openai_api_key:extreme-cycling-441523-a9/github-actions-openai-api-key
             personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
             pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
             twilio_account_sid:extreme-cycling-441523-a9/github-actions-twilio-account-sid
@@ -92,6 +93,7 @@ jobs:
         env:
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
+          OPENAI_API_KEY: ${{ steps.secrets.outputs.openai_api_key }}
           TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
           TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid }}
           TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token }}
@@ -123,6 +125,7 @@ jobs:
         env:
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
+          OPENAI_API_KEY: ${{ steps.secrets.outputs.openai_api_key }}
           TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
           TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid }}
           TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token }}
