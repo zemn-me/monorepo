@@ -27,9 +27,9 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.43.3
 	github.com/aws/aws-sdk-go-v2/config v1.32.34
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.33
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.57
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.58
 	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.81.0
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.62.3
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.63.0
 	github.com/aws/aws-sdk-go-v2/service/kms v1.55.3
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.101.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.106.4
@@ -49,7 +49,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/nyaruka/phonenumbers/v2 v2.0.6
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/sergi/go-diff v1.4.0
