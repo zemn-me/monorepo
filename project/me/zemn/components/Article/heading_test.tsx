@@ -12,7 +12,27 @@ function TocHarness({ children }: { readonly children?: ReactNode }) {
 	return (
 		<>
 			<ul ref={setToc} />
-			<tocSegment.Provider value={toc}>{children}</tocSegment.Provider>
+			<tocSegment.Provider value={toc === null ? [] : [toc]}>
+				{children}
+			</tocSegment.Provider>
+		</>
+	);
+}
+
+function DualTocHarness({ children }: { readonly children?: ReactNode }) {
+	const [tocA, setTocA] = useState<HTMLUListElement | null>(null);
+	const [tocB, setTocB] = useState<HTMLUListElement | null>(null);
+	const tocTargets = [tocA, tocB].filter(
+		(toc): toc is HTMLUListElement => toc !== null
+	);
+
+	return (
+		<>
+			<ul data-toc="a" ref={setTocA} />
+			<ul data-toc="b" ref={setTocB} />
+			<tocSegment.Provider value={tocTargets}>
+				{children}
+			</tocSegment.Provider>
 		</>
 	);
 }
@@ -67,6 +87,25 @@ it('preserves explicit heading ids for table-of-contents links', () => {
 	expect(heading?.id).toBe('given-section');
 	expect(link?.getAttribute('href')).toBe('#given-section');
 	expect(link?.textContent).toBe('Given Section');
+});
+
+it('adds heading links to every table-of-contents target', () => {
+	act(() => {
+		root.render(
+			<DualTocHarness>
+				<H2>Mirrored Section</H2>
+			</DualTocHarness>
+		);
+	});
+
+	const links = container.querySelectorAll(
+		'li[data-toc-heading-level="2"] > a'
+	);
+
+	expect(links).toHaveLength(2);
+	expect(
+		Array.from(links, link => link.textContent)
+	).toEqual(['Mirrored Section', 'Mirrored Section']);
 });
 
 it('uses inline heading id markers for table-of-contents links', () => {

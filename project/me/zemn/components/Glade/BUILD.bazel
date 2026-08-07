@@ -7,6 +7,7 @@ ts_project(
     srcs = [
         "glade.tsx",
         "menu.tsx",
+        "menu_top_content_context.ts",
     ],
     assets = [
         "menu.module.css",
@@ -51,6 +52,7 @@ filegroup(
         "glade_test.tsx",
         "menu.tsx",
         "menu_test.tsx",
+        "menu_top_content_context.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

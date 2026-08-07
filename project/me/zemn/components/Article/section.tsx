@@ -7,13 +7,18 @@ import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context
 export type SectionProps = JSX.IntrinsicElements['section'];
 
 export function Section({ children, ...props }: SectionProps) {
-	const portal = useContext(tocSegment);
-	const [childTocSegment, setChildTocSegment] =
-		useState<HTMLOListElement | null>(null);
+	const portals = useContext(tocSegment);
+	const [childTocSegments, setChildTocSegments] = useState<
+		Record<number, HTMLOListElement | null>
+	>({});
+
+	const childPortals = portals
+		.map((_, index) => childTocSegments[index])
+		.filter((portal): portal is HTMLOListElement => portal !== null);
 
 	return (
 		<section {...props}>
-			<tocSegment.Provider value={childTocSegment}>
+			<tocSegment.Provider value={childPortals}>
 				{children}
 			</tocSegment.Provider>
 
@@ -21,9 +26,21 @@ export function Section({ children, ...props }: SectionProps) {
 			if a table of contents portal is provided,
 			add this section to it.
 		*/}
-			{portal !== null
-				? createPortal(<ol ref={setChildTocSegment} />, portal)
-				: null}
+			{portals.map((portal, index) =>
+				createPortal(
+					<ol
+						ref={element =>
+							setChildTocSegments(segments =>
+								segments[index] === element
+									? segments
+									: { ...segments, [index]: element }
+							)
+						}
+					/>,
+					portal,
+					index
+				)
+			)}
 		</section>
 	);
 }
