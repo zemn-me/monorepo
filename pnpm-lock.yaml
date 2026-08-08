@@ -503,8 +503,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.13.1
-    version: 44.13.1(typanion@3.14.0)
+    specifier: 44.13.2
+    version: 44.13.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.3
     version: 0.35.3(@types/node@24.13.3)
@@ -4902,8 +4902,8 @@ packages:
       - supports-color
     dev: false
 
-  /@renovatebot/detect-tools@4.0.10:
-    resolution: {integrity: sha512-hGIZahyyO3zahpr3a2kRkNvDVXwW1gZBN6YYbql6OXlN1gFRQz7/jgn+/ImtYvP84P4tQxc9U4jS5/Qurvl0Nw==}
+  /@renovatebot/detect-tools@4.0.11:
+    resolution: {integrity: sha512-rQ8McuE2JQkg4jmUl7l0MxwZTENOY/Z/UFWT5PYi5SzaNMXfGL/iqAMMLBYrp437pAT1rF7bwzM8xaGNOp088A==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
       fs-extra: 11.4.0
@@ -14044,8 +14044,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.13.1(typanion@3.14.0):
-    resolution: {integrity: sha512-ePwC2hb4oDDQMiZdh+Epo0ff1ciAYVXzdfWPR2Cpzm/yM6ckVeOY+k6q9RA07P8LiWDLNnITOihm0tZQPMOShQ==}
+  /renovate@44.13.2(typanion@3.14.0):
+    resolution: {integrity: sha512-gmwtXYNacCekEn/Pt64j2tV3OMdTJ1W74yiRt3LGEB3ZirxLCFXTi2xBG+k7K5i2/4JuVyCJyfQdgcG0j8V7kA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14078,7 +14078,7 @@ packages:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
-      '@renovatebot/detect-tools': 4.0.10
+      '@renovatebot/detect-tools': 4.0.11
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.10
       '@renovatebot/pep440': 5.0.0
