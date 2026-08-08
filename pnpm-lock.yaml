@@ -79,8 +79,8 @@ dependencies:
     specifier: 0.4.12
     version: 0.4.12
   '@types/pako':
-    specifier: 2.0.4
-    version: 2.0.4
+    specifier: 3.0.0
+    version: 3.0.0
   '@types/ramda':
     specifier: 0.32.0
     version: 0.32.0
@@ -6083,8 +6083,11 @@ packages:
     dependencies:
       undici-types: 7.18.2
 
-  /@types/pako@2.0.4:
-    resolution: {integrity: sha512-VWDCbrLeVXJM9fihYodcLiIv0ku+AlOa/TQ1SvYOaBuyrSKgEcro95LJyIsJ4vSo6BXIxOKxiJAat04CmST9Fw==}
+  /@types/pako@3.0.0:
+    resolution: {integrity: sha512-MtIzg1Ul1GxhHZLq6oSKvWQENKqmfK1fdaW+SDcPJe7+YcJVo6AbmkW0BvGFH6+559+hEuCwdXZZe8F85lBPkA==}
+    deprecated: This is a stub types definition. pako provides its own type definitions, so you do not need this installed.
+    dependencies:
+      pako: 3.0.1
     dev: false
 
   /@types/parse-path@7.1.0:
