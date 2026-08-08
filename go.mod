@@ -48,7 +48,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/nyaruka/phonenumbers v1.8.1
+	github.com/nyaruka/phonenumbers/v2 v2.0.6
 	github.com/nyaruka/phonenumbers/v2 v2.0.6
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
