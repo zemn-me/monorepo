@@ -28,11 +28,11 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.35
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.34
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.59
-	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.81.1
+	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.82.0
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.63.1
 	github.com/aws/aws-sdk-go-v2/service/kms v1.55.4
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.101.2
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.106.5
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.51.3
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
