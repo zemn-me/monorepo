@@ -195,6 +195,15 @@ export const Bio = {
 	],
 	timeline: [
 		{
+			id: '86a18c21-ae85-4dd9-8673-1e0db3377642',
+			date: date(11, 'aug', 2026),
+			title: en`Visual Studio Code Python Extension Security Feature Bypass`,
+			publisher: en`Microsoft Security Response Center`,
+			description: en`High-severity vulnerability allowing a specially crafted file to bypass a security feature in the Visual Studio Code Python extension. CVE-2026-54981`,
+			url: url`https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-54981`,
+			tags: [security, disclosure],
+		},
+		{
 			id: '86c449a3-eb95-462e-9746-e99388376d31',
 			description: en`Talk at Stanford with Adrian Spânu on the present and future of prompt injection.`,
 			address:
