@@ -28,6 +28,8 @@ export interface Args {
 	minecraftManageDnsWake?: boolean;
 	minecraftOnDemand?: boolean;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	discordClientId?: Pulumi.Input<string>;
+	discordMinecraftGuildId?: Pulumi.Input<string>;
 }
 
 export class Component extends Pulumi.ComponentResource {
@@ -161,6 +163,8 @@ export class Component extends Pulumi.ComponentResource {
 				minecraftServerAddress: args.domain,
 				minecraftWakeFunctionArn: minecraft?.wakeFunctionArn,
 				minecraftWakeFunctionName: minecraft?.wakeFunctionName,
+				discordClientId: args.discordClientId,
+				discordMinecraftGuildId: args.discordMinecraftGuildId,
 			},
 			{ parent: this, dependsOn: Static }
 		);

@@ -23,6 +23,8 @@ export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	discordClientId?: Pulumi.Input<string>;
+	discordMinecraftGuildId?: Pulumi.Input<string>;
 }
 
 interface AwsGitHubActionsOidcArgs {
@@ -315,6 +317,13 @@ export class Component extends Pulumi.ComponentResource {
 				minecraftEnvironment: args.staging ? 'staging' : 'production',
 				minecraftManageDnsWake: !args.staging,
 				minecraftOperators: args.minecraftOperators ?? ['zemnmez'],
+				discordClientId:
+					args.discordClientId ??
+					process.env['DISCORD_CLIENT_ID'] ??
+					process.env['NEXT_PUBLIC_DISCORD_CLIENT_ID'],
+				discordMinecraftGuildId:
+					args.discordMinecraftGuildId ??
+					process.env['DISCORD_MINECRAFT_GUILD_ID'],
 			},
 			{ parent: this }
 		);
