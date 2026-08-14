@@ -370,21 +370,20 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatalf("individual journal day did not contain its entries: %v", err)
 	}
-	usesArticleDates, err := driver.ExecuteScript(`
-		const dates = [...document.querySelectorAll(
+	usesTimeOnlyEntryHeadings, err := driver.ExecuteScript(`
+		const times = [...document.querySelectorAll(
 			"details[id^='entry-'] > summary > time"
 		)];
-		return dates.length === 2 && dates.every(date =>
-			date.lang === 'en-GB' &&
-			date.querySelector('sup') !== null &&
-			date.textContent.includes(' at ')
+		return times.length === 2 && times.every(time =>
+			time.lang === 'en-GB' &&
+			time.textContent === '19:16'
 		);
 	`, nil)
 	if err != nil {
-		t.Fatalf("inspect journal entry dates: %v", err)
+		t.Fatalf("inspect journal entry times: %v", err)
 	}
-	if usesArticleDates != true {
-		t.Fatalf("journal entries did not use the article date-time format")
+	if usesTimeOnlyEntryHeadings != true {
+		t.Fatalf("journal entry headings repeated their parent day")
 	}
 	entrySummaryDates, err := driver.ExecuteScript(`
 		const entries = [...document.querySelectorAll("details[id^='entry-']")];
@@ -408,11 +407,11 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 					":scope > article header > p > time"
 				);
 				return entryDate !== null &&
-				summaryDate !== null &&
-				entryDate.dateTime.slice(0, 10) === '2025-08-13' &&
-				summaryDate.dateTime.slice(0, 10) === '2025-08-13' &&
-				entryDate.textContent.includes('the 13th of August 2025') &&
-				summaryDate.textContent.includes('the 13th of August 2025');
+					summaryDate !== null &&
+					entryDate.dateTime.slice(0, 10) === '2025-08-13' &&
+					summaryDate.dateTime.slice(0, 10) === '2025-08-13' &&
+					entryDate.textContent === '19:16' &&
+					summaryDate.textContent.includes('the 13th of August 2025');
 			}),
 		};
 	`, nil)
