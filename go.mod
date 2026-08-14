@@ -51,7 +51,6 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/invopop/jsonschema v0.14.0
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/nyaruka/phonenumbers/v2 v2.0.7
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/openai/openai-go/v3 v3.50.0
@@ -60,7 +59,7 @@ require (
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.30.9
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/image v0.44.0
+	golang.org/x/image v0.45.0
 	golang.org/x/sync v0.22.0
 	google.golang.org/protobuf v1.36.12
 )
@@ -159,7 +158,7 @@ require (
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260708182218-49f421fb7959 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 	golang.org/x/vuln v1.4.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
