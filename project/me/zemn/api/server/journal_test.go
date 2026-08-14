@@ -885,8 +885,105 @@ func TestJournalUploadSizeComesFromObjectEvent(t *testing.T) {
 		t.Fatal(err)
 	}
 	journal := journalResponse.(GetJournal200JSONResponse)
-	if len(journal.Entries) != 1 || journal.Entries[0].Status != JournalEntryStatusFailed || journal.Entries[0].ByteLength != size {
-		t.Fatalf("failed upload metadata = %#v, want authoritative size %d", journal.Entries, size)
+	if len(journal.Entries) != 0 {
+		t.Fatalf("journal entries = %#v, want failed upload omitted", journal.Entries)
+	}
+	records, err := server.listJournalRecords(ctx, journalOwnerSubject)
+	if err != nil {
+		t.Fatal(err)
+	}
+	entry, err := server.findJournalEntry(records, created.Entry.Id.String())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if entry.Status != JournalEntryStatusFailed || entry.ByteLength != size {
+		t.Fatalf("stored failed upload = %#v, want authoritative size %d", entry, size)
+	}
+}
+
+func TestGetJournalShowsOnlyReadyAndActiveEntries(t *testing.T) {
+	db := &inMemoryDDB{}
+	server := &Server{ddb: db, journalTableName: "journal"}
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+	})
+	now := time.Now().UTC()
+	activeExpiry := now.Add(time.Minute)
+	expired := now.Add(-time.Minute)
+	entries := []JournalStoredEntry{
+		{SchemaVersion: 1, Id: "00000000-0000-4000-8000-000000000011", RecordedAt: now, TimeZone: "UTC", ContentType: "audio/mp4", AudioKey: "ready", Status: JournalEntryStatusReady, Transcript: []JournalTranscriptSegment{}},
+		{SchemaVersion: 1, Id: "00000000-0000-4000-8000-000000000012", RecordedAt: now, TimeZone: "UTC", ContentType: "audio/mp4", AudioKey: "processing", Status: JournalEntryStatusProcessing, Transcript: []JournalTranscriptSegment{}},
+		{SchemaVersion: 1, Id: "00000000-0000-4000-8000-000000000013", RecordedAt: now, TimeZone: "UTC", ContentType: "audio/mp4", AudioKey: "uploading", Status: JournalEntryStatusAwaitingUpload, UploadExpiresAt: &activeExpiry, Transcript: []JournalTranscriptSegment{}},
+		{SchemaVersion: 1, Id: "00000000-0000-4000-8000-000000000014", RecordedAt: now, TimeZone: "UTC", ContentType: "audio/mp4", AudioKey: "failed", Status: JournalEntryStatusFailed, Transcript: []JournalTranscriptSegment{}},
+		{SchemaVersion: 1, Id: "00000000-0000-4000-8000-000000000015", RecordedAt: now, TimeZone: "UTC", ContentType: "audio/mp4", AudioKey: "expired", Status: JournalEntryStatusAwaitingUpload, UploadExpiresAt: &expired, Transcript: []JournalTranscriptSegment{}},
+		{SchemaVersion: 1, Id: "00000000-0000-4000-8000-000000000016", RecordedAt: now, TimeZone: "UTC", ContentType: "audio/mp4", AudioKey: "legacy", Status: JournalEntryStatusAwaitingUpload, Transcript: []JournalTranscriptSegment{}},
+	}
+	for _, entry := range entries {
+		if err := server.putJournalRecord(ctx, JournalStoredRecord{
+			Id: journalOwnerSubject, When: journalEntryRecordKey(entry.Id), Kind: JournalStoredRecordKindEntry, Entry: &entry,
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	response, err := server.GetJournal(ctx, GetJournalRequestObject{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	journal := response.(GetJournal200JSONResponse)
+	got := make([]string, 0, len(journal.Entries))
+	for _, entry := range journal.Entries {
+		got = append(got, entry.Id.String())
+	}
+	slices.Sort(got)
+	if want := []string{
+		"00000000-0000-4000-8000-000000000011",
+		"00000000-0000-4000-8000-000000000012",
+		"00000000-0000-4000-8000-000000000013",
+	}; !slices.Equal(got, want) {
+		t.Fatalf("visible entry IDs = %v, want %v", got, want)
+	}
+}
+
+func TestAbandonJournalUploadDeletesOnlyAwaitingEntry(t *testing.T) {
+	db := &inMemoryDDB{}
+	objects := &fakeJournalObjects{}
+	server := &Server{
+		ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
+		journalObjects: objects, journalPresigner: fakeJournalPresigner{},
+	}
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+	})
+	createdResponse, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{
+		Body: &JournalEntryCreate{
+			ContentType: JournalEntryCreateContentType("audio/mp4"),
+			RecordedAt:  time.Now().UTC(),
+			TimeZone:    "America/Los_Angeles",
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	created := createdResponse.(PostJournalEntries201JSONResponse)
+	response, err := server.DeleteJournalEntriesEntryId(ctx, DeleteJournalEntriesEntryIdRequestObject{
+		EntryId: created.Entry.Id,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := response.(DeleteJournalEntriesEntryId204Response); !ok {
+		t.Fatalf("delete response = %#v, want 204", response)
+	}
+	records, err := server.listJournalRecords(ctx, journalOwnerSubject)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(records) != 0 {
+		t.Fatalf("records after abandoning upload = %#v, want none", records)
+	}
+	if len(objects.objects) != 0 {
+		t.Fatalf("objects after abandoning upload = %#v, want none", objects.objects)
 	}
 }
 

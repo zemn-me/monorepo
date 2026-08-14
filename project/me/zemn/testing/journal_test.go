@@ -28,11 +28,16 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("could not find next server root: %v", err)
 	}
 	const pendingEntryID = "00000000-0000-4000-8000-000000000001"
+	const failedEntryID = "00000000-0000-4000-8000-000000000002"
 	if err := putProcessingJournalEntry(t.Context(), pendingEntryID); err != nil {
 		t.Fatalf("seed processing journal entry: %v", err)
 	}
+	if err := putJournalEntry(t.Context(), failedEntryID, apiserver.JournalEntryStatusFailed); err != nil {
+		t.Fatalf("seed failed journal entry: %v", err)
+	}
 	t.Cleanup(func() {
 		_ = deleteJournalEntry(context.Background(), pendingEntryID)
+		_ = deleteJournalEntry(context.Background(), failedEntryID)
 	})
 
 	driver, err := seleniumpkg.NewWithChromeArguments(
@@ -107,6 +112,13 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//h2[normalize-space()='Years']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not default to years: %v", err)
+	}
+	failedEntries, err := driver.FindElements(selenium.ByID, "entry-"+failedEntryID)
+	if err != nil {
+		t.Fatalf("inspect failed journal entries: %v", err)
+	}
+	if len(failedEntries) != 0 {
+		t.Fatalf("failed journal entry was displayed in the index")
 	}
 	pendingEntryStatus, err := waitForElement(
 		driver,
@@ -232,12 +244,12 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForText(driver, staleUploadError, 10*time.Second); err != nil {
 		t.Fatalf("invalid voice memo error: %v", err)
 	}
+	if err := waitForNoElement(driver, selenium.ByXPATH, fmt.Sprintf("//*[normalize-space()='%s']", staleUploadError), 12*time.Second); err != nil {
+		t.Fatalf("upload error did not dismiss itself: %v", err)
+	}
 
 	if err := dispatchJournalFile(driver, file.Name(), "drop"); err != nil {
 		t.Fatalf("drop voice memo: %v", err)
-	}
-	if err := waitForNoElement(driver, selenium.ByXPATH, fmt.Sprintf("//*[normalize-space()='%s']", staleUploadError), 10*time.Second); err != nil {
-		t.Fatalf("previous upload error remained after a new upload: %v", err)
 	}
 	if err := dispatchJournalFile(driver, file.Name(), "paste"); err != nil {
 		t.Fatalf("paste voice memo: %v", err)
@@ -770,6 +782,10 @@ func journalDynamoDBClient() (*dynamodb.Client, error) {
 }
 
 func putProcessingJournalEntry(ctx context.Context, entryID string) error {
+	return putJournalEntry(ctx, entryID, apiserver.JournalEntryStatusProcessing)
+}
+
+func putJournalEntry(ctx context.Context, entryID string, status apiserver.JournalEntryStatus) error {
 	client, err := journalDynamoDBClient()
 	if err != nil {
 		return err
@@ -785,7 +801,7 @@ func putProcessingJournalEntry(ctx context.Context, entryID string) error {
 			TimeZone:      "America/Los_Angeles",
 			ContentType:   "audio/wav",
 			AudioKey:      "entries/" + entryID + "/source",
-			Status:        apiserver.JournalEntryStatusProcessing,
+			Status:        status,
 			Transcript:    []apiserver.JournalTranscriptSegment{},
 		},
 	})

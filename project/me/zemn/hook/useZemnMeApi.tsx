@@ -753,15 +753,26 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 							: 'Could not create journal entry.';
 					throw new Error(cause);
 				}
-				const uploaded = await fetch(response.data.upload.url, {
-					body: upload.file,
-					headers: response.data.upload.headers,
-					method: response.data.upload.method,
-				});
-				if (!uploaded.ok) {
-					throw new Error(
-						`Audio upload failed (${uploaded.status}).`
-					);
+				try {
+					const uploaded = await fetch(response.data.upload.url, {
+						body: upload.file,
+						headers: response.data.upload.headers,
+						method: response.data.upload.method,
+					});
+					if (!uploaded.ok) {
+						throw new Error(
+							`Audio upload failed (${uploaded.status}).`
+						);
+					}
+				} catch (error) {
+					await client
+						.DELETE('/journal/entries/{entryId}', {
+							params: {
+								path: { entryId: response.data.entry.id },
+							},
+						})
+						.catch(() => undefined);
+					throw error;
 				}
 				return response.data.entry;
 			},
@@ -772,7 +783,7 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 				throw new Error('authentication failed');
 			}
 		),
-		onSuccess: invalidateJournal,
+		onSettled: invalidateJournal,
 	});
 }
 

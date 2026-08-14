@@ -231,8 +231,9 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 	}
 	entries := make([]JournalEntry, 0)
 	summaries := make([]JournalSummary, 0)
+	now := time.Now().UTC()
 	for _, record := range records {
-		if record.Entry != nil {
+		if record.Entry != nil && journalEntryIsVisible(*record.Entry, now) {
 			entries = append(entries, s.apiJournalEntry(ctx, *record.Entry))
 		}
 		if record.Summary != nil {
@@ -247,6 +248,17 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 		return summaries[i].Start.After(summaries[j].Start)
 	})
 	return GetJournal200JSONResponse{Entries: entries, Summaries: summaries}, nil
+}
+
+func journalEntryIsVisible(entry JournalStoredEntry, now time.Time) bool {
+	switch entry.Status {
+	case JournalEntryStatusReady, JournalEntryStatusProcessing:
+		return true
+	case JournalEntryStatusAwaitingUpload:
+		return entry.UploadExpiresAt != nil && now.Before(*entry.UploadExpiresAt)
+	default:
+		return false
+	}
 }
 
 func transcriptSources(entryID string, segments []JournalTranscriptSegment) []JournalSummarySource {
@@ -574,15 +586,17 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 	}
 	entryID := uuid.NewString()
 	contentType := string(request.Body.ContentType)
+	expiresAt := time.Now().UTC().Add(journalURLLifetime)
 	entry := JournalStoredEntry{
-		SchemaVersion: 1,
-		Id:            entryID,
-		RecordedAt:    request.Body.RecordedAt,
-		TimeZone:      request.Body.TimeZone,
-		ContentType:   contentType,
-		AudioKey:      journalEntryKey(entryID),
-		Status:        JournalEntryStatusAwaitingUpload,
-		Transcript:    []JournalTranscriptSegment{},
+		SchemaVersion:   1,
+		Id:              entryID,
+		RecordedAt:      request.Body.RecordedAt,
+		TimeZone:        request.Body.TimeZone,
+		ContentType:     contentType,
+		AudioKey:        journalEntryKey(entryID),
+		UploadExpiresAt: &expiresAt,
+		Status:          JournalEntryStatusAwaitingUpload,
+		Transcript:      []JournalTranscriptSegment{},
 	}
 	if err := s.putJournalRecord(ctx, JournalStoredRecord{
 		Id: subject, When: journalEntryRecordKey(entryID), Kind: JournalStoredRecordKindEntry, Entry: &entry,
@@ -592,7 +606,6 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 	if err := s.writeJournalEntryFiles(ctx, entry); err != nil {
 		return nil, err
 	}
-	expiresAt := time.Now().UTC().Add(journalURLLifetime)
 	upload, err := s.journalPresigner.PresignPutObject(ctx, &s3.PutObjectInput{
 		Bucket: aws.String(s.journalBucketName), Key: aws.String(entry.AudioKey), ContentType: aws.String(contentType),
 		IfNoneMatch: aws.String("*"),
@@ -606,6 +619,38 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 			Url: upload.URL, Method: JournalUploadMethod("PUT"), Headers: requestHeaders(upload.SignedHeader), ExpiresAt: expiresAt,
 		},
 	}, nil
+}
+
+func (s *Server) DeleteJournalEntriesEntryId(ctx context.Context, request DeleteJournalEntriesEntryIdRequestObject) (DeleteJournalEntriesEntryIdResponseObject, error) {
+	subject, err := journalSubject(ctx)
+	if err != nil {
+		return nil, err
+	}
+	records, err := s.listJournalRecords(ctx, subject)
+	if err != nil {
+		return nil, err
+	}
+	entryID := request.EntryId.String()
+	var entry *JournalStoredEntry
+	for _, record := range records {
+		if record.When == journalEntryRecordKey(entryID) && record.Entry != nil {
+			value := *record.Entry
+			entry = &value
+			break
+		}
+	}
+	if entry == nil {
+		return DeleteJournalEntriesEntryId204Response{}, nil
+	}
+	if entry.Status != JournalEntryStatusAwaitingUpload {
+		return DeleteJournalEntriesEntryId409JSONResponse{
+			Cause: "only an awaiting upload can be abandoned",
+		}, nil
+	}
+	if err := s.deleteJournalEntry(ctx, subject, *entry); err != nil {
+		return nil, err
+	}
+	return DeleteJournalEntriesEntryId204Response{}, nil
 }
 
 func (s *Server) findJournalEntry(records []JournalStoredRecord, entryID string) (*JournalStoredEntry, error) {
@@ -705,7 +750,7 @@ func (s *Server) releaseJournalContentHash(ctx context.Context, subject, entryID
 	return err
 }
 
-func (s *Server) deleteDuplicateJournalEntry(ctx context.Context, subject string, entry JournalStoredEntry) error {
+func (s *Server) deleteJournalEntry(ctx context.Context, subject string, entry JournalStoredEntry) error {
 	_, err := s.ddb.DeleteItem(ctx, &dynamodb.DeleteItemInput{
 		TableName: aws.String(s.journalTableName),
 		Key: map[string]types.AttributeValue{
@@ -880,7 +925,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		return err
 	}
 	if !owned {
-		return s.deleteDuplicateJournalEntry(ctx, journalOwnerSubject, *entry)
+		return s.deleteJournalEntry(ctx, journalOwnerSubject, *entry)
 	}
 	entry.Status = JournalEntryStatusProcessing
 	entry.Error = ""
