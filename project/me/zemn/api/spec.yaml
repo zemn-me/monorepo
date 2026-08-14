@@ -1994,8 +1994,8 @@ paths:
                 $ref: '#/components/schemas/Error'
   /journal/entries/{entryId}:
     delete:
-      summary: Abandon a voice journal upload.
-      description: Remove an awaiting-upload entry after its direct object-storage upload fails.
+      summary: Delete a voice journal entry.
+      description: Permanently remove an awaiting-upload or completed entry, its private audio, transcript, summary, and aggregate references. Entries actively being processed cannot be deleted.
       security:
         - OIDC: [journal_write]
       parameters:
@@ -2007,9 +2007,9 @@ paths:
             format: uuid
       responses:
         "204":
-          description: The awaiting upload was removed or no longer exists.
+          description: The entry was permanently removed or no longer exists.
         "409":
-          description: The entry has progressed beyond the awaiting-upload state.
+          description: The entry is actively being processed.
           content:
             application/json:
               schema:

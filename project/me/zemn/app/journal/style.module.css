@@ -335,6 +335,85 @@
 	transform: translateY(0);
 }
 
+.deleteControl {
+	border-block-start: 1px solid var(--journal-line);
+	margin-block-start: 1.5em;
+	max-width: 42em;
+	padding-block-start: 1em;
+}
+
+.deleteTrack {
+	background: color-mix(in srgb, currentColor 6%, transparent);
+	block-size: 2.75em;
+	border: 1px solid var(--journal-line);
+	box-sizing: border-box;
+	overflow: hidden;
+	position: relative;
+}
+
+.deleteLabel {
+	align-items: center;
+	color: var(--journal-muted);
+	display: flex;
+	font-size: 0.8em;
+	font-weight: 700;
+	inset: 0;
+	justify-content: center;
+	pointer-events: none;
+	position: absolute;
+	text-transform: uppercase;
+	user-select: none;
+	z-index: 2;
+}
+
+.deleteProgress {
+	background: color-mix(in srgb, var(--journal-recording) 18%, transparent);
+	block-size: 100%;
+	inset-block-start: 0;
+	inset-inline-start: 0;
+	pointer-events: none;
+	position: absolute;
+}
+
+.deleteThumb {
+	align-items: center;
+	background: var(--journal-recording);
+	block-size: calc(2.75em - 2px);
+	border: 0;
+	color: white;
+	cursor: grab;
+	display: flex;
+	font: inherit;
+	font-size: 1.1em;
+	inset-block-start: 0;
+	inline-size: calc(2.75em - 2px);
+	justify-content: center;
+	padding: 0;
+	position: absolute;
+	touch-action: none;
+	user-select: none;
+	z-index: 3;
+}
+
+.deleteThumb:active {
+	cursor: grabbing;
+}
+
+.deleteThumb:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: -4px;
+}
+
+.deleteThumb:disabled {
+	cursor: wait;
+	opacity: 0.65;
+}
+
+.deleteFailure {
+	color: var(--journal-recording);
+	margin-block: 0.5em 0;
+}
+
 .empty {
 	color: var(--journal-muted);
 	margin-block-start: 3em;

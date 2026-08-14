@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
@@ -945,7 +946,7 @@ func TestGetJournalShowsOnlyReadyAndActiveEntries(t *testing.T) {
 	}
 }
 
-func TestAbandonJournalUploadDeletesOnlyAwaitingEntry(t *testing.T) {
+func TestDeleteJournalEntryDeletesAwaitingUpload(t *testing.T) {
 	db := &inMemoryDDB{}
 	objects := &fakeJournalObjects{}
 	server := &Server{
@@ -984,6 +985,148 @@ func TestAbandonJournalUploadDeletesOnlyAwaitingEntry(t *testing.T) {
 	}
 	if len(objects.objects) != 0 {
 		t.Fatalf("objects after abandoning upload = %#v, want none", objects.objects)
+	}
+}
+
+func TestDeleteJournalEntryRejectsProcessingEntry(t *testing.T) {
+	db := &inMemoryDDB{}
+	server := &Server{ddb: db, journalTableName: "journal"}
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+	})
+	entry := JournalStoredEntry{
+		SchemaVersion: 1,
+		Id:            "00000000-0000-4000-8000-000000000017",
+		RecordedAt:    time.Now().UTC(),
+		TimeZone:      "America/Los_Angeles",
+		ContentType:   "audio/mp4",
+		AudioKey:      "entries/00000000-0000-4000-8000-000000000017/source",
+		Status:        JournalEntryStatusProcessing,
+		Transcript:    []JournalTranscriptSegment{},
+	}
+	if err := server.putJournalRecord(ctx, JournalStoredRecord{
+		Id: journalOwnerSubject, When: journalEntryRecordKey(entry.Id), Kind: JournalStoredRecordKindEntry, Entry: &entry,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	response, err := server.DeleteJournalEntriesEntryId(ctx, DeleteJournalEntriesEntryIdRequestObject{
+		EntryId: openapiUUID(entry.Id),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := response.(DeleteJournalEntriesEntryId409JSONResponse); !ok {
+		t.Fatalf("delete response = %#v, want 409", response)
+	}
+	records, err := server.listJournalRecords(ctx, journalOwnerSubject)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(records) != 1 || records[0].Entry == nil || records[0].Entry.Id != entry.Id {
+		t.Fatalf("records after rejected deletion = %#v, want processing entry", records)
+	}
+}
+
+func TestDeleteReadyJournalEntryRemovesFilesHashAndAggregateSummary(t *testing.T) {
+	db := &inMemoryDDB{}
+	objects := &fakeJournalObjects{}
+	server := &Server{
+		ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
+		journalObjects: objects, journalPresigner: fakeJournalPresigner{}, journalAI: &recordingJournalAI{},
+	}
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+	})
+	recordedAt := time.Date(2026, time.August, 13, 19, 16, 0, 0, time.UTC)
+	for index := range 2 {
+		createdResponse, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{
+			Body: &JournalEntryCreate{
+				ContentType: JournalEntryCreateContentType("audio/mp4"),
+				RecordedAt:  recordedAt.Add(time.Duration(index) * time.Hour),
+				TimeZone:    "America/Los_Angeles",
+			},
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		entryID := createdResponse.(PostJournalEntries201JSONResponse).Entry.Id.String()
+		audio := fmt.Appendf(nil, "delete-ready-%d", index)
+		objects.objects[journalEntryKey(entryID)] = audio
+		if err := server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(entryID), int64(len(audio))); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	response, err := server.GetJournal(ctx, GetJournalRequestObject{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	journal := response.(GetJournal200JSONResponse)
+	if len(journal.Entries) != 2 || len(journal.Summaries) != 1 || journal.Summaries[0].Period != JournalSummaryPeriodDay {
+		t.Fatalf("journal before deletion = %#v, want two entries and a day summary", journal)
+	}
+	deleted := journal.Entries[0]
+	var deletedContentSHA256 string
+	for _, record := range db.journal {
+		var stored JournalStoredRecord
+		if err := attributevalue.UnmarshalMap(record, &stored); err != nil {
+			t.Fatal(err)
+		}
+		if stored.Entry != nil && stored.Entry.Id == deleted.Id.String() {
+			deletedContentSHA256 = stored.Entry.ContentSha256
+		}
+	}
+	if deletedContentSHA256 == "" {
+		t.Fatal("ready entry has no stored content hash")
+	}
+	responseObject, err := server.DeleteJournalEntriesEntryId(ctx, DeleteJournalEntriesEntryIdRequestObject{
+		EntryId: deleted.Id,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := responseObject.(DeleteJournalEntriesEntryId204Response); !ok {
+		t.Fatalf("delete response = %#v, want 204", responseObject)
+	}
+
+	response, err = server.GetJournal(ctx, GetJournalRequestObject{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	journal = response.(GetJournal200JSONResponse)
+	if len(journal.Entries) != 1 || journal.Entries[0].Id == deleted.Id {
+		t.Fatalf("entries after deletion = %#v, want only the other entry", journal.Entries)
+	}
+	if len(journal.Summaries) != 0 {
+		t.Fatalf("summaries after deletion = %#v, want no singleton aggregate", journal.Summaries)
+	}
+	for _, key := range []string{
+		journalEntryKey(deleted.Id.String()),
+		"entries/" + deleted.Id.String() + "/metadata.json",
+		"entries/" + deleted.Id.String() + "/transcript.json",
+		"entries/" + deleted.Id.String() + "/summary.json",
+	} {
+		if _, ok := objects.objects[key]; ok {
+			t.Errorf("deleted entry object %q remains", key)
+		}
+	}
+	for _, record := range db.journal {
+		if strings.Contains(keyTableRecordID(record), deletedContentSHA256) || keyTableRecordWhen(record) == journalEntryRecordKey(deleted.Id.String()) {
+			t.Errorf("deleted entry record remains: %#v", record)
+		}
+	}
+	if _, ok := objects.objects[journalAggregateObjectKey(JournalSummaryPeriodDay, recordedAt)]; ok {
+		t.Error("deleted day aggregate object remains")
+	}
+
+	responseObject, err = server.DeleteJournalEntriesEntryId(ctx, DeleteJournalEntriesEntryIdRequestObject{
+		EntryId: deleted.Id,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := responseObject.(DeleteJournalEntriesEntryId204Response); !ok {
+		t.Fatalf("repeated delete response = %#v, want idempotent 204", responseObject)
 	}
 }
 

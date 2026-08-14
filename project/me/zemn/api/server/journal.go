@@ -642,13 +642,18 @@ func (s *Server) DeleteJournalEntriesEntryId(ctx context.Context, request Delete
 	if entry == nil {
 		return DeleteJournalEntriesEntryId204Response{}, nil
 	}
-	if entry.Status != JournalEntryStatusAwaitingUpload {
+	if entry.Status == JournalEntryStatusProcessing {
 		return DeleteJournalEntriesEntryId409JSONResponse{
-			Cause: "only an awaiting upload can be abandoned",
+			Cause: "an entry cannot be deleted while it is being processed",
 		}, nil
 	}
 	if err := s.deleteJournalEntry(ctx, subject, *entry); err != nil {
 		return nil, err
+	}
+	if entry.Status == JournalEntryStatusReady {
+		if err := s.refreshJournalSummariesForEntry(ctx, *entry); err != nil {
+			return nil, err
+		}
 	}
 	return DeleteJournalEntriesEntryId204Response{}, nil
 }
@@ -751,16 +756,6 @@ func (s *Server) releaseJournalContentHash(ctx context.Context, subject, entryID
 }
 
 func (s *Server) deleteJournalEntry(ctx context.Context, subject string, entry JournalStoredEntry) error {
-	_, err := s.ddb.DeleteItem(ctx, &dynamodb.DeleteItemInput{
-		TableName: aws.String(s.journalTableName),
-		Key: map[string]types.AttributeValue{
-			"id":   &types.AttributeValueMemberS{Value: subject},
-			"when": &types.AttributeValueMemberS{Value: journalEntryRecordKey(entry.Id)},
-		},
-	})
-	if err != nil {
-		return err
-	}
 	for _, key := range []string{
 		entry.AudioKey,
 		"entries/" + entry.Id + "/metadata.json",
@@ -774,7 +769,17 @@ func (s *Server) deleteJournalEntry(ctx context.Context, subject string, entry J
 			return err
 		}
 	}
-	return nil
+	if err := s.releaseJournalContentHash(ctx, subject, entry.Id, entry.ContentSha256); err != nil {
+		return err
+	}
+	_, err := s.ddb.DeleteItem(ctx, &dynamodb.DeleteItemInput{
+		TableName: aws.String(s.journalTableName),
+		Key: map[string]types.AttributeValue{
+			"id":   &types.AttributeValueMemberS{Value: subject},
+			"when": &types.AttributeValueMemberS{Value: journalEntryRecordKey(entry.Id)},
+		},
+	})
+	return err
 }
 
 func (s *Server) journalObjectSHA256(ctx context.Context, bucket, key string, size int64) (string, error) {

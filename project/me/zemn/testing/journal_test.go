@@ -689,6 +689,58 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForNoElement(driver, selenium.ByCSSSelector, "[data-journal-currently-spoken]", 10*time.Second); err != nil {
 		t.Fatalf("paused journal transcript remained highlighted: %v", err)
 	}
+	deleteThumb, err := waitForElement(
+		driver,
+		selenium.ByCSSSelector,
+		fmt.Sprintf("button[data-journal-delete-thumb='%s'][role='slider']", firstEntryID),
+		10*time.Second,
+	)
+	if err != nil {
+		t.Fatalf("completed journal entry did not have a swipe-to-delete control: %v", err)
+	}
+	if err := deleteThumb.Click(); err != nil {
+		t.Fatalf("click swipe-to-delete thumb: %v", err)
+	}
+	if err := journalAudioCountRemains(driver, 2, time.Second); err != nil {
+		t.Fatalf("ordinary click deleted a journal entry: %v", err)
+	}
+	if _, err := driver.ExecuteScript(`
+		const thumb = arguments[0];
+		const track = thumb.closest('[data-journal-delete-track]');
+		const bounds = track.getBoundingClientRect();
+		const options = {
+			bubbles: true,
+			cancelable: true,
+			clientX: bounds.left + 22,
+			isPrimary: true,
+			pointerId: 42,
+			pointerType: 'touch',
+		};
+		thumb.dispatchEvent(new PointerEvent('pointerdown', options));
+		options.clientX = bounds.right - 2;
+		thumb.dispatchEvent(new PointerEvent('pointermove', options));
+		thumb.dispatchEvent(new PointerEvent('pointerup', options));
+	`, []any{deleteThumb}); err != nil {
+		t.Fatalf("swipe journal delete control: %v", err)
+	}
+	if err := waitForNoElement(driver, selenium.ByID, "entry-"+firstEntryID, 30*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("swiped journal entry was not deleted: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, 1, 10*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("journal did not remove exactly one swiped entry: %v", err)
+	}
+	playbackQueryCleared, err := driver.ExecuteScript(`
+		return !new URL(location.href).searchParams.has('entry') &&
+			!new URL(location.href).searchParams.has('t');
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal URL after deleting selected entry: %v", err)
+	}
+	if playbackQueryCleared != true {
+		t.Fatalf("deleting the selected journal entry left its playback URL active")
+	}
 	journalAudio, err := driver.FindElements(selenium.ByCSSSelector, "audio[data-entry-id]")
 	if err != nil {
 		t.Fatalf("count journal entries before recording: %v", err)

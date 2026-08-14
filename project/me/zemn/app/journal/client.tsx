@@ -12,7 +12,9 @@ import { parseAsFloat, parseAsString, useQueryStates } from 'nuqs';
 import {
 	ChangeEvent,
 	memo,
+	KeyboardEvent as ReactKeyboardEvent,
 	MouseEvent as ReactMouseEvent,
+	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -27,6 +29,7 @@ import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
+	useDeleteJournalEntry,
 	useGetJournal,
 	useGetMeScopes,
 	usePostJournalEntry,
@@ -146,6 +149,7 @@ interface JournalPlayback {
 	readonly playingSegmentID: string | undefined;
 	readonly progressed: (entryID: string, time: number) => void;
 	readonly quoteForSegment: (entryID: string, segmentID: string) => string;
+	readonly removeEntry: (entryID: string) => void;
 	readonly registerAudio: (
 		entryID: string,
 		audio: HTMLAudioElement | null
@@ -339,6 +343,22 @@ function useJournalPlayback(
 		},
 		[pauseOthers, seekAndPlay, segmentFor, updateCursor]
 	);
+	const removeEntry = useCallback(
+		(entryID: string) => {
+			const audio = audioElements.current.get(entryID);
+			audio?.pause();
+			pendingSeekTimes.current.delete(entryID);
+			if (playingRef.current?.entryID === entryID) {
+				playingRef.current = undefined;
+				setPlaying(undefined);
+			}
+			if (cursorRef.current.entry !== entryID) return;
+			const next = { entry: null, t: null };
+			cursorRef.current = next;
+			void setCursor(next, { history: 'replace' });
+		},
+		[setCursor]
+	);
 	const applyURLCursor = useCallback(
 		(force = false) => {
 			const location = `${window.location.pathname}${window.location.search}`;
@@ -392,6 +412,7 @@ function useJournalPlayback(
 			playingSegmentID: playing?.segmentID,
 			progressed,
 			quoteForSegment,
+			removeEntry,
 			registerAudio,
 			started,
 			stopped,
@@ -405,6 +426,7 @@ function useJournalPlayback(
 			playing?.segmentID,
 			progressed,
 			quoteForSegment,
+			removeEntry,
 			registerAudio,
 			started,
 			stopped,
@@ -804,10 +826,177 @@ const Transcript = memo(
 			spokenSegmentFor(next.entry, next.playback)
 );
 
+const deleteThreshold = 90;
+
+function SwipeToDelete({
+	entryID,
+	onDelete,
+	onDeleting,
+}: {
+	readonly entryID: string;
+	readonly onDelete: (entryID: string) => Promise<void>;
+	readonly onDeleting: (entryID: string) => void;
+}) {
+	const trackRef = useRef<HTMLDivElement>(null);
+	const draggingPointer = useRef<number>();
+	const progressRef = useRef(0);
+	const [progress, setProgress] = useState(0);
+	const [deleting, setDeleting] = useState(false);
+	const [failure, setFailure] = useState<string>();
+	const updateProgress = useCallback((next: number) => {
+		const clamped = Math.max(0, Math.min(100, next));
+		progressRef.current = clamped;
+		setProgress(clamped);
+	}, []);
+	const updateFromPointer = useCallback(
+		(clientX: number) => {
+			const bounds = trackRef.current?.getBoundingClientRect();
+			if (!bounds) return;
+			const thumbWidth = Math.min(44, bounds.width);
+			const travel = Math.max(1, bounds.width - thumbWidth);
+			updateProgress(
+				((clientX - bounds.left - thumbWidth / 2) / travel) * 100
+			);
+		},
+		[updateProgress]
+	);
+	const deleteNow = useCallback(async () => {
+		if (deleting) return;
+		setDeleting(true);
+		setFailure(undefined);
+		onDeleting(entryID);
+		try {
+			await onDelete(entryID);
+		} catch (error) {
+			setFailure(
+				error instanceof Error
+					? error.message
+					: 'Could not delete the journal entry.'
+			);
+			updateProgress(0);
+			setDeleting(false);
+		}
+	}, [deleting, entryID, onDelete, onDeleting, updateProgress]);
+	const finishPointer = (event: ReactPointerEvent<HTMLButtonElement>) => {
+		if (draggingPointer.current !== event.pointerId) return;
+		updateFromPointer(event.clientX);
+		draggingPointer.current = undefined;
+		if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+			event.currentTarget.releasePointerCapture(event.pointerId);
+		}
+		if (progressRef.current >= deleteThreshold) void deleteNow();
+		else updateProgress(0);
+	};
+	const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+		let next: number | undefined;
+		switch (event.key) {
+			case 'ArrowLeft':
+			case 'ArrowDown':
+				next = progressRef.current - 10;
+				break;
+			case 'ArrowRight':
+			case 'ArrowUp':
+				next = progressRef.current + 10;
+				break;
+			case 'Home':
+				next = 0;
+				break;
+			case 'End':
+				next = 100;
+				break;
+			case 'Enter':
+			case ' ':
+				if (progressRef.current >= deleteThreshold) {
+					event.preventDefault();
+					void deleteNow();
+				}
+				return;
+			default:
+				return;
+		}
+		event.preventDefault();
+		updateProgress(next);
+	};
+
+	return (
+		<div className={style.deleteControl}>
+			<div
+				className={style.deleteTrack}
+				data-journal-delete-track={entryID}
+				ref={trackRef}
+			>
+				<span aria-hidden="true" className={style.deleteLabel}>
+					{deleting ? 'Deleting…' : 'Swipe to delete'}
+				</span>
+				<span
+					aria-hidden="true"
+					className={style.deleteProgress}
+					style={{ inlineSize: `${progress}%` }}
+				/>
+				<button
+					aria-label="Swipe to delete journal entry"
+					aria-orientation="horizontal"
+					aria-valuemax={100}
+					aria-valuemin={0}
+					aria-valuenow={Math.round(progress)}
+					aria-valuetext={
+						progress >= deleteThreshold
+							? 'Release to permanently delete'
+							: 'Slide all the way right to permanently delete'
+					}
+					className={style.deleteThumb}
+					data-journal-delete-thumb={entryID}
+					disabled={deleting}
+					onKeyDown={handleKeyDown}
+					onPointerCancel={event => {
+						if (draggingPointer.current !== event.pointerId) return;
+						draggingPointer.current = undefined;
+						updateProgress(0);
+					}}
+					onPointerDown={event => {
+						if (!event.isPrimary || deleting) return;
+						setFailure(undefined);
+						draggingPointer.current = event.pointerId;
+						try {
+							event.currentTarget.setPointerCapture(
+								event.pointerId
+							);
+						} catch {
+							// A browser may cancel the pointer before capture is established.
+						}
+						updateFromPointer(event.clientX);
+					}}
+					onPointerMove={event => {
+						if (draggingPointer.current === event.pointerId) {
+							updateFromPointer(event.clientX);
+						}
+					}}
+					onPointerUp={finishPointer}
+					role="slider"
+					style={{
+						insetInlineStart: `${progress}%`,
+						transform: `translateX(-${progress}%)`,
+					}}
+					type="button"
+				>
+					<span aria-hidden="true">→</span>
+				</button>
+			</div>
+			{failure && (
+				<p className={style.deleteFailure} role="alert">
+					{failure}
+				</p>
+			)}
+		</div>
+	);
+}
+
 function EntryCard({
+	deleteEntry,
 	entry,
 	playback,
 }: {
+	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly entry: JournalEntry;
 	readonly playback: JournalPlayback;
 }) {
@@ -885,6 +1074,13 @@ function EntryCard({
 			)}
 			{entry.transcript.length > 0 && (
 				<Transcript entry={entry} playback={playback} />
+			)}
+			{entry.status === 'ready' && deleteEntry && (
+				<SwipeToDelete
+					entryID={entry.id}
+					onDelete={deleteEntry}
+					onDeleting={playback.removeEntry}
+				/>
 			)}
 		</details>
 	);
@@ -971,11 +1167,10 @@ function periodBounds(entry: JournalEntry, period: AggregatePeriod) {
 					: start.add({ years: 1 });
 	const options = {
 		smallestUnit: 'second',
-		timeZoneName: 'never',
 	} as const;
 	return {
-		end: end.toString(options).replace(/\+00:00$/, 'Z'),
-		start: start.toString(options).replace(/\+00:00$/, 'Z'),
+		end: end.toInstant().toString(options),
+		start: start.toInstant().toString(options),
 	};
 }
 
@@ -1123,10 +1318,12 @@ function PeriodList({
 }
 
 function JournalBrowser({
+	deleteEntry,
 	journal,
 	route,
 	root,
 }: {
+	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
 	readonly route: JournalRoute;
 	readonly root: boolean;
@@ -1265,6 +1462,7 @@ function JournalBrowser({
 				)}
 				{entries.map(entry => (
 					<EntryCard
+						deleteEntry={deleteEntry}
 						entry={entry}
 						key={entry.id}
 						playback={playback}
@@ -1471,7 +1669,9 @@ export default function JournalPageClient({
 	const scopes = useGetMeScopes(idToken);
 	const journal = useGetJournal(idToken);
 	const createEntry = usePostJournalEntry(idToken);
+	const deleteEntry = useDeleteJournalEntry(idToken);
 	const createJournalEntry = createEntry.mutateAsync;
+	const deleteJournalEntry = deleteEntry.mutateAsync;
 	const resetCreateEntry = createEntry.reset;
 	const recorder = useRef<MediaRecorder>();
 	const recordingDisposition = useRef<'discard' | 'submit'>('discard');
@@ -1751,6 +1951,11 @@ export default function JournalPageClient({
 					{journal(
 						value => (
 							<JournalBrowser
+								deleteEntry={
+									hasWriteScope
+										? deleteJournalEntry
+										: undefined
+								}
 								journal={value}
 								root={route === undefined}
 								route={activeRoute}
