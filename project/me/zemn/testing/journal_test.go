@@ -55,6 +55,24 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := driver.FindElement(selenium.ByCSSSelector, "[data-glade-layout]"); err != nil {
 		t.Fatalf("journal does not use shared site layout: %v", err)
 	}
+	allowsJournalObjectStorage, err := driver.ExecuteScript(`
+		const policy = document.querySelector(
+			"meta[http-equiv='Content-Security-Policy']",
+		)?.content ?? '';
+		const directives = new Map(policy.split(';').map((directive) => {
+			const [name, ...sources] = directive.trim().split(/\s+/);
+			return [name, new Set(sources)];
+		}));
+		const regionalS3 = 'https://s3.us-east-1.amazonaws.com';
+		return directives.get('connect-src')?.has(regionalS3) === true &&
+			directives.get('media-src')?.has(regionalS3) === true;
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal object-storage CSP: %v", err)
+	}
+	if allowsJournalObjectStorage != true {
+		t.Fatalf("journal CSP does not allow direct uploads to and playback from regional S3")
+	}
 	usesSiteFont, err := driver.ExecuteScript(`
 		const page = document.querySelector('[data-glade-content] > main');
 		return page !== null &&
