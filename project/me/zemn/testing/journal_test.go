@@ -827,6 +827,33 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("submitted recording did not become a journal entry: %v", err)
 	}
+	currentDayAudio := append([]byte(nil), audio...)
+	currentDayAudio[len(currentDayAudio)-4] = 1
+	currentDayFile, err := os.CreateTemp(t.TempDir(), "journal-current-day-*.wav")
+	if err != nil {
+		t.Fatalf("create second current-day voice memo: %v", err)
+	}
+	if _, err := currentDayFile.Write(currentDayAudio); err != nil {
+		t.Fatalf("write second current-day voice memo: %v", err)
+	}
+	if err := currentDayFile.Close(); err != nil {
+		t.Fatalf("close second current-day voice memo: %v", err)
+	}
+	currentDayImport, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("find current-day journal import input: %v", err)
+	}
+	if err := currentDayImport.SendKeys(currentDayFile.Name()); err != nil {
+		t.Fatalf("import second current-day voice memo: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("second current-day voice memo did not become a journal entry: %v", err)
+	}
+	if err := waitForText(driver, "Local day journal", 30*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("in-progress day summary was not displayed after its second entry: %v", err)
+	}
 }
 
 func journalDynamoDBClient() (*dynamodb.Client, error) {

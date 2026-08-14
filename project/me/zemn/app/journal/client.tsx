@@ -1202,12 +1202,14 @@ function periodsFor(
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
+		const showSummary =
+			summary.period === 'day' || Date.parse(summary.end) <= Date.now();
 		nodes.set(start, {
 			end: summary.end,
 			id: summary.id,
 			period,
 			start: summary.start,
-			...(Date.parse(summary.end) <= Date.now() ? { summary } : {}),
+			...(showSummary ? { summary } : {}),
 			...(!existing ? {} : { end: existing.end, start: existing.start }),
 		});
 	}
