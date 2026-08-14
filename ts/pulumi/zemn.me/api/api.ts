@@ -21,6 +21,7 @@ export const openAIWorkloadIdentityAudience = 'https://api.openai.com/v1';
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
+	journalWorkerEnvironment: 'staging' | 'production';
 	callboxPhoneNumber: Pulumi.Input<string>;
 	protectDatabases: boolean;
 	/**
@@ -431,7 +432,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 		const journalWorkerRole = new aws.iam.Role(
 			`${name}-journal-worker-role`,
 			{
-				name: `${name}-journal-worker`,
+				// Staging and production share an AWS account, so their IAM role
+				// names must remain distinct even though their Pulumi stacks are not.
+				name: `${name}-journal-worker-${args.journalWorkerEnvironment}`,
 				assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
 					Service: 'lambda.amazonaws.com',
 				}),
