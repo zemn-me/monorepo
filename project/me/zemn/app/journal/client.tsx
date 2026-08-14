@@ -12,7 +12,9 @@ import { parseAsFloat, parseAsString, useQueryStates } from 'nuqs';
 import {
 	ChangeEvent,
 	memo,
+	KeyboardEvent as ReactKeyboardEvent,
 	MouseEvent as ReactMouseEvent,
+	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -27,6 +29,7 @@ import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
+	useDeleteJournalEntry,
 	useGetJournal,
 	useGetMeScopes,
 	usePostJournalEntry,
@@ -49,6 +52,7 @@ const journalReadScope = 'journal_read';
 const journalWriteScope = 'journal_write';
 const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
+const uploadErrorLifetimeMs = 8_000;
 
 function errorMessage(value: unknown): string {
 	return value instanceof Error
@@ -145,6 +149,7 @@ interface JournalPlayback {
 	readonly playingSegmentID: string | undefined;
 	readonly progressed: (entryID: string, time: number) => void;
 	readonly quoteForSegment: (entryID: string, segmentID: string) => string;
+	readonly removeEntry: (entryID: string) => void;
 	readonly registerAudio: (
 		entryID: string,
 		audio: HTMLAudioElement | null
@@ -155,9 +160,12 @@ interface JournalPlayback {
 
 function useJournalPlayback(
 	journal: Journal,
-	citationDestination?: (entryID: string) => string | undefined
+	citationDestination?: (entryID: string) => string | undefined,
+	navigationKey = ''
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
+	const appliedNavigation = useRef<string>();
+	const pendingSeekTimes = useRef(new Map<string, number>());
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
 	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
@@ -166,18 +174,19 @@ function useJournalPlayback(
 		throttleMs: 250,
 	});
 	const cursorRef = useRef(cursor);
-	const internalCursorKeys = useRef(new Set<string>());
 	const [playing, setPlaying] = useState<{
 		readonly entryID: string;
 		readonly segmentID: string | undefined;
 	}>();
 	const playingRef = useRef(playing);
 	playingRef.current = playing;
-	cursorRef.current = cursor;
 	const registerAudio = useCallback(
 		(entryID: string, audio: HTMLAudioElement | null) => {
 			if (audio) audioElements.current.set(entryID, audio);
-			else audioElements.current.delete(entryID);
+			else {
+				audioElements.current.delete(entryID);
+				pendingSeekTimes.current.delete(entryID);
+			}
 		},
 		[]
 	);
@@ -186,25 +195,34 @@ function useJournalPlayback(
 			if (otherEntryID !== entryID && !audio.paused) audio.pause();
 		}
 	}, []);
+	const seekAndPlay = useCallback((entryID: string, time: number) => {
+		const audio = audioElements.current.get(entryID);
+		if (!audio) return false;
+		const target = Math.max(0, time);
+		pendingSeekTimes.current.set(entryID, target);
+		const seek = () => {
+			if (audioElements.current.get(entryID) !== audio) return;
+			const pending = pendingSeekTimes.current.get(entryID);
+			if (pending === undefined) return;
+			pendingSeekTimes.current.delete(entryID);
+			if (Math.abs(audio.currentTime - pending) >= 0.25) {
+				audio.currentTime = pending;
+			}
+		};
+		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
+			audio.addEventListener('loadedmetadata', seek, { once: true });
+		} else {
+			seek();
+		}
+		void audio.play().catch(() => undefined);
+		return true;
+	}, []);
 	const updateCursor = useCallback(
 		(entryID: string, time: number, history: 'push' | 'replace') => {
 			const next = { entry: entryID, t: roundedMediaTime(time) };
 			const previous = cursorRef.current;
 			if (previous.entry === next.entry && previous.t === next.t) return;
 			cursorRef.current = next;
-			const cursorKeys = internalCursorKeys.current;
-			// Playback positions written to the URL are observations, not seek
-			// commands. Keep every throttled update in flight so an older one
-			// cannot be mistaken for browser navigation and rewind the audio.
-			cursorKeys.add(`${next.entry}@${next.t}`);
-			if (previous.entry !== next.entry && previous.t !== null) {
-				cursorKeys.add(`${next.entry}@${previous.t}`);
-			}
-			while (cursorKeys.size > 64) {
-				const oldest = cursorKeys.values().next().value;
-				if (oldest === undefined) break;
-				cursorKeys.delete(oldest);
-			}
 			void setCursor(next, {
 				history,
 				throttleMs: history === 'push' ? 50 : 250,
@@ -321,43 +339,69 @@ function useJournalPlayback(
 			if (!audio || !segment) return false;
 			updateCursor(entryID, segment.startMs / 1000, 'push');
 			pauseOthers(entryID);
-			audio.currentTime = segment.startMs / 1000;
-			void audio.play();
-			return true;
+			return seekAndPlay(entryID, segment.startMs / 1000);
 		},
-		[pauseOthers, segmentFor, updateCursor]
+		[pauseOthers, seekAndPlay, segmentFor, updateCursor]
+	);
+	const removeEntry = useCallback(
+		(entryID: string) => {
+			const audio = audioElements.current.get(entryID);
+			audio?.pause();
+			pendingSeekTimes.current.delete(entryID);
+			if (playingRef.current?.entryID === entryID) {
+				playingRef.current = undefined;
+				setPlaying(undefined);
+			}
+			if (cursorRef.current.entry !== entryID) return;
+			const next = { entry: null, t: null };
+			cursorRef.current = next;
+			void setCursor(next, { history: 'replace' });
+		},
+		[setCursor]
+	);
+	const applyURLCursor = useCallback(
+		(force = false) => {
+			const location = `${window.location.pathname}${window.location.search}`;
+			if (!force && appliedNavigation.current === location) return;
+			appliedNavigation.current = location;
+			const parameters = new URLSearchParams(window.location.search);
+			const entryID = parameters.get('entry');
+			const timeValue = parameters.get('t');
+			if (!entryID || timeValue === null) return;
+			const time = Number(timeValue);
+			if (!Number.isFinite(time)) return;
+			cursorRef.current = { entry: entryID, t: time };
+			const entry = entriesRef.current.find(
+				value => value.id === entryID
+			);
+			if (!entry) return;
+			pauseOthers(entryID);
+			const targetMilliseconds = time * 1000;
+			const segment = entry.transcript.findLast(
+				value => value.startMs <= targetMilliseconds
+			);
+			const target = segment
+				? document.getElementById(citationID(entry.id, segment.id))
+				: document.getElementById(`entry-${entryID}`);
+			let parent: HTMLElement | null = target;
+			while (parent) {
+				if (parent instanceof HTMLDetailsElement) parent.open = true;
+				parent = parent.parentElement;
+			}
+			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			seekAndPlay(entryID, time);
+		},
+		[pauseOthers, seekAndPlay]
 	);
 	useEffect(() => {
-		if (cursor.entry === null || cursor.t === null) return;
-		const cursorKey = `${cursor.entry}@${cursor.t}`;
-		if (internalCursorKeys.current.delete(cursorKey)) {
-			return;
-		}
-		const entry = entriesRef.current.find(
-			value => value.id === cursor.entry
-		);
-		if (!entry) return;
-		const audio = audioElements.current.get(cursor.entry);
-		if (!audio) return;
-		pauseOthers(cursor.entry);
-		const targetMilliseconds = cursor.t * 1000;
-		const segment = entry.transcript.findLast(
-			value => value.startMs <= targetMilliseconds
-		);
-		const target = segment
-			? document.getElementById(citationID(entry.id, segment.id))
-			: document.getElementById(`entry-${cursor.entry}`);
-		let parent: HTMLElement | null = target;
-		while (parent) {
-			if (parent instanceof HTMLDetailsElement) parent.open = true;
-			parent = parent.parentElement;
-		}
-		target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-		if (Math.abs(audio.currentTime - cursor.t) >= 0.25) {
-			audio.currentTime = Math.max(0, cursor.t);
-		}
-		if (audio.paused) void audio.play().catch(() => undefined);
-	}, [cursor.entry, cursor.t, pauseOthers]);
+		applyURLCursor();
+	}, [applyURLCursor, navigationKey]);
+	useEffect(() => {
+		const applyBrowserNavigation = () => applyURLCursor(true);
+		window.addEventListener('popstate', applyBrowserNavigation);
+		return () =>
+			window.removeEventListener('popstate', applyBrowserNavigation);
+	}, [applyURLCursor]);
 	return useMemo(
 		() => ({
 			activeEntryID: cursor.entry ?? undefined,
@@ -368,6 +412,7 @@ function useJournalPlayback(
 			playingSegmentID: playing?.segmentID,
 			progressed,
 			quoteForSegment,
+			removeEntry,
 			registerAudio,
 			started,
 			stopped,
@@ -381,6 +426,7 @@ function useJournalPlayback(
 			playing?.segmentID,
 			progressed,
 			quoteForSegment,
+			removeEntry,
 			registerAudio,
 			started,
 			stopped,
@@ -780,10 +826,177 @@ const Transcript = memo(
 			spokenSegmentFor(next.entry, next.playback)
 );
 
+const deleteThreshold = 90;
+
+function SwipeToDelete({
+	entryID,
+	onDelete,
+	onDeleting,
+}: {
+	readonly entryID: string;
+	readonly onDelete: (entryID: string) => Promise<void>;
+	readonly onDeleting: (entryID: string) => void;
+}) {
+	const trackRef = useRef<HTMLDivElement>(null);
+	const draggingPointer = useRef<number>();
+	const progressRef = useRef(0);
+	const [progress, setProgress] = useState(0);
+	const [deleting, setDeleting] = useState(false);
+	const [failure, setFailure] = useState<string>();
+	const updateProgress = useCallback((next: number) => {
+		const clamped = Math.max(0, Math.min(100, next));
+		progressRef.current = clamped;
+		setProgress(clamped);
+	}, []);
+	const updateFromPointer = useCallback(
+		(clientX: number) => {
+			const bounds = trackRef.current?.getBoundingClientRect();
+			if (!bounds) return;
+			const thumbWidth = Math.min(44, bounds.width);
+			const travel = Math.max(1, bounds.width - thumbWidth);
+			updateProgress(
+				((clientX - bounds.left - thumbWidth / 2) / travel) * 100
+			);
+		},
+		[updateProgress]
+	);
+	const deleteNow = useCallback(async () => {
+		if (deleting) return;
+		setDeleting(true);
+		setFailure(undefined);
+		onDeleting(entryID);
+		try {
+			await onDelete(entryID);
+		} catch (error) {
+			setFailure(
+				error instanceof Error
+					? error.message
+					: 'Could not delete the journal entry.'
+			);
+			updateProgress(0);
+			setDeleting(false);
+		}
+	}, [deleting, entryID, onDelete, onDeleting, updateProgress]);
+	const finishPointer = (event: ReactPointerEvent<HTMLButtonElement>) => {
+		if (draggingPointer.current !== event.pointerId) return;
+		updateFromPointer(event.clientX);
+		draggingPointer.current = undefined;
+		if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+			event.currentTarget.releasePointerCapture(event.pointerId);
+		}
+		if (progressRef.current >= deleteThreshold) void deleteNow();
+		else updateProgress(0);
+	};
+	const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+		let next: number | undefined;
+		switch (event.key) {
+			case 'ArrowLeft':
+			case 'ArrowDown':
+				next = progressRef.current - 10;
+				break;
+			case 'ArrowRight':
+			case 'ArrowUp':
+				next = progressRef.current + 10;
+				break;
+			case 'Home':
+				next = 0;
+				break;
+			case 'End':
+				next = 100;
+				break;
+			case 'Enter':
+			case ' ':
+				if (progressRef.current >= deleteThreshold) {
+					event.preventDefault();
+					void deleteNow();
+				}
+				return;
+			default:
+				return;
+		}
+		event.preventDefault();
+		updateProgress(next);
+	};
+
+	return (
+		<div className={style.deleteControl}>
+			<div
+				className={style.deleteTrack}
+				data-journal-delete-track={entryID}
+				ref={trackRef}
+			>
+				<span aria-hidden="true" className={style.deleteLabel}>
+					{deleting ? 'Deleting…' : 'Swipe to delete'}
+				</span>
+				<span
+					aria-hidden="true"
+					className={style.deleteProgress}
+					style={{ inlineSize: `${progress}%` }}
+				/>
+				<button
+					aria-label="Swipe to delete journal entry"
+					aria-orientation="horizontal"
+					aria-valuemax={100}
+					aria-valuemin={0}
+					aria-valuenow={Math.round(progress)}
+					aria-valuetext={
+						progress >= deleteThreshold
+							? 'Release to permanently delete'
+							: 'Slide all the way right to permanently delete'
+					}
+					className={style.deleteThumb}
+					data-journal-delete-thumb={entryID}
+					disabled={deleting}
+					onKeyDown={handleKeyDown}
+					onPointerCancel={event => {
+						if (draggingPointer.current !== event.pointerId) return;
+						draggingPointer.current = undefined;
+						updateProgress(0);
+					}}
+					onPointerDown={event => {
+						if (!event.isPrimary || deleting) return;
+						setFailure(undefined);
+						draggingPointer.current = event.pointerId;
+						try {
+							event.currentTarget.setPointerCapture(
+								event.pointerId
+							);
+						} catch {
+							// A browser may cancel the pointer before capture is established.
+						}
+						updateFromPointer(event.clientX);
+					}}
+					onPointerMove={event => {
+						if (draggingPointer.current === event.pointerId) {
+							updateFromPointer(event.clientX);
+						}
+					}}
+					onPointerUp={finishPointer}
+					role="slider"
+					style={{
+						insetInlineStart: `${progress}%`,
+						transform: `translateX(-${progress}%)`,
+					}}
+					type="button"
+				>
+					<span aria-hidden="true">→</span>
+				</button>
+			</div>
+			{failure && (
+				<p className={style.deleteFailure} role="alert">
+					{failure}
+				</p>
+			)}
+		</div>
+	);
+}
+
 function EntryCard({
+	deleteEntry,
 	entry,
 	playback,
 }: {
+	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly entry: JournalEntry;
 	readonly playback: JournalPlayback;
 }) {
@@ -861,6 +1074,13 @@ function EntryCard({
 			)}
 			{entry.transcript.length > 0 && (
 				<Transcript entry={entry} playback={playback} />
+			)}
+			{entry.status === 'ready' && deleteEntry && (
+				<SwipeToDelete
+					entryID={entry.id}
+					onDelete={deleteEntry}
+					onDeleting={playback.removeEntry}
+				/>
 			)}
 		</details>
 	);
@@ -947,11 +1167,10 @@ function periodBounds(entry: JournalEntry, period: AggregatePeriod) {
 					: start.add({ years: 1 });
 	const options = {
 		smallestUnit: 'second',
-		timeZoneName: 'never',
 	} as const;
 	return {
-		end: end.toString(options).replace(/\+00:00$/, 'Z'),
-		start: start.toString(options).replace(/\+00:00$/, 'Z'),
+		end: end.toInstant().toString(options),
+		start: start.toInstant().toString(options),
 	};
 }
 
@@ -962,6 +1181,11 @@ function periodsFor(
 ) {
 	const nodes = new Map<number, JournalPeriodNode>();
 	for (const entry of journal.entries) {
+		if (
+			!['awaiting_upload', 'processing', 'ready'].includes(entry.status)
+		) {
+			continue;
+		}
 		const bounds = periodBounds(entry, period);
 		const start = Date.parse(bounds.start);
 		nodes.set(start, {
@@ -1094,10 +1318,12 @@ function PeriodList({
 }
 
 function JournalBrowser({
+	deleteEntry,
 	journal,
 	route,
 	root,
 }: {
+	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
 	readonly route: JournalRoute;
 	readonly root: boolean;
@@ -1113,9 +1339,13 @@ function JournalBrowser({
 		(entryID: string) => citationDestination(journal, entryID),
 		[journal]
 	);
-	const playback = useJournalPlayback(journal, aggregateCitationDestination);
-	const pendingEntries = journal.entries.filter(
-		entry => entry.status !== 'ready'
+	const playback = useJournalPlayback(
+		journal,
+		aggregateCitationDestination,
+		route
+	);
+	const pendingEntries = journal.entries.filter(entry =>
+		['awaiting_upload', 'processing'].includes(entry.status)
 	);
 	const year = findPeriod(journal, 'year', selection.year);
 	const month = findPeriod(journal, 'month', selection.month);
@@ -1232,6 +1462,7 @@ function JournalBrowser({
 				)}
 				{entries.map(entry => (
 					<EntryCard
+						deleteEntry={deleteEntry}
 						entry={entry}
 						key={entry.id}
 						playback={playback}
@@ -1438,7 +1669,9 @@ export default function JournalPageClient({
 	const scopes = useGetMeScopes(idToken);
 	const journal = useGetJournal(idToken);
 	const createEntry = usePostJournalEntry(idToken);
+	const deleteEntry = useDeleteJournalEntry(idToken);
 	const createJournalEntry = createEntry.mutateAsync;
+	const deleteJournalEntry = deleteEntry.mutateAsync;
 	const resetCreateEntry = createEntry.reset;
 	const recorder = useRef<MediaRecorder>();
 	const recordingDisposition = useRef<'discard' | 'submit'>('discard');
@@ -1471,6 +1704,14 @@ export default function JournalPageClient({
 	const status = createEntry.isPending
 		? 'Uploading your private voice note…'
 		: recordingError;
+	useEffect(() => {
+		if (!recordingError) return;
+		const timeout = window.setTimeout(
+			() => setRecordingError(undefined),
+			uploadErrorLifetimeMs
+		);
+		return () => window.clearTimeout(timeout);
+	}, [recordingError]);
 	const resetSubmission = useCallback(() => {
 		resetCreateEntry();
 		setRecordingError(undefined);
@@ -1710,6 +1951,11 @@ export default function JournalPageClient({
 					{journal(
 						value => (
 							<JournalBrowser
+								deleteEntry={
+									hasWriteScope
+										? deleteJournalEntry
+										: undefined
+								}
 								journal={value}
 								root={route === undefined}
 								route={activeRoute}

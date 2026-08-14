@@ -28,11 +28,16 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("could not find next server root: %v", err)
 	}
 	const pendingEntryID = "00000000-0000-4000-8000-000000000001"
+	const failedEntryID = "00000000-0000-4000-8000-000000000002"
 	if err := putProcessingJournalEntry(t.Context(), pendingEntryID); err != nil {
 		t.Fatalf("seed processing journal entry: %v", err)
 	}
+	if err := putJournalEntry(t.Context(), failedEntryID, apiserver.JournalEntryStatusFailed); err != nil {
+		t.Fatalf("seed failed journal entry: %v", err)
+	}
 	t.Cleanup(func() {
 		_ = deleteJournalEntry(context.Background(), pendingEntryID)
+		_ = deleteJournalEntry(context.Background(), failedEntryID)
 	})
 
 	driver, err := seleniumpkg.NewWithChromeArguments(
@@ -107,6 +112,13 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//h2[normalize-space()='Years']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not default to years: %v", err)
+	}
+	failedEntries, err := driver.FindElements(selenium.ByID, "entry-"+failedEntryID)
+	if err != nil {
+		t.Fatalf("inspect failed journal entries: %v", err)
+	}
+	if len(failedEntries) != 0 {
+		t.Fatalf("failed journal entry was displayed in the index")
 	}
 	pendingEntryStatus, err := waitForElement(
 		driver,
@@ -232,12 +244,12 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForText(driver, staleUploadError, 10*time.Second); err != nil {
 		t.Fatalf("invalid voice memo error: %v", err)
 	}
+	if err := waitForNoElement(driver, selenium.ByXPATH, fmt.Sprintf("//*[normalize-space()='%s']", staleUploadError), 12*time.Second); err != nil {
+		t.Fatalf("upload error did not dismiss itself: %v", err)
+	}
 
 	if err := dispatchJournalFile(driver, file.Name(), "drop"); err != nil {
 		t.Fatalf("drop voice memo: %v", err)
-	}
-	if err := waitForNoElement(driver, selenium.ByXPATH, fmt.Sprintf("//*[normalize-space()='%s']", staleUploadError), 10*time.Second); err != nil {
-		t.Fatalf("previous upload error remained after a new upload: %v", err)
 	}
 	if err := dispatchJournalFile(driver, file.Name(), "paste"); err != nil {
 		t.Fatalf("paste voice memo: %v", err)
@@ -522,9 +534,20 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("first cited journal audio did not play exclusively: %v", err)
 	}
-	if err := waitForJournalAudioAdvance(driver, firstEntryID, 750*time.Millisecond, 5*time.Second); err != nil {
+	delayedAudioSource, err := driver.ExecuteScript(`
+		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
+			.find(value => value.dataset.entryId === arguments[0]);
+		return audio?.currentSrc ?? '';
+	`, []any{firstEntryID})
+	if err != nil {
+		t.Fatalf("inspect delayed journal audio source: %v", err)
+	}
+	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") {
+		t.Fatalf("journal integration audio was not delayed: %q", source)
+	}
+	if err := waitForJournalAudioAdvance(driver, firstEntryID, 2750*time.Millisecond, 8*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
-		t.Fatalf("first cited journal audio did not advance continuously: %v", err)
+		t.Fatalf("delayed journal audio did not advance continuously while updating its URL: %v", err)
 	}
 	if err := waitForCurrentlySpokenTranscript(driver, firstEntryID, 10*time.Second); err != nil {
 		t.Fatalf("first playing transcript was not highlighted: %v", err)
@@ -666,6 +689,58 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForNoElement(driver, selenium.ByCSSSelector, "[data-journal-currently-spoken]", 10*time.Second); err != nil {
 		t.Fatalf("paused journal transcript remained highlighted: %v", err)
 	}
+	deleteThumb, err := waitForElement(
+		driver,
+		selenium.ByCSSSelector,
+		fmt.Sprintf("button[data-journal-delete-thumb='%s'][role='slider']", firstEntryID),
+		10*time.Second,
+	)
+	if err != nil {
+		t.Fatalf("completed journal entry did not have a swipe-to-delete control: %v", err)
+	}
+	if err := deleteThumb.Click(); err != nil {
+		t.Fatalf("click swipe-to-delete thumb: %v", err)
+	}
+	if err := journalAudioCountRemains(driver, 2, time.Second); err != nil {
+		t.Fatalf("ordinary click deleted a journal entry: %v", err)
+	}
+	if _, err := driver.ExecuteScript(`
+		const thumb = arguments[0];
+		const track = thumb.closest('[data-journal-delete-track]');
+		const bounds = track.getBoundingClientRect();
+		const options = {
+			bubbles: true,
+			cancelable: true,
+			clientX: bounds.left + 22,
+			isPrimary: true,
+			pointerId: 42,
+			pointerType: 'touch',
+		};
+		thumb.dispatchEvent(new PointerEvent('pointerdown', options));
+		options.clientX = bounds.right - 2;
+		thumb.dispatchEvent(new PointerEvent('pointermove', options));
+		thumb.dispatchEvent(new PointerEvent('pointerup', options));
+	`, []any{deleteThumb}); err != nil {
+		t.Fatalf("swipe journal delete control: %v", err)
+	}
+	if err := waitForNoElement(driver, selenium.ByID, "entry-"+firstEntryID, 30*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("swiped journal entry was not deleted: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, 1, 10*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("journal did not remove exactly one swiped entry: %v", err)
+	}
+	playbackQueryCleared, err := driver.ExecuteScript(`
+		return !new URL(location.href).searchParams.has('entry') &&
+			!new URL(location.href).searchParams.has('t');
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal URL after deleting selected entry: %v", err)
+	}
+	if playbackQueryCleared != true {
+		t.Fatalf("deleting the selected journal entry left its playback URL active")
+	}
 	journalAudio, err := driver.FindElements(selenium.ByCSSSelector, "audio[data-entry-id]")
 	if err != nil {
 		t.Fatalf("count journal entries before recording: %v", err)
@@ -770,6 +845,10 @@ func journalDynamoDBClient() (*dynamodb.Client, error) {
 }
 
 func putProcessingJournalEntry(ctx context.Context, entryID string) error {
+	return putJournalEntry(ctx, entryID, apiserver.JournalEntryStatusProcessing)
+}
+
+func putJournalEntry(ctx context.Context, entryID string, status apiserver.JournalEntryStatus) error {
 	client, err := journalDynamoDBClient()
 	if err != nil {
 		return err
@@ -785,7 +864,7 @@ func putProcessingJournalEntry(ctx context.Context, entryID string) error {
 			TimeZone:      "America/Los_Angeles",
 			ContentType:   "audio/wav",
 			AudioKey:      "entries/" + entryID + "/source",
-			Status:        apiserver.JournalEntryStatusProcessing,
+			Status:        status,
 			Transcript:    []apiserver.JournalTranscriptSegment{},
 		},
 	})
@@ -991,7 +1070,7 @@ func waitForJournalSummaryCitations(driver selenium.WebDriver, title string, wan
 func testWAV() []byte {
 	const (
 		sampleRate     = 8000
-		seconds        = 2
+		seconds        = 6
 		bytesPerSample = 2
 	)
 	dataSize := sampleRate * seconds * bytesPerSample
@@ -1131,7 +1210,7 @@ func waitForJournalAudioAdvance(driver selenium.WebDriver, entryID string, advan
 	if largestRewind > 0.075 {
 		return fmt.Errorf("audio rewound by %.3fs while advancing from %.3fs to %.3fs", largestRewind, startedAt, currentTime)
 	}
-	if urlWrites > 1 {
+	if urlWrites > 2 {
 		return fmt.Errorf("audio playback wrote the URL %.0f times while advancing for %.3fs", urlWrites, currentTime-startedAt)
 	}
 	return nil

@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"sync"
 	"time"
 
@@ -19,9 +20,11 @@ import (
 )
 
 const (
-	localJournalObjectPath  = "/__local/journal/object"
-	localJournalRefreshPath = "/__local/journal/refresh"
-	localJournalMaxBytes    = 25 * 1024 * 1024
+	localJournalObjectPath       = "/__local/journal/object"
+	localJournalRefreshPath      = "/__local/journal/refresh"
+	localJournalAudioDelayEnv    = "JOURNAL_LOCAL_AUDIO_DELAY_MS"
+	localJournalMaxBytes         = 25 * 1024 * 1024
+	localJournalMaximumReadDelay = 5 * time.Second
 )
 
 type localJournalUploadProcessor func(context.Context, string, string, int64) error
@@ -35,6 +38,7 @@ type localJournalStore struct {
 	mu           sync.RWMutex
 	contentTypes map[string]string
 	processor    localJournalUploadProcessor
+	readDelay    time.Duration
 }
 
 func newLocalJournalStore(baseURL string, logger *log.Logger) (*localJournalStore, error) {
@@ -42,9 +46,13 @@ func newLocalJournalStore(baseURL string, logger *log.Logger) (*localJournalStor
 	if err != nil {
 		return nil, err
 	}
-	return &localJournalStore{
+	store := &localJournalStore{
 		baseURL: baseURL, directory: directory, logger: logger, contentTypes: map[string]string{},
-	}, nil
+	}
+	if milliseconds, err := strconv.Atoi(os.Getenv(localJournalAudioDelayEnv)); err == nil && milliseconds > 0 {
+		store.readDelay = min(time.Duration(milliseconds)*time.Millisecond, localJournalMaximumReadDelay)
+	}
+	return store, nil
 }
 
 func (s *localJournalStore) Close() error {
@@ -176,8 +184,12 @@ func (s *localJournalStore) PresignGetObject(_ context.Context, input *s3.GetObj
 	if input.Bucket == nil || input.Key == nil {
 		return nil, errors.New("bucket and key are required")
 	}
+	objectURL := s.objectURL(*input.Bucket, *input.Key)
+	if s.readDelay > 0 {
+		objectURL += "&delayMs=" + strconv.FormatInt(s.readDelay.Milliseconds(), 10)
+	}
 	return &v4.PresignedHTTPRequest{
-		Method: http.MethodGet, URL: s.objectURL(*input.Bucket, *input.Key), SignedHeader: http.Header{},
+		Method: http.MethodGet, URL: objectURL, SignedHeader: http.Header{},
 	}, nil
 }
 
@@ -218,6 +230,16 @@ func (s *localJournalStore) ServeHTTP(response http.ResponseWriter, request *htt
 			}()
 		}
 	case http.MethodGet:
+		if delayMilliseconds, err := strconv.Atoi(request.URL.Query().Get("delayMs")); err == nil && delayMilliseconds > 0 {
+			delay := min(time.Duration(delayMilliseconds)*time.Millisecond, localJournalMaximumReadDelay)
+			timer := time.NewTimer(delay)
+			defer timer.Stop()
+			select {
+			case <-timer.C:
+			case <-request.Context().Done():
+				return
+			}
+		}
 		object, err := s.GetObject(request.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &key})
 		if err != nil {
 			http.NotFound(response, request)

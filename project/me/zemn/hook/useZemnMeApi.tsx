@@ -753,15 +753,26 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 							: 'Could not create journal entry.';
 					throw new Error(cause);
 				}
-				const uploaded = await fetch(response.data.upload.url, {
-					body: upload.file,
-					headers: response.data.upload.headers,
-					method: response.data.upload.method,
-				});
-				if (!uploaded.ok) {
-					throw new Error(
-						`Audio upload failed (${uploaded.status}).`
-					);
+				try {
+					const uploaded = await fetch(response.data.upload.url, {
+						body: upload.file,
+						headers: response.data.upload.headers,
+						method: response.data.upload.method,
+					});
+					if (!uploaded.ok) {
+						throw new Error(
+							`Audio upload failed (${uploaded.status}).`
+						);
+					}
+				} catch (error) {
+					await client
+						.DELETE('/journal/entries/{entryId}', {
+							params: {
+								path: { entryId: response.data.entry.id },
+							},
+						})
+						.catch(() => undefined);
+					throw error;
 				}
 				return response.data.entry;
 			},
@@ -772,7 +783,40 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 				throw new Error('authentication failed');
 			}
 		),
-		onSuccess: invalidateJournal,
+		onSettled: invalidateJournal,
+	});
+}
+
+export function useDeleteJournalEntry<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateJournal = useinvalidateJournal();
+	return useMutation({
+		mutationKey: ['delete', '/journal/entries/{entryId}'],
+		mutationFn: fetchClient(
+			client => async (entryId: string) => {
+				const response = await client.DELETE(
+					'/journal/entries/{entryId}',
+					{ params: { path: { entryId } } }
+				);
+				if (!response.response.ok) {
+					const cause =
+						typeof response.error === 'object' &&
+						response.error !== null &&
+						'cause' in response.error &&
+						typeof response.error.cause === 'string'
+							? response.error.cause
+							: 'Could not delete the journal entry.';
+					throw new Error(cause);
+				}
+			},
+			() => async () => {
+				throw new Error('authentication is still loading');
+			},
+			() => async () => {
+				throw new Error('authentication failed');
+			}
+		),
+		onSettled: invalidateJournal,
 	});
 }
 
