@@ -37,6 +37,9 @@ itest_service(
         ":$${PORT}",
     ],
     autoassign_port = True,
+    env = {
+        "JOURNAL_LOCAL_AUDIO_DELAY_MS": "1500",
+    },
     exe = ":localserver",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
@@ -52,6 +55,7 @@ itest_service(
     ],
     autoassign_port = True,
     env = {
+        "JOURNAL_LOCAL_AUDIO_DELAY_MS": "1500",
         "ZEMN_TEST_CALENDAR_ICAL_ROLLING_FIXTURE": "1",
     },
     exe = ":localserver",

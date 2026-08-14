@@ -156,9 +156,12 @@ interface JournalPlayback {
 
 function useJournalPlayback(
 	journal: Journal,
-	citationDestination?: (entryID: string) => string | undefined
+	citationDestination?: (entryID: string) => string | undefined,
+	navigationKey = ''
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
+	const appliedNavigation = useRef<string>();
+	const pendingSeekTimes = useRef(new Map<string, number>());
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
 	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
@@ -167,18 +170,19 @@ function useJournalPlayback(
 		throttleMs: 250,
 	});
 	const cursorRef = useRef(cursor);
-	const internalCursorKeys = useRef(new Set<string>());
 	const [playing, setPlaying] = useState<{
 		readonly entryID: string;
 		readonly segmentID: string | undefined;
 	}>();
 	const playingRef = useRef(playing);
 	playingRef.current = playing;
-	cursorRef.current = cursor;
 	const registerAudio = useCallback(
 		(entryID: string, audio: HTMLAudioElement | null) => {
 			if (audio) audioElements.current.set(entryID, audio);
-			else audioElements.current.delete(entryID);
+			else {
+				audioElements.current.delete(entryID);
+				pendingSeekTimes.current.delete(entryID);
+			}
 		},
 		[]
 	);
@@ -187,25 +191,34 @@ function useJournalPlayback(
 			if (otherEntryID !== entryID && !audio.paused) audio.pause();
 		}
 	}, []);
+	const seekAndPlay = useCallback((entryID: string, time: number) => {
+		const audio = audioElements.current.get(entryID);
+		if (!audio) return false;
+		const target = Math.max(0, time);
+		pendingSeekTimes.current.set(entryID, target);
+		const seek = () => {
+			if (audioElements.current.get(entryID) !== audio) return;
+			const pending = pendingSeekTimes.current.get(entryID);
+			if (pending === undefined) return;
+			pendingSeekTimes.current.delete(entryID);
+			if (Math.abs(audio.currentTime - pending) >= 0.25) {
+				audio.currentTime = pending;
+			}
+		};
+		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
+			audio.addEventListener('loadedmetadata', seek, { once: true });
+		} else {
+			seek();
+		}
+		void audio.play().catch(() => undefined);
+		return true;
+	}, []);
 	const updateCursor = useCallback(
 		(entryID: string, time: number, history: 'push' | 'replace') => {
 			const next = { entry: entryID, t: roundedMediaTime(time) };
 			const previous = cursorRef.current;
 			if (previous.entry === next.entry && previous.t === next.t) return;
 			cursorRef.current = next;
-			const cursorKeys = internalCursorKeys.current;
-			// Playback positions written to the URL are observations, not seek
-			// commands. Keep every throttled update in flight so an older one
-			// cannot be mistaken for browser navigation and rewind the audio.
-			cursorKeys.add(`${next.entry}@${next.t}`);
-			if (previous.entry !== next.entry && previous.t !== null) {
-				cursorKeys.add(`${next.entry}@${previous.t}`);
-			}
-			while (cursorKeys.size > 64) {
-				const oldest = cursorKeys.values().next().value;
-				if (oldest === undefined) break;
-				cursorKeys.delete(oldest);
-			}
 			void setCursor(next, {
 				history,
 				throttleMs: history === 'push' ? 50 : 250,
@@ -322,43 +335,53 @@ function useJournalPlayback(
 			if (!audio || !segment) return false;
 			updateCursor(entryID, segment.startMs / 1000, 'push');
 			pauseOthers(entryID);
-			audio.currentTime = segment.startMs / 1000;
-			void audio.play();
-			return true;
+			return seekAndPlay(entryID, segment.startMs / 1000);
 		},
-		[pauseOthers, segmentFor, updateCursor]
+		[pauseOthers, seekAndPlay, segmentFor, updateCursor]
+	);
+	const applyURLCursor = useCallback(
+		(force = false) => {
+			const location = `${window.location.pathname}${window.location.search}`;
+			if (!force && appliedNavigation.current === location) return;
+			appliedNavigation.current = location;
+			const parameters = new URLSearchParams(window.location.search);
+			const entryID = parameters.get('entry');
+			const timeValue = parameters.get('t');
+			if (!entryID || timeValue === null) return;
+			const time = Number(timeValue);
+			if (!Number.isFinite(time)) return;
+			cursorRef.current = { entry: entryID, t: time };
+			const entry = entriesRef.current.find(
+				value => value.id === entryID
+			);
+			if (!entry) return;
+			pauseOthers(entryID);
+			const targetMilliseconds = time * 1000;
+			const segment = entry.transcript.findLast(
+				value => value.startMs <= targetMilliseconds
+			);
+			const target = segment
+				? document.getElementById(citationID(entry.id, segment.id))
+				: document.getElementById(`entry-${entryID}`);
+			let parent: HTMLElement | null = target;
+			while (parent) {
+				if (parent instanceof HTMLDetailsElement) parent.open = true;
+				parent = parent.parentElement;
+			}
+			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			seekAndPlay(entryID, time);
+		},
+		[pauseOthers, seekAndPlay]
 	);
 	useEffect(() => {
-		if (cursor.entry === null || cursor.t === null) return;
-		const cursorKey = `${cursor.entry}@${cursor.t}`;
-		if (internalCursorKeys.current.delete(cursorKey)) {
-			return;
-		}
-		const entry = entriesRef.current.find(
-			value => value.id === cursor.entry
-		);
-		if (!entry) return;
-		const audio = audioElements.current.get(cursor.entry);
-		if (!audio) return;
-		pauseOthers(cursor.entry);
-		const targetMilliseconds = cursor.t * 1000;
-		const segment = entry.transcript.findLast(
-			value => value.startMs <= targetMilliseconds
-		);
-		const target = segment
-			? document.getElementById(citationID(entry.id, segment.id))
-			: document.getElementById(`entry-${cursor.entry}`);
-		let parent: HTMLElement | null = target;
-		while (parent) {
-			if (parent instanceof HTMLDetailsElement) parent.open = true;
-			parent = parent.parentElement;
-		}
-		target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-		if (Math.abs(audio.currentTime - cursor.t) >= 0.25) {
-			audio.currentTime = Math.max(0, cursor.t);
-		}
-		if (audio.paused) void audio.play().catch(() => undefined);
-	}, [cursor.entry, cursor.t, pauseOthers]);
+		applyURLCursor();
+	}, [applyURLCursor, navigationKey]);
+	useEffect(() => {
+		const applyBrowserNavigation = () => applyURLCursor(true);
+		window.addEventListener('popstate', applyBrowserNavigation);
+		return () =>
+			window.removeEventListener('popstate', applyBrowserNavigation);
+	}, [applyURLCursor]);
 	return useMemo(
 		() => ({
 			activeEntryID: cursor.entry ?? undefined,
@@ -1119,7 +1142,11 @@ function JournalBrowser({
 		(entryID: string) => citationDestination(journal, entryID),
 		[journal]
 	);
-	const playback = useJournalPlayback(journal, aggregateCitationDestination);
+	const playback = useJournalPlayback(
+		journal,
+		aggregateCitationDestination,
+		route
+	);
 	const pendingEntries = journal.entries.filter(entry =>
 		['awaiting_upload', 'processing'].includes(entry.status)
 	);

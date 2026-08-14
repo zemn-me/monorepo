@@ -534,9 +534,20 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("first cited journal audio did not play exclusively: %v", err)
 	}
-	if err := waitForJournalAudioAdvance(driver, firstEntryID, 750*time.Millisecond, 5*time.Second); err != nil {
+	delayedAudioSource, err := driver.ExecuteScript(`
+		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
+			.find(value => value.dataset.entryId === arguments[0]);
+		return audio?.currentSrc ?? '';
+	`, []any{firstEntryID})
+	if err != nil {
+		t.Fatalf("inspect delayed journal audio source: %v", err)
+	}
+	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") {
+		t.Fatalf("journal integration audio was not delayed: %q", source)
+	}
+	if err := waitForJournalAudioAdvance(driver, firstEntryID, 2750*time.Millisecond, 8*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
-		t.Fatalf("first cited journal audio did not advance continuously: %v", err)
+		t.Fatalf("delayed journal audio did not advance continuously while updating its URL: %v", err)
 	}
 	if err := waitForCurrentlySpokenTranscript(driver, firstEntryID, 10*time.Second); err != nil {
 		t.Fatalf("first playing transcript was not highlighted: %v", err)
@@ -1007,7 +1018,7 @@ func waitForJournalSummaryCitations(driver selenium.WebDriver, title string, wan
 func testWAV() []byte {
 	const (
 		sampleRate     = 8000
-		seconds        = 2
+		seconds        = 6
 		bytesPerSample = 2
 	)
 	dataSize := sampleRate * seconds * bytesPerSample
@@ -1147,7 +1158,7 @@ func waitForJournalAudioAdvance(driver selenium.WebDriver, entryID string, advan
 	if largestRewind > 0.075 {
 		return fmt.Errorf("audio rewound by %.3fs while advancing from %.3fs to %.3fs", largestRewind, startedAt, currentTime)
 	}
-	if urlWrites > 1 {
+	if urlWrites > 2 {
 		return fmt.Errorf("audio playback wrote the URL %.0f times while advancing for %.3fs", urlWrites, currentTime-startedAt)
 	}
 	return nil
