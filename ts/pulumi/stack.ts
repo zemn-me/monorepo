@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import * as Pulumi from '@pulumi/pulumi';
 import { LocalWorkspace, Stack } from '@pulumi/pulumi/automation/index.js';
 
 import * as monorepo from '#root/ts/pulumi/index.js';
@@ -38,19 +37,21 @@ async function provisionStack(s: Promise<Stack>): Promise<Stack> {
 
 const baseComponentName = 'monorepo';
 
-function openAIWorkloadIdentityConfig() {
-	const config = new Pulumi.Config('openai');
-	const identityProviderId = config.get('identityProviderId');
-	const serviceAccountId = config.get('serviceAccountId');
-	if (
-		(identityProviderId === undefined) !==
-		(serviceAccountId === undefined)
-	) {
-		throw new Error(
-			'openai:identityProviderId and openai:serviceAccountId must be configured together'
-		);
-	}
-	return { identityProviderId, serviceAccountId };
+// OpenAI creates these resources outside Pulumi, but their non-secret IDs are
+// versioned here so each stack's Lambda configuration remains reproducible.
+const openAIIdentityProviderId = 'idp_XmRQyI2VtPZzqhhsRZB2GqPx';
+const openAIServiceAccountIds = {
+	production: 'user-32T4FdsHhAxxKLlLPgRjWfFU',
+	staging: 'user-uPqLgRuopbBeGjM1R98zxgky',
+} as const;
+
+function openAIWorkloadIdentityConfig(
+	environment: keyof typeof openAIServiceAccountIds
+) {
+	return {
+		identityProviderId: openAIIdentityProviderId,
+		serviceAccountId: openAIServiceAccountIds[environment],
+	};
 }
 
 function exportOpenAIWorkloadIdentityOutputs(component: monorepo.Component) {
@@ -73,7 +74,7 @@ export async function production(): Promise<Stack> {
 			stackName: 'prod',
 			projectName,
 			async program() {
-				const openAI = openAIWorkloadIdentityConfig();
+				const openAI = openAIWorkloadIdentityConfig('production');
 				const component = new monorepo.Component(baseComponentName, {
 					staging: false,
 					openAIIdentityProviderId: openAI.identityProviderId,
@@ -91,7 +92,7 @@ export async function staging(): Promise<Stack> {
 			stackName: 'staging',
 			projectName,
 			async program() {
-				const openAI = openAIWorkloadIdentityConfig();
+				const openAI = openAIWorkloadIdentityConfig('staging');
 				const component = new monorepo.Component(baseComponentName, {
 					staging: true,
 					openAIIdentityProviderId: openAI.identityProviderId,
