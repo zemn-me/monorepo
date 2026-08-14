@@ -177,6 +177,9 @@ dependencies:
   react-hook-form:
     specifier: 7.85.0
     version: 7.85.0(react@19.2.8)
+  react-markdown:
+    specifier: 10.1.0
+    version: 10.1.0(@types/react@18.3.31)(react@19.2.8)
   refractor:
     specifier: 5.0.0
     version: 5.0.0
@@ -359,8 +362,8 @@ devDependencies:
     specifier: 7.58.12
     version: 7.58.12(@types/node@24.13.3)
   '@pulumi/aws':
-    specifier: 6.68.0
-    version: 6.68.0(typescript@5.9.3)
+    specifier: 7.41.0
+    version: 7.41.0(typescript@5.9.3)
   '@pulumi/awsx':
     specifier: 3.8.0
     version: 3.8.0(typescript@5.9.3)
@@ -4085,17 +4088,6 @@ packages:
 
   /@protobufjs/utf8@1.1.2:
     resolution: {integrity: sha512-b1UQwcEZ4yCnMCD8DAL1VlbvBJE9/IX4FTIp7BG1xYpf29SLazLSrqUkj4w7Y5y7cCVP6E5tcqqcI0xemPkHug==}
-
-  /@pulumi/aws@6.68.0(typescript@5.9.3):
-    resolution: {integrity: sha512-uehJNSviSq3garkLXsy1zZzI7V6clBDQq8G83PSpNfdePdGeKtuRoxMSsuqkgpGkue+cGjoxJtC6QwdtzgaKBQ==}
-    dependencies:
-      '@pulumi/pulumi': 3.253.0(typescript@5.9.3)
-      mime: 2.6.0
-    transitivePeerDependencies:
-      - supports-color
-      - ts-node
-      - typescript
-    dev: true
 
   /@pulumi/aws@7.41.0(typescript@5.9.3):
     resolution: {integrity: sha512-FkmcmI2TZUh+tdMwofyJZ52gNP9hAe6xcbs+tP9ZC+C3/HxrsD6HKmT8WbYigowFp9ZXRJSOsF7YkBrtgjP7Fw==}
@@ -9685,6 +9677,10 @@ packages:
     engines: {node: '>=20.10'}
     dev: true
 
+  /html-url-attributes@3.0.1:
+    resolution: {integrity: sha512-ol6UPyBWqsrO6EJySPz2O7ZSr856WDrEzM5zMqp+FJJLGMW35cLYmmZnl0vztAZxRUoNZJFTCohfjuIJ8I4QBQ==}
+    dev: false
+
   /http-cache-semantics@4.2.0:
     resolution: {integrity: sha512-dTxcvPXqPvXBQpq5dUr6mEMJX4oIEFv6bwom3FDwKRDsuIjjJGANqhBuoAn9c1RQJIdAKav33ED65E2ys+87QQ==}
 
@@ -13640,6 +13636,29 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
     dev: true
+
+  /react-markdown@10.1.0(@types/react@18.3.31)(react@19.2.8):
+    resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
+    peerDependencies:
+      '@types/react': '>=18'
+      react: '>=18'
+    dependencies:
+      '@types/hast': 3.0.5
+      '@types/mdast': 4.0.4
+      '@types/react': 18.3.31
+      devlop: 1.1.0
+      hast-util-to-jsx-runtime: 2.3.6
+      html-url-attributes: 3.0.1
+      mdast-util-to-hast: 13.2.1
+      react: 19.2.8
+      remark-parse: 11.0.0
+      remark-rehype: 11.1.2
+      unified: 11.0.5
+      unist-util-visit: 5.1.0
+      vfile: 6.0.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /react-native@0.86.2(@babel/core@8.0.1)(@types/react@18.3.31)(react@19.2.8):
     resolution: {integrity: sha512-zbJXGZpwfZGA79Z9ob6Atvfx4nAQL8yJBa35s58E4Oo+khPykfQP2sTeumkKbjwajFYfVayg8pj7Il9nIfTk7A==}

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import * as Pulumi from '@pulumi/pulumi';
 import { LocalWorkspace, Stack } from '@pulumi/pulumi/automation/index.js';
 
 import * as monorepo from '#root/ts/pulumi/index.js';
@@ -29,7 +30,7 @@ export async function program() {
 export const projectName = 'monorepo-2';
 
 async function provisionStack(s: Promise<Stack>): Promise<Stack> {
-	await (await s).workspace.installPlugin('aws', 'v5.13.0'); // can I get rid of this? it seems stupid
+	await (await s).workspace.installPlugin('aws', 'v7.41.0');
 	await (await s).setConfig('aws:region', { value: 'us-east-1' });
 
 	return s;
@@ -37,13 +38,48 @@ async function provisionStack(s: Promise<Stack>): Promise<Stack> {
 
 const baseComponentName = 'monorepo';
 
+function openAIWorkloadIdentityConfig() {
+	const config = new Pulumi.Config('openai');
+	const identityProviderId = config.get('identityProviderId');
+	const serviceAccountId = config.get('serviceAccountId');
+	if (
+		(identityProviderId === undefined) !==
+		(serviceAccountId === undefined)
+	) {
+		throw new Error(
+			'openai:identityProviderId and openai:serviceAccountId must be configured together'
+		);
+	}
+	return { identityProviderId, serviceAccountId };
+}
+
+function exportOpenAIWorkloadIdentityOutputs(component: monorepo.Component) {
+	return {
+		journalWorkerRoleArn: component.journalWorkerRoleArn,
+		openAIWorkloadIdentityAudience:
+			component.openAIWorkloadIdentityAudience,
+		...(component.openAIWorkloadIdentityIssuer === undefined
+			? {}
+			: {
+					openAIWorkloadIdentityIssuer:
+						component.openAIWorkloadIdentityIssuer,
+				}),
+	};
+}
+
 export async function production(): Promise<Stack> {
 	return provisionStack(
 		LocalWorkspace.createOrSelectStack({
 			stackName: 'prod',
 			projectName,
 			async program() {
-				new monorepo.Component(baseComponentName, { staging: false });
+				const openAI = openAIWorkloadIdentityConfig();
+				const component = new monorepo.Component(baseComponentName, {
+					staging: false,
+					openAIIdentityProviderId: openAI.identityProviderId,
+					openAIServiceAccountId: openAI.serviceAccountId,
+				});
+				return exportOpenAIWorkloadIdentityOutputs(component);
 			},
 		})
 	);
@@ -55,7 +91,13 @@ export async function staging(): Promise<Stack> {
 			stackName: 'staging',
 			projectName,
 			async program() {
-				new monorepo.Component(baseComponentName, { staging: true });
+				const openAI = openAIWorkloadIdentityConfig();
+				const component = new monorepo.Component(baseComponentName, {
+					staging: true,
+					openAIIdentityProviderId: openAI.identityProviderId,
+					openAIServiceAccountId: openAI.serviceAccountId,
+				});
+				return exportOpenAIWorkloadIdentityOutputs(component);
 			},
 		})
 	);

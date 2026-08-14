@@ -1,0 +1,352 @@
+.page {
+	--journal-muted: color-mix(in srgb, currentColor 65%, transparent);
+	--journal-line: color-mix(in srgb, currentColor 20%, transparent);
+	--journal-recording: #d70015;
+	--journal-sticky-navigation-height: 2.75rem;
+	box-sizing: border-box;
+	margin-inline: auto;
+	max-width: 52em;
+	padding: 0 1.25em 4em;
+}
+
+.dropTarget::after {
+	border: 2px dashed currentColor;
+	content: "";
+	inset: 1em;
+	pointer-events: none;
+	position: fixed;
+	z-index: 20;
+}
+
+.dropOverlay {
+	align-items: center;
+	backdrop-filter: blur(0.4em);
+	background: color-mix(in srgb, var(--background-color) 85%, transparent);
+	display: flex;
+	font-size: 1.25em;
+	font-weight: 700;
+	gap: 0.65em;
+	inset: 1em;
+	justify-content: center;
+	pointer-events: none;
+	position: fixed;
+	z-index: 19;
+}
+
+.hero {
+	max-width: 42em;
+	margin-block-end: 2em;
+}
+
+.hero h1 {
+	margin-block: 0;
+}
+
+.recorder {
+	align-items: center;
+	border-block: 1px solid var(--journal-line);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1em;
+	margin-block: 2em;
+	padding-block: 1em;
+}
+
+.recorder button,
+.page > button,
+.uploadButton {
+	align-items: center;
+	background: var(--foreground-color);
+	border: 1px solid var(--foreground-color);
+	color: var(--background-color);
+	cursor: pointer;
+	display: inline-flex;
+	font: inherit;
+	font-weight: 700;
+	gap: 0.5em;
+	padding: 0.65em 0.9em;
+}
+
+.uploadButton {
+	position: relative;
+}
+
+.recorder button,
+.uploadButton {
+	block-size: 2.75em;
+	box-sizing: border-box;
+	inline-size: 2.75em;
+	justify-content: center;
+	padding: 0;
+}
+
+.recorder .submitButton {
+	background: var(--journal-recording);
+	border-color: var(--journal-recording);
+	color: white;
+}
+
+.recorder .cancelButton {
+	background: transparent;
+	border-color: currentColor;
+	color: inherit;
+	margin-inline-start: auto;
+}
+
+.waveform {
+	block-size: 3em;
+	color: var(--journal-recording);
+	display: block;
+	flex: 1 1 16em;
+	inline-size: 100%;
+	min-inline-size: 10em;
+}
+
+.uploadButton input {
+	clip-path: inset(50%);
+	height: 1px;
+	inline-size: 1px;
+	overflow: clip;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.recorder button:disabled,
+.page > button:disabled {
+	cursor: wait;
+	opacity: 0.55;
+}
+
+.notice {
+	align-items: center;
+	border: 1px solid currentColor;
+	display: flex;
+	gap: 0.75em;
+	padding: 1em;
+}
+
+.entry > summary {
+	cursor: pointer;
+	padding-block: 0.5em;
+}
+
+.browser > h2 {
+	margin-block: 1.5em 0.5em;
+}
+
+.backNavigation {
+	align-items: center;
+	background: var(--background-color);
+	block-size: var(--journal-sticky-navigation-height);
+	box-sizing: border-box;
+	display: flex;
+	margin-block-end: 1.5em;
+	max-width: 42em;
+	position: sticky;
+	top: 0;
+	z-index: 7;
+}
+
+.backNavigation a {
+	text-decoration-color: var(--link-color);
+}
+
+.periodList {
+	display: grid;
+	gap: 2em;
+}
+
+.period {
+	min-width: 0;
+}
+
+.summary {
+	border-block-start: 1px solid var(--journal-line);
+	margin-block: 0.75em 1em;
+	max-width: 42em;
+	padding-block-start: 0.75em;
+}
+
+.summary header p {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+	margin: 0;
+}
+
+.summary h3 {
+	margin-block: 0.2em 0.6em;
+}
+
+.citation a {
+	background: none;
+	border: 0;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	padding: 0;
+	scroll-margin-block-start: calc(
+		var(--journal-sticky-navigation-height) +
+		0.5rem
+	);
+	text-decoration: underline;
+	text-decoration-color: var(--link-color);
+}
+
+.citation {
+	font-size: 0.75em;
+	line-height: 0;
+	margin-inline: 0.1em;
+}
+
+.entry {
+	margin-inline-start: 1em;
+}
+
+.pendingEntries {
+	display: grid;
+	gap: 0.5em;
+	margin-block-end: 1.5em;
+}
+
+.pendingEntries .entry {
+	margin-inline-start: 0;
+}
+
+.entry > summary {
+	display: flex;
+	gap: 1em;
+}
+
+.entry > summary time {
+	color: var(--journal-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+.status {
+	color: var(--journal-muted);
+	font-size: 0.75em;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.entryProgress {
+	color: var(--journal-muted);
+	font-style: italic;
+	margin-block: 0.5em;
+}
+
+.audioDock {
+	background: var(--background-color);
+	box-sizing: border-box;
+	max-width: 42em;
+	padding-block: 0.5em;
+	position: sticky;
+	top: var(--journal-sticky-navigation-height);
+	z-index: 5;
+}
+
+.audio {
+	display: block;
+	width: 100%;
+}
+
+.transcriptScroller {
+	border-block: 1px solid var(--journal-line);
+	max-block-size: min(45vh, 22rem);
+	max-width: 42em;
+	overflow-y: auto;
+	scrollbar-gutter: stable;
+}
+
+.transcript {
+	line-height: 1.75;
+	margin-block: 0;
+	max-width: 42em;
+	padding-block: calc(min(45vh, 22rem) / 2 - 0.875em);
+}
+
+.transcriptParagraph {
+	margin-block: 0;
+}
+
+.transcriptParagraph + .transcriptParagraph {
+	margin-block-start: 1em;
+}
+
+.transcriptParagraphTimestamp {
+	color: var(--journal-muted);
+	font-size: 0.75em;
+	font-variant-numeric: tabular-nums;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.transcriptParagraphTimestamp:hover,
+.transcriptParagraphTimestamp:focus-visible {
+	text-decoration: underline;
+}
+
+.transcriptSegment {
+	scroll-margin-block-start: 2em;
+}
+
+.transcriptSegment a {
+	border-radius: 0.15em;
+	color: inherit;
+	cursor: pointer;
+	position: relative;
+	text-decoration: none;
+}
+
+.transcriptSegment[data-journal-currently-spoken] a,
+.transcriptSegment a:hover,
+.transcriptSegment a:focus-visible,
+.transcriptSegment:target a {
+	background: var(--highlight-color);
+	color: var(--highlight-foreground-color);
+	outline-offset: 0.15em;
+}
+
+.transcriptTimestamp {
+	background: var(--foreground-color);
+	border-radius: 0.2em;
+	bottom: calc(100% + 0.3em);
+	color: var(--background-color);
+	font-size: 0.7em;
+	font-variant-numeric: tabular-nums;
+	left: 0;
+	line-height: 1;
+	opacity: 0;
+	padding: 0.35em 0.45em;
+	pointer-events: none;
+	position: absolute;
+	transform: translateY(0.2em);
+	transition:
+		opacity 100ms ease,
+		transform 100ms ease;
+	white-space: nowrap;
+	z-index: 1;
+}
+
+.transcriptSegment a:hover .transcriptTimestamp,
+.transcriptSegment a:focus-visible .transcriptTimestamp,
+.transcriptSegment a:active .transcriptTimestamp {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.empty {
+	color: var(--journal-muted);
+	margin-block-start: 3em;
+}
+
+@media (max-width: 40rem) {
+	.entry > summary {
+		flex-direction: column;
+		gap: 0.2em;
+	}
+
+	.entry {
+		margin-inline-start: 0;
+	}
+}

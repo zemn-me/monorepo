@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "itest_service")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
@@ -6,10 +7,17 @@ package(default_visibility = ["//visibility:public"])
 
 go_library(
     name = "localserver_lib",
-    srcs = ["main.go"],
+    srcs = [
+        "journal.go",
+        "main.go",
+    ],
     importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/cmd/localserver",
     visibility = ["//visibility:private"],
-    deps = ["//project/me/zemn/api/server"],
+    deps = [
+        "//project/me/zemn/api/server",
+        "@com_github_aws_aws_sdk_go_v2//aws/signer/v4:signer",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+    ],
 )
 
 bazel_lint(
@@ -51,4 +59,11 @@ itest_service(
     deps = [
         "//java/software/amazon/dynamodb",
     ],
+)
+
+go_test(
+    name = "localserver_test",
+    srcs = ["journal_test.go"],
+    embed = [":localserver_lib"],
+    deps = ["@com_github_aws_aws_sdk_go_v2_service_s3//:s3"],
 )

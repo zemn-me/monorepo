@@ -286,6 +286,14 @@ function useinvalidateMinecraftStatus() {
 		});
 }
 
+function useinvalidateJournal() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/journal'],
+		});
+}
+
 export function usePostGrievances(id_token: string) {
 	const invalidateGrievances = useinvalidateGrievances();
 	return useZemnMeApi(id_token).useMutation('post', '/grievances', {
@@ -420,8 +428,7 @@ export type GetMinecraftWhitelistSuccessResponse =
 export type PostMinecraftWakeSuccessResponse =
 	paths['/minecraft/wake']['post']['responses']['202']['content']['application/json'];
 
-export type MinecraftLogEvent =
-	components['schemas']['MinecraftLogEvent'];
+export type MinecraftLogEvent = components['schemas']['MinecraftLogEvent'];
 
 export type MinecraftEventStreamState =
 	| 'closed'
@@ -514,7 +521,10 @@ async function readServerSentEvents(
 			}
 		}
 
-		buffer += decoder.decode().replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+		buffer += decoder
+			.decode()
+			.replaceAll('\r\n', '\n')
+			.replaceAll('\r', '\n');
 		if (buffer.trim() !== '') {
 			dispatchServerSentEvent(buffer, onEvent);
 		}
@@ -551,7 +561,9 @@ async function streamMinecraftEvents(
 				signal,
 			});
 			if (!response.ok) {
-				throw new Error(`/minecraft/events returned ${response.status}`);
+				throw new Error(
+					`/minecraft/events returned ${response.status}`
+				);
 			}
 			if (!response.body) {
 				throw new Error('/minecraft/events returned no response body');
@@ -650,7 +662,9 @@ export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 		queryFn: async () => {
 			const resp = await fetchClient.GET('/minecraft/status');
 			if (!resp.data) {
-				throw new Error('/minecraft/status returned unexpected payload');
+				throw new Error(
+					'/minecraft/status returned unexpected payload'
+				);
 			}
 			return resp.data;
 		},
@@ -663,6 +677,103 @@ export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 	});
 
 	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(
+		id_token(
+			value => value,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, token => extractIdTokenJti(token));
+	const query = useQuery({
+		queryKey: [
+			'get',
+			'/journal',
+			jti(
+				value => value,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const response = await fetchClient.GET('/journal');
+			if (!response.data) {
+				throw new Error('/journal returned unexpected payload');
+			}
+			return response.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+		refetchInterval: query => {
+			const value = query.state.data;
+			return value?.entries.some(entry =>
+				['awaiting_upload', 'processing'].includes(entry.status)
+			)
+				? 3000
+				: false;
+		},
+	});
+	return future_declare_dependency(id_token, useQueryFuture(query));
+}
+
+export interface JournalAudioUpload {
+	readonly file: Blob;
+	readonly contentType: components['schemas']['JournalEntryCreate']['contentType'];
+	readonly recordedAt: string;
+	readonly timeZone: string;
+}
+
+export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateJournal = useinvalidateJournal();
+	return useMutation({
+		mutationKey: ['post', '/journal/entries'],
+		mutationFn: fetchClient(
+			client => async (upload: JournalAudioUpload) => {
+				const response = await client.POST('/journal/entries', {
+					body: {
+						contentType: upload.contentType,
+						recordedAt: upload.recordedAt,
+						timeZone: upload.timeZone,
+					},
+				});
+				if (!response.data) {
+					const cause =
+						typeof response.error === 'object' &&
+						response.error !== null &&
+						'cause' in response.error &&
+						typeof response.error.cause === 'string'
+							? response.error.cause
+							: 'Could not create journal entry.';
+					throw new Error(cause);
+				}
+				const uploaded = await fetch(response.data.upload.url, {
+					body: upload.file,
+					headers: response.data.upload.headers,
+					method: response.data.upload.method,
+				});
+				if (!uploaded.ok) {
+					throw new Error(
+						`Audio upload failed (${uploaded.status}).`
+					);
+				}
+				return response.data.entry;
+			},
+			() => async () => {
+				throw new Error('authentication is still loading');
+			},
+			() => async () => {
+				throw new Error('authentication failed');
+			}
+		),
+		onSuccess: invalidateJournal,
+	});
 }
 
 export function usePostMinecraftWake<A, B>(id_token: Future<string, A, B>) {
@@ -707,9 +818,7 @@ export function usePostMinecraftWake<A, B>(id_token: Future<string, A, B>) {
 	});
 }
 
-export function useGetMinecraftWhitelist<A, B>(
-	id_token: Future<string, A, B>
-) {
+export function useGetMinecraftWhitelist<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(
 		id_token(
 			v => v,
@@ -747,9 +856,7 @@ export function useGetMinecraftWhitelist<A, B>(
 	return future_declare_dependency(id_token, useQueryFuture(q));
 }
 
-export function usePutMinecraftWhitelist<A, B>(
-	id_token: Future<string, A, B>
-) {
+export function usePutMinecraftWhitelist<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClientFuture(id_token);
 	const invalidateMinecraftWhitelist = useinvalidateMinecraftWhitelist();
 

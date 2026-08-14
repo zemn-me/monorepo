@@ -2,6 +2,8 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { ApiZemnMeLambdaImage } from '#root/project/me/zemn/api/cmd/api/ApiZemnMeLambdaImage.js';
+import { JournalWorkerLambdaImage } from '#root/project/me/zemn/api/cmd/journal_worker/JournalWorkerLambdaImage.js';
+import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { LambdaFunction } from '#root/ts/pulumi/lib/lambda_function.js';
 
@@ -13,6 +15,8 @@ const pick_env = <T extends string>(
 		: {
 				[k]: process.env[k],
 			};
+
+export const openAIWorkloadIdentityAudience = 'https://api.openai.com/v1';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -30,17 +34,31 @@ export interface Args {
 	minecraftServerAddress?: Pulumi.Input<string>;
 	minecraftWakeFunctionArn?: Pulumi.Input<string>;
 	minecraftWakeFunctionName?: Pulumi.Input<string>;
+	openAIIdentityProviderId?: Pulumi.Input<string>;
+	openAIServiceAccountId?: Pulumi.Input<string>;
 }
 
 const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
+const journalWorkerImageCache = new Map<string, JournalWorkerLambdaImage>();
 
 export class ApiZemnMe extends Pulumi.ComponentResource {
+	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+
 	constructor(
 		name: string,
 		args: Args,
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:zemn.me:api', name, args, opts);
+
+		if (
+			(args.openAIIdentityProviderId === undefined) !==
+			(args.openAIServiceAccountId === undefined)
+		) {
+			throw new Error(
+				'openAIIdentityProviderId and openAIServiceAccountId must be configured together'
+			);
+		}
 
 		const oidcKey = new aws.kms.Key(
 			`${name}-oidc-key`,
@@ -167,6 +185,83 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this, protect: args.protectDatabases }
 		);
 
+		const journalTable = new aws.dynamodb.Table(
+			`${name}-journal`,
+			{
+				attributes: [
+					{ name: 'id', type: 'S' },
+					{ name: 'when', type: 'S' },
+				],
+				billingMode: 'PAY_PER_REQUEST',
+				hashKey: 'id',
+				rangeKey: 'when',
+			},
+			{ parent: this, protect: args.protectDatabases }
+		);
+
+		const journalBucket = new aws.s3.BucketV2(
+			deriveBucketName(`${name}-journal-audio`),
+			{},
+			{ parent: this, protect: args.protectDatabases }
+		);
+
+		new aws.s3.BucketServerSideEncryptionConfigurationV2(
+			`${name}-journal-audio-encryption`,
+			{
+				bucket: journalBucket.id,
+				rules: [
+					{
+						applyServerSideEncryptionByDefault: {
+							sseAlgorithm: 'AES256',
+						},
+					},
+				],
+			},
+			{ parent: journalBucket }
+		);
+
+		new aws.s3.BucketPublicAccessBlock(
+			`${name}-journal-audio-public-access`,
+			{
+				bucket: journalBucket.id,
+				blockPublicAcls: true,
+				blockPublicPolicy: true,
+				ignorePublicAcls: true,
+				restrictPublicBuckets: true,
+			},
+			{ parent: journalBucket }
+		);
+
+		new aws.s3.BucketVersioningV2(
+			`${name}-journal-versioning`,
+			{
+				bucket: journalBucket.id,
+				versioningConfiguration: { status: 'Enabled' },
+			},
+			{ parent: journalBucket }
+		);
+
+		new aws.s3.BucketCorsConfigurationV2(
+			`${name}-journal-cors`,
+			{
+				bucket: journalBucket.id,
+				corsRules: [
+					{
+						allowedHeaders: ['content-type', 'if-none-match'],
+						allowedMethods: ['PUT'],
+						allowedOrigins: [
+							'https://zemn.me',
+							'https://staging.zemn.me',
+							'http://localhost:3000',
+						],
+						exposeHeaders: ['etag'],
+						maxAgeSeconds: 300,
+					},
+				],
+			},
+			{ parent: journalBucket }
+		);
+
 		const lambdaRole = new aws.iam.Role(
 			`${name}-lambda-role`,
 			{
@@ -185,6 +280,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 							grievancesTable.arn,
 							usersTable.arn,
 							keyRequestsTable.arn,
+							journalTable.arn,
 						]).apply(
 							([
 								settingsArn,
@@ -192,6 +288,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 								grievancesArn,
 								usersArn,
 								keyArn,
+								journalArn,
 							]) =>
 								JSON.stringify({
 									Version: '2012-10-17',
@@ -213,10 +310,29 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 												grievancesArn,
 												usersArn,
 												keyArn,
+												journalArn,
 											],
 										},
 									],
 								})
+						),
+					},
+					{
+						name: `${name}-journal-audio-inline-policy`,
+						policy: journalBucket.arn.apply(arn =>
+							JSON.stringify({
+								Version: '2012-10-17',
+								Statement: [
+									{
+										Action: [
+											's3:GetObject',
+											's3:PutObject',
+										],
+										Effect: 'Allow',
+										Resource: `${arn}/*`,
+									},
+								],
+							})
 						),
 					},
 					{
@@ -246,7 +362,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 											Version: '2012-10-17',
 											Statement: [
 												{
-													Action: ['lambda:InvokeFunction'],
+													Action: [
+														'lambda:InvokeFunction',
+													],
 													Effect: 'Allow',
 													Resource: arn,
 												},
@@ -267,7 +385,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 											Version: '2012-10-17',
 											Statement: [
 												{
-													Action: ['lambda:InvokeFunction'],
+													Action: [
+														'lambda:InvokeFunction',
+													],
 													Effect: 'Allow',
 													Resource: arn,
 												},
@@ -307,6 +427,86 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+
+		const journalWorkerRole = new aws.iam.Role(
+			`${name}-journal-worker-role`,
+			{
+				name: `${name}-journal-worker`,
+				assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
+					Service: 'lambda.amazonaws.com',
+				}),
+				managedPolicyArns: [
+					aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole,
+				],
+				inlinePolicies: [
+					{
+						name: `${name}-journal-worker-dynamodb-policy`,
+						policy: journalTable.arn.apply(arn =>
+							JSON.stringify({
+								Version: '2012-10-17',
+								Statement: [
+									{
+										Action: [
+											'dynamodb:Query',
+											'dynamodb:PutItem',
+											'dynamodb:UpdateItem',
+											'dynamodb:DeleteItem',
+											'dynamodb:GetItem',
+											'dynamodb:Scan',
+										],
+										Effect: 'Allow',
+										Resource: arn,
+									},
+								],
+							})
+						),
+					},
+					{
+						name: `${name}-journal-worker-audio-policy`,
+						policy: journalBucket.arn.apply(arn =>
+							JSON.stringify({
+								Version: '2012-10-17',
+								Statement: [
+									{
+										Action: [
+											's3:GetObject',
+											's3:PutObject',
+											's3:DeleteObject',
+										],
+										Effect: 'Allow',
+										Resource: `${arn}/*`,
+									},
+								],
+							})
+						),
+					},
+					{
+						name: `${name}-journal-worker-openai-identity-policy`,
+						policy: JSON.stringify({
+							Version: '2012-10-17',
+							Statement: [
+								{
+									Action: 'sts:GetWebIdentityToken',
+									Condition: {
+										'ForAllValues:StringEquals': {
+											'sts:IdentityTokenAudience':
+												openAIWorkloadIdentityAudience,
+										},
+										NumericLessThanEquals: {
+											'sts:DurationSeconds': 300,
+										},
+									},
+									Effect: 'Allow',
+									Resource: '*',
+								},
+							],
+						}),
+					},
+				],
+			},
+			{ parent: this }
+		);
+		this.journalWorkerRoleArn = journalWorkerRole.arn;
 
 		const repo = new aws.ecr.Repository(
 			`${name}_repo`,
@@ -357,6 +557,19 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			lambdaImageCache.set(imageCacheKey, image);
 		}
 
+		let journalWorkerImage = journalWorkerImageCache.get(imageCacheKey);
+		if (!journalWorkerImage) {
+			journalWorkerImage = new JournalWorkerLambdaImage(
+				`journalworkerlambdaimage`,
+				{
+					repository: repo.repositoryUrl,
+					token: auth.then(value => value.authorizationToken),
+				},
+				{ parent: this }
+			);
+			journalWorkerImageCache.set(imageCacheKey, journalWorkerImage);
+		}
+
 		const logGroup = new aws.cloudwatch.LogGroup(
 			`${name}-log-group`,
 			{
@@ -396,6 +609,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						GRIEVANCES_TABLE_NAME: grievancesTable.name,
 						USERS_TABLE_NAME: usersTable.name,
 						CALLBOX_KEY_TABLE_NAME: keyRequestsTable.name,
+						JOURNAL_TABLE_NAME: journalTable.name,
+						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 						...(args.minecraftRconBridgeFunctionName === undefined
 							? {}
@@ -431,6 +646,97 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		).function;
+
+		const journalWorker = new LambdaFunction(
+			`journalworkerlambda`,
+			{
+				packageType: 'Image',
+				role: journalWorkerRole.arn,
+				imageUri: journalWorkerImage.url,
+				timeout: 900,
+				memorySize: 1024,
+				// Aggregate summaries are read-modify-write projections. Keep uploads
+				// serial so an older projection cannot overwrite a newer one.
+				reservedConcurrentExecutions: 1,
+				environment: {
+					variables: {
+						JOURNAL_TABLE_NAME: journalTable.name,
+						JOURNAL_BUCKET_NAME: journalBucket.bucket,
+						...(args.openAIIdentityProviderId === undefined
+							? {}
+							: {
+									OPENAI_IDENTITY_PROVIDER_ID:
+										args.openAIIdentityProviderId,
+									OPENAI_SERVICE_ACCOUNT_ID:
+										args.openAIServiceAccountId,
+								}),
+					},
+				},
+			},
+			{ parent: this }
+		).function;
+
+		const permitJournalBucket = new aws.lambda.Permission(
+			`${name}-journal-bucket-permission`,
+			{
+				action: 'lambda:InvokeFunction',
+				function: journalWorker.name,
+				principal: 's3.amazonaws.com',
+				sourceArn: journalBucket.arn,
+				statementId: 'journal-s3-invoke',
+			},
+			{ parent: this }
+		);
+
+		new aws.s3.BucketNotification(
+			`${name}-journal-upload-notification`,
+			{
+				bucket: journalBucket.id,
+				lambdaFunctions: [
+					{
+						lambdaFunctionArn: journalWorker.arn,
+						events: ['s3:ObjectCreated:*'],
+						filterPrefix: 'entries/',
+						filterSuffix: 'source',
+					},
+				],
+			},
+			{ parent: journalBucket, dependsOn: permitJournalBucket }
+		);
+
+		const journalSummarySchedule = new aws.cloudwatch.EventRule(
+			`${name}-journal-summary-schedule`,
+			{
+				description:
+					'Backfill elapsed journal summaries after missed or failed upload processing.',
+				scheduleExpression: 'cron(5 * * * ? *)',
+			},
+			{ parent: this }
+		);
+
+		const permitJournalSummarySchedule = new aws.lambda.Permission(
+			`${name}-journal-summary-schedule-permission`,
+			{
+				action: 'lambda:InvokeFunction',
+				function: journalWorker.name,
+				principal: 'events.amazonaws.com',
+				sourceArn: journalSummarySchedule.arn,
+				statementId: 'journal-summary-schedule-invoke',
+			},
+			{ parent: this }
+		);
+
+		new aws.cloudwatch.EventTarget(
+			`${name}-journal-summary-schedule-target`,
+			{
+				arn: journalWorker.arn,
+				rule: journalSummarySchedule.name,
+			},
+			{
+				parent: journalSummarySchedule,
+				dependsOn: permitJournalSummarySchedule,
+			}
+		);
 
 		const integration = new aws.apigatewayv2.Integration(
 			`${name}-integration`,
@@ -543,6 +849,9 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			dynamoDBTableName: dynamoTable.name,
 			grievancesTableName: grievancesTable.name,
 			usersTableName: usersTable.name,
+			journalTableName: journalTable.name,
+			journalBucketName: journalBucket.bucket,
+			journalWorkerRoleArn: this.journalWorkerRoleArn,
 		});
 	}
 }

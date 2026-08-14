@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -18,6 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
@@ -45,6 +47,8 @@ type DynamoDBClient interface {
 
 // Ensure the real DynamoDB client implements the interface.
 var _ DynamoDBClient = (*dynamodb.Client)(nil)
+var _ JournalObjectStore = (*s3.Client)(nil)
+var _ JournalPresigner = (*s3.PresignClient)(nil)
 
 // Server holds the DynamoDB client and table names.
 type Server struct {
@@ -54,6 +58,8 @@ type Server struct {
 	grievancesTableName  string
 	usersTableName       string
 	keyRequestsTableName string
+	journalTableName     string
+	journalBucketName    string
 	rt                   *chi.Mux
 	http.Handler
 	log                    *log.Logger
@@ -65,6 +71,10 @@ type Server struct {
 	minecraftWake          minecraftWakeRequester
 	minecraftLogs          minecraftLogTailer
 	minecraftServerAddress string
+	journalAI              JournalAI
+	journalObjects         JournalObjectStore
+	journalPresigner       JournalPresigner
+	journalHierarchyMu     sync.Mutex
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -74,6 +84,11 @@ type NewServerOptions struct {
 	// AllowLocalhostAnalytics permits local development origins to post
 	// analytics beacons. Leave false for production.
 	AllowLocalhostAnalytics bool
+	// Journal dependencies may be replaced by the local development server.
+	// Production leaves these unset and uses the configured AWS clients.
+	JournalAI        JournalAI
+	JournalObjects   JournalObjectStore
+	JournalPresigner JournalPresigner
 }
 
 // NewServer initialises the DynamoDB client and HTTP router.
@@ -124,6 +139,8 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
 	usersTableName := os.Getenv("USERS_TABLE_NAME")
 	keyRequestsTableName := os.Getenv("CALLBOX_KEY_TABLE_NAME")
+	journalTableName := os.Getenv("JOURNAL_TABLE_NAME")
+	journalBucketName := os.Getenv("JOURNAL_BUCKET_NAME")
 
 	r := chi.NewRouter()
 	r.Use(analyticsRequestContext)
@@ -135,6 +152,15 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}))
 	r.Use(mw)
 
+	journalObjects := opts.JournalObjects
+	journalPresigner := opts.JournalPresigner
+	if journalObjects == nil {
+		s3Objects := s3.NewFromConfig(cfg)
+		journalObjects = s3Objects
+		if journalPresigner == nil {
+			journalPresigner = s3.NewPresignClient(s3Objects)
+		}
+	}
 	s := &Server{
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
@@ -143,6 +169,8 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		grievancesTableName:  grievancesTableName,
 		usersTableName:       usersTableName,
 		keyRequestsTableName: keyRequestsTableName,
+		journalTableName:     journalTableName,
+		journalBucketName:    journalBucketName,
 		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
@@ -153,6 +181,9 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		minecraftWake:          minecraftWakeRequesterFromEnv(cfg),
 		minecraftLogs:          minecraftLogTailerFromEnv(cfg),
 		minecraftServerAddress: minecraftServerAddressFromEnv(),
+		journalAI:              opts.JournalAI,
+		journalObjects:         journalObjects,
+		journalPresigner:       journalPresigner,
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
@@ -165,9 +196,18 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	auth.ScopeResolver = s.resolveScopes
 
-	baseHandler := HandlerFromMux(NewStrictHandler(s, nil), r)
+	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
 	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
 	return s, nil
+}
+
+func journalPrivateCacheHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/journal" || strings.HasPrefix(r.URL.Path, "/journal/") {
+			w.Header().Set("Cache-Control", "private, no-store")
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func analyticsBeaconHandler(next http.Handler, allowLocalhostOrigin bool) http.Handler {
@@ -362,6 +402,17 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 		},
 		{
 			Name: s.keyRequestsTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.journalTableName,
 			Attrs: []types.AttributeDefinition{
 				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},

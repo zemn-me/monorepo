@@ -23,6 +23,8 @@ export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	openAIIdentityProviderId?: Pulumi.Input<string>;
+	openAIServiceAccountId?: Pulumi.Input<string>;
 }
 
 interface AwsGitHubActionsOidcArgs {
@@ -142,6 +144,9 @@ export class Component extends Pulumi.ComponentResource {
 	pleaseIntroduceMeToYourDog: PleaseIntroduceMeToYourDog.Component;
 	zemnMe: ZemnMe.Component;
 	shadwellIm: ShadwellIm.Component;
+	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+	readonly openAIWorkloadIdentityAudience: string;
+	readonly openAIWorkloadIdentityIssuer?: Pulumi.Output<string>;
 	constructor(
 		name: string,
 		args: Args,
@@ -167,6 +172,17 @@ export class Component extends Pulumi.ComponentResource {
 			: new GitHubActionsSecrets(`${name}_github_actions_secrets`, {
 					parent: this,
 				});
+		// AWS exposes a single outbound issuer for the account. Production owns
+		// that shared resource; the staging worker has its own OpenAI mapping.
+		const openAIOutboundIdentity = args.staging
+			? undefined
+			: new aws.iam.OutboundWebIdentityFederation(
+					`${name}_openai_outbound_identity`,
+					{},
+					{ parent: this }
+				);
+		this.openAIWorkloadIdentityIssuer =
+			openAIOutboundIdentity?.issuerIdentifier;
 
 		if (!args.staging) {
 			const publisher = runfiles.resolve('monorepo/js/npm/publish_/publish');
@@ -315,9 +331,14 @@ export class Component extends Pulumi.ComponentResource {
 				minecraftEnvironment: args.staging ? 'staging' : 'production',
 				minecraftManageDnsWake: !args.staging,
 				minecraftOperators: args.minecraftOperators ?? ['zemnmez'],
+				openAIIdentityProviderId: args.openAIIdentityProviderId,
+				openAIServiceAccountId: args.openAIServiceAccountId,
 			},
 			{ parent: this }
 		);
+		this.journalWorkerRoleArn = this.zemnMe.journalWorkerRoleArn;
+		this.openAIWorkloadIdentityAudience =
+			this.zemnMe.openAIWorkloadIdentityAudience;
 
 		this.shadwellIm = new ShadwellIm.Component(
 			`${name}_shadwell.im`,
@@ -375,6 +396,9 @@ export class Component extends Pulumi.ComponentResource {
 			githubActionsRoleArn: githubActionsOidc?.role.arn,
 			githubActionsSecrets,
 			githubOidcProviderArn: githubActionsOidc?.provider.arn,
+			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			openAIWorkloadIdentityAudience: this.openAIWorkloadIdentityAudience,
+			openAIWorkloadIdentityIssuer: this.openAIWorkloadIdentityIssuer,
 		});
 	}
 }

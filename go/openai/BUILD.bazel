@@ -9,6 +9,7 @@ genrule(
     srcs = [
         "@com_github_openai_openai_openapi//:openapi.yaml",
         "codegen.yaml",
+        "overlay.yaml",
     ],
     outs = ["api.go"],
     cmd = """

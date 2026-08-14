@@ -186,8 +186,413 @@ components:
           type: boolean
         grievance_portal:
           type: boolean
+        journal_read:
+          type: boolean
+        journal_write:
+          type: boolean
         minecraft:
           type: boolean
+    JournalCitation:
+      type: object
+      required: [entryId, segmentId, quote]
+      properties:
+        entryId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: entry_id
+        segmentId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: segment_id
+        quote:
+          type: string
+          description: Exact supporting text quoted from the cited transcript segment.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: quote
+    JournalTranscriptSegment:
+      type: object
+      required: [id, startMs, endMs, text]
+      properties:
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        startMs:
+          type: integer
+          format: int64
+          x-oapi-codegen-extra-tags:
+            dynamodbav: start_ms
+        endMs:
+          type: integer
+          format: int64
+          x-oapi-codegen-extra-tags:
+            dynamodbav: end_ms
+        text:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: text
+    JournalSummaryBlock:
+      type: object
+      required: [markdown, citations]
+      properties:
+        markdown:
+          type: string
+          description: Markdown containing one-based numbered footnote references such as `[^1]` immediately after the claims they support. Each reference indexes the citations array; clients render the citation's source details separately.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: markdown
+        citations:
+          type: array
+          description: Ordered transcript citations referenced from markdown; every item must appear in markdown as its one-based footnote reference and is rendered with the quoted transcript segment and a timestamp link.
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: citations
+    JournalSummary:
+      type: object
+      required: [schemaVersion, id, period, start, end, title, blocks]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+          x-oapi-codegen-extra-tags:
+            dynamodbav: schema_version
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        period:
+          type: string
+          enum: [entry, day, week, month, year]
+          x-oapi-codegen-extra-tags:
+            dynamodbav: period
+        start:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: start
+        end:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: end
+        title:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: title
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: blocks
+        sourceFingerprint:
+          type: string
+          description: Hash of the ordered source material used to avoid regenerating an unchanged aggregate summary.
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'source_fingerprint,omitempty'
+    JournalSummaryResult:
+      type: object
+      description: Structured model output before trusted period metadata is attached.
+      required: [title, blocks]
+      properties:
+        title:
+          type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalSummarySource:
+      type: object
+      description: Citation-preserving source supplied to hierarchical summarization.
+      required: [label, text, citations]
+      properties:
+        label:
+          type: string
+        text:
+          type: string
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+    JournalTranscriptionResult:
+      type: object
+      description: Trusted transcription output derived from uploaded audio.
+      required: [durationMs, segments]
+      properties:
+        durationMs:
+          type: integer
+          format: int64
+          minimum: 0
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalTranscriptFile:
+      type: object
+      description: Versioned transcript document stored alongside journal audio.
+      required: [schemaVersion, entryId, segments]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        entryId:
+          type: string
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalEntryStatus:
+      type: string
+      enum: [awaiting_upload, processing, ready, failed]
+    JournalEntryMetadata:
+      type: object
+      description: Versioned metadata document stored alongside journal audio.
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        id:
+          type: string
+        recordedAt:
+          type: string
+          format: date-time
+          description: Recording time, derived from embedded audio metadata when available and otherwise from the upload request fallback.
+        timeZone:
+          type: string
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentType:
+          type: string
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        audioKey:
+          type: string
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+        error:
+          type: string
+    JournalStoredEntry:
+      type: object
+      description: Complete entry representation indexed in DynamoDB.
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status, transcript]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+          x-oapi-codegen-extra-tags:
+            dynamodbav: schema_version
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        recordedAt:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: recorded_at
+        timeZone:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: time_zone
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'duration_ms,omitempty'
+        contentType:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: content_type
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'byte_length,omitempty'
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'content_sha256,omitempty'
+        audioKey:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: audio_key
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: status
+        error:
+          type: string
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'error,omitempty'
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'transcript,omitempty'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'summary,omitempty'
+    JournalContentHashReservation:
+      type: object
+      description: Atomic ownership record preventing the same audio content from becoming multiple entries.
+      required: [sha256, entryId]
+      properties:
+        sha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: sha256
+        entryId:
+          type: string
+          format: uuid
+          x-oapi-codegen-extra-tags:
+            dynamodbav: entry_id
+    JournalStoredRecord:
+      type: object
+      description: DynamoDB envelope for an entry, aggregate summary, or content-hash reservation.
+      required: [id, when, kind]
+      properties:
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        when:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: when
+        kind:
+          type: string
+          enum: [entry, summary, content_hash]
+          x-oapi-codegen-extra-tags:
+            dynamodbav: kind
+        entry:
+          $ref: '#/components/schemas/JournalStoredEntry'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'entry,omitempty'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'summary,omitempty'
+        contentHash:
+          $ref: '#/components/schemas/JournalContentHashReservation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'content_hash,omitempty'
+    JournalEntry:
+      type: object
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, status, transcript]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        id:
+          type: string
+          format: uuid
+        recordedAt:
+          type: string
+          format: date-time
+        timeZone:
+          type: string
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentType:
+          type: string
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+        error:
+          type: string
+        audioUrl:
+          type: string
+          format: uri
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+    Journal:
+      type: object
+      required: [entries, summaries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummary'
+    JournalEntryCreate:
+      type: object
+      required: [contentType, recordedAt, timeZone]
+      properties:
+        contentType:
+          type: string
+          enum: [audio/mp4, audio/mpeg, audio/ogg, audio/wav, audio/webm]
+        recordedAt:
+          type: string
+          format: date-time
+          description: Fallback recording time used when the uploaded audio container does not provide its own creation timestamp.
+        timeZone:
+          type: string
+          description: IANA time zone used to derive calendar summary periods.
+    JournalUpload:
+      type: object
+      required: [url, method, headers, expiresAt]
+      properties:
+        url:
+          type: string
+          format: uri
+        method:
+          type: string
+          const: PUT
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        expiresAt:
+          type: string
+          format: date-time
+    JournalEntryCreateResponse:
+      type: object
+      required: [entry, upload]
+      properties:
+        entry:
+          $ref: '#/components/schemas/JournalEntry'
+        upload:
+          $ref: '#/components/schemas/JournalUpload'
     IdToken:
       type: object
       description: >
@@ -652,7 +1057,7 @@ components:
         token_endpoint: https://api.zemn.me/oauth2/token
         jwks_uri: https://api.zemn.me/.well-known/jwks.json
         userinfo_endpoint: https://api.zemn.me/oauth2/userinfo
-        scopes_supported: [openid, profile, email, callbox_key, minecraft]
+        scopes_supported: [openid, profile, email, callbox_key, journal_read, journal_write, minecraft]
         response_types_supported: [code]
         grant_types_supported: [urn:ietf:params:oauth:grant-type:token-exchange]
         subject_types_supported: [public]
@@ -1543,6 +1948,45 @@ components:
         accepted: true
 
 paths:
+  /journal:
+    get:
+      summary: Get the caller's voice journal.
+      description: Return transcript entries and citation-preserving time summaries.
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: The caller's journal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journal'
+  /journal/entries:
+    post:
+      summary: Create a voice journal entry.
+      description: Create an awaiting-upload journal entry and return a short-lived URL for uploading its audio directly to private object storage.
+      security:
+        - OIDC: [journal_write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryCreate'
+      responses:
+        "201":
+          description: Created journal entry and its short-lived upload authorization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntryCreateResponse'
+        "400":
+          description: Invalid audio or time zone.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /phone/init:
     post:
       summary: Entry point for Twilio callbox phone number.
