@@ -437,6 +437,12 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             dynamodbav: audio_key
+        uploadExpiresAt:
+          type: string
+          format: date-time
+          description: Time after which an awaiting upload can no longer be active.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'upload_expires_at,omitempty'
         status:
           $ref: '#/components/schemas/JournalEntryStatus'
           x-oapi-codegen-extra-tags:
@@ -1982,6 +1988,28 @@ paths:
                 $ref: '#/components/schemas/JournalEntryCreateResponse'
         "400":
           description: Invalid audio or time zone.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /journal/entries/{entryId}:
+    delete:
+      summary: Abandon a voice journal upload.
+      description: Remove an awaiting-upload entry after its direct object-storage upload fails.
+      security:
+        - OIDC: [journal_write]
+      parameters:
+        - name: entryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: The awaiting upload was removed or no longer exists.
+        "409":
+          description: The entry has progressed beyond the awaiting-upload state.
           content:
             application/json:
               schema:

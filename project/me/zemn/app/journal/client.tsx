@@ -49,6 +49,7 @@ const journalReadScope = 'journal_read';
 const journalWriteScope = 'journal_write';
 const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
+const uploadErrorLifetimeMs = 8_000;
 
 function errorMessage(value: unknown): string {
 	return value instanceof Error
@@ -962,6 +963,11 @@ function periodsFor(
 ) {
 	const nodes = new Map<number, JournalPeriodNode>();
 	for (const entry of journal.entries) {
+		if (
+			!['awaiting_upload', 'processing', 'ready'].includes(entry.status)
+		) {
+			continue;
+		}
 		const bounds = periodBounds(entry, period);
 		const start = Date.parse(bounds.start);
 		nodes.set(start, {
@@ -1114,8 +1120,8 @@ function JournalBrowser({
 		[journal]
 	);
 	const playback = useJournalPlayback(journal, aggregateCitationDestination);
-	const pendingEntries = journal.entries.filter(
-		entry => entry.status !== 'ready'
+	const pendingEntries = journal.entries.filter(entry =>
+		['awaiting_upload', 'processing'].includes(entry.status)
 	);
 	const year = findPeriod(journal, 'year', selection.year);
 	const month = findPeriod(journal, 'month', selection.month);
@@ -1471,6 +1477,14 @@ export default function JournalPageClient({
 	const status = createEntry.isPending
 		? 'Uploading your private voice note…'
 		: recordingError;
+	useEffect(() => {
+		if (!recordingError) return;
+		const timeout = window.setTimeout(
+			() => setRecordingError(undefined),
+			uploadErrorLifetimeMs
+		);
+		return () => window.clearTimeout(timeout);
+	}, [recordingError]);
 	const resetSubmission = useCallback(() => {
 		resetCreateEntry();
 		setRecordingError(undefined);
