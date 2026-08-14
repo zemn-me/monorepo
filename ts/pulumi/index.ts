@@ -327,6 +327,7 @@ export class Component extends Pulumi.ComponentResource {
 				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 				twilioSharedSecret: twilioSharedSecret.result,
+				journalWorkerEnvironment: args.staging ? 'staging' : 'production',
 				minecraftOnDemand: true,
 				minecraftEnvironment: args.staging ? 'staging' : 'production',
 				minecraftManageDnsWake: !args.staging,

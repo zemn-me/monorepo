@@ -200,6 +200,14 @@ describe('pulumi', () => {
 		expect(
 			resourceInputText(stagingJournalWorker?.inputs['environment'])
 		).not.toContain('OPENAI_IDENTITY_PROVIDER_ID');
+		const stagingJournalWorkerRole = mockResources.find(
+			resource =>
+				resource.type === 'aws:iam/role:Role' &&
+				resource.name.endsWith('-journal-worker-role')
+		);
+		expect(stagingJournalWorkerRole?.inputs['name']).toBe(
+			'monorepo_zemn.me_api-journal-worker-staging'
+		);
 
 		expect(
 			mockResources.some(
@@ -725,7 +733,7 @@ describe('pulumi', () => {
 				resource.name.endsWith('-journal-worker-role')
 		);
 		expect(journalWorkerRole?.inputs['name']).toBe(
-			'monorepo_zemn.me_api-journal-worker'
+			'monorepo_zemn.me_api-journal-worker-production'
 		);
 		const journalWorkerPolicies = resourceInputText(
 			journalWorkerRole?.inputs['inlinePolicies']
