@@ -35,7 +35,11 @@ import {
 	usePostJournalEntry,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import { Date as LocalizedDate, MonthYear } from '#root/ts/react/lang/date.js';
+import {
+	Date as LocalizedDate,
+	Time as LocalizedTime,
+	MonthYear,
+} from '#root/ts/react/lang/date.js';
 
 type Journal = components['schemas']['Journal'];
 type JournalCitation = components['schemas']['JournalCitation'];
@@ -1012,7 +1016,7 @@ function EntryCard({
 	return (
 		<details className={style.entry} id={`entry-${entry.id}`}>
 			<summary>
-				<LocalizedDate date={journalEntryDate(entry)} time />
+				<LocalizedTime date={journalEntryDate(entry)} />
 				<span>{title}</span>
 				{entry.status !== 'ready' && (
 					<small className={style.status}>

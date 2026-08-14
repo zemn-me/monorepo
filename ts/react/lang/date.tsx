@@ -61,7 +61,10 @@ function getDateParts(
 	}).formatToParts(zonedDateToDate(date));
 }
 
-function getTimeText(date: Temporal.ZonedDateTime, locale: Intl.Locale): string {
+function getTimeText(
+	date: Temporal.ZonedDateTime,
+	locale: Intl.Locale
+): string {
 	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 	return new Intl.DateTimeFormat(locale as any, {
 		timeStyle: 'short',
@@ -70,7 +73,9 @@ function getTimeText(date: Temporal.ZonedDateTime, locale: Intl.Locale): string 
 }
 
 function englishOrdinalSuffix(day: number, language: string): string {
-	const rule = new Intl.PluralRules(language, { type: 'ordinal' }).select(day);
+	const rule = new Intl.PluralRules(language, { type: 'ordinal' }).select(
+		day
+	);
 	return {
 		one: 'st',
 		two: 'nd',
@@ -153,8 +158,8 @@ export function formatDatePartsWithOrdinalDay(
 		if (fields.has('day') && fields.has('month')) {
 			return (
 				<>
-					<OrdinalDay day={fields.get('day')!} language={language} /> of{' '}
-					{fields.get('month')}
+					<OrdinalDay day={fields.get('day')!} language={language} />{' '}
+					of {fields.get('month')}
 				</>
 			);
 		}
@@ -278,6 +283,27 @@ export const MonthYear = memo(function MonthYearComponent(props: DateProps) {
 			lang={locale.toString()}
 		>
 			{text}
+		</time>
+	);
+});
+
+/**
+ * Localized time without a date (e.g. «19:16»).
+ */
+export const Time = memo(function TimeComponent(
+	props: Omit<DateProps, 'time'>
+) {
+	const [language] = useLocale();
+	const locale = selectLocale(language);
+	const zonedDate = normalizeToZonedDateTime(props.date);
+
+	return (
+		<time
+			className={props.className}
+			dateTime={zonedDate.toString()}
+			lang={locale.toString()}
+		>
+			{getTimeText(zonedDate, locale)}
 		</time>
 	);
 });
