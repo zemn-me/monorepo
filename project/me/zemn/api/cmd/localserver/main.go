@@ -168,6 +168,11 @@ func (localJournalAI) Transcribe(_ context.Context, audio io.Reader, _ string) (
 	}, nil
 }
 
+func (ai localJournalAI) AnalyzeEntry(ctx context.Context, _ time.Time, _ string, sources []apiserver.JournalSummarySource) (apiserver.JournalEntryAnalysisResult, error) {
+	summary, err := ai.Summarize(ctx, "entry", sources)
+	return apiserver.JournalEntryAnalysisResult{Summary: summary}, err
+}
+
 func (localJournalAI) Summarize(_ context.Context, period string, sources []apiserver.JournalSummarySource) (apiserver.JournalSummaryResult, error) {
 	citations := make([]apiserver.JournalCitation, 0)
 	for _, source := range sources {

@@ -86,12 +86,33 @@ func (fakeJournalAI) Transcribe(_ context.Context, audio io.Reader, _ string) (J
 	}, nil
 }
 
+func (ai fakeJournalAI) AnalyzeEntry(ctx context.Context, _ time.Time, _ string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	summary, err := ai.Summarize(ctx, "entry", sources)
+	return JournalEntryAnalysisResult{Summary: summary}, err
+}
+
+type inferredDateJournalAI struct {
+	fakeJournalAI
+	recordedDate string
+}
+
+func (ai inferredDateJournalAI) AnalyzeEntry(ctx context.Context, provisionalRecordedAt time.Time, timeZone string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	analysis, err := ai.fakeJournalAI.AnalyzeEntry(ctx, provisionalRecordedAt, timeZone, sources)
+	analysis.RecordedDate = ai.recordedDate
+	return analysis, err
+}
+
 type recordingJournalAI struct {
 	periods []string
 }
 
 func (*recordingJournalAI) Transcribe(ctx context.Context, audio io.Reader, contentType string) (JournalTranscriptionResult, error) {
 	return (fakeJournalAI{}).Transcribe(ctx, audio, contentType)
+}
+
+func (f *recordingJournalAI) AnalyzeEntry(ctx context.Context, provisionalRecordedAt time.Time, timeZone string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	f.periods = append(f.periods, "entry")
+	return (fakeJournalAI{}).AnalyzeEntry(ctx, provisionalRecordedAt, timeZone, sources)
 }
 
 func (f *recordingJournalAI) Summarize(ctx context.Context, period string, sources []JournalSummarySource) (JournalSummaryResult, error) {
@@ -406,6 +427,79 @@ func TestOpenAISummaryUsesGeneratedRequestAndResponseTypes(t *testing.T) {
 	}
 }
 
+func TestOpenAIEntryAnalysisInfersExplicitRecordingDate(t *testing.T) {
+	sources := []JournalSummarySource{{
+		Label: "entry",
+		Text:  "It is Thursday the 13th of August. I am recording this before bed.",
+		Citations: []JournalCitation{{
+			EntryId: "entry-1", SegmentId: "s0", Quote: "It is Thursday the 13th of August.",
+		}},
+	}}
+	provisionalRecordedAt := time.Date(2026, time.August, 14, 23, 25, 0, 0, time.FixedZone("PDT", -7*60*60))
+	client := &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		var payload map[string]any
+		if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
+			return nil, err
+		}
+		if payload["instructions"] != journalEntryAnalysisInstructions {
+			return nil, errors.New("request did not use the journal entry date instructions")
+		}
+		input, ok := payload["input"].(string)
+		if !ok || !strings.Contains(input, provisionalRecordedAt.Format(time.RFC3339)) || !strings.Contains(input, "America/Los_Angeles") {
+			return nil, fmt.Errorf("entry analysis input lacks provisional date context: %#v", payload["input"])
+		}
+		text, ok := payload["text"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("text = %T, want object", payload["text"])
+		}
+		format, ok := text["format"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("text.format = %T, want object", text["format"])
+		}
+		schema, ok := format["schema"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("text.format.schema = %T, want object", format["schema"])
+		}
+		properties, ok := schema["properties"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("schema.properties = %T, want object", schema["properties"])
+		}
+		for _, property := range []string{"recordedDate", "summary"} {
+			if _, ok := properties[property]; !ok {
+				return nil, fmt.Errorf("entry analysis schema is missing %q", property)
+			}
+		}
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Status:     "200 OK",
+			Body: io.NopCloser(strings.NewReader(`{
+				"output": [{
+					"type": "message",
+					"id": "message-1",
+					"status": "completed",
+					"role": "assistant",
+					"content": [{
+						"type": "output_text",
+						"annotations": [],
+						"logprobs": [],
+						"text": "{\"summary\":{\"title\":\"Thursday reflection\",\"blocks\":[{\"markdown\":\"Recorded before bed.[^1]\",\"citations\":[{\"entryId\":\"entry-1\",\"segmentId\":\"s0\",\"quote\":\"It is Thursday the 13th of August.\"}]}]},\"recordedDate\":\"2026-08-13\"}"
+					}]
+				}]
+			}`)),
+			Header: make(http.Header),
+		}, nil
+	})}
+	analysis, err := (&openAIJournalAI{apiKey: "test", client: client}).AnalyzeEntry(
+		context.Background(), provisionalRecordedAt, "America/Los_Angeles", sources,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if analysis.RecordedDate != "2026-08-13" || analysis.Summary.Title != "Thursday reflection" {
+		t.Fatalf("analysis = %#v", analysis)
+	}
+}
+
 func TestJournalSummaryInstructionsRequireNarrativeSynthesis(t *testing.T) {
 	for _, requirement := range []string{
 		"story of his life and thinking over time",
@@ -427,6 +521,19 @@ func TestJournalSummaryInstructionsRequireNarrativeSynthesis(t *testing.T) {
 	} {
 		if strings.Contains(journalSummaryInstructions, removed) {
 			t.Errorf("journal summary instructions still contain %q", removed)
+		}
+	}
+}
+
+func TestJournalEntryAnalysisInstructionsRequireGroundedRecordingDate(t *testing.T) {
+	for _, requirement := range []string{
+		"recording itself is being made",
+		"explicitly states or unambiguously identifies the recording date",
+		"Do not mistake the date of a remembered, planned, or otherwise discussed event",
+		"set recordedDate to an empty string",
+	} {
+		if !strings.Contains(journalEntryAnalysisInstructions, requirement) {
+			t.Errorf("journal entry analysis instructions are missing %q", requirement)
 		}
 	}
 }
@@ -554,6 +661,69 @@ func TestJournalScopesAreReservedForThomas(t *testing.T) {
 	nonOwnerScopes := ensureReservedScopes("someone-else", []string{"profile", "journal_read", "journal_write"})
 	if slices.Contains(nonOwnerScopes, "journal_read") || slices.Contains(nonOwnerScopes, "journal_write") {
 		t.Fatalf("non-owner retained reserved journal scopes: %v", nonOwnerScopes)
+	}
+}
+
+func TestProcessJournalUploadUsesSpokenDateOnlyWithoutContainerMetadata(t *testing.T) {
+	fallbackRecordedAt := time.Date(2026, time.August, 14, 18, 25, 0, 0, time.UTC)
+	embeddedRecordedAt := time.Date(2026, time.August, 12, 19, 16, 0, 0, time.UTC)
+	for _, test := range []struct {
+		name        string
+		contentType string
+		audio       []byte
+		want        time.Time
+	}{
+		{
+			name:        "fallback timestamp",
+			contentType: "audio/wav",
+			audio:       []byte("audio without creation metadata"),
+			want:        time.Date(2026, time.August, 13, 18, 25, 0, 0, time.UTC),
+		},
+		{
+			name:        "embedded timestamp",
+			contentType: "audio/mp4",
+			audio:       testMP4(embeddedRecordedAt, 0),
+			want:        embeddedRecordedAt,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			db := &inMemoryDDB{}
+			objects := &fakeJournalObjects{}
+			server := &Server{
+				ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
+				journalObjects: objects, journalPresigner: fakeJournalPresigner{},
+				journalAI: inferredDateJournalAI{recordedDate: "2026-08-13"},
+			}
+			ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+				Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+			})
+			response, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{
+				Body: &JournalEntryCreate{
+					ContentType: JournalEntryCreateContentType(test.contentType),
+					RecordedAt:  fallbackRecordedAt,
+					TimeZone:    "America/Los_Angeles",
+				},
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			entryID := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
+			objects.objects[journalEntryKey(entryID)] = test.audio
+			if err := server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(entryID), int64(len(test.audio))); err != nil {
+				t.Fatal(err)
+			}
+			journalResponse, err := server.GetJournal(ctx, GetJournalRequestObject{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			entry := journalResponse.(GetJournal200JSONResponse).Entries[0]
+			if !entry.RecordedAt.Equal(test.want) {
+				t.Fatalf("recordedAt = %v, want %v", entry.RecordedAt, test.want)
+			}
+			if entry.Summary == nil || !entry.Summary.Start.Equal(test.want) {
+				t.Fatalf("entry summary = %#v, want start %v", entry.Summary, test.want)
+			}
+		})
 	}
 }
 
