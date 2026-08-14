@@ -6,7 +6,10 @@ import { bskyDid } from '#root/project/me/zemn/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
-import { ApiZemnMe } from '#root/ts/pulumi/zemn.me/api/api.js';
+import {
+	ApiZemnMe,
+	openAIWorkloadIdentityAudience,
+} from '#root/ts/pulumi/zemn.me/api/api.js';
 import { GcpWorkstation } from '#root/ts/pulumi/zemn.me/forge/forge.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
 import {
@@ -28,10 +31,14 @@ export interface Args {
 	minecraftManageDnsWake?: boolean;
 	minecraftOnDemand?: boolean;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	openAIIdentityProviderId?: Pulumi.Input<string>;
+	openAIServiceAccountId?: Pulumi.Input<string>;
 }
 
 export class Component extends Pulumi.ComponentResource {
 	site: Website;
+	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+	readonly openAIWorkloadIdentityAudience = openAIWorkloadIdentityAudience;
 	constructor(
 		name: string,
 		args: Args,
@@ -144,7 +151,7 @@ export class Component extends Pulumi.ComponentResource {
 				)
 			: undefined;
 
-		new ApiZemnMe(
+		const api = new ApiZemnMe(
 			`${name}_api`,
 			{
 				domain: ['api', args.domain].join('.'),
@@ -161,9 +168,12 @@ export class Component extends Pulumi.ComponentResource {
 				minecraftServerAddress: args.domain,
 				minecraftWakeFunctionArn: minecraft?.wakeFunctionArn,
 				minecraftWakeFunctionName: minecraft?.wakeFunctionName,
+				openAIIdentityProviderId: args.openAIIdentityProviderId,
+				openAIServiceAccountId: args.openAIServiceAccountId,
 			},
 			{ parent: this, dependsOn: Static }
 		);
+		this.journalWorkerRoleArn = api.journalWorkerRoleArn;
 
 		if (args.cloudWorkstations)
 			new GcpWorkstation(
@@ -175,6 +185,13 @@ export class Component extends Pulumi.ComponentResource {
 				{ parent: this }
 			);
 
-		super.registerOutputs({ site: this.site, availability, Static, minecraft });
+		super.registerOutputs({
+			site: this.site,
+			availability,
+			Static,
+			minecraft,
+			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			openAIWorkloadIdentityAudience: this.openAIWorkloadIdentityAudience,
+		});
 	}
 }

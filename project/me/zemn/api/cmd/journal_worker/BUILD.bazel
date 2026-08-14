@@ -1,0 +1,56 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_oci//oci:defs.bzl", "oci_image")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+package(default_visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"])
+
+go_library(
+    name = "journal_worker_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/cmd/journal_worker",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//project/me/zemn/api/server",
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+    ],
+)
+
+go_binary(
+    name = "journal_worker",
+    embed = [":journal_worker_lib"],
+    visibility = ["//visibility:public"],
+)
+
+pkg_tar(
+    name = "tar",
+    srcs = [":journal_worker"],
+)
+
+oci_image(
+    name = "image",
+    base = "@distroless_debian12",
+    entrypoint = ["/journal_worker"],
+    tars = [":tar"],
+)
+
+pulumi_image(
+    name = "oci_image",
+    src = ":image",
+    component_name = "JournalWorkerLambdaImage",
+    visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "journal_worker_test",
+    srcs = ["main_test.go"],
+    embed = [":journal_worker_lib"],
+)

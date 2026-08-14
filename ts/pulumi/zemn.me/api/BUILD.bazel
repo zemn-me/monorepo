@@ -1,6 +1,8 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/cmd/journal_worker/JournalWorkerLambdaImage.js //project/me/zemn/api/cmd/journal_worker:oci_image
+
 ts_project(
     name = "api",
     srcs = [
@@ -14,6 +16,7 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
         "//project/me/zemn/api/cmd/api:oci_image",
+        "//project/me/zemn/api/cmd/journal_worker:oci_image",
         "//ts/pulumi/lib",
     ],
 )

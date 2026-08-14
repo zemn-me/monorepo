@@ -469,7 +469,13 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				toPort: minecraftRconPort,
 				cidrBlocks: ['10.42.0.0/16'],
 			},
-			{ parent: this }
+			{
+				parent: this,
+				// A standalone rule cannot be updated when it has disappeared from
+				// the security group. Recreate it during provider region migrations.
+				deleteBeforeReplace: true,
+				replaceOnChanges: ['region'],
+			}
 		);
 
 		const taskSecurityGroup = new aws.ec2.SecurityGroup(

@@ -56,6 +56,9 @@ const csp = {
 		...(DefaultContentSecurityPolicy['media-src'] ?? []),
 		"'self'",
 		'blob:',
+		ZEMN_ME_API_BASE as 'https://api.zemn.me',
+		'https://*.s3.amazonaws.com',
+		'https://*.s3.us-east-1.amazonaws.com',
 	]),
 };
 

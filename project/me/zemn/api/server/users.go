@@ -261,6 +261,19 @@ func ensureScope(scopes []string, scope string) []string {
 	return append(scopes, scope)
 }
 
+func ensureReservedScopes(subject string, scopes []string) []string {
+	filtered := make([]string, 0, len(scopes)+2)
+	for _, scope := range scopes {
+		if scope != "journal_read" && scope != "journal_write" {
+			filtered = append(filtered, scope)
+		}
+	}
+	if subject != journalOwnerSubject && subject != "integration-test-local" {
+		return filtered
+	}
+	return ensureScope(ensureScope(filtered, "journal_read"), "journal_write")
+}
+
 func userRecordFromNewUser(body NewUser) userRecord {
 	var scopes []string
 	if body.Scopes != nil {
@@ -564,7 +577,7 @@ func (s Server) resolveScopes(ctx context.Context, issuer, remoteSubject string)
 			return nil, err
 		}
 		if rec != nil {
-			return append([]string(nil), rec.Scopes...), nil
+			return ensureReservedScopes(rec.Id, append([]string(nil), rec.Scopes...)), nil
 		}
 	}
 
@@ -578,7 +591,7 @@ func (s Server) resolveScopes(ctx context.Context, issuer, remoteSubject string)
 			return nil, err
 		}
 		if rec != nil && !rec.Deleted {
-			return append([]string(nil), rec.Scopes...), nil
+			return ensureReservedScopes(rec.Id, append([]string(nil), rec.Scopes...)), nil
 		}
 	}
 

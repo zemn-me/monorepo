@@ -16,6 +16,7 @@ type inMemoryDDB struct {
 	grievances map[string]grievanceRecord
 	users      map[string]userRecord
 	keyRecords []map[string]types.AttributeValue
+	journal    []map[string]types.AttributeValue
 }
 
 func (db inMemoryDDB) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
@@ -40,6 +41,19 @@ func (db *inMemoryDDB) DescribeTable(ctx context.Context, params *dynamodb.Descr
 }
 
 func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := ""
+		if value, ok := in.ExpressionAttributeValues[":id"].(*types.AttributeValueMemberS); ok {
+			id = value.Value
+		}
+		items := make([]map[string]types.AttributeValue, 0, len(db.journal))
+		for _, item := range db.journal {
+			if id == "" || keyTableRecordID(item) == id {
+				items = append(items, copyDynamoItem(item))
+			}
+		}
+		return &dynamodb.QueryOutput{Items: items}, nil
+	}
 	if in.TableName != nil && *in.TableName == "analytics" {
 		feed := ""
 		if v, ok := in.ExpressionAttributeValues[":feed"]; ok {
@@ -171,6 +185,21 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 }
 
 func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		when := keyTableRecordWhen(in.Item)
+		id := keyTableRecordID(in.Item)
+		for index, existing := range db.journal {
+			if keyTableRecordID(existing) == id && keyTableRecordWhen(existing) == when {
+				if in.ConditionExpression != nil {
+					return nil, &types.ConditionalCheckFailedException{}
+				}
+				db.journal[index] = copyDynamoItem(in.Item)
+				return &dynamodb.PutItemOutput{}, nil
+			}
+		}
+		db.journal = append(db.journal, copyDynamoItem(in.Item))
+		return &dynamodb.PutItemOutput{}, nil
+	}
 	if in.TableName != nil && *in.TableName == "keys" {
 		db.keyRecords = append(db.keyRecords, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil
@@ -214,6 +243,16 @@ func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, o
 }
 
 func (db *inMemoryDDB) GetItem(ctx context.Context, in *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := keyTableRecordID(in.Key)
+		when := keyTableRecordWhen(in.Key)
+		for _, item := range db.journal {
+			if keyTableRecordID(item) == id && keyTableRecordWhen(item) == when {
+				return &dynamodb.GetItemOutput{Item: copyDynamoItem(item)}, nil
+			}
+		}
+		return &dynamodb.GetItemOutput{}, nil
+	}
 	if in.TableName != nil && *in.TableName == "grievances" {
 		if db.grievances == nil {
 			return &dynamodb.GetItemOutput{}, nil
@@ -248,6 +287,17 @@ func (db *inMemoryDDB) GetItem(ctx context.Context, in *dynamodb.GetItemInput, o
 }
 
 func (db *inMemoryDDB) DeleteItem(ctx context.Context, in *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := keyTableRecordID(in.Key)
+		when := keyTableRecordWhen(in.Key)
+		for index, item := range db.journal {
+			if keyTableRecordID(item) == id && keyTableRecordWhen(item) == when {
+				db.journal = append(db.journal[:index], db.journal[index+1:]...)
+				break
+			}
+		}
+		return &dynamodb.DeleteItemOutput{}, nil
+	}
 	if in.TableName != nil && *in.TableName == "grievances" {
 		if db.grievances != nil {
 			id := in.Key["id"].(*types.AttributeValueMemberS).Value
