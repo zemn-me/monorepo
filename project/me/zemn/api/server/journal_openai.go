@@ -13,6 +13,7 @@ import (
 	"net/textproto"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -42,8 +43,15 @@ Write natural prose. Do not use generic headings or labels such as "Theme", "The
 
 Every Markdown block must be supported by one or more citation objects copied exactly from the supplied sources. Use ordinary numbered Markdown footnotes: in each block, put [^1] immediately after the claim supported by the first object in that block's citations array, [^2] for the second, and so on. Reference every citation object inline at least once. The client renders each numbered reference with the exact quoted transcript segment and its timestamp link. Never invent an entryId or segmentId.`
 
+const journalEntryAnalysisInstructions = journalSummaryInstructions + `
+
+For an individual entry, also determine whether the transcript establishes the local calendar date on which this recording itself is being made.
+
+Set recordedDate to YYYY-MM-DD only when the speaker explicitly states or unambiguously identifies the recording date. The provisional timestamp and time zone may be used to resolve an omitted year or an explicit relative phrase about the recording moment. Do not mistake the date of a remembered, planned, or otherwise discussed event for the recording date. When the recording date is not established clearly enough, set recordedDate to an empty string.`
+
 type JournalAI interface {
 	Transcribe(ctx context.Context, audio io.Reader, contentType string) (JournalTranscriptionResult, error)
+	AnalyzeEntry(ctx context.Context, provisionalRecordedAt time.Time, timeZone string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error)
 	Summarize(ctx context.Context, period string, sources []JournalSummarySource) (JournalSummaryResult, error)
 }
 
@@ -250,40 +258,35 @@ func structuredOutputSchema[T any]() (openaiapi.ResponseFormatJsonSchemaSchema, 
 	return schema, nil
 }
 
-var journalSummarySchema = sync.OnceValues(structuredOutputSchema[JournalSummaryResult])
+var (
+	journalEntryAnalysisSchema = sync.OnceValues(structuredOutputSchema[JournalEntryAnalysisResult])
+	journalSummarySchema       = sync.OnceValues(structuredOutputSchema[JournalSummaryResult])
+)
 
-func (o *openAIJournalAI) Summarize(ctx context.Context, period string, sources []JournalSummarySource) (JournalSummaryResult, error) {
-	sourceJSON, err := json.Marshal(sources)
-	if err != nil {
-		return JournalSummaryResult{}, err
-	}
-	schema, err := journalSummarySchema()
-	if err != nil {
-		return JournalSummaryResult{}, err
-	}
+func (o *openAIJournalAI) structuredResponseText(ctx context.Context, prompt, instructions, schemaName string, schema openaiapi.ResponseFormatJsonSchemaSchema) (string, error) {
 	var input openaiapi.InputParam
-	if err := input.FromInputParam0(fmt.Sprintf("Create the %s summary from these sources:\n%s", period, sourceJSON)); err != nil {
-		return JournalSummaryResult{}, err
+	if err := input.FromInputParam0(prompt); err != nil {
+		return "", err
 	}
 	var model openaiapi.ModelIdsResponses
 	if err := model.FromModelIdsResponses1(journalSummaryModel); err != nil {
-		return JournalSummaryResult{}, err
+		return "", err
 	}
 	strict := true
 	var format openaiapi.TextResponseFormatConfiguration
 	if err := format.FromTextResponseFormatJsonSchema(openaiapi.TextResponseFormatJsonSchema{
-		Name:   "journal_summary",
+		Name:   schemaName,
 		Schema: schema,
 		Strict: &strict,
 		Type:   openaiapi.TextResponseFormatJsonSchemaTypeJsonSchema,
 	}); err != nil {
-		return JournalSummaryResult{}, err
+		return "", err
 	}
 	store := false
 	reasoningEffort := openaiapi.ReasoningEffort("medium")
 	payload := openaiapi.CreateResponse{
 		Input:        &input,
-		Instructions: ptr(journalSummaryInstructions),
+		Instructions: ptr(instructions),
 		Model:        &model,
 		Reasoning: &openaiapi.Reasoning{
 			Effort: &reasoningEffort,
@@ -295,61 +298,119 @@ func (o *openAIJournalAI) Summarize(ctx context.Context, period string, sources 
 	}
 	encoded, err := json.Marshal(payload)
 	if err != nil {
-		return JournalSummaryResult{}, err
+		return "", err
 	}
 	req, err := http.NewRequest(http.MethodPost, "https://api.openai.com/v1/responses", bytes.NewReader(encoded))
 	if err != nil {
-		return JournalSummaryResult{}, err
+		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := o.request(ctx, req)
 	if err != nil {
-		return JournalSummaryResult{}, err
+		return "", err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode/100 != 2 {
 		detail, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
-		return JournalSummaryResult{}, fmt.Errorf("OpenAI summary returned %s: %s", resp.Status, strings.TrimSpace(string(detail)))
+		return "", fmt.Errorf("OpenAI structured response returned %s: %s", resp.Status, strings.TrimSpace(string(detail)))
 	}
 	var result openaiapi.Response
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return JournalSummaryResult{}, err
+		return "", err
 	}
 	for _, output := range result.Output {
 		discriminator, err := output.Discriminator()
 		if err != nil {
-			return JournalSummaryResult{}, err
+			return "", err
 		}
 		if discriminator != string(openaiapi.OutputMessageTypeMessage) {
 			continue
 		}
 		message, err := output.AsOutputMessage()
 		if err != nil {
-			return JournalSummaryResult{}, err
+			return "", err
 		}
 		for _, content := range message.Content {
 			discriminator, err := content.Discriminator()
 			if err != nil {
-				return JournalSummaryResult{}, err
+				return "", err
 			}
 			if discriminator != string(openaiapi.OutputTextContentTypeOutputText) {
 				continue
 			}
 			outputText, err := content.AsOutputTextContent()
 			if err != nil {
-				return JournalSummaryResult{}, err
+				return "", err
 			}
-			var summary JournalSummaryResult
-			if err := json.NewDecoder(strings.NewReader(outputText.Text)).Decode(&summary); err != nil {
-				return JournalSummaryResult{}, err
-			}
-			if err := validateJournalSummary(summary, sources); err != nil {
-				return JournalSummaryResult{}, err
-			}
-			return summary, nil
+			return outputText.Text, nil
 		}
 	}
-	return JournalSummaryResult{}, errors.New("OpenAI response did not contain summary text")
+	return "", errors.New("OpenAI response did not contain structured output text")
+}
+
+func (o *openAIJournalAI) AnalyzeEntry(ctx context.Context, provisionalRecordedAt time.Time, timeZone string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	sourceJSON, err := json.Marshal(sources)
+	if err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	location, err := time.LoadLocation(timeZone)
+	if err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	schema, err := journalEntryAnalysisSchema()
+	if err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	prompt := fmt.Sprintf(
+		"Create the entry analysis from these sources.\nProvisional recording timestamp: %s\nRecording time zone: %s\nSources:\n%s",
+		provisionalRecordedAt.In(location).Format(time.RFC3339), timeZone, sourceJSON,
+	)
+	text, err := o.structuredResponseText(ctx, prompt, journalEntryAnalysisInstructions, "journal_entry_analysis", schema)
+	if err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	var analysis JournalEntryAnalysisResult
+	if err := json.NewDecoder(strings.NewReader(text)).Decode(&analysis); err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	if err := validateJournalSummary(analysis.Summary, sources); err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	if analysis.RecordedDate != "" {
+		if _, err := time.Parse(time.DateOnly, analysis.RecordedDate); err != nil {
+			return JournalEntryAnalysisResult{}, fmt.Errorf("invalid inferred journal recording date %q: %w", analysis.RecordedDate, err)
+		}
+	}
+	return analysis, nil
+}
+
+func (o *openAIJournalAI) Summarize(ctx context.Context, period string, sources []JournalSummarySource) (JournalSummaryResult, error) {
+	sourceJSON, err := json.Marshal(sources)
+	if err != nil {
+		return JournalSummaryResult{}, err
+	}
+	schema, err := journalSummarySchema()
+	if err != nil {
+		return JournalSummaryResult{}, err
+	}
+	text, err := o.structuredResponseText(
+		ctx,
+		fmt.Sprintf("Create the %s summary from these sources:\n%s", period, sourceJSON),
+		journalSummaryInstructions,
+		"journal_summary",
+		schema,
+	)
+	if err != nil {
+		return JournalSummaryResult{}, err
+	}
+	var summary JournalSummaryResult
+	if err := json.NewDecoder(strings.NewReader(text)).Decode(&summary); err != nil {
+		return JournalSummaryResult{}, err
+	}
+	if err := validateJournalSummary(summary, sources); err != nil {
+		return JournalSummaryResult{}, err
+	}
+	return summary, nil
 }
 
 func validateJournalSummary(summary JournalSummaryResult, sources []JournalSummarySource) error {

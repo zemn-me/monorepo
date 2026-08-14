@@ -813,6 +813,23 @@ func (s *Server) failJournalEntry(ctx context.Context, subject string, entry Jou
 	return s.releaseJournalContentHash(ctx, subject, entry.Id, entry.ContentSha256)
 }
 
+func journalTimestampOnLocalDate(timestamp time.Time, timeZone, localDate string) (time.Time, error) {
+	date, err := time.Parse(time.DateOnly, localDate)
+	if err != nil {
+		return time.Time{}, err
+	}
+	location, err := time.LoadLocation(timeZone)
+	if err != nil {
+		return time.Time{}, err
+	}
+	local := timestamp.In(location)
+	return time.Date(
+		date.Year(), date.Month(), date.Day(),
+		local.Hour(), local.Minute(), local.Second(), local.Nanosecond(),
+		location,
+	).UTC(), nil
+}
+
 type journalSummaryCandidate struct {
 	at       time.Time
 	location *time.Location
@@ -966,10 +983,17 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	}
 	entry.DurationMs = transcription.DurationMs
 	sources := transcriptSources(entry.Id, transcription.Segments)
-	result, err := s.journalAI.Summarize(ctx, "entry", sources)
+	analysis, err := s.journalAI.AnalyzeEntry(ctx, entry.RecordedAt, entry.TimeZone, sources)
 	if err != nil {
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
+	}
+	if !hasRecordedAt && analysis.RecordedDate != "" {
+		entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, analysis.RecordedDate)
+		if err != nil {
+			_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
+			return err
+		}
 	}
 	entry.Transcript = transcription.Segments
 	sourceFingerprint, err := summarySourceFingerprint(sources)
@@ -982,7 +1006,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		JournalSummaryPeriodEntry,
 		entry.RecordedAt,
 		entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond),
-		result,
+		analysis.Summary,
 		sourceFingerprint,
 	))
 	entry.Status = JournalEntryStatusReady
