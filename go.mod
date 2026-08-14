@@ -51,7 +51,6 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/invopop/jsonschema v0.14.0
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/nyaruka/phonenumbers/v2 v2.0.7
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/openai/openai-go/v3 v3.50.0
