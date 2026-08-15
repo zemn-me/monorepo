@@ -427,12 +427,12 @@ func TestOpenAISummaryUsesGeneratedRequestAndResponseTypes(t *testing.T) {
 	}
 }
 
-func TestOpenAIEntryAnalysisInfersExplicitRecordingDate(t *testing.T) {
+func TestOpenAIEntryAnalysisInfersExplicitEntryDate(t *testing.T) {
 	sources := []JournalSummarySource{{
 		Label: "entry",
-		Text:  "It is Thursday the 13th of August. I am recording this before bed.",
+		Text:  "This entry is from Thursday the 13th of August.",
 		Citations: []JournalCitation{{
-			EntryId: "entry-1", SegmentId: "s0", Quote: "It is Thursday the 13th of August.",
+			EntryId: "entry-1", SegmentId: "s0", Quote: "This entry is from Thursday the 13th of August.",
 		}},
 	}}
 	provisionalRecordedAt := time.Date(2026, time.August, 14, 23, 25, 0, 0, time.FixedZone("PDT", -7*60*60))
@@ -482,7 +482,7 @@ func TestOpenAIEntryAnalysisInfersExplicitRecordingDate(t *testing.T) {
 						"type": "output_text",
 						"annotations": [],
 						"logprobs": [],
-						"text": "{\"summary\":{\"title\":\"Thursday reflection\",\"blocks\":[{\"markdown\":\"Recorded before bed.[^1]\",\"citations\":[{\"entryId\":\"entry-1\",\"segmentId\":\"s0\",\"quote\":\"It is Thursday the 13th of August.\"}]}]},\"recordedDate\":\"2026-08-13\"}"
+						"text": "{\"summary\":{\"title\":\"Thursday reflection\",\"blocks\":[{\"markdown\":\"Assigned to Thursday.[^1]\",\"citations\":[{\"entryId\":\"entry-1\",\"segmentId\":\"s0\",\"quote\":\"This entry is from Thursday the 13th of August.\"}]}]},\"recordedDate\":\"2026-08-13\"}"
 					}]
 				}]
 			}`)),
@@ -527,9 +527,11 @@ func TestJournalSummaryInstructionsRequireNarrativeSynthesis(t *testing.T) {
 
 func TestJournalEntryAnalysisInstructionsRequireGroundedRecordingDate(t *testing.T) {
 	for _, requirement := range []string{
-		"recording itself is being made",
-		"explicitly states or unambiguously identifies the recording date",
-		"Do not mistake the date of a remembered, planned, or otherwise discussed event",
+		"explicitly assigns this recording or journal entry",
+		`"this entry is from 13 August"`,
+		"even if the audio file was created at a different time",
+		"Do not require the speaker to say that the audio is being recorded on that date",
+		"Do not mistake the date of a remembered, planned, or otherwise discussed event for the entry's date",
 		"set recordedDate to an empty string",
 	} {
 		if !strings.Contains(journalEntryAnalysisInstructions, requirement) {
@@ -664,7 +666,7 @@ func TestJournalScopesAreReservedForThomas(t *testing.T) {
 	}
 }
 
-func TestProcessJournalUploadUsesSpokenDateOnlyWithoutContainerMetadata(t *testing.T) {
+func TestProcessJournalUploadUsesSpokenDateOverContainerMetadata(t *testing.T) {
 	fallbackRecordedAt := time.Date(2026, time.August, 14, 18, 25, 0, 0, time.UTC)
 	embeddedRecordedAt := time.Date(2026, time.August, 12, 19, 16, 0, 0, time.UTC)
 	for _, test := range []struct {
@@ -683,7 +685,7 @@ func TestProcessJournalUploadUsesSpokenDateOnlyWithoutContainerMetadata(t *testi
 			name:        "embedded timestamp",
 			contentType: "audio/mp4",
 			audio:       testMP4(embeddedRecordedAt, 0),
-			want:        embeddedRecordedAt,
+			want:        time.Date(2026, time.August, 13, 19, 16, 0, 0, time.UTC),
 		},
 	} {
 		t.Run(test.name, func(t *testing.T) {

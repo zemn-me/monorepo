@@ -45,9 +45,9 @@ Every Markdown block must be supported by one or more citation objects copied ex
 
 const journalEntryAnalysisInstructions = journalSummaryInstructions + `
 
-For an individual entry, also determine whether the transcript establishes the local calendar date on which this recording itself is being made.
+For an individual entry, also determine whether the speaker explicitly assigns this recording or journal entry to a local calendar date. Phrases such as "this entry is from 13 August", "this is for 13 August", and "today is 13 August" establish that date even if the audio file was created at a different time. Do not require the speaker to say that the audio is being recorded on that date.
 
-Set recordedDate to YYYY-MM-DD only when the speaker explicitly states or unambiguously identifies the recording date. The provisional timestamp and time zone may be used to resolve an omitted year or an explicit relative phrase about the recording moment. Do not mistake the date of a remembered, planned, or otherwise discussed event for the recording date. When the recording date is not established clearly enough, set recordedDate to an empty string.`
+Set recordedDate to YYYY-MM-DD only when the speaker explicitly states or unambiguously identifies the date assigned to the entry. The provisional timestamp and time zone may be used to resolve an omitted year or an explicit relative phrase assigning the entry to a date. Do not mistake the date of a remembered, planned, or otherwise discussed event for the entry's date. When the entry date is not established clearly enough, set recordedDate to an empty string.`
 
 type JournalAI interface {
 	Transcribe(ctx context.Context, audio io.Reader, contentType string) (JournalTranscriptionResult, error)
