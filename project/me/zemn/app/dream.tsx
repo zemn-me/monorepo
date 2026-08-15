@@ -11,6 +11,22 @@ interface MansusCard {
 	readonly title: string;
 }
 
+type TableCardPalette =
+	| 'acquaintance'
+	| 'contentment'
+	| 'funds'
+	| 'health'
+	| 'lore'
+	| 'reason';
+
+interface TableCard {
+	readonly aspect: string;
+	readonly id: string;
+	readonly palette: TableCardPalette;
+	readonly sigil: string;
+	readonly title: string;
+}
+
 const mansusDeck: readonly MansusCard[] = [
 	{
 		aspect: 'Moth',
@@ -53,6 +69,51 @@ const mansusDeck: readonly MansusCard[] = [
 			'Snow settles in a room that has never known weather. No footprint leads away.',
 		id: 'interior-snow',
 		title: 'Interior Snow',
+	},
+] as const;
+
+const startingHand: readonly TableCard[] = [
+	{
+		aspect: 'Ability',
+		id: 'reason',
+		palette: 'reason',
+		sigil: '◆',
+		title: 'Reason',
+	},
+	{
+		aspect: 'Ability',
+		id: 'health',
+		palette: 'health',
+		sigil: '♥',
+		title: 'Health',
+	},
+	{
+		aspect: 'Resource',
+		id: 'funds',
+		palette: 'funds',
+		sigil: '£',
+		title: 'Funds',
+	},
+	{
+		aspect: 'Connection',
+		id: 'acquaintance',
+		palette: 'acquaintance',
+		sigil: '☿',
+		title: 'An Acquaintance',
+	},
+	{
+		aspect: 'Lore · Lantern 2',
+		id: 'watchmans-secret',
+		palette: 'lore',
+		sigil: '☀',
+		title: "A Watchman's Secret",
+	},
+	{
+		aspect: 'Influence · Heart 2',
+		id: 'contentment',
+		palette: 'contentment',
+		sigil: '♡',
+		title: 'Contentment',
 	},
 ] as const;
 
@@ -157,6 +218,33 @@ function PassionCard({
 				<strong>Passion</strong>
 			</CardFrame>
 		</button>
+	);
+}
+
+const tableCardPaletteStyles: Readonly<Record<TableCardPalette, string>> = {
+	acquaintance: style.acquaintanceCard,
+	contentment: style.contentmentCard,
+	funds: style.fundsCard,
+	health: style.healthCard,
+	lore: style.loreCard,
+	reason: style.reasonCard,
+};
+
+function HandCard({ card }: { readonly card: TableCard }) {
+	return (
+		<article
+			aria-label={`Hand card: ${card.title}`}
+			className={`${style.card} ${style.scatteredCard} ${tableCardPaletteStyles[card.palette]}`}
+			title={`${card.title} — ${card.aspect}`}
+		>
+			<CardFrame>
+				<span aria-hidden="true" className={style.cardSigil}>
+					{card.sigil}
+				</span>
+				<strong>{card.title}</strong>
+				<small>{card.aspect}</small>
+			</CardFrame>
+		</article>
 	);
 }
 
@@ -407,6 +495,9 @@ export function DreamTable({
 						className={style.hand}
 					>
 						<div className={style.handCards}>
+							{startingHand.map(card => (
+								<HandCard card={card} key={card.id} />
+							))}
 							{!passionPlaced && phase === 'table' && (
 								<PassionCard
 									inSlot={false}

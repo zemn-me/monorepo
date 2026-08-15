@@ -343,7 +343,7 @@
 	align-items: flex-end;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1rem;
+	gap: 0.65rem 0.35rem;
 	padding-block: 2rem;
 }
 
@@ -418,6 +418,54 @@ button.card:focus-visible {
 	background:
 		radial-gradient(circle at 50% 32%, rgb(255 239 184 / 52%), transparent 23%),
 		linear-gradient(145deg, #bd884e, #cbb77c 48%, #7a573d);
+}
+
+.scatteredCard:nth-child(3n + 1) {
+	transform: rotate(-2.2deg) translateY(0.35rem);
+}
+
+.scatteredCard:nth-child(3n + 2) {
+	transform: rotate(1.5deg) translateY(-0.3rem);
+}
+
+.scatteredCard:nth-child(3n) {
+	transform: rotate(-0.7deg) translateY(0.1rem);
+}
+
+.reasonCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(226 239 255 / 42%), transparent 25%),
+		linear-gradient(145deg, #6687a0, #9cb2bc 52%, #405f76);
+}
+
+.healthCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(226 255 223 / 42%), transparent 25%),
+		linear-gradient(145deg, #668b67, #a2b587 52%, #416142);
+}
+
+.fundsCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 247 203 / 50%), transparent 25%),
+		linear-gradient(145deg, #9b8349, #cab977 52%, #685a34);
+}
+
+.acquaintanceCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 224 212 / 28%), transparent 25%),
+		linear-gradient(145deg, #75494c, #a67668 52%, #4d3139);
+}
+
+.loreCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 246 175 / 48%), transparent 25%),
+		linear-gradient(145deg, #a28c3c, #d0bc69 52%, #695d2d);
+}
+
+.contentmentCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 238 241 / 48%), transparent 25%),
+		linear-gradient(145deg, #98707c, #c9a1a0 52%, #654c61);
 }
 
 .mansus {
@@ -562,6 +610,10 @@ button.card:focus-visible {
 	}
 
 	.hand {
+		justify-content: center;
+	}
+
+	.handCards {
 		justify-content: center;
 	}
 

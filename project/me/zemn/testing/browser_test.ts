@@ -189,6 +189,21 @@ describe('zemn.me website', () => {
 					),
 					3000
 				);
+				const startingHand = await dialog.findElements(
+					By.css('article[aria-label^="Hand card:"]')
+				);
+				expect(
+					await Promise.all(
+						startingHand.map(card => card.getAttribute('aria-label'))
+					)
+				).toEqual([
+					'Hand card: Reason',
+					'Hand card: Health',
+					'Hand card: Funds',
+					'Hand card: An Acquaintance',
+					"Hand card: A Watchman's Secret",
+					'Hand card: Contentment',
+				]);
 
 				await dialog
 					.findElement(
