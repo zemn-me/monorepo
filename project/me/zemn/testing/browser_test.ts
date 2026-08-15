@@ -229,20 +229,26 @@ describe('zemn.me website', () => {
 					'Hand card: Contentment',
 				]);
 
-				await dialog
-					.findElement(
-						By.css('button[aria-label="Place Passion in Dream"]')
-					)
-					.click();
+				const passionCard = await dialog.findElement(
+					By.css('button[aria-label="Place Passion in Dream"]')
+				);
+				const dreamSlot = await dialog.findElement(
+					By.css('[aria-label="Dream card slot"]')
+				);
+				await driver
+					.actions({ async: true })
+					.move({ origin: passionCard })
+					.press()
+					.pause(200)
+					.move({ duration: 500, origin: dreamSlot })
+					.pause(200)
+					.release()
+					.perform();
 				const dreamButton = await dialog.findElement(
 					By.css('button[aria-label="Dream with Passion"]')
 				);
 				await driver.wait(() => dreamButton.isEnabled(), 3000);
-				expect(
-					await dialog
-						.findElement(By.css('[aria-label="Dream card slot"]'))
-						.getText()
-				).toContain('Passion');
+				expect(await dreamSlot.getText()).toContain('Passion');
 				await dreamButton.click();
 
 				const mansus = await driver.wait(

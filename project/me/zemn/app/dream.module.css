@@ -436,6 +436,12 @@ button.card {
 		transform 180ms ease;
 }
 
+button.draggingCard {
+	cursor: grabbing;
+	transition: none;
+	z-index: 20;
+}
+
 button.card:hover,
 button.card:focus-visible {
 	box-shadow: 0 1.1rem 2rem rgb(0 0 0 / 58%);

@@ -250,22 +250,92 @@ function CardFrame({
 function PassionCard({
 	inSlot,
 	onChoose,
+	onDropAt,
 }: {
 	readonly inSlot: boolean;
 	readonly onChoose: () => void;
+	readonly onDropAt: (position: PointerPosition) => void;
 }) {
+	const dragStart = useRef<
+		(PointerPosition & { readonly pointerId: number }) | null
+	>(null);
+	const dragged = useRef(false);
+	const suppressClick = useRef(false);
+	const [dragOffset, setDragOffset] = useState<PointerPosition | null>(null);
+
+	const finishDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+		const start = dragStart.current;
+		if (!start || start.pointerId !== event.pointerId) return;
+		const wasDragged = dragged.current;
+		dragStart.current = null;
+		dragged.current = false;
+		setDragOffset(null);
+		if (wasDragged) {
+			suppressClick.current = true;
+			onDropAt({ x: event.clientX, y: event.clientY });
+		}
+		if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+			event.currentTarget.releasePointerCapture(event.pointerId);
+		}
+	};
+	const cancelDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+		if (dragStart.current?.pointerId !== event.pointerId) return;
+		dragStart.current = null;
+		dragged.current = false;
+		setDragOffset(null);
+		if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+			event.currentTarget.releasePointerCapture(event.pointerId);
+		}
+	};
+
 	return (
 		<button
 			aria-label={
 				inSlot ? 'Return Passion to hand' : 'Place Passion in Dream'
 			}
-			className={`${style.card} ${style.passionCard}`}
-			draggable={!inSlot}
-			onClick={onChoose}
-			onDragStart={event => {
-				event.dataTransfer.effectAllowed = 'move';
-				event.dataTransfer.setData('text/x-mansus-card', 'passion');
+			className={`${style.card} ${style.passionCard} ${dragOffset ? style.draggingCard : ''}`}
+			onClick={() => {
+				if (suppressClick.current) {
+					suppressClick.current = false;
+					return;
+				}
+				onChoose();
 			}}
+			onLostPointerCapture={event => {
+				if (dragStart.current?.pointerId === event.pointerId) {
+					dragStart.current = null;
+					dragged.current = false;
+					setDragOffset(null);
+				}
+			}}
+			onPointerCancel={cancelDrag}
+			onPointerDown={event => {
+				if (inSlot) return;
+				dragStart.current = {
+					pointerId: event.pointerId,
+					x: event.clientX,
+					y: event.clientY,
+				};
+				dragged.current = false;
+				event.currentTarget.setPointerCapture(event.pointerId);
+			}}
+			onPointerMove={event => {
+				const start = dragStart.current;
+				if (!start || start.pointerId !== event.pointerId) return;
+				const next = {
+					x: event.clientX - start.x,
+					y: event.clientY - start.y,
+				};
+				if (!dragged.current && Math.hypot(next.x, next.y) < 5) return;
+				dragged.current = true;
+				setDragOffset(next);
+			}}
+			onPointerUp={finishDrag}
+			style={
+				dragOffset
+					? { translate: `${dragOffset.x}px ${dragOffset.y}px` }
+					: undefined
+			}
 			title="Passion"
 			type="button"
 		>
@@ -480,6 +550,7 @@ export function DreamTable({
 }) {
 	const [initialHand] = useState(loadDreamHand);
 	const dialogRef = useRef<HTMLElement>(null);
+	const dreamSlotRef = useRef<HTMLDivElement>(null);
 	const dreamTimer = useRef<number>();
 	const cameraPointers = useRef(new Map<number, PointerPosition>());
 	const cameraGestureRef = useRef<CameraGesture | null>(null);
@@ -657,6 +728,19 @@ export function DreamTable({
 		}, dreamDurationMs);
 	}, [passionPlaced, phase]);
 
+	const placePassionAt = useCallback((position: PointerPosition) => {
+		const bounds = dreamSlotRef.current?.getBoundingClientRect();
+		if (
+			bounds &&
+			position.x >= bounds.left &&
+			position.x <= bounds.right &&
+			position.y >= bounds.top &&
+			position.y <= bounds.bottom
+		) {
+			setPassionPlaced(true);
+		}
+	}, []);
+
 	const returnFromMansus = useCallback(() => {
 		if (drawn) setMemories(current => [...current.slice(-2), drawn]);
 		setJourney(current => current + 1);
@@ -725,25 +809,13 @@ export function DreamTable({
 							<div
 								aria-label="Dream card slot"
 								className={`${style.cardSlot} ${passionPlaced ? style.filledSlot : ''}`}
-								onDragOver={event => {
-									event.preventDefault();
-									event.dataTransfer.dropEffect = 'move';
-								}}
-								onDrop={event => {
-									event.preventDefault();
-									if (
-										event.dataTransfer.getData(
-											'text/x-mansus-card'
-										) === 'passion'
-									) {
-										setPassionPlaced(true);
-									}
-								}}
+								ref={dreamSlotRef}
 							>
 								{passionPlaced ? (
 									<PassionCard
 										inSlot
 										onChoose={() => setPassionPlaced(false)}
+										onDropAt={placePassionAt}
 									/>
 								) : (
 									<span aria-hidden="true">+</span>
@@ -785,6 +857,7 @@ export function DreamTable({
 								<PassionCard
 									inSlot={false}
 									onChoose={() => setPassionPlaced(true)}
+									onDropAt={placePassionAt}
 								/>
 							)}
 							{memories.map((card, index) => (
