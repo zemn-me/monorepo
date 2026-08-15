@@ -189,6 +189,30 @@ describe('zemn.me website', () => {
 					),
 					3000
 				);
+				const tableCamera = await dialog.findElement(
+					By.css('[role="group"][aria-label="Dream table camera"]')
+				);
+				const initialCameraTransform = await tableCamera.getCssValue(
+					'transform'
+				);
+				await dialog
+					.findElement(By.css('button[aria-label="Zoom table in"]'))
+					.click();
+				await driver.wait(
+					async () =>
+						(await tableCamera.getCssValue('transform')) !==
+						initialCameraTransform,
+					3000
+				);
+				await dialog
+					.findElement(By.css('button[aria-label="Reset table view"]'))
+					.click();
+				await driver.wait(
+					async () =>
+						(await tableCamera.getCssValue('transform')) ===
+						initialCameraTransform,
+					3000
+				);
 				const startingHand = await dialog.findElements(
 					By.css('article[aria-label^="Hand card:"]')
 				);
@@ -227,11 +251,14 @@ describe('zemn.me website', () => {
 					),
 					6000
 				);
-				expect(
-					await mansus
-						.findElement(By.css('svg[aria-label="Map of the Mansus"]'))
-						.isDisplayed()
-				).toBe(true);
+				await driver.wait(
+					until.elementIsVisible(
+						await mansus.findElement(
+							By.css('svg[aria-label="Map of the Mansus"]')
+						)
+					),
+					3000
+				);
 				const choices = await mansus.findElements(
 					By.css('button[aria-label^="Draw Mansus card"]')
 				);

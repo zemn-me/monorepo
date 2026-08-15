@@ -1,6 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+	type CSSProperties,
+	type PointerEvent as ReactPointerEvent,
+	type WheelEvent as ReactWheelEvent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 
 import style from '#root/project/me/zemn/app/dream.module.css';
 
@@ -120,6 +129,55 @@ const startingHand: readonly TableCard[] = [
 const dreamDurationMs = 2200;
 const dreamHandStorageKey = 'zemn.me:dream-hand:v1';
 type DreamPhase = 'table' | 'working' | 'mansus';
+
+interface TableCameraState {
+	readonly x: number;
+	readonly y: number;
+	readonly zoom: number;
+}
+
+interface PointerPosition {
+	readonly x: number;
+	readonly y: number;
+}
+
+interface CameraGesture {
+	readonly camera: TableCameraState;
+	readonly center: PointerPosition;
+	readonly distance: number;
+}
+
+const defaultTableCamera: TableCameraState = { x: 0, y: 0, zoom: 1 };
+const tableZoomLevels = [0.72, 1, 1.28] as const;
+const tableZoomMinimum = 0.64;
+const tableZoomMaximum = 1.42;
+const tablePanXMaximum = 360;
+const tablePanYMaximum = 260;
+
+function clamp(value: number, minimum: number, maximum: number): number {
+	return Math.max(minimum, Math.min(maximum, value));
+}
+
+function cameraGesture(
+	pointers: ReadonlyMap<number, PointerPosition>,
+	camera: TableCameraState
+): CameraGesture | null {
+	const positions = [...pointers.values()].slice(0, 2);
+	if (positions.length === 0) return null;
+	const first = positions[0]!;
+	const second = positions[1];
+	if (!second) {
+		return { camera, center: first, distance: 0 };
+	}
+	return {
+		camera,
+		center: {
+			x: (first.x + second.x) / 2,
+			y: (first.y + second.y) / 2,
+		},
+		distance: Math.hypot(second.x - first.x, second.y - first.y),
+	};
+}
 
 interface StoredDreamHand {
 	readonly journey: number;
@@ -423,8 +481,12 @@ export function DreamTable({
 	const [initialHand] = useState(loadDreamHand);
 	const dialogRef = useRef<HTMLElement>(null);
 	const dreamTimer = useRef<number>();
+	const cameraPointers = useRef(new Map<number, PointerPosition>());
+	const cameraGestureRef = useRef<CameraGesture | null>(null);
 	const [phase, setPhase] = useState<DreamPhase>('table');
 	const [passionPlaced, setPassionPlaced] = useState(false);
+	const [tableCamera, setTableCamera] = useState(defaultTableCamera);
+	const tableCameraRef = useRef(tableCamera);
 	const [journey, setJourney] = useState(initialHand.journey);
 	const [drawn, setDrawn] = useState<MansusCard>();
 	const [memories, setMemories] = useState<readonly MansusCard[]>(
@@ -439,17 +501,146 @@ export function DreamTable({
 		[journey]
 	);
 
+	const commitTableCamera = useCallback((next: TableCameraState) => {
+		const clamped = {
+			x: clamp(next.x, -tablePanXMaximum, tablePanXMaximum),
+			y: clamp(next.y, -tablePanYMaximum, tablePanYMaximum),
+			zoom: clamp(next.zoom, tableZoomMinimum, tableZoomMaximum),
+		};
+		tableCameraRef.current = clamped;
+		setTableCamera(clamped);
+	}, []);
+
+	const setTableZoomLevel = useCallback(
+		(zoom: number) => {
+			commitTableCamera({ x: 0, y: 0, zoom });
+		},
+		[commitTableCamera]
+	);
+
+	const startCameraGesture = useCallback(() => {
+		cameraGestureRef.current = cameraGesture(
+			cameraPointers.current,
+			tableCameraRef.current
+		);
+	}, []);
+
+	const onCameraPointerDown = useCallback(
+		(event: ReactPointerEvent<HTMLDivElement>) => {
+			if (phase === 'mansus') return;
+			if (
+				(event.target as Element).closest(
+					'button, article, [role="progressbar"]'
+				)
+			) {
+				return;
+			}
+			cameraPointers.current.set(event.pointerId, {
+				x: event.clientX,
+				y: event.clientY,
+			});
+			event.currentTarget.setPointerCapture(event.pointerId);
+			startCameraGesture();
+		},
+		[phase, startCameraGesture]
+	);
+
+	const onCameraPointerMove = useCallback(
+		(event: ReactPointerEvent<HTMLDivElement>) => {
+			if (!cameraPointers.current.has(event.pointerId)) return;
+			cameraPointers.current.set(event.pointerId, {
+				x: event.clientX,
+				y: event.clientY,
+			});
+			const gesture = cameraGestureRef.current;
+			const current = cameraGesture(
+				cameraPointers.current,
+				tableCameraRef.current
+			);
+			if (!gesture || !current) return;
+
+			const zoom =
+				gesture.distance > 0 && current.distance > 0
+					? gesture.camera.zoom *
+						(current.distance / gesture.distance)
+					: gesture.camera.zoom;
+			commitTableCamera({
+				x: gesture.camera.x + current.center.x - gesture.center.x,
+				y: gesture.camera.y + current.center.y - gesture.center.y,
+				zoom,
+			});
+		},
+		[commitTableCamera]
+	);
+
+	const onCameraPointerEnd = useCallback(
+		(event: ReactPointerEvent<HTMLDivElement>) => {
+			if (!cameraPointers.current.delete(event.pointerId)) return;
+			if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+				event.currentTarget.releasePointerCapture(event.pointerId);
+			}
+			startCameraGesture();
+		},
+		[startCameraGesture]
+	);
+
+	const onCameraWheel = useCallback(
+		(event: ReactWheelEvent<HTMLDivElement>) => {
+			if (phase === 'mansus') return;
+			event.preventDefault();
+			commitTableCamera({
+				...tableCameraRef.current,
+				zoom:
+					tableCameraRef.current.zoom *
+					Math.exp(-event.deltaY * 0.0012),
+			});
+		},
+		[commitTableCamera, phase]
+	);
+
 	useEffect(() => {
 		dialogRef.current?.focus();
 	}, []);
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') onWake();
+			if (event.key === 'Escape') {
+				onWake();
+				return;
+			}
+			if (phase === 'mansus') return;
+			const zoomLevel = Number(event.key) - 1;
+			if (zoomLevel >= 0 && zoomLevel < tableZoomLevels.length) {
+				setTableZoomLevel(tableZoomLevels[zoomLevel]!);
+				return;
+			}
+			if (event.key === 'Home') {
+				setTableZoomLevel(defaultTableCamera.zoom);
+				return;
+			}
+			const movement = 48;
+			const key = event.key.toLowerCase();
+			const delta =
+				key === 'arrowleft' || key === 'a'
+					? { x: movement, y: 0 }
+					: key === 'arrowright' || key === 'd'
+						? { x: -movement, y: 0 }
+						: key === 'arrowup' || key === 'w'
+							? { x: 0, y: movement }
+							: key === 'arrowdown' || key === 's'
+								? { x: 0, y: -movement }
+								: null;
+			if (!delta) return;
+			event.preventDefault();
+			commitTableCamera({
+				...tableCameraRef.current,
+				x: tableCameraRef.current.x + delta.x,
+				y: tableCameraRef.current.y + delta.y,
+			});
 		};
 		window.addEventListener('keydown', onKeyDown);
 		return () => window.removeEventListener('keydown', onKeyDown);
-	}, [onWake]);
+	}, [commitTableCamera, onWake, phase, setTableZoomLevel]);
 
 	useEffect(() => () => window.clearTimeout(dreamTimer.current), []);
 
@@ -474,6 +665,12 @@ export function DreamTable({
 		setPhase('table');
 	}, [drawn]);
 
+	const tableCameraStyle = {
+		'--table-camera-x': `${tableCamera.x}px`,
+		'--table-camera-y': `${tableCamera.y}px`,
+		'--table-camera-zoom': tableCamera.zoom,
+	} as CSSProperties;
+
 	return (
 		<section
 			aria-label="Dreaming"
@@ -483,23 +680,39 @@ export function DreamTable({
 			role="dialog"
 			tabIndex={-1}
 		>
-			<div className={style.table}>
-				<header className={style.tableHeader}>
-					<h1 className={style.visuallyHidden}>
-						The table of dreams
-					</h1>
-					<button
-						aria-label="Wake"
-						className={style.wakeButton}
-						onClick={onWake}
-						title="Wake"
-						type="button"
-					>
-						<span aria-hidden="true">×</span>
-					</button>
-				</header>
+			<header className={style.tableHeader}>
+				<h1 className={style.visuallyHidden}>The table of dreams</h1>
+				<button
+					aria-label="Wake"
+					className={style.wakeButton}
+					onClick={onWake}
+					title="Wake"
+					type="button"
+				>
+					<span aria-hidden="true">×</span>
+				</button>
+			</header>
 
-				<main className={style.playArea}>
+			<div
+				aria-label="Dream table viewport"
+				className={style.tableViewport}
+				onLostPointerCapture={onCameraPointerEnd}
+				onPointerCancel={onCameraPointerEnd}
+				onPointerDown={onCameraPointerDown}
+				onPointerMove={onCameraPointerMove}
+				onPointerUp={onCameraPointerEnd}
+				onWheel={onCameraWheel}
+				role="region"
+				tabIndex={0}
+			>
+				<div
+					aria-label="Dream table camera"
+					className={`${style.tableCamera} ${phase === 'mansus' ? style.mansusCamera : ''}`}
+					role="group"
+					style={tableCameraStyle}
+				>
+					<div className={style.table}>
+						<main className={style.playArea}>
 					<section
 						aria-label="Dream"
 						className={style.verbArea}
@@ -582,17 +795,55 @@ export function DreamTable({
 							))}
 						</div>
 					</section>
-				</main>
+						</main>
 
-				{phase === 'mansus' && (
-					<Mansus
-						choices={choices}
-						drawn={drawn}
-						onChoose={setDrawn}
-						onReturn={returnFromMansus}
-					/>
-				)}
+						{phase === 'mansus' && (
+							<Mansus
+								choices={choices}
+								drawn={drawn}
+								onChoose={setDrawn}
+								onReturn={returnFromMansus}
+							/>
+						)}
+					</div>
+				</div>
 			</div>
+
+			{phase !== 'mansus' && (
+				<div
+					aria-label="Table camera controls"
+					className={style.cameraControls}
+					role="group"
+				>
+					<button
+						aria-keyshortcuts="1"
+						aria-label="Zoom table out"
+						onClick={() => setTableZoomLevel(tableZoomLevels[0])}
+						title="Zoom out"
+						type="button"
+					>
+						<span aria-hidden="true">−</span>
+					</button>
+					<button
+						aria-keyshortcuts="Home 2"
+						aria-label="Reset table view"
+						onClick={() => setTableZoomLevel(tableZoomLevels[1])}
+						title="Reset view"
+						type="button"
+					>
+						<span aria-hidden="true">◎</span>
+					</button>
+					<button
+						aria-keyshortcuts="3"
+						aria-label="Zoom table in"
+						onClick={() => setTableZoomLevel(tableZoomLevels[2])}
+						title="Zoom in"
+						type="button"
+					>
+						<span aria-hidden="true">+</span>
+					</button>
+				</div>
+			)}
 		</section>
 	);
 }

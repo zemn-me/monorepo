@@ -151,7 +151,7 @@
 	color: var(--dream-bone);
 	font-family: Georgia, "Times New Roman", serif;
 	inset: 0;
-	overflow: auto;
+	overflow: hidden;
 	position: fixed;
 	z-index: 2147483000;
 }
@@ -159,6 +159,38 @@
 .overlay.leaving {
 	animation: nightCloses 0.8s ease reverse forwards;
 	pointer-events: none;
+}
+
+.tableViewport {
+	inset: 0;
+	overflow: hidden;
+	position: absolute;
+	touch-action: none;
+}
+
+.tableViewport:focus-visible {
+	outline: 1px solid rgb(184 154 86 / 48%);
+	outline-offset: -0.35rem;
+}
+
+.tableCamera {
+	min-block-size: 100dvh;
+	min-inline-size: 100%;
+	transform: perspective(72rem)
+		translate3d(
+			var(--table-camera-x),
+			var(--table-camera-y),
+			0
+		)
+		rotateX(5.5deg) rotateZ(-0.22deg) scale(var(--table-camera-zoom));
+	transform-origin: 50% 44%;
+	transform-style: preserve-3d;
+	transition: transform 180ms ease-out;
+	will-change: transform;
+}
+
+.mansusCamera {
+	transform: none;
 }
 
 .table {
@@ -176,11 +208,12 @@
 	box-shadow: inset 0 0 8rem 2rem #050605;
 	box-sizing: border-box;
 	display: grid;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: 1fr;
 	min-block-size: 100dvh;
 	min-inline-size: 100%;
 	position: relative;
 	transform-origin: 50% 20%;
+	transform-style: preserve-3d;
 }
 
 .leaving .table {
@@ -206,10 +239,10 @@
 	align-items: center;
 	display: flex;
 	justify-content: flex-end;
-	margin-inline: clamp(1rem, 4vw, 4rem);
-	padding-block: clamp(0.75rem, 2vh, 1.25rem) 0;
-	position: relative;
-	z-index: 2;
+	position: fixed;
+	inset-block-start: clamp(0.75rem, 2vh, 1.25rem);
+	inset-inline-end: clamp(1rem, 4vw, 4rem);
+	z-index: 12;
 }
 
 .visuallyHidden {
@@ -226,7 +259,8 @@
 
 .wakeButton,
 .dreamButton,
-.mansusAction {
+.mansusAction,
+.cameraControls button {
 	background: transparent;
 	border: 1px solid var(--dream-brass);
 	color: var(--dream-bone);
@@ -242,11 +276,28 @@
 .dreamButton:hover:not(:disabled),
 .dreamButton:focus-visible,
 .mansusAction:hover,
-.mansusAction:focus-visible {
+.mansusAction:focus-visible,
+.cameraControls button:hover,
+.cameraControls button:focus-visible {
 	background: var(--dream-brass);
 	color: var(--dream-ink);
 	outline: 1px solid var(--dream-bone);
 	outline-offset: 0.2rem;
+}
+
+.cameraControls {
+	display: flex;
+	gap: 0.4rem;
+	inset-block-end: clamp(0.75rem, 2vh, 1.25rem);
+	inset-inline-end: clamp(1rem, 4vw, 4rem);
+	position: fixed;
+	z-index: 12;
+}
+
+.cameraControls button {
+	block-size: 2.45rem;
+	font-size: 1.05rem;
+	inline-size: 2.45rem;
 }
 
 .playArea {
@@ -285,6 +336,8 @@
 	padding: 1rem;
 	position: relative;
 	text-align: center;
+	transform: translateZ(0.8rem);
+	transform-style: preserve-3d;
 }
 
 .verbMoon {
@@ -372,6 +425,8 @@
 	padding: 0.35rem;
 	position: relative;
 	text-align: start;
+	transform: translateZ(1.4rem);
+	transform-style: preserve-3d;
 }
 
 button.card {
@@ -386,7 +441,7 @@ button.card:focus-visible {
 	box-shadow: 0 1.1rem 2rem rgb(0 0 0 / 58%);
 	outline: 2px solid var(--dream-bone);
 	outline-offset: 0.25rem;
-	transform: translateY(-0.65rem) rotate(-1deg);
+	transform: translate3d(0, -0.65rem, 3rem) rotate(-1deg);
 }
 
 .cardFrame {
@@ -432,15 +487,15 @@ button.card:focus-visible {
 }
 
 .scatteredCard:nth-child(3n + 1) {
-	transform: rotate(-2.2deg) translateY(0.35rem);
+	transform: translateZ(1.4rem) rotate(-2.2deg) translateY(0.35rem);
 }
 
 .scatteredCard:nth-child(3n + 2) {
-	transform: rotate(1.5deg) translateY(-0.3rem);
+	transform: translateZ(1.4rem) rotate(1.5deg) translateY(-0.3rem);
 }
 
 .scatteredCard:nth-child(3n) {
-	transform: rotate(-0.7deg) translateY(0.1rem);
+	transform: translateZ(1.4rem) rotate(-0.7deg) translateY(0.1rem);
 }
 
 .reasonCard {
@@ -741,6 +796,10 @@ button.card:focus-visible {
 		inline-size: 2.5rem;
 	}
 
+	.cameraControls {
+		inset-inline-end: 0.8rem;
+	}
+
 	.playArea {
 		padding-inline: 0.8rem;
 	}
@@ -766,12 +825,17 @@ button.card:focus-visible {
 		:global([data-glade-layout]),
 	.overlay,
 	.table,
+	.tableCamera,
 	.leaving .table,
 	.mansus,
 	.mapRoutes,
 	.drawnCard {
 		animation-duration: 1ms;
 		animation-delay: 0ms;
+	}
+
+	.tableCamera {
+		transition-duration: 1ms;
 	}
 
 	.timer i {
