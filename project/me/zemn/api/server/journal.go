@@ -973,13 +973,13 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		audio, finishMetadata = observeQuickTimeCreationTime(audio)
 	}
 	transcription, err := s.journalAI.Transcribe(ctx, audio, entry.ContentType)
-	recordedAt, hasRecordedAt := finishMetadata()
+	embeddedRecordedAt, hasEmbeddedRecordedAt := finishMetadata()
 	if err != nil {
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
-	if hasRecordedAt {
-		entry.RecordedAt = recordedAt
+	if hasEmbeddedRecordedAt {
+		entry.RecordedAt = embeddedRecordedAt
 	}
 	entry.DurationMs = transcription.DurationMs
 	sources := transcriptSources(entry.Id, transcription.Segments)
@@ -988,7 +988,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
-	if !hasRecordedAt && analysis.RecordedDate != "" {
+	if analysis.RecordedDate != "" {
 		entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, analysis.RecordedDate)
 		if err != nil {
 			_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
