@@ -862,6 +862,100 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("in-progress day summary was not displayed after its second entry: %v", err)
 	}
+	currentEntries, err := driver.FindElements(selenium.ByXPATH, "//details[.//audio]")
+	if err != nil || len(currentEntries) != 2 {
+		t.Fatalf("find current-day journal entries: count %d, error %v", len(currentEntries), err)
+	}
+	entrySummary, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "summary")
+	if err != nil {
+		t.Fatalf("find journal entry disclosure: %v", err)
+	}
+	if err := entrySummary.Click(); err != nil {
+		t.Fatalf("open journal entry date editor: %v", err)
+	}
+	dateInput, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "input[type='date']")
+	if err != nil {
+		t.Fatalf("find journal recording date input: %v", err)
+	}
+	currentDateValue, err := dateInput.GetAttribute("value")
+	if err != nil {
+		t.Fatalf("read journal recording date: %v", err)
+	}
+	currentDate, err := time.Parse(time.DateOnly, currentDateValue)
+	if err != nil {
+		t.Fatalf("parse journal recording date %q: %v", currentDateValue, err)
+	}
+	targetDate := currentDate.AddDate(0, 0, 1)
+	if err := dateInput.Clear(); err != nil {
+		t.Fatalf("clear journal recording date: %v", err)
+	}
+	if err := dateInput.SendKeys(targetDate.Format("01/02/2006")); err != nil {
+		t.Fatalf("enter corrected journal recording date: %v", err)
+	}
+	saveDate, err := waitForEnabledElement(
+		driver,
+		selenium.ByXPATH,
+		"//form[@aria-label='Edit recording date']//button[normalize-space()='Save date' and not(@disabled)]",
+		10*time.Second,
+	)
+	if err != nil {
+		t.Fatalf("corrected journal recording date was not editable: %v", err)
+	}
+	if err := saveDate.Click(); err != nil {
+		t.Fatalf("save corrected journal recording date: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, 1, 30*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("corrected entry did not leave its original day: %v", err)
+	}
+	if err := waitForNoElement(
+		driver,
+		selenium.ByXPATH,
+		"//*[normalize-space()='Local day journal']",
+		30*time.Second,
+	); err != nil {
+		t.Fatalf("original singleton day retained its aggregate summary: %v", err)
+	}
+	if err := driver.Get(journalURL.String()); err != nil {
+		t.Fatalf("return to journal after changing recording date: %v", err)
+	}
+	targetYear, err := waitForElement(
+		driver,
+		selenium.ByXPATH,
+		fmt.Sprintf("//a[@data-journal-period-link='year'][contains(normalize-space(), '%d')]", targetDate.Year()),
+		30*time.Second,
+	)
+	if err != nil {
+		t.Fatalf("corrected journal year was not displayed: %v", err)
+	}
+	if err := targetYear.Click(); err != nil {
+		t.Fatalf("open corrected journal year: %v", err)
+	}
+	for _, period := range []string{"month", "week", "day"} {
+		link, err := waitForElement(
+			driver,
+			selenium.ByCSSSelector,
+			fmt.Sprintf("a[data-journal-period-link='%s']", period),
+			30*time.Second,
+		)
+		if err != nil {
+			t.Fatalf("corrected journal %s was not displayed: %v", period, err)
+		}
+		if err := link.Click(); err != nil {
+			t.Fatalf("open corrected journal %s: %v", period, err)
+		}
+	}
+	correctedInput, err := waitForElement(driver, selenium.ByCSSSelector, "input[type='date']", 30*time.Second)
+	if err != nil {
+		t.Fatalf("find corrected journal entry date: %v", err)
+	}
+	correctedDate, err := correctedInput.GetAttribute("value")
+	if err != nil {
+		t.Fatalf("read corrected journal entry date: %v", err)
+	}
+	if correctedDate != targetDate.Format(time.DateOnly) {
+		t.Fatalf("corrected journal entry date = %q, want %q", correctedDate, targetDate.Format(time.DateOnly))
+	}
 }
 
 func journalDynamoDBClient() (*dynamodb.Client, error) {

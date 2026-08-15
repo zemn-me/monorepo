@@ -33,6 +33,7 @@ import {
 	useGetJournal,
 	useGetMeScopes,
 	usePostJournalEntry,
+	useUpdateJournalEntryDate,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import {
@@ -995,14 +996,64 @@ function SwipeToDelete({
 	);
 }
 
+function EntryDateEditor({
+	entry,
+	onUpdate,
+}: {
+	readonly entry: JournalEntry;
+	readonly onUpdate: (entryID: string, recordedDate: string) => Promise<void>;
+}) {
+	const recordedDate = journalEntryDate(entry).toPlainDate().toString();
+	const [value, setValue] = useState(recordedDate);
+	const [saving, setSaving] = useState(false);
+	const [failure, setFailure] = useState<string>();
+	useEffect(() => setValue(recordedDate), [recordedDate]);
+
+	return (
+		<form
+			aria-label="Edit recording date"
+			className={style.dateEditor}
+			onSubmit={event => {
+				event.preventDefault();
+				if (saving || value === recordedDate) return;
+				setSaving(true);
+				setFailure(undefined);
+				void onUpdate(entry.id, value)
+					.catch(error => setFailure(errorMessage(error)))
+					.finally(() => setSaving(false));
+			}}
+		>
+			<label>
+				<span>Recording date</span>
+				<input
+					disabled={saving}
+					onChange={event => setValue(event.currentTarget.value)}
+					required
+					type="date"
+					value={value}
+				/>
+			</label>
+			<button disabled={saving || value === recordedDate} type="submit">
+				{saving ? 'Saving…' : 'Save date'}
+			</button>
+			{failure && <p role="alert">{failure}</p>}
+		</form>
+	);
+}
+
 function EntryCard({
 	deleteEntry,
 	entry,
 	playback,
+	updateEntryDate,
 }: {
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly entry: JournalEntry;
 	readonly playback: JournalPlayback;
+	readonly updateEntryDate?: (
+		entryID: string,
+		recordedDate: string
+	) => Promise<void>;
 }) {
 	const title =
 		entry.summary?.title ??
@@ -1078,6 +1129,9 @@ function EntryCard({
 			)}
 			{entry.transcript.length > 0 && (
 				<Transcript entry={entry} playback={playback} />
+			)}
+			{entry.status === 'ready' && updateEntryDate && (
+				<EntryDateEditor entry={entry} onUpdate={updateEntryDate} />
 			)}
 			{entry.status === 'ready' && deleteEntry && (
 				<SwipeToDelete
@@ -1328,11 +1382,16 @@ function JournalBrowser({
 	journal,
 	route,
 	root,
+	updateEntryDate,
 }: {
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
 	readonly route: JournalRoute;
 	readonly root: boolean;
+	readonly updateEntryDate?: (
+		entryID: string,
+		recordedDate: string
+	) => Promise<void>;
 }) {
 	const [rawSelection] = useQueryStates(journalSelectionQuery);
 	const selection: JournalSelection = {
@@ -1472,6 +1531,7 @@ function JournalBrowser({
 						entry={entry}
 						key={entry.id}
 						playback={playback}
+						updateEntryDate={updateEntryDate}
 					/>
 				))}
 			</div>
@@ -1676,8 +1736,16 @@ export default function JournalPageClient({
 	const journal = useGetJournal(idToken);
 	const createEntry = usePostJournalEntry(idToken);
 	const deleteEntry = useDeleteJournalEntry(idToken);
+	const updateEntryDate = useUpdateJournalEntryDate(idToken);
 	const createJournalEntry = createEntry.mutateAsync;
 	const deleteJournalEntry = deleteEntry.mutateAsync;
+	const updateJournalEntryDate = useCallback(
+		(entryId: string, recordedDate: string) =>
+			updateEntryDate
+				.mutateAsync({ entryId, recordedDate })
+				.then(() => undefined),
+		[updateEntryDate]
+	);
 	const resetCreateEntry = createEntry.reset;
 	const recorder = useRef<MediaRecorder>();
 	const recordingDisposition = useRef<'discard' | 'submit'>('discard');
@@ -1965,6 +2033,11 @@ export default function JournalPageClient({
 								journal={value}
 								root={route === undefined}
 								route={activeRoute}
+								updateEntryDate={
+									hasWriteScope
+										? updateJournalEntryDate
+										: undefined
+								}
 							/>
 						),
 						() => (

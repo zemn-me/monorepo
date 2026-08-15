@@ -1199,6 +1199,83 @@ func TestDeleteJournalEntryRejectsProcessingEntry(t *testing.T) {
 	}
 }
 
+func TestPatchJournalEntryDateMovesEntryAndRebuildsDaySummaries(t *testing.T) {
+	db := &inMemoryDDB{}
+	objects := &fakeJournalObjects{}
+	server := &Server{
+		ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
+		journalObjects: objects, journalPresigner: fakeJournalPresigner{}, journalAI: &recordingJournalAI{},
+	}
+	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+		Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+	})
+	recordedTimes := []time.Time{
+		time.Date(2026, time.August, 13, 19, 16, 0, 0, time.UTC),
+		time.Date(2026, time.August, 13, 20, 16, 0, 0, time.UTC),
+		time.Date(2026, time.August, 20, 19, 16, 0, 0, time.UTC),
+	}
+	entryIDs := make([]string, 0, len(recordedTimes))
+	for index, recordedAt := range recordedTimes {
+		createdResponse, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{
+			Body: &JournalEntryCreate{
+				ContentType: JournalEntryCreateContentType("audio/mp4"),
+				RecordedAt:  recordedAt,
+				TimeZone:    "America/Los_Angeles",
+			},
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		entryID := createdResponse.(PostJournalEntries201JSONResponse).Entry.Id.String()
+		entryIDs = append(entryIDs, entryID)
+		audio := fmt.Appendf(nil, "change-date-%d", index)
+		objects.objects[journalEntryKey(entryID)] = audio
+		if err := server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(entryID), int64(len(audio))); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	response, err := server.PatchJournalEntriesEntryId(ctx, PatchJournalEntriesEntryIdRequestObject{
+		EntryId: openapiUUID(entryIDs[1]),
+		Body:    &JournalEntryDateUpdate{RecordedDate: "2026-08-20"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	updated, ok := response.(PatchJournalEntriesEntryId200JSONResponse)
+	if !ok {
+		t.Fatalf("patch response = %#v, want 200", response)
+	}
+	wantRecordedAt := time.Date(2026, time.August, 20, 20, 16, 0, 0, time.UTC)
+	if !updated.RecordedAt.Equal(wantRecordedAt) {
+		t.Fatalf("recordedAt = %v, want %v", updated.RecordedAt, wantRecordedAt)
+	}
+	if updated.Summary == nil || !updated.Summary.Start.Equal(wantRecordedAt) {
+		t.Fatalf("entry summary = %#v, want timestamps moved with entry", updated.Summary)
+	}
+
+	journalResponse, err := server.GetJournal(ctx, GetJournalRequestObject{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	journal := journalResponse.(GetJournal200JSONResponse)
+	var daySummaries []JournalSummary
+	for _, summary := range journal.Summaries {
+		if summary.Period == JournalSummaryPeriodDay {
+			daySummaries = append(daySummaries, summary)
+		}
+	}
+	if len(daySummaries) != 1 || daySummaries[0].Start.Day() != 20 {
+		t.Fatalf("day summaries after move = %#v, want only August 20", daySummaries)
+	}
+	if _, ok := objects.objects[journalAggregateObjectKey(JournalSummaryPeriodDay, recordedTimes[0])]; ok {
+		t.Error("old day aggregate object remains after its source count became one")
+	}
+	if _, ok := objects.objects[journalAggregateObjectKey(JournalSummaryPeriodDay, wantRecordedAt)]; !ok {
+		t.Error("new day aggregate object was not written after its source count became two")
+	}
+}
+
 func TestDeleteReadyJournalEntryRemovesFilesHashAndAggregateSummary(t *testing.T) {
 	db := &inMemoryDDB{}
 	objects := &fakeJournalObjects{}

@@ -820,6 +820,52 @@ export function useDeleteJournalEntry<A, B>(id_token: Future<string, A, B>) {
 	});
 }
 
+export function useUpdateJournalEntryDate<A, B>(
+	id_token: Future<string, A, B>
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateJournal = useinvalidateJournal();
+	return useMutation({
+		mutationKey: ['patch', '/journal/entries/{entryId}'],
+		mutationFn: fetchClient(
+			client =>
+				async ({
+					entryId,
+					recordedDate,
+				}: {
+					readonly entryId: string;
+					readonly recordedDate: string;
+				}) => {
+					const response = await client.PATCH(
+						'/journal/entries/{entryId}',
+						{
+							body: { recordedDate },
+							params: { path: { entryId } },
+						}
+					);
+					if (!response.data) {
+						const cause =
+							typeof response.error === 'object' &&
+							response.error !== null &&
+							'cause' in response.error &&
+							typeof response.error.cause === 'string'
+								? response.error.cause
+								: 'Could not change the journal entry date.';
+						throw new Error(cause);
+					}
+					return response.data;
+				},
+			() => async () => {
+				throw new Error('authentication is still loading');
+			},
+			() => async () => {
+				throw new Error('authentication failed');
+			}
+		),
+		onSettled: invalidateJournal,
+	});
+}
+
 export function usePostMinecraftWake<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClientFuture(id_token);
 	const invalidateMinecraftStatus = useinvalidateMinecraftStatus();
