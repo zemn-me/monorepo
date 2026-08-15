@@ -342,6 +342,50 @@
 	padding-block-start: 1em;
 }
 
+.dateEditor {
+	align-items: end;
+	border-block-start: 1px solid var(--journal-line);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75em;
+	margin-block-start: 1.5em;
+	max-width: 42em;
+	padding-block-start: 1em;
+}
+
+.dateEditor label {
+	display: grid;
+	font-weight: 700;
+	gap: 0.25em;
+}
+
+.dateEditor input,
+.dateEditor button {
+	box-sizing: border-box;
+	font: inherit;
+	min-block-size: 2.5em;
+}
+
+.dateEditor button {
+	background: var(--foreground-color);
+	border: 1px solid var(--foreground-color);
+	color: var(--background-color);
+	cursor: pointer;
+	font-weight: 700;
+	padding-inline: 0.9em;
+}
+
+.dateEditor button:disabled {
+	cursor: default;
+	opacity: 0.55;
+}
+
+.dateEditor p {
+	color: var(--journal-recording);
+	flex-basis: 100%;
+	margin-block: 0;
+}
+
 .deleteTrack {
 	background: color-mix(in srgb, currentColor 6%, transparent);
 	block-size: 2.75em;

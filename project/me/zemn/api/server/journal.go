@@ -621,6 +621,50 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 	}, nil
 }
 
+func (s *Server) PatchJournalEntriesEntryId(ctx context.Context, request PatchJournalEntriesEntryIdRequestObject) (PatchJournalEntriesEntryIdResponseObject, error) {
+	subject, err := journalSubject(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if request.Body == nil {
+		return PatchJournalEntriesEntryId400JSONResponse{Cause: "request body is required"}, nil
+	}
+	records, err := s.listJournalRecords(ctx, subject)
+	if err != nil {
+		return nil, err
+	}
+	entry, err := s.findJournalEntry(records, request.EntryId.String())
+	if err != nil {
+		return PatchJournalEntriesEntryId404JSONResponse{Cause: "journal entry not found"}, nil
+	}
+	if entry.Status != JournalEntryStatusReady {
+		return PatchJournalEntriesEntryId409JSONResponse{
+			Cause: "only completed entries can have their date changed",
+		}, nil
+	}
+	previous := *entry
+	entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, request.Body.RecordedDate)
+	if err != nil {
+		return PatchJournalEntriesEntryId400JSONResponse{Cause: "recordedDate must be a valid calendar date"}, nil
+	}
+	if entry.RecordedAt.Equal(previous.RecordedAt) {
+		return PatchJournalEntriesEntryId200JSONResponse(s.apiJournalEntry(ctx, *entry)), nil
+	}
+	if entry.Summary != nil {
+		summary := *entry.Summary
+		summary.Start = entry.RecordedAt
+		summary.End = entry.RecordedAt.Add(time.Duration(entry.DurationMs) * time.Millisecond)
+		entry.Summary = &summary
+	}
+	if err := s.updateJournalEntry(ctx, subject, *entry); err != nil {
+		return nil, err
+	}
+	if err := s.refreshJournalSummariesForEntries(ctx, previous, *entry); err != nil {
+		return nil, err
+	}
+	return PatchJournalEntriesEntryId200JSONResponse(s.apiJournalEntry(ctx, *entry)), nil
+}
+
 func (s *Server) DeleteJournalEntriesEntryId(ctx context.Context, request DeleteJournalEntriesEntryIdRequestObject) (DeleteJournalEntriesEntryIdResponseObject, error) {
 	subject, err := journalSubject(ctx)
 	if err != nil {
@@ -842,24 +886,30 @@ var journalAggregatePeriods = []JournalSummaryPeriod{
 	JournalSummaryPeriodYear,
 }
 
-func (s *Server) refreshJournalSummariesForEntry(ctx context.Context, entry JournalStoredEntry) error {
+func (s *Server) refreshJournalSummariesForEntries(ctx context.Context, entries ...JournalStoredEntry) error {
 	s.journalHierarchyMu.Lock()
 	defer s.journalHierarchyMu.Unlock()
 	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
 	if err != nil {
 		return err
 	}
-	location, err := time.LoadLocation(entry.TimeZone)
-	if err != nil {
-		return err
-	}
-	for _, period := range journalAggregatePeriods {
-		records, err = s.refreshJournalSummary(ctx, journalOwnerSubject, period, entry.RecordedAt, location, records)
+	for _, entry := range entries {
+		location, err := time.LoadLocation(entry.TimeZone)
 		if err != nil {
 			return err
 		}
+		for _, period := range journalAggregatePeriods {
+			records, err = s.refreshJournalSummary(ctx, journalOwnerSubject, period, entry.RecordedAt, location, records)
+			if err != nil {
+				return err
+			}
+		}
 	}
 	return nil
+}
+
+func (s *Server) refreshJournalSummariesForEntry(ctx context.Context, entry JournalStoredEntry) error {
+	return s.refreshJournalSummariesForEntries(ctx, entry)
 }
 
 // RefreshJournalSummaries creates summaries only for elapsed calendar periods.
