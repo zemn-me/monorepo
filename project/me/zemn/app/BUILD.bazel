@@ -5,6 +5,7 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "app",
     srcs = [
+        "dream.tsx",
         "eeg.tsx",
         "glade_layout.tsx",
         "layout.tsx",
@@ -24,6 +25,7 @@ ts_project(
     ),
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
+        ":dream_module_css",
         ":not_found_module_css",
         ":style_module_css",
         "//:node_modules/@tanstack/query-async-storage-persister",
@@ -70,6 +72,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "dream.tsx",
         "eeg.tsx",
         "glade_layout.tsx",
         "layout.tsx",
@@ -98,5 +101,11 @@ css_module(
 css_module(
     name = "style_module_css",
     src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "dream_module_css",
+    src = "dream.module.css",
     visibility = ["//:__subpackages__"],
 )

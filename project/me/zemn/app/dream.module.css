@@ -1,0 +1,704 @@
+@keyframes homepageFallsAway {
+	0% {
+		filter: blur(0);
+		opacity: 1;
+		transform: perspective(90rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+	25% {
+		filter: blur(0);
+		transform: perspective(90rem) translate3d(0, -2vh, -3rem)
+			rotateX(4deg) scale(0.97);
+	}
+	100% {
+		filter: blur(0.7rem);
+		opacity: 0;
+		transform: perspective(90rem) translate3d(2vw, 120vh, -45rem)
+			rotateX(-58deg) rotateZ(2deg) scale(0.78);
+	}
+}
+
+@keyframes homepageReturns {
+	0% {
+		filter: blur(0.7rem);
+		opacity: 0;
+		transform: perspective(90rem) translate3d(2vw, 120vh, -45rem)
+			rotateX(-58deg) rotateZ(2deg) scale(0.78);
+	}
+	100% {
+		filter: blur(0);
+		opacity: 1;
+		transform: perspective(90rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+}
+
+@keyframes nightCloses {
+	from {
+		background-color: transparent;
+	}
+	to {
+		background-color: #090a09;
+	}
+}
+
+@keyframes tableArrives {
+	0% {
+		opacity: 0;
+		transform: perspective(85rem) translate3d(0, -35vh, -55rem)
+			rotateX(68deg) scale(0.82);
+	}
+	55% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: perspective(85rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+}
+
+@keyframes tableLeaves {
+	from {
+		opacity: 1;
+		transform: perspective(85rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: perspective(85rem) translate3d(0, -28vh, -55rem)
+			rotateX(64deg) scale(0.82);
+	}
+}
+
+@keyframes timerRuns {
+	from {
+		inline-size: 0;
+	}
+	to {
+		inline-size: 100%;
+	}
+}
+
+@keyframes mansusOpens {
+	0% {
+		clip-path: circle(0 at 50% 55%);
+		opacity: 0;
+	}
+	100% {
+		clip-path: circle(85% at 50% 50%);
+		opacity: 1;
+	}
+}
+
+@keyframes ringsTurn {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+@keyframes cardReveals {
+	0% {
+		opacity: 0;
+		transform: perspective(45rem) rotateY(90deg) translateY(1rem);
+	}
+	100% {
+		opacity: 1;
+		transform: perspective(45rem) rotateY(0deg) translateY(0);
+	}
+}
+
+:global(html[data-dream-state]):has(.overlay) {
+	overflow: hidden;
+}
+
+:global(html[data-dream-state="dreaming"]):has(.overlay)
+	:global([data-glade-layout]) {
+	animation: homepageFallsAway 1.15s cubic-bezier(0.6, 0, 0.8, 0.4) forwards;
+	pointer-events: none;
+	transform-origin: 50% 18%;
+	will-change: filter, opacity, transform;
+}
+
+:global(html[data-dream-state="waking"]):has(.overlay)
+	:global([data-glade-layout]) {
+	animation: homepageReturns 0.9s cubic-bezier(0.18, 0.82, 0.25, 1) forwards;
+	transform-origin: 50% 18%;
+	will-change: filter, opacity, transform;
+}
+
+.overlay {
+	--dream-bone: #dfd2b0;
+	--dream-brass: #b89a56;
+	--dream-deep: #10120f;
+	--dream-ink: #181510;
+	--dream-moth: #8d7352;
+	--dream-paper: #c7b98f;
+	--dream-wood: #29231d;
+	animation: nightCloses 0.7s ease 0.2s both;
+	background: #090a09;
+	color: var(--dream-bone);
+	font-family: Georgia, "Times New Roman", serif;
+	inset: 0;
+	overflow: auto;
+	position: fixed;
+	z-index: 2147483000;
+}
+
+.overlay.leaving {
+	animation: nightCloses 0.8s ease reverse forwards;
+	pointer-events: none;
+}
+
+.table {
+	animation: tableArrives 1.15s cubic-bezier(0.18, 0.78, 0.22, 1) 0.36s both;
+	background:
+		radial-gradient(circle at 48% 42%, rgb(130 111 76 / 12%), transparent 32rem),
+		repeating-linear-gradient(
+			88deg,
+			rgb(255 255 255 / 1.8%) 0,
+			rgb(255 255 255 / 0%) 0.18rem,
+			rgb(0 0 0 / 9%) 0.35rem,
+			rgb(0 0 0 / 0%) 4.6rem
+		),
+		linear-gradient(130deg, #211d19, #302820 46%, #171714);
+	box-shadow: inset 0 0 8rem 2rem #050605;
+	box-sizing: border-box;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	min-block-size: 100dvh;
+	min-inline-size: 100%;
+	position: relative;
+	transform-origin: 50% 20%;
+}
+
+.leaving .table {
+	animation: tableLeaves 0.7s ease-in forwards;
+}
+
+.table::after {
+	background: repeating-radial-gradient(
+		circle at 30% 20%,
+		transparent 0 0.8rem,
+		rgb(255 255 255 / 2%) 0.85rem 0.9rem,
+		transparent 0.95rem 2rem
+	);
+	content: "";
+	inset: 0;
+	mix-blend-mode: soft-light;
+	opacity: 0.22;
+	pointer-events: none;
+	position: absolute;
+}
+
+.tableHeader {
+	align-items: flex-start;
+	border-block-end: 1px solid rgb(223 210 176 / 24%);
+	display: flex;
+	justify-content: space-between;
+	margin-inline: clamp(1rem, 4vw, 4rem);
+	padding-block: clamp(1rem, 3vh, 2.4rem) 1rem;
+	position: relative;
+	z-index: 2;
+}
+
+.tableHeader h1,
+.tableHeader p,
+.hand h2,
+.hand p,
+.verb h2,
+.verb p,
+.mansus h2,
+.mansus p {
+	margin: 0;
+}
+
+.tableHeader p,
+.hand header p,
+.mansus header p {
+	color: rgb(223 210 176 / 62%);
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.68rem;
+	letter-spacing: 0.17em;
+	text-transform: uppercase;
+}
+
+.tableHeader h1 {
+	font-size: clamp(1.5rem, 4vw, 2.8rem);
+	font-weight: normal;
+	letter-spacing: 0.04em;
+}
+
+.wakeButton,
+.dreamButton,
+.mansusAction {
+	background: transparent;
+	border: 1px solid var(--dream-brass);
+	color: var(--dream-bone);
+	cursor: pointer;
+	font: inherit;
+	letter-spacing: 0.08em;
+	padding: 0.65rem 1rem;
+}
+
+.wakeButton:hover,
+.wakeButton:focus-visible,
+.dreamButton:hover:not(:disabled),
+.dreamButton:focus-visible,
+.mansusAction:hover,
+.mansusAction:focus-visible {
+	background: var(--dream-brass);
+	color: var(--dream-ink);
+	outline: 1px solid var(--dream-bone);
+	outline-offset: 0.2rem;
+}
+
+.playArea {
+	align-items: stretch;
+	display: grid;
+	gap: clamp(1rem, 4vw, 4rem);
+	grid-template-columns: minmax(18rem, 0.8fr) minmax(20rem, 1.2fr);
+	padding: clamp(1rem, 4vw, 4rem);
+	position: relative;
+	z-index: 1;
+}
+
+.verbArea,
+.hand {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	min-block-size: 26rem;
+}
+
+.verb {
+	align-items: center;
+	background:
+		radial-gradient(circle at 50% 28%, rgb(184 154 86 / 17%), transparent 32%),
+		linear-gradient(145deg, #161816, #0d0f0d);
+	border: 1px solid rgb(184 154 86 / 58%);
+	box-shadow:
+		0 1.2rem 3rem rgb(0 0 0 / 45%),
+		inset 0 0 0 0.35rem #0b0d0b,
+		inset 0 0 0 0.42rem rgb(184 154 86 / 45%);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	inline-size: min(100%, 25rem);
+	min-block-size: 29rem;
+	padding: 1.4rem;
+	position: relative;
+	text-align: center;
+}
+
+.verbMoon {
+	color: var(--dream-brass);
+	font-size: 3.2rem;
+	line-height: 1;
+	text-shadow: 0 0 1.2rem rgb(223 210 176 / 45%);
+}
+
+.verb h2 {
+	font-size: 2rem;
+	font-weight: normal;
+}
+
+.verb > p {
+	color: rgb(223 210 176 / 63%);
+	font-size: 0.85rem;
+	margin-block: 0.2rem 1rem;
+}
+
+.cardSlot {
+	align-items: center;
+	border: 1px dashed rgb(223 210 176 / 38%);
+	box-sizing: border-box;
+	color: rgb(223 210 176 / 52%);
+	display: flex;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.68rem;
+	inline-size: 8.5rem;
+	justify-content: center;
+	letter-spacing: 0.08em;
+	min-block-size: 12rem;
+	padding: 0.35rem;
+	text-transform: uppercase;
+}
+
+.filledSlot {
+	border-color: var(--dream-brass);
+	border-style: solid;
+}
+
+.dreamButton {
+	margin-block-start: 1.2rem;
+}
+
+.dreamButton:disabled {
+	border-color: rgb(223 210 176 / 24%);
+	color: rgb(223 210 176 / 33%);
+	cursor: not-allowed;
+}
+
+.timer {
+	background: rgb(0 0 0 / 28%);
+	block-size: 2.4rem;
+	box-sizing: border-box;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.64rem;
+	inline-size: 100%;
+	margin-block-start: 0.8rem;
+	overflow: hidden;
+	padding: 0.75rem;
+	position: relative;
+}
+
+.timer span {
+	position: relative;
+	z-index: 1;
+}
+
+.timer i {
+	animation: timerRuns 2.2s linear forwards;
+	background: rgb(184 154 86 / 32%);
+	inset-block: 0;
+	inset-inline-start: 0;
+	position: absolute;
+}
+
+.hand {
+	align-content: start;
+	align-items: start;
+	border-inline-start: 1px solid rgb(223 210 176 / 18%);
+	box-sizing: border-box;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	justify-content: stretch;
+	padding-inline-start: clamp(1rem, 4vw, 4rem);
+}
+
+.hand header {
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 0.2rem;
+}
+
+.hand h2 {
+	font-size: clamp(1.4rem, 3vw, 2rem);
+	font-weight: normal;
+}
+
+.handCards {
+	align-items: flex-end;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	padding-block: 2rem;
+}
+
+.card,
+.drawnCard {
+	background: #b9aa82;
+	border: 0;
+	box-shadow: 0 0.85rem 1.4rem rgb(0 0 0 / 42%);
+	box-sizing: border-box;
+	color: var(--dream-ink);
+	display: block;
+	font: inherit;
+	inline-size: 8.5rem;
+	min-block-size: 12rem;
+	padding: 0.35rem;
+	position: relative;
+	text-align: start;
+}
+
+button.card {
+	cursor: pointer;
+	transition:
+		box-shadow 180ms ease,
+		transform 180ms ease;
+}
+
+button.card:hover,
+button.card:focus-visible {
+	box-shadow: 0 1.1rem 2rem rgb(0 0 0 / 58%);
+	outline: 2px solid var(--dream-bone);
+	outline-offset: 0.25rem;
+	transform: translateY(-0.65rem) rotate(-1deg);
+}
+
+.cardFrame {
+	border: 1px solid rgb(39 31 21 / 60%);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	inset: 0.35rem;
+	justify-content: end;
+	padding: 0.65rem;
+	position: absolute;
+}
+
+.cardFrame::before {
+	border: 1px solid rgb(39 31 21 / 28%);
+	content: "";
+	inset: 0.2rem;
+	pointer-events: none;
+	position: absolute;
+}
+
+.cardSigil {
+	align-self: center;
+	font-size: 2.5rem;
+	margin-block: auto;
+}
+
+.card strong {
+	font-size: 1.05rem;
+	font-weight: normal;
+}
+
+.card small {
+	font-size: 0.66rem;
+	line-height: 1.35;
+	margin-block-start: 0.2rem;
+}
+
+.passionCard {
+	background:
+		radial-gradient(circle at 50% 32%, rgb(255 239 184 / 52%), transparent 23%),
+		linear-gradient(145deg, #bd884e, #cbb77c 48%, #7a573d);
+}
+
+.memoryCount,
+.emptyHand {
+	color: rgb(223 210 176 / 58%);
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.7rem;
+}
+
+.mansus {
+	align-content: center;
+	animation: mansusOpens 1.1s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+	background:
+		radial-gradient(circle at 50% 50%, rgb(219 207 159 / 15%), transparent 24%),
+		radial-gradient(circle at 50% 50%, #17201b, #080a09 62%);
+	box-sizing: border-box;
+	display: grid;
+	inset: 0;
+	justify-items: center;
+	overflow: auto;
+	padding: clamp(2rem, 5vw, 5rem);
+	position: absolute;
+	text-align: center;
+	z-index: 8;
+}
+
+.mansus > *:not(.mansusRings) {
+	position: relative;
+	z-index: 2;
+}
+
+.mansus header h2 {
+	font-size: clamp(2rem, 6vw, 4.5rem);
+	font-weight: normal;
+	letter-spacing: 0.03em;
+	text-shadow: 0 0 2rem #000;
+}
+
+.mansusRings {
+	block-size: min(74vw, 44rem);
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	pointer-events: none;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	inline-size: min(74vw, 44rem);
+}
+
+.mansusRings i {
+	animation: ringsTurn 45s linear infinite;
+	border: 1px solid rgb(184 154 86 / 24%);
+	border-radius: 50%;
+	inset: 0;
+	position: absolute;
+}
+
+.mansusRings i::before,
+.mansusRings i::after {
+	background: var(--dream-brass);
+	block-size: 0.45rem;
+	box-shadow: 0 0 1.2rem var(--dream-brass);
+	content: "";
+	inset-block-start: 50%;
+	position: absolute;
+	transform: rotate(45deg);
+	inline-size: 0.45rem;
+}
+
+.mansusRings i::before {
+	inset-inline-start: -0.22rem;
+}
+
+.mansusRings i::after {
+	inset-inline-end: -0.22rem;
+}
+
+.mansusRings i:nth-child(2) {
+	animation-direction: reverse;
+	animation-duration: 31s;
+	inset: 12%;
+}
+
+.mansusRings i:nth-child(3) {
+	animation-duration: 19s;
+	inset: 26%;
+}
+
+.drawInstruction {
+	color: rgb(223 210 176 / 72%);
+	margin-block: 2rem 1rem !important;
+}
+
+.mansusChoices {
+	display: flex;
+	gap: clamp(0.8rem, 4vw, 2.5rem);
+	justify-content: center;
+	perspective: 70rem;
+}
+
+.cardBack {
+	background:
+		radial-gradient(circle at center, transparent 0 16%, rgb(184 154 86 / 42%) 16.5% 17%, transparent 17.5%),
+		repeating-radial-gradient(circle at center, #242d26 0 0.7rem, #131814 0.75rem 1.1rem);
+	color: var(--dream-bone);
+}
+
+.cardBack .cardFrame {
+	border-color: var(--dream-brass);
+}
+
+.revelation {
+	display: grid;
+	gap: 1.5rem;
+	justify-items: center;
+	margin-block-start: 2rem;
+}
+
+.drawnCard {
+	animation: cardReveals 0.65s ease both;
+	block-size: 20rem;
+	inline-size: 14rem;
+}
+
+.revealedFrame {
+	justify-content: start;
+	padding: 1rem;
+}
+
+.revealedFrame .cardSigil {
+	font-size: 4rem;
+	margin-block: 1rem;
+}
+
+.revealedFrame strong {
+	font-size: 1.35rem;
+}
+
+.revealedFrame small {
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.65rem;
+	letter-spacing: 0.11em;
+	text-transform: uppercase;
+}
+
+.cardDescription {
+	display: block;
+	font-size: 0.8rem;
+	line-height: 1.45;
+	margin-block-start: auto;
+	text-align: start;
+}
+
+@media (max-width: 48rem) {
+	.playArea {
+		grid-template-columns: 1fr;
+	}
+
+	.verbArea,
+	.hand {
+		min-block-size: auto;
+	}
+
+	.hand {
+		border-block-start: 1px solid rgb(223 210 176 / 18%);
+		border-inline-start: 0;
+		padding-block-start: 1.5rem;
+		padding-inline-start: 0;
+	}
+
+	.verb {
+		min-block-size: 27rem;
+	}
+
+	.mansusChoices {
+		align-items: center;
+	}
+
+	.mansusChoices .card,
+	.mansusChoices .drawnCard {
+		inline-size: min(28vw, 7.2rem);
+		min-block-size: 10rem;
+	}
+
+	.mansusChoices .card small {
+		display: none;
+	}
+}
+
+@media (max-width: 28rem) {
+	.tableHeader {
+		align-items: center;
+	}
+
+	.tableHeader p {
+		display: none;
+	}
+
+	.wakeButton {
+		padding: 0.5rem 0.65rem;
+	}
+
+	.playArea {
+		padding-inline: 0.8rem;
+	}
+
+	.mansus {
+		padding-inline: 0.75rem;
+	}
+
+	.mansusChoices {
+		gap: 0.45rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:global(html[data-dream-state]):has(.overlay)
+		:global([data-glade-layout]),
+	.overlay,
+	.table,
+	.leaving .table,
+	.mansus,
+	.drawnCard {
+		animation-duration: 1ms;
+		animation-delay: 0ms;
+	}
+
+	.timer i {
+		animation: none;
+		inline-size: 100%;
+	}
+
+	.mansusRings i {
+		animation: none;
+	}
+}

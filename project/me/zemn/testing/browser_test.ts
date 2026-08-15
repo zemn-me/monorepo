@@ -12,7 +12,7 @@ import {
 	it,
 } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
+import { Browser, By, ThenableWebDriver, until } from 'selenium-webdriver';
 import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -164,6 +164,117 @@ describe('zemn.me website', () => {
 				)) as string;
 				expect(backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
 				expect(backgroundColor).not.toBe('transparent');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('typing dream opens the Mansus card table and returns with a memory', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 1000 });
+				await driver.get(`${origin}/`);
+				await driver.findElement(By.css('body')).sendKeys('dream');
+
+				const dialog = await driver.wait(
+					until.elementLocated(
+						By.css('[role="dialog"][aria-label="Dreaming"]')
+					),
+					5000
+				);
+				await driver.wait(async () => {
+					const headings = await dialog.findElements(By.css('h1'));
+					return (
+						headings.length === 1 &&
+						(await headings[0]!.getText()) === 'The table of dreams'
+					);
+				}, 3000);
+
+				await dialog
+					.findElement(
+						By.css('button[aria-label="Place Passion in Dream"]')
+					)
+					.click();
+				const dreamButton = await dialog.findElement(
+					By.xpath(
+						'.//button[normalize-space()="Dream with Passion"]'
+					)
+				);
+				await driver.wait(() => dreamButton.isEnabled(), 3000);
+				expect(
+					await dialog
+						.findElement(By.css('[aria-label="Dream card slot"]'))
+						.getText()
+				).toContain('Passion');
+				await dreamButton.click();
+
+				const mansus = await driver.wait(
+					until.elementLocated(
+						By.css('[role="region"][aria-label="The Mansus"]')
+					),
+					6000
+				);
+				const mansusHeading = await mansus.findElement(By.css('h2'));
+				await driver.wait(
+					until.elementTextIs(
+						mansusHeading,
+						'The Mansus has no walls.'
+					),
+					3000
+				);
+				const choices = await mansus.findElements(
+					By.css('button[aria-label^="Draw Mansus card"]')
+				);
+				expect(choices).toHaveLength(3);
+				await choices[0]!.click();
+
+				const drawnCard = await driver.wait(
+					until.elementLocated(
+						By.css('article[aria-label="Drawn card"]')
+					),
+					3000
+				);
+				await driver.wait(
+					until.elementTextContains(drawnCard, 'A Pale Passage'),
+					3000
+				);
+				expect(await drawnCard.getText()).toContain('A Pale Passage');
+				await mansus
+					.findElement(
+						By.xpath(
+							'.//button[normalize-space()="Keep this memory and return"]'
+						)
+					)
+					.click();
+
+				await driver.wait(async () => {
+					const counters = await dialog.findElements(
+						By.xpath(
+							'.//*[normalize-space()="Memories carried back: 1"]'
+						)
+					);
+					return counters.length === 1;
+				}, 3000);
+				await dialog
+					.findElement(
+						By.xpath('.//button[normalize-space()="Wake"]')
+					)
+					.click();
+				await driver.wait(
+					async () =>
+						(
+							await driver.findElements(
+								By.css('[role="dialog"][aria-label="Dreaming"]')
+							)
+						).length === 0,
+					3000
+				);
+				expect(
+					await driver
+						.findElement(
+							By.css('img[alt="Thomas Neil James Shadwell"]')
+						)
+						.isDisplayed()
+				).toBe(true);
 			} finally {
 				await driver.quit();
 			}
