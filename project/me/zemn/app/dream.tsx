@@ -147,6 +147,7 @@ function PassionCard({
 				event.dataTransfer.effectAllowed = 'move';
 				event.dataTransfer.setData('text/x-mansus-card', 'passion');
 			}}
+			title="Passion"
 			type="button"
 		>
 			<CardFrame>
@@ -154,7 +155,6 @@ function PassionCard({
 					✦
 				</span>
 				<strong>Passion</strong>
-				<small>Intensity. Possibility. The door in the mind.</small>
 			</CardFrame>
 		</button>
 	);
@@ -192,10 +192,7 @@ function Mansus({
 				<i />
 				<i />
 			</div>
-			<header>
-				<p>The Wood grows around the House.</p>
-				<h2>The Mansus has no walls.</h2>
-			</header>
+			<h2 className={style.visuallyHidden}>The Mansus</h2>
 			{drawn ? (
 				<div aria-live="polite" className={style.revelation}>
 					<article
@@ -217,18 +214,17 @@ function Mansus({
 						</CardFrame>
 					</article>
 					<button
+						aria-label="Keep this memory and return"
 						className={style.mansusAction}
 						onClick={onReturn}
+						title="Keep this memory"
 						type="button"
 					>
-						Keep this memory and return
+						<span aria-hidden="true">↙</span>
 					</button>
 				</div>
 			) : (
 				<>
-					<p className={style.drawInstruction}>
-						Three ways offer themselves. Draw one card.
-					</p>
 					<div
 						aria-label="Mansus card choices"
 						className={style.mansusChoices}
@@ -239,6 +235,7 @@ function Mansus({
 								className={`${style.card} ${style.cardBack}`}
 								key={card.id}
 								onClick={() => onChoose(card)}
+								title="Draw"
 								type="button"
 							>
 								<CardFrame>
@@ -248,8 +245,6 @@ function Mansus({
 									>
 										☽
 									</span>
-									<strong>Unknown Way</strong>
-									<small>The card is face-down.</small>
 								</CardFrame>
 							</button>
 						))}
@@ -332,30 +327,30 @@ export function DreamTable({
 		>
 			<div className={style.table}>
 				<header className={style.tableHeader}>
-					<div>
-						<p>Between waking and the first light</p>
-						<h1>The table of dreams</h1>
-					</div>
+					<h1 className={style.visuallyHidden}>
+						The table of dreams
+					</h1>
 					<button
+						aria-label="Wake"
 						className={style.wakeButton}
 						onClick={onWake}
+						title="Wake"
 						type="button"
 					>
-						Wake
+						<span aria-hidden="true">×</span>
 					</button>
 				</header>
 
 				<main className={style.playArea}>
 					<section
-						aria-labelledby="dream-verb-heading"
+						aria-label="Dream"
 						className={style.verbArea}
 					>
-						<div className={style.verb}>
+						<div className={style.verb} title="Dream">
 							<span aria-hidden="true" className={style.verbMoon}>
 								☽
 							</span>
-							<h2 id="dream-verb-heading">Dream</h2>
-							<p>Use a card to shape the descent.</p>
+							<h2 className={style.visuallyHidden}>Dream</h2>
 							<div
 								aria-label="Dream card slot"
 								className={`${style.cardSlot} ${passionPlaced ? style.filledSlot : ''}`}
@@ -380,24 +375,27 @@ export function DreamTable({
 										onChoose={() => setPassionPlaced(false)}
 									/>
 								) : (
-									<span>Place a card here</span>
+									<span aria-hidden="true">+</span>
 								)}
 							</div>
 							<button
+								aria-label="Dream with Passion"
 								className={style.dreamButton}
 								disabled={!passionPlaced || phase !== 'table'}
 								onClick={beginDream}
+								title="Dream with Passion"
 								type="button"
 							>
-								{phase === 'working'
-									? 'Dreaming…'
-									: 'Dream with Passion'}
+								<span aria-hidden="true">
+									{phase === 'working' ? '···' : '▶'}
+								</span>
 							</button>
 							{phase === 'working' && (
-								<div className={style.timer} role="status">
-									<span>
-										The way through the Wood is opening…
-									</span>
+								<div
+									aria-label="Dreaming"
+									className={style.timer}
+									role="progressbar"
+								>
 									<i aria-hidden="true" />
 								</div>
 							)}
@@ -405,16 +403,9 @@ export function DreamTable({
 					</section>
 
 					<section
-						aria-labelledby="dream-hand-heading"
+						aria-label="Your hand"
 						className={style.hand}
 					>
-						<header>
-							<p>
-								Cards may be clicked or dragged into an open
-								slot.
-							</p>
-							<h2 id="dream-hand-heading">Your hand</h2>
-						</header>
 						<div className={style.handCards}>
 							{!passionPlaced && phase === 'table' && (
 								<PassionCard
@@ -428,17 +419,7 @@ export function DreamTable({
 									key={`${card.id}-${index}`}
 								/>
 							))}
-							{memories.length === 0 && passionPlaced && (
-								<p className={style.emptyHand}>
-									The table waits.
-								</p>
-							)}
 						</div>
-						{memories.length > 0 && (
-							<p aria-live="polite" className={style.memoryCount}>
-								Memories carried back: {memories.length}
-							</p>
-						)}
 					</section>
 				</main>
 

@@ -181,13 +181,14 @@ describe('zemn.me website', () => {
 					),
 					5000
 				);
-				await driver.wait(async () => {
-					const headings = await dialog.findElements(By.css('h1'));
-					return (
-						headings.length === 1 &&
-						(await headings[0]!.getText()) === 'The table of dreams'
-					);
-				}, 3000);
+				await driver.wait(
+					until.elementIsVisible(
+						await dialog.findElement(
+							By.css('button[aria-label="Wake"]')
+						)
+					),
+					3000
+				);
 
 				await dialog
 					.findElement(
@@ -195,9 +196,7 @@ describe('zemn.me website', () => {
 					)
 					.click();
 				const dreamButton = await dialog.findElement(
-					By.xpath(
-						'.//button[normalize-space()="Dream with Passion"]'
-					)
+					By.css('button[aria-label="Dream with Passion"]')
 				);
 				await driver.wait(() => dreamButton.isEnabled(), 3000);
 				expect(
@@ -212,14 +211,6 @@ describe('zemn.me website', () => {
 						By.css('[role="region"][aria-label="The Mansus"]')
 					),
 					6000
-				);
-				const mansusHeading = await mansus.findElement(By.css('h2'));
-				await driver.wait(
-					until.elementTextIs(
-						mansusHeading,
-						'The Mansus has no walls.'
-					),
-					3000
 				);
 				const choices = await mansus.findElements(
 					By.css('button[aria-label^="Draw Mansus card"]')
@@ -240,24 +231,20 @@ describe('zemn.me website', () => {
 				expect(await drawnCard.getText()).toContain('A Pale Passage');
 				await mansus
 					.findElement(
-						By.xpath(
-							'.//button[normalize-space()="Keep this memory and return"]'
+						By.css(
+							'button[aria-label="Keep this memory and return"]'
 						)
 					)
 					.click();
 
-				await driver.wait(async () => {
-					const counters = await dialog.findElements(
-						By.xpath(
-							'.//*[normalize-space()="Memories carried back: 1"]'
-						)
-					);
-					return counters.length === 1;
-				}, 3000);
+				await driver.wait(
+					until.elementLocated(
+						By.css('article[aria-label="Memory: A Pale Passage"]')
+					),
+					3000
+				);
 				await dialog
-					.findElement(
-						By.xpath('.//button[normalize-space()="Wake"]')
-					)
+					.findElement(By.css('button[aria-label="Wake"]'))
 					.click();
 				await driver.wait(
 					async () =>
