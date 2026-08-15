@@ -57,7 +57,64 @@ const mansusDeck: readonly MansusCard[] = [
 ] as const;
 
 const dreamDurationMs = 2200;
+const dreamHandStorageKey = 'zemn.me:dream-hand:v1';
 type DreamPhase = 'table' | 'working' | 'mansus';
+
+interface StoredDreamHand {
+	readonly journey: number;
+	readonly memoryIds: readonly string[];
+	readonly version: 1;
+}
+
+function loadDreamHand(): {
+	readonly journey: number;
+	readonly memories: readonly MansusCard[];
+} {
+	try {
+		const value: unknown = JSON.parse(
+			window.localStorage.getItem(dreamHandStorageKey) ?? 'null'
+		);
+		if (
+			!value ||
+			typeof value !== 'object' ||
+			!('version' in value) ||
+			value.version !== 1 ||
+			!('journey' in value) ||
+			typeof value.journey !== 'number' ||
+			!Number.isSafeInteger(value.journey) ||
+			value.journey < 0 ||
+			!('memoryIds' in value) ||
+			!Array.isArray(value.memoryIds) ||
+			!value.memoryIds.every(id => typeof id === 'string')
+		) {
+			return { journey: 0, memories: [] };
+		}
+
+		const memories = value.memoryIds
+			.slice(-3)
+			.map(id => mansusDeck.find(card => card.id === id))
+			.filter((card): card is MansusCard => card !== undefined);
+		return { journey: value.journey, memories };
+	} catch {
+		return { journey: 0, memories: [] };
+	}
+}
+
+function saveDreamHand(
+	journey: number,
+	memories: readonly MansusCard[]
+): void {
+	const value: StoredDreamHand = {
+		journey,
+		memoryIds: memories.map(card => card.id),
+		version: 1,
+	};
+	try {
+		window.localStorage.setItem(dreamHandStorageKey, JSON.stringify(value));
+	} catch {
+		// The dream remains playable when storage is unavailable or full.
+	}
+}
 
 function CardFrame({
 	children,
@@ -210,13 +267,16 @@ export function DreamTable({
 	readonly leaving: boolean;
 	readonly onWake: () => void;
 }) {
+	const [initialHand] = useState(loadDreamHand);
 	const dialogRef = useRef<HTMLElement>(null);
 	const dreamTimer = useRef<number>();
 	const [phase, setPhase] = useState<DreamPhase>('table');
 	const [passionPlaced, setPassionPlaced] = useState(false);
-	const [journey, setJourney] = useState(0);
+	const [journey, setJourney] = useState(initialHand.journey);
 	const [drawn, setDrawn] = useState<MansusCard>();
-	const [memories, setMemories] = useState<readonly MansusCard[]>([]);
+	const [memories, setMemories] = useState<readonly MansusCard[]>(
+		initialHand.memories
+	);
 
 	const choices = useMemo(
 		() =>
@@ -239,6 +299,10 @@ export function DreamTable({
 	}, [onWake]);
 
 	useEffect(() => () => window.clearTimeout(dreamTimer.current), []);
+
+	useEffect(() => {
+		saveDreamHand(journey, memories);
+	}, [journey, memories]);
 
 	const beginDream = useCallback(() => {
 		if (!passionPlaced || phase !== 'table') return;

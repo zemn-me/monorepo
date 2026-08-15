@@ -268,6 +268,28 @@ describe('zemn.me website', () => {
 						).length === 0,
 					3000
 				);
+
+				await driver.navigate().refresh();
+				await driver.findElement(By.css('body')).sendKeys('dream');
+				const restoredDialog = await driver.wait(
+					until.elementLocated(
+						By.css('[role="dialog"][aria-label="Dreaming"]')
+					),
+					5000
+				);
+				const restoredMemory = await restoredDialog.findElement(
+					By.css('article[aria-label="Memory: A Pale Passage"]')
+				);
+				await driver.wait(
+					until.elementTextContains(
+						restoredMemory,
+						'A Pale Passage'
+					),
+					3000
+				);
+				expect(await restoredMemory.getText()).toContain(
+					'A Pale Passage'
+				);
 				expect(
 					await driver
 						.findElement(
