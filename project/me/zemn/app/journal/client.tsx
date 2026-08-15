@@ -160,6 +160,7 @@ interface JournalPlayback {
 	) => void;
 	readonly started: (entryID: string) => void;
 	readonly stopped: (entryID: string, time: number) => void;
+	readonly titleForEntry: (entryID: string) => string;
 }
 
 function useJournalPlayback(
@@ -327,6 +328,12 @@ function useJournalPlayback(
 			segmentFor(entryID, segmentID)?.text ?? '',
 		[segmentFor]
 	);
+	const titleForEntry = useCallback(
+		(entryID: string) =>
+			journal.entries.find(value => value.id === entryID)?.summary
+				?.title ?? '',
+		[journal.entries]
+	);
 	const playSegment = useCallback(
 		(entryID: string, segmentID: string) => {
 			const segment = segmentFor(entryID, segmentID);
@@ -420,6 +427,7 @@ function useJournalPlayback(
 			registerAudio,
 			started,
 			stopped,
+			titleForEntry,
 		}),
 		[
 			cursor.entry,
@@ -434,6 +442,7 @@ function useJournalPlayback(
 			registerAudio,
 			started,
 			stopped,
+			titleForEntry,
 		]
 	);
 }
@@ -447,6 +456,7 @@ interface SummaryCitationLink {
 	readonly number: number;
 	readonly quote: string;
 	readonly referenceID: string;
+	readonly title: string;
 }
 
 function SummaryBlock({
@@ -587,6 +597,7 @@ function SummaryCardView({
 							citation.segmentId
 						),
 					referenceID: `${prefix}-${linksByCitation.size + 1}`,
+					title: playback.titleForEntry(citation.entryId),
 				};
 				linksByCitation.set(key, link);
 				return link;
@@ -601,6 +612,7 @@ function SummaryCardView({
 		playback.hrefForSegment,
 		playback.labelForSegment,
 		playback.quoteForSegment,
+		playback.titleForEntry,
 		summary.blocks,
 		summary.id,
 	]);
@@ -628,7 +640,12 @@ function SummaryCardView({
 					id={link.referenceID}
 					key={journalCitationKey(link.citation)}
 				>
-					{link.quote} {link.label}
+					{link.title && (
+						<>
+							<cite>{link.title}</cite>.{' '}
+						</>
+					)}
+					“{link.quote}” <a href={link.href}>{link.label}</a>
 				</span>
 			))}
 			<FootnotePreviews root={article} />
@@ -644,6 +661,7 @@ const SummaryCard = memo(
 		previous.playback.labelForSegment === next.playback.labelForSegment &&
 		previous.playback.playSegment === next.playback.playSegment &&
 		previous.playback.quoteForSegment === next.playback.quoteForSegment &&
+		previous.playback.titleForEntry === next.playback.titleForEntry &&
 		previous.timeZone === next.timeZone
 );
 

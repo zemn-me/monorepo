@@ -516,7 +516,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read citation tooltip: %v", err)
 	}
-	if !strings.Contains(citationTooltipText, "Local development transcript") || !strings.Contains(citationTooltipText, "00:00:00") || strings.Contains(citationTooltipText, "00:00:00.0") {
+	if !strings.Contains(citationTooltipText, "Local entry journal") || !strings.Contains(citationTooltipText, "“Local development transcript") || !strings.Contains(citationTooltipText, "00:00:00") || strings.Contains(citationTooltipText, "00:00:00.0") {
 		t.Fatalf("citation tooltip did not show its reference: %q", citationTooltipText)
 	}
 	visibleReferenceBox, err := driver.FindElements(selenium.ByXPATH, "//footer[.//h4[normalize-space()='References']]")
