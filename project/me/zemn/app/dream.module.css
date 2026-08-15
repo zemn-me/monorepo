@@ -97,6 +97,17 @@
 	}
 }
 
+@keyframes mapDraws {
+	from {
+		opacity: 0;
+		stroke-dashoffset: 1;
+	}
+	to {
+		opacity: 1;
+		stroke-dashoffset: 0;
+	}
+}
+
 @keyframes cardReveals {
 	0% {
 		opacity: 0;
@@ -485,9 +496,96 @@ button.card:focus-visible {
 	z-index: 8;
 }
 
-.mansus > *:not(.mansusRings) {
+.mansus > *:not(.mansusRings, .mansusMap) {
 	position: relative;
 	z-index: 2;
+}
+
+.mansusMap {
+	block-size: min(92vh, 58rem);
+	color: #b7c7be;
+	filter: drop-shadow(0 0 1.5rem rgb(81 139 128 / 22%));
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	max-inline-size: 96vw;
+	opacity: 0.5;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	inline-size: min(96vw, 96rem);
+	z-index: 0;
+}
+
+.mapLandscape {
+	fill: #122a2d;
+	stroke: #78918b;
+	stroke-width: 2;
+}
+
+.mapLandscape path:nth-child(2) {
+	fill: #0a181b;
+	opacity: 0.82;
+}
+
+.mapLandscape .mapRiver {
+	fill: none;
+	opacity: 0.55;
+	stroke: #8bb4b0;
+	stroke-dasharray: 7 9;
+	stroke-width: 4;
+}
+
+.mapGlory {
+	fill: none;
+	opacity: 0.58;
+	stroke: var(--dream-brass);
+	stroke-width: 2;
+}
+
+.mapRoutes {
+	animation: mapDraws 1.7s ease 0.45s both;
+	fill: none;
+	stroke: #9ebeb7;
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+	stroke-linecap: round;
+	stroke-width: 4;
+}
+
+.mapRoutes path:nth-child(2n) {
+	stroke: #a890b0;
+}
+
+.mapStairs {
+	fill: none;
+	opacity: 0.5;
+	stroke: #c7d3cc;
+	stroke-width: 5;
+}
+
+.mapNode {
+	fill: #142326;
+	stroke: #c8d4cc;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 3;
+}
+
+.mapNode:nth-of-type(2n) circle {
+	fill: #263f43;
+}
+
+.mapNode:nth-of-type(3n) circle {
+	fill: #3c303e;
+}
+
+.mapNode text {
+	fill: var(--dream-bone);
+	font: 15px Georgia, "Times New Roman", serif;
+	letter-spacing: 1.5px;
+	paint-order: stroke;
+	stroke: #071315;
+	stroke-width: 5px;
+	text-anchor: middle;
 }
 
 .mansusRings {
@@ -498,6 +596,7 @@ button.card:focus-visible {
 	position: absolute;
 	transform: translate(-50%, -50%);
 	inline-size: min(74vw, 44rem);
+	z-index: 1;
 }
 
 .mansusRings i {
@@ -650,6 +749,13 @@ button.card:focus-visible {
 		padding-inline: 0.75rem;
 	}
 
+	.mansusMap {
+		block-size: 85vh;
+		inline-size: 150vw;
+		max-inline-size: none;
+		opacity: 0.38;
+	}
+
 	.mansusChoices {
 		gap: 0.45rem;
 	}
@@ -662,6 +768,7 @@ button.card:focus-visible {
 	.table,
 	.leaving .table,
 	.mansus,
+	.mapRoutes,
 	.drawnCard {
 		animation-duration: 1ms;
 		animation-delay: 0ms;

@@ -227,6 +227,11 @@ describe('zemn.me website', () => {
 					),
 					6000
 				);
+				expect(
+					await mansus
+						.findElement(By.css('svg[aria-label="Map of the Mansus"]'))
+						.isDisplayed()
+				).toBe(true);
 				const choices = await mansus.findElements(
 					By.css('button[aria-label^="Draw Mansus card"]')
 				);

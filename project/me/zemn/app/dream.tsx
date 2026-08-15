@@ -262,6 +262,75 @@ function MemoryCard({ card }: { readonly card: MansusCard }) {
 	);
 }
 
+function MansusMap() {
+	return (
+		<svg
+			aria-label="Map of the Mansus"
+			className={style.mansusMap}
+			role="img"
+			viewBox="0 0 1200 700"
+		>
+			<g className={style.mapLandscape}>
+				<path d="M80 650 245 330 355 445 570 78 775 390 900 255 1125 650Z" />
+				<path d="M40 650 190 455 305 650ZM720 650 875 430 1010 650ZM930 650 1080 380 1180 650Z" />
+				<path
+					className={style.mapRiver}
+					d="M80 570c90-58 155 46 246-10s169 50 261-8 160 41 252-8 170 22 281-36"
+				/>
+			</g>
+
+			<g className={style.mapGlory}>
+				<circle cx="600" cy="34" r="66" />
+				<path d="M600-52V-4M600 72v48M514 34h48M638 34h48M538-28l34 34M628 62l34 34M662-28 628 6M572 62l-34 34" />
+			</g>
+
+			<g className={style.mapRoutes}>
+				<path d="M945 590 785 505 555 510 275 405" pathLength="1" />
+				<path d="M555 510 720 355 945 590" pathLength="1" />
+				<path d="M275 405 430 245 600 132" pathLength="1" />
+				<path d="M720 355 600 132" pathLength="1" />
+				<path d="M430 245 720 355" pathLength="1" />
+			</g>
+
+			<g className={style.mapStairs}>
+				<path d="M578 445h44v-46h-35v-46h35v-46h-35v-46h35v-46h-35v-46h35" />
+			</g>
+
+			<g className={style.mapNode} transform="translate(945 590)">
+				<circle r="34" />
+				<path d="M0 18V-18M0-14-18 1M0-5 18 10M0 5-15 18" />
+				<text y="58">THE WOOD</text>
+			</g>
+			<g className={style.mapNode} transform="translate(555 510)">
+				<circle r="34" />
+				<path d="M-15 19V-12Q0-29 15-12v31M-15-3h30" />
+				<text y="58">THE WHITE DOOR</text>
+			</g>
+			<g className={style.mapNode} transform="translate(275 405)">
+				<circle r="34" />
+				<path d="M0 18V-6M0-3-15-18M-8-11-20-8M0-3 15-18M8-11 20-8" />
+				<text y="58">THE STAG DOOR</text>
+			</g>
+			<g className={style.mapNode} transform="translate(720 355)">
+				<circle r="34" />
+				<circle cy="-2" r="10" />
+				<path d="M-10-9-23-18M-11-2-26-2M-10 6-23 17M10-9 23-18M11-2h15M10 6 23 17" />
+				<text y="58">THE SPIDER'S DOOR</text>
+			</g>
+			<g className={style.mapNode} transform="translate(430 245)">
+				<circle r="34" />
+				<path d="M-20 5Q0-22 20 5Q0 23-20 5ZM0-7v24" />
+				<text y="58">THE PEACOCK DOOR</text>
+			</g>
+			<g className={style.mapNode} transform="translate(600 132)">
+				<circle r="34" />
+				<path d="M0-18 17 12h-34ZM0-18v30M-17 12h34" />
+				<text y="58">THE TRICUSPID GATE</text>
+			</g>
+		</svg>
+	);
+}
+
 function Mansus({
 	choices,
 	drawn,
@@ -275,6 +344,7 @@ function Mansus({
 }) {
 	return (
 		<section aria-label="The Mansus" className={style.mansus} role="region">
+			<MansusMap />
 			<div aria-hidden="true" className={style.mansusRings}>
 				<i />
 				<i />
