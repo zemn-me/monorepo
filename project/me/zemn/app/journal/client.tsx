@@ -1499,7 +1499,7 @@ function JournalBrowser({
 			<h2>
 				{week ? (
 					<>
-						Days in <PeriodDate summary={week} />
+						The week of <PeriodDate summary={week} />
 					</>
 				) : (
 					'Days'

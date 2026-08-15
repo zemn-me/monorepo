@@ -357,6 +357,14 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := dayListLink.Click(); err != nil {
 		t.Fatalf("open journal days: %v", err)
 	}
+	if _, err := waitForElement(
+		driver,
+		selenium.ByXPATH,
+		"//h2[normalize-space()='The week of Monday, the 11th of August 2025']",
+		10*time.Second,
+	); err != nil {
+		t.Fatalf("journal week heading: %v", err)
+	}
 	if err := waitForText(driver, "Local day journal", 10*time.Second); err != nil {
 		t.Fatalf("journal day list route: %v", err)
 	}
