@@ -160,6 +160,10 @@ go_deps.gazelle_override(
     directives = ["gazelle:proto_rule @com_google_protobuf//bazel:proto_library.bzl%proto_library"],
     path = "github.com/bazelbuild/buildtools",
 )
+go_deps.gazelle_override(
+    directives = ["gazelle:proto disable_global"],
+    path = "github.com/nyaruka/phonenumbers/v2",
+)
 go_deps.module_override(
     patch_strip = 1,
     patches = ["//bzl:bazel_watcher_proto_rule.patch"],
@@ -199,7 +203,7 @@ use_repo(
     "com_github_gorilla_websocket",
     "com_github_invopop_jsonschema",
     "com_github_itchyny_gojq",
-    "com_github_nyaruka_phonenumbers",
+    "com_github_nyaruka_phonenumbers_v2",
     "com_github_oapi_codegen_nethttp_middleware",
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",

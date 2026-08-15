@@ -102,7 +102,7 @@ go_library(
         "@com_github_go_jose_go_jose_v4//cryptosigner",
         "@com_github_google_uuid//:uuid",
         "@com_github_invopop_jsonschema//:jsonschema",
-        "@com_github_nyaruka_phonenumbers//:phonenumbers",
+        "@com_github_nyaruka_phonenumbers_v2//:phonenumbers",
         "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
