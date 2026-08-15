@@ -171,6 +171,28 @@ describe('zemn.me website', () => {
 
 		it('typing dream opens the Mansus card table and returns with a memory', async () => {
 			try {
+				const dragCardToSlot = async (
+					cardLabel: string,
+					slotLabel: string
+				) => {
+					const card = await dialog.findElement(
+						By.css(`button[aria-label="Hand card: ${cardLabel}"]`)
+					);
+					const slot = await dialog.findElement(
+						By.css(`[aria-label="${slotLabel} card slot"]`)
+					);
+					await driver
+						.actions({ async: true })
+						.move({ origin: card })
+						.press()
+						.pause(200)
+						.move({ duration: 500, origin: slot })
+						.pause(200)
+						.release()
+						.perform();
+					return slot;
+				};
+
 				await driver.manage().setTimeouts({ implicit: 1000 });
 				await driver.get(`${origin}/`);
 				await driver.findElement(By.css('body')).sendKeys('dream');
@@ -189,6 +211,7 @@ describe('zemn.me website', () => {
 					),
 					3000
 				);
+				await driver.sleep(1600);
 				const tableCamera = await dialog.findElement(
 					By.css('[role="group"][aria-label="Dream table camera"]')
 				);
@@ -214,7 +237,7 @@ describe('zemn.me website', () => {
 					3000
 				);
 				const startingHand = await dialog.findElements(
-					By.css('article[aria-label^="Hand card:"]')
+					By.css('button[aria-label^="Hand card:"]')
 				);
 				expect(
 					await Promise.all(
@@ -227,23 +250,28 @@ describe('zemn.me website', () => {
 					'Hand card: An Acquaintance',
 					"Hand card: A Watchman's Secret",
 					'Hand card: Contentment',
+					'Hand card: Passion',
 				]);
 
-				const passionCard = await dialog.findElement(
-					By.css('button[aria-label="Place Passion in Dream"]')
+				const workSlot = await dragCardToSlot('Health', 'Work');
+				expect(await workSlot.getText()).toContain('Health');
+				const workButton = await dialog.findElement(
+					By.css(
+						'button[aria-label="A Shift of Necessary Labour"]'
+					)
 				);
-				const dreamSlot = await dialog.findElement(
-					By.css('[aria-label="Dream card slot"]')
+				await driver.wait(() => workButton.isEnabled(), 3000);
+				await workButton.click();
+				await driver.wait(
+					until.elementLocated(
+						By.css(
+							'button[aria-label="Hand card: The Rhythm Below"]'
+						)
+					),
+					5000
 				);
-				await driver
-					.actions({ async: true })
-					.move({ origin: passionCard })
-					.press()
-					.pause(200)
-					.move({ duration: 500, origin: dreamSlot })
-					.pause(200)
-					.release()
-					.perform();
+
+				const dreamSlot = await dragCardToSlot('Passion', 'Dream');
 				const dreamButton = await dialog.findElement(
 					By.css('button[aria-label="Dream with Passion"]')
 				);
@@ -292,7 +320,9 @@ describe('zemn.me website', () => {
 
 				await driver.wait(
 					until.elementLocated(
-						By.css('article[aria-label="Memory: A Pale Passage"]')
+						By.css(
+							'button[aria-label="Hand card: A Pale Passage"]'
+						)
 					),
 					3000
 				);
@@ -318,7 +348,7 @@ describe('zemn.me website', () => {
 					5000
 				);
 				const restoredMemory = await restoredDialog.findElement(
-					By.css('article[aria-label="Memory: A Pale Passage"]')
+					By.css('button[aria-label="Hand card: A Pale Passage"]')
 				);
 				await driver.wait(
 					until.elementTextContains(

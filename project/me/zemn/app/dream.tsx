@@ -11,6 +11,9 @@ import {
 	useState,
 } from 'react';
 
+import * as CultistRecipes from '#root/project/cultist/recipe.js';
+import * as CultistSlots from '#root/project/cultist/slots.js';
+import type * as Cultist from '#root/project/cultist/types.js';
 import style from '#root/project/me/zemn/app/dream.module.css';
 
 interface MansusCard {
@@ -26,14 +29,34 @@ type TableCardPalette =
 	| 'funds'
 	| 'health'
 	| 'lore'
+	| 'passion'
 	| 'reason';
 
-interface TableCard {
+interface TableCard extends Cultist.Element {
 	readonly aspect: string;
 	readonly id: string;
 	readonly palette: TableCardPalette;
 	readonly sigil: string;
 	readonly title: string;
+}
+
+interface CardInstance {
+	readonly card: TableCard;
+	readonly instanceId: string;
+}
+
+type TableVerbId = 'dream' | 'explore' | 'study' | 'talk' | 'work';
+
+interface TableVerb extends Cultist.Verb {
+	readonly id: TableVerbId;
+	readonly sigil: string;
+	readonly slot: Cultist.Slot;
+}
+
+interface TableRecipe extends Cultist.Recipe {
+	readonly actionid: TableVerbId;
+	readonly entersMansus?: boolean;
+	readonly outputId?: MansusCard['id'];
 }
 
 const mansusDeck: readonly MansusCard[] = [
@@ -84,6 +107,7 @@ const mansusDeck: readonly MansusCard[] = [
 const startingHand: readonly TableCard[] = [
 	{
 		aspect: 'Ability',
+		aspects: { ability: 1, reason: 1 },
 		id: 'reason',
 		palette: 'reason',
 		sigil: '◆',
@@ -91,6 +115,7 @@ const startingHand: readonly TableCard[] = [
 	},
 	{
 		aspect: 'Ability',
+		aspects: { ability: 1, health: 1 },
 		id: 'health',
 		palette: 'health',
 		sigil: '♥',
@@ -98,6 +123,7 @@ const startingHand: readonly TableCard[] = [
 	},
 	{
 		aspect: 'Resource',
+		aspects: { funds: 1, resource: 1 },
 		id: 'funds',
 		palette: 'funds',
 		sigil: '£',
@@ -105,6 +131,7 @@ const startingHand: readonly TableCard[] = [
 	},
 	{
 		aspect: 'Connection',
+		aspects: { acquaintance: 1, connection: 1 },
 		id: 'acquaintance',
 		palette: 'acquaintance',
 		sigil: '☿',
@@ -112,6 +139,7 @@ const startingHand: readonly TableCard[] = [
 	},
 	{
 		aspect: 'Lore · Lantern 2',
+		aspects: { lantern: 2, lore: 1 },
 		id: 'watchmans-secret',
 		palette: 'lore',
 		sigil: '☀',
@@ -119,10 +147,122 @@ const startingHand: readonly TableCard[] = [
 	},
 	{
 		aspect: 'Influence · Heart 2',
+		aspects: { heart: 2, influence: 1 },
 		id: 'contentment',
 		palette: 'contentment',
 		sigil: '♡',
 		title: 'Contentment',
+	},
+	{
+		aspect: 'Ability',
+		aspects: { ability: 1, passion: 1 },
+		id: 'passion',
+		palette: 'passion',
+		sigil: '✦',
+		title: 'Passion',
+	},
+] as const;
+
+const tableVerbs: readonly TableVerb[] = [
+	{
+		id: 'work',
+		label: 'Work',
+		sigil: '⚒',
+		slot: { id: 'work-input', required: { ability: 1 } },
+	},
+	{
+		id: 'study',
+		label: 'Study',
+		sigil: '◇',
+		slot: { id: 'study-input', required: { lore: 1, reason: 1 } },
+	},
+	{
+		id: 'dream',
+		label: 'Dream',
+		sigil: '☽',
+		slot: { id: 'dream-input', required: { ability: 1, memory: 1 } },
+	},
+	{
+		id: 'talk',
+		label: 'Talk',
+		sigil: '☿',
+		slot: {
+			id: 'talk-input',
+			required: { connection: 1, influence: 1 },
+		},
+	},
+	{
+		id: 'explore',
+		label: 'Explore',
+		sigil: '✣',
+		slot: { id: 'explore-input', required: { lore: 1, resource: 1 } },
+	},
+] as const;
+
+const tableRecipes: readonly TableRecipe[] = [
+	{
+		actionid: 'dream',
+		craftable: true,
+		entersMansus: true,
+		id: 'dream-with-passion',
+		label: 'Dream with Passion',
+		requirements: { passion: 1 },
+	},
+	{
+		actionid: 'dream',
+		craftable: true,
+		id: 'dream-with-reason',
+		label: 'Follow an Unasked Answer',
+		outputId: 'unasked-answer',
+		requirements: { reason: 1 },
+	},
+	{
+		actionid: 'dream',
+		craftable: true,
+		id: 'dream-with-health',
+		label: 'Remember the Rhythm Below',
+		outputId: 'root-rhythm',
+		requirements: { health: 1 },
+	},
+	{
+		actionid: 'work',
+		craftable: true,
+		id: 'work-with-health',
+		label: 'A Shift of Necessary Labour',
+		outputId: 'root-rhythm',
+		requirements: { health: 1 },
+	},
+	{
+		actionid: 'work',
+		craftable: true,
+		id: 'work-with-reason',
+		label: 'A Careful Commission',
+		outputId: 'unasked-answer',
+		requirements: { reason: 1 },
+	},
+	{
+		actionid: 'study',
+		craftable: true,
+		id: 'study-lantern-lore',
+		label: 'Study What the Watchman Knew',
+		outputId: 'remembering-door',
+		requirements: { lantern: 2 },
+	},
+	{
+		actionid: 'talk',
+		craftable: true,
+		id: 'talk-to-an-acquaintance',
+		label: 'Speak of Uncertain Things',
+		outputId: 'other-road',
+		requirements: { acquaintance: 1 },
+	},
+	{
+		actionid: 'explore',
+		craftable: true,
+		id: 'explore-with-funds',
+		label: 'Purchase an Unreliable Map',
+		outputId: 'pale-passage',
+		requirements: { funds: 1 },
 	},
 ] as const;
 
@@ -210,7 +350,7 @@ function loadDreamHand(): {
 		}
 
 		const memories = value.memoryIds
-			.slice(-3)
+			.slice(-5)
 			.map(id => mansusDeck.find(card => card.id === id))
 			.filter((card): card is MansusCard => card !== undefined);
 		return { journey: value.journey, memories };
@@ -247,13 +387,38 @@ function CardFrame({
 	);
 }
 
-function PassionCard({
-	inSlot,
-	onChoose,
+const tableCardPaletteStyles: Readonly<Record<TableCardPalette, string>> = {
+	acquaintance: style.acquaintanceCard,
+	contentment: style.contentmentCard,
+	funds: style.fundsCard,
+	health: style.healthCard,
+	lore: style.loreCard,
+	passion: style.passionCard,
+	reason: style.reasonCard,
+};
+
+function memoryAsTableCard(card: MansusCard): TableCard {
+	const aspect = card.aspect.toLocaleLowerCase().replaceAll(' ', '-');
+	return {
+		aspect: card.aspect,
+		aspects: { [aspect]: 1, lore: 1, memory: 1 },
+		description: card.description,
+		id: card.id,
+		palette: card.aspect === 'Heart' ? 'contentment' : 'lore',
+		sigil: '◇',
+		title: card.title,
+	};
+}
+
+function TableCardView({
+	card: { card },
+	inSlot = false,
+	onActivate,
 	onDropAt,
 }: {
-	readonly inSlot: boolean;
-	readonly onChoose: () => void;
+	readonly card: CardInstance;
+	readonly inSlot?: boolean;
+	readonly onActivate: () => void;
 	readonly onDropAt: (position: PointerPosition) => void;
 }) {
 	const dragStart = useRef<
@@ -262,24 +427,7 @@ function PassionCard({
 	const dragged = useRef(false);
 	const suppressClick = useRef(false);
 	const [dragOffset, setDragOffset] = useState<PointerPosition | null>(null);
-
-	const finishDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
-		const start = dragStart.current;
-		if (!start || start.pointerId !== event.pointerId) return;
-		const wasDragged = dragged.current;
-		dragStart.current = null;
-		dragged.current = false;
-		setDragOffset(null);
-		if (wasDragged) {
-			suppressClick.current = true;
-			onDropAt({ x: event.clientX, y: event.clientY });
-		}
-		if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-			event.currentTarget.releasePointerCapture(event.pointerId);
-		}
-	};
-	const cancelDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
-		if (dragStart.current?.pointerId !== event.pointerId) return;
+	const clearDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
 		dragStart.current = null;
 		dragged.current = false;
 		setDragOffset(null);
@@ -290,16 +438,14 @@ function PassionCard({
 
 	return (
 		<button
-			aria-label={
-				inSlot ? 'Return Passion to hand' : 'Place Passion in Dream'
-			}
-			className={`${style.card} ${style.passionCard} ${dragOffset ? style.draggingCard : ''}`}
+			aria-label={`${inSlot ? 'Slotted' : 'Hand'} card: ${card.title}`}
+			className={`${style.card} ${inSlot ? '' : style.scatteredCard} ${tableCardPaletteStyles[card.palette]} ${dragOffset ? style.draggingCard : ''}`}
 			onClick={() => {
 				if (suppressClick.current) {
 					suppressClick.current = false;
 					return;
 				}
-				onChoose();
+				onActivate();
 			}}
 			onLostPointerCapture={event => {
 				if (dragStart.current?.pointerId === event.pointerId) {
@@ -308,9 +454,8 @@ function PassionCard({
 					setDragOffset(null);
 				}
 			}}
-			onPointerCancel={cancelDrag}
+			onPointerCancel={clearDrag}
 			onPointerDown={event => {
-				if (inSlot) return;
 				dragStart.current = {
 					pointerId: event.pointerId,
 					x: event.clientX,
@@ -330,40 +475,22 @@ function PassionCard({
 				dragged.current = true;
 				setDragOffset(next);
 			}}
-			onPointerUp={finishDrag}
+			onPointerUp={event => {
+				if (dragStart.current?.pointerId !== event.pointerId) return;
+				const wasDragged = dragged.current;
+				clearDrag(event);
+				if (wasDragged) {
+					suppressClick.current = true;
+					onDropAt({ x: event.clientX, y: event.clientY });
+				}
+			}}
 			style={
 				dragOffset
 					? { translate: `${dragOffset.x}px ${dragOffset.y}px` }
 					: undefined
 			}
-			title="Passion"
-			type="button"
-		>
-			<CardFrame>
-				<span aria-hidden="true" className={style.cardSigil}>
-					✦
-				</span>
-				<strong>Passion</strong>
-			</CardFrame>
-		</button>
-	);
-}
-
-const tableCardPaletteStyles: Readonly<Record<TableCardPalette, string>> = {
-	acquaintance: style.acquaintanceCard,
-	contentment: style.contentmentCard,
-	funds: style.fundsCard,
-	health: style.healthCard,
-	lore: style.loreCard,
-	reason: style.reasonCard,
-};
-
-function HandCard({ card }: { readonly card: TableCard }) {
-	return (
-		<article
-			aria-label={`Hand card: ${card.title}`}
-			className={`${style.card} ${style.scatteredCard} ${tableCardPaletteStyles[card.palette]}`}
 			title={`${card.title} — ${card.aspect}`}
+			type="button"
 		>
 			<CardFrame>
 				<span aria-hidden="true" className={style.cardSigil}>
@@ -372,22 +499,31 @@ function HandCard({ card }: { readonly card: TableCard }) {
 				<strong>{card.title}</strong>
 				<small>{card.aspect}</small>
 			</CardFrame>
-		</article>
+		</button>
 	);
 }
 
-function MemoryCard({ card }: { readonly card: MansusCard }) {
-	return (
-		<article aria-label={`Memory: ${card.title}`} className={style.card}>
-			<CardFrame>
-				<span aria-hidden="true" className={style.cardSigil}>
-					◇
-				</span>
-				<strong>{card.title}</strong>
-				<small>{card.aspect}</small>
-			</CardFrame>
-		</article>
-	);
+function cardFitsVerb(card: TableCard, verb: TableVerb): boolean {
+	return [...CultistSlots.elementsValid(verb.slot, [card])].length === 1;
+}
+
+function recipeFor(
+	verb: TableVerb,
+	card: TableCard
+): TableRecipe | undefined {
+	for (const [recipe, elements] of CultistRecipes.available(
+		[verb],
+		tableRecipes,
+		[card]
+	)) {
+		if (elements.length === 1 && elements[0]?.id === card.id) {
+			return recipe as TableRecipe;
+		}
+	}
+}
+
+function cardInstance(card: TableCard): CardInstance {
+	return { card, instanceId: `hand:${card.id}` };
 }
 
 function MansusMap() {
@@ -550,18 +686,35 @@ export function DreamTable({
 }) {
 	const [initialHand] = useState(loadDreamHand);
 	const dialogRef = useRef<HTMLElement>(null);
-	const dreamSlotRef = useRef<HTMLDivElement>(null);
-	const dreamTimer = useRef<number>();
+	const nextMemoryInstance = useRef(initialHand.memories.length);
+	const verbTimers = useRef(new Map<TableVerbId, number>());
 	const cameraPointers = useRef(new Map<number, PointerPosition>());
 	const cameraGestureRef = useRef<CameraGesture | null>(null);
 	const [phase, setPhase] = useState<DreamPhase>('table');
-	const [passionPlaced, setPassionPlaced] = useState(false);
 	const [tableCamera, setTableCamera] = useState(defaultTableCamera);
 	const tableCameraRef = useRef(tableCamera);
 	const [journey, setJourney] = useState(initialHand.journey);
 	const [drawn, setDrawn] = useState<MansusCard>();
-	const [memories, setMemories] = useState<readonly MansusCard[]>(
-		initialHand.memories
+	const [memories, setMemories] = useState<readonly CardInstance[]>(
+		initialHand.memories.map((card, index) => ({
+			card: memoryAsTableCard(card),
+			instanceId: `memory:${index}:${card.id}`,
+		}))
+	);
+	const [verbSlots, setVerbSlots] = useState<
+		Partial<Record<TableVerbId, string>>
+	>({});
+	const [runningVerbs, setRunningVerbs] = useState<
+		ReadonlySet<TableVerbId>
+	>(new Set());
+
+	const cards = useMemo(
+		() => [...startingHand.map(cardInstance), ...memories],
+		[memories]
+	);
+	const cardsById = useMemo(
+		() => new Map(cards.map(card => [card.instanceId, card])),
+		[cards]
 	);
 
 	const choices = useMemo(
@@ -713,47 +866,173 @@ export function DreamTable({
 		return () => window.removeEventListener('keydown', onKeyDown);
 	}, [commitTableCamera, onWake, phase, setTableZoomLevel]);
 
-	useEffect(() => () => window.clearTimeout(dreamTimer.current), []);
+	useEffect(
+		() => () => {
+			for (const timer of verbTimers.current.values()) {
+				window.clearTimeout(timer);
+			}
+		},
+		[]
+	);
 
 	useEffect(() => {
-		saveDreamHand(journey, memories);
+		saveDreamHand(
+			journey,
+			memories.flatMap(({ card }) => {
+				const memory = mansusDeck.find(({ id }) => id === card.id);
+				return memory ? [memory] : [];
+			})
+		);
 	}, [journey, memories]);
 
-	const beginDream = useCallback(() => {
-		if (!passionPlaced || phase !== 'table') return;
-		setPhase('working');
-		window.clearTimeout(dreamTimer.current);
-		dreamTimer.current = window.setTimeout(() => {
-			setPhase('mansus');
-		}, dreamDurationMs);
-	}, [passionPlaced, phase]);
-
-	const placePassionAt = useCallback((position: PointerPosition) => {
-		const bounds = dreamSlotRef.current?.getBoundingClientRect();
-		if (
-			bounds &&
-			position.x >= bounds.left &&
-			position.x <= bounds.right &&
-			position.y >= bounds.top &&
-			position.y <= bounds.bottom
-		) {
-			setPassionPlaced(true);
-		}
+	const addMemory = useCallback((id: MansusCard['id']) => {
+		const card = mansusDeck.find(card => card.id === id);
+		if (!card) return;
+		const instance: CardInstance = {
+			card: memoryAsTableCard(card),
+			instanceId: `memory:${nextMemoryInstance.current++}:${card.id}`,
+		};
+		setMemories(current => [...current.slice(-4), instance]);
 	}, []);
 
+	const returnCardToHand = useCallback(
+		(instanceId: string) => {
+			const runningSource = tableVerbs.find(
+				verb =>
+					verbSlots[verb.id] === instanceId &&
+					runningVerbs.has(verb.id)
+			);
+			if (runningSource) return;
+			setVerbSlots(current => {
+				const next = { ...current };
+				for (const verb of tableVerbs) {
+					if (next[verb.id] === instanceId) delete next[verb.id];
+				}
+				return next;
+			});
+		},
+		[runningVerbs, verbSlots]
+	);
+
+	const placeCard = useCallback(
+		(instanceId: string, verb: TableVerb) => {
+			const instance = cardsById.get(instanceId);
+			if (!instance || runningVerbs.has(verb.id)) return;
+			const runningSource = tableVerbs.find(
+				candidate =>
+					verbSlots[candidate.id] === instanceId &&
+					runningVerbs.has(candidate.id)
+			);
+			if (runningSource || !cardFitsVerb(instance.card, verb)) return;
+			setVerbSlots(current => {
+				const next = { ...current };
+				for (const candidate of tableVerbs) {
+					if (next[candidate.id] === instanceId) {
+						delete next[candidate.id];
+					}
+				}
+				next[verb.id] = instanceId;
+				return next;
+			});
+		},
+		[cardsById, runningVerbs, verbSlots]
+	);
+
+	const dropCardAt = useCallback(
+		(instanceId: string, position: PointerPosition) => {
+			const targets = document.elementsFromPoint(position.x, position.y);
+			const verbId = targets
+				.map(target =>
+					target
+						.closest<HTMLElement>('[data-dream-verb]')
+						?.getAttribute('data-dream-verb')
+				)
+				.find((id): id is TableVerbId => id !== undefined);
+			const verb = tableVerbs.find(candidate => candidate.id === verbId);
+			if (verb) {
+				placeCard(instanceId, verb);
+				return;
+			}
+			if (targets.some(target => target.closest('[data-dream-hand]'))) {
+				returnCardToHand(instanceId);
+			}
+		},
+		[placeCard, returnCardToHand]
+	);
+
+	const placeCardInFirstVerb = useCallback(
+		(instance: CardInstance) => {
+			const verb = tableVerbs.find(
+				candidate =>
+					!verbSlots[candidate.id] &&
+					!runningVerbs.has(candidate.id) &&
+					recipeFor(candidate, instance.card)
+			);
+			if (verb) placeCard(instance.instanceId, verb);
+		},
+		[placeCard, runningVerbs, verbSlots]
+	);
+
+	const beginVerb = useCallback(
+		(verb: TableVerb) => {
+			if (phase !== 'table' || runningVerbs.has(verb.id)) return;
+			const instanceId = verbSlots[verb.id];
+			const instance = instanceId ? cardsById.get(instanceId) : undefined;
+			const recipe = instance && recipeFor(verb, instance.card);
+			if (!instance || !recipe) return;
+
+			setRunningVerbs(current => new Set(current).add(verb.id));
+			if (verb.id === 'dream') setPhase('working');
+			const timer = window.setTimeout(() => {
+				verbTimers.current.delete(verb.id);
+				if (recipe.entersMansus) {
+					setPhase('mansus');
+					return;
+				}
+				setVerbSlots(current => {
+					if (current[verb.id] !== instanceId) return current;
+					const next = { ...current };
+					delete next[verb.id];
+					return next;
+				});
+				setRunningVerbs(current => {
+					const next = new Set(current);
+					next.delete(verb.id);
+					return next;
+				});
+				if (recipe.outputId) addMemory(recipe.outputId);
+			}, dreamDurationMs);
+			verbTimers.current.set(verb.id, timer);
+		},
+		[addMemory, cardsById, phase, runningVerbs, verbSlots]
+	);
+
 	const returnFromMansus = useCallback(() => {
-		if (drawn) setMemories(current => [...current.slice(-2), drawn]);
+		if (drawn) addMemory(drawn.id);
 		setJourney(current => current + 1);
 		setDrawn(undefined);
-		setPassionPlaced(false);
+		setVerbSlots(current => {
+			const next = { ...current };
+			delete next.dream;
+			return next;
+		});
+		setRunningVerbs(current => {
+			const next = new Set(current);
+			next.delete('dream');
+			return next;
+		});
 		setPhase('table');
-	}, [drawn]);
+	}, [addMemory, drawn]);
 
 	const tableCameraStyle = {
 		'--table-camera-x': `${tableCamera.x}px`,
 		'--table-camera-y': `${tableCamera.y}px`,
 		'--table-camera-zoom': tableCamera.zoom,
 	} as CSSProperties;
+	const slottedCardIds = new Set(Object.values(verbSlots));
+	const handCards = cards.filter(
+		card => !slottedCardIds.has(card.instanceId)
+	);
 
 	return (
 		<section
@@ -797,78 +1076,112 @@ export function DreamTable({
 				>
 					<div className={style.table}>
 						<main className={style.playArea}>
-					<section
-						aria-label="Dream"
-						className={style.verbArea}
-					>
-						<div className={style.verb} title="Dream">
-							<span aria-hidden="true" className={style.verbMoon}>
-								☽
-							</span>
-							<h2 className={style.visuallyHidden}>Dream</h2>
-							<div
-								aria-label="Dream card slot"
-								className={`${style.cardSlot} ${passionPlaced ? style.filledSlot : ''}`}
-								ref={dreamSlotRef}
+							<section
+								aria-label="Verbs"
+								className={style.verbArea}
 							>
-								{passionPlaced ? (
-									<PassionCard
-										inSlot
-										onChoose={() => setPassionPlaced(false)}
-										onDropAt={placePassionAt}
-									/>
-								) : (
-									<span aria-hidden="true">+</span>
-								)}
-							</div>
-							<button
-								aria-label="Dream with Passion"
-								className={style.dreamButton}
-								disabled={!passionPlaced || phase !== 'table'}
-								onClick={beginDream}
-								title="Dream with Passion"
-								type="button"
-							>
-								<span aria-hidden="true">
-									{phase === 'working' ? '···' : '▶'}
-								</span>
-							</button>
-							{phase === 'working' && (
-								<div
-									aria-label="Dreaming"
-									className={style.timer}
-									role="progressbar"
-								>
-									<i aria-hidden="true" />
-								</div>
-							)}
-						</div>
-					</section>
+								{tableVerbs.map(verb => {
+									const instanceId = verbSlots[verb.id];
+									const instance = instanceId
+										? cardsById.get(instanceId)
+										: undefined;
+									const recipe =
+										instance && recipeFor(verb, instance.card);
+									const running = runningVerbs.has(verb.id);
+									return (
+										<div
+											aria-label={verb.label}
+											className={style.verb}
+											key={verb.id}
+											role="region"
+											title={verb.label}
+										>
+											<span
+												aria-hidden="true"
+												className={style.verbMoon}
+											>
+												{verb.sigil}
+											</span>
+											<h2 className={style.visuallyHidden}>
+												{verb.label}
+											</h2>
+											<div
+												aria-label={`${verb.label} card slot`}
+												className={`${style.cardSlot} ${instance ? style.filledSlot : ''}`}
+												data-dream-verb={verb.id}
+											>
+												{instance ? (
+													<TableCardView
+														card={instance}
+														inSlot
+														onActivate={() =>
+															returnCardToHand(
+																instance.instanceId
+															)
+														}
+														onDropAt={position =>
+															dropCardAt(
+																instance.instanceId,
+																position
+															)
+														}
+													/>
+												) : (
+													<span aria-hidden="true">+</span>
+												)}
+											</div>
+											<button
+												aria-label={
+													recipe?.label ??
+													`${verb.label} has no matching recipe`
+												}
+												className={style.verbButton}
+												disabled={
+													!recipe || running || phase !== 'table'
+												}
+												onClick={() => beginVerb(verb)}
+												title={recipe?.label ?? verb.label}
+												type="button"
+											>
+												<span aria-hidden="true">
+													{running ? '···' : '▶'}
+												</span>
+											</button>
+											{running && (
+												<div
+													aria-label={`${verb.label} in progress`}
+													className={style.timer}
+													role="progressbar"
+												>
+													<i aria-hidden="true" />
+												</div>
+											)}
+										</div>
+									);
+								})}
+							</section>
 
-					<section
-						aria-label="Your hand"
-						className={style.hand}
-					>
-						<div className={style.handCards}>
-							{startingHand.map(card => (
-								<HandCard card={card} key={card.id} />
-							))}
-							{!passionPlaced && phase === 'table' && (
-								<PassionCard
-									inSlot={false}
-									onChoose={() => setPassionPlaced(true)}
-									onDropAt={placePassionAt}
-								/>
-							)}
-							{memories.map((card, index) => (
-								<MemoryCard
-									card={card}
-									key={`${card.id}-${index}`}
-								/>
-							))}
-						</div>
-					</section>
-						</main>
+							<section
+								aria-label="Your hand"
+								className={style.hand}
+								data-dream-hand
+							>
+								<div className={style.handCards}>
+									{handCards.map(card => (
+										<TableCardView
+											card={card}
+											key={card.instanceId}
+											onActivate={() =>
+												placeCardInFirstVerb(card)
+											}
+											onDropAt={position =>
+												dropCardAt(card.instanceId, position)
+											}
+										/>
+									))}
+								</div>
+							</section>
+							</main>
 
 						{phase === 'mansus' && (
 							<Mansus

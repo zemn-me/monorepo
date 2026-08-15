@@ -258,7 +258,7 @@
 }
 
 .wakeButton,
-.dreamButton,
+.verbButton,
 .mansusAction,
 .cameraControls button {
 	background: transparent;
@@ -273,8 +273,8 @@
 
 .wakeButton:hover,
 .wakeButton:focus-visible,
-.dreamButton:hover:not(:disabled),
-.dreamButton:focus-visible,
+.verbButton:hover:not(:disabled),
+.verbButton:focus-visible,
 .mansusAction:hover,
 .mansusAction:focus-visible,
 .cameraControls button:hover,
@@ -303,19 +303,21 @@
 .playArea {
 	align-items: stretch;
 	display: grid;
-	gap: clamp(2rem, 8vw, 8rem);
-	grid-template-columns: minmax(15rem, 0.65fr) minmax(20rem, 1.35fr);
+	gap: clamp(1rem, 3vw, 2.5rem);
+	grid-template-columns: 1fr;
+	min-inline-size: 68rem;
 	padding: clamp(0.75rem, 4vw, 4rem);
 	position: relative;
 	z-index: 1;
 }
 
-.verbArea,
-.hand {
+.verbArea {
 	align-items: center;
-	display: flex;
+	display: grid;
+	gap: clamp(0.75rem, 2vw, 1.5rem);
+	grid-template-columns: repeat(5, 10.5rem);
 	justify-content: center;
-	min-block-size: 24rem;
+	min-block-size: 19rem;
 }
 
 .verb {
@@ -331,9 +333,9 @@
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	inline-size: min(100%, 16rem);
-	min-block-size: 21rem;
-	padding: 1rem;
+	inline-size: 10.5rem;
+	min-block-size: 18rem;
+	padding: 0.75rem;
 	position: relative;
 	text-align: center;
 	transform: translateZ(0.8rem);
@@ -355,10 +357,10 @@
 	display: flex;
 	font-family: Georgia, "Times New Roman", serif;
 	font-size: 1.5rem;
-	inline-size: 8.5rem;
+	inline-size: 7.5rem;
 	justify-content: center;
 	letter-spacing: 0.08em;
-	min-block-size: 12rem;
+	min-block-size: 10.5rem;
 	padding: 0.35rem;
 	text-transform: uppercase;
 }
@@ -368,11 +370,16 @@
 	border-style: solid;
 }
 
-.dreamButton {
+.cardSlot .card {
+	inline-size: 100%;
+	min-block-size: 9.8rem;
+}
+
+.verbButton {
 	margin-block-start: 0.8rem;
 }
 
-.dreamButton:disabled {
+.verbButton:disabled {
 	border-color: rgb(223 210 176 / 24%);
 	color: rgb(223 210 176 / 33%);
 	cursor: not-allowed;
@@ -760,11 +767,6 @@ button.card:focus-visible {
 }
 
 @media (max-width: 48rem) {
-	.playArea {
-		grid-template-columns: 1fr;
-	}
-
-	.verbArea,
 	.hand {
 		min-block-size: auto;
 	}
@@ -775,10 +777,6 @@ button.card:focus-visible {
 
 	.handCards {
 		justify-content: center;
-	}
-
-	.verb {
-		min-block-size: 21rem;
 	}
 
 	.mansusChoices {
