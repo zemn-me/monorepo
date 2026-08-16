@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.26.5
+go 1.26.6
 
 ignore (
 	./ci/bazel_bep
