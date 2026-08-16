@@ -20,8 +20,19 @@ interface MansusCard {
 	readonly aspect: string;
 	readonly description: string;
 	readonly id: string;
+	readonly location: MansusLocationId;
 	readonly title: string;
 }
+
+type MansusLocationId = 'temple-of-the-wheel' | 'well' | 'wood';
+
+const mansusLocations: Readonly<
+	Record<MansusLocationId, { readonly title: string }>
+> = {
+	'temple-of-the-wheel': { title: 'The Temple of the Wheel' },
+	well: { title: 'The Well' },
+	wood: { title: 'The Wood' },
+};
 
 type TableCardPalette =
 	| 'acquaintance'
@@ -65,6 +76,7 @@ const mansusDeck: readonly MansusCard[] = [
 		description:
 			'Something pale has passed between the trees. Its absence clings to you like pollen.',
 		id: 'pale-passage',
+		location: 'wood',
 		title: 'A Pale Passage',
 	},
 	{
@@ -72,6 +84,7 @@ const mansusDeck: readonly MansusCard[] = [
 		description:
 			'A light without a source shows you an answer, although you have forgotten the question.',
 		id: 'unasked-answer',
+		location: 'well',
 		title: 'An Unasked Answer',
 	},
 	{
@@ -79,6 +92,7 @@ const mansusDeck: readonly MansusCard[] = [
 		description:
 			'For one breath, another history lies beside yours. You remember the road it took.',
 		id: 'other-road',
+		location: 'temple-of-the-wheel',
 		title: 'The Other Road',
 	},
 	{
@@ -86,6 +100,7 @@ const mansusDeck: readonly MansusCard[] = [
 		description:
 			'Under the roots, a patient rhythm continues. You wake with your pulse keeping its measure.',
 		id: 'root-rhythm',
+		location: 'wood',
 		title: 'The Rhythm Below',
 	},
 	{
@@ -93,6 +108,7 @@ const mansusDeck: readonly MansusCard[] = [
 		description:
 			'A door remembers your hand. It will not open now, but neither will it forget.',
 		id: 'remembering-door',
+		location: 'well',
 		title: 'A Remembering Door',
 	},
 	{
@@ -100,6 +116,7 @@ const mansusDeck: readonly MansusCard[] = [
 		description:
 			'Snow settles in a room that has never known weather. No footprint leads away.',
 		id: 'interior-snow',
+		location: 'temple-of-the-wheel',
 		title: 'Interior Snow',
 	},
 ] as const;
@@ -526,7 +543,11 @@ function cardInstance(card: TableCard): CardInstance {
 	return { card, instanceId: `hand:${card.id}` };
 }
 
-function MansusMap() {
+function MansusMap({
+	activeLocation,
+}: {
+	readonly activeLocation?: MansusLocationId;
+}) {
 	return (
 		<svg
 			aria-label="Map of the Mansus"
@@ -550,6 +571,7 @@ function MansusMap() {
 
 			<g className={style.mapRoutes}>
 				<path d="M945 590 785 505 555 510 275 405" pathLength="1" />
+				<path d="M945 590 810 515 1050 455 945 590" pathLength="1" />
 				<path d="M555 510 720 355 945 590" pathLength="1" />
 				<path d="M275 405 430 245 600 132" pathLength="1" />
 				<path d="M720 355 600 132" pathLength="1" />
@@ -560,10 +582,33 @@ function MansusMap() {
 				<path d="M578 445h44v-46h-35v-46h35v-46h-35v-46h35v-46h-35v-46h35" />
 			</g>
 
-			<g className={style.mapNode} transform="translate(945 590)">
+			<g
+				className={`${style.mapNode} ${activeLocation === 'wood' ? style.activeMapNode : ''}`}
+				data-mansus-location="wood"
+				transform="translate(945 590)"
+			>
 				<circle r="34" />
 				<path d="M0 18V-18M0-14-18 1M0-5 18 10M0 5-15 18" />
 				<text y="58">THE WOOD</text>
+			</g>
+			<g
+				className={`${style.mapNode} ${activeLocation === 'well' ? style.activeMapNode : ''}`}
+				data-mansus-location="well"
+				transform="translate(810 515)"
+			>
+				<circle r="34" />
+				<path d="M-18-9h36M-14-9v23M14-9v23M-19 14h38M-13 14q13 16 26 0" />
+				<text y="58">THE WELL</text>
+			</g>
+			<g
+				className={`${style.mapNode} ${activeLocation === 'temple-of-the-wheel' ? style.activeMapNode : ''}`}
+				data-mansus-location="temple-of-the-wheel"
+				transform="translate(1050 455)"
+			>
+				<circle r="34" />
+				<circle r="15" />
+				<path d="M0-27v12M0 15v12M-27 0h12M15 0h12M-19-19l9 9M10 10l9 9M19-19l-9 9M-10 10l-9 9" />
+				<text y="58">TEMPLE OF THE WHEEL</text>
 			</g>
 			<g className={style.mapNode} transform="translate(555 510)">
 				<circle r="34" />
@@ -595,6 +640,88 @@ function MansusMap() {
 	);
 }
 
+function MansusRewardCard({
+	card,
+	onDropAt,
+}: {
+	readonly card: MansusCard;
+	readonly onDropAt: (position: PointerPosition) => void;
+}) {
+	const dragStart = useRef<
+		(PointerPosition & { readonly pointerId: number }) | null
+	>(null);
+	const dragged = useRef(false);
+	const [dragOffset, setDragOffset] = useState<PointerPosition | null>(null);
+	const clearDrag = (event: ReactPointerEvent<HTMLElement>) => {
+		dragStart.current = null;
+		dragged.current = false;
+		setDragOffset(null);
+		if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+			event.currentTarget.releasePointerCapture(event.pointerId);
+		}
+	};
+	const location = mansusLocations[card.location];
+
+	return (
+		<article
+			aria-label={`Chosen Mansus card: ${card.title} from ${location.title}`}
+			className={`${style.drawnCard} ${dragOffset ? style.draggingCard : ''}`}
+			onLostPointerCapture={event => {
+				if (dragStart.current?.pointerId === event.pointerId) {
+					dragStart.current = null;
+					dragged.current = false;
+					setDragOffset(null);
+				}
+			}}
+			onPointerCancel={clearDrag}
+			onPointerDown={event => {
+				dragStart.current = {
+					pointerId: event.pointerId,
+					x: event.clientX,
+					y: event.clientY,
+				};
+				dragged.current = false;
+				event.currentTarget.setPointerCapture(event.pointerId);
+			}}
+			onPointerMove={event => {
+				const start = dragStart.current;
+				if (!start || start.pointerId !== event.pointerId) return;
+				const next = {
+					x: event.clientX - start.x,
+					y: event.clientY - start.y,
+				};
+				if (!dragged.current && Math.hypot(next.x, next.y) < 5) return;
+				dragged.current = true;
+				setDragOffset(next);
+			}}
+			onPointerUp={event => {
+				if (dragStart.current?.pointerId !== event.pointerId) return;
+				const wasDragged = dragged.current;
+				clearDrag(event);
+				if (wasDragged) {
+					onDropAt({ x: event.clientX, y: event.clientY });
+				}
+			}}
+			style={
+				dragOffset
+					? { translate: `${dragOffset.x}px ${dragOffset.y}px` }
+					: undefined
+			}
+		>
+			<CardFrame className={style.revealedFrame}>
+				<span aria-hidden="true" className={style.cardSigil}>
+					◇
+				</span>
+				<strong>{card.title}</strong>
+				<small>{card.aspect}</small>
+				<span className={style.cardDescription}>
+					{card.description}
+				</span>
+			</CardFrame>
+		</article>
+	);
+}
+
 function Mansus({
 	choices,
 	drawn,
@@ -606,9 +733,20 @@ function Mansus({
 	readonly onChoose: (card: MansusCard) => void;
 	readonly onReturn: () => void;
 }) {
+	const activeLocation = drawn?.location;
+	const dropRewardAt = (position: PointerPosition) => {
+		if (
+			document
+				.elementsFromPoint(position.x, position.y)
+				.some(target => target.closest('[data-mansus-exit="wood"]'))
+		) {
+			onReturn();
+		}
+	};
+
 	return (
 		<section aria-label="The Mansus" className={style.mansus} role="region">
-			<MansusMap />
+			<MansusMap activeLocation={activeLocation} />
 			<div aria-hidden="true" className={style.mansusRings}>
 				<i />
 				<i />
@@ -616,35 +754,41 @@ function Mansus({
 			</div>
 			<h2 className={style.visuallyHidden}>The Mansus</h2>
 			{drawn ? (
-				<div aria-live="polite" className={style.revelation}>
-					<article
-						aria-label="Drawn card"
-						className={style.drawnCard}
+				<>
+					<div aria-live="polite" className={style.revelation}>
+						<p
+							aria-label="Visited Mansus location"
+							className={style.visitedLocation}
+						>
+							{mansusLocations[drawn.location].title}
+						</p>
+						<MansusRewardCard
+							card={drawn}
+							onDropAt={dropRewardAt}
+						/>
+						<button
+							className={style.visuallyHidden}
+							onClick={onReturn}
+							type="button"
+						>
+							Keep this memory and return through The Wood
+						</button>
+					</div>
+					<div
+						aria-label="Exit through The Wood"
+						className={style.mansusExit}
+						data-mansus-exit="wood"
+						role="region"
 					>
-						<CardFrame className={style.revealedFrame}>
-							<span
-								aria-hidden="true"
-								className={style.cardSigil}
-							>
-								◇
-							</span>
-							<strong>{drawn.title}</strong>
-							<small>{drawn.aspect}</small>
-							<span className={style.cardDescription}>
-								{drawn.description}
-							</span>
-						</CardFrame>
-					</article>
-					<button
-						aria-label="Keep this memory and return"
-						className={style.mansusAction}
-						onClick={onReturn}
-						title="Keep this memory"
-						type="button"
-					>
-						<span aria-hidden="true">↙</span>
-					</button>
-				</div>
+						<span
+							aria-hidden="true"
+							className={style.mansusExitSigil}
+						>
+							⌁
+						</span>
+						<strong>The Wood</strong>
+					</div>
+				</>
 			) : (
 				<>
 					<div
@@ -653,13 +797,16 @@ function Mansus({
 					>
 						{choices.map((card, index) => (
 							<button
-								aria-label={`Draw Mansus card ${index + 1}`}
+								aria-label={`Draw Mansus card ${index + 1} from ${mansusLocations[card.location].title}`}
 								className={`${style.card} ${style.cardBack}`}
 								key={card.id}
 								onClick={() => onChoose(card)}
 								title="Draw"
 								type="button"
 							>
+								<span className={style.mansusChoiceLocation}>
+									{mansusLocations[card.location].title}
+								</span>
 								<CardFrame>
 									<span
 										aria-hidden="true"
@@ -1183,17 +1330,18 @@ export function DreamTable({
 							</section>
 							</main>
 
-						{phase === 'mansus' && (
-							<Mansus
-								choices={choices}
-								drawn={drawn}
-								onChoose={setDrawn}
-								onReturn={returnFromMansus}
-							/>
-						)}
 					</div>
 				</div>
 			</div>
+
+			{phase === 'mansus' && (
+				<Mansus
+					choices={choices}
+					drawn={drawn}
+					onChoose={setDrawn}
+					onReturn={returnFromMansus}
+				/>
+			)}
 
 			{phase !== 'mansus' && (
 				<div

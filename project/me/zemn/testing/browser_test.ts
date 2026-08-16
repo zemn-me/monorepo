@@ -12,7 +12,13 @@ import {
 	it,
 } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, ThenableWebDriver, until } from 'selenium-webdriver';
+import {
+	Browser,
+	By,
+	ThenableWebDriver,
+	until,
+	WebElement,
+} from 'selenium-webdriver';
 import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -169,8 +175,29 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('typing dream opens the Mansus card table and returns with a memory', async () => {
+		it('typing dream opens the Mansus card table and carries a memory out through the Wood', async () => {
 			try {
+				const expectContained = async (
+					container: WebElement,
+					elements: readonly WebElement[]
+				) => {
+					const containerRect = await container.getRect();
+					for (const element of elements) {
+						const rect = await element.getRect();
+						expect(rect.x).toBeGreaterThanOrEqual(
+							containerRect.x - 1
+						);
+						expect(rect.y).toBeGreaterThanOrEqual(
+							containerRect.y - 1
+						);
+						expect(rect.x + rect.width).toBeLessThanOrEqual(
+							containerRect.x + containerRect.width + 1
+						);
+						expect(rect.y + rect.height).toBeLessThanOrEqual(
+							containerRect.y + containerRect.height + 1
+						);
+					}
+				};
 				const dragCardToSlot = async (
 					cardLabel: string,
 					slotLabel: string
@@ -293,15 +320,43 @@ describe('zemn.me website', () => {
 					),
 					3000
 				);
+				const [mansusRect, viewportRect] = await Promise.all([
+					mansus.getRect(),
+					dialog
+						.findElement(
+							By.css('[aria-label="Dream table viewport"]')
+						)
+						.getRect(),
+				]);
+				expect(mansusRect.x).toBeCloseTo(viewportRect.x, 0);
+				expect(mansusRect.y).toBeCloseTo(viewportRect.y, 0);
+				expect(mansusRect.width).toBeCloseTo(viewportRect.width, 0);
+				expect(mansusRect.height).toBeCloseTo(viewportRect.height, 0);
 				const choices = await mansus.findElements(
 					By.css('button[aria-label^="Draw Mansus card"]')
 				);
 				expect(choices).toHaveLength(3);
+				expect(
+					await Promise.all(
+						choices.map(choice => choice.getAttribute('aria-label'))
+					)
+				).toEqual([
+					'Draw Mansus card 1 from The Wood',
+					'Draw Mansus card 2 from The Well',
+					'Draw Mansus card 3 from The Temple of the Wheel',
+				]);
+				await driver.manage().window().setRect({
+					height: 390,
+					width: 844,
+				});
+				await expectContained(mansus, choices);
 				await choices[0]!.click();
 
 				const drawnCard = await driver.wait(
 					until.elementLocated(
-						By.css('article[aria-label="Drawn card"]')
+						By.css(
+							'article[aria-label="Chosen Mansus card: A Pale Passage from The Wood"]'
+						)
 					),
 					3000
 				);
@@ -310,13 +365,45 @@ describe('zemn.me website', () => {
 					3000
 				);
 				expect(await drawnCard.getText()).toContain('A Pale Passage');
-				await mansus
-					.findElement(
-						By.css(
-							'button[aria-label="Keep this memory and return"]'
+				expect(
+					await mansus
+						.findElement(
+							By.css('[aria-label="Visited Mansus location"]')
 						)
-					)
-					.click();
+						.getText()
+				).toBe('The Wood');
+				const woodExit = await mansus.findElement(
+					By.css('[aria-label="Exit through The Wood"]')
+				);
+				await expectContained(mansus, [drawnCard, woodExit]);
+				await driver.manage().window().setRect({
+					height: 844,
+					width: 390,
+				});
+				await expectContained(mansus, [drawnCard, woodExit]);
+				await driver.manage().window().setRect({
+					height: 480,
+					width: 320,
+				});
+				await expectContained(mansus, [drawnCard, woodExit]);
+				await expectContained(drawnCard, [
+					...(await drawnCard.findElements(By.css('span'))),
+					...(await drawnCard.findElements(By.css('strong'))),
+					...(await drawnCard.findElements(By.css('small'))),
+				]);
+				await driver.manage().window().setRect({
+					height: 800,
+					width: 1280,
+				});
+				await driver
+					.actions({ async: true })
+					.move({ origin: drawnCard })
+					.press()
+					.pause(200)
+					.move({ duration: 500, origin: woodExit })
+					.pause(200)
+					.release()
+					.perform();
 
 				await driver.wait(
 					until.elementLocated(
