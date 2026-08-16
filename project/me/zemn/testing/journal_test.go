@@ -862,6 +862,72 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("in-progress day summary was not displayed after its second entry: %v", err)
 	}
+	currentDayURL, err := driver.CurrentURL()
+	if err != nil {
+		t.Fatalf("read current journal day URL: %v", err)
+	}
+	currentMonthAudio := append([]byte(nil), audio...)
+	currentMonthAudio[len(currentMonthAudio)-4] = 2
+	currentMonthFile, err := os.CreateTemp(t.TempDir(), "journal-current-month-*.wav")
+	if err != nil {
+		t.Fatalf("create current-month voice memo: %v", err)
+	}
+	if _, err := currentMonthFile.Write(currentMonthAudio); err != nil {
+		t.Fatalf("write current-month voice memo: %v", err)
+	}
+	if err := currentMonthFile.Close(); err != nil {
+		t.Fatalf("close current-month voice memo: %v", err)
+	}
+	journalLocation, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		t.Fatalf("load journal time zone: %v", err)
+	}
+	localNow := time.Now().In(journalLocation)
+	otherDay := 1
+	if localNow.Day() == otherDay {
+		otherDay = 2
+	}
+	otherCurrentMonthTime := time.Date(
+		localNow.Year(), localNow.Month(), otherDay, 12, 0, 0, 0, journalLocation,
+	)
+	if err := os.Chtimes(currentMonthFile.Name(), otherCurrentMonthTime, otherCurrentMonthTime); err != nil {
+		t.Fatalf("date voice memo on another day in the current month: %v", err)
+	}
+	currentMonthImport, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("find current-month journal import input: %v", err)
+	}
+	if err := currentMonthImport.SendKeys(currentMonthFile.Name()); err != nil {
+		t.Fatalf("import voice memo on another current-month day: %v", err)
+	}
+	if _, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second); err != nil {
+		t.Fatalf("current-month journal upload did not finish: %v", err)
+	}
+	if err := driver.Get(journalURL.String()); err != nil {
+		t.Fatalf("return to journal before checking current-month summary: %v", err)
+	}
+	currentYearLink, err = waitForElement(
+		driver,
+		selenium.ByXPATH,
+		fmt.Sprintf("//a[@data-journal-period-link='year'][contains(normalize-space(), '%d')]", localNow.Year()),
+		30*time.Second,
+	)
+	if err != nil {
+		t.Fatalf("current journal year was not displayed: %v", err)
+	}
+	if err := currentYearLink.Click(); err != nil {
+		t.Fatalf("open current journal year: %v", err)
+	}
+	if err := waitForText(driver, "Local month journal", 30*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatalf("generated current-month summary was not displayed: %v", err)
+	}
+	if err := driver.Get(currentDayURL); err != nil {
+		t.Fatalf("return to current journal day: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
+		t.Fatalf("current journal day did not retain its two entries: %v", err)
+	}
 	currentEntries, err := driver.FindElements(selenium.ByXPATH, "//details[.//audio]")
 	if err != nil || len(currentEntries) != 2 {
 		t.Fatalf("find current-day journal entries: count %d, error %v", len(currentEntries), err)
