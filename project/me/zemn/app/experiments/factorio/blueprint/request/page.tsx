@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types';
 
 import { Client } from '#root/project/me/zemn/app/experiments/factorio/blueprint/request/client.js';
 
