@@ -35,6 +35,7 @@ import {
 	useGetJournal,
 	useGetMeScopes,
 	usePostJournalEntry,
+	useRefreshJournal,
 	useUpdateJournalEntryDate,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
@@ -1081,6 +1082,98 @@ function EntryDateEditor({
 	);
 }
 
+function JournalAudio({
+	audioURL,
+	entry,
+	playback,
+}: {
+	readonly audioURL: string;
+	readonly entry: JournalEntry;
+	readonly playback: JournalPlayback;
+}) {
+	const refreshJournal = useRefreshJournal();
+	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const playRequested = useRef(false);
+	const [source, setSource] = useState(audioURL);
+	const [recovery, setRecovery] = useState<{
+		readonly failedSource: string;
+		readonly play: boolean;
+		readonly time: number;
+	}>();
+
+	useEffect(() => {
+		if (!recovery || audioURL === source) return;
+		setSource(audioURL);
+	}, [audioURL, recovery, source]);
+
+	useEffect(() => {
+		if (!recovery || source === recovery.failedSource) return;
+		const audio = audioRef.current;
+		if (!audio) return;
+		const restore = () => {
+			if (Math.abs(audio.currentTime - recovery.time) >= 0.25) {
+				audio.currentTime = recovery.time;
+			}
+			setRecovery(undefined);
+			if (recovery.play) {
+				void audio.play().catch(() => undefined);
+			}
+		};
+		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
+			audio.addEventListener('loadedmetadata', restore, { once: true });
+			return () => audio.removeEventListener('loadedmetadata', restore);
+		}
+		restore();
+	}, [recovery, source]);
+
+	return (
+		<div className={style.audioDock} data-journal-audio-dock>
+			<audio
+				className={style.audio}
+				controls
+				data-entry-id={entry.id}
+				data-playback-active={
+					playback.activeEntryID === entry.id || undefined
+				}
+				onEnded={event => {
+					playRequested.current = false;
+					playback.stopped(entry.id, event.currentTarget.currentTime);
+				}}
+				onError={event => {
+					if (recovery?.failedSource === source) return;
+					setRecovery({
+						failedSource: source,
+						play: playRequested.current,
+						time: event.currentTarget.currentTime,
+					});
+					void refreshJournal().catch(() => setRecovery(undefined));
+				}}
+				onPause={event => {
+					if (!event.currentTarget.error)
+						playRequested.current = false;
+					playback.stopped(entry.id, event.currentTarget.currentTime);
+				}}
+				onPlay={() => {
+					playRequested.current = true;
+					playback.started(entry.id);
+				}}
+				onTimeUpdate={event =>
+					playback.progressed(
+						entry.id,
+						event.currentTarget.currentTime
+					)
+				}
+				preload="metadata"
+				ref={audio => {
+					audioRef.current = audio;
+					playback.registerAudio(entry.id, audio);
+				}}
+				src={source}
+			/>
+		</div>
+	);
+}
+
 function EntryCard({
 	deleteEntry,
 	entry,
@@ -1126,38 +1219,11 @@ function EntryCard({
 				</p>
 			)}
 			{entry.audioUrl && (
-				<div className={style.audioDock} data-journal-audio-dock>
-					<audio
-						className={style.audio}
-						controls
-						data-entry-id={entry.id}
-						data-playback-active={
-							playback.activeEntryID === entry.id || undefined
-						}
-						onEnded={event =>
-							playback.stopped(
-								entry.id,
-								event.currentTarget.currentTime
-							)
-						}
-						onPause={event =>
-							playback.stopped(
-								entry.id,
-								event.currentTarget.currentTime
-							)
-						}
-						onPlay={() => playback.started(entry.id)}
-						onTimeUpdate={event =>
-							playback.progressed(
-								entry.id,
-								event.currentTarget.currentTime
-							)
-						}
-						preload="metadata"
-						ref={audio => playback.registerAudio(entry.id, audio)}
-						src={entry.audioUrl}
-					/>
-				</div>
+				<JournalAudio
+					audioURL={entry.audioUrl}
+					entry={entry}
+					playback={playback}
+				/>
 			)}
 			{entry.error && <p className={style.notice}>{entry.error}</p>}
 			{entry.summary && (
