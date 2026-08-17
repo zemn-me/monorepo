@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types';
 
 import { Link } from '#root/ts/react/next/Link/index.js';
 

@@ -1,6 +1,6 @@
 import 'ts/pulumi/pleaseintroducemetoyour.dog/app/base.css';
 
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types';
 import { ReactNode } from 'react';
 import { AnalyticsPageBeacon } from '#root/project/me/zemn/api/analytics/AnalyticsPageBeacon.js';
 import {

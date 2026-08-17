@@ -33,7 +33,7 @@ const config = {
 		// Bazel already runs tsc checks in dedicated targets.
 		ignoreBuildErrors: true,
 	},
-	output: 'export',
+	output: 'export' as const,
 	productionBrowserSourceMaps: false,
 	images: {
 		unoptimized: true,

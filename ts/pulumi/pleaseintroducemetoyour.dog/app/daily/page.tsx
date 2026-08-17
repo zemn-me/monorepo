@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types/index.js';
+import { Metadata } from 'next/types';
 
 import { DogsOfTheDay } from '#root/ts/pulumi/pleaseintroducemetoyour.dog/app/daily/client.js';
 
