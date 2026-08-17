@@ -2,6 +2,7 @@
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ReactNode } from 'react';
 import z from 'zod';
 
@@ -31,17 +32,19 @@ z.config({ jitless: true });
 
 export function Providers({ children }: ProviderProps) {
 	return (
-		<LocalStorageController>
-			<PersistQueryClientProvider
-				client={queryClient}
-				persistOptions={{
-					persister: localStoragePersister,
-					maxAge: 1000 * 60 * 60 * 24 * 365,
-					buster: 'v1',
-				}}
-			>
-				{children}
-			</PersistQueryClientProvider>
-		</LocalStorageController>
+		<NuqsAdapter>
+			<LocalStorageController>
+				<PersistQueryClientProvider
+					client={queryClient}
+					persistOptions={{
+						persister: localStoragePersister,
+						maxAge: 1000 * 60 * 60 * 24 * 365,
+						buster: 'v1',
+					}}
+				>
+					{children}
+				</PersistQueryClientProvider>
+			</LocalStorageController>
+		</NuqsAdapter>
 	);
 }
