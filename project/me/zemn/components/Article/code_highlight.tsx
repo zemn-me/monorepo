@@ -138,7 +138,7 @@ function highlightedCode(code: string, language: string): ReactNode {
 export function CodeBlock({
 	children,
 	...props
-}: JSX.IntrinsicElements['pre']) {
+}: React.JSX.IntrinsicElements['pre']) {
 	const codeElement = Children.only(children);
 
 	if (!isValidElement(codeElement) || codeElement.type !== 'code') {

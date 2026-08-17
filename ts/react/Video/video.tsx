@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 
 import { useMediaQuery } from '#root/ts/react/useMediaQuery/useMediaQuery.js';
 
-type BaseVideoProps = JSX.IntrinsicElements['video'];
+type BaseVideoProps = React.JSX.IntrinsicElements['video'];
 
 export type VideoProps = BaseVideoProps;
 
