@@ -110,8 +110,8 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if usesMatchingIconControls != true {
 		t.Fatalf("journal import control is not an icon-only match for record")
 	}
-	if _, err := waitForElement(driver, selenium.ByXPATH, "//h2[normalize-space()='Years']", 30*time.Second); err != nil {
-		t.Fatalf("journal did not default to years: %v", err)
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Journal zoom']/p[normalize-space()='Overview']", 30*time.Second); err != nil {
+		t.Fatalf("journal did not default to its overview: %v", err)
 	}
 	failedEntries, err := driver.FindElements(selenium.ByID, "entry-"+failedEntryID)
 	if err != nil {
@@ -274,21 +274,24 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if len(recentUploads) != 0 {
 		t.Fatalf("default journal view still contained recent uploads")
 	}
-	if err := waitForJournalSummaryCitations(driver, "Local year journal", 4, 30*time.Second); err != nil {
-		t.Fatalf("meaningful journal hierarchy was not summarized after upload: %v", err)
+	if err := waitForJournalSummaryCitations(driver, "Local journal journal", 4, 30*time.Second); err != nil {
+		t.Fatalf("whole journal overview was not summarized after upload: %v", err)
 	}
-	for _, period := range []string{"year", "month", "week", "day"} {
+	for _, level := range []string{"Years", "Months", "Weeks", "Days"} {
 		link, err := waitForElement(
 			driver,
-			selenium.ByCSSSelector,
-			fmt.Sprintf("a[data-journal-period-link='%s']", period),
+			selenium.ByXPATH,
+			fmt.Sprintf("//a[@aria-label='Zoom in to %s']", level),
 			10*time.Second,
 		)
 		if err != nil {
-			t.Fatalf("journal %s was not displayed: %v", period, err)
+			t.Fatalf("journal could not zoom in to %s: %v", level, err)
 		}
 		if err := link.Click(); err != nil {
-			t.Fatalf("open journal %s: %v", period, err)
+			t.Fatalf("zoom journal in to %s: %v", level, err)
+		}
+		if _, err := waitForElement(driver, selenium.ByXPATH, fmt.Sprintf("//h2[normalize-space()='%s']", level), 10*time.Second); err != nil {
+			t.Fatalf("journal did not show %s after zooming: %v", level, err)
 		}
 	}
 	if err := waitForText(driver, "Local day journal", 10*time.Second); err != nil {
@@ -296,6 +299,13 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	}
 	if err := driver.Get(journalURL.String()); err != nil {
 		t.Fatalf("return to journal before checking scheduled refresh: %v", err)
+	}
+	zoomToYears, err := waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Years']", 30*time.Second)
+	if err != nil {
+		t.Fatalf("journal overview could not zoom to years: %v", err)
+	}
+	if err := zoomToYears.Click(); err != nil {
+		t.Fatalf("zoom journal overview to years: %v", err)
 	}
 	yearLink, err := waitForElement(driver, selenium.ByCSSSelector, "a[data-journal-period-link='year']", 30*time.Second)
 	if err != nil {
@@ -330,7 +340,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForScheduledJournalSummaries(driver, apiBase.String(), 4, 30*time.Second); err != nil {
 		t.Fatalf("immediate journal summaries did not survive scheduled refresh: %v", err)
 	}
-	monthLink, err := waitForElement(driver, selenium.ByCSSSelector, "a[data-journal-period-link='year']", 10*time.Second)
+	monthLink, err := waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Months']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("journal year did not link to its months: %v", err)
 	}
@@ -340,7 +350,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForText(driver, "Local month journal", 10*time.Second); err != nil {
 		t.Fatalf("journal month route: %v", err)
 	}
-	weekLink, err := waitForElement(driver, selenium.ByCSSSelector, "a[data-journal-period-link='month']", 10*time.Second)
+	weekLink, err := waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Weeks']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("journal month did not link to its weeks: %v", err)
 	}
@@ -350,39 +360,27 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForText(driver, "Local week journal", 10*time.Second); err != nil {
 		t.Fatalf("journal week route: %v", err)
 	}
-	dayListLink, err := waitForElement(driver, selenium.ByCSSSelector, "a[data-journal-period-link='week']", 10*time.Second)
+	dayListLink, err := waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Days']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("journal week did not link to its days: %v", err)
 	}
 	if err := dayListLink.Click(); err != nil {
 		t.Fatalf("open journal days: %v", err)
 	}
-	if _, err := waitForElement(
-		driver,
-		selenium.ByXPATH,
-		"//h2[normalize-space()='The week of Monday, the 11th of August 2025']",
-		10*time.Second,
-	); err != nil {
-		t.Fatalf("journal week heading: %v", err)
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//h2[normalize-space()='Days']", 10*time.Second); err != nil {
+		t.Fatalf("journal day timeline heading: %v", err)
 	}
 	if err := waitForText(driver, "Local day journal", 10*time.Second); err != nil {
 		t.Fatalf("journal day list route: %v", err)
 	}
-	dayLink, err := waitForElement(driver, selenium.ByCSSSelector, "a[data-journal-period-link='day']", 10*time.Second)
-	if err != nil {
-		t.Fatalf("journal day did not have a stable link: %v", err)
-	}
-	if err := dayLink.Click(); err != nil {
-		t.Fatalf("open individual journal day: %v", err)
-	}
-	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
-		t.Fatalf("individual journal day did not contain its entries: %v", err)
+	if err := waitForJournalAudioCount(driver, 4, 10*time.Second); err != nil {
+		t.Fatalf("journal day timeline did not contain its entries: %v", err)
 	}
 	usesTimeOnlyEntryHeadings, err := driver.ExecuteScript(`
 		const times = [...document.querySelectorAll(
 			"details[id^='entry-'] > summary > time"
 		)];
-		return times.length === 2 && times.every(time =>
+		return times.length === 4 && times.every(time =>
 			time.lang === 'en-GB' &&
 			time.textContent === '19:16'
 		);
@@ -394,7 +392,10 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("journal entry headings repeated their parent day")
 	}
 	entrySummaryDates, err := driver.ExecuteScript(`
-		const entries = [...document.querySelectorAll("details[id^='entry-']")];
+		const day = document.querySelector(
+			'[data-journal-period-start^="2025-08-13"]'
+		);
+		const entries = [...(day?.querySelectorAll("details[id^='entry-']") ?? [])];
 		const dates = entries.map(entry => {
 			const entryDate = entry.querySelector(':scope > summary > time');
 			const summaryDate = entry.querySelector(
@@ -431,7 +432,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	}
 	transcriptsScrollable, err := driver.ExecuteScript(`
 		const transcripts = [...document.querySelectorAll('[data-journal-transcript]')];
-		return transcripts.length === 2 && transcripts.every(transcript =>
+		return transcripts.length === 4 && transcripts.every(transcript =>
 			transcript.tagName === 'DIV' &&
 			transcript.getAttribute('role') === 'region' &&
 			getComputedStyle(transcript).overflowY === 'auto'
@@ -443,25 +444,17 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if transcriptsScrollable != true {
 		t.Fatalf("journal transcripts were not rendered as scrollable regions")
 	}
-	for _, level := range []struct {
-		label string
-		text  string
-	}{
-		{label: "days", text: "← Days"},
-		{label: "weeks", text: "← Weeks"},
-		{label: "months", text: "← Months"},
-		{label: "years", text: "← Years"},
-	} {
-		back, err := waitForElement(driver, selenium.ByXPATH, fmt.Sprintf("//a[normalize-space()='%s']", level.text), 10*time.Second)
+	for _, level := range []string{"Weeks", "Months", "Years", "Overview"} {
+		back, err := waitForElement(driver, selenium.ByXPATH, fmt.Sprintf("//a[@aria-label='Zoom out to %s']", level), 10*time.Second)
 		if err != nil {
-			t.Fatalf("journal %s back link: %v", level.label, err)
+			t.Fatalf("journal could not zoom out to %s: %v", level, err)
 		}
 		if err := back.Click(); err != nil {
-			t.Fatalf("follow journal %s back link: %v", level.label, err)
+			t.Fatalf("zoom journal out to %s: %v", level, err)
 		}
 	}
-	if err := waitForText(driver, "Local year journal", 10*time.Second); err != nil {
-		t.Fatalf("journal hierarchy did not return to years: %v", err)
+	if err := waitForText(driver, "Local journal journal", 10*time.Second); err != nil {
+		t.Fatalf("journal hierarchy did not return to its overview: %v", err)
 	}
 	markdown, err := waitForElement(driver, selenium.ByCSSSelector, "[data-journal-summary-block] strong", 10*time.Second)
 	if err != nil {
@@ -505,7 +498,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("year summary did not cite the multi-entry journal day")
 	}
 	firstCitationHref, err := firstCitation.GetAttribute("href")
-	if err != nil || !strings.Contains(firstCitationHref, "/journal/day?") || !strings.Contains(firstCitationHref, "day=") {
+	if err != nil || !strings.Contains(firstCitationHref, "/journal/day?") || !strings.Contains(firstCitationHref, "at=") {
 		t.Fatalf("aggregate citation did not link to an individual day: href %q, error %v", firstCitationHref, err)
 	}
 	if _, err := driver.ExecuteScript(`
@@ -566,9 +559,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
 			.find(value => value.dataset.entryId === arguments[0]);
 		const dock = audio?.closest('[data-journal-audio-dock]');
-		const navigation = document.querySelector(
-			"nav[aria-label='Journal hierarchy']"
-		);
+		const navigation = document.querySelector("nav[aria-label='Journal zoom']");
 		if (!dock || !navigation) return false;
 		const dockStyle = getComputedStyle(dock);
 		const navigationStyle = getComputedStyle(navigation);
@@ -600,14 +591,14 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("linked transcript: %v", err)
 	}
 	transcripts, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-transcript]")
-	if err != nil || len(transcripts) != 2 {
-		t.Fatalf("individual day transcripts: found %d, error %v", len(transcripts), err)
+	if err != nil || len(transcripts) != 4 {
+		t.Fatalf("day timeline transcripts: found %d, error %v", len(transcripts), err)
 	}
 	paragraphTranscripts, err := driver.ExecuteScript(`
 		const transcripts = [...document.querySelectorAll(
 			'[data-journal-transcript]'
 		)];
-		return transcripts.length === 2 && transcripts.every(transcript => {
+		return transcripts.length === 4 && transcripts.every(transcript => {
 			const text = transcript.querySelector('[data-journal-transcript-text]');
 			const paragraphs = text?.querySelectorAll(':scope > p');
 			return text !== null &&
@@ -708,7 +699,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := deleteThumb.Click(); err != nil {
 		t.Fatalf("click swipe-to-delete thumb: %v", err)
 	}
-	if err := journalAudioCountRemains(driver, 2, time.Second); err != nil {
+	if err := journalAudioCountRemains(driver, 4, time.Second); err != nil {
 		t.Fatalf("ordinary click deleted a journal entry: %v", err)
 	}
 	if _, err := driver.ExecuteScript(`
@@ -734,7 +725,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("swiped journal entry was not deleted: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 1, 10*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 3, 10*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("journal did not remove exactly one swiped entry: %v", err)
 	}
@@ -805,6 +796,13 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := driver.Get(journalURL.String()); err != nil {
 		t.Fatalf("open journal after submitted recording: %v", err)
 	}
+	zoomToYears, err = waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Years']", 30*time.Second)
+	if err != nil {
+		t.Fatalf("submitted recording overview could not zoom to years: %v", err)
+	}
+	if err := zoomToYears.Click(); err != nil {
+		t.Fatalf("zoom submitted recording overview to years: %v", err)
+	}
 	currentYearLink, err := waitForElement(
 		driver,
 		selenium.ByXPATH,
@@ -817,7 +815,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := currentYearLink.Click(); err != nil {
 		t.Fatalf("open submitted recording year: %v", err)
 	}
-	for _, period := range []string{"month", "week", "day"} {
+	for _, period := range []string{"month", "week"} {
 		link, err := waitForElement(
 			driver,
 			selenium.ByCSSSelector,
@@ -827,11 +825,20 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		if err != nil {
 			t.Fatalf("submitted recording %s was not displayed: %v", period, err)
 		}
+		if period == "week" {
+			label, err := link.Text()
+			if err != nil {
+				t.Fatalf("read submitted recording week label: %v", err)
+			}
+			if !strings.HasPrefix(strings.TrimSpace(label), "Week starting ") {
+				t.Fatalf("submitted recording week label = %q", label)
+			}
+		}
 		if err := link.Click(); err != nil {
 			t.Fatalf("open submitted recording %s: %v", period, err)
 		}
 	}
-	if err := waitForJournalAudioCount(driver, 1, 30*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 4, 30*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("submitted recording did not become a journal entry: %v", err)
 	}
@@ -854,7 +861,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := currentDayImport.SendKeys(currentDayFile.Name()); err != nil {
 		t.Fatalf("import second current-day voice memo: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 5, 30*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("second current-day voice memo did not become a journal entry: %v", err)
 	}
@@ -906,6 +913,13 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := driver.Get(journalURL.String()); err != nil {
 		t.Fatalf("return to journal before checking current-month summary: %v", err)
 	}
+	zoomToYears, err = waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Years']", 30*time.Second)
+	if err != nil {
+		t.Fatalf("current journal overview could not zoom to years: %v", err)
+	}
+	if err := zoomToYears.Click(); err != nil {
+		t.Fatalf("zoom current journal overview to years: %v", err)
+	}
 	currentYearLink, err = waitForElement(
 		driver,
 		selenium.ByXPATH,
@@ -925,10 +939,16 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := driver.Get(currentDayURL); err != nil {
 		t.Fatalf("return to current journal day: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
-		t.Fatalf("current journal day did not retain its two entries: %v", err)
+	if err := waitForJournalAudioCount(driver, 6, 30*time.Second); err != nil {
+		t.Fatalf("journal timeline did not retain all six entries: %v", err)
 	}
-	currentEntries, err := driver.FindElements(selenium.ByXPATH, "//details[.//audio]")
+	currentDayStart := time.Date(
+		localNow.Year(), localNow.Month(), localNow.Day(), 0, 0, 0, 0, journalLocation,
+	).UTC().Format("2006-01-02T15:04:05Z")
+	currentEntries, err := driver.FindElements(
+		selenium.ByCSSSelector,
+		fmt.Sprintf("[data-journal-period-start='%s'] details:has(audio)", currentDayStart),
+	)
 	if err != nil || len(currentEntries) != 2 {
 		t.Fatalf("find current-day journal entries: count %d, error %v", len(currentEntries), err)
 	}
@@ -970,20 +990,27 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := saveDate.Click(); err != nil {
 		t.Fatalf("save corrected journal recording date: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 1, 30*time.Second); err != nil {
+	if err := waitForJournalPeriodAudioCount(driver, currentDayStart, 1, 30*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("corrected entry did not leave its original day: %v", err)
 	}
 	if err := waitForNoElement(
 		driver,
 		selenium.ByXPATH,
-		"//*[normalize-space()='Local day journal']",
+		fmt.Sprintf("//*[@data-journal-period-start='%s']//*[normalize-space()='Local day journal']", currentDayStart),
 		30*time.Second,
 	); err != nil {
 		t.Fatalf("original singleton day retained its aggregate summary: %v", err)
 	}
 	if err := driver.Get(journalURL.String()); err != nil {
 		t.Fatalf("return to journal after changing recording date: %v", err)
+	}
+	zoomToYears, err = waitForElement(driver, selenium.ByXPATH, "//a[@aria-label='Zoom in to Years']", 30*time.Second)
+	if err != nil {
+		t.Fatalf("corrected journal overview could not zoom to years: %v", err)
+	}
+	if err := zoomToYears.Click(); err != nil {
+		t.Fatalf("zoom corrected journal overview to years: %v", err)
 	}
 	targetYear, err := waitForElement(
 		driver,
@@ -997,7 +1024,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := targetYear.Click(); err != nil {
 		t.Fatalf("open corrected journal year: %v", err)
 	}
-	for _, period := range []string{"month", "week", "day"} {
+	for _, period := range []string{"month", "week"} {
 		link, err := waitForElement(
 			driver,
 			selenium.ByCSSSelector,
@@ -1519,5 +1546,15 @@ func waitForJournalAudioCount(driver selenium.WebDriver, want int, timeout time.
 	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
 		count, err := journalAudioCount(webDriver)
 		return count == want, err
+	}, timeout)
+}
+
+func waitForJournalPeriodAudioCount(driver selenium.WebDriver, start string, want int, timeout time.Duration) error {
+	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
+		elements, err := webDriver.FindElements(
+			selenium.ByCSSSelector,
+			fmt.Sprintf("[data-journal-period-start='%s'] audio[data-entry-id]", start),
+		)
+		return len(elements) == want, err
 	}, timeout)
 }

@@ -2,6 +2,8 @@
 
 import {
 	faArrowDown,
+	faMagnifyingGlassMinus,
+	faMagnifyingGlassPlus,
 	faMicrophone,
 	faStop,
 	faTriangleExclamation,
@@ -72,6 +74,7 @@ function PeriodDate({
 	readonly summary: Pick<JournalSummary, 'period' | 'start'>;
 	readonly timeZone?: string;
 }) {
+	if (summary.period === 'journal') return <>Journal overview</>;
 	if (!timeZone) {
 		const start = new Date(summary.start);
 		if (summary.period === 'year') {
@@ -80,6 +83,13 @@ function PeriodDate({
 			);
 		}
 		if (summary.period === 'month') return <MonthYear date={start} />;
+		if (summary.period === 'week') {
+			return (
+				<>
+					Week starting <LocalizedDate date={start} />
+				</>
+			);
+		}
 		return <LocalizedDate date={start} />;
 	}
 	const start = Temporal.Instant.from(summary.start).toZonedDateTimeISO(
@@ -89,6 +99,13 @@ function PeriodDate({
 		return <time dateTime={start.toString()}>{start.year}</time>;
 	}
 	if (summary.period === 'month') return <MonthYear date={start} />;
+	if (summary.period === 'week') {
+		return (
+			<>
+				Week starting <LocalizedDate date={start} />
+			</>
+		);
+	}
 	return <LocalizedDate date={start} />;
 }
 
@@ -561,10 +578,12 @@ function journalCitationKey(citation: JournalCitation) {
 
 function SummaryCardView({
 	playback,
+	showPeriod = true,
 	summary,
 	timeZone,
 }: {
 	readonly playback: JournalPlayback;
+	readonly showPeriod?: boolean;
 	readonly summary: JournalSummary;
 	readonly timeZone?: string;
 }) {
@@ -620,9 +639,11 @@ function SummaryCardView({
 	return (
 		<article className={style.summary} ref={setArticle}>
 			<header>
-				<p>
-					<PeriodDate summary={summary} timeZone={timeZone} />
-				</p>
+				{showPeriod && (
+					<p>
+						<PeriodDate summary={summary} timeZone={timeZone} />
+					</p>
+				)}
 				<h3>{summary.title}</h3>
 			</header>
 			{summary.blocks.map((block, blockIndex) => (
@@ -663,6 +684,7 @@ const SummaryCard = memo(
 		previous.playback.playSegment === next.playback.playSegment &&
 		previous.playback.quoteForSegment === next.playback.quoteForSegment &&
 		previous.playback.titleForEntry === next.playback.titleForEntry &&
+		previous.showPeriod === next.showPeriod &&
 		previous.timeZone === next.timeZone
 );
 
@@ -1183,6 +1205,7 @@ function PendingEntries({
 }
 
 const journalSelectionQuery = {
+	at: parseAsString,
 	year: parseAsString,
 	month: parseAsString,
 	week: parseAsString,
@@ -1190,9 +1213,9 @@ const journalSelectionQuery = {
 };
 
 type JournalSelection = Partial<
-	Record<'year' | 'month' | 'week' | 'day', string>
+	Record<'at' | 'year' | 'month' | 'week' | 'day', string>
 >;
-type AggregatePeriod = Exclude<JournalSummary['period'], 'entry'>;
+type AggregatePeriod = Exclude<JournalSummary['period'], 'entry' | 'journal'>;
 
 interface JournalPeriodNode {
 	readonly end: string;
@@ -1205,13 +1228,6 @@ interface JournalPeriodNode {
 function periodContains(period: JournalPeriodNode, timestamp: string) {
 	const value = Date.parse(timestamp);
 	return value >= Date.parse(period.start) && value < Date.parse(period.end);
-}
-
-function periodsOverlap(first: JournalPeriodNode, second: JournalPeriodNode) {
-	return (
-		Date.parse(first.start) < Date.parse(second.end) &&
-		Date.parse(second.start) < Date.parse(first.end)
-	);
 }
 
 function periodBounds(entry: JournalEntry, period: AggregatePeriod) {
@@ -1250,11 +1266,7 @@ function periodBounds(entry: JournalEntry, period: AggregatePeriod) {
 	};
 }
 
-function periodsFor(
-	journal: Journal,
-	period: AggregatePeriod,
-	parent?: JournalPeriodNode
-) {
+function periodsFor(journal: Journal, period: AggregatePeriod) {
 	const nodes = new Map<number, JournalPeriodNode>();
 	for (const entry of journal.entries) {
 		if (
@@ -1283,18 +1295,9 @@ function periodsFor(
 			...(!existing ? {} : { end: existing.end, start: existing.start }),
 		});
 	}
-	return [...nodes.values()]
-		.filter(node => !parent || periodsOverlap(parent, node))
-		.sort((a, b) => Date.parse(b.start) - Date.parse(a.start));
-}
-
-function findPeriod(
-	journal: Journal,
-	period: AggregatePeriod,
-	id: string | null | undefined
-) {
-	if (!id) return undefined;
-	return periodsFor(journal, period).find(node => node.id === id);
+	return [...nodes.values()].sort(
+		(a, b) => Date.parse(b.start) - Date.parse(a.start)
+	);
 }
 
 function containingPeriod(
@@ -1317,76 +1320,243 @@ function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
 	return query.size > 0 ? `${pathname}?${query}` : pathname;
 }
 
-function hierarchySelection(
-	journal: Journal,
-	timestamp: string
-): JournalSelection {
-	return {
-		year: containingPeriod(journal, 'year', timestamp)?.id,
-		month: containingPeriod(journal, 'month', timestamp)?.id,
-		week: containingPeriod(journal, 'week', timestamp)?.id,
-		day: containingPeriod(journal, 'day', timestamp)?.id,
-	};
+function periodMidpoint(period: JournalPeriodNode) {
+	return new Date(
+		(Date.parse(period.start) + Date.parse(period.end)) / 2
+	).toISOString();
 }
 
 function citationDestination(journal: Journal, entryID: string) {
 	const entry = journal.entries.find(value => value.id === entryID);
 	if (!entry) return '/journal';
-	return journalHref('day', hierarchySelection(journal, entry.recordedAt));
+	return journalHref('day', { at: entry.recordedAt });
 }
 
-function BackLink({
-	href,
-	label,
+const zoomLevels = [undefined, 'year', 'month', 'week', 'day'] as const;
+
+function zoomLevelLabel(route: JournalRoute | undefined) {
+	if (route === undefined) return 'Overview';
+	return `${route.charAt(0).toUpperCase()}${route.slice(1)}s`;
+}
+
+function ZoomNavigation({
+	focus,
+	route,
 }: {
-	readonly href: string;
-	readonly label: string;
+	readonly focus: string;
+	readonly route?: JournalRoute;
 }) {
+	const level = zoomLevels.indexOf(route);
+	const out = level > 0 ? zoomLevels[level - 1] : undefined;
+	const into = level < zoomLevels.length - 1 ? zoomLevels[level + 1] : null;
+	const href = (destination: JournalRoute | undefined) =>
+		destination
+			? journalHref(destination, { at: focus })
+			: `/journal?${new URLSearchParams({ at: focus })}`;
 	return (
-		<nav aria-label="Journal hierarchy" className={style.backNavigation}>
-			<Link href={href}>← {label}</Link>
+		<nav aria-label="Journal zoom" className={style.zoomNavigation}>
+			{level > 0 && (
+				<Link
+					aria-label={`Zoom out to ${zoomLevelLabel(out)}`}
+					href={href(out)}
+					title={`Zoom out to ${zoomLevelLabel(out)}`}
+				>
+					<FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+				</Link>
+			)}
+			<p aria-live="polite">{zoomLevelLabel(route)}</p>
+			{into !== null && (
+				<Link
+					aria-label={`Zoom in to ${zoomLevelLabel(into)}`}
+					href={href(into)}
+					title={`Zoom in to ${zoomLevelLabel(into)}`}
+				>
+					<FontAwesomeIcon icon={faMagnifyingGlassPlus} />
+				</Link>
+			)}
 		</nav>
 	);
 }
 
 function PeriodList({
+	deleteEntry,
+	focus,
 	journal,
+	nextRoute,
 	period,
 	playback,
-	selection,
-	parent,
-	nextRoute,
+	setFocus,
+	updateEntryDate,
 }: {
+	readonly deleteEntry?: (entryID: string) => Promise<void>;
+	readonly focus: string;
 	readonly journal: Journal;
+	readonly nextRoute?: JournalRoute;
 	readonly period: AggregatePeriod;
 	readonly playback: JournalPlayback;
-	readonly selection: JournalSelection;
-	readonly parent?: JournalPeriodNode;
-	readonly nextRoute: JournalRoute;
+	readonly setFocus: (focus: string) => void;
+	readonly updateEntryDate?: (
+		entryID: string,
+		recordedDate: string
+	) => Promise<void>;
 }) {
-	const periods = periodsFor(journal, period, parent);
+	const periods = useMemo(
+		() => periodsFor(journal, period),
+		[journal, period]
+	);
+	const listRef = useRef<HTMLDivElement>(null);
+	const positionedPeriod = useRef<AggregatePeriod>();
+	const focusRef = useRef(focus);
+	focusRef.current = focus;
+
+	useEffect(() => {
+		const fallbackPeriod = periods[0];
+		if (positionedPeriod.current === period || fallbackPeriod === undefined)
+			return;
+		positionedPeriod.current = period;
+		const frame = window.requestAnimationFrame(() => {
+			const element = listRef.current?.querySelector<HTMLElement>(
+				`[data-journal-period-start="${CSS.escape(
+					containingPeriod(journal, period, focusRef.current)
+						?.start ?? fallbackPeriod.start
+				)}"]`
+			);
+			if (!element) return;
+			const node = periods.find(
+				candidate =>
+					candidate.start === element.dataset.journalPeriodStart
+			);
+			if (!node) return;
+			const duration = Date.parse(node.end) - Date.parse(node.start);
+			const fraction = Math.max(
+				0,
+				Math.min(
+					1,
+					(Date.parse(focusRef.current) - Date.parse(node.start)) /
+						duration
+				)
+			);
+			const bounds = element.getBoundingClientRect();
+			window.scrollTo({
+				behavior: 'auto',
+				top:
+					window.scrollY +
+					bounds.top +
+					bounds.height * fraction -
+					window.innerHeight / 2,
+			});
+		});
+		return () => window.cancelAnimationFrame(frame);
+	}, [journal, period, periods]);
+
+	useEffect(() => {
+		let frame = 0;
+		const update = () => {
+			frame = 0;
+			const elements = Array.from(
+				listRef.current?.querySelectorAll<HTMLElement>(
+					'[data-journal-period-start]'
+				) ?? []
+			);
+			if (elements.length === 0) return;
+			const viewportMiddle = window.innerHeight / 2;
+			const element = elements.reduce((closest, candidate) => {
+				const bounds = candidate.getBoundingClientRect();
+				const distance =
+					viewportMiddle < bounds.top
+						? bounds.top - viewportMiddle
+						: viewportMiddle > bounds.bottom
+							? viewportMiddle - bounds.bottom
+							: 0;
+				const closestBounds = closest.getBoundingClientRect();
+				const closestDistance =
+					viewportMiddle < closestBounds.top
+						? closestBounds.top - viewportMiddle
+						: viewportMiddle > closestBounds.bottom
+							? viewportMiddle - closestBounds.bottom
+							: 0;
+				return distance < closestDistance ? candidate : closest;
+			});
+			const node = periods.find(
+				candidate =>
+					candidate.start === element.dataset.journalPeriodStart
+			);
+			if (!node) return;
+			const bounds = element.getBoundingClientRect();
+			const fraction = Math.max(
+				0,
+				Math.min(1, (viewportMiddle - bounds.top) / bounds.height)
+			);
+			const timestamp = new Date(
+				Date.parse(node.start) +
+					(Date.parse(node.end) - Date.parse(node.start)) * fraction
+			).toISOString();
+			if (timestamp !== focusRef.current) {
+				focusRef.current = timestamp;
+				setFocus(timestamp);
+			}
+		};
+		const scheduleUpdate = () => {
+			if (frame === 0) frame = window.requestAnimationFrame(update);
+		};
+		window.addEventListener('scroll', scheduleUpdate, { passive: true });
+		window.addEventListener('resize', scheduleUpdate);
+		scheduleUpdate();
+		return () => {
+			window.removeEventListener('scroll', scheduleUpdate);
+			window.removeEventListener('resize', scheduleUpdate);
+			if (frame !== 0) window.cancelAnimationFrame(frame);
+		};
+	}, [periods, setFocus]);
+
 	if (periods.length === 0) {
 		return <p className={style.empty}>No {period}s yet.</p>;
 	}
 	return (
-		<div className={style.periodList}>
+		<div className={style.periodList} ref={listRef}>
 			{periods.map(node => (
-				<section className={style.period} key={node.id}>
+				<section
+					className={style.period}
+					data-journal-period-start={node.start}
+					key={node.id}
+				>
+					<h3>
+						{nextRoute ? (
+							<Link
+								data-journal-period-link={period}
+								href={journalHref(nextRoute, {
+									at: periodMidpoint(node),
+								})}
+							>
+								<PeriodDate summary={node} />
+							</Link>
+						) : (
+							<PeriodDate summary={node} />
+						)}
+					</h3>
 					{node.summary && (
 						<SummaryCard
 							playback={playback}
+							showPeriod={false}
 							summary={node.summary}
 						/>
 					)}
-					<Link
-						data-journal-period-link={period}
-						href={journalHref(nextRoute, {
-							...selection,
-							[period]: node.id,
-						})}
-					>
-						<PeriodDate summary={node} />
-					</Link>
+					{period === 'day' &&
+						journal.entries
+							.filter(
+								entry =>
+									entry.status === 'ready' &&
+									periodContains(node, entry.recordedAt)
+							)
+							.map(entry => (
+								<EntryCard
+									deleteEntry={deleteEntry}
+									entry={entry}
+									key={entry.id}
+									playback={playback}
+									updateEntryDate={updateEntryDate}
+								/>
+							))}
 				</section>
 			))}
 		</div>
@@ -1397,25 +1567,24 @@ function JournalBrowser({
 	deleteEntry,
 	journal,
 	route,
-	root,
 	updateEntryDate,
 }: {
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
-	readonly route: JournalRoute;
-	readonly root: boolean;
+	readonly route?: JournalRoute;
 	readonly updateEntryDate?: (
 		entryID: string,
 		recordedDate: string
 	) => Promise<void>;
 }) {
-	const [rawSelection] = useQueryStates(journalSelectionQuery);
-	const selection: JournalSelection = {
-		year: rawSelection.year ?? undefined,
-		month: rawSelection.month ?? undefined,
-		week: rawSelection.week ?? undefined,
-		day: rawSelection.day ?? undefined,
-	};
+	const [rawSelection, setRawSelection] = useQueryStates(
+		journalSelectionQuery,
+		{
+			history: 'replace',
+			shallow: true,
+			throttleMs: 250,
+		}
+	);
 	const aggregateCitationDestination = useCallback(
 		(entryID: string) => citationDestination(journal, entryID),
 		[journal]
@@ -1423,182 +1592,85 @@ function JournalBrowser({
 	const playback = useJournalPlayback(
 		journal,
 		aggregateCitationDestination,
-		route
+		route ?? 'overview'
 	);
 	const pendingEntries = journal.entries.filter(entry =>
 		['awaiting_upload', 'processing'].includes(entry.status)
 	);
-	const year = findPeriod(journal, 'year', selection.year);
-	const month = findPeriod(journal, 'month', selection.month);
-	const week = findPeriod(journal, 'week', selection.week);
-	const day = findPeriod(journal, 'day', selection.day);
+	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
+		.map(period =>
+			periodsFor(journal, period).find(
+				node => node.id === rawSelection[period]
+			)
+		)
+		.find(node => node !== undefined)?.start;
+	const newestEntry = journal.entries
+		.filter(entry => entry.status !== 'failed')
+		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))[0];
+	const focus =
+		rawSelection.at ??
+		legacyFocus ??
+		newestEntry?.recordedAt ??
+		new Date().toISOString();
+	const setFocus = useCallback(
+		(next: string) => {
+			void setRawSelection({ at: next }, { history: 'replace' });
+		},
+		[setRawSelection]
+	);
 
-	if (route === 'year') {
-		return (
-			<div className={style.browser}>
-				{!root && <BackLink href="/journal" label="Journal" />}
-				<PendingEntries entries={pendingEntries} playback={playback} />
-				<h2>Years</h2>
-				<PeriodList
-					journal={journal}
-					nextRoute="month"
-					period="year"
-					playback={playback}
-					selection={{}}
-				/>
-			</div>
+	if (route === undefined) {
+		const readyEntries = journal.entries.filter(
+			entry => entry.status === 'ready'
 		);
-	}
-
-	if (route === 'month') {
+		const summary =
+			journal.summaries.find(value => value.period === 'journal') ??
+			(readyEntries.length === 1
+				? readyEntries.at(0)?.summary
+				: undefined);
 		return (
 			<div className={style.browser}>
-				<BackLink href="/journal/year" label="Years" />
+				<ZoomNavigation focus={focus} />
 				<PendingEntries entries={pendingEntries} playback={playback} />
-				<h2>
-					{year ? (
-						<>
-							Months in <PeriodDate summary={year} />
-						</>
-					) : (
-						'Months'
-					)}
-				</h2>
-				{selection.year && !year ? (
-					<p className={style.notice}>That year is not available.</p>
+				{summary ? (
+					<SummaryCard
+						playback={playback}
+						showPeriod={false}
+						summary={summary}
+					/>
+				) : readyEntries.length > 1 ? (
+					<p className={style.empty} role="status">
+						Preparing the journal overview…
+					</p>
 				) : (
-					<PeriodList
-						journal={journal}
-						nextRoute="week"
-						parent={year}
-						period="month"
-						playback={playback}
-						selection={year ? { year: year.id } : {}}
-					/>
+					<p className={style.empty}>
+						The journal overview will appear here.
+					</p>
 				)}
 			</div>
 		);
 	}
 
-	if (route === 'week') {
-		const backSelection = year ? { year: year.id } : {};
-		return (
-			<div className={style.browser}>
-				<BackLink
-					href={journalHref('month', backSelection)}
-					label="Months"
-				/>
-				<PendingEntries entries={pendingEntries} playback={playback} />
-				<h2>
-					{month ? (
-						<>
-							Weeks in <PeriodDate summary={month} />
-						</>
-					) : (
-						'Weeks'
-					)}
-				</h2>
-				{selection.month && !month ? (
-					<p className={style.notice}>That month is not available.</p>
-				) : (
-					<PeriodList
-						journal={journal}
-						nextRoute="day"
-						parent={month}
-						period="week"
-						playback={playback}
-						selection={{
-							...backSelection,
-							...(month ? { month: month.id } : {}),
-						}}
-					/>
-				)}
-			</div>
-		);
-	}
-
-	if (day) {
-		const entries = journal.entries.filter(
-			entry =>
-				entry.status === 'ready' &&
-				periodContains(day, entry.recordedAt)
-		);
-		const naturalSelection = hierarchySelection(journal, day.start);
-		return (
-			<div className={style.browser}>
-				<BackLink
-					href={journalHref('day', {
-						...naturalSelection,
-						...selection,
-						day: undefined,
-					})}
-					label="Days"
-				/>
-				<PendingEntries entries={pendingEntries} playback={playback} />
-				<h2>
-					<PeriodDate summary={day} />
-				</h2>
-				{day.summary && (
-					<SummaryCard playback={playback} summary={day.summary} />
-				)}
-				{entries.map(entry => (
-					<EntryCard
-						deleteEntry={deleteEntry}
-						entry={entry}
-						key={entry.id}
-						playback={playback}
-						updateEntryDate={updateEntryDate}
-					/>
-				))}
-			</div>
-		);
-	}
-
-	const backMonth =
-		month ??
-		(week ? containingPeriod(journal, 'month', week.start) : undefined);
-	const backYear =
-		year ??
-		(backMonth
-			? containingPeriod(journal, 'year', backMonth.start)
-			: undefined);
+	const nextRoute: Partial<Record<JournalRoute, JournalRoute>> = {
+		year: 'month',
+		month: 'week',
+		week: 'day',
+	};
 	return (
 		<div className={style.browser}>
-			<BackLink
-				href={journalHref('week', {
-					...(backYear ? { year: backYear.id } : {}),
-					...(backMonth ? { month: backMonth.id } : {}),
-				})}
-				label="Weeks"
-			/>
+			<ZoomNavigation focus={focus} route={route} />
 			<PendingEntries entries={pendingEntries} playback={playback} />
-			<h2>
-				{week ? (
-					<>
-						The week of <PeriodDate summary={week} />
-					</>
-				) : (
-					'Days'
-				)}
-			</h2>
-			{selection.day && !day ? (
-				<p className={style.notice}>That day is not available.</p>
-			) : selection.week && !week ? (
-				<p className={style.notice}>That week is not available.</p>
-			) : (
-				<PeriodList
-					journal={journal}
-					nextRoute="day"
-					parent={week}
-					period="day"
-					playback={playback}
-					selection={{
-						...(backYear ? { year: backYear.id } : {}),
-						...(backMonth ? { month: backMonth.id } : {}),
-						...(week ? { week: week.id } : {}),
-					}}
-				/>
-			)}
+			<h2>{zoomLevelLabel(route)}</h2>
+			<PeriodList
+				deleteEntry={deleteEntry}
+				focus={focus}
+				journal={journal}
+				nextRoute={nextRoute[route]}
+				period={route}
+				playback={playback}
+				setFocus={setFocus}
+				updateEntryDate={updateEntryDate}
+			/>
 		</div>
 	);
 }
@@ -1746,7 +1818,6 @@ export default function JournalPageClient({
 }: {
 	readonly route?: JournalRoute;
 }) {
-	const activeRoute = route ?? 'year';
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
 	const journal = useGetJournal(idToken);
@@ -2047,8 +2118,7 @@ export default function JournalPageClient({
 										: undefined
 								}
 								journal={value}
-								root={route === undefined}
-								route={activeRoute}
+								route={route}
 								updateEntryDate={
 									hasWriteScope
 										? updateJournalEntryDate

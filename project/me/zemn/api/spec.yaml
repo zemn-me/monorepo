@@ -262,7 +262,7 @@ components:
             dynamodbav: id
         period:
           type: string
-          enum: [entry, day, week, month, year]
+          enum: [entry, day, week, month, year, journal]
           x-oapi-codegen-extra-tags:
             dynamodbav: period
         start:
