@@ -35,7 +35,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.45.5
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
-	github.com/bazelbuild/bazel-gazelle v0.51.3
+	github.com/bazelbuild/bazel-gazelle v0.52.2
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
 	github.com/bazelbuild/rules_go v0.62.0
 	github.com/beevik/etree v1.7.0
