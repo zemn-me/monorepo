@@ -1,6 +1,7 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_binary", "py_library")
 
+# keep
 py_binary(
     name = "merge_driver",
     srcs = ["merge_driver.py"],
