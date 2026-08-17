@@ -3,7 +3,7 @@ load("//ts:rules.bzl", "ts_project")
 
 genrule(
     name = "gen_data_ts",
-    srcs = ["@com_github_factoriolab//:src/data/1.1/data.json"],
+    srcs = ["@com_github_factoriolab//:public/data/1.1/data.json"],
     outs = ["data.ts"],
     cmd_bash = """
 		echo '/* biome-ignore-all lint: generated file */' > $@
