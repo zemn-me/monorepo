@@ -35,8 +35,8 @@ type MDXComponentTypes =
 interface MDXContentProps {
 	components?: {
 		[k in MDXComponentTypes]?: (
-			props: k extends keyof JSX.IntrinsicElements
-				? JSX.IntrinsicElements[k]
+			props: k extends keyof React.JSX.IntrinsicElements
+				? React.JSX.IntrinsicElements[k]
 				: never
 		) => ReactElement | null;
 	};
