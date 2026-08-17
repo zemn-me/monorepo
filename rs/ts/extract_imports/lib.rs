@@ -42,9 +42,7 @@ pub fn extract_imports(filename: String) -> Result<Vec<String>, ExtractImportsEr
         .into_iter()
         .filter_map(|item| match item {
             swc_ecma_ast::ModuleItem::ModuleDecl(m) => match m {
-                ModuleDecl::Import(import) => {
-                    Some(import.src.value.to_string_lossy().into_owned())
-                }
+                ModuleDecl::Import(import) => Some(import.src.value.to_string_lossy().into_owned()),
                 ModuleDecl::ExportDecl(_) => None,
                 ModuleDecl::ExportNamed(export) => export
                     .src
