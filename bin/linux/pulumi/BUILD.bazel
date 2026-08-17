@@ -1,5 +1,5 @@
 # the pulumi cli tool
-load("@bazel_skylib//rules:native_binary.bzl", "native_test")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -65,13 +65,16 @@ alias(
     }),
 )
 
-native_test(
-    # The name of the test rule.
+sh_test(
     name = "smoke",
-    # label; path of the pre-built executable
-    src = ":pulumi",
-    # output; an output name for the copy of the binary
-    out = "pulumi.local",
+    srcs = ["smoke.sh"],
+    data = [":pulumi"],
+    env = {
+        "PULUMI_BINARY": "$(rlocationpath :pulumi)",
+    },
+    deps = [
+        "@rules_shell//shell/runfiles",
+    ],
 )
 
 bazel_lint(
