@@ -814,9 +814,14 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	}
 	for _, period := range journalAggregatePeriods {
 		start, end := periodBounds(audioRecordedAt, location, string(period))
+		if period == JournalSummaryPeriodJournal {
+			start, end = journalBounds([]JournalStoredRecord{{Entry: &JournalStoredEntry{
+				Status: JournalEntryStatusReady, RecordedAt: audioRecordedAt, Summary: journal.Entries[0].Summary,
+			}}})
+		}
 		summary := summaryRecord(string(period)+":"+start.Format(time.RFC3339), period, start, end, legacyResult, "legacy-singleton")
 		if err := server.putJournalRecord(ctx, JournalStoredRecord{
-			Id: journalOwnerSubject, When: "SUMMARY#" + string(period) + "#" + start.Format(time.RFC3339),
+			Id: journalOwnerSubject, When: journalSummaryRecordKey(period, start),
 			Kind: JournalStoredRecordKindSummary, Summary: &summary,
 		}); err != nil {
 			t.Fatal(err)
@@ -912,7 +917,7 @@ func TestJournalSummariesRefreshMeaningfulHierarchyAfterEachUpload(t *testing.T)
 	assertCounts := func(want map[string]int) {
 		t.Helper()
 		got := counts()
-		for _, period := range []string{"entry", "day", "week", "month", "year"} {
+		for _, period := range []string{"entry", "day", "week", "month", "year", "journal"} {
 			if got[period] != want[period] {
 				t.Errorf("%s summary calls = %d, want %d; all calls: %v", period, got[period], want[period], got)
 			}
@@ -924,22 +929,22 @@ func TestJournalSummariesRefreshMeaningfulHierarchyAfterEachUpload(t *testing.T)
 	upload(0, time.Date(2026, time.July, 25, 20, 0, 0, 0, time.UTC))
 	assertCounts(map[string]int{"entry": 1})
 	upload(1, time.Date(2026, time.July, 25, 21, 0, 0, 0, time.UTC))
-	assertCounts(map[string]int{"entry": 2, "day": 1})
+	assertCounts(map[string]int{"entry": 2, "day": 1, "journal": 1})
 
 	// A singleton entry on a second day is passed through to its parents,
 	// allowing the week and month to summarize two days without creating a
 	// redundant summary for that singleton day.
 	upload(2, time.Date(2026, time.July, 26, 20, 0, 0, 0, time.UTC))
-	assertCounts(map[string]int{"entry": 3, "day": 1, "week": 1, "month": 1})
+	assertCounts(map[string]int{"entry": 3, "day": 1, "week": 1, "month": 1, "journal": 2})
 
 	// A singleton entry in a second month similarly makes the year useful.
 	upload(3, time.Date(2026, time.August, 2, 20, 0, 0, 0, time.UTC))
-	assertCounts(map[string]int{"entry": 4, "day": 1, "week": 1, "month": 1, "year": 1})
+	assertCounts(map[string]int{"entry": 4, "day": 1, "week": 1, "month": 1, "year": 1, "journal": 3})
 
 	// Adding another entry to an existing day refreshes every meaningful
 	// ancestor because each source fingerprint changes in hierarchy order.
 	upload(4, time.Date(2026, time.July, 25, 22, 0, 0, 0, time.UTC))
-	assertCounts(map[string]int{"entry": 5, "day": 2, "week": 2, "month": 2, "year": 2})
+	assertCounts(map[string]int{"entry": 5, "day": 2, "week": 2, "month": 2, "year": 2, "journal": 4})
 
 	beforeScheduledRefresh := counts()
 	if err := server.RefreshJournalSummaries(ctx, time.Date(2027, time.January, 1, 8, 5, 0, 0, time.UTC)); err != nil {
@@ -960,12 +965,13 @@ func TestJournalSummariesRefreshMeaningfulHierarchyAfterEachUpload(t *testing.T)
 	if len(journal.Entries) != 5 {
 		t.Fatalf("entries = %d, want 5", len(journal.Entries))
 	}
-	if len(journal.Summaries) != 4 {
-		t.Fatalf("summaries = %d, want day/week/month/year", len(journal.Summaries))
+	if len(journal.Summaries) != 5 {
+		t.Fatalf("summaries = %d, want day/week/month/year/journal", len(journal.Summaries))
 	}
 	wantCitations := map[JournalSummaryPeriod]int{
 		JournalSummaryPeriodDay: 3, JournalSummaryPeriodWeek: 4,
 		JournalSummaryPeriodMonth: 4, JournalSummaryPeriodYear: 5,
+		JournalSummaryPeriodJournal: 5,
 	}
 	for _, summary := range journal.Summaries {
 		if got, want := len(summary.Blocks[0].Citations), wantCitations[summary.Period]; got != want {
@@ -1311,8 +1317,15 @@ func TestDeleteReadyJournalEntryRemovesFilesHashAndAggregateSummary(t *testing.T
 		t.Fatal(err)
 	}
 	journal := response.(GetJournal200JSONResponse)
-	if len(journal.Entries) != 2 || len(journal.Summaries) != 1 || journal.Summaries[0].Period != JournalSummaryPeriodDay {
-		t.Fatalf("journal before deletion = %#v, want two entries and a day summary", journal)
+	if len(journal.Entries) != 2 || len(journal.Summaries) != 2 {
+		t.Fatalf("journal before deletion = %#v, want two entries plus day and journal summaries", journal)
+	}
+	periods := map[JournalSummaryPeriod]bool{}
+	for _, summary := range journal.Summaries {
+		periods[summary.Period] = true
+	}
+	if !periods[JournalSummaryPeriodDay] || !periods[JournalSummaryPeriodJournal] {
+		t.Fatalf("summary periods before deletion = %v, want day and journal", periods)
 	}
 	deleted := journal.Entries[0]
 	var deletedContentSHA256 string

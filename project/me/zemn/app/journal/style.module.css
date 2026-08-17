@@ -134,12 +134,14 @@
 	margin-block: 1.5em 0.5em;
 }
 
-.backNavigation {
+.zoomNavigation {
 	align-items: center;
 	background: var(--background-color);
 	block-size: var(--journal-sticky-navigation-height);
 	box-sizing: border-box;
 	display: flex;
+	gap: 0.75em;
+	justify-content: center;
 	margin-block-end: 1.5em;
 	max-width: 42em;
 	position: sticky;
@@ -147,8 +149,24 @@
 	z-index: 7;
 }
 
-.backNavigation a {
-	text-decoration-color: var(--link-color);
+.zoomNavigation a {
+	align-items: center;
+	block-size: 2.25em;
+	border: 1px solid var(--journal-line);
+	box-sizing: border-box;
+	display: inline-flex;
+	inline-size: 2.25em;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.zoomNavigation p {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+	margin: 0;
+	min-inline-size: 5em;
+	text-align: center;
+	text-transform: uppercase;
 }
 
 .periodList {
@@ -158,6 +176,11 @@
 
 .period {
 	min-width: 0;
+	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
+}
+
+.period > h3 {
+	margin-block: 0 0.75em;
 }
 
 .summary {

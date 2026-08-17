@@ -316,6 +316,26 @@ func periodBounds(at time.Time, location *time.Location, period string) (time.Ti
 	return start.UTC(), end.UTC()
 }
 
+func journalBounds(records []JournalStoredRecord) (time.Time, time.Time) {
+	var start, end time.Time
+	for _, record := range records {
+		if record.Entry == nil || record.Entry.Status != JournalEntryStatusReady || record.Entry.Summary == nil {
+			continue
+		}
+		recordedAt := record.Entry.RecordedAt
+		if start.IsZero() || recordedAt.Before(start) {
+			start = recordedAt
+		}
+		if end.IsZero() || recordedAt.After(end) {
+			end = recordedAt
+		}
+	}
+	if !end.IsZero() {
+		end = end.Add(time.Nanosecond)
+	}
+	return start, end
+}
+
 func summaryText(summary JournalSummary) string {
 	parts := make([]string, 0, len(summary.Blocks))
 	for _, block := range summary.Blocks {
@@ -448,6 +468,67 @@ func monthJournalSummarySources(records []JournalStoredRecord, start, end time.T
 	return sources, nil
 }
 
+func journalSummarySources(records []JournalStoredRecord, start, end time.Time) ([]JournalSummarySource, error) {
+	var yearSummaries []JournalSummary
+	for _, record := range records {
+		if record.Summary != nil && record.Summary.Period == JournalSummaryPeriodYear && record.Summary.Start.Before(end) && record.Summary.End.After(start) {
+			yearSummaries = append(yearSummaries, *record.Summary)
+		}
+	}
+	sources := make([]JournalSummarySource, 0, len(yearSummaries))
+	for _, summary := range yearSummaries {
+		sources = append(sources, journalSummarySource(summary))
+	}
+	type yearBounds struct{ start, end time.Time }
+	missingYears := map[string]yearBounds{}
+	for _, record := range records {
+		if record.Entry == nil {
+			continue
+		}
+		entry := record.Entry
+		if entry.Status != JournalEntryStatusReady || entry.Summary == nil || entry.RecordedAt.Before(start) || !entry.RecordedAt.Before(end) {
+			continue
+		}
+		covered := false
+		for _, summary := range yearSummaries {
+			if journalSummaryCovers(summary, entry.RecordedAt) {
+				covered = true
+				break
+			}
+		}
+		if covered {
+			continue
+		}
+		location, err := time.LoadLocation(entry.TimeZone)
+		if err != nil {
+			return nil, err
+		}
+		yearStart, yearEnd := periodBounds(entry.RecordedAt, location, string(JournalSummaryPeriodYear))
+		missingYears[yearStart.Format(time.RFC3339)] = yearBounds{start: yearStart, end: yearEnd}
+	}
+	keys := make([]string, 0, len(missingYears))
+	for key := range missingYears {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		bounds := missingYears[key]
+		yearSources, err := monthJournalSummarySources(records, bounds.start, bounds.end)
+		if err != nil {
+			return nil, err
+		}
+		switch len(yearSources) {
+		case 1:
+			sources = append(sources, yearSources[0])
+		case 0:
+			continue
+		default:
+			return nil, fmt.Errorf("year %s has %d sources but no year summary", key, len(yearSources))
+		}
+	}
+	return sources, nil
+}
+
 func summarySources(records []JournalStoredRecord, period JournalSummaryPeriod, start, end time.Time) ([]JournalSummarySource, error) {
 	var sources []JournalSummarySource
 	switch period {
@@ -461,13 +542,26 @@ func summarySources(records []JournalStoredRecord, period JournalSummaryPeriod, 
 		if err != nil {
 			return nil, err
 		}
+	case JournalSummaryPeriodJournal:
+		var err error
+		sources, err = journalSummarySources(records, start, end)
+		if err != nil {
+			return nil, err
+		}
 	}
 	sort.Slice(sources, func(i, j int) bool { return sources[i].Label < sources[j].Label })
 	return sources, nil
 }
 
+func journalSummaryRecordKey(period JournalSummaryPeriod, start time.Time) string {
+	if period == JournalSummaryPeriodJournal {
+		return "SUMMARY#journal"
+	}
+	return "SUMMARY#" + string(period) + "#" + start.Format(time.RFC3339)
+}
+
 func replaceJournalSummary(records []JournalStoredRecord, subject string, summary JournalSummary) []JournalStoredRecord {
-	key := "SUMMARY#" + string(summary.Period) + "#" + summary.Start.Format(time.RFC3339)
+	key := journalSummaryRecordKey(summary.Period, summary.Start)
 	for i := range records {
 		if records[i].When == key {
 			records[i].Summary = &summary
@@ -488,6 +582,9 @@ func removeJournalSummary(records []JournalStoredRecord, key string) []JournalSt
 }
 
 func journalAggregateObjectKey(period JournalSummaryPeriod, start time.Time) string {
+	if period == JournalSummaryPeriodJournal {
+		return "aggregates/journal.json"
+	}
 	return fmt.Sprintf("aggregates/%s/%s.json", period, start.Format("2006-01-02"))
 }
 
@@ -521,13 +618,30 @@ func (s *Server) deleteJournalSummary(ctx context.Context, subject, key string, 
 }
 
 func (s *Server) refreshJournalSummary(ctx context.Context, subject string, period JournalSummaryPeriod, at time.Time, location *time.Location, records []JournalStoredRecord) ([]JournalStoredRecord, error) {
-	start, end := periodBounds(at, location, string(period))
+	var start, end time.Time
+	if period == JournalSummaryPeriodJournal {
+		start, end = journalBounds(records)
+	} else {
+		start, end = periodBounds(at, location, string(period))
+	}
 	sources, err := summarySources(records, period, start, end)
 	if err != nil {
 		return records, err
 	}
-	key := "SUMMARY#" + string(period) + "#" + start.Format(time.RFC3339)
-	if len(sources) < 2 {
+	key := journalSummaryRecordKey(period, start)
+	minimumSources := 2
+	if period == JournalSummaryPeriodJournal {
+		readyEntries := 0
+		for _, record := range records {
+			if record.Entry != nil && record.Entry.Status == JournalEntryStatusReady && record.Entry.Summary != nil {
+				readyEntries++
+			}
+		}
+		if readyEntries >= 2 {
+			minimumSources = 1
+		}
+	}
+	if len(sources) < minimumSources {
 		return s.deleteJournalSummary(ctx, subject, key, period, start, records)
 	}
 	sourceFingerprint, err := summarySourceFingerprint(sources)
@@ -543,7 +657,11 @@ func (s *Server) refreshJournalSummary(ctx context.Context, subject string, peri
 	if err != nil {
 		return records, err
 	}
-	summary := summaryRecord(string(period)+":"+start.Format(time.RFC3339), period, start, end, result, sourceFingerprint)
+	summaryID := string(period) + ":" + start.Format(time.RFC3339)
+	if period == JournalSummaryPeriodJournal {
+		summaryID = "journal"
+	}
+	summary := summaryRecord(summaryID, period, start, end, result, sourceFingerprint)
 	record := JournalStoredRecord{
 		Id: subject, When: key, Kind: JournalStoredRecordKindSummary, Summary: &summary,
 	}
@@ -884,6 +1002,7 @@ var journalAggregatePeriods = []JournalSummaryPeriod{
 	JournalSummaryPeriodWeek,
 	JournalSummaryPeriodMonth,
 	JournalSummaryPeriodYear,
+	JournalSummaryPeriodJournal,
 }
 
 func (s *Server) refreshJournalSummariesForEntries(ctx context.Context, entries ...JournalStoredEntry) error {
@@ -912,7 +1031,8 @@ func (s *Server) refreshJournalSummariesForEntry(ctx context.Context, entry Jour
 	return s.refreshJournalSummariesForEntries(ctx, entry)
 }
 
-// RefreshJournalSummaries creates summaries only for elapsed calendar periods.
+// RefreshJournalSummaries backfills elapsed calendar periods and the current
+// whole-journal overview without regenerating unchanged source material.
 func (s *Server) RefreshJournalSummaries(ctx context.Context, now time.Time) error {
 	s.journalHierarchyMu.Lock()
 	defer s.journalHierarchyMu.Unlock()
@@ -934,6 +1054,10 @@ func (s *Server) RefreshJournalSummaries(ctx context.Context, now time.Time) err
 			return err
 		}
 		for _, period := range journalAggregatePeriods {
+			if period == JournalSummaryPeriodJournal {
+				candidates[period]["journal"] = journalSummaryCandidate{at: entry.RecordedAt, location: location}
+				continue
+			}
 			start, end := periodBounds(entry.RecordedAt, location, string(period))
 			if now.Before(end) {
 				continue
