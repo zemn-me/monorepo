@@ -5,7 +5,7 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [],
 		"packageExtensions": {
-			"@pulumi/pulumi@3.253.0": {
+			"@pulumi/pulumi": {
 				"dependencies": {
 					"typescript5": "npm:typescript@5.9.3"
 				}
@@ -59,7 +59,7 @@
 		"@microsoft/api-extractor": "7.58.12",
 		"@pulumi/aws": "7.41.0",
 		"@pulumi/awsx": "3.8.0",
-		"@pulumi/pulumi": "3.253.0",
+		"@pulumi/pulumi": "3.257.0",
 		"@schemastore/package": "1.0.5",
 		"@swc/cli": "0.8.1",
 		"@testing-library/react": "16.3.2",
@@ -115,7 +115,7 @@
 		"tmp": "0.2.7",
 		"ts-toolbelt": "9.6.0",
 		"typescript": "7.0.2",
-		"typescript5": "npm:typescript@7.0.2",
+		"typescript5": "npm:typescript@5.9.3",
 		"uuid": "14.0.1",
 		"yarn": "1.22.22"
 	},
