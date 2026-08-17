@@ -18,6 +18,7 @@ py_binary(
     ],
 )
 
+# keep
 py_binary(
     name = "inject_iservice_prod_env_bin",
     srcs = ["__main__.py"],
