@@ -4,32 +4,13 @@
  * The generateBuildId component is filled by bazel instrumentation.
  */
 
-export const reactStrictMode = true;
-export const swcMinify = true;
-export const distDir = 'build';
-
-export const typescript = {
-	// Bazel already runs tsc checks in dedicated targets.
-	ignoreBuildErrors: true,
-};
-
-export const output = 'export';
-
-export const productionBrowserSourceMaps = false;
-
-export const future = { webpack5: true };
-
-export const images = {
-	unoptimized: true,
-};
-
 interface WebpackConfig {
 	resolve?: {
 		fallback?: Record<string, false | string>;
 	};
 }
 
-export function webpack(
+function webpack(
 	config: WebpackConfig,
 	{ isServer }: { readonly isServer: boolean }
 ): WebpackConfig {
@@ -44,3 +25,20 @@ export function webpack(
 
 	return config;
 }
+
+const config = {
+	reactStrictMode: true,
+	distDir: 'build',
+	typescript: {
+		// Bazel already runs tsc checks in dedicated targets.
+		ignoreBuildErrors: true,
+	},
+	output: 'export' as const,
+	productionBrowserSourceMaps: false,
+	images: {
+		unoptimized: true,
+	},
+	webpack,
+};
+
+export default config;
