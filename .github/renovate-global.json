@@ -114,6 +114,12 @@
 			"minimumGroupSize": 2
 		},
 		{
+			"description": "Refresh generated Python locks as a unit",
+			"matchManagers": ["pip-compile"],
+			"matchDepTypes": ["indirect"],
+			"enabled": false
+		},
+		{
 			"matchManagers": [
 				"cargo",
 				"npm",
