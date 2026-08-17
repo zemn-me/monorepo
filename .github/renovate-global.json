@@ -107,6 +107,13 @@
 			"rangeStrategy": "bump"
 		},
 		{
+			"description": "gopls imports x/tools internals, so update the two modules together",
+			"groupName": "Go language tools",
+			"matchManagers": ["gomod"],
+			"matchPackageNames": ["golang.org/x/tools", "golang.org/x/tools/gopls"],
+			"minimumGroupSize": 2
+		},
+		{
 			"matchManagers": [
 				"cargo",
 				"npm",
