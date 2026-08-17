@@ -83,6 +83,21 @@ func TestLocalJournalStoreUploadsProcessesAndServesAudio(t *testing.T) {
 		t.Fatalf("playback returned content type %q and %d bytes", response.Header.Get("Content-Type"), len(played))
 	}
 
+	store.readLifetime = 5 * time.Millisecond
+	expiringPlayback, err := store.PresignGetObject(t.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &key})
+	if err != nil {
+		t.Fatal(err)
+	}
+	time.Sleep(20 * time.Millisecond)
+	expiredResponse, err := http.Get(expiringPlayback.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_ = expiredResponse.Body.Close()
+	if expiredResponse.StatusCode != http.StatusForbidden {
+		t.Fatalf("expired playback status = %d, want %d", expiredResponse.StatusCode, http.StatusForbidden)
+	}
+
 	request, err = http.NewRequest(http.MethodPut, presigned.URL, strings.NewReader("replacement"))
 	if err != nil {
 		t.Fatal(err)

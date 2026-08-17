@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import createFetchClient from 'openapi-fetch';
 import createClient from 'openapi-react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type {
 	components,
@@ -292,6 +292,17 @@ function useinvalidateJournal() {
 		void queryClient.invalidateQueries({
 			queryKey: ['get', '/journal'],
 		});
+}
+
+export function useRefreshJournal() {
+	const queryClient = useQueryClient();
+	return useCallback(
+		() =>
+			queryClient.invalidateQueries({
+				queryKey: ['get', '/journal'],
+			}),
+		[queryClient]
+	);
 }
 
 export function usePostGrievances(id_token: string) {

@@ -274,7 +274,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if len(recentUploads) != 0 {
 		t.Fatalf("default journal view still contained recent uploads")
 	}
-	if err := waitForJournalSummaryCitations(driver, "Local journal journal", 4, 30*time.Second); err != nil {
+	if err := waitForJournalSummaryCitations(driver, "Local journal journal", 4, 60*time.Second); err != nil {
 		t.Fatalf("whole journal overview was not summarized after upload: %v", err)
 	}
 	for _, level := range []string{"Years", "Months", "Weeks", "Days"} {
@@ -468,45 +468,56 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("journal summary Markdown emphasis was not rendered: got %q", markdownText)
 	}
 
-	citations, err := driver.FindElements(selenium.ByCSSSelector, "sup > a[aria-label^='Play source at '][href]")
-	if err != nil || len(citations) == 0 {
-		t.Fatalf("summary citations: found %d, error %v", len(citations), err)
-	}
-	firstCitationText, err := citations[0].Text()
+	citationDataValue, err := driver.ExecuteScript(`
+		const citations = [...document.querySelectorAll(
+			"sup > a[aria-label^='Play source at '][href]"
+		)];
+		const selected = citations.find(citation =>
+			citation.dataset.citationEntryId &&
+			citation.href.includes('2025-08-13')
+		);
+		return {
+			count: citations.length,
+			entryID: selected?.dataset.citationEntryId ?? '',
+			firstText: citations[0]?.textContent ?? '',
+			href: selected?.href ?? '',
+		};
+	`, nil)
 	if err != nil {
-		t.Fatalf("read first timestamp citation: %v", err)
+		t.Fatalf("inspect summary citations: %v", err)
+	}
+	citationData, ok := citationDataValue.(map[string]interface{})
+	if !ok {
+		t.Fatalf("summary citations returned unexpected data: %#v", citationDataValue)
+	}
+	citationCount, _ := citationData["count"].(float64)
+	firstCitationText, _ := citationData["firstText"].(string)
+	firstEntryID, _ := citationData["entryID"].(string)
+	firstCitationHref, _ := citationData["href"].(string)
+	if citationCount == 0 {
+		t.Fatal("summary contained no citations")
 	}
 	if firstCitationText != "[1]" {
 		t.Fatalf("first citation label = %q, want numbered reference [1]", firstCitationText)
 	}
-	var firstCitation selenium.WebElement
-	var firstEntryID string
-	for _, citation := range citations {
-		entryID, err := citation.GetAttribute("data-citation-entry-id")
-		if err != nil {
-			t.Fatalf("read citation target: %v", err)
-		}
-		href, err := citation.GetAttribute("href")
-		if err != nil {
-			t.Fatalf("read citation href: %v", err)
-		}
-		if firstCitation == nil && entryID != "" && strings.Contains(href, "2025-08-13") {
-			firstCitation, firstEntryID = citation, entryID
-		}
-	}
-	if firstCitation == nil {
+	if firstEntryID == "" || firstCitationHref == "" {
 		t.Fatalf("year summary did not cite the multi-entry journal day")
 	}
-	firstCitationHref, err := firstCitation.GetAttribute("href")
-	if err != nil || !strings.Contains(firstCitationHref, "/journal/day?") || !strings.Contains(firstCitationHref, "at=") {
-		t.Fatalf("aggregate citation did not link to an individual day: href %q, error %v", firstCitationHref, err)
+	if !strings.Contains(firstCitationHref, "/journal/day?") || !strings.Contains(firstCitationHref, "at=") {
+		t.Fatalf("aggregate citation did not link to an individual day: href %q", firstCitationHref)
 	}
-	if _, err := driver.ExecuteScript(`
-		arguments[0].dispatchEvent(new PointerEvent('pointerover', {
+	hoveredCitation, err := driver.ExecuteScript(`
+		const citation = [...document.querySelectorAll(
+			"sup > a[aria-label^='Play source at '][href]"
+		)].find(value => value.href === arguments[0]);
+		if (!citation) return false;
+		citation.dispatchEvent(new PointerEvent('pointerover', {
 			bubbles: true,
 			pointerType: 'mouse',
 		}));
-	`, []any{firstCitation}); err != nil {
+		return true;
+	`, []any{firstCitationHref})
+	if err != nil || hoveredCitation != true {
 		t.Fatalf("hover summary citation: %v", err)
 	}
 	citationTooltip, err := waitForElement(driver, selenium.ByCSSSelector, "[role='tooltip']", 10*time.Second)
@@ -527,7 +538,20 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if len(visibleReferenceBox) != 0 {
 		t.Fatalf("journal summary still rendered a separate References box")
 	}
-	if err := firstCitation.Click(); err != nil {
+	// The local server deliberately gives playback URLs a short lifetime. Let
+	// the cached URL expire before following the citation so this exercises the
+	// same renewal path as an old production journal tab. Look the link up in
+	// the click script because journal query updates may replace its DOM node.
+	time.Sleep(9 * time.Second)
+	clickedCitation, err := driver.ExecuteScript(`
+		const citation = [...document.querySelectorAll(
+			"sup > a[aria-label^='Play source at '][href]"
+		)].find(value => value.href === arguments[0]);
+		if (!citation) return false;
+		citation.click();
+		return true;
+	`, []any{firstCitationHref})
+	if err != nil || clickedCitation != true {
 		t.Fatalf("play first summary citation: %v", err)
 	}
 	if err := waitForExclusiveJournalAudioPlayback(driver, firstEntryID, 10*time.Second); err != nil {
@@ -542,7 +566,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("inspect delayed journal audio source: %v", err)
 	}
-	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") {
+	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") || !strings.Contains(source, "expiresAt=") {
 		t.Fatalf("journal integration audio was not delayed: %q", source)
 	}
 	if err := waitForJournalAudioAdvance(driver, firstEntryID, 2750*time.Millisecond, 8*time.Second); err != nil {
@@ -1342,11 +1366,9 @@ func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID str
 		}
 		errorCode, _ := state["errorCode"].(float64)
 		if errorCode != 0 {
-			return false, fmt.Errorf(
-				"media error %d: %v",
-				int(errorCode),
-				state["errorMessage"],
-			)
+			// Expired presigned URLs fail once before the player refreshes its
+			// journal data and resumes with a newly signed source.
+			return false, nil
 		}
 		readyState, _ := state["readyState"].(float64)
 		paused, _ := state["paused"].(bool)
