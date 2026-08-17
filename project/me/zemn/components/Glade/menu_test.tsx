@@ -72,7 +72,7 @@ jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeAuth.js', () => ({
 	],
 }));
 
-let GladeMenu: () => JSX.Element;
+let GladeMenu: () => React.JSX.Element;
 let container: HTMLDivElement;
 let root: Root;
 

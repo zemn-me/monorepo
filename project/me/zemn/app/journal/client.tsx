@@ -188,7 +188,7 @@ function useJournalPlayback(
 	navigationKey = ''
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
-	const appliedNavigation = useRef<string>();
+	const appliedNavigation = useRef<string | undefined>(undefined);
 	const pendingSeekTimes = useRef(new Map<string, number>());
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
@@ -884,7 +884,7 @@ function SwipeToDelete({
 	readonly onDeleting: (entryID: string) => void;
 }) {
 	const trackRef = useRef<HTMLDivElement>(null);
-	const draggingPointer = useRef<number>();
+	const draggingPointer = useRef<number | undefined>(undefined);
 	const progressRef = useRef(0);
 	const [progress, setProgress] = useState(0);
 	const [deleting, setDeleting] = useState(false);
@@ -1471,7 +1471,7 @@ function PeriodList({
 		[journal, period]
 	);
 	const listRef = useRef<HTMLDivElement>(null);
-	const positionedPeriod = useRef<AggregatePeriod>();
+	const positionedPeriod = useRef<AggregatePeriod | undefined>(undefined);
 	const focusRef = useRef(focus);
 	focusRef.current = focus;
 
@@ -1900,7 +1900,7 @@ export default function JournalPageClient({
 		[updateEntryDate]
 	);
 	const resetCreateEntry = createEntry.reset;
-	const recorder = useRef<MediaRecorder>();
+	const recorder = useRef<MediaRecorder | undefined>(undefined);
 	const recordingDisposition = useRef<'discard' | 'submit'>('discard');
 	const chunks = useRef<Blob[]>([]);
 	const [recording, setRecording] = useState(false);

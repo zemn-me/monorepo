@@ -127,7 +127,7 @@ jest.unstable_mockModule('#root/ts/react/lang/index.js', () => ({
 		typeof value === 'string' ? value : value.text,
 }));
 
-let Glade: (props: GladeProps) => JSX.Element;
+let Glade: (props: GladeProps) => React.JSX.Element;
 let container: HTMLDivElement;
 let root: Root;
 
