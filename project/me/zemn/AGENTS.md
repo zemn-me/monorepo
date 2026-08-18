@@ -12,3 +12,4 @@
 - Content-addressed public assets should be declared next to the TS that imports them with `hashed_public_assets`; `project/me/zemn/public:content_addressed_public_assets` collects them from `//project/me/zemn:ts`.
 - For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.
 - `//project/me/zemn:zemn` starts the local app on port 3000; passing another `--port` appends rather than overrides.
+- Signed media range failures can leave an HTML media element stalled without an `error`; preserve playback intent and recover from `waiting`/`stalled` as well as hard errors.

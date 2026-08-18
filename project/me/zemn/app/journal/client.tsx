@@ -61,6 +61,7 @@ const journalWriteScope = 'journal_write';
 const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
+const playbackStallRecoveryDelayMs = 1_500;
 
 function errorMessage(value: unknown): string {
 	return value instanceof Error
@@ -1094,12 +1095,58 @@ function JournalAudio({
 	const refreshJournal = useRefreshJournal();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const playRequested = useRef(false);
+	const stallRecoveryTimer = useRef<number>();
 	const [source, setSource] = useState(audioURL);
 	const [recovery, setRecovery] = useState<{
 		readonly failedSource: string;
 		readonly play: boolean;
 		readonly time: number;
 	}>();
+	const recoveryRef = useRef(recovery);
+	recoveryRef.current = recovery;
+
+	const cancelStallRecovery = useCallback(() => {
+		if (stallRecoveryTimer.current === undefined) return;
+		window.clearTimeout(stallRecoveryTimer.current);
+		stallRecoveryTimer.current = undefined;
+	}, []);
+	const recoverPlayback = useCallback(
+		(audio: HTMLAudioElement) => {
+			cancelStallRecovery();
+			if (recoveryRef.current?.failedSource === source) return;
+			const next = {
+				failedSource: source,
+				play: playRequested.current && !audio.ended,
+				time: audio.currentTime,
+			};
+			recoveryRef.current = next;
+			setRecovery(next);
+			void refreshJournal().catch(() => {
+				if (recoveryRef.current !== next) return;
+				recoveryRef.current = undefined;
+				setRecovery(undefined);
+			});
+		},
+		[cancelStallRecovery, refreshJournal, source]
+	);
+	const scheduleStallRecovery = useCallback(
+		(audio: HTMLAudioElement) => {
+			cancelStallRecovery();
+			if (!playRequested.current || audio.ended || audio.currentTime <= 0)
+				return;
+			stallRecoveryTimer.current = window.setTimeout(() => {
+				stallRecoveryTimer.current = undefined;
+				if (
+					playRequested.current &&
+					!audio.ended &&
+					audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA
+				) {
+					recoverPlayback(audio);
+				}
+			}, playbackStallRecoveryDelayMs);
+		},
+		[cancelStallRecovery, recoverPlayback]
+	);
 
 	useEffect(() => {
 		if (!recovery || audioURL === source) return;
@@ -1114,6 +1161,7 @@ function JournalAudio({
 			if (Math.abs(audio.currentTime - recovery.time) >= 0.25) {
 				audio.currentTime = recovery.time;
 			}
+			recoveryRef.current = undefined;
 			setRecovery(undefined);
 			if (recovery.play) {
 				void audio.play().catch(() => undefined);
@@ -1126,6 +1174,8 @@ function JournalAudio({
 		restore();
 	}, [recovery, source]);
 
+	useEffect(() => cancelStallRecovery, [cancelStallRecovery]);
+
 	return (
 		<div className={style.audioDock} data-journal-audio-dock>
 			<audio
@@ -1136,33 +1186,48 @@ function JournalAudio({
 					playback.activeEntryID === entry.id || undefined
 				}
 				onEnded={event => {
+					cancelStallRecovery();
 					playRequested.current = false;
 					playback.stopped(entry.id, event.currentTarget.currentTime);
 				}}
 				onError={event => {
-					if (recovery?.failedSource === source) return;
-					setRecovery({
-						failedSource: source,
-						play: playRequested.current,
-						time: event.currentTarget.currentTime,
-					});
-					void refreshJournal().catch(() => setRecovery(undefined));
+					recoverPlayback(event.currentTarget);
 				}}
 				onPause={event => {
-					if (!event.currentTarget.error)
+					cancelStallRecovery();
+					if (
+						!event.currentTarget.error &&
+						recoveryRef.current === undefined
+					) {
 						playRequested.current = false;
+					}
 					playback.stopped(entry.id, event.currentTarget.currentTime);
 				}}
-				onPlay={() => {
+				onPlay={event => {
 					playRequested.current = true;
+					cancelStallRecovery();
 					playback.started(entry.id);
+					if (
+						event.currentTarget.readyState <
+						HTMLMediaElement.HAVE_FUTURE_DATA
+					) {
+						scheduleStallRecovery(event.currentTarget);
+					}
 				}}
-				onTimeUpdate={event =>
+				onPlaying={cancelStallRecovery}
+				onStalled={event => {
+					if (playRequested.current && !event.currentTarget.ended) {
+						recoverPlayback(event.currentTarget);
+					}
+				}}
+				onTimeUpdate={event => {
+					cancelStallRecovery();
 					playback.progressed(
 						entry.id,
 						event.currentTarget.currentTime
-					)
-				}
+					);
+				}}
+				onWaiting={event => scheduleStallRecovery(event.currentTarget)}
 				preload="metadata"
 				ref={audio => {
 					audioRef.current = audio;
