@@ -72,6 +72,30 @@ func (fakeJournalPresigner) PresignGetObject(_ context.Context, input *s3.GetObj
 	return &v4.PresignedHTTPRequest{Method: http.MethodGet, URL: "https://audio.invalid/" + *input.Key}, nil
 }
 
+type recordingJournalPresigner struct {
+	fakeJournalPresigner
+	getExpires time.Duration
+	putExpires time.Duration
+}
+
+func (r *recordingJournalPresigner) PresignPutObject(ctx context.Context, input *s3.PutObjectInput, optionFunctions ...func(*s3.PresignOptions)) (*v4.PresignedHTTPRequest, error) {
+	options := s3.PresignOptions{}
+	for _, apply := range optionFunctions {
+		apply(&options)
+	}
+	r.putExpires = options.Expires
+	return r.fakeJournalPresigner.PresignPutObject(ctx, input)
+}
+
+func (r *recordingJournalPresigner) PresignGetObject(ctx context.Context, input *s3.GetObjectInput, optionFunctions ...func(*s3.PresignOptions)) (*v4.PresignedHTTPRequest, error) {
+	options := s3.PresignOptions{}
+	for _, apply := range optionFunctions {
+		apply(&options)
+	}
+	r.getExpires = options.Expires
+	return r.fakeJournalPresigner.PresignGetObject(ctx, input)
+}
+
 type fakeJournalAI struct{}
 
 func (fakeJournalAI) Transcribe(_ context.Context, audio io.Reader, _ string) (JournalTranscriptionResult, error) {
@@ -732,9 +756,10 @@ func TestProcessJournalUploadUsesSpokenDateOverContainerMetadata(t *testing.T) {
 func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	db := &inMemoryDDB{}
 	objects := &fakeJournalObjects{}
+	presigner := &recordingJournalPresigner{}
 	server := &Server{
 		ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
-		journalObjects: objects, journalPresigner: fakeJournalPresigner{}, journalAI: fakeJournalAI{},
+		journalObjects: objects, journalPresigner: presigner, journalAI: fakeJournalAI{},
 	}
 	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
 		Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
@@ -771,6 +796,9 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	if got := created.Upload.Headers["If-None-Match"]; got != "*" {
 		t.Fatalf("If-None-Match = %q, want upload overwrite protection", got)
 	}
+	if presigner.putExpires != journalUploadURLLifetime {
+		t.Fatalf("upload URL lifetime = %v, want %v", presigner.putExpires, journalUploadURLLifetime)
+	}
 	entryID := created.Entry.Id.String()
 	audio := testMP4(audioRecordedAt, 0)
 	objects.objects[journalEntryKey(entryID)] = audio
@@ -803,6 +831,9 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	}
 	if len(journal.Summaries) != 0 {
 		t.Fatalf("single upload generated %d aggregate summaries", len(journal.Summaries))
+	}
+	if presigner.getExpires != journalPlaybackURLLifetime {
+		t.Fatalf("playback URL lifetime = %v, want %v", presigner.getExpires, journalPlaybackURLLifetime)
 	}
 	location, err := time.LoadLocation("America/Los_Angeles")
 	if err != nil {
