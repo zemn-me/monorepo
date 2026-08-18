@@ -26,10 +26,11 @@ import (
 )
 
 const (
-	journalOwnerSubject      = "thomas"
-	journalLocalOwnerSubject = "integration-test-local"
-	maxJournalAudioBytes     = 25 * 1024 * 1024
-	journalURLLifetime       = 5 * time.Minute
+	journalOwnerSubject        = "thomas"
+	journalLocalOwnerSubject   = "integration-test-local"
+	maxJournalAudioBytes       = 25 * 1024 * 1024
+	journalPlaybackURLLifetime = 24 * time.Hour
+	journalUploadURLLifetime   = 5 * time.Minute
 )
 
 var journalCitationReferencePattern = regexp.MustCompile(`\[\^([0-9]+)\]`)
@@ -186,7 +187,7 @@ func (s *Server) journalAudioURL(ctx context.Context, entry JournalStoredEntry) 
 	request, err := s.journalPresigner.PresignGetObject(ctx, &s3.GetObjectInput{
 		Bucket: aws.String(s.journalBucketName),
 		Key:    aws.String(entry.AudioKey),
-	}, func(options *s3.PresignOptions) { options.Expires = journalURLLifetime })
+	}, func(options *s3.PresignOptions) { options.Expires = journalPlaybackURLLifetime })
 	if err != nil {
 		return nil
 	}
@@ -704,7 +705,7 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 	}
 	entryID := uuid.NewString()
 	contentType := string(request.Body.ContentType)
-	expiresAt := time.Now().UTC().Add(journalURLLifetime)
+	expiresAt := time.Now().UTC().Add(journalUploadURLLifetime)
 	entry := JournalStoredEntry{
 		SchemaVersion:   1,
 		Id:              entryID,
@@ -727,7 +728,7 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 	upload, err := s.journalPresigner.PresignPutObject(ctx, &s3.PutObjectInput{
 		Bucket: aws.String(s.journalBucketName), Key: aws.String(entry.AudioKey), ContentType: aws.String(contentType),
 		IfNoneMatch: aws.String("*"),
-	}, func(options *s3.PresignOptions) { options.Expires = journalURLLifetime })
+	}, func(options *s3.PresignOptions) { options.Expires = journalUploadURLLifetime })
 	if err != nil {
 		return nil, err
 	}
