@@ -1232,7 +1232,7 @@ func dispatchJournalFile(driver selenium.WebDriver, path, eventType string) erro
 func waitForScheduledJournalSummaries(driver selenium.WebDriver, refreshURL string, wantEntries int, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 	lastYearSummaryCount := 0
-	lastEntryIDs := map[string]struct{}{}
+	lastEntryIDCount := 0
 	for time.Now().Before(deadline) {
 		request, err := http.NewRequest(http.MethodPost, refreshURL, nil)
 		if err != nil {
@@ -1256,27 +1256,29 @@ func waitForScheduledJournalSummaries(driver selenium.WebDriver, refreshURL stri
 			pageDeadline = deadline
 		}
 		for time.Now().Before(pageDeadline) {
-			yearSummaries, err := driver.FindElements(selenium.ByXPATH, "//h3[normalize-space()='Local year journal']")
+			stateValue, err := driver.ExecuteScript(`
+				const yearSummaryCount = [...document.querySelectorAll('h3')]
+					.filter(heading => heading.textContent?.trim() === 'Local year journal')
+					.length;
+				const entryIDCount = new Set(
+					[...document.querySelectorAll('[data-citation-entry-id]')]
+						.map(citation => citation.getAttribute('data-citation-entry-id'))
+						.filter(Boolean)
+				).size;
+				return { entryIDCount, yearSummaryCount };
+			`, nil)
 			if err != nil {
 				return err
 			}
-			lastYearSummaryCount = len(yearSummaries)
-			citations, err := driver.FindElements(selenium.ByCSSSelector, "[data-citation-entry-id]")
-			if err != nil {
-				return err
+			state, ok := stateValue.(map[string]interface{})
+			if !ok {
+				return fmt.Errorf("scheduled journal summary state had unexpected type %T", stateValue)
 			}
-			entryIDs := map[string]struct{}{}
-			for _, citation := range citations {
-				entryID, err := citation.GetAttribute("data-citation-entry-id")
-				if err != nil {
-					return err
-				}
-				if entryID != "" {
-					entryIDs[entryID] = struct{}{}
-				}
-			}
-			lastEntryIDs = entryIDs
-			if len(yearSummaries) > 0 && len(entryIDs) >= wantEntries {
+			yearSummaryCount, _ := state["yearSummaryCount"].(float64)
+			entryIDCount, _ := state["entryIDCount"].(float64)
+			lastYearSummaryCount = int(yearSummaryCount)
+			lastEntryIDCount = int(entryIDCount)
+			if lastYearSummaryCount > 0 && lastEntryIDCount >= wantEntries {
 				return nil
 			}
 			time.Sleep(100 * time.Millisecond)
@@ -1286,7 +1288,7 @@ func waitForScheduledJournalSummaries(driver selenium.WebDriver, refreshURL stri
 		"timed out waiting for a year summary citing %d entries; saw %d year summaries citing %d distinct entries",
 		wantEntries,
 		lastYearSummaryCount,
-		len(lastEntryIDs),
+		lastEntryIDCount,
 	)
 }
 
