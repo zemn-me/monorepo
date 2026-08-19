@@ -1,10 +1,14 @@
 import {
 	QueryKey,
-	SkipToken,
 	skipToken,
 	useQuery,
+	useQueryClient,
 } from '@tanstack/react-query';
-
+import { buildOIDCAuthorizationURL } from '#root/project/me/zemn/hook/oidcAuthorizationURL.js';
+import {
+	getOIDCIdTokenHint,
+	useAuthSession,
+} from '#root/project/me/zemn/hook/useAuthSession.js';
 import { useOIDCConfig } from '#root/project/me/zemn/hook/useOIDCConfig.js';
 import { useWindowCallback } from '#root/project/me/zemn/promise/window_callback.js';
 import { fixedTimeStringEquals } from '#root/ts/crypto/fixed_time_string_comparison.js';
@@ -21,7 +25,6 @@ import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
 import * as option from '#root/ts/option/types.js';
-import { Err, Ok } from '#root/ts/result/result.js';
 import { Second } from '#root/ts/time/duration.js';
 
 export type OIDCImplicitRequest = Omit<
@@ -52,12 +55,19 @@ export function useOIDC(
 	promptForLogin: Future<() => Promise<void>, void, Error>,
 	/** can use to cache bust dependent queries */
 	cacheKey: QueryKey,
+	promptForAccountSelection: Future<
+		(sessionGeneration: number) => Promise<void>,
+		void,
+		Error
+	>,
 ] {
+	const queryClient = useQueryClient();
+	const { generation } = useAuthSession();
 	const oidc_config = useOIDCConfig(issuer);
 
 	const entropy = useQueryFuture(
 		useQuery({
-			queryKey: ['useoidc entropy', issuer],
+			queryKey: ['useoidc entropy', issuer, generation],
 			queryFn: fetchEntropy,
 			staleTime: Infinity,
 		})
@@ -95,69 +105,20 @@ export function useOIDC(
 			return u;
 		}
 	);
-	const cacheKeyArgs: QueryKey = [issuer, params];
+	const cacheKeyArgs: QueryKey = [issuer, params, generation];
+	const callbackQueryKey = (sessionGeneration: number): QueryKey => [
+		'use-oidc',
+		issuer,
+		params,
+		sessionGeneration,
+	];
 
 	// very close but we need to abstract and pipeline this more cleanly.
 
 	const callbackQuery = useQuery({
-		queryKey: ['use-oidc', ...cacheKeyArgs],
+		queryKey: callbackQueryKey(generation),
 		gcTime: Infinity, // don't evict auth tokens
-		queryFn: targetURL(
-			u => async () => {
-				// sadly must immediately parse to allow staleTime
-				// to be set correctly.
-				const href = new URL(await useWindowCallback(u));
-
-				const params = OIDCAuthenticationResponse.parse(
-					Object.fromEntries([
-						...href.searchParams,
-						...new URLSearchParams(href.hash.slice(1)),
-					])
-				);
-
-				// perform state validation
-				(
-					await option.option_from_maybe_undefined(params.state)(
-						() =>
-							Err(
-								new Error(
-									'missing state in authentication response'
-								)
-							),
-						state =>
-							entropy(
-								async e =>
-									(await fixedTimeStringEquals(e, state))
-										? Ok(undefined)
-										: Err(
-												new Error(
-													[
-														'invalid state:',
-														state,
-														'!=',
-														e,
-													].join(' ')
-												)
-											),
-								() =>
-									Err(new Error('this should never happen')),
-								() => Err(new Error('this should never happen'))
-							)
-					)
-				)(
-					e => {
-						throw e;
-					},
-					() => {
-						/* intentionally empty */
-					}
-				);
-
-				return params;
-			},
-			(() => skipToken) as () => SkipToken,
-			(() => skipToken) as () => SkipToken
-		),
+		queryFn: skipToken,
 		staleTime: r =>
 			option.option_from_maybe_undefined(r.state.data)(
 				(/*None*/) => 0,
@@ -166,17 +127,57 @@ export function useOIDC(
 						? parseInt(v.expires_in, 10) * Second
 						: 0
 			),
-		enabled: false,
 	});
 
 	const callbackQueryResult = useQueryFuture(callbackQuery);
 
-	const requestConsent = future_and_then(targetURL, () => async () => {
-		const response = await callbackQuery.refetch();
-		if (response.error) {
-			throw response.error;
+	const authenticate = async (
+		target: URL,
+		sessionGeneration: number,
+		selectAccount: boolean
+	) => {
+		const requestURL = buildOIDCAuthorizationURL(
+			target,
+			selectAccount
+				? { selectAccount: true }
+				: { idTokenHint: getOIDCIdTokenHint() }
+		);
+
+		const href = new URL(await useWindowCallback(requestURL));
+		const response = OIDCAuthenticationResponse.parse(
+			Object.fromEntries([
+				...href.searchParams,
+				...new URLSearchParams(href.hash.slice(1)),
+			])
+		);
+
+		const responseState = response.state;
+		if (responseState === undefined) {
+			throw new Error('missing state in authentication response');
 		}
-	});
+
+		const stateMatches = await entropy(
+			e => fixedTimeStringEquals(e, responseState),
+			() => Promise.resolve(false),
+			() => Promise.resolve(false)
+		);
+		if (!stateMatches) {
+			throw new Error('invalid state in authentication response');
+		}
+
+		queryClient.setQueryData(callbackQueryKey(sessionGeneration), response);
+	};
+
+	const requestConsent = future_and_then(
+		targetURL,
+		u => () => authenticate(u, generation, false)
+	);
+
+	const requestAccountSelection = future_and_then(
+		targetURL,
+		u => (sessionGeneration: number) =>
+			authenticate(u, sessionGeneration, true)
+	);
 
 	const callbackQueryResultWithHandledErrorCallback = future_flatten_then(
 		future_and_then(callbackQueryResult, resp =>
@@ -200,5 +201,11 @@ export function useOIDC(
 		)
 	);
 
-	return [id_token, access_token, requestConsent, cacheKeyArgs] as const;
+	return [
+		id_token,
+		access_token,
+		requestConsent,
+		cacheKeyArgs,
+		requestAccountSelection,
+	] as const;
 }

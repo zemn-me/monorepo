@@ -1,11 +1,13 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "hook",
     srcs = [
+        "oidcAuthorizationURL.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
+        "useAuthSession.tsx",
         "useGetExactContactByEmail.ts",
         "useGetExactContactByPhoneNumber.ts",
         "useGoogleAuth.tsx",
@@ -58,11 +60,45 @@ bazel_lint(
     visibility = ["//:__subpackages__"],
 )
 
+ts_project(
+    name = "hook_tests",
+    srcs = [
+        "useAuthSession_test.tsx",
+        "useOIDC_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":hook",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    size = "small",
+    srcs = [
+        "useAuthSession_test.js",
+        "useOIDC_test.js",
+    ],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":hook_tests"],
+)
+
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "oidcAuthorizationURL.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
+        "useAuthSession.tsx",
+        "useAuthSession_test.tsx",
         "useGetExactContactByEmail.ts",
         "useGetExactContactByPhoneNumber.ts",
         "useGoogleAuth.tsx",
@@ -71,6 +107,7 @@ filegroup(
         "useLocalStorage.tsx",
         "useOIDC.tsx",
         "useOIDCConfig.ts",
+        "useOIDC_test.ts",
         "useOpenIDConfiguration.ts",
         "usePosterDisplayName.ts",
         "useSearchContact.ts",

@@ -4,7 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { ReactNode } from 'react';
 import z from 'zod';
-
+import { AuthSessionProvider } from '#root/project/me/zemn/hook/useAuthSession.js';
 import { LocalStorageController } from '#root/project/me/zemn/hook/useLocalStorage.js';
 
 export interface ProviderProps {
@@ -38,7 +38,13 @@ export function Providers({ children }: ProviderProps) {
 					buster: 'v1',
 				}}
 			>
-				{children}
+				<AuthSessionProvider
+					clearPersistedClient={() =>
+						localStoragePersister.removeClient()
+					}
+				>
+					{children}
+				</AuthSessionProvider>
 			</PersistQueryClientProvider>
 		</LocalStorageController>
 	);
