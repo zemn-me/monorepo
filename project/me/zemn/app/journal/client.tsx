@@ -2491,7 +2491,6 @@ export default function JournalPageClient({
 			)}
 			<header className={style.hero}>
 				<h1>Journal</h1>
-				<p>A private record, in your own voice.</p>
 			</header>
 			{!isLoggedIn ? (
 				<button
