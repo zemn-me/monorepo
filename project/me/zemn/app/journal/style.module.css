@@ -179,14 +179,40 @@
 	display: inline-flex;
 	justify-content: center;
 	padding: 0.5em 0.8em;
+	position: relative;
 	text-decoration: none;
 	white-space: nowrap;
+	z-index: 1;
 }
 
 .zoomNavigation a[aria-current="page"] {
-	background: var(--foreground-color);
 	color: var(--background-color);
 	font-weight: 700;
+}
+
+.zoomIndicator {
+	background: var(--foreground-color);
+	border-radius: 999px;
+	inset-block: 0.65em;
+	inset-inline-start: 0;
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	transition:
+		transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+		inline-size 240ms cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 100ms ease-out;
+	will-change: transform, inline-size;
+}
+
+.zoomIndicator[data-ready] {
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.zoomIndicator {
+		transition: none;
+	}
 }
 
 .periodList {

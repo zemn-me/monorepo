@@ -114,6 +114,41 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Overview']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not default to its overview: %v", err)
 	}
+	viewIndicator, err := driver.ExecuteScript(`
+		const navigation = document.querySelector("nav[aria-label='Browse journal']");
+		const selected = navigation?.querySelector("a[aria-current='page']");
+		const indicator = navigation?.querySelector('[data-journal-view-indicator]');
+		if (!selected || !indicator) return { found: false };
+		const selectedBounds = selected.getBoundingClientRect();
+		const indicatorBounds = indicator.getBoundingClientRect();
+		const indicatorStyle = getComputedStyle(indicator);
+		return {
+			found: true,
+			ready: indicator.dataset.ready !== undefined,
+			leftDelta: Math.abs(selectedBounds.left - indicatorBounds.left),
+			widthDelta: Math.abs(selectedBounds.width - indicatorBounds.width),
+			reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+			transitionDuration: indicatorStyle.transitionDuration,
+			transitionProperty: indicatorStyle.transitionProperty,
+		};
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal view indicator: %v", err)
+	}
+	indicatorState := viewIndicator.(map[string]any)
+	if indicatorState["found"] != true {
+		t.Fatalf("journal view indicator was not found: %#v", indicatorState)
+	}
+	transitionProperty := indicatorState["transitionProperty"].(string)
+	transitionDuration := indicatorState["transitionDuration"].(string)
+	respectsMotionPreference := indicatorState["reducedMotion"] == true && transitionProperty == "none" ||
+		indicatorState["reducedMotion"] == false && strings.Contains(transitionProperty, "transform") && transitionDuration != "0s"
+	if indicatorState["ready"] != true ||
+		indicatorState["leftDelta"].(float64) >= 0.5 ||
+		indicatorState["widthDelta"].(float64) >= 0.5 ||
+		!respectsMotionPreference {
+		t.Fatalf("journal view indicator was not aligned or animated: %#v", indicatorState)
+	}
 	failedEntries, err := driver.FindElements(selenium.ByID, "entry-"+failedEntryID)
 	if err != nil {
 		t.Fatalf("inspect failed journal entries: %v", err)

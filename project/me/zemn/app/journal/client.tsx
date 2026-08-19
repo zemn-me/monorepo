@@ -18,6 +18,7 @@ import {
 	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -1437,17 +1438,75 @@ function ZoomNavigation({
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
+	const [visibleRoute, setVisibleRoute] = useState(route);
+	const navigation = useRef<HTMLElement>(null);
+	const [indicator, setIndicator] = useState({
+		inlineSize: 0,
+		offset: 0,
+	});
+	useEffect(() => setVisibleRoute(route), [route]);
+	useLayoutEffect(() => {
+		const navigationElement = navigation.current;
+		const selected = navigationElement?.querySelector<HTMLAnchorElement>(
+			`a[data-journal-view="${visibleRoute ?? 'overview'}"]`
+		);
+		if (!navigationElement || !selected) return;
+		const updateIndicator = () => {
+			const navigationBounds = navigationElement.getBoundingClientRect();
+			const selectedBounds = selected.getBoundingClientRect();
+			setIndicator({
+				inlineSize: selectedBounds.width,
+				offset:
+					selectedBounds.left -
+					navigationBounds.left +
+					navigationElement.scrollLeft,
+			});
+		};
+		updateIndicator();
+		const observer = new ResizeObserver(updateIndicator);
+		observer.observe(navigationElement);
+		observer.observe(selected);
+		return () => observer.disconnect();
+	}, [visibleRoute]);
 	const href = (destination: JournalRoute | undefined) =>
 		destination
 			? journalHref(destination, { at: focus })
 			: `/journal?${new URLSearchParams({ at: focus })}`;
 	return (
-		<nav aria-label="Browse journal" className={style.zoomNavigation}>
+		<nav
+			aria-label="Browse journal"
+			className={style.zoomNavigation}
+			ref={navigation}
+		>
+			<span
+				aria-hidden="true"
+				className={style.zoomIndicator}
+				data-ready={indicator.inlineSize > 0 ? '' : undefined}
+				data-journal-view-indicator
+				style={{
+					inlineSize: indicator.inlineSize,
+					transform: `translateX(${indicator.offset}px)`,
+				}}
+			/>
 			{journalViews.map(destination => (
 				<Link
-					aria-current={destination === route ? 'page' : undefined}
+					aria-current={
+						destination === visibleRoute ? 'page' : undefined
+					}
+					data-journal-view={destination ?? 'overview'}
 					href={href(destination)}
 					key={destination ?? 'overview'}
+					onClick={event => {
+						if (
+							event.button === 0 &&
+							!event.metaKey &&
+							!event.ctrlKey &&
+							!event.shiftKey &&
+							!event.altKey
+						) {
+							setVisibleRoute(destination);
+						}
+					}}
 				>
 					{zoomLevelLabel(destination)}
 				</Link>
