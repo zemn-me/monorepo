@@ -961,12 +961,23 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("live recording waveform: %v", err)
 	}
-	if _, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second); err != nil {
+	submitButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second)
+	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
+	}
+	if label, err := submitButton.Text(); err != nil {
+		t.Fatalf("read submit recording button text: %v", err)
+	} else if label != "" {
+		t.Fatalf("submit recording button had visible text %q", label)
 	}
 	cancelButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Cancel recording']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("cancel recording button: %v", err)
+	}
+	if label, err := cancelButton.Text(); err != nil {
+		t.Fatalf("read cancel recording button text: %v", err)
+	} else if label != "" {
+		t.Fatalf("cancel recording button had visible text %q", label)
 	}
 	if err := cancelButton.Click(); err != nil {
 		t.Fatalf("cancel recording: %v", err)
@@ -991,12 +1002,18 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	// Chromium's fake microphone needs a recording timeslice before stopping to
 	// emit a non-empty MediaRecorder chunk.
 	time.Sleep(500 * time.Millisecond)
-	submitButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second)
+	submitButton, err = waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
 	}
 	if err := submitButton.Click(); err != nil {
 		t.Fatalf("submit recording: %v", err)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Create a journal entry'][data-uploading][aria-busy='true']", 10*time.Second); err != nil {
+		t.Fatalf("submitted recording did not show its visual upload state: %v", err)
+	}
+	if _, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Create a journal entry']//p[contains(., 'Uploading your private voice note')]"); err == nil {
+		t.Fatal("submitted recording showed the redundant upload caption")
 	}
 	if _, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
 		t.Fatalf("submitted recording upload did not finish: %v", err)

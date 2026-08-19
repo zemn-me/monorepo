@@ -2337,9 +2337,6 @@ export default function JournalPageClient({
 		() => undefined,
 		() => undefined
 	);
-	const status = createEntry.isPending
-		? 'Uploading your private voice note…'
-		: recordingError;
 	useEffect(() => {
 		if (!recordingError) return;
 		const timeout = window.setTimeout(
@@ -2500,8 +2497,10 @@ export default function JournalPageClient({
 	const captureControls = hasWriteScope ? (
 		<section
 			aria-label="Create a journal entry"
+			aria-busy={createEntry.isPending}
 			className={style.recorder}
 			data-recording={recordingStream ? '' : undefined}
+			data-uploading={createEntry.isPending ? '' : undefined}
 		>
 			{!recordingStream && (
 				<label
@@ -2520,8 +2519,14 @@ export default function JournalPageClient({
 				</label>
 			)}
 			<button
-				aria-label={recording ? 'Submit note' : 'Record a note'}
-				className={recording ? style.submitButton : undefined}
+				aria-label={
+					createEntry.isPending
+						? 'Uploading voice note'
+						: recording
+							? 'Submit note'
+							: 'Record a note'
+				}
+				className={`${style.recordButton} ${recording ? style.submitButton : ''}`}
 				disabled={createEntry.isPending}
 				onClick={
 					recording
@@ -2532,9 +2537,6 @@ export default function JournalPageClient({
 				type="button"
 			>
 				<FontAwesomeIcon icon={recording ? faCheck : faMicrophone} />
-				{recording && (
-					<span className={style.actionLabel}>Done</span>
-				)}
 			</button>
 			{recordingStream && (
 				<>
@@ -2546,11 +2548,10 @@ export default function JournalPageClient({
 						type="button"
 					>
 						<FontAwesomeIcon icon={faStop} />
-						<span className={style.actionLabel}>Cancel</span>
 					</button>
 				</>
 			)}
-			{status && <p>{status}</p>}
+			{recordingError && <p>{recordingError}</p>}
 		</section>
 	) : undefined;
 
