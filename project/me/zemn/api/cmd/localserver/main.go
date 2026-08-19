@@ -107,6 +107,7 @@ func main() {
 	journalStore.SetUploadProcessor(srv.ProcessJournalUpload)
 	mux := http.NewServeMux()
 	mux.Handle(localJournalObjectPath, journalStore)
+	mux.Handle(localJournalSeedPath, newDevelopmentJournalSeedHandler(srv, journalStore))
 	mux.HandleFunc(localJournalRefreshPath, func(w http.ResponseWriter, request *http.Request) {
 		if request.Method != http.MethodPost {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
@@ -141,12 +142,17 @@ func (localJournalAI) Transcribe(_ context.Context, audio io.Reader, _ string) (
 	if err != nil {
 		return apiserver.JournalTranscriptionResult{}, err
 	}
-	texts := []string{
-		fmt.Sprintf("Local development transcript for a %d-byte voice note, with enough deterministic text to exercise the scrollable transcript in the browser.", bytes),
-		"This second passage makes the local transcript resemble a longer spoken journal instead of a single short testing sentence.",
-		"As playback moves forward, each passage becomes highlighted and the transcript follows only when that highlighted passage changes.",
-		"A reader can still scroll away from the active passage and inspect nearby text without every audio time update pulling the view back.",
-		"The final passage gives the development server enough content to demonstrate and test the bottom of the scrolling transcript.",
+	texts := []string(nil)
+	if fixture := developmentJournalFixtureForByteLength(bytes); fixture != nil {
+		texts = fixture.transcript
+	} else {
+		texts = []string{
+			fmt.Sprintf("Local development transcript for a %d-byte voice note, with enough deterministic text to exercise the scrollable transcript in the browser.", bytes),
+			"This second passage makes the local transcript resemble a longer spoken journal instead of a single short testing sentence.",
+			"As playback moves forward, each passage becomes highlighted and the transcript follows only when that highlighted passage changes.",
+			"A reader can still scroll away from the active passage and inspect nearby text without every audio time update pulling the view back.",
+			"The final passage gives the development server enough content to demonstrate and test the bottom of the scrolling transcript.",
+		}
 	}
 	segments := make([]apiserver.JournalTranscriptSegment, 0, len(texts))
 	for index, text := range texts {
@@ -182,10 +188,33 @@ func (localJournalAI) Summarize(_ context.Context, period string, sources []apis
 	for index := range citations {
 		fmt.Fprintf(&references, "[^%d]", index+1)
 	}
+	title := fmt.Sprintf("Local %s journal", period)
+	markdown := "This deterministic summary includes **rendered Markdown** from the local development server."
+	if period == "entry" && len(sources) > 0 {
+		for _, fixture := range developmentJournalFixtures {
+			if strings.Contains(sources[0].Text, fixture.transcript[0]) {
+				title = fixture.title
+				markdown = fixture.summary
+				break
+			}
+		}
+	} else if len(sources) > 0 {
+		titles := map[string]string{
+			"day":     "A day that found its own pace",
+			"week":    "Making room for steadier work",
+			"month":   "Experiments in attention",
+			"year":    "A life with more room in it",
+			"journal": "Work, friendship, and learning to slow down",
+		}
+		if value := titles[period]; value != "" {
+			title = value
+		}
+		markdown = fmt.Sprintf("Across this %s, the entries trace a move toward **clearer priorities**, more candid relationships, and a gentler pace.", period)
+	}
 	return apiserver.JournalSummaryResult{
-		Title: fmt.Sprintf("Local %s journal", period),
+		Title: title,
 		Blocks: []apiserver.JournalSummaryBlock{{
-			Markdown:  "This deterministic summary includes **rendered Markdown** from the local development server." + references.String(),
+			Markdown:  markdown + references.String(),
 			Citations: citations,
 		}},
 	}, nil

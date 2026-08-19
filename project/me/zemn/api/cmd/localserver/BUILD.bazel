@@ -8,6 +8,7 @@ package(default_visibility = ["//visibility:public"])
 go_library(
     name = "localserver_lib",
     srcs = [
+        "development_journal.go",
         "journal.go",
         "main.go",
     ],
@@ -15,6 +16,8 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//project/me/zemn/api/server",
+        "//project/me/zemn/api/server/auth",
+        "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2//aws/signer/v4:signer",
         "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
     ],
@@ -71,5 +74,8 @@ go_test(
     name = "localserver_test",
     srcs = ["journal_test.go"],
     embed = [":localserver_lib"],
-    deps = ["@com_github_aws_aws_sdk_go_v2_service_s3//:s3"],
+    deps = [
+        "//project/me/zemn/api/server",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+    ],
 )

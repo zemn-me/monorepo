@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
 
 func TestLocalJournalStoreUploadsProcessesAndServesAudio(t *testing.T) {
@@ -110,6 +111,40 @@ func TestLocalJournalStoreUploadsProcessesAndServesAudio(t *testing.T) {
 	_ = response.Body.Close()
 	if response.StatusCode != http.StatusPreconditionFailed {
 		t.Fatalf("replacement status = %d, want %d", response.StatusCode, http.StatusPreconditionFailed)
+	}
+}
+
+func TestDevelopmentJournalFixturesProduceDistinctRealisticEntries(t *testing.T) {
+	ai := localJournalAI{}
+	seenAudio := map[string]struct{}{}
+	for index, want := range developmentJournalFixtures {
+		audio := developmentJournalWAV(index + 7)
+		key := string(audio)
+		if _, exists := seenAudio[key]; exists {
+			t.Fatalf("fixture %d reused another fixture's audio", index)
+		}
+		seenAudio[key] = struct{}{}
+
+		fixture := developmentJournalFixtureForByteLength(int64(len(audio)))
+		if fixture != &developmentJournalFixtures[index] {
+			t.Fatalf("audio %d selected fixture %#v, want %#v", index, fixture, want)
+		}
+		transcript, err := ai.Transcribe(t.Context(), bytes.NewReader(audio), "audio/wav")
+		if err != nil {
+			t.Fatalf("transcribe fixture %d: %v", index, err)
+		}
+		if len(transcript.Segments) != len(want.transcript) || transcript.Segments[0].Text != want.transcript[0] {
+			t.Fatalf("fixture %d transcript = %#v", index, transcript.Segments)
+		}
+		summary, err := ai.Summarize(t.Context(), "entry", []apiserver.JournalSummarySource{{
+			Text: transcript.Segments[0].Text,
+		}})
+		if err != nil {
+			t.Fatalf("summarize fixture %d: %v", index, err)
+		}
+		if summary.Title != want.title || summary.Blocks[0].Markdown != want.summary {
+			t.Fatalf("fixture %d summary = %#v", index, summary)
+		}
 	}
 }
 

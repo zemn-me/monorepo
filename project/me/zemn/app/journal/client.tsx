@@ -1,9 +1,8 @@
 'use client';
 
 import {
-	faArrowDown,
-	faMagnifyingGlassMinus,
-	faMagnifyingGlassPlus,
+	faCheck,
+	faChevronDown,
 	faMicrophone,
 	faStop,
 	faTriangleExclamation,
@@ -30,6 +29,7 @@ import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
@@ -61,6 +61,7 @@ const journalWriteScope = 'journal_write';
 const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 function errorMessage(value: unknown): string {
 	return value instanceof Error
@@ -580,11 +581,13 @@ function journalCitationKey(citation: JournalCitation) {
 function SummaryCardView({
 	playback,
 	showPeriod = true,
+	showTitle = true,
 	summary,
 	timeZone,
 }: {
 	readonly playback: JournalPlayback;
 	readonly showPeriod?: boolean;
+	readonly showTitle?: boolean;
 	readonly summary: JournalSummary;
 	readonly timeZone?: string;
 }) {
@@ -638,15 +641,23 @@ function SummaryCardView({
 		summary.id,
 	]);
 	return (
-		<article className={style.summary} ref={setArticle}>
-			<header>
-				{showPeriod && (
-					<p>
-						<PeriodDate summary={summary} timeZone={timeZone} />
-					</p>
-				)}
-				<h3>{summary.title}</h3>
-			</header>
+		<article
+			className={`${style.summary} ${!showTitle && !showPeriod ? style.summaryEmbedded : ''}`}
+			ref={setArticle}
+		>
+			{(showPeriod || showTitle) && (
+				<header>
+					{showPeriod && (
+						<p>
+							<PeriodDate
+								summary={summary}
+								timeZone={timeZone}
+							/>
+						</p>
+					)}
+					{showTitle && <h3>{summary.title}</h3>}
+				</header>
+			)}
 			{summary.blocks.map((block, blockIndex) => (
 				<SummaryBlock
 					block={block}
@@ -686,6 +697,7 @@ const SummaryCard = memo(
 		previous.playback.quoteForSegment === next.playback.quoteForSegment &&
 		previous.playback.titleForEntry === next.playback.titleForEntry &&
 		previous.showPeriod === next.showPeriod &&
+		previous.showTitle === next.showTitle &&
 		previous.timeZone === next.timeZone
 );
 
@@ -745,7 +757,10 @@ function TranscriptView({
 			ref={scroller}
 			role="region"
 		>
-			<div className={style.transcript} data-journal-transcript-text>
+			<div
+				className={`${style.transcript} ${currentlySpokenSegmentID ? style.transcriptFollowing : ''}`}
+				data-journal-transcript-text
+			>
 				{paragraphs.map((paragraph, paragraphIndex) => {
 					const firstSegment = paragraph[0];
 					const paragraphTimestamp = mediaTimestamp(
@@ -1200,13 +1215,21 @@ function EntryCard({
 	return (
 		<details className={style.entry} id={`entry-${entry.id}`}>
 			<summary>
-				<LocalizedTime date={journalEntryDate(entry)} />
-				<span>{title}</span>
+				<LocalizedTime
+					className={style.entryTime}
+					date={journalEntryDate(entry)}
+				/>
+				<strong className={style.entryTitle}>{title}</strong>
 				{entry.status !== 'ready' && (
 					<small className={style.status}>
 						{entry.status.replace('_', ' ')}
 					</small>
 				)}
+				<FontAwesomeIcon
+					aria-hidden="true"
+					className={style.entryChevron}
+					icon={faChevronDown}
+				/>
 			</summary>
 			{entry.status === 'processing' && (
 				<p className={style.entryProgress} role="status">
@@ -1229,6 +1252,8 @@ function EntryCard({
 			{entry.summary && (
 				<SummaryCard
 					playback={playback}
+					showPeriod={false}
+					showTitle={false}
 					summary={entry.summary}
 					timeZone={entry.timeZone}
 				/>
@@ -1398,7 +1423,7 @@ function citationDestination(journal: Journal, entryID: string) {
 	return journalHref('day', { at: entry.recordedAt });
 }
 
-const zoomLevels = [undefined, 'year', 'month', 'week', 'day'] as const;
+const journalViews = [undefined, 'year', 'month', 'week', 'day'] as const;
 
 function zoomLevelLabel(route: JournalRoute | undefined) {
 	if (route === undefined) return 'Overview';
@@ -1412,34 +1437,21 @@ function ZoomNavigation({
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
-	const level = zoomLevels.indexOf(route);
-	const out = level > 0 ? zoomLevels[level - 1] : undefined;
-	const into = level < zoomLevels.length - 1 ? zoomLevels[level + 1] : null;
 	const href = (destination: JournalRoute | undefined) =>
 		destination
 			? journalHref(destination, { at: focus })
 			: `/journal?${new URLSearchParams({ at: focus })}`;
 	return (
-		<nav aria-label="Journal zoom" className={style.zoomNavigation}>
-			{level > 0 && (
+		<nav aria-label="Browse journal" className={style.zoomNavigation}>
+			{journalViews.map(destination => (
 				<Link
-					aria-label={`Zoom out to ${zoomLevelLabel(out)}`}
-					href={href(out)}
-					title={`Zoom out to ${zoomLevelLabel(out)}`}
+					aria-current={destination === route ? 'page' : undefined}
+					href={href(destination)}
+					key={destination ?? 'overview'}
 				>
-					<FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+					{zoomLevelLabel(destination)}
 				</Link>
-			)}
-			<p aria-live="polite">{zoomLevelLabel(route)}</p>
-			{into !== null && (
-				<Link
-					aria-label={`Zoom in to ${zoomLevelLabel(into)}`}
-					href={href(into)}
-					title={`Zoom in to ${zoomLevelLabel(into)}`}
-				>
-					<FontAwesomeIcon icon={faMagnifyingGlassPlus} />
-				</Link>
-			)}
+			))}
 		</nav>
 	);
 }
@@ -1629,6 +1641,43 @@ function PeriodList({
 	);
 }
 
+function RecentEntries({ journal }: { readonly journal: Journal }) {
+	const entries = [...journal.entries]
+		.filter(entry => entry.status === 'ready')
+		.sort(
+			(a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt)
+		)
+		.slice(0, 5);
+	if (entries.length === 0) return null;
+	return (
+		<section aria-labelledby="recent-journal-entries" className={style.recent}>
+			<header>
+				<h2 id="recent-journal-entries">Recent entries</h2>
+				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
+					View all days
+				</Link>
+			</header>
+			<ol>
+				{entries.map(entry => (
+					<li key={entry.id}>
+						<Link href={journalHref('day', { at: entry.recordedAt })}>
+							<span className={style.recentDate}>
+								<LocalizedDate date={journalEntryDate(entry)} />
+							</span>
+							<strong>
+								{entry.summary?.title ?? 'Untitled entry'}
+							</strong>
+							<span className={style.recentTime}>
+								<LocalizedTime date={journalEntryDate(entry)} />
+							</span>
+						</Link>
+					</li>
+				))}
+			</ol>
+		</section>
+	);
+}
+
 function JournalBrowser({
 	deleteEntry,
 	journal,
@@ -1695,7 +1744,7 @@ function JournalBrowser({
 				? readyEntries.at(0)?.summary
 				: undefined);
 		return (
-			<div className={style.browser}>
+			<div>
 				<ZoomNavigation focus={focus} />
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				{summary ? (
@@ -1710,9 +1759,10 @@ function JournalBrowser({
 					</p>
 				) : (
 					<p className={style.empty}>
-						The journal overview will appear here.
+						Your journal overview will grow as you add entries.
 					</p>
 				)}
+				<RecentEntries journal={journal} />
 			</div>
 		);
 	}
@@ -1723,10 +1773,9 @@ function JournalBrowser({
 		week: 'day',
 	};
 	return (
-		<div className={style.browser}>
+		<div>
 			<ZoomNavigation focus={focus} route={route} />
 			<PendingEntries entries={pendingEntries} playback={playback} />
-			<h2>{zoomLevelLabel(route)}</h2>
 			<PeriodList
 				deleteEntry={deleteEntry}
 				focus={focus}
@@ -1876,6 +1925,76 @@ function RecordingWaveform({ stream }: { readonly stream: MediaStream }) {
 			ref={canvasRef}
 			role="img"
 		/>
+	);
+}
+
+function DevelopmentJournalTools() {
+	const refreshJournal = useRefreshJournal();
+	const [status, setStatus] = useState<
+		'idle' | 'seeding' | 'complete' | 'failed'
+	>('idle');
+	return (
+		// Inline styles let production dead-code elimination remove this
+		// development-only control without leaving rules in the CSS bundle.
+		<aside
+			className={style.notice}
+			style={{
+				background: 'color-mix(in srgb, #ffcc00 12%, transparent)',
+				borderRadius: '0.75rem',
+				flexWrap: 'wrap',
+				marginBlock: '1em 1.5em',
+				maxWidth: '42em',
+			}}
+		>
+			<div style={{ display: 'grid', flex: 1, gap: '0.15em' }}>
+				<strong>Development journal</strong>
+				<small>Local sample entries never leave this dev server.</small>
+			</div>
+			<button
+				disabled={status === 'seeding'}
+				onClick={() => {
+					setStatus('seeding');
+					void fetch(`${ZEMN_ME_API_BASE}/__local/journal/seed`, {
+						method: 'POST',
+					})
+						.then(response => {
+							if (!response.ok)
+								throw new Error('Could not add sample entries.');
+							return refreshJournal();
+						})
+						.then(() => setStatus('complete'))
+						.catch(() => setStatus('failed'));
+				}}
+				style={{
+					background: 'transparent',
+					border: '1px solid currentColor',
+					borderRadius: '999px',
+					cursor: status === 'seeding' ? 'wait' : 'pointer',
+					font: 'inherit',
+					fontWeight: 700,
+					padding: '0.5em 0.8em',
+				}}
+				type="button"
+			>
+				{status === 'seeding' ? 'Adding entries…' : 'Add sample entries'}
+			</button>
+			{status === 'complete' && (
+				<small role="status" style={{ flexBasis: '100%' }}>
+					Sample journal ready
+				</small>
+			)}
+			{status === 'failed' && (
+				<small
+					role="alert"
+					style={{
+						color: 'var(--journal-recording)',
+						flexBasis: '100%',
+					}}
+				>
+					Could not add sample entries
+				</small>
+			)}
+		</aside>
 	);
 }
 
@@ -2102,6 +2221,7 @@ export default function JournalPageClient({
 			)}
 			<header className={style.hero}>
 				<h1>Journal</h1>
+				<p>A private record, in your own voice.</p>
 			</header>
 			{!isLoggedIn ? (
 				<button
@@ -2120,7 +2240,10 @@ export default function JournalPageClient({
 			) : (
 				<>
 					{hasWriteScope && (
-						<section className={style.recorder}>
+						<section
+							aria-label="Create a journal entry"
+							className={style.recorder}
+						>
 							<button
 								aria-label={
 									recording ? 'Submit note' : 'Record a note'
@@ -2138,9 +2261,12 @@ export default function JournalPageClient({
 							>
 								<FontAwesomeIcon
 									icon={
-										recording ? faArrowDown : faMicrophone
+										recording ? faCheck : faMicrophone
 									}
 								/>
+								<span className={style.actionLabel}>
+									{recording ? 'Done' : 'Record'}
+								</span>
 							</button>
 							{recordingStream ? (
 								<>
@@ -2154,6 +2280,9 @@ export default function JournalPageClient({
 										type="button"
 									>
 										<FontAwesomeIcon icon={faStop} />
+										<span className={style.actionLabel}>
+											Cancel
+										</span>
 									</button>
 								</>
 							) : (
@@ -2162,6 +2291,7 @@ export default function JournalPageClient({
 									title="Import voice memo"
 								>
 									<FontAwesomeIcon icon={faUpload} />
+									<span className={style.actionLabel}>Import</span>
 									<input
 										accept="audio/*,.m4a"
 										aria-label="Import voice memo"
@@ -2175,6 +2305,7 @@ export default function JournalPageClient({
 							{status && <p>{status}</p>}
 						</section>
 					)}
+					{isDevelopment && <DevelopmentJournalTools />}
 					{journal(
 						value => (
 							<JournalBrowser
