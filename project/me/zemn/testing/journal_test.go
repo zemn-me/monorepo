@@ -95,25 +95,28 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not become writable: %v", err)
 	}
-	usesClearCaptureControls, err := driver.ExecuteScript(`
+	usesCompactCaptureControls, err := driver.ExecuteScript(`
 		const record = document.querySelector("button[aria-label='Record a note']");
 		const input = document.querySelector("input[aria-label='Import voice memo']");
 		const importControl = input?.closest('label');
 		return record !== null && importControl !== null &&
-			record.textContent.trim() === 'Record' &&
-			importControl.textContent.trim() === 'Import' &&
+			record.textContent.trim() === '' &&
+			importControl.textContent.trim() === '' &&
 			Math.abs(record.getBoundingClientRect().height -
-				importControl.getBoundingClientRect().height) < 0.5;
+				importControl.getBoundingClientRect().height) < 0.5 &&
+			Math.abs(record.getBoundingClientRect().width -
+				importControl.getBoundingClientRect().width) < 0.5;
 	`, nil)
 	if err != nil {
 		t.Fatalf("inspect journal capture controls: %v", err)
 	}
-	if usesClearCaptureControls != true {
-		t.Fatalf("journal capture controls do not have clear matching labels")
+	if usesCompactCaptureControls != true {
+		t.Fatalf("journal capture controls were not matching icon buttons")
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Overview']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not default to its overview: %v", err)
 	}
+	time.Sleep(300 * time.Millisecond)
 	viewIndicator, err := driver.ExecuteScript(`
 		const navigation = document.querySelector("nav[aria-label='Browse journal']");
 		const selected = navigation?.querySelector("a[aria-current='page']");

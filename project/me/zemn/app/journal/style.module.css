@@ -89,9 +89,9 @@
 	block-size: 2.75em;
 	border-radius: 999px;
 	box-sizing: border-box;
-	inline-size: auto;
+	inline-size: 2.75em;
 	justify-content: center;
-	padding-inline: 1em;
+	padding: 0;
 }
 
 .recorder button:not(:disabled):active,
@@ -103,12 +103,16 @@
 	background: var(--journal-recording);
 	border-color: var(--journal-recording);
 	color: white;
+	inline-size: auto;
+	padding-inline: 1em;
 }
 
 .recorder .cancelButton {
 	background: transparent;
 	border-color: currentColor;
 	color: inherit;
+	inline-size: auto;
+	padding-inline: 1em;
 }
 
 .actionLabel {

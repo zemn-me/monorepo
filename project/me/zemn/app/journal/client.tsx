@@ -2316,6 +2316,9 @@ export default function JournalPageClient({
 										? () => endRecording('submit')
 										: startRecording
 								}
+								title={
+									recording ? 'Finish recording' : 'Record a note'
+								}
 								type="button"
 							>
 								<FontAwesomeIcon
@@ -2323,9 +2326,9 @@ export default function JournalPageClient({
 										recording ? faCheck : faMicrophone
 									}
 								/>
-								<span className={style.actionLabel}>
-									{recording ? 'Done' : 'Record'}
-								</span>
+								{recording && (
+									<span className={style.actionLabel}>Done</span>
+								)}
 							</button>
 							{recordingStream ? (
 								<>
@@ -2350,7 +2353,6 @@ export default function JournalPageClient({
 									title="Import voice memo"
 								>
 									<FontAwesomeIcon icon={faUpload} />
-									<span className={style.actionLabel}>Import</span>
 									<input
 										accept="audio/*,.m4a"
 										aria-label="Import voice memo"
