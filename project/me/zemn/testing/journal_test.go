@@ -403,22 +403,47 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForScheduledJournalSummaries(driver, apiBase.String(), 4, 30*time.Second); err != nil {
 		t.Fatalf("immediate journal summaries did not survive scheduled refresh: %v", err)
 	}
-	monthLink, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[normalize-space()='Months']", 10*time.Second)
+	yearDisclosure, err = waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='year']", 10*time.Second)
 	if err != nil {
-		t.Fatalf("journal year did not link to its months: %v", err)
+		t.Fatalf("find refreshed journal year disclosure: %v", err)
 	}
-	if err := monthLink.Click(); err != nil {
-		t.Fatalf("open journal months: %v", err)
+	monthLink, err := yearDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
+	if err != nil {
+		t.Fatalf("journal year did not list its months: %v", err)
+	}
+	if displayed, err := monthLink.IsDisplayed(); err != nil {
+		t.Fatalf("inspect journal year expansion: %v", err)
+	} else if !displayed {
+		yearSummary, err = yearDisclosure.FindElement(selenium.ByCSSSelector, "summary")
+		if err != nil {
+			t.Fatalf("find refreshed journal year summary: %v", err)
+		}
+		if err := yearSummary.Click(); err != nil {
+			t.Fatalf("expand refreshed journal year: %v", err)
+		}
+	}
+	if _, err := driver.ExecuteScript("arguments[0].click()", []any{monthLink}); err != nil {
+		t.Fatalf("open a journal month from its year: %v", err)
+	}
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Months']", 10*time.Second); err != nil {
+		t.Fatalf("journal month browser selection: %v", err)
 	}
 	if err := waitForText(driver, "Experiments in attention", 10*time.Second); err != nil {
 		t.Fatalf("journal month route: %v", err)
 	}
-	weekLink, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[normalize-space()='Weeks']", 10*time.Second)
+	monthDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='month'][open]", 10*time.Second)
 	if err != nil {
-		t.Fatalf("journal month did not link to its weeks: %v", err)
+		t.Fatalf("selected journal month did not open on arrival: %v", err)
 	}
-	if err := weekLink.Click(); err != nil {
-		t.Fatalf("open journal weeks: %v", err)
+	weekLink, err := monthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='week']")
+	if err != nil {
+		t.Fatalf("journal month did not list its weeks: %v", err)
+	}
+	if _, err := driver.ExecuteScript("arguments[0].click()", []any{weekLink}); err != nil {
+		t.Fatalf("open a journal week from its month: %v", err)
+	}
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Weeks']", 10*time.Second); err != nil {
+		t.Fatalf("journal week browser selection: %v", err)
 	}
 	if err := waitForText(driver, "Making room for steadier work", 10*time.Second); err != nil {
 		t.Fatalf("journal week route: %v", err)
@@ -441,22 +466,15 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if usesWeeklyDateRange != true {
 		t.Fatalf("journal week did not use a titled, non-link date range")
 	}
-	weekDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='week']", 10*time.Second)
+	weekDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='week'][open]", 10*time.Second)
 	if err != nil {
-		t.Fatalf("find journal week disclosure: %v", err)
-	}
-	weekSummary, err := weekDisclosure.FindElement(selenium.ByCSSSelector, "summary")
-	if err != nil {
-		t.Fatalf("find journal week disclosure summary: %v", err)
-	}
-	if err := weekSummary.Click(); err != nil {
-		t.Fatalf("expand journal week: %v", err)
+		t.Fatalf("selected journal week did not open on arrival: %v", err)
 	}
 	dayLink, err := weekDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']")
 	if err != nil {
 		t.Fatalf("journal week did not list its days: %v", err)
 	}
-	if err := dayLink.Click(); err != nil {
+	if _, err := driver.ExecuteScript("arguments[0].click()", []any{dayLink}); err != nil {
 		t.Fatalf("open a journal day from its week: %v", err)
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Days']", 10*time.Second); err != nil {
@@ -1177,15 +1195,16 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find corrected journal year disclosure: %v", err)
 	}
-	if err := targetYearSummary.Click(); err != nil {
-		t.Fatalf("expand corrected journal year: %v", err)
-	}
 	targetMonth, err := targetYear.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
 	if err != nil {
 		t.Fatalf("corrected journal year did not list its months: %v", err)
 	}
-	if displayed, err := targetMonth.IsDisplayed(); err != nil || !displayed {
-		t.Fatalf("corrected journal month link was not visible: displayed %t, error %v", displayed, err)
+	if displayed, err := targetMonth.IsDisplayed(); err != nil {
+		t.Fatalf("inspect corrected journal year expansion: %v", err)
+	} else if !displayed {
+		if err := targetYearSummary.Click(); err != nil {
+			t.Fatalf("expand corrected journal year: %v", err)
+		}
 	}
 	targetMonthHref, err := targetMonth.GetAttribute("href")
 	if err != nil || !strings.Contains(targetMonthHref, "/journal/month?") {
@@ -1204,16 +1223,9 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Months']", 30*time.Second); err != nil {
 		t.Fatalf("corrected journal month did not finish opening: %v", err)
 	}
-	targetMonthDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='month']", 30*time.Second)
+	targetMonthDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='month'][open]", 30*time.Second)
 	if err != nil {
-		t.Fatalf("find corrected journal month disclosure: %v", err)
-	}
-	targetMonthSummary, err := targetMonthDisclosure.FindElement(selenium.ByCSSSelector, "summary")
-	if err != nil {
-		t.Fatalf("find corrected journal month summary: %v", err)
-	}
-	if err := targetMonthSummary.Click(); err != nil {
-		t.Fatalf("expand corrected journal month: %v", err)
+		t.Fatalf("corrected journal month did not open on arrival: %v", err)
 	}
 	targetWeek, err := targetMonthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='week']")
 	if err != nil {
@@ -1236,16 +1248,9 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Weeks']", 30*time.Second); err != nil {
 		t.Fatalf("corrected journal week did not finish opening: %v", err)
 	}
-	targetWeekDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='week']", 30*time.Second)
+	targetWeekDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='week'][open]", 30*time.Second)
 	if err != nil {
-		t.Fatalf("find corrected journal week disclosure: %v", err)
-	}
-	targetWeekSummary, err := targetWeekDisclosure.FindElement(selenium.ByCSSSelector, "summary")
-	if err != nil {
-		t.Fatalf("find corrected journal week summary: %v", err)
-	}
-	if err := targetWeekSummary.Click(); err != nil {
-		t.Fatalf("expand corrected journal week: %v", err)
+		t.Fatalf("corrected journal week did not open on arrival: %v", err)
 	}
 	targetDay, err := targetWeekDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']")
 	if err != nil {

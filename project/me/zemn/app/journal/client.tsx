@@ -1476,19 +1476,25 @@ function childPeriodsFor(
 
 function PeriodDisclosure({
 	children,
+	initiallyOpen,
 	nextRoute,
 	node,
 	playback,
 }: {
 	readonly children: readonly JournalPeriodNode[];
+	readonly initiallyOpen: boolean;
 	readonly nextRoute: JournalRoute;
 	readonly node: JournalPeriodNode;
 	readonly playback: JournalPlayback;
 }) {
+	const [open, setOpen] = useState(initiallyOpen);
+
 	return (
 		<details
 			className={style.periodDisclosure}
 			data-journal-period-disclosure={node.period}
+			onToggle={(event) => setOpen(event.currentTarget.open)}
+			open={open}
 		>
 			<summary>
 				<span className={style.periodDate}>
@@ -1813,6 +1819,7 @@ function PeriodList({
 					{nextRoute ? (
 						<PeriodDisclosure
 							children={childPeriodsFor(childPeriods, node)}
+							initiallyOpen={periodContains(node, focus)}
 							nextRoute={nextRoute}
 							node={node}
 							playback={playback}
