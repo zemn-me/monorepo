@@ -1466,6 +1466,86 @@ function periodMidpoint(period: JournalPeriodNode) {
 	).toISOString();
 }
 
+function childPeriodsFor(
+	periods: readonly JournalPeriodNode[],
+	parent: JournalPeriodNode
+) {
+	return periods.filter(child => periodContains(parent, child.start));
+}
+
+function PeriodDisclosure({
+	children,
+	nextRoute,
+	node,
+	playback,
+}: {
+	readonly children: readonly JournalPeriodNode[];
+	readonly nextRoute: JournalRoute;
+	readonly node: JournalPeriodNode;
+	readonly playback: JournalPlayback;
+}) {
+	return (
+		<details
+			className={style.periodDisclosure}
+			data-journal-period-disclosure={node.period}
+		>
+			<summary>
+				<span className={style.periodDate}>
+					<PeriodDate summary={node} />
+				</span>
+				<strong className={style.periodTitle}>
+					{node.summary?.title ?? 'Summary in progress…'}
+				</strong>
+				<FontAwesomeIcon
+					aria-hidden="true"
+					className={style.periodChevron}
+					icon={faChevronDown}
+				/>
+			</summary>
+			<div className={style.periodDisclosureBody}>
+				{node.summary && (
+					<SummaryCard
+						playback={playback}
+						showPeriod={false}
+						showTitle={false}
+						summary={node.summary}
+					/>
+				)}
+				{children.length > 0 && (
+					<ol
+						aria-label={`Browse ${nextRoute}s`}
+						className={style.periodChildren}
+					>
+						{children.map(child => (
+							<li key={child.id}>
+								<Link
+									data-journal-period-link={nextRoute}
+									href={journalHref(nextRoute, {
+										at: periodMidpoint(child),
+									})}
+								>
+									<span className={style.periodChildDate}>
+										<PeriodDate summary={child} />
+									</span>
+									<strong>
+										{child.summary?.title ??
+											'Summary in progress…'}
+									</strong>
+									<FontAwesomeIcon
+										aria-hidden="true"
+										className={style.periodChildChevron}
+										icon={faChevronDown}
+									/>
+								</Link>
+							</li>
+						))}
+					</ol>
+				)}
+			</div>
+		</details>
+	);
+}
+
 function citationDestination(journal: Journal, entryID: string) {
 	const entry = journal.entries.find(value => value.id === entryID);
 	if (!entry) return '/journal';
@@ -1589,6 +1669,10 @@ function PeriodList({
 		() => periodsFor(journal, period),
 		[journal, period]
 	);
+	const childPeriods = useMemo(
+		() => (nextRoute ? periodsFor(journal, nextRoute) : []),
+		[journal, nextRoute]
+	);
 	const listRef = useRef<HTMLDivElement>(null);
 	const positionedPeriod = useRef<AggregatePeriod>();
 	const focusRef = useRef(focus);
@@ -1698,33 +1782,36 @@ function PeriodList({
 		return <p className={style.empty}>No {period}s yet.</p>;
 	}
 	return (
-		<div className={style.periodList} ref={listRef}>
+		<div
+			className={`${style.periodList} ${nextRoute ? style.periodOverviewList : ''}`}
+			ref={listRef}
+		>
 			{periods.map(node => (
 				<section
 					className={style.period}
 					data-journal-period-start={node.start}
 					key={node.id}
 				>
-					<h3>
-						{nextRoute ? (
-							<Link
-								data-journal-period-link={period}
-								href={journalHref(nextRoute, {
-									at: periodMidpoint(node),
-								})}
-							>
-								<PeriodDate summary={node} />
-							</Link>
-						) : (
-							<PeriodDate summary={node} />
-						)}
-					</h3>
-					{node.summary && (
-						<SummaryCard
+					{nextRoute ? (
+						<PeriodDisclosure
+							children={childPeriodsFor(childPeriods, node)}
+							nextRoute={nextRoute}
+							node={node}
 							playback={playback}
-							showPeriod={false}
-							summary={node.summary}
 						/>
+					) : (
+						<>
+							<h3>
+								<PeriodDate summary={node} />
+							</h3>
+							{node.summary && (
+								<SummaryCard
+									playback={playback}
+									showPeriod={false}
+									summary={node.summary}
+								/>
+							)}
+						</>
 					)}
 					{period === 'day' &&
 						journal.entries
