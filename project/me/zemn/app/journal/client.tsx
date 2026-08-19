@@ -1269,12 +1269,14 @@ function EntryCard({
 					className={style.entryTime}
 					date={journalEntryDate(entry)}
 				/>
-				<strong className={style.entryTitle}>{title}</strong>
-				{entry.status !== 'ready' && (
-					<small className={style.status}>
-						{entry.status.replace('_', ' ')}
-					</small>
-				)}
+				<span className={style.entryHeading}>
+					<strong className={style.entryTitle}>{title}</strong>
+					{entry.status !== 'ready' && (
+						<small className={style.status}>
+							{entry.status.replace('_', ' ')}
+						</small>
+					)}
+				</span>
 				<FontAwesomeIcon
 					aria-hidden="true"
 					className={style.entryChevron}

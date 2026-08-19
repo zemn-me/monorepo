@@ -520,6 +520,25 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if usesTimeOnlyEntryHeadings != true {
 		t.Fatalf("journal entry headings repeated their parent day")
 	}
+	usesPeriodDisclosureLayout, err := driver.ExecuteScript(`
+		const summaries = [...document.querySelectorAll(
+			"details[id^='entry-'] > summary"
+		)];
+		return summaries.length === 4 && summaries.every(summary => {
+			const style = getComputedStyle(summary);
+			const detailsStyle = getComputedStyle(summary.parentElement);
+			return style.display === 'grid' &&
+				style.gridTemplateColumns.split(' ').length === 3 &&
+				summary.children.length === 3 &&
+				detailsStyle.borderBottomStyle !== 'none';
+		});
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal entry disclosure layout: %v", err)
+	}
+	if usesPeriodDisclosureLayout != true {
+		t.Fatalf("journal day entries did not use the period disclosure layout")
+	}
 	entrySummaryDates, err := driver.ExecuteScript(`
 		const day = document.querySelector(
 			'[data-journal-period-start^="2025-08-13"]'

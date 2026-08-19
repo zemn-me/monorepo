@@ -258,7 +258,8 @@
 	border-block-end: 1px solid var(--journal-soft-line);
 }
 
-.periodDisclosure > summary {
+.periodDisclosure > summary,
+.entry > summary {
 	align-items: center;
 	cursor: pointer;
 	display: grid;
@@ -269,12 +270,14 @@
 	padding: 0.65em 0.25em;
 }
 
-.periodDisclosure > summary::-webkit-details-marker {
+.periodDisclosure > summary::-webkit-details-marker,
+.entry > summary::-webkit-details-marker {
 	display: none;
 }
 
 .periodDate,
-.periodChildDate {
+.periodChildDate,
+.entryTime {
 	color: var(--journal-muted);
 	font-size: 0.85em;
 }
@@ -389,27 +392,19 @@
 	margin-inline-start: 0;
 }
 
-.entry > summary {
-	align-items: center;
-	display: flex;
-	gap: 0.8em;
-	list-style: none;
-	min-block-size: 3.25em;
-	padding-inline: 0.25em;
-}
-
-.entry > summary::-webkit-details-marker {
-	display: none;
-}
-
 .entryTime {
-	color: var(--journal-muted);
-	flex: 0 0 5em;
 	font-variant-numeric: tabular-nums;
 }
 
+.entryHeading {
+	align-items: baseline;
+	display: flex;
+	gap: 0.75em;
+	min-width: 0;
+}
+
 .entryTitle {
-	flex: 1;
+	min-width: 0;
 }
 
 .entryChevron {
@@ -762,16 +757,16 @@
 
 	.entry > summary {
 		align-items: baseline;
-		column-gap: 0.65em;
-		flex-wrap: wrap;
+		gap: 0.25em 0.65em;
+		grid-template-columns: 1fr auto;
 	}
 
-	.entryTitle {
-		flex-basis: calc(100% - 7em);
+	.entryTime {
+		grid-column: 1 / -1;
 	}
 
-	.entryChevron {
-		margin-inline-start: auto;
+	.entryHeading {
+		gap: 0.5em;
 	}
 
 	.periodDisclosure > summary,
