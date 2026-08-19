@@ -1063,21 +1063,53 @@ function EntryDateEditor({
 	readonly onUpdate: (entryID: string, recordedDate: string) => Promise<void>;
 }) {
 	const recordedDate = journalEntryDate(entry).toPlainDate().toString();
+	const editorID = `entry-${entry.id}-recording-date-editor`;
 	const [value, setValue] = useState(recordedDate);
+	const [editing, setEditing] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [failure, setFailure] = useState<string>();
 	useEffect(() => setValue(recordedDate), [recordedDate]);
+	const cancel = () => {
+		setValue(recordedDate);
+		setFailure(undefined);
+		setEditing(false);
+	};
+
+	if (!editing) {
+		return (
+			<div className={style.dateEditorDisclosure}>
+				<button
+					aria-controls={editorID}
+					aria-expanded="false"
+					onClick={() => {
+						setFailure(undefined);
+						setEditing(true);
+					}}
+					type="button"
+				>
+					Edit recording date
+				</button>
+			</div>
+		);
+	}
 
 	return (
 		<form
 			aria-label="Edit recording date"
 			className={style.dateEditor}
+			id={editorID}
+			onKeyDown={event => {
+				if (event.key !== 'Escape' || saving) return;
+				event.preventDefault();
+				cancel();
+			}}
 			onSubmit={event => {
 				event.preventDefault();
 				if (saving || value === recordedDate) return;
 				setSaving(true);
 				setFailure(undefined);
 				void onUpdate(entry.id, value)
+					.then(() => setEditing(false))
 					.catch(error => setFailure(errorMessage(error)))
 					.finally(() => setSaving(false));
 			}}
@@ -1085,6 +1117,7 @@ function EntryDateEditor({
 			<label>
 				<span>Recording date</span>
 				<input
+					autoFocus
 					disabled={saving}
 					onChange={event => setValue(event.currentTarget.value)}
 					required
@@ -1092,9 +1125,22 @@ function EntryDateEditor({
 					value={value}
 				/>
 			</label>
-			<button disabled={saving || value === recordedDate} type="submit">
-				{saving ? 'Saving…' : 'Save date'}
-			</button>
+			<div className={style.dateEditorActions}>
+				<button
+					disabled={saving || value === recordedDate}
+					type="submit"
+				>
+					{saving ? 'Saving…' : 'Save date'}
+				</button>
+				<button
+					className={style.dateEditorCancel}
+					disabled={saving}
+					onClick={cancel}
+					type="button"
+				>
+					Cancel
+				</button>
+			</div>
 			{failure && <p role="alert">{failure}</p>}
 		</form>
 	);

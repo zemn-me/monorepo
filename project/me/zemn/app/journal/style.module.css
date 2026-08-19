@@ -454,6 +454,33 @@
 	padding-block-start: 1em;
 }
 
+.dateEditorDisclosure {
+	margin-block-start: 1.25em;
+	max-width: 42em;
+}
+
+.dateEditorDisclosure button {
+	background: transparent;
+	border: 0;
+	color: var(--journal-muted);
+	cursor: pointer;
+	font: inherit;
+	font-size: 0.85em;
+	padding: 0.25em 0;
+	text-decoration: underline;
+	text-decoration-color: transparent;
+	text-underline-offset: 0.2em;
+	transition:
+		color 120ms ease,
+		text-decoration-color 120ms ease;
+}
+
+.dateEditorDisclosure button:hover,
+.dateEditorDisclosure button:focus-visible {
+	color: inherit;
+	text-decoration-color: currentColor;
+}
+
 .dateEditor {
 	align-items: flex-end;
 	border-block-start: 1px solid var(--journal-line);
@@ -471,11 +498,22 @@
 	gap: 0.25em;
 }
 
+.dateEditorActions {
+	display: flex;
+	gap: 0.5em;
+}
+
 .dateEditor input,
 .dateEditor button {
 	box-sizing: border-box;
 	font: inherit;
 	min-block-size: 2.5em;
+}
+
+.dateEditor .dateEditorCancel {
+	background: transparent;
+	border-color: var(--journal-line);
+	color: inherit;
 }
 
 .dateEditor button {

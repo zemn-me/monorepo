@@ -1000,7 +1000,21 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("find journal entry disclosure: %v", err)
 	}
 	if err := entrySummary.Click(); err != nil {
-		t.Fatalf("open journal entry date editor: %v", err)
+		t.Fatalf("open journal entry: %v", err)
+	}
+	dateInputs, err := currentEntries[0].FindElements(selenium.ByCSSSelector, "input[type='date']")
+	if err != nil {
+		t.Fatalf("inspect collapsed journal recording date editor: %v", err)
+	}
+	if len(dateInputs) != 0 {
+		t.Fatalf("journal recording date input was visible before editing")
+	}
+	editDate, err := currentEntries[0].FindElement(selenium.ByXPATH, ".//button[normalize-space()='Edit recording date' and @aria-expanded='false']")
+	if err != nil {
+		t.Fatalf("find journal recording date edit control: %v", err)
+	}
+	if err := editDate.Click(); err != nil {
+		t.Fatalf("open journal recording date editor: %v", err)
 	}
 	dateInput, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "input[type='date']")
 	if err != nil {
@@ -1081,7 +1095,25 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 			t.Fatalf("open corrected journal %s: %v", period, err)
 		}
 	}
-	correctedInput, err := waitForElement(driver, selenium.ByCSSSelector, "input[type='date']", 30*time.Second)
+	correctedEntry, err := waitForElement(driver, selenium.ByCSSSelector, "details:has(audio)", 30*time.Second)
+	if err != nil {
+		t.Fatalf("find corrected journal entry: %v", err)
+	}
+	correctedSummary, err := correctedEntry.FindElement(selenium.ByCSSSelector, "summary")
+	if err != nil {
+		t.Fatalf("find corrected journal entry disclosure: %v", err)
+	}
+	if err := correctedSummary.Click(); err != nil {
+		t.Fatalf("open corrected journal entry: %v", err)
+	}
+	correctedEditDate, err := correctedEntry.FindElement(selenium.ByXPATH, ".//button[normalize-space()='Edit recording date']")
+	if err != nil {
+		t.Fatalf("find corrected journal recording date edit control: %v", err)
+	}
+	if err := correctedEditDate.Click(); err != nil {
+		t.Fatalf("open corrected journal recording date editor: %v", err)
+	}
+	correctedInput, err := correctedEntry.FindElement(selenium.ByCSSSelector, "input[type='date']")
 	if err != nil {
 		t.Fatalf("find corrected journal entry date: %v", err)
 	}
