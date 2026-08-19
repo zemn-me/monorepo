@@ -110,20 +110,39 @@
 	background: var(--journal-recording);
 	border-color: var(--journal-recording);
 	color: white;
-	inline-size: auto;
-	padding-inline: 1em;
 }
 
 .recorder .cancelButton {
 	background: transparent;
 	border-color: currentColor;
 	color: inherit;
-	inline-size: auto;
-	padding-inline: 1em;
 }
 
-.actionLabel {
-	font-size: 0.9em;
+.recordButton {
+	position: relative;
+}
+
+.recorder[data-uploading] .recordButton::after {
+	animation: journal-upload-spin 800ms linear infinite;
+	border: 2px solid var(--journal-soft-line);
+	border-block-start-color: var(--journal-recording);
+	border-radius: inherit;
+	content: "";
+	inset: -0.35em;
+	pointer-events: none;
+	position: absolute;
+}
+
+@keyframes journal-upload-spin {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.recorder[data-uploading] .recordButton::after {
+		animation: none;
+	}
 }
 
 .waveform {
