@@ -15,6 +15,7 @@ import {
 	memo,
 	KeyboardEvent as ReactKeyboardEvent,
 	MouseEvent as ReactMouseEvent,
+	type ReactNode,
 	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
@@ -1643,6 +1644,23 @@ function ZoomNavigation({
 	);
 }
 
+function JournalToolbar({
+	actions,
+	focus,
+	route,
+}: {
+	readonly actions?: ReactNode;
+	readonly focus: string;
+	readonly route?: JournalRoute;
+}) {
+	return (
+		<div className={style.journalToolbar} data-journal-toolbar>
+			<ZoomNavigation focus={focus} route={route} />
+			{actions}
+		</div>
+	);
+}
+
 function PeriodList({
 	deleteEntry,
 	focus,
@@ -1873,11 +1891,13 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 }
 
 function JournalBrowser({
+	actions,
 	deleteEntry,
 	journal,
 	route,
 	updateEntryDate,
 }: {
+	readonly actions?: ReactNode;
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
 	readonly route?: JournalRoute;
@@ -1939,7 +1959,7 @@ function JournalBrowser({
 				: undefined);
 		return (
 			<div>
-				<ZoomNavigation focus={focus} />
+				<JournalToolbar actions={actions} focus={focus} />
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				{summary ? (
 					<SummaryCard
@@ -1968,7 +1988,7 @@ function JournalBrowser({
 	};
 	return (
 		<div>
-			<ZoomNavigation focus={focus} route={route} />
+			<JournalToolbar actions={actions} focus={focus} route={route} />
 			<PendingEntries entries={pendingEntries} playback={playback} />
 			<PeriodList
 				deleteEntry={deleteEntry}
@@ -2401,6 +2421,62 @@ export default function JournalPageClient({
 			setRecordingError(errorMessage(error))
 		);
 	};
+	const captureControls = hasWriteScope ? (
+		<section
+			aria-label="Create a journal entry"
+			className={style.recorder}
+			data-recording={recordingStream ? '' : undefined}
+		>
+			{!recordingStream && (
+				<label
+					className={style.uploadButton}
+					title="Import voice memo"
+				>
+					<FontAwesomeIcon icon={faUpload} />
+					<input
+						accept="audio/*,.m4a"
+						aria-label="Import voice memo"
+						disabled={createEntry.isPending}
+						multiple
+						onChange={uploadFiles}
+						type="file"
+					/>
+				</label>
+			)}
+			<button
+				aria-label={recording ? 'Submit note' : 'Record a note'}
+				className={recording ? style.submitButton : undefined}
+				disabled={createEntry.isPending}
+				onClick={
+					recording
+						? () => endRecording('submit')
+						: startRecording
+				}
+				title={recording ? 'Finish recording' : 'Record a note'}
+				type="button"
+			>
+				<FontAwesomeIcon icon={recording ? faCheck : faMicrophone} />
+				{recording && (
+					<span className={style.actionLabel}>Done</span>
+				)}
+			</button>
+			{recordingStream && (
+				<>
+					<RecordingWaveform stream={recordingStream} />
+					<button
+						aria-label="Cancel recording"
+						className={style.cancelButton}
+						onClick={() => endRecording('discard')}
+						type="button"
+					>
+						<FontAwesomeIcon icon={faStop} />
+						<span className={style.actionLabel}>Cancel</span>
+					</button>
+				</>
+			)}
+			{status && <p>{status}</p>}
+		</section>
+	) : undefined;
 
 	return (
 		<main
@@ -2433,78 +2509,11 @@ export default function JournalPageClient({
 				</p>
 			) : (
 				<>
-					{hasWriteScope && (
-						<section
-							aria-label="Create a journal entry"
-							className={style.recorder}
-						>
-							<button
-								aria-label={
-									recording ? 'Submit note' : 'Record a note'
-								}
-								className={
-									recording ? style.submitButton : undefined
-								}
-								disabled={createEntry.isPending}
-								onClick={
-									recording
-										? () => endRecording('submit')
-										: startRecording
-								}
-								title={
-									recording ? 'Finish recording' : 'Record a note'
-								}
-								type="button"
-							>
-								<FontAwesomeIcon
-									icon={
-										recording ? faCheck : faMicrophone
-									}
-								/>
-								{recording && (
-									<span className={style.actionLabel}>Done</span>
-								)}
-							</button>
-							{recordingStream ? (
-								<>
-									<RecordingWaveform
-										stream={recordingStream}
-									/>
-									<button
-										aria-label="Cancel recording"
-										className={style.cancelButton}
-										onClick={() => endRecording('discard')}
-										type="button"
-									>
-										<FontAwesomeIcon icon={faStop} />
-										<span className={style.actionLabel}>
-											Cancel
-										</span>
-									</button>
-								</>
-							) : (
-								<label
-									className={style.uploadButton}
-									title="Import voice memo"
-								>
-									<FontAwesomeIcon icon={faUpload} />
-									<input
-										accept="audio/*,.m4a"
-										aria-label="Import voice memo"
-										disabled={createEntry.isPending}
-										multiple
-										onChange={uploadFiles}
-										type="file"
-									/>
-								</label>
-							)}
-							{status && <p>{status}</p>}
-						</section>
-					)}
 					{isDevelopment && <DevelopmentJournalTools />}
 					{journal(
 						value => (
 							<JournalBrowser
+								actions={captureControls}
 								deleteEntry={
 									hasWriteScope
 										? deleteJournalEntry

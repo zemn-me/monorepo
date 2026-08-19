@@ -99,19 +99,30 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		const record = document.querySelector("button[aria-label='Record a note']");
 		const input = document.querySelector("input[aria-label='Import voice memo']");
 		const importControl = input?.closest('label');
-		return record !== null && importControl !== null &&
-			record.textContent.trim() === '' &&
-			importControl.textContent.trim() === '' &&
-			Math.abs(record.getBoundingClientRect().height -
-				importControl.getBoundingClientRect().height) < 0.5 &&
-			Math.abs(record.getBoundingClientRect().width -
-				importControl.getBoundingClientRect().width) < 0.5;
+		const navigation = document.querySelector("nav[aria-label='Browse journal']");
+		const toolbar = navigation?.closest('[data-journal-toolbar]');
+		const checks = {
+			found: record !== null && importControl !== null && toolbar !== null,
+			iconOnly: record?.textContent.trim() === '' &&
+				importControl?.textContent.trim() === '',
+			sameToolbar: toolbar?.contains(record) === true &&
+				toolbar?.contains(importControl) === true,
+			uploadBeforeRecord: Boolean(importControl?.compareDocumentPosition(record) &
+				Node.DOCUMENT_POSITION_FOLLOWING),
+			rightAligned: Math.abs((toolbar?.getBoundingClientRect().right ?? 0) -
+				(record?.getBoundingClientRect().right ?? 0)) < 0.5,
+			matchingHeight: Math.abs((record?.getBoundingClientRect().height ?? 0) -
+				(importControl?.getBoundingClientRect().height ?? 0)) < 0.5,
+			matchingWidth: Math.abs((record?.getBoundingClientRect().width ?? 0) -
+				(importControl?.getBoundingClientRect().width ?? 0)) < 0.5,
+		};
+		return Object.values(checks).every(Boolean) ? true : JSON.stringify(checks);
 	`, nil)
 	if err != nil {
 		t.Fatalf("inspect journal capture controls: %v", err)
 	}
 	if usesCompactCaptureControls != true {
-		t.Fatalf("journal capture controls were not matching icon buttons")
+		t.Fatalf("journal capture controls were not matching right-aligned toolbar icon buttons: %v", usesCompactCaptureControls)
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Overview']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not default to its overview: %v", err)
@@ -687,27 +698,26 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
 			.find(value => value.dataset.entryId === arguments[0]);
 		const dock = audio?.closest('[data-journal-audio-dock]');
-		const navigation = document.querySelector("nav[aria-label='Browse journal']");
-		if (!dock || !navigation) return false;
+		const toolbar = document.querySelector('[data-journal-toolbar]');
+		if (!dock || !toolbar) return false;
 		const dockStyle = getComputedStyle(dock);
-		const navigationStyle = getComputedStyle(navigation);
+		const toolbarStyle = getComputedStyle(toolbar);
 		const initialScroll = scrollY;
-		const navigationDocumentTop =
-			navigation.getBoundingClientRect().top + scrollY;
-		window.scrollTo(0, navigationDocumentTop + 100);
-		const navigationPinned = Math.abs(
-			navigation.getBoundingClientRect().top
+		const toolbarDocumentTop = toolbar.getBoundingClientRect().top + scrollY;
+		window.scrollTo(0, toolbarDocumentTop + 100);
+		const toolbarPinned = Math.abs(
+			toolbar.getBoundingClientRect().top
 		) < 0.5;
 		window.scrollTo(0, initialScroll);
-		return navigationPinned &&
-			navigationStyle.position === 'sticky' &&
-			navigationStyle.top === '0px' &&
+		return toolbarPinned &&
+			toolbarStyle.position === 'sticky' &&
+			toolbarStyle.top === '0px' &&
 			dockStyle.position === 'sticky' &&
 			Math.abs(
 				Number.parseFloat(dockStyle.top) -
-				navigation.getBoundingClientRect().height
+					toolbar.getBoundingClientRect().height
 			) < 0.5 &&
-			Number(navigationStyle.zIndex) > Number(dockStyle.zIndex);
+			Number(toolbarStyle.zIndex) > Number(dockStyle.zIndex);
 	`, []any{firstEntryID})
 	if err != nil {
 		t.Fatalf("inspect sticky journal navigation and audio: %v", err)

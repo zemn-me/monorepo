@@ -51,15 +51,25 @@
 
 .recorder {
 	align-items: center;
-	background: var(--journal-surface);
-	border: 1px solid var(--journal-soft-line);
-	border-radius: 1rem;
 	display: flex;
-	flex-wrap: wrap;
-	gap: 0.65em;
-	margin-block: 1.5em;
-	max-width: 42em;
-	padding: 0.75em;
+	flex: 0 0 auto;
+	gap: 0.5em;
+	margin: 0;
+	margin-inline-start: auto;
+	padding: 0;
+}
+
+.recorder[data-recording] {
+	flex: 1 1 100%;
+	order: 2;
+	padding-block-end: 0.65em;
+}
+
+.recorder p {
+	color: var(--journal-muted);
+	font-size: 0.85em;
+	margin: 0;
+	max-width: 16em;
 }
 
 .recorder button,
@@ -156,23 +166,33 @@
 	padding-block: 0.5em;
 }
 
-.zoomNavigation {
+.journalToolbar {
 	align-items: center;
 	background: var(--background-color);
 	border-block-end: 1px solid var(--journal-soft-line);
-	border-radius: 0;
-	block-size: var(--journal-sticky-navigation-height);
 	box-sizing: border-box;
 	display: flex;
-	gap: 0.25em;
-	justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 0.5em;
 	margin-block-end: 1.5em;
 	max-width: 42em;
-	overflow-x: auto;
-	padding-block: 0.65em;
 	position: sticky;
 	top: 0;
 	z-index: 7;
+}
+
+.zoomNavigation {
+	align-items: center;
+	block-size: calc(var(--journal-sticky-navigation-height) - 1px);
+	box-sizing: border-box;
+	display: flex;
+	flex: 1 1 0;
+	gap: 0.25em;
+	justify-content: flex-start;
+	min-width: 0;
+	overflow-x: auto;
+	padding-block: 0.65em;
+	position: relative;
 }
 
 .zoomNavigation a {
