@@ -1,9 +1,8 @@
 'use client';
 
 import {
-	faArrowDown,
-	faMagnifyingGlassMinus,
-	faMagnifyingGlassPlus,
+	faCheck,
+	faChevronDown,
 	faMicrophone,
 	faStop,
 	faTriangleExclamation,
@@ -16,9 +15,11 @@ import {
 	memo,
 	KeyboardEvent as ReactKeyboardEvent,
 	MouseEvent as ReactMouseEvent,
+	type ReactNode,
 	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -30,6 +31,7 @@ import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
@@ -41,6 +43,7 @@ import {
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import {
 	Date as LocalizedDate,
+	DateRange as LocalizedDateRange,
 	Time as LocalizedTime,
 	MonthYear,
 } from '#root/ts/react/lang/date.js';
@@ -61,6 +64,7 @@ const journalWriteScope = 'journal_write';
 const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
+const isDevelopment = process.env.NODE_ENV === 'development';
 const playbackStallRecoveryDelayMs = 1_500;
 
 function errorMessage(value: unknown): string {
@@ -73,7 +77,7 @@ function PeriodDate({
 	summary,
 	timeZone,
 }: {
-	readonly summary: Pick<JournalSummary, 'period' | 'start'>;
+	readonly summary: Pick<JournalSummary, 'end' | 'period' | 'start'>;
 	readonly timeZone?: string;
 }) {
 	if (summary.period === 'journal') return <>Journal overview</>;
@@ -87,9 +91,7 @@ function PeriodDate({
 		if (summary.period === 'month') return <MonthYear date={start} />;
 		if (summary.period === 'week') {
 			return (
-				<>
-					Week starting <LocalizedDate date={start} />
-				</>
+				<LocalizedDateRange end={new Date(summary.end)} start={start} />
 			);
 		}
 		return <LocalizedDate date={start} />;
@@ -103,9 +105,12 @@ function PeriodDate({
 	if (summary.period === 'month') return <MonthYear date={start} />;
 	if (summary.period === 'week') {
 		return (
-			<>
-				Week starting <LocalizedDate date={start} />
-			</>
+			<LocalizedDateRange
+				end={Temporal.Instant.from(summary.end).toZonedDateTimeISO(
+					timeZone
+				)}
+				start={start}
+			/>
 		);
 	}
 	return <LocalizedDate date={start} />;
@@ -581,11 +586,13 @@ function journalCitationKey(citation: JournalCitation) {
 function SummaryCardView({
 	playback,
 	showPeriod = true,
+	showTitle = true,
 	summary,
 	timeZone,
 }: {
 	readonly playback: JournalPlayback;
 	readonly showPeriod?: boolean;
+	readonly showTitle?: boolean;
 	readonly summary: JournalSummary;
 	readonly timeZone?: string;
 }) {
@@ -639,15 +646,23 @@ function SummaryCardView({
 		summary.id,
 	]);
 	return (
-		<article className={style.summary} ref={setArticle}>
-			<header>
-				{showPeriod && (
-					<p>
-						<PeriodDate summary={summary} timeZone={timeZone} />
-					</p>
-				)}
-				<h3>{summary.title}</h3>
-			</header>
+		<article
+			className={`${style.summary} ${!showTitle && !showPeriod ? style.summaryEmbedded : ''}`}
+			ref={setArticle}
+		>
+			{(showPeriod || showTitle) && (
+				<header>
+					{showPeriod && (
+						<p>
+							<PeriodDate
+								summary={summary}
+								timeZone={timeZone}
+							/>
+						</p>
+					)}
+					{showTitle && <h3>{summary.title}</h3>}
+				</header>
+			)}
 			{summary.blocks.map((block, blockIndex) => (
 				<SummaryBlock
 					block={block}
@@ -687,6 +702,7 @@ const SummaryCard = memo(
 		previous.playback.quoteForSegment === next.playback.quoteForSegment &&
 		previous.playback.titleForEntry === next.playback.titleForEntry &&
 		previous.showPeriod === next.showPeriod &&
+		previous.showTitle === next.showTitle &&
 		previous.timeZone === next.timeZone
 );
 
@@ -746,7 +762,10 @@ function TranscriptView({
 			ref={scroller}
 			role="region"
 		>
-			<div className={style.transcript} data-journal-transcript-text>
+			<div
+				className={`${style.transcript} ${currentlySpokenSegmentID ? style.transcriptFollowing : ''}`}
+				data-journal-transcript-text
+			>
 				{paragraphs.map((paragraph, paragraphIndex) => {
 					const firstSegment = paragraph[0];
 					const paragraphTimestamp = mediaTimestamp(
@@ -1046,21 +1065,53 @@ function EntryDateEditor({
 	readonly onUpdate: (entryID: string, recordedDate: string) => Promise<void>;
 }) {
 	const recordedDate = journalEntryDate(entry).toPlainDate().toString();
+	const editorID = `entry-${entry.id}-recording-date-editor`;
 	const [value, setValue] = useState(recordedDate);
+	const [editing, setEditing] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [failure, setFailure] = useState<string>();
 	useEffect(() => setValue(recordedDate), [recordedDate]);
+	const cancel = () => {
+		setValue(recordedDate);
+		setFailure(undefined);
+		setEditing(false);
+	};
+
+	if (!editing) {
+		return (
+			<div className={style.dateEditorDisclosure}>
+				<button
+					aria-controls={editorID}
+					aria-expanded="false"
+					onClick={() => {
+						setFailure(undefined);
+						setEditing(true);
+					}}
+					type="button"
+				>
+					Edit recording date
+				</button>
+			</div>
+		);
+	}
 
 	return (
 		<form
 			aria-label="Edit recording date"
 			className={style.dateEditor}
+			id={editorID}
+			onKeyDown={event => {
+				if (event.key !== 'Escape' || saving) return;
+				event.preventDefault();
+				cancel();
+			}}
 			onSubmit={event => {
 				event.preventDefault();
 				if (saving || value === recordedDate) return;
 				setSaving(true);
 				setFailure(undefined);
 				void onUpdate(entry.id, value)
+					.then(() => setEditing(false))
 					.catch(error => setFailure(errorMessage(error)))
 					.finally(() => setSaving(false));
 			}}
@@ -1068,6 +1119,7 @@ function EntryDateEditor({
 			<label>
 				<span>Recording date</span>
 				<input
+					autoFocus
 					disabled={saving}
 					onChange={event => setValue(event.currentTarget.value)}
 					required
@@ -1075,9 +1127,22 @@ function EntryDateEditor({
 					value={value}
 				/>
 			</label>
-			<button disabled={saving || value === recordedDate} type="submit">
-				{saving ? 'Saving…' : 'Save date'}
-			</button>
+			<div className={style.dateEditorActions}>
+				<button
+					disabled={saving || value === recordedDate}
+					type="submit"
+				>
+					{saving ? 'Saving…' : 'Save date'}
+				</button>
+				<button
+					className={style.dateEditorCancel}
+					disabled={saving}
+					onClick={cancel}
+					type="button"
+				>
+					Cancel
+				</button>
+			</div>
 			{failure && <p role="alert">{failure}</p>}
 		</form>
 	);
@@ -1265,13 +1330,23 @@ function EntryCard({
 	return (
 		<details className={style.entry} id={`entry-${entry.id}`}>
 			<summary>
-				<LocalizedTime date={journalEntryDate(entry)} />
-				<span>{title}</span>
-				{entry.status !== 'ready' && (
-					<small className={style.status}>
-						{entry.status.replace('_', ' ')}
-					</small>
-				)}
+				<LocalizedTime
+					className={style.entryTime}
+					date={journalEntryDate(entry)}
+				/>
+				<span className={style.entryHeading}>
+					<strong className={style.entryTitle}>{title}</strong>
+					{entry.status !== 'ready' && (
+						<small className={style.status}>
+							{entry.status.replace('_', ' ')}
+						</small>
+					)}
+				</span>
+				<FontAwesomeIcon
+					aria-hidden="true"
+					className={style.entryChevron}
+					icon={faChevronDown}
+				/>
 			</summary>
 			{entry.status === 'processing' && (
 				<p className={style.entryProgress} role="status">
@@ -1294,6 +1369,8 @@ function EntryCard({
 			{entry.summary && (
 				<SummaryCard
 					playback={playback}
+					showPeriod={false}
+					showTitle={false}
 					summary={entry.summary}
 					timeZone={entry.timeZone}
 				/>
@@ -1457,13 +1534,102 @@ function periodMidpoint(period: JournalPeriodNode) {
 	).toISOString();
 }
 
+function childPeriodsFor(
+	periods: readonly JournalPeriodNode[],
+	parent: JournalPeriodNode
+) {
+	return periods.filter(child => periodContains(parent, child.start));
+}
+
+function PeriodDisclosure({
+	children,
+	initiallyOpen,
+	nextRoute,
+	node,
+	playback,
+}: {
+	readonly children: readonly JournalPeriodNode[];
+	readonly initiallyOpen: boolean;
+	readonly nextRoute: JournalRoute;
+	readonly node: JournalPeriodNode;
+	readonly playback: JournalPlayback;
+}) {
+	const [open, setOpen] = useState(initiallyOpen);
+	useEffect(() => {
+		if (initiallyOpen) setOpen(true);
+	}, [initiallyOpen]);
+
+	return (
+		<details
+			className={style.periodDisclosure}
+			data-journal-period-disclosure={node.period}
+			onToggle={(event) => setOpen(event.currentTarget.open)}
+			open={open}
+		>
+			<summary>
+				<span className={style.periodDate}>
+					<PeriodDate summary={node} />
+				</span>
+				<strong className={style.periodTitle}>
+					{node.summary?.title ?? 'Summary in progress…'}
+				</strong>
+				<FontAwesomeIcon
+					aria-hidden="true"
+					className={style.periodChevron}
+					icon={faChevronDown}
+				/>
+			</summary>
+			<div className={style.periodDisclosureBody}>
+				{node.summary && (
+					<SummaryCard
+						playback={playback}
+						showPeriod={false}
+						showTitle={false}
+						summary={node.summary}
+					/>
+				)}
+				{children.length > 0 && (
+					<ol
+						aria-label={`Browse ${nextRoute}s`}
+						className={style.periodChildren}
+					>
+						{children.map(child => (
+							<li key={child.id}>
+								<Link
+									data-journal-period-link={nextRoute}
+									href={journalHref(nextRoute, {
+										at: periodMidpoint(child),
+									})}
+								>
+									<span className={style.periodChildDate}>
+										<PeriodDate summary={child} />
+									</span>
+									<strong>
+										{child.summary?.title ??
+											'Summary in progress…'}
+									</strong>
+									<FontAwesomeIcon
+										aria-hidden="true"
+										className={style.periodChildChevron}
+										icon={faChevronDown}
+									/>
+								</Link>
+							</li>
+						))}
+					</ol>
+				)}
+			</div>
+		</details>
+	);
+}
+
 function citationDestination(journal: Journal, entryID: string) {
 	const entry = journal.entries.find(value => value.id === entryID);
 	if (!entry) return '/journal';
 	return journalHref('day', { at: entry.recordedAt });
 }
 
-const zoomLevels = [undefined, 'year', 'month', 'week', 'day'] as const;
+const journalViews = [undefined, 'year', 'month', 'week', 'day'] as const;
 
 function zoomLevelLabel(route: JournalRoute | undefined) {
 	if (route === undefined) return 'Overview';
@@ -1477,35 +1643,97 @@ function ZoomNavigation({
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
-	const level = zoomLevels.indexOf(route);
-	const out = level > 0 ? zoomLevels[level - 1] : undefined;
-	const into = level < zoomLevels.length - 1 ? zoomLevels[level + 1] : null;
+	const [visibleRoute, setVisibleRoute] = useState(route);
+	const navigation = useRef<HTMLElement>(null);
+	const [indicator, setIndicator] = useState({
+		inlineSize: 0,
+		offset: 0,
+	});
+	useEffect(() => setVisibleRoute(route), [route]);
+	useLayoutEffect(() => {
+		const navigationElement = navigation.current;
+		const selected = navigationElement?.querySelector<HTMLAnchorElement>(
+			`a[data-journal-view="${visibleRoute ?? 'overview'}"]`
+		);
+		if (!navigationElement || !selected) return;
+		const updateIndicator = () => {
+			const navigationBounds = navigationElement.getBoundingClientRect();
+			const selectedBounds = selected.getBoundingClientRect();
+			setIndicator({
+				inlineSize: selectedBounds.width,
+				offset:
+					selectedBounds.left -
+					navigationBounds.left +
+					navigationElement.scrollLeft,
+			});
+		};
+		updateIndicator();
+		const observer = new ResizeObserver(updateIndicator);
+		observer.observe(navigationElement);
+		observer.observe(selected);
+		return () => observer.disconnect();
+	}, [visibleRoute]);
 	const href = (destination: JournalRoute | undefined) =>
 		destination
 			? journalHref(destination, { at: focus })
 			: `/journal?${new URLSearchParams({ at: focus })}`;
 	return (
-		<nav aria-label="Journal zoom" className={style.zoomNavigation}>
-			{level > 0 && (
+		<nav
+			aria-label="Browse journal"
+			className={style.zoomNavigation}
+			ref={navigation}
+		>
+			<span
+				aria-hidden="true"
+				className={style.zoomIndicator}
+				data-ready={indicator.inlineSize > 0 ? '' : undefined}
+				data-journal-view-indicator
+				style={{
+					inlineSize: indicator.inlineSize,
+					transform: `translateX(${indicator.offset}px)`,
+				}}
+			/>
+			{journalViews.map(destination => (
 				<Link
-					aria-label={`Zoom out to ${zoomLevelLabel(out)}`}
-					href={href(out)}
-					title={`Zoom out to ${zoomLevelLabel(out)}`}
+					aria-current={
+						destination === visibleRoute ? 'page' : undefined
+					}
+					data-journal-view={destination ?? 'overview'}
+					href={href(destination)}
+					key={destination ?? 'overview'}
+					onClick={event => {
+						if (
+							event.button === 0 &&
+							!event.metaKey &&
+							!event.ctrlKey &&
+							!event.shiftKey &&
+							!event.altKey
+						) {
+							setVisibleRoute(destination);
+						}
+					}}
 				>
-					<FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+					{zoomLevelLabel(destination)}
 				</Link>
-			)}
-			<p aria-live="polite">{zoomLevelLabel(route)}</p>
-			{into !== null && (
-				<Link
-					aria-label={`Zoom in to ${zoomLevelLabel(into)}`}
-					href={href(into)}
-					title={`Zoom in to ${zoomLevelLabel(into)}`}
-				>
-					<FontAwesomeIcon icon={faMagnifyingGlassPlus} />
-				</Link>
-			)}
+			))}
 		</nav>
+	);
+}
+
+function JournalToolbar({
+	actions,
+	focus,
+	route,
+}: {
+	readonly actions?: ReactNode;
+	readonly focus: string;
+	readonly route?: JournalRoute;
+}) {
+	return (
+		<div className={style.journalToolbar} data-journal-toolbar>
+			<ZoomNavigation focus={focus} route={route} />
+			{actions}
+		</div>
 	);
 }
 
@@ -1534,6 +1762,10 @@ function PeriodList({
 	const periods = useMemo(
 		() => periodsFor(journal, period),
 		[journal, period]
+	);
+	const childPeriods = useMemo(
+		() => (nextRoute ? periodsFor(journal, nextRoute) : []),
+		[journal, nextRoute]
 	);
 	const listRef = useRef<HTMLDivElement>(null);
 	const positionedPeriod = useRef<AggregatePeriod>();
@@ -1644,33 +1876,37 @@ function PeriodList({
 		return <p className={style.empty}>No {period}s yet.</p>;
 	}
 	return (
-		<div className={style.periodList} ref={listRef}>
+		<div
+			className={`${style.periodList} ${nextRoute ? style.periodOverviewList : ''}`}
+			ref={listRef}
+		>
 			{periods.map(node => (
 				<section
 					className={style.period}
 					data-journal-period-start={node.start}
 					key={node.id}
 				>
-					<h3>
-						{nextRoute ? (
-							<Link
-								data-journal-period-link={period}
-								href={journalHref(nextRoute, {
-									at: periodMidpoint(node),
-								})}
-							>
-								<PeriodDate summary={node} />
-							</Link>
-						) : (
-							<PeriodDate summary={node} />
-						)}
-					</h3>
-					{node.summary && (
-						<SummaryCard
+					{nextRoute ? (
+						<PeriodDisclosure
+							children={childPeriodsFor(childPeriods, node)}
+							initiallyOpen={periodContains(node, focus)}
+							nextRoute={nextRoute}
+							node={node}
 							playback={playback}
-							showPeriod={false}
-							summary={node.summary}
 						/>
+					) : (
+						<>
+							<h3>
+								<PeriodDate summary={node} />
+							</h3>
+							{node.summary && (
+								<SummaryCard
+									playback={playback}
+									showPeriod={false}
+									summary={node.summary}
+								/>
+							)}
+						</>
 					)}
 					{period === 'day' &&
 						journal.entries
@@ -1694,12 +1930,51 @@ function PeriodList({
 	);
 }
 
+function RecentEntries({ journal }: { readonly journal: Journal }) {
+	const entries = [...journal.entries]
+		.filter(entry => entry.status === 'ready')
+		.sort(
+			(a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt)
+		)
+		.slice(0, 5);
+	if (entries.length === 0) return null;
+	return (
+		<section aria-labelledby="recent-journal-entries" className={style.recent}>
+			<header>
+				<h2 id="recent-journal-entries">Recent entries</h2>
+				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
+					View all days
+				</Link>
+			</header>
+			<ol>
+				{entries.map(entry => (
+					<li key={entry.id}>
+						<Link href={journalHref('day', { at: entry.recordedAt })}>
+							<span className={style.recentDate}>
+								<LocalizedDate date={journalEntryDate(entry)} />
+							</span>
+							<strong>
+								{entry.summary?.title ?? 'Untitled entry'}
+							</strong>
+							<span className={style.recentTime}>
+								<LocalizedTime date={journalEntryDate(entry)} />
+							</span>
+						</Link>
+					</li>
+				))}
+			</ol>
+		</section>
+	);
+}
+
 function JournalBrowser({
+	actions,
 	deleteEntry,
 	journal,
 	route,
 	updateEntryDate,
 }: {
+	readonly actions?: ReactNode;
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
 	readonly route?: JournalRoute;
@@ -1760,8 +2035,8 @@ function JournalBrowser({
 				? readyEntries.at(0)?.summary
 				: undefined);
 		return (
-			<div className={style.browser}>
-				<ZoomNavigation focus={focus} />
+			<div>
+				<JournalToolbar actions={actions} focus={focus} />
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				{summary ? (
 					<SummaryCard
@@ -1775,9 +2050,10 @@ function JournalBrowser({
 					</p>
 				) : (
 					<p className={style.empty}>
-						The journal overview will appear here.
+						Your journal overview will grow as you add entries.
 					</p>
 				)}
+				<RecentEntries journal={journal} />
 			</div>
 		);
 	}
@@ -1788,10 +2064,9 @@ function JournalBrowser({
 		week: 'day',
 	};
 	return (
-		<div className={style.browser}>
-			<ZoomNavigation focus={focus} route={route} />
+		<div>
+			<JournalToolbar actions={actions} focus={focus} route={route} />
 			<PendingEntries entries={pendingEntries} playback={playback} />
-			<h2>{zoomLevelLabel(route)}</h2>
 			<PeriodList
 				deleteEntry={deleteEntry}
 				focus={focus}
@@ -1941,6 +2216,75 @@ function RecordingWaveform({ stream }: { readonly stream: MediaStream }) {
 			ref={canvasRef}
 			role="img"
 		/>
+	);
+}
+
+function DevelopmentJournalTools() {
+	const refreshJournal = useRefreshJournal();
+	const [status, setStatus] = useState<
+		'idle' | 'seeding' | 'complete' | 'failed'
+	>('idle');
+	return (
+		// Inline styles let production dead-code elimination remove this
+		// development-only control without leaving rules in the CSS bundle.
+		<aside
+			className={style.notice}
+			style={{
+				background: 'color-mix(in srgb, #ffcc00 12%, transparent)',
+				borderRadius: '0.75rem',
+				flexWrap: 'wrap',
+				marginBlock: '1em 1.5em',
+				maxWidth: '42em',
+			}}
+		>
+			<div style={{ display: 'grid', flex: 1, gap: '0.15em' }}>
+				<strong>Development journal</strong>
+				<small>Local sample entries never leave this dev server.</small>
+			</div>
+			<button
+				disabled={status === 'seeding'}
+				onClick={() => {
+					setStatus('seeding');
+					void fetch(`${ZEMN_ME_API_BASE}/__local/journal/seed`, {
+						method: 'POST',
+					})
+						.then(response => {
+							if (!response.ok)
+								throw new Error('Could not add sample entries.');
+							return refreshJournal();
+						})
+						.then(() => setStatus('complete'))
+						.catch(() => setStatus('failed'));
+				}}
+				style={{
+					background: 'transparent',
+					border: '1px solid currentColor',
+					borderRadius: '999px',
+					cursor: status === 'seeding' ? 'wait' : 'pointer',
+					font: 'inherit',
+					padding: '0.5em 0.8em',
+				}}
+				type="button"
+			>
+				{status === 'seeding' ? 'Adding entries…' : 'Add sample entries'}
+			</button>
+			{status === 'complete' && (
+				<small role="status" style={{ flexBasis: '100%' }}>
+					Sample journal ready
+				</small>
+			)}
+			{status === 'failed' && (
+				<small
+					role="alert"
+					style={{
+						color: 'var(--journal-recording)',
+						flexBasis: '100%',
+					}}
+				>
+					Could not add sample entries
+				</small>
+			)}
+		</aside>
 	);
 }
 
@@ -2153,11 +2497,68 @@ export default function JournalPageClient({
 			setRecordingError(errorMessage(error))
 		);
 	};
+	const captureControls = hasWriteScope ? (
+		<section
+			aria-label="Create a journal entry"
+			className={style.recorder}
+			data-recording={recordingStream ? '' : undefined}
+		>
+			{!recordingStream && (
+				<label
+					className={style.uploadButton}
+					title="Import voice memo"
+				>
+					<FontAwesomeIcon icon={faUpload} />
+					<input
+						accept="audio/*,.m4a"
+						aria-label="Import voice memo"
+						disabled={createEntry.isPending}
+						multiple
+						onChange={uploadFiles}
+						type="file"
+					/>
+				</label>
+			)}
+			<button
+				aria-label={recording ? 'Submit note' : 'Record a note'}
+				className={recording ? style.submitButton : undefined}
+				disabled={createEntry.isPending}
+				onClick={
+					recording
+						? () => endRecording('submit')
+						: startRecording
+				}
+				title={recording ? 'Finish recording' : 'Record a note'}
+				type="button"
+			>
+				<FontAwesomeIcon icon={recording ? faCheck : faMicrophone} />
+				{recording && (
+					<span className={style.actionLabel}>Done</span>
+				)}
+			</button>
+			{recordingStream && (
+				<>
+					<RecordingWaveform stream={recordingStream} />
+					<button
+						aria-label="Cancel recording"
+						className={style.cancelButton}
+						onClick={() => endRecording('discard')}
+						type="button"
+					>
+						<FontAwesomeIcon icon={faStop} />
+						<span className={style.actionLabel}>Cancel</span>
+					</button>
+				</>
+			)}
+			{status && <p>{status}</p>}
+		</section>
+	) : undefined;
 
 	return (
 		<main
 			className={`${style.page} ${draggingFile ? style.dropTarget : ''}`}
 			data-journal-drop-active={draggingFile || undefined}
+			data-journal-page=""
 		>
 			{draggingFile && (
 				<div className={style.dropOverlay} role="status">
@@ -2184,65 +2585,11 @@ export default function JournalPageClient({
 				</p>
 			) : (
 				<>
-					{hasWriteScope && (
-						<section className={style.recorder}>
-							<button
-								aria-label={
-									recording ? 'Submit note' : 'Record a note'
-								}
-								className={
-									recording ? style.submitButton : undefined
-								}
-								disabled={createEntry.isPending}
-								onClick={
-									recording
-										? () => endRecording('submit')
-										: startRecording
-								}
-								type="button"
-							>
-								<FontAwesomeIcon
-									icon={
-										recording ? faArrowDown : faMicrophone
-									}
-								/>
-							</button>
-							{recordingStream ? (
-								<>
-									<RecordingWaveform
-										stream={recordingStream}
-									/>
-									<button
-										aria-label="Cancel recording"
-										className={style.cancelButton}
-										onClick={() => endRecording('discard')}
-										type="button"
-									>
-										<FontAwesomeIcon icon={faStop} />
-									</button>
-								</>
-							) : (
-								<label
-									className={style.uploadButton}
-									title="Import voice memo"
-								>
-									<FontAwesomeIcon icon={faUpload} />
-									<input
-										accept="audio/*,.m4a"
-										aria-label="Import voice memo"
-										disabled={createEntry.isPending}
-										multiple
-										onChange={uploadFiles}
-										type="file"
-									/>
-								</label>
-							)}
-							{status && <p>{status}</p>}
-						</section>
-					)}
+					{isDevelopment && <DevelopmentJournalTools />}
 					{journal(
 						value => (
 							<JournalBrowser
+								actions={captureControls}
 								deleteEntry={
 									hasWriteScope
 										? deleteJournalEntry
