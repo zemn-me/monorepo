@@ -42,6 +42,7 @@ import {
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import {
 	Date as LocalizedDate,
+	DateRange as LocalizedDateRange,
 	Time as LocalizedTime,
 	MonthYear,
 } from '#root/ts/react/lang/date.js';
@@ -74,7 +75,7 @@ function PeriodDate({
 	summary,
 	timeZone,
 }: {
-	readonly summary: Pick<JournalSummary, 'period' | 'start'>;
+	readonly summary: Pick<JournalSummary, 'end' | 'period' | 'start'>;
 	readonly timeZone?: string;
 }) {
 	if (summary.period === 'journal') return <>Journal overview</>;
@@ -88,9 +89,7 @@ function PeriodDate({
 		if (summary.period === 'month') return <MonthYear date={start} />;
 		if (summary.period === 'week') {
 			return (
-				<>
-					Week starting <LocalizedDate date={start} />
-				</>
+				<LocalizedDateRange end={new Date(summary.end)} start={start} />
 			);
 		}
 		return <LocalizedDate date={start} />;
@@ -104,9 +103,12 @@ function PeriodDate({
 	if (summary.period === 'month') return <MonthYear date={start} />;
 	if (summary.period === 'week') {
 		return (
-			<>
-				Week starting <LocalizedDate date={start} />
-			</>
+			<LocalizedDateRange
+				end={Temporal.Instant.from(summary.end).toZonedDateTimeISO(
+					timeZone
+				)}
+				start={start}
+			/>
 		);
 	}
 	return <LocalizedDate date={start} />;

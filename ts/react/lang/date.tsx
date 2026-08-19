@@ -17,6 +17,12 @@ export interface DateProps {
 	readonly time?: boolean;
 }
 
+export interface DateRangeProps {
+	readonly start: SupportedDateInput;
+	readonly end: SupportedDateInput;
+	readonly className?: string;
+}
+
 function isTemporalZonedDateTime(
 	value: SupportedDateInput
 ): value is Temporal.ZonedDateTime {
@@ -72,6 +78,25 @@ function getTimeText(
 	}).format(zonedDateToDate(date));
 }
 
+type FullDateField = 'weekday' | 'day' | 'month' | 'year';
+
+function getFullDateFields(
+	parts: readonly Intl.DateTimeFormatPart[]
+): ReadonlyMap<FullDateField, string> | undefined {
+	const wanted = new Set<FullDateField>(['weekday', 'day', 'month', 'year']);
+	const fields = new Map(
+		parts
+			.map(part =>
+				wanted.has(part.type as FullDateField)
+					? ([part.type as FullDateField, part.value] as const)
+					: undefined
+			)
+			.filter(isDefined)
+	);
+
+	return fields.size === wanted.size ? fields : undefined;
+}
+
 function englishOrdinalSuffix(day: number, language: string): string {
 	const rule = new Intl.PluralRules(language, { type: 'ordinal' }).select(
 		day
@@ -111,21 +136,8 @@ function formatEnglish(
 	language: string,
 	time: string | undefined
 ): ReactElement | undefined {
-	const want = ['weekday', 'day', 'month', 'year'] as const;
-	type Part = (typeof want)[number];
-	const desired = new Set(want);
-
-	const fields = new Map(
-		parts
-			.map(p =>
-				desired.has(p.type as Part)
-					? ([p.type as Part, p.value] as const)
-					: undefined
-			)
-			.filter(isDefined)
-	);
-
-	if (fields.size !== want.length) return undefined;
+	const fields = getFullDateFields(parts);
+	if (!fields) return undefined;
 
 	return (
 		<>
@@ -133,6 +145,63 @@ function formatEnglish(
 			<OrdinalDay day={fields.get('day')!} language={language} /> of{' '}
 			{fields.get('month')} {fields.get('year')}
 			{time ? <> at {time}</> : null}
+		</>
+	);
+}
+
+/**
+ * Build a compact English date range without repeating shared month/year
+ * context, for example «Monday, the 10th–17th of August 2026».
+ */
+function formatEnglishDateRange(
+	startParts: readonly Intl.DateTimeFormatPart[],
+	endParts: readonly Intl.DateTimeFormatPart[],
+	language: string
+): ReactElement | undefined {
+	const start = getFullDateFields(startParts);
+	const end = getFullDateFields(endParts);
+	if (!start || !end) return undefined;
+
+	if (
+		start.get('day') === end.get('day') &&
+		start.get('month') === end.get('month') &&
+		start.get('year') === end.get('year')
+	) {
+		return formatEnglish(startParts, language, undefined);
+	}
+
+	const startDay = <OrdinalDay day={start.get('day')!} language={language} />;
+	const endDay = <OrdinalDay day={end.get('day')!} language={language} />;
+	const prefix = (
+		<>
+			{start.get('weekday')}, the {startDay}
+		</>
+	);
+
+	if (
+		start.get('month') === end.get('month') &&
+		start.get('year') === end.get('year')
+	) {
+		return (
+			<>
+				{prefix}–{endDay} of {end.get('month')} {end.get('year')}
+			</>
+		);
+	}
+
+	if (start.get('year') === end.get('year')) {
+		return (
+			<>
+				{prefix} of {start.get('month')}–{endDay} of {end.get('month')}{' '}
+				{end.get('year')}
+			</>
+		);
+	}
+
+	return (
+		<>
+			{prefix} of {start.get('month')} {start.get('year')}–{endDay} of{' '}
+			{end.get('month')} {end.get('year')}
 		</>
 	);
 }
@@ -230,6 +299,18 @@ function formatMonthYear(
 	}).format(zonedDateToDate(date));
 }
 
+function formatNativeDateRange(
+	start: Temporal.ZonedDateTime,
+	end: Temporal.ZonedDateTime,
+	locale: Intl.Locale
+): string {
+	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
+	return new Intl.DateTimeFormat(locale as any, {
+		dateStyle: 'full',
+		timeZone: start.timeZoneId,
+	}).formatRange(zonedDateToDate(start), zonedDateToDate(end));
+}
+
 /**
  * Full date component (e.g. «Friday, the 3rd of January 2024»).
  */
@@ -264,6 +345,44 @@ export const Date = memo(function DateComponent(props: DateProps) {
 		>
 			{content}
 		</time>
+	);
+});
+
+/**
+ * Localized date range. English ranges retain this project's prose and
+ * ordinal-day style; other locales use Intl's native range compaction.
+ */
+export const DateRange = memo(function DateRangeComponent(
+	props: DateRangeProps
+) {
+	const [language] = useLocale();
+	const locale = selectLocale(language);
+	const start = normalizeToZonedDateTime(props.start);
+	const end = normalizeToZonedDateTime(props.end).withTimeZone(
+		start.timeZoneId
+	);
+	if (Temporal.ZonedDateTime.compare(start, end) > 0) {
+		throw new RangeError('Date range ends before it starts');
+	}
+
+	const nativeText = formatNativeDateRange(start, end, locale);
+	const content =
+		locale.language === 'en'
+			? (formatEnglishDateRange(
+					getDateParts(start, locale, false),
+					getDateParts(end, locale, false),
+					language
+				) ?? nativeText)
+			: nativeText;
+
+	return (
+		<span
+			aria-label={nativeText}
+			className={props.className}
+			lang={locale.toString()}
+		>
+			{content}
+		</span>
 	);
 });
 

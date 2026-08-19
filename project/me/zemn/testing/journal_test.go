@@ -399,6 +399,20 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForText(driver, "Making room for steadier work", 10*time.Second); err != nil {
 		t.Fatalf("journal week route: %v", err)
 	}
+	usesWeeklyDateRange, err := driver.ExecuteScript(`
+		const range = document.querySelector(
+			"a[data-journal-period-link='week'] > span[aria-label]"
+		);
+		return range !== null &&
+			range.textContent.includes('–') &&
+			!range.textContent.includes('Week starting');
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal week date range: %v", err)
+	}
+	if usesWeeklyDateRange != true {
+		t.Fatalf("journal week did not use a compact date range")
+	}
 	dayListLink, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[normalize-space()='Days']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("journal week did not link to its days: %v", err)

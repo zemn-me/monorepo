@@ -26,7 +26,10 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["index_test.js"],
+    srcs = [
+        "date_test.js",
+        "index_test.js",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [":lang_tests"],
 )
@@ -41,6 +44,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "date.tsx",
+        "date_test.tsx",
         "format_time_zone.ts",
         "index.tsx",
         "index_test.ts",
@@ -51,11 +55,19 @@ filegroup(
 
 ts_project(
     name = "lang_tests",
-    srcs = ["index_test.ts"],
+    srcs = [
+        "date_test.tsx",
+        "index_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":lang",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//:node_modules/temporal-polyfill",
     ],
 )
