@@ -545,13 +545,6 @@ func resolveLocalSubjectFromUpstream(issuer OIDCIssuer, remoteSubject string) (O
 			return local, true
 		}
 	}
-	for _, subjectMappings := range cfg.Audience {
-		for _, local := range subjectMappings {
-			if local == OIDCSubject(remoteSubject) {
-				return local, true
-			}
-		}
-	}
 	return "", false
 }
 
@@ -570,8 +563,18 @@ func hardcodedSubjectIDsFromUpstream(subject string) []string {
 	return subjectIDs
 }
 
+func isSelfIssuedOIDCIssuer(issuer string) bool {
+	apiRoot, err := ApiRoot()
+	if err != nil || apiRoot == nil {
+		return false
+	}
+	return issuer == apiRoot.String()
+}
+
 func (s Server) resolveScopes(ctx context.Context, issuer, remoteSubject string) ([]string, error) {
-	if s.usersTableName != "" {
+	selfIssued := isSelfIssuedOIDCIssuer(issuer)
+
+	if selfIssued && s.usersTableName != "" {
 		rec, err := s.findUserByLocalID(ctx, remoteSubject)
 		if err != nil {
 			return nil, err
@@ -581,7 +584,7 @@ func (s Server) resolveScopes(ctx context.Context, issuer, remoteSubject string)
 		}
 	}
 
-	if isHardcodedSubject(remoteSubject) {
+	if selfIssued && isHardcodedSubject(remoteSubject) {
 		return hardcodedScopesForSubject(OIDCSubject(remoteSubject)), nil
 	}
 
