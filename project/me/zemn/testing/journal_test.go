@@ -95,6 +95,25 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second); err != nil {
 		t.Fatalf("journal did not become writable: %v", err)
 	}
+	usesRegularWeight, err := driver.ExecuteScript(`
+		const page = document.querySelector('[data-journal-page]');
+		if (!page) return 'journal page not found';
+		const boldText = [...page.querySelectorAll('*')]
+			.filter(element => element.textContent?.trim())
+			.filter(element => Number.parseInt(
+				getComputedStyle(element).fontWeight,
+				10,
+			) >= 600)
+			.map(element => element.textContent.trim().replace(/\s+/g, ' ').slice(0, 80))
+			.slice(0, 5);
+		return boldText.length === 0 ? true : JSON.stringify(boldText);
+	`, nil)
+	if err != nil {
+		t.Fatalf("inspect journal text weight: %v", err)
+	}
+	if usesRegularWeight != true {
+		t.Fatalf("journal still contained bold text: %v", usesRegularWeight)
+	}
 	usesCompactCaptureControls, err := driver.ExecuteScript(`
 		const record = document.querySelector("button[aria-label='Record a note']");
 		const input = document.querySelector("input[aria-label='Import voice memo']");

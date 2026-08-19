@@ -11,6 +11,10 @@
 	padding: 0 1.25em 4em;
 }
 
+.page :where(h1, h2, h3, h4, h5, h6, strong, b) {
+	font-weight: inherit;
+}
+
 .dropTarget::after {
 	border: 2px dashed currentColor;
 	content: "";
@@ -26,7 +30,6 @@
 	background: color-mix(in srgb, var(--background-color) 85%, transparent);
 	display: flex;
 	font-size: 1.25em;
-	font-weight: 700;
 	gap: 0.65em;
 	inset: 1em;
 	justify-content: center;
@@ -77,7 +80,6 @@
 	cursor: pointer;
 	display: inline-flex;
 	font: inherit;
-	font-weight: 700;
 	gap: 0.5em;
 	padding: 0.65em 0.9em;
 	transition:
@@ -206,7 +208,6 @@
 
 .zoomNavigation a[aria-current="page"] {
 	color: var(--background-color);
-	font-weight: 700;
 }
 
 .zoomIndicator {
@@ -279,7 +280,6 @@
 }
 
 .periodTitle {
-	font-weight: 600;
 	min-width: 0;
 }
 
@@ -410,7 +410,6 @@
 
 .entryTitle {
 	flex: 1;
-	font-weight: 600;
 }
 
 .entryChevron {
@@ -426,7 +425,6 @@
 .status {
 	color: var(--journal-muted);
 	font-size: 0.75em;
-	font-weight: 700;
 	text-transform: uppercase;
 }
 
@@ -587,7 +585,6 @@
 
 .dateEditor label {
 	display: grid;
-	font-weight: 700;
 	gap: 0.25em;
 }
 
@@ -614,7 +611,6 @@
 	border: 1px solid var(--foreground-color);
 	color: var(--background-color);
 	cursor: pointer;
-	font-weight: 700;
 	padding-inline: 0.9em;
 }
 
@@ -643,7 +639,6 @@
 	color: var(--journal-muted);
 	display: flex;
 	font-size: 0.8em;
-	font-weight: 700;
 	inset: 0;
 	justify-content: center;
 	pointer-events: none;

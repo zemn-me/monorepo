@@ -1488,6 +1488,9 @@ function PeriodDisclosure({
 	readonly playback: JournalPlayback;
 }) {
 	const [open, setOpen] = useState(initiallyOpen);
+	useEffect(() => {
+		if (initiallyOpen) setOpen(true);
+	}, [initiallyOpen]);
 
 	return (
 		<details
@@ -2192,7 +2195,6 @@ function DevelopmentJournalTools() {
 					borderRadius: '999px',
 					cursor: status === 'seeding' ? 'wait' : 'pointer',
 					font: 'inherit',
-					fontWeight: 700,
 					padding: '0.5em 0.8em',
 				}}
 				type="button"
@@ -2489,6 +2491,7 @@ export default function JournalPageClient({
 		<main
 			className={`${style.page} ${draggingFile ? style.dropTarget : ''}`}
 			data-journal-drop-active={draggingFile || undefined}
+			data-journal-page=""
 		>
 			{draggingFile && (
 				<div className={style.dropOverlay} role="status">
