@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.31.0
-    version: 44.31.0(typanion@3.14.0)
+    specifier: 44.32.2
+    version: 44.32.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.3
     version: 0.35.3(@types/node@24.13.3)
@@ -10850,8 +10850,8 @@ packages:
     resolution: {integrity: sha512-48t3FzTaEcePC0xKtadykUy7iqMx9fpxzigbi0YtNdEiPXUr7CoM1rfyBUKg0HW167eaG0EENdjc8aowa1TMvQ==}
     dev: true
 
-  /jsonc-weaver@0.2.4:
-    resolution: {integrity: sha512-aIKK8SOg+TdBdeML4MB++phUEdS7KWZxuaPPjxUSat8Kc/2A+2AoxmAGhvbVajNjqsgSX4dhjfCJq3QlE/NSCg==}
+  /jsonc-weaver@0.3.0:
+    resolution: {integrity: sha512-JhB8eJM4yvuytKvX8VATm2kknL5LAVK6la/9v//+uY8V5H2/Tz2/+m9a0gbjlZTO7NCW3PCxZhgA19CO1MtOmw==}
     dependencies:
       jsonc-morph: 0.3.5
     dev: true
@@ -13428,8 +13428,8 @@ packages:
       '@types/node': 24.13.3
       long: 5.3.2
 
-  /protobufjs@8.7.1:
-    resolution: {integrity: sha512-agdGHrXNTv0IrYscJPDou/PlEJk1c/hBZ9o/B5NH2i/nSPtPqacNxzgwf1CebXxFMjMrZH5sqv9uQuw96aGt/A==}
+  /protobufjs@8.7.2:
+    resolution: {integrity: sha512-oTVHV+oelUBtiu5iTuTNNZ0eLYsXSMxry4cgr30mayNkgIZL6qZ0IOQVPuSWGcyAaXKl/XgqwWHIC3a0khYVBA==}
     engines: {node: '>=12.0.0'}
     dependencies:
       long: 5.3.2
@@ -14032,8 +14032,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.31.0(typanion@3.14.0):
-    resolution: {integrity: sha512-tWdK/hkWTygvnoAVP+oVNUEiup+hyLkaczOaKtGgIhuzjSHh//JQeaSidj1ckpH1FVtN8dbG5qWL92NlqI0aag==}
+  /renovate@44.32.2(typanion@3.14.0):
+    resolution: {integrity: sha512-aUNiznvIorDniDOiQx5jIilvsXw+9KCwcFQ86G6oG7Qhb8iqjh4NQaUuZxg14K0jNssHvQraZnM0WMdJlp4cCA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14115,7 +14115,7 @@ packages:
       json-stringify-pretty-compact: 4.0.0
       json5: 2.2.3
       jsonata: 2.2.1
-      jsonc-weaver: 0.2.4
+      jsonc-weaver: 0.3.0
       klona: 2.0.6
       lru-cache: 11.5.2
       luxon: 3.7.2
@@ -14132,7 +14132,7 @@ packages:
       p-throttle: 8.1.0
       parse-link-header: 2.0.0
       prettier: 3.8.1
-      protobufjs: 8.7.1
+      protobufjs: 8.7.2
       punycode: 2.3.1
       remark: 15.0.1
       remark-gfm: 4.0.1
