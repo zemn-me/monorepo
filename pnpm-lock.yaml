@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.32.2
-    version: 44.32.2(typanion@3.14.0)
+    specifier: 44.32.4
+    version: 44.32.4(typanion@3.14.0)
   sharp:
     specifier: 0.35.3
     version: 0.35.3(@types/node@24.13.3)
@@ -10850,8 +10850,8 @@ packages:
     resolution: {integrity: sha512-48t3FzTaEcePC0xKtadykUy7iqMx9fpxzigbi0YtNdEiPXUr7CoM1rfyBUKg0HW167eaG0EENdjc8aowa1TMvQ==}
     dev: true
 
-  /jsonc-weaver@0.3.0:
-    resolution: {integrity: sha512-JhB8eJM4yvuytKvX8VATm2kknL5LAVK6la/9v//+uY8V5H2/Tz2/+m9a0gbjlZTO7NCW3PCxZhgA19CO1MtOmw==}
+  /jsonc-weaver@0.3.1:
+    resolution: {integrity: sha512-a6e90+Hn5e+l7i6MC2YJ57TE6nv9gDKFyCLBIVKt0Jdv48lUBEV7StnnuwC0Y+sjnux41cnPlHJl65DH4+d9eA==}
     dependencies:
       jsonc-morph: 0.3.5
     dev: true
@@ -14032,8 +14032,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.32.2(typanion@3.14.0):
-    resolution: {integrity: sha512-aUNiznvIorDniDOiQx5jIilvsXw+9KCwcFQ86G6oG7Qhb8iqjh4NQaUuZxg14K0jNssHvQraZnM0WMdJlp4cCA==}
+  /renovate@44.32.4(typanion@3.14.0):
+    resolution: {integrity: sha512-PMpXKpVYsXfGndYNRJl1475bdUUiZltXba/fvSM3cv2EMGYz1oOcDFTD9pT0YOSl+wcgtl16SxJr26z/NUKihQ==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14115,7 +14115,7 @@ packages:
       json-stringify-pretty-compact: 4.0.0
       json5: 2.2.3
       jsonata: 2.2.1
-      jsonc-weaver: 0.3.0
+      jsonc-weaver: 0.3.1
       klona: 2.0.6
       lru-cache: 11.5.2
       luxon: 3.7.2
