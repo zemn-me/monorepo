@@ -13,8 +13,8 @@ dependencies:
     specifier: 15.0.0
     version: 15.0.0(commander@15.0.0)
   '@hookform/resolvers':
-    specifier: 5.9.0
-    version: 5.9.0(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.85.0)(typanion@3.14.0)(zod@4.4.3)
+    specifier: 5.9.1
+    version: 5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.85.0)(typanion@3.14.0)(zod@4.4.3)
   '@jest/globals':
     specifier: 30.4.1
     version: 30.4.1
@@ -2149,8 +2149,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /@hookform/resolvers@5.9.0(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.85.0)(typanion@3.14.0)(zod@4.4.3):
-    resolution: {integrity: sha512-8sNo1IklGaONrsKzXjwZJNsPbccAXLXGX//G+VFEcQOviMtbvR8/fM6HWyA0qrjgpOYauwoodda53CQIWOZ7Ag==}
+  /@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.85.0)(typanion@3.14.0)(zod@4.4.3):
+    resolution: {integrity: sha512-7b7vsbraJxKgjVSA1Nur9tLwj539WGJUBLA7QNvXnFoT2pM5Z7G+6rlukk4B2/QrTZy6huRtH6wKeESPKuIr6w==}
     peerDependencies:
       '@sinclair/typebox': '>=0.25.24'
       '@standard-schema/spec': ^1.0.0
