@@ -539,8 +539,8 @@ devDependencies:
     specifier: npm:typescript@5.9.3
     version: /typescript@5.9.3
   uuid:
-    specifier: 14.0.1
-    version: 14.0.1
+    specifier: 14.0.2
+    version: 14.0.2
   yarn:
     specifier: 1.22.22
     version: 1.22.22
@@ -6245,7 +6245,7 @@ packages:
     resolution: {integrity: sha512-HVyk8nj2m+jcFRNazzqyVKiZezyhDKrGUA3jlEcg/nZ6Ms+qHwocba1Y/AaVaznJTAM9xpdFSh+ptbNrhOGvZA==}
     deprecated: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
     dependencies:
-      uuid: 14.0.1
+      uuid: 14.0.2
     dev: true
 
   /@types/webxr@0.5.24:
@@ -15812,8 +15812,8 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  /uuid@14.0.1:
-    resolution: {integrity: sha512-6ZxzVpzDXDa3bJWaHilVayA+BH/1zmxCJoVgvmqJnid/gPoKHxUrS/aC/T6LGQtNHT+XHG9fXPJB4d+IrU30Ew==}
+  /uuid@14.0.2:
+    resolution: {integrity: sha512-xZe/16rV4aa+HGSOCiY2YeLT1OybRLrrkL/Rqaq7p7GMVXjFh+6wN4oMYgjFmnSnhY8t6Xpdl2l9qmnHYuMHwQ==}
     hasBin: true
     dev: true
 
