@@ -45,3 +45,27 @@
 	border-radius: 50%;
 	object-fit: cover;
 }
+
+.sessionControls {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15em;
+}
+
+.sessionControl {
+	display: inline-grid;
+	place-items: center;
+	width: 1.35em;
+	height: 1.35em;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+.sessionControl:disabled {
+	cursor: default;
+	opacity: 0.45;
+}

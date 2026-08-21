@@ -1,6 +1,7 @@
 import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
 
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
+import { useAuthSession } from '#root/project/me/zemn/hook/useAuthSession.js';
 import { useGoogleAuth } from '#root/project/me/zemn/hook/useGoogleAuth.js';
 import { useFetchClient } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import {
@@ -12,11 +13,13 @@ import { option_from_maybe_undefined } from '#root/ts/option/types.js';
 
 export function useZemnMeAuth() {
 	const apiFetchClient = useFetchClient();
+	const { endSession } = useAuthSession();
 	const [
 		fut_id_token,
 		fut_google_access_token,
 		fut_promptForLogin,
 		cacheKey,
+		fut_promptForAccountSelection,
 	] = useGoogleAuth([]);
 
 	const request_body = future_and_then(
@@ -71,9 +74,28 @@ export function useZemnMeAuth() {
 		access_token
 	);
 
+	const logOut = () => {
+		const idTokenHint = fut_id_token(
+			idToken => idToken,
+			() => undefined,
+			() => undefined
+		);
+		endSession(idTokenHint);
+	};
+
+	const switchUser = future_and_then(
+		fut_promptForAccountSelection,
+		promptForAccountSelection => () => {
+			const nextGeneration = endSession(null);
+			return promptForAccountSelection(nextGeneration);
+		}
+	);
+
 	return [
 		exchangedToken,
 		fut_google_access_token,
 		fut_promptForLogin,
+		logOut,
+		switchUser,
 	] as const;
 }

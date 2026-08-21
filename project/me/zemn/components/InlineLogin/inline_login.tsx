@@ -1,3 +1,8 @@
+import {
+	faRecycle,
+	faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { type ReactNode, useEffect, useState } from 'react';
 import type { z } from 'zod';
@@ -65,8 +70,12 @@ export function PosterDisplayName({
 
 function InlineLoginContent({
 	claims,
+	logOut,
+	switchUser,
 }: {
 	readonly claims: OidcIdTokenClaims;
+	readonly logOut: () => void;
+	readonly switchUser: (() => Promise<void>) | undefined;
 }) {
 	const poster = {
 		email_address: claims.email,
@@ -76,33 +85,61 @@ function InlineLoginContent({
 	};
 	const displayName = usePosterDisplayName(poster);
 
-	return displayName ? (
+	return (
 		<span className={style.loggedIn}>
-			{claims.picture ? (
-				<img
-					alt={`${displayName} profile picture`}
-					className={style.profilePicture}
-					src={claims.picture}
-				/>
-			) : undefined}
-			<span className={style.loggedInText}>
-				Logged in as <i>{displayName}</i>
+			{displayName ? (
+				<>
+					{claims.picture ? (
+						<img
+							alt={`${displayName} profile picture`}
+							className={style.profilePicture}
+							src={claims.picture}
+						/>
+					) : undefined}
+					<span className={style.loggedInText}>
+						Logged in as <i>{displayName}</i>
+					</span>
+					<sup>
+						<TimeLeftIndicator
+							end={new Date(claims.exp * 1000)}
+							start={new Date(claims.iat * 1000)}
+						/>
+					</sup>
+					.
+				</>
+			) : (
+				<>Logged in.</>
+			)}
+			<span className={style.sessionControls}>
+				<button
+					aria-label="Switch user"
+					className={style.sessionControl}
+					disabled={switchUser === undefined}
+					onClick={
+						switchUser === undefined
+							? undefined
+							: background(switchUser)
+					}
+					title="Switch user"
+				>
+					<FontAwesomeIcon icon={faRecycle} />
+				</button>
+				<button
+					aria-label="Log out"
+					className={style.sessionControl}
+					onClick={logOut}
+					title="Log out"
+				>
+					<FontAwesomeIcon icon={faRightFromBracket} />
+				</button>
 			</span>
-			<sup>
-				<TimeLeftIndicator
-					end={new Date(claims.exp * 1000)}
-					start={new Date(claims.iat * 1000)}
-				/>
-			</sup>
-			.
 		</span>
-	) : (
-		<>Logged in.</>
 	);
 }
 
 export function InlineLogin() {
-	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const [fut_idToken, , fut_promptForLogin, logOut, fut_switchUser] =
+		useZemnMeAuth();
 
 	const idTokenData = future_flatten_then(
 		future_and_then(fut_idToken, tok => {
@@ -141,8 +178,20 @@ export function InlineLogin() {
 		</button>
 	);
 
+	const switchUser = fut_switchUser(
+		f => f,
+		() => undefined,
+		() => undefined
+	);
+
 	return idTokenData(
-		f => <InlineLoginContent claims={f} />,
+		f => (
+			<InlineLoginContent
+				claims={f}
+				logOut={logOut}
+				switchUser={switchUser}
+			/>
+		),
 		() => loginButton(false),
 		err => {
 			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
