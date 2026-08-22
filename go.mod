@@ -35,7 +35,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.2
 	github.com/aws/aws-sdk-go-v2/service/sts v1.45.6
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
-	github.com/bazelbuild/bazel-gazelle v0.52.2
+	github.com/bazelbuild/bazel-gazelle v0.53.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
 	github.com/bazelbuild/rules_go v0.63.0
 	github.com/beevik/etree v1.7.1
@@ -94,7 +94,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.38.6 // indirect
 	github.com/aws/smithy-go v1.27.8 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
-	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-2.0.20260605172726-12573ed104f3 // indirect
+	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-3 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cilium/ebpf v0.11.0 // indirect
