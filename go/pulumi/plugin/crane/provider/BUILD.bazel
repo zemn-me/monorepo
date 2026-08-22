@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "provider_lib",
+    srcs = ["main.go"],
+    deps = [
+        "@com_github_pulumi_pulumi//sdk/v3/go/pulumi",
+    ],
+)
+
+go_binary(
+    name = "provider",
+    embed = [":provider_lib"],
+)
