@@ -39,6 +39,36 @@
 	white-space: nowrap;
 }
 
+.accountActions {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15em;
+}
+
+.accountAction {
+	display: inline-grid;
+	place-items: center;
+	width: 1.6em;
+	height: 1.6em;
+	padding: 0;
+	border: 0;
+	border-radius: 0.25em;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+.accountAction:hover,
+.accountAction:focus-visible {
+	background: color-mix(in srgb, currentcolor 12%, transparent);
+}
+
+.accountAction svg {
+	width: 0.9em;
+	height: 0.9em;
+}
+
 .profilePicture {
 	height: 1.2em;
 	width: 1.2em;

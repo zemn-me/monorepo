@@ -1,3 +1,8 @@
+import {
+	faRepeat,
+	faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { type ReactNode, useEffect, useState } from 'react';
 import type { z } from 'zod';
@@ -65,8 +70,12 @@ export function PosterDisplayName({
 
 function InlineLoginContent({
 	claims,
+	onLogout,
+	onSwitchUser,
 }: {
 	readonly claims: OidcIdTokenClaims;
+	readonly onLogout: () => void;
+	readonly onSwitchUser: () => Promise<void>;
 }) {
 	const poster = {
 		email_address: claims.email,
@@ -75,6 +84,28 @@ function InlineLoginContent({
 		sub: claims.sub,
 	};
 	const displayName = usePosterDisplayName(poster);
+	const accountActions = (
+		<span aria-label="Account actions" className={style.accountActions}>
+			<button
+				aria-label="Log out"
+				className={style.accountAction}
+				onClick={onLogout}
+				title="Log out"
+				type="button"
+			>
+				<FontAwesomeIcon icon={faRightFromBracket} />
+			</button>
+			<button
+				aria-label="Switch user"
+				className={style.accountAction}
+				onClick={background(onSwitchUser)}
+				title="Switch user"
+				type="button"
+			>
+				<FontAwesomeIcon icon={faRepeat} />
+			</button>
+		</span>
+	);
 
 	return displayName ? (
 		<span className={style.loggedIn}>
@@ -94,15 +125,16 @@ function InlineLoginContent({
 					start={new Date(claims.iat * 1000)}
 				/>
 			</sup>
-			.
+			{accountActions}
 		</span>
 	) : (
-		<>Logged in.</>
+		<span className={style.loggedIn}>Logged in. {accountActions}</span>
 	);
 }
 
 export function InlineLogin() {
-	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const [fut_idToken, , fut_promptForLogin, sessionControls] =
+		useZemnMeAuth();
 
 	const idTokenData = future_flatten_then(
 		future_and_then(fut_idToken, tok => {
@@ -142,7 +174,13 @@ export function InlineLogin() {
 	);
 
 	return idTokenData(
-		f => <InlineLoginContent claims={f} />,
+		f => (
+			<InlineLoginContent
+				claims={f}
+				onLogout={sessionControls.logout}
+				onSwitchUser={sessionControls.switchUser}
+			/>
+		),
 		() => loginButton(false),
 		err => {
 			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
