@@ -5,6 +5,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { ReactNode } from 'react';
 import z from 'zod';
 
+import { ZEMN_ME_QUERY_CACHE_STORAGE_KEY } from '#root/project/me/zemn/constants/constants.js';
 import { LocalStorageController } from '#root/project/me/zemn/hook/useLocalStorage.js';
 
 export interface ProviderProps {
@@ -21,6 +22,7 @@ const queryClient = new QueryClient({
 
 // Recommended: async persister with localStorage
 const localStoragePersister = createAsyncStoragePersister({
+	key: ZEMN_ME_QUERY_CACHE_STORAGE_KEY,
 	storage: typeof window !== 'undefined' ? window.localStorage : undefined,
 });
 

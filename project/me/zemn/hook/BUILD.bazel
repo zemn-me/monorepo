@@ -1,9 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "hook",
     srcs = [
+        "authentication_session.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
@@ -52,6 +53,29 @@ ts_project(
     ],
 )
 
+ts_project(
+    name = "hook_tests",
+    srcs = ["authentication_session_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":hook",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/me/zemn/constants",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["authentication_session_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":hook_tests"],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
@@ -61,6 +85,8 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "authentication_session.ts",
+        "authentication_session_test.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
