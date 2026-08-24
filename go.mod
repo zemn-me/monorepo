@@ -72,7 +72,7 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
 	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/tools/gopls v0.23.0 // indirect
-	honnef.co/go/tools v0.8.0 // indirect
+	honnef.co/go/tools v0.8.1 // indirect
 )
 
 require (
