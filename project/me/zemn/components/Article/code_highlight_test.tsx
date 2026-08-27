@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, it, jest } from '@jest/globals';
+import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 jest.unstable_mockModule(
 	'#root/project/me/zemn/components/Article/style.module.css',

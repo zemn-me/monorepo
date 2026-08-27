@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const tweetId = z.string();
-export const date = z.string().datetime();
+export const date = z.iso.datetime();
 
 /**
  * Schema for geographic coordinates.

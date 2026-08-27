@@ -1,9 +1,8 @@
 /* biome-ignore-all lint/correctness/noRestrictedElements: this module intentionally uses restricted elements */
 
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
-import React from 'react';
+import React, { act } from 'react';
 import { createRoot, Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 import * as Url from '#root/ts/url/index.js';
 

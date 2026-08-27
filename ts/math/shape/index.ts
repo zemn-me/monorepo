@@ -1,10 +1,6 @@
-import * as Camera from '#root/ts/math/camera.js';
 import * as Canvas from '#root/ts/math/canvas/index.js';
 import * as cartesian from '#root/ts/math/cartesian.js';
-import * as conv from '#root/ts/math/conv.js';
-import { EulerAngle } from '#root/ts/math/euler_angle.js';
 import * as Homog from '#root/ts/math/homog.js';
-import * as Quaternion from '#root/ts/math/quaternion.js';
 import { map } from '#root/ts/math/vec';
 
 export class Square implements Canvas.Drawable2D {
@@ -101,104 +97,5 @@ export class Cube implements Canvas.Drawable3D {
 			[ABR!, BBR!],
 			[ABL!, BBL!],
 		];
-	}
-}
-
-/**
- * @deprecated
- */
-export class Project<T extends Canvas.Drawable3D> implements Canvas.Drawable2D {
-	constructor(
-		public readonly value: T,
-		public readonly focalLength?: number
-	) {}
-
-	lines2D(): Homog.Line2D[] {
-		return this.value
-			.lines3D()
-			.map(line =>
-				line.map(point => Camera.transform(point, this.focalLength))
-			);
-	}
-}
-
-/**
- * @deprecated
- */
-export class QuaternionMultiply<
-	T extends Canvas.Drawable3D,
-	Q extends Quaternion.Quaternion,
-> implements Canvas.Drawable3D
-{
-	constructor(
-		public readonly value: T,
-		public readonly quaternion: Q
-	) {}
-	lines3D() {
-		return this.value.lines3D().map(line =>
-			line.map((point): Homog.Point3D => {
-				const [xi, yi, zi] = Homog.pointToCart(point);
-				const [[x], [y], [z]] = [xi!, yi!, zi!];
-				const q1: Quaternion.Quaternion = Quaternion.from(
-					x!,
-					y!,
-					z!,
-					0
-				);
-				const q2 = this.quaternion;
-				const n = Quaternion.multiply(q1, q2);
-
-				const [nx = 0, ny = 0, nz = 0] = [
-					Quaternion.x(n),
-					Quaternion.y(n),
-					Quaternion.z(n),
-				];
-				return [[nx], [ny], [nz], [1]];
-			})
-		);
-	}
-}
-
-/**
- * @deprecated
- */
-export class QuaternionRotate<
-	T extends Canvas.Drawable3D,
-	Q extends Homog.Point3D,
-> implements Canvas.LineDrawable3D
-{
-	constructor(
-		public readonly value: T,
-		public readonly rotation: Q
-	) {}
-	lines3D() {
-		const [rxi, ryi, rzi] = this.rotation;
-		const [[rx], [ry], [rz]] = [rxi!, ryi!, rzi!];
-		// this whole class was kind of a mistake. but i preserve this mistake
-		// here so that the tests pass.
-		const rQ = conv.Quaternion.fromEulerAngles(
-			new EulerAngle(rx!, ry!, rz!)
-		);
-		return this.value.lines3D().map(line =>
-			line.map((point): Homog.Point3D => {
-				const [xi, yi, zi] = Homog.pointToCart(point);
-				const [[x], [y], [z]] = [xi!, yi!, zi!];
-				const q1: Quaternion.Quaternion = Quaternion.from(
-					x!,
-					y!,
-					z!,
-					0
-				);
-				// technically incorrect. should be removed sometime.
-				const n = Quaternion.multiply(q1, rQ);
-
-				const [nx = 0, ny = 0, nz = 0] = [
-					Quaternion.x(n),
-					Quaternion.y(n),
-					Quaternion.z(n),
-				];
-				return [[nx], [ny], [nz], [1]] as const;
-			})
-		);
 	}
 }

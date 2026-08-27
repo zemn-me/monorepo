@@ -6,9 +6,8 @@ import {
 	it,
 	jest,
 } from '@jest/globals';
-import type { AnchorHTMLAttributes, ReactNode } from 'react';
+import { type AnchorHTMLAttributes, act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 import type { GladeProps } from './glade.js';
 
@@ -79,9 +78,11 @@ interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 jest.unstable_mockModule(
 	'#root/project/me/zemn/components/Link/index.js',
 	() => ({
-		default: ({ children, styleless: _styleless, ...props }: MockLinkProps) => (
-			<a {...props}>{children}</a>
-		),
+		default: ({
+			children,
+			styleless: _styleless,
+			...props
+		}: MockLinkProps) => <a {...props}>{children}</a>,
 	})
 );
 

@@ -22,7 +22,6 @@ import {
 	projectWorldPoint,
 	renderSegments,
 } from '#root/ts/math/wireframe_render.js';
-import { noop } from '#root/ts/noop.js';
 import {
 	buildWorld,
 	DEFAULT_POSE,
@@ -40,11 +39,6 @@ const INITIAL_VIEWPORT_WIDTH = 1280;
 const INITIAL_VIEWPORT_HEIGHT = 720;
 const JOYSTICK_RADIUS_PX = 36;
 const LOOK_JOYSTICK_SPEED = 2.2;
-
-type LegacyMediaQueryList = MediaQueryList & {
-	addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
-	removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
-};
 
 function icon(type: ParticleType): string {
 	return type === ParticleType.Egg ? '🥚' : '🐕';
@@ -86,34 +80,7 @@ export function EggDogYardClient() {
 			setMobileControls(coarsePointerQuery.matches);
 		};
 		syncMobileControls();
-		const unsubscribeCoarsePointerChanges = (() => {
-			if ('addEventListener' in coarsePointerQuery) {
-				coarsePointerQuery.addEventListener(
-					'change',
-					syncMobileControls
-				);
-				return () => {
-					coarsePointerQuery.removeEventListener(
-						'change',
-						syncMobileControls
-					);
-				};
-			}
-
-			const legacyCoarsePointerQuery =
-				coarsePointerQuery as LegacyMediaQueryList;
-			if (
-				typeof legacyCoarsePointerQuery.addListener !== 'function' ||
-				typeof legacyCoarsePointerQuery.removeListener !== 'function'
-			) {
-				return noop;
-			}
-
-			legacyCoarsePointerQuery.addListener(syncMobileControls);
-			return () => {
-				legacyCoarsePointerQuery.removeListener(syncMobileControls);
-			};
-		})();
+		coarsePointerQuery.addEventListener('change', syncMobileControls);
 
 		function syncViewport() {
 			const bounds = viewportRef.current?.getBoundingClientRect();
@@ -202,7 +169,10 @@ export function EggDogYardClient() {
 			window.removeEventListener('keyup', onKeyUp);
 			window.removeEventListener('mousemove', onMouseMove);
 			window.removeEventListener('resize', syncViewport);
-			unsubscribeCoarsePointerChanges();
+			coarsePointerQuery.removeEventListener(
+				'change',
+				syncMobileControls
+			);
 			if (frameRef.current != null)
 				cancelAnimationFrame(frameRef.current);
 		};

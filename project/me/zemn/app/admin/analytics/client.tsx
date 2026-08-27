@@ -6,12 +6,6 @@ import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { useGetAdminAnalyticsEvents } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import { future_to_option } from '#root/ts/future/option/future_to_option.js';
-import {
-	is_some as option_is_some,
-	unwrap as option_unwrap,
-	unwrap_or as option_unwrap_or,
-} from '#root/ts/option/types.js';
 
 import style from './style.module.css';
 
@@ -162,24 +156,24 @@ function AnalyticsEvents({ id_token }: { readonly id_token: string }) {
 
 export default function AdminAnalyticsPageClient() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
-	const idToken = future_to_option(fut_idToken);
-	const promptForLogin = future_to_option(fut_promptForLogin);
-	const loginReady = option_is_some(promptForLogin);
+	const loginButton = (beginLogin?: () => Promise<void>) => (
+		<button
+			aria-label="Authenticate with OIDC"
+			disabled={beginLogin === undefined}
+			onClick={() => void beginLogin?.()}
+		>
+			Login with OIDC
+		</button>
+	);
+	const login = fut_promptForLogin(
+		loginButton,
+		() => loginButton(),
+		() => loginButton()
+	);
 
-	if (!option_is_some(idToken)) {
-		return (
-			<button
-				aria-label="Authenticate with OIDC"
-				disabled={!loginReady}
-				onClick={() => {
-					if (!loginReady) return;
-					void option_unwrap(promptForLogin)();
-				}}
-			>
-				Login with OIDC
-			</button>
-		);
-	}
-
-	return <AnalyticsEvents id_token={option_unwrap_or(idToken, '')} />;
+	return fut_idToken(
+		idToken => <AnalyticsEvents id_token={idToken} />,
+		() => login,
+		() => login
+	);
 }

@@ -6,8 +6,8 @@ import {
 	it,
 	jest,
 } from '@jest/globals';
+import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 jest.unstable_mockModule('./inline_login.module.css', () => ({
 	default: {

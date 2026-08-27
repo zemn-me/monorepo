@@ -4,7 +4,6 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "zod",
     srcs = [
-        "_old_result_from_zod.ts",
         "e164.ts",
         "nuqs.ts",
         "util.ts",
@@ -18,7 +17,7 @@ ts_project(
         "//:node_modules/base64-js",
         "//:node_modules/nuqs",
         "//:node_modules/zod",
-        "//ts",
+        "//ts/result",
     ],
 )
 
@@ -31,7 +30,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "_old_result_from_zod.ts",
         "e164.ts",
         "nuqs.ts",
         "util.ts",
