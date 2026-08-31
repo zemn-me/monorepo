@@ -10,7 +10,7 @@ import {
 } from '@pulumi/pulumi';
 
 import { ContactFlowLanguage } from '#root/ts/pulumi/lib/contact_flow_language.js';
-import { Err, Ok, Result } from '#root/ts/result.js';
+import { Err, Ok, Result, unwrap } from '#root/ts/result/result.js';
 
 export interface Args extends Omit<ContactFlowArgs, 'content'> {
 	content: Input<ContactFlowLanguage>;
@@ -28,7 +28,7 @@ export class ContactFlow extends ComponentResource {
 	) {
 		super('ts:pulumi:lib:ContactFlowModule', name, args, opts);
 
-		void ContactFlow.validate(content).then(v => v.as_promise());
+		void ContactFlow.validate(content).then(result => unwrap(result));
 
 		this.value = new BaseContactFlow(
 			`${name}_contact_flow_module`,

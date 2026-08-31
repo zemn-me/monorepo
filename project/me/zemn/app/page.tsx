@@ -23,7 +23,7 @@ import TimeEye from '#root/project/me/zemn/components/TimeEye/TimeEye.js';
 import Timeline from '#root/project/me/zemn/components/timeline/index.js';
 import ZemnmezLogo from '#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLogo.js';
 import { Iterable } from '#root/ts/iter/index.js';
-import { None, Some } from '#root/ts/option/option.js';
+import { None, Some } from '#root/ts/option/types.js';
 import * as lang from '#root/ts/react/lang/index.js';
 
 const homepageLinkNames = ['CV', 'linkedin', 'github', 'bluesky', 'twitter'];
