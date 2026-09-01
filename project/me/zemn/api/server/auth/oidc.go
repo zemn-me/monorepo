@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	oidc "github.com/coreos/go-oidc"
-	"net/http"
 	"net/url"
 	"os"
 
@@ -63,7 +62,7 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		return errors.New("missing authorization header")
 	}
 
-	allowed := allowableIssuerClients(ai.RequestValidationInput.Request, issuerFromScheme)
+	allowed := allowableIssuerClients(issuerFromScheme)
 	if len(allowed) == 0 {
 		return errors.New("no allowable issuers configured")
 	}
@@ -140,7 +139,7 @@ func issuerFromSecurityScheme(scheme *openapi3.SecurityScheme) (string, error) {
 	return issuer.String(), nil
 }
 
-func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClient {
+func allowableIssuerClients(schemeIssuer string) []issuerClient {
 	seen := map[string]struct{}{}
 	var candidates []issuerClient
 
@@ -160,18 +159,6 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	}
 
 	add(schemeIssuer, zemnMeClientID)
-
-	if req != nil {
-		scheme := "https"
-		if req.URL != nil && req.URL.Scheme != "" {
-			scheme = req.URL.Scheme
-		} else if req.TLS == nil {
-			scheme = "http"
-		}
-		if host := req.Host; host != "" {
-			add(fmt.Sprintf("%s://%s", scheme, host), zemnMeClientID)
-		}
-	}
 
 	if envIssuer := os.Getenv("ZEMN_TEST_OIDC_ISSUER"); envIssuer != "" {
 		clientID := os.Getenv("ZEMN_TEST_OIDC_CLIENT_ID")
