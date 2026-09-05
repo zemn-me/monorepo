@@ -295,7 +295,12 @@ export function renderFaces(
 	return and_then(cameraSpaceTransformFromPose(pose), transform => {
 		const rendered: RenderedFace2D[] = [];
 		const transformed = new Map<Point3D, Point3D>();
-		const screen = new Map<Point3D, Point2D>();
+		const screen = new Map<Point3D, readonly [number, number, string]>();
+		const focal =
+			Math.min(projection.width, projection.height) *
+			projection.focalScale;
+		const centerX = projection.width / 2,
+			centerY = projection.height / 2;
 		for (const face of faces) {
 			if (options.cache?.has(face)) {
 				const cached = options.cache.get(face);
@@ -353,14 +358,18 @@ export function renderFaces(
 			for (const vertex of clipped) {
 				let p = screen.get(vertex);
 				if (!p) {
-					p = projectCameraPoint(vertex, projection);
+					const scale =
+						focal / Math.max(z(vertex), projection.nearPlane);
+					const sx = centerX + x(vertex) * scale,
+						sy = centerY - y(vertex) * scale;
+					p = [sx, sy, `${sx.toFixed(2)},${sy.toFixed(2)}`];
 					screen.set(vertex, p);
 				}
-				left = Math.min(left, x(p));
-				right = Math.max(right, x(p));
-				top = Math.min(top, y(p));
-				bottom = Math.max(bottom, y(p));
-				path += `${path ? 'L' : 'M'}${x(p).toFixed(2)},${y(p).toFixed(2)}`;
+				left = Math.min(left, p[0]);
+				right = Math.max(right, p[0]);
+				top = Math.min(top, p[1]);
+				bottom = Math.max(bottom, p[1]);
+				path += `${path ? 'L' : 'M'}${p[2]}`;
 			}
 			if (
 				right < 0 ||

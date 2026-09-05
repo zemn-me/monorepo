@@ -148,3 +148,16 @@ py_library(
     visibility = ["//:__subpackages__"],
     deps = ["@rules_python//python/runfiles"],
 )
+
+service_test(
+    name = "park_production_benchmark",
+    args = [
+        "-test.run=^$$",
+        "-test.bench=BenchmarkParkFrames",
+        "-test.benchtime=1x",
+        "-test.v",
+    ],
+    services = [":static_service"],
+    tags = ["manual"],
+    test = ":park_browser_test",
+)

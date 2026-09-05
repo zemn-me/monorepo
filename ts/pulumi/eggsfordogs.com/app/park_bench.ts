@@ -113,6 +113,12 @@ for (let i = 0; i < 100; i++) {
 process.stdout.write(
 	JSON.stringify(
 		{
+			worldFaces: buildParkMesh().length,
+			actorFaces: buildActors(park).length,
+			staticFragments: [...world.values()].reduce(
+				(n, tree) => n + orderFaceBSP(tree, pose.position).length,
+				0
+			),
 			note: 'CPU geometry pipeline; excludes DOM updates and browser paint. 20 warmups, 80 samples.',
 			...Object.fromEntries(
 				Object.entries(timings).map(([key, values]) => [

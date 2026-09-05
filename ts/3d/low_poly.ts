@@ -161,8 +161,8 @@ export function appendMesh(
 							0,
 							(-nx * 0.45 + ny * 0.8 + nz * 0.4) / length
 						)) *
-					32
-			) / 32;
+					16
+			) / 16;
 		const fill =
 			'#' +
 			color

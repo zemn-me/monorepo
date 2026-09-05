@@ -53,3 +53,31 @@ The production page chunk no longer contains the geometry property keys `vertice
 The deterministic CPU benchmark's median total increased from 19.88 to 23.72 ms in the before/after samples (about 19%). Median geometry construction was 1.06 versus 2.01 ms, and BSP ordering was 11.11 versus 14.65 ms. Both runs produced the same median 7,656 projected polygons. Closures have a measurable cost in this CPU-only workload; this representation change should not be described as a speed optimization. The browser benchmark and minified production gameplay checks are rerun separately, since DOM work dominates the complete application.
 
 The final Chromium run measured 19.4 SVG updates/s wandering, 23.6 gathering, and 13.6 orbiting. These live-scene measurements vary with simulation timing and machine load, and do not establish a speed gain from Church encoding. All 84 selected checks passed, including the explicit frame benchmark and minified production gameplay test.
+
+## Targeting 30 SVG updates per second
+
+A production benchmark was added to measure the minified export, with the same Chromium viewport, WebGL disablement, warmup, scenarios, and DOM observer as the development benchmark. The production baseline is `cdb4ca6cc7`. Run this target alone to avoid contention with other browser tests:
+
+```sh
+./sh/bin/bazel test //ts/pulumi/eggsfordogs.com:park_production_benchmark --test_output=all --nocache_test_results
+```
+
+The implementation keeps the SVG renderer and Church-encoded records. It makes these changes:
+
+- Tiny eyes, glints, tags, and flower centres use eight-face closed solids. Other small rounded parts use 18 faces and larger rounded parts use 32. Small discs use 16 sides; the large island keeps 32. All six dogs and park elements remain, with coarser faceting on small meshes. Actor geometry falls from 3,840 to 2,444 faces and scenery from 2,879 to 2,213. Collar geometry is reused instead of reconstructed each frame.
+- Lighting uses 1/16 intensity steps instead of 1/32, allowing more adjacent surfaces to share paint. The maximum rounding error is 1/32 intensity. Daytime and moonlight appearances were checked visually.
+- Identically colored opaque surfaces terminate BSP construction as one paint batch. When moving geometry enters that batch, all its surfaces participate in intersection sorting. This preserves occlusion across a leaf containing several distinct planes.
+- Moving geometry emits its paint order directly instead of constructing and then discarding a tree of closures. Static trees remain cached. Split fragments share their original supporting plane.
+- Shared projected vertices also share their formatted SVG coordinate strings, preserving two-decimal precision while avoiding repeated number formatting and nested point allocations.
+
+The deterministic CPU benchmark's median total fell from 23.35 to 15.19 ms in the before/after samples. Median geometry construction was 1.95 → 0.66 ms, ordering 14.29 → 10.33 ms, and SVG path generation 6.14 → 3.07 ms. These measurements exclude DOM updates and paint. Full-suite validation passed all 85 selected targets, including both browser benchmarks, production gameplay, twelve-angle nearest-surface colors, static SVG identity, and the new same-color leaf occlusion regression.
+
+The final isolated production run measured:
+
+| Scenario | Baseline SVG updates/s | Optimized SVG updates/s | Baseline p95 interval | Optimized p95 interval | Baseline median mutations/update | Optimized median mutations/update |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Wandering | 22.2 | 30.0 | 64.8 ms | 49.3 ms | 11,134 | 6,830 |
+| Gathering | 27.6 | 30.0 | 54.5 ms | 43.8 ms | 4,160 | 3,588 |
+| Orbiting | 13.2 | 25.5 | 99.5 ms | 57.0 ms | 17,288 | 10,222 |
+
+Normal play reaches the 30-update average target in this sample; it is not a guarantee of uniform 33 ms presentation. Continuous camera movement remains below 30 and varies with machine load (other optimization runs measured around 22). The benchmark observes SVG DOM updates, not GPU presentation. Running both browser benchmarks alongside the regression suite lowered throughput, so those concurrent timings were used only as functional checks, not the final comparison.

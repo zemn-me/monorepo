@@ -5,7 +5,15 @@ import { cube, cylinder, sphere, type Vec3 } from '#root/ts/3d/low_poly.js';
 const key = (p: Vec3) => p.map(n => Number(n.toFixed(7))).join(',');
 
 test('consolidated primitives remain closed with planar, outward-facing polygons', () => {
-	for (const mesh of [cube, sphere(8, 5), cylinder(12), cylinder(7, 0)]) {
+	for (const mesh of [
+		cube,
+		sphere(8, 5),
+		sphere(8, 4),
+		sphere(6, 3),
+		sphere(4, 2),
+		cylinder(12),
+		cylinder(7, 0),
+	]) {
 		const edges = new Map<string, number>();
 		for (const face of mesh) {
 			const [a, b, c] = face as [Vec3, Vec3, Vec3, ...Vec3[]];

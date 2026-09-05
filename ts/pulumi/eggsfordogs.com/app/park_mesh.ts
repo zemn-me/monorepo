@@ -10,9 +10,12 @@ import {
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { PACK, type Park } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 
-const round = sphere(8, 5);
-const smallRound = sphere(6, 4);
+const round = sphere(8, 4);
+const smallRound = sphere(6, 3);
+const tinyRound = sphere(4, 2);
 const disc = cylinder(32);
+const smallDisc = cylinder(16);
+const collar = cylinder(12);
 const flowerPetal = cylinder(5);
 const trunk = cylinder(7, 0.75);
 const cone = cylinder(7, 0);
@@ -45,6 +48,10 @@ function part(
 	yaw = 0,
 	roll = 0
 ) {
+	// Subpixel eyes, glints and flower centres need only a small closed solid.
+	if (geometry === smallRound && Math.max(...scale) < 0.17)
+		geometry = tinyRound;
+	if (geometry === disc && Math.max(...scale) < 2) geometry = smallDisc;
 	appendMesh(vertices, geometry, rgb(color), {
 		position,
 		scale,
@@ -260,7 +267,7 @@ export function buildActors(park: Park): StyledFace3D[] {
 			);
 		}
 		p(smallRound, 0xe39393, [0, 0.83, 0.87], [0.095, 0.13, 0.055]);
-		p(cylinder(12), spec.collar, [0, 0.87, 0.41], [0.35, 0.065, 0.3]);
+		p(collar, spec.collar, [0, 0.87, 0.41], [0.35, 0.065, 0.3]);
 		p(smallRound, 0xf4cf69, [0, 0.8, 0.72], [0.075, 0.095, 0.035]);
 		const wag = Math.sin(park.time * (dog.joy > 0 ? 24 : 10) + i) * 0.5;
 		p(

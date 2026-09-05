@@ -1,6 +1,7 @@
 import { type Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import {
 	faceDoubleSided,
+	faceFill,
 	faceVertices,
 	type StyledFace3D,
 	styledFace,
@@ -16,7 +17,8 @@ export type FaceBSP = <R>(
 		plane: Plane,
 		faces: readonly StyledFace3D[],
 		front: FaceBSP | null,
-		back: FaceBSP | null
+		back: FaceBSP | null,
+		uniform: boolean
 	) => R
 ) => R;
 
@@ -27,7 +29,8 @@ function distance(p: Point3D, plane: Plane): number {
 const planeCache = new WeakMap<StyledFace3D, Plane | null>();
 
 function facePlane(face: StyledFace3D): Plane | null {
-	if (planeCache.has(face)) return planeCache.get(face)!;
+	const cached = planeCache.get(face);
+	if (cached !== undefined) return cached;
 	const plane = computePlane(face);
 	planeCache.set(face, plane);
 	return plane;
@@ -136,12 +139,15 @@ function partition(
 			const split = face((_vertices, fill, layer, doubleSided) =>
 				styledFace(f, fill, layer, doubleSided)
 			);
+			// Clipping changes the boundary, not the supporting plane.
+			planeCache.set(split, facePlane(face));
 			front.push(split);
 		}
 		if (b.length >= 3) {
 			const split = face((_vertices, fill, layer, doubleSided) =>
 				styledFace(b, fill, layer, doubleSided)
 			);
+			planeCache.set(split, facePlane(face));
 			back.push(split);
 		}
 	}
@@ -153,9 +159,28 @@ export function buildFaceBSP(input: readonly StyledFace3D[]): FaceBSP | null {
 	return build(input);
 }
 
-function build(input: readonly StyledFace3D[]): FaceBSP | null {
+function build(
+	input: readonly StyledFace3D[],
+	eye?: Point3D,
+	output?: StyledFace3D[]
+): FaceBSP | null {
 	const faces = input.filter(face => facePlane(face) !== null);
 	if (!faces.length) return null;
+	// Equal opaque color cannot occlude itself. Keep it as one batch until a foreign
+	// surface enters this leaf, then resolve their intersections together.
+	const fill = faceFill(faces[0]!);
+	if (
+		faces.length > 1 &&
+		/^#[\da-f]{6}$/i.test(fill) &&
+		faces.every(face => faceFill(face) === fill)
+	) {
+		if (output) {
+			output.push(...faces);
+			return null;
+		}
+		const plane = facePlane(faces[0]!)!;
+		return use => use(plane, faces, null, null, true);
+	}
 	// Sample splitter candidates to balance traversal without a quadratic plane search.
 	let best = facePlane(faces[0]!)!,
 		bestScore = Infinity;
@@ -206,9 +231,18 @@ function build(input: readonly StyledFace3D[]): FaceBSP | null {
 		}
 	}
 	const [front, back, coplanar] = partition(faces, best);
+	// Moving geometry is consumed once. Fuse construction and traversal instead
+	// of allocating a closure for every node of a tree we would immediately drop.
+	if (eye && output) {
+		const facing = distance(eye, best) >= 0;
+		build(facing ? back : front, eye, output);
+		output.push(...coplanar);
+		build(facing ? front : back, eye, output);
+		return null;
+	}
 	const ahead = build(front),
 		behind = build(back);
-	return use => use(best, coplanar, ahead, behind);
+	return use => use(best, coplanar, ahead, behind, false);
 }
 
 export type FaceBSPSlot = 'static' | 'coplanar' | 'front' | 'back' | 'root';
@@ -224,15 +258,6 @@ export function visitFaceBSP(
 		faces: readonly StyledFace3D[]
 	) => void
 ): void {
-	function sorted(node: FaceBSP | null, result: StyledFace3D[]): void {
-		if (!node) return;
-		node((plane, faces, ahead, behind) => {
-			const front = distance(eye, plane) >= 0;
-			sorted(front ? behind : ahead, result);
-			result.push(...faces);
-			sorted(front ? ahead : behind, result);
-		});
-	}
 	function visit(
 		node: FaceBSP | null,
 		extra: readonly StyledFace3D[],
@@ -242,12 +267,21 @@ export function visitFaceBSP(
 		if (!node) {
 			if (extra.length) {
 				const ordered: StyledFace3D[] = [];
-				sorted(buildFaceBSP(extra), ordered);
+				build(extra, eye, ordered);
 				emit(parent, slot, ordered);
 			}
 			return;
 		}
-		node((plane, faces, ahead, behind) => {
+		node((plane, faces, ahead, behind, uniform) => {
+			if (uniform) {
+				if (!extra.length) emit(node, 'static', faces);
+				else {
+					const ordered: StyledFace3D[] = [];
+					build([...faces, ...extra], eye, ordered);
+					emit(node, 'coplanar', ordered);
+				}
+				return;
+			}
 			const [frontFaces, backFaces, coplanar] = partition(extra, plane);
 			const front = distance(eye, plane) >= 0;
 			visit(

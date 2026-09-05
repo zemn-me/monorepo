@@ -98,6 +98,41 @@ describe('SVG polygon ordering', () => {
 		expect(after[0]).toBe(before[0]);
 	});
 
+	test('same-color leaves resolve foreign geometry across all their surfaces', () => {
+		const quad = (
+			left: number,
+			right: number,
+			depth: number,
+			fill: string
+		) =>
+			styledFace(
+				[
+					point<3>(left, -2, depth),
+					point<3>(right, -2, depth),
+					point<3>(right, 2, depth),
+					point<3>(left, 2, depth),
+				],
+				fill,
+				0,
+				true
+			);
+		const tree = buildFaceBSP([
+			quad(-2, 0, 3, '#ff0000'),
+			quad(-4, 4, 8, '#ff0000'),
+		]);
+		const eye = point<3>(0, 0, 0);
+		const ordered = orderFaceBSP(tree, eye, [quad(-4, 4, 5, '#0000ff')]);
+		for (const px of [-0.2, 0.2]) {
+			const painted = ordered
+				.filter(face => contains(faceVertices(face), px, 0))
+				.at(-1)!;
+			expect(faceFill(painted)).toBe(px < 0 ? '#ff0000' : '#0000ff');
+		}
+		expect(orderFaceBSP(tree, eye).map(faceFill)).toEqual([
+			'#ff0000',
+			'#ff0000',
+		]);
+	});
 	test('reverses traversal behind the surfaces and handles coplanar and degenerate faces', () => {
 		const vertices = [
 			point<3>(-1, -1, 2),
