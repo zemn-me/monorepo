@@ -237,30 +237,43 @@ export function compareRenderedFaces(
 export function renderFaces(
 	faces: readonly StyledFace3D[],
 	pose: YawPitchPose,
-	projection: Perspective
+	projection: Perspective,
+	options: {
+		/** Preserve geometric ordering supplied by a BSP traversal. */
+		preserveOrder?: boolean;
+		/** Only reuse while the camera and projection are unchanged; faces must be immutable. */
+		cache?: WeakMap<StyledFace3D, RenderedFace2D | null>;
+	} = {}
 ): Result<RenderedFace2D[], Error> {
 	return and_then(cameraSpaceTransformFromPose(pose), transform => {
 		const rendered: RenderedFace2D[] = [];
 		for (const face of faces) {
+			if (options.cache?.has(face)) {
+				const cached = options.cache.get(face);
+				if (cached) rendered.push(cached);
+				continue;
+			}
+			options.cache?.set(face, null);
 			if (face.vertices.length < 3) continue;
 			const vertices = face.vertices.map(transform);
-			const [a, b, c] = vertices as [
-				Point3D,
-				Point3D,
-				Point3D,
-				...Point3D[],
-			];
-			const ux = x(b) - x(a),
-				uy = y(b) - y(a),
-				uz = z(b) - z(a);
-			const vx = x(c) - x(a),
-				vy = y(c) - y(a),
-				vz = z(c) - z(a);
-			const facing =
-				(uy * vz - uz * vy) * x(a) +
-				(uz * vx - ux * vz) * y(a) +
-				(ux * vy - uy * vx) * z(a);
-			if (!face.doubleSided && facing >= -0.000001) continue;
+			const a = vertices[0]!;
+			let facing = 0;
+			// Split polygons may start with collinear vertices. Sum the complete fan.
+			for (let i = 1; i + 1 < vertices.length; i++) {
+				const b = vertices[i]!,
+					c = vertices[i + 1]!;
+				const ux = x(b) - x(a),
+					uy = y(b) - y(a),
+					uz = z(b) - z(a);
+				const vx = x(c) - x(a),
+					vy = y(c) - y(a),
+					vz = z(c) - z(a);
+				facing +=
+					(uy * vz - uz * vy) * x(a) +
+					(uz * vx - ux * vz) * y(a) +
+					(ux * vy - uy * vx) * z(a);
+			}
+			if (!face.doubleSided && facing >= -1e-12) continue;
 			const clipped = clipPolygonToDepth(
 				clipPolygonToDepth(vertices, projection.nearPlane, true),
 				projection.farPlane,
@@ -277,7 +290,7 @@ export function renderFaces(
 				projected.every(p => y(p) > projection.height)
 			)
 				continue;
-			rendered.push({
+			const result = {
 				path:
 					projected
 						.map(
@@ -289,9 +302,13 @@ export function renderFaces(
 				depth:
 					clipped.reduce((sum, p) => sum + z(p), 0) / clipped.length,
 				layer: face.layer ?? 0,
-			});
+			};
+			rendered.push(result);
+			options.cache?.set(face, result);
 		}
-		return rendered.sort(compareRenderedFaces);
+		return options.preserveOrder
+			? rendered
+			: rendered.sort(compareRenderedFaces);
 	});
 }
 

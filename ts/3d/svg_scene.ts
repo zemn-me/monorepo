@@ -1,6 +1,11 @@
 import { type OrbitCamera, orbitPose } from '#root/ts/3d/low_poly.js';
 import {
-	compareRenderedFaces,
+	buildFaceBSP,
+	type FaceBSP,
+	orderFaceBSP,
+	visibleFaces,
+} from '#root/ts/math/face_bsp.js';
+import {
 	perspective,
 	type RenderedFace2D,
 	renderFaces,
@@ -18,30 +23,49 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 	group.setAttribute('stroke-linejoin', 'round');
 	svg.append(group);
 	const paths: { node: SVGPathElement; path: string; fill: string }[] = [];
-	let world: readonly StyledFace3D[] = [];
-	let projectedWorld: RenderedFace2D[] = [];
-	let previousCamera = '';
+	let world = new Map<number, FaceBSP | null>();
+	let worldFaces: readonly StyledFace3D[] = [];
+	let cameraKey = '';
+	let projections = new WeakMap<StyledFace3D, RenderedFace2D | null>();
 	let visibleCount = 0;
 	return {
 		setWorld(faces: readonly StyledFace3D[]) {
-			world = faces;
-			previousCamera = '';
+			worldFaces = faces;
+			cameraKey = '';
 		},
 		render(camera: OrbitCamera, faces: readonly StyledFace3D[]) {
 			const width = Math.max(1, svg.clientWidth),
 				height = Math.max(1, svg.clientHeight);
 			const projection = perspective(width, height, { focalScale: 0.95 });
 			const pose = orbitPose(camera);
+			svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
 			const key = JSON.stringify([camera, width, height]);
-			if (key !== previousCamera) {
-				projectedWorld = unwrap(renderFaces(world, pose, projection));
-				previousCamera = key;
-				svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+			if (key !== cameraKey) {
+				world = new Map(
+					[...byLayer(visibleFaces(worldFaces, pose.position))].map(
+						([layer, group]) => [layer, buildFaceBSP(group)]
+					)
+				);
+				projections = new WeakMap();
+				cameraKey = key;
 			}
-			const rendered = [
-				...projectedWorld,
-				...unwrap(renderFaces(faces, pose, projection)),
-			].sort(compareRenderedFaces);
+			const moving = byLayer(visibleFaces(faces, pose.position));
+			const layers = [
+				...new Set([...world.keys(), ...moving.keys()]),
+			].sort((a, b) => a - b);
+			const ordered = layers.flatMap(layer =>
+				orderFaceBSP(
+					world.get(layer) ?? null,
+					pose.position,
+					moving.get(layer) ?? []
+				)
+			);
+			const rendered = unwrap(
+				renderFaces(ordered, pose, projection, {
+					preserveOrder: true,
+					cache: projections,
+				})
+			);
 			for (let i = 0; i < rendered.length; i++) {
 				const face = rendered[i]!;
 				let entry = paths[i];
@@ -69,8 +93,23 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 		dispose() {
 			group.remove();
 			paths.length = 0;
-			world = [];
-			projectedWorld = [];
+			world.clear();
+			worldFaces = [];
+			projections = new WeakMap();
 		},
 	};
+}
+
+function byLayer(faces: readonly StyledFace3D[]): Map<number, StyledFace3D[]> {
+	const layers = new Map<number, StyledFace3D[]>();
+	for (const face of faces) {
+		const layer = face.layer ?? 0;
+		let group = layers.get(layer);
+		if (!group) {
+			group = [];
+			layers.set(layer, group);
+		}
+		group.push(face);
+	}
+	return layers;
 }

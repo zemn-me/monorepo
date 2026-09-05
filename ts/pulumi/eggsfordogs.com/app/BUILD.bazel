@@ -28,18 +28,27 @@ ts_project(
 
 ts_project(
     name = "app_tests",
-    srcs = ["scene_test.ts"],
+    srcs = [
+        "park_mesh_test.ts",
+        "scene_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":app",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//ts/3d",
+        "//ts/math",
+        "//ts/result",
     ],
 )
 
 jest_test(
     name = "tests",
-    srcs = ["scene_test.js"],
+    srcs = [
+        "park_mesh_test.js",
+        "scene_test.js",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [":app_tests"],
 )
@@ -51,6 +60,7 @@ filegroup(
         "layout.tsx",
         "page.tsx",
         "park_mesh.ts",
+        "park_mesh_test.ts",
         "scene.ts",
         "scene_test.ts",
     ],

@@ -1,6 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
@@ -92,4 +93,10 @@ go_test(
         "@com_github_tebeka_selenium//:selenium",
         "@com_github_tebeka_selenium//log",
     ],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )
