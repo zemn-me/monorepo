@@ -1,0 +1,58 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "3d",
+    srcs = [
+        "low_poly.ts",
+        "svg_scene.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//ts/math",
+        "//ts/result",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "low_poly.ts",
+        "low_poly_test.ts",
+        "svg_scene.ts",
+        "svg_scene_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "3d_tests",
+    srcs = [
+        "low_poly_test.ts",
+        "svg_scene_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":3d",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//ts/math",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = [
+        "low_poly_test.js",
+        "svg_scene_test.js",
+    ],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":3d_tests"],
+)

@@ -279,6 +279,8 @@ py_venv(
         "//py/ipynb",
         "//py/ipynb:ipynb_bin",
         "//py/time/hemisphere:hemisphere_bin",
+        "//ts/pulumi/eggsfordogs.com:eggsfordogs.com_py",
+        "//ts/pulumi/eggsfordogs.com:static_server",
         "//ts/pulumi/lib/oci/example/python:python_bin",
     ],
 )

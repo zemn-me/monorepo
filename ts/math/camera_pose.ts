@@ -1,7 +1,11 @@
-import { Point3D, point, sub } from '#root/ts/math/cartesian.js';
+import { Point3D, point, sub, x, y, z } from '#root/ts/math/cartesian.js';
 import { defaultUp } from '#root/ts/math/lookAt.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import { and_then_flatten, type Result } from '#root/ts/result/result.js';
+import {
+	and_then,
+	and_then_flatten,
+	type Result,
+} from '#root/ts/result/result.js';
 
 export interface YawPitchPose {
 	readonly position: Point3D;
@@ -70,4 +74,35 @@ export function cameraSpacePointFromPose(
 				sub<1, 3>(point3d, pose.position)
 			)
 	);
+}
+
+/** Compile the camera rotation once when projecting a whole scene. */
+export function cameraSpaceTransformFromPose(
+	pose: YawPitchPose
+): Result<(world: Point3D) => Point3D, Error> {
+	return and_then(inverseOrientationFromYawPitch(pose.yaw, pose.pitch), q => {
+		const qx = Quaternion.x(q),
+			qy = Quaternion.y(q),
+			qz = Quaternion.z(q),
+			qw = Quaternion.w(q);
+		const xx = 1 - 2 * (qy * qy + qz * qz),
+			xy = 2 * (qx * qy - qz * qw),
+			xz = 2 * (qx * qz + qy * qw);
+		const yx = 2 * (qx * qy + qz * qw),
+			yy = 1 - 2 * (qx * qx + qz * qz),
+			yz = 2 * (qy * qz - qx * qw);
+		const zx = 2 * (qx * qz - qy * qw),
+			zy = 2 * (qy * qz + qx * qw),
+			zz = 1 - 2 * (qx * qx + qy * qy);
+		return world => {
+			const dx = x(world) - x(pose.position),
+				dy = y(world) - y(pose.position),
+				dz = z(world) - z(pose.position);
+			return point<3>(
+				xx * dx + xy * dy + xz * dz,
+				yx * dx + yy * dy + yz * dz,
+				zx * dx + zy * dy + zz * dz
+			);
+		};
+	});
 }
