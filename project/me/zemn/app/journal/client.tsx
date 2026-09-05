@@ -28,6 +28,7 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
 
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
+import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
@@ -1532,13 +1533,6 @@ function periodMidpoint(period: JournalPeriodNode) {
 	return new Date(
 		(Date.parse(period.start) + Date.parse(period.end)) / 2
 	).toISOString();
-}
-
-function childPeriodsFor(
-	periods: readonly JournalPeriodNode[],
-	parent: JournalPeriodNode
-) {
-	return periods.filter(child => periodContains(parent, child.start));
 }
 
 function PeriodDisclosure({
