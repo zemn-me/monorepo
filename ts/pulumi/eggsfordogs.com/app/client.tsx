@@ -57,6 +57,7 @@ export function EggDogYardClient() {
 	const parkRef = useRef(createPark());
 	const cameraRef = useRef(initialCamera());
 	const settingsRef = useRef({ night: false, paused: false, sound: false });
+	const themeOverride = useRef(false);
 	const renderRef = useRef<(() => void) | null>(null);
 	const audioRef = useRef<AudioContext | null>(null);
 	const dragRef = useRef<{
@@ -194,6 +195,16 @@ export function EggDogYardClient() {
 		}
 		syncMotion();
 		reduced.addEventListener('change', syncMotion);
+		const dark = window.matchMedia('(prefers-color-scheme: dark)');
+		function syncTheme() {
+			// Follow system changes until the visitor explicitly chooses a theme.
+			if (themeOverride.current) return;
+			settingsRef.current.night = dark.matches;
+			setNight(dark.matches);
+			invalidate();
+		}
+		syncTheme();
+		dark.addEventListener('change', syncTheme);
 		const observer = new ResizeObserver(invalidate);
 		observer.observe(surface);
 		start();
@@ -204,6 +215,7 @@ export function EggDogYardClient() {
 			renderer?.dispose();
 			renderRef.current = null;
 			reduced.removeEventListener('change', syncMotion);
+			dark.removeEventListener('change', syncTheme);
 			void audioRef.current?.close().catch(() => {
 				/* The context may already be closed during teardown. */
 			});
@@ -309,6 +321,7 @@ export function EggDogYardClient() {
 					}
 					aria-pressed={night}
 					onClick={() => {
+						themeOverride.current = true;
 						settingsRef.current.night = !night;
 						setNight(!night);
 						renderRef.current?.();
