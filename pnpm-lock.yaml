@@ -14,7 +14,7 @@ dependencies:
     version: 15.0.0(commander@15.0.0)
   '@hookform/resolvers':
     specifier: 5.9.1
-    version: 5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.86.0)(typanion@3.14.0)(zod@4.4.3)
+    version: 5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.86.0)(typanion@3.14.0)(zod@4.5.4)
   '@jest/globals':
     specifier: 30.4.1
     version: 30.4.1
@@ -244,8 +244,8 @@ dependencies:
     specifier: 0.0.6
     version: 0.0.6(react-dom@19.2.8)(react@19.2.8)
   zod:
-    specifier: 4.4.3
-    version: 4.4.3
+    specifier: 4.5.4
+    version: 4.5.4
 
 optionalDependencies:
   '@typescript/typescript-aix-ppc64':
@@ -2149,7 +2149,7 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.86.0)(typanion@3.14.0)(zod@4.4.3):
+  /@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.86.0)(typanion@3.14.0)(zod@4.5.4):
     resolution: {integrity: sha512-7b7vsbraJxKgjVSA1Nur9tLwj539WGJUBLA7QNvXnFoT2pM5Z7G+6rlukk4B2/QrTZy6huRtH6wKeESPKuIr6w==}
     peerDependencies:
       '@sinclair/typebox': '>=0.25.24'
@@ -2232,7 +2232,7 @@ packages:
       ajv: 8.20.0
       react-hook-form: 7.86.0(react@19.2.8)
       typanion: 3.14.0
-      zod: 4.4.3
+      zod: 4.5.4
     dev: false
 
   /@img/colour@1.1.0:
@@ -4918,7 +4918,7 @@ packages:
       fs-extra: 11.4.0
       toml-eslint-parser: 1.0.3
       upath: 3.0.8
-      zod: 4.4.3
+      zod: 4.5.4
     dev: true
 
   /@renovatebot/good-enough-parser@2.0.1:
@@ -16347,6 +16347,10 @@ packages:
 
   /zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+    dev: true
+
+  /zod@4.5.4:
+    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
   /zustand@5.0.15(@types/react@18.3.31)(react@19.2.8)(use-sync-external-store@1.6.0):
     resolution: {integrity: sha512-MpSEjRiBkA9crSYeOUH32rJC7SVqAbm0Fqcqge/bUi2PPoLcBWKOsG+C8mevmpr8TwXHBVkChbbJiyvkE+i/3A==}
