@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -13,6 +14,11 @@ import (
 )
 
 func openPark(t testing.TB, schemes ...string) *seleniumutil.Driver {
+	t.Helper()
+	return openParkPrepared(t, nil, schemes...)
+}
+
+func openParkPrepared(t testing.TB, prepare func(*seleniumutil.Driver), schemes ...string) *seleniumutil.Driver {
 	t.Helper()
 	var ports map[string]string
 	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil {
@@ -37,6 +43,9 @@ func openPark(t testing.TB, schemes ...string) *seleniumutil.Driver {
 	}
 	if err := driver.ExecuteChromiumCommand("Emulation.setEmulatedMedia", map[string]any{"features": []map[string]string{{"name": "prefers-color-scheme", "value": scheme}}}); err != nil {
 		t.Fatal(err)
+	}
+	if prepare != nil {
+		prepare(driver)
 	}
 	if err := driver.Get(fmt.Sprintf("http://localhost:%s", port)); err != nil {
 		t.Fatal(err)
@@ -169,6 +178,100 @@ func TestParkFollowsSystemTheme(t *testing.T) {
 			theme(opposite)
 		})
 	}
+}
+
+// A real browser with page scripts disabled must still show the park and OS theme.
+func TestParkVisibleWithoutJavaScript(t *testing.T) {
+	for _, scheme := range []string{"light", "dark"} {
+		t.Run(scheme, func(t *testing.T) {
+			driver := openParkPrepared(t, func(driver *seleniumutil.Driver) {
+				if err := driver.ExecuteChromiumCommand("Emulation.setScriptExecutionDisabled", map[string]any{"value": true}); err != nil {
+					t.Fatal(err)
+				}
+				if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 390, "height": 844, "deviceScaleFactor": 1, "mobile": true}); err != nil {
+					t.Fatal(err)
+				}
+			}, scheme)
+			paths, err := driver.FindElements(selenium.ByCSSSelector, ".park-scene path")
+			if err != nil || len(paths) < 1000 {
+				t.Fatalf("initial SVG paths: %d, error: %v", len(paths), err)
+			}
+			loading, err := driver.FindElements(selenium.ByCSSSelector, ".loading-note")
+			if err != nil || len(loading) != 0 {
+				t.Fatalf("unexpected loading placeholder: %d, error: %v", len(loading), err)
+			}
+			main, err := driver.FindElement(selenium.ByCSSSelector, "main")
+			if err != nil {
+				t.Fatal(err)
+			}
+			color, err := main.CSSProperty("background-color")
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := "rgba(238, 240, 223, 1)"
+			if scheme == "dark" {
+				want = "rgba(34, 43, 62, 1)"
+			}
+			if color != want {
+				t.Fatalf("initial %s background: got %s, want %s", scheme, color, want)
+			}
+			svg, err := driver.FindElement(selenium.ByCSSSelector, "svg.park-svg")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if shown, err := svg.IsDisplayed(); err != nil || !shown {
+				t.Fatalf("initial park not displayed: %v", err)
+			}
+		})
+	}
+}
+
+func TestParkAdoptsInitialSVG(t *testing.T) {
+	driver := openParkPrepared(t, func(driver *seleniumutil.Driver) {
+		// Keep node references in this closure, with results exposed through the
+		// browser's Performance API rather than an application test global.
+		if err := driver.ExecuteChromiumCommand("Page.addScriptToEvaluateOnNewDocument", map[string]any{"source": `
+			let originalScene, originalPath;
+			const observer = new MutationObserver(() => {
+				const scene = document.querySelector('.park-scene');
+				if (!originalPath && scene?.querySelector('path')) {
+					originalScene = scene; originalPath = scene.querySelector('path');
+					performance.mark('park-initial-svg');
+				}
+				if (originalPath && document.querySelector('.toss-button')?.disabled === false) {
+					performance.mark('park-svg-adopted', { detail: { sameScene: scene === originalScene, samePath: originalPath.isConnected && scene.contains(originalPath), paths: scene.querySelectorAll('path').length } });
+					observer.disconnect();
+				}
+			});
+			observer.observe(document, {subtree: true, childList: true, attributes: true});
+		`}); err != nil {
+			t.Fatal(err)
+		}
+	})
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		value, err := wd.ExecuteScript("return performance.getEntriesByName('park-svg-adopted').length === 1", nil)
+		return value == true, err
+	}, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	value, err := driver.ExecuteScript(`const mark = performance.getEntriesByName('park-svg-adopted')[0]; return mark.detail.sameScene && mark.detail.samePath && mark.detail.paths > 1000 && !document.querySelector('.loading-note');`, nil)
+	if err != nil || value != true {
+		t.Fatalf("server SVG was not adopted: %v, %v", value, err)
+	}
+	logs, err := driver.Log(log.Browser)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range logs {
+		if strings.Contains(strings.ToLower(entry.Message), "hydration") || strings.Contains(entry.Message, "react.dev/errors/418") || strings.Contains(entry.Message, "react.dev/errors/425") {
+			t.Fatalf("hydration error: %s", entry.Message)
+		}
+	}
+	timing, err := driver.ExecuteScript(`return JSON.stringify({initialSVG: performance.getEntriesByName('park-initial-svg')[0].startTime, interactive: performance.getEntriesByName('park-svg-adopted')[0].startTime, firstContentfulPaint: performance.getEntriesByName('first-contentful-paint')[0]?.startTime, paths: performance.getEntriesByName('park-svg-adopted')[0].detail.paths});`, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("SVG startup: %v", timing)
 }
 
 // Run explicitly via :park_benchmark; timings are observations, not CI thresholds.

@@ -29,23 +29,121 @@ interface PaintSlot {
 	painted: boolean;
 }
 
+/** Adjacent identical paints share a path without changing occlusion order. */
+function paintRuns(
+	faces: readonly StyledFace3D[],
+	rendered: ReadonlyMap<StyledFace3D, RenderedFace2D>
+): [path: string, fill: string][] {
+	const runs: [path: string, fill: string][] = [];
+	for (const face of faces) {
+		const projected = rendered.get(face);
+		if (!projected) continue;
+		projected((_source, path, fill) => {
+			const previous = runs.at(-1);
+			if (previous?.[1] === fill) previous[0] += path;
+			else runs.push([path, fill]);
+		});
+	}
+	return runs;
+}
+
+/** Serialize an initial frame without a DOM; geometry and batching match live rendering. */
+export function renderSVGSnapshot(
+	worldFaces: readonly StyledFace3D[],
+	faces: readonly StyledFace3D[],
+	camera: OrbitCamera,
+	width: number,
+	height: number
+): string {
+	const world = new Map(
+		[...byLayer(worldFaces)].map(([layer, polygons]) => [
+			layer,
+			buildFaceBSP(polygons),
+		])
+	);
+	const pose = orbitPose(camera);
+	const moving = byLayer(visibleFaces(faces, pose.position));
+	const batches: (readonly StyledFace3D[])[] = [];
+	for (const layer of [...new Set([...world.keys(), ...moving.keys()])].sort(
+		(a, b) => a - b
+	))
+		visitFaceBSP(
+			world.get(layer) ?? null,
+			pose.position,
+			moving.get(layer) ?? [],
+			(_node, _kind, polygons) => batches.push(polygons)
+		);
+	const rendered = unwrap(
+		renderFaces(
+			batches.flat(),
+			pose,
+			perspective(width, height, { focalScale: 0.95 }),
+			{ preserveOrder: true }
+		)
+	);
+	const bySource = new Map(
+		rendered.map(face => [renderedSource(face), face])
+	);
+	const attribute = (value: string) =>
+		value
+			.replaceAll('&', '&amp;')
+			.replaceAll('"', '&quot;')
+			.replaceAll('<', '&lt;')
+			.replaceAll('>', '&gt;');
+	return (
+		'<g class="park-scene" aria-hidden="true" stroke-width="0.4" stroke-linejoin="round">' +
+		batches
+			.map(
+				batch =>
+					'<g>' +
+					paintRuns(batch, bySource)
+						.map(
+							([path, fill]) =>
+								`<path d="${attribute(path)}" fill="${attribute(fill)}" stroke="${attribute(fill)}"></path>`
+						)
+						.join('') +
+					'</g>'
+			)
+			.join('') +
+		'</g>'
+	);
+}
+
 /** Keep static paint slots anchored while moving geometry changes inside the gaps. */
-export function createSVGRenderer(svg: SVGSVGElement) {
+export function createSVGRenderer(svg: SVGSVGElement, host: SVGElement = svg) {
 	const namespace = 'http://www.w3.org/2000/svg';
-	const group = document.createElementNS(namespace, 'g');
+	const group =
+		host.querySelector<SVGGElement>(':scope > g.park-scene') ??
+		document.createElementNS(namespace, 'g');
 	group.setAttribute('class', 'park-scene');
 	group.setAttribute('aria-hidden', 'true');
 	group.setAttribute('stroke-width', '0.4');
 	group.setAttribute('stroke-linejoin', 'round');
-	svg.append(group);
+	if (group.parentNode !== host) host.append(group);
 	let world = new Map<number, FaceBSP | null>();
 	let slots = new Map<object | number, Map<FaceBSPSlot, PaintSlot>>();
-	const pool: PaintSlot[] = [];
+	// Reuse the server frame's nodes. The first live draw refreshes their contents
+	// before any unused slots are removed, so startup never clears the visible park.
+	const pool: PaintSlot[] = [
+		...group.querySelectorAll<SVGGElement>(':scope > g'),
+	].map(node => {
+		const paths = [
+			...node.querySelectorAll<SVGPathElement>(':scope > path'),
+		].map(node => ({
+			node,
+			path: node.getAttribute('d') ?? '',
+			fill: node.getAttribute('fill') ?? '',
+		}));
+		const count = paths.filter(
+			path => path.node.getAttribute('display') !== 'none'
+		).length;
+		return { node, paths, count, frame: 0, painted: false };
+	});
 	let used = 0,
 		frame = 0;
-	let previous: PaintSlot[] = [];
+	let previous: PaintSlot[] = [...pool];
 	let cameraKey = '';
-	let viewBox = '';
+	let viewBox = svg.getAttribute('viewBox') ?? '';
 	let projections = new WeakMap<StyledFace3D, RenderedFace2D | null>();
 
 	function getSlot(key: object | number, kind: FaceBSPSlot): PaintSlot {
@@ -79,20 +177,9 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 		faces: readonly StyledFace3D[],
 		rendered: ReadonlyMap<StyledFace3D, RenderedFace2D>
 	) {
-		// Adjacent fragments with the same paint can share one compound SVG path.
-		// Never merge across another color: that would discard occlusion ordering.
-		const runs: { path: string; fill: string }[] = [];
-		for (const face of faces) {
-			const projected = rendered.get(face);
-			if (!projected) continue;
-			projected((_source, path, fill) => {
-				const previous = runs.at(-1);
-				if (previous?.fill === fill) previous.path += path;
-				else runs.push({ path, fill });
-			});
-		}
+		const runs = paintRuns(faces, rendered);
 		for (let i = 0; i < runs.length; i++) {
-			const face = runs[i]!;
+			const [pathData, fill] = runs[i]!;
 			let path = entry.paths[i];
 			if (!path) {
 				path = {
@@ -103,14 +190,14 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 				entry.paths.push(path);
 				entry.node.append(path.node);
 			}
-			if (path.path !== face.path) {
-				path.node.setAttribute('d', face.path);
-				path.path = face.path;
+			if (path.path !== pathData) {
+				path.node.setAttribute('d', pathData);
+				path.path = pathData;
 			}
-			if (path.fill !== face.fill) {
-				path.node.setAttribute('fill', face.fill);
-				path.node.setAttribute('stroke', face.fill);
-				path.fill = face.fill;
+			if (path.fill !== fill) {
+				path.node.setAttribute('fill', fill);
+				path.node.setAttribute('stroke', fill);
+				path.fill = fill;
 			}
 			if (i >= entry.count) path.node.removeAttribute('display');
 		}
@@ -199,8 +286,8 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 			}
 			previous = desired;
 		},
-		dispose() {
-			group.remove();
+		dispose(preserveFrame = false) {
+			if (!preserveFrame) group.remove();
 			pool.length = 0;
 			previous = [];
 			world.clear();

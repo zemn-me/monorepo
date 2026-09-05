@@ -39,6 +39,9 @@ svg:focus-visible {
 	--ink: #30382b;
 	--muted: #6c735d;
 	--line: #d4d9c5;
+	--accent: #84936e;
+	--stamp: #758362;
+	--scene-filter: none;
 	position: relative;
 	min-height: 700px;
 	height: 100svh;
@@ -51,6 +54,9 @@ svg:focus-visible {
 	--ink: #f0ead6;
 	--muted: #b7c1c5;
 	--line: #465063;
+	--accent: #b5c79d;
+	--stamp: #b3c4a0;
+	--scene-filter: brightness(0.72) saturate(0.8);
 	color-scheme: dark;
 }
 .masthead {
@@ -139,14 +145,11 @@ h1 {
 	margin: 29px 0 24px;
 }
 h1 > span {
-	color: #84936e;
+	color: var(--accent);
 	font-style: italic;
 	font-size: 0.79em;
 	letter-spacing: -4px;
 	white-space: nowrap;
-}
-.is-night h1 > span {
-	color: #b5c79d;
 }
 .intro > p {
 	font-size: 14px;
@@ -224,7 +227,7 @@ h1 > span {
 	gap: 3px;
 	border: 1px solid #a4af8b;
 	border-radius: 50%;
-	color: #758362;
+	color: var(--stamp);
 	transform: rotate(13deg);
 	pointer-events: none;
 	outline: 1px dashed #a4af8b;
@@ -239,9 +242,6 @@ h1 > span {
 	font-family: Georgia, serif;
 	font-size: 28px;
 	font-weight: 400;
-}
-.is-night .park-stamp {
-	color: #b3c4a0;
 }
 .scene-caption {
 	position: absolute;
@@ -667,6 +667,19 @@ h1 > span {
 	}
 }
 
-.is-night .park-scene {
-	filter: brightness(0.72) saturate(0.8);
+.park-scene {
+	filter: var(--scene-filter);
+}
+/* The static export follows the OS before JavaScript resolves the theme. */
+@media (prefers-color-scheme: dark) {
+	.park-page.follows-system {
+		--paper: #222b3e;
+		--ink: #f0ead6;
+		--muted: #b7c1c5;
+		--line: #465063;
+		--accent: #b5c79d;
+		--stamp: #b3c4a0;
+		--scene-filter: brightness(0.72) saturate(0.8);
+		color-scheme: dark;
+	}
 }

@@ -15,3 +15,5 @@ Filled faces, projected faces, and BSP nodes are Church-encoded products. Use th
 Uniform BSP leaves are valid only for identical opaque paint. If foreign geometry enters a leaf, order all of its surfaces together; treating its first plane as the whole volume breaks occlusion.
 
 Keep `dogScale` shared by physics and mesh construction. Collision circles must enclose the animated mesh; clustered eggs share a retriever to avoid blocking pickup behind a ring of dogs.
+
+The initial SVG is serialized once per server module and adopted by the DOM renderer. Keep its React `dangerouslySetInnerHTML` prop stable and preserve the visible frame during effect cleanup; Strict Mode restarts effects without removing the host.
