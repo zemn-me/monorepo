@@ -25,15 +25,15 @@ tool (
 require (
 	github.com/aws/aws-lambda-go v1.54.0
 	github.com/aws/aws-sdk-go-v2 v1.45.1
-	github.com/aws/aws-sdk-go-v2/config v1.33.1
-	github.com/aws/aws-sdk-go-v2/credentials v1.20.1
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.21.1
-	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.84.1
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.65.1
-	github.com/aws/aws-sdk-go-v2/service/kms v1.57.1
-	github.com/aws/aws-sdk-go-v2/service/lambda v1.104.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.109.1
-	github.com/aws/aws-sdk-go-v2/service/sts v1.47.1
+	github.com/aws/aws-sdk-go-v2/config v1.33.2
+	github.com/aws/aws-sdk-go-v2/credentials v1.20.2
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.21.2
+	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.85.0
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.66.0
+	github.com/aws/aws-sdk-go-v2/service/kms v1.58.0
+	github.com/aws/aws-sdk-go-v2/service/lambda v1.106.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.110.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.48.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.53.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
@@ -83,15 +83,15 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.1 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.1 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.38.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.39.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.19 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.13.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.7.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.35.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.40.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.8.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.36.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.41.0 // indirect
 	github.com/aws/smithy-go v1.28.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-3 // indirect
