@@ -1,0 +1,46 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/next.js:rules.bzl", "next_project")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+next_project(
+    name = "next",
+    srcs = ["//ts/pulumi/waxingincandescent.com/app"],
+)
+
+ts_project(
+    name = "waxingincandescent.com",
+    srcs = ["index.ts"],
+    data = [":next"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//ts/pulumi/lib/website",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+go_test(
+    name = "waxingincandescent_com_test",
+    size = "small",
+    srcs = ["site_test.go"],
+    data = [":next"],
+    deps = [
+        "//go/seleniumutil",
+        "@io_bazel_rules_go//go/runfiles",
+    ],
+)

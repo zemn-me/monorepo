@@ -1,0 +1,25 @@
+html {
+	background: #fff;
+	color: #111;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+	margin: 0;
+}
+
+main {
+	box-sizing: border-box;
+	display: grid;
+	min-height: 100svh;
+	padding: 1.5rem;
+	place-items: center;
+}
+
+h1 {
+	margin: 0;
+	font-size: clamp(1.25rem, 4vw, 3rem);
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	text-align: center;
+}

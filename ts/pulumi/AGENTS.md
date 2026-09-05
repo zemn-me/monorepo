@@ -17,3 +17,9 @@ ECS cluster physical names have the same `[A-Za-z0-9_-]` constraint; use the AWS
 Lambda function physical names allow `[A-Za-z0-9_-]` and max 64 chars; set explicit sanitized names for dotted component-derived functions.
 
 Lambda permission statement IDs derive from the logical name unless set; use explicit sanitized `statementId` for dotted component-derived permissions.
+
+Use `route53domains.Domain` to purchase a new domain; `RegisteredDomain` only adopts existing registrations. Reuse `Domain.hostedZoneId` because registration creates and delegates a public zone automatically.
+
+Deploy infrastructure through the PR/merge workflow and let CI run Pulumi with its existing credentials. Do not ask for a local Pulumi login to deploy changes.
+
+New domain sites need staging under an already delegated zone (for example `<site>.staging.zemn.me`): merge-queue staging runs before production can purchase the new domain.
