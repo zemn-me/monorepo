@@ -17,6 +17,7 @@ import {
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
+import * as WaxingIncandescent from '#root/ts/pulumi/waxingincandescent.com/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
@@ -354,6 +355,12 @@ export class Component extends Pulumi.ComponentResource {
 
 		new Lulu.Component(
 			`${name}_lulu`,
+			{ staging: args.staging, tags },
+			{ parent: this }
+		);
+
+		new WaxingIncandescent.Component(
+			`${name}_waxingincandescent`,
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);

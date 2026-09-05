@@ -192,6 +192,19 @@ describe('pulumi', () => {
 					'aws:iam/outboundWebIdentityFederation:OutboundWebIdentityFederation'
 			)
 		).toBe(false);
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53domains/domain:Domain'
+			)
+		).toBe(false);
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('waxingincandescent.staging.zemn.me');
+
 		const stagingJournalWorker = mockResources.find(
 			resource =>
 				resource.type === 'aws:lambda/function:Function' &&
@@ -342,6 +355,30 @@ describe('pulumi', () => {
 			openAIServiceAccountId: 'openai-production-service-account',
 		});
 		await pulumi.runtime.disconnect();
+
+		expect(
+			mockResources.find(
+				resource => resource.name === 'monorepo_waxingincandescent_domain'
+			)
+		).toMatchObject({
+			type: 'aws:route53domains/domain:Domain',
+			inputs: {
+				domainName: 'waxingincandescent.com',
+				durationInYears: 1,
+				autoRenew: true,
+				adminPrivacy: true,
+				registrantPrivacy: true,
+				techPrivacy: true,
+				transferLock: true,
+			},
+		});
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('waxingincandescent.com');
 
 		const npmPublishCommands = mockResources
 			.filter(resource => resource.type === 'command:local:Command')
