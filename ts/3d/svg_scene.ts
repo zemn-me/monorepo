@@ -45,6 +45,7 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 		frame = 0;
 	let previous: PaintSlot[] = [];
 	let cameraKey = '';
+	let viewBox = '';
 	let projections = new WeakMap<StyledFace3D, RenderedFace2D | null>();
 
 	function getSlot(key: object | number, kind: FaceBSPSlot): PaintSlot {
@@ -144,7 +145,11 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 				for (const entry of pool) entry.painted = false;
 				projections = new WeakMap();
 				cameraKey = key;
-				svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+			}
+			const bounds = `0 0 ${width} ${height}`;
+			if (bounds !== viewBox) {
+				svg.setAttribute('viewBox', bounds);
+				viewBox = bounds;
 			}
 			const moving = byLayer(visibleFaces(faces, pose.position));
 			const layers = [

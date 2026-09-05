@@ -13,3 +13,5 @@ Consume the projected face results when painting SVG; do not rely only on projec
 Filled faces, projected faces, and BSP nodes are Church-encoded products. Use their constructors/selectors or consume a value with a callback; do not spread or JSON-stringify them. Keep geometry immutable to preserve identity-based caches. Benchmark closure changes as well as inspecting minified bundle size.
 
 Uniform BSP leaves are valid only for identical opaque paint. If foreign geometry enters a leaf, order all of its surfaces together; treating its first plane as the whole volume breaks occlusion.
+
+Keep `dogScale` shared by physics and mesh construction. Collision circles must enclose the animated mesh; clustered eggs share a retriever to avoid blocking pickup behind a ring of dogs.

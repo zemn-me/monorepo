@@ -8,7 +8,11 @@ import {
 	type Vec3,
 } from '#root/ts/3d/low_poly.js';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
-import { PACK, type Park } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
+import {
+	dogScale,
+	PACK,
+	type Park,
+} from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 
 const round = sphere(8, 4);
 const smallRound = sphere(6, 3);
@@ -184,7 +188,7 @@ export function buildActors(park: Park): StyledFace3D[] {
 	const v: StyledFace3D[] = [];
 	park.dogs.forEach((dog, i) => {
 		const spec = PACK[i]!;
-		const size = i === 5 ? 0.78 : i === 1 ? 0.88 : 1;
+		const size = dogScale(i);
 		const bounce =
 			dog.joy > 0
 				? Math.abs(Math.sin(dog.joy * 9)) * 0.3
@@ -270,11 +274,17 @@ export function buildActors(park: Park): StyledFace3D[] {
 		p(collar, spec.collar, [0, 0.87, 0.41], [0.35, 0.065, 0.3]);
 		p(smallRound, 0xf4cf69, [0, 0.8, 0.72], [0.075, 0.095, 0.035]);
 		const wag = Math.sin(park.time * (dog.joy > 0 ? 24 : 10) + i) * 0.5;
+		const tailHalfLength = 0.34;
+		// Offset the center after rotation so the lower end stays attached to the rump.
 		p(
 			smallRound,
 			spec.coat,
-			[wag * 0.24, 0.98, -0.64],
-			[0.13, 0.34, 0.14],
+			[
+				-Math.sin(wag) * tailHalfLength,
+				0.64 + Math.cos(wag) * tailHalfLength,
+				-0.64,
+			],
+			[0.13, tailHalfLength, 0.14],
 			wag
 		);
 		if (dog.joy > 0) {

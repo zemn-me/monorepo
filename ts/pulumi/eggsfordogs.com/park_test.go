@@ -12,7 +12,7 @@ import (
 	seleniumutil "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
-func openPark(t testing.TB) *seleniumutil.Driver {
+func openPark(t testing.TB, schemes ...string) *seleniumutil.Driver {
 	t.Helper()
 	var ports map[string]string
 	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil {
@@ -31,6 +31,13 @@ func openPark(t testing.TB) *seleniumutil.Driver {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = driver.Close() })
+	scheme := "light"
+	if len(schemes) > 0 {
+		scheme = schemes[0]
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.setEmulatedMedia", map[string]any{"features": []map[string]string{{"name": "prefers-color-scheme", "value": scheme}}}); err != nil {
+		t.Fatal(err)
+	}
 	if err := driver.Get(fmt.Sprintf("http://localhost:%s", port)); err != nil {
 		t.Fatal(err)
 	}
@@ -90,6 +97,78 @@ func TestParkPlayAndAccessibleControls(t *testing.T) {
 	waitFor("return document.querySelector('.toss-button').disabled && !!document.querySelector('[aria-label=\"Play animation\"]')")
 	click("[aria-label='Play animation']")
 	waitFor("return document.querySelector('.toss-button').disabled === false")
+}
+
+func TestParkFollowsSystemTheme(t *testing.T) {
+	for _, initial := range []string{"dark", "light"} {
+		t.Run(initial, func(t *testing.T) {
+			driver := openPark(t, initial)
+			waitFor := func(script string, args ...any) {
+				t.Helper()
+				if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+					value, err := wd.ExecuteScript(script, args)
+					return value == true, err
+				}, 30*time.Second); err != nil {
+					t.Fatalf("%s: %v", script, err)
+				}
+			}
+			theme := func(scheme string) {
+				t.Helper()
+				waitFor(`return document.querySelector('main')?.classList.contains('is-night') === arguments[0] && document.querySelector('.masthead button')?.getAttribute('aria-pressed') === String(arguments[0])`, scheme == "dark")
+			}
+			emulate := func(scheme string) {
+				t.Helper()
+				if err := driver.ExecuteChromiumCommand("Emulation.setEmulatedMedia", map[string]any{"features": []map[string]string{{"name": "prefers-color-scheme", "value": scheme}}}); err != nil {
+					t.Fatal(err)
+				}
+				waitFor("return matchMedia('(prefers-color-scheme: dark)').matches === arguments[0]", scheme == "dark")
+			}
+			click := func(selector string) {
+				t.Helper()
+				element, err := driver.FindElement(selenium.ByCSSSelector, selector)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := element.Click(); err != nil {
+					t.Fatal(err)
+				}
+			}
+			waitFor("return document.querySelector('.toss-button')?.disabled === false")
+			theme(initial)
+			click("[aria-label='Pause animation']")
+			waitFor("return document.querySelector('.toss-button').disabled")
+			const paints = `return [...document.querySelectorAll('.park-scene path:not([display="none"])')].map(p => p.getAttribute('fill')).join(',')`
+			before, err := driver.ExecuteScript(paints, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			opposite := "dark"
+			if initial == "dark" {
+				opposite = "light"
+			}
+			emulate(opposite)
+			theme(opposite)
+			// A paused park must rebuild the SVG scenery as well as changing its controls.
+			waitFor(`return [...document.querySelectorAll('.park-scene path:not([display="none"])')].map(p => p.getAttribute('fill')).join(',') !== arguments[0]`, before)
+			click(".masthead button")
+			theme(initial)
+			emulate(initial)
+			emulate(opposite)
+			// Wait across frames so a queued media-query event cannot escape the assertion.
+			if err := driver.SetAsyncScriptTimeout(5 * time.Second); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := driver.ExecuteScriptAsync(`const done = arguments[arguments.length - 1]; requestAnimationFrame(() => requestAnimationFrame(() => done(true)));`, nil); err != nil {
+				t.Fatal(err)
+			}
+			theme(initial)
+			if err := driver.Refresh(); err != nil {
+				t.Fatal(err)
+			}
+			waitFor("return document.querySelector('.toss-button')?.disabled === false")
+			theme(opposite)
+		})
+	}
 }
 
 // Run explicitly via :park_benchmark; timings are observations, not CI thresholds.
