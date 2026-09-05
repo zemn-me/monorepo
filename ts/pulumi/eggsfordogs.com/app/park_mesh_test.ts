@@ -8,7 +8,15 @@ import {
 	orderFaceBSP,
 	visibleFaces,
 } from '#root/ts/math/face_bsp.js';
-import { perspective, renderFaces } from '#root/ts/math/wireframe_render.js';
+import {
+	faceFill,
+	faceLayer,
+	faceVertices,
+	perspective,
+	renderedFill,
+	renderedPath,
+	renderFaces,
+} from '#root/ts/math/wireframe_render.js';
 import {
 	buildActors,
 	buildParkMesh,
@@ -57,13 +65,13 @@ test('dog SVG colors match the nearest mesh surface around the orbit and during 
 				target: [0, 0.95, 0],
 			});
 			const faces = visibleFaces(
-				buildActors(park).filter(face => face.layer === 1000),
+				buildActors(park).filter(face => faceLayer(face) === 1000),
 				pose.position
 			);
 			const transform = unwrap(cameraSpaceTransformFromPose(pose));
 			const reference = faces.map(face => ({
-				fill: face.fill,
-				vertices: face.vertices.map(p => {
+				fill: faceFill(face),
+				vertices: faceVertices(face).map(p => {
 					const q = transform(p);
 					return [
 						160 + (x(q) * 304) / z(q),
@@ -76,9 +84,11 @@ test('dog SVG colors match the nearest mesh surface around the orbit and during 
 			const painted = unwrap(
 				renderFaces(ordered, pose, projection, { preserveOrder: true })
 			).map(face => ({
-				fill: face.fill,
+				fill: renderedFill(face),
 				vertices: [
-					...face.path.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g),
+					...renderedPath(face).matchAll(
+						/[ML](-?[\d.]+),(-?[\d.]+)/g
+					),
 				].map(m => [Number(m[1]), Number(m[2]), 1] as Vertex),
 			}));
 			for (let py = 83.37; py < 240; py += 9)
@@ -117,11 +127,11 @@ test('the complete park can merge moving dogs into cached scenery without invali
 		target: [0, 0, 0],
 	});
 	const world = visibleFaces(
-		buildParkMesh().filter(f => f.layer === 1000),
+		buildParkMesh().filter(f => faceLayer(f) === 1000),
 		pose.position
 	);
 	const actors = visibleFaces(
-		buildActors(createPark()).filter(f => f.layer === 1000),
+		buildActors(createPark()).filter(f => faceLayer(f) === 1000),
 		pose.position
 	);
 	const rendered = unwrap(
@@ -133,5 +143,6 @@ test('the complete park can merge moving dogs into cached scenery without invali
 		)
 	);
 	expect(rendered.length).toBeGreaterThan(1000);
-	for (const face of rendered) expect(face.path).not.toMatch(/NaN|Infinity/);
+	for (const face of rendered)
+		expect(renderedPath(face)).not.toMatch(/NaN|Infinity/);
 });

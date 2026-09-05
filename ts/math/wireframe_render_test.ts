@@ -12,9 +12,15 @@ import {
 	perspective,
 	projectCameraPoint,
 	projectWorldPoint,
+	type RenderedFace2D,
+	renderedFill,
+	renderedPath,
+	renderedSource,
 	renderFaces,
 	renderSegments,
+	type StyledFace3D,
 	type StyledSegment3D,
+	styledFace,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
 
@@ -94,42 +100,61 @@ describe('filled SVG faces', () => {
 		const rendered = unwrap(
 			renderFaces(
 				[
-					{ vertices: triangle, fill: '#ff0' },
-					{ vertices: [...triangle].reverse(), fill: '#f00' },
-					{
-						vertices: triangle.map(p => point<3>(x(p), y(p), 100)),
-						fill: '#00f',
-					},
+					styledFace(triangle, '#ff0'),
+					styledFace([...triangle].reverse(), '#f00'),
+					styledFace(
+						triangle.map(p => point<3>(x(p), y(p), 100)),
+						'#00f'
+					),
 				],
 				pose,
 				perspective(800, 600)
 			)
 		);
 		expect(rendered).toHaveLength(1);
-		expect(rendered[0]!.fill).toBe('#ff0');
-		expect(rendered[0]!.path).toMatch(/^M.*L.*L.*Z$/);
-		expect(rendered[0]!.path).not.toMatch(/NaN|Infinity/);
+		expect(renderedFill(rendered[0]!)).toBe('#ff0');
+		expect(renderedPath(rendered[0]!)).toMatch(/^M.*L.*L.*Z$/);
+		expect(renderedPath(rendered[0]!)).not.toMatch(/NaN|Infinity/);
+	});
+	test('functional faces retain source identity through projection caching', () => {
+		const face = styledFace(triangle, 'gold', 7);
+		const cache = new WeakMap<StyledFace3D, RenderedFace2D | null>();
+		const projection = perspective(800, 600);
+		const first = unwrap(
+			renderFaces([face], pose, projection, { cache })
+		)[0]!;
+		const second = unwrap(
+			renderFaces([face], pose, projection, { cache })
+		)[0]!;
+		expect(second).toBe(first);
+		expect(renderedSource(second)).toBe(face);
+		expect(
+			second((_source, _path, fill, depth, layer) => [fill, depth, layer])
+		).toEqual(['gold', 3, 7]);
+		// Equal geometry is a separate cache entry; callers can replace immutable records.
+		const replacement = styledFace(triangle, 'blue', 8);
+		const next = unwrap(
+			renderFaces([replacement], pose, projection, { cache })
+		)[0]!;
+		expect(renderedSource(next)).toBe(replacement);
+		expect(renderedFill(next)).toBe('blue');
 	});
 	test('orders solids by depth and keeps terrain decals in their own layers', () => {
 		const rendered = unwrap(
 			renderFaces(
 				[
-					{ vertices: triangle, fill: 'near' },
-					{
-						vertices: triangle.map(p => point<3>(x(p), y(p), 5)),
-						fill: 'far',
-					},
-					{ vertices: triangle, fill: 'terrain', layer: -1 },
+					styledFace(triangle, 'near'),
+					styledFace(
+						triangle.map(p => point<3>(x(p), y(p), 5)),
+						'far'
+					),
+					styledFace(triangle, 'terrain', -1),
 				],
 				pose,
 				perspective(800, 600)
 			)
 		);
-		expect(rendered.map(face => face.fill)).toEqual([
-			'terrain',
-			'far',
-			'near',
-		]);
+		expect(rendered.map(renderedFill)).toEqual(['terrain', 'far', 'near']);
 	});
 	test('compiled scene transforms agree with the existing quaternion camera', () => {
 		for (const yaw of [0, 0.4, 2.7])

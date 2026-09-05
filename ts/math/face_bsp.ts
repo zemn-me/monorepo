@@ -1,16 +1,24 @@
 import { type Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
-import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
+import {
+	faceDoubleSided,
+	faceVertices,
+	type StyledFace3D,
+	styledFace,
+} from '#root/ts/math/wireframe_render.js';
 
 // Faces and their vertices are immutable; cached planes can be shared across frames.
 // World-space tolerance keeps coplanar faces stable as the camera moves.
 const epsilon = 1e-7;
 type Plane = readonly [number, number, number, number];
-export interface FaceBSP {
-	readonly plane: Plane;
-	readonly faces: readonly StyledFace3D[];
-	readonly front: FaceBSP | null;
-	readonly back: FaceBSP | null;
-}
+/** Immutable tree node; continuations expose fields without a property-name ABI. */
+export type FaceBSP = <R>(
+	use: (
+		plane: Plane,
+		faces: readonly StyledFace3D[],
+		front: FaceBSP | null,
+		back: FaceBSP | null
+	) => R
+) => R;
 
 function distance(p: Point3D, plane: Plane): number {
 	return x(p) * plane[0] + y(p) * plane[1] + z(p) * plane[2] - plane[3];
@@ -26,11 +34,12 @@ function facePlane(face: StyledFace3D): Plane | null {
 }
 
 function computePlane(face: StyledFace3D): Plane | null {
-	const a = face.vertices[0];
+	const vertices = faceVertices(face);
+	const a = vertices[0];
 	if (!a) return null;
-	for (let i = 1; i + 1 < face.vertices.length; i++) {
-		const b = face.vertices[i]!,
-			c = face.vertices[i + 1]!;
+	for (let i = 1; i + 1 < vertices.length; i++) {
+		const b = vertices[i]!,
+			c = vertices[i + 1]!;
 		const ux = x(b) - x(a),
 			uy = y(b) - y(a),
 			uz = z(b) - z(a);
@@ -61,7 +70,7 @@ export function visibleFaces(
 		const plane = facePlane(face);
 		return (
 			plane !== null &&
-			(face.doubleSided || distance(eye, plane) > epsilon)
+			(faceDoubleSided(face) || distance(eye, plane) > epsilon)
 		);
 	});
 }
@@ -69,15 +78,20 @@ export function visibleFaces(
 function partition(
 	faces: readonly StyledFace3D[],
 	plane: Plane
-): { front: StyledFace3D[]; back: StyledFace3D[]; coplanar: StyledFace3D[] } {
+): readonly [
+	front: StyledFace3D[],
+	back: StyledFace3D[],
+	coplanar: StyledFace3D[],
+] {
 	const front: StyledFace3D[] = [],
 		back: StyledFace3D[] = [],
 		coplanar: StyledFace3D[] = [];
 	for (const face of faces) {
+		const vertices = faceVertices(face);
 		const distances: number[] = [];
 		let positive = false,
 			negative = false;
-		for (const vertex of face.vertices) {
+		for (const vertex of vertices) {
 			const d = distance(vertex, plane);
 			distances.push(d);
 			positive ||= d > epsilon;
@@ -97,9 +111,9 @@ function partition(
 		}
 		const f: Point3D[] = [],
 			b: Point3D[] = [];
-		for (let i = 0; i < face.vertices.length; i++) {
-			const p = face.vertices[i]!,
-				q = face.vertices[(i + 1) % face.vertices.length]!;
+		for (let i = 0; i < vertices.length; i++) {
+			const p = vertices[i]!,
+				q = vertices[(i + 1) % vertices.length]!;
 			const d = distances[i]!,
 				e = distances[(i + 1) % distances.length]!;
 			if (d >= -epsilon) f.push(p);
@@ -119,15 +133,19 @@ function partition(
 			}
 		}
 		if (f.length >= 3) {
-			const split = { ...face, vertices: f };
+			const split = face((_vertices, fill, layer, doubleSided) =>
+				styledFace(f, fill, layer, doubleSided)
+			);
 			front.push(split);
 		}
 		if (b.length >= 3) {
-			const split = { ...face, vertices: b };
+			const split = face((_vertices, fill, layer, doubleSided) =>
+				styledFace(b, fill, layer, doubleSided)
+			);
 			back.push(split);
 		}
 	}
-	return { front, back, coplanar };
+	return [front, back, coplanar];
 }
 
 /** Splitting crossing polygons is essential: a single average depth cannot order them. */
@@ -149,7 +167,7 @@ function build(input: readonly StyledFace3D[]): FaceBSP | null {
 			let min = Infinity,
 				max = -Infinity;
 			for (const face of faces)
-				for (const p of face.vertices) {
+				for (const p of faceVertices(face)) {
 					min = Math.min(min, p[axis]![0]);
 					max = Math.max(max, p[axis]![0]);
 				}
@@ -172,7 +190,7 @@ function build(input: readonly StyledFace3D[]): FaceBSP | null {
 		for (let j = 0; j < faces.length; j += sampleStride) {
 			let positive = false,
 				negative = false;
-			for (const vertex of faces[j]!.vertices) {
+			for (const vertex of faceVertices(faces[j]!)) {
 				const d = distance(vertex, plane);
 				positive ||= d > epsilon;
 				negative ||= d < -epsilon;
@@ -187,13 +205,10 @@ function build(input: readonly StyledFace3D[]): FaceBSP | null {
 			bestScore = score;
 		}
 	}
-	const { front, back, coplanar } = partition(faces, best);
-	return {
-		plane: best,
-		faces: coplanar,
-		front: build(front),
-		back: build(back),
-	};
+	const [front, back, coplanar] = partition(faces, best);
+	const ahead = build(front),
+		behind = build(back);
+	return use => use(best, coplanar, ahead, behind);
 }
 
 export type FaceBSPSlot = 'static' | 'coplanar' | 'front' | 'back' | 'root';
@@ -211,10 +226,12 @@ export function visitFaceBSP(
 ): void {
 	function sorted(node: FaceBSP | null, result: StyledFace3D[]): void {
 		if (!node) return;
-		const front = distance(eye, node.plane) >= 0;
-		sorted(front ? node.back : node.front, result);
-		result.push(...node.faces);
-		sorted(front ? node.front : node.back, result);
+		node((plane, faces, ahead, behind) => {
+			const front = distance(eye, plane) >= 0;
+			sorted(front ? behind : ahead, result);
+			result.push(...faces);
+			sorted(front ? ahead : behind, result);
+		});
 	}
 	function visit(
 		node: FaceBSP | null,
@@ -230,22 +247,24 @@ export function visitFaceBSP(
 			}
 			return;
 		}
-		const parts = partition(extra, node.plane);
-		const front = distance(eye, node.plane) >= 0;
-		visit(
-			front ? node.back : node.front,
-			front ? parts.back : parts.front,
-			node,
-			front ? 'back' : 'front'
-		);
-		if (node.faces.length) emit(node, 'static', node.faces);
-		if (parts.coplanar.length) emit(node, 'coplanar', parts.coplanar);
-		visit(
-			front ? node.front : node.back,
-			front ? parts.front : parts.back,
-			node,
-			front ? 'front' : 'back'
-		);
+		node((plane, faces, ahead, behind) => {
+			const [frontFaces, backFaces, coplanar] = partition(extra, plane);
+			const front = distance(eye, plane) >= 0;
+			visit(
+				front ? behind : ahead,
+				front ? backFaces : frontFaces,
+				node,
+				front ? 'back' : 'front'
+			);
+			if (faces.length) emit(node, 'static', faces);
+			if (coplanar.length) emit(node, 'coplanar', coplanar);
+			visit(
+				front ? ahead : behind,
+				front ? frontFaces : backFaces,
+				node,
+				front ? 'front' : 'back'
+			);
+		});
 	}
 	visit(tree, moving, null, 'root');
 }

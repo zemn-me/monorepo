@@ -8,6 +8,8 @@ import {
 	visibleFaces,
 } from '#root/ts/math/face_bsp.js';
 import {
+	faceLayer,
+	faceVertices,
 	perspective,
 	type RenderedFace2D,
 	renderFaces,
@@ -26,7 +28,7 @@ import { unwrap } from '#root/ts/result/result.js';
 function layers(faces: readonly StyledFace3D[]): Map<number, StyledFace3D[]> {
 	const result = new Map<number, StyledFace3D[]>();
 	for (const face of faces) {
-		const key = face.layer ?? 0;
+		const key = faceLayer(face);
 		let layer = result.get(key);
 		if (!layer) {
 			layer = [];
@@ -100,7 +102,7 @@ for (let i = 0; i < 100; i++) {
 	}
 }
 const matrixSamples: number[] = [];
-const vertices = buildActors(park).flatMap(face => face.vertices);
+const vertices = buildActors(park).flatMap(face => faceVertices(face));
 const transform = unwrap(cameraSpaceTransformFromPose(pose));
 let guard = 0;
 for (let i = 0; i < 100; i++) {

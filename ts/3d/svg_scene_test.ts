@@ -4,7 +4,10 @@ import { expect, test } from '@jest/globals';
 import { type OrbitCamera } from '#root/ts/3d/low_poly.js';
 import { createSVGRenderer } from '#root/ts/3d/svg_scene.js';
 import { point } from '#root/ts/math/cartesian.js';
-import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
+import {
+	type StyledFace3D,
+	styledFace,
+} from '#root/ts/math/wireframe_render.js';
 
 const camera: OrbitCamera = {
 	yaw: 0,
@@ -13,16 +16,17 @@ const camera: OrbitCamera = {
 	target: [0, 0, 0],
 };
 function quad(fill: string, depth: number): StyledFace3D {
-	return {
-		fill,
-		doubleSided: true,
-		vertices: [
+	return styledFace(
+		[
 			point<3>(-2, -1, depth),
 			point<3>(2, -1, depth),
 			point<3>(2, 1, depth),
 			point<3>(-2, 1, depth),
 		],
-	};
+		fill,
+		0,
+		true
+	);
 }
 
 test('moving geometry keeps the static SVG paths intact and preserves front/back paint order', () => {

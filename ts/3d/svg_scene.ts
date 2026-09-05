@@ -7,8 +7,10 @@ import {
 	visitFaceBSP,
 } from '#root/ts/math/face_bsp.js';
 import {
+	faceLayer,
 	perspective,
 	type RenderedFace2D,
+	renderedSource,
 	renderFaces,
 	type StyledFace3D,
 } from '#root/ts/math/wireframe_render.js';
@@ -74,7 +76,7 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 	function paint(
 		entry: PaintSlot,
 		faces: readonly StyledFace3D[],
-		rendered: ReadonlyMap<StyledFace3D | undefined, RenderedFace2D>
+		rendered: ReadonlyMap<StyledFace3D, RenderedFace2D>
 	) {
 		// Adjacent fragments with the same paint can share one compound SVG path.
 		// Never merge across another color: that would discard occlusion ordering.
@@ -82,10 +84,11 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 		for (const face of faces) {
 			const projected = rendered.get(face);
 			if (!projected) continue;
-			const previous = runs.at(-1);
-			if (previous?.fill === projected.fill)
-				previous.path += projected.path;
-			else runs.push({ path: projected.path, fill: projected.fill });
+			projected((_source, path, fill) => {
+				const previous = runs.at(-1);
+				if (previous?.fill === fill) previous.path += path;
+				else runs.push({ path, fill });
+			});
 		}
 		for (let i = 0; i < runs.length; i++) {
 			const face = runs[i]!;
@@ -172,7 +175,9 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 					{ preserveOrder: true, cache: projections }
 				)
 			);
-			const bySource = new Map(rendered.map(face => [face.source, face]));
+			const bySource = new Map(
+				rendered.map(face => [renderedSource(face), face])
+			);
 			for (const batch of changed)
 				paint(batch.entry, batch.faces, bySource);
 			for (const entry of previous)
@@ -203,7 +208,7 @@ export function createSVGRenderer(svg: SVGSVGElement) {
 function byLayer(faces: readonly StyledFace3D[]): Map<number, StyledFace3D[]> {
 	const layers = new Map<number, StyledFace3D[]>();
 	for (const face of faces) {
-		const layer = face.layer ?? 0;
+		const layer = faceLayer(face);
 		let group = layers.get(layer);
 		if (!group) {
 			group = [];

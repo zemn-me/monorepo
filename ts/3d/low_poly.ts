@@ -6,7 +6,10 @@ import {
 	y as py,
 	z as pz,
 } from '#root/ts/math/cartesian.js';
-import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
+import {
+	type StyledFace3D,
+	styledFace,
+} from '#root/ts/math/wireframe_render.js';
 /** Small, flat-shaded meshes for interactive illustrations. Coordinates are Y-up. */
 export type Vec3 = readonly [number, number, number];
 export type RGB = readonly [number, number, number];
@@ -169,11 +172,7 @@ export function appendMesh(
 						.padStart(2, '0')
 				)
 				.join('');
-		target.push({
-			vertices,
-			fill,
-			layer: transform.layer ?? 1000,
-		});
+		target.push(styledFace(vertices, fill, transform.layer ?? 1000));
 	}
 }
 

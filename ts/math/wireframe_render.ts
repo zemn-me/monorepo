@@ -185,21 +185,62 @@ export function renderSegments(
 }
 
 /** Filled faces share the same camera and projection as wireframe segments. */
-export interface StyledFace3D {
-	readonly vertices: readonly Point3D[];
-	readonly fill: string;
-	/** Explicit layers are useful for terrain decals; ordinary solids share a layer. */
-	readonly layer?: number;
-	readonly doubleSided?: boolean;
+export type StyledFace3D = <R>(
+	use: (
+		vertices: readonly Point3D[],
+		fill: string,
+		layer: number,
+		doubleSided: boolean
+	) => R
+) => R;
+
+/** Church-encoded product: field names are local bindings, never runtime keys.
+ * Vertices must remain immutable so geometry/projection caches stay valid.
+ */
+export function styledFace(
+	vertices: readonly Point3D[],
+	fill: string,
+	layer = 0,
+	doubleSided = false
+): StyledFace3D {
+	return use => use(vertices, fill, layer, doubleSided);
 }
 
-export interface RenderedFace2D {
-	readonly source?: StyledFace3D;
-	readonly path: string;
-	readonly fill: string;
-	readonly depth: number;
-	readonly layer: number;
+export const faceVertices = (face: StyledFace3D): readonly Point3D[] =>
+	face(vertices => vertices);
+export const faceFill = (face: StyledFace3D): string =>
+	face((_vertices, fill) => fill);
+export const faceLayer = (face: StyledFace3D): number =>
+	face((_vertices, _fill, layer) => layer);
+export const faceDoubleSided = (face: StyledFace3D): boolean =>
+	face((_vertices, _fill, _layer, doubleSided) => doubleSided);
+
+export type RenderedFace2D = <R>(
+	use: (
+		source: StyledFace3D,
+		path: string,
+		fill: string,
+		depth: number,
+		layer: number
+	) => R
+) => R;
+
+function renderedFace(
+	source: StyledFace3D,
+	path: string,
+	fill: string,
+	depth: number,
+	layer: number
+): RenderedFace2D {
+	return use => use(source, path, fill, depth, layer);
 }
+
+export const renderedSource = (face: RenderedFace2D): StyledFace3D =>
+	face(source => source);
+export const renderedPath = (face: RenderedFace2D): string =>
+	face((_source, path) => path);
+export const renderedFill = (face: RenderedFace2D): string =>
+	face((_source, _path, fill) => fill);
 
 export function clipPolygonToDepth(
 	vertices: readonly Point3D[],
@@ -231,7 +272,12 @@ export function compareRenderedFaces(
 	a: RenderedFace2D,
 	b: RenderedFace2D
 ): number {
-	return a.layer - b.layer || b.depth - a.depth;
+	return a((_source, _path, _fill, depth, layer) =>
+		b(
+			(_source, _path, _fill, otherDepth, otherLayer) =>
+				layer - otherLayer || otherDepth - depth
+		)
+	);
 }
 
 /** Painter's ordering for small convex meshes, with clipping and back-face culling. */
@@ -257,8 +303,9 @@ export function renderFaces(
 				continue;
 			}
 			options.cache?.set(face, null);
-			if (face.vertices.length < 3) continue;
-			const vertices = face.vertices.map(vertex => {
+			const worldVertices = faceVertices(face);
+			if (worldVertices.length < 3) continue;
+			const vertices = worldVertices.map(vertex => {
 				let cached = transformed.get(vertex);
 				if (!cached) {
 					cached = transform(vertex);
@@ -283,7 +330,7 @@ export function renderFaces(
 					(uz * vx - ux * vz) * y(a) +
 					(ux * vy - uy * vx) * z(a);
 			}
-			if (!face.doubleSided && facing >= -1e-12) continue;
+			if (!faceDoubleSided(face) && facing >= -1e-12) continue;
 			let clipped = vertices;
 			if (clipped.some(p => z(p) < projection.nearPlane))
 				clipped = clipPolygonToDepth(
@@ -322,14 +369,13 @@ export function renderFaces(
 				top > projection.height
 			)
 				continue;
-			const result = {
-				source: face,
-				path: path + 'Z',
-				fill: face.fill,
-				depth:
-					clipped.reduce((sum, p) => sum + z(p), 0) / clipped.length,
-				layer: face.layer ?? 0,
-			};
+			const result = renderedFace(
+				face,
+				path + 'Z',
+				faceFill(face),
+				clipped.reduce((sum, p) => sum + z(p), 0) / clipped.length,
+				faceLayer(face)
+			);
 			rendered.push(result);
 			options.cache?.set(face, result);
 		}

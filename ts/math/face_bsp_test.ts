@@ -3,33 +3,41 @@ import { describe, expect, test } from '@jest/globals';
 import { type Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import { buildFaceBSP, orderFaceBSP } from '#root/ts/math/face_bsp.js';
 import {
+	faceDoubleSided,
+	faceFill,
+	faceLayer,
+	faceVertices,
 	perspective,
+	renderedFill,
 	renderFaces,
 	type StyledFace3D,
+	styledFace,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
 
 const crossing: StyledFace3D[] = [
-	{
-		fill: 'red',
-		doubleSided: true,
-		vertices: [
+	styledFace(
+		[
 			point<3>(-2, -2, 3),
 			point<3>(2, -2, 7),
 			point<3>(2, 2, 7),
 			point<3>(-2, 2, 3),
 		],
-	},
-	{
-		fill: 'blue',
-		doubleSided: true,
-		vertices: [
+		'red',
+		7,
+		true
+	),
+	styledFace(
+		[
 			point<3>(-2, -2, 7),
 			point<3>(2, -2, 3),
 			point<3>(2, 2, 3),
 			point<3>(-2, 2, 7),
 		],
-	},
+		'blue',
+		7,
+		true
+	),
 ];
 
 function contains(
@@ -53,11 +61,15 @@ describe('SVG polygon ordering', () => {
 		const eye = point<3>(0, 0, 0);
 		const ordered = orderFaceBSP(buildFaceBSP(crossing), eye);
 		expect(ordered.length).toBeGreaterThan(crossing.length);
+		for (const fragment of ordered) {
+			expect(faceLayer(fragment)).toBe(7);
+			expect(faceDoubleSided(fragment)).toBe(true);
+		}
 		for (const px of [-0.3, -0.1, 0.1, 0.3]) {
 			const painted = ordered
-				.filter(face => contains(face.vertices, px, 0))
+				.filter(face => contains(faceVertices(face), px, 0))
 				.at(-1);
-			expect(painted?.fill).toBe(px < 0 ? 'red' : 'blue');
+			expect(painted && faceFill(painted)).toBe(px < 0 ? 'red' : 'blue');
 		}
 		const rendered = unwrap(
 			renderFaces(
@@ -67,58 +79,54 @@ describe('SVG polygon ordering', () => {
 				{ preserveOrder: true }
 			)
 		);
-		expect(rendered.map(face => face.fill)).toEqual(
-			ordered.map(face => face.fill)
-		);
+		expect(rendered.map(renderedFill)).toEqual(ordered.map(faceFill));
 	});
 
 	test('moving geometry is split against the static scene without mutating its tree', () => {
 		const eye = point<3>(0, 0, 0);
 		const tree = buildFaceBSP(crossing.slice(0, 1));
-		const before = JSON.stringify(tree);
+		const before = orderFaceBSP(tree, eye);
 		const ordered = orderFaceBSP(tree, eye, crossing.slice(1));
-		expect(
-			ordered.filter(face => contains(face.vertices, -0.2, 0)).at(-1)
-				?.fill
-		).toBe('red');
-		expect(
-			ordered.filter(face => contains(face.vertices, 0.2, 0)).at(-1)?.fill
-		).toBe('blue');
-		expect(JSON.stringify(tree)).toBe(before);
+		for (const px of [-0.2, 0.2]) {
+			const painted = ordered
+				.filter(face => contains(faceVertices(face), px, 0))
+				.at(-1)!;
+			expect(faceFill(painted)).toBe(px < 0 ? 'red' : 'blue');
+		}
+		const after = orderFaceBSP(tree, eye);
+		expect(after).toEqual(before);
+		expect(after[0]).toBe(before[0]);
 	});
 
 	test('reverses traversal behind the surfaces and handles coplanar and degenerate faces', () => {
-		const near = {
-			fill: 'near',
-			vertices: [
-				point<3>(-1, -1, 2),
-				point<3>(1, -1, 2),
-				point<3>(0, 1, 2),
-			],
-		};
-		const far = {
-			...near,
-			fill: 'far',
-			vertices: near.vertices.map(p => point<3>(x(p), y(p), 4)),
-		};
+		const vertices = [
+			point<3>(-1, -1, 2),
+			point<3>(1, -1, 2),
+			point<3>(0, 1, 2),
+		];
+		const near = styledFace(vertices, 'near');
+		const far = styledFace(
+			vertices.map(p => point<3>(x(p), y(p), 4)),
+			'far'
+		);
 		const tree = buildFaceBSP([
 			near,
 			far,
-			{ ...near, fill: 'decal' },
-			{
-				fill: 'empty',
-				vertices: [
-					point<3>(0, 0, 0),
-					point<3>(0, 0, 0),
-					point<3>(0, 0, 0),
-				],
-			},
+			styledFace(vertices, 'decal'),
+			styledFace(
+				[point<3>(0, 0, 0), point<3>(0, 0, 0), point<3>(0, 0, 0)],
+				'empty'
+			),
 		]);
-		expect(
-			orderFaceBSP(tree, point<3>(0, 0, 0)).map(face => face.fill)
-		).toEqual(['far', 'near', 'decal']);
-		expect(
-			orderFaceBSP(tree, point<3>(0, 0, 6)).map(face => face.fill)
-		).toEqual(['near', 'decal', 'far']);
+		expect(orderFaceBSP(tree, point<3>(0, 0, 0)).map(faceFill)).toEqual([
+			'far',
+			'near',
+			'decal',
+		]);
+		expect(orderFaceBSP(tree, point<3>(0, 0, 6)).map(faceFill)).toEqual([
+			'near',
+			'decal',
+			'far',
+		]);
 	});
 });
