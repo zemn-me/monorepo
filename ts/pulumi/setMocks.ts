@@ -1,5 +1,6 @@
 import * as pulumi from '@pulumi/pulumi';
 
+export const mockCalls: pulumi.runtime.MockCallArgs[] = [];
 export const mockResources: pulumi.runtime.MockResourceArgs[] = [];
 
 void pulumi.runtime.setMocks({
@@ -21,5 +22,8 @@ void pulumi.runtime.setMocks({
 	},
 
 	// Mock function calls and return whatever input properties were provided.
-	call: (args: pulumi.runtime.MockCallArgs) => args.inputs,
+	call: (args: pulumi.runtime.MockCallArgs) => {
+		mockCalls.push(args);
+		return args.inputs;
+	},
 });

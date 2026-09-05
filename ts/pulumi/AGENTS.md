@@ -22,4 +22,4 @@ Use `route53domains.Domain` to purchase a new domain; `RegisteredDomain` only ad
 
 Deploy infrastructure through the PR/merge workflow and let CI run Pulumi with its existing credentials. Do not ask for a local Pulumi login to deploy changes.
 
-New domain sites need staging under an already delegated zone (for example `<site>.staging.zemn.me`): merge-queue staging runs before production can purchase the new domain.
+Bootstrap new domain sites under an already delegated staging zone (for example `<site>.staging.zemn.me`), because merge-queue staging runs before production purchases the domain. After registration succeeds, move staging to `staging.<domain>` in the production-owned zone; staging must not own the registration.

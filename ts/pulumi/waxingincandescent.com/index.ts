@@ -22,9 +22,9 @@ export class Component extends Pulumi.ComponentResource {
 		const domainName = 'waxingincandescent.com';
 		let zoneId: Pulumi.Input<string>;
 		if (args.staging) {
-			// Merge-queue staging must work before production buys the domain.
+			// Production owns the registration and zone; staging only adds records.
 			zoneId = aws.route53.getZoneOutput(
-				{ zoneId: 'ZG99IJ8QHXTSI' },
+				{ name: `${domainName}.`, privateZone: false },
 				{ parent: this }
 			).zoneId;
 		} else {
@@ -72,9 +72,7 @@ export class Component extends Pulumi.ComponentResource {
 				directory,
 				index: `${directory}/index.html`,
 				notFound: `${directory}/404.html`,
-				domain: args.staging
-					? 'waxingincandescent.staging.zemn.me'
-					: domainName,
+				domain: args.staging ? `staging.${domainName}` : domainName,
 				zoneId,
 				noIndex: args.staging,
 				noCostAllocationTag: true,
