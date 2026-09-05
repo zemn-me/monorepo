@@ -21,7 +21,10 @@ import {
 	buildActors,
 	buildParkMesh,
 } from '#root/ts/pulumi/eggsfordogs.com/app/park_mesh.js';
-import { createPark } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
+import {
+	createPark,
+	dogCollisionRadius,
+} from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 import { unwrap } from '#root/ts/result/result.js';
 
 type Vertex = readonly [number, number, number];
@@ -145,4 +148,51 @@ test('the complete park can merge moving dogs into cached scenery without invali
 	expect(rendered.length).toBeGreaterThan(1000);
 	for (const face of rendered)
 		expect(renderedPath(face)).not.toMatch(/NaN|Infinity/);
+});
+
+test('collision circles enclose the animated dog mesh through a full turn and tail wag', () => {
+	const park = createPark();
+	let maximum = 0;
+	for (let frame = 0; frame < 36; frame++) {
+		park.time = frame / 10;
+		park.dogs = [
+			{
+				x: 0,
+				z: 0,
+				heading: (frame * Math.PI) / 18,
+				moving: true,
+				joy: frame % 2 ? 1.2 : 0,
+			},
+		];
+		for (const face of buildActors(park))
+			for (const p of faceVertices(face))
+				maximum = Math.max(maximum, Math.hypot(x(p), z(p)));
+	}
+	expect(maximum).toBeLessThanOrEqual(dogCollisionRadius(0));
+});
+
+test('the tail wags from a fixed lower attachment with its tip above the rump', () => {
+	const park = createPark();
+	park.dogs = [{ x: 0, z: 0, heading: 0, moving: false, joy: 0 }];
+	const tips: number[] = [];
+	for (const time of [Math.PI / 20, (3 * Math.PI) / 20]) {
+		park.time = time;
+		const vertices = buildActors(park).flatMap(faceVertices);
+		expect(
+			vertices.some(
+				p =>
+					Math.abs(x(p)) < 1e-9 &&
+					Math.abs(y(p) - 0.79) < 1e-9 &&
+					Math.abs(z(p) + 0.64) < 1e-9
+			)
+		).toBe(true);
+		const rear = vertices.filter(p => Math.abs(z(p) + 0.64) < 1e-9);
+		const tip = rear.reduce((highest, p) =>
+			y(p) > y(highest) ? p : highest
+		);
+		expect(y(tip)).toBeGreaterThan(1.29);
+		expect(Math.abs(x(tip))).toBeGreaterThan(0.25);
+		tips.push(x(tip));
+	}
+	expect(tips[0]! * tips[1]!).toBeLessThan(0);
 });

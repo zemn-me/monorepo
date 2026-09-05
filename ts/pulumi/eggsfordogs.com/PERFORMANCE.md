@@ -81,3 +81,66 @@ The final isolated production run measured:
 | Orbiting | 13.2 | 25.5 | 99.5 ms | 57.0 ms | 17,288 | 10,222 |
 
 Normal play reaches the 30-update average target in this sample; it is not a guarantee of uniform 33 ms presentation. Continuous camera movement remains below 30 and varies with machine load (other optimization runs measured around 22). The benchmark observes SVG DOM updates, not GPU presentation. Running both browser benchmarks alongside the regression suite lowered throughput, so those concurrent timings were used only as functional checks, not the final comparison.
+
+## Higher throughput without reducing visual detail
+
+A follow-up to `e8a839095b` raises the animation ceiling from 30 to 60 updates per second, while preserving the meshes, lighting quantization, coordinate precision, SVG renderer, and Church products. The sorter now validates input planes once at its entry points, calculates bounds for all three axes in one pass, stops classification once both sides are known, and allocates interpolation distances only for crossing polygons. The SVG root viewBox is updated only when its dimensions change.
+
+The CPU benchmark now hashes projected path strings and colors in paint order across its 80 fixed-step samples, outside the measured interval. The original and optimized sorters produced the identical SHA-256 digest `56026f8b242763ca9834f90a6c2fa0d281834498a09ba147e8ff8815878c8c12`. Both retained 2,213 world faces, 2,444 actor faces, 5,928 static fragments, and a median 5,723 projected polygons. This comparison covers the benchmark trajectory; the existing multi-angle occlusion and SVG browser regressions provide additional coverage.
+
+In the paired CPU samples, median sorting fell from 10.69 to 8.96 ms and total geometry-to-SVG time from 15.86 to 14.23 ms. Total p95 was noisy (27.78 versus 33.60 ms), so this does not establish an improvement in every slow frame. Matrix-only transformation was approximately 0.14 ms in the initial profile.
+
+Isolated production benchmark results at 1200 × 800, with WebGL disabled:
+
+| Scenario | Original updates/s | Follow-up updates/s | Original p95 interval | Follow-up p95 interval |
+| --- | ---: | ---: | ---: | ---: |
+| Wandering | 29.7 | 30.8–33.4 | 47.3 ms | 42.9–48.3 ms |
+| Gathering | 30.0 | 41.3–42.2 | 51.6 ms | 35.6–37.2 ms |
+| Orbiting | 19.3 | 19.0–19.2 | 75.7 ms | 72.5–83.1 ms |
+
+The follow-up range spans runs before and after avoiding the redundant viewBox write; that small change did not demonstrate a speed gain. These measurements show a clear gathering gain, a modest wandering gain, and no demonstrated orbiting gain. A 60-update ceiling is not a claim of 60 FPS. Live simulation and machine load vary; these remain DOM-update measurements rather than compositor presentation telemetry.
+
+Chrome Performance counters on the original production build measured 3.80 seconds of script and 0.78 seconds of style/layout work during 6.06 seconds of wandering. Orbiting used 4.11 seconds of script and 1.10 seconds of style/layout in 6.06 seconds. Other browser tasks consumed roughly 0.82–0.84 seconds; these counters do not isolate paint or garbage collection. Surface sorting/splitting and SVG updates remain the main optimization opportunities. A trial of cached axis-aligned face bounds was slower and was not retained.
+
+## Collision-aware dogs
+
+Dogs now have ground-plane collision circles scaled with their meshes, steering to pass one another, and positional separation after movement. Initial positions and gathering targets leave room for all six dogs. Nearby eggs share one retriever so a ring of solid dogs cannot block every dog from reaching a treat. Pickup is checked after separation. The renderer still handles intersecting surfaces within each dog and ordinary occlusion against the park.
+
+The fixed-step CPU benchmark accepts `wander`, `gather`, or `crowd` (twelve eggs at the center). For example:
+
+```sh
+./sh/bin/bazel run //ts/pulumi/eggsfordogs.com/app:park_bench -- crowd
+```
+
+Compared with the higher-throughput implementation immediately before collisions:
+
+| Scenario | Sorting before | Sorting with collisions | Geometry-to-SVG before | Geometry-to-SVG with collisions |
+| --- | ---: | ---: | ---: | ---: |
+| Wandering | 8.38 ms | 7.31 ms | 13.20 ms | 11.52 ms |
+| Gathering | 7.73 ms | 6.98 ms | 12.04 ms | 10.86 ms |
+| Crowded treats | 8.60 ms | 7.29 ms | 13.67 ms | 11.59 ms |
+
+Simulation medians rose from 0.009–0.011 ms to 0.012–0.016 ms. Median projected polygon count changed from 5,847 to 5,637 in the crowded-treat case; wandering and gathering counts increased slightly. Trajectories differ because of the new spacing and target assignments, so these samples measure the complete movement change. Mesh detail, colors, projection precision, and SVG ordering are retained.
+
+A production browser run observed 36.1 updates/s wandering, 45.3 gathering, and 22.6 orbiting, with p95 update intervals of 39.1, 34.2, and 62.6 ms respectively. This follows the same 1200 × 800, WebGL-disabled protocol; machine load and simulation timing still affect comparisons. The preceding throughput-only runs measured 30.8–33.4, 41.3–42.2, and 19.0–19.2 updates/s respectively.
+
+Regressions cover collision clearance throughout gathering and clustered retrieval at 20 and 60 simulation steps/s, coincident dogs at the island boundary, deterministic recovery without input mutation, complete retrieval of twelve boundary treats, and collision-circle containment of the animated dog mesh. All 83 selected SVG/Eggs for Dogs checks passed, including production gameplay.
+
+## Rigid BSP and group-bounds experiment
+
+A subsequent experiment retained Church-encoded geometry and BSP nodes, used Church-encoded group metadata in weak maps, and tried reusing local-space BSPs under rigid transforms. None of the variants demonstrated a CPU pipeline improvement, so their implementation was removed. The renderer, collision handling, tail fix, model detail, and SVG output from before this experiment are retained.
+
+The same deterministic wandering benchmark ran with 20 warmup frames and 80 measured frames. These are separate local runs, not browser presentation measurements; the baseline was repeated after the experiments to check for machine-load drift.
+
+| Variant | Median geometry ms | Median ordering ms | Median geometry-to-SVG ms | Median projected polygons |
+| --- | ---: | ---: | ---: | ---: |
+| Starting renderer | 0.70 | 9.04 | 14.56 | 5,769 |
+| Primitive bounds and cached local face order | 1.12 | 9.34 | 15.08 | 5,769 |
+| Pre-split rigid torso/head assembly | 3.43 | 9.70 | 19.19 | 6,859 |
+| Cached assembly planes, splitting visible subsets lazily | 1.07 | 9.34 | 16.15 | 6,409 |
+| Bounded cache keyed by relevant source-face subsets | 1.30 | 13.54 | 19.97 | 5,779 |
+| Restored renderer, two repeats | 0.65–0.67 | 8.50–8.67 | 13.68–13.70 | 5,769 |
+
+Primitive grouping added instance metadata and order bookkeeping without reducing fragment count. Pre-splitting the rigid assemblies increased actor input faces from 2,444 to 5,552, and both full-assembly approaches produced more projected fragments: cached planes made cuts that the frame-specific sorter could otherwise avoid. The source-subset cache limited that fragmentation but its construction and lookup costs were higher. This does not rule out a different hierarchical renderer; it shows that adding these caches inside the existing flat static-tree insertion pipeline did not pay off.
+
+The starting and both restored runs produced the identical paint-order/path/color digest `130fcd82fc4079fba3770ab7999381ae6101e523ad00dbea096ca828d73637f3`. The experimental variants changed fragmentation or ordering and therefore did not preserve that digest. No browser FPS gain is claimed for them.

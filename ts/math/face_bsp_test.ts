@@ -133,6 +133,20 @@ describe('SVG polygon ordering', () => {
 			'#ff0000',
 		]);
 	});
+	test('ignores degenerate moving faces before entering the static tree', () => {
+		const eye = point<3>(0, 0, 0);
+		const tree = buildFaceBSP(crossing.slice(0, 1));
+		const pointOnPlane = point<3>(0, 0, 5);
+		const degenerate = styledFace(
+			[pointOnPlane, pointOnPlane, pointOnPlane],
+			'empty'
+		);
+		expect(orderFaceBSP(tree, eye, [degenerate])).toEqual(
+			orderFaceBSP(tree, eye)
+		);
+		expect(orderFaceBSP(null, eye, [degenerate])).toEqual([]);
+	});
+
 	test('reverses traversal behind the surfaces and handles coplanar and degenerate faces', () => {
 		const vertices = [
 			point<3>(-1, -1, 2),

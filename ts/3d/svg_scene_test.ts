@@ -31,9 +31,11 @@ function quad(fill: string, depth: number): StyledFace3D {
 
 test('moving geometry keeps the static SVG paths intact and preserves front/back paint order', () => {
 	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	let width = 800,
+		height = 600;
 	Object.defineProperties(svg, {
-		clientWidth: { value: 800 },
-		clientHeight: { value: 600 },
+		clientWidth: { get: () => width },
+		clientHeight: { get: () => height },
 	});
 	document.body.append(svg);
 	const renderer = createSVGRenderer(svg);
@@ -58,12 +60,19 @@ test('moving geometry keeps the static SVG paths intact and preserves front/back
 	expect(
 		observer.takeRecords().filter(record => record.target === lawn)
 	).toHaveLength(0);
-	observer.disconnect();
 	// Camera/theme changes must still invalidate static projections and paint.
 	renderer.render({ ...camera, yaw: 0.5 }, []);
 	expect(svg.querySelector('path[fill="green"]')?.getAttribute('d')).not.toBe(
 		outline
 	);
+	expect(
+		observer.takeRecords().filter(record => record.target === svg)
+	).toHaveLength(0);
+	width = 640;
+	height = 480;
+	renderer.render(camera, []);
+	expect(svg.getAttribute('viewBox')).toBe('0 0 640 480');
+	observer.disconnect();
 	renderer.setWorld([quad('blue', 0)]);
 	renderer.render(camera, []);
 	expect(

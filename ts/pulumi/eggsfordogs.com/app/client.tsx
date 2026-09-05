@@ -150,12 +150,12 @@ export function EggDogYardClient() {
 				return;
 			}
 			// Keep a deadline independent of simulation time; timestamp rounding must
-			// not turn the 30 fps target into alternating 33/50 ms frames.
+			// not skip a refresh when targeting 60 updates per second.
 			if (now >= nextDraw - 0.5)
 				nextDraw =
-					nextDraw && now - nextDraw < 1000 / 30
-						? nextDraw + 1000 / 30
-						: now + 1000 / 30;
+					nextDraw && now - nextDraw < 1000 / 60
+						? nextDraw + 1000 / 60
+						: now + 1000 / 60;
 			const dt = previous ? Math.min((now - previous) / 1000, 0.05) : 0;
 			previous = now;
 			if (!settingsRef.current.paused && !document.hidden) {

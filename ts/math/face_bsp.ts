@@ -91,14 +91,13 @@ function partition(
 		coplanar: StyledFace3D[] = [];
 	for (const face of faces) {
 		const vertices = faceVertices(face);
-		const distances: number[] = [];
 		let positive = false,
 			negative = false;
 		for (const vertex of vertices) {
 			const d = distance(vertex, plane);
-			distances.push(d);
 			positive ||= d > epsilon;
 			negative ||= d < -epsilon;
+			if (positive && negative) break;
 		}
 		if (!positive && !negative) {
 			coplanar.push(face);
@@ -112,6 +111,8 @@ function partition(
 			back.push(face);
 			continue;
 		}
+		// Only crossing polygons need per-vertex distances for interpolation.
+		const distances = vertices.map(vertex => distance(vertex, plane));
 		const f: Point3D[] = [],
 			b: Point3D[] = [];
 		for (let i = 0; i < vertices.length; i++) {
@@ -156,15 +157,15 @@ function partition(
 
 /** Splitting crossing polygons is essential: a single average depth cannot order them. */
 export function buildFaceBSP(input: readonly StyledFace3D[]): FaceBSP | null {
-	return build(input);
+	return build(input.filter(face => facePlane(face) !== null));
 }
 
+// Entry points reject degenerate faces once; partitioning preserves valid planes.
 function build(
-	input: readonly StyledFace3D[],
+	faces: readonly StyledFace3D[],
 	eye?: Point3D,
 	output?: StyledFace3D[]
 ): FaceBSP | null {
-	const faces = input.filter(face => facePlane(face) !== null);
 	if (!faces.length) return null;
 	// Equal opaque color cannot occlude itself. Keep it as one batch until a foreign
 	// surface enters this leaf, then resolve their intersections together.
@@ -188,21 +189,26 @@ function build(
 	const sampleStride = Math.max(1, Math.floor(faces.length / 32));
 	const candidates: Plane[] = [];
 	if (faces.length > 32) {
-		for (let axis = 0; axis < 3; axis++) {
-			let min = Infinity,
-				max = -Infinity;
-			for (const face of faces)
-				for (const p of faceVertices(face)) {
-					min = Math.min(min, p[axis]![0]);
-					max = Math.max(max, p[axis]![0]);
-				}
-			candidates.push([
-				axis === 0 ? 1 : 0,
-				axis === 1 ? 1 : 0,
-				axis === 2 ? 1 : 0,
-				(min + max) / 2,
-			]);
-		}
+		let minX = Infinity,
+			minY = Infinity,
+			minZ = Infinity;
+		let maxX = -Infinity,
+			maxY = -Infinity,
+			maxZ = -Infinity;
+		for (const face of faces)
+			for (const p of faceVertices(face)) {
+				minX = Math.min(minX, x(p));
+				minY = Math.min(minY, y(p));
+				minZ = Math.min(minZ, z(p));
+				maxX = Math.max(maxX, x(p));
+				maxY = Math.max(maxY, y(p));
+				maxZ = Math.max(maxZ, z(p));
+			}
+		candidates.push(
+			[1, 0, 0, (minX + maxX) / 2],
+			[0, 1, 0, (minY + maxY) / 2],
+			[0, 0, 1, (minZ + maxZ) / 2]
+		);
 	}
 	for (let i = 0; i < faces.length; i += stride) {
 		const plane = facePlane(faces[i]!);
@@ -219,6 +225,7 @@ function build(
 				const d = distance(vertex, plane);
 				positive ||= d > epsilon;
 				negative ||= d < -epsilon;
+				if (positive && negative) break;
 			}
 			if (positive) front++;
 			if (negative) back++;
@@ -300,7 +307,12 @@ export function visitFaceBSP(
 			);
 		});
 	}
-	visit(tree, moving, null, 'root');
+	visit(
+		tree,
+		moving.filter(face => facePlane(face) !== null),
+		null,
+		'root'
+	);
 }
 
 /** Insert moving faces into a cached static tree, then paint from far to near. */

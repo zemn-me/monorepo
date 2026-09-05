@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
 import { orbitPose } from '#root/ts/3d/low_poly.js';
@@ -20,8 +21,10 @@ import {
 	buildParkMesh,
 } from '#root/ts/pulumi/eggsfordogs.com/app/park_mesh.js';
 import {
+	callPack,
 	createPark,
 	stepPark,
+	tossEgg,
 } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 import { unwrap } from '#root/ts/result/result.js';
 
@@ -61,8 +64,15 @@ const world = new Map(
 );
 const projection = perspective(900, 700);
 const cache = new WeakMap<StyledFace3D, RenderedFace2D | null>();
-let park = createPark();
+const scenario = process.argv[2] ?? 'wander';
+if (!['wander', 'gather', 'crowd'].includes(scenario))
+	throw new Error(`Unknown park benchmark scenario: ${scenario}`);
+let park = scenario === 'wander' ? createPark() : callPack(createPark());
+if (scenario === 'crowd')
+	for (let i = 0; i < 12; i++) park = tossEgg(park, 0, 0);
+const visualDigest = createHash('sha256');
 const timings = {
+	simulationMs: [] as number[],
 	geometryMs: [] as number[],
 	cullMs: [] as number[],
 	orderMs: [] as number[],
@@ -72,6 +82,7 @@ const timings = {
 };
 // Fixed simulation steps make comparisons independent of the machine's frame rate.
 for (let i = 0; i < 100; i++) {
+	const simulationStart = performance.now();
 	park = stepPark(park, 1 / 30);
 	const a = performance.now(),
 		faces = buildActors(park),
@@ -93,12 +104,18 @@ for (let i = 0; i < 100; i++) {
 	);
 	const e = performance.now();
 	if (i >= 20) {
+		timings.simulationMs.push(a - simulationStart);
 		timings.geometryMs.push(b - a);
 		timings.cullMs.push(c - b);
 		timings.orderMs.push(d - c);
 		timings.svgMs.push(e - d);
 		timings.totalMs.push(e - a);
 		timings.polygons.push(rendered.length);
+		// Hash outside the timed interval to compare exact paint order, paths, and colors.
+		for (const face of rendered)
+			face((_source, path, fill) =>
+				visualDigest.update(JSON.stringify([path, fill]))
+			);
 	}
 }
 const matrixSamples: number[] = [];
@@ -113,6 +130,7 @@ for (let i = 0; i < 100; i++) {
 process.stdout.write(
 	JSON.stringify(
 		{
+			scenario,
 			worldFaces: buildParkMesh().length,
 			actorFaces: buildActors(park).length,
 			staticFragments: [...world.values()].reduce(
@@ -126,6 +144,7 @@ process.stdout.write(
 					summary(values),
 				])
 			),
+			visualDigest: visualDigest.digest('hex'),
 			matrixOnlyMs: summary(matrixSamples),
 			guard,
 		},
