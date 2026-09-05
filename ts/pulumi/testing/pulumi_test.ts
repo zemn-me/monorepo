@@ -25,7 +25,7 @@ import {
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
-import { mockResources } from '#root/ts/pulumi/setMocks.js';
+import { mockCalls, mockResources } from '#root/ts/pulumi/setMocks.js';
 
 const require = createRequire(import.meta.url);
 
@@ -180,8 +180,9 @@ describe('pulumi', () => {
 		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
 	});
 
-	test('staging minecraft uses staging-specific resources', async () => {
+	test('staging uses staging-specific resources', async () => {
 		mockResources.splice(0);
+		mockCalls.splice(0);
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
 
@@ -203,7 +204,15 @@ describe('pulumi', () => {
 					resource.name ===
 					'monorepo_waxingincandescent_website_distribution_record'
 			)?.inputs.name
-		).toBe('waxingincandescent.staging.zemn.me');
+		).toBe('staging.waxingincandescent.com');
+		expect(mockCalls).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					token: 'aws:route53/getZone:getZone',
+					inputs: { name: 'waxingincandescent.com.', privateZone: false },
+				}),
+			])
+		);
 
 		const stagingJournalWorker = mockResources.find(
 			resource =>
