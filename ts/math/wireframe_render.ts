@@ -1,11 +1,16 @@
 import {
 	cameraSpacePointFromPose,
+	cameraSpaceTransformFromPose,
+	orientationFromYawPitch,
 	type YawPitchPose,
 } from '#root/ts/math/camera_pose.js';
 import { Point2D, Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
+import * as Quaternion from '#root/ts/math/quaternion.js';
 import type { Segment3D } from '#root/ts/math/wireframe.js';
 import { pipe } from '#root/ts/pipe.js';
 import {
+	and_then,
+	and_then_flatten,
 	map_result,
 	type Result,
 	result_collect,
@@ -176,5 +181,147 @@ export function renderSegments(
 				)
 				.sort((left, right) => right.depth - left.depth)
 		)
+	);
+}
+
+/** Filled faces share the same camera and projection as wireframe segments. */
+export interface StyledFace3D {
+	readonly vertices: readonly Point3D[];
+	readonly fill: string;
+	/** Explicit layers are useful for terrain decals; ordinary solids share a layer. */
+	readonly layer?: number;
+	readonly doubleSided?: boolean;
+}
+
+export interface RenderedFace2D {
+	readonly path: string;
+	readonly fill: string;
+	readonly depth: number;
+	readonly layer: number;
+}
+
+export function clipPolygonToDepth(
+	vertices: readonly Point3D[],
+	depth: number,
+	keepBeyond: boolean
+): Point3D[] {
+	const clipped: Point3D[] = [];
+	for (let i = 0; i < vertices.length; i++) {
+		const a = vertices[i]!,
+			b = vertices[(i + 1) % vertices.length]!;
+		const aInside = keepBeyond ? z(a) >= depth : z(a) <= depth;
+		const bInside = keepBeyond ? z(b) >= depth : z(b) <= depth;
+		if (aInside) clipped.push(a);
+		if (aInside !== bInside) {
+			const t = (depth - z(a)) / (z(b) - z(a));
+			clipped.push(
+				point<3>(
+					x(a) + (x(b) - x(a)) * t,
+					y(a) + (y(b) - y(a)) * t,
+					depth
+				)
+			);
+		}
+	}
+	return clipped;
+}
+
+export function compareRenderedFaces(
+	a: RenderedFace2D,
+	b: RenderedFace2D
+): number {
+	return a.layer - b.layer || b.depth - a.depth;
+}
+
+/** Painter's ordering for small convex meshes, with clipping and back-face culling. */
+export function renderFaces(
+	faces: readonly StyledFace3D[],
+	pose: YawPitchPose,
+	projection: Perspective
+): Result<RenderedFace2D[], Error> {
+	return and_then(cameraSpaceTransformFromPose(pose), transform => {
+		const rendered: RenderedFace2D[] = [];
+		for (const face of faces) {
+			if (face.vertices.length < 3) continue;
+			const vertices = face.vertices.map(transform);
+			const [a, b, c] = vertices as [
+				Point3D,
+				Point3D,
+				Point3D,
+				...Point3D[],
+			];
+			const ux = x(b) - x(a),
+				uy = y(b) - y(a),
+				uz = z(b) - z(a);
+			const vx = x(c) - x(a),
+				vy = y(c) - y(a),
+				vz = z(c) - z(a);
+			const facing =
+				(uy * vz - uz * vy) * x(a) +
+				(uz * vx - ux * vz) * y(a) +
+				(ux * vy - uy * vx) * z(a);
+			if (!face.doubleSided && facing >= -0.000001) continue;
+			const clipped = clipPolygonToDepth(
+				clipPolygonToDepth(vertices, projection.nearPlane, true),
+				projection.farPlane,
+				false
+			);
+			if (clipped.length < 3) continue;
+			const projected = clipped.map(vertex =>
+				projectCameraPoint(vertex, projection)
+			);
+			if (
+				projected.every(p => x(p) < 0) ||
+				projected.every(p => x(p) > projection.width) ||
+				projected.every(p => y(p) < 0) ||
+				projected.every(p => y(p) > projection.height)
+			)
+				continue;
+			rendered.push({
+				path:
+					projected
+						.map(
+							(p, i) =>
+								`${i === 0 ? 'M' : 'L'}${x(p).toFixed(2)},${y(p).toFixed(2)}`
+						)
+						.join('') + 'Z',
+				fill: face.fill,
+				depth:
+					clipped.reduce((sum, p) => sum + z(p), 0) / clipped.length,
+				layer: face.layer ?? 0,
+			});
+		}
+		return rendered.sort(compareRenderedFaces);
+	});
+}
+
+/** Reverse the same perspective projection for click/touch picking on a horizontal plane. */
+export function groundPointFromScreen(
+	screen: Point2D,
+	pose: YawPitchPose,
+	projection: Perspective,
+	height = 0
+): Result<Point3D | null, Error> {
+	const focal =
+		Math.min(projection.width, projection.height) * projection.focalScale;
+	const ray = point<3>(
+		(x(screen) - projection.width / 2) / focal,
+		(projection.height / 2 - y(screen)) / focal,
+		1
+	);
+	return and_then_flatten(
+		orientationFromYawPitch(pose.yaw, pose.pitch),
+		rotation =>
+			and_then(Quaternion.rotateVector(rotation, ray), direction => {
+				if (Math.abs(y(direction)) < 0.000001) return null;
+				const t = (height - y(pose.position)) / y(direction);
+				return t < 0
+					? null
+					: point<3>(
+							x(pose.position) + x(direction) * t,
+							height,
+							z(pose.position) + z(direction) * t
+						);
+			})
 	);
 }

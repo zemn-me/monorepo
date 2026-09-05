@@ -1,85 +1,46 @@
 import { describe, expect, test } from '@jest/globals';
-
-import { point, x, z } from '#root/ts/math/cartesian.js';
 import {
-	buildWorld,
-	DEFAULT_POSE,
-	ParticleType,
-	stepCritters,
-	stepLook,
-	stepPlayer,
+	callPack,
+	createPark,
+	PACK,
+	stepPark,
+	tossEgg,
 } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 
-describe('eggsfordogs scene', () => {
-	test('builds a populated moving yard', () => {
-		const world = buildWorld();
-
-		expect(world.scene.length).toBeGreaterThan(60);
-		expect(
-			world.critters.filter(critter => critter.type === ParticleType.Egg)
-		).toHaveLength(55);
-		expect(
-			world.critters.filter(critter => critter.type === ParticleType.Dog)
-		).toHaveLength(8);
+describe('the dog park', () => {
+	test('the pack retrieves a tossed egg exactly once', () => {
+		let park = tossEgg(createPark(), 3, 2);
+		for (let frame = 0; frame < 600; frame++) park = stepPark(park, 1 / 60);
+		expect(park.delivered).toBe(1);
+		expect(park.eggs).toHaveLength(0);
+		expect(park.lastDog).not.toBeNull();
 	});
-
-	test('mouse look follows the same signs as baby.computer', () => {
-		const looked = stepLook(DEFAULT_POSE, 10, 10);
-
-		expect(looked.yaw).toBeGreaterThan(DEFAULT_POSE.yaw);
-		expect(looked.pitch).toBeGreaterThan(DEFAULT_POSE.pitch);
+	test('all eggs in a batch can be delivered, including at the lawn boundary', () => {
+		let park = createPark();
+		for (let i = 0; i < 12; i++)
+			park = tossEgg(park, Math.cos(i) * 40, Math.sin(i) * 40);
+		expect(tossEgg(park, 0, 0)).toBe(park);
+		for (const egg of park.eggs)
+			expect(Math.hypot(egg.x, egg.z)).toBeLessThanOrEqual(5.800001);
+		for (let frame = 0; frame < 3600; frame++)
+			park = stepPark(park, 1 / 60);
+		expect(park.delivered).toBe(12);
+		expect(park.eggs).toHaveLength(0);
 	});
-
-	test('moving forward follows yaw', () => {
-		const moved = stepPlayer(
-			{ ...DEFAULT_POSE, yaw: Math.PI / 2 },
-			{ forward: 1, strafe: 0, sprint: false, jump: false },
-			1
-		);
-
-		expect(x(moved.position)).toBeGreaterThan(x(DEFAULT_POSE.position));
-		expect(z(moved.position)).toBeCloseTo(z(DEFAULT_POSE.position), 5);
+	test('calling gathers every dog and expires naturally', () => {
+		let park = callPack(createPark());
+		for (let frame = 0; frame < 240; frame++) park = stepPark(park, 1 / 60);
+		expect(park.dogs).toHaveLength(PACK.length);
+		for (const dog of park.dogs)
+			expect(Math.hypot(dog.x, dog.z)).toBeLessThan(2);
+		for (let frame = 0; frame < 240; frame++) park = stepPark(park, 1 / 60);
+		expect(park.time).toBeGreaterThan(park.callingUntil);
 	});
-
-	test('critters move over time and stay inside the yard', () => {
-		const world = buildWorld();
-		const stepped = stepCritters(world.critters, 1, 1);
-		const changed = stepped.some(
-			(critter, index) =>
-				x(critter.position) !== x(world.critters[index]!.position) ||
-				z(critter.position) !== z(world.critters[index]!.position)
-		);
-
-		expect(changed).toBe(true);
-		for (const critter of stepped) {
-			expect(Math.abs(x(critter.position))).toBeLessThanOrEqual(31);
-			expect(Math.abs(z(critter.position))).toBeLessThanOrEqual(31);
-		}
-	});
-
-	test('dogs accelerate toward the egg centre', () => {
-		const stepped = stepCritters(
-			[
-				{
-					id: 'egg',
-					type: ParticleType.Egg,
-					position: point<3>(10, 0, 0),
-					velocity: point<3>(0, 0, 0),
-					phase: 0,
-				},
-				{
-					id: 'dog',
-					type: ParticleType.Dog,
-					position: point<3>(0, 0, 0),
-					velocity: point<3>(0, 0, 0),
-					phase: 0,
-				},
-			],
-			1,
-			0
-		);
-
-		const dog = stepped.find(critter => critter.id === 'dog')!;
-		expect(x(dog.position)).toBeGreaterThan(0);
+	test('invalid throws and suspended frames cannot corrupt the simulation', () => {
+		const park = createPark();
+		expect(tossEgg(park, Number.NaN, 0)).toBe(park);
+		expect(tossEgg(park, 0, Number.POSITIVE_INFINITY)).toBe(park);
+		expect(stepPark(park, 100).time).toBe(0.05);
+		expect(stepPark(park, -1).time).toBe(0);
 	});
 });

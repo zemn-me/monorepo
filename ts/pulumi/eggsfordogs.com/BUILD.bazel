@@ -6,6 +6,7 @@ load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
 
 # gazelle:exclude analytics_test.go
+# gazelle:exclude park_test.go
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
@@ -73,5 +74,22 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
+    ],
+)
+
+service_test(
+    name = "park_integration_test",
+    services = [":itest_service"],
+    test = ":park_browser_test",
+)
+
+go_test(
+    name = "park_browser_test",
+    srcs = ["park_test.go"],
+    tags = ["manual"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
     ],
 )
