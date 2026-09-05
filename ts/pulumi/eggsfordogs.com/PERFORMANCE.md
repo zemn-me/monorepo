@@ -1,0 +1,83 @@
+# SVG park performance
+
+Measured on 2026-09-04 on the development Mac, using Chromium at 1200 × 800 with WebGL disabled. The baseline is commit `2e786fa633`. Both browser runs use the same benchmark and the Next integration service. Each scenario has a one-second warmup and approximately five seconds of samples.
+
+| Scenario | Before SVG updates/s | After SVG updates/s | Before p95 interval | After p95 interval | Before median DOM mutations/update | After median DOM mutations/update |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Wandering | 9.5 | 19.9 | 127.8 ms | 70.9 ms | 31,776 | 11,129 |
+| Gathering | 10.1 | 27.0 | 115.5 ms | 56.5 ms | 25,428 | 3,414 |
+| Orbiting | 8.6 | 11.8 | 156.0 ms | 117.9 ms | 25,906 | 16,542 |
+
+Wandering's visible SVG path count dropped from approximately 11,900 to 7,080. Counts vary with poses, intersections, and visibility. These are observed SVG update intervals from a DOM mutation observer, not GPU presentation telemetry. The scenarios run the live simulation, so elapsed simulation time and geometry can differ between faster and slower runs. Browser version, viewport, and machine load affect the results. The animation target remains 30 updates per second; camera changes are coalesced onto animation frames.
+
+## What changed
+
+- Sphere latitude bands use planar quads. Cylinders use polygon caps, and boxes use six faces. This removes internal triangulation diagonals and degenerate pole triangles while retaining the surfaces.
+- Mesh instances and projection share vertices, reducing repeated matrix operations and temporary arrays. Polygons already inside the camera depth range bypass clipping allocations.
+- The static BSP tree survives camera movement. SVG paint slots keep static paths anchored while moving geometry changes in the gaps. Hidden faces are culled during projection.
+- Adjacent fragments with the same fill share compound paths. Lighting uses 1/32 intensity steps to reduce nearly identical fills; the maximum rounding change is 1/64 intensity.
+- Camera and resize events request a frame instead of synchronously redrawing the entire scene. The frame deadline no longer depends on floating-point comparisons against the last simulation timestamp.
+
+The minified production export also runs through the browser gameplay test, guarding against optimizer-only rendering failures. The twelve-angle dog visibility regression remains in place. Additional tests check closed, planar primitive surfaces, correct SVG front/back ordering, unchanged static DOM nodes during movement, and camera/theme invalidation.
+
+## Repeat the measurements
+
+Run the browser benchmark explicitly; it is excluded from the normal test suite:
+
+```sh
+./sh/bin/bazel test //ts/pulumi/eggsfordogs.com:park_benchmark --test_output=all --nocache_test_results
+```
+
+It reports wandering, gathering, and orbiting as JSON lines prefixed with `SVG benchmark:`. The service wrapper owns the benchmark arguments and assigns its service ports automatically.
+
+For CPU geometry, culling, ordering, and projection timings with fixed simulation steps:
+
+```sh
+./sh/bin/bazel run //ts/pulumi/eggsfordogs.com/app:park_bench
+```
+
+The CPU benchmark excludes DOM mutation and browser painting. It reports median and p95 over 80 samples after 20 warmups, plus a separate matrix-only diagnostic. Do not equate its `1000 / totalMs` with browser FPS.
+
+## GPU projection
+
+The initial CPU diagnostic spent approximately 19 ms on visibility ordering and 8 ms producing SVG paths, versus 1.3 ms transforming all actor vertices with the compiled camera matrix. Offloading just that matrix work has a small upper bound on the gain. SVG still requires CPU-visible coordinates and path strings. WebGL 2 can capture transformed vertices and retrieve buffers, but retrieving results introduces a CPU/GPU handoff; see the [WebGL 2 specification](https://registry.khronos.org/webgl/specs/2.0/). These measurements favor reducing geometry and DOM work first. GPU offloading was not implemented or benchmarked.
+
+Orbiting still updates the complete projected scene and remains the most expensive scenario. The retained BSP tree avoids rebuilding visibility geometry, but SVG path serialization, DOM updates, and browser paint still cost more than a fixed camera.
+
+## Functional geometry records
+
+The follow-up to `277201c913` represents `StyledFace3D`, `RenderedFace2D`, and `FaceBSP` as Church-encoded products. A value accepts a callback and supplies its fields as arguments. For example, `styledFace(vertices, fill, layer)` constructs a face and `face((vertices, fill) => ...)` consumes it. These field names are local bindings that the minifier can rename; there are no corresponding object keys. Function identities remain valid weak-map keys. BSP partition batches use labelled tuples, whose labels also disappear at runtime. Mutable SVG node pools, application state, and browser API objects retain their existing representations.
+
+The production page chunk no longer contains the geometry property keys `vertices` or `doubleSided`. Compared with `277201c913`, its size changed from 26,875 to 26,847 bytes, or 10,921 to 10,902 bytes with Python's default gzip compression. That 19-byte gzip reduction is negligible; this change removes a property-name dependency rather than demonstrating a download-size win. No global property-mangling setting was enabled.
+
+The deterministic CPU benchmark's median total increased from 19.88 to 23.72 ms in the before/after samples (about 19%). Median geometry construction was 1.06 versus 2.01 ms, and BSP ordering was 11.11 versus 14.65 ms. Both runs produced the same median 7,656 projected polygons. Closures have a measurable cost in this CPU-only workload; this representation change should not be described as a speed optimization. The browser benchmark and minified production gameplay checks are rerun separately, since DOM work dominates the complete application.
+
+The final Chromium run measured 19.4 SVG updates/s wandering, 23.6 gathering, and 13.6 orbiting. These live-scene measurements vary with simulation timing and machine load, and do not establish a speed gain from Church encoding. All 84 selected checks passed, including the explicit frame benchmark and minified production gameplay test.
+
+## Targeting 30 SVG updates per second
+
+A production benchmark was added to measure the minified export, with the same Chromium viewport, WebGL disablement, warmup, scenarios, and DOM observer as the development benchmark. The production baseline is `cdb4ca6cc7`. Run this target alone to avoid contention with other browser tests:
+
+```sh
+./sh/bin/bazel test //ts/pulumi/eggsfordogs.com:park_production_benchmark --test_output=all --nocache_test_results
+```
+
+The implementation keeps the SVG renderer and Church-encoded records. It makes these changes:
+
+- Tiny eyes, glints, tags, and flower centres use eight-face closed solids. Other small rounded parts use 18 faces and larger rounded parts use 32. Small discs use 16 sides; the large island keeps 32. All six dogs and park elements remain, with coarser faceting on small meshes. Actor geometry falls from 3,840 to 2,444 faces and scenery from 2,879 to 2,213. Collar geometry is reused instead of reconstructed each frame.
+- Lighting uses 1/16 intensity steps instead of 1/32, allowing more adjacent surfaces to share paint. The maximum rounding error is 1/32 intensity. Daytime and moonlight appearances were checked visually.
+- Identically colored opaque surfaces terminate BSP construction as one paint batch. When moving geometry enters that batch, all its surfaces participate in intersection sorting. This preserves occlusion across a leaf containing several distinct planes.
+- Moving geometry emits its paint order directly instead of constructing and then discarding a tree of closures. Static trees remain cached. Split fragments share their original supporting plane.
+- Shared projected vertices also share their formatted SVG coordinate strings, preserving two-decimal precision while avoiding repeated number formatting and nested point allocations.
+
+The deterministic CPU benchmark's median total fell from 23.35 to 15.19 ms in the before/after samples. Median geometry construction was 1.95 → 0.66 ms, ordering 14.29 → 10.33 ms, and SVG path generation 6.14 → 3.07 ms. These measurements exclude DOM updates and paint. Full-suite validation passed all 85 selected targets, including both browser benchmarks, production gameplay, twelve-angle nearest-surface colors, static SVG identity, and the new same-color leaf occlusion regression.
+
+The final isolated production run measured:
+
+| Scenario | Baseline SVG updates/s | Optimized SVG updates/s | Baseline p95 interval | Optimized p95 interval | Baseline median mutations/update | Optimized median mutations/update |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Wandering | 22.2 | 30.0 | 64.8 ms | 49.3 ms | 11,134 | 6,830 |
+| Gathering | 27.6 | 30.0 | 54.5 ms | 43.8 ms | 4,160 | 3,588 |
+| Orbiting | 13.2 | 25.5 | 99.5 ms | 57.0 ms | 17,288 | 10,222 |
+
+Normal play reaches the 30-update average target in this sample; it is not a guarantee of uniform 33 ms presentation. Continuous camera movement remains below 30 and varies with machine load (other optimization runs measured around 22). The benchmark observes SVG DOM updates, not GPU presentation. Running both browser benchmarks alongside the regression suite lowered throughput, so those concurrent timings were used only as functional checks, not the final comparison.
