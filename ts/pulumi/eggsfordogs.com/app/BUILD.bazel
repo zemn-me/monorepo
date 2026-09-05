@@ -9,6 +9,7 @@ ts_project(
         "layout.tsx",
         "page.tsx",
         "park_mesh.ts",
+        "park_view.ts",
         "scene.ts",
     ],
     assets = [
@@ -63,6 +64,7 @@ filegroup(
         "park_bench.ts",
         "park_mesh.ts",
         "park_mesh_test.ts",
+        "park_view.ts",
         "scene.ts",
         "scene_test.ts",
     ],

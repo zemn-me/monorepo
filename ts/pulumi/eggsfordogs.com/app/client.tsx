@@ -6,7 +6,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { type OrbitCamera, orbitPose } from '#root/ts/3d/low_poly.js';
+import { orbitPose } from '#root/ts/3d/low_poly.js';
 import { createSVGRenderer } from '#root/ts/3d/svg_scene.js';
 import { point, x, z } from '#root/ts/math/cartesian.js';
 import {
@@ -18,6 +18,10 @@ import {
 	buildParkMesh,
 } from '#root/ts/pulumi/eggsfordogs.com/app/park_mesh.js';
 import {
+	initialCamera,
+	initialViewBox,
+} from '#root/ts/pulumi/eggsfordogs.com/app/park_view.js';
+import {
 	callPack,
 	createPark,
 	PACK,
@@ -25,13 +29,6 @@ import {
 	tossEgg,
 } from '#root/ts/pulumi/eggsfordogs.com/app/scene.js';
 import { unwrap } from '#root/ts/result/result.js';
-
-const initialCamera = (): OrbitCamera => ({
-	yaw: -0.35,
-	pitch: 0.64,
-	distance: 17.4,
-	target: [0, 0, 0],
-});
 
 function EggIcon() {
 	return (
@@ -52,7 +49,10 @@ function EggIcon() {
 	);
 }
 
-export function EggDogYardClient() {
+export function EggDogYardClient({ initialScene }: { initialScene: string }) {
+	const sceneRef = useRef<SVGGElement>(null);
+	// Keep React's opaque HTML prop stable after the renderer adopts its children.
+	const initialMarkup = useRef({ __html: initialScene }).current;
 	const svgRef = useRef<SVGSVGElement>(null);
 	const parkRef = useRef(createPark());
 	const cameraRef = useRef(initialCamera());
@@ -66,7 +66,7 @@ export function EggDogYardClient() {
 		y: number;
 		distance: number;
 	} | null>(null);
-	const [night, setNight] = useState(false);
+	const [night, setNight] = useState<boolean | null>(null);
 	const [paused, setPaused] = useState(false);
 	const [sound, setSound] = useState(false);
 	const [ready, setReady] = useState(false);
@@ -175,7 +175,7 @@ export function EggDogYardClient() {
 		}
 		function start() {
 			try {
-				renderer = createSVGRenderer(surface!);
+				renderer = createSVGRenderer(surface!, sceneRef.current!);
 				worldNight = settingsRef.current.night;
 				renderer.setWorld(buildParkMesh(worldNight));
 				setFailed(false);
@@ -212,7 +212,8 @@ export function EggDogYardClient() {
 			disposed = true;
 			cancelAnimationFrame(frame);
 			observer.disconnect();
-			renderer?.dispose();
+			// React removes the host on unmount; effect restarts can reuse the visible frame.
+			renderer?.dispose(true);
 			renderRef.current = null;
 			reduced.removeEventListener('change', syncMotion);
 			dark.removeEventListener('change', syncTheme);
@@ -294,7 +295,9 @@ export function EggDogYardClient() {
 	}
 
 	return (
-		<main className={`park-page${night ? ' is-night' : ''}`}>
+		<main
+			className={`park-page${night === null ? ' follows-system' : night ? ' is-night' : ''}`}
+		>
 			<header className="masthead">
 				<a
 					className="wordmark"
@@ -319,7 +322,7 @@ export function EggDogYardClient() {
 					aria-label={
 						night ? 'Switch to daytime' : 'Switch to moonlight'
 					}
-					aria-pressed={night}
+					aria-pressed={night ?? false}
 					onClick={() => {
 						themeOverride.current = true;
 						settingsRef.current.night = !night;
@@ -362,6 +365,7 @@ export function EggDogYardClient() {
 				<svg
 					ref={svgRef}
 					className="park-svg"
+					viewBox={initialViewBox}
 					aria-label="Interactive 3D dog park rendered in SVG. Click the lawn to toss an egg, drag to orbit, or use arrow keys to rotate and Space to toss."
 					tabIndex={0}
 					onPointerDown={pointerDown}
@@ -413,12 +417,13 @@ export function EggDogYardClient() {
 					<title>
 						A tiny dog park. Use the buttons to meet the pack.
 					</title>
+					{/* The serializer escapes every attribute; no user HTML is accepted. */}
+					<g ref={sceneRef} dangerouslySetInnerHTML={initialMarkup} />
 				</svg>
-				{!ready && (
+				{failed && (
 					<div className="loading-note">
-						{failed
-							? 'The 3D park couldn’t open in this browser. You can still meet the pack below.'
-							: 'Letting the dogs out…'}
+						The animation couldn’t start. You can still enjoy the
+						park and meet the pack below.
 					</div>
 				)}
 				<div className="park-stamp">

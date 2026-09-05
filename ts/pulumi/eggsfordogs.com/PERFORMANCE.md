@@ -144,3 +144,33 @@ The same deterministic wandering benchmark ran with 20 warmup frames and 80 meas
 Primitive grouping added instance metadata and order bookkeeping without reducing fragment count. Pre-splitting the rigid assemblies increased actor input faces from 2,444 to 5,552, and both full-assembly approaches produced more projected fragments: cached planes made cuts that the frame-specific sorter could otherwise avoid. The source-subset cache limited that fragmentation but its construction and lookup costs were higher. This does not rule out a different hierarchical renderer; it shows that adding these caches inside the existing flat static-tree insertion pipeline did not pay off.
 
 The starting and both restored runs produced the identical paint-order/path/color digest `130fcd82fc4079fba3770ab7999381ae6101e523ad00dbea096ca828d73637f3`. The experimental variants changed fragmentation or ordering and therefore did not preserve that digest. No browser FPS gain is claimed for them.
+
+## React-managed SVG comparison
+
+Measured on 2026-09-05 against `9d605b0911`, using the isolated minified production benchmark in Chromium at 1200 × 800 with WebGL disabled and the light theme explicitly selected. Each scenario has one second of warmup and approximately five seconds of measured DOM updates. The direct renderer ran twice before and twice after the React variants; each React variant ran twice.
+
+The experiment replaced path/paint-slot DOM management with a React root inside the existing scene group. It retained the same BSP sorter, Church-encoded geometry, projection caches, adjacent-color path batching, pooled path descriptors, and stable slot/path keys. Unchanged React elements were cached, including static paint slots. The outer SVG and its accessible title retained their existing ownership. One variant used normal `root.render` scheduling; the other used `flushSync` to request a commit for each renderer update.
+
+| Scenario | Direct updates/s, mean (range) | React scheduled updates/s | Scheduled loss | React synchronous updates/s | Synchronous loss |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Wandering | 32.3 (32.1–32.7) | 28.8 | 11% | 28.7 | 11% |
+| Gathering | 42.9 (42.4–43.5) | 39.7 | 7% | 40.1 | 6% |
+| Orbiting | 24.1 (23.9–24.5) | 20.7 | 14% | 21.4 | 11% |
+
+The percentages compare means across runs. These are SVG DOM update rates, not compositor presentation FPS or an isolated measurement of React CPU time. The simulations are live, so poses and fragment counts vary with timing; the results describe this implementation on this machine, not a universal React overhead. The before/after direct-renderer repeats remained consistent.
+
+Both React variants passed the production gameplay and theme regressions. The synchronous variant also passed the existing static-node identity, paint-order, camera, theme, and resize adapter tests. Normal scheduled rendering commits asynchronously, so those synchronous adapter assertions were not used for that variant.
+
+The React runtime changes and temporary dependencies were removed after measurement. The existing direct renderer remains in use, and the production build was restored by the final baseline runs. React was viable with a modest but measurable throughput cost; these results do not support treating it as inherently unsuitable for SVG animation.
+
+## Initial SVG before hydration
+
+The static export now includes the complete initial park, using the same ordering, projection, and paint batching as the live renderer. React hydrates the controls and an opaque SVG host; the imperative renderer adopts its groups and paths, including across development effect restarts. The geometry remains Church-encoded, and animation still bypasses React reconciliation. CSS follows the system theme before scripts run. The fixed initial viewBox scales to the viewport until the live renderer measures it.
+
+The production HTML changed from 9,536 to 1,466,910 bytes, or 3,271 to 217,913 bytes using Python's default gzip compression. These are artifact sizes, not measured CDN transfers. The snapshot and React's serialized payload increase the download by approximately 210 KiB compressed; the benefit is a visible park before JavaScript starts, including when JavaScript is disabled.
+
+A local production startup sample observed the initial SVG in the DOM at 34 ms, first contentful paint at 97 ms, and enabled controls at 220 ms after navigation. First contentful paint is a page metric, not proof that every SVG path had painted at that instant. The node-adoption check retained the original scene and path and reported 5,139 scene paths. These local timings exclude realistic network latency and are observations rather than CI thresholds.
+
+An isolated production benchmark measured 40.8 SVG updates/s wandering, 53.1 gathering, and 32.9 orbiting, with p95 intervals of 39.4, 30.7, and 43.0 ms. The protocol remains Chromium at 1200 × 800 with WebGL disabled. This showed no apparent steady-state regression, but it was not an interleaved baseline comparison and does not establish a speed gain from prerendering.
+
+Browser regressions verify the visible SVG and light/dark theme with JavaScript disabled, original-node adoption without hydration errors, and live gameplay and theme changes in both development and production. Adapter tests additionally check exact snapshot/live markup agreement, retained node identity, effect-restart adoption, and escaped SVG attributes.
