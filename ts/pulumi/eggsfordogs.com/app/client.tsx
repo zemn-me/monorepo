@@ -118,10 +118,16 @@ export function EggDogYardClient() {
 		let renderer: ReturnType<typeof createSVGRenderer> | undefined;
 		let frame = 0;
 		let previous = 0;
+		let nextDraw = 0;
+		let dirty = true;
+		const invalidate = () => {
+			dirty = true;
+		};
 		let disposed = false;
 		let worldNight = false;
 		function draw() {
 			if (!renderer || disposed) return;
+			dirty = false;
 			const camera = cameraRef.current;
 			if (worldNight !== settingsRef.current.night) {
 				worldNight = settingsRef.current.night;
@@ -139,10 +145,17 @@ export function EggDogYardClient() {
 			);
 		}
 		function loop(now: number) {
-			if (now - previous < 1000 / 30) {
+			if (!dirty && now < nextDraw - 0.5) {
 				frame = requestAnimationFrame(loop);
 				return;
 			}
+			// Keep a deadline independent of simulation time; timestamp rounding must
+			// not turn the 30 fps target into alternating 33/50 ms frames.
+			if (now >= nextDraw - 0.5)
+				nextDraw =
+					nextDraw && now - nextDraw < 1000 / 30
+						? nextDraw + 1000 / 30
+						: now + 1000 / 30;
 			const dt = previous ? Math.min((now - previous) / 1000, 0.05) : 0;
 			previous = now;
 			if (!settingsRef.current.paused && !document.hidden) {
@@ -155,7 +168,7 @@ export function EggDogYardClient() {
 					);
 				}
 			}
-			if (!document.hidden && (!settingsRef.current.paused || dt === 0))
+			if (!document.hidden && (!settingsRef.current.paused || dirty))
 				draw();
 			frame = requestAnimationFrame(loop);
 		}
@@ -166,7 +179,7 @@ export function EggDogYardClient() {
 				renderer.setWorld(buildParkMesh(worldNight));
 				setFailed(false);
 				setReady(true);
-				renderRef.current = draw;
+				renderRef.current = invalidate;
 				draw();
 				frame = requestAnimationFrame(loop);
 			} catch {
@@ -181,7 +194,7 @@ export function EggDogYardClient() {
 		}
 		syncMotion();
 		reduced.addEventListener('change', syncMotion);
-		const observer = new ResizeObserver(draw);
+		const observer = new ResizeObserver(invalidate);
 		observer.observe(surface);
 		start();
 		return () => {

@@ -1,6 +1,7 @@
 import { type Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 
+// Faces and their vertices are immutable; cached planes can be shared across frames.
 // World-space tolerance keeps coplanar faces stable as the camera moves.
 const epsilon = 1e-7;
 type Plane = readonly [number, number, number, number];
@@ -15,7 +16,16 @@ function distance(p: Point3D, plane: Plane): number {
 	return x(p) * plane[0] + y(p) * plane[1] + z(p) * plane[2] - plane[3];
 }
 
+const planeCache = new WeakMap<StyledFace3D, Plane | null>();
+
 function facePlane(face: StyledFace3D): Plane | null {
+	if (planeCache.has(face)) return planeCache.get(face)!;
+	const plane = computePlane(face);
+	planeCache.set(face, plane);
+	return plane;
+}
+
+function computePlane(face: StyledFace3D): Plane | null {
 	const a = face.vertices[0];
 	if (!a) return null;
 	for (let i = 1; i + 1 < face.vertices.length; i++) {
@@ -64,9 +74,15 @@ function partition(
 		back: StyledFace3D[] = [],
 		coplanar: StyledFace3D[] = [];
 	for (const face of faces) {
-		const distances = face.vertices.map(p => distance(p, plane));
-		const positive = distances.some(d => d > epsilon),
-			negative = distances.some(d => d < -epsilon);
+		const distances: number[] = [];
+		let positive = false,
+			negative = false;
+		for (const vertex of face.vertices) {
+			const d = distance(vertex, plane);
+			distances.push(d);
+			positive ||= d > epsilon;
+			negative ||= d < -epsilon;
+		}
 		if (!positive && !negative) {
 			coplanar.push(face);
 			continue;
@@ -102,8 +118,14 @@ function partition(
 				b.push(intersection);
 			}
 		}
-		if (f.length >= 3) front.push({ ...face, vertices: f });
-		if (b.length >= 3) back.push({ ...face, vertices: b });
+		if (f.length >= 3) {
+			const split = { ...face, vertices: f };
+			front.push(split);
+		}
+		if (b.length >= 3) {
+			const split = { ...face, vertices: b };
+			back.push(split);
+		}
 	}
 	return { front, back, coplanar };
 }
@@ -174,6 +196,60 @@ function build(input: readonly StyledFace3D[]): FaceBSP | null {
 	};
 }
 
+export type FaceBSPSlot = 'static' | 'coplanar' | 'front' | 'back' | 'root';
+
+/** Visit stable paint slots so moving polygons never displace static SVG elements. */
+export function visitFaceBSP(
+	tree: FaceBSP | null,
+	eye: Point3D,
+	moving: readonly StyledFace3D[],
+	emit: (
+		node: FaceBSP | null,
+		slot: FaceBSPSlot,
+		faces: readonly StyledFace3D[]
+	) => void
+): void {
+	function sorted(node: FaceBSP | null, result: StyledFace3D[]): void {
+		if (!node) return;
+		const front = distance(eye, node.plane) >= 0;
+		sorted(front ? node.back : node.front, result);
+		result.push(...node.faces);
+		sorted(front ? node.front : node.back, result);
+	}
+	function visit(
+		node: FaceBSP | null,
+		extra: readonly StyledFace3D[],
+		parent: FaceBSP | null,
+		slot: FaceBSPSlot
+	): void {
+		if (!node) {
+			if (extra.length) {
+				const ordered: StyledFace3D[] = [];
+				sorted(buildFaceBSP(extra), ordered);
+				emit(parent, slot, ordered);
+			}
+			return;
+		}
+		const parts = partition(extra, node.plane);
+		const front = distance(eye, node.plane) >= 0;
+		visit(
+			front ? node.back : node.front,
+			front ? parts.back : parts.front,
+			node,
+			front ? 'back' : 'front'
+		);
+		if (node.faces.length) emit(node, 'static', node.faces);
+		if (parts.coplanar.length) emit(node, 'coplanar', parts.coplanar);
+		visit(
+			front ? node.front : node.back,
+			front ? parts.front : parts.back,
+			node,
+			front ? 'front' : 'back'
+		);
+	}
+	visit(tree, moving, null, 'root');
+}
+
 /** Insert moving faces into a cached static tree, then paint from far to near. */
 export function orderFaceBSP(
 	tree: FaceBSP | null,
@@ -181,23 +257,8 @@ export function orderFaceBSP(
 	moving: readonly StyledFace3D[] = []
 ): StyledFace3D[] {
 	const result: StyledFace3D[] = [];
-	function visit(node: FaceBSP | null, extra: readonly StyledFace3D[]): void {
-		if (!node) {
-			if (extra.length) visit(buildFaceBSP(extra), []);
-			return;
-		}
-		const parts = partition(extra, node.plane);
-		const inFront = distance(eye, node.plane) >= 0;
-		visit(
-			inFront ? node.back : node.front,
-			inFront ? parts.back : parts.front
-		);
-		result.push(...node.faces, ...parts.coplanar);
-		visit(
-			inFront ? node.front : node.back,
-			inFront ? parts.front : parts.back
-		);
-	}
-	visit(tree, moving);
+	visitFaceBSP(tree, eye, moving, (_node, _slot, faces) =>
+		result.push(...faces)
+	);
 	return result;
 }

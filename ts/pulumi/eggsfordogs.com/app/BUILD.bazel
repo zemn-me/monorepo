@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -59,6 +60,7 @@ filegroup(
         "client.tsx",
         "layout.tsx",
         "page.tsx",
+        "park_bench.ts",
         "park_mesh.ts",
         "park_mesh_test.ts",
         "scene.ts",
@@ -70,4 +72,23 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "park_bench_ts",
+    srcs = ["park_bench.ts"],
+    deps = [
+        ":app",
+        "//:node_modules/@types/node",
+        "//ts/3d",
+        "//ts/math",
+        "//ts/result",
+    ],
+)
+
+js_binary(
+    name = "park_bench",
+    data = [":park_bench_ts"],
+    entry_point = "park_bench.js",
+    tags = ["manual"],
 )

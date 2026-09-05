@@ -194,6 +194,7 @@ export interface StyledFace3D {
 }
 
 export interface RenderedFace2D {
+	readonly source?: StyledFace3D;
 	readonly path: string;
 	readonly fill: string;
 	readonly depth: number;
@@ -247,6 +248,8 @@ export function renderFaces(
 ): Result<RenderedFace2D[], Error> {
 	return and_then(cameraSpaceTransformFromPose(pose), transform => {
 		const rendered: RenderedFace2D[] = [];
+		const transformed = new Map<Point3D, Point3D>();
+		const screen = new Map<Point3D, Point2D>();
 		for (const face of faces) {
 			if (options.cache?.has(face)) {
 				const cached = options.cache.get(face);
@@ -255,7 +258,14 @@ export function renderFaces(
 			}
 			options.cache?.set(face, null);
 			if (face.vertices.length < 3) continue;
-			const vertices = face.vertices.map(transform);
+			const vertices = face.vertices.map(vertex => {
+				let cached = transformed.get(vertex);
+				if (!cached) {
+					cached = transform(vertex);
+					transformed.set(vertex, cached);
+				}
+				return cached;
+			});
 			const a = vertices[0]!;
 			let facing = 0;
 			// Split polygons may start with collinear vertices. Sum the complete fan.
@@ -274,30 +284,47 @@ export function renderFaces(
 					(ux * vy - uy * vx) * z(a);
 			}
 			if (!face.doubleSided && facing >= -1e-12) continue;
-			const clipped = clipPolygonToDepth(
-				clipPolygonToDepth(vertices, projection.nearPlane, true),
-				projection.farPlane,
-				false
-			);
+			let clipped = vertices;
+			if (clipped.some(p => z(p) < projection.nearPlane))
+				clipped = clipPolygonToDepth(
+					clipped,
+					projection.nearPlane,
+					true
+				);
+			if (clipped.some(p => z(p) > projection.farPlane))
+				clipped = clipPolygonToDepth(
+					clipped,
+					projection.farPlane,
+					false
+				);
 			if (clipped.length < 3) continue;
-			const projected = clipped.map(vertex =>
-				projectCameraPoint(vertex, projection)
-			);
+			let path = '',
+				left = Infinity,
+				right = -Infinity,
+				top = Infinity,
+				bottom = -Infinity;
+			for (const vertex of clipped) {
+				let p = screen.get(vertex);
+				if (!p) {
+					p = projectCameraPoint(vertex, projection);
+					screen.set(vertex, p);
+				}
+				left = Math.min(left, x(p));
+				right = Math.max(right, x(p));
+				top = Math.min(top, y(p));
+				bottom = Math.max(bottom, y(p));
+				path += `${path ? 'L' : 'M'}${x(p).toFixed(2)},${y(p).toFixed(2)}`;
+			}
 			if (
-				projected.every(p => x(p) < 0) ||
-				projected.every(p => x(p) > projection.width) ||
-				projected.every(p => y(p) < 0) ||
-				projected.every(p => y(p) > projection.height)
+				right < 0 ||
+				left > projection.width ||
+				bottom < 0 ||
+				top > projection.height
 			)
 				continue;
 			const result = {
-				path:
-					projected
-						.map(
-							(p, i) =>
-								`${i === 0 ? 'M' : 'L'}${x(p).toFixed(2)},${y(p).toFixed(2)}`
-						)
-						.join('') + 'Z',
+				source: face,
+				path: path + 'Z',
 				fill: face.fill,
 				depth:
 					clipped.reduce((sum, p) => sum + z(p), 0) / clipped.length,
