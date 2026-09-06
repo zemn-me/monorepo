@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 ---
-name: Cancel obsolete staging
+name: Cancel obsolete merge-group runs
 
 on: # yamllint disable-line rule:truthy
   pull_request_target:
@@ -30,7 +30,10 @@ jobs:
           # This workflow has a write token: execute only its trusted revision.
           ref: ${{ github.workflow_sha }}
           persist-credentials: false
-      - name: Cancel pending runs for obsolete merge-group commits
-        run: python3 -m py.ci.cancel_obsolete_staging --execute
+      - name: Cancel obsolete checks and pending staging deployments
+        run: |
+          ./sh/bin/bazel run --config=ci \
+            //py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin -- \
+            --execute
         env:
           GH_TOKEN: ${{ github.token }}

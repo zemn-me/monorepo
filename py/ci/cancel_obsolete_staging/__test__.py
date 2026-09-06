@@ -17,7 +17,11 @@ RUN = {
     "head_branch": "gh-readonly-queue/main/pr-42-old",
     "head_sha": "candidate-sha",
 }
-LIST = "/actions/workflows/staging.yml/runs?event=merge_group&status=pending&per_page=100&page="
+def listing(workflow="staging.yml", status="pending"):
+    return f"/actions/workflows/{workflow}/runs?event=merge_group&status={status}&per_page=100&page="
+
+
+LIST = listing()
 REF = "/git/ref/heads/" + RUN["head_branch"]
 
 
@@ -30,6 +34,12 @@ class CleanupTest(unittest.TestCase):
             ("GET", "/actions/runs/1"): (200, RUN),
             ("POST", "/actions/runs/1/cancel"): (202, None),
         }
+        for workflow, statuses in {
+            "staging.yml": ["queued"],
+            "presubmit.yml": ["pending", "queued", "in_progress"],
+        }.items():
+            for status in statuses:
+                self.responses["GET", listing(workflow, status) + "1"] = (200, {"workflow_runs": []})
         test = self
 
         class Handler(BaseHTTPRequestHandler):
@@ -79,6 +89,46 @@ class CleanupTest(unittest.TestCase):
             ("POST", "/actions/runs/1/cancel"),
         ])
 
+    def test_obsolete_presubmits_are_cancelled_in_each_active_status(self):
+        for status in ["pending", "queued", "in_progress"]:
+            with self.subTest(status=status):
+                self.calls.clear()
+                run = RUN | {"path": ".github/workflows/presubmit.yml", "status": status}
+                self.responses["GET", LIST + "1"] = (200, {"workflow_runs": []})
+                self.responses["GET", listing("presubmit.yml", status) + "1"] = (200, {"workflow_runs": [run]})
+                self.responses["GET", "/actions/runs/1"] = (200, run)
+                cleanup(self.github, execute=True)
+                self.assertEqual(self.cancellations(), ["/actions/runs/1/cancel"])
+                self.responses["GET", listing("presubmit.yml", status) + "1"] = (200, {"workflow_runs": []})
+
+    def test_queued_staging_is_cancelled(self):
+        run = RUN | {"status": "queued"}
+        self.responses["GET", LIST + "1"] = (200, {"workflow_runs": []})
+        self.responses["GET", listing(status="queued") + "1"] = (200, {"workflow_runs": [run]})
+        self.responses["GET", "/actions/runs/1"] = (200, run)
+        cleanup(self.github, execute=True)
+        self.assertEqual(self.cancellations(), ["/actions/runs/1/cancel"])
+
+    def test_ordinary_pr_presubmit_is_preserved(self):
+        run = RUN | {"path": ".github/workflows/presubmit.yml", "event": "pull_request"}
+        self.responses["GET", listing("presubmit.yml") + "1"] = (200, {"workflow_runs": [run]})
+        self.responses["GET", LIST + "1"] = (200, {"workflow_runs": []})
+        cleanup(self.github, execute=True)
+        self.assertEqual(self.cancellations(), [])
+
+    def test_current_presubmit_is_preserved(self):
+        run = RUN | {"path": ".github/workflows/presubmit.yml", "status": "in_progress"}
+        self.responses["GET", listing("presubmit.yml", "in_progress") + "1"] = (200, {"workflow_runs": [run]})
+        self.responses["GET", LIST + "1"] = (200, {"workflow_runs": []})
+        self.responses["GET", REF] = (200, {"object": {"sha": RUN["head_sha"]}})
+        cleanup(self.github, execute=True)
+        self.assertEqual(self.cancellations(), [])
+
+    def test_status_list_duplicates_are_cancelled_once(self):
+        self.responses["GET", listing(status="queued") + "1"] = (200, {"workflow_runs": [RUN]})
+        cleanup(self.github, execute=True)
+        self.assertEqual(self.cancellations(), ["/actions/runs/1/cancel"])
+
     def test_current_merge_group_is_preserved(self):
         self.responses["GET", REF] = (200, {"object": {"sha": RUN["head_sha"]}})
         cleanup(self.github, execute=True)
@@ -94,7 +144,7 @@ class CleanupTest(unittest.TestCase):
         self.assertEqual(self.cancellations(), [])
 
     def test_started_or_finished_run_is_preserved(self):
-        for status in ["in_progress", "completed", "queued", "waiting"]:
+        for status in ["in_progress", "completed", "waiting"]:
             with self.subTest(status=status):
                 self.responses["GET", "/actions/runs/1"] = (200, RUN | {"status": status})
                 cleanup(self.github, execute=True)
@@ -141,7 +191,7 @@ class CleanupTest(unittest.TestCase):
             cleanup(self.github, execute=True)
 
     def test_all_pages_are_read_before_cancellation(self):
-        unrelated = RUN | {"path": ".github/workflows/submit.yml"}
+        unrelated = RUN | {"id": 3, "path": ".github/workflows/submit.yml"}
         self.responses["GET", LIST + "1"] = (200, {"workflow_runs": [RUN] + [unrelated] * 99})
         second = RUN | {"id": 2, "head_branch": "gh-readonly-queue/main/pr-43-old"}
         self.responses["GET", LIST + "2"] = (200, {"workflow_runs": [second]})
