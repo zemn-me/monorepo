@@ -115,10 +115,12 @@ jobs:
           aws-region: us-east-1
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
+        # main just refreshed and deployed staging, so reuse its current state.
         run: |
          ./.github/workflows/prepare_ci.sh
          $BAZEL run --tool_tag=staging //ci:presubmit -- \
          --skip-bazel-tests \
+         --skip-pulumi-refresh \
          --dirty
         env:
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
