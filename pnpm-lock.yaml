@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.61.4
-    version: 44.61.4(typanion@3.14.0)
+    specifier: 44.61.5
+    version: 44.61.5(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.3)
@@ -11500,8 +11500,8 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
-  /markdown-it@14.3.0:
-    resolution: {integrity: sha512-RCEsPjR+sr0x+AuYp601tKTkgFG4YEPLCzHST3cQ/fhlJkqAkz1L2/Qbp1j9qw5SBwQHFBoW8+hoN5xssOF0Tw==}
+  /markdown-it@14.3.1:
+    resolution: {integrity: sha512-4Ej49aYTDFIQ+uBkfX8GBvJGccoARxxPep+7aWTs55ozbjQJpW9M26Fe53vnGgvLeVzva/amzjQQaQu9w0vMhA==}
     hasBin: true
     dependencies:
       argparse: 2.0.1
@@ -14215,8 +14215,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.61.4(typanion@3.14.0):
-    resolution: {integrity: sha512-9hdNljbMxkA0ftvgtNEmtmKmj9zVcZYXK5VfwuzhLLJtFsCq+ImlyIJ/R6nuxhheCNrpwBqx1kjjRFZGmOtWQA==}
+  /renovate@44.61.5(typanion@3.14.0):
+    resolution: {integrity: sha512-fapCUAKZNVn61Lgcsg1wclEob79jGLOoIQr3JqeXGryCzXzpMNr32fdAo7jjITHvS/e6jPxm1li5u6mQRYy1RQ==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14304,7 +14304,7 @@ packages:
       klona: 2.0.6
       lru-cache: 11.5.2
       luxon: 3.7.2
-      markdown-it: 14.3.0
+      markdown-it: 14.3.1
       markdown-table: 3.0.4
       minimatch: 10.2.6
       moo: 0.5.3
