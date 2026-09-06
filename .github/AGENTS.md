@@ -7,3 +7,12 @@ Presubmit gets only the read-only BuildBuddy key; staging and submit get the ful
 Staging and Submit share `pulumi_deploy`; obsolete pending merge-group runs are
 removed by `cancel-obsolete-staging.yml`. Keep cleanup outside that concurrency
 group and execute only trusted workflow code when using its Actions write token.
+
+`package.json#packageManager` is the pnpm pin for both Renovate and Bazel. Do not
+add pnpm as an npm dependency: Renovate gives dependency upgrades precedence over
+that pin when generating lockfiles. The workflow reads Renovate's version from
+the tested devDependency; keep the compatibility test on its real artifact path.
+
+Keep pnpm and `aspect_rules_js` in the same Renovate update group: the rules supply
+pnpm's executable layout and known release checksums. Let compatibility checks
+gate upgrades rather than imposing a permanent pnpm major-version ceiling.
