@@ -169,8 +169,8 @@ dependencies:
     specifier: 3.0.1
     version: 3.0.1
   pnpm:
-    specifier: 11.25.0
-    version: 11.25.0
+    specifier: 12.3.1
+    version: 12.3.1
   ramda:
     specifier: 0.32.0
     version: 0.32.0
@@ -4142,6 +4142,62 @@ packages:
       '@pnpm/constants': 6.1.0
     dev: true
 
+  /@pnpm/exe.darwin-arm64@12.3.1:
+    resolution: {integrity: sha512-Yer+aZnQtgE+OOLKwbRHaAEt74WBJdH8eXpLrSWf+5vj7DkkDvhSR45HVxN3a5d430fMUyF0lmQai02T650r4g==}
+    cpu: [arm64]
+    os: [darwin]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.darwin-x64@12.3.1:
+    resolution: {integrity: sha512-XPZYf+XpxufwZS8tpQQdftsv6eUtPDA0uU5NlfXA1uMVPvXJesw5PLGWmmJZHcI4rIscn2H6FngkIcvkuZaaKQ==}
+    cpu: [x64]
+    os: [darwin]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.linux-arm64-musl@12.3.1:
+    resolution: {integrity: sha512-WjKcLeuierWGSQHjb0QeDl8avQTel8rN5jDMCI55tBJTrTBXNQsdlpgzP9uCD0GSzjPH+hjWKb+GjeMNvv5Ruw==}
+    cpu: [arm64]
+    os: [linux]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.linux-arm64@12.3.1:
+    resolution: {integrity: sha512-X0HxHlEYubFRuMPBOy+ytKsv6c11v4em/ovVVCy5KCdJVBtVGF7vF5ywlGqw7EjpGdqM39pdLTWFwH9Q77lUzQ==}
+    cpu: [arm64]
+    os: [linux]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.linux-x64-musl@12.3.1:
+    resolution: {integrity: sha512-ZvzQI2+Ek0v+V6m30XV3ShIx5sm+ZIZoM669Z0F/RvMSpHgklqv3CBdEwAsQCZ7XBNZLMQIE7RPR2yIwxt3mnw==}
+    cpu: [x64]
+    os: [linux]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.linux-x64@12.3.1:
+    resolution: {integrity: sha512-ubvbQ2OSt7fR3kSnhtknx5xnm2H7uRi0kC32ADmzKJ1vZz337kmL30rTHoUzTG7ZcIyEhODg7R+zI1cW1ZdVDw==}
+    cpu: [x64]
+    os: [linux]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.win32-arm64@12.3.1:
+    resolution: {integrity: sha512-e+5CjFBGWP7U7RfFlH/EQnlFaP9Uyo/Y0BDCEbitsC4if28WBur3ajAkc25rRwiEwmmEpipTSzqNsKIs9Mq72Q==}
+    cpu: [arm64]
+    os: [win32]
+    dev: false
+    optional: true
+
+  /@pnpm/exe.win32-x64@12.3.1:
+    resolution: {integrity: sha512-5pW8NQuVF3dkNdaUCm03PeoDiC5I9h4y9Fz717KLWi5jxDKmgARmD1zDdm60F5ohRZHPrRv/jAg94a/5+VXxow==}
+    cpu: [x64]
+    os: [win32]
+    dev: false
+    optional: true
+
   /@pnpm/graceful-fs@2.0.0:
     resolution: {integrity: sha512-ogUZCGf0/UILZt6d8PsO4gA4pXh7f0BumXeFkcCe4AQ65PXPKfAkHC0C30Lheh2EgFOpLZm3twDP1Eiww18gew==}
     engines: {node: '>=14.19'}
@@ -4400,7 +4456,7 @@ packages:
       yauzl:
         optional: true
     dependencies:
-      modern-tar: 0.8.4
+      modern-tar: 0.8.5
       yargs: 18.1.0
     dev: true
 
@@ -12487,8 +12543,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  /modern-tar@0.8.4:
-    resolution: {integrity: sha512-gN54ddmyzEg10orwZ2u4OOv+bjpMWdIl5jIkodK97bMq8QBSL5c0D7YX0lT1Ooz+99S7+PvFbnxzdjgHo1r41g==}
+  /modern-tar@0.8.5:
+    resolution: {integrity: sha512-snEhs+6G5Tjd4I7tLCDOaoln2RgE0bD19RzEKgvgK2hZ5VKy3MpLhLTZ2fWpXSTg4K2cyPwp+VHATFJhxfnOeA==}
     engines: {node: '>=18.0.0'}
     dev: true
 
@@ -13393,10 +13449,19 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
-  /pnpm@11.25.0:
-    resolution: {integrity: sha512-XN6SW08HX3Jetx+64YpC/+eEUkeJ8ZthxzHLhyHsKKruFg4BqNWvT+2ypCzb8wDv4j2zVrDUoXtNY+EfirfJVg==}
-    engines: {node: '>=22.13'}
+  /pnpm@12.3.1:
+    resolution: {integrity: sha512-PBTBVAjRSJ01D47X+TNh0mzHBwVPaEmk7qO7dAf/T+RWS0E6HEIadzoXarEWio3xx9VI8s0Nx9NE9YxOaApbGA==}
+    engines: {node: '>=18.*'}
     hasBin: true
+    optionalDependencies:
+      '@pnpm/exe.darwin-arm64': 12.3.1
+      '@pnpm/exe.darwin-x64': 12.3.1
+      '@pnpm/exe.linux-arm64': 12.3.1
+      '@pnpm/exe.linux-arm64-musl': 12.3.1
+      '@pnpm/exe.linux-x64': 12.3.1
+      '@pnpm/exe.linux-x64-musl': 12.3.1
+      '@pnpm/exe.win32-arm64': 12.3.1
+      '@pnpm/exe.win32-x64': 12.3.1
     dev: false
 
   /postcss-media-query-parser@0.2.3:
