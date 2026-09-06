@@ -1,4 +1,5 @@
 import { type OrbitCamera, orbitPose } from '#root/ts/3d/low_poly.js';
+import type { YawPitchPose } from '#root/ts/math/camera_pose.js';
 import {
 	buildFaceBSP,
 	type FaceBSP,
@@ -8,6 +9,7 @@ import {
 } from '#root/ts/math/face_bsp.js';
 import {
 	faceLayer,
+	type Perspective,
 	perspective,
 	type RenderedFace2D,
 	renderedSource,
@@ -51,9 +53,12 @@ function paintRuns(
 export function renderSVGSnapshot(
 	worldFaces: readonly StyledFace3D[],
 	faces: readonly StyledFace3D[],
-	camera: OrbitCamera,
+	camera: OrbitCamera | YawPitchPose,
 	width: number,
-	height: number
+	height: number,
+	projectionOptions: Partial<
+		Pick<Perspective, 'farPlane' | 'focalScale'>
+	> = {}
 ): string {
 	const world = new Map(
 		[...byLayer(worldFaces)].map(([layer, polygons]) => [
@@ -61,7 +66,7 @@ export function renderSVGSnapshot(
 			buildFaceBSP(polygons),
 		])
 	);
-	const pose = orbitPose(camera);
+	const pose = 'target' in camera ? orbitPose(camera) : camera;
 	const moving = byLayer(visibleFaces(faces, pose.position));
 	const batches: (readonly StyledFace3D[])[] = [];
 	for (const layer of [...new Set([...world.keys(), ...moving.keys()])].sort(
@@ -77,7 +82,10 @@ export function renderSVGSnapshot(
 		renderFaces(
 			batches.flat(),
 			pose,
-			perspective(width, height, { focalScale: 0.95 }),
+			perspective(width, height, {
+				focalScale: 0.95,
+				...projectionOptions,
+			}),
 			{ preserveOrder: true }
 		)
 	);
@@ -110,7 +118,13 @@ export function renderSVGSnapshot(
 }
 
 /** Keep static paint slots anchored while moving geometry changes inside the gaps. */
-export function createSVGRenderer(svg: SVGSVGElement, host: SVGElement = svg) {
+export function createSVGRenderer(
+	svg: SVGSVGElement,
+	host: SVGElement = svg,
+	projectionOptions: Partial<
+		Pick<Perspective, 'farPlane' | 'focalScale'>
+	> = {}
+) {
 	const namespace = 'http://www.w3.org/2000/svg';
 	const group =
 		host.querySelector<SVGGElement>(':scope > g.park-scene') ??
@@ -219,12 +233,18 @@ export function createSVGRenderer(svg: SVGSVGElement, host: SVGElement = svg) {
 			used = 0;
 			cameraKey = '';
 		},
-		render(camera: OrbitCamera, faces: readonly StyledFace3D[]) {
+		render(
+			camera: OrbitCamera | YawPitchPose,
+			faces: readonly StyledFace3D[]
+		) {
 			frame++;
 			const width = Math.max(1, svg.clientWidth),
 				height = Math.max(1, svg.clientHeight);
-			const projection = perspective(width, height, { focalScale: 0.95 }),
-				pose = orbitPose(camera);
+			const projection = perspective(width, height, {
+					focalScale: 0.95,
+					...projectionOptions,
+				}),
+				pose = 'target' in camera ? orbitPose(camera) : camera;
 			const key = JSON.stringify([camera, width, height]);
 			if (key !== cameraKey) {
 				// BSP planes are independent of the eye; orbiting only changes traversal

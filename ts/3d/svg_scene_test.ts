@@ -142,3 +142,28 @@ test('snapshot serialization escapes paint attributes instead of accepting marku
 	expect(svg.querySelectorAll('path')).toHaveLength(1);
 	expect(svg.querySelector('path')!.getAttribute('fill')).toBe(fill);
 });
+
+test('first-person cameras reuse paths while moving through a larger mesh', () => {
+	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	Object.defineProperties(svg, {
+		clientWidth: { value: 800 },
+		clientHeight: { value: 600 },
+	});
+	const pose = { position: point<3>(0, 0, 0), yaw: 0, pitch: 0 };
+	const world = [quad('green', 100)];
+	svg.innerHTML = renderSVGSnapshot(world, [], pose, 800, 600, {
+		farPlane: 200,
+	});
+	const path = svg.querySelector('path')!;
+	expect(path).not.toBeNull();
+	const renderer = createSVGRenderer(svg, svg, { farPlane: 200 });
+	renderer.setWorld(world);
+	renderer.render(pose, []);
+	const initial = path.getAttribute('d');
+	renderer.render({ ...pose, position: point<3>(0, 0, 50) }, []);
+	expect(svg.querySelector('path')).toBe(path);
+	expect(path.getAttribute('d')).not.toBe(initial);
+	renderer.render({ ...pose, yaw: Math.PI }, []);
+	expect(svg.querySelector('path:not([display="none"])')).toBeNull();
+	renderer.dispose();
+});

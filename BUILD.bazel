@@ -276,6 +276,8 @@ py_venv(
         "//py/devtools",
         "//py/devtools/prep",
         "//py/devtools/prep:prep_bin",
+        "//py/doom",
+        "//py/doom:doom_bin",
         "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
         "//py/ipynb",

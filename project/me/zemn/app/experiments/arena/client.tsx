@@ -1,485 +1,301 @@
 'use client';
 
-import {
-	type PointerEvent as ReactPointerEvent,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
 	createArenaScene,
-	DEFAULT_POSE,
-	EYE_HEIGHT,
-	forwardFromPose,
-	type PlayerPose,
-	type RenderedSegment,
-	renderScene,
-	stepPlayer,
+	OVERVIEW,
+	START,
+	stepCamera,
 } from '#root/project/me/zemn/app/experiments/arena/scene.js';
 import style from '#root/project/me/zemn/app/experiments/arena/style.module.css';
-import { is_err, unwrap, unwrap_err } from '#root/ts/result/result.js';
+import { type OrbitCamera } from '#root/ts/3d/low_poly.js';
+import { createSVGRenderer } from '#root/ts/3d/svg_scene.js';
+import type { YawPitchPose } from '#root/ts/math/camera_pose.js';
 
 const scene = createArenaScene();
-const LOOK_SENSITIVITY = 0.0025;
-const PITCH_LIMIT = Math.PI * 0.45;
-const SVG_WIDTH = 1200;
-const SVG_HEIGHT = 800;
-const MOTION_YAW_SENSITIVITY = Math.PI / 180;
-const MOTION_PITCH_SENSITIVITY = Math.PI / 270;
+const keys = new Set([
+	'KeyW',
+	'KeyA',
+	'KeyS',
+	'KeyD',
+	'Space',
+	'KeyC',
+	'ShiftLeft',
+	'ShiftRight',
+]);
+const clampPitch = (pitch: number) => Math.max(-1.5, Math.min(1.5, pitch));
 
-interface MotionBaseline {
-	beta: number;
-	gamma: number;
-	yaw: number;
-	pitch: number;
-}
-
-interface KeyState {
-	KeyW: boolean;
-	KeyA: boolean;
-	KeyS: boolean;
-	KeyD: boolean;
-	Space: boolean;
-	ShiftLeft: boolean;
-	ShiftRight: boolean;
-}
-
-function initialKeys(): KeyState {
-	return {
-		KeyW: false,
-		KeyA: false,
-		KeyS: false,
-		KeyD: false,
-		Space: false,
-		ShiftLeft: false,
-		ShiftRight: false,
-	};
-}
-
-function clampPitch(pitch: number): number {
-	return Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, pitch));
-}
-
-function wrapRadians(angle: number): number {
-	return Math.atan2(Math.sin(angle), Math.cos(angle));
-}
-
-function normalizeDegrees(angle: number): number {
-	return ((angle + 540) % 360) - 180;
-}
-
-function movementFromKeys(keys: KeyState) {
-	return {
-		forward: Number(keys.KeyW) - Number(keys.KeyS),
-		strafe: Number(keys.KeyD) - Number(keys.KeyA),
-		sprint: keys.ShiftLeft || keys.ShiftRight,
-		jump: false,
-	};
-}
-
-function formatAngle(radians: number): string {
-	return `${((radians * 180) / Math.PI).toFixed(0)}deg`;
-}
-
-export function ArenaClient() {
-	const viewportRef = useRef<SVGSVGElement | null>(null);
-	const frameRef = useRef<number | null>(null);
-	const poseRef = useRef<PlayerPose>(DEFAULT_POSE);
-	const keysRef = useRef<KeyState>(initialKeys());
-	const jumpRequestedRef = useRef(false);
-	const draggingPointerIdRef = useRef<number | null>(null);
-	const lastDragPositionRef = useRef<{ x: number; y: number } | null>(null);
-	const lastAnimationTimeRef = useRef<number | null>(null);
-	const motionBaselineRef = useRef<MotionBaseline | null>(null);
-
+export function ArenaClient({ initialFrame }: { initialFrame: string }) {
+	// Keep React from replacing the DOM nodes owned by the SVG renderer on HUD updates.
+	const initialMarkup = useMemo(
+		() => ({ __html: initialFrame }),
+		[initialFrame]
+	);
+	const viewport = useRef<SVGSVGElement>(null);
+	const host = useRef<SVGGElement>(null);
+	const camera = useRef<OrbitCamera | YawPitchPose>({ ...OVERVIEW });
+	const pressed = useRef(new Set<string>());
+	const [flying, setFlying] = useState(false);
 	const [locked, setLocked] = useState(false);
-	const [pose, setPose] = useState<PlayerPose>(DEFAULT_POSE);
-	const [motionAvailable, setMotionAvailable] = useState(false);
-	const [motionEnabled, setMotionEnabled] = useState(false);
-	const [motionPermissionNeeded, setMotionPermissionNeeded] = useState(false);
 
 	useEffect(() => {
-		const supportsMotion = typeof DeviceOrientationEvent !== 'undefined';
-		setMotionAvailable(supportsMotion);
-		setMotionPermissionNeeded(
-			supportsMotion &&
-				typeof (
-					DeviceOrientationEvent as typeof DeviceOrientationEvent & {
-						requestPermission?: () => Promise<'granted' | 'denied'>;
-					}
-				).requestPermission === 'function'
-		);
+		const svg = viewport.current!;
+		const renderer = createSVGRenderer(svg, host.current!, {
+			farPlane: 200,
+		});
+		renderer.setWorld(scene);
+		let frame = 0;
+		let previous = 0;
+		let lastCamera: typeof camera.current | undefined;
+		let resized = true;
+		const observer = new ResizeObserver(() => {
+			resized = true;
+		});
+		observer.observe(svg);
+		let drag: { id: number; x: number; y: number } | undefined;
 
-		function onPointerLockChange() {
-			setLocked(document.pointerLockElement === viewportRef.current);
+		function look(dx: number, dy: number) {
+			const current = camera.current;
+			camera.current = {
+				...current,
+				yaw: current.yaw + dx * 0.004 * ('target' in current ? -1 : 1),
+				pitch: clampPitch(current.pitch + dy * 0.004),
+			};
 		}
-
-		function onKeyDown(event: KeyboardEvent) {
-			if (event.code in keysRef.current) {
-				keysRef.current = {
-					...keysRef.current,
-					[event.code]: true,
-				};
-				if (event.code === 'Space' && !event.repeat) {
-					jumpRequestedRef.current = true;
-				}
+		function keyDown(event: KeyboardEvent) {
+			if (
+				document.activeElement !== svg &&
+				document.pointerLockElement !== svg
+			)
+				return;
+			if (keys.has(event.code)) {
+				pressed.current.add(event.code);
 				event.preventDefault();
 			}
 		}
-
-		function onKeyUp(event: KeyboardEvent) {
-			if (event.code in keysRef.current) {
-				keysRef.current = {
-					...keysRef.current,
-					[event.code]: false,
+		function keyUp(event: KeyboardEvent) {
+			pressed.current.delete(event.code);
+		}
+		function clearKeys() {
+			pressed.current.clear();
+		}
+		function pointerDown(event: PointerEvent) {
+			svg.focus();
+			drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+			svg.setPointerCapture(event.pointerId);
+		}
+		function pointerMove(event: PointerEvent) {
+			if (document.pointerLockElement === svg) {
+				look(event.movementX, event.movementY);
+			} else if (drag?.id === event.pointerId) {
+				look(event.clientX - drag.x, event.clientY - drag.y);
+				drag = {
+					id: event.pointerId,
+					x: event.clientX,
+					y: event.clientY,
 				};
 			}
 		}
-
-		function onMouseMove(event: MouseEvent) {
-			if (document.pointerLockElement !== viewportRef.current) {
-				return;
-			}
-
-			const next = {
-				...poseRef.current,
-				yaw: poseRef.current.yaw + event.movementX * LOOK_SENSITIVITY,
-				pitch: clampPitch(
-					poseRef.current.pitch + event.movementY * LOOK_SENSITIVITY
+		function pointerUp() {
+			drag = undefined;
+		}
+		function wheel(event: WheelEvent) {
+			if (!('target' in camera.current)) return;
+			event.preventDefault();
+			camera.current = {
+				...camera.current,
+				distance: Math.max(
+					10,
+					Math.min(
+						110,
+						camera.current.distance * Math.exp(event.deltaY * 0.001)
+					)
 				),
 			};
-
-			poseRef.current = next;
-			setPose(next);
 		}
-
-		function onDeviceOrientation(event: DeviceOrientationEvent) {
-			if (!motionEnabled || locked) {
-				return;
-			}
-
-			const beta = event.beta;
-			const gamma = event.gamma;
-
-			if (beta == null || gamma == null) {
-				return;
-			}
-
-			const baseline = motionBaselineRef.current ?? {
-				beta,
-				gamma,
-				yaw: poseRef.current.yaw,
-				pitch: poseRef.current.pitch,
-			};
-			motionBaselineRef.current = baseline;
-
-			const yawDelta =
-				normalizeDegrees(gamma - baseline.gamma) *
-				MOTION_YAW_SENSITIVITY;
-			const pitchDelta =
-				normalizeDegrees(beta - baseline.beta) *
-				MOTION_PITCH_SENSITIVITY;
-			const next = {
-				...poseRef.current,
-				yaw: wrapRadians(baseline.yaw + yawDelta),
-				pitch: clampPitch(baseline.pitch - pitchDelta),
-			};
-
-			poseRef.current = next;
-			setPose(next);
+		function lockChanged() {
+			setLocked(document.pointerLockElement === svg);
+			clearKeys();
 		}
-
 		function animate(timestamp: number) {
-			const previous = lastAnimationTimeRef.current ?? timestamp;
-			lastAnimationTimeRef.current = timestamp;
-			const deltaSeconds = Math.min((timestamp - previous) / 1000, 0.05);
-			const input = {
-				...movementFromKeys(keysRef.current),
-				jump: jumpRequestedRef.current,
-			};
-			jumpRequestedRef.current = false;
-
-			if (
-				input.forward !== 0 ||
-				input.strafe !== 0 ||
-				input.jump ||
-				poseRef.current.position[1]![0]! > EYE_HEIGHT ||
-				poseRef.current.verticalVelocity !== 0
-			) {
-				const next = stepPlayer(poseRef.current, input, deltaSeconds);
-				poseRef.current = next;
-				setPose(next);
+			const seconds = previous
+				? Math.min((timestamp - previous) / 1000, 0.05)
+				: 0;
+			previous = timestamp;
+			if (!('target' in camera.current) && pressed.current.size) {
+				const has = (key: string) => Number(pressed.current.has(key));
+				camera.current = stepCamera(
+					camera.current,
+					{
+						forward: has('KeyW') - has('KeyS'),
+						strafe: has('KeyD') - has('KeyA'),
+						vertical: has('Space') - has('KeyC'),
+						sprint: !!(has('ShiftLeft') || has('ShiftRight')),
+					},
+					seconds
+				);
 			}
-
-			frameRef.current = window.requestAnimationFrame(animate);
+			if (resized || lastCamera !== camera.current) {
+				renderer.render(camera.current, []);
+				lastCamera = camera.current;
+				resized = false;
+			}
+			frame = requestAnimationFrame(animate);
 		}
-
-		document.addEventListener('pointerlockchange', onPointerLockChange);
-		window.addEventListener('keydown', onKeyDown);
-		window.addEventListener('keyup', onKeyUp);
-		window.addEventListener('mousemove', onMouseMove);
-		window.addEventListener('deviceorientation', onDeviceOrientation);
-		frameRef.current = window.requestAnimationFrame(animate);
-
+		svg.addEventListener('pointerdown', pointerDown);
+		svg.addEventListener('pointermove', pointerMove);
+		svg.addEventListener('pointerup', pointerUp);
+		svg.addEventListener('pointercancel', pointerUp);
+		svg.addEventListener('wheel', wheel, { passive: false });
+		svg.addEventListener('blur', clearKeys);
+		window.addEventListener('keydown', keyDown);
+		window.addEventListener('keyup', keyUp);
+		window.addEventListener('blur', clearKeys);
+		document.addEventListener('pointerlockchange', lockChanged);
+		frame = requestAnimationFrame(animate);
 		return () => {
-			document.removeEventListener(
-				'pointerlockchange',
-				onPointerLockChange
-			);
-			window.removeEventListener('keydown', onKeyDown);
-			window.removeEventListener('keyup', onKeyUp);
-			window.removeEventListener('mousemove', onMouseMove);
-			window.removeEventListener(
-				'deviceorientation',
-				onDeviceOrientation
-			);
-			if (frameRef.current != null) {
-				window.cancelAnimationFrame(frameRef.current);
-			}
+			cancelAnimationFrame(frame);
+			observer.disconnect();
+			renderer.dispose(true);
+			clearKeys();
+			svg.removeEventListener('pointerdown', pointerDown);
+			svg.removeEventListener('pointermove', pointerMove);
+			svg.removeEventListener('pointerup', pointerUp);
+			svg.removeEventListener('pointercancel', pointerUp);
+			svg.removeEventListener('wheel', wheel);
+			svg.removeEventListener('blur', clearKeys);
+			window.removeEventListener('keydown', keyDown);
+			window.removeEventListener('keyup', keyUp);
+			window.removeEventListener('blur', clearKeys);
+			document.removeEventListener('pointerlockchange', lockChanged);
 		};
-	}, [locked, motionEnabled]);
+	}, []);
 
-	function lockPointer() {
-		void viewportRef.current?.requestPointerLock();
-		viewportRef.current?.focus();
+	function changeView() {
+		camera.current = flying ? { ...OVERVIEW } : START;
+		pressed.current.clear();
+		setFlying(!flying);
+		if (document.pointerLockElement) document.exitPointerLock();
+		viewport.current?.focus();
 	}
-
-	async function enableMotionLook() {
-		if (typeof DeviceOrientationEvent === 'undefined') {
-			return;
-		}
-
-		const eventType =
-			DeviceOrientationEvent as typeof DeviceOrientationEvent & {
-				requestPermission?: () => Promise<'granted' | 'denied'>;
-			};
-		if (typeof eventType.requestPermission === 'function') {
-			const permission = await eventType.requestPermission();
-			if (permission !== 'granted') {
-				return;
-			}
-		}
-
-		motionBaselineRef.current = null;
-		setMotionPermissionNeeded(false);
-		setMotionEnabled(true);
+	function reset() {
+		camera.current = flying ? START : { ...OVERVIEW };
+		pressed.current.clear();
+		viewport.current?.focus();
 	}
-
-	function handlePointerDown(event: ReactPointerEvent<SVGSVGElement>) {
-		viewportRef.current?.focus();
-
-		if (event.pointerType === 'mouse') {
-			lockPointer();
-			return;
-		}
-
-		draggingPointerIdRef.current = event.pointerId;
-		lastDragPositionRef.current = {
-			x: event.clientX,
-			y: event.clientY,
-		};
-		event.currentTarget.setPointerCapture(event.pointerId);
-	}
-
-	function handlePointerMove(event: ReactPointerEvent<SVGSVGElement>) {
-		if (
-			draggingPointerIdRef.current !== event.pointerId ||
-			locked ||
-			motionEnabled
-		) {
-			return;
-		}
-		const last = lastDragPositionRef.current;
-		if (last == null) {
-			lastDragPositionRef.current = {
-				x: event.clientX,
-				y: event.clientY,
-			};
-			return;
-		}
-		const deltaX = event.clientX - last.x;
-		const deltaY = event.clientY - last.y;
-		lastDragPositionRef.current = {
-			x: event.clientX,
-			y: event.clientY,
-		};
-
-		const next = {
-			...poseRef.current,
-			yaw: poseRef.current.yaw + deltaX * LOOK_SENSITIVITY * 1.4,
-			pitch: clampPitch(
-				poseRef.current.pitch + deltaY * LOOK_SENSITIVITY * 1.4
-			),
-		};
-		poseRef.current = next;
-		setPose(next);
-	}
-
-	function handlePointerUp(event: ReactPointerEvent<SVGSVGElement>) {
-		if (draggingPointerIdRef.current === event.pointerId) {
-			draggingPointerIdRef.current = null;
-			lastDragPositionRef.current = null;
+	async function capturePointer() {
+		viewport.current?.focus();
+		try {
+			await viewport.current?.requestPointerLock();
+		} catch {
+			/* Drag controls remain available when the browser declines capture. */
 		}
 	}
-
-	const segmentsResult = renderScene(scene, pose, SVG_WIDTH, SVG_HEIGHT);
-	const forwardResult = forwardFromPose(pose);
-	const renderError = is_err(segmentsResult)
-		? unwrap_err(segmentsResult)
-		: is_err(forwardResult)
-			? unwrap_err(forwardResult)
-			: null;
-	const segments: RenderedSegment[] = is_err(segmentsResult)
-		? []
-		: unwrap(segmentsResult);
-	const forward = is_err(forwardResult) ? null : unwrap(forwardResult);
 
 	return (
-		<main className={style.shell}>
-			<section className={style.stage}>
-				<div className={style.hud}>
-					<p className={style.label}>SVG Arena</p>
-					<h1 className={style.title}>
-						Pointer-lock wireframe arena
+		<section aria-label="SVG arena" className={style.shell}>
+			<header className={style.header}>
+				<div className={style.heading}>
+					<a href="/experiments" aria-label="Back to experiments">
+						←
+					</a>
+					<h1>
+						<span>E1M1</span> Hangar
 					</h1>
-					<p className={style.copy}>
-						Click the arena, then use <kbd>W</kbd>
-						<kbd>A</kbd>
-						<kbd>S</kbd>
-						<kbd>D</kbd> to move. Press <kbd>Space</kbd> to jump. On
-						mobile, enable motion look to steer with the
-						accelerometer. The four suspended pyramids are rotated
-						with the existing
-						<code>lookAt</code> quaternion logic so their tips face
-						the cardinal directions exactly.
-					</p>
-					{motionAvailable ? (
-						<div className={style.mobileControls}>
-							<button
-								className={style.motionButton}
-								onClick={() => void enableMotionLook()}
-								type="button"
-							>
-								{motionEnabled
-									? 'Motion look active'
-									: motionPermissionNeeded
-										? 'Enable motion look'
-										: 'Calibrate motion look'}
-							</button>
-							<p className={style.motionNote}>
-								Keep the phone at your preferred neutral angle
-								when enabling motion look.
-							</p>
-						</div>
-					) : null}
-					<dl className={style.telemetry} data-testid="arena-status">
-						<div>
-							<dt>mode</dt>
-							<dd>
-								{locked
-									? 'pointer locked'
-									: motionEnabled
-										? 'motion look'
-										: 'tap or click viewport'}
-							</dd>
-						</div>
-						<div>
-							<dt>position</dt>
-							<dd>
-								{pose.position[0]![0]!.toFixed(1)},{' '}
-								{pose.position[1]![0]!.toFixed(1)},{' '}
-								{pose.position[2]![0]!.toFixed(1)}
-							</dd>
-						</div>
-						<div>
-							<dt>yaw / pitch</dt>
-							<dd>
-								{formatAngle(pose.yaw)} /{' '}
-								{formatAngle(pose.pitch)}
-							</dd>
-						</div>
-						<div>
-							<dt>forward</dt>
-							<dd>
-								{forward == null
-									? 'unavailable'
-									: `${forward[0]![0]!.toFixed(2)}, ${forward[1]![0]!.toFixed(2)}, ${forward[2]![0]!.toFixed(2)}`}
-							</dd>
-						</div>
-					</dl>
-					{renderError != null ? (
-						<p className={style.renderError}>
-							Render degraded: {renderError.message}
-						</p>
-					) : null}
 				</div>
-				<div className={style.viewportWrap}>
-					<svg
-						aria-label="Wireframe arena viewport"
-						className={style.viewport}
-						data-testid="arena-svg"
-						onPointerDown={handlePointerDown}
-						onPointerMove={handlePointerMove}
-						onPointerUp={handlePointerUp}
-						ref={viewportRef}
-						tabIndex={0}
-						viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
-					>
-						<defs>
-							<radialGradient
-								cx="50%"
-								cy="45%"
-								id="arenaGlow"
-								r="75%"
-							>
-								<stop offset="0%" stopColor="#203b28" />
-								<stop offset="55%" stopColor="#0d1810" />
-								<stop offset="100%" stopColor="#050806" />
-							</radialGradient>
-						</defs>
-						<rect
-							fill="url(#arenaGlow)"
-							height={SVG_HEIGHT}
-							width={SVG_WIDTH}
-						/>
-						{segments.map((segment, index) => (
-							<line
-								key={`${index}:${segment.depth.toFixed(3)}`}
-								opacity={segment.opacity}
-								stroke={segment.stroke}
-								strokeLinecap="round"
-								strokeWidth={segment.width}
-								x1={segment.x1}
-								x2={segment.x2}
-								y1={segment.y1}
-								y2={segment.y2}
-							/>
-						))}
-						<line
-							className={style.crosshair}
-							x1={585}
-							x2={615}
-							y1={400}
-							y2={400}
-						/>
-						<line
-							className={style.crosshair}
-							x1={600}
-							x2={600}
-							y1={385}
-							y2={415}
-						/>
-					</svg>
-					<button
-						className={style.lockButton}
-						onClick={lockPointer}
-						type="button"
-					>
-						{locked ? 'Pointer locked' : 'Enter arena'}
+				<nav aria-label="Arena controls">
+					<button onClick={changeView} type="button">
+						{flying ? 'Overview' : 'Fly through'}
 					</button>
+					<button onClick={reset} type="button">
+						Reset
+					</button>
+				</nav>
+			</header>
+			<svg
+				aria-label="Doom E1M1 wireframe mesh"
+				aria-describedby="arena-help"
+				className={style.viewport}
+				ref={viewport}
+				tabIndex={0}
+				viewBox="0 0 1200 800"
+			>
+				<g ref={host} dangerouslySetInnerHTML={initialMarkup} />
+			</svg>
+			{flying ? (
+				<span aria-hidden="true" className={style.crosshair}>
+					+
+				</span>
+			) : null}
+
+			{flying ? (
+				<div className={style.touchControls}>
+					{(
+						[
+							['KeyW', 'Move forward', '↑'],
+							['KeyS', 'Move backward', '↓'],
+							['Space', 'Move up', '+'],
+							['KeyC', 'Move down', '−'],
+						] as const
+					).map(([key, label, symbol]) => (
+						<button
+							key={key}
+							aria-label={label}
+							type="button"
+							onPointerDown={event => {
+								event.currentTarget.setPointerCapture(
+									event.pointerId
+								);
+								pressed.current.add(key);
+							}}
+							onPointerUp={() => pressed.current.delete(key)}
+							onPointerCancel={() => pressed.current.delete(key)}
+							onClick={event => {
+								if (
+									event.detail === 0 &&
+									!('target' in camera.current)
+								)
+									camera.current = stepCamera(
+										camera.current,
+										{
+											forward:
+												key === 'KeyW'
+													? 1
+													: key === 'KeyS'
+														? -1
+														: 0,
+											strafe: 0,
+											vertical:
+												key === 'Space'
+													? 1
+													: key === 'KeyC'
+														? -1
+														: 0,
+											sprint: false,
+										},
+										0.2
+									);
+							}}
+						>
+							{symbol}
+						</button>
+					))}
 				</div>
-			</section>
-		</main>
+			) : null}
+			<footer className={style.footer}>
+				<p id="arena-help">
+					{flying
+						? 'WASD move · Space / C up / down · Shift fast'
+						: 'Drag to orbit · Scroll to zoom'}
+				</p>
+				{flying ? (
+					<button onClick={() => void capturePointer()} type="button">
+						{locked ? 'Esc to release' : 'Capture mouse'}
+					</button>
+				) : null}
+				<a href="https://doom.bethesda.net/">Doom © id Software</a>
+			</footer>
+		</section>
 	);
 }

@@ -574,6 +574,14 @@ http_archive(
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
+# The original shareware release is an immutable build input for E1M1's geometry.
+http_file(
+    name = "doom_shareware",
+    downloaded_file_path = "doom-shareware.zip",
+    sha256 = "734ff1ea57ab0f2210b30a842b8199f0634284223f8138d3ddb450b1a1251763",
+    url = "https://archive.org/download/DoomsharewareEpisode/Doomsw1993idSoftwareInc.action.zip",
+)
+
 # renovate:
 # 	datasource=github-tags
 # 	versioning=loose
