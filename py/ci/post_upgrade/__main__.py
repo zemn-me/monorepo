@@ -104,5 +104,11 @@ def modify_bazel_lockfiles():
 
 modify_non_bazel_lockfiles()
 modify_bazel_lockfiles()
-update_git_refs_archives_file(f"{wd}/MODULE.bazel")
+# Use main rather than the bot branch's previous attempt so retries still
+# repair checksums for download URLs changed by that branch.
+baseline_module = run(
+    ["git", "show", "origin/main:MODULE.bazel"],
+    capture_output=True, text=True, check=True,
+).stdout
+update_git_refs_archives_file(f"{wd}/MODULE.bazel", baseline_module)
 run(["rm", "-rf", "dist/"])
