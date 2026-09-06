@@ -157,10 +157,23 @@ def _replace_archive_field_in_block(
 def update_module_bazel_text(
     module_text: str,
     fetcher: Callable[[str], bytes],
+    baseline_text: str = "",
 ) -> str:
     var_values: dict[str, str] = {}
     for match in re.finditer(r"^([A-Z0-9_]+)\s*=\s*\"([^\"]+)\"", module_text, re.MULTILINE):
         var_values[match.group(1)] = match.group(2)
+
+    baseline_vars = dict(re.findall(r'^([A-Z0-9_]+)\s*=\s*"([^"]+)"', baseline_text, re.MULTILINE))
+    baseline_archives = {}
+    for _, _, block in _http_archive_blocks(baseline_text):
+        try:
+            expression = _extract_url_expr(block)
+        except Exception:
+            continue
+        baseline_archives[_extract_archive_name(block)] = (
+            _resolve_expr(expression, baseline_vars),
+            _extract_checksum_field(block),
+        )
 
     updated = module_text
     blocks = _http_archive_blocks(module_text)
@@ -172,6 +185,10 @@ def update_module_bazel_text(
         archive_name = _extract_archive_name(archive_block)
         field = _extract_checksum_field(archive_block)
         url = _resolve_expr(url_expr, var_values)
+        # Unrelated dependency updates must not depend on every archive host
+        # being reachable. Refresh only new or changed download URLs.
+        if baseline_archives.get(archive_name) == (url, field):
+            continue
         data = fetcher(url)
         value = _sha256_value(data) if field == "sha256" else _integrity_value(data)
         updated_block = _replace_archive_field_in_block(
@@ -189,8 +206,8 @@ def _fetch_url(url: str) -> bytes:
         return response.read()
 
 
-def update_git_refs_archives_file(module_bazel: str) -> None:
+def update_git_refs_archives_file(module_bazel: str, baseline_text: str = "") -> None:
     text = open(module_bazel, "r", encoding="utf-8").read()
-    updated = update_module_bazel_text(text, _fetch_url)
+    updated = update_module_bazel_text(text, _fetch_url, baseline_text)
     with open(module_bazel, "w", encoding="utf-8") as handle:
         handle.write(updated)
