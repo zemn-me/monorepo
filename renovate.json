@@ -6,6 +6,12 @@
 			"enabled": false,
 			"matchDepNames": ["typescript5"],
 			"matchManagers": ["npm"]
+		},
+		{
+			"description": "The rules_js pnpm launcher requires the pnpm 10 executable layout",
+			"matchManagers": ["npm"],
+			"matchDepNames": ["pnpm"],
+			"allowedVersions": "<11"
 		}
 	]
 }
