@@ -3,7 +3,10 @@ load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
 py_library(
     name = "doom",
-    srcs = ["wad.py"],
+    srcs = [
+        "textures.py",
+        "wad.py",
+    ],
     visibility = ["//:__subpackages__"],
 )
 

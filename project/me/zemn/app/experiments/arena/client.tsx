@@ -1,16 +1,18 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-
+import { level } from '#root/project/me/zemn/app/experiments/arena/level.js';
 import {
 	createArenaScene,
 	OVERVIEW,
 	START,
-	stepCamera,
 } from '#root/project/me/zemn/app/experiments/arena/scene.js';
 import style from '#root/project/me/zemn/app/experiments/arena/style.module.css';
-import { type OrbitCamera } from '#root/ts/3d/low_poly.js';
+import type { OrbitCamera } from '#root/ts/3d/low_poly.js';
 import { createSVGRenderer } from '#root/ts/3d/svg_scene.js';
+import type { SVGTexture } from '#root/ts/3d/svg_texture.js';
+import { texturedMesh } from '#root/ts/doom/mesh.js';
+import { type Doors, useDoor, walk } from '#root/ts/doom/walk.js';
 import type { YawPitchPose } from '#root/ts/math/camera_pose.js';
 
 const scene = createArenaScene();
@@ -19,42 +21,68 @@ const keys = new Set([
 	'KeyA',
 	'KeyS',
 	'KeyD',
+	'ArrowLeft',
+	'ArrowRight',
 	'Space',
-	'KeyC',
+	'KeyE',
 	'ShiftLeft',
 	'ShiftRight',
 ]);
-const clampPitch = (pitch: number) => Math.max(-1.5, Math.min(1.5, pitch));
+const clampPitch = (pitch: number) => Math.max(-1.3, Math.min(1.3, pitch));
 
 export function ArenaClient({ initialFrame }: { initialFrame: string }) {
-	// Keep React from replacing the DOM nodes owned by the SVG renderer on HUD updates.
+	// React must preserve the DOM nodes owned by the SVG renderer on HUD updates.
 	const initialMarkup = useMemo(
 		() => ({ __html: initialFrame }),
 		[initialFrame]
 	);
-	const viewport = useRef<SVGSVGElement>(null);
-	const host = useRef<SVGGElement>(null);
+	const viewport = useRef<SVGSVGElement>(null),
+		host = useRef<SVGGElement>(null);
 	const camera = useRef<OrbitCamera | YawPitchPose>({ ...OVERVIEW });
-	const pressed = useRef(new Set<string>());
-	const [flying, setFlying] = useState(false);
-	const [locked, setLocked] = useState(false);
+	const pressed = useRef(new Set<string>()),
+		doors = useRef<Doors>(new Map());
+	const rebuild = useRef<() => void>(() => undefined);
+	const use = useRef<() => void>(() => undefined);
+	const [walking, setWalking] = useState(false),
+		[locked, setLocked] = useState(false);
 
 	useEffect(() => {
-		const svg = viewport.current!;
-		const renderer = createSVGRenderer(svg, host.current!, {
-			farPlane: 200,
-		});
-		renderer.setWorld(scene);
-		let frame = 0;
-		let previous = 0;
+		const svg = viewport.current!,
+			materials = new Map<string, SVGTexture>();
+		const renderer = createSVGRenderer(
+			svg,
+			host.current!,
+			{ farPlane: 200 },
+			materials
+		);
 		let lastCamera: typeof camera.current | undefined;
-		let resized = true;
+		rebuild.current = () => {
+			const walking = !('target' in camera.current);
+			materials.clear();
+			renderer.setWorld(
+				walking ? texturedMesh(level, doors.current, materials) : scene
+			);
+			svg.style.backgroundImage = walking
+				? `url("${level.textures['wall:SKY1']!.url}")`
+				: '';
+			lastCamera = undefined;
+		};
+		use.current = () => {
+			if (
+				!('target' in camera.current) &&
+				useDoor(level, camera.current, doors.current)
+			)
+				rebuild.current();
+		};
+		rebuild.current();
+		let frame = 0,
+			previous = 0,
+			resized = true;
+		let drag: { id: number; x: number; y: number } | undefined;
 		const observer = new ResizeObserver(() => {
 			resized = true;
 		});
 		observer.observe(svg);
-		let drag: { id: number; x: number; y: number } | undefined;
-
 		function look(dx: number, dy: number) {
 			const current = camera.current;
 			camera.current = {
@@ -70,7 +98,12 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 			)
 				return;
 			if (keys.has(event.code)) {
-				pressed.current.add(event.code);
+				if (
+					(event.code === 'Space' || event.code === 'KeyE') &&
+					!event.repeat
+				)
+					use.current();
+				else pressed.current.add(event.code);
 				event.preventDefault();
 			}
 		}
@@ -86,9 +119,9 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 			svg.setPointerCapture(event.pointerId);
 		}
 		function pointerMove(event: PointerEvent) {
-			if (document.pointerLockElement === svg) {
+			if (document.pointerLockElement === svg)
 				look(event.movementX, event.movementY);
-			} else if (drag?.id === event.pointerId) {
+			else if (drag?.id === event.pointerId) {
 				look(event.clientX - drag.x, event.clientY - drag.y);
 				drag = {
 					id: event.pointerId,
@@ -123,21 +156,25 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 				? Math.min((timestamp - previous) / 1000, 0.05)
 				: 0;
 			previous = timestamp;
-			if (!('target' in camera.current) && pressed.current.size) {
+			if (!('target' in camera.current)) {
 				const has = (key: string) => Number(pressed.current.has(key));
-				camera.current = stepCamera(
-					camera.current,
-					{
-						forward: has('KeyW') - has('KeyS'),
-						strafe: has('KeyD') - has('KeyA'),
-						vertical: has('Space') - has('KeyC'),
-						sprint: !!(has('ShiftLeft') || has('ShiftRight')),
-					},
-					seconds
-				);
+				const yaw =
+					camera.current.yaw +
+					(has('ArrowRight') - has('ArrowLeft')) * seconds * 2;
+				if (pressed.current.size || camera.current.verticalVelocity)
+					camera.current = walk(
+						level,
+						{ ...camera.current, yaw },
+						has('KeyW') - has('KeyS'),
+						has('KeyD') - has('KeyA'),
+						!!(has('ShiftLeft') || has('ShiftRight')),
+						seconds,
+						doors.current
+					);
 			}
 			if (resized || lastCamera !== camera.current) {
 				renderer.render(camera.current, []);
+				svg.style.backgroundPosition = `${-camera.current.yaw * 256}px ${camera.current.pitch * 200}px`;
 				lastCamera = camera.current;
 				resized = false;
 			}
@@ -171,17 +208,19 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 			document.removeEventListener('pointerlockchange', lockChanged);
 		};
 	}, []);
-
-	function changeView() {
-		camera.current = flying ? { ...OVERVIEW } : START;
+	function reset() {
+		camera.current = walking ? START : { ...OVERVIEW };
+		doors.current.clear();
 		pressed.current.clear();
-		setFlying(!flying);
-		if (document.pointerLockElement) document.exitPointerLock();
+		rebuild.current();
 		viewport.current?.focus();
 	}
-	function reset() {
-		camera.current = flying ? START : { ...OVERVIEW };
+	function changeView() {
+		camera.current = walking ? { ...OVERVIEW } : START;
 		pressed.current.clear();
+		setWalking(!walking);
+		rebuild.current();
+		if (document.pointerLockElement) document.exitPointerLock();
 		viewport.current?.focus();
 	}
 	async function capturePointer() {
@@ -189,7 +228,7 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 		try {
 			await viewport.current?.requestPointerLock();
 		} catch {
-			/* Drag controls remain available when the browser declines capture. */
+			/* Drag controls remain available if capture is declined. */
 		}
 	}
 
@@ -206,7 +245,7 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 				</div>
 				<nav aria-label="Arena controls">
 					<button onClick={changeView} type="button">
-						{flying ? 'Overview' : 'Fly through'}
+						{walking ? 'Overview' : 'Walk around'}
 					</button>
 					<button onClick={reset} type="button">
 						Reset
@@ -214,29 +253,28 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 				</nav>
 			</header>
 			<svg
-				aria-label="Doom E1M1 wireframe mesh"
+				aria-label="Doom E1M1 mesh"
 				aria-describedby="arena-help"
-				className={style.viewport}
+				className={`${style.viewport} ${walking ? style.textured : ''}`}
 				ref={viewport}
 				tabIndex={0}
 				viewBox="0 0 1200 800"
 			>
 				<g ref={host} dangerouslySetInnerHTML={initialMarkup} />
 			</svg>
-			{flying ? (
+			{walking ? (
 				<span aria-hidden="true" className={style.crosshair}>
 					+
 				</span>
 			) : null}
-
-			{flying ? (
+			{walking ? (
 				<div className={style.touchControls}>
 					{(
 						[
 							['KeyW', 'Move forward', '↑'],
+							['KeyA', 'Move left', '←'],
 							['KeyS', 'Move backward', '↓'],
-							['Space', 'Move up', '+'],
-							['KeyC', 'Move down', '−'],
+							['KeyD', 'Move right', '→'],
 						] as const
 					).map(([key, label, symbol]) => (
 						<button
@@ -256,40 +294,40 @@ export function ArenaClient({ initialFrame }: { initialFrame: string }) {
 									event.detail === 0 &&
 									!('target' in camera.current)
 								)
-									camera.current = stepCamera(
+									camera.current = walk(
+										level,
 										camera.current,
-										{
-											forward:
-												key === 'KeyW'
-													? 1
-													: key === 'KeyS'
-														? -1
-														: 0,
-											strafe: 0,
-											vertical:
-												key === 'Space'
-													? 1
-													: key === 'KeyC'
-														? -1
-														: 0,
-											sprint: false,
-										},
-										0.2
+										key === 'KeyW'
+											? 1
+											: key === 'KeyS'
+												? -1
+												: 0,
+										key === 'KeyD'
+											? 1
+											: key === 'KeyA'
+												? -1
+												: 0,
+										false,
+										0.2,
+										doors.current
 									);
 							}}
 						>
 							{symbol}
 						</button>
 					))}
+					<button onClick={() => use.current()} type="button">
+						Use
+					</button>
 				</div>
 			) : null}
 			<footer className={style.footer}>
 				<p id="arena-help">
-					{flying
-						? 'WASD move · Space / C up / down · Shift fast'
+					{walking
+						? 'WASD move · E / Space use · Shift run'
 						: 'Drag to orbit · Scroll to zoom'}
 				</p>
-				{flying ? (
+				{walking ? (
 					<button onClick={() => void capturePointer()} type="button">
 						{locked ? 'Esc to release' : 'Capture mouse'}
 					</button>

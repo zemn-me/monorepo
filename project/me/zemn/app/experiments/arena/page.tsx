@@ -23,5 +23,6 @@ export default function Page() {
 
 export const metadata: Metadata = {
 	title: 'SVG Arena',
-	description: 'Explore Doom’s E1M1 as an SVG wireframe mesh.',
+	description:
+		'Walk through Doom’s E1M1 with textured SVG meshes, or orbit the wireframe map.',
 };

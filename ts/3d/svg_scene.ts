@@ -1,4 +1,8 @@
 import { type OrbitCamera, orbitPose } from '#root/ts/3d/low_poly.js';
+import {
+	createTextureProjector,
+	type SVGTexture,
+} from '#root/ts/3d/svg_texture.js';
 import type { YawPitchPose } from '#root/ts/math/camera_pose.js';
 import {
 	buildFaceBSP,
@@ -8,10 +12,13 @@ import {
 	visitFaceBSP,
 } from '#root/ts/math/face_bsp.js';
 import {
+	faceFill,
 	faceLayer,
 	type Perspective,
 	perspective,
 	type RenderedFace2D,
+	renderedFill,
+	renderedPath,
 	renderedSource,
 	renderFaces,
 	type StyledFace3D,
@@ -20,6 +27,7 @@ import { unwrap } from '#root/ts/result/result.js';
 
 interface PathEntry {
 	node: SVGPathElement;
+	pattern?: SVGPatternElement;
 	path: string;
 	fill: string;
 }
@@ -123,9 +131,36 @@ export function createSVGRenderer(
 	host: SVGElement = svg,
 	projectionOptions: Partial<
 		Pick<Perspective, 'farPlane' | 'focalScale'>
-	> = {}
+	> = {},
+	materials: ReadonlyMap<string, SVGTexture> = new Map()
 ) {
 	const namespace = 'http://www.w3.org/2000/svg';
+	const definitions = document.createElementNS(namespace, 'defs');
+	svg.append(definitions);
+	const prefix = `svg-texture-${++textureRendererID}`;
+	const images = new Map<string, string>();
+	let textureID = 0;
+	function template(texture: SVGTexture) {
+		const key = `${texture.light}:${texture.image.url}`;
+		const found = images.get(key);
+		if (found) return found;
+		const id = `${prefix}-image-${textureID++}`;
+		const pattern = document.createElementNS(namespace, 'pattern');
+		pattern.id = id;
+		pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+		pattern.setAttribute('width', String(texture.image.width));
+		pattern.setAttribute('height', String(texture.image.height));
+		const image = document.createElementNS(namespace, 'image');
+		image.setAttribute('href', texture.image.url);
+		image.setAttribute('width', String(texture.image.width));
+		image.setAttribute('height', String(texture.image.height));
+		image.style.imageRendering = 'pixelated';
+		image.style.filter = `brightness(${texture.light})`;
+		pattern.append(image);
+		definitions.append(pattern);
+		images.set(key, id);
+		return id;
+	}
 	const group =
 		host.querySelector<SVGGElement>(':scope > g.park-scene') ??
 		document.createElementNS(namespace, 'g');
@@ -189,11 +224,35 @@ export function createSVGRenderer(
 	function paint(
 		entry: PaintSlot,
 		faces: readonly StyledFace3D[],
-		rendered: ReadonlyMap<StyledFace3D, RenderedFace2D>
+		rendered: ReadonlyMap<StyledFace3D, RenderedFace2D>,
+		project: ReturnType<typeof createTextureProjector>
 	) {
-		const runs = paintRuns(faces, rendered);
+		const runs: [string, string, SVGTexture?, string?][] = materials.size
+			? faces.flatMap<[string, string, SVGTexture?, string?]>(face => {
+					const projected = rendered.get(face);
+					if (!projected) return [];
+					const texture = materials.get(faceFill(face));
+					return texture
+						? project(face, texture).map(
+								t =>
+									[t.path, '', texture, t.matrix] as [
+										string,
+										string,
+										SVGTexture,
+										string,
+									]
+							)
+						: [
+								[
+									renderedPath(projected),
+									renderedFill(projected),
+								] as [string, string],
+							];
+				})
+			: paintRuns(faces, rendered);
 		for (let i = 0; i < runs.length; i++) {
-			const [pathData, fill] = runs[i]!;
+			const [pathData, paintFill, texture, matrix] = runs[i]!;
+			let fill = paintFill;
 			let path = entry.paths[i];
 			if (!path) {
 				path = {
@@ -203,6 +262,19 @@ export function createSVGRenderer(
 				};
 				entry.paths.push(path);
 				entry.node.append(path.node);
+			}
+			if (texture && matrix) {
+				if (!path.pattern) {
+					path.pattern = document.createElementNS(
+						namespace,
+						'pattern'
+					);
+					path.pattern.id = `${prefix}-projection-${textureID++}`;
+					definitions.append(path.pattern);
+				}
+				path.pattern.setAttribute('href', `#${template(texture)}`);
+				path.pattern.setAttribute('patternTransform', matrix);
+				fill = `url(#${path.pattern.id})`;
 			}
 			if (path.path !== pathData) {
 				path.node.setAttribute('d', pathData);
@@ -290,8 +362,9 @@ export function createSVGRenderer(
 			const bySource = new Map(
 				rendered.map(face => [renderedSource(face), face])
 			);
+			const project = createTextureProjector(pose, projection);
 			for (const batch of changed)
-				paint(batch.entry, batch.faces, bySource);
+				paint(batch.entry, batch.faces, bySource, project);
 			for (const entry of previous)
 				if (entry.frame !== frame) entry.node.remove();
 			let next: Node | null = null;
@@ -308,6 +381,7 @@ export function createSVGRenderer(
 		},
 		dispose(preserveFrame = false) {
 			if (!preserveFrame) group.remove();
+			definitions.remove();
 			pool.length = 0;
 			previous = [];
 			world.clear();
@@ -330,3 +404,5 @@ function byLayer(faces: readonly StyledFace3D[]): Map<number, StyledFace3D[]> {
 	}
 	return layers;
 }
+
+let textureRendererID = 0;

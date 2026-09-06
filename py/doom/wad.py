@@ -10,6 +10,8 @@ import struct
 from pathlib import Path
 from zipfile import ZipFile
 
+from py.doom.textures import extract_textures
+
 
 def clip(polygon, a, b, side=0):
     """Intersect a convex polygon with the right (0) or left (1) half-plane."""
@@ -37,7 +39,7 @@ def extract(data, name):
         offset, size, raw_name = struct.unpack_from('<ii8s', data, directory + i * 16)
         if offset < 0 or size < 0 or offset + size > len(data):
             raise ValueError('WAD lump outside file')
-        lumps.append((raw_name.rstrip(b'\0').decode('ascii'), data[offset:offset + size]))
+        lumps.append((raw_name.rstrip(b'\0').decode('ascii').upper(), data[offset:offset + size]))
     start = next(i for i, lump in enumerate(lumps) if lump[0] == name)
     section = dict(lumps[start + 1:start + 11])
 
@@ -73,6 +75,7 @@ def extract(data, name):
                               world(vertices[v2], top), world(vertices[v1], top)])
 
     floors = []
+    cells = []
     spawn_floor = 0
 
     def visit(child, polygon, contains_spawn):
@@ -85,6 +88,8 @@ def extract(data, name):
             sector = sectors[sides[lines[segments[0][3]][5 + segments[0][4]]][-1]]
             for segment in segments:
                 polygon = clip(polygon, vertices[segment[0]], vertices[segment[1]])
+            cells.append({'sector': sides[lines[segments[0][3]][5 + segments[0][4]]][-1],
+                          'polygon': [[world(p, 0)[0], world(p, 0)[2]] for p in polygon]})
             if contains_spawn:
                 spawn_floor = sector[0]
             # Convex BSP leaves can be triangulated as a fan without filling holes.
@@ -104,7 +109,27 @@ def extract(data, name):
 
     visit(len(nodes) - 1, [[min(xs), min(ys)], [max(xs), min(ys)],
                            [max(xs), max(ys)], [min(xs), max(ys)]], True)
-    return {'walls': walls, 'floors': floors,
+    def texture_name(raw):
+        return raw.rstrip(b'\0').decode().upper()
+
+    def side_data(index):
+        if index == 65535:
+            return None
+        side = sides[index]
+        return {'sector': side[-1], 'xOffset': side[0], 'yOffset': side[1],
+                'upper': texture_name(side[2]), 'lower': texture_name(side[3]),
+                'middle': texture_name(side[4])}
+
+    textures = extract_textures(dict(lumps), sectors, sides)
+    rooms = [{'floor': sector[0] / 64, 'ceiling': sector[1] / 64,
+              'floorTexture': texture_name(sector[2]), 'ceilingTexture': texture_name(sector[3]),
+              'light': sector[4], 'tag': sector[6]} for sector in sectors]
+    map_lines = [{'a': [world(vertices[line[0]], 0)[0], world(vertices[line[0]], 0)[2]],
+                  'b': [world(vertices[line[1]], 0)[0], world(vertices[line[1]], 0)[2]],
+                  'flags': line[2], 'special': line[3], 'tag': line[4],
+                  'front': side_data(line[5]), 'back': side_data(line[6])} for line in lines]
+    return {'origin': center, 'rooms': rooms, 'lines': map_lines, 'cells': cells,
+            'textures': textures, 'walls': walls, 'floors': floors,
             'spawn': world(spawn[:2], spawn_floor + 41), 'angle': spawn[2],
             'linedefs': len(lines), 'sectors': len(sectors)}
 
@@ -114,7 +139,7 @@ def generate(archive, output, name):
         level = extract(source.read('DOOM1.WAD'), name)
     Path(output).write_text(
         '// Generated from Doom shareware by //py/doom; do not edit.\n'
-        'export const level: { walls: number[][][]; floors: number[][][]; '
-        'spawn: number[]; angle: number; linedefs: number; sectors: number } = '
+        "import type { DoomLevel } from '#root/ts/doom/level.js';\n"
+        'export const level: DoomLevel = '
         + json.dumps(level, separators=(',', ':')) + ';\n'
     )

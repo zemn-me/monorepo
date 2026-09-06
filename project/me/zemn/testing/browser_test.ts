@@ -118,9 +118,12 @@ describe('zemn.me website', () => {
 			).toHaveLength(0);
 		});
 
-		it('Doom arena supports orbit, flight and reset', async () => {
-			try { await testDoomArena(driver, origin); }
-			finally { await driver.quit(); }
+		it('Doom arena supports orbit, textured walking, collision and reset', async () => {
+			try {
+				await testDoomArena(driver, origin);
+			} finally {
+				await driver.quit();
+			}
 		});
 
 		it('api server /healthz returns OK', async () => {

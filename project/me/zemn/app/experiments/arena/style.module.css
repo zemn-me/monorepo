@@ -84,7 +84,7 @@
 	outline: 1px solid #84a599;
 	outline-offset: -1px;
 }
-.viewport path {
+.viewport:not(.textured) path {
 	fill: none;
 	stroke-width: 0.85px;
 	vector-effect: non-scaling-stroke;
@@ -155,4 +155,14 @@
 		touch-action: none;
 		user-select: none;
 	}
+}
+
+.textured {
+	background-size: auto 100%;
+	background-repeat: repeat-x;
+	image-rendering: pixelated;
+}
+.textured path {
+	stroke-width: 0.45px;
+	stroke-linejoin: round;
 }

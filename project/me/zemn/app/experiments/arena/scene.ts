@@ -1,7 +1,7 @@
 import { level } from '#root/project/me/zemn/app/experiments/arena/level.js';
 import type { OrbitCamera } from '#root/ts/3d/low_poly.js';
 import type { YawPitchPose } from '#root/ts/math/camera_pose.js';
-import { point, x, y, z } from '#root/ts/math/cartesian.js';
+import { point } from '#root/ts/math/cartesian.js';
 import { styledFace } from '#root/ts/math/wireframe_render.js';
 
 export const OVERVIEW: OrbitCamera = {
@@ -40,38 +40,4 @@ export function createArenaScene() {
 			true
 		)
 	);
-}
-
-export interface MovementInput {
-	forward: number;
-	strafe: number;
-	vertical: number;
-	sprint: boolean;
-}
-
-/** Free flight keeps closed doors and secret rooms accessible in the mesh viewer. */
-export function stepCamera(
-	pose: YawPitchPose,
-	input: MovementInput,
-	seconds: number
-): YawPitchPose {
-	const magnitude = Math.max(
-		1,
-		Math.hypot(input.forward, input.strafe, input.vertical)
-	);
-	const distance = (seconds * (input.sprint ? 12 : 4)) / magnitude;
-	return {
-		...pose,
-		position: point<3>(
-			x(pose.position) +
-				(Math.sin(pose.yaw) * input.forward +
-					Math.cos(pose.yaw) * input.strafe) *
-					distance,
-			y(pose.position) + input.vertical * distance,
-			z(pose.position) +
-				(Math.cos(pose.yaw) * input.forward -
-					Math.sin(pose.yaw) * input.strafe) *
-					distance
-		),
-	};
 }

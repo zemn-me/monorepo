@@ -7,7 +7,7 @@ export async function testDoomArena(driver: ThenableWebDriver, origin: string) {
 	await driver.manage().setTimeouts({ implicit: 5000 });
 	await driver.get(`${origin}/experiments/arena`);
 	const svg = await driver.findElement(
-		By.css('svg[aria-label="Doom E1M1 wireframe mesh"]')
+		By.css('svg[aria-label="Doom E1M1 mesh"]')
 	);
 	const paths = () => svg.findElements(By.css('path:not([display="none"])'));
 	const geometry = () =>
@@ -41,14 +41,22 @@ export async function testDoomArena(driver: ThenableWebDriver, origin: string) {
 	);
 	const orbited = await geometry();
 	await driver
-		.findElement(By.xpath('//button[text()="Fly through"]'))
+		.findElement(By.xpath('//button[text()="Walk around"]'))
 		.click();
 	await driver.wait(
 		async () => (await geometry()) !== orbited,
 		5000,
-		'flight moves to the player start'
+		'walking starts at the player position'
 	);
 	await driver.wait(async () => (await paths()).length > 0, 5000);
+	expect(
+		(
+			await svg.findElements(
+				By.css('pattern image[href^="data:image/png"]')
+			)
+		).length
+	).toBeGreaterThan(0);
+	expect(await driver.findElements(By.css('canvas'))).toHaveLength(0);
 	const start = await geometry();
 	expect(start).not.toBe(overview);
 	await driver.actions().keyDown('w').pause(300).keyUp('w').perform();
@@ -57,6 +65,25 @@ export async function testDoomArena(driver: ThenableWebDriver, origin: string) {
 		5000,
 		'W moves the camera'
 	);
+	await driver.actions().keyDown('w').perform();
+	let wall = await geometry();
+	try {
+		await driver.wait(
+			async () => {
+				await driver.actions().pause(500).perform();
+				const current = await geometry();
+				const stopped = current === wall;
+				wall = current;
+				return stopped;
+			},
+			30000,
+			'walking stops at a solid wall'
+		);
+	} finally {
+		await driver.actions().keyUp('w').perform();
+	}
+	await driver.actions().keyDown('w').pause(500).keyUp('w').perform();
+	expect((await geometry()) === wall).toBe(true);
 	await driver.findElement(By.xpath('//button[text()="Reset"]')).click();
 	await driver.wait(
 		async () => (await geometry()) === start,
@@ -65,7 +92,7 @@ export async function testDoomArena(driver: ThenableWebDriver, origin: string) {
 	);
 	if (output)
 		await writeFile(
-			join(output, 'doom-flight.png'),
+			join(output, 'doom-walking.png'),
 			await driver.takeScreenshot(),
 			'base64'
 		);
