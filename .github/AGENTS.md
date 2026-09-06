@@ -6,4 +6,5 @@ Presubmit gets only the read-only BuildBuddy key; staging and submit get the ful
 
 Staging and Submit share `pulumi_deploy`; obsolete pending merge-group runs are
 removed by `cancel-obsolete-staging.yml`. Keep cleanup outside that concurrency
-group and execute only trusted workflow code when using its Actions write token.
+group and execute only trusted workflow code through Bazel when using its Actions
+write token. Cleanup also cancels obsolete running Presubmits, which only run checks.
