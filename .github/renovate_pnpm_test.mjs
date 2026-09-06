@@ -6,6 +6,7 @@ import path from 'node:path';
 
 import { runfiles } from '@bazel/runfiles';
 import { GlobalConfig } from 'renovate/dist/config/global.js';
+import { extractPackageJson } from 'renovate/dist/modules/manager/npm/extract/common/package-file.js';
 import { generateLockFile } from 'renovate/dist/modules/manager/npm/post-update/pnpm.js';
 
 const require = createRequire(import.meta.url);
@@ -28,6 +29,22 @@ for (const section of [
 		undefined,
 		'A pnpm dependency overrides Renovate packageManager selection'
 	);
+}
+
+// The shared pin must remain discoverable by Renovate's npm manager, as must
+// the Renovate dependency that controls the workflow's own version.
+const extracted = extractPackageJson(repository, 'package.json');
+for (const [depName, depType, currentValue] of [
+	['pnpm', 'packageManager', expectedVersion],
+	['renovate', 'devDependencies', repository.devDependencies.renovate],
+]) {
+	const dependency = extracted.deps.find(
+		dep => dep.depName === depName && dep.depType === depType
+	);
+	assert.ok(dependency, `${depName} must remain managed by Renovate`);
+	assert.equal(dependency.currentValue, currentValue);
+	assert.equal(dependency.datasource, 'npm');
+	assert.equal(dependency.skipReason, undefined);
 }
 
 const pnpm = runfiles.resolve(process.env.PNPM_BIN);

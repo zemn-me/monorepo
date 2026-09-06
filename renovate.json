@@ -8,10 +8,11 @@
 			"matchManagers": ["npm"]
 		},
 		{
-			"description": "The rules_js pnpm launcher requires the pnpm 10 executable layout",
-			"matchManagers": ["npm"],
-			"matchDepNames": ["pnpm"],
-			"allowedVersions": "<11"
+			"description": "Update pnpm together with the Bazel rules that provide its launcher and release checksums",
+			"groupName": "pnpm toolchain",
+			"matchManagers": ["npm", "bazel-module"],
+			"matchPackageNames": ["pnpm", "aspect_rules_js"],
+			"separateMajorMinor": false
 		}
 	]
 }
