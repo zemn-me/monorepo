@@ -231,6 +231,15 @@ func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
 	if err := waitForText(driver, "Traffic over time", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
+	for _, label := range []string{"Go to homepage", "Open navigation menu"} {
+		element, err := driver.FindElement(selenium.ByCSSSelector, "[aria-label='"+label+"']")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if displayed, err := element.IsDisplayed(); err != nil || !displayed {
+			t.Fatalf("shared site UI %q must be visible: %v", label, err)
+		}
+	}
 	if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" {
 		if screenshot, err := driver.Screenshot(); err == nil {
 			if err := os.WriteFile(filepath.Join(outputDir, "analytics-desktop.png"), screenshot, 0600); err != nil {

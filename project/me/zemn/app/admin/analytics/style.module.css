@@ -1,15 +1,5 @@
-/* Reports need the full content width for side-by-side comparisons. */
-:global([data-glade-layout]):has(.page) {
-	grid: "content" auto "footer" auto / minmax(0, 1fr);
-}
-:global([data-glade-layout]):has(.page) :global([data-glade-banner]) {
-	display: none;
-}
-:global([data-glade-content]):has(.page) {
-	padding-top: 0;
-}
-
 .page {
+	container-type: inline-size;
 	max-width: 78rem;
 	margin: 0 auto;
 	padding: 2rem 1rem 4rem;
@@ -186,7 +176,7 @@
 	max-height: 28rem;
 	font-size: 0.8rem;
 }
-@media (max-width: 44rem) {
+@container (max-width: 44rem) {
 	.metrics {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
