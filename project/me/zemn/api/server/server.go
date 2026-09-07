@@ -352,18 +352,28 @@ func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) 
 // It mirrors the schemas defined in Pulumi (id/hash key & optional when/range key).
 func (s *Server) ProvisionTables(ctx context.Context) error {
 	type tableSpec struct {
-		Name  string
-		Attrs []types.AttributeDefinition
-		Keys  []types.KeySchemaElement
+		Name    string
+		Attrs   []types.AttributeDefinition
+		Keys    []types.KeySchemaElement
+		Indexes []types.GlobalSecondaryIndex
 	}
 
 	specs := []tableSpec{
 		{
 			Name: s.analyticsTableName,
 			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("feed"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
 			},
+			Indexes: []types.GlobalSecondaryIndex{{
+				IndexName: aws.String(analyticsFeedIndexName),
+				KeySchema: []types.KeySchemaElement{
+					{AttributeName: aws.String("feed"), KeyType: types.KeyTypeHash},
+					{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+				},
+				Projection: &types.Projection{ProjectionType: types.ProjectionTypeAll},
+			}},
 			Keys: []types.KeySchemaElement{
 				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
 				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
@@ -439,6 +449,7 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 					TableName:                 aws.String(spec.Name),
 					AttributeDefinitions:      spec.Attrs,
 					KeySchema:                 spec.Keys,
+					GlobalSecondaryIndexes:    spec.Indexes,
 					BillingMode:               types.BillingModePayPerRequest,
 					DeletionProtectionEnabled: aws.Bool(false),
 				})

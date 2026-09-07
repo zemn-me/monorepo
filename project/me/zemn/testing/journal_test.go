@@ -742,6 +742,14 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") || !strings.Contains(source, "expiresAt=") {
 		t.Fatalf("journal integration audio was not delayed: %q", source)
 	}
+	// Check transcript tracking while the short clip is playing, before the
+	// separate advance and URL-recovery checks consume its remaining duration.
+	if err := waitForCurrentlySpokenTranscript(driver, firstEntryID, 10*time.Second); err != nil {
+		t.Fatalf("first playing transcript was not highlighted: %v", err)
+	}
+	if err := waitForCenteredJournalTranscript(driver, firstEntryID, 10*time.Second); err != nil {
+		t.Fatalf("currently spoken journal transcript segment was not centered: %v", err)
+	}
 	if err := waitForJournalAudioAdvance(driver, firstEntryID, 2750*time.Millisecond, 8*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("delayed journal audio did not advance continuously while updating its URL: %v", err)
@@ -749,12 +757,6 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForJournalAudioStallRecovery(driver, firstEntryID, 3*time.Second, 12*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("journal audio did not recover from a playback stall: %v", err)
-	}
-	if err := waitForCurrentlySpokenTranscript(driver, firstEntryID, 10*time.Second); err != nil {
-		t.Fatalf("first playing transcript was not highlighted: %v", err)
-	}
-	if err := waitForCenteredJournalTranscript(driver, firstEntryID, 10*time.Second); err != nil {
-		t.Fatalf("currently spoken journal transcript segment was not centered: %v", err)
 	}
 	stickyNavigationAndAudio, err := driver.ExecuteScript(`
 		const audio = [...document.querySelectorAll('audio[data-entry-id]')]

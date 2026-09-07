@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 )
@@ -218,5 +219,67 @@ func TestGetAdminAnalyticsEventsListsPaginatedEvents(t *testing.T) {
 	}
 	if secondPage.NextCursor != nil {
 		t.Fatalf("unexpected next cursor: %q", *secondPage.NextCursor)
+	}
+}
+
+func TestAdminAnalyticsDateRange(t *testing.T) {
+	s := newTestServer()
+	for i, timestamp := range []string{
+		"2026-03-28T23:59:59.999999999Z", "2026-03-29T00:00:00Z",
+		"2026-03-29T00:00:00.000000001Z", "2026-03-29T23:59:59.999999999Z",
+		"2026-03-30T00:00:00Z",
+	} {
+		when, err := time.Parse(time.RFC3339Nano, timestamp)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_, err = s.PostAnalyticsBeacon(t.Context(), PostAnalyticsBeaconRequestObject{Body: &AnalyticsEvent{
+			EventName: "page_view", EventTime: when, EventId: fmt.Sprint(i), SessionId: "browser",
+		}})
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	start, end, limit := "2026-03-29", "2026-03-30", 2
+	params := GetAdminAnalyticsEventsParams{StartDate: &start, EndDate: &end, Limit: &limit}
+	first, err := s.GetAdminAnalyticsEvents(t.Context(), GetAdminAnalyticsEventsRequestObject{Params: params})
+	if err != nil {
+		t.Fatal(err)
+	}
+	page := first.(GetAdminAnalyticsEvents200JSONResponse)
+	if len(page.Events) != 2 || page.NextCursor == nil {
+		t.Fatalf("unexpected first page: %+v", page)
+	}
+	params.Cursor = page.NextCursor
+	second, err := s.GetAdminAnalyticsEvents(t.Context(), GetAdminAnalyticsEventsRequestObject{Params: params})
+	if err != nil {
+		t.Fatal(err)
+	}
+	last := second.(GetAdminAnalyticsEvents200JSONResponse)
+	if len(last.Events) != 1 || last.NextCursor != nil {
+		t.Fatalf("unexpected last page: %+v", last)
+	}
+	ids := map[string]bool{}
+	for _, event := range append(page.Events, last.Events...) {
+		ids[event.Event.EventId] = true
+	}
+	if len(ids) != 3 || !ids["1"] || !ids["2"] || !ids["3"] {
+		t.Fatalf("incorrect date boundaries: %v", ids)
+	}
+}
+
+func TestAdminAnalyticsRejectsInvalidRangeAndCursor(t *testing.T) {
+	valid, invalid, end, cursor := "2026-03-29", "2026-02-30", "2026-03-30", "not-a-cursor"
+	for _, params := range []GetAdminAnalyticsEventsParams{
+		{StartDate: &valid}, {EndDate: &end}, {StartDate: &invalid, EndDate: &end},
+		{StartDate: &end, EndDate: &valid}, {StartDate: &valid, EndDate: &valid}, {Cursor: &cursor},
+	} {
+		response, err := newTestServer().GetAdminAnalyticsEvents(t.Context(), GetAdminAnalyticsEventsRequestObject{Params: params})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, ok := response.(GetAdminAnalyticsEvents400Response); !ok {
+			t.Fatalf("expected bad request, got %T", response)
+		}
 	}
 }

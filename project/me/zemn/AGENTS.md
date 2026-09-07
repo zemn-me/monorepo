@@ -13,3 +13,5 @@
 - For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.
 - `//project/me/zemn:zemn` starts the local app on port 3000; passing another `--port` appends rather than overrides.
 - Signed media range failures can leave an HTML media element stalled without an `error`; preserve playback intent and recover from `waiting`/`stalled` as well as hard errors.
+
+- Keep local `api/server.Server.ProvisionTables` indexes aligned with Pulumi; analytics listing requires `feed-when-index`, which ingest-only tests do not exercise.
