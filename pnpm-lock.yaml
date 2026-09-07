@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.61.5
-    version: 44.61.5(typanion@3.14.0)
+    specifier: 44.61.6
+    version: 44.61.6(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.3)
@@ -3778,7 +3778,7 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
     dev: true
 
@@ -3790,7 +3790,7 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
     dev: true
 
@@ -3802,7 +3802,7 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       gcp-metadata: 8.1.4
     transitivePeerDependencies:
       - supports-color
@@ -3815,7 +3815,7 @@ packages:
       '@opentelemetry/api': ^1.0.0
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
     dev: true
 
   /@opentelemetry/resources@2.10.0(@opentelemetry/api@1.9.1):
@@ -7639,7 +7639,7 @@ packages:
       minipass-collect: 2.0.1
       minipass-flush: 1.0.7
       minipass-pipeline: 1.2.4
-      p-map: 7.0.6
+      p-map: 7.0.7
       ssri: 13.0.1
 
   /cacheable-lookup@5.0.4:
@@ -13176,8 +13176,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /p-map@7.0.6:
-    resolution: {integrity: sha512-I4Prw6ivkd6p8PiYR1tXASOAOBzIJwu0TB7fqaX0c/8c3QAehNYmX57EijyGGGBt3c/BIowGwV03RVBtXvHEVg==}
+  /p-map@7.0.7:
+    resolution: {integrity: sha512-VaWRu2i4FJNRtiRWCuuQRgfQ1B7a6+gMSrO+3j0EQi/k0ULfS9kosRxGoiqwzIjZTDI02tGfk5mXXltLg6QtfQ==}
     engines: {node: '>=18'}
 
   /p-queue@9.3.3:
@@ -14215,8 +14215,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.61.5(typanion@3.14.0):
-    resolution: {integrity: sha512-fapCUAKZNVn61Lgcsg1wclEob79jGLOoIQr3JqeXGryCzXzpMNr32fdAo7jjITHvS/e6jPxm1li5u6mQRYy1RQ==}
+  /renovate@44.61.6(typanion@3.14.0):
+    resolution: {integrity: sha512-4g4L6rp2scv44i1KMKrDdvducrQVlG9tnzeOCDOoskkEIN+orlFM3AUjgQMfqVWe/awrNwJZVkI6ESU0wic4vA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14312,7 +14312,7 @@ packages:
       neotraverse: 0.6.18
       node-html-parser: 7.1.0
       p-all: 5.0.1
-      p-map: 7.0.6
+      p-map: 7.0.7
       p-queue: 9.3.3
       p-throttle: 8.1.0
       parse-link-header: 2.0.0
