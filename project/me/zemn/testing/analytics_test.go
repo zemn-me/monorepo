@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -14,6 +16,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
@@ -181,4 +184,155 @@ func postAnalyticsEvent(ctx context.Context, endpoint string, origin string, ses
 	}
 
 	return nil
+}
+
+func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
+	root, err := nextServerRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	if err := driver.ResizeWindow("", 1280, 900); err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if t.Failed() {
+			body, _ := driver.ExecuteScript("return document.body.innerText", nil)
+			logs, _ := driver.Log(log.Browser)
+			t.Logf("analytics panel: %v; browser logs: %+v", body, logs)
+		}
+	}()
+
+	// A real page navigation emits the page view used in the report.
+	root.Path = "/"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "internationally recognised expert", 20*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	root.Path = "/admin/analytics"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Complete range", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Traffic over time", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" {
+		if screenshot, err := driver.Screenshot(); err == nil {
+			if err := os.WriteFile(filepath.Join(outputDir, "analytics-desktop.png"), screenshot, 0600); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	views, err := driver.FindElement(selenium.ByCSSSelector, "output[aria-label='Page views']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	text, err := views.Text()
+	if err != nil || text == "0" || text == "" {
+		t.Fatalf("expected real page views, got %q (%v)", text, err)
+	}
+
+	search, err := driver.FindElement(selenium.ByCSSSelector, "input[type='search']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := search.SendKeys("no-such-page-analytics-itest"); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "No events match this selection.", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := expectElementText(driver, "output[aria-label='Page views']", "0", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	clear, err := driver.FindElement(selenium.ByXPATH, "//button[normalize-space()='Clear filters']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := clear.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := expectInputValue(driver, "input[type='search']", "", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	page, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Top pages']//button[normalize-space()='/']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := page.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Page: /", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := expectElementText(driver, "output[aria-label='Pages viewed']", "1", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	payload, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Recent events'] details summary", 10*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := payload.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Recent events'] details[open] pre", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+
+	period, err := driver.FindElement(selenium.ByXPATH, "//label[contains(., 'Period')]/select/option[@value='1']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := period.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Complete range", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	bars, err := driver.FindElements(selenium.ByCSSSelector, "[aria-label='Daily page views'] [role='listitem']")
+	if err != nil || len(bars) != 1 {
+		t.Fatalf("today should have one daily bucket, got %d (%v)", len(bars), err)
+	}
+	refresh, err := driver.FindElement(selenium.ByXPATH, "//button[normalize-space()='Refresh']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := refresh.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Complete range", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ResizeWindow("", 390, 844); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		value, err := wd.ExecuteScript("return document.documentElement.scrollWidth <= window.innerWidth", nil)
+		return value == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatalf("mobile layout overflows: %v", err)
+	}
+	if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" {
+		if screenshot, err := driver.Screenshot(); err == nil {
+			if err := os.WriteFile(filepath.Join(outputDir, "analytics-mobile.png"), screenshot, 0600); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+
 }

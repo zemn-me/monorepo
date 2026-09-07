@@ -2692,6 +2692,16 @@ paths:
       security:
         - OIDC: [admin_analytics_read]
       parameters:
+        - name: startDate
+          in: query
+          description: Inclusive UTC date (YYYY-MM-DD). Must be paired with endDate.
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          description: Exclusive UTC date (YYYY-MM-DD). Must be after startDate.
+          schema:
+            type: string
         - name: cursor
           in: query
           description: Cursor from a previous analytics events response.
@@ -2706,6 +2716,8 @@ paths:
             maximum: 100
             default: 25
       responses:
+        "400":
+          description: Invalid date range or cursor.
         "200":
           description: Stored analytics events.
           content:
