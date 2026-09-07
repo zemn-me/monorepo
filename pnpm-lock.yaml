@@ -169,8 +169,8 @@ dependencies:
     specifier: 3.0.1
     version: 3.0.1
   pnpm:
-    specifier: 12.3.1
-    version: 12.3.1
+    specifier: 12.3.2
+    version: 12.3.2
   ramda:
     specifier: 0.32.0
     version: 0.32.0
@@ -630,7 +630,7 @@ packages:
     resolution: {integrity: sha512-93Z1N+BQNXysodoicpOIyNh2drHfz/CTf9nnT0FEx72GJcIiwgydD7tGAr78j41LsYn3hlRn+LdGPuBLn1Bl8Q==}
     engines: {node: ^22.13.0 || >=24.0.0}
     dependencies:
-      bidi-js: 1.0.3
+      bidi-js: 1.1.0
       css-tree: 3.2.1
       is-potential-custom-element-name: 1.0.1
       lru-cache: 11.5.2
@@ -3778,7 +3778,7 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
     dev: true
 
@@ -3790,7 +3790,7 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
     dev: true
 
@@ -3802,7 +3802,7 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
       gcp-metadata: 8.1.4
     transitivePeerDependencies:
       - supports-color
@@ -3815,7 +3815,7 @@ packages:
       '@opentelemetry/api': ^1.0.0
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.10.0(@opentelemetry/api@1.9.1)
     dev: true
 
   /@opentelemetry/resources@2.10.0(@opentelemetry/api@1.9.1):
@@ -4142,57 +4142,57 @@ packages:
       '@pnpm/constants': 6.1.0
     dev: true
 
-  /@pnpm/exe.darwin-arm64@12.3.1:
-    resolution: {integrity: sha512-Yer+aZnQtgE+OOLKwbRHaAEt74WBJdH8eXpLrSWf+5vj7DkkDvhSR45HVxN3a5d430fMUyF0lmQai02T650r4g==}
+  /@pnpm/exe.darwin-arm64@12.3.2:
+    resolution: {integrity: sha512-6/s7P0pq+ULV5FwspTAJcGznMrGCbLOsJdD5d9YpoJONb9jI73MmNTKxlDMtlMikNNK+no8HZDWPFh7Ga1avVA==}
     cpu: [arm64]
     os: [darwin]
     dev: false
     optional: true
 
-  /@pnpm/exe.darwin-x64@12.3.1:
-    resolution: {integrity: sha512-XPZYf+XpxufwZS8tpQQdftsv6eUtPDA0uU5NlfXA1uMVPvXJesw5PLGWmmJZHcI4rIscn2H6FngkIcvkuZaaKQ==}
+  /@pnpm/exe.darwin-x64@12.3.2:
+    resolution: {integrity: sha512-PQympeXAJXS+ittZ5AHg+eZbcW89ajoCVlM23kFIcrv2eDDiciLJNk4+8AZgmMXMRAbEnjtqVjZbk3lFxHoFEw==}
     cpu: [x64]
     os: [darwin]
     dev: false
     optional: true
 
-  /@pnpm/exe.linux-arm64-musl@12.3.1:
-    resolution: {integrity: sha512-WjKcLeuierWGSQHjb0QeDl8avQTel8rN5jDMCI55tBJTrTBXNQsdlpgzP9uCD0GSzjPH+hjWKb+GjeMNvv5Ruw==}
+  /@pnpm/exe.linux-arm64-musl@12.3.2:
+    resolution: {integrity: sha512-uHgJwDuohgKwlik5zGem0JIhs5c3NNzdh8hB9OW7MmD2s1L2z3/sloMknvCEdx4tne2vS9NN/yb3Enhpj9ZxwQ==}
     cpu: [arm64]
     os: [linux]
     dev: false
     optional: true
 
-  /@pnpm/exe.linux-arm64@12.3.1:
-    resolution: {integrity: sha512-X0HxHlEYubFRuMPBOy+ytKsv6c11v4em/ovVVCy5KCdJVBtVGF7vF5ywlGqw7EjpGdqM39pdLTWFwH9Q77lUzQ==}
+  /@pnpm/exe.linux-arm64@12.3.2:
+    resolution: {integrity: sha512-SMj5eTAWvjojqCYCXGKQO4qSanTBCe1xhtXQ0qgfBZWJcLCMJkyea65HotYEZLWmAXEDWPh87GZczcJZXEzCIQ==}
     cpu: [arm64]
     os: [linux]
     dev: false
     optional: true
 
-  /@pnpm/exe.linux-x64-musl@12.3.1:
-    resolution: {integrity: sha512-ZvzQI2+Ek0v+V6m30XV3ShIx5sm+ZIZoM669Z0F/RvMSpHgklqv3CBdEwAsQCZ7XBNZLMQIE7RPR2yIwxt3mnw==}
+  /@pnpm/exe.linux-x64-musl@12.3.2:
+    resolution: {integrity: sha512-YYKfJubIb18iBG/pm9peDIP/STy5l5GrOQQkuFr9yOZdkc+hlYH5MBdTD8ffjTkemP9AfTYJ1R/QB/L+AZfRXA==}
     cpu: [x64]
     os: [linux]
     dev: false
     optional: true
 
-  /@pnpm/exe.linux-x64@12.3.1:
-    resolution: {integrity: sha512-ubvbQ2OSt7fR3kSnhtknx5xnm2H7uRi0kC32ADmzKJ1vZz337kmL30rTHoUzTG7ZcIyEhODg7R+zI1cW1ZdVDw==}
+  /@pnpm/exe.linux-x64@12.3.2:
+    resolution: {integrity: sha512-qc3jzpaGtMNABOG6Xl0Mee0IOXddAFiDD6sFoOqHpzcq+3YALy+6HMms47g7bYOFNSKWULqPv+SyFYJfZ8EMsA==}
     cpu: [x64]
     os: [linux]
     dev: false
     optional: true
 
-  /@pnpm/exe.win32-arm64@12.3.1:
-    resolution: {integrity: sha512-e+5CjFBGWP7U7RfFlH/EQnlFaP9Uyo/Y0BDCEbitsC4if28WBur3ajAkc25rRwiEwmmEpipTSzqNsKIs9Mq72Q==}
+  /@pnpm/exe.win32-arm64@12.3.2:
+    resolution: {integrity: sha512-W1+M+HdebF/i3DjF2Tx9/+i7BoIJFX+AwNd3WXjWozylQQVfhBA024Ea0rrx7nwToPkS2M8sd8axpwIFLL5bbw==}
     cpu: [arm64]
     os: [win32]
     dev: false
     optional: true
 
-  /@pnpm/exe.win32-x64@12.3.1:
-    resolution: {integrity: sha512-5pW8NQuVF3dkNdaUCm03PeoDiC5I9h4y9Fz717KLWi5jxDKmgARmD1zDdm60F5ohRZHPrRv/jAg94a/5+VXxow==}
+  /@pnpm/exe.win32-x64@12.3.2:
+    resolution: {integrity: sha512-LjekndG6dhq9g34qTNeEcynAAVypRUoYuga79lG96AA4JCKxH5dC3jx0mLRKeClQKwGVE1yXuQrCj+alVU2qQA==}
     cpu: [x64]
     os: [win32]
     dev: false
@@ -7468,8 +7468,8 @@ packages:
     resolution: {integrity: sha512-q6tR3RPqIB1pMiTRMFcZwuG5T8vwp+vUvEG0vuI6B+Rikh5BfPp2fQ82c925FOs+b0lcFQ8CFrL+KbilfZFhOQ==}
     dev: true
 
-  /bidi-js@1.0.3:
-    resolution: {integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==}
+  /bidi-js@1.1.0:
+    resolution: {integrity: sha512-fX1Onk0tdVPC7obPWB5EbJ1z7NVhLq4m2xZLq2YXBkxzMXIGRpNMU88n0EPgWseKl12J7zXs7qrDxPK4sRs2fg==}
     dependencies:
       require-from-string: 2.0.2
     dev: true
@@ -12418,8 +12418,8 @@ packages:
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
-  /minimizer-webpack-plugin@5.9.0(@swc/core@1.16.2)(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4)(svgo@4.1.0)(webpack@5.110.3):
-    resolution: {integrity: sha512-OASqv+dewv8vjkOBjqMOHvxUaXhtGBLZAXq7JbmYE8TSzBvOswiGq5JcBdc8ypuLL/8YUT1OEyupga6/iqdyTA==}
+  /minimizer-webpack-plugin@5.10.0(@swc/core@1.16.2)(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4)(svgo@4.1.0)(webpack@5.110.3):
+    resolution: {integrity: sha512-2//60T4S0X1Ug/dqLDOgDaGlZsN1Lv8hf8oB0NOV/KIHSaXlPwXBBIbim79dE2Z7NEs52ES8YHoSv6Lmsk+XNg==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
       '@minify-html/node': '*'
@@ -13457,19 +13457,19 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
-  /pnpm@12.3.1:
-    resolution: {integrity: sha512-PBTBVAjRSJ01D47X+TNh0mzHBwVPaEmk7qO7dAf/T+RWS0E6HEIadzoXarEWio3xx9VI8s0Nx9NE9YxOaApbGA==}
+  /pnpm@12.3.2:
+    resolution: {integrity: sha512-gvkDUxRkbuqYGt7IXHEaIatfOwVlmz+c6dJwy7k+ig9hTaF5Irrgl5AuK4YO6OttXBp+iSmaFod8DCQ/NrjhWw==}
     engines: {node: '>=18.*'}
     hasBin: true
     optionalDependencies:
-      '@pnpm/exe.darwin-arm64': 12.3.1
-      '@pnpm/exe.darwin-x64': 12.3.1
-      '@pnpm/exe.linux-arm64': 12.3.1
-      '@pnpm/exe.linux-arm64-musl': 12.3.1
-      '@pnpm/exe.linux-x64': 12.3.1
-      '@pnpm/exe.linux-x64-musl': 12.3.1
-      '@pnpm/exe.win32-arm64': 12.3.1
-      '@pnpm/exe.win32-x64': 12.3.1
+      '@pnpm/exe.darwin-arm64': 12.3.2
+      '@pnpm/exe.darwin-x64': 12.3.2
+      '@pnpm/exe.linux-arm64': 12.3.2
+      '@pnpm/exe.linux-arm64-musl': 12.3.2
+      '@pnpm/exe.linux-x64': 12.3.2
+      '@pnpm/exe.linux-x64-musl': 12.3.2
+      '@pnpm/exe.win32-arm64': 12.3.2
+      '@pnpm/exe.win32-x64': 12.3.2
     dev: false
 
   /postcss-media-query-parser@0.2.3:
@@ -16137,7 +16137,7 @@ packages:
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
-      minimizer-webpack-plugin: 5.9.0(@swc/core@1.16.2)(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4)(svgo@4.1.0)(webpack@5.110.3)
+      minimizer-webpack-plugin: 5.10.0(@swc/core@1.16.2)(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4)(svgo@4.1.0)(webpack@5.110.3)
       neo-async: 2.6.2
       schema-utils: 4.3.3
       tapable: 2.3.3
