@@ -727,7 +727,9 @@ export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
 				['awaiting_upload', 'processing'].includes(entry.status)
 			)
 				? 3000
-				: false;
+				// Aggregate summaries can finish after every entry is ready.
+				// Keep visible journals fresh instead of retaining that intermediate snapshot.
+				: 10000;
 		},
 	});
 	return future_declare_dependency(id_token, useQueryFuture(query));
