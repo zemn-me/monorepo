@@ -33,7 +33,7 @@ export function HangarBackground() {
 					distance: 62,
 					target: [0, 0, 0],
 				},
-				1.4
+				1.96
 			);
 		const animate = (now: number) => {
 			if (previous)

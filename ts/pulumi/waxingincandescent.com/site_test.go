@@ -98,7 +98,9 @@ func TestHomepage(t *testing.T) {
 				if (document.querySelector('canvas')) return 'unexpected canvas renderer';
 				const box = svg.querySelector('g').getBBox();
 				if (box.width < innerWidth * 0.25 || box.height < 50) return 'wireframe is too small or empty';
-				if (box.x < 0 || box.x + box.width > innerWidth || box.y < 0 || box.y + box.height > innerHeight) return 'wireframe clipped';
+				// Zoomed geometry can crop at the edges; its viewport must remain contained.
+				const viewport = svg.getBoundingClientRect();
+				if (viewport.x < 0 || viewport.right > innerWidth || viewport.y < 0 || viewport.bottom > innerHeight) return 'scene viewport overflow';
 				if ([...svg.querySelectorAll('path')].some(p => /NaN|Infinity/.test(p.getAttribute('d')))) return 'invalid geometry';
 				return document.title === 'WAXING INCANDESCENT' ? 'ok' : 'incorrect title';
 			`, nil)
