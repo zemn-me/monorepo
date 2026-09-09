@@ -10,6 +10,7 @@ const sliders = [
 	{ key: 'yaw', label: 'Yaw', min: -180, max: 180, unit: '°' },
 	{ key: 'tilt', label: 'Tilt', min: -90, max: 90, unit: '°' },
 	{ key: 'roll', label: 'Roll', min: -180, max: 180, unit: '°' },
+	{ key: 'zoom', label: 'Zoom', min: 0.25, max: 8, unit: '×' },
 	{ key: 'speed', label: 'Speed', min: 0, max: 5, unit: '×' },
 ] as const;
 
@@ -21,6 +22,7 @@ export function HangarBackground() {
 		yaw: -48.7,
 		tilt: 48.7,
 		roll: 0,
+		zoom: 3.92,
 		speed: 1.69,
 	});
 	const settings = useRef(controls);
@@ -44,7 +46,7 @@ export function HangarBackground() {
 					distance: 62,
 					target: [0, 0, 0],
 				},
-				3.92,
+				settings.current.zoom,
 				settings.current.roll * radians
 			);
 		const animate = (now: number) => {
@@ -154,7 +156,7 @@ export function HangarBackground() {
 							max={max}
 							step={0.01}
 							value={controls[key]}
-							aria-valuetext={`${controls[key].toFixed(key === 'speed' ? 2 : 1)}${unit === '°' ? ' degrees' : ' times'}`}
+							aria-valuetext={`${controls[key].toFixed(unit === '×' ? 2 : 1)}${unit === '°' ? ' degrees' : ' times'}`}
 							onChange={event =>
 								change(key, event.currentTarget.valueAsNumber)
 							}
@@ -171,7 +173,7 @@ export function HangarBackground() {
 							onBlur={() => setAdjusting(false)}
 						/>
 						<span className="camera-value" aria-hidden="true">
-							{controls[key].toFixed(key === 'speed' ? 2 : 1)}
+							{controls[key].toFixed(unit === '×' ? 2 : 1)}
 							{unit}
 						</span>
 					</div>

@@ -96,7 +96,7 @@ func TestHomepage(t *testing.T) {
 				if (getComputedStyle(svg).pointerEvents !== 'none') return 'scene intercepts pointer events';
 				if (Number(getComputedStyle(heading).zIndex) <= 0) return 'heading is not above the scene';
 				if (document.querySelector('canvas')) return 'unexpected canvas renderer';
-				if (document.querySelectorAll('.camera-controls input[type="range"]').length !== 4) return 'missing camera sliders';
+				if (document.querySelectorAll('.camera-controls input[type="range"]').length !== 5) return 'missing camera sliders';
 				const controls = document.querySelector('.camera-controls').getBoundingClientRect();
 				if (controls.x < 0 || controls.right > innerWidth || controls.bottom > innerHeight || controls.top < bounds.bottom) return 'camera controls obscure the heading or overflow';
 				const box = svg.querySelector('g').getBBox();
@@ -123,8 +123,8 @@ func TestHomepage(t *testing.T) {
 			}
 			waitFor(`return !!document.querySelector('[aria-label="Resume level rotation"]')`)
 			assertStill()
-			// Keyboard changes must redraw each camera axis even while paused.
-			for _, axis := range []string{"yaw", "tilt", "roll"} {
+			// Keyboard changes must redraw camera angles and zoom even while paused.
+			for _, axis := range []string{"yaw", "tilt", "roll", "zoom"} {
 				before := readGeometry()
 				slider, err := driver.FindElement(webdriver.ByCSSSelector, "#camera-"+axis)
 				if err != nil {
