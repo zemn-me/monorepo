@@ -41,15 +41,57 @@ h1 {
 	pointer-events: none;
 }
 
-.motion-toggle {
+.camera-controls {
 	position: absolute;
-	right: 1.5rem;
+	left: 1.5rem;
 	bottom: 1.5rem;
-	z-index: 1;
+	z-index: 2;
+	box-sizing: border-box;
+	width: min(340px, calc(100% - 3rem));
+	max-height: calc(50svh - 3rem);
+	overflow: auto;
+	padding: 0.75rem 1rem;
+	border: 1px solid #d8dde2;
+	border-radius: 6px;
+	background: #fffffff2;
+	color: #3f4a54;
+	font-size: 0.75rem;
+}
+
+.camera-controls-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 2rem;
+	margin-bottom: 0.25rem;
+}
+
+.camera-control {
+	display: grid;
+	grid-template-columns: 2.5rem minmax(0, 1fr) 3.5rem;
+	align-items: center;
+	gap: 0.75rem;
+	min-height: 2rem;
+}
+
+.camera-control input {
+	width: 100%;
+	min-width: 0;
+	margin: 0;
+	accent-color: #4b5864;
+	cursor: pointer;
+}
+
+.camera-value {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+.motion-toggle {
 	border: 0;
 	border-radius: 2px;
-	padding: 0.75rem;
-	background: #ffffffd9;
+	padding: 0.35rem 0;
+	background: transparent;
 	color: #59616a;
 	font: inherit;
 	font-size: 0.75rem;

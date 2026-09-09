@@ -18,10 +18,15 @@ export function createSVGWireframe(
 	svg.append(group);
 	const paths = new Map<string, SVGPathElement>();
 	return {
-		render(camera: OrbitCamera, zoom = 1) {
+		render(camera: OrbitCamera, zoom = 1, roll = 0) {
 			const width = Math.max(1, svg.clientWidth);
 			const height = Math.max(1, svg.clientHeight);
 			svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+			// Camera roll is a rotation around the projected optical centre.
+			group.setAttribute(
+				'transform',
+				`rotate(${(roll * 180) / Math.PI} ${width / 2} ${height / 2})`
+			);
 			const projected = unwrap(
 				renderSegments(
 					segments,

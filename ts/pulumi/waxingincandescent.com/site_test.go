@@ -37,7 +37,7 @@ func TestHomepage(t *testing.T) {
 			t.Fatalf("%s: %v", script, err)
 		}
 	}
-	const geometry = `return [...document.querySelectorAll('.hangar-background path')].map(p => p.getAttribute('d')).join('')`
+	const geometry = `return document.querySelector('.hangar-background').innerHTML`
 	readGeometry := func() any {
 		t.Helper()
 		value, err := driver.ExecuteScript(geometry, nil)
@@ -96,6 +96,9 @@ func TestHomepage(t *testing.T) {
 				if (getComputedStyle(svg).pointerEvents !== 'none') return 'scene intercepts pointer events';
 				if (Number(getComputedStyle(heading).zIndex) <= 0) return 'heading is not above the scene';
 				if (document.querySelector('canvas')) return 'unexpected canvas renderer';
+				if (document.querySelectorAll('.camera-controls input[type="range"]').length !== 4) return 'missing camera sliders';
+				const controls = document.querySelector('.camera-controls').getBoundingClientRect();
+				if (controls.x < 0 || controls.right > innerWidth || controls.bottom > innerHeight || controls.top < bounds.bottom) return 'camera controls obscure the heading or overflow';
 				const box = svg.querySelector('g').getBBox();
 				if (box.width < innerWidth * 0.25 || box.height < 50) return 'wireframe is too small or empty';
 				// Zoomed geometry can crop at the edges; its viewport must remain contained.
@@ -120,12 +123,48 @@ func TestHomepage(t *testing.T) {
 			}
 			waitFor(`return !!document.querySelector('[aria-label="Resume level rotation"]')`)
 			assertStill()
+			// Keyboard changes must redraw each camera axis even while paused.
+			for _, axis := range []string{"yaw", "tilt", "roll"} {
+				before := readGeometry()
+				slider, err := driver.FindElement(webdriver.ByCSSSelector, "#camera-"+axis)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := slider.SendKeys(webdriver.EndKey); err != nil {
+					t.Fatal(err)
+				}
+				waitFor(geometry+` !== arguments[0]`, before)
+				assertStill()
+			}
 			if err := pause.Click(); err != nil {
+				t.Fatal(err)
+			}
+			waitFor(geometry+` !== arguments[0]`, readGeometry())
+			speed, err := driver.FindElement(webdriver.ByCSSSelector, "#camera-speed")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := speed.SendKeys(webdriver.HomeKey); err != nil {
+				t.Fatal(err)
+			}
+			waitFor(`return document.querySelector('#camera-speed').value === '0'`)
+			assertStill()
+			if err := speed.SendKeys(webdriver.EndKey); err != nil {
 				t.Fatal(err)
 			}
 			waitFor(geometry+` !== arguments[0]`, readGeometry())
 			setMotion("reduce")
 			waitFor(`return !document.querySelector('.motion-toggle')`)
+			assertStill()
+			beforeTilt := readGeometry()
+			tilt, err := driver.FindElement(webdriver.ByCSSSelector, "#camera-tilt")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := tilt.SendKeys(webdriver.HomeKey); err != nil {
+				t.Fatal(err)
+			}
+			waitFor(geometry+` !== arguments[0]`, beforeTilt)
 			assertStill()
 			// The preference must be respected on first load as well as live changes.
 			if err := driver.Refresh(); err != nil {

@@ -5,43 +5,68 @@ import { useEffect, useRef, useState } from 'react';
 import { createSVGWireframe } from '#root/ts/3d/svg_wireframe.js';
 import { hangar } from '#root/ts/pulumi/waxingincandescent.com/app/hangar.js';
 
+const radians = Math.PI / 180;
+const sliders = [
+	{ key: 'yaw', label: 'Yaw', min: -180, max: 180, unit: '°' },
+	{ key: 'tilt', label: 'Tilt', min: -90, max: 90, unit: '°' },
+	{ key: 'roll', label: 'Roll', min: -180, max: 180, unit: '°' },
+	{ key: 'speed', label: 'Speed', min: 0, max: 5, unit: '×' },
+] as const;
+
 export function HangarBackground() {
 	const ref = useRef<SVGSVGElement>(null);
 	const [paused, setPaused] = useState(false);
 	const [reducedMotion, setReducedMotion] = useState(false);
-	const yaw = useRef(-0.85);
-
-	useEffect(() => {
-		const media = matchMedia('(prefers-reduced-motion: reduce)');
-		const update = () => setReducedMotion(media.matches);
-		update();
-		media.addEventListener('change', update);
-		return () => media.removeEventListener('change', update);
-	}, []);
+	const [controls, setControls] = useState({
+		yaw: -48.7,
+		tilt: 48.7,
+		roll: 0,
+		speed: 1.69,
+	});
+	const settings = useRef(controls);
+	const stopped = useRef(false);
+	const adjusting = useRef(false);
+	const refresh = useRef<(() => void) | null>(null);
 
 	useEffect(() => {
 		const svg = ref.current;
 		if (!svg) return;
 		const renderer = createSVGWireframe(svg, hangar());
+		const media = matchMedia('(prefers-reduced-motion: reduce)');
 		let frame = 0;
 		let previous = 0;
+		let lastReadout = 0;
 		const render = () =>
 			renderer.render(
 				{
-					yaw: yaw.current,
-					pitch: 0.85,
+					yaw: settings.current.yaw * radians,
+					pitch: settings.current.tilt * radians,
 					distance: 62,
 					target: [0, 0, 0],
 				},
-				3.92
+				3.92,
+				settings.current.roll * radians
 			);
 		const animate = (now: number) => {
-			if (previous)
-				yaw.current +=
-					(Math.min(now - previous, 100) * Math.PI * 2 * 1.69) /
-					180_000;
+			if (previous) {
+				const yaw =
+					settings.current.yaw +
+					(Math.min(now - previous, 100) *
+						2 *
+						settings.current.speed) /
+						1000;
+				settings.current = {
+					...settings.current,
+					yaw: ((yaw + 180) % 360) - 180,
+				};
+			}
 			previous = now;
 			render();
+			// Keep the control readout current without re-rendering React every frame.
+			if (now - lastReadout >= 100) {
+				setControls(settings.current);
+				lastReadout = now;
+			}
 			frame = requestAnimationFrame(animate);
 		};
 		const update = () => {
@@ -49,23 +74,44 @@ export function HangarBackground() {
 			previous = 0;
 			render();
 			if (
-				!paused &&
-				!matchMedia('(prefers-reduced-motion: reduce)').matches &&
-				!document.hidden
+				!stopped.current &&
+				!adjusting.current &&
+				!media.matches &&
+				!document.hidden &&
+				settings.current.speed > 0
 			)
 				frame = requestAnimationFrame(animate);
 		};
+		const updateMotion = () => {
+			setReducedMotion(media.matches);
+			update();
+		};
+		refresh.current = update;
 		const resize = new ResizeObserver(render);
 		resize.observe(svg);
+		media.addEventListener('change', updateMotion);
 		document.addEventListener('visibilitychange', update);
-		update();
+		updateMotion();
 		return () => {
 			cancelAnimationFrame(frame);
+			refresh.current = null;
 			resize.disconnect();
+			media.removeEventListener('change', updateMotion);
 			document.removeEventListener('visibilitychange', update);
 			renderer.dispose();
 		};
-	}, [paused, reducedMotion]);
+	}, []);
+
+	function change(key: keyof typeof controls, value: number) {
+		settings.current = { ...settings.current, [key]: value };
+		setControls(settings.current);
+		refresh.current?.();
+	}
+	function setAdjusting(value: boolean) {
+		adjusting.current = value;
+		if (value) setControls(settings.current);
+		refresh.current?.();
+	}
 
 	return (
 		<>
@@ -75,20 +121,62 @@ export function HangarBackground() {
 				aria-hidden="true"
 				focusable="false"
 			/>
-			{!reducedMotion && (
-				<button
-					className="motion-toggle"
-					type="button"
-					aria-label={
-						paused
-							? 'Resume level rotation'
-							: 'Pause level rotation'
-					}
-					onClick={() => setPaused(value => !value)}
-				>
-					{paused ? 'Resume motion' : 'Pause motion'}
-				</button>
-			)}
+			<section className="camera-controls" aria-label="Camera controls">
+				<div className="camera-controls-header">
+					<span>Camera</span>
+					{!reducedMotion && (
+						<button
+							className="motion-toggle"
+							type="button"
+							aria-label={
+								paused
+									? 'Resume level rotation'
+									: 'Pause level rotation'
+							}
+							onClick={() => {
+								stopped.current = !stopped.current;
+								setPaused(stopped.current);
+								setControls(settings.current);
+								refresh.current?.();
+							}}
+						>
+							{paused ? 'Resume motion' : 'Pause motion'}
+						</button>
+					)}
+				</div>
+				{sliders.map(({ key, label, min, max, unit }) => (
+					<div className="camera-control" key={key}>
+						<label htmlFor={`camera-${key}`}>{label}</label>
+						<input
+							id={`camera-${key}`}
+							type="range"
+							min={min}
+							max={max}
+							step={0.01}
+							value={controls[key]}
+							aria-valuetext={`${controls[key].toFixed(key === 'speed' ? 2 : 1)}${unit === '°' ? ' degrees' : ' times'}`}
+							onChange={event =>
+								change(key, event.currentTarget.valueAsNumber)
+							}
+							onPointerDown={event => {
+								event.currentTarget.setPointerCapture(
+									event.pointerId
+								);
+								setAdjusting(true);
+							}}
+							onPointerUp={() => setAdjusting(false)}
+							onPointerCancel={() => setAdjusting(false)}
+							onKeyDown={() => setAdjusting(true)}
+							onKeyUp={() => setAdjusting(false)}
+							onBlur={() => setAdjusting(false)}
+						/>
+						<span className="camera-value" aria-hidden="true">
+							{controls[key].toFixed(key === 'speed' ? 2 : 1)}
+							{unit}
+						</span>
+					</div>
+				))}
+			</section>
 		</>
 	);
 }
