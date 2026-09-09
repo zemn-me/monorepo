@@ -26,16 +26,20 @@ export function HangarBackground() {
 		let frame = 0;
 		let previous = 0;
 		const render = () =>
-			renderer.render({
-				yaw: yaw.current,
-				pitch: 0.85,
-				distance: 62,
-				target: [0, 0, 0],
-			});
+			renderer.render(
+				{
+					yaw: yaw.current,
+					pitch: 0.85,
+					distance: 62,
+					target: [0, 0, 0],
+				},
+				1.4
+			);
 		const animate = (now: number) => {
 			if (previous)
 				yaw.current +=
-					(Math.min(now - previous, 100) * Math.PI * 2) / 180_000;
+					(Math.min(now - previous, 100) * Math.PI * 2 * 1.3) /
+					180_000;
 			previous = now;
 			render();
 			frame = requestAnimationFrame(animate);

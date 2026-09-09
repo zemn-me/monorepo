@@ -18,7 +18,7 @@ export function createSVGWireframe(
 	svg.append(group);
 	const paths = new Map<string, SVGPathElement>();
 	return {
-		render(camera: OrbitCamera) {
+		render(camera: OrbitCamera, zoom = 1) {
 			const width = Math.max(1, svg.clientWidth);
 			const height = Math.max(1, svg.clientHeight);
 			svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
@@ -27,7 +27,7 @@ export function createSVGWireframe(
 					segments,
 					orbitPose(camera),
 					perspective(width, height, {
-						focalScale: 0.95,
+						focalScale: 0.95 * zoom,
 						farPlane: camera.distance + 150,
 					})
 				)
