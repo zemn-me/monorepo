@@ -6,6 +6,7 @@ ts_project(
     srcs = [
         "low_poly.ts",
         "svg_scene.ts",
+        "svg_wireframe.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -22,6 +23,7 @@ filegroup(
         "low_poly_test.ts",
         "svg_scene.ts",
         "svg_scene_test.ts",
+        "svg_wireframe.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

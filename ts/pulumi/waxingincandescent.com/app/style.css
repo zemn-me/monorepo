@@ -9,6 +9,9 @@ body {
 }
 
 main {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
 	box-sizing: border-box;
 	display: grid;
 	min-height: 100svh;
@@ -17,9 +20,47 @@ main {
 }
 
 h1 {
+	z-index: 1;
+	text-shadow: 0 0 12px #fff, 0 0 24px #fff, 0 0 36px #fff;
 	margin: 0;
 	font-size: clamp(1.25rem, 4vw, 3rem);
 	font-weight: 500;
 	letter-spacing: 0.08em;
 	text-align: center;
+}
+
+.temple-background {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	color: #85919b;
+	opacity: 0.55;
+	pointer-events: none;
+}
+
+.motion-toggle {
+	position: absolute;
+	right: 1.5rem;
+	bottom: 1.5rem;
+	z-index: 1;
+	border: 0;
+	border-radius: 2px;
+	padding: 0.75rem;
+	background: #ffffffd9;
+	color: #59616a;
+	font: inherit;
+	font-size: 0.75rem;
+	cursor: pointer;
+}
+
+.motion-toggle:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.motion-toggle {
+		display: none;
+	}
 }

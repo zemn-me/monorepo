@@ -41,6 +41,7 @@ go_test(
     data = [":next"],
     deps = [
         "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
         "@io_bazel_rules_go//go/runfiles",
     ],
 )

@@ -1,4 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
@@ -6,6 +7,8 @@ ts_project(
     srcs = [
         "layout.tsx",
         "page.tsx",
+        "temple_background.tsx",
+        "temple_church.ts",
     ],
     assets = ["style.css"],
     visibility = ["//:__subpackages__"],
@@ -16,6 +19,8 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//ts/3d",
+        "//ts/math",
         "//ts/next.js",
         "//ts/next.js/types/next-compiled",
     ],
@@ -26,6 +31,8 @@ filegroup(
     srcs = [
         "layout.tsx",
         "page.tsx",
+        "temple_background.tsx",
+        "temple_church.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -33,4 +40,10 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["temple_church.md"],
+    visibility = ["//:__subpackages__"],
 )
