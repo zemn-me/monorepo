@@ -11,6 +11,7 @@ body {
 main {
 	position: relative;
 	isolation: isolate;
+	background: #fff;
 	overflow: hidden;
 	box-sizing: border-box;
 	display: grid;
@@ -21,7 +22,8 @@ main {
 
 h1 {
 	z-index: 1;
-	text-shadow: 0 0 12px #fff, 0 0 24px #fff, 0 0 36px #fff;
+	color: #fff;
+	mix-blend-mode: difference;
 	margin: 0;
 	font-size: clamp(1.25rem, 4vw, 3rem);
 	font-weight: 500;
@@ -34,8 +36,8 @@ h1 {
 	inset: 0;
 	width: 100%;
 	height: 100%;
-	color: #85919b;
-	opacity: 0.55;
+	color: #4b5864;
+	opacity: 0.8;
 	pointer-events: none;
 }
 
