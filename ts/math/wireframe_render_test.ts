@@ -12,6 +12,7 @@ import {
 	groundPointFromScreen,
 	perspective,
 	projectCameraPoint,
+	projectSegments,
 	projectWorldPoint,
 	type RenderedFace2D,
 	renderedFill,
@@ -20,9 +21,10 @@ import {
 	renderFaces,
 	renderSegments,
 	type StyledFace3D,
-	type StyledSegment3D,
 	styledFace,
 	styleSegment,
+	type WireSegment3D,
+	wireSegment,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
 
@@ -55,10 +57,39 @@ describe('wireframe_render', () => {
 		).toBeNull();
 	});
 
+	test('object-based scene callers retain tuple styles, Result wrapping and projected fields', () => {
+		const start = point<3>(-1, 1.8, -10),
+			end = point<3>(1, 1.8, -10);
+		const segment = styleSegment([start, end], {
+			stroke: '#fff',
+			width: 1,
+			opacity: 1,
+		});
+		expect(segment[0]).toBe(start);
+		expect(segment[1]).toBe(end);
+		expect(segment.stroke).toBe('#fff');
+		const pose = { position: point<3>(0, 1.8, -18), yaw: 0, pitch: 0 };
+		const rendered = unwrap(
+			renderSegments([segment], pose, perspective(800, 600))
+		);
+		expect(rendered).toEqual([
+			{
+				x1: 332.5,
+				y1: 300,
+				x2: 467.5,
+				y2: 300,
+				stroke: '#fff',
+				width: 1,
+				opacity: 1 - 8 / 90,
+				depth: 8,
+			},
+		]);
+	});
+
 	test('wire segments clip at the near plane, reject hidden geometry and sort by depth', () => {
 		const line = (z1: number, z2: number, stroke: string) =>
-			styleSegment(point<3>(-1, 0, z1), point<3>(1, 0, z2), stroke, 1, 1);
-		const result = renderSegments(
+			wireSegment(point<3>(-1, 0, z1), point<3>(1, 0, z2), stroke, 1, 1);
+		const result = projectSegments(
 			[
 				line(-1, 2, 'clipped'),
 				line(-3, -1, 'behind'),
@@ -79,14 +110,14 @@ describe('wireframe_render', () => {
 		});
 	});
 
-	test('renderSegments renders visible geometry in front of the camera', () => {
+	test('projectSegments renders visible geometry in front of the camera', () => {
 		const pose: YawPitchPose = {
 			position: point<3>(0, 1.8, -18),
 			yaw: 0,
 			pitch: 0,
 		};
-		const scene: StyledSegment3D[] = [
-			styleSegment(
+		const scene: WireSegment3D[] = [
+			wireSegment(
 				point<3>(-1, 1.8, -10),
 				point<3>(1, 1.8, -10),
 				'#fff',
@@ -94,7 +125,7 @@ describe('wireframe_render', () => {
 				1
 			),
 		];
-		const rendered = renderSegments(
+		const rendered = projectSegments(
 			scene,
 			unwrap(cameraSpaceTransformFromPose(pose)),
 			cameraProjector(800, 600)

@@ -3,8 +3,8 @@ import { cameraSpaceTransform } from '#root/ts/math/camera_pose.js';
 import { type Point3D } from '#root/ts/math/cartesian.js';
 import {
 	cameraProjector,
-	renderSegments,
-	type StyledSegment3D,
+	projectSegments,
+	type WireSegment3D,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
 
@@ -23,7 +23,7 @@ export type SVGWireframe = <R>(
 /** Church-encoded lifecycle and segments keep application fields out of runtime keys. */
 export function createSVGWireframe(
 	svg: SVGSVGElement,
-	segments: readonly StyledSegment3D[]
+	segments: readonly WireSegment3D[]
 ): SVGWireframe {
 	const namespace = 'http://www.w3.org/2000/svg';
 	const group = document.createElementNS(namespace, 'g');
@@ -47,7 +47,7 @@ export function createSVGWireframe(
 			'transform',
 			`rotate(${(roll * 180) / Math.PI} ${width / 2} ${height / 2})`
 		);
-		const projected = renderSegments(
+		const projected = projectSegments(
 			segments,
 			unwrap(
 				cameraSpaceTransform(

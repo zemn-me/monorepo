@@ -7,7 +7,7 @@ import { point, x, y } from '#root/ts/math/cartesian.js';
 import {
 	perspective,
 	projectWorldPoint,
-	styleSegment,
+	wireSegment,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
 
@@ -23,7 +23,7 @@ test('wireframe projection agrees with the shared camera and reuses paths across
 		end = point<3>(2, 1, 0),
 		target = point<3>(0, 0, 0);
 	createSVGWireframe(svg, [
-		styleSegment(start, end, 'currentColor', 0.8, 0.85),
+		wireSegment(start, end, 'currentColor', 0.8, 0.85),
 	])((render, dispose) => {
 		const yaw = (-48.7 * Math.PI) / 180,
 			pitch = (32 * Math.PI) / 180;

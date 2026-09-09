@@ -6,6 +6,7 @@ import {
 } from '#root/ts/math/camera_pose.js';
 import { Point2D, Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
+import type { Segment3D } from '#root/ts/math/wireframe.js';
 import { pipe } from '#root/ts/pipe.js';
 import {
 	and_then,
@@ -14,8 +15,74 @@ import {
 	type Result,
 } from '#root/ts/result/result.js';
 
+/** Object-based scene API used by existing wireframe applications. */
+export type StyledSegment3D = Segment3D & {
+	readonly stroke: string;
+	readonly width: number;
+	readonly opacity: number;
+};
+
+export interface RenderedSegment2D {
+	readonly x1: number;
+	readonly y1: number;
+	readonly x2: number;
+	readonly y2: number;
+	readonly stroke: string;
+	readonly width: number;
+	readonly opacity: number;
+	readonly depth: number;
+}
+
+export function styleSegment(
+	segment: Segment3D,
+	style: Pick<StyledSegment3D, 'stroke' | 'width' | 'opacity'>
+): StyledSegment3D {
+	return Object.assign(segment, style);
+}
+
+/** Adapt existing scenes at the boundary; projection stays shared with the functional API. */
+export function renderSegments(
+	segments: readonly StyledSegment3D[],
+	pose: YawPitchPose,
+	projection: Perspective
+): Result<RenderedSegment2D[], Error> {
+	return and_then(cameraSpaceTransformFromPose(pose), toCamera =>
+		projectSegments(
+			segments.map(segment =>
+				wireSegment(
+					segment[0],
+					segment[1],
+					segment.stroke,
+					segment.width,
+					segment.opacity
+				)
+			),
+			toCamera,
+			cameraProjector(
+				projection.width,
+				projection.height,
+				projection.focalScale,
+				projection.nearPlane
+			),
+			projection.nearPlane,
+			projection.farPlane
+		).map(segment =>
+			segment((x1, y1, x2, y2, stroke, width, opacity, depth) => ({
+				x1,
+				y1,
+				x2,
+				y2,
+				stroke,
+				width,
+				opacity,
+				depth,
+			}))
+		)
+	);
+}
+
 /** Church products keep segment fields local so minifiers can rename them. */
-export type StyledSegment3D = <R>(
+export type WireSegment3D = <R>(
 	use: (
 		start: Point3D,
 		end: Point3D,
@@ -25,7 +92,7 @@ export type StyledSegment3D = <R>(
 	) => R
 ) => R;
 
-export type RenderedSegment2D = <R>(
+export type ProjectedSegment2D = <R>(
 	use: (
 		x1: number,
 		y1: number,
@@ -46,13 +113,13 @@ export interface Perspective {
 	readonly focalScale: number;
 }
 
-export function styleSegment(
+export function wireSegment(
 	start: Point3D,
 	end: Point3D,
 	stroke: string,
 	width: number,
 	opacity: number
-): StyledSegment3D {
+): WireSegment3D {
 	return use => use(start, end, stroke, width, opacity);
 }
 
@@ -162,19 +229,19 @@ function renderedSegment(
 	width: number,
 	opacity: number,
 	depth: number
-): RenderedSegment2D {
+): ProjectedSegment2D {
 	return use => use(x1, y1, x2, y2, stroke, width, opacity, depth);
 }
 
 /** Transform and project a wire model with a camera compiled once per frame. */
-export function renderSegments(
-	segments: readonly StyledSegment3D[],
+export function projectSegments(
+	segments: readonly WireSegment3D[],
 	toCamera: (world: Point3D) => Point3D,
 	project: (cameraPoint: Point3D) => Point2D,
 	nearPlane = 0.1,
 	farPlane = 90
-): RenderedSegment2D[] {
-	const rendered: RenderedSegment2D[] = [];
+): ProjectedSegment2D[] {
+	const rendered: ProjectedSegment2D[] = [];
 	for (const segment of segments)
 		segment((start, end, stroke, width, opacity) => {
 			const clipped = clipSegmentToNearPlane(
