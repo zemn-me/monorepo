@@ -38,7 +38,7 @@ export function HangarBackground() {
 		const animate = (now: number) => {
 			if (previous)
 				yaw.current +=
-					(Math.min(now - previous, 100) * Math.PI * 2 * 1.3) /
+					(Math.min(now - previous, 100) * Math.PI * 2 * 1.69) /
 					180_000;
 			previous = now;
 			render();
