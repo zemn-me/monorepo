@@ -9,6 +9,10 @@ body {
 }
 
 main {
+	position: relative;
+	isolation: isolate;
+	background: #fff;
+	overflow: hidden;
 	box-sizing: border-box;
 	display: grid;
 	min-height: 100svh;
@@ -17,9 +21,22 @@ main {
 }
 
 h1 {
+	z-index: 1;
+	color: #fff;
+	mix-blend-mode: difference;
 	margin: 0;
 	font-size: clamp(1.25rem, 4vw, 3rem);
 	font-weight: 500;
 	letter-spacing: 0.08em;
 	text-align: center;
+}
+
+.hangar-background {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	color: #4b5864;
+	opacity: 0.8;
+	pointer-events: none;
 }

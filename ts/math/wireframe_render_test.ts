@@ -7,10 +7,12 @@ import {
 } from '#root/ts/math/camera_pose.js';
 import { point, x, y, z } from '#root/ts/math/cartesian.js';
 import {
+	cameraProjector,
 	clipPolygonToDepth,
 	groundPointFromScreen,
 	perspective,
 	projectCameraPoint,
+	projectSegments,
 	projectWorldPoint,
 	type RenderedFace2D,
 	renderedFill,
@@ -19,8 +21,10 @@ import {
 	renderFaces,
 	renderSegments,
 	type StyledFace3D,
-	type StyledSegment3D,
 	styledFace,
+	styleSegment,
+	type WireSegment3D,
+	wireSegment,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
 
@@ -53,25 +57,85 @@ describe('wireframe_render', () => {
 		).toBeNull();
 	});
 
-	test('renderSegments renders visible geometry in front of the camera', () => {
+	test('object-based scene callers retain tuple styles, Result wrapping and projected fields', () => {
+		const start = point<3>(-1, 1.8, -10),
+			end = point<3>(1, 1.8, -10);
+		const segment = styleSegment([start, end], {
+			stroke: '#fff',
+			width: 1,
+			opacity: 1,
+		});
+		expect(segment[0]).toBe(start);
+		expect(segment[1]).toBe(end);
+		expect(segment.stroke).toBe('#fff');
+		const pose = { position: point<3>(0, 1.8, -18), yaw: 0, pitch: 0 };
+		const rendered = unwrap(
+			renderSegments([segment], pose, perspective(800, 600))
+		);
+		expect(rendered).toEqual([
+			{
+				x1: 332.5,
+				y1: 300,
+				x2: 467.5,
+				y2: 300,
+				stroke: '#fff',
+				width: 1,
+				opacity: 1 - 8 / 90,
+				depth: 8,
+			},
+		]);
+	});
+
+	test('wire segments clip at the near plane, reject hidden geometry and sort by depth', () => {
+		const line = (z1: number, z2: number, stroke: string) =>
+			wireSegment(point<3>(-1, 0, z1), point<3>(1, 0, z2), stroke, 1, 1);
+		const result = projectSegments(
+			[
+				line(-1, 2, 'clipped'),
+				line(-3, -1, 'behind'),
+				line(20, 20, 'far'),
+				line(4, 4, 'visible'),
+			],
+			world => world,
+			cameraProjector(800, 600),
+			0.1,
+			10
+		);
+		expect(
+			result.map(line => line((_x1, _y1, _x2, _y2, stroke) => stroke))
+		).toEqual(['visible', 'clipped']);
+		result[1]!((x1, y1, x2, y2, _stroke, _width, _opacity, depth) => {
+			expect([x1, y1, x2, y2].every(Number.isFinite)).toBe(true);
+			expect(depth).toBeCloseTo(1.05);
+		});
+	});
+
+	test('projectSegments renders visible geometry in front of the camera', () => {
 		const pose: YawPitchPose = {
 			position: point<3>(0, 1.8, -18),
 			yaw: 0,
 			pitch: 0,
 		};
-		const scene: StyledSegment3D[] = [
-			Object.assign(
-				[point<3>(-1, 1.8, -10), point<3>(1, 1.8, -10)] as const,
-				{ stroke: '#fff', width: 1, opacity: 1 }
+		const scene: WireSegment3D[] = [
+			wireSegment(
+				point<3>(-1, 1.8, -10),
+				point<3>(1, 1.8, -10),
+				'#fff',
+				1,
+				1
 			),
 		];
-
-		const rendered = unwrap(
-			renderSegments(scene, pose, perspective(800, 600))
+		const rendered = projectSegments(
+			scene,
+			unwrap(cameraSpaceTransformFromPose(pose)),
+			cameraProjector(800, 600)
 		);
-
 		expect(rendered).toHaveLength(1);
-		expect(rendered[0]!.x1).toBeLessThan(rendered[0]!.x2);
+		rendered[0]!((x1, y1, x2, y2, stroke, width, opacity, depth) => {
+			expect([x1, y1, x2, y2]).toEqual([332.5, 300, 467.5, 300]);
+			expect([stroke, width, depth]).toEqual(['#fff', 1, 8]);
+			expect(opacity).toBeCloseTo(1 - 8 / 90);
+		});
 	});
 });
 
