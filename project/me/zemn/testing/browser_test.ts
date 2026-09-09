@@ -15,6 +15,8 @@ import glob from 'fast-glob';
 import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
 import handler from 'serve-handler';
 
+import { testDoomArena } from '#root/project/me/zemn/testing/arena/browser.js';
+
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
 const resolveRunfilesPath = (candidate: string): string => {
@@ -114,6 +116,14 @@ describe('zemn.me website', () => {
 						: false
 				)
 			).toHaveLength(0);
+		});
+
+		it('Doom arena supports orbit, textured walking, collision and reset', async () => {
+			try {
+				await testDoomArena(driver, origin);
+			} finally {
+				await driver.quit();
+			}
 		});
 
 		it('api server /healthz returns OK', async () => {

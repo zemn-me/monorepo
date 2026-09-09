@@ -49,6 +49,7 @@ ts_project(
         "//:node_modules/jose",
         "//:node_modules/selenium-webdriver",
         "//:node_modules/serve-handler",
+        "//project/me/zemn/testing/arena",
         "//ts/selenium",
     ],
 )
