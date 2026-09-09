@@ -5,10 +5,10 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "app",
     srcs = [
+        "hangar.ts",
+        "hangar_background.tsx",
         "layout.tsx",
         "page.tsx",
-        "temple_background.tsx",
-        "temple_church.ts",
     ],
     assets = ["style.css"],
     visibility = ["//:__subpackages__"],
@@ -23,16 +23,17 @@ ts_project(
         "//ts/math",
         "//ts/next.js",
         "//ts/next.js/types/next-compiled",
+        "//ts/pulumi/waxingincandescent.com/hangar",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "hangar.ts",
+        "hangar_background.tsx",
         "layout.tsx",
         "page.tsx",
-        "temple_background.tsx",
-        "temple_church.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -44,6 +45,6 @@ bazel_lint(
 
 md_files(
     name = "md",
-    srcs = ["temple_church.md"],
+    srcs = ["hangar.md"],
     visibility = ["//:__subpackages__"],
 )

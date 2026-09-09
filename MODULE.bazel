@@ -574,6 +574,14 @@ http_archive(
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
+# Doom shareware 1.9, archived by the SHA-1 of its uncompressed WAD.
+http_file(
+    name = "doom1_shareware",
+    downloaded_file_path = "doom1.wad.gz",
+    sha256 = "99ce219867b28c3e467b0ee84f5059f4c610f46bba957278584f50fa9c3753a0",
+    urls = ["https://archive.org/download/wadarchive/DATA/5b.zip/5b%2F2e249b9c5133ec987b3ea77596381dc0d6bc1d%2F5b2e249b9c5133ec987b3ea77596381dc0d6bc1d.wad.gz"],
+)
+
 # renovate:
 # 	datasource=github-tags
 # 	versioning=loose

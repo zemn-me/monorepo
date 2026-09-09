@@ -37,7 +37,7 @@ func TestHomepage(t *testing.T) {
 			t.Fatalf("%s: %v", script, err)
 		}
 	}
-	const geometry = `return [...document.querySelectorAll('.temple-background path')].map(p => p.getAttribute('d')).join('')`
+	const geometry = `return [...document.querySelectorAll('.hangar-background path')].map(p => p.getAttribute('d')).join('')`
 	readGeometry := func() any {
 		t.Helper()
 		value, err := driver.ExecuteScript(geometry, nil)
@@ -51,7 +51,7 @@ func TestHomepage(t *testing.T) {
 		value, err := driver.ExecuteScriptAsync(`
 			const done = arguments[arguments.length - 1];
 			requestAnimationFrame(() => requestAnimationFrame(() => {
-				const svg = document.querySelector('.temple-background');
+				const svg = document.querySelector('.hangar-background');
 				const before = svg.innerHTML;
 				setTimeout(() => done(before === svg.innerHTML), 350);
 			}));
@@ -82,7 +82,7 @@ func TestHomepage(t *testing.T) {
 			if err := driver.Get(server.URL); err != nil {
 				t.Fatal(err)
 			}
-			waitFor(`return !!document.querySelector('.temple-background path[d^="M"]')`)
+			waitFor(`return !!document.querySelector('.hangar-background path[d^="M"]')`)
 			result, err := driver.ExecuteScript(`
 				const heading = document.querySelector('main h1');
 				if (!heading) return 'missing heading';
@@ -91,7 +91,7 @@ func TestHomepage(t *testing.T) {
 				if (Math.abs(bounds.x + bounds.width / 2 - innerWidth / 2) > 2) return 'not horizontally centered';
 				if (Math.abs(bounds.y + bounds.height / 2 - innerHeight / 2) > 2) return 'not vertically centered';
 				if (document.documentElement.scrollWidth > innerWidth) return 'horizontal overflow';
-				const svg = document.querySelector('.temple-background');
+				const svg = document.querySelector('.hangar-background');
 				if (svg.getAttribute('aria-hidden') !== 'true') return 'decorative scene is exposed to assistive technology';
 				if (getComputedStyle(svg).pointerEvents !== 'none') return 'scene intercepts pointer events';
 				if (Number(getComputedStyle(heading).zIndex) <= 0) return 'heading is not above the scene';
@@ -109,14 +109,14 @@ func TestHomepage(t *testing.T) {
 				t.Fatalf("homepage: %v", result)
 			}
 			waitFor(geometry+` !== arguments[0]`, readGeometry())
-			pause, err := driver.FindElement(webdriver.ByCSSSelector, `[aria-label="Pause church rotation"]`)
+			pause, err := driver.FindElement(webdriver.ByCSSSelector, `[aria-label="Pause level rotation"]`)
 			if err != nil {
 				t.Fatal(err)
 			}
 			if err := pause.Click(); err != nil {
 				t.Fatal(err)
 			}
-			waitFor(`return !!document.querySelector('[aria-label="Resume church rotation"]')`)
+			waitFor(`return !!document.querySelector('[aria-label="Resume level rotation"]')`)
 			assertStill()
 			if err := pause.Click(); err != nil {
 				t.Fatal(err)
@@ -129,7 +129,7 @@ func TestHomepage(t *testing.T) {
 			if err := driver.Refresh(); err != nil {
 				t.Fatal(err)
 			}
-			waitFor(`return !!document.querySelector('.temple-background path[d^="M"]') && !document.querySelector('.motion-toggle')`)
+			waitFor(`return !!document.querySelector('.hangar-background path[d^="M"]') && !document.querySelector('.motion-toggle')`)
 			assertStill()
 			beforeResize := readGeometry()
 			if err := driver.ResizeWindow("", size.width-40, size.height-40); err != nil {

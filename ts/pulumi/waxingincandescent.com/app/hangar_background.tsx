@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { createSVGWireframe } from '#root/ts/3d/svg_wireframe.js';
-import { templeChurch } from '#root/ts/pulumi/waxingincandescent.com/app/temple_church.js';
+import { hangar } from '#root/ts/pulumi/waxingincandescent.com/app/hangar.js';
 
-export function TempleBackground() {
+export function HangarBackground() {
 	const ref = useRef<SVGSVGElement>(null);
 	const [paused, setPaused] = useState(false);
 	const [reducedMotion, setReducedMotion] = useState(false);
@@ -22,15 +22,15 @@ export function TempleBackground() {
 	useEffect(() => {
 		const svg = ref.current;
 		if (!svg) return;
-		const renderer = createSVGWireframe(svg, templeChurch());
+		const renderer = createSVGWireframe(svg, hangar());
 		let frame = 0;
 		let previous = 0;
 		const render = () =>
 			renderer.render({
 				yaw: yaw.current,
-				pitch: 0.3,
+				pitch: 0.85,
 				distance: 62,
-				target: [0, 7.8, 0],
+				target: [0, 0, 0],
 			});
 		const animate = (now: number) => {
 			if (previous)
@@ -67,7 +67,7 @@ export function TempleBackground() {
 		<>
 			<svg
 				ref={ref}
-				className="temple-background"
+				className="hangar-background"
 				aria-hidden="true"
 				focusable="false"
 			/>
@@ -77,8 +77,8 @@ export function TempleBackground() {
 					type="button"
 					aria-label={
 						paused
-							? 'Resume church rotation'
-							: 'Pause church rotation'
+							? 'Resume level rotation'
+							: 'Pause level rotation'
 					}
 					onClick={() => setPaused(value => !value)}
 				>

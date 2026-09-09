@@ -1,0 +1,36 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+py_library(
+    name = "doom_wireframe",
+    srcs = [
+        "__init__.py",
+        "lib.py",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+py_binary(
+    name = "doom_wireframe_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [":doom_wireframe"],
+)
+
+py_test(
+    name = "doom_wireframe_test",
+    srcs = ["__test__.py"],
+    data = ["@doom1_shareware//file"],
+    env = {"DOOM_WAD": "$(rlocationpath @doom1_shareware//file)"},
+    main = "__test__.py",
+    deps = [
+        ":doom_wireframe",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
