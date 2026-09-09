@@ -24,6 +24,7 @@ filegroup(
         "svg_scene.ts",
         "svg_scene_test.ts",
         "svg_wireframe.ts",
+        "svg_wireframe_test.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -38,6 +39,7 @@ ts_project(
     srcs = [
         "low_poly_test.ts",
         "svg_scene_test.ts",
+        "svg_wireframe_test.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -45,6 +47,7 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//ts/math",
+        "//ts/result",
     ],
 )
 
@@ -53,6 +56,7 @@ jest_test(
     srcs = [
         "low_poly_test.js",
         "svg_scene_test.js",
+        "svg_wireframe_test.js",
     ],
     jsdom = True,
     visibility = ["//:__subpackages__"],

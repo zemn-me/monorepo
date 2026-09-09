@@ -6,33 +6,37 @@ import {
 } from '#root/ts/math/camera_pose.js';
 import { Point2D, Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
-import type { Segment3D } from '#root/ts/math/wireframe.js';
 import { pipe } from '#root/ts/pipe.js';
 import {
 	and_then,
 	and_then_flatten,
 	map_result,
 	type Result,
-	result_collect,
-	zipped,
 } from '#root/ts/result/result.js';
 
-export type StyledSegment3D = Segment3D & {
-	readonly stroke: string;
-	readonly width: number;
-	readonly opacity: number;
-};
+/** Church products keep segment fields local so minifiers can rename them. */
+export type StyledSegment3D = <R>(
+	use: (
+		start: Point3D,
+		end: Point3D,
+		stroke: string,
+		width: number,
+		opacity: number
+	) => R
+) => R;
 
-export interface RenderedSegment2D {
-	readonly x1: number;
-	readonly y1: number;
-	readonly x2: number;
-	readonly y2: number;
-	readonly stroke: string;
-	readonly width: number;
-	readonly opacity: number;
-	readonly depth: number;
-}
+export type RenderedSegment2D = <R>(
+	use: (
+		x1: number,
+		y1: number,
+		x2: number,
+		y2: number,
+		stroke: string,
+		width: number,
+		opacity: number,
+		depth: number
+	) => R
+) => R;
 
 export interface Perspective {
 	readonly width: number;
@@ -43,10 +47,13 @@ export interface Perspective {
 }
 
 export function styleSegment(
-	segment: Segment3D,
-	style: Pick<StyledSegment3D, 'stroke' | 'width' | 'opacity'>
+	start: Point3D,
+	end: Point3D,
+	stroke: string,
+	width: number,
+	opacity: number
 ): StyledSegment3D {
-	return Object.assign(segment, style);
+	return use => use(start, end, stroke, width, opacity);
 }
 
 export function perspective(
@@ -97,15 +104,38 @@ export function projectCameraPoint(
 	cameraPoint: Point3D,
 	projection: Perspective
 ): Point2D {
-	const focalPixels =
-		Math.min(projection.width, projection.height) * projection.focalScale;
-	const depth = Math.max(z(cameraPoint), projection.nearPlane);
-	const projectedScale = focalPixels / depth;
-
-	return point<2>(
-		projection.width / 2 + x(cameraPoint) * projectedScale,
-		projection.height / 2 - y(cameraPoint) * projectedScale
+	return projectPoint(
+		cameraPoint,
+		projection.width / 2,
+		projection.height / 2,
+		Math.min(projection.width, projection.height) * projection.focalScale,
+		projection.nearPlane
 	);
+}
+
+function projectPoint(
+	cameraPoint: Point3D,
+	cx: number,
+	cy: number,
+	focalPixels: number,
+	nearPlane: number
+): Point2D {
+	const scale = focalPixels / Math.max(z(cameraPoint), nearPlane);
+	return point<2>(cx + x(cameraPoint) * scale, cy - y(cameraPoint) * scale);
+}
+
+/** Compile viewport scalars once, with no projection record in the frame loop. */
+export function cameraProjector(
+	width: number,
+	height: number,
+	focalScale = 0.9,
+	nearPlane = 0.1
+): (cameraPoint: Point3D) => Point2D {
+	const focalPixels = Math.min(width, height) * focalScale;
+	const cx = width / 2,
+		cy = height / 2;
+	return cameraPoint =>
+		projectPoint(cameraPoint, cx, cy, focalPixels, nearPlane);
 }
 
 export function projectWorldPoint(
@@ -123,63 +153,63 @@ export function projectWorldPoint(
 	);
 }
 
-function renderSegment(
-	segment: StyledSegment3D,
-	pose: YawPitchPose,
-	projection: Perspective
-): Result<RenderedSegment2D | null, Error> {
-	return zipped(
-		cameraSpacePointFromPose(segment[0], pose),
-		cameraSpacePointFromPose(segment[1], pose),
-		(start, end) => {
-			const clipped = clipSegmentToNearPlane(
-				start,
-				end,
-				projection.nearPlane
-			);
-			if (clipped == null) {
-				return null;
-			}
-
-			const [visibleStart, visibleEnd] = clipped;
-			const depth = (z(visibleStart) + z(visibleEnd)) / 2;
-			if (depth > projection.farPlane) {
-				return null;
-			}
-
-			const projectedStart = projectCameraPoint(visibleStart, projection);
-			const projectedEnd = projectCameraPoint(visibleEnd, projection);
-			const fade = 1 - Math.min(depth / projection.farPlane, 0.82);
-
-			return {
-				x1: x(projectedStart),
-				y1: y(projectedStart),
-				x2: x(projectedEnd),
-				y2: y(projectedEnd),
-				stroke: segment.stroke,
-				width: segment.width,
-				opacity: Math.max(0.14, segment.opacity * fade),
-				depth,
-			};
-		}
-	);
+function renderedSegment(
+	x1: number,
+	y1: number,
+	x2: number,
+	y2: number,
+	stroke: string,
+	width: number,
+	opacity: number,
+	depth: number
+): RenderedSegment2D {
+	return use => use(x1, y1, x2, y2, stroke, width, opacity, depth);
 }
 
+/** Transform and project a wire model with a camera compiled once per frame. */
 export function renderSegments(
 	segments: readonly StyledSegment3D[],
-	pose: YawPitchPose,
-	projection: Perspective
-): Result<RenderedSegment2D[], Error> {
-	return pipe(
-		result_collect(
-			segments.map(segment => renderSegment(segment, pose, projection))
-		),
-		map_result(rendered =>
-			rendered
-				.filter(
-					(segment): segment is RenderedSegment2D => segment != null
+	toCamera: (world: Point3D) => Point3D,
+	project: (cameraPoint: Point3D) => Point2D,
+	nearPlane = 0.1,
+	farPlane = 90
+): RenderedSegment2D[] {
+	const rendered: RenderedSegment2D[] = [];
+	for (const segment of segments)
+		segment((start, end, stroke, width, opacity) => {
+			const clipped = clipSegmentToNearPlane(
+				toCamera(start),
+				toCamera(end),
+				nearPlane
+			);
+			if (!clipped) return;
+			const [visibleStart, visibleEnd] = clipped;
+			const depth = (z(visibleStart) + z(visibleEnd)) / 2;
+			if (depth > farPlane) return;
+			const projectedStart = project(visibleStart),
+				projectedEnd = project(visibleEnd);
+			const alpha = Math.max(
+				0.14,
+				opacity * (1 - Math.min(depth / farPlane, 0.82))
+			);
+			rendered.push(
+				renderedSegment(
+					x(projectedStart),
+					y(projectedStart),
+					x(projectedEnd),
+					y(projectedEnd),
+					stroke,
+					width,
+					alpha,
+					depth
 				)
-				.sort((left, right) => right.depth - left.depth)
+			);
+		});
+	return rendered.sort((left, right) =>
+		left((_x1, _y1, _x2, _y2, _stroke, _width, _opacity, depth) =>
+			right(
+				(_a, _b, _c, _d, _s, _w, _o, otherDepth) => otherDepth - depth
+			)
 		)
 	);
 }

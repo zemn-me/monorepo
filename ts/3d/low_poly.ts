@@ -186,12 +186,22 @@ export interface OrbitCamera {
 export function orbitPose(camera: OrbitCamera): YawPitchPose {
 	const { yaw, pitch, distance, target } = camera;
 	return {
-		position: point<3>(
-			target[0] + Math.sin(yaw) * Math.cos(pitch) * distance,
-			target[1] + Math.sin(pitch) * distance,
-			target[2] + Math.cos(yaw) * Math.cos(pitch) * distance
-		),
+		position: orbitPosition(yaw, pitch, distance, point<3>(...target)),
 		yaw: yaw + Math.PI,
 		pitch,
 	};
+}
+
+/** Orbit position without allocating a named camera record. */
+export function orbitPosition(
+	yaw: number,
+	pitch: number,
+	distance: number,
+	target: Point3D
+): Point3D {
+	return point<3>(
+		px(target) + Math.sin(yaw) * Math.cos(pitch) * distance,
+		py(target) + Math.sin(pitch) * distance,
+		pz(target) + Math.cos(yaw) * Math.cos(pitch) * distance
+	);
 }

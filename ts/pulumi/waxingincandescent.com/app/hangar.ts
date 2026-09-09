@@ -20,19 +20,11 @@ export function hangar() {
 		);
 	return segments.map(([x1, y1, z1, x2, y2, z2]) =>
 		styleSegment(
-			[
-				point<3>(
-					(x1 - cx) * scale,
-					(y1 - cy) * scale,
-					(z1 - cz) * scale
-				),
-				point<3>(
-					(x2 - cx) * scale,
-					(y2 - cy) * scale,
-					(z2 - cz) * scale
-				),
-			],
-			{ stroke: 'currentColor', width: 0.8, opacity: 0.85 }
+			point<3>((x1 - cx) * scale, (y1 - cy) * scale, (z1 - cz) * scale),
+			point<3>((x2 - cx) * scale, (y2 - cy) * scale, (z2 - cz) * scale),
+			'currentColor',
+			0.8,
+			0.85
 		)
 	);
 }
