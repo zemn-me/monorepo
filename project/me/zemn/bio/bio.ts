@@ -195,6 +195,18 @@ export const Bio = {
 	],
 	timeline: [
 		{
+			id: '3eb9b53b-a3d3-44e5-b1e9-62fe75d2eb87',
+			date: date(9, 'sep', 2026),
+			title: en`Stanford Security Lunch`,
+			publisher: en`Stanford University`,
+			description: en`Talk with Adrian Spânu at Stanford Security Lunch.`,
+			address: 'CoDa E160, Stanford University',
+			url: linkToHighlight(url`https://securitylunch.stanford.edu/`, {
+				start: 'Adrian Spânu, Thomas Shadwell',
+			}),
+			tags: [talk, work, security],
+		},
+		{
 			id: '86a18c21-ae85-4dd9-8673-1e0db3377642',
 			date: date(11, 'aug', 2026),
 			title: en`Visual Studio Code Python Extension Security Feature Bypass`,
