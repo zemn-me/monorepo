@@ -12,7 +12,13 @@ import {
 	it,
 } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
+import {
+	Browser,
+	By,
+	ThenableWebDriver,
+	until,
+	WebElement,
+} from 'selenium-webdriver';
 import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -164,6 +170,290 @@ describe('zemn.me website', () => {
 				)) as string;
 				expect(backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
 				expect(backgroundColor).not.toBe('transparent');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('typing dream opens the Mansus card table and carries a memory out through the Wood', async () => {
+			try {
+				const expectContained = async (
+					container: WebElement,
+					elements: readonly WebElement[]
+				) => {
+					const containerRect = await container.getRect();
+					for (const element of elements) {
+						const rect = await element.getRect();
+						expect(rect.x).toBeGreaterThanOrEqual(
+							containerRect.x - 1
+						);
+						expect(rect.y).toBeGreaterThanOrEqual(
+							containerRect.y - 1
+						);
+						expect(rect.x + rect.width).toBeLessThanOrEqual(
+							containerRect.x + containerRect.width + 1
+						);
+						expect(rect.y + rect.height).toBeLessThanOrEqual(
+							containerRect.y + containerRect.height + 1
+						);
+					}
+				};
+				const dragCardToSlot = async (
+					cardLabel: string,
+					slotLabel: string
+				) => {
+					const card = await dialog.findElement(
+						By.css(`button[aria-label="Hand card: ${cardLabel}"]`)
+					);
+					const slot = await dialog.findElement(
+						By.css(`[aria-label="${slotLabel} card slot"]`)
+					);
+					await driver
+						.actions({ async: true })
+						.move({ origin: card })
+						.press()
+						.pause(200)
+						.move({ duration: 500, origin: slot })
+						.pause(200)
+						.release()
+						.perform();
+					return slot;
+				};
+
+				await driver.manage().setTimeouts({ implicit: 1000 });
+				await driver.get(`${origin}/`);
+				await driver.findElement(By.css('body')).sendKeys('dream');
+
+				const dialog = await driver.wait(
+					until.elementLocated(
+						By.css('[role="dialog"][aria-label="Dreaming"]')
+					),
+					5000
+				);
+				await driver.wait(
+					until.elementIsVisible(
+						await dialog.findElement(
+							By.css('button[aria-label="Wake"]')
+						)
+					),
+					3000
+				);
+				await driver.sleep(1600);
+				const tableCamera = await dialog.findElement(
+					By.css('[role="group"][aria-label="Dream table camera"]')
+				);
+				const initialCameraTransform = await tableCamera.getCssValue(
+					'transform'
+				);
+				await dialog
+					.findElement(By.css('button[aria-label="Zoom table in"]'))
+					.click();
+				await driver.wait(
+					async () =>
+						(await tableCamera.getCssValue('transform')) !==
+						initialCameraTransform,
+					3000
+				);
+				await dialog
+					.findElement(By.css('button[aria-label="Reset table view"]'))
+					.click();
+				await driver.wait(
+					async () =>
+						(await tableCamera.getCssValue('transform')) ===
+						initialCameraTransform,
+					3000
+				);
+				const startingHand = await dialog.findElements(
+					By.css('button[aria-label^="Hand card:"]')
+				);
+				expect(
+					await Promise.all(
+						startingHand.map(card => card.getAttribute('aria-label'))
+					)
+				).toEqual([
+					'Hand card: Reason',
+					'Hand card: Health',
+					'Hand card: Funds',
+					'Hand card: An Acquaintance',
+					"Hand card: A Watchman's Secret",
+					'Hand card: Contentment',
+					'Hand card: Passion',
+				]);
+
+				const workSlot = await dragCardToSlot('Health', 'Work');
+				expect(await workSlot.getText()).toContain('Health');
+				const workButton = await dialog.findElement(
+					By.css(
+						'button[aria-label="A Shift of Necessary Labour"]'
+					)
+				);
+				await driver.wait(() => workButton.isEnabled(), 3000);
+				await workButton.click();
+				await driver.wait(
+					until.elementLocated(
+						By.css(
+							'button[aria-label="Hand card: The Rhythm Below"]'
+						)
+					),
+					5000
+				);
+
+				const dreamSlot = await dragCardToSlot('Passion', 'Dream');
+				const dreamButton = await dialog.findElement(
+					By.css('button[aria-label="Dream with Passion"]')
+				);
+				await driver.wait(() => dreamButton.isEnabled(), 3000);
+				expect(await dreamSlot.getText()).toContain('Passion');
+				await dreamButton.click();
+
+				const mansus = await driver.wait(
+					until.elementLocated(
+						By.css('[role="region"][aria-label="The Mansus"]')
+					),
+					6000
+				);
+				await driver.wait(
+					until.elementIsVisible(
+						await mansus.findElement(
+							By.css('svg[aria-label="Map of the Mansus"]')
+						)
+					),
+					3000
+				);
+				const [mansusRect, viewportRect] = await Promise.all([
+					mansus.getRect(),
+					dialog
+						.findElement(
+							By.css('[aria-label="Dream table viewport"]')
+						)
+						.getRect(),
+				]);
+				expect(mansusRect.x).toBeCloseTo(viewportRect.x, 0);
+				expect(mansusRect.y).toBeCloseTo(viewportRect.y, 0);
+				expect(mansusRect.width).toBeCloseTo(viewportRect.width, 0);
+				expect(mansusRect.height).toBeCloseTo(viewportRect.height, 0);
+				const choices = await mansus.findElements(
+					By.css('button[aria-label^="Draw Mansus card"]')
+				);
+				expect(choices).toHaveLength(3);
+				expect(
+					await Promise.all(
+						choices.map(choice => choice.getAttribute('aria-label'))
+					)
+				).toEqual([
+					'Draw Mansus card 1 from The Wood',
+					'Draw Mansus card 2 from The Well',
+					'Draw Mansus card 3 from The Temple of the Wheel',
+				]);
+				await driver.manage().window().setRect({
+					height: 390,
+					width: 844,
+				});
+				await expectContained(mansus, choices);
+				await choices[0]!.click();
+
+				const drawnCard = await driver.wait(
+					until.elementLocated(
+						By.css(
+							'article[aria-label="Chosen Mansus card: A Pale Passage from The Wood"]'
+						)
+					),
+					3000
+				);
+				await driver.wait(
+					until.elementTextContains(drawnCard, 'A Pale Passage'),
+					3000
+				);
+				expect(await drawnCard.getText()).toContain('A Pale Passage');
+				expect(
+					await mansus
+						.findElement(
+							By.css('[aria-label="Visited Mansus location"]')
+						)
+						.getText()
+				).toBe('The Wood');
+				const woodExit = await mansus.findElement(
+					By.css('[aria-label="Exit through The Wood"]')
+				);
+				await expectContained(mansus, [drawnCard, woodExit]);
+				await driver.manage().window().setRect({
+					height: 844,
+					width: 390,
+				});
+				await expectContained(mansus, [drawnCard, woodExit]);
+				await driver.manage().window().setRect({
+					height: 480,
+					width: 320,
+				});
+				await expectContained(mansus, [drawnCard, woodExit]);
+				await expectContained(drawnCard, [
+					...(await drawnCard.findElements(By.css('span'))),
+					...(await drawnCard.findElements(By.css('strong'))),
+					...(await drawnCard.findElements(By.css('small'))),
+				]);
+				await driver.manage().window().setRect({
+					height: 800,
+					width: 1280,
+				});
+				await driver
+					.actions({ async: true })
+					.move({ origin: drawnCard })
+					.press()
+					.pause(200)
+					.move({ duration: 500, origin: woodExit })
+					.pause(200)
+					.release()
+					.perform();
+
+				await driver.wait(
+					until.elementLocated(
+						By.css(
+							'button[aria-label="Hand card: A Pale Passage"]'
+						)
+					),
+					3000
+				);
+				await dialog
+					.findElement(By.css('button[aria-label="Wake"]'))
+					.click();
+				await driver.wait(
+					async () =>
+						(
+							await driver.findElements(
+								By.css('[role="dialog"][aria-label="Dreaming"]')
+							)
+						).length === 0,
+					3000
+				);
+
+				await driver.navigate().refresh();
+				await driver.findElement(By.css('body')).sendKeys('dream');
+				const restoredDialog = await driver.wait(
+					until.elementLocated(
+						By.css('[role="dialog"][aria-label="Dreaming"]')
+					),
+					5000
+				);
+				const restoredMemory = await restoredDialog.findElement(
+					By.css('button[aria-label="Hand card: A Pale Passage"]')
+				);
+				await driver.wait(
+					until.elementTextContains(
+						restoredMemory,
+						'A Pale Passage'
+					),
+					3000
+				);
+				expect(await restoredMemory.getText()).toContain(
+					'A Pale Passage'
+				);
+				expect(
+					await driver
+						.findElement(
+							By.css('img[alt="Thomas Neil James Shadwell"]')
+						)
+						.isDisplayed()
+				).toBe(true);
 			} finally {
 				await driver.quit();
 			}
