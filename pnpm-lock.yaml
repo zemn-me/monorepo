@@ -359,8 +359,8 @@ devDependencies:
     specifier: 7.30.14
     version: 7.30.14(@types/node@24.13.4)
   '@microsoft/api-extractor':
-    specifier: 7.59.0
-    version: 7.59.0(@types/node@24.13.4)
+    specifier: 7.59.1
+    version: 7.59.1(@types/node@24.13.4)
   '@pulumi/aws':
     specifier: 7.41.0
     version: 7.41.0(typescript@5.9.3)
@@ -2879,17 +2879,6 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor-model@7.33.11(@types/node@24.13.4):
-    resolution: {integrity: sha512-iDu1AtuRC2Z8XVs2SieZieVavF1FXPBX1C9pMexJh8Dx/Dd/3ZZ4nRQp/PU2Vk2rUHWuBz1wOyL4DcuhVnBXwg==}
-    engines: {node: '>=20.9.0'}
-    dependencies:
-      '@microsoft/tsdoc': 0.16.0
-      '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.24.0(@types/node@24.13.4)
-    transitivePeerDependencies:
-      - '@types/node'
-    dev: true
-
   /@microsoft/api-extractor-model@7.33.12(@types/node@24.13.4):
     resolution: {integrity: sha512-TdKOYgwf98xLjNW+y3iXIiCf4ZLQbilGAlqkMTTAqqAWfgRXAn9YCSGMsaiB1U7OPRvslUWg6n08EqQPbP93tA==}
     engines: {node: '>=20.9.0'}
@@ -2901,18 +2890,18 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.59.0(@types/node@24.13.4):
-    resolution: {integrity: sha512-KDYV8kSVjmG8JJWVg1f1aKxteNG1IQ44D07Rjhlcci8wlqrSFNhUfgv7dJhwT0W2h3NDIL5Vz2f+/DfO4OpDHw==}
+  /@microsoft/api-extractor@7.59.1(@types/node@24.13.4):
+    resolution: {integrity: sha512-GjRUqx1MTY7xuH36urwASkfBPzrdxYG+irVeV7C9JEdRtn509AgMmwit/BhvztQzIoFk9vhFDTVYOp2cjw+9Uw==}
     engines: {node: '>=20.9.0'}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.33.11(@types/node@24.13.4)
+      '@microsoft/api-extractor-model': 7.33.12(@types/node@24.13.4)
       '@microsoft/tsdoc': 0.16.0
       '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.24.0(@types/node@24.13.4)
+      '@rushstack/node-core-library': 5.24.1(@types/node@24.13.4)
       '@rushstack/rig-package': 0.7.3
-      '@rushstack/terminal': 0.24.3(@types/node@24.13.4)
-      '@rushstack/ts-command-line': 5.3.13(@types/node@24.13.4)
+      '@rushstack/terminal': 0.24.4(@types/node@24.13.4)
+      '@rushstack/ts-command-line': 5.3.14(@types/node@24.13.4)
       diff: 8.0.4
       minimatch: 10.2.3
       resolve: 1.22.12
@@ -5154,26 +5143,6 @@ packages:
     engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
     dev: true
 
-  /@rushstack/node-core-library@5.24.0(@types/node@24.13.4):
-    resolution: {integrity: sha512-g/Z47ZwARn/VkTnHcyJslrR26erRf1G5JbqPlfGZGBCrOcrEt8fTQXXDVhUDDNl/g/v3TXI1dNiAAT5FEks8BA==}
-    engines: {node: '>=20.9.0'}
-    peerDependencies:
-      '@types/node': '*'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-    dependencies:
-      '@types/node': 24.13.4
-      ajv: 8.20.0
-      ajv-draft-04: 1.0.0(ajv@8.20.0)
-      ajv-formats: 3.0.1(ajv@8.20.0)
-      fs-extra: 11.3.6
-      import-lazy: 4.0.0
-      jju: 1.4.0
-      resolve: 1.22.12
-      semver: 7.7.4
-    dev: true
-
   /@rushstack/node-core-library@5.24.1(@types/node@24.13.4):
     resolution: {integrity: sha512-ZlOrzv92MwnsCXA45qWfDj4L/kTasKghXezu+M2WmdtkbnXyPnZSCovfeBZx1Yc5qm+LkElbLw6IeSSWZDhZUg==}
     engines: {node: '>=20.9.0'}
@@ -5212,21 +5181,6 @@ packages:
       resolve: 1.22.12
     dev: true
 
-  /@rushstack/terminal@0.24.3(@types/node@24.13.4):
-    resolution: {integrity: sha512-KxphDhPGC4xDrKg8O4yrWCEpPMi87aJc1iycXqMVh1dLgV0M34hiH9ZTgWjBRmcrT/OIHoOeWf48npcQFzgp+g==}
-    engines: {node: '>=20.9.0'}
-    peerDependencies:
-      '@types/node': '*'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-    dependencies:
-      '@rushstack/node-core-library': 5.24.0(@types/node@24.13.4)
-      '@rushstack/problem-matcher': 0.2.1(@types/node@24.13.4)
-      '@types/node': 24.13.4
-      supports-color: 8.1.1
-    dev: true
-
   /@rushstack/terminal@0.24.4(@types/node@24.13.4):
     resolution: {integrity: sha512-3fRBWK0IMY293lBx5ycgit1DTMUi+nhOjALHlrIad9hQsqzM9Ak+XdBI1gJ/tZPxW+LraeAc4SsmMdcOflBmAQ==}
     engines: {node: '>=20.9.0'}
@@ -5240,18 +5194,6 @@ packages:
       '@rushstack/problem-matcher': 0.2.1(@types/node@24.13.4)
       '@types/node': 24.13.4
       supports-color: 8.1.1
-    dev: true
-
-  /@rushstack/ts-command-line@5.3.13(@types/node@24.13.4):
-    resolution: {integrity: sha512-+jNbxhh8CkrZYxMk9X3GRYM2+Myr1xCCj+eHbJ9Vp+PCdNHS0TUl5QQFT6UbM/aTFRCzs5jiBTKYzBRpe5uYbQ==}
-    engines: {node: '>=20.9.0'}
-    dependencies:
-      '@rushstack/terminal': 0.24.3(@types/node@24.13.4)
-      '@types/argparse': 1.0.38
-      argparse: 1.0.10
-      string-argv: 0.3.2
-    transitivePeerDependencies:
-      - '@types/node'
     dev: true
 
   /@rushstack/ts-command-line@5.3.14(@types/node@24.13.4):
