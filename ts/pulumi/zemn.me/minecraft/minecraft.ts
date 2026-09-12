@@ -637,7 +637,8 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const taskLogGroup = new aws.cloudwatch.LogGroup(
 			resourceName('task_logs'),
 			{
-				retentionInDays: 14,
+				// Player activity history must survive server restarts and log aging.
+				retentionInDays: 0,
 				tags,
 			},
 			{ parent: this }
@@ -966,6 +967,68 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				rule: taskStateRule.name,
 			},
 			{ parent: this }
+		);
+
+		// Keep recording stops from older revisions during rolling deployments.
+		const historyRule = new aws.cloudwatch.EventRule(
+			resourceName('task_history'),
+			{
+				eventPattern: Pulumi.all([cluster.arn, service.name]).apply(
+					([clusterArn, serviceName]) =>
+						JSON.stringify({
+							source: ['aws.ecs'],
+							'detail-type': ['ECS Task State Change'],
+							detail: {
+								clusterArn: [clusterArn],
+								group: [`service:${serviceName}`],
+								lastStatus: ['RUNNING', 'STOPPED'],
+							},
+						})
+				),
+				tags,
+			},
+			{ parent: this }
+		);
+		const historyLogPolicy = new aws.cloudwatch.LogResourcePolicy(
+			resourceName('history_log_policy'),
+			{
+				policyName: sanitizeAwsLambdaStatementId(
+					resourceName('history_log_policy')
+				),
+				policyDocument: Pulumi.all([
+					taskLogGroup.arn,
+					historyRule.arn,
+				]).apply(([arn, sourceArn]) =>
+					JSON.stringify({
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Principal: {
+									Service: [
+										'events.amazonaws.com',
+										'delivery.logs.amazonaws.com',
+									],
+								},
+								Action: [
+									'logs:CreateLogStream',
+									'logs:PutLogEvents',
+								],
+								Resource: `${arn}:*`,
+								Condition: {
+									ArnEquals: { 'aws:SourceArn': sourceArn },
+								},
+							},
+						],
+					})
+				),
+			},
+			{ parent: this }
+		);
+		new aws.cloudwatch.EventTarget(
+			resourceName('task_history_target'),
+			{ arn: taskLogGroup.arn, rule: historyRule.name },
+			{ parent: this, dependsOn: [historyLogPolicy] }
 		);
 
 		new aws.lambda.Permission(
