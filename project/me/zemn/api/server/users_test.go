@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"slices"
 	"testing"
 )
 
@@ -72,6 +73,77 @@ func TestGetAdminUsersIncludesHardcoded(t *testing.T) {
 	}
 	if !seen["thomas"] || !seen["keng"] {
 		t.Fatalf("expected hardcoded users to be listed, got %v", seen)
+	}
+}
+
+func TestResolveScopesRequiresTrustedIssuerForHardcodedSubject(t *testing.T) {
+	s := newTestServer()
+
+	scopes, err := s.resolveScopes(context.Background(), "https://attacker.example", "thomas")
+	if err != nil {
+		t.Fatalf("resolve scopes for attacker issuer: %v", err)
+	}
+	if len(scopes) != 0 {
+		t.Fatalf("attacker issuer must not receive hardcoded scopes, got %#v", scopes)
+	}
+
+	scopes, err = s.resolveScopes(context.Background(), "https://api.zemn.me", "thomas")
+	if err != nil {
+		t.Fatalf("resolve scopes for self-issued token: %v", err)
+	}
+	if !slices.Contains(scopes, "admin_users_manage") {
+		t.Fatalf("expected self-issued hardcoded subject scopes, got %#v", scopes)
+	}
+
+	scopes, err = s.resolveScopes(context.Background(), "https://accounts.google.com", "111669004071516300752")
+	if err != nil {
+		t.Fatalf("resolve scopes for configured upstream mapping: %v", err)
+	}
+	if !slices.Contains(scopes, "admin_users_manage") {
+		t.Fatalf("expected configured upstream mapping to keep hardcoded scopes, got %#v", scopes)
+	}
+}
+
+func TestResolveScopesDoesNotGrantHardcodedScopesToUpstreamBareLocalSubject(t *testing.T) {
+	s := newTestServer()
+
+	scopes, err := s.resolveScopes(context.Background(), "https://accounts.google.com", "thomas")
+	if err != nil {
+		t.Fatalf("resolve scopes: %v", err)
+	}
+	if len(scopes) != 0 {
+		t.Fatalf("upstream bare local subject must not receive hardcoded scopes, got %#v", scopes)
+	}
+}
+
+func TestResolveScopesDoesNotTreatUpstreamSubjectAsLocalUserID(t *testing.T) {
+	s := newTestServer()
+
+	createResp, err := s.PostAdminUsers(context.Background(), PostAdminUsersRequestObject{
+		Body: &NewUser{
+			Email:  "local-id@example.com",
+			Scopes: &[]string{"admin_users_read"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("seed user: %v", err)
+	}
+	created := createResp.(PostAdminUsers200JSONResponse)
+
+	scopes, err := s.resolveScopes(context.Background(), "https://accounts.google.com", OIDCSubject(created.Id))
+	if err != nil {
+		t.Fatalf("resolve upstream scopes: %v", err)
+	}
+	if len(scopes) != 0 {
+		t.Fatalf("upstream subject must not be treated as a local user id, got %#v", scopes)
+	}
+
+	scopes, err = s.resolveScopes(context.Background(), "https://api.zemn.me", OIDCSubject(created.Id))
+	if err != nil {
+		t.Fatalf("resolve self-issued scopes: %v", err)
+	}
+	if !slices.Contains(scopes, "admin_users_read") {
+		t.Fatalf("expected self-issued local user id scopes, got %#v", scopes)
 	}
 }
 
