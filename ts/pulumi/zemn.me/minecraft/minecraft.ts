@@ -2,6 +2,8 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 import * as random from '@pulumi/random';
 
+import { MinecraftServerImage } from '#root/project/me/zemn/minecraft/MinecraftServerImage.js';
+
 import {
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
 	sanitizeAwsEcsTaskFamilyName,
@@ -23,7 +25,6 @@ export interface Args {
 
 const minecraftPort = 25565;
 const minecraftRconPort = 25575;
-const minecraftServerImage = 'itzg/minecraft-server:latest';
 
 function wakeLambdaCode(): string {
 	return `
@@ -366,6 +367,21 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const resourceName = (suffix: string) => `${name}_${suffix}`;
 		const hostedZoneArn = (zoneId: string) =>
 			`arn:aws:route53:::hostedzone/${zoneId.replace(/^\/hostedzone\//, '')}`;
+		const imageRepository = new aws.ecr.Repository(
+			resourceName('image_repository'),
+			{ tags },
+			{ parent: this }
+		);
+		const imageAuth = aws.ecr.getAuthorizationToken();
+		const serverImage = new MinecraftServerImage(
+			resourceName('image'),
+			{
+				repository: imageRepository.repositoryUrl,
+				token: imageAuth.then(auth => auth.authorizationToken),
+			},
+			{ parent: this }
+		);
+
 		const manageDnsWake = args.manageDnsWake ?? true;
 		const minecraftZone = manageDnsWake
 			? new aws.route53.Zone(
@@ -671,12 +687,13 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 					taskLogGroup.name,
 					args.operators ?? [],
 					rconPassword.result,
-				]).apply(([logGroupName, operators, rconPasswordValue]) => {
+					serverImage.url,
+				]).apply(([logGroupName, operators, password, image]) => {
 					const allowList = [...new Set(operators)];
 					return JSON.stringify([
 						{
 							name: 'minecraft',
-							image: minecraftServerImage,
+							image,
 							essential: true,
 							portMappings: [
 								{
@@ -717,7 +734,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 								},
 								{
 									name: 'RCON_PASSWORD',
-									value: rconPasswordValue,
+									value: password,
 								},
 								...(operators.length > 0
 									? [
