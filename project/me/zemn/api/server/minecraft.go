@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/http"
 	"os"
 	"regexp"
 	"sort"
@@ -183,6 +184,117 @@ func (t cloudWatchMinecraftLogTailer) LogEvents(ctx context.Context, since time.
 		return events[i].Timestamp.Before(events[j].Timestamp)
 	})
 	return events, nil
+}
+
+// History is paginated separately from the short live-log tail. Empty CloudWatch
+// pages can still have a continuation token and must not end the history scan.
+type minecraftHistoryReader interface {
+	HistoryPage(context.Context, time.Time, *string) (MinecraftHistory, error)
+}
+
+var minecraftPlayerActivityRE = regexp.MustCompile(`^\[[^]\r\n]+\] \[Server thread/INFO\](?: \[minecraft/[^]\r\n]+\])?: ([A-Za-z0-9_]{3,16}) (joined|left) the game$`)
+var minecraftServerActivityRE = regexp.MustCompile(`^\[[^]\r\n]+\] \[Server thread/INFO\](?: \[minecraft/[^]\r\n]+\])?: (Starting minecraft server version .+|Stopping server)$`)
+
+func minecraftHistoryEvent(event MinecraftLogEvent) (MinecraftHistoryEvent, bool) {
+	result := MinecraftHistoryEvent{Id: minecraftLogEventID(event), Timestamp: event.Timestamp}
+	if stream := aws.ToString(event.Stream); stream != "" {
+		instance := stream[strings.LastIndex(stream, "/")+1:]
+		result.Instance = &instance
+	}
+	message := strings.TrimSpace(event.Message)
+	if match := minecraftPlayerActivityRE.FindStringSubmatch(message); match != nil {
+		result.Player = &match[1]
+		result.Kind = "login"
+		if match[2] == "left" {
+			result.Kind = "logout"
+		}
+		return result, true
+	}
+	if match := minecraftServerActivityRE.FindStringSubmatch(message); match != nil {
+		result.Kind = "server_on"
+		if match[1] == "Stopping server" {
+			result.Kind = "server_off"
+		}
+		return result, true
+	}
+	// Task events also record abrupt exits that never emit a shutdown log line.
+	var task struct {
+		ID         string    `json:"id"`
+		Source     string    `json:"source"`
+		DetailType string    `json:"detail-type"`
+		Time       time.Time `json:"time"`
+		Detail     struct {
+			LastStatus string `json:"lastStatus"`
+			TaskArn    string `json:"taskArn"`
+		} `json:"detail"`
+	}
+	if json.Unmarshal([]byte(message), &task) == nil && task.Source == "aws.ecs" && task.DetailType == "ECS Task State Change" && !task.Time.IsZero() {
+		switch task.Detail.LastStatus {
+		case "RUNNING":
+			result.Kind = "server_on"
+		case "STOPPED":
+			result.Kind = "server_off"
+		default:
+			return result, false
+		}
+		result.Timestamp = task.Time
+		if task.Detail.TaskArn != "" {
+			instance := task.Detail.TaskArn[strings.LastIndex(task.Detail.TaskArn, "/")+1:]
+			result.Instance = &instance
+		}
+		if task.ID != "" {
+			result.Id = task.ID
+		}
+		return result, true
+	}
+	return result, false
+}
+
+func (t cloudWatchMinecraftLogTailer) HistoryPage(ctx context.Context, before time.Time, token *string) (MinecraftHistory, error) {
+	out, err := t.client.FilterLogEvents(ctx, &cloudwatchlogs.FilterLogEventsInput{
+		LogGroupName:  aws.String(t.logGroupName),
+		EndTime:       aws.Int64(before.UnixMilli()),
+		FilterPattern: aws.String(`%joined the game|left the game|Starting minecraft server version|Stopping server|ECS Task State Change%`),
+		NextToken:     token,
+		Limit:         aws.Int32(1000),
+	})
+	if err != nil {
+		return MinecraftHistory{}, err
+	}
+	result := MinecraftHistory{Events: []MinecraftHistoryEvent{}, NextToken: out.NextToken}
+	for _, event := range out.Events {
+		activity, ok := minecraftHistoryEvent(MinecraftLogEvent{
+			Id: aws.ToString(event.EventId), Message: aws.ToString(event.Message),
+			Stream:    event.LogStreamName,
+			Timestamp: time.UnixMilli(aws.ToInt64(event.Timestamp)).UTC(),
+		})
+		if ok {
+			result.Events = append(result.Events, activity)
+		}
+	}
+	sort.SliceStable(result.Events, func(i, j int) bool { return result.Events[i].Timestamp.Before(result.Events[j].Timestamp) })
+	return result, nil
+}
+
+// The OpenAPI request validator verifies OIDC and the minecraft scope before
+// dispatching this handler, just as it does for the other Minecraft endpoints.
+func (s Server) GetMinecraftHistory(ctx context.Context, rq GetMinecraftHistoryRequestObject) (GetMinecraftHistoryResponseObject, error) {
+	reader, ok := s.minecraftLogs.(minecraftHistoryReader)
+	if !ok {
+		return GetMinecraftHistory503JSONResponse(minecraftError("minecraft history is not configured")), nil
+	}
+	page, err := reader.HistoryPage(ctx, rq.Params.Before, rq.Params.NextToken)
+	if err != nil {
+		return GetMinecraftHistory503JSONResponse(minecraftError("could not load minecraft history")), nil
+	}
+	return minecraftHistoryResponse{page}, nil
+}
+
+type minecraftHistoryResponse struct{ MinecraftHistory }
+
+func (r minecraftHistoryResponse) VisitGetMinecraftHistoryResponse(w http.ResponseWriter) error {
+	w.Header().Set("Cache-Control", "private, no-store")
+	return GetMinecraftHistory200JSONResponse(r.MinecraftHistory).VisitGetMinecraftHistoryResponse(w)
 }
 
 type directMinecraftRCONCommander struct {

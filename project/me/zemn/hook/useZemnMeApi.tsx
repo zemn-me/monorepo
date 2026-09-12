@@ -651,6 +651,71 @@ export function useMinecraftEvents<A, B>(
 	return { events, streamState };
 }
 
+export type MinecraftHistoryEvent =
+	components['schemas']['MinecraftHistoryEvent'];
+
+export function useMinecraftHistory<A, B>(
+	idToken: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = idToken(
+		v => v,
+		() => undefined,
+		() => undefined
+	);
+	const client = useFetchClient(token);
+	const [before, setBefore] = useState(() => new Date().toISOString());
+	const query = useInfiniteQuery({
+		queryKey: ['get', '/minecraft/history', token, before],
+		initialPageParam: undefined as string | undefined,
+		queryFn: async ({ pageParam, signal }) => {
+			const response = await client.GET('/minecraft/history', {
+				params: { query: { before, nextToken: pageParam } },
+				signal,
+			});
+			if (!response.data)
+				throw new Error('Could not load activity history.');
+			return response.data;
+		},
+		getNextPageParam: page => page.nextToken,
+		enabled: enabled && token !== undefined,
+		gcTime: 0,
+		staleTime: Infinity,
+		refetchOnWindowFocus: false,
+	});
+	const { hasNextPage, isFetching, isError, fetchNextPage } = query;
+	useEffect(() => {
+		if (
+			enabled &&
+			token !== undefined &&
+			hasNextPage &&
+			!isFetching &&
+			!isError
+		) {
+			void fetchNextPage();
+		}
+	}, [enabled, token, hasNextPage, isFetching, isError, fetchNextPage]);
+	const events = useMemo(() => {
+		const unique = new Map<string, MinecraftHistoryEvent>();
+		for (const page of query.data?.pages ?? []) {
+			for (const event of page.events) unique.set(event.id, event);
+		}
+		return [...unique.values()].sort(
+			(a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp)
+		);
+	}, [query.data]);
+	return {
+		events: enabled && token !== undefined ? events : [],
+		before,
+		loading:
+			query.isPending ||
+			query.isFetching ||
+			(query.hasNextPage && !query.isError),
+		error: query.isError,
+		refresh: () => setBefore(new Date().toISOString()),
+	};
+}
+
 export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(
 		id_token(

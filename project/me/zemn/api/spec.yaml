@@ -1410,6 +1410,37 @@ components:
           description: Minecraft server log line.
           example: "[12:34:56] [Server thread/INFO]: <zemnmez> hello"
 
+    MinecraftHistoryEvent:
+      type: object
+      required: [id, timestamp, kind]
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [login, logout, server_on, server_off]
+        player:
+          type: string
+          description: Minecraft username for login and logout events.
+        instance:
+          type: string
+          description: Opaque server instance identifier used to pair events across restarts.
+
+    MinecraftHistory:
+      type: object
+      required: [events]
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinecraftHistoryEvent'
+        nextToken:
+          type: string
+          description: Continue loading even when this page contains no events.
+
     MinecraftWake:
       description: Result of requesting the Minecraft server to wake.
       type: object
@@ -2178,6 +2209,40 @@ paths:
                 $ref: '#/components/schemas/MinecraftWake'
         "503":
           description: Minecraft wake bridge is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/history:
+    get:
+      summary: Get all recorded Minecraft player and server activity.
+      description: Paginated history from all retained server logs. History predating log retention is unavailable.
+      security:
+        - OIDC: [minecraft]
+      parameters:
+        - in: query
+          name: nextToken
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 1024
+        - in: query
+          name: before
+          required: true
+          description: Exclusive end time, kept constant while paging through a snapshot.
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: One page of activity history, in chronological order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftHistory'
+        '503':
+          description: History is unavailable.
           content:
             application/json:
               schema:
