@@ -121,8 +121,8 @@ dependencies:
     specifier: 3.3.3
     version: 3.3.3
   file-type:
-    specifier: 22.0.2
-    version: 22.0.2
+    specifier: 22.1.0
+    version: 22.1.0
   glob-promise:
     specifier: 6.0.7
     version: 6.0.7(glob@8.1.0)
@@ -9004,8 +9004,8 @@ packages:
       - supports-color
     dev: true
 
-  /file-type@22.0.2:
-    resolution: {integrity: sha512-0H8TsCUGBLx+V5adH3EY52hTAcyLKbV1D4gq5cIOJ6DnQAHeV9Z2Hhuc5CoBX4YmvB2oL+JIC84z0qO7JsCoNw==}
+  /file-type@22.1.0:
+    resolution: {integrity: sha512-fbvf9u6jnHWr1EP6V8R99E9iLMhNLXgZkUzWBiPpJ5/89UJ/Atuxjn5YXR+XaZWo2hc2/8mGfTez+NDAgOcpLA==}
     engines: {node: '>=22'}
     dependencies:
       '@tokenizer/inflate': 0.4.1
