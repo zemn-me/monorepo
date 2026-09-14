@@ -1,5 +1,5 @@
 import type { Metadata } from 'next/types';
-import type { ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Connect your voice journal',
@@ -8,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { readonly children: ReactNode }) {
-	return children;
+	return (
+		<Suspense fallback={<p role="status">Loading connection request…</p>}>
+			{children}
+		</Suspense>
+	);
 }

@@ -8,6 +8,7 @@
 - Server components cannot pass function-valued selectors into client components; pass serializable selector data and rebuild the function inside the client boundary.
 - In React code, prefer carrying async/remote values with `ts/future/future.ts` helpers over duplicating messy internal loading/error state.
 - Prefer `project/me/zemn/api/spec.yaml` and its generated API types over hard-coding duplicate request/response types.
+- URL query hooks such as `useQueryState` need an enclosing Suspense boundary for static export. Verify `//project/me/zemn:build`; development-server browser tests do not catch prerender failures.
 - For metadata-only app route types, import from `next/types`; importing package root `next` pulls ambient declarations that collide with repo shims.
 - Content-addressed public assets should be declared next to the TS that imports them with `hashed_public_assets`; `project/me/zemn/public:content_addressed_public_assets` collects them from `//project/me/zemn:ts`.
 - For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.
