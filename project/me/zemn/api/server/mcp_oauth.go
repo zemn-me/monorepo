@@ -3,9 +3,7 @@ package apiserver
 import (
 	"context"
 	"crypto/subtle"
-	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -60,154 +58,37 @@ func oauthFrontendOrigin() string {
 	}
 	return "https://zemn.me"
 }
-func oauthJSON(w http.ResponseWriter, status int, value any) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(value)
-}
-func oauthError(w http.ResponseWriter, status int, code, description string) {
-	oauthJSON(w, status, map[string]string{"error": code, "error_description": description})
-}
-func oauthDecode(w http.ResponseWriter, r *http.Request, value any) bool {
-	if strings.Split(r.Header.Get("Content-Type"), ";")[0] != "application/json" {
-		oauthError(w, 400, "invalid_request", "JSON body required")
-		return false
-	}
-	decoder := json.NewDecoder(http.MaxBytesReader(w, r.Body, 16384))
-	if err := decoder.Decode(value); err != nil {
-		oauthError(w, 400, "invalid_request", "Invalid JSON body")
-		return false
-	}
-	if err := decoder.Decode(new(any)); err != io.EOF {
-		oauthError(w, 400, "invalid_request", "Only one JSON object is allowed")
-		return false
-	}
-	return true
-}
-
-func (s *Server) withMCPOAuth(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		path := r.URL.Path
-		handled := path == "/.well-known/oauth-authorization-server" || path == oauthResourceMetadataPath || path == "/.well-known/oauth-protected-resource" || path == "/oauth2/register" || path == "/oauth2/authorize" || path == oauthTokenPath || path == "/oauth2/mcp/revoke" || strings.HasPrefix(path, oauthRequestPath)
-		if !handled {
-			next.ServeHTTP(w, r)
-			return
-		}
-		w.Header().Set("Cache-Control", "private, no-store")
-		w.Header().Set("Pragma", "no-cache")
-		w.Header().Set("Referrer-Policy", "no-referrer")
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-		// Consent uses the website's bearer credential and is restricted to its
-		// origin. Public OAuth protocol endpoints also serve browser MCP clients.
-		if strings.HasPrefix(path, oauthRequestPath) {
-			origin := r.Header.Get("Origin")
-			if origin != "" && origin != oauthFrontendOrigin() {
-				oauthError(w, 403, "access_denied", "Origin not allowed")
-				return
-			}
-			w.Header().Set("Access-Control-Allow-Origin", oauthFrontendOrigin())
-			w.Header().Add("Vary", "Origin")
-		} else {
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-		}
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(204)
-			return
-		}
-		switch {
-		case r.Method == http.MethodGet && (path == oauthResourceMetadataPath || path == "/.well-known/oauth-protected-resource"):
-			oauthJSON(w, http.StatusOK, map[string]any{
-				"resource":                 oauthURL(journalMCPPath),
-				"authorization_servers":    []string{oauthURL("")},
-				"scopes_supported":         []string{"journal_read"},
-				"bearer_methods_supported": []string{"header"},
-				"resource_name":            "Voice journal",
-			})
-		case r.Method == http.MethodGet && path == "/.well-known/oauth-authorization-server":
-			oauthJSON(w, http.StatusOK, map[string]any{
-				"issuer":                                         oauthURL(""),
-				"authorization_endpoint":                         oauthURL("/oauth2/authorize"),
-				"token_endpoint":                                 oauthURL(oauthTokenPath),
-				"registration_endpoint":                          oauthURL("/oauth2/register"),
-				"revocation_endpoint":                            oauthURL("/oauth2/mcp/revoke"),
-				"response_types_supported":                       []string{"code"},
-				"grant_types_supported":                          []string{"authorization_code", "refresh_token"},
-				"token_endpoint_auth_methods_supported":          []string{"none"},
-				"revocation_endpoint_auth_methods_supported":     []string{"none"},
-				"code_challenge_methods_supported":               []string{"S256"},
-				"scopes_supported":                               []string{"journal_read"},
-				"client_id_metadata_document_supported":          true,
-				"authorization_response_iss_parameter_supported": true,
-			})
-		case r.Method == http.MethodPost && path == "/oauth2/register":
-			s.oauthRegister(w, r)
-		case r.Method == http.MethodGet && path == "/oauth2/authorize":
-			s.oauthAuthorize(w, r)
-		case (r.Method == http.MethodGet || r.Method == http.MethodPost) && strings.HasPrefix(path, oauthRequestPath):
-			s.oauthConsent(w, r)
-		case r.Method == http.MethodPost && path == oauthTokenPath:
-			s.oauthToken(w, r)
-		case r.Method == http.MethodPost && path == "/oauth2/mcp/revoke":
-			s.oauthRevoke(w, r)
-		default:
-			oauthError(w, 405, "invalid_request", "Method not allowed")
-		}
-	})
-}
-func (s *Server) oauthRegister(w http.ResponseWriter, r *http.Request) {
-	var client oauthClient
-	if !oauthDecode(w, r, &client) {
-		return
-	}
+func (s *Server) oauthRegister(ctx context.Context, body MCPOAuthClient) (MCPOAuthClient, *oauthFailure) {
+	client := oauthClient(body)
 	if err := client.validate(); err != nil {
-		oauthError(w, 400, "invalid_client_metadata", err.Error())
-		return
+		return oauthFail[MCPOAuthClient](400, "invalid_client_metadata", err.Error())
 	}
-	client.ID = oauthRandom()
-	if err := s.oauthPut(r.Context(), "client", client.ID, client, time.Time{}, ""); err != nil {
-		oauthError(w, 503, "temporarily_unavailable", "Registration unavailable")
-		return
+	client.ClientId = oauthRandom()
+	if err := s.oauthPut(ctx, "client", client.ClientId, client, time.Time{}, ""); err != nil {
+		return oauthFail[MCPOAuthClient](503, "temporarily_unavailable", "Registration unavailable")
 	}
-	oauthJSON(w, 201, client)
+	return MCPOAuthClient(client), nil
 }
-func (s *Server) oauthAuthorize(w http.ResponseWriter, r *http.Request) {
-	q, err := url.ParseQuery(r.URL.RawQuery)
-	if err != nil || len(r.URL.RawQuery) > 8192 {
-		oauthError(w, 400, "invalid_request", "Invalid authorization request")
-		return
+func (s *Server) oauthAuthorize(ctx context.Context, q AuthorizeMCPClientParams) (string, *oauthFailure) {
+	client, err := s.oauthResolveClient(ctx, q.ClientId)
+	if err != nil || !slices.Contains(client.RedirectUris, q.RedirectUri) {
+		return oauthFail[string](400, "invalid_request", "Unknown client or unregistered redirect URI")
 	}
-	for _, values := range q {
-		if len(values) != 1 {
-			oauthError(w, 400, "invalid_request", "Repeated parameters are not supported")
-			return
-		}
+	if q.ResponseType != "code" || q.CodeChallengeMethod != "S256" || !oauthChallengeValid(q.CodeChallenge) {
+		return oauthFail[string](400, "invalid_request", "Authorization code with S256 PKCE is required")
 	}
-	client, err := s.oauthResolveClient(r.Context(), q.Get("client_id"))
-	if err != nil || !slices.Contains(client.RedirectURIs, q.Get("redirect_uri")) {
-		oauthError(w, 400, "invalid_request", "Unknown client or unregistered redirect URI")
-		return
+	if q.Resource != oauthURL(journalMCPPath) {
+		return oauthFail[string](400, "invalid_target", "The journal MCP resource is required")
 	}
-	if q.Get("response_type") != "code" || q.Get("code_challenge_method") != "S256" || !oauthChallengeValid(q.Get("code_challenge")) {
-		oauthError(w, 400, "invalid_request", "Authorization code with S256 PKCE is required")
-		return
+	if scope := q.Scope; scope != "" && scope != "journal_read" {
+		return oauthFail[string](400, "invalid_scope", "Only journal_read is supported")
 	}
-	if q.Get("resource") != oauthURL(journalMCPPath) {
-		oauthError(w, 400, "invalid_target", "The journal MCP resource is required")
-		return
-	}
-	if scope := q.Get("scope"); scope != "" && scope != "journal_read" {
-		oauthError(w, 400, "invalid_scope", "Only journal_read is supported")
-		return
-	}
-	request := oauthAuthorization{Client: client, RedirectURI: q.Get("redirect_uri"), State: q.Get("state"), Challenge: q.Get("code_challenge"), Resource: q.Get("resource")}
+	request := oauthAuthorization{Client: client, RedirectURI: q.RedirectUri, State: q.State, Challenge: q.CodeChallenge, Resource: q.Resource}
 	id := oauthRandom()
-	if err = s.oauthPut(r.Context(), "request", id, request, time.Now().Add(10*time.Minute), ""); err != nil {
-		oauthError(w, 503, "temporarily_unavailable", "Authorization unavailable")
-		return
+	if err = s.oauthPut(ctx, "request", id, request, time.Now().Add(10*time.Minute), ""); err != nil {
+		return oauthFail[string](503, "temporarily_unavailable", "Authorization unavailable")
 	}
-	http.Redirect(w, r, oauthFrontendOrigin()+"/journal/connect?request="+url.QueryEscape(id), http.StatusFound)
+	return oauthFrontendOrigin() + "/journal/connect?request=" + url.QueryEscape(id), nil
 }
 func oauthChallengeValid(s string) bool {
 	if len(s) != 43 {
@@ -220,147 +101,88 @@ func oauthChallengeValid(s string) bool {
 	}
 	return true
 }
-func (s *Server) oauthConsent(w http.ResponseWriter, r *http.Request) {
-	id := strings.TrimPrefix(r.URL.Path, oauthRequestPath)
+func (s *Server) oauthConsent(ctx context.Context, id string, approve bool) (OAuthConsentResult, *oauthFailure) {
 	var request oauthAuthorization
-	previous, err := s.oauthGet(r.Context(), "request", id, &request)
+	previous, err := s.oauthGet(ctx, "request", id, &request)
 	if err != nil {
-		oauthError(w, 400, "invalid_request", "This connection request has expired. Start again from your MCP client.")
-		return
+		return oauthFail[OAuthConsentResult](400, "invalid_request", "This connection request has expired. Start again from your MCP client.")
 	}
-	if r.Method == http.MethodGet {
-		oauthJSON(w, 200, map[string]any{"client_name": request.Client.Name, "client_id": request.Client.ID, "redirect_uri": request.RedirectURI, "scope": "journal_read"})
-		return
+	info, _ := auth.UserInfoFromContext(ctx)
+	if info == nil {
+		return oauthFail[OAuthConsentResult](401, "access_denied", "Sign in to zemn.me first")
 	}
-	var decision struct {
-		Approve *bool `json:"approve"`
-	}
-	if !oauthDecode(w, r, &decision) {
-		return
-	}
-	if decision.Approve == nil {
-		oauthError(w, 400, "invalid_request", "An explicit consent decision is required")
-		return
-	}
-	scheme, identity, _ := strings.Cut(r.Header.Get("Authorization"), " ")
-	if !strings.EqualFold(scheme, "Bearer") {
-		oauthError(w, 401, "access_denied", "Sign in to zemn.me first")
-		return
-	}
-	info, err := s.verifyJournalIdentity(r.Context(), identity, r)
-	if err != nil {
-		oauthError(w, 401, "access_denied", "Sign in to zemn.me first")
-		return
-	}
-	if !s.oauthSubjectAllowed(r.Context(), info.UserID) {
-		oauthError(w, 403, "access_denied", "This account does not have journal access")
-		return
-	}
-	if err = s.oauthDelete(r.Context(), "request", id, previous); err != nil {
-		oauthError(w, 400, "invalid_request", "This request has already been used")
-		return
+
+	if err = s.oauthDelete(ctx, "request", id, previous); err != nil {
+		return oauthFail[OAuthConsentResult](400, "invalid_request", "This request has already been used")
 	}
 	redirect, _ := url.Parse(request.RedirectURI)
 	query := redirect.Query()
 	query.Set("state", request.State)
 	query.Set("iss", oauthURL(""))
-	if *decision.Approve {
-		request.Subject = info.UserID
+	if approve {
+		request.Subject = info.Subject
 		code := oauthRandom()
-		if err = s.oauthPut(r.Context(), "code", code, request, time.Now().Add(time.Minute), ""); err != nil {
-			oauthError(w, 503, "temporarily_unavailable", "Authorization unavailable")
-			return
+		if err = s.oauthPut(ctx, "code", code, request, time.Now().Add(time.Minute), ""); err != nil {
+			return oauthFail[OAuthConsentResult](503, "temporarily_unavailable", "Authorization unavailable")
 		}
 		query.Set("code", code)
 	} else {
 		query.Set("error", "access_denied")
 	}
 	redirect.RawQuery = query.Encode()
-	oauthJSON(w, 200, map[string]string{"redirect_uri": redirect.String()})
+	return OAuthConsentResult{RedirectUri: redirect.String()}, nil
 }
-func oauthForm(w http.ResponseWriter, r *http.Request) bool {
-	if strings.Split(r.Header.Get("Content-Type"), ";")[0] != "application/x-www-form-urlencoded" {
-		oauthError(w, 400, "invalid_request", "Form body required")
-		return false
+func (s *Server) oauthToken(ctx context.Context, f MCPOAuthTokenRequest) (MCPOAuthTokenResponse, *oauthFailure) {
+	if f.Resource != oauthURL(journalMCPPath) {
+		return oauthFail[MCPOAuthTokenResponse](400, "invalid_target", "The journal MCP resource is required")
 	}
-	r.Body = http.MaxBytesReader(w, r.Body, 16384)
-	if err := r.ParseForm(); err != nil {
-		oauthError(w, 400, "invalid_request", "Invalid form")
-		return false
+	if scope := f.Scope; scope != "" && scope != "journal_read" {
+		return oauthFail[MCPOAuthTokenResponse](400, "invalid_scope", "Only journal_read is supported")
 	}
-	for _, values := range r.PostForm {
-		if len(values) != 1 {
-			oauthError(w, 400, "invalid_request", "Repeated parameters are not supported")
-			return false
-		}
+	if f.ClientSecret != "" || protocolRequest(ctx).Header.Get("Authorization") != "" {
+		return oauthFail[MCPOAuthTokenResponse](400, "invalid_client", "Public clients use PKCE without client secrets")
 	}
-	return true
-}
-func (s *Server) oauthToken(w http.ResponseWriter, r *http.Request) {
-	if !oauthForm(w, r) {
-		return
-	}
-	f := r.PostForm
-	if f.Get("resource") != oauthURL(journalMCPPath) {
-		oauthError(w, 400, "invalid_target", "The journal MCP resource is required")
-		return
-	}
-	if scope := f.Get("scope"); scope != "" && scope != "journal_read" {
-		oauthError(w, 400, "invalid_scope", "Only journal_read is supported")
-		return
-	}
-	if f.Get("client_secret") != "" || r.Header.Get("Authorization") != "" {
-		oauthError(w, 400, "invalid_client", "Public clients use PKCE without client secrets")
-		return
-	}
-	switch f.Get("grant_type") {
+	switch f.GrantType {
 	case "authorization_code":
 		var code oauthAuthorization
-		previous, err := s.oauthGet(r.Context(), "code", f.Get("code"), &code)
-		verifier := f.Get("code_verifier")
-		if err != nil || code.Client.ID != f.Get("client_id") || code.RedirectURI != f.Get("redirect_uri") || code.Resource != f.Get("resource") || !oauthVerifierValid(verifier) || subtle.ConstantTimeCompare([]byte(oauthHash(verifier)), []byte(code.Challenge)) != 1 {
-			oauthError(w, 400, "invalid_grant", "Invalid authorization code or PKCE verifier")
-			return
+		previous, err := s.oauthGet(ctx, "code", f.Code, &code)
+		verifier := f.CodeVerifier
+		if err != nil || code.Client.ClientId != f.ClientId || code.RedirectURI != f.RedirectUri || code.Resource != f.Resource || !oauthVerifierValid(verifier) || subtle.ConstantTimeCompare([]byte(oauthHash(verifier)), []byte(code.Challenge)) != 1 {
+			return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Invalid authorization code or PKCE verifier")
 		}
-		if !s.oauthSubjectAllowed(r.Context(), code.Subject) {
-			oauthError(w, 400, "invalid_grant", "Journal access is no longer available")
-			return
+		if !s.oauthSubjectAllowed(ctx, code.Subject) {
+			return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Journal access is no longer available")
 		}
-		if err = s.oauthDelete(r.Context(), "code", f.Get("code"), previous); err != nil {
-			oauthError(w, 400, "invalid_grant", "Authorization code already used")
-			return
+		if err = s.oauthDelete(ctx, "code", f.Code, previous); err != nil {
+			return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Authorization code already used")
 		}
 		lifetime := time.Hour
 		refresh := slices.Contains(code.Client.GrantTypes, "refresh_token")
 		if refresh {
 			lifetime = 30 * 24 * time.Hour
 		}
-		grant := oauthGrant{Subject: code.Subject, ClientID: code.Client.ID, Expires: time.Now().Add(lifetime)}
-		s.oauthIssueTokens(w, r, oauthRandom(), grant, "", refresh)
+		grant := oauthGrant{Subject: code.Subject, ClientID: code.Client.ClientId, Expires: time.Now().Add(lifetime)}
+		return s.oauthIssueTokens(ctx, oauthRandom(), grant, "", refresh)
 	case "refresh_token":
-		claims, err := s.oauthParseToken(f.Get("refresh_token"), "refresh")
-		if err != nil || claims.ClientID != f.Get("client_id") {
-			oauthError(w, 400, "invalid_grant", "Invalid refresh token")
-			return
+		claims, err := s.oauthParseToken(f.RefreshToken, "refresh")
+		if err != nil || claims.ClientID != f.ClientId {
+			return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Invalid refresh token")
 		}
 		var grant oauthGrant
-		previous, err := s.oauthGet(r.Context(), "grant", claims.Grant, &grant)
-		if err != nil || grant.ClientID != claims.ClientID || !s.oauthSubjectAllowed(r.Context(), grant.Subject) {
-			oauthError(w, 400, "invalid_grant", "Authorization expired or revoked")
-			return
+		previous, err := s.oauthGet(ctx, "grant", claims.Grant, &grant)
+		if err != nil || grant.ClientID != claims.ClientID || !s.oauthSubjectAllowed(ctx, grant.Subject) {
+			return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Authorization expired or revoked")
 		}
-		if subtle.ConstantTimeCompare([]byte(grant.RefreshHash), []byte(oauthHash(f.Get("refresh_token")))) != 1 {
+		if subtle.ConstantTimeCompare([]byte(grant.RefreshHash), []byte(oauthHash(f.RefreshToken))) != 1 {
 			// A correctly signed, previously rotated refresh token proves reuse.
-			if err = s.oauthDelete(r.Context(), "grant", claims.Grant, ""); err != nil {
-				oauthError(w, 503, "temporarily_unavailable", "Revocation unavailable")
-				return
+			if err = s.oauthDelete(ctx, "grant", claims.Grant, ""); err != nil {
+				return oauthFail[MCPOAuthTokenResponse](503, "temporarily_unavailable", "Revocation unavailable")
 			}
-			oauthError(w, 400, "invalid_grant", "Refresh token reuse revoked this connection")
-			return
+			return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Refresh token reuse revoked this connection")
 		}
-		s.oauthIssueTokens(w, r, claims.Grant, grant, previous, true)
+		return s.oauthIssueTokens(ctx, claims.Grant, grant, previous, true)
 	default:
-		oauthError(w, 400, "unsupported_grant_type", "Use authorization_code or refresh_token")
+		return oauthFail[MCPOAuthTokenResponse](400, "unsupported_grant_type", "Use authorization_code or refresh_token")
 	}
 }
 func oauthVerifierValid(value string) bool {
@@ -379,7 +201,7 @@ func (s *Server) oauthSubjectAllowed(ctx context.Context, subject string) bool {
 	_, ownerErr := journalSubject(context.WithValue(ctx, auth.IDTokenKey, &auth.IDToken{Subject: subject}))
 	return err == nil && ownerErr == nil && slices.Contains(scopes, "journal_read")
 }
-func (s *Server) oauthIssueTokens(w http.ResponseWriter, r *http.Request, id string, grant oauthGrant, previous string, refresh bool) {
+func (s *Server) oauthIssueTokens(ctx context.Context, id string, grant oauthGrant, previous string, refresh bool) (MCPOAuthTokenResponse, *oauthFailure) {
 	now := time.Now()
 	accessExpiry := now.Add(time.Hour)
 	if grant.Expires.Before(accessExpiry) {
@@ -394,42 +216,35 @@ func (s *Server) oauthIssueTokens(w http.ResponseWriter, r *http.Request, id str
 		},
 		ClientID: grant.ClientID, Grant: id, Scope: "journal_read", Use: "access",
 	}
-	access, err := s.IssueJWT(r.Context(), claims)
+	access, err := s.IssueJWT(ctx, claims)
 	var renewal string
 	if err == nil && refresh {
 		claims.Use = "refresh"
 		claims.Expiry = jwt.NewNumericDate(grant.Expires)
 		claims.ID = oauthRandom()
-		renewal, err = s.IssueJWT(r.Context(), claims)
+		renewal, err = s.IssueJWT(ctx, claims)
 		grant.RefreshHash = oauthHash(renewal)
 	}
 	if err != nil {
-		oauthError(w, 503, "temporarily_unavailable", "Token signing unavailable")
-		return
+		return oauthFail[MCPOAuthTokenResponse](503, "temporarily_unavailable", "Token signing unavailable")
 	}
-	if err = s.oauthPut(r.Context(), "grant", id, grant, grant.Expires, previous); err != nil {
+	if err = s.oauthPut(ctx, "grant", id, grant, grant.Expires, previous); err != nil {
 		var conflict *types.ConditionalCheckFailedException
 		if !errors.As(err, &conflict) {
-			oauthError(w, 503, "temporarily_unavailable", "Token storage unavailable")
-			return
+			return oauthFail[MCPOAuthTokenResponse](503, "temporarily_unavailable", "Token storage unavailable")
 		}
 		// Concurrent use of the same refresh token is also reuse. Revoke the
 		// winning rotation because we cannot distinguish the legitimate client.
 		if previous != "" {
-			if err = s.oauthDelete(r.Context(), "grant", id, ""); err != nil {
-				oauthError(w, 503, "temporarily_unavailable", "Revocation unavailable")
-				return
+			if err = s.oauthDelete(ctx, "grant", id, ""); err != nil {
+				return oauthFail[MCPOAuthTokenResponse](503, "temporarily_unavailable", "Revocation unavailable")
 			}
 		}
-		oauthError(w, 400, "invalid_grant", "Authorization was already used or revoked")
-		return
+		return oauthFail[MCPOAuthTokenResponse](400, "invalid_grant", "Authorization was already used or revoked")
 	}
-	response := map[string]any{"access_token": access, "token_type": "Bearer", "expires_in": int(time.Until(accessExpiry) / time.Second), "scope": "journal_read"}
-	if refresh {
-		response["refresh_token"] = renewal
-	}
-	oauthJSON(w, 200, response)
+	return MCPOAuthTokenResponse{AccessToken: access, TokenType: "Bearer", ExpiresIn: int(time.Until(accessExpiry) / time.Second), Scope: "journal_read", RefreshToken: renewal}, nil
 }
+
 func (s *Server) oauthParseToken(raw, use string) (oauthTokenClaims, error) {
 	var claims oauthTokenClaims
 	token, err := jwt.ParseSigned(raw, []jose.SignatureAlgorithm{jose.ES256})
@@ -459,19 +274,15 @@ func (s *Server) verifyJournalMCPToken(ctx context.Context, raw string, _ *http.
 	}
 	return &mcpauth.TokenInfo{UserID: claims.Subject, Scopes: scopes, Expiration: claims.Expiry.Time()}, nil
 }
-func (s *Server) oauthRevoke(w http.ResponseWriter, r *http.Request) {
-	if !oauthForm(w, r) {
-		return
-	}
-	claims, err := s.oauthParseToken(r.PostForm.Get("token"), "refresh")
+func (s *Server) oauthRevoke(ctx context.Context, body MCPOAuthRevocation) (struct{}, *oauthFailure) {
+	claims, err := s.oauthParseToken(body.Token, "refresh")
 	if err != nil {
-		claims, err = s.oauthParseToken(r.PostForm.Get("token"), "access")
+		claims, err = s.oauthParseToken(body.Token, "access")
 	}
-	if err == nil && claims.ClientID == r.PostForm.Get("client_id") {
-		if err = s.oauthDelete(r.Context(), "grant", claims.Grant, ""); err != nil {
-			oauthError(w, 503, "temporarily_unavailable", "Revocation unavailable")
-			return
+	if err == nil && claims.ClientID == body.ClientId {
+		if err = s.oauthDelete(ctx, "grant", claims.Grant, ""); err != nil {
+			return oauthFail[struct{}](503, "temporarily_unavailable", "Revocation unavailable")
 		}
 	}
-	w.WriteHeader(200)
+	return struct{}{}, nil
 }

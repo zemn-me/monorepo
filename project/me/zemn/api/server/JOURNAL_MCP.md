@@ -51,9 +51,14 @@ be used as website identity tokens or refresh tokens. Every MCP request verifies
 the signature, issuer, audience, token purpose, expiry, active grant, current
 account permission, and diary ownership.
 
-OAuth routes are handled outside the OpenAPI JSON validator because they use
-OAuth-specific request and response framing, as does the MCP transport. Consent
-response schemas live in the OpenAPI spec for the generated frontend types.
+The Swagger/OpenAPI spec (`../spec.yaml`) defines MCP's HTTP methods and JSON-RPC
+envelope, OAuth discovery and endpoints, request/response models, and bearer
+security schemes. All routes use the generated router, request validator, and
+strict server interface. The MCP response visitor passes the validated envelope
+to the SDK for method dispatch and transport responses; tool schemas remain
+available through MCP `tools/list`. OAuth business handlers consume generated
+request types and return generated success responses and the shared error model.
+The consent page uses the generated API client for both reads and decisions.
 The frontend consent page is `/journal/connect`; its origin comes from
 `OAUTH_FRONTEND_ORIGIN` (defaults to `https://zemn.me`). OAuth state and registered
 clients use `OAUTH_TABLE_NAME`. `ZEMN_API_ORIGIN` pins discovery, issuer, and resource URLs

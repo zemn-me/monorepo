@@ -83,10 +83,12 @@ func oauthTestRequest(s *Server, method, path, body, token string) *httptest.Res
 	}
 	response := httptest.NewRecorder()
 	s.ServeHTTP(response, request)
+	response.Result().Request = request
 	return response
 }
 func oauthTestJSON(t *testing.T, response *httptest.ResponseRecorder, status int) map[string]any {
 	t.Helper()
+	assertProtocolResponse(t, response)
 	if response.Code != status {
 		t.Fatalf("status %d, want %d: %s", response.Code, status, response.Body)
 	}

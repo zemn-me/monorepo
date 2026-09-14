@@ -14,14 +14,7 @@ import (
 	"time"
 )
 
-type oauthClient struct {
-	ID            string   `json:"client_id"`
-	Name          string   `json:"client_name"`
-	RedirectURIs  []string `json:"redirect_uris"`
-	GrantTypes    []string `json:"grant_types"`
-	ResponseTypes []string `json:"response_types"`
-	AuthMethod    string   `json:"token_endpoint_auth_method"`
-}
+type oauthClient MCPOAuthClient
 
 func validOAuthRedirect(raw string) bool {
 	u, err := url.Parse(raw)
@@ -31,18 +24,18 @@ func validOAuthRedirect(raw string) bool {
 	return u.Scheme == "https" || (u.Scheme == "http" && (u.Hostname() == "127.0.0.1" || u.Hostname() == "::1" || u.Hostname() == "localhost"))
 }
 func (c *oauthClient) validate() error {
-	if c.Name == "" || len(c.Name) > 200 || len(c.RedirectURIs) == 0 || len(c.RedirectURIs) > 10 {
+	if c.ClientName == "" || len(c.ClientName) > 200 || len(c.RedirectUris) == 0 || len(c.RedirectUris) > 10 {
 		return errors.New("client_name and 1–10 redirect_uris are required")
 	}
-	for _, uri := range c.RedirectURIs {
+	for _, uri := range c.RedirectUris {
 		if !validOAuthRedirect(uri) {
 			return errors.New("redirect URIs must use HTTPS or HTTP loopback, without fragments")
 		}
 	}
-	if c.AuthMethod == "" {
-		c.AuthMethod = "none"
+	if c.TokenEndpointAuthMethod == "" {
+		c.TokenEndpointAuthMethod = "none"
 	}
-	if c.AuthMethod != "none" {
+	if c.TokenEndpointAuthMethod != "none" {
 		return errors.New("only public clients with PKCE and token_endpoint_auth_method none are supported")
 	}
 	if len(c.GrantTypes) == 0 {
@@ -142,7 +135,7 @@ func oauthFetchClientMetadata(ctx context.Context, id string, client *http.Clien
 	if err = json.Unmarshal(data, &c); err != nil {
 		return c, err
 	}
-	if c.ID != id {
+	if c.ClientId != id {
 		return c, errors.New("client_id does not match its metadata URL")
 	}
 	return c, c.validate()
