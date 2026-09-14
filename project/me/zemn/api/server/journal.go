@@ -93,19 +93,28 @@ func journalEntryIDFromKey(key string) (string, bool) {
 }
 
 func (s *Server) listJournalRecords(ctx context.Context, subject string) ([]JournalStoredRecord, error) {
-	out, err := s.ddb.Query(ctx, &dynamodb.QueryInput{
+	input := &dynamodb.QueryInput{
 		TableName:              aws.String(s.journalTableName),
 		KeyConditionExpression: aws.String("id = :id"),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":id": &types.AttributeValueMemberS{Value: subject},
 		},
-	})
-	if err != nil {
-		return nil, err
 	}
 	var records []JournalStoredRecord
-	if err := attributevalue.UnmarshalListOfMaps(out.Items, &records); err != nil {
-		return nil, err
+	for {
+		out, err := s.ddb.Query(ctx, input)
+		if err != nil {
+			return nil, err
+		}
+		var page []JournalStoredRecord
+		if err := attributevalue.UnmarshalListOfMaps(out.Items, &page); err != nil {
+			return nil, err
+		}
+		records = append(records, page...)
+		if len(out.LastEvaluatedKey) == 0 {
+			break
+		}
+		input.ExclusiveStartKey = out.LastEvaluatedKey
 	}
 	return records, nil
 }

@@ -197,7 +197,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	auth.ScopeResolver = s.resolveScopes
 
 	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
-	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
+	s.Handler = analyticsBeaconHandler(s.withJournalMCP(baseHandler), opts.AllowLocalhostAnalytics)
 	return s, nil
 }
 

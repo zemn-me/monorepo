@@ -7,6 +7,7 @@ ts_project(
     srcs = [
         "client.tsx",
         "layout.tsx",
+        "mcp_setup.tsx",
         "page.tsx",
         "periods.ts",
     ],
@@ -46,6 +47,7 @@ filegroup(
     srcs = [
         "client.tsx",
         "layout.tsx",
+        "mcp_setup.tsx",
         "page.tsx",
         "periods.ts",
         "periods_test.ts",
