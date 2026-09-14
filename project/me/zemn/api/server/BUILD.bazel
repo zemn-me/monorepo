@@ -59,6 +59,9 @@ go_library(
         "jwt.go",
         "key_requests.go",
         "kms.go",
+        "mcp_oauth.go",
+        "mcp_oauth_clients.go",
+        "mcp_oauth_store.go",
         "minecraft.go",
         "oidc.go",
         "oidc_configuration.go",
@@ -130,6 +133,7 @@ go_test(
         "in_memory_ddb_test.go",
         "journal_mcp_test.go",
         "journal_test.go",
+        "mcp_oauth_test.go",
         "minecraft_test.go",
         "phone_features_test.go",
         "salutation_test.go",
@@ -162,6 +166,9 @@ go_test(
 
 md_files(
     name = "md",
-    srcs = ["JOURNAL_MCP.md"],
+    srcs = [
+        "AGENTS.md",
+        "JOURNAL_MCP.md",
+    ],
     visibility = ["//:__subpackages__"],
 )

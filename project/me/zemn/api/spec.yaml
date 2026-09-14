@@ -29,6 +29,25 @@ components:
       description: >
         The unique never reused identifier for a user.
       example: user_2f7a3b91c8d24a7f
+    OAuthConsentDetails:
+      type: object
+      required: [client_name, client_id, redirect_uri, scope]
+      properties:
+        client_name:
+          type: string
+        client_id:
+          type: string
+        redirect_uri:
+          type: string
+        scope:
+          type: string
+          enum: [journal_read]
+    OAuthConsentResult:
+      type: object
+      required: [redirect_uri]
+      properties:
+        redirect_uri:
+          type: string
     OAuthClientId:
       type: string
       description: OAuth 2.0 client identifier registered with the provider.
@@ -163,6 +182,8 @@ components:
       type: string
       description: OAuth grant type supported by this endpoint.
       enum:
+        - authorization_code
+        - refresh_token
         - urn:ietf:params:oauth:grant-type:token-exchange
     OAuthScopes:
       type: object
@@ -1027,11 +1048,21 @@ components:
         request_object_encryption_enc_values_supported:
           type: array
           items: { type: string }
+        code_challenge_methods_supported:
+          type: array
+          items: { type: string }
+        client_id_metadata_document_supported:
+          type: boolean
+        authorization_response_iss_parameter_supported:
+          type: boolean
+        revocation_endpoint:
+          type: string
+          format: uri
         token_endpoint_auth_methods_supported:
           type: array
           items:
             type: string
-            enum: [client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt]
+            enum: [none, client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt]
         token_endpoint_auth_signing_alg_values_supported:
           type: array
           items: { type: string }

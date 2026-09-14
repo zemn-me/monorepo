@@ -59,6 +59,7 @@ type Server struct {
 	usersTableName       string
 	keyRequestsTableName string
 	journalTableName     string
+	oauthTableName       string
 	journalBucketName    string
 	rt                   *chi.Mux
 	http.Handler
@@ -170,6 +171,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		usersTableName:       usersTableName,
 		keyRequestsTableName: keyRequestsTableName,
 		journalTableName:     journalTableName,
+		oauthTableName:       os.Getenv("OAUTH_TABLE_NAME"),
 		journalBucketName:    journalBucketName,
 		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
@@ -197,7 +199,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	auth.ScopeResolver = s.resolveScopes
 
 	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
-	s.Handler = analyticsBeaconHandler(s.withJournalMCP(baseHandler), opts.AllowLocalhostAnalytics)
+	s.Handler = analyticsBeaconHandler(s.withMCPOAuth(s.withJournalMCP(baseHandler)), opts.AllowLocalhostAnalytics)
 	return s, nil
 }
 
@@ -359,6 +361,15 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 	}
 
 	specs := []tableSpec{
+		{
+			Name: s.oauthTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+		},
 		{
 			Name: s.analyticsTableName,
 			Attrs: []types.AttributeDefinition{

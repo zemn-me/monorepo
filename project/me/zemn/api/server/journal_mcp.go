@@ -19,10 +19,9 @@ import (
 
 const journalMCPPath = "/journal/mcp"
 
-// MCP is another transport for the journal API. Accept only tokens issued by
-// this API, with the same audience and dynamically resolved journal scopes.
+// Consent accepts the website identity token and resolves current account scopes.
 // Neither request headers nor unverified token claims select a signing key.
-func (s *Server) verifyJournalMCPToken(ctx context.Context, raw string, _ *http.Request) (*mcpauth.TokenInfo, error) {
+func (s *Server) verifyJournalIdentity(ctx context.Context, raw string, _ *http.Request) (*mcpauth.TokenInfo, error) {
 	token, err := jwt.ParseSigned(raw, []jose.SignatureAlgorithm{jose.ES256})
 	if err != nil {
 		return nil, mcpauth.ErrInvalidToken
@@ -72,7 +71,7 @@ func (s *Server) journalMCPHandler() http.Handler {
 		}
 		http.MaxBytesHandler(transport, 64*1024).ServeHTTP(w, r.WithContext(ctx))
 	})
-	return mcpauth.RequireBearerToken(s.verifyJournalMCPToken, &mcpauth.RequireBearerTokenOptions{Scopes: []string{"journal_read"}})(owner)
+	return mcpauth.RequireBearerToken(s.verifyJournalMCPToken, &mcpauth.RequireBearerTokenOptions{Scopes: []string{"journal_read"}, ResourceMetadataURL: oauthURL(oauthResourceMetadataPath)})(owner)
 }
 
 // Route outside OpenAPI's JSON validator: MCP owns its JSON-RPC framing and

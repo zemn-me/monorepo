@@ -25,7 +25,8 @@ func newJournalMCPTestServer(t *testing.T) *Server {
 	if err != nil {
 		t.Fatal(err)
 	}
-	s.ddb = &inMemoryDDB{}
+	s.ddb = &oauthTestDDB{inMemoryDDB: &inMemoryDDB{}}
+	s.oauthTableName = "oauth"
 	s.journalTableName = "journal"
 	s.usersTableName = ""
 	return s
@@ -33,13 +34,17 @@ func newJournalMCPTestServer(t *testing.T) *Server {
 
 func journalMCPTestClaims() jwt.Claims {
 	return jwt.Claims{Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
-		Audience: jwt.Audience{zemnMeClient}, Expiry: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+		Audience: jwt.Audience{oauthURL(journalMCPPath)}, Expiry: jwt.NewNumericDate(time.Now().Add(time.Hour)),
 	}
 }
 
 func journalMCPTestToken(t *testing.T, s *Server, claims jwt.Claims) string {
 	t.Helper()
-	token, err := s.IssueJWT(t.Context(), claims)
+	grantID := oauthRandom()
+	if err := s.oauthPut(t.Context(), "grant", grantID, oauthGrant{ClientID: "test", Subject: claims.Subject, Expires: time.Now().Add(time.Hour)}, time.Now().Add(time.Hour), ""); err != nil {
+		t.Fatal(err)
+	}
+	token, err := s.IssueJWT(t.Context(), oauthTokenClaims{Claims: claims, ClientID: "test", Grant: grantID, Scope: "journal_read", Use: "access"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +55,7 @@ func TestJournalMCPAuthentication(t *testing.T) {
 	s := newJournalMCPTestServer(t)
 	// Even an account explicitly granted journal_read must pass the owner check.
 	s.usersTableName = "users"
-	db := s.ddb.(*inMemoryDDB)
+	db := s.ddb.(*oauthTestDDB).inMemoryDDB
 	db.users = map[string]userRecord{"other": {Id: "other", Scopes: []string{"journal_read"}}}
 	otherSigner := newJournalMCPTestServer(t)
 	for _, test := range []struct {
@@ -135,13 +140,7 @@ func TestJournalMCPClient(t *testing.T) {
 	if err := s.putJournalRecord(t.Context(), JournalStoredRecord{Id: journalOwnerSubject, When: "SUMMARY#day", Kind: JournalStoredRecordKindSummary, Summary: &summary}); err != nil {
 		t.Fatal(err)
 	}
-	token, err := s.IssueIdToken(t.Context(), IdToken{
-		Iss: "https://api.zemn.me", Sub: journalOwnerSubject, Aud: OAuthClientId(zemnMeClient),
-		Iat: time.Now().Unix(), Exp: time.Now().Add(time.Hour).Unix(),
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
+	token := journalMCPTestToken(t, s, journalMCPTestClaims())
 	endpoint := httptest.NewServer(s)
 	defer endpoint.Close()
 	httpClient := &http.Client{Transport: roundTripFunc(func(req *http.Request) (*http.Response, error) {
