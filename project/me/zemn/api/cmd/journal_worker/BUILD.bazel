@@ -26,15 +26,25 @@ go_binary(
 )
 
 pkg_tar(
+    name = "ffmpeg_tar",
+    srcs = ["//bin/host/ffmpeg"],
+    mode = "0755",
+    package_dir = "/usr/local/bin",
+)
+
+pkg_tar(
     name = "tar",
     srcs = [":journal_worker"],
 )
 
 oci_image(
     name = "image",
-    base = "@distroless_debian12",
+    base = "@distroless_cc_debian12",
     entrypoint = ["/journal_worker"],
-    tars = [":tar"],
+    tars = [
+        ":tar",
+        ":ffmpeg_tar",
+    ],
 )
 
 pulumi_image(

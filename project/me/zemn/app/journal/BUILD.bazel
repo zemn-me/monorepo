@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -10,6 +11,9 @@ ts_project(
         "mcp_setup.tsx",
         "page.tsx",
         "periods.ts",
+        "recording.ts",
+        "recording_queue.tsx",
+        "recording_store.ts",
     ],
     assets = ["style.module.css"],
     visibility = ["//project/me/zemn:__subpackages__"],
@@ -33,6 +37,7 @@ ts_project(
         "//project/me/zemn/constants",
         "//project/me/zemn/hook",
         "//ts/next.js/types/next-compiled",
+        "//ts/oidc",
         "//ts/react/lang",
     ],
 )
@@ -51,6 +56,10 @@ filegroup(
         "page.tsx",
         "periods.ts",
         "periods_test.ts",
+        "recording.ts",
+        "recording_queue.tsx",
+        "recording_store.ts",
+        "recording_test.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -63,7 +72,10 @@ css_module(
 
 ts_project(
     name = "journal_tests",
-    srcs = ["periods_test.ts"],
+    srcs = [
+        "periods_test.ts",
+        "recording_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":journal",
@@ -74,7 +86,17 @@ ts_project(
 
 jest_test(
     name = "tests",
-    srcs = ["periods_test.js"],
+    srcs = [
+        "periods_test.js",
+        "recording_test.js",
+    ],
+    jsdom = True,
     visibility = ["//:__subpackages__"],
     deps = [":journal_tests"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -42,6 +42,18 @@ oci.pull(
         "linux/ppc64le",
     ],
 )
+oci.pull(
+    name = "distroless_cc_debian12",
+    digest = "sha256:e5d81ddde149641e2a9ba55be4545bc125c67de07508b03ba4c22e6eb0ded5aa",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+        "linux/arm/v7",
+        "linux/s390x",
+        "linux/ppc64le",
+    ],
+)
 
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
 use_repo(
@@ -52,6 +64,12 @@ use_repo(
     "distroless_base_linux_arm_v7",
     "distroless_base_linux_ppc64le",
     "distroless_base_linux_s390x",
+    "distroless_cc_debian12",
+    "distroless_cc_debian12_linux_amd64",
+    "distroless_cc_debian12_linux_arm64_v8",
+    "distroless_cc_debian12_linux_arm_v7",
+    "distroless_cc_debian12_linux_ppc64le",
+    "distroless_cc_debian12_linux_s390x",
     "distroless_debian12",
     "distroless_debian12_linux_amd64",
     "distroless_debian12_linux_arm64_v8",
