@@ -70,6 +70,7 @@ require (
 	github.com/go-delve/delve v1.27.2 // indirect
 	github.com/itchyny/gojq v0.12.19 // indirect
 	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
+	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/tools/gopls v0.23.0 // indirect
 	honnef.co/go/tools v0.8.1 // indirect
@@ -125,7 +126,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.19 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
-	github.com/modelcontextprotocol/go-sdk v1.6.0
+	github.com/modelcontextprotocol/go-sdk v1.7.0
 	github.com/oasdiff/yaml v0.1.1 // indirect
 	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
