@@ -28,6 +28,7 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
 
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
+import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
 import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
@@ -2608,6 +2609,7 @@ export default function JournalPageClient({
 							</p>
 						)
 					)}
+					<JournalMCPSetup />
 				</>
 			)}
 		</main>
