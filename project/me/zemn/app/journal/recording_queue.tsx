@@ -274,7 +274,7 @@ function LocalRecordingRow({
 				{emergency
 					? 'Not saved on this device — download before leaving.'
 					: tooLarge
-						? 'Too large to transcribe. Download the audio and split it into files under 25 MB.'
+						? 'This file exceeds the 256 MiB upload limit. Download a backup and split it into smaller recordings.'
 						: uploading
 							? 'Syncing voice note…'
 							: draft.state === 'recording'

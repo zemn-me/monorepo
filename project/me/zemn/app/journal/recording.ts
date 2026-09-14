@@ -5,31 +5,11 @@ import {
 	saveRecording,
 } from '#root/project/me/zemn/app/journal/recording_store.js';
 
-export const maxRecordingMilliseconds = 30 * 60 * 1000;
-export const maxUploadBytes = 25_000_000;
-const stopRecordingBytes = 23_000_000;
+// Keep uploads within the worker's storage budget. Transcription pieces are
+// bounded separately on the server; recording has no fixed time limit.
+export const maxUploadBytes = 256 * 1024 * 1024;
+const stopRecordingBytes = maxUploadBytes - 2_000_000;
 const recordingBitrate = 64_000;
-
-export function remainingRecordingMilliseconds(
-	start: number,
-	now: number,
-	bytes: number,
-	bitrate: number
-): number {
-	const elapsed = Math.max(0, now - start);
-	const bytesPerSecond = Math.max(
-		bitrate / 8,
-		elapsed > 0 ? bytes / (elapsed / 1000) : 0,
-		1
-	);
-	return Math.max(
-		0,
-		Math.min(
-			maxRecordingMilliseconds - elapsed,
-			((stopRecordingBytes - bytes) / bytesPerSecond) * 1000
-		)
-	);
-}
 
 export interface RecordingSession {
 	readonly stream: MediaStream;
@@ -39,7 +19,7 @@ export interface RecordingSession {
 }
 
 interface RecordingCallbacks {
-	tick(remaining: number): void;
+	tick(elapsed: number): void;
 	finished(
 		recording: LocalRecording | undefined,
 		durable: boolean,
@@ -112,16 +92,10 @@ async function capture(
 	};
 	const checkLimit = () => {
 		if (recorder.state === 'inactive') return;
-		const remaining = remainingRecordingMilliseconds(
-			start,
-			Date.now(),
-			bytes,
-			recorder.audioBitsPerSecond || recordingBitrate
-		);
-		callbacks.tick(remaining);
-		if (remaining <= 0) {
+		callbacks.tick(Math.max(0, Date.now() - start));
+		if (bytes >= stopRecordingBytes) {
 			message =
-				'Recording stopped at its limit. Your voice note has been kept.';
+				'Recording reached the 256 MiB upload limit. Your voice note has been kept; you can start another.';
 			stop();
 		}
 	};

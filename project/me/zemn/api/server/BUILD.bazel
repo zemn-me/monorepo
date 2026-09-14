@@ -54,6 +54,7 @@ go_library(
         "journal_audio_metadata.go",
         "journal_mcp.go",
         "journal_openai.go",
+        "journal_transcription_chunks.go",
         "journal_worker.go",
         "jwks.go",
         "jwt.go",
@@ -116,6 +117,7 @@ go_library(
         "@com_github_twilio_twilio_go//:twilio-go",
         "@com_github_twilio_twilio_go//rest/api/v2010:api",
         "@com_github_twilio_twilio_go//twiml",
+        "@org_golang_x_sync//errgroup",
     ],
 )
 
@@ -130,6 +132,7 @@ go_test(
         "in_memory_ddb_test.go",
         "journal_mcp_test.go",
         "journal_test.go",
+        "journal_transcription_chunks_test.go",
         "minecraft_test.go",
         "phone_features_test.go",
         "salutation_test.go",
@@ -138,7 +141,9 @@ go_test(
         "token_exchange_test.go",
         "users_test.go",
     ],
+    data = ["//bin/host/ffmpeg"],
     embed = [":server"],
+    env = {"FFMPEG_RLOCATIONPATH": "$(rlocationpath //bin/host/ffmpeg)"},
     deps = [
         "//project/me/zemn/api/server/auth",
         "@com_github_aws_aws_sdk_go_v2//aws",
@@ -157,6 +162,7 @@ go_test(
         "@com_github_google_uuid//:uuid",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
         "@com_github_twilio_twilio_go//twiml",
+        "@io_bazel_rules_go//go/runfiles",
     ],
 )
 

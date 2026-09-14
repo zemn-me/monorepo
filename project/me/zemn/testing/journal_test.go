@@ -1991,7 +1991,7 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 	if err := record.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='timer'][aria-label='Recording time remaining']", 15*time.Second); err != nil {
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='timer'][aria-label='Recording duration']", 15*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatal(err)
 	}

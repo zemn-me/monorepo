@@ -9,11 +9,7 @@ jest.unstable_mockModule('./recording_store.js', () => ({
 	removeRecording: remove,
 	recordingLock: (owner: string) => owner,
 }));
-const {
-	startLocalRecording,
-	remainingRecordingMilliseconds,
-	maxRecordingMilliseconds,
-} = await import('./recording.js');
+const { startLocalRecording, maxUploadBytes } = await import('./recording.js');
 
 class Recorder {
 	static latest: Recorder;
@@ -32,8 +28,10 @@ class Recorder {
 	start() {
 		this.state = 'recording';
 	}
-	chunk(text: string) {
-		this.ondataavailable?.({ data: new Blob([text]) });
+	chunk(text: string | Blob) {
+		this.ondataavailable?.({
+			data: typeof text === 'string' ? new Blob([text]) : text,
+		});
 	}
 	stop() {
 		this.state = 'inactive';
@@ -94,24 +92,22 @@ afterEach(() => {
 	restore(navigator, 'locks', originalLocks);
 });
 
-it('automatically finalizes at the time limit, including the last audio chunk', async () => {
+it('keeps recording beyond thirty minutes and the transcription file limit', async () => {
 	const finished = jest.fn();
 	const tick = jest.fn();
 	const session = await startLocalRecording('owner', { tick, finished });
-	Recorder.latest.chunk('first');
-	await jest.advanceTimersByTimeAsync(maxRecordingMilliseconds);
+	Recorder.latest.chunk(new Blob([new Uint8Array(26_000_000)]));
+	jest.setSystemTime(Date.now() + 2 * 60 * 60 * 1000);
+	await jest.advanceTimersByTimeAsync(250);
+	expect(Recorder.latest.state).toBe('recording');
+	expect(tick).toHaveBeenLastCalledWith(2 * 60 * 60 * 1000 + 250);
+	expect(finished).not.toHaveBeenCalled();
+	session.stop();
 	await session.done;
-	expect(Recorder.latest.state).toBe('inactive');
-	expect(stopTrack).toHaveBeenCalled();
-	expect(tick).toHaveBeenLastCalledWith(0);
 	const final = save.mock.calls.at(-1)?.[0];
 	expect(final?.state).toBe('queued');
-	expect(final?.parts.map(part => part.size)).toEqual([5, 5]);
-	expect(finished).toHaveBeenCalledWith(
-		final,
-		true,
-		expect.stringContaining('limit')
-	);
+	expect(final?.parts.map(part => part.size)).toEqual([26_000_000, 5]);
+	expect(finished).toHaveBeenCalledWith(final, true, undefined);
 });
 
 it('retains completed audio for download if a checkpoint and final save fail', async () => {
@@ -163,20 +159,20 @@ it('cancelling removes the draft even when the recorder emits its final chunk', 
 	);
 });
 
-it('uses a byte safeguard and shortens the countdown for faster encoders', () => {
-	expect(remainingRecordingMilliseconds(0, 0, 0, 64_000)).toBe(
-		maxRecordingMilliseconds
+it('retains a final download if the worker upload budget is reached', async () => {
+	const finished = jest.fn();
+	const session = await startLocalRecording('owner', {
+		tick: () => undefined,
+		finished,
+	});
+	const large = new Blob(['audio']);
+	Object.defineProperty(large, 'size', { value: maxUploadBytes });
+	Recorder.latest.chunk(large);
+	await session.done;
+	expect(Recorder.latest.state).toBe('inactive');
+	expect(finished).toHaveBeenCalledWith(
+		expect.objectContaining({ state: 'queued' }),
+		true,
+		expect.stringContaining('256 MiB')
 	);
-	expect(remainingRecordingMilliseconds(0, 1000, 23_000_000, 64_000)).toBe(0);
-	expect(remainingRecordingMilliseconds(0, 0, 0, 256_000)).toBeLessThan(
-		maxRecordingMilliseconds
-	);
-	expect(
-		remainingRecordingMilliseconds(
-			0,
-			maxRecordingMilliseconds + 10_000,
-			0,
-			64_000
-		)
-	).toBe(0);
 });

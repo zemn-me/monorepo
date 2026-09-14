@@ -56,6 +56,7 @@ type JournalAI interface {
 }
 
 type openAIJournalAI struct {
+	ffmpegPath       string
 	apiKey           string
 	workloadIdentity *openaiauth.WorkloadIdentityAuth
 	client           *http.Client
@@ -191,7 +192,7 @@ func journalTranscriptionBody(audio io.Reader, contentType string) (io.ReadClose
 	return reader, multipartContentType
 }
 
-func (o *openAIJournalAI) Transcribe(ctx context.Context, audio io.Reader, contentType string) (JournalTranscriptionResult, error) {
+func (o *openAIJournalAI) transcribeFile(ctx context.Context, audio io.Reader, contentType string, allowEmpty bool) (JournalTranscriptionResult, error) {
 	body, contentHeader := journalTranscriptionBody(audio, contentType)
 	defer body.Close()
 
@@ -214,6 +215,9 @@ func (o *openAIJournalAI) Transcribe(ctx context.Context, audio io.Reader, conte
 		return JournalTranscriptionResult{}, err
 	}
 	if result.Segments == nil {
+		if allowEmpty && result.Duration >= 0 {
+			return JournalTranscriptionResult{DurationMs: int64(math.Round(result.Duration * 1000))}, nil
+		}
 		return JournalTranscriptionResult{}, errors.New("OpenAI returned an empty transcript")
 	}
 	segments := make([]JournalTranscriptSegment, 0, len(*result.Segments))
@@ -229,7 +233,7 @@ func (o *openAIJournalAI) Transcribe(ctx context.Context, audio io.Reader, conte
 			Text:    strings.TrimSpace(segment.Text),
 		})
 	}
-	if len(segments) == 0 {
+	if len(segments) == 0 && !allowEmpty {
 		return JournalTranscriptionResult{}, errors.New("OpenAI returned an empty transcript")
 	}
 	if result.Duration < 0 {

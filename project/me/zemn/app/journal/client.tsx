@@ -31,7 +31,6 @@ import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
 import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
 import {
-	maxRecordingMilliseconds,
 	type RecordingSession,
 	startLocalRecording,
 } from '#root/project/me/zemn/app/journal/recording.js';
@@ -2320,9 +2319,7 @@ export default function JournalPageClient({
 	const resetCreateEntry = createEntry.reset;
 	const recorder = useRef<RecordingSession>();
 	const [recordingBusy, setRecordingBusy] = useState(false);
-	const [recordingRemaining, setRecordingRemaining] = useState(
-		maxRecordingMilliseconds
-	);
+	const [recordingElapsed, setRecordingElapsed] = useState(0);
 	const [recording, setRecording] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
 	const [recordingError, setRecordingError] = useState<string>();
@@ -2502,7 +2499,7 @@ export default function JournalPageClient({
 		let session: RecordingSession | undefined;
 		try {
 			session = await startLocalRecording(owner, {
-				tick: setRecordingRemaining,
+				tick: setRecordingElapsed,
 				finished: (draft, durable, message) => {
 					if (recorder.current === session) {
 						recorder.current = undefined;
@@ -2590,17 +2587,12 @@ export default function JournalPageClient({
 				<>
 					<RecordingWaveform stream={recordingStream} />
 					<div className={style.recordingTime}>
-						<span
-							role="timer"
-							aria-label="Recording time remaining"
-						>
-							{mediaTimestamp(
-								Math.ceil(recordingRemaining / 1000) * 1000
-							)}{' '}
-							left
+						<span role="timer" aria-label="Recording duration">
+							{mediaTimestamp(recordingElapsed)} recorded
 						</span>
 						<small>
-							Stops automatically; audio is saved on this device.
+							Saved on this device. Long notes are split
+							automatically for transcription.
 						</small>
 					</div>
 					<button
