@@ -58,6 +58,7 @@
 }
 
 .recorder[data-recording] {
+	flex-wrap: wrap;
 	flex: 1 1 100%;
 	order: 2;
 	padding-block-end: 0.65em;
@@ -831,4 +832,68 @@
 	padding: 0.75em;
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
+}
+
+.recordingTime {
+	align-items: baseline;
+	display: flex;
+	flex: 1 1 100%;
+	flex-wrap: wrap;
+	gap: 0.25em 1em;
+	justify-content: space-between;
+	order: 1;
+	font-variant-numeric: tabular-nums;
+}
+
+.recordingTime small {
+	color: var(--journal-muted);
+	font-size: 0.85em;
+}
+
+.localRecordings {
+	border: 1px solid var(--journal-line);
+	border-radius: 1rem;
+	margin-block: 1em 2em;
+	max-width: 42em;
+	padding: 1em;
+}
+
+.localRecordings h2 {
+	margin-block-start: 0;
+}
+
+.localRecordings ul {
+	list-style: none;
+	padding: 0;
+}
+
+.localRecordings li {
+	border-block-start: 1px solid var(--journal-soft-line);
+	padding-block: 0.75em;
+}
+
+.localRecordingActions {
+	align-items: baseline;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1em;
+}
+
+.localRecordingActions button {
+	background: transparent;
+	border: 1px solid var(--journal-line);
+	border-radius: 0.4em;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	padding: 0.5em 0.75em;
+}
+
+.localRecordingActions summary {
+	cursor: pointer;
+}
+
+.localRecordingActions button:disabled {
+	cursor: default;
+	opacity: 0.5;
 }

@@ -747,9 +747,11 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 	const invalidateJournal = useinvalidateJournal();
 	return useMutation({
 		mutationKey: ['post', '/journal/entries'],
+		networkMode: 'always',
 		mutationFn: fetchClient(
 			client => async (upload: JournalAudioUpload) => {
 				const response = await client.POST('/journal/entries', {
+					signal: AbortSignal.timeout(30_000),
 					body: {
 						contentType: upload.contentType,
 						recordedAt: upload.recordedAt,
@@ -769,6 +771,7 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 				try {
 					const uploaded = await fetch(response.data.upload.url, {
 						body: upload.file,
+						signal: AbortSignal.timeout(10 * 60_000),
 						headers: response.data.upload.headers,
 						method: response.data.upload.method,
 					});
@@ -780,6 +783,7 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 				} catch (error) {
 					await client
 						.DELETE('/journal/entries/{entryId}', {
+							signal: AbortSignal.timeout(10_000),
 							params: {
 								path: { entryId: response.data.entry.id },
 							},
