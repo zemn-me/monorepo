@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.26.6
+go 1.27.1
 
 ignore (
 	./ci/bazel_bep
@@ -50,6 +50,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/invopop/jsonschema v0.14.0
+	github.com/modelcontextprotocol/go-sdk v1.7.0
 	github.com/nyaruka/phonenumbers/v2 v2.0.11
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.7.0
@@ -65,19 +66,8 @@ require (
 )
 
 require (
-	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60 // indirect
-	github.com/bazelbuild/bazel-watcher v0.33.0 // indirect
-	github.com/go-delve/delve v1.27.2 // indirect
-	github.com/itchyny/gojq v0.12.19 // indirect
-	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
-	golang.org/x/time v0.15.0 // indirect
-	golang.org/x/tools v0.48.0 // indirect
-	golang.org/x/tools/gopls v0.23.0 // indirect
-	honnef.co/go/tools v0.8.1 // indirect
-)
-
-require (
 	github.com/BurntSushi/toml v1.6.0 // indirect
+	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.20 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.0 // indirect
@@ -96,6 +86,7 @@ require (
 	github.com/aws/smithy-go v1.28.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-3 // indirect
+	github.com/bazelbuild/bazel-watcher v0.33.0 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cilium/ebpf v0.22.0 // indirect
@@ -110,6 +101,7 @@ require (
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsevents v0.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
+	github.com/go-delve/delve v1.27.2 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
@@ -120,13 +112,14 @@ require (
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/itchyny/go-yaml v0.0.0-20251001235044-fca9a0999f15 // indirect
+	github.com/itchyny/gojq v0.12.19 // indirect
 	github.com/itchyny/timefmt-go v0.1.8 // indirect
 	github.com/jaschaephraim/lrserver v0.0.0-20240306232639-afed386b3640 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.19 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
-	github.com/modelcontextprotocol/go-sdk v1.7.0
+	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
 	github.com/oasdiff/yaml v0.1.1 // indirect
 	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
@@ -159,10 +152,14 @@ require (
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260708182218-49f421fb7959 // indirect
 	golang.org/x/text v0.41.0 // indirect
+	golang.org/x/time v0.15.0 // indirect
+	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
+	golang.org/x/tools/gopls v0.23.0 // indirect
 	golang.org/x/vuln v1.4.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	honnef.co/go/tools v0.8.1 // indirect
 	mvdan.cc/gofumpt v0.10.0 // indirect
 	mvdan.cc/xurls/v2 v2.6.0 // indirect
 )
