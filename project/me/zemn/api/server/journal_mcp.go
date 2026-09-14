@@ -1,8 +1,10 @@
 package apiserver
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"net/http"
 	"slices"
 	"sort"
@@ -14,15 +16,13 @@ import (
 	"github.com/google/uuid"
 	mcpauth "github.com/modelcontextprotocol/go-sdk/auth"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
 )
 
 const journalMCPPath = "/journal/mcp"
 
-// MCP is another transport for the journal API. Accept only tokens issued by
-// this API, with the same audience and dynamically resolved journal scopes.
+// Consent accepts the website identity token and resolves current account scopes.
 // Neither request headers nor unverified token claims select a signing key.
-func (s *Server) verifyJournalMCPToken(ctx context.Context, raw string, _ *http.Request) (*mcpauth.TokenInfo, error) {
+func (s *Server) verifyJournalIdentity(ctx context.Context, raw string, _ *http.Request) (*mcpauth.TokenInfo, error) {
 	token, err := jwt.ParseSigned(raw, []jose.SignatureAlgorithm{jose.ES256})
 	if err != nil {
 		return nil, mcpauth.ErrInvalidToken
@@ -63,30 +63,41 @@ func (s *Server) journalMCPHandler() http.Handler {
 		Stateless: true, JSONResponse: true,
 		CrossOriginProtection: &http.CrossOriginProtection{},
 	})
-	owner := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		info := mcpauth.TokenInfoFromContext(r.Context())
-		ctx := context.WithValue(r.Context(), auth.IDTokenKey, &auth.IDToken{Subject: info.UserID})
-		if _, err := journalSubject(ctx); err != nil {
-			http.Error(w, "the journal is restricted to its owner", http.StatusForbidden)
-			return
-		}
-		http.MaxBytesHandler(transport, 64*1024).ServeHTTP(w, r.WithContext(ctx))
-	})
-	return mcpauth.RequireBearerToken(s.verifyJournalMCPToken, &mcpauth.RequireBearerTokenOptions{Scopes: []string{"journal_read"}})(owner)
+	return transport
 }
 
-// Route outside OpenAPI's JSON validator: MCP owns its JSON-RPC framing and
-// transport negotiation, while its middleware authenticates every request.
-func (s *Server) withJournalMCP(next http.Handler) http.Handler {
-	handler := s.journalMCPHandler()
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == journalMCPPath {
-			w.Header().Set("Cache-Control", "private, no-store")
-			handler.ServeHTTP(w, r)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
+// Generated routes validate and bind the envelope; the SDK owns MCP dispatch
+// and writes the transport response through the generated response visitor.
+type journalMCPResponse struct {
+	handler http.Handler
+	request *http.Request
+}
+
+func (response journalMCPResponse) serve(w http.ResponseWriter) error {
+	response.handler.ServeHTTP(w, response.request)
+	return nil
+}
+func (response journalMCPResponse) VisitPostJournalMCPResponse(w http.ResponseWriter) error {
+	return response.serve(w)
+}
+func (response journalMCPResponse) VisitGetJournalMCPResponse(w http.ResponseWriter) error {
+	return response.serve(w)
+}
+func (response journalMCPResponse) VisitDeleteJournalMCPResponse(w http.ResponseWriter) error {
+	return response.serve(w)
+}
+func (s *Server) PostJournalMCP(ctx context.Context, request PostJournalMCPRequestObject) (PostJournalMCPResponseObject, error) {
+	r := protocolRequest(ctx).Clone(ctx)
+	body := []byte(*request.Body)
+	r.Body = io.NopCloser(bytes.NewReader(body))
+	r.ContentLength = int64(len(body))
+	return journalMCPResponse{handler: s.journalMCP, request: r}, nil
+}
+func (s *Server) GetJournalMCP(ctx context.Context, _ GetJournalMCPRequestObject) (GetJournalMCPResponseObject, error) {
+	return journalMCPResponse{handler: s.journalMCP, request: protocolRequest(ctx).Clone(ctx)}, nil
+}
+func (s *Server) DeleteJournalMCP(ctx context.Context, _ DeleteJournalMCPRequestObject) (DeleteJournalMCPResponseObject, error) {
+	return journalMCPResponse{handler: s.journalMCP, request: protocolRequest(ctx).Clone(ctx)}, nil
 }
 
 type journalMCPFilter struct {

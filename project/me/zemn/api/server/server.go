@@ -59,6 +59,8 @@ type Server struct {
 	usersTableName       string
 	keyRequestsTableName string
 	journalTableName     string
+	oauthTableName       string
+	journalMCP           http.Handler
 	journalBucketName    string
 	rt                   *chi.Mux
 	http.Handler
@@ -102,12 +104,6 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	configureTestOIDCIssuerFromEnv()
 
-	mw := middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
-		Options: openapi3filter.Options{
-			AuthenticationFunc: auth.OIDC,
-		},
-	})
-
 	// Optional endpoint override (DynamoDB Local / LocalStack).
 	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
 	var cfg aws.Config
@@ -144,13 +140,13 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	r := chi.NewRouter()
 	r.Use(analyticsRequestContext)
+	r.Use(protocolHTTPContext)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions, http.MethodPatch},
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
 		MaxAge:         300,
 	}))
-	r.Use(mw)
 
 	journalObjects := opts.JournalObjects
 	journalPresigner := opts.JournalPresigner
@@ -170,6 +166,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		usersTableName:       usersTableName,
 		keyRequestsTableName: keyRequestsTableName,
 		journalTableName:     journalTableName,
+		oauthTableName:       os.Getenv("OAUTH_TABLE_NAME"),
 		journalBucketName:    journalBucketName,
 		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
@@ -196,8 +193,13 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	auth.ScopeResolver = s.resolveScopes
 
+	s.journalMCP = s.journalMCPHandler()
+	r.Use(middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
+		Options:              openapi3filter.Options{AuthenticationFunc: s.authenticateAPI},
+		ErrorHandlerWithOpts: protocolValidationError,
+	}))
 	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
-	s.Handler = analyticsBeaconHandler(s.withJournalMCP(baseHandler), opts.AllowLocalhostAnalytics)
+	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
 	return s, nil
 }
 
@@ -359,6 +361,15 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 	}
 
 	specs := []tableSpec{
+		{
+			Name: s.oauthTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+		},
 		{
 			Name: s.analyticsTableName,
 			Attrs: []types.AttributeDefinition{

@@ -1,23 +1,72 @@
 # Voice diary MCP
 
-The API serves Streamable HTTP MCP at `https://api.zemn.me/journal/mcp`.
-Use the existing zemn.me OAuth token exchange and send its returned token on
-**every** MCP request:
+Add `https://api.zemn.me/journal/mcp` as a remote Streamable HTTP server and
+choose OAuth. The client discovers registration and authorization endpoints,
+opens zemn.me for sign-in and consent, and completes PKCE automatically. No
+manual bearer token, client ID, or client secret is required.
 
-```http
-Authorization: Bearer <zemn.me token>
-```
+The consent page shows the client name, client identifier, return address, and
+`journal_read` permission. It reuses the website's existing Google sign-in and
+zemn.me token exchange. Approval requires the journal owner's current account
+permissions. Client names are self-declared; check the return address before
+sharing private entries.
 
-The token must be signed by this API, issued by its configured API origin,
-intended for `zemn.me`, and unexpired. The server resolves `journal_read` using
-the same account scopes as the diary and enforces the diary's owner restriction.
-No additional scope or secret is needed. `journal_write` is not required because
-all exposed tools are read-only.
+## OAuth protocol
 
-This uses the existing `/oauth2/token` token-exchange flow. It does not add an
-OAuth authorization-code/PKCE flow or dynamic client registration. Clients must
-support configuring a bearer token; automatic browser sign-in requires a separate
-authorization-code flow in the identity service.
+- Protected resource metadata: `/.well-known/oauth-protected-resource/journal/mcp`
+  (also available at `/.well-known/oauth-protected-resource`). The MCP bearer
+  challenge points to it and requests `journal_read`.
+- Authorization server metadata: `/.well-known/oauth-authorization-server`.
+  The existing `/.well-known/openid-configuration` also advertises these
+  endpoints, PKCE, and registration capabilities for clients using OIDC discovery.
+- Dynamic registration: `POST /oauth2/register`, using RFC 7591 client metadata.
+  Public clients use `token_endpoint_auth_method: none`. Request
+  `authorization_code` and optionally `refresh_token` in `grant_types`.
+- Client ID Metadata Documents: HTTPS client IDs with a path are resolved as
+  metadata documents. Their `client_id` must match the URL exactly. Fetches are
+  bounded, disallow redirects, and resolve and dial only public IP addresses.
+  Metadata is fetched anew for authorization and held in the consent request.
+- Authorization: `GET /oauth2/authorize`, with `response_type=code`, a registered
+  `redirect_uri`, `scope=journal_read`, and mandatory S256 PKCE. Redirect URIs
+  match exactly and must use HTTPS or HTTP loopback for local clients.
+- Both authorization and token requests must include
+  `resource=https://api.zemn.me/journal/mcp`.
+- Token exchange and refresh: `POST /oauth2/mcp/token`, form encoded. Code
+  redemption includes `client_id`, `redirect_uri`, `code`, and `code_verifier`.
+  Refresh includes `client_id`, `refresh_token`, and `resource`.
+- Revocation: `POST /oauth2/mcp/revoke`, form encoded with `client_id` and `token`.
+  Revoking either token revokes its whole connection immediately.
+
+Authorization requests expire after ten minutes; codes expire after one minute
+and are single use. Access tokens last at most one hour, and renewable grants
+last thirty days. Refresh tokens rotate on every use. Reusing an old signed
+refresh token revokes the connection. Clients must serialize refresh requests
+and store the replacement token. The user must authorize again after expiry or
+revocation.
+
+The existing `/oauth2/token` website token exchange remains unchanged. Its broad
+website identity tokens are no longer accepted directly by MCP. MCP tokens are
+bound to the MCP resource, the consenting account, and `journal_read`, and cannot
+be used as website identity tokens or refresh tokens. Every MCP request verifies
+the signature, issuer, audience, token purpose, expiry, active grant, current
+account permission, and diary ownership.
+
+The Swagger/OpenAPI spec (`../spec.yaml`) defines MCP's HTTP methods and JSON-RPC
+envelope, OAuth discovery and endpoints, request/response models, and bearer
+security schemes. All routes use the generated router, request validator, and
+strict server interface. The MCP response visitor passes the validated envelope
+to the SDK for method dispatch and transport responses; tool schemas remain
+available through MCP `tools/list`. OAuth business handlers consume generated
+request types and return generated success responses and the shared error model.
+The consent page uses the generated API client for both reads and decisions.
+The frontend consent page is `/journal/connect`; its origin comes from
+`OAUTH_FRONTEND_ORIGIN` (defaults to `https://zemn.me`). OAuth state and registered
+clients use `OAUTH_TABLE_NAME`. `ZEMN_API_ORIGIN` pins discovery, issuer, and resource URLs
+to the deployed API origin, including staging. Pulumi provisions this table with TTL cleanup;
+application code checks expiry independently and uses conditional DynamoDB
+writes for code consumption and refresh rotation across Lambda instances.
+
+## Tools
 
 | Tool | Inputs | Result |
 | --- | --- | --- |

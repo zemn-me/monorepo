@@ -14,7 +14,7 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 ) (conf OIDCConfiguration, err error) {
 	emptyStrings := &[]string{}
 	emptyClaims := &[]OIDCConfigurationClaimTypesSupported{}
-	emptyAuth := &[]OIDCConfigurationTokenEndpointAuthMethodsSupported{}
+	publicAuth := &[]OIDCConfigurationTokenEndpointAuthMethodsSupported{"none"}
 
 	apiRoot, err := ApiRoot()
 	if err != nil {
@@ -32,8 +32,8 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		Issuer:                           apiRoot.String(),
 		AuthorizationEndpoint:            authEndpoint.String(),
 		JwksUri:                          jwksEndpoint.String(),
-		ResponseTypesSupported:           []string{},
-		SubjectTypesSupported:            []OIDCConfigurationSubjectTypesSupported{},
+		ResponseTypesSupported:           []string{"code"},
+		SubjectTypesSupported:            []OIDCConfigurationSubjectTypesSupported{"public"},
 		IdTokenSigningAlgValuesSupported: []string{s.signingKey.Algorithm},
 
 		AcrValuesSupported:     emptyStrings,
@@ -42,32 +42,36 @@ func (s *Server) getOpenIDConnectRootConfiguration(
 		ClaimsSupported:        emptyStrings,
 		DisplayValuesSupported: emptyStrings,
 		GrantTypesSupported: &[]OAuthGrantType{
-			UrnIetfParamsOauthGrantTypeTokenExchange,
+			"authorization_code", "refresh_token",
 		},
 		IdTokenEncryptionAlgValuesSupported:        emptyStrings,
 		IdTokenEncryptionEncValuesSupported:        emptyStrings,
 		RequestObjectEncryptionAlgValuesSupported:  emptyStrings,
 		RequestObjectEncryptionEncValuesSupported:  emptyStrings,
 		RequestObjectSigningAlgValuesSupported:     emptyStrings,
-		ResponseModesSupported:                     emptyStrings,
-		ScopesSupported:                            &[]string{"openid", "profile", "email", "callbox_key", "grievance_portal", "journal_read", "journal_write", "minecraft"},
-		TokenEndpointAuthMethodsSupported:          emptyAuth,
+		ResponseModesSupported:                     &[]string{"query"},
+		ScopesSupported:                            &[]string{"journal_read"},
+		TokenEndpointAuthMethodsSupported:          publicAuth,
 		TokenEndpointAuthSigningAlgValuesSupported: emptyStrings,
 		UiLocalesSupported:                         emptyStrings,
 		UserinfoEncryptionAlgValuesSupported:       emptyStrings,
 		UserinfoEncryptionEncValuesSupported:       emptyStrings,
 		UserinfoSigningAlgValuesSupported:          emptyStrings,
 
-		TokenEndpoint:                 nil,
-		UserinfoEndpoint:              nil,
-		RegistrationEndpoint:          nil,
-		ServiceDocumentation:          nil,
-		OpPolicyUri:                   nil,
-		OpTosUri:                      nil,
-		ClaimsParameterSupported:      nil,
-		RequestParameterSupported:     nil,
-		RequestUriParameterSupported:  nil,
-		RequireRequestUriRegistration: nil,
+		TokenEndpoint:                              strptr(oauthURL(oauthTokenPath)),
+		UserinfoEndpoint:                           nil,
+		CodeChallengeMethodsSupported:              &[]string{"S256"},
+		ClientIdMetadataDocumentSupported:          boolptr(true),
+		AuthorizationResponseIssParameterSupported: boolptr(true),
+		RevocationEndpoint:                         strptr(oauthURL("/oauth2/mcp/revoke")),
+		RegistrationEndpoint:                       strptr(oauthURL("/oauth2/register")),
+		ServiceDocumentation:                       nil,
+		OpPolicyUri:                                nil,
+		OpTosUri:                                   nil,
+		ClaimsParameterSupported:                   nil,
+		RequestParameterSupported:                  nil,
+		RequestUriParameterSupported:               nil,
+		RequireRequestUriRegistration:              nil,
 	}, nil
 }
 

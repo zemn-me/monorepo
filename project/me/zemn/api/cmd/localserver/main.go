@@ -27,6 +27,8 @@ func init() {
 }
 
 type AssignedPorts struct {
+	NextPort         string `json:"@@//project/me/zemn:itest_service"`
+	CalendarNextPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
 	APIPort          string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
 	OIDCProviderPort string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
 }
@@ -42,6 +44,12 @@ func main() {
 		}
 
 		ddbAddress = "http://localhost:" + ports.APIPort
+		if ports.NextPort == "" {
+			ports.NextPort = ports.CalendarNextPort
+		}
+		if ports.NextPort != "" {
+			mustSetEnv("OAUTH_FRONTEND_ORIGIN", "http://localhost:"+ports.NextPort)
+		}
 		if ports.OIDCProviderPort != "" {
 			issuer := fmt.Sprintf("http://localhost:%s", ports.OIDCProviderPort)
 			mustSetEnv("ZEMN_TEST_OIDC_ISSUER", issuer)
@@ -66,6 +74,10 @@ func main() {
 	mustSetEnv("USERS_TABLE_NAME", "table4")
 	mustSetEnv("CALLBOX_KEY_TABLE_NAME", "table5")
 	mustSetEnv("JOURNAL_TABLE_NAME", "table6")
+	mustSetEnv("OAUTH_TABLE_NAME", "oauth")
+	if os.Getenv("OAUTH_FRONTEND_ORIGIN") == "" {
+		mustSetEnv("OAUTH_FRONTEND_ORIGIN", "http://localhost:3000")
+	}
 	mustSetEnv("JOURNAL_BUCKET_NAME", "local-journal")
 
 	ln, err := net.Listen("tcp", address)
