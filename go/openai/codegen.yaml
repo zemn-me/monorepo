@@ -3,4 +3,6 @@ package: openai
 generate:
   models: true
 output-options:
+  overlay:
+    path: go/openai/overlay.yaml
   skip-prune: true

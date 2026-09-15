@@ -42,12 +42,16 @@ pub fn extract_imports(filename: String) -> Result<Vec<String>, ExtractImportsEr
         .into_iter()
         .filter_map(|item| match item {
             swc_ecma_ast::ModuleItem::ModuleDecl(m) => match m {
-                ModuleDecl::Import(import) => Some(import.src.value.clone().to_string()),
+                ModuleDecl::Import(import) => Some(import.src.value.to_string_lossy().into_owned()),
                 ModuleDecl::ExportDecl(_) => None,
-                ModuleDecl::ExportNamed(export) => export.src.map(|value| value.value.to_string()),
+                ModuleDecl::ExportNamed(export) => export
+                    .src
+                    .map(|value| value.value.to_string_lossy().into_owned()),
                 ModuleDecl::ExportDefaultDecl(_) => None,
                 ModuleDecl::ExportDefaultExpr(_) => None,
-                ModuleDecl::ExportAll(export) => Some(export.src.value.to_string()),
+                ModuleDecl::ExportAll(export) => {
+                    Some(export.src.value.to_string_lossy().into_owned())
+                }
                 ModuleDecl::TsImportEquals(_) => None,
                 ModuleDecl::TsExportAssignment(_) => None,
                 ModuleDecl::TsNamespaceExport(_) => None,

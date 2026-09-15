@@ -1,11 +1,14 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
-load("@rules_itest//private:itest.bzl", "service_test")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_binary")
+load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_binary", "py_library")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
 
+# gazelle:python_library_naming_convention $package_name$_py
 # gazelle:exclude analytics_test.go
+# gazelle:exclude park_test.go
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
@@ -74,4 +77,87 @@ ts_project(
         "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
     ],
+)
+
+service_test(
+    name = "park_integration_test",
+    services = [":itest_service"],
+    test = ":park_browser_test",
+)
+
+go_test(
+    name = "park_browser_test",
+    srcs = ["park_test.go"],
+    tags = ["manual"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+md_files(
+    name = "md",
+    srcs = [
+        "AGENTS.md",
+        "PERFORMANCE.md",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+service_test(
+    name = "park_benchmark",
+    args = [
+        "-test.run=^$$",
+        "-test.bench=BenchmarkParkFrames",
+        "-test.benchtime=1x",
+        "-test.v",
+    ],
+    services = [":itest_service"],
+    tags = ["manual"],
+    test = ":park_browser_test",
+)
+
+py_binary(
+    name = "static_server",
+    srcs = ["static_server.py"],
+    data = [":build"],
+    env = {"PARK_BUILD_DIR": "$(rlocationpath :build)"},
+    main = "static_server.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+itest_service(
+    name = "static_service",
+    args = ["$${PORT}"],
+    autoassign_port = True,
+    exe = ":static_server",
+    http_health_check_address = "http://localhost:$${PORT}/",
+)
+
+service_test(
+    name = "park_production_test",
+    services = [":static_service"],
+    test = ":park_browser_test",
+)
+
+py_library(
+    name = "eggsfordogs.com_py",
+    srcs = ["static_server.py"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+service_test(
+    name = "park_production_benchmark",
+    args = [
+        "-test.run=^$$",
+        "-test.bench=BenchmarkParkFrames",
+        "-test.benchtime=1x",
+        "-test.v",
+    ],
+    services = [":static_service"],
+    tags = ["manual"],
+    test = ":park_browser_test",
 )

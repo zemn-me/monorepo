@@ -42,6 +42,18 @@ oci.pull(
         "linux/ppc64le",
     ],
 )
+oci.pull(
+    name = "distroless_cc_debian12",
+    digest = "sha256:e5d81ddde149641e2a9ba55be4545bc125c67de07508b03ba4c22e6eb0ded5aa",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+        "linux/arm/v7",
+        "linux/s390x",
+        "linux/ppc64le",
+    ],
+)
 
 # Keep a release tag for Renovate; the digest is the immutable build input.
 oci.pull(
@@ -61,6 +73,12 @@ use_repo(
     "distroless_base_linux_arm_v7",
     "distroless_base_linux_ppc64le",
     "distroless_base_linux_s390x",
+    "distroless_cc_debian12",
+    "distroless_cc_debian12_linux_amd64",
+    "distroless_cc_debian12_linux_arm64_v8",
+    "distroless_cc_debian12_linux_arm_v7",
+    "distroless_cc_debian12_linux_ppc64le",
+    "distroless_cc_debian12_linux_s390x",
     "distroless_debian12",
     "distroless_debian12_linux_amd64",
     "distroless_debian12_linux_arm64_v8",
@@ -156,7 +174,7 @@ bazel_dep(name = "rules_go", version = "0.61.1", repo_name = "io_bazel_rules_go"
 bazel_dep(name = "gazelle", version = "0.51.3", repo_name = "bazel_gazelle")
 
 # Synced from go.mod by //:go_version_sync.
-GO_VERSION = "1.26.5"
+GO_VERSION = "1.26.6"
 
 go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.download(version = GO_VERSION)
@@ -170,6 +188,10 @@ go_deps.from_file(go_mod = "//:go.mod")
 go_deps.gazelle_override(
     directives = ["gazelle:proto_rule @com_google_protobuf//bazel:proto_library.bzl%proto_library"],
     path = "github.com/bazelbuild/buildtools",
+)
+go_deps.gazelle_override(
+    directives = ["gazelle:proto disable_global"],
+    path = "github.com/nyaruka/phonenumbers/v2",
 )
 go_deps.module_override(
     patch_strip = 1,
@@ -192,6 +214,7 @@ use_repo(
     "com_github_aws_aws_sdk_go_v2_service_kms",
     "com_github_aws_aws_sdk_go_v2_service_lambda",
     "com_github_aws_aws_sdk_go_v2_service_s3",
+    "com_github_aws_aws_sdk_go_v2_service_sts",
     "com_github_awslabs_aws_lambda_go_api_proxy",
     "com_github_bazelbuild_bazel_watcher",
     "com_github_bazelbuild_buildtools",
@@ -207,11 +230,14 @@ use_repo(
     "com_github_golang_protobuf",
     "com_github_google_uuid",
     "com_github_gorilla_websocket",
+    "com_github_invopop_jsonschema",
     "com_github_itchyny_gojq",
-    "com_github_nyaruka_phonenumbers",
+    "com_github_modelcontextprotocol_go_sdk",
+    "com_github_nyaruka_phonenumbers_v2",
     "com_github_oapi_codegen_nethttp_middleware",
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",
+    "com_github_openai_openai_go_v3",
     "com_github_sergi_go_diff",
     "com_github_tdewolff_parse_v2",
     "com_github_tebeka_selenium",
@@ -224,7 +250,7 @@ use_repo(
     "org_golang_x_tools_gopls",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "1.8.0")
 bazel_dep(name = "aspect_rules_py", version = "1.8.4")
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -244,13 +270,13 @@ use_repo(
 # 	datasource=git-refs
 # 	versioning=git
 # 	depName=https://github.com/openai/openai-openapi
-# 	refs-from=master
-OPENAI_OPENAPI_COMMIT = "2577b8c9a889a61c1163075c2e71e3812d80aa83"
+# 	refs-from=main
+OPENAI_OPENAPI_COMMIT = "c6d56281af688d522bb6baf6fc8fb3daae273820"
 
 http_archive(
     name = "com_github_openai_openai_openapi",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-P0PkXK8DEh56Z+S7dWMwxIpVxqmuDJTBuni5ZN/cSok=",
+    integrity = "sha256-ozS1SpmoxOL7y3I9uvvK7xt0wcue2lEKGAJBzoTpQv4=",
     strip_prefix = "openai-openapi-" + OPENAI_OPENAPI_COMMIT,
     # auto-integrity
     url = "https://github.com/openai/openai-openapi/archive/" + OPENAI_OPENAPI_COMMIT + ".zip",
@@ -325,12 +351,12 @@ http_archive(
 # 	versioning=git
 # 	depName=https://github.com/factoriolab/factoriolab
 # 	refs-from=main
-FACTORIOLAB_COMMIT = "7aff56fde2b912f4812750b17d552a5facc410df"
+FACTORIOLAB_COMMIT = "9682457762d9d92d1a89d81c39502f3cc0a917e7"
 
 http_archive(
     name = "com_github_factoriolab",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-rfjX14Q+/LaxxEDtOTG91GUT/y99QXuVjhkgWsxdzls=",
+    integrity = "sha256-Vkl27W8+DMdpXHEylpQ1z6KV9jySCiIHt6EdJdCulkQ=",
     strip_prefix = "factoriolab-" + FACTORIOLAB_COMMIT,
     # auto-integrity
     url = "https://github.com/factoriolab/factoriolab/archive/" + FACTORIOLAB_COMMIT + ".zip",
@@ -457,12 +483,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_X64 = "3.253.0"
+PULUMI_CLI_VERSION_LINUX_X64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "33161e521280e6c77395a46344dba5ff9c118a90df254801e662087143b4d1ac",
+    sha256 = "0469448b9853f723340bf19273c817482bca90f5c02c4cac9fa18a530df6402a",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_X64 + "-linux-x64.tar.gz",
@@ -473,12 +499,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.253.0"
+PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "12d1d00e1a6411ab9af07a9afbd94ca234e889909281dc482ee2e466add28e3e",
+    sha256 = "a3c2ff50ef94962711649e234a28ed3803618cbb2f313505a88ca86c30da98e0",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
@@ -489,12 +515,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_X64 = "3.253.0"
+PULUMI_CLI_VERSION_DARWIN_X64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "afee83f8af2845556eb69cb92632211723860235ef224bac3b80f905820497a0",
+    sha256 = "7db45a6fb6f876e7181925861613b1aa2ae4eea7629f2fb495b221c67c0ec117",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_X64 + "-darwin-x64.tar.gz",
@@ -505,14 +531,14 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_ARM64 = "3.253.0"
+PULUMI_CLI_VERSION_LINUX_ARM64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_linux_arm64",
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    sha256 = "7d7074d67a76139226c163b2365f14fbd45d8e2251362a2e10dc4602b3b577ea",
+    sha256 = "224ffde7339807abca1ee8866372e37fcf23f27a1e31056326188f81823b69a4",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "-linux-arm64.tar.gz",
@@ -523,12 +549,12 @@ exports_files(glob(["**/*"], allow_empty=True))
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.253.0"
+PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "35e696bc4263e81cab4d7bd4500528a376ae79b9e22732ce204ffb54ad8af7dd",
+    sha256 = "3d599ce4d4736446bd0bfb8fee11bf27ae9a9a3dca25c4dc3c48c929ecc2e411",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "-windows-arm64.zip",
@@ -539,12 +565,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_X64 = "3.253.0"
+PULUMI_CLI_VERSION_WINDOWS_X64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_windows_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "3b5ec1964212021c2d8158b01884544e2aad69c73370b189ae574d3ce5a00b19",
+    sha256 = "7243e0eef9d6ee820c6d525ef3ad90118b7bd0d9624665ca1f12aae0dddc00a4",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "-windows-x64.zip",
@@ -578,6 +604,14 @@ http_archive(
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
+# Doom shareware 1.9, archived by the SHA-1 of its uncompressed WAD.
+http_file(
+    name = "doom1_shareware",
+    downloaded_file_path = "doom1.wad.gz",
+    sha256 = "99ce219867b28c3e467b0ee84f5059f4c610f46bba957278584f50fa9c3753a0",
+    urls = ["https://archive.org/download/wadarchive/DATA/5b.zip/5b%2F2e249b9c5133ec987b3ea77596381dc0d6bc1d%2F5b2e249b9c5133ec987b3ea77596381dc0d6bc1d.wad.gz"],
+)
+
 # renovate:
 # 	datasource=github-tags
 # 	versioning=loose
@@ -604,7 +638,7 @@ rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_t
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.97.1"
+RUST_VERSION = "1.98.1"
 
 rust.toolchain(
     edition = "2021",
@@ -663,13 +697,13 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.15.22"
+RUFF_VERSION = "0.16.7"
 
 # For Apple Silicon macOS
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-ooga8m/R0Z9JMsTd8ecLTg789IUTxdrgglZOA/C0Z6M=",
+    integrity = "sha256-gCIaXgsa4pJip0SW8q0TgMGrUrPt2M7hPsdtis/0Bso=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",
@@ -714,7 +748,7 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=loose
 # 	depName=facebook/sapling
-SAPLING_VERSION = "0.2.20260522-084851+1e764c94"
+SAPLING_VERSION = "0.2.20260811-150444+8fb02b32"
 
 http_archive(
     name = "sapling_linux_amd64",

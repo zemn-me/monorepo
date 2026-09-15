@@ -7,6 +7,7 @@ ts_project(
     srcs = [
         "events.ts",
         "index.tsx",
+        "roman.ts",
         "timeline.tsx",
     ],
     assets = [
@@ -34,6 +35,7 @@ filegroup(
         "events.ts",
         "events_test.ts",
         "index.tsx",
+        "roman.ts",
         "timeline.tsx",
     ],
     visibility = ["//:__subpackages__"],

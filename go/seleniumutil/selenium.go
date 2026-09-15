@@ -35,6 +35,11 @@ func (d *Driver) Close() error {
 // New starts chromedriver on a free port, opens a headless Chrome session,
 // and returns a Driver ready to use.
 func New() (*Driver, error) {
+	return NewWithChromeArguments()
+}
+
+// NewWithChromeArguments starts a driver with additional Chromium flags.
+func NewWithChromeArguments(additionalArguments ...string) (*Driver, error) {
 	chrome, err := runfiles.Rlocation(chromiumRlocationPath)
 	if err != nil {
 		return nil, fmt.Errorf("locate chromium: %w", err)
@@ -66,15 +71,17 @@ func New() (*Driver, error) {
 		return nil, fmt.Errorf("start chromedriver: %w", err)
 	}
 
+	chromeArguments := []string{
+		"--headless",
+		"--no-sandbox",
+		"--disable-dev-shm-usage",
+	}
+	chromeArguments = append(chromeArguments, additionalArguments...)
 	caps := selenium.Capabilities{
 		"browserName": "chrome",
 		"goog:chromeOptions": map[string]any{
 			"binary": chrome,
-			"args": []string{
-				"--headless",
-				"--no-sandbox",
-				"--disable-dev-shm-usage",
-			},
+			"args":   chromeArguments,
 		},
 	}
 

@@ -304,7 +304,8 @@ func (r *RealtimeServerEventResponse) UnmarshalJSON(b []byte) (err error) {
 			return
 		}
 
-		if v.Item.Type != nil && *v.Item.Type == "function_call" {
+		itemType, itemTypeErr := v.Item.Discriminator()
+		if itemTypeErr == nil && itemType == string(openai.RealtimeConversationItemFunctionCallTypeFunctionCall) {
 			var v2 ToolCall
 			err = json.Unmarshal(b, &v2)
 			r.value = v2
@@ -405,67 +406,40 @@ type SessionUpdate struct {
 	Type string
 }
 
-func strPtr(s string) *string {
-	return &s
-}
-
 // sendSessionUpdate sends a session update to the OpenAI WebSocket.
 func sendSessionUpdate(ctx context.Context, openaiConn *websocket.Conn) error {
-	var temperature float32 = 0.8
-	s := openai.RealtimeClientEventSessionUpdate{
-		Type: "session.update",
-		Session: struct {
-			InputAudioFormat        *string "json:\"input_audio_format,omitempty\""
-			InputAudioTranscription *struct {
-				Model *string "json:\"model,omitempty\""
-			} "json:\"input_audio_transcription,omitempty\""
-			Instructions      *string                                                          "json:\"instructions,omitempty\""
-			MaxOutputTokens   *openai.RealtimeClientEventSessionUpdate_Session_MaxOutputTokens "json:\"max_output_tokens,omitempty\""
-			Modalities        *[]string                                                        "json:\"modalities,omitempty\""
-			OutputAudioFormat *string                                                          "json:\"output_audio_format,omitempty\""
-			Temperature       *float32                                                         "json:\"temperature,omitempty\""
-			ToolChoice        *string                                                          "json:\"tool_choice,omitempty\""
-			Tools             *[]struct {
-				Description *string                 "json:\"description,omitempty\""
-				Name        *string                 "json:\"name,omitempty\""
-				Parameters  *map[string]interface{} "json:\"parameters,omitempty\""
-				Type        *string                 "json:\"type,omitempty\""
-			} "json:\"tools,omitempty\""
-			TurnDetection *struct {
-				PrefixPaddingMs   *int     "json:\"prefix_padding_ms,omitempty\""
-				SilenceDurationMs *int     "json:\"silence_duration_ms,omitempty\""
-				Threshold         *float32 "json:\"threshold,omitempty\""
-				Type              *string  "json:\"type,omitempty\""
-			} "json:\"turn_detection,omitempty\""
-			Voice *string "json:\"voice,omitempty\""
-		}{
-			TurnDetection: &struct {
-				PrefixPaddingMs   *int     "json:\"prefix_padding_ms,omitempty\""
-				SilenceDurationMs *int     "json:\"silence_duration_ms,omitempty\""
-				Threshold         *float32 "json:\"threshold,omitempty\""
-				Type              *string  "json:\"type,omitempty\""
-			}{
-				Type: strPtr("server_vad"),
+	sessionBytes, err := json.Marshal(map[string]any{
+		"type":         openai.RealtimeSessionCreateRequestGATypeRealtime,
+		"instructions": "Hi",
+		"audio": map[string]any{
+			"input": map[string]any{
+				"format":         map[string]any{"type": openai.Audiopcmu},
+				"turn_detection": map[string]any{"type": openai.RealtimeTurnDetection0TypeServerVad},
 			},
-			InputAudioFormat:  strPtr("g711_ulaw"),
-			OutputAudioFormat: strPtr("g711_ulaw"),
-			Voice:             strPtr(string(openai.CreateSpeechRequestVoiceAlloy)),
-			Instructions:      strPtr("Hi"),
-			Modalities:        &[]string{"text", "audio"},
-			Temperature:       &temperature,
-			Tools: &[]struct {
-				Description *string                 "json:\"description,omitempty\""
-				Name        *string                 "json:\"name,omitempty\""
-				Parameters  *map[string]interface{} "json:\"parameters,omitempty\""
-				Type        *string                 "json:\"type,omitempty\""
-			}{
-				{
-					Description: strPtr("Used to hang up the call."),
-					Name:        strPtr("HangUp"),
-					Type:        strPtr("function"),
-				},
+			"output": map[string]any{
+				"format": map[string]any{"type": openai.Audiopcmu},
+				"voice":  openai.Alloy,
 			},
 		},
+		"output_modalities": []openai.RealtimeSessionCreateRequestGAOutputModalities{
+			openai.RealtimeSessionCreateRequestGAOutputModalitiesAudio,
+		},
+		"tools": []map[string]any{{
+			"description": "Used to hang up the call.",
+			"name":        "HangUp",
+			"type":        openai.RealtimeFunctionToolTypeFunction,
+		}},
+	})
+	if err != nil {
+		return err
+	}
+	var session openai.RealtimeClientEventSessionUpdate_Session
+	if err := json.Unmarshal(sessionBytes, &session); err != nil {
+		return err
+	}
+	s := openai.RealtimeClientEventSessionUpdate{
+		Type:    openai.RealtimeClientEventSessionUpdateTypeSessionUpdate,
+		Session: session,
 	}
 
 	sessionUpdateBytes, err := json.Marshal(s)

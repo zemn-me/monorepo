@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "itest_service")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
@@ -6,10 +7,20 @@ package(default_visibility = ["//visibility:public"])
 
 go_library(
     name = "localserver_lib",
-    srcs = ["main.go"],
+    srcs = [
+        "development_journal.go",
+        "journal.go",
+        "main.go",
+    ],
     importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/cmd/localserver",
     visibility = ["//visibility:private"],
-    deps = ["//project/me/zemn/api/server"],
+    deps = [
+        "//project/me/zemn/api/server",
+        "//project/me/zemn/api/server/auth",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2//aws/signer/v4:signer",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+    ],
 )
 
 bazel_lint(
@@ -29,6 +40,10 @@ itest_service(
         ":$${PORT}",
     ],
     autoassign_port = True,
+    env = {
+        "JOURNAL_LOCAL_AUDIO_DELAY_MS": "1500",
+        "JOURNAL_LOCAL_AUDIO_LIFETIME_MS": "8000",
+    },
     exe = ":localserver",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
@@ -44,11 +59,23 @@ itest_service(
     ],
     autoassign_port = True,
     env = {
+        "JOURNAL_LOCAL_AUDIO_DELAY_MS": "1500",
+        "JOURNAL_LOCAL_AUDIO_LIFETIME_MS": "8000",
         "ZEMN_TEST_CALENDAR_ICAL_ROLLING_FIXTURE": "1",
     },
     exe = ":localserver",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
         "//java/software/amazon/dynamodb",
+    ],
+)
+
+go_test(
+    name = "localserver_test",
+    srcs = ["journal_test.go"],
+    embed = [":localserver_lib"],
+    deps = [
+        "//project/me/zemn/api/server",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
     ],
 )

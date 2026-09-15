@@ -48,6 +48,16 @@ def go_mod_tidy():
 	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
 
 
+def pnpm_lockfile():
+	return bazel_run([
+		"@@//sh/bin:pnpm",
+		"--",
+		"install",
+		"--lockfile-only",
+		"--force",
+	])
+
+
 def sync_go_versions():
 	return bazel_run([
 		"@@//go/cmd/version_sync",
@@ -78,6 +88,7 @@ def bazel_update_modfile():
 	return bazel(["mod", "tidy"])
 
 def modify_non_bazel_lockfiles():
+	pnpm_lockfile()
 	sync_go_versions()
 	go_mod_tidy()
 	sync_go_versions()

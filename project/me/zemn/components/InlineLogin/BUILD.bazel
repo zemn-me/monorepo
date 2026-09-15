@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "InlineLogin",
@@ -9,6 +9,8 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         ":inline_login_module_css",
+        "//:node_modules/@fortawesome/free-solid-svg-icons",
+        "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/classnames",
@@ -22,9 +24,35 @@ ts_project(
     ],
 )
 
+ts_project(
+    name = "InlineLogin_tests",
+    srcs = ["inline_login_test.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":InlineLogin",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["inline_login_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":InlineLogin_tests"],
+)
+
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["inline_login.tsx"],
+    srcs = [
+        "inline_login.tsx",
+        "inline_login_test.tsx",
+    ],
     visibility = ["//:__subpackages__"],
 )
 

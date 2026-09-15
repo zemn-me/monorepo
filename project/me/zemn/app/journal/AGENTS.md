@@ -1,0 +1,2 @@
+- Local recording drafts are account-scoped IndexedDB backups. Keep audio until the server reports its entry ready, including across upload errors and reloads; never store authentication tokens in drafts.
+- MediaRecorder chunks are fragments of one container. Concatenate them in order; do not upload arbitrary chunks as independent audio files.

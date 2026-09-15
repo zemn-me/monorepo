@@ -24,7 +24,8 @@ import {
 	sanitizeAwsLambdaStatementId,
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
-import { mockResources } from '#root/ts/pulumi/setMocks.js';
+import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
+import { mockCalls, mockResources } from '#root/ts/pulumi/setMocks.js';
 
 const require = createRequire(import.meta.url);
 
@@ -111,6 +112,12 @@ describe('pulumi', () => {
 		await expect(serializeFunction(() => 42)).resolves.toBeDefined();
 	});
 
+	test('derives S3-compatible bucket names', () => {
+		expect(deriveBucketName('monorepo_zemn.me_api-journal-audio')).toBe(
+			'monorepo-zemn.me-api-journal-audio-bucket'
+		);
+	});
+
 	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
 		expect(
 			sanitizeAwsAlphaNumericHyphenUnderscoreName(
@@ -173,10 +180,56 @@ describe('pulumi', () => {
 		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
 	});
 
-	test('staging minecraft uses staging-specific resources', async () => {
+	test('staging uses staging-specific resources', async () => {
 		mockResources.splice(0);
+		mockCalls.splice(0);
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
+
+		expect(
+			mockResources.some(
+				resource =>
+					resource.type ===
+					'aws:iam/outboundWebIdentityFederation:OutboundWebIdentityFederation'
+			)
+		).toBe(false);
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53domains/domain:Domain'
+			)
+		).toBe(false);
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('staging.waxingincandescent.com');
+		expect(mockCalls).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					token: 'aws:route53/getZone:getZone',
+					inputs: { name: 'waxingincandescent.com.', privateZone: false },
+				}),
+			])
+		);
+
+		const stagingJournalWorker = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalworkerlambda'
+		);
+		expect(
+			resourceInputText(stagingJournalWorker?.inputs['environment'])
+		).not.toContain('OPENAI_IDENTITY_PROVIDER_ID');
+		const stagingJournalWorkerRole = mockResources.find(
+			resource =>
+				resource.type === 'aws:iam/role:Role' &&
+				resource.name.endsWith('-journal-worker-role')
+		);
+		expect(stagingJournalWorkerRole?.inputs['name']).toBe(
+			'monorepo_zemn.me_api-journal-worker-staging'
+		);
 
 		expect(
 			mockResources.some(
@@ -305,8 +358,36 @@ describe('pulumi', () => {
 
 	test('smoke', async () => {
 		mockResources.splice(0);
-		new project.Component('monorepo', { staging: false });
+		new project.Component('monorepo', {
+			staging: false,
+			openAIIdentityProviderId: 'openai-provider',
+			openAIServiceAccountId: 'openai-production-service-account',
+		});
 		await pulumi.runtime.disconnect();
+
+		expect(
+			mockResources.find(
+				resource => resource.name === 'monorepo_waxingincandescent_domain'
+			)
+		).toMatchObject({
+			type: 'aws:route53domains/domain:Domain',
+			inputs: {
+				domainName: 'waxingincandescent.com',
+				durationInYears: 1,
+				autoRenew: true,
+				adminPrivacy: true,
+				registrantPrivacy: true,
+				techPrivacy: true,
+				transferLock: true,
+			},
+		});
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('waxingincandescent.com');
 
 		const npmPublishCommands = mockResources
 			.filter(resource => resource.type === 'command:local:Command')
@@ -691,6 +772,44 @@ describe('pulumi', () => {
 				role: 'roles/secretmanager.secretAccessor',
 			});
 		}
+
+		const journalWorkerRole = mockResources.find(
+			resource =>
+				resource.type === 'aws:iam/role:Role' &&
+				resource.name.endsWith('-journal-worker-role')
+		);
+		expect(journalWorkerRole?.inputs['name']).toBe(
+			'monorepo_zemn.me_api-journal-worker-production'
+		);
+		const journalWorkerPolicies = resourceInputText(
+			journalWorkerRole?.inputs['inlinePolicies']
+		);
+		expect(journalWorkerPolicies).toContain('sts:GetWebIdentityToken');
+		expect(journalWorkerPolicies).toContain('https://api.openai.com/v1');
+		expect(journalWorkerPolicies).toContain('sts:DurationSeconds');
+
+		const journalWorker = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalworkerlambda'
+		);
+		expect(
+			resourceInputText(journalWorker?.inputs['environment'])
+		).not.toContain('OPENAI_API_KEY');
+		expect(journalWorker?.inputs['environment']).toMatchObject({
+			variables: {
+				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
+				OPENAI_SERVICE_ACCOUNT_ID: 'openai-production-service-account',
+			},
+		});
+		expect(journalWorker?.inputs['reservedConcurrentExecutions']).toBe(1);
+		expect(
+			mockResources.filter(
+				resource =>
+					resource.type ===
+					'aws:iam/outboundWebIdentityFederation:OutboundWebIdentityFederation'
+			)
+		).toHaveLength(1);
 
 		const awsIamRoles = mockResources.filter(
 			resource => resource.type === 'aws:iam/role:Role'

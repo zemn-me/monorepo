@@ -1,0 +1,94 @@
+.page {
+	padding-block-end: 4rem;
+}
+
+.introduction {
+	margin: 0 auto 3rem;
+	max-width: 32rem;
+	padding-inline: 1.25rem;
+	text-align: center;
+}
+
+.groups,
+.entries {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.group + .group {
+	margin-block-start: 2.5rem;
+}
+
+.groupHeading {
+	align-items: baseline;
+	display: grid;
+	gap: 0.7rem;
+	grid-template-columns: auto auto minmax(2rem, 1fr);
+	margin: 0 1.25rem 0.8rem;
+}
+
+.groupHeading::after {
+	border-block-start: 1px solid currentColor;
+	content: "";
+	inline-size: 100%;
+}
+
+.groupHeading h2 {
+	font-size: 1.1em;
+	margin: 0;
+}
+
+.count {
+	font-size: 0.8em;
+	font-style: italic;
+	opacity: 0.72;
+}
+
+.entries {
+	border-block-start: 1px solid
+		color-mix(in srgb, currentColor 28%, transparent);
+	counter-reset: experiment;
+	margin-inline: 1.25rem;
+}
+
+.entry {
+	align-items: baseline;
+	border-block-end: 1px solid
+		color-mix(in srgb, currentColor 28%, transparent);
+	counter-increment: experiment;
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 2.5rem minmax(0, 1fr);
+	padding-block: 0.85rem;
+}
+
+.entry::before {
+	content: counter(experiment, decimal-leading-zero);
+	font-size: 0.85em;
+	font-style: italic;
+	font-variant-numeric: tabular-nums;
+	opacity: 0.72;
+}
+
+.experiment h3,
+.experiment p {
+	margin: 0;
+}
+
+.experiment h3 {
+	font-size: 1em;
+}
+
+.experiment p {
+	line-height: 1.45;
+	margin-block-start: 0.25rem;
+	max-width: 34rem;
+}
+
+@media (max-width: 34rem) {
+	.entry {
+		gap: 0.65rem;
+		grid-template-columns: 1.8rem minmax(0, 1fr);
+	}
+}

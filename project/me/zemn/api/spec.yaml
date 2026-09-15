@@ -7,16 +7,233 @@ info:
 servers:
   - url: https://api.zemn.me
     description: Production
-  - url: http://api.staging.zemn.me
+  - url: https://api.staging.zemn.me
     description: Staging
 
 components:
+  responses:
+    MCPOAuthError:
+      description: OAuth protocol error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MCPOAuthError'
+    MCPTransportError:
+      description: Transport or authentication error. Authentication failures include the resource metadata URL and required scope.
+      headers:
+        WWW-Authenticate:
+          schema: { type: string }
+      content:
+        application/json:
+          schema: {}
+        text/plain:
+          schema: { type: string }
   securitySchemes:
+    JournalMCPBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Resource-bound journal_read access token issued through journal OAuth.
+    JournalConsentBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Website identity token used to approve or deny a journal connection.
     OIDC:
       type: openIdConnect
       # todo: own issuer!
       openIdConnectUrl: "https://api.zemn.me"
   schemas:
+    MCPMessage:
+      type: object
+      description: JSON-RPC 2.0 request, notification, or response. MCP validates method-specific payloads and advertises tool schemas through tools/list.
+      required: [jsonrpc]
+      x-go-type: json.RawMessage
+      properties:
+        jsonrpc:
+          type: string
+          enum: ['2.0']
+        id: {}
+        method:
+          type: string
+        params: {}
+        result: {}
+        error:
+          type: object
+      anyOf:
+        - required: [method]
+        - required: [result, id]
+        - required: [error, id]
+    MCPOAuthError:
+      type: object
+      required: [error, error_description]
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    MCPOAuthClient:
+      type: object
+      required: [client_name, redirect_uris]
+      properties:
+        client_id:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        redirect_uris:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+            maxLength: 2048
+        grant_types:
+          type: array
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
+        response_types:
+          type: array
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
+        token_endpoint_auth_method:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        token_endpoint_auth_methods_supported:
+          description: Methods supported by a Client ID Metadata Document. For dynamic registration, token_endpoint_auth_method remains the requested method.
+          type: array
+          minItems: 1
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
+    MCPOAuthRegisteredClient:
+      allOf:
+        - $ref: '#/components/schemas/MCPOAuthClient'
+        - type: object
+          required: [client_id]
+          properties:
+            client_id:
+              type: string
+              minLength: 1
+    MCPOAuthTokenRequest:
+      type: object
+      required: [grant_type, client_id, resource]
+      properties:
+        grant_type:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_id:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        resource:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        scope:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        code:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        redirect_uri:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        code_verifier:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        refresh_token:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_secret:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_assertion:
+          description: Client assertions are unsupported and rejected by this public-client token endpoint.
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_assertion_type:
+          type: string
+          x-go-type-skip-optional-pointer: true
+    MCPOAuthTokenResponse:
+      type: object
+      required: [access_token, token_type, expires_in, scope]
+      properties:
+        access_token: { type: string }
+        token_type:
+          type: string
+          enum: [Bearer]
+        expires_in: { type: integer, minimum: 0 }
+        scope:
+          type: string
+          enum: [journal_read]
+        refresh_token:
+          type: string
+          x-go-type-skip-optional-pointer: true
+    MCPOAuthRevocation:
+      type: object
+      required: [client_id, token]
+      properties:
+        client_id: { type: string }
+        token: { type: string }
+        token_type_hint:
+          type: string
+          x-go-type-skip-optional-pointer: true
+    OAuthConsentDecision:
+      type: object
+      required: [approve]
+      properties:
+        approve: { type: boolean }
+    MCPResourceMetadata:
+      type: object
+      required: [resource, authorization_servers, scopes_supported, bearer_methods_supported, resource_name]
+      properties:
+        resource: { type: string }
+        resource_name: { type: string }
+        authorization_servers:
+          type: array
+          items: { type: string }
+        scopes_supported:
+          type: array
+          items: { type: string }
+        bearer_methods_supported:
+          type: array
+          items: { type: string }
+    MCPAuthorizationServerMetadata:
+      type: object
+      required: [issuer, authorization_endpoint, token_endpoint, registration_endpoint, revocation_endpoint, response_types_supported, grant_types_supported, token_endpoint_auth_methods_supported, revocation_endpoint_auth_methods_supported, code_challenge_methods_supported, scopes_supported, client_id_metadata_document_supported, authorization_response_iss_parameter_supported]
+      properties:
+        issuer:
+          type: string
+        authorization_endpoint:
+          type: string
+        token_endpoint:
+          type: string
+        registration_endpoint:
+          type: string
+        revocation_endpoint:
+          type: string
+        response_types_supported:
+          type: array
+          items: { type: string }
+        grant_types_supported:
+          type: array
+          items: { type: string }
+        token_endpoint_auth_methods_supported:
+          type: array
+          items: { type: string }
+        revocation_endpoint_auth_methods_supported:
+          type: array
+          items: { type: string }
+        code_challenge_methods_supported:
+          type: array
+          items: { type: string }
+        scopes_supported:
+          type: array
+          items: { type: string }
+        client_id_metadata_document_supported:
+          type: boolean
+        authorization_response_iss_parameter_supported:
+          type: boolean
     OIDCIssuer:
       type: string
       format: uri
@@ -29,6 +246,25 @@ components:
       description: >
         The unique never reused identifier for a user.
       example: user_2f7a3b91c8d24a7f
+    OAuthConsentDetails:
+      type: object
+      required: [client_name, client_id, redirect_uri, scope]
+      properties:
+        client_name:
+          type: string
+        client_id:
+          type: string
+        redirect_uri:
+          type: string
+        scope:
+          type: string
+          enum: [journal_read]
+    OAuthConsentResult:
+      type: object
+      required: [redirect_uri]
+      properties:
+        redirect_uri:
+          type: string
     OAuthClientId:
       type: string
       description: OAuth 2.0 client identifier registered with the provider.
@@ -163,6 +399,8 @@ components:
       type: string
       description: OAuth grant type supported by this endpoint.
       enum:
+        - authorization_code
+        - refresh_token
         - urn:ietf:params:oauth:grant-type:token-exchange
     OAuthScopes:
       type: object
@@ -186,8 +424,438 @@ components:
           type: boolean
         grievance_portal:
           type: boolean
+        journal_read:
+          type: boolean
+        journal_write:
+          type: boolean
         minecraft:
           type: boolean
+    JournalCitation:
+      type: object
+      required: [entryId, segmentId, quote]
+      properties:
+        entryId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: entry_id
+        segmentId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: segment_id
+        quote:
+          type: string
+          description: Exact supporting text quoted from the cited transcript segment.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: quote
+    JournalTranscriptSegment:
+      type: object
+      required: [id, startMs, endMs, text]
+      properties:
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        startMs:
+          type: integer
+          format: int64
+          x-oapi-codegen-extra-tags:
+            dynamodbav: start_ms
+        endMs:
+          type: integer
+          format: int64
+          x-oapi-codegen-extra-tags:
+            dynamodbav: end_ms
+        text:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: text
+    JournalSummaryBlock:
+      type: object
+      required: [markdown, citations]
+      properties:
+        markdown:
+          type: string
+          description: Markdown containing one-based numbered footnote references such as `[^1]` immediately after the claims they support. Each reference indexes the citations array; clients render the citation's source details separately.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: markdown
+        citations:
+          type: array
+          description: Ordered transcript citations referenced from markdown; every item must appear in markdown as its one-based footnote reference and is rendered with the quoted transcript segment and a timestamp link.
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: citations
+    JournalSummary:
+      type: object
+      required: [schemaVersion, id, period, start, end, title, blocks]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+          x-oapi-codegen-extra-tags:
+            dynamodbav: schema_version
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        period:
+          type: string
+          enum: [entry, day, week, month, year, journal]
+          x-oapi-codegen-extra-tags:
+            dynamodbav: period
+        start:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: start
+        end:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: end
+        title:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: title
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: blocks
+        sourceFingerprint:
+          type: string
+          description: Hash of the ordered source material used to avoid regenerating an unchanged aggregate summary.
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'source_fingerprint,omitempty'
+    JournalSummaryResult:
+      type: object
+      description: Structured model output before trusted period metadata is attached.
+      required: [title, blocks]
+      properties:
+        title:
+          type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalEntryAnalysisResult:
+      type: object
+      description: Structured entry analysis before trusted journal metadata is attached.
+      required: [summary, recordedDate]
+      properties:
+        summary:
+          $ref: '#/components/schemas/JournalSummaryResult'
+        recordedDate:
+          type: string
+          pattern: '^(|\d{4}-\d{2}-\d{2})$'
+          description: Local calendar date explicitly assigned by the speaker to this journal entry, or an empty string when the transcript does not establish one.
+    JournalSummarySource:
+      type: object
+      description: Citation-preserving source supplied to hierarchical summarization.
+      required: [label, text, citations]
+      properties:
+        label:
+          type: string
+        text:
+          type: string
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+    JournalTranscriptionResult:
+      type: object
+      description: Trusted transcription output derived from uploaded audio.
+      required: [durationMs, segments]
+      properties:
+        durationMs:
+          type: integer
+          format: int64
+          minimum: 0
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalTranscriptFile:
+      type: object
+      description: Versioned transcript document stored alongside journal audio.
+      required: [schemaVersion, entryId, segments]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        entryId:
+          type: string
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalEntryStatus:
+      type: string
+      enum: [awaiting_upload, processing, ready, failed]
+    JournalEntryMetadata:
+      type: object
+      description: Versioned metadata document stored alongside journal audio.
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        id:
+          type: string
+        recordedAt:
+          type: string
+          format: date-time
+          description: Recording time, derived from embedded audio metadata when available and otherwise from the upload request fallback.
+        timeZone:
+          type: string
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentType:
+          type: string
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        audioKey:
+          type: string
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+        error:
+          type: string
+    JournalStoredEntry:
+      type: object
+      description: Complete entry representation indexed in DynamoDB.
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status, transcript]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+          x-oapi-codegen-extra-tags:
+            dynamodbav: schema_version
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        recordedAt:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: recorded_at
+        timeZone:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: time_zone
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'duration_ms,omitempty'
+        contentType:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: content_type
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'byte_length,omitempty'
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'content_sha256,omitempty'
+        audioKey:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: audio_key
+        uploadExpiresAt:
+          type: string
+          format: date-time
+          description: Time after which an awaiting upload can no longer be active.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'upload_expires_at,omitempty'
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: status
+        error:
+          type: string
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'error,omitempty'
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'transcript,omitempty'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'summary,omitempty'
+    JournalContentHashReservation:
+      type: object
+      description: Atomic ownership record preventing the same audio content from becoming multiple entries.
+      required: [sha256, entryId]
+      properties:
+        sha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: sha256
+        entryId:
+          type: string
+          format: uuid
+          x-oapi-codegen-extra-tags:
+            dynamodbav: entry_id
+    JournalStoredRecord:
+      type: object
+      description: DynamoDB envelope for an entry, aggregate summary, or content-hash reservation.
+      required: [id, when, kind]
+      properties:
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        when:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: when
+        kind:
+          type: string
+          enum: [entry, summary, content_hash]
+          x-oapi-codegen-extra-tags:
+            dynamodbav: kind
+        entry:
+          $ref: '#/components/schemas/JournalStoredEntry'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'entry,omitempty'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'summary,omitempty'
+        contentHash:
+          $ref: '#/components/schemas/JournalContentHashReservation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'content_hash,omitempty'
+    JournalEntry:
+      type: object
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, status, transcript]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        id:
+          type: string
+          format: uuid
+        recordedAt:
+          type: string
+          format: date-time
+        timeZone:
+          type: string
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentType:
+          type: string
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+        error:
+          type: string
+        audioUrl:
+          type: string
+          format: uri
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+    Journal:
+      type: object
+      required: [entries, summaries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummary'
+    JournalEntryCreate:
+      type: object
+      required: [contentType, recordedAt, timeZone]
+      properties:
+        contentType:
+          type: string
+          enum: [audio/mp4, audio/mpeg, audio/ogg, audio/wav, audio/webm]
+        recordedAt:
+          type: string
+          format: date-time
+          description: Fallback recording time used when the uploaded audio container does not provide its own creation timestamp.
+        timeZone:
+          type: string
+          description: IANA time zone used to derive calendar summary periods.
+    JournalEntryDateUpdate:
+      type: object
+      required: [recordedDate]
+      properties:
+        recordedDate:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          description: Local calendar date to assign while preserving the entry's local time of day and time zone.
+    JournalUpload:
+      type: object
+      required: [url, method, headers, expiresAt]
+      properties:
+        url:
+          type: string
+          format: uri
+        method:
+          type: string
+          const: PUT
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        expiresAt:
+          type: string
+          format: date-time
+    JournalEntryCreateResponse:
+      type: object
+      required: [entry, upload]
+      properties:
+        entry:
+          $ref: '#/components/schemas/JournalEntry'
+        upload:
+          $ref: '#/components/schemas/JournalUpload'
     IdToken:
       type: object
       description: >
@@ -597,11 +1265,21 @@ components:
         request_object_encryption_enc_values_supported:
           type: array
           items: { type: string }
+        code_challenge_methods_supported:
+          type: array
+          items: { type: string }
+        client_id_metadata_document_supported:
+          type: boolean
+        authorization_response_iss_parameter_supported:
+          type: boolean
+        revocation_endpoint:
+          type: string
+          format: uri
         token_endpoint_auth_methods_supported:
           type: array
           items:
             type: string
-            enum: [client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt]
+            enum: [none, client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt]
         token_endpoint_auth_signing_alg_values_supported:
           type: array
           items: { type: string }
@@ -652,7 +1330,7 @@ components:
         token_endpoint: https://api.zemn.me/oauth2/token
         jwks_uri: https://api.zemn.me/.well-known/jwks.json
         userinfo_endpoint: https://api.zemn.me/oauth2/userinfo
-        scopes_supported: [openid, profile, email, callbox_key, minecraft]
+        scopes_supported: [openid, profile, email, callbox_key, journal_read, journal_write, minecraft]
         response_types_supported: [code]
         grant_types_supported: [urn:ietf:params:oauth:grant-type:token-exchange]
         subject_types_supported: [public]
@@ -1574,6 +2252,519 @@ components:
         accepted: true
 
 paths:
+  /.well-known/oauth-authorization-server:
+    get:
+      operationId: getMCPAuthorizationMetadata
+      tags: [Journal OAuth]
+      summary: Discover journal OAuth capabilities.
+      security: []
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPAuthorizationServerMetadata'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /.well-known/oauth-protected-resource:
+    get:
+      operationId: getOAuthResourceMetadata
+      tags: [Journal OAuth]
+      summary: Discover journal OAuth capabilities.
+      security: []
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPResourceMetadata'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /.well-known/oauth-protected-resource/journal/mcp:
+    get:
+      operationId: getMCPResourceMetadata
+      tags: [Journal OAuth]
+      summary: Discover journal OAuth capabilities.
+      security: []
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPResourceMetadata'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/register:
+    post:
+      operationId: registerMCPClient
+      tags: [Journal OAuth]
+      summary: Register a public OAuth client.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPOAuthClient'
+      responses:
+        '201':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPOAuthRegisteredClient'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/authorize:
+    get:
+      operationId: authorizeMCPClient
+      tags: [Journal OAuth]
+      summary: Start authorization with explicit consent and S256 PKCE.
+      security: []
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: redirect_uri
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: response_type
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: resource
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: code_challenge
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: code_challenge_method
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+      responses:
+        '302':
+          description: Open the website consent page.
+          headers:
+            Location:
+              required: true
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/requests/{requestId}:
+    get:
+      operationId: getMCPConsent
+      tags: [Journal OAuth]
+      summary: Read the client and requested permission.
+      security: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthConsentDetails'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+    post:
+      operationId: decideMCPConsent
+      tags: [Journal OAuth]
+      summary: Approve or deny a journal connection.
+      security:
+        - JournalConsentBearer: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthConsentDecision'
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthConsentResult'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/mcp/token:
+    post:
+      operationId: exchangeMCPToken
+      tags: [Journal OAuth]
+      summary: Redeem a single-use code or rotate a refresh token.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MCPOAuthTokenRequest'
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPOAuthTokenResponse'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/mcp/revoke:
+    post:
+      operationId: revokeMCPToken
+      tags: [Journal OAuth]
+      summary: Revoke a journal OAuth connection.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MCPOAuthRevocation'
+      responses:
+        '200':
+          description: Successful response.
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /journal/mcp:
+    get:
+      operationId: getJournalMCP
+      tags: [Journal]
+      summary: Journal MCP Streamable HTTP transport.
+      description: Stateless JSON responses; authenticated GET and DELETE return 405 because standalone SSE and sessions are not supported. POST accepts one JSON-RPC message. Notifications and client responses receive 202. Tools remain discoverable through MCP tools/list.
+      security:
+        - JournalMCPBearer: []
+      parameters:
+        - name: MCP-Protocol-Version
+          in: header
+          schema: { type: string }
+        - name: Mcp-Session-Id
+          in: header
+          schema: { type: string }
+      responses:
+        '200':
+          description: JSON-RPC response, including method and tool errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPMessage'
+        '202':
+          description: Notification or response accepted.
+        '405':
+          description: This stateless endpoint does not offer sessions or standalone SSE.
+          headers:
+            Allow:
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPTransportError'
+        '401':
+          $ref: '#/components/responses/MCPTransportError'
+        '403':
+          $ref: '#/components/responses/MCPTransportError'
+        '406':
+          $ref: '#/components/responses/MCPTransportError'
+        '413':
+          $ref: '#/components/responses/MCPTransportError'
+        '415':
+          $ref: '#/components/responses/MCPTransportError'
+        '500':
+          $ref: '#/components/responses/MCPTransportError'
+    post:
+      operationId: postJournalMCP
+      tags: [Journal]
+      summary: Journal MCP Streamable HTTP transport.
+      description: Stateless JSON responses; authenticated GET and DELETE return 405 because standalone SSE and sessions are not supported. POST accepts one JSON-RPC message. Notifications and client responses receive 202. Tools remain discoverable through MCP tools/list.
+      security:
+        - JournalMCPBearer: []
+      parameters:
+        - name: MCP-Protocol-Version
+          in: header
+          schema: { type: string }
+        - name: Mcp-Session-Id
+          in: header
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPMessage'
+      responses:
+        '200':
+          description: JSON-RPC response, including method and tool errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPMessage'
+        '202':
+          description: Notification or response accepted.
+        '405':
+          description: This stateless endpoint does not offer sessions or standalone SSE.
+          headers:
+            Allow:
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPTransportError'
+        '401':
+          $ref: '#/components/responses/MCPTransportError'
+        '403':
+          $ref: '#/components/responses/MCPTransportError'
+        '406':
+          $ref: '#/components/responses/MCPTransportError'
+        '413':
+          $ref: '#/components/responses/MCPTransportError'
+        '415':
+          $ref: '#/components/responses/MCPTransportError'
+        '500':
+          $ref: '#/components/responses/MCPTransportError'
+    delete:
+      operationId: deleteJournalMCP
+      tags: [Journal]
+      summary: Journal MCP Streamable HTTP transport.
+      description: Stateless JSON responses; authenticated GET and DELETE return 405 because standalone SSE and sessions are not supported. POST accepts one JSON-RPC message. Notifications and client responses receive 202. Tools remain discoverable through MCP tools/list.
+      security:
+        - JournalMCPBearer: []
+      parameters:
+        - name: MCP-Protocol-Version
+          in: header
+          schema: { type: string }
+        - name: Mcp-Session-Id
+          in: header
+          schema: { type: string }
+      responses:
+        '200':
+          description: JSON-RPC response, including method and tool errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPMessage'
+        '202':
+          description: Notification or response accepted.
+        '405':
+          description: This stateless endpoint does not offer sessions or standalone SSE.
+          headers:
+            Allow:
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPTransportError'
+        '401':
+          $ref: '#/components/responses/MCPTransportError'
+        '403':
+          $ref: '#/components/responses/MCPTransportError'
+        '406':
+          $ref: '#/components/responses/MCPTransportError'
+        '413':
+          $ref: '#/components/responses/MCPTransportError'
+        '415':
+          $ref: '#/components/responses/MCPTransportError'
+        '500':
+          $ref: '#/components/responses/MCPTransportError'
+  /journal:
+    get:
+      summary: Get the caller's voice journal.
+      description: Return transcript entries and citation-preserving time summaries.
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: The caller's journal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journal'
+  /journal/entries:
+    post:
+      summary: Create a voice journal entry.
+      description: Create an awaiting-upload journal entry and return a short-lived URL for uploading its audio directly to private object storage.
+      security:
+        - OIDC: [journal_write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryCreate'
+      responses:
+        "201":
+          description: Created journal entry and its short-lived upload authorization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntryCreateResponse'
+        "400":
+          description: Invalid audio or time zone.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /journal/entries/{entryId}:
+    patch:
+      summary: Correct the date of a voice journal entry.
+      description: Move a completed entry to another local calendar date and rebuild the affected journal summaries.
+      security:
+        - OIDC: [journal_write]
+      parameters:
+        - name: entryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryDateUpdate'
+      responses:
+        "200":
+          description: The corrected journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntry'
+        "400":
+          description: The requested local date is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The journal entry does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "409":
+          description: The journal entry has not finished processing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a voice journal entry.
+      description: Permanently remove an awaiting-upload or completed entry, its private audio, transcript, summary, and aggregate references. Entries actively being processed cannot be deleted.
+      security:
+        - OIDC: [journal_write]
+      parameters:
+        - name: entryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: The entry was permanently removed or no longer exists.
+        "409":
+          description: The entry is actively being processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /phone/init:
     post:
       summary: Entry point for Twilio callbox phone number.
@@ -2223,6 +3414,16 @@ paths:
       security:
         - OIDC: [admin_analytics_read]
       parameters:
+        - name: startDate
+          in: query
+          description: Inclusive UTC date (YYYY-MM-DD). Must be paired with endDate.
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          description: Exclusive UTC date (YYYY-MM-DD). Must be after startDate.
+          schema:
+            type: string
         - name: cursor
           in: query
           description: Cursor from a previous analytics events response.
@@ -2237,6 +3438,8 @@ paths:
             maximum: 100
             default: 25
       responses:
+        "400":
+          description: Invalid date range or cursor.
         "200":
           description: Stored analytics events.
           content:

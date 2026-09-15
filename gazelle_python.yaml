@@ -9,7 +9,6 @@ manifest:
     08ae81f72d5a2b5fa9e0__mypyc: mypy
     IPython: ipython
     OpenSSL: pyopenssl
-    ada92cb5d92a588d1b93__mypyc: charset_normalizer
     aioquic: aioquic
     annotated_types: annotated_types
     anyio: anyio
@@ -39,7 +38,6 @@ manifest:
     cryptography: cryptography
     dateutil: python_dateutil
     debugpy: debugpy
-    decorator: decorator
     defusedxml: defusedxml
     executing: executing
     fastjsonschema: fastjsonschema
@@ -174,4 +172,4 @@ manifest:
     zstandard: zstandard
   pip_repository:
     name: pip
-integrity: 9df7d5aa692545ce54cea299b5f87abdd64c88e64c50807a3c544596f059c3fe
+integrity: 9b795cfcf94dc1b4a10156baa9597b9d54e24cd5ddda9bdd0fcb777ae9baeb47

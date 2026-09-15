@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -18,6 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/go-chi/chi/v5"
@@ -45,6 +47,8 @@ type DynamoDBClient interface {
 
 // Ensure the real DynamoDB client implements the interface.
 var _ DynamoDBClient = (*dynamodb.Client)(nil)
+var _ JournalObjectStore = (*s3.Client)(nil)
+var _ JournalPresigner = (*s3.PresignClient)(nil)
 
 // Server holds the DynamoDB client and table names.
 type Server struct {
@@ -54,6 +58,11 @@ type Server struct {
 	grievancesTableName  string
 	usersTableName       string
 	keyRequestsTableName string
+	journalTableName     string
+	oauthTableName       string
+	oauthMetadataClient  *http.Client
+	journalMCP           http.Handler
+	journalBucketName    string
 	rt                   *chi.Mux
 	http.Handler
 	log                    *log.Logger
@@ -65,6 +74,10 @@ type Server struct {
 	minecraftWake          minecraftWakeRequester
 	minecraftLogs          minecraftLogTailer
 	minecraftServerAddress string
+	journalAI              JournalAI
+	journalObjects         JournalObjectStore
+	journalPresigner       JournalPresigner
+	journalHierarchyMu     sync.Mutex
 	// kms in production, dummy in testing.
 	signingKey jose.JSONWebKey
 }
@@ -74,6 +87,11 @@ type NewServerOptions struct {
 	// AllowLocalhostAnalytics permits local development origins to post
 	// analytics beacons. Leave false for production.
 	AllowLocalhostAnalytics bool
+	// Journal dependencies may be replaced by the local development server.
+	// Production leaves these unset and uses the configured AWS clients.
+	JournalAI        JournalAI
+	JournalObjects   JournalObjectStore
+	JournalPresigner JournalPresigner
 }
 
 // NewServer initialises the DynamoDB client and HTTP router.
@@ -86,12 +104,6 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	spec.Servers = nil
 
 	configureTestOIDCIssuerFromEnv()
-
-	mw := middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
-		Options: openapi3filter.Options{
-			AuthenticationFunc: auth.OIDC,
-		},
-	})
 
 	// Optional endpoint override (DynamoDB Local / LocalStack).
 	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
@@ -124,17 +136,28 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
 	usersTableName := os.Getenv("USERS_TABLE_NAME")
 	keyRequestsTableName := os.Getenv("CALLBOX_KEY_TABLE_NAME")
+	journalTableName := os.Getenv("JOURNAL_TABLE_NAME")
+	journalBucketName := os.Getenv("JOURNAL_BUCKET_NAME")
 
 	r := chi.NewRouter()
 	r.Use(analyticsRequestContext)
+	r.Use(protocolHTTPContext)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions, http.MethodPatch},
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
 		MaxAge:         300,
 	}))
-	r.Use(mw)
 
+	journalObjects := opts.JournalObjects
+	journalPresigner := opts.JournalPresigner
+	if journalObjects == nil {
+		s3Objects := s3.NewFromConfig(cfg)
+		journalObjects = s3Objects
+		if journalPresigner == nil {
+			journalPresigner = s3.NewPresignClient(s3Objects)
+		}
+	}
 	s := &Server{
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
@@ -143,6 +166,9 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		grievancesTableName:  grievancesTableName,
 		usersTableName:       usersTableName,
 		keyRequestsTableName: keyRequestsTableName,
+		journalTableName:     journalTableName,
+		oauthTableName:       os.Getenv("OAUTH_TABLE_NAME"),
+		journalBucketName:    journalBucketName,
 		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: os.Getenv("TWILIO_API_KEY_SID"),
@@ -153,6 +179,9 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		minecraftWake:          minecraftWakeRequesterFromEnv(cfg),
 		minecraftLogs:          minecraftLogTailerFromEnv(cfg),
 		minecraftServerAddress: minecraftServerAddressFromEnv(),
+		journalAI:              opts.JournalAI,
+		journalObjects:         journalObjects,
+		journalPresigner:       journalPresigner,
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
@@ -165,9 +194,23 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 
 	auth.ScopeResolver = s.resolveScopes
 
-	baseHandler := HandlerFromMux(NewStrictHandler(s, nil), r)
+	s.journalMCP = s.journalMCPHandler()
+	r.Use(middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
+		Options:              openapi3filter.Options{AuthenticationFunc: s.authenticateAPI},
+		ErrorHandlerWithOpts: protocolValidationError,
+	}))
+	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
 	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
 	return s, nil
+}
+
+func journalPrivateCacheHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/journal" || strings.HasPrefix(r.URL.Path, "/journal/") {
+			w.Header().Set("Cache-Control", "private, no-store")
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func analyticsBeaconHandler(next http.Handler, allowLocalhostOrigin bool) http.Handler {
@@ -312,18 +355,37 @@ func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) 
 // It mirrors the schemas defined in Pulumi (id/hash key & optional when/range key).
 func (s *Server) ProvisionTables(ctx context.Context) error {
 	type tableSpec struct {
-		Name  string
-		Attrs []types.AttributeDefinition
-		Keys  []types.KeySchemaElement
+		Name    string
+		Attrs   []types.AttributeDefinition
+		Keys    []types.KeySchemaElement
+		Indexes []types.GlobalSecondaryIndex
 	}
 
 	specs := []tableSpec{
 		{
+			Name: s.oauthTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+		},
+		{
 			Name: s.analyticsTableName,
 			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("feed"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
 				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
 			},
+			Indexes: []types.GlobalSecondaryIndex{{
+				IndexName: aws.String(analyticsFeedIndexName),
+				KeySchema: []types.KeySchemaElement{
+					{AttributeName: aws.String("feed"), KeyType: types.KeyTypeHash},
+					{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+				},
+				Projection: &types.Projection{ProjectionType: types.ProjectionTypeAll},
+			}},
 			Keys: []types.KeySchemaElement{
 				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
 				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
@@ -371,6 +433,17 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
 			},
 		},
+		{
+			Name: s.journalTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
 	}
 
 	for _, spec := range specs {
@@ -388,6 +461,7 @@ func (s *Server) ProvisionTables(ctx context.Context) error {
 					TableName:                 aws.String(spec.Name),
 					AttributeDefinitions:      spec.Attrs,
 					KeySchema:                 spec.Keys,
+					GlobalSecondaryIndexes:    spec.Indexes,
 					BillingMode:               types.BillingModePayPerRequest,
 					DeletionProtectionEnabled: aws.Bool(false),
 				})

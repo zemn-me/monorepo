@@ -125,6 +125,19 @@
 			"rangeStrategy": "bump"
 		},
 		{
+			"description": "gopls imports x/tools internals, so update the two modules together",
+			"groupName": "Go language tools",
+			"matchManagers": ["gomod"],
+			"matchPackageNames": ["golang.org/x/tools", "golang.org/x/tools/gopls"],
+			"minimumGroupSize": 2
+		},
+		{
+			"description": "Refresh generated Python locks as a unit",
+			"matchManagers": ["pip-compile"],
+			"matchDepTypes": ["indirect"],
+			"enabled": false
+		},
+		{
 			"matchManagers": [
 				"cargo",
 				"npm",
@@ -150,6 +163,7 @@
 					"MODULE.bazel.lock",
 					"gazelle_python.yaml",
 					"go.sum",
+					"pnpm-lock.yaml",
 					"requirements.txt",
 					"**/.release.lock",
 					"**/version/*"

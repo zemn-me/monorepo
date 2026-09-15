@@ -34,6 +34,13 @@ const ibmPlexMono = IBM_Plex_Mono({
 	display: 'swap',
 });
 
+const journalObjectStorageSources = [
+	'https://s3.amazonaws.com',
+	'https://*.s3.amazonaws.com',
+	'https://s3.us-east-1.amazonaws.com',
+	'https://*.s3.us-east-1.amazonaws.com',
+] satisfies SourceExpression[];
+
 const csp = {
 	...DefaultContentSecurityPolicy,
 	'script-src': new Set<SourceExpression>([
@@ -47,6 +54,7 @@ const csp = {
 		'http://localhost:*' as 'https://localhost',
 		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		'https://www.googleapis.com', // dub-dub-dub?? what year is it?
+		...journalObjectStorageSources,
 	]),
 	'img-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['img-src']!,
@@ -56,6 +64,8 @@ const csp = {
 		...(DefaultContentSecurityPolicy['media-src'] ?? []),
 		"'self'",
 		'blob:',
+		ZEMN_ME_API_BASE as 'https://api.zemn.me',
+		...journalObjectStorageSources,
 	]),
 };
 

@@ -17,6 +17,7 @@ export function useZemnMeAuth() {
 		fut_google_access_token,
 		fut_promptForLogin,
 		cacheKey,
+		sessionControls,
 	] = useGoogleAuth([]);
 
 	const request_body = future_and_then(
@@ -75,5 +76,6 @@ export function useZemnMeAuth() {
 		exchangedToken,
 		fut_google_access_token,
 		fut_promptForLogin,
+		sessionControls,
 	] as const;
 }

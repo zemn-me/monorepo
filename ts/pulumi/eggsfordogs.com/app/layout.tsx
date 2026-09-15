@@ -16,13 +16,19 @@ const csp = {
 	]),
 };
 
+export const metadata = {
+	title: 'Eggs for dogs — a little park, endless joy',
+	description:
+		'A tiny interactive 3D dog park. Toss an egg, meet six very good dogs, and take a moment to play.',
+};
+
 export interface Props {
 	readonly children?: ReactNode;
 }
 
 export default function Layout({ children }: Props) {
 	return (
-		<html>
+		<html lang="en">
 			<body>
 				<HeaderTagsAppRouter cspPolicy={csp} />
 				<AnalyticsPageBeacon />

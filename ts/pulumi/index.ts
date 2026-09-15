@@ -17,12 +17,15 @@ import {
 import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
+import * as WaxingIncandescent from '#root/ts/pulumi/waxingincandescent.com/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	openAIIdentityProviderId?: Pulumi.Input<string>;
+	openAIServiceAccountId?: Pulumi.Input<string>;
 }
 
 interface AwsGitHubActionsOidcArgs {
@@ -142,6 +145,9 @@ export class Component extends Pulumi.ComponentResource {
 	pleaseIntroduceMeToYourDog: PleaseIntroduceMeToYourDog.Component;
 	zemnMe: ZemnMe.Component;
 	shadwellIm: ShadwellIm.Component;
+	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+	readonly openAIWorkloadIdentityAudience: string;
+	readonly openAIWorkloadIdentityIssuer?: Pulumi.Output<string>;
 	constructor(
 		name: string,
 		args: Args,
@@ -167,6 +173,17 @@ export class Component extends Pulumi.ComponentResource {
 			: new GitHubActionsSecrets(`${name}_github_actions_secrets`, {
 					parent: this,
 				});
+		// AWS exposes a single outbound issuer for the account. Production owns
+		// that shared resource; the staging worker has its own OpenAI mapping.
+		const openAIOutboundIdentity = args.staging
+			? undefined
+			: new aws.iam.OutboundWebIdentityFederation(
+					`${name}_openai_outbound_identity`,
+					{},
+					{ parent: this }
+				);
+		this.openAIWorkloadIdentityIssuer =
+			openAIOutboundIdentity?.issuerIdentifier;
 
 		if (!args.staging) {
 			const publisher = runfiles.resolve('monorepo/js/npm/publish_/publish');
@@ -311,13 +328,19 @@ export class Component extends Pulumi.ComponentResource {
 				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 				twilioSharedSecret: twilioSharedSecret.result,
+				journalWorkerEnvironment: args.staging ? 'staging' : 'production',
 				minecraftOnDemand: true,
 				minecraftEnvironment: args.staging ? 'staging' : 'production',
 				minecraftManageDnsWake: !args.staging,
 				minecraftOperators: args.minecraftOperators ?? ['zemnmez'],
+				openAIIdentityProviderId: args.openAIIdentityProviderId,
+				openAIServiceAccountId: args.openAIServiceAccountId,
 			},
 			{ parent: this }
 		);
+		this.journalWorkerRoleArn = this.zemnMe.journalWorkerRoleArn;
+		this.openAIWorkloadIdentityAudience =
+			this.zemnMe.openAIWorkloadIdentityAudience;
 
 		this.shadwellIm = new ShadwellIm.Component(
 			`${name}_shadwell.im`,
@@ -332,6 +355,12 @@ export class Component extends Pulumi.ComponentResource {
 
 		new Lulu.Component(
 			`${name}_lulu`,
+			{ staging: args.staging, tags },
+			{ parent: this }
+		);
+
+		new WaxingIncandescent.Component(
+			`${name}_waxingincandescent`,
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);
@@ -375,6 +404,9 @@ export class Component extends Pulumi.ComponentResource {
 			githubActionsRoleArn: githubActionsOidc?.role.arn,
 			githubActionsSecrets,
 			githubOidcProviderArn: githubActionsOidc?.provider.arn,
+			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			openAIWorkloadIdentityAudience: this.openAIWorkloadIdentityAudience,
+			openAIWorkloadIdentityIssuer: this.openAIWorkloadIdentityIssuer,
 		});
 	}
 }

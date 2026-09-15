@@ -1,354 +1,262 @@
-import {
-	forwardFromPose,
-	type YawPitchPose,
-} from '#root/ts/math/camera_pose.js';
-import {
-	Point3D,
-	point,
-	scale,
-	translate,
-	x,
-	z,
-} from '#root/ts/math/cartesian.js';
-import { defaultUp } from '#root/ts/math/lookAt.js';
-import * as Quaternion from '#root/ts/math/quaternion.js';
-import {
-	type StyledSegment3D,
-	styleSegment,
-} from '#root/ts/math/wireframe_render.js';
-import { and_then, type Result, unwrap } from '#root/ts/result/result.js';
+export const PACK = [
+	{
+		name: 'Biscuit',
+		coat: 0xd9a35d,
+		patch: 0xffefcf,
+		collar: 0xde6650,
+		personality: 'Head of egg inspection',
+	},
+	{
+		name: 'Mochi',
+		coat: 0xf5eedb,
+		patch: 0xbf956f,
+		collar: 0x93a4d0,
+		personality: 'Small dog. Big feelings.',
+	},
+	{
+		name: 'Pickles',
+		coat: 0x655345,
+		patch: 0xe3b879,
+		collar: 0xf3ca51,
+		personality: 'Has never read a rule',
+	},
+	{
+		name: 'Clover',
+		coat: 0xc1844a,
+		patch: 0xf7ead7,
+		collar: 0x75a58a,
+		personality: 'Your new best friend',
+	},
+	{
+		name: 'Waffles',
+		coat: 0xefe1c2,
+		patch: 0x735645,
+		collar: 0xda8bad,
+		personality: 'Thinking about breakfast',
+	},
+	{
+		name: 'Bean',
+		coat: 0x52535b,
+		patch: 0xf3e7d3,
+		collar: 0x6ea9b1,
+		personality: 'Employee of the month',
+	},
+] as const;
 
-export interface PlayerPose extends YawPitchPose {
-	readonly verticalVelocity: number;
+export interface Dog {
+	x: number;
+	z: number;
+	heading: number;
+	joy: number;
+	moving: boolean;
 }
 
-export interface MovementInput {
-	readonly forward: number;
-	readonly strafe: number;
-	readonly sprint: boolean;
-	readonly jump: boolean;
+export interface Egg {
+	id: number;
+	x: number;
+	z: number;
+	age: number;
 }
 
-export enum ParticleType {
-	Egg,
-	Dog,
+export interface Park {
+	dogs: Dog[];
+	eggs: Egg[];
+	time: number;
+	nextEgg: number;
+	delivered: number;
+	lastDog: number | null;
+	callingUntil: number;
 }
 
-export type Particle = {
-	readonly id: string;
-	readonly type: ParticleType;
-	readonly position: Point3D;
-	readonly velocity: Point3D;
-	readonly phase: number;
-};
-
-export interface World {
-	readonly scene: StyledSegment3D[];
-	readonly critters: Particle[];
+export function dogScale(index: number): number {
+	return index === 5 ? 0.78 : index === 1 ? 0.88 : 1;
 }
 
-export const ARENA_LIMIT = 31;
-export const EYE_HEIGHT = 1.8;
-export const DEFAULT_POSE: PlayerPose = {
-	position: point<3>(0, EYE_HEIGHT, -18),
-	yaw: 0,
-	pitch: 0,
-	verticalVelocity: 0,
-};
-
-const DEFAULT_FORWARD = point<3>(0, 0, 1);
-const DEFAULT_RIGHT = point<3>(1, 0, 0);
-const PITCH_LIMIT = Math.PI * 0.45;
-
-function clamp(value: number, min: number, max: number): number {
-	return Math.max(min, Math.min(max, value));
+/** Encloses the animated mesh in the ground plane, including the nose and tail. */
+export function dogCollisionRadius(index: number): number {
+	return 1.1 * dogScale(index);
 }
 
-function horizontalUnit(vec: Point3D): Point3D {
-	const len = Math.hypot(x(vec), z(vec));
-	if (len === 0) return point<3>(0, 0, 0);
-	return point<3>(x(vec) / len, 0, z(vec) / len);
-}
+const dogCenterLimit = 6.2;
+const gatheringRadius = 2.4;
 
-function seededRandom(seed: number): () => number {
-	let state = seed >>> 0;
-	return () => {
-		state = (1664525 * state + 1013904223) >>> 0;
-		return state / 0x100000000;
-	};
-}
-
-function keepInYard(
-	position: Point3D,
-	velocity: Point3D
-): {
-	readonly position: Point3D;
-	readonly velocity: Point3D;
-} {
-	let px = x(position);
-	let pz = z(position);
-	let vx = x(velocity);
-	let vz = z(velocity);
-
-	if (Math.abs(px) > ARENA_LIMIT) {
-		px = clamp(px, -ARENA_LIMIT, ARENA_LIMIT);
-		vx *= -0.82;
-	}
-
-	if (Math.abs(pz) > ARENA_LIMIT) {
-		pz = clamp(pz, -ARENA_LIMIT, ARENA_LIMIT);
-		vz *= -0.82;
-	}
-
+export function createPark(): Park {
 	return {
-		position: point<3>(px, 0, pz),
-		velocity: point<3>(vx, 0, vz),
+		dogs: PACK.map((_, i) => ({
+			x: Math.cos((i * Math.PI * 2) / PACK.length) * 3.2,
+			z: Math.sin((i * Math.PI * 2) / PACK.length) * 3,
+			heading: (i * Math.PI * 2) / PACK.length,
+			joy: 0,
+			moving: false,
+		})),
+		eggs: [],
+		time: 0,
+		nextEgg: 0,
+		delivered: 0,
+		lastDog: null,
+		callingUntil: 0,
 	};
 }
 
-export function clampPitch(pitch: number): number {
-	return clamp(pitch, -PITCH_LIMIT, PITCH_LIMIT);
-}
-
-export function stepLook(
-	pose: PlayerPose,
-	movementX: number,
-	movementY: number,
-	sensitivity = 0.0025
-): PlayerPose {
+/** Keep treats on the lawn and cap active objects even when someone clicks rapidly. */
+export function tossEgg(park: Park, x: number, z: number): Park {
+	if (park.eggs.length >= 12 || !Number.isFinite(x) || !Number.isFinite(z))
+		return park;
+	const radius = Math.hypot(x, z);
+	const scale = radius > 5.8 ? 5.8 / radius : 1;
 	return {
-		...pose,
-		yaw: pose.yaw + movementX * sensitivity,
-		pitch: clampPitch(pose.pitch + movementY * sensitivity),
+		...park,
+		nextEgg: park.nextEgg + 1,
+		eggs: [
+			...park.eggs,
+			{ id: park.nextEgg, x: x * scale, z: z * scale, age: 0 },
+		],
 	};
 }
 
-export function stepPlayer(
-	pose: PlayerPose,
-	input: MovementInput,
-	deltaSeconds: number
-): PlayerPose {
-	const yawRotation = unwrap(Quaternion.fromAxisAngle(defaultUp, pose.yaw));
-	const forward = horizontalUnit(
-		unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_FORWARD))
-	);
-	const right = horizontalUnit(
-		unwrap(Quaternion.rotateVector(yawRotation, DEFAULT_RIGHT))
-	);
-	const requested = translate(
-		scale(forward, input.forward),
-		scale(right, input.strafe)
-	) as Point3D;
-	const movement = scale(
-		horizontalUnit(requested),
-		(input.sprint ? 10 : 5) * deltaSeconds
-	) as Point3D;
-	const onGround = pose.position[1]![0]! <= EYE_HEIGHT + 0.000001;
-	const jumpVelocity = input.jump && onGround ? 6.5 : pose.verticalVelocity;
-	const nextVerticalVelocity = jumpVelocity - 18 * deltaSeconds;
-	const verticalMovement = jumpVelocity * deltaSeconds;
-	const unclamped = translate(
-		pose.position,
-		translate(movement, point<3>(0, verticalMovement, 0)) as Point3D
-	) as Point3D;
-	const nextY = Math.max(EYE_HEIGHT, unclamped[1]![0]!);
-	const landed = nextY === EYE_HEIGHT && nextVerticalVelocity < 0;
-
-	return {
-		...pose,
-		position: point<3>(
-			clamp(x(unclamped), -ARENA_LIMIT, ARENA_LIMIT),
-			nextY,
-			clamp(z(unclamped), -ARENA_LIMIT, ARENA_LIMIT)
-		),
-		verticalVelocity: landed ? 0 : nextVerticalVelocity,
-	};
+export function callPack(park: Park): Park {
+	return { ...park, callingUntil: park.time + 7 };
 }
 
-export function buildWorld(): World {
-	const scene: StyledSegment3D[] = [];
-	for (let row = -32; row <= 32; row += 2) {
-		scene.push(
-			styleSegment([point<3>(-32, 0, row), point<3>(32, 0, row)], {
-				stroke: '#6f8f54',
-				width: 0.75,
-				opacity: 0.42,
-			}),
-			styleSegment([point<3>(row, 0, -32), point<3>(row, 0, 32)], {
-				stroke: '#9d8150',
-				width: 0.55,
-				opacity: 0.26,
-			})
+/** Reserve one retriever per nearby group of treats so a crowd cannot block pickup. */
+function eggTargets(
+	dogs: readonly Dog[],
+	eggs: readonly Egg[]
+): Map<number, Egg> {
+	const targets = new Map<number, Egg>();
+	let available = [...eggs];
+	while (available.length && targets.size < dogs.length) {
+		let nearest = Infinity,
+			dogIndex = -1;
+		let target: Egg | undefined;
+		for (const egg of available)
+			for (let i = 0; i < dogs.length; i++) {
+				if (targets.has(i)) continue;
+				const dog = dogs[i]!;
+				const distance = (dog.x - egg.x) ** 2 + (dog.z - egg.z) ** 2;
+				if (distance < nearest) {
+					nearest = distance;
+					dogIndex = i;
+					target = egg;
+				}
+			}
+		if (!target) break;
+		targets.set(dogIndex, target);
+		const reserved = target;
+		available = available.filter(
+			egg => Math.hypot(egg.x - reserved.x, egg.z - reserved.z) >= 2.2
 		);
 	}
-	for (const radius of [12, 22, 31]) {
-		scene.push(
-			styleSegment(
-				[
-					point<3>(-radius, 0.02, -radius),
-					point<3>(radius, 0.02, -radius),
-				],
-				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
-			),
-			styleSegment(
-				[
-					point<3>(radius, 0.02, -radius),
-					point<3>(radius, 0.02, radius),
-				],
-				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
-			),
-			styleSegment(
-				[
-					point<3>(radius, 0.02, radius),
-					point<3>(-radius, 0.02, radius),
-				],
-				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
-			),
-			styleSegment(
-				[
-					point<3>(-radius, 0.02, radius),
-					point<3>(-radius, 0.02, -radius),
-				],
-				{ stroke: '#f4d47f', width: 1.25, opacity: 0.48 }
-			)
-		);
-	}
-
-	const rng = seededRandom(0x600d_e99);
-	const critters: Particle[] = [];
-	for (let i = 0; i < 55; i += 1) {
-		const angle = rng() * Math.PI * 2;
-		critters.push({
-			id: `egg-${i}`,
-			type: ParticleType.Egg,
-			position: point<3>(rng() * 56 - 28, 0, rng() * 56 - 28),
-			velocity: point<3>(
-				Math.cos(angle) * 0.35,
-				0,
-				Math.sin(angle) * 0.35
-			),
-			phase: rng() * Math.PI * 2,
-		});
-	}
-	for (let i = 0; i < 8; i += 1) {
-		const angle = rng() * Math.PI * 2;
-		critters.push({
-			id: `dog-${i}`,
-			type: ParticleType.Dog,
-			position: point<3>(rng() * 56 - 28, 0, rng() * 56 - 28),
-			velocity: point<3>(Math.cos(angle) * 1.6, 0, Math.sin(angle) * 1.6),
-			phase: rng() * Math.PI * 2,
-		});
-	}
-
-	return { scene, critters };
+	return targets;
 }
 
-export function stepCritters(
-	critters: readonly Particle[],
-	deltaSeconds: number,
-	timeSeconds: number
-): Particle[] {
-	const eggs = critters.filter(critter => critter.type === ParticleType.Egg);
-	const eggCentre =
-		eggs.length === 0
-			? point<3>(0, 0, 0)
-			: point<3>(
-					eggs.reduce((total, egg) => total + x(egg.position), 0) /
-						eggs.length,
-					0,
-					eggs.reduce((total, egg) => total + z(egg.position), 0) /
-						eggs.length
-				);
+/** Project proposed positions out of one another; only the newly created dogs mutate. */
+function separateDogs(dogs: Dog[]): void {
+	for (let pass = 0; pass < 32; pass++) {
+		let correction = 0;
+		for (let i = 0; i < dogs.length; i++)
+			for (let j = i + 1; j < dogs.length; j++) {
+				const a = dogs[i]!,
+					b = dogs[j]!;
+				const dx = b.x - a.x,
+					dz = b.z - a.z;
+				const distance = Math.hypot(dx, dz);
+				const overlap =
+					dogCollisionRadius(i) + dogCollisionRadius(j) - distance;
+				if (overlap <= 0) continue;
+				// A deterministic normal also separates exactly coincident centers.
+				const angle = i + j * 2.399963229728653;
+				const nx = distance > 1e-9 ? dx / distance : Math.cos(angle);
+				const nz = distance > 1e-9 ? dz / distance : Math.sin(angle);
+				const push = (overlap + 1e-6) / 2;
+				a.x -= nx * push;
+				a.z -= nz * push;
+				b.x += nx * push;
+				b.z += nz * push;
+				correction = Math.max(correction, overlap);
+			}
+		for (const dog of dogs) {
+			const distance = Math.hypot(dog.x, dog.z);
+			if (distance > dogCenterLimit) {
+				dog.x *= dogCenterLimit / distance;
+				dog.z *= dogCenterLimit / distance;
+				correction = Math.max(correction, distance - dogCenterLimit);
+			}
+		}
+		if (correction < 1e-5) break;
+	}
+}
 
-	return critters.map(critter => {
-		const wander = point<3>(
-			Math.cos(timeSeconds * 1.7 + critter.phase),
-			0,
-			Math.sin(timeSeconds * 1.3 + critter.phase * 1.37)
-		);
-		const dogPush =
-			critter.type === ParticleType.Egg
-				? critters
-						.filter(other => other.type === ParticleType.Dog)
-						.reduce(
-							(push, dog) => {
-								const away = point<3>(
-									x(critter.position) - x(dog.position),
-									0,
-									z(critter.position) - z(dog.position)
-								);
-								const distance = Math.max(
-									1,
-									Math.hypot(x(away), z(away))
-								);
-								if (distance > 7) return push;
-								return translate(
-									push,
-									scale(
-										horizontalUnit(away),
-										(7 - distance) * 1.5
-									)
-								) as Point3D;
-							},
-							point<3>(0, 0, 0)
-						)
-				: point<3>(0, 0, 0);
-		const toEggs =
-			critter.type === ParticleType.Dog
-				? scale(
-						horizontalUnit(
-							point<3>(
-								x(eggCentre) - x(critter.position),
-								0,
-								z(eggCentre) - z(critter.position)
-							)
-						),
-						2.6
-					)
-				: point<3>(0, 0, 0);
-		const acceleration = translate(
-			scale(wander, critter.type === ParticleType.Egg ? 0.9 : 1.2),
-			translate(dogPush, toEggs) as Point3D
-		) as Point3D;
-		const damping = critter.type === ParticleType.Egg ? 0.9 : 0.82;
-		const maxSpeed = critter.type === ParticleType.Egg ? 2.7 : 4.4;
-		const nextVelocity = scale(
-			translate(
-				critter.velocity,
-				scale(acceleration, deltaSeconds)
-			) as Point3D,
-			Math.pow(damping, deltaSeconds)
-		) as Point3D;
-		const speed = Math.hypot(x(nextVelocity), z(nextVelocity));
-		const limitedVelocity =
-			speed > maxSpeed
-				? (scale(horizontalUnit(nextVelocity), maxSpeed) as Point3D)
-				: nextVelocity;
-		const next = keepInYard(
-			translate(
-				critter.position,
-				scale(limitedVelocity, deltaSeconds)
-			) as Point3D,
-			limitedVelocity
-		);
-
+export function stepPark(park: Park, delta: number): Park {
+	const dt = Math.max(0, Math.min(delta, 0.05));
+	if (dt === 0) return park;
+	const time = park.time + dt;
+	let eggs = park.eggs.map(egg => ({ ...egg, age: egg.age + dt }));
+	let delivered = park.delivered;
+	let lastDog = park.lastDog;
+	const targets = eggTargets(park.dogs, eggs);
+	const dogs = park.dogs.map((dog, i) => {
+		const targetEgg = targets.get(i);
+		const calling = park.callingUntil > time;
+		const phase = (i * Math.PI * 2) / PACK.length;
+		const tx =
+			targetEgg?.x ??
+			(calling
+				? Math.cos(phase) * gatheringRadius
+				: Math.cos(time * 0.16 + phase) * 4.4);
+		const tz =
+			targetEgg?.z ??
+			(calling
+				? Math.sin(phase) * gatheringRadius
+				: Math.sin(time * 0.21 + phase) * 3.8);
+		const distance = Math.hypot(tx - dog.x, tz - dog.z);
+		const speed = targetEgg || calling ? 3.3 : 0.7;
+		const moving = distance > 0.25;
+		let vx = moving ? (tx - dog.x) / distance : 0;
+		let vz = moving ? (tz - dog.z) / distance : 0;
+		if (moving) {
+			for (let j = 0; j < park.dogs.length; j++) {
+				if (j === i) continue;
+				const other = park.dogs[j]!;
+				const dx = other.x - dog.x,
+					dz = other.z - dog.z;
+				const gap = Math.hypot(dx, dz);
+				const clearance =
+					dogCollisionRadius(i) + dogCollisionRadius(j) + 0.6;
+				if (gap < 1e-9 || gap >= clearance || vx * dx + vz * dz <= 0)
+					continue;
+				// Pass on the right instead of repeatedly walking into a blocked path.
+				const weight = (1 - gap / clearance) * 2;
+				vx += ((dz - dx * 0.5) / gap) * weight;
+				vz += ((-dx - dz * 0.5) / gap) * weight;
+			}
+		}
+		const length = Math.hypot(vx, vz);
+		const step = Math.min(distance, dt * speed);
 		return {
-			...critter,
-			position: next.position,
-			velocity: next.velocity,
+			x: dog.x + (length > 0 ? (vx / length) * step : 0),
+			z: dog.z + (length > 0 ? (vz / length) * step : 0),
+			heading: length > 0 ? Math.atan2(vx, vz) : dog.heading,
+			joy: Math.max(0, dog.joy - dt),
+			moving,
 		};
 	});
-}
-
-export function isFacingPose(
-	point3d: Point3D,
-	pose: PlayerPose
-): Result<boolean, Error> {
-	const dx = x(point3d) - x(pose.position);
-	const dz = z(point3d) - z(pose.position);
-	return and_then(
-		forwardFromPose(pose),
-		forward => dx * x(forward) + dz * z(forward) > 0
-	);
+	separateDogs(dogs);
+	for (let i = 0; i < dogs.length; i++) {
+		const dog = dogs[i]!,
+			target = targets.get(i);
+		const previous = park.dogs[i]!;
+		dog.moving = Math.hypot(dog.x - previous.x, dog.z - previous.z) > 1e-5;
+		if (
+			target &&
+			target.age > 0.8 &&
+			Math.hypot(target.x - dog.x, target.z - dog.z) < 0.55
+		) {
+			eggs = eggs.filter(egg => egg.id !== target.id);
+			delivered++;
+			lastDog = i;
+			dog.joy = 1.7;
+		}
+	}
+	return { ...park, time, dogs, eggs, delivered, lastDog };
 }
