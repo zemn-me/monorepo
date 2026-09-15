@@ -16,7 +16,11 @@ export function historyRows(events: readonly MinecraftHistoryEvent[]) {
 		events: [],
 		ends: new Map(),
 	});
-	const active = new Map<string, MinecraftHistoryEvent>();
+	// Deployments can overlap, including sessions for the same player.
+	const playersByInstance = new Map<
+		string,
+		Map<string, MinecraftHistoryEvent>
+	>();
 	const servers = new Map<string, MinecraftHistoryEvent>();
 	let offline: MinecraftHistoryEvent | undefined;
 	for (const event of events) {
@@ -31,22 +35,25 @@ export function historyRows(events: readonly MinecraftHistoryEvent[]) {
 			};
 			rows.set(id, row);
 		}
-		const previous = row.events.at(-1);
 		const at = Date.parse(event.timestamp);
 		const instance = event.instance ?? 'legacy';
-		if (
-			event.player &&
-			previous &&
-			(previous.kind !== 'login' ||
-				(event.kind === 'logout' &&
-					previous.instance === event.instance))
-		) {
-			// A second login without a logout does not prove an uninterrupted session.
-			if (!row.ends.has(previous.id)) row.ends.set(previous.id, at);
+		if (event.player) {
+			let players = playersByInstance.get(instance);
+			if (!players) {
+				players = new Map();
+				playersByInstance.set(instance, players);
+			}
+			const previous = players.get(id);
+			if (
+				previous &&
+				(previous.kind !== 'login' || event.kind === 'logout')
+			) {
+				// A second login without a logout does not prove an uninterrupted session.
+				if (!row.ends.has(previous.id)) row.ends.set(previous.id, at);
+			}
+			players.set(id, event);
 		}
 		row.events.push(event);
-		if (event.kind === 'login') active.set(id, event);
-		if (event.kind === 'logout') active.delete(id);
 		if (event.kind === 'server_on') {
 			if (offline && servers.size === 0) row.ends.set(offline.id, at);
 			offline = undefined;
@@ -62,10 +69,11 @@ export function historyRows(events: readonly MinecraftHistoryEvent[]) {
 				if (offline) row.ends.set(offline.id, at);
 				offline = event;
 			}
-			for (const [playerID, login] of active) {
-				if (login.instance !== event.instance) continue;
-				rows.get(playerID)?.ends.set(login.id, at);
-				active.delete(playerID);
+			for (const [playerID, activity] of playersByInstance.get(instance) ?? []) {
+				const playerRow = rows.get(playerID);
+				if (activity.kind === 'login' && !playerRow?.ends.has(activity.id)) {
+					playerRow?.ends.set(activity.id, at);
+				}
 			}
 		}
 	}

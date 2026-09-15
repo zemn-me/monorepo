@@ -14,6 +14,13 @@ const event = (
 	timestamp: new Date(Number(id) * 1000).toISOString(),
 });
 
+const instanceEvent = (
+	id: string,
+	kind: MinecraftHistoryEvent['kind'],
+	instance: string,
+	player?: string
+) => ({ ...event(id, kind, player), instance });
+
 it('charts separate player sessions and server uptime, including abrupt shutdowns', () => {
 	const rows = historyRows([
 		event('1', 'server_on'),
@@ -54,12 +61,6 @@ it('keeps a player named Server separate from the server', () => {
 });
 
 it('does not end a new server or its players when an older task stops', () => {
-	const instanceEvent = (
-		id: string,
-		kind: MinecraftHistoryEvent['kind'],
-		instance: string,
-		player?: string
-	) => ({ ...event(id, kind, player), instance });
 	const rows = historyRows([
 		instanceEvent('1', 'server_on', 'old'),
 		instanceEvent('2', 'server_on', 'new'),
@@ -73,4 +74,43 @@ it('does not end a new server or its players when an older task stops', () => {
 		['2', 6000],
 	]);
 	expect([...rows[1]!.ends]).toEqual([['3', 5000]]);
+});
+
+it.each([
+	['logout', 'logout'],
+	['logout', 'server_off'],
+	['server_off', 'logout'],
+	['server_off', 'server_off'],
+] as const)(
+	'pairs overlapping player sessions when the old instance ends with %s and the new one with %s',
+	(oldEnd, newEnd) => {
+		const rows = historyRows([
+			instanceEvent('1', 'login', 'old', 'Alex'),
+			instanceEvent('2', 'login', 'new', 'Alex'),
+			instanceEvent('3', oldEnd, 'old', oldEnd === 'logout' ? 'Alex' : undefined),
+			instanceEvent('4', newEnd, 'new', newEnd === 'logout' ? 'Alex' : undefined),
+		]);
+		expect([...rows[1]!.ends]).toEqual([
+			['1', 3000],
+			['2', 4000],
+		]);
+	}
+);
+
+it('does not connect offline activity between different instances', () => {
+	const rows = historyRows([
+		instanceEvent('1', 'logout', 'old', 'Alex'),
+		instanceEvent('2', 'login', 'new', 'Alex'),
+	]);
+	expect([...rows[1]!.ends]).toEqual([]);
+});
+
+it('keeps the first recorded end when shutdown has both log and task events', () => {
+	const rows = historyRows([
+		instanceEvent('1', 'login', 'old', 'Alex'),
+		instanceEvent('2', 'server_off', 'old'),
+		instanceEvent('3', 'server_off', 'old'),
+		instanceEvent('4', 'logout', 'old', 'Alex'),
+	]);
+	expect([...rows[1]!.ends]).toEqual([['1', 2000]]);
 });
