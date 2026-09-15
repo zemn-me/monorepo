@@ -16,6 +16,8 @@ import (
 
 type oauthClient MCPOAuthClient
 
+var errOAuthClientAuthMethod = errors.New("client does not support public-client authentication with PKCE")
+
 func validOAuthRedirect(raw string) bool {
 	u, err := url.Parse(raw)
 	if err != nil || len(raw) > 2048 || u.Host == "" || u.User != nil || strings.Contains(raw, "#") || u.Opaque != "" {
@@ -36,7 +38,7 @@ func (c *oauthClient) validate() error {
 		c.TokenEndpointAuthMethod = "none"
 	}
 	if c.TokenEndpointAuthMethod != "none" {
-		return errors.New("only public clients with PKCE and token_endpoint_auth_method none are supported")
+		return errOAuthClientAuthMethod
 	}
 	if len(c.GrantTypes) == 0 {
 		c.GrantTypes = []string{"authorization_code"}
@@ -109,7 +111,11 @@ func (s *Server) oauthResolveClient(ctx context.Context, id string) (oauthClient
 	if err != nil || len(id) > 2048 || u.Host == "" || u.User != nil || strings.Contains(id, "#") || u.Path == "" || (u.Port() != "" && u.Port() != "443") {
 		return c, errors.New("invalid client metadata URL")
 	}
-	return oauthFetchClientMetadata(ctx, id, oauthMetadataHTTPClient())
+	client := s.oauthMetadataClient
+	if client == nil {
+		client = oauthMetadataHTTPClient()
+	}
+	return oauthFetchClientMetadata(ctx, id, client)
 }
 
 func oauthFetchClientMetadata(ctx context.Context, id string, client *http.Client) (oauthClient, error) {
@@ -137,6 +143,14 @@ func oauthFetchClientMetadata(ctx context.Context, id string, client *http.Clien
 	}
 	if c.ClientId != id {
 		return c, errors.New("client_id does not match its metadata URL")
+	}
+	// CIMD lists capabilities; the legacy singular field is only a preference
+	// when that list is present. DCR still binds the singular requested method.
+	if methods := c.TokenEndpointAuthMethodsSupported; methods != nil {
+		if !slices.Contains(methods, "none") {
+			return c, errOAuthClientAuthMethod
+		}
+		c.TokenEndpointAuthMethod = "none"
 	}
 	return c, c.validate()
 }

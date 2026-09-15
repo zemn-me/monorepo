@@ -60,6 +60,7 @@ type Server struct {
 	keyRequestsTableName string
 	journalTableName     string
 	oauthTableName       string
+	oauthMetadataClient  *http.Client
 	journalMCP           http.Handler
 	journalBucketName    string
 	rt                   *chi.Mux

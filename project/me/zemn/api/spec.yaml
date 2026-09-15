@@ -101,6 +101,12 @@ components:
         token_endpoint_auth_method:
           type: string
           x-go-type-skip-optional-pointer: true
+        token_endpoint_auth_methods_supported:
+          description: Methods supported by a Client ID Metadata Document. For dynamic registration, token_endpoint_auth_method remains the requested method.
+          type: array
+          minItems: 1
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
     MCPOAuthRegisteredClient:
       allOf:
         - $ref: '#/components/schemas/MCPOAuthClient'
@@ -139,6 +145,13 @@ components:
           type: string
           x-go-type-skip-optional-pointer: true
         client_secret:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_assertion:
+          description: Client assertions are unsupported and rejected by this public-client token endpoint.
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_assertion_type:
           type: string
           x-go-type-skip-optional-pointer: true
     MCPOAuthTokenResponse:
