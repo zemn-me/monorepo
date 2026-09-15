@@ -207,6 +207,15 @@ export const Bio = {
 			tags: [talk, work, security],
 		},
 		{
+			id: '6d3a6458-f9ac-4199-a47b-ae39c40cc3cb',
+			date: date(8, 'sep', 2026),
+			title: en`Visual Studio Code Security Feature Bypass`,
+			publisher: en`Microsoft Security Response Center`,
+			description: en`Critical vulnerability allowing an attacker to compromise a user's computer through VSCode. CVE-2026-81376`,
+			url: url`https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-81376`,
+			tags: [security, disclosure],
+		},
+		{
 			id: '86a18c21-ae85-4dd9-8673-1e0db3377642',
 			date: date(11, 'aug', 2026),
 			title: en`Visual Studio Code Python Extension Security Feature Bypass`,
