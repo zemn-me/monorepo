@@ -211,7 +211,7 @@ export const Bio = {
 			date: date(8, 'sep', 2026),
 			title: en`Visual Studio Code Security Feature Bypass`,
 			publisher: en`Microsoft Security Response Center`,
-			description: en`Critical vulnerability in Visual Studio Code allowing an unauthorised attacker to bypass a security feature over a network. CVE-2026-81376`,
+			description: en`Critical vulnerability allowing an attacker to compromise a user's computer through VSCode. CVE-2026-81376`,
 			url: url`https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-81376`,
 			tags: [security, disclosure],
 		},
