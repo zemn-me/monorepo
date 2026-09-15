@@ -52,6 +52,17 @@
 			"versioningTemplate": "{{{versioning}}}",
 			"packageNameTemplate": "{{{depName}}}",
 			"depNameTemplate": "{{{depName}}}"
+		},
+		{
+			"customType": "regex",
+			"description": "Minecraft Java server release embedded in the shared OCI image",
+			"managerFilePatterns": [
+				"/^project/me/zemn/minecraft/minecraft\\.env$/"
+			],
+			"matchStrings": ["(?:^|\\n)VERSION=(?<currentValue>[^\\s]+)"],
+			"datasourceTemplate": "custom.minecraft_java",
+			"depNameTemplate": "minecraft-java",
+			"versioningTemplate": "loose"
 		}
 	],
 	"customDatasources": {
@@ -66,6 +77,13 @@
 		"osxexperts_ffmpeg": {
 			"defaultRegistryUrlTemplate": "https://www.osxexperts.net/",
 			"format": "plain"
+		},
+		"minecraft_java": {
+			"defaultRegistryUrlTemplate": "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\": [versions[type = \"release\"].{\"version\": id, \"releaseTimestamp\": releaseTime}]}"
+			]
 		}
 	},
 	"packageRules": [

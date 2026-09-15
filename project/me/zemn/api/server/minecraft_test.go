@@ -4,6 +4,12 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/getkin/kin-openapi/openapi3filter"
+	"github.com/go-chi/chi/v5"
+	middleware "github.com/oapi-codegen/nethttp-middleware"
+	apiSpec "github.com/zemn-me/monorepo/project/me/zemn/api"
+	"net/http/httptest"
 	"reflect"
 	"strings"
 	"testing"
@@ -335,4 +341,145 @@ func containsString(values []string, needle string) bool {
 		}
 	}
 	return false
+}
+
+func TestMinecraftHistoryParsesOnlyActivity(t *testing.T) {
+	for _, tc := range []struct{ message, kind, player string }{
+		{"[12:34:56] [Server thread/INFO]: Alex joined the game", "login", "Alex"},
+		{"[12:34:56] [Server thread/INFO]: Steve left the game", "logout", "Steve"},
+		{"[12:34:56] [Server thread/INFO] [minecraft/MinecraftServer]: Alex joined the game", "login", "Alex"},
+		{"[12:34:56] [Server thread/INFO]: Starting minecraft server version 1.21.4", "server_on", ""},
+		{"[12:34:56] [Server thread/INFO]: Stopping server\n", "server_off", ""},
+		{"[12:34:56] [Server thread/INFO]: <Alex> Steve joined the game", "", ""},
+		{"[12:34:56] [Server thread/INFO]: <Alex> Stopping server", "", ""},
+		{"[12:34:56] [Server thread/INFO]: Alex lost connection: Disconnected", "", ""},
+		{"unrelated output", "", ""},
+		{`{"id":"task-event","source":"aws.ecs","detail-type":"ECS Task State Change","time":"2026-09-12T00:00:00Z","detail":{"lastStatus":"STOPPED"}}`, "server_off", ""},
+		{`{"source":"aws.ecs","detail-type":"ECS Task State Change","time":"2026-09-12T00:00:00Z","detail":{"lastStatus":"RUNNING"}}`, "server_on", ""},
+	} {
+		t.Run(tc.message, func(t *testing.T) {
+			event, ok := minecraftHistoryEvent(MinecraftLogEvent{Id: "event", Message: tc.message, Timestamp: time.Unix(1, 0)})
+			if ok != (tc.kind != "") || string(event.Kind) != tc.kind || aws.ToString(event.Player) != tc.player {
+				t.Fatalf("unexpected parsed event: %#v, %v", event, ok)
+			}
+			if strings.Contains(tc.message, "task-event") && (event.Id != "task-event" || !event.Timestamp.Equal(time.Date(2026, 9, 12, 0, 0, 0, 0, time.UTC))) {
+				t.Fatalf("task event identity/time lost: %#v", event)
+			}
+		})
+	}
+}
+
+func TestMinecraftHistoryPagination(t *testing.T) {
+	client := &fakeMinecraftCloudWatchLogsClient{output: &cloudwatchlogs.FilterLogEventsOutput{NextToken: aws.String("next-page")}}
+	tailer := cloudWatchMinecraftLogTailer{client: client, logGroupName: "history"}
+	before := time.Now().UTC()
+	page, err := tailer.HistoryPage(t.Context(), before, nil)
+	if err != nil || len(page.Events) != 0 || aws.ToString(page.NextToken) != "next-page" {
+		t.Fatalf("empty page must preserve continuation: %#v, %v", page, err)
+	}
+	if client.input.StartTime != nil || aws.ToInt64(client.input.EndTime) != before.UnixMilli() {
+		t.Fatalf("history must cover all retained time up to the snapshot: %#v", client.input)
+	}
+	client.output = &cloudwatchlogs.FilterLogEventsOutput{Events: []types.FilteredLogEvent{
+		{EventId: aws.String("logout"), Timestamp: aws.Int64(1000), Message: aws.String("[12:34:56] [Server thread/INFO]: Alex left the game")},
+		{EventId: aws.String("chat"), Timestamp: aws.Int64(1000), Message: aws.String("[12:34:56] [Server thread/INFO]: <Alex> private chat")},
+		{EventId: aws.String("login"), Timestamp: aws.Int64(1000), Message: aws.String("[12:34:56] [Server thread/INFO]: Steve joined the game")},
+	}}
+	page, err = tailer.HistoryPage(t.Context(), before, page.NextToken)
+	if err != nil || len(page.Events) != 2 || page.NextToken != nil || aws.ToString(client.input.NextToken) != "next-page" {
+		t.Fatalf("unexpected final page: %#v, %v", page, err)
+	}
+	if page.Events[0].Id != "logout" || page.Events[1].Id != "login" {
+		t.Fatalf("equal-timestamp events lost: %#v", page)
+	}
+}
+
+func TestMinecraftHistoryHTTP(t *testing.T) {
+	spec, err := openapi3.NewLoader().LoadFromData([]byte(apiSpec.Spec))
+	if err != nil {
+		t.Fatal(err)
+	}
+	spec.Servers = nil
+	for _, tc := range []struct {
+		name         string
+		token, scope bool
+		status       int
+	}{
+		{"anonymous", false, false, 401},
+		{"missing Minecraft access", true, false, 401},
+		{"authorized", true, true, 200},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			client := &fakeMinecraftCloudWatchLogsClient{output: &cloudwatchlogs.FilterLogEventsOutput{Events: []types.FilteredLogEvent{
+				{EventId: aws.String("login"), Timestamp: aws.Int64(1000), Message: aws.String("[12:34:56] [Server thread/INFO]: Alex joined the game")},
+			}}}
+			server := Server{minecraftLogs: cloudWatchMinecraftLogTailer{client: client, logGroupName: "history"}}
+			router := chi.NewRouter()
+			router.Use(middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{Options: openapi3filter.Options{
+				AuthenticationFunc: func(ctx context.Context, input *openapi3filter.AuthenticationInput) error {
+					// Exercise real OpenAPI routing and scope requirements with a local identity.
+					if !reflect.DeepEqual(input.Scopes, []string{"minecraft"}) {
+						t.Errorf("history security scopes: %#v", input.Scopes)
+					}
+					if input.SecuritySchemeName != "OIDC" {
+						t.Errorf("unexpected security scheme: %s", input.SecuritySchemeName)
+					}
+					if !tc.token || !tc.scope {
+						return errors.New("access denied")
+					}
+					return nil
+				},
+			}}))
+			handler := HandlerFromMux(NewStrictHandler(&server, nil), router)
+			response := httptest.NewRecorder()
+			handler.ServeHTTP(response, httptest.NewRequest("GET", "/minecraft/history?before=2026-09-12T00:00:00Z", nil))
+			if response.Code != tc.status {
+				t.Fatalf("status %d: %s", response.Code, response.Body.String())
+			}
+			if tc.status != 200 {
+				if client.input != nil {
+					t.Fatal("unauthorized request read activity logs")
+				}
+			} else {
+				if !strings.Contains(response.Body.String(), `"player":"Alex"`) {
+					t.Fatalf("missing player activity: %s", response.Body.String())
+				}
+				if response.Header().Get("Cache-Control") != "private, no-store" {
+					t.Fatal("history may be cached")
+				}
+			}
+		})
+	}
+}
+
+func TestMinecraftHistoryUnavailable(t *testing.T) {
+	for _, server := range []Server{
+		{},
+		{minecraftLogs: cloudWatchMinecraftLogTailer{client: &fakeMinecraftCloudWatchLogsClient{err: errors.New("private upstream error")}}},
+	} {
+		result, err := server.GetMinecraftHistory(t.Context(), GetMinecraftHistoryRequestObject{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, ok := result.(GetMinecraftHistory503JSONResponse); !ok {
+			t.Fatalf("unexpected response: %#v", result)
+		}
+	}
+}
+
+func TestMinecraftHistoryRequiresRealAuthentication(t *testing.T) {
+	server, err := NewServer(t.Context(), NewServerOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	client := &fakeMinecraftCloudWatchLogsClient{}
+	server.minecraftLogs = cloudWatchMinecraftLogTailer{client: client, logGroupName: "history"}
+	response := httptest.NewRecorder()
+	server.ServeHTTP(response, httptest.NewRequest("GET", "/minecraft/history?before=2026-09-12T00:00:00Z", nil))
+	if response.Code != 401 {
+		t.Fatalf("anonymous history status %d: %s", response.Code, response.Body.String())
+	}
+	if client.input != nil {
+		t.Fatal("anonymous request read history")
+	}
 }

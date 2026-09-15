@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { MinecraftHistoryChart } from '#root/project/me/zemn/app/minecraft/history.js';
 import style from '#root/project/me/zemn/app/minecraft/style.module.css';
 import {
 	type MinecraftEventStreamState,
@@ -18,6 +19,7 @@ import {
 	useGetMinecraftStatus,
 	useGetMinecraftWhitelist,
 	useMinecraftEvents,
+	useMinecraftHistory,
 	usePostMinecraftWake,
 	usePutMinecraftWhitelist,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
@@ -218,6 +220,7 @@ export default function MinecraftPageClient() {
 		() => false
 	);
 	const eventStream = useMinecraftEvents(fut_idToken, hasMinecraftScope);
+	const history = useMinecraftHistory(fut_idToken, hasMinecraftScope);
 
 	useEffect(() => {
 		if (!hasMinecraftScope || wakeStarted.current) return;
@@ -323,6 +326,8 @@ export default function MinecraftPageClient() {
 					</button>
 				</div>
 			</section>
+
+			<MinecraftHistoryChart history={history} />
 
 			<MinecraftEventLog
 				events={eventStream.events}

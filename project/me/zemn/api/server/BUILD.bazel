@@ -173,6 +173,7 @@ go_test(
         "@com_github_go_jose_go_jose_v4//jwt",
         "@com_github_google_uuid//:uuid",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
+        "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
         "@com_github_twilio_twilio_go//twiml",
         "@io_bazel_rules_go//go/runfiles",
     ],
