@@ -80,7 +80,15 @@ export function cameraSpacePointFromPose(
 export function cameraSpaceTransformFromPose(
 	pose: YawPitchPose
 ): Result<(world: Point3D) => Point3D, Error> {
-	return and_then(inverseOrientationFromYawPitch(pose.yaw, pose.pitch), q => {
+	return cameraSpaceTransform(pose.position, pose.yaw, pose.pitch);
+}
+
+export function cameraSpaceTransform(
+	position: Point3D,
+	yaw: number,
+	pitch: number
+): Result<(world: Point3D) => Point3D, Error> {
+	return and_then(inverseOrientationFromYawPitch(yaw, pitch), q => {
 		const qx = Quaternion.x(q),
 			qy = Quaternion.y(q),
 			qz = Quaternion.z(q),
@@ -95,9 +103,9 @@ export function cameraSpaceTransformFromPose(
 			zy = 2 * (qy * qz + qx * qw),
 			zz = 1 - 2 * (qx * qx + qy * qy);
 		return world => {
-			const dx = x(world) - x(pose.position),
-				dy = y(world) - y(pose.position),
-				dz = z(world) - z(pose.position);
+			const dx = x(world) - x(position),
+				dy = y(world) - y(position),
+				dz = z(world) - z(position);
 			return point<3>(
 				xx * dx + xy * dy + xz * dz,
 				yx * dx + yy * dy + yz * dz,

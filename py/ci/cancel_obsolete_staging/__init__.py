@@ -1,9 +1,17 @@
-"""Remove pending deployments for merge-group commits that no longer exist."""
+"""Cancel obsolete merge-group checks and pending staging deployments."""
 
 import json
 from urllib.error import HTTPError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
+
+
+# Presubmit only runs checks, so obsolete running attempts can be cancelled.
+# Staging deploys infrastructure; preserve deployments already underway.
+CANCELLABLE_STATUSES = {
+    "staging.yml": ("pending", "queued"),
+    "presubmit.yml": ("pending", "queued", "in_progress"),
+}
 
 
 class GitHub:
@@ -29,20 +37,24 @@ class GitHub:
             error.close()
             raise
 
-    def pending_staging_runs(self):
+    def candidate_runs(self):
         # Finish pagination before cancelling: cancellations remove entries from
-        # this filtered list and would otherwise shift subsequent pages.
-        runs = []
-        page = 1
-        while True:
-            result = self.request(
-                "/actions/workflows/staging.yml/runs"
-                f"?event=merge_group&status=pending&per_page=100&page={page}"
-            )["workflow_runs"]
-            runs.extend(result)
-            if len(result) < 100:
-                return runs
-            page += 1
+        # these filtered lists and would otherwise shift subsequent pages.
+        runs = {}
+        for workflow, statuses in CANCELLABLE_STATUSES.items():
+            for status in statuses:
+                page = 1
+                while True:
+                    result = self.request(
+                        f"/actions/workflows/{workflow}/runs"
+                        f"?event=merge_group&status={status}&per_page=100&page={page}"
+                    )["workflow_runs"]
+                    # A run may move between status lists while we paginate.
+                    runs.update((run["id"], run) for run in result)
+                    if len(result) < 100:
+                        break
+                    page += 1
+        return runs.values()
 
     def obsolete(self, run):
         branch = quote(run["head_branch"], safe="/")
@@ -55,26 +67,30 @@ class GitHub:
         return ref["object"]["sha"] != run["head_sha"]
 
 
-def is_pending_staging(run):
+def is_cancellable(run):
     return (
-        run["status"] == "pending"
-        and run["event"] == "merge_group"
-        and run["path"] == ".github/workflows/staging.yml"
+        run["event"] == "merge_group"
         and run["head_branch"].startswith("gh-readonly-queue/")
+        and any(
+            run["path"] == f".github/workflows/{workflow}"
+            and run["status"] in statuses
+            for workflow, statuses in CANCELLABLE_STATUSES.items()
+        )
     )
 
 
 def cleanup(github, execute=False):
-    for listed in github.pending_staging_runs():
-        if not is_pending_staging(listed) or not github.obsolete(listed):
+    for listed in github.candidate_runs():
+        if not is_cancellable(listed) or not github.obsolete(listed):
             continue
         # A run may have acquired the deployment lock since it was listed.
         # Recheck both its status and ref immediately before requesting cancel.
         run = github.request(f"/actions/runs/{listed['id']}")
-        if not is_pending_staging(run) or not github.obsolete(run):
+        if not is_cancellable(run) or not github.obsolete(run):
             continue
+        label = f"{run['path']} run {run['id']}"
         if not execute:
-            print(f"Would cancel obsolete pending Staging run {run['id']}")
+            print(f"Would cancel obsolete {label}")
             continue
         try:
             github.request(f"/actions/runs/{run['id']}/cancel", method="POST")
@@ -82,6 +98,6 @@ def cleanup(github, execute=False):
             # Completion or another cleanup can win the cancellation race.
             if error.code != 409:
                 raise
-            print(f"Staging run {run['id']} no longer accepts cancellation")
+            print(f"{label} no longer accepts cancellation")
         else:
-            print(f"Requested cancellation of obsolete pending Staging run {run['id']}")
+            print(f"Requested cancellation of obsolete {label}")

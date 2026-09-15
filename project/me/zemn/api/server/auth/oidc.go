@@ -160,6 +160,7 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	}
 
 	add(schemeIssuer, zemnMeClientID)
+	add(os.Getenv("ZEMN_API_ORIGIN"), zemnMeClientID)
 
 	if req != nil {
 		scheme := "https"

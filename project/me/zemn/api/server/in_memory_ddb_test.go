@@ -64,6 +64,12 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 
 		records := make([]analyticsEventRecord, 0, len(db.analytics))
 		for _, rec := range db.analytics {
+			if lower, ok := in.ExpressionAttributeValues[":start"].(*types.AttributeValueMemberS); ok && rec.When < lower.Value {
+				continue
+			}
+			if upper, ok := in.ExpressionAttributeValues[":end"].(*types.AttributeValueMemberS); ok && rec.When > upper.Value {
+				continue
+			}
 			if feed != "" && rec.Feed != feed {
 				continue
 			}

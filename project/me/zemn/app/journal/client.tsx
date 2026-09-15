@@ -28,7 +28,17 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
 
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
+import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
 import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
+import {
+	type RecordingSession,
+	startLocalRecording,
+} from '#root/project/me/zemn/app/journal/recording.js';
+import {
+	LocalRecordings,
+	useRecordingQueue,
+} from '#root/project/me/zemn/app/journal/recording_queue.js';
+import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
@@ -42,6 +52,7 @@ import {
 	useUpdateJournalEntryDate,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
+import { watchOutParseIdToken } from '#root/ts/oidc/oidc.js';
 import {
 	Date as LocalizedDate,
 	DateRange as LocalizedDateRange,
@@ -62,7 +73,6 @@ export type JournalRoute = 'year' | 'month' | 'week' | 'day';
 
 const journalReadScope = 'journal_read';
 const journalWriteScope = 'journal_write';
-const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -655,10 +665,7 @@ function SummaryCardView({
 				<header>
 					{showPeriod && (
 						<p>
-							<PeriodDate
-								summary={summary}
-								timeZone={timeZone}
-							/>
+							<PeriodDate summary={summary} timeZone={timeZone} />
 						</p>
 					)}
 					{showTitle && <h3>{summary.title}</h3>}
@@ -1557,7 +1564,7 @@ function PeriodDisclosure({
 		<details
 			className={style.periodDisclosure}
 			data-journal-period-disclosure={node.period}
-			onToggle={(event) => setOpen(event.currentTarget.open)}
+			onToggle={event => setOpen(event.currentTarget.open)}
 			open={open}
 		>
 			<summary>
@@ -1927,13 +1934,14 @@ function PeriodList({
 function RecentEntries({ journal }: { readonly journal: Journal }) {
 	const entries = [...journal.entries]
 		.filter(entry => entry.status === 'ready')
-		.sort(
-			(a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt)
-		)
+		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))
 		.slice(0, 5);
 	if (entries.length === 0) return null;
 	return (
-		<section aria-labelledby="recent-journal-entries" className={style.recent}>
+		<section
+			aria-labelledby="recent-journal-entries"
+			className={style.recent}
+		>
 			<header>
 				<h2 id="recent-journal-entries">Recent entries</h2>
 				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
@@ -1943,7 +1951,9 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 			<ol>
 				{entries.map(entry => (
 					<li key={entry.id}>
-						<Link href={journalHref('day', { at: entry.recordedAt })}>
+						<Link
+							href={journalHref('day', { at: entry.recordedAt })}
+						>
 							<span className={style.recentDate}>
 								<LocalizedDate date={journalEntryDate(entry)} />
 							</span>
@@ -2244,7 +2254,9 @@ function DevelopmentJournalTools() {
 					})
 						.then(response => {
 							if (!response.ok)
-								throw new Error('Could not add sample entries.');
+								throw new Error(
+									'Could not add sample entries.'
+								);
 							return refreshJournal();
 						})
 						.then(() => setStatus('complete'))
@@ -2260,7 +2272,9 @@ function DevelopmentJournalTools() {
 				}}
 				type="button"
 			>
-				{status === 'seeding' ? 'Adding entries…' : 'Add sample entries'}
+				{status === 'seeding'
+					? 'Adding entries…'
+					: 'Add sample entries'}
 			</button>
 			{status === 'complete' && (
 				<small role="status" style={{ flexBasis: '100%' }}>
@@ -2303,9 +2317,9 @@ export default function JournalPageClient({
 		[updateEntryDate]
 	);
 	const resetCreateEntry = createEntry.reset;
-	const recorder = useRef<MediaRecorder>();
-	const recordingDisposition = useRef<'discard' | 'submit'>('discard');
-	const chunks = useRef<Blob[]>([]);
+	const recorder = useRef<RecordingSession>();
+	const [recordingBusy, setRecordingBusy] = useState(false);
+	const [recordingElapsed, setRecordingElapsed] = useState(0);
 	const [recording, setRecording] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
 	const [recordingError, setRecordingError] = useState<string>();
@@ -2326,6 +2340,48 @@ export default function JournalPageClient({
 		() => false,
 		() => false
 	);
+	const owner = idToken(
+		token => {
+			const parsed = watchOutParseIdToken.safeParse(token);
+			return parsed.success
+				? JSON.stringify([parsed.data.iss, parsed.data.sub])
+				: undefined;
+		},
+		() => undefined,
+		() => undefined
+	);
+	const currentOwner = useRef(owner);
+	currentOwner.current = owner;
+	const queue = useRecordingQueue({
+		owner,
+		canSync: hasWriteScope,
+		upload: createJournalEntry,
+		readyEntryIDs: journal(
+			value =>
+				value.entries
+					.filter(entry => entry.status === 'ready')
+					.map(entry => entry.id),
+			() => [],
+			() => []
+		),
+	});
+	const keepRecording = queue.keep;
+	const refreshRecordings = queue.refresh;
+	useEffect(() => {
+		currentOwner.current = owner;
+		return () => {
+			currentOwner.current = undefined;
+			recorder.current?.stop();
+		};
+	}, [owner]);
+	useEffect(() => {
+		if (!recordingStream && queue.emergencyIDs.size === 0) return;
+		const warn = (event: BeforeUnloadEvent) => {
+			event.preventDefault();
+		};
+		window.addEventListener('beforeunload', warn);
+		return () => window.removeEventListener('beforeunload', warn);
+	}, [recordingStream, queue.emergencyIDs.size]);
 	const promptForLogin = promptForLoginFuture(
 		value => value,
 		() => undefined,
@@ -2347,19 +2403,22 @@ export default function JournalPageClient({
 	const submitAudio = useCallback(
 		async (blob: Blob, recordedAt: Date) => {
 			resetSubmission();
-			if (blob.size <= 0 || blob.size > maxJournalAudioBytes) {
-				throw new Error(
-					'Voice notes must be between 1 byte and 25 MiB.'
-				);
-			}
-			await createJournalEntry({
-				file: blob,
-				contentType: normalizedContentType(blob),
+			if (!owner) throw new Error('Sign in before saving a voice note.');
+			if (blob.size === 0) throw new Error('The audio file is empty.');
+			const contentType = normalizedContentType(blob);
+			const draft: LocalRecording = {
+				id: crypto.randomUUID(),
+				owner,
+				parts: [blob],
+				contentType,
 				recordedAt: recordedAt.toISOString(),
 				timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-			});
+				name: blob instanceof File ? blob.name : 'voice-note.webm',
+				state: 'queued',
+			};
+			await keepRecording(draft);
 		},
-		[createJournalEntry, resetSubmission]
+		[keepRecording, owner, resetSubmission]
 	);
 
 	const submitFiles = useCallback(
@@ -2432,52 +2491,47 @@ export default function JournalPageClient({
 
 	const startRecording = async () => {
 		resetSubmission();
-		let stream: MediaStream | undefined;
+		if (!owner) {
+			setRecordingError('Sign in before recording a voice note.');
+			return;
+		}
+		setRecordingBusy(true);
+		let session: RecordingSession | undefined;
 		try {
-			const activeStream = await navigator.mediaDevices.getUserMedia({
-				audio: true,
+			session = await startLocalRecording(owner, {
+				tick: setRecordingElapsed,
+				finished: (draft, durable, message) => {
+					if (recorder.current === session) {
+						recorder.current = undefined;
+						setRecordingStream(undefined);
+						setRecording(false);
+						setRecordingBusy(false);
+					}
+					if (message) setRecordingError(message);
+					if (draft) void keepRecording(draft, durable);
+					else void refreshRecordings();
+				},
 			});
-			stream = activeStream;
-			const mediaRecorder = new MediaRecorder(activeStream);
-			recorder.current = mediaRecorder;
-			recordingDisposition.current = 'discard';
-			chunks.current = [];
-			mediaRecorder.ondataavailable = event => {
-				if (event.data.size > 0) chunks.current.push(event.data);
-			};
-			mediaRecorder.onstop = () => {
-				const disposition = recordingDisposition.current;
-				const recordedChunks = chunks.current;
-				chunks.current = [];
-				recorder.current = undefined;
-				activeStream.getTracks().forEach(track => track.stop());
-				setRecordingStream(undefined);
-				setRecording(false);
-				if (disposition === 'submit') {
-					const blob = new Blob(recordedChunks, {
-						type: mediaRecorder.mimeType,
-					});
-					void submitAudio(blob, new Date()).catch(error =>
-						setRecordingError(errorMessage(error))
-					);
-				}
-			};
-			mediaRecorder.start();
-			setRecordingStream(activeStream);
+			if (currentOwner.current !== owner) {
+				session.stop();
+				return;
+			}
+			recorder.current = session;
+			setRecordingStream(session.stream);
 			setRecording(true);
+			setRecordingBusy(false);
 		} catch (error) {
-			stream?.getTracks().forEach(track => track.stop());
-			setRecordingError(errorMessage(error));
+			setRecordingBusy(false);
+			setRecordingError(
+				`Could not start a recording safely: ${errorMessage(error)}`
+			);
 		}
 	};
 
 	const endRecording = (disposition: 'discard' | 'submit') => {
-		const mediaRecorder = recorder.current;
-		if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
-		recordingDisposition.current = disposition;
-		mediaRecorder.stop();
-		setRecordingStream(undefined);
-		setRecording(false);
+		if (!recorder.current) return;
+		setRecordingBusy(true);
+		recorder.current.stop(disposition === 'discard');
 	};
 
 	const uploadFiles = (event: ChangeEvent<HTMLInputElement>) => {
@@ -2491,21 +2545,18 @@ export default function JournalPageClient({
 	const captureControls = hasWriteScope ? (
 		<section
 			aria-label="Create a journal entry"
-			aria-busy={createEntry.isPending}
+			aria-busy={recordingBusy || queue.syncing !== undefined}
 			className={style.recorder}
 			data-recording={recordingStream ? '' : undefined}
-			data-uploading={createEntry.isPending ? '' : undefined}
+			data-uploading={queue.syncing ? '' : undefined}
 		>
 			{!recordingStream && (
-				<label
-					className={style.uploadButton}
-					title="Import voice memo"
-				>
+				<label className={style.uploadButton} title="Import voice memo">
 					<FontAwesomeIcon icon={faUpload} />
 					<input
 						accept="audio/*,.m4a"
 						aria-label="Import voice memo"
-						disabled={createEntry.isPending}
+						disabled={recordingBusy}
 						multiple
 						onChange={uploadFiles}
 						type="file"
@@ -2514,18 +2565,18 @@ export default function JournalPageClient({
 			)}
 			<button
 				aria-label={
-					createEntry.isPending
-						? 'Uploading voice note'
+					recordingBusy
+						? recording
+							? 'Saving voice note'
+							: 'Starting microphone'
 						: recording
 							? 'Submit note'
 							: 'Record a note'
 				}
 				className={`${style.recordButton} ${recording ? style.submitButton : ''}`}
-				disabled={createEntry.isPending}
+				disabled={recordingBusy}
 				onClick={
-					recording
-						? () => endRecording('submit')
-						: startRecording
+					recording ? () => endRecording('submit') : startRecording
 				}
 				title={recording ? 'Finish recording' : 'Record a note'}
 				type="button"
@@ -2535,8 +2586,18 @@ export default function JournalPageClient({
 			{recordingStream && (
 				<>
 					<RecordingWaveform stream={recordingStream} />
+					<div className={style.recordingTime}>
+						<span role="timer" aria-label="Recording duration">
+							{mediaTimestamp(recordingElapsed)} recorded
+						</span>
+						<small>
+							Saved on this device. Long notes are split
+							automatically for transcription.
+						</small>
+					</div>
 					<button
 						aria-label="Cancel recording"
+						disabled={recordingBusy}
 						className={style.cancelButton}
 						onClick={() => endRecording('discard')}
 						type="button"
@@ -2545,7 +2606,7 @@ export default function JournalPageClient({
 					</button>
 				</>
 			)}
-			{recordingError && <p>{recordingError}</p>}
+			{recordingError && <p role="status">{recordingError}</p>}
 		</section>
 	) : undefined;
 
@@ -2581,6 +2642,10 @@ export default function JournalPageClient({
 			) : (
 				<>
 					{isDevelopment && <DevelopmentJournalTools />}
+					<LocalRecordings
+						queue={queue}
+						activeID={recorder.current?.id}
+					/>
 					{journal(
 						value => (
 							<JournalBrowser
@@ -2600,14 +2665,27 @@ export default function JournalPageClient({
 							/>
 						),
 						() => (
-							<p>Loading your journal…</p>
+							<>
+								<JournalToolbar
+									actions={captureControls}
+									focus={new Date().toISOString()}
+								/>
+								<p>Loading your journal…</p>
+							</>
 						),
 						error => (
-							<p className={style.notice}>
-								{errorMessage(error)}
-							</p>
+							<>
+								<JournalToolbar
+									actions={captureControls}
+									focus={new Date().toISOString()}
+								/>
+								<p className={style.notice}>
+									{errorMessage(error)}
+								</p>
+							</>
 						)
 					)}
+					<JournalMCPSetup />
 				</>
 			)}
 		</main>

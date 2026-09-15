@@ -28,7 +28,7 @@ import (
 const (
 	journalOwnerSubject        = "thomas"
 	journalLocalOwnerSubject   = "integration-test-local"
-	maxJournalAudioBytes       = 25 * 1024 * 1024
+	maxJournalAudioBytes       = 256 * 1024 * 1024
 	journalPlaybackURLLifetime = 24 * time.Hour
 	journalUploadURLLifetime   = 5 * time.Minute
 )
@@ -93,19 +93,28 @@ func journalEntryIDFromKey(key string) (string, bool) {
 }
 
 func (s *Server) listJournalRecords(ctx context.Context, subject string) ([]JournalStoredRecord, error) {
-	out, err := s.ddb.Query(ctx, &dynamodb.QueryInput{
+	input := &dynamodb.QueryInput{
 		TableName:              aws.String(s.journalTableName),
 		KeyConditionExpression: aws.String("id = :id"),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":id": &types.AttributeValueMemberS{Value: subject},
 		},
-	})
-	if err != nil {
-		return nil, err
 	}
 	var records []JournalStoredRecord
-	if err := attributevalue.UnmarshalListOfMaps(out.Items, &records); err != nil {
-		return nil, err
+	for {
+		out, err := s.ddb.Query(ctx, input)
+		if err != nil {
+			return nil, err
+		}
+		var page []JournalStoredRecord
+		if err := attributevalue.UnmarshalListOfMaps(out.Items, &page); err != nil {
+			return nil, err
+		}
+		records = append(records, page...)
+		if len(out.LastEvaluatedKey) == 0 {
+			break
+		}
+		input.ExclusiveStartKey = out.LastEvaluatedKey
 	}
 	return records, nil
 }
@@ -1106,7 +1115,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	}
 	entry.ByteLength = size
 	if size <= 0 || size > maxJournalAudioBytes {
-		cause := fmt.Errorf("uploaded audio length %d is outside the allowed range of 1 byte to 25 MiB", size)
+		cause := fmt.Errorf("uploaded audio length %d is outside the allowed range of 1 byte to 256 MiB", size)
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, cause)
 		return cause
 	}

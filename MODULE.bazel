@@ -42,6 +42,18 @@ oci.pull(
         "linux/ppc64le",
     ],
 )
+oci.pull(
+    name = "distroless_cc_debian12",
+    digest = "sha256:e5d81ddde149641e2a9ba55be4545bc125c67de07508b03ba4c22e6eb0ded5aa",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+        "linux/arm/v7",
+        "linux/s390x",
+        "linux/ppc64le",
+    ],
+)
 
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
 use_repo(
@@ -52,6 +64,12 @@ use_repo(
     "distroless_base_linux_arm_v7",
     "distroless_base_linux_ppc64le",
     "distroless_base_linux_s390x",
+    "distroless_cc_debian12",
+    "distroless_cc_debian12_linux_amd64",
+    "distroless_cc_debian12_linux_arm64_v8",
+    "distroless_cc_debian12_linux_arm_v7",
+    "distroless_cc_debian12_linux_ppc64le",
+    "distroless_cc_debian12_linux_s390x",
     "distroless_debian12",
     "distroless_debian12_linux_amd64",
     "distroless_debian12_linux_arm64_v8",
@@ -207,6 +225,7 @@ use_repo(
     "com_github_gorilla_websocket",
     "com_github_invopop_jsonschema",
     "com_github_itchyny_gojq",
+    "com_github_modelcontextprotocol_go_sdk",
     "com_github_nyaruka_phonenumbers_v2",
     "com_github_oapi_codegen_nethttp_middleware",
     "com_github_oapi_codegen_oapi_codegen_v2",
@@ -457,12 +476,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_X64 = "3.259.0"
+PULUMI_CLI_VERSION_LINUX_X64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "94ba357acac23d01474084c4b00098dc0f7bc70ce13f34c777459254a5f718e5",
+    sha256 = "0469448b9853f723340bf19273c817482bca90f5c02c4cac9fa18a530df6402a",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_X64 + "-linux-x64.tar.gz",
@@ -473,12 +492,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.259.0"
+PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "57c27f179e527e2cf9f62b841a448af72a020e44b2fb4ee0d9bd85556c00c864",
+    sha256 = "a3c2ff50ef94962711649e234a28ed3803618cbb2f313505a88ca86c30da98e0",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
@@ -489,12 +508,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_X64 = "3.259.0"
+PULUMI_CLI_VERSION_DARWIN_X64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "eaca4c3b8277bfa3ab061fa3b270d1c66358a0b2e613da8c5587a04b7226c534",
+    sha256 = "7db45a6fb6f876e7181925861613b1aa2ae4eea7629f2fb495b221c67c0ec117",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_X64 + "-darwin-x64.tar.gz",
@@ -505,14 +524,14 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_ARM64 = "3.259.0"
+PULUMI_CLI_VERSION_LINUX_ARM64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_linux_arm64",
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    sha256 = "edc8327463a72160bb36cf82cf5062da9c8a244290a706d9980988e7bf486853",
+    sha256 = "224ffde7339807abca1ee8866372e37fcf23f27a1e31056326188f81823b69a4",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "-linux-arm64.tar.gz",
@@ -523,12 +542,12 @@ exports_files(glob(["**/*"], allow_empty=True))
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.259.0"
+PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "aa09cca63eba8fb5ca05cdb71d1a99b37e9bdc9b48345f2ce94adb0ea065a09a",
+    sha256 = "3d599ce4d4736446bd0bfb8fee11bf27ae9a9a3dca25c4dc3c48c929ecc2e411",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "-windows-arm64.zip",
@@ -539,12 +558,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_X64 = "3.259.0"
+PULUMI_CLI_VERSION_WINDOWS_X64 = "3.262.0"
 
 http_archive(
     name = "pulumi_cli_windows_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "1f4848102934f0ca9a907f80d3b1c70edf46efca6ec8d0b9ffbe22d133dd705c",
+    sha256 = "7243e0eef9d6ee820c6d525ef3ad90118b7bd0d9624665ca1f12aae0dddc00a4",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "-windows-x64.zip",
@@ -578,6 +597,14 @@ http_archive(
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
+# Doom shareware 1.9, archived by the SHA-1 of its uncompressed WAD.
+http_file(
+    name = "doom1_shareware",
+    downloaded_file_path = "doom1.wad.gz",
+    sha256 = "99ce219867b28c3e467b0ee84f5059f4c610f46bba957278584f50fa9c3753a0",
+    urls = ["https://archive.org/download/wadarchive/DATA/5b.zip/5b%2F2e249b9c5133ec987b3ea77596381dc0d6bc1d%2F5b2e249b9c5133ec987b3ea77596381dc0d6bc1d.wad.gz"],
+)
+
 # renovate:
 # 	datasource=github-tags
 # 	versioning=loose
@@ -604,7 +631,7 @@ rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_t
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.98.0"
+RUST_VERSION = "1.98.1"
 
 rust.toolchain(
     edition = "2021",
@@ -663,13 +690,13 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.16.5"
+RUFF_VERSION = "0.16.7"
 
 # For Apple Silicon macOS
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-7RQvhlbgCSgowQPdBYtVuHHIjhOoAcrej4YNipyolD4=",
+    integrity = "sha256-gCIaXgsa4pJip0SW8q0TgMGrUrPt2M7hPsdtis/0Bso=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",

@@ -1,9 +1,12 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "app",
     srcs = [
+        "hangar.ts",
+        "hangar_background.tsx",
         "layout.tsx",
         "page.tsx",
     ],
@@ -16,14 +19,19 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//ts/3d",
+        "//ts/math",
         "//ts/next.js",
         "//ts/next.js/types/next-compiled",
+        "//ts/pulumi/waxingincandescent.com/hangar",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "hangar.ts",
+        "hangar_background.tsx",
         "layout.tsx",
         "page.tsx",
     ],
@@ -33,4 +41,10 @@ filegroup(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["hangar.md"],
+    visibility = ["//:__subpackages__"],
 )

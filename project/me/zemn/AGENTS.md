@@ -8,8 +8,11 @@
 - Server components cannot pass function-valued selectors into client components; pass serializable selector data and rebuild the function inside the client boundary.
 - In React code, prefer carrying async/remote values with `ts/future/future.ts` helpers over duplicating messy internal loading/error state.
 - Prefer `project/me/zemn/api/spec.yaml` and its generated API types over hard-coding duplicate request/response types.
+- URL query hooks such as `useQueryState` need an enclosing Suspense boundary for static export. Verify `//project/me/zemn:build`; development-server browser tests do not catch prerender failures.
 - For metadata-only app route types, import from `next/types`; importing package root `next` pulls ambient declarations that collide with repo shims.
 - Content-addressed public assets should be declared next to the TS that imports them with `hashed_public_assets`; `project/me/zemn/public:content_addressed_public_assets` collects them from `//project/me/zemn:ts`.
 - For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.
 - `//project/me/zemn:zemn` starts the local app on port 3000; passing another `--port` appends rather than overrides.
 - Signed media range failures can leave an HTML media element stalled without an `error`; preserve playback intent and recover from `waiting`/`stalled` as well as hard errors.
+
+- Keep local `api/server.Server.ProvisionTables` indexes aligned with Pulumi; analytics listing requires `feed-when-index`, which ingest-only tests do not exercise.

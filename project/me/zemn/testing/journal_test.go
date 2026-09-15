@@ -3,10 +3,12 @@ package selenium_test
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/binary"
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -309,7 +311,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	`, nil); err != nil {
 		t.Fatalf("submit invalid voice memo: %v", err)
 	}
-	const staleUploadError = "Voice notes must be between 1 byte and 25 MiB."
+	const staleUploadError = "The audio file is empty."
 	if err := waitForText(driver, staleUploadError, 10*time.Second); err != nil {
 		t.Fatalf("invalid voice memo error: %v", err)
 	}
@@ -742,6 +744,14 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") || !strings.Contains(source, "expiresAt=") {
 		t.Fatalf("journal integration audio was not delayed: %q", source)
 	}
+	// Check transcript tracking while the short clip is playing, before the
+	// separate advance and URL-recovery checks consume its remaining duration.
+	if err := waitForCurrentlySpokenTranscript(driver, firstEntryID, 10*time.Second); err != nil {
+		t.Fatalf("first playing transcript was not highlighted: %v", err)
+	}
+	if err := waitForCenteredJournalTranscript(driver, firstEntryID, 10*time.Second); err != nil {
+		t.Fatalf("currently spoken journal transcript segment was not centered: %v", err)
+	}
 	if err := waitForJournalAudioAdvance(driver, firstEntryID, 2750*time.Millisecond, 8*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("delayed journal audio did not advance continuously while updating its URL: %v", err)
@@ -749,12 +759,6 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := waitForJournalAudioStallRecovery(driver, firstEntryID, 3*time.Second, 12*time.Second); err != nil {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("journal audio did not recover from a playback stall: %v", err)
-	}
-	if err := waitForCurrentlySpokenTranscript(driver, firstEntryID, 10*time.Second); err != nil {
-		t.Fatalf("first playing transcript was not highlighted: %v", err)
-	}
-	if err := waitForCenteredJournalTranscript(driver, firstEntryID, 10*time.Second); err != nil {
-		t.Fatalf("currently spoken journal transcript segment was not centered: %v", err)
 	}
 	stickyNavigationAndAudio, err := driver.ExecuteScript(`
 		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
@@ -1001,7 +1005,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	}
 	// Chromium's fake microphone needs a recording timeslice before stopping to
 	// emit a non-empty MediaRecorder chunk.
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(1500 * time.Millisecond)
 	submitButton, err = waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
@@ -1009,8 +1013,8 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err := submitButton.Click(); err != nil {
 		t.Fatalf("submit recording: %v", err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Create a journal entry'][data-uploading][aria-busy='true']", 10*time.Second); err != nil {
-		t.Fatalf("submitted recording did not show its visual upload state: %v", err)
+	if err := waitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
+		t.Fatalf("submitted recording did not finish capture: %v", err)
 	}
 	if _, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Create a journal entry']//p[contains(., 'Uploading your private voice note')]"); err == nil {
 		t.Fatal("submitted recording showed the redundant upload caption")
@@ -1478,7 +1482,9 @@ func dispatchJournalFile(driver selenium.WebDriver, path, eventType string) erro
 			done('could not find the staged file or journal upload input');
 			return;
 		}
-		let sawPending = uploadInput.disabled;
+		const uploadControl = uploadInput.closest('section[aria-label="Create a journal entry"]');
+		const isPending = () => uploadControl?.getAttribute('aria-busy') === 'true';
+		let sawPending = isPending();
 		let settled = false;
 		const finish = error => {
 			if (settled) return;
@@ -1489,12 +1495,12 @@ func dispatchJournalFile(driver selenium.WebDriver, path, eventType string) erro
 			done(error ?? null);
 		};
 		const observer = new MutationObserver(() => {
-			if (uploadInput.disabled) sawPending = true;
+			if (isPending()) sawPending = true;
 			else if (sawPending) finish();
 		});
-		observer.observe(uploadInput, {
+		observer.observe(uploadControl, {
 			attributes: true,
-			attributeFilter: ['disabled'],
+			attributeFilter: ['aria-busy'],
 		});
 		const timer = setTimeout(
 			() => finish('upload did not settle (pending observed: ' + sawPending + ')'),
@@ -1948,4 +1954,108 @@ func waitForJournalPeriodAudioCount(driver selenium.WebDriver, start string, wan
 		)
 		return len(elements) == want, err
 	}, timeout)
+}
+
+func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
+	root, err := nextServerRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments("--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForNoElement(driver, selenium.ByXPATH, "//p[normalize-space()='Loading your journal…']", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	record, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Block upload requests while preserving the page and login flow, as when
+	// the journal service is unreachable but the browser can load the website.
+	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/journal/entries"}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := record.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='timer'][aria-label='Recording duration']", 15*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatal(err)
+	}
+	time.Sleep(2200 * time.Millisecond)
+	submit, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Submit note']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := submit.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Waiting to sync", 20*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	const downloadSelector = "section[aria-labelledby='local-recordings-heading'] a[download]"
+	fingerprint := func() string {
+		t.Helper()
+		directory := t.TempDir()
+		if err := driver.ExecuteChromiumCommand("Page.setDownloadBehavior", map[string]any{"behavior": "allow", "downloadPath": directory}); err != nil {
+			t.Fatal(err)
+		}
+		link, err := waitForElement(driver, selenium.ByCSSSelector, downloadSelector+"[href^='blob:']", 10*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := link.Click(); err != nil {
+			t.Fatal(err)
+		}
+		var audio []byte
+		if err := driver.WaitWithTimeout(func(selenium.WebDriver) (bool, error) {
+			files, err := os.ReadDir(directory)
+			if err != nil {
+				return false, err
+			}
+			for _, file := range files {
+				if strings.HasSuffix(file.Name(), ".webm") {
+					audio, err = os.ReadFile(filepath.Join(directory, file.Name()))
+					return len(audio) > 0, err
+				}
+			}
+			return false, nil
+		}, 10*time.Second); err != nil {
+			t.Fatalf("audio download failed: %v", err)
+		}
+		return fmt.Sprintf("%d:%x", len(audio), sha256.Sum256(audio))
+	}
+	before := fingerprint()
+	if err := driver.Refresh(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForText(driver, "Waiting to sync", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if after := fingerprint(); after != before {
+		t.Fatal("recording audio changed after reload")
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{}}); err != nil {
+		t.Fatal(err)
+	}
+	// The periodic retry must sync without another user action.
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		links, err := wd.FindElements(selenium.ByCSSSelector, downloadSelector)
+		return err == nil && len(links) == 0, nil
+	}, 90*time.Second); err != nil {
+		t.Fatalf("local audio did not sync and receive server confirmation: %v", err)
+	}
 }

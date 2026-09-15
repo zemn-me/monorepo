@@ -38,6 +38,11 @@ const cmd = new Command('presubmit')
 		false
 	)
 	.option(
+		'--skip-pulumi-refresh',
+		'Skip refreshing Pulumi state when staging was just deployed in the same workflow.',
+		false
+	)
+	.option(
 		'--skip-pulumi-deploy',
 		`${
 			'Skip doing the pulumi deploy once bazel testing is completed. ' +
@@ -156,6 +161,7 @@ const cmd = new Command('presubmit')
 				deploy_to_staging({
 					overwrite: o.overwrite,
 					doNotTearDown: o.dirty,
+					skipRefresh: o.skipPulumiRefresh,
 				})
 			);
 		}

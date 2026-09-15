@@ -123,6 +123,10 @@ interface Args {
 	 * Destroy existing state before doing Pulumi up.
 	 */
 	overwrite: boolean;
+	/**
+	 * Reuse state from a staging deployment that just completed.
+	 */
+	skipRefresh?: boolean;
 }
 
 export async function main(args: Args) {
@@ -135,9 +139,11 @@ export async function main(args: Args) {
 
 	const s = staging();
 
-	const e1 = await waitForLockTask(async () =>
-		s.then(v => v.refresh(baseConfig))
-	)('refreshing state');
+	const e1 = args.skipRefresh
+		? undefined
+		: await waitForLockTask(async () => s.then(v => v.refresh(baseConfig)))(
+				'refreshing state'
+			);
 
 	let e2: pulumi.DestroyResult | pulumi.UpResult | Error | undefined =
 		undefined;

@@ -20,9 +20,7 @@ type ServicePorts struct {
 	CalendarNextServerPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
 	APIPort                string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
 	CalendarAPIPort        string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
-	// Analytics are not rendered anywhere yet, so the itest reads DynamoDB
-	// directly to verify ingest. Once analytics are visible in the product, this
-	// can go away and the test should assert on the UI instead.
+	// The beacon transport test checks ingestion independently of admin authentication.
 	DynamoDBPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
 	OIDCProvider string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
 }
