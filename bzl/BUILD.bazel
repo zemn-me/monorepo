@@ -1,9 +1,11 @@
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 exports_files([
     "bazel_watcher_proto_rule.patch",
     "curl_sys_link_curl.patch",
+    "npm_patch.sh",
 ])
 
 sh_binary(
@@ -18,4 +20,11 @@ bazel_lint(
         "rules.bzl",
         "show_all_outputs.bzl",
     ],
+)
+
+sh_test(
+    name = "npm_patch_test",
+    srcs = ["npm_patch_test.sh"],
+    args = ["$(rootpath :npm_patch.sh)"],
+    data = ["npm_patch.sh"],
 )

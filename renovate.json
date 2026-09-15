@@ -6,6 +6,13 @@
 			"enabled": false,
 			"matchDepNames": ["typescript5"],
 			"matchManagers": ["npm"]
+		},
+		{
+			"description": "Update pnpm together with the Bazel rules that provide its launcher and release checksums",
+			"groupName": "pnpm toolchain",
+			"matchManagers": ["npm", "bazel-module"],
+			"matchPackageNames": ["pnpm", "aspect_rules_js"],
+			"separateMajorMinor": false
 		}
 	]
 }

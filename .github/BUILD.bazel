@@ -1,5 +1,7 @@
+load("@aspect_rules_js//js:defs.bzl", "js_test")
 load("@npm//:renovate/package_json.bzl", "bin")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
 load("//md:rules.bzl", "md_files")
 load("//yml:test.bzl", "yaml_lint_test")
 
@@ -27,4 +29,28 @@ md_files(
     name = "github",
     srcs = ["AGENTS.md"],
     visibility = ["//:__subpackages__"],
+)
+
+js_test(
+    name = "renovate_pnpm_test",
+    size = "small",
+    data = [
+        ":renovate_pnpm_test_mjs",
+        "//:package_json",
+        "@pnpm",
+    ],
+    entry_point = "renovate_pnpm_test.mjs",
+    env = {
+        "PACKAGE_JSON": "$(rlocationpath //:package_json)",
+        "PNPM_BIN": "$(rlocationpath @pnpm//:pnpm)",
+    },
+)
+
+js_library(
+    name = "renovate_pnpm_test_mjs",
+    srcs = ["renovate_pnpm_test.mjs"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/renovate",
+    ],
 )
