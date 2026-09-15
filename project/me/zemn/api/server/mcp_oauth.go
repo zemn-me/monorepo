@@ -71,8 +71,14 @@ func (s *Server) oauthRegister(ctx context.Context, body MCPOAuthClient) (MCPOAu
 }
 func (s *Server) oauthAuthorize(ctx context.Context, q AuthorizeMCPClientParams) (string, *oauthFailure) {
 	client, err := s.oauthResolveClient(ctx, q.ClientId)
-	if err != nil || !slices.Contains(client.RedirectUris, q.RedirectUri) {
-		return oauthFail[string](400, "invalid_request", "Unknown client or unregistered redirect URI")
+	if errors.Is(err, errOAuthClientAuthMethod) {
+		return oauthFail[string](400, "invalid_request", "This client does not support public-client authentication with PKCE")
+	}
+	if err != nil {
+		return oauthFail[string](400, "invalid_request", "Client registration or metadata could not be validated")
+	}
+	if !slices.Contains(client.RedirectUris, q.RedirectUri) {
+		return oauthFail[string](400, "invalid_request", "Unregistered redirect URI")
 	}
 	if q.ResponseType != "code" || q.CodeChallengeMethod != "S256" || !oauthChallengeValid(q.CodeChallenge) {
 		return oauthFail[string](400, "invalid_request", "Authorization code with S256 PKCE is required")
@@ -139,8 +145,8 @@ func (s *Server) oauthToken(ctx context.Context, f MCPOAuthTokenRequest) (MCPOAu
 	if scope := f.Scope; scope != "" && scope != "journal_read" {
 		return oauthFail[MCPOAuthTokenResponse](400, "invalid_scope", "Only journal_read is supported")
 	}
-	if f.ClientSecret != "" || protocolRequest(ctx).Header.Get("Authorization") != "" {
-		return oauthFail[MCPOAuthTokenResponse](400, "invalid_client", "Public clients use PKCE without client secrets")
+	if f.ClientSecret != "" || f.ClientAssertion != "" || f.ClientAssertionType != "" || protocolRequest(ctx).Header.Get("Authorization") != "" {
+		return oauthFail[MCPOAuthTokenResponse](400, "invalid_client", "Public clients use PKCE without client secrets or assertions")
 	}
 	switch f.GrantType {
 	case "authorization_code":

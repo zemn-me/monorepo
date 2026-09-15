@@ -104,6 +104,9 @@ func oauthTestClient(t *testing.T, s *Server) string {
 func oauthTestCode(t *testing.T, s *Server, client, verifier string) url.Values {
 	t.Helper()
 	params := url.Values{"client_id": {client}, "response_type": {"code"}, "redirect_uri": {"https://client.example/callback"}, "resource": {oauthURL(journalMCPPath)}, "scope": {"journal_read"}, "state": {"client-state"}, "code_challenge_method": {"S256"}, "code_challenge": {oauthHash(verifier)}}
+	params.Set("redirect_uri", "https://client.example/unregistered")
+	oauthTestJSON(t, oauthTestRequest(s, "GET", "/oauth2/authorize?"+params.Encode(), "", ""), 400)
+	params.Set("redirect_uri", "https://client.example/callback")
 	response := oauthTestRequest(s, "GET", "/oauth2/authorize?"+params.Encode(), "", "")
 	if response.Code != 302 {
 		t.Fatalf("authorize: %d %s", response.Code, response.Body)
@@ -127,48 +130,76 @@ func oauthTestCode(t *testing.T, s *Server, client, verifier string) url.Values 
 	return url.Values{"grant_type": {"authorization_code"}, "code": {redirect.Query().Get("code")}, "client_id": {client}, "redirect_uri": {"https://client.example/callback"}, "resource": {oauthURL(journalMCPPath)}, "code_verifier": {verifier}}
 }
 func TestMCPOAuthConnectionLifecycle(t *testing.T) {
-	s := newJournalMCPTestServer(t)
-	client := oauthTestClient(t, s)
-	form := oauthTestCode(t, s, client, strings.Repeat("v", 43))
-	for _, field := range []string{"code_verifier", "client_id", "redirect_uri", "resource"} {
-		original := form.Get(field)
-		form.Set(field, "incorrect")
-		oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 400)
-		form.Set(field, original)
-	}
-	tokens := oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 200)
-	access := tokens["access_token"].(string)
-	refresh := tokens["refresh_token"].(string)
-	info, err := s.verifyJournalMCPToken(t.Context(), access, nil)
-	if err != nil || info.UserID != journalOwnerSubject {
-		t.Fatalf("access token: %v %v", info, err)
-	}
-	if _, err = s.verifyJournalIdentity(t.Context(), access, nil); err == nil {
-		t.Fatal("MCP token granted website access")
-	}
-	if _, err = s.verifyJournalMCPToken(t.Context(), refresh, nil); err == nil {
-		t.Fatal("refresh token accepted as access token")
-	}
-	oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 400)
-	renewal := url.Values{"grant_type": {"refresh_token"}, "refresh_token": {refresh}, "client_id": {client}, "resource": {oauthURL(journalMCPPath)}}
-	fresh := oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, renewal.Encode(), ""), 200)
-	if fresh["refresh_token"] == refresh {
-		t.Fatal("refresh token not rotated")
-	}
-	oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, renewal.Encode(), ""), 400)
-	if _, err = s.verifyJournalMCPToken(t.Context(), fresh["access_token"].(string), nil); err == nil {
-		t.Fatal("refresh replay failed to revoke the grant")
-	}
-	renewal.Set("refresh_token", fresh["refresh_token"].(string))
-	oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, renewal.Encode(), ""), 400)
-	form = oauthTestCode(t, s, client, strings.Repeat("z", 43))
-	tokens = oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 200)
-	revoke := url.Values{"token": {tokens["refresh_token"].(string)}, "client_id": {client}}
-	if response := oauthTestRequest(s, "POST", "/oauth2/mcp/revoke", revoke.Encode(), ""); response.Code != 200 {
-		t.Fatal(response.Code)
-	}
-	if _, err = s.verifyJournalMCPToken(t.Context(), tokens["access_token"].(string), nil); err == nil {
-		t.Fatal("revoked access token accepted")
+	for _, registration := range []string{"dynamic", "metadata"} {
+		t.Run(registration, func(t *testing.T) {
+			s := newJournalMCPTestServer(t)
+			var client string
+			if registration == "dynamic" {
+				client = oauthTestClient(t, s)
+			} else {
+				client = "https://client.example/oauth/client.json"
+				// ChatGPT publishes a legacy preference alongside a set of
+				// supported methods. Exercise negotiation through the OAuth routes.
+				metadata := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					if r.URL.Path != "/oauth/client.json" || r.Header.Get("Authorization") != "" || r.Header.Get("Cookie") != "" {
+						t.Error("unexpected metadata request or leaked credentials")
+					}
+					w.Header().Set("Content-Type", "application/json")
+					_, _ = io.WriteString(w, `{"client_id":"https://client.example/oauth/client.json","client_name":"Diary test","redirect_uris":["https://client.example/callback"],"grant_types":["authorization_code","refresh_token"],"response_types":["code"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`)
+				}))
+				t.Cleanup(metadata.Close)
+				endpoint, _ := url.Parse(metadata.URL)
+				s.oauthMetadataClient = &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+					if r.URL.String() != client {
+						t.Fatalf("unexpected metadata URL: %s", r.URL)
+					}
+					request := r.Clone(r.Context())
+					request.URL.Host = endpoint.Host
+					return metadata.Client().Transport.RoundTrip(request)
+				})}
+			}
+			form := oauthTestCode(t, s, client, strings.Repeat("v", 43))
+			for _, field := range []string{"code_verifier", "client_id", "redirect_uri", "resource", "client_secret", "client_assertion", "client_assertion_type"} {
+				original := form.Get(field)
+				form.Set(field, "incorrect")
+				oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 400)
+				form.Set(field, original)
+			}
+			tokens := oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 200)
+			access := tokens["access_token"].(string)
+			refresh := tokens["refresh_token"].(string)
+			info, err := s.verifyJournalMCPToken(t.Context(), access, nil)
+			if err != nil || info.UserID != journalOwnerSubject {
+				t.Fatalf("access token: %v %v", info, err)
+			}
+			if _, err = s.verifyJournalIdentity(t.Context(), access, nil); err == nil {
+				t.Fatal("MCP token granted website access")
+			}
+			if _, err = s.verifyJournalMCPToken(t.Context(), refresh, nil); err == nil {
+				t.Fatal("refresh token accepted as access token")
+			}
+			oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 400)
+			renewal := url.Values{"grant_type": {"refresh_token"}, "refresh_token": {refresh}, "client_id": {client}, "resource": {oauthURL(journalMCPPath)}}
+			fresh := oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, renewal.Encode(), ""), 200)
+			if fresh["refresh_token"] == refresh {
+				t.Fatal("refresh token not rotated")
+			}
+			oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, renewal.Encode(), ""), 400)
+			if _, err = s.verifyJournalMCPToken(t.Context(), fresh["access_token"].(string), nil); err == nil {
+				t.Fatal("refresh replay failed to revoke the grant")
+			}
+			renewal.Set("refresh_token", fresh["refresh_token"].(string))
+			oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, renewal.Encode(), ""), 400)
+			form = oauthTestCode(t, s, client, strings.Repeat("z", 43))
+			tokens = oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, form.Encode(), ""), 200)
+			revoke := url.Values{"token": {tokens["refresh_token"].(string)}, "client_id": {client}}
+			if response := oauthTestRequest(s, "POST", "/oauth2/mcp/revoke", revoke.Encode(), ""); response.Code != 200 {
+				t.Fatal(response.Code)
+			}
+			if _, err = s.verifyJournalMCPToken(t.Context(), tokens["access_token"].(string), nil); err == nil {
+				t.Fatal("revoked access token accepted")
+			}
+		})
 	}
 }
 func TestMCPOAuthDiscoveryAndValidation(t *testing.T) {
@@ -189,6 +220,7 @@ func TestMCPOAuthDiscoveryAndValidation(t *testing.T) {
 		body, _ := json.Marshal(map[string]any{"client_name": "Bad", "redirect_uris": []string{redirect}})
 		oauthTestJSON(t, oauthTestRequest(s, "POST", "/oauth2/register", string(body), ""), 400)
 	}
+	oauthTestJSON(t, oauthTestRequest(s, "POST", "/oauth2/register", `{"client_name":"DCR private client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`, ""), 400)
 	for _, ip := range []string{"127.0.0.1", "::1", "10.1.1.1", "169.254.169.254", "100.100.100.200", "::ffff:127.0.0.1", "64:ff9b::a00:1"} {
 		if oauthPublicIP(netip.MustParseAddr(ip)) {
 			t.Fatalf("private metadata destination accepted: %s", ip)
@@ -213,6 +245,11 @@ func TestMCPOAuthClientMetadata(t *testing.T) {
 		valid      bool
 	}{
 		{"valid", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["http://127.0.0.1:3000/callback"],"token_endpoint_auth_method":"none"}`, true},
+		{"multiple methods", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`, true},
+		{"plural only", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_methods_supported":["private_key_jwt","none"]}`, true},
+		{"private key only", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"private_key_jwt"}`, false},
+		{"no mutual method", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"none","token_endpoint_auth_methods_supported":["private_key_jwt"]}`, false},
+		{"empty methods", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"none","token_endpoint_auth_methods_supported":[]}`, false},
 		{"mismatched identity", `{"client_id":"https://other.example/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"]}`, false},
 		{"missing name", `{"client_id":"https://client.example/oauth/client.json","redirect_uris":["https://client.example/callback"]}`, false},
 		{"invalid redirect", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["http://private.example/callback"]}`, false},
@@ -225,9 +262,12 @@ func TestMCPOAuthClientMetadata(t *testing.T) {
 				}
 				return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(test.body)), Header: make(http.Header)}, nil
 			})}
-			_, err := oauthFetchClientMetadata(t.Context(), id, client)
+			resolved, err := oauthFetchClientMetadata(t.Context(), id, client)
 			if (err == nil) != test.valid {
 				t.Fatalf("metadata validation: %v", err)
+			}
+			if test.valid && resolved.TokenEndpointAuthMethod != "none" {
+				t.Fatalf("negotiated unsupported method: %s", resolved.TokenEndpointAuthMethod)
 			}
 		})
 	}
