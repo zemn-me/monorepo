@@ -1,31 +1,16 @@
-# Testing guidelines
+# Browser integration tests
 
-Integration tests in this directory should mimic real user behaviour: drive the UI through Selenium (clicks, form fills, waits) and observe UI state. Do not set application state by writing directly to storage, dispatching synthetic events, or mutating network responses. If the test needs an auth token, obtain it via the same flow the user experiences (e.g. through the OIDC popup) and only read data that the app itself persisted.
-
-- Group Selenium tests by surface area (e.g. `/admin`, `/grievanceportal`) instead of lumping them into a single file. Shared helpers can live alongside the tests in `*_helpers_test.go`.
-
+- Drive the UI through Selenium and assert visible behaviour. Set up
+  application state through user flows, including the OIDC popup for auth;
+  do not seed storage, dispatch synthetic events, or mutate network
+  responses. Read only data the app itself persisted.
+- Select elements through accessible roles, names, and status indicators
+  (`role`, `aria-label`, `aria-live`). When tests need observable state,
+  expose it usefully in the UI rather than adding test-only attributes,
+  classes, IDs, or globals. Assert that UI state instead of polling internal
+  APIs or databases when the UI can expose it.
+- Group tests by surface (for example, `/admin` or `/grievanceportal`), with
+  shared helpers in `*_helpers_test.go`.
 - The local OIDC provider advertises Google contact scopes for auth-flow
-  compatibility, but its access token is not a Google API token. Gate browser
-  Google API calls on the real Google issuer.
-
-
-## Interacting with the UI
-
-Rather than injecting special classes or IDs, add information that would
-be useful to a screenreader (i.e. ARIA annotations) and select and navigate
-elements by that means.
-
-- Prefer ARIA-compliant hooks (e.g. `role`, `aria-label`, `aria-live`) over
-  `data-testid`/`data-*` selectors so we exercise the accessible surface the
-  user experiences. If you need to expose new state for tests, add a
-  screen-reader-friendly status element instead of a bespoke test attribute.
-
-- End-to-end tests should assert behaviour that is visible in the DOM. Avoid
-  polling internal APIs or databases to “confirm” state when the UI can expose
-  that state through an accessible indicator.
-
-## Extensions to global objects
-
-Do not attempt to use global objects for testing or injecting content into
-tests. You may use `window`, or `globalThis` for debugging, but do not keep
-these in any live test or production code.
+  compatibility, but its access token is not a Google API token. Gate
+  browser Google API calls on the real Google issuer.

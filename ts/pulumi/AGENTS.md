@@ -1,25 +1,30 @@
 # Pulumi notes
 
+Deploy through the PR/merge workflow; CI runs Pulumi with its existing
+credentials. Local Pulumi login is not a prerequisite for preparing changes.
+
+## CI identity and secrets
+
 GitHub Actions secret storage is GCP Secret Manager in `extreme-cycling-441523-a9`; the WIF provider uses project number `845702659200`.
 
 When Pulumi seeds GCP Secret Manager values, prefer `secretDataWo` with `deletionPolicy: "ABANDON"` so secret material is not persisted in state and bootstrap versions survive code removal.
 
-After migration, protect the GCP WIF and Secret Manager resources that CI requires; only leave them unprotected during an explicit rollback window.
+Protect the GCP WIF and Secret Manager resources that CI requires; only leave them unprotected during an explicit rollback window.
 
 The AWS GitHub Actions role is intentionally admin for now, but its trust policy must stay pinned to the Submit workflow on `refs/heads/main` and the Staging workflow on merge-queue refs.
 
 AWS GitHub OIDC trust policies should use AWS-documented GitHub keys like `repository_id`, `workflow`, `ref`, and `sub`; do not copy GCP-only owner claim checks into AWS.
 
-CloudFront Function physical names only allow `[a-zA-Z0-9-_]`; set explicit sanitized names for resources derived from domains.
+## AWS resource names
 
-ECS cluster physical names have the same `[A-Za-z0-9_-]` constraint; use the AWS name sanitizer instead of passing dotted component names through.
-
-Lambda function physical names allow `[A-Za-z0-9_-]` and max 64 chars; set explicit sanitized names for dotted component-derived functions.
+CloudFront Functions, ECS clusters, and Lambda functions require physical
+names using `[A-Za-z0-9_-]`; use the AWS name sanitizer for dotted domain or
+component names. Lambda function names also have a 64-character limit.
 
 Lambda permission statement IDs derive from the logical name unless set; use explicit sanitized `statementId` for dotted component-derived permissions.
 
-Use `route53domains.Domain` to purchase a new domain; `RegisteredDomain` only adopts existing registrations. Reuse `Domain.hostedZoneId` because registration creates and delegates a public zone automatically.
+## Domain registration
 
-Deploy infrastructure through the PR/merge workflow and let CI run Pulumi with its existing credentials. Do not ask for a local Pulumi login to deploy changes.
+Use `route53domains.Domain` to purchase a new domain; `RegisteredDomain` only adopts existing registrations. Reuse `Domain.hostedZoneId` because registration creates and delegates a public zone automatically.
 
 Bootstrap new domain sites under an already delegated staging zone (for example `<site>.staging.zemn.me`), because merge-queue staging runs before production purchases the domain. After registration succeeds, move staging to `staging.<domain>` in the production-owned zone; staging must not own the registration.
