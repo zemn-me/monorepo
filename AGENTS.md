@@ -1,102 +1,65 @@
-# hello robot
+# Repository guidance
 
-This file is for robots... if you learn anything that would be important to
-remember next time, please commit it to an AGENTS.md.
+Keep AGENTS.md notes short, durable, and specific to this repo. Put local
+knowledge in the nearest relevant AGENTS.md; add notes only when they will
+save future work, not as a changelog. Code comments should explain lasting
+intent rather than edit history.
 
-AGENTS.md is NOT a changelog. Do not simply write what you did and note that
-you may not need to update this file at all.
+## Workflow and completion
 
-This file is reserved for short, pithy learnings that will save time in future.
+Use a branch and pull request unless the user explicitly requests a direct
+write to the default branch. This checkout is Sapling-backed: use `sl amend`
+for amendments; `git commit --amend` can leave `.git/sl` pointing at a Git
+node Sapling has not imported.
 
-Code comments should explain durable intent; avoid anchoring them to transient
-previous states that will stop making sense after future edits.
+Carry requested changes through implementation, relevant validation, and
+fixes for failures they cause. Routine local edits and affected checks do
+not need separate approval. Once those checks pass, report the result and
+any remaining blockers; broaden testing when the change or a failure calls
+for it. Publishing, merging, and deploying follow the user's requested scope.
 
-Final note before we get into the good stuff -- use a LOCAL AGENTS.md wherever
-possible. i.e. if the note is relevant to code in ts/pulumi, put the note in
-ts/pulumi/AGENTS.md instead.
+## Build and test
 
-# tools
+- This is a Bazel monorepo. Use the wrappers in `sh/bin` (on `$PATH`);
+  `bazel` maps to `./sh/bin/bazel`. Pass absolute file paths such as
+  `$(pwd)/path/to/file` to tools launched through Bazel.
+- Run `./sh/bin/gazelle` to update BUILD metadata before submitting.
+  Prefer narrow Gazelle directives or explicit BUILD metadata over
+  `# gazelle:ignore` for new code.
+- Validate affected packages with `bazel test //path/to/changes/...`.
+  Use `bazel query` to select narrower relevant targets when needed;
+  let slow Bazel runs finish or time out naturally.
+- For features, prefer integration tests of user-visible behaviour.
+  Types can cover invariants they enforce. Observe the DOM, network, or
+  existing APIs instead of adding custom `window.*` globals for tests.
+- For background test services, use `rules_itest` and `inject_iservice` with
+  auto-assigned ports from `ASSIGNED_PORTS` (for example, a struct field
+  tagged `json:"@@//path:service"`), not hard-coded addresses.
 
-this is a bazel monorepo. `bazel` is provided in `$PATH`. It maps to
-./sh/bin/bazel. There are many tools in ./sh/bin that can be used and they are
-all added to $PATH.
+## Dependency and tooling changes
 
-Do not write directly to the default branch as a first resort. Create a branch
-and use a pull request unless the user explicitly requests a direct write.
+- When changing `MODULE.bazel`, run `./sh/bin/bazel test //:bazel_lint`
+  and fix buildifier output.
+- When bumping `GO_VERSION`, keep `golang.org/x/tools/gopls` compatible;
+  stale `x/tools/internal/tokeninternal` can fail on Go's private
+  `go/token.FileSet` layout.
+- Keep TypeScript 7 as the canonical `typescript` package. Legacy compiler
+  API consumers (currently Pulumi) need a package-local TypeScript 5 peer
+  via pnpm `packageExtensions`.
+- For Renovate-managed `http_archive` checksums, put `# auto-integrity`
+  immediately before `url`/`urls` so post-upgrade refreshes the checksum.
+  Use immutable archive URLs; for FFmpeg binaries, pin BtbN dated monthly
+  autobuild tags because their last monthly build is retained.
+- For Biome safe lint fixes and import sorting, run
+  `./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
 
-This checkout is Sapling-backed; use `sl amend` for amendments. Raw
-`git commit --amend` can leave `.git/sl` pointing at a Git node Sapling has not
-imported.
+## Code boundaries
 
-A lot of your tools are run through bazel and therefore get confused by
-relative paths. Please use `$(pwd)/path/to/file` to get a relative path!
-
-please run gazelle also! Or the presubmit will fail.
-
-Avoid `# gazelle:ignore` for new code wherever possible; teach Gazelle about
-the package with narrower directives or explicit BUILD metadata instead.
-
-When bumping `GO_VERSION`, keep `golang.org/x/tools/gopls` compatible with
-that Go release; stale `x/tools/internal/tokeninternal` code can fail on Go's
-private `go/token.FileSet` layout.
-
-Keep TypeScript 7 as the canonical `typescript` package. Packages that still
-load the legacy compiler API (currently Pulumi) need a package-local TypeScript
-5 peer via pnpm `packageExtensions`; do not downgrade the root.
-
-For Biome lint safe fixes, including import sorting, run
-`./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
-
-Renovate-managed `http_archive` checksums are refreshed by post-upgrade only
-when `# auto-integrity` sits immediately before the `url`/`urls` line.
-
-Avoid mutable archive URLs such as `latest` tags or moving release aliases;
-Bazel needs a stable integrity/hash for repository rules. For FFmpeg binary
-archives, pin BtbN dated monthly autobuild tags because their last monthly
-build is retained.
-
-After touching `MODULE.bazel`, run `./sh/bin/bazel test //:bazel_lint` and fix
-the buildifier output.
-
-For timezone-aware TypeScript calendar math, use `Temporal.ZonedDateTime`
-from `temporal-polyfill`; do not hand-roll offset or `Intl.formatToParts`
-arithmetic.
-
-# rules_itest services
-
-When adding background processes for integration tests, define them with
-`rules_itest` so ports are auto-assigned. Reference service ports via
-`ASSIGNED_PORTS` (e.g. struct fields tagged with `json:"@@//path:service"`),
-and avoid hard-coding addresses—`rules_itest` and `inject_iservice` handle
-plumbing.
-
-# tests
-
-don't forget to write tests! But where it's ergonomic consider that you
-may be able to set the types in your code such that they validate those
-conditions without ever having to do a test! yippee!
-
-Changes must be tested via bazel test path/to/your/changes/...
-
-Bazel WILL take a long time! please don't interrupt the process! let it time
-out naturally...
-
-If your tests take too long, you can use `bazel query` to pick a more specific
-set of tests!
-
-- For *features*, prefer integration tests over all other tests. In that sense,
-always test the feature works as intended rather than the *code* works as
-intended.
-
-- Avoid introducing or relying on custom `window.*` globals to communicate
-  state to tests; prefer observing behaviour through the DOM, network
-  responses, or existing APIs instead.
-
-
-# generated files
-
-do not commit generated files! those files should be generated by bazel!!
-
-`//:base_defs` generates `.d.ts` types for CSS modules, so don't commit those.
-
-- Projects (code under `project/`) should not import each other unless the logic is semantically specific to that project (e.g. shared `zemn.me` API client code can live in `project/me/zemn`); broadly reusable logic like 3D rendering should live in `ts/...` (or another language-appropriate shared root).
+- Bazel generates outputs; do not commit generated files. `//:base_defs`
+  generates CSS module `.d.ts` types.
+- Code under `project/` should not import another project unless the logic
+  is specific to that project (for example, the shared zemn.me API client).
+  Put broadly reusable code in `ts/...` or another shared language root.
+- For timezone-aware TypeScript calendar math, use `Temporal.ZonedDateTime`
+  from `temporal-polyfill` rather than custom offset or `Intl.formatToParts`
+  arithmetic.
