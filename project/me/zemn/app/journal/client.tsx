@@ -485,15 +485,33 @@ function useJournalPlayback(
 
 const citationReferencePattern = /\[\^([0-9]+)\]/g;
 
-interface SummaryCitationLink {
-	readonly citation: JournalCitation;
-	readonly href: string;
-	readonly label: string;
-	readonly number: number;
-	readonly quote: string;
-	readonly referenceID: string;
-	readonly title: string;
+/** Derived citation presentation data never enters the API or persisted query cache. */
+type SummaryCitationLink = <R>(
+	use: (
+		citation: JournalCitation,
+		href: string,
+		label: string,
+		number: number,
+		quote: string,
+		referenceID: string,
+		title: string
+	) => R
+) => R;
+
+function summaryCitationLink(
+	citation: JournalCitation,
+	href: string,
+	label: string,
+	number: number,
+	quote: string,
+	referenceID: string,
+	title: string
+): SummaryCitationLink {
+	return use => use(citation, href, label, number, quote, referenceID, title);
 }
+
+const citationNumber = (link: SummaryCitationLink) =>
+	link((_citation, _href, _label, number) => number);
 
 function SummaryBlock({
 	block,
@@ -517,7 +535,7 @@ function SummaryBlock({
 				const link = links[index];
 				if (!link) return reference;
 				referenced.add(index);
-				return `[${link.number}](${markdownHref(index)})`;
+				return `[${citationNumber(link)}](${markdownHref(index)})`;
 			}
 		);
 		const missingIndexes = links
@@ -526,7 +544,8 @@ function SummaryBlock({
 		if (missingIndexes.length > 0) {
 			renderedMarkdown += ` ${missingIndexes
 				.map(
-					index => `[${links[index]?.number}](${markdownHref(index)})`
+					index =>
+						`[${citationNumber(links[index]!)}](${markdownHref(index)})`
 				)
 				.join('')}`;
 		}
@@ -549,32 +568,33 @@ function SummaryBlock({
 				const resolved = href ? linksByHref.get(href) : undefined;
 				if (!resolved) return <a href={href}>{children}</a>;
 				const { citationID, link } = resolved;
-				const { citation } = link;
-				return (
-					<sup className={style.citation}>
-						<a
-							aria-label={`Play source at ${link.label}`}
-							data-citation-entry-id={citation.entryId}
-							data-citation-segment-id={citation.segmentId}
-							data-footnote-ref=""
-							data-footnote-target={link.referenceID}
-							href={link.href}
-							id={citationID}
-							onClick={event => {
-								if (followsLinkNormally(event)) return;
-								if (
-									playback.playSegment(
-										citation.entryId,
-										citation.segmentId
-									)
-								) {
-									event.preventDefault();
-								}
-							}}
-						>
-							[{children}]
-						</a>
-					</sup>
+				return link(
+					(citation, href, label, _number, _quote, referenceID) => (
+						<sup className={style.citation}>
+							<a
+								aria-label={`Play source at ${label}`}
+								data-citation-entry-id={citation.entryId}
+								data-citation-segment-id={citation.segmentId}
+								data-footnote-ref=""
+								data-footnote-target={referenceID}
+								href={href}
+								id={citationID}
+								onClick={event => {
+									if (followsLinkNormally(event)) return;
+									if (
+										playback.playSegment(
+											citation.entryId,
+											citation.segmentId
+										)
+									) {
+										event.preventDefault();
+									}
+								}}
+							>
+								[{children}]
+							</a>
+						</sup>
+					)
 				);
 			},
 		}),
@@ -619,26 +639,25 @@ function SummaryCardView({
 				(blockCitationIDs[blockIndex] ??= []).push(citationID);
 				const existing = linksByCitation.get(key);
 				if (existing) return existing;
-				const link: SummaryCitationLink = {
+				const link = summaryCitationLink(
 					citation,
-					href: playback.hrefForSegment(
+					playback.hrefForSegment(
 						citation.entryId,
 						citation.segmentId
 					),
-					label: playback.labelForSegment(
+					playback.labelForSegment(
 						citation.entryId,
 						citation.segmentId
 					),
-					number: linksByCitation.size + 1,
-					quote:
-						citation.quote ||
+					linksByCitation.size + 1,
+					citation.quote ||
 						playback.quoteForSegment(
 							citation.entryId,
 							citation.segmentId
 						),
-					referenceID: `${prefix}-${linksByCitation.size + 1}`,
-					title: playback.titleForEntry(citation.entryId),
-				};
+					`${prefix}-${linksByCitation.size + 1}`,
+					playback.titleForEntry(citation.entryId)
+				);
 				linksByCitation.set(key, link);
 				return link;
 			})
@@ -680,21 +699,33 @@ function SummaryCardView({
 					playback={playback}
 				/>
 			))}
-			{links.map(link => (
-				<span
-					data-journal-citation-source={link.number}
-					hidden
-					id={link.referenceID}
-					key={journalCitationKey(link.citation)}
-				>
-					{link.title && (
-						<>
-							<cite>{link.title}</cite>.{' '}
-						</>
-					)}
-					“{link.quote}” <a href={link.href}>{link.label}</a>
-				</span>
-			))}
+			{links.map(link =>
+				link(
+					(
+						citation,
+						href,
+						label,
+						number,
+						quote,
+						referenceID,
+						title
+					) => (
+						<span
+							data-journal-citation-source={number}
+							hidden
+							id={referenceID}
+							key={journalCitationKey(citation)}
+						>
+							{title && (
+								<>
+									<cite>{title}</cite>.{' '}
+								</>
+							)}
+							“{quote}” <a href={href}>{label}</a>
+						</span>
+					)
+				)
+			)}
 			<FootnotePreviews root={article} />
 		</article>
 	);
@@ -1433,17 +1464,43 @@ type JournalSelection = Partial<
 >;
 type AggregatePeriod = Exclude<JournalSummary['period'], 'entry' | 'journal'>;
 
-interface JournalPeriodNode {
-	readonly end: string;
-	readonly id: string;
-	readonly period: AggregatePeriod;
-	readonly start: string;
-	readonly summary?: JournalSummary;
+/** A derived view of a period; API summaries retain their serializable shape. */
+type JournalPeriodNode = <R>(
+	use: (
+		start: string,
+		end: string,
+		id: string,
+		period: AggregatePeriod,
+		summary: JournalSummary | undefined
+	) => R
+) => R;
+
+function journalPeriodNode(
+	start: string,
+	end: string,
+	id: string,
+	period: AggregatePeriod,
+	summary?: JournalSummary
+): JournalPeriodNode {
+	return use => use(start, end, id, period, summary);
+}
+
+const periodStart = (node: JournalPeriodNode) => node(start => start);
+const periodEnd = (node: JournalPeriodNode) => node((_start, end) => end);
+const periodID = (node: JournalPeriodNode) => node((_start, _end, id) => id);
+
+function periodNodeDate(node: JournalPeriodNode) {
+	return node((start, end, _id, period) => (
+		<PeriodDate summary={{ start, end, period }} />
+	));
 }
 
 function periodContains(period: JournalPeriodNode, timestamp: string) {
 	const value = Date.parse(timestamp);
-	return value >= Date.parse(period.start) && value < Date.parse(period.end);
+	return (
+		value >= Date.parse(periodStart(period)) &&
+		value < Date.parse(periodEnd(period))
+	);
 }
 
 function periodBounds(entry: JournalEntry, period: AggregatePeriod) {
@@ -1492,27 +1549,33 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 		}
 		const bounds = periodBounds(entry, period);
 		const start = Date.parse(bounds.start);
-		nodes.set(start, {
-			...bounds,
-			id: `${period}:${bounds.start}`,
-			period,
-		});
+		nodes.set(
+			start,
+			journalPeriodNode(
+				bounds.start,
+				bounds.end,
+				`${period}:${bounds.start}`,
+				period
+			)
+		);
 	}
 	for (const summary of journal.summaries) {
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
-		nodes.set(start, {
-			end: summary.end,
-			id: summary.id,
-			period,
-			start: summary.start,
-			summary,
-			...(!existing ? {} : { end: existing.end, start: existing.start }),
-		});
+		nodes.set(
+			start,
+			journalPeriodNode(
+				existing ? periodStart(existing) : summary.start,
+				existing ? periodEnd(existing) : summary.end,
+				summary.id,
+				period,
+				summary
+			)
+		);
 	}
 	return [...nodes.values()].sort(
-		(a, b) => Date.parse(b.start) - Date.parse(a.start)
+		(a, b) => Date.parse(periodStart(b)) - Date.parse(periodStart(a))
 	);
 }
 
@@ -1538,7 +1601,7 @@ function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
 
 function periodMidpoint(period: JournalPeriodNode) {
 	return new Date(
-		(Date.parse(period.start) + Date.parse(period.end)) / 2
+		(Date.parse(periodStart(period)) + Date.parse(periodEnd(period))) / 2
 	).toISOString();
 }
 
@@ -1560,19 +1623,17 @@ function PeriodDisclosure({
 		if (initiallyOpen) setOpen(true);
 	}, [initiallyOpen]);
 
-	return (
+	return node((_start, _end, _id, period, summary) => (
 		<details
 			className={style.periodDisclosure}
-			data-journal-period-disclosure={node.period}
+			data-journal-period-disclosure={period}
 			onToggle={event => setOpen(event.currentTarget.open)}
 			open={open}
 		>
 			<summary>
-				<span className={style.periodDate}>
-					<PeriodDate summary={node} />
-				</span>
+				<span className={style.periodDate}>{periodNodeDate(node)}</span>
 				<strong className={style.periodTitle}>
-					{node.summary?.title ?? 'Summary in progress…'}
+					{summary?.title ?? 'Summary in progress…'}
 				</strong>
 				<FontAwesomeIcon
 					aria-hidden="true"
@@ -1581,12 +1642,12 @@ function PeriodDisclosure({
 				/>
 			</summary>
 			<div className={style.periodDisclosureBody}>
-				{node.summary && (
+				{summary && (
 					<SummaryCard
 						playback={playback}
 						showPeriod={false}
 						showTitle={false}
-						summary={node.summary}
+						summary={summary}
 					/>
 				)}
 				{children.length > 0 && (
@@ -1594,34 +1655,36 @@ function PeriodDisclosure({
 						aria-label={`Browse ${nextRoute}s`}
 						className={style.periodChildren}
 					>
-						{children.map(child => (
-							<li key={child.id}>
-								<Link
-									data-journal-period-link={nextRoute}
-									href={journalHref(nextRoute, {
-										at: periodMidpoint(child),
-									})}
-								>
-									<span className={style.periodChildDate}>
-										<PeriodDate summary={child} />
-									</span>
-									<strong>
-										{child.summary?.title ??
-											'Summary in progress…'}
-									</strong>
-									<FontAwesomeIcon
-										aria-hidden="true"
-										className={style.periodChildChevron}
-										icon={faChevronDown}
-									/>
-								</Link>
-							</li>
-						))}
+						{children.map(child =>
+							child((_start, _end, id, _period, summary) => (
+								<li key={id}>
+									<Link
+										data-journal-period-link={nextRoute}
+										href={journalHref(nextRoute, {
+											at: periodMidpoint(child),
+										})}
+									>
+										<span className={style.periodChildDate}>
+											{periodNodeDate(child)}
+										</span>
+										<strong>
+											{summary?.title ??
+												'Summary in progress…'}
+										</strong>
+										<FontAwesomeIcon
+											aria-hidden="true"
+											className={style.periodChildChevron}
+											icon={faChevronDown}
+										/>
+									</Link>
+								</li>
+							))
+						)}
 					</ol>
 				)}
 			</div>
 		</details>
-	);
+	));
 }
 
 function citationDestination(journal: Journal, entryID: string) {
@@ -1781,22 +1844,28 @@ function PeriodList({
 		const frame = window.requestAnimationFrame(() => {
 			const element = listRef.current?.querySelector<HTMLElement>(
 				`[data-journal-period-start="${CSS.escape(
-					containingPeriod(journal, period, focusRef.current)
-						?.start ?? fallbackPeriod.start
+					containingPeriod(
+						journal,
+						period,
+						focusRef.current
+					)?.(start => start) ?? periodStart(fallbackPeriod)
 				)}"]`
 			);
 			if (!element) return;
 			const node = periods.find(
 				candidate =>
-					candidate.start === element.dataset.journalPeriodStart
+					periodStart(candidate) ===
+					element.dataset.journalPeriodStart
 			);
 			if (!node) return;
-			const duration = Date.parse(node.end) - Date.parse(node.start);
+			const duration =
+				Date.parse(periodEnd(node)) - Date.parse(periodStart(node));
 			const fraction = Math.max(
 				0,
 				Math.min(
 					1,
-					(Date.parse(focusRef.current) - Date.parse(node.start)) /
+					(Date.parse(focusRef.current) -
+						Date.parse(periodStart(node))) /
 						duration
 				)
 			);
@@ -1843,7 +1912,8 @@ function PeriodList({
 			});
 			const node = periods.find(
 				candidate =>
-					candidate.start === element.dataset.journalPeriodStart
+					periodStart(candidate) ===
+					element.dataset.journalPeriodStart
 			);
 			if (!node) return;
 			const bounds = element.getBoundingClientRect();
@@ -1852,8 +1922,10 @@ function PeriodList({
 				Math.min(1, (viewportMiddle - bounds.top) / bounds.height)
 			);
 			const timestamp = new Date(
-				Date.parse(node.start) +
-					(Date.parse(node.end) - Date.parse(node.start)) * fraction
+				Date.parse(periodStart(node)) +
+					(Date.parse(periodEnd(node)) -
+						Date.parse(periodStart(node))) *
+						fraction
 			).toISOString();
 			if (timestamp !== focusRef.current) {
 				focusRef.current = timestamp;
@@ -1881,52 +1953,57 @@ function PeriodList({
 			className={`${style.periodList} ${nextRoute ? style.periodOverviewList : ''}`}
 			ref={listRef}
 		>
-			{periods.map(node => (
-				<section
-					className={style.period}
-					data-journal-period-start={node.start}
-					key={node.id}
-				>
-					{nextRoute ? (
-						<PeriodDisclosure
-							children={childPeriodsFor(childPeriods, node)}
-							initiallyOpen={periodContains(node, focus)}
-							nextRoute={nextRoute}
-							node={node}
-							playback={playback}
-						/>
-					) : (
-						<>
-							<h3>
-								<PeriodDate summary={node} />
-							</h3>
-							{node.summary && (
-								<SummaryCard
-									playback={playback}
-									showPeriod={false}
-									summary={node.summary}
-								/>
-							)}
-						</>
-					)}
-					{period === 'day' &&
-						journal.entries
-							.filter(
-								entry =>
-									entry.status === 'ready' &&
-									periodContains(node, entry.recordedAt)
-							)
-							.map(entry => (
-								<EntryCard
-									deleteEntry={deleteEntry}
-									entry={entry}
-									key={entry.id}
-									playback={playback}
-									updateEntryDate={updateEntryDate}
-								/>
-							))}
-				</section>
-			))}
+			{periods.map(node =>
+				node((start, _end, id, _period, summary) => (
+					<section
+						className={style.period}
+						data-journal-period-start={start}
+						key={id}
+					>
+						{nextRoute ? (
+							<PeriodDisclosure
+								children={childPeriodsFor(
+									childPeriods,
+									node,
+									periodStart,
+									periodEnd
+								)}
+								initiallyOpen={periodContains(node, focus)}
+								nextRoute={nextRoute}
+								node={node}
+								playback={playback}
+							/>
+						) : (
+							<>
+								<h3>{periodNodeDate(node)}</h3>
+								{summary && (
+									<SummaryCard
+										playback={playback}
+										showPeriod={false}
+										summary={summary}
+									/>
+								)}
+							</>
+						)}
+						{period === 'day' &&
+							journal.entries
+								.filter(
+									entry =>
+										entry.status === 'ready' &&
+										periodContains(node, entry.recordedAt)
+								)
+								.map(entry => (
+									<EntryCard
+										deleteEntry={deleteEntry}
+										entry={entry}
+										key={entry.id}
+										playback={playback}
+										updateEntryDate={updateEntryDate}
+									/>
+								))}
+					</section>
+				))
+			)}
 		</div>
 	);
 }
@@ -2010,10 +2087,10 @@ function JournalBrowser({
 	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
 		.map(period =>
 			periodsFor(journal, period).find(
-				node => node.id === rawSelection[period]
+				node => periodID(node) === rawSelection[period]
 			)
 		)
-		.find(node => node !== undefined)?.start;
+		.find(node => node !== undefined)?.(start => start);
 	const newestEntry = journal.entries
 		.filter(entry => entry.status !== 'failed')
 		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))[0];
