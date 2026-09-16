@@ -51,16 +51,29 @@ const HALF_HOUR_MARKS = minuteMarks(30);
 
 type LocaleList = readonly [string, ...string[]];
 
-interface DayRange {
-	readonly endsAt: Temporal.ZonedDateTime;
-	readonly key: string;
-	readonly dateLabel: ReactElement;
-	readonly startsAt: Temporal.ZonedDateTime;
-	readonly weekdayLabel: string;
-}
+/** Calendar view data stays inside the client, including its React labels. */
+type DayRange = <R>(
+	use: (
+		startsAt: Temporal.ZonedDateTime,
+		endsAt: Temporal.ZonedDateTime,
+		key: string,
+		dateLabel: ReactElement,
+		weekdayLabel: string
+	) => R
+) => R;
 
-interface DayBucket extends DayRange {
-	readonly events: readonly CalendarEvent[];
+type DayBucket = <R>(
+	use: (day: DayRange, events: readonly CalendarEvent[]) => R
+) => R;
+
+function dayRange(
+	startsAt: Temporal.ZonedDateTime,
+	endsAt: Temporal.ZonedDateTime,
+	key: string,
+	dateLabel: ReactElement,
+	weekdayLabel: string
+): DayRange {
+	return use => use(startsAt, endsAt, key, dateLabel, weekdayLabel);
 }
 
 function resolvedTimeZone() {
@@ -182,17 +195,17 @@ function visibleDayRanges(
 		const endsAt = startsAt.add({ days: 1 });
 		const startsAtDate = toDate(startsAt);
 
-		return {
-			dateLabel: formatDatePartsWithOrdinalDay(
+		return dayRange(
+			startsAt,
+			endsAt,
+			formatKey.format(startsAtDate),
+			formatDatePartsWithOrdinalDay(
 				formatDate.formatToParts(startsAtDate),
 				locale,
 				localeName
 			),
-			endsAt,
-			key: formatKey.format(startsAtDate),
-			startsAt,
-			weekdayLabel: formatWeekday.format(startsAtDate),
-		};
+			formatWeekday.format(startsAtDate)
+		);
 	});
 }
 
@@ -200,14 +213,16 @@ function bucketBusyEvents(
 	events: readonly CalendarEvent[],
 	days: readonly DayRange[]
 ): readonly DayBucket[] {
-	return days.map(day => ({
-		...day,
-		events: busyEventsForRange(
-			events,
-			toDate(day.startsAt),
-			toDate(day.endsAt)
-		),
-	}));
+	return days.map(day =>
+		day((startsAt, endsAt) => {
+			const eventsForDay = busyEventsForRange(
+				events,
+				toDate(startsAt),
+				toDate(endsAt)
+			);
+			return use => use(day, eventsForDay);
+		})
+	);
 }
 
 function timeMarkStyle(
@@ -227,14 +242,16 @@ function eventMinuteOfDay(
 	timeZone: string,
 	boundary: 'start' | 'end'
 ) {
-	const epochMilliseconds = date.getTime();
-	const dayStart = day.startsAt.epochMilliseconds;
-	const dayEnd = day.endsAt.epochMilliseconds;
-	if (epochMilliseconds <= dayStart) return 0;
-	if (epochMilliseconds >= dayEnd) return MINUTES_PER_DAY;
+	return day((startsAt, endsAt) => {
+		const epochMilliseconds = date.getTime();
+		const dayStart = startsAt.epochMilliseconds;
+		const dayEnd = endsAt.epochMilliseconds;
+		if (epochMilliseconds <= dayStart) return 0;
+		if (epochMilliseconds >= dayEnd) return MINUTES_PER_DAY;
 
-	const minute = viewMinuteOfDay(toZonedDateTime(date, timeZone));
-	return boundary === 'end' && minute === 0 ? MINUTES_PER_DAY : minute;
+		const minute = viewMinuteOfDay(toZonedDateTime(date, timeZone));
+		return boundary === 'end' && minute === 0 ? MINUTES_PER_DAY : minute;
+	});
 }
 
 function eventStyle(
@@ -331,7 +348,10 @@ export function AvailabilityClient() {
 		[events, days]
 	);
 	const rulerLabels = useMemo(
-		() => (days[0] ? hourLabels(days[0].startsAt, formatTime) : []),
+		() =>
+			days[0]
+				? days[0](startsAt => hourLabels(startsAt, formatTime))
+				: [],
 		[days, formatTime]
 	);
 	const currentTimeMinute = now ? viewMinuteOfDay(now) : undefined;
@@ -376,21 +396,36 @@ export function AvailabilityClient() {
 						style={CALENDAR_GRID_STYLE}
 					>
 						<div className={style.rulerHeader} aria-hidden="true" />
-						{dayBuckets.map((day, index) => (
-							<header
-								className={style.dayHeader}
-								key={day.key}
-								style={{
-									gridColumn: FIRST_DAY_COLUMN + index,
-									gridRow: '1 / 3',
-								}}
-							>
-								<span>{day.weekdayLabel}</span>
-								<span className={style.dayHeaderDate}>
-									{day.dateLabel}
-								</span>
-							</header>
-						))}
+						{dayBuckets.map((bucket, index) =>
+							bucket(day =>
+								day(
+									(
+										_startsAt,
+										_endsAt,
+										key,
+										dateLabel,
+										weekdayLabel
+									) => (
+										<header
+											className={style.dayHeader}
+											key={key}
+											style={{
+												gridColumn:
+													FIRST_DAY_COLUMN + index,
+												gridRow: '1 / 3',
+											}}
+										>
+											<span>{weekdayLabel}</span>
+											<span
+												className={style.dayHeaderDate}
+											>
+												{dateLabel}
+											</span>
+										</header>
+									)
+								)
+							)
+						)}
 						<div
 							className={style.rulerLane}
 							aria-hidden="true"
@@ -399,17 +434,22 @@ export function AvailabilityClient() {
 								gridRow: FULL_DAY_ROWS,
 							}}
 						/>
-						{dayBuckets.map((day, index) => (
-							<div
-								className={style.dayLane}
-								aria-hidden="true"
-								key={`${day.key}-lane`}
-								style={{
-									gridColumn: FIRST_DAY_COLUMN + index,
-									gridRow: FULL_DAY_ROWS,
-								}}
-							/>
-						))}
+						{dayBuckets.map((bucket, index) =>
+							bucket(day =>
+								day((_startsAt, _endsAt, key) => (
+									<div
+										className={style.dayLane}
+										aria-hidden="true"
+										key={`${key}-lane`}
+										style={{
+											gridColumn:
+												FIRST_DAY_COLUMN + index,
+											gridRow: FULL_DAY_ROWS,
+										}}
+									/>
+								))
+							)
+						)}
 						{HOUR_MARKS.map(minute => (
 							<div
 								className={style.dayHourLine}
@@ -453,17 +493,21 @@ export function AvailabilityClient() {
 						{currentTimeMinute === undefined ? null : (
 							<CurrentTimeMarker minute={currentTimeMinute} />
 						)}
-						{dayBuckets.map((day, index) =>
-							day.events.map((event, i) => (
-								<BusyEvent
-									column={FIRST_DAY_COLUMN + index}
-									day={day}
-									event={event}
-									formatTime={formatTime}
-									key={`${day.key}-${event.startsAt.toISOString()}-${i}`}
-									timeZone={timeZone}
-								/>
-							))
+						{dayBuckets.map((bucket, index) =>
+							bucket((day, events) =>
+								day((_startsAt, _endsAt, key) =>
+									events.map((event, i) => (
+										<BusyEvent
+											column={FIRST_DAY_COLUMN + index}
+											day={day}
+											event={event}
+											formatTime={formatTime}
+											key={`${key}-${event.startsAt.toISOString()}-${i}`}
+											timeZone={timeZone}
+										/>
+									))
+								)
+							)
 						)}
 					</section>
 				</div>
