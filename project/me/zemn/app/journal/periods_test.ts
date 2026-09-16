@@ -1,6 +1,21 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
+import { childPeriodsFor as selectChildPeriods } from '#root/project/me/zemn/app/journal/periods.js';
+
+function childPeriodsFor<
+	T extends { readonly start: string; readonly end: string },
+>(
+	periods: readonly T[],
+	parent: { readonly start: string; readonly end: string }
+) {
+	// Preserve child identities even when the parent has no child-specific fields.
+	return selectChildPeriods<T | typeof parent>(
+		periods,
+		parent,
+		p => p.start,
+		p => p.end
+	);
+}
 
 const september = {
 	start: '2026-09-01T00:00:00-07:00',
@@ -60,8 +75,29 @@ describe('journal child periods', () => {
 			start: '2026-09-14T00:00:00-07:00',
 			end: '2026-09-21T00:00:00-07:00',
 		};
-		const result = childPeriodsFor([lastWeek, middleWeek, firstWeek], september);
+		const result = childPeriodsFor(
+			[lastWeek, middleWeek, firstWeek],
+			september
+		);
 		expect(result).toEqual([lastWeek, middleWeek, firstWeek]);
 		expect(result[0]).toBe(lastWeek);
 	});
+});
+
+test('selects overlapping Church-encoded periods without rebuilding their values', () => {
+	const range =
+		(start: string, end: string) =>
+		<R>(use: (start: string, end: string) => R) =>
+			use(start, end);
+	const parent = range(september.start, september.end);
+	const child = range(firstWeek.start, firstWeek.end);
+	const touching = range(september.end, '2026-10-02T00:00:00-07:00');
+	const selected = selectChildPeriods(
+		[child, touching],
+		parent,
+		p => p(start => start),
+		p => p((_start, end) => end)
+	);
+	expect(selected).toEqual([child]);
+	expect(selected[0]).toBe(child);
 });
