@@ -485,15 +485,33 @@ function useJournalPlayback(
 
 const citationReferencePattern = /\[\^([0-9]+)\]/g;
 
-interface SummaryCitationLink {
-	readonly citation: JournalCitation;
-	readonly href: string;
-	readonly label: string;
-	readonly number: number;
-	readonly quote: string;
-	readonly referenceID: string;
-	readonly title: string;
+/** Derived citation presentation data never enters the API or persisted query cache. */
+type SummaryCitationLink = <R>(
+	use: (
+		citation: JournalCitation,
+		href: string,
+		label: string,
+		number: number,
+		quote: string,
+		referenceID: string,
+		title: string
+	) => R
+) => R;
+
+function summaryCitationLink(
+	citation: JournalCitation,
+	href: string,
+	label: string,
+	number: number,
+	quote: string,
+	referenceID: string,
+	title: string
+): SummaryCitationLink {
+	return use => use(citation, href, label, number, quote, referenceID, title);
 }
+
+const citationNumber = (link: SummaryCitationLink) =>
+	link((_citation, _href, _label, number) => number);
 
 function SummaryBlock({
 	block,
@@ -517,7 +535,7 @@ function SummaryBlock({
 				const link = links[index];
 				if (!link) return reference;
 				referenced.add(index);
-				return `[${link.number}](${markdownHref(index)})`;
+				return `[${citationNumber(link)}](${markdownHref(index)})`;
 			}
 		);
 		const missingIndexes = links
@@ -526,7 +544,8 @@ function SummaryBlock({
 		if (missingIndexes.length > 0) {
 			renderedMarkdown += ` ${missingIndexes
 				.map(
-					index => `[${links[index]?.number}](${markdownHref(index)})`
+					index =>
+						`[${citationNumber(links[index]!)}](${markdownHref(index)})`
 				)
 				.join('')}`;
 		}
@@ -549,32 +568,33 @@ function SummaryBlock({
 				const resolved = href ? linksByHref.get(href) : undefined;
 				if (!resolved) return <a href={href}>{children}</a>;
 				const { citationID, link } = resolved;
-				const { citation } = link;
-				return (
-					<sup className={style.citation}>
-						<a
-							aria-label={`Play source at ${link.label}`}
-							data-citation-entry-id={citation.entryId}
-							data-citation-segment-id={citation.segmentId}
-							data-footnote-ref=""
-							data-footnote-target={link.referenceID}
-							href={link.href}
-							id={citationID}
-							onClick={event => {
-								if (followsLinkNormally(event)) return;
-								if (
-									playback.playSegment(
-										citation.entryId,
-										citation.segmentId
-									)
-								) {
-									event.preventDefault();
-								}
-							}}
-						>
-							[{children}]
-						</a>
-					</sup>
+				return link(
+					(citation, href, label, _number, _quote, referenceID) => (
+						<sup className={style.citation}>
+							<a
+								aria-label={`Play source at ${label}`}
+								data-citation-entry-id={citation.entryId}
+								data-citation-segment-id={citation.segmentId}
+								data-footnote-ref=""
+								data-footnote-target={referenceID}
+								href={href}
+								id={citationID}
+								onClick={event => {
+									if (followsLinkNormally(event)) return;
+									if (
+										playback.playSegment(
+											citation.entryId,
+											citation.segmentId
+										)
+									) {
+										event.preventDefault();
+									}
+								}}
+							>
+								[{children}]
+							</a>
+						</sup>
+					)
 				);
 			},
 		}),
@@ -619,26 +639,25 @@ function SummaryCardView({
 				(blockCitationIDs[blockIndex] ??= []).push(citationID);
 				const existing = linksByCitation.get(key);
 				if (existing) return existing;
-				const link: SummaryCitationLink = {
+				const link = summaryCitationLink(
 					citation,
-					href: playback.hrefForSegment(
+					playback.hrefForSegment(
 						citation.entryId,
 						citation.segmentId
 					),
-					label: playback.labelForSegment(
+					playback.labelForSegment(
 						citation.entryId,
 						citation.segmentId
 					),
-					number: linksByCitation.size + 1,
-					quote:
-						citation.quote ||
+					linksByCitation.size + 1,
+					citation.quote ||
 						playback.quoteForSegment(
 							citation.entryId,
 							citation.segmentId
 						),
-					referenceID: `${prefix}-${linksByCitation.size + 1}`,
-					title: playback.titleForEntry(citation.entryId),
-				};
+					`${prefix}-${linksByCitation.size + 1}`,
+					playback.titleForEntry(citation.entryId)
+				);
 				linksByCitation.set(key, link);
 				return link;
 			})
@@ -680,21 +699,33 @@ function SummaryCardView({
 					playback={playback}
 				/>
 			))}
-			{links.map(link => (
-				<span
-					data-journal-citation-source={link.number}
-					hidden
-					id={link.referenceID}
-					key={journalCitationKey(link.citation)}
-				>
-					{link.title && (
-						<>
-							<cite>{link.title}</cite>.{' '}
-						</>
-					)}
-					“{link.quote}” <a href={link.href}>{link.label}</a>
-				</span>
-			))}
+			{links.map(link =>
+				link(
+					(
+						citation,
+						href,
+						label,
+						number,
+						quote,
+						referenceID,
+						title
+					) => (
+						<span
+							data-journal-citation-source={number}
+							hidden
+							id={referenceID}
+							key={journalCitationKey(citation)}
+						>
+							{title && (
+								<>
+									<cite>{title}</cite>.{' '}
+								</>
+							)}
+							“{quote}” <a href={href}>{label}</a>
+						</span>
+					)
+				)
+			)}
 			<FootnotePreviews root={article} />
 		</article>
 	);
