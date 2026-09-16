@@ -43,17 +43,6 @@ export function GladeMenu() {
 			() => false
 		);
 
-	const visibleSections = navSections
-		.map(section => ({
-			...section,
-			links: section.links.filter(
-				link =>
-					(!link.requiresAuthentication || isLoggedIn) &&
-					isLinkVisible(link.requiredScope)
-			),
-		}))
-		.filter(section => section.links.length > 0);
-
 	return (
 		<nav aria-label="Site navigation" className={style.hamburgerNav}>
 			<details className={style.hamburgerDetails} ref={detailsRef}>
@@ -69,28 +58,51 @@ export function GladeMenu() {
 					</span>
 				</summary>
 				<div className={style.hamburgerMenu}>
-					{visibleSections.map(section => (
-						<section
-							aria-label={section.label}
-							className={style.hamburgerSection}
-							key={section.label}
-						>
-							<h2 className={style.hamburgerSectionLabel}>
-								{section.label}
-							</h2>
-							<div className={style.hamburgerLinks}>
-								{section.links.map(link => (
-									<Link
-										className={style.hamburgerLink}
-										href={link.href}
-										key={link.href}
-									>
-										{link.label}
-									</Link>
-								))}
-							</div>
-						</section>
-					))}
+					{navSections.map(section =>
+						section((label, links) => {
+							const visibleLinks = links.filter(link =>
+								link(
+									(
+										_href,
+										_label,
+										_description,
+										requiresAuthentication,
+										requiredScope
+									) =>
+										(!requiresAuthentication ||
+											isLoggedIn) &&
+										isLinkVisible(requiredScope)
+								)
+							);
+							if (visibleLinks.length === 0) return null;
+							return (
+								<section
+									aria-label={label}
+									className={style.hamburgerSection}
+									key={label}
+								>
+									<h2 className={style.hamburgerSectionLabel}>
+										{label}
+									</h2>
+									<div className={style.hamburgerLinks}>
+										{visibleLinks.map(link =>
+											link((href, label) => (
+												<Link
+													className={
+														style.hamburgerLink
+													}
+													href={href}
+													key={href}
+												>
+													{label}
+												</Link>
+											))
+										)}
+									</div>
+								</section>
+							);
+						})
+					)}
 					<div className={style.inlineLoginCopy}>
 						<InlineLogin />
 					</div>
