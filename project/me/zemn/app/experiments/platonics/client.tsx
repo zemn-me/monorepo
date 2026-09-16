@@ -11,6 +11,7 @@ import {
 	createPlatonicField,
 	DEFAULT_POSE,
 	EYE_HEIGHT,
+	fieldSolidCount,
 	forwardFromPose,
 	type PlayerPose,
 	type RenderedSegment,
@@ -26,7 +27,7 @@ const LOOK_SENSITIVITY = 0.0023;
 const PITCH_LIMIT = Math.PI * 0.45;
 const SVG_WIDTH = 1280;
 const SVG_HEIGHT = 720;
-const DEFAULT_SOLID_LIMIT = Math.min(10, field.solidCount);
+const DEFAULT_SOLID_LIMIT = Math.min(10, fieldSolidCount(field));
 
 interface KeyState {
 	KeyW: boolean;
@@ -330,7 +331,7 @@ export function PlatonicsClient() {
 						<div>
 							<dt>solids</dt>
 							<dd>
-								{solidLimit} / {field.solidCount}
+								{solidLimit} / {fieldSolidCount(field)}
 							</dd>
 						</div>
 						<div>
@@ -367,7 +368,13 @@ export function PlatonicsClient() {
 						viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
 					>
 						<defs>
-							<linearGradient id="solidSky" x1="0" x2="1" y1="0" y2="1">
+							<linearGradient
+								id="solidSky"
+								x1="0"
+								x2="1"
+								y1="0"
+								y2="1"
+							>
 								<stop offset="0%" stopColor="#071015" />
 								<stop offset="45%" stopColor="#0f1410" />
 								<stop offset="100%" stopColor="#050506" />
@@ -420,7 +427,7 @@ export function PlatonicsClient() {
 						<input
 							aria-label="Rendered solid count"
 							className={style.slider}
-							max={field.solidCount}
+							max={fieldSolidCount(field)}
 							min={0}
 							onChange={event =>
 								setSolidLimit(event.currentTarget.valueAsNumber)
