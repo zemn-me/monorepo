@@ -1,10 +1,12 @@
 'use client';
 
 import {
-	faCheck,
+	faBookOpen,
 	faChevronDown,
 	faMicrophone,
+	faSpinner,
 	faStop,
+	faTrashCan,
 	faTriangleExclamation,
 	faUpload,
 } from '@fortawesome/free-solid-svg-icons';
@@ -39,6 +41,10 @@ import {
 	useRecordingQueue,
 } from '#root/project/me/zemn/app/journal/recording_queue.js';
 import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
+import {
+	JournalPlaceholder,
+	JournalStatus,
+} from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
@@ -1326,15 +1332,7 @@ function EntryCard({
 		recordedDate: string
 	) => Promise<void>;
 }) {
-	const title =
-		entry.summary?.title ??
-		(entry.status === 'failed'
-			? 'Processing failed'
-			: entry.status === 'ready'
-				? 'Untitled entry'
-				: entry.status === 'processing'
-					? 'Transcribing voice note…'
-					: 'Uploading voice note…');
+	const title = entry.summary?.title ?? 'Voice note';
 	return (
 		<details className={style.entry} id={`entry-${entry.id}`}>
 			<summary>
@@ -1345,9 +1343,16 @@ function EntryCard({
 				<span className={style.entryHeading}>
 					<strong className={style.entryTitle}>{title}</strong>
 					{entry.status !== 'ready' && (
-						<small className={style.status}>
-							{entry.status.replace('_', ' ')}
-						</small>
+						<JournalStatus
+							label={
+								entry.status === 'processing'
+									? 'Transcribing voice note'
+									: entry.status === 'failed'
+										? 'Processing failed'
+										: 'Uploading voice note'
+							}
+							state={entry.status === 'failed' ? 'error' : 'busy'}
+						/>
 					)}
 				</span>
 				<FontAwesomeIcon
@@ -1356,15 +1361,14 @@ function EntryCard({
 					icon={faChevronDown}
 				/>
 			</summary>
-			{entry.status === 'processing' && (
-				<p className={style.entryProgress} role="status">
-					Transcribing voice note…
-				</p>
-			)}
-			{entry.status === 'awaiting_upload' && (
-				<p className={style.entryProgress} role="status">
-					Uploading voice note…
-				</p>
+			{['processing', 'awaiting_upload'].includes(entry.status) && (
+				<JournalPlaceholder
+					label={
+						entry.status === 'processing'
+							? 'Preparing transcript'
+							: 'Uploading audio'
+					}
+				/>
 			)}
 			{entry.audioUrl && (
 				<JournalAudio
@@ -1667,6 +1671,14 @@ function ZoomNavigation({
 					navigationBounds.left +
 					navigationElement.scrollLeft,
 			});
+			// Keep the selected view visible when capture controls narrow the tab strip.
+			if (selectedBounds.right > navigationBounds.right) {
+				navigationElement.scrollLeft +=
+					selectedBounds.right - navigationBounds.right;
+			} else if (selectedBounds.left < navigationBounds.left) {
+				navigationElement.scrollLeft +=
+					selectedBounds.left - navigationBounds.left;
+			}
 		};
 		updateIndicator();
 		const observer = new ResizeObserver(updateIndicator);
@@ -1973,6 +1985,8 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 
 function JournalBrowser({
 	actions,
+	localRecordings,
+	localEntryIDs,
 	deleteEntry,
 	journal,
 	route,
@@ -1981,6 +1995,8 @@ function JournalBrowser({
 	readonly actions?: ReactNode;
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
+	readonly localRecordings: ReactNode;
+	readonly localEntryIDs: readonly (string | undefined)[];
 	readonly route?: JournalRoute;
 	readonly updateEntryDate?: (
 		entryID: string,
@@ -2004,8 +2020,10 @@ function JournalBrowser({
 		aggregateCitationDestination,
 		route ?? 'overview'
 	);
-	const pendingEntries = journal.entries.filter(entry =>
-		['awaiting_upload', 'processing'].includes(entry.status)
+	const pendingEntries = journal.entries.filter(
+		entry =>
+			['awaiting_upload', 'processing'].includes(entry.status) &&
+			!localEntryIDs.includes(entry.id)
 	);
 	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
 		.map(period =>
@@ -2041,6 +2059,7 @@ function JournalBrowser({
 		return (
 			<div>
 				<JournalToolbar actions={actions} focus={focus} />
+				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				{summary ? (
 					<SummaryCard
@@ -2049,13 +2068,18 @@ function JournalBrowser({
 						summary={summary}
 					/>
 				) : readyEntries.length > 1 ? (
-					<p className={style.empty} role="status">
-						Preparing the journal overview…
-					</p>
+					<JournalPlaceholder label="Preparing journal overview" />
 				) : (
-					<p className={style.empty}>
-						Your journal overview will grow as you add entries.
-					</p>
+					pendingEntries.length === 0 &&
+					localEntryIDs.length === 0 && (
+						<div className={style.empty}>
+							<FontAwesomeIcon
+								aria-hidden="true"
+								icon={faBookOpen}
+							/>
+							<p>No entries yet</p>
+						</div>
+					)
 				)}
 				<RecentEntries journal={journal} />
 			</div>
@@ -2070,6 +2094,7 @@ function JournalBrowser({
 	return (
 		<div>
 			<JournalToolbar actions={actions} focus={focus} route={route} />
+			{localRecordings}
 			<PendingEntries entries={pendingEntries} playback={playback} />
 			<PeriodList
 				deleteEntry={deleteEntry}
@@ -2581,19 +2606,25 @@ export default function JournalPageClient({
 				title={recording ? 'Finish recording' : 'Record a note'}
 				type="button"
 			>
-				<FontAwesomeIcon icon={recording ? faCheck : faMicrophone} />
+				<FontAwesomeIcon
+					aria-hidden="true"
+					className={recordingBusy ? style.spinning : undefined}
+					icon={
+						recordingBusy
+							? faSpinner
+							: recording
+								? faStop
+								: faMicrophone
+					}
+				/>
 			</button>
 			{recordingStream && (
 				<>
 					<RecordingWaveform stream={recordingStream} />
 					<div className={style.recordingTime}>
 						<span role="timer" aria-label="Recording duration">
-							{mediaTimestamp(recordingElapsed)} recorded
+							{mediaTimestamp(recordingElapsed)}
 						</span>
-						<small>
-							Saved on this device. Long notes are split
-							automatically for transcription.
-						</small>
 					</div>
 					<button
 						aria-label="Cancel recording"
@@ -2602,7 +2633,7 @@ export default function JournalPageClient({
 						onClick={() => endRecording('discard')}
 						type="button"
 					>
-						<FontAwesomeIcon icon={faStop} />
+						<FontAwesomeIcon aria-hidden="true" icon={faTrashCan} />
 					</button>
 				</>
 			)}
@@ -2632,7 +2663,7 @@ export default function JournalPageClient({
 					onClick={() => void promptForLogin?.()}
 					type="button"
 				>
-					Sign in to open your journal
+					Sign in
 				</button>
 			) : !hasReadScope ? (
 				<p className={style.notice}>
@@ -2642,13 +2673,18 @@ export default function JournalPageClient({
 			) : (
 				<>
 					{isDevelopment && <DevelopmentJournalTools />}
-					<LocalRecordings
-						queue={queue}
-						activeID={recorder.current?.id}
-					/>
 					{journal(
 						value => (
 							<JournalBrowser
+								localRecordings={
+									<LocalRecordings
+										queue={queue}
+										activeID={recorder.current?.id}
+									/>
+								}
+								localEntryIDs={queue.recordings.map(
+									draft => draft.remoteEntryID
+								)}
 								actions={captureControls}
 								deleteEntry={
 									hasWriteScope
@@ -2670,7 +2706,11 @@ export default function JournalPageClient({
 									actions={captureControls}
 									focus={new Date().toISOString()}
 								/>
-								<p>Loading your journal…</p>
+								<LocalRecordings
+									queue={queue}
+									activeID={recorder.current?.id}
+								/>
+								<JournalPlaceholder label="Loading journal" />
 							</>
 						),
 						error => (
@@ -2678,6 +2718,10 @@ export default function JournalPageClient({
 								<JournalToolbar
 									actions={captureControls}
 									focus={new Date().toISOString()}
+								/>
+								<LocalRecordings
+									queue={queue}
+									activeID={recorder.current?.id}
 								/>
 								<p className={style.notice}>
 									{errorMessage(error)}

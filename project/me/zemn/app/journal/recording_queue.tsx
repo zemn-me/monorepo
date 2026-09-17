@@ -1,5 +1,12 @@
 'use client';
 
+import {
+	faArrowRotateRight,
+	faChevronDown,
+	faDownload,
+	faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { maxUploadBytes } from '#root/project/me/zemn/app/journal/recording.js';
@@ -12,6 +19,7 @@ import {
 	removeRecording,
 	saveRecording,
 } from '#root/project/me/zemn/app/journal/recording_store.js';
+import { JournalStatus } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import type { JournalAudioUpload } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import {
@@ -105,7 +113,7 @@ export function useRecordingQueue(options: QueueOptions) {
 							setErrors(previous => ({
 								...previous,
 								[draft.id]:
-									'Waiting to sync. Your recording is saved; another attempt will run automatically.',
+									'Sync failed. Will retry automatically.',
 							}));
 							break;
 						} finally {
@@ -263,70 +271,141 @@ function LocalRecordingRow({
 	const canRetry =
 		!uploading &&
 		(!draft.uploadedAt || Date.now() - draft.uploadedAt > 120_000);
+	const status =
+		emergency || tooLarge || queue.errors[draft.id]
+			? 'error'
+			: uploading || draft.state === 'uploaded'
+				? 'busy'
+				: draft.state === 'recording'
+					? 'interrupted'
+					: 'queued';
+	const label = emergency
+		? 'Recording not saved'
+		: tooLarge
+			? 'Recording too large'
+			: uploading
+				? 'Syncing voice note'
+				: draft.state === 'uploaded'
+					? 'Transcribing voice note'
+					: draft.state === 'recording'
+						? 'Interrupted recording'
+						: (queue.errors[draft.id] ?? 'Waiting to sync');
 	return (
 		<li>
-			<p>
-				<LocalizedDate date={new Date(draft.recordedAt)} /> ·{' '}
-				<LocalizedTime date={new Date(draft.recordedAt)} /> ·{' '}
-				{(file.size / 1_000_000).toFixed(1)} MB
-			</p>
-			<p role="status">
-				{emergency
-					? 'Not saved on this device — download before leaving.'
-					: tooLarge
-						? 'This file exceeds the 256 MiB upload limit. Download a backup and split it into smaller recordings.'
-						: uploading
-							? 'Syncing voice note…'
-							: draft.state === 'recording'
-								? 'Interrupted recording — the audio saved so far is available to download or sync.'
-								: draft.state === 'uploaded'
-									? 'Uploaded — keeping a local copy until transcription is ready.'
-									: (queue.errors[draft.id] ??
-										'Waiting to sync voice note — saved on this device.')}
-			</p>
-			<div className={style.localRecordingActions}>
-				<a download={draft.name} href={url}>
-					Download audio
-				</a>
-				{!tooLarge && file.size > 0 && (
-					<button
-						disabled={!canRetry}
-						onClick={() => {
-							void queue
-								.retry(draft)
-								.catch(() =>
-									setActionError(
-										'Could not retry. Your local recording has been kept.'
-									)
-								);
-						}}
-						type="button"
-					>
-						{draft.state === 'recording'
-							? 'Sync saved audio'
-							: 'Retry sync'}
-					</button>
+			<details
+				className={style.localRecording}
+				open={emergency || tooLarge || undefined}
+			>
+				<summary title={label}>
+					<div className={style.localRecordingHeading}>
+						<span>
+							{draft.name === 'voice-note.webm' ||
+							/^voice-note-\d{4}-\d{2}-\d{2}T/.test(draft.name)
+								? 'Voice note'
+								: draft.name}
+						</span>
+						<small>
+							<LocalizedDate date={new Date(draft.recordedAt)} />{' '}
+							·{' '}
+							<LocalizedTime date={new Date(draft.recordedAt)} />
+						</small>
+					</div>
+					<JournalStatus label={label} state={status} />
+					<FontAwesomeIcon
+						aria-hidden="true"
+						className={style.entryChevron}
+						icon={faChevronDown}
+					/>
+				</summary>
+				{emergency && (
+					<p role="alert">
+						Download this recording before leaving; it couldn’t be
+						saved.
+					</p>
 				)}
-				<details>
-					<summary>Remove local copy</summary>
-					<button
-						disabled={uploading}
-						onClick={() => {
-							void queue
-								.discard(draft)
-								.catch(() =>
-									setActionError(
-										'Could not remove the local recording.'
-									)
-								);
-						}}
-						type="button"
+				{tooLarge && (
+					<p role="alert">
+						Audio exceeds 256 MiB. Download and split it to sync.
+					</p>
+				)}
+				<audio
+					aria-label="Preview local recording"
+					className={style.audio}
+					controls
+					preload="none"
+					src={url}
+				/>
+				<div className={style.localRecordingActions}>
+					<small>{(file.size / 1_000_000).toFixed(1)} MB</small>
+					<a
+						aria-label="Download audio"
+						download={draft.name}
+						href={url}
+						title="Download audio"
 					>
-						Delete local recording
-					</button>
-				</details>
-			</div>
-			{actionError && <p role="alert">{actionError}</p>}
+						<FontAwesomeIcon aria-hidden="true" icon={faDownload} />
+					</a>
+					{!tooLarge && file.size > 0 && (
+						<button
+							aria-label={
+								draft.state === 'recording'
+									? 'Sync saved audio'
+									: 'Retry sync'
+							}
+							disabled={!canRetry}
+							onClick={() => {
+								void queue
+									.retry(draft)
+									.catch(() =>
+										setActionError(
+											'Could not retry. Your local recording has been kept.'
+										)
+									);
+							}}
+							title="Retry sync"
+							type="button"
+						>
+							<FontAwesomeIcon
+								aria-hidden="true"
+								icon={faArrowRotateRight}
+							/>
+						</button>
+					)}
+					<details className={style.removeRecording}>
+						<summary
+							aria-label="Remove local copy"
+							title="Remove local copy"
+						>
+							<FontAwesomeIcon
+								aria-hidden="true"
+								icon={faTrashCan}
+							/>
+						</summary>
+						<div>
+							<p>
+								Delete this device’s copy? Unsynced audio will
+								be lost.
+							</p>
+							<button
+								disabled={uploading}
+								onClick={() => {
+									void queue
+										.discard(draft)
+										.catch(() =>
+											setActionError(
+												'Could not remove the local recording.'
+											)
+										);
+								}}
+								type="button"
+							>
+								Delete local recording
+							</button>
+						</div>
+					</details>
+				</div>
+				{actionError && <p role="alert">{actionError}</p>}
+			</details>
 		</li>
 	);
 }
@@ -348,16 +427,9 @@ export function LocalRecordings({
 			)}
 			{recordings.length > 0 && (
 				<section
-					aria-labelledby="local-recordings-heading"
+					aria-label="Local recordings"
 					className={style.localRecordings}
 				>
-					<h2 id="local-recordings-heading">Waiting to sync</h2>
-					<p>
-						Audio stays in this browser until the server confirms it
-						is ready. Keep the journal open to sync automatically,
-						or download a backup. Clearing browser data removes
-						local copies.
-					</p>
 					<ul>
 						{recordings.map(draft => (
 							<LocalRecordingRow

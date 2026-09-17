@@ -14,6 +14,7 @@ ts_project(
         "recording.ts",
         "recording_queue.tsx",
         "recording_store.ts",
+        "status.tsx",
     ],
     assets = ["style.module.css"],
     visibility = ["//project/me/zemn:__subpackages__"],
@@ -60,6 +61,7 @@ filegroup(
         "recording_queue.tsx",
         "recording_store.ts",
         "recording_test.ts",
+        "status.tsx",
     ],
     visibility = ["//:__subpackages__"],
 )
