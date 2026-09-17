@@ -24,8 +24,8 @@ jest.unstable_mockModule(
 			content: 'content',
 			copyright: 'copyright',
 			footer: 'footer',
+			footerEmblem: 'footerEmblem',
 			fullName: 'fullName',
-			future: 'future',
 			handle: 'handle',
 			headerBgv: 'headerBgv',
 			letterHead: 'letterHead',
@@ -95,12 +95,8 @@ jest.unstable_mockModule(
 );
 
 jest.unstable_mockModule(
-	'#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLogo.js',
-	() => ({
-		default: ({ className }: { readonly className?: string }) => (
-			<svg className={className} />
-		),
-	})
+	'#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLogo.module.css',
+	() => ({ default: { zemnmezLogo: 'zemnmezLogo' } })
 );
 
 jest.unstable_mockModule('#root/project/me/zemn/bio/index.js', () => ({
@@ -136,14 +132,16 @@ beforeAll(async () => {
 });
 
 beforeEach(() => {
+	jest.useFakeTimers();
 	container = document.createElement('div');
 	root = createRoot(container);
 	document.body.appendChild(container);
 });
 
 afterEach(() => {
-	root.unmount();
+	act(() => root.unmount());
 	container.remove();
+	jest.useRealTimers();
 });
 
 it('renders article content before the hero video in the DOM', () => {
@@ -163,4 +161,33 @@ it('renders article content before the hero video in the DOM', () => {
 	expect(Array.from(main!.children).indexOf(content!)).toBeLessThan(
 		Array.from(main!.children).indexOf(heroVideo!)
 	);
+});
+
+function footerLogoTitle() {
+	return container.querySelector('[data-glade-footer] svg title')?.textContent;
+}
+
+it.each([
+	[2027, 1, 2, 'Thomas Shadwell’s shield'],
+	[2027, 1, 3, 'Zemnmez Logo'],
+	[2028, 1, 3, 'Zemnmez Logo'],
+	[2027, 1, 4, 'Thomas Shadwell’s shield'],
+	[2027, 2, 3, 'Thomas Shadwell’s shield'],
+])('selects the footer emblem on local date %i/%i/%i', (year, month, day, title) => {
+	jest.setSystemTime(new Date(year, month, day, 12));
+	act(() => root.render(<Glade />));
+	expect(footerLogoTitle()).toBe(title);
+});
+
+it('switches into and out of the anniversary while the page stays open', () => {
+	jest.setSystemTime(new Date(2027, 1, 2, 23, 59));
+	act(() => root.render(<Glade />));
+	expect(footerLogoTitle()).toBe('Thomas Shadwell’s shield');
+
+	act(() => jest.advanceTimersByTime(60_000));
+	expect(footerLogoTitle()).toBe('Zemnmez Logo');
+
+	jest.setSystemTime(new Date(2027, 1, 3, 23, 59));
+	act(() => jest.advanceTimersByTime(60_000));
+	expect(footerLogoTitle()).toBe('Thomas Shadwell’s shield');
 });

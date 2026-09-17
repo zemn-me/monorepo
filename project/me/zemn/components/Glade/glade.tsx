@@ -1,9 +1,10 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import * as bio from '#root/project/me/zemn/bio/index.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
+import { HeraldicShield } from '#root/project/me/zemn/components/Glade/heraldic_shield.js';
 import { GladeMenu } from '#root/project/me/zemn/components/Glade/menu.js';
 import style from '#root/project/me/zemn/components/Glade/style.module.css';
 import { HeroVideo } from '#root/project/me/zemn/components/HeroVideo/hero_video.js';
@@ -14,15 +15,27 @@ import ZemnmezLogo from '#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLog
 import { repoFirstCommitYear } from '#root/ts/constants/constants.js';
 import * as lang from '#root/ts/react/lang/index.js';
 
-/*
-function ZemnmezLogoInline() {
-	return <ZemnmezLogo className={style.logoInline} />;
-}
+function FooterEmblem() {
+	const [isAnniversary, setIsAnniversary] = useState(false);
 
-function TimeEyeInline() {
-	return <TimeEye className={style.logoInline} />;
+	useEffect(() => {
+		// Resolve the visitor's local date after hydration, not at static build time.
+		const update = () => {
+			const today = new Date();
+			// The zemnmez name began on 3 February 2009.
+			setIsAnniversary(today.getMonth() === 1 && today.getDate() === 3);
+		};
+		update();
+		const timer = window.setInterval(update, 60_000);
+		return () => window.clearInterval(timer);
+	}, []);
+
+	return isAnniversary ? (
+		<ZemnmezLogo className={style.footerEmblem} />
+	) : (
+		<HeraldicShield className={style.footerEmblem} />
+	);
 }
-*/
 
 /**
  * LetterHead is the inner part of the heading with the name and logo.
@@ -63,7 +76,7 @@ export default function Glade(props: GladeProps) {
 				<h2 className={dividerHeadingClass}>
 					<span>⁂</span>
 				</h2>
-				<ZemnmezLogo className={style.future} />
+				<FooterEmblem />
 				{isHomepage ? (
 					<i className={style.tagline}>
 						This is what we become, when our eyes are open.
