@@ -164,15 +164,17 @@ it('renders article content before the hero video in the DOM', () => {
 });
 
 function footerLogoTitle() {
-	return container.querySelector('[data-glade-footer] svg title')?.textContent;
+	const emblem = container.querySelector('[data-glade-footer] svg');
+	expect(emblem).not.toBeNull();
+	return emblem?.querySelector('title')?.textContent ?? null;
 }
 
 it.each([
-	[2027, 1, 2, 'Thomas Shadwell’s shield'],
+	[2027, 1, 2, null],
 	[2027, 1, 3, 'Zemnmez Logo'],
 	[2028, 1, 3, 'Zemnmez Logo'],
-	[2027, 1, 4, 'Thomas Shadwell’s shield'],
-	[2027, 2, 3, 'Thomas Shadwell’s shield'],
+	[2027, 1, 4, null],
+	[2027, 2, 3, null],
 ])('selects the footer emblem on local date %i/%i/%i', (year, month, day, title) => {
 	jest.setSystemTime(new Date(year, month, day, 12));
 	act(() => root.render(<Glade />));
@@ -182,12 +184,12 @@ it.each([
 it('switches into and out of the anniversary while the page stays open', () => {
 	jest.setSystemTime(new Date(2027, 1, 2, 23, 59));
 	act(() => root.render(<Glade />));
-	expect(footerLogoTitle()).toBe('Thomas Shadwell’s shield');
+	expect(footerLogoTitle()).toBe(null);
 
 	act(() => jest.advanceTimersByTime(60_000));
 	expect(footerLogoTitle()).toBe('Zemnmez Logo');
 
 	jest.setSystemTime(new Date(2027, 1, 3, 23, 59));
 	act(() => jest.advanceTimersByTime(60_000));
-	expect(footerLogoTitle()).toBe('Thomas Shadwell’s shield');
+	expect(footerLogoTitle()).toBe(null);
 });

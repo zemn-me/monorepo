@@ -3,7 +3,6 @@ import type { SVGProps } from 'react';
 export function HeraldicShield(props: SVGProps<SVGSVGElement>) {
 	return (
 		<svg fill="currentColor" role="img" viewBox="120 337 364 357" {...props}>
-			<title lang="en-GB">Thomas Shadwell’s shield</title>
 			<desc lang="en-GB">
 				A shield divided diagonally by an embattled line, bearing two
 				counterchanged locks, each enclosing an eye. The upper lock
