@@ -1,0 +1,50 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+css_module(
+    name = "page_module_css",
+    src = "page.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "about",
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
+    assets = ["page.module.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":page_module_css",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/next",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//project/me/zemn/app",
+        "//project/me/zemn/components/DividerHeading",
+        "//project/me/zemn/components/Link",
+        "//project/me/zemn/components/Prose",
+        "//project/me/zemn/components/Q",
+        "//project/me/zemn/components/TimeEye",
+        "//project/me/zemn/components/ZemnmezLogo",
+        "//ts/next.js/types/next-compiled",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "layout.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)

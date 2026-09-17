@@ -13,6 +13,7 @@
 - Content-addressed public assets should be declared next to the TS that imports them with `hashed_public_assets`; `project/me/zemn/public:content_addressed_public_assets` collects them from `//project/me/zemn:ts`.
 - For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.
 - `//project/me/zemn:zemn` starts the local app on port 3000; passing another `--port` appends rather than overrides.
+- The dev server reads Bazel-copied inputs; if rebuilt CSS stays stale in the preview, restart `//project/me/zemn:zemn` before reloading the browser.
 - Signed media range failures can leave an HTML media element stalled without an `error`; preserve playback intent and recover from `waiting`/`stalled` as well as hard errors.
 
 - Keep local `api/server.Server.ProvisionTables` indexes aligned with Pulumi; analytics listing requires `feed-when-index`, which ingest-only tests do not exercise.

@@ -6,6 +6,7 @@ ts_project(
     name = "Glade",
     srcs = [
         "glade.tsx",
+        "heraldic_shield.tsx",
         "menu.tsx",
     ],
     assets = [
@@ -49,6 +50,7 @@ filegroup(
     srcs = [
         "glade.tsx",
         "glade_test.tsx",
+        "heraldic_shield.tsx",
         "menu.tsx",
         "menu_test.tsx",
     ],
