@@ -1,10 +1,12 @@
 import type { Metadata } from 'next/types';
 
-import { GladeLayout } from '#root/project/me/zemn/app/glade_layout.js';
+import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Voice journal',
 	description: 'A private, transcript-linked voice journal.',
 };
 
-export default GladeLayout;
+export default function Layout({ children }: { readonly children: ReactNode }) {
+	return children;
+}

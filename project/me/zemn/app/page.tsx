@@ -6,7 +6,6 @@ import {
 	pictureSources as profilePhotoSources,
 } from '#root/jpeg/2026/05/25/profile_photo.js';
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
-import { GladeLayout } from '#root/project/me/zemn/app/glade_layout.js';
 import {
 	type LinksetLabel,
 	LinksetLink,
@@ -58,7 +57,7 @@ const homepageLinks = Iterable(bio.Bio.links)
 
 export default function Main() {
 	return (
-		<GladeLayout>
+		<>
 			<Eeg />
 			<header>
 				<picture
@@ -125,7 +124,7 @@ export default function Main() {
 				}}
 				type="application/ld+json"
 			/>
-		</GladeLayout>
+		</>
 	);
 }
 

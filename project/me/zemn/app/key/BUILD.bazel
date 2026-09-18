@@ -6,7 +6,6 @@ ts_project(
     name = "key",
     srcs = [
         "client.tsx",
-        "layout.tsx",
         "page.tsx",
     ],
     assets = ["style.module.css"],
@@ -21,7 +20,6 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/temporal-polyfill",
         "//:node_modules/web-haptics",
-        "//project/me/zemn/app",
         "//project/me/zemn/components/InlineLogin",
         "//project/me/zemn/components/ProgressCircle",
         "//project/me/zemn/hook",
@@ -38,7 +36,6 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
-        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],

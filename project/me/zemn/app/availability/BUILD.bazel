@@ -8,7 +8,6 @@ ts_project(
         "calendar.ts",
         "client.tsx",
         "ical.ts",
-        "layout.tsx",
         "page.tsx",
     ],
     assets = glob(
@@ -26,7 +25,6 @@ ts_project(
         "//:node_modules/react-dom",
         "//:node_modules/temporal-polyfill",
         "//project/me/zemn/bio",
-        "//project/me/zemn/components/Glade",
         "//project/me/zemn/hook",
         "//ts/future",
         "//ts/next.js/types/next-compiled",
@@ -40,7 +38,6 @@ filegroup(
         "calendar.ts",
         "client.tsx",
         "ical.ts",
-        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],

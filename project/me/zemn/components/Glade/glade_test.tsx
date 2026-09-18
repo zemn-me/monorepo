@@ -12,8 +12,10 @@ import { act } from 'react-dom/test-utils';
 
 import type { GladeProps } from './glade.js';
 
+let pathname = '/article/example';
+
 jest.unstable_mockModule('next/navigation', () => ({
-	usePathname: () => '/article/example',
+	usePathname: () => pathname,
 }));
 
 jest.unstable_mockModule(
@@ -79,9 +81,11 @@ interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 jest.unstable_mockModule(
 	'#root/project/me/zemn/components/Link/index.js',
 	() => ({
-		default: ({ children, styleless: _styleless, ...props }: MockLinkProps) => (
-			<a {...props}>{children}</a>
-		),
+		default: ({
+			children,
+			styleless: _styleless,
+			...props
+		}: MockLinkProps) => <a {...props}>{children}</a>,
 	})
 );
 
@@ -132,6 +136,7 @@ beforeAll(async () => {
 });
 
 beforeEach(() => {
+	pathname = '/article/example';
 	jest.useFakeTimers();
 	container = document.createElement('div');
 	root = createRoot(container);
@@ -175,11 +180,14 @@ it.each([
 	[2028, 1, 3, 'Zemnmez Logo'],
 	[2027, 1, 4, null],
 	[2027, 2, 3, null],
-])('selects the footer emblem on local date %i/%i/%i', (year, month, day, title) => {
-	jest.setSystemTime(new Date(year, month, day, 12));
-	act(() => root.render(<Glade />));
-	expect(footerLogoTitle()).toBe(title);
-});
+])(
+	'selects the footer emblem on local date %i/%i/%i',
+	(year, month, day, title) => {
+		jest.setSystemTime(new Date(year, month, day, 12));
+		act(() => root.render(<Glade />));
+		expect(footerLogoTitle()).toBe(title);
+	}
+);
 
 it('switches into and out of the anniversary while the page stays open', () => {
 	jest.setSystemTime(new Date(2027, 1, 2, 23, 59));
@@ -192,4 +200,27 @@ it('switches into and out of the anniversary while the page stays open', () => {
 	jest.setSystemTime(new Date(2027, 1, 3, 23, 59));
 	act(() => jest.advanceTimersByTime(60_000));
 	expect(footerLogoTitle()).toBe(null);
+});
+
+it.each(['/2026/endings', '/2026/endings/', '/2026/endings/chapter'])(
+	'renders %s without the Glade shell',
+	path => {
+		pathname = path;
+		act(() =>
+			root.render(
+				<Glade>
+					<article>Endings</article>
+				</Glade>
+			)
+		);
+		expect(container.querySelector('article')?.textContent).toBe('Endings');
+		expect(container.querySelector('[data-glade-layout]')).toBeNull();
+		expect(container.querySelector('figure')).toBeNull();
+	}
+);
+
+it('does not exclude routes that merely share the Endings prefix', () => {
+	pathname = '/2026/endings-other';
+	act(() => root.render(<Glade />));
+	expect(container.querySelector('[data-glade-layout]')).not.toBeNull();
 });
