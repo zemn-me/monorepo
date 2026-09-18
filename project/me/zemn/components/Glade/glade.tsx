@@ -62,6 +62,15 @@ export interface GladeProps {
 export default function Glade(props: GladeProps) {
 	const pathname = usePathname();
 	const isHomepage = pathname == '/';
+
+	// Endings has its own full-screen presentation. Keep ordinary routes in
+	// this shared layout so their hero video survives client navigation.
+	if (
+		pathname === '/2026/endings' ||
+		pathname?.startsWith('/2026/endings/')
+	) {
+		return <>{props.children}</>;
+	}
 	return (
 		<main className={style.main} data-glade-layout>
 			<section className={style.content} data-glade-content>

@@ -6,7 +6,6 @@ ts_project(
     name = "experiments",
     srcs = [
         "experiments.ts",
-        "layout.tsx",
         "page.tsx",
     ],
     assets = glob(
@@ -25,7 +24,6 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
-        "//project/me/zemn/app",
         "//project/me/zemn/components/DividerHeading",
         "//project/me/zemn/components/Link",
         "//ts/next.js/types/next-compiled",
@@ -41,7 +39,6 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "experiments.ts",
-        "layout.tsx",
         "page.tsx",
     ],
     visibility = ["//:__subpackages__"],

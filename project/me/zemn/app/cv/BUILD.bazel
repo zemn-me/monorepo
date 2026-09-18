@@ -4,10 +4,7 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "cv",
-    srcs = [
-        "layout.tsx",
-        "page.tsx",
-    ],
+    srcs = ["page.tsx"],
     assets = [
         "page.module.css",
     ],
@@ -19,7 +16,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
-        "//project/me/zemn/app",
         "//project/me/zemn/bio",
         "//project/me/zemn/components/Link",
         "//project/me/zemn/components/TimeEye",
@@ -34,10 +30,7 @@ bazel_lint(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = [
-        "layout.tsx",
-        "page.tsx",
-    ],
+    srcs = ["page.tsx"],
     visibility = ["//:__subpackages__"],
 )
 
