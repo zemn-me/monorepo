@@ -1,8 +1,24 @@
 .page {
-	--journal-muted: color-mix(in srgb, currentColor 65%, transparent);
-	--journal-line: color-mix(in srgb, currentColor 20%, transparent);
-	--journal-soft-line: color-mix(in srgb, currentColor 11%, transparent);
-	--journal-surface: color-mix(in srgb, currentColor 4%, transparent);
+	--journal-muted: color-mix(
+		in srgb,
+		var(--foreground-color) 80%,
+		var(--background-color)
+	);
+	--journal-line: color-mix(
+		in srgb,
+		var(--foreground-color) 20%,
+		var(--background-color)
+	);
+	--journal-soft-line: color-mix(
+		in srgb,
+		var(--foreground-color) 11%,
+		var(--background-color)
+	);
+	--journal-surface: color-mix(
+		in srgb,
+		var(--foreground-color) 4%,
+		var(--background-color)
+	);
 	--journal-recording: #d70015;
 	--journal-sticky-navigation-height: 3.5rem;
 	box-sizing: border-box;
@@ -17,7 +33,7 @@
 
 .dropTarget::after {
 	border: 2px dashed currentColor;
-	content: "";
+	content: '';
 	inset: 1em;
 	pointer-events: none;
 	position: fixed;
@@ -123,36 +139,84 @@
 	position: relative;
 }
 
-.recorder[data-uploading] .recordButton::after {
-	animation: journal-upload-spin 800ms linear infinite;
-	border: 2px solid var(--journal-soft-line);
-	border-block-start-color: var(--journal-recording);
-	border-radius: inherit;
-	content: "";
-	inset: -0.35em;
-	pointer-events: none;
-	position: absolute;
-}
-
 @keyframes journal-upload-spin {
 	to {
 		transform: rotate(1turn);
 	}
 }
 
+.spinning,
+.statusIndicator[data-state='busy'] > svg {
+	animation: journal-upload-spin 1s linear infinite;
+}
+
+.statusIndicator {
+	align-items: center;
+	color: var(--journal-muted);
+	display: inline-flex;
+	flex: 0 0 auto;
+	justify-content: center;
+	inline-size: 1.5em;
+}
+
+.statusIndicator[data-state='error'] {
+	color: var(--journal-recording);
+}
+
+.visuallyHidden {
+	clip-path: inset(50%);
+	block-size: 1px;
+	inline-size: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.placeholder {
+	display: grid;
+	gap: 0.8em;
+	margin-block: 1.5em;
+	max-inline-size: 36em;
+}
+
+.placeholder > span[aria-hidden] {
+	animation: journal-placeholder-pulse 1.5s ease-in-out infinite alternate;
+	background: var(--journal-soft-line);
+	block-size: 0.65em;
+	border-radius: 1em;
+}
+
+.placeholder > span:last-child {
+	inline-size: 65%;
+}
+
+@keyframes journal-placeholder-pulse {
+	to {
+		opacity: 0.4;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
-	.recorder[data-uploading] .recordButton::after {
+	.spinning,
+	.statusIndicator[data-state='busy'] > svg,
+	.placeholder > span[aria-hidden] {
 		animation: none;
 	}
+}
+
+.page :where(button, a, summary):focus-visible,
+.uploadButton:focus-within {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
 }
 
 .waveform {
 	block-size: 3em;
 	color: var(--journal-recording);
 	display: block;
-	flex: 1 1 16em;
+	flex: 1 1 4em;
 	inline-size: 100%;
-	min-inline-size: 10em;
+	min-inline-size: 3em;
 }
 
 .uploadButton input {
@@ -226,7 +290,7 @@
 	z-index: 1;
 }
 
-.zoomNavigation a[aria-current="page"] {
+.zoomNavigation a[aria-current='page'] {
 	color: var(--background-color);
 }
 
@@ -384,8 +448,7 @@
 	font: inherit;
 	padding: 0;
 	scroll-margin-block-start: calc(
-		var(--journal-sticky-navigation-height) +
-		0.5rem
+		var(--journal-sticky-navigation-height) + 0.5rem
 	);
 	text-decoration: underline;
 	text-decoration-color: var(--link-color);
@@ -435,18 +498,6 @@
 
 .entry[open] > summary .entryChevron {
 	transform: rotate(180deg);
-}
-
-.status {
-	color: var(--journal-muted);
-	font-size: 0.75em;
-	text-transform: uppercase;
-}
-
-.entryProgress {
-	color: var(--journal-muted);
-	font-style: italic;
-	margin-block: 0.5em;
 }
 
 .audioDock {
@@ -835,65 +886,145 @@
 }
 
 .recordingTime {
-	align-items: baseline;
+	align-items: center;
 	display: flex;
-	flex: 1 1 100%;
-	flex-wrap: wrap;
-	gap: 0.25em 1em;
-	justify-content: space-between;
-	order: 1;
+	gap: 0.5em;
 	font-variant-numeric: tabular-nums;
 }
 
-.recordingTime small {
-	color: var(--journal-muted);
-	font-size: 0.85em;
+.recordingTime::before {
+	background: var(--journal-recording);
+	border-radius: 50%;
+	block-size: 0.5em;
+	inline-size: 0.5em;
+	content: '';
 }
 
 .localRecordings {
-	border: 1px solid var(--journal-line);
-	border-radius: 1rem;
-	margin-block: 1em 2em;
+	margin-block: 0 1.5em;
 	max-width: 42em;
-	padding: 1em;
-}
-
-.localRecordings h2 {
-	margin-block-start: 0;
 }
 
 .localRecordings ul {
 	list-style: none;
+	margin: 0;
 	padding: 0;
 }
 
 .localRecordings li {
-	border-block-start: 1px solid var(--journal-soft-line);
-	padding-block: 0.75em;
+	border-block-end: 1px solid var(--journal-soft-line);
+}
+
+.localRecording > summary {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	gap: 0.75em;
+	list-style: none;
+	min-block-size: 3.5em;
+	padding-block: 0.65em;
+}
+
+.localRecording > summary::-webkit-details-marker,
+.removeRecording > summary::-webkit-details-marker {
+	display: none;
+}
+
+.localRecordingHeading {
+	display: grid;
+	flex: 1;
+	gap: 0.25em;
+	min-inline-size: 0;
+}
+
+.localRecordingHeading > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.localRecordingHeading small,
+.localRecordingActions > small {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+}
+
+.localRecording[open] > summary .entryChevron {
+	transform: rotate(180deg);
 }
 
 .localRecordingActions {
-	align-items: baseline;
+	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1em;
+	gap: 0.25em;
+	padding-block: 0.5em;
 }
 
-.localRecordingActions button {
+.localRecordingActions > small {
+	margin-inline-end: auto;
+}
+
+.localRecordingActions button,
+.localRecordingActions a,
+.removeRecording > summary {
+	align-items: center;
 	background: transparent;
-	border: 1px solid var(--journal-line);
-	border-radius: 0.4em;
+	border: 0;
+	border-radius: 0.5em;
+	box-sizing: border-box;
 	color: inherit;
 	cursor: pointer;
+	display: inline-flex;
 	font: inherit;
-	padding: 0.5em 0.75em;
+	justify-content: center;
+	min-block-size: 44px;
+	min-inline-size: 44px;
+	padding: 0.5em;
+	text-decoration: none;
 }
 
-.localRecordingActions summary {
-	cursor: pointer;
+.localRecordingActions :where(button, a, summary):hover {
+	background: var(--journal-surface);
 }
 
 .localRecordingActions button:disabled {
 	cursor: default;
-	opacity: 0.5;
+	opacity: 0.4;
+}
+
+.removeRecording {
+	position: relative;
+}
+
+.removeRecording > div {
+	background: var(--background-color);
+	border: 1px solid var(--journal-line);
+	border-radius: 0.75em;
+	box-shadow: 0 0.5em 2em #0002;
+	inline-size: min(18em, 65vw);
+	inset-inline-end: 0;
+	padding: 1em;
+	position: absolute;
+	z-index: 8;
+}
+
+.removeRecording p {
+	margin-block: 0 0.5em;
+}
+.removeRecording button {
+	color: var(--journal-recording);
+}
+
+@media (max-width: 40rem) {
+	.recorder[data-recording] {
+		gap: 0.5em;
+	}
+	.waveform {
+		flex-basis: 4em;
+		min-inline-size: 3em;
+	}
+	.recordingTime {
+		font-size: 0.85em;
+	}
 }
