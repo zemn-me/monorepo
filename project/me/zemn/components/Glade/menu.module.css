@@ -65,7 +65,7 @@
 	display: grid;
 	gap: 0;
 	min-width: 0;
-	width: min(24rem, calc(100vw - 3rem));
+	width: min(16rem, calc(100vw - 3rem));
 	max-height: min(70vh, calc(100vh - 5rem));
 	overflow-y: auto;
 	position: absolute;
