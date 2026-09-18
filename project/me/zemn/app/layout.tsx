@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 import { AnalyticsPageBeacon } from '#root/project/me/zemn/api/analytics/AnalyticsPageBeacon.js';
 import { Providers } from '#root/project/me/zemn/app/providers.js';
 import { Bio } from '#root/project/me/zemn/bio/index.js';
+import Glade from '#root/project/me/zemn/components/Glade/glade.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import {
 	DefaultContentSecurityPolicy,
@@ -90,7 +91,7 @@ export function RootLayout({ children }: Props) {
 					<body className={lora.className}>
 						<ReactQueryDevtools initialIsOpen={false} />
 						<AnalyticsPageBeacon />
-						{children}
+						<Glade>{children}</Glade>
 					</body>
 				</html>
 			</Providers>

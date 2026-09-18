@@ -146,6 +146,68 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it.each(['/', '/article', '/experiments'])(
+			'keeps the hero video mounted when using the menu from %s',
+			async start => {
+				try {
+					await driver.manage().setTimeouts({ implicit: 5000 });
+					await driver.get(`${origin}${start}`);
+					const video = await driver.findElement(
+						By.css('figure video')
+					);
+
+					for (const destination of [
+						'/article',
+						'/experiments',
+						'/',
+					]) {
+						if (destination === start) continue;
+						await driver
+							.findElement(
+								By.css(
+									'summary[aria-label="Open navigation menu"]'
+								)
+							)
+							.click();
+						await driver
+							.findElement(
+								By.css(
+									`nav[aria-label="Site navigation"] a[href="${destination}"]`
+								)
+							)
+							.click();
+						await driver.wait(
+							async () =>
+								(await driver.getCurrentUrl()) ===
+								`${origin}${destination}`,
+							5000
+						);
+						// A remount or full-page navigation makes this original
+						// WebElement stale, even if the replacement looks identical.
+						expect(
+							await driver.executeScript(
+								'return arguments[0] === document.querySelector("figure video");',
+								video
+							)
+						).toBe(true);
+						await driver.wait(
+							async () =>
+								(await driver
+									.findElement(
+										By.css(
+											'nav[aria-label="Site navigation"] details'
+										)
+									)
+									.getAttribute('open')) === null,
+							5000
+						);
+					}
+				} finally {
+					await driver.quit();
+				}
+			}
+		);
+
 		it('homepage profile photo has a sampled fallback background', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
@@ -182,7 +244,9 @@ describe('zemn.me website', () => {
 				);
 				await menuButton.click();
 				const articleMenuLinks = await driver.findElements(
-					By.css('nav[aria-label="Site navigation"] a[href^="/article"]')
+					By.css(
+						'nav[aria-label="Site navigation"] a[href^="/article"]'
+					)
 				);
 				expect(
 					await Promise.all(
@@ -198,7 +262,9 @@ describe('zemn.me website', () => {
 					By.css('ol[aria-label="Published articles"]')
 				);
 				const links = await list.findElements(By.css('a'));
-				expect(await Promise.all(links.map(link => link.getText()))).toEqual([
+				expect(
+					await Promise.all(links.map(link => link.getText()))
+				).toEqual([
 					'Letter to Kasimir',
 					'The Hagiography of Clean',
 					'Missing',
@@ -238,7 +304,9 @@ describe('zemn.me website', () => {
 					By.css('ol[aria-label="Experiments"]')
 				);
 				const links = await list.findElements(By.css('a'));
-				expect(await Promise.all(links.map(link => link.getText()))).toEqual([
+				expect(
+					await Promise.all(links.map(link => link.getText()))
+				).toEqual([
 					'Rays',
 					'SVG Arena',
 					'Platonic Stress',
@@ -272,7 +340,9 @@ describe('zemn.me website', () => {
 							text: await link.getText(),
 						}))
 					)
-				).toEqual([{ href: `${origin}/experiments`, text: 'Experiments' }]);
+				).toEqual([
+					{ href: `${origin}/experiments`, text: 'Experiments' },
+				]);
 				const omittedMenuLinks = await driver.findElements(
 					By.css(
 						'nav[aria-label="Site navigation"] a[href="/cv"], nav[aria-label="Site navigation"] a[href="/tool/elastictabs"]'
@@ -284,7 +354,8 @@ describe('zemn.me website', () => {
 				await links[0]!.click();
 				await driver.wait(
 					async () =>
-						(await driver.getCurrentUrl()) === `${origin}/experiments/rays`,
+						(await driver.getCurrentUrl()) ===
+						`${origin}/experiments/rays`,
 					5000
 				);
 			} finally {
@@ -296,6 +367,13 @@ describe('zemn.me website', () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
 				await driver.get(`${origin}/2026/endings`);
+				expect(
+					await driver.findElements(
+						By.css(
+							'nav[aria-label="Site navigation"], figure video'
+						)
+					)
+				).toHaveLength(0);
 				await driver.executeScript(
 					'window.scrollTo(0, document.documentElement.scrollHeight);'
 				);
@@ -310,6 +388,11 @@ describe('zemn.me website', () => {
 					async () => (await driver.getCurrentUrl()) === `${origin}/`,
 					5000
 				);
+				expect(
+					await driver
+						.findElement(By.css('figure video'))
+						.isDisplayed()
+				).toBe(true);
 			} finally {
 				await driver.quit();
 			}

@@ -6,7 +6,6 @@ ts_project(
     name = "app",
     srcs = [
         "eeg.tsx",
-        "glade_layout.tsx",
         "layout.tsx",
         "linkset_link.tsx",
         "not-found.tsx",
@@ -67,7 +66,6 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "eeg.tsx",
-        "glade_layout.tsx",
         "layout.tsx",
         "linkset_link.tsx",
         "not-found.tsx",

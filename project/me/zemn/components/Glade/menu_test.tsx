@@ -52,6 +52,10 @@ jest.unstable_mockModule(
 	})
 );
 
+jest.unstable_mockModule('next/navigation', () => ({
+	usePathname: () => '/',
+}));
+
 let grantedScopes: readonly string[] = [];
 
 jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeApi.js', () => ({
