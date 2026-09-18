@@ -31,7 +31,19 @@ async function capture(
 	owner: string,
 	callbacks: RecordingCallbacks
 ): Promise<RecordingSession> {
-	const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+	const stream = await navigator.mediaDevices
+		.getUserMedia({ audio: true })
+		.catch((error: unknown) => {
+			if (
+				error instanceof DOMException &&
+				error.name === 'NotAllowedError'
+			) {
+				throw new Error(
+					'Microphone access is blocked. Allow it in your browser’s website settings, then try again.'
+				);
+			}
+			throw error;
+		});
 	let recorder: MediaRecorder;
 	let draft: LocalRecording;
 	try {

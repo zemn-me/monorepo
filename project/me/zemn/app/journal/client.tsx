@@ -2547,9 +2547,7 @@ export default function JournalPageClient({
 			setRecordingBusy(false);
 		} catch (error) {
 			setRecordingBusy(false);
-			setRecordingError(
-				`Could not start a recording safely: ${errorMessage(error)}`
-			);
+			setRecordingError(errorMessage(error));
 		}
 	};
 
