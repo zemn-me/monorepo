@@ -20,11 +20,9 @@
 	border-radius: 999px;
 	border: 1px solid
 		color-mix(in srgb, var(--foreground-color) 40%, transparent);
-	background: color-mix(in srgb, var(--background-color) 80%, transparent);
+	background: var(--background-color);
 	color: var(--foreground-color);
 	cursor: pointer;
-	box-shadow: 0 0.5rem 1.5rem
-		color-mix(in srgb, var(--foreground-color) 15%, transparent);
 	position: relative;
 	user-select: none;
 	-webkit-user-select: none;
@@ -51,10 +49,6 @@
 	display: none;
 }
 
-.hamburgerDetails[open] .hamburgerButton {
-	background: color-mix(in srgb, var(--background-color) 90%, transparent);
-}
-
 .hamburgerDetails[open] .hamburgerIconClosed {
 	opacity: 0;
 	transform: rotate(90deg) scale(0.75);
@@ -76,12 +70,10 @@
 	overflow-y: auto;
 	position: absolute;
 	right: 0;
-	background: color-mix(in srgb, var(--background-color) 90%, transparent);
+	background: var(--background-color);
 	border: 1px solid
 		color-mix(in srgb, var(--foreground-color) 20%, transparent);
 	border-radius: 0.75rem;
-	box-shadow: 0 0.75rem 2.5rem
-		color-mix(in srgb, var(--foreground-color) 15%, transparent);
 	box-sizing: border-box;
 	scrollbar-gutter: stable;
 }
