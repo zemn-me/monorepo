@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.90.2
-    version: 44.90.2(typanion@3.14.0)
+    specifier: 44.93.4
+    version: 44.93.4(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.4)
@@ -8034,8 +8034,8 @@ packages:
     engines: {node: '>=18.0'}
     dev: true
 
-  /cronstrue@3.24.0:
-    resolution: {integrity: sha512-t/Ji3Ur2c/pzhIAWNwC0ftl3JAE4dLfCjAdZoTZXmPDZwcispnS1PaMcMS4OmIIXyIVouAz+yw+mfQiE3hz5OQ==}
+  /cronstrue@3.25.0:
+    resolution: {integrity: sha512-PAPaioNXHMLiUSM8V5sC0bIx5MALUQjjtuDZZWBir5Tau8D676Aoj3Oju/SCaggi4eLG+QPC3IU+dCo30AzDIA==}
     hasBin: true
     dev: true
 
@@ -9956,11 +9956,6 @@ packages:
     engines: {node: ^20.17.0 || >=22.9.0}
     dependencies:
       minimatch: 10.2.6
-
-  /ignore@7.0.8:
-    resolution: {integrity: sha512-YYNsSlXBjMk92SKnkwvB5LOVSa6OznlFUGcsvrFgNJbJCd0M1XKeFVRc8ZByeCqz32FivYNHJVooLmdqrmvp/Q==}
-    engines: {node: '>= 4'}
-    dev: true
 
   /ignore@7.0.9:
     resolution: {integrity: sha512-brTTsvFRt5C1gGHtPst/281UjPD5t9fBqbgoMPlVWy11ZLTPfu7HxK4ZYqO9H7o/yC9rSTCI85EaQ4OoY12qYw==}
@@ -14203,8 +14198,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.90.2(typanion@3.14.0):
-    resolution: {integrity: sha512-8VzK8eIa5ZQFNqJBZ4pAvX+B02suSwBfIzdU0D9V0fCJGIpfvwbzA0bpWADXbMycfRmALNOxHCMvga8LeDm7vQ==}
+  /renovate@44.93.4(typanion@3.14.0):
+    resolution: {integrity: sha512-w8lSFDqu7But5ast5IamUGspdY/0lMT8PE9BNXqRjjokw1OwFVT6NhxI+gnwvSWWXorH/TVrNOTvTyQtHp6zdg==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14261,7 +14256,7 @@ packages:
       commander: 15.0.0
       common-tags: 1.8.2
       croner: 10.0.1
-      cronstrue: 3.24.0
+      cronstrue: 3.25.0
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.2
@@ -14283,7 +14278,7 @@ packages:
       got: 16.0.0
       graph-data-structure: 4.5.0
       handlebars: 4.7.9
-      ignore: 7.0.8
+      ignore: 7.0.9
       ini: 6.0.0
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 4.0.0
