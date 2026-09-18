@@ -28,15 +28,17 @@
 
 .loggedIn {
 	display: inline-flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.3em;
+	max-width: 100%;
 }
 
 .loggedInText {
+	min-width: 0;
 	max-width: 16em;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	overflow-wrap: anywhere;
+	white-space: normal;
 }
 
 .accountActions {
