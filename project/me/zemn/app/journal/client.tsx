@@ -5,7 +5,6 @@ import {
 	faChevronDown,
 	faMicrophone,
 	faSpinner,
-	faStop,
 	faTrashCan,
 	faTriangleExclamation,
 	faUpload,
@@ -2593,7 +2592,7 @@ export default function JournalPageClient({
 							? 'Saving voice note'
 							: 'Starting microphone'
 						: recording
-							? 'Submit note'
+							? 'Stop and upload'
 							: 'Record a note'
 				}
 				className={`${style.recordButton} ${recording ? style.submitButton : ''}`}
@@ -2601,7 +2600,7 @@ export default function JournalPageClient({
 				onClick={
 					recording ? () => endRecording('submit') : startRecording
 				}
-				title={recording ? 'Finish recording' : 'Record a note'}
+				title={recording ? 'Stop and upload' : 'Record a note'}
 				type="button"
 			>
 				<FontAwesomeIcon
@@ -2611,7 +2610,7 @@ export default function JournalPageClient({
 						recordingBusy
 							? faSpinner
 							: recording
-								? faStop
+								? faUpload
 								: faMicrophone
 					}
 				/>

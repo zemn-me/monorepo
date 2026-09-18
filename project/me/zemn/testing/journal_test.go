@@ -965,7 +965,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		dumpPageDiagnostics(t, driver)
 		t.Fatalf("live recording waveform: %v", err)
 	}
-	submitButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second)
+	submitButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
 	}
@@ -1006,7 +1006,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	// Chromium's fake microphone needs a recording timeslice before stopping to
 	// emit a non-empty MediaRecorder chunk.
 	time.Sleep(1500 * time.Millisecond)
-	submitButton, err = waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Submit note']", 10*time.Second)
+	submitButton, err = waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
 	}
@@ -2009,7 +2009,7 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 	}
 	time.Sleep(2200 * time.Millisecond)
 	capture("journal-recording")
-	submit, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Submit note']")
+	submit, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Stop and upload']")
 	if err != nil {
 		t.Fatal(err)
 	}
