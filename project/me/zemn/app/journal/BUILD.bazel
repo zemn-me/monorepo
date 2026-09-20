@@ -8,6 +8,8 @@ ts_project(
     srcs = [
         "client.tsx",
         "layout.tsx",
+        "location_geometry.ts",
+        "location_map.tsx",
         "mcp_setup.tsx",
         "page.tsx",
         "periods.ts",
@@ -52,6 +54,9 @@ filegroup(
     srcs = [
         "client.tsx",
         "layout.tsx",
+        "location_geometry.ts",
+        "location_geometry_test.ts",
+        "location_map.tsx",
         "mcp_setup.tsx",
         "page.tsx",
         "periods.ts",
@@ -74,6 +79,7 @@ css_module(
 ts_project(
     name = "journal_tests",
     srcs = [
+        "location_geometry_test.ts",
         "periods_test.ts",
         "recording_test.ts",
     ],
@@ -88,6 +94,7 @@ ts_project(
 jest_test(
     name = "tests",
     srcs = [
+        "location_geometry_test.js",
         "periods_test.js",
         "recording_test.js",
     ],

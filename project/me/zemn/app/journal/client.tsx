@@ -27,8 +27,8 @@ import {
 } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
-
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
+import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
 import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
 import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
 import {
@@ -1333,7 +1333,11 @@ function EntryCard({
 }) {
 	const title = entry.summary?.title ?? 'Voice note';
 	return (
-		<details className={style.entry} id={`entry-${entry.id}`}>
+		<details
+			className={style.entry}
+			id={`entry-${entry.id}`}
+			open={playback.activeEntryID === entry.id || undefined}
+		>
 			<summary>
 				<LocalizedTime
 					className={style.entryTime}
@@ -1369,6 +1373,7 @@ function EntryCard({
 					}
 				/>
 			)}
+			<JournalMap entries={[entry]} />
 			{entry.audioUrl && (
 				<JournalAudio
 					audioURL={entry.audioUrl}
@@ -1920,6 +1925,15 @@ function PeriodList({
 							)}
 						</>
 					)}
+					{period !== 'day' && (
+						<JournalMap
+							entries={journal.entries.filter(
+								entry =>
+									entry.status === 'ready' &&
+									periodContains(node, entry.recordedAt)
+							)}
+						/>
+					)}
 					{period === 'day' &&
 						journal.entries
 							.filter(
@@ -2080,6 +2094,7 @@ function JournalBrowser({
 						</div>
 					)
 				)}
+				<JournalMap entries={readyEntries} />
 				<RecentEntries journal={journal} />
 			</div>
 		);

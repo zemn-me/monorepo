@@ -804,6 +804,7 @@ export interface JournalAudioUpload {
 	readonly file: Blob;
 	readonly contentType: components['schemas']['JournalEntryCreate']['contentType'];
 	readonly recordedAt: string;
+	readonly location?: components['schemas']['JournalLocation'];
 	readonly timeZone: string;
 }
 
@@ -820,6 +821,7 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 					body: {
 						contentType: upload.contentType,
 						recordedAt: upload.recordedAt,
+						location: upload.location,
 						timeZone: upload.timeZone,
 					},
 				});

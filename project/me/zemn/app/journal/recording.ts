@@ -171,6 +171,32 @@ async function capture(
 		await removeRecording(owner, draft.id);
 		throw error;
 	}
+	// Capture once at the start, without delaying audio for a permission prompt.
+	// A late response must not recreate a stopped or discarded draft.
+	navigator.geolocation?.getCurrentPosition(
+		position => {
+			if (recorder.state === 'inactive') return;
+			draft = {
+				...draft,
+				location: {
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude,
+					accuracyMeters: position.coords.accuracy,
+					capturedAt: new Date(position.timestamp).toISOString(),
+				},
+			};
+			const checkpoint = { ...draft, parts: [...parts] };
+			writes = writes.then(async () => {
+				try {
+					await saveRecording(checkpoint);
+				} catch {
+					/* Audio checkpoints and final saving report storage failures. */
+				}
+			});
+		},
+		() => undefined,
+		{ maximumAge: 0, timeout: 10_000, enableHighAccuracy: false }
+	);
 	checkLimit();
 	return { stream, id: draft.id, done, stop };
 }

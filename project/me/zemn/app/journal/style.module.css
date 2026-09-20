@@ -33,7 +33,7 @@
 
 .dropTarget::after {
 	border: 2px dashed currentColor;
-	content: '';
+	content: "";
 	inset: 1em;
 	pointer-events: none;
 	position: fixed;
@@ -146,7 +146,7 @@
 }
 
 .spinning,
-.statusIndicator[data-state='busy'] > svg {
+.statusIndicator[data-state="busy"] > svg {
 	animation: journal-upload-spin 1s linear infinite;
 }
 
@@ -159,7 +159,7 @@
 	inline-size: 1.5em;
 }
 
-.statusIndicator[data-state='error'] {
+.statusIndicator[data-state="error"] {
 	color: var(--journal-recording);
 }
 
@@ -198,7 +198,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.spinning,
-	.statusIndicator[data-state='busy'] > svg,
+	.statusIndicator[data-state="busy"] > svg,
 	.placeholder > span[aria-hidden] {
 		animation: none;
 	}
@@ -290,7 +290,7 @@
 	z-index: 1;
 }
 
-.zoomNavigation a[aria-current='page'] {
+.zoomNavigation a[aria-current="page"] {
 	color: var(--background-color);
 }
 
@@ -448,7 +448,8 @@
 	font: inherit;
 	padding: 0;
 	scroll-margin-block-start: calc(
-		var(--journal-sticky-navigation-height) + 0.5rem
+		var(--journal-sticky-navigation-height) +
+		0.5rem
 	);
 	text-decoration: underline;
 	text-decoration-color: var(--link-color);
@@ -897,7 +898,7 @@
 	border-radius: 50%;
 	block-size: 0.5em;
 	inline-size: 0.5em;
-	content: '';
+	content: "";
 }
 
 .localRecordings {
@@ -1027,4 +1028,50 @@
 	.recordingTime {
 		font-size: 0.85em;
 	}
+}
+
+.locationMap {
+	position: relative;
+	block-size: 144px;
+	overflow: hidden;
+	border-radius: 0.5rem;
+	margin-block: 0.75rem;
+	background: #e6e9e5;
+	isolation: isolate;
+}
+.locationMap > img {
+	position: absolute;
+	max-width: none;
+}
+.mapPin {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	display: grid;
+	place-items: center;
+	inline-size: 24px;
+	block-size: 24px;
+	border: 2px solid white;
+	border-radius: 50%;
+	background: #9b3232;
+	color: white;
+	box-shadow: 0 1px 4px #0006;
+	font-size: 10px;
+	text-decoration: none;
+}
+.mapPin:focus-visible {
+	outline: 3px solid #152e56;
+	outline-offset: 3px;
+	z-index: 1;
+}
+.mapAttribution {
+	position: absolute;
+	inset-block-end: 0;
+	inset-inline-end: 0;
+	background: #fffffff0;
+	color: #222;
+	font: 10px / 1.5 sans-serif;
+	padding-inline: 4px;
+}
+.mapAttribution a {
+	color: inherit;
 }
