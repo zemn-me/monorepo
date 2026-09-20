@@ -2199,3 +2199,87 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 		t.Fatalf("map pin did not open its note: %v", err)
 	}
 }
+
+func TestJournalLocationPermissionError(t *testing.T) {
+	root, err := nextServerRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments("--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	if err := driver.ExecuteChromiumCommand("Browser.setPermission", map[string]any{
+		"origin": root.String(), "permission": map[string]any{"name": "geolocation"}, "setting": "denied",
+	}); err != nil {
+		t.Fatal(err)
+	}
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	record, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := record.Click(); err != nil {
+		t.Fatal(err)
+	}
+	const noticeSelector = "section[aria-label='Create a journal entry'] [role='status']"
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		notice, err := wd.FindElement(selenium.ByCSSSelector, noticeSelector)
+		if err != nil {
+			return false, nil
+		}
+		text, err := notice.Text()
+		return err == nil && strings.Contains(text, "Location access is blocked.") && strings.Contains(text, "browser and device settings"), nil
+	}, 10*time.Second); err != nil {
+		t.Fatalf("location permission failure was not shown: %v", err)
+	}
+	// Keep recording past the ordinary error timeout; the location notice must persist.
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		timer, err := wd.FindElement(selenium.ByCSSSelector, "[role='timer'][aria-label='Recording duration']")
+		if err != nil {
+			return false, nil
+		}
+		text, err := timer.Text()
+		return err == nil && text >= "00:00:09", nil
+	}, 15*time.Second); err != nil {
+		t.Fatalf("recording did not continue after location denial: %v", err)
+	}
+	for _, width := range []int{1280, 390} {
+		if err := driver.ResizeWindow("", width, 844); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := driver.ExecuteScript(`document.querySelector("section[aria-label='Create a journal entry']").scrollIntoView({block: 'center', behavior: 'instant'})`, nil); err != nil {
+			t.Fatal(err)
+		}
+		fits, err := driver.ExecuteScript(`
+			const notice = document.querySelector("section[aria-label='Create a journal entry'] [role='status']");
+			return document.documentElement.scrollWidth <= window.innerWidth &&
+				notice?.innerText.includes('Location access is blocked.') && notice.getBoundingClientRect().height > 0;
+		`, nil)
+		if err != nil || fits != true {
+			t.Fatalf("location notice overflowed at %dpx: %v, %v", width, fits, err)
+		}
+		if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" {
+			if screenshot, err := driver.Screenshot(); err == nil {
+				_ = os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-error-%d.png", width)), screenshot, 0600)
+			}
+		}
+	}
+	stop, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := stop.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second); err != nil {
+		t.Fatalf("could not finish recording after location denial: %v", err)
+	}
+}

@@ -2370,6 +2370,7 @@ export default function JournalPageClient({
 	const [recording, setRecording] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
 	const [recordingError, setRecordingError] = useState<string>();
+	const [recordingLocationError, setRecordingLocationError] = useState<string>();
 	const [draggingFile, setDraggingFile] = useState(false);
 	const dragDepth = useRef(0);
 	const hasReadScope = scopes(
@@ -2421,6 +2422,7 @@ export default function JournalPageClient({
 	const refreshRecordings = queue.refresh;
 	useEffect(() => {
 		currentOwner.current = owner;
+		setRecordingLocationError(undefined);
 		return () => {
 			currentOwner.current = undefined;
 			recorder.current?.stop();
@@ -2543,6 +2545,7 @@ export default function JournalPageClient({
 
 	const startRecording = async () => {
 		resetSubmission();
+		setRecordingLocationError(undefined);
 		if (!owner) {
 			setRecordingError('Sign in before recording a voice note.');
 			return;
@@ -2552,6 +2555,10 @@ export default function JournalPageClient({
 		try {
 			session = await startLocalRecording(owner, {
 				tick: setRecordingElapsed,
+				locationError: message => {
+					if (currentOwner.current === owner)
+						setRecordingLocationError(message);
+				},
 				finished: (draft, durable, message) => {
 					if (recorder.current === session) {
 						recorder.current = undefined;
@@ -2598,6 +2605,7 @@ export default function JournalPageClient({
 			aria-busy={recordingBusy || queue.syncing !== undefined}
 			className={style.recorder}
 			data-recording={recordingStream ? '' : undefined}
+			data-notice={recordingError || recordingLocationError ? '' : undefined}
 			data-uploading={queue.syncing ? '' : undefined}
 		>
 			{!recordingStream && (
@@ -2674,7 +2682,11 @@ export default function JournalPageClient({
 					</button>
 				</>
 			)}
-			{recordingError && <p role="status">{recordingError}</p>}
+			{(recordingError || recordingLocationError) && (
+				<p className={style.recordingNotice} role="status">
+					{recordingError || recordingLocationError}
+				</p>
+			)}
 		</section>
 	) : undefined;
 

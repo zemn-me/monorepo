@@ -127,7 +127,8 @@
 	padding: 0;
 }
 
-.recorder[data-recording] {
+.recorder[data-recording],
+.recorder[data-notice] {
 	flex-wrap: wrap;
 	flex: 1 1 100%;
 	order: 2;
@@ -139,6 +140,11 @@
 	font-size: 0.85em;
 	margin: 0;
 	max-width: 16em;
+}
+
+.recorder .recordingNotice {
+	flex: 1 1 100%;
+	max-width: none;
 }
 
 .recorder button,
