@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.95.0
-    version: 44.95.0(typanion@3.14.0)
+    specifier: 44.96.2
+    version: 44.96.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.5)
@@ -5186,8 +5186,8 @@ packages:
     engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
     dev: true
 
-  /@renovatebot/pgp@1.4.1:
-    resolution: {integrity: sha512-e4lknjxPe354YISRvhR5s9Vx2gB9hEJVK+O6dYzeE9MsAbyTpcHKcIeDXE2QGGi8h0WV5seUAQUhDh3f5jZ1Wg==}
+  /@renovatebot/pgp@1.4.3:
+    resolution: {integrity: sha512-jjD0oxcnmqTv5ykCUbP9WGHsC0LmoRbVUGgz4JXdYYvJpxRQxD6DCOp5iNQPrGpYV/JSiQ+urX4qF4fg0c0LQg==}
     engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
     dev: true
 
@@ -14416,8 +14416,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.95.0(typanion@3.14.0):
-    resolution: {integrity: sha512-YHmgsEcTUOZ3bCLpRuXIWJT5Sj/ZlaWZPzyeXPUfIJ9Xy4W9vfG4MvhOL6DGiQgrEUsnfz1B4WsXfE4kjnzyOg==}
+  /renovate@44.96.2(typanion@3.14.0):
+    resolution: {integrity: sha512-CLzdjp9qHfDuDlt81FfL82wHTpfAjbF9VjPgErckNUtuAF1UibZOLn1YBt9FR2frEiAIogk4cZdNbPtrkl0fTw==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14456,7 +14456,7 @@ packages:
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.10
       '@renovatebot/pep440': 5.0.1
-      '@renovatebot/pgp': 1.4.1
+      '@renovatebot/pgp': 1.4.3
       '@renovatebot/ruby-semver': 5.0.0
       '@sindresorhus/is': 8.1.0
       '@yarnpkg/core': 4.9.1(typanion@3.14.0)
