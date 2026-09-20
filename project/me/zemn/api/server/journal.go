@@ -150,16 +150,17 @@ func (s *Server) putJournalJSON(ctx context.Context, key string, value any) erro
 
 func journalEntryMetadata(entry JournalStoredEntry) JournalEntryMetadata {
 	metadata := JournalEntryMetadata{
-		SchemaVersion: 1,
-		Id:            entry.Id,
-		RecordedAt:    entry.RecordedAt,
-		TimeZone:      entry.TimeZone,
-		DurationMs:    entry.DurationMs,
-		ContentType:   entry.ContentType,
-		ByteLength:    entry.ByteLength,
-		ContentSha256: entry.ContentSha256,
-		AudioKey:      entry.AudioKey,
-		Status:        entry.Status,
+		SchemaVersion:      1,
+		Id:                 entry.Id,
+		RecordedAt:         entry.RecordedAt,
+		TimeZone:           entry.TimeZone,
+		DurationMs:         entry.DurationMs,
+		ContentType:        entry.ContentType,
+		ByteLength:         entry.ByteLength,
+		ContentSha256:      entry.ContentSha256,
+		AudioKey:           entry.AudioKey,
+		Status:             entry.Status,
+		ProcessingProgress: entry.ProcessingProgress,
 	}
 	if entry.Error != "" {
 		metadata.Error = &entry.Error
@@ -205,16 +206,17 @@ func (s *Server) journalAudioURL(ctx context.Context, entry JournalStoredEntry) 
 
 func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) JournalEntry {
 	result := JournalEntry{
-		SchemaVersion: 1,
-		Id:            openapiUUID(entry.Id),
-		RecordedAt:    entry.RecordedAt,
-		TimeZone:      entry.TimeZone,
-		DurationMs:    entry.DurationMs,
-		ContentType:   entry.ContentType,
-		ByteLength:    entry.ByteLength,
-		Status:        JournalEntryStatus(entry.Status),
-		AudioUrl:      s.journalAudioURL(ctx, entry),
-		Transcript:    entry.Transcript,
+		SchemaVersion:      1,
+		Id:                 openapiUUID(entry.Id),
+		RecordedAt:         entry.RecordedAt,
+		TimeZone:           entry.TimeZone,
+		DurationMs:         entry.DurationMs,
+		ContentType:        entry.ContentType,
+		ByteLength:         entry.ByteLength,
+		Status:             JournalEntryStatus(entry.Status),
+		ProcessingProgress: entry.ProcessingProgress,
+		AudioUrl:           s.journalAudioURL(ctx, entry),
+		Transcript:         entry.Transcript,
 	}
 	if entry.Error != "" {
 		result.Error = &entry.Error
@@ -978,6 +980,7 @@ func (s *Server) journalObjectSHA256(ctx context.Context, bucket, key string, si
 
 func (s *Server) failJournalEntry(ctx context.Context, subject string, entry JournalStoredEntry, cause error) error {
 	entry.Status = JournalEntryStatusFailed
+	entry.ProcessingProgress = nil
 	entry.Error = cause.Error()
 	if err := s.updateJournalEntry(ctx, subject, entry); err != nil {
 		return err
@@ -1134,6 +1137,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		return s.deleteJournalEntry(ctx, journalOwnerSubject, *entry)
 	}
 	entry.Status = JournalEntryStatusProcessing
+	entry.ProcessingProgress = &JournalProcessingProgress{Stage: JournalProcessingProgressStageTranscribing}
 	entry.Error = ""
 	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
 		return err
@@ -1156,7 +1160,17 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	if entry.ContentType == "audio/mp4" {
 		audio, finishMetadata = observeQuickTimeCreationTime(audio)
 	}
-	transcription, err := s.journalAI.Transcribe(ctx, audio, entry.ContentType)
+	var transcription JournalTranscriptionResult
+	if ai, ok := s.journalAI.(interface {
+		TranscribeWithProgress(context.Context, io.Reader, string, func(int, int) error) (JournalTranscriptionResult, error)
+	}); ok {
+		transcription, err = ai.TranscribeWithProgress(ctx, audio, entry.ContentType, func(completed, total int) error {
+			entry.ProcessingProgress = &JournalProcessingProgress{Stage: JournalProcessingProgressStageTranscribing, CompletedChunks: completed, TotalChunks: total}
+			return s.updateJournalEntry(ctx, journalOwnerSubject, *entry)
+		})
+	} else {
+		transcription, err = s.journalAI.Transcribe(ctx, audio, entry.ContentType)
+	}
 	embeddedRecordedAt, hasEmbeddedRecordedAt := finishMetadata()
 	if err != nil {
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
@@ -1166,6 +1180,11 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		entry.RecordedAt = embeddedRecordedAt
 	}
 	entry.DurationMs = transcription.DurationMs
+	entry.Transcript = transcription.Segments
+	entry.ProcessingProgress.Stage = JournalProcessingProgressStageSummarizing
+	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
+		return err
+	}
 	sources := transcriptSources(entry.Id, transcription.Segments)
 	analysis, err := s.journalAI.AnalyzeEntry(ctx, entry.RecordedAt, entry.TimeZone, sources)
 	if err != nil {
@@ -1194,6 +1213,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		sourceFingerprint,
 	))
 	entry.Status = JournalEntryStatusReady
+	entry.ProcessingProgress = nil
 	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
 		return err
 	}

@@ -61,6 +61,7 @@ filegroup(
         "recording_store.ts",
         "recording_test.ts",
         "status.tsx",
+        "status_test.tsx",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -76,12 +77,17 @@ ts_project(
     srcs = [
         "periods_test.ts",
         "recording_test.ts",
+        "status_test.tsx",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":journal",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
     ],
 )
 
@@ -90,6 +96,7 @@ jest_test(
     srcs = [
         "periods_test.js",
         "recording_test.js",
+        "status_test.js",
     ],
     jsdom = True,
     visibility = ["//:__subpackages__"],

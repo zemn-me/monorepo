@@ -19,7 +19,10 @@ import {
 	removeRecording,
 	saveRecording,
 } from '#root/project/me/zemn/app/journal/recording_store.js';
-import { JournalStatus } from '#root/project/me/zemn/app/journal/status.js';
+import {
+	JournalProcessingStatus,
+	JournalStatus,
+} from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import type { JournalAudioUpload } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import {
@@ -27,7 +30,11 @@ import {
 	Time as LocalizedTime,
 } from '#root/ts/react/lang/date.js';
 
+type JournalEntry =
+	import('#root/project/me/zemn/api/api_client.gen.js').components['schemas']['JournalEntry'];
+
 interface QueueOptions {
+	readonly entries: readonly JournalEntry[];
 	readonly owner: string | undefined;
 	readonly canSync: boolean;
 	readonly upload: (
@@ -239,6 +246,7 @@ export function useRecordingQueue(options: QueueOptions) {
 			...recordings.filter(item => !emergencyIDs.has(item.id)),
 			...memory,
 		].filter(item => item.owner === owner),
+		entries: options.entries,
 		emergencyIDs,
 		syncing,
 		errors,
@@ -265,6 +273,9 @@ function LocalRecordingRow({
 		setURL(url);
 		return () => URL.revokeObjectURL(url);
 	}, [draft]);
+	const remoteEntry = queue.entries.find(
+		entry => entry.id === draft.remoteEntryID
+	);
 	const tooLarge = file.size > maxUploadBytes;
 	const uploading = queue.syncing === draft.id;
 	const emergency = queue.emergencyIDs.has(draft.id);
@@ -310,7 +321,13 @@ function LocalRecordingRow({
 							<LocalizedTime date={new Date(draft.recordedAt)} />
 						</small>
 					</div>
-					<JournalStatus label={label} state={status} />
+					{!uploading && remoteEntry?.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={remoteEntry.processingProgress}
+						/>
+					) : (
+						<JournalStatus label={label} state={status} />
+					)}
 					<FontAwesomeIcon
 						aria-hidden="true"
 						className={style.entryChevron}

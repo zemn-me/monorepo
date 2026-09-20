@@ -33,7 +33,7 @@
 
 .dropTarget::after {
 	border: 2px dashed currentColor;
-	content: '';
+	content: "";
 	inset: 1em;
 	pointer-events: none;
 	position: fixed;
@@ -146,7 +146,7 @@
 }
 
 .spinning,
-.statusIndicator[data-state='busy'] > svg {
+.statusIndicator[data-state="busy"] > svg {
 	animation: journal-upload-spin 1s linear infinite;
 }
 
@@ -159,7 +159,7 @@
 	inline-size: 1.5em;
 }
 
-.statusIndicator[data-state='error'] {
+.statusIndicator[data-state="error"] {
 	color: var(--journal-recording);
 }
 
@@ -198,7 +198,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.spinning,
-	.statusIndicator[data-state='busy'] > svg,
+	.statusIndicator[data-state="busy"] > svg,
 	.placeholder > span[aria-hidden] {
 		animation: none;
 	}
@@ -290,7 +290,7 @@
 	z-index: 1;
 }
 
-.zoomNavigation a[aria-current='page'] {
+.zoomNavigation a[aria-current="page"] {
 	color: var(--background-color);
 }
 
@@ -448,7 +448,8 @@
 	font: inherit;
 	padding: 0;
 	scroll-margin-block-start: calc(
-		var(--journal-sticky-navigation-height) + 0.5rem
+		var(--journal-sticky-navigation-height) +
+		0.5rem
 	);
 	text-decoration: underline;
 	text-decoration-color: var(--link-color);
@@ -897,7 +898,7 @@
 	border-radius: 50%;
 	block-size: 0.5em;
 	inline-size: 0.5em;
-	content: '';
+	content: "";
 }
 
 .localRecordings {
@@ -1027,4 +1028,17 @@
 	.recordingTime {
 		font-size: 0.85em;
 	}
+}
+
+.processingStatus {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	font-size: 0.75em;
+	color: var(--journal-muted);
+}
+
+.processingStatus progress {
+	inline-size: 4em;
+	accent-color: currentColor;
 }

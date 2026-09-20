@@ -42,6 +42,7 @@ import {
 import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
 import {
 	JournalPlaceholder,
+	JournalProcessingStatus,
 	JournalStatus,
 } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
@@ -1341,17 +1342,23 @@ function EntryCard({
 				/>
 				<span className={style.entryHeading}>
 					<strong className={style.entryTitle}>{title}</strong>
-					{entry.status !== 'ready' && (
-						<JournalStatus
-							label={
-								entry.status === 'processing'
-									? 'Transcribing voice note'
-									: entry.status === 'failed'
+					{entry.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={entry.processingProgress}
+						/>
+					) : (
+						entry.status !== 'ready' && (
+							<JournalStatus
+								label={
+									entry.status === 'failed'
 										? 'Processing failed'
 										: 'Uploading voice note'
-							}
-							state={entry.status === 'failed' ? 'error' : 'busy'}
-						/>
+								}
+								state={
+									entry.status === 'failed' ? 'error' : 'busy'
+								}
+							/>
+						)
 					)}
 				</span>
 				<FontAwesomeIcon
@@ -1364,7 +1371,9 @@ function EntryCard({
 				<JournalPlaceholder
 					label={
 						entry.status === 'processing'
-							? 'Preparing transcript'
+							? entry.processingProgress?.stage === 'summarizing'
+								? 'Preparing summary'
+								: 'Preparing transcript'
 							: 'Uploading audio'
 					}
 				/>
@@ -2380,6 +2389,11 @@ export default function JournalPageClient({
 		owner,
 		canSync: hasWriteScope,
 		upload: createJournalEntry,
+		entries: journal(
+			value => value.entries,
+			() => [],
+			() => []
+		),
 		readyEntryIDs: journal(
 			value =>
 				value.entries

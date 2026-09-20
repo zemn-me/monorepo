@@ -1429,3 +1429,61 @@ func TestProcessJournalUploadIgnoresSidecarNotifications(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+type progressInspectingJournalAI struct {
+	fakeJournalAI
+	inspect func() error
+	fail    bool
+}
+
+func (ai progressInspectingJournalAI) AnalyzeEntry(ctx context.Context, at time.Time, zone string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	if err := ai.inspect(); err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	if ai.fail {
+		return JournalEntryAnalysisResult{}, errors.New("summary failed")
+	}
+	return ai.fakeJournalAI.AnalyzeEntry(ctx, at, zone, sources)
+}
+
+func TestJournalProcessingProgressLifecycle(t *testing.T) {
+	for _, fail := range []bool{false, true} {
+		t.Run(fmt.Sprintf("summary_failure_%v", fail), func(t *testing.T) {
+			objects := &fakeJournalObjects{}
+			server := &Server{ddb: &inMemoryDDB{}, journalTableName: "journal", journalBucketName: "journal-audio", journalObjects: objects, journalPresigner: fakeJournalPresigner{}}
+			ctx := context.WithValue(t.Context(), auth.IDTokenKey, &auth.IDToken{Issuer: "https://api.zemn.me", Subject: journalOwnerSubject})
+			inspected := false
+			server.journalAI = progressInspectingJournalAI{fail: fail, inspect: func() error {
+				response, err := server.GetJournal(ctx, GetJournalRequestObject{})
+				if err != nil {
+					return err
+				}
+				entry := response.(GetJournal200JSONResponse).Entries[0]
+				if entry.ProcessingProgress == nil || entry.ProcessingProgress.Stage != JournalProcessingProgressStageSummarizing || len(entry.Transcript) == 0 {
+					return fmt.Errorf("transcript/summary stage not published: %+v", entry)
+				}
+				inspected = true
+				return nil
+			}}
+			response, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{Body: &JournalEntryCreate{ContentType: "audio/wav", RecordedAt: time.Now(), TimeZone: "UTC"}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			id := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
+			objects.objects[journalEntryKey(id)] = []byte("audio")
+			err = server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(id), 5)
+			if (err != nil) != fail || !inspected {
+				t.Fatalf("processing error=%v, inspected=%v", err, inspected)
+			}
+			records, err := server.listJournalRecords(ctx, journalOwnerSubject)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, record := range records {
+				if record.Entry != nil && record.Entry.ProcessingProgress != nil {
+					t.Fatal("finished entry retained stale progress")
+				}
+			}
+		})
+	}
+}

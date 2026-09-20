@@ -66,10 +66,23 @@ func journalTranscriptionResponse(duration float64, text string) *http.Response 
 type chunkedJournalTestAI struct {
 	fakeJournalAI
 	transcriber *openAIJournalAI
+	progress    func(int, int) error
 }
 
 func (ai chunkedJournalTestAI) Transcribe(ctx context.Context, audio io.Reader, contentType string) (JournalTranscriptionResult, error) {
 	return ai.transcriber.Transcribe(ctx, audio, contentType)
+}
+
+func (ai chunkedJournalTestAI) TranscribeWithProgress(ctx context.Context, audio io.Reader, contentType string, report func(int, int) error) (JournalTranscriptionResult, error) {
+	return ai.transcriber.TranscribeWithProgress(ctx, audio, contentType, func(completed, total int) error {
+		if err := report(completed, total); err != nil {
+			return err
+		}
+		if ai.progress != nil {
+			return ai.progress(completed, total)
+		}
+		return nil
+	})
 }
 
 // Exercise the actual decoder and multipart requests through the upload worker:
@@ -124,6 +137,23 @@ func TestLongJournalUploadSplitsAndJoinsOneEntry(t *testing.T) {
 		t.Fatalf("create: %#v", response)
 	}
 	id := created.Entry.Id.String()
+	var observed [][2]int
+	server.journalAI = chunkedJournalTestAI{transcriber: ai, progress: func(completed, total int) error {
+		response, err := server.GetJournal(ctx, GetJournalRequestObject{})
+		if err != nil {
+			return err
+		}
+		entries := response.(GetJournal200JSONResponse).Entries
+		if len(entries) != 1 || entries[0].ProcessingProgress == nil {
+			return errors.New("progress not exposed by journal API")
+		}
+		progress := entries[0].ProcessingProgress
+		if progress.CompletedChunks != completed || progress.TotalChunks != total || progress.Stage != JournalProcessingProgressStageTranscribing {
+			return fmt.Errorf("unexpected progress: %+v", progress)
+		}
+		observed = append(observed, [2]int{completed, total})
+		return nil
+	}}
 	objects.objects[journalEntryKey(id)] = original
 	if err := server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(id), int64(len(original))); err != nil {
 		t.Fatal(err)
@@ -137,6 +167,18 @@ func TestLongJournalUploadSplitsAndJoinsOneEntry(t *testing.T) {
 		t.Fatalf("got %d entries", len(journal.Entries))
 	}
 	entry := journal.Entries[0]
+	if len(observed) < 4 || observed[len(observed)-1] != [2]int{4, 4} {
+		t.Fatalf("missing chunk progress: %v", observed)
+	}
+	for i := 1; i < len(observed); i++ {
+		if observed[i][0] < observed[i-1][0] {
+			t.Fatalf("progress moved backwards: %v", observed)
+		}
+	}
+	if entry.ProcessingProgress != nil {
+		t.Fatal("ready entry retained processing progress")
+	}
+
 	if entry.Status != "ready" || entry.DurationMs != seconds*1000 || len(entry.Transcript) != 4 || entry.Summary == nil || entry.AudioUrl == nil {
 		t.Fatalf("entry did not retain its audio and complete transcript: %#v", entry)
 	}

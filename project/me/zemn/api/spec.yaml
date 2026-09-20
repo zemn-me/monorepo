@@ -592,6 +592,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalProcessingProgress:
+      type: object
+      required: [stage, completedChunks, totalChunks]
+      properties:
+        stage:
+          type: string
+          enum: [transcribing, summarizing]
+          x-enum-varnames: [JournalProcessingProgressStageTranscribing, JournalProcessingProgressStageSummarizing]
+        completedChunks:
+          type: integer
+          minimum: 0
+        totalChunks:
+          type: integer
+          minimum: 0
+          description: Zero until decoding has established the complete chunk count.
     JournalEntryStatus:
       type: string
       enum: [awaiting_upload, processing, ready, failed]
@@ -630,6 +645,8 @@ components:
           x-omitempty: true
         audioKey:
           type: string
+        processingProgress:
+          $ref: '#/components/schemas/JournalProcessingProgress'
         status:
           $ref: '#/components/schemas/JournalEntryStatus'
         error:
@@ -692,6 +709,10 @@ components:
           description: Time after which an awaiting upload can no longer be active.
           x-oapi-codegen-extra-tags:
             dynamodbav: 'upload_expires_at,omitempty'
+        processingProgress:
+          $ref: '#/components/schemas/JournalProcessingProgress'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'processing_progress,omitempty'
         status:
           $ref: '#/components/schemas/JournalEntryStatus'
           x-oapi-codegen-extra-tags:
@@ -784,6 +805,8 @@ components:
           format: int64
           x-go-type-skip-optional-pointer: true
           x-omitempty: true
+        processingProgress:
+          $ref: '#/components/schemas/JournalProcessingProgress'
         status:
           $ref: '#/components/schemas/JournalEntryStatus'
         error:
