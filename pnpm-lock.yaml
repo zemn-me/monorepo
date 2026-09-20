@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.96.4
-    version: 44.96.4(typanion@3.14.0)
+    specifier: 44.97.2
+    version: 44.97.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.5)
@@ -5186,9 +5186,9 @@ packages:
     engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
     dev: true
 
-  /@renovatebot/pgp@1.4.3:
-    resolution: {integrity: sha512-jjD0oxcnmqTv5ykCUbP9WGHsC0LmoRbVUGgz4JXdYYvJpxRQxD6DCOp5iNQPrGpYV/JSiQ+urX4qF4fg0c0LQg==}
-    engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
+  /@renovatebot/pgp@2.0.1:
+    resolution: {integrity: sha512-aOnsCaPCF+xBCqNv9ru5Yo/e18lPMrXgXDOWkFZCmG+7syrRYaRTglE5vut1m2jAxlkYT4P6fAu4GD2MjH88Zw==}
+    engines: {node: '>=24.10.0', pnpm: '>=10.0.0'}
     dev: true
 
   /@renovatebot/ruby-semver@5.0.0:
@@ -8238,8 +8238,8 @@ packages:
     engines: {node: '>=18.0'}
     dev: true
 
-  /cronstrue@3.25.0:
-    resolution: {integrity: sha512-PAPaioNXHMLiUSM8V5sC0bIx5MALUQjjtuDZZWBir5Tau8D676Aoj3Oju/SCaggi4eLG+QPC3IU+dCo30AzDIA==}
+  /cronstrue@3.26.0:
+    resolution: {integrity: sha512-PEXTHEir/KllAWMsOQOsv3ZXjI6Y1PA1eVAEM/WhCaesAcCYHldra9pr2jkFH6r/ynbEOAPOGoWYz9NkjP0huA==}
     hasBin: true
     dev: true
 
@@ -14416,8 +14416,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.96.4(typanion@3.14.0):
-    resolution: {integrity: sha512-Q2PRuiJ1eOqUDJMwBwE/q1x2gB+sbQYw48DgphXCb7YrmUyWjV/wXq7aC++WvkhAs5nHpI7GRmae8Y2MrL4REA==}
+  /renovate@44.97.2(typanion@3.14.0):
+    resolution: {integrity: sha512-IsJD8AQNQByPYLSFvHo2agHrozEQ0h1cxEKL3cOe01P7tl1KoPQRDfan8MWKAX0UhmVaNwdHrEiuB5DSMpja6Q==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14456,7 +14456,7 @@ packages:
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.10
       '@renovatebot/pep440': 5.0.1
-      '@renovatebot/pgp': 1.4.3
+      '@renovatebot/pgp': 2.0.1
       '@renovatebot/ruby-semver': 5.0.0
       '@sindresorhus/is': 8.1.0
       '@yarnpkg/core': 4.9.1(typanion@3.14.0)
@@ -14474,7 +14474,7 @@ packages:
       commander: 15.0.0
       common-tags: 1.8.2
       croner: 10.0.1
-      cronstrue: 3.25.0
+      cronstrue: 3.26.0
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.2
