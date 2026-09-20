@@ -21,7 +21,6 @@ ts_project(
     assets = ["style.module.css"],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
-        ":location_map_module_css",
         ":style_module_css",
         "//:node_modules/@fortawesome/free-solid-svg-icons",
         "//:node_modules/@fortawesome/react-fontawesome",
@@ -107,11 +106,5 @@ jest_test(
 md_files(
     name = "md",
     srcs = ["AGENTS.md"],
-    visibility = ["//:__subpackages__"],
-)
-
-css_module(
-    name = "location_map_module_css",
-    src = "location_map.module.css",
     visibility = ["//:__subpackages__"],
 )
