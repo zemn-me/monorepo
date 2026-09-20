@@ -17,7 +17,10 @@ ts_project(
         "recording_store.ts",
         "status.tsx",
     ],
-    assets = ["style.module.css"],
+    assets = [
+        "processing_status.module.css",
+        "style.module.css",
+    ],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
         ":processing_status_module_css",
