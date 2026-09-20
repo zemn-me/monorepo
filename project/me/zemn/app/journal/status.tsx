@@ -11,10 +11,14 @@ import style from '#root/project/me/zemn/app/journal/style.module.css';
 export function JournalStatus({
 	label,
 	state = 'busy',
+	progress,
 }: {
 	readonly label: string;
 	readonly state?: 'busy' | 'queued' | 'interrupted' | 'error';
+	readonly progress?: number;
 }) {
+	if (progress !== undefined)
+		return <JournalProgress label={label} progress={progress} />;
 	const icon = {
 		busy: faSpinner,
 		queued: faCloudArrowUp,
@@ -43,5 +47,43 @@ export function JournalPlaceholder({ label }: { readonly label: string }) {
 			<span aria-hidden="true" />
 			<span aria-hidden="true" />
 		</div>
+	);
+}
+
+export function JournalProgress({
+	label,
+	progress,
+}: {
+	readonly label: string;
+	readonly progress: number;
+}) {
+	const percent = Math.round(Math.max(0, Math.min(1, progress)) * 100);
+	return (
+		<span
+			className={style.progressRing}
+			role="progressbar"
+			aria-label={label}
+			aria-valuemin={0}
+			aria-valuemax={100}
+			aria-valuenow={percent}
+			title={`${label}: ${percent}%`}
+		>
+			<svg aria-hidden="true" viewBox="0 0 36 36">
+				<circle
+					className={style.progressTrack}
+					cx="18"
+					cy="18"
+					r="16"
+				/>
+				<circle
+					cx="18"
+					cy="18"
+					r="16"
+					pathLength="100"
+					strokeDasharray={`${percent} 100`}
+					transform="rotate(-90 18 18)"
+				/>
+			</svg>
+		</span>
 	);
 }
