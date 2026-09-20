@@ -597,9 +597,13 @@ components:
       enum: [awaiting_upload, processing, ready, failed]
     JournalEntryMetadata:
       type: object
-      description: Versioned metadata document stored alongside journal audio.
+      description: Versioned metadata document stored alongside journal audio. Browser recordingStartedAt takes precedence over container metadata.
       required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         schemaVersion:
           type: integer
           const: 1
@@ -639,6 +643,12 @@ components:
       description: Complete entry representation indexed in DynamoDB.
       required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status, transcript]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'recording_started_at,omitempty'
         schemaVersion:
           type: integer
           const: 1
@@ -761,6 +771,10 @@ components:
       type: object
       required: [schemaVersion, id, recordedAt, timeZone, contentType, status, transcript]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         schemaVersion:
           type: integer
           const: 1
@@ -813,6 +827,10 @@ components:
       type: object
       required: [contentType, recordedAt, timeZone]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         contentType:
           type: string
           enum: [audio/mp4, audio/mpeg, audio/ogg, audio/wav, audio/webm]

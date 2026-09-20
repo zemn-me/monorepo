@@ -753,6 +753,70 @@ func TestProcessJournalUploadUsesSpokenDateOverContainerMetadata(t *testing.T) {
 	}
 }
 
+func TestProcessJournalUploadPreservesBrowserRecordingStart(t *testing.T) {
+	fallbackRecordedAt := time.Date(2026, time.August, 14, 18, 25, 0, 0, time.UTC)
+	embeddedRecordedAt := time.Date(2026, time.August, 12, 19, 16, 0, 0, time.UTC)
+	for _, test := range []struct {
+		name        string
+		contentType string
+		audio       []byte
+		want        time.Time
+	}{
+		{
+			name:        "fallback timestamp",
+			contentType: "audio/wav",
+			audio:       []byte("audio without creation metadata"),
+			want:        fallbackRecordedAt,
+		},
+		{
+			name:        "embedded timestamp",
+			contentType: "audio/mp4",
+			audio:       testMP4(embeddedRecordedAt, 0),
+			want:        fallbackRecordedAt,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			db := &inMemoryDDB{}
+			objects := &fakeJournalObjects{}
+			server := &Server{
+				ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
+				journalObjects: objects, journalPresigner: fakeJournalPresigner{},
+				journalAI: fakeJournalAI{},
+			}
+			ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+				Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+			})
+			response, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{
+				Body: &JournalEntryCreate{
+					ContentType:        JournalEntryCreateContentType(test.contentType),
+					RecordedAt:         time.Now(),
+					RecordingStartedAt: &fallbackRecordedAt,
+					TimeZone:           "America/Los_Angeles",
+				},
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			entryID := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
+			objects.objects[journalEntryKey(entryID)] = test.audio
+			if err := server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(entryID), int64(len(test.audio))); err != nil {
+				t.Fatal(err)
+			}
+			journalResponse, err := server.GetJournal(ctx, GetJournalRequestObject{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			entry := journalResponse.(GetJournal200JSONResponse).Entries[0]
+			if !entry.RecordedAt.Equal(test.want) {
+				t.Fatalf("recordedAt = %v, want %v", entry.RecordedAt, test.want)
+			}
+			if entry.Summary == nil || !entry.Summary.Start.Equal(test.want) {
+				t.Fatalf("entry summary = %#v, want start %v", entry.Summary, test.want)
+			}
+		})
+	}
+}
+
 func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	db := &inMemoryDDB{}
 	objects := &fakeJournalObjects{}

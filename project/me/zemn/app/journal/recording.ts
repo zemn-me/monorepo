@@ -75,6 +75,7 @@ async function capture(
 			id: crypto.randomUUID(),
 			owner,
 			recordedAt,
+			recordingStartedAt: recordedAt,
 			timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 			contentType,
 			name: `voice-note-${recordedAt.replaceAll(':', '-')}.${contentType === 'audio/mp4' ? 'm4a' : contentType.split('/')[1]}`,

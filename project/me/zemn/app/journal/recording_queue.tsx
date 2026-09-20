@@ -94,6 +94,7 @@ export function useRecordingQueue(options: QueueOptions) {
 						setUploadProgress(undefined);
 						try {
 							const entry = await current.current.upload({
+								recordingStartedAt: draft.recordingStartedAt,
 								file,
 								contentType: draft.contentType,
 								recordedAt: draft.recordedAt,

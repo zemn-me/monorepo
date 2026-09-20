@@ -161,6 +161,7 @@ func journalEntryMetadata(entry JournalStoredEntry) JournalEntryMetadata {
 		AudioKey:      entry.AudioKey,
 		Status:        entry.Status,
 	}
+	metadata.RecordingStartedAt = entry.RecordingStartedAt
 	if entry.Error != "" {
 		metadata.Error = &entry.Error
 	}
@@ -216,6 +217,7 @@ func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) 
 		AudioUrl:      s.journalAudioURL(ctx, entry),
 		Transcript:    entry.Transcript,
 	}
+	result.RecordingStartedAt = entry.RecordingStartedAt
 	if entry.Error != "" {
 		result.Error = &entry.Error
 	}
@@ -726,6 +728,10 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 		Status:          JournalEntryStatusAwaitingUpload,
 		Transcript:      []JournalTranscriptSegment{},
 	}
+	entry.RecordingStartedAt = request.Body.RecordingStartedAt
+	if entry.RecordingStartedAt != nil {
+		entry.RecordedAt = *entry.RecordingStartedAt
+	}
 	if err := s.putJournalRecord(ctx, JournalStoredRecord{
 		Id: subject, When: journalEntryRecordKey(entryID), Kind: JournalStoredRecordKindEntry, Entry: &entry,
 	}); err != nil {
@@ -1162,7 +1168,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
-	if hasEmbeddedRecordedAt {
+	if hasEmbeddedRecordedAt && entry.RecordingStartedAt == nil {
 		entry.RecordedAt = embeddedRecordedAt
 	}
 	entry.DurationMs = transcription.DurationMs

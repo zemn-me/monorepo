@@ -10,6 +10,7 @@ export interface LocalRecording {
 	readonly parts: readonly Blob[];
 	readonly state: 'recording' | 'queued' | 'uploaded';
 	readonly remoteEntryID?: string;
+	readonly recordingStartedAt?: string;
 	readonly uploadedAt?: number;
 }
 
