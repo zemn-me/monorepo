@@ -2167,6 +2167,9 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 			if err := driver.ResizeWindow("", width, 844); err != nil {
 				t.Fatal(err)
 			}
+			if _, err := driver.ExecuteScript(`document.querySelector('[role="region"][aria-label^="Recording locations:"]').scrollIntoView({block: 'center', behavior: 'instant'})`, nil); err != nil {
+				t.Fatal(err)
+			}
 			usable, err := driver.ExecuteScript(`
 				const pins = [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"] a[aria-label]')];
 				return document.documentElement.scrollWidth <= window.innerWidth && pins.length > 0 &&
