@@ -221,19 +221,66 @@ it('persists the recording location with audio checkpoints and the queued draft'
 	});
 	expect(save.mock.calls.at(-1)?.[0].location?.latitude).toBe(40.7);
 });
-it('keeps audio when location permission is denied', async () => {
+it.each<[number, string]>([
+	[1, 'Location access is blocked.'],
+	[2, 'Location is unavailable.'],
+	[3, 'Location timed out.'],
+])('reports location error %s without interrupting audio', async (code, message) => {
 	const finished = jest.fn();
+	const locationError = jest.fn();
 	const session = await startLocalRecording('owner', {
 		tick: jest.fn(),
 		finished,
+		locationError,
 	});
-	locate.mock.calls[0]?.[1]?.({ code: 1 } as GeolocationPositionError);
+	locate.mock.calls[0]?.[1]?.({ code } as GeolocationPositionError);
+	expect(locationError).toHaveBeenCalledWith(expect.stringContaining(message));
+	expect(Recorder.latest.state).toBe('recording');
+	expect(stopTrack).not.toHaveBeenCalled();
 	Recorder.latest.chunk('audio');
 	session.stop();
 	await session.done;
 	expect(finished.mock.calls[0]?.[0]).toMatchObject({ state: 'queued' });
 	expect(finished.mock.calls[0]?.[0]).not.toHaveProperty('location');
 });
+it.each(['missing', 'throws'])(
+	'keeps recording when the location API %s',
+	async failure => {
+		if (failure === 'missing') Reflect.deleteProperty(navigator, 'geolocation');
+		else
+			locate.mockImplementation(() => {
+				throw new DOMException('Blocked', 'SecurityError');
+			});
+		const locationError = jest.fn();
+		const finished = jest.fn();
+		const session = await startLocalRecording('owner', {
+			tick: jest.fn(),
+			finished,
+			locationError,
+		});
+		expect(locationError).toHaveBeenCalledTimes(1);
+		expect(Recorder.latest.state).toBe('recording');
+		Recorder.latest.chunk('audio');
+		session.stop();
+		await session.done;
+		expect(finished.mock.calls[0]?.[0]).toMatchObject({ state: 'queued' });
+	}
+);
+it.each([false, true])(
+	'ignores late location errors after stop (discard: %s)',
+	async discard => {
+		const locationError = jest.fn();
+		const session = await startLocalRecording('owner', {
+			tick: jest.fn(),
+			finished: jest.fn(),
+			locationError,
+		});
+		session.stop(discard);
+		await session.done;
+		locate.mock.calls[0]?.[1]?.({ code: 1 } as GeolocationPositionError);
+		expect(locationError).not.toHaveBeenCalled();
+	}
+);
 it('ignores location permission responses after a recording is discarded', async () => {
 	const session = await startLocalRecording('owner', {
 		tick: jest.fn(),

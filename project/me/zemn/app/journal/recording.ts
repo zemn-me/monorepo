@@ -20,6 +20,7 @@ export interface RecordingSession {
 
 interface RecordingCallbacks {
 	tick(elapsed: number): void;
+	locationError?(message: string): void;
 	finished(
 		recording: LocalRecording | undefined,
 		durable: boolean,
@@ -174,30 +175,52 @@ async function capture(
 	}
 	// Capture once at the start, without delaying audio for a permission prompt.
 	// A late response must not recreate a stopped or discarded draft.
-	navigator.geolocation?.getCurrentPosition(
-		position => {
-			if (recorder.state === 'inactive') return;
-			draft = {
-				...draft,
-				location: {
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude,
-					accuracyMeters: position.coords.accuracy,
-					capturedAt: new Date(position.timestamp).toISOString(),
+	const reportLocationError = (code?: number) => {
+		if (recorder.state === 'inactive') return;
+		callbacks.locationError?.(
+			code === 1
+				? 'Location access is blocked. Allow it in your browser and device settings to include a map.'
+				: code === 3
+					? 'Location timed out. This recording won’t include a map.'
+					: 'Location is unavailable. Check your device’s Location Services to include a map.'
+		);
+	};
+	try {
+		if (!navigator.geolocation) reportLocationError();
+		else
+			navigator.geolocation.getCurrentPosition(
+				position => {
+					if (recorder.state === 'inactive') return;
+					draft = {
+						...draft,
+						location: {
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+							accuracyMeters: position.coords.accuracy,
+							capturedAt: new Date(position.timestamp).toISOString(),
+						},
+					};
+					const checkpoint = { ...draft, parts: [...parts] };
+					writes = writes.then(async () => {
+						try {
+							await saveRecording(checkpoint);
+						} catch {
+							/* Audio checkpoints and final saving report storage failures. */
+						}
+					});
 				},
-			};
-			const checkpoint = { ...draft, parts: [...parts] };
-			writes = writes.then(async () => {
-				try {
-					await saveRecording(checkpoint);
-				} catch {
-					/* Audio checkpoints and final saving report storage failures. */
-				}
-			});
-		},
-		() => undefined,
-		{ maximumAge: 0, timeout: 10_000, enableHighAccuracy: false }
-	);
+				error => reportLocationError(error.code),
+				{ maximumAge: 0, timeout: 10_000, enableHighAccuracy: false }
+			);
+	} catch (error) {
+		// Location failures must never leave a live recorder without its controls.
+		reportLocationError(
+			error instanceof DOMException &&
+			(error.name === 'NotAllowedError' || error.name === 'SecurityError')
+				? 1
+				: undefined
+		);
+	}
 	checkLimit();
 	return { stream, id: draft.id, done, stop };
 }
