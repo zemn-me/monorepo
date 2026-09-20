@@ -2163,9 +2163,25 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 		if err != nil || thin != true {
 			t.Fatalf("map height on %s: %v, %v", route, thin, err)
 		}
-		if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" && route == "/journal/year" {
-			if screenshot, err := driver.Screenshot(); err == nil {
-				_ = os.WriteFile(filepath.Join(outputDir, "journal-location-map.png"), screenshot, 0600)
+		for _, width := range []int{1280, 390} {
+			if err := driver.ResizeWindow("", width, 844); err != nil {
+				t.Fatal(err)
+			}
+			usable, err := driver.ExecuteScript(`
+				const pins = [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"] a[aria-label]')];
+				return document.documentElement.scrollWidth <= window.innerWidth && pins.length > 0 &&
+					pins.every(pin => {
+						const rect = pin.getBoundingClientRect();
+						return rect.width >= 44 && rect.height >= 44;
+					});
+			`, nil)
+			if err != nil || usable != true {
+				t.Fatalf("map targets or layout on %s at %dpx: %v, %v", route, width, usable, err)
+			}
+			if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" && route == "/journal/year" {
+				if screenshot, err := driver.Screenshot(); err == nil {
+					_ = os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-map-%d.png", width)), screenshot, 0600)
+				}
 			}
 		}
 	}
@@ -2173,7 +2189,7 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := pin.Click(); err != nil {
+	if err := pin.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, "details[open] [role='region'][aria-label^='Recording locations:']", 30*time.Second); err != nil {

@@ -97,7 +97,7 @@ export function JournalMap({
 							aria-label={label}
 							title={label}
 						>
-							●
+							<span aria-hidden="true">●</span>
 						</a>
 					);
 				})}

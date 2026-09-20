@@ -16,6 +16,15 @@
 	transform: translate(-50%, -50%);
 	display: grid;
 	place-items: center;
+	inline-size: 44px;
+	block-size: 44px;
+	border-radius: 50%;
+	text-decoration: none;
+}
+.mapPin > span {
+	display: grid;
+	place-items: center;
+	box-sizing: border-box;
 	inline-size: 24px;
 	block-size: 24px;
 	border: 2px solid white;
@@ -24,11 +33,10 @@
 	color: white;
 	box-shadow: 0 1px 4px #0006;
 	font-size: 10px;
-	text-decoration: none;
 }
 .mapPin:focus-visible {
-	outline: 3px solid #152e56;
-	outline-offset: 3px;
+	outline: 2px solid #152e56;
+	outline-offset: 0;
 	z-index: 1;
 }
 .mapAttribution {
@@ -37,7 +45,7 @@
 	inset-inline-end: 0;
 	background: #fffffff0;
 	color: #222;
-	font: 10px / 1.5 sans-serif;
+	font: 12px / 1.5 sans-serif;
 	padding-inline: 4px;
 }
 .mapAttribution a {
