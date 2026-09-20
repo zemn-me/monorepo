@@ -18,12 +18,10 @@ ts_project(
         "status.tsx",
     ],
     assets = [
-        "processing_status.module.css",
         "style.module.css",
     ],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
-        ":processing_status_module_css",
         ":style_module_css",
         "//:node_modules/@fortawesome/free-solid-svg-icons",
         "//:node_modules/@fortawesome/react-fontawesome",
@@ -112,11 +110,5 @@ jest_test(
 md_files(
     name = "md",
     srcs = ["AGENTS.md"],
-    visibility = ["//:__subpackages__"],
-)
-
-css_module(
-    name = "processing_status_module_css",
-    src = "processing_status.module.css",
     visibility = ["//:__subpackages__"],
 )

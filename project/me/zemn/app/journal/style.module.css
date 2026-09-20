@@ -151,6 +151,7 @@
 }
 
 .statusIndicator {
+	block-size: 1.5em;
 	align-items: center;
 	color: var(--journal-muted);
 	display: inline-flex;

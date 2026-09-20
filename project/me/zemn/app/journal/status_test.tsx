@@ -3,7 +3,6 @@ import { act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 jest.unstable_mockModule('./style.module.css', () => ({ default: {} }));
-jest.unstable_mockModule('./processing_status.module.css', () => ({default: {}}));
 const { JournalProcessingStatus } = await import('./processing_status.js');
 
 let root: Root | undefined;
@@ -31,10 +30,15 @@ it('shows real completed chunk progress', async () => {
 		container
 			.querySelector('[role="progressbar"]')
 			?.getAttribute('aria-valuenow')
-	).toBe('2');
-	expect(container.textContent).toContain('2 of 4 parts');
+	).toBe('50');
+	expect(container.querySelector('[role="progressbar"] svg')).not.toBeNull();
+	expect(container.querySelector('[role="status"]')).toBeNull();
+	expect(
+		container.querySelector('[role="progressbar"]')?.getAttribute('aria-label')
+	).toBe('Transcribing voice note');
+	expect(container.textContent).toBe('');
 });
-it('shows completed work without a guessed denominator while decoding', async () => {
+it('uses compact activity without a guessed denominator while decoding', async () => {
 	const container = await render(
 		<JournalProcessingStatus
 			progress={{
@@ -47,7 +51,7 @@ it('shows completed work without a guessed denominator while decoding', async ()
 	expect(container.querySelector('[role="progressbar"]')).toBeNull();
 	expect(
 		container.querySelector('[role="status"]')?.getAttribute('aria-label')
-	).toContain('2 parts complete');
+	).toBe('Transcribing voice note');
 });
 it('switches to summary generation after transcription', async () => {
 	const container = await render(

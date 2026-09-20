@@ -325,18 +325,18 @@ function LocalRecordingRow({
 							·{' '}
 							<LocalizedTime date={new Date(draft.recordedAt)} />
 						</small>
-						{!uploading && remoteEntry?.status === 'processing' && (
-							<JournalProcessingStatus
-								progress={remoteEntry.processingProgress}
-								showSpinner={false}
-							/>
-						)}
 					</div>
-					<JournalStatus
-						label={label}
-						state={status}
-						progress={uploading ? queue.uploadProgress : undefined}
-					/>
+					{!uploading && remoteEntry?.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={remoteEntry.processingProgress}
+						/>
+					) : (
+						<JournalStatus
+							label={label}
+							state={status}
+							progress={uploading ? queue.uploadProgress : undefined}
+						/>
+					)}
 					<FontAwesomeIcon
 						aria-hidden="true"
 						className={style.entryChevron}
