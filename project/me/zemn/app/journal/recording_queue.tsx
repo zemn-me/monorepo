@@ -42,6 +42,7 @@ export function useRecordingQueue(options: QueueOptions) {
 	const [recordings, setRecordings] = useState<LocalRecording[]>([]);
 	const [memory, setMemory] = useState<LocalRecording[]>([]);
 	const [syncing, setSyncing] = useState<string>();
+	const [uploadProgress, setUploadProgress] = useState<number>();
 	const [errors, setErrors] = useState<Record<string, string>>({});
 	const [storageError, setStorageError] = useState<string>();
 	const owner = options.owner;
@@ -90,12 +91,14 @@ export function useRecordingQueue(options: QueueOptions) {
 						if (file.size === 0 || file.size > maxUploadBytes)
 							continue;
 						setSyncing(draft.id);
+						setUploadProgress(undefined);
 						try {
 							const entry = await current.current.upload({
 								file,
 								contentType: draft.contentType,
 								recordedAt: draft.recordedAt,
 								timeZone: draft.timeZone,
+								onProgress: setUploadProgress,
 							});
 							// Keep the local audio until transcription is confirmed ready.
 							await saveRecording({
@@ -118,6 +121,7 @@ export function useRecordingQueue(options: QueueOptions) {
 							break;
 						} finally {
 							setSyncing(undefined);
+							setUploadProgress(undefined);
 						}
 					}
 				}
@@ -135,6 +139,7 @@ export function useRecordingQueue(options: QueueOptions) {
 		setRecordings([]);
 		setErrors({});
 		setSyncing(undefined);
+		setUploadProgress(undefined);
 		void refresh().then(sync);
 		const retry = () => {
 			void sync();
@@ -241,6 +246,7 @@ export function useRecordingQueue(options: QueueOptions) {
 		].filter(item => item.owner === owner),
 		emergencyIDs,
 		syncing,
+		uploadProgress,
 		errors,
 		storageError,
 		keep,
@@ -310,7 +316,11 @@ function LocalRecordingRow({
 							<LocalizedTime date={new Date(draft.recordedAt)} />
 						</small>
 					</div>
-					<JournalStatus label={label} state={status} />
+					<JournalStatus
+						label={label}
+						state={status}
+						progress={uploading ? queue.uploadProgress : undefined}
+					/>
 					<FontAwesomeIcon
 						aria-hidden="true"
 						className={style.entryChevron}
