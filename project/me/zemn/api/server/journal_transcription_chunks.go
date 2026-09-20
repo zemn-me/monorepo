@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -24,12 +25,22 @@ const (
 // Small uploads retain their original format. Large containers must be decoded,
 // not sliced at byte offsets: later MediaRecorder fragments lack container headers.
 func (o *openAIJournalAI) Transcribe(ctx context.Context, audio io.Reader, contentType string) (JournalTranscriptionResult, error) {
+	return o.TranscribeWithProgress(ctx, audio, contentType, func(int, int) error { return nil })
+}
+
+// The callback is serialized, including when chunks finish out of order.
+func (o *openAIJournalAI) TranscribeWithProgress(ctx context.Context, audio io.Reader, contentType string, report func(completed, total int) error) (JournalTranscriptionResult, error) {
+
 	prefix, err := io.ReadAll(io.LimitReader(audio, journalTranscriptionFileBytes+1))
 	if err != nil {
 		return JournalTranscriptionResult{}, err
 	}
 	if len(prefix) <= journalTranscriptionFileBytes {
-		return o.transcribeFile(ctx, bytes.NewReader(prefix), contentType, false)
+		result, err := o.transcribeFile(ctx, bytes.NewReader(prefix), contentType, false)
+		if err == nil {
+			err = report(1, 1)
+		}
+		return result, err
 	}
 	// A seekable source also handles imported MP4 files with metadata at the end.
 	source, err := os.CreateTemp("", "journal-transcription-*")
@@ -48,7 +59,7 @@ func (o *openAIJournalAI) Transcribe(ctx context.Context, audio io.Reader, conte
 	if err := source.Close(); err != nil {
 		return JournalTranscriptionResult{}, err
 	}
-	return o.transcribeLargeFile(ctx, source.Name())
+	return o.transcribeLargeFileWithProgress(ctx, source.Name(), report)
 }
 
 type journalChunkTranscript struct {
@@ -58,6 +69,10 @@ type journalChunkTranscript struct {
 }
 
 func (o *openAIJournalAI) transcribeLargeFile(ctx context.Context, source string) (JournalTranscriptionResult, error) {
+	return o.transcribeLargeFileWithProgress(ctx, source, func(int, int) error { return nil })
+}
+
+func (o *openAIJournalAI) transcribeLargeFileWithProgress(ctx context.Context, source string, report func(completed, total int) error) (JournalTranscriptionResult, error) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	executable := o.ffmpegPath
@@ -84,6 +99,8 @@ func (o *openAIJournalAI) transcribeLargeFile(ctx context.Context, source string
 
 	requests, requestContext := errgroup.WithContext(ctx)
 	requests.SetLimit(3)
+	var progressMu sync.Mutex
+	completed, total := 0, 0
 	var chunks []*journalChunkTranscript
 	var offset int64
 	var carry []byte
@@ -121,12 +138,29 @@ func (o *openAIJournalAI) transcribeLargeFile(ctx context.Context, source string
 				return fmt.Errorf("transcribe journal chunk at %d ms: %w", chunk.startBytes*1000/journalPCMBytesPerSecond, err)
 			}
 			chunk.transcript = transcript
+			progressMu.Lock()
+			defer progressMu.Unlock()
+			completed++
+			if err := report(completed, total); err != nil {
+				cancel()
+				return err
+			}
 			return nil
 		})
 		if err != nil {
 			break
 		}
 	}
+	// Until EOF, decoding may discover more chunks; do not invent a denominator.
+	progressMu.Lock()
+	total = len(chunks)
+	if readError == nil && ctx.Err() == nil {
+		if err := report(completed, total); err != nil {
+			readError = err
+			cancel()
+		}
+	}
+	progressMu.Unlock()
 	requestError := requests.Wait()
 	processError := command.Wait()
 	if requestError != nil {

@@ -31,6 +31,7 @@ import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
 import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
+import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
 import {
 	type RecordingSession,
 	startLocalRecording,
@@ -1342,17 +1343,23 @@ function EntryCard({
 				/>
 				<span className={style.entryHeading}>
 					<strong className={style.entryTitle}>{title}</strong>
-					{entry.status !== 'ready' && (
-						<JournalStatus
-							label={
-								entry.status === 'processing'
-									? 'Transcribing voice note'
-									: entry.status === 'failed'
+					{entry.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={entry.processingProgress}
+						/>
+					) : (
+						entry.status !== 'ready' && (
+							<JournalStatus
+								label={
+									entry.status === 'failed'
 										? 'Processing failed'
 										: 'Uploading voice note'
-							}
-							state={entry.status === 'failed' ? 'error' : 'busy'}
-						/>
+								}
+								state={
+									entry.status === 'failed' ? 'error' : 'busy'
+								}
+							/>
+						)
 					)}
 				</span>
 				<FontAwesomeIcon
@@ -1365,7 +1372,9 @@ function EntryCard({
 				<JournalPlaceholder
 					label={
 						entry.status === 'processing'
-							? 'Preparing transcript'
+							? entry.processingProgress?.stage === 'summarizing'
+								? 'Preparing summary'
+								: 'Preparing transcript'
 							: 'Uploading audio'
 					}
 				/>
@@ -2381,6 +2390,11 @@ export default function JournalPageClient({
 		owner,
 		canSync: hasWriteScope,
 		upload: createJournalEntry,
+		entries: journal(
+			value => value.entries,
+			() => [],
+			() => []
+		),
 		readyEntryIDs: journal(
 			value =>
 				value.entries

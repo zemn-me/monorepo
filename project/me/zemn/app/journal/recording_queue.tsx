@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
+import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
 import { maxUploadBytes } from '#root/project/me/zemn/app/journal/recording.js';
 import {
 	getRecording,
@@ -27,7 +27,11 @@ import {
 	Time as LocalizedTime,
 } from '#root/ts/react/lang/date.js';
 
+type JournalEntry =
+	import('#root/project/me/zemn/api/api_client.gen.js').components['schemas']['JournalEntry'];
+
 interface QueueOptions {
+	readonly entries: readonly JournalEntry[];
 	readonly owner: string | undefined;
 	readonly canSync: boolean;
 	readonly upload: (
@@ -245,6 +249,7 @@ export function useRecordingQueue(options: QueueOptions) {
 			...recordings.filter(item => !emergencyIDs.has(item.id)),
 			...memory,
 		].filter(item => item.owner === owner),
+		entries: options.entries,
 		emergencyIDs,
 		syncing,
 		uploadProgress,
@@ -272,6 +277,9 @@ function LocalRecordingRow({
 		setURL(url);
 		return () => URL.revokeObjectURL(url);
 	}, [draft]);
+	const remoteEntry = queue.entries.find(
+		entry => entry.id === draft.remoteEntryID
+	);
 	const tooLarge = file.size > maxUploadBytes;
 	const uploading = queue.syncing === draft.id;
 	const emergency = queue.emergencyIDs.has(draft.id);
@@ -293,7 +301,9 @@ function LocalRecordingRow({
 			: uploading
 				? 'Syncing voice note'
 				: draft.state === 'uploaded'
-					? 'Transcribing voice note'
+					? remoteEntry?.processingProgress?.stage === 'summarizing'
+						? 'Preparing summary'
+						: 'Transcribing voice note'
 					: draft.state === 'recording'
 						? 'Interrupted recording'
 						: (queue.errors[draft.id] ?? 'Waiting to sync');
@@ -317,11 +327,17 @@ function LocalRecordingRow({
 							<LocalizedTime date={new Date(draft.recordedAt)} />
 						</small>
 					</div>
-					<JournalStatus
-						label={label}
-						state={status}
-						progress={uploading ? queue.uploadProgress : undefined}
-					/>
+					{!uploading && remoteEntry?.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={remoteEntry.processingProgress}
+						/>
+					) : (
+						<JournalStatus
+							label={label}
+							state={status}
+							progress={uploading ? queue.uploadProgress : undefined}
+						/>
+					)}
 					<FontAwesomeIcon
 						aria-hidden="true"
 						className={style.entryChevron}
