@@ -597,7 +597,7 @@ components:
       enum: [awaiting_upload, processing, ready, failed]
     JournalEntryMetadata:
       type: object
-      description: Versioned metadata document stored alongside journal audio.
+      description: Versioned metadata document stored alongside journal audio. Browser recordingStartedAt takes precedence over container metadata.
       required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status]
       properties:
         recordingStartedAt:
@@ -612,7 +612,7 @@ components:
         recordedAt:
           type: string
           format: date-time
-          description: Recording time, using browser capture start when supplied, otherwise embedded audio metadata or the upload request fallback.
+          description: Recording time, derived from embedded audio metadata when available and otherwise from the upload request fallback.
         timeZone:
           type: string
         durationMs:
