@@ -607,6 +607,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalLocation:
+      type: object
+      required: [latitude, longitude, accuracyMeters, capturedAt]
+      properties:
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+        accuracyMeters:
+          type: number
+          format: double
+          minimum: 0
+          description: Estimated horizontal accuracy radius in metres.
+        capturedAt:
+          type: string
+          format: date-time
     JournalEntryStatus:
       type: string
       enum: [awaiting_upload, processing, ready, failed]
@@ -628,6 +650,8 @@ components:
           type: string
           format: date-time
           description: Recording time, derived from embedded audio metadata when available and otherwise from the upload request fallback.
+        location:
+          $ref: '#/components/schemas/JournalLocation'
         timeZone:
           type: string
         durationMs:
@@ -680,6 +704,10 @@ components:
           format: date-time
           x-oapi-codegen-extra-tags:
             dynamodbav: recorded_at
+        location:
+          $ref: '#/components/schemas/JournalLocation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'location,omitempty'
         timeZone:
           type: string
           x-oapi-codegen-extra-tags:
@@ -805,6 +833,8 @@ components:
         recordedAt:
           type: string
           format: date-time
+        location:
+          $ref: '#/components/schemas/JournalLocation'
         timeZone:
           type: string
         durationMs:
@@ -861,6 +891,8 @@ components:
           type: string
           format: date-time
           description: Fallback recording time used when the uploaded audio container does not provide its own creation timestamp.
+        location:
+          $ref: '#/components/schemas/JournalLocation'
         timeZone:
           type: string
           description: IANA time zone used to derive calendar summary periods.

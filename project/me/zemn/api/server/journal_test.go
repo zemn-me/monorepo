@@ -834,6 +834,7 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 		Body: &JournalEntryCreate{
 			ContentType: JournalEntryCreateContentType("audio/mp4"),
 			RecordedAt:  fallbackRecordedAt,
+			Location:    &JournalLocation{Latitude: 40.7, Longitude: -74, AccuracyMeters: 25, CapturedAt: fallbackRecordedAt},
 			TimeZone:    "America/Los_Angeles",
 		},
 	})
@@ -951,6 +952,9 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	var metadata JournalEntryMetadata
 	if err := json.Unmarshal(objects.objects["entries/"+entryID+"/metadata.json"], &metadata); err != nil {
 		t.Fatal(err)
+	}
+	if metadata.Location == nil || metadata.Location.Latitude != 40.7 || journal.Entries[0].Location == nil || journal.Entries[0].Location.Longitude != -74 {
+		t.Fatalf("recording location did not survive processing: metadata=%+v, entry=%+v", metadata.Location, journal.Entries[0].Location)
 	}
 	if metadata.Id != entryID || metadata.Status != JournalEntryStatusReady || !metadata.RecordedAt.Equal(audioRecordedAt) {
 		t.Fatalf("metadata = %#v, want ready entry %s", metadata, entryID)

@@ -102,6 +102,7 @@ export function useRecordingQueue(options: QueueOptions) {
 								file,
 								contentType: draft.contentType,
 								recordedAt: draft.recordedAt,
+								location: draft.location,
 								timeZone: draft.timeZone,
 								onProgress: setUploadProgress,
 							});

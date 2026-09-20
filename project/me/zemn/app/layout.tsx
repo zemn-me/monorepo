@@ -60,6 +60,7 @@ const csp = {
 	'img-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['img-src']!,
 		'https://*.googleusercontent.com',
+		'https://tile.openstreetmap.org',
 	]),
 	'media-src': new Set<SourceExpression>([
 		...(DefaultContentSecurityPolicy['media-src'] ?? []),

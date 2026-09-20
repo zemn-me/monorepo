@@ -2110,3 +2110,92 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 		t.Fatalf("local audio did not sync and receive server confirmation: %v", err)
 	}
 }
+
+func TestJournalRecordingLocationMaps(t *testing.T) {
+	root, err := nextServerRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments("--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	if err := driver.ExecuteChromiumCommand("Browser.grantPermissions", map[string]any{"origin": root.String(), "permissions": []string{"geolocation"}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.setGeolocationOverride", map[string]any{"latitude": 40.7, "longitude": -74, "accuracy": 25}); err != nil {
+		t.Fatal(err)
+	}
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	record, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := record.Click(); err != nil {
+		t.Fatal(err)
+	}
+	stop, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Capture at least one real MediaRecorder timeslice from the fake microphone.
+	time.Sleep(1500 * time.Millisecond)
+	if err := stop.Click(); err != nil {
+		t.Fatal(err)
+	}
+	for _, route := range []string{"/journal", "/journal/month", "/journal/year"} {
+		root.Path = route
+		if err := driver.Get(root.String()); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label^='Recording locations:'] a[aria-label*='40.7000, -74.0000']", 60*time.Second); err != nil {
+			dumpPageDiagnostics(t, driver)
+			t.Fatalf("recording pin missing on %s: %v", route, err)
+		}
+		thin, err := driver.ExecuteScript(`return Array.from(document.querySelectorAll('[role="region"][aria-label^="Recording locations:"]')).every(map => map.getBoundingClientRect().height === 144)`, nil)
+		if err != nil || thin != true {
+			t.Fatalf("map height on %s: %v, %v", route, thin, err)
+		}
+		for _, width := range []int{1280, 390} {
+			if err := driver.ResizeWindow("", width, 844); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := driver.ExecuteScript(`document.querySelector('[role="region"][aria-label^="Recording locations:"]').scrollIntoView({block: 'center', behavior: 'instant'})`, nil); err != nil {
+				t.Fatal(err)
+			}
+			usable, err := driver.ExecuteScript(`
+				const pins = [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"] a[aria-label]')];
+				return document.documentElement.scrollWidth <= window.innerWidth && pins.length > 0 &&
+					pins.every(pin => {
+						const rect = pin.getBoundingClientRect();
+						return rect.width >= 44 && rect.height >= 44;
+					});
+			`, nil)
+			if err != nil || usable != true {
+				t.Fatalf("map targets or layout on %s at %dpx: %v, %v", route, width, usable, err)
+			}
+			if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" && route == "/journal/year" {
+				if screenshot, err := driver.Screenshot(); err == nil {
+					_ = os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-map-%d.png", width)), screenshot, 0600)
+				}
+			}
+		}
+	}
+	pin, err := driver.FindElement(selenium.ByCSSSelector, "[role='region'][aria-label^='Recording locations:'] a[aria-label*='40.7000, -74.0000']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := pin.SendKeys(selenium.EnterKey); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "details[open] [role='region'][aria-label^='Recording locations:']", 30*time.Second); err != nil {
+		t.Fatalf("map pin did not open its note: %v", err)
+	}
+}

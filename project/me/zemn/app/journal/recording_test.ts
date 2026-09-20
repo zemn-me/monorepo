@@ -48,6 +48,11 @@ const originalMediaDevices = Object.getOwnPropertyDescriptor(
 	navigator,
 	'mediaDevices'
 );
+const originalGeolocation = Object.getOwnPropertyDescriptor(
+	navigator,
+	'geolocation'
+);
+const locate = jest.fn<typeof navigator.geolocation.getCurrentPosition>();
 const originalLocks = Object.getOwnPropertyDescriptor(navigator, 'locks');
 function restore(
 	object: object,
@@ -62,6 +67,11 @@ beforeEach(() => {
 	save.mockReset().mockResolvedValue('saved');
 	remove.mockReset().mockResolvedValue(undefined);
 	stopTrack.mockReset();
+	locate.mockReset();
+	Object.defineProperty(navigator, 'geolocation', {
+		configurable: true,
+		value: { getCurrentPosition: locate },
+	});
 	Object.defineProperty(globalThis, 'MediaRecorder', {
 		configurable: true,
 		value: Recorder,
@@ -90,6 +100,7 @@ afterEach(() => {
 	restore(globalThis, 'MediaRecorder', originalRecorder);
 	restore(navigator, 'mediaDevices', originalMediaDevices);
 	restore(navigator, 'locks', originalLocks);
+	restore(navigator, 'geolocation', originalGeolocation);
 });
 
 it('keeps recording beyond thirty minutes and the transcription file limit', async () => {
@@ -189,4 +200,52 @@ it('retains a final download if the worker upload budget is reached', async () =
 		true,
 		expect.stringContaining('256 MiB')
 	);
+});
+
+it('persists the recording location with audio checkpoints and the queued draft', async () => {
+	const finished = jest.fn();
+	const session = await startLocalRecording('owner', {
+		tick: jest.fn(),
+		finished,
+	});
+	expect(locate).toHaveBeenCalledTimes(1);
+	locate.mock.calls[0]?.[0]({
+		coords: { latitude: 40.7, longitude: -74, accuracy: 25 },
+		timestamp: Date.now(),
+	} as GeolocationPosition);
+	Recorder.latest.chunk('audio');
+	session.stop();
+	await session.done;
+	expect(finished.mock.calls[0]?.[0]).toMatchObject({
+		location: { latitude: 40.7, longitude: -74, accuracyMeters: 25 },
+	});
+	expect(save.mock.calls.at(-1)?.[0].location?.latitude).toBe(40.7);
+});
+it('keeps audio when location permission is denied', async () => {
+	const finished = jest.fn();
+	const session = await startLocalRecording('owner', {
+		tick: jest.fn(),
+		finished,
+	});
+	locate.mock.calls[0]?.[1]?.({ code: 1 } as GeolocationPositionError);
+	Recorder.latest.chunk('audio');
+	session.stop();
+	await session.done;
+	expect(finished.mock.calls[0]?.[0]).toMatchObject({ state: 'queued' });
+	expect(finished.mock.calls[0]?.[0]).not.toHaveProperty('location');
+});
+it('ignores location permission responses after a recording is discarded', async () => {
+	const session = await startLocalRecording('owner', {
+		tick: jest.fn(),
+		finished: jest.fn(),
+	});
+	session.stop(true);
+	await session.done;
+	const count = save.mock.calls.length;
+	locate.mock.calls[0]?.[0]({
+		coords: { latitude: 40.7, longitude: -74, accuracy: 25 },
+		timestamp: Date.now(),
+	} as GeolocationPosition);
+	await Promise.resolve();
+	expect(save.mock.calls).toHaveLength(count);
 });
