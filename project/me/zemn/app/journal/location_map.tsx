@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { mapViewport } from '#root/project/me/zemn/app/journal/location_geometry.js';
-import style from '#root/project/me/zemn/app/journal/style.module.css';
+import style from '#root/project/me/zemn/app/journal/location_map.module.css';
 
 type Entry = components['schemas']['JournalEntry'];
 const mapHeight = 144;

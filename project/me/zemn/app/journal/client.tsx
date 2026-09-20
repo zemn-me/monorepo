@@ -1925,15 +1925,13 @@ function PeriodList({
 							)}
 						</>
 					)}
-					{period !== 'day' && (
-						<JournalMap
-							entries={journal.entries.filter(
-								entry =>
-									entry.status === 'ready' &&
-									periodContains(node, entry.recordedAt)
-							)}
-						/>
-					)}
+					<JournalMap
+						entries={journal.entries.filter(
+							entry =>
+								entry.status === 'ready' &&
+								periodContains(node, entry.recordedAt)
+						)}
+					/>
 					{period === 'day' &&
 						journal.entries
 							.filter(
