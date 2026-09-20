@@ -8,12 +8,12 @@ import {
 import createFetchClient from 'openapi-fetch';
 import createClient from 'openapi-react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
 import type {
 	components,
 	paths,
 } from '#root/project/me/zemn/api/api_client.gen.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
+import { uploadJournalAudio } from '#root/project/me/zemn/hook/journal_upload.js';
 import {
 	Future,
 	future_and_then,
@@ -802,6 +802,7 @@ export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
 
 export interface JournalAudioUpload {
 	readonly file: Blob;
+	readonly onProgress?: (progress: number | undefined) => void;
 	readonly contentType: components['schemas']['JournalEntryCreate']['contentType'];
 	readonly recordedAt: string;
 	readonly timeZone: string;
@@ -834,17 +835,7 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 					throw new Error(cause);
 				}
 				try {
-					const uploaded = await fetch(response.data.upload.url, {
-						body: upload.file,
-						signal: AbortSignal.timeout(10 * 60_000),
-						headers: response.data.upload.headers,
-						method: response.data.upload.method,
-					});
-					if (!uploaded.ok) {
-						throw new Error(
-							`Audio upload failed (${uploaded.status}).`
-						);
-					}
+					await uploadJournalAudio(response.data.upload, upload.file, upload.onProgress);
 				} catch (error) {
 					await client
 						.DELETE('/journal/entries/{entryId}', {

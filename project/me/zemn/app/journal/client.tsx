@@ -43,6 +43,7 @@ import {
 import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
 import {
 	JournalPlaceholder,
+	JournalProgress,
 	JournalStatus,
 } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
@@ -2589,6 +2590,18 @@ export default function JournalPageClient({
 			{!recordingStream && (
 				<label className={style.uploadButton} title="Import voice memo">
 					<FontAwesomeIcon icon={faUpload} />
+					{queue.syncing && (
+						<span className={style.uploadProgress}>
+							{queue.uploadProgress === undefined ? (
+								<JournalStatus label="Preparing upload" />
+							) : (
+								<JournalProgress
+									label="Uploading voice note"
+									progress={queue.uploadProgress}
+								/>
+							)}
+						</span>
+					)}
 					<input
 						accept="audio/*,.m4a"
 						aria-label="Import voice memo"

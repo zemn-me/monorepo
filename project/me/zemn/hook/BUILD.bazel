@@ -5,6 +5,7 @@ ts_project(
     name = "hook",
     srcs = [
         "authentication_session.ts",
+        "journal_upload.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
@@ -58,6 +59,7 @@ ts_project(
     srcs = [
         "authentication_session_test.ts",
         "journal_refresh_test.tsx",
+        "journal_upload_test.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -79,6 +81,7 @@ jest_test(
     srcs = [
         "authentication_session_test.js",
         "journal_refresh_test.js",
+        "journal_upload_test.js",
     ],
     jsdom = True,
     visibility = ["//:__subpackages__"],
@@ -97,6 +100,8 @@ filegroup(
         "authentication_session.ts",
         "authentication_session_test.ts",
         "journal_refresh_test.tsx",
+        "journal_upload.ts",
+        "journal_upload_test.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
