@@ -31,6 +31,7 @@ import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
 import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
+import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
 import {
 	type RecordingSession,
 	startLocalRecording,
@@ -42,7 +43,6 @@ import {
 import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
 import {
 	JournalPlaceholder,
-	JournalProcessingStatus,
 	JournalStatus,
 } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';

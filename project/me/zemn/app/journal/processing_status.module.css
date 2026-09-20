@@ -1,0 +1,12 @@
+.processingStatus {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	font-size: 0.75em;
+	color: var(--journal-muted);
+}
+
+.processingStatus progress {
+	inline-size: 4em;
+	accent-color: currentColor;
+}

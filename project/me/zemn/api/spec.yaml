@@ -578,20 +578,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalTranscriptSegment'
-    JournalTranscriptFile:
-      type: object
-      description: Versioned transcript document stored alongside journal audio.
-      required: [schemaVersion, entryId, segments]
-      properties:
-        schemaVersion:
-          type: integer
-          const: 1
-        entryId:
-          type: string
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/JournalTranscriptSegment'
     JournalProcessingProgress:
       type: object
       required: [stage, completedChunks, totalChunks]
@@ -607,6 +593,20 @@ components:
           type: integer
           minimum: 0
           description: Zero until decoding has established the complete chunk count.
+    JournalTranscriptFile:
+      type: object
+      description: Versioned transcript document stored alongside journal audio.
+      required: [schemaVersion, entryId, segments]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        entryId:
+          type: string
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
     JournalEntryStatus:
       type: string
       enum: [awaiting_upload, processing, ready, failed]

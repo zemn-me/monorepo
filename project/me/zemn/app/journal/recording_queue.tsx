@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
+import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
 import { maxUploadBytes } from '#root/project/me/zemn/app/journal/recording.js';
 import {
 	getRecording,
@@ -19,10 +19,7 @@ import {
 	removeRecording,
 	saveRecording,
 } from '#root/project/me/zemn/app/journal/recording_store.js';
-import {
-	JournalProcessingStatus,
-	JournalStatus,
-} from '#root/project/me/zemn/app/journal/status.js';
+import { JournalStatus } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import type { JournalAudioUpload } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import {
@@ -297,7 +294,9 @@ function LocalRecordingRow({
 			: uploading
 				? 'Syncing voice note'
 				: draft.state === 'uploaded'
-					? 'Transcribing voice note'
+					? remoteEntry?.processingProgress?.stage === 'summarizing'
+						? 'Preparing summary'
+						: 'Transcribing voice note'
 					: draft.state === 'recording'
 						? 'Interrupted recording'
 						: (queue.errors[draft.id] ?? 'Waiting to sync');
@@ -320,14 +319,14 @@ function LocalRecordingRow({
 							·{' '}
 							<LocalizedTime date={new Date(draft.recordedAt)} />
 						</small>
+						{!uploading && remoteEntry?.status === 'processing' && (
+							<JournalProcessingStatus
+								progress={remoteEntry.processingProgress}
+								showSpinner={false}
+							/>
+						)}
 					</div>
-					{!uploading && remoteEntry?.status === 'processing' ? (
-						<JournalProcessingStatus
-							progress={remoteEntry.processingProgress}
-						/>
-					) : (
-						<JournalStatus label={label} state={status} />
-					)}
+					<JournalStatus label={label} state={status} />
 					<FontAwesomeIcon
 						aria-hidden="true"
 						className={style.entryChevron}

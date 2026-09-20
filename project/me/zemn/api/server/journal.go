@@ -150,21 +150,21 @@ func (s *Server) putJournalJSON(ctx context.Context, key string, value any) erro
 
 func journalEntryMetadata(entry JournalStoredEntry) JournalEntryMetadata {
 	metadata := JournalEntryMetadata{
-		SchemaVersion:      1,
-		Id:                 entry.Id,
-		RecordedAt:         entry.RecordedAt,
-		TimeZone:           entry.TimeZone,
-		DurationMs:         entry.DurationMs,
-		ContentType:        entry.ContentType,
-		ByteLength:         entry.ByteLength,
-		ContentSha256:      entry.ContentSha256,
-		AudioKey:           entry.AudioKey,
-		Status:             entry.Status,
-		ProcessingProgress: entry.ProcessingProgress,
+		SchemaVersion: 1,
+		Id:            entry.Id,
+		RecordedAt:    entry.RecordedAt,
+		TimeZone:      entry.TimeZone,
+		DurationMs:    entry.DurationMs,
+		ContentType:   entry.ContentType,
+		ByteLength:    entry.ByteLength,
+		ContentSha256: entry.ContentSha256,
+		AudioKey:      entry.AudioKey,
+		Status:        entry.Status,
 	}
 	if entry.Error != "" {
 		metadata.Error = &entry.Error
 	}
+	metadata.ProcessingProgress = entry.ProcessingProgress
 	return metadata
 }
 
@@ -206,17 +206,16 @@ func (s *Server) journalAudioURL(ctx context.Context, entry JournalStoredEntry) 
 
 func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) JournalEntry {
 	result := JournalEntry{
-		SchemaVersion:      1,
-		Id:                 openapiUUID(entry.Id),
-		RecordedAt:         entry.RecordedAt,
-		TimeZone:           entry.TimeZone,
-		DurationMs:         entry.DurationMs,
-		ContentType:        entry.ContentType,
-		ByteLength:         entry.ByteLength,
-		Status:             JournalEntryStatus(entry.Status),
-		ProcessingProgress: entry.ProcessingProgress,
-		AudioUrl:           s.journalAudioURL(ctx, entry),
-		Transcript:         entry.Transcript,
+		SchemaVersion: 1,
+		Id:            openapiUUID(entry.Id),
+		RecordedAt:    entry.RecordedAt,
+		TimeZone:      entry.TimeZone,
+		DurationMs:    entry.DurationMs,
+		ContentType:   entry.ContentType,
+		ByteLength:    entry.ByteLength,
+		Status:        JournalEntryStatus(entry.Status),
+		AudioUrl:      s.journalAudioURL(ctx, entry),
+		Transcript:    entry.Transcript,
 	}
 	if entry.Error != "" {
 		result.Error = &entry.Error
@@ -224,6 +223,7 @@ func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) 
 	if entry.Summary != nil {
 		result.Summary = entry.Summary
 	}
+	result.ProcessingProgress = entry.ProcessingProgress
 	return result
 }
 

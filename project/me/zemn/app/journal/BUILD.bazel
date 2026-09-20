@@ -11,6 +11,7 @@ ts_project(
         "mcp_setup.tsx",
         "page.tsx",
         "periods.ts",
+        "processing_status.tsx",
         "recording.ts",
         "recording_queue.tsx",
         "recording_store.ts",
@@ -19,6 +20,7 @@ ts_project(
     assets = ["style.module.css"],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
+        ":processing_status_module_css",
         ":style_module_css",
         "//:node_modules/@fortawesome/free-solid-svg-icons",
         "//:node_modules/@fortawesome/react-fontawesome",
@@ -56,6 +58,7 @@ filegroup(
         "page.tsx",
         "periods.ts",
         "periods_test.ts",
+        "processing_status.tsx",
         "recording.ts",
         "recording_queue.tsx",
         "recording_store.ts",
@@ -106,5 +109,11 @@ jest_test(
 md_files(
     name = "md",
     srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "processing_status_module_css",
+    src = "processing_status.module.css",
     visibility = ["//:__subpackages__"],
 )

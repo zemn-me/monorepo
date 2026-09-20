@@ -3,7 +3,8 @@ import { act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 jest.unstable_mockModule('./style.module.css', () => ({ default: {} }));
-const { JournalProcessingStatus } = await import('./status.js');
+jest.unstable_mockModule('./processing_status.module.css', () => ({default: {}}));
+const { JournalProcessingStatus } = await import('./processing_status.js');
 
 let root: Root | undefined;
 afterEach(async () => {
