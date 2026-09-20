@@ -600,6 +600,10 @@ components:
       description: Versioned metadata document stored alongside journal audio.
       required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         schemaVersion:
           type: integer
           const: 1
@@ -609,10 +613,6 @@ components:
           type: string
           format: date-time
           description: Recording time, using browser capture start when supplied, otherwise embedded audio metadata or the upload request fallback.
-        recordingStartedAt:
-          type: string
-          format: date-time
-          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         timeZone:
           type: string
         durationMs:
@@ -643,6 +643,12 @@ components:
       description: Complete entry representation indexed in DynamoDB.
       required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status, transcript]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'recording_started_at,omitempty'
         schemaVersion:
           type: integer
           const: 1
@@ -657,12 +663,6 @@ components:
           format: date-time
           x-oapi-codegen-extra-tags:
             dynamodbav: recorded_at
-        recordingStartedAt:
-          type: string
-          format: date-time
-          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
-          x-oapi-codegen-extra-tags:
-            dynamodbav: 'recording_started_at,omitempty'
         timeZone:
           type: string
           x-oapi-codegen-extra-tags:
@@ -771,6 +771,10 @@ components:
       type: object
       required: [schemaVersion, id, recordedAt, timeZone, contentType, status, transcript]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         schemaVersion:
           type: integer
           const: 1
@@ -780,10 +784,6 @@ components:
         recordedAt:
           type: string
           format: date-time
-        recordingStartedAt:
-          type: string
-          format: date-time
-          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         timeZone:
           type: string
         durationMs:
@@ -827,6 +827,10 @@ components:
       type: object
       required: [contentType, recordedAt, timeZone]
       properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         contentType:
           type: string
           enum: [audio/mp4, audio/mpeg, audio/ogg, audio/wav, audio/webm]
@@ -834,10 +838,6 @@ components:
           type: string
           format: date-time
           description: Fallback recording time used when the uploaded audio container does not provide its own creation timestamp.
-        recordingStartedAt:
-          type: string
-          format: date-time
-          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
         timeZone:
           type: string
           description: IANA time zone used to derive calendar summary periods.

@@ -801,10 +801,10 @@ export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
 }
 
 export interface JournalAudioUpload {
+	readonly recordingStartedAt?: string;
 	readonly file: Blob;
 	readonly contentType: components['schemas']['JournalEntryCreate']['contentType'];
 	readonly recordedAt: string;
-	readonly recordingStartedAt?: string;
 	readonly timeZone: string;
 }
 
@@ -819,9 +819,9 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 				const response = await client.POST('/journal/entries', {
 					signal: AbortSignal.timeout(30_000),
 					body: {
+						recordingStartedAt: upload.recordingStartedAt,
 						contentType: upload.contentType,
 						recordedAt: upload.recordedAt,
-						recordingStartedAt: upload.recordingStartedAt,
 						timeZone: upload.timeZone,
 					},
 				});

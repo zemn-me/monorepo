@@ -92,10 +92,10 @@ export function useRecordingQueue(options: QueueOptions) {
 						setSyncing(draft.id);
 						try {
 							const entry = await current.current.upload({
+								recordingStartedAt: draft.recordingStartedAt,
 								file,
 								contentType: draft.contentType,
 								recordedAt: draft.recordedAt,
-								recordingStartedAt: draft.recordingStartedAt,
 								timeZone: draft.timeZone,
 							});
 							// Keep the local audio until transcription is confirmed ready.

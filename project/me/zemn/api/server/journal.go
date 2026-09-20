@@ -150,18 +150,18 @@ func (s *Server) putJournalJSON(ctx context.Context, key string, value any) erro
 
 func journalEntryMetadata(entry JournalStoredEntry) JournalEntryMetadata {
 	metadata := JournalEntryMetadata{
-		SchemaVersion:      1,
-		Id:                 entry.Id,
-		RecordedAt:         entry.RecordedAt,
-		RecordingStartedAt: entry.RecordingStartedAt,
-		TimeZone:           entry.TimeZone,
-		DurationMs:         entry.DurationMs,
-		ContentType:        entry.ContentType,
-		ByteLength:         entry.ByteLength,
-		ContentSha256:      entry.ContentSha256,
-		AudioKey:           entry.AudioKey,
-		Status:             entry.Status,
+		SchemaVersion: 1,
+		Id:            entry.Id,
+		RecordedAt:    entry.RecordedAt,
+		TimeZone:      entry.TimeZone,
+		DurationMs:    entry.DurationMs,
+		ContentType:   entry.ContentType,
+		ByteLength:    entry.ByteLength,
+		ContentSha256: entry.ContentSha256,
+		AudioKey:      entry.AudioKey,
+		Status:        entry.Status,
 	}
+	metadata.RecordingStartedAt = entry.RecordingStartedAt
 	if entry.Error != "" {
 		metadata.Error = &entry.Error
 	}
@@ -206,18 +206,18 @@ func (s *Server) journalAudioURL(ctx context.Context, entry JournalStoredEntry) 
 
 func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) JournalEntry {
 	result := JournalEntry{
-		SchemaVersion:      1,
-		Id:                 openapiUUID(entry.Id),
-		RecordedAt:         entry.RecordedAt,
-		RecordingStartedAt: entry.RecordingStartedAt,
-		TimeZone:           entry.TimeZone,
-		DurationMs:         entry.DurationMs,
-		ContentType:        entry.ContentType,
-		ByteLength:         entry.ByteLength,
-		Status:             JournalEntryStatus(entry.Status),
-		AudioUrl:           s.journalAudioURL(ctx, entry),
-		Transcript:         entry.Transcript,
+		SchemaVersion: 1,
+		Id:            openapiUUID(entry.Id),
+		RecordedAt:    entry.RecordedAt,
+		TimeZone:      entry.TimeZone,
+		DurationMs:    entry.DurationMs,
+		ContentType:   entry.ContentType,
+		ByteLength:    entry.ByteLength,
+		Status:        JournalEntryStatus(entry.Status),
+		AudioUrl:      s.journalAudioURL(ctx, entry),
+		Transcript:    entry.Transcript,
 	}
+	result.RecordingStartedAt = entry.RecordingStartedAt
 	if entry.Error != "" {
 		result.Error = &entry.Error
 	}
@@ -718,17 +718,17 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 	contentType := string(request.Body.ContentType)
 	expiresAt := time.Now().UTC().Add(journalUploadURLLifetime)
 	entry := JournalStoredEntry{
-		SchemaVersion:      1,
-		Id:                 entryID,
-		RecordedAt:         request.Body.RecordedAt,
-		RecordingStartedAt: request.Body.RecordingStartedAt,
-		TimeZone:           request.Body.TimeZone,
-		ContentType:        contentType,
-		AudioKey:           journalEntryKey(entryID),
-		UploadExpiresAt:    &expiresAt,
-		Status:             JournalEntryStatusAwaitingUpload,
-		Transcript:         []JournalTranscriptSegment{},
+		SchemaVersion:   1,
+		Id:              entryID,
+		RecordedAt:      request.Body.RecordedAt,
+		TimeZone:        request.Body.TimeZone,
+		ContentType:     contentType,
+		AudioKey:        journalEntryKey(entryID),
+		UploadExpiresAt: &expiresAt,
+		Status:          JournalEntryStatusAwaitingUpload,
+		Transcript:      []JournalTranscriptSegment{},
 	}
+	entry.RecordingStartedAt = request.Body.RecordingStartedAt
 	if entry.RecordingStartedAt != nil {
 		entry.RecordedAt = *entry.RecordingStartedAt
 	}

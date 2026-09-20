@@ -4,13 +4,13 @@ export interface LocalRecording {
 	readonly id: string;
 	readonly owner: string;
 	readonly recordedAt: string;
-	readonly recordingStartedAt?: string;
 	readonly timeZone: string;
 	readonly contentType: JournalAudioUpload['contentType'];
 	readonly name: string;
 	readonly parts: readonly Blob[];
 	readonly state: 'recording' | 'queued' | 'uploaded';
 	readonly remoteEntryID?: string;
+	readonly recordingStartedAt?: string;
 	readonly uploadedAt?: number;
 }
 
