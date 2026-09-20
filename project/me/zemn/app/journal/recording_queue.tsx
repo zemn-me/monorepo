@@ -95,6 +95,7 @@ export function useRecordingQueue(options: QueueOptions) {
 								file,
 								contentType: draft.contentType,
 								recordedAt: draft.recordedAt,
+								recordingStartedAt: draft.recordingStartedAt,
 								timeZone: draft.timeZone,
 							});
 							// Keep the local audio until transcription is confirmed ready.

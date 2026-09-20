@@ -176,3 +176,17 @@ it('retains a final download if the worker upload budget is reached', async () =
 		expect.stringContaining('256 MiB')
 	);
 });
+
+it('retains the start timestamp when a recording spans midnight and a clock change', async () => {
+ jest.setSystemTime(new Date('2026-11-01T03:59:00Z'));
+ const finished = jest.fn();
+ const session = await startLocalRecording('owner', {tick: jest.fn(), finished});
+ Recorder.latest.chunk('before midnight');
+ jest.setSystemTime(new Date('2026-11-01T07:30:00Z'));
+ session.stop();
+ await session.done;
+ const draft = finished.mock.calls[0]?.[0] as LocalRecording;
+ expect(draft.recordedAt).toBe('2026-11-01T03:59:00.000Z');
+ expect(draft.recordingStartedAt).toBe(draft.recordedAt);
+ expect(save.mock.calls.at(-1)?.[0].recordingStartedAt).toBe(draft.recordedAt);
+});

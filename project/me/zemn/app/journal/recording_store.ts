@@ -4,6 +4,7 @@ export interface LocalRecording {
 	readonly id: string;
 	readonly owner: string;
 	readonly recordedAt: string;
+	readonly recordingStartedAt?: string;
 	readonly timeZone: string;
 	readonly contentType: JournalAudioUpload['contentType'];
 	readonly name: string;
