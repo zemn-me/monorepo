@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.97.6
-    version: 44.97.6(typanion@3.14.0)
+    specifier: 44.103.1
+    version: 44.103.1(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.5)
@@ -5158,8 +5158,8 @@ packages:
       moo: 0.5.3
     dev: true
 
-  /@renovatebot/osv-offline-db@3.0.10:
-    resolution: {integrity: sha512-xH4jJzMUagwJt4ofAtG8qWGc4TxgdNyVaUj6gjmdSVqd81fVu2qSkgVdd+Oh3O+MhTS6rOR3MZq+X5LqX4E4Iw==}
+  /@renovatebot/osv-offline-db@3.0.11:
+    resolution: {integrity: sha512-JFFrnTJjK/1GWMKilHfjU4GHZ+V9busmzZ+WUxDaQMlySNI1EA3Z3QTXG325noaDQhg0NqqXcPl8fLdrll0Oaw==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
       debug: 4.4.3(supports-color@10.2.2)
@@ -5167,12 +5167,12 @@ packages:
       - supports-color
     dev: true
 
-  /@renovatebot/osv-offline@3.0.10:
-    resolution: {integrity: sha512-btStcVTVmUaJ89qwdPlI+1yMyXTZSEpTMdgJv/77MsDzhOvVTNtoaDu6k0PHSPFoUfQ2X5WvZGRq2+CxUSqLPQ==}
+  /@renovatebot/osv-offline@3.0.11:
+    resolution: {integrity: sha512-xnf1rGaPDZR1DePYrKlOyMaHR6Giy+bOlqKut60+SPbf80PajCQd+rK1tdngkO88YM4EM1DJmkAtjHutPLqaCg==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
-      '@renovatebot/osv-offline-db': 3.0.10
-      adm-zip: 0.6.0
+      '@renovatebot/osv-offline-db': 3.0.11
+      adm-zip: 0.6.1
       debug: 4.4.3(supports-color@10.2.2)
       fs-extra: 11.4.0
       got: 15.1.0
@@ -7320,8 +7320,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  /adm-zip@0.6.0:
-    resolution: {integrity: sha512-XleryMhbuksdKtofnWZ9Sk+4CUTbms4Mb/EU32SZwToAyZ5RgVos/ki8n+yr0LWHOGKuakbXTuuYNHLQjhddgg==}
+  /adm-zip@0.6.1:
+    resolution: {integrity: sha512-Xwrja8nx9e5o2N1my4DsKCeKpdrnACyr1wtbPxBDgGzKzKyE9kRtBFA8mWldI+RVlD7CBZNWY/wQ2+ydwOR6kQ==}
     engines: {node: '>=14.0'}
     dev: true
 
@@ -14427,8 +14427,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.97.6(typanion@3.14.0):
-    resolution: {integrity: sha512-U2OE88jmgXsDB++59Aykr1qJBeuUAXawcP+qOfFZd8L+95ukn14bf22xYKSBbL02Hh8KMgGrcHCMR8qJRZYSMg==}
+  /renovate@44.103.1(typanion@3.14.0):
+    resolution: {integrity: sha512-QSiC97uIA5i6geIOqPvfJywVH/gl+/Pr8c3OKB+nmcrdPKM9kGcnA8k1mNNwMN3gFQGZWLY0+A/5GtJI5CK6AA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14465,14 +14465,14 @@ packages:
       '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
       '@renovatebot/detect-tools': 4.0.17
       '@renovatebot/good-enough-parser': 2.0.1
-      '@renovatebot/osv-offline': 3.0.10
+      '@renovatebot/osv-offline': 3.0.11
       '@renovatebot/pep440': 5.0.1
       '@renovatebot/pgp': 2.0.1
       '@renovatebot/ruby-semver': 5.0.0
       '@sindresorhus/is': 8.1.0
       '@yarnpkg/core': 4.9.1(typanion@3.14.0)
       '@yarnpkg/parsers': 3.1.0
-      adm-zip: 0.6.0
+      adm-zip: 0.6.1
       ae-cvss-calculator: 1.0.13
       agentkeepalive: 4.6.0
       async-mutex: 0.5.0
