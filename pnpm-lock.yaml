@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.97.2
-    version: 44.97.2(typanion@3.14.0)
+    specifier: 44.97.3
+    version: 44.97.3(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.5)
@@ -5145,7 +5145,7 @@ packages:
       fs-extra: 11.4.0
       toml-eslint-parser: 1.0.3
       upath: 3.0.8
-      zod: 4.6.1
+      zod: 4.6.2
     dev: true
 
   /@renovatebot/good-enough-parser@2.0.1:
@@ -14416,8 +14416,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.97.2(typanion@3.14.0):
-    resolution: {integrity: sha512-IsJD8AQNQByPYLSFvHo2agHrozEQ0h1cxEKL3cOe01P7tl1KoPQRDfan8MWKAX0UhmVaNwdHrEiuB5DSMpja6Q==}
+  /renovate@44.97.3(typanion@3.14.0):
+    resolution: {integrity: sha512-WrZaj6EtKJHFZDMrIgjCMI5zkDKrcrwnkT/Qt4ZAygQLyioAMAyopPLtqeiSJRfgQ2sqOnZYzbuBYfLqcOEnow==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14543,7 +14543,7 @@ packages:
       xmldoc: 3.0.0
       yaml: 2.9.0
       yauzl: 3.4.0
-      zod: 4.6.1
+      zod: 4.6.2
     optionalDependencies:
       openpgp: 6.3.1
       re2: 1.26.1
@@ -16727,8 +16727,8 @@ packages:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
     dev: false
 
-  /zod@4.6.1:
-    resolution: {integrity: sha512-341aRWQsve0rvronKNTqZpjmzdbUDlFuzHaI/XLg/Ej82qffDJRRfBTCuv7+9q/rMjB6LSLyEBnW4InJeMtt/Q==}
+  /zod@4.6.2:
+    resolution: {integrity: sha512-lh5RCAGFa1Cm2hjtNwLQhSs/AsqdWnTQaBER9fEwN/88pSh7KOtJavtBx/0VlkN/uFd61SwYmljLMDAsHlvzBQ==}
     dev: true
 
   /zustand@5.0.15(@types/react@18.3.31)(react@19.3.0)(use-sync-external-store@1.7.0):
