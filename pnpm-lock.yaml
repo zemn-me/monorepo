@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.103.2
-    version: 44.103.2(typanion@3.14.0)
+    specifier: 44.103.3
+    version: 44.103.3(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.6)
@@ -13390,8 +13390,8 @@ packages:
       p-timeout: 7.0.2
     dev: true
 
-  /p-throttle@8.1.0:
-    resolution: {integrity: sha512-c1wmXavsHZIC4g1OLhOsafK6jZSAeMo0Ap3yivj59PUcCkpacy5YgWdgIp/dB4vp1JZrfBSsPCR0YuADB+ENLQ==}
+  /p-throttle@8.1.1:
+    resolution: {integrity: sha512-xxWFBUyvbrQ10XC3VAr0SoXoOCKXqCX/yvbFIkBE98upphHFwjIKR6AId13ZH3jngFfF6yK43QTOtrngYAmFMA==}
     engines: {node: '>=20'}
     dev: true
 
@@ -14428,8 +14428,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.103.2(typanion@3.14.0):
-    resolution: {integrity: sha512-TkZoIxEKl6gTfubDAq6czX5BC4fIx0ts1Ct8Lf+Y2x4zPDRYTenZsIssXZJCYs8tZsEx6OF2MOjP15L8ZvDHNg==}
+  /renovate@44.103.3(typanion@3.14.0):
+    resolution: {integrity: sha512-PqauesudLvJWCcgZk58wuT9nwXrh5UZiszkdNQe8av9szEXt67obH3aWQYx3ICK+kmm98Ha3EQQWyukD/eeNzA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14528,7 +14528,7 @@ packages:
       p-all: 5.0.1
       p-map: 7.0.7
       p-queue: 9.3.3
-      p-throttle: 8.1.0
+      p-throttle: 8.1.1
       parse-link-header: 2.0.0
       prettier: 3.9.6
       protobufjs: 8.8.0
