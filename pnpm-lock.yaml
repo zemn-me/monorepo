@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.103.3
-    version: 44.103.3(typanion@3.14.0)
+    specifier: 44.103.6
+    version: 44.103.6(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.6)
@@ -5138,14 +5138,14 @@ packages:
     resolution: {integrity: sha512-czdGJWh09Lapvcqt7Vb09KlrU2PhRJ8xQaI+AItTuD9aDJ5MAgxnS38lnys6Ll+6RJEqPiaUqTwIQhVLwFvv+w==}
     dev: true
 
-  /@renovatebot/detect-tools@4.0.17:
-    resolution: {integrity: sha512-tSMsEDAOLZ6RrO0EMziYli0lUPnKy1xLWlxe1XrylKMsgQSXk2qKFXHVV8KRLIIs4H8jnDuZ6pNWygWTKG456A==}
+  /@renovatebot/detect-tools@4.0.19:
+    resolution: {integrity: sha512-FEQQQwSq1wQcySnanelF8g89QAjnhC9OqZcuICTrq31jywJBZGbWBFoeQArewc6vQFNl6K0DimGU1VkTxgFo7Q==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
     dependencies:
       fs-extra: 11.4.0
       toml-eslint-parser: 1.0.3
       upath: 3.0.8
-      zod: 4.6.2
+      zod: 4.6.4
     dev: true
 
   /@renovatebot/good-enough-parser@2.0.1:
@@ -7809,7 +7809,7 @@ packages:
       minipass-collect: 2.0.1
       minipass-flush: 1.0.7
       minipass-pipeline: 1.2.4
-      p-map: 7.0.7
+      p-map: 7.0.8
       ssri: 13.0.1
 
   /cacheable-lookup@5.0.4:
@@ -13378,8 +13378,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /p-map@7.0.7:
-    resolution: {integrity: sha512-VaWRu2i4FJNRtiRWCuuQRgfQ1B7a6+gMSrO+3j0EQi/k0ULfS9kosRxGoiqwzIjZTDI02tGfk5mXXltLg6QtfQ==}
+  /p-map@7.0.8:
+    resolution: {integrity: sha512-MitaVsCuCFIvOLLPIU7NnfrZvS9H9h7kwMUkDo+T2pEISaJD48IV9S8iIdXB7PsvvdxyYcsSTTrr90XKsbulNw==}
     engines: {node: '>=18'}
 
   /p-queue@9.3.3:
@@ -14428,8 +14428,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.103.3(typanion@3.14.0):
-    resolution: {integrity: sha512-PqauesudLvJWCcgZk58wuT9nwXrh5UZiszkdNQe8av9szEXt67obH3aWQYx3ICK+kmm98Ha3EQQWyukD/eeNzA==}
+  /renovate@44.103.6(typanion@3.14.0):
+    resolution: {integrity: sha512-SXBNuz8sKcTxnjIZruO5ukZ7gqkQcHt78WwuoWdKOmz84XHqv4aVRnx0FqM/gXwv+XWSAaXatkM5xjhb2Qb2WA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14464,7 +14464,7 @@ packages:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
-      '@renovatebot/detect-tools': 4.0.17
+      '@renovatebot/detect-tools': 4.0.19
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.11
       '@renovatebot/pep440': 5.0.1
@@ -14526,7 +14526,7 @@ packages:
       neotraverse: 1.0.1
       node-html-parser: 9.0.4
       p-all: 5.0.1
-      p-map: 7.0.7
+      p-map: 7.0.8
       p-queue: 9.3.3
       p-throttle: 8.1.1
       parse-link-header: 2.0.0
@@ -14555,7 +14555,7 @@ packages:
       xmldoc: 3.0.0
       yaml: 2.9.1
       yauzl: 3.4.0
-      zod: 4.6.2
+      zod: 4.6.4
     optionalDependencies:
       openpgp: 6.3.1
       re2: 1.26.1
@@ -16733,8 +16733,8 @@ packages:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
     dev: false
 
-  /zod@4.6.2:
-    resolution: {integrity: sha512-lh5RCAGFa1Cm2hjtNwLQhSs/AsqdWnTQaBER9fEwN/88pSh7KOtJavtBx/0VlkN/uFd61SwYmljLMDAsHlvzBQ==}
+  /zod@4.6.4:
+    resolution: {integrity: sha512-AXSD6hvGdvRjajG/l1cC+d6IrhH+sjmPKtYeQdJIK8MFJl3LyClzS+o/YsVC+zQZPupAaeH5skwwm8YqYH7BqA==}
     dev: true
 
   /zustand@5.0.15(@types/react@18.3.31)(react@19.3.0)(use-sync-external-store@1.7.0):
