@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.107.0
-    version: 44.107.0(typanion@3.14.0)
+    specifier: 44.108.2
+    version: 44.108.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.6)
@@ -5182,8 +5182,8 @@ packages:
     engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
     dev: true
 
-  /@renovatebot/pgp@2.0.1:
-    resolution: {integrity: sha512-aOnsCaPCF+xBCqNv9ru5Yo/e18lPMrXgXDOWkFZCmG+7syrRYaRTglE5vut1m2jAxlkYT4P6fAu4GD2MjH88Zw==}
+  /@renovatebot/pgp@2.0.2:
+    resolution: {integrity: sha512-wAQXq8yQYm94slVEMRTIyGgNF04kyg++N1hmrmDwynoW0mQyL95UXY/NnkaKYIpm7+JyoXQDUKW1Yx6lwt7U6Q==}
     engines: {node: '>=24.10.0', pnpm: '>=10.0.0'}
     dev: true
 
@@ -8240,8 +8240,8 @@ packages:
     engines: {node: '>=18.0'}
     dev: true
 
-  /cronstrue@3.26.0:
-    resolution: {integrity: sha512-PEXTHEir/KllAWMsOQOsv3ZXjI6Y1PA1eVAEM/WhCaesAcCYHldra9pr2jkFH6r/ynbEOAPOGoWYz9NkjP0huA==}
+  /cronstrue@3.27.0:
+    resolution: {integrity: sha512-AKhV4ilvx73NmicrZCGASdszUIf2ew0A/6jQQTh4pu3lIUzgWOGjT3Gv3CGIcTQ/p8Qy/tZuCmlaOftj8PXaNg==}
     hasBin: true
     dev: true
 
@@ -14420,8 +14420,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.107.0(typanion@3.14.0):
-    resolution: {integrity: sha512-l0UOtnaYIzo0onSsYx/C498lfwYh6uwFVlzTUNzX2CRWpjso9/dIl7dvnNmsWs/ySqeaZ1HXRqiqYSUNjPhP7w==}
+  /renovate@44.108.2(typanion@3.14.0):
+    resolution: {integrity: sha512-aVCBz+3AEeQodebQO7/xZyFpM7Td8fe4xCURrqyoHFAOtQKA+2wE1xJJ/wKjYnf7yQPwacnjCqC72mQkkC62uw==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14460,7 +14460,7 @@ packages:
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.11
       '@renovatebot/pep440': 5.0.1
-      '@renovatebot/pgp': 2.0.1
+      '@renovatebot/pgp': 2.0.2
       '@renovatebot/ruby-semver': 5.0.0
       '@sindresorhus/is': 8.1.0
       '@yarnpkg/core': 4.9.1(typanion@3.14.0)
@@ -14478,7 +14478,7 @@ packages:
       commander: 15.0.0
       common-tags: 1.8.2
       croner: 10.0.1
-      cronstrue: 3.26.0
+      cronstrue: 3.27.0
       deepmerge: 4.3.1
       dequal: 2.0.3
       detect-indent: 7.0.2
