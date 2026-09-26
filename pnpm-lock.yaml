@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.108.2
-    version: 44.108.2(typanion@3.14.0)
+    specifier: 44.111.2
+    version: 44.111.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.6)
@@ -9753,8 +9753,8 @@ packages:
       csstype: 3.2.3
     dev: false
 
-  /google-auth-library@11.0.2:
-    resolution: {integrity: sha512-vzpgPutxrghPsnjrjpzLX2bdv8IOL719Rh0oEjGnQu8YCIbnbMuTTQ5zU9LcKvLdOPgCxBwppbvnhgW90Qna5Q==}
+  /google-auth-library@11.1.0:
+    resolution: {integrity: sha512-YIBq5KNoHQrZ9PM4PeodDBqqBGlSTIxh1zibN8u3zNIO9UJg8gvKuCpdKV7fWXhsZ2zRkU6FhGrgKNgLJ2IRgw==}
     engines: {node: '>=22'}
     dependencies:
       base64-js: 1.5.1
@@ -13727,8 +13727,8 @@ packages:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  /prettier@3.9.6:
-    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+  /prettier@3.9.7:
+    resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -14420,8 +14420,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.108.2(typanion@3.14.0):
-    resolution: {integrity: sha512-aVCBz+3AEeQodebQO7/xZyFpM7Td8fe4xCURrqyoHFAOtQKA+2wE1xJJ/wKjYnf7yQPwacnjCqC72mQkkC62uw==}
+  /renovate@44.111.2(typanion@3.14.0):
+    resolution: {integrity: sha512-Dzhs/NJ5gO6O+SrgL1cRtw/FDDtUXMM2rYoJKcM2X2m/cKD8z0msQThc2xOqONYWFs0CD02uOS8blMVpboF/lA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14496,7 +14496,7 @@ packages:
       github-url-from-git: 1.5.0
       glob: 13.0.6
       global-agent: 3.0.0
-      google-auth-library: 11.0.2
+      google-auth-library: 11.1.0
       got: 16.0.0
       graph-data-structure: 4.5.0
       handlebars: 4.7.9
@@ -14522,7 +14522,7 @@ packages:
       p-queue: 9.3.3
       p-throttle: 8.1.1
       parse-link-header: 2.0.0
-      prettier: 3.9.6
+      prettier: 3.9.7
       protobufjs: 8.8.0
       punycode: 2.3.1
       remark: 15.0.1
