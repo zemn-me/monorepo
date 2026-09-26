@@ -616,7 +616,7 @@ http_file(
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2026c"
+TZ_VERSION = "2026d"
 
 http_archive(
     name = "com_github_eggbert_tz",
