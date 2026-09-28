@@ -506,8 +506,8 @@ devDependencies:
     specifier: 0.14.1
     version: 0.14.1
   renovate:
-    specifier: 44.113.0
-    version: 44.113.0(typanion@3.14.0)
+    specifier: 44.115.2
+    version: 44.115.2(typanion@3.14.0)
   sharp:
     specifier: 0.35.4
     version: 0.35.4(@types/node@24.13.6)
@@ -13735,8 +13735,8 @@ packages:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  /prettier@3.9.7:
-    resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
+  /prettier@3.9.8:
+    resolution: {integrity: sha512-WRFq3Wn3WId7LLROfMLdH7xaFr2jR62wU8nLO6rQUOLOxNZUviyJQs1M0iIhLexSFy+L+w0ch66wtoO2jRjG0A==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -14428,8 +14428,8 @@ packages:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
-  /renovate@44.113.0(typanion@3.14.0):
-    resolution: {integrity: sha512-nGiNL+0Hq5jQg3yeBBeJmeGF8uicoW7RyLufq7zvCNOkRn5lPE4MBZs3RVEyq6d3CL0r2xKaqtRPdBYiJR9hhQ==}
+  /renovate@44.115.2(typanion@3.14.0):
+    resolution: {integrity: sha512-Djw3zN8XNnGH83NhqGlVEUfmhipznPPNIurUwfUFno1+STWH6TNgNYF9psQiM1XOIPWB2zKmVBgwEbG3Yeoj0g==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
     dependencies:
@@ -14530,7 +14530,7 @@ packages:
       p-queue: 9.3.3
       p-throttle: 8.1.1
       parse-link-header: 2.0.0
-      prettier: 3.9.7
+      prettier: 3.9.8
       protobufjs: 8.8.0
       punycode: 2.3.1
       remark: 15.0.1
