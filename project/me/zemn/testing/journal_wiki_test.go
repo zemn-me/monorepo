@@ -174,7 +174,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	click := func(by, selector string) {
 		t.Helper()
-		if err := find(by, selector).Click(); err != nil {
+		if err := clickElementWithRetry(driver, by, selector, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 	}

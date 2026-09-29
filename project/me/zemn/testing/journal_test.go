@@ -1653,7 +1653,8 @@ func testWAV() []byte {
 }
 
 func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID string, timeout time.Duration) error {
-	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
+	var lastState any
+	err := driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
 		value, err := webDriver.ExecuteScript(`
 			const audios = [...document.querySelectorAll('audio[data-entry-id]')];
 			const audio = audios.find(value => value.dataset.entryId === arguments[0]);
@@ -1676,6 +1677,7 @@ func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID str
 		if err != nil {
 			return false, err
 		}
+		lastState = value
 		state, ok := value.(map[string]interface{})
 		if !ok {
 			return false, nil
@@ -1696,6 +1698,10 @@ func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID str
 		urlTimeMatches, _ := state["urlTimeMatches"].(bool)
 		return readyState >= 2 && !otherPlaying && urlEntry == entryID && urlTime != "" && urlTimeMatches && (ended || (!paused && currentTime > 0.05)), nil
 	}, timeout)
+	if err != nil {
+		return fmt.Errorf("%w; entry %s playback state: %#v", err, entryID, lastState)
+	}
+	return nil
 }
 
 func waitForJournalAudioAdvance(driver selenium.WebDriver, entryID string, advance, timeout time.Duration) error {

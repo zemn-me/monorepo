@@ -299,36 +299,6 @@ func fillFieldWithRetry(driver selenium.WebDriver, by, selector, text string, ti
 	return fmt.Errorf("fill %s:%s: %w", by, selector, lastErr)
 }
 
-func clickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
-	deadline := time.Now().Add(timeout)
-	var lastErr error
-	for time.Now().Before(deadline) {
-		elem, err := driver.FindElement(by, selector)
-		if err != nil {
-			lastErr = err
-			time.Sleep(200 * time.Millisecond)
-			continue
-		}
-		if err := elem.Click(); err != nil {
-			lastErr = err
-			if isStaleElementErr(err) {
-				time.Sleep(150 * time.Millisecond)
-				continue
-			}
-			return fmt.Errorf("click %s:%s: %w", by, selector, err)
-		}
-		return nil
-	}
-	if lastErr == nil {
-		lastErr = fmt.Errorf("element never located")
-	}
-	return fmt.Errorf("click %s:%s: %w", by, selector, lastErr)
-}
-
-func isStaleElementErr(err error) bool {
-	return err != nil && strings.Contains(err.Error(), "stale element reference")
-}
-
 func waitForGrievanceElement(driver selenium.WebDriver, description string, timeout time.Duration) (selenium.WebElement, error) {
 	deadline := time.Now().Add(timeout)
 	var lastErr error

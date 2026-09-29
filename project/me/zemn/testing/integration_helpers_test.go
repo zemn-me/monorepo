@@ -246,6 +246,38 @@ func waitForEnabledElement(driver selenium.WebDriver, by, value string, timeout 
 	return nil, fmt.Errorf("enabled element %s:%s not found", by, value)
 }
 
+// React may replace an element between lookup and click. Only retry stale
+// references; other click failures must still fail the test.
+func clickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
+	deadline := time.Now().Add(timeout)
+	var lastErr error
+	for time.Now().Before(deadline) {
+		elem, err := driver.FindElement(by, selector)
+		if err != nil {
+			lastErr = err
+			time.Sleep(200 * time.Millisecond)
+			continue
+		}
+		if err := elem.Click(); err != nil {
+			lastErr = err
+			if isStaleElementErr(err) {
+				time.Sleep(150 * time.Millisecond)
+				continue
+			}
+			return fmt.Errorf("click %s:%s: %w", by, selector, err)
+		}
+		return nil
+	}
+	if lastErr == nil {
+		lastErr = fmt.Errorf("element never located")
+	}
+	return fmt.Errorf("click %s:%s: %w", by, selector, lastErr)
+}
+
+func isStaleElementErr(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "stale element reference")
+}
+
 func waitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
 	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
 		_, err := wd.FindElement(by, value)

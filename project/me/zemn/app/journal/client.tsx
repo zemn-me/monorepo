@@ -204,7 +204,8 @@ interface JournalPlayback {
 	readonly removeEntry: (entryID: string) => void;
 	readonly registerAudio: (
 		entryID: string,
-		audio: HTMLAudioElement | null
+		audio: HTMLAudioElement | null,
+		play: (time: number) => void
 	) => void;
 	readonly started: (entryID: string) => void;
 	readonly stopped: (entryID: string, time: number) => void;
@@ -217,8 +218,8 @@ function useJournalPlayback(
 	navigationKey = ''
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
+	const audioPlayRequests = useRef(new Map<string, (time: number) => void>());
 	const appliedNavigation = useRef<string>();
-	const pendingSeekTimes = useRef(new Map<string, number>());
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
 	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
@@ -234,11 +235,17 @@ function useJournalPlayback(
 	const playingRef = useRef(playing);
 	playingRef.current = playing;
 	const registerAudio = useCallback(
-		(entryID: string, audio: HTMLAudioElement | null) => {
-			if (audio) audioElements.current.set(entryID, audio);
-			else {
+		(
+			entryID: string,
+			audio: HTMLAudioElement | null,
+			play: (time: number) => void
+		) => {
+			if (audio) {
+				audioElements.current.set(entryID, audio);
+				audioPlayRequests.current.set(entryID, play);
+			} else {
 				audioElements.current.delete(entryID);
-				pendingSeekTimes.current.delete(entryID);
+				audioPlayRequests.current.delete(entryID);
 			}
 		},
 		[]
@@ -249,25 +256,9 @@ function useJournalPlayback(
 		}
 	}, []);
 	const seekAndPlay = useCallback((entryID: string, time: number) => {
-		const audio = audioElements.current.get(entryID);
-		if (!audio) return false;
-		const target = Math.max(0, time);
-		pendingSeekTimes.current.set(entryID, target);
-		const seek = () => {
-			if (audioElements.current.get(entryID) !== audio) return;
-			const pending = pendingSeekTimes.current.get(entryID);
-			if (pending === undefined) return;
-			pendingSeekTimes.current.delete(entryID);
-			if (Math.abs(audio.currentTime - pending) >= 0.25) {
-				audio.currentTime = pending;
-			}
-		};
-		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
-			audio.addEventListener('loadedmetadata', seek, { once: true });
-		} else {
-			seek();
-		}
-		void audio.play().catch(() => undefined);
+		const play = audioPlayRequests.current.get(entryID);
+		if (!play) return false;
+		play(Math.max(0, time));
 		return true;
 	}, []);
 	const updateCursor = useCallback(
@@ -409,7 +400,6 @@ function useJournalPlayback(
 		(entryID: string) => {
 			const audio = audioElements.current.get(entryID);
 			audio?.pause();
-			pendingSeekTimes.current.delete(entryID);
 			if (playingRef.current?.entryID === entryID) {
 				playingRef.current = undefined;
 				setPlaying(undefined);
@@ -1190,6 +1180,7 @@ function JournalAudio({
 	const refreshJournal = useRefreshJournal();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const playRequested = useRef(false);
+	const pendingSeek = useRef<number>();
 	const stallRecoveryTimer = useRef<number>();
 	const [source, setSource] = useState(audioURL);
 	const [recovery, setRecovery] = useState<{
@@ -1206,23 +1197,59 @@ function JournalAudio({
 		stallRecoveryTimer.current = undefined;
 	}, []);
 	const recoverPlayback = useCallback(
-		(audio: HTMLAudioElement) => {
+		(audio: HTMLAudioElement, time = audio.currentTime) => {
 			cancelStallRecovery();
 			if (recoveryRef.current?.failedSource === source) return;
 			const next = {
 				failedSource: source,
 				play: playRequested.current && !audio.ended,
-				time: audio.currentTime,
+				time: pendingSeek.current ?? time,
 			};
 			recoveryRef.current = next;
 			setRecovery(next);
 			void refreshJournal().catch(() => {
-				if (recoveryRef.current !== next) return;
+				if (recoveryRef.current?.failedSource !== next.failedSource) return;
 				recoveryRef.current = undefined;
 				setRecovery(undefined);
 			});
 		},
 		[cancelStallRecovery, refreshJournal, source]
+	);
+	const requestPlayback = useCallback(
+		(time: number) => {
+			const audio = audioRef.current;
+			if (!audio) return;
+			// Record intent before play(): an already-failed element can reject
+			// without emitting a play event, and a refresh may already be pending.
+			playRequested.current = true;
+			pendingSeek.current = time;
+			const recovering = recoveryRef.current;
+			if (recovering) {
+				const next = { ...recovering, play: true, time };
+				recoveryRef.current = next;
+				setRecovery(next);
+				return;
+			}
+			if (audio.error) {
+				recoverPlayback(audio, time);
+				return;
+			}
+			const seek = () => {
+				if (audioRef.current !== audio) return;
+				const target = pendingSeek.current;
+				if (target === undefined) return;
+				pendingSeek.current = undefined;
+				if (Math.abs(audio.currentTime - target) >= 0.25)
+					audio.currentTime = target;
+			};
+			if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
+				audio.addEventListener('loadedmetadata', seek, { once: true });
+			} else {
+				seek();
+			}
+			void audio.play().catch(() => undefined);
+		},
+		[recoverPlayback]
 	);
 	const scheduleStallRecovery = useCallback(
 		(audio: HTMLAudioElement) => {
@@ -1253,10 +1280,12 @@ function JournalAudio({
 		const audio = audioRef.current;
 		if (!audio) return;
 		const restore = () => {
+			if (recoveryRef.current !== recovery) return;
 			if (Math.abs(audio.currentTime - recovery.time) >= 0.25) {
 				audio.currentTime = recovery.time;
 			}
 			recoveryRef.current = undefined;
+			pendingSeek.current = undefined;
 			setRecovery(undefined);
 			if (recovery.play) {
 				void audio.play().catch(() => undefined);
@@ -1326,7 +1355,7 @@ function JournalAudio({
 				preload="metadata"
 				ref={audio => {
 					audioRef.current = audio;
-					playback.registerAudio(entry.id, audio);
+					playback.registerAudio(entry.id, audio, requestPlayback);
 				}}
 				src={source}
 			/>
