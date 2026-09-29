@@ -25,7 +25,6 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -47,6 +46,11 @@ import {
 	JournalStatus,
 } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
+import { Markdown } from '#root/project/me/zemn/components/Article/markdown.js';
+import {
+	type MarkdownComponents,
+	markdownComponents,
+} from '#root/project/me/zemn/components/Article/markdown_components.js';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
@@ -554,18 +558,25 @@ function SummaryBlock({
 			markdown: renderedMarkdown,
 		};
 	}, [block.markdown, citationIDs, links]);
-	const markdownComponents = useMemo<Components>(
+	const components = useMemo<MarkdownComponents>(
 		() => ({
-			h2: ({ children }) => <h4>{children}</h4>,
-			h3: ({ children }) => <h5>{children}</h5>,
-			a: ({ children, href }) => {
+			h2: markdownComponents.h4,
+			h3: markdownComponents.h5,
+			a: ({ children, href, ...props }) => {
+				const Anchor = markdownComponents.a;
 				const resolved = href ? linksByHref.get(href) : undefined;
-				if (!resolved) return <Link href={href}>{children}</Link>;
+				if (!resolved)
+					return (
+						<Anchor {...props} href={href}>
+							{children}
+						</Anchor>
+					);
 				const { citationID, link } = resolved;
 				const { citation } = link;
 				return (
 					<sup className={style.citation}>
-						<Link
+						<Anchor
+							{...props}
 							aria-label={`Play source at ${link.label}`}
 							data-citation-entry-id={citation.entryId}
 							data-citation-segment-id={citation.segmentId}
@@ -586,7 +597,7 @@ function SummaryBlock({
 							}}
 						>
 							[{children}]
-						</Link>
+						</Anchor>
 					</sup>
 				);
 			},
@@ -596,9 +607,7 @@ function SummaryBlock({
 
 	return (
 		<div data-journal-summary-block>
-			<ReactMarkdown components={markdownComponents}>
-				{markdown}
-			</ReactMarkdown>
+			<Markdown components={components}>{markdown}</Markdown>
 		</div>
 	);
 }
