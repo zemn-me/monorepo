@@ -1536,6 +1536,7 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 		});
 	}
 	for (const summary of journal.summaries) {
+		if (journal.curation) continue;
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
@@ -1613,7 +1614,7 @@ function PeriodDisclosure({
 				<strong className={style.periodTitle}>
 					{node.summary?.title ??
 						(curation
-							? 'Article in progress…'
+							? 'Browse recordings'
 							: 'Summary in progress…')}
 				</strong>
 				<FontAwesomeIcon
@@ -1650,7 +1651,7 @@ function PeriodDisclosure({
 									<strong>
 										{child.summary?.title ??
 											(curation
-												? 'Article in progress…'
+												? 'Browse recordings'
 												: 'Summary in progress…')}
 									</strong>
 									<FontAwesomeIcon
@@ -1858,10 +1859,6 @@ function PeriodList({
 					candidate.start === element.dataset.journalPeriodStart
 			);
 			if (!node) return;
-			if (journal.curation && node.summary) {
-				element.scrollIntoView({ block: 'start', behavior: 'instant' });
-				return;
-			}
 			const duration = Date.parse(node.end) - Date.parse(node.start);
 			const fraction = Math.max(
 				0,

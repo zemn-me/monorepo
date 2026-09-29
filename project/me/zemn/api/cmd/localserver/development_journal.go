@@ -28,7 +28,7 @@ type developmentJournalFixture struct {
 // Fictional, connected stories let reviewers inspect cross-date evidence,
 // ambiguous names, changing plans, and calendar browsing in the real UI.
 var developmentJournalFixtures = []developmentJournalFixture{
-	{title: "A quieter kind of launch", summary: "The Lantern pilot worked best when visitors could start without an account. Maya's design decision became visible in the room.", transcript: []string{
+	{title: "A quieter kind of launch", summary: "Eleven visitors came to the Lantern pilot. Two tried the station after the sign-in step was removed.", transcript: []string{
 		"Tonight we ran the Lantern pilot at Rivermill Library. Jo counted eleven visitors, and eight tried the listening station without asking for help.",
 		"Maya Torres stayed near the door and watched rather than explaining the screen. Two people who hesitated at the sign-in prompt tried it once we removed that step.",
 		"Ivo Chen fixed the headphone delay before we opened. We decided to keep the next pilot small and optional, and Jo wants to invite the afternoon reading group.",
@@ -38,7 +38,7 @@ var developmentJournalFixtures = []developmentJournalFixture{
 		"I had treated registrations as proof that the project mattered. Maya asked whether someone could enjoy a story and leave without owing us anything. We agreed to try the pilot without mandatory sign-in.",
 		"The person I called Meyer in my river-walk note was Maya Torres, not a new collaborator. We were discussing the same Lantern sign-in screen.",
 	}},
-	{title: "The rehearsal found the wrong problem", summary: "A rehearsal with Ivo exposed a technical delay and a more important interaction problem: people did not know whether they were allowed to begin.", transcript: []string{
+	{title: "The rehearsal found the wrong problem", summary: "At rehearsal, Ivo investigated a headphone delay and Jo asked whether she needed an account. The team simplified the screen.", transcript: []string{
 		"Ivo Chen and I rehearsed Lantern at Rivermill Library. The headphones lagged by half a second, which he thinks is a buffering problem rather than a broken device.",
 		"Jo Alvarez tried the screen and asked whether she needed an account before touching anything. I realized our welcome screen looked like a form, even though we wanted it to feel like an invitation.",
 		"We removed the extra toolbar and put one large Listen button in the middle. The sign-in question is still unresolved; I want to talk to Maya before the pilot.",

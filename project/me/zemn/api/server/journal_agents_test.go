@@ -33,6 +33,9 @@ func TestJournalAgentsHostedCorpusAndIdempotentSubmission(t *testing.T) {
 		case "POST /v1/agents/sessions":
 			creates++
 			var payload struct {
+				Agent struct {
+					Instructions string `json:"instructions"`
+				} `json:"agent"`
 				Input       any               `json:"input"`
 				Metadata    map[string]string `json:"metadata"`
 				Environment struct {
@@ -45,6 +48,9 @@ func TestJournalAgentsHostedCorpusAndIdempotentSubmission(t *testing.T) {
 			}
 			if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
 				return nil, err
+			}
+			if !strings.Contains(payload.Agent.Instructions, journalWritingInstructions) {
+				return nil, errors.New("hosted curator omitted shared writing guidance")
 			}
 			if payload.Input != nil || payload.Metadata["journal_run"] != runID || payload.Environment.Type != "openai_hosted" || payload.Environment.Network.Access != "disabled" {
 				return nil, errors.New("invalid hosted session")

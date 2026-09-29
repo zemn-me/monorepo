@@ -378,6 +378,9 @@ func TestOpenAISummaryUsesGeneratedRequestAndResponseTypes(t *testing.T) {
 		if !ok {
 			return nil, fmt.Errorf("instructions = %T, want string", payload["instructions"])
 		}
+		if !strings.Contains(instructions, journalWritingInstructions) {
+			return nil, errors.New("summary request omitted shared writing guidance")
+		}
 		if instructions != journalSummaryInstructions {
 			return nil, errors.New("request did not use the journal narrative summary instructions")
 		}
@@ -464,6 +467,10 @@ func TestOpenAIEntryAnalysisInfersExplicitEntryDate(t *testing.T) {
 		var payload map[string]any
 		if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
 			return nil, err
+		}
+		instructions, _ := payload["instructions"].(string)
+		if !strings.Contains(instructions, journalWritingInstructions) {
+			return nil, errors.New("entry analysis omitted shared writing guidance")
 		}
 		if payload["instructions"] != journalEntryAnalysisInstructions {
 			return nil, errors.New("request did not use the journal entry date instructions")

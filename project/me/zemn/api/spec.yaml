@@ -579,45 +579,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalSummaryBlock'
-    JournalCalendarPeriod:
-      type: object
-      description: Trusted calendar boundaries and recordings supplied to the curator. Weeks start on Monday in the recording's time zone.
-      required: [id, period, start, end, entryIds, href]
-      properties:
-        id:
-          type: string
-        period:
-          type: string
-          enum: [day, week, month, year]
-        start:
-          type: string
-          format: date-time
-        end:
-          type: string
-          format: date-time
-        entryIds:
-          type: array
-          items:
-            type: string
-        href:
-          type: string
-    JournalCuratedPeriod:
-      type: object
-      description: A calendar article with an introduction, dated events and developments, grounded in original recordings across the corpus. Period metadata comes from the trusted calendar manifest.
-      required: [periodId, title, blocks]
-      properties:
-        periodId:
-          type: string
-        title:
-          type: string
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/JournalSummaryBlock'
     JournalCurationResult:
       type: object
-      description: Complete proposed generation. Citation quotes always refer to original transcript text, including when prose explains a likely transcription error. Wiki links use /journal?wiki=<page UUID>; calendar links use the exact href from corpus.periods.
-      required: [entries, pages, periods]
+      description: Complete proposed generation. Citation quotes always refer to original transcript text, including when prose explains a likely transcription error. Wiki links use /journal?wiki=<page UUID>.
+      required: [entries, pages]
       properties:
         entries:
           type: array
@@ -627,10 +592,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalWikiPage'
-        periods:
-          type: array
-          items:
-            $ref: '#/components/schemas/JournalCuratedPeriod'
     JournalCurationStatus:
       type: object
       required: [status]

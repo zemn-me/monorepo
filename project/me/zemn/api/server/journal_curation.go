@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"regexp"
 	"sort"
 	"strings"
@@ -22,7 +23,9 @@ import (
 
 const journalCurationKey = "CURATION"
 const journalCurationMaxBytes = 48 * 1024 * 1024
-const journalCurationVersion = "2"
+
+// Bump when the output contract or writing policy changes so unchanged diaries refresh.
+const journalCurationVersion = "3"
 
 // The application, not the sandbox, owns publication and credentials.
 type JournalCurator interface {
@@ -59,12 +62,11 @@ type journalCorpusEntry struct {
 }
 
 type journalCorpus struct {
-	Version      string                  `json:"version"`
-	Entries      []journalCorpusEntry    `json:"entries"`
-	Periods      []JournalCalendarPeriod `json:"periods"`
-	Summaries    []JournalSummary        `json:"summaries"`
-	Previous     JournalCurationResult   `json:"previous"`
-	OutputSchema any                     `json:"outputSchema"`
+	Version      string                `json:"version"`
+	Entries      []journalCorpusEntry  `json:"entries"`
+	Summaries    []JournalSummary      `json:"summaries"`
+	Previous     JournalCurationResult `json:"previous"`
+	OutputSchema any                   `json:"outputSchema"`
 }
 
 type journalGeneration struct {
@@ -83,38 +85,7 @@ func journalCorpusFromRecords(records []JournalStoredRecord) journalCorpus {
 		}
 	}
 	sort.Slice(corpus.Entries, func(i, j int) bool { return corpus.Entries[i].ID < corpus.Entries[j].ID })
-	corpus.Periods = journalCalendarPeriods(corpus.Entries)
 	return corpus
-}
-
-// Calendar membership uses each recording's local date, including DST and
-// Monday week boundaries. The agent supplies prose, never its own date ranges.
-func journalCalendarPeriods(entries []journalCorpusEntry) []JournalCalendarPeriod {
-	byID := map[string]JournalCalendarPeriod{}
-	for _, entry := range entries {
-		location, err := time.LoadLocation(entry.TimeZone)
-		if err != nil {
-			location = time.UTC
-		}
-		for _, period := range []string{"day", "week", "month", "year"} {
-			start, end := periodBounds(entry.RecordedAt, location, period)
-			id := period + ":" + start.Format(time.RFC3339)
-			page, ok := byID[id]
-			if !ok {
-				page = JournalCalendarPeriod{Id: id, Period: JournalCalendarPeriodPeriod(period), Start: start, End: end,
-					Href: "/journal/" + period + "?at=" + start.Add(end.Sub(start)/2).Format(time.RFC3339)}
-			}
-			page.EntryIds = append(page.EntryIds, entry.ID)
-			byID[id] = page
-		}
-	}
-	pages := make([]JournalCalendarPeriod, 0, len(byID))
-	for _, page := range byID {
-		sort.Strings(page.EntryIds)
-		pages = append(pages, page)
-	}
-	sort.Slice(pages, func(i, j int) bool { return pages[i].Id < pages[j].Id })
-	return pages
 }
 
 func journalCorpusHashes(corpus journalCorpus) (map[string]string, string) {
@@ -224,15 +195,16 @@ func (s *Server) journalPublishedGeneration(ctx context.Context, records []Journ
 
 var journalWikiLinkPattern = regexp.MustCompile(`\]\(\s*([^)]*)\)`)
 
-func validateJournalWikiLinks(blocks []JournalSummaryBlock, links map[string]bool) error {
+func validateJournalWikiLinks(blocks []JournalSummaryBlock, pages map[string]bool) error {
 	for _, block := range blocks {
-		// Generated prose only links to known entity or calendar pages. Citations use footnotes.
+		// Generated prose only links to known wiki pages. Citations use footnotes.
 		prose := journalCitationReferencePattern.ReplaceAllString(block.Markdown, "")
 		if strings.Contains(prose, "][") || strings.Contains(prose, "]:") || strings.Contains(prose, "![") || strings.Contains(prose, "<") {
 			return errors.New("use inline wiki links and numbered citation references only")
 		}
 		for _, match := range journalWikiLinkPattern.FindAllStringSubmatch(block.Markdown, -1) {
-			if !links[strings.TrimSpace(match[1])] {
+			u, err := url.Parse(strings.TrimSpace(match[1]))
+			if err != nil || u.Path != "/journal" || u.Host != "" || u.Scheme != "" || u.Fragment != "" || len(u.Query()) != 1 || len(u.Query()["wiki"]) != 1 || !pages[u.Query().Get("wiki")] {
 				return errors.New("curation contains an unknown wiki link")
 			}
 		}
@@ -241,8 +213,8 @@ func validateJournalWikiLinks(blocks []JournalSummaryBlock, links map[string]boo
 }
 
 func validateJournalCuration(result JournalCurationResult, corpus journalCorpus) error {
-	if result.Pages == nil || result.Entries == nil || result.Periods == nil {
-		return errors.New("curation requires entries, pages and periods arrays")
+	if result.Pages == nil || result.Entries == nil {
+		return errors.New("curation requires entries and pages arrays")
 	}
 	allowed := journalAllowedCitations(journalCorpusSources(corpus))
 	entries := map[string]bool{}
@@ -250,10 +222,6 @@ func validateJournalCuration(result JournalCurationResult, corpus journalCorpus)
 		entries[e.ID] = true
 	}
 	pages := map[string]bool{}
-	links := map[string]bool{}
-	for _, period := range corpus.Periods {
-		links[period.Href] = true
-	}
 	for _, page := range result.Pages {
 		id := page.Id.String()
 		if page.Id == uuid.Nil || pages[id] || len(page.Title) > 200 || len(page.Aliases) > 50 || page.Aliases == nil {
@@ -265,7 +233,6 @@ func validateJournalCuration(result JournalCurationResult, corpus journalCorpus)
 			return errors.New("invalid wiki page kind")
 		}
 		pages[id] = true
-		links["/journal?wiki="+id] = true
 	}
 	if len(result.Entries) != len(entries) {
 		return errors.New("curation must account for every completed entry")
@@ -291,7 +258,7 @@ func validateJournalCuration(result JournalCurationResult, corpus journalCorpus)
 		if !cited {
 			return errors.New("entry analysis does not cite its own recording")
 		}
-		if err := validateJournalWikiLinks(entry.Blocks, links); err != nil {
+		if err := validateJournalWikiLinks(entry.Blocks, pages); err != nil {
 			return err
 		}
 	}
@@ -299,43 +266,8 @@ func validateJournalCuration(result JournalCurationResult, corpus journalCorpus)
 		if err := validateJournalSummaryEvidence(JournalSummaryResult{Title: page.Title, Blocks: page.Blocks}, allowed); err != nil {
 			return err
 		}
-		if err := validateJournalWikiLinks(page.Blocks, links); err != nil {
+		if err := validateJournalWikiLinks(page.Blocks, pages); err != nil {
 			return err
-		}
-	}
-	periods := map[string]JournalCalendarPeriod{}
-	for _, period := range corpus.Periods {
-		periods[period.Id] = period
-	}
-	if len(result.Periods) != len(periods) {
-		return errors.New("curation must account for every calendar period")
-	}
-	for _, page := range result.Periods {
-		period, ok := periods[page.PeriodId]
-		if !ok {
-			return errors.New("unknown or duplicate calendar period")
-		}
-		delete(periods, page.PeriodId)
-		if err := validateJournalSummaryEvidence(JournalSummaryResult{Title: page.Title, Blocks: page.Blocks}, allowed); err != nil {
-			return err
-		}
-		if err := validateJournalWikiLinks(page.Blocks, links); err != nil {
-			return err
-		}
-		members := map[string]bool{}
-		for _, id := range period.EntryIds {
-			members[id] = true
-		}
-		cited := false
-		for _, block := range page.Blocks {
-			for _, citation := range block.Citations {
-				if members[citation.EntryId] {
-					cited = true
-				}
-			}
-		}
-		if !cited {
-			return errors.New("calendar article does not cite a recording from its period")
 		}
 	}
 	return nil
@@ -360,18 +292,12 @@ func filterJournalLegacyEvidence(records []JournalStoredRecord) []JournalStoredR
 	return result
 }
 
-func (s *Server) applyJournalGeneration(records []JournalStoredRecord, generation journalGeneration) []JournalStoredRecord {
+func applyJournalGeneration(records []JournalStoredRecord, generation journalGeneration) []JournalStoredRecord {
 	analyses := map[string]JournalCuratedEntry{}
 	for _, analysis := range generation.Result.Entries {
 		analyses[analysis.EntryId.String()] = analysis
 	}
-	result := make([]JournalStoredRecord, 0, len(records))
-	for _, record := range filterJournalLegacyEvidence(records) {
-		if record.Summary != nil && (s.journalCurationEnabled || generation.Sources != nil) {
-			continue
-		}
-		result = append(result, record)
-	}
+	result := filterJournalLegacyEvidence(records)
 	for i, record := range result {
 		if record.Entry == nil {
 			continue
@@ -380,16 +306,6 @@ func (s *Server) applyJournalGeneration(records []JournalStoredRecord, generatio
 			entry := *record.Entry
 			entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond), JournalSummaryResult{Title: analysis.Title, Blocks: analysis.Blocks}, generation.Sources[entry.Id]))
 			result[i].Entry = &entry
-		}
-	}
-	periods := map[string]JournalCalendarPeriod{}
-	for _, period := range journalCorpusFromRecords(records).Periods {
-		periods[period.Id] = period
-	}
-	for _, page := range generation.Result.Periods {
-		if period, ok := periods[page.PeriodId]; ok {
-			summary := summaryRecord(period.Id, JournalSummaryPeriod(period.Period), period.Start, period.End, JournalSummaryResult{Title: page.Title, Blocks: page.Blocks}, "")
-			result = append(result, JournalStoredRecord{Summary: &summary})
 		}
 	}
 	return result

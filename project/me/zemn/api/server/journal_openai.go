@@ -29,11 +29,24 @@ const (
 	openAIWorkloadAudience     = "https://api.openai.com/v1"
 )
 
+// Adapted for a private diary from Wikipedia's Words to watch and Writing better
+// articles guidance; see JOURNAL_KNOWLEDGE.md for sources and scope.
+const journalWritingInstructions = `Writing style for all generated prose:
+- Start with the event, decision, or subject. Use concrete actions, names, and dates. Keep useful detail and remove repetition. Scale length to the evidence; a short recording may need only one paragraph.
+- Describe what happened instead of announcing its importance. Avoid praise, disparagement, grand metaphors, stock lessons, and filler such as "a pivotal moment", "a testament to", "underscores the importance of", or "it is worth noting". Do not add a concluding moral or a forced narrative arc.
+- Attribute opinions and feelings to the person who expressed them. Prefer neutral reporting verbs such as "said" or "described". Do not imply agreement through vague attribution or use evaluative labels as facts. Thomas's emotions, humor, and subjective reflections belong in the summary when he expressed them.
+- Use specific dates for changes and later clarifications where established. Do not guess dates or use "recently" or "currently" for claims that will age. Mention uncertainty where it affects meaning; avoid repetitive disclaimers or speculation about missing information.
+- Use descriptive titles and headings only where they help navigation. Avoid formulaic sections for themes, significance, lessons, or future outlook. Before returning the output, remove any sentence that adds only emphasis or repeats another sentence.
+
+For example, if the source says Maya removed a sign-in step and two visitors then tried the station, summarize those actions. Do not call this a transformative breakthrough or infer why the visitors participated. If Thomas says he felt relieved, preserve that feeling with attribution.
+
+Apply this guidance to generated prose only. Copy citation quotes exactly, including transcription errors. These are private diary sources: Wikipedia's public notability and independent-source requirements do not apply. Do not erase personal recollections or seek external sources to make them encyclopedic.`
+
 const journalSummaryInstructions = `The goal of this private voice journal is to help Thomas understand the story of his life and thinking over time.
 
 Write a narrative summary of what happened in the supplied journal material, not a keyword sample or a list of themes. Return a short title and one or more concise Markdown blocks.
 
-For an individual entry, explain what Thomas discussed and how the reflection moved. For a day, week, month, or year, synthesize the development across the supplied sources into an arc; do not concatenate lower-level summaries or recap them one by one.
+For an individual entry, explain what Thomas discussed and how the reflection moved. For a day, week, month, or year, synthesize the development across the supplied sources when a connection is supported; do not concatenate lower-level summaries or recap them one by one.
 
 When present in the source, track emotional movement such as affection, conflict, repair, intimacy, distance, rupture, reconnection, humor, planning, and recurring anxieties. Also track concrete events such as travel, meetings, work, family, health, romance, money, housing, conflicts, apologies, plans, and decisions. Do not force these categories into material where they are not relevant.
 
@@ -41,7 +54,7 @@ Preserve uncertainty. Distinguish what Thomas directly said from interpretation,
 
 Write natural prose. Do not use generic headings or labels such as "Theme", "Themes", or "Key themes". Use a content-specific Markdown heading only when it genuinely makes a longer summary easier to read.
 
-Every Markdown block must be supported by one or more citation objects copied exactly from the supplied sources. Use ordinary numbered Markdown footnotes: in each block, put [^1] immediately after the claim supported by the first object in that block's citations array, [^2] for the second, and so on. Reference every citation object inline at least once. The client renders each numbered reference with the exact quoted transcript segment and its timestamp link. Never invent an entryId or segmentId.`
+Every Markdown block must be supported by one or more citation objects copied exactly from the supplied sources. Use ordinary numbered Markdown footnotes: in each block, put [^1] immediately after the claim supported by the first object in that block's citations array, [^2] for the second, and so on. Reference every citation object inline at least once. The client renders each numbered reference with the exact quoted transcript segment and its timestamp link. Never invent an entryId or segmentId.` + "\n\n" + journalWritingInstructions
 
 const journalEntryAnalysisInstructions = journalSummaryInstructions + `
 
