@@ -832,13 +832,22 @@ describe('pulumi', () => {
 		expect(journalVersioning?.inputs['versioningConfiguration']).toEqual({
 			status: 'Enabled',
 		});
-		expect(
-			mockResources.filter(
-				resource =>
-					resource.type.includes('bucketLifecycle') &&
-					resource.inputs['bucket'] === `${journalBucket?.name}-id`
-			)
-		).toHaveLength(0);
+		const journalLifecycles = mockResources.filter(
+			resource =>
+				resource.type.includes('bucketLifecycle') &&
+				resource.inputs['bucket'] === `${journalBucket?.name}-id`
+		);
+		expect(journalLifecycles).toHaveLength(1);
+		// Exact rules prevent accidental expiration of current recordings or
+		// shorter recovery windows hidden in an additional lifecycle rule.
+		expect(journalLifecycles[0]?.inputs['rules']).toEqual([
+			{
+				id: 'expire-noncurrent-versions-after-30-days',
+				status: 'Enabled',
+				filter: { prefix: '' },
+				noncurrentVersionExpiration: { noncurrentDays: 30 },
+			},
+		]);
 		const uploadNotification = mockResources.find(
 			resource =>
 				resource.type === 'aws:s3/bucketNotification:BucketNotification' &&
