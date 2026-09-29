@@ -244,31 +244,13 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: journalBucket }
 		);
 
-		const journalVersioning = new aws.s3.BucketVersioningV2(
+		new aws.s3.BucketVersioningV2(
 			`${name}-journal-versioning`,
 			{
 				bucket: journalBucket.id,
 				versioningConfiguration: { status: 'Enabled' },
 			},
 			{ parent: journalBucket }
-		);
-
-		// Preserve current recordings indefinitely. The recovery window starts
-		// when a version becomes noncurrent after an overwrite or deletion.
-		new aws.s3.BucketLifecycleConfiguration(
-			`${name}-journal-version-retention`,
-			{
-				bucket: journalBucket.id,
-				rules: [
-					{
-						id: 'expire-noncurrent-versions-after-30-days',
-						status: 'Enabled',
-						filter: { prefix: '' },
-						noncurrentVersionExpiration: { noncurrentDays: 30 },
-					},
-				],
-			},
-			{ parent: journalBucket, dependsOn: [journalVersioning] }
 		);
 
 		new aws.s3.BucketCorsConfigurationV2(
