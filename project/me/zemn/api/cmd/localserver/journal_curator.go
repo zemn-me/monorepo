@@ -96,6 +96,17 @@ var reviewAnalyses = [][]reviewBlock{
 	{rb("A conversation with {{jo}} at {{library}} made the storytelling idea feel possible by reducing its scale to one afternoon with paper cards. There was no team or timetable yet.", [2]int{7, 0}, [2]int{7, 2}), rb("The phrase {{experiments}} captures the relief of being allowed to stop. Later notes connect this beginning to {{lantern}}, but its name and collaborators had not yet been established here.", [2]int{7, 1}, [2]int{5, 0})},
 }
 
+var reviewCalendarEvents = []reviewBlock{
+	rb("{{lantern}} opened at {{library}}. Eleven visitors came; eight tried the station without help. Two hesitant visitors participated after sign-in was removed.", [2]int{0, 0}, [2]int{0, 1}),
+	rb("Over coffee, {{maya}} and the diarist agreed to test participation without mandatory sign-in. The recording also clarified that the earlier ‘Meyer’ reference meant Maya Torres.", [2]int{1, 1}, [2]int{1, 2}),
+	rb("At rehearsal, {{ivo}} investigated headphone latency and {{jo}} mistook the welcome screen for an account requirement. The main action was reduced to one Listen button.", [2]int{2, 0}, [2]int{2, 1}, [2]int{2, 2}),
+	rb("A river-walk discussion left the value of collecting names unresolved. The original transcript names ‘Meyer’; a later recording on {{date:1}} identifies the person as {{maya}}.", [2]int{3, 0}, [2]int{3, 2}, [2]int{1, 2}),
+	rb("{{jo}} offered a corner beside the reading room for one evening. Email collection was proposed for follow-up, while any permanent installation remained outside the agreement.", [2]int{4, 0}, [2]int{4, 1}, [2]int{4, 2}),
+	rb("{{jo}} introduced {{maya}} and {{lantern}} acquired its name. Paper cards were proposed before software; long-term ownership was left undecided.", [2]int{5, 0}, [2]int{5, 1}, [2]int{5, 2}),
+	rb("{{ivo}} described an {{attention}} and offered help with an unnamed listening-station idea. The diarist wanted room for curiosity without turning rest into another productivity measure.", [2]int{6, 0}, [2]int{6, 1}, [2]int{6, 2}),
+	rb("A conversation with {{jo}} at {{library}} proposed one afternoon of paper cards. The diarist described the relief of trying {{experiments}} without promising to continue indefinitely.", [2]int{7, 0}, [2]int{7, 1}, [2]int{7, 2}),
+}
+
 func reviewPageID(key string) uuid.UUID {
 	if key == "maya" {
 		return uuid.MustParse("cc6010d8-69d2-4f88-a2da-aed75ca48198")
@@ -105,7 +116,8 @@ func reviewPageID(key string) uuid.UUID {
 
 func (c *localJournalCurator) Prepare(_ context.Context, runID string, data []byte) (string, error) {
 	var corpus struct {
-		Entries []reviewEntry `json:"entries"`
+		Entries []reviewEntry                     `json:"entries"`
+		Periods []apiserver.JournalCalendarPeriod `json:"periods"`
 	}
 	if err := json.Unmarshal(data, &corpus); err != nil {
 		return "", err
@@ -159,7 +171,7 @@ func (c *localJournalCurator) Prepare(_ context.Context, runID string, data []by
 		}
 		return result, nil
 	}
-	result := apiserver.JournalCurationResult{Entries: []apiserver.JournalCuratedEntry{}, Pages: []apiserver.JournalWikiPage{}}
+	result := apiserver.JournalCurationResult{Periods: []apiserver.JournalCuratedPeriod{}, Entries: []apiserver.JournalCuratedEntry{}, Pages: []apiserver.JournalWikiPage{}}
 	for _, entry := range corpus.Entries {
 		if entry.Summary == nil {
 			return "", errors.New("local wiki fixtures require entry summaries")
@@ -180,6 +192,99 @@ func (c *localJournalCurator) Prepare(_ context.Context, runID string, data []by
 			return "", err
 		}
 		result.Pages = append(result.Pages, apiserver.JournalWikiPage{Id: reviewPageID(page.key), Title: page.title, Kind: apiserver.JournalWikiPageKind(page.kind), Aliases: page.aliases, Blocks: blocks})
+	}
+	for _, period := range corpus.Periods {
+		members := map[string]bool{}
+		for _, id := range period.EntryIds {
+			members[id] = true
+		}
+		indices := []int{}
+		for i := range developmentJournalFixtures {
+			if members[byFixture[i].ID] {
+				indices = append(indices, i)
+			}
+		}
+		if len(indices) == 0 {
+			// Other browser flows upload their own recordings before sample data.
+			// Keep those periods covered using their original, cited local analysis.
+			blocks := []apiserver.JournalSummaryBlock{}
+			for _, entry := range corpus.Entries {
+				if members[entry.ID] && entry.Summary != nil {
+					blocks = append(blocks, entry.Summary.Blocks...)
+				}
+			}
+			result.Periods = append(result.Periods, apiserver.JournalCuratedPeriod{PeriodId: period.Id, Title: "Recorded events", Blocks: blocks})
+			continue
+		}
+		latest := indices[0]
+		title := "A small idea takes shape"
+		intro := rb("The surviving notes from this period introduce a modest library storytelling idea. A conversation with {{jo}} at {{library}} made room for {{experiments}}, with neither a team nor a timetable yet in place.", [2]int{7, 0}, [2]int{7, 1}, [2]int{7, 2})
+		switch latest {
+		case 0, 1:
+			title = "Lantern reaches its first audience"
+			intro = rb("{{lantern}} moved from planning into a first public pilot at {{library}}. The central question became how to let a visitor begin without an obligation to register; {{maya}}, {{ivo}} and {{jo}} each helped turn that question into a small, observable test.", [2]int{0, 0}, [2]int{0, 1}, [2]int{0, 2}, [2]int{1, 1})
+		case 2:
+			title = "Rehearsing the invitation"
+			intro = rb("The recorded work on {{lantern}} concerned the first moments of participation. Rehearsal exposed an audio delay and a welcome screen that looked like an account requirement; mandatory sign-in was still undecided.", [2]int{2, 0}, [2]int{2, 1}, [2]int{2, 2})
+		case 3:
+			title = "An unresolved question of participation"
+			intro = rb("A river-walk conversation challenged a working assumption behind {{lantern}}: whether collecting names for follow-up was worth the effort imposed on a new visitor. The note leaves the disagreement unresolved.", [2]int{3, 0}, [2]int{3, 2})
+		case 4:
+			title = "A place and a boundary for Lantern"
+			intro = rb("{{jo}} offered {{lantern}} a home at {{library}}. The recorded agreement was deliberately limited to one evening and one station, with permission for visitors to leave and no permanent installation promised.", [2]int{4, 0}, [2]int{4, 2})
+		case 5:
+			title = "Lantern begins on paper"
+			intro = rb("{{lantern}} acquired a name and collaborators at {{library}}. {{jo}} introduced {{maya}}, whose suggestion to begin with paper cards put the visitor's experience ahead of building an application.", [2]int{5, 0}, [2]int{5, 1})
+		case 6:
+			title = "Making room for curiosity"
+			intro = rb("A conversation with {{ivo}} introduced the idea of an {{attention}}: the effort consumed by unnecessary choices before an experience begins. An unnamed library listening idea remained a notebook possibility, without a deadline.", [2]int{6, 0}, [2]int{6, 2})
+		}
+		if latest == 0 {
+			switch period.Period {
+			case "year":
+				title = "From a notebook idea to a public pilot"
+				intro = rb("The recordings from this year trace {{lantern}} from an unnamed notebook idea to a listening-station pilot at {{library}}. {{ivo}}'s {{attention}} conversation preceded the project team taking shape with {{maya}}; by {{month:0}}, the focus had shifted to what a visitor needed in order to begin. These are the developments preserved in the diary, not a complete account of the year.", [2]int{6, 0}, [2]int{6, 2}, [2]int{5, 0}, [2]int{0, 0}, [2]int{0, 1})
+			case "month":
+				title = "Testing how an invitation works"
+				intro = rb("The month's recorded work turned {{lantern}} into a first public pilot at {{library}}. Plans to collect email addresses met a practical objection during rehearsal: the welcome screen felt like a form. Discussion with {{maya}} led to a test without mandatory sign-in, followed by a small but encouraging response from visitors.", [2]int{4, 1}, [2]int{2, 1}, [2]int{1, 1}, [2]int{0, 1})
+			case "week":
+				title = "Lantern's first public pilot"
+			case "day":
+				title = "The first Lantern pilot"
+			}
+		}
+		blocks := []reviewBlock{intro}
+		for n := len(indices) - 1; n >= 0; n-- {
+			i := indices[n]
+			event := reviewCalendarEvents[i]
+			date := fmt.Sprintf("{{date:%d}}", i)
+			// Calendar links are supplied by the same manifest used by the importer.
+			for _, day := range corpus.Periods {
+				if day.Period != "day" {
+					continue
+				}
+				for _, id := range day.EntryIds {
+					if id == byFixture[i].ID {
+						date = "[" + date + "](" + day.Href + ")"
+					}
+				}
+			}
+			event.text = "- **" + date + ".** " + event.text
+			if n == len(indices)-1 {
+				event.text = "## Events\n\n" + event.text
+			}
+			blocks = append(blocks, event)
+		}
+		if latest <= 1 {
+			blocks = append(blocks, rb("## Participation and the cost of beginning\n\nThe pilot gave {{attention}} a practical expression: two visitors tried the station after the sign-in step was removed. The phrase had appeared in the earlier conversation with {{ivo}} on {{date:6}}. This is an observation consistent with the idea, not proof that simpler interfaces always work better.", [2]int{0, 1}, [2]int{6, 0}), rb("## Open questions\n\n{{jo}} proposed inviting the afternoon reading group next. No date is recorded, and permanent maintenance remains unresolved. The plan still fits {{experiments}} rather than a commitment to operate a full archive.", [2]int{0, 2}, [2]int{5, 2}, [2]int{7, 1}))
+		} else {
+			blocks = append(blocks, rb("## Later developments\n\nBy {{date:0}}, {{lantern}} had reached a first pilot with eleven visitors. That later outcome puts these earlier notes in context; it does not make the eventual design or a permanent service a settled plan at the time. Maintenance remained an open question.", [2]int{0, 0}, [2]int{0, 2}, [2]int{5, 2}))
+		}
+		rendered, err := render(blocks, nil)
+		if err != nil {
+			return "", err
+		}
+		result.Periods = append(result.Periods, apiserver.JournalCuratedPeriod{PeriodId: period.Id, Title: title, Blocks: rendered})
 	}
 	c.mu.Lock()
 	defer c.mu.Unlock()

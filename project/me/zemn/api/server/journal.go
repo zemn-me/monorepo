@@ -250,7 +250,7 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 	if err != nil {
 		return nil, err
 	}
-	records = applyJournalGeneration(records, generation)
+	records = s.applyJournalGeneration(records, generation)
 	entries := make([]JournalEntry, 0)
 	summaries := make([]JournalSummary, 0)
 	now := time.Now().UTC()

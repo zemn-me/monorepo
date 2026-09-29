@@ -159,7 +159,7 @@ func (s *Server) journalMCPRecords(ctx context.Context) ([]JournalStoredRecord, 
 	if err != nil {
 		return nil, errors.New("unable to read journal knowledge")
 	}
-	return applyJournalGeneration(records, generation), nil
+	return s.applyJournalGeneration(records, generation), nil
 }
 
 type journalMCPMatch struct {

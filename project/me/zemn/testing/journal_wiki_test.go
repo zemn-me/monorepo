@@ -256,6 +256,9 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Fatal(err)
 	}
 	save("08-citation-preview-desktop", data)
+	if err := driver.ResizeWindow("", 1440, 2600); err != nil {
+		t.Fatal(err)
+	}
 	click(selenium.ByLinkText, "Days")
 	launch := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
 	if err := launch.Click(); err != nil {
@@ -290,7 +293,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Fatal(err)
 	}
 	save("10-earlier-day-clarification-desktop", data)
-	if err := driver.ResizeWindow("", 390, 1400); err != nil {
+	if err := driver.ResizeWindow("", 390, 4000); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
@@ -313,11 +316,52 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		// that visible navigation settle before selecting a different view.
 		time.Sleep(400 * time.Millisecond)
 		click(selenium.ByLinkText, view.link)
+		var heading selenium.WebElement
 		if view.link == "Years" {
-			find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
+			heading = find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
 		} else {
-			find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
+			heading = find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
 		}
-		capture(view.name, "nav[aria-label='Browse journal']", 1440, 1100, false)
+		period, err := heading.FindElement(selenium.ByXPATH, "parent::details")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if open, _ := period.GetAttribute("open"); open != "true" {
+			if err := heading.Click(); err != nil {
+				t.Fatal(err)
+			}
+		}
+		if _, err := period.FindElement(selenium.ByXPATH, ".//h4[normalize-space()='Events']"); err != nil {
+			t.Fatal("calendar article missing events: ", err)
+		}
+		if _, err := period.FindElement(selenium.ByXPATH, ".//h4[normalize-space()='Open questions']"); err != nil {
+			t.Fatal("calendar article missing thematic context: ", err)
+		}
+		if _, err := period.FindElement(selenium.ByCSSSelector, "article a[href^='/journal/day?']"); err != nil {
+			t.Fatal("events lack day links: ", err)
+		}
+		entity := find(selenium.ByCSSSelector, "details[open] article a[href^='/journal?wiki=']")
+		// Canonical links inherit prose colour, use an italic face and the
+		// site's underline token. Plain browser anchors fail this assertion.
+		styled, err := driver.ExecuteScript(`const link = arguments[0], s = getComputedStyle(link), canonical = getComputedStyle(document.querySelector('a[href="/journal?wiki=all"]')); return s.color === getComputedStyle(link.parentElement).color && s.fontStyle === 'italic' && s.textDecorationLine.includes('underline') && s.textDecorationColor === canonical.textDecorationColor`, []any{entity})
+		if err != nil || styled != true {
+			t.Fatalf("calendar link is not using canonical styling: %v %v", styled, err)
+		}
+		capture(view.name, "details[open]", 1440, 2400, true)
+		if view.link == "Years" {
+			capture("15-year-phone", "details[open]", 390, 4000, true)
+		}
 	}
+	// Follow an entity mention from a calendar article, then a day from its
+	// chronological event list, exercising the same links a reader uses.
+	time.Sleep(400 * time.Millisecond)
+	click(selenium.ByCSSSelector, "details[open] article a[href^='/journal?wiki=']")
+	find(selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Lantern']")
+	time.Sleep(400 * time.Millisecond)
+	click(selenium.ByLinkText, "Years")
+	find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+time.Now().Format("2006")+"']]")
+	time.Sleep(400 * time.Millisecond)
+	click(selenium.ByCSSSelector, "details[open] article a[href^='/journal/day?']")
+	find(selenium.ByCSSSelector, "a[aria-current='page'][data-journal-view='day']")
+	find(selenium.ByXPATH, "//h4[normalize-space()='Events']")
 }

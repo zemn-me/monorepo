@@ -99,6 +99,14 @@ func journalKnowledgeResult(entries []JournalStoredEntry) JournalCurationResult 
 	for _, entry := range entries {
 		result.Entries = append(result.Entries, JournalCuratedEntry{EntryId: uuid.MustParse(entry.Id), Title: "The move", Blocks: blocks})
 	}
+	var records []JournalStoredRecord
+	for i := range entries {
+		records = append(records, JournalStoredRecord{Entry: &entries[i]})
+	}
+	result.Periods = []JournalCuratedPeriod{}
+	for _, period := range journalCorpusFromRecords(records).Periods {
+		result.Periods = append(result.Periods, JournalCuratedPeriod{PeriodId: period.Id, Title: "The move and a clarified identity", Blocks: blocks})
+	}
 	return result
 }
 
@@ -140,10 +148,22 @@ func TestJournalKnowledgePublishesCrossDateWikiAndAnalyses(t *testing.T) {
 	if journal.Curation.Status != "ready" || journal.Wiki == nil || len(*journal.Wiki) != 1 {
 		t.Fatalf("not published: %#v", journal)
 	}
+	if len(journal.Summaries) != len(curator.corpus.Periods) || len(journal.Summaries) == 0 {
+		t.Fatal("calendar articles were not published")
+	}
+	for _, article := range journal.Summaries {
+		if article.Title != "The move and a clarified identity" || len(article.Blocks[0].Citations) != 2 {
+			t.Fatal("calendar article lacks cross-date context")
+		}
+	}
 	for _, entry := range journal.Entries {
 		if entry.Summary == nil || len(entry.Summary.Blocks[0].Citations) != 2 {
 			t.Fatal("entry lacks cross-date analysis")
 		}
+	}
+	_, calendar, err := s.listJournalSummariesMCP(ctx, nil, journalMCPSummaryArgs{Period: "year"})
+	if err != nil || len(calendar.Summaries) != 1 || calendar.Summaries[0].Title != "The move and a clarified identity" {
+		t.Fatalf("calendar MCP read: %#v %v", calendar, err)
 	}
 	page, err := s.GetJournalWikiPageId(ctx, GetJournalWikiPageIdRequestObject{PageId: result.Pages[0].Id})
 	if err != nil {
@@ -179,7 +199,7 @@ func TestJournalKnowledgeRejectsInvalidEvidenceAndLinks(t *testing.T) {
 	records := []JournalStoredRecord{{Entry: &entries[0]}, {Entry: &entries[1]}}
 	corpus := journalCorpusFromRecords(records)
 	valid := journalKnowledgeResult(entries)
-	valid.Pages[0].Blocks[0].Markdown = "Later evidence clarified the name.[^1][^2]"
+	valid.Pages[0].Blocks[0].Markdown = "Later evidence clarified the name.[^1][^2] See [this period](" + corpus.Periods[0].Href + ")."
 	if err := validateJournalCuration(valid, corpus); err != nil {
 		t.Fatalf("adjacent citations: %v", err)
 	}
@@ -189,6 +209,16 @@ func TestJournalKnowledgeRejectsInvalidEvidenceAndLinks(t *testing.T) {
 	}{
 		{"fabricated quote", func(r *JournalCurationResult) { r.Entries[0].Blocks[0].Citations[0].Quote = "invented" }},
 		{"unknown source", func(r *JournalCurationResult) { r.Pages[0].Blocks[0].Citations[0].EntryId = uuid.NewString() }},
+		{"missing periods", func(r *JournalCurationResult) { r.Periods = nil }},
+		{"missing period", func(r *JournalCurationResult) { r.Periods = r.Periods[:1] }},
+		{"duplicate period", func(r *JournalCurationResult) { r.Periods[1].PeriodId = r.Periods[0].PeriodId }},
+		{"unknown period", func(r *JournalCurationResult) { r.Periods[0].PeriodId = "year:1900" }},
+		{"unrelated calendar evidence", func(r *JournalCurationResult) {
+			r.Periods[0].Blocks = []JournalSummaryBlock{{Markdown: "Only another date.[^1]", Citations: []JournalCitation{{EntryId: entries[1].Id, SegmentId: "s0", Quote: entries[1].Transcript[0].Text}}}}
+		}},
+		{"unknown calendar link", func(r *JournalCurationResult) {
+			r.Pages[0].Blocks[0].Markdown += " [future](/journal/year?at=2099-06-01T00:00:00Z)"
+		}},
 		{"missing entry", func(r *JournalCurationResult) { r.Entries = r.Entries[:1] }},
 		{"duplicate entry", func(r *JournalCurationResult) { r.Entries[1].EntryId = r.Entries[0].EntryId }},
 		{"duplicate page", func(r *JournalCurationResult) { r.Pages = append(r.Pages, r.Pages[0]) }},
@@ -224,7 +254,7 @@ func TestJournalKnowledgeDeletionHidesDerivedContentEverywhere(t *testing.T) {
 		t.Fatal(err)
 	}
 	journal := response.(GetJournal200JSONResponse)
-	if len(*journal.Wiki) != 0 || journal.Entries[0].Summary != nil {
+	if len(*journal.Wiki) != 0 || journal.Entries[0].Summary != nil || len(journal.Summaries) != 0 {
 		t.Fatal("deleted evidence remains visible")
 	}
 	page, err := s.GetJournalWikiPageId(ctx, GetJournalWikiPageIdRequestObject{PageId: result.Pages[0].Id})
@@ -301,5 +331,28 @@ func TestJournalKnowledgeOwnershipAndStateFencing(t *testing.T) {
 	}
 	if err := s.saveJournalCurationState(ctx, &state); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestJournalCalendarUsesLocalDatesAndDST(t *testing.T) {
+	// Both recordings belong to Sunday even though their UTC dates differ.
+	entries := []journalCorpusEntry{
+		{ID: "morning", RecordedAt: time.Date(2026, 3, 8, 9, 0, 0, 0, time.UTC), TimeZone: "America/Los_Angeles"},
+		{ID: "evening", RecordedAt: time.Date(2026, 3, 9, 6, 0, 0, 0, time.UTC), TimeZone: "America/Los_Angeles"},
+	}
+	periods := journalCalendarPeriods(entries)
+	if len(periods) != 4 {
+		t.Fatalf("expected one of each period, got %d", len(periods))
+	}
+	for _, period := range periods {
+		if len(period.EntryIds) != 2 {
+			t.Fatal("local date split across periods")
+		}
+		if period.Period == "day" && (period.Start.Format(time.RFC3339) != "2026-03-08T08:00:00Z" || period.End.Sub(period.Start) != 23*time.Hour) {
+			t.Fatalf("wrong DST day: %#v", period)
+		}
+		if period.Period == "week" && period.Start.Format(time.RFC3339) != "2026-03-02T08:00:00Z" {
+			t.Fatalf("week must start on local Monday: %#v", period)
+		}
 	}
 }

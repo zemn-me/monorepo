@@ -556,14 +556,16 @@ function SummaryBlock({
 	}, [block.markdown, citationIDs, links]);
 	const markdownComponents = useMemo<Components>(
 		() => ({
+			h2: ({ children }) => <h4>{children}</h4>,
+			h3: ({ children }) => <h5>{children}</h5>,
 			a: ({ children, href }) => {
 				const resolved = href ? linksByHref.get(href) : undefined;
-				if (!resolved) return <a href={href}>{children}</a>;
+				if (!resolved) return <Link href={href}>{children}</Link>;
 				const { citationID, link } = resolved;
 				const { citation } = link;
 				return (
 					<sup className={style.citation}>
-						<a
+						<Link
 							aria-label={`Play source at ${link.label}`}
 							data-citation-entry-id={citation.entryId}
 							data-citation-segment-id={citation.segmentId}
@@ -584,7 +586,7 @@ function SummaryBlock({
 							}}
 						>
 							[{children}]
-						</a>
+						</Link>
 					</sup>
 				);
 			},
@@ -703,7 +705,7 @@ function SummaryCardView({
 							<cite>{link.title}</cite>.{' '}
 						</>
 					)}
-					“{link.quote}” <a href={link.href}>{link.label}</a>
+					“{link.quote}” <Link href={link.href}>{link.label}</Link>
 				</span>
 			))}
 			<FootnotePreviews root={article} />
@@ -1525,7 +1527,6 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 		});
 	}
 	for (const summary of journal.summaries) {
-		if (journal.curation) continue;
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
@@ -1603,7 +1604,7 @@ function PeriodDisclosure({
 				<strong className={style.periodTitle}>
 					{node.summary?.title ??
 						(curation
-							? 'Browse recordings'
+							? 'Article in progress…'
 							: 'Summary in progress…')}
 				</strong>
 				<FontAwesomeIcon
@@ -1640,7 +1641,7 @@ function PeriodDisclosure({
 									<strong>
 										{child.summary?.title ??
 											(curation
-												? 'Browse recordings'
+												? 'Article in progress…'
 												: 'Summary in progress…')}
 									</strong>
 									<FontAwesomeIcon
@@ -1848,6 +1849,10 @@ function PeriodList({
 					candidate.start === element.dataset.journalPeriodStart
 			);
 			if (!node) return;
+			if (journal.curation && node.summary) {
+				element.scrollIntoView({ block: 'start', behavior: 'instant' });
+				return;
+			}
 			const duration = Date.parse(node.end) - Date.parse(node.start);
 			const fraction = Math.max(
 				0,

@@ -5,7 +5,10 @@ from the entire completed diary. Original audio and transcript segments remain
 the source of truth. The existing per-entry analysis still provides provisional
 prose and spoken-date inference while the cloud run is pending; it no longer
 triggers the recursive day/week/month/year summary pipeline in production.
-Existing aggregate summaries remain readable when their evidence is still valid.
+The calendar instead displays cited wiki articles for days, Monday-based weeks,
+months and years, with introductions, dated events and thematic developments.
+Legacy aggregates remain corpus navigation aids; curated read surfaces replace
+them with calendar articles.
 
 ## Runtime
 
@@ -18,7 +21,9 @@ No diary contents are committed to Git or attached to a coding repository.
 
 Each immutable corpus contains all ready transcripts, valid provisional and
 legacy summaries, the previous published wiki and analyses, and the output
-schema. The sandbox can search this file with shell/Python. Network access and
+schema and a trusted calendar manifest. Calendar membership and boundaries come
+from each recording's time zone, including DST; the agent returns prose keyed by
+period ID. The sandbox can search this file with shell/Python. Network access and
 subagents are disabled; it receives no application credentials. It returns one
 complete JSON generation at `/workspace/outputs/journal.json`.
 
@@ -29,10 +34,13 @@ links mentions to `/journal?wiki=UUID`. This is a model heuristic, not a hard
 entity-count rule. Quotes always retain the original transcription, even when
 the prose explains a likely transcription error.
 
-The importer checks complete entry coverage, unique IDs, page kinds, links,
+The importer checks complete entry and calendar coverage, unique IDs, page kinds, links,
 footnote indices, and exact `(entryId, segmentId, quote)` evidence against all
 original segments. Every entry must cite its own recording and may cite any
-other date. Citation validation proves provenance, not that a model's inference
+other date. Calendar articles must cite a recording from their own period and may
+also cite other dates. Calendar links must match an exact manifest URL. The
+curator is prompted to distinguish background and later clarification from
+events within the period and to describe sparse coverage honestly. Citation validation proves provenance, not that a model's inference
 is correct. Invalid or partial output is never published.
 
 ## Consistency and failure recovery
