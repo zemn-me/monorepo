@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -24,79 +25,49 @@ type developmentJournalFixture struct {
 	transcript []string
 }
 
+// Fictional, connected stories let reviewers inspect cross-date evidence,
+// ambiguous names, changing plans, and calendar browsing in the real UI.
 var developmentJournalFixtures = []developmentJournalFixture{
-	{
-		title:   "A slow morning and a clear plan",
-		summary: "A quiet walk made the day feel less rushed, and three deliberately small priorities replaced an intimidating task list.",
-		transcript: []string{
-			"I walked around the lake before opening my laptop, and the extra half hour made the whole morning feel less compressed.",
-			"Instead of carrying the entire week in my head, I wrote down three things that would make today feel complete.",
-			"The surprising part was that choosing less made me more eager to begin, not less ambitious.",
-		},
-	},
-	{
-		title:   "Dinner, laughter, and an honest question",
-		summary: "Dinner with Maya moved from easy laughter into an honest conversation about staying close when work becomes consuming.",
-		transcript: []string{
-			"Maya and I found the tiny noodle place she had been talking about, and we laughed through most of dinner.",
-			"She asked whether I disappear into work when I am worried, and I could tell the question mattered more than my first answer allowed.",
-			"By the time we left, I had promised to name that feeling sooner instead of making her guess where I had gone.",
-		},
-	},
-	{
-		title:   "The prototype finally felt simple",
-		summary: "Removing controls from the prototype revealed the interaction it had been trying to become, turning a frustrating review into a useful design lesson.",
-		transcript: []string{
-			"The prototype review started badly because every screen was explaining itself twice and still felt hard to use.",
-			"Once I removed the extra toolbar, the main gesture became obvious and the whole thing suddenly felt calmer.",
-			"I want to remember that clarity often arrives through subtraction, especially when I feel tempted to add one more label.",
-		},
-	},
-	{
-		title:   "Calling home",
-		summary: "A call home carried both concern about Dad's appointment and relief that everyone could speak plainly about what happens next.",
-		transcript: []string{
-			"I called home after lunch and Mum gave me the fuller version of Dad's appointment rather than the reassuring headline.",
-			"There is another test next month, but nobody sounded panicked, and it helped to talk about the practical plan.",
-			"I felt the familiar distance of being far away, then a little better after putting the next call in the calendar.",
-		},
-	},
-	{
-		title:   "Rain on the cabin roof",
-		summary: "A rainy cabin weekend created enough quiet to read, cook, and notice how thoroughly rest changes the texture of attention.",
-		transcript: []string{
-			"It rained against the cabin roof for almost the entire afternoon, so I made soup and finished the novel by the window.",
-			"There was nowhere useful to go and nothing urgent to optimize, which was exactly what I needed.",
-			"I came home wanting to protect a smaller version of that quiet inside an ordinary week.",
-		},
-	},
-	{
-		title:   "Learning the shape of the new team",
-		summary: "The first month with the new team brought early trust, a few avoidable misunderstandings, and a clearer sense of how to collaborate well.",
-		transcript: []string{
-			"A month into the new team, I am beginning to understand which conversations need a document and which need a walk.",
-			"We repaired two misunderstandings quickly this week, mostly because everyone was willing to say what they had assumed.",
-			"I still feel new, but I no longer feel like I am waiting outside the real work.",
-		},
-	},
-	{
-		title:   "The trip I nearly cancelled",
-		summary: "A nearly cancelled coastal trip became a reminder that anticipation is not a reliable forecast of enjoyment.",
-		transcript: []string{
-			"I nearly cancelled the coast trip because the train felt complicated and I was already tired before packing.",
-			"By sunset we were eating chips on the sea wall, and I could not believe how close I had come to missing it.",
-			"The lesson is not to say yes to everything, but to distrust the version of me who predicts the whole weekend from Friday fatigue.",
-		},
-	},
-	{
-		title:   "A year with more room in it",
-		summary: "Looking back, the year felt less defined by its milestones than by a gradual shift toward friendship, steadier work, and unhurried time.",
-		transcript: []string{
-			"This year looked busy on the calendar, but the moments I remember best are the ones where time seemed to widen.",
-			"I became better at asking friends for company before loneliness turned into a private theory about my life.",
-			"Work is still important to me, but it no longer needs to occupy every empty surface in order to feel meaningful.",
-		},
-	},
+	{title: "A quieter kind of launch", summary: "Eleven visitors came to the Lantern pilot. Two tried the station after the sign-in step was removed.", transcript: []string{
+		"Tonight we ran the Lantern pilot at Rivermill Library. Jo counted eleven visitors, and eight tried the listening station without asking for help.",
+		"Maya Torres stayed near the door and watched rather than explaining the screen. Two people who hesitated at the sign-in prompt tried it once we removed that step.",
+		"Ivo Chen fixed the headphone delay before we opened. We decided to keep the next pilot small and optional, and Jo wants to invite the afternoon reading group.",
+	}},
+	{title: "Coffee with Maya before the pilot", summary: "Maya challenged the idea that a successful pilot needs registrations. The aim is to make the first invitation feel easy.", transcript: []string{
+		"Over coffee, Maya Torres said Lantern should offer someone a quiet first minute, not a new account to look after. She is the designer I have been working with since July.",
+		"I had treated registrations as proof that the project mattered. Maya asked whether someone could enjoy a story and leave without owing us anything. We agreed to try the pilot without mandatory sign-in.",
+		"The person I called Meyer in my river-walk note was Maya Torres, not a new collaborator. We were discussing the same Lantern sign-in screen.",
+	}},
+	{title: "The rehearsal found the wrong problem", summary: "At rehearsal, Ivo investigated a headphone delay and Jo asked whether she needed an account. The team simplified the screen.", transcript: []string{
+		"Ivo Chen and I rehearsed Lantern at Rivermill Library. The headphones lagged by half a second, which he thinks is a buffering problem rather than a broken device.",
+		"Jo Alvarez tried the screen and asked whether she needed an account before touching anything. I realized our welcome screen looked like a form, even though we wanted it to feel like an invitation.",
+		"We removed the extra toolbar and put one large Listen button in the middle. The sign-in question is still unresolved; I want to talk to Maya before the pilot.",
+	}},
+	{title: "An argument on the river path", summary: "A walk brought the Lantern disagreement into focus: collecting useful feedback might also make participation feel like work.", transcript: []string{
+		"I walked by the river with Meyer after work. We argued about whether Lantern needs sign-in on the first screen; I wanted names so we could follow up with visitors.",
+		"She said that attention is a budget, and we were spending the visitor's first minute on our own uncertainty. I was defensive at first, but I kept thinking about it on the way home.",
+		"We did not settle the question. I still think feedback matters, but perhaps asking for it can happen after someone has actually heard a story.",
+	}},
+	{title: "Jo's practical questions", summary: "Jo helped turn the library idea into a small pilot, while leaving the registration decision open.", transcript: []string{
+		"Jo Alvarez, the community librarian at Rivermill Library, offered us a corner beside the reading room for a Lantern pilot. She asked for one listening station and a clear way to walk away.",
+		"Jo initially suggested collecting email addresses so she could invite people back. I liked that because it would give us a number to report, although we had not asked visitors whether they wanted follow-up.",
+		"We agreed on a small reversible experiment: one evening, no permanent installation, and a conversation afterward about what surprised us. A successful pilot would not automatically mean a permanent service.",
+	}},
+	{title: "Lantern begins on paper", summary: "Maya and Jo helped define Lantern as a low-pressure way to encounter local stories, with a paper prototype before any software.", transcript: []string{
+		"At Rivermill Library I met Maya Torres, a freelance interaction designer, through Jo Alvarez. We sketched Lantern: a listening station where neighbors can hear short local stories.",
+		"Maya suggested trying paper cards before building the app. Jo cared most about whether someone visiting alone would feel comfortable approaching it.",
+		"I wrote down that Lantern is not an archive of everything. It is an invitation to one story at a time. We have not decided who would maintain it if it becomes permanent.",
+	}},
+	{title: "Ivo's attention budget", summary: "A river walk with Ivo introduced a useful way to think about attention: every unnecessary decision spends a little of it.", transcript: []string{
+		"Ivo Chen, my friend who builds audio tools, called attention a budget while we were walking beside the river. Every notification and unexplained choice spends some of it before the useful part begins.",
+		"I liked the idea, but I do not want to turn rest into another efficiency contest. The point is to leave room for curiosity, not measure every minute.",
+		"Ivo offered to help if I ever made the library listening idea real. At this point it is a notebook sketch, not a project with a name or deadline.",
+	}},
+	{title: "Permission to try something small", summary: "A conversation at the library planted the idea of testing a small invitation before committing to a large project.", transcript: []string{
+		"I spoke to Jo Alvarez at Rivermill Library about putting neighbors' stories somewhere people might stumble across them. She suggested a single afternoon with paper cards before worrying about a permanent installation.",
+		"I wrote small reversible experiments at the top of the page. Make the decision cheap enough to learn from, and say in advance what would make us stop.",
+		"There is no team or schedule yet. I mostly felt relieved that trying an idea did not have to mean promising to run it forever.",
+	}},
 }
 
 func developmentJournalFixtureForByteLength(byteLength int64) *developmentJournalFixture {
@@ -203,6 +174,15 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 		if err := server.RefreshJournalSummaries(ctx, time.Now()); err != nil {
 			http.Error(response, fmt.Sprintf("refresh summaries: %v", err), http.StatusInternalServerError)
 			return
+		}
+		// Advance the deterministic local session through submit, publish and
+		// cleanup, exercising exactly the same importer as scheduled runs.
+		for range 3 {
+			if err := server.RefreshJournalKnowledge(ctx, time.Now()); err != nil {
+				log.Printf("curate journal fixtures: %v", err)
+				http.Error(response, fmt.Sprintf("curate fixtures: %v", err), http.StatusInternalServerError)
+				return
+			}
 		}
 		response.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(response).Encode(map[string]int{"entries": len(developmentJournalFixtures)})

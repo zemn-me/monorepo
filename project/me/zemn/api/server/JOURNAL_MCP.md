@@ -73,6 +73,12 @@ writes for code consumption and refresh rotation across Lambda instances.
 | `search_journal` | Optional `query`, RFC3339 `start` (inclusive) and `end` (exclusive), `offset`, `limit` | Completed entries, newest first, with IDs, recording times, titles and excerpts. Text matching is a case-insensitive substring search. Empty query lists entries. |
 | `get_journal_entry` | `id` from search | Full transcript segments and the entry summary, preserving citation references. |
 | `list_journal_summaries` | Optional `period` (`day`, `week`, `month`, `year`, `journal`), `offset`, `limit` | Aggregate summaries, newest first, preserving citations. |
+| `search_journal_wiki` | Optional `query`, `offset`, `limit` | Wiki page IDs, titles, kinds and aliases; searches titles, aliases and prose. |
+| `get_journal_wiki_page` | `id` from wiki search | Full wiki page, including citations across diary dates. |
+
+Entry reads use the latest valid contextual analysis. Wiki and entry analyses
+share the source-validation rules described in `JOURNAL_KNOWLEDGE.md`.
+All tools remain read-only; curation publishes through the scheduled worker.
 
 Pages default to 20 results and allow up to 50. Pass `next_offset` back as
 `offset` to continue. Offset pagination reflects the current journal, so records

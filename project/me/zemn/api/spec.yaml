@@ -530,6 +530,80 @@ components:
           x-omitempty: true
           x-oapi-codegen-extra-tags:
             dynamodbav: 'source_fingerprint,omitempty'
+    JournalWikiPage:
+      type: object
+      required: [id, title, kind, aliases, blocks]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 200
+        kind:
+          type: string
+          enum: [person, place, project, subject]
+        aliases:
+          type: array
+          items:
+            type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalWikiIndexEntry:
+      type: object
+      required: [id, title, kind, aliases]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        kind:
+          type: string
+        aliases:
+          type: array
+          items:
+            type: string
+    JournalCuratedEntry:
+      type: object
+      required: [entryId, title, blocks]
+      properties:
+        entryId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalCurationResult:
+      type: object
+      description: Complete proposed generation. Citation quotes always refer to original transcript text, including when prose explains a likely transcription error. Wiki links use /journal?wiki=<page UUID>.
+      required: [entries, pages]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalCuratedEntry'
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalWikiPage'
+    JournalCurationStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [pending, running, ready, failed]
+        updatedAt:
+          type: string
+          format: date-time
+        generation:
+          type: string
     JournalSummaryResult:
       type: object
       description: Structured model output before trusted period metadata is attached.
@@ -876,6 +950,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalSummary'
+        wiki:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalWikiIndexEntry'
+        curation:
+          $ref: '#/components/schemas/JournalCurationStatus'
     JournalEntryCreate:
       type: object
       required: [contentType, recordedAt, timeZone]
@@ -2747,6 +2827,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Journal'
+  /journal/wiki/{pageId}:
+    get:
+      summary: Read a cited wiki page from the caller's private diary.
+      security:
+        - OIDC: [journal_read]
+      parameters:
+        - name: pageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: A published wiki page with cross-diary citations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalWikiPage'
+        "404":
+          description: Page unavailable or being rebuilt after a source correction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /journal/entries:
     post:
       summary: Create a voice journal entry.

@@ -501,6 +501,17 @@
 	margin-block: 0.2em 0.6em;
 }
 
+.summary h4 {
+	border-block-end: 1px solid var(--journal-soft-line);
+	font-size: 1.05em;
+	margin-block: 1.5em 0.65em;
+	padding-block-end: 0.35em;
+}
+
+.summary ul {
+	padding-inline-start: 1.25em;
+}
+
 .citation a {
 	background: none;
 	border: 0;
@@ -1122,4 +1133,71 @@
 .uploadProgress > .statusIndicator {
 	position: absolute;
 	inset-inline-start: 100%;
+}
+
+.wikiNavigation {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-inline-size: 44px;
+	min-block-size: 44px;
+	padding-inline: 0.5rem;
+	flex-shrink: 0;
+}
+.wikiNavigation[aria-current="page"] {
+	font-weight: 700;
+	text-underline-offset: 0.3em;
+}
+.wiki {
+	max-inline-size: 48rem;
+	margin-block: 1.5rem;
+}
+.wikiHeader {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 1rem;
+}
+.wikiHeader h2 {
+	margin: 0;
+}
+.wikiSearch {
+	display: grid;
+	gap: 0.5rem;
+	margin-block: 1.5rem;
+}
+.wikiSearch input {
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-block-size: 44px;
+	font: inherit;
+	padding: 0.5rem 0.75rem;
+	color: inherit;
+	background: transparent;
+	border: 1px solid currentColor;
+	border-radius: 0.5rem;
+}
+.wikiIndex {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+	gap: 0.75rem;
+}
+.wikiIndex a {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-block-size: 44px;
+	padding: 0.75rem;
+	border: 1px solid currentColor;
+	border-radius: 0.5rem;
+	text-decoration: none;
+}
+.wikiIndex a span,
+.wikiKind {
+	font-size: 0.85em;
+}
+.wikiIntro {
+	margin-block: 1.5rem;
 }

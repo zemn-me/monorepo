@@ -25,7 +25,6 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -47,12 +46,18 @@ import {
 	JournalStatus,
 } from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
+import { Markdown } from '#root/project/me/zemn/components/Article/markdown.js';
+import {
+	type MarkdownComponents,
+	markdownComponents,
+} from '#root/project/me/zemn/components/Article/markdown_components.js';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
+	useGetJournalWikiPage,
 	useGetMeScopes,
 	usePostJournalEntry,
 	useRefreshJournal,
@@ -199,7 +204,8 @@ interface JournalPlayback {
 	readonly removeEntry: (entryID: string) => void;
 	readonly registerAudio: (
 		entryID: string,
-		audio: HTMLAudioElement | null
+		audio: HTMLAudioElement | null,
+		play: (time: number) => void
 	) => void;
 	readonly started: (entryID: string) => void;
 	readonly stopped: (entryID: string, time: number) => void;
@@ -212,8 +218,8 @@ function useJournalPlayback(
 	navigationKey = ''
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
+	const audioPlayRequests = useRef(new Map<string, (time: number) => void>());
 	const appliedNavigation = useRef<string>();
-	const pendingSeekTimes = useRef(new Map<string, number>());
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
 	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
@@ -229,11 +235,17 @@ function useJournalPlayback(
 	const playingRef = useRef(playing);
 	playingRef.current = playing;
 	const registerAudio = useCallback(
-		(entryID: string, audio: HTMLAudioElement | null) => {
-			if (audio) audioElements.current.set(entryID, audio);
-			else {
+		(
+			entryID: string,
+			audio: HTMLAudioElement | null,
+			play: (time: number) => void
+		) => {
+			if (audio) {
+				audioElements.current.set(entryID, audio);
+				audioPlayRequests.current.set(entryID, play);
+			} else {
 				audioElements.current.delete(entryID);
-				pendingSeekTimes.current.delete(entryID);
+				audioPlayRequests.current.delete(entryID);
 			}
 		},
 		[]
@@ -244,25 +256,9 @@ function useJournalPlayback(
 		}
 	}, []);
 	const seekAndPlay = useCallback((entryID: string, time: number) => {
-		const audio = audioElements.current.get(entryID);
-		if (!audio) return false;
-		const target = Math.max(0, time);
-		pendingSeekTimes.current.set(entryID, target);
-		const seek = () => {
-			if (audioElements.current.get(entryID) !== audio) return;
-			const pending = pendingSeekTimes.current.get(entryID);
-			if (pending === undefined) return;
-			pendingSeekTimes.current.delete(entryID);
-			if (Math.abs(audio.currentTime - pending) >= 0.25) {
-				audio.currentTime = pending;
-			}
-		};
-		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
-			audio.addEventListener('loadedmetadata', seek, { once: true });
-		} else {
-			seek();
-		}
-		void audio.play().catch(() => undefined);
+		const play = audioPlayRequests.current.get(entryID);
+		if (!play) return false;
+		play(Math.max(0, time));
 		return true;
 	}, []);
 	const updateCursor = useCallback(
@@ -372,9 +368,12 @@ function useJournalPlayback(
 		[segmentFor]
 	);
 	const titleForEntry = useCallback(
-		(entryID: string) =>
-			journal.entries.find(value => value.id === entryID)?.summary
-				?.title ?? '',
+		(entryID: string) => {
+			const entry = journal.entries.find(value => value.id === entryID);
+			if (!entry) return '';
+			const date = journalEntryDate(entry).toPlainDate().toString();
+			return entry.summary ? `${date}: ${entry.summary.title}` : date;
+		},
 		[journal.entries]
 	);
 	const playSegment = useCallback(
@@ -401,7 +400,6 @@ function useJournalPlayback(
 		(entryID: string) => {
 			const audio = audioElements.current.get(entryID);
 			audio?.pause();
-			pendingSeekTimes.current.delete(entryID);
 			if (playingRef.current?.entryID === entryID) {
 				playingRef.current = undefined;
 				setPlaying(undefined);
@@ -550,16 +548,25 @@ function SummaryBlock({
 			markdown: renderedMarkdown,
 		};
 	}, [block.markdown, citationIDs, links]);
-	const markdownComponents = useMemo<Components>(
+	const components = useMemo<MarkdownComponents>(
 		() => ({
-			a: ({ children, href }) => {
+			h2: markdownComponents.h4,
+			h3: markdownComponents.h5,
+			a: ({ children, href, ...props }) => {
+				const Anchor = markdownComponents.a;
 				const resolved = href ? linksByHref.get(href) : undefined;
-				if (!resolved) return <a href={href}>{children}</a>;
+				if (!resolved)
+					return (
+						<Anchor {...props} href={href}>
+							{children}
+						</Anchor>
+					);
 				const { citationID, link } = resolved;
 				const { citation } = link;
 				return (
 					<sup className={style.citation}>
-						<a
+						<Anchor
+							{...props}
 							aria-label={`Play source at ${link.label}`}
 							data-citation-entry-id={citation.entryId}
 							data-citation-segment-id={citation.segmentId}
@@ -580,7 +587,7 @@ function SummaryBlock({
 							}}
 						>
 							[{children}]
-						</a>
+						</Anchor>
 					</sup>
 				);
 			},
@@ -590,9 +597,7 @@ function SummaryBlock({
 
 	return (
 		<div data-journal-summary-block>
-			<ReactMarkdown components={markdownComponents}>
-				{markdown}
-			</ReactMarkdown>
+			<Markdown components={components}>{markdown}</Markdown>
 		</div>
 	);
 }
@@ -699,7 +704,7 @@ function SummaryCardView({
 							<cite>{link.title}</cite>.{' '}
 						</>
 					)}
-					“{link.quote}” <a href={link.href}>{link.label}</a>
+					“{link.quote}” <Link href={link.href}>{link.label}</Link>
 				</span>
 			))}
 			<FootnotePreviews root={article} />
@@ -1175,6 +1180,7 @@ function JournalAudio({
 	const refreshJournal = useRefreshJournal();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const playRequested = useRef(false);
+	const pendingSeek = useRef<number>();
 	const stallRecoveryTimer = useRef<number>();
 	const [source, setSource] = useState(audioURL);
 	const [recovery, setRecovery] = useState<{
@@ -1191,23 +1197,59 @@ function JournalAudio({
 		stallRecoveryTimer.current = undefined;
 	}, []);
 	const recoverPlayback = useCallback(
-		(audio: HTMLAudioElement) => {
+		(audio: HTMLAudioElement, time = audio.currentTime) => {
 			cancelStallRecovery();
 			if (recoveryRef.current?.failedSource === source) return;
 			const next = {
 				failedSource: source,
 				play: playRequested.current && !audio.ended,
-				time: audio.currentTime,
+				time: pendingSeek.current ?? time,
 			};
 			recoveryRef.current = next;
 			setRecovery(next);
 			void refreshJournal().catch(() => {
-				if (recoveryRef.current !== next) return;
+				if (recoveryRef.current?.failedSource !== next.failedSource) return;
 				recoveryRef.current = undefined;
 				setRecovery(undefined);
 			});
 		},
 		[cancelStallRecovery, refreshJournal, source]
+	);
+	const requestPlayback = useCallback(
+		(time: number) => {
+			const audio = audioRef.current;
+			if (!audio) return;
+			// Record intent before play(): an already-failed element can reject
+			// without emitting a play event, and a refresh may already be pending.
+			playRequested.current = true;
+			pendingSeek.current = time;
+			const recovering = recoveryRef.current;
+			if (recovering) {
+				const next = { ...recovering, play: true, time };
+				recoveryRef.current = next;
+				setRecovery(next);
+				return;
+			}
+			if (audio.error) {
+				recoverPlayback(audio, time);
+				return;
+			}
+			const seek = () => {
+				if (audioRef.current !== audio) return;
+				const target = pendingSeek.current;
+				if (target === undefined) return;
+				pendingSeek.current = undefined;
+				if (Math.abs(audio.currentTime - target) >= 0.25)
+					audio.currentTime = target;
+			};
+			if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
+				audio.addEventListener('loadedmetadata', seek, { once: true });
+			} else {
+				seek();
+			}
+			void audio.play().catch(() => undefined);
+		},
+		[recoverPlayback]
 	);
 	const scheduleStallRecovery = useCallback(
 		(audio: HTMLAudioElement) => {
@@ -1238,10 +1280,12 @@ function JournalAudio({
 		const audio = audioRef.current;
 		if (!audio) return;
 		const restore = () => {
+			if (recoveryRef.current !== recovery) return;
 			if (Math.abs(audio.currentTime - recovery.time) >= 0.25) {
 				audio.currentTime = recovery.time;
 			}
 			recoveryRef.current = undefined;
+			pendingSeek.current = undefined;
 			setRecovery(undefined);
 			if (recovery.play) {
 				void audio.play().catch(() => undefined);
@@ -1311,7 +1355,7 @@ function JournalAudio({
 				preload="metadata"
 				ref={audio => {
 					audioRef.current = audio;
-					playback.registerAudio(entry.id, audio);
+					playback.registerAudio(entry.id, audio, requestPlayback);
 				}}
 				src={source}
 			/>
@@ -1392,6 +1436,9 @@ function EntryCard({
 				/>
 			)}
 			{entry.error && <p className={style.notice}>{entry.error}</p>}
+			{entry.status === 'ready' && !entry.summary && (
+				<p className={style.wikiKind}>Analysis pending</p>
+			)}
 			{entry.summary && (
 				<SummaryCard
 					playback={playback}
@@ -1439,6 +1486,7 @@ function PendingEntries({
 }
 
 const journalSelectionQuery = {
+	wiki: parseAsString,
 	at: parseAsString,
 	year: parseAsString,
 	month: parseAsString,
@@ -1517,6 +1565,7 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 		});
 	}
 	for (const summary of journal.summaries) {
+		if (journal.curation) continue;
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
@@ -1561,12 +1610,14 @@ function periodMidpoint(period: JournalPeriodNode) {
 }
 
 function PeriodDisclosure({
+	curation,
 	children,
 	initiallyOpen,
 	nextRoute,
 	node,
 	playback,
 }: {
+	readonly curation: boolean;
 	readonly children: readonly JournalPeriodNode[];
 	readonly initiallyOpen: boolean;
 	readonly nextRoute: JournalRoute;
@@ -1590,7 +1641,10 @@ function PeriodDisclosure({
 					<PeriodDate summary={node} />
 				</span>
 				<strong className={style.periodTitle}>
-					{node.summary?.title ?? 'Summary in progress…'}
+					{node.summary?.title ??
+						(curation
+							? 'Browse recordings'
+							: 'Summary in progress…')}
 				</strong>
 				<FontAwesomeIcon
 					aria-hidden="true"
@@ -1625,7 +1679,9 @@ function PeriodDisclosure({
 									</span>
 									<strong>
 										{child.summary?.title ??
-											'Summary in progress…'}
+											(curation
+												? 'Browse recordings'
+												: 'Summary in progress…')}
 									</strong>
 									<FontAwesomeIcon
 										aria-hidden="true"
@@ -1656,9 +1712,11 @@ function zoomLevelLabel(route: JournalRoute | undefined) {
 }
 
 function ZoomNavigation({
+	inactive = false,
 	focus,
 	route,
 }: {
+	readonly inactive?: boolean;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
@@ -1713,7 +1771,9 @@ function ZoomNavigation({
 			<span
 				aria-hidden="true"
 				className={style.zoomIndicator}
-				data-ready={indicator.inlineSize > 0 ? '' : undefined}
+				data-ready={
+					!inactive && indicator.inlineSize > 0 ? '' : undefined
+				}
 				data-journal-view-indicator
 				style={{
 					inlineSize: indicator.inlineSize,
@@ -1723,7 +1783,9 @@ function ZoomNavigation({
 			{journalViews.map(destination => (
 				<Link
 					aria-current={
-						destination === visibleRoute ? 'page' : undefined
+						!inactive && destination === visibleRoute
+							? 'page'
+							: undefined
 					}
 					data-journal-view={destination ?? 'overview'}
 					href={href(destination)}
@@ -1748,17 +1810,26 @@ function ZoomNavigation({
 }
 
 function JournalToolbar({
+	wiki = false,
 	actions,
 	focus,
 	route,
 }: {
+	readonly wiki?: boolean;
 	readonly actions?: ReactNode;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
 	return (
 		<div className={style.journalToolbar} data-journal-toolbar>
-			<ZoomNavigation focus={focus} route={route} />
+			<ZoomNavigation focus={focus} route={route} inactive={wiki} />
+			<Link
+				className={style.wikiNavigation}
+				href="/journal?wiki=all"
+				aria-current={wiki ? 'page' : undefined}
+			>
+				Wiki
+			</Link>
 			{actions}
 		</div>
 	);
@@ -1915,6 +1986,7 @@ function PeriodList({
 				>
 					{nextRoute ? (
 						<PeriodDisclosure
+							curation={journal.curation !== undefined}
 							children={childPeriodsFor(childPeriods, node)}
 							initiallyOpen={periodContains(node, focus)}
 							nextRoute={nextRoute}
@@ -2004,6 +2076,137 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 	);
 }
 
+function JournalWikiPage({
+	pageID,
+	generation,
+	playback,
+}: {
+	readonly pageID: string;
+	readonly generation?: string;
+	readonly playback: JournalPlayback;
+}) {
+	const [token] = useZemnMeAuth();
+	const page = useGetJournalWikiPage(token, pageID, generation);
+	return page(
+		value => (
+			<div>
+				<p className={style.wikiKind}>{value.kind}</p>
+				<SummaryCard
+					playback={playback}
+					showPeriod={false}
+					summary={{
+						schemaVersion: 1,
+						id: `wiki:${value.id}`,
+						title: value.title,
+						blocks: value.blocks,
+						period: 'journal',
+						start: '',
+						end: '',
+					}}
+				/>
+				{value.aliases.length > 0 && (
+					<p>Also known as {value.aliases.join(', ')}</p>
+				)}
+			</div>
+		),
+		() => <JournalPlaceholder label="Loading wiki page" />,
+		() => (
+			<p role="alert">This page is unavailable or awaiting an update.</p>
+		)
+	);
+}
+
+function JournalWiki({
+	journal,
+	pageID,
+	playback,
+}: {
+	readonly journal: Journal;
+	readonly pageID: string;
+	readonly playback: JournalPlayback;
+}) {
+	const [query, setQuery] = useState('');
+	const pages = journal.wiki ?? [];
+	const selected = pages.find(page => page.id === pageID);
+	const matches = pages.filter(page =>
+		[page.title, ...page.aliases]
+			.join(' ')
+			.toLocaleLowerCase()
+			.includes(query.toLocaleLowerCase())
+	);
+	return (
+		<section className={style.wiki} aria-label="Diary wiki">
+			<header className={style.wikiHeader}>
+				<h2>
+					{pageID === 'all' ? (
+						'Wiki'
+					) : (
+						<Link href="/journal?wiki=all">Wiki</Link>
+					)}
+				</h2>
+				{journal.curation?.updatedAt && (
+					<small>
+						Updated{' '}
+						<LocalizedDate
+							date={new Date(journal.curation.updatedAt)}
+						/>
+					</small>
+				)}
+			</header>
+			{journal.curation?.status === 'failed' && (
+				<p role="status">
+					The latest update could not finish. It will retry
+					automatically.
+				</p>
+			)}
+			{pageID === 'all' ? (
+				<>
+					<label className={style.wikiSearch}>
+						Find a person, place, or project
+						<input
+							type="search"
+							value={query}
+							onChange={event =>
+								setQuery(event.currentTarget.value)
+							}
+						/>
+					</label>
+					{matches.length > 0 ? (
+						<ul className={style.wikiIndex}>
+							{matches.map(page => (
+								<li key={page.id}>
+									<Link href={`/journal?wiki=${page.id}`}>
+										<strong>{page.title}</strong>
+										<span>{page.kind}</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					) : (
+						<p>
+							{pages.length
+								? 'No matching pages.'
+								: journal.entries.length
+									? 'Wiki pages will appear after the diary is analyzed.'
+									: 'Record a diary entry to begin.'}
+						</p>
+					)}
+				</>
+			) : selected ? (
+				<JournalWikiPage
+					pageID={selected.id}
+					generation={journal.curation?.generation}
+					playback={playback}
+				/>
+			) : (
+				<p role="status">
+					This page is unavailable or awaiting an update.
+				</p>
+			)}
+		</section>
+	);
+}
+
 function JournalBrowser({
 	actions,
 	localRecordings,
@@ -2068,15 +2271,35 @@ function JournalBrowser({
 		[setRawSelection]
 	);
 
+	if (rawSelection.wiki !== null) {
+		return (
+			<div>
+				<JournalToolbar
+					actions={actions}
+					focus={focus}
+					route={route}
+					wiki
+				/>
+				{localRecordings}
+				<JournalWiki
+					journal={journal}
+					pageID={rawSelection.wiki}
+					playback={playback}
+				/>
+			</div>
+		);
+	}
+
 	if (route === undefined) {
 		const readyEntries = journal.entries.filter(
 			entry => entry.status === 'ready'
 		);
-		const summary =
-			journal.summaries.find(value => value.period === 'journal') ??
-			(readyEntries.length === 1
-				? readyEntries.at(0)?.summary
-				: undefined);
+		const summary = journal.curation
+			? undefined
+			: (journal.summaries.find(value => value.period === 'journal') ??
+				(readyEntries.length === 1
+					? readyEntries.at(0)?.summary
+					: undefined));
 		return (
 			<div>
 				<JournalToolbar actions={actions} focus={focus} />
@@ -2088,6 +2311,13 @@ function JournalBrowser({
 						showPeriod={false}
 						summary={summary}
 					/>
+				) : journal.curation ? (
+					<p className={style.wikiIntro}>
+						<Link href="/journal?wiki=all">
+							Explore the diary wiki
+						</Link>{' '}
+						for people, places, and projects across your recordings.
+					</p>
 				) : readyEntries.length > 1 ? (
 					<JournalPlaceholder label="Preparing journal overview" />
 				) : (
@@ -2370,7 +2600,8 @@ export default function JournalPageClient({
 	const [recording, setRecording] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
 	const [recordingError, setRecordingError] = useState<string>();
-	const [recordingLocationError, setRecordingLocationError] = useState<string>();
+	const [recordingLocationError, setRecordingLocationError] =
+		useState<string>();
 	const [draggingFile, setDraggingFile] = useState(false);
 	const dragDepth = useRef(0);
 	const hasReadScope = scopes(
@@ -2605,7 +2836,9 @@ export default function JournalPageClient({
 			aria-busy={recordingBusy || queue.syncing !== undefined}
 			className={style.recorder}
 			data-recording={recordingStream ? '' : undefined}
-			data-notice={recordingError || recordingLocationError ? '' : undefined}
+			data-notice={
+				recordingError || recordingLocationError ? '' : undefined
+			}
 			data-uploading={queue.syncing ? '' : undefined}
 		>
 			{!recordingStream && (

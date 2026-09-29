@@ -103,6 +103,7 @@ func main() {
 		LocalStack:              true,
 		AllowLocalhostAnalytics: true,
 		JournalAI:               journalAI,
+		JournalCurator:          &localJournalCurator{},
 		JournalObjects:          journalStore,
 		JournalPresigner:        journalStore,
 	})

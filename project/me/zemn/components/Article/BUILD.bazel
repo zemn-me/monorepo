@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -9,6 +10,8 @@ ts_project(
         "article_metadata.tsx",
         "code_highlight.tsx",
         "heading.tsx",
+        "markdown.tsx",
+        "markdown_components.tsx",
         "mdx_article.tsx",
         "section.tsx",
         "toc_context.ts",
@@ -23,6 +26,7 @@ ts_project(
         "//:node_modules/next",
         "//:node_modules/react",
         "//:node_modules/react-dom",
+        "//:node_modules/react-markdown",
         "//:node_modules/refractor",
         "//:node_modules/schema-dts",
         "//project/me/zemn/bio",
@@ -46,6 +50,7 @@ ts_project(
     srcs = [
         "code_highlight_test.tsx",
         "heading_test.tsx",
+        "markdown_test.tsx",
     ],
     visibility = ["//project/me/zemn:__subpackages__"],
     deps = [
@@ -65,6 +70,7 @@ jest_test(
     srcs = [
         "code_highlight_test.js",
         "heading_test.js",
+        "markdown_test.js",
     ],
     jsdom = True,
     visibility = ["//project/me/zemn:__subpackages__"],
@@ -80,6 +86,9 @@ filegroup(
         "code_highlight_test.tsx",
         "heading.tsx",
         "heading_test.tsx",
+        "markdown.tsx",
+        "markdown_components.tsx",
+        "markdown_test.tsx",
         "mdx_article.tsx",
         "section.tsx",
         "toc_context.ts",
@@ -90,5 +99,11 @@ filegroup(
 css_module(
     name = "style_module_css",
     src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
     visibility = ["//:__subpackages__"],
 )

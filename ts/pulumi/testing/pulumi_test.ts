@@ -803,6 +803,63 @@ describe('pulumi', () => {
 			},
 		});
 		expect(journalWorker?.inputs['reservedConcurrentExecutions']).toBe(1);
+		const curator = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalcuratorlambda'
+		);
+		expect(curator?.inputs['timeout']).toBe(120);
+		expect(curator?.inputs['reservedConcurrentExecutions']).toBe(1);
+		expect(curator?.inputs['environment']).toMatchObject({
+			variables: {
+				JOURNAL_CURATION_ENABLED: 'true',
+				JOURNAL_CURATOR_MODEL: 'gpt-6-astra',
+				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
+			},
+		});
+		const journalBucket = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' &&
+				resource.name === 'monorepo-zemn.me-api-journal-audio-bucket'
+		);
+		expect(journalBucket).toBeDefined();
+		expect(journalBucket?.inputs['forceDestroy']).not.toBe(true);
+		const journalVersioning = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketVersioningV2:BucketVersioningV2' &&
+				resource.name.endsWith('-journal-versioning')
+		);
+		expect(journalVersioning?.inputs['versioningConfiguration']).toEqual({
+			status: 'Enabled',
+		});
+		expect(
+			mockResources.filter(
+				resource =>
+					resource.type.includes('bucketLifecycle') &&
+					resource.inputs['bucket'] === `${journalBucket?.name}-id`
+			)
+		).toHaveLength(0);
+		const uploadNotification = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketNotification:BucketNotification' &&
+				resource.name.endsWith('-journal-upload-notification')
+		);
+		expect(uploadNotification?.inputs['lambdaFunctions']).toEqual([
+			expect.objectContaining({
+				filterPrefix: 'entries/',
+				filterSuffix: 'source',
+			}),
+		]);
+
+		const curatorSchedule = mockResources.find(
+			resource =>
+				resource.type === 'aws:cloudwatch/eventRule:EventRule' &&
+				resource.name.endsWith('-journal-summary-schedule')
+		);
+		expect(curatorSchedule?.inputs['scheduleExpression']).toBe(
+			'rate(5 minutes)'
+		);
+
 		expect(
 			mockResources.filter(
 				resource =>

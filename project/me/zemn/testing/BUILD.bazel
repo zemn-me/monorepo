@@ -74,6 +74,7 @@ go_test(
         "integration_helpers_test.go",
         "journal_oauth_test.go",
         "journal_test.go",
+        "journal_wiki_test.go",
         "key_test.go",
     ],
     tags = ["manual"],  # keep; needs integration testing harness.

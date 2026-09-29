@@ -792,12 +792,47 @@ export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
 				['awaiting_upload', 'processing'].includes(entry.status)
 			)
 				? 3000
-				// Aggregate summaries can finish after every entry is ready.
-				// Keep visible journals fresh instead of retaining that intermediate snapshot.
-				: 10000;
+				: // Aggregate summaries can finish after every entry is ready.
+					// Keep visible journals fresh instead of retaining that intermediate snapshot.
+					10000;
 		},
 	});
 	return future_declare_dependency(id_token, useQueryFuture(query));
+}
+
+export function useGetJournalWikiPage<A, B>(
+	idToken: Future<string, A, B>,
+	pageId: string,
+	generation?: string
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: [
+			'get',
+			'/journal/wiki/{pageId}',
+			token ? extractIdTokenJti(token) : undefined,
+			pageId,
+			generation,
+		],
+		queryFn: async () => {
+			const response = await client.GET('/journal/wiki/{pageId}', {
+				params: { path: { pageId } },
+			});
+			if (!response.data)
+				throw new Error(
+					'This page is unavailable or awaiting an update.'
+				);
+			return response.data;
+		},
+		enabled: token !== undefined,
+		refetchInterval: 10000,
+	});
+	return future_declare_dependency(idToken, useQueryFuture(query));
 }
 
 export interface JournalAudioUpload {
@@ -839,7 +874,11 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 					throw new Error(cause);
 				}
 				try {
-					await uploadJournalAudio(response.data.upload, upload.file, upload.onProgress);
+					await uploadJournalAudio(
+						response.data.upload,
+						upload.file,
+						upload.onProgress
+					);
 				} catch (error) {
 					await client
 						.DELETE('/journal/entries/{entryId}', {
