@@ -27,6 +27,10 @@ const journalCurationMaxBytes = 48 * 1024 * 1024
 // Bump when the output contract or writing policy changes so unchanged diaries refresh.
 const journalCurationVersion = "3"
 
+func journalCurationInputKey(runID string) string {
+	return "curation/runs/" + runID + "/input.json"
+}
+
 // The application, not the sandbox, owns publication and credentials.
 type JournalCurator interface {
 	Prepare(context.Context, string, []byte) (string, error)
@@ -364,6 +368,14 @@ func (s *Server) RefreshJournalKnowledge(ctx context.Context, now time.Time) err
 
 func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurationState, now time.Time) error {
 	if state.Cleaning {
+		// A damaged checkpoint must never turn temporary-file cleanup into
+		// deletion of an original recording or another run's artifacts.
+		if state.InputKey != "" {
+			runID, err := uuid.Parse(state.RunID)
+			if err != nil || runID == uuid.Nil || runID.String() != state.RunID || state.InputKey != journalCurationInputKey(state.RunID) {
+				return errors.New("refusing to clean an unexpected journal input key")
+			}
+		}
 		if err := s.journalCurator.Cleanup(ctx, state.RunID, state.SessionID); err != nil {
 			return err
 		}
@@ -410,7 +422,7 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 		}
 		state.RunID = uuid.NewString()
 		state.StartedAt, state.Fingerprint, state.Failed = now, fingerprint, false
-		state.InputKey = "curation/runs/" + state.RunID + "/input.json"
+		state.InputKey = journalCurationInputKey(state.RunID)
 		if err := s.putJournalJSON(ctx, state.InputKey, corpus); err != nil {
 			state.RunID = ""
 			return err

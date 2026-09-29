@@ -817,6 +817,40 @@ describe('pulumi', () => {
 				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
 			},
 		});
+		const journalBucket = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' &&
+				resource.name === 'monorepo-zemn.me-api-journal-audio-bucket'
+		);
+		expect(journalBucket).toBeDefined();
+		expect(journalBucket?.inputs['forceDestroy']).not.toBe(true);
+		const journalVersioning = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketVersioningV2:BucketVersioningV2' &&
+				resource.name.endsWith('-journal-versioning')
+		);
+		expect(journalVersioning?.inputs['versioningConfiguration']).toEqual({
+			status: 'Enabled',
+		});
+		expect(
+			mockResources.filter(
+				resource =>
+					resource.type.includes('bucketLifecycle') &&
+					resource.inputs['bucket'] === `${journalBucket?.name}-id`
+			)
+		).toHaveLength(0);
+		const uploadNotification = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketNotification:BucketNotification' &&
+				resource.name.endsWith('-journal-upload-notification')
+		);
+		expect(uploadNotification?.inputs['lambdaFunctions']).toEqual([
+			expect.objectContaining({
+				filterPrefix: 'entries/',
+				filterSuffix: 'source',
+			}),
+		]);
+
 		const curatorSchedule = mockResources.find(
 			resource =>
 				resource.type === 'aws:cloudwatch/eventRule:EventRule' &&

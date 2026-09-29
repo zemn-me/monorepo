@@ -77,6 +77,34 @@ for diagnosis/recovery and are never served without source checks. S3 versioning
 can retain deleted objects. Diary deletion therefore removes content from live
 read surfaces, not every historical storage version or provider retention copy.
 
+## Preservation during migration
+
+The first backfill reads existing ready entries and writes only new `curation/`
+objects and the `CURATION` checkpoint. It does not retranscribe audio, update
+entry rows, replace stored summaries, or delete original objects. Published
+analyses overlay summaries on reads. Legacy calendar summaries remain stored
+but are hidden by the calendar UI when curation is enabled.
+
+Cleanup accepts only `curation/runs/<run UUID>/input.json` for its own run;
+unexpected checkpoint keys fail before any cleanup. Regression tests compare
+all original audio, metadata, transcripts, summaries, content-hash reservations,
+and entry records before and after successful publication, invalid output,
+agent failure, and timeout. They also observe every object write and deletion.
+
+The existing bucket/table names and storage resources are unchanged. The bucket
+continues to have versioning enabled and no expiration lifecycle or forced
+bucket destruction. These are declarations and local tests, not verification of
+live AWS state or an independently verified backup. Before production deployment,
+review the Pulumi preview for any replacement/deletion of journal storage and
+verify the existing recordings and recovery copies. No production backup or
+restore drill has been performed by this PR.
+
+The normal explicit entry-deletion endpoint and existing duplicate-upload
+cleanup remain separate from migration; this is not a blanket ban on deletion
+through the application. The hosted agent receives no AWS credentials and has
+no network access. The coordinator still shares the upload worker's execution
+role; the exact-key cleanup check is an application safeguard, not an IAM deny.
+
 ## Configuration and limits
 
 - `JOURNAL_TABLE_NAME`, `JOURNAL_BUCKET_NAME`: existing private diary stores.

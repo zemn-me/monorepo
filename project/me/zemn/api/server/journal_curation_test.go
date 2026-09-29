@@ -1,12 +1,16 @@
 package apiserver
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
 )
@@ -304,5 +308,164 @@ func TestJournalKnowledgeOwnershipAndStateFencing(t *testing.T) {
 	}
 	if err := s.saveJournalCurationState(ctx, &state); err != nil {
 		t.Fatal(err)
+	}
+}
+
+// Observe every write, including a delete followed by recreation of identical
+// bytes, which a final-state comparison alone would miss.
+type journalCurationObservedObjects struct {
+	*fakeJournalObjects
+	writes, deletes []string
+}
+
+func (o *journalCurationObservedObjects) PutObject(ctx context.Context, input *s3.PutObjectInput, options ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
+	o.writes = append(o.writes, *input.Key)
+	return o.fakeJournalObjects.PutObject(ctx, input, options...)
+}
+
+func (o *journalCurationObservedObjects) DeleteObject(ctx context.Context, input *s3.DeleteObjectInput, options ...func(*s3.Options)) (*s3.DeleteObjectOutput, error) {
+	o.deletes = append(o.deletes, *input.Key)
+	return o.fakeJournalObjects.DeleteObject(ctx, input, options...)
+}
+
+func TestJournalKnowledgeBackfillPreservesExistingDiary(t *testing.T) {
+	for _, outcome := range []string{"published", "invalid output", "agent failure", "timeout"} {
+		t.Run(outcome, func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			objects := s.journalObjects.(*fakeJournalObjects)
+			for i := range entries {
+				entry := &entries[i]
+				entry.AudioKey = journalEntryKey(entry.Id)
+				entry.ContentSha256 = fmt.Sprintf("%064x", i+1)
+				citation := JournalCitation{EntryId: entry.Id, SegmentId: "s0", Quote: entry.Transcript[0].Text}
+				entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt, JournalSummaryResult{
+					Title: "Original entry summary", Blocks: []JournalSummaryBlock{{Markdown: "The move.[^1]", Citations: []JournalCitation{citation}}},
+				}, "original"))
+				if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
+					t.Fatal(err)
+				}
+				objects.objects[entry.AudioKey] = []byte{0, 1, 2, byte(i), 255}
+				if owned, err := s.claimJournalContentHash(ctx, journalOwnerSubject, entry.Id, entry.ContentSha256); err != nil || !owned {
+					t.Fatalf("seed content hash: %v %v", owned, err)
+				}
+			}
+			legacy := *entries[0].Summary
+			legacy.Id, legacy.Period = "old-day-summary", JournalSummaryPeriodDay
+			if err := s.putJournalRecord(ctx, JournalStoredRecord{Id: journalOwnerSubject, When: "SUMMARY#day", Kind: JournalStoredRecordKindSummary, Summary: &legacy}); err != nil {
+				t.Fatal(err)
+			}
+			if err := s.putJournalJSON(ctx, journalAggregateObjectKey(legacy.Period, legacy.Start), legacy); err != nil {
+				t.Fatal(err)
+			}
+			originalObjects := map[string][]byte{}
+			for key, data := range objects.objects {
+				originalObjects[key] = bytes.Clone(data)
+			}
+			diaryRecords := func() map[string]string {
+				records := map[string]string{}
+				for _, item := range s.ddb.(*inMemoryDDB).journal {
+					if keyTableRecordWhen(item) == journalCurationKey {
+						continue
+					}
+					data, err := json.Marshal(item)
+					if err != nil {
+						t.Fatal(err)
+					}
+					records[keyTableRecordID(item)+"/"+keyTableRecordWhen(item)] = string(data)
+				}
+				return records
+			}
+			originalRecords := diaryRecords()
+			observed := &journalCurationObservedObjects{fakeJournalObjects: objects}
+			s.journalObjects = observed
+			if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+				t.Fatal(err)
+			}
+			state, err := s.readJournalCurationState(ctx)
+			if err != nil || state.PublishedKey != "" || state.InputKey == "" {
+				t.Fatalf("expected first backfill with no published generation: %#v %v", state, err)
+			}
+			inputKey := state.InputKey
+			result := journalKnowledgeResult(entries)
+			curator.result = &result
+			collectAt := now.Add(5 * time.Minute)
+			switch outcome {
+			case "invalid output":
+				result.Entries = nil
+			case "agent failure":
+				curator.failure = &journalCuratorTerminalError{reason: "failed"}
+			case "timeout":
+				collectAt = now.Add(121 * time.Minute)
+			}
+			err = s.RefreshJournalKnowledge(ctx, collectAt)
+			wantError := outcome == "invalid output" || outcome == "agent failure"
+			if (err != nil) != wantError {
+				t.Fatalf("collect: %v", err)
+			}
+			if err := s.RefreshJournalKnowledge(ctx, collectAt.Add(5*time.Minute)); err != nil {
+				t.Fatal(err)
+			}
+			state, err = s.readJournalCurationState(ctx)
+			if err != nil || (state.PublishedKey != "") != (outcome == "published") || curator.cleans != 1 {
+				t.Fatalf("unexpected publication/cleanup: %#v %v", state, err)
+			}
+			response, err := s.GetJournal(ctx, GetJournalRequestObject{})
+			if err != nil || len(response.(GetJournal200JSONResponse).Entries) != len(entries) {
+				t.Fatalf("entries unavailable after backfill: %v", err)
+			}
+			for key, before := range originalObjects {
+				after, exists := objects.objects[key]
+				if !exists || !bytes.Equal(before, after) {
+					t.Errorf("original object changed or deleted: %s", key)
+				}
+			}
+			if !reflect.DeepEqual(originalRecords, diaryRecords()) {
+				t.Fatal("backfill changed existing diary records")
+			}
+			for _, key := range observed.writes {
+				if !strings.HasPrefix(key, "curation/") {
+					t.Errorf("curator wrote outside derived artifacts: %s", key)
+				}
+			}
+			if !reflect.DeepEqual(observed.deletes, []string{inputKey}) {
+				t.Fatalf("cleanup deleted objects other than its temporary input: %v", observed.deletes)
+			}
+		})
+	}
+}
+
+func TestJournalKnowledgeCleanupRejectsUnexpectedObjectKeys(t *testing.T) {
+	for _, target := range []string{"audio", "transcript", "another run", "generation", "invalid run ID"} {
+		t.Run(target, func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			runID := uuid.NewString()
+			key := journalCurationInputKey(runID)
+			switch target {
+			case "audio":
+				key = journalEntryKey(entries[0].Id)
+			case "transcript":
+				key = "entries/" + entries[0].Id + "/transcript.json"
+			case "another run":
+				key = journalCurationInputKey(uuid.NewString())
+			case "generation":
+				key = "curation/generations/" + runID + ".json"
+			case "invalid run ID":
+				runID = "../originals"
+				key = journalCurationInputKey(runID)
+			}
+			objects := &journalCurationObservedObjects{fakeJournalObjects: s.journalObjects.(*fakeJournalObjects)}
+			s.journalObjects = objects
+			objects.objects[key] = []byte("preserve this object")
+			state := journalCurationState{ID: journalOwnerSubject, When: journalCurationKey, RunID: runID, InputKey: key, Cleaning: true}
+			if err := s.saveJournalCurationState(ctx, &state); err != nil {
+				t.Fatal(err)
+			}
+			if err := s.RefreshJournalKnowledge(ctx, now); err == nil {
+				t.Fatal("cleanup accepted an unexpected object key")
+			}
+			if len(objects.deletes) != 0 || curator.cleans != 0 || string(objects.objects[key]) != "preserve this object" {
+				t.Fatal("unsafe cleanup performed a deletion")
+			}
+		})
 	}
 }
