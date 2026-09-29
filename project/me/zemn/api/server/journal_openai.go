@@ -418,6 +418,10 @@ func (o *openAIJournalAI) Summarize(ctx context.Context, period string, sources 
 }
 
 func validateJournalSummary(summary JournalSummaryResult, sources []JournalSummarySource) error {
+	return validateJournalSummaryEvidence(summary, journalAllowedCitations(sources))
+}
+
+func validateJournalSummaryEvidence(summary JournalSummaryResult, allowed map[JournalCitation]struct{}) error {
 	if strings.TrimSpace(summary.Title) == "" || len(summary.Blocks) == 0 {
 		return errors.New("summary must contain a title and at least one block")
 	}
@@ -444,7 +448,7 @@ func validateJournalSummary(summary JournalSummaryResult, sources []JournalSumma
 				return fmt.Errorf("summary citation %d is not referenced inline as [^%d]", index+1, index+1)
 			}
 		}
-		if err := validateJournalCitations(block.Citations, sources); err != nil {
+		if err := validateJournalCitationEvidence(block.Citations, allowed); err != nil {
 			return err
 		}
 	}
@@ -452,12 +456,20 @@ func validateJournalSummary(summary JournalSummaryResult, sources []JournalSumma
 }
 
 func validateJournalCitations(citations []JournalCitation, sources []JournalSummarySource) error {
+	return validateJournalCitationEvidence(citations, journalAllowedCitations(sources))
+}
+
+func journalAllowedCitations(sources []JournalSummarySource) map[JournalCitation]struct{} {
 	allowed := map[JournalCitation]struct{}{}
 	for _, source := range sources {
 		for _, citation := range source.Citations {
 			allowed[citation] = struct{}{}
 		}
 	}
+	return allowed
+}
+
+func validateJournalCitationEvidence(citations []JournalCitation, allowed map[JournalCitation]struct{}) error {
 	for _, citation := range citations {
 		if _, ok := allowed[citation]; !ok {
 			return fmt.Errorf("summary cited unknown transcript segment %s/%s", citation.EntryId, citation.SegmentId)

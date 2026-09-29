@@ -59,6 +59,8 @@ func (s *Server) journalMCPHandler() http.Handler {
 	mcp.AddTool(server, &mcp.Tool{
 		Name: "list_journal_summaries", Description: "Read citation-preserving diary summaries for days, weeks, months, years, or the entire journal. Results are ordered newest first.", Annotations: annotations,
 	}, s.listJournalSummariesMCP)
+	mcp.AddTool(server, &mcp.Tool{Name: "search_journal_wiki", Description: "Search cited wiki pages about people, places, projects and recurring subjects. Empty query lists pages.", Annotations: annotations}, s.searchJournalWikiMCP)
+	mcp.AddTool(server, &mcp.Tool{Name: "get_journal_wiki_page", Description: "Read a wiki page with original transcript citations across diary dates.", Annotations: annotations}, s.getJournalWikiMCP)
 	transport := mcp.NewStreamableHTTPHandler(func(*http.Request) *mcp.Server { return server }, &mcp.StreamableHTTPOptions{
 		Stateless: true, JSONResponse: true,
 		CrossOriginProtection: &http.CrossOriginProtection{},
@@ -153,7 +155,11 @@ func (s *Server) journalMCPRecords(ctx context.Context) ([]JournalStoredRecord, 
 	if err != nil {
 		return nil, errors.New("unable to read journal")
 	}
-	return records, nil
+	generation, _, err := s.journalPublishedGeneration(ctx, records)
+	if err != nil {
+		return nil, errors.New("unable to read journal knowledge")
+	}
+	return applyJournalGeneration(records, generation), nil
 }
 
 type journalMCPMatch struct {
@@ -279,4 +285,57 @@ func (s *Server) listJournalSummariesMCP(ctx context.Context, _ *mcp.CallToolReq
 	})
 	result.Summaries, result.NextOffset = journalMCPPage(result.Summaries, args.Offset, limit)
 	return nil, result, nil
+}
+
+type journalWikiMCPFilter struct {
+	Query  string `json:"query,omitempty"`
+	Offset int    `json:"offset,omitempty"`
+	Limit  int    `json:"limit,omitempty"`
+}
+type journalWikiMCPResults struct {
+	Pages      []JournalWikiIndexEntry `json:"pages"`
+	NextOffset *int                    `json:"next_offset,omitempty"`
+}
+
+func (s *Server) searchJournalWikiMCP(ctx context.Context, _ *mcp.CallToolRequest, args journalWikiMCPFilter) (*mcp.CallToolResult, journalWikiMCPResults, error) {
+	result := journalWikiMCPResults{Pages: []JournalWikiIndexEntry{}}
+	_, _, limit, err := (journalMCPFilter{Query: args.Query, Offset: args.Offset, Limit: args.Limit}).validate()
+	if err != nil {
+		return nil, result, err
+	}
+	records, err := s.journalMCPRecords(ctx)
+	if err != nil {
+		return nil, result, err
+	}
+	generation, _, err := s.journalPublishedGeneration(ctx, records)
+	if err != nil {
+		return nil, result, err
+	}
+	for _, page := range generation.Result.Pages {
+		text := page.Title + "\n" + strings.Join(page.Aliases, "\n")
+		for _, block := range page.Blocks {
+			text += "\n" + block.Markdown
+		}
+		if strings.Contains(strings.ToLower(text), strings.ToLower(args.Query)) {
+			result.Pages = append(result.Pages, JournalWikiIndexEntry{Id: page.Id, Title: page.Title, Kind: string(page.Kind), Aliases: page.Aliases})
+		}
+	}
+	sort.Slice(result.Pages, func(i, j int) bool { return result.Pages[i].Id.String() < result.Pages[j].Id.String() })
+	result.Pages, result.NextOffset = journalMCPPage(result.Pages, args.Offset, limit)
+	return nil, result, nil
+}
+func (s *Server) getJournalWikiMCP(ctx context.Context, _ *mcp.CallToolRequest, args journalMCPEntryArgs) (*mcp.CallToolResult, JournalWikiPage, error) {
+	var result JournalWikiPage
+	id, err := uuid.Parse(args.ID)
+	if err != nil {
+		return nil, result, errors.New("id must be a UUID")
+	}
+	response, err := s.GetJournalWikiPageId(ctx, GetJournalWikiPageIdRequestObject{PageId: id})
+	if err != nil {
+		return nil, result, err
+	}
+	if page, ok := response.(GetJournalWikiPageId200JSONResponse); ok {
+		return nil, JournalWikiPage(page), nil
+	}
+	return nil, result, errors.New("wiki page unavailable")
 }

@@ -12,8 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
-// JournalWorker transcribes uploaded audio and creates its cited entry summary.
-// Scheduled invocations use it to finalize elapsed aggregate periods.
+// JournalWorker transcribes uploads and advances asynchronous cloud curation.
 type JournalWorker struct {
 	server *Server
 }
@@ -34,13 +33,19 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 	if err != nil {
 		return nil, err
 	}
+	model := os.Getenv("JOURNAL_CURATOR_MODEL")
+	if model == "" {
+		model = "gpt-6-astra"
+	}
 	objects := s3.NewFromConfig(cfg)
 	return &JournalWorker{server: &Server{
-		ddb:               dynamodb.NewFromConfig(cfg),
-		journalTableName:  table,
-		journalBucketName: bucket,
-		journalObjects:    objects,
-		journalAI:         journalAI,
+		ddb:                    dynamodb.NewFromConfig(cfg),
+		journalTableName:       table,
+		journalBucketName:      bucket,
+		journalObjects:         objects,
+		journalAI:              journalAI,
+		journalCurationEnabled: true,
+		journalCurator:         &openAIJournalCurator{ai: journalAI.(*openAIJournalAI), model: model},
 	}}, nil
 }
 
@@ -49,5 +54,5 @@ func (w *JournalWorker) ProcessUpload(ctx context.Context, bucket, key string, s
 }
 
 func (w *JournalWorker) RefreshSummaries(ctx context.Context, now time.Time) error {
-	return w.server.RefreshJournalSummaries(ctx, now)
+	return w.server.RefreshJournalKnowledge(ctx, now)
 }

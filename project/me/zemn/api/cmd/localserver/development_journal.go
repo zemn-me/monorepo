@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -203,6 +204,15 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 		if err := server.RefreshJournalSummaries(ctx, time.Now()); err != nil {
 			http.Error(response, fmt.Sprintf("refresh summaries: %v", err), http.StatusInternalServerError)
 			return
+		}
+		// Advance the deterministic local session through submit, publish and
+		// cleanup, exercising exactly the same importer as scheduled runs.
+		for range 3 {
+			if err := server.RefreshJournalKnowledge(ctx, time.Now()); err != nil {
+				log.Printf("curate journal fixtures: %v", err)
+				http.Error(response, fmt.Sprintf("curate fixtures: %v", err), http.StatusInternalServerError)
+				return
+			}
 		}
 		response.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(response).Encode(map[string]int{"entries": len(developmentJournalFixtures)})

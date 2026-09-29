@@ -53,6 +53,7 @@ import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
+	useGetJournalWikiPage,
 	useGetMeScopes,
 	usePostJournalEntry,
 	useRefreshJournal,
@@ -372,9 +373,12 @@ function useJournalPlayback(
 		[segmentFor]
 	);
 	const titleForEntry = useCallback(
-		(entryID: string) =>
-			journal.entries.find(value => value.id === entryID)?.summary
-				?.title ?? '',
+		(entryID: string) => {
+			const entry = journal.entries.find(value => value.id === entryID);
+			if (!entry) return '';
+			const date = journalEntryDate(entry).toPlainDate().toString();
+			return entry.summary ? `${date}: ${entry.summary.title}` : date;
+		},
 		[journal.entries]
 	);
 	const playSegment = useCallback(
@@ -1392,6 +1396,9 @@ function EntryCard({
 				/>
 			)}
 			{entry.error && <p className={style.notice}>{entry.error}</p>}
+			{entry.status === 'ready' && !entry.summary && (
+				<p className={style.wikiKind}>Analysis pending</p>
+			)}
 			{entry.summary && (
 				<SummaryCard
 					playback={playback}
@@ -1439,6 +1446,7 @@ function PendingEntries({
 }
 
 const journalSelectionQuery = {
+	wiki: parseAsString,
 	at: parseAsString,
 	year: parseAsString,
 	month: parseAsString,
@@ -1517,6 +1525,7 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 		});
 	}
 	for (const summary of journal.summaries) {
+		if (journal.curation) continue;
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
@@ -1561,12 +1570,14 @@ function periodMidpoint(period: JournalPeriodNode) {
 }
 
 function PeriodDisclosure({
+	curation,
 	children,
 	initiallyOpen,
 	nextRoute,
 	node,
 	playback,
 }: {
+	readonly curation: boolean;
 	readonly children: readonly JournalPeriodNode[];
 	readonly initiallyOpen: boolean;
 	readonly nextRoute: JournalRoute;
@@ -1590,7 +1601,10 @@ function PeriodDisclosure({
 					<PeriodDate summary={node} />
 				</span>
 				<strong className={style.periodTitle}>
-					{node.summary?.title ?? 'Summary in progress…'}
+					{node.summary?.title ??
+						(curation
+							? 'Browse recordings'
+							: 'Summary in progress…')}
 				</strong>
 				<FontAwesomeIcon
 					aria-hidden="true"
@@ -1625,7 +1639,9 @@ function PeriodDisclosure({
 									</span>
 									<strong>
 										{child.summary?.title ??
-											'Summary in progress…'}
+											(curation
+												? 'Browse recordings'
+												: 'Summary in progress…')}
 									</strong>
 									<FontAwesomeIcon
 										aria-hidden="true"
@@ -1656,9 +1672,11 @@ function zoomLevelLabel(route: JournalRoute | undefined) {
 }
 
 function ZoomNavigation({
+	inactive = false,
 	focus,
 	route,
 }: {
+	readonly inactive?: boolean;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
@@ -1713,7 +1731,9 @@ function ZoomNavigation({
 			<span
 				aria-hidden="true"
 				className={style.zoomIndicator}
-				data-ready={indicator.inlineSize > 0 ? '' : undefined}
+				data-ready={
+					!inactive && indicator.inlineSize > 0 ? '' : undefined
+				}
 				data-journal-view-indicator
 				style={{
 					inlineSize: indicator.inlineSize,
@@ -1723,7 +1743,9 @@ function ZoomNavigation({
 			{journalViews.map(destination => (
 				<Link
 					aria-current={
-						destination === visibleRoute ? 'page' : undefined
+						!inactive && destination === visibleRoute
+							? 'page'
+							: undefined
 					}
 					data-journal-view={destination ?? 'overview'}
 					href={href(destination)}
@@ -1748,17 +1770,26 @@ function ZoomNavigation({
 }
 
 function JournalToolbar({
+	wiki = false,
 	actions,
 	focus,
 	route,
 }: {
+	readonly wiki?: boolean;
 	readonly actions?: ReactNode;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
 	return (
 		<div className={style.journalToolbar} data-journal-toolbar>
-			<ZoomNavigation focus={focus} route={route} />
+			<ZoomNavigation focus={focus} route={route} inactive={wiki} />
+			<Link
+				className={style.wikiNavigation}
+				href="/journal?wiki=all"
+				aria-current={wiki ? 'page' : undefined}
+			>
+				Wiki
+			</Link>
 			{actions}
 		</div>
 	);
@@ -1915,6 +1946,7 @@ function PeriodList({
 				>
 					{nextRoute ? (
 						<PeriodDisclosure
+							curation={journal.curation !== undefined}
 							children={childPeriodsFor(childPeriods, node)}
 							initiallyOpen={periodContains(node, focus)}
 							nextRoute={nextRoute}
@@ -2004,6 +2036,137 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 	);
 }
 
+function JournalWikiPage({
+	pageID,
+	generation,
+	playback,
+}: {
+	readonly pageID: string;
+	readonly generation?: string;
+	readonly playback: JournalPlayback;
+}) {
+	const [token] = useZemnMeAuth();
+	const page = useGetJournalWikiPage(token, pageID, generation);
+	return page(
+		value => (
+			<div>
+				<p className={style.wikiKind}>{value.kind}</p>
+				<SummaryCard
+					playback={playback}
+					showPeriod={false}
+					summary={{
+						schemaVersion: 1,
+						id: `wiki:${value.id}`,
+						title: value.title,
+						blocks: value.blocks,
+						period: 'journal',
+						start: '',
+						end: '',
+					}}
+				/>
+				{value.aliases.length > 0 && (
+					<p>Also known as {value.aliases.join(', ')}</p>
+				)}
+			</div>
+		),
+		() => <JournalPlaceholder label="Loading wiki page" />,
+		() => (
+			<p role="alert">This page is unavailable or awaiting an update.</p>
+		)
+	);
+}
+
+function JournalWiki({
+	journal,
+	pageID,
+	playback,
+}: {
+	readonly journal: Journal;
+	readonly pageID: string;
+	readonly playback: JournalPlayback;
+}) {
+	const [query, setQuery] = useState('');
+	const pages = journal.wiki ?? [];
+	const selected = pages.find(page => page.id === pageID);
+	const matches = pages.filter(page =>
+		[page.title, ...page.aliases]
+			.join(' ')
+			.toLocaleLowerCase()
+			.includes(query.toLocaleLowerCase())
+	);
+	return (
+		<section className={style.wiki} aria-label="Diary wiki">
+			<header className={style.wikiHeader}>
+				<h2>
+					{pageID === 'all' ? (
+						'Wiki'
+					) : (
+						<Link href="/journal?wiki=all">Wiki</Link>
+					)}
+				</h2>
+				{journal.curation?.updatedAt && (
+					<small>
+						Updated{' '}
+						<LocalizedDate
+							date={new Date(journal.curation.updatedAt)}
+						/>
+					</small>
+				)}
+			</header>
+			{journal.curation?.status === 'failed' && (
+				<p role="status">
+					The latest update could not finish. It will retry
+					automatically.
+				</p>
+			)}
+			{pageID === 'all' ? (
+				<>
+					<label className={style.wikiSearch}>
+						Find a person, place, or project
+						<input
+							type="search"
+							value={query}
+							onChange={event =>
+								setQuery(event.currentTarget.value)
+							}
+						/>
+					</label>
+					{matches.length > 0 ? (
+						<ul className={style.wikiIndex}>
+							{matches.map(page => (
+								<li key={page.id}>
+									<Link href={`/journal?wiki=${page.id}`}>
+										<strong>{page.title}</strong>
+										<span>{page.kind}</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					) : (
+						<p>
+							{pages.length
+								? 'No matching pages.'
+								: journal.entries.length
+									? 'Wiki pages will appear after the diary is analyzed.'
+									: 'Record a diary entry to begin.'}
+						</p>
+					)}
+				</>
+			) : selected ? (
+				<JournalWikiPage
+					pageID={selected.id}
+					generation={journal.curation?.generation}
+					playback={playback}
+				/>
+			) : (
+				<p role="status">
+					This page is unavailable or awaiting an update.
+				</p>
+			)}
+		</section>
+	);
+}
+
 function JournalBrowser({
 	actions,
 	localRecordings,
@@ -2068,15 +2231,35 @@ function JournalBrowser({
 		[setRawSelection]
 	);
 
+	if (rawSelection.wiki !== null) {
+		return (
+			<div>
+				<JournalToolbar
+					actions={actions}
+					focus={focus}
+					route={route}
+					wiki
+				/>
+				{localRecordings}
+				<JournalWiki
+					journal={journal}
+					pageID={rawSelection.wiki}
+					playback={playback}
+				/>
+			</div>
+		);
+	}
+
 	if (route === undefined) {
 		const readyEntries = journal.entries.filter(
 			entry => entry.status === 'ready'
 		);
-		const summary =
-			journal.summaries.find(value => value.period === 'journal') ??
-			(readyEntries.length === 1
-				? readyEntries.at(0)?.summary
-				: undefined);
+		const summary = journal.curation
+			? undefined
+			: (journal.summaries.find(value => value.period === 'journal') ??
+				(readyEntries.length === 1
+					? readyEntries.at(0)?.summary
+					: undefined));
 		return (
 			<div>
 				<JournalToolbar actions={actions} focus={focus} />
@@ -2088,6 +2271,13 @@ function JournalBrowser({
 						showPeriod={false}
 						summary={summary}
 					/>
+				) : journal.curation ? (
+					<p className={style.wikiIntro}>
+						<Link href="/journal?wiki=all">
+							Explore the diary wiki
+						</Link>{' '}
+						for people, places, and projects across your recordings.
+					</p>
 				) : readyEntries.length > 1 ? (
 					<JournalPlaceholder label="Preparing journal overview" />
 				) : (
@@ -2370,7 +2560,8 @@ export default function JournalPageClient({
 	const [recording, setRecording] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
 	const [recordingError, setRecordingError] = useState<string>();
-	const [recordingLocationError, setRecordingLocationError] = useState<string>();
+	const [recordingLocationError, setRecordingLocationError] =
+		useState<string>();
 	const [draggingFile, setDraggingFile] = useState(false);
 	const dragDepth = useRef(0);
 	const hasReadScope = scopes(
@@ -2605,7 +2796,9 @@ export default function JournalPageClient({
 			aria-busy={recordingBusy || queue.syncing !== undefined}
 			className={style.recorder}
 			data-recording={recordingStream ? '' : undefined}
-			data-notice={recordingError || recordingLocationError ? '' : undefined}
+			data-notice={
+				recordingError || recordingLocationError ? '' : undefined
+			}
 			data-uploading={queue.syncing ? '' : undefined}
 		>
 			{!recordingStream && (

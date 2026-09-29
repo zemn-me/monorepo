@@ -803,6 +803,29 @@ describe('pulumi', () => {
 			},
 		});
 		expect(journalWorker?.inputs['reservedConcurrentExecutions']).toBe(1);
+		const curator = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalcuratorlambda'
+		);
+		expect(curator?.inputs['timeout']).toBe(120);
+		expect(curator?.inputs['reservedConcurrentExecutions']).toBe(1);
+		expect(curator?.inputs['environment']).toMatchObject({
+			variables: {
+				JOURNAL_CURATION_ENABLED: 'true',
+				JOURNAL_CURATOR_MODEL: 'gpt-6-astra',
+				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
+			},
+		});
+		const curatorSchedule = mockResources.find(
+			resource =>
+				resource.type === 'aws:cloudwatch/eventRule:EventRule' &&
+				resource.name.endsWith('-journal-summary-schedule')
+		);
+		expect(curatorSchedule?.inputs['scheduleExpression']).toBe(
+			'rate(5 minutes)'
+		);
+
 		expect(
 			mockResources.filter(
 				resource =>

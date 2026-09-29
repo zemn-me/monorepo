@@ -75,6 +75,8 @@ type Server struct {
 	minecraftLogs          minecraftLogTailer
 	minecraftServerAddress string
 	journalAI              JournalAI
+	journalCurator         JournalCurator
+	journalCurationEnabled bool
 	journalObjects         JournalObjectStore
 	journalPresigner       JournalPresigner
 	journalHierarchyMu     sync.Mutex
@@ -89,9 +91,11 @@ type NewServerOptions struct {
 	AllowLocalhostAnalytics bool
 	// Journal dependencies may be replaced by the local development server.
 	// Production leaves these unset and uses the configured AWS clients.
-	JournalAI        JournalAI
-	JournalObjects   JournalObjectStore
-	JournalPresigner JournalPresigner
+	JournalAI              JournalAI
+	JournalCurationEnabled bool
+	JournalCurator         JournalCurator
+	JournalObjects         JournalObjectStore
+	JournalPresigner       JournalPresigner
 }
 
 // NewServer initialises the DynamoDB client and HTTP router.
@@ -180,6 +184,8 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		minecraftLogs:          minecraftLogTailerFromEnv(cfg),
 		minecraftServerAddress: minecraftServerAddressFromEnv(),
 		journalAI:              opts.JournalAI,
+		journalCurator:         opts.JournalCurator,
+		journalCurationEnabled: opts.JournalCurationEnabled || os.Getenv("JOURNAL_CURATION_ENABLED") == "true",
 		journalObjects:         journalObjects,
 		journalPresigner:       journalPresigner,
 	}

@@ -95,6 +95,7 @@ func journalEntryIDFromKey(key string) (string, bool) {
 func (s *Server) listJournalRecords(ctx context.Context, subject string) ([]JournalStoredRecord, error) {
 	input := &dynamodb.QueryInput{
 		TableName:              aws.String(s.journalTableName),
+		ConsistentRead:         aws.Bool(true),
 		KeyConditionExpression: aws.String("id = :id"),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":id": &types.AttributeValueMemberS{Value: subject},
@@ -245,6 +246,11 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 	if err != nil {
 		return nil, err
 	}
+	generation, curationState, err := s.journalPublishedGeneration(ctx, records)
+	if err != nil {
+		return nil, err
+	}
+	records = applyJournalGeneration(records, generation)
 	entries := make([]JournalEntry, 0)
 	summaries := make([]JournalSummary, 0)
 	now := time.Now().UTC()
@@ -263,7 +269,32 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 		}
 		return summaries[i].Start.After(summaries[j].Start)
 	})
-	return GetJournal200JSONResponse{Entries: entries, Summaries: summaries}, nil
+	result := GetJournal200JSONResponse{Entries: entries, Summaries: summaries}
+	wiki := make([]JournalWikiIndexEntry, 0, len(generation.Result.Pages))
+	for _, page := range generation.Result.Pages {
+		wiki = append(wiki, JournalWikiIndexEntry{Id: page.Id, Title: page.Title, Kind: string(page.Kind), Aliases: page.Aliases})
+	}
+	sort.Slice(wiki, func(i, j int) bool { return wiki[i].Title < wiki[j].Title })
+	result.Wiki = &wiki
+	if s.journalCurationEnabled || curationState.Version != "" {
+		status := JournalCurationStatus{Status: JournalCurationStatusStatusPending}
+		_, fingerprint := journalCorpusHashes(journalCorpusFromRecords(records))
+		if curationState.PublishedFingerprint == fingerprint && len(generation.Sources) > 0 {
+			status.Status = JournalCurationStatusStatusReady
+		}
+		if curationState.RunID != "" && !curationState.Cleaning {
+			status.Status = JournalCurationStatusStatusRunning
+		}
+		if curationState.Failed {
+			status.Status = JournalCurationStatusStatusFailed
+		}
+		if !curationState.PublishedAt.IsZero() {
+			status.UpdatedAt = &curationState.PublishedAt
+			status.Generation = &curationState.PublishedKey
+		}
+		result.Curation = &status
+	}
+	return result, nil
 }
 
 func journalEntryIsVisible(entry JournalStoredEntry, now time.Time) bool {
@@ -1028,6 +1059,9 @@ var journalAggregatePeriods = []JournalSummaryPeriod{
 }
 
 func (s *Server) refreshJournalSummariesForEntries(ctx context.Context, entries ...JournalStoredEntry) error {
+	if s.journalCurationEnabled {
+		return nil
+	}
 	s.journalHierarchyMu.Lock()
 	defer s.journalHierarchyMu.Unlock()
 	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
@@ -1056,6 +1090,9 @@ func (s *Server) refreshJournalSummariesForEntry(ctx context.Context, entry Jour
 // RefreshJournalSummaries backfills elapsed calendar periods and the current
 // whole-journal overview without regenerating unchanged source material.
 func (s *Server) RefreshJournalSummaries(ctx context.Context, now time.Time) error {
+	if s.journalCurationEnabled {
+		return s.RefreshJournalKnowledge(ctx, now)
+	}
 	s.journalHierarchyMu.Lock()
 	defer s.journalHierarchyMu.Unlock()
 	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
@@ -1190,19 +1227,33 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	}
 	entry.DurationMs = transcription.DurationMs
 	entry.Transcript = transcription.Segments
-	entry.ProcessingProgress.Stage = JournalProcessingProgressStageSummarizing
+	if s.journalCurationEnabled {
+		// Transcription is durable before optional provisional analysis. This
+		// retains spoken-date inference without making source availability
+		// depend on either analysis service.
+		entry.Status = JournalEntryStatusReady
+		entry.ProcessingProgress = nil
+	} else {
+		entry.ProcessingProgress.Stage = JournalProcessingProgressStageSummarizing
+	}
 	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
 		return err
 	}
 	sources := transcriptSources(entry.Id, transcription.Segments)
 	analysis, err := s.journalAI.AnalyzeEntry(ctx, entry.RecordedAt, entry.TimeZone, sources)
 	if err != nil {
+		if s.journalCurationEnabled {
+			return err
+		}
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
 	if analysis.RecordedDate != "" {
 		entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, analysis.RecordedDate)
 		if err != nil {
+			if s.journalCurationEnabled {
+				return err
+			}
 			_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 			return err
 		}
@@ -1210,6 +1261,9 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	entry.Transcript = transcription.Segments
 	sourceFingerprint, err := summarySourceFingerprint(sources)
 	if err != nil {
+		if s.journalCurationEnabled {
+			return err
+		}
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
