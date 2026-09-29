@@ -98,7 +98,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		}
 	}
 	// Follow an inline citation as a user would, through the footnote preview.
-	reference, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] [data-journal-summary-block] a")
+	reference, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] a[aria-label^='Play source']")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -126,5 +126,198 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		if err := os.WriteFile(filepath.Join(directory, "journal-wiki-unavailable.png"), screenshot, 0600); err != nil {
 			t.Fatal(err)
 		}
+	}
+}
+
+// These screenshots use authored fictional content through the normal local
+// sample-data flow, so UI reviews do not require a paid model or private diary.
+func TestJournalReviewScreenshots(t *testing.T) {
+	root, err := nextServerRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments("--force-device-scale-factor=1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	defer func() {
+		if !t.Failed() {
+			return
+		}
+		if page, err := driver.FindElement(selenium.ByTagName, "body"); err == nil {
+			if content, err := page.Text(); err == nil {
+				t.Log(content)
+			}
+		}
+		if shot, err := driver.Screenshot(); err == nil {
+			_ = os.WriteFile(filepath.Join(os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"), "review-failure.png"), shot, 0600)
+		}
+	}()
+	if err := driver.SetTimezoneOverride("America/Los_Angeles"); err != nil {
+		t.Fatal(err)
+	}
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	find := func(by, selector string) selenium.WebElement {
+		t.Helper()
+		el, err := waitForElement(driver, by, selector, 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return el
+	}
+	click := func(by, selector string) {
+		t.Helper()
+		if err := find(by, selector).Click(); err != nil {
+			t.Fatal(err)
+		}
+	}
+	save := func(name string, data []byte) {
+		t.Helper()
+		directory := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
+		if directory == "" {
+			t.Fatal("screenshots require TEST_UNDECLARED_OUTPUTS_DIR")
+		}
+		if err := os.WriteFile(filepath.Join(directory, name+".png"), data, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	capture := func(name, selector string, width, height int, elementOnly bool) {
+		t.Helper()
+		if err := driver.ResizeWindow("", width, height); err != nil {
+			t.Fatal(err)
+		}
+		el := find(selenium.ByCSSSelector, selector)
+		if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start', behavior:'instant'}); window.scrollBy(0,-90);`, []any{el}); err != nil {
+			t.Fatal(err)
+		}
+		if overflow, err := driver.ExecuteScript(`return document.documentElement.scrollWidth > innerWidth`, nil); err != nil || overflow == true {
+			t.Fatalf("overflow in %s: %v %v", name, overflow, err)
+		}
+		var data []byte
+		var err error
+		if elementOnly {
+			data, err = el.Screenshot(false)
+		} else {
+			data, err = driver.Screenshot()
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		save(name, data)
+	}
+	click(selenium.ByLinkText, "Wiki")
+	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
+	if _, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]"); err != nil {
+		click(selenium.ByXPATH, "//button[normalize-space()='Add sample entries']")
+		find(selenium.ByXPATH, "//*[@role='status' and contains(.,'Sample journal ready')]")
+	}
+	click(selenium.ByLinkText, "Overview")
+	capture("01-overview-desktop", "section[aria-labelledby='recent-journal-entries']", 1440, 1000, false)
+	click(selenium.ByLinkText, "Wiki")
+	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
+	capture("02-wiki-index-desktop", "section[aria-label='Diary wiki']", 1440, 1000, true)
+	openPage := func(title string) {
+		t.Helper()
+		click(selenium.ByLinkText, "Wiki")
+		click(selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='"+title+"']]")
+		find(selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='"+title+"']")
+	}
+	for _, page := range []struct{ name, title string }{
+		{"03-wiki-maya-desktop", "Maya"},
+		{"04-wiki-lantern-desktop", "Lantern"},
+		{"05-wiki-attention-desktop", "Attention budget"},
+		{"06-wiki-library-desktop", "Rivermill Library"},
+	} {
+		openPage(page.title)
+		capture(page.name, "section[aria-label='Diary wiki']", 1440, 1400, true)
+	}
+	openPage("Maya")
+	capture("07-wiki-maya-phone", "section[aria-label='Diary wiki']", 390, 1400, true)
+	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
+		t.Fatal(err)
+	}
+	reference := find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] a[aria-label^='Play source']")
+	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'center',behavior:'instant'});`, []any{reference}); err != nil {
+		t.Fatal(err)
+	}
+	if err := reference.SendKeys(selenium.NullKey); err != nil {
+		t.Fatal(err)
+	}
+	find(selenium.ByCSSSelector, "[role='tooltip']")
+	data, err := driver.Screenshot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	save("08-citation-preview-desktop", data)
+	click(selenium.ByLinkText, "Days")
+	launch := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
+	if err := launch.Click(); err != nil {
+		t.Fatal(err)
+	}
+	// Read the selected day's section from the visible entry's enclosing DOM.
+	section, err := launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
+		t.Fatal(err)
+	}
+	data, err = section.Screenshot(false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	save("09-launch-day-desktop", data)
+	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
+	if err := earlier.Click(); err != nil {
+		t.Fatal(err)
+	}
+	earlierSection, err := earlier.FindElement(selenium.ByXPATH, "ancestor::section[1]")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{earlierSection}); err != nil {
+		t.Fatal(err)
+	}
+	data, err = earlierSection.Screenshot(false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	save("10-earlier-day-clarification-desktop", data)
+	if err := driver.ResizeWindow("", 390, 1400); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
+		t.Fatal(err)
+	}
+	data, err = section.Screenshot(false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	save("11-launch-day-phone", data)
+	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
+		t.Fatal(err)
+	}
+	for _, view := range []struct{ name, link, visibleDate string }{
+		{"12-months-desktop", "Months", time.Now().Format("January 2006")},
+		{"13-weeks-desktop", "Weeks", "Monday"},
+		{"14-years-desktop", "Years", time.Now().Format("2006")},
+	} {
+		// Scrolling updates the date in the URL on a 250 ms throttle. Let
+		// that visible navigation settle before selecting a different view.
+		time.Sleep(400 * time.Millisecond)
+		click(selenium.ByLinkText, view.link)
+		if view.link == "Years" {
+			find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
+		} else {
+			find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
+		}
+		capture(view.name, "nav[aria-label='Browse journal']", 1440, 1100, false)
 	}
 }
