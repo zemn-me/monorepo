@@ -140,7 +140,6 @@ bazel_dep(name = "rules_nodejs", version = "6.7.3")
 pnpm = use_extension("//bzl/pnpm:extensions.bzl", "pnpm", dev_dependency = True)
 pnpm.tool(
     integrity_lock = "//bzl/pnpm:integrity.json",
-    package_json = "//:package.json",
 )
 use_repo(pnpm, "pnpm")
 

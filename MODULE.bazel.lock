@@ -507,8 +507,8 @@
   "moduleExtensions": {
     "//bzl/pnpm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "vDBDFZmGTZBOzQunO6F3MnrVZTQUV9KQnDExgV3Cp/k=",
-        "usagesDigest": "cvoGXQXA8QJ7gCUtNZFjUJZP0FVZnVH6YCXNptl80oc=",
+        "bzlTransitiveDigest": "HqI6/AK63KLe5pxMu2WbL49QlpMQ2OOPDaHcFxlRxo8=",
+        "usagesDigest": "3kdiaUjSuETqX0U0b6zs7Lv1X2BeaHoIWft5BdUD9bc=",
         "recordedInputs": [
           "REPO_MAPPING:,aspect_rules_js aspect_rules_js+",
           "REPO_MAPPING:aspect_bazel_lib+,bazel_lib bazel_lib+",
@@ -526,7 +526,6 @@
           "REPO_MAPPING:tar.bzl+,aspect_bazel_lib aspect_bazel_lib+",
           "REPO_MAPPING:tar.bzl+,bazel_skylib bazel_skylib+",
           "REPO_MAPPING:tar.bzl+,tar.bzl tar.bzl+",
-          "FILE:@@//package.json 087c8549c8a124561a741529900815877a5b3fdb68e408b9cfb999a15e8f4b33",
           "FILE:@@//bzl/pnpm/integrity.json 8fad39b52f51a277cdde369608883a237b62d95c31f7ef4f88b2f21ae128f172"
         ],
         "generatedRepoSpecs": {
