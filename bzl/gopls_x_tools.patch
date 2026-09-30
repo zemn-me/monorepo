@@ -1,0 +1,31 @@
+diff --git a/internal/analysis/unusedfunc/unusedfunc.go b/internal/analysis/unusedfunc/unusedfunc.go
+--- a/internal/analysis/unusedfunc/unusedfunc.go
++++ b/internal/analysis/unusedfunc/unusedfunc.go
+@@ -77 +77 @@ func run(pass *analysis.Pass) (any, error) {
+-	if packagepath.IsStdPackage(pass.Pkg.Path()) {
++	if packagepath.MaybeStdPackage(pass.Pkg.Path()) {
+diff --git a/internal/mcp/context.go b/internal/mcp/context.go
+--- a/internal/mcp/context.go
++++ b/internal/mcp/context.go
+@@ -111 +111 @@
+-			if packagepath.IsStdPackage(spec.Path.Value) {
++			if packagepath.MaybeStdPackage(spec.Path.Value) {
+diff --git a/internal/golang/completion/completion.go b/internal/golang/completion/completion.go
+--- a/internal/golang/completion/completion.go
++++ b/internal/golang/completion/completion.go
+@@ -313 +313,4 @@ func (c *completer) tooNew(obj types.Object) bool {
+-		disallowed = typesinternal.TooNewStdSymbols(pkg, c.goversion)
++		disallowed = make(map[types.Object]string)
++		for obj, symbol := range typesinternal.TooNewStdSymbols(pkg, c.goversion) {
++			disallowed[obj] = symbol.Version.String()
++		}
+diff --git a/internal/settings/analysis.go b/internal/settings/analysis.go
+--- a/internal/settings/analysis.go
++++ b/internal/settings/analysis.go
+@@ -17 +16,0 @@
+-	"golang.org/x/tools/go/analysis/passes/scannererr"
+@@ -20 +18,0 @@
+-	"golang.org/x/tools/go/analysis/passes/sqlrowserr"
+@@ -173,2 +170,0 @@
+-		{analyzer: scannererr.Analyzer},         // to appear in cmd/vet@go1.28
+-		{analyzer: sqlrowserr.Analyzer},         // to appear in cmd/vet@go1.28
