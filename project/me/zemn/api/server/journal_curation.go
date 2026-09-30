@@ -25,7 +25,7 @@ const journalCurationKey = "CURATION"
 const journalCurationMaxBytes = 48 * 1024 * 1024
 
 // Bump when the output contract or writing policy changes so unchanged diaries refresh.
-const journalCurationVersion = "4"
+const journalCurationVersion = "5"
 
 func journalCurationInputKey(runID string) string {
 	return "curation/runs/" + runID + "/input.json"
@@ -217,8 +217,8 @@ func validateJournalWikiLinks(blocks []JournalSummaryBlock, pages map[string]boo
 }
 
 func validateJournalCuration(result JournalCurationResult, corpus journalCorpus) error {
-	if result.Pages == nil || result.Entries == nil {
-		return errors.New("curation requires entries and pages arrays")
+	if err := validateJournalCurationSchema(result); err != nil {
+		return err
 	}
 	allowed := journalAllowedCitations(journalCorpusSources(corpus))
 	entries := map[string]bool{}
@@ -228,13 +228,8 @@ func validateJournalCuration(result JournalCurationResult, corpus journalCorpus)
 	pages := map[string]bool{}
 	for _, page := range result.Pages {
 		id := page.Id.String()
-		if page.Id == uuid.Nil || pages[id] || len(page.Title) > 200 || len(page.Aliases) > 50 || page.Aliases == nil {
+		if page.Id == uuid.Nil || pages[id] {
 			return errors.New("invalid or duplicate wiki page")
-		}
-		switch page.Kind {
-		case "person", "place", "project", "subject":
-		default:
-			return errors.New("invalid wiki page kind")
 		}
 		pages[id] = true
 	}
@@ -403,7 +398,7 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 			return err
 		}
 		corpus.Previous = generation.Result
-		schema, err := structuredOutputSchema[JournalCurationResult]()
+		schema, err := journalCurationOutputSchema()
 		if err != nil {
 			return err
 		}
