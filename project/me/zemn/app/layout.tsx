@@ -2,7 +2,7 @@ import 'project/me/zemn/app/base.css';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { IBM_Plex_Mono, Lora } from 'next/font/google';
-import { Metadata } from 'next/types';
+import { Metadata, Viewport } from 'next/types';
 import { ReactNode } from 'react';
 
 import { AnalyticsPageBeacon } from '#root/project/me/zemn/api/analytics/AnalyticsPageBeacon.js';
@@ -102,11 +102,14 @@ export function RootLayout({ children }: Props) {
 
 export default RootLayout;
 
-export const metadata: Metadata = {
+export const viewport: Viewport = {
 	themeColor: [
 		{ media: '(prefers-color-scheme: dark)', color: '#00130e' },
 		{ media: '(prefers-color-scheme: light)', color: '#fff' },
 	],
+};
+
+export const metadata: Metadata = {
 	authors: [{ name: text(Bio.who.fullName), url: 'https://zemn.me' }],
 	metadataBase: new URL('https://zemn.me'),
 	twitter: {
