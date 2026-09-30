@@ -37,6 +37,15 @@ compile_pip_requirements(
 )
 
 js_library(
+    name = "renovate_go_inputs",
+    srcs = [
+        "MODULE.bazel",
+        "go.mod",
+    ],
+    visibility = ["//.github:__pkg__"],
+)
+
+js_library(
     name = "renovate_python_inputs",
     srcs = [
         "requirements.in",
