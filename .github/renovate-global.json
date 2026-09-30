@@ -135,6 +135,11 @@
 			"minimumGroupSize": 2
 		},
 		{
+			"description": "Advance supported Python version floors without pinning transitive dependencies",
+			"matchManagers": ["pip-compile"],
+			"rangeStrategy": "bump"
+		},
+		{
 			"description": "Refresh generated Python locks as a unit",
 			"matchManagers": ["pip-compile"],
 			"matchDepTypes": ["indirect"],
@@ -164,6 +169,7 @@
 					"go.mod",
 					"MODULE.bazel",
 					"MODULE.bazel.lock",
+					"bzl/pnpm/integrity.json",
 					"gazelle_python.yaml",
 					"go.sum",
 					"pnpm-lock.yaml",

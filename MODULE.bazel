@@ -137,8 +137,10 @@ bazel_dep(name = "rules_nodejs", version = "6.7.3")
 #node.toolchain(node_version = "18.13.0")
 #################################
 
-pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm", dev_dependency = True)
-pnpm.pnpm(pnpm_version_from = "//:package.json")
+pnpm = use_extension("//bzl/pnpm:extensions.bzl", "pnpm", dev_dependency = True)
+pnpm.tool(
+    integrity_lock = "//bzl/pnpm:integrity.json",
+)
 use_repo(pnpm, "pnpm")
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
@@ -200,6 +202,14 @@ go_deps.module_override(
     patch_strip = 1,
     patches = ["//bzl:bazel_watcher_proto_rule.patch"],
     path = "github.com/bazelbuild/bazel-watcher",
+)
+
+# gopls 0.23 predates internal API changes in x/tools 0.49, required by
+# x/image. Remove this compatibility patch when gopls adopts those APIs.
+go_deps.module_override(
+    patch_strip = 1,
+    patches = ["//bzl:gopls_x_tools.patch"],
+    path = "golang.org/x/tools/gopls",
 )
 
 # regenerate with bazelisk mod tidy
