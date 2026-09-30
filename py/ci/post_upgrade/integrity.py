@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 from typing import Callable
+import argparse
 import base64
 import hashlib
+from pathlib import Path
 import re
+import subprocess
 import urllib.request
 
 
@@ -157,21 +160,26 @@ def _replace_archive_field_in_block(
 def update_module_bazel_text(
     module_text: str,
     fetcher: Callable[[str], bytes],
+    baseline: str | None = None,
 ) -> str:
     var_values: dict[str, str] = {}
     for match in re.finditer(r"^([A-Z0-9_]+)\s*=\s*\"([^\"]+)\"", module_text, re.MULTILINE):
         var_values[match.group(1)] = match.group(2)
 
+    # Unchanged URLs keep their reviewed checksums. Fetching every archive can
+    # block an unrelated update on an unavailable historical release.
+    baseline_urls = _archive_urls(baseline) if baseline is not None else {}
     updated = module_text
     blocks = _http_archive_blocks(module_text)
     for start, end, archive_block in reversed(blocks):
-        try:
-            url_expr = _extract_url_expr(archive_block)
-        except Exception:
+        if "auto-integrity" not in archive_block:
             continue
+        url_expr = _extract_url_expr(archive_block)
         archive_name = _extract_archive_name(archive_block)
         field = _extract_checksum_field(archive_block)
         url = _resolve_expr(url_expr, var_values)
+        if baseline_urls.get(archive_name) == url:
+            continue
         data = fetcher(url)
         value = _sha256_value(data) if field == "sha256" else _integrity_value(data)
         updated_block = _replace_archive_field_in_block(
@@ -184,13 +192,35 @@ def update_module_bazel_text(
     return updated
 
 
+def _archive_urls(module_text: str) -> dict[str, str]:
+    variables = dict(re.findall(r'^([A-Z0-9_]+)\s*=\s*"([^"]+)"', module_text, re.MULTILINE))
+    return {
+        _extract_archive_name(block): _resolve_expr(_extract_url_expr(block), variables)
+        for _, _, block in _http_archive_blocks(module_text)
+        if "auto-integrity" in block
+    }
+
+
 def _fetch_url(url: str) -> bytes:
-    with urllib.request.urlopen(url) as response:
+    with urllib.request.urlopen(url, timeout=60) as response:
         return response.read()
 
 
-def update_git_refs_archives_file(module_bazel: str) -> None:
+def update_git_refs_archives_file(module_bazel: str, baseline: str | None = None) -> None:
     text = open(module_bazel, "r", encoding="utf-8").read()
-    updated = update_module_bazel_text(text, _fetch_url)
+    updated = update_module_bazel_text(text, _fetch_url, baseline)
     with open(module_bazel, "w", encoding="utf-8") as handle:
         handle.write(updated)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Refresh changed archive checksums before starting Bazel.")
+    parser.add_argument("module", type=Path)
+    parser.add_argument("--baseline-ref", default="HEAD", help="Git revision before the dependency update")
+    args = parser.parse_args()
+    module = args.module.resolve()
+    baseline = subprocess.check_output(
+        ["git", "show", f"{args.baseline_ref}:{module.name}"],
+        cwd=module.parent, text=True,
+    )
+    update_git_refs_archives_file(str(module), baseline)

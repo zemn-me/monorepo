@@ -128,7 +128,10 @@
 			"description": "gopls imports x/tools internals, so update the two modules together",
 			"groupName": "Go language tools",
 			"matchManagers": ["gomod"],
-			"matchPackageNames": ["golang.org/x/tools", "golang.org/x/tools/gopls"],
+			"matchPackageNames": [
+				"golang.org/x/tools",
+				"golang.org/x/tools/gopls"
+			],
 			"minimumGroupSize": 2
 		},
 		{
@@ -151,7 +154,7 @@
 				"bazelisk"
 			],
 			"postUpgradeTasks": {
-				"commands": ["./sh/postUpgrade.sh", "./sh/postUpgrade.sh"],
+				"commands": ["./sh/postUpgrade.sh"],
 				"executionMode": "branch",
 				"fileFilters": [
 					"Cargo.Bazel.lock",
@@ -166,7 +169,9 @@
 					"pnpm-lock.yaml",
 					"requirements.txt",
 					"**/.release.lock",
-					"**/version/*"
+					"**/version/*",
+					"BUILD.bazel",
+					"**/BUILD.bazel"
 				],
 				"recreateWhen": "always"
 			}
@@ -184,5 +189,6 @@
 			"groupName": "bazel",
 			"matchPackageNames": ["bazel", "bazelbuild/bazel"]
 		}
-	]
+	],
+	"rebaseWhen": "behind-base-branch"
 }

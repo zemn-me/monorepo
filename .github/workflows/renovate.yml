@@ -9,6 +9,7 @@ concurrency:
   # do not attempt to run overlapping instances.
   group: renovate
 on: # yamllint disable-line rule:truthy
+  workflow_dispatch:
   schedule:
     # The "*" (#42, asterisk) character has special semantics in YAML, so this
     # string has to be quoted.
@@ -38,6 +39,8 @@ jobs:
         uses: renovatebot/github-action@f3a31a786096ba6b40d0f0ffe11a494ef73bfa7c # v46.3.4
         with:
           configurationFile: .github/renovate-global.json
+          docker-cmd-file: .github/renovate-entrypoint.sh
+          docker-user: root
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
     env:
