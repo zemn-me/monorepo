@@ -3,6 +3,10 @@
 Deploy through the PR/merge workflow; CI runs Pulumi with its existing
 credentials. Local Pulumi login is not a prerequisite for preparing changes.
 
+Keep Pulumi's compiler shim on its package-local `typescript5` alias when
+updating pnpm or its lockfile; falling through to the root TypeScript 7 package
+breaks the compiler API used during serialization.
+
 ## CI identity and secrets
 
 GitHub Actions secret storage is GCP Secret Manager in `extreme-cycling-441523-a9`; the WIF provider uses project number `845702659200`.

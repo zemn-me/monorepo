@@ -18,3 +18,7 @@ Let `pip-compile` own `requirements.txt`; direct edits of transitive pins can
 violate parent constraints. Its manager needs an explicit file pattern and a
 pip-compile command in the generated header. Keep that header aligned with the
 `CUSTOM_COMPILE_COMMAND` on the Bazel requirements target.
+
+`package.json#packageManager` pins pnpm for both Bazel and Renovate. Keep pnpm
+out of dependency sections, which override Renovate's tool selection. The
+workflow reads its Renovate version from the tested devDependency.
