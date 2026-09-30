@@ -135,6 +135,11 @@
 			"minimumGroupSize": 2
 		},
 		{
+			"description": "Advance supported Python version floors without pinning transitive dependencies",
+			"matchManagers": ["pip-compile"],
+			"rangeStrategy": "bump"
+		},
+		{
 			"description": "Refresh generated Python locks as a unit",
 			"matchManagers": ["pip-compile"],
 			"matchDepTypes": ["indirect"],
