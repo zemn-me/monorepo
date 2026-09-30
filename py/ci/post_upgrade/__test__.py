@@ -13,6 +13,35 @@ from py.ci.post_upgrade.integrity import update_module_bazel_text
 
 
 class TestAutoIntegrity(unittest.TestCase):
+    def test_multiline_build_content_does_not_end_archive(self):
+        module = '''# http_archive(ignored comment
+TEXT = "http_archive(ignored string"
+http_archive(
+    name = "sapling",
+    build_file_content = """
+filegroup(
+    name = "srcs",
+    srcs = glob(["**"], exclude = ["BUILD"]),
+)
+# http_archive(another ignored comment inside the string)
+""",
+    sha256 = "stale",
+    # auto-integrity
+    url = "https://example.com/sapling.tar.gz",
+)
+'''
+        calls = []
+
+        def fetcher(url):
+            calls.append(url)
+            return b"sapling release"
+
+        updated = update_module_bazel_text(module, fetcher)
+        self.assertEqual(calls, ["https://example.com/sapling.tar.gz"])
+        self.assertEqual(updated, module.replace('sha256 = "stale"', f'sha256 = "{hashlib.sha256(b"sapling release").hexdigest()}"'))
+        self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+        self.assertEqual(len(calls), 1)
+
     def test_updates_auto_integrity_archives(self):
         module_text = """
 FOO_COMMIT = "abc123"

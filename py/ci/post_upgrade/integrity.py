@@ -5,9 +5,11 @@ from typing import Callable
 import argparse
 import base64
 import hashlib
+import io
 from pathlib import Path
 import re
 import subprocess
+import tokenize
 import urllib.request
 
 
@@ -82,18 +84,37 @@ def _resolve_expr(expr: str, var_values: dict[str, str]) -> str:
 
 
 def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
+    # Starlark strings can contain complete BUILD snippets, including closing
+    # parentheses and apparent archive calls. Tokenization keeps those opaque.
+    line_offsets = [0]
+    for line in module_text.splitlines(keepends=True):
+        line_offsets.append(line_offsets[-1] + len(line))
+
+    def offset(position: tuple[int, int]) -> int:
+        row, column = position
+        return line_offsets[row - 1] + column
+
     blocks: list[tuple[int, int, str]] = []
-    offset = 0
-    while True:
-        start = module_text.find("http_archive(", offset)
-        if start == -1:
-            break
-        end_match = re.search(r"^\s*\)\s*$", module_text[start:], re.MULTILINE)
-        if not end_match:
-            raise Exception("Failed to find end of http_archive block")
-        end = start + end_match.end()
-        blocks.append((start, end, module_text[start:end]))
-        offset = end
+    start: int | None = None
+    depth = 0
+    for token in tokenize.generate_tokens(io.StringIO(module_text).readline):
+        if token.type in (tokenize.COMMENT, tokenize.NL, tokenize.NEWLINE):
+            continue
+        if depth:
+            if token.type == tokenize.OP:
+                if token.string == "(":
+                    depth += 1
+                elif token.string == ")":
+                    depth -= 1
+                    if depth == 0:
+                        end = offset(token.end)
+                        assert start is not None
+                        blocks.append((start, end, module_text[start:end]))
+                        start = None
+        elif start is not None and token.type == tokenize.OP and token.string == "(":
+            depth = 1
+        else:
+            start = offset(token.start) if token.type == tokenize.NAME and token.string == "http_archive" else None
     return blocks
 
 
