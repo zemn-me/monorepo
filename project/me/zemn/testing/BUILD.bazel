@@ -8,6 +8,7 @@ package(default_visibility = ["//visibility:public"])
 
 service_test(
     name = "integration_test",
+    size = "large",  # Full browser flows plus cold Next.js compilation exceed five minutes in CI.
     flaky = True,
     services = [
         "//project/me/zemn:itest_service_calendar_fixture",
