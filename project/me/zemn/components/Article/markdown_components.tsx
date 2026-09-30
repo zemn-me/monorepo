@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { JSX, ReactNode } from 'react';
 
 import { CodeBlock } from '#root/project/me/zemn/components/Article/code_highlight.js';
 import {

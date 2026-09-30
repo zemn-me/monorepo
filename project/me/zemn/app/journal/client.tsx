@@ -1180,8 +1180,8 @@ function JournalAudio({
 	const refreshJournal = useRefreshJournal();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const playRequested = useRef(false);
-	const pendingSeek = useRef<number>();
-	const stallRecoveryTimer = useRef<number>();
+	const pendingSeek = useRef<number | undefined>(undefined);
+	const stallRecoveryTimer = useRef<number | undefined>(undefined);
 	const [source, setSource] = useState(audioURL);
 	const [recovery, setRecovery] = useState<{
 		readonly failedSource: string;
