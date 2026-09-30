@@ -5,11 +5,14 @@ import (
 	"compress/gzip"
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	openai "github.com/openai/openai-go/v3"
 	"github.com/openai/openai-go/v3/option"
+	"io"
 	"net/http"
+	"strings"
 )
 
 const journalCuratorInputLimit = 9 * 1024 * 1024
@@ -163,7 +166,7 @@ func (o *openAIJournalCurator) Collect(ctx context.Context, sessionID string) (*
 		defer response.Body.Close()
 		var result JournalCurationResult
 		if err := decodeJournalCurationJSON(response.Body, &result); err != nil {
-			return nil, &journalCuratorTerminalError{reason: "journal agent returned malformed output"}
+			return nil, &journalCuratorTerminalError{reason: "journal agent returned malformed output: " + journalCurationDecodeDiagnostic(err)}
 		}
 		return &result, nil
 	}
@@ -171,6 +174,25 @@ func (o *openAIJournalCurator) Collect(ctx context.Context, sessionID string) (*
 		return nil, err
 	}
 	return nil, &journalCuratorTerminalError{reason: "journal agent completed without the required artifact"}
+}
+
+// Decoder errors can contain diary text, including values and unknown field
+// names. Log only error categories and byte offsets, never the raw error.
+func journalCurationDecodeDiagnostic(err error) string {
+	var syntax *json.SyntaxError
+	var mismatch *json.UnmarshalTypeError
+	switch {
+	case errors.As(err, &syntax):
+		return fmt.Sprintf("invalid JSON at byte %d", syntax.Offset)
+	case errors.As(err, &mismatch):
+		return fmt.Sprintf("wrong JSON type at byte %d", mismatch.Offset)
+	case errors.Is(err, io.EOF), errors.Is(err, io.ErrUnexpectedEOF):
+		return "empty or incomplete JSON"
+	case strings.HasPrefix(err.Error(), "json: unknown field "):
+		return "unknown JSON field"
+	default:
+		return "invalid JSON value or document"
+	}
 }
 
 func (o *openAIJournalCurator) cleanupSession(ctx context.Context, sessionID string) error {
