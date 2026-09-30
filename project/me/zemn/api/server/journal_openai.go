@@ -11,12 +11,14 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"reflect"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"github.com/google/uuid"
 	"github.com/invopop/jsonschema"
 	openaiauth "github.com/openai/openai-go/v3/auth"
 	openaiapi "github.com/zemn-me/monorepo/go/openai"
@@ -262,6 +264,14 @@ func structuredOutputSchema[T any]() (openaiapi.ResponseFormatJsonSchemaSchema, 
 	reflector := jsonschema.Reflector{
 		AllowAdditionalProperties: false,
 		DoNotReference:            true,
+		// UUID's Go storage is [16]byte, but its JSON representation is a
+		// string. Reflection alone produces a schema the decoder rejects.
+		Mapper: func(t reflect.Type) *jsonschema.Schema {
+			if t == reflect.TypeOf(uuid.UUID{}) {
+				return &jsonschema.Schema{Type: "string", Format: "uuid"}
+			}
+			return nil
+		},
 	}
 	var value T
 	encoded, err := json.Marshal(reflector.Reflect(value))

@@ -153,6 +153,8 @@ func TestJournalAgentsCleanupIncludesLostCreationResponse(t *testing.T) {
 }
 
 func TestJournalAgentsRequireCompletedTurnAndMatchingArtifact(t *testing.T) {
+	_, _, _, entries, _ := journalKnowledgeFixture(t)
+	want := journalKnowledgeResult(entries)
 	for _, status := range []string{"in_progress", "failed", "completed"} {
 		t.Run(status, func(t *testing.T) {
 			client := &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
@@ -167,7 +169,7 @@ func TestJournalAgentsRequireCompletedTurnAndMatchingArtifact(t *testing.T) {
 						map[string]any{"id": "current", "path": journalCuratorOutputPath, "turn_id": "turn_current"},
 					}, "has_more": false}), nil
 				case "/v1/agents/sessions/sess_test/artifacts/current/content":
-					return journalAgentTestResponse(map[string]any{"entries": []any{}, "pages": []any{}}), nil
+					return journalAgentTestResponse(want), nil
 				default:
 					return nil, fmt.Errorf("unexpected retrieval: %s", request.URL)
 				}
@@ -177,6 +179,9 @@ func TestJournalAgentsRequireCompletedTurnAndMatchingArtifact(t *testing.T) {
 			if status == "completed" {
 				if result == nil || err != nil {
 					t.Fatalf("missing result: %v", err)
+				}
+				if len(result.Entries) != len(want.Entries) || result.Entries[0].EntryId != want.Entries[0].EntryId || result.Pages[0].Id != want.Pages[0].Id {
+					t.Fatal("artifact UUIDs did not survive collection")
 				}
 			} else if result != nil {
 				t.Fatal("published incomplete turn")
@@ -188,11 +193,46 @@ func TestJournalAgentsRequireCompletedTurnAndMatchingArtifact(t *testing.T) {
 	}
 }
 
+func TestJournalCurationDecodeDiagnosticsExcludeSourceText(t *testing.T) {
+	for _, tc := range []struct{ body, diagnostic string }{
+		{`{"entries":[{"entryId":[1,2,3]}],"pages":[]}`, "wrong JSON type"},
+		{`{"entries":[],"pages":[],"private diary content":1}`, "unknown JSON field"},
+		{`{"entries":`, "empty or incomplete JSON"},
+		{`private diary content`, "invalid JSON at byte"},
+		{`{"entries":[{"entryId":"private diary content"}],"pages":[]}`, "invalid JSON value or document"},
+	} {
+		var result JournalCurationResult
+		err := decodeJournalCurationJSON(strings.NewReader(tc.body), &result)
+		if err == nil {
+			t.Fatal("invalid output accepted")
+		}
+		diagnostic := journalCurationDecodeDiagnostic(err)
+		if !strings.HasPrefix(diagnostic, tc.diagnostic) || strings.Contains(diagnostic, "private diary content") {
+			t.Fatalf("unexpected diagnostic: %s", diagnostic)
+		}
+	}
+}
+
 func TestJournalCurationRejectsTrailingAndUnknownOutput(t *testing.T) {
 	for _, body := range []string{`{"entries":[],"pages":[]} {}`, `{"entries":[],"pages":[],"sourceEdits":[]}`} {
 		var result JournalCurationResult
 		if decodeJournalCurationJSON(strings.NewReader(body), &result) == nil {
 			t.Fatal("malformed output accepted")
+		}
+	}
+}
+
+func TestJournalCurationSchemaUUIDWireFormat(t *testing.T) {
+	schema, err := structuredOutputSchema[JournalCurationResult]()
+	if err != nil {
+		t.Fatal(err)
+	}
+	properties := schema["properties"].(map[string]any)
+	for collection, field := range map[string]string{"entries": "entryId", "pages": "id"} {
+		item := properties[collection].(map[string]any)["items"].(map[string]any)
+		id := item["properties"].(map[string]any)[field].(map[string]any)
+		if id["type"] != "string" || id["format"] != "uuid" {
+			t.Errorf("%s.%s must describe the JSON UUID string, got %v", collection, field, id)
 		}
 	}
 }
