@@ -113,8 +113,9 @@ function imagePushInterpreter(
 				'  emit_push_output',
 				'  printf "%s@%s\\n" "$2" "$3"',
 				'  exit 0',
+				'else',
+				'  status=$?',
 				'fi',
-				'status=$?',
 				'if grep -Eiq "existing manifest: sha256:[0-9a-f]+|already exists" "$stderr"; then',
 				'  emit_push_output',
 				'  printf "%s@%s\\n" "$2" "$3"',
@@ -158,12 +159,29 @@ export class OCIImage extends ComponentResource {
 		const upload = new local.Command(
 			`${name}_push`,
 			{
-				environment: output(authFile).apply(
-					f =>
-						({
-							DOCKER_CONFIG: f,
-						}) as { [v: string]: string }
-				),
+				environment: output(authFile).apply(f => {
+					const environment: Record<string, string> = {};
+					if (f) environment.DOCKER_CONFIG = f;
+					// The provider is a separate process; it does not inherit the
+					// runfiles context established by this program's Bazel launcher.
+					for (const key of [
+						'RUNFILES_DIR',
+						'RUNFILES_MANIFEST_FILE',
+						'JAVA_RUNFILES',
+						'PATH',
+					]) {
+						const value = process.env[key];
+						if (value) environment[key] = value;
+					}
+					// rules_js exposes this path under its own name in bazel run;
+					// RUNFILES_DIR is normally supplied only by bazel test. Bash
+					// executables such as oci_push require the canonical name.
+					const runfilesDir =
+						process.env['RUNFILES_DIR'] ||
+						process.env['JS_BINARY__RUNFILES'];
+					if (runfilesDir) environment.RUNFILES_DIR = runfilesDir;
+					return environment;
+				}),
 				interpreter: imagePushInterpreter(
 					args.push,
 					args.repository,

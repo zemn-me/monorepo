@@ -1,5 +1,30 @@
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_push")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+oci_image(
+    name = "test_image",
+    testonly = True,
+    architecture = "amd64",
+    os = "linux",
+)
+
+oci_push(
+    name = "test_push",
+    testonly = True,
+    image = ":test_image",
+    repository = "example.invalid/not-uploaded",
+)
+
+jest_test(
+    name = "tests",
+    testonly = True,
+    srcs = ["image_test.js"],
+    data = [":test_push"],
+    env = {"TEST_PUSH": "$(rootpath :test_push)"},
+    visibility = ["//:__subpackages__"],
+    deps = [":oci_tests"],
+)
 
 exports_files(
     [
@@ -37,7 +62,20 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "image.ts",
+        "image_test.ts",
         "oci_image.tmpl.ts",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "oci_tests",
+    srcs = ["image_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":oci",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
 )

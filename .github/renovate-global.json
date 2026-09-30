@@ -125,6 +125,14 @@
 			"rangeStrategy": "bump"
 		},
 		{
+			"description": "Use published upstream dates for the rules_oci release-age check",
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_oci"],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "bazel-contrib/rules_oci",
+			"extractVersion": "^v(?<version>.*)$"
+		},
+		{
 			"description": "Use published upstream dates for the rules_go release-age check",
 			"matchManagers": ["bazel-module"],
 			"matchPackageNames": ["rules_go"],

@@ -32,6 +32,7 @@ def jest_test(name, srcs = [], env = {}, data = [], deps = [], jest_config = "//
     # This rule is used specifically to update snapshots via `bazel run`
     jest.jest_binary(
         name = "%s.update" % name,
+        testonly = True,
         data = data,
         args = args + ["-u"],
     )
