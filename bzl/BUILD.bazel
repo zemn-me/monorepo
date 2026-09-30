@@ -5,6 +5,7 @@ exports_files([
     "bazel_watcher_proto_rule.patch",
     "curl_sys_link_curl.patch",
     "pulumi_typescript5.patch",
+    "rules_itest_http_timeout.patch",
 ])
 
 sh_binary(

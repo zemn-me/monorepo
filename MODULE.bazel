@@ -771,6 +771,15 @@ filegroup(
 
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "rules_itest", version = "0.0.49")
+
+# Rendering readiness pages in CI can take more than the upstream 50ms budget.
+# Keep the service's overall readiness deadline and status checks unchanged.
+single_version_override(
+    module_name = "rules_itest",
+    patch_strip = 1,
+    patches = ["//bzl:rules_itest_http_timeout.patch"],
+)
+
 bazel_dep(name = "rules_jvm_external", version = "6.9")
 bazel_dep(name = "rules_java", version = "9.3.0")
 

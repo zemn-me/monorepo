@@ -178,17 +178,21 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 }
 
 func expectElementText(driver selenium.WebDriver, selector string, expected string, timeout time.Duration) error {
-	elem, err := waitForElement(driver, selenium.ByCSSSelector, selector, timeout)
+	var value string
+	// Outputs can exist while their asynchronous values are still loading.
+	err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		elem, err := wd.FindElement(selenium.ByCSSSelector, selector)
+		if err != nil {
+			return false, nil
+		}
+		value, err = elem.Text()
+		if isStaleElementErr(err) {
+			return false, nil
+		}
+		return strings.TrimSpace(value) == expected, err
+	}, timeout)
 	if err != nil {
-		return err
-	}
-	val, err := driver.ExecuteScript("return (arguments[0]?.textContent ?? '').trim();", []any{elem})
-	if err != nil {
-		return err
-	}
-	valueStr, _ := val.(string)
-	if strings.TrimSpace(valueStr) != expected {
-		return fmt.Errorf("unexpected text for %s: got %q want %q", selector, valueStr, expected)
+		return fmt.Errorf("wait for text in %s: got %q want %q: %w", selector, value, expected, err)
 	}
 	return nil
 }

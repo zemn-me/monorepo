@@ -365,8 +365,10 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 			t.Fatalf("journal did not select %s after browsing: %v", level, err)
 		}
 	}
-	if err := waitForText(driver, "A day that found its own pace", 10*time.Second); err != nil {
-		t.Fatalf("multi-entry day summary did not appear immediately: %v", err)
+	// The dev server compiles the newly visited calendar routes on demand.
+	// Match the navigation budget used elsewhere in this browser suite.
+	if err := waitForText(driver, "A day that found its own pace", 30*time.Second); err != nil {
+		t.Fatalf("multi-entry day summary did not appear after navigation: %v", err)
 	}
 	if err := driver.Get(journalURL.String()); err != nil {
 		t.Fatalf("return to journal before checking scheduled refresh: %v", err)
