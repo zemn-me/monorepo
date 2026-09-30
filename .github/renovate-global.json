@@ -125,6 +125,24 @@
 			"rangeStrategy": "bump"
 		},
 		{
+			"description": "Use published upstream dates for the rules_go release-age check",
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_go"],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "bazel-contrib/rules_go",
+			"extractVersion": "^v(?<version>.*)$"
+		},
+		{
+			"description": "Keep the Go SDK and both references to its Bazel build rules compatible",
+			"groupName": "Go toolchain",
+			"matchPackageNames": [
+				"go",
+				"github.com/bazelbuild/rules_go",
+				"bazel-contrib/rules_go",
+				"rules_go"
+			]
+		},
+		{
 			"description": "gopls imports x/tools internals, so update the two modules together",
 			"groupName": "Go language tools",
 			"matchManagers": ["gomod"],
