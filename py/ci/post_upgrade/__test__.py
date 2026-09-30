@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import json
 import os
 from pathlib import Path
 import shlex
@@ -10,6 +11,42 @@ import tempfile
 import unittest
 
 from py.ci.post_upgrade.integrity import update_module_bazel_text
+from py.ci.post_upgrade.pnpm import refresh
+
+
+class TestPnpmIntegrity(unittest.TestCase):
+    def test_new_release_and_cached_release(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest, lock = Path(tmp) / "package.json", Path(tmp) / "integrity.json"
+            manifest.write_text('{"packageManager":"pnpm@10.34.5"}')
+            lock.write_text('{"version":"10.22.0","integrity":"old"}')
+            integrity = "sha512-" + base64.b64encode(hashlib.sha512(b"release").digest()).decode()
+            calls = []
+
+            def fetcher(version):
+                calls.append(version)
+                return {"name": "pnpm", "version": version, "dist": {"integrity": integrity}}
+
+            refresh(manifest, lock, fetcher)
+            self.assertEqual(json.loads(lock.read_text()), {"version": "10.34.5", "integrity": integrity})
+            refresh(manifest, lock, fetcher)
+            self.assertEqual(calls, ["10.34.5"])
+
+    def test_bad_metadata_preserves_reviewed_lock(self):
+        integrity = "sha512-" + base64.b64encode(hashlib.sha512(b"release").digest()).decode()
+        for metadata in [
+            {"name": "other", "version": "10.34.5", "dist": {"integrity": integrity}},
+            {"name": "pnpm", "version": "10.22.0", "dist": {"integrity": integrity}},
+            {"name": "pnpm", "version": "10.34.5", "dist": {"integrity": "sha512-short"}},
+        ]:
+            with self.subTest(metadata=metadata), tempfile.TemporaryDirectory() as tmp:
+                manifest, lock = Path(tmp) / "package.json", Path(tmp) / "integrity.json"
+                manifest.write_text('{"packageManager":"pnpm@10.34.5"}')
+                original = '{"version":"10.22.0","integrity":"reviewed"}'
+                lock.write_text(original)
+                with self.assertRaises(ValueError):
+                    refresh(manifest, lock, lambda _: metadata)
+                self.assertEqual(lock.read_text(), original)
 
 
 class TestAutoIntegrity(unittest.TestCase):
@@ -155,6 +192,13 @@ http_archive(
                 (root / "py/ci/post_upgrade").mkdir(parents=True)
                 shutil.copyfile("sh/postUpgrade.sh", root / "sh/postUpgrade.sh")
                 shutil.copyfile(Path(__file__).with_name("integrity.py"), root / "py/ci/post_upgrade/integrity.py")
+                shutil.copyfile(Path(__file__).with_name("pnpm.py"), root / "py/ci/post_upgrade/pnpm.py")
+                (root / "bzl/pnpm").mkdir(parents=True)
+                (root / "package.json").write_text('{"packageManager":"pnpm@10.34.5"}')
+                (root / "bzl/pnpm/integrity.json").write_text(json.dumps({
+                    "version": "10.34.5",
+                    "integrity": "sha512-" + base64.b64encode(hashlib.sha512(b"release").digest()).decode(),
+                }))
                 payload = root / "release.zip"
                 if available:
                     payload.write_bytes(b"release bytes")

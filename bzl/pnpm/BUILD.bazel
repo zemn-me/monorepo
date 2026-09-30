@@ -1,0 +1,11 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+exports_files(["integrity.json"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "extensions.bzl",
+    ],
+)

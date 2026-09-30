@@ -6,11 +6,6 @@
 			"enabled": false,
 			"matchDepNames": ["typescript5"],
 			"matchManagers": ["npm"]
-		},
-		{
-			"description": "Keep pnpm executable support and checksums aligned with the Bazel launcher",
-			"groupName": "pnpm and rules_js",
-			"matchPackageNames": ["pnpm", "aspect_rules_js"]
 		}
 	]
 }
