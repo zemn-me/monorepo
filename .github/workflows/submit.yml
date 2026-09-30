@@ -96,6 +96,7 @@ jobs:
           secrets: |-
             buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
             personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
+            openai_curator_api_key:extreme-cycling-441523-a9/github-actions-openai-curator-api-key
             pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
             twilio_account_sid:extreme-cycling-441523-a9/github-actions-twilio-account-sid
             twilio_api_key_sid:extreme-cycling-441523-a9/github-actions-twilio-api-key-sid
@@ -134,3 +135,4 @@ jobs:
           # i guess if you exfil this secret you can also call me instead
           # of making a security report 🤣
           PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number }}
+          OPENAI_CURATOR_API_KEY: ${{ steps.secrets.outputs.openai_curator_api_key }}

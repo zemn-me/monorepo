@@ -113,6 +113,13 @@ role; the exact-key cleanup check is an application safeguard, not an IAM deny.
   Agents session create/list/read/delete, event write, turn read, and artifact
   read permissions and access to the configured model.
 - `JOURNAL_CURATOR_MODEL`: defaults to `gpt-6-astra`.
+- `OPENAI_CURATOR_API_KEY`: optional dedicated credential for Agents curation.
+  When absent, curation uses workload identity. Audio transcription and
+  provisional analysis continue using workload identity in either case.
+  Production Submit reads `github-actions-openai-curator-api-key` from GCP
+  Secret Manager and supplies it only to the curator Lambda, marked as a
+  Pulumi secret. Staging, upload workers, and public API Lambdas do not receive
+  this key. It never enters the hosted sandbox.
 - `JOURNAL_CURATION_ENABLED=true`: disables hierarchical refresh in API flows.
   The production journal worker always uses the curator for scheduled events.
 
@@ -129,6 +136,16 @@ or workload-identity permissions. Verify those with a deployed run before
 considering rollout complete. This PR's tests use deterministic fixtures and
 the real generated SDK against a simulated HTTP service; they do not upload
 the private diary to a live agent.
+
+Before deploying the API-key fallback, create and seed the secret in GCP project
+`extreme-cycling-441523-a9`, and grant `roles/secretmanager.secretAccessor` on
+that secret to the existing GitHub WIF principal set with
+`attribute.workflow_scope/submit`. Submit reads the value before Pulumi runs;
+the deployment then adopts the secret container and manages that binding.
+Use a restricted OpenAI project key with Agents read/write, Responses write,
+and List models read. Rotate it by adding a new GCP secret version and running
+Submit; the Lambda receives the value at deployment time. To restore workload
+identity, remove the dedicated key from the curator's deployment configuration.
 
 API reference: [Agents API overview](https://developers.openai.com/api/docs/guides/agents-api/overview).
 

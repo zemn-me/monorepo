@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -33,6 +34,12 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 	if err != nil {
 		return nil, err
 	}
+	curatorAI := journalAI.(*openAIJournalAI)
+	// Hosted curation can use a dedicated key while audio processing continues
+	// to authenticate with workload identity. Removing the key restores WIF.
+	if apiKey := strings.TrimSpace(os.Getenv("OPENAI_CURATOR_API_KEY")); apiKey != "" {
+		curatorAI = newOpenAIJournalAI(apiKey).(*openAIJournalAI)
+	}
 	model := os.Getenv("JOURNAL_CURATOR_MODEL")
 	if model == "" {
 		model = "gpt-6-astra"
@@ -45,7 +52,7 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 		journalObjects:         objects,
 		journalAI:              journalAI,
 		journalCurationEnabled: true,
-		journalCurator:         &openAIJournalCurator{ai: journalAI.(*openAIJournalAI), model: model},
+		journalCurator:         &openAIJournalCurator{ai: curatorAI, model: model},
 	}}, nil
 }
 

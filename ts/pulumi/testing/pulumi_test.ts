@@ -356,6 +356,43 @@ describe('pulumi', () => {
 		expect(protectedResources).toEqual([]);
 	});
 
+	test('only the production curator receives the dedicated OpenAI key', async () => {
+		const previousKey = process.env['OPENAI_CURATOR_API_KEY'];
+		process.env['OPENAI_CURATOR_API_KEY'] = 'test-curator-credential';
+		try {
+			for (const staging of [false, true]) {
+				mockResources.splice(0);
+				new project.Component(
+					`curator-key-${staging ? 'staging' : 'production'}`,
+					{ staging }
+				);
+				await pulumi.runtime.disconnect();
+				const recipients = mockResources.filter(
+					resource =>
+						resource.type === 'aws:lambda/function:Function' &&
+						resourceInputText(resource.inputs).includes(
+							'test-curator-credential'
+						)
+				);
+				expect(recipients.map(resource => resource.name)).toEqual(
+					staging ? [] : ['journalcuratorlambda']
+				);
+			}
+		} finally {
+			if (previousKey === undefined)
+				delete process.env['OPENAI_CURATOR_API_KEY'];
+			else process.env['OPENAI_CURATOR_API_KEY'] = previousKey;
+		}
+		expect(githubActionsSecretAccessByWorkflow.submit).toContain(
+			githubActionsSecretIds.openAICuratorApiKey
+		);
+		for (const scope of ['presubmit', 'staging', 'renovate'] as const) {
+			expect(githubActionsSecretAccessByWorkflow[scope]).not.toContain(
+				githubActionsSecretIds.openAICuratorApiKey
+			);
+		}
+	});
+
 	test('smoke', async () => {
 		mockResources.splice(0);
 		new project.Component('monorepo', {
