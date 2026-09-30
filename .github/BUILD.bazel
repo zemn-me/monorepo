@@ -7,19 +7,19 @@ load("//yml:test.bzl", "yaml_lint_test")
 exports_files(["renovate-global.json"])
 
 js_test(
-    name = "renovate_go_toolchain_test",
+    name = "renovate_bazel_releases_test",
     size = "small",
     data = [
         "renovate-global.json",
         "//:node_modules/renovate",
-        "//:renovate_go_inputs",
+        "//:renovate_bazel_inputs",
     ],
-    entry_point = "renovate_go_toolchain_test.mjs",
+    entry_point = "renovate_bazel_releases_test.mjs",
 )
 
 js_library(
-    name = "renovate_go_toolchain_test_mjs",
-    srcs = ["renovate_go_toolchain_test.mjs"],
+    name = "renovate_bazel_releases_test_mjs",
+    srcs = ["renovate_bazel_releases_test.mjs"],
     deps = ["//:node_modules/renovate"],
 )
 

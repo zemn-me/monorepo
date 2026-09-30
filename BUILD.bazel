@@ -37,7 +37,7 @@ compile_pip_requirements(
 )
 
 js_library(
-    name = "renovate_go_inputs",
+    name = "renovate_bazel_inputs",
     srcs = [
         "MODULE.bazel",
         "go.mod",
