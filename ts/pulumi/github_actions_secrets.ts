@@ -12,6 +12,7 @@ export const githubActionsSecretProject = gcpProjectId;
 export const githubActionsSecretIds = {
 	buildbuddyApiKey: 'github-actions-buildbuddy-api-key',
 	ghPat: 'github-actions-gh-pat',
+	openAICuratorApiKey: 'github-actions-openai-curator-api-key',
 	personalPhoneNumber: 'github-actions-personal-phone-number',
 	pulumiAccessToken: 'github-actions-pulumi-access-token',
 	readonlyBuildbuddyApiKey: 'github-actions-readonly-buildbuddy-api-key',
@@ -41,6 +42,7 @@ export const githubActionsSecretAccessByWorkflow = {
 	],
 	submit: [
 		githubActionsSecretIds.buildbuddyApiKey,
+		githubActionsSecretIds.openAICuratorApiKey,
 		githubActionsSecretIds.personalPhoneNumber,
 		githubActionsSecretIds.pulumiAccessToken,
 		githubActionsSecretIds.twilioAccountSid,
@@ -191,6 +193,14 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					},
 					{
 						dependsOn: services,
+						// Seeded through Secret Manager before this deployment can
+						// read it. Adopt the container without importing its value.
+						...(secretId ===
+						githubActionsSecretIds.openAICuratorApiKey
+							? {
+									import: `projects/${gcpProjectId}/secrets/${secretId}`,
+								}
+							: {}),
 						parent: this,
 						protect: true,
 					}
