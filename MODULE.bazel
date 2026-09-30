@@ -202,6 +202,14 @@ go_deps.module_override(
     path = "github.com/bazelbuild/bazel-watcher",
 )
 
+# gopls 0.23 predates internal API changes in x/tools 0.49, required by
+# x/image. Remove this compatibility patch when gopls adopts those APIs.
+go_deps.module_override(
+    patch_strip = 1,
+    patches = ["//bzl:gopls_x_tools.patch"],
+    path = "golang.org/x/tools/gopls",
+)
+
 # regenerate with bazelisk mod tidy
 use_repo(
     go_deps,
