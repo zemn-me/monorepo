@@ -1,0 +1,5 @@
+--- typescript-shim.js
++++ typescript-shim.js
+@@ -20 +20 @@
+-    module.exports = require("typescript");
++    module.exports = require("typescript5");
