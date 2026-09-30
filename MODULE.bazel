@@ -619,13 +619,13 @@ http_file(
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2026c"
+TZ_VERSION = "2026d"
 
 http_archive(
     name = "com_github_eggbert_tz",
     build_file_content = """
 exports_files(glob(["**/*"]))""",
-    integrity = "sha256-IQP4DgwAtghpAKUIV7OEeZsm08cKcQXGco1ZHpCmiq4=",
+    integrity = "sha256-DOeSipb84pPQNoojFzSqUaChi+uJYUNenJeUVKzRTMo=",
     strip_prefix = "tz-" + TZ_VERSION,
     # auto-integrity
     url = "https://github.com/eggert/tz/archive/refs/tags/" + TZ_VERSION + ".zip",
