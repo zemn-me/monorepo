@@ -545,6 +545,7 @@ components:
           enum: [person, place, project, subject]
         aliases:
           type: array
+          maxItems: 50
           items:
             type: string
         blocks:
