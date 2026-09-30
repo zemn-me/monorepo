@@ -1,0 +1,44 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "fixture",
+    embed = [":healthcheck_lib"],
+    visibility = ["//visibility:public"],
+)
+
+itest_service(
+    name = "server",
+    args = ["--address=:$${PORT}"],
+    autoassign_port = True,
+    exe = ":fixture",
+    health_check_timeout = "5s",
+    http_health_check_address = "http://localhost:$${PORT}/ready",
+)
+
+go_test(
+    name = "healthcheck_test",
+    srcs = ["main_test.go"],
+    embed = [":healthcheck_lib"],
+    tags = ["manual"],  # Requires the service_test harness.
+)
+
+service_test(
+    name = "integration_test",
+    services = [":server"],
+    test = ":healthcheck_test",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_library(
+    name = "healthcheck_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/bzl/itest/healthcheck",
+    visibility = ["//visibility:private"],
+)
