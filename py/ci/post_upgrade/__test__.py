@@ -1,5 +1,12 @@
 import base64
 import hashlib
+import os
+from pathlib import Path
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
 import unittest
 
 from py.ci.post_upgrade.integrity import update_module_bazel_text
@@ -67,6 +74,91 @@ http_archive(
         self.assertIn(f'sha256 = "{bar_sha256}"', updated)
         self.assertIn(f'sha256 = "{bazelish_sha256}"', updated)
         self.assertIn('integrity = "sha256-unchanged"', updated)
+
+    def test_only_changed_urls_are_downloaded(self):
+        baseline = '''
+VERSION = "1"
+http_archive(
+    name = "changed",
+    sha256 = "old",
+    # auto-integrity
+    url = "https://example.com/" + VERSION + ".zip",
+)
+http_archive(
+    name = "unavailable",
+    sha256 = "keep-reviewed-checksum",
+    # auto-integrity
+    url = "https://example.com/removed-release.zip",
+)
+'''
+        calls = []
+
+        def fetcher(url):
+            calls.append(url)
+            self.assertEqual(url, "https://example.com/2.zip")
+            return b"new release"
+
+        updated = update_module_bazel_text(baseline.replace('VERSION = "1"', 'VERSION = "2"'), fetcher, baseline)
+        self.assertEqual(calls, ["https://example.com/2.zip"])
+        self.assertIn(hashlib.sha256(b"new release").hexdigest(), updated)
+        self.assertIn('sha256 = "keep-reviewed-checksum"', updated)
+        self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+        self.assertEqual(len(calls), 1)
+
+    def test_malformed_marker_fails_instead_of_silently_skipping_repair(self):
+        with self.assertRaisesRegex(Exception, "auto-integrity must be followed"):
+            update_module_bazel_text('''http_archive(
+    name = "broken",
+    sha256 = "old",
+    # auto-integrity
+    strip_prefix = "wrong-order",
+    url = "https://example.com/file.zip",
+)
+''', lambda _: b"data")
+
+    def test_shell_bootstrap_repairs_before_bazel_and_stops_on_failure(self):
+        # Exercise the actual entry point without fetching dependencies or
+        # needing Bazel to load a repository with a deliberately stale hash.
+        for available in [True, False]:
+            with self.subTest(available=available), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root / "sh/bin").mkdir(parents=True)
+                (root / "py/ci/post_upgrade").mkdir(parents=True)
+                shutil.copyfile("sh/postUpgrade.sh", root / "sh/postUpgrade.sh")
+                shutil.copyfile(Path(__file__).with_name("integrity.py"), root / "py/ci/post_upgrade/integrity.py")
+                payload = root / "release.zip"
+                if available:
+                    payload.write_bytes(b"release bytes")
+                baseline = f'''http_archive(
+    name = "tool",
+    sha256 = "stale",
+    # auto-integrity
+    url = "{payload.as_uri()}.old",
+)
+'''
+                current = baseline.replace(payload.as_uri() + ".old", payload.as_uri())
+                (root / "baseline").write_text(baseline)
+                (root / "MODULE.bazel").write_text(current)
+                (root / "bin").mkdir()
+                (root / "bin/python3").symlink_to(sys.executable)
+                git = root / "bin/git"
+                git.write_text(f"#!/bin/sh\ncat {shlex.quote(str(root / 'baseline'))}\n")
+                git.chmod(0o755)
+                bazel = root / "sh/bin/bazel"
+                bazel.write_text("#!/bin/sh\ncp MODULE.bazel observed-by-bazel\n")
+                bazel.chmod(0o755)
+                result = subprocess.run(
+                    ["bash", str(root / "sh/postUpgrade.sh")], cwd=tmp,
+                    env={**os.environ, "PATH": str(root / "bin") + os.pathsep + os.environ["PATH"]},
+                    capture_output=True, text=True,
+                )
+                if available:
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertIn(hashlib.sha256(b"release bytes").hexdigest(), (root / "observed-by-bazel").read_text())
+                else:
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertFalse((root / "observed-by-bazel").exists())
+                    self.assertEqual((root / "MODULE.bazel").read_text(), current)
 
 
 if __name__ == "__main__":

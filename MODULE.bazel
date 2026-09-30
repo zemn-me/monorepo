@@ -703,7 +703,7 @@ RUFF_VERSION = "0.16.9"
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-D/pTiZ8pcNJPFPvtjYJlyHGAsVm3EAeU2XoVJ9xg+nk=",
+    integrity = "sha256-M9NTlEmQlM9uuQ9zDcgvEcD6sF0XY3iuT2femF7MQUY=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",

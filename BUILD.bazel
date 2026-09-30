@@ -89,6 +89,7 @@ exports_files(
         ".gitignore",
         ".editorconfig",
         ".git",
+        "sh/postUpgrade.sh",
     ],
     visibility = ["//visibility:public"],
 )
