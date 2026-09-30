@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 
 import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context.js';
 
-type BaseHeadingProps = JSX.IntrinsicElements['h1'];
+type BaseHeadingProps = React.JSX.IntrinsicElements['h1'];
 type HeadingMarkerProps = {
 	readonly children?: ReactNode;
 	readonly 'data-heading-id'?: unknown;

@@ -219,7 +219,7 @@ function useJournalPlayback(
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
 	const audioPlayRequests = useRef(new Map<string, (time: number) => void>());
-	const appliedNavigation = useRef<string>();
+	const appliedNavigation = useRef<string | undefined>(undefined);
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
 	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
@@ -924,7 +924,7 @@ function SwipeToDelete({
 	readonly onDeleting: (entryID: string) => void;
 }) {
 	const trackRef = useRef<HTMLDivElement>(null);
-	const draggingPointer = useRef<number>();
+	const draggingPointer = useRef<number | undefined>(undefined);
 	const progressRef = useRef(0);
 	const [progress, setProgress] = useState(0);
 	const [deleting, setDeleting] = useState(false);
@@ -1180,8 +1180,8 @@ function JournalAudio({
 	const refreshJournal = useRefreshJournal();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const playRequested = useRef(false);
-	const pendingSeek = useRef<number>();
-	const stallRecoveryTimer = useRef<number>();
+	const pendingSeek = useRef<number | undefined>(undefined);
+	const stallRecoveryTimer = useRef<number | undefined>(undefined);
 	const [source, setSource] = useState(audioURL);
 	const [recovery, setRecovery] = useState<{
 		readonly failedSource: string;
@@ -1866,7 +1866,7 @@ function PeriodList({
 		[journal, nextRoute]
 	);
 	const listRef = useRef<HTMLDivElement>(null);
-	const positionedPeriod = useRef<AggregatePeriod>();
+	const positionedPeriod = useRef<AggregatePeriod | undefined>(undefined);
 	const focusRef = useRef(focus);
 	focusRef.current = focus;
 
@@ -2594,7 +2594,7 @@ export default function JournalPageClient({
 		[updateEntryDate]
 	);
 	const resetCreateEntry = createEntry.reset;
-	const recorder = useRef<RecordingSession>();
+	const recorder = useRef<RecordingSession | undefined>(undefined);
 	const [recordingBusy, setRecordingBusy] = useState(false);
 	const [recordingElapsed, setRecordingElapsed] = useState(0);
 	const [recording, setRecording] = useState(false);

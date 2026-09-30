@@ -180,7 +180,7 @@ export function HeroVideo(props: HeroVideoProps) {
 
 	type VideoChoice = readonly [
 		poster: Poster,
-		videoSources: JSX.Element,
+		videoSources: React.JSX.Element,
 		caption?: string,
 		latLng?: LatLng,
 	];
