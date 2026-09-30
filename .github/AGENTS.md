@@ -13,3 +13,8 @@ Renovate's container entrypoint installs bootstrap tools as root, then runs the
 bot as `ubuntu`. Keep post-upgrade checksum repair before Bazel and refresh stale
 branches explicitly: merge queues make Renovate's automatic rebase policy leave
 non-conflicting failed branches on old tooling.
+
+Let `pip-compile` own `requirements.txt`; direct edits of transitive pins can
+violate parent constraints. Its manager needs an explicit file pattern and a
+pip-compile command in the generated header. Keep that header aligned with the
+`CUSTOM_COMPILE_COMMAND` on the Bazel requirements target.

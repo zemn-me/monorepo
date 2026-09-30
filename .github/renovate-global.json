@@ -190,5 +190,11 @@
 			"matchPackageNames": ["bazel", "bazelbuild/bazel"]
 		}
 	],
-	"rebaseWhen": "behind-base-branch"
+	"rebaseWhen": "behind-base-branch",
+	"pip-compile": {
+		"managerFilePatterns": ["/^requirements\\.txt$/"]
+	},
+	"pip_requirements": {
+		"enabled": false
+	}
 }

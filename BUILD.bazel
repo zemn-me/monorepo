@@ -31,7 +31,18 @@ compile_pip_requirements(
     name = "requirements",
     timeout = "moderate",
     src = "requirements.in",
+    # Renovate reads this command to discover the source and solver options.
+    env = {"CUSTOM_COMPILE_COMMAND": "pip-compile --allow-unsafe --generate-hashes --resolver=backtracking --output-file=requirements.txt requirements.in"},
     requirements_txt = "requirements.txt",
+)
+
+js_library(
+    name = "renovate_python_inputs",
+    srcs = [
+        "requirements.in",
+        "requirements.txt",
+    ],
+    visibility = ["//.github:__pkg__"],
 )
 
 # implement fix api
