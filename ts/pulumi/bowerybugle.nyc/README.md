@@ -35,12 +35,12 @@ production stack's `boweryBugleNameServers` output. Wait for public delegation,
 then set `boweryBugleCustomDomainReady: true` on the production component in
 `ts/pulumi/stack.ts` in a follow-up PR. That activates the custom hostname,
 certificate, and indexing. Do not enable it before delegation: ACM validation
-would otherwise block the deployment. No mailbox is provisioned; the site links
-to the email and telephone printed in issue 6.
+would otherwise block the deployment. No mailbox is provisioned. The printed
+email address and telephone number are intentionally omitted from the website.
 
 ## Validation
 
 Run `bazel test //ts/pulumi/bowerybugle.nyc/...`. The page test parses the shipped
-HTML, verifies local navigation and contact links, and checks that the supplied
+HTML, verifies local navigation, and checks that contact details and the supplied
 photographs are not published. The infrastructure tests cover staging isolation, initial
 production, and the delegated custom-domain switch.

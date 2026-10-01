@@ -222,16 +222,8 @@ h4 {
 	column-span: all;
 }
 footer {
-	padding: 2.5rem 0 1rem;
+	padding: 1rem 0;
 	border-top: 5px solid;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 2rem;
-}
-footer h2 {
-	font-size: clamp(2rem, 4vw, 4rem);
-	line-height: 1;
-	letter-spacing: -0.05em;
 }
 footer a {
 	display: inline-block;
@@ -240,10 +232,6 @@ footer a {
 	overflow-wrap: anywhere;
 }
 .colophon {
-	grid-column: 1 / -1;
-	border-top: 1px solid;
-	margin-top: 1rem;
-	padding-top: 0.7rem;
 	font-size: 0.75rem;
 }
 .skip-link {
@@ -326,9 +314,6 @@ footer a {
 	}
 	h3 {
 		font-size: 2.6rem;
-	}
-	footer {
-		grid-template-columns: 1fr;
 	}
 	.colophon {
 		flex-wrap: wrap;

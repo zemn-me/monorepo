@@ -8,7 +8,7 @@ const document = new DOMParser().parseFromString(
 	'text/html'
 );
 
-test('publishes issue 6 with readable stories and working contact links', () => {
+test('publishes issue 6 with readable stories and no contact details', () => {
 	expect(document.querySelectorAll('h1')).toHaveLength(1);
 	expect(document.title).toBe('The Bowery Bugle — Issue 6');
 	for (const text of [
@@ -19,9 +19,15 @@ test('publishes issue 6 with readable stories and working contact links', () => 
 	]) {
 		expect(document.body.textContent).toContain(text);
 	}
-	for (const href of ['mailto:bowerybugle@gmail.com', 'tel:+19178306332']) {
-		expect(document.querySelector(`a[href="${href}"]`)).not.toBeNull();
-	}
+	expect(
+		document.querySelector('[href^="mailto:"], [href^="tel:"], [href="#contact"]')
+	).toBeNull();
+	expect(document.body.textContent).not.toMatch(
+		/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
+	);
+	expect(document.body.textContent).not.toMatch(
+		/\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/
+	);
 });
 
 test('every local link and image resolves in the shipped site', () => {
