@@ -310,10 +310,19 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
+	// Match the calendar's browser time zone, including month boundaries.
+	currentMonth, err := driver.ExecuteScript(`return new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'}).format(new Date())`, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentYear, err := driver.ExecuteScript(`return String(new Date().getFullYear())`, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 	for _, view := range []struct{ name, link, visibleDate string }{
-		{"12-months-desktop", "Months", time.Now().Format("January 2006")},
+		{"12-months-desktop", "Months", currentMonth.(string)},
 		{"13-weeks-desktop", "Weeks", "Monday"},
-		{"14-years-desktop", "Years", time.Now().Format("2006")},
+		{"14-years-desktop", "Years", currentYear.(string)},
 	} {
 		// Scrolling updates the date in the URL on a 250 ms throttle. Let
 		// that visible navigation settle before selecting a different view.
