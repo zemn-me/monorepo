@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '@jest/globals';
 
@@ -42,19 +42,12 @@ test('every local link and image resolves in the shipped site', () => {
 	}
 });
 
-test('includes all four original photographs with accessible descriptions', () => {
-	const images = [...document.querySelectorAll('img')];
-	const sources = new Set(images.map(image => image.getAttribute('src')));
-	expect(sources.size).toBe(4);
-	for (const image of images) {
-		expect(image.alt.length).toBeGreaterThan(0);
-		expect(image.width).toBe(960);
-		expect(image.height).toBe(1280);
-		const bytes = readFileSync(
-			path.join(directory, image.getAttribute('src') ?? '')
-		);
-		expect(bytes.subarray(0, 3)).toEqual(Buffer.from([0xff, 0xd8, 0xff]));
-	}
+test('does not publish the supplied photographs or links to them', () => {
+	expect(document.querySelectorAll('img')).toHaveLength(0);
+	expect(
+		document.querySelector('[href*="/photos/"], [src*="/photos/"]')
+	).toBeNull();
+	expect(existsSync(path.join(directory, 'photos'))).toBe(false);
 });
 
 test('offers a way home from missing pages', () => {

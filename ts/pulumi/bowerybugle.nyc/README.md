@@ -1,8 +1,8 @@
 # The Bowery Bugle
 
 Static issue 6 site based on the supplied September 18, 2026 paper photographs.
-The photographs are preserved as supplied; selected stories are transcribed in
-HTML and excerpts link to their complete printed source. No browser JavaScript,
+The supplied photographs are visual references only and are not published.
+Selected stories and excerpts are transcribed in HTML. No browser JavaScript,
 third-party fonts, tracking, or external asset service is needed.
 
 ## Domain purchase and launch
@@ -35,6 +35,6 @@ to the email and telephone printed in issue 6.
 ## Validation
 
 Run `bazel test //ts/pulumi/bowerybugle.nyc/...`. The page test parses the shipped
-HTML, verifies local navigation and assets, verifies contact links, and checks
-every supplied image. The infrastructure tests cover staging isolation, initial
+HTML, verifies local navigation and contact links, and checks that the supplied
+photographs are not published. The infrastructure tests cover staging isolation, initial
 production, and the delegated custom-domain switch.

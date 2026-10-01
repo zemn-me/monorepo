@@ -10,10 +10,6 @@ js_library(
     srcs = [
         "public/404.html",
         "public/index.html",
-        "public/photos/back.jpg",
-        "public/photos/cover.jpg",
-        "public/photos/inside-left.jpg",
-        "public/photos/inside-right.jpg",
         "public/style.css",
     ],
 )
