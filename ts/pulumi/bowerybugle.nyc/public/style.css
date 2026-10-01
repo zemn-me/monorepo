@@ -84,7 +84,6 @@ h1 {
 	gap: 0.4em;
 	font-size: clamp(3.5rem, 7.7vw, 7rem);
 	line-height: 1.2;
-	padding-right: 7rem;
 	letter-spacing: -0.065em;
 }
 .word {
@@ -107,14 +106,6 @@ h1 b:nth-child(3n) {
 	transform: rotate(-9deg) translateY(0.06em);
 	font-family: Georgia, serif;
 }
-.neighborhoods {
-	position: absolute;
-	right: 0;
-	bottom: 2.4rem;
-	font-size: 0.85rem;
-	line-height: 1.35;
-	text-align: right;
-}
 nav {
 	border-block: 3px solid;
 	padding: 0.85rem 0;
@@ -129,40 +120,23 @@ nav a:hover {
 }
 .opening {
 	display: grid;
-	grid-template-columns: 1.7fr 1fr;
+	grid-template-columns: 8rem minmax(0, 1fr);
 	gap: 2.5rem;
 	padding: 3rem 0;
 	align-items: start;
 }
-.eyebrow,
-.story-number {
+.eyebrow {
 	text-transform: uppercase;
 	font-size: 0.78rem;
 	letter-spacing: 0.08em;
 	font-weight: 700;
 }
-.intro h2 {
-	font-size: clamp(2.2rem, 4.5vw, 4.5rem);
-	line-height: 1.04;
-	letter-spacing: -0.055em;
-	margin: 1rem 0 1.5rem;
-}
 em {
 	font-family: Georgia, serif;
 	font-weight: 400;
 }
-.intro p:not(.eyebrow) {
-	max-width: 38rem;
-}
-.text-link {
-	display: inline-flex;
-	justify-content: space-between;
-	width: 100%;
-	border-top: 1px solid;
-	padding-top: 1rem;
-	text-decoration: none;
-	font-weight: 700;
-	margin-top: 0.5rem;
+.intro p {
+	max-width: 48rem;
 }
 .ornament {
 	display: block;
@@ -170,28 +144,6 @@ em {
 		8rem / 0.9 "Manufacturing Consent",
 		serif;
 	margin-bottom: 1.5rem;
-}
-.issue-index a {
-	display: flex;
-	justify-content: space-between;
-	gap: 0.75rem;
-	padding: 0.85rem 0;
-	border-top: 1px solid;
-	font-weight: 700;
-	font-size: 0.9rem;
-	text-decoration: none;
-}
-.issue-index a:hover {
-	text-decoration: underline;
-}
-.issue-index a span {
-	font-weight: 400;
-}
-.small-note {
-	font:
-		italic 1.2rem / 1.3 Georgia,
-		serif;
-	margin-top: 1.5rem;
 }
 .section-heading {
 	border-block: 3px solid;
@@ -205,11 +157,6 @@ em {
 	font-size: clamp(2.4rem, 5vw, 4.5rem);
 	letter-spacing: -0.055em;
 	line-height: 1;
-}
-.section-heading span {
-	font:
-		italic 1rem Georgia,
-		serif;
 }
 .stories {
 	display: grid;
@@ -244,14 +191,6 @@ h3 {
 		serif;
 	padding: 0.1rem 0.5rem 0 0;
 }
-blockquote {
-	font:
-		italic 2rem / 1.1 Georgia,
-		serif;
-	margin: 1.6rem 0;
-	padding: 1.2rem 0;
-	border-block: 1px solid;
-}
 .notice {
 	border: 2px solid;
 	padding: 1.1rem;
@@ -272,9 +211,6 @@ h4 {
 	line-height: 1.15;
 }
 .dispatches {
-	display: grid;
-	grid-template-columns: 1.6fr 1fr;
-	gap: 3rem;
 	margin: 2rem 0 3rem;
 }
 .dispatches article {
@@ -282,21 +218,8 @@ h4 {
 	column-gap: 2rem;
 }
 .dispatches h3,
-.dispatches .byline,
-.dispatches .story-number {
+.dispatches .byline {
 	column-span: all;
-}
-.sightings {
-	border-left: 1px solid;
-	padding-left: 2rem;
-}
-.sightings h3 {
-	font-size: 2rem;
-}
-hr {
-	border: 0;
-	border-top: 1px solid;
-	margin: 1.5rem 0;
 }
 footer {
 	padding: 2.5rem 0 1rem;
@@ -339,20 +262,6 @@ footer a {
 	.paper {
 		padding-inline: 1.5rem;
 	}
-	.opening {
-		grid-template-columns: 1fr;
-	}
-	.issue-index {
-		grid-column: 1 / -1;
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1rem;
-	}
-	.issue-index .ornament,
-	.issue-index .eyebrow,
-	.small-note {
-		display: none;
-	}
 	.stories article {
 		padding-inline: 1rem;
 	}
@@ -382,15 +291,6 @@ footer a {
 		gap: 0.25em;
 		padding: 0;
 	}
-	.neighborhoods {
-		position: static;
-		text-align: left;
-		margin: 1.5rem 0 0;
-		font-size: 0.8rem;
-	}
-	.neighborhoods br {
-		display: none;
-	}
 	nav {
 		flex-wrap: wrap;
 		justify-content: space-between;
@@ -401,15 +301,12 @@ footer a {
 		display: none;
 	}
 	.opening {
-		grid-template-columns: 1fr;
-		gap: 2rem;
+		grid-template-columns: 4rem minmax(0, 1fr);
+		gap: 1rem;
 		padding-block: 2rem;
 	}
-	.intro h2 {
-		font-size: 3.2rem;
-	}
-	.issue-index {
-		grid-template-columns: 1fr 1fr;
+	.ornament {
+		font-size: 5rem;
 	}
 	.section-heading {
 		align-items: flex-start;
@@ -429,15 +326,6 @@ footer a {
 	}
 	h3 {
 		font-size: 2.6rem;
-	}
-	.dispatches {
-		grid-template-columns: 1fr;
-		gap: 2rem;
-	}
-	.sightings {
-		border-left: 0;
-		border-top: 1px solid;
-		padding: 2rem 0 0;
 	}
 	footer {
 		grid-template-columns: 1fr;
@@ -460,7 +348,6 @@ footer a {
 		color: black;
 	}
 	nav,
-	.issue-index,
 	.skip-link {
 		display: none;
 	}

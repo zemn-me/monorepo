@@ -2,7 +2,9 @@
 
 Static issue 6 site based on the supplied September 18, 2026 paper photographs.
 The supplied photographs are visual references only and are not published.
-Selected stories and excerpts are transcribed in HTML. No browser JavaScript,
+Selected stories and excerpts are transcribed in HTML. Keep editorial copy
+faithful to the zine; do not add taglines, summaries, or promotional headings.
+No browser JavaScript,
 tracking or external asset service is needed. Blackletter initials use a locally
 served Manufacturing Consent font, with its SIL Open Font License included.
 It is a visual approximation; the original printed typeface is not confirmed.
