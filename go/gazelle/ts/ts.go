@@ -46,7 +46,6 @@ var (
 	jsdomDirectivePattern = regexp.MustCompile(`(?m)@jest-environment\s+jsdom`)
 	knownFileExtensions   = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
 	defaultDeps           = []string{"//:node_modules/@types/node"}
-	nextShimDep           = "//ts/next.js/types/next-compiled"
 	builtinModulePrefix   = "node:"
 )
 
@@ -562,11 +561,6 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 
 	if mainDep, ok := r.PrivateAttr(testMainDepKey).(string); ok && mainDep != "" {
 		deps[mainDep] = struct{}{}
-	}
-
-	// If a target depends on Next itself, it also needs the shimmed typings for Next's bundled deps.
-	if _, hasNext := deps["//:node_modules/next"]; hasNext {
-		deps[nextShimDep] = struct{}{}
 	}
 
 	labels := make([]string, 0, len(deps))

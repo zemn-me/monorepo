@@ -16,8 +16,8 @@ import (
 )
 
 type ServicePorts struct {
-	NextServerPort         string `json:"@@//project/me/zemn:itest_service"`
-	CalendarNextServerPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
+	FrontendPort         string `json:"@@//project/me/zemn:itest_service"`
+	CalendarFrontendPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
 	APIPort                string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
 	CalendarAPIPort        string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
 	// The beacon transport test checks ingestion independently of admin authentication.
@@ -29,8 +29,8 @@ func servicePorts() (p ServicePorts, err error) {
 	if err = json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &p); err != nil {
 		return
 	}
-	if p.NextServerPort == "" {
-		p.NextServerPort = p.CalendarNextServerPort
+	if p.FrontendPort == "" {
+		p.FrontendPort = p.CalendarFrontendPort
 	}
 	if p.APIPort == "" {
 		p.APIPort = p.CalendarAPIPort
@@ -39,7 +39,7 @@ func servicePorts() (p ServicePorts, err error) {
 	return
 }
 
-func nextServerRoot() (u url.URL, err error) {
+func frontendRoot() (u url.URL, err error) {
 	ports, err := servicePorts()
 	if err != nil {
 		return
@@ -47,7 +47,7 @@ func nextServerRoot() (u url.URL, err error) {
 
 	return url.URL{
 		Scheme: "http",
-		Host:   "localhost:" + ports.NextServerPort,
+		Host:   "localhost:" + ports.FrontendPort,
 	}, nil
 }
 

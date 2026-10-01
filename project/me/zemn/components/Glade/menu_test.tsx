@@ -52,8 +52,8 @@ jest.unstable_mockModule(
 	})
 );
 
-jest.unstable_mockModule('next/navigation', () => ({
-	usePathname: () => '/',
+jest.unstable_mockModule('react-router', () => ({
+	useLocation: () => ({ pathname: '/' }),
 }));
 
 let grantedScopes: readonly string[] = [];

@@ -25,9 +25,9 @@ import (
 )
 
 func TestJournalEndToEndInDevServer(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find frontend root: %v", err)
 	}
 	const pendingEntryID = "00000000-0000-4000-8000-000000000001"
 	const failedEntryID = "00000000-0000-4000-8000-000000000002"
@@ -349,7 +349,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("whole journal overview was not summarized after upload: %v", err)
 	}
 	for _, level := range []string{"Years", "Months", "Weeks", "Days"} {
-		link, err := waitForElement(
+		err := clickElementWithRetry(
 			driver,
 			selenium.ByXPATH,
 			fmt.Sprintf("//nav[@aria-label='Browse journal']/a[normalize-space()='%s']", level),
@@ -357,9 +357,6 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		)
 		if err != nil {
 			t.Fatalf("journal could not zoom in to %s: %v", level, err)
-		}
-		if err := link.Click(); err != nil {
-			t.Fatalf("zoom journal in to %s: %v", level, err)
 		}
 		if _, err := waitForElement(driver, selenium.ByXPATH, fmt.Sprintf("//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='%s']", level), 10*time.Second); err != nil {
 			t.Fatalf("journal did not select %s after browsing: %v", level, err)
@@ -1965,7 +1962,7 @@ func waitForJournalPeriodAudioCount(driver selenium.WebDriver, start string, wan
 }
 
 func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2120,7 +2117,7 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 }
 
 func TestJournalRecordingLocationMaps(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2209,7 +2206,7 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 }
 
 func TestJournalLocationPermissionError(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}

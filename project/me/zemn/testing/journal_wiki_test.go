@@ -12,7 +12,7 @@ import (
 )
 
 func TestJournalWikiNavigationAndCitations(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -132,7 +132,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 // These screenshots use authored fictional content through the normal local
 // sample-data flow, so UI reviews do not require a paid model or private diary.
 func TestJournalReviewScreenshots(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -152,6 +152,19 @@ describe('zemn.me website', () => {
 				try {
 					await driver.manage().setTimeouts({ implicit: 5000 });
 					await driver.get(`${origin}${start}`);
+					// The static document is visible before its client handlers load.
+					await driver.wait(
+						async () => {
+							const login = await driver.findElement(
+								By.css(
+									'nav[aria-label="Site navigation"] button'
+								)
+							);
+							return login.isEnabled();
+						},
+						10000,
+						'Login control did not become ready after hydration'
+					);
 					const video = await driver.findElement(
 						By.css('figure video')
 					);
@@ -180,7 +193,8 @@ describe('zemn.me website', () => {
 							async () =>
 								(await driver.getCurrentUrl()) ===
 								`${origin}${destination}`,
-							5000
+							5000,
+							`Navigation did not reach ${destination}`
 						);
 						// A remount or full-page navigation makes this original
 						// WebElement stale, even if the replacement looks identical.
@@ -199,9 +213,15 @@ describe('zemn.me website', () => {
 										)
 									)
 									.getAttribute('open')) === null,
-							5000
+							5000,
+							`Navigation menu did not close after reaching ${destination}`
 						);
 					}
+				} catch (error) {
+					throw new Error(
+						`Browser logs: ${JSON.stringify(await driver.manage().logs().get('browser'))}`,
+						{ cause: error }
+					);
 				} finally {
 					await driver.quit();
 				}

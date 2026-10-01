@@ -1,7 +1,5 @@
 import style from '#root/project/me/zemn/components/Link/link.module.css';
-import BaseRedirect, {
-	Props,
-} from '#root/ts/next.js/component/Redirect/app.js';
+import BaseRedirect, { Props } from '#root/ts/remix/component/Redirect/app.js';
 
 export type RedirectProps = Props;
 

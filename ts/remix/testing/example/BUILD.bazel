@@ -1,0 +1,65 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "service_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//ts/remix:rules.bzl", "remix_itest_service", "remix_project")
+
+remix_project(
+    name = "example",
+    srcs = ["//ts/remix/testing/example/app"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "browser_test",
+    srcs = ["launch_server_test.go"],
+    tags = ["manual"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+    ],
+)
+
+remix_itest_service(
+    name = "dev_service",
+    exe = ":dev",
+    health_check_timeout = "20s",
+    http_health_check_address = "http://localhost:$${PORT}/",
+)
+
+remix_itest_service(
+    name = "production_service",
+    exe = ":start",
+    health_check_timeout = "20s",
+    http_health_check_address = "http://localhost:$${PORT}/",
+)
+
+service_test(
+    name = "development_test",
+    services = [":dev_service"],
+    test = ":browser_test",
+)
+
+service_test(
+    name = "production_test",
+    services = [":production_service"],
+    test = ":browser_test",
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
+)
+
+# gazelle:exclude launch_server_test.go

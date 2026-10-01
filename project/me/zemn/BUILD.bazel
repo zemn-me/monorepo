@@ -1,7 +1,8 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
 load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
-load("//ts/next.js:rules.bzl", "next_itest_service", "next_itest_service_dev", "next_project")
+load("//ts/remix:rules.bzl", "remix_itest_service", "remix_itest_service_dev", "remix_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -72,19 +73,16 @@ ts_project(
     ],
 )
 
-next_project(
-    name = "next",
+remix_project(
+    name = "remix",
     srcs = [
         ":ts",
         "//project/me/zemn/public:files",
     ],
 )
 
-next_itest_service(
+remix_itest_service(
     name = "itest_service",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
@@ -93,11 +91,8 @@ next_itest_service(
     ],
 )
 
-next_itest_service(
+remix_itest_service(
     name = "itest_service_calendar_fixture",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
@@ -106,11 +101,8 @@ next_itest_service(
     ],
 )
 
-next_itest_service_dev(
+remix_itest_service_dev(
     name = "itest_service_dev",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
@@ -118,11 +110,8 @@ next_itest_service_dev(
     ],
 )
 
-next_itest_service_dev(
+remix_itest_service_dev(
     name = "itest_service_dev_prod_env",
-    args = [
-        "project/me/zemn",
-    ],
     exe = "//project/me/zemn/inject_iservice:inject_iservice_prod_env_bin",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
@@ -156,4 +145,16 @@ md_files(
         "README.md",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
 )

@@ -37,7 +37,10 @@ function relative(from: string, to: string): string {
 }
 
 async function contentType(fPath: string): Promise<string> {
-	const detected = mime.getType(fPath) ?? (await fileTypeFromFile(fPath))?.mime;
+	// React Router's prerendered loader responses are Turbo Streams.
+	if (fPath.endsWith('.data')) return 'text/x-script; charset=utf-8';
+	const detected =
+		mime.getType(fPath) ?? (await fileTypeFromFile(fPath))?.mime;
 	if (detected == null) {
 		throw new Error(`couldn't get contentType of ${fPath}`);
 	}

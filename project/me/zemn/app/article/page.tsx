@@ -1,15 +1,29 @@
-import { Metadata } from 'next/types';
-
 import { articles } from '#root/project/me/zemn/app/article/articles.js';
 import style from '#root/project/me/zemn/app/article/page.module.css';
 import * as bio from '#root/project/me/zemn/bio/index.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { romanize } from '#root/project/me/zemn/components/timeline/roman.js';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
-const articlesByYear = Map.groupBy(articles, article =>
-	article.publishedAt.getFullYear()
-);
+export function loader() {
+	return {
+		articlesByYear: [
+			...Map.groupBy(articles, article =>
+				article.publishedAt.getFullYear()
+			),
+		].map(
+			([year, entries]) =>
+				[
+					year,
+					entries.map(({ publishedAt, ...article }) => ({
+						...article,
+						displayDate: formatDate(publishedAt, article.language),
+					})),
+				] as const
+		),
+	};
+}
 
 function formatDate(date: Date, locale: string): string {
 	return new Intl.DateTimeFormat(locale, {
@@ -18,7 +32,11 @@ function formatDate(date: Date, locale: string): string {
 	}).format(date);
 }
 
-export default function Page() {
+export default function Page({
+	loaderData,
+}: {
+	loaderData: ReturnType<typeof loader>;
+}) {
 	return (
 		<div className={style.page}>
 			<h1 className={dividerHeadingClass}>
@@ -28,7 +46,7 @@ export default function Page() {
 				Essays, letters, and notes, arranged by publication date.
 			</p>
 			<ol aria-label="Published articles" className={style.years}>
-				{[...articlesByYear].map(([year, yearArticles]) => {
+				{loaderData.articlesByYear.map(([year, yearArticles]) => {
 					const age = year - bio.Bio.birthdate.getFullYear();
 					const headingId = `articles-${year}`;
 
@@ -47,16 +65,16 @@ export default function Page() {
 								</header>
 								<ol className={style.entries}>
 									{yearArticles.map(article => (
-										<li className={style.entry} key={article.href}>
+										<li
+											className={style.entry}
+											key={article.href}
+										>
 											<time
 												className={style.date}
 												dateTime={article.dateTime}
 												lang={article.language}
 											>
-												{formatDate(
-													article.publishedAt,
-													article.language
-												)}
+												{article.displayDate}
 											</time>
 											<article className={style.article}>
 												<h3>
@@ -89,3 +107,5 @@ export const metadata: Metadata = {
 	title: 'Articles',
 	description: 'Essays, letters, and notes by Thomas NJ Shadwell.',
 };
+
+export const handle = { metadata };
