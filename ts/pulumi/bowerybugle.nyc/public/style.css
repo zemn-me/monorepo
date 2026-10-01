@@ -119,11 +119,8 @@ nav a:hover {
 	text-decoration: underline;
 }
 .opening {
-	display: grid;
-	grid-template-columns: 8rem minmax(0, 1fr);
-	gap: 2.5rem;
+	display: flow-root;
 	padding: 3rem 0;
-	align-items: start;
 }
 .eyebrow {
 	text-transform: uppercase;
@@ -137,13 +134,6 @@ em {
 }
 .intro p {
 	max-width: 48rem;
-}
-.ornament {
-	display: block;
-	font:
-		8rem / 0.9 "Manufacturing Consent",
-		serif;
-	margin-bottom: 1.5rem;
 }
 .section-heading {
 	border-block: 3px solid;
@@ -184,12 +174,34 @@ h3 {
 	font-size: 0.8rem;
 	margin: -0.25rem 0 1.5rem;
 }
-.drop-cap::first-letter {
+.initial {
 	float: left;
 	font:
-		5.5rem / 0.85 "Manufacturing Consent",
+		4.5rem / 1 "Manufacturing Consent",
 		serif;
-	padding: 0.1rem 0.5rem 0 0;
+	margin: 0.1rem 0.55rem 0.25rem 0;
+}
+/* The same glyph outline paints the initial and defines its wrapping contour. */
+@supports (shape-outside: url("")) and (mask-image: url("")) {
+	.initial {
+		position: relative;
+		width: var(--initial-width);
+		height: 1em;
+		color: transparent;
+		shape-outside: var(--initial-shape);
+		shape-image-threshold: 0.1;
+		shape-margin: 0.08em;
+	}
+	.initial::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: var(--ink);
+		mask: var(--initial-shape) center / 100% 100% no-repeat;
+	}
+}
+.ornament {
+	font-size: 7rem;
 }
 .notice {
 	border: 2px solid;
@@ -289,8 +301,6 @@ footer a {
 		display: none;
 	}
 	.opening {
-		grid-template-columns: 4rem minmax(0, 1fr);
-		gap: 1rem;
 		padding-block: 2rem;
 	}
 	.ornament {

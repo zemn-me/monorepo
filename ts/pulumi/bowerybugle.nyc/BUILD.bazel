@@ -13,6 +13,7 @@ js_library(
         "public/fonts/OFL.txt",
         "public/index.html",
         "public/style.css",
+        ":drop_caps",
     ],
 )
 
@@ -78,4 +79,12 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
     ],
+)
+
+genrule(
+    name = "drop_caps",
+    srcs = ["public/fonts/ManufacturingConsent-Regular.ttf"],
+    outs = ["public/drop-caps.css"],
+    cmd = "$(location //go/font/cmd/glyphcss) -font $(location public/fonts/ManufacturingConsent-Regular.ttf) -letters BILN -output $@",
+    tools = ["//go/font/cmd/glyphcss"],
 )

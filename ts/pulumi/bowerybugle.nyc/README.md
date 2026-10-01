@@ -8,6 +8,11 @@ No browser JavaScript,
 tracking or external asset service is needed. Blackletter initials use a locally
 served Manufacturing Consent font, with its SIL Open Font License included.
 It is a visual approximation; the original printed typeface is not confirmed.
+Bazel generates `public/drop-caps.css` from that font using
+`//go/font/cmd/glyphcss`. The same SVG outline paints each initial and supplies
+its CSS wrapping shape. Letters remain in the HTML text for accessibility and
+copying; no browser JavaScript is needed. Preview the built public directory so
+the generated stylesheet is included.
 
 Font source: [Google Fonts, revision 4e5f06d](https://github.com/google/fonts/tree/4e5f06dbb274a27ebe71ed54ea706b3ee40eabd9/ofl/manufacturingconsent).
 
