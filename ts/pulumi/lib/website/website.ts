@@ -37,7 +37,8 @@ function relative(from: string, to: string): string {
 }
 
 async function contentType(fPath: string): Promise<string> {
-	const detected = mime.getType(fPath) ?? (await fileTypeFromFile(fPath))?.mime;
+	const detected =
+		mime.getType(fPath) ?? (await fileTypeFromFile(fPath))?.mime;
 	if (detected == null) {
 		throw new Error(`couldn't get contentType of ${fPath}`);
 	}
@@ -105,6 +106,9 @@ export interface Args {
 	 * `/.well-known/jwks.json` to this origin.
 	 */
 	wellKnownOidcDomain?: pulumi.Input<string>;
+
+	/** Same-origin /api/* backend; requests and cookies are never cached. */
+	apiDomain?: pulumi.Input<string>;
 }
 
 // needed cause there's a cache policy limit of 20.
@@ -383,48 +387,87 @@ export class Website extends pulumi.ComponentResource {
 				: []),
 		];
 
-		const orderedCacheBehaviors = args.wellKnownOidcDomain
-			? [
-					{
-						pathPattern: '/.well-known/openid-configuration',
-						targetOriginId: `${name}_oidc_api`,
-						compress: true,
-						responseHeadersPolicyId: responseHeadersPolicy.id,
-						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-						cachedMethods: ['GET', 'HEAD'],
-						forwardedValues: {
-							queryString: false,
-							cookies: { forward: 'none' },
+		const orderedCacheBehaviors: aws.types.input.cloudfront.DistributionOrderedCacheBehavior[] =
+			args.wellKnownOidcDomain
+				? [
+						{
+							pathPattern: '/.well-known/openid-configuration',
+							targetOriginId: `${name}_oidc_api`,
+							compress: true,
+							responseHeadersPolicyId: responseHeadersPolicy.id,
+							allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+							cachedMethods: ['GET', 'HEAD'],
+							forwardedValues: {
+								queryString: false,
+								cookies: { forward: 'none' },
+							},
+							viewerProtocolPolicy: 'redirect-to-https',
+							minTtl: 0,
+							defaultTtl: 0,
+							maxTtl: 0,
 						},
-						viewerProtocolPolicy: 'redirect-to-https',
-						minTtl: 0,
-						defaultTtl: 0,
-						maxTtl: 0,
-					},
-					{
-						pathPattern: '/.well-known/jwks.json',
-						targetOriginId: `${name}_oidc_api`,
-						compress: true,
-						responseHeadersPolicyId: responseHeadersPolicy.id,
-						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-						cachedMethods: ['GET', 'HEAD'],
-						forwardedValues: {
-							queryString: false,
-							cookies: { forward: 'none' },
+						{
+							pathPattern: '/.well-known/jwks.json',
+							targetOriginId: `${name}_oidc_api`,
+							compress: true,
+							responseHeadersPolicyId: responseHeadersPolicy.id,
+							allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+							cachedMethods: ['GET', 'HEAD'],
+							forwardedValues: {
+								queryString: false,
+								cookies: { forward: 'none' },
+							},
+							viewerProtocolPolicy: 'redirect-to-https',
+							minTtl: 0,
+							defaultTtl: 0,
+							maxTtl: 0,
 						},
-						viewerProtocolPolicy: 'redirect-to-https',
-						minTtl: 0,
-						defaultTtl: 0,
-						maxTtl: 0,
-					},
-				]
-			: undefined;
+					]
+				: [];
+
+		if (args.apiDomain) {
+			origins.push({
+				domainName: args.apiDomain,
+				originId: `${name}_api`,
+				customOriginConfig: {
+					originProtocolPolicy: 'https-only',
+					httpPort: 80,
+					httpsPort: 443,
+					originSslProtocols: ['TLSv1.2'],
+				},
+			});
+			orderedCacheBehaviors.push({
+				pathPattern: '/api/*',
+				targetOriginId: `${name}_api`,
+				allowedMethods: [
+					'GET',
+					'HEAD',
+					'OPTIONS',
+					'POST',
+					'PUT',
+					'PATCH',
+					'DELETE',
+				],
+				cachedMethods: ['GET', 'HEAD'],
+				forwardedValues: {
+					queryString: false,
+					headers: ['Origin', 'Content-Type'],
+					cookies: { forward: 'all' },
+				},
+				viewerProtocolPolicy: 'https-only',
+				minTtl: 0,
+				defaultTtl: 0,
+				maxTtl: 0,
+			});
+		}
 
 		const distribution = new aws.cloudfront.Distribution(
 			`${name}_cloudfront_distribution`,
 			{
 				origins,
-				...(orderedCacheBehaviors ? { orderedCacheBehaviors } : {}),
+				...(orderedCacheBehaviors.length
+					? { orderedCacheBehaviors }
+					: {}),
 				enabled: true,
 				isIpv6Enabled: true,
 				defaultRootObject: indexDocumentObject.key,

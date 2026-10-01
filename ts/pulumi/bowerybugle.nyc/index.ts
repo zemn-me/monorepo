@@ -3,6 +3,8 @@ import * as Pulumi from '@pulumi/pulumi';
 
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
+import { Backend } from './backend.js';
+
 export interface Args {
 	staging: boolean;
 	bootstrapZoneId: Pulumi.Input<string>;
@@ -39,11 +41,26 @@ export class Component extends Pulumi.ComponentResource {
 			: useCustomDomain
 				? 'bowerybugle.nyc'
 				: 'bowerybugle.zemn.me';
+		const zoneId =
+			useCustomDomain && this.zone
+				? this.zone.zoneId
+				: args.bootstrapZoneId;
+		const backend = new Backend(
+			`${name}_backend`,
+			{
+				domain: this.domain,
+				zoneId,
+				staging: args.staging,
+				tags: args.tags,
+			},
+			{ parent: this }
+		);
 		const directory = 'ts/pulumi/bowerybugle.nyc/public';
 		this.site = new Website(
 			`${name}_website`,
 			{
 				directory,
+				apiDomain: backend.domain,
 				index: `${directory}/index.html`,
 				notFound: `${directory}/404.html`,
 				domain: this.domain,

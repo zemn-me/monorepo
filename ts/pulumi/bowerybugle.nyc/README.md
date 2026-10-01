@@ -1,20 +1,51 @@
 # The Bowery Bugle
 
-Static issue 6 site based on the supplied September 18, 2026 paper photographs.
-The supplied photographs are visual references only and are not published.
-Selected stories and excerpts are transcribed in HTML. Keep editorial copy
-faithful to the zine; do not add taglines, summaries, or promotional headings.
-No browser JavaScript,
-tracking or external asset service is needed. Blackletter initials use a locally
-served Manufacturing Consent font, with its SIL Open Font License included.
-It is a visual approximation; the original printed typeface is not confirmed.
-Bazel generates `public/drop-caps.css` from that font using
-`//go/font/cmd/glyphcss`. The same SVG outline paints each initial and supplies
-its CSS wrapping shape. Letters remain in the HTML text for accessibility and
-copying; no browser JavaScript is needed. Preview the built public directory so
-the generated stylesheet is included.
+The public site keeps the pink paper and cut-out masthead, with a PDF archive
+starting at issues 1–6. There are no fabricated PDFs, transcribed articles,
+photographs, or public contact details. Issues without an upload are labelled
+“PDF not uploaded”. The author can also add later issue numbers.
 
-Font source: [Google Fonts, revision 4e5f06d](https://github.com/google/fonts/tree/4e5f06dbb274a27ebe71ed54ea706b3ee40eabd9/ofl/manufacturingconsent).
+## Author publishing
+
+“Log in” is at the bottom of the page. Only the server-configured
+`bowerybugle@gmail.com` address can receive a login link. Links expire after ten
+minutes, require an explicit confirmation click, and are consumed atomically.
+Tokens are stored as SHA-256 hashes. Sessions last seven days and use a Secure,
+HttpOnly, SameSite=Strict host cookie; logging out revokes the session.
+Login email is limited to one per minute and ten per hour, shared across Lambda
+instances. Write requests require the configured website origin.
+
+The author chooses an issue number and a PDF up to 50 MiB. Uploads go directly
+to a private S3 bucket using a 15-minute POST policy restricted to one key,
+PDF content type, and file size. The backend checks size, type and PDF signature
+before publishing. This is file-format screening, not malware scanning.
+The archive pins the exact inspected S3 object version, so replaying a still-valid
+upload form cannot replace the published bytes. Replacing an issue is explicit
+in the upload button; older object versions remain recoverable. Reader links
+redirect to short-lived S3 PDF URLs on a separate origin. Publication and upload
+consumption are one DynamoDB transaction. PDFs and metadata are separate from
+static assets and protected from production stack deletion.
+
+The Go backend follows the repository's Lambda HTTP adapter and OCI image
+pattern. The shared Website component proxies `/api/*` to API Gateway with no
+caching and forwards the Origin header and session cookie. No authentication
+headers, secrets or author email are embedded in the public JavaScript.
+
+## Email setup
+
+Pulumi creates an SES domain identity, verification TXT record and DKIM records
+for the active site domain. The sender is `login@<site domain>`. Production also
+creates the author's recipient identity; AWS sends a one-time verification
+email to the author. The author must accept that verification if SES is still
+in its sandbox. Staging reuses that account-wide recipient verification and
+never creates another author identity. No Gmail password or mailbox access is
+needed. SES permissions restrict delivery to the author address.
+
+This PR does not send login emails or deploy infrastructure. After merge,
+confirm the AWS verification email, request a login link on the deployed site,
+and publish a real PDF. Actual SES delivery and S3 browser uploads need this
+live check; automated tests use isolated mail/storage doubles and signed policies.
+See [SES sandbox requirements](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html).
 
 ## Domain purchase and launch
 
@@ -45,7 +76,10 @@ email address and telephone number are intentionally omitted from the website.
 
 ## Validation
 
-Run `bazel test //ts/pulumi/bowerybugle.nyc/...`. The page test parses the shipped
-HTML, verifies local navigation, and checks that contact details and the supplied
-photographs are not published. The infrastructure tests cover staging isolation, initial
-production, and the delegated custom-domain switch.
+Run `bazel test //project/nyc/bowerybugle/... //ts/pulumi/bowerybugle.nyc/... //ts/pulumi/lib/website/... //:bazel_lint`.
+The Go HTTP tests cover login, replay, expiry, throttling, origin checks,
+upload rejection, publication, replacement and immutable reads. SDK tests
+inspect signed upload constraints and version-specific object reads. Browser
+DOM tests cover login confirmation, publishing, failed-upload retry and logout.
+Infrastructure tests cover all domain modes, private versioned storage,
+restricted email permissions, and uncached same-origin API forwarding.

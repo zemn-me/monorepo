@@ -1,31 +1,30 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
 load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
+# gazelle:resolve typescript typescript #root/project/nyc/bowerybugle/cmd/api/BoweryBugleImage.js //project/nyc/bowerybugle/cmd/api:oci_image
+
 package(default_visibility = ["//:__subpackages__"])
 
-js_library(
+alias(
     name = "public",
-    srcs = [
-        "public/404.html",
-        "public/fonts/ManufacturingConsent-Regular.ttf",
-        "public/fonts/OFL.txt",
-        "public/index.html",
-        "public/style.css",
-        ":drop_caps",
-    ],
+    actual = "//ts/pulumi/bowerybugle.nyc/public:public",
 )
 
 ts_project(
     name = "bowerybugle.nyc",
-    srcs = ["index.ts"],
+    srcs = [
+        "backend.ts",
+        "index.ts",
+    ],
     data = [":public"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
+        "//project/nyc/bowerybugle/cmd/api:oci_image",
+        "//ts/pulumi/lib",
         "//ts/pulumi/lib/website",
     ],
 )
@@ -40,6 +39,8 @@ jest_test(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "archive_test.ts",
+        "backend.ts",
         "index.ts",
         "infra_test.ts",
         "site_test.ts",
@@ -69,6 +70,7 @@ jest_test(
 ts_project(
     name = "bowerybugle.nyc_tests",
     srcs = [
+        "archive_test.ts",
         "infra_test.ts",
         "site_test.ts",
     ],
@@ -81,10 +83,10 @@ ts_project(
     ],
 )
 
-genrule(
-    name = "drop_caps",
-    srcs = ["public/fonts/ManufacturingConsent-Regular.ttf"],
-    outs = ["public/drop-caps.css"],
-    cmd = "$(location //go/font/cmd/glyphcss) -font $(location public/fonts/ManufacturingConsent-Regular.ttf) -letters BILN -output $@",
-    tools = ["//go/font/cmd/glyphcss"],
+jest_test(
+    name = "archive_test",
+    srcs = ["archive_test.js"],
+    data = [":public"],
+    jsdom = True,
+    deps = [":bowerybugle.nyc_tests"],
 )

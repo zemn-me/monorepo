@@ -8,19 +8,27 @@ const document = new DOMParser().parseFromString(
 	'text/html'
 );
 
-test('publishes issue 6 with readable stories and no contact details', () => {
+test('shows the masthead, six issues and a footer login without contact details', () => {
 	expect(document.querySelectorAll('h1')).toHaveLength(1);
-	expect(document.title).toBe('The Bowery Bugle — Issue 6');
-	for (const text of [
-		'September 18, 2026',
-		'Henry Wong:',
-		'Glitters',
-		'Chrystie’s',
-	]) {
-		expect(document.body.textContent).toContain(text);
-	}
+	expect(document.title).toBe('The Bowery Bugle');
 	expect(
-		document.querySelector('[href^="mailto:"], [href^="tel:"], [href="#contact"]')
+		[...document.querySelectorAll('#issue-list h3')].map(e => e.textContent)
+	).toEqual([
+		'Issue 6',
+		'Issue 5',
+		'Issue 4',
+		'Issue 3',
+		'Issue 2',
+		'Issue 1',
+	]);
+	expect(document.querySelector('footer #show-login')?.textContent).toBe(
+		'Log in'
+	);
+	expect(
+		document.querySelector('#upload-panel')?.hasAttribute('hidden')
+	).toBe(true);
+	expect(
+		document.querySelector('[href^="mailto:"], [href^="tel:"]')
 	).toBeNull();
 	expect(document.body.textContent).not.toMatch(
 		/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
@@ -28,6 +36,7 @@ test('publishes issue 6 with readable stories and no contact details', () => {
 	expect(document.body.textContent).not.toMatch(
 		/\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/
 	);
+	expect(document.body.textContent).not.toContain('Henry Wong');
 });
 
 test('every local link and image resolves in the shipped site', () => {

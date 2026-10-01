@@ -9,12 +9,19 @@ void pulumi.runtime.setMocks({
 			id: `${args.name}-id`,
 			state: {
 				...args.inputs,
+				arn: `arn:aws:test:::${args.name}`,
+				apiEndpoint: 'https://test.execute-api.us-east-1.amazonaws.com',
+				executionArn: 'arn:aws:execute-api:us-east-1:123:api',
+				repositoryUrl: '123.dkr.ecr.us-east-1.amazonaws.com/test',
+				dkimTokens: ['a', 'b', 'c'],
+				verificationToken: 'verified',
+				bucket: `${args.name}-bucket`,
 				zoneId: `${args.name}-zone`,
 				nameServers: ['ns.example.test'],
 			},
 		};
 	},
-	call: args => args.inputs,
+	call: args => ({ ...args.inputs, authorizationToken: undefined }),
 });
 
 // Import after installing mocks so no provider operations reach AWS.
@@ -78,6 +85,74 @@ for (const scenario of [
 			owned.find(r => r.type === 'aws:acm/certificate:Certificate')
 				?.inputs.domainName
 		).toBe(scenario.domain);
-		expect(owned.some(r => r.type.startsWith('aws:ses/'))).toBe(false);
+		const distribution = owned.find(
+			r => r.type === 'aws:cloudfront/distribution:Distribution'
+		);
+		expect(distribution?.inputs.orderedCacheBehaviors).toContainEqual(
+			expect.objectContaining({
+				pathPattern: '/api/*',
+				minTtl: 0,
+				defaultTtl: 0,
+				maxTtl: 0,
+				forwardedValues: {
+					queryString: false,
+					headers: ['Origin', 'Content-Type'],
+					cookies: { forward: 'all' },
+				},
+			})
+		);
+		expect(
+			owned.find(
+				r =>
+					r.type ===
+					'aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock'
+			)?.inputs
+		).toMatchObject({
+			blockPublicAcls: true,
+			blockPublicPolicy: true,
+			ignorePublicAcls: true,
+			restrictPublicBuckets: true,
+		});
+		expect(
+			owned.find(
+				r => r.type === 'aws:s3/bucketVersioningV2:BucketVersioningV2'
+			)?.inputs.versioningConfiguration.status
+		).toBe('Enabled');
+		expect(
+			owned.find(
+				r =>
+					r.type ===
+					'aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2'
+			)?.inputs.corsRules[0].allowedOrigins
+		).toEqual([`https://${scenario.domain}`]);
+		expect(
+			owned.find(r => r.type === 'aws:dynamodb/table:Table')?.inputs
+		).toMatchObject({
+			hashKey: 'kind',
+			rangeKey: 'id',
+			ttl: { attributeName: 'expires', enabled: true },
+			pointInTimeRecovery: { enabled: !scenario.staging },
+		});
+		expect(
+			owned.filter(r => r.type === 'aws:ses/emailIdentity:EmailIdentity')
+		).toHaveLength(scenario.staging ? 0 : 1);
+		const permissions = owned.find(
+			r => r.name === `${scenario.name}_backend_permissions`
+		);
+		const policy = JSON.parse(permissions?.inputs.policy ?? '{}');
+		expect(
+			policy.Statement.find((s: { Action: string[] }) =>
+				s.Action.includes('ses:SendEmail')
+			).Condition
+		).toEqual({
+			'ForAllValues:StringEquals': {
+				'ses:Recipients': ['bowerybugle@gmail.com'],
+			},
+		});
+		const fn = owned.find(r => r.type === 'aws:lambda/function:Function');
+		expect(fn?.inputs.environment.variables).toMatchObject({
+			AUTHOR_EMAIL: 'bowerybugle@gmail.com',
+			SITE_ORIGIN: `https://${scenario.domain}`,
+		});
 	});
 }
