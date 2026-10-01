@@ -9,6 +9,8 @@ js_library(
     name = "public",
     srcs = [
         "public/404.html",
+        "public/fonts/OFL.txt",
+        "public/fonts/UnifrakturMaguntia-Book.ttf",
         "public/index.html",
         "public/style.css",
     ],

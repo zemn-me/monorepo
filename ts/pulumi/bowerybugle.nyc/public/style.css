@@ -1,3 +1,11 @@
+@font-face {
+	font-family: "UnifrakturMaguntia";
+	src: url("/fonts/UnifrakturMaguntia-Book.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
 :root {
 	--paper: #ff3984;
 	--ink: #27131b;
@@ -159,10 +167,8 @@ em {
 .ornament {
 	display: block;
 	font:
-		8rem / 0.9 Georgia,
-		"Times New Roman",
+		8rem / 0.9 "UnifrakturMaguntia",
 		serif;
-	font-weight: 900;
 	margin-bottom: 1.5rem;
 }
 .issue-index a {
@@ -234,9 +240,9 @@ h3 {
 .drop-cap::first-letter {
 	float: left;
 	font:
-		bold 4.5rem / 0.85 Georgia,
+		5.5rem / 0.85 "UnifrakturMaguntia",
 		serif;
-	padding: 0.1rem 0.4rem 0 0;
+	padding: 0.1rem 0.5rem 0 0;
 }
 blockquote {
 	font:
