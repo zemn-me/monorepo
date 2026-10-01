@@ -1,0 +1,35 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library", "js_test")
+load("//ts/remix:rules.bzl", "remix_project")
+
+# gazelle:exclude server_test.mjs
+
+remix_project(
+    name = "example",
+    srcs = ["//ts/remix/testing/server/app"],
+    server = True,
+)
+
+js_test(
+    name = "server_test",
+    size = "small",
+    data = [":build"],
+    entry_point = "server_test.mjs",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
+)

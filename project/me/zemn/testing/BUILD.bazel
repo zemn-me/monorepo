@@ -1,6 +1,9 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+
+# gazelle:exclude server_test.mjs
+load("//js:rules.bzl", "js_test")
 load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
@@ -104,4 +107,11 @@ md_files(
     name = "project_me_zemn_testing",
     srcs = ["AGENTS.md"],
     visibility = ["//:__subpackages__"],
+)
+
+js_test(
+    name = "server_test",
+    size = "small",
+    data = ["//project/me/zemn:build"],
+    entry_point = "server_test.mjs",
 )

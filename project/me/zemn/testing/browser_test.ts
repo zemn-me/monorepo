@@ -1,6 +1,7 @@
 import { ChildProcess, spawn } from 'node:child_process';
 import http from 'node:http';
 import Path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { runfiles } from '@bazel/runfiles';
 import {
@@ -38,12 +39,24 @@ describe('zemn.me website', () => {
 			.map(path =>
 				Path.relative(base, path).replace(/index.html|.html$/g, '')
 			);
+		paths.push('journal', 'admin', 'callback', 'key', 'healthz');
 		paths.sort();
 
 		beforeAll(async () => {
+			const { handleRequest, createNodeListener, staticPaths } =
+				await import(
+					pathToFileURL(Path.join(base, '../server/handler.mjs')).href
+				);
+			const listener = createNodeListener(handleRequest);
 			server = http
 				.createServer((rq, rw) => {
-					void handler(rq, rw, { public: base });
+					if (
+						staticPaths.includes(
+							new URL(rq.url!, 'http://localhost').pathname
+						)
+					)
+						void handler(rq, rw, { public: base });
+					else void listener(rq, rw);
 				})
 				.listen();
 

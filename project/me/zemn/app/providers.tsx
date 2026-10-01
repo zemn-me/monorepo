@@ -3,7 +3,7 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v8';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import z from 'zod';
 
 import { ZEMN_ME_QUERY_CACHE_STORAGE_KEY } from '#root/project/me/zemn/constants/constants.js';
@@ -13,13 +13,17 @@ export interface ProviderProps {
 	readonly children?: ReactNode;
 }
 
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			gcTime: 1000 * 60 * 60 * 24, // 24 hours
+const createQueryClient = () =>
+	new QueryClient({
+		defaultOptions: {
+			queries: {
+				gcTime:
+					typeof window === 'undefined'
+						? Infinity
+						: 1000 * 60 * 60 * 24,
+			},
 		},
-	},
-});
+	});
 
 // Recommended: async persister with localStorage
 const localStoragePersister = createAsyncStoragePersister({
@@ -33,6 +37,8 @@ const localStoragePersister = createAsyncStoragePersister({
 z.config({ jitless: true });
 
 export function Providers({ children }: ProviderProps) {
+	// A warm SSR process serves multiple people; never share its query cache.
+	const [queryClient] = useState(createQueryClient);
 	return (
 		<NuqsAdapter>
 			<LocalStorageController>

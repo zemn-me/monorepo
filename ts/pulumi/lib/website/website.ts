@@ -7,11 +7,11 @@ import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
 import { fileTypeFromFile } from 'file-type';
 import mime from 'mime';
-
 import * as guard from '#root/ts/guard.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
+import { RemixServer } from './remix.js';
 
 function relative(from: string, to: string): string {
 	const f = path.normalize(from),
@@ -48,6 +48,8 @@ async function contentType(fPath: string): Promise<string> {
 }
 
 export interface Args {
+	/** Optional bundled Remix server, including its generated asset manifest. */
+	serverDirectory?: string;
 	/**
 	 * Zone to create any needed DNS records in.
 	 */
@@ -257,7 +259,27 @@ export class Website extends pulumi.ComponentResource {
 					new aws.s3.BucketObjectv2(
 						`${name}_bucket_file_${fPath}`,
 						{
-							key: getS3Key(relative(args.directory, fPath)),
+							// Keep existing prerender object keys; public files retain their literal URLs.
+							key:
+								args.serverDirectory &&
+								!fs.existsSync(
+									path.join(
+										args.serverDirectory,
+										'prerendered',
+										relative(args.directory, fPath)
+									)
+								)
+									? relative(args.directory, fPath)
+									: getS3Key(relative(args.directory, fPath)),
+							...(args.serverDirectory
+								? {
+										cacheControl: /^(assets|sha256)\//.test(
+											relative(args.directory, fPath)
+										)
+											? 'public, max-age=31536000, immutable'
+											: 'public, max-age=300',
+									}
+								: {}),
 							bucket: bucket.id,
 							contentType: contentType(fPath),
 							source,
@@ -313,7 +335,7 @@ export class Website extends pulumi.ComponentResource {
 						].join(', ')}]`
 				)(objects.get(args.index))
 			: undefined;
-		if (!args.serverOrigin && !indexDocumentObject)
+		if (!args.serverOrigin && !args.serverDirectory && !indexDocumentObject)
 			throw new Error('A static index or server origin is required');
 
 		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
@@ -368,6 +390,18 @@ export class Website extends pulumi.ComponentResource {
 
 		// create the cloudfront
 
+		const server = args.serverDirectory
+			? new RemixServer(
+					`${name}_remix`,
+					{
+						directory: args.serverDirectory,
+						domain: args.domain,
+						tags,
+					},
+					{ parent: this }
+				)
+			: undefined;
+
 		const origins: aws.types.input.cloudfront.DistributionOrigin[] = [
 			...(args.serverOrigin
 				? [
@@ -407,42 +441,89 @@ export class Website extends pulumi.ComponentResource {
 				: []),
 		];
 
-		const orderedCacheBehaviors = args.wellKnownOidcDomain
-			? [
-					{
-						pathPattern: '/.well-known/openid-configuration',
-						targetOriginId: `${name}_oidc_api`,
-						compress: true,
-						responseHeadersPolicyId: responseHeadersPolicy.id,
-						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-						cachedMethods: ['GET', 'HEAD'],
-						forwardedValues: {
-							queryString: false,
-							cookies: { forward: 'none' },
+		const orderedCacheBehaviors: aws.types.input.cloudfront.DistributionOrderedCacheBehavior[] =
+			args.wellKnownOidcDomain
+				? [
+						{
+							pathPattern: '/.well-known/openid-configuration',
+							targetOriginId: `${name}_oidc_api`,
+							compress: true,
+							responseHeadersPolicyId: responseHeadersPolicy.id,
+							allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+							cachedMethods: ['GET', 'HEAD'],
+							forwardedValues: {
+								queryString: false,
+								cookies: { forward: 'none' },
+							},
+							viewerProtocolPolicy: 'redirect-to-https',
+							minTtl: 0,
+							defaultTtl: 0,
+							maxTtl: 0,
 						},
-						viewerProtocolPolicy: 'redirect-to-https',
-						minTtl: 0,
-						defaultTtl: 0,
-						maxTtl: 0,
-					},
-					{
-						pathPattern: '/.well-known/jwks.json',
-						targetOriginId: `${name}_oidc_api`,
-						compress: true,
-						responseHeadersPolicyId: responseHeadersPolicy.id,
-						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-						cachedMethods: ['GET', 'HEAD'],
-						forwardedValues: {
-							queryString: false,
-							cookies: { forward: 'none' },
+						{
+							pathPattern: '/.well-known/jwks.json',
+							targetOriginId: `${name}_oidc_api`,
+							compress: true,
+							responseHeadersPolicyId: responseHeadersPolicy.id,
+							allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+							cachedMethods: ['GET', 'HEAD'],
+							forwardedValues: {
+								queryString: false,
+								cookies: { forward: 'none' },
+							},
+							viewerProtocolPolicy: 'redirect-to-https',
+							minTtl: 0,
+							defaultTtl: 0,
+							maxTtl: 0,
 						},
-						viewerProtocolPolicy: 'redirect-to-https',
-						minTtl: 0,
-						defaultTtl: 0,
-						maxTtl: 0,
+					]
+				: [];
+
+		if (server && args.serverDirectory) {
+			origins.push({
+				originId: `${name}_remix`,
+				domainName: server.domain,
+				customHeaders: [
+					{
+						name: 'X-Remix-Origin-Secret',
+						value: server.originSecret,
 					},
-				]
-			: undefined;
+				],
+				customOriginConfig: {
+					originProtocolPolicy: 'https-only',
+					httpPort: 80,
+					httpsPort: 443,
+					originSslProtocols: ['TLSv1.2'],
+				},
+			});
+			const patterns = JSON.parse(
+				fs.readFileSync(
+					path.join(args.serverDirectory, 'assets.json'),
+					'utf8'
+				)
+			) as string[];
+			for (const pathPattern of [
+				...patterns,
+				'/.well-known/security.txt',
+			]) {
+				orderedCacheBehaviors.push({
+					pathPattern,
+					targetOriginId: `${name}_cloudfront_distribution`,
+					compress: true,
+					responseHeadersPolicyId: responseHeadersPolicy.id,
+					allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+					cachedMethods: ['GET', 'HEAD'],
+					forwardedValues: {
+						queryString: false,
+						cookies: { forward: 'none' },
+					},
+					viewerProtocolPolicy: 'redirect-to-https',
+					minTtl: 0,
+					defaultTtl: 3600,
+					maxTtl: 31536000,
+				});
+			}
+		}
 
 		const pageCacheBehaviors = args.serverOrigin
 			? [
@@ -472,22 +553,25 @@ export class Website extends pulumi.ComponentResource {
 			`${name}_cloudfront_distribution`,
 			{
 				origins,
-				...(pageCacheBehaviors
+				...(pageCacheBehaviors.length
 					? { orderedCacheBehaviors: pageCacheBehaviors }
 					: {}),
 				enabled: true,
 				isIpv6Enabled: true,
-				defaultRootObject: indexDocumentObject?.key,
+				defaultRootObject: server
+					? undefined
+					: indexDocumentObject?.key,
 				// this is the host that the distribution will expect
 				// (other than the default).
 				aliases: [args.domain],
 				// in the future we could maybe take a bunch of these as args, but
 				// we're not overengineering today!
 				// im sorry this bit kinda sucks
-				...(args.serverOrigin
+				...(args.serverOrigin || server
 					? {
 							customErrorResponses: [
-								400, 403, 404, 405, 500, 502, 503, 504,
+								400, 403, 404, 405, 414, 416, 500, 501, 502,
+								503, 504,
 							].map(errorCode => ({
 								errorCode,
 								errorCachingMinTtl: 0,
@@ -537,6 +621,19 @@ export class Website extends pulumi.ComponentResource {
 					minTtl: 0,
 					defaultTtl: args.serverOrigin ? 0 : 3600,
 					maxTtl: args.serverOrigin ? 0 : 86400,
+					...(server
+						? {
+								targetOriginId: `${name}_remix`,
+								cachePolicyId: server.cachePolicy.id,
+								// AWS managed AllViewerExceptHostHeader: preserve forms and request headers while API Gateway receives its own Host.
+								originRequestPolicyId:
+									'b689b0a8-53d0-40ab-baf2-68738e2966ac',
+								forwardedValues: undefined,
+								minTtl: undefined,
+								defaultTtl: undefined,
+								maxTtl: undefined,
+							}
+						: {}),
 				},
 				restrictions: {
 					geoRestriction: {

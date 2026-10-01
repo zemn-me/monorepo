@@ -1,11 +1,13 @@
 export default {
-	ssr: false,
+	ssr: true,
 	buildDirectory: '.react-router-build',
 	routeDiscovery: { mode: 'initial' },
 	prerender: ({ getStaticPaths }) => [
-		...getStaticPaths(),
+		// Authenticated and backend-driven pages must run at request time.
+		...getStaticPaths().filter(
+			path => !/^\/(journal|admin|callback|key|healthz)(\/|$)/.test(path)
+		),
 		...[
-			'/404',
 			'/src',
 			'/src/issues',
 			'/src/pulls',

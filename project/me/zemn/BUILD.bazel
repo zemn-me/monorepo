@@ -79,6 +79,7 @@ remix_project(
         ":ts",
         "//project/me/zemn/public:files",
     ],
+    server = True,
 )
 
 remix_itest_service(

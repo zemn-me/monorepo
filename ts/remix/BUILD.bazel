@@ -1,6 +1,12 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "copy_to_bin", "js_library")
+
+# gazelle:exclude server_test.mjs
+load("//js:rules.bzl", "copy_to_bin", "js_library", "js_test")
 load("//ts:rules.bzl", "jest_test", "ts_project")
+
+# The JS generator cannot resolve the runner/runtime import within a grouped target.
+# gazelle:exclude runner.mjs
+# gazelle:exclude server.mjs
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -24,9 +30,13 @@ ts_project(
 js_library(
     name = "tooling",
     srcs = ["vite.mjs"],
+
     # keep
     data = [
         ":runner",
+        ":server",
+        "//:node_modules/esbuild",
+        "//:node_modules/react-router",
         "//:node_modules/serve-handler",
     ],
     deps = [
@@ -77,4 +87,16 @@ jest_test(
     srcs = ["metadata_test.js"],
     visibility = ["//:__subpackages__"],
     deps = [":remix_tests"],
+)
+
+copy_to_bin(
+    name = "server",
+    srcs = ["server.mjs"],
+)
+
+js_test(
+    name = "server_test",
+    size = "small",
+    data = [":tooling"],
+    entry_point = "server_test.mjs",
 )
