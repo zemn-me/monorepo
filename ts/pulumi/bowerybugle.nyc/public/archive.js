@@ -80,7 +80,7 @@
 		try {
 			await api('/api/login', { email: el('email').value });
 			el('login-status').textContent =
-				'If this is the author’s email, a login link is on its way. It expires in 10 minutes.';
+				'If this is the author’s email, a login link is on its way. The email shows when its 12-hour login window ends.';
 		} catch (error) {
 			el('login-status').textContent = errorText(error);
 		} finally {

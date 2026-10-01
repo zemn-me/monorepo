@@ -7,6 +7,7 @@ go_library(
     srcs = [
         "aws.go",
         "server.go",
+        "totp.go",
     ],
     importpath = "github.com/zemn-me/monorepo/project/nyc/bowerybugle/server",
     visibility = ["//visibility:public"],
@@ -26,6 +27,7 @@ go_test(
     srcs = [
         "aws_test.go",
         "server_test.go",
+        "totp_test.go",
     ],
     embed = [":server"],
     deps = [

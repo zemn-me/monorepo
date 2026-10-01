@@ -28,6 +28,17 @@ export class Backend extends pulumi.ComponentResource {
 		};
 		const author = 'bowerybugle@gmail.com';
 		const origin = `https://${args.domain}`;
+		const loginKey = new aws.kms.Key(
+			`${name}_login_key`,
+			{
+				customerMasterKeySpec: 'HMAC_256',
+				keyUsage: 'GENERATE_VERIFY_MAC',
+				description: 'Bowery Bugle email login seed derivation',
+				deletionWindowInDays: 30,
+				tags: args.tags,
+			},
+			durable
+		);
 		const bucket = new aws.s3.BucketV2(
 			`${name}_pdfs`,
 			{ tags: args.tags },
@@ -162,11 +173,16 @@ export class Backend extends pulumi.ComponentResource {
 			{
 				role: role.id,
 				policy: pulumi
-					.all([table.arn, bucket.arn, identity.arn])
-					.apply(([tableArn, bucketArn, senderArn]) =>
+					.all([table.arn, bucket.arn, identity.arn, loginKey.arn])
+					.apply(([tableArn, bucketArn, senderArn, loginKeyArn]) =>
 						JSON.stringify({
 							Version: '2012-10-17',
 							Statement: [
+								{
+									Effect: 'Allow',
+									Action: ['kms:GenerateMac'],
+									Resource: loginKeyArn,
+								},
 								{
 									Effect: 'Allow',
 									Action: [
@@ -235,6 +251,7 @@ export class Backend extends pulumi.ComponentResource {
 				environment: {
 					variables: {
 						TABLE_NAME: table.name,
+						LOGIN_KEY_ID: loginKey.keyId,
 						PDF_BUCKET: bucket.bucket,
 						SITE_ORIGIN: origin,
 						AUTHOR_EMAIL: author,

@@ -104,12 +104,14 @@ func (f *testFiles) Download(_ context.Context, rec Record) (string, error) {
 
 type testMail struct {
 	links      []string
+	messages   []LoginEmail
 	recipients []string
 	err        error
 }
 
-func (m *testMail) Send(_ context.Context, to, link string) error {
-	m.links = append(m.links, link)
+func (m *testMail) Send(_ context.Context, to string, email LoginEmail) error {
+	m.messages = append(m.messages, email)
+	m.links = append(m.links, email.Link)
 	m.recipients = append(m.recipients, to)
 	return m.err
 }
@@ -124,7 +126,7 @@ type fixture struct {
 
 func setup() *fixture {
 	f := &fixture{store: &memoryStore{records: map[string]Record{}, hits: map[string]int{}}, files: &testFiles{objects: map[string]Object{}}, mail: &testMail{}, now: time.Unix(1800000000, 0)}
-	f.server = &Server{Store: f.store, Files: f.files, Mail: f.mail, Origin: "https://bugle.example.test", Author: "author@example.test", Now: func() time.Time { return f.now }}
+	f.server = &Server{Store: f.store, Files: f.files, Mail: f.mail, Origin: "https://bugle.example.test", Author: "author@example.test", LoginKey: []byte("12345678901234567890123456789012"), Now: func() time.Time { return f.now }}
 	return f
 }
 func (f *fixture) request(method, path string, body any, cookie *http.Cookie) *httptest.ResponseRecorder {
@@ -171,8 +173,10 @@ func TestAuthorLoginAndLogout(t *testing.T) {
 	if f.mail.recipients[0] != f.server.Author || !strings.HasPrefix(f.mail.links[0], f.server.Origin+"/#login=") {
 		t.Fatal("wrong recipient or untrusted email link")
 	}
-	if _, ok := f.store.records["challenge/"+tok]; ok {
-		t.Fatal("stored a raw login token")
+	for key := range f.store.records {
+		if strings.HasPrefix(key, "challenge/") {
+			t.Fatal("stored a challenge record")
+		}
 	}
 	status(t, f.request("POST", "/api/login/confirm", map[string]string{"token": token()}, nil), 400)
 	w := f.request("POST", "/api/login/confirm", map[string]string{"token": tok}, nil)
@@ -181,7 +185,7 @@ func TestAuthorLoginAndLogout(t *testing.T) {
 	if !c.Secure || !c.HttpOnly || c.SameSite != http.SameSiteStrictMode || c.Path != "/" || c.Domain != "" {
 		t.Fatal("session cookie not protected")
 	}
-	status(t, f.request("POST", "/api/login/confirm", map[string]string{"token": tok}, nil), 400)
+	status(t, f.request("POST", "/api/login/confirm", map[string]string{"token": tok}, nil), 200)
 	w = f.request("GET", "/api/session", nil, c)
 	status(t, w, 200)
 	if !strings.Contains(w.Body.String(), "true") {
@@ -193,7 +197,7 @@ func TestAuthorLoginAndLogout(t *testing.T) {
 		t.Fatal("logout did not revoke session")
 	}
 }
-func TestConcurrentChallengeRedemption(t *testing.T) {
+func TestConcurrentChallengeReuse(t *testing.T) {
 	f := setup()
 	tok := f.challenge(t)
 	var wg sync.WaitGroup
@@ -211,7 +215,7 @@ func TestConcurrentChallengeRedemption(t *testing.T) {
 			t.Fatalf("unexpected status %d", code)
 		}
 	}
-	if success != 1 {
+	if success != 8 {
 		t.Fatalf("redeemed %d times", success)
 	}
 }
@@ -219,7 +223,11 @@ func TestExpiryRateLimitsAndMailFailure(t *testing.T) {
 	f := setup()
 	tok := f.challenge(t)
 	status(t, f.request("POST", "/api/login", map[string]string{"email": f.server.Author}, nil), 429)
-	f.now = f.now.Add(10 * time.Minute)
+	_, expiry, err := f.server.loginCode(f.now)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f.now = expiry
 	status(t, f.request("POST", "/api/login/confirm", map[string]string{"token": tok}, nil), 400)
 	c := f.login(t)
 	f.now = f.now.Add(7 * 24 * time.Hour)
@@ -227,8 +235,14 @@ func TestExpiryRateLimitsAndMailFailure(t *testing.T) {
 	f = setup()
 	f.mail.err = errors.New("email delivery failed")
 	status(t, f.request("POST", "/api/login", map[string]string{"email": f.server.Author}, nil), 503)
-	tok = strings.Split(f.mail.links[0], "#login=")[1]
-	status(t, f.request("POST", "/api/login/confirm", map[string]string{"token": tok}, nil), 400)
+	if len(f.mail.messages) != 1 {
+		t.Fatal("email was not attempted")
+	}
+	for key := range f.store.records {
+		if strings.HasPrefix(key, "challenge/") {
+			t.Fatal("mail failure left challenge state")
+		}
+	}
 	f = setup()
 	for range 10 {
 		f.challenge(t)

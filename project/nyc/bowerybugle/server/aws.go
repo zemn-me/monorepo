@@ -162,7 +162,7 @@ type SESMailer struct {
 	From   string
 }
 
-func (s SESMailer) Send(ctx context.Context, to, link string) error {
-	_, err := s.Client.SendEmail(ctx, &sesv2.SendEmailInput{FromEmailAddress: aws.String(s.From), Destination: &ses.Destination{ToAddresses: []string{to}}, Content: &ses.EmailContent{Simple: &ses.Message{Subject: &ses.Content{Data: aws.String("Log in to The Bowery Bugle")}, Body: &ses.Body{Text: &ses.Content{Data: aws.String("Use this link to upload issues of The Bowery Bugle:\n\n" + link + "\n\nThis link expires in 10 minutes and can only be used once. If you did not request it, you can ignore this email.")}}}}})
+func (s SESMailer) Send(ctx context.Context, to string, email LoginEmail) error {
+	_, err := s.Client.SendEmail(ctx, &sesv2.SendEmailInput{FromEmailAddress: aws.String(s.From), Destination: &ses.Destination{ToAddresses: []string{to}}, Content: &ses.EmailContent{Simple: &ses.Message{Subject: &ses.Content{Data: aws.String("Log in to The Bowery Bugle")}, Body: &ses.Body{Text: &ses.Content{Data: aws.String(email.body())}}}}})
 	return err
 }

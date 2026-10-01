@@ -109,6 +109,7 @@ test('reader sees issues and opens author login only from the footer', async () 
 		'login link is on its way'
 	);
 	expect(element('upload-panel').hidden).toBe(true);
+	expect(element('login-status').textContent).toContain('12-hour');
 });
 
 test('email link requires confirmation, then author can publish, read and log out', async () => {

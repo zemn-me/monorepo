@@ -8,12 +8,28 @@ photographs, or public contact details. Issues without an upload are labelled
 ## Author publishing
 
 “Log in” is at the bottom of the page. Only the server-configured
-`bowerybugle@gmail.com` address can receive a login link. Links expire after ten
-minutes, require an explicit confirmation click, and are consumed atomically.
-Tokens are stored as SHA-256 hashes. Sessions last seven days and use a Secure,
-HttpOnly, SameSite=Strict host cookie; logging out revokes the session.
-Login email is limited to one per minute and ten per hour, shared across Lambda
-instances. Write requests require the configured website origin.
+`bowerybugle@gmail.com` address can receive a login link. The link carries an
+eight-digit SHA-256 TOTP code in its URL fragment and requires a confirmation
+click. Codes use fixed 12-hour UTC windows (00:00–12:00 and 12:00–00:00).
+The email states the exact window-end timestamp; this is up to 12 hours of
+remaining validity, not 12 hours from delivery. Only the current window is
+accepted. Reuse within that window is intentional: there are no challenge
+records or replay markers, so a link can establish multiple sessions until
+expiry. This uses the TOTP calculation with an explicitly replayable policy.
+
+Each deployment owns a persistent KMS HMAC-256 master key. At cold start,
+Lambda derives the author seed using HMAC-SHA256 over the site origin, login
+purpose and normalized email. The master key stays in KMS; only its identifier
+is in Lambda configuration. Staging and production use distinct keys and
+origins. The derived seed remains in process memory. No per-request secrets
+are stored. Sessions still last seven days, store only token hashes, and use a
+Secure, HttpOnly, SameSite=Strict host cookie; logging out revokes that session.
+It does not invalidate an emailed code that is still within its window.
+
+Login email is limited to one per minute and ten per hour. Verification is
+limited to ten attempts per minute and 100 per 12-hour window. These counters
+are shared across Lambda instances. Write requests require the configured
+website origin.
 
 The author chooses an issue number and a PDF up to 50 MiB. Uploads go directly
 to a private S3 bucket using a 15-minute POST policy restricted to one key,
@@ -77,8 +93,8 @@ email address and telephone number are intentionally omitted from the website.
 ## Validation
 
 Run `bazel test //project/nyc/bowerybugle/... //ts/pulumi/bowerybugle.nyc/... //ts/pulumi/lib/website/... //:bazel_lint`.
-The Go HTTP tests cover login, replay, expiry, throttling, origin checks,
-upload rejection, publication, replacement and immutable reads. SDK tests
+The Go HTTP tests cover login, intentional code reuse, window expiry, throttling, origin checks,
+upload rejection, publication, replacement and immutable reads. TOTP tests include the RFC 6238 SHA-256 vectors and exact 12-hour boundaries. SDK tests
 inspect signed upload constraints and version-specific object reads. Browser
 DOM tests cover login confirmation, publishing, failed-upload retry and logout.
 Infrastructure tests cover all domain modes, private versioned storage,

@@ -3,6 +3,7 @@ package server
 
 import (
 	"context"
+	"crypto/hmac"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
@@ -59,15 +60,16 @@ type Files interface {
 	Download(context.Context, Record) (string, error)
 }
 type Mailer interface {
-	Send(context.Context, string, string) error
+	Send(context.Context, string, LoginEmail) error
 }
 type Server struct {
-	Store  Store
-	Files  Files
-	Mail   Mailer
-	Origin string
-	Author string
-	Now    func() time.Time
+	Store    Store
+	Files    Files
+	Mail     Mailer
+	Origin   string
+	Author   string
+	LoginKey []byte
+	Now      func() time.Time
 }
 
 func (s *Server) now() time.Time {
@@ -189,16 +191,13 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	t := token()
-	id := digest(t)
-	if err := s.Store.Put(r.Context(), "challenge", id, Record{Expires: now + 600}); err != nil {
+	code, expires, err := s.loginCode(s.now())
+	if err != nil {
 		failure(w, err)
 		return
 	}
-	// Fragments are not sent in HTTP requests or Referrer headers. The page requires
-	// a confirmation click before exchanging the token, so link previews cannot log in.
-	if err := s.Mail.Send(r.Context(), s.Author, s.Origin+"/#login="+t); err != nil {
-		_, _ = s.Store.Take(r.Context(), "challenge", id, now)
+	// The code stays out of request URLs and is exchanged only after a click.
+	if err := s.Mail.Send(r.Context(), s.Author, LoginEmail{Link: s.Origin + "/#login=" + code, Code: code, Expires: expires}); err != nil {
 		failure(w, err)
 		return
 	}
@@ -211,27 +210,47 @@ func (s *Server) confirm(w http.ResponseWriter, r *http.Request) {
 	if !decode(w, r, &req) {
 		return
 	}
-	if !validToken(req.Token) {
+	if !validCode(req.Token) {
 		problem(w, 400, "This link is invalid or has expired. Request a new one.")
 		return
 	}
 	now := s.now()
-	_, err := s.Store.Take(r.Context(), "challenge", digest(req.Token), now.Unix())
-	if errors.Is(err, ErrMissing) {
-		problem(w, 400, "This link is invalid or has expired. Request a new one.")
-		return
-	}
+	code, expires, err := s.loginCode(now)
 	if err != nil {
 		failure(w, err)
 		return
 	}
+	for _, limit := range []struct {
+		key     string
+		expires int64
+		max     int
+	}{
+		{"verify-minute", now.Unix() + 60, 10},
+		{fmt.Sprintf("verify-window-%d", expires.Unix()), expires.Unix(), 100},
+	} {
+		ok, err := s.Store.Limit(r.Context(), limit.key, now.Unix(), limit.expires, limit.max)
+		if err != nil {
+			failure(w, err)
+			return
+		}
+		if !ok {
+			problem(w, 429, "Too many login attempts. Please try again later.")
+			return
+		}
+	}
+	// Reuse within the current window is intentional. Do not record or consume
+	// individual challenges, and do not accept adjacent 12-hour windows.
+	if !hmac.Equal([]byte(req.Token), []byte(code)) {
+		problem(w, 400, "This link is invalid or has expired. Request a new one.")
+		return
+	}
 	t := token()
-	expires := now.Add(7 * 24 * time.Hour)
-	if err := s.Store.Put(r.Context(), "session", digest(t), Record{Expires: expires.Unix()}); err != nil {
+	sessionExpires := now.Add(7 * 24 * time.Hour)
+	if err := s.Store.Put(r.Context(), "session", digest(t), Record{Expires: sessionExpires.Unix()}); err != nil {
 		failure(w, err)
 		return
 	}
-	http.SetCookie(w, &http.Cookie{Name: sessionCookie, Value: t, Path: "/", Secure: true, HttpOnly: true, SameSite: http.SameSiteStrictMode, MaxAge: 7 * 24 * 3600, Expires: expires})
+	http.SetCookie(w, &http.Cookie{Name: sessionCookie, Value: t, Path: "/", Secure: true, HttpOnly: true, SameSite: http.SameSiteStrictMode, MaxAge: 7 * 24 * 3600, Expires: sessionExpires})
 	jsonResponse(w, 200, map[string]bool{"authenticated": true})
 }
 func (s *Server) session(w http.ResponseWriter, r *http.Request) {

@@ -15,6 +15,7 @@ void pulumi.runtime.setMocks({
 				repositoryUrl: '123.dkr.ecr.us-east-1.amazonaws.com/test',
 				dkimTokens: ['a', 'b', 'c'],
 				verificationToken: 'verified',
+				keyId: `${args.name}-key`,
 				bucket: `${args.name}-bucket`,
 				zoneId: `${args.name}-zone`,
 				nameServers: ['ns.example.test'],
@@ -149,9 +150,21 @@ for (const scenario of [
 				'ses:Recipients': ['bowerybugle@gmail.com'],
 			},
 		});
+		expect(
+			owned.find(r => r.type === 'aws:kms/key:Key')?.inputs
+		).toMatchObject({
+			customerMasterKeySpec: 'HMAC_256',
+			keyUsage: 'GENERATE_VERIFY_MAC',
+		});
+		expect(
+			policy.Statement.find((s: { Action: string[] }) =>
+				s.Action.includes('kms:GenerateMac')
+			).Resource
+		).toBe(`arn:aws:test:::${scenario.name}_backend_login_key`);
 		const fn = owned.find(r => r.type === 'aws:lambda/function:Function');
 		expect(fn?.inputs.environment.variables).toMatchObject({
 			AUTHOR_EMAIL: 'bowerybugle@gmail.com',
+			LOGIN_KEY_ID: `${scenario.name}_backend_login_key-key`,
 			SITE_ORIGIN: `https://${scenario.domain}`,
 		});
 	});
