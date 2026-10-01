@@ -1129,6 +1129,9 @@ func TestJournalDuplicateAudioHashKeepsSingleEntry(t *testing.T) {
 	if len(journal.Entries) != 1 || journal.Entries[0].Id.String() != entryIDs[0] {
 		t.Fatalf("entries = %#v, want only the first copy %s", journal.Entries, entryIDs[0])
 	}
+	if journal.Entries[0].ContentSha256 != fmt.Sprintf("%x", sha256.Sum256(audio)) {
+		t.Fatal("completed entry did not expose its audio hash for duplicate reconciliation")
+	}
 	if got := len(ai.periods); got != 1 || ai.periods[0] != "entry" {
 		t.Fatalf("AI summary calls = %v, want one entry call", ai.periods)
 	}
@@ -1170,8 +1173,8 @@ func TestJournalUploadSizeComesFromObjectEvent(t *testing.T) {
 		t.Fatal(err)
 	}
 	journal := journalResponse.(GetJournal200JSONResponse)
-	if len(journal.Entries) != 0 {
-		t.Fatalf("journal entries = %#v, want failed upload omitted", journal.Entries)
+	if len(journal.Entries) != 1 || journal.Entries[0].Status != JournalEntryStatusFailed || journal.Entries[0].Error == nil || !strings.Contains(*journal.Entries[0].Error, "outside the allowed range") {
+		t.Fatalf("journal entries = %#v, want failed upload with its error", journal.Entries)
 	}
 	records, err := server.listJournalRecords(ctx, journalOwnerSubject)
 	if err != nil {
@@ -1186,7 +1189,7 @@ func TestJournalUploadSizeComesFromObjectEvent(t *testing.T) {
 	}
 }
 
-func TestGetJournalShowsOnlyReadyAndActiveEntries(t *testing.T) {
+func TestGetJournalShowsReadyActiveAndFailedEntries(t *testing.T) {
 	db := &inMemoryDDB{}
 	server := &Server{ddb: db, journalTableName: "journal"}
 	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
@@ -1225,6 +1228,7 @@ func TestGetJournalShowsOnlyReadyAndActiveEntries(t *testing.T) {
 		"00000000-0000-4000-8000-000000000011",
 		"00000000-0000-4000-8000-000000000012",
 		"00000000-0000-4000-8000-000000000013",
+		"00000000-0000-4000-8000-000000000014",
 	}; !slices.Equal(got, want) {
 		t.Fatalf("visible entry IDs = %v, want %v", got, want)
 	}
