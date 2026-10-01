@@ -217,6 +217,7 @@ func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) 
 		DurationMs:    entry.DurationMs,
 		ContentType:   entry.ContentType,
 		ByteLength:    entry.ByteLength,
+		ContentSha256: entry.ContentSha256,
 		Status:        JournalEntryStatus(entry.Status),
 		AudioUrl:      s.journalAudioURL(ctx, entry),
 		Transcript:    entry.Transcript,
@@ -299,7 +300,7 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 
 func journalEntryIsVisible(entry JournalStoredEntry, now time.Time) bool {
 	switch entry.Status {
-	case JournalEntryStatusReady, JournalEntryStatusProcessing:
+	case JournalEntryStatusReady, JournalEntryStatusProcessing, JournalEntryStatusFailed:
 		return true
 	case JournalEntryStatusAwaitingUpload:
 		return entry.UploadExpiresAt != nil && now.Before(*entry.UploadExpiresAt)

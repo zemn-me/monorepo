@@ -67,6 +67,7 @@ filegroup(
         "processing_status.tsx",
         "recording.ts",
         "recording_queue.tsx",
+        "recording_queue_test.tsx",
         "recording_store.ts",
         "recording_test.ts",
         "status.tsx",
@@ -86,6 +87,7 @@ ts_project(
     srcs = [
         "location_geometry_test.ts",
         "periods_test.ts",
+        "recording_queue_test.tsx",
         "recording_test.ts",
         "status_test.tsx",
     ],
@@ -106,6 +108,7 @@ jest_test(
     srcs = [
         "location_geometry_test.js",
         "periods_test.js",
+        "recording_queue_test.js",
         "recording_test.js",
         "status_test.js",
     ],
