@@ -12,7 +12,7 @@ import {
 } from 'react';
 
 import { RANK_IMAGE_RULES } from '#root/project/im/shadwell/luke/app/wikitree/rankIconReferences.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
+import { Link } from '#root/ts/react/router/Link/index.js';
 
 type RelationName = 'father' | 'mother' | 'child';
 

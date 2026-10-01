@@ -1,6 +1,6 @@
 'use client';
-import { usePathname } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 import * as bio from '#root/project/me/zemn/bio/index.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
@@ -60,7 +60,7 @@ export interface GladeProps {
 }
 
 export default function Glade(props: GladeProps) {
-	const pathname = usePathname();
+	const pathname = useLocation().pathname;
 	const isHomepage = pathname == '/';
 
 	// Endings has its own full-screen presentation. Keep ordinary routes in

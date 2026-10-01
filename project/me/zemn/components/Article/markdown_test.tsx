@@ -13,7 +13,7 @@ jest.unstable_mockModule(
 		default: { link: 'canonicalLink' },
 	})
 );
-jest.unstable_mockModule('#root/ts/react/next/Link/Link.module.css', () => ({
+jest.unstable_mockModule('#root/ts/react/router/Link/Link.module.css', () => ({
 	default: {},
 }));
 // Keep the MDX adapter real; its surrounding metadata/layout is tested separately.

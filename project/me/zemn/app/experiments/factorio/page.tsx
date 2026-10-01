@@ -1,7 +1,6 @@
-import { Metadata } from 'next/types';
-
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { Prose } from '#root/project/me/zemn/components/Prose/prose.js';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
 export default function Main() {
 	return (
@@ -21,3 +20,5 @@ export const metadata: Metadata = {
 	title: 'List of experiments.',
 	description: 'List of experiments.',
 };
+
+export const handle = { metadata };

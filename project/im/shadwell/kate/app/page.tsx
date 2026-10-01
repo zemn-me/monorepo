@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
 import styles from './page.module.css';
 
@@ -81,3 +81,5 @@ export default function Main() {
 		</div>
 	);
 }
+
+export const handle = { metadata };

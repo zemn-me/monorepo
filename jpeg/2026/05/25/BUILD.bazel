@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts/next.js:image_srcset.bzl", "responsive_image_srcset")
+load("//ts/remix:image_srcset.bzl", "responsive_image_srcset")
 
 package(default_visibility = ["//project/me/zemn:__subpackages__"])
 

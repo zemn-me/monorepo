@@ -14,8 +14,8 @@ import type { GladeProps } from './glade.js';
 
 let pathname = '/article/example';
 
-jest.unstable_mockModule('next/navigation', () => ({
-	usePathname: () => pathname,
+jest.unstable_mockModule('react-router', () => ({
+	useLocation: () => ({ pathname: pathname }),
 }));
 
 jest.unstable_mockModule(
