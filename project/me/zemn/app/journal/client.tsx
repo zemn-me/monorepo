@@ -1382,7 +1382,11 @@ function EntryCard({
 		<details
 			className={style.entry}
 			id={`entry-${entry.id}`}
-			open={playback.activeEntryID === entry.id || undefined}
+			open={
+				entry.status === 'failed' ||
+				playback.activeEntryID === entry.id ||
+				undefined
+			}
 		>
 			<summary>
 				<LocalizedTime
@@ -1435,7 +1439,11 @@ function EntryCard({
 					playback={playback}
 				/>
 			)}
-			{entry.error && <p className={style.notice}>{entry.error}</p>}
+			{(entry.error || entry.status === 'failed') && (
+				<p className={style.recordingFailure} role="alert">
+					{entry.error || 'Could not process this voice note.'}
+				</p>
+			)}
 			{entry.status === 'ready' && !entry.summary && (
 				<p className={style.wikiKind}>Analysis pending</p>
 			)}
@@ -2246,8 +2254,9 @@ function JournalBrowser({
 	);
 	const pendingEntries = journal.entries.filter(
 		entry =>
-			['awaiting_upload', 'processing'].includes(entry.status) &&
-			!localEntryIDs.includes(entry.id)
+			['awaiting_upload', 'processing', 'failed'].includes(
+				entry.status
+			) && !localEntryIDs.includes(entry.id)
 	);
 	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
 		.map(period =>

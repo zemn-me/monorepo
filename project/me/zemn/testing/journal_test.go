@@ -188,8 +188,11 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("inspect failed journal entries: %v", err)
 	}
-	if len(failedEntries) != 0 {
-		t.Fatalf("failed journal entry was displayed in the index")
+	if len(failedEntries) != 1 {
+		t.Fatalf("failed journal entry was not displayed in unfinished voice notes")
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "#entry-"+failedEntryID+"[open] [role='alert']", 10*time.Second); err != nil {
+		t.Fatalf("processing error was not visible: %v", err)
 	}
 	pendingEntryStatus, err := waitForElement(
 		driver,
@@ -214,6 +217,12 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		10*time.Second,
 	); err != nil {
 		t.Fatalf("opened processing journal entry did not show transcription status: %v", err)
+	}
+	if err := deleteJournalEntry(t.Context(), failedEntryID); err != nil {
+		t.Fatalf("remove failed journal fixture: %v", err)
+	}
+	if err := waitForNoElement(driver, selenium.ByID, "entry-"+failedEntryID, 30*time.Second); err != nil {
+		t.Fatal(err)
 	}
 	if err := deleteJournalEntry(t.Context(), pendingEntryID); err != nil {
 		t.Fatalf("remove processing journal fixture: %v", err)
@@ -1954,6 +1963,15 @@ func waitForJournalPeriodAudioCount(driver selenium.WebDriver, start string, wan
 }
 
 func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
+	testJournalUploadSurvivesFailureAndReload(t, true)
+}
+
+func TestJournalImportedUploadSurvivesFailureAndReload(t *testing.T) {
+	testJournalUploadSurvivesFailureAndReload(t, false)
+}
+
+func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
+	t.Helper()
 	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
@@ -1985,10 +2003,6 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 	if err := waitForNoElement(driver, selenium.ByXPATH, "//*[@role='status' and @aria-label='Loading journal']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	record, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
 	// Block upload requests while preserving the page and login flow, as when
 	// the journal service is unreachable but the browser can load the website.
 	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
@@ -1997,26 +2011,66 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/journal/entries"}}); err != nil {
 		t.Fatal(err)
 	}
-	if err := record.Click(); err != nil {
+	if recordAudio {
+		record, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := record.Click(); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='timer'][aria-label='Recording duration']", 15*time.Second); err != nil {
+			dumpPageDiagnostics(t, driver)
+			t.Fatal(err)
+		}
+		time.Sleep(2200 * time.Millisecond)
+		capture("journal-recording")
+		submit, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Stop and upload']")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := submit.Click(); err != nil {
+			t.Fatal(err)
+		}
+	} else {
+		path := filepath.Join(t.TempDir(), "imported.wav")
+		audio := testWAV()
+		audio[len(audio)-5] = 37
+		if err := os.WriteFile(path, audio, 0600); err != nil {
+			t.Fatal(err)
+		}
+		input, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := input.SendKeys(path); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings'] details[open] [role='alert']", 20*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='timer'][aria-label='Recording duration']", 15*time.Second); err != nil {
-		dumpPageDiagnostics(t, driver)
-		t.Fatal(err)
-	}
-	time.Sleep(2200 * time.Millisecond)
-	capture("journal-recording")
-	submit, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Stop and upload']")
+	alert, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Local recordings'] [role='alert']")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := submit.Click(); err != nil {
+	message, err := alert.Text()
+	if err != nil || !strings.Contains(message, "Failed to fetch") || !strings.Contains(message, "Will retry automatically.") {
+		t.Fatalf("upload error did not explain the failure and recovery: %q, %v", message, err)
+	}
+	capture("journal-sync-error-desktop")
+	retry, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Retry sync']")
+	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings'] [role='status'][aria-label='Sync failed. Will retry automatically.']", 20*time.Second); err != nil {
+	if err := retry.SendKeys(selenium.TabKey); err != nil {
 		t.Fatal(err)
 	}
-	capture("journal-sync-collapsed")
+	focused, err := driver.ExecuteScript(`return document.activeElement?.getAttribute('aria-label')`, nil)
+	if err != nil || focused != "Remove local copy" {
+		t.Fatalf("recording controls did not support keyboard navigation: %v, %v", focused, err)
+	}
+	capture("journal-sync-error-keyboard")
 	if err := driver.ResizeWindow("", 390, 844); err != nil {
 		t.Fatal(err)
 	}
@@ -2027,8 +2081,14 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := row.Click(); err != nil {
+		details, err := row.FindElement(selenium.ByXPATH, "..")
+		if err != nil {
 			t.Fatal(err)
+		}
+		if open, _ := details.GetAttribute("open"); open == "" {
+			if err := row.Click(); err != nil {
+				t.Fatal(err)
+			}
 		}
 		if _, err := waitForElement(driver, selenium.ByCSSSelector, "audio[aria-label='Preview local recording']", 10*time.Second); err != nil {
 			t.Fatal(err)
@@ -2063,7 +2123,7 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 				return false, err
 			}
 			for _, file := range files {
-				if strings.HasSuffix(file.Name(), ".webm") {
+				if strings.HasSuffix(file.Name(), ".webm") || strings.HasSuffix(file.Name(), ".wav") {
 					audio, err = os.ReadFile(filepath.Join(directory, file.Name()))
 					return len(audio) > 0, err
 				}
@@ -2090,7 +2150,7 @@ func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 	if err := driver.Refresh(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings'] [role='status'][aria-label='Sync failed. Will retry automatically.']", 30*time.Second); err != nil {
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings'] details[open] [role='alert']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if after := fingerprint(); after != before {
@@ -2278,5 +2338,46 @@ func TestJournalLocationPermissionError(t *testing.T) {
 	}
 	if _, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second); err != nil {
 		t.Fatalf("could not finish recording after location denial: %v", err)
+	}
+}
+
+func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
+	root, err := frontendRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	audio := testWAV()
+	audio[len(audio)-4] = 73
+	path := filepath.Join(t.TempDir(), "duplicate.wav")
+	if err := os.WriteFile(path, audio, 0600); err != nil {
+		t.Fatal(err)
+	}
+	for attempt := range 2 {
+		input, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := input.SendKeys(path); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
+			t.Fatalf("upload %d did not enter the local queue: %v", attempt, err)
+		}
+		if err := waitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
+			dumpPageDiagnostics(t, driver)
+			t.Fatalf("upload %d stayed in the local queue: %v", attempt, err)
+		}
 	}
 }

@@ -90,6 +90,44 @@ export function useRecordingQueue(options: QueueOptions) {
 							await removeRecording(owner, draft.id);
 							continue;
 						}
+						// A duplicate upload is removed by the worker. Only discard its
+						// local copy after matching the bytes to a completed entry.
+						if (
+							draft.state === 'uploaded' &&
+							!current.current.entries.some(
+								entry => entry.id === draft.remoteEntryID
+							)
+						) {
+							const file = recordingBlob(draft);
+							const candidates = current.current.entries.filter(
+								entry =>
+									entry.status === 'ready' &&
+									entry.byteLength === file.size &&
+									entry.contentSha256
+							);
+							if (candidates.length > 0) {
+								const digest = new Uint8Array(
+									await crypto.subtle.digest(
+										'SHA-256',
+										await file.arrayBuffer()
+									)
+								);
+								const hash = Array.from(digest, byte =>
+									byte.toString(16).padStart(2, '0')
+								).join('');
+								if (
+									current.current.owner === owner &&
+									current.current.entries.some(
+										entry =>
+											entry.status === 'ready' &&
+											entry.contentSha256 === hash
+									)
+								) {
+									await removeRecording(owner, draft.id);
+									continue;
+								}
+							}
+						}
 						if (draft.state !== 'queued') continue;
 						const file = recordingBlob(draft);
 						if (file.size === 0 || file.size > maxUploadBytes)
@@ -118,11 +156,13 @@ export function useRecordingQueue(options: QueueOptions) {
 								delete next[draft.id];
 								return next;
 							});
-						} catch {
+						} catch (error) {
 							setErrors(previous => ({
 								...previous,
 								[draft.id]:
-									'Sync failed. Will retry automatically.',
+									error instanceof Error && error.message
+										? error.message
+										: 'Audio upload failed.',
 							}));
 							break;
 						} finally {
@@ -281,14 +321,29 @@ function LocalRecordingRow({
 	const remoteEntry = queue.entries.find(
 		entry => entry.id === draft.remoteEntryID
 	);
+	const processingFailed = remoteEntry?.status === 'failed';
+	const confirmationMissing =
+		draft.state === 'uploaded' &&
+		!remoteEntry &&
+		Boolean(draft.uploadedAt && Date.now() - draft.uploadedAt > 120_000);
+	const failure =
+		queue.errors[draft.id] ??
+		(confirmationMissing
+			? 'Could not confirm this upload.'
+			: undefined) ??
+		(processingFailed
+			? remoteEntry.error || 'Could not process this voice note.'
+			: undefined);
 	const tooLarge = file.size > maxUploadBytes;
 	const uploading = queue.syncing === draft.id;
 	const emergency = queue.emergencyIDs.has(draft.id);
 	const canRetry =
 		!uploading &&
-		(!draft.uploadedAt || Date.now() - draft.uploadedAt > 120_000);
+		(processingFailed ||
+			!draft.uploadedAt ||
+			Date.now() - draft.uploadedAt > 120_000);
 	const status =
-		emergency || tooLarge || queue.errors[draft.id]
+		emergency || tooLarge || failure
 			? 'error'
 			: uploading || draft.state === 'uploaded'
 				? 'busy'
@@ -301,18 +356,27 @@ function LocalRecordingRow({
 			? 'Recording too large'
 			: uploading
 				? 'Syncing voice note'
-				: draft.state === 'uploaded'
-					? remoteEntry?.processingProgress?.stage === 'summarizing'
-						? 'Preparing summary'
-						: 'Transcribing voice note'
-					: draft.state === 'recording'
-						? 'Interrupted recording'
-						: (queue.errors[draft.id] ?? 'Waiting to sync');
+				: confirmationMissing
+					? 'Upload not confirmed'
+					: processingFailed
+						? 'Processing failed'
+						: draft.state === 'uploaded'
+							? !remoteEntry
+								? 'Confirming voice note'
+								: remoteEntry.processingProgress?.stage ===
+										'summarizing'
+									? 'Preparing summary'
+									: 'Transcribing voice note'
+							: draft.state === 'recording'
+								? 'Interrupted recording'
+								: failure
+									? 'Upload failed'
+									: 'Waiting to sync';
 	return (
 		<li>
 			<details
 				className={style.localRecording}
-				open={emergency || tooLarge || undefined}
+				open={emergency || tooLarge || Boolean(failure) || undefined}
 			>
 				<summary title={label}>
 					<div className={style.localRecordingHeading}>
@@ -336,7 +400,9 @@ function LocalRecordingRow({
 						<JournalStatus
 							label={label}
 							state={status}
-							progress={uploading ? queue.uploadProgress : undefined}
+							progress={
+								uploading ? queue.uploadProgress : undefined
+							}
 						/>
 					)}
 					<FontAwesomeIcon
@@ -345,6 +411,15 @@ function LocalRecordingRow({
 						icon={faChevronDown}
 					/>
 				</summary>
+				{failure && (
+					<p className={style.recordingFailure} role="alert">
+						{failure}
+						{/[.!?]$/.test(failure) ? ' ' : '. '}
+						{processingFailed || confirmationMissing
+							? 'Your recording is saved on this device. Retry or download it.'
+							: 'Your recording is saved on this device. Will retry automatically.'}
+					</p>
+				)}
 				{emergency && (
 					<p role="alert">
 						Download this recording before leaving; it couldn’t be

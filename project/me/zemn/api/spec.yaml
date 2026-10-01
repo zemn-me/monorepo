@@ -924,6 +924,12 @@ components:
           format: int64
           x-go-type-skip-optional-pointer: true
           x-omitempty: true
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          description: SHA-256 of the original audio, used to recognize completed duplicate uploads.
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
         processingProgress:
           $ref: '#/components/schemas/JournalProcessingProgress'
         status:
