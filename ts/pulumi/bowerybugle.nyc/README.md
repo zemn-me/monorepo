@@ -4,9 +4,10 @@ Static issue 6 site based on the supplied September 18, 2026 paper photographs.
 The supplied photographs are visual references only and are not published.
 Selected stories and excerpts are transcribed in HTML. No browser JavaScript,
 tracking or external asset service is needed. Blackletter initials use a locally
-served UnifrakturMaguntia font, with its SIL Open Font License included.
+served Manufacturing Consent font, with its SIL Open Font License included.
+It is a visual approximation; the original printed typeface is not confirmed.
 
-Font source: [Google Fonts, revision 26be279](https://github.com/google/fonts/tree/26be2797742d47542bd5e8e9153cea3a792fba85/ofl/unifrakturmaguntia).
+Font source: [Google Fonts, revision 4e5f06d](https://github.com/google/fonts/tree/4e5f06dbb274a27ebe71ed54ea706b3ee40eabd9/ofl/manufacturingconsent).
 
 ## Domain purchase and launch
 

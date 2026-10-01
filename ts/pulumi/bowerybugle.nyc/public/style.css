@@ -1,6 +1,6 @@
 @font-face {
-	font-family: "UnifrakturMaguntia";
-	src: url("/fonts/UnifrakturMaguntia-Book.ttf") format("truetype");
+	font-family: "Manufacturing Consent";
+	src: url("/fonts/ManufacturingConsent-Regular.ttf") format("truetype");
 	font-style: normal;
 	font-weight: 400;
 	font-display: swap;
@@ -167,7 +167,7 @@ em {
 .ornament {
 	display: block;
 	font:
-		8rem / 0.9 "UnifrakturMaguntia",
+		8rem / 0.9 "Manufacturing Consent",
 		serif;
 	margin-bottom: 1.5rem;
 }
@@ -240,7 +240,7 @@ h3 {
 .drop-cap::first-letter {
 	float: left;
 	font:
-		5.5rem / 0.85 "UnifrakturMaguntia",
+		5.5rem / 0.85 "Manufacturing Consent",
 		serif;
 	padding: 0.1rem 0.5rem 0 0;
 }
