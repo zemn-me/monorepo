@@ -94,13 +94,12 @@ h2 {
 	padding: 0;
 	margin: 0;
 }
-.issues li {
+.issue-line {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 1rem;
 	padding: 1.5rem 0;
-	border-bottom: 1px solid;
 }
 .issues h3 {
 	font-size: clamp(1.75rem, 3vw, 2.5rem);
@@ -213,7 +212,7 @@ input::file-selector-button {
 		gap: 0.25em;
 		padding: 0;
 	}
-	.issues li {
+	.issue-line {
 		padding-block: 1.25rem;
 	}
 }
@@ -227,6 +226,59 @@ input::file-selector-button {
 	}
 	footer,
 	.skip-link {
+		display: none;
+	}
+}
+
+.issues li {
+	border-bottom: 1px solid;
+}
+.management-nav,
+.issue-controls,
+.add-controls {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	flex-wrap: wrap;
+}
+.management-nav {
+	justify-content: space-between;
+	margin-block: 1rem;
+}
+.issue-controls {
+	padding-bottom: 1rem;
+	align-items: start;
+}
+.issue-controls button,
+.issue-controls summary {
+	font-size: 0.875rem;
+}
+.issue-controls summary {
+	cursor: pointer;
+	padding-block: 0.75rem;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+	font-weight: bold;
+}
+.issue-controls form {
+	margin-block: 0.5rem;
+}
+#add-issue {
+	margin-top: 2rem;
+}
+#issue-number {
+	width: 7rem;
+}
+#editing-note {
+	font-size: 0.875rem;
+}
+@media print {
+	.issue-controls,
+	.management-nav,
+	#add-issue,
+	#author-panel,
+	#editing-note,
+	#edit-status {
 		display: none;
 	}
 }

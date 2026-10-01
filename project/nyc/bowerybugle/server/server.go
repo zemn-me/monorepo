@@ -24,16 +24,19 @@ const MaxPDFBytes int64 = 50 << 20
 const sessionCookie = "__Host-bugle-session"
 
 var ErrMissing = errors.New("record missing or expired")
+var ErrConflict = errors.New("issue changed")
 
 // Expiry is checked on every use; DynamoDB TTL cleanup is asynchronous.
 type Record struct {
-	Kind    string `dynamodbav:"kind"`
-	ID      string `dynamodbav:"id"`
-	Expires int64  `dynamodbav:"expires,omitempty"`
-	Number  int    `dynamodbav:"number,omitempty"`
-	Key     string `dynamodbav:"object_key,omitempty"`
-	Version string `dynamodbav:"version,omitempty"`
-	Size    int64  `dynamodbav:"size,omitempty"`
+	Deleted  bool   `dynamodbav:"deleted,omitempty"`
+	Revision string `dynamodbav:"revision,omitempty"`
+	Kind     string `dynamodbav:"kind"`
+	ID       string `dynamodbav:"id"`
+	Expires  int64  `dynamodbav:"expires,omitempty"`
+	Number   int    `dynamodbav:"number,omitempty"`
+	Key      string `dynamodbav:"object_key,omitempty"`
+	Version  string `dynamodbav:"version,omitempty"`
+	Size     int64  `dynamodbav:"size,omitempty"`
 }
 type Store interface {
 	Get(context.Context, string, string) (Record, error)
@@ -42,6 +45,7 @@ type Store interface {
 	Limit(context.Context, string, int64, int64, int) (bool, error)
 	Issues(context.Context) ([]Record, error)
 	Publish(context.Context, string, int64, Record) error
+	ReplaceIssue(context.Context, Record, Record) error
 }
 type Upload struct {
 	URL    string            `json:"url"`
@@ -120,6 +124,9 @@ func decode(w http.ResponseWriter, r *http.Request, v any) bool {
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/issues", s.issues)
+	mux.HandleFunc("POST /api/issues", s.addIssue)
+	mux.HandleFunc("DELETE /api/issues/{number}", s.deleteIssue)
+	mux.HandleFunc("DELETE /api/issues/{number}/pdf", s.removePDF)
 	mux.HandleFunc("GET /api/issues/{number}/pdf", s.pdf)
 	mux.HandleFunc("POST /api/login", s.login)
 	mux.HandleFunc("POST /api/login/confirm", s.confirm)
@@ -197,7 +204,7 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// The code stays out of request URLs and is exchanged only after a click.
-	if err := s.Mail.Send(r.Context(), s.Author, LoginEmail{Link: s.Origin + "/#login=" + code, Code: code, Expires: expires}); err != nil {
+	if err := s.Mail.Send(r.Context(), s.Author, LoginEmail{Link: s.Origin + "/manage.html#login=" + code, Code: code, Expires: expires}); err != nil {
 		failure(w, err)
 		return
 	}
@@ -290,7 +297,16 @@ func (s *Server) issues(w http.ResponseWriter, r *http.Request) {
 		issues[n] = Issue{Number: n}
 	}
 	for _, rec := range records {
-		issues[rec.Number] = Issue{Number: rec.Number, PDF: fmt.Sprintf("/api/issues/%d/pdf", rec.Number), Size: rec.Size}
+		if rec.Deleted {
+			delete(issues, rec.Number)
+			continue
+		}
+		issue := Issue{Number: rec.Number}
+		if rec.Key != "" {
+			issue.PDF = fmt.Sprintf("/api/issues/%d/pdf", rec.Number)
+			issue.Size = rec.Size
+		}
+		issues[rec.Number] = issue
 	}
 	out := make([]Issue, 0, len(issues))
 	for _, i := range issues {
@@ -306,7 +322,7 @@ func (s *Server) pdf(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rec, err := s.Store.Get(r.Context(), "issue", issueID(n))
-	if errors.Is(err, ErrMissing) {
+	if errors.Is(err, ErrMissing) || err == nil && (rec.Deleted || rec.Key == "") {
 		problem(w, 404, "PDF not uploaded yet.")
 		return
 	}
@@ -336,6 +352,15 @@ func (s *Server) prepare(w http.ResponseWriter, r *http.Request) {
 		problem(w, 400, "Choose an issue number and a PDF up to 50 MB.")
 		return
 	}
+	issue, err := s.issue(r.Context(), req.Number)
+	if errors.Is(err, ErrMissing) || err == nil && issue.Deleted {
+		problem(w, 404, "Add this issue before uploading a PDF.")
+		return
+	}
+	if err != nil {
+		failure(w, err)
+		return
+	}
 	id := token()
 	key := "issues/" + id + ".pdf"
 	upload, err := s.Files.Prepare(r.Context(), key)
@@ -343,7 +368,7 @@ func (s *Server) prepare(w http.ResponseWriter, r *http.Request) {
 		failure(w, err)
 		return
 	}
-	if err := s.Store.Put(r.Context(), "upload", id, Record{Number: req.Number, Key: key, Size: req.Size, Expires: s.now().Unix() + 900}); err != nil {
+	if err := s.Store.Put(r.Context(), "upload", id, Record{Number: req.Number, Revision: issue.Revision, Key: key, Size: req.Size, Expires: s.now().Unix() + 900}); err != nil {
 		failure(w, err)
 		return
 	}
@@ -382,12 +407,81 @@ func (s *Server) publish(w http.ResponseWriter, r *http.Request) {
 	rec.Version = obj.Version
 	rec.Expires = 0
 	if err := s.Store.Publish(r.Context(), id, s.now().Unix(), rec); err != nil {
-		if errors.Is(err, ErrMissing) {
-			problem(w, 409, "This upload has already been published or expired.")
+		if errors.Is(err, ErrMissing) || errors.Is(err, ErrConflict) {
+			problem(w, 409, "This issue or upload has changed. Reload and try again.")
 		} else {
 			failure(w, err)
 		}
 		return
 	}
 	jsonResponse(w, 200, Issue{Number: rec.Number, PDF: fmt.Sprintf("/api/issues/%d/pdf", rec.Number), Size: rec.Size})
+}
+
+// Default issue rows exist until explicitly changed. Tombstones prevent deleted
+// defaults from reappearing, and revisions invalidate uploads started before edits.
+func (s *Server) issue(ctx context.Context, n int) (Record, error) {
+	rec, err := s.Store.Get(ctx, "issue", issueID(n))
+	if errors.Is(err, ErrMissing) && n >= 1 && n <= 6 {
+		return Record{Number: n}, nil
+	}
+	return rec, err
+}
+func (s *Server) addIssue(w http.ResponseWriter, r *http.Request) {
+	if !s.require(w, r) {
+		return
+	}
+	var req struct {
+		Number int `json:"number"`
+	}
+	if !decode(w, r, &req) {
+		return
+	}
+	if req.Number < 1 || req.Number > 9999 {
+		problem(w, 400, "Choose an issue number from 1 to 9999.")
+		return
+	}
+	old, err := s.issue(r.Context(), req.Number)
+	if err == nil && !old.Deleted {
+		problem(w, 409, "That issue already exists.")
+		return
+	}
+	if err != nil && !errors.Is(err, ErrMissing) {
+		failure(w, err)
+		return
+	}
+	old.Number = req.Number
+	s.replaceIssue(w, r, old, Record{Number: req.Number, Revision: token()})
+}
+func (s *Server) deleteIssue(w http.ResponseWriter, r *http.Request) { s.editIssue(w, r, true) }
+func (s *Server) removePDF(w http.ResponseWriter, r *http.Request)   { s.editIssue(w, r, false) }
+func (s *Server) editIssue(w http.ResponseWriter, r *http.Request, deleted bool) {
+	if !s.require(w, r) {
+		return
+	}
+	n, err := strconv.Atoi(r.PathValue("number"))
+	if err != nil || n < 1 || n > 9999 {
+		problem(w, 404, "Issue not found.")
+		return
+	}
+	old, err := s.issue(r.Context(), n)
+	if errors.Is(err, ErrMissing) || err == nil && old.Deleted {
+		problem(w, 404, "Issue not found.")
+		return
+	}
+	if err != nil {
+		failure(w, err)
+		return
+	}
+	s.replaceIssue(w, r, old, Record{Number: n, Revision: token(), Deleted: deleted})
+}
+func (s *Server) replaceIssue(w http.ResponseWriter, r *http.Request, old, next Record) {
+	if err := s.Store.ReplaceIssue(r.Context(), old, next); err != nil {
+		if errors.Is(err, ErrConflict) {
+			problem(w, 409, "This issue has changed. Reload and try again.")
+		} else {
+			failure(w, err)
+		}
+		return
+	}
+	jsonResponse(w, 200, map[string]bool{"saved": true})
 }

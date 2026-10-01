@@ -8,25 +8,14 @@ const document = new DOMParser().parseFromString(
 	'text/html'
 );
 
-test('shows the masthead, six issues and a footer login without contact details', () => {
+test('shows the masthead and a footer login without contact details', () => {
 	expect(document.querySelectorAll('h1')).toHaveLength(1);
 	expect(document.title).toBe('The Bowery Bugle');
 	expect(
-		[...document.querySelectorAll('#issue-list h3')].map(e => e.textContent)
-	).toEqual([
-		'Issue 6',
-		'Issue 5',
-		'Issue 4',
-		'Issue 3',
-		'Issue 2',
-		'Issue 1',
-	]);
-	expect(document.querySelector('footer #show-login')?.textContent).toBe(
-		'Log in'
-	);
-	expect(
-		document.querySelector('#upload-panel')?.hasAttribute('hidden')
-	).toBe(true);
+		document.querySelector('footer #show-login')?.getAttribute('href')
+	).toBe('/manage.html');
+	expect(document.querySelectorAll('form')).toHaveLength(0);
+	expect(document.body.textContent).not.toContain('PDF not uploaded');
 	expect(
 		document.querySelector('[href^="mailto:"], [href^="tel:"]')
 	).toBeNull();

@@ -17,6 +17,7 @@ js_library(
     srcs = [
         "404.html",
         "index.html",
+        "manage.html",
         "style.css",
     ],
     visibility = ["//ts/pulumi/bowerybugle.nyc:__subpackages__"],

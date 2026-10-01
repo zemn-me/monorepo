@@ -18,39 +18,11 @@
 </div></header>
 <main id="issues">
 <div class="section-heading"><h2>Issues</h2></div>
-<p id="archive-status" role="status">Loading PDFs…</p>
-<ol class="issues" id="issue-list" reversed><li><h3>Issue 6</h3><span>PDF not uploaded</span></li>
-<li><h3>Issue 5</h3><span>PDF not uploaded</span></li>
-<li><h3>Issue 4</h3><span>PDF not uploaded</span></li>
-<li><h3>Issue 3</h3><span>PDF not uploaded</span></li>
-<li><h3>Issue 2</h3><span>PDF not uploaded</span></li>
-<li><h3>Issue 1</h3><span>PDF not uploaded</span></li></ol>
+<p id="archive-status" role="status">Loading issues…</p>
+<ol class="issues" id="issue-list" reversed></ol>
 <noscript><p>Enable JavaScript to load the PDFs and log in.</p></noscript>
 </main>
-<footer>
-<button class="text-button" id="show-login" type="button" aria-expanded="false" aria-controls="author-panel">Log in</button>
-<section id="author-panel" aria-label="Author login" hidden>
-<form id="login-form">
-<label for="email">Email</label>
-<input id="email" name="email" type="email" autocomplete="email" required>
-<button type="submit">Send login link</button>
-</form>
-<button id="confirm-login" type="button" hidden>Confirm login</button>
-<p id="login-status" role="status"></p>
-</section>
-<section id="upload-panel" aria-label="Upload an issue" hidden>
-<form id="upload-form">
-<label for="issue-number">Issue number</label>
-<input id="issue-number" name="number" type="number" min="1" max="9999" value="6" required>
-<label for="pdf">PDF</label>
-<input id="pdf" name="pdf" type="file" accept="application/pdf,.pdf" aria-describedby="pdf-help" required>
-<p id="pdf-help">Up to 50 MB.</p>
-<button id="publish" type="submit">Upload PDF</button>
-<p id="upload-status" role="status"></p>
-</form>
-<button class="text-button" id="logout" type="button">Log out</button>
-</section>
-</footer>
+<footer><a id="show-login" href="/manage.html">Log in</a></footer>
 </div>
 </body>
 </html>

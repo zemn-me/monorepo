@@ -2,12 +2,22 @@
 
 The public site keeps the pink paper and cut-out masthead, with a PDF archive
 starting at issues 1–6. There are no fabricated PDFs, transcribed articles,
-photographs, or public contact details. Issues without an upload are labelled
-“PDF not uploaded”. The author can also add later issue numbers.
+photographs, or public contact details. Issues without a PDF have no link or placeholder copy. Published PDFs have a
+“Read” link. The author can add or delete issue rows independently of PDFs.
 
 ## Author publishing
 
-“Log in” is at the bottom of the page. Only the server-configured
+“Log in” at the bottom of the public page opens `/manage.html`. Both pages
+render the same issue-list component. The management page adds per-row upload,
+replacement, PDF removal and issue deletion controls after login, plus an
+“Add issue” form. Changes take effect immediately; readers see them on their
+next load. Removing a PDF retains the issue row; deleting an issue hides the
+whole row. Stored PDF versions are retained, and previously issued signed
+links can remain usable until they expire (15 minutes). Revision checks prevent
+a pending upload from restoring a deleted issue or removed PDF. Deletions of
+the initial issues are persisted as tombstones so they do not reappear.
+
+Only the server-configured
 `bowerybugle@gmail.com` address can receive a login link. The link carries an
 eight-digit SHA-256 TOTP code in its URL fragment and requires a confirmation
 click. Codes use fixed 12-hour UTC windows (00:00–12:00 and 12:00–00:00).
@@ -31,7 +41,7 @@ limited to ten attempts per minute and 100 per 12-hour window. These counters
 are shared across Lambda instances. Write requests require the configured
 website origin.
 
-The author chooses an issue number and a PDF up to 50 MiB. Uploads go directly
+The author adds an issue, then uploads a PDF up to 50 MiB on that row. Uploads go directly
 to a private S3 bucket using a 15-minute POST policy restricted to one key,
 PDF content type, and file size. The backend checks size, type and PDF signature
 before publishing. This is file-format screening, not malware scanning.

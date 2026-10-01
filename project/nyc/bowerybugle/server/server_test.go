@@ -77,8 +77,23 @@ func (m *memoryStore) Publish(_ context.Context, id string, now int64, rec Recor
 	if m.records[k].Expires <= now {
 		return ErrMissing
 	}
+	if m.records["issue/"+issueID(rec.Number)].Revision != rec.Revision {
+		return ErrConflict
+	}
+	rec.Revision = id
 	delete(m.records, k)
 	m.records["issue/"+issueID(rec.Number)] = rec
+	return nil
+}
+
+func (m *memoryStore) ReplaceIssue(_ context.Context, old, next Record) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	k := "issue/" + issueID(next.Number)
+	if m.records[k].Revision != old.Revision {
+		return ErrConflict
+	}
+	m.records[k] = next
 	return nil
 }
 
@@ -170,7 +185,7 @@ func TestAuthorLoginAndLogout(t *testing.T) {
 		t.Fatal("emailed a non-author")
 	}
 	tok := f.challenge(t)
-	if f.mail.recipients[0] != f.server.Author || !strings.HasPrefix(f.mail.links[0], f.server.Origin+"/#login=") {
+	if f.mail.recipients[0] != f.server.Author || !strings.HasPrefix(f.mail.links[0], f.server.Origin+"/manage.html#login=") {
 		t.Fatal("wrong recipient or untrusted email link")
 	}
 	for key := range f.store.records {
@@ -312,6 +327,7 @@ func TestArchiveUploadReadAndReplace(t *testing.T) {
 	if !strings.Contains(w.Body.String(), `"pdf":"/api/issues/6/pdf"`) {
 		t.Fatal("published PDF missing from archive")
 	}
+	status(t, f.request("POST", "/api/issues", map[string]int{"number": 7}, c), 200)
 	upload := f.upload(t, c, 7)
 	f.files.objects[upload.Fields["key"]] = Object{Version: "new", Size: 9, ContentType: "application/pdf", Prefix: []byte("%PDF-")}
 	status(t, f.request("POST", "/api/uploads/"+upload.ID+"/publish", map[string]string{}, c), 200)
@@ -349,4 +365,74 @@ func TestInvalidUploadsNeverReplacePublishedIssue(t *testing.T) {
 	u := f.upload(t, c, 6)
 	f.now = f.now.Add(16 * time.Minute)
 	status(t, f.request("POST", "/api/uploads/"+u.ID+"/publish", map[string]string{}, c), 400)
+}
+
+func TestManageIssuesAndRemovePDF(t *testing.T) {
+	f := setup()
+	for _, route := range []struct{ method, path string }{{"POST", "/api/issues"}, {"DELETE", "/api/issues/6"}, {"DELETE", "/api/issues/6/pdf"}} {
+		status(t, f.request(route.method, route.path, map[string]int{"number": 7}, nil), 401)
+	}
+	c := f.login(t)
+	listing := func() []Issue {
+		t.Helper()
+		var result struct {
+			Issues []Issue `json:"issues"`
+		}
+		w := f.request("GET", "/api/issues", nil, nil)
+		status(t, w, 200)
+		if err := json.Unmarshal(w.Body.Bytes(), &result); err != nil {
+			t.Fatal(err)
+		}
+		return result.Issues
+	}
+	status(t, f.request("POST", "/api/issues", map[string]int{"number": 6}, c), 409)
+	for _, n := range []int{0, 10000} {
+		status(t, f.request("POST", "/api/issues", map[string]int{"number": n}, c), 400)
+	}
+	status(t, f.request("POST", "/api/uploads", map[string]int{"number": 7, "size": 9}, c), 404)
+	status(t, f.request("POST", "/api/issues", map[string]int{"number": 7}, c), 200)
+	if rows := listing(); len(rows) != 7 || rows[0].Number != 7 || rows[0].PDF != "" {
+		t.Fatalf("new issue: %+v", rows)
+	}
+	u := f.upload(t, c, 7)
+	f.files.objects[u.Fields["key"]] = Object{Version: "first", Size: 9, ContentType: "application/pdf", Prefix: []byte("%PDF-")}
+	status(t, f.request("POST", "/api/uploads/"+u.ID+"/publish", map[string]string{}, c), 200)
+	status(t, f.request("DELETE", "/api/issues/7/pdf", nil, c), 200)
+	if rows := listing(); len(rows) != 7 || rows[0].PDF != "" {
+		t.Fatalf("PDF removal deleted row or left link: %+v", rows)
+	}
+	status(t, f.request("GET", "/api/issues/7/pdf", nil, nil), 404)
+	status(t, f.request("DELETE", "/api/issues/7", nil, c), 200)
+	status(t, f.request("DELETE", "/api/issues/6", nil, c), 200)
+	if rows := listing(); len(rows) != 5 || rows[0].Number != 5 {
+		t.Fatalf("deleted default returned: %+v", rows)
+	}
+	status(t, f.request("DELETE", "/api/issues/6/pdf", nil, c), 404)
+	status(t, f.request("POST", "/api/issues", map[string]int{"number": 6}, c), 200)
+	if rows := listing(); len(rows) != 6 || rows[0].Number != 6 || rows[0].PDF != "" {
+		t.Fatalf("re-add restored old PDF: %+v", rows)
+	}
+	for n := 1; n <= 6; n++ {
+		status(t, f.request("DELETE", fmt.Sprintf("/api/issues/%d", n), nil, c), 200)
+	}
+	if len(listing()) != 0 {
+		t.Fatal("empty archive reintroduced defaults")
+	}
+}
+
+func TestEditsInvalidatePendingUploads(t *testing.T) {
+	for _, path := range []string{"/api/issues/6", "/api/issues/6/pdf"} {
+		t.Run(path, func(t *testing.T) {
+			f := setup()
+			c := f.login(t)
+			u := f.upload(t, c, 6)
+			f.files.objects[u.Fields["key"]] = Object{Version: "old", Size: 9, ContentType: "application/pdf", Prefix: []byte("%PDF-")}
+			status(t, f.request("DELETE", path, nil, c), 200)
+			if path == "/api/issues/6" {
+				status(t, f.request("POST", "/api/issues", map[string]int{"number": 6}, c), 200)
+			}
+			status(t, f.request("POST", "/api/uploads/"+u.ID+"/publish", map[string]string{}, c), 409)
+			status(t, f.request("GET", "/api/issues/6/pdf", nil, nil), 404)
+		})
+	}
 }

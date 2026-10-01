@@ -94,7 +94,29 @@ func (s DynamoStore) Issues(ctx context.Context) ([]Record, error) {
 	}
 	return records, nil
 }
+func revisionCondition(revision string) (string, map[string]ddb.AttributeValue) {
+	if revision == "" {
+		return "attribute_not_exists(revision)", nil
+	}
+	return "revision = :revision", map[string]ddb.AttributeValue{":revision": &ddb.AttributeValueMemberS{Value: revision}}
+}
+func (s DynamoStore) ReplaceIssue(ctx context.Context, old, next Record) error {
+	next.Kind, next.ID = "issue", issueID(next.Number)
+	item, err := attributevalue.MarshalMap(next)
+	if err != nil {
+		return err
+	}
+	condition, values := revisionCondition(old.Revision)
+	_, err = s.Client.PutItem(ctx, &dynamodb.PutItemInput{TableName: aws.String(s.Table), Item: item, ConditionExpression: aws.String(condition), ExpressionAttributeValues: values})
+	var conflict *ddb.ConditionalCheckFailedException
+	if errors.As(err, &conflict) {
+		return ErrConflict
+	}
+	return err
+}
 func (s DynamoStore) Publish(ctx context.Context, id string, now int64, rec Record) error {
+	condition, values := revisionCondition(rec.Revision)
+	rec.Revision = id
 	rec.Kind = "issue"
 	rec.ID = issueID(rec.Number)
 	m, err := attributevalue.MarshalMap(rec)
@@ -103,7 +125,7 @@ func (s DynamoStore) Publish(ctx context.Context, id string, now int64, rec Reco
 	}
 	_, err = s.Client.TransactWriteItems(ctx, &dynamodb.TransactWriteItemsInput{TransactItems: []ddb.TransactWriteItem{
 		{Delete: &ddb.Delete{TableName: aws.String(s.Table), Key: key("upload", id), ConditionExpression: aws.String("expires > :now"), ExpressionAttributeValues: map[string]ddb.AttributeValue{":now": number(now)}}},
-		{Put: &ddb.Put{TableName: aws.String(s.Table), Item: m}},
+		{Put: &ddb.Put{TableName: aws.String(s.Table), Item: m, ConditionExpression: aws.String(condition), ExpressionAttributeValues: values}},
 	}})
 	var canceled *ddb.TransactionCanceledException
 	if errors.As(err, &canceled) {
