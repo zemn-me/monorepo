@@ -592,11 +592,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		t.Fatalf("journal transcripts were not rendered as scrollable regions")
 	}
 	for _, level := range []string{"Weeks", "Months", "Years", "Overview"} {
-		back, err := waitForElement(driver, selenium.ByXPATH, fmt.Sprintf("//nav[@aria-label='Browse journal']/a[normalize-space()='%s']", level), 10*time.Second)
-		if err != nil {
-			t.Fatalf("journal could not zoom out to %s: %v", level, err)
-		}
-		if err := back.Click(); err != nil {
+		if err := clickElementWithRetry(driver, selenium.ByXPATH, fmt.Sprintf("//nav[@aria-label='Browse journal']/a[normalize-space()='%s']", level), 10*time.Second); err != nil {
 			t.Fatalf("zoom journal out to %s: %v", level, err)
 		}
 		if _, err := waitForElement(
@@ -611,16 +607,12 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, "[data-journal-summary-block]", 10*time.Second); err != nil {
 		t.Fatalf("journal hierarchy did not return to its overview summary: %v", err)
 	}
-	markdown, err := waitForElement(driver, selenium.ByCSSSelector, "[data-journal-summary-block] strong", 10*time.Second)
-	if err != nil {
-		t.Fatalf("render journal summary markdown: %v", err)
-	}
-	markdownText, err := markdown.Text()
-	if err != nil {
-		t.Fatalf("read rendered journal summary markdown: %v", err)
-	}
-	if markdownText != "clearer priorities" {
-		t.Fatalf("journal summary Markdown emphasis was not rendered: got %q", markdownText)
+	// Read the rendered emphasis atomically while the route finishes replacing its DOM.
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		text, err := wd.ExecuteScript(`return document.querySelector('[data-journal-summary-block] strong')?.innerText`, nil)
+		return text == "clearer priorities", err
+	}, 10*time.Second); err != nil {
+		t.Fatalf("journal summary Markdown emphasis was not rendered: %v", err)
 	}
 
 	citationDataValue, err := driver.ExecuteScript(`
