@@ -197,7 +197,16 @@
 			el('archive-status').textContent =
 				'Couldn’t load the issues. Please reload to try again.';
 		});
-		if (!managing) return;
+		if (!managing) {
+			try {
+				const session = await api('/api/session');
+				el('show-edit').hidden = !session.authenticated;
+				el('show-login').hidden = session.authenticated;
+			} catch {
+				// Keep the login link available if session lookup fails.
+			}
+			return;
+		}
 		el('add-issue').addEventListener('submit', event => {
 			event.preventDefault();
 			const number = Number(el('issue-number').value);

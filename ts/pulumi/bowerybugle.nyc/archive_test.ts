@@ -135,7 +135,8 @@ test('public page has blank missing links, Read links, and a separate management
 	expect(row(5).textContent).toBe('Issue 5');
 	expect(element('show-login').getAttribute('href')).toBe('/manage.html');
 	expect(document.querySelectorAll('form, .issue-controls')).toHaveLength(0);
-	expect(requests.some(r => r.url === '/api/session')).toBe(false);
+	expect(element('show-login').hidden).toBe(false);
+	expect(element('show-edit').hidden).toBe(true);
 });
 
 test('management renders exactly the same public row component with added author controls', async () => {
@@ -275,5 +276,41 @@ test('expired login link offers another email without exposing editing controls'
 	await settle();
 	expect(element('login-status').textContent).toContain('expired');
 	expect(element('login-form').hidden).toBe(false);
+	expect(document.querySelectorAll('.issue-controls')).toHaveLength(0);
+});
+
+test('signed-in authors see the public archive unchanged and enter editing through the footer', async () => {
+	issues[0] = { number: 6, pdf: '/api/issues/6/pdf' };
+	start(false);
+	await settle();
+	const publicArchive = element('issues').outerHTML;
+	loggedIn = true;
+	start(false);
+	await settle();
+	expect(element('issues').outerHTML).toBe(publicArchive);
+	expect(document.querySelectorAll('form, .issue-controls')).toHaveLength(0);
+	expect(element('show-login').hidden).toBe(true);
+	expect(element('show-edit').hidden).toBe(false);
+	expect(element('show-edit').textContent).toBe('Edit');
+	expect(element('show-edit').getAttribute('href')).toBe('/manage.html');
+	start();
+	await settle();
+	expect(document.querySelectorAll('.issue-controls')).toHaveLength(6);
+});
+
+test('session lookup failure leaves the public archive and login link usable', async () => {
+	const fetch = globalThis.fetch;
+	globalThis.fetch = jest
+		.fn<typeof fetch>()
+		.mockImplementation((url, init) =>
+			String(url) === '/api/session'
+				? Promise.resolve(reply({ error: 'Unavailable' }, 503))
+				: fetch(url, init)
+		);
+	start(false);
+	await settle();
+	expect(document.querySelectorAll('#issue-list li')).toHaveLength(6);
+	expect(element('show-login').hidden).toBe(false);
+	expect(element('show-edit').hidden).toBe(true);
 	expect(document.querySelectorAll('.issue-controls')).toHaveLength(0);
 });

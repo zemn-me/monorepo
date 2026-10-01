@@ -7,7 +7,9 @@ photographs, or public contact details. Issues without a PDF have no link or pla
 
 ## Author publishing
 
-“Log in” at the bottom of the public page opens `/manage.html`. Both pages
+The public archive stays read-only even for signed-in authors. Its footer shows
+“Log in” for readers and “Edit” for signed-in authors; both open `/manage.html`.
+Both pages
 render the same issue-list component. The management page adds per-row upload,
 replacement, PDF removal and issue deletion controls after login, plus an
 “Add issue” form. Changes take effect immediately; readers see them on their
@@ -80,7 +82,38 @@ resource for this TLD: it would fail production deployment. Registration must
 be completed with a supporting registrar in the intended owner's account.
 Availability and purchase price still need to be checked with that registrar.
 
-Sources checked October 1, 2026:
+Recommended registrar: **DNSimple**. Its published standard .nyc registration
+and renewal price is **US $40.60/year**, with no DNSimple hosting subscription
+required for registration. The exact domain's availability and any premium
+pricing still require a registrar check. The registry RDAP lookup for
+`bowerybugle.nyc` returned 404 on October 1, 2026; this alone does not establish
+that the name is registerable or available at standard pricing.
+
+The Pulumi DNSimple provider supports both purchase and delegation:
+
+- `dnsimple.RegisteredDomain` registers the domain using an existing registrant
+  contact ID. Use auto-renewal and transfer lock, disable WHOIS privacy/trustee
+  services for .nyc, and protect/retain the resource in production.
+- `dnsimple.DomainDelegation` sets its nameservers to this component's Route 53
+  zone outputs. DNS records, certificates, CloudFront and the API remain under
+  the existing AWS Pulumi resources.
+- Provision registration/delegation only in production; retain the bootstrap
+  hostname until delegation resolves, then enable `boweryBugleCustomDomainReady`.
+
+This registrar integration is a recommendation, not enabled code. It needs a
+DNSimple account with billing, account ID, an API token provided as a CI secret,
+and the intended owner's registrant contact ID. The owner must meet .nyc's NYC
+nexus requirements. Do not commit registrant addresses or tokens. The domain
+has not been purchased.
+
+Registrar references checked October 1, 2026:
+
+- [DNSimple .nyc pricing](https://dnsimple.com/tlds/nyc-domains)
+- [Pulumi RegisteredDomain](https://www.pulumi.com/registry/packages/dnsimple/api-docs/registereddomain/)
+- [Pulumi DomainDelegation](https://www.pulumi.com/registry/packages/dnsimple/api-docs/domaindelegation/)
+- [DNSimple provider configuration](https://www.pulumi.com/registry/packages/dnsimple/installation-configuration/)
+
+Other sources checked October 1, 2026:
 
 - [AWS supported TLDs](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html)
 - [.nyc registrant nexus policy](https://www.ownit.nyc/assets/doc/pdf/nyc_Nexus_Policy.pdf)
