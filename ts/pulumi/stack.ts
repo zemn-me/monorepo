@@ -80,7 +80,12 @@ export async function production(): Promise<Stack> {
 					openAIIdentityProviderId: openAI.identityProviderId,
 					openAIServiceAccountId: openAI.serviceAccountId,
 				});
-				return exportOpenAIWorkloadIdentityOutputs(component);
+				return {
+					...exportOpenAIWorkloadIdentityOutputs(component),
+					boweryBugleUrl: `https://${component.boweryBugle.domain}`,
+					boweryBugleNameServers:
+						component.boweryBugle.zone?.nameServers,
+				};
 			},
 		})
 	);
