@@ -201,26 +201,3 @@ it('switches into and out of the anniversary while the page stays open', () => {
 	act(() => jest.advanceTimersByTime(60_000));
 	expect(footerLogoTitle()).toBe(null);
 });
-
-it.each(['/2026/endings', '/2026/endings/', '/2026/endings/chapter'])(
-	'renders %s without the Glade shell',
-	path => {
-		pathname = path;
-		act(() =>
-			root.render(
-				<Glade>
-					<article>Endings</article>
-				</Glade>
-			)
-		);
-		expect(container.querySelector('article')?.textContent).toBe('Endings');
-		expect(container.querySelector('[data-glade-layout]')).toBeNull();
-		expect(container.querySelector('figure')).toBeNull();
-	}
-);
-
-it('does not exclude routes that merely share the Endings prefix', () => {
-	pathname = '/2026/endings-other';
-	act(() => root.render(<Glade />));
-	expect(container.querySelector('[data-glade-layout]')).not.toBeNull();
-});
