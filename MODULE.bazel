@@ -762,7 +762,7 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=loose
 # 	depName=facebook/sapling
-SAPLING_VERSION = "0.2.20260811-150444+8fb02b32"
+SAPLING_VERSION = "0.2.20260929-102736+288e0c2d"
 
 http_archive(
     name = "sapling_linux_amd64",
@@ -774,7 +774,7 @@ filegroup(
     srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
 )
 """,
-    sha256 = "f05c5b08b914d2b2ab4788a55d2fd42f395b50d05fb284f4d120042122d77802",
+    sha256 = "7a6d3cf76ad2f215946870c28c779fe31b1c514ef23060ff9db1b844c5bc0f74",
     strip_prefix = "sapling-" + SAPLING_VERSION.replace("+", "-"),
     # auto-integrity
     url = "https://github.com/facebook/sapling/archive/refs/tags/" + SAPLING_VERSION + ".tar.gz",
