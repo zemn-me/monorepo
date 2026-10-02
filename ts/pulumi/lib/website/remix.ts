@@ -5,6 +5,7 @@ import * as pulumi from '@pulumi/pulumi';
 import { RandomPassword } from '@pulumi/random';
 
 import {
+	sanitizeAwsAlphaNumericHyphenUnderscoreName,
 	sanitizeAwsLambdaFunctionName,
 	sanitizeAwsLambdaStatementId,
 } from '#root/ts/pulumi/lib/awsNames.js';
@@ -150,7 +151,7 @@ export class RemixServer extends pulumi.ComponentResource {
 			.all([api.apiEndpoint, stage.id])
 			.apply(([endpoint]) => new URL(endpoint).hostname);
 		this.cachePolicy = new aws.cloudfront.CachePolicy(
-			`${name}_cache`,
+			sanitizeAwsAlphaNumericHyphenUnderscoreName(`${name}_cache`),
 			{
 				// Zero minimum is required for private/no-store to take effect.
 				minTtl: 0,

@@ -14,6 +14,10 @@ import Website from './website.js';
 const resources: pulumi.runtime.MockResourceArgs[] = [];
 void pulumi.runtime.setMocks({
 	newResource: args => {
+		if (args.type === 'aws:cloudfront/cachePolicy:CachePolicy') {
+			// Pulumi derives the physical name from the logical name by default.
+			expect(args.inputs['name'] ?? args.name).toMatch(/^[A-Za-z0-9_-]+$/);
+		}
 		resources.push(args);
 		return {
 			id: args.name,
@@ -110,7 +114,7 @@ test('hybrid hosting keeps static sites intact and separates asset caching from 
 	expect(site['defaultRootObject']).toBeUndefined();
 	expect(site['defaultCacheBehavior']).toMatchObject({
 		targetOriginId: 'hybrid.zemn.me_remix',
-		cachePolicyId: 'hybrid.zemn.me_remix_cache',
+		cachePolicyId: 'hybrid_zemn_me_remix_cache',
 		originRequestPolicyId: 'b689b0a8-53d0-40ab-baf2-68738e2966ac',
 		allowedMethods: expect.arrayContaining([
 			'GET',
@@ -157,7 +161,7 @@ test('hybrid hosting keeps static sites intact and separates asset caching from 
 	);
 	const policy = resource(
 		'aws:cloudfront/cachePolicy:CachePolicy',
-		'hybrid.zemn.me_remix_cache'
+		'hybrid_zemn_me_remix_cache'
 	);
 	expect(policy).toMatchObject({
 		minTtl: 0,
