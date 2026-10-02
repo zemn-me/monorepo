@@ -38,7 +38,8 @@ Interface Guidelines as a reference for interaction and clarity:
 - Shared zemn.me menu/index links live in `project/me/zemn/navigation/navigation.ts`; update that when adding visible routes.
 - In React code, prefer carrying async/remote values with `ts/future/future.ts` helpers over duplicating messy internal loading/error state.
 - Prefer `project/me/zemn/api/spec.yaml` and its generated API types over hard-coding duplicate request/response types.
-- Verify `//project/me/zemn:build`; development-server browser tests do not catch prerender failures.
+- Verify `//project/me/zemn:build` and `//project/me/zemn/testing:server_test`; development-server tests do not catch deployment bundle failures.
+- Exclude backend-driven paths from `react-router.config.mjs` prerendering. Runtime responses default to no-store; public loader caching also needs a route `headers` export.
 - Content-addressed public assets should be declared next to the TS that imports them with `hashed_public_assets`; `project/me/zemn/public:content_addressed_public_assets` collects them from `//project/me/zemn:ts`.
 - For `hashed_public_assets` generated TS modules outside `project/me/zemn`, add a `gazelle:resolve typescript` directive at the import site; Gazelle will not infer the generated module.
 - `//project/me/zemn:zemn` starts the local app on port 3000; the shared runner uses the last `--port` argument.

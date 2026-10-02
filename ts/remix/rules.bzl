@@ -22,7 +22,9 @@ def remix_itest_service_dev(name, exe = None, args = [], **kwargs):
         **kwargs
     )
 
-def remix_project(name, srcs, server_entry = None, **kwargs):
+def remix_project(name, srcs, server_entry = None, server = False, **kwargs):
+    if server and server_entry:
+        fail("Choose either the shared server or a custom server entry")
     native.filegroup(name = name + "_git_analysis_srcs", srcs = srcs)
     inputs = srcs + ([server_entry, "//:node_modules/esbuild"] if server_entry else []) + [
         "vite.config.mjs",
@@ -46,8 +48,8 @@ def remix_project(name, srcs, server_entry = None, **kwargs):
         name = "build",
         tool = ":build_bin",
         srcs = inputs,
-        args = ["build", native.package_name()] + (["--server-entry", server_entry] if server_entry else []),
-        out_dirs = ["build"] + (["server_build"] if server_entry else []),
+        args = ["build", native.package_name()] + (["--server-entry", server_entry] if server_entry else []) + (["--server"] if server else []),
+        out_dirs = ["build"] + (["server_build"] if server_entry else []) + (["server"] if server else []),
     )
     js_binary(
         name = "dev",
@@ -61,6 +63,6 @@ def remix_project(name, srcs, server_entry = None, **kwargs):
         name = "start",
         entry_point = "//ts/remix:runner",
         data = [":build", "//ts/remix:tooling"],
-        fixed_args = ["start", native.package_name()],
+        fixed_args = ["start", native.package_name()] + (["--server"] if server else []),
     )
     native.alias(name = name, actual = ":build", **kwargs)

@@ -9,12 +9,15 @@ import {
 	rename,
 	rm,
 	symlink,
+	writeFile,
 } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { build as bundle } from 'esbuild';
 import serve from 'serve-handler';
+import { createNodeListener } from '#root/ts/remix/server.mjs';
 
 const [command, project, ...args] = process.argv.slice(2);
 let root = path.resolve(project);
@@ -44,7 +47,21 @@ if (command === 'dev') {
 }
 const portIndex = args.lastIndexOf('--port');
 const port = portIndex < 0 ? 3000 : Number(args[portIndex + 1]);
-if (command === 'start') {
+if (command === 'start' && args.includes('--server')) {
+	const { handleRequest, staticPaths } = await import(
+		pathToFileURL(path.join(root, 'server/handler.mjs')).href
+	);
+	const listener = createNodeListener(handleRequest);
+	createServer(async (request, response) => {
+		const url = new URL(request.url, 'http://localhost');
+		if (staticPaths.includes(url.pathname))
+			return serve(request, response, {
+				public: path.join(root, 'build'),
+				cleanUrls: false,
+			});
+		return listener(request, response);
+	}).listen(port, 'localhost', () => console.log(`http://localhost:${port}`));
+} else if (command === 'start') {
 	const serverFile = path.join(root, 'server_build/handler.mjs');
 	const renderer = existsSync(serverFile)
 		? await import(pathToFileURL(serverFile))
@@ -159,6 +176,89 @@ if (command === 'start') {
 			}
 		}
 		await flatten(output);
+		if (args.includes('--server')) {
+			const server = path.join(root, 'server');
+			await mkdir(server, { recursive: true });
+			const prerendered = {};
+			const staticPaths = [];
+			async function collect(directory) {
+				for (const entry of await readdir(directory, {
+					withFileTypes: true,
+				})) {
+					const file = path.join(directory, entry.name);
+					if (entry.isDirectory()) {
+						await collect(file);
+						continue;
+					}
+					const relative = path.relative(output, file);
+					const isPublic = await access(
+						path.join(root, 'public', relative)
+					).then(
+						() => true,
+						() => false
+					);
+					if (
+						!isPublic &&
+						/\.(html|data)$/.test(relative) &&
+						!['404.html', '__spa-fallback.html'].includes(relative)
+					) {
+						const route =
+							relative === 'index.html'
+								? '/'
+								: '/' + relative.replace(/\.html$/, '');
+						prerendered[route] = relative;
+						await mkdir(
+							path.dirname(
+								path.join(server, 'prerendered', relative)
+							),
+							{ recursive: true }
+						);
+						await cp(
+							file,
+							path.join(server, 'prerendered', relative)
+						);
+					} else if (
+						!relative.startsWith('.vite/') &&
+						relative !== '404.html'
+					)
+						staticPaths.push('/' + relative);
+				}
+			}
+			await collect(output);
+			// Public directories are reserved asset namespaces in CloudFront.
+			const assetPatterns = [
+				...new Set(
+					staticPaths.map(value => {
+						const slash = value.indexOf('/', 1);
+						return slash < 0 ? value : value.slice(0, slash) + '/*';
+					})
+				),
+			];
+			await writeFile(
+				path.join(server, 'assets.json'),
+				JSON.stringify(assetPatterns)
+			);
+			await bundle({
+				stdin: {
+					contents: `import * as build from ${JSON.stringify(path.join(root, '.react-router-build/server/index.js'))};
+import { createApp, createLambdaHandler } from ${JSON.stringify(path.join(path.dirname(fileURLToPath(import.meta.url)), 'server.mjs'))};
+export { createNodeListener } from ${JSON.stringify(path.join(path.dirname(fileURLToPath(import.meta.url)), 'server.mjs'))};
+export const staticPaths = ${JSON.stringify(staticPaths)};
+export const handleRequest = createApp(build, ${JSON.stringify(prerendered)}, new URL('./prerendered/', import.meta.url));
+export const handler = createLambdaHandler(handleRequest);`,
+					resolveDir: root,
+				},
+				outfile: path.join(server, 'handler.mjs'),
+				bundle: true,
+				platform: 'node',
+				target: 'node24',
+				format: 'esm',
+				define: { 'process.env.NODE_ENV': '"production"' },
+				banner: {
+					js: 'import { createRequire as __createRequire } from "node:module"; const require = __createRequire(import.meta.url);',
+				},
+			});
+		}
 		await rm(path.join(output, '__spa-fallback.html'), { force: true });
 		await rm(path.join(output, '.vite'), { recursive: true, force: true });
 	});
