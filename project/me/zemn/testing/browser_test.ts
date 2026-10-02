@@ -383,39 +383,75 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('2026/endings shows a homepage back link after the story text renders', async () => {
+		it('prerenders the Glade layout only for routes in its group', async () => {
 			try {
-				await driver.manage().setTimeouts({ implicit: 5000 });
-				await driver.get(`${origin}/2026/endings`);
-				expect(
-					await driver.findElements(
-						By.css(
-							'nav[aria-label="Site navigation"], figure video'
-						)
-					)
-				).toHaveLength(0);
-				await driver.executeScript(
-					'window.scrollTo(0, document.documentElement.scrollHeight);'
-				);
-
-				const backLink = await driver.findElement(
-					By.css('a[aria-label="Back to homepage"]')
-				);
-				expect(await backLink.getText()).toBe('Back');
-
-				await backLink.click();
-				await driver.wait(
-					async () => (await driver.getCurrentUrl()) === `${origin}/`,
-					5000
-				);
-				expect(
-					await driver
-						.findElement(By.css('figure video'))
-						.isDisplayed()
-				).toBe(true);
+				for (const path of ['/', '/article', '/2026/endings']) {
+					const response = await fetch(`${origin}${path}`);
+					expect(response.ok).toBe(true);
+					const html = await response.text();
+					expect(html.includes('data-glade-layout')).toBe(
+						path !== '/2026/endings'
+					);
+				}
 			} finally {
 				await driver.quit();
 			}
 		});
+
+		it.each([
+			{ width: 1280, height: 900 },
+			{ width: 390, height: 844 },
+		])(
+			'keeps Endings standalone and restores Glade on return at $width px',
+			async size => {
+				try {
+					await driver.manage().setTimeouts({ implicit: 5000 });
+					await driver.manage().window().setRect(size);
+					await driver.get(`${origin}/2026/endings`);
+					expect(
+						await driver.findElements(
+							By.css(
+								'[data-glade-layout], nav[aria-label="Site navigation"], figure video'
+							)
+						)
+					).toHaveLength(0);
+					await driver.executeScript(
+						'window.scrollTo(0, document.documentElement.scrollHeight);'
+					);
+
+					const backLink = await driver.findElement(
+						By.css('a[aria-label="Back to homepage"]')
+					);
+					expect(await backLink.getText()).toBe('Back');
+
+					await backLink.click();
+					await driver.wait(
+						async () =>
+							(await driver.getCurrentUrl()) === `${origin}/`,
+						5000
+					);
+					expect(
+						await driver
+							.findElement(By.css('figure video'))
+							.isDisplayed()
+					).toBe(true);
+					expect(
+						await driver.findElements(By.css('[data-glade-layout]'))
+					).toHaveLength(1);
+					await driver.navigate().back();
+					await driver.wait(
+						async () =>
+							(await driver.getCurrentUrl()) ===
+							`${origin}/2026/endings`,
+						5000
+					);
+					expect(
+						await driver.findElements(By.css('[data-glade-layout]'))
+					).toHaveLength(0);
+				} finally {
+					await driver.quit();
+				}
+			}
+		);
 	});
 });
