@@ -21,6 +21,19 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer driver.Close()
+	if err := driver.ResizeWindow("", 390, 900); err != nil {
+		t.Fatal(err)
+	}
+	assertWikiScroll := func() {
+		t.Helper()
+		// The portrait layout has a full-height banner above the journal.
+		// Navigation must not reset to the top, even if shorter content
+		// causes the browser to clamp the previous scroll position.
+		scrolled, err := driver.ExecuteScript(`return window.scrollY > 0;`, nil)
+		if err != nil || scrolled != true {
+			t.Fatalf("wiki navigation reset the scroll position: %v %v", scrolled, err)
+		}
+	}
 	root.Path = "/journal"
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
@@ -53,6 +66,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	assertWikiScroll()
 	if err := search.SendKeys("Maya"); err != nil {
 		t.Fatal(err)
 	}
@@ -72,6 +86,26 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
+	}
+	assertWikiScroll()
+	for _, step := range []struct {
+		link, destination string
+	}{
+		{"//section[@aria-label='Diary wiki']//article//a[normalize-space()='Lantern']", "//section[@aria-label='Diary wiki']//h3[normalize-space()='Lantern']"},
+		{"//section[@aria-label='Diary wiki']//h2/a[normalize-space()='Wiki']", "//section[@aria-label='Diary wiki']//input[@type='search']"},
+		{"//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']"},
+	} {
+		link, err := waitForElement(driver, selenium.ByXPATH, step.link, 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := link.Click(); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := waitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
+			t.Fatal(err)
+		}
+		assertWikiScroll()
 	}
 	for _, width := range []int{1280, 390} {
 		if err := driver.ResizeWindow("", width, 900); err != nil {
