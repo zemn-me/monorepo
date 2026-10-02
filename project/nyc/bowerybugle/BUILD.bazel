@@ -1,0 +1,27 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//ts/remix:rules.bzl", "remix_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+remix_project(
+    name = "remix",
+    srcs = ["//project/nyc/bowerybugle/app"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
+)

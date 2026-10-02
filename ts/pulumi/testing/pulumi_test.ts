@@ -775,7 +775,9 @@ describe('pulumi', () => {
 		const expectedSecretIds = Object.values(githubActionsSecretIds).sort();
 		const secretIds = mockResources
 			.filter(
-				resource => resource.type === 'gcp:secretmanager/secret:Secret'
+				resource =>
+					resource.type === 'gcp:secretmanager/secret:Secret' &&
+					resource.name.startsWith('monorepo_github_actions_secrets_')
 			)
 			.map(resource => resource.inputs['secretId'])
 			.sort();
@@ -783,7 +785,8 @@ describe('pulumi', () => {
 
 		const secretIamMembers = mockResources.filter(
 			resource =>
-				resource.type === 'gcp:secretmanager/secretIamMember:SecretIamMember'
+				resource.type === 'gcp:secretmanager/secretIamMember:SecretIamMember' &&
+				resource.name.startsWith('monorepo_github_actions_secrets_')
 		);
 		const expectedSecretIamMemberNames = Object.entries(
 			githubActionsSecretAccessByWorkflow

@@ -315,6 +315,9 @@ importers:
       '@pulumi/awsx':
         specifier: 3.10.0
         version: 3.10.0(typescript@7.0.2)
+      '@pulumi/dnsimple':
+        specifier: 5.2.0
+        version: 5.2.0(typescript@7.0.2)
       '@pulumi/pulumi':
         specifier: 3.265.0
         version: 3.265.0(typescript@7.0.2)
@@ -2589,6 +2592,9 @@ packages:
   '@pulumi/command@4.5.0':
     resolution: {integrity: sha512-o1omwSERsuqsAt7jhokjpF/TOrtx60oimc9u9YdwMIHG+s4WIzLokSDzlgiQMVNVkWWypFOZyWp1Dhvi32NXgQ==}
     deprecated: Inadvertently published.
+
+  '@pulumi/dnsimple@5.2.0':
+    resolution: {integrity: sha512-gQCTOXnG4DyaYK9wcWdKPHgOfETdLCAi38GX5PYLoR5etqzqrtZifDO4h2EXRj4PeGbNcv6dpcVViSpcgsfxlQ==}
 
   '@pulumi/docker-build@0.0.14':
     resolution: {integrity: sha512-dLCta3BOrYRxHyp22QnVh06qlSiSORtmIypcQ6yb4+GZ2+ThbML06pINyERc5ClgJXGQFSVTtuWhMSiurTWU2w==}
@@ -11787,6 +11793,14 @@ snapshots:
       - typescript
 
   '@pulumi/command@4.5.0(typescript@7.0.2)':
+    dependencies:
+      '@pulumi/pulumi': 3.265.0(typescript@7.0.2)
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+      - typescript
+
+  '@pulumi/dnsimple@5.2.0(typescript@7.0.2)':
     dependencies:
       '@pulumi/pulumi': 3.265.0(typescript@7.0.2)
     transitivePeerDependencies:
