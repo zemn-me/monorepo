@@ -192,7 +192,7 @@ function Login({
 					(send.isPending
 						? 'Sending…'
 						: send.isSuccess
-							? 'If this is the author’s email, a login link is on its way. The email shows when its 12-hour login window ends.'
+							? 'If this is the author’s email, a login link is on its way.'
 							: token
 								? 'Confirm to log in and manage issues.'
 								: '')}

@@ -198,7 +198,9 @@ test('email login requires confirmation before editing and logout hides all cont
 	element<HTMLInputElement>('email').value = 'author@example.test';
 	submit(element('login-form'));
 	await settle();
-	expect(element('login-status').textContent).toContain('12-hour');
+	expect(element('login-status').textContent).toBe(
+		'If this is the author’s email, a login link is on its way.'
+	);
 	start(true, '#login=secret-token');
 	await settle();
 	expect(location.hash).toBe('');
