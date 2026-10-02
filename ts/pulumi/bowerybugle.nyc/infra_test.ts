@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 
@@ -195,14 +196,66 @@ for (const scenario of [
 		const distribution = owned.find(
 			r => r.type === 'aws:cloudfront/distribution:Distribution'
 		);
-		expect(distribution?.inputs.orderedCacheBehaviors).toBeUndefined();
-		expect(distribution?.inputs.origins).toHaveLength(1);
+		expect(distribution?.inputs.origins).toHaveLength(2);
+		expect(distribution?.inputs.defaultRootObject).toBeUndefined();
+		expect(distribution?.inputs.defaultCacheBehavior).toMatchObject({
+			targetOriginId: `${scenario.name}_website_renderer`,
+			minTtl: 0,
+			defaultTtl: 0,
+			maxTtl: 0,
+			forwardedValues: {
+				queryString: true,
+				cookies: { forward: 'none' },
+			},
+		});
+		expect(distribution?.inputs.orderedCacheBehaviors).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					pathPattern: '/assets/*',
+					targetOriginId: `${scenario.name}_website_cloudfront_distribution`,
+					defaultTtl: 86400,
+				}),
+			])
+		);
+		const renderer = owned.find(
+			r =>
+				r.name.includes('_frontend_lambda') &&
+				r.type === 'aws:lambda/function:Function'
+		);
+		expect(renderer?.inputs).toMatchObject({
+			runtime: 'nodejs24.x',
+			handler: 'handler.handler',
+			timeout: 15,
+			environment: {
+				variables: {
+					SITE_ORIGIN: `https://${scenario.domain}`,
+					API_ORIGIN: `https://api.${scenario.domain}`,
+				},
+			},
+		});
+		const archive = renderer?.inputs.code;
+		expect(pulumi.asset.AssetArchive.isInstance(archive)).toBe(true);
+		const assets = await archive.assets;
+		expect(Object.keys(assets)).toEqual(['handler.mjs']);
+		expect(pulumi.asset.FileAsset.isInstance(assets['handler.mjs'])).toBe(
+			true
+		);
+		const bundle = readFileSync(await assets['handler.mjs'].path, 'utf8');
+		expect(bundle).toContain('createRequestHandler');
+		expect(bundle.length).toBeGreaterThan(1000);
+		expect(
+			owned.filter(
+				r =>
+					r.name.startsWith(`${scenario.name}_frontend`) &&
+					r.type === 'aws:iam/rolePolicy:RolePolicy'
+			)
+		).toHaveLength(0);
 		expect(
 			owned.find(r => r.type === 'aws:apigatewayv2/domainName:DomainName')
 				?.inputs
 		).toMatchObject({ domainName: `api.${scenario.domain}` });
 		expect(
-			owned.find(r => r.type === 'aws:apigatewayv2/api:Api')?.inputs
+			owned.find(r => r.name === `${scenario.name}_backend_api`)?.inputs
 		).toMatchObject({ disableExecuteApiEndpoint: true });
 		expect(
 			owned.find(r => r.name === `${scenario.name}_backend_dns`)?.inputs
@@ -273,7 +326,11 @@ for (const scenario of [
 				s.Action.includes('kms:GenerateMac')
 			).Resource
 		).toBe(`arn:aws:test:::${scenario.name}_backend_login_key`);
-		const fn = owned.find(r => r.type === 'aws:lambda/function:Function');
+		const fn = owned.find(
+			r =>
+				r.name.includes('_backend_lambda') &&
+				r.type === 'aws:lambda/function:Function'
+		);
 		expect(fn?.inputs.environment.variables).toMatchObject({
 			AUTHOR_EMAIL: 'bowerybugle@gmail.com',
 			LOGIN_KEY_ID: `${scenario.name}_backend_login_key-key`,

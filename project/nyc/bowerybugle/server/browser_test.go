@@ -2,11 +2,14 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/http/httputil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -35,7 +38,7 @@ func (f *browserFiles) Prepare(_ context.Context, key string) (Upload, error) {
 	return Upload{URL: f.origin + "/upload", Fields: map[string]string{"key": key}}, nil
 }
 
-// The real prerendered app talks to the real Go handler on a distinct HTTPS
+// The real server-rendered app talks to the real Go handler on a distinct HTTPS
 // origin. Only storage and email are doubles; Chromium enforces CORS and cookies.
 func TestBrowserPublishingAcrossOrigins(t *testing.T) {
 	build, err := runfiles.Rlocation("_main/project/nyc/bowerybugle/build")
@@ -50,6 +53,16 @@ func TestBrowserPublishingAcrossOrigins(t *testing.T) {
 	var staticCookie, uploadCookie atomic.Bool
 	static := http.FileServer(http.Dir(build))
 	handler := f.server.Handler()
+	var ports struct {
+		Renderer string `json:"@@//project/nyc/bowerybugle:renderer_test_service"`
+	}
+	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.Renderer == "" {
+		t.Fatal("renderer service port missing", err)
+	}
+	publicAPI := httptest.NewServer(handler)
+	defer publicAPI.Close()
+	rendererURL, _ := url.Parse("http://127.0.0.1:" + ports.Renderer)
+	renderer := httputil.NewSingleHostReverseProxy(rendererURL)
 	server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		host, _, _ := net.SplitHostPort(r.Host)
 		switch host {
@@ -82,10 +95,13 @@ func TestBrowserPublishingAcrossOrigins(t *testing.T) {
 			if r.Header.Get("Cookie") != "" {
 				staticCookie.Store(true)
 			}
-			if r.URL.Path == "/manage" {
-				r.URL.Path = "/manage.html"
+			if strings.HasPrefix(r.URL.Path, "/assets/") {
+				static.ServeHTTP(w, r)
+			} else {
+				r.Header.Set("X-Test-Site-Origin", f.server.Origin)
+				r.Header.Set("X-Test-API-Origin", publicAPI.URL)
+				renderer.ServeHTTP(w, r)
 			}
-			static.ServeHTTP(w, r)
 		}
 	}))
 	_, port, _ := net.SplitHostPort(server.Listener.Addr().String())
@@ -93,6 +109,21 @@ func TestBrowserPublishingAcrossOrigins(t *testing.T) {
 	files.origin = "https://uploads.bugle.example.test:" + port
 	server.StartTLS()
 	defer server.Close()
+	// The document must already contain the archive before any JS can run.
+	request, _ := http.NewRequest("GET", server.URL+"/", nil)
+	request.Host = "bugle.example.test:" + port
+	response, err := server.Client().Do(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	html, err := io.ReadAll(response.Body)
+	response.Body.Close()
+	if err != nil || response.StatusCode != 200 || !strings.Contains(string(html), `id="issue-6"`) || strings.Contains(string(html), "Loading issues") {
+		t.Fatalf("archive missing from initial HTML: %s (%v)", html, err)
+	}
+	if response.Header.Get("Cache-Control") != "no-store" {
+		t.Fatal("rendered page must not be cached")
+	}
 	driver, err := seleniumutil.NewWithChromeArguments("--ignore-certificate-errors", "--no-proxy-server", "--host-resolver-rules=MAP *.example.test 127.0.0.1")
 	if err != nil {
 		t.Fatal(err)
@@ -136,6 +167,13 @@ func TestBrowserPublishingAcrossOrigins(t *testing.T) {
 		t.Fatal(err)
 	}
 	wait("document.querySelectorAll('#issue-list li').length === 6")
+	// Session fetch confirms hydration ran. Fresh server data needs no immediate
+	// browser archive fetch and must not disappear behind a loading state.
+	wait("performance.getEntriesByType('resource').some(r => r.name.includes('/api/session'))")
+	count, err := driver.ExecuteScript("return performance.getEntriesByType('resource').filter(r => r.name.includes('/api/issues')).length", nil)
+	if err != nil || count != float64(0) {
+		t.Fatalf("hydration refetched initial issues: %v %v", count, err)
+	}
 	screenshot("public-desktop")
 	before, err := driver.ExecuteScript("return performance.timeOrigin", nil)
 	if err != nil {

@@ -1,6 +1,5 @@
 export default {
-	ssr: false,
+	ssr: true,
 	buildDirectory: '.react-router-build',
 	routeDiscovery: {mode: 'initial'},
-	prerender: ({getStaticPaths}) => [...getStaticPaths(), '/404'],
 };

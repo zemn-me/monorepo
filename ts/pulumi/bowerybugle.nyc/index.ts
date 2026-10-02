@@ -2,8 +2,8 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 
 import Website from '#root/ts/pulumi/lib/website/website.js';
-
 import { Backend } from './backend.js';
+import { Frontend } from './frontend.js';
 import { Registrar, type Registration } from './registrar.js';
 
 export interface Args {
@@ -67,7 +67,7 @@ export class Component extends Pulumi.ComponentResource {
 			useCustomDomain && customZoneId
 				? customZoneId
 				: args.bootstrapZoneId;
-		new Backend(
+		const backend = new Backend(
 			`${name}_backend`,
 			{
 				domain: this.domain,
@@ -77,13 +77,17 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+		const frontend = new Frontend(
+			`${name}_frontend`,
+			{ domain: this.domain, tags: args.tags },
+			{ parent: this, dependsOn: [backend] }
+		);
 		const directory = 'project/nyc/bowerybugle/build';
 		this.site = new Website(
 			`${name}_website`,
 			{
 				directory,
-				index: `${directory}/index.html`,
-				notFound: `${directory}/404.html`,
+				serverOrigin: frontend.origin,
 				domain: this.domain,
 				zoneId,
 				noIndex: args.staging || !useCustomDomain,

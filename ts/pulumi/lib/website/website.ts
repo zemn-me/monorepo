@@ -71,7 +71,10 @@ export interface Args {
 	/**
 	 * The index document to serve.
 	 */
-	index: string;
+	index?: string;
+
+	/** HTTPS renderer origin for HTML and route data; /assets/* stays on S3. */
+	serverOrigin?: pulumi.Input<string>;
 
 	/**
 	 * The 404 document to serve.
@@ -301,13 +304,17 @@ export class Website extends pulumi.ComponentResource {
 						].join(', ')}]`
 				)(objects.get(args.notFound))
 			: undefined;
-		const indexDocumentObject = guard.must(
-			guard.isDefined,
-			() =>
-				`Cannot find ${args.index} in [${[...objects.keys()].join(
-					', '
-				)}]`
-		)(objects.get(args.index));
+		const indexDocumentObject = args.index
+			? guard.must(
+					guard.isDefined,
+					() =>
+						`Cannot find ${args.index} in [${[
+							...objects.keys(),
+						].join(', ')}]`
+				)(objects.get(args.index))
+			: undefined;
+		if (!args.serverOrigin && !indexDocumentObject)
+			throw new Error('A static index or server origin is required');
 
 		const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
 			`${name}_origin_access_identity`,
@@ -362,6 +369,20 @@ export class Website extends pulumi.ComponentResource {
 		// create the cloudfront
 
 		const origins: aws.types.input.cloudfront.DistributionOrigin[] = [
+			...(args.serverOrigin
+				? [
+						{
+							domainName: args.serverOrigin,
+							originId: `${name}_renderer`,
+							customOriginConfig: {
+								originProtocolPolicy: 'https-only',
+								httpPort: 80,
+								httpsPort: 443,
+								originSslProtocols: ['TLSv1.2'],
+							},
+						},
+					]
+				: []),
 			{
 				s3OriginConfig: {
 					originAccessIdentity:
@@ -423,31 +444,66 @@ export class Website extends pulumi.ComponentResource {
 				]
 			: undefined;
 
+		const pageCacheBehaviors = args.serverOrigin
+			? [
+					...['/assets/*', '/.well-known/security.txt'].map(
+						pathPattern => ({
+							pathPattern,
+							targetOriginId: `${name}_cloudfront_distribution`,
+							compress: true,
+							responseHeadersPolicyId: responseHeadersPolicy.id,
+							allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+							cachedMethods: ['GET', 'HEAD'],
+							forwardedValues: {
+								queryString: false,
+								cookies: { forward: 'none' },
+							},
+							viewerProtocolPolicy: 'redirect-to-https',
+							minTtl: 0,
+							defaultTtl: 86400,
+							maxTtl: 31536000,
+						})
+					),
+					...(orderedCacheBehaviors ?? []),
+				]
+			: orderedCacheBehaviors;
+
 		const distribution = new aws.cloudfront.Distribution(
 			`${name}_cloudfront_distribution`,
 			{
 				origins,
-				...(orderedCacheBehaviors ? { orderedCacheBehaviors } : {}),
+				...(pageCacheBehaviors
+					? { orderedCacheBehaviors: pageCacheBehaviors }
+					: {}),
 				enabled: true,
 				isIpv6Enabled: true,
-				defaultRootObject: indexDocumentObject.key,
+				defaultRootObject: indexDocumentObject?.key,
 				// this is the host that the distribution will expect
 				// (other than the default).
 				aliases: [args.domain],
 				// in the future we could maybe take a bunch of these as args, but
 				// we're not overengineering today!
 				// im sorry this bit kinda sucks
-				...(errorDocumentObject !== undefined
+				...(args.serverOrigin
 					? {
 							customErrorResponses: [
-								{
-									errorCode: 404,
-									responseCode: 404,
-									responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
-								},
-							],
+								400, 403, 404, 405, 500, 502, 503, 504,
+							].map(errorCode => ({
+								errorCode,
+								errorCachingMinTtl: 0,
+							})),
 						}
-					: {}),
+					: errorDocumentObject !== undefined
+						? {
+								customErrorResponses: [
+									{
+										errorCode: 404,
+										responseCode: 404,
+										responsePagePath: pulumi.interpolate`/${errorDocumentObject.key}`,
+									},
+								],
+							}
+						: {}),
 				defaultCacheBehavior: {
 					compress: true,
 					responseHeadersPolicyId: responseHeadersPolicy.id,
@@ -466,9 +522,11 @@ export class Website extends pulumi.ComponentResource {
 					// i'm fairly sure this is correct, but the docs kinda suck
 					// on which of AWS's many IDs this might be and sapling histgrep
 					// is broken.
-					targetOriginId: `${name}_cloudfront_distribution`,
+					targetOriginId: args.serverOrigin
+						? `${name}_renderer`
+						: `${name}_cloudfront_distribution`,
 					forwardedValues: {
-						queryString: false,
+						queryString: !!args.serverOrigin,
 						// I'm not using cookies for anything yet.
 						// and to be honest, i prefer localStorage.
 						cookies: {
@@ -477,8 +535,8 @@ export class Website extends pulumi.ComponentResource {
 					},
 					viewerProtocolPolicy: 'redirect-to-https',
 					minTtl: 0,
-					defaultTtl: 3600,
-					maxTtl: 86400,
+					defaultTtl: args.serverOrigin ? 0 : 3600,
+					maxTtl: args.serverOrigin ? 0 : 86400,
 				},
 				restrictions: {
 					geoRestriction: {
