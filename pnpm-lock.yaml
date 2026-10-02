@@ -457,8 +457,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 44.119.1
-        version: 44.119.1(typanion@3.14.0)
+        specifier: 44.121.3
+        version: 44.121.3(typanion@3.14.0)
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@24.19.0)
@@ -3029,20 +3029,20 @@ packages:
   '@remix-run/route-pattern@0.22.1':
     resolution: {integrity: sha512-czdGJWh09Lapvcqt7Vb09KlrU2PhRJ8xQaI+AItTuD9aDJ5MAgxnS38lnys6Ll+6RJEqPiaUqTwIQhVLwFvv+w==}
 
-  '@renovatebot/detect-tools@4.0.20':
-    resolution: {integrity: sha512-hPIbS6EyL/Sy9Bcv3nO6szMDNWsdkCtbaZpJN4EtL93CiRp3N+6DJmNkr6wm6UnNuyaI1CpUzFjPeeTp2jMx5A==}
+  '@renovatebot/detect-tools@4.0.21':
+    resolution: {integrity: sha512-1+yfO/pivwJu1m8180pfxHSVlx9ByZVDUa9xcvRLBraAFTn+ziDeOBoKVqpr4lElYwZ6kBNfE945dCVewz6edQ==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
 
   '@renovatebot/good-enough-parser@2.0.1':
     resolution: {integrity: sha512-FBLawccaWOPwqXgMSB3FTp1VTfGJWSTTXY2Q3kWPoLYOpKYBr3V37vtqFLjb5wUFkrXN2Sj+S840JXKfHwy8Rg==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
 
-  '@renovatebot/osv-offline-db@3.0.11':
-    resolution: {integrity: sha512-JFFrnTJjK/1GWMKilHfjU4GHZ+V9busmzZ+WUxDaQMlySNI1EA3Z3QTXG325noaDQhg0NqqXcPl8fLdrll0Oaw==}
+  '@renovatebot/osv-offline-db@3.0.12':
+    resolution: {integrity: sha512-zucy8DMvzE4JBjmobiAqk1mXnH2X7KwbZ9Q9YRw3RzevqhlBDZ+q5qQ3KLpEM1vaCpdhDUzaeJLxA5zOkNh4ww==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
 
-  '@renovatebot/osv-offline@3.0.11':
-    resolution: {integrity: sha512-xnf1rGaPDZR1DePYrKlOyMaHR6Giy+bOlqKut60+SPbf80PajCQd+rK1tdngkO88YM4EM1DJmkAtjHutPLqaCg==}
+  '@renovatebot/osv-offline@3.0.12':
+    resolution: {integrity: sha512-trFb1+hz84jtvvkJpsx/hEIktwDfyVsXIe4bWj7t5dSUHcP5JZmibE8CiR8KY9BXnqQtiig5HTRM5iwzlkQw/Q==}
     engines: {node: '>=22.12.0', pnpm: '>=10.0.0'}
 
   '@renovatebot/pep440@5.0.1':
@@ -5624,8 +5624,8 @@ packages:
     resolution: {integrity: sha512-w8ZNZr2mKIc7qeNaQ9AVPT1+iFaI+Avd4xudVOvdDJ8VytREi1Ft5Ih7hd9jjehod8vAM5GMsfQ/TpPf4EyoEA==}
     engines: {node: '>=14.14'}
 
-  fs-extra@11.4.0:
-    resolution: {integrity: sha512-EQsFzMUJkCKGr1ePqlYADkIUmHW1s3ZXr5Yqy6wbGrfUCphpl2maM/kyOIRA2HpP3AaFQTZXD4ldjek+nccddA==}
+  fs-extra@11.4.1:
+    resolution: {integrity: sha512-KYAb4c9BJQI6QqGKthV68OHe0badztdXJWKo0WtBA9IuCFPTKvE5ZdUBglP833aMjhaSPNO4A5j/EkzZtGlKjA==}
     engines: {node: '>=14.14'}
 
   fs-minipass@3.0.3:
@@ -5983,10 +5983,6 @@ packages:
 
   ignore@7.0.10:
     resolution: {integrity: sha512-HpbUakT7xp5miBUywCHf36ZEuAJNklBJDDsGpUIjMzOSmM8ELSfA9Sa/QDPeNeqeoN31u+UTCkL4klCOVvRm4Q==}
-    engines: {node: '>= 4'}
-
-  ignore@7.0.9:
-    resolution: {integrity: sha512-brTTsvFRt5C1gGHtPst/281UjPD5t9fBqbgoMPlVWy11ZLTPfu7HxK4ZYqO9H7o/yC9rSTCI85EaQ4OoY12qYw==}
     engines: {node: '>= 4'}
 
   immediate@3.0.6:
@@ -8199,8 +8195,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@44.119.1:
-    resolution: {integrity: sha512-nh7Of18pxcbl0VsmM9cfoJHs9qUITA+GnG+4w09KF17uWvYceRqLW6nYoCPq5QAc9HZg/5jmQqn9y4tZf+i1jw==}
+  renovate@44.121.3:
+    resolution: {integrity: sha512-Lmup8NkYLoWv/SUB2AjIAxBpthjxVj6uRHsdRi+xoQNl3l4xtEjyweyEFP7a0jPZB5Z7pOMWm8ZW5ECxobkNYQ==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -12261,9 +12257,9 @@ snapshots:
 
   '@remix-run/route-pattern@0.22.1': {}
 
-  '@renovatebot/detect-tools@4.0.20':
+  '@renovatebot/detect-tools@4.0.21':
     dependencies:
-      fs-extra: 11.4.0
+      fs-extra: 11.4.1
       toml-eslint-parser: 1.0.3
       upath: 3.0.8
       zod: 4.6.5
@@ -12275,18 +12271,18 @@ snapshots:
       klona: 2.0.6
       moo: 0.5.3
 
-  '@renovatebot/osv-offline-db@3.0.11':
+  '@renovatebot/osv-offline-db@3.0.12':
     dependencies:
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
-  '@renovatebot/osv-offline@3.0.11':
+  '@renovatebot/osv-offline@3.0.12':
     dependencies:
-      '@renovatebot/osv-offline-db': 3.0.11
+      '@renovatebot/osv-offline-db': 3.0.12
       adm-zip: 0.6.1
       debug: 4.4.3(supports-color@10.2.2)
-      fs-extra: 11.4.0
+      fs-extra: 11.4.1
       got: 15.1.0
       luxon: 3.7.2
     transitivePeerDependencies:
@@ -14997,7 +14993,7 @@ snapshots:
       jsonfile: 6.2.1
       universalify: 2.0.1
 
-  fs-extra@11.4.0:
+  fs-extra@11.4.1:
     dependencies:
       graceful-fs: 4.2.11
       jsonfile: 6.2.1
@@ -15483,8 +15479,6 @@ snapshots:
       minimatch: 10.2.6
 
   ignore@7.0.10: {}
-
-  ignore@7.0.9: {}
 
   immediate@3.0.6: {}
 
@@ -18229,7 +18223,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@44.119.1(typanion@3.14.0):
+  renovate@44.121.3(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1117.0
       '@aws-sdk/client-ec2': 3.1117.0
@@ -18262,9 +18256,9 @@ snapshots:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
-      '@renovatebot/detect-tools': 4.0.20
+      '@renovatebot/detect-tools': 4.0.21
       '@renovatebot/good-enough-parser': 2.0.1
-      '@renovatebot/osv-offline': 3.0.11
+      '@renovatebot/osv-offline': 3.0.12
       '@renovatebot/pep440': 5.0.1
       '@renovatebot/pgp': 2.0.2
       '@renovatebot/ruby-semver': 5.0.0
@@ -18297,7 +18291,7 @@ snapshots:
       execa: 10.0.1
       find-packages: 10.0.4
       find-up: 8.0.0
-      fs-extra: 11.4.0
+      fs-extra: 11.4.1
       git-url-parse: 16.1.0
       github-url-from-git: 1.5.0
       glob: 13.0.6
@@ -18306,7 +18300,7 @@ snapshots:
       got: 16.0.0
       graph-data-structure: 4.5.0
       handlebars: 4.7.9
-      ignore: 7.0.9
+      ignore: 7.0.10
       ini: 6.0.0
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 4.0.0
