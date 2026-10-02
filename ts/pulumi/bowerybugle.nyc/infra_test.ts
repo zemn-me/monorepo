@@ -5,6 +5,14 @@ const resources: pulumi.runtime.MockResourceArgs[] = [];
 const calls: pulumi.runtime.MockCallArgs[] = [];
 void pulumi.runtime.setMocks({
 	newResource: args => {
+		if (args.type === 'aws:s3/bucketV2:BucketV2') {
+			// With no explicit physical name, Pulumi uses the logical name plus
+			// a random suffix. Mocks otherwise accept names S3 rejects at deploy.
+			const name = args.inputs.bucket ?? `${args.name}-1234567`;
+			expect(name).toMatch(/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/);
+			expect(name.length).toBeLessThanOrEqual(63);
+			expect(name).not.toContain('..');
+		}
 		resources.push(args);
 		return {
 			id: `${args.name}-id`,

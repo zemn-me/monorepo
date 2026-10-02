@@ -3,6 +3,7 @@ import * as pulumi from '@pulumi/pulumi';
 
 import { BoweryBugleImage } from '#root/project/nyc/bowerybugle/cmd/api/BoweryBugleImage.js';
 import { sanitizeAwsLambdaStatementId } from '#root/ts/pulumi/lib/awsNames.js';
+import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { LambdaFunction } from '#root/ts/pulumi/lib/lambda_function.js';
 
@@ -41,7 +42,7 @@ export class Backend extends pulumi.ComponentResource {
 			durable
 		);
 		const bucket = new aws.s3.BucketV2(
-			`${name}_pdfs`,
+			deriveBucketName(`${name}_pdfs`),
 			{ tags: args.tags },
 			durable
 		);
