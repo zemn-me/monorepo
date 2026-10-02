@@ -47,6 +47,36 @@ repetitive caveats, and invented narrative arcs. Preserve the speaker's feelings
 and recollections with attribution, and keep citation quotations exact. Public
 notability and independent-source requirements do not apply to this private diary.
 
+The hosted curator additionally receives `journalWikiWritingInstructions`, adapted
+from Wikipedia's core content policies and article structure guidance:
+
+- [Neutral point of view](https://en.wikipedia.org/wiki/Wikipedia:Neutral_point_of_view):
+  distinguish reported events from attributed views, including secondhand accounts.
+  Preserve subjective experience without endorsing it or inventing a counterargument.
+  Allocate coverage across the diary's history rather than letting a recent or dramatic
+  recording dominate; repeated retellings are not independent corroboration.
+- [Verifiability](https://en.wikipedia.org/wiki/Wikipedia:Verifiability):
+  each cited passage must support the actual claim in context, including its identity,
+  timing, certainty, and scope. A genuine quotation on the same topic is insufficient.
+  Here the original diary is the source; public publication and independent sourcing
+  requirements do not apply.
+- [No original research](https://en.wikipedia.org/wiki/Wikipedia:No_original_research):
+  combine supported developments across dates without inventing a causal explanation,
+  diagnosis, or relationship. Report the speaker's interpretations as interpretations;
+  hedging does not make an unsupported inference suitable for publication.
+- [Lead sections](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Lead_section):
+  start with a concise overview identifying the subject and its place in Thomas's
+  life. Leads carry citations and preserve qualifications just like the body.
+- [Summary style](https://en.wikipedia.org/wiki/Wikipedia:Summary_style):
+  organize longer pages by subject and useful chronology, with descriptive headings;
+  summarize and link related subjects without duplicating whole accounts. Short pages
+  do not need artificial sections.
+
+The evidence and attribution guidance also applies to contextual entry analyses;
+the page structure guidance does not replace their narrative form. These rules do
+not impose public notability thresholds or permit outside research. They preserve
+the journal's existing page-eligibility heuristic, exact quotes, and personal scope.
+
 The curator reviews reused prose against this guidance as well as its sources.
 Bump `journalCurationVersion` when changing the writing policy so an unchanged
 archive becomes eligible for a fresh scheduled generation. The calendar remains
