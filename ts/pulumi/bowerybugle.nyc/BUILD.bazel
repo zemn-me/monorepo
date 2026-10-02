@@ -15,6 +15,7 @@ ts_project(
     name = "bowerybugle.nyc",
     srcs = [
         "backend.ts",
+        "frontend.ts",
         "index.ts",
         "registrar.ts",
     ],
@@ -43,6 +44,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "backend.ts",
+        "frontend.ts",
         "index.ts",
         "infra_test.ts",
         "registrar.ts",

@@ -1,4 +1,4 @@
-"""Build statically prerendered Remix/React Router sites from Bazel inputs."""
+"""Build static or server-rendered Remix/React Router sites from Bazel inputs."""
 
 load("@rules_itest//private:itest.bzl", "itest_service")
 load("//js:rules.bzl", "js_binary", "js_run_binary")
@@ -22,9 +22,9 @@ def remix_itest_service_dev(name, exe = None, args = [], **kwargs):
         **kwargs
     )
 
-def remix_project(name, srcs, **kwargs):
+def remix_project(name, srcs, server_entry = None, **kwargs):
     native.filegroup(name = name + "_git_analysis_srcs", srcs = srcs)
-    inputs = srcs + [
+    inputs = srcs + ([server_entry, "//:node_modules/esbuild"] if server_entry else []) + [
         "vite.config.mjs",
         "react-router.config.mjs",
         "//ts/remix:tooling",
@@ -46,8 +46,8 @@ def remix_project(name, srcs, **kwargs):
         name = "build",
         tool = ":build_bin",
         srcs = inputs,
-        args = ["build", native.package_name()],
-        out_dirs = ["build"],
+        args = ["build", native.package_name()] + (["--server-entry", server_entry] if server_entry else []),
+        out_dirs = ["build"] + (["server_build"] if server_entry else []),
     )
     js_binary(
         name = "dev",
