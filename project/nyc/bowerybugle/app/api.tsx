@@ -58,9 +58,14 @@ export class API {
 		return new URL(path, this.origin).href;
 	}
 	issues() {
-		return this.queries.queryOptions('get', '/api/issues', {
-			baseUrl: this.origin,
-		});
+		return this.queries.queryOptions(
+			'get',
+			'/api/issues',
+			{
+				baseUrl: this.origin,
+			},
+			{ staleTime: 30_000 }
+		);
 	}
 	session() {
 		return this.queries.queryOptions(

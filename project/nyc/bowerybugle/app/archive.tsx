@@ -299,7 +299,7 @@ export function Archive({ managing = false }: { managing?: boolean }) {
 						}
 					/>
 					<noscript>
-						<p>Enable JavaScript to load the PDFs and log in.</p>
+						<p>Enable JavaScript to log in and manage issues.</p>
 					</noscript>
 					{managing && authenticated && (
 						<form

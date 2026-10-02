@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { data, Link } from 'react-router';
 export default function NotFound() {
 	return (
 		<main className="paper">
@@ -8,3 +8,7 @@ export default function NotFound() {
 	);
 }
 export const handle = { metadata: { title: 'Page not found' } };
+
+export function loader() {
+	return data(null, { status: 404 });
+}

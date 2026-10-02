@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { realpathSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import {
 	access,
 	cp,
@@ -13,6 +13,7 @@ import {
 import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import serve from 'serve-handler';
 
 const [command, project, ...args] = process.argv.slice(2);
@@ -44,12 +45,36 @@ if (command === 'dev') {
 const portIndex = args.lastIndexOf('--port');
 const port = portIndex < 0 ? 3000 : Number(args[portIndex + 1]);
 if (command === 'start') {
-	createServer((request, response) =>
-		serve(request, response, {
-			public: path.join(root, 'build'),
-			cleanUrls: true,
-		})
-	).listen(port, 'localhost', () => console.log(`http://localhost:${port}`));
+	const serverFile = path.join(root, 'server_build/handler.mjs');
+	const renderer = existsSync(serverFile)
+		? await import(pathToFileURL(serverFile))
+		: undefined;
+	createServer(async (request, response) => {
+		if (!renderer || request.url.startsWith('/assets/')) {
+			return serve(request, response, {
+				public: path.join(root, 'build'),
+				cleanUrls: true,
+			});
+		}
+		try {
+			const result = await renderer.fetchPage(
+				new Request(
+					new URL(request.url, `http://${request.headers.host}`),
+					{ method: request.method }
+				),
+				{ apiOrigin: process.env.API_ORIGIN }
+			);
+			response.writeHead(
+				result.status,
+				Object.fromEntries(result.headers)
+			);
+			response.end(Buffer.from(await result.arrayBuffer()));
+		} catch (error) {
+			console.error(error);
+			response.writeHead(500);
+			response.end('Unable to render page');
+		}
+	}).listen(port, 'localhost', () => console.log(`http://localhost:${port}`));
 } else {
 	const require = createRequire(import.meta.url);
 	const cli = path.join(
@@ -85,6 +110,26 @@ if (command === 'start') {
 		await cp(path.join(root, '.react-router-build/client'), output, {
 			recursive: true,
 		});
+		const serverEntryIndex = args.indexOf('--server-entry');
+		if (serverEntryIndex !== -1) {
+			const { build } = await import('esbuild');
+			await build({
+				stdin: {
+					contents: `import {createHandler} from ${JSON.stringify(path.join(root, args[serverEntryIndex + 1]))}; import * as build from ${JSON.stringify(path.join(root, '.react-router-build/server/index.js'))}; export const {handler, fetchPage} = createHandler(build);`,
+					resolveDir: root,
+					sourcefile: 'server-entry.mjs',
+				},
+				outfile: path.join(root, 'server_build/handler.mjs'),
+				bundle: true,
+				platform: 'node',
+				format: 'esm',
+				target: 'node24',
+				banner: {
+					js: "import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);",
+				},
+				define: { 'process.env.NODE_ENV': '"production"' },
+			});
+		}
 		// CloudFront stores extensionless page keys; preserve the existing export contract.
 		async function flatten(directory) {
 			for (const entry of await readdir(directory, {

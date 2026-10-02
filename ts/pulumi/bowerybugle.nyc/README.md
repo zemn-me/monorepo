@@ -55,7 +55,13 @@ consumption are one DynamoDB transaction. PDFs and metadata are separate from
 static assets and protected from production stack deletion.
 
 The frontend uses the repository's Remix/React Router build in
-`project/nyc/bowerybugle`, with prerendered public and management routes.
+`project/nyc/bowerybugle`, with public and management routes rendered per request by a Node.js Lambda.
+The root loader fetches the public issue list before rendering and dehydrates a
+request-scoped React Query cache into the HTML. Hydration reuses that data for
+30 seconds; edits still invalidate it immediately. Page and route-data responses
+use `no-store`, and CloudFront disables caching for the renderer. Hashed assets
+remain in S3 behind CloudFront. The renderer has logging permissions only and
+never forwards author cookies to the API.
 TanStack React Query owns issue/session reads and author mutations. Successful
 edits invalidate the issue query, refreshing both routes' shared archive cache.
 The query cache is in memory; it does not persist authentication to local storage.
@@ -63,8 +69,8 @@ The query cache is in memory; it does not persist authentication to local storag
 The Go backend follows the repository's Lambda HTTP adapter and OCI image
 pattern. It has its own TLS hostname, `api.<site domain>`, with Route 53 DNS and
 an API Gateway regional custom-domain mapping. The default execute-api endpoint
-is disabled. The static site's CloudFront distribution has no API origin or
-proxy behavior. Fetches use `credentials: 'include'`; CORS permits only the
+is disabled. The site's CloudFront distribution sends pages to the frontend renderer; it
+does not proxy the Go API. Fetches use `credentials: 'include'`; CORS permits only the
 configured site origin, including preflights and error responses. Write requests
 also require that exact Origin. The API-host cookie stays SameSite=Strict because
 the two HTTPS hosts are same-site. PDF uploads still go directly to S3 without
@@ -173,4 +179,11 @@ DOM tests cover login confirmation, publishing, failed-upload retry and logout.
 Infrastructure tests cover all domain modes, private versioned storage,
 restricted email permissions, separate API DNS/TLS routing, and no CloudFront API proxy.
 HTTP tests cover trusted and rejected CORS origins, preflights and error responses.
-The Remix production build is also checked for prerendered routes and linked assets.
+The bundled renderer is tested for populated initial HTML, fresh data after edits,
+Lambda request handling, and retryable API errors. The browser publishing test
+uses the real renderer and Go backend on separate origins, and verifies hydration
+does not fetch the initial archive again.
+
+For a local production preview, set `API_ORIGIN` to the public API origin and run
+`bazel run //project/nyc/bowerybugle:start`. Development uses the same environment
+variable with `bazel run //project/nyc/bowerybugle:dev`.
