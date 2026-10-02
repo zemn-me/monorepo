@@ -148,7 +148,7 @@ function Login({
 		if (error) setToken(null);
 	}, [error]);
 	const send = useMutation({
-		mutationFn: (email: string) => api.request('/api/login', { email }),
+		mutationFn: (email: string) => api.requestLogin(email),
 	});
 	return (
 		<section id="author-panel" aria-label="Author login">
@@ -209,12 +209,7 @@ export function Archive({ managing = false }: { managing?: boolean }) {
 	const edit = useEdit();
 	const auth = useMutation({
 		mutationFn: (token: string | null) =>
-			token === null
-				? api.request<{ authenticated: boolean }>('/api/logout', {})
-				: api.request<{ authenticated: boolean }>(
-						'/api/login/confirm',
-						{ token }
-					),
+			token === null ? api.logout() : api.confirmLogin(token),
 		onSuccess: async data => {
 			await client.cancelQueries({ queryKey: api.session().queryKey });
 			client.setQueryData(api.session().queryKey, data);

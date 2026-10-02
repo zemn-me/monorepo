@@ -1,11 +1,27 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
 load("//go:rules.bzl", "go_library")
+
+go_oapi_codegen(
+    name = "server_gen",
+    out = "api.gen.go",
+    generate = [
+        "chi-server",
+        "models",
+        "strict-server",
+        "spec",
+    ],
+    package = "server",
+    source = "//project/nyc/bowerybugle/api:spec.yaml",
+)
 
 go_library(
     name = "server",
     srcs = [
+        "api.gen.go",
         "aws.go",
+        "protocol_http.go",
         "server.go",
         "totp.go",
     ],
@@ -19,6 +35,11 @@ go_library(
         "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
         "@com_github_aws_aws_sdk_go_v2_service_sesv2//:sesv2",
         "@com_github_aws_aws_sdk_go_v2_service_sesv2//types",
+        "@com_github_getkin_kin_openapi//openapi3",  # keep: generated spec
+        "@com_github_getkin_kin_openapi//openapi3filter",
+        "@com_github_go_chi_chi_v5//:chi",
+        "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
+        "@com_github_oapi_codegen_runtime//:runtime",  # keep: generated router
     ],
 )
 
@@ -27,6 +48,7 @@ go_test(
     srcs = [
         "aws_test.go",
         "browser_test.go",
+        "protocol_http_test.go",
         "server_test.go",
         "totp_test.go",
     ],
@@ -37,6 +59,9 @@ go_test(
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
         "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+        "@com_github_getkin_kin_openapi//openapi3filter",
+        "@com_github_getkin_kin_openapi//routers",
+        "@com_github_getkin_kin_openapi//routers/gorillamux",
         "@com_github_tebeka_selenium//:selenium",
         "@io_bazel_rules_go//go/runfiles",
     ],

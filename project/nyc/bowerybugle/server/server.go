@@ -11,11 +11,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"log/slog"
 	"net/http"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -46,11 +44,6 @@ type Store interface {
 	Issues(context.Context) ([]Record, error)
 	Publish(context.Context, string, int64, Record) error
 	ReplaceIssue(context.Context, Record, Record) error
-}
-type Upload struct {
-	URL    string            `json:"url"`
-	Fields map[string]string `json:"fields"`
-	ID     string            `json:"id"`
 }
 type Object struct {
 	Version     string
@@ -101,39 +94,14 @@ func jsonResponse(w http.ResponseWriter, status int, data any) {
 	_ = json.NewEncoder(w).Encode(data)
 }
 func problem(w http.ResponseWriter, status int, message string) {
-	jsonResponse(w, status, map[string]string{"error": message})
+	jsonResponse(w, status, Problem{Error: message})
 }
 func failure(w http.ResponseWriter, err error) {
 	slog.Error("archive operation failed", "error", err)
 	problem(w, 503, "Something went wrong. Please try again.")
 }
-func decode(w http.ResponseWriter, r *http.Request, v any) bool {
-	r.Body = http.MaxBytesReader(w, r.Body, 4096)
-	d := json.NewDecoder(r.Body)
-	d.DisallowUnknownFields()
-	if err := d.Decode(v); err != nil {
-		problem(w, 400, "Invalid request.")
-		return false
-	}
-	if err := d.Decode(new(any)); err != io.EOF {
-		problem(w, 400, "Invalid request.")
-		return false
-	}
-	return true
-}
 func (s *Server) Handler() http.Handler {
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /api/issues", s.issues)
-	mux.HandleFunc("POST /api/issues", s.addIssue)
-	mux.HandleFunc("DELETE /api/issues/{number}", s.deleteIssue)
-	mux.HandleFunc("DELETE /api/issues/{number}/pdf", s.removePDF)
-	mux.HandleFunc("GET /api/issues/{number}/pdf", s.pdf)
-	mux.HandleFunc("POST /api/login", s.login)
-	mux.HandleFunc("POST /api/login/confirm", s.confirm)
-	mux.HandleFunc("GET /api/session", s.session)
-	mux.HandleFunc("POST /api/logout", s.logout)
-	mux.HandleFunc("POST /api/uploads", s.prepare)
-	mux.HandleFunc("POST /api/uploads/{id}/publish", s.publish)
+	mux := s.apiHandler()
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -189,28 +157,11 @@ func (s *Server) authenticated(r *http.Request) (bool, error) {
 	}
 	return rec.Expires > s.now().Unix(), nil
 }
-func (s *Server) require(w http.ResponseWriter, r *http.Request) bool {
-	ok, err := s.authenticated(r)
-	if err != nil {
-		failure(w, err)
-		return false
-	}
-	if !ok {
-		problem(w, 401, "Please log in again.")
-	}
-	return ok
-}
-func (s *Server) login(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		Email string `json:"email"`
-	}
-	if !decode(w, r, &req) {
-		return
-	}
+func (s *Server) RequestLogin(ctx context.Context, request RequestLoginRequestObject) (RequestLoginResponseObject, error) {
+	req := request.Body
 	// The address is configured only on the server, never advertised in the page.
 	if strings.ToLower(strings.TrimSpace(req.Email)) != s.Author {
-		jsonResponse(w, 202, map[string]bool{"sent": true})
-		return
+		return RequestLogin202JSONResponse{Sent: true}, nil
 	}
 	now := s.now().Unix()
 	for _, limit := range []struct {
@@ -218,44 +169,30 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 		expires int64
 		max     int
 	}{{"login-minute", now + 60, 1}, {fmt.Sprintf("login-hour-%d", now/3600), (now/3600 + 1) * 3600, 10}} {
-		ok, err := s.Store.Limit(r.Context(), limit.key, now, limit.expires, limit.max)
+		ok, err := s.Store.Limit(ctx, limit.key, now, limit.expires, limit.max)
 		if err != nil {
-			failure(w, err)
-			return
+			return nil, err
 		}
 		if !ok {
-			problem(w, 429, "Please wait before requesting another link.")
-			return
+			return nil, apiError{429, "Please wait before requesting another link."}
 		}
 	}
 	code, expires, err := s.loginCode(s.now())
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
 	// The code stays out of request URLs and is exchanged only after a click.
-	if err := s.Mail.Send(r.Context(), s.Author, LoginEmail{Link: s.Origin + "/manage#login=" + code, Code: code, Expires: expires}); err != nil {
-		failure(w, err)
-		return
+	if err := s.Mail.Send(ctx, s.Author, LoginEmail{Link: s.Origin + "/manage#login=" + code, Code: code, Expires: expires}); err != nil {
+		return nil, err
 	}
-	jsonResponse(w, 202, map[string]bool{"sent": true})
+	return RequestLogin202JSONResponse{Sent: true}, nil
 }
-func (s *Server) confirm(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		Token string `json:"token"`
-	}
-	if !decode(w, r, &req) {
-		return
-	}
-	if !validCode(req.Token) {
-		problem(w, 400, "This link is invalid or has expired. Request a new one.")
-		return
-	}
+func (s *Server) ConfirmLogin(ctx context.Context, request ConfirmLoginRequestObject) (ConfirmLoginResponseObject, error) {
+	req := request.Body
 	now := s.now()
 	code, expires, err := s.loginCode(now)
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
 	for _, limit := range []struct {
 		key     string
@@ -265,62 +202,49 @@ func (s *Server) confirm(w http.ResponseWriter, r *http.Request) {
 		{"verify-minute", now.Unix() + 60, 10},
 		{fmt.Sprintf("verify-window-%d", expires.Unix()), expires.Unix(), 100},
 	} {
-		ok, err := s.Store.Limit(r.Context(), limit.key, now.Unix(), limit.expires, limit.max)
+		ok, err := s.Store.Limit(ctx, limit.key, now.Unix(), limit.expires, limit.max)
 		if err != nil {
-			failure(w, err)
-			return
+			return nil, err
 		}
 		if !ok {
-			problem(w, 429, "Too many login attempts. Please try again later.")
-			return
+			return nil, apiError{429, "Too many login attempts. Please try again later."}
 		}
 	}
 	// Reuse within the current window is intentional. Do not record or consume
 	// individual challenges, and do not accept adjacent 12-hour windows.
 	if !hmac.Equal([]byte(req.Token), []byte(code)) {
-		problem(w, 400, "This link is invalid or has expired. Request a new one.")
-		return
+		return nil, apiError{400, "This link is invalid or has expired. Request a new one."}
 	}
 	t := token()
 	sessionExpires := now.Add(7 * 24 * time.Hour)
-	if err := s.Store.Put(r.Context(), "session", digest(t), Record{Expires: sessionExpires.Unix()}); err != nil {
-		failure(w, err)
-		return
+	if err := s.Store.Put(ctx, "session", digest(t), Record{Expires: sessionExpires.Unix()}); err != nil {
+		return nil, err
 	}
-	http.SetCookie(w, &http.Cookie{Name: sessionCookie, Value: t, Path: "/", Secure: true, HttpOnly: true, SameSite: http.SameSiteStrictMode, MaxAge: 7 * 24 * 3600, Expires: sessionExpires})
-	jsonResponse(w, 200, map[string]bool{"authenticated": true})
+	cookie := (&http.Cookie{Name: sessionCookie, Value: t, Path: "/", Secure: true, HttpOnly: true, SameSite: http.SameSiteStrictMode, MaxAge: 7 * 24 * 3600, Expires: sessionExpires}).String()
+	return ConfirmLogin200JSONResponse{Body: Session{Authenticated: true}, Headers: ConfirmLogin200ResponseHeaders{SetCookie: cookie}}, nil
 }
-func (s *Server) session(w http.ResponseWriter, r *http.Request) {
-	ok, err := s.authenticated(r)
+func (s *Server) GetSession(ctx context.Context, request GetSessionRequestObject) (GetSessionResponseObject, error) {
+	ok, err := s.authenticated(protocolRequest(ctx))
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
-	jsonResponse(w, 200, map[string]bool{"authenticated": ok})
+	return GetSession200JSONResponse{Authenticated: ok}, nil
 }
-func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
-	if c, e := r.Cookie(sessionCookie); e == nil {
-		_, err := s.Store.Take(r.Context(), "session", digest(c.Value), 0)
+func (s *Server) Logout(ctx context.Context, request LogoutRequestObject) (LogoutResponseObject, error) {
+	if c, e := protocolRequest(ctx).Cookie(sessionCookie); e == nil {
+		_, err := s.Store.Take(ctx, "session", digest(c.Value), 0)
 		if err != nil && !errors.Is(err, ErrMissing) {
-			failure(w, err)
-			return
+			return nil, err
 		}
 	}
-	http.SetCookie(w, &http.Cookie{Name: sessionCookie, Value: "", Path: "/", Secure: true, HttpOnly: true, SameSite: http.SameSiteStrictMode, MaxAge: -1})
-	jsonResponse(w, 200, map[string]bool{"authenticated": false})
+	cookie := (&http.Cookie{Name: sessionCookie, Value: "", Path: "/", Secure: true, HttpOnly: true, SameSite: http.SameSiteStrictMode, MaxAge: -1}).String()
+	return Logout200JSONResponse{Body: Session{Authenticated: false}, Headers: Logout200ResponseHeaders{SetCookie: cookie}}, nil
 }
 
-type Issue struct {
-	Number int    `json:"number"`
-	PDF    string `json:"pdf,omitempty"`
-	Size   int64  `json:"size,omitempty"`
-}
-
-func (s *Server) issues(w http.ResponseWriter, r *http.Request) {
-	records, err := s.Store.Issues(r.Context())
+func (s *Server) ListIssues(ctx context.Context, request ListIssuesRequestObject) (ListIssuesResponseObject, error) {
+	records, err := s.Store.Issues(ctx)
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
 	issues := map[int]Issue{}
 	for n := 1; n <= 6; n++ {
@@ -343,108 +267,74 @@ func (s *Server) issues(w http.ResponseWriter, r *http.Request) {
 		out = append(out, i)
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Number > out[j].Number })
-	jsonResponse(w, 200, map[string]any{"issues": out})
+	return ListIssues200JSONResponse{Issues: out}, nil
 }
-func (s *Server) pdf(w http.ResponseWriter, r *http.Request) {
-	n, err := strconv.Atoi(r.PathValue("number"))
-	if err != nil || n < 1 || n > 9999 {
-		problem(w, 404, "Issue not found.")
-		return
-	}
-	rec, err := s.Store.Get(r.Context(), "issue", issueID(n))
+func (s *Server) ReadPDF(ctx context.Context, request ReadPDFRequestObject) (ReadPDFResponseObject, error) {
+	n := request.Number
+	rec, err := s.Store.Get(ctx, "issue", issueID(n))
 	if errors.Is(err, ErrMissing) || err == nil && (rec.Deleted || rec.Key == "") {
-		problem(w, 404, "PDF not uploaded yet.")
-		return
+		return nil, apiError{404, "PDF not uploaded yet."}
 	}
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
-	url, err := s.Files.Download(r.Context(), rec)
+	url, err := s.Files.Download(ctx, rec)
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
-	http.Redirect(w, r, url, http.StatusFound)
+	return ReadPDF302Response{Headers: ReadPDF302ResponseHeaders{Location: url}}, nil
 }
-func (s *Server) prepare(w http.ResponseWriter, r *http.Request) {
-	if !s.require(w, r) {
-		return
-	}
-	var req struct {
-		Number int   `json:"number"`
-		Size   int64 `json:"size"`
-	}
-	if !decode(w, r, &req) {
-		return
-	}
-	if req.Number < 1 || req.Number > 9999 || req.Size < 5 || req.Size > MaxPDFBytes {
-		problem(w, 400, "Choose an issue number and a PDF up to 50 MB.")
-		return
-	}
-	issue, err := s.issue(r.Context(), req.Number)
+func (s *Server) PrepareUpload(ctx context.Context, request PrepareUploadRequestObject) (PrepareUploadResponseObject, error) {
+	req := request.Body
+	issue, err := s.issue(ctx, req.Number)
 	if errors.Is(err, ErrMissing) || err == nil && issue.Deleted {
-		problem(w, 404, "Add this issue before uploading a PDF.")
-		return
+		return nil, apiError{404, "Add this issue before uploading a PDF."}
 	}
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
 	id := token()
 	key := "issues/" + id + ".pdf"
-	upload, err := s.Files.Prepare(r.Context(), key)
+	upload, err := s.Files.Prepare(ctx, key)
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
-	if err := s.Store.Put(r.Context(), "upload", id, Record{Number: req.Number, Revision: issue.Revision, Key: key, Size: req.Size, Expires: s.now().Unix() + 900}); err != nil {
-		failure(w, err)
-		return
+	if err := s.Store.Put(ctx, "upload", id, Record{Number: req.Number, Revision: issue.Revision, Key: key, Size: req.Size, Expires: s.now().Unix() + 900}); err != nil {
+		return nil, err
 	}
 	upload.ID = id
-	jsonResponse(w, 200, upload)
+	return PrepareUpload200JSONResponse(upload), nil
 }
-func (s *Server) publish(w http.ResponseWriter, r *http.Request) {
-	if !s.require(w, r) {
-		return
-	}
-	id := r.PathValue("id")
+func (s *Server) PublishUpload(ctx context.Context, request PublishUploadRequestObject) (PublishUploadResponseObject, error) {
+	id := request.Id
 	if !validToken(id) {
-		problem(w, 400, "Invalid upload.")
-		return
+		return nil, apiError{400, "Invalid upload."}
 	}
-	rec, err := s.Store.Get(r.Context(), "upload", id)
+	rec, err := s.Store.Get(ctx, "upload", id)
 	if errors.Is(err, ErrMissing) || err == nil && rec.Expires <= s.now().Unix() {
-		problem(w, 400, "This upload has expired. Please upload again.")
-		return
+		return nil, apiError{400, "This upload has expired. Please upload again."}
 	}
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
-	obj, err := s.Files.Inspect(r.Context(), rec.Key)
+	obj, err := s.Files.Inspect(ctx, rec.Key)
 	if err != nil {
-		failure(w, err)
-		return
+		return nil, err
 	}
 	if obj.Version == "" || obj.Version == "null" || obj.Size != rec.Size || obj.Size > MaxPDFBytes || obj.ContentType != "application/pdf" || !strings.HasPrefix(string(obj.Prefix), "%PDF-") {
-		problem(w, 400, "That file is not a valid PDF upload.")
-		return
+		return nil, apiError{400, "That file is not a valid PDF upload."}
 	}
 	// Pin the inspected version. A still-valid upload URL must never replace the
 	// bytes readers see after publication without another validation step.
 	rec.Version = obj.Version
 	rec.Expires = 0
-	if err := s.Store.Publish(r.Context(), id, s.now().Unix(), rec); err != nil {
+	if err := s.Store.Publish(ctx, id, s.now().Unix(), rec); err != nil {
 		if errors.Is(err, ErrMissing) || errors.Is(err, ErrConflict) {
-			problem(w, 409, "This issue or upload has changed. Reload and try again.")
-		} else {
-			failure(w, err)
+			return nil, apiError{409, "This issue or upload has changed. Reload and try again."}
 		}
-		return
+		return nil, err
 	}
-	jsonResponse(w, 200, Issue{Number: rec.Number, PDF: fmt.Sprintf("/api/issues/%d/pdf", rec.Number), Size: rec.Size})
+	return PublishUpload200JSONResponse{Number: rec.Number, PDF: fmt.Sprintf("/api/issues/%d/pdf", rec.Number), Size: rec.Size}, nil
 }
 
 // Default issue rows exist until explicitly changed. Tombstones prevent deleted
@@ -456,62 +346,49 @@ func (s *Server) issue(ctx context.Context, n int) (Record, error) {
 	}
 	return rec, err
 }
-func (s *Server) addIssue(w http.ResponseWriter, r *http.Request) {
-	if !s.require(w, r) {
-		return
-	}
-	var req struct {
-		Number int `json:"number"`
-	}
-	if !decode(w, r, &req) {
-		return
-	}
-	if req.Number < 1 || req.Number > 9999 {
-		problem(w, 400, "Choose an issue number from 1 to 9999.")
-		return
-	}
-	old, err := s.issue(r.Context(), req.Number)
+func (s *Server) AddIssue(ctx context.Context, request AddIssueRequestObject) (AddIssueResponseObject, error) {
+	req := request.Body
+	old, err := s.issue(ctx, req.Number)
 	if err == nil && !old.Deleted {
-		problem(w, 409, "That issue already exists.")
-		return
+		return nil, apiError{409, "That issue already exists."}
 	}
 	if err != nil && !errors.Is(err, ErrMissing) {
-		failure(w, err)
-		return
+		return nil, err
 	}
 	old.Number = req.Number
-	s.replaceIssue(w, r, old, Record{Number: req.Number, Revision: token()})
+	if err := s.replaceIssue(ctx, old, Record{Number: req.Number, Revision: token()}); err != nil {
+		return nil, err
+	}
+	return AddIssue200JSONResponse{SavedJSONResponse{Saved: true}}, nil
 }
-func (s *Server) deleteIssue(w http.ResponseWriter, r *http.Request) { s.editIssue(w, r, true) }
-func (s *Server) removePDF(w http.ResponseWriter, r *http.Request)   { s.editIssue(w, r, false) }
-func (s *Server) editIssue(w http.ResponseWriter, r *http.Request, deleted bool) {
-	if !s.require(w, r) {
-		return
+func (s *Server) DeleteIssue(ctx context.Context, request DeleteIssueRequestObject) (DeleteIssueResponseObject, error) {
+	if err := s.editIssue(ctx, request.Number, true); err != nil {
+		return nil, err
 	}
-	n, err := strconv.Atoi(r.PathValue("number"))
-	if err != nil || n < 1 || n > 9999 {
-		problem(w, 404, "Issue not found.")
-		return
+	return DeleteIssue200JSONResponse{SavedJSONResponse{Saved: true}}, nil
+}
+func (s *Server) RemovePDF(ctx context.Context, request RemovePDFRequestObject) (RemovePDFResponseObject, error) {
+	if err := s.editIssue(ctx, request.Number, false); err != nil {
+		return nil, err
 	}
-	old, err := s.issue(r.Context(), n)
+	return RemovePDF200JSONResponse{SavedJSONResponse{Saved: true}}, nil
+}
+func (s *Server) editIssue(ctx context.Context, n int, deleted bool) error {
+	old, err := s.issue(ctx, n)
 	if errors.Is(err, ErrMissing) || err == nil && old.Deleted {
-		problem(w, 404, "Issue not found.")
-		return
+		return apiError{404, "Issue not found."}
 	}
 	if err != nil {
-		failure(w, err)
-		return
+		return err
 	}
-	s.replaceIssue(w, r, old, Record{Number: n, Revision: token(), Deleted: deleted})
+	return s.replaceIssue(ctx, old, Record{Number: n, Revision: token(), Deleted: deleted})
 }
-func (s *Server) replaceIssue(w http.ResponseWriter, r *http.Request, old, next Record) {
-	if err := s.Store.ReplaceIssue(r.Context(), old, next); err != nil {
+func (s *Server) replaceIssue(ctx context.Context, old, next Record) error {
+	if err := s.Store.ReplaceIssue(ctx, old, next); err != nil {
 		if errors.Is(err, ErrConflict) {
-			problem(w, 409, "This issue has changed. Reload and try again.")
-		} else {
-			failure(w, err)
+			return apiError{409, "This issue has changed. Reload and try again."}
 		}
-		return
+		return err
 	}
-	jsonResponse(w, 200, map[string]bool{"saved": true})
+	return nil
 }

@@ -1,22 +1,21 @@
-import {
-	queryOptions,
-	useMutation,
-	useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import createFetchClient from 'openapi-fetch';
+import createClient from 'openapi-react-query';
 import { createContext, type ReactNode, useContext } from 'react';
+import type {
+	components,
+	paths,
+} from '#root/project/nyc/bowerybugle/api/api_client.gen.js';
 
-export interface Issue {
-	number: number;
-	pdf?: string;
-	size?: number;
-}
-interface Session {
-	authenticated: boolean;
-}
-interface Upload {
-	id: string;
-	url: string;
-	fields: Record<string, string>;
+export type Issue = components['schemas']['Issue'];
+
+function data<T>(result: {
+	data?: T;
+	error?: components['schemas']['Problem'];
+}): T {
+	if (result.error) throw new Error(result.error.error);
+	if (result.data === undefined) throw new Error('Please try again.');
+	return result.data;
 }
 
 // Each deployed site uses a sibling API host, keeping cookies off the static site.
@@ -26,51 +25,65 @@ export function apiOrigin(siteOrigin: string): string {
 	return url.origin;
 }
 export class API {
-	constructor(readonly origin: string) {}
+	readonly fetchClient;
+	readonly queries;
+	constructor(readonly origin: string) {
+		this.fetchClient = createFetchClient<paths>({
+			baseUrl: origin,
+			credentials: 'include',
+			cache: 'no-store',
+			fetch: (...args) => globalThis.fetch(...args),
+		});
+		this.fetchClient.use({
+			async onResponse({ response }) {
+				if (!response.ok) {
+					const body: unknown = await response
+						.clone()
+						.json()
+						.catch(() => null);
+					throw new Error(
+						body &&
+							typeof body === 'object' &&
+							'error' in body &&
+							typeof body.error === 'string'
+							? body.error
+							: 'Please try again.'
+					);
+				}
+			},
+		});
+		this.queries = createClient(this.fetchClient);
+	}
 	url(path: string) {
 		return new URL(path, this.origin).href;
 	}
-	async request<T>(
-		path: string,
-		body?: unknown,
-		method = body === undefined ? 'GET' : 'POST',
-		signal?: AbortSignal
-	): Promise<T> {
-		const response = await fetch(this.url(path), {
-			method,
-			signal,
-			credentials: 'include',
-			cache: 'no-store',
-			...(body === undefined
-				? {}
-				: {
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(body),
-					}),
-		});
-		const data = await response.json();
-		if (!response.ok) throw new Error(data.error || 'Please try again.');
-		return data;
-	}
 	issues() {
-		return queryOptions({
-			queryKey: ['issues', this.origin],
-			queryFn: ({ signal }) =>
-				this.request<{ issues: Issue[] }>(
-					'/api/issues',
-					undefined,
-					'GET',
-					signal
-				),
+		return this.queries.queryOptions('get', '/api/issues', {
+			baseUrl: this.origin,
 		});
 	}
 	session() {
-		return queryOptions({
-			queryKey: ['session', this.origin],
-			queryFn: ({ signal }) =>
-				this.request<Session>('/api/session', undefined, 'GET', signal),
-			retry: false,
-		});
+		return this.queries.queryOptions(
+			'get',
+			'/api/session',
+			{ baseUrl: this.origin },
+			{ retry: false }
+		);
+	}
+	async requestLogin(email: string) {
+		return data(
+			await this.fetchClient.POST('/api/login', { body: { email } })
+		);
+	}
+	async confirmLogin(token: string) {
+		return data(
+			await this.fetchClient.POST('/api/login/confirm', {
+				body: { token },
+			})
+		);
+	}
+	async logout() {
+		return data(await this.fetchClient.POST('/api/logout'));
 	}
 	async upload(number: number, file: File) {
 		if (
@@ -79,10 +92,11 @@ export class API {
 			file.size > 50 * 1024 * 1024
 		)
 			throw new Error('Choose a PDF up to 50 MB.');
-		const prepared = await this.request<Upload>('/api/uploads', {
-			number,
-			size: file.size,
-		});
+		const prepared = data(
+			await this.fetchClient.POST('/api/uploads', {
+				body: { number, size: file.size },
+			})
+		);
 		const body = new FormData();
 		for (const [key, value] of Object.entries(prepared.fields))
 			body.append(key, value);
@@ -94,7 +108,9 @@ export class API {
 		});
 		if (!response.ok)
 			throw new Error('The upload failed. Please try again.');
-		await this.request(`/api/uploads/${prepared.id}/publish`, {});
+		await this.fetchClient.POST('/api/uploads/{id}/publish', {
+			params: { path: { id: prepared.id } },
+		});
 	}
 }
 const APIContext = createContext<API | null>(null);
@@ -122,21 +138,19 @@ export function useEdit() {
 		mutationFn: async (edit: Edit) => {
 			switch (edit.kind) {
 				case 'add':
-					await api.request('/api/issues', { number: edit.number });
+					await api.fetchClient.POST('/api/issues', {
+						body: { number: edit.number },
+					});
 					return `Issue ${edit.number} added.`;
 				case 'delete':
-					await api.request(
-						`/api/issues/${edit.number}`,
-						undefined,
-						'DELETE'
-					);
+					await api.fetchClient.DELETE('/api/issues/{number}', {
+						params: { path: { number: edit.number } },
+					});
 					return `Issue ${edit.number} deleted.`;
 				case 'remove':
-					await api.request(
-						`/api/issues/${edit.number}/pdf`,
-						undefined,
-						'DELETE'
-					);
+					await api.fetchClient.DELETE('/api/issues/{number}/pdf', {
+						params: { path: { number: edit.number } },
+					});
 					return `PDF removed from issue ${edit.number}.`;
 				case 'upload':
 					await api.upload(edit.number, edit.file);
