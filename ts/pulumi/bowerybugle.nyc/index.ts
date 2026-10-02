@@ -10,7 +10,7 @@ export interface Args {
 	staging: boolean;
 	bootstrapZoneId: Pulumi.Input<string>;
 	registration?: Registration;
-	/** Enable only after the external registrar delegates the .nyc zone. */
+	/** Use the .nyc hostname; DNS records wait for registrar delegation. */
 	customDomainReady?: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
@@ -54,9 +54,18 @@ export class Component extends Pulumi.ComponentResource {
 			: useCustomDomain
 				? 'bowerybugle.nyc'
 				: 'bowerybugle.zemn.me';
+		// DNS validation must wait for registration and delegation, even when
+		// the custom hostname is enabled in the same deployment as purchase.
+		const customZoneId =
+			this.zone && this.registrar?.delegation
+				? Pulumi.all([
+						this.zone.zoneId,
+						this.registrar.delegation.id,
+					]).apply(([zoneId]) => zoneId)
+				: this.zone?.zoneId;
 		const zoneId =
-			useCustomDomain && this.zone
-				? this.zone.zoneId
+			useCustomDomain && customZoneId
+				? customZoneId
 				: args.bootstrapZoneId;
 		new Backend(
 			`${name}_backend`,
@@ -76,10 +85,7 @@ export class Component extends Pulumi.ComponentResource {
 				index: `${directory}/index.html`,
 				notFound: `${directory}/404.html`,
 				domain: this.domain,
-				zoneId:
-					useCustomDomain && this.zone
-						? this.zone.zoneId
-						: args.bootstrapZoneId,
+				zoneId,
 				noIndex: args.staging || !useCustomDomain,
 				noCostAllocationTag: true,
 				email: false,
