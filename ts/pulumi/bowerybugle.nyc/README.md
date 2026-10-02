@@ -104,17 +104,18 @@ integer `contactId` and optional `extendedAttributes` map. It is currently
 `undefined`, so no purchase occurs. Keep `boweryBugleCustomDomainReady: false`
 until public DNS delegation resolves.
 
-The first production deployment creates the empty, protected GCP Secret Manager
-container `bowery-bugle-dnsimple-token` in `extreme-cycling-441523-a9`. Add the
-DNSimple API token as a secret version directly in Secret Manager. Pulumi grants
+The DNSimple Monorepo API token is stored directly in GCP Secret Manager as
+version 1 of `bowery-bugle-dnsimple-token` in `extreme-cycling-441523-a9`.
+The first production deployment imports and protects that existing container;
+secret versions remain managed directly in Secret Manager. Pulumi grants
 the existing CI deploy service account access and reads `latest` only when
 registration is enabled. The provider input is marked secret so Pulumi encrypts
 it in state. No token or registrant address belongs in Git or stack outputs.
 
 Before configuring `boweryBugleRegistration`, complete DNSimple billing, create the intended
 owner's registrant contact, confirm .nyc eligibility and any required extended
-attributes, verify the exact domain's availability and price, and add the token
-version. Add the registration settings to `boweryBugleProduction` in a PR; after merge,
+attributes, and verify the exact domain's availability and price.
+Add the registration settings to `boweryBugleProduction` in a PR; after merge,
 the production deployment purchases and delegates the domain.
 These settings must remain enabled after purchase: the protected resources block
 accidental removal. If registration was purchased outside Pulumi, import it

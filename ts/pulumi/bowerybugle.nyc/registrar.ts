@@ -26,7 +26,7 @@ export class Registrar extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:bowerybugle.nyc:Registrar', name, args, opts);
 
-		// Create only the container. Its value is added directly to Secret Manager.
+		// Adopt the pre-seeded container; secret versions stay outside Pulumi.
 		const token = new gcp.secretmanager.Secret(
 			`${name}_token`,
 			{
@@ -35,7 +35,12 @@ export class Registrar extends pulumi.ComponentResource {
 				replication: { auto: {} },
 				deletionProtection: true,
 			},
-			{ parent: this, protect: true, retainOnDelete: true }
+			{
+				import: `projects/${project}/secrets/${tokenSecretId}`,
+				parent: this,
+				protect: true,
+				retainOnDelete: true,
+			}
 		);
 		const access = new gcp.secretmanager.SecretIamMember(
 			`${name}_token_access`,

@@ -117,6 +117,15 @@ for (const scenario of [
 		expect(
 			owned.filter(r => r.type === 'gcp:secretmanager/secret:Secret')
 		).toHaveLength(scenario.staging ? 0 : 1);
+		if (!scenario.staging) {
+			expect(
+				resourceOptions.get(`${scenario.name}_registrar_token`)
+			).toMatchObject({
+				import: 'projects/extreme-cycling-441523-a9/secrets/bowery-bugle-dnsimple-token',
+				protect: true,
+				retainOnDelete: true,
+			});
+		}
 		expect(
 			calls
 				.slice(callStart)
