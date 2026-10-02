@@ -17,7 +17,18 @@ void pulumi.runtime.setMocks({
 		// https://www.pulumi.com/docs/guides/testing/unit
 		return {
 			id: `${args.name}-id`,
-			state: args.inputs,
+			state: {
+				...args.inputs,
+				...(args.type === 'aws:ses/domainDkim:DomainDkim'
+					? { dkimTokens: ['test-a', 'test-b', 'test-c'] }
+					: {}),
+				...(args.type === 'aws:apigatewayv2/api:Api'
+					? {
+							apiEndpoint:
+								'https://test.execute-api.us-east-1.amazonaws.com',
+						}
+					: {}),
+			},
 		};
 	},
 

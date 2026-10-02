@@ -89,22 +89,39 @@ pricing still require a registrar check. The registry RDAP lookup for
 `bowerybugle.nyc` returned 404 on October 1, 2026; this alone does not establish
 that the name is registerable or available at standard pricing.
 
-The Pulumi DNSimple provider supports both purchase and delegation:
+Pulumi now owns purchase and delegation through the DNSimple provider in
+account **178973**. Production creates a protected, retained `RegisteredDomain`
+with auto-renewal and transfer lock, plus a `DomainDelegation` pointing at the
+existing Route 53 nameservers. WHOIS privacy and trustee services are disabled
+for .nyc. No premium-price authorization is supplied. DNS records, certificates,
+CloudFront and the API stay on AWS. Staging never creates registrar resources,
+reads the DNSimple token, or purchases a domain.
 
-- `dnsimple.RegisteredDomain` registers the domain using an existing registrant
-  contact ID. Use auto-renewal and transfer lock, disable WHOIS privacy/trustee
-  services for .nyc, and protect/retain the resource in production.
-- `dnsimple.DomainDelegation` sets its nameservers to this component's Route 53
-  zone outputs. DNS records, certificates, CloudFront and the API remain under
-  the existing AWS Pulumi resources.
-- Provision registration/delegation only in production; retain the bootstrap
-  hostname until delegation resolves, then enable `boweryBugleCustomDomainReady`.
+Activation is versioned in `boweryBugleProduction` in `ts/pulumi/stack.ts`,
+because CI creates temporary Automation API workspaces. Set
+`boweryBugleRegistration` to an object containing the intended owner's positive
+integer `contactId` and optional `extendedAttributes` map. It is currently
+`undefined`, so no purchase occurs. Keep `boweryBugleCustomDomainReady: false`
+until public DNS delegation resolves.
 
-This registrar integration is a recommendation, not enabled code. It needs a
-DNSimple account with billing, account ID, an API token provided as a CI secret,
-and the intended owner's registrant contact ID. The owner must meet .nyc's NYC
-nexus requirements. Do not commit registrant addresses or tokens. The domain
-has not been purchased.
+The first production deployment creates the empty, protected GCP Secret Manager
+container `bowery-bugle-dnsimple-token` in `extreme-cycling-441523-a9`. Add the
+DNSimple API token as a secret version directly in Secret Manager. Pulumi grants
+the existing CI deploy service account access and reads `latest` only when
+registration is enabled. The provider input is marked secret so Pulumi encrypts
+it in state. No token or registrant address belongs in Git or stack outputs.
+
+Before configuring `boweryBugleRegistration`, complete DNSimple billing, create the intended
+owner's registrant contact, confirm .nyc eligibility and any required extended
+attributes, verify the exact domain's availability and price, and add the token
+version. Add the registration settings to `boweryBugleProduction` in a PR; after merge,
+the production deployment purchases and delegates the domain.
+These settings must remain enabled after purchase: the protected resources block
+accidental removal. If registration was purchased outside Pulumi, import it
+before deployment instead of attempting another purchase.
+
+Registration is disabled until these prerequisites are supplied. This PR does
+not purchase the domain or change the live hostname.
 
 Registrar references checked October 1, 2026:
 
@@ -125,12 +142,12 @@ exports `boweryBugleNameServers`, while serving the site at
 ready. Staging always uses `https://bowerybugle.staging.zemn.me` in the existing
 zemn.me zone, so the merge queue does not depend on registration.
 
-After registering `bowerybugle.nyc`, set its registrar nameservers to the
-production stack's `boweryBugleNameServers` output. Wait for public delegation,
-then set `boweryBugleCustomDomainReady: true` on the production component in
-`ts/pulumi/stack.ts` in a follow-up PR. That activates the custom hostname,
-certificate, and indexing. Do not enable it before delegation: ACM validation
-would otherwise block the deployment. No mailbox is provisioned. The printed
+After the registration deployment, DNSimple delegation is set automatically to
+`boweryBugleNameServers`. Wait for public delegation, then set
+`boweryBugleCustomDomainReady` to `true` in `boweryBugleProduction` in a
+follow-up PR. That activates the custom hostname, certificate, SES identity, and
+indexing. Do not enable it before delegation: ACM validation would otherwise
+block the deployment. No mailbox is provisioned. The printed
 email address and telephone number are intentionally omitted from the website.
 
 ## Validation

@@ -23,6 +23,7 @@ import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
 	boweryBugleCustomDomainReady?: boolean;
+	boweryBugleRegistration?: BoweryBugle.Args['registration'];
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
@@ -368,6 +369,7 @@ export class Component extends Pulumi.ComponentResource {
 				staging: args.staging,
 				bootstrapZoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
 				customDomainReady: args.boweryBugleCustomDomainReady,
+				registration: args.boweryBugleRegistration,
 				tags,
 			},
 			{ parent: this }

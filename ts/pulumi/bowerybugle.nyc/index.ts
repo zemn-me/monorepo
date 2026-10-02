@@ -4,10 +4,12 @@ import * as Pulumi from '@pulumi/pulumi';
 import Website from '#root/ts/pulumi/lib/website/website.js';
 
 import { Backend } from './backend.js';
+import { Registrar, type Registration } from './registrar.js';
 
 export interface Args {
 	staging: boolean;
 	bootstrapZoneId: Pulumi.Input<string>;
+	registration?: Registration;
 	/** Enable only after the external registrar delegates the .nyc zone. */
 	customDomainReady?: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
@@ -17,6 +19,7 @@ export class Component extends Pulumi.ComponentResource {
 	readonly site: Website;
 	readonly zone?: aws.route53.Zone;
 	readonly domain: string;
+	readonly registrar?: Registrar;
 
 	constructor(
 		name: string,
@@ -34,6 +37,16 @@ export class Component extends Pulumi.ComponentResource {
 					{ name: 'bowerybugle.nyc', tags: args.tags },
 					{ parent: this, protect: true, retainOnDelete: true }
 				);
+		if (this.zone) {
+			this.registrar = new Registrar(
+				`${name}_registrar`,
+				{
+					registration: args.registration,
+					nameServers: this.zone.nameServers,
+				},
+				{ parent: this }
+			);
+		}
 		const useCustomDomain =
 			!args.staging && args.customDomainReady === true;
 		this.domain = args.staging

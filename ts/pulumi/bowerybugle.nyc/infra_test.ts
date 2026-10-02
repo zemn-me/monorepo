@@ -2,6 +2,7 @@ import { expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 
 const resources: pulumi.runtime.MockResourceArgs[] = [];
+const calls: pulumi.runtime.MockCallArgs[] = [];
 void pulumi.runtime.setMocks({
 	newResource: args => {
 		resources.push(args);
@@ -22,7 +23,14 @@ void pulumi.runtime.setMocks({
 			},
 		};
 	},
-	call: args => ({ ...args.inputs, authorizationToken: undefined }),
+	call: args => {
+		calls.push(args);
+		return {
+			...args.inputs,
+			authorizationToken: undefined,
+			secretData: 'test-token',
+		};
+	},
 });
 
 // Import after installing mocks so no provider operations reach AWS.
@@ -31,40 +39,120 @@ const { Component } = await import('#root/ts/pulumi/bowerybugle.nyc/index.js');
 for (const scenario of [
 	{
 		name: 'staging',
+		register: false,
 		staging: true,
 		ready: false,
 		domain: 'bowerybugle.staging.zemn.me',
 	},
 	{
 		name: 'staging-ready',
+		register: true,
 		staging: true,
 		ready: true,
 		domain: 'bowerybugle.staging.zemn.me',
 	},
 	{
 		name: 'bootstrap',
+		register: false,
 		staging: false,
 		ready: false,
 		domain: 'bowerybugle.zemn.me',
 	},
 	{
 		name: 'delegated',
+		register: true,
 		staging: false,
 		ready: true,
 		domain: 'bowerybugle.nyc',
 	},
+	{
+		name: 'registering',
+		register: true,
+		staging: false,
+		ready: false,
+		domain: 'bowerybugle.zemn.me',
+	},
 ]) {
 	test(scenario.name, async () => {
-		const component = new Component(scenario.name, {
-			staging: scenario.staging,
-			customDomainReady: scenario.ready,
-			bootstrapZoneId: 'existing-zone',
-		});
+		const callStart = calls.length;
+		const resourceOptions = new Map<string, pulumi.ResourceOptions>();
+		const component = new Component(
+			scenario.name,
+			{
+				staging: scenario.staging,
+				registration: scenario.register
+					? {
+							contactId: 12345,
+							extendedAttributes: {
+								'test-attribute': 'test-value',
+							},
+						}
+					: undefined,
+				customDomainReady: scenario.ready,
+				bootstrapZoneId: 'existing-zone',
+			},
+			{
+				transformations: [
+					args => {
+						resourceOptions.set(args.name, args.opts);
+						return undefined;
+					},
+				],
+			}
+		);
 		await pulumi.runtime.disconnect();
 		const owned = resources.filter(r =>
 			r.name.startsWith(`${scenario.name}_`)
 		);
 		expect(component.domain).toBe(scenario.domain);
+		const registers = scenario.register && !scenario.staging;
+		const registration = owned.filter(
+			r => r.type === 'dnsimple:index/registeredDomain:RegisteredDomain'
+		);
+		const delegation = owned.filter(
+			r => r.type === 'dnsimple:index/domainDelegation:DomainDelegation'
+		);
+		expect(registration).toHaveLength(registers ? 1 : 0);
+		expect(delegation).toHaveLength(registers ? 1 : 0);
+		expect(
+			owned.filter(r => r.type === 'gcp:secretmanager/secret:Secret')
+		).toHaveLength(scenario.staging ? 0 : 1);
+		expect(
+			calls
+				.slice(callStart)
+				.filter(
+					c =>
+						c.token ===
+						'gcp:secretmanager/getSecretVersion:getSecretVersion'
+				)
+		).toHaveLength(registers ? 1 : 0);
+		if (registers) {
+			expect(registration[0]?.inputs).toMatchObject({
+				name: 'bowerybugle.nyc',
+				contactId: 12345,
+				autoRenewEnabled: true,
+				transferLockEnabled: true,
+				whoisPrivacyEnabled: false,
+				trustee: false,
+				extendedAttributes: { 'test-attribute': 'test-value' },
+			});
+			expect(registration[0]?.inputs.premiumPrice).toBeUndefined();
+			for (const resource of [...registration, ...delegation]) {
+				expect(resourceOptions.get(resource.name)).toMatchObject({
+					protect: true,
+					retainOnDelete: true,
+				});
+			}
+			expect(delegation[0]?.inputs).toMatchObject({
+				domain: 'bowerybugle.nyc',
+				nameServers: ['ns.example.test'],
+			});
+			expect(delegation[0]?.provider).toBe(registration[0]?.provider);
+			expect(
+				owned.find(r => r.type === 'pulumi:providers:dnsimple')?.inputs
+			).toMatchObject({ account: '178973', sandbox: 'false' });
+		}
+
 		expect(owned.some(r => r.type.startsWith('aws:route53domains/'))).toBe(
 			false
 		);

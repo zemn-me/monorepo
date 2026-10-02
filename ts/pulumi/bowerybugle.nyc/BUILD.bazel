@@ -16,11 +16,14 @@ ts_project(
     srcs = [
         "backend.ts",
         "index.ts",
+        "registrar.ts",
     ],
     data = [":public"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/dnsimple",
+        "//:node_modules/@pulumi/gcp",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
         "//project/nyc/bowerybugle/cmd/api:oci_image",
@@ -43,6 +46,7 @@ filegroup(
         "backend.ts",
         "index.ts",
         "infra_test.ts",
+        "registrar.ts",
         "site_test.ts",
     ],
     visibility = ["//:__subpackages__"],
