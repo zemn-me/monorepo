@@ -52,6 +52,9 @@ func TestJournalAgentsHostedCorpusAndIdempotentSubmission(t *testing.T) {
 			if !strings.Contains(payload.Agent.Instructions, journalWritingInstructions) {
 				return nil, errors.New("hosted curator omitted shared writing guidance")
 			}
+			if !strings.Contains(payload.Agent.Instructions, journalWikiWritingInstructions) {
+				return nil, errors.New("hosted curator omitted wiki writing guidance")
+			}
 			if payload.Input != nil || payload.Metadata["journal_run"] != runID || payload.Environment.Type != "openai_hosted" || payload.Environment.Network.Access != "disabled" {
 				return nil, errors.New("invalid hosted session")
 			}
