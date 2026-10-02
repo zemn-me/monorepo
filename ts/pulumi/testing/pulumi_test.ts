@@ -78,6 +78,55 @@ const awsLambdaFunctionNameMaxLength = 64;
 const pulumiAutoNameRandomSuffixLength = 7;
 const awsElbv2NamePattern = /^[A-Za-z0-9-]+$/;
 
+const s3BucketNameViolations = (
+	resources: readonly pulumi.runtime.MockResourceArgs[]
+) =>
+	resources
+		.filter(resource =>
+			['aws:s3/bucket:Bucket', 'aws:s3/bucketV2:BucketV2'].includes(
+				resource.type
+			)
+		)
+		.flatMap(resource => {
+			// Mocks skip provider defaults. S3 AutoNameTransform lowercases and
+			// truncates the logical name to fit a hyphen and seven random characters.
+			// https://github.com/pulumi/pulumi-aws/blob/v7.48.0/provider/resource_overrides.go
+			const bucket =
+				resource.inputs['bucket'] ??
+				`${resource.name.toLowerCase().slice(0, 63 - 1 - pulumiAutoNameRandomSuffixLength)}-1234567`;
+			// General-purpose buckets in the shared global namespace:
+			// https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+			if (
+				typeof bucket === 'string' &&
+				/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/.test(bucket) &&
+				!bucket.includes('..') &&
+				!/^\d+\.\d+\.\d+\.\d+$/.test(bucket) &&
+				!/^(xn--|sthree-|amzn-s3-demo-)/.test(bucket) &&
+				!/(-s3alias|--ol-s3|\.mrap|--x-s3|--table-s3|-an)$/.test(bucket)
+			) {
+				return [];
+			}
+			return [
+				`${resource.type} ${JSON.stringify(resource.name)} has invalid S3 bucket name ${JSON.stringify(bucket)} (${resource.inputs['bucket'] === undefined ? 'Pulumi auto-name' : 'explicit bucket input'}). Use deriveBucketName for the logical name or set a valid bucket input.`,
+			];
+		});
+
+const expectValidS3BucketNames = () => {
+	expect(
+		mockResources.some(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' ||
+				resource.type === 'aws:s3/bucket:Bucket'
+		)
+	).toBe(true);
+	const violations = s3BucketNameViolations(mockResources);
+	if (violations.length > 0) {
+		throw new Error(
+			`S3 bucket name validation failed:\n${violations.join('\n')}`
+		);
+	}
+};
+
 interface AwsAssumeRoleStatement {
 	Condition: {
 		StringEquals: Record<string, string>;
@@ -117,6 +166,56 @@ describe('pulumi', () => {
 			'monorepo-zemn.me-api-journal-audio-bucket'
 		);
 	});
+
+	test.each(['aws:s3/bucket:Bucket', 'aws:s3/bucketV2:BucketV2'])(
+		'validates physical names of %s resources',
+		type => {
+			const resource = (name: string, inputs = {}) => ({
+				type,
+				name,
+				inputs,
+			});
+			const invalidLogicalName = 'monorepo_bowerybugle_backend_pdfs';
+			expect(
+				s3BucketNameViolations([resource(invalidLogicalName)])
+			).toEqual([expect.stringContaining(invalidLogicalName)]);
+			for (const bucket of [
+				'ab',
+				'a'.repeat(64),
+				'UPPERCASE',
+				'has_underscore',
+				'-leading',
+				'trailing-',
+				'two..dots',
+				'192.168.5.4',
+				'xn--bucket',
+				'sthree-bucket',
+				'amzn-s3-demo-bucket',
+				'bucket-s3alias',
+				'bucket--ol-s3',
+				'bucket.mrap',
+				'bucket--x-s3',
+				'bucket--table-s3',
+				'bucket-an',
+			]) {
+				expect(
+					s3BucketNameViolations([resource('valid', { bucket })])
+				).toEqual([expect.stringContaining(JSON.stringify(bucket))]);
+			}
+			expect(
+				s3BucketNameViolations([
+					resource(deriveBucketName(invalidLogicalName)),
+					resource('Uppercase'),
+					resource('a'.repeat(100)),
+					resource(invalidLogicalName, {
+						bucket: 'valid.example-bucket',
+					}),
+					resource('valid', { bucket: 'a'.repeat(63) }),
+					resource('valid', { bucket: 'abc' }),
+				])
+			).toEqual([]);
+		}
+	);
 
 	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
 		expect(
@@ -185,6 +284,7 @@ describe('pulumi', () => {
 		mockCalls.splice(0);
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
+		expectValidS3BucketNames();
 
 		expect(
 			mockResources.some(
@@ -401,6 +501,7 @@ describe('pulumi', () => {
 			openAIServiceAccountId: 'openai-production-service-account',
 		});
 		await pulumi.runtime.disconnect();
+		expectValidS3BucketNames();
 
 		expect(
 			mockResources.find(
