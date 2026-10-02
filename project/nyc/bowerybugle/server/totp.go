@@ -38,18 +38,6 @@ func (s *Server) loginCode(now time.Time) (string, time.Time, error) {
 	return totp(s.LoginKey, uint64(step)), time.Unix((step+1)*int64(loginWindow/time.Second), 0).UTC(), nil
 }
 
-func validCode(code string) bool {
-	if len(code) != 8 {
-		return false
-	}
-	for _, c := range code {
-		if c < '0' || c > '9' {
-			return false
-		}
-	}
-	return true
-}
-
 type LoginEmail struct {
 	Link    string
 	Code    string

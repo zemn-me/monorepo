@@ -154,10 +154,12 @@ func (f *fixture) request(method, path string, body any, cookie *http.Cookie) *h
 	}
 	w := httptest.NewRecorder()
 	f.server.Handler().ServeHTTP(w, r)
+	w.Result().Request = r
 	return w
 }
 func status(t *testing.T, w *httptest.ResponseRecorder, want int) {
 	t.Helper()
+	assertAPIResponse(t, w)
 	if w.Code != want {
 		t.Fatalf("HTTP %d, want %d: %s", w.Code, want, w.Body.String())
 	}

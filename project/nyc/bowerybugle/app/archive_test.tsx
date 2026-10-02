@@ -1,3 +1,4 @@
+import { runInThisContext } from 'node:vm';
 import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -5,6 +6,9 @@ import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { API, APIProvider, apiOrigin } from './api.js';
 import { Archive } from './archive.js';
+
+// Use Node's real Fetch constructors; jsdom supplies DOM APIs but omits these.
+Object.assign(globalThis, runInThisContext('({ Request, Response, Headers })'));
 
 const api = new API('https://api.bowerybugle.nyc');
 let client: QueryClient;
@@ -17,7 +21,10 @@ const requests: { url: string; init?: RequestInit }[] = [];
 const element = <T extends HTMLElement>(id: string) =>
 	document.getElementById(id) as T;
 const reply = (data: unknown, status = 200) =>
-	({ ok: status < 400, status, json: async () => data }) as Response;
+	new Response(status === 204 ? null : JSON.stringify(data), {
+		status,
+		headers: { 'Content-Type': 'application/json' },
+	});
 const settle = async () => {
 	for (let i = 0; i < 5; i++)
 		await act(async () => {
@@ -76,6 +83,16 @@ beforeEach(() => {
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation(async (url, init) => {
+			if (url instanceof Request) {
+				init = {
+					method: url.method,
+					credentials: url.credentials,
+					cache: url.cache,
+					headers: url.headers,
+					...(url.body ? { body: await url.text() } : {}),
+				};
+				url = url.url;
+			}
 			const path = String(url).replace(api.origin, '');
 			requests.push({ url: String(url), ...(init ? { init } : {}) });
 			const body =
@@ -270,7 +287,7 @@ test('a rejected deletion keeps the issue visible and re-enables controls', asyn
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation((url, init) =>
-			init?.method === 'DELETE'
+			(url instanceof Request ? url.method : init?.method) === 'DELETE'
 				? Promise.resolve(reply({ error: 'Please log in again.' }, 401))
 				: fetch(url, init)
 		);
@@ -286,7 +303,8 @@ test('expired login link offers another email without exposing editing controls'
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation((url, init) =>
-			String(url) === api.url('/api/login/confirm')
+			(url instanceof Request ? url.url : String(url)) ===
+			api.url('/api/login/confirm')
 				? Promise.resolve(
 						reply({ error: 'This link has expired.' }, 400)
 					)
@@ -325,7 +343,8 @@ test('session lookup failure leaves the public archive and login link usable', a
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation((url, init) =>
-			String(url) === api.url('/api/session')
+			(url instanceof Request ? url.url : String(url)) ===
+			api.url('/api/session')
 				? Promise.resolve(reply({ error: 'Unavailable' }, 503))
 				: fetch(url, init)
 		);

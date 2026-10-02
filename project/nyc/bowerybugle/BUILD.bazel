@@ -1,3 +1,7 @@
+load("//md:rules.bzl", "md_files")
+
+# gazelle:resolve typescript typescript #root/project/nyc/bowerybugle/api/api_client.gen.js //project/nyc/bowerybugle/api:ts_client_dts
+
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library")
 load("//ts/remix:rules.bzl", "remix_project")
@@ -24,4 +28,10 @@ js_library(
     name = "vite_config_mjs",
     srcs = ["vite.config.mjs"],
     deps = [],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )
