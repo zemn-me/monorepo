@@ -74,8 +74,8 @@ const boweryBugleProduction: Pick<
 	monorepo.Args,
 	'boweryBugleRegistration' | 'boweryBugleCustomDomainReady'
 > = {
-	boweryBugleRegistration: undefined,
-	boweryBugleCustomDomainReady: false,
+	boweryBugleRegistration: { contactId: 69498 },
+	boweryBugleCustomDomainReady: true,
 };
 
 export async function production(): Promise<Stack> {

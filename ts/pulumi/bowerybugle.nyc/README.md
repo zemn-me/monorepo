@@ -111,9 +111,10 @@ reads the DNSimple token, or purchases a domain.
 Activation is versioned in `boweryBugleProduction` in `ts/pulumi/stack.ts`,
 because CI creates temporary Automation API workspaces. Set
 `boweryBugleRegistration` to an object containing the intended owner's positive
-integer `contactId` and optional `extendedAttributes` map. It is currently
-`undefined`, so no purchase occurs. Keep `boweryBugleCustomDomainReady: false`
-until public DNS delegation resolves.
+integer `contactId` and optional `extendedAttributes` map. Production uses
+contact **69498** and enables `boweryBugleCustomDomainReady`. DNS records for
+the website and API depend on the registrar delegation, allowing purchase,
+delegation, and HTTPS activation in the same deployment.
 
 The DNSimple Monorepo API token is stored directly in GCP Secret Manager as
 version 1 of `bowery-bugle-dnsimple-token` in `extreme-cycling-441523-a9`.
@@ -132,8 +133,9 @@ These settings must remain enabled after purchase: the protected resources block
 accidental removal. If registration was purchased outside Pulumi, import it
 before deployment instead of attempting another purchase.
 
-Registration is disabled until these prerequisites are supplied. This PR does
-not purchase the domain or change the live hostname.
+Registration is enabled for the verified contact with billing configured.
+The DNSimple checkout quoted **$40.60** for `bowerybugle.nyc` on October 1,
+2026; no premium-price authorization or paid DNS subscription is configured.
 
 Registrar references checked October 1, 2026:
 
@@ -154,12 +156,11 @@ exports `boweryBugleNameServers`, while serving the site at
 ready. Staging always uses `https://bowerybugle.staging.zemn.me` in the existing
 zemn.me zone, so the merge queue does not depend on registration.
 
-After the registration deployment, DNSimple delegation is set automatically to
-`boweryBugleNameServers`. Wait for public delegation, then set
-`boweryBugleCustomDomainReady` to `true` in `boweryBugleProduction` in a
-follow-up PR. That activates the custom hostname, certificate, SES identity, and
-indexing. Do not enable it before delegation: ACM validation would otherwise
-block the deployment. No mailbox is provisioned. The printed
+DNSimple delegation is set automatically to `boweryBugleNameServers`.
+With `boweryBugleCustomDomainReady` enabled, the custom hostname, certificate,
+SES identity, and indexing are activated. Certificate validation waits for the
+delegation resource through the DNS records' zone input; AWS then waits for
+public DNS propagation. No mailbox is provisioned. The printed
 email address and telephone number are intentionally omitted from the website.
 
 ## Validation
