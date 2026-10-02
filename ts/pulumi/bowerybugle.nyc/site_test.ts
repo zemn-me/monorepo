@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '@jest/globals';
 
-const directory = 'ts/pulumi/bowerybugle.nyc/public';
+const directory = 'project/nyc/bowerybugle/build';
 const document = new DOMParser().parseFromString(
 	readFileSync(path.join(directory, 'index.html'), 'utf8'),
 	'text/html'
@@ -13,7 +13,7 @@ test('shows the masthead and a footer login without contact details', () => {
 	expect(document.title).toBe('The Bowery Bugle');
 	expect(
 		document.querySelector('footer #show-login')?.getAttribute('href')
-	).toBe('/manage.html');
+	).toBe('/manage');
 	expect(document.querySelectorAll('form')).toHaveLength(0);
 	expect(document.body.textContent).not.toContain('PDF not uploaded');
 	expect(
@@ -40,7 +40,14 @@ test('every local link and image resolves in the shipped site', () => {
 		if (url.hash) expect(ids).toContain(url.hash.slice(1));
 		if (url.pathname !== '/') {
 			expect(
-				readFileSync(path.join(directory, url.pathname))
+				readFileSync(
+					path.join(
+						directory,
+						url.pathname === '/manage'
+							? 'manage.html'
+							: url.pathname
+					)
+				)
 			).not.toHaveLength(0);
 		}
 	}

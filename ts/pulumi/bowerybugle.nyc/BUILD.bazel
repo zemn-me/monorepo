@@ -8,7 +8,7 @@ package(default_visibility = ["//:__subpackages__"])
 
 alias(
     name = "public",
-    actual = "//ts/pulumi/bowerybugle.nyc/public:public",
+    actual = "//project/nyc/bowerybugle:remix",
 )
 
 ts_project(
@@ -42,7 +42,6 @@ jest_test(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "archive_test.ts",
         "backend.ts",
         "index.ts",
         "infra_test.ts",
@@ -74,7 +73,6 @@ jest_test(
 ts_project(
     name = "bowerybugle.nyc_tests",
     srcs = [
-        "archive_test.ts",
         "infra_test.ts",
         "site_test.ts",
     ],
@@ -85,12 +83,4 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
     ],
-)
-
-jest_test(
-    name = "archive_test",
-    srcs = ["archive_test.js"],
-    data = [":public"],
-    jsdom = True,
-    deps = [":bowerybugle.nyc_tests"],
 )

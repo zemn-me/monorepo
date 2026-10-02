@@ -138,6 +138,36 @@ func (s *Server) Handler() http.Handler {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("Referrer-Policy", "no-referrer")
+		w.Header().Add("Vary", "Origin")
+		if origin := r.Header.Get("Origin"); origin != "" && origin != s.Origin {
+			problem(w, 403, "Request origin not allowed.")
+			return
+		} else if origin == s.Origin {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+		}
+		if r.Method == http.MethodOptions {
+			if r.Header.Get("Origin") != s.Origin {
+				problem(w, 403, "Request origin not allowed.")
+				return
+			}
+			switch r.Header.Get("Access-Control-Request-Method") {
+			case "GET", "POST", "DELETE":
+			default:
+				problem(w, 403, "Request method not allowed.")
+				return
+			}
+			for _, header := range strings.Split(r.Header.Get("Access-Control-Request-Headers"), ",") {
+				if h := strings.TrimSpace(header); h != "" && !strings.EqualFold(h, "Content-Type") {
+					problem(w, 403, "Request header not allowed.")
+					return
+				}
+			}
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		if r.Method != "GET" && r.Method != "HEAD" && r.Header.Get("Origin") != s.Origin {
 			problem(w, 403, "Request origin not allowed.")
 			return
@@ -204,7 +234,7 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// The code stays out of request URLs and is exchanged only after a click.
-	if err := s.Mail.Send(r.Context(), s.Author, LoginEmail{Link: s.Origin + "/manage.html#login=" + code, Code: code, Expires: expires}); err != nil {
+	if err := s.Mail.Send(r.Context(), s.Author, LoginEmail{Link: s.Origin + "/manage#login=" + code, Code: code, Expires: expires}); err != nil {
 		failure(w, err)
 		return
 	}

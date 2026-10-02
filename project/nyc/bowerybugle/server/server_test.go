@@ -185,7 +185,7 @@ func TestAuthorLoginAndLogout(t *testing.T) {
 		t.Fatal("emailed a non-author")
 	}
 	tok := f.challenge(t)
-	if f.mail.recipients[0] != f.server.Author || !strings.HasPrefix(f.mail.links[0], f.server.Origin+"/manage.html#login=") {
+	if f.mail.recipients[0] != f.server.Author || !strings.HasPrefix(f.mail.links[0], f.server.Origin+"/manage#login=") {
 		t.Fatal("wrong recipient or untrusted email link")
 	}
 	for key := range f.store.records {
@@ -434,5 +434,46 @@ func TestEditsInvalidatePendingUploads(t *testing.T) {
 			status(t, f.request("POST", "/api/uploads/"+u.ID+"/publish", map[string]string{}, c), 409)
 			status(t, f.request("GET", "/api/issues/6/pdf", nil, nil), 404)
 		})
+	}
+}
+
+func TestCrossOriginAPI(t *testing.T) {
+	f := setup()
+	for _, tc := range []struct {
+		name, origin, method, requestedMethod, headers string
+		want                                           int
+	}{
+		{"read", f.server.Origin, "GET", "", "", 200},
+		{"direct read", "", "GET", "", "", 200},
+		{"preflight login", f.server.Origin, "OPTIONS", "POST", "content-type", 204},
+		{"preflight delete", f.server.Origin, "OPTIONS", "DELETE", "", 204},
+		{"foreign read", "https://evil.example.test", "GET", "", "", 403},
+		{"foreign preflight", "https://evil.example.test", "OPTIONS", "POST", "content-type", 403},
+		{"missing origin", "", "OPTIONS", "POST", "content-type", 403},
+		{"unsupported method", f.server.Origin, "OPTIONS", "PATCH", "", 403},
+		{"unsupported header", f.server.Origin, "OPTIONS", "POST", "x-untrusted", 403},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			r := httptest.NewRequest(tc.method, "https://api.bugle.example.test/api/issues", nil)
+			r.Header.Set("Origin", tc.origin)
+			r.Header.Set("Access-Control-Request-Method", tc.requestedMethod)
+			r.Header.Set("Access-Control-Request-Headers", tc.headers)
+			w := httptest.NewRecorder()
+			f.server.Handler().ServeHTTP(w, r)
+			status(t, w, tc.want)
+			if tc.origin == f.server.Origin {
+				if w.Header().Get("Access-Control-Allow-Origin") != tc.origin || w.Header().Get("Access-Control-Allow-Credentials") != "true" {
+					t.Fatal("missing credentialed CORS headers")
+				}
+			} else if w.Header().Get("Access-Control-Allow-Origin") != "" {
+				t.Fatal("allowed untrusted origin")
+			}
+		})
+	}
+	// Errors must also be readable by the trusted frontend, including expired sessions.
+	w := f.request("DELETE", "/api/issues/6", nil, nil)
+	status(t, w, 401)
+	if w.Header().Get("Access-Control-Allow-Origin") != f.server.Origin {
+		t.Fatal("error response omitted CORS")
 	}
 }

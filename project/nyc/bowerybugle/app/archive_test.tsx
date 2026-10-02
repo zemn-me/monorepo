@@ -1,8 +1,13 @@
-import { readFileSync } from 'node:fs';
 import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
 
-const directory = 'ts/pulumi/bowerybugle.nyc/public/';
-const script = readFileSync(`${directory}archive.js`, 'utf8');
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { act, cleanup, fireEvent, render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router';
+import { API, APIProvider, apiOrigin } from './api.js';
+import { Archive } from './archive.js';
+
+const api = new API('https://api.bowerybugle.nyc');
+let client: QueryClient;
 const originalFetch = globalThis.fetch;
 let issues: { number: number; pdf?: string }[];
 let loggedIn: boolean;
@@ -15,20 +20,32 @@ const reply = (data: unknown, status = 200) =>
 	({ ok: status < 400, status, json: async () => data }) as Response;
 const settle = async () => {
 	for (let i = 0; i < 5; i++)
-		await new Promise(resolve => setTimeout(resolve, 0));
+		await act(async () => {
+			await new Promise(resolve => setTimeout(resolve, 0));
+		});
 };
 function start(manage = true, hash = '') {
-	document.documentElement.innerHTML = readFileSync(
-		`${directory}${manage ? 'manage' : 'index'}.html`,
-		'utf8'
+	cleanup();
+	client?.clear();
+	client = new QueryClient({
+		defaultOptions: {
+			queries: { retry: false },
+			mutations: { retry: false },
+		},
+	});
+	history.replaceState(null, '', `${manage ? '/manage' : '/'}${hash}`);
+	render(
+		<QueryClientProvider client={client}>
+			<APIProvider api={api}>
+				<BrowserRouter>
+					<Archive managing={manage} />
+				</BrowserRouter>
+			</APIProvider>
+		</QueryClientProvider>
 	);
-	history.replaceState(null, '', `${manage ? '/manage.html' : '/'}${hash}`);
-	window.eval(script);
 }
 function submit(form: HTMLFormElement) {
-	form.dispatchEvent(
-		new Event('submit', { bubbles: true, cancelable: true })
-	);
+	fireEvent.submit(form);
 }
 function row(number = 6) {
 	return element(`issue-${number}`);
@@ -59,8 +76,8 @@ beforeEach(() => {
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation(async (url, init) => {
-			const path = String(url);
-			requests.push({ url: path, ...(init ? { init } : {}) });
+			const path = String(url).replace(api.origin, '');
+			requests.push({ url: String(url), ...(init ? { init } : {}) });
 			const body =
 				init?.body && typeof init.body === 'string'
 					? JSON.parse(init.body)
@@ -123,6 +140,8 @@ beforeEach(() => {
 		});
 });
 afterEach(() => {
+	cleanup();
+	client?.clear();
 	globalThis.fetch = originalFetch;
 });
 
@@ -133,10 +152,10 @@ test('public page has blank missing links, Read links, and a separate management
 	expect(document.querySelectorAll('#issue-list li')).toHaveLength(6);
 	expect(row().querySelector('a')?.textContent).toBe('Read');
 	expect(row(5).textContent).toBe('Issue 5');
-	expect(element('show-login').getAttribute('href')).toBe('/manage.html');
+	expect(element('show-login').getAttribute('href')).toBe('/manage');
 	expect(document.querySelectorAll('form, .issue-controls')).toHaveLength(0);
-	expect(element('show-login').hidden).toBe(false);
-	expect(element('show-edit').hidden).toBe(true);
+	expect(element('show-login')).not.toBeNull();
+	expect(element('show-edit')).toBeNull();
 });
 
 test('management renders exactly the same public row component with added author controls', async () => {
@@ -166,22 +185,25 @@ test('email login requires confirmation before editing and logout hides all cont
 	start(true, '#login=secret-token');
 	await settle();
 	expect(location.hash).toBe('');
-	expect(requests.some(r => r.url === '/api/login/confirm')).toBe(false);
-	element('confirm-login').click();
+	expect(requests.some(r => r.url === api.url('/api/login/confirm'))).toBe(
+		false
+	);
+	fireEvent.click(element('confirm-login'));
 	await settle();
 	expect(
 		JSON.parse(
 			String(
-				requests.find(r => r.url === '/api/login/confirm')?.init?.body
+				requests.find(r => r.url === api.url('/api/login/confirm'))
+					?.init?.body
 			)
 		)
 	).toEqual({ token: 'secret-token' });
 	expect(document.querySelectorAll('.issue-controls')).toHaveLength(6);
-	element('logout').click();
+	fireEvent.click(element('logout'));
 	await settle();
 	expect(document.querySelectorAll('.issue-controls')).toHaveLength(0);
-	expect(element('add-issue').hidden).toBe(true);
-	expect(element('author-panel').hidden).toBe(false);
+	expect(element('add-issue')).toBeNull();
+	expect(element('author-panel')).not.toBeNull();
 });
 
 test('author adds an issue, uploads, removes just its PDF, and deletes its row', async () => {
@@ -199,7 +221,7 @@ test('author adds an issue, uploads, removes just its PDF, and deletes its row',
 	await settle();
 	expect(element('edit-status').textContent).toBe('Issue 7 is published.');
 	expect(row(7).querySelector('a')?.getAttribute('href')).toBe(
-		'/api/issues/7/pdf'
+		api.url('/api/issues/7/pdf')
 	);
 	expect(control('Replace PDF', 7)).toBeTruthy();
 	const upload = requests.find(r => r.url === 'https://upload.example.test');
@@ -207,11 +229,11 @@ test('author adds an issue, uploads, removes just its PDF, and deletes its row',
 	const form = upload?.init?.body;
 	if (!(form instanceof FormData)) throw new Error('Upload form missing');
 	expect(form.get('file')).toBeInstanceOf(File);
-	control('Remove PDF', 7).click();
+	fireEvent.click(control('Remove PDF', 7));
 	await settle();
 	expect(row(7).querySelector('a')).toBeNull();
 	expect(row(7).querySelector('h3')?.textContent).toBe('Issue 7');
-	control('Delete issue', 7).click();
+	fireEvent.click(control('Delete issue', 7));
 	await settle();
 	expect(row(7)).toBeNull();
 	start(false);
@@ -252,7 +274,7 @@ test('a rejected deletion keeps the issue visible and re-enables controls', asyn
 				? Promise.resolve(reply({ error: 'Please log in again.' }, 401))
 				: fetch(url, init)
 		);
-	control('Delete issue').click();
+	fireEvent.click(control('Delete issue'));
 	await settle();
 	expect(row()).not.toBeNull();
 	expect(control('Delete issue').disabled).toBe(false);
@@ -264,7 +286,7 @@ test('expired login link offers another email without exposing editing controls'
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation((url, init) =>
-			String(url) === '/api/login/confirm'
+			String(url) === api.url('/api/login/confirm')
 				? Promise.resolve(
 						reply({ error: 'This link has expired.' }, 400)
 					)
@@ -272,10 +294,10 @@ test('expired login link offers another email without exposing editing controls'
 		);
 	start(true, '#login=expired');
 	await settle();
-	element('confirm-login').click();
+	fireEvent.click(element('confirm-login'));
 	await settle();
 	expect(element('login-status').textContent).toContain('expired');
-	expect(element('login-form').hidden).toBe(false);
+	expect(element('login-form')).not.toBeNull();
 	expect(document.querySelectorAll('.issue-controls')).toHaveLength(0);
 });
 
@@ -289,10 +311,10 @@ test('signed-in authors see the public archive unchanged and enter editing throu
 	await settle();
 	expect(element('issues').outerHTML).toBe(publicArchive);
 	expect(document.querySelectorAll('form, .issue-controls')).toHaveLength(0);
-	expect(element('show-login').hidden).toBe(true);
-	expect(element('show-edit').hidden).toBe(false);
+	expect(element('show-login')).toBeNull();
+	expect(element('show-edit')).not.toBeNull();
 	expect(element('show-edit').textContent).toBe('Edit');
-	expect(element('show-edit').getAttribute('href')).toBe('/manage.html');
+	expect(element('show-edit').getAttribute('href')).toBe('/manage');
 	start();
 	await settle();
 	expect(document.querySelectorAll('.issue-controls')).toHaveLength(6);
@@ -303,14 +325,34 @@ test('session lookup failure leaves the public archive and login link usable', a
 	globalThis.fetch = jest
 		.fn<typeof fetch>()
 		.mockImplementation((url, init) =>
-			String(url) === '/api/session'
+			String(url) === api.url('/api/session')
 				? Promise.resolve(reply({ error: 'Unavailable' }, 503))
 				: fetch(url, init)
 		);
 	start(false);
 	await settle();
 	expect(document.querySelectorAll('#issue-list li')).toHaveLength(6);
-	expect(element('show-login').hidden).toBe(false);
-	expect(element('show-edit').hidden).toBe(true);
+	expect(element('show-login')).not.toBeNull();
+	expect(element('show-edit')).toBeNull();
 	expect(document.querySelectorAll('.issue-controls')).toHaveLength(0);
+});
+
+test('all API requests and Read links use the separate credentialed API origin', async () => {
+	issues[0] = { number: 6, pdf: '/api/issues/6/pdf' };
+	start(false);
+	await settle();
+	expect(row().querySelector('a')?.href).toBe(
+		'https://api.bowerybugle.nyc/api/issues/6/pdf'
+	);
+	for (const request of requests) {
+		expect(new URL(request.url).origin).toBe(api.origin);
+		expect(request.init?.credentials).toBe('include');
+	}
+	for (const domain of [
+		'bowerybugle.nyc',
+		'bowerybugle.zemn.me',
+		'bowerybugle.staging.zemn.me',
+	]) {
+		expect(apiOrigin(`https://${domain}`)).toBe(`https://api.${domain}`);
+	}
 });

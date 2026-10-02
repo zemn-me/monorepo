@@ -180,25 +180,32 @@ for (const scenario of [
 					: 'existing-zone',
 		});
 		expect(
-			owned.find(r => r.type === 'aws:acm/certificate:Certificate')
-				?.inputs.domainName
+			owned.find(
+				r => r.name === `${scenario.name}_website_certificate_cert`
+			)?.inputs.domainName
 		).toBe(scenario.domain);
 		const distribution = owned.find(
 			r => r.type === 'aws:cloudfront/distribution:Distribution'
 		);
-		expect(distribution?.inputs.orderedCacheBehaviors).toContainEqual(
-			expect.objectContaining({
-				pathPattern: '/api/*',
-				minTtl: 0,
-				defaultTtl: 0,
-				maxTtl: 0,
-				forwardedValues: {
-					queryString: false,
-					headers: ['Origin', 'Content-Type'],
-					cookies: { forward: 'all' },
-				},
-			})
-		);
+		expect(distribution?.inputs.orderedCacheBehaviors).toBeUndefined();
+		expect(distribution?.inputs.origins).toHaveLength(1);
+		expect(
+			owned.find(r => r.type === 'aws:apigatewayv2/domainName:DomainName')
+				?.inputs
+		).toMatchObject({ domainName: `api.${scenario.domain}` });
+		expect(
+			owned.find(r => r.type === 'aws:apigatewayv2/api:Api')?.inputs
+		).toMatchObject({ disableExecuteApiEndpoint: true });
+		expect(
+			owned.find(r => r.name === `${scenario.name}_backend_dns`)?.inputs
+		).toMatchObject({
+			name: `api.${scenario.domain}`,
+			zoneId:
+				scenario.ready && !scenario.staging
+					? `${scenario.name}_zone-zone`
+					: 'existing-zone',
+		});
+
 		expect(
 			owned.find(
 				r =>

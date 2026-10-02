@@ -58,7 +58,7 @@ export class Component extends Pulumi.ComponentResource {
 			useCustomDomain && this.zone
 				? this.zone.zoneId
 				: args.bootstrapZoneId;
-		const backend = new Backend(
+		new Backend(
 			`${name}_backend`,
 			{
 				domain: this.domain,
@@ -68,12 +68,11 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
-		const directory = 'ts/pulumi/bowerybugle.nyc/public';
+		const directory = 'project/nyc/bowerybugle/build';
 		this.site = new Website(
 			`${name}_website`,
 			{
 				directory,
-				apiDomain: backend.domain,
 				index: `${directory}/index.html`,
 				notFound: `${directory}/404.html`,
 				domain: this.domain,

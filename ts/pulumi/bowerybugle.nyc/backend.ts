@@ -3,6 +3,7 @@ import * as pulumi from '@pulumi/pulumi';
 
 import { BoweryBugleImage } from '#root/project/nyc/bowerybugle/cmd/api/BoweryBugleImage.js';
 import { sanitizeAwsLambdaStatementId } from '#root/ts/pulumi/lib/awsNames.js';
+import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { LambdaFunction } from '#root/ts/pulumi/lib/lambda_function.js';
 
 interface Args {
@@ -13,7 +14,7 @@ interface Args {
 }
 
 export class Backend extends pulumi.ComponentResource {
-	readonly domain: pulumi.Output<string>;
+	readonly domain: string;
 	constructor(
 		name: string,
 		args: Args,
@@ -264,7 +265,7 @@ export class Backend extends pulumi.ComponentResource {
 		).function;
 		const gateway = new aws.apigatewayv2.Api(
 			`${name}_api`,
-			{ protocolType: 'HTTP' },
+			{ protocolType: 'HTTP', disableExecuteApiEndpoint: true },
 			child
 		);
 		const integration = new aws.apigatewayv2.Integration(
@@ -286,7 +287,7 @@ export class Backend extends pulumi.ComponentResource {
 			},
 			child
 		);
-		new aws.apigatewayv2.Stage(
+		const stage = new aws.apigatewayv2.Stage(
 			`${name}_stage`,
 			{
 				apiId: gateway.id,
@@ -310,8 +311,49 @@ export class Backend extends pulumi.ComponentResource {
 			},
 			child
 		);
-		this.domain = gateway.apiEndpoint.apply(
-			endpoint => new URL(endpoint).hostname
+		this.domain = `api.${args.domain}`;
+		const certificate = new Certificate(
+			`${name}_certificate`,
+			{
+				domain: this.domain,
+				zoneId: args.zoneId,
+				noCostAllocationTag: true,
+				tags: args.tags,
+			},
+			child
+		);
+		const domain = new aws.apigatewayv2.DomainName(
+			`${name}_domain`,
+			{
+				domainName: this.domain,
+				domainNameConfiguration: {
+					certificateArn: certificate.validation.certificateArn,
+					endpointType: 'REGIONAL',
+					securityPolicy: 'TLS_1_2',
+				},
+			},
+			child
+		);
+		new aws.apigatewayv2.ApiMapping(
+			`${name}_mapping`,
+			{ apiId: gateway.id, domainName: domain.id, stage: stage.id },
+			child
+		);
+		new aws.route53.Record(
+			`${name}_dns`,
+			{
+				zoneId: args.zoneId,
+				name: this.domain,
+				type: 'A',
+				aliases: [
+					{
+						name: domain.domainNameConfiguration.targetDomainName,
+						zoneId: domain.domainNameConfiguration.hostedZoneId,
+						evaluateTargetHealth: false,
+					},
+				],
+			},
+			child
 		);
 		this.registerOutputs({ domain: this.domain });
 	}

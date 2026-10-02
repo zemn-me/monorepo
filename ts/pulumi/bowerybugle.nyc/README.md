@@ -8,7 +8,7 @@ photographs, or public contact details. Issues without a PDF have no link or pla
 ## Author publishing
 
 The public archive stays read-only even for signed-in authors. Its footer shows
-“Log in” for readers and “Edit” for signed-in authors; both open `/manage.html`.
+“Log in” for readers and “Edit” for signed-in authors; both open `/manage`.
 Both pages
 render the same issue-list component. The management page adds per-row upload,
 replacement, PDF removal and issue deletion controls after login, plus an
@@ -35,7 +35,7 @@ purpose and normalized email. The master key stays in KMS; only its identifier
 is in Lambda configuration. Staging and production use distinct keys and
 origins. The derived seed remains in process memory. No per-request secrets
 are stored. Sessions still last seven days, store only token hashes, and use a
-Secure, HttpOnly, SameSite=Strict host cookie; logging out revokes that session.
+Secure, HttpOnly, SameSite=Strict API-host cookie; logging out revokes that session.
 It does not invalidate an emailed code that is still within its window.
 
 Login email is limited to one per minute and ten per hour. Verification is
@@ -54,10 +54,21 @@ redirect to short-lived S3 PDF URLs on a separate origin. Publication and upload
 consumption are one DynamoDB transaction. PDFs and metadata are separate from
 static assets and protected from production stack deletion.
 
+The frontend uses the repository's Remix/React Router build in
+`project/nyc/bowerybugle`, with prerendered public and management routes.
+TanStack React Query owns issue/session reads and author mutations. Successful
+edits invalidate the issue query, refreshing both routes' shared archive cache.
+The query cache is in memory; it does not persist authentication to local storage.
+
 The Go backend follows the repository's Lambda HTTP adapter and OCI image
-pattern. The shared Website component proxies `/api/*` to API Gateway with no
-caching and forwards the Origin header and session cookie. No authentication
-headers, secrets or author email are embedded in the public JavaScript.
+pattern. It has its own TLS hostname, `api.<site domain>`, with Route 53 DNS and
+an API Gateway regional custom-domain mapping. The default execute-api endpoint
+is disabled. The static site's CloudFront distribution has no API origin or
+proxy behavior. Fetches use `credentials: 'include'`; CORS permits only the
+configured site origin, including preflights and error responses. Write requests
+also require that exact Origin. The API-host cookie stays SameSite=Strict because
+the two HTTPS hosts are same-site. PDF uploads still go directly to S3 without
+credentials. No secrets or author email are embedded in public JavaScript.
 
 ## Email setup
 
@@ -159,4 +170,6 @@ upload rejection, publication, replacement and immutable reads. TOTP tests inclu
 inspect signed upload constraints and version-specific object reads. Browser
 DOM tests cover login confirmation, publishing, failed-upload retry and logout.
 Infrastructure tests cover all domain modes, private versioned storage,
-restricted email permissions, and uncached same-origin API forwarding.
+restricted email permissions, separate API DNS/TLS routing, and no CloudFront API proxy.
+HTTP tests cover trusted and rejected CORS origins, preflights and error responses.
+The Remix production build is also checked for prerendered routes and linked assets.
