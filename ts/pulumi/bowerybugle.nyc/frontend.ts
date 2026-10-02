@@ -47,9 +47,13 @@ export class Frontend extends pulumi.ComponentResource {
 			{
 				runtime: 'nodejs24.x',
 				handler: 'handler.handler',
-				code: new pulumi.asset.FileArchive(
-					'project/nyc/bowerybugle/server_build'
-				),
+				// Bazel runfiles are symlinks, which directory archives can skip.
+				// Explicit file assets preserve the handler in the deployment ZIP.
+				code: new pulumi.asset.AssetArchive({
+					'handler.mjs': new pulumi.asset.FileAsset(
+						'project/nyc/bowerybugle/server_build/handler.mjs'
+					),
+				}),
 				role: role.arn,
 				timeout: 15,
 				memorySize: 512,

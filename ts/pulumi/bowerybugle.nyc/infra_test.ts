@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 
@@ -232,6 +233,16 @@ for (const scenario of [
 				},
 			},
 		});
+		const archive = renderer?.inputs.code;
+		expect(pulumi.asset.AssetArchive.isInstance(archive)).toBe(true);
+		const assets = await archive.assets;
+		expect(Object.keys(assets)).toEqual(['handler.mjs']);
+		expect(pulumi.asset.FileAsset.isInstance(assets['handler.mjs'])).toBe(
+			true
+		);
+		const bundle = readFileSync(await assets['handler.mjs'].path, 'utf8');
+		expect(bundle).toContain('createRequestHandler');
+		expect(bundle.length).toBeGreaterThan(1000);
 		expect(
 			owned.filter(
 				r =>
