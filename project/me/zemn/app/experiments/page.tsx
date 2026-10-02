@@ -1,9 +1,8 @@
-import { Metadata } from 'next/types';
-
 import { experimentGroups } from '#root/project/me/zemn/app/experiments/experiments.js';
 import style from '#root/project/me/zemn/app/experiments/page.module.css';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
 export default function Page() {
 	return (
@@ -26,15 +25,24 @@ export default function Page() {
 								<header className={style.groupHeading}>
 									<h2 id={headingId}>{group.title}</h2>
 									<span className={style.count}>
-										{group.experiments.length.toString().padStart(2, '0')}
+										{group.experiments.length
+											.toString()
+											.padStart(2, '0')}
 									</span>
 								</header>
 								<ol className={style.entries}>
 									{group.experiments.map(experiment => (
-										<li className={style.entry} key={experiment.href}>
-											<article className={style.experiment}>
+										<li
+											className={style.entry}
+											key={experiment.href}
+										>
+											<article
+												className={style.experiment}
+											>
 												<h3>
-													<Link href={experiment.href}>
+													<Link
+														href={experiment.href}
+													>
 														{experiment.title}
 													</Link>
 												</h3>
@@ -56,3 +64,5 @@ export const metadata: Metadata = {
 	title: 'Experiments',
 	description: 'Small tools, visual studies, games, and unfinished ideas.',
 };
+
+export const handle = { metadata };

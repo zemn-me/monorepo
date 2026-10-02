@@ -2,7 +2,7 @@
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v8';
 import { ReactNode } from 'react';
 import z from 'zod';
 
@@ -25,6 +25,8 @@ const queryClient = new QueryClient({
 const localStoragePersister = createAsyncStoragePersister({
 	key: ZEMN_ME_QUERY_CACHE_STORAGE_KEY,
 	storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+	// A completed login must survive an immediate full-document OAuth redirect.
+	throttleTime: 0,
 });
 
 // Prevent CSP issues

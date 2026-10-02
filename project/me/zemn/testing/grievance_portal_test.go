@@ -13,9 +13,9 @@ import (
 )
 
 func TestGrievancePortalHasNoErrors(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find frontend root: %v", err)
 	}
 
 	portal := root
@@ -103,9 +103,9 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 
 func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
-	portalURL, err := nextServerRoot()
+	portalURL, err := frontendRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find frontend root: %v", err)
 	}
 	portalURL.Path = "/grievanceportal"
 	if err := driver.Get(portalURL.String()); err != nil {
@@ -188,6 +188,18 @@ func forceGrievanceSubmissionTimeZone(t *testing.T, driver *seleniumpkg.Driver, 
 }
 
 func dumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
+	if capture, err := driver.ExecuteScript(`
+		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
+		return capture ? JSON.stringify({
+			text: capture.innerText,
+			busy: capture.getAttribute('aria-busy'),
+			buttons: [...capture.querySelectorAll('button')].map(button => ({
+				label: button.getAttribute('aria-label'), disabled: button.disabled,
+			})),
+		}) : '';
+	`, nil); err == nil && capture != "" {
+		t.Logf("journal capture controls: %s", capture)
+	}
 	if body, err := driver.ExecuteScript("return document.body ? document.body.innerText : ''", nil); err == nil {
 		if text, ok := body.(string); ok {
 			if len(text) > 1024 {

@@ -5,8 +5,8 @@ ts_project(
     name = "zemn.me",
     srcs = ["index.ts"],
     data = [
-        "//project/me/zemn:next",
-        "//ts/pulumi/zemn.me/availability:next",
+        "//project/me/zemn:remix",
+        "//ts/pulumi/zemn.me/availability:remix",
     ],
     visibility = ["//:__subpackages__"],
     deps = [

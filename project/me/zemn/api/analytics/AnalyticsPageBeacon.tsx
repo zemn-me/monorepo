@@ -1,7 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 const analyticsSessionStorageKey = 'ZEMN_ANALYTICS_SESSION_ID';
 
@@ -88,9 +88,9 @@ function collectEngagement() {
 }
 
 export function AnalyticsPageBeacon({
-	apiBase = process.env['NEXT_PUBLIC_ZEMN_ME_API_BASE'] ?? 'https://api.zemn.me',
+	apiBase = process.env['PUBLIC_ZEMN_ME_API_BASE'] ?? 'https://api.zemn.me',
 }: AnalyticsPageBeaconProps) {
-	const pathname = usePathname();
+	const pathname = useLocation().pathname;
 	const lastSentKey = useRef<string | null>(null);
 
 	useEffect(() => {
@@ -118,4 +118,3 @@ export function AnalyticsPageBeacon({
 
 	return null;
 }
-

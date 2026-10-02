@@ -1,0 +1,56 @@
+import { Links, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { DocumentMeta } from '#root/ts/remix/metadata.js';
+
+export { ErrorBoundary } from '#root/ts/remix/error.js';
+
+import { ReactNode } from 'react';
+
+import { AnalyticsPageBeacon } from '#root/project/me/zemn/api/analytics/AnalyticsPageBeacon.js';
+import {
+	DefaultContentSecurityPolicy,
+	HeaderTagsAppRouter,
+	SourceExpression,
+} from '#root/ts/remix/index.js';
+
+const csp = {
+	...DefaultContentSecurityPolicy,
+	'connect-src': new Set<SourceExpression>([
+		...(DefaultContentSecurityPolicy['connect-src'] ?? []),
+		'https://api.zemn.me',
+		'http://localhost:*' as 'https://localhost',
+	]),
+};
+
+export const metadata = {
+	title: 'Eggs for dogs — a little park, endless joy',
+	description:
+		'A tiny interactive 3D dog park. Toss an egg, meet six very good dogs, and take a moment to play.',
+};
+
+export interface Props {
+	readonly children?: ReactNode;
+}
+
+export function Layout({ children }: Props) {
+	return (
+		<html lang="en">
+			<head>
+				<DocumentMeta />
+				<Links />
+			</head>
+			<body>
+				<HeaderTagsAppRouter cspPolicy={csp} />
+				<AnalyticsPageBeacon />
+				{children}
+				<ScrollRestoration />
+				<Scripts />
+			</body>
+		</html>
+	);
+}
+
+export default function App() {
+	return <Outlet />;
+}
+
+export const handle = { metadata };

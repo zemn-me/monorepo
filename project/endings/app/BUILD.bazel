@@ -8,8 +8,10 @@ ts_project(
     name = "app",
     srcs = [
         "client.tsx",
-        "layout.tsx",
+        "not-found.tsx",
         "page.tsx",
+        "root.tsx",
+        "routes.ts",
         "scene.ts",
     ],
     assets = [
@@ -19,12 +21,14 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         ":style_module_css",
+        "//:node_modules/@react-router/dev",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/react",
+        "//:node_modules/react-router",
         "//project/me/zemn/app/experiments/arena",
         "//ts/math",
-        "//ts/next.js",
+        "//ts/remix",
         "//ts/result",
     ],
 )
@@ -53,8 +57,10 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "client.tsx",
-        "layout.tsx",
+        "not-found.tsx",
         "page.tsx",
+        "root.tsx",
+        "routes.ts",
         "scene.ts",
         "scene_test.ts",
     ],

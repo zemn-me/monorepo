@@ -23,9 +23,9 @@ import (
 )
 
 func TestAnalyticsBeaconIntegration(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find frontend root: %v", err)
 	}
 	apiBase, err := apiRoot()
 	if err != nil {
@@ -187,7 +187,7 @@ func postAnalyticsEvent(ctx context.Context, endpoint string, origin string, ses
 }
 
 func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}

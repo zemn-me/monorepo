@@ -1,6 +1,5 @@
-import { Metadata } from 'next/types';
-
-import { Link } from '#root/ts/react/next/Link/index.js';
+import { Link } from '#root/ts/react/router/Link/index.js';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
 export default function Main() {
 	return (
@@ -21,3 +20,5 @@ export default function Main() {
 export const metadata: Metadata = {
 	title: 'Home',
 };
+
+export const handle = { metadata };

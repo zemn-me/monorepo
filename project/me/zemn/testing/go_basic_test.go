@@ -8,9 +8,9 @@ import (
 )
 
 func TestOIDCLoginButtonBecomesEnabled(t *testing.T) {
-	root, err := nextServerRoot()
+	root, err := frontendRoot()
 	if err != nil {
-		t.Fatalf("could not find next server root: %v", err)
+		t.Fatalf("could not find frontend root: %v", err)
 	}
 
 	driver, err := seleniumpkg.New()

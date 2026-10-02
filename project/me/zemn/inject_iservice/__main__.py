@@ -2,8 +2,8 @@
 
 """
 This file parses the [ASSIGNED_PORTS] environment variable and re‑exports
-each entry as a `NEXT_PUBLIC_*` environment variable, then execs the
-Next.js binary specified by `NEXTJS_BINARY`.
+each entry as a `PUBLIC_*` environment variable, then execs the
+React Router binary specified by `REMIX_BINARY`.
 
 [ASSIGNED_PORTS]: https://github.com/dzbarsky/rules_itest/blob/master/docs/itest.md#itest_service-env
 """
@@ -49,7 +49,7 @@ def main() -> None:
 		sys.exit("API service port is not set in ASSIGNED_PORTS")
 
 	api_base = "http://localhost:" + str(api_service_port)
-	os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = api_base
+	os.environ["PUBLIC_ZEMN_ME_API_BASE"] = api_base
 
 	if not use_prod_env:
 		issuer = None
@@ -65,25 +65,25 @@ def main() -> None:
 		os.environ.setdefault("ZEMN_TEST_OIDC_CLIENT_ID", "integration-test-client")
 		os.environ.setdefault("ZEMN_TEST_OIDC_SUBJECT", "integration-test-remote")
 		os.environ.setdefault("ZEMN_TEST_OIDC_LOCAL_SUBJECT", "integration-test-local")
-		os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_ISSUER", os.environ["ZEMN_TEST_OIDC_ISSUER"])
-		os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID", os.environ["ZEMN_TEST_OIDC_CLIENT_ID"])
-		os.environ.setdefault("NEXT_PUBLIC_ZEMN_TEST_OIDC_NAME", "Local Test IdP")
+		os.environ.setdefault("PUBLIC_ZEMN_TEST_OIDC_ISSUER", os.environ["ZEMN_TEST_OIDC_ISSUER"])
+		os.environ.setdefault("PUBLIC_ZEMN_TEST_OIDC_CLIENT_ID", os.environ["ZEMN_TEST_OIDC_CLIENT_ID"])
+		os.environ.setdefault("PUBLIC_ZEMN_TEST_OIDC_NAME", "Local Test IdP")
 
-	nextjs_bin_rlocation = os.getenv("NEXTJS_BINARY")
-	if not nextjs_bin_rlocation:
-		raise RuntimeError("NEXTJS_BINARY is not set")
+	remix_bin_rlocation = os.getenv("REMIX_BINARY")
+	if not remix_bin_rlocation:
+		raise RuntimeError("REMIX_BINARY is not set")
 
 	r = runfiles.Create()
 
 	if r is None:
 		raise RuntimeError("Runfiles not found. Ensure this script is run in a Bazel environment.")
 
-	nextjs_bin = r.Rlocation(nextjs_bin_rlocation)
+	remix_bin = r.Rlocation(remix_bin_rlocation)
 
-	if not nextjs_bin:
-		raise RuntimeError(f"Next.js binary not found at {nextjs_bin_rlocation}")
+	if not remix_bin:
+		raise RuntimeError(f"React Router binary not found at {remix_bin_rlocation}")
 
-	os.execvp(nextjs_bin, [nextjs_bin, *sys.argv[1:]])
+	os.execvp(remix_bin, [remix_bin, *sys.argv[1:]])
 
 
 if __name__ == "__main__":

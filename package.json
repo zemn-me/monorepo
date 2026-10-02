@@ -15,6 +15,10 @@
 					"typescript5": "npm:typescript@5.5.4"
 				}
 			}
+		},
+		"overrides": {
+			"nuqs>next": "-",
+			"nuqs>react-router-dom": "-"
 		}
 	},
 	"optionalDependencies": {
@@ -52,15 +56,19 @@
 		"@bazel/runfiles": "6.5.0",
 		"@bazel/typescript": "5.8.1",
 		"@biomejs/biome": "2.5.14",
+		"@fontsource/ibm-plex-mono": "5.3.0",
+		"@fontsource/lora": "5.3.0",
 		"@fortawesome/fontawesome-svg-core": "7.3.1",
 		"@fortawesome/free-solid-svg-icons": "7.3.1",
 		"@fortawesome/react-fontawesome": "3.5.0",
 		"@microsoft/api-documenter": "7.30.16",
-		"@microsoft/api-extractor": "7.59.2",
+		"@microsoft/api-extractor": "7.59.3",
 		"@pulumi/aws": "7.48.0",
 		"@pulumi/awsx": "3.10.0",
 		"@pulumi/dnsimple": "5.2.0",
 		"@pulumi/pulumi": "3.265.0",
+		"@react-router/dev": "8.4.0",
+		"@react-router/node": "8.4.0",
 		"@schemastore/package": "1.0.5",
 		"@swc/cli": "0.8.1",
 		"@testing-library/react": "16.3.3",
@@ -96,14 +104,12 @@
 		"mime": "4.1.0",
 		"minimist": "1.2.8",
 		"module-alias": "2.3.4",
-		"next": "15.5.26",
 		"patch-package": "8.0.1",
 		"prettier": "3.9.9",
 		"puppeteer": "25.12.0",
 		"react": "19.3.0",
 		"react-dom": "19.3.0",
 		"react-router": "8.4.0",
-		"react-router-dom": "7.18.4",
 		"react-spring": "10.0.4",
 		"regenerator-runtime": "0.14.1",
 		"renovate": "44.115.13",
@@ -118,6 +124,7 @@
 		"typescript": "7.0.2",
 		"typescript5": "npm:typescript@5.9.3",
 		"uuid": "14.0.2",
+		"vite": "8.3.1",
 		"yarn": "1.22.22"
 	},
 	"dependencies": {
@@ -160,8 +167,9 @@
 		"fast-glob": "3.3.3",
 		"file-type": "22.1.1",
 		"glob-promise": "6.0.7",
+		"isbot": "5.2.2",
 		"jose": "6.2.12",
-		"jscpd": "5.3.2",
+		"jscpd": "5.3.3",
 		"json-schema-to-typescript": "16.0.0",
 		"jszip": "3.10.2",
 		"libphonenumber-js": "1.13.14",

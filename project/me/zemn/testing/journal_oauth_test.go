@@ -28,7 +28,7 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	frontend, err := nextServerRoot()
+	frontend, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -137,6 +137,10 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	}
 	cancel, err := waitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']", 30*time.Second)
 	if err != nil {
+		if body, bodyErr := driver.FindElement(selenium.ByTagName, "body"); bodyErr == nil {
+			text, _ := body.Text()
+			t.Logf("connection page: %s", text)
+		}
 		t.Fatal(err)
 	}
 	if err = cancel.Click(); err != nil {

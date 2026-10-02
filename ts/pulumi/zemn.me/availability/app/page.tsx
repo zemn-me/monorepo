@@ -1,5 +1,5 @@
 import { ClientSideRedirect } from '#root/ts/pulumi/zemn.me/availability/app/client.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
+import { Link } from '#root/ts/react/router/Link/index.js';
 
 const availabilityURL = 'https://zemn.me/availability';
 

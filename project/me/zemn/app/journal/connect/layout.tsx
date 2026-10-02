@@ -1,5 +1,6 @@
-import type { Metadata } from 'next/types';
-import { type ReactNode, Suspense } from 'react';
+import { Suspense } from 'react';
+import { Outlet } from 'react-router';
+import type { Metadata } from '#root/ts/remix/metadata.js';
 
 export const metadata: Metadata = {
 	title: 'Connect your voice journal',
@@ -7,10 +8,12 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
-export default function Layout({ children }: { readonly children: ReactNode }) {
+export default function Layout() {
 	return (
 		<Suspense fallback={<p role="status">Loading connection request…</p>}>
-			{children}
+			<Outlet />
 		</Suspense>
 	);
 }
+
+export const handle = { metadata };

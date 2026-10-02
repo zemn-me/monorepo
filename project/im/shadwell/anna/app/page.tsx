@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
 export const metadata: Metadata = {
 	title: 'Anna!',
@@ -7,3 +7,5 @@ export const metadata: Metadata = {
 export default function Main() {
 	return <p>Anna!</p>;
 }
+
+export const handle = { metadata };

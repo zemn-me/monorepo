@@ -1,18 +1,22 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
 load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
-load("//ts/next.js:rules.bzl", "next_itest_service", "next_project")
+load("//ts/remix:rules.bzl", "remix_itest_service", "remix_project")
 
 # gazelle:exclude analytics_test.go
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
-next_project(
-    name = "next",
-    srcs = ["//ts/pulumi/pleaseintroducemetoyour.dog/app"],
+remix_project(
+    name = "remix",
+    srcs = [
+        "//ts/pulumi/pleaseintroducemetoyour.dog/app",
+        "//ts/pulumi/pleaseintroducemetoyour.dog/app/daily",
+    ],
 )
 
 py_binary(
@@ -20,7 +24,7 @@ py_binary(
     srcs = ["//project/me/zemn/api/analytics/inject_iservice:__main__.py"],
     data = [":dev"],
     env = {
-        "NEXTJS_BINARY": "$(rlocationpath :dev)",
+        "REMIX_BINARY": "$(rlocationpath :dev)",
     },
     main = "//project/me/zemn/api/analytics/inject_iservice:__main__.py",
     deps = [
@@ -29,11 +33,8 @@ py_binary(
     ],
 )
 
-next_itest_service(
+remix_itest_service(
     name = "itest_service",
-    args = [
-        "ts/pulumi/pleaseintroducemetoyour.dog",
-    ],
     exe = ":inject_iservice_bin",
     http_health_check_address = "http://localhost:$${PORT}/",
     deps = ["//project/me/zemn/api/cmd/localserver:localserver_itest_service"],
@@ -61,7 +62,7 @@ bazel_lint(
 ts_project(
     name = "pleaseintroducemetoyour.dog",
     srcs = ["index.ts"],
-    data = [":next"],
+    data = [":remix"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
@@ -82,4 +83,16 @@ md_files(
     name = "ts_pulumi_pleaseintroducemetoyour_dog",
     srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
 )

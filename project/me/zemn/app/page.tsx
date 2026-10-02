@@ -1,5 +1,3 @@
-import { Metadata } from 'next/types';
-
 import {
 	imageProps as profilePhoto,
 	averageColor as profilePhotoAverageColor,
@@ -20,6 +18,7 @@ import Timeline from '#root/project/me/zemn/components/timeline/index.js';
 import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
 import * as lang from '#root/ts/react/lang/index.js';
+import { Metadata } from '#root/ts/remix/metadata.js';
 
 const homepageLinkNames = ['CV', 'linkedin', 'github', 'bluesky', 'twitter'];
 
@@ -147,3 +146,5 @@ export const metadata: Metadata = {
 		description,
 	},
 };
+
+export const handle = { metadata };

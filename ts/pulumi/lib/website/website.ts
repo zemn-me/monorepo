@@ -37,6 +37,8 @@ function relative(from: string, to: string): string {
 }
 
 async function contentType(fPath: string): Promise<string> {
+	// React Router's prerendered loader responses are Turbo Streams.
+	if (fPath.endsWith('.data')) return 'text/x-script; charset=utf-8';
 	const detected =
 		mime.getType(fPath) ?? (await fileTypeFromFile(fPath))?.mime;
 	if (detected == null) {
