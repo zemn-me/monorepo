@@ -552,14 +552,20 @@ function SummaryBlock({
 		() => ({
 			h2: markdownComponents.h4,
 			h3: markdownComponents.h5,
-			a: ({ children, href, ...props }) => {
+			a: ({ children, href, node: _node, ...props }) => {
 				const Anchor = markdownComponents.a;
 				const resolved = href ? linksByHref.get(href) : undefined;
 				if (!resolved)
 					return (
-						<Anchor {...props} href={href}>
+						<Link
+							{...props}
+							href={href}
+							scroll={
+								href?.startsWith('/journal?wiki=') ? false : undefined
+							}
+						>
 							{children}
-						</Anchor>
+						</Link>
 					);
 				const { citationID, link } = resolved;
 				const { citation } = link;
@@ -1834,6 +1840,7 @@ function JournalToolbar({
 			<Link
 				className={style.wikiNavigation}
 				href="/journal?wiki=all"
+				scroll={false}
 				aria-current={wiki ? 'page' : undefined}
 			>
 				Wiki
@@ -2149,7 +2156,9 @@ function JournalWiki({
 					{pageID === 'all' ? (
 						'Wiki'
 					) : (
-						<Link href="/journal?wiki=all">Wiki</Link>
+						<Link href="/journal?wiki=all" scroll={false}>
+							Wiki
+						</Link>
 					)}
 				</h2>
 				{journal.curation?.updatedAt && (
@@ -2183,7 +2192,10 @@ function JournalWiki({
 						<ul className={style.wikiIndex}>
 							{matches.map(page => (
 								<li key={page.id}>
-									<Link href={`/journal?wiki=${page.id}`}>
+									<Link
+										href={`/journal?wiki=${page.id}`}
+										scroll={false}
+									>
 										<strong>{page.title}</strong>
 										<span>{page.kind}</span>
 									</Link>
@@ -2322,7 +2334,7 @@ function JournalBrowser({
 					/>
 				) : journal.curation ? (
 					<p className={style.wikiIntro}>
-						<Link href="/journal?wiki=all">
+						<Link href="/journal?wiki=all" scroll={false}>
 							Explore the diary wiki
 						</Link>{' '}
 						for people, places, and projects across your recordings.
