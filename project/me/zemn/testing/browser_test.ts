@@ -188,9 +188,13 @@ describe('zemn.me website', () => {
 						.click();
 					await driver.wait(
 						async () =>
-							(await driver
-								.findElement(By.css('h1'))
-								.getText()) === 'Articles.',
+							(
+								await driver.findElements(
+									By.xpath(
+										"//h1[normalize-space()='Articles.']"
+									)
+								)
+							).length === 1,
 						10000
 					);
 					await driver.navigate().back();
