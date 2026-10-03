@@ -15,6 +15,6 @@
   compatibility, but its access token is not a Google API token. Gate
   browser Google API calls on the real Google issuer.
 
-- Cover hydration and dependency-resolution changes in `:testing`, which serves
-  the production build. `:integration_test` uses Vite's development server;
-  passing its browser flows does not validate production bundle identity.
+- `:integration_test` runs the regular login and journal flows against a
+  production bundle and server. Its frontend builds after `rules_itest` assigns
+  the API/OIDC ports; keep it on the deployment build pipeline, not Vite dev.

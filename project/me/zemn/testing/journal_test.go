@@ -24,7 +24,7 @@ import (
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
 
-func TestJournalEndToEndInDevServer(t *testing.T) {
+func TestJournalEndToEnd(t *testing.T) {
 	root, err := frontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
@@ -207,7 +207,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find processing journal entry summary: %v", err)
 	}
-	if err := pendingEntrySummary.Click(); err != nil {
+	if err := clickElementInView(driver, pendingEntrySummary); err != nil {
 		t.Fatalf("open processing journal entry: %v", err)
 	}
 	if _, err := waitForElement(
@@ -371,7 +371,6 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 			t.Fatalf("journal did not select %s after browsing: %v", level, err)
 		}
 	}
-	// The dev server compiles the newly visited calendar routes on demand.
 	// Match the navigation budget used elsewhere in this browser suite.
 	if err := waitForText(driver, "A day that found its own pace", 30*time.Second); err != nil {
 		t.Fatalf("multi-entry day summary did not appear after navigation: %v", err)
@@ -447,7 +446,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 		if err != nil {
 			t.Fatalf("find refreshed journal year summary: %v", err)
 		}
-		if err := yearSummary.Click(); err != nil {
+		if err := clickElementInView(driver, yearSummary); err != nil {
 			t.Fatalf("expand refreshed journal year: %v", err)
 		}
 	}
@@ -859,7 +858,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find second journal entry disclosure: %v", err)
 	}
-	if err := secondEntrySummary.Click(); err != nil {
+	if err := clickElementInView(driver, secondEntrySummary); err != nil {
 		t.Fatalf("open second journal entry: %v", err)
 	}
 	secondTranscriptSegment, err := secondTranscript.FindElement(selenium.ByCSSSelector, "a[data-journal-transcript-segment]")
@@ -1130,7 +1129,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find current journal year disclosure: %v", err)
 	}
-	if err := currentYearSummary.Click(); err != nil {
+	if err := clickElementInView(driver, currentYearSummary); err != nil {
 		t.Fatalf("expand current journal year: %v", err)
 	}
 	currentMonthLink, err := currentYearDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
@@ -1176,7 +1175,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find journal entry disclosure: %v", err)
 	}
-	if err := entrySummary.Click(); err != nil {
+	if err := clickElementInView(driver, entrySummary); err != nil {
 		t.Fatalf("open journal entry: %v", err)
 	}
 	dateInputs, err := currentEntries[0].FindElements(selenium.ByCSSSelector, "input[type='date']")
@@ -1275,7 +1274,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if displayed, err := targetMonth.IsDisplayed(); err != nil {
 		t.Fatalf("inspect corrected journal year expansion: %v", err)
 	} else if !displayed {
-		if err := targetYearSummary.Click(); err != nil {
+		if err := clickElementInView(driver, targetYearSummary); err != nil {
 			t.Fatalf("expand corrected journal year: %v", err)
 		}
 	}
@@ -1362,7 +1361,7 @@ func TestJournalEndToEndInDevServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find corrected journal entry disclosure: %v", err)
 	}
-	if err := correctedSummary.Click(); err != nil {
+	if err := clickElementInView(driver, correctedSummary); err != nil {
 		t.Fatalf("open corrected journal entry: %v", err)
 	}
 	correctedEditDate, err := correctedEntry.FindElement(selenium.ByXPATH, ".//button[normalize-space()='Edit recording date']")

@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
+load("//js:rules.bzl", "js_binary", "js_library")
 load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "ts_project")
 load("//ts/remix:rules.bzl", "remix_itest_service", "remix_itest_service_dev", "remix_project")
@@ -82,9 +82,24 @@ remix_project(
     server = True,
 )
 
+# Build after rules_itest allocates public API/OIDC ports, using deployment inputs.
+js_binary(
+    name = "production_test_server",
+    testonly = True,
+    data = [":build_bin"],
+    entry_point = "//ts/remix:runner",
+    fixed_args = [
+        "build-start",
+        "project/me/zemn",
+        "--server",
+    ],
+)
+
 remix_itest_service(
     name = "itest_service",
-    exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
+    testonly = True,
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_production_bin",
+    health_check_timeout = "300s",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
@@ -94,7 +109,9 @@ remix_itest_service(
 
 remix_itest_service(
     name = "itest_service_calendar_fixture",
-    exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
+    testonly = True,
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_production_bin",
+    health_check_timeout = "300s",
     http_health_check_address = "http://localhost:$${PORT}/healthz",
     deps = [
         "//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service",

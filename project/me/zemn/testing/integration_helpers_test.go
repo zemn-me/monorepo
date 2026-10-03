@@ -18,8 +18,8 @@ import (
 type ServicePorts struct {
 	FrontendPort         string `json:"@@//project/me/zemn:itest_service"`
 	CalendarFrontendPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
-	APIPort                string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
-	CalendarAPIPort        string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
+	APIPort              string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
+	CalendarAPIPort      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
 	// The beacon transport test checks ingestion independently of admin authentication.
 	DynamoDBPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
 	OIDCProvider string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
@@ -244,6 +244,14 @@ func waitForEnabledElement(driver selenium.WebDriver, by, value string, timeout 
 		time.Sleep(250 * time.Millisecond)
 	}
 	return nil, fmt.Errorf("enabled element %s:%s not found", by, value)
+}
+
+// Selenium's default scrolling can leave a control beneath a sticky toolbar.
+func clickElementInView(driver selenium.WebDriver, element selenium.WebElement) error {
+	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});`, []any{element}); err != nil {
+		return err
+	}
+	return element.Click()
 }
 
 // React may replace an element between lookup and click. Only retry stale

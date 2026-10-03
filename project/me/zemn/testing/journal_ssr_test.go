@@ -48,6 +48,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer driver.Close()
+	defer assertNoSevereBrowserLogs(t, driver)
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
@@ -130,7 +131,6 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			}
 		}
 	}
-	assertNoSevereBrowserLogs(t, driver)
 	logout, err := waitForElement(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)

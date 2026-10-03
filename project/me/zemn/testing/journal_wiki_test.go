@@ -2,8 +2,11 @@ package selenium_test
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
+	"sync"
 	"testing"
 	"time"
 
@@ -11,7 +14,30 @@ import (
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
+// The fictional corpus is a local API fixture. Production bundles deliberately
+// omit the development button that invokes this endpoint in local previews.
+var seedJournalWikiFixture = sync.OnceValue(func() error {
+	api, err := apiRoot()
+	if err != nil {
+		return err
+	}
+	client := http.Client{Timeout: 90 * time.Second}
+	response, err := client.Post(api.String()+"/__local/journal/seed", "application/json", nil)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(io.LimitReader(response.Body, 4096))
+		return fmt.Errorf("seed wiki fixture: %s: %s", response.Status, body)
+	}
+	return nil
+})
+
 func TestJournalWikiNavigationAndCitations(t *testing.T) {
+	if err := seedJournalWikiFixture(); err != nil {
+		t.Fatal(err)
+	}
 	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
@@ -41,21 +67,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	seed, err := waitForElement(driver, selenium.ByXPATH, "//button[normalize-space()='Add sample entries']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := seed.Click(); err != nil {
-		t.Fatal(err)
-	}
-	status, err := waitForElement(driver, selenium.ByXPATH, "//*[@role='status' and contains(.,'Sample journal ready')] | //*[@role='alert' and contains(.,'Could not add sample entries')]", 90*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if message, _ := status.Text(); message != "Sample journal ready" {
-		t.Fatal(message)
-	}
-	wiki, err := driver.FindElement(selenium.ByLinkText, "Wiki")
+	wiki, err := waitForElement(driver, selenium.ByLinkText, "Wiki", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -166,6 +178,9 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 // These screenshots use authored fictional content through the normal local
 // sample-data flow, so UI reviews do not require a paid model or private diary.
 func TestJournalReviewScreenshots(t *testing.T) {
+	if err := seedJournalWikiFixture(); err != nil {
+		t.Fatal(err)
+	}
 	root, err := frontendRoot()
 	if err != nil {
 		t.Fatal(err)
@@ -248,10 +263,6 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
-	if _, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]"); err != nil {
-		click(selenium.ByXPATH, "//button[normalize-space()='Add sample entries']")
-		find(selenium.ByXPATH, "//*[@role='status' and contains(.,'Sample journal ready')]")
-	}
 	click(selenium.ByLinkText, "Overview")
 	capture("01-overview-desktop", "section[aria-labelledby='recent-journal-entries']", 1440, 1000, false)
 	click(selenium.ByLinkText, "Wiki")
