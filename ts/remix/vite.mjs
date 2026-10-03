@@ -49,7 +49,9 @@ export default defineConfig(({ command }) => ({
 		// Keep route IDs in the sandbox; npm dependencies still use their real package scopes.
 		preserveSymlinks: command === 'build',
 		alias: { '#root': workspace },
-		dedupe: ['react', 'react-dom', 'react-router'],
+		// Route modules and shared code can resolve through different Bazel roots.
+		// Context providers and consumers must still share one package instance.
+		dedupe: ['react', 'react-dom', 'react-router', '@tanstack/react-query'],
 	},
 	// Concurrent integration services can share Bazel inputs but not optimizer output.
 	cacheDir: `.react-router/vite-${process.pid}`,

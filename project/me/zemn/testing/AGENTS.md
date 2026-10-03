@@ -14,3 +14,7 @@
 - The local OIDC provider advertises Google contact scopes for auth-flow
   compatibility, but its access token is not a Google API token. Gate
   browser Google API calls on the real Google issuer.
+
+- Cover hydration and dependency-resolution changes in `:testing`, which serves
+  the production build. `:integration_test` uses Vite's development server;
+  passing its browser flows does not validate production bundle identity.

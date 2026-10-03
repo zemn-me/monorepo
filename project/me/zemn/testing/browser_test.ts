@@ -13,7 +13,7 @@ import {
 	it,
 } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
+import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
 import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -109,9 +109,7 @@ describe('zemn.me website', () => {
 				const url: string = await driver.getCurrentUrl();
 				if (new URL(url).origin !== origin) return [];
 
-				return logs.length
-					? logs.map(log => ({ url, endpoint, log }))
-					: logs;
+				return logs.map(log => ({ url, endpoint, log }));
 			} finally {
 				await driver.quit();
 			}
@@ -121,13 +119,92 @@ describe('zemn.me website', () => {
 			const logs = await testEndpoint(path);
 			if (pathsThatMayError.has(path)) return;
 			expect(
-				logs.filter(log =>
-					'log' in log
-						? log.log.message.includes('Ignoring event: localhost')
-						: false
+				logs.filter(
+					({ log }) => log.level.value >= logging.Level.SEVERE.value
 				)
-			).toHaveLength(0);
+			).toEqual([]);
 		});
+
+		it.each([
+			'/journal?wiki=all',
+			'/journal/day?at=2026-10-03T12:00:00.000Z',
+		])(
+			'hydrates the production journal and survives navigation at %s',
+			async path => {
+				try {
+					await driver.get(`${origin}${path}`);
+					const assertJournalReady = async () => {
+						await driver.wait(
+							async () => {
+								const headings = await driver.findElements(
+									By.css('h1')
+								);
+								const text = await Promise.all(
+									headings.map(h => h.getText())
+								);
+								expect(text).not.toContain(
+									'Something went wrong'
+								);
+								const buttons = await driver.findElements(
+									By.css(
+										'button[aria-label="Authenticate with OIDC"]'
+									)
+								);
+								return (
+									text.includes('Journal') &&
+									buttons.length === 1 &&
+									(await buttons[0]!.isEnabled())
+								);
+							},
+							15000,
+							'Production journal did not become interactive'
+						);
+						expect(
+							(
+								await driver.manage().logs().get('browser')
+							).filter(
+								log =>
+									log.level.value >=
+									logging.Level.SEVERE.value
+							)
+						).toEqual([]);
+					};
+					// The server HTML alone can look correct while the browser's
+					// HydrationBoundary reads a different React Query context.
+					await assertJournalReady();
+					await driver.navigate().refresh();
+					await assertJournalReady();
+					await driver
+						.findElement(
+							By.css('summary[aria-label="Open navigation menu"]')
+						)
+						.click();
+					await driver
+						.findElement(
+							By.css(
+								'nav[aria-label="Site navigation"] a[href="/article"]'
+							)
+						)
+						.click();
+					await driver.wait(
+						async () =>
+							(await driver
+								.findElement(By.css('h1'))
+								.getText()) === 'Articles.',
+						10000
+					);
+					await driver.navigate().back();
+					await assertJournalReady();
+				} catch (error) {
+					throw new Error(
+						`Production journal browser logs: ${JSON.stringify(await driver.manage().logs().get('browser'))}`,
+						{ cause: error }
+					);
+				} finally {
+					await driver.quit();
+				}
+			}
+		);
 
 		it('api server /healthz returns OK', async () => {
 			try {

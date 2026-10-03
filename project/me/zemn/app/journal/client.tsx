@@ -40,6 +40,7 @@ import {
 	useRecordingQueue,
 } from '#root/project/me/zemn/app/journal/recording_queue.js';
 import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
+import { useJournalRenderTime } from '#root/project/me/zemn/app/journal/render_time.js';
 import {
 	JournalPlaceholder,
 	JournalProgress,
@@ -54,6 +55,7 @@ import {
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
+import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
@@ -64,7 +66,6 @@ import {
 	useUpdateJournalEntryDate,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import { watchOutParseIdToken } from '#root/ts/oidc/oidc.js';
 import {
 	Date as LocalizedDate,
 	DateRange as LocalizedDateRange,
@@ -2247,6 +2248,7 @@ function JournalBrowser({
 		recordedDate: string
 	) => Promise<void>;
 }) {
+	const renderTime = useJournalRenderTime();
 	const [rawSelection, setRawSelection] = useQueryStates(
 		journalSelectionQuery,
 		{
@@ -2284,7 +2286,7 @@ function JournalBrowser({
 		rawSelection.at ??
 		legacyFocus ??
 		newestEntry?.recordedAt ??
-		new Date().toISOString();
+		new Date(renderTime).toISOString();
 	const setFocus = useCallback(
 		(next: string) => {
 			void setRawSelection({ at: next }, { history: 'replace' });
@@ -2599,6 +2601,7 @@ export default function JournalPageClient({
 }: {
 	readonly route?: JournalRoute;
 }) {
+	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
 	const journal = useGetJournal(idToken);
@@ -2635,26 +2638,20 @@ export default function JournalPageClient({
 		() => false,
 		() => false
 	);
-	const isLoggedIn = idToken(
-		() => true,
-		() => false,
-		() => false
-	);
-	const owner = idToken(
-		token => {
-			const parsed = watchOutParseIdToken.safeParse(token);
-			return parsed.success
-				? JSON.stringify([parsed.data.iss, parsed.data.sub])
-				: undefined;
-		},
-		() => undefined,
-		() => undefined
-	);
+	const claims = useSessionClaims(idToken);
+	const isLoggedIn = claims !== undefined;
+	const owner = claims ? JSON.stringify([claims.iss, claims.sub]) : undefined;
 	const currentOwner = useRef(owner);
 	currentOwner.current = owner;
 	const queue = useRecordingQueue({
 		owner,
-		canSync: hasWriteScope,
+		canSync:
+			hasWriteScope &&
+			idToken(
+				() => true,
+				() => false,
+				() => false
+			),
 		upload: createJournalEntry,
 		entries: journal(
 			value => value.entries,
@@ -3007,7 +3004,7 @@ export default function JournalPageClient({
 							<>
 								<JournalToolbar
 									actions={captureControls}
-									focus={new Date().toISOString()}
+									focus={new Date(renderTime).toISOString()}
 								/>
 								<LocalRecordings
 									queue={queue}
@@ -3020,7 +3017,7 @@ export default function JournalPageClient({
 							<>
 								<JournalToolbar
 									actions={captureControls}
-									focus={new Date().toISOString()}
+									focus={new Date(renderTime).toISOString()}
 								/>
 								<LocalRecordings
 									queue={queue}

@@ -13,7 +13,12 @@ export function RedirectBlurb({
 	...props
 }: BlurbProps) {
 	const href = props.to.toString();
-	const target = URL.canParse(href) ? new URL(href) : undefined;
+	let target: URL | undefined;
+	try {
+		target = new URL(href);
+	} catch {
+		// Relative destinations use their original text.
+	}
 	const text = target?.protocol === 'https:' ? target.host : href;
 	return (
 		<Prose>
