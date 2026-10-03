@@ -15,6 +15,10 @@ import type {
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import { uploadJournalAudio } from '#root/project/me/zemn/hook/journal_upload.js';
 import {
+	useServerSession,
+	useSessionClaims,
+} from '#root/project/me/zemn/hook/server_session.js';
+import {
 	Future,
 	future_and_then,
 	future_declare_dependency,
@@ -193,41 +197,29 @@ export function useGetAdminAnalyticsEvents(
 }
 
 export function useGetMeScopes<L, E>(id_token: Future<string, L, E>) {
-	const fetchClient = useFetchClient(
-		id_token(
-			token => token,
-			() => undefined,
-			() => undefined
-		)
+	const token = id_token(
+		value => value,
+		() => undefined,
+		() => undefined
 	);
-
-	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
-
+	const claims = useSessionClaims(id_token);
+	const { session } = useServerSession();
+	const fetchClient = useFetchClient(token);
 	const qr = useQuery({
-		queryKey: [
-			'get',
-			'/me/scopes',
-			jti(
-				j => j,
-				() => undefined,
-				() => undefined
-			),
-		],
+		queryKey: ['get', '/me/scopes', claims?.jti],
+		initialData:
+			claims?.jti === session?.claims.jti ? session?.scopes : undefined,
 		queryFn: async () => {
 			const resp = await fetchClient.GET('/me/scopes');
-			if (!resp.data) {
+			if (!resp.data)
 				throw new Error('/me/scopes returned unexpected payload');
-			}
 			return resp.data.scopes;
 		},
-		enabled: id_token(
-			() => true,
-			() => false,
-			() => false
-		),
+		enabled: token !== undefined,
 	});
-
-	return future_declare_dependency(id_token, useQueryFuture(qr));
+	return claims
+		? useQueryFuture(qr)
+		: future_declare_dependency(id_token, useQueryFuture(qr));
 }
 
 function useinvalidateGrievances() {
@@ -756,24 +748,15 @@ export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 }
 
 export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
-	const fetchClient = useFetchClient(
-		id_token(
-			value => value,
-			() => undefined,
-			() => undefined
-		)
+	const token = id_token(
+		value => value,
+		() => undefined,
+		() => undefined
 	);
-	const jti = future_and_then(id_token, token => extractIdTokenJti(token));
+	const claims = useSessionClaims(id_token);
+	const fetchClient = useFetchClient(token);
 	const query = useQuery({
-		queryKey: [
-			'get',
-			'/journal',
-			jti(
-				value => value,
-				() => undefined,
-				() => undefined
-			),
-		],
+		queryKey: ['get', '/journal', claims?.jti],
 		queryFn: async () => {
 			const response = await fetchClient.GET('/journal');
 			if (!response.data) {
@@ -781,11 +764,7 @@ export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
 			}
 			return response.data;
 		},
-		enabled: id_token(
-			() => true,
-			() => false,
-			() => false
-		),
+		enabled: token !== undefined,
 		refetchInterval: query => {
 			const value = query.state.data;
 			return value?.entries.some(entry =>
@@ -797,7 +776,9 @@ export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
 					10000;
 		},
 	});
-	return future_declare_dependency(id_token, useQueryFuture(query));
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(id_token, useQueryFuture(query));
 }
 
 export function useGetJournalWikiPage<A, B>(
@@ -810,12 +791,13 @@ export function useGetJournalWikiPage<A, B>(
 		() => undefined,
 		() => undefined
 	);
+	const claims = useSessionClaims(idToken);
 	const client = useFetchClient(token);
 	const query = useQuery({
 		queryKey: [
 			'get',
 			'/journal/wiki/{pageId}',
-			token ? extractIdTokenJti(token) : undefined,
+			claims?.jti,
 			pageId,
 			generation,
 		],
@@ -832,7 +814,9 @@ export function useGetJournalWikiPage<A, B>(
 		enabled: token !== undefined,
 		refetchInterval: 10000,
 	});
-	return future_declare_dependency(idToken, useQueryFuture(query));
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
 }
 
 export interface JournalAudioUpload {

@@ -5,6 +5,7 @@ load("//ts:rules.bzl", "ts_project")
 ts_project(
     name = "app",
     srcs = [
+        "auth-session.ts",
         "eeg.tsx",
         "glade-layout.tsx",
         "linkset_link.tsx",
@@ -67,6 +68,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "auth-session.ts",
         "eeg.tsx",
         "glade-layout.tsx",
         "linkset_link.tsx",
