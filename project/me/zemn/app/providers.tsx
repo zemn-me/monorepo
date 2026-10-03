@@ -48,11 +48,6 @@ export function Providers({ children }: ProviderProps) {
 						persister: localStoragePersister,
 						maxAge: 1000 * 60 * 60 * 24 * 365,
 						buster: 'v1',
-						dehydrateOptions: {
-							shouldDehydrateQuery: query =>
-								query.state.status === 'success' &&
-								query.meta?.['persist'] !== false,
-						},
 					}}
 				>
 					{children}

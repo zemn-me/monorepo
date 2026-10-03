@@ -6,15 +6,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { type ReactNode, useEffect, useState } from 'react';
 import type { z } from 'zod';
+
 import style from '#root/project/me/zemn/components/InlineLogin/inline_login.module.css';
 import { ProgressCircle } from '#root/project/me/zemn/components/ProgressCircle/ProgressCircle.js';
-import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
 	type PosterIdentity,
 	usePosterDisplayName,
 } from '#root/project/me/zemn/hook/usePosterDisplayName.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import type { OidcIdTokenClaimsSchema } from '#root/ts/oidc/id_token.js';
+import {
+	future_and_then,
+	future_error,
+	future_flatten_then,
+	future_resolve,
+} from '#root/ts/future/future.js';
+import { OidcIdTokenClaimsSchema } from '#root/ts/oidc/id_token.js';
 import { background } from '#root/ts/promise/ignore_result.js';
 
 const progressRatio = (min: number, max: number, now: number) => {
@@ -29,13 +35,12 @@ interface TimeLeftIndicatorProps {
 }
 
 function TimeLeftIndicator({ start, end }: TimeLeftIndicatorProps) {
-	const [now, setNow] = useState(start.getTime());
+	const [now, setNow] = useState(Date.now());
 
 	useEffect(() => {
-		setNow(Date.now());
 		const interval = setInterval(() => setNow(Date.now()), 1000);
 		return () => clearInterval(interval);
-	}, []);
+	});
 
 	const done = now >= end.getTime();
 	const progress = progressRatio(start.getTime(), end.getTime(), +now);
@@ -69,7 +74,7 @@ function InlineLoginContent({
 	onSwitchUser,
 }: {
 	readonly claims: OidcIdTokenClaims;
-	readonly onLogout: () => Promise<void>;
+	readonly onLogout: () => void;
 	readonly onSwitchUser: () => Promise<void>;
 }) {
 	const poster = {
@@ -84,7 +89,7 @@ function InlineLoginContent({
 			<button
 				aria-label="Log out"
 				className={style.accountAction}
-				onClick={background(onLogout)}
+				onClick={onLogout}
 				title="Log out"
 				type="button"
 			>
@@ -131,18 +136,17 @@ export function InlineLogin() {
 	const [fut_idToken, , fut_promptForLogin, sessionControls] =
 		useZemnMeAuth();
 
-	const claims = useSessionClaims(fut_idToken);
-	const [actionError, setActionError] = useState<{
-		retry: () => Promise<void>;
-	}>();
-	const runAction = (action: () => Promise<void>) => async () => {
-		setActionError(undefined);
-		try {
-			await action();
-		} catch {
-			setActionError({ retry: action });
-		}
-	};
+	const idTokenData = future_flatten_then(
+		future_and_then(fut_idToken, tok => {
+			// "unsafely" (not really because on client)
+			// parse id_token
+			const claims = tok.split('.')[1]!;
+			const decoded = atob(claims);
+			const r = OidcIdTokenClaimsSchema.safeParse(JSON.parse(decoded));
+
+			return r.success ? future_resolve(r.data) : future_error(r.error);
+		})
+	);
 
 	const loginButton = (error: boolean) => (
 		<button
@@ -169,33 +173,19 @@ export function InlineLogin() {
 		</button>
 	);
 
-	const account = claims ? (
-		<InlineLoginContent
-			claims={claims}
-			onLogout={runAction(sessionControls.logout)}
-			onSwitchUser={runAction(sessionControls.switchUser)}
-		/>
-	) : (
-		fut_idToken(
-			() => loginButton(true),
-			() => loginButton(false),
-			() => loginButton(true)
-		)
-	);
-	return (
-		<>
-			{account}
-			{actionError ? (
-				<span role="alert">
-					Could not update your login.{' '}
-					<button
-						onClick={background(runAction(actionError.retry))}
-						type="button"
-					>
-						Try again
-					</button>
-				</span>
-			) : null}
-		</>
+	return idTokenData(
+		f => (
+			<InlineLoginContent
+				claims={f}
+				onLogout={sessionControls.logout}
+				onSwitchUser={sessionControls.switchUser}
+			/>
+		),
+		() => loginButton(false),
+		err => {
+			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
+			console.error(err);
+			return loginButton(true);
+		}
 	);
 }
