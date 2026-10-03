@@ -26,6 +26,7 @@ import {
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import { mockCalls, mockResources } from '#root/ts/pulumi/setMocks.js';
+import { lambdaArchiveViolations } from './lambda_archives.js';
 
 const require = createRequire(import.meta.url);
 
@@ -36,6 +37,18 @@ const resourceInputText = (input: unknown) =>
 	typeof input === 'string' ? input : JSON.stringify(input);
 
 const awsAlphaNumericHyphenUnderscoreNameInputs = [
+	{
+		input: 'name',
+		type: 'aws:cloudfront/cachePolicy:CachePolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/originRequestPolicy:OriginRequestPolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/responseHeadersPolicy:ResponseHeadersPolicy',
+	},
 	{
 		input: 'name',
 		type: 'aws:cloudfront/function:Function',
@@ -127,6 +140,174 @@ const expectValidS3BucketNames = () => {
 	}
 };
 
+const expectValidAwsNames = (
+	resources: readonly pulumi.runtime.MockResourceArgs[] = mockResources
+) => {
+	const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
+		({ input, type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs[input];
+					if (typeof value !== 'string') {
+						if (
+							isAwsAlphaNumericHyphenUnderscoreName(resource.name)
+						) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
+						];
+					}
+					if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
+					];
+				})
+	);
+	if (awsNameViolations.length > 0) {
+		throw new Error(
+			`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const lambdaFunctionNameViolations = awsLambdaFunctionNameInputs.flatMap(
+		({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['name'];
+					if (typeof value === 'string') {
+						if (isAwsLambdaFunctionName(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					}
+
+					const implicitNamePrefix = `${resource.name}-`;
+					const implicitNameLength =
+						implicitNamePrefix.length +
+						pulumiAutoNameRandomSuffixLength;
+					if (
+						implicitNameLength <= awsLambdaFunctionNameMaxLength &&
+						isAwsAlphaNumericHyphenUnderscoreName(
+							implicitNamePrefix
+						)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set name to an explicit valid Lambda function name.`,
+					];
+				})
+	);
+	if (lambdaFunctionNameViolations.length > 0) {
+		throw new Error(
+			`AWS Lambda function name validation failed:\n${lambdaFunctionNameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const lambdaPermissionStatementIdViolations =
+		awsLambdaPermissionStatementIdInputs.flatMap(({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['statementId'];
+					if (typeof value === 'string') {
+						if (isAwsLambdaStatementId(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(value)} from its explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					}
+
+					if (isAwsLambdaStatementId(resource.name)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set statementId to an explicit valid Lambda permission statement ID.`,
+					];
+				})
+		);
+	if (lambdaPermissionStatementIdViolations.length > 0) {
+		throw new Error(
+			`AWS Lambda permission statement ID validation failed:\n${lambdaPermissionStatementIdViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
+		resources
+			.filter(resource => resource.type === type)
+			.flatMap(resource => {
+				const value = resource.inputs['name'];
+				if (typeof value === 'string') {
+					if (isAwsElbv2Name(value)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+					];
+				}
+
+				const implicitNamePrefix = `${resource.name}-`;
+				const implicitNameLength =
+					implicitNamePrefix.length +
+					pulumiAutoNameRandomSuffixLength;
+				if (
+					implicitNameLength <= awsElbv2NameMaxLength &&
+					awsElbv2NamePattern.test(implicitNamePrefix)
+				) {
+					return [];
+				}
+
+				return [
+					`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
+				];
+			})
+	);
+	if (elbv2NameViolations.length > 0) {
+		throw new Error(
+			`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const ecsTaskDefinitionFamilyViolations =
+		awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['family'];
+					if (
+						typeof value === 'string' &&
+						isAwsEcsTaskFamilyName(value)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+					];
+				})
+		);
+	if (ecsTaskDefinitionFamilyViolations.length > 0) {
+		throw new Error(
+			`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+};
+
 interface AwsAssumeRoleStatement {
 	Condition: {
 		StringEquals: Record<string, string>;
@@ -150,6 +331,42 @@ interface EcrLifecyclePolicy {
 }
 
 describe('pulumi', () => {
+	test.each(awsAlphaNumericHyphenUnderscoreNameInputs)(
+		'rejects invalid explicit and auto-named $type resources',
+		({ type, input }) => {
+			const resource = (
+				name: string,
+				inputs = {}
+			): pulumi.runtime.MockResourceArgs => ({
+				type,
+				name,
+				inputs,
+				custom: true,
+			});
+			for (const name of [
+				'monorepo_zemn.me_cache',
+				'spaces in name',
+				'slash/name',
+				'bad!name',
+			]) {
+				expect(() => expectValidAwsNames([resource(name)])).toThrow(
+					'AWS physical name'
+				);
+				expect(() =>
+					expectValidAwsNames([resource('valid', { [input]: name })])
+				).toThrow('AWS physical name');
+			}
+			expect(() =>
+				expectValidAwsNames([
+					resource('monorepo_zemn_me_cache'),
+					resource('logical.names.can.contain.dots', {
+						[input]: 'valid-explicit_name',
+					}),
+				])
+			).not.toThrow();
+		}
+	);
+
 	test('loads its package-local TypeScript 5 compiler API', () => {
 		const typescript = require('@pulumi/pulumi/typescript-shim.js') as {
 			version: string;
@@ -285,6 +502,8 @@ describe('pulumi', () => {
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
 		expectValidS3BucketNames();
+		expectValidAwsNames();
+		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
 
 		expect(
 			mockResources.some(
@@ -502,6 +721,8 @@ describe('pulumi', () => {
 		});
 		await pulumi.runtime.disconnect();
 		expectValidS3BucketNames();
+		expectValidAwsNames();
+		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
 
 		expect(
 			mockResources.find(
@@ -542,160 +763,6 @@ describe('pulumi', () => {
 			});
 		}
 
-		const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
-			({ input, type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs[input];
-						if (typeof value !== 'string') {
-							if (isAwsAlphaNumericHyphenUnderscoreName(resource.name)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
-							];
-						}
-						if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
-						];
-					})
-		);
-		if (awsNameViolations.length > 0) {
-			throw new Error(
-				`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const lambdaFunctionNameViolations = awsLambdaFunctionNameInputs.flatMap(
-			({ type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs['name'];
-						if (typeof value === 'string') {
-							if (isAwsLambdaFunctionName(value)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
-							];
-						}
-
-						const implicitNamePrefix = `${resource.name}-`;
-						const implicitNameLength =
-							implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
-						if (
-							implicitNameLength <= awsLambdaFunctionNameMaxLength &&
-							isAwsAlphaNumericHyphenUnderscoreName(implicitNamePrefix)
-						) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set name to an explicit valid Lambda function name.`,
-						];
-					})
-		);
-		if (lambdaFunctionNameViolations.length > 0) {
-			throw new Error(
-				`AWS Lambda function name validation failed:\n${lambdaFunctionNameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const lambdaPermissionStatementIdViolations =
-			awsLambdaPermissionStatementIdInputs.flatMap(({ type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs['statementId'];
-						if (typeof value === 'string') {
-							if (isAwsLambdaStatementId(value)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(value)} from its explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
-							];
-						}
-
-						if (isAwsLambdaStatementId(resource.name)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set statementId to an explicit valid Lambda permission statement ID.`,
-						];
-					})
-			);
-		if (lambdaPermissionStatementIdViolations.length > 0) {
-			throw new Error(
-				`AWS Lambda permission statement ID validation failed:\n${lambdaPermissionStatementIdViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
-			mockResources
-				.filter(resource => resource.type === type)
-				.flatMap(resource => {
-					const value = resource.inputs['name'];
-					if (typeof value === 'string') {
-						if (isAwsElbv2Name(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
-						];
-					}
-
-					const implicitNamePrefix = `${resource.name}-`;
-					const implicitNameLength =
-						implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
-					if (
-						implicitNameLength <= awsElbv2NameMaxLength &&
-						awsElbv2NamePattern.test(implicitNamePrefix)
-					) {
-						return [];
-					}
-
-					return [
-						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
-					];
-				})
-		);
-		if (elbv2NameViolations.length > 0) {
-			throw new Error(
-				`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const ecsTaskDefinitionFamilyViolations =
-			awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs['family'];
-						if (typeof value === 'string' && isAwsEcsTaskFamilyName(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
-						];
-					})
-			);
-		if (ecsTaskDefinitionFamilyViolations.length > 0) {
-			throw new Error(
-				`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
 
 		expect(
 			mockResources.some(

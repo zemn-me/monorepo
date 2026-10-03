@@ -18,6 +18,14 @@ not need separate approval. Once those checks pass, report the result and
 any remaining blockers; broaden testing when the change or a failure calls
 for it. Publishing, merging, and deploying follow the user's requested scope.
 
+When staging fails because a component is misconfigured (for example, an invalid
+AWS resource name or deployment archive), fix the configuration and follow up
+with a separate PR adding a regression test to the normal presubmit checks.
+Prefer shared validation across affected component types and both staging and
+production, and verify that the test rejects the configuration that failed.
+Run the affected checks and enable auto-merge on the follow-up PR; do not bypass
+required checks. Record the failure class and test coverage in its description.
+
 ## Build and test
 
 - This is a Bazel monorepo. Use the wrappers in `sh/bin` (on `$PATH`);
