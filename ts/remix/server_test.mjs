@@ -77,6 +77,16 @@ test('public caching requires explicit opt-in and a representable cache key', ()
 			new Response(null, { status, headers: responseHeaders })
 		);
 		assert.equal(response.headers.get('cache-control'), expected);
+		if (responseHeaders.vary === '*')
+			assert.equal(response.headers.get('vary'), '*');
+		else {
+			assert.match(response.headers.get('vary'), /cookie/i);
+			assert.match(response.headers.get('vary'), /authorization/i);
+			if (responseHeaders.vary)
+				assert.ok(
+					response.headers.get('vary').includes(responseHeaders.vary)
+				);
+		}
 	}
 });
 
