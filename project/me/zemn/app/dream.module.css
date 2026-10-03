@@ -1,0 +1,974 @@
+@keyframes homepageFallsAway {
+	0% {
+		filter: blur(0);
+		opacity: 1;
+		transform: perspective(90rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+	25% {
+		filter: blur(0);
+		transform: perspective(90rem) translate3d(0, -2vh, -3rem)
+			rotateX(4deg) scale(0.97);
+	}
+	100% {
+		filter: blur(0.7rem);
+		opacity: 0;
+		transform: perspective(90rem) translate3d(2vw, 120vh, -45rem)
+			rotateX(-58deg) rotateZ(2deg) scale(0.78);
+	}
+}
+
+@keyframes homepageReturns {
+	0% {
+		filter: blur(0.7rem);
+		opacity: 0;
+		transform: perspective(90rem) translate3d(2vw, 120vh, -45rem)
+			rotateX(-58deg) rotateZ(2deg) scale(0.78);
+	}
+	100% {
+		filter: blur(0);
+		opacity: 1;
+		transform: perspective(90rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+}
+
+@keyframes nightCloses {
+	from {
+		background-color: transparent;
+	}
+	to {
+		background-color: #00130e;
+	}
+}
+
+@keyframes tableArrives {
+	0% {
+		opacity: 0;
+		transform: perspective(85rem) translate3d(0, -35vh, -55rem)
+			rotateX(68deg) scale(0.82);
+	}
+	55% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: perspective(85rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+}
+
+@keyframes tableLeaves {
+	from {
+		opacity: 1;
+		transform: perspective(85rem) translate3d(0, 0, 0) rotateX(0deg)
+			scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: perspective(85rem) translate3d(0, -28vh, -55rem)
+			rotateX(64deg) scale(0.82);
+	}
+}
+
+@keyframes timerRuns {
+	from {
+		inline-size: 0;
+	}
+	to {
+		inline-size: 100%;
+	}
+}
+
+@keyframes mansusOpens {
+	0% {
+		clip-path: circle(0 at 50% 55%);
+		opacity: 0;
+	}
+	100% {
+		clip-path: circle(85% at 50% 50%);
+		opacity: 1;
+	}
+}
+
+@keyframes ringsTurn {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+@keyframes mapDraws {
+	from {
+		opacity: 0;
+		stroke-dashoffset: 1;
+	}
+	to {
+		opacity: 1;
+		stroke-dashoffset: 0;
+	}
+}
+
+@keyframes cardReveals {
+	0% {
+		opacity: 0;
+		transform: perspective(45rem) rotateY(90deg) translateY(1rem);
+	}
+	100% {
+		opacity: 1;
+		transform: perspective(45rem) rotateY(0deg) translateY(0);
+	}
+}
+
+:global(html[data-dream-state]):has(.overlay) {
+	overflow: hidden;
+}
+
+:global(html[data-dream-state="dreaming"]):has(.overlay)
+	:global([data-glade-layout]) {
+	animation: homepageFallsAway 1.15s cubic-bezier(0.6, 0, 0.8, 0.4) forwards;
+	pointer-events: none;
+	transform-origin: 50% 18%;
+	will-change: filter, opacity, transform;
+}
+
+:global(html[data-dream-state="waking"]):has(.overlay)
+	:global([data-glade-layout]) {
+	animation: homepageReturns 0.9s cubic-bezier(0.18, 0.82, 0.25, 1) forwards;
+	transform-origin: 50% 18%;
+	will-change: filter, opacity, transform;
+}
+
+.overlay {
+	/* The dream is the main site's dark palette, seen by stranger light. */
+	--dream-bone: #8ca6a2;
+	--dream-brass: #5e8645;
+	--dream-deep: #00130e;
+	--dream-ink: #1b525e;
+	--dream-moth: #92635e;
+	--dream-paper: #b7b58c;
+	--dream-wood: #00130e;
+	animation: nightCloses 0.7s ease 0.2s both;
+	background: var(--dream-deep);
+	color: var(--dream-bone);
+	font-family: inherit;
+	inset: 0;
+	overflow: hidden;
+	position: fixed;
+	z-index: 2147483000;
+}
+
+.overlay.leaving {
+	animation: nightCloses 0.8s ease reverse forwards;
+	pointer-events: none;
+}
+
+.tableViewport {
+	inset: 0;
+	overflow: hidden;
+	position: absolute;
+	touch-action: none;
+}
+
+.tableViewport:focus-visible {
+	outline: 1px solid color-mix(in srgb, var(--dream-brass) 48%, transparent);
+	outline-offset: -0.35rem;
+}
+
+.tableCamera {
+	min-block-size: 100dvh;
+	min-inline-size: 100%;
+	transform: perspective(72rem)
+		translate3d(
+			var(--table-camera-x),
+			var(--table-camera-y),
+			0
+		)
+		rotateX(5.5deg) rotateZ(-0.22deg) scale(var(--table-camera-zoom));
+	transform-origin: 50% 44%;
+	transform-style: preserve-3d;
+	transition: transform 180ms ease-out;
+	will-change: transform;
+}
+
+.mansusCamera {
+	transform: none;
+}
+
+.table {
+	animation: tableArrives 1.15s cubic-bezier(0.18, 0.78, 0.22, 1) 0.36s both;
+	background:
+		radial-gradient(circle at 48% 42%, rgb(140 166 162 / 16%), transparent 32rem),
+		repeating-linear-gradient(
+			88deg,
+			rgb(140 166 162 / 1.8%) 0,
+			rgb(255 255 255 / 0%) 0.18rem,
+			rgb(0 0 0 / 9%) 0.35rem,
+			rgb(0 0 0 / 0%) 4.6rem
+		),
+		linear-gradient(130deg, #00130e, #082d29 46%, #00130e);
+	box-shadow: inset 0 0 8rem 2rem #000906;
+	box-sizing: border-box;
+	display: grid;
+	grid-template-rows: 1fr;
+	min-block-size: 100dvh;
+	min-inline-size: 100%;
+	position: relative;
+	transform-origin: 50% 20%;
+	transform-style: preserve-3d;
+}
+
+.leaving .table {
+	animation: tableLeaves 0.7s ease-in forwards;
+}
+
+.table::after {
+	background: repeating-radial-gradient(
+		circle at 30% 20%,
+		transparent 0 0.8rem,
+		rgb(255 255 255 / 2%) 0.85rem 0.9rem,
+		transparent 0.95rem 2rem
+	);
+	content: "";
+	inset: 0;
+	mix-blend-mode: soft-light;
+	opacity: 0.22;
+	pointer-events: none;
+	position: absolute;
+}
+
+.tableHeader {
+	align-items: center;
+	display: flex;
+	justify-content: flex-end;
+	position: fixed;
+	inset-block-start: clamp(0.75rem, 2vh, 1.25rem);
+	inset-inline-end: clamp(1rem, 4vw, 4rem);
+	z-index: 12;
+}
+
+.visuallyHidden {
+	block-size: 1px;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	inline-size: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.wakeButton,
+.verbButton,
+.mansusAction,
+.cameraControls button {
+	background: var(--dream-bone);
+	border: 1px solid var(--dream-bone);
+	border-radius: 50%;
+	color: var(--dream-deep);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 1.35rem;
+	line-height: 1;
+	block-size: 2.75rem;
+	inline-size: 2.75rem;
+	padding: 0;
+}
+
+.wakeButton:hover,
+.wakeButton:focus-visible,
+.verbButton:hover:not(:disabled),
+.verbButton:focus-visible,
+.mansusAction:hover,
+.mansusAction:focus-visible,
+.cameraControls button:hover,
+.cameraControls button:focus-visible {
+	background: var(--dream-brass);
+	border-color: var(--dream-brass);
+	color: var(--dream-deep);
+	outline: 1px solid var(--dream-bone);
+	outline-offset: 0.2rem;
+}
+
+.cameraControls {
+	display: flex;
+	gap: 0.4rem;
+	inset-block-end: clamp(0.75rem, 2vh, 1.25rem);
+	inset-inline-end: clamp(1rem, 4vw, 4rem);
+	position: fixed;
+	z-index: 12;
+}
+
+.cameraControls button {
+	block-size: 2.45rem;
+	font-size: 1.05rem;
+	inline-size: 2.45rem;
+}
+
+.playArea {
+	align-items: stretch;
+	display: grid;
+	gap: clamp(1rem, 3vw, 2.5rem);
+	grid-template-columns: 1fr;
+	min-inline-size: 68rem;
+	padding: clamp(0.75rem, 4vw, 4rem);
+	position: relative;
+	z-index: 1;
+}
+
+.verbArea {
+	align-items: center;
+	display: grid;
+	gap: clamp(0.75rem, 2vw, 1.5rem);
+	grid-template-columns: repeat(5, 10.5rem);
+	justify-content: center;
+	min-block-size: 19rem;
+}
+
+.verb {
+	align-items: center;
+	background:
+		radial-gradient(circle at 50% 28%, rgb(94 134 69 / 13%), transparent 32%),
+		color-mix(in srgb, var(--dream-deep) 86%, transparent);
+	border: 1px solid color-mix(in srgb, var(--dream-bone) 38%, transparent);
+	box-shadow:
+		0 1.2rem 3rem rgb(0 0 0 / 45%),
+		inset 0 0 0 0.3rem var(--dream-deep);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	inline-size: 10.5rem;
+	min-block-size: 18rem;
+	padding: 0.75rem;
+	position: relative;
+	text-align: center;
+	transform: translateZ(0.8rem);
+	transform-style: preserve-3d;
+}
+
+.verbMoon {
+	color: var(--dream-brass);
+	font-size: 2.5rem;
+	line-height: 1;
+	text-shadow: 0 0 1.2rem color-mix(in srgb, var(--dream-bone) 45%, transparent);
+}
+
+.cardSlot {
+	align-items: center;
+	border: 1px dashed color-mix(in srgb, var(--dream-bone) 38%, transparent);
+	box-sizing: border-box;
+	color: color-mix(in srgb, var(--dream-bone) 52%, transparent);
+	display: flex;
+	font-family: inherit;
+	font-size: 1.5rem;
+	inline-size: 7.5rem;
+	justify-content: center;
+	letter-spacing: 0.08em;
+	min-block-size: 10.5rem;
+	padding: 0.35rem;
+	text-transform: uppercase;
+}
+
+.filledSlot {
+	border-color: var(--dream-brass);
+	border-style: solid;
+}
+
+.cardSlot .card {
+	inline-size: 100%;
+	min-block-size: 9.8rem;
+}
+
+.verbButton {
+	margin-block-start: 0.8rem;
+}
+
+.verbButton:disabled {
+	background: transparent;
+	border-color: color-mix(in srgb, var(--dream-bone) 24%, transparent);
+	color: color-mix(in srgb, var(--dream-bone) 33%, transparent);
+	cursor: not-allowed;
+}
+
+.timer {
+	background: rgb(0 0 0 / 28%);
+	block-size: 0.35rem;
+	box-sizing: border-box;
+	inline-size: 100%;
+	margin-block-start: 0.6rem;
+	overflow: hidden;
+	position: relative;
+}
+
+.timer i {
+	animation: timerRuns 2.2s linear forwards;
+	background: color-mix(in srgb, var(--dream-brass) 32%, transparent);
+	inset-block: 0;
+	inset-inline-start: 0;
+	position: absolute;
+}
+
+.hand {
+	align-items: center;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.handCards {
+	align-items: flex-end;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.65rem 0.35rem;
+	padding-block: 2rem;
+}
+
+.card,
+.drawnCard {
+	background: var(--dream-paper);
+	border: 0;
+	box-shadow: 0 0.85rem 1.4rem rgb(0 0 0 / 42%);
+	box-sizing: border-box;
+	color: var(--dream-ink);
+	display: block;
+	font: inherit;
+	inline-size: 8.5rem;
+	min-block-size: 12rem;
+	padding: 0.35rem;
+	position: relative;
+	text-align: start;
+	transform: translateZ(1.4rem);
+	transform-style: preserve-3d;
+}
+
+button.card {
+	cursor: pointer;
+	transition:
+		box-shadow 180ms ease,
+		transform 180ms ease;
+}
+
+button.draggingCard {
+	cursor: grabbing;
+	transition: none;
+	z-index: 20;
+}
+
+button.card:hover,
+button.card:focus-visible {
+	box-shadow: 0 1.1rem 2rem rgb(0 0 0 / 58%);
+	outline: 2px solid var(--dream-bone);
+	outline-offset: 0.25rem;
+	transform: translate3d(0, -0.65rem, 3rem) rotate(-1deg);
+}
+
+.cardFrame {
+	border: 1px solid color-mix(in srgb, var(--dream-ink) 60%, transparent);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	inset: 0.35rem;
+	justify-content: flex-end;
+	padding: 0.65rem;
+	position: absolute;
+}
+
+.cardFrame::before {
+	border: 1px solid color-mix(in srgb, var(--dream-ink) 28%, transparent);
+	content: "";
+	inset: 0.2rem;
+	pointer-events: none;
+	position: absolute;
+}
+
+.cardSigil {
+	align-self: center;
+	font-size: 2.5rem;
+	margin-block: auto;
+}
+
+.card strong {
+	font-size: 1.05rem;
+	font-weight: normal;
+}
+
+.card small {
+	font-family: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", monospace;
+	font-size: 0.66rem;
+	line-height: 1.35;
+	margin-block-start: 0.2rem;
+}
+
+.passionCard {
+	background:
+		radial-gradient(circle at 50% 32%, rgb(255 239 184 / 52%), transparent 23%),
+		linear-gradient(145deg, #bd884e, #cbb77c 48%, #7a573d);
+}
+
+.scatteredCard:nth-child(3n + 1) {
+	transform: translateZ(1.4rem) rotate(-2.2deg) translateY(0.35rem);
+}
+
+.scatteredCard:nth-child(3n + 2) {
+	transform: translateZ(1.4rem) rotate(1.5deg) translateY(-0.3rem);
+}
+
+.scatteredCard:nth-child(3n) {
+	transform: translateZ(1.4rem) rotate(-0.7deg) translateY(0.1rem);
+}
+
+.reasonCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(226 239 255 / 42%), transparent 25%),
+		linear-gradient(145deg, #6687a0, #9cb2bc 52%, #405f76);
+}
+
+.healthCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(226 255 223 / 42%), transparent 25%),
+		linear-gradient(145deg, #668b67, #a2b587 52%, #416142);
+}
+
+.fundsCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 247 203 / 50%), transparent 25%),
+		linear-gradient(145deg, #9b8349, #cab977 52%, #685a34);
+}
+
+.acquaintanceCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 224 212 / 28%), transparent 25%),
+		linear-gradient(145deg, #75494c, #a67668 52%, #4d3139);
+}
+
+.loreCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 246 175 / 48%), transparent 25%),
+		linear-gradient(145deg, #a28c3c, #d0bc69 52%, #695d2d);
+}
+
+.contentmentCard {
+	background:
+		radial-gradient(circle at 50% 30%, rgb(255 238 241 / 48%), transparent 25%),
+		linear-gradient(145deg, #98707c, #c9a1a0 52%, #654c61);
+}
+
+.mansus {
+	--mansus-exit-size: clamp(4.5rem, min(18vw, 20dvh), 7rem);
+
+	align-content: center;
+	animation: mansusOpens 1.1s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+	background:
+		radial-gradient(circle at 50% 50%, rgb(140 166 162 / 13%), transparent 24%),
+		radial-gradient(circle at 50% 50%, #092a25, var(--dream-deep) 62%);
+	box-sizing: border-box;
+	display: grid;
+	inset: 0;
+	justify-items: center;
+	overflow: hidden;
+	padding: clamp(0.75rem, min(5vw, 5dvh), 5rem);
+	position: absolute;
+	text-align: center;
+	z-index: 8;
+}
+
+.mansus > *:not(.mansusRings, .mansusMap, .mansusExit) {
+	position: relative;
+	z-index: 2;
+}
+
+.mansusMap {
+	block-size: min(92vh, 58rem);
+	color: var(--dream-bone);
+	filter: drop-shadow(0 0 1.5rem rgb(81 139 128 / 22%));
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	max-inline-size: 96vw;
+	opacity: 0.5;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	inline-size: min(96vw, 96rem);
+	z-index: 0;
+}
+
+.mapLandscape {
+	fill: #08231f;
+	stroke: var(--dream-bone);
+	stroke-width: 2;
+}
+
+.mapLandscape path:nth-child(2) {
+	fill: var(--dream-deep);
+	opacity: 0.82;
+}
+
+.mapLandscape .mapRiver {
+	fill: none;
+	opacity: 0.55;
+	stroke: var(--dream-bone);
+	stroke-dasharray: 7 9;
+	stroke-width: 4;
+}
+
+.mapGlory {
+	fill: none;
+	opacity: 0.58;
+	stroke: var(--dream-brass);
+	stroke-width: 2;
+}
+
+.mapRoutes {
+	animation: mapDraws 1.7s ease 0.45s both;
+	fill: none;
+	stroke: var(--dream-bone);
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+	stroke-linecap: round;
+	stroke-width: 4;
+}
+
+.mapRoutes path:nth-child(2n) {
+	stroke: var(--dream-moth);
+}
+
+.mapStairs {
+	fill: none;
+	opacity: 0.5;
+	stroke: var(--dream-bone);
+	stroke-width: 5;
+}
+
+.mapNode {
+	fill: #08231f;
+	stroke: var(--dream-bone);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 3;
+}
+
+.mapNode:nth-of-type(2n) circle {
+	fill: #103832;
+}
+
+.mapNode:nth-of-type(3n) circle {
+	fill: #33282d;
+}
+
+.mapNode text {
+	fill: var(--dream-bone);
+	font-family: inherit;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	paint-order: stroke;
+	stroke: var(--dream-deep);
+	stroke-width: 5px;
+	text-anchor: middle;
+}
+
+.activeMapNode {
+	filter: drop-shadow(0 0 1rem var(--dream-brass));
+}
+
+.activeMapNode circle {
+	fill: var(--dream-brass);
+	stroke: var(--dream-bone);
+	stroke-width: 5;
+}
+
+.activeMapNode text {
+	fill: var(--dream-bone);
+	font-size: 18px;
+}
+
+.mansusRings {
+	block-size: min(74vw, 44rem);
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	pointer-events: none;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	inline-size: min(74vw, 44rem);
+	z-index: 1;
+}
+
+.mansusRings i {
+	animation: ringsTurn 45s linear infinite;
+	border: 1px solid color-mix(in srgb, var(--dream-brass) 24%, transparent);
+	border-radius: 50%;
+	inset: 0;
+	position: absolute;
+}
+
+.mansusRings i::before,
+.mansusRings i::after {
+	background: var(--dream-brass);
+	block-size: 0.45rem;
+	box-shadow: 0 0 1.2rem var(--dream-brass);
+	content: "";
+	inset-block-start: 50%;
+	position: absolute;
+	transform: rotate(45deg);
+	inline-size: 0.45rem;
+}
+
+.mansusRings i::before {
+	inset-inline-start: -0.22rem;
+}
+
+.mansusRings i::after {
+	inset-inline-end: -0.22rem;
+}
+
+.mansusRings i:nth-child(2) {
+	animation-direction: reverse;
+	animation-duration: 31s;
+	inset: 12%;
+}
+
+.mansusRings i:nth-child(3) {
+	animation-duration: 19s;
+	inset: 26%;
+}
+
+.mansusChoices {
+	display: flex;
+	gap: clamp(0.8rem, 4vw, 2.5rem);
+	justify-content: center;
+	perspective: 70rem;
+}
+
+.mansusChoices .card {
+	aspect-ratio: 8.5 / 12;
+	inline-size: min(8.5rem, 28vw, 36dvh);
+	min-block-size: 0;
+}
+
+.mansusChoiceLocation {
+	color: var(--dream-bone);
+	font-size: clamp(0.52rem, min(2.1vw, 2dvh), 0.72rem);
+	font-style: italic;
+	inset-block-end: calc(100% + 0.65rem);
+	inset-inline: 50% auto;
+	inline-size: 100%;
+	letter-spacing: 0.1em;
+	position: absolute;
+	text-shadow: 0 0 0.8rem #000;
+	text-decoration: underline;
+	text-decoration-color: var(--dream-brass);
+	text-underline-offset: 0.14em;
+	transform: translateX(-50%);
+}
+
+.cardBack {
+	background:
+		radial-gradient(circle at center, transparent 0 16%, rgb(94 134 69 / 52%) 16.5% 17%, transparent 17.5%),
+		repeating-radial-gradient(circle at center, #103832 0 0.7rem, var(--dream-deep) 0.75rem 1.1rem);
+	color: var(--dream-bone);
+}
+
+.cardBack .cardFrame {
+	border-color: var(--dream-brass);
+}
+
+.revelation {
+	display: grid;
+	gap: clamp(0.5rem, 2dvh, 1.5rem);
+	justify-items: center;
+	margin-block-start: 0;
+}
+
+.visitedLocation {
+	align-items: center;
+	color: var(--dream-bone);
+	display: grid;
+	font-size: 0.82rem;
+	font-style: italic;
+	gap: 0.8rem;
+	grid-template-columns: minmax(1.5rem, 1fr) auto minmax(1.5rem, 1fr);
+	inline-size: min(22rem, 72vw);
+	letter-spacing: 0.06em;
+	margin: 0;
+	text-shadow: 0 0 1rem #000;
+}
+
+.visitedLocation::before,
+.visitedLocation::after {
+	border-block-start: 1px solid currentColor;
+	content: "";
+}
+
+.drawnCard {
+	animation: cardReveals 0.65s ease both;
+	aspect-ratio: 7 / 10;
+	block-size: auto;
+	cursor: grab;
+	inline-size: min(14rem, 56vw, 50dvh);
+	min-block-size: 0;
+	touch-action: none;
+	user-select: none;
+}
+
+.drawnCard.draggingCard {
+	animation: none;
+	cursor: grabbing;
+	z-index: 8;
+}
+
+.mansusExit {
+	align-items: center;
+	background: color-mix(in srgb, var(--dream-deep) 82%, transparent);
+	border: 1px solid color-mix(in srgb, var(--dream-bone) 58%, transparent);
+	border-radius: 50%;
+	box-shadow: 0 0 2rem rgb(0 0 0 / 75%);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	block-size: var(--mansus-exit-size);
+	font-size: clamp(0.54rem, min(1.8vw, 1.8dvh), 0.68rem);
+	font-style: italic;
+	inset-block-start: 82%;
+	inset-inline-start: 80%;
+	justify-content: center;
+	letter-spacing: 0.04em;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	transition:
+		background 180ms ease,
+		box-shadow 180ms ease,
+		transform 180ms ease;
+	inline-size: var(--mansus-exit-size);
+	z-index: 3;
+}
+
+.mansusExitSigil {
+	color: var(--dream-brass);
+	font-size: clamp(1.55rem, min(6vw, 6dvh), 2.4rem);
+	line-height: 0.85;
+}
+
+.mansusExit strong {
+	text-decoration: underline;
+	text-decoration-color: var(--dream-brass);
+	text-underline-offset: 0.15em;
+}
+
+.mansus:has(.draggingCard) .mansusExit {
+	background: color-mix(in srgb, var(--dream-brass) 58%, var(--dream-deep));
+	box-shadow:
+		0 0 1.2rem var(--dream-brass),
+		0 0 3.5rem color-mix(in srgb, var(--dream-brass) 55%, transparent);
+	transform: translate(-50%, -50%) scale(1.12);
+}
+
+.revealedFrame {
+	justify-content: start;
+	padding: clamp(0.55rem, min(3vw, 3dvh), 1rem);
+}
+
+.revealedFrame .cardSigil {
+	font-size: clamp(2.1rem, min(15vw, 12dvh), 4rem);
+	margin-block: clamp(0.35rem, min(2.5vw, 2.5dvh), 1rem);
+}
+
+.revealedFrame strong {
+	font-size: clamp(0.95rem, min(5vw, 4dvh), 1.35rem);
+}
+
+.revealedFrame small {
+	font-family: "IBM Plex Mono", monospace;
+	font-size: clamp(0.52rem, min(2.5vw, 2.2dvh), 0.65rem);
+	letter-spacing: 0.11em;
+	text-transform: uppercase;
+}
+
+.cardDescription {
+	display: block;
+	font-size: clamp(0.62rem, min(3.4vw, 2.8dvh), 0.8rem);
+	line-height: 1.35;
+	margin-block-start: auto;
+	text-align: start;
+}
+
+@media (max-width: 48rem) {
+	.hand {
+		min-block-size: auto;
+	}
+
+	.hand {
+		justify-content: center;
+	}
+
+	.handCards {
+		justify-content: center;
+	}
+
+	.mansusChoices {
+		align-items: center;
+	}
+}
+
+@media (max-width: 28rem) {
+	.tableHeader {
+		align-items: center;
+	}
+
+	.wakeButton {
+		block-size: 2.5rem;
+		inline-size: 2.5rem;
+	}
+
+	.cameraControls {
+		inset-inline-end: 0.8rem;
+	}
+
+	.playArea {
+		padding-inline: 0.8rem;
+	}
+
+	.mansus {
+		padding-inline: 0.75rem;
+	}
+
+	.mansusMap {
+		block-size: 85vh;
+		inline-size: 150vw;
+		max-inline-size: none;
+		opacity: 0.38;
+	}
+
+	.mansusChoices {
+		gap: 0.45rem;
+	}
+
+	.mansusChoiceLocation {
+		letter-spacing: 0.06em;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:global(html[data-dream-state]):has(.overlay)
+		:global([data-glade-layout]),
+	.overlay,
+	.table,
+	.tableCamera,
+	.leaving .table,
+	.mansus,
+	.mapRoutes,
+	.drawnCard {
+		animation-duration: 1ms;
+		animation-delay: 0ms;
+	}
+
+	.tableCamera {
+		transition-duration: 1ms;
+	}
+
+	.timer i {
+		animation: none;
+		inline-size: 100%;
+	}
+
+	.mansusRings i {
+		animation: none;
+	}
+}
