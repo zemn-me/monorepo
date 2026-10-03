@@ -1,7 +1,6 @@
 import { SkipToken, skipToken, useQuery } from '@tanstack/react-query';
+
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
-import { useServerSession } from '#root/project/me/zemn/hook/server_session.js';
-import { updateSessionCookie } from '#root/project/me/zemn/hook/session_cookie.js';
 import { useGoogleAuth } from '#root/project/me/zemn/hook/useGoogleAuth.js';
 import { useFetchClient } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import {
@@ -9,7 +8,6 @@ import {
 	future_declare_dependency,
 } from '#root/ts/future/future.js';
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
-import { watchOutParseIdToken } from '#root/ts/oidc/oidc.js';
 import { option_from_maybe_undefined } from '#root/ts/option/types.js';
 
 export function useZemnMeAuth() {
@@ -74,47 +72,10 @@ export function useZemnMeAuth() {
 		access_token
 	);
 
-	const { clear } = useServerSession();
-	const token = exchangedToken(
-		value => value,
-		() => undefined,
-		() => undefined
-	);
-	const tokenID =
-		token === undefined
-			? undefined
-			: watchOutParseIdToken.safeParse(token).data?.jti;
-	// Mirror the persisted React Query credential without gating browser API access.
-	useQuery({
-		queryKey: ['authorization-cookie', ...cacheKey, tokenID],
-		queryFn:
-			token === undefined
-				? skipToken
-				: ({ signal }) => updateSessionCookie(token, signal),
-		staleTime: Infinity,
-		// Session cookies must be checked again after a document load; don't persist
-		// a successful write as proof that a browser still has the cookie.
-		meta: { persist: false },
-	});
-	const controls = {
-		logout: async () => {
-			clear();
-			sessionControls.logout();
-			await updateSessionCookie(null);
-		},
-		switchUser: () => {
-			clear();
-			// Open the account picker during the click, before awaiting any I/O.
-			const login = sessionControls.switchUser();
-			const cleared = updateSessionCookie(null);
-			return Promise.all([cleared, login]).then(() => undefined);
-		},
-	};
-
 	return [
 		exchangedToken,
 		fut_google_access_token,
 		fut_promptForLogin,
-		controls,
+		sessionControls,
 	] as const;
 }

@@ -6,9 +6,6 @@ ts_project(
     srcs = [
         "authentication_session.ts",
         "journal_upload.ts",
-        "server_session.tsx",
-        "session.server.ts",
-        "session_cookie.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",
@@ -36,7 +33,6 @@ ts_project(
         "//:node_modules/openapi-fetch",
         "//:node_modules/openapi-react-query",
         "//:node_modules/react",
-        "//:node_modules/react-router",
         "//:node_modules/zod",
         "//project/me/zemn/api:ts_client_dts",
         "//project/me/zemn/constants",
@@ -61,12 +57,9 @@ ts_project(
 ts_project(
     name = "hook_tests",
     srcs = [
-        "auth_cookie_sync_test.tsx",
         "authentication_session_test.ts",
         "journal_refresh_test.tsx",
         "journal_upload_test.ts",
-        "server_session_test.tsx",
-        "session_cookie_test.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -86,12 +79,9 @@ ts_project(
 jest_test(
     name = "tests",
     srcs = [
-        "auth_cookie_sync_test.js",
         "authentication_session_test.js",
         "journal_refresh_test.js",
         "journal_upload_test.js",
-        "server_session_test.js",
-        "session_cookie_test.js",
     ],
     jsdom = True,
     visibility = ["//:__subpackages__"],
@@ -107,17 +97,11 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "auth_cookie_sync_test.tsx",
         "authentication_session.ts",
         "authentication_session_test.ts",
         "journal_refresh_test.tsx",
         "journal_upload.ts",
         "journal_upload_test.ts",
-        "server_session.tsx",
-        "server_session_test.tsx",
-        "session.server.ts",
-        "session_cookie.ts",
-        "session_cookie_test.ts",
         "useAnalyticsSessionId.ts",
         "useAuthRedirect.ts",
         "useGetExactContactByEmail.ts",

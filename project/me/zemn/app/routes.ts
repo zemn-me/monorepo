@@ -1,7 +1,6 @@
 import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
-	{ path: 'auth/session', file: 'auth-session.js' },
 	{
 		file: 'glade-layout.js',
 		children: [

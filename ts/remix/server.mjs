@@ -23,11 +23,6 @@ export function protectCache(request, response) {
 		.split(',')
 		.map(value => value.trim())
 		.filter(Boolean);
-	if (!vary.includes('*')) {
-		for (const header of ['Cookie', 'Authorization'])
-			if (!vary.includes(header.toLowerCase()))
-				headers.append('vary', header);
-	}
 	if (
 		!['GET', 'HEAD'].includes(request.method) ||
 		request.headers.has('authorization') ||
@@ -71,7 +66,6 @@ export function createApp(build, prerendered, directory) {
 							? 'text/x-script; charset=utf-8'
 							: 'text/html; charset=utf-8',
 						'cache-control': publicCache,
-						vary: 'Cookie, Authorization',
 					},
 				}
 			);

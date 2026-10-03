@@ -5,8 +5,7 @@ export default {
 	prerender: ({ getStaticPaths }) => [
 		// Authenticated and backend-driven pages must run at request time.
 		...getStaticPaths().filter(
-			path =>
-				!/^\/(auth|journal|admin|callback|key|healthz)(\/|$)/.test(path)
+			path => !/^\/(journal|admin|callback|key|healthz)(\/|$)/.test(path)
 		),
 		...[
 			'/src',
