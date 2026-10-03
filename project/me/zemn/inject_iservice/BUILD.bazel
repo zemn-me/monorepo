@@ -20,6 +20,25 @@ py_binary(
 
 # keep
 py_binary(
+    name = "inject_iservice_production_bin",
+    testonly = True,
+    srcs = ["__main__.py"],
+    data = [
+        "//project/me/zemn:production_test_server",
+    ],
+    env = {
+        "REMIX_BINARY": "$(rlocationpath @@//project/me/zemn:production_test_server)",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+# keep
+py_binary(
     name = "inject_iservice_prod_env_bin",
     srcs = ["__main__.py"],
     data = [

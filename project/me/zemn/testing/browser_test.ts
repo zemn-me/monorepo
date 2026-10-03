@@ -13,7 +13,7 @@ import {
 	it,
 } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
+import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
 import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -109,9 +109,7 @@ describe('zemn.me website', () => {
 				const url: string = await driver.getCurrentUrl();
 				if (new URL(url).origin !== origin) return [];
 
-				return logs.length
-					? logs.map(log => ({ url, endpoint, log }))
-					: logs;
+				return logs.map(log => ({ url, endpoint, log }));
 			} finally {
 				await driver.quit();
 			}
@@ -121,12 +119,10 @@ describe('zemn.me website', () => {
 			const logs = await testEndpoint(path);
 			if (pathsThatMayError.has(path)) return;
 			expect(
-				logs.filter(log =>
-					'log' in log
-						? log.log.message.includes('Ignoring event: localhost')
-						: false
+				logs.filter(
+					({ log }) => log.level.value >= logging.Level.SEVERE.value
 				)
-			).toHaveLength(0);
+			).toEqual([]);
 		});
 
 		it('api server /healthz returns OK', async () => {

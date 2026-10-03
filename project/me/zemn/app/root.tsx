@@ -1,4 +1,17 @@
-import { Links, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import {
+	data,
+	Links,
+	type LoaderFunctionArgs,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	useRouteLoaderData,
+} from 'react-router';
+import { ServerSessionProvider } from '#root/project/me/zemn/hook/server_session.js';
+import {
+	privateHeaders,
+	readSession,
+} from '#root/project/me/zemn/hook/session.server.js';
 import { DocumentMeta } from '#root/ts/remix/metadata.js';
 
 export { ErrorBoundary } from '#root/ts/remix/error.js';
@@ -69,35 +82,48 @@ const csp = {
 	]),
 };
 
+export const headers = () => privateHeaders;
+
+export async function loader({ request }: LoaderFunctionArgs) {
+	const verified = await readSession(request);
+	return data(
+		{ session: verified?.session ?? null },
+		{ headers: privateHeaders }
+	);
+}
+
 export function Layout({ children }: Props) {
+	const initial = useRouteLoaderData<typeof loader>('root');
 	return (
 		<>
-			<Providers>
-				<html style={{ fontFamily: '"IBM Plex Mono", monospace' }}>
-					<head>
-						<DocumentMeta />
-						<Links />
-						<link
-							href="/icon.svg"
-							rel="icon"
-							type="image/svg+xml"
-						/>
-						<link
-							href="/icon.svg"
-							rel="apple-touch-icon"
-							type="image/svg+xml"
-						/>
-						<HeaderTagsAppRouter cspPolicy={csp} />
-					</head>
-					<body style={{ fontFamily: 'Lora, serif' }}>
-						<ReactQueryDevtools initialIsOpen={false} />
-						<AnalyticsPageBeacon />
-						{children}
-						<ScrollRestoration />
-						<Scripts />
-					</body>
-				</html>
-			</Providers>
+			<ServerSessionProvider session={initial?.session ?? null}>
+				<Providers>
+					<html style={{ fontFamily: '"IBM Plex Mono", monospace' }}>
+						<head>
+							<DocumentMeta />
+							<Links />
+							<link
+								href="/icon.svg"
+								rel="icon"
+								type="image/svg+xml"
+							/>
+							<link
+								href="/icon.svg"
+								rel="apple-touch-icon"
+								type="image/svg+xml"
+							/>
+							<HeaderTagsAppRouter cspPolicy={csp} />
+						</head>
+						<body style={{ fontFamily: 'Lora, serif' }}>
+							<ReactQueryDevtools initialIsOpen={false} />
+							<AnalyticsPageBeacon />
+							{children}
+							<ScrollRestoration />
+							<Scripts />
+						</body>
+					</html>
+				</Providers>
+			</ServerSessionProvider>
 		</>
 	);
 }

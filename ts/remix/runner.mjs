@@ -19,17 +19,17 @@ import { build as bundle } from 'esbuild';
 import serve from 'serve-handler';
 import { createNodeListener } from '#root/ts/remix/server.mjs';
 
-const [command, project, ...args] = process.argv.slice(2);
+let [command, project, ...args] = process.argv.slice(2);
 let root = path.resolve(project);
-if (command === 'dev') {
+if (command === 'dev' || command === 'build-start') {
 	const compiledRoot = path.dirname(
 		path.dirname(realpathSync(path.join(root, 'app/root.js')))
 	);
 	const temporary = path.join(compiledRoot, '.react-router');
 	await mkdir(temporary, { recursive: true });
-	const snapshot = await mkdtemp(path.join(temporary, 'dev-'));
-	// Route files need stable real paths, but watching Bazel's output tree follows
-	// test runfiles back into the entire workspace. Snapshot only declared app inputs.
+	const snapshot = await mkdtemp(path.join(temporary, `${command}-`));
+	// Isolate generated files between services and keep stable route paths. Dev
+	// watchers must not follow Bazel runfiles back into the entire workspace.
 	await cp(path.join(root, 'app'), path.join(snapshot, 'app'), {
 		recursive: true,
 		dereference: true,
@@ -44,6 +44,32 @@ if (command === 'dev') {
 	)
 		await symlink(path.join(root, 'public'), path.join(snapshot, 'public'));
 	root = snapshot;
+	if (command === 'build-start') {
+		// Service ports are allocated at test startup. Bundle with those public
+		// settings using the same build pipeline as the deployment artifact.
+		const child = spawn(
+			process.execPath,
+			[fileURLToPath(import.meta.url), 'build', root, ...args],
+			{ stdio: 'inherit', env: process.env }
+		);
+		const finished = new Promise((resolve, reject) => {
+			child.once('error', reject);
+			child.once('exit', resolve);
+		});
+		for (const signal of ['SIGINT', 'SIGTERM'])
+			process.once(signal, async () => {
+				child.kill(signal);
+				await finished;
+				await rm(root, { recursive: true, force: true });
+				process.exit(0);
+			});
+		const code = await finished;
+		if (code !== 0) {
+			await rm(root, { recursive: true, force: true });
+			process.exit(code ?? 1);
+		}
+		command = 'start';
+	}
 }
 const portIndex = args.lastIndexOf('--port');
 const port = portIndex < 0 ? 3000 : Number(args[portIndex + 1]);
