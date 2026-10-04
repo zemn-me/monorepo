@@ -711,13 +711,13 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.16.9"
+RUFF_VERSION = "0.16.10"
 
 # For Apple Silicon macOS
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-M9NTlEmQlM9uuQ9zDcgvEcD6sF0XY3iuT2femF7MQUY=",
+    integrity = "sha256-8FHNMG3iaRJioFdPiFfNH01r/NRICE6iPWG5wcN99RA=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",
