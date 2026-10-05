@@ -297,9 +297,9 @@ http_archive(
 )
 
 chromium_buildfile = """
-load("@@//bin/host/chromium:chromium_bundle.bzl", "chromium_bundle")
+load("@@//bin/host/chromium:linux_chromium.bzl", "linux_chromium")
 
-chromium_bundle(
+linux_chromium(
     name = "in_bin",
     executable_src = "chrome-linux64/chrome",
     srcs = glob(["chrome-linux64/**"], allow_empty=True),
@@ -308,9 +308,9 @@ chromium_bundle(
 """
 
 chromium_mac_arm64_buildfile = """
-load("@@//bin/host/chromium:chromium_bundle.bzl", "chromium_bundle")
+load("@@//bin/host/chromium:mac_chromium.bzl", "mac_chromium")
 
-chromium_bundle(
+mac_chromium(
     name = "in_bin",
     executable_src = "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
     srcs = glob(["chrome-mac-arm64/Google Chrome for Testing.app/**"], allow_empty=True),
@@ -319,9 +319,9 @@ chromium_bundle(
 """
 
 chromium_mac_x64_buildfile = """
-load("@@//bin/host/chromium:chromium_bundle.bzl", "chromium_bundle")
+load("@@//bin/host/chromium:mac_chromium.bzl", "mac_chromium")
 
-chromium_bundle(
+mac_chromium(
     name = "in_bin",
     executable_src = "chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
     srcs = glob(["chrome-mac-x64/Google Chrome for Testing.app/**"], allow_empty=True),
