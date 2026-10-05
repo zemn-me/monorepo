@@ -64,6 +64,10 @@ func main() {
 	})
 
 	http.HandleFunc("/authorize", makeAuthorizeHandler(issuer))
+	// Browsers request an icon for the login popup even though it has none.
+	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	})
 
 	log.Printf("OIDC test provider listening on %s (issuer %s)", addr, issuer)
 	log.Fatal(http.ListenAndServe(addr, http.DefaultServeMux))
