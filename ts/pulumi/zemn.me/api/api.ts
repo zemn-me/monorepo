@@ -772,7 +772,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			`${name}-journal-summary-schedule`,
 			{
 				description:
-					'Reconcile cloud diary curation; start at most one new run per hour when sources change.',
+					'Reconcile cloud diary curation; one run per 24 hours with at most two retries after failure.',
 				scheduleExpression: 'rate(5 minutes)',
 			},
 			{ parent: this }

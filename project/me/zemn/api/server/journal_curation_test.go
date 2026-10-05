@@ -32,47 +32,52 @@ func (f *fakeJournalCurator) Collect(context.Context, string) (*JournalCurationR
 }
 func (f *fakeJournalCurator) Cleanup(context.Context, string, string) error { f.cleans++; return nil }
 
-type unavailableJournalAnalysis struct{ fakeJournalAI }
-
-func (unavailableJournalAnalysis) AnalyzeEntry(context.Context, time.Time, string, []JournalSummarySource) (JournalEntryAnalysisResult, error) {
-	return JournalEntryAnalysisResult{}, fmt.Errorf("analysis unavailable")
+type transcriptionOnlyJournalAI struct {
+	fakeJournalAI
+	t *testing.T
 }
 
-func TestJournalKnowledgeUploadSurvivesProvisionalAnalysisFailure(t *testing.T) {
-	for name, ai := range map[string]JournalAI{
-		"unavailable":  unavailableJournalAnalysis{},
-		"invalid date": inferredDateJournalAI{recordedDate: "not-a-date"},
-	} {
-		t.Run(name, func(t *testing.T) {
-			s, _, ctx, _, now := journalKnowledgeFixture(t)
-			s.journalAI = ai
-			response, err := s.PostJournalEntries(ctx, PostJournalEntriesRequestObject{Body: &JournalEntryCreate{
-				ContentType: "audio/mp4", RecordedAt: now, TimeZone: "UTC",
-			}})
-			if err != nil {
-				t.Fatal(err)
-			}
-			id := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
-			audio := testMP4(now, 0)
-			s.journalObjects.(*fakeJournalObjects).objects = map[string][]byte{journalEntryKey(id): audio}
-			if err := s.ProcessJournalUpload(ctx, "journal", journalEntryKey(id), int64(len(audio))); err == nil {
-				t.Fatal("missing analysis failure")
-			}
-			journalResponse, err := s.GetJournal(ctx, GetJournalRequestObject{})
-			if err != nil {
-				t.Fatal(err)
-			}
-			for _, entry := range journalResponse.(GetJournal200JSONResponse).Entries {
-				if entry.Id.String() == id {
-					if entry.Status != "ready" || len(entry.Transcript) == 0 {
-						t.Fatalf("transcript unavailable after analysis failure: %#v", entry)
-					}
-					return
-				}
-			}
-			t.Fatal("uploaded entry missing")
-		})
+func (ai transcriptionOnlyJournalAI) AnalyzeEntry(context.Context, time.Time, string, []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	ai.t.Fatal("upload called per-entry analysis")
+	return JournalEntryAnalysisResult{}, nil
+}
+
+func (ai transcriptionOnlyJournalAI) Summarize(context.Context, string, []JournalSummarySource) (JournalSummaryResult, error) {
+	ai.t.Fatal("upload called aggregate summarization")
+	return JournalSummaryResult{}, nil
+}
+
+func TestJournalKnowledgeUploadOnlyTranscribes(t *testing.T) {
+	s, _, ctx, _, now := journalKnowledgeFixture(t)
+	s.journalAI = transcriptionOnlyJournalAI{t: t}
+	response, err := s.PostJournalEntries(ctx, PostJournalEntriesRequestObject{Body: &JournalEntryCreate{
+		ContentType: "audio/mp4", RecordedAt: now, TimeZone: "UTC",
+	}})
+	if err != nil {
+		t.Fatal(err)
 	}
+	id := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
+	embeddedDate := now.Add(-48 * time.Hour)
+	audio := testMP4(embeddedDate, 0)
+	s.journalObjects.(*fakeJournalObjects).objects = map[string][]byte{journalEntryKey(id): audio}
+	for range 2 {
+		if err := s.ProcessJournalUpload(ctx, "journal", journalEntryKey(id), int64(len(audio))); err != nil {
+			t.Fatal(err)
+		}
+	}
+	journalResponse, err := s.GetJournal(ctx, GetJournalRequestObject{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range journalResponse.(GetJournal200JSONResponse).Entries {
+		if entry.Id.String() == id {
+			if entry.Status != "ready" || len(entry.Transcript) == 0 || entry.Summary != nil || entry.ProcessingProgress != nil || !entry.RecordedAt.Equal(embeddedDate) {
+				t.Fatalf("unexpected transcribed entry: %#v", entry)
+			}
+			return
+		}
+	}
+	t.Fatal("uploaded entry missing")
 }
 
 func journalKnowledgeFixture(t *testing.T) (*Server, *fakeJournalCurator, context.Context, []JournalStoredEntry, time.Time) {
@@ -467,5 +472,150 @@ func TestJournalKnowledgeCleanupRejectsUnexpectedObjectKeys(t *testing.T) {
 				t.Fatal("unsafe cleanup performed a deletion")
 			}
 		})
+	}
+}
+
+func TestJournalKnowledgeDailyAttempts(t *testing.T) {
+	for _, outcome := range []string{"agent failure", "invalid output", "timeout"} {
+		t.Run(outcome, func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			for attempt := range 3 {
+				at := now.Add(time.Duration(attempt) * 3 * time.Hour)
+				if err := s.RefreshJournalKnowledge(ctx, at); err != nil {
+					t.Fatal(err)
+				}
+				if curator.starts != attempt+1 {
+					t.Fatalf("attempt %d: starts = %d", attempt+1, curator.starts)
+				}
+				failedAt := at.Add(5 * time.Minute)
+				switch outcome {
+				case "agent failure":
+					curator.failure = &journalCuratorTerminalError{reason: "failed"}
+				case "invalid output":
+					curator.result = &JournalCurationResult{}
+				case "timeout":
+					failedAt = at.Add(125 * time.Minute)
+				}
+				err := s.RefreshJournalKnowledge(ctx, failedAt)
+				if (err != nil) != (outcome != "timeout") {
+					t.Fatalf("failure result: %v", err)
+				}
+				if err := s.RefreshJournalKnowledge(ctx, failedAt.Add(5*time.Minute)); err != nil {
+					t.Fatal(err)
+				}
+				if outcome != "timeout" {
+					if err := s.RefreshJournalKnowledge(ctx, failedAt.Add(10*time.Minute)); err != nil {
+						t.Fatal(err)
+					}
+				}
+				if curator.starts != attempt+1 {
+					t.Fatal("failure retried before hourly backoff or daily cap")
+				}
+			}
+			// Uploading another source must not reset the exhausted budget.
+			entries[0].Transcript[0].Text = "Changed source."
+			if err := s.updateJournalEntry(ctx, journalOwnerSubject, entries[0]); err != nil {
+				t.Fatal(err)
+			}
+			for at := now.Add(9 * time.Hour); at.Before(now.Add(24 * time.Hour)); at = at.Add(5 * time.Minute) {
+				if err := s.RefreshJournalKnowledge(ctx, at); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if curator.starts != 3 {
+				t.Fatalf("daily budget exceeded: %d", curator.starts)
+			}
+			state, err := s.readJournalCurationState(ctx)
+			if err != nil || state.Attempts != 3 || !state.AttemptWindowStart.Equal(now) {
+				t.Fatalf("budget not durable: %#v %v", state, err)
+			}
+			if err := s.RefreshJournalKnowledge(ctx, now.Add(24*time.Hour)); err != nil {
+				t.Fatal(err)
+			}
+			if curator.starts != 4 {
+				t.Fatal("next day's attempt did not start")
+			}
+		})
+	}
+}
+
+func TestJournalKnowledgeSuccessWaitsUntilNextDay(t *testing.T) {
+	for _, retry := range []bool{false, true} {
+		t.Run(fmt.Sprint("retry=", retry), func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+				t.Fatal(err)
+			}
+			at := now
+			if retry {
+				curator.failure = &journalCuratorTerminalError{reason: "failed"}
+				if err := s.RefreshJournalKnowledge(ctx, now.Add(5*time.Minute)); err == nil {
+					t.Fatal("missing failure")
+				}
+				if err := s.RefreshJournalKnowledge(ctx, now.Add(10*time.Minute)); err != nil {
+					t.Fatal(err)
+				}
+				curator.failure = nil
+				at = now.Add(time.Hour)
+				if err := s.RefreshJournalKnowledge(ctx, at); err != nil {
+					t.Fatal(err)
+				}
+			}
+			result := journalKnowledgeResult(entries)
+			curator.result = &result
+			for _, tick := range []time.Time{at.Add(5 * time.Minute), at.Add(10 * time.Minute)} {
+				if err := s.RefreshJournalKnowledge(ctx, tick); err != nil {
+					t.Fatal(err)
+				}
+			}
+			starts := curator.starts
+			entries[0].RecordedAt = now
+			if err := s.updateJournalEntry(ctx, journalOwnerSubject, entries[0]); err != nil {
+				t.Fatal(err)
+			}
+			for tick := now.Add(2 * time.Hour); tick.Before(now.Add(24 * time.Hour)); tick = tick.Add(5 * time.Minute) {
+				if err := s.RefreshJournalKnowledge(ctx, tick); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if curator.starts != starts {
+				t.Fatal("changed sources triggered another run after success")
+			}
+			if err := s.RefreshJournalKnowledge(ctx, now.Add(24*time.Hour)); err != nil {
+				t.Fatal(err)
+			}
+			if curator.starts != starts+1 {
+				t.Fatal("changed sources did not start next day")
+			}
+		})
+	}
+}
+
+func TestJournalKnowledgeExistingCheckpointCountsAsAttempt(t *testing.T) {
+	s, curator, ctx, _, now := journalKnowledgeFixture(t)
+	state := journalCurationState{ID: journalOwnerSubject, When: journalCurationKey, StartedAt: now}
+	if err := s.saveJournalCurationState(ctx, &state); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.RefreshJournalKnowledge(ctx, now.Add(2*time.Hour)); err != nil {
+		t.Fatal(err)
+	}
+	if curator.starts != 0 {
+		t.Fatal("existing successful attempt ignored")
+	}
+	state, err := s.readJournalCurationState(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	state.Failed = true
+	if err := s.saveJournalCurationState(ctx, &state); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.RefreshJournalKnowledge(ctx, now.Add(3*time.Hour)); err != nil {
+		t.Fatal(err)
+	}
+	state, err = s.readJournalCurationState(ctx)
+	if err != nil || state.Attempts != 2 || curator.starts != 1 {
+		t.Fatalf("legacy failed attempt not counted: %#v %v", state, err)
 	}
 }

@@ -48,6 +48,8 @@ type journalCurationState struct {
 	SessionID            string    `dynamodbav:"session_id"`
 	Submitted            bool      `dynamodbav:"submitted"`
 	StartedAt            time.Time `dynamodbav:"started_at"`
+	AttemptWindowStart   time.Time `dynamodbav:"attempt_window_start"`
+	Attempts             int       `dynamodbav:"attempts"`
 	InputKey             string    `dynamodbav:"input_key"`
 	Fingerprint          string    `dynamodbav:"fingerprint"`
 	PublishedKey         string    `dynamodbav:"published_key"`
@@ -333,7 +335,8 @@ func (s *Server) GetJournalWikiPageId(ctx context.Context, request GetJournalWik
 
 // RefreshJournalKnowledge advances one durable run without holding a Lambda
 // open for the cloud agent. A five-minute schedule reconciles work; new paid
-// runs start at most hourly. Conditional state versions fence concurrent calls.
+// work starts once per 24 hours, with at most two retries after failure.
+// Conditional state versions fence concurrent calls.
 func (s *Server) RefreshJournalKnowledge(ctx context.Context, now time.Time) error {
 	if s.journalCurator == nil {
 		return errors.New("journal curator is not configured")
@@ -393,6 +396,17 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 		if len(corpus.Entries) == 0 || fingerprint == state.PublishedFingerprint || now.Before(state.StartedAt.Add(time.Hour)) {
 			return nil
 		}
+		// Count the last run from checkpoints predating the daily budget.
+		if state.AttemptWindowStart.IsZero() && !state.StartedAt.IsZero() {
+			state.AttemptWindowStart, state.Attempts = state.StartedAt, 1
+		}
+		if !state.AttemptWindowStart.IsZero() && now.Before(state.AttemptWindowStart.Add(24*time.Hour)) {
+			if state.Attempts > 0 && (!state.Failed || state.Attempts >= 3) {
+				return nil
+			}
+		} else {
+			state.AttemptWindowStart, state.Attempts = now, 0
+		}
 		generation, _, err := s.journalPublishedGeneration(ctx, records)
 		if err != nil {
 			return err
@@ -416,10 +430,14 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 			return err
 		}
 		state.RunID = uuid.NewString()
+		// Reserve an attempt durably before contacting the paid service.
+		// Cleanup and failures never refund the daily budget.
+		state.Attempts++
 		state.StartedAt, state.Fingerprint, state.Failed = now, fingerprint, false
 		state.InputKey = journalCurationInputKey(state.RunID)
 		if err := s.putJournalJSON(ctx, state.InputKey, corpus); err != nil {
 			state.RunID = ""
+			state.Failed = true
 			return err
 		}
 		if err := s.saveJournalCurationState(ctx, state); err != nil {

@@ -2,16 +2,21 @@
 
 The scheduled worker builds contextual entry analyses and a human-readable wiki
 from the entire completed diary. Original audio and transcript segments remain
-the source of truth. The existing per-entry analysis still provides provisional
-prose and spoken-date inference while the cloud run is pending; it no longer
-triggers the recursive day/week/month/year summary pipeline in production.
+the source of truth. Uploads only transcribe; the scheduled agent supplies entry
+prose. Recording timestamps come from upload metadata or embedded audio metadata,
+without a separate spoken-date inference call. The recursive day/week/month/year
+summary pipeline does not run in production.
 Existing aggregate summaries remain readable when their evidence is still valid.
 
 ## Runtime
 
 Pulumi provisions a separate coordinator Lambda with a five-minute EventBridge
 schedule, a two-minute invocation timeout, and reserved concurrency of one.
-The coordinator starts at most one new run per hour, only after source changes.
+The coordinator starts one initial run per 24-hour window, only after source
+changes. Failed attempts count toward a maximum of three attempts in that window
+(one initial attempt and two retries), spaced at least an hour apart. Success
+prevents further starts until the window expires, even if new recordings arrive.
+The window starts with the initial attempt and survives cleanup and restarts.
 It submits an asynchronous hosted session through the beta OpenAI Agents API,
 then returns. Later invocations collect the output and retire the session.
 No diary contents are committed to Git or attached to a coding repository.
@@ -92,7 +97,9 @@ use a durable `Idempotency-Key` through the SDK; session creation sends no
 input, so recovering an uncertain creation does not duplicate inference.
 Cleanup includes sessions recovered by run metadata, cancels active work, and
 deletes sessions. Runs time out after two hours. Transport failures retry the
-same run; terminal/invalid runs are cleaned up before a later hourly retry.
+same run without reserving another attempt; terminal/invalid runs are cleaned up
+before a retry within the daily budget. Source changes and timeouts also consume
+the reserved attempt.
 
 Validated generations live in S3; one DynamoDB pointer publishes the complete
 generation. Both publication and all read surfaces check source fingerprints.
@@ -144,8 +151,8 @@ role; the exact-key cleanup check is an application safeguard, not an IAM deny.
   read permissions and access to the configured model.
 - `JOURNAL_CURATOR_MODEL`: defaults to `gpt-6-astra`.
 - `OPENAI_CURATOR_API_KEY`: optional dedicated credential for Agents curation.
-  When absent, curation uses workload identity. Audio transcription and
-  provisional analysis continue using workload identity in either case.
+  When absent, curation uses workload identity. Audio transcription continues using
+  workload identity in either case.
   Production Submit reads `github-actions-openai-curator-api-key` from GCP
   Secret Manager and supplies it only to the curator Lambda, marked as a
   Pulumi secret. Staging, upload workers, and public API Lambdas do not receive
