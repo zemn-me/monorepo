@@ -125,6 +125,26 @@ describe('zemn.me website', () => {
 			).toEqual([]);
 		});
 
+		it('initializes availability dates after hydration', async () => {
+			try {
+				const response = await fetch(`${origin}/availability`);
+				const html = await response.text();
+				// Prerendered dates can be stale before the document is served.
+				expect(html).toContain('Loading your local calendar');
+				await driver.get(`${origin}/availability`);
+				await driver.wait(async () => {
+					const headers = await driver.findElements(
+						By.css('section[aria-label="Availability calendar"] header')
+					);
+					return headers.length === 63;
+				}, 10000);
+				const logs = await driver.manage().logs().get('browser');
+				expect(logs.filter(log => log.level.value >= logging.Level.SEVERE.value)).toEqual([]);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('api server /healthz returns OK', async () => {
 			try {
 				await driver.get(`${apiOrigin}/healthz`);

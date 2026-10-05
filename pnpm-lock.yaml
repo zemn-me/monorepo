@@ -54,20 +54,20 @@ importers:
         specifier: 1.3.0
         version: 1.3.0
       '@tanstack/query-async-storage-persister':
-        specifier: 5.104.0
-        version: 5.104.0
+        specifier: 5.104.1
+        version: 5.104.1
       '@tanstack/query-core':
-        specifier: 5.104.0
-        version: 5.104.0
+        specifier: 5.104.1
+        version: 5.104.1
       '@tanstack/react-query':
-        specifier: 5.104.0
-        version: 5.104.0(react@19.3.0)
+        specifier: 5.104.1
+        version: 5.104.1(react@19.3.0)
       '@tanstack/react-query-devtools':
-        specifier: 5.104.0
-        version: 5.104.0(@tanstack/react-query@5.104.0(react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.0)
+        specifier: 5.104.1
+        version: 5.104.1(@tanstack/react-query@5.104.1(react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.0)
       '@tanstack/react-query-persist-client':
-        specifier: 5.104.0
-        version: 5.104.0(@tanstack/react-query@5.104.0(react@19.3.0))(react@19.3.0)
+        specifier: 5.104.1
+        version: 5.104.1(@tanstack/react-query@5.104.1(react@19.3.0))(react@19.3.0)
       '@types/bcryptjs':
         specifier: 3.0.0
         version: 3.0.0
@@ -166,7 +166,7 @@ importers:
         version: 0.17.0
       openapi-react-query:
         specifier: 0.5.4
-        version: 0.5.4(@tanstack/react-query@5.104.0(react@19.3.0))(openapi-fetch@0.17.0)
+        version: 0.5.4(@tanstack/react-query@5.104.1(react@19.3.0))(openapi-fetch@0.17.0)
       openapi-typescript:
         specifier: 7.13.0
         version: 7.13.0(typescript@7.0.2)
@@ -457,23 +457,23 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 44.129.0
-        version: 44.129.0(typanion@3.14.0)
+        specifier: 44.132.2
+        version: 44.132.2(typanion@3.14.0)
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@24.19.1)
       stylelint:
-        specifier: 17.15.0
-        version: 17.15.0(typescript@7.0.2)
+        specifier: 17.16.0
+        version: 17.16.0(typescript@7.0.2)
       stylelint-config-css-modules:
         specifier: 4.6.0
-        version: 4.6.0(stylelint@17.15.0(typescript@7.0.2))
+        version: 4.6.0(stylelint@17.16.0(typescript@7.0.2))
       stylelint-config-recommended:
         specifier: 18.0.0
-        version: 18.0.0(stylelint@17.15.0(typescript@7.0.2))
+        version: 18.0.0(stylelint@17.16.0(typescript@7.0.2))
       stylelint-config-standard:
         specifier: 40.0.0
-        version: 40.0.0(stylelint@17.15.0(typescript@7.0.2))
+        version: 40.0.0(stylelint@17.16.0(typescript@7.0.2))
       svgo:
         specifier: 4.1.0
         version: 4.1.0
@@ -3491,33 +3491,33 @@ packages:
     resolution: {integrity: sha512-aPkUQctDzpXLSWhlx7jUDi3mInsI18xcnrK1hvIyIa88ab1ax88cACr7xU+BKMCGB4NZYNwh4SoNSEbv3RY2NA==}
     engines: {node: '>=20'}
 
-  '@tanstack/query-async-storage-persister@5.104.0':
-    resolution: {integrity: sha512-7pz2WgNxcvGKqbmILrmZ8DOQLOoQyqjT9HTWngYoxgjUyEses0O+GOzTjShT68snFq67EA3CFuYJs2Jna+kBIA==}
+  '@tanstack/query-async-storage-persister@5.104.1':
+    resolution: {integrity: sha512-wSs/HrangoSMVW3zLifawRT9lA+fbiilPQmaY+YhxBOM/VS9oqx+MQvROHpW+hKwDpdvFmhyBjWiyDhTHL1YXg==}
 
-  '@tanstack/query-core@5.104.0':
-    resolution: {integrity: sha512-JrC2r/JQlXt7khBSdUpsgxNvybzOg+aITa+ARRMlP2AFo93Y8vIqz077rp+e61mJetSZ0T6AJbwW1JHer1vrPQ==}
+  '@tanstack/query-core@5.104.1':
+    resolution: {integrity: sha512-TiRghcrGkUTE+M4JBxvpPSpBhxvIzQairw+cksrHYGr+2uwC77yW1SY9nYxnYRYOppvucf8rEg6b5byoz4rTpw==}
 
-  '@tanstack/query-devtools@5.104.0':
-    resolution: {integrity: sha512-snKyFLVFC5LuNoyUTpyqCD2Z8cRlCWrAeO3xub0nGi81IMz8YAUWq2Z+XdpGSGT7bCxqVdOHUjyiA3CtDuBjfQ==}
+  '@tanstack/query-devtools@5.104.1':
+    resolution: {integrity: sha512-wmXnQbnwEz+SctYMTrwsOWWNHKhCsVgtaliL9E+VI2vx2Xr773d/MpcrbIU1hEOUqC3p7x59swXFUPDLbplT3g==}
 
-  '@tanstack/query-persist-client-core@5.104.0':
-    resolution: {integrity: sha512-7XEoH8+gaARK06Uw6e97WqOfus7dtcrYxA6RUf1+OZArz1Ax7Stlcfas6XRz7V2YiOTAkGKUYsk2y43QUmpiTw==}
+  '@tanstack/query-persist-client-core@5.104.1':
+    resolution: {integrity: sha512-ONiadXqe56iNrw6RESqKILpTIVG9ZMI/DageTQnrBDt/nZ6WiP4G13iIiMwJEsiO12gQ3Gychx8tcFIPw4k25g==}
 
-  '@tanstack/react-query-devtools@5.104.0':
-    resolution: {integrity: sha512-E3AfuGqrdyaamuRV3u8RFWQlkZxk7OQa9MJ3XLF9SEHFRHyTUnlHcAQ0hEpDYxNsNFKYrheiRpDKlYaG4vkt7g==}
+  '@tanstack/react-query-devtools@5.104.1':
+    resolution: {integrity: sha512-0GoLxe08PVxnkbrHFwO+7fkgbc07xEcoBfdYvbTv63e6Fe7uz7PGyOxKeQTOXKGMmTfoniaISOqkjDzKC/66Ng==}
     peerDependencies:
-      '@tanstack/react-query': ^5.104.0
+      '@tanstack/react-query': ^5.104.1
       '@types/react': ^18 || ^19
       react: ^18 || ^19
 
-  '@tanstack/react-query-persist-client@5.104.0':
-    resolution: {integrity: sha512-ZIw4PQfk/MLEJEyaxg0AQfuT0I+HGSogcWl18GjG+Yy2707TFtf3Or2yZilAJoSzBMdoZr9X2xx6T5cap0PlUg==}
+  '@tanstack/react-query-persist-client@5.104.1':
+    resolution: {integrity: sha512-kU3YaqjkwEUzUUfPF0JVg56d6gJKWHaFVqOlQztwc4C2IT0P5sv/23orrSoQqjxKaUe6Ejw5IIQtA/G12uNmow==}
     peerDependencies:
-      '@tanstack/react-query': ^5.104.0
+      '@tanstack/react-query': ^5.104.1
       react: ^18 || ^19
 
-  '@tanstack/react-query@5.104.0':
-    resolution: {integrity: sha512-e1TZmDCQnWIfiDVryIHeA6Idj+Lfx1hORLOhXS/l5wcgvtVD4yYqbTDl378sGQKIi2cSgb0TEMC9cKK8GGoJEw==}
+  '@tanstack/react-query@5.104.1':
+    resolution: {integrity: sha512-Zz70EgjahNI7aCz8BZxM3vUGU44ycxEAzMuCUjLeA7SVhhOkg3ZgPjPJPvHjs6Rmky/dtmnu1WzjGHNHmhCoZQ==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -8190,8 +8190,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@44.129.0:
-    resolution: {integrity: sha512-Fi8H1B4Uqtpp9elgKXkAsi9AZHXsuP1ob/6HD6AEyqFvQMGpEz5pB0WPq5ycMGQc5bpxik7lBL9Of5+Uo6XEXA==}
+  renovate@44.132.2:
+    resolution: {integrity: sha512-RD5+d1UPhvTj55u6wbZUY/Fhb2LRkYfo9ZqymjH8XeiKub37aNdDNJPgksnOjsyHPMzLMh6DeMTrEBRnQzBgvA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -8728,8 +8728,8 @@ packages:
     peerDependencies:
       stylelint: ^16.8.2 || ^17.0.0
 
-  stylelint@17.15.0:
-    resolution: {integrity: sha512-mWIkesYQvQjf4Kvdeu9ns0IL8/K/wtjaGxPqsPd6DlLZvaQxGysJsocxUDrBcyHQ5VleAk4uSMat4yMrVED7PA==}
+  stylelint@17.16.0:
+    resolution: {integrity: sha512-ejlWnbJ13x1GU32+zZXa6sYQJsKKkwSdv2B4rAdO3OWdEmvhSJKcXi5pOphQYSzyaj1kXpuGJr7pcMBNfDIuPw==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -12677,21 +12677,21 @@ snapshots:
     dependencies:
       remove-accents: 0.5.0
 
-  '@tanstack/query-async-storage-persister@5.104.0':
+  '@tanstack/query-async-storage-persister@5.104.1':
     dependencies:
-      '@tanstack/query-core': 5.104.0
-      '@tanstack/query-persist-client-core': 5.104.0
+      '@tanstack/query-core': 5.104.1
+      '@tanstack/query-persist-client-core': 5.104.1
 
-  '@tanstack/query-core@5.104.0': {}
+  '@tanstack/query-core@5.104.1': {}
 
-  '@tanstack/query-devtools@5.104.0(csstype@3.2.3)':
+  '@tanstack/query-devtools@5.104.1(csstype@3.2.3)':
     dependencies:
       '@kobalte/core': 0.13.14(solid-js@1.9.15)
       '@solid-primitives/keyed': 1.5.3(solid-js@1.9.15)
       '@solid-primitives/resize-observer': 2.2.0(solid-js@1.9.15)
       '@solid-primitives/storage': 1.3.11(solid-js@1.9.15)
       '@tanstack/match-sorter-utils': 9.1.2
-      '@tanstack/query-core': 5.104.0
+      '@tanstack/query-core': 5.104.1
       clsx: 2.1.1
       goober: 2.1.19(csstype@3.2.3)
       solid-js: 1.9.15
@@ -12700,28 +12700,28 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/query-persist-client-core@5.104.0':
+  '@tanstack/query-persist-client-core@5.104.1':
     dependencies:
-      '@tanstack/query-core': 5.104.0
+      '@tanstack/query-core': 5.104.1
 
-  '@tanstack/react-query-devtools@5.104.0(@tanstack/react-query@5.104.0(react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.0)':
+  '@tanstack/react-query-devtools@5.104.1(@tanstack/react-query@5.104.1(react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.0)':
     dependencies:
-      '@tanstack/query-devtools': 5.104.0(csstype@3.2.3)
-      '@tanstack/react-query': 5.104.0(react@19.3.0)
+      '@tanstack/query-devtools': 5.104.1(csstype@3.2.3)
+      '@tanstack/react-query': 5.104.1(react@19.3.0)
       '@types/react': 19.3.0
       react: 19.3.0
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/react-query-persist-client@5.104.0(@tanstack/react-query@5.104.0(react@19.3.0))(react@19.3.0)':
+  '@tanstack/react-query-persist-client@5.104.1(@tanstack/react-query@5.104.1(react@19.3.0))(react@19.3.0)':
     dependencies:
-      '@tanstack/query-persist-client-core': 5.104.0
-      '@tanstack/react-query': 5.104.0(react@19.3.0)
+      '@tanstack/query-persist-client-core': 5.104.1
+      '@tanstack/react-query': 5.104.1(react@19.3.0)
       react: 19.3.0
 
-  '@tanstack/react-query@5.104.0(react@19.3.0)':
+  '@tanstack/react-query@5.104.1(react@19.3.0)':
     dependencies:
-      '@tanstack/query-core': 5.104.0
+      '@tanstack/query-core': 5.104.1
       react: 19.3.0
 
   '@testing-library/dom@10.4.2':
@@ -17486,9 +17486,9 @@ snapshots:
     dependencies:
       openapi-typescript-helpers: 0.1.0
 
-  openapi-react-query@0.5.4(@tanstack/react-query@5.104.0(react@19.3.0))(openapi-fetch@0.17.0):
+  openapi-react-query@0.5.4(@tanstack/react-query@5.104.1(react@19.3.0))(openapi-fetch@0.17.0):
     dependencies:
-      '@tanstack/react-query': 5.104.0(react@19.3.0)
+      '@tanstack/react-query': 5.104.1(react@19.3.0)
       openapi-fetch: 0.17.0
       openapi-typescript-helpers: 0.1.0
 
@@ -18216,7 +18216,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@44.129.0(typanion@3.14.0):
+  renovate@44.132.2(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -18915,22 +18915,22 @@ snapshots:
     dependencies:
       inline-style-parser: 0.2.7
 
-  stylelint-config-css-modules@4.6.0(stylelint@17.15.0(typescript@7.0.2)):
+  stylelint-config-css-modules@4.6.0(stylelint@17.16.0(typescript@7.0.2)):
     dependencies:
-      stylelint: 17.15.0(typescript@7.0.2)
+      stylelint: 17.16.0(typescript@7.0.2)
     optionalDependencies:
-      stylelint-scss: 7.3.0(stylelint@17.15.0(typescript@7.0.2))
+      stylelint-scss: 7.3.0(stylelint@17.16.0(typescript@7.0.2))
 
-  stylelint-config-recommended@18.0.0(stylelint@17.15.0(typescript@7.0.2)):
+  stylelint-config-recommended@18.0.0(stylelint@17.16.0(typescript@7.0.2)):
     dependencies:
-      stylelint: 17.15.0(typescript@7.0.2)
+      stylelint: 17.16.0(typescript@7.0.2)
 
-  stylelint-config-standard@40.0.0(stylelint@17.15.0(typescript@7.0.2)):
+  stylelint-config-standard@40.0.0(stylelint@17.16.0(typescript@7.0.2)):
     dependencies:
-      stylelint: 17.15.0(typescript@7.0.2)
-      stylelint-config-recommended: 18.0.0(stylelint@17.15.0(typescript@7.0.2))
+      stylelint: 17.16.0(typescript@7.0.2)
+      stylelint-config-recommended: 18.0.0(stylelint@17.16.0(typescript@7.0.2))
 
-  stylelint-scss@7.3.0(stylelint@17.15.0(typescript@7.0.2)):
+  stylelint-scss@7.3.0(stylelint@17.16.0(typescript@7.0.2)):
     dependencies:
       '@csstools/css-calc': 3.4.1(@csstools/css-parser-algorithms@4.0.1(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-parser-algorithms': 4.0.1(@csstools/css-tokenizer@4.0.2)
@@ -18943,10 +18943,10 @@ snapshots:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.1.6
       postcss-value-parser: 4.2.0
-      stylelint: 17.15.0(typescript@7.0.2)
+      stylelint: 17.16.0(typescript@7.0.2)
     optional: true
 
-  stylelint@17.15.0(typescript@7.0.2):
+  stylelint@17.16.0(typescript@7.0.2):
     dependencies:
       '@csstools/css-calc': 3.4.1(@csstools/css-parser-algorithms@4.0.1(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-parser-algorithms': 4.0.1(@csstools/css-tokenizer@4.0.2)
