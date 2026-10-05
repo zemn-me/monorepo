@@ -148,7 +148,7 @@ function millisecondsUntilNextMinute(date: Temporal.ZonedDateTime) {
 
 function currentDayStart(
 	timeZone: string,
-	now = Temporal.Now.zonedDateTimeISO(timeZone)
+	now: Temporal.ZonedDateTime
 ) {
 	const zonedNow = now.withTimeZone(timeZone);
 	const startsAt = zonedNow.with({
@@ -309,11 +309,11 @@ export function AvailabilityClient() {
 		[locales, timeZone]
 	);
 	const start = useMemo(
-		() => currentDayStart(timeZone, now),
+		() => (now ? currentDayStart(timeZone, now) : undefined),
 		[now, timeZone]
 	);
 	const days = useMemo(
-		() => visibleDayRanges(start, locales, timeZone),
+		() => (start ? visibleDayRanges(start, locales, timeZone) : []),
 		[locales, start, timeZone]
 	);
 	const events = calendarBatches(
@@ -368,6 +368,7 @@ export function AvailabilityClient() {
 				<h1>Thomas' availability</h1>
 				<p>Timed blocks below are times I am probably busy.</p>
 			</header>
+			{now ? null : <p role="status">Loading your local calendar…</p>}
 			<div className={style.weekShell}>
 				<div className={style.weekScroller}>
 					<section
