@@ -63,6 +63,19 @@
 			"datasourceTemplate": "custom.minecraft_java",
 			"depNameTemplate": "minecraft-java",
 			"versioningTemplate": "loose"
+		},
+		{
+			"customType": "regex",
+			"description": "Chrome for Testing browser and driver archives",
+			"managerFilePatterns": [
+				"/^MODULE.bazel$/"
+			],
+			"matchStrings": [
+				"https://storage.googleapis.com/chrome-for-testing-public/(?<currentValue>\\d+\\.\\d+\\.\\d+\\.\\d+)/"
+			],
+			"datasourceTemplate": "custom.chrome_stable",
+			"depNameTemplate": "chrome-for-testing",
+			"versioningTemplate": "loose"
 		}
 	],
 	"customDatasources": {
@@ -83,6 +96,13 @@
 			"format": "json",
 			"transformTemplates": [
 				"{\"releases\": [versions[type = \"release\"].{\"version\": id, \"releaseTimestamp\": releaseTime}]}"
+			]
+		},
+		"chrome_stable": {
+			"defaultRegistryUrlTemplate": "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\": [{\"version\": channels.Stable.version}]}"
 			]
 		}
 	},
@@ -213,8 +233,10 @@
 			"matchPackageNames": ["/pulumi_cli_.*/"]
 		},
 		{
-			"groupName": "chromedriver",
-			"matchPackageNames": ["/com_googleapis_storage_chromedriver.*/"]
+			"description": "The Stable channel feed has no per-release timestamps",
+			"groupName": "Chrome for Testing",
+			"matchPackageNames": ["chrome-for-testing"],
+			"minimumReleaseAge": null
 		},
 		{
 			"description": "Keep the Bazel executable and downloaded Bazel source on the same release",

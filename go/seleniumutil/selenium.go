@@ -17,12 +17,17 @@ import (
 // Driver embeds selenium.WebDriver and cleans itself up via Close().
 type Driver struct {
 	selenium.WebDriver
-	svc *selenium.Service
-	url string
+	svc     *selenium.Service
+	url     string
+	logFile *os.File
 }
 
 // Close satisfies io.Closer.
 func (d *Driver) Close() error {
+	if d.logFile != nil {
+		defer os.Remove(d.logFile.Name())
+		defer d.logFile.Close()
+	}
 	if d.WebDriver != nil {
 		_ = d.WebDriver.Quit()
 	}
@@ -63,9 +68,21 @@ func NewWithChromeArguments(additionalArguments ...string) (*Driver, error) {
 		return nil, err
 	}
 
+	logFile, err := os.CreateTemp("", "chromedriver-*.log")
+	if err != nil {
+		return nil, fmt.Errorf("create chromedriver startup log: %w", err)
+	}
+	keepLog := false
+	defer func() {
+		if !keepLog {
+			logFile.Close()
+			os.Remove(logFile.Name())
+		}
+	}()
+
 	svc, err := selenium.NewChromeDriverService(
 		driverBin, port,
-		selenium.ChromeDriver(chrome), // tell driver where Chromium lives
+		selenium.Output(logFile),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("start chromedriver: %w", err)
@@ -89,10 +106,12 @@ func NewWithChromeArguments(additionalArguments ...string) (*Driver, error) {
 	wd, err := selenium.NewRemote(caps, remoteURL)
 	if err != nil {
 		_ = svc.Stop()
-		return nil, err
+		log, _ := os.ReadFile(logFile.Name())
+		return nil, fmt.Errorf("%w\nChromeDriver startup log:\n%s", err, log)
 	}
 
-	return &Driver{WebDriver: wd, svc: svc, url: remoteURL}, nil
+	keepLog = true
+	return &Driver{WebDriver: wd, svc: svc, url: remoteURL, logFile: logFile}, nil
 }
 
 // SetTimezoneOverride configures Chromium to report the provided time zone ID.
