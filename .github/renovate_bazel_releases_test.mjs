@@ -45,3 +45,29 @@ for (const name of ['go', 'github.com/bazelbuild/rules_go']) {
 	});
 	assert.equal(grouped.groupName, 'Go toolchain');
 }
+
+// Every browser and driver archive must move to the same Stable release.
+const { extractPackageFile: extractRegex } = await import(
+	'renovate/dist/modules/manager/custom/regex/index.js'
+);
+const chromeManager = config.customManagers.find(
+	manager => manager.depNameTemplate === 'chrome-for-testing'
+);
+const chrome = await extractRegex(module, 'MODULE.bazel', chromeManager);
+assert.equal(chrome.deps.length, 7);
+assert.equal(new Set(chrome.deps.map(dep => dep.currentValue)).size, 1);
+for (const dep of chrome.deps) {
+	assert.equal(dep.datasource, 'custom.chrome_stable');
+	const configured = await applyPackageRules({
+		...dep,
+		packageName: dep.depName,
+		minimumReleaseAge: config.minimumReleaseAge,
+		packageRules: config.packageRules,
+	});
+	assert.equal(configured.groupName, 'Chrome for Testing');
+	assert.equal(configured.minimumReleaseAge, null);
+}
+assert.equal(
+	config.customDatasources.chrome_stable.defaultRegistryUrlTemplate,
+	'https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json'
+);

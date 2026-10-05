@@ -339,25 +339,25 @@ mac_chromium(
 http_archive(
     name = "com_googleapis_storage_chromium_linux_x64",
     build_file_content = chromium_buildfile,
-    sha256 = "cc8ae96ccba9010425abf2481ecdca343d53623151e0b4f2c180f58ec55b66a4",
+    sha256 = "ff43322f335e436b2f4dcdfeeec5db032299e335a7e8c1c618b326e100ce8732",
     # auto-integrity
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/linux64/chrome-linux64.zip",
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/linux64/chrome-linux64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromium_mac_arm64",
     build_file_content = chromium_mac_arm64_buildfile,
-    sha256 = "c30f54d81188231e8da6b06a01e5ba7fc7e7fe66d9708316a4f30f78f50d9202",
+    sha256 = "b62e904b6571c5ff5108ed7812cf93ac6d1c4027f10ae47ac34d8e229ed88001",
     # auto-integrity
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/mac-arm64/chrome-mac-arm64.zip",
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/mac-arm64/chrome-mac-arm64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromium_mac_x64",
     build_file_content = chromium_mac_x64_buildfile,
-    sha256 = "88ec927ec591dc6d1b80efac8e0b64edb418ade96bc4086be07f7c509e00203d",
+    sha256 = "9ddd0959603a3cdb90926427b2942279d81414c9aad856c97d405bb406d50e8b",
     # auto-integrity
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90/mac-x64/chrome-mac-x64.zip",
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/mac-x64/chrome-mac-x64.zip",
 )
 
 # renovate:
@@ -381,7 +381,7 @@ load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 
 copy_to_bin(
 name = "in_bin",
-srcs = [ "chromedriver" ],
+srcs = glob(["chromedriver*"]),
 visibility = [ "//visibility:public" ]
 )
 """
@@ -389,29 +389,37 @@ visibility = [ "//visibility:public" ]
 http_archive(
     name = "com_googleapis_storage_chromedriver_linux_x64",
     build_file_content = chromedriver_buildfile,
-    sha256 = "a7787ef8b139170cab4abfca4a0284fd5d006bfd979624b4af25b64d583a6f44",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip",
+    sha256 = "cc99c87cfd10e1da1b7d42ea9800a211df279f5a47c19a55b02c927cb9f606c2",
+    strip_prefix = "chromedriver-linux64",
+    # auto-integrity
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/linux64/chromedriver-linux64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_mac64",
     build_file_content = chromedriver_buildfile,
-    sha256 = "6abdc9d358c2bc4668bef7b23048de2a9dbd3ad82cfbc6dfe322e74d4cff1650",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac64.zip",
+    sha256 = "cb03fe8181c391d5604e86b0c6df32e05ddc759484526fe4aeb7686526307e34",
+    strip_prefix = "chromedriver-mac-x64",
+    # auto-integrity
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/mac-x64/chromedriver-mac-x64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_mac_arm64",
     build_file_content = chromedriver_buildfile,
-    sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+    sha256 = "7642a748afb35ecf58183f3d0f41309cf2a239833a612518bcdc2f50347660ac",
+    strip_prefix = "chromedriver-mac-arm64",
+    # auto-integrity
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/mac-arm64/chromedriver-mac-arm64.zip",
 )
 
 http_archive(
     name = "com_googleapis_storage_chromedriver_win32",
     build_file_content = chromedriver_buildfile,
-    sha256 = "14eb3a1642a829fcbc11ef22e113b2f6a2340c4f4e235e5494b414c4834fa47c",
-    url = "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_mac_arm64.zip",
+    sha256 = "5657209f445878bcbe1f05a6a4226116c1fc9d8b56fcad950a13396af86194a5",
+    strip_prefix = "chromedriver-win32",
+    # auto-integrity
+    url = "https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/win32/chromedriver-win32.zip",
 )
 
 FFMPEG_LINUX_BTB_N_BUILD_TAG = "autobuild-2026-04-30-13-44"
