@@ -297,27 +297,20 @@ http_archive(
 )
 
 chromium_buildfile = """
-load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
-load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+load("@@//bin/host/chromium:chromium_bundle.bzl", "chromium_bundle")
 
-copy_to_bin(
-name = "in_bin",
-srcs = [ ":binary" ],
-visibility = [ "//visibility:public" ]
-)
-
-native_binary(
-name = "binary",
-src = "chrome-linux64/chrome",
-data = glob(["**/*"], ["chrome-linux64/chrome"], allow_empty=True),
-out = "chromium"
+chromium_bundle(
+    name = "in_bin",
+    executable_src = "chrome-linux64/chrome",
+    srcs = glob(["chrome-linux64/**"], allow_empty=True),
+    visibility = ["//visibility:public"],
 )
 """
 
 chromium_mac_arm64_buildfile = """
-load("@@//bin/host/chromium:mac_chromium.bzl", "mac_chromium")
+load("@@//bin/host/chromium:chromium_bundle.bzl", "chromium_bundle")
 
-mac_chromium(
+chromium_bundle(
     name = "in_bin",
     executable_src = "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
     srcs = glob(["chrome-mac-arm64/Google Chrome for Testing.app/**"], allow_empty=True),
@@ -326,9 +319,9 @@ mac_chromium(
 """
 
 chromium_mac_x64_buildfile = """
-load("@@//bin/host/chromium:mac_chromium.bzl", "mac_chromium")
+load("@@//bin/host/chromium:chromium_bundle.bzl", "chromium_bundle")
 
-mac_chromium(
+chromium_bundle(
     name = "in_bin",
     executable_src = "chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
     srcs = glob(["chrome-mac-x64/Google Chrome for Testing.app/**"], allow_empty=True),

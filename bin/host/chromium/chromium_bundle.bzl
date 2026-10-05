@@ -1,10 +1,12 @@
+"""Keep Chrome executable and runtime resources together in the output tree."""
+
 load(
     "@aspect_bazel_lib//lib:copy_to_bin.bzl",
     "COPY_FILE_TO_BIN_TOOLCHAINS",
     "copy_file_to_bin_action",
 )
 
-def _mac_chromium_impl(ctx):
+def _chromium_bundle_impl(ctx):
     runfiles = []
     executable = None
     for src in ctx.files.srcs:
@@ -22,8 +24,8 @@ def _mac_chromium_impl(ctx):
         runfiles = ctx.runfiles(files = runfiles),
     )
 
-mac_chromium = rule(
-    implementation = _mac_chromium_impl,
+chromium_bundle = rule(
+    implementation = _chromium_bundle_impl,
     attrs = {
         "executable_src": attr.label(allow_single_file = True, mandatory = True),
         "srcs": attr.label_list(allow_files = True, mandatory = True),
