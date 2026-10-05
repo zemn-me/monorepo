@@ -1229,11 +1229,10 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	entry.DurationMs = transcription.DurationMs
 	entry.Transcript = transcription.Segments
 	if s.journalCurationEnabled {
-		// Transcription is durable before optional provisional analysis. This
-		// retains spoken-date inference without making source availability
-		// depend on either analysis service.
+		// The scheduled curator owns diary prose; uploads only transcribe.
 		entry.Status = JournalEntryStatusReady
 		entry.ProcessingProgress = nil
+		return s.updateJournalEntry(ctx, journalOwnerSubject, *entry)
 	} else {
 		entry.ProcessingProgress.Stage = JournalProcessingProgressStageSummarizing
 	}
@@ -1243,18 +1242,12 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	sources := transcriptSources(entry.Id, transcription.Segments)
 	analysis, err := s.journalAI.AnalyzeEntry(ctx, entry.RecordedAt, entry.TimeZone, sources)
 	if err != nil {
-		if s.journalCurationEnabled {
-			return err
-		}
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
 	if analysis.RecordedDate != "" {
 		entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, analysis.RecordedDate)
 		if err != nil {
-			if s.journalCurationEnabled {
-				return err
-			}
 			_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 			return err
 		}
@@ -1262,9 +1255,6 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	entry.Transcript = transcription.Segments
 	sourceFingerprint, err := summarySourceFingerprint(sources)
 	if err != nil {
-		if s.journalCurationEnabled {
-			return err
-		}
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
