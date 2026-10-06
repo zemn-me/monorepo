@@ -159,6 +159,10 @@ export class OCIImage extends ComponentResource {
 		const upload = new local.Command(
 			`${name}_push`,
 			{
+				// The interpreter performs the push; explicitly invoke it on both
+				// lifecycle paths rather than omitting the command body.
+				create: '',
+				update: '',
 				environment: output(authFile).apply(f => {
 					const environment: Record<string, string> = {};
 					if (f) environment.DOCKER_CONFIG = f;
