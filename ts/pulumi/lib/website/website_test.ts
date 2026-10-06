@@ -12,6 +12,13 @@ import * as pulumi from '@pulumi/pulumi';
 import Website from './website.js';
 
 const resources: pulumi.runtime.MockResourceArgs[] = [];
+const retained = new Map<string, boolean | undefined>();
+const options: pulumi.ComponentResourceOptions = {
+	transformations: [args => {
+		retained.set(args.name, args.opts.retainOnDelete);
+		return undefined;
+	}],
+};
 void pulumi.runtime.setMocks({
 	newResource: args => {
 		if (args.type === 'aws:cloudfront/cachePolicy:CachePolicy') {
@@ -80,12 +87,12 @@ test('hybrid hosting keeps static sites intact and separates asset caching from 
 		email: false,
 		noIndex: false,
 	};
-	new Website('static', args);
+	new Website('static', args, options);
 	new Website('hybrid.zemn.me', {
 		...args,
 		serverDirectory,
 		wellKnownOidcDomain: 'api.example.com',
-	});
+	}, options);
 	await pulumi.runtime.disconnect();
 
 	const resource = (type: string, name: string) => {
@@ -95,6 +102,11 @@ test('hybrid hosting keeps static sites intact and separates asset caching from 
 		expect(value).toBeDefined();
 		return value!.inputs;
 	};
+	// Retained objects require a retained bucket to avoid BucketNotEmpty during
+	// stack removal. Check both hosting modes, shared by staging and production.
+	for (const name of ['static-bucket', 'hybrid.zemn.me-bucket']) {
+		expect(retained.get(name)).toBe(true);
+	}
 	const staticSite = resource(
 		'aws:cloudfront/distribution:Distribution',
 		'static_cloudfront_distribution'

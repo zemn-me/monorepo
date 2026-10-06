@@ -223,6 +223,9 @@ export class Website extends pulumi.ComponentResource {
 				tags,
 			},
 			{
+				// Uploaded assets are retained, so their bucket must also survive
+				// stack removal rather than failing deletion with BucketNotEmpty.
+				retainOnDelete: true,
 				parent: this,
 			}
 		);
