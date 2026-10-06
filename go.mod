@@ -33,7 +33,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kms v1.61.1
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.110.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.0
-	github.com/aws/aws-sdk-go-v2/service/sesv2 v1.77.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.1
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.54.0

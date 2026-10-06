@@ -457,8 +457,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 44.132.2
-        version: 44.132.2(typanion@3.14.0)
+        specifier: 44.132.5
+        version: 44.132.5(typanion@3.14.0)
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@24.19.1)
@@ -7982,8 +7982,8 @@ packages:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
 
-  re2@1.26.1:
-    resolution: {integrity: sha512-oi79a4h6EO3PAwNsDMWgeCcsRGQEUa52DIgOiFTZGDEZocEXG9h+oXy0qZqndo47huUeJuVWSoOJIEhOupqOcg==}
+  re2@1.27.0:
+    resolution: {integrity: sha512-z5Vascmj7lQbU3YdfYJUDkBGGTnoAObcVW/CSbpI3WbVb1vZQsSzSWcGkfKU0JKrrGfPZwPr8EVHwYXKQKLVXw==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   react-devtools-core@6.1.5:
@@ -8190,8 +8190,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@44.132.2:
-    resolution: {integrity: sha512-RD5+d1UPhvTj55u6wbZUY/Fhb2LRkYfo9ZqymjH8XeiKub37aNdDNJPgksnOjsyHPMzLMh6DeMTrEBRnQzBgvA==}
+  renovate@44.132.5:
+    resolution: {integrity: sha512-3bCOC/3fz5ILyaRyOQU5WYmxRMlJsDyRe1piozt14lBeQL0phqD3ixXpH9GtWjBE0zxp7jbzMvWReflHhg7f5A==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -17877,7 +17877,7 @@ snapshots:
 
   range-parser@1.2.1: {}
 
-  re2@1.26.1:
+  re2@1.27.0:
     dependencies:
       install-artifact-from-github: 1.8.1
       nan: 2.29.0
@@ -18214,7 +18214,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@44.132.2(typanion@3.14.0):
+  renovate@44.132.5(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -18341,7 +18341,7 @@ snapshots:
       zod: 4.6.5
     optionalDependencies:
       openpgp: 6.3.2
-      re2: 1.26.1
+      re2: 1.27.0
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@openpgp/web-stream-tools'
