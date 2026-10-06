@@ -392,7 +392,7 @@ describe('pulumi', () => {
 				name,
 				inputs,
 			});
-			const invalidLogicalName = 'monorepo_bowerybugle_backend_pdfs';
+			const invalidLogicalName = 'monorepo_example_backend_pdfs';
 			expect(
 				s3BucketNameViolations([resource(invalidLogicalName)])
 			).toEqual([expect.stringContaining(invalidLogicalName)]);
