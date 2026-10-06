@@ -13,7 +13,10 @@ on:   # yamllint disable-line rule:truthy
       - renovate/**
 
 env:
-  BAZEL: ./sh/bin/bazel
+  BAZEL: >-
+    ./sh/bin/bazel
+    --distdir=${{ runner.temp }}/bazel-distdir/ape
+    --distdir=${{ runner.temp }}/bazel-distdir/rules_diff
 
 jobs:
   Staging:
@@ -45,6 +48,19 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
+      # Main may not yet contain the archive fallback. Seed it from the candidate
+      # outside the checkout so it also survives switching back to the candidate.
+      - name: Checkout candidate dependency archives
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: dependency-archives
+          sparse-checkout: third_party/bazel_distdir
+      - name: Seed dependency archives for both staging builds
+        run: |
+          mkdir -p "$RUNNER_TEMP/bazel-distdir"
+          if [ -d dependency-archives/third_party/bazel_distdir ]; then
+            cp -R dependency-archives/third_party/bazel_distdir/. "$RUNNER_TEMP/bazel-distdir/"
+          fi
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets.
         id: secret_auth
