@@ -15,7 +15,6 @@ import {
 	getTwilioPhoneNumber,
 	TwilioPhoneNumber,
 } from '#root/ts/pulumi/lib/twilio/phone_number.js';
-import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
 import * as WaxingIncandescent from '#root/ts/pulumi/waxingincandescent.com/index.js';
@@ -354,12 +353,6 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: args.staging,
 				tags,
 			},
-			{ parent: this }
-		);
-
-		new Lulu.Component(
-			`${name}_lulu`,
-			{ staging: args.staging, tags },
 			{ parent: this }
 		);
 

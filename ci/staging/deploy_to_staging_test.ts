@@ -2,6 +2,8 @@ import { beforeEach, expect, jest, test } from '@jest/globals';
 
 const result = { summary: { message: 'completed' } };
 const stack = {
+	exportStack: jest.fn(async () => ({ version: 3, deployment: { resources: [] } })),
+	importStack: jest.fn(async () => {}),
 	refresh: jest.fn(async () => result),
 	up: jest.fn(async () => result),
 	destroy: jest.fn(async () => result),

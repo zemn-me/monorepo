@@ -13,6 +13,7 @@ import * as pulumi from '@pulumi/pulumi/automation/index.js';
 
 import { Command, Summarize } from '#root/ts/github/actions/index.js';
 import { staging } from '#root/ts/pulumi/stack.js';
+import { prepareLuluRetirement } from '#root/ts/pulumi/retire_lulu.js';
 
 const Task =
 	(name: string) =>
@@ -154,9 +155,11 @@ export async function main(args: Args) {
 	// this ensures that the infrastructure gets to the desired state
 	// even if there are conflicts, but without necessarily waiting for
 	// a full destroy.
-	const e3 = await waitForLockTask(async () => s.then(v => v.up(baseConfig)))(
-		'deploying'
-	);
+	const e3 = await waitForLockTask(async () => {
+		const stack = await s;
+		await prepareLuluRetirement(stack);
+		return stack.up(baseConfig);
+	})('deploying');
 
 	if (args.overwrite && e3 instanceof Error) {
 		e2 = await waitForLockTask(async () =>
