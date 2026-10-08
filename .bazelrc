@@ -132,3 +132,8 @@ common --check_direct_dependencies=error
 common --local_resources=memory=HOST_RAM*.5
 # in ci use it all
 common:ci --local_resources=memory=HOST_RAM
+
+# Original, checksum-verified release archives avoid an unavailable GitLab host.
+# Separate directories are needed because both upstream archives are src.tar.gz.
+common --distdir=third_party/bazel_distdir/ape
+common --distdir=third_party/bazel_distdir/rules_diff
