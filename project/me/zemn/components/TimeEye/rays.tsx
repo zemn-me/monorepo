@@ -35,10 +35,8 @@ function Ray({ stroke, seed = '', ...props }: RayProps) {
 			props.minSegments
 	);
 
-	const { sqrt, pow, abs } = Math;
 	const { x1, x2, y1, y2 } = props;
-	// thanks pythagoras
-	const length = sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2));
+	const length = Math.hypot(x2 - x1, y2 - y1);
 
 	const segmentLengths = [...Array(nSegments)].map((_, n) =>
 		random(`segment length ${n}` + seed)
@@ -66,7 +64,7 @@ interface RaysProps {
 	readonly innerSpaceVariationPerc?: number;
 	readonly randomAmountPerc: number;
 	readonly maxSegments: number;
-	readonly minSegements: number;
+	readonly minSegments: number;
 }
 
 export function Rays(props: RaysProps) {
@@ -86,7 +84,7 @@ export function Rays(props: RaysProps) {
 					<Ray
 						key={`${t}`}
 						maxSegments={props.maxSegments}
-						minSegments={props.minSegements}
+						minSegments={props.minSegments}
 						seed={t.toString()}
 						stroke={`var(--foreground-color)`}
 						strokeWidth={props.strokeWidth}

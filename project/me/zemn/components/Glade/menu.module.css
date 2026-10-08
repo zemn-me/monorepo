@@ -1,7 +1,7 @@
 .hamburgerNav {
-	position: absolute;
-	top: 1.5rem;
-	right: 1.5rem;
+	display: grid;
+	position: relative;
+	justify-self: end;
 	pointer-events: all;
 	z-index: 4;
 }
@@ -15,8 +15,8 @@
 	list-style: none;
 	display: grid;
 	place-items: center;
-	width: 2.5rem;
-	height: 2.5rem;
+	width: var(--glade-control-size, 44px);
+	height: var(--glade-control-size, 44px);
 	border: none;
 	background: transparent;
 	color: var(--foreground-color);
@@ -122,15 +122,4 @@
 	border-top: 1px solid
 		color-mix(in srgb, var(--foreground-color) 20%, transparent);
 	font-size: 0.9rem;
-}
-
-.compact {
-	position: relative;
-	top: auto;
-	right: auto;
-}
-
-.compact .hamburgerButton {
-	width: 44px;
-	height: 44px;
 }

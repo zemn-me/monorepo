@@ -34,6 +34,7 @@ Interface Guidelines as a reference for interaction and clarity:
 - Debug-only wiring is only acceptable if it does not ship in the production bundle. Remove temporary client-visible debugging code rather than leaving dormant fallback paths behind.
 - Don't add compatibility fallbacks for web platform features that are Baseline Widely available; prefer the standard API directly unless the product explicitly needs older environments.
 - New `app/` route packages must also be added to the `//project/me/zemn:ts` deps list; Gazelle does not wire that aggregate automatically. Register their URLs in `app/routes.ts`.
+- Offset route-level sticky controls with `--glade-bar-block-size` so they remain below Glade's shared navigation bar.
 - Put ordinary pages under the pathless `glade-layout.js` group in `app/routes.ts` so its hero video persists across navigation. Standalone pages belong beside that group; keep pathname exceptions out of Glade.
 - Shared zemn.me menu/index links live in `project/me/zemn/navigation/navigation.ts`; update that when adding visible routes.
 - In React code, prefer carrying async/remote values with `ts/future/future.ts` helpers over duplicating messy internal loading/error state.

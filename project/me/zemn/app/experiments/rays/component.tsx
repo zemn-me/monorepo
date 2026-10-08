@@ -70,7 +70,7 @@ export default function RaysEditor() {
 					innerSpacePerc={innerSpacePerc.value}
 					length={height * (rayLengthPerc.value / 100)}
 					maxSegments={maxSegments.value}
-					minSegements={minSegments.value}
+					minSegments={minSegments.value}
 					nRays={nRays.value}
 					randomAmountPerc={randomAmountPerc.value}
 					strokeWidth={strokeWidth.value / 1000}

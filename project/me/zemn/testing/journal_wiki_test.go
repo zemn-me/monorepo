@@ -53,15 +53,11 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	var originalVideo selenium.WebElement
 	assertWikiNavigation := func() {
 		t.Helper()
-		preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{originalVideo})
-		if err != nil || preserved != true {
-			t.Fatalf("wiki navigation replaced the page: %v %v", preserved, err)
-		}
+		assertHeroVideoPreserved(t, driver, originalVideo)
 		visible, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect(); return bar.top >= 0 && bar.bottom <= window.innerHeight && bar.height < 100;`, nil)
 		if err != nil || visible != true {
 			t.Fatalf("wiki navigation hid the compact navigation bar: %v %v", visible, err)
 		}
-
 	}
 	root.Path = "/journal"
 	if err := driver.Get(root.String()); err != nil {

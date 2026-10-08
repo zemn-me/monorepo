@@ -62,6 +62,38 @@ function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 	);
 }
 
+function NavigationRays({ loading }: { readonly loading: boolean }) {
+	return (
+		<span
+			className={`${style.logoLoading} ${loading ? style.active : ''}`}
+			role={loading ? 'status' : undefined}
+			aria-hidden={!loading}
+			aria-label="Loading page"
+			title="Loading page"
+		>
+			<svg
+				className={style.logoRays}
+				viewBox="-120 -80 240 160"
+				aria-hidden="true"
+			>
+				<g className={style.raysGrowth}>
+					<Rays
+						nRays={80}
+						length={145}
+						innerSpacePerc={25}
+						innerSpaceVariationPerc={60}
+						randomAmountPerc={30}
+						maxSegments={8}
+						minSegments={2}
+						strokeWidth={0.65}
+						transform="scale(1 0.6)"
+					/>
+				</g>
+			</svg>
+		</span>
+	);
+}
+
 export interface GladeProps {
 	readonly children?: ReactNode;
 	readonly navigationPending?: boolean;
@@ -92,21 +124,12 @@ export default function Glade(props: GladeProps) {
 		return () => window.clearTimeout(timer);
 	}, [props.navigationPending]);
 
-	const loading = props.navigationPending && showNavigationStatus;
+	const loading = !!props.navigationPending && showNavigationStatus;
 	return (
 		<main
 			className={`${style.main} ${isHomepage ? '' : style.compact}`}
 			data-glade-layout
 		>
-			{isHomepage && loading && (
-				<div
-					className={style.navigationStatus}
-					role="status"
-					aria-label="Loading page"
-				>
-					Loading…
-				</div>
-			)}
 			<section className={style.content} data-glade-content>
 				{props.children}
 			</section>
@@ -133,39 +156,23 @@ export default function Glade(props: GladeProps) {
 						</button>
 					)}
 				</div>
-				{isHomepage ? <span /> : <LetterHead compact />}
-				<div className={style.topbarActions}>
-					<GladeMenu compact />
-				</div>
-				{!isHomepage && (
-					<span
-						className={style.logoLoading}
-						role={loading ? 'status' : undefined}
-						aria-hidden={!loading}
-						aria-label="Loading page"
-						title="Loading page"
-					>
-						<svg
-							className={style.logoRays}
-							viewBox="-120 -80 240 160"
-							aria-hidden="true"
+				{isHomepage ? (
+					loading ? (
+						<span
+							className={style.navigationStatus}
+							role="status"
+							aria-label="Loading page"
 						>
-							<g className={style.raysGrowth}>
-								<Rays
-									nRays={80}
-									length={145}
-									innerSpacePerc={25}
-									innerSpaceVariationPerc={60}
-									randomAmountPerc={30}
-									maxSegments={8}
-									minSegements={2}
-									strokeWidth={0.65}
-									transform="scale(1 0.6)"
-								/>
-							</g>
-						</svg>
-					</span>
+							Loading…
+						</span>
+					) : (
+						<span />
+					)
+				) : (
+					<LetterHead compact />
 				)}
+				<GladeMenu />
+				{!isHomepage && <NavigationRays loading={loading} />}
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>

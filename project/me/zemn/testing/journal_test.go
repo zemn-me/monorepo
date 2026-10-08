@@ -382,7 +382,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("journal overview could not zoom to years: %v", err)
 	}
-	if err := zoomToYears.Click(); err != nil {
+	if err := clickElementInView(driver, zoomToYears); err != nil {
 		t.Fatalf("zoom journal overview to years: %v", err)
 	}
 	yearDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='year']", 30*time.Second)
@@ -767,20 +767,21 @@ func TestJournalEndToEnd(t *testing.T) {
 		if (!dock || !toolbar) return false;
 		const dockStyle = getComputedStyle(dock);
 		const toolbarStyle = getComputedStyle(toolbar);
+		const barHeight = document.querySelector('header[data-glade-banner]').getBoundingClientRect().height;
 		const initialScroll = scrollY;
 		const toolbarDocumentTop = toolbar.getBoundingClientRect().top + scrollY;
 		window.scrollTo(0, toolbarDocumentTop + 100);
 		const toolbarPinned = Math.abs(
-			toolbar.getBoundingClientRect().top
+			toolbar.getBoundingClientRect().top - barHeight
 		) < 0.5;
 		window.scrollTo(0, initialScroll);
 		return toolbarPinned &&
 			toolbarStyle.position === 'sticky' &&
-			toolbarStyle.top === '0px' &&
+			Math.abs(parseFloat(toolbarStyle.top) - barHeight) < 0.5 &&
 			dockStyle.position === 'sticky' &&
 			Math.abs(
 				Number.parseFloat(dockStyle.top) -
-					toolbar.getBoundingClientRect().height
+					barHeight - toolbar.getBoundingClientRect().height
 			) < 0.5 &&
 			Number(toolbarStyle.zIndex) > Number(dockStyle.zIndex);
 	`, []any{firstEntryID})
@@ -788,7 +789,13 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("inspect sticky journal navigation and audio: %v", err)
 	}
 	if stickyNavigationAndAudio != true {
-		t.Fatalf("journal navigation and audio did not remain stacked while reading")
+		dimensions, _ := driver.ExecuteScript(`
+const bar = document.querySelector('header[data-glade-banner]');
+const toolbar = document.querySelector('[data-journal-toolbar]');
+const dock = document.querySelector('[data-journal-audio-dock]');
+return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.getBoundingClientRect().height, toolbarTop: getComputedStyle(toolbar).top, dockTop: getComputedStyle(dock).top};
+`, nil)
+		t.Fatalf("journal navigation and audio did not remain stacked while reading: %v", dimensions)
 	}
 	if _, err := waitForElement(
 		driver,
@@ -865,7 +872,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find second journal transcript segment: %v", err)
 	}
-	if err := secondTranscriptSegment.Click(); err != nil {
+	if err := clickElementInView(driver, secondTranscriptSegment); err != nil {
 		t.Fatalf("play second journal transcript segment: %v", err)
 	}
 	if err := waitForExclusiveJournalAudioPlayback(driver, secondEntryID, 10*time.Second); err != nil {
@@ -904,7 +911,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("completed journal entry did not have a swipe-to-delete control: %v", err)
 	}
-	if err := deleteThumb.Click(); err != nil {
+	if err := clickElementInView(driver, deleteThumb); err != nil {
 		t.Fatalf("click swipe-to-delete thumb: %v", err)
 	}
 	if err := journalAudioCountRemains(driver, 4, time.Second); err != nil {
@@ -957,7 +964,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("record button: %v", err)
 	}
-	if err := recordButton.Click(); err != nil {
+	if err := clickElementInView(driver, recordButton); err != nil {
 		t.Fatalf("start recording: %v", err)
 	}
 	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
@@ -982,7 +989,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	} else if label != "" {
 		t.Fatalf("cancel recording button had visible text %q", label)
 	}
-	if err := cancelButton.Click(); err != nil {
+	if err := clickElementInView(driver, cancelButton); err != nil {
 		t.Fatalf("cancel recording: %v", err)
 	}
 	if err := waitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
@@ -996,7 +1003,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("record button after cancellation: %v", err)
 	}
-	if err := recordButton.Click(); err != nil {
+	if err := clickElementInView(driver, recordButton); err != nil {
 		t.Fatalf("start submitted recording: %v", err)
 	}
 	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
@@ -1009,7 +1016,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
 	}
-	if err := submitButton.Click(); err != nil {
+	if err := clickElementInView(driver, submitButton); err != nil {
 		t.Fatalf("submit recording: %v", err)
 	}
 	if err := waitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
@@ -1028,7 +1035,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("submitted recording overview could not browse days: %v", err)
 	}
-	if err := browseDays.Click(); err != nil {
+	if err := clickElementInView(driver, browseDays); err != nil {
 		t.Fatalf("browse submitted recording days: %v", err)
 	}
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Days']", 30*time.Second); err != nil {
@@ -1113,7 +1120,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("current journal overview could not zoom to years: %v", err)
 	}
-	if err := zoomToYears.Click(); err != nil {
+	if err := clickElementInView(driver, zoomToYears); err != nil {
 		t.Fatalf("zoom current journal overview to years: %v", err)
 	}
 	currentYearDisclosure, err := waitForElement(
@@ -1189,7 +1196,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find journal recording date edit control: %v", err)
 	}
-	if err := editDate.Click(); err != nil {
+	if err := clickElementInView(driver, editDate); err != nil {
 		t.Fatalf("open journal recording date editor: %v", err)
 	}
 	dateInput, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "input[type='date']")
@@ -1229,7 +1236,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("corrected journal recording date was not editable: %v", err)
 	}
-	if err := saveDate.Click(); err != nil {
+	if err := clickElementInView(driver, saveDate); err != nil {
 		t.Fatalf("save corrected journal recording date: %v", err)
 	}
 	if err := waitForJournalPeriodAudioCount(driver, currentDayStart, 1, 30*time.Second); err != nil {
@@ -1251,7 +1258,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("corrected journal overview could not zoom to years: %v", err)
 	}
-	if err := zoomToYears.Click(); err != nil {
+	if err := clickElementInView(driver, zoomToYears); err != nil {
 		t.Fatalf("zoom corrected journal overview to years: %v", err)
 	}
 	targetYear, err := waitForElement(
@@ -1368,7 +1375,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find corrected journal recording date edit control: %v", err)
 	}
-	if err := correctedEditDate.Click(); err != nil {
+	if err := clickElementInView(driver, correctedEditDate); err != nil {
 		t.Fatalf("open corrected journal recording date editor: %v", err)
 	}
 	correctedInput, err := correctedEntry.FindElement(selenium.ByCSSSelector, "input[type='date']")
@@ -2112,7 +2119,7 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := link.Click(); err != nil {
+		if err := clickElementInView(driver, link); err != nil {
 			t.Fatal(err)
 		}
 		var audio []byte
