@@ -1,6 +1,7 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { animated, useReducedMotion, useSpring } from 'react-spring';
 
 import * as bio from '#root/project/me/zemn/bio/index.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
@@ -62,7 +63,15 @@ function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 	);
 }
 
+const AnimatedRays = animated(Rays);
+
 function NavigationRays({ loading }: { readonly loading: boolean }) {
+	const reducedMotion = useReducedMotion();
+	const { length } = useSpring({
+		length: loading ? 145 : 0,
+		config: { tension: 600, friction: 30, clamp: true },
+		immediate: !!reducedMotion,
+	});
 	return (
 		<span
 			className={`${style.logoLoading} ${loading ? style.active : ''}`}
@@ -76,10 +85,10 @@ function NavigationRays({ loading }: { readonly loading: boolean }) {
 				viewBox="-120 -80 240 160"
 				aria-hidden="true"
 			>
-				<g className={style.raysGrowth}>
-					<Rays
+				<g>
+					<AnimatedRays
 						nRays={80}
-						length={145}
+						length={length}
 						innerSpacePerc={25}
 						innerSpaceVariationPerc={60}
 						randomAmountPerc={30}

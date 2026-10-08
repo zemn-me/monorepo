@@ -35,21 +35,19 @@ function Ray({ stroke, seed = '', ...props }: RayProps) {
 			props.minSegments
 	);
 
-	const { x1, x2, y1, y2 } = props;
-	const length = Math.hypot(x2 - x1, y2 - y1);
-
 	const segmentLengths = [...Array(nSegments)].map((_, n) =>
 		random(`segment length ${n}` + seed)
 	);
 
 	const totalSegmentLengths = segmentLengths.reduce((p, c) => p + c, 0);
 
-	const scaleFactor = length / totalSegmentLengths;
+	const scaleFactor = 1 / totalSegmentLengths;
 
 	return (
 		<line
 			style={{ stroke }}
 			{...lineProps}
+			pathLength={1}
 			strokeDasharray={segmentLengths.map(v => v * scaleFactor).join(' ')}
 		/>
 	);

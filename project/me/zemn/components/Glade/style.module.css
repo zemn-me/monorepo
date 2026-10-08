@@ -297,42 +297,28 @@ html:has(.main) {
 	height: 160px;
 }
 
-.raysGrowth {
-	transform: scale(0);
-	opacity: 0;
-	transition:
-		transform 350ms ease-in-out,
-		opacity 350ms ease-in-out;
-}
-
-.active .raysGrowth {
-	transform: scale(1);
-	opacity: 1;
-}
-
 .compactLetterHead .logo [data-part="frustum"] {
 	fill: var(--background-color);
 }
 
 .active line {
-	animation: rayShimmer 1.6s 350ms ease-in-out infinite alternate;
+	animation: rayFlow 650ms linear infinite;
 }
 
 .logoRays line:nth-child(3n) {
-	animation-duration: 2s;
+	animation-duration: 800ms;
 }
 .logoRays line:nth-child(3n + 1) {
-	animation-duration: 2.4s;
+	animation-duration: 950ms;
 }
 
-@keyframes rayShimmer {
+/* Two normalized path lengths form a complete dash cycle for odd or even arrays. */
+@keyframes rayFlow {
 	from {
 		stroke-dashoffset: 0;
-		opacity: 0.55;
 	}
 	to {
-		stroke-dashoffset: 6;
-		opacity: 1;
+		stroke-dashoffset: -2;
 	}
 }
 
@@ -344,9 +330,6 @@ html:has(.main) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.raysGrowth {
-		transition: none;
-	}
 	.logoRays line {
 		animation: none;
 	}
