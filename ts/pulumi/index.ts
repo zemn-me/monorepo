@@ -6,7 +6,6 @@ import * as Pulumi from '@pulumi/pulumi';
 import * as random from '@pulumi/random';
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
-import * as BoweryBugle from '#root/ts/pulumi/bowerybugle.nyc/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { GitHubActionsSecrets } from '#root/ts/pulumi/github_actions_secrets.js';
 import { NpmPackage } from '#root/ts/pulumi/lib/npm/package.js';
@@ -21,8 +20,6 @@ import * as WaxingIncandescent from '#root/ts/pulumi/waxingincandescent.com/inde
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
-	boweryBugleCustomDomainReady?: boolean;
-	boweryBugleRegistration?: BoweryBugle.Args['registration'];
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
@@ -144,7 +141,6 @@ class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
  * The Pulumi infrastructure.
  */
 export class Component extends Pulumi.ComponentResource {
-	readonly boweryBugle: BoweryBugle.Component;
 	pleaseIntroduceMeToYourDog: PleaseIntroduceMeToYourDog.Component;
 	zemnMe: ZemnMe.Component;
 	shadwellIm: ShadwellIm.Component;
@@ -351,18 +347,6 @@ export class Component extends Pulumi.ComponentResource {
 				zoneId: Pulumi.output(zone.im.shadwell.then(z => z.id)),
 				domain: stage('shadwell.im'),
 				noIndex: args.staging,
-				tags,
-			},
-			{ parent: this }
-		);
-
-		this.boweryBugle = new BoweryBugle.Component(
-			`${name}_bowerybugle`,
-			{
-				staging: args.staging,
-				bootstrapZoneId: Pulumi.output(zone.me.zemn.then(z => z.id)),
-				customDomainReady: args.boweryBugleCustomDomainReady,
-				registration: args.boweryBugleRegistration,
 				tags,
 			},
 			{ parent: this }

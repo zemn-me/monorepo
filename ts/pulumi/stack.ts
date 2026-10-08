@@ -68,16 +68,6 @@ function exportOpenAIWorkloadIdentityOutputs(component: monorepo.Component) {
 	};
 }
 
-// CI creates temporary Automation API workspaces. Keep non-secret launch
-// settings in source so subsequent deploys cannot lose the registration config.
-const boweryBugleProduction: Pick<
-	monorepo.Args,
-	'boweryBugleRegistration' | 'boweryBugleCustomDomainReady'
-> = {
-	boweryBugleRegistration: { contactId: 69498 },
-	boweryBugleCustomDomainReady: true,
-};
-
 export async function production(): Promise<Stack> {
 	return provisionStack(
 		LocalWorkspace.createOrSelectStack({
@@ -87,18 +77,10 @@ export async function production(): Promise<Stack> {
 				const openAI = openAIWorkloadIdentityConfig('production');
 				const component = new monorepo.Component(baseComponentName, {
 					staging: false,
-					...boweryBugleProduction,
 					openAIIdentityProviderId: openAI.identityProviderId,
 					openAIServiceAccountId: openAI.serviceAccountId,
 				});
-				return {
-					...exportOpenAIWorkloadIdentityOutputs(component),
-					boweryBugleUrl: `https://${component.boweryBugle.domain}`,
-					boweryBugleNameServers:
-						component.boweryBugle.zone?.nameServers,
-					boweryBugleRegistrationId:
-						component.boweryBugle.registrar?.registration?.id,
-				};
+				return exportOpenAIWorkloadIdentityOutputs(component);
 			},
 		})
 	);

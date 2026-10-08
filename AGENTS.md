@@ -18,6 +18,10 @@ not need separate approval. Once those checks pass, report the result and
 any remaining blockers; broaden testing when the change or a failure calls
 for it. Publishing, merging, and deploying follow the user's requested scope.
 
+When monitoring CI or a merge queue to ensure a PR merges, check every five
+to ten minutes rather than polling constantly. Use scheduled follow-ups or
+automation when the agent supports them.
+
 When staging fails because a component is misconfigured (for example, an invalid
 AWS resource name or deployment archive), fix the configuration and follow up
 with a separate PR adding a regression test to the normal presubmit checks.

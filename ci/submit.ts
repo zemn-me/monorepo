@@ -1,7 +1,8 @@
 /* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { Command, Summarize } from '#root/ts/github/actions/index.js';
-import * as Stack from '#root/ts/pulumi/stack.js';
+import { prepareBoweryBugleRemoval } from '#root/ts/pulumi/retire_bowery_bugle.js';
 import { prepareLuluRetirement } from '#root/ts/pulumi/retire_lulu.js';
+import * as Stack from '#root/ts/pulumi/stack.js';
 
 async function main() {
 	const stack = await Stack.production();
@@ -26,6 +27,7 @@ async function main() {
 	}
 
 	await prepareLuluRetirement(stack);
+	await prepareBoweryBugleRemoval(stack);
 	const result2 = await stack.up({
 		logToStdErr: true,
 		onOutput: o => console.info(o),

@@ -18,6 +18,7 @@ jest_test(
     srcs = [
         "lambda_archives_test.js",
         "pulumi_test.js",
+        "retire_bowery_bugle_test.js",
         "retire_lulu_test.js",
     ],
     data = [
@@ -35,6 +36,7 @@ filegroup(
         "lambda_archives.ts",
         "lambda_archives_test.ts",
         "pulumi_test.ts",
+        "retire_bowery_bugle_test.ts",
         "retire_lulu_test.ts",
     ],
     visibility = ["//:__subpackages__"],
@@ -50,6 +52,7 @@ ts_project(
     srcs = [
         "lambda_archives_test.ts",
         "pulumi_test.ts",
+        "retire_bowery_bugle_test.ts",
         "retire_lulu_test.ts",
     ],
     visibility = ["//:__subpackages__"],

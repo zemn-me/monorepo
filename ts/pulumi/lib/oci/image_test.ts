@@ -80,26 +80,37 @@ test('the provider can run an OCI push from the program runfiles', async () => {
 			] as string[];
 			// The provider process does not inherit environment changes made by
 			// the Node program's Bazel launcher; only explicit inputs cross RPC.
-			const result = spawnSync(executable!, args, {
-				env: {
-					PATH: process.env.PATH,
-					TEST_PUSH: path.resolve(process.env['TEST_PUSH']!),
-					...(command.inputs['environment'] as Record<
-						string,
-						string
-					>),
-				},
-				encoding: 'utf8',
-			});
-			expect({ status: result.status, stderr: result.stderr }).toEqual({
-				status: 0,
-				stderr: expect.stringContaining('Usage:'),
-			});
-			expect(result.stderr).toContain('Usage:');
-			expect(result.stderr).not.toContain('cannot find');
-			expect(result.stdout.trim()).toBe(
-				`example.invalid/not-uploaded@sha256:${'0'.repeat(64)}`
-			);
+			for (const lifecycle of ['create', 'update']) {
+				const body = command.inputs[lifecycle];
+				expect(typeof body).toBe('string');
+				const result = spawnSync(
+					executable!,
+					[...args, body as string],
+					{
+						env: {
+							PATH: process.env.PATH,
+							TEST_PUSH: path.resolve(process.env['TEST_PUSH']!),
+							...(command.inputs['environment'] as Record<
+								string,
+								string
+							>),
+						},
+						encoding: 'utf8',
+					}
+				);
+				expect({
+					status: result.status,
+					stderr: result.stderr,
+				}).toEqual({
+					status: 0,
+					stderr: expect.stringContaining('Usage:'),
+				});
+				expect(result.stderr).toContain('Usage:');
+				expect(result.stderr).not.toContain('cannot find');
+				expect(result.stdout.trim()).toBe(
+					`example.invalid/not-uploaded@sha256:${'0'.repeat(64)}`
+				);
+			}
 		}
 		const failure = commands.find(
 			item => item.name === 'failed_test_push'
