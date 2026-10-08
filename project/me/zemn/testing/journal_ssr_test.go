@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -34,7 +35,17 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		direct(req)
 		req.Host = upstream.Host
 	}
-	transport := httptest.NewTLSServer(proxy)
+	var delayNavigation atomic.Bool
+	transport := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if delayNavigation.Load() && strings.HasSuffix(req.URL.Path, ".data") {
+			select {
+			case <-time.After(2 * time.Second):
+			case <-req.Context().Done():
+				return
+			}
+		}
+		proxy.ServeHTTP(w, req)
+	}))
 	defer transport.Close()
 	publicOrigin = transport.URL
 	publicURL, err := url.Parse(publicOrigin)
@@ -114,6 +125,13 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			t.Fatal(err)
 		}
 		wiki, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		delayNavigation.Store(true)
+		assertSharedNavigation(t, driver, publicOrigin, width)
+		delayNavigation.Store(false)
+		wiki, err = driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
 		if err != nil {
 			t.Fatal(err)
 		}

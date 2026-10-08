@@ -1,3 +1,16 @@
+/* Keep anchor navigation and scrollIntoView targets below the sticky bar. */
+html:has(.main) {
+	--glade-control-size: max(44px, 2.75rem);
+	--glade-bar-padding-start: max(0.5rem, env(safe-area-inset-top));
+	--glade-bar-block-size: calc(
+		var(--glade-control-size) +
+		var(--glade-bar-padding-start) +
+		0.5rem +
+		1px
+	);
+	scroll-padding-block-start: var(--glade-bar-block-size);
+}
+
 .main {
 	display: grid;
 }
@@ -158,4 +171,183 @@
 
 .links > * {
 	margin: auto;
+}
+
+.navigationStatus {
+	font-size: 0.875rem;
+	line-height: 1.25;
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	padding: 0.6em 1em;
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	background: var(--background-color);
+	color: var(--foreground-color);
+	pointer-events: none;
+}
+
+.navigationStatus::before {
+	content: "";
+	width: 1em;
+	height: 1em;
+	border: 2px solid currentColor;
+	border-inline-end-color: transparent;
+	border-radius: 50%;
+	animation: navigationSpin 1s linear infinite;
+}
+
+@keyframes navigationSpin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.navigationStatus::before {
+		animation: none;
+	}
+}
+
+.main.compact {
+	grid: "topbar" auto "content" auto "footer" auto / minmax(0, 1fr);
+}
+
+.compact .headerBgv {
+	display: none;
+}
+
+.topbar {
+	grid-area: topbar;
+	width: 100%;
+	position: sticky;
+	top: 0;
+	height: auto;
+	box-sizing: border-box;
+	z-index: 30;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	padding: var(--glade-bar-padding-start) 0.75rem 0.5rem;
+	background: var(--background-color);
+	color: var(--foreground-color);
+	border-bottom: 1px solid
+		color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	pointer-events: auto;
+	break-after: auto;
+	page-break-after: auto;
+}
+
+.homeTopbar {
+	grid-area: banner;
+	align-self: start;
+}
+
+.compact .content {
+	padding-top: 1.5rem;
+}
+
+.compactLetterHead {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 88px;
+	min-height: var(--glade-control-size);
+	color: inherit;
+}
+
+.compactLetterHead .logo {
+	position: relative;
+	z-index: 1;
+	width: 64px;
+	height: 42.667px;
+}
+
+.backSlot {
+	display: grid;
+	justify-self: start;
+	width: var(--glade-control-size);
+}
+
+.backButton {
+	width: var(--glade-control-size);
+	height: var(--glade-control-size);
+	border: none;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+/* Clip the rays at the bar, independently of the menu popover. */
+.logoLoading {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.logoRays {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 240px;
+	height: 160px;
+}
+
+.raysGrowth {
+	transform: scale(0);
+	opacity: 0;
+	transition:
+		transform 350ms ease-in-out,
+		opacity 350ms ease-in-out;
+}
+
+.active .raysGrowth {
+	transform: scale(1);
+	opacity: 1;
+}
+
+.compactLetterHead .logo [data-part="frustum"] {
+	fill: var(--background-color);
+}
+
+.active line {
+	animation: rayShimmer 1.6s 350ms ease-in-out infinite alternate;
+}
+
+.logoRays line:nth-child(3n) {
+	animation-duration: 2s;
+}
+.logoRays line:nth-child(3n + 1) {
+	animation-duration: 2.4s;
+}
+
+@keyframes rayShimmer {
+	from {
+		stroke-dashoffset: 0;
+		opacity: 0.55;
+	}
+	to {
+		stroke-dashoffset: 6;
+		opacity: 1;
+	}
+}
+
+.backButton:focus-visible,
+.compactLetterHead:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+	border-radius: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.raysGrowth {
+		transition: none;
+	}
+	.logoRays line {
+		animation: none;
+	}
 }

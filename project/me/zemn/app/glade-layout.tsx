@@ -1,11 +1,12 @@
-import { Outlet } from 'react-router';
+import { Outlet, useNavigation } from 'react-router';
 
 import Glade from '#root/project/me/zemn/components/Glade/glade.js';
 import { ErrorBoundary as RouteError } from '#root/ts/remix/error.js';
 
 export default function GladeLayout() {
+	const navigation = useNavigation();
 	return (
-		<Glade>
+		<Glade navigationPending={navigation.state !== 'idle'}>
 			<Outlet />
 		</Glade>
 	);

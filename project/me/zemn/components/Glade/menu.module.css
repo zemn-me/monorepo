@@ -1,7 +1,7 @@
 .hamburgerNav {
-	position: absolute;
-	top: 1.5rem;
-	right: 1.5rem;
+	display: grid;
+	position: relative;
+	justify-self: end;
 	pointer-events: all;
 	z-index: 4;
 }
@@ -15,18 +15,22 @@
 	list-style: none;
 	display: grid;
 	place-items: center;
-	width: 2.5rem;
-	height: 2.5rem;
-	border-radius: 999px;
-	border: 1px solid
-		color-mix(in srgb, var(--foreground-color) 40%, transparent);
-	background: var(--background-color);
+	width: var(--glade-control-size, 44px);
+	height: var(--glade-control-size, 44px);
+	border: none;
+	background: transparent;
 	color: var(--foreground-color);
 	cursor: pointer;
 	position: relative;
 	user-select: none;
 	-webkit-user-select: none;
 	-webkit-tap-highlight-color: transparent;
+}
+
+.hamburgerButton:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+	border-radius: 0.25rem;
 }
 
 .hamburgerIconClosed,

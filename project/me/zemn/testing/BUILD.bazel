@@ -81,6 +81,7 @@ go_test(
         "journal_test.go",
         "journal_wiki_test.go",
         "key_test.go",
+        "navigation_helpers_test.go",
     ],
     tags = ["manual"],  # keep; needs integration testing harness.
     deps = [
