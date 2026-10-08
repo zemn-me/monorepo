@@ -72,7 +72,7 @@ export function GladeMenu({
 			<details className={style.hamburgerDetails} ref={detailsRef}>
 				<summary
 					aria-label="Open navigation menu"
-					className={`${style.hamburgerButton} ${pathname === '/' ? style.bubble : ''}`}
+					className={style.hamburgerButton}
 				>
 					<span className={style.hamburgerIconClosed}>
 						<FontAwesomeIcon icon={faBars} />
