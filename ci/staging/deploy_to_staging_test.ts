@@ -30,7 +30,10 @@ test('staging refreshes before deploying by default', async () => {
 
 	expect(stack.refresh).toHaveBeenCalledTimes(1);
 	expect(stack.up).toHaveBeenCalledTimes(1);
-	expect(stack.exportStack).toHaveBeenCalledTimes(1);
+	expect(stack.exportStack).toHaveBeenCalledTimes(2);
+	expect(stack.exportStack.mock.invocationCallOrder[1]).toBeLessThan(
+		stack.up.mock.invocationCallOrder[0]!
+	);
 	expect(stack.importStack).not.toHaveBeenCalled();
 	expect(stack.refresh.mock.invocationCallOrder[0]).toBeLessThan(
 		stack.up.mock.invocationCallOrder[0]!
@@ -46,7 +49,10 @@ test('candidate deployment reuses state without refreshing', async () => {
 
 	expect(stack.refresh).not.toHaveBeenCalled();
 	expect(stack.up).toHaveBeenCalledTimes(1);
-	expect(stack.exportStack).toHaveBeenCalledTimes(1);
+	expect(stack.exportStack).toHaveBeenCalledTimes(2);
+	expect(stack.exportStack.mock.invocationCallOrder[1]).toBeLessThan(
+		stack.up.mock.invocationCallOrder[0]!
+	);
 	expect(stack.importStack).not.toHaveBeenCalled();
 	expect(stack.outputs).toHaveBeenCalledTimes(1);
 	expect(stack.destroy).not.toHaveBeenCalled();
