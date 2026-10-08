@@ -201,3 +201,32 @@ it('switches into and out of the anniversary while the page stays open', () => {
 	act(() => jest.advanceTimersByTime(60_000));
 	expect(footerLogoTitle()).toBe(null);
 });
+
+function loadingStatus() {
+	return container.querySelector(
+		'[role="status"][aria-label="Loading page"]'
+	);
+}
+
+it('shows navigation feedback after 500 ms and hides it when navigation finishes', () => {
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(499));
+	expect(loadingStatus()).toBeNull();
+	act(() => jest.advanceTimersByTime(1));
+	expect(loadingStatus()).not.toBeNull();
+	act(() => root.render(<Glade navigationPending={false} />));
+	expect(loadingStatus()).toBeNull();
+});
+
+it('cancels feedback for quick navigation and gives the next navigation its own delay', () => {
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(300));
+	act(() => root.render(<Glade navigationPending={false} />));
+	act(() => jest.advanceTimersByTime(500));
+	expect(loadingStatus()).toBeNull();
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(499));
+	expect(loadingStatus()).toBeNull();
+	act(() => jest.advanceTimersByTime(1));
+	expect(loadingStatus()).not.toBeNull();
+});

@@ -63,10 +63,21 @@ export interface GladeProps {
 export default function Glade(props: GladeProps) {
 	const pathname = useLocation().pathname;
 	const isHomepage = pathname == '/';
+	const [showNavigationStatus, setShowNavigationStatus] = useState(false);
+	useEffect(() => {
+		setShowNavigationStatus(false);
+		if (!props.navigationPending) return;
+		// Avoid flashing feedback for navigations that complete quickly.
+		const timer = window.setTimeout(
+			() => setShowNavigationStatus(true),
+			500
+		);
+		return () => window.clearTimeout(timer);
+	}, [props.navigationPending]);
 
 	return (
 		<main className={style.main} data-glade-layout>
-			{props.navigationPending && (
+			{props.navigationPending && showNavigationStatus && (
 				<div
 					className={style.navigationStatus}
 					role="status"
