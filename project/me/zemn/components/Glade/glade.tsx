@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import * as bio from '#root/project/me/zemn/bio/index.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
@@ -40,17 +40,23 @@ function FooterEmblem() {
 /**
  * LetterHead is the inner part of the heading with the name and logo.
  */
-function LetterHead() {
+function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 	return (
 		<Link
 			aria-label="Go to homepage"
-			className={style.letterHead}
+			className={compact ? style.compactLetterHead : style.letterHead}
 			href="/"
 			styleless
 		>
-			<div className={style.handle}>{lang.text(bio.Bio.who.handle)}</div>
+			{!compact && (
+				<div className={style.handle}>
+					{lang.text(bio.Bio.who.handle)}
+				</div>
+			)}
 			<TimeEye className={style.logo} />
-			<div className={style.fullName}>Thomas NJ Shadwell</div>
+			{!compact && (
+				<div className={style.fullName}>Thomas NJ Shadwell</div>
+			)}
 		</Link>
 	);
 }
@@ -63,6 +69,16 @@ export interface GladeProps {
 export default function Glade(props: GladeProps) {
 	const pathname = useLocation().pathname;
 	const isHomepage = pathname == '/';
+	const navigate = useNavigate();
+	const [canGoBack, setCanGoBack] = useState(false);
+	useEffect(() => {
+		const navigation = window.navigation;
+		const update = () => setCanGoBack(navigation?.canGoBack ?? false);
+		update();
+		navigation?.addEventListener('currententrychange', update);
+		return () =>
+			navigation?.removeEventListener('currententrychange', update);
+	}, []);
 	const [showNavigationStatus, setShowNavigationStatus] = useState(false);
 	useEffect(() => {
 		setShowNavigationStatus(false);
@@ -75,9 +91,13 @@ export default function Glade(props: GladeProps) {
 		return () => window.clearTimeout(timer);
 	}, [props.navigationPending]);
 
+	const loading = props.navigationPending && showNavigationStatus;
 	return (
-		<main className={style.main} data-glade-layout>
-			{props.navigationPending && showNavigationStatus && (
+		<main
+			className={`${style.main} ${isHomepage ? '' : style.compact}`}
+			data-glade-layout
+		>
+			{isHomepage && loading && (
 				<div
 					className={style.navigationStatus}
 					role="status"
@@ -91,8 +111,37 @@ export default function Glade(props: GladeProps) {
 			</section>
 			<HeroVideo className={style.headerBgv} data-glade-banner />
 			<header className={style.banner} data-glade-banner>
-				<LetterHead />
-				<GladeMenu />
+				{!isHomepage && (
+					<div className={style.backSlot}>
+						{canGoBack && (
+							<button
+								type="button"
+								className={style.backButton}
+								aria-label="Go back"
+								title="Go back"
+								onClick={() => void navigate(-1)}
+							>
+								<span aria-hidden="true">←</span>
+							</button>
+						)}
+					</div>
+				)}
+				<LetterHead compact={!isHomepage} />
+				<div className={isHomepage ? undefined : style.topbarActions}>
+					<GladeMenu compact={!isHomepage} />
+					{!isHomepage && (
+						<span className={style.loadingSlot}>
+							{loading && (
+								<span
+									className={style.topbarLoading}
+									role="status"
+									aria-label="Loading page"
+									title="Loading page"
+								/>
+							)}
+						</span>
+					)}
+				</div>
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>

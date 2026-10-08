@@ -51,19 +51,17 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		t.Fatal(err)
 	}
 	var originalVideo selenium.WebElement
-	assertWikiScroll := func() {
+	assertWikiNavigation := func() {
 		t.Helper()
 		preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{originalVideo})
 		if err != nil || preserved != true {
 			t.Fatalf("wiki navigation replaced the page: %v %v", preserved, err)
 		}
-		// The portrait layout has a full-height banner above the journal.
-		// Navigation must not reset to the top, even if shorter content
-		// causes the browser to clamp the previous scroll position.
-		scrolled, err := driver.ExecuteScript(`return window.scrollY > 0;`, nil)
-		if err != nil || scrolled != true {
-			t.Fatalf("wiki navigation reset the scroll position: %v %v", scrolled, err)
+		visible, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect(); return bar.top >= 0 && bar.bottom <= window.innerHeight && bar.height < 100;`, nil)
+		if err != nil || visible != true {
+			t.Fatalf("wiki navigation hid the compact navigation bar: %v %v", visible, err)
 		}
+
 	}
 	root.Path = "/journal"
 	if err := driver.Get(root.String()); err != nil {
@@ -76,18 +74,14 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wiki, err := waitForElement(driver, selenium.ByLinkText, "Wiki", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := wiki.Click(); err != nil {
+	if err := clickElementWithRetry(driver, selenium.ByLinkText, "Wiki", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	search, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertWikiScroll()
+	assertWikiNavigation()
 	if err := search.SendKeys("Maya"); err != nil {
 		t.Fatal(err)
 	}
@@ -108,7 +102,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if _, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	assertWikiScroll()
+	assertWikiNavigation()
 	for _, step := range []struct {
 		link, destination string
 	}{
@@ -126,7 +120,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		if _, err := waitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
-		assertWikiScroll()
+		assertWikiNavigation()
 	}
 	for _, width := range []int{1280, 390} {
 		if err := driver.ResizeWindow("", width, 900); err != nil {

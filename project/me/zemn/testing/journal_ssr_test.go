@@ -128,6 +128,10 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		compact, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect(); const heading = document.querySelector('h1').getBoundingClientRect(); return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.bottom < window.innerHeight && getComputedStyle(document.querySelector('figure')).display === 'none';`, nil)
+		if err != nil || compact != true {
+			t.Fatalf("non-homepage content starts behind the hero at width %d: %v %v", width, compact, err)
+		}
 		video, err := driver.FindElement(selenium.ByCSSSelector, "figure video")
 		if err != nil {
 			t.Fatal(err)
@@ -192,6 +196,10 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			}
 		}
 		for _, path := range []string{"/article", "/experiments", "/", "/article", "/journal"} {
+			previousURL, err := driver.CurrentURL()
+			if err != nil {
+				t.Fatal(err)
+			}
 			menu, err := driver.FindElement(selenium.ByCSSSelector, "summary[aria-label='Open navigation menu']")
 			if err != nil {
 				t.Fatal(err)
@@ -222,6 +230,21 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{video})
 			if err != nil || preserved != true {
 				t.Fatalf("menu navigation to %s replaced the page: %v %v", path, preserved, err)
+			}
+			if path == "/article" {
+				back, err := waitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Go back']", 10*time.Second)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := back.Click(); err != nil {
+					t.Fatal(err)
+				}
+				if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+					current, err := d.CurrentURL()
+					return current == previousURL, err
+				}, 30*time.Second); err != nil {
+					t.Fatal("top bar did not go back", err)
+				}
 			}
 		}
 		wikiLink, err := driver.FindElement(selenium.ByLinkText, "Wiki")

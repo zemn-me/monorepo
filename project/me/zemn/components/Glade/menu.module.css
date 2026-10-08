@@ -119,3 +119,14 @@
 		color-mix(in srgb, var(--foreground-color) 20%, transparent);
 	font-size: 0.9rem;
 }
+
+.compact {
+	position: relative;
+	top: auto;
+	right: auto;
+}
+
+.compact .hamburgerButton {
+	width: 44px;
+	height: 44px;
+}

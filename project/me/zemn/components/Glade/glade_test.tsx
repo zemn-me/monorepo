@@ -16,6 +16,7 @@ let pathname = '/article/example';
 
 jest.unstable_mockModule('react-router', () => ({
 	useLocation: () => ({ pathname: pathname }),
+	useNavigate: () => jest.fn(),
 }));
 
 jest.unstable_mockModule(

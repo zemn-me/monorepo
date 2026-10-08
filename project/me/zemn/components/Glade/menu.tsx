@@ -10,7 +10,11 @@ import { useGetMeScopes } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import { navSections } from '#root/project/me/zemn/navigation/navigation.js';
 
-export function GladeMenu() {
+export function GladeMenu({
+	compact = false,
+}: {
+	readonly compact?: boolean;
+} = {}) {
 	const pathname = useLocation().pathname;
 	const detailsRef = useRef<HTMLDetailsElement | null>(null);
 	const [fut_idToken] = useZemnMeAuth();
@@ -61,7 +65,10 @@ export function GladeMenu() {
 		.filter(section => section.links.length > 0);
 
 	return (
-		<nav aria-label="Site navigation" className={style.hamburgerNav}>
+		<nav
+			aria-label="Site navigation"
+			className={`${style.hamburgerNav} ${compact ? style.compact : ''}`}
+		>
 			<details className={style.hamburgerDetails} ref={detailsRef}>
 				<summary
 					aria-label="Open navigation menu"
