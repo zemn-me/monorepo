@@ -288,7 +288,6 @@ func analyticsBeaconLocalhostOrigin(u *url.URL) bool {
 func analyticsBeaconHostAllowed(host string) bool {
 	for _, domain := range []string{
 		"zemn.me",
-		"lulu.computer",
 		"baby.computer",
 		"pleaseintroducemetoyour.dog",
 		"eggsfordogs.com",

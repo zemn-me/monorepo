@@ -19,6 +19,7 @@ jest_test(
         "lambda_archives_test.js",
         "pulumi_test.js",
         "retire_bowery_bugle_test.js",
+        "retire_lulu_test.js",
     ],
     data = [
         "//ts/do-sync:npm_package",
@@ -36,6 +37,7 @@ filegroup(
         "lambda_archives_test.ts",
         "pulumi_test.ts",
         "retire_bowery_bugle_test.ts",
+        "retire_lulu_test.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -51,6 +53,7 @@ ts_project(
         "lambda_archives_test.ts",
         "pulumi_test.ts",
         "retire_bowery_bugle_test.ts",
+        "retire_lulu_test.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [

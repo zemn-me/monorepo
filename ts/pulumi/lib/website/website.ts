@@ -134,6 +134,8 @@ function noRobotsResponseHeadersPolicy() {
 function robotsResponseHeadersPolicy() {
 	if (typeof robotsResponseHeadersPolicyCache == 'undefined') {
 		robotsResponseHeadersPolicyCache = responseHeadersPolicy(
+			// Keep this legacy identity: other sites share the policy and CloudFront
+			// limits prevent creating a replacement during Lulu's retirement.
 			'monorepo_lulu_lulu-computer_response_headers',
 			false
 		);
