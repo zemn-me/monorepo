@@ -41,13 +41,7 @@ function FooterEmblem() {
 /**
  * LetterHead is the inner part of the heading with the name and logo.
  */
-function LetterHead({
-	compact = false,
-	loading = false,
-}: {
-	readonly compact?: boolean;
-	readonly loading?: boolean;
-}) {
+function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 	return (
 		<Link
 			aria-label="Go to homepage"
@@ -59,31 +53,6 @@ function LetterHead({
 				<div className={style.handle}>
 					{lang.text(bio.Bio.who.handle)}
 				</div>
-			)}
-			{compact && loading && (
-				<span
-					className={style.logoLoading}
-					role="status"
-					aria-label="Loading page"
-					title="Loading page"
-				>
-					<svg
-						className={style.logoRays}
-						viewBox="-44 -24 88 48"
-						aria-hidden="true"
-					>
-						<Rays
-							nRays={60}
-							length={64}
-							innerSpacePerc={38}
-							randomAmountPerc={12}
-							maxSegments={8}
-							minSegements={2}
-							strokeWidth={0.65}
-							transform="scale(1 0.5)"
-						/>
-					</svg>
-				</span>
 			)}
 			<TimeEye className={style.logo} />
 			{!compact && (
@@ -158,10 +127,35 @@ export default function Glade(props: GladeProps) {
 						)}
 					</div>
 				)}
-				<LetterHead compact={!isHomepage} loading={loading} />
+				<LetterHead compact={!isHomepage} />
 				<div className={isHomepage ? undefined : style.topbarActions}>
 					<GladeMenu compact={!isHomepage} />
 				</div>
+				{!isHomepage && loading && (
+					<span
+						className={style.logoLoading}
+						role="status"
+						aria-label="Loading page"
+						title="Loading page"
+					>
+						<svg
+							className={style.logoRays}
+							viewBox="-120 -80 240 160"
+							aria-hidden="true"
+						>
+							<Rays
+								nRays={80}
+								length={145}
+								innerSpacePerc={25}
+								randomAmountPerc={12}
+								maxSegments={8}
+								minSegements={2}
+								strokeWidth={0.65}
+								transform="scale(1 0.6)"
+							/>
+						</svg>
+					</span>
+				)}
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>

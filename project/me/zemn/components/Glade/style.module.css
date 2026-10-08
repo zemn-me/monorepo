@@ -240,8 +240,10 @@
 }
 
 .compactLetterHead .logo {
-	width: 48px;
-	height: 32px;
+	position: relative;
+	z-index: 1;
+	width: 64px;
+	height: 42.667px;
 }
 
 .backSlot {
@@ -267,17 +269,21 @@
 	gap: 0.5rem;
 }
 
-/* The logo stays still while its engraving-style halo signals activity. */
+/* Clip the rays at the bar, independently of the menu popover. */
 .logoLoading {
 	position: absolute;
 	inset: 0;
+	overflow: hidden;
 	pointer-events: none;
 }
 
 .logoRays {
-	width: 100%;
-	height: 100%;
-	overflow: visible;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 240px;
+	height: 160px;
 }
 
 .logoRays line {

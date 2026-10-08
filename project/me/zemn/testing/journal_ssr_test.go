@@ -151,7 +151,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='status'][aria-label='Loading page']", 5*time.Second); err != nil {
 				t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination.label, width, err)
 			}
-			logoFeedback, err := driver.ExecuteScript(`const logo = document.querySelector('header a[aria-label="Go to homepage"]'); const status = logo?.querySelector('[role="status"][aria-label="Loading page"]'); const rays = status?.querySelectorAll('svg line'); const rect = status?.getBoundingClientRect(); return rays?.length > 0 && rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= document.querySelector('header[data-glade-banner]').getBoundingClientRect().bottom;`, nil)
+			logoFeedback, err := driver.ExecuteScript(`const header = document.querySelector('header[data-glade-banner]'); const status = header?.querySelector('[role="status"][aria-label="Loading page"]'); const rays = status?.querySelectorAll('svg line'); const rect = status?.getBoundingClientRect(); return rays?.length > 0 && rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= header.getBoundingClientRect().bottom && getComputedStyle(status).overflow === 'hidden' && status.querySelector('svg').getBoundingClientRect().height > header.getBoundingClientRect().height && header.querySelector('a[aria-label="Go to homepage"] > svg').getBoundingClientRect().width >= 64;`, nil)
 			if err != nil || logoFeedback != true {
 				t.Fatalf("loading rays are not visible around the logo at width %d: %v %v", width, logoFeedback, err)
 			}
