@@ -11,6 +11,7 @@ import { HeroVideo } from '#root/project/me/zemn/components/HeroVideo/hero_video
 import { InlineLogin } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { TimeEye } from '#root/project/me/zemn/components/TimeEye/index.js';
+import { Rays } from '#root/project/me/zemn/components/TimeEye/rays.js';
 import ZemnmezLogo from '#root/project/me/zemn/components/ZemnmezLogo/ZemnmezLogo.js';
 import { repoFirstCommitYear } from '#root/ts/constants/constants.js';
 import * as lang from '#root/ts/react/lang/index.js';
@@ -40,7 +41,13 @@ function FooterEmblem() {
 /**
  * LetterHead is the inner part of the heading with the name and logo.
  */
-function LetterHead({ compact = false }: { readonly compact?: boolean }) {
+function LetterHead({
+	compact = false,
+	loading = false,
+}: {
+	readonly compact?: boolean;
+	readonly loading?: boolean;
+}) {
 	return (
 		<Link
 			aria-label="Go to homepage"
@@ -52,6 +59,31 @@ function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 				<div className={style.handle}>
 					{lang.text(bio.Bio.who.handle)}
 				</div>
+			)}
+			{compact && loading && (
+				<span
+					className={style.logoLoading}
+					role="status"
+					aria-label="Loading page"
+					title="Loading page"
+				>
+					<svg
+						className={style.logoRays}
+						viewBox="-44 -24 88 48"
+						aria-hidden="true"
+					>
+						<Rays
+							nRays={60}
+							length={64}
+							innerSpacePerc={38}
+							randomAmountPerc={12}
+							maxSegments={8}
+							minSegements={2}
+							strokeWidth={0.65}
+							transform="scale(1 0.5)"
+						/>
+					</svg>
+				</span>
 			)}
 			<TimeEye className={style.logo} />
 			{!compact && (
@@ -126,21 +158,9 @@ export default function Glade(props: GladeProps) {
 						)}
 					</div>
 				)}
-				<LetterHead compact={!isHomepage} />
+				<LetterHead compact={!isHomepage} loading={loading} />
 				<div className={isHomepage ? undefined : style.topbarActions}>
 					<GladeMenu compact={!isHomepage} />
-					{!isHomepage && (
-						<span className={style.loadingSlot}>
-							{loading && (
-								<span
-									className={style.topbarLoading}
-									role="status"
-									aria-label="Loading page"
-									title="Loading page"
-								/>
-							)}
-						</span>
-					)}
 				</div>
 			</header>
 			<section className={style.footer} data-glade-footer>
