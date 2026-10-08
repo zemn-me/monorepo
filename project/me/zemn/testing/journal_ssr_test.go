@@ -1,6 +1,7 @@
 package selenium_test
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -246,6 +247,21 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{video})
 			if err != nil || preserved != true {
 				t.Fatalf("menu navigation to %s replaced the page: %v %v", path, preserved, err)
+			}
+			if path == "/" {
+				homeLayout, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]'); const rect = bar.getBoundingClientRect(); const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]'); const menu = bar.querySelector('summary').getBoundingClientRect(); return rect.top === 0 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
+				if err != nil || homeLayout != true {
+					t.Fatalf("homepage does not keep its card and shared top bar at width %d: %v %v", width, homeLayout, err)
+				}
+				if output := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); output != "" {
+					shot, err := driver.Screenshot()
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err := os.WriteFile(filepath.Join(output, fmt.Sprintf("homepage-topbar-%d.png", width)), shot, 0o600); err != nil {
+						t.Fatal(err)
+					}
+				}
 			}
 			if path == "/article" {
 				back, err := waitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Go back']", 10*time.Second)

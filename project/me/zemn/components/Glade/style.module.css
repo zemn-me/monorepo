@@ -165,7 +165,7 @@
 	inset-block-start: max(1rem, env(safe-area-inset-top));
 	inset-inline-start: 50%;
 	transform: translateX(-50%);
-	z-index: 20;
+	z-index: 40;
 	display: flex;
 	align-items: center;
 	gap: 0.6em;
@@ -200,14 +200,16 @@
 }
 
 .main.compact {
-	grid: "banner" auto "content" auto "footer" auto / minmax(0, 1fr);
+	grid: "topbar" auto "content" auto "footer" auto / minmax(0, 1fr);
 }
 
 .compact .headerBgv {
 	display: none;
 }
 
-.compact .banner {
+.topbar {
+	grid-area: topbar;
+	width: 100%;
 	position: sticky;
 	top: 0;
 	height: auto;
@@ -224,6 +226,11 @@
 	pointer-events: auto;
 	break-after: auto;
 	page-break-after: auto;
+}
+
+.homeTopbar {
+	position: fixed;
+	inset-inline: 0;
 }
 
 .compact .content {

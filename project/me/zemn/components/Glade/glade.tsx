@@ -111,25 +111,31 @@ export default function Glade(props: GladeProps) {
 				{props.children}
 			</section>
 			<HeroVideo className={style.headerBgv} data-glade-banner />
-			<header className={style.banner} data-glade-banner>
-				{!isHomepage && (
-					<div className={style.backSlot}>
-						{canGoBack && (
-							<button
-								type="button"
-								className={style.backButton}
-								aria-label="Go back"
-								title="Go back"
-								onClick={() => void navigate(-1)}
-							>
-								<span aria-hidden="true">←</span>
-							</button>
-						)}
-					</div>
-				)}
-				<LetterHead compact={!isHomepage} />
-				<div className={isHomepage ? undefined : style.topbarActions}>
-					<GladeMenu compact={!isHomepage} />
+			{isHomepage && (
+				<div className={style.banner} data-glade-banner>
+					<LetterHead />
+				</div>
+			)}
+			<header
+				className={`${style.topbar} ${isHomepage ? style.homeTopbar : ''}`}
+				data-glade-banner
+			>
+				<div className={style.backSlot}>
+					{canGoBack && (
+						<button
+							type="button"
+							className={style.backButton}
+							aria-label="Go back"
+							title="Go back"
+							onClick={() => void navigate(-1)}
+						>
+							<span aria-hidden="true">←</span>
+						</button>
+					)}
+				</div>
+				{isHomepage ? <span /> : <LetterHead compact />}
+				<div className={style.topbarActions}>
+					<GladeMenu compact />
 				</div>
 				{!isHomepage && (
 					<span
