@@ -286,15 +286,32 @@
 	height: 160px;
 }
 
-.logoRays line {
-	animation: rayShimmer 1.6s ease-in-out infinite alternate;
+.raysGrowth {
+	transform: scale(0);
+	opacity: 0;
+	transition:
+		transform 350ms ease-in-out,
+		opacity 350ms ease-in-out;
 }
 
-.logoRays line:nth-child(3n) {
-	animation-delay: -0.5s;
+.logoLoading[role="status"] .raysGrowth {
+	transform: scale(1);
+	opacity: 1;
 }
-.logoRays line:nth-child(3n + 1) {
-	animation-delay: -1s;
+
+.compactLetterHead .logo [data-part="frustum"] {
+	fill: var(--background-color);
+}
+
+.logoLoading[role="status"] line {
+	animation: rayShimmer 1.6s 350ms ease-in-out infinite alternate;
+}
+
+.logoLoading[role="status"] line:nth-child(3n) {
+	animation-duration: 2s;
+}
+.logoLoading[role="status"] line:nth-child(3n + 1) {
+	animation-duration: 2.4s;
 }
 
 @keyframes rayShimmer {
@@ -316,7 +333,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.logoRays line {
+	.raysGrowth {
+		transition: none;
+	}
+	.logoLoading[role="status"] line {
 		animation: none;
 	}
 }

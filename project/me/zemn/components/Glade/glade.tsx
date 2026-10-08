@@ -131,10 +131,11 @@ export default function Glade(props: GladeProps) {
 				<div className={isHomepage ? undefined : style.topbarActions}>
 					<GladeMenu compact={!isHomepage} />
 				</div>
-				{!isHomepage && loading && (
+				{!isHomepage && (
 					<span
 						className={style.logoLoading}
-						role="status"
+						role={loading ? 'status' : undefined}
+						aria-hidden={!loading}
 						aria-label="Loading page"
 						title="Loading page"
 					>
@@ -143,16 +144,19 @@ export default function Glade(props: GladeProps) {
 							viewBox="-120 -80 240 160"
 							aria-hidden="true"
 						>
-							<Rays
-								nRays={80}
-								length={145}
-								innerSpacePerc={25}
-								randomAmountPerc={12}
-								maxSegments={8}
-								minSegements={2}
-								strokeWidth={0.65}
-								transform="scale(1 0.6)"
-							/>
+							<g className={style.raysGrowth}>
+								<Rays
+									nRays={80}
+									length={145}
+									innerSpacePerc={25}
+									innerSpaceVariationPerc={60}
+									randomAmountPerc={30}
+									maxSegments={8}
+									minSegements={2}
+									strokeWidth={0.65}
+									transform="scale(1 0.6)"
+								/>
+							</g>
 						</svg>
 					</span>
 				)}

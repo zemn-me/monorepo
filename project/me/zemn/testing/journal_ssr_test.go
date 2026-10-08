@@ -155,6 +155,12 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			if err != nil || logoFeedback != true {
 				t.Fatalf("loading rays are not visible around the logo at width %d: %v %v", width, logoFeedback, err)
 			}
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				fullSize, err := d.ExecuteScript(`const growth = document.querySelector('header [role="status"][aria-label="Loading page"] svg > g'); return !!growth && new DOMMatrixReadOnly(getComputedStyle(growth).transform).a >= 0.99;`, nil)
+				return fullSize == true, err
+			}, time.Second); err != nil {
+				t.Fatal("loading rays did not grow to full size", err)
+			}
 			if destination.label == "Days" {
 				if output := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); output != "" {
 					shot, err := driver.Screenshot()
@@ -175,6 +181,12 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 				return len(pending) == 0, err
 			}, 30*time.Second); err != nil {
 				t.Fatal(err)
+			}
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				shrunk, err := d.ExecuteScript(`const growth = document.querySelector('header [aria-label="Loading page"][aria-hidden="true"] svg > g'); return !!growth && new DOMMatrixReadOnly(getComputedStyle(growth).transform).a <= 0.01;`, nil)
+				return shrunk == true, err
+			}, time.Second); err != nil {
+				t.Fatal("loading rays did not shrink after navigation", err)
 			}
 			if _, err := waitForElement(driver, selenium.ByCSSSelector, destination.selector, 30*time.Second); err != nil {
 				t.Fatal(err)

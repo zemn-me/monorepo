@@ -63,6 +63,7 @@ interface RaysProps {
 	readonly length: number;
 	readonly strokeWidth: number;
 	readonly innerSpacePerc: number;
+	readonly innerSpaceVariationPerc?: number;
 	readonly randomAmountPerc: number;
 	readonly maxSegments: number;
 	readonly minSegements: number;
@@ -90,7 +91,12 @@ export function Rays(props: RaysProps) {
 						stroke={`var(--foreground-color)`}
 						strokeWidth={props.strokeWidth}
 						transform={`rotate(${(360 / props.nRays) * t} 0 0)`}
-						x1={innerSpaceAmount}
+						x1={
+							innerSpaceAmount *
+							(1 +
+								((props.innerSpaceVariationPerc ?? 0) / 100) *
+									random(`inner space ${t}`))
+						}
 						x2={rayLength}
 						y1={0}
 						y2={0}
