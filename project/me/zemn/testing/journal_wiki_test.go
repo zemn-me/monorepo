@@ -50,8 +50,13 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := driver.ResizeWindow("", 390, 900); err != nil {
 		t.Fatal(err)
 	}
+	var originalVideo selenium.WebElement
 	assertWikiScroll := func() {
 		t.Helper()
+		preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{originalVideo})
+		if err != nil || preserved != true {
+			t.Fatalf("wiki navigation replaced the page: %v %v", preserved, err)
+		}
 		// The portrait layout has a full-height banner above the journal.
 		// Navigation must not reset to the top, even if shorter content
 		// causes the browser to clamp the previous scroll position.
@@ -65,6 +70,10 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		t.Fatal(err)
 	}
 	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	originalVideo, err = driver.FindElement(selenium.ByCSSSelector, "figure video")
+	if err != nil {
 		t.Fatal(err)
 	}
 	wiki, err := waitForElement(driver, selenium.ByLinkText, "Wiki", 30*time.Second)

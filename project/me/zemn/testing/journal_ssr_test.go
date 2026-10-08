@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -34,7 +35,17 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		direct(req)
 		req.Host = upstream.Host
 	}
-	transport := httptest.NewTLSServer(proxy)
+	var delayNavigation atomic.Bool
+	transport := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if delayNavigation.Load() && strings.HasSuffix(req.URL.Path, ".data") {
+			select {
+			case <-time.After(2 * time.Second):
+			case <-req.Context().Done():
+				return
+			}
+		}
+		proxy.ServeHTTP(w, req)
+	}))
 	defer transport.Close()
 	publicOrigin = transport.URL
 	publicURL, err := url.Parse(publicOrigin)
@@ -114,6 +125,74 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			t.Fatal(err)
 		}
 		wiki, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		video, err := driver.FindElement(selenium.ByCSSSelector, "figure video")
+		if err != nil {
+			t.Fatal(err)
+		}
+		delayNavigation.Store(true)
+		for _, destination := range []struct{ label, selector, path, query string }{
+			{"Days", "section[aria-label='Create a journal entry']", "/journal/day", ""},
+			{"Wiki", "section[aria-label='Diary wiki']", "/journal", "all"},
+		} {
+			link, err := driver.FindElement(selenium.ByLinkText, destination.label)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := link.Click(); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='status'][aria-label='Loading journal page']", 5*time.Second); err != nil {
+				t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination.label, width, err)
+			}
+			if destination.label == "Days" {
+				if output := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); output != "" {
+					shot, err := driver.Screenshot()
+					if err != nil {
+						t.Fatal(err)
+					}
+					name := "journal-loading-desktop.png"
+					if width == 390 {
+						name = "journal-loading-phone.png"
+					}
+					if err := os.WriteFile(filepath.Join(output, name), shot, 0o600); err != nil {
+						t.Fatal(err)
+					}
+				}
+			}
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				pending, err := d.FindElements(selenium.ByCSSSelector, "[role='status'][aria-label='Loading journal page']")
+				return len(pending) == 0, err
+			}, 30*time.Second); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := waitForElement(driver, selenium.ByCSSSelector, destination.selector, 30*time.Second); err != nil {
+				t.Fatal(err)
+			}
+			currentURL, err := driver.CurrentURL()
+			if err != nil {
+				t.Fatal(err)
+			}
+			current, err := url.Parse(currentURL)
+			if err != nil || current.Path != destination.path || current.Query().Get("wiki") != destination.query {
+				t.Fatalf("%s did not reach its destination: %s (%v)", destination.label, currentURL, err)
+			}
+			preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{video})
+			if err != nil || preserved != true {
+				t.Fatalf("%s navigation replaced the page: %v %v", destination.label, preserved, err)
+			}
+			loggedIn, err := driver.FindElement(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
+			if err != nil {
+				t.Fatal("navigation lost the signed-in session", err)
+			}
+			if visible, err := loggedIn.IsDisplayed(); err != nil || !visible {
+				t.Fatal("navigation hid the signed-in session", err)
+			}
+		}
+		delayNavigation.Store(false)
+		wiki, err = driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
 		if err != nil {
 			t.Fatal(err)
 		}
