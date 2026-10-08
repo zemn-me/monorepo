@@ -76,6 +76,8 @@ type journalCorpus struct {
 }
 
 type journalGeneration struct {
+	// Labels can outlive corpus-wide prose when their own source is unchanged.
+	Titles  map[string]string     `json:"-"`
 	Sources map[string]string     `json:"sources"`
 	Result  JournalCurationResult `json:"result"`
 }
@@ -179,8 +181,9 @@ func decodeJournalCurationJSON(reader io.Reader, target any) error {
 }
 
 // New recordings may coexist with the previous generation. Corrections and
-// deletions hide that generation immediately: even uncited prose may have
-// depended on a removed source. All read surfaces share this check.
+// deletions hide its prose immediately: even uncited prose may have depended
+// on a removed source. Unchanged recordings retain their identifying labels.
+// All read surfaces share this check.
 func (s *Server) journalPublishedGeneration(ctx context.Context, records []JournalStoredRecord) (journalGeneration, journalCurationState, error) {
 	state, err := s.readJournalCurationState(ctx)
 	var generation journalGeneration
@@ -191,11 +194,19 @@ func (s *Server) journalPublishedGeneration(ctx context.Context, records []Journ
 		return journalGeneration{}, state, err
 	}
 	current, _ := journalCorpusHashes(journalCorpusFromRecords(records))
-	for id, hash := range generation.Sources {
-		if current[id] != hash {
-			return journalGeneration{}, state, nil
+	titles := map[string]string{}
+	for _, analysis := range generation.Result.Entries {
+		id := analysis.EntryId.String()
+		if hash, ok := generation.Sources[id]; ok && current[id] == hash {
+			titles[id] = analysis.Title
 		}
 	}
+	for id, hash := range generation.Sources {
+		if current[id] != hash {
+			return journalGeneration{Titles: titles}, state, nil
+		}
+	}
+	generation.Titles = titles
 	return generation, state, nil
 }
 
@@ -303,11 +314,14 @@ func applyJournalGeneration(records []JournalStoredRecord, generation journalGen
 		if record.Entry == nil {
 			continue
 		}
-		if analysis, ok := analyses[record.Entry.Id]; ok {
-			entry := *record.Entry
-			entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond), JournalSummaryResult{Title: analysis.Title, Blocks: analysis.Blocks}, generation.Sources[entry.Id]))
-			result[i].Entry = &entry
+		entry := *record.Entry
+		if title, ok := generation.Titles[entry.Id]; ok {
+			entry.Title = ptr(title)
 		}
+		if analysis, ok := analyses[entry.Id]; ok {
+			entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond), JournalSummaryResult{Title: analysis.Title, Blocks: analysis.Blocks}, generation.Sources[entry.Id]))
+		}
+		result[i].Entry = &entry
 	}
 	return result
 }

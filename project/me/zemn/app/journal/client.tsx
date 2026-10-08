@@ -1384,7 +1384,7 @@ function EntryCard({
 		recordedDate: string
 	) => Promise<void>;
 }) {
-	const title = entry.summary?.title ?? 'Voice note';
+	const title = entry.title ?? entry.summary?.title ?? 'Voice note';
 	return (
 		<details
 			className={style.entry}
@@ -2079,7 +2079,7 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 								<LocalizedDate date={journalEntryDate(entry)} />
 							</span>
 							<strong>
-								{entry.summary?.title ?? 'Untitled entry'}
+								{entry.title ?? entry.summary?.title ?? 'Untitled entry'}
 							</strong>
 							<span className={style.recentTime}>
 								<LocalizedTime date={journalEntryDate(entry)} />

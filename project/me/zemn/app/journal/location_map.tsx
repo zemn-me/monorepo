@@ -87,7 +87,7 @@ export function JournalMap({
 				located.map((entry, index) => {
 					const point = view.points[index];
 					if (!point) return null;
-					const label = `${entry.summary?.title ?? 'Voice note'} — ${entry.location.latitude.toFixed(4)}, ${entry.location.longitude.toFixed(4)} (accuracy ${Math.round(entry.location.accuracyMeters)} m)`;
+					const label = `${entry.title ?? entry.summary?.title ?? 'Voice note'} — ${entry.location.latitude.toFixed(4)}, ${entry.location.longitude.toFixed(4)} (accuracy ${Math.round(entry.location.accuracyMeters)} m)`;
 					return (
 						<a
 							key={entry.id}
