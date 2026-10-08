@@ -144,7 +144,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			if err := link.Click(); err != nil {
 				t.Fatal(err)
 			}
-			if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='status'][aria-label='Loading journal page']", 5*time.Second); err != nil {
+			if _, err := waitForElement(driver, selenium.ByCSSSelector, "[role='status'][aria-label='Loading page']", 5*time.Second); err != nil {
 				t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination.label, width, err)
 			}
 			if destination.label == "Days" {
@@ -163,7 +163,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 				}
 			}
 			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-				pending, err := d.FindElements(selenium.ByCSSSelector, "[role='status'][aria-label='Loading journal page']")
+				pending, err := d.FindElements(selenium.ByCSSSelector, "[role='status'][aria-label='Loading page']")
 				return len(pending) == 0, err
 			}, 30*time.Second); err != nil {
 				t.Fatal(err)
@@ -190,6 +190,49 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			if visible, err := loggedIn.IsDisplayed(); err != nil || !visible {
 				t.Fatal("navigation hid the signed-in session", err)
 			}
+		}
+		for _, path := range []string{"/article", "/experiments", "/", "/article", "/journal"} {
+			menu, err := driver.FindElement(selenium.ByCSSSelector, "summary[aria-label='Open navigation menu']")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := menu.Click(); err != nil {
+				t.Fatal(err)
+			}
+			link, err := driver.FindElement(selenium.ByCSSSelector, "nav[aria-label='Site navigation'] a[href='"+path+"']")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := link.Click(); err != nil {
+				t.Fatal(err)
+			}
+			pending, err := waitForElement(driver, selenium.ByCSSSelector, "[role='status'][aria-label='Loading page']", 5*time.Second)
+			if err != nil {
+				t.Fatalf("menu navigation to %s at width %d gave no loading feedback: %v", path, width, err)
+			}
+			if visible, err := pending.IsDisplayed(); err != nil || !visible {
+				t.Fatal("page loading feedback is hidden", err)
+			}
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				current, err := d.CurrentURL()
+				return current == publicOrigin+path, err
+			}, 30*time.Second); err != nil {
+				t.Fatal(err)
+			}
+			preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{video})
+			if err != nil || preserved != true {
+				t.Fatalf("menu navigation to %s replaced the page: %v %v", path, preserved, err)
+			}
+		}
+		wikiLink, err := driver.FindElement(selenium.ByLinkText, "Wiki")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := wikiLink.Click(); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
+			t.Fatal(err)
 		}
 		delayNavigation.Store(false)
 		wiki, err = driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")

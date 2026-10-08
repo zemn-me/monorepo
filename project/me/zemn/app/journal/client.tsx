@@ -25,7 +25,6 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { useNavigation } from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -2603,7 +2602,6 @@ export default function JournalPageClient({
 	readonly route?: JournalRoute;
 }) {
 	const renderTime = useJournalRenderTime();
-	const navigation = useNavigation();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
 	const journal = useGetJournal(idToken);
@@ -2957,11 +2955,6 @@ export default function JournalPageClient({
 			)}
 			<header className={style.hero}>
 				<h1>Journal</h1>
-				<span className={style.navigationStatus}>
-					{navigation.state !== 'idle' && (
-						<JournalStatus label="Loading journal page" />
-					)}
-				</span>
 			</header>
 			{!isLoggedIn ? (
 				<button

@@ -57,6 +57,7 @@ function LetterHead() {
 
 export interface GladeProps {
 	readonly children?: ReactNode;
+	readonly navigationPending?: boolean;
 }
 
 export default function Glade(props: GladeProps) {
@@ -65,6 +66,15 @@ export default function Glade(props: GladeProps) {
 
 	return (
 		<main className={style.main} data-glade-layout>
+			{props.navigationPending && (
+				<div
+					className={style.navigationStatus}
+					role="status"
+					aria-label="Loading page"
+				>
+					Loading…
+				</div>
+			)}
 			<section className={style.content} data-glade-content>
 				{props.children}
 			</section>

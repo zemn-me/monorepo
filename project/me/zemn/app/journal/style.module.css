@@ -109,17 +109,8 @@
 }
 
 .hero {
-	display: flex;
-	align-items: center;
-	gap: 0.75em;
 	max-width: 42em;
 	margin-block-end: 1.5em;
-}
-
-.navigationStatus {
-	display: inline-flex;
-	width: 1.5em;
-	height: 1.5em;
 }
 
 .hero h1 {
