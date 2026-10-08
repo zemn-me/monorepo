@@ -229,8 +229,8 @@
 }
 
 .homeTopbar {
-	position: fixed;
-	inset-inline: 0;
+	grid-area: banner;
+	align-self: start;
 }
 
 .compact .content {

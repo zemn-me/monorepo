@@ -249,7 +249,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 				t.Fatalf("menu navigation to %s replaced the page: %v %v", path, preserved, err)
 			}
 			if path == "/" {
-				homeLayout, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]'); const rect = bar.getBoundingClientRect(); const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]'); const menu = bar.querySelector('summary').getBoundingClientRect(); return rect.top === 0 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
+				homeLayout, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]'); const rect = bar.getBoundingClientRect(); const hero = document.querySelector('figure').getBoundingClientRect(); const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]'); const menu = bar.querySelector('summary').getBoundingClientRect(); return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.right - hero.right) < 1 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
 				if err != nil || homeLayout != true {
 					t.Fatalf("homepage does not keep its card and shared top bar at width %d: %v %v", width, homeLayout, err)
 				}
