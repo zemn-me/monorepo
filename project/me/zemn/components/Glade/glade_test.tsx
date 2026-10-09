@@ -222,9 +222,9 @@ function loadingStatus() {
 	);
 }
 
-it('shows navigation feedback after 500 ms and hides it when navigation finishes', () => {
+it('shows navigation feedback after 200 ms and hides it when navigation finishes', () => {
 	act(() => root.render(<Glade navigationPending />));
-	act(() => jest.advanceTimersByTime(499));
+	act(() => jest.advanceTimersByTime(199));
 	expect(loadingStatus()).toBeNull();
 	act(() => jest.advanceTimersByTime(1));
 	expect(loadingStatus()).not.toBeNull();
@@ -234,12 +234,12 @@ it('shows navigation feedback after 500 ms and hides it when navigation finishes
 
 it('cancels feedback for quick navigation and gives the next navigation its own delay', () => {
 	act(() => root.render(<Glade navigationPending />));
-	act(() => jest.advanceTimersByTime(300));
+	act(() => jest.advanceTimersByTime(100));
 	act(() => root.render(<Glade navigationPending={false} />));
 	act(() => jest.advanceTimersByTime(500));
 	expect(loadingStatus()).toBeNull();
 	act(() => root.render(<Glade navigationPending />));
-	act(() => jest.advanceTimersByTime(499));
+	act(() => jest.advanceTimersByTime(199));
 	expect(loadingStatus()).toBeNull();
 	act(() => jest.advanceTimersByTime(1));
 	expect(loadingStatus()).not.toBeNull();

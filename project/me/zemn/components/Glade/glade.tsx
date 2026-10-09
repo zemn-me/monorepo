@@ -128,7 +128,7 @@ export default function Glade(props: GladeProps) {
 		// Avoid flashing feedback for navigations that complete quickly.
 		const timer = window.setTimeout(
 			() => setShowNavigationStatus(true),
-			500
+			200
 		);
 		return () => window.clearTimeout(timer);
 	}, [props.navigationPending]);
