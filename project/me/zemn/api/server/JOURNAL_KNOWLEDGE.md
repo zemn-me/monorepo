@@ -89,6 +89,13 @@ recording navigation; only entities have wiki pages. Local review fixtures are
 authored examples, not evidence of model writing quality. Evaluate live prose
 separately after deployment; these tests do not spend tokens to grade style.
 
+The curator may return `dateCorrections` supported by exact original quotes from
+that recording. Correct only dates clearly assigned to the recording, not dates
+of events it discusses. The server validates all corrections before writing,
+preserves local time and time zone, conditionally refuses concurrent edits or
+deletions, and fingerprints the corrected corpus when publishing. Date changes
+retain already published knowledge while a new generation is prepared.
+
 ## Consistency and failure recovery
 
 The DynamoDB `CURATION` item has a conditional version and expiring lease.

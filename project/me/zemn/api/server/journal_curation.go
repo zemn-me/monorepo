@@ -25,7 +25,7 @@ const journalCurationKey = "CURATION"
 const journalCurationMaxBytes = 48 * 1024 * 1024
 
 // Bump when the output contract or writing policy changes so unchanged diaries refresh.
-const journalCurationVersion = "6"
+const journalCurationVersion = "7"
 
 func journalCurationInputKey(runID string) string {
 	return "curation/runs/" + runID + "/input.json"
@@ -270,6 +270,35 @@ func validateJournalCuration(result JournalCurationResult, corpus journalCorpus)
 	entries := map[string]bool{}
 	for _, e := range corpus.Entries {
 		entries[e.ID] = true
+	}
+	corrections := map[string]bool{}
+	for _, correction := range result.DateCorrections {
+		id := correction.EntryId.String()
+		if !entries[id] || corrections[id] {
+			return errors.New("unknown or duplicate date correction")
+		}
+		corrections[id] = true
+		if _, err := time.Parse(time.DateOnly, correction.RecordedDate); err != nil {
+			return errors.New("invalid corrected recording date")
+		}
+		if len(correction.Citations) == 0 {
+			return errors.New("date correction requires original evidence")
+		}
+		if err := validateJournalCitationEvidence(correction.Citations, allowed); err != nil {
+			return err
+		}
+		for _, citation := range correction.Citations {
+			if citation.EntryId != id {
+				return errors.New("date correction must cite its own recording")
+			}
+		}
+		for _, entry := range corpus.Entries {
+			if entry.ID == id {
+				if _, err := journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, correction.RecordedDate); err != nil {
+					return err
+				}
+			}
+		}
 	}
 	pages := map[string]bool{}
 	for _, page := range result.Pages {
@@ -545,22 +574,77 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 		state.Cleaning, state.Failed = true, true
 		return fmt.Errorf("invalid journal curation: %w", err)
 	}
+	// Apply only validated, evidence-backed changes to the snapshot. A conditional
+	// write refuses a concurrent user edit or deletion without resurrecting it.
+	for _, correction := range result.DateCorrections {
+		for i := range records {
+			entry := records[i].Entry
+			if entry == nil || entry.Id != correction.EntryId.String() {
+				continue
+			}
+			corrected := *entry
+			corrected.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, correction.RecordedDate)
+			if err != nil {
+				return err
+			}
+			if corrected.RecordedAt.Equal(entry.RecordedAt) {
+				continue
+			}
+			if corrected.Summary != nil {
+				summary := *corrected.Summary
+				summary.Start = corrected.RecordedAt
+				summary.End = corrected.RecordedAt.Add(time.Duration(corrected.DurationMs) * time.Millisecond)
+				corrected.Summary = &summary
+			}
+			if err := s.correctJournalCuratorDate(ctx, records[i], corrected); err != nil {
+				state.Cleaning, state.Failed = true, true
+				return err
+			}
+			records[i].Entry = &corrected
+		}
+	}
+	// Include the agent's own corrections in the published fingerprint so they
+	// do not schedule a redundant curation run for the same generated knowledge.
+	hashes, fingerprint = journalCorpusHashes(journalCorpusFromRecords(records))
 	key := "curation/generations/" + state.RunID + ".json"
 	if err := s.putJournalJSON(ctx, key, journalGeneration{Sources: hashes, Result: *result}); err != nil {
 		return err
 	}
-	// Recheck after artifact validation. Readers also compare the immutable
-	// source hashes, covering source changes racing this pointer update.
+	// Recheck after artifact validation and date corrections. Concurrent source
+	// changes must not publish output built from an older snapshot.
 	records, err = s.listJournalRecords(ctx, journalOwnerSubject)
 	if err != nil {
 		return err
 	}
 	_, current := journalCorpusHashes(journalCorpusFromRecords(records))
-	if current != state.Fingerprint {
+	if current != fingerprint {
 		state.Cleaning = true
 		return nil
 	}
 	state.PublishedKey, state.PublishedFingerprint, state.PublishedAt = key, fingerprint, now
 	state.Cleaning, state.Failed = true, false
 	return nil
+}
+
+func (s *Server) correctJournalCuratorDate(ctx context.Context, previous JournalStoredRecord, corrected JournalStoredEntry) error {
+	next := previous
+	next.Entry = &corrected
+	item, err := attributevalue.MarshalMap(next)
+	if err != nil {
+		return err
+	}
+	expected, err := attributevalue.Marshal(previous.Entry)
+	if err != nil {
+		return err
+	}
+	_, err = s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
+		TableName: aws.String(s.journalTableName), Item: item,
+		ConditionExpression:       aws.String("#entry = :previousEntry"),
+		ExpressionAttributeNames:  map[string]string{"#entry": "entry"},
+		ExpressionAttributeValues: map[string]types.AttributeValue{":previousEntry": expected},
+	})
+	if err != nil {
+		return err
+	}
+	return s.writeJournalEntryFiles(ctx, corrected)
 }

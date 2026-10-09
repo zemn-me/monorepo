@@ -117,3 +117,89 @@ func TestJournalDateCorrectionPreservesPublishedKnowledge(t *testing.T) {
 		}
 	}
 }
+
+// Curator date corrections use the same public diary surfaces as manual edits.
+func TestJournalCuratorCorrectsRecordingDateWithoutLosingKnowledge(t *testing.T) {
+	server, curator, ctx, entries, now := journalKnowledgeFixture(t)
+	result := journalKnowledgeResult(entries)
+	entries[0].TimeZone = "America/Los_Angeles"
+	entries[0].Transcript[0].Text = "This recording is for September 25, 2026. I spoke to Cass about moving."
+	if err := server.updateJournalEntry(ctx, journalOwnerSubject, entries[0]); err != nil {
+		t.Fatal(err)
+	}
+	result = journalKnowledgeResult(entries)
+	curator.result = &result
+	for _, at := range []time.Time{now, now.Add(5 * time.Minute), now.Add(10 * time.Minute)} {
+		if err := server.RefreshJournalKnowledge(ctx, at); err != nil {
+			t.Fatal(err)
+		}
+	}
+	result.DateCorrections = []JournalCuratedDateCorrection{{
+		EntryId: result.Entries[0].EntryId, RecordedDate: "2026-09-25",
+		Citations: []JournalCitation{{EntryId: entries[0].Id, SegmentId: "s0", Quote: entries[0].Transcript[0].Text}},
+	}}
+	// A user edit makes the corpus eligible for another curation; that later
+	// complete generation can correct another previously published recording.
+	entries[1].RecordedAt = entries[1].RecordedAt.Add(24 * time.Hour)
+	if err := server.updateJournalEntry(ctx, journalOwnerSubject, entries[1]); err != nil {
+		t.Fatal(err)
+	}
+	for _, at := range []time.Time{now.Add(25 * time.Hour), now.Add(25*time.Hour + 5*time.Minute)} {
+		if err := server.RefreshJournalKnowledge(ctx, at); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	handler := Handler(NewStrictHandler(server, nil))
+	response := httptest.NewRecorder()
+	handler.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/journal", nil).WithContext(ctx))
+	if response.Code != http.StatusOK {
+		t.Fatalf("GET journal: %d", response.Code)
+	}
+	var diary GetJournal200JSONResponse
+	if err := json.Unmarshal(response.Body.Bytes(), &diary); err != nil {
+		t.Fatal(err)
+	}
+	if len(diary.Entries) != len(entries) || (diary.Wiki == nil || len(*diary.Wiki) != len(result.Pages)) {
+		t.Fatal("curator correction lost published knowledge")
+	}
+	for _, entry := range diary.Entries {
+		if entry.Summary == nil || entry.Title == nil || *entry.Title != "The move" || len(entry.Summary.Blocks) == 0 {
+			t.Fatal("curator correction lost a recording's analysis or title")
+		}
+		if !entry.Summary.Start.Equal(entry.RecordedAt) {
+			t.Fatal("analysis period did not follow date correction")
+		}
+		if entry.Id.String() == entries[0].Id {
+			location, err := time.LoadLocation("America/Los_Angeles")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got := entry.RecordedAt.In(location).Format(time.DateOnly); got != "2026-09-25" {
+				t.Fatalf("curator left recording date at %s", got)
+			}
+			if entry.RecordedAt.In(location).Hour() != entries[0].RecordedAt.In(location).Hour() {
+				t.Fatal("date correction changed recording's local time")
+			}
+		}
+	}
+	for _, page := range result.Pages {
+		response := httptest.NewRecorder()
+		handler.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/journal/wiki/"+page.Id.String(), nil).WithContext(ctx))
+		if response.Code != http.StatusOK {
+			t.Fatalf("wiki unavailable after date correction: %d", response.Code)
+		}
+	}
+	records, err := server.listJournalRecords(ctx, journalOwnerSubject)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, fingerprint := journalCorpusHashes(journalCorpusFromRecords(records))
+	state, err := server.readJournalCurationState(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if state.PublishedFingerprint != fingerprint {
+		t.Fatal("curator dates made its own generation dirty")
+	}
+}
