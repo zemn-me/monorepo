@@ -619,3 +619,104 @@ func TestJournalKnowledgeExistingCheckpointCountsAsAttempt(t *testing.T) {
 		t.Fatalf("legacy failed attempt not counted: %#v %v", state, err)
 	}
 }
+
+func TestJournalKnowledgeSourceChangePreservesUnrelatedBlocks(t *testing.T) {
+	for _, change := range []string{"delete", "correct transcript"} {
+		t.Run(change, func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			blocks := []JournalSummaryBlock{}
+			for _, entry := range entries {
+				blocks = append(blocks, JournalSummaryBlock{
+					Markdown:  entry.Transcript[0].Text + "[^1]",
+					Citations: []JournalCitation{{EntryId: entry.Id, SegmentId: "s0", Quote: entry.Transcript[0].Text}},
+				})
+			}
+			result := journalKnowledgeResult(entries)
+			for i := range result.Entries {
+				result.Entries[i].Blocks = blocks
+			}
+			result.Pages[0].Blocks = blocks
+			curator.result = &result
+			for _, at := range []time.Time{now, now.Add(5 * time.Minute)} {
+				if err := s.RefreshJournalKnowledge(ctx, at); err != nil {
+					t.Fatal(err)
+				}
+			}
+			state, err := s.readJournalCurationState(ctx)
+			if err != nil {
+				t.Fatal(err)
+			}
+			original := append([]byte(nil), s.journalObjects.(*fakeJournalObjects).objects[state.PublishedKey]...)
+			if change == "delete" {
+				if _, err := s.DeleteJournalEntriesEntryId(ctx, DeleteJournalEntriesEntryIdRequestObject{EntryId: uuid.MustParse(entries[0].Id)}); err != nil {
+					t.Fatal(err)
+				}
+			} else {
+				entry := entries[0]
+				entry.Transcript = []JournalTranscriptSegment{{Id: "s0", Text: "I corrected the original transcript.", StartMs: 0, EndMs: 1500}}
+				if err := s.updateJournalEntry(ctx, journalOwnerSubject, entry); err != nil {
+					t.Fatal(err)
+				}
+			}
+			response, err := s.GetJournal(ctx, GetJournalRequestObject{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			journal := response.(GetJournal200JSONResponse)
+			if journal.Wiki == nil || len(*journal.Wiki) != 1 {
+				t.Fatal("one changed source cleared the diary wiki")
+			}
+			for _, entry := range journal.Entries {
+				if entry.Id.String() == entries[1].Id && (entry.Summary == nil || !reflect.DeepEqual(entry.Summary.Blocks, blocks[1:])) {
+					t.Fatal("unrelated recording analysis was discarded")
+				}
+			}
+			pageResponse, err := s.GetJournalWikiPageId(ctx, GetJournalWikiPageIdRequestObject{PageId: result.Pages[0].Id})
+			if err != nil {
+				t.Fatal(err)
+			}
+			page, ok := pageResponse.(GetJournalWikiPageId200JSONResponse)
+			if !ok || !reflect.DeepEqual(page.Blocks, blocks[1:]) {
+				t.Fatal("wiki did not retain only the unaffected block")
+			}
+			_, wiki, err := s.searchJournalWikiMCP(ctx, nil, journalWikiMCPFilter{})
+			if err != nil || len(wiki.Pages) != 1 {
+				t.Fatalf("MCP did not preserve wiki content with live evidence: %#v %v", wiki, err)
+			}
+			_, mcpPage, err := s.getJournalWikiMCP(ctx, nil, journalMCPEntryArgs{ID: result.Pages[0].Id.String()})
+			if err != nil || !reflect.DeepEqual(mcpPage.Blocks, blocks[1:]) {
+				t.Fatalf("MCP wiki retained invalid evidence or discarded an unrelated block: %#v %v", mcpPage, err)
+			}
+			if !bytes.Equal(original, s.journalObjects.(*fakeJournalObjects).objects[state.PublishedKey]) {
+				t.Fatal("read filtering overwrote the recoverable published generation")
+			}
+		})
+	}
+}
+
+func TestJournalLegacySourceChangePreservesUnrelatedBlocks(t *testing.T) {
+	s, _, ctx, entries, _ := journalKnowledgeFixture(t)
+	blocks := []JournalSummaryBlock{}
+	for _, entry := range entries {
+		blocks = append(blocks, JournalSummaryBlock{
+			Markdown:  entry.Transcript[0].Text + "[^1]",
+			Citations: []JournalCitation{{EntryId: entry.Id, SegmentId: "s0", Quote: entry.Transcript[0].Text}},
+		})
+	}
+	entry := entries[1]
+	entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt, JournalSummaryResult{Title: "A retained label", Blocks: blocks}, "legacy"))
+	if err := s.updateJournalEntry(ctx, journalOwnerSubject, entry); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.DeleteJournalEntriesEntryId(ctx, DeleteJournalEntriesEntryIdRequestObject{EntryId: uuid.MustParse(entries[0].Id)}); err != nil {
+		t.Fatal(err)
+	}
+	response, err := s.GetJournal(ctx, GetJournalRequestObject{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	journal := response.(GetJournal200JSONResponse)
+	if len(journal.Entries) != 1 || journal.Entries[0].Summary == nil || !reflect.DeepEqual(journal.Entries[0].Summary.Blocks, blocks[1:]) {
+		t.Fatal("legacy filtering discarded an unrelated block")
+	}
+}

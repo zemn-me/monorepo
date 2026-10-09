@@ -7,5 +7,5 @@
 
 # Diary knowledge
 
-- Serve curated content through `journalPublishedGeneration`; it checks original source hashes so deletions/date corrections invalidate derived prose on every read surface. Never treat previous summaries or wiki pages as primary citation evidence.
+- Serve curated content through `journalPublishedGeneration`. Date corrections retain published knowledge; deleted or changed transcript evidence removes only the affected blocks across all read surfaces. Never invalidate the whole diary for a metadata edit or treat generated prose as primary citation evidence.
 - Build the curator's output schema from `spec.yaml` and use it for import validation. Reflection of generated Go types loses enum constraints and can misrepresent UUIDs. The opt-in `TestJournalAgentsLiveSyntheticSchema` exercises hosted generation through publication using fake diary entries.
