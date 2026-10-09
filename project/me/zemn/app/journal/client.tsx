@@ -25,6 +25,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
+import { useNavigation } from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -1736,12 +1737,15 @@ function ZoomNavigation({
 	readonly route?: JournalRoute;
 }) {
 	const [visibleRoute, setVisibleRoute] = useState(route);
+	const navigationState = useNavigation().state;
 	const navigation = useRef<HTMLElement>(null);
 	const [indicator, setIndicator] = useState({
 		inlineSize: 0,
 		offset: 0,
 	});
-	useEffect(() => setVisibleRoute(route), [route]);
+	useEffect(() => {
+		if (navigationState === 'idle') setVisibleRoute(route);
+	}, [route, navigationState]);
 	useLayoutEffect(() => {
 		const navigationElement = navigation.current;
 		const selected = navigationElement?.querySelector<HTMLAnchorElement>(

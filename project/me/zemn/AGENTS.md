@@ -9,6 +9,9 @@ Interface Guidelines as a reference for interaction and clarity:
   beside the affected item. Use familiar icons, selection states, placeholders,
   and disclosure controls; avoid repeating the same state in headings, captions,
   and explanatory paragraphs. Keep primary actions discoverable.
+- Prefer showing routine state changes through familiar icons and motion over
+  explanatory text or redundant retry controls. Keep accessible names; respect
+  reduced motion. Share a GIF of changed animations when reviewing them.
 - [Write](https://developer.apple.com/design/human-interface-guidelines/writing)
   only what helps someone understand or act. Keep necessary labels and brief,
   actionable errors; omit storage, sync, and processing implementation details

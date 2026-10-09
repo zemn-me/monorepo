@@ -281,3 +281,45 @@ it('shows and hides full ray geometry immediately with reduced motion', () => {
 	act(() => root.render(<Glade navigationPending={false} />));
 	expect(rayLength()).toBe(0);
 });
+
+it('announces navigation failure with an icon and no visible prose or retry control', () => {
+	act(() =>
+		root.render(
+			<Glade navigationFailed>
+				<article>Article body</article>
+			</Glade>
+		)
+	);
+	const failure = container.querySelector('[role="alert"]');
+	expect(failure?.getAttribute('aria-label')).toBe(
+		'Page could not be loaded'
+	);
+	expect(
+		failure?.querySelector('[data-icon="triangle-exclamation"]')
+	).not.toBeNull();
+	expect(failure?.textContent).toBe('');
+	expect(failure?.querySelector('button')).toBeNull();
+	expect(container.textContent).toContain('Article body');
+	act(() => root.render(<Glade navigationFailed navigationPending />));
+	expect(container.querySelector('[role="alert"]')).toBeNull();
+});
+
+it('retracts rays normally after failure and dismisses the warning after two seconds', () => {
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(500));
+	advanceSpring(400);
+	expect(rayLength()).toBeGreaterThan(0);
+	act(() => root.render(<Glade navigationFailed />));
+	advanceSpring(600);
+	expect(rayLength()).toBe(0);
+	expect(container.querySelector('[role="alert"]')).not.toBeNull();
+	act(() => jest.advanceTimersByTime(1400));
+	expect(
+		container.querySelector('[data-icon="triangle-exclamation"]')
+	).not.toBeNull();
+	act(() => jest.advanceTimersByTime(200));
+	expect(container.querySelector('[role="alert"]')).toBeNull();
+	expect(
+		container.querySelector('[data-icon="triangle-exclamation"]')
+	).toBeNull();
+});

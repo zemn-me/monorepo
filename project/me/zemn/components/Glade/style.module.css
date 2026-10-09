@@ -334,3 +334,32 @@ html:has(.main) {
 		animation: none;
 	}
 }
+
+.navigationFailureIcon {
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline-start: calc(50% + 38px);
+	transform: translateY(-50%);
+	color: var(--error-color);
+	font-size: 16px;
+	inline-size: 1em;
+	block-size: 1em;
+	animation: failureIcon 2200ms ease-in-out both;
+}
+
+@keyframes failureIcon {
+	0%,
+	100% {
+		opacity: 0;
+	}
+	9%,
+	91% {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.navigationFailureIcon {
+		animation: none;
+	}
+}

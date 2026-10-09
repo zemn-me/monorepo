@@ -7,6 +7,7 @@ import {
 	ScrollRestoration,
 	useRouteLoaderData,
 } from 'react-router';
+import { recoverFailedNavigation } from '#root/project/me/zemn/app/navigation_failure.js';
 import { ServerSessionProvider } from '#root/project/me/zemn/hook/server_session.js';
 import {
 	privateHeaders,
@@ -81,6 +82,8 @@ const csp = {
 		...journalObjectStorageSources,
 	]),
 };
+
+export const clientMiddleware = [recoverFailedNavigation];
 
 export const headers = () => privateHeaders;
 
