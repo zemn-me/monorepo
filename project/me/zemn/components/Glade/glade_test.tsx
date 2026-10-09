@@ -6,6 +6,7 @@ import {
 	it,
 	jest,
 } from '@jest/globals';
+import { raf } from '@react-spring/rafz';
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
@@ -13,6 +14,7 @@ import { act } from 'react-dom/test-utils';
 import type { GladeProps } from './glade.js';
 
 let pathname = '/article/example';
+let reducedMotion = false;
 
 jest.unstable_mockModule('react-router', () => ({
 	useLocation: () => ({ pathname: pathname }),
@@ -138,7 +140,18 @@ beforeAll(async () => {
 
 beforeEach(() => {
 	pathname = '/article/example';
+	reducedMotion = false;
+	Object.defineProperty(window, 'matchMedia', {
+		configurable: true,
+		value: (media: string) => ({
+			media,
+			matches: reducedMotion,
+			addEventListener: jest.fn(),
+			removeEventListener: jest.fn(),
+		}),
+	});
 	jest.useFakeTimers();
+	raf.frameLoop = 'demand';
 	container = document.createElement('div');
 	root = createRoot(container);
 	document.body.appendChild(container);
@@ -230,4 +243,41 @@ it('cancels feedback for quick navigation and gives the next navigation its own 
 	expect(loadingStatus()).toBeNull();
 	act(() => jest.advanceTimersByTime(1));
 	expect(loadingStatus()).not.toBeNull();
+});
+
+function advanceSpring(milliseconds: number) {
+	for (let elapsed = 0; elapsed < milliseconds; elapsed += 16) {
+		act(() => {
+			jest.advanceTimersByTime(16);
+			raf.advance();
+		});
+	}
+}
+
+function rayLength() {
+	return Number(container.querySelector('svg line')?.getAttribute('x2'));
+}
+
+it('grows and retracts ray geometry with the navigation state', () => {
+	act(() => root.render(<Glade navigationPending />));
+	expect(rayLength()).toBe(0);
+	act(() => jest.advanceTimersByTime(500));
+	advanceSpring(80);
+	const growingLength = rayLength();
+	expect(growingLength).toBeGreaterThan(0);
+	advanceSpring(400);
+	expect(rayLength()).toBeGreaterThan(growingLength);
+	act(() => root.render(<Glade navigationPending={false} />));
+	advanceSpring(600);
+	expect(rayLength()).toBe(0);
+});
+
+it('shows and hides full ray geometry immediately with reduced motion', () => {
+	reducedMotion = true;
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(500));
+	advanceSpring(16);
+	expect(rayLength()).toBeGreaterThan(0);
+	act(() => root.render(<Glade navigationPending={false} />));
+	expect(rayLength()).toBe(0);
 });
