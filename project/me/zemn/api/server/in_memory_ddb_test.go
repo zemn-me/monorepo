@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"reflect"
 	"sort"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -197,15 +198,24 @@ func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, o
 		for index, existing := range db.journal {
 			if keyTableRecordID(existing) == id && keyTableRecordWhen(existing) == when {
 				if in.ConditionExpression != nil {
-					expected, checksVersion := in.ExpressionAttributeValues[":version"].(*types.AttributeValueMemberS)
-					actual, hasVersion := existing["version"].(*types.AttributeValueMemberS)
-					if !checksVersion || !hasVersion || expected.Value != actual.Value {
-						return nil, &types.ConditionalCheckFailedException{}
+					if expected, checksEntry := in.ExpressionAttributeValues[":previousEntry"]; checksEntry {
+						if !reflect.DeepEqual(expected, existing["entry"]) {
+							return nil, &types.ConditionalCheckFailedException{}
+						}
+					} else {
+						expected, checksVersion := in.ExpressionAttributeValues[":version"].(*types.AttributeValueMemberS)
+						actual, hasVersion := existing["version"].(*types.AttributeValueMemberS)
+						if !checksVersion || !hasVersion || expected.Value != actual.Value {
+							return nil, &types.ConditionalCheckFailedException{}
+						}
 					}
 				}
 				db.journal[index] = copyDynamoItem(in.Item)
 				return &dynamodb.PutItemOutput{}, nil
 			}
+		}
+		if _, checksEntry := in.ExpressionAttributeValues[":previousEntry"]; checksEntry {
+			return nil, &types.ConditionalCheckFailedException{}
 		}
 		db.journal = append(db.journal, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil

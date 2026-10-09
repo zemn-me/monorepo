@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
@@ -718,5 +720,121 @@ func TestJournalLegacySourceChangePreservesUnrelatedBlocks(t *testing.T) {
 	journal := response.(GetJournal200JSONResponse)
 	if len(journal.Entries) != 1 || journal.Entries[0].Summary == nil || !reflect.DeepEqual(journal.Entries[0].Summary.Blocks, blocks[1:]) {
 		t.Fatal("legacy filtering discarded an unrelated block")
+	}
+}
+
+func TestJournalCuratorRejectsInvalidDateCorrectionsBeforeWriting(t *testing.T) {
+	for _, name := range []string{"invalid date", "foreign evidence", "altered quote", "missing evidence", "unknown entry", "duplicate"} {
+		t.Run(name, func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			result := journalKnowledgeResult(entries)
+			correction := JournalCuratedDateCorrection{EntryId: uuid.MustParse(entries[0].Id), RecordedDate: "2026-09-25", Citations: []JournalCitation{{EntryId: entries[0].Id, SegmentId: "s0", Quote: entries[0].Transcript[0].Text}}}
+			switch name {
+			case "invalid date":
+				correction.RecordedDate = "2026-02-30"
+			case "foreign evidence":
+				correction.Citations = []JournalCitation{{EntryId: entries[1].Id, SegmentId: "s0", Quote: entries[1].Transcript[0].Text}}
+			case "altered quote":
+				correction.Citations[0].Quote = "fabricated date evidence"
+			case "missing evidence":
+				correction.Citations = []JournalCitation{}
+			case "unknown entry":
+				correction.EntryId = uuid.New()
+			}
+			result.DateCorrections = []JournalCuratedDateCorrection{correction}
+			if name == "duplicate" {
+				result.DateCorrections = append(result.DateCorrections, correction)
+			}
+			curator.result = &result
+			if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+				t.Fatal(err)
+			}
+			if err := s.RefreshJournalKnowledge(ctx, now.Add(5*time.Minute)); err == nil {
+				t.Fatal("invalid correction was accepted")
+			}
+			records, err := s.listJournalRecords(ctx, journalOwnerSubject)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, original := range entries {
+				got, err := s.findJournalEntry(records, original.Id)
+				if err != nil || !got.RecordedAt.Equal(original.RecordedAt) {
+					t.Fatal("invalid output mutated recording dates")
+				}
+			}
+			state, err := s.readJournalCurationState(ctx)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if state.PublishedKey != "" {
+				t.Fatal("invalid output was published")
+			}
+		})
+	}
+}
+
+type racingJournalCuratorDateDB struct {
+	*inMemoryDDB
+	race func()
+}
+
+func (db *racingJournalCuratorDateDB) PutItem(ctx context.Context, input *dynamodb.PutItemInput, opts ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+	if _, correction := input.ExpressionAttributeValues[":previousEntry"]; correction && db.race != nil {
+		race := db.race
+		db.race = nil
+		race()
+	}
+	return db.inMemoryDDB.PutItem(ctx, input, opts...)
+}
+
+func TestJournalCuratorDateCorrectionCannotOverwriteConcurrentEditOrDeletion(t *testing.T) {
+	for _, deleted := range []bool{false, true} {
+		t.Run(fmt.Sprintf("deleted=%t", deleted), func(t *testing.T) {
+			s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+			result := journalKnowledgeResult(entries)
+			result.DateCorrections = []JournalCuratedDateCorrection{{EntryId: uuid.MustParse(entries[0].Id), RecordedDate: "2026-09-25", Citations: []JournalCitation{{EntryId: entries[0].Id, SegmentId: "s0", Quote: entries[0].Transcript[0].Text}}}}
+			curator.result = &result
+			db := &racingJournalCuratorDateDB{inMemoryDDB: s.ddb.(*inMemoryDDB)}
+			db.race = func() {
+				if deleted {
+					_, err := db.DeleteItem(ctx, &dynamodb.DeleteItemInput{TableName: &s.journalTableName, Key: map[string]types.AttributeValue{"id": &types.AttributeValueMemberS{Value: journalOwnerSubject}, "when": &types.AttributeValueMemberS{Value: journalEntryRecordKey(entries[0].Id)}}})
+					if err != nil {
+						t.Fatal(err)
+					}
+				} else {
+					edited := entries[0]
+					edited.RecordedAt = edited.RecordedAt.Add(48 * time.Hour)
+					if err := s.updateJournalEntry(ctx, journalOwnerSubject, edited); err != nil {
+						t.Fatal(err)
+					}
+				}
+			}
+			s.ddb = db
+			if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+				t.Fatal(err)
+			}
+			if err := s.RefreshJournalKnowledge(ctx, now.Add(5*time.Minute)); err == nil {
+				t.Fatal("concurrent change was overwritten")
+			}
+			records, err := s.listJournalRecords(ctx, journalOwnerSubject)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := s.findJournalEntry(records, entries[0].Id)
+			if deleted {
+				if err == nil {
+					t.Fatal("deleted recording resurrected")
+				}
+			} else if err != nil || !got.RecordedAt.Equal(entries[0].RecordedAt.Add(48*time.Hour)) {
+				t.Fatal("manual date correction overwritten")
+			}
+			state, err := s.readJournalCurationState(ctx)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if state.PublishedKey != "" {
+				t.Fatal("stale curation published")
+			}
+		})
 	}
 }
