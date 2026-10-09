@@ -334,3 +334,42 @@ html:has(.main) {
 		animation: none;
 	}
 }
+
+.navigationFailure {
+	animation: navigationFailureIn 200ms ease-out;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 1em;
+	padding: 0.5em 1em;
+	background: var(--background-color);
+	border-block-end: 1px solid currentColor;
+}
+
+.navigationFailure button {
+	color: inherit;
+	font: inherit;
+	background: transparent;
+	border: 1px solid currentColor;
+	border-radius: 0.25em;
+	min-block-size: 44px;
+	padding-inline: 1em;
+}
+
+@keyframes navigationFailureIn {
+	from {
+		opacity: 0;
+		transform: translateY(-0.25em);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.navigationFailure {
+		animation: none;
+	}
+}

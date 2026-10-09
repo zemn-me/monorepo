@@ -106,6 +106,8 @@ function NavigationRays({ loading }: { readonly loading: boolean }) {
 export interface GladeProps {
 	readonly children?: ReactNode;
 	readonly navigationPending?: boolean;
+	readonly navigationFailed?: boolean;
+	readonly retryNavigation?: () => void;
 }
 
 export default function Glade(props: GladeProps) {
@@ -140,6 +142,16 @@ export default function Glade(props: GladeProps) {
 			data-glade-layout
 		>
 			<section className={style.content} data-glade-content>
+				{props.navigationFailed && (
+					<div className={style.navigationFailure} role="alert">
+						<span>
+							Could not load the page. Check your connection.
+						</span>
+						<button type="button" onClick={props.retryNavigation}>
+							Try again
+						</button>
+					</div>
+				)}
 				{props.children}
 			</section>
 			<HeroVideo className={style.headerBgv} data-glade-banner />

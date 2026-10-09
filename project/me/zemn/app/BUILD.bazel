@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "app",
@@ -9,6 +9,7 @@ ts_project(
         "eeg.tsx",
         "glade-layout.tsx",
         "linkset_link.tsx",
+        "navigation_failure.ts",
         "not-found.tsx",
         "page.tsx",
         "providers.tsx",
@@ -72,6 +73,8 @@ filegroup(
         "eeg.tsx",
         "glade-layout.tsx",
         "linkset_link.tsx",
+        "navigation_failure.ts",
+        "navigation_failure_test.tsx",
         "not-found.tsx",
         "page.tsx",
         "providers.tsx",
@@ -98,4 +101,28 @@ css_module(
     name = "style_module_css",
     src = "style.module.css",
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "app_tests",
+    srcs = ["navigation_failure_test.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":app",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//:node_modules/react-router",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["navigation_failure_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":app_tests"],
 )
