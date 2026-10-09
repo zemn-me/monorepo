@@ -49,8 +49,8 @@ return rays?.length > 0 && rect.width > 0 && rect.height > 0 && rect.top >= 0 &&
 			t.Fatalf("loading rays are not visible around the logo at width %d: %v %v", width, logoFeedback, err)
 		}
 		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-			fullSize, err := d.ExecuteScript(`const growth = document.querySelector('header [role="status"][aria-label="Loading page"] svg > g');
-return !!growth && new DOMMatrixReadOnly(getComputedStyle(growth).transform).a >= 0.99;`, nil)
+			fullSize, err := d.ExecuteScript(`const rays = document.querySelectorAll('header [role="status"][aria-label="Loading page"] svg line');
+return rays.length > 0 && [...rays].every(ray => Number(ray.getAttribute('x2')) >= 75 && ray.getTotalLength() > 10);`, nil)
 			return fullSize == true, err
 		}, time.Second); err != nil {
 			t.Fatal("loading rays did not grow to full size", err)
@@ -69,8 +69,8 @@ return !!growth && new DOMMatrixReadOnly(getComputedStyle(growth).transform).a >
 			t.Fatal(err)
 		}
 		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-			shrunk, err := d.ExecuteScript(`const growth = document.querySelector('header [aria-label="Loading page"][aria-hidden="true"] svg > g');
-return !!growth && new DOMMatrixReadOnly(getComputedStyle(growth).transform).a <= 0.01;`, nil)
+			shrunk, err := d.ExecuteScript(`const rays = document.querySelectorAll('header [aria-label="Loading page"][aria-hidden="true"] svg line');
+return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`, nil)
 			return shrunk == true, err
 		}, time.Second); err != nil {
 			t.Fatal("loading rays did not shrink after navigation", err)
