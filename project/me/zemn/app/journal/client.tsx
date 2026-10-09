@@ -562,9 +562,6 @@ function SummaryBlock({
 						<Link
 							{...props}
 							href={href}
-							scroll={
-								href?.startsWith('/journal?wiki=') ? false : undefined
-							}
 						>
 							{children}
 						</Link>
@@ -1599,16 +1596,6 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 	);
 }
 
-function containingPeriod(
-	journal: Journal,
-	period: AggregatePeriod,
-	timestamp: string
-) {
-	return periodsFor(journal, period).find(node =>
-		periodContains(node, timestamp)
-	);
-}
-
 function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
 	const pathname = `/journal/${route}`;
 	const query = new URLSearchParams(
@@ -1845,7 +1832,6 @@ function JournalToolbar({
 			<Link
 				className={style.wikiNavigation}
 				href="/journal?wiki=all"
-				scroll={false}
 				aria-current={wiki ? 'page' : undefined}
 			>
 				Wiki
@@ -1886,49 +1872,8 @@ function PeriodList({
 		[journal, nextRoute]
 	);
 	const listRef = useRef<HTMLDivElement>(null);
-	const positionedPeriod = useRef<AggregatePeriod | undefined>(undefined);
 	const focusRef = useRef(focus);
 	focusRef.current = focus;
-
-	useEffect(() => {
-		const fallbackPeriod = periods[0];
-		if (positionedPeriod.current === period || fallbackPeriod === undefined)
-			return;
-		positionedPeriod.current = period;
-		const frame = window.requestAnimationFrame(() => {
-			const element = listRef.current?.querySelector<HTMLElement>(
-				`[data-journal-period-start="${CSS.escape(
-					containingPeriod(journal, period, focusRef.current)
-						?.start ?? fallbackPeriod.start
-				)}"]`
-			);
-			if (!element) return;
-			const node = periods.find(
-				candidate =>
-					candidate.start === element.dataset.journalPeriodStart
-			);
-			if (!node) return;
-			const duration = Date.parse(node.end) - Date.parse(node.start);
-			const fraction = Math.max(
-				0,
-				Math.min(
-					1,
-					(Date.parse(focusRef.current) - Date.parse(node.start)) /
-						duration
-				)
-			);
-			const bounds = element.getBoundingClientRect();
-			window.scrollTo({
-				behavior: 'auto',
-				top:
-					window.scrollY +
-					bounds.top +
-					bounds.height * fraction -
-					window.innerHeight / 2,
-			});
-		});
-		return () => window.cancelAnimationFrame(frame);
-	}, [journal, period, periods]);
 
 	useEffect(() => {
 		let frame = 0;
@@ -2161,7 +2106,7 @@ function JournalWiki({
 					{pageID === 'all' ? (
 						'Wiki'
 					) : (
-						<Link href="/journal?wiki=all" scroll={false}>
+						<Link href="/journal?wiki=all">
 							Wiki
 						</Link>
 					)}
@@ -2199,7 +2144,6 @@ function JournalWiki({
 								<li key={page.id}>
 									<Link
 										href={`/journal?wiki=${page.id}`}
-										scroll={false}
 									>
 										<strong>{page.title}</strong>
 										<span>{page.kind}</span>
@@ -2340,7 +2284,7 @@ function JournalBrowser({
 					/>
 				) : journal.curation ? (
 					<p className={style.wikiIntro}>
-						<Link href="/journal?wiki=all" scroll={false}>
+						<Link href="/journal?wiki=all">
 							Explore the diary wiki
 						</Link>{' '}
 						for people, places, and projects across your recordings.

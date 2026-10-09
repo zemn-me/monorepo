@@ -86,6 +86,7 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err != nil || current.Path != destination.path || current.Query().Get("wiki") != destination.query {
 			t.Fatalf("%s did not reach its destination: %s (%v)", destination.label, currentURL, err)
 		}
+		assertJournalNavigationAtTop(t, driver, destination.path)
 		assertHeroVideoPreserved(t, driver, video)
 		loggedIn, err := driver.FindElement(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
 		if err != nil {
@@ -197,5 +198,23 @@ func saveNavigationScreenshot(t *testing.T, driver selenium.WebDriver, name stri
 	}
 	if err := os.WriteFile(filepath.Join(output, name), shot, 0o600); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func assertJournalNavigationAtTop(t *testing.T, driver selenium.WebDriver, path string) {
+	t.Helper()
+	var stableSince time.Time
+	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		atTop, err := d.ExecuteScript(`return window.location.pathname === arguments[0] && window.scrollY <= 1;`, []any{path})
+		if err != nil || atTop != true {
+			stableSince = time.Time{}
+			return false, err
+		}
+		if stableSince.IsZero() {
+			stableSince = time.Now()
+		}
+		return time.Since(stableSince) >= 250*time.Millisecond, nil
+	}, 10*time.Second); err != nil {
+		t.Fatalf("journal navigation to %s did not stay at the top: %v", path, err)
 	}
 }
