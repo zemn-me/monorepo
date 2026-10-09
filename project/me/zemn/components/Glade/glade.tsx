@@ -58,7 +58,7 @@ function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 					{lang.text(bio.Bio.who.handle)}
 				</div>
 			)}
-			<TimeEye className={style.logo} />
+			{compact && <TimeEye className={style.logo} />}
 			{!compact && (
 				<div className={style.fullName}>Thomas NJ Shadwell</div>
 			)}
@@ -190,30 +190,14 @@ export default function Glade(props: GladeProps) {
 						</button>
 					)}
 				</div>
-				{isHomepage ? (
-					loading ? (
-						<span
-							className={style.navigationStatus}
-							role="status"
-							aria-label="Loading page"
-						>
-							Loading…
-						</span>
-					) : (
-						<span />
-					)
-				) : (
-					<LetterHead compact />
-				)}
+				<LetterHead compact />
 				<GladeMenu />
-				{!isHomepage && (
-					<NavigationRays
-						loading={loading}
-						failed={
-							!!props.navigationFailed && !props.navigationPending
-						}
-					/>
-				)}
+				<NavigationRays
+					loading={loading}
+					failed={
+						!!props.navigationFailed && !props.navigationPending
+					}
+				/>
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>
