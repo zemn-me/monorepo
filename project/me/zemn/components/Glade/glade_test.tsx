@@ -281,3 +281,25 @@ it('shows and hides full ray geometry immediately with reduced motion', () => {
 	act(() => root.render(<Glade navigationPending={false} />));
 	expect(rayLength()).toBe(0);
 });
+
+it('announces navigation failure with an icon and no visible prose or retry control', () => {
+	act(() =>
+		root.render(
+			<Glade navigationFailed>
+				<article>Article body</article>
+			</Glade>
+		)
+	);
+	const failure = container.querySelector('[role="alert"]');
+	expect(failure?.getAttribute('aria-label')).toBe(
+		'Page could not be loaded'
+	);
+	expect(
+		failure?.querySelector('[data-icon="triangle-exclamation"]')
+	).not.toBeNull();
+	expect(failure?.textContent).toBe('');
+	expect(failure?.querySelector('button')).toBeNull();
+	expect(container.textContent).toContain('Article body');
+	act(() => root.render(<Glade navigationFailed navigationPending />));
+	expect(container.querySelector('[role="alert"]')).toBeNull();
+});

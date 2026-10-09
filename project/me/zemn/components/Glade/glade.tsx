@@ -1,4 +1,7 @@
 'use client';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { animated, useReducedMotion, useSpring } from 'react-spring';
@@ -65,20 +68,26 @@ function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 
 const AnimatedRays = animated(Rays);
 
-function NavigationRays({ loading }: { readonly loading: boolean }) {
+function NavigationRays({
+	loading,
+	failed,
+}: {
+	readonly loading: boolean;
+	readonly failed: boolean;
+}) {
 	const reducedMotion = useReducedMotion();
 	const { length } = useSpring({
-		length: loading ? 145 : 0,
+		length: loading || failed ? 145 : 0,
 		config: { tension: 600, friction: 30, clamp: true },
 		immediate: !!reducedMotion,
 	});
 	return (
 		<span
-			className={`${style.logoLoading} ${loading ? style.active : ''}`}
-			role={loading ? 'status' : undefined}
-			aria-hidden={!loading}
-			aria-label="Loading page"
-			title="Loading page"
+			className={`${style.logoLoading} ${loading ? style.active : ''} ${failed ? style.failed : ''}`}
+			role={failed ? 'alert' : loading ? 'status' : undefined}
+			aria-hidden={!loading && !failed}
+			aria-label={failed ? 'Page could not be loaded' : 'Loading page'}
+			title={failed ? 'Page could not be loaded' : 'Loading page'}
 		>
 			<svg
 				className={style.logoRays}
@@ -99,6 +108,13 @@ function NavigationRays({ loading }: { readonly loading: boolean }) {
 					/>
 				</g>
 			</svg>
+			{failed && (
+				<FontAwesomeIcon
+					aria-hidden="true"
+					icon={faTriangleExclamation}
+					className={style.navigationFailureIcon}
+				/>
+			)}
 		</span>
 	);
 }
@@ -107,7 +123,6 @@ export interface GladeProps {
 	readonly children?: ReactNode;
 	readonly navigationPending?: boolean;
 	readonly navigationFailed?: boolean;
-	readonly retryNavigation?: () => void;
 }
 
 export default function Glade(props: GladeProps) {
@@ -142,16 +157,6 @@ export default function Glade(props: GladeProps) {
 			data-glade-layout
 		>
 			<section className={style.content} data-glade-content>
-				{props.navigationFailed && (
-					<div className={style.navigationFailure} role="alert">
-						<span>
-							Could not load the page. Check your connection.
-						</span>
-						<button type="button" onClick={props.retryNavigation}>
-							Try again
-						</button>
-					</div>
-				)}
 				{props.children}
 			</section>
 			<HeroVideo className={style.headerBgv} data-glade-banner />
@@ -193,7 +198,14 @@ export default function Glade(props: GladeProps) {
 					<LetterHead compact />
 				)}
 				<GladeMenu />
-				{!isHomepage && <NavigationRays loading={loading} />}
+				{!isHomepage && (
+					<NavigationRays
+						loading={loading}
+						failed={
+							!!props.navigationFailed && !props.navigationPending
+						}
+					/>
+				)}
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>

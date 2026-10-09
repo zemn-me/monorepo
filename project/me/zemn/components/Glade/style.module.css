@@ -335,41 +335,66 @@ html:has(.main) {
 	}
 }
 
-.navigationFailure {
-	animation: navigationFailureIn 200ms ease-out;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	gap: 1em;
-	padding: 0.5em 1em;
-	background: var(--background-color);
-	border-block-end: 1px solid currentColor;
+.failed {
+	--foreground-color: var(--error-color);
 }
 
-.navigationFailure button {
-	color: inherit;
-	font: inherit;
-	background: transparent;
-	border: 1px solid currentColor;
-	border-radius: 0.25em;
-	min-block-size: 44px;
-	padding-inline: 1em;
+.failed .logoRays {
+	animation: navigationFailure 800ms ease-in-out forwards;
 }
 
-@keyframes navigationFailureIn {
+.navigationFailureIcon {
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline-start: calc(50% + 38px);
+	transform: translateY(-50%);
+	color: var(--error-color);
+	font-size: 16px;
+	inline-size: 1em;
+	block-size: 1em;
+	animation: failureIconIn 200ms 500ms both;
+}
+
+@keyframes navigationFailure {
+	0%,
+	25% {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+	35% {
+		transform: translate(calc(-50% - 4px), -50%);
+	}
+	45% {
+		transform: translate(calc(-50% + 4px), -50%);
+	}
+	55% {
+		transform: translate(calc(-50% - 2px), -50%);
+		opacity: 1;
+	}
+	65% {
+		transform: translate(-50%, -50%);
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(0.35);
+		opacity: 0;
+	}
+}
+
+@keyframes failureIconIn {
 	from {
 		opacity: 0;
-		transform: translateY(-0.25em);
 	}
 	to {
 		opacity: 1;
-		transform: translateY(0);
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.navigationFailure {
+	.failed .logoRays {
+		animation: none;
+		opacity: 0;
+	}
+	.navigationFailureIcon {
 		animation: none;
 	}
 }

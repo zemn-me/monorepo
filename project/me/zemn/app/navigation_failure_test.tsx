@@ -37,11 +37,8 @@ function Layout() {
 	return (
 		<>
 			<Outlet />
-			{failure.failed && (
-				<div role="alert">
-					Could not load the page
-					<button onClick={failure.retry}>Try again</button>
-				</div>
+			{failure && (
+				<span role="alert" aria-label="Page could not be loaded" />
 			)}
 		</>
 	);
@@ -93,7 +90,7 @@ async function setup(load: () => Promise<string>) {
 	return { container, initialLoads: () => initialLoads };
 }
 
-it('preserves the previous page and its state after a network failure, then retries', async () => {
+it('preserves the previous page and its state after a network failure, then a new navigation succeeds', async () => {
 	let reject: (error: Error) => void = () => {
 		throw new Error('Loader has not started');
 	};
@@ -112,15 +109,11 @@ it('preserves the previous page and its state after a network failure, then retr
 	expect(router?.state.location.pathname).toBe('/');
 	expect(container.querySelector('input')).toBe(input);
 	expect(input?.value).toBe('unfinished note');
-	expect(container.querySelector('[role="alert"]')?.textContent).toContain(
-		'Could not load'
-	);
+	expect(
+		container.querySelector('[role="alert"]')?.getAttribute('aria-label')
+	).toBe('Page could not be loaded');
 	expect(initialLoads()).toBe(1);
-	await act(async () =>
-		container
-			.querySelector<HTMLButtonElement>('[role="alert"] button')
-			?.click()
-	);
+	await act(async () => container.querySelector('button')?.click());
 	expect(router?.state.location.pathname).toBe('/next');
 	expect(container.textContent).toContain('Next page');
 	expect(container.querySelector('[role="alert"]')).toBeNull();

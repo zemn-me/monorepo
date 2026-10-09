@@ -48,10 +48,7 @@ export function useNavigationFailure() {
 	const navigate = useNavigate();
 	const current = useRef({ location, navigation });
 	current.current = { location, navigation };
-	const [failed, setFailed] = useState<{
-		path: string;
-		state: unknown;
-	} | null>(null);
+	const [failed, setFailed] = useState(false);
 
 	useEffect(() => {
 		const handler = (request: Request) => {
@@ -64,10 +61,7 @@ export function useNavigationFailure() {
 				pending.location.search !== destination.search
 			)
 				return;
-			setFailed({
-				path: createPath(pending.location),
-				state: pending.location.state,
-			});
+			setFailed(true);
 			void navigate(createPath(committed), {
 				replace: true,
 				state: committed.state,
@@ -81,13 +75,6 @@ export function useNavigationFailure() {
 		};
 	}, [navigate]);
 
-	useEffect(() => setFailed(null), [location.pathname, location.search]);
-	return {
-		failed: failed !== null,
-		retry: () => {
-			if (!failed) return;
-			setFailed(null);
-			void navigate(failed.path, { state: failed.state });
-		},
-	};
+	useEffect(() => setFailed(false), [location.pathname, location.search]);
+	return failed;
 }

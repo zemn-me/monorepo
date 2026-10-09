@@ -10,8 +10,7 @@ export default function GladeLayout() {
 	return (
 		<Glade
 			navigationPending={navigation.state !== 'idle'}
-			navigationFailed={failure.failed}
-			retryNavigation={failure.retry}
+			navigationFailed={failure}
 		>
 			<Outlet />
 		</Glade>
