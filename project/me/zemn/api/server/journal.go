@@ -212,6 +212,7 @@ func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) 
 		SchemaVersion: 1,
 		Id:            openapiUUID(entry.Id),
 		RecordedAt:    entry.RecordedAt,
+		Title:         entry.Title,
 		Location:      entry.Location,
 		TimeZone:      entry.TimeZone,
 		DurationMs:    entry.DurationMs,
@@ -817,6 +818,13 @@ func (s *Server) PatchJournalEntriesEntryId(ctx context.Context, request PatchJo
 	entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, request.Body.RecordedDate)
 	if err != nil {
 		return PatchJournalEntriesEntryId400JSONResponse{Cause: "recordedDate must be a valid calendar date"}, nil
+	}
+	generation, _, err := s.journalPublishedGeneration(ctx, records)
+	if err != nil {
+		return nil, err
+	}
+	if title, ok := generation.Titles[entry.Id]; ok {
+		entry.Title = ptr(title)
 	}
 	if entry.RecordedAt.Equal(previous.RecordedAt) {
 		return PatchJournalEntriesEntryId200JSONResponse(s.apiJournalEntry(ctx, *entry)), nil

@@ -759,6 +759,11 @@ components:
       description: Complete entry representation indexed in DynamoDB.
       required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status, transcript]
       properties:
+        title:
+          type: string
+          description: Recording label, retained across recording-date corrections independently of generated analysis.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'title,omitempty'
         recordingStartedAt:
           type: string
           format: date-time
@@ -895,6 +900,9 @@ components:
       type: object
       required: [schemaVersion, id, recordedAt, timeZone, contentType, status, transcript]
       properties:
+        title:
+          type: string
+          description: Recording label, retained across recording-date corrections independently of generated analysis.
         recordingStartedAt:
           type: string
           format: date-time

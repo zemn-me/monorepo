@@ -76,6 +76,8 @@ type journalCorpus struct {
 }
 
 type journalGeneration struct {
+	// Recording labels remain available independently of filtered prose.
+	Titles  map[string]string     `json:"-"`
 	Sources map[string]string     `json:"sources"`
 	Result  JournalCurationResult `json:"result"`
 }
@@ -178,9 +180,9 @@ func decodeJournalCurationJSON(reader io.Reader, target any) error {
 	return nil
 }
 
-// New recordings may coexist with the previous generation. Corrections and
-// deletions hide that generation immediately: even uncited prose may have
-// depended on a removed source. All read surfaces share this check.
+// Keep the last published knowledge visible while the curator catches up with
+// date corrections or new recordings. Only blocks whose quoted primary evidence
+// was deleted or changed are removed; metadata edits never clear the diary.
 func (s *Server) journalPublishedGeneration(ctx context.Context, records []JournalStoredRecord) (journalGeneration, journalCurationState, error) {
 	state, err := s.readJournalCurationState(ctx)
 	var generation journalGeneration
@@ -190,13 +192,55 @@ func (s *Server) journalPublishedGeneration(ctx context.Context, records []Journ
 	if err := s.readJournalCurationJSON(ctx, state.PublishedKey, &generation); err != nil {
 		return journalGeneration{}, state, err
 	}
-	current, _ := journalCorpusHashes(journalCorpusFromRecords(records))
-	for id, hash := range generation.Sources {
-		if current[id] != hash {
-			return journalGeneration{}, state, nil
+	corpus := journalCorpusFromRecords(records)
+	allowed := journalAllowedCitations(journalCorpusSources(corpus))
+	current := map[string]bool{}
+	for _, entry := range corpus.Entries {
+		current[entry.ID] = true
+	}
+	result := JournalCurationResult{Entries: []JournalCuratedEntry{}, Pages: []JournalWikiPage{}}
+	generation.Titles = map[string]string{}
+	for _, analysis := range generation.Result.Entries {
+		id := analysis.EntryId.String()
+		if !current[id] {
+			continue
+		}
+		generation.Titles[id] = analysis.Title
+		analysis.Blocks = filterJournalBlocks(analysis.Blocks, allowed)
+		if len(analysis.Blocks) > 0 {
+			result.Entries = append(result.Entries, analysis)
 		}
 	}
+	for _, page := range generation.Result.Pages {
+		page.Blocks = filterJournalBlocks(page.Blocks, allowed)
+		if len(page.Blocks) > 0 {
+			result.Pages = append(result.Pages, page)
+		}
+	}
+	generation.Result = result
 	return generation, state, nil
+}
+
+func filterJournalBlocks(blocks []JournalSummaryBlock, allowed map[JournalCitation]struct{}) []JournalSummaryBlock {
+	result := make([]JournalSummaryBlock, 0, len(blocks))
+	for _, block := range blocks {
+		if validateJournalCitationEvidence(block.Citations, allowed) == nil {
+			result = append(result, block)
+		}
+	}
+	return result
+}
+
+func filterJournalSummary(summary *JournalSummary, allowed map[JournalCitation]struct{}) *JournalSummary {
+	if summary == nil {
+		return nil
+	}
+	filtered := *summary
+	filtered.Blocks = filterJournalBlocks(summary.Blocks, allowed)
+	if len(filtered.Blocks) == 0 {
+		return nil
+	}
+	return &filtered
 }
 
 var journalWikiLinkPattern = regexp.MustCompile(`\]\(\s*([^)]*)\)`)
@@ -280,12 +324,18 @@ func filterJournalLegacyEvidence(records []JournalStoredRecord) []JournalStoredR
 	allowed := journalAllowedCitations(journalCorpusSources(journalCorpusFromRecords(records)))
 	result := make([]JournalStoredRecord, 0, len(records))
 	for _, record := range records {
-		if record.Summary != nil && validateJournalCitationEvidence(summaryCitations(*record.Summary), allowed) != nil {
-			continue
+		if record.Summary != nil {
+			record.Summary = filterJournalSummary(record.Summary, allowed)
+			if record.Summary == nil {
+				continue
+			}
 		}
-		if record.Entry != nil && record.Entry.Summary != nil && validateJournalCitationEvidence(summaryCitations(*record.Entry.Summary), allowed) != nil {
+		if record.Entry != nil && record.Entry.Summary != nil {
 			entry := *record.Entry
-			entry.Summary = nil
+			if entry.Title == nil {
+				entry.Title = ptr(entry.Summary.Title)
+			}
+			entry.Summary = filterJournalSummary(entry.Summary, allowed)
 			record.Entry = &entry
 		}
 		result = append(result, record)
@@ -303,11 +353,14 @@ func applyJournalGeneration(records []JournalStoredRecord, generation journalGen
 		if record.Entry == nil {
 			continue
 		}
-		if analysis, ok := analyses[record.Entry.Id]; ok {
-			entry := *record.Entry
-			entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond), JournalSummaryResult{Title: analysis.Title, Blocks: analysis.Blocks}, generation.Sources[entry.Id]))
-			result[i].Entry = &entry
+		entry := *record.Entry
+		if title, ok := generation.Titles[entry.Id]; ok {
+			entry.Title = ptr(title)
 		}
+		if analysis, ok := analyses[entry.Id]; ok {
+			entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond), JournalSummaryResult{Title: analysis.Title, Blocks: analysis.Blocks}, generation.Sources[entry.Id]))
+		}
+		result[i].Entry = &entry
 	}
 	return result
 }

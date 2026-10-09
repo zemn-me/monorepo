@@ -191,10 +191,17 @@ func (s *Server) searchJournalMCP(ctx context.Context, _ *mcp.CallToolRequest, f
 			continue
 		}
 		var title string
-		var parts []string
-		if entry.Summary != nil {
+		if entry.Title != nil {
+			title = *entry.Title
+		} else if entry.Summary != nil {
 			title = entry.Summary.Title
-			parts = append(parts, title, summaryText(*entry.Summary))
+		}
+		var parts []string
+		if title != "" {
+			parts = append(parts, title)
+		}
+		if entry.Summary != nil {
+			parts = append(parts, summaryText(*entry.Summary))
 		}
 		for _, segment := range entry.Transcript {
 			parts = append(parts, segment.Text)
@@ -224,6 +231,7 @@ type journalMCPEntryArgs struct {
 	ID string `json:"id" jsonschema:"UUID returned by search_journal"`
 }
 type journalMCPEntry struct {
+	Title      *string                    `json:"title,omitempty"`
 	ID         string                     `json:"id"`
 	RecordedAt time.Time                  `json:"recordedAt"`
 	TimeZone   string                     `json:"timeZone"`
@@ -244,7 +252,7 @@ func (s *Server) getJournalEntryMCP(ctx context.Context, _ *mcp.CallToolRequest,
 	if err != nil || entry.Status != JournalEntryStatusReady {
 		return nil, result, errors.New("journal entry not found")
 	}
-	result = journalMCPEntry{ID: entry.Id, RecordedAt: entry.RecordedAt, TimeZone: entry.TimeZone, Transcript: entry.Transcript, Summary: entry.Summary}
+	result = journalMCPEntry{Title: entry.Title, ID: entry.Id, RecordedAt: entry.RecordedAt, TimeZone: entry.TimeZone, Transcript: entry.Transcript, Summary: entry.Summary}
 	return nil, result, nil
 }
 
