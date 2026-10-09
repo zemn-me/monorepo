@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -11,7 +12,7 @@ import (
 
 // Exercise the HTTP date editor contract against published curation and durable
 // storage, rather than testing the frontend's fallback label in isolation.
-func TestJournalDateCorrectionPreservesRecordingTitles(t *testing.T) {
+func TestJournalDateCorrectionPreservesPublishedKnowledge(t *testing.T) {
 	server, curator, ctx, entries, now := journalKnowledgeFixture(t)
 	result := journalKnowledgeResult(entries)
 	for i := range result.Entries {
@@ -51,11 +52,13 @@ func TestJournalDateCorrectionPreservesRecordingTitles(t *testing.T) {
 	var before diary
 	request(http.MethodGet, "/journal", "", &before)
 	wantTitles := map[string]string{}
+	wantBlocks := map[string][]JournalSummaryBlock{}
 	for _, entry := range before.Entries {
 		if entry.Summary == nil {
 			t.Fatal("fixture did not publish a titled analysis")
 		}
 		wantTitles[entry.ID] = entry.Summary.Title
+		wantBlocks[entry.ID] = entry.Summary.Blocks
 	}
 	for _, date := range []string{"2026-09-26", "2026-09-25"} {
 		var edited recording
@@ -78,8 +81,11 @@ func TestJournalDateCorrectionPreservesRecordingTitles(t *testing.T) {
 			if title != wantTitles[entry.ID] {
 				t.Fatalf("after editing %s, recording %s became %q; want %q", entries[0].Id, entry.ID, title, wantTitles[entry.ID])
 			}
-			if entry.Summary != nil {
-				t.Fatal("date correction retained stale analysis prose")
+			if entry.Summary == nil || !reflect.DeepEqual(entry.Summary.Blocks, wantBlocks[entry.ID]) {
+				t.Fatal("date correction discarded published recording analysis")
+			}
+			if !entry.Summary.Start.Equal(entry.RecordedAt) {
+				t.Fatal("preserved analysis did not follow the corrected recording date")
 			}
 			if len(entry.Transcript) == 0 {
 				t.Fatal("date correction removed the original transcript")
@@ -88,8 +94,13 @@ func TestJournalDateCorrectionPreservesRecordingTitles(t *testing.T) {
 				t.Fatalf("recording date = %s, want %s", entry.RecordedAt, date)
 			}
 		}
-		if len(after.Wiki) != 0 {
-			t.Fatal("date correction retained stale wiki prose")
+		if !reflect.DeepEqual(after.Wiki, before.Wiki) {
+			t.Fatal("date correction discarded published wiki pages")
+		}
+		var page JournalWikiPage
+		request(http.MethodGet, "/journal/wiki/"+result.Pages[0].Id.String(), "", &page)
+		if !reflect.DeepEqual(page, result.Pages[0]) {
+			t.Fatal("date correction changed the published wiki page")
 		}
 		_, matches, err := server.searchJournalMCP(ctx, nil, journalMCPFilter{})
 		if err != nil || len(matches.Entries) != len(after.Entries) {
@@ -100,8 +111,8 @@ func TestJournalDateCorrectionPreservesRecordingTitles(t *testing.T) {
 				t.Fatalf("MCP recording title = %q, want %q", match.Title, wantTitles[match.ID])
 			}
 			_, recording, err := server.getJournalEntryMCP(ctx, nil, journalMCPEntryArgs{ID: match.ID})
-			if err != nil || recording.Title == nil || *recording.Title != match.Title || recording.Summary != nil {
-				t.Fatalf("MCP recording did not retain only its label and original sources: %#v %v", recording, err)
+			if err != nil || recording.Title == nil || *recording.Title != match.Title || recording.Summary == nil || !reflect.DeepEqual(recording.Summary.Blocks, wantBlocks[match.ID]) {
+				t.Fatalf("MCP recording did not retain its published analysis: %#v %v", recording, err)
 			}
 		}
 	}
