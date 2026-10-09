@@ -61,7 +61,7 @@ require (
 	github.com/twilio/twilio-go v1.31.2
 	github.com/xeipuuv/gojsonschema v1.2.0
 	golang.org/x/image v0.46.0
-	golang.org/x/sync v0.23.0
+	golang.org/x/sync v0.24.0
 	google.golang.org/protobuf v1.36.12
 )
 
