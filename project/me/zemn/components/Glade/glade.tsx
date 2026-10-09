@@ -75,19 +75,27 @@ function NavigationRays({
 	readonly loading: boolean;
 	readonly failed: boolean;
 }) {
+	const [showFailure, setShowFailure] = useState(failed);
+	useEffect(() => {
+		setShowFailure(failed);
+		if (!failed) return;
+		const timer = window.setTimeout(() => setShowFailure(false), 2200);
+		return () => window.clearTimeout(timer);
+	}, [failed]);
+	const failure = failed && showFailure;
 	const reducedMotion = useReducedMotion();
 	const { length } = useSpring({
-		length: loading || failed ? 145 : 0,
+		length: loading ? 145 : 0,
 		config: { tension: 600, friction: 30, clamp: true },
 		immediate: !!reducedMotion,
 	});
 	return (
 		<span
-			className={`${style.logoLoading} ${loading ? style.active : ''} ${failed ? style.failed : ''}`}
-			role={failed ? 'alert' : loading ? 'status' : undefined}
-			aria-hidden={!loading && !failed}
-			aria-label={failed ? 'Page could not be loaded' : 'Loading page'}
-			title={failed ? 'Page could not be loaded' : 'Loading page'}
+			className={`${style.logoLoading} ${loading ? style.active : ''}`}
+			role={failure ? 'alert' : loading ? 'status' : undefined}
+			aria-hidden={!loading && !failure}
+			aria-label={failure ? 'Page could not be loaded' : 'Loading page'}
+			title={failure ? 'Page could not be loaded' : 'Loading page'}
 		>
 			<svg
 				className={style.logoRays}
@@ -108,7 +116,7 @@ function NavigationRays({
 					/>
 				</g>
 			</svg>
-			{failed && (
+			{failure && (
 				<FontAwesomeIcon
 					aria-hidden="true"
 					icon={faTriangleExclamation}

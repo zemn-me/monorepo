@@ -335,14 +335,6 @@ html:has(.main) {
 	}
 }
 
-.failed {
-	--foreground-color: var(--error-color);
-}
-
-.failed .logoRays {
-	animation: navigationFailure 800ms ease-in-out forwards;
-}
-
 .navigationFailureIcon {
 	position: absolute;
 	inset-block-start: 50%;
@@ -352,48 +344,21 @@ html:has(.main) {
 	font-size: 16px;
 	inline-size: 1em;
 	block-size: 1em;
-	animation: failureIconIn 200ms 500ms both;
+	animation: failureIcon 2200ms ease-in-out both;
 }
 
-@keyframes navigationFailure {
+@keyframes failureIcon {
 	0%,
-	25% {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
-	35% {
-		transform: translate(calc(-50% - 4px), -50%);
-	}
-	45% {
-		transform: translate(calc(-50% + 4px), -50%);
-	}
-	55% {
-		transform: translate(calc(-50% - 2px), -50%);
-		opacity: 1;
-	}
-	65% {
-		transform: translate(-50%, -50%);
-	}
 	100% {
-		transform: translate(-50%, -50%) scale(0.35);
 		opacity: 0;
 	}
-}
-
-@keyframes failureIconIn {
-	from {
-		opacity: 0;
-	}
-	to {
+	9%,
+	91% {
 		opacity: 1;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.failed .logoRays {
-		animation: none;
-		opacity: 0;
-	}
 	.navigationFailureIcon {
 		animation: none;
 	}

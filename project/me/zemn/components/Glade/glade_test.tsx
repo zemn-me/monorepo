@@ -303,3 +303,23 @@ it('announces navigation failure with an icon and no visible prose or retry cont
 	act(() => root.render(<Glade navigationFailed navigationPending />));
 	expect(container.querySelector('[role="alert"]')).toBeNull();
 });
+
+it('retracts rays normally after failure and dismisses the warning after two seconds', () => {
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(500));
+	advanceSpring(400);
+	expect(rayLength()).toBeGreaterThan(0);
+	act(() => root.render(<Glade navigationFailed />));
+	advanceSpring(600);
+	expect(rayLength()).toBe(0);
+	expect(container.querySelector('[role="alert"]')).not.toBeNull();
+	act(() => jest.advanceTimersByTime(1400));
+	expect(
+		container.querySelector('[data-icon="triangle-exclamation"]')
+	).not.toBeNull();
+	act(() => jest.advanceTimersByTime(200));
+	expect(container.querySelector('[role="alert"]')).toBeNull();
+	expect(
+		container.querySelector('[data-icon="triangle-exclamation"]')
+	).toBeNull();
+});
