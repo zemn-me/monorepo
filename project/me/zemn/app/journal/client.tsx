@@ -60,6 +60,8 @@ import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
+	useGetJournalUploads,
+	useGetJournalWikiIndex,
 	useGetJournalWikiPage,
 	useGetMeScopes,
 	usePostJournalEntry,
@@ -76,6 +78,9 @@ import {
 
 type Journal = components['schemas']['Journal'];
 type JournalCitation = components['schemas']['JournalCitation'];
+type JournalWikiPageView = components['schemas']['JournalWikiPageView'];
+type JournalWikiIndex = components['schemas']['JournalWikiIndex'];
+type JournalCurationStatus = components['schemas']['JournalCurationStatus'];
 type JournalEntry = components['schemas']['JournalEntry'];
 type JournalTranscriptSegment = JournalEntry['transcript'][number];
 type JournalSummary = components['schemas']['JournalSummary'];
@@ -194,6 +199,17 @@ function followsLinkNormally(event: ReactMouseEvent<HTMLAnchorElement>) {
 		event.shiftKey
 	);
 }
+
+type JournalCitationPlayback = Pick<
+	JournalPlayback,
+	| 'hrefForSegment'
+	| 'labelForSegment'
+	| 'playSegment'
+	| 'playingEntryID'
+	| 'playingSegmentID'
+	| 'quoteForSegment'
+	| 'titleForEntry'
+>;
 
 interface JournalPlayback {
 	readonly activeEntryID: string | undefined;
@@ -512,7 +528,7 @@ function SummaryBlock({
 	readonly block: JournalSummaryBlock;
 	readonly citationIDs: readonly string[];
 	readonly links: readonly SummaryCitationLink[];
-	readonly playback: JournalPlayback;
+	readonly playback: JournalCitationPlayback;
 }) {
 	const { linksByHref, markdown } = useMemo(() => {
 		const referenced = new Set<number>();
@@ -622,7 +638,7 @@ function SummaryCardView({
 	summary,
 	timeZone,
 }: {
-	readonly playback: JournalPlayback;
+	readonly playback: JournalCitationPlayback;
 	readonly showPeriod?: boolean;
 	readonly showTitle?: boolean;
 	readonly summary: JournalSummary;
@@ -1770,8 +1786,10 @@ function ZoomNavigation({
 	}, [visibleRoute]);
 	const href = (destination: JournalRoute | undefined) =>
 		destination
-			? journalHref(destination, { at: focus })
-			: `/journal?${new URLSearchParams({ at: focus })}`;
+			? journalHref(destination, focus ? { at: focus } : {})
+			: focus
+				? `/journal?${new URLSearchParams({ at: focus })}`
+				: '/journal';
 	return (
 		<nav
 			aria-label="Browse journal"
@@ -2199,69 +2217,18 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 	);
 }
 
-function JournalWikiPage({
-	pageID,
-	generation,
-	playback,
+function WikiHeader({
+	index = false,
+	curation,
 }: {
-	readonly pageID: string;
-	readonly generation?: string;
-	readonly playback: JournalPlayback;
+	readonly index?: boolean;
+	readonly curation?: JournalCurationStatus;
 }) {
-	const [token] = useZemnMeAuth();
-	const page = useGetJournalWikiPage(token, pageID, generation);
-	return page(
-		value => (
-			<div>
-				<p className={style.wikiKind}>{value.kind}</p>
-				<SummaryCard
-					playback={playback}
-					showPeriod={false}
-					summary={{
-						schemaVersion: 1,
-						id: `wiki:${value.id}`,
-						title: value.title,
-						blocks: value.blocks,
-						period: 'journal',
-						start: '',
-						end: '',
-					}}
-				/>
-				{value.aliases.length > 0 && (
-					<p>Also known as {value.aliases.join(', ')}</p>
-				)}
-			</div>
-		),
-		() => <JournalPlaceholder label="Loading wiki page" />,
-		() => (
-			<p role="alert">This page is unavailable or awaiting an update.</p>
-		)
-	);
-}
-
-function JournalWiki({
-	journal,
-	pageID,
-	playback,
-}: {
-	readonly journal: Journal;
-	readonly pageID: string;
-	readonly playback: JournalPlayback;
-}) {
-	const [query, setQuery] = useState('');
-	const pages = journal.wiki ?? [];
-	const selected = pages.find(page => page.id === pageID);
-	const matches = pages.filter(page =>
-		[page.title, ...page.aliases]
-			.join(' ')
-			.toLocaleLowerCase()
-			.includes(query.toLocaleLowerCase())
-	);
 	return (
-		<section className={style.wiki} aria-label="Diary wiki">
+		<>
 			<header className={style.wikiHeader}>
 				<h2>
-					{pageID === 'all' ? (
+					{index ? (
 						'Wiki'
 					) : (
 						<Link href="/journal?wiki=all" scroll={false}>
@@ -2269,67 +2236,207 @@ function JournalWiki({
 						</Link>
 					)}
 				</h2>
-				{journal.curation?.updatedAt && (
+				{curation?.updatedAt && (
 					<small>
 						Updated{' '}
-						<LocalizedDate
-							date={new Date(journal.curation.updatedAt)}
-						/>
+						<LocalizedDate date={new Date(curation.updatedAt)} />
 					</small>
 				)}
 			</header>
-			{journal.curation?.status === 'failed' && (
+			{curation?.status === 'failed' && (
 				<p role="status">
 					The latest update could not finish. It will retry
 					automatically.
 				</p>
 			)}
-			{pageID === 'all' ? (
-				<>
-					<label className={style.wikiSearch}>
-						Find a person, place, or project
-						<input
-							type="search"
-							value={query}
-							onChange={event =>
-								setQuery(event.currentTarget.value)
-							}
-						/>
-					</label>
-					{matches.length > 0 ? (
-						<ul className={style.wikiIndex}>
-							{matches.map(page => (
-								<li key={page.id}>
-									<Link
-										href={`/journal?wiki=${page.id}`}
-										scroll={false}
-									>
-										<strong>{page.title}</strong>
-										<span>{page.kind}</span>
-									</Link>
-								</li>
-							))}
-						</ul>
-					) : (
-						<p>
-							{pages.length
-								? 'No matching pages.'
-								: journal.entries.length
-									? 'Wiki pages will appear after the diary is analyzed.'
-									: 'Record a diary entry to begin.'}
-						</p>
-					)}
-				</>
-			) : selected ? (
-				<JournalWikiPage
-					pageID={selected.id}
-					generation={journal.curation?.generation}
-					playback={playback}
-				/>
-			) : (
+		</>
+	);
+}
+
+function WikiArticle({ page }: { readonly page: JournalWikiPageView }) {
+	const playback = useMemo<JournalCitationPlayback>(() => {
+		const key = (entryID: string, segmentID: string) =>
+			JSON.stringify([entryID, segmentID]);
+		const sources = new Map(
+			page.sources.map(source => [
+				key(source.entryId, source.segmentId),
+				source,
+			])
+		);
+		const entries = new Map(
+			page.sources.map(source => [source.entryId, source])
+		);
+		const quotes = new Map(
+			page.blocks
+				.flatMap(block => block.citations)
+				.map(citation => [
+					key(citation.entryId, citation.segmentId),
+					citation.quote,
+				])
+		);
+		return {
+			hrefForSegment: (entryID, segmentID) => {
+				const source = sources.get(key(entryID, segmentID));
+				return journalPlaybackHref(
+					entryID,
+					(source?.startMs ?? 0) / 1000,
+					journalHref('day', { at: source?.recordedAt })
+				);
+			},
+			labelForSegment: (entryID, segmentID) =>
+				mediaTimestamp(
+					sources.get(key(entryID, segmentID))?.startMs ?? 0
+				),
+			quoteForSegment: (entryID, segmentID) =>
+				quotes.get(key(entryID, segmentID)) ?? '',
+			titleForEntry: entryID => {
+				const source = entries.get(entryID);
+				if (!source) return '';
+				const date = Temporal.Instant.from(source.recordedAt)
+					.toZonedDateTimeISO(source.timeZone)
+					.toPlainDate()
+					.toString();
+				return source.title ? `${date}: ${source.title}` : date;
+			},
+			playSegment: () => false,
+			playingEntryID: undefined,
+			playingSegmentID: undefined,
+		};
+	}, [page]);
+	return (
+		<>
+			<WikiHeader curation={page.curation} />
+			<p className={style.wikiKind}>{page.kind}</p>
+			<SummaryCard
+				playback={playback}
+				showPeriod={false}
+				summary={{
+					schemaVersion: 1,
+					id: `wiki:${page.id}`,
+					title: page.title,
+					blocks: page.blocks,
+					period: 'journal',
+					start: '',
+					end: '',
+				}}
+			/>
+			{page.aliases.length > 0 && (
+				<p>Also known as {page.aliases.join(', ')}</p>
+			)}
+		</>
+	);
+}
+
+function JournalWikiPage({ pageID }: { readonly pageID: string }) {
+	const [token] = useZemnMeAuth();
+	const page = useGetJournalWikiPage(token, pageID);
+	return page(
+		value => <WikiArticle page={value} />,
+		() => (
+			<>
+				<WikiHeader />
+				<JournalPlaceholder label="Loading wiki page" />
+			</>
+		),
+		() => (
+			<>
+				<WikiHeader />
 				<p role="status">
 					This page is unavailable or awaiting an update.
 				</p>
+			</>
+		)
+	);
+}
+
+function WikiIndex({
+	index,
+	query,
+	setQuery,
+}: {
+	readonly index: JournalWikiIndex;
+	readonly query: string;
+	readonly setQuery: (query: string) => void;
+}) {
+	const pages = index.pages;
+	const matches = pages.filter(page =>
+		[page.title, ...page.aliases]
+			.join(' ')
+			.toLocaleLowerCase()
+			.includes(query.toLocaleLowerCase())
+	);
+	return (
+		<>
+			<WikiHeader curation={index.curation} index />
+			<label className={style.wikiSearch}>
+				Find a person, place, or project
+				<input
+					type="search"
+					value={query}
+					onChange={event => setQuery(event.currentTarget.value)}
+				/>
+			</label>
+			{matches.length > 0 ? (
+				<ul className={style.wikiIndex}>
+					{matches.map(page => (
+						<li key={page.id}>
+							<Link
+								href={`/journal?wiki=${page.id}`}
+								scroll={false}
+							>
+								<strong>{page.title}</strong>
+								<span>{page.kind}</span>
+							</Link>
+						</li>
+					))}
+				</ul>
+			) : (
+				<p>
+					{pages.length
+						? 'No matching pages.'
+						: index.hasEntries
+							? 'Wiki pages will appear after the diary is analyzed.'
+							: 'Record a diary entry to begin.'}
+				</p>
+			)}
+		</>
+	);
+}
+
+function JournalWikiIndex({
+	query,
+	setQuery,
+}: {
+	readonly query: string;
+	readonly setQuery: (query: string) => void;
+}) {
+	const [token] = useZemnMeAuth();
+	const index = useGetJournalWikiIndex(token);
+	return index(
+		value => <WikiIndex index={value} query={query} setQuery={setQuery} />,
+		() => (
+			<>
+				<WikiHeader index />
+				<JournalPlaceholder label="Loading wiki" />
+			</>
+		),
+		() => (
+			<>
+				<WikiHeader index />
+				<p role="alert">Could not load the wiki.</p>
+			</>
+		)
+	);
+}
+
+function JournalWiki({ pageID }: { readonly pageID: string }) {
+	const [query, setQuery] = useState('');
+	return (
+		<section className={style.wiki} aria-label="Diary wiki">
+			{pageID === 'all' ? (
+				<JournalWikiIndex query={query} setQuery={setQuery} />
+			) : (
+				<JournalWikiPage pageID={pageID} />
 			)}
 		</section>
 	);
@@ -2408,25 +2515,6 @@ function JournalBrowser({
 		},
 		[setRawSelection]
 	);
-
-	if (rawSelection.wiki !== null) {
-		return (
-			<div>
-				<JournalToolbar
-					actions={actions}
-					focus={focus}
-					route={route}
-					wiki
-				/>
-				{localRecordings}
-				<JournalWiki
-					journal={journal}
-					pageID={rawSelection.wiki}
-					playback={playback}
-				/>
-			</div>
-		);
-	}
 
 	if (route === undefined) {
 		const readyEntries = journal.entries.filter(
@@ -2719,7 +2807,11 @@ export default function JournalPageClient({
 	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
-	const journal = useGetJournal(idToken);
+	const [selection] = useQueryStates(journalSelectionQuery);
+	const isWiki = selection.wiki !== null;
+	const [hasLocalRecordings, setHasLocalRecordings] = useState(false);
+	const journal = useGetJournal(idToken, !isWiki);
+	const uploads = useGetJournalUploads(idToken, isWiki && hasLocalRecordings);
 	const createEntry = usePostJournalEntry(idToken);
 	const deleteEntry = useDeleteJournalEntry(idToken);
 	const updateEntryDate = useUpdateJournalEntryDate(idToken);
@@ -2768,12 +2860,12 @@ export default function JournalPageClient({
 				() => false
 			),
 		upload: createJournalEntry,
-		entries: journal(
+		entries: (isWiki ? uploads : journal)(
 			value => value.entries,
 			() => [],
 			() => []
 		),
-		readyEntryIDs: journal(
+		readyEntryIDs: (isWiki ? uploads : journal)(
 			value =>
 				value.entries
 					.filter(entry => entry.status === 'ready')
@@ -2782,6 +2874,9 @@ export default function JournalPageClient({
 			() => []
 		),
 	});
+	useEffect(() => {
+		setHasLocalRecordings(queue.recordings.length > 0);
+	}, [queue.recordings.length]);
 	const keepRecording = queue.keep;
 	const refreshRecordings = queue.refresh;
 	useEffect(() => {
@@ -3088,60 +3183,80 @@ export default function JournalPageClient({
 			) : (
 				<>
 					{isDevelopment && <DevelopmentJournalTools />}
-					{journal(
-						value => (
-							<JournalBrowser
-								localRecordings={
+					{isWiki ? (
+						<div>
+							<JournalToolbar
+								actions={captureControls}
+								focus={selection.at ?? ''}
+								route={route}
+								wiki
+							/>
+							<LocalRecordings
+								queue={queue}
+								activeID={recorder.current?.id}
+							/>
+							<JournalWiki pageID={selection.wiki ?? 'all'} />
+						</div>
+					) : (
+						journal(
+							value => (
+								<JournalBrowser
+									localRecordings={
+										<LocalRecordings
+											queue={queue}
+											activeID={recorder.current?.id}
+										/>
+									}
+									localEntryIDs={queue.recordings.map(
+										draft => draft.remoteEntryID
+									)}
+									actions={captureControls}
+									deleteEntry={
+										hasWriteScope
+											? deleteJournalEntry
+											: undefined
+									}
+									journal={value}
+									route={route}
+									updateEntryDate={
+										hasWriteScope
+											? updateJournalEntryDate
+											: undefined
+									}
+								/>
+							),
+							() => (
+								<>
+									<JournalToolbar
+										actions={captureControls}
+										focus={new Date(
+											renderTime
+										).toISOString()}
+									/>
 									<LocalRecordings
 										queue={queue}
 										activeID={recorder.current?.id}
 									/>
-								}
-								localEntryIDs={queue.recordings.map(
-									draft => draft.remoteEntryID
-								)}
-								actions={captureControls}
-								deleteEntry={
-									hasWriteScope
-										? deleteJournalEntry
-										: undefined
-								}
-								journal={value}
-								route={route}
-								updateEntryDate={
-									hasWriteScope
-										? updateJournalEntryDate
-										: undefined
-								}
-							/>
-						),
-						() => (
-							<>
-								<JournalToolbar
-									actions={captureControls}
-									focus={new Date(renderTime).toISOString()}
-								/>
-								<LocalRecordings
-									queue={queue}
-									activeID={recorder.current?.id}
-								/>
-								<JournalPlaceholder label="Loading journal" />
-							</>
-						),
-						error => (
-							<>
-								<JournalToolbar
-									actions={captureControls}
-									focus={new Date(renderTime).toISOString()}
-								/>
-								<LocalRecordings
-									queue={queue}
-									activeID={recorder.current?.id}
-								/>
-								<p className={style.notice}>
-									{errorMessage(error)}
-								</p>
-							</>
+									<JournalPlaceholder label="Loading journal" />
+								</>
+							),
+							error => (
+								<>
+									<JournalToolbar
+										actions={captureControls}
+										focus={new Date(
+											renderTime
+										).toISOString()}
+									/>
+									<LocalRecordings
+										queue={queue}
+										activeID={recorder.current?.id}
+									/>
+									<p className={style.notice}>
+										{errorMessage(error)}
+									</p>
+								</>
+							)
 						)
 					)}
 					<JournalMCPSetup />

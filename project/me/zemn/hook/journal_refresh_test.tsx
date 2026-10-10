@@ -19,8 +19,8 @@ jest.unstable_mockModule('#root/ts/oidc/oidc.js', () => ({
 }));
 const { useGetJournal } = await import('./useZemnMeApi.js');
 
-function JournalSummary() {
-	return useGetJournal(resolve('test-token'))(
+function JournalSummary({ enabled = true }: { readonly enabled?: boolean }) {
+	return useGetJournal(resolve('test-token'), enabled)(
 		journal => (
 			<output>
 				{journal.summaries.map(summary => summary.title).join(', ')}
@@ -74,6 +74,34 @@ it('refreshes an aggregate that finishes after the final entry is ready', async 
 		expect(container.textContent).toBe(
 			'Overview including the last upload'
 		);
+	} finally {
+		await act(async () => root.unmount());
+		client.clear();
+	}
+});
+
+it('does not fetch or poll the full journal while its observer is disabled', async () => {
+	jest.useFakeTimers();
+	const client = new QueryClient({
+		defaultOptions: { queries: { retry: false } },
+	});
+	client.setQueryData(['get', '/journal', 'journal-refresh-test'], {
+		entries: [{ status: 'ready' }],
+		summaries: [{ title: 'Previously loaded journal' }],
+	});
+	const root = createRoot(document.createElement('div'));
+	try {
+		await act(async () => {
+			root.render(
+				<QueryClientProvider client={client}>
+					<JournalSummary enabled={false} />
+				</QueryClientProvider>
+			);
+		});
+		await act(async () => {
+			await jest.advanceTimersByTimeAsync(30001);
+		});
+		expect(fetchJournal).not.toHaveBeenCalled();
 	} finally {
 		await act(async () => root.unmount());
 		client.clear();

@@ -53,6 +53,7 @@ type journalCurationState struct {
 	InputKey             string    `dynamodbav:"input_key"`
 	Fingerprint          string    `dynamodbav:"fingerprint"`
 	PublishedKey         string    `dynamodbav:"published_key"`
+	PublishedWikiKey     string    `dynamodbav:"published_wiki_key"`
 	PublishedFingerprint string    `dynamodbav:"published_fingerprint"`
 	PublishedAt          time.Time `dynamodbav:"published_at"`
 	Failed               bool      `dynamodbav:"failed"`
@@ -394,27 +395,6 @@ func applyJournalGeneration(records []JournalStoredRecord, generation journalGen
 	return result
 }
 
-func (s *Server) GetJournalWikiPageId(ctx context.Context, request GetJournalWikiPageIdRequestObject) (GetJournalWikiPageIdResponseObject, error) {
-	subject, err := journalSubject(ctx)
-	if err != nil {
-		return nil, err
-	}
-	records, err := s.listJournalRecords(ctx, subject)
-	if err != nil {
-		return nil, err
-	}
-	generation, _, err := s.journalPublishedGeneration(ctx, records)
-	if err != nil {
-		return nil, err
-	}
-	for _, page := range generation.Result.Pages {
-		if page.Id == request.PageId {
-			return GetJournalWikiPageId200JSONResponse(page), nil
-		}
-	}
-	return GetJournalWikiPageId404JSONResponse{Cause: "Wiki page unavailable or awaiting an update."}, nil
-}
-
 // RefreshJournalKnowledge advances one durable run without holding a Lambda
 // open for the cloud agent. A five-minute schedule reconciles work; new paid
 // work starts once per 24 hours, with at most two retries after failure.
@@ -610,6 +590,10 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 	if err := s.putJournalJSON(ctx, key, journalGeneration{Sources: hashes, Result: *result}); err != nil {
 		return err
 	}
+	wikiKey, err := s.writeJournalWikiGeneration(ctx, key, *result)
+	if err != nil {
+		return err
+	}
 	// Recheck after artifact validation and date corrections. Concurrent source
 	// changes must not publish output built from an older snapshot.
 	records, err = s.listJournalRecords(ctx, journalOwnerSubject)
@@ -621,7 +605,7 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 		state.Cleaning = true
 		return nil
 	}
-	state.PublishedKey, state.PublishedFingerprint, state.PublishedAt = key, fingerprint, now
+	state.PublishedKey, state.PublishedWikiKey, state.PublishedFingerprint, state.PublishedAt = key, wikiKey, fingerprint, now
 	state.Cleaning, state.Failed = true, false
 	return nil
 }
