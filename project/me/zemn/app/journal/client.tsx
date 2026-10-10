@@ -579,9 +579,6 @@ function SummaryBlock({
 						<Link
 							{...props}
 							href={href}
-							scroll={
-								href?.startsWith('/journal?wiki=') ? false : undefined
-							}
 						>
 							{children}
 						</Link>
@@ -1854,7 +1851,6 @@ function JournalToolbar({
 			<Link
 				className={style.wikiNavigation}
 				href="/journal?wiki=all"
-				scroll={false}
 				aria-current={wiki ? 'page' : undefined}
 			>
 				Wiki
@@ -1993,39 +1989,6 @@ function PeriodList({
 		observer.observe(button);
 		return () => observer.disconnect();
 	}, [hasOlderDays, showOlderDays]);
-
-	useEffect(() => {
-		const node = periods[focusedIndex];
-		if (positionedFocus.current === focus || node === undefined) return;
-		const frame = window.requestAnimationFrame(() => {
-			const element = listRef.current?.querySelector<HTMLElement>(
-				`[data-journal-period-start="${CSS.escape(node.start)}"]`
-			);
-			if (!element) return;
-			positionedFocus.current = focus;
-			const duration = Date.parse(node.end) - Date.parse(node.start);
-			const fraction = !periodContains(node, focus)
-				? 0
-				: Math.max(
-						0,
-						Math.min(
-							1,
-							(Date.parse(focus) - Date.parse(node.start)) /
-								duration
-						)
-					);
-			const bounds = element.getBoundingClientRect();
-			window.scrollTo({
-				behavior: 'instant',
-				top:
-					window.scrollY +
-					bounds.top +
-					bounds.height * fraction -
-					window.innerHeight / 2,
-			});
-		});
-		return () => window.cancelAnimationFrame(frame);
-	}, [focus, focusedIndex, periods, page]);
 
 	useEffect(() => {
 		let frame = 0;
@@ -2231,7 +2194,7 @@ function WikiHeader({
 					{index ? (
 						'Wiki'
 					) : (
-						<Link href="/journal?wiki=all" scroll={false}>
+						<Link href="/journal?wiki=all">
 							Wiki
 						</Link>
 					)}
@@ -2382,7 +2345,6 @@ function WikiIndex({
 						<li key={page.id}>
 							<Link
 								href={`/journal?wiki=${page.id}`}
-								scroll={false}
 							>
 								<strong>{page.title}</strong>
 								<span>{page.kind}</span>
@@ -2539,7 +2501,7 @@ function JournalBrowser({
 					/>
 				) : journal.curation ? (
 					<p className={style.wikiIntro}>
-						<Link href="/journal?wiki=all" scroll={false}>
+						<Link href="/journal?wiki=all">
 							Explore the diary wiki
 						</Link>{' '}
 						for people, places, and projects across your recordings.

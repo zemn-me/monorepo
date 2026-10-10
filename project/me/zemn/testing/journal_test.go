@@ -459,6 +459,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err := waitForText(driver, "Experiments in attention", 10*time.Second); err != nil {
 		t.Fatalf("journal month route: %v", err)
 	}
+	assertJournalNavigationAtTop(t, driver, "/journal/month")
 	monthDisclosure, err := waitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='month'][open]", 10*time.Second)
 	if err != nil {
 		t.Fatalf("selected journal month did not open on arrival: %v", err)
@@ -476,6 +477,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err := waitForText(driver, "Making room for steadier work", 10*time.Second); err != nil {
 		t.Fatalf("journal week route: %v", err)
 	}
+	assertJournalNavigationAtTop(t, driver, "/journal/week")
 	usesWeeklyDateRange, err := driver.ExecuteScript(`
 		const disclosure = document.querySelector(
 			"details[data-journal-period-disclosure='week']"
@@ -511,6 +513,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err := waitForText(driver, "A day that found its own pace", 10*time.Second); err != nil {
 		t.Fatalf("journal day list route: %v", err)
 	}
+	assertJournalNavigationAtTop(t, driver, "/journal/day")
 	if err := waitForJournalAudioCount(driver, 4, 10*time.Second); err != nil {
 		t.Fatalf("journal day timeline did not contain its entries: %v", err)
 	}
@@ -611,7 +614,13 @@ func TestJournalEndToEnd(t *testing.T) {
 		); err != nil {
 			t.Fatalf("journal did not finish zooming out to %s: %v", level, err)
 		}
+		wantPath := "/journal"
+		if level != "Overview" {
+			wantPath += "/" + strings.ToLower(strings.TrimSuffix(level, "s"))
+		}
+		assertJournalNavigationAtTop(t, driver, wantPath)
 	}
+
 	if _, err := waitForElement(driver, selenium.ByCSSSelector, "[data-journal-summary-block]", 10*time.Second); err != nil {
 		t.Fatalf("journal hierarchy did not return to its overview summary: %v", err)
 	}
@@ -2397,5 +2406,82 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 			dumpPageDiagnostics(t, driver)
 			t.Fatalf("upload %d stayed in the local queue: %v", attempt, err)
 		}
+	}
+}
+
+func TestJournalNavigationReturnsToTop(t *testing.T) {
+	root, err := frontendRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	root.Path = "/journal"
+	for sizeIndex, width := range []int{1280, 390} {
+		t.Run(fmt.Sprintf("width-%d", width), func(t *testing.T) {
+			driver, err := seleniumpkg.New()
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer driver.Close()
+			if err := driver.ResizeWindow("", width, 844); err != nil {
+				t.Fatal(err)
+			}
+			if err := driver.Get(root.String()); err != nil {
+				t.Fatal(err)
+			}
+			if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+				t.Fatal(err)
+			}
+			input, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var paths []string
+			for i := range 6 {
+				audio := testWAV()
+				audio[len(audio)-4] = byte(90 + sizeIndex*6 + i)
+				path := filepath.Join(t.TempDir(), fmt.Sprintf("scroll-%d.wav", i))
+				if err := os.WriteFile(path, audio, 0600); err != nil {
+					t.Fatal(err)
+				}
+				at := time.Date(2025, time.July, 16, 12, 0, 0, 0, time.UTC).AddDate(0, -i, 0)
+				if err := os.Chtimes(path, at, at); err != nil {
+					t.Fatal(err)
+				}
+				paths = append(paths, path)
+			}
+			if err := input.SendKeys(strings.Join(paths, "\n")); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
+				t.Fatal(err)
+			}
+			if err := waitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
+				t.Fatal(err)
+			}
+			for _, destination := range []struct{ label, path string }{
+				{"Years", "/journal/year"}, {"Months", "/journal/month"},
+				{"Weeks", "/journal/week"}, {"Days", "/journal/day"},
+				{"Overview", "/journal"}, {"Wiki", "/journal"},
+			} {
+				if _, err := driver.ExecuteScript(`window.scrollTo(0, 400); return window.scrollY;`, nil); err != nil {
+					t.Fatal(err)
+				}
+				if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+					scrolled, err := d.ExecuteScript(`return window.scrollY > 0;`, nil)
+					return scrolled == true, err
+				}, 5*time.Second); err != nil {
+					t.Fatalf("%s source page was not scrollable: %v", destination.label, err)
+				}
+				link, err := driver.FindElement(selenium.ByLinkText, destination.label)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := link.Click(); err != nil {
+					t.Fatal(err)
+				}
+				assertJournalNavigationAtTop(t, driver, destination.path)
+			}
+			saveNavigationScreenshot(t, driver, fmt.Sprintf("journal-navigation-top-%d.png", width))
+		})
 	}
 }
