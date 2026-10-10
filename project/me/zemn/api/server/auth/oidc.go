@@ -47,8 +47,14 @@ func UserInfoFromContext(ctx context.Context) (*IDToken, bool) {
 // ScopeResolver resolves scopes for a verified token subject.
 var ScopeResolver func(ctx context.Context, issuer, subject string) ([]string, error)
 
-// suuper basic oidc auth that only checks if it's me via Google.
-func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err error) {
+type OIDCOptions struct {
+	// AllowRequestHostIssuer supports local servers whose issuer uses their
+	// assigned address. Deployed servers must use configured issuers only.
+	AllowRequestHostIssuer bool
+}
+
+// OIDC verifies the identity before resolving its required account scopes.
+func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput, opts OIDCOptions) (err error) {
 	if ai.SecuritySchemeName != securitySchemeOIDC {
 		return fmt.Errorf("unsupported security scheme %q", ai.SecuritySchemeName)
 	}
@@ -63,7 +69,7 @@ func OIDC(ctx context.Context, ai *openapi3filter.AuthenticationInput) (err erro
 		return errors.New("missing authorization header")
 	}
 
-	allowed := allowableIssuerClients(ai.RequestValidationInput.Request, issuerFromScheme)
+	allowed := allowableIssuerClients(ai.RequestValidationInput.Request, issuerFromScheme, opts)
 	if len(allowed) == 0 {
 		return errors.New("no allowable issuers configured")
 	}
@@ -140,7 +146,7 @@ func issuerFromSecurityScheme(scheme *openapi3.SecurityScheme) (string, error) {
 	return issuer.String(), nil
 }
 
-func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClient {
+func allowableIssuerClients(req *http.Request, schemeIssuer string, opts OIDCOptions) []issuerClient {
 	seen := map[string]struct{}{}
 	var candidates []issuerClient
 
@@ -162,7 +168,7 @@ func allowableIssuerClients(req *http.Request, schemeIssuer string) []issuerClie
 	add(schemeIssuer, zemnMeClientID)
 	add(os.Getenv("ZEMN_API_ORIGIN"), zemnMeClientID)
 
-	if req != nil {
+	if opts.AllowRequestHostIssuer && req != nil {
 		scheme := "https"
 		if req.URL != nil && req.URL.Scheme != "" {
 			scheme = req.URL.Scheme

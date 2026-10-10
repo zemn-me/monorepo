@@ -95,7 +95,7 @@ func repeatedValues(values url.Values) bool {
 func (s *Server) authenticateAPI(ctx context.Context, input *openapi3filter.AuthenticationInput) error {
 	scheme := input.SecuritySchemeName
 	if scheme != "JournalMCPBearer" && scheme != "JournalConsentBearer" {
-		return auth.OIDC(ctx, input)
+		return auth.OIDC(ctx, input, s.oidcOptions)
 	}
 	r := input.RequestValidationInput.Request
 	header, token, _ := strings.Cut(r.Header.Get("Authorization"), " ")
