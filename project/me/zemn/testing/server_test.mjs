@@ -115,14 +115,14 @@ function fakeAPI(t, subjects = ['alice', 'bob', 'restricted']) {
 			aliases: [],
 			blocks: [],
 		};
-		if (route === '/journal')
+		if (route === '/journal/wiki')
 			return Response.json({
-				entries: [],
-				summaries: [],
-				wiki: [page],
+				pages: [page],
+				hasEntries: true,
 				curation: { status: 'ready', generation: sub },
 			});
-		if (route === `/journal/wiki/${wikiID}`) return Response.json(page);
+		if (route === `/journal/wiki/${wikiID}`)
+			return Response.json({ ...page, sources: [] });
 		assert.fail(`Unexpected API call ${route}`);
 	});
 	return { tokens, calls };
@@ -157,7 +157,7 @@ function assertPrivate(response) {
 }
 
 test('authenticated HTML and navigation data are rendered per request without serializing credentials', async t => {
-	const { tokens } = fakeAPI(t);
+	const { tokens, calls } = fakeAPI(t);
 	const sessions = await Promise.all(
 		[...tokens].slice(0, 2).map(async ([token, sub]) => ({
 			token,
@@ -196,13 +196,22 @@ test('authenticated HTML and navigation data are rendered per request without se
 						assert.match(body, /aria-label="Diary wiki"/);
 						assert.doesNotMatch(
 							body,
-							/aria-label="Loading (journal|wiki page)"/
+							/aria-label="Loading (journal|wiki|wiki page)"/
 						);
 					}
 				}
 			})
 		);
 	}
+	assert.equal(calls.filter(call => call.route === '/journal').length, 0);
+	assert.equal(
+		calls.filter(call => call.route === '/journal/wiki').length,
+		8
+	);
+	assert.equal(
+		calls.filter(call => call.route === `/journal/wiki/${wikiID}`).length,
+		4
+	);
 	const anonymous = await request('/journal?wiki=all');
 	assertPrivate(anonymous);
 	const body = await anonymous.text();
@@ -228,7 +237,7 @@ test('invalid, expired, and unprivileged cookies cannot render a journal', async
 			/private wiki|aria-label="Diary wiki"/
 		);
 	}
-	assert.ok(!calls.some(call => call.route === '/journal'));
+	assert.ok(!calls.some(call => call.route.startsWith('/journal')));
 	const rejected = await request('/auth/session', {
 		method: 'POST',
 		headers: {
