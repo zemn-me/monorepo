@@ -91,6 +91,7 @@ const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
 const isDevelopment = process.env.NODE_ENV === 'development';
 const playbackStallRecoveryDelayMs = 1_500;
+const journalDayPageSize = 7;
 
 function errorMessage(value: unknown): string {
 	return value instanceof Error
@@ -1599,16 +1600,6 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 	);
 }
 
-function containingPeriod(
-	journal: Journal,
-	period: AggregatePeriod,
-	timestamp: string
-) {
-	return periodsFor(journal, period).find(node =>
-		periodContains(node, timestamp)
-	);
-}
-
 function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
 	const pathname = `/journal/${route}`;
 	const query = new URLSearchParams(
@@ -1886,40 +1877,128 @@ function PeriodList({
 		[journal, nextRoute]
 	);
 	const listRef = useRef<HTMLDivElement>(null);
-	const positionedPeriod = useRef<AggregatePeriod | undefined>(undefined);
+	const olderDaysRef = useRef<HTMLButtonElement>(null);
+	const positionedFocus = useRef<string | undefined>(undefined);
 	const focusRef = useRef(focus);
 	focusRef.current = focus;
+	const focusedIndex = Math.max(
+		0,
+		periods.findIndex(node => periodContains(node, focus))
+	);
+	const pageAt = (index: number) => ({
+		newest: index === 0 ? undefined : periods[index]?.start,
+		oldest: periods[
+			Math.min(periods.length - 1, index + journalDayPageSize - 1)
+		]?.start,
+	});
+	const [page, setPage] = useState(() => pageAt(focusedIndex));
+	const newestIndex =
+		page.newest === undefined
+			? 0
+			: periods.findIndex(
+					node => Date.parse(node.start) <= Date.parse(page.newest!)
+				);
+	const firstIndex =
+		newestIndex < 0 ? Math.max(0, periods.length - 1) : newestIndex;
+	const oldestIndex =
+		page.oldest === undefined
+			? Math.min(periods.length - 1, firstIndex + journalDayPageSize - 1)
+			: periods.findIndex(
+					node => Date.parse(node.start) <= Date.parse(page.oldest!)
+				);
+	const lastIndex = Math.max(
+		firstIndex,
+		oldestIndex < 0 ? periods.length - 1 : oldestIndex
+	);
+	const visiblePeriods =
+		period === 'day' ? periods.slice(firstIndex, lastIndex + 1) : periods;
+	// Scroll updates keep their page; a link to an unmounted day starts there.
+	if (
+		period === 'day' &&
+		positionedFocus.current !== focus &&
+		(focusedIndex < firstIndex || focusedIndex > lastIndex)
+	) {
+		setPage(pageAt(focusedIndex));
+	}
+	const hasNewerDays = period === 'day' && firstIndex > 0;
+	const hasOlderDays = period === 'day' && lastIndex < periods.length - 1;
+	const showOlderDays = useCallback(() => {
+		setPage(previous => ({
+			...previous,
+			oldest: periods[
+				Math.min(periods.length - 1, lastIndex + journalDayPageSize)
+			]?.start,
+		}));
+	}, [lastIndex, periods]);
+	const prependAnchor = useRef<
+		{ element: HTMLElement; top: number } | undefined
+	>(undefined);
+	const showNewerDays = () => {
+		const element = listRef.current?.querySelector<HTMLElement>(
+			'[data-journal-period-start]'
+		);
+		if (element) {
+			prependAnchor.current = {
+				element,
+				top: element.getBoundingClientRect().top,
+			};
+		}
+		setPage(previous => ({
+			...previous,
+			newest:
+				firstIndex <= journalDayPageSize
+					? undefined
+					: periods[firstIndex - journalDayPageSize]?.start,
+		}));
+	};
+	useLayoutEffect(() => {
+		const anchor = prependAnchor.current;
+		if (!anchor) return;
+		window.scrollBy({
+			top: anchor.element.getBoundingClientRect().top - anchor.top,
+			behavior: 'instant',
+		});
+		prependAnchor.current = undefined;
+	}, [page]);
 
 	useEffect(() => {
-		const fallbackPeriod = periods[0];
-		if (positionedPeriod.current === period || fallbackPeriod === undefined)
-			return;
-		positionedPeriod.current = period;
+		const button = olderDaysRef.current;
+		if (!button || !hasOlderDays) return;
+		const observer = new IntersectionObserver(
+			changes => {
+				if (!changes.some(change => change.isIntersecting)) return;
+				observer.disconnect();
+				showOlderDays();
+			},
+			{ rootMargin: '600px' }
+		);
+		observer.observe(button);
+		return () => observer.disconnect();
+	}, [hasOlderDays, showOlderDays]);
+
+	useEffect(() => {
+		const node = periods[focusedIndex];
+		if (positionedFocus.current === focus || node === undefined) return;
 		const frame = window.requestAnimationFrame(() => {
 			const element = listRef.current?.querySelector<HTMLElement>(
-				`[data-journal-period-start="${CSS.escape(
-					containingPeriod(journal, period, focusRef.current)
-						?.start ?? fallbackPeriod.start
-				)}"]`
+				`[data-journal-period-start="${CSS.escape(node.start)}"]`
 			);
 			if (!element) return;
-			const node = periods.find(
-				candidate =>
-					candidate.start === element.dataset.journalPeriodStart
-			);
-			if (!node) return;
+			positionedFocus.current = focus;
 			const duration = Date.parse(node.end) - Date.parse(node.start);
-			const fraction = Math.max(
-				0,
-				Math.min(
-					1,
-					(Date.parse(focusRef.current) - Date.parse(node.start)) /
-						duration
-				)
-			);
+			const fraction = !periodContains(node, focus)
+				? 0
+				: Math.max(
+						0,
+						Math.min(
+							1,
+							(Date.parse(focus) - Date.parse(node.start)) /
+								duration
+						)
+					);
 			const bounds = element.getBoundingClientRect();
 			window.scrollTo({
-				behavior: 'auto',
+				behavior: 'instant',
 				top:
 					window.scrollY +
 					bounds.top +
@@ -1928,7 +2007,7 @@ function PeriodList({
 			});
 		});
 		return () => window.cancelAnimationFrame(frame);
-	}, [journal, period, periods]);
+	}, [focus, focusedIndex, periods, page]);
 
 	useEffect(() => {
 		let frame = 0;
@@ -1973,6 +2052,7 @@ function PeriodList({
 					(Date.parse(node.end) - Date.parse(node.start)) * fraction
 			).toISOString();
 			if (timestamp !== focusRef.current) {
+				positionedFocus.current = timestamp;
 				focusRef.current = timestamp;
 				setFocus(timestamp);
 			}
@@ -1982,23 +2062,36 @@ function PeriodList({
 		};
 		window.addEventListener('scroll', scheduleUpdate, { passive: true });
 		window.addEventListener('resize', scheduleUpdate);
-		scheduleUpdate();
+		// A linked day can sit above the viewport's center on the first page.
+		// Keep its address until scrolling changes the reading position.
+		if (period !== 'day') scheduleUpdate();
 		return () => {
 			window.removeEventListener('scroll', scheduleUpdate);
 			window.removeEventListener('resize', scheduleUpdate);
 			if (frame !== 0) window.cancelAnimationFrame(frame);
 		};
-	}, [periods, setFocus]);
+	}, [period, periods, setFocus]);
 
 	if (periods.length === 0) {
 		return <p className={style.empty}>No {period}s yet.</p>;
 	}
 	return (
 		<div
-			className={`${style.periodList} ${nextRoute ? style.periodOverviewList : ''}`}
+			className={`${style.periodList} ${nextRoute ? style.periodOverviewList : style.dayList}`}
 			ref={listRef}
+			role={period === 'day' ? 'region' : undefined}
+			aria-label={period === 'day' ? 'Journal days' : undefined}
 		>
-			{periods.map(node => (
+			{hasNewerDays && (
+				<button
+					className={style.dayPagination}
+					onClick={showNewerDays}
+					type="button"
+				>
+					Show newer days
+				</button>
+			)}
+			{visiblePeriods.map(node => (
 				<section
 					className={style.period}
 					data-journal-period-start={node.start}
@@ -2052,6 +2145,16 @@ function PeriodList({
 							))}
 				</section>
 			))}
+			{hasOlderDays && (
+				<button
+					className={style.dayPagination}
+					onClick={showOlderDays}
+					ref={olderDaysRef}
+					type="button"
+				>
+					Show older days
+				</button>
+			)}
 		</div>
 	);
 }
@@ -2277,15 +2380,23 @@ function JournalBrowser({
 			) && !localEntryIDs.includes(entry.id)
 	);
 	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
+		.filter(period => rawSelection[period] !== null)
 		.map(period =>
 			periodsFor(journal, period).find(
 				node => node.id === rawSelection[period]
 			)
 		)
 		.find(node => node !== undefined)?.start;
-	const newestEntry = journal.entries
-		.filter(entry => entry.status !== 'failed')
-		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))[0];
+	const newestEntry = useMemo(
+		() =>
+			journal.entries
+				.filter(entry => entry.status !== 'failed')
+				.sort(
+					(a, b) =>
+						Date.parse(b.recordedAt) - Date.parse(a.recordedAt)
+				)[0],
+		[journal.entries]
+	);
 	const focus =
 		rawSelection.at ??
 		legacyFocus ??

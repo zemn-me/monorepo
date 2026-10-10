@@ -805,6 +805,18 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	); err != nil {
 		t.Fatalf("linked citation transcript: %v", err)
 	}
+	// The cited recording is on the previous day. Add the newer day through
+	// pagination before checking the complete timeline and switching sources.
+	newerDays, err := waitForElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show newer days']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("find newer days after following a citation: %v", err)
+	}
+	if err := clickElementInView(driver, newerDays); err != nil {
+		t.Fatalf("browse newer days after following a citation: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, 4, 10*time.Second); err != nil {
+		t.Fatalf("newer days did not restore the complete timeline: %v", err)
+	}
 	transcripts, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-transcript]")
 	if err != nil || len(transcripts) != 4 {
 		t.Fatalf("day timeline transcripts: found %d, error %v", len(transcripts), err)
