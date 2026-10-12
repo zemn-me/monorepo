@@ -310,8 +310,8 @@ importers:
         specifier: 7.59.4
         version: 7.59.4(@types/node@24.19.1)
       '@pulumi/aws':
-        specifier: 7.49.0
-        version: 7.49.0(typescript@7.0.2)
+        specifier: 7.50.0
+        version: 7.50.0(typescript@7.0.2)
       '@pulumi/awsx':
         specifier: 3.10.0
         version: 3.10.0(typescript@7.0.2)
@@ -2609,8 +2609,8 @@ packages:
   '@protobufjs/utf8@1.1.2':
     resolution: {integrity: sha512-b1UQwcEZ4yCnMCD8DAL1VlbvBJE9/IX4FTIp7BG1xYpf29SLazLSrqUkj4w7Y5y7cCVP6E5tcqqcI0xemPkHug==}
 
-  '@pulumi/aws@7.49.0':
-    resolution: {integrity: sha512-WM27HFAJk0qwaKmnfC0/O48kv9neSd6Xh2emNptEIZ3KkRRF3QEhb1cm0TnbgOgz/IhA2vl8+ChAIyj28Y8u0g==}
+  '@pulumi/aws@7.50.0':
+    resolution: {integrity: sha512-YqnrUfFd5c3mFE8cZeGq5dFM8puX6c+IPBjxUD7ByZUJ1De7z6n4rL3moevkqU8IA4Tn89cEa2H+jUcZ2DzH0w==}
 
   '@pulumi/awsx@3.10.0':
     resolution: {integrity: sha512-T4o1WZbKTOfHguMTqfL2m2YwoGSK7Kej/cAWOEiUV3lk/uaZI+vec89YYdr5DAeeRkhe4wmEOTBn/bndJxLPcg==}
@@ -11776,7 +11776,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.2': {}
 
-  '@pulumi/aws@7.49.0(typescript@7.0.2)':
+  '@pulumi/aws@7.50.0(typescript@7.0.2)':
     dependencies:
       '@pulumi/pulumi': 3.268.0(typescript@7.0.2)
       mime: 2.6.0
@@ -11788,7 +11788,7 @@ snapshots:
   '@pulumi/awsx@3.10.0(typescript@7.0.2)':
     dependencies:
       '@aws-sdk/client-ecs': 3.1142.0
-      '@pulumi/aws': 7.49.0(typescript@7.0.2)
+      '@pulumi/aws': 7.50.0(typescript@7.0.2)
       '@pulumi/docker': 4.11.2(typescript@7.0.2)
       '@pulumi/docker-build': 0.0.14(typescript@7.0.2)
       '@pulumi/pulumi': 3.268.0(typescript@7.0.2)
