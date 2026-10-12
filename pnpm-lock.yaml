@@ -323,7 +323,7 @@ importers:
         version: 3.268.0(typescript@7.0.2)
       '@react-router/dev':
         specifier: 8.4.0
-        version: 8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@7.0.2)(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1))
+        version: 8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@7.0.2)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1))
       '@react-router/node':
         specifier: 8.4.0
         version: 8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@7.0.2)
@@ -493,8 +493,8 @@ importers:
         specifier: 14.0.2
         version: 14.0.2
       vite:
-        specifier: 8.3.3
-        version: 8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1)
+        specifier: 8.3.4
+        version: 8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1)
       yarn:
         specifier: 1.22.22
         version: 1.22.22
@@ -7910,6 +7910,10 @@ packages:
     resolution: {integrity: sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==}
     engines: {node: ^10 || ^12 || >=14}
 
+  postcss@8.5.29:
+    resolution: {integrity: sha512-49cGhUbXj8Qenv0iTMxA1cFBzxXoctpC9Ujd77t1WcbJIr6nF/eI7g/8MgxrYldFRuAXvja7xQRwavoW7kgrxQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
   prettier@3.9.9:
     resolution: {integrity: sha512-Z/CJHIkdujO/OtN7nXUii0Rf3VT5SRuhjBA82Xvu2XhBUgX3nhP67T0LHceBdQLex7OOFGTox+Q5Yg8Jk2Qivg==}
     engines: {node: '>=14'}
@@ -8472,10 +8476,6 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  shell-quote@1.11.0:
-    resolution: {integrity: sha512-JdxDPD0DBTyu08pq0kPC0xSNet/qsU07qT6IsX1AS8oO2ICNRY4ldNa8OAI6PuwAH8tG3lxEhbqmyp4Dw4036g==}
-    engines: {node: '>= 0.4'}
-
   shell-quote@1.12.0:
     resolution: {integrity: sha512-PcByqNyT/38F2kDNi006HAMRJaULuBzq/FOsw3qdZvX/GA9W/jamDaRskgHjubHiftXK5sIFxLNkvrXUwcof6Q==}
     engines: {node: '>= 0.4'}
@@ -8582,6 +8582,10 @@ packages:
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
+    engines: {node: '>=0.10.0'}
+
+  source-map-js@1.2.2:
+    resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
     engines: {node: '>=0.10.0'}
 
   source-map-loader@5.0.0:
@@ -9221,8 +9225,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite@8.3.3:
-    resolution: {integrity: sha512-cTAldKPImjg6c+gk48U19POPn3GCBzZwpdsN8ZMEEcbpes+6/wvfqUd0C2y3qYY4wsj8PwgFwrZ/1jBPVttMSg==}
+  vite@8.3.4:
+    resolution: {integrity: sha512-IftLE8phJhdNRIGNEV4JCCvfNScoZQVfcXaN8TQropWGJtOHcu+iAB9pHcuGvmEb/kddw0LBe/jS8ztdC6xdiQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -12136,7 +12140,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  '@react-router/dev@8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@7.0.2)(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1))':
+  '@react-router/dev@8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@7.0.2)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1))':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/generator': 7.29.8
@@ -12162,7 +12166,7 @@ snapshots:
       semver: 7.8.5
       tinyglobby: 0.2.17
       valibot: 1.5.0(typescript@7.0.2)
-      vite: 8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1)
+      vite: 8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1)
     optionalDependencies:
       typescript: 7.0.2
     transitivePeerDependencies:
@@ -17810,6 +17814,12 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postcss@8.5.29:
+    dependencies:
+      nanoid: 3.3.19
+      picocolors: 1.1.1
+      source-map-js: 1.2.2
+
   prettier@3.9.9: {}
 
   pretty-format@27.5.1:
@@ -17943,7 +17953,7 @@ snapshots:
 
   react-devtools-core@6.1.5:
     dependencies:
-      shell-quote: 1.11.0
+      shell-quote: 1.12.0
       ws: 7.5.13
     transitivePeerDependencies:
       - bufferutil
@@ -18685,8 +18695,6 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shell-quote@1.11.0: {}
-
   shell-quote@1.12.0: {}
 
   shlex@3.0.0: {}
@@ -18810,6 +18818,8 @@ snapshots:
       is-plain-obj: 2.1.0
 
   source-map-js@1.2.1: {}
+
+  source-map-js@1.2.2: {}
 
   source-map-loader@5.0.0(webpack@5.111.1(@swc/core@1.16.12(@swc/helpers@0.5.23))(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.5(@types/node@24.19.1))(svgo@4.1.0)):
     dependencies:
@@ -19525,11 +19535,11 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1):
+  vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.28
+      postcss: 8.5.29
       rolldown: 1.2.12
       tinyglobby: 0.2.17
     optionalDependencies:
