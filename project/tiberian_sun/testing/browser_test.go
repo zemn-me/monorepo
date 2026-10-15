@@ -44,6 +44,11 @@ func playFreeware(t *testing.T, mode string) {
 		t.Fatal(err)
 	}
 	defer driver.Close()
+	// Scenario generation includes synchronous Wasm and software-rendering work;
+	// its CPU time is independent of the simulated timer budget.
+	if err := driver.SetAsyncScriptTimeout(2 * time.Minute); err != nil {
+		t.Fatal(err)
+	}
 	var messages strings.Builder
 	readGameLog := func() (string, error) {
 		entries, err := driver.Log(log.Browser)
@@ -96,8 +101,15 @@ func playFreeware(t *testing.T, mode string) {
 	}
 	advance := func(duration time.Duration) {
 		t.Helper()
-		if err := clock.Advance(duration); err != nil {
-			t.Fatal(err)
+		// Bound long advances while keeping short input gestures atomic:
+		// Exit may restore an older document without the injected clock.
+		// A long tick can render hundreds of frames before returning control.
+		for duration > 0 {
+			step := min(duration, 100*time.Millisecond)
+			if err := clock.Advance(step); err != nil {
+				t.Fatal(err)
+			}
+			duration -= step
 		}
 	}
 	wait := func(condition selenium.Condition, timeout time.Duration, intervals ...time.Duration) error {
@@ -303,12 +315,16 @@ func playFreeware(t *testing.T, mode string) {
 			t.Fatal(err)
 		}
 		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			var err error
-			canvas, err = w.FindElement(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
-			return canvas != nil, err
+			canvases, err := w.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
+			if err != nil || len(canvases) == 0 {
+				return false, err
+			}
+			canvas = canvases[0]
+			return true, nil
 		}, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
+		waitPixels("game selector rendered after remount", image.Rect(100, 150, 360, 470), colored, 15000)
 		mouse(120, 110, false)
 		waitPixels("interactive selector after remount", image.Rect(105, 102, 140, 120), white, 30)
 		text, _ := readGameLog()
