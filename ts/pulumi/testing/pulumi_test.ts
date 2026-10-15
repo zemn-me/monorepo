@@ -1,6 +1,7 @@
 import '#root/ts/pulumi/setMocks.js';
 
 import { createRequire } from 'node:module';
+import { runInNewContext } from 'node:vm';
 import { describe, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 import { serializeFunction } from '@pulumi/pulumi/runtime/closure/serializeClosure.js';
@@ -905,15 +906,65 @@ describe('pulumi', () => {
 		expect(githubProvider?.inputs['attributeCondition']).toContain(
 			'assertion.workflow_ref'
 		);
-		expect(githubProvider?.inputs['attributeCondition']).toContain(
-			'assertion.event_name == "pull_request"'
-		);
-		expect(githubProvider?.inputs['attributeCondition']).toContain(
-			'assertion.sub == "repo:zemn-me/monorepo:pull_request"'
-		);
-		expect(githubProvider?.inputs['attributeCondition']).toContain(
-			'assertion.ref.startsWith("refs/pull/")'
-		);
+		if (githubProvider === undefined) {
+			throw new Error('missing GitHub OIDC provider');
+		}
+		const providerCondition = githubProvider.inputs['attributeCondition'];
+		const scopeExpression = (
+			githubProvider.inputs['attributeMapping'] as Record<
+				'attribute.workflow_scope',
+				string
+			>
+		)['attribute.workflow_scope'];
+		expect(typeof providerCondition).toBe('string');
+		const queueRef = 'refs/heads/gh-readonly-queue/main/pr-14577-example';
+		const identity = (workflow: string, ref: string, event: string) => ({
+			event_name: event,
+			ref,
+			repository: 'zemn-me/monorepo',
+			repository_id: '275403409',
+			repository_owner: 'zemn-me',
+			repository_owner_id: '145876100',
+			sub: 'repo:zemn-me/monorepo:pull_request',
+			workflow_ref: `zemn-me/monorepo/.github/workflows/${workflow}.yml@${ref}`,
+		});
+		// These generated CEL expressions use the common JS/CEL subset:
+		// string equality, startsWith, boolean operators and ternaries.
+		const evaluate = (expression: string, assertion: object) =>
+			runInNewContext(expression, { assertion });
+		for (const workflow of ['presubmit', 'staging', 'submit', 'renovate']) {
+			for (const event of ['pull_request', 'pull_request_target']) {
+				const assertion = identity(workflow, 'refs/pull/14577/merge', event);
+				expect(evaluate(providerCondition as string, assertion)).toBe(false);
+				expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+			}
+		}
+		// Queue-shaped workflow refs cannot turn a PR event into a merge group.
+		for (const event of ['pull_request', 'pull_request_target', 'push']) {
+			const assertion = identity('presubmit', queueRef, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(false);
+			expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+		}
+		for (const [workflow, ref, event] of [
+			['presubmit', queueRef, 'merge_group'],
+			['staging', queueRef, 'merge_group'],
+			['submit', 'refs/heads/main', 'push'],
+			['renovate', 'refs/heads/main', 'workflow_dispatch'],
+		] as const) {
+			const assertion = identity(workflow, ref, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(true);
+			expect(evaluate(scopeExpression, assertion)).toBe(workflow);
+			for (const override of [
+				{ repository: 'attacker/monorepo' },
+				{ repository_id: '1' },
+				{ repository_owner_id: '1' },
+				{ ref: 'refs/pull/14577/merge' },
+			]) {
+				expect(
+					evaluate(providerCondition as string, { ...assertion, ...override })
+				).toBe(false);
+			}
+		}
 		expect(githubProvider?.inputs['attributeMapping']).toMatchObject({
 			'attribute.repository': 'assertion.repository',
 			'attribute.repository_id': 'assertion.repository_id',
