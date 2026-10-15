@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"image"
 	"image/png"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,13 +27,14 @@ func TestDirectVisitExit(t *testing.T) { playFreeware(t, "direct") }
 
 func playFreeware(t *testing.T, mode string) {
 	quit := mode != "play"
+
 	var ports struct {
 		Site string `json:"@@//project/tiberian_sun/testing:site"`
 	}
 	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.Site == "" {
 		t.Fatalf("assigned site port: %v", err)
 	}
-	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{"goog:loggingPrefs": map[string]string{"browser": "ALL"}}, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1280,1100")
+	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{"pageLoadStrategy": "eager", "goog:loggingPrefs": map[string]string{"browser": "ALL"}}, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1280,1100")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +52,11 @@ func playFreeware(t *testing.T, mode string) {
 		return messages.String(), err
 	}
 
+	var clock *seleniumutil.VirtualClock
 	defer func() {
+		if clock == nil {
+			return
+		}
 		if shot, err := driver.Screenshot(); err == nil {
 			dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
 			if dir != "" {
@@ -72,22 +78,43 @@ func playFreeware(t *testing.T, mode string) {
 			t.Fatal(err)
 		}
 	}
-	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
+	clock, err = seleniumutil.NewVirtualClock(driver)
+	if err != nil {
 		t.Fatal(err)
 	}
-	if mode == "direct" {
-		// Model opening a link in a fresh tab, with no earlier document to return to.
-		if err := driver.ExecuteChromiumCommand("Page.resetNavigationHistory", map[string]any{}); err != nil {
+	advance := func(duration time.Duration) {
+		t.Helper()
+		if err := clock.Advance(duration); err != nil {
 			t.Fatal(err)
 		}
+	}
+	wait := func(condition selenium.Condition, timeout time.Duration, intervals ...time.Duration) error {
+		step := 100 * time.Millisecond
+		if len(intervals) > 0 {
+			step = intervals[0]
+		}
+		for elapsed := time.Duration(0); ; elapsed += step {
+			ready, err := condition(driver)
+			if err != nil || ready {
+				return err
+			}
+			if elapsed >= timeout {
+				return fmt.Errorf("condition not met after %s simulated time", timeout)
+			}
+			advance(step)
+		}
+	}
+
+	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
+		t.Fatal(err)
 	}
 	if buttons, err := driver.FindElements(selenium.ByCSSSelector, "button#launch"); err != nil || len(buttons) != 0 {
 		t.Fatalf("game should start on navigation without a launch button: %v", err)
 	}
-	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+	if err := wait(func(w selenium.WebDriver) (bool, error) {
 		el, err := w.FindElement(selenium.ByCSSSelector, "[role=status]")
 		if err != nil {
-			return false, err
+			return false, nil
 		}
 		raw, _ := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
 		text, _ := raw.(string)
@@ -98,13 +125,20 @@ func playFreeware(t *testing.T, mode string) {
 	}, 120*time.Second); err != nil {
 		t.Fatal(err)
 	}
+
+	if mode == "direct" {
+		// Model opening a link in a fresh tab, with no earlier document to return to.
+		if err := driver.ExecuteChromiumCommand("Page.resetNavigationHistory", map[string]any{}); err != nil {
+			t.Fatal(err)
+		}
+	}
 	canvas, err := driver.FindElement(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
 	if err != nil {
 		t.Fatal(err)
 	}
 	snapshot := func() image.Image {
 		t.Helper()
-		data, err := canvas.Screenshot(true)
+		data, err := driver.Screenshot()
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -117,7 +151,8 @@ func playFreeware(t *testing.T, mode string) {
 	waitPixels := func(label string, rect image.Rectangle, predicate func(uint32, uint32, uint32) bool, minimum int) {
 		t.Helper()
 		var count int
-		err := driver.WaitWithTimeoutAndInterval(func(selenium.WebDriver) (bool, error) {
+
+		err := wait(func(selenium.WebDriver) (bool, error) {
 			frame := snapshot()
 			count = 0
 			for y := rect.Min.Y; y < rect.Max.Y; y++ {
@@ -165,7 +200,7 @@ func playFreeware(t *testing.T, mode string) {
 		dispatch(px, py, "mouseMoved", 0)
 		if click {
 			dispatch(px, py, "mousePressed", 1)
-			time.Sleep(80 * time.Millisecond)
+			advance(80 * time.Millisecond)
 			dispatch(px, py, "mouseReleased", 0)
 		}
 	}
@@ -174,12 +209,14 @@ func playFreeware(t *testing.T, mode string) {
 	cyan := func(r, g, b uint32) bool { return g > 100 && b > 100 && g > r+30 && b > r+30 }
 	green := func(r, g, b uint32) bool { return g > 100 && g > b+50 && g > r }
 	waitPixels("game selector rendered", image.Rect(100, 150, 360, 470), colored, 15000)
+	// Artwork appears before the selector starts accepting input. With time
+	// paused, wait for its hover response rather than relying on elapsed wall time.
+	white := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
+	mouse(120, 110, false)
+	waitPixels("interactive game selector", image.Rect(105, 102, 140, 120), white, 30)
 	if quit {
-		mouse(120, 110, false)
-		highlight := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
-		waitPixels("interactive Exit highlight", image.Rect(105, 102, 140, 120), highlight, 30)
 		click(120, 110) // Exit from the original game selector.
-		if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
 			current, err := w.CurrentURL()
 			destination := base + "/experiments"
 			if mode == "back" {
@@ -195,18 +232,17 @@ func playFreeware(t *testing.T, mode string) {
 	click(240, 300) // Original Tiberian Sun disc.
 	waitPixels("main menu ready", image.Rect(320, 240, 480, 450), cyan, 150)
 	mouse(400, 408, false)
-	white := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
 	waitPixels("interactive Skirmish highlight", image.Rect(366, 400, 436, 418), white, 40)
 	click(400, 408) // Skirmish.
 	waitPixels("skirmish setup ready", image.Rect(548, 458, 568, 472), green, 15)
-	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+	if err := wait(func(w selenium.WebDriver) (bool, error) {
 		text, err := readGameLog()
 		return strings.Contains(text, "skirmish.rml opened"), err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("skirmish controls did not finish opening: %v", err)
 	}
 	click(558, 465) // Start the default Grand Canyon skirmish against an AI.
-	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+	if err := wait(func(w selenium.WebDriver) (bool, error) {
 		text, err := readGameLog()
 		return strings.Contains(text, "Finished unit generation"), err
 	}, 60*time.Second); err != nil {
@@ -219,16 +255,32 @@ func playFreeware(t *testing.T, mode string) {
 	pointer(120, 100, "mousePressed", 1)
 	for step := 1; step <= 10; step++ {
 		pointer(120+step*39, 100+step*26, "mouseMoved", 1)
-		time.Sleep(25 * time.Millisecond)
+		advance(25 * time.Millisecond)
 	}
 	pointer(510, 360, "mouseReleased", 0)
 	if err := canvas.SendKeys("d"); err != nil {
 		t.Fatal(err)
 	}
 	waitPixels("construction yard unlocks power plant", image.Rect(656, 178, 719, 220), colored, 1100)
-	// Keep the simulation running beyond initial rendering and input handling.
+	// Run ten seconds of the actual simulation without waiting ten wall seconds.
+	// Advancing at the browser layer covers native engine time and async waits.
+	beforeAdvance, err := driver.ExecuteScript("return performance.now()", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	before := snapshot()
-	if err := driver.WaitWithTimeoutAndInterval(func(selenium.WebDriver) (bool, error) {
+	advancedAt := time.Now()
+	advance(10 * time.Second)
+	t.Logf("advanced ten seconds of game time in %s", time.Since(advancedAt))
+	afterAdvance, err := driver.ExecuteScript("return performance.now()", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if math.Abs(afterAdvance.(float64)-beforeAdvance.(float64)-10000) > 1 {
+		t.Fatalf("game clock did not advance by ten virtual seconds")
+	}
+	if err := wait(func(selenium.WebDriver) (bool, error) {
 		frame := snapshot()
 		changed := 0
 		for y := 140; y < 400; y++ {
@@ -253,20 +305,20 @@ func playFreeware(t *testing.T, mode string) {
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 1440, "height": 900, "deviceScaleFactor": 2, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+	if err := wait(func(w selenium.WebDriver) (bool, error) {
 		value, err := w.ExecuteScript("return arguments[0].width === 1440 && arguments[0].height === 900", []interface{}{canvas})
 		return value == true, err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("framebuffer did not adapt to larger window: %v", err)
 	}
 	// A genuine mode change updates the terrain and sidebar surfaces too.
-	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+	if err := wait(func(w selenium.WebDriver) (bool, error) {
 		text, err := readGameLog()
 		return strings.Contains(text, "VisibleRect: 1440x900") && strings.Contains(text, "Mode change complete."), err
 	}, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.WaitWithTimeoutAndInterval(func(selenium.WebDriver) (bool, error) {
+	if err := wait(func(selenium.WebDriver) (bool, error) {
 		frame := snapshot()
 		count := 0
 		for y := 178; y < 220; y++ {

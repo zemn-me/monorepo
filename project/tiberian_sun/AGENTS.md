@@ -7,3 +7,5 @@
 - Verify an asset-backed scenario in a browser before claiming runtime compatibility. Asset-free tests alone establish compilation and packaging.
 - Build bundled data through `assets:game_data`; preserve the original EULA and keep music, movies, executables, and installation settings outside the public package.
 - `testing:integration_test` drives the production site. Wait for interactive menu highlights and completed dialog-open logs before clicking bitmap controls.
+
+- Install `seleniumutil.NewVirtualClock` before game navigation and advance it for test input and simulation. Keep the clock bundle out of production assets; its 32-bit timer handles match Emscripten's C timer API.

@@ -120,12 +120,23 @@ and unrelated paths cannot enter the public package.
 
 `//project/tiberian_sun/testing:integration_test` starts the production website
 through `rules_itest` with an assigned port and runs headless Chromium. It
-clicks Start, selects Tiberian Sun, opens Skirmish, loads a map with an AI,
+opens the game route, selects Tiberian Sun, opens Skirmish, loads a map with an AI,
 selects and deploys the MCV, and checks the rendered construction sidebar
-and continuing animation. It reads the visible engine log and screenshots;
+and continuing animation. It reads the browser console and screenshots;
 there are no test-only game globals or seeded browser storage. Screenshots
 are retained in the test's undeclared outputs. This test uses the same
 Bazel-downloaded freeware data as the deployed experiment.
+
+The browser tests install a Sinon clock before application scripts load. They
+advance dates, performance timers, timeouts, intervals, animation frames, and
+ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
+and ten seconds of skirmish simulation use simulated time rather than host
+sleeps. The clock bundle is embedded only in the Selenium test helper and is
+not a website asset. Its timer handles stay within 32 bits for Emscripten's
+C API. Fetching assets, compiling Wasm, rendering, and CPU work still require
+real time. A separate browser test advances a virtual minute and verifies
+frozen clocks, timer cancellation, and animation-frame callbacks.
+
 
 Local asset-backed browser testing reached both game-selection discs,
 Tiberian Sun's main menu and skirmish setup, then loaded Grand Canyon,
