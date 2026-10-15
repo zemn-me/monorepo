@@ -282,29 +282,29 @@ test('session updates require same origin and logout expires the host cookie', a
 });
 
 
-test('Tiberian Sun serves a standalone source-compiled runtime with the freeware game data', async () => {
+test('Tiberian Sun renders a hydratable React page with source-compiled assets', async () => {
     const response = await request('/experiments/tiberian-sun');
     assert.equal(response.status, 200);
     assert.match(response.headers.get('content-type'), /text\/html/);
-    assert.match(response.headers.get('content-security-policy'), /wasm-unsafe-eval/);
     const html = await response.text();
+    assert.match(html, /wasm-unsafe-eval/);
+    assert.match(html, /aria-label="Tiberian Sun game"/);
+    assert.match(html, /role="status"/);
+    assert.match(html, /\/assets\/[^" ]+\.js/);
     assert.doesNotMatch(html, /type="file"/);
     assert.match(html, /Freeware game data source/);
-
     assert.match(html, /EA has not endorsed/);
-    for (const attribute of ['src', 'data-engine', 'data-wasm', 'data-data', 'data-game']) {
-        const match = html.match(new RegExp(`${attribute}="(/sha256/[^" ]+)"`));
-        assert.ok(match, attribute);
-        const bytes = await readFile(path.join('project/me/zemn/build', match[1]));
-        assert.ok(bytes.length > 0);
-        if (attribute === 'data-wasm') {
+
+    const assets = await import(pathToFileURL(path.resolve('project/me/zemn/app/experiments/tiberian_sun/assets.js')).href);
+    for (const name of ['engineJavaScript', 'engineWasm', 'engineData', 'gameData']) {
+        const bytes = await readFile(path.join('project/me/zemn/build', assets[name]));
+        assert.ok(bytes.length > 0, name);
+        if (name === 'engineWasm') {
             assert.equal(WebAssembly.validate(bytes), true);
             const module = await WebAssembly.compile(bytes);
-            assert.ok(WebAssembly.Module.exports(module).some(entry => entry.name === '__main_argc_argv'));
-        }
-        if (attribute === 'src') {
-            assert.match(bytes.toString(), /DecompressionStream/);
-            assert.match(bytes.toString(), /IDBFS/);
+            const exports = WebAssembly.Module.exports(module);
+            assert.ok(exports.some(entry => entry.name === '__main_argc_argv'));
+            assert.ok(exports.some(entry => entry.name === 'Web_Request_Stop'));
         }
     }
 });

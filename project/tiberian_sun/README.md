@@ -96,6 +96,16 @@ OpenTS independently and remains an asset-free Wasm integration test.
   image addresses with browser equivalents. Use POSIX file timestamps and
   filesystem flushes. Preserve source notices and mark the build `wasm32`.
 
+The website uses a normal React Router TSX route outside the Glade layout.
+React renders loading, progress, and error feedback with a CSS module, and
+hands a canvas ref to the TypeScript launcher. The launcher and peer transport
+are type-checked and compiled through the repository's Bazel TypeScript rules.
+Only the generated Emscripten engine crosses a dynamically imported boundary.
+Unmount aborts downloads, removes listeners, closes peer connections, and asks
+the suspended engine to exit at its next yield. Emscripten then runs native
+shutdown handlers before a replacement mount starts another engine. The
+experiment index uses ordinary client-side navigation.
+
 The web overlay supplies the CMake build and browser platform functions.
 Emscripten's system processor is explicitly `wasm32`: its compatibility
 default of `x86` would enable native SSE flags in the renderer dependency.
@@ -161,13 +171,18 @@ compares checksums at three distinct frames after startup suppression. It
 reads the browser console and screenshots;
 there are no test-only game globals or seeded browser storage. Screenshots
 are retained in the test's undeclared outputs. This test uses the same
-Bazel-downloaded freeware data as the deployed experiment.
+Bazel-downloaded freeware data as the deployed experiment. A navigation case
+opens the game through the experiment link, goes back while the engine is
+running, and reopens it without replacing the React document. Download-failure
+cases verify visible, focused error feedback at desktop and phone widths.
 
 The browser tests install a Sinon clock before application scripts load. They
 advance dates, performance timers, timeouts, intervals, animation frames, and
 ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
 and ten seconds of skirmish simulation use simulated time rather than host
-sleeps. The clock bundle is embedded only in the Selenium test helper and is
+sleeps. The clock initially captures the current date so server-rendered calendar text
+hydrates consistently, then remains frozen between explicit advances.
+The clock bundle is embedded only in the Selenium test helper and is
 not a website asset. Its timer handles stay within 32 bits for Emscripten's
 C API. Fetching assets, compiling Wasm, rendering, and CPU work still require
 real time. A separate browser test advances a virtual minute and verifies

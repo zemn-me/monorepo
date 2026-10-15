@@ -5,10 +5,13 @@
 #include "misc.h"
 #include "globals.h"
 #include "video.h"
+#include "audio/audioengine.h"
+#include "gamewindow.h"
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
 namespace { int Count; char **Arguments; }
 uint64_t Web_Monotonic_Nanoseconds() { return static_cast<uint64_t>(emscripten_get_now() * 1000000.0); }
 int Web_Executable_Path(char *path, uint32_t *size) {
@@ -52,5 +55,20 @@ void Web_Update_Display() {
             Options.ScreenWidth = width;
             Options.ScreenHeight = height;
         }
+    }
+}
+
+namespace { bool StopRequested = false; }
+extern "C" EMSCRIPTEN_KEEPALIVE void Web_Request_Stop() { StopRequested = true; }
+
+void Web_Yield(int milliseconds) {
+    emscripten_sleep(milliseconds);
+    // Unmount can arrive while Asyncify has suspended the engine. Exit after
+    // resuming on its own stack so its registered shutdown handlers can run.
+    if (StopRequested) {
+        StopRequested = false;
+        AudioEngine.End();
+        Game_Window_Begin_Shutdown();
+        emscripten_force_exit(EXIT_SUCCESS);
     }
 }

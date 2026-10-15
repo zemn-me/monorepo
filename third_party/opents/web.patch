@@ -115,7 +115,7 @@ index fec1471..eade10f 100644
  
  	_FramePending = false;
  	bgfx::frame();
-+	emscripten_sleep(0);
++	Web_Yield(0);
  }
  
  
@@ -127,7 +127,7 @@ index 49b7913..3ab1cdc 100644
   *=============================================================================================*/
  void Call_Back(void)
  {
-+	emscripten_sleep(1);
++	Web_Yield(1);
  	/*
  	**	Music and speech maintenance
  	*/
@@ -380,7 +380,7 @@ index 22ab91c..cca6461 100644
  
  void Main_Window_Pump_Events(void)
  {
-+	emscripten_sleep(1);
++	Web_Yield(1);
  	if (_Window == nullptr) {
  		return;
  	}
@@ -580,7 +580,7 @@ index 275b9eb..62760a0 100644
  inline void Sleep(DWORD milliseconds)
  {
 -	usleep((useconds_t)milliseconds * 1000);
-+	emscripten_sleep(milliseconds);
++	Web_Yield(milliseconds);
  }
  
  // FILETIME counts 100-nanosecond intervals since 1601-01-01 UTC. Save files store it.

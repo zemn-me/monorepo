@@ -19,7 +19,8 @@ try {
 // This bundle is embedded in browser tests only, never in the website.
 // The library exposes its controller as setTimeout.clock; no game API is added.
 fakeTimers.install({
-    now: Date.UTC(2024, 0, 1),
+    // Match server-rendered calendar text, then keep the clock frozen.
+    now: Date.now(),
     shouldAdvanceTime: false,
     toFake: ['Date', 'performance', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'requestAnimationFrame', 'cancelAnimationFrame'],
 });

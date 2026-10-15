@@ -1,14 +1,9 @@
 # gazelle:exclude build_engine.py
 
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
 load("//py:rules.bzl", "py_binary")
+load("//ts:rules.bzl", "ts_project")
 load(":build.bzl", "engine_build")
-
-exports_files([
-    "launcher.mjs",
-    "network.mjs",
-])
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -96,7 +91,21 @@ bazel_lint(
     ],
 )
 
-js_library(
-    name = "network_mjs",
-    srcs = ["network.mjs"],
+ts_project(
+    name = "web",
+    srcs = [
+        "launcher.ts",
+        "network.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "launcher.ts",
+        "network.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )

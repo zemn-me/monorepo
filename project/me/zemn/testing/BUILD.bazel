@@ -115,6 +115,9 @@ md_files(
 js_test(
     name = "server_test",
     size = "small",
-    data = ["//project/me/zemn:build"],
+    data = [
+        "//project/me/zemn:build",
+        "//project/me/zemn/app/experiments/tiberian_sun",
+    ],
     entry_point = "server_test.mjs",
 )

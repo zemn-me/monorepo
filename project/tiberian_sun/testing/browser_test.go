@@ -20,13 +20,18 @@ import (
 
 // The game draws its controls on a canvas. Drive real input and inspect the
 // rendered pixels and the engine's browser console rather than adding a game API.
-func TestFreewareSkirmish(t *testing.T) { playFreeware(t, "play") }
-func TestWindowExit(t *testing.T)       { playFreeware(t, "back") }
+func TestFreewareSkirmish(t *testing.T)         { playFreeware(t, "play") }
+func TestGameDownloadFailure(t *testing.T)      { playFreeware(t, "error") }
+func TestGameDownloadFailurePhone(t *testing.T) { playFreeware(t, "error-phone") }
+
+func TestReactNavigation(t *testing.T) { playFreeware(t, "navigate") }
+
+func TestWindowExit(t *testing.T) { playFreeware(t, "back") }
 
 func TestDirectVisitExit(t *testing.T) { playFreeware(t, "direct") }
 
 func playFreeware(t *testing.T, mode string) {
-	quit := mode != "play"
+	quit := mode == "back" || mode == "direct"
 
 	var ports struct {
 		Site string `json:"@@//project/tiberian_sun/testing:site"`
@@ -43,6 +48,9 @@ func playFreeware(t *testing.T, mode string) {
 	readGameLog := func() (string, error) {
 		entries, err := driver.Log(log.Browser)
 		for _, entry := range entries {
+			if strings.Contains(entry.Message, "Minified React error #418") || strings.Contains(entry.Message, "Hydration failed") {
+				t.Errorf("React hydration failed: %s", entry.Message)
+			}
 			if (strings.Contains(entry.Message, "skirmish.rml opened") || strings.Contains(entry.Message, "Finished unit generation")) && entry.Level != log.Info {
 				t.Errorf("routine game diagnostic has level %s, want INFO: %s", entry.Level, entry.Message)
 			}
@@ -68,7 +76,11 @@ func playFreeware(t *testing.T, mode string) {
 			t.Log(text)
 		}
 	}()
-	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+	width, height := 800, 600
+	if mode == "error-phone" {
+		width, height = 390, 844
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
 	base := "http://localhost:" + ports.Site
@@ -105,8 +117,57 @@ func playFreeware(t *testing.T, mode string) {
 		}
 	}
 
-	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
+	if strings.HasPrefix(mode, "error") {
+		if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*.gz"}}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	var documentOrigin interface{}
+	if mode == "navigate" {
+		if err := driver.Get(base + "/"); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.Get(base + "/experiments?from=react-game-test"); err != nil {
+			t.Fatal(err)
+		}
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
+			elements, err := w.FindElements(selenium.ByCSSSelector, "button[aria-label='Go back']")
+			return len(elements) > 0, err
+		}, 30*time.Second); err != nil {
+			t.Fatal(err)
+		}
+		documentOrigin, _ = driver.ExecuteScript("return performance.timeOrigin", nil)
+		link, err := driver.FindElement(selenium.ByCSSSelector, "a[href='/experiments/tiberian-sun']")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := link.Click(); err != nil {
+			t.Fatal(err)
+		}
+	} else if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
 		t.Fatal(err)
+	}
+	if strings.HasPrefix(mode, "error") {
+		// Fail the actual download at the network layer; no app state is seeded.
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
+			status, err := w.FindElement(selenium.ByCSSSelector, "[role='status']")
+			if err != nil {
+				return false, nil
+			}
+			text, _ := status.Text()
+			valid, err := w.ExecuteScript(`const s=arguments[0],r=s.getBoundingClientRect();return document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{status})
+			return strings.Contains(text, "Could not start the game") && valid == true, err
+		}, 30*time.Second); err != nil {
+			t.Fatalf("download failure is not visible and focused at width %d: %v", width, err)
+		}
+		text, _ := readGameLog()
+		if strings.Contains(text, "Game Init Completed.") {
+			t.Fatal("engine started after its game download failed")
+		}
+		return
 	}
 	if buttons, err := driver.FindElements(selenium.ByCSSSelector, "button#launch"); err != nil || len(buttons) != 0 {
 		t.Fatalf("game should start on navigation without a launch button: %v", err)
@@ -214,6 +275,59 @@ func playFreeware(t *testing.T, mode string) {
 	white := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
 	mouse(120, 110, false)
 	waitPixels("interactive game selector", image.Rect(105, 102, 140, 120), white, 30)
+	if mode == "navigate" {
+		origin, _ := driver.ExecuteScript("return performance.timeOrigin", nil)
+		if origin != documentOrigin {
+			t.Fatal("game navigation replaced the React document")
+		}
+		if err := driver.Back(); err != nil {
+			t.Fatal(err)
+		}
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
+			current, err := w.CurrentURL()
+			if err != nil {
+				return false, err
+			}
+			text, err := readGameLog()
+			canvases, _ := w.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
+			overflow, _ := w.ExecuteScript("return document.body.style.overflow", nil)
+			return current == base+"/experiments?from=react-game-test" && len(canvases) == 0 && overflow == "" && strings.Contains(text, "Tiberian Sun runtime stopped"), err
+		}, 30*time.Second); err != nil {
+			t.Fatalf("React unmount did not stop the engine and restore the page: %v", err)
+		}
+		link, err := driver.FindElement(selenium.ByCSSSelector, "a[href='/experiments/tiberian-sun']")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := link.Click(); err != nil {
+			t.Fatal(err)
+		}
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
+			var err error
+			canvas, err = w.FindElement(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
+			return canvas != nil, err
+		}, 30*time.Second); err != nil {
+			t.Fatal(err)
+		}
+		mouse(120, 110, false)
+		waitPixels("interactive selector after remount", image.Rect(105, 102, 140, 120), white, 30)
+		text, _ := readGameLog()
+		if strings.Count(text, "Game Init Completed.") != 2 {
+			t.Fatal("game did not start exactly once per React mount")
+		}
+		origin, _ = driver.ExecuteScript("return performance.timeOrigin", nil)
+		if origin != documentOrigin {
+			t.Fatal("game remount replaced the React document")
+		}
+		click(120, 110)
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
+			url, err := w.CurrentURL()
+			return url == base+"/experiments?from=react-game-test", err
+		}, 30*time.Second); err != nil {
+			t.Fatal(err)
+		}
+		return
+	}
 	if quit {
 		click(120, 110) // Exit from the original game selector.
 		if err := wait(func(w selenium.WebDriver) (bool, error) {
