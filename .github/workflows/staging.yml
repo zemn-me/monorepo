@@ -13,10 +13,7 @@ on:   # yamllint disable-line rule:truthy
       - renovate/**
 
 env:
-  BAZEL: >-
-    ./sh/bin/bazel
-    --distdir=${{ runner.temp }}/bazel-distdir/ape
-    --distdir=${{ runner.temp }}/bazel-distdir/rules_diff
+  BAZEL: ./sh/bin/bazel
 
 jobs:
   Staging:
@@ -44,6 +41,9 @@ jobs:
           docker-images: true
           large-packages: false
           swap-storage: true
+      - name: Configure Bazel archive paths
+        run: |
+          echo "BAZEL=./sh/bin/bazel --distdir=$RUNNER_TEMP/bazel-distdir/ape --distdir=$RUNNER_TEMP/bazel-distdir/rules_diff" >> "$GITHUB_ENV"
       - name: Checkout main branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
