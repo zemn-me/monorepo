@@ -34,7 +34,6 @@ html:has(.main) {
 	margin: auto;
 	display: grid;
 	grid:
-		"    logo      " 2em
 		"    handle    " auto
 		"    fullName  " auto / auto;
 }
