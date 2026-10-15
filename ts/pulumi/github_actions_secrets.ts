@@ -59,16 +59,14 @@ const workloadIdentityProviderId = 'my-repo';
 const githubActionsServiceAccountEmail = `monorepo-root@${gcpProjectId}.iam.gserviceaccount.com`;
 const githubActionsServiceAccountName = `projects/${gcpProjectId}/serviceAccounts/${githubActionsServiceAccountEmail}`;
 const presubmitWorkflowRef = `${githubRepository}/.github/workflows/presubmit.yml`;
-const presubmitMergeQueueCondition = `assertion.workflow_ref.startsWith("${presubmitWorkflowRef}@refs/heads/gh-readonly-queue/")`;
-const presubmitPullRequestCondition = [
-	'assertion.event_name == "pull_request"',
-	`assertion.sub == "repo:${githubRepository}:pull_request"`,
-	'assertion.ref.startsWith("refs/pull/")',
-	`assertion.workflow_ref.startsWith("${presubmitWorkflowRef}@")`,
+// Workflow guards are editable by PRs; enforce the event boundary in GCP too.
+const presubmitMergeQueueCondition = [
+	'assertion.event_name == "merge_group"',
+	`assertion.workflow_ref.startsWith("${presubmitWorkflowRef}@refs/heads/gh-readonly-queue/")`,
 ].join(' && ');
 
 const workflowConditions = {
-	presubmit: `(${presubmitMergeQueueCondition}) || (${presubmitPullRequestCondition})`,
+	presubmit: presubmitMergeQueueCondition,
 	renovate: `assertion.workflow_ref == "${githubRepository}/.github/workflows/renovate.yml@refs/heads/main"`,
 	staging: `assertion.workflow_ref.startsWith("${githubRepository}/.github/workflows/staging.yml@refs/heads/gh-readonly-queue/")`,
 	submit: `assertion.workflow_ref == "${githubRepository}/.github/workflows/submit.yml@refs/heads/main"`,
@@ -134,7 +132,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 					`assertion.repository_id == "${githubRepositoryId}"`,
 					`assertion.repository_owner == "${githubRepositoryOwner}"`,
 					`assertion.repository_owner_id == "${githubRepositoryOwnerId}"`,
-					`(assertion.ref == "refs/heads/main" || assertion.ref.startsWith("refs/heads/gh-readonly-queue/") || assertion.ref.startsWith("refs/pull/"))`,
+					`(assertion.ref == "refs/heads/main" || assertion.ref.startsWith("refs/heads/gh-readonly-queue/"))`,
 					`(${allowedWorkflowCondition})`,
 				].join(' && '),
 				attributeMapping: {
