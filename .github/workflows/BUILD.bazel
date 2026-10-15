@@ -1,6 +1,6 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
-load("//py:rules.bzl", "py_test")
 load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
@@ -20,10 +20,10 @@ md_files(
     visibility = ["//:__subpackages__"],
 )
 
-py_test(
-    name = "runner_context_scope_test",
+sh_test(
+    name = "actionlint_test",
     size = "small",
-    srcs = ["runner_context_scope_test.py"],  # keep
+    srcs = ["actionlint_test.sh"],
     args = ["$(rootpath %s)" % path for path in glob(
         [
             "*.yml",
@@ -37,6 +37,11 @@ py_test(
             "*.yaml",
         ],
         allow_empty = True,
-    ),
-    deps = ["@pip//pyyaml"],
+    ) + [
+        "@com_github_rhysd_actionlint//cmd/actionlint",
+    ],
+    env = {
+        "ACTIONLINT": "$(rlocationpath @com_github_rhysd_actionlint//cmd/actionlint)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
 )
