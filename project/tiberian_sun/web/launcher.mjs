@@ -58,9 +58,14 @@ function importGame(engine, data) {
 
 async function startGame() {
     try {
-        const { default: createEngine } = await import(script.dataset.engine);
+        const [{ default: createEngine }, { createPeerTransport }] = await Promise.all([
+            import(script.dataset.engine), import(script.dataset.network),
+        ]);
+        const webNetwork = createPeerTransport();
+        window.addEventListener("pagehide", () => webNetwork.reset(), { once: true });
         const [engine, data] = await Promise.all([createEngine({
             canvas,
+            webNetwork,
             noInitialRun: true,
             locateFile: name => name.endsWith('.wasm') ? script.dataset.wasm : script.dataset.data,
             print: message => console.info(message),

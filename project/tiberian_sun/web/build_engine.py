@@ -30,8 +30,9 @@ def main():
         shutil.copyfile(overlay / "CMakeLists.txt", src / "CMakeLists.txt")
         shutil.copyfile(overlay / "thirdparty.cmake", src / "thirdparty/CMakeLists.txt")
         (src / "web").mkdir(exist_ok=True)
-        for name in ("platform.cpp", "platform.h"):
+        for name in ("platform.cpp", "platform.h", "network.cpp"):
             shutil.copyfile(overlay / name, src / "web" / name)
+        shutil.copyfile(overlay / "webpeer.rml", src / "ui/webpeer.rml")
         # Emscripten's executables use env python3; keep the action on Bazel's interpreter.
         tools = work / "tools"
         tools.mkdir()

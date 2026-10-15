@@ -102,6 +102,38 @@ default of `x86` would enable native SSE flags in the renderer dependency.
 The engine uses Wasm SIMD and retains the native source's strict
 floating-point compiler options.
 
+## Internet multiplayer
+
+Choose **Internet** from the game's main menu. The connection dialog is rendered
+by the engine's existing RmlUi shell, inside the game canvas.
+
+1. The host chooses **Create invitation**, then **Copy your code**, and sends
+   that code to the other player.
+2. The other player chooses **Paste code**, then **Accept code**, and sends
+   their resulting code back to the host.
+3. The host pastes and accepts that reply. Once connected, both players choose
+   **Continue to lobby**.
+4. Enter different player names. The host chooses **New**; the other player
+   selects the advertised game and chooses **Join**. Use the original game
+   setup, **Accept**, and **Go!** controls to start the match.
+
+Clipboard buttons may ask for browser permission. The input also accepts a
+normal browser paste. Connection codes contain complete WebRTC descriptions
+and ICE candidates, so they are longer than room codes and apply only while
+that connection remains open.
+
+The browser adapter carries the engine's existing LAN datagrams over an
+unordered, non-retransmitting WebRTC data channel. The engine continues to
+manage acknowledgements, retries, lobby discovery, and lockstep simulation.
+Virtual addresses distinguish the two peers; broadcasts reach the connected
+opponent. Incoming packets and queued bytes are bounded.
+
+This first transport supports two browser players. STUN is used for candidate
+discovery; there is no signaling service or TURN relay. Networks that cannot
+establish a direct connection cannot play through this transport. Windows and
+CnCNet interoperability, more than two players, and recovery after a browser
+reload are outside its current scope.
+
 ## Validation and limits
 
 Affected automated checks:
@@ -122,7 +154,11 @@ and unrelated paths cannot enter the public package.
 through `rules_itest` with an assigned port and runs headless Chromium. It
 opens the game route, selects Tiberian Sun, opens Skirmish, loads a map with an AI,
 selects and deploys the MCV, and checks the rendered construction sidebar
-and continuing animation. It reads the browser console and screenshots;
+and continuing animation. Its multiplayer case opens two independent browsers,
+exchanges connection codes through the in-game clipboard controls, joins and
+starts a match through the original lobby, deploys both players' MCVs, and
+compares checksums at three distinct frames after startup suppression. It
+reads the browser console and screenshots;
 there are no test-only game globals or seeded browser storage. Screenshots
 are retained in the test's undeclared outputs. This test uses the same
 Bazel-downloaded freeware data as the deployed experiment.
@@ -145,7 +181,9 @@ and placed a power plant. The packaged engine ran under the production CSP.
 A skirmish save survived a page reload and resumed with its buildings and
 construction progress intact.
 This is runtime evidence for that scenario; it does not establish complete
-campaign, cutscene, Firestorm gameplay, or multiplayer compatibility.
+campaign, cutscene, or Firestorm gameplay compatibility. The multiplayer
+integration test verifies two browser peers on the same test machine; direct
+connectivity across different routers still depends on their NATs and firewalls.
 The browser build's saved games are local to its origin; cross-platform
 save and network compatibility is not claimed.
 

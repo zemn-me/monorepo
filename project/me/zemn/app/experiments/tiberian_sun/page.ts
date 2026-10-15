@@ -6,6 +6,7 @@ import {
     gameLicense,
     launcher,
     license,
+    network,
     thirdPartyNotices,
 } from '#root/project/me/zemn/app/experiments/tiberian_sun/assets.js';
 
@@ -21,13 +22,13 @@ export function loader() {
 <header><a href="/experiments">← Experiments</a><span class="notice">EA has not endorsed and does not support this product.</span></header>
 <h1>Tiberian Sun</h1>
 <p>Use a keyboard and mouse. Exit the game to return to the previous page.</p>
-<p class="notice">Experimental browser port. Campaigns, Firestorm gameplay, and multiplayer have not been verified.</p>
+<p class="notice">Experimental browser port. Internet multiplayer supports two browser players using connection codes. Campaigns and Firestorm gameplay have not been verified.</p>
 <p>Game files download when you start. Music and movies are not included. Saved games are kept in this browser.</p>
 <div id="feedback"><p id="status" role="status" tabindex="-1">Loading Tiberian Sun…</p>
 <progress id="progress" aria-label="Downloading game files" hidden></progress>
 </div>
 <footer>Engine: OpenTS, compiled from C++ to WebAssembly. <a href="${license}">License</a> · <a href="${thirdPartyNotices}">Third-party notices</a> · <a href="https://github.com/zemn-me/monorepo/tree/main/project/tiberian_sun">Source and build instructions</a> · <a href="https://archive.org/details/command-and-conquer-tiberian-sun">Freeware game data source</a> · <a href="${gameLicense}">Original game license</a></footer>
-<script type="module" src="${launcher}" data-engine="${engineJavaScript}" data-wasm="${engineWasm}" data-data="${engineData}" data-game="${gameData}"></script>
+<script type="module" src="${launcher}" data-network="${network}" data-engine="${engineJavaScript}" data-wasm="${engineWasm}" data-data="${engineData}" data-game="${gameData}"></script>
 </main><div id="game-view" hidden><canvas id="canvas" width="800" height="600" tabindex="0" aria-label="Tiberian Sun game"></canvas></div></body></html>`, {
         headers: {
             'content-type': 'text/html; charset=utf-8',

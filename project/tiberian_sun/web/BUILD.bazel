@@ -5,7 +5,10 @@ load("//js:rules.bzl", "js_library")
 load("//py:rules.bzl", "py_binary")
 load(":build.bzl", "engine_build")
 
-exports_files(["launcher.mjs"])
+exports_files([
+    "launcher.mjs",
+    "network.mjs",
+])
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -55,6 +58,8 @@ engine_build(
         "thirdparty.cmake",
         "platform.cpp",
         "platform.h",
+        "network.cpp",
+        "webpeer.rml",
     ],
     overlay_marker = "CMakeLists.txt",
     sdk = select({
@@ -92,7 +97,6 @@ bazel_lint(
 )
 
 js_library(
-    name = "launcher_mjs",
-    srcs = ["launcher.mjs"],
-    deps = [],
+    name = "network_mjs",
+    srcs = ["network.mjs"],
 )

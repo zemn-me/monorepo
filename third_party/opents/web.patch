@@ -643,3 +643,84 @@ diff --git a/code/ui/uishell.cpp b/code/ui/uishell.cpp
  		bool ended = service();
  		if (!Ready) {
  			break;
+diff --git a/code/newmenu.cpp b/code/newmenu.cpp
+--- a/code/newmenu.cpp
++++ b/code/newmenu.cpp
+@@ -287,7 +287,9 @@
+ 	}
+ 
+ 	// The button is drawn by the menu artwork, so it is disabled rather than taken away.
++	#ifndef __EMSCRIPTEN__
+ 	options.Add(NSEL_INTERNET);
++#endif
+ 
+ 	return(Display_Menu("TiberianSunMenu", options));
+ }
+@@ -312,7 +314,9 @@
+ 
+ 	// Both buttons are drawn by the menu artwork, so they are disabled rather than taken
+ 	// away. Neither the online service they led to nor the tour it hosted can be reached.
++	#ifndef __EMSCRIPTEN__
+ 	options.Add(NSEL_INTERNET);
++#endif
+ 	options.Add(NSEL_WDT);
+ 
+ 	return(Display_Menu("FirestormMenu", options));
+diff --git a/code/init.cpp b/code/init.cpp
+--- a/code/init.cpp
++++ b/code/init.cpp
+@@ -6292,6 +6292,15 @@
+ 		case NSEL_LOAD_MISSION:
+ 			return(SEL_LOAD_GAME);
+ 
++		case NSEL_INTERNET:
++#ifdef __EMSCRIPTEN__
++			if (!Web_Connect_Peer()) return SEL_NONE;
++			Session.Type = GAME_IPX;
++			break;
++#else
++			return SEL_NONE;
++#endif
++
+ 		case NSEL_LAN:
+ 			Session.Type = GAME_IPX;
+ 			break;
+diff --git a/code/mplayer.cpp b/code/mplayer.cpp
+--- a/code/mplayer.cpp
++++ b/code/mplayer.cpp
+@@ -65,7 +65,11 @@
+ 	UIMenuState menu;
+ 	menu.Kind = firestorm ? UI_MENU_MULTIPLAYER_FIRESTORM : UI_MENU_MULTIPLAYER;
+ 	menu.Title = "Select Multiplayer Game";
++	#ifdef __EMSCRIPTEN__
++	menu.Items.push_back(UIMenuItemType{"Internet", GAME_INTERNET, true});
++#else
+ 	menu.Items.push_back(UIMenuItemType{"Internet", GAME_INTERNET, false});
++#endif
+ 	if (firestorm) {
+ 		menu.Items.push_back(UIMenuItemType{"World Domination! (Internet)", GAME_WDT, false});
+ 	}
+@@ -75,6 +79,9 @@
+ 	UI_Menu_Place(menu);
+ 
+ 	int chosen = UI_Menu_Dialog(menu, GAME_NORMAL);
++	#ifdef __EMSCRIPTEN__
++	if (chosen == GAME_INTERNET && Web_Connect_Peer()) chosen = GAME_IPX;
++#endif
+ 	if (chosen == GAME_IPX || chosen == GAME_SKIRMISH) {
+ 		retval = (GameType)chosen;
+ 	}
+diff --git a/code/queue.cpp b/code/queue.cpp
+--- a/code/queue.cpp
++++ b/code/queue.cpp
+@@ -735,6 +735,10 @@
+ 	// Compute the Game's CRC
+ 	//------------------------------------------------------------------------
+ 	Compute_Game_CRC();
++#ifdef __EMSCRIPTEN__
++	// Periodic checksums make connection stalls and desynchronization diagnosable.
++	if (Frame % 120 == 0) DebugString("Multiplayer frame %d checksum %08x\n", Frame, GameCRC);
++#endif
+ 
+ 	/*
+ 	**	A deliberate mismatch waits for the startup suppression to expire, or the checksum

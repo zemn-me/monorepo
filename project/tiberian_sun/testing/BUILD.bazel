@@ -25,7 +25,10 @@ service_test(
 
 go_test(
     name = "testing_test",
-    srcs = ["browser_test.go"],
+    srcs = [
+        "browser_test.go",
+        "multiplayer_test.go",
+    ],
     tags = ["manual"],  # keep; requires the production site service.
     deps = [
         "//go/seleniumutil",

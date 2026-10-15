@@ -12,3 +12,5 @@ char *** Web_Argv();
 
 void Web_Display_Size(int &width, int &height);
 void Web_Update_Display();
+
+bool Web_Connect_Peer();
