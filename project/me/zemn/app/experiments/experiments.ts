@@ -16,7 +16,8 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/rays',
 				title: 'Rays',
-				description: 'Renderer for engraving-style rays and halo effects.',
+				description:
+					'Renderer for engraving-style rays and halo effects.',
 			},
 			{
 				href: '/experiments/arena',
@@ -31,7 +32,8 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/geometry_of_music',
 				title: 'Geometry of Music',
-				description: 'Notes and diagrams from reading Geometry of Music.',
+				description:
+					'Notes and diagrams from reading Geometry of Music.',
 			},
 		],
 	},
@@ -51,12 +53,14 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/frame',
 				title: 'Framing calculator',
-				description: 'Calculations for framing pictures and sizing mattes.',
+				description:
+					'Calculations for framing pictures and sizing mattes.',
 			},
 			{
 				href: '/experiments/pitch_training',
 				title: 'Pitch Training',
-				description: 'Generated Anki decks for recognizing pitches by ear.',
+				description:
+					'Generated Anki decks for recognizing pitches by ear.',
 			},
 		],
 	},
@@ -71,7 +75,8 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/factorio/blueprint',
 				title: 'Factorio blueprints',
-				description: 'Playing around with the Factorio blueprint format.',
+				description:
+					'Playing around with the Factorio blueprint format.',
 			},
 			{
 				href: '/experiments/factorio/blueprint/parse',
@@ -81,7 +86,8 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/factorio/blueprint/request',
 				title: 'Requester chest generator',
-				description: 'Generate requester-chest blueprints from item lists.',
+				description:
+					'Generate requester-chest blueprints from item lists.',
 			},
 			{
 				href: '/experiments/factorio/blueprint/wall',
@@ -98,6 +104,11 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 	{
 		title: 'Games',
 		experiments: [
+			{
+				href: '/experiments/tiberian-sun',
+				title: 'Tiberian Sun',
+				description: 'Play the freeware Tiberian Sun in your browser.',
+			},
 			{
 				href: '/experiments/cultist',
 				title: 'Cultist simulator',

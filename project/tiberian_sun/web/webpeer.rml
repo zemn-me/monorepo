@@ -1,0 +1,38 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<rml>
+<head>
+<title>Internet connection</title>
+<link type="text/template" href="dialog.rml"/>
+<style>
+#reveal { width: 640dp; height: 450dp; top: 50%; margin-top: -225dp; }
+#content { position: relative; padding: 0; }
+#content > * { position: absolute; margin: 0; }
+#title { left: 28dp; top: 16dp; }
+#status { left: 28dp; top: 42dp; width: 580dp; height: 40dp; }
+textarea { left: 28dp; width: 580dp; height: 72dp; box-sizing: border-box; font-size: 12dp; }
+button { width: 175dp; }
+#invite { left: 28dp; top: 85dp; }
+#copy { left: 230dp; top: 85dp; }
+#code { top: 125dp; }
+#label { left: 28dp; top: 205dp; }
+#input { top: 230dp; }
+#paste { left: 28dp; top: 315dp; }
+#accept { left: 230dp; top: 315dp; }
+#continue { left: 28dp; top: 365dp; width: 220dp; }
+#cancel { left: 280dp; top: 365dp; }
+</style>
+</head>
+<body template="dialog" data-model="webpeer">
+<p id="title">Internet: direct connection</p>
+<p id="status">{{status}}</p>
+<button id="invite" data-event-click="queue('invite')">Create invitation</button>
+<button id="copy" data-event-click="queue('copy')">Copy your code</button>
+<textarea id="code" readonly="readonly" data-value="code"/>
+<p id="label">Paste your opponent's invitation or reply:</p>
+<textarea id="input" maxlength="65536" data-value="input" data-event-change="queue('input', 0, ev.value)"/>
+<button id="paste" data-event-click="queue('paste')">Paste code</button>
+<button id="accept" data-event-click="queue('accept')">Accept code</button>
+<button id="continue" data-event-click="queue('continue')">Continue to lobby</button>
+<button id="cancel" data-event-click="queue('cancel')">Cancel</button>
+</body>
+</rml>

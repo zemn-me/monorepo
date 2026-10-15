@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { access } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { test } from 'node:test';
 import { pathToFileURL } from 'node:url';
@@ -279,4 +279,32 @@ test('session updates require same origin and logout expires the host cookie', a
 		/^__Host-zemn-authorization=.*Max-Age=0/
 	);
 	assert.equal(response.headers.get('cache-control'), 'private, no-store');
+});
+
+
+test('Tiberian Sun renders a hydratable React page with source-compiled assets', async () => {
+    const response = await request('/experiments/tiberian-sun');
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get('content-type'), /text\/html/);
+    const html = await response.text();
+    assert.match(html, /wasm-unsafe-eval/);
+    assert.match(html, /aria-label="Tiberian Sun game"/);
+    assert.match(html, /role="status"/);
+    assert.match(html, /\/assets\/[^" ]+\.js/);
+    assert.doesNotMatch(html, /type="file"/);
+    assert.match(html, /Freeware game data source/);
+    assert.match(html, /EA has not endorsed/);
+
+    const assets = await import(pathToFileURL(path.resolve('project/me/zemn/app/experiments/tiberian_sun/assets.js')).href);
+    for (const name of ['engineJavaScript', 'engineWasm', 'engineData', 'gameData']) {
+        const bytes = await readFile(path.join('project/me/zemn/build', assets[name]));
+        assert.ok(bytes.length > 0, name);
+        if (name === 'engineWasm') {
+            assert.equal(WebAssembly.validate(bytes), true);
+            const module = await WebAssembly.compile(bytes);
+            const exports = WebAssembly.Module.exports(module);
+            assert.ok(exports.some(entry => entry.name === '__main_argc_argv'));
+            assert.ok(exports.some(entry => entry.name === 'Web_Request_Stop'));
+        }
+    }
 });

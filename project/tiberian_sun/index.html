@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenTS WebAssembly experiment</title>
+<style>
+  body { max-width: 48rem; margin: 3rem auto; padding: 0 1rem; font: 1.1rem/1.5 system-ui; }
+  textarea { box-sizing: border-box; width: 100%; min-height: 10rem; font: inherit; }
+  button { margin-top: 1rem; padding: .6rem 1rem; font: inherit; }
+  output { display: block; margin-top: 1rem; white-space: pre-wrap; }
+</style>
+<p>EA has not endorsed and does not support this product.</p>
+<h1>OpenTS → WebAssembly</h1>
+<p>This experiment runs OpenTS’s LCW compressor and decompressor in your browser.
+It does not run the game. No original game assets are included.</p>
+<label for="source">Text to compress and recover (up to 32,768 UTF-8 bytes)</label>
+<textarea id="source">Tiberium grows. Tiberium grows. Tiberium grows.</textarea>
+<button id="run" disabled>Run round trip</button>
+<output id="result" role="status">Loading WebAssembly…</output>
+<script type="module" src="probe.mjs"></script>
+</html>

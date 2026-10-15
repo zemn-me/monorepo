@@ -1,0 +1,111 @@
+# gazelle:exclude build_engine.py
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
+load("//ts:rules.bzl", "ts_project")
+load(":build.bzl", "engine_build")
+
+package(default_visibility = ["//:__subpackages__"])
+
+config_setting(
+    name = "mac_arm64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+config_setting(
+    name = "mac_x86_64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "linux_arm64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+py_binary(
+    name = "build_engine",
+    srcs = ["build_engine.py"],  # keep
+    main = "build_engine.py",
+    visibility = ["//:__subpackages__"],
+)
+
+engine_build(
+    name = "engine",
+    srcs = ["@opents_web//:sources"],
+    compiler = select({
+        ":mac_arm64": "@emscripten_bin_mac_arm64//:emscripten/emcc.py",
+        ":mac_x86_64": "@emscripten_bin_mac//:emscripten/emcc.py",
+        ":linux_arm64": "@emscripten_bin_linux_arm64//:emscripten/emcc.py",
+        "//conditions:default": "@emscripten_bin_linux//:emscripten/emcc.py",
+    }),
+    marker = "@opents_web//:VERSION",
+    overlay = [
+        "CMakeLists.txt",
+        "thirdparty.cmake",
+        "platform.cpp",
+        "platform.h",
+        "network.cpp",
+        "webpeer.rml",
+    ],
+    overlay_marker = "CMakeLists.txt",
+    sdk = select({
+        ":mac_arm64": "@emscripten_bin_mac_arm64//:all",
+        ":mac_x86_64": "@emscripten_bin_mac//:all",
+        ":linux_arm64": "@emscripten_bin_linux_arm64//:all",
+        "//conditions:default": "@emscripten_bin_linux//:all",
+    }),
+)
+
+filegroup(
+    name = "javascript",
+    srcs = [":engine"],
+    output_group = "javascript",
+)
+
+filegroup(
+    name = "wasm",
+    srcs = [":engine"],
+    output_group = "wasm",
+)
+
+filegroup(
+    name = "data",
+    srcs = [":engine"],
+    output_group = "data",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "build.bzl",
+    ],
+)
+
+ts_project(
+    name = "web",
+    srcs = [
+        "launcher.ts",
+        "network.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "launcher.ts",
+        "network.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)

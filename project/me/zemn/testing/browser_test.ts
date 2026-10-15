@@ -370,6 +370,7 @@ describe('zemn.me website', () => {
 					'Requester chest generator',
 					'Blueprint wall generator',
 					'Blueprint book',
+					'Tiberian Sun',
 					'Cultist simulator',
 				]);
 

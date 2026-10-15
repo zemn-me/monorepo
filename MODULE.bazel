@@ -13,6 +13,7 @@ bazel_dep(name = "rules_oci", version = "2.2.7")
 
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "emsdk", version = "5.0.7")
 bazel_dep(name = "rules_license", version = "1.0.0")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
@@ -97,7 +98,7 @@ bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.9.0", dev_dependency = True)
 
 bazel_dep(name = "rules_pkg", version = "1.2.0")
-bazel_dep(name = "rules_python", version = "1.8.0")
+bazel_dep(name = "rules_python", version = "1.8.4")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 
@@ -128,14 +129,11 @@ use_repo(pip, "pip")
 bazel_dep(name = "aspect_rules_swc", version = "2.6.0")
 bazel_dep(name = "aspect_rules_js", version = "2.9.2")
 
-####### Node.js version #########
-# By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
-# Optionally you can pin a different node version:
+# Keep the repository's default Node version; SDK dependencies must not select an older one.
 bazel_dep(name = "rules_nodejs", version = "6.7.3")
-#node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 
-#node.toolchain(node_version = "18.13.0")
-#################################
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain()
 
 pnpm = use_extension("//bzl/pnpm:extensions.bzl", "pnpm", dev_dependency = True)
 pnpm.tool(
@@ -847,3 +845,64 @@ exports_files(glob(["**/*"], allow_empty=True))
 )
 
 bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# OpenTS is fetched as source only; its Windows build and game data are unused.
+http_archive(
+    name = "opents",
+    build_file = "//third_party/opents:BUILD.opents",
+    patch_args = ["-p1"],
+    patches = ["//third_party/opents:portable_lcw.patch"],
+    sha256 = "b37dc2bddc1e26004e76a583f29eb74d66d32bbd43da416fe53489e14b4b48f0",
+    strip_prefix = "OpenTS-51b52aa3839281471496652ecfcedb40ca85dbc4",
+    url = "https://github.com/OpenTS-Developers/OpenTS/archive/51b52aa3839281471496652ecfcedb40ca85dbc4.tar.gz",
+)
+
+# The source port has removed the engine's Windows dependency; this build replaces
+# its remaining macOS platform calls with browser implementations.
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "opents_web",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["VERSION"])
+filegroup(
+    name = "sources",
+    srcs = glob(["**"], exclude = ["archive/**", "dist/**", "tests/**", "manual/**"]),
+)
+""",
+    commit = "92f0aa9009506c2c090846d3a924bb5a163c4349",
+    patch_args = ["-p1"],
+    patches = ["//third_party/opents:web.patch"],
+    recursive_init_submodules = True,
+    remote = "https://github.com/TFrey98/OpenTS_mac.git",
+)
+
+emscripten_deps = use_extension("@emsdk//:emscripten_deps.bzl", "emscripten_deps")
+use_repo(
+    emscripten_deps,
+    "emscripten_bin_linux",
+    "emscripten_bin_linux_arm64",
+    "emscripten_bin_mac",
+    "emscripten_bin_mac_arm64",
+)
+
+# The original EA 2010 freeware package, preserved with its original installation tree.
+# Provenance: https://archive.org/details/command-and-conquer-tiberian-sun
+
+http_file(
+    name = "tiberian_sun_freeware",
+    downloaded_file_path = "OfficialCnCTiberianSun.rar",
+    sha256 = "b04219e715511de9baa2feb9827013c8e106f8d6b9b563936b8a2f650305dec5",
+    urls = ["https://archive.org/download/command-and-conquer-tiberian-sun/OfficialCnCTiberianSun.rar"],
+)
+
+# Build-time extraction only; this executable is not part of the browser runtime.
+http_archive(
+    name = "unrar",
+    build_file = "//third_party/unrar:unrar.BUILD.bazel",
+    sha256 = "634900842a3737d9cc15bbcc71d4c74cc713437e0bca296a573424fe5f2660ab",
+    strip_prefix = "unrar",
+    # auto-integrity
+    urls = ["https://www.rarlab.com/rar/unrarsrc-7.3.1.tar.gz"],
+)
