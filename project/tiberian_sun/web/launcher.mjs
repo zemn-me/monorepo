@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-const launch = document.querySelector('#launch');
 const status = document.querySelector('#status');
 const canvas = document.querySelector('#canvas');
 const progress = document.querySelector('#progress');
@@ -7,15 +6,13 @@ const log = document.querySelector('#log');
 const script = document.querySelector('script[data-engine]');
 const lines = [];
 const gameView = document.querySelector('#game-view');
-let started = false;
 
 function restorePage(message) {
     delete document.body.dataset.state;
     gameView.hidden = true;
     progress.hidden = true;
     status.textContent = message;
-    launch.disabled = false;
-    launch.focus();
+    status.focus();
 }
 
 
@@ -66,13 +63,7 @@ function importGame(engine, data) {
     if (offset !== data.length || !names.has('TIBSUN.MIX')) throw new Error('Incomplete game package');
 }
 
-launch.addEventListener('click', async () => {
-    // Each Emscripten instance owns its WebGL context and event handlers.
-    if (started) { sessionStorage.setItem('tiberian-sun-restart', 'yes'); location.reload(); return; }
-    started = true;
-    launch.disabled = true;
-    document.body.dataset.state = 'loading';
-    status.textContent = 'Loading the game engine and downloading game files…';
+async function startGame() {
     try {
         const { default: createEngine } = await import(script.dataset.engine);
         const [engine, data] = await Promise.all([createEngine({
@@ -82,7 +73,11 @@ launch.addEventListener('click', async () => {
             print: record,
             printErr: record,
             onAbort: message => restorePage(`The game stopped: ${message}.`),
-            onExit: () => restorePage('Game closed.'),
+            onExit: code => {
+                if (code !== 0) { restorePage(`The game stopped (exit code ${code}).`); return; }
+                if (history.length > 1) history.back();
+                else location.replace('/experiments');
+            },
         }), downloadGame()]);
         engine.FS.mkdirTree('/game');
         engine.FS.mkdirTree('/save');
@@ -103,10 +98,6 @@ launch.addEventListener('click', async () => {
         record(error);
         restorePage(`Could not start the game: ${error.message ?? error}.`);
     }
-});
-
-
-if (sessionStorage.getItem('tiberian-sun-restart') === 'yes') {
-    sessionStorage.removeItem('tiberian-sun-restart');
-    launch.click();
 }
+
+void startGame();

@@ -18,17 +18,20 @@ import (
 
 // The game draws its controls on a canvas. Drive real input and inspect the
 // rendered pixels and the engine's visible log rather than adding a game API.
-func TestFreewareSkirmish(t *testing.T) { playFreeware(t, false) }
-func TestWindowExit(t *testing.T)       { playFreeware(t, true) }
+func TestFreewareSkirmish(t *testing.T) { playFreeware(t, "play") }
+func TestWindowExit(t *testing.T)       { playFreeware(t, "back") }
 
-func playFreeware(t *testing.T, quit bool) {
+func TestDirectVisitExit(t *testing.T) { playFreeware(t, "direct") }
+
+func playFreeware(t *testing.T, mode string) {
+	quit := mode != "play"
 	var ports struct {
 		Site string `json:"@@//project/tiberian_sun/testing:site"`
 	}
 	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.Site == "" {
 		t.Fatalf("assigned site port: %v", err)
 	}
-	driver, err := seleniumutil.NewWithChromeArguments("--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--autoplay-policy=no-user-gesture-required", "--window-size=1280,1100")
+	driver, err := seleniumutil.NewWithChromeArguments("--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1280,1100")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,25 +53,24 @@ func playFreeware(t *testing.T, quit bool) {
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.Get("http://localhost:" + ports.Site + "/experiments/tiberian-sun"); err != nil {
+	base := "http://localhost:" + ports.Site
+	if mode == "back" {
+		// A real previous document must survive quitting, rather than a fixed redirect.
+		if err := driver.Get(base + "/experiments?from=tiberian-sun-test"); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
 		t.Fatal(err)
 	}
-	start, err := driver.FindElement(selenium.ByCSSSelector, "button#launch")
-	if err != nil {
-		t.Fatal(err)
+	if mode == "direct" {
+		// Model opening a link in a fresh tab, with no earlier document to return to.
+		if err := driver.ExecuteChromiumCommand("Page.resetNavigationHistory", map[string]any{}); err != nil {
+			t.Fatal(err)
+		}
 	}
-	if enabled, _ := start.IsEnabled(); !enabled {
-		t.Fatal("freeware game requires no upload before starting")
-	}
-	details, err := driver.FindElement(selenium.ByCSSSelector, "details > summary")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := details.Click(); err != nil {
-		t.Fatal(err)
-	}
-	if err := start.Click(); err != nil {
-		t.Fatal(err)
+	if buttons, err := driver.FindElements(selenium.ByCSSSelector, "button#launch"); err != nil || len(buttons) != 0 {
+		t.Fatalf("game should start on navigation without a launch button: %v", err)
 	}
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
 		el, err := w.FindElement(selenium.ByCSSSelector, "[role=status]")
@@ -122,7 +124,7 @@ func playFreeware(t *testing.T, quit bool) {
 			t.Fatalf("%s: %d matching pixels: %v", label, count, err)
 		}
 	}
-	pointer := func(x, y int, kind string, buttons int) {
+	screenPoint := func(x, y int) (int, int) {
 		t.Helper()
 		rect, err := driver.ExecuteScript("const r=arguments[0].getBoundingClientRect(); return [r.left,r.top,r.width,r.height]", []interface{}{canvas})
 		if err != nil {
@@ -131,16 +133,28 @@ func playFreeware(t *testing.T, quit bool) {
 		box := rect.([]interface{})
 		px := int(box[0].(float64) + float64(x)*box[2].(float64)/800)
 		py := int(box[1].(float64) + float64(y)*box[3].(float64)/600)
+		return px, py
+	}
+	dispatch := func(px, py int, kind string, buttons int) {
+		t.Helper()
 		if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": kind, "x": px, "y": py, "button": "left", "buttons": buttons, "clickCount": 1}); err != nil {
 			t.Fatal(err)
 		}
 	}
+	pointer := func(x, y int, kind string, buttons int) {
+		t.Helper()
+		px, py := screenPoint(x, y)
+		dispatch(px, py, kind, buttons)
+	}
 	mouse := func(x, y int, click bool) {
-		pointer(x, y, "mouseMoved", 0)
+		t.Helper()
+		// Exit navigates on press; resolve the canvas before either half of the click.
+		px, py := screenPoint(x, y)
+		dispatch(px, py, "mouseMoved", 0)
 		if click {
-			pointer(x, y, "mousePressed", 1)
+			dispatch(px, py, "mousePressed", 1)
 			time.Sleep(80 * time.Millisecond)
-			pointer(x, y, "mouseReleased", 0)
+			dispatch(px, py, "mouseReleased", 0)
 		}
 	}
 	click := func(x, y int) { t.Helper(); mouse(x, y, true) }
@@ -154,20 +168,16 @@ func playFreeware(t *testing.T, quit bool) {
 		waitPixels("interactive Exit highlight", image.Rect(105, 102, 140, 120), highlight, 30)
 		click(120, 110) // Exit from the original game selector.
 		if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-			value, err := w.ExecuteScript(`return document.querySelector('#status').textContent === 'Game closed.' && getComputedStyle(document.querySelector('main')).display !== 'none' && document.querySelector('#game-view').hidden && !document.querySelector('#launch').disabled && document.activeElement.id === 'launch'`, nil)
-			return value == true, err
+			current, err := w.CurrentURL()
+			destination := base + "/experiments"
+			if mode == "back" {
+				destination += "?from=tiberian-sun-test"
+			}
+			return current == destination, err
 		}, 30*time.Second); err != nil {
-			t.Fatalf("quitting did not restore the page: %v", err)
+			t.Fatalf("quitting did not return to the previous page: %v", err)
 		}
-		if err := start.Click(); err != nil {
-			t.Fatal(err)
-		}
-		if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-			value, err := w.ExecuteScript(`return document.body.dataset.state === 'running' && !document.querySelector('#game-view').hidden`, nil)
-			return value == true, err
-		}, 120*time.Second); err != nil {
-			t.Fatalf("restarting failed: %v", err)
-		}
+
 		return
 	}
 	click(240, 300) // Original Tiberian Sun disc.

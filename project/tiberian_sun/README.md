@@ -11,15 +11,15 @@ extracts an explicit allowlist of 11 game archives and 18 Firestorm maps.
 No original assets are committed to Git. Music, movies, original Windows
 executables, and installation settings are excluded from the public package.
 
-The site route is `/experiments/tiberian-sun`. Choose **Start game**; no file
-upload or Windows installation is needed. The browser downloads about 88 MiB
+The site route is `/experiments/tiberian-sun`. Visiting it starts the game
+automatically; no file upload or Windows installation is needed. The browser downloads about 88 MiB
 of compressed data on first use, decompresses it with the standard browser
 API, and mounts the user directory on IndexedDB. It starts the engine with
 `-DATADIR=/game -USERDIR=/save -WIN -XCC`; the bounded Game log displays the
 engine's diagnostics. Game data uses the site's content-addressed asset cache.
 
-Starting hides the page and fills the browser viewport with the game. Quitting
-from the game's menu restores the page. Rendering follows the viewport in CSS
+The game fills the browser viewport. Quitting from its menu returns to the
+previous page, or the experiments index when the tab has no previous page. Rendering follows the viewport in CSS
 pixels, including live window resizing, with an 800×600 minimum and a 4096-pixel
 maximum edge; smaller windows scale the minimum frame to fit without distortion.
 Changes are debounced and applied between game or modal frames because replacing
