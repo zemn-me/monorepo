@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sync"
@@ -51,15 +52,37 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		t.Fatal(err)
 	}
 	var originalVideo selenium.WebElement
+	assertWikiRequests := func() {
+		t.Helper()
+		api, err := apiRoot()
+		if err != nil {
+			t.Fatal(err)
+		}
+		requests, err := driver.ExecuteScript(`
+			const api = new URL(arguments[0]);
+			return performance.getEntriesByType('resource')
+				.map(entry => new URL(entry.name))
+				.filter(url => url.origin === api.origin &&
+					(url.pathname === '/journal' || url.pathname === '/journal/entries'))
+				.map(url => url.href);
+		`, []any{api.String()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(requests.([]any)) != 0 {
+			t.Fatalf("wiki loaded recording data: %v", requests)
+		}
+	}
 	assertWikiNavigation := func() {
 		t.Helper()
+		assertWikiRequests()
 		assertHeroVideoPreserved(t, driver, originalVideo)
 		visible, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect(); return bar.top >= 0 && bar.bottom <= window.innerHeight && bar.height < 100;`, nil)
 		if err != nil || visible != true {
 			t.Fatalf("wiki navigation hid the compact navigation bar: %v %v", visible, err)
 		}
 	}
-	root.Path = "/journal"
+	root.Path, root.RawQuery = "/journal", "wiki=all"
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
@@ -68,9 +91,6 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	}
 	originalVideo, err = driver.FindElement(selenium.ByCSSSelector, "figure video")
 	if err != nil {
-		t.Fatal(err)
-	}
-	if err := clickElementWithRetry(driver, selenium.ByLinkText, "Wiki", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	search, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second)
@@ -122,6 +142,11 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		if err := driver.ResizeWindow("", width, 900); err != nil {
 			t.Fatal(err)
 		}
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": 900, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
 		if _, err := driver.ExecuteScript(`document.querySelector('section[aria-label="Diary wiki"]').scrollIntoView({block: 'center'});`, nil); err != nil {
 			t.Fatal(err)
 		}
@@ -141,6 +166,28 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 				t.Fatal(err)
 			}
 		}
+	}
+	time.Sleep(11 * time.Second)
+	assertWikiRequests()
+	// A reload of an individual page should fetch that page alone.
+	if err := driver.Refresh(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	assertWikiRequests()
+	api, err := apiRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	indexRequests, err := driver.ExecuteScript(`
+		return performance.getEntriesByType('resource').filter(entry =>
+			entry.name.startsWith(arguments[0]) && new URL(entry.name).pathname === '/journal/wiki'
+		).length;
+	`, []any{api.String()})
+	if err != nil || indexRequests != float64(0) {
+		t.Fatalf("individual page loaded the whole wiki index: %v %v", indexRequests, err)
 	}
 	// Follow an inline citation as a user would, through the footnote preview.
 	reference, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] a[aria-label^='Play source']")
@@ -392,5 +439,107 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		if view.link == "Years" {
 			capture("15-years-phone", "nav[aria-label='Browse journal']", 390, 1100, false)
 		}
+	}
+}
+
+func TestJournalWikiUploadConfirmation(t *testing.T) {
+	if err := seedJournalWikiFixture(); err != nil {
+		t.Fatal(err)
+	}
+	root, err := frontendRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	if err := driver.SetTimezoneOverride("America/Los_Angeles"); err != nil {
+		t.Fatal(err)
+	}
+	root.Path, root.RawQuery = "/journal", "wiki=all"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+
+	audio := testWAV()
+	audio[len(audio)-10] = 91
+	path := filepath.Join(t.TempDir(), "wiki-confirmation.wav")
+	if err := os.WriteFile(path, audio, 0600); err != nil {
+		t.Fatal(err)
+	}
+	date := time.Date(2008, time.May, 13, 20, 0, 0, 0, time.UTC)
+	if err := os.Chtimes(path, date, date); err != nil {
+		t.Fatal(err)
+	}
+	input, err := driver.FindElement(selenium.ByCSSSelector, "input[aria-label='Import voice memo']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := input.SendKeys(path); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
+		dumpPageDiagnostics(t, driver)
+		t.Fatal("wiki upload was not confirmed: ", err)
+	}
+	if _, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']"); err != nil {
+		t.Fatal("upload left the wiki: ", err)
+	}
+	api, err := apiRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests, err := driver.ExecuteScript(`
+		const api = new URL(arguments[0]);
+		const paths = performance.getEntriesByType('resource')
+			.map(entry => new URL(entry.name)).filter(url => url.origin === api.origin).map(url => url.pathname);
+		return { journal: paths.filter(path => path === '/journal').length,
+			uploads: paths.filter(path => path === '/journal/entries').length };
+	`, []any{api.String()})
+	if err != nil {
+		t.Fatal(err)
+	}
+	counts := requests.(map[string]any)
+	if counts["journal"] != float64(0) || counts["uploads"].(float64) < 2 {
+		t.Fatalf("wiki confirmation did not use lightweight metadata: %v", counts)
+	}
+
+	// Confirm the recording exists in the journal before removing the fixture.
+	root.Path, root.RawQuery = "/journal/day", url.Values{"at": {date.Format(time.RFC3339)}}.Encode()
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	selector := "[role='region'][aria-label='Journal days'] > section:has(> h3 > time[datetime^='2008-05-13']) details:has(audio[data-entry-id])"
+	entry, err := waitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
+	if err != nil {
+		t.Fatal("confirmed recording was not ready in the journal: ", err)
+	}
+	summary, err := entry.FindElement(selenium.ByCSSSelector, ":scope > summary")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := clickElementInView(driver, summary); err != nil {
+		t.Fatal(err)
+	}
+	remove, err := entry.FindElement(selenium.ByCSSSelector, "[role='slider'][aria-label='Swipe to delete journal entry']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := remove.SendKeys(selenium.EndKey + selenium.EnterKey); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForNoElement(driver, selenium.ByCSSSelector, selector, 30*time.Second); err != nil {
+		t.Fatal(err)
 	}
 }

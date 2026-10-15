@@ -14,8 +14,8 @@
 # Without floors, a resolver can satisfy newer transitive dependencies by
 # silently selecting an obsolete release with fewer dependency constraints.
 yamllint>=1.38.0
-pip-tools>=7.6.1
-ruff>=0.16.10
+pip-tools>=7.6.2
+ruff>=0.17.0
 mypy>=2.4.0
 jupyter>=1.1.1
 sympy>=1.14.0
@@ -29,5 +29,5 @@ nbconvert>=7.17.1
 ipywidgets>=8.1.9
 frida-tools>=14.11.0
 mitmproxy>=12.2.3
-pydantic>=2.13.5
+pydantic>=2.14.0
 genanki>=0.13.1

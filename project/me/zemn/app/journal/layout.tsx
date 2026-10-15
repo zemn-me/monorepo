@@ -27,29 +27,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const auth = await readSession(request);
 	const queryClient = new QueryClient();
 	if (auth?.session.scopes.includes('journal_read')) {
-		const response = await auth.client.GET('/journal');
-		if (!response.data)
-			throw new Response('Journal unavailable', {
-				status: response.response.status,
-				headers: privateHeaders,
-			});
-		const journal = response.data;
 		const jti = auth.session.claims.jti;
-		queryClient.setQueryData(['get', '/journal', jti], journal);
 		const pageId = new URL(request.url).searchParams.get('wiki');
-		if (pageId && pageId !== 'all') {
+		if (pageId === null) {
+			const response = await auth.client.GET('/journal');
+			if (!response.data)
+				throw new Response('Journal unavailable', {
+					status: response.response.status,
+					headers: privateHeaders,
+				});
+			queryClient.setQueryData(['get', '/journal', jti], response.data);
+		} else if (pageId === 'all') {
+			const response = await auth.client.GET('/journal/wiki');
+			if (!response.data)
+				throw new Response('Wiki unavailable', {
+					status: response.response.status,
+					headers: privateHeaders,
+				});
+			queryClient.setQueryData(
+				['get', '/journal', 'wiki', jti],
+				response.data
+			);
+		} else {
 			const page = await auth.client.GET('/journal/wiki/{pageId}', {
 				params: { path: { pageId } },
 			});
 			if (page.data)
 				queryClient.setQueryData(
-					[
-						'get',
-						'/journal/wiki/{pageId}',
-						jti,
-						pageId,
-						journal.curation?.generation,
-					],
+					['get', '/journal', 'wiki-page', jti, pageId, undefined],
 					page.data
 				);
 		}

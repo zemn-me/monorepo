@@ -343,7 +343,7 @@ func (s *Server) getJournalWikiMCP(ctx context.Context, _ *mcp.CallToolRequest, 
 		return nil, result, err
 	}
 	if page, ok := response.(GetJournalWikiPageId200JSONResponse); ok {
-		return nil, JournalWikiPage(page), nil
+		return nil, JournalWikiPage{Id: page.Id, Title: page.Title, Kind: JournalWikiPageKind(page.Kind), Aliases: page.Aliases, Blocks: page.Blocks}, nil
 	}
 	return nil, result, errors.New("wiki page unavailable")
 }

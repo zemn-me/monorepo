@@ -552,6 +552,60 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalWikiSource:
+      type: object
+      description: Recording metadata needed to link a wiki citation without downloading its transcript or audio.
+      required: [entryId, segmentId, recordedAt, timeZone, startMs]
+      properties:
+        entryId:
+          type: string
+        segmentId:
+          type: string
+        recordedAt:
+          type: string
+          format: date-time
+        timeZone:
+          type: string
+        startMs:
+          type: integer
+          format: int64
+        title:
+          type: string
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+    JournalWikiPageView:
+      allOf:
+        - $ref: '#/components/schemas/JournalWikiPage'
+        - type: object
+          required: [sources]
+          properties:
+            sources:
+              type: array
+              items:
+                $ref: '#/components/schemas/JournalWikiSource'
+            curation:
+              $ref: '#/components/schemas/JournalCurationStatus'
+    JournalWikiIndex:
+      type: object
+      required: [pages, hasEntries]
+      properties:
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalWikiIndexEntry'
+        hasEntries:
+          type: boolean
+        curation:
+          $ref: '#/components/schemas/JournalCurationStatus'
+    JournalUploads:
+      type: object
+      description: Upload confirmation and processing metadata, without transcript, summary, or signed audio URLs.
+      required: [entries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
     JournalWikiIndexEntry:
       type: object
       required: [id, title, kind, aliases]
@@ -2864,6 +2918,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Journal'
+  /journal/wiki:
+    get:
+      summary: List the caller's diary wiki pages without loading the journal recordings.
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: Wiki page names and the latest curation status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalWikiIndex'
   /journal/wiki/{pageId}:
     get:
       summary: Read a cited wiki page from the caller's private diary.
@@ -2882,7 +2948,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JournalWikiPage'
+                $ref: '#/components/schemas/JournalWikiPageView'
         "404":
           description: Page unavailable or being rebuilt after a source correction.
           content:
@@ -2890,6 +2956,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /journal/entries:
+    get:
+      summary: List upload confirmation and processing metadata without journal content.
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: Visible recording status and upload confirmation metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalUploads'
     post:
       summary: Create a voice journal entry.
       description: Create an awaiting-upload journal entry and return a short-lived URL for uploading its audio directly to private object storage.

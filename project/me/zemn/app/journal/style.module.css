@@ -385,6 +385,24 @@
 	gap: 2em;
 }
 
+.dayList {
+	/* Newer pages restore their reading position explicitly. */
+	overflow-anchor: none;
+}
+
+.dayPagination {
+	background: transparent;
+	border: 1px solid var(--journal-soft-line);
+	border-radius: 0.5em;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	justify-self: center;
+	min-block-size: 44px;
+	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
+	padding: 0.5em 1em;
+}
+
 .periodOverviewList {
 	gap: 0;
 	max-width: 42em;

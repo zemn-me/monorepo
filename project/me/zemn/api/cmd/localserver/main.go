@@ -100,12 +100,13 @@ func main() {
 	}
 
 	srv, err := apiserver.NewServer(context.Background(), apiserver.NewServerOptions{
-		LocalStack:              true,
-		AllowLocalhostAnalytics: true,
-		JournalAI:               journalAI,
-		JournalCurator:          &localJournalCurator{},
-		JournalObjects:          journalStore,
-		JournalPresigner:        journalStore,
+		LocalStack:                 true,
+		AllowRequestHostOIDCIssuer: true,
+		AllowLocalhostAnalytics:    true,
+		JournalAI:                  journalAI,
+		JournalCurator:             &localJournalCurator{},
+		JournalObjects:             journalStore,
+		JournalPresigner:           journalStore,
 	})
 	if err != nil {
 		log.Fatalf("failed to create server: %v", err)
