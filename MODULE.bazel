@@ -886,3 +886,23 @@ use_repo(
     "emscripten_bin_mac",
     "emscripten_bin_mac_arm64",
 )
+
+# The original EA 2010 freeware package, preserved with its original installation tree.
+# Provenance: https://archive.org/details/command-and-conquer-tiberian-sun
+
+http_file(
+    name = "tiberian_sun_freeware",
+    downloaded_file_path = "OfficialCnCTiberianSun.rar",
+    sha256 = "b04219e715511de9baa2feb9827013c8e106f8d6b9b563936b8a2f650305dec5",
+    urls = ["https://archive.org/download/command-and-conquer-tiberian-sun/OfficialCnCTiberianSun.rar"],
+)
+
+# Build-time extraction only; this executable is not part of the browser runtime.
+http_archive(
+    name = "unrar",
+    build_file = "//third_party/unrar:unrar.BUILD.bazel",
+    sha256 = "634900842a3737d9cc15bbcc71d4c74cc713437e0bca296a573424fe5f2660ab",
+    strip_prefix = "unrar",
+    # auto-integrity
+    urls = ["https://www.rarlab.com/rar/unrarsrc-7.3.1.tar.gz"],
+)

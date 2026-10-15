@@ -1,0 +1,52 @@
+# gazelle:exclude package_data.py
+# gazelle:exclude package_data_test.py
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+package(default_visibility = ["//:__subpackages__"])
+
+py_binary(
+    name = "package_data",
+    srcs = ["package_data.py"],  # keep
+    main = "package_data.py",
+)
+
+genrule(
+    name = "freeware",
+    srcs = ["@tiberian_sun_freeware//file"],
+    outs = [
+        "freeware.data.gz",
+        "EA_CnCTiberianSunEULA.doc",
+    ],
+    cmd = "$(execpath :package_data) --unrar $(execpath @unrar//:unrar) --archive $(execpath @tiberian_sun_freeware//file) --output $(location freeware.data.gz) --license-output $(location EA_CnCTiberianSunEULA.doc)",
+    tools = [
+        ":package_data",
+        "@unrar",
+    ],
+)
+
+py_test(
+    name = "package_data_test",
+    srcs = ["package_data_test.py"],  # keep
+    deps = [":package_data_lib"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_library(
+    name = "package_data_lib",
+    srcs = ["package_data.py"],
+)
+
+filegroup(
+    name = "game_data",
+    srcs = ["freeware.data.gz"],
+)
+
+filegroup(
+    name = "game_license",
+    srcs = ["EA_CnCTiberianSunEULA.doc"],
+)

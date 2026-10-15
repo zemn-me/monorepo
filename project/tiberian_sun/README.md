@@ -5,15 +5,43 @@ EA has not endorsed and does not support this product.
 The complete OpenTS C++ engine and its dependencies are cross-compiled to
 WebAssembly with Emscripten. The browser executes that engine directly;
 no original Windows executable, x86 emulator, or Windows image is used.
-The player selects an installed game folder locally. Game assets are not
-included in the site build or uploaded to a server.
+The website includes game data from the preserved EA 2010 freeware release.
+Bazel downloads the original archive over HTTP, verifies its SHA-256, and
+extracts an explicit allowlist of 11 game archives and 18 Firestorm maps.
+No original assets are committed to Git. Music, movies, original Windows
+executables, and installation settings are excluded from the public package.
 
-The site route is `/experiments/tiberian-sun`. It starts the game after the
-player chooses a folder containing `TIBSUN.MIX`. Include the other `.MIX`
-archives, maps, and settings from that installation. Firestorm also needs
-its expansion data. The browser imports supported files from the selected
-folder, mounts the user directory on IndexedDB, and starts the engine with
-`-DATADIR=/game -USERDIR=/save -WIN`.
+The site route is `/experiments/tiberian-sun`. Choose **Start game**; no file
+upload or Windows installation is needed. The browser downloads about 88 MiB
+of compressed data on first use, decompresses it with the standard browser
+API, and mounts the user directory on IndexedDB. It starts the engine with
+`-DATADIR=/game -USERDIR=/save -WIN -XCC`; the bounded Game log displays the
+engine's diagnostics. Game data uses the site's content-addressed asset cache.
+
+## Freeware data and provenance
+
+`@tiberian_sun_freeware//file` pins
+[the preserved original release](https://archive.org/details/command-and-conquer-tiberian-sun):
+`OfficialCnCTiberianSun.rar`, SHA-256
+`b04219e715511de9baa2feb9827013c8e106f8d6b9b563936b8a2f650305dec5`.
+The archive retains EA's First Decade installation tree and its February
+2010 EULA. The preservation metadata identifies it as the files EA gave
+away to promote Command & Conquer 4. [CnCNet's guide](https://cncnet.org/tiberian-sun/how-to-play)
+also records the freeware release and links to the community installer.
+The previous local BottleShip fixture is not a dependency of this build.
+
+`//project/tiberian_sun/assets:game_data` creates a deterministic gzip package:
+`OPENTSD1`, a little-endian 32-bit JSON-header length, a JSON array of
+`{name,size}` entries, then the concatenated file bytes. The launcher checks
+names, lengths, duplicates, and the required `TIBSUN.MIX` before starting.
+`//project/tiberian_sun/assets:game_license` preserves the release's original
+`EA_CnCTiberianSunEULA.doc`, linked separately on the page.
+
+UnRAR 7.3.1 is built from pinned vendor source solely as an extraction tool.
+Its license stays in the external source repository; it is not linked into
+or deployed with the GPL browser engine. The first data build downloads the
+1.33 GB original archive, which Bazel then caches. The website serves only
+the selected compressed package, engine resources, and notices.
 
 ## Build and run
 
@@ -26,7 +54,7 @@ From the monorepo root:
 
 Open <http://localhost:3000/experiments/tiberian-sun>. Use a keyboard and
 mouse. The full site build is `//project/me/zemn:build`; it includes the
-engine JavaScript, Wasm, bundled open-source UI resources, launcher, and
+engine JavaScript, Wasm, bundled open-source UI resources, launcher, freeware data, and
 license notices as content-addressed public assets. The standalone game
 document has its own script policy and opens through a document navigation.
 Leaving the page ends that engine instance.
@@ -79,9 +107,19 @@ Affected automated checks:
 
 The LCW test executes the compiled upstream compressor with known bytes,
 UTF-8, deterministic binary data, buffer boundaries, and rejected lengths.
-The production server test checks the game document and the emitted
-JavaScript, Wasm entry point, resource package, and local-import launcher.
-Automated checks do not require proprietary game data.
+The production server test checks the game document and emitted JavaScript,
+Wasm entry point, UI resources, and game-data URL. Selection unit tests reject
+incomplete or ambiguous releases and ensure music, movies, executable files,
+and unrelated paths cannot enter the public package.
+
+`//project/tiberian_sun/testing:integration_test` starts the production website
+through `rules_itest` with an assigned port and runs headless Chromium. It
+clicks Start, selects Tiberian Sun, opens Skirmish, loads a map with an AI,
+selects and deploys the MCV, and checks the rendered construction sidebar
+and continuing animation. It reads the visible engine log and screenshots;
+there are no test-only game globals or seeded browser storage. Screenshots
+are retained in the test's undeclared outputs. This test uses the same
+Bazel-downloaded freeware data as the deployed experiment.
 
 Local asset-backed browser testing reached both game-selection discs,
 Tiberian Sun's main menu and skirmish setup, then loaded Grand Canyon,
@@ -95,8 +133,8 @@ The browser build's saved games are local to its origin; cross-platform
 save and network compatibility is not claimed.
 
 The user filesystem is persisted through Emscripten IDBFS. Clearing site
-data deletes those saves. Game assets are selected again on a new launch
-and remain outside the persistent user directory.
+data deletes those saves. Downloaded game assets remain outside the
+persistent user directory.
 
 ## Licensing
 
@@ -106,9 +144,12 @@ material. The pinned source includes notices for its open-source rendering,
 audio, font, and UI dependencies. The site exposes those notices and a link
 to the source and build instructions alongside the game.
 
-Original game assets remain separate from the engine license. The site
-links to the [freeware installer](https://cnc-comm.com/tiberian-sun/downloads/the-game/installer)
-and imports the player's local files. It does not bundle original artwork,
-music, movies, executables, or archives into the deployment. See
-[EA's franchise modding guidelines](https://www.ea.com/games/command-and-conquer/news/modding-faq)
-for the conditions on community mods and asset distribution.
+Original game assets remain separate from the engine's GPL license. The
+original freeware EULA restricts redistribution, including network downloads.
+EA's later [C&C modding guidelines](https://www.ea.com/games/command-and-conquer/news/modding-faq)
+grant a conditional, revocable license for noncommercial community mods and
+exclude music. This implementation preserves the original EULA and records
+both sources; the existence of the freeware download is not a legal
+clearance for public redistribution. Public hosting requires resolving how
+those terms apply to this browser port. No public deployment is performed by
+building or running these targets.

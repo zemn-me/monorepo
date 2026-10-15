@@ -2,6 +2,8 @@ import {
     engineData,
     engineJavaScript,
     engineWasm,
+    gameData,
+    gameLicense,
     launcher,
     license,
     thirdPartyNotices,
@@ -16,18 +18,16 @@ export function loader() {
 </style></head><body><main>
 <header><a href="/experiments">← Experiments</a><span class="notice">EA has not endorsed and does not support this product.</span></header>
 <h1>Tiberian Sun</h1>
-<p>Play Tiberian Sun and Firestorm with your installed game files. Use a keyboard and mouse.</p>
+<p>Play Tiberian Sun in your browser. Use a keyboard and mouse.</p>
 <p class="notice">Experimental browser port. Campaigns, Firestorm gameplay, and multiplayer have not been verified.</p>
-<p>Your game files stay on this device. Saved games are kept in this browser.</p>
-<label for="files">Choose your installed Tiberian Sun folder</label>
-<input id="files" type="file" webkitdirectory multiple aria-describedby="help">
-<p id="help">Select the folder containing TIBSUN.MIX and the other game archives. <a href="https://cnc-comm.com/tiberian-sun/downloads/the-game/installer" target="_blank" rel="noreferrer">Get the freeware installer</a>.</p>
-<button id="launch" disabled>Start game</button> <button id="fullscreen" disabled>Fullscreen</button>
-<p id="status" role="status">Choose a game folder to start.</p>
+<p>Game files download when you start. Music and movies are not included. Saved games are kept in this browser.</p>
+<button id="launch">Start game</button> <button id="fullscreen" disabled>Fullscreen</button>
+<p id="status" role="status">Ready to play.</p>
+<progress id="progress" aria-label="Downloading game files" hidden></progress>
 <canvas id="canvas" width="800" height="600" tabindex="0" aria-label="Tiberian Sun game" hidden></canvas>
 <details><summary>Game log</summary><pre id="log"></pre></details>
-<footer>Engine: OpenTS, compiled from C++ to WebAssembly. <a href="${license}">License</a> · <a href="${thirdPartyNotices}">Third-party notices</a> · <a href="https://github.com/zemn-me/monorepo/tree/main/project/tiberian_sun">Source and build instructions</a></footer>
-<script type="module" src="${launcher}" data-engine="${engineJavaScript}" data-wasm="${engineWasm}" data-data="${engineData}"></script>
+<footer>Engine: OpenTS, compiled from C++ to WebAssembly. <a href="${license}">License</a> · <a href="${thirdPartyNotices}">Third-party notices</a> · <a href="https://github.com/zemn-me/monorepo/tree/main/project/tiberian_sun">Source and build instructions</a> · <a href="https://archive.org/details/command-and-conquer-tiberian-sun">Freeware game data source</a> · <a href="${gameLicense}">Original game license</a></footer>
+<script type="module" src="${launcher}" data-engine="${engineJavaScript}" data-wasm="${engineWasm}" data-data="${engineData}" data-game="${gameData}"></script>
 </main></body></html>`, {
         headers: {
             'content-type': 'text/html; charset=utf-8',

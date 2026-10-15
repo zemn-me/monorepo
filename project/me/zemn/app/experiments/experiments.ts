@@ -99,7 +99,7 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 	{
 		title: 'Games',
 		experiments: [
-			{ reloadDocument: true, href: '/experiments/tiberian-sun', title: 'Tiberian Sun', description: 'Play Tiberian Sun and Firestorm using your own game files.' },
+			{ reloadDocument: true, href: '/experiments/tiberian-sun', title: 'Tiberian Sun', description: 'Play the freeware Tiberian Sun in your browser.' },
 			{
 				href: '/experiments/cultist',
 				title: 'Cultist simulator',

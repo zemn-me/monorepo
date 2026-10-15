@@ -9,6 +9,8 @@ hashed_public_assets(
         "//project/tiberian_sun/web:javascript": "engineJavaScript",
         "//project/tiberian_sun/web:wasm": "engineWasm",
         "//project/tiberian_sun/web:data": "engineData",
+        "//project/tiberian_sun/assets:game_data": "gameData",
+        "//project/tiberian_sun/assets:game_license": "gameLicense",
         "//project/tiberian_sun/web:launcher.mjs": "launcher",
         "//project/tiberian_sun:LICENSE.md": "license",
         "@opents_web//:THIRD_PARTY_NOTICES.md": "thirdPartyNotices",
