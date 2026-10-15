@@ -41,6 +41,9 @@ func playFreeware(t *testing.T, mode string) {
 	readGameLog := func() (string, error) {
 		entries, err := driver.Log(log.Browser)
 		for _, entry := range entries {
+			if (strings.Contains(entry.Message, "skirmish.rml opened") || strings.Contains(entry.Message, "Finished unit generation")) && entry.Level != log.Info {
+				t.Errorf("routine game diagnostic has level %s, want INFO: %s", entry.Level, entry.Message)
+			}
 			messages.WriteString(entry.Message)
 			messages.WriteByte('\n')
 		}

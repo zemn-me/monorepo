@@ -63,11 +63,19 @@ async function startGame() {
             canvas,
             noInitialRun: true,
             locateFile: name => name.endsWith('.wasm') ? script.dataset.wasm : script.dataset.data,
-            print: message => console.log(message),
-            printErr: message => console.error(message),
-            onAbort: message => restorePage(`The game stopped: ${message}.`),
+            print: message => console.info(message),
+            // OpenTS writes routine diagnostics to stderr too; it is not a severity signal.
+            printErr: message => console.info(message),
+            onAbort: message => {
+                console.error('The game aborted:', message);
+                restorePage(`The game stopped: ${message}.`);
+            },
             onExit: code => {
-                if (code !== 0) { restorePage(`The game stopped (exit code ${code}).`); return; }
+                if (code !== 0) {
+                    console.error(`The game stopped (exit code ${code}).`);
+                    restorePage(`The game stopped (exit code ${code}).`);
+                    return;
+                }
                 if (history.length > 1) history.back();
                 else location.replace('/experiments');
             },
