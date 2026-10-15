@@ -1,5 +1,7 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_test")
 load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
@@ -17,4 +19,51 @@ md_files(
     name = "github_workflows",
     srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
+)
+
+sh_test(
+    name = "actionlint_test",
+    size = "small",
+    srcs = ["actionlint_test.sh"],
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ) + [
+        "@com_github_rhysd_actionlint//cmd/actionlint",
+    ],
+    env = {
+        "ACTIONLINT": "$(rlocationpath @com_github_rhysd_actionlint//cmd/actionlint)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
+py_test(
+    name = "bazel_commands_test",
+    size = "small",
+    srcs = ["bazel_commands_test.py"],  # keep
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ),
+    deps = ["@pip//pyyaml"],
 )
