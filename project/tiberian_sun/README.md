@@ -85,7 +85,10 @@ Automated checks do not require proprietary game data.
 
 Local asset-backed browser testing reached both game-selection discs,
 Tiberian Sun's main menu and skirmish setup, then loaded Grand Canyon,
-selected the starting MCV, and deployed it into a construction yard.
+selected the starting MCV, deployed it into a construction yard, and built
+and placed a power plant. The packaged engine ran under the production CSP.
+A skirmish save survived a page reload and resumed with its buildings and
+construction progress intact.
 This is runtime evidence for that scenario; it does not establish complete
 campaign, cutscene, Firestorm gameplay, or multiplayer compatibility.
 The browser build's saved games are local to its origin; cross-platform
