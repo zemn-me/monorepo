@@ -18,6 +18,13 @@ API, and mounts the user directory on IndexedDB. It starts the engine with
 `-DATADIR=/game -USERDIR=/save -WIN -XCC`; the bounded Game log displays the
 engine's diagnostics. Game data uses the site's content-addressed asset cache.
 
+Starting hides the page and fills the browser viewport with the game. Quitting
+from the game's menu restores the page. Rendering follows the viewport in CSS
+pixels, including live window resizing, with an 800×600 minimum and a 4096-pixel
+maximum edge; smaller windows scale the minimum frame to fit without distortion.
+Changes are debounced and applied between game or modal frames because replacing
+drawing surfaces during a suspended paint would invalidate its pointers.
+
 ## Freeware data and provenance
 
 `@tiberian_sun_freeware//file` pins

@@ -6,6 +6,18 @@ const progress = document.querySelector('#progress');
 const log = document.querySelector('#log');
 const script = document.querySelector('script[data-engine]');
 const lines = [];
+const gameView = document.querySelector('#game-view');
+let started = false;
+
+function restorePage(message) {
+    delete document.body.dataset.state;
+    gameView.hidden = true;
+    progress.hidden = true;
+    status.textContent = message;
+    launch.disabled = false;
+    launch.focus();
+}
+
 
 function record(message) {
     lines.push(String(message));
@@ -15,7 +27,7 @@ function record(message) {
 
 window.addEventListener('error', event => {
     record(event.error?.stack ?? event.message);
-    status.textContent = 'The game stopped unexpectedly. Open the game log for details. Reload to try again.';
+    restorePage('The game stopped unexpectedly. Open the game log for details.');
 });
 
 async function downloadGame() {
@@ -55,7 +67,11 @@ function importGame(engine, data) {
 }
 
 launch.addEventListener('click', async () => {
+    // Each Emscripten instance owns its WebGL context and event handlers.
+    if (started) { sessionStorage.setItem('tiberian-sun-restart', 'yes'); location.reload(); return; }
+    started = true;
     launch.disabled = true;
+    document.body.dataset.state = 'loading';
     status.textContent = 'Loading the game engine and downloading game files…';
     try {
         const { default: createEngine } = await import(script.dataset.engine);
@@ -65,8 +81,8 @@ launch.addEventListener('click', async () => {
             locateFile: name => name.endsWith('.wasm') ? script.dataset.wasm : script.dataset.data,
             print: record,
             printErr: record,
-            onAbort: message => { status.textContent = `The game stopped: ${message}. Reload to try again.`; },
-            onExit: () => { status.textContent = 'Game closed. Reload to play again.'; },
+            onAbort: message => restorePage(`The game stopped: ${message}.`),
+            onExit: () => restorePage('Game closed.'),
         }), downloadGame()]);
         engine.FS.mkdirTree('/game');
         engine.FS.mkdirTree('/save');
@@ -78,17 +94,19 @@ launch.addEventListener('click', async () => {
         }
         engine.FS.chdir('/game');
         status.textContent = 'Game running. Saves are kept in this browser.';
-        canvas.hidden = false;
-        document.querySelector('#fullscreen').disabled = false;
+        document.body.dataset.state = 'running';
+        gameView.hidden = false;
         canvas.focus();
         engine.callMain(['-DATADIR=/game', '-USERDIR=/save', '-WIN', '-XCC']);
     } catch (error) {
         progress.hidden = true;
         record(error);
-        status.textContent = `Could not start the game: ${error.message ?? error}. Reload to try again.`;
+        restorePage(`Could not start the game: ${error.message ?? error}.`);
     }
 });
 
-document.querySelector('#fullscreen').addEventListener('click', () => {
-    canvas.requestFullscreen().catch(record);
-});
+
+if (sessionStorage.getItem('tiberian-sun-restart') === 'yes') {
+    sessionStorage.removeItem('tiberian-sun-restart');
+    launch.click();
+}

@@ -9,3 +9,6 @@ int Web_Executable_Path(char *path, uint32_t *size);
 void Web_Set_Arguments(int count, char **arguments);
 int * Web_Argc();
 char *** Web_Argv();
+
+void Web_Display_Size(int &width, int &height);
+void Web_Update_Display();

@@ -18,7 +18,10 @@ import (
 
 // The game draws its controls on a canvas. Drive real input and inspect the
 // rendered pixels and the engine's visible log rather than adding a game API.
-func TestFreewareSkirmish(t *testing.T) {
+func TestFreewareSkirmish(t *testing.T) { playFreeware(t, false) }
+func TestWindowExit(t *testing.T)       { playFreeware(t, true) }
+
+func playFreeware(t *testing.T, quit bool) {
 	var ports struct {
 		Site string `json:"@@//project/tiberian_sun/testing:site"`
 	}
@@ -34,16 +37,19 @@ func TestFreewareSkirmish(t *testing.T) {
 		if shot, err := driver.Screenshot(); err == nil {
 			dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
 			if dir != "" {
-				_ = os.WriteFile(filepath.Join(dir, "skirmish.png"), shot, 0644)
+				_ = os.WriteFile(filepath.Join(dir, t.Name()+".png"), shot, 0644)
 			}
 		}
 		if t.Failed() {
 			if el, err := driver.FindElement(selenium.ByCSSSelector, "#log"); err == nil {
-				text, _ := el.Text()
+				text, _ := driver.ExecuteScript("return arguments[0].textContent", []interface{}{el})
 				t.Log(text)
 			}
 		}
 	}()
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+		t.Fatal(err)
+	}
 	if err := driver.Get("http://localhost:" + ports.Site + "/experiments/tiberian-sun"); err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +75,8 @@ func TestFreewareSkirmish(t *testing.T) {
 		if err != nil {
 			return false, err
 		}
-		text, _ := el.Text()
+		raw, _ := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
+		text, _ := raw.(string)
 		if strings.Contains(text, "Could not") || strings.Contains(text, "stopped") {
 			return false, fmt.Errorf("startup: %s", text)
 		}
@@ -141,6 +148,28 @@ func TestFreewareSkirmish(t *testing.T) {
 	cyan := func(r, g, b uint32) bool { return g > 100 && b > 100 && g > r+30 && b > r+30 }
 	green := func(r, g, b uint32) bool { return g > 100 && g > b+50 && g > r }
 	waitPixels("game selector rendered", image.Rect(100, 150, 360, 470), colored, 15000)
+	if quit {
+		mouse(120, 110, false)
+		highlight := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
+		waitPixels("interactive Exit highlight", image.Rect(105, 102, 140, 120), highlight, 30)
+		click(120, 110) // Exit from the original game selector.
+		if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+			value, err := w.ExecuteScript(`return document.querySelector('#status').textContent === 'Game closed.' && getComputedStyle(document.querySelector('main')).display !== 'none' && document.querySelector('#game-view').hidden && !document.querySelector('#launch').disabled && document.activeElement.id === 'launch'`, nil)
+			return value == true, err
+		}, 30*time.Second); err != nil {
+			t.Fatalf("quitting did not restore the page: %v", err)
+		}
+		if err := start.Click(); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+			value, err := w.ExecuteScript(`return document.body.dataset.state === 'running' && !document.querySelector('#game-view').hidden`, nil)
+			return value == true, err
+		}, 120*time.Second); err != nil {
+			t.Fatalf("restarting failed: %v", err)
+		}
+		return
+	}
 	click(240, 300) // Original Tiberian Sun disc.
 	waitPixels("main menu ready", image.Rect(320, 240, 480, 450), cyan, 150)
 	mouse(400, 408, false)
@@ -153,7 +182,8 @@ func TestFreewareSkirmish(t *testing.T) {
 		if err != nil {
 			return false, err
 		}
-		text, err := el.Text()
+		raw, err := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
+		text, _ := raw.(string)
 		return strings.Contains(text, "skirmish.rml opened"), err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("skirmish controls did not finish opening: %v", err)
@@ -164,7 +194,8 @@ func TestFreewareSkirmish(t *testing.T) {
 		if err != nil {
 			return false, err
 		}
-		text, err := el.Text()
+		raw, err := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
+		text, _ := raw.(string)
 		return strings.Contains(text, "Finished unit generation"), err
 	}, 60*time.Second); err != nil {
 		t.Fatalf("scenario did not generate units: %v", err)
@@ -200,7 +231,44 @@ func TestFreewareSkirmish(t *testing.T) {
 		t.Fatalf("simulation stopped animating: %v", err)
 	}
 	status, _ := driver.FindElement(selenium.ByCSSSelector, "[role=status]")
-	text, _ := status.Text()
+	raw, _ := driver.ExecuteScript("return arguments[0].textContent", []interface{}{status})
+	text, _ := raw.(string)
+	// The game occupies the viewport and the surrounding page stays out of play.
+	layout, err := driver.ExecuteScript(`const c=arguments[0], r=c.getBoundingClientRect(); return getComputedStyle(document.querySelector('main')).display === 'none' && r.x === 0 && r.y === 0 && r.width === innerWidth && r.height === innerHeight`, []interface{}{canvas})
+	if err != nil || layout != true {
+		t.Fatalf("game does not fill the window: %v %v", layout, err)
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 1440, "height": 900, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+		value, err := w.ExecuteScript("return arguments[0].width === 1440 && arguments[0].height === 900", []interface{}{canvas})
+		return value == true, err
+	}, 30*time.Second); err != nil {
+		t.Fatalf("framebuffer did not adapt to larger window: %v", err)
+	}
+	// A genuine mode change updates the terrain and sidebar surfaces too.
+	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+		value, err := w.ExecuteScript("return document.querySelector('#log').textContent.includes('VisibleRect: 1440x900') && document.querySelector('#log').textContent.includes('Mode change complete.')", nil)
+		return value == true, err
+	}, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeoutAndInterval(func(selenium.WebDriver) (bool, error) {
+		frame := snapshot()
+		count := 0
+		for y := 178; y < 220; y++ {
+			for x := 1296; x < 1359; x++ {
+				r, g, b, _ := frame.At(x*frame.Bounds().Dx()/1440, y*frame.Bounds().Dy()/900).RGBA()
+				if colored(r>>8, g>>8, b>>8) {
+					count++
+				}
+			}
+		}
+		return count > 1100, nil
+	}, 15*time.Second, 300*time.Millisecond); err != nil {
+		t.Fatalf("sidebar did not redraw at the larger resolution: %v", err)
+	}
 	if !strings.Contains(text, "Game running") {
 		t.Fatalf("runtime failed: %s", text)
 	}

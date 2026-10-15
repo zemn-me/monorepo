@@ -597,3 +597,49 @@ index 74fdb8b..ae22776 100644
  
  
  def fail(message):
+diff --git a/code/startup.cpp b/code/startup.cpp
+--- a/code/startup.cpp
++++ b/code/startup.cpp
+@@ -523,6 +523,8 @@
+ 			}
+ 		}
+ 
++		Web_Display_Size(Options.ScreenWidth, Options.ScreenHeight);
++
+ 		if (Options.ScreenWidth == -1 || Options.ScreenHeight == -1) {
+ 			Options.ScreenWidth = 640;
+ 			Options.ScreenHeight = 480;
+diff --git a/code/sdl/sdlwindow.cpp b/code/sdl/sdlwindow.cpp
+--- a/code/sdl/sdlwindow.cpp
++++ b/code/sdl/sdlwindow.cpp
+@@ -300,7 +300,7 @@
+ 		return(false);
+ 	}
+ 
+-	SDL_WindowFlags flags = SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL;
++	SDL_WindowFlags flags = SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL;
+ 	flags |= SDL_WINDOW_RESIZABLE;
+ 
+ 	_Window = SDL_CreateWindow("Tiberian Sun", width, height, flags);
+diff --git a/code/mainloop.cpp b/code/mainloop.cpp
+--- a/code/mainloop.cpp
++++ b/code/mainloop.cpp
+@@ -234,6 +234,7 @@
+  *=============================================================================================*/
+ bool Main_Loop(void)
+ {
++	Web_Update_Display();
+ 	KeyNumType	input;					// Player input.
+ 	int x;
+ 	int y;
+diff --git a/code/ui/uishell.cpp b/code/ui/uishell.cpp
+--- a/code/ui/uishell.cpp
++++ b/code/ui/uishell.cpp
+@@ -1137,6 +1137,7 @@
+ 	UIResult result = UI_RESULT_SESSION_ENDED;
+ 
+ 	while (true) {
++		Web_Update_Display();
+ 		bool ended = service();
+ 		if (!Ready) {
+ 			break;
