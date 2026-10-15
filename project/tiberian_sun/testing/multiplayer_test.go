@@ -100,10 +100,7 @@ func (p *multiplayerBrowser) wait(label string, condition func() bool, others ..
 }
 func newMultiplayerBrowser(t *testing.T, base, name string) *multiplayerBrowser {
 	t.Helper()
-	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{"pageLoadStrategy": "eager", "goog:loggingPrefs": map[string]string{"browser": "ALL"}}, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1000,900", "--disable-features=WebRtcHideLocalIpsWithMdns")
-	if err != nil {
-		t.Fatal(err)
-	}
+	driver := newGameBrowser(t, "--window-size=1000,900", "--disable-features=WebRtcHideLocalIpsWithMdns")
 	p := &multiplayerBrowser{t: t, driver: driver, name: name}
 	t.Cleanup(func() {
 		if data, err := driver.Screenshot(); err == nil {
@@ -129,6 +126,7 @@ func newMultiplayerBrowser(t *testing.T, base, name string) *multiplayerBrowser 
 	if err := driver.ExecuteChromiumCommand("Browser.grantPermissions", map[string]any{"origin": base, "permissions": []string{"clipboardReadWrite", "clipboardSanitizedWrite"}}); err != nil {
 		t.Fatal(err)
 	}
+	var err error
 	p.clock, err = seleniumutil.NewVirtualClock(driver)
 	if err != nil {
 		t.Fatal(err)

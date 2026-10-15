@@ -26,6 +26,7 @@ service_test(
 go_test(
     name = "testing_test",
     srcs = [
+        "browser_helpers_test.go",
         "browser_test.go",
         "multiplayer_test.go",
     ],

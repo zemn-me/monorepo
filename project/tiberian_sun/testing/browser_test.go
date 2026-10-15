@@ -39,16 +39,8 @@ func playFreeware(t *testing.T, mode string) {
 	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.Site == "" {
 		t.Fatalf("assigned site port: %v", err)
 	}
-	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{"pageLoadStrategy": "eager", "goog:loggingPrefs": map[string]string{"browser": "ALL"}}, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1280,1100")
-	if err != nil {
-		t.Fatal(err)
-	}
+	driver := newGameBrowser(t, "--window-size=1280,1100")
 	defer driver.Close()
-	// Scenario generation includes synchronous Wasm and software-rendering work;
-	// its CPU time is independent of the simulated timer budget.
-	if err := driver.SetAsyncScriptTimeout(2 * time.Minute); err != nil {
-		t.Fatal(err)
-	}
 	var messages strings.Builder
 	readGameLog := func() (string, error) {
 		entries, err := driver.Log(log.Browser)
@@ -95,6 +87,7 @@ func playFreeware(t *testing.T, mode string) {
 			t.Fatal(err)
 		}
 	}
+	var err error
 	clock, err = seleniumutil.NewVirtualClock(driver)
 	if err != nil {
 		t.Fatal(err)
