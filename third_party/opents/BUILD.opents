@@ -1,0 +1,19 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "lcw",
+    srcs = ["code/lcw.cpp"],
+    hdrs = ["code/lcw.h"],
+    includes = ["code"],
+)
+
+filegroup(
+    name = "source_and_license",
+    srcs = [
+        "LICENSE.md",
+        "code/lcw.cpp",
+        "code/lcw.h",
+    ],
+)

@@ -1,0 +1,75 @@
+load("//md:rules.bzl", "md_files")
+
+# The loader is emitted by Emscripten; the test and browser data are declared below.
+# gazelle:exclude lcw_wasm_test.mjs
+# gazelle:exclude probe.mjs
+
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
+load("@emsdk//emscripten_toolchain:wasm_rules.bzl", "wasm_cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_test")
+
+cc_binary(
+    name = "lcw_probe",
+    srcs = ["lcw_probe.cpp"],
+    copts = ["-std=c++20"],
+    linkopts = [
+        "--no-entry",
+        "-sMODULARIZE=1",
+        "-sEXPORT_ES6=1",
+        "-sENVIRONMENT=web,node",
+        "-sEXPORTED_FUNCTIONS=['_input_data','_compressed_data','_decoded_data','_input_capacity','_compressed_size','_round_trip']",
+        "-sEXPORTED_RUNTIME_METHODS=['HEAPU8']",
+    ],
+    tags = ["manual"],
+    deps = ["@opents//:lcw"],
+)
+
+wasm_cc_binary(
+    name = "lcw_wasm",
+    cc_target = ":lcw_probe",
+    outputs = [
+        "lcw_probe.js",
+        "lcw_probe.wasm",
+    ],
+    threads = "off",
+)
+
+copy_to_bin(
+    name = "browser_files",
+    srcs = [
+        "LICENSE.md",
+        "index.html",
+        "probe.mjs",
+    ],
+)
+
+filegroup(
+    name = "browser",
+    srcs = [
+        ":browser_files",
+        ":lcw_wasm",
+    ],
+)
+
+js_test(
+    name = "lcw_wasm_test",
+    size = "small",
+    data = [":lcw_wasm"],
+    entry_point = "lcw_wasm_test.mjs",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = [
+        "LICENSE.md",
+        "README.md",
+    ],
+    visibility = ["//:__subpackages__"],
+)
