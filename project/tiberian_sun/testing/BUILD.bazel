@@ -30,6 +30,7 @@ go_test(
     deps = [
         "//go/seleniumutil",
         "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
     ],
 )
 

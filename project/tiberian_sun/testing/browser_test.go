@@ -13,11 +13,12 @@ import (
 	"time"
 
 	"github.com/tebeka/selenium"
+	"github.com/tebeka/selenium/log"
 	seleniumutil "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
 // The game draws its controls on a canvas. Drive real input and inspect the
-// rendered pixels and the engine's visible log rather than adding a game API.
+// rendered pixels and the engine's browser console rather than adding a game API.
 func TestFreewareSkirmish(t *testing.T) { playFreeware(t, "play") }
 func TestWindowExit(t *testing.T)       { playFreeware(t, "back") }
 
@@ -31,11 +32,21 @@ func playFreeware(t *testing.T, mode string) {
 	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.Site == "" {
 		t.Fatalf("assigned site port: %v", err)
 	}
-	driver, err := seleniumutil.NewWithChromeArguments("--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1280,1100")
+	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{"goog:loggingPrefs": map[string]string{"browser": "ALL"}}, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--window-size=1280,1100")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer driver.Close()
+	var messages strings.Builder
+	readGameLog := func() (string, error) {
+		entries, err := driver.Log(log.Browser)
+		for _, entry := range entries {
+			messages.WriteString(entry.Message)
+			messages.WriteByte('\n')
+		}
+		return messages.String(), err
+	}
+
 	defer func() {
 		if shot, err := driver.Screenshot(); err == nil {
 			dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
@@ -44,10 +55,8 @@ func playFreeware(t *testing.T, mode string) {
 			}
 		}
 		if t.Failed() {
-			if el, err := driver.FindElement(selenium.ByCSSSelector, "#log"); err == nil {
-				text, _ := driver.ExecuteScript("return arguments[0].textContent", []interface{}{el})
-				t.Log(text)
-			}
+			text, _ := readGameLog()
+			t.Log(text)
 		}
 	}()
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
@@ -188,24 +197,14 @@ func playFreeware(t *testing.T, mode string) {
 	click(400, 408) // Skirmish.
 	waitPixels("skirmish setup ready", image.Rect(548, 458, 568, 472), green, 15)
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-		el, err := w.FindElement(selenium.ByCSSSelector, "#log")
-		if err != nil {
-			return false, err
-		}
-		raw, err := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
-		text, _ := raw.(string)
+		text, err := readGameLog()
 		return strings.Contains(text, "skirmish.rml opened"), err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("skirmish controls did not finish opening: %v", err)
 	}
 	click(558, 465) // Start the default Grand Canyon skirmish against an AI.
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-		el, err := w.FindElement(selenium.ByCSSSelector, "#log")
-		if err != nil {
-			return false, err
-		}
-		raw, err := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
-		text, _ := raw.(string)
+		text, err := readGameLog()
 		return strings.Contains(text, "Finished unit generation"), err
 	}, 60*time.Second); err != nil {
 		t.Fatalf("scenario did not generate units: %v", err)
@@ -259,8 +258,8 @@ func playFreeware(t *testing.T, mode string) {
 	}
 	// A genuine mode change updates the terrain and sidebar surfaces too.
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-		value, err := w.ExecuteScript("return document.querySelector('#log').textContent.includes('VisibleRect: 1440x900') && document.querySelector('#log').textContent.includes('Mode change complete.')", nil)
-		return value == true, err
+		text, err := readGameLog()
+		return strings.Contains(text, "VisibleRect: 1440x900") && strings.Contains(text, "Mode change complete."), err
 	}, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}

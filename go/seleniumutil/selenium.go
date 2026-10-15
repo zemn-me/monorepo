@@ -45,6 +45,12 @@ func New() (*Driver, error) {
 
 // NewWithChromeArguments starts a driver with additional Chromium flags.
 func NewWithChromeArguments(additionalArguments ...string) (*Driver, error) {
+	return NewWithChromeCapabilities(nil, additionalArguments...)
+}
+
+// NewWithChromeCapabilities starts a driver with additional session capabilities
+// and Chromium arguments, for example browser-console logging preferences.
+func NewWithChromeCapabilities(additionalCapabilities selenium.Capabilities, additionalArguments ...string) (*Driver, error) {
 	chrome, err := runfiles.Rlocation(chromiumRlocationPath)
 	if err != nil {
 		return nil, fmt.Errorf("locate chromium: %w", err)
@@ -100,6 +106,10 @@ func NewWithChromeArguments(additionalArguments ...string) (*Driver, error) {
 			"binary": chrome,
 			"args":   chromeArguments,
 		},
+	}
+
+	for key, value := range additionalCapabilities {
+		caps[key] = value
 	}
 
 	remoteURL := fmt.Sprintf("http://localhost:%d/wd/hub", port)

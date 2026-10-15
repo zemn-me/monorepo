@@ -2,9 +2,7 @@
 const status = document.querySelector('#status');
 const canvas = document.querySelector('#canvas');
 const progress = document.querySelector('#progress');
-const log = document.querySelector('#log');
 const script = document.querySelector('script[data-engine]');
-const lines = [];
 const gameView = document.querySelector('#game-view');
 
 function restorePage(message) {
@@ -16,15 +14,10 @@ function restorePage(message) {
 }
 
 
-function record(message) {
-    lines.push(String(message));
-    if (lines.length > 200) lines.shift();
-    log.textContent = lines.join('\n');
-}
 
 window.addEventListener('error', event => {
-    record(event.error?.stack ?? event.message);
-    restorePage('The game stopped unexpectedly. Open the game log for details.');
+    console.error(event.error ?? event.message);
+    restorePage('The game stopped unexpectedly. See the browser console for details.');
 });
 
 async function downloadGame() {
@@ -70,8 +63,8 @@ async function startGame() {
             canvas,
             noInitialRun: true,
             locateFile: name => name.endsWith('.wasm') ? script.dataset.wasm : script.dataset.data,
-            print: record,
-            printErr: record,
+            print: message => console.log(message),
+            printErr: message => console.error(message),
             onAbort: message => restorePage(`The game stopped: ${message}.`),
             onExit: code => {
                 if (code !== 0) { restorePage(`The game stopped (exit code ${code}).`); return; }
@@ -95,7 +88,7 @@ async function startGame() {
         engine.callMain(['-DATADIR=/game', '-USERDIR=/save', '-WIN', '-XCC']);
     } catch (error) {
         progress.hidden = true;
-        record(error);
+        console.error(error);
         restorePage(`Could not start the game: ${error.message ?? error}.`);
     }
 }

@@ -15,8 +15,7 @@ The site route is `/experiments/tiberian-sun`. Visiting it starts the game
 automatically; no file upload or Windows installation is needed. The browser downloads about 88 MiB
 of compressed data on first use, decompresses it with the standard browser
 API, and mounts the user directory on IndexedDB. It starts the engine with
-`-DATADIR=/game -USERDIR=/save -WIN -XCC`; the bounded Game log displays the
-engine's diagnostics. Game data uses the site's content-addressed asset cache.
+`-DATADIR=/game -USERDIR=/save -WIN -XCC`; engine output and errors go to the browser console. Game data uses the site's content-addressed asset cache.
 
 The game fills the browser viewport. Quitting from its menu returns to the
 previous page, or the experiments index when the tab has no previous page. Rendering follows the viewport in CSS
