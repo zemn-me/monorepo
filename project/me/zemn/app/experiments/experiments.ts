@@ -1,5 +1,6 @@
 export interface Experiment {
 	readonly description: string;
+	readonly reloadDocument?: boolean;
 	readonly href: string;
 	readonly title: string;
 }
@@ -98,6 +99,7 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 	{
 		title: 'Games',
 		experiments: [
+			{ reloadDocument: true, href: '/experiments/tiberian-sun', title: 'Tiberian Sun', description: 'Play Tiberian Sun and Firestorm using your own game files.' },
 			{
 				href: '/experiments/cultist',
 				title: 'Cultist simulator',

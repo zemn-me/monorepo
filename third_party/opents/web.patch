@@ -1,0 +1,599 @@
+diff --git a/code/audio/audioengine.cpp b/code/audio/audioengine.cpp
+index ff9a6b7..4adc0d2 100644
+--- a/code/audio/audioengine.cpp
++++ b/code/audio/audioengine.cpp
+@@ -17,6 +17,7 @@
+ #include "random.h"
+ 
+ #include <algorithm>
++#include <emscripten.h>
+ #include <cstring>
+ #include <string>
+ #include <thread>
+@@ -500,7 +501,7 @@ bool AudioEngineClass::Wait_Finished(AudioHandle handle, int ms)
+ 		if (Now_Ms() - start > (unsigned)ms) {
+ 			return(false);
+ 		}
+-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
++		emscripten_sleep(1);
+ 	}
+ }
+ 
+diff --git a/code/audio/audiostream.cpp b/code/audio/audiostream.cpp
+index 82c5f5d..bfcc2a6 100644
+--- a/code/audio/audiostream.cpp
++++ b/code/audio/audiostream.cpp
+@@ -13,6 +13,8 @@
+ #include "audio/audiomixer.h"
+ 
+ #include <algorithm>
++#include <emscripten.h>
++#include <emscripten/eventloop.h>
+ #include <cstring>
+ 
+ namespace {
+@@ -346,7 +348,7 @@ bool AudioFeederClass::Start(void)
+ 	Exit.store(false, std::memory_order_release);
+ 	Running.store(true, std::memory_order_release);
+ 	try {
+-		Thread = std::thread([this]() { Run(); });
++		BrowserTimer = emscripten_set_interval([](void * self) { static_cast<AudioFeederClass *>(self)->Service(); }, 10, this);
+ 	} catch (...) {
+ 		Running.store(false, std::memory_order_release);
+ 		return(false);
+@@ -357,6 +359,7 @@ bool AudioFeederClass::Start(void)
+ 
+ void AudioFeederClass::Stop(void)
+ {
++	if (BrowserTimer != 0) { emscripten_clear_interval(BrowserTimer); BrowserTimer = 0; }
+ 	if (Thread.joinable()) {
+ 		Exit.store(true, std::memory_order_release);
+ 		Thread.join();
+@@ -408,7 +411,7 @@ void AudioFeederClass::Detach(unsigned slot)
+ 	}
+ 	s.State.store(SLOT_CLOSING, std::memory_order_release);
+ 	while (s.State.load(std::memory_order_acquire) != SLOT_IDLE) {
+-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
++		emscripten_sleep(1);
+ 	}
+ }
+ 
+@@ -423,7 +426,7 @@ void AudioFeederClass::Run(void)
+ {
+ 	while (!Exit.load(std::memory_order_acquire)) {
+ 		Service();
+-		std::this_thread::sleep_for(std::chrono::milliseconds(AUDIO_FEEDER_PERIOD_MS));
++		emscripten_sleep(AUDIO_FEEDER_PERIOD_MS);
+ 	}
+ }
+ 
+diff --git a/code/audio/audiostream.h b/code/audio/audiostream.h
+index 71b194c..46a6566 100644
+--- a/code/audio/audiostream.h
++++ b/code/audio/audiostream.h
+@@ -201,6 +201,7 @@ class AudioFeederClass
+ 
+ 		SlotClass Slots[AUDIO_MAX_STREAMS];
+ 		std::thread Thread;
++		long BrowserTimer = 0;
+ 		std::atomic<bool> Exit{false};
+ 		std::atomic<bool> Running{false};
+ 		std::atomic<bool> Recovering{false};
+diff --git a/code/bgfxbackend.cpp b/code/bgfxbackend.cpp
+index fec1471..eade10f 100644
+--- a/code/bgfxbackend.cpp
++++ b/code/bgfxbackend.cpp
+@@ -12,6 +12,8 @@
+ 
+ #include "bgfxbackend.h"
+ 
++#include <emscripten.h>
++
+ #include "dbgprint.h"
+ #include "except.h"
+ 
+@@ -270,15 +272,15 @@ bool Backend_Init(NativeWindow const & window, int drawablewidth, int drawablehe
+ 	_ResetFlags = BGFX_RESET_FLIP_AFTER_RENDER | (vsync ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
+ 
+ 	bgfx::Init init;
+-	init.platformData.nwh = window.Handle;
++	init.platformData.nwh = (void*)"#canvas";
+ 	init.resolution.width = (uint32_t)drawablewidth;
+ 	init.resolution.height = (uint32_t)drawableheight;
+ 	init.resolution.reset = _ResetFlags;
+ 	init.callback = &_Callback;
+ 
+-	// Metal is the only renderer on macOS, whatever the stored setting names.
++	// Browser presentation uses WebGL through bgfx's OpenGL ES backend.
+ 	(void)renderer;
+-	init.type = bgfx::RendererType::Metal;
++	init.type = bgfx::RendererType::OpenGLES;
+ 
+ 	if (!bgfx::init(init)) {
+ 		return(false);
+@@ -531,6 +533,7 @@ void Backend_End_Frame(void)
+ 
+ 	_FramePending = false;
+ 	bgfx::frame();
++	emscripten_sleep(0);
+ }
+ 
+ 
+diff --git a/code/conquer.cpp b/code/conquer.cpp
+index 49b7913..3ab1cdc 100644
+--- a/code/conquer.cpp
++++ b/code/conquer.cpp
+@@ -522,6 +522,7 @@ void Main_Game(int argc, char * argv[])
+  *=============================================================================================*/
+ void Call_Back(void)
+ {
++	emscripten_sleep(1);
+ 	/*
+ 	**	Music and speech maintenance
+ 	*/
+diff --git a/code/dbgprint.cpp b/code/dbgprint.cpp
+index 24913e2..7ddf0b6 100644
+--- a/code/dbgprint.cpp
++++ b/code/dbgprint.cpp
+@@ -21,7 +21,6 @@
+ #include <algorithm>
+ #include <atomic>
+ #include <cerrno>
+-#include <crt_externs.h>
+ #include <cstdarg>
+ #include <cstdio>
+ #include <cstdlib>
+@@ -30,7 +29,6 @@
+ #include <filesystem>
+ #include <mutex>
+ #include <pthread.h>
+-#include <sys/sysctl.h>
+ #include <sys/time.h>
+ #include <unistd.h>
+ 
+@@ -49,7 +47,7 @@ static constexpr unsigned long long DEBUG_LOG_NOTICE_RESERVE = sizeof(DebugTrunc
+ static constexpr unsigned long long DEBUG_LOG_BUDGET = DEBUG_LOG_MAX_BYTES - DEBUG_LOG_NOTICE_RESERVE;
+ 
+ static std::mutex DebugLock;
+-static std::atomic<pthread_t> DebugLockOwner{nullptr};
++static std::atomic<pthread_t> DebugLockOwner{0};
+ static bool DebugInitDone = false;
+ static bool AtLineStart = true;
+ static bool ConsoleActive = false;
+@@ -66,8 +64,8 @@ static unsigned long long DebugBytesWritten = 0;
+ /// </summary>
+ static bool Command_Line_Requests_Console(void)
+ {
+-	int const argc = *_NSGetArgc();
+-	char ** const argv = *_NSGetArgv();
++	int const argc = *Web_Argc();
++	char ** const argv = *Web_Argv();
+ 
+ 	// Index zero is the executable path, which may itself look like an option.
+ 	for (int index = 1; index < argc; index++) {
+@@ -297,19 +295,13 @@ R"ART(
+ 	snprintf(line, sizeof(line), "Started  : %s\n", started_text);
+ 	Write_Message_Locked(line, false);
+ 
+-	char version[64] = "unknown";
+-	char build[64] = "";
+-	size_t size = sizeof(version);
+-	sysctlbyname("kern.osproductversion", version, &size, NULL, 0);
+-	size = sizeof(build);
+-	sysctlbyname("kern.osversion", build, &size, NULL, 0);
+-	snprintf(line, sizeof(line), "System   : macOS %s (%s)\n", version, build);
++	snprintf(line, sizeof(line), "System   : WebAssembly\n");
+ 	Write_Message_Locked(line, false);
+ 
+ 	// The arguments only. The executable path usually carries the account name.
+ 	char options[256] = "(none)";
+-	int const argc = *_NSGetArgc();
+-	char ** const argv = *_NSGetArgv();
++	int const argc = *Web_Argc();
++	char ** const argv = *Web_Argv();
+ 	size_t used = 0;
+ 	for (int index = 1; index < argc; index++) {
+ 		int const written = snprintf(options + used, sizeof(options) - used, "%s%s", used == 0 ? "" : " ", argv[index]);
+@@ -346,7 +338,7 @@ static void Emit(char const * buffer, bool with_prefix)
+ 	Init_Locked();
+ 	Write_Message_Locked(buffer, with_prefix);
+ 
+-	DebugLockOwner = nullptr;
++	DebugLockOwner = 0;
+ }
+ 
+ 
+@@ -363,7 +355,7 @@ static void Init_Once(bool with_console)
+ 		Init_Console_Locked();
+ 	}
+ 
+-	DebugLockOwner = nullptr;
++	DebugLockOwner = 0;
+ }
+ 
+ 
+diff --git a/code/file_posix.cpp b/code/file_posix.cpp
+index d223d6c..25fdd43 100644
+--- a/code/file_posix.cpp
++++ b/code/file_posix.cpp
+@@ -152,7 +152,7 @@ std::vector<FoundFileRecord> Find_Files(char const * pattern)
+ 		if (name[0] == '.' || stat(search->GetFullName(), &info) != 0 || !S_ISREG(info.st_mode)) {
+ 			continue;
+ 		}
+-		found.push_back({name, File_Time_From_Unix(info.st_mtimespec.tv_sec, info.st_mtimespec.tv_nsec)});
++		found.push_back({name, File_Time_From_Unix(info.st_mtim.tv_sec, info.st_mtim.tv_nsec)});
+ 	} while (search->FindNext());
+ 	search->Close();
+ 	return(found);
+diff --git a/code/gamedirs.cpp b/code/gamedirs.cpp
+index c930de1..b570de9 100644
+--- a/code/gamedirs.cpp
++++ b/code/gamedirs.cpp
+@@ -22,7 +22,6 @@
+ #include <filesystem>
+ #include <fstream>
+ #include <limits.h>
+-#include <mach-o/dyld.h>
+ #include <strings.h>
+ #include <vector>
+ 
+@@ -262,7 +261,7 @@ static std::string Find_Game_Data(void)
+ 
+ 	char executable[PATH_MAX];
+ 	uint32_t size = sizeof(executable);
+-	if (_NSGetExecutablePath(executable, &size) == 0) {
++	if (Web_Executable_Path(executable, &size) == 0) {
+ 		std::error_code error;
+ 		std::filesystem::path const program = std::filesystem::canonical(executable, error);
+ 		// Contents/MacOS/OpenTS inside OpenTS.app, whose own folder is three levels up.
+diff --git a/code/getcpu.cpp b/code/getcpu.cpp
+index 943ff6c..5a5cf5b 100644
+--- a/code/getcpu.cpp
++++ b/code/getcpu.cpp
+@@ -42,7 +42,6 @@
+ 
+ #include <cstdio>
+ #include <cstring>
+-#include <sys/sysctl.h>
+ 
+ 
+ /***********************************************************************************************
+@@ -79,10 +78,7 @@ char VendorID[64] = "Not available";
+ /// </summary>
+ void CPU_Id(void)
+ {
+-	size_t size = sizeof(VendorID);
+-	if (sysctlbyname("machdep.cpu.brand_string", VendorID, &size, NULL, 0) != 0) {
+-		strncpy(VendorID, "Not available", sizeof(VendorID));
+-	}
++	strncpy(VendorID, "WebAssembly", sizeof(VendorID));
+ 	CPUType = 6;
+ }
+ 
+diff --git a/code/mapgen.cpp b/code/mapgen.cpp
+index c6afe78..20623ef 100644
+--- a/code/mapgen.cpp
++++ b/code/mapgen.cpp
+@@ -3332,7 +3332,7 @@ void Clean_Up_RMCache(void)
+ 		struct stat info;
+ 		if (strcasecmp(entry.path().extension().c_str(), ".mmp") == 0 && stat(entry.path().c_str(), &info) == 0
+ 			&& S_ISREG(info.st_mode)) {
+-			files.push_back({entry.path(), info.st_atimespec});
++			files.push_back({entry.path(), info.st_atim});
+ 		}
+ 	}
+ 
+diff --git a/code/mpu.cpp b/code/mpu.cpp
+index 6581042..03d55cb 100644
+--- a/code/mpu.cpp
++++ b/code/mpu.cpp
+@@ -34,16 +34,13 @@
+ 
+ #include "mpu.h"
+ 
+-#include <mach/mach_time.h>
+ 
+ #include <cmath>
+ 
+ 
+ static double Counter_Hertz(void)
+ {
+-	mach_timebase_info_data_t timebase;
+-	mach_timebase_info(&timebase);
+-	return(1.0e9 * (double)timebase.denom / (double)timebase.numer);
++	return(1.0e9);
+ }
+ 
+ 
+@@ -69,7 +66,7 @@ unsigned int Get_CPU_Rate(unsigned int & high)
+ /// <returns>unsigned int; the low half of the counter.</returns>
+ unsigned int Get_CPU_Clock(unsigned int & high)
+ {
+-	unsigned long long const stamp = mach_absolute_time();
++	unsigned long long const stamp = Web_Monotonic_Nanoseconds();
+ 
+ 	high = (unsigned int)(stamp >> 32);
+ 	return((unsigned int)stamp);
+diff --git a/code/partsys.cpp b/code/partsys.cpp
+index 9629812..b840935 100644
+--- a/code/partsys.cpp
++++ b/code/partsys.cpp
+@@ -425,7 +425,8 @@ void ParticleSystemClass::Smoke_AI(void)
+ {
+ 	int i;
+ 
+-	if (Source->As_ObjectClass() != NULL && Source->What_Am_I() != RTTI_BUILDING) {
++	// Detached smoke keeps aging after its source has gone away.
++	if (Source != NULL && Source->As_ObjectClass() != NULL && Source->What_Am_I() != RTTI_BUILDING) {
+ 		Set_Coord(Source->Center_Coord() + CoordOffset);
+ 	}
+ 
+@@ -492,7 +493,7 @@ void ParticleSystemClass::Smoke_AI(void)
+ 	}
+ 
+ 	if (!IsMarkedForDeletion && IsActive && (Frame % (int)SpawnFrames) == 0) {
+-		FootClass *foot = Source->As_FootClass();
++		FootClass *foot = Source != NULL ? Source->As_FootClass() : NULL;
+ 		if (foot == NULL || foot->CurrentTube < 0) {
+ 			int xrand = Scen->RandomNumber();
+ 			int yrand = Scen->RandomNumber();
+diff --git a/code/savefile.cpp b/code/savefile.cpp
+index fdfcf8f..8b38efb 100644
+--- a/code/savefile.cpp
++++ b/code/savefile.cpp
+@@ -436,8 +436,8 @@ SaveFileClass::ResultType SaveFileClass::Write(char const * path) const
+ 	bool ok = Write_Range(file, header, HEADER_SIZE);
+ 	if (ok && !table.empty()) ok = Write_Range(file, table.data(), (std::uint32_t)table.size());
+ 	if (ok && payload_length > 0) ok = Write_Range(file, payload, payload_length);
+-	// F_FULLFSYNC reaches the drive's own cache, which fsync alone leaves unflushed on macOS.
+-	if (ok) ok = (fcntl(file, F_FULLFSYNC) == 0 || fsync(file) == 0);
++	// The browser host persists the mounted user filesystem after writes.
++	if (ok) ok = (fsync(file) == 0);
+ 	if (close(file) != 0) ok = false;
+ 
+ 	if (ok) ok = (rename(temporary.c_str(), path) == 0);
+diff --git a/code/sdl/sdlwindow.cpp b/code/sdl/sdlwindow.cpp
+index 22ab91c..cca6461 100644
+--- a/code/sdl/sdlwindow.cpp
++++ b/code/sdl/sdlwindow.cpp
+@@ -300,8 +300,8 @@ bool Main_Window_Create(bool windowed, int width, int height)
+ 		return(false);
+ 	}
+ 
+-	SDL_WindowFlags flags = SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_METAL;
+-	flags |= windowed ? SDL_WINDOW_RESIZABLE : SDL_WINDOW_FULLSCREEN;
++	SDL_WindowFlags flags = SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL;
++	flags |= SDL_WINDOW_RESIZABLE;
+ 
+ 	_Window = SDL_CreateWindow("Tiberian Sun", width, height, flags);
+ 	if (_Window == nullptr) {
+@@ -349,7 +349,7 @@ NativeWindow Main_Window_Native(void)
+ {
+ 	NativeWindow window = { nullptr };
+ 	if (_Window != nullptr) {
+-		window.Handle = SDL_GetPointerProperty(SDL_GetWindowProperties(_Window), SDL_PROP_WINDOW_COCOA_WINDOW_POINTER, nullptr);
++		window.Handle = (void*)"#canvas";
+ 	}
+ 	return(window);
+ }
+@@ -462,6 +462,7 @@ std::vector<std::pair<int, int>> Main_Window_Fullscreen_Sizes(void)
+ 
+ void Main_Window_Pump_Events(void)
+ {
++	emscripten_sleep(1);
+ 	if (_Window == nullptr) {
+ 		return;
+ 	}
+@@ -521,8 +522,7 @@ void Main_Window_Confine_Cursor(bool confine)
+ }
+ 
+ 
+-// The position is read from the system rather than from the last event, so it is current
+-// even while the game is not pumping events.
++// SDL reports the pointer relative to the browser canvas.
+ bool Main_Window_Cursor_Position(int & x, int & y)
+ {
+ 	if (_Window == nullptr) {
+@@ -531,11 +531,11 @@ bool Main_Window_Cursor_Position(int & x, int & y)
+ 
+ 	float globalx = 0.0f;
+ 	float globaly = 0.0f;
+-	SDL_GetGlobalMouseState(&globalx, &globaly);
++	SDL_GetMouseState(&globalx, &globaly);
+ 
+ 	int windowx = 0;
+ 	int windowy = 0;
+-	SDL_GetWindowPosition(_Window, &windowx, &windowy);
++	// Browser mouse coordinates are already relative to the canvas.
+ 
+ 	float const density = Pixel_Density();
+ 	x = (int)std::floor((globalx - (float)windowx) * density);
+@@ -557,11 +557,11 @@ void Main_Window_Warp_Cursor(int x, int y)
+ bool Main_Window_Key_Down(int virtualkey)
+ {
+ 	switch (virtualkey) {
+-		case VK_LBUTTON:	return((SDL_GetGlobalMouseState(nullptr, nullptr) & SDL_BUTTON_LMASK) != 0);
+-		case VK_RBUTTON:	return((SDL_GetGlobalMouseState(nullptr, nullptr) & SDL_BUTTON_RMASK) != 0);
+-		case VK_MBUTTON:	return((SDL_GetGlobalMouseState(nullptr, nullptr) & SDL_BUTTON_MMASK) != 0);
+-		case VK_XBUTTON1:	return((SDL_GetGlobalMouseState(nullptr, nullptr) & SDL_BUTTON_X1MASK) != 0);
+-		case VK_XBUTTON2:	return((SDL_GetGlobalMouseState(nullptr, nullptr) & SDL_BUTTON_X2MASK) != 0);
++		case VK_LBUTTON:	return((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_LMASK) != 0);
++		case VK_RBUTTON:	return((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_RMASK) != 0);
++		case VK_MBUTTON:	return((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_MMASK) != 0);
++		case VK_XBUTTON1:	return((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_X1MASK) != 0);
++		case VK_XBUTTON2:	return((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_X2MASK) != 0);
+ 		default:			break;
+ 	}
+ 
+diff --git a/code/startup.cpp b/code/startup.cpp
+index dad7ef0..9dadfcb 100644
+--- a/code/startup.cpp
++++ b/code/startup.cpp
+@@ -171,7 +171,6 @@
+ #include <fcntl.h>
+ #include <filesystem>
+ #include <limits.h>
+-#include <mach-o/dyld.h>
+ #include <sys/file.h>
+ #include <unistd.h>
+ 
+@@ -392,6 +391,7 @@ static bool Claim_Single_Instance(void)
+  *=============================================================================================*/
+ int main(int given_count, char ** given_arguments)
+ {
++	Web_Set_Arguments(given_count, given_arguments);
+ 	int		argc;       //Command line argument count
+ 	char **	argv;       //Pointers to command line arguments
+ 	char	path_to_exe[PATH_MAX];
+@@ -429,7 +429,7 @@ int main(int given_count, char ** given_arguments)
+ 	*/
+ 	uint32_t path_size = sizeof(path_to_exe);
+ 	char unresolved[PATH_MAX];
+-	if (_NSGetExecutablePath(unresolved, &path_size) != 0 || realpath(unresolved, path_to_exe) == NULL) {
++	if (Web_Executable_Path(unresolved, &path_size) != 0 || realpath(unresolved, path_to_exe) == NULL) {
+ 		snprintf(path_to_exe, sizeof(path_to_exe), "%s", given_arguments[0]);
+ 	}
+ 
+diff --git a/code/stats.cpp b/code/stats.cpp
+index 910b8a3..23e7b9b 100644
+--- a/code/stats.cpp
++++ b/code/stats.cpp
+@@ -64,9 +64,7 @@ int WestwoodOnline_PortNumber = 1234;
+ #include <algorithm>
+ #include <climits>
+ #include <cstdint>
+-#include <mach-o/dyld.h>
+ #include <sys/stat.h>
+-#include <sys/sysctl.h>
+ 
+ #define FIELD_GAME_ID							"IDNO"
+ #define FIELD_START_CREDITS						"CRED"
+@@ -408,9 +406,7 @@ void Send_Statistics_Packet(void)
+ 	/*
+ 	**	Memory
+ 	*/
+-	uint64_t memory = 0;
+-	size_t memory_size = sizeof(memory);
+-	sysctlbyname("hw.memsize", &memory, &memory_size, NULL, 0);
++	uint64_t memory = emscripten_get_heap_size();
+ 	stats.Add_Field (FIELD_MEMORY, (int)std::min<uint64_t>(memory, INT_MAX));
+ 
+ 	/*
+@@ -432,8 +428,8 @@ void Send_Statistics_Packet(void)
+ 	// The packet carries each half byte-swapped with the low half still leading.
+ 	struct stat attributes;
+ 
+-	if (_NSGetExecutablePath(path_to_exe, &path_size) == 0 && stat(path_to_exe, &attributes) == 0) {
+-		write_time = File_Time_From_Unix(attributes.st_mtimespec.tv_sec, attributes.st_mtimespec.tv_nsec);
++	if (Web_Executable_Path(path_to_exe, &path_size) == 0 && stat(path_to_exe, &attributes) == 0) {
++		write_time = File_Time_From_Unix(attributes.st_mtim.tv_sec, attributes.st_mtim.tv_nsec);
+ 		write_time.dwLowDateTime = htonl (write_time.dwLowDateTime);
+ 		write_time.dwHighDateTime = htonl (write_time.dwHighDateTime);
+ 		stats.Add_Field (FIELD_GAME_BUILD_DATE, (void*)&write_time, sizeof (write_time));
+diff --git a/code/syncrechook.cpp b/code/syncrechook.cpp
+index 78e25cf..cf00638 100644
+--- a/code/syncrechook.cpp
++++ b/code/syncrechook.cpp
+@@ -26,8 +26,6 @@
+ #include "except.h"
+ #include "session.h"
+ 
+-#include <mach-o/dyld.h>
+-#include <mach-o/getsect.h>
+ 
+ 
+ static uintptr_t ModuleBase = 0;
+@@ -206,12 +204,9 @@ void Sync_Recorder_Arm(void)
+ 	bool const network = (Session.Type == GAME_IPX || Session.Type == GAME_INTERNET);
+ 	SyncRecorder.Set_Recording(network || Session.Record || Session.Play);
+ 
+-	// Offsets are taken from the executable's Mach-O header, where __TEXT begins. The linker's
+-	// preferred base for __TEXT, 0x100000000, does not fit the report's 32-bit field, so
+-	// MapImageBase stays zero and reports give image offsets alone.
+-	ModuleBase = (uintptr_t)_dyld_get_image_header(0);
+-	segment_command_64 const * text = getsegbyname("__TEXT");
+-	ModuleSize = (text != nullptr && text->vmsize < SYNC_CALLER_EXTERN) ? (uint32_t)text->vmsize : 0;
++	// Wasm function indices are not native executable image addresses.
++	ModuleBase = 0;
++	ModuleSize = 0;
+ 	MapImageBase = 0;
+ 
+ 	SyncCallerContextType context;
+diff --git a/code/syncreport.cpp b/code/syncreport.cpp
+index a6f27bb..64367ae 100644
+--- a/code/syncreport.cpp
++++ b/code/syncreport.cpp
+@@ -235,7 +235,7 @@ void Print_CRCs(EventClass const * events, int count, unsigned const * crc_ring,
+ 	}
+ 	fprintf(fp, "Seed: %08x\n", Seed);
+ 	fprintf(fp, "Session type: %d\n", Session.Type);
+-	fprintf(fp, "FPCR: %llx\n", (unsigned long long)__builtin_arm_rsr64("fpcr"));
++	fprintf(fp, "Floating point: WebAssembly IEEE 754\n");
+ 
+ 	int cpu_type = PROC_PENTIUM_PRO;
+ 	char vendor[32];
+diff --git a/code/ui/dev/uidev.cpp b/code/ui/dev/uidev.cpp
+index cb4798b..47c9e79 100644
+--- a/code/ui/dev/uidev.cpp
++++ b/code/ui/dev/uidev.cpp
+@@ -435,7 +435,7 @@ void UIDev_Tick(void)
+ 		ratio = 1.0f;
+ 	}
+ 
+-	long long const now = (long long)clock_gettime_nsec_np(CLOCK_UPTIME_RAW);
++	long long const now = (long long)Web_Monotonic_Nanoseconds();
+ 	float delta = (_LastFrameTicks == 0) ? (1.0f / 60.0f) : (float)(now - _LastFrameTicks) / 1.0e9f;
+ 	if (delta < 0.0001f) {
+ 		delta = 0.0001f;
+diff --git a/code/win.h b/code/win.h
+index 275b9eb..62760a0 100644
+--- a/code/win.h
++++ b/code/win.h
+@@ -39,6 +39,7 @@
+ #include <cstdint>
+ #include <ctime>
+ #include <unistd.h>
++#include <emscripten.h>
+ 
+ #include "vkey.h"
+ 
+@@ -111,7 +112,7 @@ typedef struct { LONG x; LONG y; } POINT;
+ // and callers compare times by unsigned difference.
+ inline DWORD timeGetTime(void)
+ {
+-	return (DWORD)(clock_gettime_nsec_np(CLOCK_UPTIME_RAW) / 1000000);
++	return (DWORD)(Web_Monotonic_Nanoseconds() / 1000000);
+ }
+ 
+ inline DWORD GetTickCount(void)
+@@ -121,7 +122,7 @@ inline DWORD GetTickCount(void)
+ 
+ inline ULONGLONG GetTickCount64(void)
+ {
+-	return clock_gettime_nsec_np(CLOCK_UPTIME_RAW) / 1000000;
++	return Web_Monotonic_Nanoseconds() / 1000000;
+ }
+ 
+ // The macOS scheduler needs no timer-resolution request, so these always succeed.
+@@ -130,7 +131,7 @@ inline UINT timeEndPeriod(UINT) { return 0; }
+ 
+ inline void Sleep(DWORD milliseconds)
+ {
+-	usleep((useconds_t)milliseconds * 1000);
++	emscripten_sleep(milliseconds);
+ }
+ 
+ // FILETIME counts 100-nanosecond intervals since 1601-01-01 UTC. Save files store it.
+diff --git a/platform/macos/generate_headers.py b/platform/macos/generate_headers.py
+index 74fdb8b..ae22776 100644
+--- a/platform/macos/generate_headers.py
++++ b/platform/macos/generate_headers.py
+@@ -30,7 +30,7 @@ LICENSE = """/******************************************************************
+  ******************************************************************************/
+ """
+ 
+-ARCH = "arm64"
++ARCH = "wasm32"
+ 
+ 
+ def fail(message):

@@ -17,6 +17,7 @@ export type LinkProps = Omit<
 	readonly href?: string | URL | UrlObject | RelativeURL;
 	readonly styleless?: boolean;
 	readonly replace?: boolean;
+	readonly reloadDocument?: boolean;
 	readonly scroll?: boolean;
 	readonly prefetch?: boolean;
 } & React.RefAttributes<HTMLAnchorElement>;
@@ -82,6 +83,7 @@ export function Link({
 	rel,
 	target,
 	replace,
+	reloadDocument,
 	scroll,
 	prefetch,
 	...props
@@ -109,6 +111,7 @@ export function Link({
 			rel={rel}
 			target={target}
 			replace={replace}
+			reloadDocument={reloadDocument}
 			preventScrollReset={scroll === false}
 			prefetch={prefetch ? 'intent' : 'none'}
 		/>

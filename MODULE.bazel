@@ -129,14 +129,11 @@ use_repo(pip, "pip")
 bazel_dep(name = "aspect_rules_swc", version = "2.6.0")
 bazel_dep(name = "aspect_rules_js", version = "2.9.2")
 
-####### Node.js version #########
-# By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
-# Optionally you can pin a different node version:
+# Keep the repository's default Node version; SDK dependencies must not select an older one.
 bazel_dep(name = "rules_nodejs", version = "6.7.3")
-#node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 
-#node.toolchain(node_version = "18.13.0")
-#################################
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain()
 
 pnpm = use_extension("//bzl/pnpm:extensions.bzl", "pnpm", dev_dependency = True)
 pnpm.tool(
@@ -858,4 +855,34 @@ http_archive(
     sha256 = "b37dc2bddc1e26004e76a583f29eb74d66d32bbd43da416fe53489e14b4b48f0",
     strip_prefix = "OpenTS-51b52aa3839281471496652ecfcedb40ca85dbc4",
     url = "https://github.com/OpenTS-Developers/OpenTS/archive/51b52aa3839281471496652ecfcedb40ca85dbc4.tar.gz",
+)
+
+# The source port has removed the engine's Windows dependency; this build replaces
+# its remaining macOS platform calls with browser implementations.
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "opents_web",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["VERSION"])
+filegroup(
+    name = "sources",
+    srcs = glob(["**"], exclude = ["archive/**", "dist/**", "tests/**", "manual/**"]),
+)
+""",
+    commit = "92f0aa9009506c2c090846d3a924bb5a163c4349",
+    patch_args = ["-p1"],
+    patches = ["//third_party/opents:web.patch"],
+    recursive_init_submodules = True,
+    remote = "https://github.com/TFrey98/OpenTS_mac.git",
+)
+
+emscripten_deps = use_extension("@emsdk//:emscripten_deps.bzl", "emscripten_deps")
+use_repo(
+    emscripten_deps,
+    "emscripten_bin_linux",
+    "emscripten_bin_linux_arm64",
+    "emscripten_bin_mac",
+    "emscripten_bin_mac_arm64",
 )

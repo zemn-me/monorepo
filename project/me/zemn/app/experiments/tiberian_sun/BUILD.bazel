@@ -1,0 +1,38 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/remix:public_assets.bzl", "hashed_public_assets")
+
+hashed_public_assets(
+    name = "runtime",
+    outs = ["assets.ts"],
+    assets = {
+        "//project/tiberian_sun/web:javascript": "engineJavaScript",
+        "//project/tiberian_sun/web:wasm": "engineWasm",
+        "//project/tiberian_sun/web:data": "engineData",
+        "//project/tiberian_sun/web:launcher.mjs": "launcher",
+        "//project/tiberian_sun:LICENSE.md": "license",
+        "@opents_web//:THIRD_PARTY_NOTICES.md": "thirdPartyNotices",
+    },
+    public_dir = "sha256",
+)
+
+ts_project(
+    name = "tiberian_sun",
+    srcs = [
+        "page.ts",
+        ":runtime_generated",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["page.ts"],
+    visibility = ["//:__subpackages__"],
+)

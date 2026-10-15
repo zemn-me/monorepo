@@ -1,6 +1,6 @@
 EA has not endorsed and does not support this product.
 
-The LCW probe and its JavaScript harness are licensed under GPL-3.0-or-later.
+The web adapter, launcher, and LCW probe are licensed under GPL-3.0-or-later.
 OpenTS-derived material retains the additional terms reproduced below.
 
 OpenTS is licensed under the GNU General Public License version 3 or later,

@@ -10,6 +10,8 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_test")
 
+exports_files(["LICENSE.md"])
+
 cc_binary(
     name = "lcw_probe",
     srcs = ["lcw_probe.cpp"],
@@ -46,7 +48,7 @@ copy_to_bin(
 )
 
 filegroup(
-    name = "browser",
+    name = "lcw_browser",
     srcs = [
         ":browser_files",
         ":lcw_wasm",
@@ -68,6 +70,7 @@ bazel_lint(
 md_files(
     name = "md",
     srcs = [
+        "AGENTS.md",
         "LICENSE.md",
         "README.md",
     ],

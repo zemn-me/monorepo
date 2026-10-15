@@ -1,102 +1,111 @@
-# Tiberian Sun WebAssembly experiment
+# Tiberian Sun for the browser
 
 EA has not endorsed and does not support this product.
 
-This project starts a WebAssembly port for Command & Conquer: Tiberian Sun
-and Firestorm by compiling OpenTS's LCW compressor and decompressor. It does
-not run either game. The browser probe accepts text, compresses it in C++,
-decodes that generated stream, and verifies that every byte survives.
-No game assets or original executables are included or downloaded.
+The complete OpenTS C++ engine and its dependencies are cross-compiled to
+WebAssembly with Emscripten. The browser executes that engine directly;
+no original Windows executable, x86 emulator, or Windows image is used.
+The player selects an installed game folder locally. Game assets are not
+included in the site build or uploaded to a server.
+
+The site route is `/experiments/tiberian-sun`. It starts the game after the
+player chooses a folder containing `TIBSUN.MIX`. Include the other `.MIX`
+archives, maps, and settings from that installation. Firestorm also needs
+its expansion data. The browser imports supported files from the selected
+folder, mounts the user directory on IndexedDB, and starts the engine with
+`-DATADIR=/game -USERDIR=/save -WIN`.
 
 ## Build and run
 
 From the monorepo root:
 
 ```sh
-./sh/bin/bazel test //project/tiberian_sun/...
-./sh/bin/bazel build //project/tiberian_sun:browser
-python3 -m http.server --bind 127.0.0.1 --directory dist/bin/project/tiberian_sun 8000
+./sh/bin/bazel build //project/tiberian_sun/web:engine
+./sh/bin/bazel run //project/me/zemn:zemn
 ```
 
-Open <http://localhost:8000>. The build downloads a pinned Emscripten SDK
-and OpenTS source archive. It does not require an installed SDK or Windows.
-The Node integration test executes the emitted WebAssembly with known LCW
-bytes, repeated data, UTF-8, deterministic binary data, buffer boundaries,
-and invalid lengths. Browser interaction is a separate manual check: confirm that loading enables
-the button, text survives the round trip, and empty input shows a size error.
+Open <http://localhost:3000/experiments/tiberian-sun>. Use a keyboard and
+mouse. The full site build is `//project/me/zemn:build`; it includes the
+engine JavaScript, Wasm, bundled open-source UI resources, launcher, and
+license notices as content-addressed public assets. The standalone game
+document has its own script policy and opens through a document navigation.
+Leaving the page ends that engine instance.
 
-The ABI owns fixed input, compressed, and decoded buffers. Callers write at
-`input_data()` and pass 1–32,768 bytes to `round_trip()`. It returns the
-verified decoded size or a negative error code. `compressed_size()` is zero
-after rejected input. Calls are synchronous and share those buffers.
-Only streams produced by the compressor are passed to the upstream decoder:
-`LCW_Uncomp` bounds the output but accepts no compressed input length.
-Do not expose it to arbitrary uploaded compressed files without validation.
+Build inputs are pinned in `MODULE.bazel`, including the source port and
+its recursive dependency commits, the Emscripten SDK, and the build
+toolchains. The Bazel action uses CMake and Ninja from `rules_foreign_cc`,
+Node from `rules_nodejs`, and Python from the repository toolchain. It does
+not need a separately installed Emscripten SDK, CMake, Ninja, or Windows.
+The first full build downloads and compiles the dependencies.
 
-## Source selection
+## Source and browser changes
 
-Inspected 2026-10-14. The build pins
-[OpenTS commit 51b52aa](https://github.com/OpenTS-Developers/OpenTS/tree/51b52aa3839281471496652ecfcedb40ca85dbc4)
-and verifies its archive SHA-256. OpenTS reconstructs the standalone Tiberian
-Sun 2.03 Firestorm engine. Its
-[build guide](https://github.com/OpenTS-Developers/OpenTS/blob/51b52aa3839281471496652ecfcedb40ca85dbc4/docs/BUILDING.md)
-supports Windows/MSVC, Win32 and x64. Its claims of playable campaigns do
-not establish browser compatibility.
+The full engine starts from
+[TFrey98/OpenTS_mac at 92f0aa9](https://github.com/TFrey98/OpenTS_mac/tree/92f0aa9009506c2c090846d3a924bb5a163c4349),
+a native source port of
+[OpenTS](https://github.com/OpenTS-Developers/OpenTS). That source removes
+most of the Windows dependency while retaining the Tiberian Sun 2.03
+Firestorm engine. The original, narrower LCW probe still pins upstream
+OpenTS independently and remains an asset-free Wasm integration test.
 
-Other candidates:
+`third_party/opents/web.patch` adapts the source port for the browser:
 
-| Project | Fit |
-| --- | --- |
-| [TS++](https://github.com/Vinifera-Developers/TSpp) | Maps and interacts with the original binary; not a standalone portable engine. |
-| [Vinifera](https://github.com/Vinifera-Developers/Vinifera) | Extends the existing Tiberian Sun engine. |
-| [Vanilla Conquer](https://github.com/TheAssemblyArmada/Vanilla-Conquer) | Portable C++, but targets Tiberian Dawn and Red Alert rather than Tiberian Sun. |
-| [OpenTS](https://github.com/OpenTS-Developers/OpenTS) | Standalone reconstruction covering Tiberian Sun and Firestorm; selected for this experiment. |
+- Select bgfx's OpenGL ES/WebGL renderer and SDL's browser canvas.
+- Read mouse coordinates and button state relative to the canvas.
+- Yield event processing, frame presentation, and synchronous waits through
+  Emscripten Asyncify so input, rendering, and audio can run.
+- Service the audio feeder on a browser timer and yield waits for stream
+  closure and audio completion instead of blocking on native threads.
+- Guard smoke particle updates after their source object has been detached.
+  Calling a cast member on a null source caused a Wasm trap during combat.
+- Replace macOS executable paths, timing, CPU/OS diagnostics, and native
+  image addresses with browser equivalents. Use POSIX file timestamps and
+  filesystem flushes. Preserve source notices and mark the build `wasm32`.
 
-`third_party/opents/portable_lcw.patch` removes the unused `always.h`
-include from `lcw.cpp`. That umbrella header pulls in engine platform
-assumptions. The LCW implementation and header otherwise remain unchanged;
-Bazel supplies the C++ standard library through Emscripten. This is a narrow
-library build, not a port of OpenTS's CMake configuration.
+The web overlay supplies the CMake build and browser platform functions.
+Emscripten's system processor is explicitly `wasm32`: its compatibility
+default of `x86` would enable native SSE flags in the renderer dependency.
+The engine uses Wasm SIMD and retains the native source's strict
+floating-point compiler options.
 
-## Next milestones
+## Validation and limits
 
-1. Load a player's local MIX files and list their contents in the browser.
-   Validate archive bounds before passing data to legacy parsers. Keep
-   game files local; do not upload or redistribute them.
-2. Decode one local palette and sprite and display it. Use this to establish
-   asset decoding, indexed colour conversion, and rendering parity.
-3. Port engine startup and the simulation loop. Replace `WinMain` and
-   synchronous waits with browser scheduling; introduce browser filesystem
-   access and save persistence. Verify deterministic simulation separately.
-4. Connect rendering, input and audio. The current engine uses bgfx, SDL3,
-   miniaudio, RmlUi, and FreeType; their presence alone does not establish
-   that the engine integration builds or runs on the web.
-5. Run an asset-backed skirmish, then campaigns and Firestorm. Defer
-   multiplayer until transport and deterministic execution are verified.
+Affected automated checks:
 
-Concrete platform work includes Windows APIs in `gamedirs.cpp`,
-`mapgen.cpp`, `loaddlg.cpp`, and `nettime.cpp`, Windows startup in
-`startup.cpp`, and waits in `mainloop.cpp`. Save/network compatibility
-also needs a decision: OpenTS's build guide documents incompatible raw
-layouts between its Win32 and x64 builds without a compatibility guard.
-A wasm32 build must not silently claim compatibility with either.
+```sh
+./sh/bin/gazelle
+./sh/bin/bazel test //project/tiberian_sun/... //project/me/zemn/app/experiments/tiberian_sun/... //project/me/zemn/testing:server_test //:bazel_lint
+```
 
-## Licensing and distribution
+The LCW test executes the compiled upstream compressor with known bytes,
+UTF-8, deterministic binary data, buffer boundaries, and rejected lengths.
+The production server test checks the game document and the emitted
+JavaScript, Wasm entry point, resource package, and local-import launcher.
+Automated checks do not require proprietary game data.
 
-[OpenTS's license](https://github.com/OpenTS-Developers/OpenTS/blob/51b52aa3839281471496652ecfcedb40ca85dbc4/LICENSE.md)
-is GPL-3.0-or-later with additional terms for EA-derived material. The
-local `LICENSE.md` reproduces those terms. Preserve file notices,
-and distribute corresponding source and build/patch instructions with any
-public binary release. The source archive and checksum are in `MODULE.bazel`;
-the external `@opents//:source_and_license` target identifies the compiled
-upstream files and license. The local C++ adapter, JavaScript harnesses,
-and HTML are GPL-3.0-or-later.
+Local asset-backed browser testing reached both game-selection discs,
+Tiberian Sun's main menu and skirmish setup, then loaded Grand Canyon,
+selected the starting MCV, and deployed it into a construction yard.
+This is runtime evidence for that scenario; it does not establish complete
+campaign, cutscene, Firestorm gameplay, or multiplayer compatibility.
+The browser build's saved games are local to its origin; cross-platform
+save and network compatibility is not claimed.
 
-The engine license does not grant unrestricted redistribution of original
-game data. “Abandonware” is not a redistribution license. EA's
-[2025 franchise modding guidelines](https://www.ea.com/games/command-and-conquer/news/modding-faq)
-set conditions on community mods, including non-commercial distribution,
-no implied endorsement, and no included game music. Those guidelines do not
-settle every question about hosting a complete browser edition. Before
-hosting original data, establish the applicable asset permissions. The first
-milestones use synthetic data and then user-supplied local files.
+The user filesystem is persisted through Emscripten IDBFS. Clearing site
+data deletes those saves. Game assets are selected again on a new launch
+and remain outside the persistent user directory.
+
+## Licensing
+
+The engine, web adapter, and launcher are GPL-3.0-or-later. The local
+`LICENSE.md` retains OpenTS's GPL text and additional terms for EA-derived
+material. The pinned source includes notices for its open-source rendering,
+audio, font, and UI dependencies. The site exposes those notices and a link
+to the source and build instructions alongside the game.
+
+Original game assets remain separate from the engine license. The site
+links to the [freeware installer](https://cnc-comm.com/tiberian-sun/downloads/the-game/installer)
+and imports the player's local files. It does not bundle original artwork,
+music, movies, executables, or archives into the deployment. See
+[EA's franchise modding guidelines](https://www.ea.com/games/command-and-conquer/news/modding-faq)
+for the conditions on community mods and asset distribution.

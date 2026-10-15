@@ -1035,7 +1035,7 @@
     "@@emsdk+//:emscripten_deps.bzl%emscripten_deps": {
       "general": {
         "bzlTransitiveDigest": "8Vn46wSp+hTAa7ukADJJN29mi8vhzaO2tpSGav8K4ZE=",
-        "usagesDigest": "lqS0hMGr6MqmX63BGZOskMFcqzqO53K0UlYFxuE3QSU=",
+        "usagesDigest": "4V1E/rjyp00a+GmGNu6kphKh03Sn0HSNf2yCqUwcOuA=",
         "recordedInputs": [
           "REPO_MAPPING:bazel_features+,bazel_features_globals bazel_features++version_extension+bazel_features_globals",
           "REPO_MAPPING:bazel_features+,bazel_features_version bazel_features++version_extension+bazel_features_version",
@@ -1323,7 +1323,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "4pUxCNc22K4I+6+4Nxu52Hur12tFRfa1JMsN5mdDv60=",
-        "usagesDigest": "F05blVI2anjrwQAXOMX4P9A0t5ISLOnGHA7rqjp0WZM=",
+        "usagesDigest": "oc+H5DONZ3nvikWHH7nUysEEIMqYwa4WLZDhK1Sb/b4=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "nodejs_linux_amd64": {
@@ -1334,7 +1334,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "linux_amd64"
             }
@@ -1347,7 +1347,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "linux_arm64"
             }
@@ -1360,7 +1360,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "linux_s390x"
             }
@@ -1373,7 +1373,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "linux_ppc64le"
             }
@@ -1386,7 +1386,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "darwin_amd64"
             }
@@ -1399,7 +1399,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "darwin_arm64"
             }
@@ -1412,7 +1412,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "windows_amd64"
             }
@@ -1425,7 +1425,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "20.18.0",
+              "node_version": "22.22.0",
               "include_headers": false,
               "platform": "windows_arm64"
             }

@@ -42,6 +42,7 @@ export default function Page() {
 												<h3>
 													<Link
 														href={experiment.href}
+														reloadDocument={experiment.reloadDocument}
 													>
 														{experiment.title}
 													</Link>
