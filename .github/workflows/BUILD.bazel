@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_test")
 load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
@@ -17,4 +18,25 @@ md_files(
     name = "github_workflows",
     srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "runner_context_scope_test",
+    size = "small",
+    srcs = ["runner_context_scope_test.py"],  # keep
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ),
+    deps = ["@pip//pyyaml"],
 )
