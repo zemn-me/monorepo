@@ -41,9 +41,6 @@ jobs:
           docker-images: true
           large-packages: false
           swap-storage: true
-      - name: Configure Bazel archive paths
-        run: |
-          echo "BAZEL=./sh/bin/bazel --distdir=$RUNNER_TEMP/bazel-distdir/ape --distdir=$RUNNER_TEMP/bazel-distdir/rules_diff" >> "$GITHUB_ENV"
       - name: Checkout main branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -99,10 +96,10 @@ jobs:
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
-            $BAZEL build --config=ci --tool_tag=staging //ci:presubmit && \
+            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
-            $BAZEL run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
+            $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
             --overwrite && \
             echo "::endgroup::"
         env:
@@ -134,7 +131,7 @@ jobs:
         # main just refreshed and deployed staging, so reuse its current state.
         run: |
          ./.github/workflows/prepare_ci.sh
-         $BAZEL run --tool_tag=staging //ci:presubmit -- \
+         $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --tool_tag=staging //ci:presubmit -- \
          --skip-bazel-tests \
          --skip-pulumi-refresh \
          --dirty
