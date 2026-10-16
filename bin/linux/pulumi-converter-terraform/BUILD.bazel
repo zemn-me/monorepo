@@ -1,0 +1,4 @@
+alias(
+    name = "pulumi-converter-terraform",
+    actual = "@com_pulumi_get_pulumi_converter_terraform_linux_amd64//:pulumi-converter-terraform",
+)
