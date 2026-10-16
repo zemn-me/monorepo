@@ -14,6 +14,7 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/tebeka/selenium"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 type journalOAuthTransport struct{ token string }
@@ -24,11 +25,11 @@ func (transport journalOAuthTransport) RoundTrip(request *http.Request) (*http.R
 	return http.DefaultTransport.RoundTrip(request)
 }
 func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
-	api, err := apiRoot()
+	api, err := browserhelpers.APIRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
-	frontend, err := frontendRoot()
+	frontend, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -76,13 +77,13 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err = driver.Get(api.String() + "/oauth2/authorize?" + params.Encode()); err != nil {
 		t.Fatal(err)
 	}
-	if _, err = waitForElement(driver, selenium.ByXPATH, "//p[contains(.,'Browser diary assistant')]", 30*time.Second); err != nil {
+	if _, err = browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//p[contains(.,'Browser diary assistant')]", 30*time.Second); err != nil {
 		t.Fatalf("consent details: %v", err)
 	}
-	if err = performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err = browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	approve, err := waitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Allow journal access']", 30*time.Second)
+	approve, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Allow journal access']", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,7 +136,7 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err = driver.Get(api.String() + "/oauth2/authorize?" + params.Encode()); err != nil {
 		t.Fatal(err)
 	}
-	cancel, err := waitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']", 30*time.Second)
+	cancel, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']", 30*time.Second)
 	if err != nil {
 		if body, bodyErr := driver.FindElement(selenium.ByTagName, "body"); bodyErr == nil {
 			text, _ := body.Text()

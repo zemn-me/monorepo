@@ -9,11 +9,12 @@ import (
 	"github.com/tebeka/selenium"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/oidc"
 )
 
 func TestAdminSettingsEndToEnd(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -33,11 +34,11 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if hostVal, err := driver.ExecuteScript("return window.location.hostname;", nil); err == nil {
 		t.Logf("admin hostname: %v", hostVal)
 	}
-	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForLoginButtonReady(driver, 20*time.Second); err != nil {
 		t.Fatalf("oidc login readiness: %v", err)
 	}
 
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatalf("oidc login: %v", err)
 	}
 
@@ -45,15 +46,15 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	syncIndicatorSyncedSelector := syncIndicatorSelector + "[aria-busy='false']"
 	syncIndicatorBusySelector := syncIndicatorSelector + "[aria-busy='true']"
 	uidValueSelector := "output[aria-label='Admin UID value']"
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for login text: %v (body snippet: %v)", err, body)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, uidValueSelector, 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, uidValueSelector, 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for admin uid output: %v (body snippet: %v)", err, body)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
 		t.Fatalf("initial settings sync: %v", err)
 	}
 	if err := expectElementText(driver, uidValueSelector, oidc.LocalSubject, 10*time.Second); err != nil {
@@ -64,7 +65,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	entryCodeValue := fmt.Sprintf("%05d", time.Now().UnixNano()%100000)
 	fallbackValue := fmt.Sprintf("+1202555%04d", (time.Now().UnixNano()/2)%10000)
 
-	authorizerAddButton, err := waitForElement(driver, selenium.ByXPATH, "//fieldset[legend[normalize-space()='Authorizers']]//button[normalize-space()='+']", 10*time.Second)
+	authorizerAddButton, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//fieldset[legend[normalize-space()='Authorizers']]//button[normalize-space()='+']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("authorizer add button: %v", err)
 	}
@@ -72,7 +73,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("click authorizer add button: %v", err)
 	}
 
-	authorizerInput, err := waitForElement(driver, selenium.ByCSSSelector, "input[name='authorizers.0.phoneNumber']", 10*time.Second)
+	authorizerInput, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[name='authorizers.0.phoneNumber']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("authorizer phone input: %v", err)
 	}
@@ -83,7 +84,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("fill authorizer phone: %v", err)
 	}
 
-	entryCodeAddButton, err := waitForElement(driver, selenium.ByXPATH, "//fieldset[legend[normalize-space()='Entry Codes']]//button[normalize-space()='+']", 10*time.Second)
+	entryCodeAddButton, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//fieldset[legend[normalize-space()='Entry Codes']]//button[normalize-space()='+']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("entry code add button: %v", err)
 	}
@@ -91,7 +92,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("click entry code add button: %v", err)
 	}
 
-	entryCodeInput, err := waitForElement(driver, selenium.ByCSSSelector, "input[name='entryCodes.0.code']", 10*time.Second)
+	entryCodeInput, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[name='entryCodes.0.code']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("entry code input: %v", err)
 	}
@@ -102,7 +103,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("fill entry code: %v", err)
 	}
 
-	fallbackInput, err := waitForElement(driver, selenium.ByCSSSelector, "input[id$='fallbackPhone']", 10*time.Second)
+	fallbackInput, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[id$='fallbackPhone']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("fallback phone input: %v", err)
 	}
@@ -113,7 +114,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("fill fallback phone: %v", err)
 	}
 
-	partyCheckbox, err := waitForElement(driver, selenium.ByCSSSelector, "input[type='checkbox'][id$='partyMode']", 10*time.Second)
+	partyCheckbox, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[type='checkbox'][id$='partyMode']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("party mode checkbox: %v", err)
 	}
@@ -127,17 +128,17 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		}
 	}
 
-	submit, err := waitForElement(driver, selenium.ByCSSSelector, "form input[type='submit']", 10*time.Second)
+	submit, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "form input[type='submit']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("submit button: %v", err)
 	}
 	if err := submit.Click(); err != nil {
 		t.Fatalf("submit admin form: %v", err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorBusySelector, 5*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, syncIndicatorBusySelector, 5*time.Second); err != nil {
 		t.Fatalf("settings sync indicator did not enter pending state: %v", err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
 		t.Fatalf("settings sync indicator did not return to synced: %v", err)
 	}
 
@@ -145,14 +146,14 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("reload admin after save: %v", err)
 	}
 
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("wait for login text post-save: %v (body snippet: %v)", err, body)
 	}
 	if err := expectElementText(driver, uidValueSelector, oidc.LocalSubject, 10*time.Second); err != nil {
 		t.Fatalf("admin uid mismatch after reload: %v", err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
 		t.Fatalf("settings sync indicator after reload: %v", err)
 	}
 
@@ -166,7 +167,7 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 		t.Fatalf("entry code after reload: %v", err)
 	}
 
-	reloadedParty, err := waitForElement(driver, selenium.ByCSSSelector, "input[type='checkbox'][id$='partyMode']", 10*time.Second)
+	reloadedParty, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[type='checkbox'][id$='partyMode']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("party mode checkbox after reload: %v", err)
 	}
@@ -186,7 +187,7 @@ func expectElementText(driver selenium.WebDriver, selector string, expected stri
 			return false, nil
 		}
 		value, err = elem.Text()
-		if isStaleElementErr(err) {
+		if browserhelpers.IsStaleElementErr(err) {
 			return false, nil
 		}
 		return strings.TrimSpace(value) == expected, err

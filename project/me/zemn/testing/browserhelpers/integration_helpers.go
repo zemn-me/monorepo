@@ -1,6 +1,8 @@
-package selenium_test
+package browserhelpers
 
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -39,7 +41,7 @@ func servicePorts() (p ServicePorts, err error) {
 	return
 }
 
-func frontendRoot() (u url.URL, err error) {
+func FrontendRoot() (u url.URL, err error) {
 	ports, err := servicePorts()
 	if err != nil {
 		return
@@ -51,7 +53,7 @@ func frontendRoot() (u url.URL, err error) {
 	}, nil
 }
 
-func apiRoot() (url.URL, error) {
+func APIRoot() (url.URL, error) {
 	ports, err := servicePorts()
 	if err != nil {
 		return url.URL{}, err
@@ -66,7 +68,7 @@ func apiRoot() (url.URL, error) {
 	}, nil
 }
 
-func dynamoDBRoot() (url.URL, error) {
+func DynamoDBRoot() (url.URL, error) {
 	ports, err := servicePorts()
 	if err != nil {
 		return url.URL{}, err
@@ -81,7 +83,7 @@ func dynamoDBRoot() (url.URL, error) {
 	}, nil
 }
 
-func testEndpointHasNoLogErrors(t *testing.T, ep string) {
+func AssertEndpointHasNoLogErrors(t *testing.T, ep string) {
 	d, err := seleniumpkg.New()
 	if err != nil {
 		t.Fatalf("driver: %v", err)
@@ -129,7 +131,7 @@ func filterErrorsWeDontCareAbout(in []log.Message) (out []log.Message) {
 
 const loginButtonSelector = "button[aria-label='Authenticate with OIDC']"
 
-func waitForLoginButtonReady(driver selenium.WebDriver, timeout time.Duration) (selenium.WebElement, error) {
+func WaitForLoginButtonReady(driver selenium.WebDriver, timeout time.Duration) (selenium.WebElement, error) {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		button, err := driver.FindElement(selenium.ByCSSSelector, loginButtonSelector)
@@ -144,7 +146,7 @@ func waitForLoginButtonReady(driver selenium.WebDriver, timeout time.Duration) (
 	return nil, fmt.Errorf("login button did not become enabled")
 }
 
-func performOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time.Duration) error {
+func PerformOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time.Duration) error {
 	originalHandle, err := driver.CurrentWindowHandle()
 	if err != nil {
 		return fmt.Errorf("current window handle: %w", err)
@@ -155,7 +157,7 @@ func performOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time
 		return fmt.Errorf("list window handles: %w", err)
 	}
 
-	loginButton, err := waitForLoginButtonReady(driver, timeout)
+	loginButton, err := WaitForLoginButtonReady(driver, timeout)
 	if err != nil {
 		return fmt.Errorf("prepare login button: %w", err)
 	}
@@ -172,7 +174,7 @@ func performOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time
 	}
 
 	loginButtonXPath := fmt.Sprintf("//button[contains(normalize-space(.), '%s')]", loginLabel)
-	quickButton, err := waitForElement(driver, selenium.ByXPATH, loginButtonXPath, 10*time.Second)
+	quickButton, err := WaitForElement(driver, selenium.ByXPATH, loginButtonXPath, 10*time.Second)
 	if err != nil {
 		return fmt.Errorf("locate quick login button: %w", err)
 	}
@@ -219,7 +221,7 @@ func waitForNewWindow(driver selenium.WebDriver, existing []string, timeout time
 	return "", fmt.Errorf("timed out waiting for login window")
 }
 
-func waitForElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
+func WaitForElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		elem, err := driver.FindElement(by, value)
@@ -231,7 +233,7 @@ func waitForElement(driver selenium.WebDriver, by, value string, timeout time.Du
 	return nil, fmt.Errorf("element %s:%s not found", by, value)
 }
 
-func waitForEnabledElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
+func WaitForEnabledElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		elem, err := driver.FindElement(by, value)
@@ -247,7 +249,7 @@ func waitForEnabledElement(driver selenium.WebDriver, by, value string, timeout 
 }
 
 // Selenium's default scrolling can leave a control beneath a sticky toolbar.
-func clickElementInView(driver selenium.WebDriver, element selenium.WebElement) error {
+func ClickElementInView(driver selenium.WebDriver, element selenium.WebElement) error {
 	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});`, []any{element}); err != nil {
 		return err
 	}
@@ -256,7 +258,7 @@ func clickElementInView(driver selenium.WebDriver, element selenium.WebElement) 
 
 // React may replace an element between lookup and click. Only retry stale
 // references; other click failures must still fail the test.
-func clickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
+func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 	var lastErr error
 	for time.Now().Before(deadline) {
@@ -268,7 +270,7 @@ func clickElementWithRetry(driver selenium.WebDriver, by, selector string, timeo
 		}
 		if err := elem.Click(); err != nil {
 			lastErr = err
-			if isStaleElementErr(err) {
+			if IsStaleElementErr(err) {
 				time.Sleep(150 * time.Millisecond)
 				continue
 			}
@@ -282,11 +284,11 @@ func clickElementWithRetry(driver selenium.WebDriver, by, selector string, timeo
 	return fmt.Errorf("click %s:%s: %w", by, selector, lastErr)
 }
 
-func isStaleElementErr(err error) bool {
+func IsStaleElementErr(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "stale element reference")
 }
 
-func waitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
+func WaitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
 	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
 		_, err := wd.FindElement(by, value)
 		if err != nil {
@@ -296,7 +298,7 @@ func waitForNoElement(driver selenium.WebDriver, by, value string, timeout time.
 	}, timeout)
 }
 
-func waitForText(driver selenium.WebDriver, substr string, timeout time.Duration) error {
+func WaitForText(driver selenium.WebDriver, substr string, timeout time.Duration) error {
 	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
 		res, err := wd.ExecuteScript("return document.body ? document.body.innerText : ''", nil)
 		if err != nil {
@@ -305,4 +307,103 @@ func waitForText(driver selenium.WebDriver, substr string, timeout time.Duration
 		text, _ := res.(string)
 		return strings.Contains(text, substr), nil
 	}, timeout)
+}
+
+func AssertNoSevereBrowserLogs(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	logs, err := driver.Log(log.Browser)
+	if err != nil {
+		t.Logf("browser log unavailable: %v", err)
+		return
+	}
+	for _, entry := range filterErrorsWeDontCareAbout(logs) {
+		if entry.Level == log.Severe {
+			t.Fatalf("browser console error: %s", entry.Message)
+		}
+	}
+}
+
+func DumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
+	if capture, err := driver.ExecuteScript(`
+		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
+		return capture ? JSON.stringify({
+			text: capture.innerText,
+			busy: capture.getAttribute('aria-busy'),
+			buttons: [...capture.querySelectorAll('button')].map(button => ({
+				label: button.getAttribute('aria-label'), disabled: button.disabled,
+			})),
+		}) : '';
+	`, nil); err == nil && capture != "" {
+		t.Logf("journal capture controls: %s", capture)
+	}
+	if body, err := driver.ExecuteScript("return document.body ? document.body.innerText : ''", nil); err == nil {
+		if text, ok := body.(string); ok {
+			if len(text) > 1024 {
+				text = text[:1024]
+			}
+			t.Logf("page text snippet: %s", text)
+		}
+	}
+	if html, err := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil); err == nil {
+		if text, ok := html.(string); ok {
+			if len(text) > 1024 {
+				text = text[:1024]
+			}
+			t.Logf("page html snippet: %s", text)
+		}
+	}
+	if count, err := driver.ExecuteScript("return document.querySelectorAll('li').length;", nil); err == nil {
+		if n, ok := count.(float64); ok {
+			t.Logf("li count: %d", int(n))
+		}
+	}
+	if logs, err := driver.Log(log.Browser); err == nil {
+		ignored := []string{
+			"Failed to parse source map",
+			"react-dev-overlay",
+		}
+		filtered := make([]log.Message, 0, len(logs))
+	outer:
+		for _, entry := range logs {
+			for _, pattern := range ignored {
+				if strings.Contains(entry.Message, pattern) {
+					continue outer
+				}
+			}
+			if entry.Level == log.Severe || strings.Contains(strings.ToLower(entry.Message), "error") {
+				filtered = append(filtered, entry)
+			}
+		}
+		max := 5
+		if len(filtered) < max {
+			max = len(filtered)
+		}
+		for i := 0; i < max; i++ {
+			t.Logf("console[%d]: %s", i, filtered[i].Message)
+		}
+	}
+}
+
+func TestWAV() []byte {
+	const (
+		sampleRate     = 8000
+		seconds        = 12
+		bytesPerSample = 2
+	)
+	dataSize := sampleRate * seconds * bytesPerSample
+	buffer := bytes.NewBuffer(make([]byte, 0, 44+dataSize))
+	buffer.WriteString("RIFF")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(36+dataSize))
+	buffer.WriteString("WAVEfmt ")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(16))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate))
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate*bytesPerSample))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(bytesPerSample))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(8*bytesPerSample))
+	buffer.WriteString("data")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(dataSize))
+	buffer.Write(make([]byte, dataSize))
+	return buffer.Bytes()
 }

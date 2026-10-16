@@ -20,14 +20,15 @@ import (
 	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestAnalyticsBeaconIntegration(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
-	apiBase, err := apiRoot()
+	apiBase, err := browserhelpers.APIRoot()
 	if err != nil {
 		t.Fatalf("api root: %v", err)
 	}
@@ -54,7 +55,7 @@ func TestAnalyticsBeaconIntegration(t *testing.T) {
 		t.Fatalf("navigate analytics probe: %v", err)
 	}
 
-	if err := waitForText(driver, "internationally recognised expert", 10*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "internationally recognised expert", 10*time.Second); err != nil {
 		body, _ := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil)
 		t.Fatalf("home page load: %v (body snippet: %v)", err, body)
 	}
@@ -88,7 +89,7 @@ func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time
 }
 
 func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.Duration) error {
-	ddbRoot, err := dynamoDBRoot()
+	ddbRoot, err := browserhelpers.DynamoDBRoot()
 	if err != nil {
 		return err
 	}
@@ -187,7 +188,7 @@ func postAnalyticsEvent(ctx context.Context, endpoint string, origin string, ses
 }
 
 func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -212,23 +213,23 @@ func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "internationally recognised expert", 20*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "internationally recognised expert", 20*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	root.Path = "/admin/analytics"
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForLoginButtonReady(driver, 20*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "Complete range", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "Complete range", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "Traffic over time", 10*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "Traffic over time", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	for _, label := range []string{"Go to homepage", "Open navigation menu"} {
@@ -263,7 +264,7 @@ func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
 	if err := search.SendKeys("no-such-page-analytics-itest"); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "No events match this selection.", 10*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "No events match this selection.", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if err := expectElementText(driver, "output[aria-label='Page views']", "0", 10*time.Second); err != nil {
@@ -286,20 +287,20 @@ func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
 	if err := page.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "Page: /", 10*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "Page: /", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if err := expectElementText(driver, "output[aria-label='Pages viewed']", "1", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	payload, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Recent events'] details summary", 10*time.Second)
+	payload, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Recent events'] details summary", 10*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if err := payload.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Recent events'] details[open] pre", 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Recent events'] details[open] pre", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
 
@@ -310,7 +311,7 @@ func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
 	if err := period.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "Complete range", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "Complete range", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	bars, err := driver.FindElements(selenium.ByCSSSelector, "[aria-label='Daily page views'] [role='listitem']")
@@ -324,7 +325,7 @@ func TestAdminAnalyticsPanelEndToEnd(t *testing.T) {
 	if err := refresh.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForText(driver, "Complete range", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "Complete range", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if err := driver.ResizeWindow("", 390, 844); err != nil {

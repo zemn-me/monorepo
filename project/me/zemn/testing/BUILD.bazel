@@ -1,23 +1,39 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_test")
-load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
+load("@rules_itest//private:itest.bzl", "itest_service")
 load("//bzl:rules.bzl", "bazel_lint")
-
-# gazelle:exclude server_test.mjs
-load("//js:rules.bzl", "js_test")
+load("//js:rules.bzl", "js_library", "js_test")
 load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
-service_test(
+test_suite(
     name = "integration_test",
-    size = "large",  # Full browser flows plus production bundling exceed five minutes in CI.
-    flaky = True,
-    services = [
-        "//project/me/zemn:itest_service_calendar_fixture",
-        ":oidc_provider_itest_service",
+    tests = [
+        ":admin_integration_test",
+        ":journal_access_integration_test",
+        ":journal_integration_test",
+        ":site_integration_test",
     ],
-    test = ":testing_test",
+)
+
+test_suite(
+    name = "journal_integration_test",
+    tests = ["//project/me/zemn/testing/journal:journal_test"],
+)
+
+test_suite(
+    name = "journal_access_integration_test",
+    tests = ["//project/me/zemn/testing/journal_access:journal_access_test"],
+)
+
+test_suite(
+    name = "admin_integration_test",
+    tests = ["//project/me/zemn/testing/admin:admin_test"],
+)
+
+test_suite(
+    name = "site_integration_test",
+    tests = ["//project/me/zemn/testing/site:site_test"],
 )
 
 itest_service(
@@ -33,7 +49,10 @@ itest_service(
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    srcs = [
+        "BUILD.bazel",
+        "browser_test.bzl",
+    ],
 )
 
 ts_project(
@@ -68,38 +87,6 @@ jest_test(
     ],
 )
 
-go_test(
-    name = "testing_test",
-    srcs = [
-        "admin_test.go",
-        "analytics_test.go",
-        "go_basic_test.go",
-        "grievance_portal_test.go",
-        "integration_helpers_test.go",
-        "journal_oauth_test.go",
-        "journal_pagination_test.go",
-        "journal_ssr_test.go",
-        "journal_test.go",
-        "journal_wiki_test.go",
-        "key_test.go",
-        "navigation_helpers_test.go",
-    ],
-    tags = ["manual"],  # keep; needs integration testing harness.
-    deps = [
-        "//go/seleniumutil",
-        "//project/me/zemn/api/server",
-        "//project/me/zemn/testing/oidc",
-        "@com_github_aws_aws_sdk_go_v2//aws",
-        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
-        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
-        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
-        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
-        "@com_github_modelcontextprotocol_go_sdk//mcp",
-        "@com_github_tebeka_selenium//:selenium",
-        "@com_github_tebeka_selenium//log",
-    ],
-)
-
 filegroup(
     name = "all_ts_srcs",
     srcs = ["browser_test.ts"],
@@ -120,4 +107,10 @@ js_test(
         "//project/me/zemn/app/experiments/tiberian_sun",
     ],
     entry_point = "server_test.mjs",
+)
+
+js_library(
+    name = "server_test_mjs",
+    srcs = ["server_test.mjs"],
+    deps = [],
 )

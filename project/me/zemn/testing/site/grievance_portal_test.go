@@ -7,13 +7,13 @@ import (
 	"time"
 
 	"github.com/tebeka/selenium"
-	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestGrievancePortalHasNoErrors(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -21,7 +21,7 @@ func TestGrievancePortalHasNoErrors(t *testing.T) {
 	portal := root
 	portal.Path = "/grievanceportal"
 
-	testEndpointHasNoLogErrors(t, portal.String())
+	browserhelpers.AssertEndpointHasNoLogErrors(t, portal.String())
 }
 
 func TestGrievancePortalEndToEnd(t *testing.T) {
@@ -103,7 +103,7 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 
 func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
-	portalURL, err := frontendRoot()
+	portalURL, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -119,21 +119,21 @@ func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 		t.Logf("grievance portal hostname: %v", hostVal)
 	}
 
-	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForLoginButtonReady(driver, 20*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
 		t.Fatalf("oidc login readiness: %v", err)
 	}
 
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
 		t.Fatalf("oidc login: %v", err)
 	}
 
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
@@ -147,14 +147,14 @@ func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, description st
 	if err := fillFieldWithRetry(driver, selenium.ByCSSSelector, "textarea[name='description']", description, 15*time.Second); err != nil {
 		t.Fatalf("fill grievance description: %v", err)
 	}
-	if err := clickElementWithRetry(driver, selenium.ByCSSSelector, "form input[type='submit']", 10*time.Second); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "form input[type='submit']", 10*time.Second); err != nil {
 		t.Fatalf("submit grievance form: %v", err)
 	}
 
 	entryXPath := grievanceEntryXPath(description)
 	entry, err := waitForGrievanceElement(driver, description, 60*time.Second)
 	if err != nil {
-		dumpPageDiagnostics(t, driver)
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("wait for grievance entry: %v", err)
 	}
 	return entry, entryXPath
@@ -183,67 +183,6 @@ func forceGrievanceSubmissionTimeZone(t *testing.T, driver *seleniumpkg.Driver, 
 	return func() {
 		if err := driver.SetTimezoneOverride(current); err != nil {
 			t.Logf("reset timezone override: %v", err)
-		}
-	}
-}
-
-func dumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
-	if capture, err := driver.ExecuteScript(`
-		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
-		return capture ? JSON.stringify({
-			text: capture.innerText,
-			busy: capture.getAttribute('aria-busy'),
-			buttons: [...capture.querySelectorAll('button')].map(button => ({
-				label: button.getAttribute('aria-label'), disabled: button.disabled,
-			})),
-		}) : '';
-	`, nil); err == nil && capture != "" {
-		t.Logf("journal capture controls: %s", capture)
-	}
-	if body, err := driver.ExecuteScript("return document.body ? document.body.innerText : ''", nil); err == nil {
-		if text, ok := body.(string); ok {
-			if len(text) > 1024 {
-				text = text[:1024]
-			}
-			t.Logf("page text snippet: %s", text)
-		}
-	}
-	if html, err := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil); err == nil {
-		if text, ok := html.(string); ok {
-			if len(text) > 1024 {
-				text = text[:1024]
-			}
-			t.Logf("page html snippet: %s", text)
-		}
-	}
-	if count, err := driver.ExecuteScript("return document.querySelectorAll('li').length;", nil); err == nil {
-		if n, ok := count.(float64); ok {
-			t.Logf("li count: %d", int(n))
-		}
-	}
-	if logs, err := driver.Log(log.Browser); err == nil {
-		ignored := []string{
-			"Failed to parse source map",
-			"react-dev-overlay",
-		}
-		filtered := make([]log.Message, 0, len(logs))
-	outer:
-		for _, entry := range logs {
-			for _, pattern := range ignored {
-				if strings.Contains(entry.Message, pattern) {
-					continue outer
-				}
-			}
-			if entry.Level == log.Severe || strings.Contains(strings.ToLower(entry.Message), "error") {
-				filtered = append(filtered, entry)
-			}
-		}
-		max := 5
-		if len(filtered) < max {
-			max = len(filtered)
-		}
-		for i := 0; i < max; i++ {
-			t.Logf("console[%d]: %s", i, filtered[i].Message)
 		}
 	}
 }
@@ -289,7 +228,7 @@ func fillFieldWithRetry(driver selenium.WebDriver, by, selector, text string, ti
 		}
 		if err := elem.Clear(); err != nil {
 			lastErr = err
-			if isStaleElementErr(err) {
+			if browserhelpers.IsStaleElementErr(err) {
 				time.Sleep(150 * time.Millisecond)
 				continue
 			}
@@ -297,7 +236,7 @@ func fillFieldWithRetry(driver selenium.WebDriver, by, selector, text string, ti
 		}
 		if err := elem.SendKeys(text); err != nil {
 			lastErr = err
-			if isStaleElementErr(err) {
+			if browserhelpers.IsStaleElementErr(err) {
 				time.Sleep(150 * time.Millisecond)
 				continue
 			}

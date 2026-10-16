@@ -1,4 +1,4 @@
-package selenium_test
+package browserhelpers
 
 import (
 	"fmt"
@@ -13,8 +13,8 @@ import (
 
 const pageLoadingSelector = "[role='status'][aria-label='Loading page']"
 
-// assertSharedNavigation runs after login with navigation responses delayed by the caller.
-func assertSharedNavigation(t *testing.T, driver selenium.WebDriver, publicOrigin string, width int) {
+// AssertSharedNavigation runs after login with navigation responses delayed by the caller.
+func AssertSharedNavigation(t *testing.T, driver selenium.WebDriver, publicOrigin string, width int) {
 	t.Helper()
 	compact, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect();
 const heading = document.querySelector('h1').getBoundingClientRect();
@@ -37,7 +37,7 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 		if err := link.Click(); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := waitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second); err != nil {
+		if _, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second); err != nil {
 			t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination.label, width, err)
 		}
 		logoFeedback, err := driver.ExecuteScript(`const header = document.querySelector('header[data-glade-banner]');
@@ -60,7 +60,7 @@ return rays.length > 0 && [...rays].every(ray => Number(ray.getAttribute('x2')) 
 			if width == 390 {
 				name = "journal-loading-phone.png"
 			}
-			saveNavigationScreenshot(t, driver, name)
+			SaveNavigationScreenshot(t, driver, name)
 		}
 		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
 			pending, err := d.FindElements(selenium.ByCSSSelector, pageLoadingSelector)
@@ -75,7 +75,7 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		}, time.Second); err != nil {
 			t.Fatal("loading rays did not shrink after navigation", err)
 		}
-		if _, err := waitForElement(driver, selenium.ByCSSSelector, destination.selector, 30*time.Second); err != nil {
+		if _, err := WaitForElement(driver, selenium.ByCSSSelector, destination.selector, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 		currentURL, err := driver.CurrentURL()
@@ -86,8 +86,8 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err != nil || current.Path != destination.path || current.Query().Get("wiki") != destination.query {
 			t.Fatalf("%s did not reach its destination: %s (%v)", destination.label, currentURL, err)
 		}
-		assertJournalNavigationAtTop(t, driver, destination.path)
-		assertHeroVideoPreserved(t, driver, video)
+		AssertJournalNavigationAtTop(t, driver, destination.path)
+		AssertHeroVideoPreserved(t, driver, video)
 		loggedIn, err := driver.FindElement(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
 		if err != nil {
 			t.Fatal("navigation lost the signed-in session", err)
@@ -115,7 +115,7 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err := link.Click(); err != nil {
 			t.Fatal(err)
 		}
-		pending, err := waitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second)
+		pending, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second)
 		if err != nil {
 			t.Fatalf("menu navigation to %s at width %d gave no loading feedback: %v", path, width, err)
 		}
@@ -137,7 +137,7 @@ return !!bar && rect.left >= bar.left && rect.right <= bar.right && rect.top >= 
 		}, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
-		assertHeroVideoPreserved(t, driver, video)
+		AssertHeroVideoPreserved(t, driver, video)
 		if path == "/" {
 			homeLayout, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
 const rect = bar.getBoundingClientRect();
@@ -148,10 +148,10 @@ return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.ri
 			if err != nil || homeLayout != true {
 				t.Fatalf("homepage does not keep its card and shared top bar at width %d: %v %v", width, homeLayout, err)
 			}
-			saveNavigationScreenshot(t, driver, fmt.Sprintf("homepage-topbar-%d.png", width))
+			SaveNavigationScreenshot(t, driver, fmt.Sprintf("homepage-topbar-%d.png", width))
 		}
 		if path == "/article" {
-			back, err := waitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Go back']", 10*time.Second)
+			back, err := WaitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Go back']", 10*time.Second)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -173,12 +173,12 @@ return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.ri
 	if err := wikiLink.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
+	if _, err := WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 }
 
-func assertHeroVideoPreserved(t *testing.T, driver selenium.WebDriver, video selenium.WebElement) {
+func AssertHeroVideoPreserved(t *testing.T, driver selenium.WebDriver, video selenium.WebElement) {
 	t.Helper()
 	preserved, err := driver.ExecuteScript(`return arguments[0] === document.querySelector('figure video');`, []interface{}{video})
 	if err != nil || preserved != true {
@@ -186,7 +186,7 @@ func assertHeroVideoPreserved(t *testing.T, driver selenium.WebDriver, video sel
 	}
 }
 
-func saveNavigationScreenshot(t *testing.T, driver selenium.WebDriver, name string) {
+func SaveNavigationScreenshot(t *testing.T, driver selenium.WebDriver, name string) {
 	t.Helper()
 	output := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
 	if output == "" {
@@ -201,7 +201,7 @@ func saveNavigationScreenshot(t *testing.T, driver selenium.WebDriver, name stri
 	}
 }
 
-func assertJournalNavigationAtTop(t *testing.T, driver selenium.WebDriver, path string) {
+func AssertJournalNavigationAtTop(t *testing.T, driver selenium.WebDriver, path string) {
 	t.Helper()
 	var stableSince time.Time
 	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {

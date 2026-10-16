@@ -15,10 +15,11 @@ import (
 
 	"github.com/tebeka/selenium"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestJournalAuthenticatedServerRendering(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,14 +60,14 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer driver.Close()
-	defer assertNoSevereBrowserLogs(t, driver)
+	defer browserhelpers.AssertNoSevereBrowserLogs(t, driver)
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	var cookie selenium.Cookie
@@ -124,12 +125,12 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		if err := driver.Refresh(); err != nil {
 			t.Fatal(err)
 		}
-		wiki, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second)
+		wiki, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second)
 		if err != nil {
 			t.Fatal(err)
 		}
 		delayNavigation.Store(true)
-		assertSharedNavigation(t, driver, publicOrigin, width)
+		browserhelpers.AssertSharedNavigation(t, driver, publicOrigin, width)
 		delayNavigation.Store(false)
 		wiki, err = driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
 		if err != nil {
@@ -149,7 +150,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			}
 		}
 	}
-	logout, err := waitForElement(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']", 30*time.Second)
+	logout, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -165,7 +166,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 	if err := driver.Refresh(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForLoginButtonReady(driver, 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForLoginButtonReady(driver, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if elements, err := driver.FindElements(selenium.ByCSSSelector, "section[aria-label='Diary wiki']"); err != nil || len(elements) != 0 {
