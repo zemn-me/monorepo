@@ -70,6 +70,18 @@ func (p *multiplayerBrowser) screenshot() image.Image {
 	}
 	return frame
 }
+func (p *multiplayerBrowser) captureStep(name string) {
+	p.t.Helper()
+	data, err := p.driver.Screenshot()
+	if err != nil {
+		p.t.Fatal(err)
+	}
+	if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+		if err := os.WriteFile(filepath.Join(dir, "multiplayer-"+p.name+"-"+name+".png"), data, 0644); err != nil {
+			p.t.Fatal(err)
+		}
+	}
+}
 func (p *multiplayerBrowser) white(x, y int) bool {
 	frame := p.screenshot()
 	count := 0
@@ -147,17 +159,17 @@ func newMultiplayerBrowser(t *testing.T, base, name string) *multiplayerBrowser 
 	})
 	return p
 }
-func (p *multiplayerBrowser) copyCode() string {
+func (p *multiplayerBrowser) copyCode(previous string) string {
 	p.t.Helper()
 	var code string
 	p.wait("connection code", func() bool {
-		p.click(400, 175)
+		p.click(210, 340)
 		raw, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.readText().then(done,()=>done(''))", nil)
 		if err != nil {
 			p.t.Fatal(err)
 		}
 		code, _ = raw.(string)
-		return strings.HasPrefix(code, "OPENTS1:")
+		return strings.HasPrefix(code, "OPENTS1:") && code != previous
 	})
 	return code
 }
@@ -166,9 +178,9 @@ func (p *multiplayerBrowser) pasteCode(code string) {
 	if _, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.writeText(arguments[0]).then(()=>done(true),e=>done(String(e)))", []interface{}{code}); err != nil {
 		p.t.Fatal(err)
 	}
-	p.click(190, 405)
+	p.click(210, 340)
 	p.advance()
-	p.click(400, 405)
+	p.click(550, 340)
 }
 
 func TestBrowserMultiplayer(t *testing.T) {
@@ -181,19 +193,69 @@ func TestBrowserMultiplayer(t *testing.T) {
 	base := "http://localhost:" + ports.Site
 	host := newMultiplayerBrowser(t, base, "host")
 	guest := newMultiplayerBrowser(t, base, "guest")
-	host.click(190, 175)
-	offer := host.copyCode()
+	host.captureStep("choose")
+	host.click(210, 244) // Host a game.
+	offer := host.copyCode("")
+	host.captureStep("invitation")
+	host.click(550, 340) // Next, then back: keep the original invitation valid.
+	host.click(180, 465)
+	if again := host.copyCode(""); again != offer {
+		t.Fatal("Back replaced the invitation")
+	}
+	host.click(550, 340)  // Next: enter reply.
+	guest.click(210, 308) // Join a game.
+	// Invalid input stays in this form and produces an actionable error.
+	guest.pasteCode("not a connection code")
+	guest.wait("invalid invitation feedback", func() bool {
+		return strings.Contains(guest.logs(), "Paste the complete invitation code from the host.")
+	})
+	guest.captureStep("invalid-invitation")
+	if err := guest.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 390, "height": 844, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+		t.Fatal(err)
+	}
+	for i := 0; i < 5; i++ {
+		guest.advance()
+	}
+	guest.captureStep("phone-invalid-invitation")
+	if err := guest.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+		t.Fatal(err)
+	}
+	for i := 0; i < 5; i++ {
+		guest.advance()
+	}
 	guest.pasteCode(offer)
-	answer := guest.copyCode()
+	answer := guest.copyCode(offer)
+	guest.captureStep("reply")
 	if answer == offer {
 		t.Fatal("guest did not produce its own reply")
 	}
+	host.pasteCode(offer)
+	host.wait("own invitation feedback", func() bool {
+		return strings.Contains(host.logs(), "That is your code. Paste the code your opponent sent back.")
+	})
+	canvas, err := host.driver.FindElement(selenium.ByCSSSelector, "canvas")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := canvas.SendKeys(selenium.TabKey); err != nil {
+		t.Fatal(err)
+	}
+	host.advance()
+	host.captureStep("reply-keyboard-focus")
 	host.pasteCode(answer)
 	host.wait("direct connection", func() bool {
 		return strings.Contains(host.logs(), "WebRTC game channel connected") && strings.Contains(guest.logs(), "WebRTC game channel connected")
 	}, guest)
-	host.click(220, 455)
-	guest.click(220, 455)
+	for _, p := range []*multiplayerBrowser{host, guest} {
+		p.wait("Continue button is visible", func() bool {
+			p.mouse(250, 340, "mouseMoved", 0)
+			return p.white(250, 340)
+		}, host, guest)
+	}
+	host.captureStep("connected")
+	guest.captureStep("connected")
+	host.click(250, 340)
+	guest.click(250, 340)
 	host.wait("network lobby", func() bool {
 		return strings.Contains(host.logs(), "netlobby.rml opened") && strings.Contains(guest.logs(), "netlobby.rml opened")
 	}, guest)

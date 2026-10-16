@@ -117,15 +117,20 @@ floating-point compiler options.
 Choose **Internet** from the game's main menu. The connection dialog is rendered
 by the engine's existing RmlUi shell, inside the game canvas.
 
-1. The host chooses **Create invitation**, then **Copy your code**, and sends
-   that code to the other player.
-2. The other player chooses **Paste code**, then **Accept code**, and sends
-   their resulting code back to the host.
-3. The host pastes and accepts that reply. Once connected, both players choose
-   **Continue to lobby**.
-4. Enter different player names. The host chooses **New**; the other player
-   selects the advertised game and chooses **Join**. Use the original game
-   setup, **Accept**, and **Go!** controls to start the match.
+Choose **Host a game** or **Join a game**, then follow the numbered steps:
+
+1. **Invitation:** the host copies and sends their invitation, then chooses
+   **Next: enter reply**. The other player pastes it and chooses **Create reply**.
+2. **Reply:** the other player copies and sends their reply back. The host
+   pastes that reply and chooses **Connect**.
+3. **Connect:** once connected, each player sees the next lobby action for
+   their role and chooses **Continue to lobby**.
+
+In the lobby, enter different player names. The host chooses **New**; the other
+player selects that game and chooses **Join**, then **Accept** when ready.
+The host chooses **Go!** to start the match. **Back** lets the host return to
+an invitation without replacing its code; returning to the role chooser
+starts a new connection.
 
 Clipboard buttons may ask for browser permission. The input also accepts a
 normal browser paste. Connection codes contain complete WebRTC descriptions
