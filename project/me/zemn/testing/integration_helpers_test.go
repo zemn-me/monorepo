@@ -1,6 +1,8 @@
 package selenium_test
 
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -305,4 +307,103 @@ func waitForText(driver selenium.WebDriver, substr string, timeout time.Duration
 		text, _ := res.(string)
 		return strings.Contains(text, substr), nil
 	}, timeout)
+}
+
+func assertNoSevereBrowserLogs(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	logs, err := driver.Log(log.Browser)
+	if err != nil {
+		t.Logf("browser log unavailable: %v", err)
+		return
+	}
+	for _, entry := range filterErrorsWeDontCareAbout(logs) {
+		if entry.Level == log.Severe {
+			t.Fatalf("browser console error: %s", entry.Message)
+		}
+	}
+}
+
+func dumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
+	if capture, err := driver.ExecuteScript(`
+		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
+		return capture ? JSON.stringify({
+			text: capture.innerText,
+			busy: capture.getAttribute('aria-busy'),
+			buttons: [...capture.querySelectorAll('button')].map(button => ({
+				label: button.getAttribute('aria-label'), disabled: button.disabled,
+			})),
+		}) : '';
+	`, nil); err == nil && capture != "" {
+		t.Logf("journal capture controls: %s", capture)
+	}
+	if body, err := driver.ExecuteScript("return document.body ? document.body.innerText : ''", nil); err == nil {
+		if text, ok := body.(string); ok {
+			if len(text) > 1024 {
+				text = text[:1024]
+			}
+			t.Logf("page text snippet: %s", text)
+		}
+	}
+	if html, err := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil); err == nil {
+		if text, ok := html.(string); ok {
+			if len(text) > 1024 {
+				text = text[:1024]
+			}
+			t.Logf("page html snippet: %s", text)
+		}
+	}
+	if count, err := driver.ExecuteScript("return document.querySelectorAll('li').length;", nil); err == nil {
+		if n, ok := count.(float64); ok {
+			t.Logf("li count: %d", int(n))
+		}
+	}
+	if logs, err := driver.Log(log.Browser); err == nil {
+		ignored := []string{
+			"Failed to parse source map",
+			"react-dev-overlay",
+		}
+		filtered := make([]log.Message, 0, len(logs))
+	outer:
+		for _, entry := range logs {
+			for _, pattern := range ignored {
+				if strings.Contains(entry.Message, pattern) {
+					continue outer
+				}
+			}
+			if entry.Level == log.Severe || strings.Contains(strings.ToLower(entry.Message), "error") {
+				filtered = append(filtered, entry)
+			}
+		}
+		max := 5
+		if len(filtered) < max {
+			max = len(filtered)
+		}
+		for i := 0; i < max; i++ {
+			t.Logf("console[%d]: %s", i, filtered[i].Message)
+		}
+	}
+}
+
+func testWAV() []byte {
+	const (
+		sampleRate     = 8000
+		seconds        = 12
+		bytesPerSample = 2
+	)
+	dataSize := sampleRate * seconds * bytesPerSample
+	buffer := bytes.NewBuffer(make([]byte, 0, 44+dataSize))
+	buffer.WriteString("RIFF")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(36+dataSize))
+	buffer.WriteString("WAVEfmt ")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(16))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate))
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate*bytesPerSample))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(bytesPerSample))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(8*bytesPerSample))
+	buffer.WriteString("data")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(dataSize))
+	buffer.Write(make([]byte, dataSize))
+	return buffer.Bytes()
 }

@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/tebeka/selenium"
-	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
@@ -183,67 +182,6 @@ func forceGrievanceSubmissionTimeZone(t *testing.T, driver *seleniumpkg.Driver, 
 	return func() {
 		if err := driver.SetTimezoneOverride(current); err != nil {
 			t.Logf("reset timezone override: %v", err)
-		}
-	}
-}
-
-func dumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
-	if capture, err := driver.ExecuteScript(`
-		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
-		return capture ? JSON.stringify({
-			text: capture.innerText,
-			busy: capture.getAttribute('aria-busy'),
-			buttons: [...capture.querySelectorAll('button')].map(button => ({
-				label: button.getAttribute('aria-label'), disabled: button.disabled,
-			})),
-		}) : '';
-	`, nil); err == nil && capture != "" {
-		t.Logf("journal capture controls: %s", capture)
-	}
-	if body, err := driver.ExecuteScript("return document.body ? document.body.innerText : ''", nil); err == nil {
-		if text, ok := body.(string); ok {
-			if len(text) > 1024 {
-				text = text[:1024]
-			}
-			t.Logf("page text snippet: %s", text)
-		}
-	}
-	if html, err := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil); err == nil {
-		if text, ok := html.(string); ok {
-			if len(text) > 1024 {
-				text = text[:1024]
-			}
-			t.Logf("page html snippet: %s", text)
-		}
-	}
-	if count, err := driver.ExecuteScript("return document.querySelectorAll('li').length;", nil); err == nil {
-		if n, ok := count.(float64); ok {
-			t.Logf("li count: %d", int(n))
-		}
-	}
-	if logs, err := driver.Log(log.Browser); err == nil {
-		ignored := []string{
-			"Failed to parse source map",
-			"react-dev-overlay",
-		}
-		filtered := make([]log.Message, 0, len(logs))
-	outer:
-		for _, entry := range logs {
-			for _, pattern := range ignored {
-				if strings.Contains(entry.Message, pattern) {
-					continue outer
-				}
-			}
-			if entry.Level == log.Severe || strings.Contains(strings.ToLower(entry.Message), "error") {
-				filtered = append(filtered, entry)
-			}
-		}
-		max := 5
-		if len(filtered) < max {
-			max = len(filtered)
-		}
-		for i := 0; i < max; i++ {
-			t.Logf("console[%d]: %s", i, filtered[i].Message)
 		}
 	}
 }

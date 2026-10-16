@@ -7,17 +7,74 @@ load("//js:rules.bzl", "js_test")
 load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
+# Browser binaries are grouped by surface and share test helpers explicitly.
+# gazelle:exclude admin_test.go
+# gazelle:exclude analytics_test.go
+# gazelle:exclude go_basic_test.go
+# gazelle:exclude grievance_portal_test.go
+# gazelle:exclude integration_helpers_test.go
+# gazelle:exclude journal_pagination_test.go
+# gazelle:exclude journal_oauth_test.go
+# gazelle:exclude journal_ssr_test.go
+# gazelle:exclude journal_test.go
+# gazelle:exclude journal_wiki_test.go
+# gazelle:exclude key_test.go
+# gazelle:exclude navigation_helpers_test.go
+
 package(default_visibility = ["//visibility:public"])
 
-service_test(
+test_suite(
     name = "integration_test",
-    size = "large",  # Full browser flows plus production bundling exceed five minutes in CI.
+    tests = [
+        ":admin_integration_test",
+        ":journal_access_integration_test",
+        ":journal_integration_test",
+        ":site_integration_test",
+    ],
+)
+
+service_test(
+    name = "journal_integration_test",
+    size = "large",  # Each isolated production frontend builds after port assignment.
     flaky = True,
     services = [
         "//project/me/zemn:itest_service_calendar_fixture",
         ":oidc_provider_itest_service",
     ],
-    test = ":testing_test",
+    test = ":journal_browser_test",
+)
+
+service_test(
+    name = "journal_access_integration_test",
+    size = "large",  # Each isolated production frontend builds after port assignment.
+    flaky = True,
+    services = [
+        "//project/me/zemn:itest_service_calendar_fixture",
+        ":oidc_provider_itest_service",
+    ],
+    test = ":journal_access_browser_test",
+)
+
+service_test(
+    name = "admin_integration_test",
+    size = "large",  # Each isolated production frontend builds after port assignment.
+    flaky = True,
+    services = [
+        "//project/me/zemn:itest_service_calendar_fixture",
+        ":oidc_provider_itest_service",
+    ],
+    test = ":admin_browser_test",
+)
+
+service_test(
+    name = "site_integration_test",
+    size = "large",  # Each isolated production frontend builds after port assignment.
+    flaky = True,
+    services = [
+        "//project/me/zemn:itest_service_calendar_fixture",
+        ":oidc_provider_itest_service",
+    ],
+    test = ":site_browser_test",
 )
 
 itest_service(
@@ -69,32 +126,78 @@ jest_test(
 )
 
 go_test(
-    name = "testing_test",
+    name = "journal_browser_test",
     srcs = [
-        "admin_test.go",
-        "analytics_test.go",
-        "go_basic_test.go",
-        "grievance_portal_test.go",
         "integration_helpers_test.go",
-        "journal_oauth_test.go",
-        "journal_pagination_test.go",
-        "journal_ssr_test.go",
         "journal_test.go",
-        "journal_wiki_test.go",
-        "key_test.go",
         "navigation_helpers_test.go",
     ],
-    tags = ["manual"],  # keep; needs integration testing harness.
+    tags = ["manual"],  # Needs the integration service harness.
     deps = [
         "//go/seleniumutil",
         "//project/me/zemn/api/server",
-        "//project/me/zemn/testing/oidc",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
         "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+go_test(
+    name = "journal_access_browser_test",
+    srcs = [
+        "integration_helpers_test.go",
+        "journal_oauth_test.go",
+        "journal_pagination_test.go",
+        "journal_ssr_test.go",
+        "journal_wiki_test.go",
+        "navigation_helpers_test.go",
+    ],
+    tags = ["manual"],  # Needs the integration service harness.
+    deps = [
+        "//go/seleniumutil",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+go_test(
+    name = "admin_browser_test",
+    srcs = [
+        "admin_test.go",
+        "analytics_test.go",
+        "integration_helpers_test.go",
+        "navigation_helpers_test.go",
+    ],
+    tags = ["manual"],  # Needs the integration service harness.
+    deps = [
+        "//go/seleniumutil",
+        "//project/me/zemn/testing/oidc",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+go_test(
+    name = "site_browser_test",
+    srcs = [
+        "go_basic_test.go",
+        "grievance_portal_test.go",
+        "integration_helpers_test.go",
+        "key_test.go",
+        "navigation_helpers_test.go",
+    ],
+    tags = ["manual"],  # Needs the integration service harness.
+    deps = [
+        "//go/seleniumutil",
         "@com_github_tebeka_selenium//:selenium",
         "@com_github_tebeka_selenium//log",
     ],

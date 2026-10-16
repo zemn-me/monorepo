@@ -15,6 +15,11 @@
   compatibility, but its access token is not a Google API token. Gate
   browser Google API calls on the real Google issuer.
 
-- `:integration_test` runs the regular login and journal flows against a
-  production bundle and server. Its frontend builds after `rules_itest` assigns
-  the API/OIDC ports; keep it on the deployment build pipeline, not Vite dev.
+- `:integration_test` collects the surface-specific browser targets. Each has
+  its own production bundle and service stack. The frontend builds after
+  `rules_itest` assigns the API/OIDC ports; keep it on the deployment build
+  pipeline, not Vite dev.
+
+- Browser Go sources are explicitly grouped in `BUILD.bazel`; put new tests in
+  the matching `*_browser_test` and exclude the source from Gazelle’s combined
+  Go test. Keep cross-surface helpers in `*_helpers_test.go`.

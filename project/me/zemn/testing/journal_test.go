@@ -1,10 +1,8 @@
 package selenium_test
 
 import (
-	"bytes"
 	"context"
 	"crypto/sha256"
-	"encoding/binary"
 	"fmt"
 	"net/http"
 	"os"
@@ -1653,30 +1651,6 @@ func waitForJournalSummaryCitations(driver selenium.WebDriver, title string, wan
 		count, ok := value.(float64)
 		return ok && int(count) >= wantEntries, nil
 	}, timeout)
-}
-
-func testWAV() []byte {
-	const (
-		sampleRate     = 8000
-		seconds        = 12
-		bytesPerSample = 2
-	)
-	dataSize := sampleRate * seconds * bytesPerSample
-	buffer := bytes.NewBuffer(make([]byte, 0, 44+dataSize))
-	buffer.WriteString("RIFF")
-	_ = binary.Write(buffer, binary.LittleEndian, uint32(36+dataSize))
-	buffer.WriteString("WAVEfmt ")
-	_ = binary.Write(buffer, binary.LittleEndian, uint32(16))
-	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
-	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
-	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate))
-	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate*bytesPerSample))
-	_ = binary.Write(buffer, binary.LittleEndian, uint16(bytesPerSample))
-	_ = binary.Write(buffer, binary.LittleEndian, uint16(8*bytesPerSample))
-	buffer.WriteString("data")
-	_ = binary.Write(buffer, binary.LittleEndian, uint32(dataSize))
-	buffer.Write(make([]byte, dataSize))
-	return buffer.Bytes()
 }
 
 func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID string, timeout time.Duration) error {
