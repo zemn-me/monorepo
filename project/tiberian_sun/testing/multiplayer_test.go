@@ -28,6 +28,10 @@ type multiplayerBrowser struct {
 
 func (p *multiplayerBrowser) advance() {
 	p.t.Helper()
+	if p.clock == nil {
+		time.Sleep(50 * time.Millisecond)
+		return
+	}
 	if err := p.clock.Advance(100 * time.Millisecond); err != nil {
 		p.t.Fatal(err)
 	}
@@ -108,6 +112,19 @@ func newMultiplayerBrowser(t *testing.T, base, name string) *multiplayerBrowser 
 				_ = os.WriteFile(filepath.Join(dir, "multiplayer-"+name+".png"), data, 0644)
 			}
 		}
+		if os.Getenv("TIBERIAN_MULTIPLAYER_REALTIME") == "1" {
+			text := p.logs()
+			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+				if err := os.WriteFile(filepath.Join(dir, "performance-"+name+".log"), []byte(text), 0644); err != nil {
+					t.Error(err)
+				}
+			}
+			for _, line := range strings.Split(text, "\n") {
+				if strings.Contains(line, "Multiplayer performance ") || strings.Contains(line, "Network timing evaluation") {
+					t.Log(name + ": " + line)
+				}
+			}
+		}
 		if t.Failed() {
 			text := p.logs()
 			if len(text) > 22000 {
@@ -126,10 +143,12 @@ func newMultiplayerBrowser(t *testing.T, base, name string) *multiplayerBrowser 
 	if err := driver.ExecuteChromiumCommand("Browser.grantPermissions", map[string]any{"origin": base, "permissions": []string{"clipboardReadWrite", "clipboardSanitizedWrite"}}); err != nil {
 		t.Fatal(err)
 	}
-	var err error
-	p.clock, err = seleniumutil.NewVirtualClock(driver)
-	if err != nil {
-		t.Fatal(err)
+	if os.Getenv("TIBERIAN_MULTIPLAYER_REALTIME") != "1" {
+		var err error
+		p.clock, err = seleniumutil.NewVirtualClock(driver)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
 		t.Fatal(err)

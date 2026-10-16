@@ -123,11 +123,13 @@ diff --git a/code/conquer.cpp b/code/conquer.cpp
 index 49b7913..3ab1cdc 100644
 --- a/code/conquer.cpp
 +++ b/code/conquer.cpp
-@@ -522,6 +522,7 @@ void Main_Game(int argc, char * argv[])
+@@ -522,6 +522,9 @@ void Main_Game(int argc, char * argv[])
   *=============================================================================================*/
  void Call_Back(void)
  {
-+	Web_Yield(1);
++	// Multiplayer pumps window events in IPX_Call_Back, which already yields.
++	if (Session.Type != GAME_IPX && Session.Type != GAME_INTERNET)
++		Web_Yield(1);
  	/*
  	**	Music and speech maintenance
  	*/
@@ -713,13 +715,16 @@ diff --git a/code/mplayer.cpp b/code/mplayer.cpp
 diff --git a/code/queue.cpp b/code/queue.cpp
 --- a/code/queue.cpp
 +++ b/code/queue.cpp
-@@ -735,6 +735,10 @@
+@@ -735,6 +735,13 @@
  	// Compute the Game's CRC
  	//------------------------------------------------------------------------
  	Compute_Game_CRC();
 +#ifdef __EMSCRIPTEN__
 +	// Periodic checksums make connection stalls and desynchronization diagnosable.
-+	if (Frame % 120 == 0) DebugString("Multiplayer frame %d checksum %08x\n", Frame, GameCRC);
++	if (Frame % 120 == 0) {
++		DebugString("Multiplayer frame %d checksum %08x\n", Frame, GameCRC);
++		EM_ASM({ Module.webNetwork.report($0, $1, $2, $3); }, Frame, Session.DesiredFrameRate, Session.FrameSendRate, Session.MaxAhead);
++	}
 +#endif
  
  	/*
