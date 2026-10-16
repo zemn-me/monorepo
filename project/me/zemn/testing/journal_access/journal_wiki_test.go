@@ -13,12 +13,13 @@ import (
 
 	"github.com/tebeka/selenium"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 // The fictional corpus is a local API fixture. Production bundles deliberately
 // omit the development button that invokes this endpoint in local previews.
 var seedJournalWikiFixture = sync.OnceValue(func() error {
-	api, err := apiRoot()
+	api, err := browserhelpers.APIRoot()
 	if err != nil {
 		return err
 	}
@@ -39,7 +40,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := seedJournalWikiFixture(); err != nil {
 		t.Fatal(err)
 	}
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,7 +55,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	var originalVideo selenium.WebElement
 	assertWikiRequests := func() {
 		t.Helper()
-		api, err := apiRoot()
+		api, err := browserhelpers.APIRoot()
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -76,7 +77,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	assertWikiNavigation := func() {
 		t.Helper()
 		assertWikiRequests()
-		assertHeroVideoPreserved(t, driver, originalVideo)
+		browserhelpers.AssertHeroVideoPreserved(t, driver, originalVideo)
 		visible, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect(); return bar.top >= 0 && bar.bottom <= window.innerHeight && bar.height < 100;`, nil)
 		if err != nil || visible != true {
 			t.Fatalf("wiki navigation hid the compact navigation bar: %v %v", visible, err)
@@ -86,14 +87,14 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	originalVideo, err = driver.FindElement(selenium.ByCSSSelector, "figure video")
 	if err != nil {
 		t.Fatal(err)
 	}
-	search, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second)
+	search, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -101,7 +102,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := search.SendKeys("Maya"); err != nil {
 		t.Fatal(err)
 	}
-	page, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", 30*time.Second)
+	page, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -115,7 +116,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := page.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	assertWikiNavigation()
@@ -126,14 +127,14 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		{"//section[@aria-label='Diary wiki']//h2/a[normalize-space()='Wiki']", "//section[@aria-label='Diary wiki']//input[@type='search']"},
 		{"//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']"},
 	} {
-		link, err := waitForElement(driver, selenium.ByXPATH, step.link, 30*time.Second)
+		link, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, step.link, 30*time.Second)
 		if err != nil {
 			t.Fatal(err)
 		}
 		if err := link.Click(); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := waitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 		assertWikiNavigation()
@@ -173,11 +174,11 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := driver.Refresh(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	assertWikiRequests()
-	api, err := apiRoot()
+	api, err := browserhelpers.APIRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -197,14 +198,14 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := reference.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "audio", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "audio", 30*time.Second); err != nil {
 		t.Fatal("citation did not open source audio: ", err)
 	}
 	root.Path, root.RawQuery = "/journal", "wiki=00000000-0000-0000-0000-000000000000"
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//*[@role='status' and contains(.,'unavailable')]", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//*[@role='status' and contains(.,'unavailable')]", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := driver.ExecuteScript(`document.querySelector('section[aria-label="Diary wiki"]').scrollIntoView({block: 'center'});`, nil); err != nil {
@@ -227,7 +228,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := seedJournalWikiFixture(); err != nil {
 		t.Fatal(err)
 	}
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -256,12 +257,12 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	find := func(by, selector string) selenium.WebElement {
 		t.Helper()
-		el, err := waitForElement(driver, by, selector, 30*time.Second)
+		el, err := browserhelpers.WaitForElement(driver, by, selector, 30*time.Second)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -269,7 +270,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	click := func(by, selector string) {
 		t.Helper()
-		if err := clickElementWithRetry(driver, by, selector, 30*time.Second); err != nil {
+		if err := browserhelpers.ClickElementWithRetry(driver, by, selector, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -446,7 +447,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := seedJournalWikiFixture(); err != nil {
 		t.Fatal(err)
 	}
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -462,14 +463,14 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 
-	audio := testWAV()
+	audio := browserhelpers.TestWAV()
 	audio[len(audio)-10] = 91
 	path := filepath.Join(t.TempDir(), "wiki-confirmation.wav")
 	if err := os.WriteFile(path, audio, 0600); err != nil {
@@ -486,17 +487,17 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := input.SendKeys(path); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
-		dumpPageDiagnostics(t, driver)
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatal("wiki upload was not confirmed: ", err)
 	}
 	if _, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']"); err != nil {
 		t.Fatal("upload left the wiki: ", err)
 	}
-	api, err := apiRoot()
+	api, err := browserhelpers.APIRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -521,7 +522,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 		t.Fatal(err)
 	}
 	selector := "[role='region'][aria-label='Journal days'] > section:has(> h3 > time[datetime^='2008-05-13']) details:has(audio[data-entry-id])"
-	entry, err := waitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
+	entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 	if err != nil {
 		t.Fatal("confirmed recording was not ready in the journal: ", err)
 	}
@@ -529,7 +530,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := clickElementInView(driver, summary); err != nil {
+	if err := browserhelpers.ClickElementInView(driver, summary); err != nil {
 		t.Fatal(err)
 	}
 	remove, err := entry.FindElement(selenium.ByCSSSelector, "[role='slider'][aria-label='Swipe to delete journal entry']")
@@ -539,7 +540,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := remove.SendKeys(selenium.EndKey + selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForNoElement(driver, selenium.ByCSSSelector, selector, 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, selector, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 }

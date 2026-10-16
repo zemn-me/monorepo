@@ -9,10 +9,11 @@ import (
 	"github.com/tebeka/selenium"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestGrievancePortalHasNoErrors(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -20,7 +21,7 @@ func TestGrievancePortalHasNoErrors(t *testing.T) {
 	portal := root
 	portal.Path = "/grievanceportal"
 
-	testEndpointHasNoLogErrors(t, portal.String())
+	browserhelpers.AssertEndpointHasNoLogErrors(t, portal.String())
 }
 
 func TestGrievancePortalEndToEnd(t *testing.T) {
@@ -102,7 +103,7 @@ func TestGrievancePortalListUpdatesAfterCreate(t *testing.T) {
 
 func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
-	portalURL, err := frontendRoot()
+	portalURL, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -118,21 +119,21 @@ func loginToGrievancePortal(t *testing.T, driver selenium.WebDriver) {
 		t.Logf("grievance portal hostname: %v", hostVal)
 	}
 
-	if _, err := waitForLoginButtonReady(driver, 20*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForLoginButtonReady(driver, 20*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
 		t.Fatalf("oidc login readiness: %v", err)
 	}
 
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
 		t.Fatalf("oidc login: %v", err)
 	}
 
-	if err := waitForText(driver, "You are logged in.", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "You are logged in.", 30*time.Second); err != nil {
 		if alreadyLoggedIn(driver) {
 			return
 		}
@@ -146,14 +147,14 @@ func submitGrievanceForm(t *testing.T, driver selenium.WebDriver, description st
 	if err := fillFieldWithRetry(driver, selenium.ByCSSSelector, "textarea[name='description']", description, 15*time.Second); err != nil {
 		t.Fatalf("fill grievance description: %v", err)
 	}
-	if err := clickElementWithRetry(driver, selenium.ByCSSSelector, "form input[type='submit']", 10*time.Second); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "form input[type='submit']", 10*time.Second); err != nil {
 		t.Fatalf("submit grievance form: %v", err)
 	}
 
 	entryXPath := grievanceEntryXPath(description)
 	entry, err := waitForGrievanceElement(driver, description, 60*time.Second)
 	if err != nil {
-		dumpPageDiagnostics(t, driver)
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("wait for grievance entry: %v", err)
 	}
 	return entry, entryXPath
@@ -227,7 +228,7 @@ func fillFieldWithRetry(driver selenium.WebDriver, by, selector, text string, ti
 		}
 		if err := elem.Clear(); err != nil {
 			lastErr = err
-			if isStaleElementErr(err) {
+			if browserhelpers.IsStaleElementErr(err) {
 				time.Sleep(150 * time.Millisecond)
 				continue
 			}
@@ -235,7 +236,7 @@ func fillFieldWithRetry(driver selenium.WebDriver, by, selector, text string, ti
 		}
 		if err := elem.SendKeys(text); err != nil {
 			lastErr = err
-			if isStaleElementErr(err) {
+			if browserhelpers.IsStaleElementErr(err) {
 				time.Sleep(150 * time.Millisecond)
 				continue
 			}

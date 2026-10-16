@@ -11,10 +11,11 @@ import (
 
 	"github.com/tebeka/selenium"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestJournalDayPagination(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +31,7 @@ func TestJournalDayPagination(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 
@@ -42,7 +43,7 @@ func TestJournalDayPagination(t *testing.T) {
 	var paths []string
 	var dates []time.Time
 	for index := range 24 {
-		audio := testWAV()
+		audio := browserhelpers.TestWAV()
 		audio[len(audio)-8] = byte(index + 100)
 		path := filepath.Join(t.TempDir(), fmt.Sprintf("pagination-%02d.wav", index))
 		if err := os.WriteFile(path, audio, 0600); err != nil {
@@ -55,18 +56,18 @@ func TestJournalDayPagination(t *testing.T) {
 		paths = append(paths, path)
 		dates = append(dates, date)
 	}
-	input, err := waitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
+	input, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if err := input.SendKeys(strings.Join(paths, "\n")); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 120*time.Second); err != nil {
-		dumpPageDiagnostics(t, driver)
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 120*time.Second); err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatal(err)
 	}
 
@@ -79,7 +80,7 @@ func TestJournalDayPagination(t *testing.T) {
 				continue
 			}
 			selector := fmt.Sprintf("[role='region'][aria-label='Journal days'] > section:has(> h3 > time[datetime^='%s']) details[id^='entry-']", date.Format("2006-01-02"))
-			entry, err := waitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
+			entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 			if err != nil {
 				t.Errorf("find cleanup recording %d: %v", index, err)
 				continue
@@ -89,7 +90,7 @@ func TestJournalDayPagination(t *testing.T) {
 				t.Error(err)
 				continue
 			}
-			if err := clickElementInView(driver, summary); err != nil {
+			if err := browserhelpers.ClickElementInView(driver, summary); err != nil {
 				t.Error(err)
 				continue
 			}
@@ -102,7 +103,7 @@ func TestJournalDayPagination(t *testing.T) {
 				t.Error(err)
 				continue
 			}
-			if err := waitForNoElement(driver, selenium.ByCSSSelector, selector, 30*time.Second); err != nil {
+			if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, selector, 30*time.Second); err != nil {
 				t.Errorf("delete cleanup recording %d: %v", index, err)
 			}
 		}
@@ -117,7 +118,7 @@ func TestJournalDayPagination(t *testing.T) {
 		if err := driver.Get(root.String()); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := waitForElement(driver, selenium.ByCSSSelector, daySelector(index), 30*time.Second); err != nil {
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, daySelector(index), 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -136,7 +137,7 @@ func TestJournalDayPagination(t *testing.T) {
 		t.Fatalf("oldest day was eagerly rendered: %v %v", len(days), err)
 	}
 	for _, want := range []int{14, 21, 24} {
-		older, err := waitForElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show older days']", 10*time.Second)
+		older, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show older days']", 10*time.Second)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -145,10 +146,10 @@ func TestJournalDayPagination(t *testing.T) {
 		}
 		assertDayCount(want)
 	}
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, daySelector(0), 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, daySelector(0), 10*time.Second); err != nil {
 		t.Fatal("scrolling did not reach oldest day: ", err)
 	}
-	if err := waitForNoElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show older days']", 10*time.Second); err != nil {
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show older days']", 10*time.Second); err != nil {
 		t.Fatal("older-day control remained at end of journal: ", err)
 	}
 
@@ -193,7 +194,7 @@ func TestJournalDayPagination(t *testing.T) {
 		if _, err := driver.ExecuteScript("arguments[0].focus({preventScroll:true})", []any{newer}); err != nil {
 			t.Fatal(err)
 		}
-		saveNavigationScreenshot(t, driver, fmt.Sprintf("journal-pagination-focus-%d.png", width))
+		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-pagination-focus-%d.png", width))
 		if err := newer.SendKeys(selenium.EnterKey); err != nil {
 			t.Fatal(err)
 		}
@@ -209,7 +210,7 @@ func TestJournalDayPagination(t *testing.T) {
 		if overflow, err := driver.ExecuteScript("return document.documentElement.scrollWidth > innerWidth", nil); err != nil || overflow == true {
 			t.Fatalf("pagination overflow at width %d: %v %v", width, overflow, err)
 		}
-		saveNavigationScreenshot(t, driver, fmt.Sprintf("journal-pagination-%d.png", width))
+		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-pagination-%d.png", width))
 
 		// The address tracks the day at the viewport's center after scrolling.
 		address, err = driver.CurrentURL()
@@ -237,7 +238,7 @@ func TestJournalDayPagination(t *testing.T) {
 		if err := driver.Refresh(); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := waitForElement(driver, selenium.ByCSSSelector, daySelector(focusedDay), 30*time.Second); err != nil {
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, daySelector(focusedDay), 30*time.Second); err != nil {
 			t.Fatalf("reloaded day link lost its destination (%s): %v", address, err)
 		}
 		if newer, err := driver.FindElements(selenium.ByCSSSelector, daySelector(23)); err != nil || len(newer) != 0 {

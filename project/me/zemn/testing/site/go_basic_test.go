@@ -5,10 +5,11 @@ import (
 	"time"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestOIDCLoginButtonBecomesEnabled(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -25,7 +26,7 @@ func TestOIDCLoginButtonBecomesEnabled(t *testing.T) {
 		t.Fatalf("navigate grievance portal: %v", err)
 	}
 
-	button, err := waitForLoginButtonReady(driver, 20*time.Second)
+	button, err := browserhelpers.WaitForLoginButtonReady(driver, 20*time.Second)
 	if err != nil {
 		t.Fatalf("login button did not become enabled: %v", err)
 	}

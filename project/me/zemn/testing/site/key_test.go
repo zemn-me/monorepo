@@ -7,10 +7,11 @@ import (
 	"github.com/tebeka/selenium"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
 func TestKeyPageUnlockedPadlockLocksAgain(t *testing.T) {
-	root, err := frontendRoot()
+	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
@@ -27,23 +28,23 @@ func TestKeyPageUnlockedPadlockLocksAgain(t *testing.T) {
 		t.Fatalf("navigate key page: %v", err)
 	}
 
-	if err := performOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatalf("oidc login: %v", err)
 	}
 
-	unlockButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Unlock Door']", 30*time.Second)
+	unlockButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Unlock Door']", 30*time.Second)
 	if err != nil {
 		t.Fatalf("unlock button: %v", err)
 	}
 	if err := unlockButton.Click(); err != nil {
 		t.Fatalf("click unlock button: %v", err)
 	}
-	if err := waitForText(driver, "unlocked", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "unlocked", 30*time.Second); err != nil {
 		t.Fatalf("key history event: %v", err)
 	}
-	assertNoSevereBrowserLogs(t, driver)
+	browserhelpers.AssertNoSevereBrowserLogs(t, driver)
 
-	lockButton, err := waitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Lock Door']", 30*time.Second)
+	lockButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Lock Door']", 30*time.Second)
 	if err != nil {
 		t.Fatalf("lock button after unlock: %v", err)
 	}
@@ -51,10 +52,10 @@ func TestKeyPageUnlockedPadlockLocksAgain(t *testing.T) {
 		t.Fatalf("click unlocked padlock: %v", err)
 	}
 
-	if _, err := waitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Unlock Door']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Unlock Door']", 30*time.Second); err != nil {
 		t.Fatalf("unlock button after lock: %v", err)
 	}
-	if err := waitForText(driver, "Locked.", 30*time.Second); err != nil {
+	if err := browserhelpers.WaitForText(driver, "Locked.", 30*time.Second); err != nil {
 		t.Fatalf("locked status after relock: %v", err)
 	}
 
