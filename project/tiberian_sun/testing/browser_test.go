@@ -283,6 +283,9 @@ func playFreeware(t *testing.T, mode string) {
 		px, py := screenPoint(x, y)
 		dispatch(px, py, "mouseMoved", 0)
 		if click {
+			// The native menu consumes motion at an Asyncify yield; let it
+			// update its hovered item before the press is queued.
+			advance(50 * time.Millisecond)
 			dispatch(px, py, "mousePressed", 1)
 			advance(80 * time.Millisecond)
 			dispatch(px, py, "mouseReleased", 0)
