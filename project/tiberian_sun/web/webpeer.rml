@@ -27,8 +27,11 @@ button:disabled {
 }
 #host { left: 28dp; top: 154dp; }
 #join { left: 28dp; top: 218dp; }
-#copy, #paste { left: 28dp; top: 250dp; }
-#next, #accept { left: 340dp; top: 250dp; width: 268dp; }
+#copy { left: 28dp; top: 132dp; }
+#paste { left: 28dp; top: 250dp; }
+#next { left: 340dp; top: 132dp; width: 268dp; }
+#accept { left: 340dp; top: 250dp; width: 268dp; }
+#share-status { left: 28dp; top: 190dp; width: 580dp; height: 80dp; }
 #status { left: 28dp; top: 310dp; width: 580dp; height: 48dp; }
 #back { left: 28dp; top: 375dp; width: 150dp; }
 #cancel { left: 448dp; top: 375dp; width: 160dp; }
@@ -42,7 +45,6 @@ button:disabled {
 <p id="hint">{{hint}}</p>
 <button id="host" data-if="choose" data-event-click="queue('invite')">Host a game</button>
 <button id="join" data-if="choose" data-event-click="queue('join')">Join a game</button>
-<textarea id="code" data-if="share" readonly="readonly" data-value="code"/>
 <button id="copy" data-if="share" data-attrif-disabled="unavailable" data-event-click="queue('copy')">{{copy_label}}</button>
 <button id="next" data-if="host_share" data-attrif-disabled="unavailable" data-event-click="queue('next')">Next: enter reply</button>
 <textarea id="input" data-if="receive" maxlength="65536" data-value="input" data-event-change="queue('input', 0, ev.value)"/>
@@ -50,7 +52,8 @@ button:disabled {
 <button id="accept" data-if="receive" data-attrif-disabled="cannot_accept" data-event-click="queue('accept')">{{accept_label}}</button>
 <p id="lobby" data-if="connected">{{lobby}}</p>
 <button id="continue" data-if="connected" data-event-click="queue('continue')">Continue to lobby</button>
-<p id="status">{{status}}</p>
+<p id="share-status" data-if="share">{{status}}</p>
+<p id="status" data-if="!share">{{status}}</p>
 <button id="back" data-if="can_back" data-attrif-disabled="busy" data-event-click="queue('back')">Back</button>
 <button id="cancel" data-event-click="queue('cancel')">Cancel</button>
 </body>

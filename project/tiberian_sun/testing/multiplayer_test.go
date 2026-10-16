@@ -163,7 +163,7 @@ func (p *multiplayerBrowser) copyCode(previous string) string {
 	p.t.Helper()
 	var code string
 	p.wait("connection code", func() bool {
-		p.click(210, 340)
+		p.click(210, 222)
 		raw, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.readText().then(done,()=>done(''))", nil)
 		if err != nil {
 			p.t.Fatal(err)
@@ -197,12 +197,12 @@ func TestBrowserMultiplayer(t *testing.T) {
 	host.click(210, 244) // Host a game.
 	offer := host.copyCode("")
 	host.captureStep("invitation")
-	host.click(550, 340) // Next, then back: keep the original invitation valid.
+	host.click(550, 222) // Next, then back: keep the original invitation valid.
 	host.click(180, 465)
 	if again := host.copyCode(""); again != offer {
 		t.Fatal("Back replaced the invitation")
 	}
-	host.click(550, 340)  // Next: enter reply.
+	host.click(550, 222)  // Next: enter reply.
 	guest.click(210, 308) // Join a game.
 	// Invalid input stays in this form and produces an actionable error.
 	guest.pasteCode("not a connection code")

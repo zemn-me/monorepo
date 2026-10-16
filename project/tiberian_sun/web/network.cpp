@@ -27,7 +27,7 @@ EM_JS(void, Peer_Copy, (), {
     navigator.clipboard.writeText(Module.webNetwork.state.code).then(() => {
         Module.webNetwork.state.status = 'Copied to clipboard.';
     }).catch(() => {
-        Module.webNetwork.state.status = 'Copy failed. Select the code and copy it manually.';
+        Module.webNetwork.state.status = 'Copy failed. Allow clipboard access in your browser, then try again.';
     });
 });
 EM_JS(void, Peer_Paste, (), {
@@ -145,7 +145,7 @@ class PeerView : public UIRmlViewClass {
 public:
     explicit PeerView(PeerPresenter &data) : UIRmlViewClass(data, "webpeer.rml", "webpeer"), Data(data) {}
     bool Bind(Rml::DataModelConstructor &model) override {
-        return model.Bind("status", &Data.Status) && model.Bind("code", &Data.Code) && model.Bind("input", &Data.Input)
+        return model.Bind("status", &Data.Status) && model.Bind("input", &Data.Input)
             && model.Bind("progress", &Data.Progress) && model.Bind("title", &Data.Title) && model.Bind("hint", &Data.Hint)
             && model.Bind("copy_label", &Data.CopyLabel) && model.Bind("accept_label", &Data.AcceptLabel) && model.Bind("lobby", &Data.Lobby)
             && model.Bind("choose", &Data.Choose) && model.Bind("share", &Data.Share) && model.Bind("host_share", &Data.HostShare)
