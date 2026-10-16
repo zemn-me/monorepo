@@ -12,6 +12,7 @@ import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
 	type DownloadProgress,
 	type GameAssets,
+	type GameCampaign,
 	startGame,
 } from '#root/project/tiberian_sun/web/launcher.js';
 import {
@@ -23,7 +24,15 @@ import {
 
 type GameState = Future<void, DownloadProgress | undefined, string>;
 
-export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
+export function TiberianSun({
+	assets,
+	campaign,
+	onExit,
+}: {
+	readonly assets: GameAssets;
+	readonly campaign?: GameCampaign;
+	readonly onExit?: () => void;
+}) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
 	const [state, setState] = useState<GameState>(() =>
@@ -72,17 +81,22 @@ export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
 				},
 				error: value => setState(() => future_error(value)),
 				exit: () => {
+					if (onExit) {
+						onExit();
+						return;
+					}
 					if (window.history.length > 1) void navigate(-1);
 					else void navigate('/experiments', { replace: true });
 				},
 			},
-			lifetime.signal
+			lifetime.signal,
+			campaign
 		);
 		return () => {
 			lifetime.abort();
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [assets, navigate]);
+	}, [assets, campaign, navigate, onExit]);
 
 	useEffect(() => {
 		if (failed) statusRef.current?.focus();

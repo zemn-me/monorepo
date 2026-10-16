@@ -11,6 +11,11 @@ export interface GameAssets {
 	readonly engineData: string;
 	readonly gameData: string;
 }
+export interface GameCampaign {
+	readonly scenario: string;
+	readonly files: Readonly<Record<string, string>>;
+}
+
 export interface DownloadProgress {
 	readonly received: number;
 	readonly total?: number;
@@ -74,7 +79,8 @@ export function startGame(
 	canvas: HTMLCanvasElement,
 	assets: GameAssets,
 	callbacks: GameCallbacks,
-	signal: AbortSignal
+	signal: AbortSignal,
+	campaign?: GameCampaign
 ): void {
 	const preceding = previousExit;
 	const { promise: exitComplete, resolve: stopped } =
@@ -169,6 +175,18 @@ export function startGame(
 					'[Video]\nScreenWidth=800\nScreenHeight=600\nWindowed=yes\n[Options]\nVideoBackBuffer=no\n'
 				);
 			}
+			if (campaign) {
+				// Campaign files are ephemeral game data; saved games stay in IDBFS.
+				for (const [name, contents] of Object.entries(campaign.files)) {
+					if (!/^[A-Z0-9_]+\.INI$/.test(name))
+						throw new Error('Invalid campaign filename');
+					loaded.FS.writeFile('/game/' + name, contents);
+				}
+				if (!Object.hasOwn(campaign.files, campaign.scenario))
+					throw new Error('Missing campaign scenario');
+				loaded.FS.writeFile('/game/SPAWN.INI',
+					`[Settings]\nIsSinglePlayer=yes\nScenario=${campaign.scenario}\nCampaignID=-1\nGameSpeed=2\n`);
+			}
 			loaded.FS.chdir('/game');
 			started = true;
 			callbacks.running();
@@ -178,6 +196,7 @@ export function startGame(
 				'-USERDIR=/save',
 				'-WIN',
 				'-XCC',
+				...(campaign ? ['-SPAWN'] : []),
 			]);
 		} catch (error) {
 			if (!signal.aborted) {

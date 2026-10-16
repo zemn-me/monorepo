@@ -1,0 +1,237 @@
+.command {
+	min-height: 100vh;
+	box-sizing: border-box;
+	background: #111810;
+	color: #e2e7d6;
+	padding: 0 max(1.25rem, calc((100vw - 1180px) / 2));
+	font: 16px / 1.6 monospace;
+	color-scheme: dark;
+}
+.command * {
+	box-sizing: border-box;
+}
+.command a {
+	color: inherit;
+}
+.command button {
+	font: inherit;
+	cursor: pointer;
+}
+.command :is(a, button):focus-visible {
+	outline: 3px solid #e7f4ac;
+	outline-offset: 4px;
+}
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	border-bottom: 1px solid #43513a;
+	padding: 1rem 0;
+	font-size: 0.75rem;
+}
+.header a {
+	padding: 0.6rem 0;
+}
+.header span {
+	color: #a0ae8e;
+}
+.intro {
+	padding: 4rem 0 2.5rem;
+}
+.eyebrow {
+	color: #b8d77d;
+	font-size: 0.7rem;
+	letter-spacing: 0.14em;
+}
+.intro h1 {
+	font:
+		400 clamp(3.5rem, 8vw, 6.5rem) / 0.95 Georgia,
+		serif;
+	letter-spacing: -0.04em;
+	margin: 1.5rem 0;
+}
+.intro h1 em {
+	color: #c2dc8b;
+	font-weight: 400;
+}
+.intro > p:last-child {
+	max-width: 32rem;
+	color: #b2bea6;
+}
+.operations {
+	display: grid;
+	grid-template-columns: 1fr 1.4fr;
+	border: 1px solid #43513a;
+}
+.missions {
+	padding: 1.5rem;
+	background: #192117;
+}
+.missions > p {
+	margin: 0 0 1.5rem;
+}
+.missions button {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	text-align: left;
+	color: #c4cdb8;
+	background: transparent;
+	border: 1px solid #43513a;
+	width: 100%;
+	padding: 1.25rem 1rem;
+	margin-bottom: 0.75rem;
+	min-height: 88px;
+}
+.missions button[aria-pressed="true"] {
+	background: #c1d98b;
+	color: #17200e;
+	border-color: #c1d98b;
+}
+.missions button > span:nth-child(2) {
+	flex: 1;
+}
+.missions small,
+.missions strong {
+	display: block;
+}
+.missions small {
+	font-size: 0.7rem;
+	margin-bottom: 0.25rem;
+}
+.missions strong {
+	font-weight: 400;
+}
+.number {
+	font:
+		italic 2rem Georgia,
+		serif;
+}
+.briefing {
+	padding: 1.75rem 2rem;
+	border-left: 1px solid #43513a;
+}
+.briefing h2 {
+	font:
+		400 2rem / 1.15 Georgia,
+		serif;
+	margin: 0.75rem 0;
+}
+.briefing > p:not(.eyebrow) {
+	color: #b9c3ad;
+	font-size: 0.85rem;
+}
+.radar {
+	color: #bed883;
+	background: radial-gradient(ellipse at center, #293c22, #111810);
+	border: 1px solid #43513a;
+	margin-bottom: 1.5rem;
+}
+.radar svg {
+	display: block;
+	width: 100%;
+	max-height: 240px;
+}
+.deploy {
+	display: flex;
+	justify-content: space-between;
+	gap: 1.5rem;
+	min-height: 48px;
+	width: 100%;
+	border: 1px solid #c1d98b;
+	background: #c1d98b;
+	color: #17200e;
+	padding: 0.75rem 1rem;
+	margin-top: 1.5rem;
+}
+.briefing .hint {
+	font-size: 0.7rem;
+}
+.dossier {
+	margin: 4rem 0;
+}
+.dossierHeading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	border-bottom: 1px solid #43513a;
+}
+.dossierHeading h2 {
+	font:
+		400 2rem Georgia,
+		serif;
+}
+.dossierHeading span {
+	font-size: 0.7rem;
+	color: #b8d77d;
+}
+.dossier > p {
+	color: #b9c3ad;
+	font-size: 0.8rem;
+}
+.dossier ol {
+	padding: 0;
+	list-style: none;
+}
+.dossier li {
+	display: grid;
+	grid-template-columns: 9rem 1fr;
+	padding: 1.5rem 0;
+	border-bottom: 1px solid #303d29;
+}
+.dossier time {
+	color: #a0ae8e;
+	font-size: 0.75rem;
+	padding-top: 0.2rem;
+}
+.dossier h3 {
+	font-size: 1rem;
+	margin: 0;
+	font-weight: 400;
+}
+.dossier li p {
+	font-size: 0.8rem;
+	color: #b9c3ad;
+	margin-bottom: 0;
+}
+.footer {
+	border-top: 1px solid #43513a;
+	padding: 1.5rem 0 2rem;
+	color: #a0ae8e;
+	font-size: 0.7rem;
+}
+@media (max-width: 650px) {
+	.header span {
+		display: none;
+	}
+	.intro {
+		padding-top: 2rem;
+	}
+	.operations {
+		grid-template-columns: 1fr;
+	}
+	.missions {
+		padding: 1rem;
+	}
+	.missions button {
+		min-height: 72px;
+		padding: 0.75rem;
+	}
+	.briefing {
+		border-left: 0;
+		border-top: 1px solid #43513a;
+		padding: 1.5rem 1rem;
+	}
+	.dossierHeading {
+		align-items: baseline;
+		flex-direction: column;
+		gap: 0;
+		padding-bottom: 1rem;
+	}
+	.dossier li {
+		grid-template-columns: 1fr;
+		gap: 0.5rem;
+	}
+}

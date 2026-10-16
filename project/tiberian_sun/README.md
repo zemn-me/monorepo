@@ -223,3 +223,24 @@ both sources; the existence of the freeware download is not a legal
 clearance for public redistribution. Public hosting requires resolving how
 those terms apply to this browser port. No public deployment is performed by
 building or running these targets.
+
+## Bio exploration campaign
+
+`/experiments/tiberian-sun/bio` opens **A life in the field**, a custom,
+peaceful GDI reconnaissance campaign based on the website's public bio.
+The dossier divides the canonical timeline into four eras and retains every
+published record and its source link. Each native mission transmits three
+highlights from its era when an expedition member approaches a radar-marked
+archive hut. All three recoveries advance to the next mission; any mission
+can also be selected directly from the dossier.
+
+The website derives ephemeral INI scenarios from `Bio.timeline`, mounts them
+beside the freeware data, and launches the engine's single-player spawner.
+No game binaries or original archives are modified. Campaign saves use the
+existing browser save directory. Quitting returns to the dossier.
+
+`//project/me/zemn/app/experiments/tiberian_sun:tests` checks timeline coverage
+and the native mission chain. `TestBioCampaign` in the game's browser
+integration suite exercises the dossier at desktop and phone widths and
+launches a native bio scenario using the actual packaged game data, then
+recovers all three archives and verifies progression to the next mission.

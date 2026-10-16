@@ -1,6 +1,7 @@
 import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
+	{ path: 'experiments/tiberian-sun/bio', file: 'experiments/tiberian_sun/bio.js' },
 	{ path: 'auth/session', file: 'auth-session.js' },
 	{ path: 'experiments/tiberian-sun', file: 'experiments/tiberian_sun/page.js' },
 	{
