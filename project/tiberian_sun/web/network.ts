@@ -1,11 +1,30 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /* biome-ignore-all lint/suspicious/noConsole: Console output is the game's diagnostic log. */
 // The engine retains its packet protocol; this transports one datagram per message.
-export function createPeerTransport(signal: AbortSignal) {
+export function createPeerTransport(
+	signal: AbortSignal,
+	configuration: RTCConfiguration = {
+		iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+	}
+) {
 	let peer: RTCPeerConnection | undefined;
 	let channel: RTCDataChannel | undefined;
 	let generation = 0;
-	let incoming: Uint8Array<ArrayBuffer>[] = [];
+	let incoming: { bytes: Uint8Array<ArrayBuffer>; arrived: number }[] = [];
+	let head = 0;
+	const counters = () => ({
+		sentPackets: 0,
+		sentBytes: 0,
+		receivedPackets: 0,
+		receivedBytes: 0,
+		deliveredPackets: 0,
+		droppedPackets: 0,
+		blockedSends: 0,
+		peakQueuedBytes: 0,
+		maxQueueDelayMs: 0,
+	});
+	let metrics = counters();
+	let previousReport: { frame: number; time: number } | undefined;
 	let queuedBytes = 0;
 	const state = {
 		status: '',
@@ -23,7 +42,10 @@ export function createPeerTransport(signal: AbortSignal) {
 		if (peer) peer.close();
 		peer = channel = undefined;
 		incoming = [];
+		head = 0;
 		queuedBytes = 0;
+		metrics = counters();
+		previousReport = undefined;
 		Object.assign(state, {
 			status: '',
 			step: 'choose',
@@ -66,17 +88,25 @@ export function createPeerTransport(signal: AbortSignal) {
 		};
 		next.onmessage = event => {
 			const data: unknown = event.data;
+			if (token !== generation) return;
 			if (
-				token !== generation ||
 				!(data instanceof ArrayBuffer) ||
 				data.byteLength === 0 ||
 				data.byteLength > 1536 ||
 				queuedBytes + data.byteLength > limit
-			)
+			) {
+				metrics.droppedPackets++;
 				return;
+			}
 			const bytes = new Uint8Array(data);
-			incoming.push(bytes);
+			incoming.push({ bytes, arrived: performance.now() });
 			queuedBytes += bytes.length;
+			metrics.receivedPackets++;
+			metrics.receivedBytes += bytes.length;
+			metrics.peakQueuedBytes = Math.max(
+				metrics.peakQueuedBytes,
+				queuedBytes
+			);
 		};
 	}
 	function begin(host: boolean) {
@@ -84,9 +114,7 @@ export function createPeerTransport(signal: AbortSignal) {
 		state.host = host;
 		state.status = 'Preparing your code…';
 		const token = generation;
-		const connection = new RTCPeerConnection({
-			iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
-		});
+		const connection = new RTCPeerConnection(configuration);
 		peer = connection;
 		connection.onconnectionstatechange = () => {
 			if (token !== generation) return;
@@ -245,24 +273,106 @@ export function createPeerTransport(signal: AbortSignal) {
 		state,
 		perform,
 		reset,
+		diagnostics() {
+			return {
+				...metrics,
+				queuedBytes,
+				bufferedBytes: channel?.bufferedAmount ?? 0,
+			};
+		},
+		async report(
+			frame: number,
+			targetFps: number,
+			frameSendRate: number,
+			maxAhead: number
+		) {
+			const now = performance.now();
+			const previous = previousReport;
+			previousReport = { frame, time: now };
+			const snapshot = this.diagnostics();
+			const connection = peer;
+			const token = generation;
+			let path: { local?: string; remote?: string; rttMs?: number } = {};
+			try {
+				const stats = await connection?.getStats();
+				stats?.forEach(entry => {
+					if (
+						entry.type !== 'transport' ||
+						!entry.selectedCandidatePairId
+					)
+						return;
+					const pair = stats.get(entry.selectedCandidatePairId);
+					if (!pair) return;
+					path = {
+						local: stats.get(pair.localCandidateId)?.candidateType,
+						remote: stats.get(pair.remoteCandidateId)
+							?.candidateType,
+						rttMs:
+							pair.currentRoundTripTime === undefined
+								? undefined
+								: pair.currentRoundTripTime * 1000,
+					};
+				});
+			} catch {
+				/* A disconnect can race a diagnostic sample. */
+			}
+			if (token !== generation) return;
+			console.info(
+				'Multiplayer performance ' +
+					JSON.stringify({
+						frame,
+						targetFps,
+						frameSendRate,
+						maxAhead,
+						intervalMs: previous ? now - previous.time : undefined,
+						fps:
+							previous && frame > previous.frame
+								? ((frame - previous.frame) * 1000) /
+									(now - previous.time)
+								: undefined,
+						...snapshot,
+						path,
+					})
+			);
+		},
 		send(bytes: Uint8Array<ArrayBuffer>) {
 			if (
 				!state.connected ||
 				!channel ||
 				channel.bufferedAmount + bytes.length > limit
-			)
+			) {
+				metrics.blockedSends++;
 				return false;
+			}
 			try {
 				channel.send(bytes);
+				metrics.sentPackets++;
+				metrics.sentBytes += bytes.length;
 				return true;
 			} catch {
+				metrics.blockedSends++;
 				return false;
 			}
 		},
 		receive() {
-			const bytes = incoming.shift();
-			if (bytes) queuedBytes -= bytes.length;
-			return bytes;
+			const packet = incoming[head];
+			if (!packet) return;
+			head++;
+			queuedBytes -= packet.bytes.length;
+			metrics.deliveredPackets++;
+			metrics.maxQueueDelayMs = Math.max(
+				metrics.maxQueueDelayMs,
+				performance.now() - packet.arrived
+			);
+			// Avoid moving the whole queue for every datagram during a burst.
+			if (head === incoming.length) {
+				incoming = [];
+				head = 0;
+			} else if (head >= 1024 && head * 2 >= incoming.length) {
+				incoming = incoming.slice(head);
+				head = 0;
+			}
+			return packet.bytes;
 		},
 	};
 }

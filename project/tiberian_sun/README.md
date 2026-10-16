@@ -153,6 +153,68 @@ establish a direct connection cannot play through this transport. Windows and
 CnCNet interoperability, more than two players, and recovery after a browser
 reload are outside its current scope.
 
+## Multiplayer performance
+
+Run the asset-free transport benchmark with real browser clocks:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/benchmark:benchmark_test --nocache_test_results
+```
+
+The test connects two production peer adapters in one headless Chromium document,
+using the real invitation/answer flow and WebRTC stack with host-only ICE
+(no external STUN dependency). It checks ping/echo latency
+with 1 ms and 16 ms receive polling, then sends 2,048 packets in each direction
+at 64, 512, and 1,536 bytes. Bursts yield every 32 packets, so reported throughput
+is achieved application goodput for that offered load, not link capacity. Payload,
+sequence, duplicate, and loss checks run alongside measurements. A separate
+queued burst verifies partial draining, compaction, and refilling without losing
+or duplicating datagrams. The JSON report
+is saved as `network-performance.json` in the test's undeclared outputs. Timing
+has no fixed CI threshold; missing replies, corrupted packets, and more than 5%
+loopback burst loss fail the test.
+
+This measures local WebRTC and adapter overhead, including browser timer delays.
+It does not emulate two devices, Wi-Fi, the C++/Wasm bridge, rendering, or engine
+acknowledgements and lockstep. In particular, use wall time for performance:
+the normal virtual-clock integration test cannot measure real game speed.
+
+For an asset-backed match with two independent browsers and real clocks:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
+  --test_arg=-test.run=TestBrowserMultiplayer --test_arg=-test.v \
+  --test_env=TIBERIAN_MULTIPLAYER_REALTIME=1 --nocache_test_results
+```
+
+This uses the same lobby, orders, and checksum assertions as the normal test.
+It retains `performance-host.log` and `performance-guest.log` in undeclared
+outputs and prints performance samples. Headless software rendering can be much
+slower than an interactive browser; compare runs on the same machine.
+
+During any real match, the browser console logs `Multiplayer performance` every
+120 simulation frames. Each sample includes achieved FPS (after the first sample),
+requested FPS, sample interval in milliseconds, frames between sends, maximum
+simulation lead, cumulative packet
+and byte counts, receive-queue peak and maximum residence time, rejected packets,
+blocked sends, current queued/buffered bytes, selected ICE candidate types, and
+WebRTC RTT when available. Candidate addresses and connection codes are omitted.
+Counters and peaks reset on reconnect; compute differences between samples for
+rates. `droppedPackets` counts local adapter rejections, not losses on the wire.
+Multiplayer maintenance avoids yielding twice for the same callback: its window
+event pump already yields to the browser. Solo maintenance retains its yield.
+The engine's existing `Network timing evaluation` log separately reports process
+time, protocol RTT, and synchronization waiting time.
+
+Interpret these together: high queue residence time implicates delayed engine
+servicing; high processing time and low requested FPS implicate local execution;
+high protocol RTT or waits with low WebRTC RTT suggest engine servicing or retry
+delays. The pinned engine also gives identical speed settings different solo/network
+limits: setting 3 is 30 FPS solo and 20 FPS multiplayer. Check requested FPS
+before treating that difference as transport loss.
+The slowest peer constrains a lockstep match. A same-LAN connection alone
+does not establish which of those costs dominates.
+
 ## Validation and limits
 
 Affected automated checks:

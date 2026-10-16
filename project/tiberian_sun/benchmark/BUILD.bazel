@@ -1,0 +1,55 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_library", "js_run_binary")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_project(
+    name = "benchmark",
+    srcs = ["network_benchmark.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//project/tiberian_sun/web",
+    ],
+)
+
+js_library(
+    name = "bundle_source",
+    srcs = ["bundle_benchmark.mjs"],
+    data = [":benchmark"],  # keep; esbuild resolves the entry point at runtime.
+    deps = ["//:node_modules/esbuild"],
+)
+
+js_binary(
+    name = "bundle_bin",
+    data = [":bundle_source"],
+    entry_point = "bundle_benchmark.mjs",
+)
+
+js_run_binary(
+    name = "bundle",
+    stdout = "network_benchmark_bundle.js",
+    tool = ":bundle_bin",
+)
+
+go_test(
+    name = "benchmark_test",
+    size = "medium",
+    srcs = ["network_test.go"],
+    # Gazelle cannot infer this generated go:embed input.
+    embedsrcs = [":bundle"],  # keep
+    deps = ["//go/seleniumutil"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["network_benchmark.ts"],
+    visibility = ["//:__subpackages__"],
+)
