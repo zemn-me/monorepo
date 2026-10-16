@@ -230,14 +230,29 @@ Open the normal `/experiments/tiberian-sun` game, select the Tiberian Sun disc,
 and choose **New Campaign**. **Thomas Shadwell: Bio** is the third campaign,
 after the original GDI and Nod campaigns. There are no additional website pages.
 
-The website turns published `Bio.timeline` entries into six chronological acts.
-Dated records arrive as intercepted transmissions during combat. The operations
-alternate between a timed strike on a relay, defending an uplink against waves,
-and a base-building assault. Later acts rotate the battlefield and approaches.
-Destroying the enemy power plant disables its laser towers and delivers two
-Titans; destroying its relay cuts off further enemy waves. Base missions include
-factories, a starting budget, a harvester, and two Tiberium fields to expand into.
-Future-dated entries are excluded until their publication date.
+The website turns published `Bio.timeline` entries into six stable chronological
+chapters. New records join their era without moving older records into different
+missions. Each chapter translates work in the biography into a tactical problem:
+
+- **Night Shift (2009–2013):** provision the Grove hotel with an engineer, cut the
+  relay, and escort hospital evacuees through a lamplit town.
+- **Hack Fortress (2014–2017):** defend an uplink while a second team captures a
+  terminal to unlock armored reinforcements.
+- **Full Steam Ahead (2018–2019):** sever remote control and deliver an evidence
+  train through a defended rail yard; losing the engine fails the operation.
+- **Westbound (2020–2022):** escort a civilian convoy past Tiberium groves, fiends,
+  and visceroids, echoing the London-to-San-Francisco move.
+- **Trust Issues (2023–2024):** capture a quarantine terminal intact to reclaim hostile
+  laser defenses, then hold the perimeter against attacks.
+- **Lockdown (2025 onward):** capture two outbound gateways and destroy the relay.
+
+Short dated bio transmissions unlock after mission milestones. The operations
+are fictional interpretations; the underlying dates and titles come from the bio.
+Native city buildings, civilian teams, paved streets, gardens, local lamps,
+Tiberium trees, fauna and connected train cars supply the setting. Each chapter
+has its own ambient light. Power-plant destruction disables laser defenses;
+relay destruction cuts off reinforcement waves. Base missions include factories,
+a harvester and two resource fields. Future entries stay unpublished until due.
 
 Generated scenarios and `BATTLEWEB.INI` are ephemeral game data mounted alongside
 the freeware assets. The browser engine appends the extra battle definitions
@@ -248,5 +263,7 @@ continue to use the normal browser save directory.
 The campaign unit tests verify full timeline coverage, publication boundaries,
 distinct objectives, native resource encoding, and isolation from original campaign files.
 `TestBioCampaign` enters through the regular game menu, selects the third
-campaign, fights through the opening raid, reinforces the defense, and advances to
-the siege. It also observes harvesting income and native factory production.
+campaign and completes all six operations through the native victory credits and
+replay menu. It exercises engineer captures, civilian evacuation, the scripted train
+delivery, the wilderness convoy, the quarantine takeover, and both final gateways.
+It also observes harvesting income and native factory production.

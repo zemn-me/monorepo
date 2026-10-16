@@ -99,6 +99,13 @@ func TestBioCampaign(t *testing.T) {
 	if colored < 10000 {
 		t.Fatalf("mission terrain did not render: %d pixels", colored)
 	}
+	// Provision the hotel with one of the starting engineers. Civilians must
+	// physically traverse the mission before relay destruction can win.
+	p.click(269, 104)
+	p.click(200, 110)
+	for i := 0; i < 100; i++ {
+		p.advance()
+	}
 	// Select the strike force and destroy the power plant. This is a native
 	// attack order: victory now requires combat, not entering tagged cells.
 	p.mouse(265, 130, "mousePressed", 1)
@@ -118,8 +125,12 @@ func TestBioCampaign(t *testing.T) {
 		}
 	}
 	p.click(410, 535)
-	p.wait("destroying the relay advances to the defense operation", func() bool {
-		return strings.Contains(p.logs(), "Reading scenario: BIO02.INI")
+	p.wait("evacuating civilians and destroying the relay advances to Hack Fortress", func() bool {
+		logs := p.logs()
+		if strings.Contains(logs, "message.rml shown") {
+			t.Fatal("evacuation operation failed")
+		}
+		return strings.Contains(logs, "Reading scenario: BIO02.INI")
 	})
 	p.wait("defense briefing", func() bool { return strings.Count(p.logs(), "restate.rml shown") >= 2 })
 	p.wait("defense briefing dismissed", func() bool {
@@ -134,6 +145,8 @@ func TestBioCampaign(t *testing.T) {
 		}
 		return false
 	})
+	p.click(293, 140) // Engineer outside the construction yard.
+	p.click(70, 350)  // Capture the southern hacking terminal.
 	for i := 0; i < 100; i++ {
 		p.advance()
 	}
@@ -169,8 +182,12 @@ func TestBioCampaign(t *testing.T) {
 	for i := 0; i < 4; i++ {
 		p.click(760, 515)
 	} // Queue armor for the incoming waves.
-	p.wait("defending the uplink advances to the siege operation", func() bool {
-		return strings.Contains(p.logs(), "Reading scenario: BIO03.INI")
+	p.wait("capturing the terminal and defending the uplink advances to Full Steam Ahead", func() bool {
+		logs := p.logs()
+		if strings.Contains(logs, "message.rml shown") {
+			t.Fatal("capture-and-defense operation failed")
+		}
+		return strings.Contains(logs, "Reading scenario: BIO03.INI")
 	})
 
 	p.wait("siege briefing", func() bool { return strings.Count(p.logs(), "restate.rml shown") >= 3 })
@@ -214,5 +231,147 @@ func TestBioCampaign(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		p.advance()
 	}
+	// Clear the rail corridor before risking the evidence train. Its arrival,
+	// rather than base annihilation or a timer, must advance this chapter.
+	p.mouse(265, 130, "mousePressed", 1)
+	for i := 1; i <= 10; i++ {
+		p.mouse(265+i*21, 130+i*10, "mouseMoved", 1)
+		p.advance()
+	}
+	p.mouse(475, 230, "mouseReleased", 0)
+	p.advance()
+	p.click(465, 270)
+	for i := 0; i < 220; i++ {
+		p.advance()
+	}
+	if strings.Contains(p.logs(), "Reading scenario: BIO04.INI") {
+		t.Fatal("rail mission won before releasing the train")
+	}
+	p.click(410, 535)
+	p.wait("delivering the train advances to Westbound", func() bool {
+		logs := p.logs()
+		if strings.Contains(logs, "message.rml shown") {
+			t.Fatal("evidence train was lost")
+		}
+		return strings.Contains(logs, "Reading scenario: BIO04.INI")
+	})
+
+	// Continue through the wilderness rescue, quarantine takeover and final
+	// two-terminal lockdown using ordinary orders and mission briefings.
+	resume := func(chapter int) {
+		p.wait("next chapter briefing", func() bool { return strings.Count(p.logs(), "restate.rml shown") >= chapter })
+		p.wait("dismiss next chapter briefing", func() bool {
+			if strings.Count(p.logs(), "restate.rml closed") >= chapter {
+				return true
+			}
+			if err := canvas.SendKeys(selenium.EnterKey); err != nil {
+				t.Fatal(err)
+			}
+			for i := 0; i < 3; i++ {
+				p.advance()
+			}
+			return false
+		})
+		for i := 0; i < 50; i++ {
+			p.advance()
+		}
+	}
+	march := func(x1, y1, x2, y2 int) {
+		p.mouse(x1, y1, "mousePressed", 1)
+		for i := 1; i <= 10; i++ {
+			p.mouse(x1+(x2-x1)*i/10, y1+(y2-y1)*i/10, "mouseMoved", 1)
+			p.advance()
+		}
+		p.mouse(x2, y2, "mouseReleased", 0)
+		p.advance()
+	}
+	tick := func(count int) {
+		for i := 0; i < count; i++ {
+			p.advance()
+		}
+	}
+	save := func(name string) {
+		if data, err := driver.Screenshot(); err == nil {
+			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+				_ = os.WriteFile(filepath.Join(dir, name), data, 0644)
+			}
+		}
+	}
+	next := func(name string) {
+		p.wait("complete "+name, func() bool {
+			logs := p.logs()
+			if strings.Contains(logs, "message.rml shown") {
+				t.Fatal("mission failed before " + name)
+			}
+			return strings.Contains(logs, "Reading scenario: "+name)
+		})
+	}
+	resume(4)
+	save("bio-westbound.png")
+	march(265, 130, 405, 250)
+	p.click(465, 270)
+	tick(220)
+	p.click(80, 365) // Contact the waystation and release the convoy.
+	tick(180)
+	p.click(410, 535)
+	next("BIO05.INI")
+	resume(5)
+	p.click(293, 140)
+	p.click(70, 350)
+	tick(100)
+	p.click(775, 552)
+	for i := 0; i < 4; i++ {
+		p.click(760, 515)
+	}
+	tick(150)
+	save("bio-quarantine.png")
+	// Capturing the laser towers must not overload the starting power grid.
+	// The native radar switches to a faction logo on low power.
+	radar := p.screenshot()
+	green := 0
+	for y := 30; y < 130; y++ {
+		for x := 660; x < 780; x++ {
+			r, g, b, _ := radar.At(x, y).RGBA()
+			if g > 15000 && g > r*6/5 && g > b*6/5 {
+				green++
+			}
+		}
+	}
+	if green < 80 {
+		t.Fatalf("quarantine takeover left the radar without power: %d map pixels", green)
+	}
+	next("BIO06.INI")
+	resume(6)
+	p.click(293, 140)
+	p.click(70, 350)          // Southern outbound gateway.
+	march(310, 130, 475, 230) // Keep the second engineer out of the assault group.
+	p.click(465, 270)
+	tick(220)
+	p.click(269, 152)
+	p.click(584, 380) // Eastern outbound gateway.
+	tick(200)
+	save("bio-lockdown.png")
+	march(300, 150, 500, 350)
+	p.click(410, 535)
+	p.wait("all six operations completed", func() bool {
+		logs := p.logs()
+		if strings.Contains(logs, "message.rml shown") {
+			t.Fatal("final lockdown operation failed")
+		}
+		return strings.Count(logs, "BorrowedTime == 90") >= 6
+	})
+	tick(150)
+	if err := canvas.SendKeys(selenium.EscapeKey); err != nil {
+		t.Fatal(err)
+	} // Native end credits.
+	p.wait("return to the main menu after the finale", func() bool {
+		if strings.Contains(p.logs(), "message.rml shown") {
+			t.Fatal("finale ended in defeat")
+		}
+		p.mouse(400, 408, "mouseMoved", 0)
+		return p.white(400, 408)
+	})
+	p.click(400, 260)
+	p.wait("campaign can be replayed after completion", func() bool { return strings.Count(p.logs(), "campaign.rml opened") >= 2 })
 
 }

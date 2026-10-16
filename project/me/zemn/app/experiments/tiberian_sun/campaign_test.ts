@@ -37,7 +37,7 @@ describe('native bio campaign', () => {
 			expect(briefing?.length).toBeLessThan(1024);
 			for (const [archive, event] of mission.events.entries()) {
 				expect(ini).toContain(
-					`INTEL${archive}=1,13,0,${5 + archive * Math.min(12, Math.floor(150 / Math.max(1, mission.transmissions.length - 1)))}`
+					`INTEL${archive}=1,13,0,${8 + Math.floor(archive / 3) * 10}`
 				);
 				expect(ini).toContain(
 					`${100 + archive}=${event.date.toISOString().slice(0, 10)}`
@@ -82,15 +82,64 @@ describe('native bio campaign', () => {
 			'siege',
 		]);
 		const files = createBioCampaign(missions).files;
-		expect(files['BIO01.INI']).toContain('DEADLINE=1,14,0,0');
+		expect(files['BIO01.INI']).toContain('DONE=2,36,0,0,36,0,2');
+		expect(files['BIO01.INI']).toContain('RESCUE=1,1,0,0');
+		expect(files['BIO01.INI']).toContain('0=4,CIV1');
 		expect(files['BIO01.INI']).not.toContain(',GACNST,');
 		expect(files['BIO02.INI']).toContain('UPLINK=1,7,0,0');
-		expect(files['BIO02.INI']).toContain('DONE=1,14,0,0');
-		expect(files['BIO03.INI']).toContain('DONE=1,10,0,1');
+		expect(files['BIO02.INI']).toContain('DONE=2,14,0,0,36,0,1');
+		expect(files['BIO03.INI']).toContain('TRAINHOME=1,34,0,7');
+		expect(files['BIO03.INI']).toContain('TRAINLOST=1,48,0,0');
+		expect(files['BIO06.INI']).toContain('DONE=3,36,0,0,36,0,1,36,0,2');
+		expect(files['BIO04.INI']).toContain(',DOGGIE,');
+		expect(files['BIO04.INI']).toContain(',VISC_SML,');
+		for (const mission of missions) {
+			expect(files[mission.scenario]).toContain('[IsoMapPack3]');
+			expect(files[mission.scenario]).toContain('=TIBTRE01');
+			expect(files[mission.scenario]).toContain(',GALITE,');
+		}
 		for (const name of ['BIO02.INI', 'BIO03.INI']) {
 			expect(files[name]).toContain(',GACNST,');
 			expect(files[name]).toContain(',HARV,');
 			expect(files[name]).toContain('[OverlayPack]');
+		}
+	});
+	it('keeps existing chapters stable as new bio entries are published', () => {
+		const historical = bioMissions(new Date('2024-12-31T23:59:59Z'));
+		const current = bioMissions(now);
+		expect(historical).toHaveLength(5);
+		expect(current.slice(0, 5)).toEqual(historical);
+		expect(
+			current[0]?.events.some(event =>
+				text(event.title).includes('Grove Hotel')
+			)
+		).toBe(true);
+		expect(
+			current[2]?.events.some(event =>
+				text(event.title).includes('Steam Remote Code')
+			)
+		).toBe(true);
+		expect(
+			current[3]?.events.some(event =>
+				text(event.title).includes('Relocated to San Francisco')
+			)
+		).toBe(true);
+	});
+	it('keeps player buildings and objectives within the native playable diamond', () => {
+		for (const ini of Object.values(
+			createBioCampaign(bioMissions(now)).files
+		)) {
+			const structures =
+				ini.split('[Structures]\n')[1]?.split('\n\n')[0] ?? '';
+			for (const line of structures.trim().split('\n').filter(Boolean)) {
+				const fields = line.slice(line.indexOf('=') + 1).split(',');
+				if (fields[0] !== 'GDI' && fields[6] === 'None') continue;
+				const x = Number(fields[3]),
+					y = Number(fields[4]);
+				expect(x + y).toBeGreaterThan(48);
+				expect(x + y).toBeLessThanOrEqual(114);
+				expect(Math.abs(x - y)).toBeLessThan(36);
+			}
 		}
 	});
 	it('encodes resource cells in bounded native Format80 blocks', () => {
