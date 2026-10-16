@@ -8,7 +8,8 @@ export function createPeerTransport(signal: AbortSignal) {
 	let incoming: Uint8Array<ArrayBuffer>[] = [];
 	let queuedBytes = 0;
 	const state = {
-		status: 'Create an invitation, or paste an invitation from your opponent.',
+		status: '',
+		step: 'choose',
 		code: '',
 		connected: false,
 		host: false,
@@ -24,7 +25,8 @@ export function createPeerTransport(signal: AbortSignal) {
 		incoming = [];
 		queuedBytes = 0;
 		Object.assign(state, {
-			status: 'Create an invitation, or paste an invitation from your opponent.',
+			status: '',
+			step: 'choose',
 			code: '',
 			connected: false,
 			host: false,
@@ -51,7 +53,8 @@ export function createPeerTransport(signal: AbortSignal) {
 		next.onopen = () => {
 			if (token !== generation) return;
 			state.connected = true;
-			state.status = 'Connected. Continue to the game lobby.';
+			state.step = 'connected';
+			state.status = 'Your opponent is connected.';
 			console.info('WebRTC game channel connected');
 		};
 		next.onclose = () => {
@@ -79,7 +82,7 @@ export function createPeerTransport(signal: AbortSignal) {
 	function begin(host: boolean) {
 		reset();
 		state.host = host;
-		state.status = 'Preparing connection code…';
+		state.status = 'Preparing your code…';
 		const token = generation;
 		const connection = new RTCPeerConnection({
 			iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
@@ -89,7 +92,7 @@ export function createPeerTransport(signal: AbortSignal) {
 			if (token !== generation) return;
 			if (connection.connectionState === 'failed')
 				state.status =
-					'Direct connection failed. These networks may require a relay. Cancel and try another network.';
+					'Could not connect on these networks. Cancel and try another network.';
 		};
 		if (host)
 			attach(
@@ -142,12 +145,35 @@ export function createPeerTransport(signal: AbortSignal) {
 		if (token !== generation) return;
 		state.code =
 			'OPENTS1:' + btoa(JSON.stringify(connection.localDescription));
-		state.status = state.host
-			? 'Send your invitation to your opponent, then paste their reply below.'
-			: 'Send this reply to the host. Keep this screen open until connected.';
+		if (!state.connected)
+			state.step = state.host ? 'host-share' : 'guest-share';
+		state.status = state.connected ? 'Your opponent is connected.' : '';
 	}
-	async function perform(action: 'invite' | 'accept', text: string) {
+	async function perform(
+		action: 'invite' | 'join' | 'next' | 'back' | 'restart' | 'accept',
+		text: string
+	) {
 		if (state.busy) return;
+		if (action === 'restart') {
+			reset();
+			return;
+		}
+		if (action === 'join') {
+			reset();
+			state.step = 'guest-invite';
+			state.status = '';
+			return;
+		}
+		if (action === 'next' && state.step === 'host-share' && state.code) {
+			state.step = 'host-reply';
+			state.status = '';
+			return;
+		}
+		if (action === 'back' && state.step === 'host-reply') {
+			state.step = 'host-share';
+			state.status = '';
+			return;
+		}
 		let token = generation;
 		state.busy = true;
 		try {
@@ -155,6 +181,7 @@ export function createPeerTransport(signal: AbortSignal) {
 				const started = begin(true);
 				token = started.token;
 				state.busy = true;
+				state.step = 'host-share';
 				await started.connection.setLocalDescription(
 					await started.connection.createOffer()
 				);
@@ -162,16 +189,29 @@ export function createPeerTransport(signal: AbortSignal) {
 			} else if (action === 'accept') {
 				const code = text.trim();
 				if (code.length > 65536 || !code.startsWith('OPENTS1:'))
-					throw new Error('Paste a complete OpenTS connection code.');
+					throw new Error(
+						state.host
+							? 'Paste the complete reply code your opponent sent you.'
+							: 'Paste the complete invitation code from the host.'
+					);
 				if (code === state.code)
 					throw new Error(
 						'That is your code. Paste the code your opponent sent back.'
 					);
 				const description = decodeDescription(code);
+				if (state.host && description.type !== 'answer')
+					throw new Error(
+						'That is an invitation. Ask your opponent for their reply code.'
+					);
+				if (!state.host && description.type !== 'offer')
+					throw new Error(
+						'That is a reply. Ask the host for an invitation code.'
+					);
 				if (description.type === 'offer') {
 					const started = begin(false);
 					token = started.token;
 					state.busy = true;
+					state.step = 'guest-invite';
 					await started.connection.setRemoteDescription(description);
 					await started.connection.setLocalDescription(
 						await started.connection.createAnswer()
@@ -187,8 +227,10 @@ export function createPeerTransport(signal: AbortSignal) {
 							'Create an invitation before accepting a reply.'
 						);
 					await peer.setRemoteDescription(description);
-					if (token === generation && !state.connected)
-						state.status = 'Connecting directly to your opponent…';
+					if (token === generation && !state.connected) {
+						state.step = 'connecting';
+						state.status = 'Connecting to your opponent…';
+					}
 				}
 			}
 		} catch (error) {
@@ -230,7 +272,9 @@ function decodeDescription(code: string): RTCSessionDescriptionInit {
 	try {
 		value = JSON.parse(atob(code.slice(8)));
 	} catch {
-		throw new Error('Invalid connection code.');
+		throw new Error(
+			'This code is incomplete or invalid. Ask your opponent to copy it again.'
+		);
 	}
 	if (
 		typeof value !== 'object' ||
@@ -240,7 +284,7 @@ function decodeDescription(code: string): RTCSessionDescriptionInit {
 		!('type' in value) ||
 		(value.type !== 'offer' && value.type !== 'answer')
 	) {
-		throw new Error('Invalid connection description.');
+		throw new Error('This is not an invitation or reply code.');
 	}
 	return { type: value.type, sdp: value.sdp };
 }
