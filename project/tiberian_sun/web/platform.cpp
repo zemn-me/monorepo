@@ -28,7 +28,20 @@ void Show_Alert(char const *title, char const *text) { fprintf(stderr,"%s: %s\n"
 // CSS pixels keep the original pixel-art controls usable on high-density displays.
 EM_JS(int, Web_Window_Width, (), { return window.innerWidth; });
 EM_JS(int, Web_Window_Height, (), { return window.innerHeight; });
+// Use the logical frame's aspect, rather than SDL's rounded drawable size, so
+// containing the canvas cannot feed rounding errors back into the next resize.
+EM_JS(void, Web_Display_Aspect, (int width, int height), {
+    Module.canvas.style.setProperty('--game-aspect', String(width / height));
+});
 void Web_Display_Size(int &width, int &height) {
+    // Shell menus use fixed pixel artwork in both the legacy and Rml renderers.
+    // Let the browser contain-scale that canvas; gameplay still follows the viewport.
+    if (!GameActive) {
+        width = 800;
+        height = 600;
+        Web_Display_Aspect(width, height);
+        return;
+    }
     double w = std::max(1, Web_Window_Width());
     double h = std::max(1, Web_Window_Height());
     // Small windows retain the game's minimum usable area; very large displays
@@ -37,6 +50,7 @@ void Web_Display_Size(int &width, int &height) {
     scale = std::min(scale, std::min(4096.0 / w, 4096.0 / h));
     width = std::max(800, (int)std::lround(w * scale));
     height = std::max(600, (int)std::lround(h * scale));
+    Web_Display_Aspect(width, height);
 }
 
 bool Change_Display_Mode(int width, int height);

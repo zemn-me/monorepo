@@ -724,3 +724,14 @@ diff --git a/code/queue.cpp b/code/queue.cpp
  
  	/*
  	**	A deliberate mismatch waits for the startup suppression to expire, or the checksum
+diff --git a/code/ui/uienginehost.cpp b/code/ui/uienginehost.cpp
+--- a/code/ui/uienginehost.cpp
++++ b/code/ui/uienginehost.cpp
+@@ -60,2 +60,5 @@
+-			frame.ScaleX = scale.ScaleX;
+-			frame.ScaleY = scale.ScaleY;
++			// Scale menus independently of gameplay resolution. Rml uses the
++			// smaller ratio for artwork, fonts and controls, preserving aspect
++			// while its input stays in the same drawable coordinate system.
++			frame.ScaleX = (float)frame.Width / 800.0f;
++			frame.ScaleY = (float)frame.Height / 600.0f;
