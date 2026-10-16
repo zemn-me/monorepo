@@ -69,6 +69,10 @@ required checks. Record the failure class and test coverage in its description.
 
 - Bazel generates outputs; do not commit generated files. `//:base_defs`
   generates CSS module `.d.ts` types.
+- Write new code for JavaScript runtimes in TypeScript (`.ts`, or `.tsx`
+  for JSX). Do not add hand-written `.js`, `.mjs`, or `.cjs` source files.
+  Use the repository's TypeScript/Bazel rules to type-check sources and
+  compile any required JavaScript.
 - Code under `project/` should not import another project unless the logic
   is specific to that project (for example, the shared zemn.me API client).
   Put broadly reusable code in `ts/...` or another shared language root.

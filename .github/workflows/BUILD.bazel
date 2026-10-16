@@ -45,3 +45,12 @@ sh_test(
     },
     deps = ["@rules_shell//shell/runfiles"],
 )
+
+sh_test(
+    name = "bootstrap_bazel_remote_cache_test",
+    size = "small",
+    srcs = ["bootstrap_bazel_remote_cache_test.sh"],
+    data = ["bootstrap_bazel_remote_cache.sh"],
+    env = {"BOOTSTRAP": "$(rlocationpath :bootstrap_bazel_remote_cache.sh)"},
+    deps = ["@rules_shell//shell/runfiles"],
+)

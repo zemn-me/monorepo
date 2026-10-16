@@ -2,9 +2,11 @@
 
 CI secrets live in GCP Secret Manager via GitHub OIDC/WIF. Do not assume Azure Key Vault for this repo.
 
-PR Presubmit runs without secrets. Merge-queue Presubmit gets only the read-only
-BuildBuddy key; staging and submit get the full key. Enforce the PR exclusion in
-the GCP WIF policy as well as workflow step conditions.
+PR Presubmit uses the separate `github-presubmit-cache` WIF pool, granted only
+its read-only BuildBuddy key. Keep PR identities out of the deployment pool and
+service-account impersonation grants. Cached artifacts and the read-only key
+are accessible to PR code; cache only non-sensitive outputs. Presubmit disables
+cache and build-event uploads; staging and submit retain the writable key.
 
 Staging and Submit share `pulumi_deploy`; obsolete pending merge-group runs are
 removed by `cancel-obsolete-staging.yml`. Keep cleanup outside that concurrency
