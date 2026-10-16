@@ -81,6 +81,10 @@ export function startGame(
 		Promise.withResolvers<void>();
 	previousExit = exitComplete;
 	const lifetime = new AbortController();
+	// Right-click belongs to the game's map controls while this canvas is active.
+	canvas.addEventListener('contextmenu', event => event.preventDefault(), {
+		signal: lifetime.signal,
+	});
 	const webNetwork = createPeerTransport(lifetime.signal);
 	let engine: Engine | undefined;
 	let started = false;
