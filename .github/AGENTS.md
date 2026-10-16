@@ -30,3 +30,6 @@ out of dependency sections, which override Renovate's tool selection. The
 workflow reads its Renovate version from the tested devDependency.
 The pnpm bootstrap refreshes `bzl/pnpm/integrity.json` before Bazel starts,
 so new pnpm releases do not depend on rules_js's bundled version table.
+
+Validate workflow changes with `bazel test //.github/workflows/...`; actionlint
+checks expression contexts and workflow semantics alongside YAML lint.

@@ -21,6 +21,32 @@ md_files(
 )
 
 sh_test(
+    name = "actionlint_test",
+    size = "small",
+    srcs = ["actionlint_test.sh"],
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ) + [
+        "@com_github_rhysd_actionlint//cmd/actionlint",
+    ],
+    env = {
+        "ACTIONLINT": "$(rlocationpath @com_github_rhysd_actionlint//cmd/actionlint)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
+sh_test(
     name = "bootstrap_bazel_remote_cache_test",
     size = "small",
     srcs = ["bootstrap_bazel_remote_cache_test.sh"],
