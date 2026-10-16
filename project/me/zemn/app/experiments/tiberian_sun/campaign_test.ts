@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import {
 	bioMissions,
+	campaignTerrain,
 	createBioCampaign,
 	overlayPack,
 } from '#root/project/me/zemn/app/experiments/tiberian_sun/campaign.js';
@@ -139,6 +140,104 @@ describe('native bio campaign', () => {
 				expect(x + y).toBeGreaterThan(48);
 				expect(x + y).toBeLessThanOrEqual(114);
 				expect(Math.abs(x - y)).toBeLessThan(36);
+			}
+		}
+	});
+	it('connects every mission objective across real height changes', () => {
+		for (const mission of bioMissions(now)) {
+			const terrain = campaignTerrain(mission.act);
+			const start = terrain.get('26,26');
+			expect(start?.height).toBe(0);
+			expect([...terrain.values()].some(cell => cell.height === 4)).toBe(
+				true
+			);
+			expect([...terrain.values()].some(cell => cell.ramp !== 0)).toBe(
+				true
+			);
+			const reached = new Set(['26,26']);
+			const queue = [start!];
+			for (let i = 0; i < queue.length; i++) {
+				const cell = queue[i]!;
+				for (const [dx, dy] of [
+					[0, 1],
+					[1, 0],
+					[0, -1],
+					[-1, 0],
+				]) {
+					const key = `${cell.x + dx!},${cell.y + dy!}`;
+					const next = terrain.get(key);
+					if (
+						!next ||
+						next.x + next.y <= 48 ||
+						next.x + next.y > 114 ||
+						Math.abs(next.x - next.y) >= 36 ||
+						next.blocked ||
+						reached.has(key) ||
+						Math.abs(cell.height - next.height) > 1
+					)
+						continue;
+					reached.add(key);
+					queue.push(next);
+				}
+			}
+			for (const key of [
+				'22,27',
+				'30,40',
+				'42,31',
+				mission.act === 3 ? '44,36' : '44,40',
+				'18,34',
+				'42,44',
+			])
+				expect(reached.has(key)).toBe(true);
+			const ini = createBioCampaign([mission]).files[mission.scenario]!;
+			const structures = ini
+				.split('[Structures]\n')[1]!
+				.split('\n\n')[0]!;
+			for (const line of structures.trim().split('\n')) {
+				const fields = line.slice(line.indexOf('=') + 1).split(',');
+				const x = Number(fields[3]),
+					y = Number(fields[4]);
+				// Native foundations must stay level across their entire footprint.
+				const foundations: Record<string, readonly [number, number]> = {
+					GACNST: [3, 3],
+					GAPOWR: [2, 2],
+					NAPOWR: [2, 2],
+					GAWEAP: [4, 3],
+					GAPILE: [2, 2],
+					GARADR: [2, 2],
+					NARADR: [2, 2],
+					CA0007: [1, 2],
+					CITY02: [2, 3],
+				};
+				const [width, depth] = foundations[fields[1]!] ?? [1, 1];
+				const height = terrain.get(`${x},${y}`)?.height;
+				for (let dy = 0; dy < depth; dy++)
+					for (let dx = 0; dx < width; dx++) {
+						const ground = terrain.get(`${x + dx},${y + dy}`);
+						expect({
+							type: fields[1],
+							blocked: ground?.blocked,
+							ramp: ground?.ramp,
+							height: ground?.height,
+						}).toEqual({
+							type: fields[1],
+							blocked: false,
+							ramp: 0,
+							height,
+						});
+					}
+			}
+			if (mission.act === 3) {
+				for (let x = 15; x <= 55; x++) {
+					const rail = terrain.get(`${x},43`);
+					expect(rail?.height).toBe(0);
+					expect(rail?.ramp).toBe(0);
+					expect(rail?.blocked).toBe(false);
+				}
+			} else {
+				const wall = mission.operation === 'defend' ? '20,36' : '37,40';
+				expect(terrain.get(wall)?.blocked).toBe(true);
+				expect(reached.has(wall)).toBe(false);
 			}
 		}
 	});

@@ -250,7 +250,10 @@ Short dated bio transmissions unlock after mission milestones. The operations
 are fictional interpretations; the underlying dates and titles come from the bio.
 Native city buildings, civilian teams, paved streets, gardens, local lamps,
 Tiberium trees, fauna and connected train cars supply the setting. Each chapter
-has its own ambient light. Power-plant destruction disables laser defenses;
+has its own ambient light. Four-level native escarpments block direct ground
+movement: separate ramps connect the elevated districts, defensive uplink bluffs,
+and civilian convoy route. The evidence train runs through a low cutting beneath
+sloping banks. Power-plant destruction disables laser defenses;
 relay destruction cuts off reinforcement waves. Base missions include factories,
 a harvester and two resource fields. Future entries stay unpublished until due.
 

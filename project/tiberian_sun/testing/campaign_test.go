@@ -124,7 +124,7 @@ func TestBioCampaign(t *testing.T) {
 			_ = os.WriteFile(filepath.Join(dir, "bio-power-breach.png"), data, 0644)
 		}
 	}
-	p.click(410, 535)
+	p.click(410, 487)
 	p.wait("evacuating civilians and destroying the relay advances to Hack Fortress", func() bool {
 		logs := p.logs()
 		if strings.Contains(logs, "message.rml shown") {
@@ -247,7 +247,7 @@ func TestBioCampaign(t *testing.T) {
 	if strings.Contains(p.logs(), "Reading scenario: BIO04.INI") {
 		t.Fatal("rail mission won before releasing the train")
 	}
-	p.click(410, 535)
+	p.click(506, 439) // Relay on the northern bank above the railway.
 	p.wait("delivering the train advances to Westbound", func() bool {
 		logs := p.logs()
 		if strings.Contains(logs, "message.rml shown") {
@@ -311,9 +311,14 @@ func TestBioCampaign(t *testing.T) {
 	march(265, 130, 405, 250)
 	p.click(465, 270)
 	tick(220)
-	p.click(80, 365) // Contact the waystation and release the convoy.
+	march(265, 70, 520, 350) // Bring the power-cut reinforcements into the assault.
+	p.click(365, 340)        // Take the northern ramp, away from the fiend grove.
+	tick(100)
+	p.click(410, 487) // Clear the high district before exposing the convoy.
+	tick(240)
+	p.click(80, 365) // Contact the waystation after securing the pass.
 	tick(180)
-	p.click(410, 535)
+	save("bio-convoy-descent.png")
 	next("BIO05.INI")
 	resume(5)
 	p.click(293, 140)
@@ -338,6 +343,10 @@ func TestBioCampaign(t *testing.T) {
 		}
 	}
 	if green < 80 {
+		p.mouse(1, 300, "mouseMoved", 0)
+		tick(50)
+		p.mouse(320, 300, "mouseMoved", 0)
+		save("bio-bluff-power-failure.png")
 		t.Fatalf("quarantine takeover left the radar without power: %d map pixels", green)
 	}
 	next("BIO06.INI")
@@ -348,11 +357,11 @@ func TestBioCampaign(t *testing.T) {
 	p.click(465, 270)
 	tick(220)
 	p.click(269, 152)
-	p.click(584, 380) // Eastern outbound gateway.
+	p.click(584, 332) // Eastern outbound gateway.
 	tick(200)
 	save("bio-lockdown.png")
 	march(300, 150, 500, 350)
-	p.click(410, 535)
+	p.click(410, 487)
 	p.wait("all six operations completed", func() bool {
 		logs := p.logs()
 		if strings.Contains(logs, "message.rml shown") {
@@ -371,6 +380,9 @@ func TestBioCampaign(t *testing.T) {
 		p.mouse(400, 408, "mouseMoved", 0)
 		return p.white(400, 408)
 	})
+	// Native bitmap menus resolve clicks from the last processed hover.
+	p.mouse(400, 260, "mouseMoved", 0)
+	tick(3)
 	p.click(400, 260)
 	p.wait("campaign can be replayed after completion", func() bool { return strings.Count(p.logs(), "campaign.rml opened") >= 2 })
 

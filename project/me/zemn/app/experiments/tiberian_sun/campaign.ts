@@ -25,42 +25,42 @@ const chapters = [
 		name: 'Night Shift',
 		operation: 'raid',
 		briefing:
-			'Watford, after dark. Your first job is to get the network working. Send an engineer into the Grove hotel (west of your troops) to provision the evacuation route. Destroy the Nod relay, then cover the hospital civilians as they walk back to the hotel. The eastern power plant feeds the lasers. Save the patients: no evacuation, no victory.',
+			'Watford, after dark. Your first job is to get the network working. Send an engineer into the Grove hotel (west of your troops) to provision the evacuation route. Destroy the Nod relay, then cover the hospital civilians as they walk back to the hotel. The power plant feeds the lasers above the escarpment. Assault the northern ramp or flank along the southern approach. Save the patients: no evacuation, no victory.',
 	},
 	{
 		through: 2017,
 		name: 'Hack Fortress',
 		operation: 'defend',
 		briefing:
-			'Two games, one team. Hold your uplink for three minutes AND capture the field terminal beside the southern settlement with an engineer. The hacking team unlocks two Titans for the battlefield team. Destroying the Nod relay cuts off their waves. Your Twitch and early security years become a fight over who controls the network.',
+			'Two games, one team. Hold your uplink for three minutes AND capture the field terminal beside the southern settlement with an engineer. The hacking team unlocks two Titans for the battlefield team. Destroying the Nod relay cuts off their waves. Your uplink sits on the western bluff. Hold the ramp mouths while your hacking team works below.',
 	},
 	{
 		through: 2019,
 		name: 'Full Steam Ahead',
 		operation: 'siege',
 		briefing:
-			'A rail yard carries a very literal payload. Destroy the Nod relay to sever remote control, which releases the evidence train toward the eastern signal. Escort it through the rail yard. Keep the engine alive. Clear the laser batteries before moving: the train is valuable evidence, not a tank. Inspired by the Steam remote-code-execution research.',
+			'A rail yard carries a very literal payload. Destroy the Nod relay to sever remote control, which releases the evidence train toward the eastern signal. Escort it through the low railway cutting. Clear the northern ridge before releasing it; enemies on the banks overlook the train. Clear the laser batteries before moving: the train is valuable evidence, not a tank. Inspired by the Steam remote-code-execution research.',
 	},
 	{
 		through: 2022,
 		name: 'Westbound',
 		operation: 'raid',
 		briefing:
-			'London to San Francisco, through the wrong kind of green belt. Reach the lit waystation south of the woods to release the civilian convoy. Escort it to your landing zone and destroy the Nod relay. Fiends own the Tiberium groves: the short route is dangerous for infantry. Cut the eastern power plant to get armored support.',
+			'London to San Francisco, through the wrong kind of green belt. Use your armored reinforcements to clear the northern ramp and ridge, then reach the lit waystation south of the woods to release the civilian convoy. Escort it to your landing zone and destroy the Nod relay. The convoy must descend the eastern ridge through the southern pass. Cover the ramp mouth; fiends own the Tiberium groves. Cut the eastern power plant to get armored support.',
 	},
 	{
 		through: 2024,
 		name: 'Trust Issues',
 		operation: 'defend',
 		briefing:
-			'An apparently harmless workspace has crossed the perimeter. Capture the southern quarantine terminal with an engineer, then keep your uplink alive for three minutes. Seize the control plane intact: shelling the terminal loses the mission. Capturing it turns the hostile laser defenses against the attackers. A mission about workspace trust, security engineering, and building at OpenAI.',
+			'An apparently harmless workspace has crossed the perimeter. Capture the southern quarantine terminal with an engineer, then keep your uplink alive for three minutes. Seize the control plane intact: shelling the terminal loses the mission. Capturing it turns the hostile laser defenses against the attackers. Your uplink overlooks the valley from the western bluff. The terminal below is exposed: protect both the ramp and your engineer.',
 	},
 	{
 		through: Infinity,
 		name: 'Lockdown',
 		operation: 'siege',
 		briefing:
-			'The city is an agent with too many permissions. Capture BOTH perimeter terminals with engineers to close its outbound routes, then destroy the central relay. Cutting a power supply is useful; razing the whole city is not. Keep civilians out of the crossfire. The last chapter grows with the bio, including the work on prompt injection and data exfiltration.',
+			'The city is an agent with too many permissions. Capture BOTH perimeter terminals with engineers to close its outbound routes, then destroy the central relay. Cutting a power supply is useful; razing the whole city is not. Keep civilians out of the crossfire. The eastern gateway and relay occupy the high district. Use the narrow northern ramp or take the longer southern flank.',
 	},
 ] as const;
 
@@ -90,6 +90,214 @@ export function bioMissions(now = new Date()): BioMission[] {
 			},
 		];
 	});
+}
+
+interface CampaignCell {
+	readonly x: number;
+	readonly y: number;
+	readonly tile: number;
+	readonly subTile: number;
+	readonly height: number;
+	readonly ramp: number;
+	readonly blocked: boolean;
+}
+
+// Temperate theater's native cliff/ramp pieces. These are footprint metadata,
+// not artwork: the existing game assets supply rendering and movement rules.
+// Entries are [sub-tile, elevation, ramp, impassable] in row-major order.
+const rampPieces: Readonly<
+	Record<
+		number,
+		{
+			width: number;
+			cells: readonly (readonly [number, number, number, boolean])[];
+		}
+	>
+> = {
+	405: {
+		width: 4,
+		cells: [
+			[0, 3, 3, false],
+			[1, 2, 3, false],
+			[2, 1, 3, false],
+			[3, 0, 3, false],
+			[4, 3, 10, false],
+			[5, 3, 2, true],
+			[6, 0, 4, true],
+			[7, 0, 7, false],
+			[9, 4, 0, true],
+			[10, 0, 0, true],
+		],
+	},
+	406: {
+		width: 4,
+		cells: [
+			[1, 4, 0, true],
+			[2, 0, 0, true],
+			[4, 3, 11, false],
+			[5, 3, 4, true],
+			[6, 0, 2, true],
+			[7, 0, 6, false],
+			[8, 3, 3, false],
+			[9, 2, 3, false],
+			[10, 1, 3, false],
+			[11, 0, 3, false],
+		],
+	},
+	410: {
+		width: 4,
+		cells: [
+			[1, 0, 0, true],
+			[2, 4, 0, true],
+			[4, 0, 5, false],
+			[5, 0, 0, true],
+			[6, 3, 4, true],
+			[7, 3, 12, false],
+			[8, 0, 1, false],
+			[9, 1, 1, false],
+			[10, 2, 1, false],
+			[11, 3, 1, false],
+		],
+	},
+	411: {
+		width: 4,
+		cells: [
+			[0, 0, 1, false],
+			[1, 1, 1, false],
+			[2, 2, 1, false],
+			[3, 3, 1, false],
+			[4, 0, 8, false],
+			[5, 0, 4, true],
+			[9, 0, 0, true],
+		],
+	},
+	412: {
+		width: 2,
+		cells: [
+			[0, 3, 2, true],
+			[1, 3, 9, false],
+			[2, 4, 0, true],
+		],
+	},
+};
+
+export function campaignTerrain(act: number): Map<string, CampaignCell> {
+	const cells = new Map<string, CampaignCell>();
+	const put = (
+		x: number,
+		y: number,
+		tile: number,
+		height: number,
+		subTile = 0,
+		ramp = 0,
+		blocked = false
+	) => {
+		cells.set(`${x},${y}`, { x, y, tile, subTile, height, ramp, blocked });
+	};
+	const defense = act === 2 || act === 5;
+	const edge = defense ? 20 : 37;
+	const bank = (x: number, y: number) =>
+		Math.max(0, Math.min(4, x - 36, Math.max(43 - y, y - 45)));
+	// Corner ordering and ramp numbers match the engine's deformation grid:
+	// NW, NE, SE, SW. Shared corner heights prevent cracks between hill tiles.
+	const slopes = [0, 7, 8, 4, 5, 18, 1, 12, 6, 3, 17, 11, 2, 10, 9, 0];
+	for (let y = 1; y < 80; y++)
+		for (let x = 1; x < 80; x++) {
+			if (x + y <= 40 || x + y > 120 || Math.abs(x - y) >= 40) continue;
+			const road =
+				act === 4
+					? x >= 30 && x <= 32 && y >= 25 && y <= 45
+					: (y >= 31 && y <= 33 && x >= 21 && x <= 51) ||
+						(x >= 32 && x <= 34 && y >= 23 && y <= 46);
+			const garden =
+				(x - 22) ** 2 + (y - 25) ** 2 < 38 ||
+				(x - 27) ** 2 + (y - 47) ** 2 < 35;
+			const waste = (x - 40) ** 2 + (y - 48) ** 2 < 65;
+			let height = defense ? (x <= edge ? 4 : 0) : x >= edge ? 4 : 0;
+			let ramp = 0;
+			if (act === 3) {
+				const corners = [
+					bank(x, y),
+					bank(x + 1, y),
+					bank(x + 1, y + 1),
+					bank(x, y + 1),
+				];
+				height = Math.min(...corners);
+				const mask = corners.reduce(
+					(mask, corner, i) =>
+						mask | ((corner > height ? 1 : 0) << i),
+					0
+				);
+				ramp = slopes[mask] ?? 0;
+			}
+			put(
+				x,
+				y,
+				ramp ? 39 + ramp : road ? 671 : garden ? 626 : waste ? 150 : 0,
+				height,
+				0,
+				ramp
+			);
+		}
+	if (act === 3) return cells;
+	const stamp = (tile: number, x: number, y: number) => {
+		const piece = rampPieces[tile];
+		if (!piece) throw new Error(`Unknown ramp piece ${tile}`);
+		for (const [subTile, height, ramp, blocked] of piece.cells)
+			put(
+				x + (subTile % piece.width),
+				y + Math.floor(subTile / piece.width),
+				tile,
+				height,
+				subTile,
+				ramp,
+				blocked
+			);
+	};
+	// A real four-level cliff stops ground movement. Two separated ramps let
+	// players choose a direct assault or a longer flank, and defend either mouth.
+	for (let y = 1; y < 80; y++) {
+		if (defense) {
+			put(edge, y, 77, 4, 0, 0, true); // CLIFF18: high western rim.
+			put(edge + 1, y, 77, 0, 1, 0, true);
+		} else put(edge, y, 97, 4, 0, 0, true); // CLIFF38: high eastern rim.
+	}
+	const passes = defense
+		? [
+				[28, 35],
+				[37, 45],
+			]
+		: act === 6
+			? [
+					[30, 37],
+					[43, 51],
+				]
+			: [
+					[30, 38],
+					[42, 50],
+				];
+	for (const [start, end] of passes) {
+		if (start === undefined || end === undefined) continue;
+		// Remove the wall across the complete ramp footprint before stamping
+		// its asymmetric native end caps and four-cell sloping carriageway.
+		for (let y = start; y <= end; y++)
+			for (let x = edge - 2; x <= edge + 2; x++)
+				put(x, y, 0, defense ? (x <= edge ? 4 : 0) : x >= edge ? 4 : 0);
+		if (defense) {
+			stamp(406, edge - 1, start);
+			stamp(405, edge - 1, end - 2);
+			for (let y = start + 3; y < end - 2; y++)
+				for (let i = 0; i < 4; i++)
+					put(edge - 1 + i, y, 42, 3 - i, 0, 3);
+		} else {
+			stamp(410, edge - 2, start);
+			stamp(411, edge - 2, end - 2);
+			stamp(412, edge, end - 1);
+			for (let y = start + 3; y < end - 2; y++)
+				for (let i = 0; i < 4; i++) put(edge - 2 + i, y, 40, i, 0, 1);
+		}
+	}
+	return cells;
 }
 
 const section = (name: string, lines: readonly string[]) =>
@@ -193,7 +401,7 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 				'Send an engineer into the western hotel. Escort the hospital evacuees home and destroy the Nod relay. Power plant: optional blackout.',
 				'Capture the southern terminal with an engineer AND defend your uplink for 3:00. Hacking unlocks Titans. Relay stops waves.',
 				'Destroy the Nod relay to release the evidence train. Escort it to the eastern signal. Do not lose the locomotive.',
-				'Reach the southern waystation. Escort civilians to the landing zone and destroy the relay. Avoid the fiend groves.',
+				'Clear the northern ramp with your reinforced armor, then contact the southern waystation. Cover the convoy as it descends.',
 				'Capture the southern quarantine terminal intact to reclaim the laser defenses. Hold your uplink for 3:00.',
 				'Capture both perimeter terminals with engineers. Destroy the relay to finish Lockdown.',
 			][mission.act - 1]
@@ -331,6 +539,7 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 			teamAction(i % 2 ? 'WEST' : 'EAST'),
 		])
 	);
+	const landscape = campaignTerrain(mission.act);
 	const structures: string[] = [];
 	const units: string[] = [];
 	const infantry: string[] = [];
@@ -340,10 +549,25 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 		x: number,
 		y: number,
 		tag = 'None'
-	) =>
+	) => {
+		if (owner === 'Neutral') {
+			const height = landscape.get(`${x},${y}`)?.height;
+			for (let dy = 0; dy < 3; dy++)
+				for (let dx = 0; dx < 3; dx++) {
+					const ground = landscape.get(`${x + dx},${y + dy}`);
+					if (
+						!ground ||
+						ground.blocked ||
+						ground.ramp ||
+						ground.height !== height
+					)
+						return;
+				}
+		}
 		structures.push(
 			`${structures.length}=${owner},${type},256,${position(x, y).join(',')},0,${tag},1,0,1,${type === 'GACTWR' ? 1 : 0},0,${type === 'GACTWR' ? 'GAVULC' : 'None'},None,None,0,0`
 		);
+	};
 	const unit = (
 		owner: string,
 		type: string,
@@ -368,11 +592,11 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 			`${infantry.length}=${owner},${type},256,${position(x, y).join(',')},0,${order},0,${tag},0,-1,0,1,1`
 		);
 	building('Nod', 'NAPOWR', 34, 28, 'POWER_TAG');
-	building('Nod', 'NARADR', 44, 40, 'RELAY_TAG');
+	building('Nod', 'NARADR', 44, rail ? 36 : 40, 'RELAY_TAG');
 	building(
 		'Nod',
 		'NALASR',
-		39,
+		rail ? 40 : 39,
 		35,
 		mission.act === 5 ? 'RECLAIM_TAG' : 'None'
 	);
@@ -384,16 +608,27 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 		mission.act === 5 ? 'RECLAIM_TAG' : 'None'
 	);
 	if (!raid) {
-		building('Nod', 'NAHAND', 46, rail ? 47 : 43);
+		building('Nod', 'NAHAND', 46, rail ? 51 : 43);
 		building('GDI', 'GACNST', 23, 26);
-		building('GDI', 'GAPOWR', 22, 29);
-		building('GDI', 'GAPOWR', 18, 31);
+		building('GDI', 'GAPOWR', defense ? 23 : 22, defense ? 31 : 29);
+		building('GDI', 'GAPOWR', defense ? 17 : 18, defense ? 41 : 31);
 		building('GDI', 'GAPILE', 27, 29);
-		building('GDI', 'PROC', 22, 34);
+		building('GDI', 'PROC', defense ? 25 : 22, defense ? 35 : 34);
 		building('GDI', 'GAWEAP', 29, 34);
-		building('GDI', 'GARADR', 18, 34, defense ? 'UPLINK_TAG' : 'None');
-		unit('GDI', 'HARV', 26, 36, 'Harvest');
+		building(
+			'GDI',
+			'GARADR',
+			defense ? 17 : 18,
+			defense ? 38 : 34,
+			defense ? 'UPLINK_TAG' : 'None'
+		);
+		unit('GDI', 'HARV', defense ? 28 : 26, defense ? 38 : 36, 'Harvest');
 		building('GDI', 'GACTWR', 32, 29);
+		if (defense) {
+			building('GDI', 'GACTWR', 18, 40);
+			// The exposed bluff and reclaimed lasers need a reserve under fire.
+			building('GDI', 'GAPOWR', 29, 31);
+		}
 	}
 	unit('GDI', 'MMCH', 28, 26);
 	if (!defense) unit('GDI', 'MMCH', 29, 27);
@@ -438,8 +673,8 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 				[39, 28, 'CITY03'],
 				[42, 28, 'CITY12'],
 				[47, 32, 'CITY01'],
-				[41, 45, 'CITY11'],
-				[48, 47, 'CITY04'],
+				[41, rail ? 51 : 45, 'CITY11'],
+				[48, rail ? 51 : 47, 'CITY04'],
 				[20, 44, 'CA0013'],
 			]) as readonly (readonly [number, number, string])[])
 		building('Neutral', type, x, y);
@@ -454,8 +689,8 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 		building('Neutral', 'GALITE', x, y);
 		soldier('Neutral', 'CIV1', x + 1, y + 1, 'Area Guard');
 	}
-	building('Nod', 'REDLAMP', 38, 34);
-	building('Neutral', 'INGRNLMP', 38, 48);
+	building('Nod', 'REDLAMP', 40, 34);
+	building('Neutral', 'INGRNLMP', 42, 50);
 	if (mission.act === 1 || capture) {
 		soldier(
 			'GDI',
@@ -491,35 +726,23 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 		terrain.push(`${cell(35, y)}=TREE0${(y % 3) + 1}`);
 		if (y % 2) terrain.push(`${cell(36, y)}=TREE02`);
 	}
-	terrain.push(`${cell(38, 48)}=TIBTRE01`);
+	terrain.push(`${cell(42, 50)}=TIBTRE01`);
 	for (let x = 17; x < 31; x += 2)
 		terrain.push(`${cell(x, 46 + (x % 3))}=TREE0${(x % 3) + 1}`);
 	if (mission.act === 4 || mission.act === 6) {
-		soldier('Special', 'DOGGIE', 37, 47, 'Area Guard');
+		soldier('Special', 'DOGGIE', 40, 47, 'Area Guard');
 		soldier('Special', 'DOGGIE', 40, 49, 'Area Guard');
 		unit('Special', 'VISC_SML', 44, 49, 'Area Guard');
 		unit('Special', 'VISC_SML', 46, 50, 'Area Guard');
 	}
-	// Native uncompressed map records: int16 x/y, int32 tile, byte sub-tile,
-	// byte elevation, terminated by CELL_NONE. Single-cell LAT tiles make roads
-	// and gardens continuous without copying terrain from shipped campaign maps.
+	// Trees and ambient props must never obstruct the cliff ramps.
+	const openGround = (x: number, y: number) => {
+		const ground = landscape.get(`${x},${y}`);
+		return ground !== undefined && ground.ramp === 0 && !ground.blocked;
+	};
 	const tiles: number[] = [];
-	for (let y = 14; y < 63; y++)
-		for (let x = 12; x < 63; x++) {
-			if (x + y <= 42 || x + y >= 111 || Math.abs(x - y) >= 34) continue;
-			const city = mission.act !== 4;
-			const road = city
-				? (y >= 31 && y <= 33 && x >= 21 && x <= 51) ||
-					(x >= 32 && x <= 34 && y >= 23 && y <= 46)
-				: x >= 30 && x <= 32 && y >= 25 && y <= 45;
-			const garden =
-				(x - 22) ** 2 + (y - 25) ** 2 < 38 ||
-				(x - 27) ** 2 + (y - 47) ** 2 < 35;
-			const waste = (x - 40) ** 2 + (y - 48) ** 2 < 65;
-			const tile = road ? 671 : garden ? 626 : waste ? 150 : null;
-			if (tile !== null)
-				tiles.push(x, 0, y, 0, tile & 255, tile >> 8, 0, 0, 0, 0);
-		}
+	for (const { x, y, tile, subTile, height } of landscape.values())
+		tiles.push(x, 0, y, 0, tile & 255, tile >> 8, 0, 0, subTile, height);
 	tiles.push(0, 0, 0, 0);
 
 	// The starting field is safe; a larger reserve beyond the woods rewards
@@ -534,7 +757,10 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 			continue;
 		for (let y = cy - radius; y <= cy + radius; y++)
 			for (let x = cx - radius; x <= cx + radius; x++)
-				if ((x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2) {
+				if (
+					(x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2 &&
+					openGround(x, y)
+				) {
 					const [a, b] = position(x, y);
 					overlays[b * 512 + a] = 105; // Engine OVERLAY_TIBERIUM01 (green Tiberium).
 					density[b * 512 + a] = 11;
@@ -638,7 +864,13 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 		section('Structures', structures),
 		section('Units', units),
 		section('Infantry', infantry),
-		section('Terrain', terrain),
+		section(
+			'Terrain',
+			terrain.filter(line => {
+				const cell = Number(line.split('=')[0]);
+				return openGround(cell % 1000, Math.floor(cell / 1000));
+			})
+		),
 		section('IsoMapPack3', packedLines(tiles)),
 		section('CellTags', cellTags),
 		section('OverlayPack', overlayPack(overlays)),
@@ -648,11 +880,11 @@ export function missionINI(mission: BioMission, next?: BioMission): string {
 			[
 				[26, 26],
 				[34, 28],
-				[44, 40],
+				[44, rail ? 36 : 40],
 				[52, 29],
 				[24, 48],
 				[23, 24],
-				[33, 41],
+				[mission.act === 4 ? 42 : 33, mission.act === 4 ? 44 : 41],
 				rail ? [53, 43] : [30, 40],
 				[26, 26],
 				[33, 32],
