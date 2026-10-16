@@ -223,11 +223,14 @@ func playFreeware(t *testing.T, mode string) {
 		return (float64(menuWidth)-800*scale)/2 + float64(x)*scale,
 			(float64(menuHeight)-600*scale)/2 + float64(y)*scale
 	}
-	waitPixels := func(label string, rect image.Rectangle, predicate func(uint32, uint32, uint32) bool, minimum int) {
+	waitPixels := func(label string, rect image.Rectangle, predicate func(uint32, uint32, uint32) bool, minimum int, before ...func()) {
 		t.Helper()
 		var count int
 
 		err := wait(func(selenium.WebDriver) (bool, error) {
+			for _, prepare := range before {
+				prepare()
+			}
 			frame := snapshot()
 			count = 0
 			for y := rect.Min.Y; y < rect.Max.Y; y++ {
@@ -254,6 +257,11 @@ func playFreeware(t *testing.T, mode string) {
 			t.Fatal(err)
 		}
 		box := rect.([]interface{})
+		if mode == "menus" {
+			// Rml also scales its 800x600 layout inside gameplay-sized canvases.
+			mx, my := menuPoint(x, y)
+			return int(mx), int(my)
+		}
 		px := int(box[0].(float64) + float64(x)*box[2].(float64)/800)
 		py := int(box[1].(float64) + float64(y)*box[3].(float64)/600)
 		return px, py
@@ -305,8 +313,14 @@ func playFreeware(t *testing.T, mode string) {
 				layout, _ := driver.ExecuteScript("const c=arguments[0], r=c.getBoundingClientRect(); return JSON.stringify({width:c.width,height:c.height,rect:r.toJSON(),viewport:[innerWidth,innerHeight],aspect:c.style.getPropertyValue('--game-aspect')})", []interface{}{canvas})
 				t.Fatalf("menu contain at %dx%d: %v; %v", menuWidth, menuHeight, err, layout)
 			}
-			mouse(120, 110, false)
-			waitPixels("resized selector hover", image.Rect(105, 102, 140, 120), white, 30)
+			minimum := 30
+			if menuWidth < 800 {
+				// Downsampling antialiases the thin highlight strokes on phones.
+				minimum = 15
+			}
+			// CSS settles before SDL consumes its resize event. Keep moving the
+			// pointer until the native highlight proves the new scale is ready.
+			waitPixels("resized selector hover", image.Rect(105, 102, 140, 120), white, minimum, func() { mouse(120, 110, false) })
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
 				shot, err := driver.Screenshot()
 				if err != nil {

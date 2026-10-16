@@ -18,9 +18,10 @@ API, and mounts the user directory on IndexedDB. It starts the engine with
 `-DATADIR=/game -USERDIR=/save -WIN -XCC`; engine output and errors go to the browser console. Game data uses the site's content-addressed asset cache.
 
 The game fills the browser viewport. Quitting from its menu returns to the
-previous page, or the experiments index when the tab has no previous page. Shell
-menus retain their 800×600 canvas and scale to fit the window with centered
-letterboxing, keeping artwork and pointer targets aligned on large displays.
+previous page, or the experiments index when the tab has no previous page. Menus
+scale from an 800×600 reference to fit the window with centered letterboxing,
+keeping artwork and pointer targets aligned on large displays. Rml setup menus
+and in-game dialogs scale independently of the gameplay resolution.
 Gameplay rendering follows the viewport in CSS pixels, including live window
 resizing, with an 800×600 minimum and a 4096-pixel maximum edge; smaller windows
 scale the minimum frame to fit without distortion.
