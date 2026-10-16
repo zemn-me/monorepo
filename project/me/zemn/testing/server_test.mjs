@@ -308,3 +308,11 @@ test('Tiberian Sun renders a hydratable React page with source-compiled assets',
         }
     }
 });
+
+
+test('bio campaign does not add a website page or homepage link', async () => {
+	const removed = await request('/experiments/tiberian-sun/bio');
+	assert.equal(removed.status, 404);
+	const home = await request('/');
+	assert.doesNotMatch(await home.text(), /experiments\/tiberian-sun\/bio/);
+});

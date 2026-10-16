@@ -7,7 +7,7 @@ export default {
 		...getStaticPaths().filter(
 			path =>
 				!/^\/(auth|journal|admin|callback|key|healthz)(\/|$)/.test(path) &&
-				!path.startsWith('/experiments/tiberian-sun')
+				path !== '/experiments/tiberian-sun'
 		),
 		...[
 			'/src',

@@ -105,11 +105,6 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 		title: 'Games',
 		experiments: [
 			{
-				href: '/experiments/tiberian-sun/bio',
-				title: 'A life in the field',
-				description: 'Explore my bio in a custom Tiberian Sun campaign.',
-			},
-			{
 				href: '/experiments/tiberian-sun',
 				title: 'Tiberian Sun',
 				description: 'Play the freeware Tiberian Sun in your browser.',

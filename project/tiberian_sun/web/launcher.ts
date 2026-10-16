@@ -12,7 +12,6 @@ export interface GameAssets {
 	readonly gameData: string;
 }
 export interface GameCampaign {
-	readonly scenario: string;
 	readonly files: Readonly<Record<string, string>>;
 }
 
@@ -182,10 +181,6 @@ export function startGame(
 						throw new Error('Invalid campaign filename');
 					loaded.FS.writeFile('/game/' + name, contents);
 				}
-				if (!Object.hasOwn(campaign.files, campaign.scenario))
-					throw new Error('Missing campaign scenario');
-				loaded.FS.writeFile('/game/SPAWN.INI',
-					`[Settings]\nIsSinglePlayer=yes\nScenario=${campaign.scenario}\nCampaignID=-1\nGameSpeed=2\n`);
 			}
 			loaded.FS.chdir('/game');
 			started = true;
@@ -196,7 +191,6 @@ export function startGame(
 				'-USERDIR=/save',
 				'-WIN',
 				'-XCC',
-				...(campaign ? ['-SPAWN'] : []),
 			]);
 		} catch (error) {
 			if (!signal.aborted) {

@@ -7,12 +7,12 @@ import {
 	license,
 	thirdPartyNotices,
 } from '#root/project/me/zemn/app/experiments/tiberian_sun/assets.js';
+import { createBioCampaign } from '#root/project/me/zemn/app/experiments/tiberian_sun/campaign.js';
 import style from '#root/project/me/zemn/app/experiments/tiberian_sun/style.module.css';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
 	type DownloadProgress,
 	type GameAssets,
-	type GameCampaign,
 	startGame,
 } from '#root/project/tiberian_sun/web/launcher.js';
 import {
@@ -24,15 +24,7 @@ import {
 
 type GameState = Future<void, DownloadProgress | undefined, string>;
 
-export function TiberianSun({
-	assets,
-	campaign,
-	onExit,
-}: {
-	readonly assets: GameAssets;
-	readonly campaign?: GameCampaign;
-	readonly onExit?: () => void;
-}) {
+export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
 	const [state, setState] = useState<GameState>(() =>
@@ -81,22 +73,18 @@ export function TiberianSun({
 				},
 				error: value => setState(() => future_error(value)),
 				exit: () => {
-					if (onExit) {
-						onExit();
-						return;
-					}
 					if (window.history.length > 1) void navigate(-1);
 					else void navigate('/experiments', { replace: true });
 				},
 			},
 			lifetime.signal,
-			campaign
+			createBioCampaign()
 		);
 		return () => {
 			lifetime.abort();
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [assets, campaign, navigate, onExit]);
+	}, [assets, navigate]);
 
 	useEffect(() => {
 		if (failed) statusRef.current?.focus();

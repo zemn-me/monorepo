@@ -224,23 +224,29 @@ clearance for public redistribution. Public hosting requires resolving how
 those terms apply to this browser port. No public deployment is performed by
 building or running these targets.
 
-## Bio exploration campaign
+## Generated bio campaign
 
-`/experiments/tiberian-sun/bio` opens **A life in the field**, a custom,
-peaceful GDI reconnaissance campaign based on the website's public bio.
-The dossier divides the canonical timeline into four eras and retains every
-published record and its source link. Each native mission transmits three
-highlights from its era when an expedition member approaches a radar-marked
-archive hut. All three recoveries advance to the next mission; any mission
-can also be selected directly from the dossier.
+Open the normal `/experiments/tiberian-sun` game, select the Tiberian Sun disc,
+and choose **New Campaign**. **Thomas Shadwell: Bio** is the third campaign,
+after the original GDI and Nod campaigns. There are no additional website pages.
 
-The website derives ephemeral INI scenarios from `Bio.timeline`, mounts them
-beside the freeware data, and launches the engine's single-player spawner.
-No game binaries or original archives are modified. Campaign saves use the
-existing browser save directory. Quitting returns to the dossier.
+The website turns published `Bio.timeline` entries into six chronological acts.
+Dated records arrive as intercepted transmissions during combat. The operations
+alternate between a timed strike on a relay, defending an uplink against waves,
+and a base-building assault. Later acts rotate the battlefield and approaches.
+Destroying the enemy power plant disables its laser towers and delivers two
+Titans; destroying its relay cuts off further enemy waves. Base missions include
+factories, a starting budget, a harvester, and two Tiberium fields to expand into.
+Future-dated entries are excluded until their publication date.
 
-`//project/me/zemn/app/experiments/tiberian_sun:tests` checks timeline coverage
-and the native mission chain. `TestBioCampaign` in the game's browser
-integration suite exercises the dossier at desktop and phone widths and
-launches a native bio scenario using the actual packaged game data, then
-recovers all three archives and verifies progression to the next mission.
+Generated scenarios and `BATTLEWEB.INI` are ephemeral game data mounted alongside
+the freeware assets. The browser engine appends the extra battle definitions
+after its original campaigns and uses `MAPSEL<campaign name>.INI` when provided,
+so the bio campaign's progression graph does not replace GDI or Nod's. Saves
+continue to use the normal browser save directory.
+
+The campaign unit tests verify full timeline coverage, publication boundaries,
+distinct objectives, native resource encoding, and isolation from original campaign files.
+`TestBioCampaign` enters through the regular game menu, selects the third
+campaign, fights through the opening raid, reinforces the defense, and advances to
+the siege. It also observes harvesting income and native factory production.

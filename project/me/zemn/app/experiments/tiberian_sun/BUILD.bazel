@@ -21,19 +21,16 @@ hashed_public_assets(
 ts_project(
     name = "tiberian_sun",
     srcs = [
-        "bio.tsx",
         "campaign.ts",
         "client.tsx",
         "page.tsx",
         ":runtime_generated",
     ],
     assets = [
-        "campaign.module.css",
         "style.module.css",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
-        ":campaign_module_css",
         ":style_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
@@ -56,7 +53,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "bio.tsx",
         "campaign.ts",
         "campaign_test.ts",
         "client.tsx",
@@ -68,12 +64,6 @@ filegroup(
 css_module(
     name = "style_module_css",
     src = "style.module.css",
-    visibility = ["//:__subpackages__"],
-)
-
-css_module(
-    name = "campaign_module_css",
-    src = "campaign.module.css",
     visibility = ["//:__subpackages__"],
 )
 
@@ -93,5 +83,6 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//project/me/zemn/bio",
+        "//ts/react/lang",
     ],
 )

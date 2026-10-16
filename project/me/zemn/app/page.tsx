@@ -99,10 +99,7 @@ export default function Main() {
 					</p>
 					<p>
 						A selection of my work over the years can be found
-						below. Or{' '}
-						<Link href="/experiments/tiberian-sun/bio">
-							explore my bio as a Tiberian Sun campaign
-						</Link>.
+						below.
 					</p>
 				</Prose>
 				<nav className={style.links}>

@@ -8,7 +8,7 @@ import { TiberianSun } from '#root/project/me/zemn/app/experiments/tiberian_sun/
 import type { GameAssets } from '#root/project/tiberian_sun/web/launcher.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 
-export const assets = {
+const assets = {
 	engineJavaScript,
 	engineWasm,
 	engineData,
