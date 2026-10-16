@@ -24,6 +24,8 @@ func TestFreewareSkirmish(t *testing.T)         { playFreeware(t, "play") }
 func TestGameDownloadFailure(t *testing.T)      { playFreeware(t, "error") }
 func TestGameDownloadFailurePhone(t *testing.T) { playFreeware(t, "error-phone") }
 
+func TestMenuContain(t *testing.T) { playFreeware(t, "menus") }
+
 func TestReactNavigation(t *testing.T) { playFreeware(t, "navigate") }
 
 func TestWindowExit(t *testing.T) { playFreeware(t, "back") }
@@ -214,6 +216,13 @@ func playFreeware(t *testing.T, mode string) {
 		}
 		return frame
 	}
+	// Menu artwork and input share an aspect-preserving 800x600 reference.
+	menuWidth, menuHeight := 800, 600
+	menuPoint := func(x, y int) (float64, float64) {
+		scale := math.Min(float64(menuWidth)/800, float64(menuHeight)/600)
+		return (float64(menuWidth)-800*scale)/2 + float64(x)*scale,
+			(float64(menuHeight)-600*scale)/2 + float64(y)*scale
+	}
 	waitPixels := func(label string, rect image.Rectangle, predicate func(uint32, uint32, uint32) bool, minimum int) {
 		t.Helper()
 		var count int
@@ -223,8 +232,9 @@ func playFreeware(t *testing.T, mode string) {
 			count = 0
 			for y := rect.Min.Y; y < rect.Max.Y; y++ {
 				for x := rect.Min.X; x < rect.Max.X; x++ {
-					px := frame.Bounds().Min.X + x*frame.Bounds().Dx()/800
-					py := frame.Bounds().Min.Y + y*frame.Bounds().Dy()/600
+					mx, my := menuPoint(x, y)
+					px := frame.Bounds().Min.X + int(mx*float64(frame.Bounds().Dx())/float64(menuWidth))
+					py := frame.Bounds().Min.Y + int(my*float64(frame.Bounds().Dy())/float64(menuHeight))
 					red, green, blue, _ := frame.At(px, py).RGBA()
 					if predicate(red>>8, green>>8, blue>>8) {
 						count++
@@ -280,6 +290,34 @@ func playFreeware(t *testing.T, mode string) {
 	white := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
 	mouse(120, 110, false)
 	waitPixels("interactive game selector", image.Rect(105, 102, 140, 120), white, 30)
+	if mode == "menus" {
+		// Resize while a menu is open, checking both width- and height-limited
+		// layouts at high pixel density. Hover pixels prove hit testing follows.
+		for _, size := range [][2]int{{1920, 1080}, {900, 1440}, {390, 844}, {1920, 1080}} {
+			menuWidth, menuHeight = size[0], size[1]
+			if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": menuWidth, "height": menuHeight, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+				t.Fatal(err)
+			}
+			if err := wait(func(w selenium.WebDriver) (bool, error) {
+				value, err := w.ExecuteScript(`const c=arguments[0], r=c.getBoundingClientRect(), s=Math.min(innerWidth/800,innerHeight/600); return Math.abs(r.width-800*s)<1 && Math.abs(r.height-600*s)<1 && Math.abs(r.x-(innerWidth-r.width)/2)<1 && Math.abs(r.y-(innerHeight-r.height)/2)<1`, []interface{}{canvas})
+				return value == true, err
+			}, 30*time.Second); err != nil {
+				layout, _ := driver.ExecuteScript("const c=arguments[0], r=c.getBoundingClientRect(); return JSON.stringify({width:c.width,height:c.height,rect:r.toJSON(),viewport:[innerWidth,innerHeight],aspect:c.style.getPropertyValue('--game-aspect')})", []interface{}{canvas})
+				t.Fatalf("menu contain at %dx%d: %v; %v", menuWidth, menuHeight, err, layout)
+			}
+			mouse(120, 110, false)
+			waitPixels("resized selector hover", image.Rect(105, 102, 140, 120), white, 30)
+			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+				shot, err := driver.Screenshot()
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(filepath.Join(dir, fmt.Sprintf("menu-%dx%d.png", menuWidth, menuHeight)), shot, 0644); err != nil {
+					t.Fatal(err)
+				}
+			}
+		}
+	}
 	if mode == "navigate" {
 		origin, _ := driver.ExecuteScript("return performance.timeOrigin", nil)
 		if origin != documentOrigin {
@@ -370,6 +408,15 @@ func playFreeware(t *testing.T, mode string) {
 		return strings.Contains(text, "Finished unit generation"), err
 	}, 60*time.Second); err != nil {
 		t.Fatalf("scenario did not generate units: %v", err)
+	}
+	if mode == "menus" {
+		if err := wait(func(w selenium.WebDriver) (bool, error) {
+			value, err := w.ExecuteScript(`const c=arguments[0],r=c.getBoundingClientRect(); return c.width===innerWidth && c.height===innerHeight && r.x===0 && r.y===0 && r.width===innerWidth && r.height===innerHeight`, []interface{}{canvas})
+			return value == true, err
+		}, 30*time.Second); err != nil {
+			t.Fatalf("scaled menus did not transition to viewport-sized gameplay: %v", err)
+		}
+		return
 	}
 	waitPixels("terrain and units rendered", image.Rect(150, 140, 500, 350), colored, 15000)
 	// Spawn positions and MCV facing vary with the scenario seed. Box-select
