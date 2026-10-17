@@ -1,0 +1,55 @@
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load", "oci_push")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+# Package post-install scripts are intentionally not executed. Declare the
+# compiler alternatives they would install so the image has no mutable setup.
+pkg_tar(
+    name = "compiler_links",
+    symlinks = {
+        "usr/bin/cc": "gcc-11",
+        "usr/bin/c++": "g++-11",
+    },
+)
+
+oci_image(
+    name = "image",
+    base = "@rbe_ubuntu_linux_amd64",
+    env = {"PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"},
+    labels = {"org.opencontainers.image.source": "https://github.com/zemn-me/monorepo"},
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    tars = [
+        "@rbe_bootstrap_packages//:flat",
+        ":compiler_links",
+    ],
+)
+
+oci_load(
+    name = "load",
+    image = ":image",
+    repo_tags = ["monorepo-rbe:verify"],
+    tags = ["manual"],
+)
+
+oci_push(
+    name = "push",
+    image = ":image",
+    repository = "ghcr.io/zemn-me/monorepo-rbe-ubuntu",
+    tags = ["manual"],
+)
+
+sh_test(
+    name = "environment_test",
+    size = "small",
+    srcs = ["environment_test.sh"],
+    target_compatible_with = ["@platforms//os:linux"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
