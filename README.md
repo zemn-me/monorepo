@@ -62,23 +62,11 @@ To build or test using BuildBuddy's Linux amd64 executors:
 
 The `remote` profile selects matching Linux execution and target platforms, the
 BuildBuddy GCC toolchain, remote caching, and build results in the BuildBuddy UI.
-The executor image is built by `//bzl/remote_execution:image` from Canonical’s
-digest-pinned official Ubuntu 22.04 image and checksum-pinned Ubuntu snapshot
-packages for GCC and basic build utilities. No third-party executor base is used. Chromium and
+The executor uses BuildBuddy’s official Ubuntu 22.04 image, published in its
+`gcr.io/flame-public` registry and pinned by digest. Chromium and
 ChromeDriver declare their shared libraries as Bazel runtime inputs, Cargo
 builds vendored OpenSSL, and the API server embeds Go's timezone database.
-The browser libraries, OpenSSL, and timezone data are Bazel dependencies rather
-than packages installed in the executor image.
-
-The base is [`docker.io/library/ubuntu:22.04`](https://hub.docker.com/_/ubuntu),
-maintained by Canonical; `MODULE.bazel` pins its amd64 manifest digest. The
-bootstrap package list uses Ubuntu’s dated snapshot, with archive checksums in
-`MODULE.bazel.lock`. `rules_oci` assembles these inputs without executing package
-installation scripts. The image publication workflow runs locally on a GitHub
-runner, checks C/C++ compilation inside the image, and publishes to
-`ghcr.io/zemn-me/monorepo-rbe-ubuntu`. After changing image inputs, publish first,
-then update `buildbuddy.platform` to the resulting immutable digest and run the
-full uncached presubmit suite before merging.
+These dependencies do not require a custom executor image.
 
 It produces Linux artifacts even when Bazel runs on macOS. Use ordinary Bazel
 commands without `--config=remote` for native builds and locally launched tools

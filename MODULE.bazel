@@ -21,10 +21,10 @@ bazel_dep(name = "toolchains_buildbuddy", version = "0.0.4")
 
 buildbuddy = use_extension("@toolchains_buildbuddy//:extensions.bzl", "buildbuddy")
 
-# Bootstrap image built by //bzl/remote_execution:image from official Ubuntu.
-# Application/runtime dependencies remain declared Bazel inputs below.
+# BuildBuddy publishes its official executor images in gcr.io/flame-public.
+# Application/runtime dependencies are declared below.
 buildbuddy.platform(
-    container_image = "docker://ghcr.io/zemn-me/monorepo-rbe-ubuntu@sha256:b272c45a058d9facf034be2029d3be1e2a67a7b49fd5efad945cb7d39f75a17b",
+    container_image = "docker://gcr.io/flame-public/rbe-ubuntu22-04@sha256:19a6ae9d1f58f24020b2d672919e8e4ea859e1389497dc2ddcb28bb9818becf8",
 )
 buildbuddy.gcc_toolchain(gcc_major_version = "11")
 
@@ -74,38 +74,9 @@ apt.install(
         "jammy-security",
     ],
 )
-apt.install(
-    dependency_set = "rbe_bootstrap_packages",
-    packages = [
-        "build-essential",
-        "ca-certificates",
-        "file",
-        "git",
-        "patch",
-        "perl",
-        "python3",
-        "unzip",
-        "xz-utils",
-        "zip",
-    ],
-    suites = [
-        "jammy",
-        "jammy-updates",
-        "jammy-security",
-    ],
-)
-use_repo(apt, "chromium_packages", "rbe_bootstrap_packages")
+use_repo(apt, "chromium_packages")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
-
-# Canonical's Docker Official Image, resolved from library/ubuntu:22.04.
-oci.pull(
-    name = "rbe_ubuntu",
-    digest = "sha256:98510ac07bb4545e389be502a8918b385c018bfe4ceeb5ac7e0375c782268b04",
-    image = "docker.io/library/ubuntu",
-    platforms = ["linux/amd64"],
-)
-use_repo(oci, "rbe_ubuntu", "rbe_ubuntu_linux_amd64")
 
 # Declare external images you need to pull, for example:
 oci.pull(
