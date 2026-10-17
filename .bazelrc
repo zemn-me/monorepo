@@ -132,10 +132,15 @@ query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 
 common --lockfile_mode=refresh
 
-common:ci --lockfile_mode=error
-common:ci --build_metadata=ROLE=CI
-common:ci --keep_going
-common:ci --show_progress
+# CI builds use the same remote execution profile as local --config=remote.
+# Read-only presubmit and credential-free maintenance jobs use ci-local.
+common:ci --config=ci-local
+build:ci --config=remote
+
+common:ci-local --lockfile_mode=error
+common:ci-local --build_metadata=ROLE=CI
+common:ci-local --keep_going
+common:ci-local --show_progress
 common --test_verbose_timeout_warnings
 
 
@@ -146,7 +151,7 @@ common --check_direct_dependencies=error
 # in regular usage, don't use all of the host ram for bazel.
 common --local_resources=memory=HOST_RAM*.5
 # in ci use it all
-common:ci --local_resources=memory=HOST_RAM
+common:ci-local --local_resources=memory=HOST_RAM
 
 # Original, checksum-verified release archives avoid an unavailable GitLab host.
 # Separate directories are needed because both upstream archives are src.tar.gz.

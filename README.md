@@ -40,7 +40,7 @@ support for Go, Bazel and Python.
 Remote caching and execution
 -------------------------------------------------------------------------------
 
-BuildBuddy provides remote caching and opt-in remote execution. From the repo
+BuildBuddy provides remote caching and execution. From the repo
 root, run `./.github/workflows/bootstrap_bazel_remote_cache.sh` with an existing
 read/write BuildBuddy API key in `BUILDBUDDY_API_KEY`. The script writes the
 ignored `.auth.bazelrc`; never commit credentials or put keys in shell history.
@@ -68,8 +68,11 @@ such as development servers; `bazel run` launches its output on your machine.
 Actions marked for local execution still run locally, so targets that depend on
 host-installed tools may need further changes before they support this profile.
 
-PR CI retains its read-only cache setup. Remote execution requires uploading
-action inputs and a read/write key; do not substitute a writable key into the
-PR workflow. The `remote` profile is opt-in and is not enabled by `--config=ci`.
+The `ci` profile includes `remote`, so staging and submit use RBE with their
+existing read/write key. Read-only presubmit and credential-free maintenance
+jobs use `ci-local`, which retains CI checks and resource settings while
+executing on the runner. Presubmit passes `BAZEL_CI_CONFIG=ci-local` through to
+its nested Bazel test command. Remote execution requires uploading action inputs
+and a read/write key; do not substitute a writable key into the PR workflow.
 
 <!-- -->

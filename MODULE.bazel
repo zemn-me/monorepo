@@ -201,6 +201,13 @@ go_deps.gazelle_override(
     directives = ["gazelle:proto disable_global"],
     path = "github.com/nyaruka/phonenumbers/v2",
 )
+
+# Buildifier's wrapper must handle regular runfiles on remote executors.
+go_deps.module_override(
+    patch_strip = 1,
+    patches = ["//bzl:buildifier_remote_runfiles.patch"],
+    path = "github.com/bazelbuild/buildtools",
+)
 go_deps.module_override(
     patch_strip = 1,
     patches = ["//bzl:bazel_watcher_proto_rule.patch"],

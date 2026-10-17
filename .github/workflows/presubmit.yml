@@ -81,11 +81,12 @@ jobs:
         run: |
          ./.github/workflows/prepare_ci.sh && \
          echo "::group::Presubmit prep" && \
-         $BAZEL build --config=ci --tool_tag=presubmit //ci:presubmit && \
+         $BAZEL build --config="$BAZEL_CI_CONFIG" --tool_tag=presubmit //ci:presubmit && \
          echo "::endgroup::" && \
          echo "::group::Presubmit" && \
-         $BAZEL run --config=ci --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
+         $BAZEL run --config="$BAZEL_CI_CONFIG" --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
          echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.readonly_buildbuddy_api_key }}
           BUILDBUDDY_CACHE_READ_ONLY: 'true'
+          BAZEL_CI_CONFIG: ci-local
