@@ -42,5 +42,12 @@ for layout in regular symlink; do
     fi
     "$buildifier" -mode=fix BUILD.bazel
     bash runner.bash
+
+    # The no-sandbox mode changes directory before invoking the same tool.
+    mkdir nested
+    cp BUILD.bazel nested/BUILD.bazel
+    touch nested/WORKSPACE
+    sed 's|^WORKSPACE=""$|WORKSPACE="nested/WORKSPACE"|' runner.bash > runner-workspace.bash
+    bash runner-workspace.bash
   )
 done
