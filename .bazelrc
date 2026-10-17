@@ -78,6 +78,21 @@ run --incompatible_strict_action_env
 # collect coverage information from test targets
 coverage --instrument_test_targets
 
+# Build and test on BuildBuddy's Linux amd64 executors with --config=remote.
+# Credentials belong in the ignored .auth.bazelrc; see README.md.
+build:remote --bes_results_url=https://app.buildbuddy.io/invocation/
+build:remote --bes_backend=grpcs://remote.buildbuddy.io
+build:remote --remote_cache=grpcs://remote.buildbuddy.io
+build:remote --remote_executor=grpcs://remote.buildbuddy.io
+build:remote --remote_timeout=10m
+build:remote --remote_download_outputs=toplevel
+build:remote --remote_cache_compression
+build:remote --jobs=50
+build:remote --platforms=@toolchains_buildbuddy//platforms:linux_x86_64
+build:remote --extra_execution_platforms=@toolchains_buildbuddy//platforms:linux_x86_64
+build:remote --extra_toolchains=@toolchains_buildbuddy//toolchains/cc:ubuntu_gcc_x86_64
+build:remote --tool_java_runtime_version=remotejdk_17
+
 # Load any settings specific to the current user.
 # .bazelrc.user should appear in .gitignore so that settings are not shared with team members
 # This needs to be last statement in this
