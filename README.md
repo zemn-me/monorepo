@@ -37,18 +37,51 @@ support for Go, Bazel and Python.
 [gazelle]: https://github.com/bazelbuild/bazel-gazelle
 
 
-Remote Caching
+Remote caching and execution
 -------------------------------------------------------------------------------
 
-The project is configured to use a BuildBuddy cache for faster build times. If
-you have an account, you can run BUILDBUDDY_API_KEY=EDIT_AND_REPLACE
-<./.github/workflows/bootstrap_remote_cache.sh> from the project root, and it
-will drop an .auth.bazelrc in there.
+BuildBuddy provides remote caching and execution. From the repo
+root, run `./.github/workflows/bootstrap_bazel_remote_cache.sh` with an existing
+read/write BuildBuddy API key in `BUILDBUDDY_API_KEY`. The script writes the
+ignored `.auth.bazelrc`; never commit credentials or put keys in shell history.
+You can also create `.auth.bazelrc` yourself with:
 
-Once that's done, edit the file and replace EDIT_AND_REPLACE with your
-BuildBuddy API key. I **do not** recommend changing "EDIT_AND_REPLACE" on the
-bash commandline, or you'll end up having your secret API key stored in your
-shell history.
+```bazelrc
+build --remote_header=x-buildbuddy-api-key=EDIT_AND_REPLACE
+```
 
+Replace the placeholder in your editor with the key from
+[BuildBuddy Quickstart](https://app.buildbuddy.io/docs/setup/).
+
+To build or test using BuildBuddy's Linux amd64 executors:
+
+```sh
+./sh/bin/bazel test --config=remote //go/encoding/jsonc/...
+./sh/bin/bazel build --config=remote @sqlite4java//:libsqlite4java.so
+```
+
+The `remote` profile selects matching Linux execution and target platforms, the
+BuildBuddy GCC toolchain, remote caching, and build results in the BuildBuddy UI.
+The executor uses a digest-pinned public BuildBuddy Ubuntu base. Chromium and
+ChromeDriver declare their shared libraries as Bazel runtime inputs, Cargo
+builds vendored OpenSSL, and the API server embeds Go's timezone database.
+These dependencies do not require a custom executor image.
+
+It produces Linux artifacts even when Bazel runs on macOS. Use ordinary Bazel
+commands without `--config=remote` for native builds and locally launched tools
+such as development servers; `bazel run` launches its output on your machine.
+Actions marked for local execution still run locally, so targets that depend on
+host-installed tools may need further changes before they support this profile.
+
+The `ci` profile includes `remote`. Regular PR presubmits use `ci-presubmit`,
+which adds `--remote_upload_local_results=false` and disables build-event
+uploads. Their isolated BuildBuddy credential must be **CAS-only**: it allows
+uploading execution inputs, but denies action-cache updates at the server.
+A fully read-only key cannot upload new inputs and therefore cannot support
+RBE. Staging and submit retain their read/write key. Jobs without credentials
+fall back to `ci-local`; it also remains available for native runner builds.
+Presubmit passes its chosen profile to the nested Bazel test command.
+To force actual test execution, rerun the GitHub workflow with debug logging
+enabled, or set `BAZEL_TEST_UNCACHED=true` when launching `//ci:presubmit`.
 
 <!-- -->

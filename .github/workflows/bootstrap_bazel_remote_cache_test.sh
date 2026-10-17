@@ -32,6 +32,7 @@ for mode in readonly writable missing; do
       if [[ "$mode" == readonly ]]; then
         [[ "$config" == *'--remote_upload_local_results=false'* ]]
         [[ "$config" == *'--remote_cache_header=x-buildbuddy-api-key=test-buildbuddy-key'* ]]
+        [[ "$config" == *'--remote_exec_header=x-buildbuddy-api-key=test-buildbuddy-key'* ]]
         [[ "$config" != *'--remote_header='* ]]
         [[ "$config" != *'--bes_backend='* ]]
       else

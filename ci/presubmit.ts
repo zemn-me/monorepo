@@ -75,7 +75,16 @@ const cmd = new Command('presubmit')
 				)
 			);
 			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...', '--keep_going', '--config=ci')
+				Bazel.Bazel(
+					cwd,
+					'test',
+					'//...',
+					'--keep_going',
+					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
+					...(process.env['BAZEL_TEST_UNCACHED'] === 'true'
+						? ['--nocache_test_results']
+						: [])
+				)
 			);
 			// perform all the normal tests
 		}

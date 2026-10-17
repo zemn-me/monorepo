@@ -329,7 +329,9 @@ binary_with_args(
     name = "pnpm_lockfile_validation_bin",
     args = [
         "i",
-        #        "--lockfile-only", # https://github.com/pnpm/pnpm/issues/6962#issuecomment-2985146457
+        "--lockfile-only",
+        "--offline",
+        "--ignore-scripts",
         "--frozen-lockfile",
     ],
     binary = "@pnpm",
