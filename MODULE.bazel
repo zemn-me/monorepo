@@ -16,6 +16,11 @@ bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "emsdk", version = "5.0.7")
 bazel_dep(name = "rules_license", version = "1.0.0")
 
+# Linux platforms and their matching compiler for --config=remote.
+bazel_dep(name = "toolchains_buildbuddy", version = "0.0.4")
+
+buildbuddy = use_extension("@toolchains_buildbuddy//:extensions.bzl", "buildbuddy")
+
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 
 # Declare external images you need to pull, for example:
@@ -195,6 +200,13 @@ go_deps.gazelle_override(
 go_deps.gazelle_override(
     directives = ["gazelle:proto disable_global"],
     path = "github.com/nyaruka/phonenumbers/v2",
+)
+
+# Buildifier's wrapper must handle regular runfiles on remote executors.
+go_deps.module_override(
+    patch_strip = 1,
+    patches = ["//bzl:buildifier_remote_runfiles.patch"],
+    path = "github.com/bazelbuild/buildtools",
 )
 go_deps.module_override(
     patch_strip = 1,
