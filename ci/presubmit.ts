@@ -79,7 +79,6 @@ const cmd = new Command('presubmit')
 					cwd,
 					'test',
 					'//...',
-					'--keep_going',
 					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
 					...(process.env['BAZEL_TEST_UNCACHED'] === 'true'
 						? ['--nocache_test_results']

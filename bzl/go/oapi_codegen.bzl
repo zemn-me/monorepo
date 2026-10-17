@@ -32,6 +32,7 @@ def _go_oapi_codegen_impl(ctx):
             sdk.go,
         ],
         toolchain = GO_TOOLCHAIN,
+        mnemonic = "GoOpenApiSourceGen",
         command = """
       export GOROOT=$(pwd)/{goroot} &&
       export PATH=$GOROOT/bin:$PATH &&
@@ -41,7 +42,6 @@ def _go_oapi_codegen_impl(ctx):
             cmd = "$(pwd)/" + ctx.file.codegen_tool.path,
             args = " ".join(args),
             out = ctx.outputs.out.path,
-            mnemonic = "GoOpenApiSourceGen",
         ),
     )
 

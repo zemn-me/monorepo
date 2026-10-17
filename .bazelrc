@@ -133,7 +133,7 @@ query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 common --lockfile_mode=refresh
 
 # CI builds use the same remote execution profile as local --config=remote.
-# Read-only presubmit and credential-free maintenance jobs use ci-local.
+# Presubmits add cache restrictions; credential-free jobs use ci-local.
 common:ci --config=ci-local
 build:ci --config=remote
 

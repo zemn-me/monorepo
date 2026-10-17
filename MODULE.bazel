@@ -368,7 +368,6 @@ linux_chromium(
     name = "in_bin",
     executable_src = "chrome-linux64/chrome",
     runtime = "@@//bin/host/chromium:linux_runtime",
-    runtime_relative_path = "../../_main/bin/host/chromium/linux_runtime",
     srcs = glob(["chrome-linux64/**"], allow_empty=True),
     visibility = ["//visibility:public"],
 )
@@ -453,7 +452,6 @@ linux_chromium(
     executable_src = "chromedriver",
     srcs = glob(["chromedriver*"], allow_empty=True),
     runtime = "@@//bin/host/chromium:linux_runtime",
-    runtime_relative_path = "../_main/bin/host/chromium/linux_runtime",
     visibility = ["//visibility:public"],
 )
 """
