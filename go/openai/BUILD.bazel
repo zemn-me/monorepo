@@ -1,17 +1,29 @@
-load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
 load("//go:rules.bzl", "go_library")
 
 "Generated defs for the openai apis."
 
 load("//bzl:rules.bzl", "bazel_lint")
 
-# Code generation needs the full Go SDK, including on remote executors.
-go_oapi_codegen(
+genrule(
     name = "gen_api",
-    out = "api.go",
-    config = "codegen.yaml",
-    data = ["overlay.yaml"],
-    source = "@com_github_openai_openai_openapi//:openapi.yaml",
+    srcs = [
+        "@com_github_openai_openai_openapi//:openapi.yaml",
+        "codegen.yaml",
+        "overlay.yaml",
+    ],
+    outs = ["api.go"],
+    cmd = """
+GO="$${PWD}/$(execpath //bin/host/go)"
+export PATH=$$(dirname $$GO):$$PATH
+$(execpath //bin/host/oapi-codegen) \\
+	-config $(location codegen.yaml) \\
+	-o $(location api.go) \\
+	 $(location @com_github_openai_openai_openapi//:openapi.yaml)
+	""",
+    tools = [
+        "//bin/host/go",
+        "//bin/host/oapi-codegen",
+    ],
 )
 
 bazel_lint(
