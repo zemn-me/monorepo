@@ -6,9 +6,7 @@ PR Presubmit uses the separate `github-presubmit-cache` WIF pool, granted only
 its read-only BuildBuddy key. Keep PR identities out of the deployment pool and
 service-account impersonation grants. Cached artifacts and the read-only key
 are accessible to PR code; cache only non-sensitive outputs. Presubmit disables
-cache and build-event uploads and uses `ci-local`; staging and submit retain
-the writable key and use `ci`, which includes remote execution. Use `ci-local`
-for jobs without writable BuildBuddy credentials.
+cache and build-event uploads; staging and submit retain the writable key.
 
 Staging and Submit share `pulumi_deploy`; obsolete pending merge-group runs are
 removed by `cancel-obsolete-staging.yml`. Keep cleanup outside that concurrency
