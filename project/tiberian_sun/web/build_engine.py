@@ -11,6 +11,18 @@ import sys
 import tempfile
 
 
+def run_commands(commands, env, log):
+    """Keep successful action output private; replay diagnostics on failure."""
+    with log.open("w") as stream:
+        for command in commands:
+            print(shlex.join(command), file=stream, flush=True)
+            result = subprocess.run(command, env=env, stdout=stream, stderr=subprocess.STDOUT)
+            if result.returncode:
+                stream.flush()
+                print(log.read_text()[-24000:], file=sys.stderr)
+                raise SystemExit(result.returncode)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("config")
@@ -49,12 +61,9 @@ def main():
         env["PATH"] = str(tools) + os.pathsep + env.get("PATH", "/usr/bin:/bin")
         generated = src / "generated"
         generated.mkdir()
-        subprocess.run(
-            [sys.executable, str(src / "platform/macos/generate_headers.py"), str(src), str(generated)],
-            check=True, env=env,
-        )
         build = work / "build"
         commands = [
+            [sys.executable, str(src / "platform/macos/generate_headers.py"), str(src), str(generated)],
             [cmake, "-S", str(src), "-B", str(build), "-G", "Ninja",
              f"-DCMAKE_MAKE_PROGRAM={ninja}",
              f"-DCMAKE_TOOLCHAIN_FILE={sdk / 'emscripten/cmake/Modules/Platform/Emscripten.cmake'}",
@@ -62,14 +71,7 @@ def main():
             [cmake, "--build", str(build), "--target", "opents", "-j", "4"],
         ]
         log = work / "build.log"
-        with log.open("w") as stream:
-            for command in commands:
-                print(shlex.join(command), flush=True)
-                result = subprocess.run(command, env=env, stdout=stream, stderr=subprocess.STDOUT)
-                if result.returncode:
-                    stream.flush()
-                    print(log.read_text()[-24000:], file=sys.stderr)
-                    raise SystemExit(result.returncode)
+        run_commands(commands, env, log)
         for output in outputs:
             output.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(build / output.name, output)

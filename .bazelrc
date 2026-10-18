@@ -147,7 +147,6 @@ common:ci-local --lockfile_mode=error
 common:ci-local --build_metadata=ROLE=CI
 common:ci-local --keep_going
 common:ci-local --show_progress
-common --test_verbose_timeout_warnings
 
 
 common --experimental_remote_cache_compression_threshold=100

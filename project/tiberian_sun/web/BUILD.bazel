@@ -1,7 +1,8 @@
 # gazelle:exclude build_engine.py
+# gazelle:resolve py project.tiberian_sun.web.build_engine //project/tiberian_sun/web:build_engine_lib
 
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_binary")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 load("//ts:rules.bzl", "ts_project")
 load(":build.bzl", "engine_build")
 
@@ -36,6 +37,17 @@ py_binary(
     srcs = ["build_engine.py"],  # keep
     main = "build_engine.py",
     visibility = ["//:__subpackages__"],
+)
+
+py_library(
+    name = "build_engine_lib",
+    srcs = ["build_engine.py"],  # keep
+)
+
+py_test(
+    name = "build_engine_test",
+    srcs = ["build_engine_test.py"],
+    deps = ["//project/tiberian_sun/web:build_engine_lib"],
 )
 
 engine_build(
