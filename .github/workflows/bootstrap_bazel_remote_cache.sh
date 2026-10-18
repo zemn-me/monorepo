@@ -13,9 +13,10 @@ else
 	echo "build --experimental_remote_cache_compression" >> .auth.bazelrc
 	echo "build --nolegacy_important_outputs" >> .auth.bazelrc
 	if [[ "${BUILDBUDDY_CACHE_READ_ONLY:-}" == "true" ]]; then
-		# This flag avoids upload attempts; the key must also be read-only in BuildBuddy.
+		# Deny action-cache uploads; CAS-only credentials still allow RBE inputs.
 		echo "build --remote_upload_local_results=false" >> .auth.bazelrc
 		echo "build --remote_cache_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}" >> .auth.bazelrc
+		echo "build --remote_exec_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}" >> .auth.bazelrc
 	else
 		echo "build --bes_results_url=https://app.buildbuddy.io/invocation/" >> .auth.bazelrc
 		echo "build --bes_backend=grpcs://remote.buildbuddy.io" >> .auth.bazelrc

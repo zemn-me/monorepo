@@ -40,6 +40,8 @@ go_test(
     srcs = ["network_test.go"],
     # Gazelle cannot infer this generated go:embed input.
     embedsrcs = [":bundle"],  # keep
+    # Loopback WebRTC still needs an interface for ICE candidate gathering.
+    exec_properties = {"test.network": "external"},
     deps = ["//go/seleniumutil"],
 )
 
