@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 	"time"
+	_ "time/tzdata" // Date assertions must not depend on executor zoneinfo packages.
 
 	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"

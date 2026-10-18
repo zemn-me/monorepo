@@ -15,6 +15,9 @@ def browser_test(name, tags = [], **kwargs):
         name = name,
         size = "large",  # Production bundling and full browser flows can exceed five minutes.
         flaky = True,
+        # Chrome otherwise reports navigator.onLine=false in an interface-less
+        # container, so local API uploads remain queued without being attempted.
+        exec_properties = {"test.network": "external"},
         services = [
             "//project/me/zemn:itest_service_calendar_fixture",
             "//project/me/zemn/testing:oidc_provider_itest_service",

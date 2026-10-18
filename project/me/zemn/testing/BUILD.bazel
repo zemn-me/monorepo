@@ -1,4 +1,4 @@
-load("@rules_itest//private:itest.bzl", "itest_service")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library", "js_test")
 load("//md:rules.bzl", "md_files")
@@ -67,24 +67,32 @@ ts_project(
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/selenium-webdriver",
-        "//:node_modules/@types/serve-handler",
         "//:node_modules/fast-glob",
         "//:node_modules/jose",
         "//:node_modules/selenium-webdriver",
-        "//:node_modules/serve-handler",
         "//ts/selenium",
     ],
 )
 
 jest_test(
-    name = "testing",
+    name = "testing_binary",
     size = "medium",
     srcs = ["browser_test.js"],
     data = [
         ":ts",
-        "//project/me/zemn/api/cmd/localserver",
         "//ts/oidc",
     ],
+    tags = ["manual"],
+)
+
+service_test(
+    name = "testing",
+    size = "large",
+    services = [
+        "//project/me/zemn:itest_service_calendar_fixture",
+        ":oidc_provider_itest_service",
+    ],
+    test = ":testing_binary",
 )
 
 filegroup(

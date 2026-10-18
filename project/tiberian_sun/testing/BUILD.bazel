@@ -19,6 +19,8 @@ itest_service(
 service_test(
     name = "integration_test",
     size = "large",
+    # WebRTC needs a browser-visible interface to gather ICE candidates.
+    exec_properties = {"test.network": "external"},
     services = [":site"],
     test = ":testing_test",
 )
