@@ -180,9 +180,16 @@ use_repo(python, "python_3_10")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
+    # Resolve wheel variants by target OS/CPU instead of the machine running Bazel.
+    experimental_index_url = "https://pypi.org/simple",
     hub_name = "pip",
     python_version = PYTHON_VERSION,
     requirements_lock = "//:requirements.txt",
+    target_platforms = [
+        "linux_x86_64",
+        "osx_aarch64",
+        "osx_x86_64",
+    ],
 )
 use_repo(pip, "pip")
 

@@ -20,6 +20,7 @@ load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:pip_requirements_test.bzl", "pip_requirements_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/binary_with_args:binary_with_args.bzl", "binary_with_args")
 load("//go/cmd/version_sync:go_version_sync.bzl", "go_version_sync")
@@ -33,6 +34,7 @@ compile_pip_requirements(
     src = "requirements.in",
     # Renovate reads this command to discover the source and solver options.
     env = {"CUSTOM_COMPILE_COMMAND": "pip-compile --allow-unsafe --generate-hashes --resolver=backtracking --output-file=requirements.txt requirements.in"},
+    py_test = pip_requirements_test,
     requirements_txt = "requirements.txt",
 )
 

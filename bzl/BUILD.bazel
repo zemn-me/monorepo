@@ -20,6 +20,7 @@ bazel_lint(
     name = "bazel_lint",
     srcs = [
         "BUILD.bazel",
+        "pip_requirements_test.bzl",
         "rules.bzl",
         "show_all_outputs.bzl",
     ],
