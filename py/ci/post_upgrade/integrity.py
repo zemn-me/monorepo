@@ -125,6 +125,36 @@ def _extract_archive_name(block: str) -> str:
     return match.group(1)
 
 
+def _first_url_list_entry(source: str) -> str:
+    # Stop at the first list separator, keeping commas in calls and brackets
+    # inside URL strings opaque. Preserve the expression for the URL resolver.
+    source = "[" + source
+    lines = source.splitlines(keepends=True)
+    tokens = tokenize.generate_tokens(io.StringIO(source).readline)
+    next(tokens)  # Opening list bracket keeps multiline entries within one expression.
+    start: tuple[int, int] | None = None
+    depth = 0
+    for token in tokens:
+        if token.type in (tokenize.COMMENT, tokenize.NL, tokenize.NEWLINE):
+            continue
+        if token.type == tokenize.OP:
+            if depth == 0 and token.string in (",", "]"):
+                if start is None:
+                    break
+                row, column = start
+                begin = sum(map(len, lines[:row - 1])) + column
+                row, column = token.start
+                end = sum(map(len, lines[:row - 1])) + column
+                return source[begin:end].strip()
+            if token.string in ("(", "[", "{"):
+                depth += 1
+            elif token.string in (")", "]", "}"):
+                depth -= 1
+        if start is None:
+            start = token.start
+    raise Exception("Failed to find urls entry after auto-integrity")
+
+
 def _extract_url_expr(block: str) -> str:
     lines = block.splitlines()
     for idx, line in enumerate(lines):
@@ -136,17 +166,10 @@ def _extract_url_expr(block: str) -> str:
                 url_match = re.match(r"url\s*=\s*(.+?),\s*$", follow)
                 if url_match:
                     return url_match.group(1).strip()
-                if follow.startswith("urls") and follow.endswith("["):
-                    for entry in lines[follow_idx + 1:]:
-                        entry = entry.strip()
-                        if "]" in entry:
-                            break
-                        if not entry or entry == ",":
-                            continue
-                        entry_match = re.match(r"(.+?),\s*$", entry)
-                        if entry_match:
-                            return entry_match.group(1).strip()
-                    raise Exception("Failed to find urls entry after auto-integrity")
+                urls_match = re.match(r"urls\s*=\s*\[", follow)
+                if urls_match:
+                    source = "\n".join([follow[urls_match.end():], *lines[follow_idx + 1:]])
+                    return _first_url_list_entry(source)
                 raise Exception("auto-integrity must be followed by url or urls")
     raise Exception("Missing auto-integrity marker")
 
