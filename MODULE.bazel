@@ -151,6 +151,15 @@ use_repo(
 )
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+
+# Keep APE runtime downloads available when cosmo.zip is unreachable.
+bazel_dep(name = "ape", version = "1.0.1")
+
+cosmos = use_extension("@ape//ape/cosmos:defs.bzl", "ape_cosmos")
+cosmos.url(
+    template = "https://gitlab.arm.com/api/v4/projects/bazel%2Fape/packages/generic/cosmos.zip/{version}/{name}",
+)
+
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
