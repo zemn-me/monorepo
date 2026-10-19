@@ -50,6 +50,45 @@ class TestPnpmIntegrity(unittest.TestCase):
 
 
 class TestAutoIntegrity(unittest.TestCase):
+    def test_repository_module_baseline(self):
+        module = Path("MODULE.bazel").read_text()
+
+        def fetcher(url):
+            self.fail(f"Unchanged archive should not be fetched: {url}")
+
+        self.assertEqual(update_module_bazel_text(module, fetcher, module), module)
+
+    def test_url_list_layouts(self):
+        for urls in [
+            '["https://example.com/release.zip"]',
+            '["https://example.com/release.zip",]',
+            '[\n        "https://example.com/release.zip"\n    ]',
+            '["https://example.com/release.zip".replace("]", "unused")]',
+            '["https://example.com/release.zip", "https://example.com/mirror.zip"]',
+            '[\n        "https://example.com/release.zip",\n    ]',
+            '[  # primary mirror\n        "https://example.com/" + VERSION.replace("+", "-") + ".zip",\n    ]',
+        ]:
+            with self.subTest(urls=urls):
+                module = f'''VERSION = "release"
+http_archive(
+    name = "tool",
+    sha256 = "stale",
+    # auto-integrity
+    urls = {urls},
+)
+'''
+                calls = []
+
+                def fetcher(url):
+                    calls.append(url)
+                    return b"release"
+
+                updated = update_module_bazel_text(module, fetcher)
+                self.assertEqual(calls, ["https://example.com/release.zip"])
+                self.assertIn(hashlib.sha256(b"release").hexdigest(), updated)
+                self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+                self.assertEqual(len(calls), 1)
+
     def test_multiline_build_content_does_not_end_archive(self):
         module = '''# http_archive(ignored comment
 TEXT = "http_archive(ignored string"
