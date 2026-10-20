@@ -643,9 +643,9 @@ idna==3.20 \
     #   httpx
     #   jsonschema
     #   requests
-ipykernel==7.3.0 \
-    --hash=sha256:897eb64da762549ef610698fca5e9675195ec6ac8ec7f19d81ce1ca20c876057 \
-    --hash=sha256:9acaaaf97d16355166e4085afe9d225bfbdf2b7ef520f9df3be8f2b248275e09
+ipykernel==7.4.0 \
+    --hash=sha256:4330114d22b9b33575b2c7c68753fc8faabbbcfbc60b0cdff9f14dd4ce63742f \
+    --hash=sha256:a6757f790ddc5a6006b813d82da1a9dbb65b3a00f2b6607df776418c6566ec1c
     # via
     #   -r requirements.in
     #   jupyter
@@ -1196,9 +1196,7 @@ psutil==7.2.2 \
     --hash=sha256:ed0cace939114f62738d808fdcecd4c869222507e266e574799e9c0faa17d486 \
     --hash=sha256:eed63d3b4d62449571547b60578c5b2c4bcccc5387148db46e0c2313dad0ee00 \
     --hash=sha256:fd04ef36b4a6d599bbdb225dd1d3f51e00105f6d48a28f006da7f9822f2606d8
-    # via
-    #   ipykernel
-    #   ipython
+    # via ipython
 ptyprocess==0.7.0 \
     --hash=sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35 \
     --hash=sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220
@@ -1755,17 +1753,17 @@ tinycss2==1.5.1 \
     --hash=sha256:3415ba0f5839c062696996998176c4a3751d18b7edaaeeb658c9ce21ec150661 \
     --hash=sha256:d339d2b616ba90ccce58da8495a78f46e55d4d25f9fd71dfd526f07e7d53f957
     # via bleach
-tornado==6.5.5 \
-    --hash=sha256:192b8f3ea91bd7f1f50c06955416ed76c6b72f96779b962f07f911b91e8d30e9 \
-    --hash=sha256:2c9a876e094109333f888539ddb2de4361743e5d21eece20688e3e351e4990a6 \
-    --hash=sha256:36abed1754faeb80fbd6e64db2758091e1320f6bba74a4cf8c09cd18ccce8aca \
-    --hash=sha256:3f54aa540bdbfee7b9eb268ead60e7d199de5021facd276819c193c0fb28ea4e \
-    --hash=sha256:435319e9e340276428bbdb4e7fa732c2d399386d1de5686cb331ec8eee754f07 \
-    --hash=sha256:487dc9cc380e29f58c7ab88f9e27cdeef04b2140862e5076a66fb6bb68bb1bfa \
-    --hash=sha256:6443a794ba961a9f619b1ae926a2e900ac20c34483eea67be4ed8f1e58d3ef7b \
-    --hash=sha256:65a7f1d46d4bb41df1ac99f5fcb685fb25c7e61613742d5108b010975a9a6521 \
-    --hash=sha256:dd3eafaaeec1c7f2f8fdcd5f964e8907ad788fe8a5a32c4426fbbdda621223b7 \
-    --hash=sha256:e74c92e8e65086b338fd56333fb9a68b9f6f2fe7ad532645a290a464bcf46be5
+tornado==6.5.10 \
+    --hash=sha256:302eb1e0e3e159314eb591920529fdea80acca92df5510a2cec5bbd4f099ec72 \
+    --hash=sha256:37ae8f150cecfdbf747fc4e12f5e9a97ecd8cf1d4cdb3f119e2de84b11196918 \
+    --hash=sha256:4bd192b959f9128fb99b8898148070ba4574c9589b78bce42d1851131fe85828 \
+    --hash=sha256:66aaa3f57d30c6e6becee83ff28055d5930ac724214bde99393eefda83d5e015 \
+    --hash=sha256:69acca6501eed74582b76dbbceee2a91613f54728e3e418346000d7103101676 \
+    --hash=sha256:83e6cf438b106c6b3852d70960967bb1b70c87438050dca0981e4b9aa751a4c1 \
+    --hash=sha256:9261783640e23258694a9ff0795df430a5a7b0a651d3dd53dd0969ad6be16da7 \
+    --hash=sha256:a6b1ccd08c04b4a06fb5aeb381be99de5ad1e5375c1785e31d78c880feb57687 \
+    --hash=sha256:bdf942448169e5336451d0494d7e3d81cfa726d5aa312affdc4682dd62a62f6d \
+    --hash=sha256:ce045d3c298fddd30e89a2777f97039d1b641eb9518ac7b26a4721903539c694
     # via
     #   ipykernel
     #   jupyter-client
