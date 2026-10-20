@@ -25,21 +25,6 @@ service_test(
     test = ":testing_test",
 )
 
-# Wall-clock speed checks are opt-in, like the existing multiplayer benchmark.
-service_test(
-    name = "background_integration_test",
-    size = "large",
-    args = [
-        "-test.run=^TestBrowserMultiplayerBackground$$",
-        "-test.v",
-    ],
-    env = {"TIBERIAN_MULTIPLAYER_BACKGROUND": "1"},
-    exec_properties = {"test.network": "external"},
-    services = [":site"],
-    tags = ["manual"],
-    test = ":testing_test",
-)
-
 go_test(
     name = "testing_test",
     srcs = [

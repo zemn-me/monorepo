@@ -48,6 +48,7 @@ interface Engine {
 interface EngineOptions {
 	readonly canvas: HTMLCanvasElement;
 	readonly webNetwork: PeerTransport;
+	readonly webYield: () => Promise<void>;
 	readonly noInitialRun: true;
 	readonly locateFile: (name: string) => string;
 	readonly print: (message: string) => void;
@@ -64,6 +65,37 @@ function isEngineModule(value: unknown): value is { default: EngineFactory } {
 		'default' in value &&
 		typeof value.default === 'function'
 	);
+}
+
+// Only one native Asyncify continuation can be pending. Reuse its message
+// channel and release it with the engine, including an unmount while suspended.
+function createMessageYield(signal: AbortSignal): () => Promise<void> {
+	const channel = new MessageChannel();
+	let pending: (() => void) | undefined;
+	channel.port1.onmessage = () => {
+		const resume = pending;
+		pending = undefined;
+		resume?.();
+	};
+	signal.addEventListener(
+		'abort',
+		() => {
+			channel.port1.close();
+			channel.port2.close();
+			pending?.();
+			pending = undefined;
+		},
+		{ once: true }
+	);
+	return () =>
+		new Promise<void>(resolve => {
+			if (signal.aborted) {
+				resolve();
+				return;
+			}
+			pending = resolve;
+			channel.port2.postMessage(null);
+		});
 }
 
 // SDL owns document-level listeners and audio. A replacement mount waits for
@@ -86,6 +118,7 @@ export function startGame(
 		signal: lifetime.signal,
 	});
 	const webNetwork = createPeerTransport(lifetime.signal);
+	const webYield = createMessageYield(lifetime.signal);
 	let engine: Engine | undefined;
 	let started = false;
 	let exited = false;
@@ -121,6 +154,7 @@ export function startGame(
 				imported.default({
 					canvas,
 					webNetwork,
+					webYield,
 					noInitialRun: true,
 					locateFile: name =>
 						name.endsWith('.wasm')

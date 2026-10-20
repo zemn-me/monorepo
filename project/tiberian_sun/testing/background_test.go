@@ -1,7 +1,6 @@
 package testing_test
 
 import (
-	"os"
 	"regexp"
 	"strconv"
 	"testing"
@@ -78,9 +77,6 @@ func observeMultiplayerProgress(t *testing.T, host, guest *multiplayerBrowser, h
 }
 
 func TestBrowserMultiplayerBackground(t *testing.T) {
-	if os.Getenv("TIBERIAN_MULTIPLAYER_BACKGROUND") != "1" {
-		t.Skip("run //project/tiberian_sun/testing:background_integration_test for real-time background scheduling")
-	}
 	t.Setenv("TIBERIAN_MULTIPLAYER_REALTIME", "1")
 	host, guest := startBrowserMultiplayer(t, true)
 	if host.clock != nil || guest.clock != nil {
