@@ -19,6 +19,8 @@ itest_service(
 service_test(
     name = "integration_test",
     size = "large",
+    # Emit timings as commands finish: a process timeout loses Go's buffered logs.
+    args = ["-test.v"],
     # Two complete engines use software-rendered Chromium alongside the site.
     # Reserve their CPU and memory rather than relying on an estimate from the
     # much lighter browser scenarios sharing this test target.
