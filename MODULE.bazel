@@ -9,7 +9,24 @@ module(
     name = "monorepo",
 )
 
-bazel_dep(name = "rules_oci", version = "2.2.7")
+# renovate:
+# datasource = github-releases
+# versioning = semver
+# depName = bazel-contrib/rules_oci
+# extractVersion = ^v(?<version>.*)$
+RULES_OCI_VERSION = "2.3.3"
+
+bazel_dep(name = "rules_oci", version = RULES_OCI_VERSION)
+
+# Upstream publishes releases before BCR. Keep the release archive and module
+# version together so Renovate can refresh both without a registry publication.
+archive_override(
+    module_name = "rules_oci",
+    integrity = "sha256-JD6sh+xB1o0dnm0hiEpQ7CjgMfcCsLn83H+Xw/PVOJo=",
+    strip_prefix = "rules_oci-" + RULES_OCI_VERSION,
+    # auto-integrity
+    urls = ["https://github.com/bazel-contrib/rules_oci/releases/download/v" + RULES_OCI_VERSION + "/rules_oci-v" + RULES_OCI_VERSION + ".tar.gz"],
+)
 
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 bazel_dep(name = "rules_cc", version = "0.2.17")
