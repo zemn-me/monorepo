@@ -19,8 +19,15 @@ itest_service(
 service_test(
     name = "integration_test",
     size = "large",
-    # WebRTC needs a browser-visible interface to gather ICE candidates.
-    exec_properties = {"test.network": "external"},
+    # Two complete engines use software-rendered Chromium alongside the site.
+    # Reserve their CPU and memory rather than relying on an estimate from the
+    # much lighter browser scenarios sharing this test target.
+    exec_properties = {
+        "test.EstimatedCPU": "4",
+        "test.EstimatedMemory": "4GB",
+        # WebRTC needs a browser-visible interface to gather ICE candidates.
+        "test.network": "external",
+    },
     services = [":site"],
     # Keep each browser scenario within the test deadline under remote contention.
     shard_count = 4,

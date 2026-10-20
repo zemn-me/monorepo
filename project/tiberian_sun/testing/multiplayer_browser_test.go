@@ -12,16 +12,25 @@ import (
 	"time"
 
 	"github.com/tebeka/selenium"
-	"github.com/tebeka/selenium/log"
 	seleniumutil "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
 type multiplayerBrowser struct {
-	t        *testing.T
-	driver   *seleniumutil.Driver
-	clock    *seleniumutil.VirtualClock
-	messages strings.Builder
-	name     string
+	t       *testing.T
+	driver  *seleniumutil.Driver
+	clock   *seleniumutil.VirtualClock
+	console *seleniumutil.ConsoleLog
+	name    string
+}
+
+func (p *multiplayerBrowser) trace(operation string) func() {
+	p.t.Helper()
+	if p.clock != nil {
+		return func() {}
+	}
+	began := time.Now()
+	p.t.Logf("%s: begin %s at %s", p.name, operation, began.UTC().Format(time.RFC3339Nano))
+	return func() { p.t.Logf("%s: end %s after %s", p.name, operation, time.Since(began)) }
 }
 
 func (p *multiplayerBrowser) advance() {
@@ -36,18 +45,15 @@ func (p *multiplayerBrowser) advance() {
 }
 func (p *multiplayerBrowser) logs() string {
 	p.t.Helper()
-	entries, err := p.driver.Log(log.Browser)
+	text, err := p.console.Text()
 	if err != nil {
 		p.t.Fatal(err)
 	}
-	for _, entry := range entries {
-		p.messages.WriteString(entry.Message)
-		p.messages.WriteByte('\n')
-	}
-	return p.messages.String()
+	return text
 }
 func (p *multiplayerBrowser) mouse(x, y int, kind string, buttons int) {
 	p.t.Helper()
+	defer p.trace("mouse " + kind)()
 	if err := p.driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": kind, "x": x, "y": y, "button": "left", "buttons": buttons, "clickCount": 1}); err != nil {
 		p.t.Fatalf("%s: mouse %s at (%d, %d): %v", p.name, kind, x, y, err)
 	}
@@ -64,6 +70,7 @@ func (p *multiplayerBrowser) click(x, y int) {
 }
 func (p *multiplayerBrowser) screenshot() image.Image {
 	p.t.Helper()
+	defer p.trace("pixel screenshot")()
 	data, err := p.driver.ViewScreenshot()
 	if err != nil {
 		p.t.Fatalf("%s: screenshot: %v", p.name, err)
@@ -83,6 +90,7 @@ func (p *multiplayerBrowser) captureStep(name string) {
 	if dir == "" {
 		return
 	}
+	defer p.trace("diagnostic screenshot " + name)()
 	data, err := p.driver.ViewScreenshot()
 	if err != nil {
 		p.t.Logf("%s: diagnostic capture %s unavailable: %v", p.name, name, err)
@@ -108,6 +116,7 @@ func (p *multiplayerBrowser) white(x, y int) bool {
 func (p *multiplayerBrowser) wait(label string, condition func() bool, others ...*multiplayerBrowser) {
 	p.t.Helper()
 	p.t.Logf("%s: waiting for %s", p.name, label)
+	defer p.trace("wait " + label)()
 	// ICE and network delivery remain real browser I/O. Only the game clocks advance.
 	deadline := time.Now().Add(90 * time.Second)
 	for time.Now().Before(deadline) {
@@ -119,6 +128,7 @@ func (p *multiplayerBrowser) wait(label string, condition func() bool, others ..
 			other.advance()
 		}
 	}
+	p.t.Logf("%s: console on failed %s:\n%s", p.name, label, p.logs())
 	state, err := p.driver.ExecuteScript(`const c=document.querySelector('canvas'), r=c?.getBoundingClientRect(); return {viewport:[innerWidth,innerHeight], screen:[screen.width,screen.height], hidden:document.hidden, canvas:c&&{width:c.width,height:c.height,rect:r&&[r.x,r.y,r.width,r.height]}}`, nil)
 	p.t.Logf("%s: layout on failed %s: %v (error=%v)", p.name, label, state, err)
 	p.captureStep("failed-" + strings.ReplaceAll(label, " ", "-"))
@@ -134,7 +144,12 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 		}}
 	}
 	driver := newGameBrowserWithCapabilities(t, capabilities, "--window-size=1000,900", "--disable-features=WebRtcHideLocalIpsWithMdns")
-	p := &multiplayerBrowser{t: t, driver: driver, name: name}
+	console, err := driver.WatchConsole()
+	if err != nil {
+		driver.Close()
+		t.Fatal(err)
+	}
+	p := &multiplayerBrowser{t: t, driver: driver, name: name, console: console}
 	t.Cleanup(func() {
 		if data, err := driver.ViewScreenshot(); err == nil {
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
@@ -161,6 +176,7 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 			}
 			t.Log(name + ":\n" + text)
 		}
+		console.Close()
 		driver.Close()
 	})
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
@@ -182,6 +198,7 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
 		t.Fatal(err)
 	}
+
 	p.wait("game selector", func() bool { p.mouse(120, 110, "mouseMoved", 0); return p.white(120, 110) })
 	p.click(240, 300)
 	p.wait("Internet button highlight", func() bool { p.mouse(400, 350, "mouseMoved", 0); return p.white(400, 350) })

@@ -18,9 +18,10 @@ import (
 // Driver embeds selenium.WebDriver and cleans itself up via Close().
 type Driver struct {
 	selenium.WebDriver
-	svc     *selenium.Service
-	url     string
-	logFile *os.File
+	svc             *selenium.Service
+	url             string
+	logFile         *os.File
+	debuggerAddress string
 }
 
 // Close satisfies io.Closer.
@@ -95,10 +96,18 @@ func NewWithChromeCapabilities(additionalCapabilities selenium.Capabilities, add
 		return nil, fmt.Errorf("start chromedriver: %w", err)
 	}
 
+	debuggerPort, err := freePort()
+	if err != nil {
+		_ = svc.Stop()
+		return nil, err
+	}
 	chromeArguments := []string{
 		"--headless",
 		"--no-sandbox",
 		"--disable-dev-shm-usage",
+		// Keep the browser's debugging endpoint available to passive observers.
+		// The Selenium client discards W3C's returned debuggerAddress capability.
+		fmt.Sprintf("--remote-debugging-port=%d", debuggerPort),
 	}
 	chromeArguments = append(chromeArguments, additionalArguments...)
 	caps := selenium.Capabilities{
@@ -132,7 +141,7 @@ func NewWithChromeCapabilities(additionalCapabilities selenium.Capabilities, add
 	}
 
 	keepLog = true
-	return &Driver{WebDriver: wd, svc: svc, url: remoteURL, logFile: logFile}, nil
+	return &Driver{WebDriver: wd, svc: svc, url: remoteURL, logFile: logFile, debuggerAddress: fmt.Sprintf("127.0.0.1:%d", debuggerPort)}, nil
 }
 
 // SetTimezoneOverride configures Chromium to report the provided time zone ID.

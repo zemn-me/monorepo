@@ -1,8 +1,10 @@
 package testing_test
 
 import (
+	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 )
@@ -77,6 +79,18 @@ func observeMultiplayerProgress(t *testing.T, host, guest *multiplayerBrowser, h
 }
 
 func TestBrowserMultiplayerBackground(t *testing.T) {
+	// Native timing depends on the runner allocation as well as browser policy.
+	// Keep the Linux quota and throttling counters with failures from remote CI.
+	for _, name := range []string{"cpu.max", "memory.max", "cpu.stat"} {
+		if value, err := os.ReadFile("/sys/fs/cgroup/" + name); err == nil {
+			t.Logf("runner %s: %s", name, strings.TrimSpace(string(value)))
+		}
+	}
+	t.Cleanup(func() {
+		if value, err := os.ReadFile("/sys/fs/cgroup/cpu.stat"); err == nil {
+			t.Logf("runner final cpu.stat: %s", strings.TrimSpace(string(value)))
+		}
+	})
 	t.Setenv("TIBERIAN_MULTIPLAYER_REALTIME", "1")
 	host, guest := startBrowserMultiplayer(t, true)
 	if host.clock != nil || guest.clock != nil {

@@ -44,6 +44,7 @@ go_library(
     srcs = [
         "chrome_rlocation.go",
         "chromedriver_rlocation.go",
+        "console.go",
         "selenium.go",
         "virtual_clock.go",
     ],
@@ -56,6 +57,7 @@ go_library(
     importpath = "github.com/zemn-me/monorepo/go/seleniumutil",
     visibility = ["//visibility:public"],
     deps = [
+        "@com_github_gorilla_websocket//:websocket",
         "@com_github_tebeka_selenium//:selenium",
         "@io_bazel_rules_go//go/runfiles",
     ],
@@ -64,6 +66,7 @@ go_library(
 go_test(
     name = "seleniumutil_test",
     srcs = [
+        "console_test.go",
         "selenium_test.go",
         "virtual_clock_test.go",
     ],
