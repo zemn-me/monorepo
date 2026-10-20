@@ -57,6 +57,8 @@ func (p *multiplayerBrowser) mouse(x, y int, kind string, buttons int) {
 func (p *multiplayerBrowser) click(x, y int) {
 	p.t.Helper()
 	p.mouse(x, y, "mouseMoved", 0)
+	// The native menu consumes motion at an Asyncify yield before handling press.
+	p.advance()
 	p.mouse(x, y, "mousePressed", 1)
 	p.advance()
 	p.mouse(x, y, "mouseReleased", 0)

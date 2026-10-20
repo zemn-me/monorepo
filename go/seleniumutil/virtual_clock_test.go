@@ -1,7 +1,10 @@
 package selenium_test
 
 import (
+	"fmt"
 	"math"
+	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"testing"
 	"time"
@@ -65,5 +68,54 @@ function frame(){frames.textContent=Number(frames.textContent)+1;requestAnimatio
 	paused := sample()
 	if after[0] != paused[0] || after[1] != paused[1] {
 		t.Fatalf("clock did not pause after budget: %v -> %v", after, paused)
+	}
+}
+
+func TestVirtualClockHistoryNavigation(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		if r.URL.Path == "/game" {
+			// Navigation can destroy WebDriver's callback before pagehide completes.
+			// An earlier pagehide handler makes that ordering deterministic here.
+			fmt.Fprint(w, `<script>
+addEventListener('pagehide', e => e.stopImmediatePropagation());
+setInterval(() => {}, 1);
+setTimeout(() => history.back(), 10);
+</script>`)
+			return
+		}
+		fmt.Fprint(w, `<p>Previous document</p>`)
+	}))
+	defer server.Close()
+	driver, err := selenium.NewWithChromeCapabilities(webdriver.Capabilities{"pageLoadStrategy": "eager"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	if err := driver.SetAsyncScriptTimeout(2 * time.Second); err != nil {
+		t.Fatal(err)
+	}
+	// The previous document predates clock installation, just like the game's Exit.
+	if err := driver.Get(server.URL + "/before"); err != nil {
+		t.Fatal(err)
+	}
+	clock, err := selenium.NewVirtualClock(driver)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.Get(server.URL + "/game"); err != nil {
+		t.Fatal(err)
+	}
+	if err := clock.Advance(time.Minute); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(w webdriver.WebDriver) (bool, error) {
+		url, err := w.CurrentURL()
+		return url == server.URL+"/before", err
+	}, 5*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := clock.Advance(100 * time.Millisecond); err != nil {
+		t.Fatal(err)
 	}
 }
