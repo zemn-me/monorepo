@@ -35,9 +35,10 @@ EM_JS(void, Web_Display_Aspect, (int width, int height), {
     Module.canvas.style.setProperty('--game-aspect', String(width / height));
 });
 void Web_Display_Size(int &width, int &height) {
-    // Shell menus use fixed pixel artwork in both the legacy and Rml renderers.
-    // Let the browser contain-scale that canvas; gameplay still follows the viewport.
-    if (!GameActive) {
+    // Select_Game marks GameActive before a player or scenario exists. Shell
+    // menus still need fixed pixel artwork until gameplay has an actual player.
+    // Let CSS contain-scale that canvas; gameplay follows the viewport.
+    if (!GameActive || PlayerPtr == nullptr) {
         width = 800;
         height = 600;
         Web_Display_Aspect(width, height);

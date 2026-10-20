@@ -2,6 +2,7 @@ package selenium_test
 
 import (
 	"bytes"
+	"image"
 	"image/png"
 	"net/url"
 	"os"
@@ -96,25 +97,30 @@ function draw(){gl.clearColor(0,0,1,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(g
 	if err != nil {
 		t.Fatal(err)
 	}
-	for range 10 {
-		data, err := driver.ViewScreenshot()
-		if err != nil {
+	for _, size := range []image.Point{{X: 800, Y: 600}, {X: 390, Y: 844}, {X: 800, Y: 600}} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": size.X, "height": size.Y, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 			t.Fatal(err)
 		}
-		shot, err := png.Decode(bytes.NewReader(data))
-		if err != nil {
-			t.Fatal(err)
-		}
-		if shot.Bounds().Dx() != 800 || shot.Bounds().Dy() != 600 {
-			t.Fatalf("screenshot bounds = %v, want 800x600", shot.Bounds())
-		}
-		r, g, b, _ := shot.At(120, 120).RGBA()
-		if r < 60000 || g < 60000 || b < 60000 {
-			t.Fatalf("white control pixel = %d,%d,%d", r, g, b)
-		}
-		r, g, b, _ = shot.At(10, 10).RGBA()
-		if r > 1000 || g > 1000 || b < 60000 {
-			t.Fatalf("blue background pixel = %d,%d,%d", r, g, b)
+		for range 10 {
+			data, err := driver.ViewScreenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			shot, err := png.Decode(bytes.NewReader(data))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if shot.Bounds().Dx() != size.X || shot.Bounds().Dy() != size.Y {
+				t.Fatalf("screenshot bounds = %v, want %dx%d", shot.Bounds(), size.X, size.Y)
+			}
+			r, g, b, _ := shot.At(120, 120).RGBA()
+			if r < 60000 || g < 60000 || b < 60000 {
+				t.Fatalf("white control pixel = %d,%d,%d", r, g, b)
+			}
+			r, g, b, _ = shot.At(10, 10).RGBA()
+			if r > 1000 || g > 1000 || b < 60000 {
+				t.Fatalf("blue background pixel = %d,%d,%d", r, g, b)
+			}
 		}
 	}
 	after, err := driver.ExecuteScript("return Number(document.querySelector('canvas').dataset.frame)", nil)

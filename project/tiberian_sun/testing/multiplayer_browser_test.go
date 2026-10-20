@@ -119,6 +119,8 @@ func (p *multiplayerBrowser) wait(label string, condition func() bool, others ..
 			other.advance()
 		}
 	}
+	state, err := p.driver.ExecuteScript(`const c=document.querySelector('canvas'), r=c?.getBoundingClientRect(); return {viewport:[innerWidth,innerHeight], screen:[screen.width,screen.height], hidden:document.hidden, canvas:c&&{width:c.width,height:c.height,rect:r&&[r.x,r.y,r.width,r.height]}}`, nil)
+	p.t.Logf("%s: layout on failed %s: %v (error=%v)", p.name, label, state, err)
 	p.captureStep("failed-" + strings.ReplaceAll(label, " ", "-"))
 	p.t.Fatalf("%s: %s", p.name, label)
 }
@@ -207,6 +209,25 @@ func (p *multiplayerBrowser) copyCode(previous string) string {
 	})
 	return code
 }
+func (p *multiplayerBrowser) resizeMenu(width, height int) {
+	p.t.Helper()
+	if err := p.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+		p.t.Fatal(err)
+	}
+	p.wait("menu viewport layout", func() bool {
+		ready, err := p.driver.ExecuteScript(`const [w,h]=arguments, c=document.querySelector('canvas');
+		if (!c || innerWidth!==w || innerHeight!==h) return false;
+		const r=c.getBoundingClientRect(), scale=Math.min(w/800,h/600);
+		return c.width===800 && c.height===600 &&
+		 Math.abs(r.width-800*scale)<1 && Math.abs(r.height-600*scale)<1 &&
+		 Math.abs(r.x-(w-r.width)/2)<1 && Math.abs(r.y-(h-r.height)/2)<1;`, []interface{}{width, height})
+		if err != nil {
+			p.t.Fatal(err)
+		}
+		return ready == true
+	})
+}
+
 func (p *multiplayerBrowser) pasteCode(code string) {
 	p.t.Helper()
 	result, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.writeText(arguments[0]).then(()=>done(true),e=>done(String(e)))", []interface{}{code})
@@ -216,7 +237,12 @@ func (p *multiplayerBrowser) pasteCode(code string) {
 	// A viewport change can finish after the browser acknowledges its resize.
 	// Wait for the actual menu to accept input at the desktop coordinates.
 	p.wait("Paste button is ready", func() bool {
+		// SDL drops unchanged mouse coordinates. After a resize, send a fresh
+		// gesture and let the native menu consume it before reading the hover.
+		p.mouse(210, 360, "mouseMoved", 0)
+		p.advance()
 		p.mouse(210, 340, "mouseMoved", 0)
+		p.advance()
 		return p.white(210, 340)
 	})
 	p.click(210, 270) // Clear the previous invitation or reply through its text field.
@@ -269,19 +295,9 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 		return strings.Contains(guest.logs(), "Paste the complete invitation code from the host.")
 	})
 	guest.captureStep("invalid-invitation")
-	if err := guest.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 390, "height": 844, "deviceScaleFactor": 1, "mobile": false}); err != nil {
-		t.Fatal(err)
-	}
-	for i := 0; i < 5; i++ {
-		guest.advance()
-	}
+	guest.resizeMenu(390, 844)
 	guest.captureStep("phone-invalid-invitation")
-	if err := guest.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
-		t.Fatal(err)
-	}
-	for i := 0; i < 5; i++ {
-		guest.advance()
-	}
+	guest.resizeMenu(800, 600)
 	guest.pasteCode(offer)
 	answer := guest.copyCode(offer)
 	guest.captureStep("reply")
