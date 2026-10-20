@@ -298,12 +298,9 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 	guest.resizeMenu(390, 844)
 	guest.captureStep("phone-invalid-invitation")
 	guest.resizeMenu(800, 600)
-	guest.pasteCode(offer)
-	answer := guest.copyCode(offer)
-	guest.captureStep("reply")
-	if answer == offer {
-		t.Fatal("guest did not produce its own reply")
-	}
+	// Exercise host validation before the guest starts ICE. Return the reply
+	// promptly so browser input and diagnostic captures cannot exhaust ICE
+	// connectivity checks while the host is still testing invalid input.
 	host.pasteCode(offer)
 	host.wait("own invitation feedback", func() bool {
 		return strings.Contains(host.logs(), "That is your code. Paste the code your opponent sent back.")
@@ -317,6 +314,12 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 	}
 	host.advance()
 	host.captureStep("reply-keyboard-focus")
+	guest.pasteCode(offer)
+	answer := guest.copyCode(offer)
+	guest.captureStep("reply")
+	if answer == offer {
+		t.Fatal("guest did not produce its own reply")
+	}
 	host.pasteCode(answer)
 	host.wait("direct connection", func() bool {
 		return strings.Contains(host.logs(), "WebRTC game channel connected") && strings.Contains(guest.logs(), "WebRTC game channel connected")
