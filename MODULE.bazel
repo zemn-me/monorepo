@@ -9,7 +9,24 @@ module(
     name = "monorepo",
 )
 
-bazel_dep(name = "rules_oci", version = "2.2.7")
+# renovate:
+# datasource = github-releases
+# versioning = semver
+# depName = bazel-contrib/rules_oci
+# extractVersion = ^v(?<version>.*)$
+RULES_OCI_VERSION = "2.3.3"
+
+bazel_dep(name = "rules_oci", version = RULES_OCI_VERSION)
+
+# Upstream publishes releases before BCR. Keep the release archive and module
+# version together so Renovate can refresh both without a registry publication.
+archive_override(
+    module_name = "rules_oci",
+    integrity = "sha256-JD6sh+xB1o0dnm0hiEpQ7CjgMfcCsLn83H+Xw/PVOJo=",
+    strip_prefix = "rules_oci-" + RULES_OCI_VERSION,
+    # auto-integrity
+    urls = ["https://github.com/bazel-contrib/rules_oci/releases/download/v" + RULES_OCI_VERSION + "/rules_oci-v" + RULES_OCI_VERSION + ".tar.gz"],
+)
 
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 bazel_dep(name = "rules_cc", version = "0.2.17")
@@ -167,15 +184,68 @@ bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.9.0", dev_dependency = True)
 
 bazel_dep(name = "rules_pkg", version = "1.2.0")
-bazel_dep(name = "rules_python", version = "1.8.4")
+bazel_dep(name = "rules_python", version = "2.4.2")
+
+# Keep the installer and resolver on a compatible pip API for Python 3.15.
+single_version_override(
+    module_name = "rules_python",
+    patch_strip = 1,
+    patches = ["//bzl:rules_python_installer.patch"],
+)
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+
+# Register the stable runtime explicitly while the rules_python minor mapping
+# still selects a release candidate. Keep immutable publisher archives and hashes.
+
+python.single_version_platform_override(
+    platform = "aarch64-apple-darwin",
+    python_version = "3.15.0",
+    sha256 = "473e6213a1c55da12e60642249a6201fe9dca841b4ad8c59149798846ed87c62",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-aarch64-apple-darwin-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "x86_64-apple-darwin",
+    python_version = "3.15.0",
+    sha256 = "76253e5619694b66e817a091bbdbf3db89bb0aff6d77a9ac7aae2ce96218ed0d",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-x86_64-apple-darwin-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "aarch64-unknown-linux-gnu",
+    python_version = "3.15.0",
+    sha256 = "00345e47b7f42d10ec60d28b2ccad6b1f33c40697f0ae57ee15d70896efad0b5",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "x86_64-unknown-linux-gnu",
+    python_version = "3.15.0",
+    sha256 = "46edc8f6fccade47dc38001ef2d4094d9cedd21a1863d9b44b2a02c1ee76b94d",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "aarch64-pc-windows-msvc",
+    python_version = "3.15.0",
+    sha256 = "33fb6162a4fcaed7b7683622638f8b22bf7d722acb461793f991d6522c9787cb",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-aarch64-pc-windows-msvc-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "x86_64-pc-windows-msvc",
+    python_version = "3.15.0",
+    sha256 = "0943854634fa0fc4faf2a37d900bc7e1a6f89afd7ac576b22d17f39142c63b55",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"],
+)
 
 # renovate:
 # 	datasource=python-version
 # 	versioning=python
 # 	depName=python
-PYTHON_VERSION = "3.14"
+PYTHON_VERSION = "3.15.0"
 
 python.toolchain(
     is_default = True,
@@ -183,6 +253,12 @@ python.toolchain(
 )
 python.toolchain(
     python_version = "3.10",
+)
+
+# The standalone interception CLI has a narrower native-wheel and Tornado
+# compatibility range than the notebook environment.
+python.toolchain(
+    python_version = "3.14",
 )
 use_repo(python, "python_3_14")
 use_repo(python, "python_3_10")
@@ -200,7 +276,18 @@ pip.parse(
         "osx_x86_64",
     ],
 )
-use_repo(pip, "pip")
+pip.parse(
+    experimental_index_url = "https://pypi.org/simple",
+    hub_name = "mitmproxy_pip",
+    python_version = "3.14",
+    requirements_lock = "//py/mitmproxy:requirements.txt",
+    target_platforms = [
+        "linux_x86_64",
+        "osx_aarch64",
+        "osx_x86_64",
+    ],
+)
+use_repo(pip, "mitmproxy_pip", "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.6.0")
 bazel_dep(name = "aspect_rules_js", version = "3.5.1")
@@ -290,8 +377,8 @@ go_deps.module_override(
     path = "github.com/bazelbuild/bazel-watcher",
 )
 
-# gopls 0.23 predates internal API changes in x/tools 0.49, required by
-# x/image. Remove this compatibility patch when gopls adopts those APIs.
+# gopls 0.24 predates the cursor helper move and inliner API in x/tools 0.52.
+# Remove this compatibility patch when gopls adopts those APIs.
 go_deps.module_override(
     patch_strip = 1,
     patches = ["//bzl:gopls_x_tools.patch"],
@@ -350,7 +437,7 @@ use_repo(
     "org_golang_x_tools_gopls",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "1.8.0")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "2.4.2")
 bazel_dep(name = "aspect_rules_py", version = "1.8.4")
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -596,12 +683,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_X64 = "3.268.0"
+PULUMI_CLI_VERSION_LINUX_X64 = "3.270.0"
 
 http_archive(
     name = "pulumi_cli_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "903cafeaa9f6327e4bf53a8b7b99ae660f26198acfa804a2f982bf5de3f1de0b",
+    sha256 = "d05899c251cb0413a9a2304f23229218c46852a61256913f34f08ebc27266139",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_X64 + "-linux-x64.tar.gz",
@@ -612,12 +699,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.268.0"
+PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.270.0"
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "ef509a84f0ad8f4ed0ec04be957e6688f094eb9a1cdc676a4864103d66d8a4e9",
+    sha256 = "688a9f4c5bb685cbd40b83e45c282715cb537ff2a5be97ffb6367ed6f6c26b34",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
@@ -628,12 +715,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_X64 = "3.268.0"
+PULUMI_CLI_VERSION_DARWIN_X64 = "3.270.0"
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "b0c4e37e9fd9573d3e09b65606124486ef2c2049db1237ca6037c4204c6a99a8",
+    sha256 = "20e38aa2710b1e1f6351787c51012757e2392bde547ab7430717094130672b56",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_X64 + "-darwin-x64.tar.gz",
@@ -644,14 +731,14 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_ARM64 = "3.268.0"
+PULUMI_CLI_VERSION_LINUX_ARM64 = "3.270.0"
 
 http_archive(
     name = "pulumi_cli_linux_arm64",
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    sha256 = "47c1b9283b7997337b0a373d240f771a6aeb42ee5dd2e213c14604247c7ff15a",
+    sha256 = "b41f199a161aba4843312d4cda3143024fa6fbd73229d4149f572a1788f84bda",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "-linux-arm64.tar.gz",
@@ -662,12 +749,12 @@ exports_files(glob(["**/*"], allow_empty=True))
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.268.0"
+PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.270.0"
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "c9ca1e94687394f13a3fd8cb0df02976850ec41d574f5bc26f7860a8596b488d",
+    sha256 = "6de899bb478ee7797cf96ed23c086d2d64a953e75ed8d34f23eaf29d6d4aee2c",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "-windows-arm64.zip",
@@ -678,12 +765,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_X64 = "3.268.0"
+PULUMI_CLI_VERSION_WINDOWS_X64 = "3.270.0"
 
 http_archive(
     name = "pulumi_cli_windows_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "c7c3baabb2cf80d1edfdf9255c6aede9c0adfccedf1d98d2e8ec149211fc223e",
+    sha256 = "55f14842add7df2f3d6270858f3963bbad873909b166bcb20f87b9a4b52cdbd8",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "-windows-x64.zip",

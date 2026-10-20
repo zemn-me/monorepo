@@ -57,6 +57,7 @@ js_test(
         "renovate-global.json",
         "//:node_modules/renovate",
         "//:renovate_python_inputs",
+        "//py/mitmproxy:renovate_python_inputs",
     ],
     entry_point = "renovate_python_lock_test.mjs",
 )
