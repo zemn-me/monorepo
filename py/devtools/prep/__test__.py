@@ -1,7 +1,6 @@
 import os
 import unittest
 import tempfile
-import shutil
 
 from py.devtools.prep.lib import (
     get_sapling_config_dir,
@@ -11,17 +10,9 @@ from py.devtools.prep.lib import (
 
 class TestSaplingConfig(unittest.TestCase):
     def setUp(self):
-        """
-        Create a fresh temporary directory before each test,
-        mimicking Pytest's `tmp_path` fixture.
-        """
-        self.tmp_dir = tempfile.mkdtemp()
-
-    def tearDown(self):
-        """
-        Remove the temporary directory after each test.
-        """
-        shutil.rmtree(self.tmp_dir)
+        directory = tempfile.TemporaryDirectory(dir=os.environ.get("TEST_TMPDIR"))
+        self.addCleanup(directory.cleanup)
+        self.tmp_dir = directory.name
 
     def test_get_sapling_config_dir(self):
         git_path = os.path.join(self.tmp_dir, ".git")
@@ -37,6 +28,8 @@ class TestSaplingConfig(unittest.TestCase):
         # File doesn’t exist initially
         changed = ensure_sapling_include(config_file, relative_path)
         self.assertTrue(changed, "Should create file and prepend line.")
+        with open(config_file) as config:
+            self.assertEqual(config.read(), "%include ../ini/sl/config.ini\n")
 
         # Calling again detects it's already included
         changed_again = ensure_sapling_include(config_file, relative_path)
