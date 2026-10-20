@@ -249,7 +249,7 @@ function useinvalidateMeScopes() {
 function useinvalidateCallboxStatus() {
 	const queryClient = useQueryClient();
 	return () =>
-		void queryClient.invalidateQueries({
+		queryClient.invalidateQueries({
 			queryKey: ['get', '/callbox'],
 		});
 }
@@ -257,7 +257,7 @@ function useinvalidateCallboxStatus() {
 function useinvalidateCallboxEvents() {
 	const queryClient = useQueryClient();
 	return () =>
-		void queryClient.invalidateQueries({
+		queryClient.invalidateQueries({
 			queryKey: ['get', '/callbox/events'],
 		});
 }
@@ -384,8 +384,9 @@ export function usePostMeKey<A, B>(
 			}
 		),
 
-		onMutate: open => {
+		onMutate: async open => {
 			onMutate();
+			await queryClient.cancelQueries({ queryKey: ['get', '/callbox'] });
 			// eagerly assume the query will succeed.
 			queryClient.setQueryData(
 				[
@@ -403,10 +404,13 @@ export function usePostMeKey<A, B>(
 			);
 		},
 
-		onSuccess: () => {
-			// sync with server
-			invalidateCallboxStatus();
-			invalidateCallboxEvents();
+		onSuccess: async () => {
+			// Keep the control pending until polling reflects the confirmed write;
+			// an optimistic label is not yet safe to use for the next toggle.
+			await Promise.all([
+				invalidateCallboxStatus(),
+				invalidateCallboxEvents(),
+			]);
 			onSuccess();
 		},
 
@@ -1165,8 +1169,8 @@ export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 				() => undefined
 			),
 		],
-		queryFn: async () => {
-			const resp = await fetchClient.GET('/callbox');
+		queryFn: async ({ signal }) => {
+			const resp = await fetchClient.GET('/callbox', { signal });
 			if (!resp.data) {
 				throw new Error('/callbox returned unexpected payload');
 			}
