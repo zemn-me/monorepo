@@ -16,7 +16,6 @@ ts_project(
 jest_test(
     name = "tests",
     srcs = ["fs_test.js"],
-    data = glob(["testfiles/**/*"]),
     deps = [
         ":fs",
         "//:node_modules/@jest/globals",

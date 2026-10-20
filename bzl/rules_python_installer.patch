@@ -1,0 +1,37 @@
+diff --git a/python/private/pypi/deps.bzl b/python/private/pypi/deps.bzl
+--- a/python/private/pypi/deps.bzl
++++ b/python/private/pypi/deps.bzl
+@@ -61,13 +61,13 @@
+     ),
+     (
+         "pypi__pip",
+-        "https://files.pythonhosted.org/packages/de/f0/c81e05b613866b76d2d1066490adf1a3dbc4ee9d9c839961c3fc8a6997af/pip-26.0.1-py3-none-any.whl",
+-        "bdb1b08f4274833d62c1aa29e20907365a2ceb950410df15fc9521bad440122b",
++        "https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl",
++        "71138adf1f4ca900cdb7d289c21b7494329f2332b6d85f0e1c42108c0384ed3e",
+     ),
+     (
+         "pypi__pip_tools",
+-        "https://files.pythonhosted.org/packages/6e/74/59906d876c6cb1137f42a137164f2fe683b06283cde84bfcf7f5dd43970b/pip_tools-7.5.3-py3-none-any.whl",
+-        "3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e",
++        "https://files.pythonhosted.org/packages/4b/68/f3bd09c53ed3159bb1349e1d5859ad1ea7755b8e4cd50174290e9e8cbb47/pip_tools-7.6.2-py3-none-any.whl",
++        "f37eb4b736859c2c30230e50977312c61918b7ef931071ff7811fd067715c25f",
+     ),
+     (
+         "pypi__pyproject_hooks",
+diff --git a/python/private/pypi/dependency_resolver/dependency_resolver.py b/python/private/pypi/dependency_resolver/dependency_resolver.py
+--- a/python/private/pypi/dependency_resolver/dependency_resolver.py
++++ b/python/private/pypi/dependency_resolver/dependency_resolver.py
+@@ -221,6 +221,12 @@
+         if golden != out:
+             import difflib
+ 
++            # Preserve canonical platform output for reviewing and applying fixes.
++            outputs_dir = os.environ.get("TEST_UNDECLARED_OUTPUTS_DIR")
++            if outputs_dir:
++                with open(os.path.join(outputs_dir, "requirements.txt"), "w") as output:
++                    output.writelines(out)
++
+             print("".join(difflib.unified_diff(golden, out)), file=sys.stderr)
+             print(
+                 f"Lock file out of date. Run '{update_command}' to update.",

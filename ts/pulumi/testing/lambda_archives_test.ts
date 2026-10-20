@@ -15,7 +15,9 @@ afterEach(async () => {
 	);
 });
 async function directory() {
-	const result = await mkdtemp(path.join(tmpdir(), 'lambda-archive-'));
+	const result = await mkdtemp(
+		path.join(process.env['TEST_TMPDIR'] ?? tmpdir(), 'lambda-archive-')
+	);
 	directories.push(result);
 	return result;
 }

@@ -9,6 +9,7 @@ exports_files([
     "gopls_x_tools.patch",
     "pulumi_typescript5.patch",
     "rules_itest_http_timeout.patch",
+    "rules_python_installer.patch",
 ])
 
 sh_binary(
