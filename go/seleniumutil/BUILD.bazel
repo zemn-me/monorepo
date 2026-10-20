@@ -45,6 +45,7 @@ go_library(
         "chrome_rlocation.go",
         "chromedriver_rlocation.go",
         "console.go",
+        "page_commands.go",
         "selenium.go",
         "virtual_clock.go",
     ],
@@ -67,6 +68,7 @@ go_test(
     name = "seleniumutil_test",
     srcs = [
         "console_test.go",
+        "page_commands_test.go",
         "selenium_test.go",
         "virtual_clock_test.go",
     ],

@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/tebeka/selenium"
 )
 
 var multiplayerChecksums = regexp.MustCompile(`Multiplayer frame (\d+) checksum ([0-9a-f]+)`)
@@ -106,11 +108,19 @@ func TestBrowserMultiplayerBackground(t *testing.T) {
 
 	// Release the focus override before activating a genuine second tab. Keep
 	// WebDriver attached to the game: selecting it again would foreground it.
-	if err := guest.driver.ExecuteChromiumCommand("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": false}); err != nil {
+	if err := guest.command("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": false}); err != nil {
 		t.Fatal(err)
 	}
-	if err := guest.driver.ExecuteChromiumCommand("Target.createTarget", map[string]any{"url": "about:blank", "background": false}); err != nil {
+	if err := guest.command("Target.createTarget", map[string]any{"url": "about:blank", "background": false}); err != nil {
 		t.Fatal(err)
+	}
+	// Tab activation completes before the old page's visibility event arrives.
+	// Observe the actual hidden state before its uninterrupted grace interval.
+	if err := guest.driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		hidden, err := wd.ExecuteScript("return document.hidden && !document.hasFocus()", nil)
+		return hidden == true, err
+	}, 12*time.Second); err != nil {
+		t.Fatalf("guest did not become hidden and unfocused: %v", err)
 	}
 	guest.assertVisibility(true)
 	// Let Chromium's short background grace period expire before measuring.
@@ -121,10 +131,10 @@ func TestBrowserMultiplayerBackground(t *testing.T) {
 	if hiddenHost*2 < baselineHost || hiddenGuest*2 < baselineGuest {
 		t.Errorf("background match fell below half its foreground progress: host %d/%d, guest %d/%d", hiddenHost, baselineHost, hiddenGuest, baselineGuest)
 	}
-	if err := guest.driver.ExecuteChromiumCommand("Page.bringToFront", map[string]any{}); err != nil {
+	if err := guest.command("Page.bringToFront", map[string]any{}); err != nil {
 		t.Fatal(err)
 	}
-	if err := guest.driver.ExecuteChromiumCommand("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": true}); err != nil {
+	if err := guest.command("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": true}); err != nil {
 		t.Fatal(err)
 	}
 	recoveredHost, recoveredGuest := observeMultiplayerProgress(t, host, guest, false)

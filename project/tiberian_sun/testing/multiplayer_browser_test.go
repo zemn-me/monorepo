@@ -2,6 +2,7 @@ package testing_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"image"
 	"image/png"
@@ -16,11 +17,13 @@ import (
 )
 
 type multiplayerBrowser struct {
-	t       *testing.T
-	driver  *seleniumutil.Driver
-	clock   *seleniumutil.VirtualClock
-	console *seleniumutil.ConsoleLog
-	name    string
+	t            *testing.T
+	driver       *seleniumutil.Driver
+	clock        *seleniumutil.VirtualClock
+	console      *seleniumutil.ConsoleLog
+	page         *seleniumutil.PageCommands
+	waitDeadline time.Time
+	name         string
 }
 
 func (p *multiplayerBrowser) trace(operation string) func() {
@@ -51,10 +54,41 @@ func (p *multiplayerBrowser) logs() string {
 	}
 	return text
 }
+
+// Command time counts against the existing UI wait and scenario deadlines.
+func (p *multiplayerBrowser) commandContext() (context.Context, context.CancelFunc) {
+	deadline := time.Now().Add(90 * time.Second)
+	if !p.waitDeadline.IsZero() && p.waitDeadline.Before(deadline) {
+		deadline = p.waitDeadline
+	}
+	if end, ok := p.t.Deadline(); ok && end.Before(deadline) {
+		deadline = end
+	}
+	return context.WithDeadline(context.Background(), deadline)
+}
+
+// Browser-only commands must not wait for ChromeDriver's renderer probes.
+func (p *multiplayerBrowser) command(method string, params map[string]any) error {
+	if p.page != nil {
+		ctx, cancel := p.commandContext()
+		defer cancel()
+		return p.page.Execute(ctx, method, params, nil)
+	}
+	return p.driver.ExecuteChromiumCommand(method, params)
+}
+func (p *multiplayerBrowser) viewScreenshot() ([]byte, error) {
+	if p.page != nil {
+		ctx, cancel := p.commandContext()
+		defer cancel()
+		return p.page.ViewScreenshot(ctx)
+	}
+	return p.driver.ViewScreenshot()
+}
+
 func (p *multiplayerBrowser) mouse(x, y int, kind string, buttons int) {
 	p.t.Helper()
 	defer p.trace("mouse " + kind)()
-	if err := p.driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": kind, "x": x, "y": y, "button": "left", "buttons": buttons, "clickCount": 1}); err != nil {
+	if err := p.command("Input.dispatchMouseEvent", map[string]any{"type": kind, "x": x, "y": y, "button": "left", "buttons": buttons, "clickCount": 1}); err != nil {
 		p.t.Fatalf("%s: mouse %s at (%d, %d): %v", p.name, kind, x, y, err)
 	}
 }
@@ -71,7 +105,7 @@ func (p *multiplayerBrowser) click(x, y int) {
 func (p *multiplayerBrowser) screenshot() image.Image {
 	p.t.Helper()
 	defer p.trace("pixel screenshot")()
-	data, err := p.driver.ViewScreenshot()
+	data, err := p.viewScreenshot()
 	if err != nil {
 		p.t.Fatalf("%s: screenshot: %v", p.name, err)
 	}
@@ -91,7 +125,7 @@ func (p *multiplayerBrowser) captureStep(name string) {
 		return
 	}
 	defer p.trace("diagnostic screenshot " + name)()
-	data, err := p.driver.ViewScreenshot()
+	data, err := p.viewScreenshot()
 	if err != nil {
 		p.t.Logf("%s: diagnostic capture %s unavailable: %v", p.name, name, err)
 		return
@@ -100,6 +134,21 @@ func (p *multiplayerBrowser) captureStep(name string) {
 		p.t.Logf("%s: save diagnostic capture %s: %v", p.name, name, err)
 	}
 }
+
+// A diagnostic readback may wait for the compositor. Overlap it only with
+// independent work in the other browser; keep this page unchanged until done.
+func (p *multiplayerBrowser) captureStepWhile(name string, other func()) {
+	if p.page == nil {
+		p.captureStep(name)
+		other()
+		return
+	}
+	done := make(chan struct{})
+	go func() { defer close(done); p.captureStep(name) }()
+	defer func() { <-done }()
+	other()
+}
+
 func (p *multiplayerBrowser) white(x, y int) bool {
 	frame := p.screenshot()
 	count := 0
@@ -119,6 +168,13 @@ func (p *multiplayerBrowser) wait(label string, condition func() bool, others ..
 	defer p.trace("wait " + label)()
 	// ICE and network delivery remain real browser I/O. Only the game clocks advance.
 	deadline := time.Now().Add(90 * time.Second)
+	for _, peer := range append([]*multiplayerBrowser{p}, others...) {
+		previous := peer.waitDeadline
+		if previous.IsZero() || deadline.Before(previous) {
+			peer.waitDeadline = deadline
+		}
+		defer func(peer *multiplayerBrowser, previous time.Time) { peer.waitDeadline = previous }(peer, previous)
+	}
 	for time.Now().Before(deadline) {
 		if condition() {
 			return
@@ -150,8 +206,16 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 		t.Fatal(err)
 	}
 	p := &multiplayerBrowser{t: t, driver: driver, name: name, console: console}
+	if backgroundThrottling {
+		p.page, err = driver.OpenPageCommands()
+		if err != nil {
+			console.Close()
+			driver.Close()
+			t.Fatal(err)
+		}
+	}
 	t.Cleanup(func() {
-		if data, err := driver.ViewScreenshot(); err == nil {
+		if data, err := p.viewScreenshot(); err == nil {
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
 				_ = os.WriteFile(filepath.Join(dir, "multiplayer-"+name+".png"), data, 0644)
 			}
@@ -176,16 +240,19 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 			}
 			t.Log(name + ":\n" + text)
 		}
+		if p.page != nil {
+			p.page.Close()
+		}
 		console.Close()
 		driver.Close()
 	})
-	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+	if err := p.command("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.ExecuteChromiumCommand("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": true}); err != nil {
+	if err := p.command("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": true}); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.ExecuteChromiumCommand("Browser.grantPermissions", map[string]any{"origin": base, "permissions": []string{"clipboardReadWrite", "clipboardSanitizedWrite"}}); err != nil {
+	if err := p.command("Browser.grantPermissions", map[string]any{"origin": base, "permissions": []string{"clipboardReadWrite", "clipboardSanitizedWrite"}}); err != nil {
 		t.Fatal(err)
 	}
 	if os.Getenv("TIBERIAN_MULTIPLAYER_REALTIME") != "1" {
@@ -217,7 +284,15 @@ func (p *multiplayerBrowser) copyCode(previous string) string {
 	var code string
 	p.wait("connection code", func() bool {
 		p.click(210, 222)
-		raw, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.readText().then(done,()=>done(''))", nil)
+		var raw any
+		var err error
+		if p.page != nil {
+			ctx, cancel := p.commandContext()
+			err = p.page.Evaluate(ctx, "navigator.clipboard.readText().catch(() => '')", &raw)
+			cancel()
+		} else {
+			raw, err = p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.readText().then(done,()=>done(''))", nil)
+		}
 		if err != nil {
 			p.t.Fatal(err)
 		}
@@ -228,7 +303,7 @@ func (p *multiplayerBrowser) copyCode(previous string) string {
 }
 func (p *multiplayerBrowser) resizeMenu(width, height int) {
 	p.t.Helper()
-	if err := p.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+	if err := p.command("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		p.t.Fatal(err)
 	}
 	p.wait("menu viewport layout", func() bool {
@@ -247,7 +322,19 @@ func (p *multiplayerBrowser) resizeMenu(width, height int) {
 
 func (p *multiplayerBrowser) pasteCode(code string) {
 	p.t.Helper()
-	result, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.writeText(arguments[0]).then(()=>done(true),e=>done(String(e)))", []interface{}{code})
+	var result any
+	var err error
+	if p.page != nil {
+		encoded, marshalErr := json.Marshal(code)
+		if marshalErr != nil {
+			p.t.Fatal(marshalErr)
+		}
+		ctx, cancel := p.commandContext()
+		err = p.page.Evaluate(ctx, "navigator.clipboard.writeText("+string(encoded)+").then(() => true, e => String(e))", &result)
+		cancel()
+	} else {
+		result, err = p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.writeText(arguments[0]).then(()=>done(true),e=>done(String(e)))", []interface{}{code})
+	}
 	if err != nil || result != true {
 		p.t.Fatalf("write clipboard: result=%v, error=%v", result, err)
 	}
@@ -294,20 +381,31 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 	}
 	base := "http://localhost:" + ports.Site
 	host := newMultiplayerBrowser(t, base, "host", backgroundThrottling)
-	guest := newMultiplayerBrowser(t, base, "guest", backgroundThrottling)
-	host.captureStep("choose")
+	var guest *multiplayerBrowser
+	host.captureStepWhile("choose", func() {
+		guest = newMultiplayerBrowser(t, base, "guest", backgroundThrottling)
+	})
 	host.click(210, 244) // Host a game.
 	offer := host.copyCode("")
-	host.captureStep("invitation")
+	joinGuest := func() {
+		guest.click(210, 308) // Join a game.
+		guest.pasteCode("not a connection code")
+	}
+	if backgroundThrottling {
+		host.captureStepWhile("invitation", joinGuest)
+	} else {
+		host.captureStep("invitation")
+	}
 	host.click(550, 222) // Next, then back: keep the original invitation valid.
 	host.click(180, 465)
 	if again := host.copyCode(""); again != offer {
 		t.Fatal("Back replaced the invitation")
 	}
-	host.click(550, 222)  // Next: enter reply.
-	guest.click(210, 308) // Join a game.
+	host.click(550, 222) // Next: enter reply.
 	// Invalid input stays in this form and produces an actionable error.
-	guest.pasteCode("not a connection code")
+	if !backgroundThrottling {
+		joinGuest()
+	}
 	guest.wait("invalid invitation feedback", func() bool {
 		return strings.Contains(guest.logs(), "Paste the complete invitation code from the host.")
 	})
@@ -330,9 +428,11 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 		t.Fatal(err)
 	}
 	host.advance()
-	host.captureStep("reply-keyboard-focus")
-	guest.pasteCode(offer)
-	answer := guest.copyCode(offer)
+	var answer string
+	host.captureStepWhile("reply-keyboard-focus", func() {
+		guest.pasteCode(offer)
+		answer = guest.copyCode(offer)
+	})
 	guest.captureStep("reply")
 	if answer == offer {
 		t.Fatal("guest did not produce its own reply")
@@ -347,8 +447,7 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 			return p.white(250, 340)
 		}, host, guest)
 	}
-	host.captureStep("connected")
-	guest.captureStep("connected")
+	host.captureStepWhile("connected", func() { guest.captureStep("connected") })
 	host.click(250, 340)
 	guest.click(250, 340)
 	host.wait("network lobby", func() bool {
