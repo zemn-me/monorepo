@@ -192,6 +192,27 @@ It retains `performance-host.log` and `performance-guest.log` in undeclared
 outputs and prints performance samples. Headless software rendering can be much
 slower than an interactive browser; compare runs on the same machine.
 
+To reproduce background-tab slowdowns with the asset-backed game:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/testing:background_integration_test \
+  --nocache_test_results --test_output=all
+```
+
+This opt-in target runs native browser clocks and removes ChromeDriver's
+background-throttling exemptions. It starts a real WebRTC match, measures both
+players for 30 seconds with the game visible, activates a blank tab in the
+guest's browser, waits out the short background grace period, and measures
+another 30 seconds. It checks the actual game document is hidden and unfocused,
+requires matching simulation checksums during the interval, and rejects progress
+below half the foreground baseline. A final visible interval checks recovery.
+No scripts, screenshots, or log polling run during each measurement window.
+The relative threshold allows for software-rendering costs across machines;
+this is a regression check for large slowdowns, not a guarantee of a particular
+frame rate. It covers short-term tab hiding, not OS sleep, discarded pages, or
+Chrome's additional throttling after several minutes. Logs and screenshots are
+saved with the other multiplayer diagnostics.
+
 During any real match, the browser console logs `Multiplayer performance` every
 120 simulation frames. Each sample includes achieved FPS (after the first sample),
 requested FPS, sample interval in milliseconds, frames between sends, maximum

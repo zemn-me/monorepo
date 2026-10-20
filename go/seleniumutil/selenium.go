@@ -109,6 +109,16 @@ func NewWithChromeCapabilities(additionalCapabilities selenium.Capabilities, add
 	}
 
 	for key, value := range additionalCapabilities {
+		if key == "goog:chromeOptions" {
+			// Preserve the Bazel-selected binary and arguments when callers add
+			// options such as ChromeDriver's excludeSwitches.
+			if options, ok := value.(map[string]any); ok {
+				for name, option := range options {
+					caps[key].(map[string]any)[name] = option
+				}
+				continue
+			}
+		}
 		caps[key] = value
 	}
 

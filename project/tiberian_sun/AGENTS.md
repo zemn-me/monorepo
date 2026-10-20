@@ -8,7 +8,7 @@
 - Build bundled data through `assets:game_data`; preserve the original EULA and keep music, movies, executables, and installation settings outside the public package.
 - `testing:integration_test` drives the production site. Wait for interactive menu highlights and completed dialog-open logs before clicking bitmap controls.
 
-- Except in the opt-in real-time performance run, install `seleniumutil.NewVirtualClock` before game navigation and advance it for test input and simulation. Keep the clock bundle out of production assets; its 32-bit timer handles match Emscripten's C timer API.
+- Except in the opt-in real-time performance and background-tab runs, install `seleniumutil.NewVirtualClock` before game navigation and advance it for test input and simulation. Keep the clock bundle out of production assets; its 32-bit timer handles match Emscripten's C timer API.
 
 - Browser Internet play uses the native LAN lobby over an unordered WebRTC data channel. Keep packet reliability and simulation synchronization in the engine.
 - Multiplayer integration advances both game clocks while allowing real ICE/network delivery; compare distinct checksum frames after the native startup suppression.
