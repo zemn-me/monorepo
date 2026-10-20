@@ -192,7 +192,7 @@ For an asset-backed match with two independent browsers and real clocks:
 
 ```sh
 ./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
-  --test_arg=-test.run=TestBrowserMultiplayer --test_arg=-test.v \
+  --test_arg='-test.run=^TestBrowserMultiplayer$' --test_arg=-test.v \
   --test_env=TIBERIAN_MULTIPLAYER_REALTIME=1 --nocache_test_results
 ```
 
@@ -200,6 +200,35 @@ This uses the same lobby, orders, and checksum assertions as the normal test.
 It retains `performance-host.log` and `performance-guest.log` in undeclared
 outputs and prints performance samples. Headless software rendering can be much
 slower than an interactive browser; compare runs on the same machine.
+
+The normal integration suite also checks real-time multiplayer background scheduling.
+To run that case by itself:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
+  --test_arg='-test.run=^TestBrowserMultiplayerBackground$' \
+  --nocache_test_results --test_output=all
+```
+
+This case runs native browser clocks and removes ChromeDriver's
+background-throttling exemptions. It starts a real WebRTC match, measures both
+players for 30 seconds with the game visible, activates a blank tab in the
+guest's browser, waits out the short background grace period, and measures
+another 30 seconds. It checks the actual game document is hidden and unfocused,
+requires matching simulation checksums during the interval, and rejects progress
+below half the foreground baseline. A final visible interval checks recovery.
+No scripts, screenshots, or log polling run during each measurement window.
+The relative threshold allows for software-rendering costs across machines;
+this is a regression check for large slowdowns, not a guarantee of a particular
+frame rate. It covers short-term tab hiding, not OS sleep, discarded pages, or
+Chrome's additional throttling after several minutes. Logs and screenshots are
+saved with the other multiplayer diagnostics.
+
+While a multiplayer match is active and hidden, short native waits resume through
+a MessageChannel task instead of a timer. The native frame pacer still controls
+simulation speed and the browser still receives control between engine slices.
+Visible games and solo games retain their existing timer waits. The channel is
+closed and any suspended continuation released when the engine is unmounted.
 
 During any real match, the browser console logs `Multiplayer performance` every
 120 simulation frames. Each sample includes achieved FPS (after the first sample),
@@ -256,7 +285,8 @@ opens the game through the experiment link, goes back while the engine is
 running, and reopens it without replacing the React document. Download-failure
 cases verify visible, focused error feedback at desktop and phone widths.
 
-The browser tests install a Sinon clock before application scripts load. They
+Except for the real-time multiplayer background case, the browser tests install
+a Sinon clock before application scripts load. They
 advance dates, performance timers, timeouts, intervals, animation frames, and
 ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
 and ten seconds of skirmish simulation use simulated time rather than host

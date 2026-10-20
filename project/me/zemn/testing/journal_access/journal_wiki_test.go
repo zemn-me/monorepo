@@ -260,6 +260,9 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Log out']", 30*time.Second); err != nil {
+		t.Fatalf("authenticated account controls: %v", err)
+	}
 	find := func(by, selector string) selenium.WebElement {
 		t.Helper()
 		el, err := browserhelpers.WaitForElement(driver, by, selector, 30*time.Second)
@@ -484,10 +487,21 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Hold the real upload endpoint until the saved local recording is observed.
+	// A fast local service can otherwise confirm it before WebDriver's next lookup.
+	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/journal/entries"}}); err != nil {
+		t.Fatal(err)
+	}
 	if err := input.SendKeys(path); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{}}); err != nil {
 		t.Fatal(err)
 	}
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {

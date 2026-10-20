@@ -47,6 +47,11 @@ buildbuddy.gcc_toolchain(gcc_major_version = "11")
 
 # Package archives and indices are pinned by snapshot and MODULE.bazel.lock.
 bazel_dep(name = "rules_distroless", version = "0.9.4")
+single_version_override(
+    module_name = "rules_distroless",
+    patch_strip = 1,
+    patches = ["//bzl:rules_distroless_ubuntu_fallback.patch"],
+)
 
 apt = use_extension("@rules_distroless//apt:extensions.bzl", "apt")
 apt.sources_list(

@@ -4,6 +4,7 @@
 #include "goptions.h"
 #include "misc.h"
 #include "globals.h"
+#include "session.h"
 #include "video.h"
 #include "audio/audioengine.h"
 #include "gamewindow.h"
@@ -34,9 +35,10 @@ EM_JS(void, Web_Display_Aspect, (int width, int height), {
     Module.canvas.style.setProperty('--game-aspect', String(width / height));
 });
 void Web_Display_Size(int &width, int &height) {
-    // Shell menus use fixed pixel artwork in both the legacy and Rml renderers.
-    // Let the browser contain-scale that canvas; gameplay still follows the viewport.
-    if (!GameActive) {
+    // Select_Game marks GameActive before a player or scenario exists. Shell
+    // menus still need fixed pixel artwork until gameplay has an actual player.
+    // Let CSS contain-scale that canvas; gameplay follows the viewport.
+    if (!GameActive || PlayerPtr == nullptr) {
         width = 800;
         height = 600;
         Web_Display_Aspect(width, height);
@@ -75,8 +77,21 @@ void Web_Update_Display() {
 namespace { bool StopRequested = false; }
 extern "C" EMSCRIPTEN_KEEPALIVE void Web_Request_Stop() { StopRequested = true; }
 
+// Asyncify must release the stack so network messages and input can run.
+// Hidden multiplayer cannot resume through setTimeout: browser timer clamping
+// stalls this peer and therefore every peer in the native lockstep protocol.
+EM_JS(int, Web_Document_Hidden, (), { return document.hidden; });
+EM_ASYNC_JS(void, Web_Yield_Task, (), { await Module.webYield(); });
+
 void Web_Yield(int milliseconds) {
-    emscripten_sleep(milliseconds);
+    const bool multiplayer = Session.Type == GAME_IPX || Session.Type == GAME_INTERNET;
+    if (GameActive && multiplayer && milliseconds <= 1 && Web_Document_Hidden()) {
+        // FramePacer still controls simulation time. These short waits only
+        // yield cooperatively; they must not depend on a hidden-tab timer.
+        Web_Yield_Task();
+    } else {
+        emscripten_sleep(milliseconds);
+    }
     // Unmount can arrive while Asyncify has suspended the engine. Exit after
     // resuming on its own stack so its registered shutdown handlers can run.
     if (StopRequested) {

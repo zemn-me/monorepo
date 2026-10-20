@@ -1,6 +1,7 @@
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load(":ubuntu_fallback_test.bzl", "ubuntu_fallback_test_suite")
 
 exports_files([
     "bazel_watcher_proto_rule.patch",
@@ -9,6 +10,7 @@ exports_files([
     "gopls_x_tools.patch",
     "pulumi_typescript5.patch",
     "rules_itest_http_timeout.patch",
+    "rules_distroless_ubuntu_fallback.patch",
     "rules_python_installer.patch",
 ])
 
@@ -24,6 +26,7 @@ bazel_lint(
         "pip_requirements_test.bzl",
         "rules.bzl",
         "show_all_outputs.bzl",
+        "ubuntu_fallback_test.bzl",
     ],
 )
 
@@ -41,3 +44,5 @@ sh_test(
     },
     deps = ["@rules_shell//shell/runfiles"],
 )
+
+ubuntu_fallback_test_suite(name = "ubuntu_fallback_tests")
