@@ -1,12 +1,14 @@
 """Build the complete C++ engine with Emscripten and pinned host toolchains."""
 
+load("//py:rules.bzl", "py_test")
+
 def _engine_impl(ctx):
     cmake = ctx.toolchains["@rules_foreign_cc//toolchains:cmake_toolchain"].data
     ninja = ctx.toolchains["@rules_foreign_cc//toolchains:ninja_toolchain"].data
     node = ctx.toolchains["@rules_nodejs//nodejs:toolchain_type"].nodeinfo.node
     if not cmake.target or not ninja.target or not node:
         fail("The engine build requires hermetic CMake, Ninja, and Node toolchains")
-    outputs = [ctx.actions.declare_file("engine/opents." + extension) for extension in ["js", "wasm", "data"]]
+    outputs = [ctx.actions.declare_file(ctx.label.name + "/opents." + extension) for extension in ["js", "wasm", "data"]]
     config = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.write(config, json.encode({
         "source": ctx.file.marker.dirname,
@@ -32,7 +34,7 @@ def _engine_impl(ctx):
         OutputGroupInfo(javascript = depset([outputs[0]]), wasm = depset([outputs[1]]), data = depset([outputs[2]])),
     ]
 
-engine_build = rule(
+_engine_build = rule(
     implementation = _engine_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
@@ -49,3 +51,25 @@ engine_build = rule(
         "@rules_nodejs//nodejs:toolchain_type",
     ],
 )
+
+def engine_build(name, **kwargs):
+    """Compile production outputs and independently rebuild them for presubmit."""
+    _engine_build(name = name, **kwargs)
+    rebuild = name + "_rebuild"
+
+    # Distinct output/config paths keep these as separate Bazel actions. Each
+    # action compiles from scratch in its own randomly named temporary directory.
+    _engine_build(name = rebuild, **kwargs)
+    py_test(
+        name = name + "_reproducibility_test",
+        size = "small",
+        srcs = ["reproducibility_test.py"],
+        main = "reproducibility_test.py",
+        args = [
+            "--first",
+            "$(rootpaths :%s)" % name,
+            "--second",
+            "$(rootpaths :%s)" % rebuild,
+        ],
+        data = [":" + name, ":" + rebuild],
+    )

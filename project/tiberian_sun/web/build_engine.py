@@ -57,17 +57,27 @@ def main():
             f"CACHE = {str(sdk / 'emscripten/cache')!r}\n"
             "FROZEN_CACHE = True\n"
         )
-        env = dict(os.environ, EM_CONFIG=str(emconfig))
+        # Dependencies use __DATE__/__TIME__ in compiled diagnostics. A fixed epoch
+        # keeps unchanged source independent of the wall clock.
+        env = dict(os.environ, EM_CONFIG=str(emconfig), SOURCE_DATE_EPOCH="0")
         env["PATH"] = str(tools) + os.pathsep + env.get("PATH", "/usr/bin:/bin")
         generated = src / "generated"
         generated.mkdir()
         build = work / "build"
+        # Assertions and source_location embed __FILE__, even in release builds.
+        # Remap both the fresh work directory and the SDK's action-local path.
+        prefix_maps = shlex.join([
+            f"-ffile-prefix-map={work}=/opents",
+            f"-ffile-prefix-map={sdk}=/emsdk",
+        ])
         commands = [
             [sys.executable, str(src / "platform/macos/generate_headers.py"), str(src), str(generated)],
             [cmake, "-S", str(src), "-B", str(build), "-G", "Ninja",
              f"-DCMAKE_MAKE_PROGRAM={ninja}",
              f"-DCMAKE_TOOLCHAIN_FILE={sdk / 'emscripten/cmake/Modules/Platform/Emscripten.cmake'}",
-             "-DEMSCRIPTEN_SYSTEM_PROCESSOR=wasm32", "-DCMAKE_C_FLAGS=-msimd128", "-DCMAKE_BUILD_TYPE=Release"],
+             "-DEMSCRIPTEN_SYSTEM_PROCESSOR=wasm32",
+             f"-DCMAKE_C_FLAGS=-msimd128 {prefix_maps}",
+             f"-DCMAKE_CXX_FLAGS={prefix_maps}", "-DCMAKE_BUILD_TYPE=Release"],
             [cmake, "--build", str(build), "--target", "opents", "-j", "4"],
         ]
         log = work / "build.log"
