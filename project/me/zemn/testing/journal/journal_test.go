@@ -3,6 +3,7 @@ package selenium_test
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -17,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/tebeka/selenium"
+	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
@@ -2348,7 +2350,7 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	driver, err := seleniumpkg.New()
+	driver, err := seleniumpkg.NewWithChromeCapabilities(selenium.Capabilities{"goog:loggingPrefs": map[string]string{"performance": "ALL"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2367,15 +2369,48 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 		t.Fatal(err)
 	}
 	for attempt := range 2 {
-		input, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
-		if err != nil {
+		// A completed duplicate can clear immediately. Observe the accepted PUT
+		// rather than requiring that its transient queue row survives polling.
+		if _, err := driver.Log(log.Performance); err != nil {
 			t.Fatal(err)
 		}
-		if err := input.SendKeys(path); err != nil {
+		if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", []string{path}, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
-			t.Fatalf("upload %d did not enter the local queue: %v", attempt, err)
+		requests := map[string]bool{}
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			entries, err := wd.Log(log.Performance)
+			if err != nil {
+				return false, err
+			}
+			for _, entry := range entries {
+				var event struct {
+					Message struct {
+						Method string `json:"method"`
+						Params struct {
+							RequestID string                       `json:"requestId"`
+							Request   struct{ Method, URL string } `json:"request"`
+							Response  struct{ Status int }         `json:"response"`
+						} `json:"params"`
+					} `json:"message"`
+				}
+				if err := json.Unmarshal([]byte(entry.Message), &event); err != nil {
+					return false, err
+				}
+				message := event.Message
+				if message.Method == "Network.requestWillBeSent" && message.Params.Request.Method == "PUT" && strings.Contains(message.Params.Request.URL, "/__local/journal/object?") {
+					requests[message.Params.RequestID] = true
+				}
+				if message.Method == "Network.responseReceived" && requests[message.Params.RequestID] {
+					if message.Params.Response.Status < 200 || message.Params.Response.Status >= 300 {
+						return false, fmt.Errorf("upload returned HTTP %d", message.Params.Response.Status)
+					}
+					return true, nil
+				}
+			}
+			return false, nil
+		}, 10*time.Second); err != nil {
+			t.Fatalf("upload %d was not accepted: %v", attempt, err)
 		}
 		if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
 			browserhelpers.DumpPageDiagnostics(t, driver)
@@ -2406,7 +2441,7 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 			if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 				t.Fatal(err)
 			}
-			input, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
+			_, err = browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -2424,13 +2459,18 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 				}
 				paths = append(paths, path)
 			}
-			if err := input.SendKeys(strings.Join(paths, "\n")); err != nil {
+			if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", paths, 30*time.Second); err != nil {
 				t.Fatal(err)
 			}
 			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
 				t.Fatal(err)
 			}
 			if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
+				if queue, findErr := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Local recordings']"); findErr == nil {
+					text, textErr := queue.Text()
+					t.Logf("remaining local recordings: %s (error=%v)", text, textErr)
+				}
+				browserhelpers.DumpPageDiagnostics(t, driver)
 				t.Fatal(err)
 			}
 			for _, destination := range []struct{ label, path string }{

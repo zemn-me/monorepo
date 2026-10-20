@@ -61,14 +61,23 @@ beforeEach(() => {
 	saved = [{ ...draft }];
 	removeRecording.mockClear();
 	upload.mockReset();
+	const heldLocks = new Set<string>();
 	Object.defineProperty(navigator, 'locks', {
 		configurable: true,
 		value: {
 			request: async (
-				_name: string,
+				name: string,
 				_options: unknown,
-				callback: (lock: object) => Promise<void>
-			) => callback({}),
+				callback: (lock: object | null) => Promise<void>
+			) => {
+				if (heldLocks.has(name)) return callback(null);
+				heldLocks.add(name);
+				try {
+					await callback({});
+				} finally {
+					heldLocks.delete(name);
+				}
+			},
 		},
 	});
 	Object.defineProperty(crypto, 'subtle', {
@@ -89,7 +98,13 @@ beforeEach(() => {
 afterEach(async () => {
 	await act(async () => root.unmount());
 });
-function Harness({ entries }: { readonly entries: Options['entries'] }) {
+function Harness({
+	entries,
+	capture,
+}: {
+	readonly entries: Options['entries'];
+	readonly capture: (queue: ReturnType<typeof useRecordingQueue>) => void;
+}) {
 	const queue = useRecordingQueue({
 		owner: 'owner',
 		canSync: true,
@@ -99,17 +114,27 @@ function Harness({ entries }: { readonly entries: Options['entries'] }) {
 			.filter(entry => entry.status === 'ready')
 			.map(entry => entry.id),
 	});
+	capture(queue);
 	return <LocalRecordings queue={queue} />;
 }
 async function render(entries: Options['entries'] = []) {
+	let queue!: ReturnType<typeof useRecordingQueue>;
 	await act(async () => {
-		root.render(<Harness entries={entries} />);
+		root.render(
+			<Harness
+				entries={entries}
+				capture={value => {
+					queue = value;
+				}}
+			/>
+		);
 		// Let Web Crypto and the asynchronous recording store settle.
 		await new Promise(resolve => setTimeout(resolve, 30));
 	});
 	await act(async () => {
 		await new Promise(resolve => setTimeout(resolve, 30));
 	});
+	return queue;
 }
 it('shows the upload error beside the saved recording and keeps the audio', async () => {
 	saved = [{ ...draft, state: 'queued', remoteEntryID: undefined }];
@@ -124,6 +149,7 @@ it('shows the upload error beside the saved recording and keeps the audio', asyn
 	);
 	expect(container.querySelector('a[download]')).not.toBeNull();
 	expect(removeRecording).not.toHaveBeenCalled();
+	expect(upload).toHaveBeenCalledTimes(1);
 });
 it.each(['Audio could not be decoded.', undefined])(
 	'shows processing failures and enables immediate retry: %s',
@@ -173,3 +199,68 @@ it.each([
 		).toBeNull();
 	}
 );
+
+it.each(['original', 'duplicate'])(
+	'reconciles a newly confirmed %s without waiting for the retry timer',
+	async kind => {
+		const id = kind === 'original' ? draft.remoteEntryID! : completed.id;
+		await render([{ ...completed, id, status: 'processing' }]);
+		expect(removeRecording).not.toHaveBeenCalled();
+		await render([{ ...completed, id, status: 'ready' }]);
+		expect(removeRecording).toHaveBeenCalledWith('owner', draft.id);
+		expect(
+			container.querySelector('section[aria-label="Local recordings"]')
+		).toBeNull();
+	}
+);
+
+it('drains recordings added while an earlier upload owns the synchronization lock', async () => {
+	saved = [];
+	let held = false;
+	Object.defineProperty(navigator, 'locks', {
+		configurable: true,
+		value: {
+			request: async (
+				_name: string,
+				_options: unknown,
+				callback: (lock: object | null) => Promise<void>
+			) => {
+				if (held) return callback(null);
+				held = true;
+				try {
+					await callback({});
+				} finally {
+					held = false;
+				}
+			},
+		},
+	});
+	const first = Promise.withResolvers<{ id: string }>();
+	upload
+		.mockReturnValueOnce(first.promise)
+		.mockResolvedValue({ id: 'remote-second' });
+	const queue = await render();
+	await act(async () =>
+		queue.keep({
+			...draft,
+			id: 'first',
+			state: 'queued',
+			remoteEntryID: undefined,
+		})
+	);
+	await act(async () =>
+		queue.keep({
+			...draft,
+			id: 'second',
+			state: 'queued',
+			remoteEntryID: undefined,
+		})
+	);
+	expect(upload).toHaveBeenCalledTimes(1);
+	await act(async () => first.resolve({ id: 'remote-first' }));
+	await act(async () => {
+		await new Promise(resolve => setTimeout(resolve, 30));
+	});
+	expect(upload).toHaveBeenCalledTimes(2);
+	expect(removeRecording).not.toHaveBeenCalled();
+});

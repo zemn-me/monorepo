@@ -285,6 +285,25 @@ func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeo
 	return fmt.Errorf("click %s:%s: %w", by, selector, lastErr)
 }
 
+// SelectFiles reacquires file inputs replaced during rendering. A stale file
+// selection has not selected files; other errors are terminal.
+func SelectFiles(driver selenium.WebDriver, by, selector string, paths []string, timeout time.Duration) error {
+	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		element, err := wd.FindElement(by, selector)
+		if err != nil {
+			if strings.Contains(err.Error(), "no such element") {
+				return false, nil
+			}
+			return false, err
+		}
+		err = element.SendKeys(strings.Join(paths, "\n"))
+		if IsStaleElementErr(err) {
+			return false, nil
+		}
+		return err == nil, err
+	}, timeout)
+}
+
 func IsStaleElementErr(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "stale element reference")
 }
