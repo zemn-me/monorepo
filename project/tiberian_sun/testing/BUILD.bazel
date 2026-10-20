@@ -30,6 +30,7 @@ go_test(
     srcs = [
         "browser_helpers_test.go",
         "browser_test.go",
+        "game_browser_test.go",
         "multiplayer_test.go",
     ],
     tags = ["manual"],  # keep; requires the production site service.

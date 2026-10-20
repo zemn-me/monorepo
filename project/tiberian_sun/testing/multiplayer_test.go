@@ -196,11 +196,35 @@ func (p *multiplayerBrowser) copyCode(previous string) string {
 }
 func (p *multiplayerBrowser) pasteCode(code string) {
 	p.t.Helper()
-	if _, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.writeText(arguments[0]).then(()=>done(true),e=>done(String(e)))", []interface{}{code}); err != nil {
+	result, err := p.driver.ExecuteScriptAsync("const done=arguments[arguments.length-1];navigator.clipboard.writeText(arguments[0]).then(()=>done(true),e=>done(String(e)))", []interface{}{code})
+	if err != nil || result != true {
+		p.t.Fatalf("write clipboard: result=%v, error=%v", result, err)
+	}
+	// A viewport change can finish after the browser acknowledges its resize.
+	// Wait for the actual menu to accept input at the desktop coordinates.
+	p.wait("Paste button is ready", func() bool {
+		p.mouse(210, 340, "mouseMoved", 0)
+		return p.white(210, 340)
+	})
+	p.click(210, 270) // Clear the previous invitation or reply through its text field.
+	canvas, err := p.driver.FindElement(selenium.ByCSSSelector, "canvas")
+	if err != nil {
 		p.t.Fatal(err)
 	}
+	if err := canvas.SendKeys(selenium.ControlKey + "a" + selenium.NullKey + selenium.BackspaceKey); err != nil {
+		p.t.Fatal(err)
+	}
+	p.wait("empty input disables acceptance", func() bool {
+		p.mouse(550, 340, "mouseMoved", 0)
+		return !p.white(550, 340)
+	})
 	p.click(210, 340)
-	p.advance()
+	// Clipboard reads are real asynchronous browser I/O. Advancing a fixed
+	// number of game ticks does not guarantee the pasted text has arrived.
+	p.wait("pasted code enables acceptance", func() bool {
+		p.mouse(550, 340, "mouseMoved", 0)
+		return p.white(550, 340)
+	})
 	p.click(550, 340)
 }
 

@@ -64,20 +64,30 @@ test.each(['staging', 'prod'])(
 		];
 		const unrelated = structuredClone(resources.at(-1));
 		expect(prepareBoweryBugleResources(resources)).toBe(true);
-		for (const resource of resources.slice(0, -1)) {
+		expect(
+			resources.slice(0, -1).map(resource => ({
+				urn: resource.urn,
+				retained: resource.retainOnDelete,
+			}))
+		).toEqual([
+			{ urn: root, retained: false },
+			{ urn: `${root}_website`, retained: false },
+			{ urn: `${root}_bucket`, retained: false },
+			{ urn: `${root}_pdfs`, retained: false },
+			{ urn: `${root}_asset`, retained: false },
+			{ urn: `${root}_secret`, retained: false },
+			{ urn: `${root}_domain`, retained: true },
+			{ urn: `${root}_delegation`, retained: true },
+		]);
+		for (const resource of resources.slice(0, -1))
 			expect(resource.protect).not.toBe(true);
-			expect(resource.retainOnDelete).toBe(
-				resource.type.startsWith('dnsimple:')
-			);
-		}
-		for (const resource of resources.filter(
-			r =>
-				r.type.startsWith('aws:s3/bucket:') ||
-				r.type.startsWith('aws:s3/bucketV2:')
-		)) {
-			if (resource.urn === 'unrelated') continue;
-			expect(resource.inputs?.['forceDestroy']).toBe(true);
-			expect(resource.outputs?.['forceDestroy']).toBe(true);
+		for (const name of ['bucket', 'pdfs']) {
+			expect(
+				resources.find(resource => resource.urn === `${root}_${name}`)
+			).toMatchObject({
+				inputs: { forceDestroy: true },
+				outputs: { forceDestroy: true },
+			});
 		}
 		expect(resources.find(r => r.urn === `${root}_secret`)).toMatchObject({
 			inputs: { deletionProtection: false },
