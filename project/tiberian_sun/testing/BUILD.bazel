@@ -22,6 +22,8 @@ service_test(
     # WebRTC needs a browser-visible interface to gather ICE candidates.
     exec_properties = {"test.network": "external"},
     services = [":site"],
+    # Keep each browser scenario within the test deadline under remote contention.
+    shard_count = 4,
     test = ":testing_test",
 )
 
