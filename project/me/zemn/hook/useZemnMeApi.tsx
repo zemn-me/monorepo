@@ -764,8 +764,8 @@ export function useGetJournal<A, B>(
 	const fetchClient = useFetchClient(token);
 	const query = useQuery({
 		queryKey: ['get', '/journal', claims?.jti],
-		queryFn: async () => {
-			const response = await fetchClient.GET('/journal');
+		queryFn: async ({ signal }) => {
+			const response = await fetchClient.GET('/journal', { signal });
 			if (!response.data) {
 				throw new Error('/journal returned unexpected payload');
 			}
@@ -827,8 +827,8 @@ export function useGetJournalUploads<A, B>(
 	const client = useFetchClient(token);
 	const query = useQuery({
 		queryKey: ['get', '/journal', 'uploads', claims?.jti],
-		queryFn: async () => {
-			const response = await client.GET('/journal/entries');
+		queryFn: async ({ signal }) => {
+			const response = await client.GET('/journal/entries', { signal });
 			if (!response.data) throw new Error('Could not check voice notes.');
 			return response.data;
 		},

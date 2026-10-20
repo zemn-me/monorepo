@@ -17,7 +17,13 @@ def browser_test(name, tags = [], **kwargs):
         flaky = True,
         # Chrome otherwise reports navigator.onLine=false in an interface-less
         # container, so local API uploads remain queued without being attempted.
-        exec_properties = {"test.network": "external"},
+        exec_properties = {
+            # This action runs Chromium, the production frontend, the API and
+            # DynamoDB together; reserve capacity for the complete service stack.
+            "test.EstimatedCPU": "4",
+            "test.EstimatedMemory": "4GB",
+            "test.network": "external",
+        },
         services = [
             "//project/me/zemn:itest_service_calendar_fixture",
             "//project/me/zemn/testing:oidc_provider_itest_service",

@@ -6,8 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 	"time"
@@ -26,6 +28,7 @@ import (
 )
 
 func TestJournalEndToEnd(t *testing.T) {
+	logJournalRunnerResources(t)
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
@@ -43,7 +46,8 @@ func TestJournalEndToEnd(t *testing.T) {
 		_ = deleteJournalEntry(context.Background(), failedEntryID)
 	})
 
-	driver, err := seleniumpkg.NewWithChromeArguments(
+	driver, err := seleniumpkg.NewWithChromeCapabilities(
+		selenium.Capabilities{"goog:loggingPrefs": map[string]string{"performance": "ALL"}},
 		"--use-fake-device-for-media-stream",
 		"--use-fake-ui-for-media-stream",
 	)
@@ -51,6 +55,11 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("driver: %v", err)
 	}
 	defer driver.Close()
+	defer func() {
+		if t.Failed() {
+			logJournalNetworkRequests(t, driver)
+		}
+	}()
 	if err := driver.SetTimezoneOverride("America/Los_Angeles"); err != nil {
 		t.Fatalf("set journal browser time zone: %v", err)
 	}
@@ -146,11 +155,19 @@ func TestJournalEndToEnd(t *testing.T) {
 	if usesCompactCaptureControls != true {
 		t.Fatalf("journal capture controls were not matching right-aligned toolbar icon buttons: %v", usesCompactCaptureControls)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Overview']", 30*time.Second); err != nil {
+	indicatorDeadline := time.Now().Add(30 * time.Second)
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Overview']", time.Until(indicatorDeadline)); err != nil {
 		t.Fatalf("journal did not default to its overview: %v", err)
 	}
-	time.Sleep(300 * time.Millisecond)
-	viewIndicator, err := driver.ExecuteScript(`
+	var viewIndicator any
+	remaining := time.Until(indicatorDeadline)
+	if remaining <= 0 {
+		t.Fatal("journal view indicator did not become ready before the navigation deadline")
+	}
+	// Font and layout changes can restart the indicator's CSS transition.
+	// Observe alignment within the same navigation-readiness budget.
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		value, readErr := wd.ExecuteScript(`
 		const navigation = document.querySelector("nav[aria-label='Browse journal']");
 		const selected = navigation?.querySelector("a[aria-current='page']");
 		const indicator = navigation?.querySelector('[data-journal-view-indicator]');
@@ -168,8 +185,17 @@ func TestJournalEndToEnd(t *testing.T) {
 			transitionProperty: indicatorStyle.transitionProperty,
 		};
 	`, nil)
-	if err != nil {
-		t.Fatalf("inspect journal view indicator: %v", err)
+		if readErr != nil {
+			return false, readErr
+		}
+		viewIndicator = value
+		state, ok := value.(map[string]any)
+		if !ok || state["found"] != true || state["ready"] != true {
+			return false, nil
+		}
+		return state["leftDelta"].(float64) < 0.5 && state["widthDelta"].(float64) < 0.5, nil
+	}, remaining); err != nil {
+		t.Fatalf("journal view indicator did not align: %v; last state: %#v", err, viewIndicator)
 	}
 	indicatorState := viewIndicator.(map[string]any)
 	if indicatorState["found"] != true {
@@ -356,6 +382,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("default journal view still contained recent uploads")
 	}
 	if err := waitForJournalSummaryCitations(driver, "Work, friendship, and learning to slow down", 4, 60*time.Second); err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("whole journal overview was not summarized after upload: %v", err)
 	}
 	for _, level := range []string{"Years", "Months", "Weeks", "Days"} {
@@ -1635,7 +1662,8 @@ func waitForScheduledJournalSummaries(driver selenium.WebDriver, refreshURL stri
 }
 
 func waitForJournalSummaryCitations(driver selenium.WebDriver, title string, wantEntries int, timeout time.Duration) error {
-	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
+	var lastCount any
+	err := driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
 		value, err := webDriver.ExecuteScript(`
 			const title = arguments[0];
 			const summary = [...document.querySelectorAll('article')].find(article =>
@@ -1651,9 +1679,14 @@ func waitForJournalSummaryCitations(driver selenium.WebDriver, title string, wan
 		if err != nil {
 			return false, err
 		}
+		lastCount = value
 		count, ok := value.(float64)
 		return ok && int(count) >= wantEntries, nil
 	}, timeout)
+	if err != nil {
+		return fmt.Errorf("summary %q cited %v entries, want at least %d: %w", title, lastCount, wantEntries, err)
+	}
+	return nil
 }
 
 func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID string, timeout time.Duration) error {
@@ -2043,11 +2076,7 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 		if err := os.WriteFile(path, audio, 0600); err != nil {
 			t.Fatal(err)
 		}
-		input, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := input.SendKeys(path); err != nil {
+		if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", []string{path}, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -2202,13 +2231,16 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err := record.Click(); err != nil {
 		t.Fatal(err)
 	}
-	stop, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
-	if err != nil {
+	const captureDuration = 1500 * time.Millisecond
+	// Readiness and clicking share one budget, excluding the recording timeslice.
+	deadline := time.Now().Add(10*time.Second + captureDuration)
+	if _, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	// Capture at least one real MediaRecorder timeslice from the fake microphone.
-	time.Sleep(1500 * time.Millisecond)
-	if err := stop.Click(); err != nil {
+	time.Sleep(captureDuration)
+	// Recording progress can replace the control while a timeslice is captured.
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", time.Until(deadline)); err != nil {
 		t.Fatal(err)
 	}
 	for _, route := range []string{"/journal", "/journal/month", "/journal/year"} {
@@ -2427,11 +2459,17 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 	root.Path = "/journal"
 	for sizeIndex, width := range []int{1280, 390} {
 		t.Run(fmt.Sprintf("width-%d", width), func(t *testing.T) {
-			driver, err := seleniumpkg.New()
+			logJournalRunnerResources(t)
+			driver, err := seleniumpkg.NewWithChromeCapabilities(selenium.Capabilities{"goog:loggingPrefs": map[string]string{"performance": "ALL"}})
 			if err != nil {
 				t.Fatal(err)
 			}
 			defer driver.Close()
+			defer func() {
+				if t.Failed() {
+					logJournalNetworkRequests(t, driver)
+				}
+			}()
 			if err := driver.ResizeWindow("", width, 844); err != nil {
 				t.Fatal(err)
 			}
@@ -2498,5 +2536,101 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 			}
 			browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-navigation-top-%d.png", width))
 		})
+	}
+}
+
+// Keep allocation, pressure and request timing beside browser failures so slow
+// service responses can be distinguished from a renderer or confirmation fault.
+func logJournalRunnerResources(t *testing.T) {
+	t.Helper()
+	started := time.Now()
+	before := map[string]string{}
+	for _, name := range []string{"cpu.max", "memory.max", "cpu.stat", "cpu.pressure", "io.pressure", "memory.events"} {
+		if value, err := os.ReadFile("/sys/fs/cgroup/" + name); err == nil {
+			before[name] = strings.TrimSpace(string(value))
+		}
+	}
+	t.Cleanup(func() {
+		for _, name := range []string{"cpu.max", "memory.max", "cpu.stat", "cpu.pressure", "io.pressure", "memory.events"} {
+			if value, err := os.ReadFile("/sys/fs/cgroup/" + name); err == nil {
+				t.Logf("runner %s: before=%q after=%q", name, before[name], strings.TrimSpace(string(value)))
+			}
+		}
+		t.Logf("runner observed wall time: %s", time.Since(started))
+	})
+}
+
+func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	logs, err := driver.Log(log.Performance)
+	if err != nil {
+		t.Logf("network diagnostics: %v", err)
+		return
+	}
+	type observedRequest struct {
+		path, method, failure string
+		start, end, wall      float64
+		status                int
+	}
+	requests := map[string]*observedRequest{}
+	var latest float64
+	for _, entry := range logs {
+		var event struct {
+			Message struct {
+				Method string `json:"method"`
+				Params struct {
+					ID        string                       `json:"requestId"`
+					Timestamp float64                      `json:"timestamp"`
+					WallTime  float64                      `json:"wallTime"`
+					Error     string                       `json:"errorText"`
+					Request   struct{ URL, Method string } `json:"request"`
+					Response  struct{ Status int }         `json:"response"`
+				} `json:"params"`
+			} `json:"message"`
+		}
+		if json.Unmarshal([]byte(entry.Message), &event) != nil {
+			continue
+		}
+		p := event.Message.Params
+		if p.Timestamp > latest {
+			latest = p.Timestamp
+		}
+		if event.Message.Method == "Network.requestWillBeSent" {
+			u, err := url.Parse(p.Request.URL)
+			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || strings.HasPrefix(u.Path, "/__local/journal/object")) {
+				continue
+			}
+			// Log only the path: signed URL parameters and headers are private.
+			requests[p.ID] = &observedRequest{path: u.Path, method: p.Request.Method, start: p.Timestamp, wall: p.WallTime}
+		}
+		if request := requests[p.ID]; request != nil {
+			switch event.Message.Method {
+			case "Network.responseReceived":
+				request.status = p.Response.Status
+			case "Network.loadingFinished", "Network.loadingFailed":
+				request.end = p.Timestamp
+				request.failure = p.Error
+			}
+		}
+	}
+	ordered := make([]*observedRequest, 0, len(requests))
+	for _, request := range requests {
+		ordered = append(ordered, request)
+	}
+	elapsed := func(request *observedRequest) float64 {
+		if request.end > 0 {
+			return request.end - request.start
+		}
+		if request.wall > 0 {
+			return float64(time.Now().UnixNano())/1e9 - request.wall
+		}
+		return latest - request.start
+	}
+	sort.Slice(ordered, func(i, j int) bool { return elapsed(ordered[i]) > elapsed(ordered[j]) })
+	for index, request := range ordered {
+		if index == 12 {
+			break
+		}
+		t.Logf("journal request %s %s: elapsed=%.3fs status=%d completed=%v failure=%q", request.method, request.path, elapsed(request), request.status, request.end > 0, request.failure)
 	}
 }

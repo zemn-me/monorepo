@@ -191,6 +191,25 @@ func PerformOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time
 				if err := driver.SwitchWindow(originalHandle); err != nil {
 					return fmt.Errorf("return to original window: %w", err)
 				}
+				// Popup closure can precede the main page's authenticated render.
+				// Observe the signed-in control before using account-owned inputs.
+				remaining := time.Until(deadline)
+				if remaining <= 0 {
+					return fmt.Errorf("signed-in page was not ready before the login deadline")
+				}
+				if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+					button, err := wd.FindElement(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
+					if err != nil {
+						return false, nil
+					}
+					visible, err := button.IsDisplayed()
+					if IsStaleElementErr(err) {
+						return false, nil
+					}
+					return visible, err
+				}, remaining); err != nil {
+					return fmt.Errorf("wait for signed-in page: %w", err)
+				}
 				return nil
 			}
 		}
@@ -258,7 +277,7 @@ func ClickElementInView(driver selenium.WebDriver, element selenium.WebElement) 
 }
 
 // React may replace an element between lookup and click. Only retry stale
-// references; other click failures must still fail the test.
+// references and wait for enabled controls; other click failures still fail.
 func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 	var lastErr error
@@ -267,6 +286,20 @@ func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeo
 		if err != nil {
 			lastErr = err
 			time.Sleep(200 * time.Millisecond)
+			continue
+		}
+		enabled, err := elem.IsEnabled()
+		if err != nil {
+			if !IsStaleElementErr(err) {
+				return fmt.Errorf("enabled %s:%s: %w", by, selector, err)
+			}
+			lastErr = err
+			time.Sleep(150 * time.Millisecond)
+			continue
+		}
+		if !enabled {
+			lastErr = fmt.Errorf("element is disabled")
+			time.Sleep(150 * time.Millisecond)
 			continue
 		}
 		if err := elem.Click(); err != nil {
@@ -344,6 +377,12 @@ func AssertNoSevereBrowserLogs(t *testing.T, driver selenium.WebDriver) {
 }
 
 func DumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
+	if state, err := driver.ExecuteScript(`return JSON.stringify({
+		visibility: document.visibilityState, focused: document.hasFocus(),
+		online: navigator.onLine, ready: document.readyState,
+	});`, nil); err == nil {
+		t.Logf("browser page state: %s", state)
+	}
 	if capture, err := driver.ExecuteScript(`
 		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
 		return capture ? JSON.stringify({
