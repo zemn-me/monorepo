@@ -107,6 +107,7 @@ exports_files(
         "biome.json",
         ".prettierrc.json",
         "package.json",
+        "pnpm-workspace.yaml",
         "tsconfig.json",
         ".gitignore",
         ".editorconfig",
@@ -182,6 +183,16 @@ copy_to_bin(
 copy_to_bin(
     name = "package_json",
     srcs = ["package.json"],
+)
+
+copy_to_bin(
+    name = "pnpm_workspace",
+    srcs = ["pnpm-workspace.yaml"],
+)
+
+copy_to_bin(
+    name = "pnpm_lockfile",
+    srcs = ["pnpm-lock.yaml"],
 )
 
 npm_link_all_packages(name = "node_modules")

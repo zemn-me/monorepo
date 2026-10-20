@@ -15,7 +15,10 @@ def _pnpm_impl(module_ctx):
             lock = json.decode(module_ctx.read(config.integrity_lock))
             pnpm_repository(
                 name = "pnpm",
-                pnpm_version = (lock["version"], lock["integrity"]),
+                pnpm_version = lock["version"],
+                integrity = lock["integrity"],
+                exe_integrity = lock.get("exe_integrity", {}),
+                include_npm = False,
             )
 
 pnpm = module_extension(

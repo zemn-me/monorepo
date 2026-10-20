@@ -1,0 +1,31 @@
+--- a/npm/private/pnpm_repository.bzl
++++ b/npm/private/pnpm_repository.bzl
+@@ -105,18 +105,16 @@
+         patch_directory = "package",
+     )
+ 
+-    # The native binary for the host platform, laid out where the wrapper
+-    # resolves the installed platform package.
+-    platform = _pnpm_exe_platform(rctx.os.name, rctx.os.arch, _is_linux_musl(rctx))
+-    exe_package = "@pnpm/exe.{}".format(platform)
+-    if platform not in rctx.attr.exe_integrity:
+-        fail("No known integrity for the {}@{} binary. Use a pnpm version mirrored in rules_js (see npm/private/versions.bzl) or upgrade rules_js.".format(exe_package, version))
+-    rctx.download_and_extract(
+-        url = utils.npm_registry_download_url(exe_package, version, {}, utils.default_registry()),
+-        integrity = rctx.attr.exe_integrity[platform],
+-        output = "package/node_modules/{}".format(exe_package),
+-        stripPrefix = "package",
+-    )
++    # Remote actions can run on a different platform from repository fetching.
++    # Ship each reviewed binary where pnpm's runtime platform resolver finds it.
++    for platform in rctx.attr.exe_integrity:
++        exe_package = "@pnpm/exe.{}".format(platform)
++        rctx.download_and_extract(
++            url = utils.npm_registry_download_url(exe_package, version, {}, utils.default_registry()),
++            integrity = rctx.attr.exe_integrity[platform],
++            output = "package/node_modules/{}".format(exe_package),
++            stripPrefix = "package",
++        )
+ 
+     # Compatibility entry for consumers of the pre-12 CJS entry point, such as
+     # the default `use_pnpm` label of npm_translate_lock; pnpm 12+ only ships

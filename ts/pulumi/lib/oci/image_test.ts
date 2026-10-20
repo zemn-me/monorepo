@@ -18,7 +18,9 @@ void pulumi.runtime.setMocks({
 });
 
 test('the provider can run an OCI push from the program runfiles', async () => {
-	const directory = mkdtempSync(path.join(tmpdir(), 'oci-runfiles-'));
+	const directory = mkdtempSync(
+		path.join(process.env['TEST_TMPDIR'] ?? tmpdir(), 'oci-runfiles-')
+	);
 	try {
 		const wrapper = path.join(directory, 'help.sh');
 		// Exercise the real generated push and its crane dependency without

@@ -29,11 +29,15 @@ js_test(
     data = [
         ":renovate_pnpm_test_mjs",
         "//:package_json",
+        "//:pnpm_workspace",
+        "//:pnpm_lockfile",
         "@pnpm",
     ],
     entry_point = "renovate_pnpm_test.mjs",
     env = {
         "PACKAGE_JSON": "$(rlocationpath //:package_json)",
+        "PNPM_LOCKFILE": "$(rlocationpath //:pnpm_lockfile)",
+        "PNPM_WORKSPACE": "$(rlocationpath //:pnpm_workspace)",
         "PNPM_BIN": "$(rlocationpath @pnpm//:pnpm)",
     },
 )

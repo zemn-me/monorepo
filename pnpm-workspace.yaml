@@ -1,0 +1,12 @@
+# Bazel and Renovate select the shared packageManager pin and verify its integrity.
+onlyBuiltDependencies: []
+packageExtensions:
+  '@pulumi/pulumi':
+    dependencies:
+      typescript5: npm:typescript@5.9.3
+  'openapi-typescript@7.13.0':
+    dependencies:
+      typescript5: npm:typescript@5.5.4
+overrides:
+  'nuqs>next': '-'
+  'nuqs>react-router-dom': '-'
