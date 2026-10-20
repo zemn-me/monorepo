@@ -64,7 +64,7 @@ func (p *multiplayerBrowser) click(x, y int) {
 }
 func (p *multiplayerBrowser) screenshot() image.Image {
 	p.t.Helper()
-	data, err := p.driver.Screenshot()
+	data, err := p.driver.ViewScreenshot()
 	if err != nil {
 		p.t.Fatalf("%s: screenshot: %v", p.name, err)
 	}
@@ -83,7 +83,7 @@ func (p *multiplayerBrowser) captureStep(name string) {
 	if dir == "" {
 		return
 	}
-	data, err := p.driver.Screenshot()
+	data, err := p.driver.ViewScreenshot()
 	if err != nil {
 		p.t.Logf("%s: diagnostic capture %s unavailable: %v", p.name, name, err)
 		return
@@ -133,7 +133,7 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 	driver := newGameBrowserWithCapabilities(t, capabilities, "--window-size=1000,900", "--disable-features=WebRtcHideLocalIpsWithMdns")
 	p := &multiplayerBrowser{t: t, driver: driver, name: name}
 	t.Cleanup(func() {
-		if data, err := driver.Screenshot(); err == nil {
+		if data, err := driver.ViewScreenshot(); err == nil {
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
 				_ = os.WriteFile(filepath.Join(dir, "multiplayer-"+name+".png"), data, 0644)
 			}

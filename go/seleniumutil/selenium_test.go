@@ -1,6 +1,9 @@
 package selenium_test
 
 import (
+	"bytes"
+	"image/png"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -66,5 +69,59 @@ func TestChromeOptions(t *testing.T) {
 	}
 	if !strings.Contains(text, "--headless") || !strings.Contains(text, "--window-size=900,700") {
 		t.Fatalf("normal launch arguments lost when adding Chrome options: %s", text)
+	}
+}
+
+func TestViewScreenshotDuringAnimation(t *testing.T) {
+	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{
+		"goog:chromeOptions": map[string]any{
+			"excludeSwitches": []string{"disable-background-timer-throttling", "disable-backgrounding-occluded-windows", "disable-renderer-backgrounding"},
+		},
+	}, "--window-size=1000,900", "--use-angle=swiftshader", "--enable-unsafe-swiftshader")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { driver.Close() })
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.Get("data:text/html," + url.PathEscape(`<style>body{margin:0}</style><canvas width="800" height="600"></canvas><script>
+const canvas=document.querySelector('canvas'), gl=canvas.getContext('webgl');
+let frame=0;
+function draw(){gl.clearColor(0,0,1,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.SCISSOR_TEST);gl.scissor(100,400,100,100);gl.clearColor(1,1,1,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.disable(gl.SCISSOR_TEST);canvas.dataset.frame=++frame;requestAnimationFrame(draw);}draw();
+</script>`)); err != nil {
+		t.Fatal(err)
+	}
+	before, err := driver.ExecuteScript("return Number(document.querySelector('canvas').dataset.frame)", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for range 10 {
+		data, err := driver.ViewScreenshot()
+		if err != nil {
+			t.Fatal(err)
+		}
+		shot, err := png.Decode(bytes.NewReader(data))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if shot.Bounds().Dx() != 800 || shot.Bounds().Dy() != 600 {
+			t.Fatalf("screenshot bounds = %v, want 800x600", shot.Bounds())
+		}
+		r, g, b, _ := shot.At(120, 120).RGBA()
+		if r < 60000 || g < 60000 || b < 60000 {
+			t.Fatalf("white control pixel = %d,%d,%d", r, g, b)
+		}
+		r, g, b, _ = shot.At(10, 10).RGBA()
+		if r > 1000 || g > 1000 || b < 60000 {
+			t.Fatalf("blue background pixel = %d,%d,%d", r, g, b)
+		}
+	}
+	after, err := driver.ExecuteScript("return Number(document.querySelector('canvas').dataset.frame)", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if after.(float64) <= before.(float64) {
+		t.Fatalf("animation stopped during capture: %v -> %v", before, after)
 	}
 }

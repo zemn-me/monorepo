@@ -2,6 +2,7 @@ package selenium
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -157,11 +158,11 @@ func (d *Driver) SetTimezoneOverride(tz string) error {
 	// it's crazy that codex had a hard time setting the time zone
 	// and decided to just hand-form this
 	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
-	if err := d.postChromiumCommand(primary, body); err != nil {
+	if err := d.postChromiumCommand(primary, body, nil); err != nil {
 		var statusErr *httpStatusError
 		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
 			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
-			return d.postChromiumCommand(fallback, body)
+			return d.postChromiumCommand(fallback, body, nil)
 		}
 		return err
 	}
@@ -171,6 +172,10 @@ func (d *Driver) SetTimezoneOverride(tz string) error {
 // ExecuteChromiumCommand sends a Chrome DevTools Protocol command through
 // chromedriver.
 func (d *Driver) ExecuteChromiumCommand(cmd string, params map[string]any) error {
+	return d.executeChromiumCommand(cmd, params, nil)
+}
+
+func (d *Driver) executeChromiumCommand(cmd string, params map[string]any, result any) error {
 	if d.WebDriver == nil {
 		return fmt.Errorf("web driver not initialized")
 	}
@@ -188,15 +193,30 @@ func (d *Driver) ExecuteChromiumCommand(cmd string, params map[string]any) error
 	}
 
 	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
-	if err := d.postChromiumCommand(primary, body); err != nil {
+	if err := d.postChromiumCommand(primary, body, result); err != nil {
 		var statusErr *httpStatusError
 		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
 			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
-			return d.postChromiumCommand(fallback, body)
+			return d.postChromiumCommand(fallback, body, result)
 		}
 		return err
 	}
 	return nil
+}
+
+// ViewScreenshot captures the visible browser view without asking Chromium to
+// resize and copy its compositor surface, which can stall animated WebGL pages.
+func (d *Driver) ViewScreenshot() ([]byte, error) {
+	var result struct {
+		Data string `json:"data"`
+	}
+	if err := d.executeChromiumCommand("Page.captureScreenshot", map[string]any{"format": "png", "fromSurface": false}, &result); err != nil {
+		return nil, err
+	}
+	if result.Data == "" {
+		return nil, fmt.Errorf("chromium returned an empty screenshot")
+	}
+	return base64.StdEncoding.DecodeString(result.Data)
 }
 
 // SetLocaleOverride configures Chromium to report the provided locale.
@@ -220,11 +240,11 @@ func (d *Driver) SetLocaleOverride(locale string) error {
 	}
 
 	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
-	if err := d.postChromiumCommand(primary, body); err != nil {
+	if err := d.postChromiumCommand(primary, body, nil); err != nil {
 		var statusErr *httpStatusError
 		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
 			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
-			return d.postChromiumCommand(fallback, body)
+			return d.postChromiumCommand(fallback, body, nil)
 		}
 		return err
 	}
@@ -240,7 +260,7 @@ func (e *httpStatusError) Error() string {
 	return fmt.Sprintf("chromium command failed (%d): %s", e.Code, e.Body)
 }
 
-func (d *Driver) postChromiumCommand(url string, body []byte) error {
+func (d *Driver) postChromiumCommand(url string, body []byte, result any) error {
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(body))
 	if err != nil {
 		return fmt.Errorf("build chromium request: %w", err)
@@ -255,8 +275,17 @@ func (d *Driver) postChromiumCommand(url string, body []byte) error {
 		msg, _ := io.ReadAll(resp.Body)
 		return &httpStatusError{Code: resp.StatusCode, Body: string(msg)}
 	}
-	_, _ = io.Copy(io.Discard, resp.Body)
-	return nil
+	if result == nil {
+		_, _ = io.Copy(io.Discard, resp.Body)
+		return nil
+	}
+	var response struct {
+		Value json.RawMessage `json:"value"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return fmt.Errorf("decode chromium response: %w", err)
+	}
+	return json.Unmarshal(response.Value, result)
 }
 
 // freePort asks the kernel for any available TCP port.
