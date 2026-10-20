@@ -38,3 +38,20 @@ func TestTime_String_Marshal_Unmarshal(t *testing.T) {
 		t.Fatalf("round-trip = %v, want %v", rt.Time, tt.Time)
 	}
 }
+
+// DynamoDB compares stored timestamps as strings, including fractional seconds.
+func TestTimeStringsPreserveChronologicalOrder(t *testing.T) {
+	earlier := Time{Time: time.Date(2026, time.October, 20, 12, 0, 0, 100_000_000, time.UTC)}
+	later := Time{Time: time.Date(2026, time.October, 20, 12, 0, 0, 110_000_000, time.UTC)}
+	if earlier.String() >= later.String() {
+		t.Fatalf("earlier timestamp %q sorts after %q", earlier.String(), later.String())
+	}
+}
+
+func TestTimeStringsOrderWholeSecondsBeforeFractions(t *testing.T) {
+	earlier := Time{Time: time.Date(2026, time.October, 20, 12, 0, 0, 0, time.UTC)}
+	later := Time{Time: time.Date(2026, time.October, 20, 12, 0, 0, 100_000_000, time.UTC)}
+	if earlier.String() >= later.String() {
+		t.Fatalf("earlier timestamp %q sorts after %q", earlier.String(), later.String())
+	}
+}

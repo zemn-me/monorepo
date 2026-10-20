@@ -9,7 +9,24 @@ module(
     name = "monorepo",
 )
 
-bazel_dep(name = "rules_oci", version = "2.3.3")
+# renovate:
+# datasource = github-releases
+# versioning = semver
+# depName = bazel-contrib/rules_oci
+# extractVersion = ^v(?<version>.*)$
+RULES_OCI_VERSION = "2.3.3"
+
+bazel_dep(name = "rules_oci", version = RULES_OCI_VERSION)
+
+# Upstream publishes releases before BCR. Keep the release archive and module
+# version together so Renovate can refresh both without a registry publication.
+archive_override(
+    module_name = "rules_oci",
+    integrity = "sha256-JD6sh+xB1o0dnm0hiEpQ7CjgMfcCsLn83H+Xw/PVOJo=",
+    strip_prefix = "rules_oci-" + RULES_OCI_VERSION,
+    # auto-integrity
+    urls = ["https://github.com/bazel-contrib/rules_oci/releases/download/v" + RULES_OCI_VERSION + "/rules_oci-v" + RULES_OCI_VERSION + ".tar.gz"],
+)
 
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 bazel_dep(name = "rules_cc", version = "0.2.17")
@@ -817,7 +834,7 @@ RUFF_VERSION = "0.17.1"
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-Wa/mTCJ+X5o52FxNa+bi2OmoXFXwiHuq2cni93WhwRk=",
+    integrity = "sha256-HI5uNlOOqguZY3iiDCJkA8TKY2msJIhHUbAk06lTC4Y=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",
