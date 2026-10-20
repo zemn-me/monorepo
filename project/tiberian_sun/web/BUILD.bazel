@@ -1,4 +1,5 @@
 # gazelle:exclude build_engine.py
+# gazelle:exclude reproducibility_test.py
 # gazelle:resolve py project.tiberian_sun.web.build_engine //project/tiberian_sun/web:build_engine_lib
 
 load("//bzl:rules.bzl", "bazel_lint")

@@ -116,6 +116,15 @@ default of `x86` would enable native SSE flags in the renderer dependency.
 The engine uses Wasm SIMD and retains the native source's strict
 floating-point compiler options.
 
+`//project/tiberian_sun/web:engine_reproducibility_test` compares the production
+JavaScript, WASM, and data files with a second complete compilation in a separate
+Bazel action and fresh temporary directory. It runs in normal presubmit; unchanged
+inputs can reuse each action's cache independently. The compiler remaps source
+and SDK paths and uses a fixed `SOURCE_DATE_EPOCH` so build paths and compilation
+timestamps do not create new content-addressed S3 objects. This checks repeatability
+with the selected host toolchain, not equality between different SDK versions or
+host platforms.
+
 ## Internet multiplayer
 
 Choose **Internet** from the game's main menu. The connection dialog is rendered
