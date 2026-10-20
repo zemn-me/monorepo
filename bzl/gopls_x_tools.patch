@@ -1,31 +1,136 @@
-diff --git a/internal/analysis/unusedfunc/unusedfunc.go b/internal/analysis/unusedfunc/unusedfunc.go
---- a/internal/analysis/unusedfunc/unusedfunc.go
-+++ b/internal/analysis/unusedfunc/unusedfunc.go
-@@ -77 +77 @@ func run(pass *analysis.Pass) (any, error) {
--	if packagepath.IsStdPackage(pass.Pkg.Path()) {
-+	if packagepath.MaybeStdPackage(pass.Pkg.Path()) {
-diff --git a/internal/mcp/context.go b/internal/mcp/context.go
---- a/internal/mcp/context.go
-+++ b/internal/mcp/context.go
-@@ -111 +111 @@
--			if packagepath.IsStdPackage(spec.Path.Value) {
-+			if packagepath.MaybeStdPackage(spec.Path.Value) {
-diff --git a/internal/golang/completion/completion.go b/internal/golang/completion/completion.go
---- a/internal/golang/completion/completion.go
-+++ b/internal/golang/completion/completion.go
-@@ -313 +313,4 @@ func (c *completer) tooNew(obj types.Object) bool {
--		disallowed = typesinternal.TooNewStdSymbols(pkg, c.goversion)
-+		disallowed = make(map[types.Object]string)
-+		for obj, symbol := range typesinternal.TooNewStdSymbols(pkg, c.goversion) {
-+			disallowed[obj] = symbol.Version.String()
-+		}
-diff --git a/internal/settings/analysis.go b/internal/settings/analysis.go
---- a/internal/settings/analysis.go
-+++ b/internal/settings/analysis.go
-@@ -17 +16,0 @@
--	"golang.org/x/tools/go/analysis/passes/scannererr"
-@@ -20 +18,0 @@
--	"golang.org/x/tools/go/analysis/passes/sqlrowserr"
-@@ -173,2 +170,0 @@
--		{analyzer: scannererr.Analyzer},         // to appear in cmd/vet@go1.28
--		{analyzer: sqlrowserr.Analyzer},         // to appear in cmd/vet@go1.28
+diff --git a/internal/util/typesutil/typesutil.go b/internal/util/typesutil/typesutil.go
+--- a/internal/util/typesutil/typesutil.go
++++ b/internal/util/typesutil/typesutil.go
+@@ -14,7 +14,7 @@
+ 
+ 	"golang.org/x/tools/go/ast/edge"
+ 	"golang.org/x/tools/go/ast/inspector"
+-	"golang.org/x/tools/internal/astutil"
++	"golang.org/x/tools/internal/cursorutil"
+ 	"golang.org/x/tools/internal/typesinternal"
+ )
+ 
+@@ -59,7 +59,7 @@
+ 		}
+ 	}
+ 
+-	cur = astutil.UnparenEnclosingCursor(cur)
++	cur = cursorutil.UnparenEnclosing(cur)
+ 	ek, idx := cur.ParentEdge()
+ 	switch ek {
+ 	case edge.AssignStmt_Lhs:
+diff --git a/internal/util/typesutil/BUILD.bazel b/internal/util/typesutil/BUILD.bazel
+--- a/internal/util/typesutil/BUILD.bazel
++++ b/internal/util/typesutil/BUILD.bazel
+@@ -8,7 +8,7 @@
+     deps = [
+         "@org_golang_x_tools//go/ast/edge",
+         "@org_golang_x_tools//go/ast/inspector",
+-        "@org_golang_x_tools//internal/astutil",
++        "@org_golang_x_tools//internal/cursorutil",
+         "@org_golang_x_tools//internal/typesinternal",
+     ],
+ )
+diff --git a/internal/analysis/errorsastypeshadow/errorsastypeshadow.go b/internal/analysis/errorsastypeshadow/errorsastypeshadow.go
+--- a/internal/analysis/errorsastypeshadow/errorsastypeshadow.go
++++ b/internal/analysis/errorsastypeshadow/errorsastypeshadow.go
+@@ -16,7 +16,7 @@
+ 	"golang.org/x/tools/go/types/typeutil"
+ 	"golang.org/x/tools/internal/analysis/analyzerutil"
+ 	typeindexanalyzer "golang.org/x/tools/internal/analysis/typeindex"
+-	"golang.org/x/tools/internal/astutil"
++	"golang.org/x/tools/internal/cursorutil"
+ 	"golang.org/x/tools/internal/typesinternal/typeindex"
+ )
+ 
+@@ -131,7 +131,7 @@
+ 		// isModifyingUseOfZeroVal returns true if use could potentially modify
+ 		// the zero value stored in the variable referenced by use.
+ 		isModifyingUseOfZeroVal := func(use inspector.Cursor) bool {
+-			use = astutil.UnparenEnclosingCursor(use)
++			use = cursorutil.UnparenEnclosing(use)
+ 
+ 			// The function is intentionally conservative as it is only used when
+ 			// analyzing results of AsType[T] within if/else chains.
+@@ -152,7 +152,7 @@
+ 			for {
+ 				switch use.ParentEdgeKind() {
+ 				case edge.TypeAssertExpr_X, edge.SelectorExpr_X, edge.IndexExpr_X:
+-					use = astutil.UnparenEnclosingCursor(use.Parent())
++					use = cursorutil.UnparenEnclosing(use.Parent())
+ 					continue
+ 				}
+ 				break
+diff --git a/internal/analysis/errorsastypeshadow/BUILD.bazel b/internal/analysis/errorsastypeshadow/BUILD.bazel
+--- a/internal/analysis/errorsastypeshadow/BUILD.bazel
++++ b/internal/analysis/errorsastypeshadow/BUILD.bazel
+@@ -16,7 +16,7 @@
+         "@org_golang_x_tools//go/types/typeutil",
+         "@org_golang_x_tools//internal/analysis/analyzerutil",
+         "@org_golang_x_tools//internal/analysis/typeindex",
+-        "@org_golang_x_tools//internal/astutil",
++        "@org_golang_x_tools//internal/cursorutil",
+         "@org_golang_x_tools//internal/typesinternal/typeindex",
+     ],
+ )
+diff --git a/internal/golang/inline.go b/internal/golang/inline.go
+--- a/internal/golang/inline.go
++++ b/internal/golang/inline.go
+@@ -108,12 +108,15 @@
+ 	}
+ 
+ 	// Inline the call.
++	curCall, ok := callerPGF.Cursor().FindNode(call)
++	if !ok {
++		return nil, nil, fmt.Errorf("cannot locate call in caller syntax")
++	}
+ 	caller := &inline.Caller{
+ 		Fset:      callerPkg.FileSet(),
+ 		Types:     callerPkg.Types(),
+ 		Info:      callerPkg.TypesInfo(),
+-		File:      callerPGF.File,
+-		Call:      call,
++		Call:      curCall,
+ 		CountUses: nil, // (use inefficient default implementation)
+ 	}
+ 
+diff --git a/internal/golang/inline_all.go b/internal/golang/inline_all.go
+--- a/internal/golang/inline_all.go
++++ b/internal/golang/inline_all.go
+@@ -12,6 +12,7 @@
+ 	"go/types"
+ 
+ 	"golang.org/x/tools/go/ast/astutil"
++	"golang.org/x/tools/go/ast/inspector"
+ 	"golang.org/x/tools/go/types/typeutil"
+ 	"golang.org/x/tools/gopls/internal/cache"
+ 	"golang.org/x/tools/gopls/internal/cache/parsego"
+@@ -252,12 +253,15 @@
+ 
+ 		currentCall := 0
+ 		for currentCall < len(calls) {
++			curCall, ok := inspector.New([]*ast.File{file}).Root().FindNode(calls[currentCall])
++			if !ok {
++				return nil, fmt.Errorf("cannot locate call in caller syntax")
++			}
+ 			caller := &inline.Caller{
+ 				Fset:      fset,
+ 				Types:     tpkg,
+ 				Info:      tinfo,
+-				File:      file,
+-				Call:      calls[currentCall],
++				Call:      curCall,
+ 				CountUses: nil, // TODO(adonovan): opt: amortize across callInfo.pkg
+ 			}
+ 			res, err := inline.Inline(caller, callee, opts)
+diff --git a/internal/test/marker/testdata/codeaction/inline_issue67336.txt b/internal/test/marker/testdata/codeaction/inline_issue67336.txt
+--- a/internal/test/marker/testdata/codeaction/inline_issue67336.txt
++++ b/internal/test/marker/testdata/codeaction/inline_issue67336.txt
+@@ -55,7 +55,6 @@
+ package c
+ import (
+ 	"context"
+-	
+ 	"example.com/one/more/pkg"
+ 	pkg0 "example.com/some/other/pkg"
+ 	"example.com/define/my/typ"
