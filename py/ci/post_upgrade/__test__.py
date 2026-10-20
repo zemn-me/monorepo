@@ -50,6 +50,30 @@ class TestPnpmIntegrity(unittest.TestCase):
 
 
 class TestAutoIntegrity(unittest.TestCase):
+    def test_archive_override_tracks_release_variable(self):
+        module = '''VERSION = "2.3.3"
+archive_override(
+    module_name = "rules_oci",
+    integrity = "old",
+    strip_prefix = "rules_oci-" + VERSION,
+    # auto-integrity
+    urls = ["https://example.com/v" + VERSION + "/rules_oci-v" + VERSION + ".tar.gz"],
+)
+'''
+        calls = []
+
+        def fetcher(url):
+            calls.append(url)
+            return b"reviewed release"
+
+        updated = update_module_bazel_text(module, fetcher, module.replace('VERSION = "2.3.3"', 'VERSION = "2.3.0"'))
+        self.assertEqual(calls, ["https://example.com/v2.3.3/rules_oci-v2.3.3.tar.gz"])
+        expected = "sha256-" + base64.b64encode(hashlib.sha256(b"reviewed release").digest()).decode()
+        self.assertIn(f'integrity = "{expected}"', updated)
+        calls.clear()
+        self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+        self.assertEqual(calls, [])
+
     def test_repository_module_baseline(self):
         module = Path("MODULE.bazel").read_text()
 

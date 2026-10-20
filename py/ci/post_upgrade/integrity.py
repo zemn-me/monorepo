@@ -83,7 +83,7 @@ def _resolve_expr(expr: str, var_values: dict[str, str]) -> str:
     return out
 
 
-def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
+def _archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
     # Starlark strings can contain complete BUILD snippets, including closing
     # parentheses and apparent archive calls. Tokenization keeps those opaque.
     line_offsets = [0]
@@ -114,14 +114,14 @@ def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
         elif start is not None and token.type == tokenize.OP and token.string == "(":
             depth = 1
         else:
-            start = offset(token.start) if token.type == tokenize.NAME and token.string == "http_archive" else None
+            start = offset(token.start) if token.type == tokenize.NAME and token.string in ("http_archive", "archive_override") else None
     return blocks
 
 
 def _extract_archive_name(block: str) -> str:
-    match = re.search(r"^\s*name\s*=\s*\"([^\"]+)\"", block, re.MULTILINE)
+    match = re.search(r"^\s*(?:name|module_name)\s*=\s*\"([^\"]+)\"", block, re.MULTILINE)
     if not match:
-        raise Exception("Failed to find http_archive name")
+        raise Exception("Failed to find archive name or module_name")
     return match.group(1)
 
 
@@ -214,7 +214,7 @@ def update_module_bazel_text(
     # block an unrelated update on an unavailable historical release.
     baseline_urls = _archive_urls(baseline) if baseline is not None else {}
     updated = module_text
-    blocks = _http_archive_blocks(module_text)
+    blocks = _archive_blocks(module_text)
     for start, end, archive_block in reversed(blocks):
         if "auto-integrity" not in archive_block:
             continue
@@ -240,7 +240,7 @@ def _archive_urls(module_text: str) -> dict[str, str]:
     variables = dict(re.findall(r'^([A-Z0-9_]+)\s*=\s*"([^"]+)"', module_text, re.MULTILINE))
     return {
         _extract_archive_name(block): _resolve_expr(_extract_url_expr(block), variables)
-        for _, _, block in _http_archive_blocks(module_text)
+        for _, _, block in _archive_blocks(module_text)
         if "auto-integrity" in block
     }
 

@@ -56,11 +56,22 @@ func TestJournalDayPagination(t *testing.T) {
 		paths = append(paths, path)
 		dates = append(dates, date)
 	}
-	input, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := input.SendKeys(strings.Join(paths, "\n")); err != nil {
+	// Completing login can replace the capture controls. Locate the current
+	// input for each attempt; a stale SendKeys did not select any files.
+	if err := driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
+		input, err := webDriver.FindElement(selenium.ByCSSSelector, "input[aria-label='Import voice memo']")
+		if err != nil {
+			if strings.Contains(err.Error(), "no such element") {
+				return false, nil
+			}
+			return false, err
+		}
+		err = input.SendKeys(strings.Join(paths, "\n"))
+		if browserhelpers.IsStaleElementErr(err) {
+			return false, nil
+		}
+		return err == nil, err
+	}, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {

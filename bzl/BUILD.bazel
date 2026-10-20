@@ -11,6 +11,7 @@ exports_files([
     "pulumi_typescript5.patch",
     "rules_itest_http_timeout.patch",
     "rules_distroless_ubuntu_fallback.patch",
+    "rules_python_installer.patch",
 ])
 
 sh_binary(

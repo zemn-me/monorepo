@@ -55,13 +55,13 @@ require (
 	github.com/nyaruka/phonenumbers/v2 v2.0.14
 	github.com/oapi-codegen/nethttp-middleware v1.2.0
 	github.com/oapi-codegen/runtime v1.7.0
-	github.com/openai/openai-go/v3 v3.78.0
+	github.com/openai/openai-go/v3 v3.79.0
 	github.com/sergi/go-diff v1.4.0
 	github.com/tdewolff/parse/v2 v2.8.18
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.32.0
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/image v0.46.0
+	golang.org/x/image v0.47.0
 	golang.org/x/sync v0.24.0
 	google.golang.org/protobuf v1.36.12
 )
@@ -151,20 +151,20 @@ require (
 	go.yaml.in/yaml/v4 v4.0.0-rc.3 // indirect
 	golang.org/x/arch v0.28.0 // indirect
 	golang.org/x/crypto v0.57.0 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/mod v0.41.0 // indirect
-	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/telemetry v0.0.0-20260811182544-a038080d80e5 // indirect
-	golang.org/x/text v0.42.0 // indirect
-	golang.org/x/time v0.15.0 // indirect
-	golang.org/x/tools v0.49.0 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20260908205506-85c1c2202aba // indirect
+	golang.org/x/mod v0.42.0 // indirect
+	golang.org/x/oauth2 v0.37.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/telemetry v0.0.0-20261009151841-97e8ea77aa2a // indirect
+	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/time v0.16.0 // indirect
+	golang.org/x/tools v0.52.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
-	golang.org/x/tools/gopls v0.23.0 // indirect
-	golang.org/x/vuln v1.4.0 // indirect
+	golang.org/x/tools/gopls v0.24.0 // indirect
+	golang.org/x/vuln v1.8.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	honnef.co/go/tools v0.8.1 // indirect
-	mvdan.cc/gofumpt v0.10.0 // indirect
+	honnef.co/go/tools v0.8.2 // indirect
+	mvdan.cc/gofumpt v0.12.0 // indirect
 	mvdan.cc/xurls/v2 v2.6.0 // indirect
 )
