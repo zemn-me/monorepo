@@ -49,7 +49,7 @@ func (p *multiplayerBrowser) logs() string {
 func (p *multiplayerBrowser) mouse(x, y int, kind string, buttons int) {
 	p.t.Helper()
 	if err := p.driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": kind, "x": x, "y": y, "button": "left", "buttons": buttons, "clickCount": 1}); err != nil {
-		p.t.Fatal(err)
+		p.t.Fatalf("%s: mouse %s at (%d, %d): %v", p.name, kind, x, y, err)
 	}
 }
 func (p *multiplayerBrowser) click(x, y int) {
@@ -66,7 +66,7 @@ func (p *multiplayerBrowser) screenshot() image.Image {
 	p.t.Helper()
 	data, err := p.driver.Screenshot()
 	if err != nil {
-		p.t.Fatal(err)
+		p.t.Fatalf("%s: screenshot: %v", p.name, err)
 	}
 	frame, err := png.Decode(bytes.NewReader(data))
 	if err != nil {
@@ -74,16 +74,22 @@ func (p *multiplayerBrowser) screenshot() image.Image {
 	}
 	return frame
 }
+
+// Diagnostic captures supplement the behavior assertions. A compositor capture
+// can time out while a real-time peer keeps rendering; it must not stop the match.
 func (p *multiplayerBrowser) captureStep(name string) {
 	p.t.Helper()
+	dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
+	if dir == "" {
+		return
+	}
 	data, err := p.driver.Screenshot()
 	if err != nil {
-		p.t.Fatal(err)
+		p.t.Logf("%s: diagnostic capture %s unavailable: %v", p.name, name, err)
+		return
 	}
-	if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
-		if err := os.WriteFile(filepath.Join(dir, "multiplayer-"+p.name+"-"+name+".png"), data, 0644); err != nil {
-			p.t.Fatal(err)
-		}
+	if err := os.WriteFile(filepath.Join(dir, "multiplayer-"+p.name+"-"+name+".png"), data, 0644); err != nil {
+		p.t.Logf("%s: save diagnostic capture %s: %v", p.name, name, err)
 	}
 }
 func (p *multiplayerBrowser) white(x, y int) bool {
@@ -101,6 +107,7 @@ func (p *multiplayerBrowser) white(x, y int) bool {
 }
 func (p *multiplayerBrowser) wait(label string, condition func() bool, others ...*multiplayerBrowser) {
 	p.t.Helper()
+	p.t.Logf("%s: waiting for %s", p.name, label)
 	// ICE and network delivery remain real browser I/O. Only the game clocks advance.
 	deadline := time.Now().Add(90 * time.Second)
 	for time.Now().Before(deadline) {
