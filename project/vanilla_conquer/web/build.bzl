@@ -1,5 +1,7 @@
 """Build the complete C++ engine with Emscripten and pinned host toolchains."""
 
+load("//py:rules.bzl", "py_test")
+
 def _engine_impl(ctx):
     cmake = ctx.toolchains["@rules_foreign_cc//toolchains:cmake_toolchain"].data
     ninja = ctx.toolchains["@rules_foreign_cc//toolchains:ninja_toolchain"].data
@@ -34,7 +36,7 @@ def _engine_impl(ctx):
         OutputGroupInfo(javascript = depset([outputs[0]]), wasm = depset([outputs[1]])),
     ]
 
-engine_build = rule(
+_engine_build = rule(
     implementation = _engine_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
@@ -54,3 +56,25 @@ engine_build = rule(
         "@rules_nodejs//nodejs:toolchain_type",
     ],
 )
+
+def engine_build(name, **kwargs):
+    """Compare production artifacts with a separate, complete compilation."""
+    _engine_build(name = name, **kwargs)
+    rebuild = name + "_rebuild"
+
+    # Distinct config/output paths force separate actions. Each invocation builds
+    # from scratch in a fresh random directory, rather than copying cached outputs.
+    _engine_build(name = rebuild, **kwargs)
+    py_test(
+        name = name + "_reproducibility_test",
+        size = "small",
+        srcs = ["reproducibility_test.py"],
+        main = "reproducibility_test.py",
+        args = [
+            "--first",
+            "$(rootpaths :%s)" % name,
+            "--second",
+            "$(rootpaths :%s)" % rebuild,
+        ],
+        data = [":" + name, ":" + rebuild],
+    )

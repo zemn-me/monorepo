@@ -26,6 +26,21 @@ The complete production website target is `//project/me/zemn:build`.
 `testing:integration_test` runs against that production bundle with an
 automatically assigned service port.
 
+## Build reproducibility
+
+`//project/vanilla_conquer/web:vanillara_reproducibility_test` and
+`//project/vanilla_conquer/web:vanillatd_reproducibility_test` compare each
+production JavaScript and Wasm artifact byte for byte with a second complete
+compilation in a separate Bazel action and fresh temporary directory. Empty
+outputs also fail. Both tests run in normal presubmit; unchanged inputs may
+reuse the two actions' caches independently.
+
+The builds fix `SOURCE_DATE_EPOCH`, remap source and SDK paths, and fix the
+compilation directory recorded in Wasm debug information. These tests check
+repeatability with the selected host toolchain, not equality across host
+platforms or SDK versions. The data packager separately tests identical
+gzip output for identical file contents.
+
 ## Browser adaptation
 
 `third_party/vanilla_conquer/web.patch` supplies the small browser platform

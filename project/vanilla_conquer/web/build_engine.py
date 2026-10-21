@@ -64,10 +64,12 @@ def main():
         generated.mkdir()
         build = work / "build"
         # Assertions and source_location embed __FILE__, even in release builds.
-        # Remap both the fresh work directory and the SDK's action-local path.
+        # Remap source/SDK paths and the working directory recorded in DWARF.
+        # Clang records its compilation directory separately from file-prefix maps.
         prefix_maps = shlex.join([
             f"-ffile-prefix-map={work}=/vanilla",
             f"-ffile-prefix-map={sdk}=/emsdk",
+            "-fdebug-compilation-dir=/vanilla/build",
         ])
         commands = [
             [cmake, "-S", str(src), "-B", str(build), "-G", "Ninja",

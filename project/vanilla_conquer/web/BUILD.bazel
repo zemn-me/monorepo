@@ -1,4 +1,5 @@
 # gazelle:exclude build_engine.py
+# gazelle:exclude reproducibility_test.py
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_binary")
 load("//ts:rules.bzl", "ts_project")
