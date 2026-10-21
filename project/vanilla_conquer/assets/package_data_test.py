@@ -6,8 +6,10 @@ from pathlib import Path
 import struct
 import tempfile
 import unittest
+from unittest.mock import patch
+import zipfile
 
-from project.vanilla_conquer.assets.package_data import Disc, MAGIC, RA_INSTALL, RA_MAIN, TD_FILES, package
+from project.vanilla_conquer.assets.package_data import Disc, MAGIC, RA_INSTALL, RA_MAIN, TD_FILES, main, package
 
 
 def record(extent, size, name, directory=False):
@@ -33,6 +35,34 @@ def image():
 
 
 class PackageTest(unittest.TestCase):
+    def test_ra_packaging_tracks_lowercase_tool_outputs(self):
+        # Model vanillamix's output spelling even on case-insensitive hosts.
+        def mixtool(command, **kwargs):
+            if "-c" in command:
+                output = Path(command[-1])
+                self.assertEqual(output.name, output.name.lower())
+                output.with_name(output.name.lower()).write_bytes(b"rebuilt mix")
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "disc.zip"
+            with zipfile.ZipFile(archive, "w") as zipped:
+                zipped.writestr("disc.iso", b"disc fixture")
+            output = root / "ra.gz"
+            with patch("project.vanilla_conquer.assets.package_data.Disc") as disc, \
+                 patch("project.vanilla_conquer.assets.package_data.subprocess.run", side_effect=mixtool), \
+                 patch("sys.argv", ["package_data", "--archive", str(archive), "--game", "ra",
+                                    "--mixtool", "mixtool", "--unshield", "unshield",
+                                    "--output", str(output), "--notice-output", str(root / "notice")]):
+                disc.return_value.extract.side_effect = lambda name, path: Path(path).write_bytes(b"disc file")
+                main()
+            content = gzip.decompress(output.read_bytes())
+            length, = struct.unpack_from("<I", content, 8)
+            self.assertEqual(json.loads(content[12:12 + length]), [
+                {"name": "MAIN.MIX", "size": 11}, {"name": "REDALERT.MIX", "size": 11},
+            ])
+            self.assertEqual(content[12 + length:], b"rebuilt mix" * 2)
+
     def test_disc_and_package(self):
         disc = Disc(io.BytesIO(image()))
         with tempfile.TemporaryDirectory() as directory:
