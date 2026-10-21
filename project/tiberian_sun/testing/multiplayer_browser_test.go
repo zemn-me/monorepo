@@ -467,11 +467,14 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 	}
 	host.click(645, 465) // New game.
 	host.wait("host game setup", func() bool { return strings.Contains(host.logs(), "netgame.rml opened") }, guest)
-	for i := 0; i < 30; i++ {
-		host.advance()
-		guest.advance()
-	}
-	guest.click(590, 170) // Host's game below the Lobby row.
+	// Discovery arrives over real network I/O. Wait for the host row's selected
+	// background before joining, including on slow real-time browser runners.
+	guest.wait("host game row selected", func() bool {
+		guest.click(590, 170) // Host's game below the Lobby row.
+		frame := guest.screenshot()
+		r, g, b, _ := frame.At(680, 170).RGBA()
+		return r>>8 == 0x22 && g>>8 == 0x50 && b>>8 == 0x61
+	}, host)
 	guest.click(520, 465) // Join.
 	guest.wait("guest game setup", func() bool { return strings.Contains(guest.logs(), "netgame.rml opened") }, host)
 	host.wait("both engines generate a scenario", func() bool {
