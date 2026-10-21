@@ -76,6 +76,10 @@ func snapshot(t *testing.T, driver *seleniumutil.Driver, name string) image.Imag
 
 func advance(t *testing.T, clock *seleniumutil.VirtualClock, duration time.Duration) {
 	t.Helper()
+	if clock == nil {
+		time.Sleep(duration)
+		return
+	}
 	for duration > 0 {
 		step := min(duration, 100*time.Millisecond)
 		if err := clock.Advance(step); err != nil {
@@ -128,12 +132,49 @@ func TestBrowserCampaigns(t *testing.T) {
 	}{{"red-alert", 268}, {"command-and-conquer", 112}} {
 		t.Run(game.route, func(t *testing.T) {
 			driver := newBrowser(t, 800, 600)
-			clock, err := seleniumutil.NewVirtualClock(driver)
-			if err != nil {
-				t.Fatal(err)
+			var clock *seleniumutil.VirtualClock
+			if game.route != "red-alert" {
+				var err error
+				clock, err = seleniumutil.NewVirtualClock(driver)
+				if err != nil {
+					t.Fatal(err)
+				}
 			}
+			// Red Alert cinematics use real Web Audio buffer sources and their
+			// completion events, which the ScriptProcessor test clock does not model.
 			if err := driver.Get(base + "/experiments/" + game.route); err != nil {
 				t.Fatal(err)
+			}
+			if game.route == "red-alert" {
+				if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+					button, err := w.FindElement(selenium.ByCSSSelector, "button")
+					if err != nil {
+						return false, nil
+					}
+					return button.IsDisplayed()
+				}, 90*time.Second); err != nil {
+					t.Fatalf("start button: %v", err)
+				}
+				button, err := driver.FindElement(selenium.ByCSSSelector, "button")
+				if err != nil {
+					t.Fatal(err)
+				}
+				for _, viewport := range []struct{ width, height int }{{390, 844}, {800, 600}} {
+					if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": viewport.width, "height": viewport.height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+						t.Fatal(err)
+					}
+					value, err := driver.ExecuteScript(`const b=arguments[0],r=b.getBoundingClientRect();return document.activeElement===b&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight&&r.height>=44&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{button})
+					if err != nil || value != true {
+						t.Fatalf("start button visibility/focus at width %d: %v, %v", viewport.width, value, err)
+					}
+					snapshot(t, driver, "red-alert-ready-"+strconv.Itoa(viewport.width))
+				}
+				if err := button.SendKeys(selenium.EnterKey); err != nil {
+					t.Fatal(err)
+				}
+				advance(t, clock, 3*time.Second)
+				snapshot(t, driver, "red-alert-intro")
+				advance(t, clock, 10*time.Second) // Let the intro finish naturally.
 			}
 			if err := driver.WaitWithTimeout(func(selenium.WebDriver) (bool, error) {
 				advance(t, clock, 100*time.Millisecond)
@@ -163,9 +204,25 @@ func TestBrowserCampaigns(t *testing.T) {
 			enter(t, canvas, clock, 2*time.Second) // Start New Game.
 			enter(t, canvas, clock, 3*time.Second) // Normal difficulty.
 			if game.route == "red-alert" {
-				enter(t, canvas, clock, 10*time.Second) // Allies and the text briefing.
-				snapshot(t, driver, game.route+"-briefing")
-				enter(t, canvas, clock, 15*time.Second) // Acknowledge the briefing.
+				enter(t, canvas, clock, 4*time.Second) // Allies and the first mission briefing movie.
+				firstMovie := snapshot(t, driver, "red-alert-briefing-movie")
+				advance(t, clock, 2*time.Second)
+				nextMovie := snapshot(t, driver, "red-alert-briefing-movie-next")
+				changed := 0
+				for y := 80; y < 500; y++ {
+					for x := 50; x < 750; x++ {
+						if firstMovie.At(x, y) != nextMovie.At(x, y) {
+							changed++
+						}
+					}
+				}
+				if changed < 1000 {
+					t.Fatalf("briefing movie did not animate: %d changed pixels", changed)
+				}
+				if err := canvas.SendKeys(selenium.EscapeKey); err != nil {
+					t.Fatal(err)
+				}
+				advance(t, clock, 15*time.Second) // Skip the briefing into the mission.
 			} else {
 				click(t, driver, clock, 200, 300) // GDI in the original faction selector.
 				advance(t, clock, 15*time.Second)

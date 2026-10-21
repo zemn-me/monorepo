@@ -273,3 +273,32 @@ index 8ae9955..13283dd 100644
          if (!ScoreMix) {
              ScoreMix = new MFCD("SCORES.MIX");
              ThemeClass::Scan();
+diff --git a/common/vqatask.cpp b/common/vqatask.cpp
+index 28f9dc5..f92a126 100644
+--- a/common/vqatask.cpp
++++ b/common/vqatask.cpp
+@@ -16,6 +16,9 @@
+ #include "vqafile.h"
+ #include "vqaloader.h"
+ #include <string.h>
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
+ 
+ bool VQAMovieDone = false;
+ 
+@@ -112,6 +115,14 @@ VQAErrorType VQA_Play(VQAHandle* handle, VQAPlayMode mode)
+         }
+ 
+         while (mode != 1) {
++#ifdef __EMSCRIPTEN__
++            // Frame/audio buffers can be waiting before the drawer polls input.
++            // Yield even then so Web Audio, painting, and cancellation can run.
++            emscripten_sleep(1);
++            if (EM_ASM_INT({ return !!Module.webStop; })) {
++                emscripten_force_exit(0);
++            }
++#endif
+             if (data->Flags & (VQA_DATA_FLAG_VIDEO_MEMORY_SET | VQA_DATA_FLAG_8)) {
+                 break;
+             }

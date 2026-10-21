@@ -59,10 +59,13 @@ class PackageTest(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     Disc(io.BytesIO(data))
 
-    def test_allowlists_exclude_music_movies_and_programs(self):
+    def test_allowlists_include_ra_cinematics_but_exclude_music_and_programs(self):
         for name in RA_MAIN | RA_INSTALL | TD_FILES:
             self.assertTrue(name.endswith(".MIX"))
-            self.assertFalse(name.startswith(("SCORES", "MOVIES", "NCHIRES", "MAIN", "REDALERT")))
+            self.assertFalse(name.startswith(("SCORES", "MAIN", "REDALERT")))
+
+        self.assertIn("MOVIES1.MIX", RA_MAIN)
+        self.assertIn("NCHIRES.MIX", RA_INSTALL)
 
 
 if __name__ == "__main__":

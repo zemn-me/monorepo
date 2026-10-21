@@ -10,8 +10,9 @@ or CPU emulator runs in the browser.
 
 The standalone React routes are `/experiments/red-alert` and
 `/experiments/command-and-conquer`. They automatically download their
-content-addressed engine and gzip game package. Each game has a separate
-IndexedDB save directory. Clearing site data removes local saves. Use a
+content-addressed engine and gzip game package. Red Alert then shows a Start
+button so its intro can begin with browser audio enabled. Escape skips movies.
+Each game has a separate IndexedDB save directory. Clearing site data removes local saves. Use a
 keyboard and mouse. Exit the game to return to the previous page.
 
 From the monorepo root:
@@ -55,8 +56,10 @@ on a separately installed Emscripten SDK, Windows, SDL, or OpenAL.
 The optional score archive is detected before starting a playlist, so an
 asset package without music cannot enter an endless track search.
 Native networking is disabled; browser multiplayer is not implemented.
-Music, movies, expansion packs, and interoperability with native saves are
-outside the current port's scope.
+Standalone soundtrack archives, expansion packs, and interoperability with
+native saves are outside the current port's scope. Red Alert includes the
+intro and cinematics from the Allied disc; the Soviet disc movies are not
+in the current asset package.
 
 ## Game data
 
@@ -69,12 +72,12 @@ Bazel pins these preserved original freeware discs by SHA-256:
 
 `assets/package_data.py` reads the ISO9660 images and selects explicit
 allowlists. Red Alert's original MIX containers are rebuilt using the
-upstream `vanillamix` tool to retain local-disc detection while excluding
-music and movies. C&C Gold's installed interface data is extracted from
+upstream `vanillamix` tool to retain local-disc detection. It includes
+`MOVIES1.MIX` and `NCHIRES.MIX` for cinematics and movie palettes, while
+excluding the standalone `SCORES.MIX` soundtrack. C&C Gold's installed
+interface data is extracted from
 `INSTALL/SETUP.Z` using source-built, pinned `unshieldv3`; only allowlisted
-MIX files enter the browser package. Red Alert's cinematic-only `NCHIRES.MIX`
-is also excluded: it contains an embedded intro VQA as well as movie palettes. Both extraction tools run only at
-build time. Original disc readmes are preserved separately.
+MIX files enter the browser package. Both extraction tools run only at build time. Original disc readmes are preserved separately.
 
 The deterministic gzip package contains `VANILLD1`, a little-endian 32-bit
 JSON header length, an array of `{name,size}` entries, and concatenated
@@ -92,8 +95,12 @@ the freeware provenance and source-code license do not relicense the assets.
 The browser integration test drives both production routes with the original
 freeware assets, accepts normal difficulty, selects the Allies or GDI,
 and checks the first campaign map and three seconds of simulation animation.
-It uses the shared virtual browser clock for dates, timers, audio, and input
-holds. Desktop and phone-width cases block the actual game-data download and
+The Red Alert flow checks the React Start button at desktop and phone widths,
+starts with the keyboard, lets the intro finish, verifies that the first
+briefing movie animates, and skips it into gameplay.
+Red Alert uses the real browser and Web Audio clock to verify movie-buffer
+completion. Tiberian Dawn uses the shared virtual clock for dates, timers,
+audio, and input holds. Desktop and phone-width cases block the actual game-data download and
 verify that the error is visible and receives keyboard focus.
 
 This establishes the tested initial campaign flows, not complete campaign,

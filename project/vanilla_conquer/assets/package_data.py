@@ -9,8 +9,8 @@ import subprocess
 import tempfile
 import zipfile
 
-RA_MAIN = {"CONQUER.MIX", "RUSSIAN.MIX", "ALLIES.MIX", "SOUNDS.MIX", "SNOW.MIX", "INTERIOR.MIX", "TEMPERAT.MIX", "GENERAL.MIX"}
-RA_INSTALL = {"LOCAL.MIX", "HIRES.MIX", "LORES.MIX", "SPEECH.MIX"}
+RA_MAIN = {"CONQUER.MIX", "RUSSIAN.MIX", "ALLIES.MIX", "SOUNDS.MIX", "SNOW.MIX", "INTERIOR.MIX", "TEMPERAT.MIX", "GENERAL.MIX", "MOVIES1.MIX"}
+RA_INSTALL = {"LOCAL.MIX", "HIRES.MIX", "LORES.MIX", "SPEECH.MIX", "NCHIRES.MIX"}
 TD_FILES = {"CONQUER.MIX", "GENERAL.MIX", "SOUNDS.MIX", "TEMPERAT.MIX", "WINTER.MIX", "DESERT.MIX"}
 TD_INSTALL = {"CCLOCAL.MIX", "TRANSIT.MIX", "SPEECH.MIX", "LOCAL.MIX", "UPDATE.MIX", "UPDATEC.MIX", "WINTICNH.MIX", "DESEICNH.MIX", "TEMPICNH.MIX"}
 MAGIC = b"VANILLD1"
@@ -122,7 +122,7 @@ def main():
                         command += ["-f", name.lower()]
                     subprocess.run([*command, str(mix)], check=True, capture_output=True)
                     # Keep the original container layout for the engine's local-disc
-                    # detection, but rebuild it without excluded music and movies.
+                    # detection, including Allied cinematics but excluding standalone music.
                     mix.unlink()
                     command = [mixtool, "-c", "-d", str(work)]
                     for name in sorted(allowlist):

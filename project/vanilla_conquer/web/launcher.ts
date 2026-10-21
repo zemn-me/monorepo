@@ -12,6 +12,7 @@ export interface DownloadProgress {
 }
 export interface GameCallbacks {
 	readonly progress: (progress: DownloadProgress | undefined) => void;
+	readonly ready: (start: () => void) => void;
 	readonly running: () => void;
 	readonly error: (message: string) => void;
 	readonly exit: () => void;
@@ -169,6 +170,18 @@ export function startGame(
 				);
 			}
 			loaded.FS.chdir('/game');
+			if (assets.game === 'ra') {
+				// Start the intro from a user gesture so browser audio can play.
+				await new Promise<void>((resolve, reject) => {
+					lifetime.signal.addEventListener(
+						'abort',
+						() => reject(lifetime.signal.reason),
+						{ once: true }
+					);
+					callbacks.ready(resolve);
+				});
+				signal.throwIfAborted();
+			}
 			started = true;
 			callbacks.running();
 			canvas.focus();
@@ -254,7 +267,7 @@ function importGame(
 		const { name, size } = entry;
 		if (
 			!/^[A-Z0-9_]+\.(MIX|MAP)$/.test(name) ||
-			/^(SCORES|MOVIES)/.test(name) ||
+			/^SCORES/.test(name) ||
 			names.has(name) ||
 			!Number.isSafeInteger(size) ||
 			size <= 0 ||
