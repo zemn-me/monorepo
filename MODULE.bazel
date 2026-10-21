@@ -1100,3 +1100,67 @@ http_archive(
     # auto-integrity
     urls = ["https://www.rarlab.com/rar/unrarsrc-7.3.1.tar.gz"],
 )
+
+# Source-only original C&C engines; browser outputs are built locally.
+http_archive(
+    name = "vanilla_conquer",
+    build_file = "//third_party/vanilla_conquer:BUILD.vanilla",
+    patch_args = ["-p1"],
+    patches = ["//third_party/vanilla_conquer:web.patch"],
+    sha256 = "e0a90c08ed6643797255e15bb34044cf687e4580b2582afead42522920fd2559",
+    strip_prefix = "Vanilla-Conquer-ce83b59edd99cccac6cebaae054ca04962c744b7",
+    url = "https://github.com/TheAssemblyArmada/Vanilla-Conquer/archive/ce83b59edd99cccac6cebaae054ca04962c744b7.tar.gz",
+)
+
+http_archive(
+    name = "vanilla_sdl2",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["CMakeLists.txt", "LICENSE.txt"])
+filegroup(name = "sources", srcs = glob(["**"]))
+""",
+    sha256 = "03f9d7c191a837525c9cda6406af2f2e48be02b5e7eb03d949cc9f1e9ca41c8b",
+    strip_prefix = "SDL-release-2.32.10",
+    url = "https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.32.10.tar.gz",
+)
+
+# Preserved EA freeware discs; only selected data is packaged for the browser.
+http_file(
+    name = "red_alert_freeware",
+    downloaded_file_path = "RA_Allies.zip",
+    sha256 = "3b09edca3f93cb50a8d38d163f0c93540c2015f0b7b441cad35cda6d766876d7",
+    urls = ["https://downloads.cnc-comm.com/red-alert/iso/RA_Allies.zip"],
+)
+
+http_file(
+    name = "tiberian_dawn_freeware",
+    downloaded_file_path = "CNC95_GDI.zip",
+    sha256 = "5c35e23ae74dd5d7d6cea58822eb45a2f87548d5507ef65ae584994859e84c75",
+    urls = ["https://downloads.cnc-comm.com/command-and-conquer/iso/CNC95_GDI.zip"],
+)
+
+# Build-time only: original Gold discs store installed assets in InstallShield v3.
+http_archive(
+    name = "unshieldv3",
+    build_file_content = """
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+package(default_visibility = ["//visibility:public"])
+config_setting(name = "macos", constraint_values = ["@platforms//os:macos"])
+cc_library(name = "blast", srcs = ["blast.c"], hdrs = ["blast.h"])
+genrule(
+    name = "config",
+    outs = ["config.h"],
+    cmd = "echo '#define CMAKE_PROJECT_NAME \\\"unshieldv3\\\"' > $@; echo '#define CMAKE_PROJECT_VER \\\"0.2.2\\\"' >> $@",
+)
+cc_binary(
+    name = "unshieldv3",
+    srcs = ["main.cpp", "ISArchiveV3.cpp", "ISArchiveV3.h", ":config"],
+    copts = ["-std=c++17"] + select({":macos": ["-mmacosx-version-min=10.15"], "//conditions:default": []}),
+    linkopts = select({":macos": ["-mmacosx-version-min=10.15"], "//conditions:default": []}),
+    deps = [":blast"],
+)
+""",
+    sha256 = "25270989563a7a56b8ad3a86f513ca940c63554d1c21bb03e6423ab713c6cfe1",
+    strip_prefix = "unshieldv3-4e5700fb97ba9f0338b49c1031834ce42177f265",
+    url = "https://github.com/wfr/unshieldv3/archive/4e5700fb97ba9f0338b49c1031834ce42177f265.tar.gz",
+)
