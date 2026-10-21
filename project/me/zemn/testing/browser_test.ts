@@ -321,6 +321,8 @@ describe('zemn.me website', () => {
 					'Requester chest generator',
 					'Blueprint wall generator',
 					'Blueprint book',
+					'Red Alert',
+					'Command & Conquer',
 					'Tiberian Sun',
 					'Cultist simulator',
 				]);
