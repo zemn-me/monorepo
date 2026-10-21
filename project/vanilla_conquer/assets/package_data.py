@@ -115,7 +115,9 @@ def main():
             disc = Disc(stream)
             if args.game == "ra":
                 for member, allowlist in [("MAIN.MIX", RA_MAIN), ("INSTALL/REDALERT.MIX", RA_INSTALL)]:
-                    mix = work / Path(member).name
+                    # RawFileClass lowercases new output paths on Linux. Use the
+                    # same spelling for extracted and rebuilt containers on every host.
+                    mix = work / Path(member).name.lower()
                     disc.extract(member, mix)
                     command = [mixtool, "-x", "-d", str(work)]
                     for name in sorted(allowlist):
@@ -128,7 +130,7 @@ def main():
                     for name in sorted(allowlist):
                         command += ["-f", name.lower()]
                     subprocess.run([*command, str(mix)], check=True, capture_output=True)
-                files = {name: work / name for name in ("MAIN.MIX", "REDALERT.MIX")}
+                files = {name: work / name.lower() for name in ("MAIN.MIX", "REDALERT.MIX")}
                 disc.extract("README.TXT", args.notice_output)
             else:
                 files = {name: work / name for name in TD_FILES}
