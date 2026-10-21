@@ -246,10 +246,22 @@ index 5e41f06..5e510aa 100644
  {
      int len = strlen(str);
 diff --git a/redalert/init.cpp b/redalert/init.cpp
-index b6b00d7..be96150 100644
+index b6b00d7..a053660 100644
 --- a/redalert/init.cpp
 +++ b/redalert/init.cpp
-@@ -2362,7 +2362,8 @@ static void Init_Secondary_Mixfiles(void)
+@@ -2354,15 +2354,17 @@ static void Init_Secondary_Mixfiles(void)
+ 
+     if (CCFileClass("MOVIES1.MIX").Is_Available()) {
+         MoviesMix = new MFCD("MOVIES1.MIX", &FastKey); // Never cached.
+-    } else {
+-        MoviesMix = new MFCD("MOVIES2.MIX", &FastKey); // Never cached.
+     }
+-    assert(MoviesMix != NULL);
++    if (CCFileClass("MOVIES2.MIX").Is_Available()) {
++        Movies2Mix = new MFCD("MOVIES2.MIX", &FastKey); // Never cached.
++    }
++    assert(MoviesMix != NULL || Movies2Mix != NULL);
+ 
      /*
      **	Register the score mixfile.
      */

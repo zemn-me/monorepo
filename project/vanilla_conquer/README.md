@@ -58,8 +58,9 @@ asset package without music cannot enter an endless track search.
 Native networking is disabled; browser multiplayer is not implemented.
 Standalone soundtrack archives, expansion packs, and interoperability with
 native saves are outside the current port's scope. Red Alert includes the
-intro and cinematics from the Allied disc; the Soviet disc movies are not
-in the current asset package.
+intro and cinematics from both the Allied and Soviet discs. The engine
+registers both movie archives so changing campaigns does not require swapping
+disc images.
 
 ## Game data
 
@@ -67,17 +68,21 @@ Bazel pins these preserved original freeware discs by SHA-256:
 
 - [Red Alert Allies disc](https://cnc-comm.com/red-alert/downloads/the-game/allies-disc):
   `RA_Allies.zip`, `3b09edca3f93cb50a8d38d163f0c93540c2015f0b7b441cad35cda6d766876d7`.
+- [Red Alert Soviet disc](https://cnc-comm.com/red-alert/downloads/the-game/soviet-disc):
+  `RA_Soviet.zip`, `8cc097511109f27d853d8e210503139aebc4a3d7fe46af3bd0b9dfb3bd1238a7`.
 - [C&C Gold GDI disc](https://cnc-comm.com/command-and-conquer/downloads/the-game/gdi-disc-win95):
   `CNC95_GDI.zip`, `5c35e23ae74dd5d7d6cea58822eb45a2f87548d5507ef65ae584994859e84c75`.
 
 `assets/package_data.py` reads the ISO9660 images and selects explicit
 allowlists. Red Alert's original MIX containers are rebuilt using the
 upstream `vanillamix` tool to retain local-disc detection. It includes
-`MOVIES1.MIX` and `NCHIRES.MIX` for cinematics and movie palettes, while
-excluding the standalone `SCORES.MIX` soundtrack. C&C Gold's installed
-interface data is extracted from
-`INSTALL/SETUP.Z` using source-built, pinned `unshieldv3`; only allowlisted
-MIX files enter the browser package. Both extraction tools run only at build time. Original disc readmes are preserved separately.
+`MOVIES1.MIX`, `MOVIES2.MIX`, and `NCHIRES.MIX` for both campaigns'
+cinematics and movie palettes, while excluding the standalone `SCORES.MIX`
+soundtrack. The combined Red Alert data download is approximately 556 MiB.
+C&C Gold's installed interface data is extracted from `INSTALL/SETUP.Z` using source-built, pinned `unshieldv3`; only allowlisted
+MIX files enter the browser package. Both extraction tools run only at build
+time. The two Red Alert disc readmes are identical; the package preserves a
+copy alongside the game data.
 
 The deterministic gzip package contains `VANILLD1`, a little-endian 32-bit
 JSON header length, an array of `{name,size}` entries, and concatenated
@@ -93,11 +98,11 @@ the freeware provenance and source-code license do not relicense the assets.
 ## Runtime verification
 
 The browser integration test drives both production routes with the original
-freeware assets, accepts normal difficulty, selects the Allies or GDI,
+freeware assets, accepts normal difficulty, selects the Allies, Soviets, or GDI,
 and checks the first campaign map and three seconds of simulation animation.
 The Red Alert flow checks the React Start button at desktop and phone widths,
 starts with the keyboard, lets the intro finish, verifies that the first
-briefing movie animates, and skips it into gameplay.
+briefing movie animates for each faction, and skips it into gameplay.
 Red Alert uses the real browser and Web Audio clock to verify movie-buffer
 completion. Tiberian Dawn uses the shared virtual clock for dates, timers,
 audio, and input holds. Desktop and phone-width cases block the actual game-data download and

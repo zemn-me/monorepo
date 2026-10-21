@@ -93,24 +93,31 @@ def package(files, output):
                 shutil.copyfileobj(source, dest)
 
 
+def unpack_disc(archive_path, output):
+    with zipfile.ZipFile(archive_path) as archive:
+        images = [n for n in archive.namelist() if n.lower().endswith(".iso")]
+        if len(images) != 1:
+            raise ValueError("Expected one freeware disc image")
+        with archive.open(images[0]) as source, Path(output).open("wb") as target:
+            shutil.copyfileobj(source, target)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--archive", required=True)
+    parser.add_argument("--soviet-archive")
     parser.add_argument("--game", choices=["ra", "td"], required=True)
     parser.add_argument("--mixtool", required=True)
     parser.add_argument("--unshield", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--notice-output", required=True)
     args = parser.parse_args()
+    if args.game == "ra" and not args.soviet_archive:
+        parser.error("Red Alert requires --soviet-archive")
     mixtool = str(Path(args.mixtool).absolute())
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
-        with zipfile.ZipFile(args.archive) as archive:
-            images = [n for n in archive.namelist() if n.lower().endswith(".iso")]
-            if len(images) != 1:
-                raise ValueError("Expected one freeware disc image")
-            with archive.open(images[0]) as source, (work / "disc.iso").open("wb") as target:
-                shutil.copyfileobj(source, target)
+        unpack_disc(args.archive, work / "disc.iso")
         with (work / "disc.iso").open("rb") as stream:
             disc = Disc(stream)
             if args.game == "ra":
@@ -122,7 +129,7 @@ def main():
                         command += ["-f", name.lower()]
                     subprocess.run([*command, str(mix)], check=True, capture_output=True)
                     # Keep the original container layout for the engine's local-disc
-                    # detection, including Allied cinematics but excluding standalone music.
+                    # detection, including cinematics but excluding standalone music.
                     mix.unlink()
                     command = [mixtool, "-c", "-d", str(work)]
                     for name in sorted(allowlist):
@@ -130,6 +137,11 @@ def main():
                     subprocess.run([*command, str(mix)], check=True, capture_output=True)
                 files = {name: work / name for name in ("MAIN.MIX", "REDALERT.MIX")}
                 disc.extract("README.TXT", args.notice_output)
+                unpack_disc(args.soviet_archive, work / "soviet.iso")
+                with (work / "soviet.iso").open("rb") as soviet_stream:
+                    Disc(soviet_stream).extract("MAIN.MIX", work / "soviet-main.mix")
+                subprocess.run([mixtool, "-x", "-d", str(work), "-f", "movies2.mix", str(work / "soviet-main.mix")], check=True, capture_output=True)
+                files["MOVIES2.MIX"] = work / "movies2.mix"
             else:
                 files = {name: work / name for name in TD_FILES}
                 for name, path in files.items():

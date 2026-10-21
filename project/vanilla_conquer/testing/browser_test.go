@@ -127,10 +127,14 @@ func assertRunning(t *testing.T, driver *seleniumutil.Driver) bool {
 func TestBrowserCampaigns(t *testing.T) {
 	base := siteURL(t)
 	for _, game := range []struct {
-		route string
-		menuY int
-	}{{"red-alert", 268}, {"command-and-conquer", 112}} {
-		t.Run(game.route, func(t *testing.T) {
+		name, route, faction string
+		menuY                int
+	}{
+		{"red-alert-allies", "red-alert", "allies", 268},
+		{"red-alert-soviet", "red-alert", "soviet", 268},
+		{"command-and-conquer", "command-and-conquer", "gdi", 112},
+	} {
+		t.Run(game.name, func(t *testing.T) {
 			driver := newBrowser(t, 800, 600)
 			var clock *seleniumutil.VirtualClock
 			if game.route != "red-alert" {
@@ -167,13 +171,13 @@ func TestBrowserCampaigns(t *testing.T) {
 					if err != nil || value != true {
 						t.Fatalf("start button visibility/focus at width %d: %v, %v", viewport.width, value, err)
 					}
-					snapshot(t, driver, "red-alert-ready-"+strconv.Itoa(viewport.width))
+					snapshot(t, driver, game.name+"-ready-"+strconv.Itoa(viewport.width))
 				}
 				if err := button.SendKeys(selenium.EnterKey); err != nil {
 					t.Fatal(err)
 				}
 				advance(t, clock, 3*time.Second)
-				snapshot(t, driver, "red-alert-intro")
+				snapshot(t, driver, game.name+"-intro")
 				advance(t, clock, 10*time.Second) // Let the intro finish naturally.
 			}
 			if err := driver.WaitWithTimeout(func(selenium.WebDriver) (bool, error) {
@@ -183,7 +187,7 @@ func TestBrowserCampaigns(t *testing.T) {
 				}
 				// The boot splash also paints a frame. Require colored text in
 				// the actual Start New Game button before sending input.
-				picture := snapshot(t, driver, game.route+"-menu")
+				picture := snapshot(t, driver, game.name+"-menu")
 				colored := 0
 				for y := game.menuY; y < game.menuY+21; y++ {
 					for x := 260; x < 540; x++ {
@@ -201,13 +205,24 @@ func TestBrowserCampaigns(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+			// Keyboard-only WebDriver starts its pointer at the window corner.
+			// Keep it inside the map so native edge scrolling cannot hide the action.
+			if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": 600, "y": 350}); err != nil {
+				t.Fatal(err)
+			}
 			enter(t, canvas, clock, 2*time.Second) // Start New Game.
 			enter(t, canvas, clock, 3*time.Second) // Normal difficulty.
 			if game.route == "red-alert" {
-				enter(t, canvas, clock, 4*time.Second) // Allies and the first mission briefing movie.
-				firstMovie := snapshot(t, driver, "red-alert-briefing-movie")
+				if game.faction == "soviet" {
+					// The native dialog displays Allies, Soviet, Cancel.
+					if err := canvas.SendKeys(selenium.RightArrowKey); err != nil {
+						t.Fatal(err)
+					}
+				}
+				enter(t, canvas, clock, 4*time.Second) // Faction and its first mission briefing movie.
+				firstMovie := snapshot(t, driver, game.name+"-briefing-movie")
 				advance(t, clock, 2*time.Second)
-				nextMovie := snapshot(t, driver, "red-alert-briefing-movie-next")
+				nextMovie := snapshot(t, driver, game.name+"-briefing-movie-next")
 				changed := 0
 				for y := 80; y < 500; y++ {
 					for x := 50; x < 750; x++ {
@@ -230,7 +245,7 @@ func TestBrowserCampaigns(t *testing.T) {
 			if !assertRunning(t, driver) {
 				t.Fatal("engine did not remain running")
 			}
-			first := snapshot(t, driver, game.route+"-mission")
+			first := snapshot(t, driver, game.name+"-mission")
 			// Gameplay's credit counter has a textured control bar at the top;
 			// the title, faction selector, and briefing screens do not.
 			controls := 0
@@ -246,7 +261,7 @@ func TestBrowserCampaigns(t *testing.T) {
 				t.Fatalf("campaign did not reach the map (control pixels: %d)", controls)
 			}
 			advance(t, clock, 3*time.Second)
-			next := snapshot(t, driver, game.route+"-simulation")
+			next := snapshot(t, driver, game.name+"-simulation")
 			changed := 0
 			for y := 80; y < 500; y++ {
 				for x := 50; x < 750; x++ {

@@ -6,8 +6,9 @@ from pathlib import Path
 import struct
 import tempfile
 import unittest
+import zipfile
 
-from project.vanilla_conquer.assets.package_data import Disc, MAGIC, RA_INSTALL, RA_MAIN, TD_FILES, package
+from project.vanilla_conquer.assets.package_data import Disc, MAGIC, RA_INSTALL, RA_MAIN, TD_FILES, package, unpack_disc
 
 
 def record(extent, size, name, directory=False):
@@ -48,6 +49,17 @@ class PackageTest(unittest.TestCase):
             length, = struct.unpack_from("<I", content, 8)
             self.assertEqual(json.loads(content[12:12 + length]), [{"name": "CONQUER.MIX", "size": 5}])
             self.assertEqual(content[12 + length:], b"hello")
+
+    def test_unpack_soviet_disc(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with zipfile.ZipFile(root / "soviet.zip", "w") as archive:
+                archive.writestr("RA_SOVIET.ISO", image())
+                archive.writestr("readme.txt", "Disc notice")
+            unpack_disc(root / "soviet.zip", root / "soviet.iso")
+            with (root / "soviet.iso").open("rb") as stream:
+                Disc(stream).extract("CONQUER.MIX", root / "conquer.mix")
+            self.assertEqual((root / "conquer.mix").read_bytes(), b"hello")
 
     def test_invalid_disc(self):
         for change in (lambda d: d.__setitem__(16 * 2048, 0),
