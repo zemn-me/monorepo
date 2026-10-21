@@ -1,9 +1,38 @@
 # gazelle:resolve py project.vanilla_conquer.assets.package_data //project/vanilla_conquer/assets:package_data_lib
 # gazelle:exclude package_data.py
+# gazelle:exclude package_cinematics.py
+# gazelle:resolve py project.vanilla_conquer.assets.package_cinematics //project/vanilla_conquer/assets:package_cinematics_lib
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+load("//ts:rules.bzl", "ts_project")
+load(":cinematics.bzl", "cinematics")
 
 package(default_visibility = ["//:__subpackages__"])
+
+py_binary(
+    name = "package_cinematics",
+    srcs = ["package_cinematics.py"],  # keep
+    main = "package_cinematics.py",
+    deps = [":package_data_lib"],  # keep
+)
+
+py_library(
+    name = "package_cinematics_lib",
+    srcs = ["package_cinematics.py"],
+    deps = [":package_data_lib"],
+)  # keep
+
+cinematics(
+    name = "ra_cinematics",
+    allied = "@red_alert_freeware//file",
+    mixtool = "@vanilla_conquer//:vanillamix",
+    soviet = "@red_alert_soviet_freeware//file",
+)
+
+ts_project(
+    name = "cinematics",
+    srcs = [":ra_cinematics"],
+)
 
 py_binary(
     name = "package_data",
@@ -69,10 +98,19 @@ filegroup(
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    srcs = [
+        "BUILD.bazel",
+        "cinematics.bzl",
+    ],
 )
 
 py_library(
     name = "package_data_lib",
     srcs = ["package_data.py"],
 )  # keep
+
+py_test(
+    name = "package_cinematics_test",
+    srcs = ["package_cinematics_test.py"],
+    deps = ["//project/vanilla_conquer/assets:package_cinematics_lib"],
+)

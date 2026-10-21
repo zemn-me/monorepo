@@ -1,3 +1,4 @@
+# gazelle:resolve typescript #root/project/vanilla_conquer/assets/cinematics.js //project/vanilla_conquer/assets:cinematics
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
@@ -38,6 +39,7 @@ ts_project(
         "//:node_modules/react",
         "//:node_modules/react-router",
         "//project/me/zemn/components/Link",
+        "//project/vanilla_conquer/assets:cinematics",
         "//project/vanilla_conquer/web",
         "//ts/future",
         "//ts/remix",
