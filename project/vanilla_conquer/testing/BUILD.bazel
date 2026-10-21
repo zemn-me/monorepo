@@ -21,7 +21,7 @@ service_test(
     size = "large",
     args = [
         "-test.v",
-        "-test.timeout=240s",
+        "-test.timeout=150s",
     ],
     services = [":site"],
     test = ":testing_test",

@@ -28,12 +28,10 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 	const title = assets.game === 'ra' ? 'Red Alert' : 'Command & Conquer';
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
-	const startRef = useRef<HTMLButtonElement>(null);
 	const [state, setState] = useState<GameState>(() =>
 		future_loading(undefined)
 	);
 	const navigate = useNavigate();
-	const [start, setStart] = useState<(() => void) | undefined>();
 	const running = state(
 		() => true,
 		() => false,
@@ -62,23 +60,17 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';
 		setState(() => future_loading(undefined));
-		setStart(undefined);
 		startGame(
 			canvas,
 			assets,
 			{
-				ready: begin => {
-					if (!lifetime.signal.aborted) setStart(() => begin);
-				},
 				progress: value => {
 					if (!lifetime.signal.aborted)
 						setState(() => future_loading(value));
 				},
 				running: () => {
-					if (!lifetime.signal.aborted) {
-						setStart(undefined);
+					if (!lifetime.signal.aborted)
 						setState(() => future_resolve(undefined));
-					}
 				},
 				error: value => setState(() => future_error(value)),
 				exit: () => {
@@ -98,10 +90,6 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 		if (failed) statusRef.current?.focus();
 	}, [failed]);
 
-	useEffect(() => {
-		if (start) startRef.current?.focus();
-	}, [start]);
-
 	return (
 		<div className={style.screen}>
 			<canvas
@@ -116,21 +104,11 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 			<main className={style.feedback} hidden={running}>
 				<div>
 					<p ref={statusRef} role="status" tabIndex={-1}>
-						{start ? 'Red Alert is ready.' : message}
+						{message}
 					</p>
-					{start && (
-						<button
-							type="button"
-							ref={startRef}
-							className={style.start}
-							onClick={start}
-						>
-							Start Red Alert
-						</button>
-					)}
 					<progress
 						aria-label="Downloading game files"
-						hidden={!progress || !!start}
+						hidden={!progress}
 						max={progress?.total}
 						value={progress?.total ? progress.received : undefined}
 					/>

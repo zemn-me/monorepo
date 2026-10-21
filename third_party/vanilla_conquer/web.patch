@@ -246,22 +246,10 @@ index 5e41f06..5e510aa 100644
  {
      int len = strlen(str);
 diff --git a/redalert/init.cpp b/redalert/init.cpp
-index b6b00d7..a053660 100644
+index b6b00d7..be96150 100644
 --- a/redalert/init.cpp
 +++ b/redalert/init.cpp
-@@ -2354,15 +2354,17 @@ static void Init_Secondary_Mixfiles(void)
- 
-     if (CCFileClass("MOVIES1.MIX").Is_Available()) {
-         MoviesMix = new MFCD("MOVIES1.MIX", &FastKey); // Never cached.
--    } else {
--        MoviesMix = new MFCD("MOVIES2.MIX", &FastKey); // Never cached.
-     }
--    assert(MoviesMix != NULL);
-+    if (CCFileClass("MOVIES2.MIX").Is_Available()) {
-+        Movies2Mix = new MFCD("MOVIES2.MIX", &FastKey); // Never cached.
-+    }
-+    assert(MoviesMix != NULL || Movies2Mix != NULL);
- 
+@@ -2362,7 +2362,8 @@ static void Init_Secondary_Mixfiles(void)
      /*
      **	Register the score mixfile.
      */
@@ -285,32 +273,3 @@ index 8ae9955..13283dd 100644
          if (!ScoreMix) {
              ScoreMix = new MFCD("SCORES.MIX");
              ThemeClass::Scan();
-diff --git a/common/vqatask.cpp b/common/vqatask.cpp
-index 28f9dc5..f92a126 100644
---- a/common/vqatask.cpp
-+++ b/common/vqatask.cpp
-@@ -16,6 +16,9 @@
- #include "vqafile.h"
- #include "vqaloader.h"
- #include <string.h>
-+#ifdef __EMSCRIPTEN__
-+#include <emscripten.h>
-+#endif
- 
- bool VQAMovieDone = false;
- 
-@@ -112,6 +115,14 @@ VQAErrorType VQA_Play(VQAHandle* handle, VQAPlayMode mode)
-         }
- 
-         while (mode != 1) {
-+#ifdef __EMSCRIPTEN__
-+            // Frame/audio buffers can be waiting before the drawer polls input.
-+            // Yield even then so Web Audio, painting, and cancellation can run.
-+            emscripten_sleep(1);
-+            if (EM_ASM_INT({ return !!Module.webStop; })) {
-+                emscripten_force_exit(0);
-+            }
-+#endif
-             if (data->Flags & (VQA_DATA_FLAG_VIDEO_MEMORY_SET | VQA_DATA_FLAG_8)) {
-                 break;
-             }

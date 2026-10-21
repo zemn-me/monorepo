@@ -1133,13 +1133,6 @@ http_file(
 )
 
 http_file(
-    name = "red_alert_soviet_freeware",
-    downloaded_file_path = "RA_Soviet.zip",
-    sha256 = "8cc097511109f27d853d8e210503139aebc4a3d7fe46af3bd0b9dfb3bd1238a7",
-    urls = ["https://downloads.cnc-comm.com/red-alert/iso/RA_Soviet.zip"],
-)
-
-http_file(
     name = "tiberian_dawn_freeware",
     downloaded_file_path = "CNC95_GDI.zip",
     sha256 = "5c35e23ae74dd5d7d6cea58822eb45a2f87548d5507ef65ae584994859e84c75",

@@ -19,15 +19,12 @@ py_test(
 
 genrule(
     name = "ra_freeware",
-    srcs = [
-        "@red_alert_freeware//file",
-        "@red_alert_soviet_freeware//file",
-    ],
+    srcs = ["@red_alert_freeware//file"],
     outs = [
         "ra.data.gz",
         "ra-readme.txt",
     ],
-    cmd = "$(execpath :package_data) --unshield $(execpath @unshieldv3//:unshieldv3) --game ra --archive $(execpath @red_alert_freeware//file) --soviet-archive $(execpath @red_alert_soviet_freeware//file) --mixtool $(execpath @vanilla_conquer//:vanillamix) --output $(location ra.data.gz) --notice-output $(location ra-readme.txt)",
+    cmd = "$(execpath :package_data) --unshield $(execpath @unshieldv3//:unshieldv3) --game ra --archive $(execpath @red_alert_freeware//file) --mixtool $(execpath @vanilla_conquer//:vanillamix) --output $(location ra.data.gz) --notice-output $(location ra-readme.txt)",
     tools = [
         ":package_data",
         "@unshieldv3",
