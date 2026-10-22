@@ -1,0 +1,18 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+
+exports_files(["License.txt"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = [
+        "AGENTS.md",
+        "README.md",
+    ],
+    visibility = ["//:__subpackages__"],
+)

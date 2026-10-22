@@ -1,0 +1,275 @@
+diff --git a/common/debugstring.h b/common/debugstring.h
+index 543371b..68f9afd 100644
+--- a/common/debugstring.h
++++ b/common/debugstring.h
+@@ -15,7 +15,7 @@
+ /*
+ ** If we aren't building a debug build, then don't even expose the logging interface.
+ */
+-#ifdef _DEBUG
++#if defined(_DEBUG) || defined(__EMSCRIPTEN__)
+ void Debug_String_Log(unsigned level, const char* file, int line, const char* fmt, ...);
+ void Debug_String_File(const char* file);
+ #else
+@@ -37,37 +37,37 @@ void Debug_String_File(const char* file);
+ #define LOGLEVEL_TRACE 6
+ 
+ /* Conditionally define the function like macros for logging levels, allows only certain logging to be compiled into client program. */
+-#if LOGLEVEL_TRACE <= LOGGING_LEVEL && defined _DEBUG
++#if LOGLEVEL_TRACE <= LOGGING_LEVEL && (defined(_DEBUG) || defined(__EMSCRIPTEN__))
+ #define DBG_TRACE(x, ...) Debug_String_Log(LOGLEVEL_TRACE, __FILE__, __LINE__, ##__VA_ARGS__)
+ #else
+ #define DBG_TRACE(x, ...) ((void)0)
+ #endif
+ 
+-#if LOGLEVEL_DEBUG <= LOGGING_LEVEL && defined _DEBUG
++#if LOGLEVEL_DEBUG <= LOGGING_LEVEL && (defined(_DEBUG) || defined(__EMSCRIPTEN__))
+ #define DBG_LOG(x, ...) Debug_String_Log(LOGLEVEL_DEBUG, __FILE__, __LINE__, x, ##__VA_ARGS__)
+ #else
+ #define DBG_LOG(x, ...) ((void)0)
+ #endif
+ 
+-#if LOGLEVEL_INFO <= LOGGING_LEVEL && defined _DEBUG
++#if LOGLEVEL_INFO <= LOGGING_LEVEL && (defined(_DEBUG) || defined(__EMSCRIPTEN__))
+ #define DBG_INFO(x, ...) Debug_String_Log(LOGLEVEL_INFO, __FILE__, __LINE__, x, ##__VA_ARGS__)
+ #else
+ #define DBG_INFO(x, ...) ((void)0)
+ #endif
+ 
+-#if LOGLEVEL_WARN <= LOGGING_LEVEL && defined _DEBUG
++#if LOGLEVEL_WARN <= LOGGING_LEVEL && (defined(_DEBUG) || defined(__EMSCRIPTEN__))
+ #define DBG_WARN(x, ...) Debug_String_Log(LOGLEVEL_WARN, __FILE__, __LINE__, x, ##__VA_ARGS__)
+ #else
+ #define DBG_WARN(x, ...) ((void)0)
+ #endif
+ 
+-#if LOGLEVEL_ERROR <= LOGGING_LEVEL && defined _DEBUG
++#if LOGLEVEL_ERROR <= LOGGING_LEVEL && (defined(_DEBUG) || defined(__EMSCRIPTEN__))
+ #define DBG_ERROR(x, ...) Debug_String_Log(LOGLEVEL_ERROR, __FILE__, __LINE__, x, ##__VA_ARGS__)
+ #else
+ #define DBG_ERROR(x, ...) ((void)0)
+ #endif
+ 
+-#if LOGLEVEL_FATAL <= LOGGING_LEVEL && defined _DEBUG
++#if LOGLEVEL_FATAL <= LOGGING_LEVEL && (defined(_DEBUG) || defined(__EMSCRIPTEN__))
+ #define DBG_FATAL(x, ...)                                                                                              \
+     do {                                                                                                               \
+         Debug_String_Log(LOGLEVEL_FATAL, __FILE__, __LINE__, x, ##__VA_ARGS__);                                        \
+diff --git a/common/delay.cpp b/common/delay.cpp
+index e3942aa..67b8486 100644
+--- a/common/delay.cpp
++++ b/common/delay.cpp
+@@ -1,3 +1,7 @@
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
++
+ //
+ // Copyright 2020 Electronic Arts Inc.
+ //
+@@ -40,7 +44,9 @@ void Delay(int duration)
+     while (duration--) {
+         count = timer.Time() + 1;
+         while (count >= (unsigned)timer.Time()) {
+-            ;
++#ifdef __EMSCRIPTEN__
++            emscripten_sleep(1);
++#endif
+         }
+     }
+ 
+diff --git a/common/mssleep.h b/common/mssleep.h
+index eb1f8eb..8c634c2 100644
+--- a/common/mssleep.h
++++ b/common/mssleep.h
+@@ -6,6 +6,10 @@
+ #ifndef MSSLEEP_H
+ #define MSSLEEP_H
+ 
++#if defined(__EMSCRIPTEN__)
++#include <emscripten.h>
++#endif
++
+ #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+ #include <winbase.h>
+ #elif defined(_WIN32)
+@@ -25,7 +29,9 @@
+  */
+ static inline void us_sleep(unsigned us)
+ {
+-#ifdef _WIN32
++#if defined(__EMSCRIPTEN__)
++    emscripten_sleep((us + 999) / 1000);
++#elif defined(_WIN32)
+     Sleep((us + 999) / 1000);
+ #else
+     struct timespec ts;
+@@ -40,7 +46,9 @@ static inline void us_sleep(unsigned us)
+  */
+ static inline void ms_sleep(unsigned ms)
+ {
+-#ifdef _WIN32
++#if defined(__EMSCRIPTEN__)
++    emscripten_sleep(ms);
++#elif defined(_WIN32)
+     Sleep(ms);
+ #else
+     struct timespec ts;
+diff --git a/common/palette.cpp b/common/palette.cpp
+index a745d23..ba4793e 100644
+--- a/common/palette.cpp
++++ b/common/palette.cpp
+@@ -1,3 +1,7 @@
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
++
+ //
+ // Copyright 2020 Electronic Arts Inc.
+ //
+@@ -180,6 +184,10 @@ void Fade_Palette_To(void* palette1, unsigned int delay, void (*callback)())
+         if (changed) {
+             Frame_Limiter();
+             while (WinTickCount.Time() < (int)timer) {
++#ifdef __EMSCRIPTEN__
++                // Fades without callbacks must still let the browser service timers.
++                emscripten_sleep(1);
++#endif
+                 /*
+                 ................. Update callback while waiting .................
+                 */
+diff --git a/common/palettec.cpp b/common/palettec.cpp
+index c3ceca0..d749ffc 100644
+--- a/common/palettec.cpp
++++ b/common/palettec.cpp
+@@ -1,3 +1,7 @@
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
++
+ //
+ // Copyright 2020 Electronic Arts Inc.
+ //
+@@ -341,6 +345,10 @@ void PaletteClass::Set(int time, void (*callback)(void)) const
+         **	result in the same intermediate palette that was previously calculated.
+         */
+         while (timer == holdtime && holdtime != 0) {
++#ifdef __EMSCRIPTEN__
++                // Fades without callbacks must still let the browser service timers.
++                emscripten_sleep(1);
++#endif
+             if (callback)
+                 callback();
+         }
+diff --git a/common/paths_posix.cpp b/common/paths_posix.cpp
+index 195e6f4..81d7c9e 100644
+--- a/common/paths_posix.cpp
++++ b/common/paths_posix.cpp
+@@ -128,7 +128,10 @@ const char* PathsClass::Program_Path()
+         std::string tmp;
+         char buffer[PATH_MAX];
+         char* resolved = nullptr;
+-#if defined(__linux__) || defined(__CYGWIN__) || defined(__sun)
++#if defined(__EMSCRIPTEN__)
++        ProgramPath = "/game";
++        return ProgramPath.c_str();
++#elif defined(__linux__) || defined(__CYGWIN__) || defined(__sun)
+         resolved = realpath(PROC_SELF_EXE, buffer);
+ #elif defined(__APPLE__)
+         char buffer1[PATH_MAX];
+diff --git a/common/video_sdl2.cpp b/common/video_sdl2.cpp
+index e5ca8aa..beaf852 100644
+--- a/common/video_sdl2.cpp
++++ b/common/video_sdl2.cpp
+@@ -217,6 +217,9 @@ SurfaceMonitorClass& AllSurfaces = AllSurfacesDummy; // List of all direct draw
+ bool Set_Video_Mode(int w, int h, int bits_per_pixel)
+ {
+     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
++#ifdef __EMSCRIPTEN__
++    atexit(SDL_Quit);
++#endif
+     SDL_ShowCursor(SDL_DISABLE);
+ 
+     int win_w = w;
+diff --git a/common/wwkeyboard_sdl2.cpp b/common/wwkeyboard_sdl2.cpp
+index 30f1745..b67c29c 100644
+--- a/common/wwkeyboard_sdl2.cpp
++++ b/common/wwkeyboard_sdl2.cpp
+@@ -20,6 +20,10 @@
+ #include "settings.h"
+ #include <cmath>
+ #include <SDL.h>
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#include "audio.h"
++#endif
+ 
+ void Focus_Loss();
+ void Focus_Restore();
+@@ -33,6 +37,17 @@ void WWKeyboardClassSDL2::Fill_Buffer_From_System(void)
+ {
+ #ifdef NETWORKING
+     Process_Network();
++#endif
++#ifdef __EMSCRIPTEN__
++    // Modal menus poll here without passing through the frame limiter.
++    // Yield so the browser can deliver input, audio, and painted frames.
++    emscripten_sleep(0);
++    if (EM_ASM_INT({ return !!Module['webStop']; })) {
++        Sound_End();
++        Reset_Video_Mode();
++        SDL_Quit();
++        exit(0);
++    }
+ #endif
+     SDL_Event event;
+ 
+diff --git a/common/wwstd.h b/common/wwstd.h
+index 5e41f06..5e510aa 100644
+--- a/common/wwstd.h
++++ b/common/wwstd.h
+@@ -260,6 +260,7 @@ inline static void _splitpath(const char* path, char* drive, char* dir, char* fn
+     }
+ }
+ 
++#ifndef __EMSCRIPTEN__
+ inline static char* strupr(char* str)
+ {
+     char* ret = str;
+@@ -270,6 +271,8 @@ inline static char* strupr(char* str)
+     return ret;
+ }
+ 
++#endif
++
+ inline static void strrev(char* str)
+ {
+     int len = strlen(str);
+diff --git a/redalert/init.cpp b/redalert/init.cpp
+index b6b00d7..be96150 100644
+--- a/redalert/init.cpp
++++ b/redalert/init.cpp
+@@ -2362,7 +2362,8 @@ static void Init_Secondary_Mixfiles(void)
+     /*
+     **	Register the score mixfile.
+     */
+-    ScoresPresent = true;
++    // An absent optional score archive must not start an empty playlist.
++    ScoresPresent = CCFileClass("SCORES.MIX").Is_Available();
+     ScoreMix = new MFCD("SCORES.MIX", &FastKey);
+     ThemeClass::Scan();
+ 
+diff --git a/tiberiandawn/init.cpp b/tiberiandawn/init.cpp
+index 8ae9955..13283dd 100644
+--- a/tiberiandawn/init.cpp
++++ b/tiberiandawn/init.cpp
+@@ -434,7 +434,8 @@ bool Init_Game(int, char*[])
+         CCDebugString("C&C95 - About to register SCORES.MIX\n");
+         ScoresPresent = false;
+         //	if (CCFileClass("SCORES.MIX").Is_Available()) {
+-        ScoresPresent = true;
++        // An absent optional score archive must not start an empty playlist.
++        ScoresPresent = CCFileClass("SCORES.MIX").Is_Available();
+         if (!ScoreMix) {
+             ScoreMix = new MFCD("SCORES.MIX");
+             ThemeClass::Scan();
