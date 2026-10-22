@@ -186,7 +186,7 @@ func TestMenuContain(t *testing.T) {
 	// layouts at high pixel density. Hover pixels prove hit testing follows.
 	for _, size := range [][2]int{{1920, 1080}, {900, 1440}, {390, 844}, {1920, 1080}} {
 		g.menuWidth, g.menuHeight = size[0], size[1]
-		if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": g.menuWidth, "height": g.menuHeight, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+		if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": g.menuWidth, "height": g.menuHeight, "screenWidth": g.menuWidth, "screenHeight": g.menuHeight, "deviceScaleFactor": 2, "mobile": false}); err != nil {
 			t.Fatal(err)
 		}
 		if err := g.wait(func(w selenium.WebDriver) (bool, error) {
