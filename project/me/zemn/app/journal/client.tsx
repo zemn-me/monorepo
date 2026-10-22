@@ -20,12 +20,11 @@ import {
 	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
-	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
 } from 'react';
-import { useNavigate, useNavigation } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -1784,100 +1783,24 @@ function zoomLevelLabel(route: JournalRoute | undefined) {
 }
 
 function ZoomNavigation({
-	inactive = false,
 	focus,
 	route,
 }: {
-	readonly inactive?: boolean;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
-	const [visibleRoute, setVisibleRoute] = useState(route);
-	const navigationState = useNavigation().state;
-	const navigation = useRef<HTMLElement>(null);
-	const [indicator, setIndicator] = useState({
-		inlineSize: 0,
-		offset: 0,
-	});
-	useEffect(() => {
-		if (navigationState === 'idle') setVisibleRoute(route);
-	}, [route, navigationState]);
-	useLayoutEffect(() => {
-		const navigationElement = navigation.current;
-		const selected = navigationElement?.querySelector<HTMLAnchorElement>(
-			`a[data-journal-view="${visibleRoute ?? 'overview'}"]`
-		);
-		if (!navigationElement || !selected) return;
-		const updateIndicator = () => {
-			const navigationBounds = navigationElement.getBoundingClientRect();
-			const selectedBounds = selected.getBoundingClientRect();
-			setIndicator({
-				inlineSize: selectedBounds.width,
-				offset:
-					selectedBounds.left -
-					navigationBounds.left +
-					navigationElement.scrollLeft,
-			});
-			// Keep the selected view visible when capture controls narrow the tab strip.
-			if (selectedBounds.right > navigationBounds.right) {
-				navigationElement.scrollLeft +=
-					selectedBounds.right - navigationBounds.right;
-			} else if (selectedBounds.left < navigationBounds.left) {
-				navigationElement.scrollLeft +=
-					selectedBounds.left - navigationBounds.left;
-			}
-		};
-		updateIndicator();
-		const observer = new ResizeObserver(updateIndicator);
-		observer.observe(navigationElement);
-		observer.observe(selected);
-		return () => observer.disconnect();
-	}, [visibleRoute]);
-	const href = (destination: JournalRoute | undefined) =>
-		destination
-			? journalHref(destination, focus ? { at: focus } : {})
-			: focus
-				? `/journal?${new URLSearchParams({ at: focus })}`
-				: '/journal';
 	return (
-		<nav
-			aria-label="Browse journal"
-			className={style.zoomNavigation}
-			ref={navigation}
-		>
-			<span
-				aria-hidden="true"
-				className={style.zoomIndicator}
-				data-ready={
-					!inactive && indicator.inlineSize > 0 ? '' : undefined
-				}
-				data-journal-view-indicator
-				style={{
-					inlineSize: indicator.inlineSize,
-					transform: `translateX(${indicator.offset}px)`,
-				}}
-			/>
+		<nav aria-label="Browse journal" className={style.zoomNavigation}>
 			{journalViews.map(destination => (
 				<Link
-					aria-current={
-						!inactive && destination === visibleRoute
-							? 'page'
-							: undefined
-					}
-					data-journal-view={destination ?? 'overview'}
-					href={href(destination)}
 					key={destination ?? 'overview'}
-					onClick={event => {
-						if (
-							event.button === 0 &&
-							!event.metaKey &&
-							!event.ctrlKey &&
-							!event.shiftKey &&
-							!event.altKey
-						) {
-							setVisibleRoute(destination);
-						}
-					}}
+					data-journal-view={destination ?? 'overview'}
+					aria-current={destination === route ? 'page' : undefined}
+					href={
+						destination
+							? journalHref(destination, { at: focus })
+							: `/journal?${new URLSearchParams({ at: focus })}`
+					}
 				>
 					{zoomLevelLabel(destination)}
 				</Link>
@@ -1887,11 +1810,13 @@ function ZoomNavigation({
 }
 
 function JournalToolbar({
+	journal,
 	wiki = false,
 	actions,
 	focus,
 	route,
 }: {
+	readonly journal?: Journal;
 	readonly wiki?: boolean;
 	readonly actions?: ReactNode;
 	readonly focus: string;
@@ -1899,14 +1824,24 @@ function JournalToolbar({
 }) {
 	return (
 		<div className={style.journalToolbar} data-journal-toolbar>
-			<ZoomNavigation focus={focus} route={route} inactive={wiki} />
-			<Link
-				className={style.wikiNavigation}
-				href="/journal?wiki=all"
-				aria-current={wiki ? 'page' : undefined}
-			>
-				Wiki
-			</Link>
+			{journal ? (
+				<CalendarNavigation
+					journal={journal}
+					focus={focus}
+					route={route}
+				/>
+			) : (
+				<Link href="/journal">Browse journal</Link>
+			)}
+			{!journal && (
+				<Link
+					className={style.wikiNavigation}
+					href="/journal?wiki=all"
+					aria-current={wiki ? 'page' : undefined}
+				>
+					Wiki
+				</Link>
+			)}
 			{actions}
 		</div>
 	);
@@ -1969,12 +1904,6 @@ function PeriodList({
 					/>
 				) : (
 					<>
-						<h3>
-							<PeriodDate
-								summary={node}
-								timeZone={journal.browse?.timeZone}
-							/>
-						</h3>
 						{node.summary && (
 							<SummaryCard
 								playback={playback}
@@ -2024,6 +1953,28 @@ function CalendarNavigation({
 	readonly route?: JournalRoute;
 }) {
 	const navigate = useNavigate();
+	const picker = useRef<HTMLDetailsElement>(null);
+	useEffect(() => {
+		const closeOutside = (event: PointerEvent) => {
+			if (
+				event.target instanceof Node &&
+				!picker.current?.contains(event.target)
+			) {
+				picker.current?.removeAttribute('open');
+			}
+		};
+		const closeOnEscape = (event: KeyboardEvent) => {
+			if (event.key !== 'Escape' || !picker.current?.open) return;
+			picker.current.removeAttribute('open');
+			picker.current.querySelector('summary')?.focus();
+		};
+		document.addEventListener('pointerdown', closeOutside);
+		document.addEventListener('keydown', closeOnEscape);
+		return () => {
+			document.removeEventListener('pointerdown', closeOutside);
+			document.removeEventListener('keydown', closeOnEscape);
+		};
+	}, []);
 	const browse = journal.browse;
 	if (!browse) return null;
 	return (
@@ -2035,83 +1986,139 @@ function CalendarNavigation({
 				(browse.previous ? (
 					<Link
 						aria-label={`Previous ${route}`}
+						title={`Previous ${route}`}
 						href={journalHref(route, { at: browse.previous })}
 					>
-						← Previous {route}
+						←
 					</Link>
 				) : (
-					<span aria-disabled="true">← Previous {route}</span>
+					<span aria-disabled="true" aria-label={`Previous ${route}`}>
+						←
+					</span>
 				))}
-			{(['year', 'month', 'day'] as const).map(period => {
-				const choices = periodsFor(journal, period);
-				const selected = choices.find(choice =>
-					periodContains(choice, focus)
-				);
-				return (
-					<label key={period}>
-						{period.charAt(0).toUpperCase() + period.slice(1)}
-						<select
-							aria-label={`Journal ${period}`}
-							value={selected?.start ?? ''}
-							onChange={event => {
-								void navigate(
-									journalHref(period, {
-										at: periodMidpoint(
-											choices.find(
-												choice =>
-													choice.start ===
-													event.target.value
-											)!
-										),
-									})
-								);
-							}}
-						>
-							{!selected && (
-								<option value="" disabled>
-									Choose a {period}
-								</option>
-							)}
-							{choices.map(choice => {
-								const date = Temporal.Instant.from(
-									choice.start
-								).toZonedDateTimeISO(browse.timeZone);
-								return (
-									<option
-										key={choice.id}
-										value={choice.start}
-									>
-										{period === 'year'
-											? date.year
-											: period === 'month'
-												? date.toLocaleString(
-														undefined,
-														{ month: 'long' }
-													)
-												: date.toLocaleString(
-														undefined,
-														{
-															day: 'numeric',
-															weekday: 'short',
-														}
-													)}
-									</option>
-								);
-							})}
-						</select>
-					</label>
-				);
-			})}
+			<details
+				ref={picker}
+				className={style.datePicker}
+				key={`${route}-${focus}`}
+			>
+				<summary aria-label="Choose journal date">
+					{route
+						? Temporal.Instant.from(focus)
+								.toZonedDateTimeISO(browse.timeZone)
+								.toLocaleString(
+									undefined,
+									route === 'year'
+										? { year: 'numeric' }
+										: route === 'month'
+											? { year: 'numeric', month: 'long' }
+											: {
+													year: 'numeric',
+													month: 'short',
+													day: 'numeric',
+												}
+								)
+						: 'Overview'}{' '}
+					<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
+				</summary>
+				<div
+					className={style.dateChoices}
+					onClick={event => {
+						if (
+							event.target instanceof Element &&
+							event.target.closest('a')
+						)
+							picker.current?.removeAttribute('open');
+					}}
+				>
+					<ZoomNavigation focus={focus} route={route} />
+					<Link
+						href="/journal?wiki=all"
+						className={style.wikiNavigation}
+					>
+						Wiki
+					</Link>
+					{(['year', 'month', 'day'] as const).map(period => {
+						const choices = periodsFor(journal, period);
+						const selected = choices.find(choice =>
+							periodContains(choice, focus)
+						);
+						return (
+							<label key={period}>
+								{period.charAt(0).toUpperCase() +
+									period.slice(1)}
+								<select
+									aria-label={`Journal ${period}`}
+									value={selected?.start ?? ''}
+									onChange={event => {
+										event.currentTarget
+											.closest('details')
+											?.removeAttribute('open');
+										void navigate(
+											journalHref(period, {
+												at: periodMidpoint(
+													choices.find(
+														choice =>
+															choice.start ===
+															event.target.value
+													)!
+												),
+											})
+										);
+									}}
+								>
+									{!selected && (
+										<option value="" disabled>
+											Choose a {period}
+										</option>
+									)}
+									{choices.map(choice => {
+										const date = Temporal.Instant.from(
+											choice.start
+										).toZonedDateTimeISO(browse.timeZone);
+										return (
+											<option
+												key={choice.id}
+												value={choice.start}
+											>
+												{period === 'year'
+													? date.year
+													: period === 'month'
+														? date.toLocaleString(
+																undefined,
+																{
+																	month: 'long',
+																}
+															)
+														: date.toLocaleString(
+																undefined,
+																{
+																	day: 'numeric',
+																	weekday:
+																		'short',
+																}
+															)}
+											</option>
+										);
+									})}
+								</select>
+							</label>
+						);
+					})}
+				</div>
+			</details>
 			{route &&
 				(browse.next ? (
 					<Link
 						aria-label={`Next ${route}`}
+						title={`Next ${route}`}
 						href={journalHref(route, { at: browse.next })}
 					>
-						Next {route} →
+						→
 					</Link>
 				) : (
-					<span aria-disabled="true">Next {route} →</span>
+					<span aria-disabled="true" aria-label={`Next ${route}`}>
+						→
+					</span>
 				))}
 		</nav>
 	);
@@ -2462,8 +2469,11 @@ function JournalBrowser({
 					: undefined));
 		return (
 			<div>
-				<JournalToolbar actions={actions} focus={focus} />
-				<CalendarNavigation journal={journal} focus={focus} />
+				<JournalToolbar
+					journal={journal}
+					actions={actions}
+					focus={focus}
+				/>
 				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				{summary ? (
@@ -2506,8 +2516,12 @@ function JournalBrowser({
 	};
 	return (
 		<div>
-			<JournalToolbar actions={actions} focus={focus} route={route} />
-			<CalendarNavigation journal={journal} focus={focus} route={route} />
+			<JournalToolbar
+				journal={journal}
+				actions={actions}
+				focus={focus}
+				route={route}
+			/>
 			{localRecordings}
 			<PendingEntries entries={pendingEntries} playback={playback} />
 			<PeriodList

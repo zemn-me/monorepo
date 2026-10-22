@@ -318,66 +318,26 @@
 	gap: 0.5em;
 	margin-block-end: 1.5em;
 	max-width: 42em;
+	min-block-size: 56px;
 	position: sticky;
 	top: var(--glade-bar-block-size, 0px);
 	z-index: 7;
 }
 
 .zoomNavigation {
-	align-items: center;
-	block-size: calc(var(--journal-sticky-navigation-height) - 1px);
-	box-sizing: border-box;
 	display: flex;
-	flex: 1 1 0;
+	flex-wrap: wrap;
 	gap: 0.25em;
-	justify-content: flex-start;
-	min-width: 0;
-	overflow-x: auto;
-	padding-block: 0.65em;
-	position: relative;
+	grid-column: 1 / -1;
 }
 
 .zoomNavigation a {
-	align-items: center;
-	border: 0;
-	border-radius: 999px;
-	box-sizing: border-box;
-	display: inline-flex;
-	justify-content: center;
-	padding: 0.5em 0.8em;
-	position: relative;
-	text-decoration: none;
-	white-space: nowrap;
-	z-index: 1;
+	padding: 0.5em;
 }
 
 .zoomNavigation a[aria-current="page"] {
-	color: var(--background-color);
-}
-
-.zoomIndicator {
-	background: var(--foreground-color);
-	border-radius: 999px;
-	inset-block: 0.65em;
-	inset-inline-start: 0;
-	opacity: 0;
-	pointer-events: none;
-	position: absolute;
-	transition:
-		transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-		inline-size 240ms cubic-bezier(0.22, 1, 0.36, 1),
-		opacity 100ms ease-out;
-	will-change: transform, inline-size;
-}
-
-.zoomIndicator[data-ready] {
-	opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.zoomIndicator {
-		transition: none;
-	}
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.25em;
 }
 
 .periodList {
@@ -391,37 +351,83 @@
 
 .calendarNavigation {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: end;
-	gap: 0.75em;
-	margin-block: 1em 2em;
+	align-items: center;
+	flex: 1;
+	min-inline-size: 0;
 }
 
-.calendarNavigation label {
-	display: grid;
-	gap: 0.25em;
+.calendarNavigation > a,
+.calendarNavigation > span,
+.datePicker > summary {
+	align-items: center;
+	box-sizing: border-box;
+	display: inline-flex;
+	justify-content: center;
+	min-block-size: 44px;
+	min-inline-size: 44px;
+	text-decoration: none;
 }
 
-.calendarNavigation select,
-.calendarNavigation a,
 .calendarNavigation > span {
-	background: transparent;
+	opacity: 0.35;
+}
+
+.datePicker > summary {
+	cursor: pointer;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0.5em;
+}
+
+.datePicker > summary::-webkit-details-marker {
+	display: none;
+}
+
+.datePicker > summary svg {
+	font-size: 0.6em;
+}
+
+.dateChoices {
+	background: var(--background-color);
 	border: 1px solid var(--journal-soft-line);
 	border-radius: 0.5em;
+	box-shadow: 0 0.5em 1.5em #0002;
+	box-sizing: border-box;
+	display: grid;
+	gap: 0.75em;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	inset-inline-start: 0;
+	max-inline-size: 100%;
+	padding: 1em;
+	position: absolute;
+	z-index: 8;
+}
+
+.dateChoices > .wikiNavigation {
+	grid-column: 1 / -1;
+	justify-content: start;
+}
+
+.dateChoices label {
+	display: grid;
+	gap: 0.25em;
+	min-inline-size: 0;
+}
+
+.dateChoices select {
+	background: var(--background-color);
+	border: 1px solid var(--journal-soft-line);
+	border-radius: 0.25em;
 	color: inherit;
 	font: inherit;
 	min-block-size: 44px;
-	padding: 0.5em 1em;
+	min-inline-size: 0;
+	padding: 0.25em;
 }
 
-.calendarNavigation select {
-	background: var(--background-color);
-	color: var(--foreground-color);
-	max-inline-size: 100%;
-}
-
-.calendarNavigation > span {
-	opacity: 0.5;
+.dateChoices a {
+	box-sizing: border-box;
+	min-block-size: 44px;
 }
 
 .periodOverviewList {
@@ -933,14 +939,6 @@
 }
 
 @media (max-width: 40rem) {
-	.zoomNavigation {
-		font-size: 0.85em;
-	}
-
-	.zoomNavigation a {
-		padding-inline: 0.55em;
-	}
-
 	.entry > summary {
 		align-items: baseline;
 		gap: 0.25em 0.65em;
