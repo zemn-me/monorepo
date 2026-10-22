@@ -24,7 +24,6 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { useNavigate } from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -1775,37 +1774,209 @@ function citationDestination(journal: Journal, entryID: string) {
 	return journalHref('day', { at: entry.recordedAt });
 }
 
-const journalViews = [undefined, 'year', 'month', 'week', 'day'] as const;
-
-function zoomLevelLabel(route: JournalRoute | undefined) {
-	if (route === undefined) return 'Overview';
-	return `${route.charAt(0).toUpperCase()}${route.slice(1)}s`;
-}
-
-function ZoomNavigation({
+function JournalDatePicker({
+	journal,
 	focus,
 	route,
 }: {
+	readonly journal: Journal;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
+	const timeZone = journal.browse?.timeZone ?? 'UTC';
+	const selected = Temporal.Instant.from(focus).toZonedDateTimeISO(timeZone);
+	const [date, setDate] = useState(selected.with({ day: 1 }));
+	const [view, setView] = useState<'day' | 'month' | 'year'>(
+		route === 'year' ? 'month' : 'day'
+	);
+	const heading = useRef<HTMLButtonElement>(null);
+	const yearStart = Math.floor(date.year / 12) * 12;
+	const monthName = date.toLocaleString(undefined, { month: 'long' });
+	const firstDay = date.with({ day: 1 }).startOfDay();
+	const monthAt = (
+		date.year === selected.year && date.month === selected.month
+			? selected
+			: firstDay.with({ hour: 12 })
+	)
+		.toInstant()
+		.toString();
+	const selectedDay = selected.toPlainDate().toString();
+	const changeView = (next: typeof view) => {
+		setView(next);
+		heading.current?.focus();
+	};
+	const step = (direction: number) =>
+		setDate(value =>
+			value.add(
+				view === 'day'
+					? { months: direction }
+					: { years: direction * (view === 'year' ? 12 : 1) }
+			)
+		);
+	const stepLabel =
+		view === 'day' ? 'month' : view === 'month' ? 'year' : '12 years';
 	return (
-		<nav aria-label="Browse journal" className={style.zoomNavigation}>
-			{journalViews.map(destination => (
-				<Link
-					key={destination ?? 'overview'}
-					data-journal-view={destination ?? 'overview'}
-					aria-current={destination === route ? 'page' : undefined}
-					href={
-						destination
-							? journalHref(destination, { at: focus })
-							: `/journal?${new URLSearchParams({ at: focus })}`
+		<>
+			<header className={style.calendarHeading}>
+				<button
+					type="button"
+					aria-label={`Previous ${stepLabel}`}
+					title={`Previous ${stepLabel}`}
+					onClick={() => step(-1)}
+				>
+					‹
+				</button>
+				<button
+					type="button"
+					ref={heading}
+					aria-label={
+						view === 'month' ? 'Choose year' : 'Choose month'
+					}
+					title={view === 'month' ? 'Choose year' : 'Choose month'}
+					onClick={() =>
+						changeView(view === 'month' ? 'year' : 'month')
 					}
 				>
-					{zoomLevelLabel(destination)}
+					{view === 'day'
+						? `${monthName} ${date.year}`
+						: view === 'month'
+							? date.year
+							: `${yearStart}–${yearStart + 11}`}
+					<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
+				</button>
+				<button
+					type="button"
+					aria-label={`Next ${stepLabel}`}
+					title={`Next ${stepLabel}`}
+					onClick={() => step(1)}
+				>
+					›
+				</button>
+			</header>
+			{view === 'day' ? (
+				<div
+					className={style.calendarDays}
+					role="group"
+					aria-label={`${monthName} ${date.year}`}
+				>
+					{Array.from({ length: 7 }, (_, index) => (
+						<span className={style.calendarWeekday} key={index}>
+							{firstDay
+								.add({ days: index + 1 - firstDay.dayOfWeek })
+								.toLocaleString(undefined, {
+									weekday: 'narrow',
+								})}
+						</span>
+					))}
+					{Array.from(
+						{ length: firstDay.dayOfWeek - 1 },
+						(_, index) => (
+							<span key={`space-${index}`} />
+						)
+					)}
+					{Array.from({ length: date.daysInMonth }, (_, index) => {
+						const day = firstDay
+							.add({ days: index })
+							.with({ hour: 12 });
+						return (
+							<Link
+								key={day.day}
+								href={journalHref('day', {
+									at: day.toInstant().toString(),
+								})}
+								aria-label={day.toLocaleString('en-GB', {
+									day: 'numeric',
+									month: 'long',
+									year: 'numeric',
+								})}
+								aria-current={
+									day.toPlainDate().toString() === selectedDay
+										? 'date'
+										: undefined
+								}
+							>
+								{day.day}
+							</Link>
+						);
+					})}
+				</div>
+			) : (
+				<div
+					className={style.calendarPeriods}
+					role="group"
+					aria-label={
+						view === 'month'
+							? `Months in ${date.year}`
+							: 'Choose a year'
+					}
+				>
+					{Array.from({ length: 12 }, (_, index) => {
+						const value =
+							view === 'month' ? index + 1 : yearStart + index;
+						const period =
+							view === 'month'
+								? date.with({ month: value })
+								: date.with({ year: value });
+						const current =
+							view === 'month'
+								? value === selected.month &&
+									date.year === selected.year
+								: value === selected.year;
+						return (
+							<button
+								key={value}
+								type="button"
+								aria-pressed={current}
+								onClick={() => {
+									setDate(period);
+									changeView(
+										view === 'month' ? 'day' : 'month'
+									);
+								}}
+							>
+								{view === 'month'
+									? period.toLocaleString(undefined, {
+											month: 'short',
+										})
+									: value}
+							</button>
+						);
+					})}
+				</div>
+			)}
+			<div className={style.calendarSummaries}>
+				<Link
+					aria-label={
+						view === 'day' ? 'Month summary' : 'Year summary'
+					}
+					href={journalHref(view === 'day' ? 'month' : 'year', {
+						at: monthAt,
+					})}
+				>
+					{view === 'day' ? monthName : date.year} summary{' '}
+					<span aria-hidden="true">↗</span>
 				</Link>
-			))}
-		</nav>
+				{view === 'day' && (
+					<Link
+						aria-label="Week summary"
+						href={journalHref('week', {
+							at: monthAt,
+						})}
+					>
+						Week summary
+					</Link>
+				)}
+			</div>
+			<nav aria-label="Browse journal" className={style.calendarFooter}>
+				<Link
+					href={`/journal?${new URLSearchParams({ at: focus })}`}
+					aria-current={route === undefined ? 'page' : undefined}
+				>
+					Overview
+				</Link>
+				<Link href="/journal?wiki=all">Wiki</Link>
+			</nav>
+		</>
 	);
 }
 
@@ -1952,8 +2123,14 @@ function CalendarNavigation({
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
-	const navigate = useNavigate();
 	const picker = useRef<HTMLDetailsElement>(null);
+	const fitPicker = useCallback(() => {
+		if (!picker.current?.open) return;
+		const panel =
+			picker.current.querySelector<HTMLDivElement>(':scope > div');
+		if (!panel) return;
+		panel.style.maxBlockSize = `${Math.max(44, window.innerHeight - panel.getBoundingClientRect().top - 16)}px`;
+	}, []);
 	useEffect(() => {
 		const closeOutside = (event: PointerEvent) => {
 			if (
@@ -1968,13 +2145,17 @@ function CalendarNavigation({
 			picker.current.removeAttribute('open');
 			picker.current.querySelector('summary')?.focus();
 		};
+		window.addEventListener('resize', fitPicker);
+		window.addEventListener('scroll', fitPicker, true);
 		document.addEventListener('pointerdown', closeOutside);
 		document.addEventListener('keydown', closeOnEscape);
 		return () => {
+			window.removeEventListener('resize', fitPicker);
+			window.removeEventListener('scroll', fitPicker, true);
 			document.removeEventListener('pointerdown', closeOutside);
 			document.removeEventListener('keydown', closeOnEscape);
 		};
-	}, []);
+	}, [fitPicker]);
 	const browse = journal.browse;
 	if (!browse) return null;
 	return (
@@ -1998,6 +2179,7 @@ function CalendarNavigation({
 				))}
 			<details
 				ref={picker}
+				onToggle={fitPicker}
 				className={style.datePicker}
 				key={`${route}-${focus}`}
 			>
@@ -2030,80 +2212,12 @@ function CalendarNavigation({
 							picker.current?.removeAttribute('open');
 					}}
 				>
-					<ZoomNavigation focus={focus} route={route} />
-					<Link
-						href="/journal?wiki=all"
-						className={style.wikiNavigation}
-					>
-						Wiki
-					</Link>
-					{(['year', 'month', 'day'] as const).map(period => {
-						const choices = periodsFor(journal, period);
-						const selected = choices.find(choice =>
-							periodContains(choice, focus)
-						);
-						return (
-							<label key={period}>
-								{period.charAt(0).toUpperCase() +
-									period.slice(1)}
-								<select
-									aria-label={`Journal ${period}`}
-									value={selected?.start ?? ''}
-									onChange={event => {
-										event.currentTarget
-											.closest('details')
-											?.removeAttribute('open');
-										void navigate(
-											journalHref(period, {
-												at: periodMidpoint(
-													choices.find(
-														choice =>
-															choice.start ===
-															event.target.value
-													)!
-												),
-											})
-										);
-									}}
-								>
-									{!selected && (
-										<option value="" disabled>
-											Choose a {period}
-										</option>
-									)}
-									{choices.map(choice => {
-										const date = Temporal.Instant.from(
-											choice.start
-										).toZonedDateTimeISO(browse.timeZone);
-										return (
-											<option
-												key={choice.id}
-												value={choice.start}
-											>
-												{period === 'year'
-													? date.year
-													: period === 'month'
-														? date.toLocaleString(
-																undefined,
-																{
-																	month: 'long',
-																}
-															)
-														: date.toLocaleString(
-																undefined,
-																{
-																	day: 'numeric',
-																	weekday:
-																		'short',
-																}
-															)}
-											</option>
-										);
-									})}
-								</select>
-							</label>
-						);
-					})}
+					<JournalDatePicker
+						key={`${route}-${focus}`}
+						journal={journal}
+						focus={focus}
+						route={route}
+					/>
 				</div>
 			</details>
 			{route &&
