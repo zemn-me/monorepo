@@ -386,21 +386,42 @@
 }
 
 .dayList {
-	/* Newer pages restore their reading position explicitly. */
 	overflow-anchor: none;
 }
 
-.dayPagination {
+.calendarNavigation {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: 0.75em;
+	margin-block: 1em 2em;
+}
+
+.calendarNavigation label {
+	display: grid;
+	gap: 0.25em;
+}
+
+.calendarNavigation select,
+.calendarNavigation a,
+.calendarNavigation > span {
 	background: transparent;
 	border: 1px solid var(--journal-soft-line);
 	border-radius: 0.5em;
 	color: inherit;
-	cursor: pointer;
 	font: inherit;
-	justify-self: center;
 	min-block-size: 44px;
-	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
 	padding: 0.5em 1em;
+}
+
+.calendarNavigation select {
+	background: var(--background-color);
+	color: var(--foreground-color);
+	max-inline-size: 100%;
+}
+
+.calendarNavigation > span {
+	opacity: 0.5;
 }
 
 .periodOverviewList {

@@ -492,7 +492,10 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("selected journal month did not open on arrival: %v", err)
 	}
-	weekLink, err := monthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='week']")
+	if _, err := monthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']"); err != nil {
+		t.Fatal("month did not offer days", err)
+	}
+	weekLink, err := driver.FindElement(selenium.ByCSSSelector, "nav[aria-label='Browse journal'] a[data-journal-view='week']")
 	if err != nil {
 		t.Fatalf("journal month did not list its weeks: %v", err)
 	}
@@ -542,14 +545,111 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("journal day list route: %v", err)
 	}
 	browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal/day")
-	if err := waitForJournalAudioCount(driver, 4, 10*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatalf("journal day timeline did not contain its entries: %v", err)
+	}
+	chooseMonth, err := driver.FindElement(selenium.ByXPATH, "//select[@aria-label='Journal month']/option[normalize-space()='July']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := chooseMonth.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[data-journal-period-start^='2025-07'] details[data-journal-period-disclosure='month']", 10*time.Second); err != nil {
+		t.Fatal("month selector did not open July", err)
+	}
+	if err := waitForJournalAudioCount(driver, 0, 10*time.Second); err != nil {
+		t.Fatal("month loaded recording players", err)
+	}
+	chooseMonth, err = driver.FindElement(selenium.ByXPATH, "//select[@aria-label='Journal month']/option[normalize-space()='August']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := chooseMonth.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[data-journal-period-start^='2025-08'] details[data-journal-period-disclosure='month']", 10*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	chooseDay, err := driver.FindElement(selenium.ByXPATH, "//select[@aria-label='Journal day']/option[contains(normalize-space(), '13')]")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := chooseDay.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+		t.Fatal("day selector did not open selected recordings", err)
+	}
+	if single, err := driver.ExecuteScript(`return document.querySelectorAll('[data-journal-period-start]').length === 1`, nil); err != nil || single != true {
+		t.Fatalf("expected a single day: %v %v", single, err)
+	}
+	previousDay, err := driver.FindElement(selenium.ByCSSSelector, "a[aria-label='Previous day']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, previousDay); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForJournalAudioCount(driver, 1, 10*time.Second); err != nil {
+		t.Fatal("previous day retained neighboring recordings", err)
+	}
+	if err := driver.Back(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+		t.Fatal("Back did not restore selected day", err)
+	}
+	if err := driver.Refresh(); err != nil {
+		t.Fatal(err)
+	}
+	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+		t.Fatal("reload lost selected day", err)
+	}
+	for _, width := range []int{1280, 390} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": 900, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.ResizeWindow("", width, 900); err != nil {
+			t.Fatal(err)
+		}
+		usable, err := driver.ExecuteScript(`const nav = document.querySelector('nav[aria-label="Choose journal date"]');
+		return nav.querySelectorAll('select').length === 3 && document.documentElement.scrollWidth <= innerWidth &&
+		[...nav.querySelectorAll('select, a')].every(control => control.getBoundingClientRect().height >= 44);`, nil)
+		if err != nil || usable != true {
+			t.Fatalf("calendar navigation at %dpx: %v %v", width, usable, err)
+		}
+		yearSelector, err := driver.FindElement(selenium.ByCSSSelector, "select[aria-label='Journal year']")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := yearSelector.SendKeys(selenium.TabKey); err != nil {
+			t.Fatal(err)
+		}
+		if focus, err := driver.ExecuteScript(`return document.activeElement?.getAttribute('aria-label')`, nil); err != nil || focus != "Journal month" {
+			t.Fatalf("calendar keyboard focus: %v %v", focus, err)
+		}
+		if directory := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); directory != "" {
+			shot, err := driver.Screenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(directory, fmt.Sprintf("journal-calendar-%d.png", width)), shot, 0600); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ResizeWindow("", 1280, 900); err != nil {
+		t.Fatal(err)
 	}
 	usesTimeOnlyEntryHeadings, err := driver.ExecuteScript(`
 		const times = [...document.querySelectorAll(
 			"details[id^='entry-'] > summary > time"
 		)];
-		return times.length === 4 && times.every(time =>
+		return times.length === 2 && times.every(time =>
 			time.lang === 'en-GB' &&
 			time.textContent === '19:16'
 		);
@@ -564,7 +664,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		const summaries = [...document.querySelectorAll(
 			"details[id^='entry-'] > summary"
 		)];
-		return summaries.length === 4 && summaries.every(summary => {
+		return summaries.length === 2 && summaries.every(summary => {
 			const style = getComputedStyle(summary);
 			const detailsStyle = getComputedStyle(summary.parentElement);
 			return style.display === 'grid' &&
@@ -618,7 +718,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	transcriptsScrollable, err := driver.ExecuteScript(`
 		const transcripts = [...document.querySelectorAll('[data-journal-transcript]')];
-		return transcripts.length === 4 && transcripts.every(transcript =>
+		return transcripts.length === 2 && transcripts.every(transcript =>
 			transcript.tagName === 'DIV' &&
 			transcript.getAttribute('role') === 'region' &&
 			getComputedStyle(transcript).overflowY === 'auto'
@@ -842,27 +942,26 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	); err != nil {
 		t.Fatalf("linked citation transcript: %v", err)
 	}
-	// The cited recording is on the previous day. Add the newer day through
-	// pagination before checking the complete timeline and switching sources.
-	newerDays, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show newer days']", 10*time.Second)
+	// Navigate to the newer day without retaining the cited day in the DOM.
+	newerDays, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Next day']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("find newer days after following a citation: %v", err)
 	}
 	if err := browserhelpers.ClickElementInView(driver, newerDays); err != nil {
 		t.Fatalf("browse newer days after following a citation: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 4, 10*time.Second); err != nil {
-		t.Fatalf("newer days did not restore the complete timeline: %v", err)
+	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+		t.Fatalf("next day did not replace the selected recordings: %v", err)
 	}
 	transcripts, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-transcript]")
-	if err != nil || len(transcripts) != 4 {
-		t.Fatalf("day timeline transcripts: found %d, error %v", len(transcripts), err)
+	if err != nil || len(transcripts) != 2 {
+		t.Fatalf("selected day transcripts: found %d, error %v", len(transcripts), err)
 	}
 	structuredTranscripts, err := driver.ExecuteScript(`
 		const transcripts = [...document.querySelectorAll(
 			'[data-journal-transcript]'
 		)];
-		return transcripts.length === 4 && transcripts.every(transcript => {
+		return transcripts.length === 2 && transcripts.every(transcript => {
 			const text = transcript.querySelector('[data-journal-transcript-text]');
 			const paragraphs = text?.querySelectorAll(':scope > p');
 			return text !== null &&
@@ -934,6 +1033,9 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := driver.Back(); err != nil {
 		t.Fatalf("navigate back to first cited journal audio: %v", err)
 	}
+	if err := driver.Back(); err != nil {
+		t.Fatal(err)
+	}
 	if err := waitForExclusiveJournalAudioPlayback(driver, firstEntryID, 10*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("Back did not restore the first cited journal audio: %v", err)
@@ -963,7 +1065,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := browserhelpers.ClickElementInView(driver, deleteThumb); err != nil {
 		t.Fatalf("click swipe-to-delete thumb: %v", err)
 	}
-	if err := journalAudioCountRemains(driver, 4, time.Second); err != nil {
+	if err := journalAudioCountRemains(driver, 1, time.Second); err != nil {
 		t.Fatalf("ordinary click deleted a journal entry: %v", err)
 	}
 	if _, err := driver.ExecuteScript(`
@@ -989,7 +1091,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("swiped journal entry was not deleted: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 3, 10*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 0, 10*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("journal did not remove exactly one swiped entry: %v", err)
 	}
@@ -1003,80 +1105,19 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if playbackQueryCleared != true {
 		t.Fatalf("deleting the selected journal entry left its playback URL active")
 	}
-	journalAudio, err := driver.FindElements(selenium.ByCSSSelector, "audio[data-entry-id]")
-	if err != nil {
-		t.Fatalf("count journal entries before recording: %v", err)
+	currentRecording := browserhelpers.TestWAV()
+	currentRecording[len(currentRecording)-6] = 61
+	currentPath := filepath.Join(t.TempDir(), "current-recording.wav")
+	if err := os.WriteFile(currentPath, currentRecording, 0600); err != nil {
+		t.Fatal(err)
 	}
-	baselineAudioCount := len(journalAudio)
-
-	recordButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second)
-	if err != nil {
-		t.Fatalf("record button: %v", err)
+	if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", []string{currentPath}, 30*time.Second); err != nil {
+		t.Fatal(err)
 	}
-	if err := browserhelpers.ClickElementInView(driver, recordButton); err != nil {
-		t.Fatalf("start recording: %v", err)
-	}
-	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
-		browserhelpers.DumpPageDiagnostics(t, driver)
-		t.Fatalf("live recording waveform: %v", err)
-	}
-	submitButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
-	if err != nil {
-		t.Fatalf("submit recording button: %v", err)
-	}
-	if label, err := submitButton.Text(); err != nil {
-		t.Fatalf("read submit recording button text: %v", err)
-	} else if label != "" {
-		t.Fatalf("submit recording button had visible text %q", label)
-	}
-	cancelButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Cancel recording']", 10*time.Second)
-	if err != nil {
-		t.Fatalf("cancel recording button: %v", err)
-	}
-	if label, err := cancelButton.Text(); err != nil {
-		t.Fatalf("read cancel recording button text: %v", err)
-	} else if label != "" {
-		t.Fatalf("cancel recording button had visible text %q", label)
-	}
-	if err := browserhelpers.ClickElementInView(driver, cancelButton); err != nil {
-		t.Fatalf("cancel recording: %v", err)
-	}
-	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
-		t.Fatalf("waveform remained after recording stopped: %v", err)
-	}
-	if err := journalAudioCountRemains(driver, baselineAudioCount, 2*time.Second); err != nil {
-		t.Fatalf("cancelled recording was submitted: %v", err)
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 30*time.Second); err != nil {
+		t.Fatal(err)
 	}
 
-	recordButton, err = browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second)
-	if err != nil {
-		t.Fatalf("record button after cancellation: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, recordButton); err != nil {
-		t.Fatalf("start submitted recording: %v", err)
-	}
-	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
-		t.Fatalf("submitted recording waveform: %v", err)
-	}
-	// Chromium's fake microphone needs a recording timeslice before stopping to
-	// emit a non-empty MediaRecorder chunk.
-	time.Sleep(1500 * time.Millisecond)
-	submitButton, err = browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
-	if err != nil {
-		t.Fatalf("submit recording button: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, submitButton); err != nil {
-		t.Fatalf("submit recording: %v", err)
-	}
-	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
-		t.Fatalf("submitted recording did not finish capture: %v", err)
-	}
-	if _, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Create a journal entry']//p[contains(., 'Uploading your private voice note')]"); err == nil {
-		t.Fatal("submitted recording showed the redundant upload caption")
-	}
-	if _, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
-		t.Fatalf("submitted recording upload did not finish: %v", err)
-	}
 	if err := driver.Get(journalURL.String()); err != nil {
 		t.Fatalf("open journal after submitted recording: %v", err)
 	}
@@ -1090,7 +1131,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//nav[@aria-label='Browse journal']/a[@aria-current='page' and normalize-space()='Days']", 30*time.Second); err != nil {
 		t.Fatalf("submitted recording days were not selected: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 4, 30*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 1, 30*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("submitted recording did not become a journal entry: %v", err)
 	}
@@ -1113,7 +1154,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := currentDayImport.SendKeys(currentDayFile.Name()); err != nil {
 		t.Fatalf("import second current-day voice memo: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 5, 30*time.Second); err != nil {
+	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("second current-day voice memo did not become a journal entry: %v", err)
 	}
@@ -1214,8 +1255,8 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := driver.Get(currentDayURL); err != nil {
 		t.Fatalf("return to current journal day: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 6, 30*time.Second); err != nil {
-		t.Fatalf("journal timeline did not retain all six entries: %v", err)
+	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
+		t.Fatalf("selected day did not retain its two recordings: %v", err)
 	}
 	currentDayStart := time.Date(
 		localNow.Year(), localNow.Month(), localNow.Day(), 0, 0, 0, 0, journalLocation,
@@ -1355,7 +1396,10 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err != nil {
 		t.Fatalf("corrected journal month did not open on arrival: %v", err)
 	}
-	targetWeek, err := targetMonthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='week']")
+	if _, err := targetMonthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']"); err != nil {
+		t.Fatal(err)
+	}
+	targetWeek, err := driver.FindElement(selenium.ByCSSSelector, "nav[aria-label='Browse journal'] a[data-journal-view='week']")
 	if err != nil {
 		t.Fatalf("corrected journal month did not list its weeks: %v", err)
 	}
@@ -1997,6 +2041,106 @@ func waitForJournalPeriodAudioCount(driver selenium.WebDriver, start string, wan
 		)
 		return len(elements) == want, err
 	}, timeout)
+}
+
+func TestJournalRecordingControls(t *testing.T) {
+	root, err := browserhelpers.FrontendRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	root.Path = "/journal/day"
+	query := root.Query()
+	query.Set("at", time.Now().UTC().Format(time.RFC3339))
+	root.RawQuery = query.Encode()
+	driver, err := seleniumpkg.NewWithChromeArguments("--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label='Journal day']", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	baselineAudioCount, err := journalAudioCount(driver)
+	if err != nil {
+		t.Fatal(err)
+	}
+	recordButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("record button: %v", err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, recordButton); err != nil {
+		t.Fatalf("start recording: %v", err)
+	}
+	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
+		t.Fatalf("live recording waveform: %v", err)
+	}
+	submitButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("submit recording button: %v", err)
+	}
+	if label, err := submitButton.Text(); err != nil {
+		t.Fatalf("read submit recording button text: %v", err)
+	} else if label != "" {
+		t.Fatalf("submit recording button had visible text %q", label)
+	}
+	cancelButton, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Cancel recording']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("cancel recording button: %v", err)
+	}
+	if label, err := cancelButton.Text(); err != nil {
+		t.Fatalf("read cancel recording button text: %v", err)
+	} else if label != "" {
+		t.Fatalf("cancel recording button had visible text %q", label)
+	}
+	if err := browserhelpers.ClickElementInView(driver, cancelButton); err != nil {
+		t.Fatalf("cancel recording: %v", err)
+	}
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
+		t.Fatalf("waveform remained after recording stopped: %v", err)
+	}
+	if err := journalAudioCountRemains(driver, baselineAudioCount, 2*time.Second); err != nil {
+		t.Fatalf("cancelled recording was submitted: %v", err)
+	}
+
+	recordButton, err = browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("record button after cancellation: %v", err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, recordButton); err != nil {
+		t.Fatalf("start submitted recording: %v", err)
+	}
+	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
+		t.Fatalf("submitted recording waveform: %v", err)
+	}
+	// Chromium's fake microphone needs a recording timeslice before stopping to
+	// emit a non-empty MediaRecorder chunk.
+	time.Sleep(1500 * time.Millisecond)
+	submitButton, err = browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
+	if err != nil {
+		t.Fatalf("submit recording button: %v", err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, submitButton); err != nil {
+		t.Fatalf("submit recording: %v", err)
+	}
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
+		t.Fatalf("submitted recording did not finish capture: %v", err)
+	}
+	if _, err := driver.FindElement(selenium.ByXPATH, "//section[@aria-label='Create a journal entry']//p[contains(., 'Uploading your private voice note')]"); err == nil {
+		t.Fatal("submitted recording showed the redundant upload caption")
+	}
+	if _, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
+		t.Fatalf("submitted recording upload did not finish: %v", err)
+	}
+	if err := waitForJournalAudioCount(driver, baselineAudioCount+1, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {

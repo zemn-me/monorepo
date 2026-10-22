@@ -208,6 +208,12 @@ func (s *Server) journalAudioURL(ctx context.Context, entry JournalStoredEntry) 
 }
 
 func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) JournalEntry {
+	result := journalEntryContent(entry)
+	result.AudioUrl = s.journalAudioURL(ctx, entry)
+	return result
+}
+
+func journalEntryContent(entry JournalStoredEntry) JournalEntry {
 	result := JournalEntry{
 		SchemaVersion: 1,
 		Id:            openapiUUID(entry.Id),
@@ -220,7 +226,6 @@ func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) 
 		ByteLength:    entry.ByteLength,
 		ContentSha256: entry.ContentSha256,
 		Status:        JournalEntryStatus(entry.Status),
-		AudioUrl:      s.journalAudioURL(ctx, entry),
 		Transcript:    entry.Transcript,
 	}
 	result.RecordingStartedAt = entry.RecordingStartedAt
@@ -239,7 +244,7 @@ func openapiUUID(value string) uuid.UUID {
 	return parsed
 }
 
-func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (GetJournalResponseObject, error) {
+func (s *Server) GetJournal(ctx context.Context, request GetJournalRequestObject) (GetJournalResponseObject, error) {
 	subject, err := journalSubject(ctx)
 	if err != nil {
 		return nil, err
@@ -253,15 +258,44 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 		return nil, err
 	}
 	records = applyJournalGeneration(records, generation)
+	var browse *JournalBrowse
+	var start, end time.Time
+	view := ""
+	if request.Params.View != nil {
+		view = string(*request.Params.View)
+		sort.SliceStable(records, func(i, j int) bool {
+			if records[i].Entry == nil {
+				return false
+			}
+			if records[j].Entry == nil {
+				return true
+			}
+			return records[i].Entry.RecordedAt.After(records[j].Entry.RecordedAt)
+		})
+		selection, from, to := journalBrowse(records, view, request.Params.At, time.Now().UTC())
+		browse, start, end = &selection, from, to
+	}
 	entries := make([]JournalEntry, 0)
 	summaries := make([]JournalSummary, 0)
 	now := time.Now().UTC()
 	for _, record := range records {
 		if record.Entry != nil && journalEntryIsVisible(*record.Entry, now) {
-			entries = append(entries, s.apiJournalEntry(ctx, *record.Entry))
+			if browse == nil || (view == "day" && !record.Entry.RecordedAt.Before(start) && record.Entry.RecordedAt.Before(end)) || (view == "overview" && len(entries) < 5) || record.Entry.Status != JournalEntryStatusReady {
+				if browse != nil && view == "overview" && record.Entry.Status == JournalEntryStatusReady {
+					entry := journalEntryContent(*record.Entry)
+					entry.Transcript = []JournalTranscriptSegment{}
+					entries = append(entries, entry)
+				} else {
+					entries = append(entries, s.apiJournalEntry(ctx, *record.Entry))
+				}
+			}
 		}
-		if record.Summary != nil {
-			summaries = append(summaries, *record.Summary)
+		if summary := record.Summary; summary != nil {
+			midpoint := summary.Start.Add(summary.End.Sub(summary.Start) / 2)
+			selected := string(summary.Period) == view && !midpoint.Before(start) && midpoint.Before(end)
+			if browse == nil || (view == "overview" && summary.Period == JournalSummaryPeriodJournal) || selected {
+				summaries = append(summaries, *summary)
+			}
 		}
 	}
 	sort.Slice(entries, func(i, j int) bool { return entries[i].RecordedAt.After(entries[j].RecordedAt) })
@@ -271,7 +305,7 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 		}
 		return summaries[i].Start.After(summaries[j].Start)
 	})
-	result := GetJournal200JSONResponse{Entries: entries, Summaries: summaries}
+	result := GetJournal200JSONResponse{Entries: entries, Summaries: summaries, Browse: browse}
 	wiki := make([]JournalWikiIndexEntry, 0, len(generation.Result.Pages))
 	for _, page := range generation.Result.Pages {
 		wiki = append(wiki, JournalWikiIndexEntry{Id: page.Id, Title: page.Title, Kind: string(page.Kind), Aliases: page.Aliases})
@@ -295,6 +329,9 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 			status.Generation = &curationState.PublishedKey
 		}
 		result.Curation = &status
+	}
+	if browse != nil {
+		browse.Sources = journalBrowseSources(records, entries, summaries)
 	}
 	return result, nil
 }

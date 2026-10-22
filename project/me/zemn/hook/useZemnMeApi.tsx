@@ -753,7 +753,8 @@ export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 
 export function useGetJournal<A, B>(
 	id_token: Future<string, A, B>,
-	enabled = true
+	enabled = true,
+	browse?: paths['/journal']['get']['parameters']['query']
 ) {
 	const token = id_token(
 		value => value,
@@ -763,9 +764,13 @@ export function useGetJournal<A, B>(
 	const claims = useSessionClaims(id_token);
 	const fetchClient = useFetchClient(token);
 	const query = useQuery({
-		queryKey: ['get', '/journal', claims?.jti],
+		queryKey: ['get', '/journal', claims?.jti, ...(browse ? [browse] : [])],
+		staleTime: 10_000,
 		queryFn: async ({ signal }) => {
-			const response = await fetchClient.GET('/journal', { signal });
+			const response = await fetchClient.GET('/journal', {
+				signal,
+				params: { query: browse },
+			});
 			if (!response.data) {
 				throw new Error('/journal returned unexpected payload');
 			}
