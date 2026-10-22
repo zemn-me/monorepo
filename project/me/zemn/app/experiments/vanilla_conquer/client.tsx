@@ -11,6 +11,7 @@ import {
 import style from '#root/project/me/zemn/app/experiments/vanilla_conquer/style.module.css';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
+	type CinematicStatus,
 	type DownloadProgress,
 	type GameAssets,
 	startGame,
@@ -28,10 +29,14 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 	const title = assets.game === 'ra' ? 'Red Alert' : 'Command & Conquer';
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
+	const startRef = useRef<HTMLButtonElement>(null);
 	const [state, setState] = useState<GameState>(() =>
 		future_loading(undefined)
 	);
 	const navigate = useNavigate();
+	const [cinematic, setCinematic] = useState<CinematicStatus | undefined>();
+	const skipRef = useRef<HTMLButtonElement>(null);
+	const [start, setStart] = useState<(() => void) | undefined>();
 	const running = state(
 		() => true,
 		() => false,
@@ -60,17 +65,27 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';
 		setState(() => future_loading(undefined));
+		setStart(undefined);
+		setCinematic(undefined);
 		startGame(
 			canvas,
 			assets,
 			{
+				cinematic: value => {
+					if (!lifetime.signal.aborted) setCinematic(value);
+				},
+				ready: begin => {
+					if (!lifetime.signal.aborted) setStart(() => begin);
+				},
 				progress: value => {
 					if (!lifetime.signal.aborted)
 						setState(() => future_loading(value));
 				},
 				running: () => {
-					if (!lifetime.signal.aborted)
+					if (!lifetime.signal.aborted) {
+						setStart(undefined);
 						setState(() => future_resolve(undefined));
+					}
 				},
 				error: value => setState(() => future_error(value)),
 				exit: () => {
@@ -90,6 +105,18 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 		if (failed) statusRef.current?.focus();
 	}, [failed]);
 
+	useEffect(() => {
+		if (start) startRef.current?.focus();
+	}, [start]);
+
+	const cinematicKind = cinematic?.kind;
+	useEffect(() => {
+		if (cinematicKind === 'error') statusRef.current?.focus();
+		else if (cinematicKind === 'loading') skipRef.current?.focus();
+	}, [cinematicKind]);
+	const displayedProgress =
+		cinematic?.kind === 'loading' ? cinematic.progress : progress;
+
 	return (
 		<div className={style.screen}>
 			<canvas
@@ -98,19 +125,77 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 				className={style.canvas}
 				width={640}
 				height={400}
-				tabIndex={0}
+				tabIndex={cinematic ? -1 : 0}
 				aria-label={`${title} game`}
 			/>
-			<main className={style.feedback} hidden={running}>
+			<main
+				className={style.feedback}
+				hidden={running && !cinematic}
+				onKeyDown={event => {
+					if (cinematic && event.key === 'Escape') {
+						event.preventDefault();
+						cinematic.skip();
+					}
+				}}
+			>
 				<div>
 					<p ref={statusRef} role="status" tabIndex={-1}>
-						{message}
+						{cinematic
+							? cinematic.kind === 'error'
+								? 'Could not load this cinematic.'
+								: 'Loading cinematic…'
+							: start
+								? 'Red Alert is ready.'
+								: message}
 					</p>
+					{start && (
+						<button
+							type="button"
+							ref={startRef}
+							className={style.start}
+							onClick={start}
+						>
+							Start Red Alert
+						</button>
+					)}
+					{cinematic && (
+						<div className={style.actions}>
+							{cinematic.kind === 'error' && (
+								<button
+									type="button"
+									className={style.start}
+									onClick={cinematic.retry}
+								>
+									Retry
+								</button>
+							)}
+							<button
+								type="button"
+								ref={skipRef}
+								className={style.start}
+								onClick={cinematic.skip}
+							>
+								Skip cinematic
+							</button>
+						</div>
+					)}
 					<progress
-						aria-label="Downloading game files"
-						hidden={!progress}
-						max={progress?.total}
-						value={progress?.total ? progress.received : undefined}
+						aria-label={
+							cinematic
+								? 'Downloading cinematic'
+								: 'Downloading game files'
+						}
+						hidden={
+							(!cinematic && !progress) ||
+							!!start ||
+							cinematic?.kind === 'error'
+						}
+						max={displayedProgress?.total}
+						value={
+							displayedProgress?.total
+								? displayedProgress.received
+								: undefined
+						}
 					/>
 					<section className={style.details} hidden={!failed}>
 						<h1>{title}</h1>

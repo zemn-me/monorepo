@@ -5,13 +5,28 @@ export interface GameAssets {
 	readonly engineWasm: string;
 	readonly game: 'ra' | 'td';
 	readonly gameData: string;
+	readonly cinematics?: Readonly<Record<string, string>>;
 }
 export interface DownloadProgress {
 	readonly received: number;
 	readonly total?: number;
 }
+export type CinematicStatus =
+	| {
+			readonly kind: 'loading';
+			readonly progress?: DownloadProgress;
+			readonly skip: () => void;
+	  }
+	| {
+			readonly kind: 'error';
+			readonly retry: () => void;
+			readonly skip: () => void;
+	  };
+
 export interface GameCallbacks {
 	readonly progress: (progress: DownloadProgress | undefined) => void;
+	readonly ready: (start: () => void) => void;
+	readonly cinematic: (status: CinematicStatus | undefined) => void;
 	readonly running: () => void;
 	readonly error: (message: string) => void;
 	readonly exit: () => void;
@@ -35,10 +50,13 @@ interface Engine {
 		): void;
 		analyzePath(path: string): { exists: boolean };
 		chdir(path: string): void;
+		unlink(path: string): void;
 	};
 	readonly IDBFS: unknown;
 	callMain(arguments_: string[]): void;
 	webStop: boolean;
+	webLoadMovie?: (name: string) => Promise<number>;
+	webReleaseMovie?: (name: string) => void;
 }
 interface EngineOptions {
 	readonly canvas: HTMLCanvasElement;
@@ -169,6 +187,103 @@ export function startGame(
 				);
 			}
 			loaded.FS.chdir('/game');
+			// Availability checks also decide whether saved missions offer a video
+			// briefing. Empty markers advertise catalog entries without loading data.
+			for (const name of Object.keys(assets.cinematics ?? {})) {
+				loaded.FS.writeFile(`/game/${name}.VQA`, new Uint8Array());
+			}
+			const removeMovie = (name: string) => {
+				for (const extension of ['VQA', 'VQP']) {
+					const path = `/game/${name.toUpperCase()}.${extension}`;
+					if (loaded.FS.analyzePath(path).exists)
+						loaded.FS.unlink(path);
+				}
+			};
+			loaded.webReleaseMovie = name => {
+				removeMovie(name);
+				// Native mission flow checks availability after playback to choose its
+				// text fallback. Keep a zero-byte marker; playback always loads first.
+				loaded.FS.writeFile(
+					`/game/${name.toUpperCase()}.VQA`,
+					new Uint8Array()
+				);
+			};
+			loaded.webLoadMovie = async requested => {
+				const name = requested.toUpperCase();
+				const url = assets.cinematics?.[name];
+				if (!url || lifetime.signal.aborted) return 0;
+				const request = new AbortController();
+				const skip = () => request.abort();
+				lifetime.signal.addEventListener('abort', skip, { once: true });
+				try {
+					while (!request.signal.aborted) {
+						try {
+							callbacks.cinematic({ kind: 'loading', skip });
+							const movie = await downloadGame(
+								url,
+								request.signal,
+								progress => {
+									if (!request.signal.aborted)
+										callbacks.cinematic({
+											kind: 'loading',
+											progress,
+											skip,
+										});
+								}
+							);
+							const names = importFiles(
+								loaded,
+								movie,
+								new RegExp(`^${name}\\.(VQA|VQP)$`)
+							);
+							if (!names.has(`${name}.VQA`))
+								throw new Error('Incomplete cinematic');
+							return 1;
+						} catch {
+							removeMovie(name);
+							if (request.signal.aborted) return 0;
+							await new Promise<void>(resolve => {
+								const finish = () => {
+									request.signal.removeEventListener(
+										'abort',
+										finish
+									);
+									resolve();
+								};
+								request.signal.addEventListener(
+									'abort',
+									finish,
+									{ once: true }
+								);
+								callbacks.cinematic({
+									kind: 'error',
+									retry: finish,
+									skip,
+								});
+							});
+						}
+					}
+					return 0;
+				} finally {
+					lifetime.signal.removeEventListener('abort', skip);
+					if (!lifetime.signal.aborted) {
+						callbacks.cinematic(undefined);
+						canvas.focus();
+					}
+				}
+			};
+			if (assets.game === 'ra') {
+				// Start the intro from a user gesture so browser audio can play.
+				await new Promise<void>((resolve, reject) => {
+					lifetime.signal.addEventListener(
+						'abort',
+						() => reject(lifetime.signal.reason),
+						{ once: true }
+					);
+					callbacks.ready(resolve);
+				});
+				signal.throwIfAborted();
+			}
 			started = true;
 			callbacks.running();
 			canvas.focus();
@@ -196,7 +311,7 @@ async function downloadGame(
 	signal: AbortSignal,
 	progress: GameCallbacks['progress']
 ): Promise<Uint8Array<ArrayBuffer>> {
-	const response = await fetch(url, { signal });
+	const response = await fetch(url, { signal, cache: 'force-cache' });
 	if (!response.ok)
 		throw new Error(`Game download failed (${response.status})`);
 	if (!response.body) throw new Error('Game download has no response body');
@@ -224,6 +339,20 @@ function importGame(
 	data: Uint8Array<ArrayBuffer>,
 	game: 'ra' | 'td'
 ): void {
+	const names = importFiles(engine, data, /^[A-Z0-9_]+\.(MIX|MAP)$/);
+	if (
+		!(game === 'ra'
+			? names.has('MAIN.MIX') && names.has('REDALERT.MIX')
+			: names.has('CONQUER.MIX') && names.has('CCLOCAL.MIX'))
+	)
+		throw new Error('Incomplete game package');
+}
+
+function importFiles(
+	engine: Engine,
+	data: Uint8Array<ArrayBuffer>,
+	allowed: RegExp
+): Set<string> {
 	if (
 		data.length < 12 ||
 		new TextDecoder().decode(data.subarray(0, 8)) !== 'VANILLD1'
@@ -253,8 +382,8 @@ function importGame(
 			throw new Error('Invalid game file');
 		const { name, size } = entry;
 		if (
-			!/^[A-Z0-9_]+\.(MIX|MAP)$/.test(name) ||
-			/^(SCORES|MOVIES)/.test(name) ||
+			!allowed.test(name) ||
+			/^SCORES/.test(name) ||
 			names.has(name) ||
 			!Number.isSafeInteger(size) ||
 			size <= 0 ||
@@ -269,11 +398,6 @@ function importGame(
 		);
 		offset += size;
 	}
-	if (
-		offset !== data.length ||
-		!(game === 'ra'
-			? names.has('MAIN.MIX') && names.has('REDALERT.MIX')
-			: names.has('CONQUER.MIX') && names.has('CCLOCAL.MIX'))
-	)
-		throw new Error('Incomplete game package');
+	if (offset !== data.length) throw new Error('Incomplete game package');
+	return names;
 }
