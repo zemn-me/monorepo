@@ -26,9 +26,17 @@ char *** Web_Argv() { return &Arguments; }
 std::string Choose_Folder(char const *) { return {}; }
 void Show_Alert(char const *title, char const *text) { fprintf(stderr,"%s: %s\n",title,text); }
 
-// CSS pixels keep the original pixel-art controls usable on high-density displays.
+// Window and screen dimensions share CSS units, independent of pixel density.
 EM_JS(int, Web_Window_Width, (), { return window.innerWidth; });
 EM_JS(int, Web_Window_Height, (), { return window.innerHeight; });
+EM_JS(double, Web_Screen_Scale, (), {
+    const width = window.screen?.width;
+    const height = window.screen?.height;
+    if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 1;
+    // Keep the original 800x600 view at a consistent fraction of the display.
+    // Browsers do not expose reliable physical dimensions in inches or cm.
+    return Math.max(1, Math.min(width / 800, height / 600));
+});
 // Use the logical frame's aspect, rather than SDL's rounded drawable size, so
 // containing the canvas cannot feed rounding errors back into the next resize.
 EM_JS(void, Web_Display_Aspect, (int width, int height), {
@@ -44,8 +52,9 @@ void Web_Display_Size(int &width, int &height) {
         Web_Display_Aspect(width, height);
         return;
     }
-    double w = std::max(1, Web_Window_Width());
-    double h = std::max(1, Web_Window_Height());
+    double displayScale = Web_Screen_Scale();
+    double w = std::max(1, Web_Window_Width()) / displayScale;
+    double h = std::max(1, Web_Window_Height()) / displayScale;
     // Small windows retain the game's minimum usable area; very large displays
     // cap the software framebuffer's cost while preserving the window's aspect.
     double scale = std::max({1.0, 800.0 / w, 600.0 / h});
