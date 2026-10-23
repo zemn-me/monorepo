@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 import zipfile
 
-from project.vanilla_conquer.assets.package_data import Disc, MAGIC, RA_INSTALL, RA_MAIN, TD_FILES, main, package
+from project.vanilla_conquer.assets.package_data import Disc, MAGIC, RA_INSTALL, RA_MAIN, TD_FILES, compact_font, compact_shape, main, package
 
 
 def record(extent, size, name, directory=False):
@@ -35,6 +35,40 @@ def image():
 
 
 class PackageTest(unittest.TestCase):
+    def test_compact_font_preserves_strokes_and_bearing(self):
+        source = bytearray(29)
+        struct.pack_into("<HBB6H4B", source, 0, 29, 0, 5, 14, 20, 22, 23, 27, 0x1012, 0, 0, 4, 3)
+        struct.pack_into("<H", source, 20, 23)
+        source[22] = 3
+        source[23:27] = bytes([0x10, 0, 0, 1])
+        source[27:29] = bytes([1, 2])
+        result = compact_font(source)
+        self.assertEqual(result[18:20], bytes([2, 3]))
+        self.assertEqual(result[22], 3)
+        self.assertEqual(result[23:27], bytes([1, 0, 0x10, 0]))
+        self.assertEqual(result[27:29], bytes([0, 2]))
+        self.assertEqual(compact_font(source, gradient=True)[23:27], bytes([13, 0, 0xD0, 0]))
+        self.assertEqual(struct.unpack_from("<H", result)[0], len(result))
+
+    def test_compact_gold_ui_preserves_keyframes_and_delta_states(self):
+        # A 4x4 keyframe uses literal pixels, an overlapping back-reference,
+        # and a run. The next two frames exercise key and chained XOR deltas.
+        key = bytes([0x84, 0, 1, 2, 3, 0, 4, 0xFE, 9, 0, 8, 0x80])
+        delta = bytes([1, 9, 0x80, 0, 0])
+        start = 14 + 5 * 8
+        source = struct.pack("<7H", 3, 0, 0, 4, 4, 16, 0)
+        source += struct.pack("<II", start | 0x80000000, 0)
+        source += struct.pack("<II", (start + len(key)) | 0x40000000, start)
+        source += struct.pack("<II", (start + len(key) + len(delta)) | 0x20000000, 1)
+        source += struct.pack("<IIII", start + len(key) + 2 * len(delta), 0, 0, 0)
+        result = compact_shape(source + key + delta + delta)
+        self.assertEqual(struct.unpack_from("<7H", result), (3, 0, 0, 2, 2, 4, 0))
+        for index, first in enumerate([0, 9, 0]):
+            offset, reference = struct.unpack_from("<II", result, 14 + index * 8)
+            self.assertEqual(offset >> 24, 0x80)
+            self.assertEqual(reference, 0)
+            self.assertEqual(result[offset & 0xFFFFFF:(offset & 0xFFFFFF) + 6], bytes([0x84, first, 2, 8, 8, 0x80]))
+
     def test_ra_packaging_tracks_lowercase_tool_outputs(self):
         # Model vanillamix's output spelling even on case-insensitive hosts.
         def mixtool(command, **kwargs):

@@ -15,6 +15,15 @@ button so its intro can begin with browser audio enabled. Escape skips movies.
 Each game has a separate IndexedDB save directory. Clearing site data removes local saves. Use a
 keyboard and mouse. Exit the game to return to the previous page.
 
+Small touch displays use each engine's native 320×200 mode. Battlefield sprites
+retain their original pixel size, so units appear twice as large as the 640×400
+view on the same phone. Menus, sidebar artwork, input coordinates, and video
+playback use the engine's matching native layout. Desktop launches retain
+640×400, even if the same browser previously saved settings on a phone.
+The canvas fits the window without distortion and adapts to rotation. C&C Gold’s
+compact interface uses fonts and downsampled artwork from its original archives;
+the generated assets stay in the browser package.
+
 From the monorepo root:
 
 ```sh

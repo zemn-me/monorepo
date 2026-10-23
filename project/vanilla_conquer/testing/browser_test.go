@@ -282,17 +282,40 @@ func waitMenu(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.Vir
 }
 
 func TestBrowserCampaigns(t *testing.T) {
+	testBrowserCampaigns(t, false)
+}
+
+func TestPhoneCampaigns(t *testing.T) {
+	testBrowserCampaigns(t, true)
+}
+
+func testBrowserCampaigns(t *testing.T, phone bool) {
+	t.Helper()
 	base := siteURL(t)
 	for _, game := range []struct {
 		name, route, faction string
 		menuY                int
+		phone                bool
 	}{
-		{"red-alert-allies", "red-alert", "allies", 268},
-		{"red-alert-soviet", "red-alert", "soviet", 268},
-		{"command-and-conquer", "command-and-conquer", "gdi", 112},
+		{"red-alert-allies", "red-alert", "allies", 268, false},
+		{"red-alert-soviet", "red-alert", "soviet", 268, false},
+		{"command-and-conquer", "command-and-conquer", "gdi", 112, false},
+		{"red-alert-phone", "red-alert", "allies", 268, true},
+		{"command-and-conquer-phone", "command-and-conquer", "gdi", 112, true},
 	} {
+		if game.phone != phone {
+			continue
+		}
 		t.Run(game.name, func(t *testing.T) {
 			driver, clock := newBrowser(t, 800, 600)
+			if game.phone {
+				if err := driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+					t.Fatal(err)
+				}
+				if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "screenWidth": 390, "screenHeight": 844, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+					t.Fatal(err)
+				}
+			}
 			if err := driver.Get(base + "/experiments/" + game.route); err != nil {
 				t.Fatal(err)
 			}
@@ -318,7 +341,7 @@ func TestBrowserCampaigns(t *testing.T) {
 					t.Fatalf("initial game data exceeds 30 MiB: %v, %v", value, err)
 				}
 				for _, viewport := range []struct{ width, height int }{{390, 844}, {800, 600}} {
-					if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": viewport.width, "height": viewport.height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+					if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": viewport.width, "height": viewport.height, "screenWidth": 390, "screenHeight": 844, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 						t.Fatal(err)
 					}
 					value, err := driver.ExecuteScript(`const b=arguments[0],r=b.getBoundingClientRect();return document.activeElement===b&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight&&r.height>=44&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{button})
@@ -336,6 +359,14 @@ func TestBrowserCampaigns(t *testing.T) {
 				advance(t, clock, 10*time.Second) // Let the intro finish naturally.
 			}
 			waitMenu(t, driver, clock, game.name, game.menuY)
+			frameWidth := 640
+			if game.phone {
+				frameWidth = 320
+			}
+			mode, err := driver.ExecuteScript(`return document.querySelector('canvas').width`, nil)
+			if err != nil || mode != float64(frameWidth) {
+				t.Fatalf("native framebuffer: got %v, want %d: %v", mode, frameWidth, err)
+			}
 			if game.route == "red-alert" && movieRequests(t, driver) != 1 {
 				t.Fatal("unrequested movies downloaded at startup")
 			}
@@ -396,6 +427,20 @@ func TestBrowserCampaigns(t *testing.T) {
 					}
 				}
 			}
+			if game.phone {
+				labels := 0
+				for y := 52; y < 70; y++ {
+					for x := 20; x < 180; x++ {
+						r, g, b, _ := first.At(x, y).RGBA()
+						if min(r, g, b) > 45000 {
+							labels++
+						}
+					}
+				}
+				if labels < 40 {
+					t.Fatalf("phone controls have no readable labels: %d", labels)
+				}
+			}
 			if controls < 500 {
 				t.Fatalf("campaign did not reach the map (control pixels: %d)", controls)
 			}
@@ -413,6 +458,34 @@ func TestBrowserCampaigns(t *testing.T) {
 				t.Fatalf("mission simulation did not animate (changed pixels: %d)", changed)
 			}
 			playTouchCampaign(t, driver, clock, game.name)
+			if game.phone {
+				for _, size := range [][2]int{{390, 844}, {844, 390}, {430, 932}, {932, 430}} {
+					if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": size[0], "height": size[1], "screenWidth": size[0], "screenHeight": size[1], "deviceScaleFactor": 3, "mobile": true}); err != nil {
+						t.Fatal(err)
+					}
+					if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": size[0] / 2, "y": size[1] / 2}); err != nil {
+						t.Fatal(err)
+					}
+					if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+						value, err := w.ExecuteScript(`const c=document.querySelector('canvas'),r=c.getBoundingClientRect(),s=Math.min(innerWidth/320,innerHeight/200);return c.width===320&&c.height===200&&Math.abs(r.width-320*s)<1&&Math.abs(r.height-200*s)<1&&Math.abs(r.x-(innerWidth-r.width)/2)<1&&Math.abs(r.y-(innerHeight-r.height)/2)<1`, nil)
+						return value == true, err
+					}, 10*time.Second); err != nil {
+						t.Fatalf("phone layout: %v", err)
+					}
+					advance(t, clock, 300*time.Millisecond)
+					snapshot(t, driver, game.name+"-"+strconv.Itoa(size[0])+"x"+strconv.Itoa(size[1]))
+				}
+				if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "screenWidth": 390, "screenHeight": 844, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+					t.Fatal(err)
+				}
+				// The native sidebar toggle must still accept canvas coordinates.
+				click(t, driver, clock, 700, 60)
+				if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": 400, "y": 300}); err != nil {
+					t.Fatal(err)
+				}
+				advance(t, clock, 300*time.Millisecond)
+				snapshot(t, driver, game.name+"-sidebar")
+			}
 		})
 	}
 }
