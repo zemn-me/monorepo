@@ -262,7 +262,7 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 			t.Fatal(err)
 		}
 	}
-	if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
+	if err := driver.GetWithNetworkRetry(base + "/experiments/tiberian-sun"); err != nil {
 		t.Fatal(err)
 	}
 

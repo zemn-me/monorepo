@@ -69,7 +69,7 @@ func (g *freewareBrowser) installClock() {
 func (g *freewareBrowser) navigate() {
 	g.t.Helper()
 	g.installClock()
-	if err := g.driver.Get(g.base + "/experiments/tiberian-sun"); err != nil {
+	if err := g.driver.GetWithNetworkRetry(g.base + "/experiments/tiberian-sun"); err != nil {
 		g.t.Fatal(err)
 	}
 }
