@@ -208,12 +208,13 @@ It retains `performance-host.log` and `performance-guest.log` in undeclared
 outputs and prints performance samples. Headless software rendering can be much
 slower than an interactive browser; compare runs on the same machine.
 
-The normal integration suite also checks real-time multiplayer background scheduling.
-To run that case by itself:
+The normal multiplayer scenario continues the match through hiding and restoring
+the guest tab under virtual time, checking new shared simulation checksums.
+Native browser background scheduling is an opt-in performance measurement,
+excluded from the normal virtual-time integration suite:
 
 ```sh
-./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
-  --test_arg='-test.run=^TestBrowserMultiplayerBackground$' \
+./sh/bin/bazel test //project/tiberian_sun/testing:background_scheduling_benchmark \
   --nocache_test_results --test_output=all
 ```
 
@@ -292,10 +293,10 @@ opens the game through the experiment link, goes back while the engine is
 running, and reopens it without replacing the React document. Download-failure
 cases verify visible, focused error feedback at desktop and phone widths.
 
-Except for the real-time multiplayer background case, the browser tests install
-a Sinon clock before application scripts load. They
+The normal browser integration tests install a Sinon clock before application
+scripts load. They
 advance dates, performance timers, timeouts, intervals, animation frames, and
-ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
+Web Audio processing and completion callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
 and ten seconds of skirmish simulation use simulated time rather than host
 sleeps. The clock initially captures the current date so server-rendered calendar text
 hydrates consistently, then remains frozen between explicit advances.
