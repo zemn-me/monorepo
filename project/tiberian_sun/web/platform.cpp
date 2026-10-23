@@ -37,6 +37,11 @@ EM_JS(double, Web_Screen_Scale, (), {
     // Browsers do not expose reliable physical dimensions in inches or cm.
     return Math.max(1, Math.min(width / 800, height / 600));
 });
+EM_JS(int, Web_Small_Touch_Display, (), {
+    const width = window.screen?.width || window.innerWidth;
+    const height = window.screen?.height || window.innerHeight;
+    return window.matchMedia('(pointer: coarse)').matches && Math.min(width, height) <= 600;
+});
 // Use the logical frame's aspect, rather than SDL's rounded drawable size, so
 // containing the canvas cannot feed rounding errors back into the next resize.
 EM_JS(void, Web_Display_Aspect, (int width, int height), {
@@ -52,15 +57,20 @@ void Web_Display_Size(int &width, int &height) {
         Web_Display_Aspect(width, height);
         return;
     }
-    double displayScale = Web_Screen_Scale();
+    const bool compact = Web_Small_Touch_Display();
+    const int minimumWidth = compact ? 360 : 800;
+    const int minimumHeight = compact ? 300 : 600;
+    // A phone needs fewer world pixels, not a desktop battlefield shrunk to fit.
+    // Keep enough room for the fixed-width sidebar and at least one build row.
+    double displayScale = compact ? 1.25 : Web_Screen_Scale();
     double w = std::max(1, Web_Window_Width()) / displayScale;
     double h = std::max(1, Web_Window_Height()) / displayScale;
-    // Small windows retain the game's minimum usable area; very large displays
-    // cap the software framebuffer's cost while preserving the window's aspect.
-    double scale = std::max({1.0, 800.0 / w, 600.0 / h});
+    // Retain a usable area and cap the software framebuffer's cost while
+    // preserving the window's aspect.
+    double scale = std::max({1.0, minimumWidth / w, minimumHeight / h});
     scale = std::min(scale, std::min(4096.0 / w, 4096.0 / h));
-    width = std::max(800, (int)std::lround(w * scale));
-    height = std::max(600, (int)std::lround(h * scale));
+    width = std::max(minimumWidth, (int)std::lround(w * scale));
+    height = std::max(minimumHeight, (int)std::lround(h * scale));
     Web_Display_Aspect(width, height);
 }
 

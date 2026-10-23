@@ -28,8 +28,10 @@ Window resizing changes the visible battlefield at that display scale. Screen
 and viewport measurements use CSS pixels, independent of device pixel density;
 if screen dimensions are unavailable, gameplay falls back to one CSS pixel per
 game pixel. Browsers do not report reliable physical dimensions in inches or cm.
-The framebuffer retains an 800×600 minimum and a 4096-pixel maximum edge; smaller
-windows scale the minimum frame to fit without distortion.
+Desktop gameplay retains an 800×600 minimum. Small touch displays instead target
+1.25 CSS pixels per game pixel with a 360×300 minimum, showing less battlefield
+so units remain readable on phones. Menus keep their 800×600 reference. Both
+layouts preserve aspect ratio and cap the framebuffer edge at 4096 pixels.
 Changes are debounced and applied between game or modal frames because replacing
 drawing surfaces during a suspended paint would invalidate its pointers.
 
