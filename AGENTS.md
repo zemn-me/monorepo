@@ -41,9 +41,29 @@ required checks. Record the failure class and test coverage in its description.
 - Validate affected packages with `bazel test //path/to/changes/...`.
   Use `bazel query` to select narrower relevant targets when needed;
   let slow Bazel runs finish or time out naturally.
+- Drive integration-test delays with virtual clocks or observable completion;
+  do not add wall-clock sleeps. Keep measurements of native scheduling or
+  throughput in explicit, opt-in performance targets.
 - For features, prefer integration tests of user-visible behaviour.
   Types can cover invariants they enforce. Observe the DOM, network, or
   existing APIs instead of adding custom `window.*` globals for tests.
+- Assert observable results through public interfaces. Avoid source-text
+  checks and mock call sequences that merely restate the implementation;
+  behaviour-preserving refactors should not require rewriting expectations.
+- Keep each test's inputs, action, and expected results easy to read together.
+  Prefer explicit examples and modest duplication over shared fixtures,
+  loops, or helpers that hide what the scenario proves.
+- Prefer real dependencies when practical, then maintained fakes at the
+  lowest external boundary. Check a fake against the real API's contract
+  (ideally with shared contract tests); retain integration coverage of the
+  real implementation.
+- In Python tests, inject the needed callable or dependency rather than
+  replacing shared built-ins or module functions process-wide; unrelated
+  code must keep its normal behaviour.
+- Give tests isolated temporary paths and database namespaces, with explicit
+  fixture setup and cleanup. Do not assume shared files or services are empty
+  or safe from concurrent tests; use Bazel's test temporary directory where
+  applicable.
 - For background test services, use `rules_itest` and `inject_iservice` with
   auto-assigned ports from `ASSIGNED_PORTS` (for example, a struct field
   tagged `json:"@@//path:service"`), not hard-coded addresses.
@@ -65,8 +85,17 @@ required checks. Record the failure class and test coverage in its description.
 - For Biome safe lint fixes and import sorting, run
   `./sh/bin/biome check --write --formatter-enabled=false --linter-enabled=true --assist-enabled=true --enforce-assist=true --config-path=$(pwd)/biome.json --no-errors-on-unmatched $(pwd)/path/to/file-or-dir`.
 
-## Code boundaries
+## Code design and boundaries
 
+- Use guard clauses and early returns to keep error handling near its check
+  and the main path shallow. Extract a focused function when nested loops or
+  branches obscure the operation.
+- Add abstractions, extension points, parameters, and flags only for current
+  requirements. Keep APIs as private as practical and avoid options whose
+  callers always use the same value.
+- Name booleans and flags positively (for example, `enabled` or `hasAccess`)
+  and prefer positive conditions in `if`/`else` branches. Keep negative guard
+  clauses when they make early exits clearer; avoid double negatives.
 - Bazel generates outputs; do not commit generated files. `//:base_defs`
   generates CSS module `.d.ts` types.
 - Write new code for JavaScript runtimes in TypeScript (`.ts`, or `.tsx`

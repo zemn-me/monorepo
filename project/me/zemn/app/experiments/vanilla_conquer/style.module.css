@@ -1,0 +1,78 @@
+.screen {
+	display: grid;
+	place-items: center;
+	position: fixed;
+	inset: 0;
+	z-index: 1;
+	background: #000;
+	color: #e5eade;
+	font: 16px / 1.5 system-ui;
+}
+
+.canvas {
+	display: block;
+	width: min(100vw, calc(100vh * var(--game-aspect, 1.6)));
+	height: min(100vh, calc(100vw / var(--game-aspect, 1.6)));
+	object-fit: contain;
+	background: #000;
+	outline: none;
+}
+
+.canvas:focus-visible {
+	outline: 2px solid #c0ed86;
+	outline-offset: -2px;
+}
+
+.feedback {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 1.5rem;
+	overflow: auto;
+	background: #000;
+}
+
+.feedback[hidden] {
+	display: none;
+}
+.feedback p {
+	margin: 0 0 1rem;
+}
+.feedback a {
+	color: #bee899;
+}
+.feedback a:focus-visible {
+	outline: 3px solid #c0ed86;
+	outline-offset: 3px;
+}
+.details {
+	max-width: 64rem;
+}
+.details footer {
+	font-size: 0.85rem;
+}
+
+.start {
+	min-height: 44px;
+	padding: 0.75rem 1.5rem;
+	border: 1px solid #bee899;
+	border-radius: 0.25rem;
+	background: #bee899;
+	color: #000;
+	font: inherit;
+	cursor: pointer;
+}
+.start:focus-visible {
+	outline: 3px solid #fff;
+	outline-offset: 4px;
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-block: 1rem;
+}

@@ -11,12 +11,17 @@ def _go_oapi_codegen_impl(ctx):
     go = go_context(ctx, include_deprecated_properties = False)
     sdk = go.sdk
 
-    inputs_direct = [ctx.file.source]
+    inputs_direct = [ctx.file.source] + ctx.files.data
+    if ctx.file.config:
+        inputs_direct.append(ctx.file.config)
     inputs_transitive = [sdk.tools, sdk.headers, sdk.srcs]
 
     args = []
-    args += ["-package", ctx.attr.package]
-    args += ["-generate", ",".join(ctx.attr.generate)]
+    if ctx.file.config:
+        args += ["-config", ctx.file.config.path]
+    else:
+        args += ["-package", ctx.attr.package]
+        args += ["-generate", ",".join(ctx.attr.generate)]
     args.append(ctx.file.source.path)
 
     ctx.actions.run_shell(
@@ -27,6 +32,7 @@ def _go_oapi_codegen_impl(ctx):
             sdk.go,
         ],
         toolchain = GO_TOOLCHAIN,
+        mnemonic = "GoOpenApiSourceGen",
         command = """
       export GOROOT=$(pwd)/{goroot} &&
       export PATH=$GOROOT/bin:$PATH &&
@@ -36,7 +42,6 @@ def _go_oapi_codegen_impl(ctx):
             cmd = "$(pwd)/" + ctx.file.codegen_tool.path,
             args = " ".join(args),
             out = ctx.outputs.out.path,
-            mnemonic = "GoOpenApiSourceGen",
         ),
     )
 
@@ -46,6 +51,14 @@ go_oapi_codegen = rule(
         "source": attr.label(
             mandatory = True,
             allow_single_file = True,
+        ),
+        "config": attr.label(
+            allow_single_file = True,
+            doc = "Optional oapi-codegen configuration, replacing package/generate flags.",
+        ),
+        "data": attr.label_list(
+            allow_files = True,
+            doc = "Additional code generation inputs such as OpenAPI overlays.",
         ),
         "out": attr.output(
             mandatory = True,

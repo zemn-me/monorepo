@@ -12,3 +12,7 @@
 
 - Browser Internet play uses the native LAN lobby over an unordered WebRTC data channel. Keep packet reliability and simulation synchronization in the engine.
 - Multiplayer integration advances both game clocks while allowing real ICE/network delivery; compare distinct checksum frames after the native startup suppression.
+
+- `benchmark:benchmark_test` measures real loopback WebRTC with the production adapter, without engine assets. Never use virtual timers for throughput or latency measurements.
+
+- Normal integration runs use virtual time. Native Chromium background-throttling measurement is opt-in through `testing:background_scheduling_benchmark`; it is excluded from the normal integration target.

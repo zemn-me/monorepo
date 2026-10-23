@@ -53,7 +53,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
-        name: Acquire cache-only credentials
+        name: Acquire presubmit credentials
         id: secret_auth
         continue-on-error: true
         with:
@@ -74,11 +74,15 @@ jobs:
         run: |
          ./.github/workflows/prepare_ci.sh && \
          echo "::group::Presubmit prep" && \
-         $BAZEL build --config=ci --tool_tag=presubmit //ci:presubmit && \
+         $BAZEL build --config="$BAZEL_CI_CONFIG" --tool_tag=presubmit //ci:presubmit && \
          echo "::endgroup::" && \
          echo "::group::Presubmit" && \
-         $BAZEL run --config=ci --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
+         $BAZEL run --config="$BAZEL_CI_CONFIG" --tool_tag=presubmit //ci:presubmit -- --skip-pulumi-deploy && \
          echo "::endgroup::"
         env:
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.readonly_buildbuddy_api_key }}
           BUILDBUDDY_CACHE_READ_ONLY: 'true'
+          BAZEL_TEST_UNCACHED: ${{ runner.debug == '1' && 'true' || 'false' }}
+          BAZEL_CI_CONFIG: >-
+            ${{ steps.secrets.outputs.readonly_buildbuddy_api_key != ''
+                && 'ci-presubmit' || 'ci-local' }}

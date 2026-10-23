@@ -1,0 +1,37 @@
+--- a/apt/private/deb_import.bzl
++++ b/apt/private/deb_import.bzl
+@@ -443,9 +443,33 @@
+ 
+     return (build_file_content, outs, symlinks)
+ 
++def deb_package_urls(urls, sha256):
++    """Keep snapshot resolution while allowing identical, checksum-pinned archives."""
++    result = list(urls)
++    if len(sha256) != 64 or sha256.strip("0123456789abcdef"):
++        return result
++    prefix = "https://snapshot.ubuntu.com/ubuntu/"
++    for url in urls:
++        if not url.startswith(prefix):
++            continue
++        parts = url[len(prefix):].split("/")
++        stamp = parts[0]
++        if len(stamp) != 16 or stamp[8] != "T" or stamp[15] != "Z":
++            continue
++        if (stamp[:8] + stamp[9:15]).strip("0123456789"):
++            continue
++        if len(parts) < 5 or parts[1] != "pool" or not parts[-1].endswith(".deb"):
++            continue
++        if "?" in url or "#" in url or "%" in url or ".." in parts or "" in parts:
++            continue
++        fallback = "https://archive.ubuntu.com/ubuntu/" + "/".join(parts[1:])
++        if fallback not in result:
++            result.append(fallback)
++    return result
++
+ def _deb_import_impl(rctx):
+     rctx.download_and_extract(
+-        url = rctx.attr.urls,
++        url = deb_package_urls(rctx.attr.urls, rctx.attr.sha256),
+         sha256 = rctx.attr.sha256,
+     )
+ 

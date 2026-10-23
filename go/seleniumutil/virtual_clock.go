@@ -10,9 +10,8 @@ import (
 var virtualClockScript string
 
 // VirtualClock drives test-only replacements for browser dates, performance
-// timers, timeouts, intervals, animation frames, and ScriptProcessor audio
-// callbacks. Emscripten shares those
-// clocks, so advancing runs the real WebAssembly engine without wall-clock
+// timers, timeouts, intervals, animation frames, and Web Audio processing/completion
+// callbacks. Emscripten shares those clocks, so advancing runs the real WebAssembly engine without wall-clock
 // sleeps. Network requests, rendering, and CPU work still take real time.
 type VirtualClock struct{ driver *Driver }
 
@@ -34,8 +33,16 @@ func (clock *VirtualClock) Advance(duration time.Duration) error {
 	if duration <= 0 {
 		return fmt.Errorf("virtual duration must be positive")
 	}
+	// Chrome can discard the async WebDriver callback during document navigation,
+	// even when pagehide calls it. Only forgive that error if the document changed.
+	origin, err := clock.driver.ExecuteScript("return performance.timeOrigin", nil)
+	if err != nil {
+		return err
+	}
 	result, err := clock.driver.ExecuteScriptAsync(`
         const done = arguments[arguments.length - 1];
+        // History may restore a document visited before clock installation.
+        if (!setTimeout.clock) { done(null); return; }
         let settled = false;
         const finish = error => {
             if (settled) return;
@@ -48,6 +55,10 @@ func (clock *VirtualClock) Advance(duration time.Duration) error {
         setTimeout.clock.tickAsync(arguments[0]).then(() => finish(null), error => finish(error.stack ?? String(error)));
     `, []interface{}{float64(duration) / float64(time.Millisecond)})
 	if err != nil {
+		current, navigationErr := clock.driver.ExecuteScript("return performance.timeOrigin", nil)
+		if navigationErr == nil && current != origin {
+			return nil
+		}
 		return err
 	}
 	if result != nil {
