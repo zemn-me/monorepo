@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /* biome-ignore-all lint/suspicious/noConsole: Console output is the game's diagnostic log. */
+
 import {
 	createPeerTransport,
 	type PeerTransport,
 } from '#root/project/tiberian_sun/web/network.js';
+import { trackMouseHover } from '#root/ts/pointer/hover.js';
 
 export interface GameAssets {
 	readonly engineJavaScript: string;
@@ -118,22 +120,7 @@ export function startGame(
 	canvas.addEventListener('contextmenu', event => event.preventDefault(), {
 		signal: lifetime.signal,
 	});
-	// A touch leaves SDL's synthetic mouse at the last contact position. It
-	// cannot hover there after release or keep driving native edge scrolling.
-	let hasMouseHover = false;
-	const trackPointer = (event: PointerEvent) => {
-		hasMouseHover = event.pointerType === 'mouse';
-	};
-	for (const type of ['pointerenter', 'pointermove', 'pointerdown'] as const) {
-		canvas.addEventListener(type, trackPointer, { signal: lifetime.signal });
-	}
-	const clearHover = () => {
-		hasMouseHover = false;
-	};
-	canvas.addEventListener('pointerleave', clearHover, {
-		signal: lifetime.signal,
-	});
-	window.addEventListener('blur', clearHover, { signal: lifetime.signal });
+	const webHasMouseHover = trackMouseHover(canvas, lifetime.signal);
 	const webNetwork = createPeerTransport(lifetime.signal);
 	const webYield = createMessageYield(lifetime.signal);
 	let engine: Engine | undefined;
@@ -172,7 +159,7 @@ export function startGame(
 					canvas,
 					webNetwork,
 					webYield,
-					webHasMouseHover: () => hasMouseHover,
+					webHasMouseHover,
 					noInitialRun: true,
 					locateFile: name =>
 						name.endsWith('.wasm')

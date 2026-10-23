@@ -28,6 +28,7 @@ type freewareBrowser struct {
 	messages              strings.Builder
 	menuWidth, menuHeight int
 	scaledMenus           bool
+	touchInput            bool
 }
 
 func newFreewareBrowser(t *testing.T) *freewareBrowser {
@@ -191,9 +192,58 @@ func (g *freewareBrowser) dispatch(px, py int, kind string, buttons int) {
 	}
 }
 
+func (g *freewareBrowser) touchAt(x, y int, kind string) {
+	g.t.Helper()
+	points := []map[string]any{}
+	if kind != "touchEnd" && kind != "touchCancel" {
+		points = append(points, map[string]any{"x": x, "y": y, "id": 1})
+	}
+	if err := g.driver.ExecuteChromiumCommand("Input.dispatchTouchEvent", map[string]any{"type": kind, "touchPoints": points}); err != nil {
+		g.t.Fatal(err)
+	}
+}
+
+// Compare terrain, allowing units to animate and move within the same view.
+func (g *freewareBrowser) stationaryBattlefield(t *testing.T, before, after image.Image, width, height int) float64 {
+	t.Helper()
+	matched, total := 0, 0
+	for y := 25; y < height-12; y += 3 {
+		for x := 8; x < width-176; x += 3 {
+			px, py := x*before.Bounds().Dx()/width, y*before.Bounds().Dy()/height
+			r, green, b, _ := before.At(px, py).RGBA()
+			if !colored(r>>8, green>>8, b>>8) {
+				continue
+			}
+			total++
+			r2, g2, b2, _ := after.At(px, py).RGBA()
+			difference := math.Abs(float64(r)-float64(r2)) + math.Abs(float64(green)-float64(g2)) + math.Abs(float64(b)-float64(b2))
+			if difference < 30*257 {
+				matched++
+			}
+		}
+	}
+	if total < 100 {
+		t.Fatal("not enough visible terrain during gameplay")
+	}
+	return float64(matched) / float64(total)
+}
+
 func (g *freewareBrowser) pointer(x, y int, kind string, buttons int) {
 	g.t.Helper()
 	px, py := g.screenPoint(x, y)
+	if g.touchInput {
+		switch kind {
+		case "mousePressed":
+			g.touchAt(px, py, "touchStart")
+		case "mouseMoved":
+			if buttons != 0 {
+				g.touchAt(px, py, "touchMove")
+			}
+		case "mouseReleased":
+			g.touchAt(px, py, "touchEnd")
+		}
+		return
+	}
 	g.dispatch(px, py, kind, buttons)
 }
 

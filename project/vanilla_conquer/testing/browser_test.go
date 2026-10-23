@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"image"
 	"image/png"
+	"math"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -108,6 +109,102 @@ func click(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.Virtua
 			t.Fatal(err)
 		}
 		advance(t, clock, 100*time.Millisecond)
+	}
+}
+
+// Touch gameplay uses the browser's input path, including SDL's synthesized mouse.
+func touch(t *testing.T, driver *seleniumutil.Driver, x, y int, kind string) {
+	t.Helper()
+	points := []map[string]any{}
+	if kind != "touchEnd" {
+		points = append(points, map[string]any{"x": x, "y": y, "id": 1})
+	}
+	if err := driver.ExecuteChromiumCommand("Input.dispatchTouchEvent", map[string]any{"type": kind, "touchPoints": points}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func stationaryTerrain(t *testing.T, before, after image.Image) float64 {
+	t.Helper()
+	total, matched := 0, 0
+	for y := 100; y < 480; y += 3 {
+		for x := 50; x < 580; x += 3 {
+			r, g, b, _ := before.At(x, y).RGBA()
+			// Ignore shroud, but include snow as well as colored terrain.
+			if max(r, g, b) < 35*257 {
+				continue
+			}
+			total++
+			r2, g2, b2, _ := after.At(x, y).RGBA()
+			if math.Abs(float64(r)-float64(r2))+math.Abs(float64(g)-float64(g2))+math.Abs(float64(b)-float64(b2)) < 30*257 {
+				matched++
+			}
+		}
+	}
+	if total < 100 {
+		t.Fatal("not enough visible terrain during campaign gameplay")
+	}
+	return float64(matched) / float64(total)
+}
+
+func playTouchCampaign(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.VirtualClock, name string) {
+	t.Helper()
+	if err := driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+		t.Fatal(err)
+	}
+	// Open the sidebar, box-select the battlefield, and issue a ground order.
+	closedSidebar := snapshot(t, driver, name+"-sidebar-before")
+	touch(t, driver, 700, 60, "touchStart")
+	advance(t, clock, 80*time.Millisecond)
+	touch(t, driver, 700, 60, "touchEnd")
+	advance(t, clock, 300*time.Millisecond)
+	openSidebar := snapshot(t, driver, name+"-sidebar-touch")
+	changed := 0
+	for y := 90; y < 500; y++ {
+		for x := 610; x < 790; x++ {
+			if closedSidebar.At(x, y) != openSidebar.At(x, y) {
+				changed++
+			}
+		}
+	}
+	if changed < 1000 {
+		t.Fatalf("touch did not toggle the native sidebar: %d changed pixels", changed)
+	}
+	touch(t, driver, 40, 100, "touchStart")
+	for step := 1; step <= 8; step++ {
+		touch(t, driver, 40+550*step/8, 100+449*step/8, "touchMove")
+		advance(t, clock, 25*time.Millisecond)
+	}
+	touch(t, driver, 590, 549, "touchEnd")
+	before := snapshot(t, driver, name+"-selection")
+	advance(t, clock, 2*time.Second)
+	if stable := stationaryTerrain(t, before, snapshot(t, driver, name+"-selected-army")); stable < 0.75 {
+		t.Fatalf("view moved while selecting the army: %.1f%% stationary terrain", stable*100)
+	}
+	touch(t, driver, 430, 400, "touchStart")
+	advance(t, clock, 80*time.Millisecond)
+	touch(t, driver, 430, 400, "touchEnd")
+	before = snapshot(t, driver, name+"-orders")
+	advance(t, clock, 3*time.Second)
+	if stable := stationaryTerrain(t, before, snapshot(t, driver, name+"-playing")); stable < 0.75 {
+		t.Fatalf("view drifted while units carried out their orders: %.1f%% stationary terrain", stable*100)
+	}
+	// A touch-capable device may also have a mouse: its camera controls still work.
+	movement := 0.0
+	for _, x := range []int{1, 799} {
+		if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": 400, "y": 300}); err != nil {
+			t.Fatal(err)
+		}
+		advance(t, clock, 300*time.Millisecond)
+		before = snapshot(t, driver, name+"-mouse-center")
+		if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": x, "y": 300}); err != nil {
+			t.Fatal(err)
+		}
+		advance(t, clock, time.Second)
+		movement = math.Max(movement, 1-stationaryTerrain(t, before, snapshot(t, driver, name+"-mouse-camera")))
+	}
+	if movement < 0.25 {
+		t.Fatalf("mouse camera controls did not move the view: %.1f%%", movement*100)
 	}
 }
 
@@ -323,6 +420,7 @@ func TestBrowserCampaigns(t *testing.T) {
 			if changed < 60 {
 				t.Fatalf("mission simulation did not animate (changed pixels: %d)", changed)
 			}
+			playTouchCampaign(t, driver, clock, game.name)
 		})
 	}
 }

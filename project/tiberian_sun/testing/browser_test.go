@@ -327,12 +327,16 @@ func TestDirectVisitExit(t *testing.T) {
 	}
 }
 
-func TestPhoneGameplayScale(t *testing.T) {
+func TestPhoneSkirmishGameplay(t *testing.T) {
 	g := newFreewareBrowser(t)
 	g.navigate()
 	g.waitRunning()
 	g.waitSelector()
 	g.startSkirmish()
+	if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+		t.Fatal(err)
+	}
+	g.touchInput = true
 	g.deployStartingArmy()
 	// Keep gameplay centered on the same starting army after each mode change.
 	for _, size := range []struct {
@@ -375,6 +379,32 @@ func TestPhoneGameplayScale(t *testing.T) {
 			}, 30*time.Second); err != nil {
 				t.Fatalf("phone battlefield remained blank: %v", err)
 			}
+			// Box-select the visible army, just as when dragging a finger
+			// across the battlefield, then let the simulation run hands-free.
+			startX, startY := 10*size.width/size.frameWidth, 30*size.height/size.frameHeight
+			endX, endY := (size.frameWidth-170)*size.width/size.frameWidth, size.height-1
+			g.touchAt(startX, startY, "touchStart")
+			for step := 1; step <= 8; step++ {
+				g.touchAt(startX+(endX-startX)*step/8, startY+(endY-startY)*step/8, "touchMove")
+				g.advance(25 * time.Millisecond)
+			}
+			g.touchAt(endX, endY, "touchEnd")
+			before := g.snapshot()
+			g.advance(2 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("battlefield moved while the player waited: %.1f%% stationary terrain", stable*100)
+			}
+			// Give the selected army a ground order and continue playing.
+			targetX := (size.frameWidth - 168) * size.width * 3 / (size.frameWidth * 4)
+			targetY := size.height * 3 / 4
+			g.touchAt(targetX, targetY, "touchStart")
+			g.advance(80 * time.Millisecond)
+			g.touchAt(targetX, targetY, "touchEnd")
+			before = g.snapshot()
+			g.advance(3 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("view drifted while units carried out their orders: %.1f%% stationary terrain", stable*100)
+			}
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
 				shot, err := g.driver.Screenshot()
 				if err != nil {
@@ -386,93 +416,22 @@ func TestPhoneGameplayScale(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestPhoneTouchDoesNotEdgeScroll(t *testing.T) {
-	g := newFreewareBrowser(t)
-	g.navigate()
-	g.waitRunning()
-	g.waitSelector()
-	g.startSkirmish()
-	g.deployStartingArmy()
-	if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
-		t.Fatal(err)
-	}
-	if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 844, "height": 390, "screenWidth": 844, "screenHeight": 390, "deviceScaleFactor": 3, "mobile": true}); err != nil {
-		t.Fatal(err)
-	}
-	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
-		value, err := w.ExecuteScript("return arguments[0].width===675 && arguments[0].height===312", []interface{}{g.canvas})
-		return value == true, err
-	}, 30*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	// Compare the battlefield rather than a camera diagnostic. Stationary terrain
-	// stays put while sprites animate; edge scrolling moves almost every tile.
-	unchangedTerrain := func(before, after image.Image) float64 {
-		matched, total := 0, 0
-		for y := 60; y < 290; y += 3 {
-			for x := 10; x < 490; x += 3 {
-				px, py := x*before.Bounds().Dx()/675, y*before.Bounds().Dy()/312
-				r, green, b, _ := before.At(px, py).RGBA()
-				if !colored(r>>8, green>>8, b>>8) {
-					continue
-				}
-				total++
-				r2, g2, b2, _ := after.At(px, py).RGBA()
-				if math.Abs(float64(r)-float64(r2))+math.Abs(float64(green)-float64(g2))+math.Abs(float64(b)-float64(b2)) < 30*257 {
-					matched++
-				}
-			}
-		}
-		if total < 100 {
-			t.Fatal("not enough visible terrain to check scrolling")
-		}
-		return float64(matched) / float64(total)
-	}
-	for _, edge := range []struct {
-		name string
-		x    int
-	}{{"left", 1}, {"right", 843}} {
-		t.Run(edge.name, func(t *testing.T) {
-			for _, kind := range []string{"touchEnd", "touchCancel"} {
-				t.Run(kind, func(t *testing.T) {
-					if err := g.driver.ExecuteChromiumCommand("Input.dispatchTouchEvent", map[string]any{"type": "touchStart", "touchPoints": []map[string]any{{"x": edge.x, "y": 190, "id": 1}}}); err != nil {
-						t.Fatal(err)
-					}
-					g.advance(100 * time.Millisecond)
-					if err := g.driver.ExecuteChromiumCommand("Input.dispatchTouchEvent", map[string]any{"type": kind, "touchPoints": []map[string]any{}}); err != nil {
-						t.Fatal(err)
-					}
-					if err := g.canvas.SendKeys("h"); err != nil {
-						t.Fatal(err)
-					}
-					g.advance(100 * time.Millisecond)
-					before := g.snapshot()
-					g.advance(time.Second)
-					if unchanged := unchangedTerrain(before, g.snapshot()); unchanged < 0.75 {
-						t.Fatalf("released touch kept scrolling: %.1f%% terrain stayed in place", unchanged*100)
-					}
-				})
-			}
-		})
-	}
-	// Touch-capable phones can also have a mouse attached. A genuine mouse
-	// hovering at an edge must still move the map after the touch gestures.
-	largestMovement := 0.0
-	for _, x := range []int{1, 843} {
-		g.dispatch(400, 190, "mouseMoved", 0)
+	// Switching to a real mouse still permits intentional camera movement.
+	g.touchInput = false
+	moved := 0.0
+	for _, x := range []int{1, 931} {
+		g.dispatch(400, 215, "mouseMoved", 0)
 		g.advance(300 * time.Millisecond)
 		if err := g.canvas.SendKeys("h"); err != nil {
 			t.Fatal(err)
 		}
 		g.advance(100 * time.Millisecond)
 		before := g.snapshot()
-		g.dispatch(x, 190, "mouseMoved", 0)
+		g.dispatch(x, 215, "mouseMoved", 0)
 		g.advance(time.Second)
-		largestMovement = math.Max(largestMovement, 1-unchangedTerrain(before, g.snapshot()))
+		moved = math.Max(moved, 1-g.stationaryBattlefield(t, before, g.snapshot(), 746, 344))
 	}
-	if largestMovement < 0.25 {
-		t.Fatalf("mouse hover no longer edge-scrolls: %.1f%% terrain moved", largestMovement*100)
+	if moved < 0.25 {
+		t.Fatalf("mouse camera controls did not move the view: %.1f%%", moved*100)
 	}
 }
