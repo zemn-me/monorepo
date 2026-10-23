@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// GetWithNetworkRetry navigates and waits for same-origin requests to settle.
+// GetWithNetworkRetry navigates and waits for same-origin documents, scripts, and stylesheets.
 // Chromium can cancel initial module loads with ERR_NETWORK_CHANGED while its
 // network service starts. Retry only that failure, before test input begins;
 // blocked downloads, HTTP errors, and application failures remain observable.
@@ -44,7 +44,7 @@ type navigationWatch struct {
 	conn         *websocket.Conn
 	origin       *url.URL
 	mu           sync.Mutex
-	pending      map[string]bool
+	pending      map[string]string
 	lastActivity time.Time
 	changed      bool
 	err          error
@@ -59,6 +59,7 @@ type navigationEvent struct {
 	} `json:"error"`
 	Params struct {
 		RequestID string `json:"requestId"`
+		Type      string `json:"type"`
 		Request   struct {
 			URL string `json:"url"`
 		} `json:"request"`
@@ -93,7 +94,7 @@ func (d *Driver) watchNavigation(origin *url.URL) (*navigationWatch, error) {
 		}
 	}
 	conn.SetReadDeadline(time.Time{})
-	watch := &navigationWatch{conn: conn, origin: origin, pending: make(map[string]bool), lastActivity: time.Now(), done: make(chan struct{})}
+	watch := &navigationWatch{conn: conn, origin: origin, pending: make(map[string]string), lastActivity: time.Now(), done: make(chan struct{})}
 	go func() {
 		defer close(watch.done)
 		for {
@@ -116,13 +117,18 @@ func (w *navigationWatch) record(event navigationEvent) {
 	id := event.Params.RequestID
 	switch event.Method {
 	case "Network.requestWillBeSent":
+		// Fetches can deliberately remain open, or need virtual time to finish.
+		// Only page resources determine whether the initial module graph loaded.
+		if event.Params.Type != "Document" && event.Params.Type != "Script" && event.Params.Type != "Stylesheet" {
+			return
+		}
 		address, err := url.Parse(event.Params.Request.URL)
 		if err == nil && address.Scheme == w.origin.Scheme && address.Host == w.origin.Host {
-			w.pending[id] = true
+			w.pending[id] = address.String()
 			w.lastActivity = time.Now()
 		}
 	case "Network.loadingFinished", "Network.loadingFailed":
-		if w.pending[id] {
+		if w.pending[id] != "" {
 			delete(w.pending, id)
 			w.lastActivity = time.Now()
 			if event.Params.ErrorText == "net::ERR_NETWORK_CHANGED" {
@@ -138,6 +144,10 @@ func (w *navigationWatch) settle() (bool, error) {
 		w.mu.Lock()
 		changed, err := w.changed, w.err
 		ready := len(w.pending) == 0 && time.Since(w.lastActivity) >= 250*time.Millisecond
+		pending := make([]string, 0, len(w.pending))
+		for _, address := range w.pending {
+			pending = append(pending, address)
+		}
 		w.mu.Unlock()
 		if changed {
 			return true, nil
@@ -149,7 +159,7 @@ func (w *navigationWatch) settle() (bool, error) {
 			return false, nil
 		}
 		if time.Now().After(deadline) {
-			return false, fmt.Errorf("same-origin navigation requests did not settle within 30s")
+			return false, fmt.Errorf("page resources did not settle within 30s: %v", pending)
 		}
 		time.Sleep(25 * time.Millisecond)
 	}

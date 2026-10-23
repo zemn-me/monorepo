@@ -19,7 +19,12 @@ func TestNavigationWaitsForAsyncScript(t *testing.T) {
 		case "/":
 			w.Header().Set("Content-Type", "text/html")
 			pages.Add(1)
-			fmt.Fprint(w, `<output>loading</output><script async src="/delayed.js"></script>`)
+			fmt.Fprint(w, `<output>loading</output><script>fetch("/poll")</script><script async src="/delayed.js"></script>`)
+		case "/poll":
+			w.Header().Set("Content-Type", "text/event-stream")
+			w.WriteHeader(http.StatusOK)
+			w.(http.Flusher).Flush()
+			<-r.Context().Done()
 		case "/delayed.js":
 			time.Sleep(500 * time.Millisecond)
 			w.Header().Set("Content-Type", "text/javascript")
