@@ -19,7 +19,12 @@ func TestBioCampaign(t *testing.T) {
 		t.Fatalf("assigned site port: %v", err)
 	}
 	driver := newGameBrowser(t, "--window-size=1100,900")
-	p := &multiplayerBrowser{t: t, driver: driver, name: "bio campaign"}
+	console, err := driver.WatchConsole()
+	if err != nil {
+		driver.Close()
+		t.Fatal(err)
+	}
+	p := &multiplayerBrowser{t: t, driver: driver, name: "bio campaign", console: console}
 	t.Cleanup(func() {
 		if data, err := driver.Screenshot(); err == nil {
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
@@ -29,9 +34,9 @@ func TestBioCampaign(t *testing.T) {
 		if t.Failed() {
 			t.Log(p.logs())
 		}
+		console.Close()
 		driver.Close()
 	})
-	var err error
 	p.clock, err = seleniumutil.NewVirtualClock(driver)
 	if err != nil {
 		t.Fatal(err)
