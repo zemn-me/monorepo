@@ -1,6 +1,7 @@
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_test")
 load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
@@ -24,6 +25,15 @@ md_files(
     name = "github_workflows",
     srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "archive_checkout_test",
+    size = "small",
+    srcs = ["archive_checkout_test.py"],
+    args = ["$(rootpath staging.yml)"],
+    data = ["staging.yml"],
+    deps = ["@pip//pyyaml"],
 )
 
 sh_test(
