@@ -2,9 +2,14 @@
 
 CI secrets live in GCP Secret Manager via GitHub OIDC/WIF. Do not assume Azure Key Vault for this repo.
 
-PR Presubmit runs without secrets. Merge-queue Presubmit gets only the read-only
-BuildBuddy key; staging and submit get the full key. Enforce the PR exclusion in
-the GCP WIF policy as well as workflow step conditions.
+PR Presubmit uses the separate `github-presubmit-cache` WIF pool, granted only
+its BuildBuddy key. The key must have CAS-write permission for execution inputs
+and no action-cache-write permission. Keep PR identities out of the deployment
+pool and service-account impersonation grants. Cached artifacts and this key
+are accessible to PR code; cache only non-sensitive outputs. Presubmit uses
+`ci-presubmit` for RBE, disabling local result and build-event uploads, and
+falls back to `ci-local` when credentials are unavailable. Staging and submit
+retain their writable key and use `ci`.
 
 Staging and Submit share `pulumi_deploy`; obsolete pending merge-group runs are
 removed by `cancel-obsolete-staging.yml`. Keep cleanup outside that concurrency
@@ -28,3 +33,6 @@ out of dependency sections, which override Renovate's tool selection. The
 workflow reads its Renovate version from the tested devDependency.
 The pnpm bootstrap refreshes `bzl/pnpm/integrity.json` before Bazel starts,
 so new pnpm releases do not depend on rules_js's bundled version table.
+
+Validate workflow changes with `bazel test //.github/workflows/...`; actionlint
+checks expression contexts and workflow semantics alongside YAML lint.

@@ -2,28 +2,39 @@ import {
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
+	rmSync,
 	symlinkSync,
 	writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { expect, test } from '@jest/globals';
+import { pathToFileURL } from 'node:url';
+import { afterEach, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 import Website from './website.js';
 
+const directories: string[] = [];
+afterEach(() => {
+	for (const directory of directories.splice(0))
+		rmSync(directory, { recursive: true, force: true });
+});
 const resources: pulumi.runtime.MockResourceArgs[] = [];
 const retained = new Map<string, boolean | undefined>();
 const options: pulumi.ComponentResourceOptions = {
-	transformations: [args => {
-		retained.set(args.name, args.opts.retainOnDelete);
-		return undefined;
-	}],
+	transformations: [
+		args => {
+			retained.set(args.name, args.opts.retainOnDelete);
+			return undefined;
+		},
+	],
 };
 void pulumi.runtime.setMocks({
 	newResource: args => {
 		if (args.type === 'aws:cloudfront/cachePolicy:CachePolicy') {
 			// Pulumi derives the physical name from the logical name by default.
-			expect(args.inputs['name'] ?? args.name).toMatch(/^[A-Za-z0-9_-]+$/);
+			expect(args.inputs['name'] ?? args.name).toMatch(
+				/^[A-Za-z0-9_-]+$/
+			);
 		}
 		resources.push(args);
 		return {
@@ -52,18 +63,25 @@ void pulumi.runtime.setMocks({
 });
 
 test('hybrid hosting keeps static sites intact and separates asset caching from request-aware SSR', async () => {
-	const directory = mkdtempSync(path.join(tmpdir(), 'remix-infra-'));
+	const root = mkdtempSync(
+		path.join(process.env['TEST_TMPDIR'] ?? tmpdir(), 'website-')
+	);
+	directories.push(root);
+	const directory = path.join(root, 'public');
+	mkdirSync(directory);
 	writeFileSync(path.join(directory, 'index.html'), '<html>Home</html>');
 	writeFileSync(path.join(directory, '404.html'), '<html>Not found</html>');
-	const serverDirectory = mkdtempSync(path.join(tmpdir(), 'remix-server-'));
+	const serverDirectory = path.join(root, 'server');
+	mkdirSync(serverDirectory);
 	writeFileSync(
 		path.join(serverDirectory, 'assets.json'),
 		JSON.stringify(['/assets/*', '/sha256/*', '/icon.svg'])
 	);
-	const bundleDirectory = mkdtempSync(path.join(tmpdir(), 'remix-bundle-'));
+	const bundleDirectory = path.join(root, 'bundle');
+	mkdirSync(bundleDirectory);
 	writeFileSync(
 		path.join(bundleDirectory, 'handler.mjs'),
-		'export const handler = () => {};'
+		'const respond = () => ({statusCode: 200, body: "Packaged response"}); export {respond as handler};'
 	);
 	mkdirSync(path.join(bundleDirectory, 'prerendered'));
 	writeFileSync(
@@ -88,11 +106,15 @@ test('hybrid hosting keeps static sites intact and separates asset caching from 
 		noIndex: false,
 	};
 	new Website('static', args, options);
-	new Website('hybrid.zemn.me', {
-		...args,
-		serverDirectory,
-		wellKnownOidcDomain: 'api.example.com',
-	}, options);
+	new Website(
+		'hybrid.zemn.me',
+		{
+			...args,
+			serverDirectory,
+			wellKnownOidcDomain: 'api.example.com',
+		},
+		options
+	);
 	await pulumi.runtime.disconnect();
 
 	const resource = (type: string, name: string) => {
@@ -204,9 +226,13 @@ test('hybrid hosting keeps static sites intact and separates asset caching from 
 		'handler.mjs',
 		'prerendered/index.html',
 	]);
-	expect(readFileSync(await files['handler.mjs'].path, 'utf8')).toContain(
-		'export const handler'
+	const handler = await import(
+		pathToFileURL(await files['handler.mjs'].path).href
 	);
+	expect(await handler.handler()).toEqual({
+		statusCode: 200,
+		body: 'Packaged response',
+	});
 	expect(
 		readFileSync(await files['prerendered/index.html'].path, 'utf8')
 	).toBe('<html>Snapshot</html>');

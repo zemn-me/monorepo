@@ -1,0 +1,468 @@
+package browserhelpers
+
+import (
+	"bytes"
+	"encoding/binary"
+	"encoding/json"
+	"fmt"
+	"net/url"
+	"os"
+	"strings"
+	"testing"
+	"time"
+	_ "time/tzdata" // Date assertions must not depend on executor zoneinfo packages.
+
+	"github.com/tebeka/selenium"
+	"github.com/tebeka/selenium/log"
+
+	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+)
+
+type ServicePorts struct {
+	FrontendPort         string `json:"@@//project/me/zemn:itest_service"`
+	CalendarFrontendPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
+	APIPort              string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
+	CalendarAPIPort      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
+	// The beacon transport test checks ingestion independently of admin authentication.
+	DynamoDBPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
+	OIDCProvider string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
+}
+
+func servicePorts() (p ServicePorts, err error) {
+	if err = json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &p); err != nil {
+		return
+	}
+	if p.FrontendPort == "" {
+		p.FrontendPort = p.CalendarFrontendPort
+	}
+	if p.APIPort == "" {
+		p.APIPort = p.CalendarAPIPort
+	}
+
+	return
+}
+
+func FrontendRoot() (u url.URL, err error) {
+	ports, err := servicePorts()
+	if err != nil {
+		return
+	}
+
+	return url.URL{
+		Scheme: "http",
+		Host:   "localhost:" + ports.FrontendPort,
+	}, nil
+}
+
+func APIRoot() (url.URL, error) {
+	ports, err := servicePorts()
+	if err != nil {
+		return url.URL{}, err
+	}
+	if ports.APIPort == "" {
+		return url.URL{}, fmt.Errorf("api port not found in ASSIGNED_PORTS")
+	}
+
+	return url.URL{
+		Scheme: "http",
+		Host:   "localhost:" + ports.APIPort,
+	}, nil
+}
+
+func DynamoDBRoot() (url.URL, error) {
+	ports, err := servicePorts()
+	if err != nil {
+		return url.URL{}, err
+	}
+	if ports.DynamoDBPort == "" {
+		return url.URL{}, fmt.Errorf("dynamodb port not found in ASSIGNED_PORTS")
+	}
+
+	return url.URL{
+		Scheme: "http",
+		Host:   "localhost:" + ports.DynamoDBPort,
+	}, nil
+}
+
+func AssertEndpointHasNoLogErrors(t *testing.T, ep string) {
+	d, err := seleniumpkg.New()
+	if err != nil {
+		t.Fatalf("driver: %v", err)
+	}
+	defer d.Close()
+
+	u, err := url.Parse(ep)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := d.Get(ep); err != nil {
+		t.Fatalf("get: %v", err)
+	}
+
+	origin := url.URL{
+		Scheme: u.Scheme,
+		Host:   u.Host,
+	}
+
+	time.Sleep(1 * time.Second)
+
+	logs, _ := d.Log(log.Browser)
+	cu, _ := d.CurrentURL()
+	filtered := filterErrorsWeDontCareAbout(logs)
+	// don't error if we were redirected
+	if len(filtered) > 0 && strings.HasPrefix(cu, origin.String()) {
+		t.Fatalf("%+q logged %+v", ep, filtered)
+	}
+}
+
+func filterErrorsWeDontCareAbout(in []log.Message) (out []log.Message) {
+	out = make([]log.Message, 0, len(in))
+	for _, l := range in {
+		if strings.Contains(l.Message, "Ignoring Event: localhost") ||
+			strings.Contains(l.Message, "source map") ||
+			strings.Contains(l.Message, "react-dev-overlay") {
+			continue
+		}
+		out = append(out, l)
+	}
+
+	return
+}
+
+const loginButtonSelector = "button[aria-label='Authenticate with OIDC']"
+
+func WaitForLoginButtonReady(driver selenium.WebDriver, timeout time.Duration) (selenium.WebElement, error) {
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		button, err := driver.FindElement(selenium.ByCSSSelector, loginButtonSelector)
+		if err == nil {
+			enabled, err := button.IsEnabled()
+			if err == nil && enabled {
+				return button, nil
+			}
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
+	return nil, fmt.Errorf("login button did not become enabled")
+}
+
+func PerformOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time.Duration) error {
+	originalHandle, err := driver.CurrentWindowHandle()
+	if err != nil {
+		return fmt.Errorf("current window handle: %w", err)
+	}
+
+	existingHandles, err := driver.WindowHandles()
+	if err != nil {
+		return fmt.Errorf("list window handles: %w", err)
+	}
+
+	loginButton, err := WaitForLoginButtonReady(driver, timeout)
+	if err != nil {
+		return fmt.Errorf("prepare login button: %w", err)
+	}
+	if err := loginButton.Click(); err != nil {
+		return fmt.Errorf("click login button: %w", err)
+	}
+
+	newHandle, err := waitForNewWindow(driver, existingHandles, timeout)
+	if err != nil {
+		return err
+	}
+	if err := driver.SwitchWindow(newHandle); err != nil {
+		return fmt.Errorf("switch to provider window: %w", err)
+	}
+
+	loginButtonXPath := fmt.Sprintf("//button[contains(normalize-space(.), '%s')]", loginLabel)
+	quickButton, err := WaitForElement(driver, selenium.ByXPATH, loginButtonXPath, 10*time.Second)
+	if err != nil {
+		return fmt.Errorf("locate quick login button: %w", err)
+	}
+	if err := quickButton.Click(); err != nil {
+		return fmt.Errorf("submit quick login: %w", err)
+	}
+
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		handles, err := driver.WindowHandles()
+		if err == nil {
+			if len(handles) == 1 && handles[0] == originalHandle {
+				if err := driver.SwitchWindow(originalHandle); err != nil {
+					return fmt.Errorf("return to original window: %w", err)
+				}
+				// Popup closure can precede the main page's authenticated render.
+				// Observe the signed-in control before using account-owned inputs.
+				remaining := time.Until(deadline)
+				if remaining <= 0 {
+					return fmt.Errorf("signed-in page was not ready before the login deadline")
+				}
+				if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+					button, err := wd.FindElement(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
+					if err != nil {
+						return false, nil
+					}
+					visible, err := button.IsDisplayed()
+					if IsStaleElementErr(err) {
+						return false, nil
+					}
+					return visible, err
+				}, remaining); err != nil {
+					return fmt.Errorf("wait for signed-in page: %w", err)
+				}
+				return nil
+			}
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+
+	_ = driver.SwitchWindow(originalHandle)
+	return fmt.Errorf("login window did not close")
+}
+
+func waitForNewWindow(driver selenium.WebDriver, existing []string, timeout time.Duration) (string, error) {
+	existingSet := make(map[string]struct{}, len(existing))
+	for _, h := range existing {
+		existingSet[h] = struct{}{}
+	}
+
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		handles, err := driver.WindowHandles()
+		if err == nil {
+			for _, h := range handles {
+				if _, ok := existingSet[h]; !ok {
+					return h, nil
+				}
+			}
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+	return "", fmt.Errorf("timed out waiting for login window")
+}
+
+func WaitForElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		elem, err := driver.FindElement(by, value)
+		if err == nil {
+			return elem, nil
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
+	return nil, fmt.Errorf("element %s:%s not found", by, value)
+}
+
+func WaitForEnabledElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		elem, err := driver.FindElement(by, value)
+		if err == nil {
+			enabled, err := elem.IsEnabled()
+			if err == nil && enabled {
+				return elem, nil
+			}
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
+	return nil, fmt.Errorf("enabled element %s:%s not found", by, value)
+}
+
+// Selenium's default scrolling can leave a control beneath a sticky toolbar.
+func ClickElementInView(driver selenium.WebDriver, element selenium.WebElement) error {
+	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});`, []any{element}); err != nil {
+		return err
+	}
+	return element.Click()
+}
+
+// React may replace an element between lookup and click. Only retry stale
+// references and wait for enabled controls; other click failures still fail.
+func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
+	deadline := time.Now().Add(timeout)
+	var lastErr error
+	for time.Now().Before(deadline) {
+		elem, err := driver.FindElement(by, selector)
+		if err != nil {
+			lastErr = err
+			time.Sleep(200 * time.Millisecond)
+			continue
+		}
+		enabled, err := elem.IsEnabled()
+		if err != nil {
+			if !IsStaleElementErr(err) {
+				return fmt.Errorf("enabled %s:%s: %w", by, selector, err)
+			}
+			lastErr = err
+			time.Sleep(150 * time.Millisecond)
+			continue
+		}
+		if !enabled {
+			lastErr = fmt.Errorf("element is disabled")
+			time.Sleep(150 * time.Millisecond)
+			continue
+		}
+		if err := elem.Click(); err != nil {
+			lastErr = err
+			if IsStaleElementErr(err) {
+				time.Sleep(150 * time.Millisecond)
+				continue
+			}
+			return fmt.Errorf("click %s:%s: %w", by, selector, err)
+		}
+		return nil
+	}
+	if lastErr == nil {
+		lastErr = fmt.Errorf("element never located")
+	}
+	return fmt.Errorf("click %s:%s: %w", by, selector, lastErr)
+}
+
+// SelectFiles reacquires file inputs replaced during rendering. A stale file
+// selection has not selected files; other errors are terminal.
+func SelectFiles(driver selenium.WebDriver, by, selector string, paths []string, timeout time.Duration) error {
+	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		element, err := wd.FindElement(by, selector)
+		if err != nil {
+			if strings.Contains(err.Error(), "no such element") {
+				return false, nil
+			}
+			return false, err
+		}
+		err = element.SendKeys(strings.Join(paths, "\n"))
+		if IsStaleElementErr(err) {
+			return false, nil
+		}
+		return err == nil, err
+	}, timeout)
+}
+
+func IsStaleElementErr(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "stale element reference")
+}
+
+func WaitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
+	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		_, err := wd.FindElement(by, value)
+		if err != nil {
+			return true, nil
+		}
+		return false, nil
+	}, timeout)
+}
+
+func WaitForText(driver selenium.WebDriver, substr string, timeout time.Duration) error {
+	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		res, err := wd.ExecuteScript("return document.body ? document.body.innerText : ''", nil)
+		if err != nil {
+			return false, nil
+		}
+		text, _ := res.(string)
+		return strings.Contains(text, substr), nil
+	}, timeout)
+}
+
+func AssertNoSevereBrowserLogs(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	logs, err := driver.Log(log.Browser)
+	if err != nil {
+		t.Logf("browser log unavailable: %v", err)
+		return
+	}
+	for _, entry := range filterErrorsWeDontCareAbout(logs) {
+		if entry.Level == log.Severe {
+			t.Fatalf("browser console error: %s", entry.Message)
+		}
+	}
+}
+
+func DumpPageDiagnostics(t *testing.T, driver selenium.WebDriver) {
+	if state, err := driver.ExecuteScript(`return JSON.stringify({
+		visibility: document.visibilityState, focused: document.hasFocus(),
+		online: navigator.onLine, ready: document.readyState,
+	});`, nil); err == nil {
+		t.Logf("browser page state: %s", state)
+	}
+	if capture, err := driver.ExecuteScript(`
+		const capture = document.querySelector('section[aria-label="Create a journal entry"]');
+		return capture ? JSON.stringify({
+			text: capture.innerText,
+			busy: capture.getAttribute('aria-busy'),
+			buttons: [...capture.querySelectorAll('button')].map(button => ({
+				label: button.getAttribute('aria-label'), disabled: button.disabled,
+			})),
+		}) : '';
+	`, nil); err == nil && capture != "" {
+		t.Logf("journal capture controls: %s", capture)
+	}
+	if body, err := driver.ExecuteScript("return document.body ? document.body.innerText : ''", nil); err == nil {
+		if text, ok := body.(string); ok {
+			if len(text) > 1024 {
+				text = text[:1024]
+			}
+			t.Logf("page text snippet: %s", text)
+		}
+	}
+	if html, err := driver.ExecuteScript("return document.body ? document.body.innerHTML : ''", nil); err == nil {
+		if text, ok := html.(string); ok {
+			if len(text) > 1024 {
+				text = text[:1024]
+			}
+			t.Logf("page html snippet: %s", text)
+		}
+	}
+	if count, err := driver.ExecuteScript("return document.querySelectorAll('li').length;", nil); err == nil {
+		if n, ok := count.(float64); ok {
+			t.Logf("li count: %d", int(n))
+		}
+	}
+	if logs, err := driver.Log(log.Browser); err == nil {
+		ignored := []string{
+			"Failed to parse source map",
+			"react-dev-overlay",
+		}
+		filtered := make([]log.Message, 0, len(logs))
+	outer:
+		for _, entry := range logs {
+			for _, pattern := range ignored {
+				if strings.Contains(entry.Message, pattern) {
+					continue outer
+				}
+			}
+			if entry.Level == log.Severe || strings.Contains(strings.ToLower(entry.Message), "error") {
+				filtered = append(filtered, entry)
+			}
+		}
+		max := 5
+		if len(filtered) < max {
+			max = len(filtered)
+		}
+		for i := 0; i < max; i++ {
+			t.Logf("console[%d]: %s", i, filtered[i].Message)
+		}
+	}
+}
+
+func TestWAV() []byte {
+	const (
+		sampleRate     = 8000
+		seconds        = 12
+		bytesPerSample = 2
+	)
+	dataSize := sampleRate * seconds * bytesPerSample
+	buffer := bytes.NewBuffer(make([]byte, 0, 44+dataSize))
+	buffer.WriteString("RIFF")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(36+dataSize))
+	buffer.WriteString("WAVEfmt ")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(16))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(1))
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate))
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(sampleRate*bytesPerSample))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(bytesPerSample))
+	_ = binary.Write(buffer, binary.LittleEndian, uint16(8*bytesPerSample))
+	buffer.WriteString("data")
+	_ = binary.Write(buffer, binary.LittleEndian, uint32(dataSize))
+	buffer.Write(make([]byte, dataSize))
+	return buffer.Bytes()
+}

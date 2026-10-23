@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /* biome-ignore-all lint/suspicious/noConsole: Console output is the game's diagnostic log. */
+
 import {
 	createPeerTransport,
 	type PeerTransport,
 } from '#root/project/tiberian_sun/web/network.js';
+import { trackMouseHover } from '#root/ts/pointer/hover.js';
 
 export interface GameAssets {
 	readonly engineJavaScript: string;
@@ -48,6 +50,8 @@ interface Engine {
 interface EngineOptions {
 	readonly canvas: HTMLCanvasElement;
 	readonly webNetwork: PeerTransport;
+	readonly webYield: () => Promise<void>;
+	readonly webHasMouseHover: () => boolean;
 	readonly noInitialRun: true;
 	readonly locateFile: (name: string) => string;
 	readonly print: (message: string) => void;
@@ -66,6 +70,37 @@ function isEngineModule(value: unknown): value is { default: EngineFactory } {
 	);
 }
 
+// Only one native Asyncify continuation can be pending. Reuse its message
+// channel and release it with the engine, including an unmount while suspended.
+function createMessageYield(signal: AbortSignal): () => Promise<void> {
+	const channel = new MessageChannel();
+	let pending: (() => void) | undefined;
+	channel.port1.onmessage = () => {
+		const resume = pending;
+		pending = undefined;
+		resume?.();
+	};
+	signal.addEventListener(
+		'abort',
+		() => {
+			channel.port1.close();
+			channel.port2.close();
+			pending?.();
+			pending = undefined;
+		},
+		{ once: true }
+	);
+	return () =>
+		new Promise<void>(resolve => {
+			if (signal.aborted) {
+				resolve();
+				return;
+			}
+			pending = resolve;
+			channel.port2.postMessage(null);
+		});
+}
+
 // SDL owns document-level listeners and audio. A replacement mount waits for
 // the previous native shutdown before creating another engine in this document.
 let previousExit: Promise<void> = Promise.resolve();
@@ -81,7 +116,13 @@ export function startGame(
 		Promise.withResolvers<void>();
 	previousExit = exitComplete;
 	const lifetime = new AbortController();
+	// Right-click belongs to the game's map controls while this canvas is active.
+	canvas.addEventListener('contextmenu', event => event.preventDefault(), {
+		signal: lifetime.signal,
+	});
+	const webHasMouseHover = trackMouseHover(canvas, lifetime.signal);
 	const webNetwork = createPeerTransport(lifetime.signal);
+	const webYield = createMessageYield(lifetime.signal);
 	let engine: Engine | undefined;
 	let started = false;
 	let exited = false;
@@ -117,6 +158,8 @@ export function startGame(
 				imported.default({
 					canvas,
 					webNetwork,
+					webYield,
+					webHasMouseHover,
 					noInitialRun: true,
 					locateFile: name =>
 						name.endsWith('.wasm')

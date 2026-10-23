@@ -1,3 +1,4 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_test")
@@ -27,4 +28,39 @@ py_test(
     args = ["$(rootpath staging.yml)"],
     data = ["staging.yml"],
     deps = ["@pip//pyyaml"],
+)
+
+sh_test(
+    name = "actionlint_test",
+    size = "small",
+    srcs = ["actionlint_test.sh"],
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ) + [
+        "@com_github_rhysd_actionlint//cmd/actionlint",
+    ],
+    env = {
+        "ACTIONLINT": "$(rlocationpath @com_github_rhysd_actionlint//cmd/actionlint)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
+sh_test(
+    name = "bootstrap_bazel_remote_cache_test",
+    size = "small",
+    srcs = ["bootstrap_bazel_remote_cache_test.sh"],
+    data = ["bootstrap_bazel_remote_cache.sh"],
+    env = {"BOOTSTRAP": "$(rlocationpath :bootstrap_bazel_remote_cache.sh)"},
+    deps = ["@rules_shell//shell/runfiles"],
 )
