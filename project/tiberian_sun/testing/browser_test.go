@@ -327,12 +327,16 @@ func TestDirectVisitExit(t *testing.T) {
 	}
 }
 
-func TestPhoneGameplayScale(t *testing.T) {
+func TestPhoneSkirmishGameplay(t *testing.T) {
 	g := newFreewareBrowser(t)
 	g.navigate()
 	g.waitRunning()
 	g.waitSelector()
 	g.startSkirmish()
+	if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+		t.Fatal(err)
+	}
+	g.touchInput = true
 	g.deployStartingArmy()
 	// Keep gameplay centered on the same starting army after each mode change.
 	for _, size := range []struct {
@@ -375,6 +379,32 @@ func TestPhoneGameplayScale(t *testing.T) {
 			}, 30*time.Second); err != nil {
 				t.Fatalf("phone battlefield remained blank: %v", err)
 			}
+			// Box-select the visible army, just as when dragging a finger
+			// across the battlefield, then let the simulation run hands-free.
+			startX, startY := 10*size.width/size.frameWidth, 30*size.height/size.frameHeight
+			endX, endY := (size.frameWidth-170)*size.width/size.frameWidth, size.height-1
+			g.touchAt(startX, startY, "touchStart")
+			for step := 1; step <= 8; step++ {
+				g.touchAt(startX+(endX-startX)*step/8, startY+(endY-startY)*step/8, "touchMove")
+				g.advance(25 * time.Millisecond)
+			}
+			g.touchAt(endX, endY, "touchEnd")
+			before := g.snapshot()
+			g.advance(2 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("battlefield moved while the player waited: %.1f%% stationary terrain", stable*100)
+			}
+			// Give the selected army a ground order and continue playing.
+			targetX := (size.frameWidth - 168) * size.width * 3 / (size.frameWidth * 4)
+			targetY := size.height * 3 / 4
+			g.touchAt(targetX, targetY, "touchStart")
+			g.advance(80 * time.Millisecond)
+			g.touchAt(targetX, targetY, "touchEnd")
+			before = g.snapshot()
+			g.advance(3 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("view drifted while units carried out their orders: %.1f%% stationary terrain", stable*100)
+			}
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
 				shot, err := g.driver.Screenshot()
 				if err != nil {
@@ -385,5 +415,23 @@ func TestPhoneGameplayScale(t *testing.T) {
 				}
 			}
 		})
+	}
+	// Switching to a real mouse still permits intentional camera movement.
+	g.touchInput = false
+	moved := 0.0
+	for _, x := range []int{1, 931} {
+		g.dispatch(400, 215, "mouseMoved", 0)
+		g.advance(300 * time.Millisecond)
+		if err := g.canvas.SendKeys("h"); err != nil {
+			t.Fatal(err)
+		}
+		g.advance(100 * time.Millisecond)
+		before := g.snapshot()
+		g.dispatch(x, 215, "mouseMoved", 0)
+		g.advance(time.Second)
+		moved = math.Max(moved, 1-g.stationaryBattlefield(t, before, g.snapshot(), 746, 344))
+	}
+	if moved < 0.25 {
+		t.Fatalf("mouse camera controls did not move the view: %.1f%%", moved*100)
 	}
 }

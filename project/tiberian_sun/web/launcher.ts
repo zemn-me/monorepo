@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /* biome-ignore-all lint/suspicious/noConsole: Console output is the game's diagnostic log. */
+
 import {
 	createPeerTransport,
 	type PeerTransport,
 } from '#root/project/tiberian_sun/web/network.js';
+import { trackMouseHover } from '#root/ts/pointer/hover.js';
 
 export interface GameAssets {
 	readonly engineJavaScript: string;
@@ -49,6 +51,7 @@ interface EngineOptions {
 	readonly canvas: HTMLCanvasElement;
 	readonly webNetwork: PeerTransport;
 	readonly webYield: () => Promise<void>;
+	readonly webHasMouseHover: () => boolean;
 	readonly noInitialRun: true;
 	readonly locateFile: (name: string) => string;
 	readonly print: (message: string) => void;
@@ -117,6 +120,7 @@ export function startGame(
 	canvas.addEventListener('contextmenu', event => event.preventDefault(), {
 		signal: lifetime.signal,
 	});
+	const webHasMouseHover = trackMouseHover(canvas, lifetime.signal);
 	const webNetwork = createPeerTransport(lifetime.signal);
 	const webYield = createMessageYield(lifetime.signal);
 	let engine: Engine | undefined;
@@ -155,6 +159,7 @@ export function startGame(
 					canvas,
 					webNetwork,
 					webYield,
+					webHasMouseHover,
 					noInitialRun: true,
 					locateFile: name =>
 						name.endsWith('.wasm')

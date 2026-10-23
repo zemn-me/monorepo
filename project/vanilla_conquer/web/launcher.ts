@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /* biome-ignore-all lint/suspicious/noConsole: Console output is the game's diagnostic log. */
+import { trackMouseHover } from '#root/ts/pointer/hover.js';
+
 export interface GameAssets {
 	readonly engineJavaScript: string;
 	readonly engineWasm: string;
@@ -60,6 +62,7 @@ interface Engine {
 }
 interface EngineOptions {
 	readonly canvas: HTMLCanvasElement;
+	readonly webHasMouseHover: () => boolean;
 	readonly noInitialRun: true;
 	readonly locateFile: (name: string) => string;
 	readonly print: (message: string) => void;
@@ -97,6 +100,7 @@ export function startGame(
 	canvas.addEventListener('contextmenu', event => event.preventDefault(), {
 		signal: lifetime.signal,
 	});
+	const webHasMouseHover = trackMouseHover(canvas, lifetime.signal);
 	let engine: Engine | undefined;
 	let started = false;
 	let exited = false;
@@ -131,6 +135,7 @@ export function startGame(
 			const [loaded, data] = await Promise.all([
 				imported.default({
 					canvas,
+					webHasMouseHover,
 					noInitialRun: true,
 					locateFile: () => assets.engineWasm,
 					print: message => console.info(message),

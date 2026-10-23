@@ -26,6 +26,9 @@ char *** Web_Argv() { return &Arguments; }
 std::string Choose_Folder(char const *) { return {}; }
 void Show_Alert(char const *title, char const *text) { fprintf(stderr,"%s: %s\n",title,text); }
 
+EM_JS(int, Web_Has_Mouse_Hover, (), { return Module.webHasMouseHover(); });
+bool Web_Mouse_Hover_Active() { return Web_Has_Mouse_Hover() != 0; }
+
 // Window and screen dimensions share CSS units, independent of pixel density.
 EM_JS(int, Web_Window_Width, (), { return window.innerWidth; });
 EM_JS(int, Web_Window_Height, (), { return window.innerHeight; });
