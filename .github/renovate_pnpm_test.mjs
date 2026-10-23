@@ -55,12 +55,15 @@ mkdirSync(bin, { recursive: true });
 // Disable pnpm's own version switching so a mismatched Bazel tool cannot hide.
 process.env.npm_config_manage_package_manager_versions = 'false';
 process.env.CI = 'true';
+process.env.COREPACK_ENABLE_NETWORK = '0';
 process.env.BAZEL_BINDIR = '.';
 function runPnpm(args) {
+	console.error('pnpm compatibility fixture:', args.join(' '));
 	return spawnSync(pnpm, args, {
 		cwd: fixture,
 		env: process.env,
 		encoding: 'utf8',
+		timeout: 20000,
 	});
 }
 function successfulPnpm(args) {
@@ -86,13 +89,34 @@ const manifest = {
 	name: 'renovate-pnpm-compatibility',
 	private: true,
 	packageManager: repository.packageManager,
-	pnpm: repository.pnpm,
 	dependencies: { 'fixture-dependency': 'file:1.0.0' },
 };
 const writeManifest = () =>
 	writeFileSync(path.join(fixture, 'package.json'), JSON.stringify(manifest));
 writeManifest();
-successfulPnpm(['install', '--lockfile-only', '--ignore-scripts']);
+writeFileSync(
+	path.join(fixture, 'pnpm-workspace.yaml'),
+	readFileSync(runfiles.resolve(process.env.PNPM_WORKSPACE))
+);
+// Exercise pnpm's actual configuration reader; package.json settings are ignored
+// by pnpm 12 and would silently lose the compiler aliases and peer exclusions.
+const extensions = JSON.parse(successfulPnpm(['config', 'get', 'packageExtensions', '--json']));
+assert.equal(extensions['@pulumi/pulumi'].dependencies.typescript5, 'npm:typescript@5.9.3');
+assert.equal(extensions['openapi-typescript@7.13.0'].dependencies.typescript5, 'npm:typescript@5.5.4');
+assert.deepEqual(JSON.parse(successfulPnpm(['config', 'get', 'overrides', '--json'])), {
+	'nuqs>next': '-',
+	'nuqs>react-router-dom': '-',
+});
+// pnpm 12 records its own integrity-pinned engine closure before resolving
+// project dependencies. Reuse the reviewed closure so this fixture needs no
+// registry metadata or executable downloads on an offline remote worker.
+const lockDocuments = readFileSync(runfiles.resolve(process.env.PNPM_LOCKFILE), 'utf8')
+	.split(/^---\s*$/m)
+	.filter(document => document.trim());
+assert.match(lockDocuments[0], /packageManagerDependencies:/);
+assert(lockDocuments[0].includes(`specifier: ${expectedVersion}`));
+writeFileSync(path.join(fixture, 'pnpm-lock.yaml'), `---\n${lockDocuments[0]}`);
+successfulPnpm(['install', '--lockfile-only', '--ignore-scripts', '--offline', '--no-frozen-lockfile']);
 manifest.dependencies['fixture-dependency'] = 'file:2.0.0';
 writeManifest();
 const stale = runPnpm([

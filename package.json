@@ -2,25 +2,6 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "monorepo",
 	"private": true,
-	"pnpm": {
-		"onlyBuiltDependencies": [],
-		"packageExtensions": {
-			"@pulumi/pulumi": {
-				"dependencies": {
-					"typescript5": "npm:typescript@5.9.3"
-				}
-			},
-			"openapi-typescript@7.13.0": {
-				"dependencies": {
-					"typescript5": "npm:typescript@5.5.4"
-				}
-			}
-		},
-		"overrides": {
-			"nuqs>next": "-",
-			"nuqs>react-router-dom": "-"
-		}
-	},
 	"optionalDependencies": {
 		"@typescript/typescript-aix-ppc64": "7.0.2",
 		"@typescript/typescript-darwin-arm64": "7.0.2",
@@ -213,5 +194,5 @@
 	"imports": {
 		"#root/*": "./*"
 	},
-	"packageManager": "pnpm@10.34.7"
+	"packageManager": "pnpm@12.14.0"
 }

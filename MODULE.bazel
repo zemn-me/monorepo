@@ -295,7 +295,12 @@ pip.parse(
 use_repo(pip, "mitmproxy_pip", "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.6.0")
-bazel_dep(name = "aspect_rules_js", version = "2.9.2")
+bazel_dep(name = "aspect_rules_js", version = "3.5.1")
+single_version_override(
+    module_name = "aspect_rules_js",
+    patch_strip = 1,
+    patches = ["//bzl/pnpm:remote_execution.patch"],
+)
 
 # Keep the repository's default Node version; SDK dependencies must not select an older one.
 bazel_dep(name = "rules_nodejs", version = "6.7.3")

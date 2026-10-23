@@ -107,6 +107,7 @@ exports_files(
         "biome.json",
         ".prettierrc.json",
         "package.json",
+        "pnpm-workspace.yaml",
         "tsconfig.json",
         ".gitignore",
         ".editorconfig",
@@ -182,6 +183,16 @@ copy_to_bin(
 copy_to_bin(
     name = "package_json",
     srcs = ["package.json"],
+)
+
+copy_to_bin(
+    name = "pnpm_workspace",
+    srcs = ["pnpm-workspace.yaml"],
+)
+
+copy_to_bin(
+    name = "pnpm_lockfile",
+    srcs = ["pnpm-lock.yaml"],
 )
 
 npm_link_all_packages(name = "node_modules")
@@ -327,12 +338,14 @@ py_library(
     visibility = ["//:__subpackages__"],
 )
 
+# pnpm 12 rechecks release policy even for frozen lockfiles and needs registry
+# metadata. Run this network check on the CI host; offline lock semantics have
+# a separate regression target in //bzl/pnpm:offline_lockfile_test.
 binary_with_args(
     name = "pnpm_lockfile_validation_bin",
     args = [
         "i",
         "--lockfile-only",
-        "--offline",
         "--ignore-scripts",
         "--frozen-lockfile",
     ],
@@ -340,8 +353,12 @@ binary_with_args(
     data = [
         "package.json",
         "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
     ],
-    tags = ["no-sandbox"],
+    tags = [
+        "no-remote-exec",
+        "no-sandbox",
+    ],
     test = True,
 )
 

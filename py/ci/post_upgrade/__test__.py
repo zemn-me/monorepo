@@ -11,10 +11,37 @@ import tempfile
 import unittest
 
 from py.ci.post_upgrade.integrity import update_module_bazel_text
-from py.ci.post_upgrade.pnpm import refresh
+from py.ci.post_upgrade.pnpm import NATIVE_PLATFORMS, refresh
 
 
 class TestPnpmIntegrity(unittest.TestCase):
+    def test_native_release_pins_all_platforms_and_reuses_cache(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest, lock = Path(tmp) / "package.json", Path(tmp) / "integrity.json"
+            manifest.write_text('{"packageManager":"pnpm@12.14.0"}')
+            integrity = "sha512-" + base64.b64encode(hashlib.sha512(b"wrapper").digest()).decode()
+            calls = []
+
+            def fetcher(version):
+                return {"name": "pnpm", "version": version, "dist": {"integrity": integrity}}
+
+            def native(version, platform):
+                calls.append(platform)
+                digest = "sha512-" + base64.b64encode(hashlib.sha512(platform.encode()).digest()).decode()
+                return {"name": f"@pnpm/exe.{platform}", "version": version, "dist": {"integrity": digest}}
+
+            refresh(manifest, lock, fetcher, native)
+            self.assertEqual(set(json.loads(lock.read_text())["exe_integrity"]), set(NATIVE_PLATFORMS))
+            refresh(manifest, lock, lambda _: self.fail("cached release fetched"), native)
+            self.assertEqual(calls, list(NATIVE_PLATFORMS))
+            before = lock.read_text()
+            manifest.write_text('{"packageManager":"pnpm@12.14.1"}')
+            with self.assertRaises(ValueError):
+                refresh(manifest, lock, fetcher, lambda version, platform: {
+                    "name": "unexpected-platform", "version": version, "dist": {"integrity": integrity},
+                })
+            self.assertEqual(lock.read_text(), before)
+
     def test_new_release_and_cached_release(self):
         with tempfile.TemporaryDirectory() as tmp:
             manifest, lock = Path(tmp) / "package.json", Path(tmp) / "integrity.json"

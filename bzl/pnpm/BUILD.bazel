@@ -1,7 +1,10 @@
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
-exports_files(["integrity.json"])
+exports_files([
+    "integrity.json",
+    "remote_execution.patch",
+])
 
 sh_test(
     name = "offline_lockfile_test",

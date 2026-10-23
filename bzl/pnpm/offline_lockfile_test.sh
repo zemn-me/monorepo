@@ -14,6 +14,8 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 
 pnpm="$(rlocation "$PNPM")"
 export BAZEL_BINDIR=.
+# A remote worker must use the reviewed native binary, never download a fallback.
+export COREPACK_ENABLE_NETWORK=0
 unset BUILD_WORKSPACE_DIRECTORY
 cd "$TEST_TMPDIR"
 printf '%s\n' '{"name":"fixture","version":"1.0.0"}' > package.json
