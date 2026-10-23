@@ -24,6 +24,7 @@ service_test(
         "-test.timeout=240s",
     ],
     services = [":site"],
+    shard_count = 2,
     test = ":testing_test",
 )
 

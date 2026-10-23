@@ -4,3 +4,5 @@
 - Both engines use single-threaded Asyncify. Modal input and timing waits must yield to the browser.
 - Package original data through `assets:ra_data` and `assets:td_data`. Keep core MIX data free of movies/music. Build individual movie packets through `assets:ra_cinematics`; the native playback hook must await only the requested clip and release it afterward.
 - Verify an asset-backed browser scenario before claiming gameplay compatibility. Keep original game data and generated Wasm outside Git.
+
+- Install `seleniumutil.NewVirtualClock` before navigation for gameplay and cinematics; advance it for input, simulation, and Web Audio completion instead of sleeping.

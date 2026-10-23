@@ -69,4 +69,50 @@ func TestBrowserMultiplayer(t *testing.T) {
 		}
 		return len(matched) >= 3
 	}, guest)
+	// Continue the same match through hiding and restoring the guest tab.
+	// Virtual time drives simulation; the real WebRTC channel still delivers packets.
+	for _, hidden := range []bool{true, false} {
+		before := max(latestSimulationFrame(host.simulationFrames()), latestSimulationFrame(guest.simulationFrames()))
+		if hidden {
+			if err := guest.command("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": false}); err != nil {
+				t.Fatal(err)
+			}
+			if err := guest.command("Target.createTarget", map[string]any{"url": "about:blank", "background": false}); err != nil {
+				t.Fatal(err)
+			}
+		} else {
+			if err := guest.command("Page.bringToFront", map[string]any{}); err != nil {
+				t.Fatal(err)
+			}
+			if err := guest.command("Emulation.setFocusEmulationEnabled", map[string]any{"enabled": true}); err != nil {
+				t.Fatal(err)
+			}
+		}
+		guest.wait(fmt.Sprintf("guest hidden=%v", hidden), func() bool {
+			raw, err := guest.driver.ExecuteScript("return document.hidden", nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			return raw == hidden
+		}, host)
+		guest.assertVisibility(hidden)
+		host.wait(fmt.Sprintf("shared simulation progresses with guest hidden=%v", hidden), func() bool {
+			matched := 0
+			guestFrames := guest.simulationFrames()
+			for frame, checksum := range host.simulationFrames() {
+				if frame <= before {
+					continue
+				}
+				if other, ok := guestFrames[frame]; ok {
+					if other != checksum {
+						t.Fatalf("frame %d desynchronized with guest hidden=%v: host=%s guest=%s", frame, hidden, checksum, other)
+					}
+					matched++
+				}
+			}
+			return matched >= 3
+		}, guest)
+		guest.assertVisibility(hidden)
+	}
+
 }
