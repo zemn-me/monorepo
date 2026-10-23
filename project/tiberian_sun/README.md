@@ -22,9 +22,14 @@ previous page, or the experiments index when the tab has no previous page. Menus
 scale from an 800×600 reference to fit the window with centered letterboxing,
 keeping artwork and pointer targets aligned on large displays. Rml setup menus
 and in-game dialogs scale independently of the gameplay resolution.
-Gameplay rendering follows the viewport in CSS pixels, including live window
-resizing, with an 800×600 minimum and a 4096-pixel maximum edge; smaller windows
-scale the minimum frame to fit without distortion.
+Gameplay scales the 800×600 reference to the reported screen size, so units and
+sidebar controls occupy a consistent fraction of the display across resolutions.
+Window resizing changes the visible battlefield at that display scale. Screen
+and viewport measurements use CSS pixels, independent of device pixel density;
+if screen dimensions are unavailable, gameplay falls back to one CSS pixel per
+game pixel. Browsers do not report reliable physical dimensions in inches or cm.
+The framebuffer retains an 800×600 minimum and a 4096-pixel maximum edge; smaller
+windows scale the minimum frame to fit without distortion.
 Changes are debounced and applied between game or modal frames because replacing
 drawing surfaces during a suspended paint would invalidate its pointers.
 

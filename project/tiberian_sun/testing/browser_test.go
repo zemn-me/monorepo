@@ -72,11 +72,11 @@ func TestFreewareSkirmish(t *testing.T) {
 	if err != nil || layout != true {
 		t.Fatalf("game does not fill the window: %v %v", layout, err)
 	}
-	if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 1440, "height": 900, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+	if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 1440, "height": 900, "screenWidth": 1440, "screenHeight": 900, "deviceScaleFactor": 2, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
 	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
-		value, err := w.ExecuteScript("return arguments[0].width === 1440 && arguments[0].height === 900", []interface{}{g.canvas})
+		value, err := w.ExecuteScript("return arguments[0].width === 960 && arguments[0].height === 600", []interface{}{g.canvas})
 		return value == true, err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("framebuffer did not adapt to larger window: %v", err)
@@ -84,7 +84,7 @@ func TestFreewareSkirmish(t *testing.T) {
 	// A genuine mode change updates the terrain and sidebar surfaces too.
 	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
 		text, err := g.readGameLog()
-		return strings.Contains(text, "VisibleRect: 1440x900") && strings.Contains(text, "Mode change complete."), err
+		return strings.Contains(text, "VisibleRect: 960x600") && strings.Contains(text, "Mode change complete."), err
 	}, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
@@ -92,8 +92,8 @@ func TestFreewareSkirmish(t *testing.T) {
 		frame := g.snapshot()
 		count := 0
 		for y := 178; y < 220; y++ {
-			for x := 1296; x < 1359; x++ {
-				r, g, b, _ := frame.At(x*frame.Bounds().Dx()/1440, y*frame.Bounds().Dy()/900).RGBA()
+			for x := 816; x < 879; x++ {
+				r, g, b, _ := frame.At(x*frame.Bounds().Dx()/960, y*frame.Bounds().Dy()/600).RGBA()
 				if colored(r>>8, g>>8, b>>8) {
 					count++
 				}
@@ -102,6 +102,37 @@ func TestFreewareSkirmish(t *testing.T) {
 		return count > 1100, nil
 	}, 15*time.Second, 300*time.Millisecond); err != nil {
 		t.Fatalf("sidebar did not redraw at the larger resolution: %v", err)
+	}
+	// The same full-screen view survives resolution and density changes, while
+	// a smaller window on that display shows less terrain at the same scale.
+	for _, size := range []struct {
+		name                                                          string
+		windowWidth, windowHeight, screenWidth, screenHeight, density int
+		frameWidth, frameHeight                                       int
+	}{
+		{"high resolution", 2880, 1800, 2880, 1800, 1, 960, 600},
+		{"high density", 2880, 1800, 2880, 1800, 2, 960, 600},
+		{"smaller window", 2400, 1800, 2880, 1800, 1, 800, 600},
+		{"ultrawide", 3440, 1440, 3440, 1440, 1, 1433, 600},
+		{"small display", 640, 480, 640, 480, 1, 800, 600},
+	} {
+		t.Run(size.name, func(t *testing.T) {
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+				"width": size.windowWidth, "height": size.windowHeight,
+				"screenWidth": size.screenWidth, "screenHeight": size.screenHeight,
+				"deviceScaleFactor": size.density, "mobile": false,
+			}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+				value, err := w.ExecuteScript(`const [c,w,h]=arguments,r=c.getBoundingClientRect();
+				return c.width===w && c.height===h && Math.abs(r.width/r.height-w/h)<0.001 &&
+				Math.abs(r.x-(innerWidth-r.width)/2)<1 && Math.abs(r.y-(innerHeight-r.height)/2)<1`, []interface{}{g.canvas, size.frameWidth, size.frameHeight})
+				return value == true, err
+			}, 30*time.Second); err != nil {
+				t.Fatalf("framebuffer did not adapt to display: %v", err)
+			}
+		})
 	}
 	if !strings.Contains(text, "Game running") {
 		t.Fatalf("runtime failed: %s", text)
@@ -155,7 +186,7 @@ func TestMenuContain(t *testing.T) {
 	// layouts at high pixel density. Hover pixels prove hit testing follows.
 	for _, size := range [][2]int{{1920, 1080}, {900, 1440}, {390, 844}, {1920, 1080}} {
 		g.menuWidth, g.menuHeight = size[0], size[1]
-		if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": g.menuWidth, "height": g.menuHeight, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+		if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": g.menuWidth, "height": g.menuHeight, "screenWidth": g.menuWidth, "screenHeight": g.menuHeight, "deviceScaleFactor": 2, "mobile": false}); err != nil {
 			t.Fatal(err)
 		}
 		if err := g.wait(func(w selenium.WebDriver) (bool, error) {
@@ -185,7 +216,7 @@ func TestMenuContain(t *testing.T) {
 	}
 	g.startSkirmish()
 	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
-		value, err := w.ExecuteScript(`const c=arguments[0],r=c.getBoundingClientRect(); return c.width===innerWidth && c.height===innerHeight && r.x===0 && r.y===0 && r.width===innerWidth && r.height===innerHeight`, []interface{}{g.canvas})
+		value, err := w.ExecuteScript(`const c=arguments[0],r=c.getBoundingClientRect(); return c.width===1067 && c.height===600 && Math.abs(r.x)<1 && Math.abs(r.y)<1 && Math.abs(r.width-innerWidth)<1 && Math.abs(r.height-innerHeight)<1`, []interface{}{g.canvas})
 		return value == true, err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("scaled menus did not transition to viewport-sized gameplay: %v", err)
