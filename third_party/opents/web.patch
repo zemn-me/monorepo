@@ -745,7 +745,11 @@ diff --git a/code/ui/uienginehost.cpp b/code/ui/uienginehost.cpp
 diff --git a/code/scroll.cpp b/code/scroll.cpp
 --- a/code/scroll.cpp
 +++ b/code/scroll.cpp
-@@ -405,0 +406,7 @@ void ScrollClass::Scroll_Edge(Point2D const & point)
+@@ -404,2 +404,9 @@
+-void ScrollClass::Scroll_Edge(Point2D const & point)
+-{
++void ScrollClass::Scroll_Edge(Point2D const & point)
++{
 +	// Released touches retain a synthetic mouse position but cannot hover.
 +	// Clear inertia too, so an earlier edge gesture cannot coast indefinitely.
 +	if (!Web_Mouse_Hover_Active()) {
