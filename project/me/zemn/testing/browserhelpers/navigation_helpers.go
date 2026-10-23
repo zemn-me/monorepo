@@ -174,14 +174,7 @@ return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.ri
 			}
 		}
 	}
-	OpenJournalDatePicker(t, driver)
-	wikiLink, err := driver.FindElement(selenium.ByLinkText, "Wiki")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := wikiLink.Click(); err != nil {
-		t.Fatal(err)
-	}
+	ClickJournalWiki(t, driver)
 	if _, err := WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
@@ -243,5 +236,53 @@ func OpenJournalDatePicker(t *testing.T, driver selenium.WebDriver) {
 		if err := ClickElementInView(driver, picker); err != nil {
 			t.Fatal(err)
 		}
+	}
+}
+
+// ClickJournalWiki handles both the loading toolbar and the loaded calendar menu.
+func ClickJournalWiki(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		links, err := d.FindElements(selenium.ByCSSSelector, "a[href='/journal?wiki=all']")
+		if err != nil {
+			return false, err
+		}
+		for _, link := range links {
+			visible, err := link.IsDisplayed()
+			if IsStaleElementErr(err) {
+				return false, nil
+			}
+			if err != nil {
+				return false, err
+			}
+			if !visible {
+				continue
+			}
+			err = ClickElementInView(d, link)
+			if IsStaleElementErr(err) {
+				return false, nil
+			}
+			return err == nil, err
+		}
+		pickers, err := d.FindElements(selenium.ByCSSSelector, "summary[aria-label='Choose journal date']")
+		if err != nil || len(pickers) == 0 {
+			return false, err
+		}
+		open, err := d.ExecuteScript("return arguments[0].parentElement.open", []any{pickers[0]})
+		if IsStaleElementErr(err) {
+			return false, nil
+		}
+		if err != nil {
+			return false, err
+		}
+		if open != true {
+			err = ClickElementInView(d, pickers[0])
+			if IsStaleElementErr(err) {
+				return false, nil
+			}
+		}
+		return false, err
+	}, 30*time.Second); err != nil {
+		t.Fatal("open journal wiki: ", err)
 	}
 }

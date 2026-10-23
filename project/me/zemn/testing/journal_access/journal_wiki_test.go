@@ -300,9 +300,8 @@ func TestJournalReviewScreenshots(t *testing.T) {
 					by, selector = selenium.ByCSSSelector, "a[aria-label='Year summary']"
 				}
 			case "Wiki":
-				if pickers, err := driver.FindElements(selenium.ByCSSSelector, "summary[aria-label='Choose journal date']"); err == nil && len(pickers) > 0 {
-					browserhelpers.OpenJournalDatePicker(t, driver)
-				}
+				browserhelpers.ClickJournalWiki(t, driver)
+				return
 			}
 		}
 		if err := browserhelpers.ClickElementWithRetry(driver, by, selector, 30*time.Second); err != nil {
@@ -408,7 +407,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	save("09-launch-day-desktop", data)
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='Coffee with Maya before the pilot']]")
+	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
 	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
 	if err := earlier.Click(); err != nil {
@@ -429,11 +428,20 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='Coffee with Maya before the pilot']]")
+	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
 	launch = find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
+	open, err := driver.ExecuteScript("return arguments[0].parentElement.open", []any{launch})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if open != true {
+		if err := browserhelpers.ClickElementInView(driver, launch); err != nil {
+			t.Fatal(err)
+		}
+	}
 	section, err = launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
 	if err != nil {
 		t.Fatal(err)
