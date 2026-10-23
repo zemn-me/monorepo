@@ -276,3 +276,20 @@ func (g *freewareBrowser) startSkirmish() {
 		g.t.Fatalf("scenario did not generate units: %v", err)
 	}
 }
+
+func (g *freewareBrowser) deployStartingArmy() {
+	g.t.Helper()
+	// Spawn positions and MCV facing vary with the scenario seed. Box-select
+	// the starting army so the deployment check does not rely on a sprite pixel.
+	g.pointer(120, 100, "mouseMoved", 0)
+	g.pointer(120, 100, "mousePressed", 1)
+	for step := 1; step <= 10; step++ {
+		g.pointer(120+step*39, 100+step*26, "mouseMoved", 1)
+		g.advance(25 * time.Millisecond)
+	}
+	g.pointer(510, 360, "mouseReleased", 0)
+	if err := g.canvas.SendKeys("d"); err != nil {
+		g.t.Fatal(err)
+	}
+	g.waitPixels("construction yard unlocks power plant", image.Rect(656, 178, 719, 220), colored, 1100)
+}
