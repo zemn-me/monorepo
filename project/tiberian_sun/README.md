@@ -28,8 +28,10 @@ Window resizing changes the visible battlefield at that display scale. Screen
 and viewport measurements use CSS pixels, independent of device pixel density;
 if screen dimensions are unavailable, gameplay falls back to one CSS pixel per
 game pixel. Browsers do not report reliable physical dimensions in inches or cm.
-The framebuffer retains an 800×600 minimum and a 4096-pixel maximum edge; smaller
-windows scale the minimum frame to fit without distortion.
+Desktop gameplay retains an 800×600 minimum. Small touch displays instead target
+1.25 CSS pixels per game pixel with a 360×300 minimum, showing less battlefield
+so units remain readable on phones. Menus keep their 800×600 reference. Both
+layouts preserve aspect ratio and cap the framebuffer edge at 4096 pixels.
 Changes are debounced and applied between game or modal frames because replacing
 drawing surfaces during a suspended paint would invalidate its pointers.
 
@@ -206,12 +208,13 @@ It retains `performance-host.log` and `performance-guest.log` in undeclared
 outputs and prints performance samples. Headless software rendering can be much
 slower than an interactive browser; compare runs on the same machine.
 
-The normal integration suite also checks real-time multiplayer background scheduling.
-To run that case by itself:
+The normal multiplayer scenario continues the match through hiding and restoring
+the guest tab under virtual time, checking new shared simulation checksums.
+Native browser background scheduling is an opt-in performance measurement,
+excluded from the normal virtual-time integration suite:
 
 ```sh
-./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
-  --test_arg='-test.run=^TestBrowserMultiplayerBackground$' \
+./sh/bin/bazel test //project/tiberian_sun/testing:background_scheduling_benchmark \
   --nocache_test_results --test_output=all
 ```
 
@@ -290,10 +293,10 @@ opens the game through the experiment link, goes back while the engine is
 running, and reopens it without replacing the React document. Download-failure
 cases verify visible, focused error feedback at desktop and phone widths.
 
-Except for the real-time multiplayer background case, the browser tests install
-a Sinon clock before application scripts load. They
+The normal browser integration tests install a Sinon clock before application
+scripts load. They
 advance dates, performance timers, timeouts, intervals, animation frames, and
-ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
+Web Audio processing and completion callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
 and ten seconds of skirmish simulation use simulated time rather than host
 sleeps. The clock initially captures the current date so server-rendered calendar text
 hydrates consistently, then remains frozen between explicit advances.

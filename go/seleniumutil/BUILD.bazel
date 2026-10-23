@@ -2,6 +2,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_library")
 load("//js:rules.bzl", "js_binary", "js_library", "js_run_binary")
+load("//ts:rules.bzl", "ts_project")
 
 """
 Provides the rlocationpath of chromewebdriver to TypeScript
@@ -89,7 +90,10 @@ js_library(
     name = "bundle_virtual_clock_source",
     srcs = ["bundle_virtual_clock.mjs"],
     # esbuild resolves this entry point at runtime.
-    data = [":virtual_clock_source"],  # keep
+    data = [
+        ":clocked_audio",
+        ":virtual_clock_source",
+    ],  # keep
     deps = ["//:node_modules/esbuild"],
 )
 
@@ -103,4 +107,30 @@ js_run_binary(
     name = "virtual_clock_bundle",
     stdout = "virtual_clock_bundle.js",
     tool = ":bundle_virtual_clock_bin",
+)
+
+# gazelle:resolve typescript #root/go/seleniumutil/virtual_clock.mjs :virtual_clock_source
+ts_project(
+    name = "clocked_audio",
+    srcs = [
+        "clocked_audio.ts",
+        "native_performance.ts",
+        "virtual_clock_entry.ts",
+        "virtual_clock_modules.d.ts",
+    ],
+    deps = [
+        ":virtual_clock_source",
+        "//:node_modules/@types/node",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "clocked_audio.ts",
+        "native_performance.ts",
+        "virtual_clock_entry.ts",
+        "virtual_clock_modules.d.ts",
+    ],
+    visibility = ["//:__subpackages__"],
 )

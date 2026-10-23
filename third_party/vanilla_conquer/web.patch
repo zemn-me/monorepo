@@ -375,3 +375,57 @@ diff --git a/common/settings.cpp b/common/settings.cpp
      Video.Scaler = ini.Get_String("Video", "Scaler", Video.Scaler);
      Video.Driver = ini.Get_String("Video", "Driver", Video.Driver);
      Video.PixelFormat = ini.Get_String("Video", "PixelFormat", Video.PixelFormat);
+diff --git a/redalert/scroll.cpp b/redalert/scroll.cpp
+--- a/redalert/scroll.cpp
++++ b/redalert/scroll.cpp
+@@ -37,4 +37,7 @@
+-
++
+ #include "function.h"
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
+-
++
+ #define SCROLL_DELAY 1
+@@ -104,4 +107,13 @@
+             int scrollDistance = (7 - Options.ScrollRate) * 20;
+             Scroll_Map((DirType)scrollDirection, scrollDistance, true);
++        }
++#endif
++
++#ifdef __EMSCRIPTEN__
++        // A released touch is not a hovering mouse, even though SDL retains
++        // its last position. Keep native clicks and analog scrolling active.
++        if (!EM_ASM_INT({ return Module.webHasMouseHover(); })) {
++            noscroll = true;
++            Inertia = 0;
+         }
+ #endif
+diff --git a/tiberiandawn/scroll.cpp b/tiberiandawn/scroll.cpp
+--- a/tiberiandawn/scroll.cpp
++++ b/tiberiandawn/scroll.cpp
+@@ -37,4 +37,7 @@
+-
++
+ #include "function.h"
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
+-
++
+ #define SCROLL_DELAY 1
+@@ -108,4 +111,13 @@
+             int scrollDistance = (7 - Options.ScrollRate) * 20;
+             Scroll_Map((DirType)scrollDirection, scrollDistance, true);
++        }
++#endif
++
++#ifdef __EMSCRIPTEN__
++        // A released touch is not a hovering mouse, even though SDL retains
++        // its last position. Keep native clicks and analog scrolling active.
++        if (!EM_ASM_INT({ return Module.webHasMouseHover(); })) {
++            noscroll = true;
++            Inertia = 0;
+         }
+ #endif

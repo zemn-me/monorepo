@@ -19,19 +19,7 @@ func TestFreewareSkirmish(t *testing.T) {
 	g.waitSelector()
 	g.startSkirmish()
 	g.waitPixels("terrain and units rendered", image.Rect(150, 140, 500, 350), colored, 15000)
-	// Spawn positions and MCV facing vary with the scenario seed. Box-select
-	// the starting army so the deployment check does not rely on a sprite pixel.
-	g.pointer(120, 100, "mouseMoved", 0)
-	g.pointer(120, 100, "mousePressed", 1)
-	for step := 1; step <= 10; step++ {
-		g.pointer(120+step*39, 100+step*26, "mouseMoved", 1)
-		g.advance(25 * time.Millisecond)
-	}
-	g.pointer(510, 360, "mouseReleased", 0)
-	if err := g.canvas.SendKeys("d"); err != nil {
-		t.Fatal(err)
-	}
-	g.waitPixels("construction yard unlocks power plant", image.Rect(656, 178, 719, 220), colored, 1100)
+	g.deployStartingArmy()
 	// Run ten seconds of the actual simulation without waiting ten wall seconds.
 	// Advancing at the browser layer covers native engine time and async waits.
 	beforeAdvance, err := g.driver.ExecuteScript("return performance.now()", nil)
@@ -336,5 +324,114 @@ func TestDirectVisitExit(t *testing.T) {
 		return current == g.base+"/experiments", err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("quitting did not return to the previous page: %v", err)
+	}
+}
+
+func TestPhoneSkirmishGameplay(t *testing.T) {
+	g := newFreewareBrowser(t)
+	g.navigate()
+	g.waitRunning()
+	g.waitSelector()
+	g.startSkirmish()
+	if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+		t.Fatal(err)
+	}
+	g.touchInput = true
+	g.deployStartingArmy()
+	// Keep gameplay centered on the same starting army after each mode change.
+	for _, size := range []struct {
+		name                                   string
+		width, height, frameWidth, frameHeight int
+	}{
+		{"iphone-portrait", 390, 844, 360, 779},
+		{"iphone-landscape", 844, 390, 675, 312},
+		{"large-iphone-portrait", 430, 932, 360, 780},
+		{"large-iphone-landscape", 932, 430, 746, 344},
+	} {
+		t.Run(size.name, func(t *testing.T) {
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": size.width, "height": size.height, "screenWidth": size.width, "screenHeight": size.height, "deviceScaleFactor": 3, "mobile": true}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+				value, err := w.ExecuteScript(`const [c,w,h]=arguments,r=c.getBoundingClientRect();return c.width===w&&c.height===h&&Math.abs(r.width-innerWidth)<1&&Math.abs(r.height-innerHeight)<1`, []interface{}{g.canvas, size.frameWidth, size.frameHeight})
+				return value == true, err
+			}, 30*time.Second); err != nil {
+				t.Fatalf("phone framebuffer: %v", err)
+			}
+			if err := g.canvas.SendKeys("h"); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.wait(func(selenium.WebDriver) (bool, error) {
+				frame := g.snapshot()
+				visible := 0
+				for y := 20; y < size.frameHeight; y += 4 {
+					for x := 0; x < size.frameWidth-168; x += 4 {
+						r, g, b, _ := frame.At(x*frame.Bounds().Dx()/size.frameWidth, y*frame.Bounds().Dy()/size.frameHeight).RGBA()
+						if colored(r>>8, g>>8, b>>8) {
+							visible++
+						}
+					}
+				}
+				return visible > 200, nil
+			}, 30*time.Second); err != nil {
+				t.Fatalf("phone battlefield remained blank: %v", err)
+			}
+			// Box-select the visible army, just as when dragging a finger
+			// across the battlefield, then let the simulation run hands-free.
+			startX, startY := 10*size.width/size.frameWidth, 30*size.height/size.frameHeight
+			endX, endY := (size.frameWidth-170)*size.width/size.frameWidth, size.height-1
+			g.touchAt(startX, startY, "touchStart")
+			for step := 1; step <= 8; step++ {
+				g.touchAt(startX+(endX-startX)*step/8, startY+(endY-startY)*step/8, "touchMove")
+				g.advance(25 * time.Millisecond)
+			}
+			g.touchAt(endX, endY, "touchEnd")
+			before := g.snapshot()
+			g.advance(2 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("battlefield moved while the player waited: %.1f%% stationary terrain", stable*100)
+			}
+			// Give the selected army a ground order and continue playing.
+			targetX := (size.frameWidth - 168) * size.width * 3 / (size.frameWidth * 4)
+			targetY := size.height * 3 / 4
+			g.touchAt(targetX, targetY, "touchStart")
+			g.advance(80 * time.Millisecond)
+			g.touchAt(targetX, targetY, "touchEnd")
+			before = g.snapshot()
+			g.advance(3 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("view drifted while units carried out their orders: %.1f%% stationary terrain", stable*100)
+			}
+			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+				shot, err := g.driver.Screenshot()
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(filepath.Join(dir, size.name+".png"), shot, 0644); err != nil {
+					t.Fatal(err)
+				}
+			}
+		})
+	}
+	// Switching to a real mouse still permits intentional camera movement.
+	g.touchInput = false
+	moved := 0.0
+	for _, x := range []int{1, 931} {
+		g.dispatch(400, 215, "mouseMoved", 0)
+		g.advance(300 * time.Millisecond)
+		if err := g.canvas.SendKeys("h"); err != nil {
+			t.Fatal(err)
+		}
+		g.advance(100 * time.Millisecond)
+		before := g.snapshot()
+		g.dispatch(x, 215, "mouseMoved", 0)
+		g.advance(time.Second)
+		moved = math.Max(moved, 1-g.stationaryBattlefield(t, before, g.snapshot(), 746, 344))
+	}
+	if moved < 0.25 {
+		t.Fatalf("mouse camera controls did not move the view: %.1f%%", moved*100)
 	}
 }

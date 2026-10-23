@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"image"
 	"image/png"
+	"math"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -28,7 +29,7 @@ func siteURL(t *testing.T) string {
 	return "http://localhost:" + ports.Site
 }
 
-func newBrowser(t *testing.T, width, height int) *seleniumutil.Driver {
+func newBrowser(t *testing.T, width, height int) (*seleniumutil.Driver, *seleniumutil.VirtualClock) {
 	t.Helper()
 	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{"pageLoadStrategy": "eager", "goog:loggingPrefs": map[string]string{"browser": "ALL"}}, "--use-angle=swiftshader", "--enable-unsafe-swiftshader")
 	if err != nil {
@@ -53,7 +54,11 @@ func newBrowser(t *testing.T, width, height int) *seleniumutil.Driver {
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
-	return driver
+	clock, err := seleniumutil.NewVirtualClock(driver)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return driver, clock
 }
 
 func snapshot(t *testing.T, driver *seleniumutil.Driver, name string) image.Image {
@@ -76,10 +81,6 @@ func snapshot(t *testing.T, driver *seleniumutil.Driver, name string) image.Imag
 
 func advance(t *testing.T, clock *seleniumutil.VirtualClock, duration time.Duration) {
 	t.Helper()
-	if clock == nil {
-		time.Sleep(duration)
-		return
-	}
 	for duration > 0 {
 		step := min(duration, 100*time.Millisecond)
 		if err := clock.Advance(step); err != nil {
@@ -111,6 +112,102 @@ func click(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.Virtua
 	}
 }
 
+// Touch gameplay uses the browser's input path, including SDL's synthesized mouse.
+func touch(t *testing.T, driver *seleniumutil.Driver, x, y int, kind string) {
+	t.Helper()
+	points := []map[string]any{}
+	if kind != "touchEnd" {
+		points = append(points, map[string]any{"x": x, "y": y, "id": 1})
+	}
+	if err := driver.ExecuteChromiumCommand("Input.dispatchTouchEvent", map[string]any{"type": kind, "touchPoints": points}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func stationaryTerrain(t *testing.T, before, after image.Image) float64 {
+	t.Helper()
+	total, matched := 0, 0
+	for y := 100; y < 480; y += 3 {
+		for x := 50; x < 580; x += 3 {
+			r, g, b, _ := before.At(x, y).RGBA()
+			// Ignore shroud, but include snow as well as colored terrain.
+			if max(r, g, b) < 35*257 {
+				continue
+			}
+			total++
+			r2, g2, b2, _ := after.At(x, y).RGBA()
+			if math.Abs(float64(r)-float64(r2))+math.Abs(float64(g)-float64(g2))+math.Abs(float64(b)-float64(b2)) < 30*257 {
+				matched++
+			}
+		}
+	}
+	if total < 100 {
+		t.Fatal("not enough visible terrain during campaign gameplay")
+	}
+	return float64(matched) / float64(total)
+}
+
+func playTouchCampaign(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.VirtualClock, name string) {
+	t.Helper()
+	if err := driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+		t.Fatal(err)
+	}
+	// Open the sidebar, box-select the battlefield, and issue a ground order.
+	closedSidebar := snapshot(t, driver, name+"-sidebar-before")
+	touch(t, driver, 700, 60, "touchStart")
+	advance(t, clock, 80*time.Millisecond)
+	touch(t, driver, 700, 60, "touchEnd")
+	advance(t, clock, 300*time.Millisecond)
+	openSidebar := snapshot(t, driver, name+"-sidebar-touch")
+	changed := 0
+	for y := 90; y < 500; y++ {
+		for x := 610; x < 790; x++ {
+			if closedSidebar.At(x, y) != openSidebar.At(x, y) {
+				changed++
+			}
+		}
+	}
+	if changed < 1000 {
+		t.Fatalf("touch did not toggle the native sidebar: %d changed pixels", changed)
+	}
+	touch(t, driver, 40, 100, "touchStart")
+	for step := 1; step <= 8; step++ {
+		touch(t, driver, 40+550*step/8, 100+449*step/8, "touchMove")
+		advance(t, clock, 25*time.Millisecond)
+	}
+	touch(t, driver, 590, 549, "touchEnd")
+	before := snapshot(t, driver, name+"-selection")
+	advance(t, clock, 2*time.Second)
+	if stable := stationaryTerrain(t, before, snapshot(t, driver, name+"-selected-army")); stable < 0.75 {
+		t.Fatalf("view moved while selecting the army: %.1f%% stationary terrain", stable*100)
+	}
+	touch(t, driver, 430, 400, "touchStart")
+	advance(t, clock, 80*time.Millisecond)
+	touch(t, driver, 430, 400, "touchEnd")
+	before = snapshot(t, driver, name+"-orders")
+	advance(t, clock, 3*time.Second)
+	if stable := stationaryTerrain(t, before, snapshot(t, driver, name+"-playing")); stable < 0.75 {
+		t.Fatalf("view drifted while units carried out their orders: %.1f%% stationary terrain", stable*100)
+	}
+	// A touch-capable device may also have a mouse: its camera controls still work.
+	movement := 0.0
+	for _, x := range []int{1, 799} {
+		if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": 400, "y": 300}); err != nil {
+			t.Fatal(err)
+		}
+		advance(t, clock, 300*time.Millisecond)
+		before = snapshot(t, driver, name+"-mouse-center")
+		if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": "mouseMoved", "x": x, "y": 300}); err != nil {
+			t.Fatal(err)
+		}
+		advance(t, clock, time.Second)
+		movement = math.Max(movement, 1-stationaryTerrain(t, before, snapshot(t, driver, name+"-mouse-camera")))
+	}
+	if movement < 0.25 {
+		t.Fatalf("mouse camera controls did not move the view: %.1f%%", movement*100)
+	}
+}
+
 func assertRunning(t *testing.T, driver *seleniumutil.Driver) bool {
 	t.Helper()
 	value, err := driver.ExecuteScript("return document.querySelector('[role=status]')?.textContent", nil)
@@ -133,9 +230,10 @@ func movieRequests(t *testing.T, driver *seleniumutil.Driver) int {
 	return int(value.(float64))
 }
 
-func waitMovie(t *testing.T, driver *seleniumutil.Driver, count int) {
+func waitMovie(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.VirtualClock, count int) {
 	t.Helper()
 	if err := driver.WaitWithTimeout(func(selenium.WebDriver) (bool, error) {
+		advance(t, clock, 100*time.Millisecond)
 		value, err := driver.ExecuteScript(`return document.querySelector('[role=status]')?.textContent.includes('Game running')`, nil)
 		return err == nil && value == true && movieRequests(t, driver) >= count, err
 	}, 60*time.Second); err != nil {
@@ -143,10 +241,11 @@ func waitMovie(t *testing.T, driver *seleniumutil.Driver, count int) {
 	}
 }
 
-func button(t *testing.T, driver *seleniumutil.Driver, text string) selenium.WebElement {
+func button(t *testing.T, driver *seleniumutil.Driver, clock *seleniumutil.VirtualClock, text string) selenium.WebElement {
 	t.Helper()
 	var result selenium.WebElement
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
+		advance(t, clock, 100*time.Millisecond)
 		var err error
 		result, err = w.FindElement(selenium.ByXPATH, "//button[normalize-space(.)='"+text+"']")
 		if err != nil {
@@ -208,7 +307,7 @@ func testBrowserCampaigns(t *testing.T, phone bool) {
 			continue
 		}
 		t.Run(game.name, func(t *testing.T) {
-			driver := newBrowser(t, 800, 600)
+			driver, clock := newBrowser(t, 800, 600)
 			if game.phone {
 				if err := driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
 					t.Fatal(err)
@@ -217,16 +316,6 @@ func testBrowserCampaigns(t *testing.T, phone bool) {
 					t.Fatal(err)
 				}
 			}
-			var clock *seleniumutil.VirtualClock
-			if game.route != "red-alert" {
-				var err error
-				clock, err = seleniumutil.NewVirtualClock(driver)
-				if err != nil {
-					t.Fatal(err)
-				}
-			}
-			// Red Alert cinematics use real Web Audio buffer sources and their
-			// completion events, which the ScriptProcessor test clock does not model.
 			if err := driver.Get(base + "/experiments/" + game.route); err != nil {
 				t.Fatal(err)
 			}
@@ -264,7 +353,7 @@ func testBrowserCampaigns(t *testing.T, phone bool) {
 				if err := button.SendKeys(selenium.EnterKey); err != nil {
 					t.Fatal(err)
 				}
-				waitMovie(t, driver, 1)
+				waitMovie(t, driver, clock, 1)
 				advance(t, clock, 3*time.Second)
 				snapshot(t, driver, game.name+"-intro")
 				advance(t, clock, 10*time.Second) // Let the intro finish naturally.
@@ -300,7 +389,7 @@ func testBrowserCampaigns(t *testing.T, phone bool) {
 					}
 				}
 				enter(t, canvas, clock, 4*time.Second) // Faction and its first mission briefing movie.
-				waitMovie(t, driver, 2)
+				waitMovie(t, driver, clock, 2)
 				firstMovie := snapshot(t, driver, game.name+"-briefing-movie")
 				advance(t, clock, 2*time.Second)
 				nextMovie := snapshot(t, driver, game.name+"-briefing-movie-next")
@@ -368,6 +457,7 @@ func testBrowserCampaigns(t *testing.T, phone bool) {
 			if changed < 60 {
 				t.Fatalf("mission simulation did not animate (changed pixels: %d)", changed)
 			}
+			playTouchCampaign(t, driver, clock, game.name)
 			if game.phone {
 				for _, size := range [][2]int{{390, 844}, {844, 390}, {430, 932}, {932, 430}} {
 					if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": size[0], "height": size[1], "screenWidth": size[0], "screenHeight": size[1], "deviceScaleFactor": 3, "mobile": true}); err != nil {
@@ -404,7 +494,7 @@ func TestDownloadFailure(t *testing.T) {
 	base := siteURL(t)
 	for _, width := range []int{800, 390} {
 		t.Run(strconv.Itoa(width), func(t *testing.T) {
-			driver := newBrowser(t, width, 844)
+			driver, _ := newBrowser(t, width, 844)
 			for _, command := range []struct {
 				name string
 				args map[string]any
@@ -443,7 +533,7 @@ func TestCinematicDownloadFailure(t *testing.T) {
 		retry bool
 	}{{390, true}, {800, false}} {
 		t.Run(strconv.Itoa(scenario.width), func(t *testing.T) {
-			driver := newBrowser(t, scenario.width, 844)
+			driver, clock := newBrowser(t, scenario.width, 844)
 			if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
 				t.Fatal(err)
 			}
@@ -453,10 +543,10 @@ func TestCinematicDownloadFailure(t *testing.T) {
 			if err := driver.Get(siteURL(t) + "/experiments/red-alert"); err != nil {
 				t.Fatal(err)
 			}
-			if err := button(t, driver, "Start Red Alert").Click(); err != nil {
+			if err := button(t, driver, clock, "Start Red Alert").Click(); err != nil {
 				t.Fatal(err)
 			}
-			button(t, driver, "Retry")
+			button(t, driver, clock, "Retry")
 			if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
 				value, err := w.ExecuteScript(`const s=document.querySelector('[role=status]'),r=s.getBoundingClientRect();return s.textContent.includes('Could not load this cinematic')&&document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, nil)
 				return value == true, err
@@ -468,11 +558,11 @@ func TestCinematicDownloadFailure(t *testing.T) {
 				if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{}}); err != nil {
 					t.Fatal(err)
 				}
-				if err := button(t, driver, "Retry").Click(); err != nil {
+				if err := button(t, driver, clock, "Retry").Click(); err != nil {
 					t.Fatal(err)
 				}
-				waitMovie(t, driver, 1)
-				advance(t, nil, 2*time.Second)
+				waitMovie(t, driver, clock, 1)
+				advance(t, clock, 2*time.Second)
 				canvas, err := driver.FindElement(selenium.ByCSSSelector, "canvas")
 				if err != nil {
 					t.Fatal(err)
@@ -481,24 +571,24 @@ func TestCinematicDownloadFailure(t *testing.T) {
 					t.Fatal(err)
 				}
 			} else {
-				if err := button(t, driver, "Skip cinematic").Click(); err != nil {
+				if err := button(t, driver, clock, "Skip cinematic").Click(); err != nil {
 					t.Fatal(err)
 				}
 			}
 			if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 				t.Fatal(err)
 			}
-			waitMenu(t, driver, nil, "cinematic-recovered-"+strconv.Itoa(scenario.width), 268)
+			waitMenu(t, driver, clock, "cinematic-recovered-"+strconv.Itoa(scenario.width), 268)
 		})
 	}
 }
 
 func TestSkipDownloadingCinematic(t *testing.T) {
-	driver := newBrowser(t, 390, 844)
+	driver, clock := newBrowser(t, 390, 844)
 	if err := driver.Get(siteURL(t) + "/experiments/red-alert"); err != nil {
 		t.Fatal(err)
 	}
-	start := button(t, driver, "Start Red Alert")
+	start := button(t, driver, clock, "Start Red Alert")
 	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
 		t.Fatal(err)
 	}
@@ -508,7 +598,7 @@ func TestSkipDownloadingCinematic(t *testing.T) {
 	if err := start.Click(); err != nil {
 		t.Fatal(err)
 	}
-	skip := button(t, driver, "Skip cinematic")
+	skip := button(t, driver, clock, "Skip cinematic")
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
 		value, err := w.ExecuteScript(`const b=arguments[0],r=b.getBoundingClientRect(),p=document.querySelector('progress');return document.activeElement===b&&r.left>=0&&r.right<=innerWidth&&r.height>=44&&!p.hidden`, []interface{}{skip})
 		return value == true, err
@@ -525,11 +615,11 @@ func TestSkipDownloadingCinematic(t *testing.T) {
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
-	waitMenu(t, driver, nil, "cinematic-download-skipped", 268)
+	waitMenu(t, driver, clock, "cinematic-download-skipped", 268)
 }
 
 func TestCinematicNavigation(t *testing.T) {
-	driver := newBrowser(t, 800, 600)
+	driver, clock := newBrowser(t, 800, 600)
 	base := siteURL(t)
 	if err := driver.Get(base + "/experiments"); err != nil {
 		t.Fatal(err)
@@ -541,7 +631,7 @@ func TestCinematicNavigation(t *testing.T) {
 	if err := link.Click(); err != nil {
 		t.Fatal(err)
 	}
-	start := button(t, driver, "Start Red Alert")
+	start := button(t, driver, clock, "Start Red Alert")
 	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
 		t.Fatal(err)
 	}
@@ -551,7 +641,7 @@ func TestCinematicNavigation(t *testing.T) {
 	if err := start.Click(); err != nil {
 		t.Fatal(err)
 	}
-	button(t, driver, "Skip cinematic")
+	button(t, driver, clock, "Skip cinematic")
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
@@ -571,5 +661,5 @@ func TestCinematicNavigation(t *testing.T) {
 	if err := link.Click(); err != nil {
 		t.Fatal(err)
 	}
-	button(t, driver, "Start Red Alert") // A second engine can start after the pending one shuts down.
+	button(t, driver, clock, "Start Red Alert") // A second engine can start after the pending one shuts down.
 }
