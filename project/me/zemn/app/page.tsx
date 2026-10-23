@@ -2,7 +2,7 @@ import {
 	imageProps as profilePhoto,
 	averageColor as profilePhotoAverageColor,
 	pictureSources as profilePhotoSources,
-} from '#root/jpeg/2026/05/25/profile_photo.js';
+} from '#root/jpeg/2026/09/06/profile_photo.js';
 import { Eeg } from '#root/project/me/zemn/app/eeg.js';
 import {
 	type LinksetLabel,
