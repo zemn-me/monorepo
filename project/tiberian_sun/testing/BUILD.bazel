@@ -19,16 +19,53 @@ itest_service(
 service_test(
     name = "integration_test",
     size = "large",
+    # Emit timings as commands finish: a process timeout loses Go's buffered logs.
+    args = [
+        "-test.v",
+        "-test.skip=TestBrowserMultiplayerBackground",
+    ],
+    # Two complete engines use software-rendered Chromium alongside the site.
+    # Reserve their CPU and memory rather than relying on an estimate from the
+    # much lighter browser scenarios sharing this test target.
+    exec_properties = {
+        "test.EstimatedCPU": "4",
+        "test.EstimatedMemory": "4GB",
+        # WebRTC needs a browser-visible interface to gather ICE candidates.
+        "test.network": "external",
+    },
     services = [":site"],
+    # Keep each browser scenario within the test deadline under remote contention.
+    shard_count = 4,
+    test = ":testing_test",
+)
+
+# Measures native Chromium throttling; virtual clocks would mask that behavior.
+service_test(
+    name = "background_scheduling_benchmark",
+    size = "large",
+    args = [
+        "-test.v",
+        "-test.run=^TestBrowserMultiplayerBackground$",
+    ],
+    exec_properties = {
+        "test.EstimatedCPU": "4",
+        "test.EstimatedMemory": "4GB",
+        "test.network": "external",
+    },
+    services = [":site"],
+    tags = ["manual"],
     test = ":testing_test",
 )
 
 go_test(
     name = "testing_test",
     srcs = [
+        "background_test.go",
         "browser_helpers_test.go",
         "browser_test.go",
         "campaign_test.go",
+        "game_browser_test.go",
+        "multiplayer_browser_test.go",
         "multiplayer_test.go",
     ],
     tags = ["manual"],  # keep; requires the production site service.

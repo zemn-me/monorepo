@@ -2773,7 +2773,7 @@ export default function JournalPageClient({
 	const isWiki = selection.wiki !== null;
 	const [hasLocalRecordings, setHasLocalRecordings] = useState(false);
 	const journal = useGetJournal(idToken, !isWiki);
-	const uploads = useGetJournalUploads(idToken, isWiki && hasLocalRecordings);
+	const uploads = useGetJournalUploads(idToken, hasLocalRecordings);
 	const createEntry = usePostJournalEntry(idToken);
 	const deleteEntry = useDeleteJournalEntry(idToken);
 	const updateEntryDate = useUpdateJournalEntryDate(idToken);
@@ -2822,12 +2822,12 @@ export default function JournalPageClient({
 				() => false
 			),
 		upload: createJournalEntry,
-		entries: (isWiki ? uploads : journal)(
+		entries: uploads(
 			value => value.entries,
 			() => [],
 			() => []
 		),
-		readyEntryIDs: (isWiki ? uploads : journal)(
+		readyEntryIDs: uploads(
 			value =>
 				value.entries
 					.filter(entry => entry.status === 'ready')

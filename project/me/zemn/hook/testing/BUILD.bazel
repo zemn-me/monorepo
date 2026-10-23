@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+go_test(
+    name = "testing_test",
+    srcs = ["upload_test.go"],
+    data = ["//project/me/zemn/hook:journal_upload.js"],
+    env = {"UPLOAD_MODULE": "$(rlocationpath //project/me/zemn/hook:journal_upload.js)"},
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@io_bazel_rules_go//go/runfiles",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

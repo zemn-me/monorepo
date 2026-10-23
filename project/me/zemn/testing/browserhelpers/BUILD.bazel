@@ -1,0 +1,26 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+package(
+    default_testonly = True,
+    default_visibility = ["//project/me/zemn/testing:__subpackages__"],
+)
+
+go_library(
+    name = "browserhelpers",
+    srcs = [
+        "integration_helpers.go",
+        "navigation_helpers.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers",
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

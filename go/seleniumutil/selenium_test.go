@@ -1,13 +1,19 @@
 package selenium_test
 
 import (
+	"bytes"
+	"image"
+	"image/png"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
 
-	selenium "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/tebeka/selenium"
+
+	seleniumutil "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
 func TestBrowserSession(t *testing.T) {
@@ -19,7 +25,7 @@ func TestBrowserSession(t *testing.T) {
 		}
 		t.Setenv("TMPDIR", tmp)
 	}
-	driver, err := selenium.New()
+	driver, err := seleniumutil.New()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,5 +39,95 @@ func TestBrowserSession(t *testing.T) {
 	}
 	if title != "browser smoke test" {
 		t.Fatalf("title = %q", title)
+	}
+}
+
+// Excluding ChromeDriver's timer override must retain the managed binary and
+// normal launch arguments. Inspect Chromium's own runtime command line.
+func TestChromeOptions(t *testing.T) {
+	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{
+		"goog:chromeOptions": map[string]any{
+			"excludeSwitches": []string{"disable-background-timer-throttling"},
+		},
+	}, "--window-size=900,700")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { driver.Close() })
+	if err := driver.Get("chrome://version"); err != nil {
+		t.Fatal(err)
+	}
+	commandLine, err := driver.FindElement(selenium.ByCSSSelector, "#command_line")
+	if err != nil {
+		t.Fatal(err)
+	}
+	text, err := commandLine.Text()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(text, "--disable-background-timer-throttling") {
+		t.Fatalf("excluded timer override remains active: %s", text)
+	}
+	if !strings.Contains(text, "--headless") || !strings.Contains(text, "--window-size=900,700") {
+		t.Fatalf("normal launch arguments lost when adding Chrome options: %s", text)
+	}
+}
+
+func TestViewScreenshotDuringAnimation(t *testing.T) {
+	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{
+		"goog:chromeOptions": map[string]any{
+			"excludeSwitches": []string{"disable-background-timer-throttling", "disable-backgrounding-occluded-windows", "disable-renderer-backgrounding"},
+		},
+	}, "--window-size=1000,900", "--use-angle=swiftshader", "--enable-unsafe-swiftshader")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { driver.Close() })
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.Get("data:text/html," + url.PathEscape(`<style>body{margin:0}</style><canvas width="800" height="600"></canvas><script>
+const canvas=document.querySelector('canvas'), gl=canvas.getContext('webgl');
+let frame=0;
+function draw(){gl.clearColor(0,0,1,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.SCISSOR_TEST);gl.scissor(100,400,100,100);gl.clearColor(1,1,1,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.disable(gl.SCISSOR_TEST);canvas.dataset.frame=++frame;requestAnimationFrame(draw);}draw();
+</script>`)); err != nil {
+		t.Fatal(err)
+	}
+	before, err := driver.ExecuteScript("return Number(document.querySelector('canvas').dataset.frame)", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, size := range []image.Point{{X: 800, Y: 600}, {X: 390, Y: 844}, {X: 800, Y: 600}} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": size.X, "height": size.Y, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+			t.Fatal(err)
+		}
+		for range 10 {
+			data, err := driver.ViewScreenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			shot, err := png.Decode(bytes.NewReader(data))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if shot.Bounds().Dx() != size.X || shot.Bounds().Dy() != size.Y {
+				t.Fatalf("screenshot bounds = %v, want %dx%d", shot.Bounds(), size.X, size.Y)
+			}
+			r, g, b, _ := shot.At(120, 120).RGBA()
+			if r < 60000 || g < 60000 || b < 60000 {
+				t.Fatalf("white control pixel = %d,%d,%d", r, g, b)
+			}
+			r, g, b, _ = shot.At(10, 10).RGBA()
+			if r > 1000 || g > 1000 || b < 60000 {
+				t.Fatalf("blue background pixel = %d,%d,%d", r, g, b)
+			}
+		}
+	}
+	after, err := driver.ExecuteScript("return Number(document.querySelector('canvas').dataset.frame)", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if after.(float64) <= before.(float64) {
+		t.Fatalf("animation stopped during capture: %v -> %v", before, after)
 	}
 }

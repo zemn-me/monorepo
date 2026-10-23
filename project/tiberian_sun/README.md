@@ -18,9 +18,20 @@ API, and mounts the user directory on IndexedDB. It starts the engine with
 `-DATADIR=/game -USERDIR=/save -WIN -XCC`; engine output and errors go to the browser console. Game data uses the site's content-addressed asset cache.
 
 The game fills the browser viewport. Quitting from its menu returns to the
-previous page, or the experiments index when the tab has no previous page. Rendering follows the viewport in CSS
-pixels, including live window resizing, with an 800×600 minimum and a 4096-pixel
-maximum edge; smaller windows scale the minimum frame to fit without distortion.
+previous page, or the experiments index when the tab has no previous page. Menus
+scale from an 800×600 reference to fit the window with centered letterboxing,
+keeping artwork and pointer targets aligned on large displays. Rml setup menus
+and in-game dialogs scale independently of the gameplay resolution.
+Gameplay scales the 800×600 reference to the reported screen size, so units and
+sidebar controls occupy a consistent fraction of the display across resolutions.
+Window resizing changes the visible battlefield at that display scale. Screen
+and viewport measurements use CSS pixels, independent of device pixel density;
+if screen dimensions are unavailable, gameplay falls back to one CSS pixel per
+game pixel. Browsers do not report reliable physical dimensions in inches or cm.
+Desktop gameplay retains an 800×600 minimum. Small touch displays instead target
+1.25 CSS pixels per game pixel with a 360×300 minimum, showing less battlefield
+so units remain readable on phones. Menus keep their 800×600 reference. Both
+layouts preserve aspect ratio and cap the framebuffer edge at 4096 pixels.
 Changes are debounced and applied between game or modal frames because replacing
 drawing surfaces during a suspended paint would invalidate its pointers.
 
@@ -112,20 +123,34 @@ default of `x86` would enable native SSE flags in the renderer dependency.
 The engine uses Wasm SIMD and retains the native source's strict
 floating-point compiler options.
 
+`//project/tiberian_sun/web:engine_reproducibility_test` compares the production
+JavaScript, WASM, and data files with a second complete compilation in a separate
+Bazel action and fresh temporary directory. It runs in normal presubmit; unchanged
+inputs can reuse each action's cache independently. The compiler remaps source
+and SDK paths and uses a fixed `SOURCE_DATE_EPOCH` so build paths and compilation
+timestamps do not create new content-addressed S3 objects. This checks repeatability
+with the selected host toolchain, not equality between different SDK versions or
+host platforms.
+
 ## Internet multiplayer
 
 Choose **Internet** from the game's main menu. The connection dialog is rendered
 by the engine's existing RmlUi shell, inside the game canvas.
 
-1. The host chooses **Create invitation**, then **Copy your code**, and sends
-   that code to the other player.
-2. The other player chooses **Paste code**, then **Accept code**, and sends
-   their resulting code back to the host.
-3. The host pastes and accepts that reply. Once connected, both players choose
-   **Continue to lobby**.
-4. Enter different player names. The host chooses **New**; the other player
-   selects the advertised game and chooses **Join**. Use the original game
-   setup, **Accept**, and **Go!** controls to start the match.
+Choose **Host a game** or **Join a game**, then follow the numbered steps:
+
+1. **Invitation:** the host copies and sends their invitation, then chooses
+   **Next: enter reply**. The other player pastes it and chooses **Create reply**.
+2. **Reply:** the other player copies and sends their reply back. The host
+   pastes that reply and chooses **Connect**.
+3. **Connect:** once connected, each player sees the next lobby action for
+   their role and chooses **Continue to lobby**.
+
+In the lobby, enter different player names. The host chooses **New**; the other
+player selects that game and chooses **Join**, then **Accept** when ready.
+The host chooses **Go!** to start the match. **Back** lets the host return to
+an invitation without replacing its code; returning to the role chooser
+starts a new connection.
 
 Clipboard buttons may ask for browser permission. The input also accepts a
 normal browser paste. Connection codes contain complete WebRTC descriptions
@@ -143,6 +168,98 @@ discovery; there is no signaling service or TURN relay. Networks that cannot
 establish a direct connection cannot play through this transport. Windows and
 CnCNet interoperability, more than two players, and recovery after a browser
 reload are outside its current scope.
+
+## Multiplayer performance
+
+Run the asset-free transport benchmark with real browser clocks:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/benchmark:benchmark_test --nocache_test_results
+```
+
+The test connects two production peer adapters in one headless Chromium document,
+using the real invitation/answer flow and WebRTC stack with host-only ICE
+(no external STUN dependency). It checks ping/echo latency
+with 1 ms and 16 ms receive polling, then sends 2,048 packets in each direction
+at 64, 512, and 1,536 bytes. Bursts yield every 32 packets, so reported throughput
+is achieved application goodput for that offered load, not link capacity. Payload,
+sequence, duplicate, and loss checks run alongside measurements. A separate
+queued burst verifies partial draining, compaction, and refilling without losing
+or duplicating datagrams. The JSON report
+is saved as `network-performance.json` in the test's undeclared outputs. Timing
+has no fixed CI threshold; missing replies, corrupted packets, and more than 5%
+loopback burst loss fail the test.
+
+This measures local WebRTC and adapter overhead, including browser timer delays.
+It does not emulate two devices, Wi-Fi, the C++/Wasm bridge, rendering, or engine
+acknowledgements and lockstep. In particular, use wall time for performance:
+the normal virtual-clock integration test cannot measure real game speed.
+
+For an asset-backed match with two independent browsers and real clocks:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
+  --test_arg='-test.run=^TestBrowserMultiplayer$' --test_arg=-test.v \
+  --test_env=TIBERIAN_MULTIPLAYER_REALTIME=1 --nocache_test_results
+```
+
+This uses the same lobby, orders, and checksum assertions as the normal test.
+It retains `performance-host.log` and `performance-guest.log` in undeclared
+outputs and prints performance samples. Headless software rendering can be much
+slower than an interactive browser; compare runs on the same machine.
+
+The normal multiplayer scenario continues the match through hiding and restoring
+the guest tab under virtual time, checking new shared simulation checksums.
+Native browser background scheduling is an opt-in performance measurement,
+excluded from the normal virtual-time integration suite:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/testing:background_scheduling_benchmark \
+  --nocache_test_results --test_output=all
+```
+
+This case runs native browser clocks and removes ChromeDriver's
+background-throttling exemptions. It starts a real WebRTC match, measures both
+players for 30 seconds with the game visible, activates a blank tab in the
+guest's browser, waits out the short background grace period, and measures
+another 30 seconds. It checks the actual game document is hidden and unfocused,
+requires matching simulation checksums during the interval, and rejects progress
+below half the foreground baseline. A final visible interval checks recovery.
+No scripts, screenshots, or log polling run during each measurement window.
+The relative threshold allows for software-rendering costs across machines;
+this is a regression check for large slowdowns, not a guarantee of a particular
+frame rate. It covers short-term tab hiding, not OS sleep, discarded pages, or
+Chrome's additional throttling after several minutes. Logs and screenshots are
+saved with the other multiplayer diagnostics.
+
+While a multiplayer match is active and hidden, short native waits resume through
+a MessageChannel task instead of a timer. The native frame pacer still controls
+simulation speed and the browser still receives control between engine slices.
+Visible games and solo games retain their existing timer waits. The channel is
+closed and any suspended continuation released when the engine is unmounted.
+
+During any real match, the browser console logs `Multiplayer performance` every
+120 simulation frames. Each sample includes achieved FPS (after the first sample),
+requested FPS, sample interval in milliseconds, frames between sends, maximum
+simulation lead, cumulative packet
+and byte counts, receive-queue peak and maximum residence time, rejected packets,
+blocked sends, current queued/buffered bytes, selected ICE candidate types, and
+WebRTC RTT when available. Candidate addresses and connection codes are omitted.
+Counters and peaks reset on reconnect; compute differences between samples for
+rates. `droppedPackets` counts local adapter rejections, not losses on the wire.
+Multiplayer maintenance avoids yielding twice for the same callback: its window
+event pump already yields to the browser. Solo maintenance retains its yield.
+The engine's existing `Network timing evaluation` log separately reports process
+time, protocol RTT, and synchronization waiting time.
+
+Interpret these together: high queue residence time implicates delayed engine
+servicing; high processing time and low requested FPS implicate local execution;
+high protocol RTT or waits with low WebRTC RTT suggest engine servicing or retry
+delays. The pinned engine also gives identical speed settings different solo/network
+limits: setting 3 is 30 FPS solo and 20 FPS multiplayer. Check requested FPS
+before treating that difference as transport loss.
+The slowest peer constrains a lockstep match. A same-LAN connection alone
+does not establish which of those costs dominates.
 
 ## Validation and limits
 
@@ -176,9 +293,10 @@ opens the game through the experiment link, goes back while the engine is
 running, and reopens it without replacing the React document. Download-failure
 cases verify visible, focused error feedback at desktop and phone widths.
 
-The browser tests install a Sinon clock before application scripts load. They
+The normal browser integration tests install a Sinon clock before application
+scripts load. They
 advance dates, performance timers, timeouts, intervals, animation frames, and
-ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
+Web Audio processing and completion callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
 and ten seconds of skirmish simulation use simulated time rather than host
 sleeps. The clock initially captures the current date so server-rendered calendar text
 hydrates consistently, then remains frozen between explicit advances.
