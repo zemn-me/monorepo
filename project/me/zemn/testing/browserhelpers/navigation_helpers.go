@@ -139,13 +139,19 @@ return !!bar && rect.left >= bar.left && rect.right <= bar.right && rect.top >= 
 		}
 		AssertHeroVideoPreserved(t, driver, video)
 		if path == "/" {
-			homeLayout, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
+			// The URL can change before the homepage layout and scroll reset commit.
+			var homeLayout any
+			err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				var err error
+				homeLayout, err = d.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
 const rect = bar.getBoundingClientRect();
 const hero = document.querySelector('figure').getBoundingClientRect();
 const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]');
 const menu = bar.querySelector('summary').getBoundingClientRect();
 return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.right - hero.right) < 1 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
-			if err != nil || homeLayout != true {
+				return homeLayout == true, err
+			}, 10*time.Second)
+			if err != nil {
 				t.Fatalf("homepage does not keep its card and shared top bar at width %d: %v %v", width, homeLayout, err)
 			}
 			SaveNavigationScreenshot(t, driver, fmt.Sprintf("homepage-topbar-%d.png", width))
