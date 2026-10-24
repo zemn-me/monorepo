@@ -318,66 +318,10 @@
 	gap: 0.5em;
 	margin-block-end: 1.5em;
 	max-width: 42em;
+	min-block-size: 56px;
 	position: sticky;
 	top: var(--glade-bar-block-size, 0px);
 	z-index: 7;
-}
-
-.zoomNavigation {
-	align-items: center;
-	block-size: calc(var(--journal-sticky-navigation-height) - 1px);
-	box-sizing: border-box;
-	display: flex;
-	flex: 1 1 0;
-	gap: 0.25em;
-	justify-content: flex-start;
-	min-width: 0;
-	overflow-x: auto;
-	padding-block: 0.65em;
-	position: relative;
-}
-
-.zoomNavigation a {
-	align-items: center;
-	border: 0;
-	border-radius: 999px;
-	box-sizing: border-box;
-	display: inline-flex;
-	justify-content: center;
-	padding: 0.5em 0.8em;
-	position: relative;
-	text-decoration: none;
-	white-space: nowrap;
-	z-index: 1;
-}
-
-.zoomNavigation a[aria-current="page"] {
-	color: var(--background-color);
-}
-
-.zoomIndicator {
-	background: var(--foreground-color);
-	border-radius: 999px;
-	inset-block: 0.65em;
-	inset-inline-start: 0;
-	opacity: 0;
-	pointer-events: none;
-	position: absolute;
-	transition:
-		transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-		inline-size 240ms cubic-bezier(0.22, 1, 0.36, 1),
-		opacity 100ms ease-out;
-	will-change: transform, inline-size;
-}
-
-.zoomIndicator[data-ready] {
-	opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.zoomIndicator {
-		transition: none;
-	}
 }
 
 .periodList {
@@ -386,21 +330,161 @@
 }
 
 .dayList {
-	/* Newer pages restore their reading position explicitly. */
 	overflow-anchor: none;
 }
 
-.dayPagination {
-	background: transparent;
+.calendarNavigation {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	min-inline-size: 0;
+}
+
+.calendarNavigation > a,
+.calendarNavigation > span,
+.datePicker > summary {
+	align-items: center;
+	box-sizing: border-box;
+	display: inline-flex;
+	justify-content: center;
+	min-block-size: 44px;
+	min-inline-size: 44px;
+	text-decoration: none;
+}
+
+.calendarNavigation > span {
+	opacity: 0.35;
+}
+
+.datePicker > summary {
+	cursor: pointer;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0.5em;
+}
+
+.datePicker > summary::-webkit-details-marker {
+	display: none;
+}
+
+.datePicker > summary svg {
+	font-size: 0.6em;
+}
+
+.dateChoices {
+	background: var(--background-color);
 	border: 1px solid var(--journal-soft-line);
-	border-radius: 0.5em;
+	border-radius: 0.75em;
+	box-shadow: 0 0.5em 1.5em #0002;
+	box-sizing: border-box;
+	inset-inline-start: 0;
+	inline-size: 23rem;
+	max-inline-size: 100%;
+	max-block-size: calc(
+		100dvh -
+		var(--glade-bar-block-size, 0px) -
+		var(--journal-sticky-navigation-height) -
+		1em
+	);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 0.75em;
+	position: absolute;
+	z-index: 8;
+}
+
+.calendarHeading {
+	align-items: center;
+	display: grid;
+	grid-template-columns: 44px 1fr 44px;
+	margin-block-end: 0.5em;
+}
+
+.calendarHeading button,
+.calendarPeriods button,
+.calendarDays a {
+	align-items: center;
+	background: transparent;
+	border: 0;
+	border-radius: 0.4em;
 	color: inherit;
 	cursor: pointer;
+	display: flex;
 	font: inherit;
-	justify-self: center;
+	justify-content: center;
 	min-block-size: 44px;
-	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
-	padding: 0.5em 1em;
+	padding: 0;
+	text-decoration: none;
+}
+
+.calendarHeading button {
+	gap: 0.5em;
+}
+
+.calendarHeading svg {
+	font-size: 0.6em;
+}
+
+.calendarDays {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendarWeekday {
+	color: var(--journal-muted);
+	font-size: 0.75em;
+	padding-block: 0.5em;
+	text-align: center;
+}
+
+.calendarPeriods {
+	display: grid;
+	gap: 0.25em;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.calendarPeriods button {
+	min-block-size: 52px;
+}
+
+.calendarDays a[aria-current="date"],
+.calendarPeriods button[aria-pressed="true"] {
+	background: var(--foreground-color);
+	color: var(--background-color);
+}
+
+.calendarHeading button:hover,
+.calendarPeriods button:hover,
+.calendarDays a:hover {
+	box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.calendarSummaries,
+.calendarFooter {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+}
+
+.calendarSummaries {
+	border-block-start: 1px solid var(--journal-soft-line);
+	margin-block-start: 0.75em;
+	padding-block-start: 0.25em;
+}
+
+.calendarSummaries a,
+.calendarFooter a {
+	align-items: center;
+	display: inline-flex;
+	font-size: 0.85em;
+	gap: 0.5em;
+	min-block-size: 44px;
+	padding-inline: 0.5em;
+	text-decoration: none;
+}
+
+.calendarFooter a {
+	color: var(--journal-muted);
 }
 
 .periodOverviewList {
@@ -912,14 +996,6 @@
 }
 
 @media (max-width: 40rem) {
-	.zoomNavigation {
-		font-size: 0.85em;
-	}
-
-	.zoomNavigation a {
-		padding-inline: 0.55em;
-	}
-
 	.entry > summary {
 		align-items: baseline;
 		gap: 0.25em 0.65em;

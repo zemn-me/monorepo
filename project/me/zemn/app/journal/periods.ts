@@ -14,3 +14,18 @@ export function childPeriodsFor<T extends PeriodBounds>(
 		child => Date.parse(child.start) < end && Date.parse(child.end) > start
 	);
 }
+
+export function journalBrowseQuery(pathname: string, at: string | null) {
+	const route = pathname.split('/').filter(Boolean).at(-1);
+	const view =
+		route === 'year' ||
+		route === 'month' ||
+		route === 'week' ||
+		route === 'day'
+			? route
+			: 'overview';
+	return {
+		view,
+		...(at && Number.isFinite(Date.parse(at)) ? { at } : {}),
+	} as const;
+}

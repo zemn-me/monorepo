@@ -13,7 +13,7 @@ import (
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
-func TestJournalDayPagination(t *testing.T) {
+func TestJournalSelectedDayNavigation(t *testing.T) {
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
@@ -44,7 +44,7 @@ func TestJournalDayPagination(t *testing.T) {
 	for index := range 24 {
 		audio := browserhelpers.TestWAV()
 		audio[len(audio)-8] = byte(index + 100)
-		path := filepath.Join(t.TempDir(), fmt.Sprintf("pagination-%02d.wav", index))
+		path := filepath.Join(t.TempDir(), fmt.Sprintf("selected-day-%02d.wav", index))
 		if err := os.WriteFile(path, audio, 0600); err != nil {
 			t.Fatal(err)
 		}
@@ -74,7 +74,7 @@ func TestJournalDayPagination(t *testing.T) {
 				t.Errorf("open cleanup day %d: %v", index, err)
 				continue
 			}
-			selector := fmt.Sprintf("[role='region'][aria-label='Journal days'] > section:has(> h3 > time[datetime^='%s']) details[id^='entry-']", date.Format("2006-01-02"))
+			selector := fmt.Sprintf("[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='%s'])", date.Format("2006-01-02"))
 			entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 			if err != nil {
 				t.Errorf("find cleanup recording %d: %v", index, err)
@@ -104,74 +104,21 @@ func TestJournalDayPagination(t *testing.T) {
 		}
 	}()
 
-	daySelector := func(index int) string {
-		return fmt.Sprintf("[role='region'][aria-label='Journal days'] > section:has(> h3 > time[datetime^='%s'])", dates[index].Format("2006-01-02"))
+	entrySelector := func(index int) string {
+		return fmt.Sprintf("[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='%s'])", dates[index].Format(time.DateOnly))
 	}
-	visitDay := func(index int) {
+	assertSelectedDay := func(index int) {
 		t.Helper()
-		root.Path, root.RawQuery = "/journal/day", url.Values{"at": {dates[index].Format(time.RFC3339)}}.Encode()
-		if err := driver.Get(root.String()); err != nil {
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, entrySelector(index), 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, daySelector(index), 30*time.Second); err != nil {
-			t.Fatal(err)
+		sections, err := driver.FindElements(selenium.ByCSSSelector, "[role='region'][aria-label='Journal day'] > section")
+		if err != nil || len(sections) != 1 {
+			t.Fatalf("expected one selected day, got %d: %v", len(sections), err)
 		}
-	}
-	assertDayCount := func(want int) {
-		t.Helper()
-		if err := driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
-			days, err := webDriver.FindElements(selenium.ByCSSSelector, "[role='region'][aria-label='Journal days'] > section")
-			return len(days) == want, err
-		}, 10*time.Second); err != nil {
-			t.Fatalf("rendered day count did not reach %d: %v", want, err)
-		}
-	}
-	visitDay(23)
-	assertDayCount(7)
-	if days, err := driver.FindElements(selenium.ByCSSSelector, daySelector(0)); err != nil || len(days) != 0 {
-		t.Fatalf("oldest day was eagerly rendered: %v %v", len(days), err)
-	}
-	for _, want := range []int{14, 21, 24} {
-		older, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show older days']", 10*time.Second)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if _, err := driver.ExecuteScript("arguments[0].scrollIntoView({block:'center',behavior:'instant'})", []any{older}); err != nil {
-			t.Fatal(err)
-		}
-		assertDayCount(want)
-	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, daySelector(0), 10*time.Second); err != nil {
-		t.Fatal("scrolling did not reach oldest day: ", err)
-	}
-	if err := browserhelpers.WaitForNoElement(driver, selenium.ByXPATH, "//button[normalize-space()='Show older days']", 10*time.Second); err != nil {
-		t.Fatal("older-day control remained at end of journal: ", err)
-	}
-
-	// A deep link must not mount all the newer days to reach its destination.
-	for _, width := range []int{1280, 390} {
-		if err := driver.ResizeWindow("", width, 900); err != nil {
-			t.Fatal(err)
-		}
-		// Chromium's minimum outer window width exceeds a narrow phone.
-		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
-			"width": width, "height": 900, "deviceScaleFactor": 1, "mobile": false,
-		}); err != nil {
-			t.Fatal(err)
-		}
-		visitDay(6)
-		assertDayCount(7)
-		day, err := driver.FindElement(selenium.ByCSSSelector, daySelector(6))
-		if err != nil {
-			t.Fatal(err)
-		}
-		position, err := driver.ExecuteScript("return arguments[0].getBoundingClientRect().top", []any{day})
-		if err != nil {
-			t.Fatal(err)
-		}
-		newer, err := driver.FindElement(selenium.ByXPATH, "//button[normalize-space()='Show newer days']")
-		if err != nil {
-			t.Fatal(err)
+		entries, err := driver.FindElements(selenium.ByCSSSelector, "[role='region'][aria-label='Journal day'] details:has(> summary time)")
+		if err != nil || len(entries) != 1 {
+			t.Fatalf("selected day mounted neighboring recordings: %d %v", len(entries), err)
 		}
 		address, err := driver.CurrentURL()
 		if err != nil {
@@ -182,62 +129,63 @@ func TestJournalDayPagination(t *testing.T) {
 			t.Fatal(err)
 		}
 		at, err := time.Parse(time.RFC3339Nano, link.Query().Get("at"))
-		if err != nil || at.In(location).Format(time.DateOnly) != dates[6].Format(time.DateOnly) {
-			t.Fatalf("opening a day changed its linked date: %s %v", address, err)
+		if err != nil || link.Path != "/journal/day" || at.In(location).Format(time.DateOnly) != dates[index].Format(time.DateOnly) {
+			t.Fatalf("selected day lost its linked date: %s %v", address, err)
 		}
-		// Reach the control by keyboard without scrolling the reading position.
-		if _, err := driver.ExecuteScript("arguments[0].focus({preventScroll:true})", []any{newer}); err != nil {
+	}
+	visitDay := func(index int) {
+		t.Helper()
+		root.Path, root.RawQuery = "/journal/day", url.Values{"at": {dates[index].Format(time.RFC3339)}}.Encode()
+		if err := driver.Get(root.String()); err != nil {
 			t.Fatal(err)
 		}
-		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-pagination-focus-%d.png", width))
-		if err := newer.SendKeys(selenium.EnterKey); err != nil {
-			t.Fatal(err)
-		}
-		assertDayCount(14)
-		// Let browser scroll anchoring and the scroll-updated URL settle.
-		if _, err := driver.ExecuteScriptAsync("setTimeout(arguments[arguments.length - 1], 350)", nil); err != nil {
-			t.Fatal(err)
-		}
-		stable, err := driver.ExecuteScript("return Math.abs(arguments[0].getBoundingClientRect().top - arguments[1]) < 2", []any{day, position})
-		if err != nil || stable != true {
-			t.Fatalf("prepending newer days moved the reading position at width %d: %v %v", width, stable, err)
-		}
-		if overflow, err := driver.ExecuteScript("return document.documentElement.scrollWidth > innerWidth", nil); err != nil || overflow == true {
-			t.Fatalf("pagination overflow at width %d: %v %v", width, overflow, err)
-		}
-		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-pagination-%d.png", width))
+		assertSelectedDay(index)
+	}
+	visitDay(23)
+	visitDay(0)
 
-		// The address tracks the day at the viewport's center after scrolling.
-		address, err = driver.CurrentURL()
+	// A deep link and each navigation must render only the selected day's content.
+	for _, width := range []int{1280, 390} {
+		if err := driver.ResizeWindow("", width, 900); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": 900, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		visitDay(6)
+		previous, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Previous day']", 10*time.Second)
 		if err != nil {
 			t.Fatal(err)
 		}
-		link, err = url.Parse(address)
+		if err := previous.SendKeys(selenium.EnterKey); err != nil {
+			t.Fatal(err)
+		}
+		assertSelectedDay(5)
+		if err := driver.Back(); err != nil {
+			t.Fatal(err)
+		}
+		assertSelectedDay(6)
+		if err := driver.Forward(); err != nil {
+			t.Fatal(err)
+		}
+		assertSelectedDay(5)
+		next, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Next day']", 10*time.Second)
 		if err != nil {
 			t.Fatal(err)
 		}
-		at, err = time.Parse(time.RFC3339Nano, link.Query().Get("at"))
-		if err != nil {
-			t.Fatalf("scrolling did not retain a shareable date: %v", err)
+		if err := next.SendKeys(selenium.EnterKey); err != nil {
+			t.Fatal(err)
 		}
-		focusedDay := -1
-		for index, date := range dates {
-			if at.In(location).Format(time.DateOnly) == date.Format(time.DateOnly) {
-				focusedDay = index
-				break
-			}
-		}
-		if focusedDay < 0 {
-			t.Fatalf("scrolling selected a day outside the rendered recordings: %s", address)
-		}
+		assertSelectedDay(6)
 		if err := driver.Refresh(); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, daySelector(focusedDay), 30*time.Second); err != nil {
-			t.Fatalf("reloaded day link lost its destination (%s): %v", address, err)
+		assertSelectedDay(6)
+		if overflow, err := driver.ExecuteScript("return document.documentElement.scrollWidth > innerWidth", nil); err != nil || overflow == true {
+			t.Fatalf("selected day overflow at width %d: %v %v", width, overflow, err)
 		}
-		if newer, err := driver.FindElements(selenium.ByCSSSelector, daySelector(23)); err != nil || len(newer) != 0 {
-			t.Fatalf("reloading eagerly rendered the newer history: %v %v", len(newer), err)
-		}
+		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-selected-day-%d.png", width))
 	}
 }

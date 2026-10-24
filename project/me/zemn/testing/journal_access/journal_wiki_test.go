@@ -273,6 +273,37 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	click := func(by, selector string) {
 		t.Helper()
+		if by == selenium.ByLinkText {
+			switch selector {
+			case "Overview", "Days", "Months", "Weeks", "Years":
+				if links, err := driver.FindElements(selenium.ByLinkText, "Browse journal"); err == nil && len(links) > 0 {
+					if err := browserhelpers.ClickElementInView(driver, links[0]); err != nil {
+						t.Fatal(err)
+					}
+					if selector == "Overview" {
+						browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
+						return
+					}
+				}
+				browserhelpers.OpenJournalDatePicker(t, driver)
+				switch selector {
+				case "Days":
+					by, selector = selenium.ByCSSSelector, "a[aria-current='date']"
+				case "Months":
+					by, selector = selenium.ByCSSSelector, "a[aria-label='Month summary']"
+				case "Weeks":
+					by, selector = selenium.ByCSSSelector, "a[aria-label='Week summary']"
+				case "Years":
+					if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Choose month']", 10*time.Second); err != nil {
+						t.Fatal(err)
+					}
+					by, selector = selenium.ByCSSSelector, "a[aria-label='Year summary']"
+				}
+			case "Wiki":
+				browserhelpers.ClickJournalWiki(t, driver)
+				return
+			}
+		}
 		if err := browserhelpers.ClickElementWithRetry(driver, by, selector, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
@@ -375,6 +406,9 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Fatal(err)
 	}
 	save("09-launch-day-desktop", data)
+	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
+	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
 	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
 	if err := earlier.Click(); err != nil {
 		t.Fatal(err)
@@ -391,6 +425,27 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Fatal(err)
 	}
 	save("10-earlier-day-clarification-desktop", data)
+	if err := driver.Back(); err != nil {
+		t.Fatal(err)
+	}
+	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	if err := driver.Back(); err != nil {
+		t.Fatal(err)
+	}
+	launch = find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
+	open, err := driver.ExecuteScript("return arguments[0].parentElement.open", []any{launch})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if open != true {
+		if err := browserhelpers.ClickElementInView(driver, launch); err != nil {
+			t.Fatal(err)
+		}
+	}
+	section, err = launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
+	if err != nil {
+		t.Fatal(err)
+	}
 	if err := driver.ResizeWindow("", 390, 1400); err != nil {
 		t.Fatal(err)
 	}
@@ -414,34 +469,43 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, view := range []struct{ name, link, visibleDate string }{
-		{"12-months-desktop", "Months", currentMonth.(string)},
-		{"13-weeks-desktop", "Weeks", "Monday"},
-		{"14-years-desktop", "Years", currentYear.(string)},
+	for _, view := range []struct{ name, link, visibleDate, period, child, title string }{
+		{"12-months-desktop", "Months", currentMonth.(string), "month", "day", "Experiments in attention"},
+		{"13-weeks-desktop", "Weeks", "Monday", "week", "day", "Making room for steadier work"},
+		{"14-years-desktop", "Years", currentYear.(string), "year", "month", "A life with more room in it"},
 	} {
-		// Scrolling updates the date in the URL on a 250 ms throttle. Let
-		// that visible navigation settle before selecting a different view.
-		time.Sleep(400 * time.Millisecond)
 		click(selenium.ByLinkText, view.link)
+		regionSelector := "[role='region'][aria-label='Journal " + view.period + "']"
+		find(selenium.ByCSSSelector, regionSelector)
+		if sections, err := driver.FindElements(selenium.ByCSSSelector, regionSelector+" > section"); err != nil || len(sections) != 1 {
+			t.Fatalf("selected %s should render one period: %d %v", view.period, len(sections), err)
+		}
 		var heading selenium.WebElement
 		if view.link == "Years" {
 			heading = find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
 		} else {
 			heading = find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
 		}
-		if _, err := heading.FindElement(selenium.ByXPATH, ".//strong[normalize-space()='Browse recordings']"); err != nil {
-			t.Fatal("calendar period should browse recordings: ", err)
+		if _, err := heading.FindElement(selenium.ByXPATH, ".//strong[normalize-space()='"+view.title+"']"); err != nil {
+			t.Fatal("calendar period should show its summary title: ", err)
 		}
 		period, err := heading.FindElement(selenium.ByXPATH, "parent::details")
 		if err != nil {
 			t.Fatal(err)
 		}
-		if articles, err := period.FindElements(selenium.ByTagName, "article"); err != nil || len(articles) != 0 {
-			t.Fatalf("calendar period contains generated articles: %d %v", len(articles), err)
+		if articles, err := period.FindElements(selenium.ByTagName, "article"); err != nil || len(articles) != 1 {
+			t.Fatalf("calendar period should contain its summary: %d %v", len(articles), err)
 		}
-		capture(view.name, "nav[aria-label='Browse journal']", 1440, 1100, false)
+		children, err := period.FindElements(selenium.ByCSSSelector, "ol[aria-label='Browse "+view.child+"s'] a[href^='/journal/"+view.child+"?at=']")
+		if err != nil || len(children) == 0 {
+			t.Fatalf("calendar period should link to its %ss: %d %v", view.child, len(children), err)
+		}
+		if visible, err := children[0].IsDisplayed(); err != nil || !visible {
+			t.Fatalf("calendar child periods should be visible: %v %v", visible, err)
+		}
+		capture(view.name, regionSelector, 1440, 1100, false)
 		if view.link == "Years" {
-			capture("15-years-phone", "nav[aria-label='Browse journal']", 390, 1100, false)
+			capture("15-years-phone", regionSelector, 390, 1100, false)
 		}
 	}
 }
@@ -535,7 +599,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	selector := "[role='region'][aria-label='Journal days'] > section:has(> h3 > time[datetime^='2008-05-13']) details:has(audio[data-entry-id])"
+	selector := "[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='2008-05-13'])"
 	entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 	if err != nil {
 		t.Fatal("confirmed recording was not ready in the journal: ", err)
