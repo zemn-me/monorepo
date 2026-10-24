@@ -14,10 +14,6 @@ export interface GameAssets {
 	readonly engineData: string;
 	readonly gameData: string;
 }
-export interface GameCampaign {
-	readonly files: Readonly<Record<string, string>>;
-}
-
 export interface DownloadProgress {
 	readonly received: number;
 	readonly total?: number;
@@ -114,8 +110,7 @@ export function startGame(
 	canvas: HTMLCanvasElement,
 	assets: GameAssets,
 	callbacks: GameCallbacks,
-	signal: AbortSignal,
-	campaign?: GameCampaign
+	signal: AbortSignal
 ): void {
 	const preceding = previousExit;
 	const { promise: exitComplete, resolve: stopped } =
@@ -218,14 +213,6 @@ export function startGame(
 					'/save/SUN.INI',
 					'[Video]\nScreenWidth=800\nScreenHeight=600\nWindowed=yes\n[Options]\nVideoBackBuffer=no\n'
 				);
-			}
-			if (campaign) {
-				// Campaign files are ephemeral game data; saved games stay in IDBFS.
-				for (const [name, contents] of Object.entries(campaign.files)) {
-					if (!/^[A-Z0-9_]+\.INI$/.test(name))
-						throw new Error('Invalid campaign filename');
-					loaded.FS.writeFile('/game/' + name, contents);
-				}
 			}
 			loaded.FS.chdir('/game');
 			started = true;
