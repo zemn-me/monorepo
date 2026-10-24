@@ -163,7 +163,14 @@ func TestBioCampaign(t *testing.T) {
 	// Observe the ordinary credit display: with no production orders or other
 	// income, a change proves the harvester can collect and deliver Tiberium.
 	creditFrame := p.screenshot()
+	creditPolls, maxCreditChanges := 0, 0
+	t.Cleanup(func() {
+		if t.Failed() {
+			t.Logf("harvesting: %d credit checks, at most %d changed credit pixels", creditPolls, maxCreditChanges)
+		}
+	})
 	creditChanged := func() bool {
+		creditPolls++
 		frame := p.screenshot()
 		changed := 0
 		for y := 3; y < 14; y++ {
@@ -175,13 +182,22 @@ func TestBioCampaign(t *testing.T) {
 				}
 			}
 		}
+		maxCreditChanges = max(maxCreditChanges, changed)
 		return changed > 15
 	}
 	p.wait("harvested Tiberium increases available credits", func() bool {
 		if strings.Contains(p.logs(), "Reading scenario: BIO03.INI") {
 			t.Fatal("no harvesting income before the defense ended")
 		}
-		return creditChanged()
+		if creditChanged() {
+			return true
+		}
+		// A harvesting trip takes game time. Avoid spending the real-time
+		// deadline capturing every 100 ms of simulation on slower renderers.
+		for i := 0; i < 9; i++ {
+			p.advance()
+		}
+		return false
 	})
 	p.click(775, 552) // Scroll past the harvester to the Titan cameo.
 	for i := 0; i < 4; i++ {
