@@ -6,13 +6,18 @@ export function trackMouseHover(
 ): () => boolean {
 	let hovering = false;
 	const track = (event: PointerEvent) => {
-		hovering = event.pointerType === 'mouse';
+		// Translated touch input also emits mouse Pointer Events for SDL3.
+		if (event.isTrusted) hovering = event.pointerType === 'mouse';
 	};
 	const clear = () => {
 		hovering = false;
 	};
-	for (const type of ['pointerenter', 'pointermove', 'pointerdown'] as const) {
-		canvas.addEventListener(type, track, { signal });
+	for (const type of [
+		'pointerenter',
+		'pointermove',
+		'pointerdown',
+	] as const) {
+		canvas.addEventListener(type, track, { capture: true, signal });
 	}
 	canvas.addEventListener('pointerleave', clear, { signal });
 	window.addEventListener('blur', clear, { signal });
