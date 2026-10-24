@@ -469,31 +469,43 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, view := range []struct{ name, link, visibleDate string }{
-		{"12-months-desktop", "Months", currentMonth.(string)},
-		{"13-weeks-desktop", "Weeks", "Monday"},
-		{"14-years-desktop", "Years", currentYear.(string)},
+	for _, view := range []struct{ name, link, visibleDate, period, child, title string }{
+		{"12-months-desktop", "Months", currentMonth.(string), "month", "day", "Experiments in attention"},
+		{"13-weeks-desktop", "Weeks", "Monday", "week", "day", "Making room for steadier work"},
+		{"14-years-desktop", "Years", currentYear.(string), "year", "month", "A life with more room in it"},
 	} {
 		click(selenium.ByLinkText, view.link)
+		regionSelector := "[role='region'][aria-label='Journal " + view.period + "']"
+		find(selenium.ByCSSSelector, regionSelector)
+		if sections, err := driver.FindElements(selenium.ByCSSSelector, regionSelector+" > section"); err != nil || len(sections) != 1 {
+			t.Fatalf("selected %s should render one period: %d %v", view.period, len(sections), err)
+		}
 		var heading selenium.WebElement
 		if view.link == "Years" {
 			heading = find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
 		} else {
 			heading = find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
 		}
-		if _, err := heading.FindElement(selenium.ByXPATH, ".//strong[normalize-space()='Browse recordings']"); err != nil {
-			t.Fatal("calendar period should browse recordings: ", err)
+		if _, err := heading.FindElement(selenium.ByXPATH, ".//strong[normalize-space()='"+view.title+"']"); err != nil {
+			t.Fatal("calendar period should show its summary title: ", err)
 		}
 		period, err := heading.FindElement(selenium.ByXPATH, "parent::details")
 		if err != nil {
 			t.Fatal(err)
 		}
-		if articles, err := period.FindElements(selenium.ByTagName, "article"); err != nil || len(articles) != 0 {
-			t.Fatalf("calendar period contains generated articles: %d %v", len(articles), err)
+		if articles, err := period.FindElements(selenium.ByTagName, "article"); err != nil || len(articles) != 1 {
+			t.Fatalf("calendar period should contain its summary: %d %v", len(articles), err)
 		}
-		capture(view.name, "nav[aria-label='Choose journal date']", 1440, 1100, false)
+		children, err := period.FindElements(selenium.ByCSSSelector, "ol[aria-label='Browse "+view.child+"s'] a[href^='/journal/"+view.child+"?at=']")
+		if err != nil || len(children) == 0 {
+			t.Fatalf("calendar period should link to its %ss: %d %v", view.child, len(children), err)
+		}
+		if visible, err := children[0].IsDisplayed(); err != nil || !visible {
+			t.Fatalf("calendar child periods should be visible: %v %v", visible, err)
+		}
+		capture(view.name, regionSelector, 1440, 1100, false)
 		if view.link == "Years" {
-			capture("15-years-phone", "nav[aria-label='Choose journal date']", 390, 1100, false)
+			capture("15-years-phone", regionSelector, 390, 1100, false)
 		}
 	}
 }
