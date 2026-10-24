@@ -1770,6 +1770,9 @@ func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID str
 			if (!audio) return null;
 			const playbackQuery = new URLSearchParams(window.location.search);
 			const urlTime = playbackQuery.get('t');
+			const spokenLink = document.getElementById('entry-' + arguments[0])
+				?.querySelector('[data-journal-currently-spoken] a[href]');
+			const segmentTime = spokenLink ? new URL(spokenLink.href).searchParams.get('t') : null;
 			return {
 				currentTime: audio.currentTime,
 				ended: audio.ended,
@@ -1780,7 +1783,13 @@ func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID str
 				readyState: audio.readyState,
 				urlEntry: playbackQuery.get('entry') ?? '',
 				urlTime: urlTime ?? '',
-				urlTimeMatches: urlTime !== null && Math.abs(Number(urlTime) - audio.currentTime) <= 0.6,
+				// During speech the URL tracks the current segment's start, not
+				// every media timeupdate. Pauses and seeks retain an exact cursor.
+				segmentTime,
+				urlTimeMatches: urlTime !== null && (
+					Math.abs(Number(urlTime) - audio.currentTime) <= 0.6 ||
+					(!audio.paused && segmentTime !== null && Number(urlTime) === Number(segmentTime))
+				),
 			};
 		`, []any{entryID})
 		if err != nil {
@@ -1950,20 +1959,35 @@ func waitForJournalAudioStallRecovery(driver selenium.WebDriver, entryID string,
 }
 
 func waitForCurrentlySpokenTranscript(driver selenium.WebDriver, entryID string, timeout time.Duration) error {
-	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
+	var lastState any
+	err := driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
 		value, err := webDriver.ExecuteScript(`
 			const highlighted = [...document.querySelectorAll(
 				'[data-journal-currently-spoken]'
 			)];
-			return highlighted.length === 1 &&
-				highlighted[0].closest('details[id]')?.id === 'entry-' + arguments[0];
+			const audio = [...document.querySelectorAll('audio[data-entry-id]')]
+				.find(value => value.dataset.entryId === arguments[0]);
+			return {
+				matches: highlighted.length === 1 &&
+					highlighted[0].closest('details[id]')?.id === 'entry-' + arguments[0],
+				highlightedEntries: highlighted.map(value => value.closest('details[id]')?.id),
+				currentTime: audio?.currentTime,
+				paused: audio?.paused,
+				ended: audio?.ended,
+			};
 		`, []any{entryID})
 		if err != nil {
 			return false, err
 		}
-		highlighted, _ := value.(bool)
-		return highlighted, nil
+		lastState = value
+		state, _ := value.(map[string]interface{})
+		matches, _ := state["matches"].(bool)
+		return matches, nil
 	}, timeout)
+	if err != nil {
+		return fmt.Errorf("%w; entry %s transcript state: %#v", err, entryID, lastState)
+	}
+	return nil
 }
 
 func waitForCenteredJournalTranscript(driver selenium.WebDriver, entryID string, timeout time.Duration) error {
