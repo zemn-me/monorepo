@@ -731,6 +731,67 @@ diff --git a/code/queue.cpp b/code/queue.cpp
  
  	/*
  	**	A deliberate mismatch waits for the startup suppression to expire, or the checksum
+diff --git a/code/init.cpp b/code/init.cpp
+--- a/code/init.cpp
++++ b/code/init.cpp
+@@ -584,6 +584,10 @@
+ 	bool found = false;
+ 
+ 	for (std::string const & name : Search_Files("BATTLE*.INI")) {
++#ifdef __EMSCRIPTEN__
++		// Browser-supplied campaigns are appended after the original campaigns.
++		if (strcasecmp(name.c_str(), "BATTLEWEB.INI") == 0) continue;
++#endif
+ 		CCFileClass file(name.c_str());
+ 		CCINIClass * ini = new CCINIClass;
+ 		ini->Load(file, false);
+@@ -617,6 +621,15 @@
+ 			delete ini;
+ 		}
+ 	}
++#ifdef __EMSCRIPTEN__
++	CCFileClass web_file("BATTLEWEB.INI");
++	if (web_file.Is_Available()) {
++		CCINIClass web_ini;
++		web_ini.Load(web_file, false);
++		Read_Battle_INI(web_ini);
++	}
++#endif
++
+ }
+ 
+ 
+diff --git a/code/mschoice.cpp b/code/mschoice.cpp
+--- a/code/mschoice.cpp
++++ b/code/mschoice.cpp
+@@ -10,6 +10,8 @@
+ #include "always.h"
+ 
+ #include "mschoice.h"
++#include "campaign.h"
++#include "scenario.h"
+ 
+ #include "_mixfile.h"
+ #include "addon.h"
+@@ -73,6 +75,18 @@
+ 		file.Open("MAPSEL.INI");
+ 	}
+ 
++	#ifdef __EMSCRIPTEN__
++	// A custom campaign may supply its own graph without replacing GDI/Nod's.
++	if (Scen->Campaign != CAMPAIGN_NONE) {
++		char custom_name[64];
++		snprintf(custom_name, sizeof(custom_name), "MAPSEL%s.INI", (char const *)Campaigns[Scen->Campaign]->IniName);
++		CCFileClass custom(custom_name);
++		if (custom.Is_Available()) {
++			file.Close();
++			file.Open(custom_name);
++		}
++	}
++#endif
+ 	if (!ini.Load(file)) {
+ 		DebugString("Failed to load MAPSEL.INI\n");
+ 		return(false);
 diff --git a/code/ui/uienginehost.cpp b/code/ui/uienginehost.cpp
 --- a/code/ui/uienginehost.cpp
 +++ b/code/ui/uienginehost.cpp

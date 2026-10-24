@@ -7,6 +7,7 @@ import {
 	license,
 	thirdPartyNotices,
 } from '#root/project/me/zemn/app/experiments/tiberian_sun/assets.js';
+import { createBioCampaign } from '#root/project/me/zemn/app/experiments/tiberian_sun/campaign.js';
 import style from '#root/project/me/zemn/app/experiments/tiberian_sun/style.module.css';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
@@ -76,7 +77,8 @@ export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
 					else void navigate('/experiments', { replace: true });
 				},
 			},
-			lifetime.signal
+			lifetime.signal,
+			createBioCampaign()
 		);
 		return () => {
 			lifetime.abort();
