@@ -250,7 +250,7 @@ python.single_version_platform_override(
 # 	datasource=python-version
 # 	versioning=python
 # 	depName=python
-PYTHON_VERSION = "3.15.0"
+PYTHON_VERSION = "3.15.1"
 
 python.toolchain(
     is_default = True,
