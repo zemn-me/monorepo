@@ -70,8 +70,11 @@ From the monorepo root:
 ```
 
 Open <http://localhost:3000/experiments/tiberian-sun>. Use a keyboard and
-mouse. The full site build is `//project/me/zemn:build`; it includes the
-engine JavaScript, Wasm, bundled open-source UI resources, launcher, freeware data, and
+mouse, or touch: one finger holds the left mouse button; two fingers hold
+the right mouse button until either finger lifts. After a two-finger gesture,
+lift all fingers before starting another left click. The full site build is
+`//project/me/zemn:build`; it includes the engine JavaScript, Wasm, bundled
+open-source UI resources, launcher, freeware data, and
 license notices as content-addressed public assets. The standalone game
 document has its own script policy and opens through a document navigation.
 Leaving the page ends that engine instance.

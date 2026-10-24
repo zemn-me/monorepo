@@ -6,6 +6,7 @@ import {
 	type PeerTransport,
 } from '#root/project/tiberian_sun/web/network.js';
 import { trackMouseHover } from '#root/ts/pointer/hover.js';
+import { installTouchMouse } from '#root/ts/pointer/touch_mouse.js';
 
 export interface GameAssets {
 	readonly engineJavaScript: string;
@@ -121,6 +122,7 @@ export function startGame(
 		signal: lifetime.signal,
 	});
 	const webHasMouseHover = trackMouseHover(canvas, lifetime.signal);
+	installTouchMouse(canvas, lifetime.signal);
 	const webNetwork = createPeerTransport(lifetime.signal);
 	const webYield = createMessageYield(lifetime.signal);
 	let engine: Engine | undefined;

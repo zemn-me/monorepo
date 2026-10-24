@@ -13,7 +13,10 @@ The standalone React routes are `/experiments/red-alert` and
 content-addressed engine and gzip game package. Red Alert then shows a Start
 button so its intro can begin with browser audio enabled. Escape skips movies.
 Each game has a separate IndexedDB save directory. Clearing site data removes local saves. Use a
-keyboard and mouse. Exit the game to return to the previous page.
+keyboard and mouse, or touch: one finger holds the left mouse button; two fingers
+hold the right mouse button until either finger lifts. After a two-finger gesture,
+lift all fingers before starting another left click. Exit the game to return to
+the previous page.
 
 Small touch displays use each engine's native 320×200 mode. Battlefield sprites
 retain their original pixel size, so units appear twice as large as the 640×400

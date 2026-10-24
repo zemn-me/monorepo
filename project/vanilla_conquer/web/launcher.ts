@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /* biome-ignore-all lint/suspicious/noConsole: Console output is the game's diagnostic log. */
 import { trackMouseHover } from '#root/ts/pointer/hover.js';
+import { installTouchMouse } from '#root/ts/pointer/touch_mouse.js';
 
 export interface GameAssets {
 	readonly engineJavaScript: string;
@@ -101,6 +102,7 @@ export function startGame(
 		signal: lifetime.signal,
 	});
 	const webHasMouseHover = trackMouseHover(canvas, lifetime.signal);
+	installTouchMouse(canvas, lifetime.signal);
 	let engine: Engine | undefined;
 	let started = false;
 	let exited = false;
