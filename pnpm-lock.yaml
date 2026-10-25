@@ -319,8 +319,8 @@ importers:
         specifier: 5.3.2
         version: 5.3.2(typescript@7.0.2)
       '@pulumi/pulumi':
-        specifier: 3.271.0
-        version: 3.271.0(typescript@7.0.2)
+        specifier: 3.272.0
+        version: 3.272.0(typescript@7.0.2)
       '@react-router/dev':
         specifier: 8.5.0
         version: 8.5.0(react-router@8.5.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1))
@@ -2651,8 +2651,8 @@ packages:
   '@pulumi/gcp@10.2.0':
     resolution: {integrity: sha512-SkNSx0MhAVQI/TI4/np9lrM41U1I1L6YeSrtq0D9flkwr3bHWcXKpvgYasJR6qL+3eoLt9UwZmGQuPpYUxIxdQ==}
 
-  '@pulumi/pulumi@3.271.0':
-    resolution: {integrity: sha512-5Ol0JIf0vCbiFj1j3r0hvdaCSCbCURhfOxpNvTsE1qhjJS3m665UG1qO3HKrB6T9mD7OzgcD1y4PbL6EGl0gjg==}
+  '@pulumi/pulumi@3.272.0':
+    resolution: {integrity: sha512-DepbT+tA3HnNo5+OtEMEevK1pC45PD/71sQh3tlWYFtW4tjuZijAQprvgCYcQUKNwRP3/Y3z83Kbvxn7y9HR2w==}
     engines: {node: '>=22'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
@@ -11855,7 +11855,7 @@ snapshots:
 
   '@pulumi/aws@7.51.1(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
       mime: 2.6.0
     transitivePeerDependencies:
       - supports-color
@@ -11868,7 +11868,7 @@ snapshots:
       '@pulumi/aws': 7.51.1(typescript@7.0.2)
       '@pulumi/docker': 4.11.2(typescript@7.0.2)
       '@pulumi/docker-build': 0.0.14(typescript@7.0.2)
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
       '@types/aws-lambda': 8.10.164
       docker-classic: '@pulumi/docker@3.6.1(typescript@7.0.2)'
       mime: 2.6.0
@@ -11879,7 +11879,7 @@ snapshots:
 
   '@pulumi/command@4.5.0(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -11887,7 +11887,7 @@ snapshots:
 
   '@pulumi/dnsimple@5.3.2(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -11895,7 +11895,7 @@ snapshots:
 
   '@pulumi/docker-build@0.0.14(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -11903,7 +11903,7 @@ snapshots:
 
   '@pulumi/docker@3.6.1(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -11912,7 +11912,7 @@ snapshots:
 
   '@pulumi/docker@4.11.2(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -11921,14 +11921,14 @@ snapshots:
 
   '@pulumi/gcp@10.2.0(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
       '@types/express': 4.17.25
     transitivePeerDependencies:
       - supports-color
       - ts-node
       - typescript
 
-  '@pulumi/pulumi@3.271.0(typescript@7.0.2)':
+  '@pulumi/pulumi@3.272.0(typescript@7.0.2)':
     dependencies:
       '@grpc/grpc-js': 1.14.5
       '@logdna/tail-file': 2.2.0
@@ -11963,7 +11963,7 @@ snapshots:
 
   '@pulumi/random@4.21.4(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.271.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
