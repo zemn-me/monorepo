@@ -22,4 +22,4 @@ swc_ecma_ast = "=29.0.2"
 swc_allocator = "=5.0.0"
 serenity = "=0.12.5"
 cargo = { version = "=0.100.0", features = ["vendored-openssl"] }
-tokio = { version = "=1.53.3", features = ["rt", "rt-multi-thread", "macros"] }
+tokio = { version = "=1.54.1", features = ["rt", "rt-multi-thread", "macros"] }
