@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/url"
 	"regexp"
 	"sort"
@@ -23,6 +24,7 @@ import (
 
 const journalCurationKey = "CURATION"
 const journalCurationMaxBytes = 48 * 1024 * 1024
+const journalCurationRunBudget = 30 * time.Minute
 
 // Bump when the output contract or writing policy changes so unchanged diaries refresh.
 const journalCurationVersion = "7"
@@ -34,30 +36,33 @@ func journalCurationInputKey(runID string) string {
 // The application, not the sandbox, owns publication and credentials.
 type JournalCurator interface {
 	Prepare(context.Context, string, []byte) (string, error)
-	Start(context.Context, string, string) error
+	Start(context.Context, string, string, time.Duration) error
 	Collect(context.Context, string) (*JournalCurationResult, error)
 	Cleanup(context.Context, string, string) error
 }
 
 type journalCurationState struct {
-	ID                   string    `dynamodbav:"id"`
-	When                 string    `dynamodbav:"when"`
-	Version              string    `dynamodbav:"version"`
-	LeaseUntil           time.Time `dynamodbav:"lease_until"`
-	RunID                string    `dynamodbav:"run_id"`
-	SessionID            string    `dynamodbav:"session_id"`
-	Submitted            bool      `dynamodbav:"submitted"`
-	StartedAt            time.Time `dynamodbav:"started_at"`
-	AttemptWindowStart   time.Time `dynamodbav:"attempt_window_start"`
-	Attempts             int       `dynamodbav:"attempts"`
-	InputKey             string    `dynamodbav:"input_key"`
-	Fingerprint          string    `dynamodbav:"fingerprint"`
-	PublishedKey         string    `dynamodbav:"published_key"`
-	PublishedWikiKey     string    `dynamodbav:"published_wiki_key"`
-	PublishedFingerprint string    `dynamodbav:"published_fingerprint"`
-	PublishedAt          time.Time `dynamodbav:"published_at"`
-	Failed               bool      `dynamodbav:"failed"`
-	Cleaning             bool      `dynamodbav:"cleaning"`
+	ID                    string        `dynamodbav:"id"`
+	When                  string        `dynamodbav:"when"`
+	Version               string        `dynamodbav:"version"`
+	LeaseUntil            time.Time     `dynamodbav:"lease_until"`
+	RunID                 string        `dynamodbav:"run_id"`
+	SessionID             string        `dynamodbav:"session_id"`
+	Submitted             bool          `dynamodbav:"submitted"`
+	ContinuationTurnID    string        `dynamodbav:"continuation_turn_id"`
+	ContinuationRemaining time.Duration `dynamodbav:"continuation_remaining"`
+	ContinuationSubmitted bool          `dynamodbav:"continuation_submitted"`
+	StartedAt             time.Time     `dynamodbav:"started_at"`
+	AttemptWindowStart    time.Time     `dynamodbav:"attempt_window_start"`
+	Attempts              int           `dynamodbav:"attempts"`
+	InputKey              string        `dynamodbav:"input_key"`
+	Fingerprint           string        `dynamodbav:"fingerprint"`
+	PublishedKey          string        `dynamodbav:"published_key"`
+	PublishedWikiKey      string        `dynamodbav:"published_wiki_key"`
+	PublishedFingerprint  string        `dynamodbav:"published_fingerprint"`
+	PublishedAt           time.Time     `dynamodbav:"published_at"`
+	Failed                bool          `dynamodbav:"failed"`
+	Cleaning              bool          `dynamodbav:"cleaning"`
 }
 
 type journalCorpusEntry struct {
@@ -428,26 +433,9 @@ func (s *Server) RefreshJournalKnowledge(ctx context.Context, now time.Time) err
 
 func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurationState, now time.Time) error {
 	if state.Cleaning {
-		// A damaged checkpoint must never turn temporary-file cleanup into
-		// deletion of an original recording or another run's artifacts.
-		if state.InputKey != "" {
-			runID, err := uuid.Parse(state.RunID)
-			if err != nil || runID == uuid.Nil || runID.String() != state.RunID || state.InputKey != journalCurationInputKey(state.RunID) {
-				return errors.New("refusing to clean an unexpected journal input key")
-			}
-		}
-		if err := s.journalCurator.Cleanup(ctx, state.RunID, state.SessionID); err != nil {
-			return err
-		}
-		if state.InputKey != "" {
-			if _, err := s.journalObjects.DeleteObject(ctx, &s3.DeleteObjectInput{Bucket: aws.String(s.journalBucketName), Key: aws.String(state.InputKey)}); err != nil {
-				return err
-			}
-		}
-		state.RunID, state.SessionID, state.InputKey = "", "", ""
-		state.Submitted, state.Cleaning = false, false
-		return nil
+		return s.cleanupJournalCuration(ctx, state)
 	}
+
 	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
 	if err != nil {
 		return err
@@ -508,9 +496,13 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 	}
 	// Deletion, date correction or another upload must not be overwritten by
 	// an agent that worked on an older snapshot.
-	if state.Fingerprint != fingerprint || now.After(state.StartedAt.Add(2*time.Hour)) {
+	if state.Fingerprint != fingerprint {
 		state.Cleaning, state.Failed = true, true
 		return nil
+	}
+	deadlineExpired := !now.Before(state.StartedAt.Add(journalCurationRunBudget))
+	if deadlineExpired && (!state.Submitted || state.SessionID == "") {
+		return s.expireJournalCuration(ctx, state)
 	}
 	if state.SessionID == "" {
 		var snapshot journalCorpus
@@ -533,14 +525,38 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 		}
 	}
 	if !state.Submitted {
-		if err := s.journalCurator.Start(ctx, state.SessionID, state.RunID); err != nil {
+		if err := s.journalCurator.Start(ctx, state.SessionID, state.RunID, journalCurationRunBudget); err != nil {
 			return err
 		}
 		state.Submitted = true
 		return nil
 	}
+	if !deadlineExpired && state.ContinuationTurnID != "" && !state.ContinuationSubmitted {
+		return s.submitJournalContinuation(ctx, state)
+	}
 	result, err := s.journalCurator.Collect(ctx, state.SessionID)
+	// A turn may have finished between the last schedule tick and the deadline.
+	// Collect its completed output, but never submit more work after the budget.
+	if deadlineExpired && (err != nil || result == nil) {
+		return s.expireJournalCuration(ctx, state)
+	}
 	if err != nil {
+		var incomplete *journalCuratorIncompleteError
+		if errors.As(err, &incomplete) {
+			if state.ContinuationTurnID == incomplete.turnID {
+				return nil
+			}
+			state.ContinuationTurnID = incomplete.turnID
+			state.ContinuationRemaining = journalCurationRunBudget - now.Sub(state.StartedAt)
+			state.ContinuationSubmitted = false
+			// Persist the exact logical message before submission. A lost response or
+			// restart reuses both its key and remaining-time text without paid duplicates.
+			if err := s.saveJournalCurationState(ctx, state); err != nil {
+				return err
+			}
+			log.Printf("%s; continuing with %s remaining", incomplete, state.ContinuationRemaining)
+			return s.submitJournalContinuation(ctx, state)
+		}
 		var terminal *journalCuratorTerminalError
 		if errors.As(err, &terminal) {
 			state.Cleaning, state.Failed = true, true
@@ -631,4 +647,42 @@ func (s *Server) correctJournalCuratorDate(ctx context.Context, previous Journal
 		return err
 	}
 	return s.writeJournalEntryFiles(ctx, corrected)
+}
+
+func (s *Server) submitJournalContinuation(ctx context.Context, state *journalCurationState) error {
+	key := state.RunID + ":continue:" + state.ContinuationTurnID
+	if err := s.journalCurator.Start(ctx, state.SessionID, key, state.ContinuationRemaining); err != nil {
+		return err
+	}
+	state.ContinuationSubmitted = true
+	return nil
+}
+
+func (s *Server) cleanupJournalCuration(ctx context.Context, state *journalCurationState) error {
+	// A damaged checkpoint must never turn temporary-file cleanup into
+	// deletion of an original recording or another run's artifacts.
+	if state.InputKey != "" {
+		runID, err := uuid.Parse(state.RunID)
+		if err != nil || runID == uuid.Nil || runID.String() != state.RunID || state.InputKey != journalCurationInputKey(state.RunID) {
+			return errors.New("refusing to clean an unexpected journal input key")
+		}
+	}
+	if err := s.journalCurator.Cleanup(ctx, state.RunID, state.SessionID); err != nil {
+		return err
+	}
+	if state.InputKey != "" {
+		if _, err := s.journalObjects.DeleteObject(ctx, &s3.DeleteObjectInput{Bucket: aws.String(s.journalBucketName), Key: aws.String(state.InputKey)}); err != nil {
+			return err
+		}
+	}
+	state.RunID, state.SessionID, state.InputKey = "", "", ""
+	state.Submitted, state.Cleaning = false, false
+	state.ContinuationTurnID, state.ContinuationRemaining, state.ContinuationSubmitted = "", 0, false
+	return nil
+}
+
+func (s *Server) expireJournalCuration(ctx context.Context, state *journalCurationState) error {
+	state.Cleaning, state.Failed = true, true
+	log.Printf("journal curation reached 30-minute run budget; run=%s session=%s", state.RunID, state.SessionID)
+	return s.cleanupJournalCuration(ctx, state)
 }
