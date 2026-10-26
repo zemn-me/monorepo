@@ -27,7 +27,7 @@ const journalCurationMaxBytes = 48 * 1024 * 1024
 const journalCurationRunBudget = 30 * time.Minute
 
 // Bump when the output contract or writing policy changes so unchanged diaries refresh.
-const journalCurationVersion = "7"
+const journalCurationVersion = "8"
 
 func journalCurationInputKey(runID string) string {
 	return "curation/runs/" + runID + "/input.json"
