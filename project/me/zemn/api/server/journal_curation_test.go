@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -22,13 +23,25 @@ type fakeJournalCurator struct {
 	result                   *JournalCurationResult
 	prepares, starts, cleans int
 	failure                  error
+	startFailure             error
+	submissions              []journalTestSubmission
 }
 
 func (f *fakeJournalCurator) Prepare(_ context.Context, _ string, data []byte) (string, error) {
 	f.prepares++
 	return "sess_test", json.Unmarshal(data, &f.corpus)
 }
-func (f *fakeJournalCurator) Start(context.Context, string, string) error { f.starts++; return nil }
+
+type journalTestSubmission struct {
+	session, key string
+	remaining    time.Duration
+}
+
+func (f *fakeJournalCurator) Start(_ context.Context, session, key string, remaining time.Duration) error {
+	f.starts++
+	f.submissions = append(f.submissions, journalTestSubmission{session, key, remaining})
+	return f.startFailure
+}
 func (f *fakeJournalCurator) Collect(context.Context, string) (*JournalCurationResult, error) {
 	return f.result, f.failure
 }
@@ -402,7 +415,8 @@ func TestJournalKnowledgeBackfillPreservesExistingDiary(t *testing.T) {
 			case "agent failure":
 				curator.failure = &journalCuratorTerminalError{reason: "failed"}
 			case "timeout":
-				collectAt = now.Add(121 * time.Minute)
+				collectAt = now.Add(30 * time.Minute)
+				curator.result = nil
 			}
 			err = s.RefreshJournalKnowledge(ctx, collectAt)
 			wantError := outcome == "invalid output" || outcome == "agent failure"
@@ -496,7 +510,7 @@ func TestJournalKnowledgeDailyAttempts(t *testing.T) {
 				case "invalid output":
 					curator.result = &JournalCurationResult{}
 				case "timeout":
-					failedAt = at.Add(125 * time.Minute)
+					failedAt = at.Add(30 * time.Minute)
 				}
 				err := s.RefreshJournalKnowledge(ctx, failedAt)
 				if (err != nil) != (outcome != "timeout") {
@@ -836,5 +850,112 @@ func TestJournalCuratorDateCorrectionCannotOverwriteConcurrentEditOrDeletion(t *
 				t.Fatal("stale curation published")
 			}
 		})
+	}
+}
+
+func TestJournalKnowledgeContinuesSameSessionUntilPublication(t *testing.T) {
+	s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+	tick := func(minutes int) {
+		t.Helper()
+		if err := s.RefreshJournalKnowledge(ctx, now.Add(time.Duration(minutes)*time.Minute)); err != nil {
+			t.Fatal(err)
+		}
+	}
+	tick(0)
+	curator.failure = &journalCuratorIncompleteError{turnID: "turn_one", reason: "Review unfinished"}
+	tick(5)
+	tick(10) // Stale reads of the completed turn must not queue extra messages.
+	curator.failure = &journalCuratorIncompleteError{turnID: "turn_two", reason: "Review still unfinished"}
+	tick(15)
+	state, err := s.readJournalCurationState(ctx)
+	if err != nil || state.Failed || state.Cleaning || state.Attempts != 1 || curator.prepares != 1 || curator.starts != 3 || curator.cleans != 0 {
+		t.Fatalf("continuation restarted or retired the run: %#v %#v %v", state, curator, err)
+	}
+	if curator.submissions[1].session != "sess_test" || curator.submissions[1].remaining != 25*time.Minute || curator.submissions[2].remaining != 15*time.Minute || curator.submissions[1].key == curator.submissions[2].key {
+		t.Fatalf("wrong continuation messages: %#v", curator.submissions)
+	}
+	result := journalKnowledgeResult(entries)
+	curator.failure, curator.result = nil, &result
+	tick(20)
+	state, err = s.readJournalCurationState(ctx)
+	if err != nil || state.PublishedKey == "" || state.Failed {
+		t.Fatalf("continuation result not published: %#v %v", state, err)
+	}
+	tick(25)
+	if curator.cleans != 1 {
+		t.Fatal("completed session not cleaned up")
+	}
+}
+
+func TestJournalKnowledgeContinuationSubmissionRecovery(t *testing.T) {
+	s, curator, ctx, _, now := journalKnowledgeFixture(t)
+	if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+		t.Fatal(err)
+	}
+	curator.failure = &journalCuratorIncompleteError{turnID: "turn_one", reason: "Needs more review"}
+	curator.startFailure = errors.New("lost submission response")
+	if err := s.RefreshJournalKnowledge(ctx, now.Add(5*time.Minute)); err == nil {
+		t.Fatal("lost response not reported")
+	}
+	state, err := s.readJournalCurationState(ctx)
+	if err != nil || state.ContinuationSubmitted || state.ContinuationTurnID != "turn_one" || state.ContinuationRemaining != 25*time.Minute || state.Failed {
+		t.Fatalf("submission not checkpointed: %#v %v", state, err)
+	}
+	curator.startFailure = nil
+	// Reconstruct the coordinator with the same durable services after a restart.
+	restarted := *s
+	if err := restarted.RefreshJournalKnowledge(ctx, now.Add(10*time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	if len(curator.submissions) != 3 || curator.submissions[1] != curator.submissions[2] {
+		t.Fatalf("retry changed logical message: %#v", curator.submissions)
+	}
+	if err := restarted.RefreshJournalKnowledge(ctx, now.Add(15*time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	if len(curator.submissions) != 3 {
+		t.Fatal("completed-turn replay queued another message")
+	}
+}
+
+func TestJournalKnowledgeContinuationDeadline(t *testing.T) {
+	for _, pending := range []bool{false, true} {
+		t.Run(fmt.Sprint("pending=", pending), func(t *testing.T) {
+			s, curator, ctx, _, now := journalKnowledgeFixture(t)
+			if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+				t.Fatal(err)
+			}
+			if pending {
+				curator.failure = &journalCuratorIncompleteError{turnID: "turn_last", reason: "Unfinished"}
+				curator.startFailure = errors.New("lost response")
+				if err := s.RefreshJournalKnowledge(ctx, now.Add(25*time.Minute)); err == nil {
+					t.Fatal("missing submission failure")
+				}
+			}
+			starts := curator.starts
+			if err := s.RefreshJournalKnowledge(ctx, now.Add(30*time.Minute)); err != nil {
+				t.Fatal(err)
+			}
+			state, err := s.readJournalCurationState(ctx)
+			if err != nil || !state.Failed || state.RunID != "" || state.PublishedKey != "" || curator.cleans != 1 || curator.starts != starts {
+				t.Fatalf("30-minute deadline did not retire session: %#v %#v %v", state, curator, err)
+			}
+		})
+	}
+}
+
+func TestJournalKnowledgeCollectsCompletedResultAtDeadline(t *testing.T) {
+	s, curator, ctx, entries, now := journalKnowledgeFixture(t)
+	if err := s.RefreshJournalKnowledge(ctx, now); err != nil {
+		t.Fatal(err)
+	}
+	result := journalKnowledgeResult(entries)
+	curator.result = &result
+	if err := s.RefreshJournalKnowledge(ctx, now.Add(30*time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	state, err := s.readJournalCurationState(ctx)
+	if err != nil || state.PublishedKey == "" || state.Failed || curator.starts != 1 {
+		t.Fatalf("discarded completed output at deadline: %#v %v", state, err)
 	}
 }

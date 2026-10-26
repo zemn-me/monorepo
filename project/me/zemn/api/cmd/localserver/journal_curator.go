@@ -189,7 +189,7 @@ func (c *localJournalCurator) Prepare(_ context.Context, runID string, data []by
 	c.results[runID] = result
 	return runID, nil
 }
-func (c *localJournalCurator) Start(context.Context, string, string) error { return nil }
+func (c *localJournalCurator) Start(context.Context, string, string, time.Duration) error { return nil }
 func (c *localJournalCurator) Collect(_ context.Context, sessionID string) (*apiserver.JournalCurationResult, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
