@@ -239,3 +239,56 @@ func TestJournalCurationSchemaUUIDWireFormat(t *testing.T) {
 		}
 	}
 }
+
+func TestJournalAgentsFailureExplanations(t *testing.T) {
+	for _, tc := range []struct {
+		name, status, turnStatus, body, reportTurn, want string
+		size                                             int
+	}{
+		{"no artifacts", "idle", "completed", "", "", "artifacts=0 current_turn=0 expected_output=0", 0},
+		{"completed", "idle", "completed", `{"message":"Schema validation failed after two repair attempts"}`, "turn_current", `agent explanation: "Schema validation failed after two repair attempts"`, 0},
+		{"failed", "failed", "failed", `{"message":"Workspace setup failed"}`, "turn_current", `agent explanation: "Workspace setup failed"`, 0},
+		{"requires action", "requires_action", "in_progress", `{"message":"Required tool unavailable"}`, "turn_current", `agent explanation: "Required tool unavailable"`, 0},
+		{"stale report", "idle", "completed", `{"message":"DO NOT READ"}`, "turn_old", "artifacts=2 current_turn=0 expected_output=0", 0},
+		{"malformed", "idle", "completed", `{"private text":`, "turn_current", "invalid failure report", 0},
+		{"oversized metadata", "idle", "completed", `DO NOT READ`, "turn_current", "failure report exceeds size limit", journalCuratorFailureLimit + 1},
+		{"oversized body", "idle", "completed", strings.Repeat("x", journalCuratorFailureLimit+1), "turn_current", "failure report exceeds size limit", 0},
+		{"log escaping", "idle", "completed", `{"message":"failed\nFORGED LOG LINE"}`, "turn_current", `agent explanation: "failed\nFORGED LOG LINE"`, 0},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			client := &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+				switch request.URL.Path {
+				case "/v1/agents/sessions/sess_test":
+					return journalAgentTestResponse(map[string]any{"id": "sess_test", "status": tc.status}), nil
+				case "/v1/agents/sessions/sess_test/turns":
+					return journalAgentTestResponse(map[string]any{"data": []any{map[string]string{"id": "turn_current", "status": tc.turnStatus}}}), nil
+				case "/v1/agents/sessions/sess_test/artifacts":
+					if tc.name == "no artifacts" {
+						return journalAgentTestResponse(map[string]any{"data": []any{}, "has_more": false}), nil
+					}
+					return journalAgentTestResponse(map[string]any{"data": []any{
+						map[string]any{"id": "report", "path": journalCuratorFailurePath, "turn_id": tc.reportTurn, "size_bytes": tc.size},
+						map[string]any{"id": "private", "path": journalCuratorOutputPath, "turn_id": "turn_old"},
+					}, "has_more": false}), nil
+				case "/v1/agents/sessions/sess_test/artifacts/report/content":
+					if tc.reportTurn != "turn_current" || tc.size > journalCuratorFailureLimit {
+						t.Fatal("read stale or oversized report")
+					}
+					return &http.Response{StatusCode: 200, Header: http.Header{}, Body: io.NopCloser(strings.NewReader(tc.body))}, nil
+				default:
+					t.Fatalf("unexpected request: %s", request.URL)
+					return nil, errors.New("unexpected request")
+				}
+			})}
+			curator := &openAIJournalCurator{ai: &openAIJournalAI{apiKey: "test", client: client}}
+			result, err := curator.Collect(t.Context(), "sess_test")
+			var terminal *journalCuratorTerminalError
+			if result != nil || !errors.As(err, &terminal) || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("result=%v error=%v; want terminal diagnostic %q", result, err, tc.want)
+			}
+			if strings.Contains(err.Error(), "DO NOT READ") || strings.Contains(err.Error(), "private text") || strings.Contains(err.Error(), "\n") {
+				t.Fatalf("unsafe diagnostic: %q", err)
+			}
+		})
+	}
+}
