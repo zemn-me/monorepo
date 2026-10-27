@@ -5,9 +5,15 @@ def _policy_test_impl(ctx):
     env = unittest.begin(ctx)
     snapshot = "https://snapshot.ubuntu.com/ubuntu/20261001T000000Z/pool/main/a/a/a_1_amd64.deb"
     archive = "https://archive.ubuntu.com/ubuntu/pool/main/a/a/a_1_amd64.deb"
+    launchpad = "https://launchpad.net/ubuntu/+archive/primary/+files/a_1_amd64.deb"
     digest = "a" * 64
-    asserts.equals(env, [snapshot, archive], deb_package_urls([snapshot], digest))
-    asserts.equals(env, [snapshot, archive], deb_package_urls([snapshot, archive], digest))
+    asserts.equals(env, [snapshot, archive, launchpad], deb_package_urls([snapshot], digest))
+    asserts.equals(env, [snapshot, archive, launchpad], deb_package_urls([snapshot, archive], digest))
+    asserts.equals(env, [snapshot, archive, launchpad], deb_package_urls([snapshot, archive, launchpad], digest))
+
+    # Security updates can leave the rolling archive but remain in Launchpad.
+    updated = snapshot.replace("a_1_", "a_1+ubuntu1_")
+    asserts.equals(env, [updated, archive.replace("a_1_", "a_1+ubuntu1_"), launchpad.replace("a_1_", "a_1+ubuntu1_")], deb_package_urls([updated], digest))
     for invalid_digest in ["", "a" * 63, "g" * 64]:
         asserts.equals(env, [snapshot], deb_package_urls([snapshot], invalid_digest))
     for other in [
