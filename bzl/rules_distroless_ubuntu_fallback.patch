@@ -1,6 +1,6 @@
 --- a/apt/private/deb_import.bzl
 +++ b/apt/private/deb_import.bzl
-@@ -443,9 +443,33 @@
+@@ -443,9 +443,37 @@
  
      return (build_file_content, outs, symlinks)
  
@@ -23,9 +23,13 @@
 +            continue
 +        if "?" in url or "#" in url or "%" in url or ".." in parts or "" in parts:
 +            continue
-+        fallback = "https://archive.ubuntu.com/ubuntu/" + "/".join(parts[1:])
-+        if fallback not in result:
-+            result.append(fallback)
++        fallbacks = [
++            "https://archive.ubuntu.com/ubuntu/" + "/".join(parts[1:]),
++            "https://launchpad.net/ubuntu/+archive/primary/+files/" + parts[-1],
++        ]
++        for fallback in fallbacks:
++            if fallback not in result:
++                result.append(fallback)
 +    return result
 +
  def _deb_import_impl(rctx):
