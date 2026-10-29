@@ -544,18 +544,18 @@
           "REPO_MAPPING:tar.bzl+,bazel_lib bazel_lib+",
           "REPO_MAPPING:tar.bzl+,bazel_skylib bazel_skylib+",
           "REPO_MAPPING:tar.bzl+,tar.bzl tar.bzl+",
-          "FILE:@@//bzl/pnpm/integrity.json 61439dd51a60d6b7dfa3e280ee85a0c2494684a7afd73b71f17fe590ed3687dc"
+          "FILE:@@//bzl/pnpm/integrity.json 92e01765dab417de570641632272a0a007399c2fe25ab0669000656700d0d126"
         ],
         "generatedRepoSpecs": {
           "pnpm": {
             "repoRuleId": "@@aspect_rules_js+//npm/private:npm_import.bzl%npm_import_rule",
             "attributes": {
               "package": "pnpm",
-              "version": "10.34.8",
+              "version": "10.34.9",
               "root_package": "",
               "link_workspace": "",
               "link_packages": {},
-              "integrity": "sha512-9ieo6XE0Ov5J39D2PQKCNCAd+oMdXLWIcz4eX42ya/FpiaMhYatcG02zsf28NzFgYGtbieAC323RmoWt+R/FqA==",
+              "integrity": "sha512-9JtajqD97bRLs8DB1ldQkqU8KVDZW3rRXfEfF5dId6LeOgHAfpNOmyjOcW5RwJqUlixzBtCb4uHksYqMh2L9Mg==",
               "url": "",
               "commit": "",
               "patch_args": [
@@ -577,7 +577,7 @@
             "repoRuleId": "@@aspect_rules_js+//npm/private:npm_import.bzl%npm_import_links",
             "attributes": {
               "package": "pnpm",
-              "version": "10.34.8",
+              "version": "10.34.9",
               "dev": false,
               "root_package": "",
               "link_packages": {},
