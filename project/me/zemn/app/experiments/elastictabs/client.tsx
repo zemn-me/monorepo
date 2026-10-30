@@ -132,6 +132,14 @@ export default function ElasticTabStopsClient() {
 			</p>
 
 			<p>
+				To use this formatter in your own TypeScript projects, install{' '}
+				<Link href="https://www.npmjs.com/package/@zemnmez/tabwriter">
+					@zemnmez/tabwriter from npm
+				</Link>
+				.
+			</p>
+
+			<p>
 				Click <button onClick={onExampleButtonClick}>here</button> for
 				an example.
 			</p>
