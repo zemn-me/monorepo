@@ -427,8 +427,8 @@ importers:
         specifier: 30.1.3
         version: 30.1.3
       mime:
-        specifier: 4.1.1
-        version: 4.1.1
+        specifier: 4.1.2
+        version: 4.1.2
       minimist:
         specifier: 1.2.8
         version: 1.2.8
@@ -7207,8 +7207,8 @@ packages:
     engines: {node: '>=4.0.0'}
     hasBin: true
 
-  mime@4.1.1:
-    resolution: {integrity: sha512-YAApRsTpM2+gnUFHhRNGfkX8NK0V5xj1nyQLufGlwEI+eX4xRsTcel2IXDuMEGSGjBvzykNW4VuoEACgwYe7BQ==}
+  mime@4.1.2:
+    resolution: {integrity: sha512-ikRzZ2RwbUVDyL9SsU0f2Phcmav4yq5r8faH5ZZKHtOZrMBLnrQOrj0uvqZ5R1uQnj+RO7Wcklw/lAf81mP9LQ==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -13302,7 +13302,7 @@ snapshots:
 
   '@types/mime@4.0.0':
     dependencies:
-      mime: 4.1.1
+      mime: 4.1.2
 
   '@types/moo@0.5.10': {}
 
@@ -17301,7 +17301,7 @@ snapshots:
 
   mime@2.6.0: {}
 
-  mime@4.1.1: {}
+  mime@4.1.2: {}
 
   mimic-fn@2.1.0: {}
 
