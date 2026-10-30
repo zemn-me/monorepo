@@ -207,6 +207,11 @@ export class Component extends Pulumi.ComponentResource {
 					path: 'ts/result',
 					resourceName: 'result',
 				},
+				{
+					name: '@zemnmez/tabwriter',
+					path: 'ts/text/tabwriter',
+					resourceName: 'tabwriter',
+				},
 			]) {
 				const target = `monorepo/${npmPackage.path}/npm_pkg`;
 				new NpmPackage(

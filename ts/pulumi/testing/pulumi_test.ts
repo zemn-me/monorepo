@@ -757,6 +757,7 @@ describe('pulumi', () => {
 			'monorepo_future_npm_publish',
 			'monorepo_knowitwhenyouseeit_npm_publish',
 			'monorepo_result_npm_publish',
+			'monorepo_tabwriter_npm_publish',
 		]);
 		for (const command of npmPublishCommands) {
 			expect(command.inputs['environment']).toEqual({

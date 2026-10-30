@@ -46,6 +46,7 @@ ts_project(
         "//ts/pulumi/zemn.me/availability:remix",
         "//ts/pulumi/zemn.me/static",
         "//ts/result:npm_pkg_publish_data",
+        "//ts/text/tabwriter:npm_pkg_publish_data",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
