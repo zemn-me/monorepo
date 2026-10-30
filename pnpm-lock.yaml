@@ -316,8 +316,8 @@ importers:
         specifier: 3.11.0
         version: 3.11.0(typescript@7.0.2)
       '@pulumi/dnsimple':
-        specifier: 5.3.2
-        version: 5.3.2(typescript@7.0.2)
+        specifier: 5.3.3
+        version: 5.3.3(typescript@7.0.2)
       '@pulumi/pulumi':
         specifier: 3.272.0
         version: 3.272.0(typescript@7.0.2)
@@ -2633,8 +2633,8 @@ packages:
     resolution: {integrity: sha512-o1omwSERsuqsAt7jhokjpF/TOrtx60oimc9u9YdwMIHG+s4WIzLokSDzlgiQMVNVkWWypFOZyWp1Dhvi32NXgQ==}
     deprecated: Inadvertently published.
 
-  '@pulumi/dnsimple@5.3.2':
-    resolution: {integrity: sha512-FuICf6TL+FabB04522z4HjVUAn56sD+czO10EhvAszSt07F+D4XLiuMZUlz8sq5fFeoKalJWJHwQFBoqqtghzQ==}
+  '@pulumi/dnsimple@5.3.3':
+    resolution: {integrity: sha512-ClTZEhi/NSj5neV2uT4KAEYgqPeOK3gJm6j+6ZxIIoDF8HjWF+w1haDNU7Hw7MhiDH0uHdPCBrpiJHmp+RKrkg==}
 
   '@pulumi/docker-build@0.0.14':
     resolution: {integrity: sha512-dLCta3BOrYRxHyp22QnVh06qlSiSORtmIypcQ6yb4+GZ2+ThbML06pINyERc5ClgJXGQFSVTtuWhMSiurTWU2w==}
@@ -11882,7 +11882,7 @@ snapshots:
       - ts-node
       - typescript
 
-  '@pulumi/dnsimple@5.3.2(typescript@7.0.2)':
+  '@pulumi/dnsimple@5.3.3(typescript@7.0.2)':
     dependencies:
       '@pulumi/pulumi': 3.272.0(typescript@7.0.2)
     transitivePeerDependencies:
