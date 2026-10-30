@@ -304,8 +304,8 @@ importers:
         specifier: 3.5.0
         version: 3.5.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.3.1)
       '@microsoft/api-documenter':
-        specifier: 7.30.18
-        version: 7.30.18(@types/node@26.6.5)
+        specifier: 7.30.19
+        version: 7.30.19(@types/node@26.6.5)
       '@microsoft/api-extractor':
         specifier: 7.59.4
         version: 7.59.4(@types/node@26.6.5)
@@ -1912,8 +1912,8 @@ packages:
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
 
-  '@microsoft/api-documenter@7.30.18':
-    resolution: {integrity: sha512-HbmyutE7u6JQ6GYn4dxyDDfoFKdLjHOvCcbRGSkz+wfWJcKxYzpG/G3kSsmZgW+4JMeTh3u36usiwAbHvmhlhA==}
+  '@microsoft/api-documenter@7.30.19':
+    resolution: {integrity: sha512-LuKurf1uBwQUGrrFa/tWJmw6S1Hd6OYJR3gQwCh6CIW7V+rI7qzSEoRnAU/inHLJnT9ggo90T0aVZqE2UvbpVQ==}
     engines: {node: '>=20.9.0'}
     hasBin: true
 
@@ -11088,7 +11088,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@microsoft/api-documenter@7.30.18(@types/node@26.6.5)':
+  '@microsoft/api-documenter@7.30.19(@types/node@26.6.5)':
     dependencies:
       '@microsoft/api-extractor-model': 7.33.15(@types/node@26.6.5)
       '@microsoft/tsdoc': 0.17.0
