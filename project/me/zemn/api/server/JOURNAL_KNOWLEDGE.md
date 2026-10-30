@@ -24,8 +24,12 @@ No diary contents are committed to Git or attached to a coding repository.
 Each immutable corpus contains all ready transcripts, valid provisional and
 legacy summaries, the previous published wiki and analyses, and the output
 schema. The sandbox can search this file with shell/Python. Network access and
-subagents are disabled; it receives no application credentials. It returns one
-complete JSON generation at `/workspace/outputs/journal.json`.
+subagents are disabled; it receives no application credentials. It can accumulate JSON batches under `/workspace/outputs/journal-parts/` across
+turns, then commit the complete generation with `journal-manifest.json`. The
+coordinator combines the listed parts before full validation and publication.
+The single-file `journal.json` form is also accepted. Runs have a 30-minute
+budget; an unfinished completed turn receives a follow-up with remaining time.
+A current-turn `failure.json` with `final: true` explicitly ends the run.
 
 The curator is prompted to create pages for recurring entities (two dates), or
 an entity with substantial enduring significance. It preserves page UUIDs and
@@ -148,6 +152,34 @@ cleanup remain separate from migration; this is not a blanket ban on deletion
 through the application. The hosted agent receives no AWS credentials and has
 no network access. The coordinator still shares the upload worker's execution
 role; the exact-key cleanup check is an application safeguard, not an IAM deny.
+
+## Manual testing
+
+An IAM-authorized operator can invoke the coordinator Lambda directly with
+`{"source":"journal.manual","requestId":"<new canonical UUID>"}`. This starts
+one 30-minute test even when the daily attempt budget is exhausted or the
+published corpus is unchanged. No public HTTP endpoint is added. Manual tests
+retain the normal lease, active-run exclusion, source fencing, validation,
+publication and cleanup; they do not clear or increment the scheduled budget.
+Scheduled ticks continue the admitted run. The request UUID is durably bound to
+its first run, so retry the same UUID after an uncertain invocation response;
+use a new UUID only to deliberately authorize another test. Existing work is
+never replaced by a manual request.
+
+For example, save the event above with a generated UUID to `/tmp/journal-run.json`,
+then run:
+
+```sh
+aws lambda invoke --region us-east-1 \
+  --function-name journalcuratorlambda-f57487f \
+  --cli-binary-format raw-in-base64-out \
+  --payload file:///tmp/journal-run.json /tmp/journal-run-response.json
+```
+
+Inspect both `FunctionError` in the CLI response and the response JSON. The
+invocation returns after submitting work; monitor `CURATION` in the journal
+DynamoDB table and the curator's CloudWatch log group for the final outcome.
+Each new request can incur paid model usage and can publish a validated result.
 
 ## Configuration and limits
 

@@ -12,6 +12,8 @@ type recordingEventProcessor struct {
 	key         string
 	size        int64
 	refreshedAt time.Time
+	manualID    string
+	manualAt    time.Time
 }
 
 func (p *recordingEventProcessor) ProcessUpload(_ context.Context, bucket, key string, size int64) error {
@@ -61,5 +63,28 @@ func TestHandleScheduledSummaryRefresh(t *testing.T) {
 func TestHandleRejectsUnknownEvent(t *testing.T) {
 	if err := handleEvent(context.Background(), &recordingEventProcessor{}, json.RawMessage(`{"source":"unknown"}`)); err == nil {
 		t.Fatal("unknown event was accepted")
+	}
+}
+
+func (p *recordingEventProcessor) RunCuration(_ context.Context, now time.Time, requestID string) error {
+	p.manualID, p.manualAt = requestID, now
+	return nil
+}
+
+func TestHandleManualCuration(t *testing.T) {
+	processor := &recordingEventProcessor{}
+	before := time.Now()
+	// A caller-supplied time must not become a daily-budget override.
+	event := json.RawMessage(`{"source":"journal.manual","requestId":"request-one","time":"2099-01-01T00:00:00Z"}`)
+	if err := handleEvent(t.Context(), processor, event); err != nil {
+		t.Fatal(err)
+	}
+	if processor.manualID != "request-one" || processor.manualAt.Before(before) || processor.manualAt.After(time.Now()) || !processor.refreshedAt.IsZero() {
+		t.Fatalf("manual dispatch: %#v", processor)
+	}
+	for _, body := range []string{`{"source":"journal.manual"}`, `{"source":"journal.manual","requestId":"one","Records":[{}]}`} {
+		if err := handleEvent(t.Context(), &recordingEventProcessor{}, json.RawMessage(body)); err == nil {
+			t.Fatal("invalid manual event accepted")
+		}
 	}
 }

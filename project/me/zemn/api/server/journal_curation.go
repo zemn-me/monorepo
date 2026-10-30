@@ -42,6 +42,8 @@ type JournalCurator interface {
 }
 
 type journalCurationState struct {
+	ManualRequestID       string        `dynamodbav:"manual_request_id"`
+	LastRunManual         bool          `dynamodbav:"last_run_manual"`
 	ID                    string        `dynamodbav:"id"`
 	When                  string        `dynamodbav:"when"`
 	Version               string        `dynamodbav:"version"`
@@ -405,6 +407,10 @@ func applyJournalGeneration(records []JournalStoredRecord, generation journalGen
 // work starts once per 24 hours, with at most two retries after failure.
 // Conditional state versions fence concurrent calls.
 func (s *Server) RefreshJournalKnowledge(ctx context.Context, now time.Time) error {
+	return s.refreshJournalKnowledge(ctx, now, "")
+}
+
+func (s *Server) refreshJournalKnowledge(ctx context.Context, now time.Time, manualRequestID string) error {
 	if s.journalCurator == nil {
 		return errors.New("journal curator is not configured")
 	}
@@ -412,13 +418,34 @@ func (s *Server) RefreshJournalKnowledge(ctx context.Context, now time.Time) err
 	if err != nil {
 		return err
 	}
+	if manualRequestID != "" {
+		existing, err := s.journalManualRequestRun(ctx, manualRequestID)
+		if err != nil {
+			return err
+		}
+		if existing != "" {
+			return nil
+		}
+		if state.RunID != "" || state.Cleaning || (state.ManualRequestID != "" && state.ManualRequestID != manualRequestID) {
+			return errors.New("journal curation already has an active or pending run")
+		}
+	}
 	if now.Before(state.LeaseUntil) {
+		if manualRequestID != "" {
+			return errors.New("journal curator is busy; retry the same request ID")
+		}
 		return nil
+	}
+	if manualRequestID != "" {
+		state.ManualRequestID = manualRequestID
 	}
 	state.LeaseUntil = now.Add(3 * time.Minute)
 	if err := s.saveJournalCurationState(ctx, &state); err != nil {
 		var conflict *types.ConditionalCheckFailedException
 		if errors.As(err, &conflict) {
+			if manualRequestID != "" {
+				return errors.New("journal curator is busy; retry the same request ID")
+			}
 			return nil
 		}
 		return err
@@ -443,19 +470,28 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 	corpus := journalCorpusFromRecords(filterJournalLegacyEvidence(records))
 	hashes, fingerprint := journalCorpusHashes(corpus)
 	if state.RunID == "" {
-		if len(corpus.Entries) == 0 || fingerprint == state.PublishedFingerprint || now.Before(state.StartedAt.Add(time.Hour)) {
+		if len(corpus.Entries) == 0 {
+			if state.ManualRequestID != "" {
+				state.ManualRequestID = ""
+				return errors.New("journal has no completed recordings to curate")
+			}
 			return nil
 		}
-		// Count the last run from checkpoints predating the daily budget.
-		if state.AttemptWindowStart.IsZero() && !state.StartedAt.IsZero() {
-			state.AttemptWindowStart, state.Attempts = state.StartedAt, 1
-		}
-		if !state.AttemptWindowStart.IsZero() && now.Before(state.AttemptWindowStart.Add(24*time.Hour)) {
-			if state.Attempts > 0 && (!state.Failed || state.Attempts >= 3) {
+		if state.ManualRequestID == "" {
+			if fingerprint == state.PublishedFingerprint || now.Before(state.StartedAt.Add(time.Hour)) {
 				return nil
 			}
-		} else {
-			state.AttemptWindowStart, state.Attempts = now, 0
+			// Count the last run from checkpoints predating the daily budget.
+			if state.AttemptWindowStart.IsZero() && !state.StartedAt.IsZero() && !state.LastRunManual {
+				state.AttemptWindowStart, state.Attempts = state.StartedAt, 1
+			}
+			if !state.AttemptWindowStart.IsZero() && now.Before(state.AttemptWindowStart.Add(24*time.Hour)) {
+				if state.Attempts > 0 && (!state.Failed || state.Attempts >= 3) {
+					return nil
+				}
+			} else {
+				state.AttemptWindowStart, state.Attempts = now, 0
+			}
 		}
 		generation, _, err := s.journalPublishedGeneration(ctx, records)
 		if err != nil {
@@ -480,9 +516,12 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 			return err
 		}
 		state.RunID = uuid.NewString()
-		// Reserve an attempt durably before contacting the paid service.
-		// Cleanup and failures never refund the daily budget.
-		state.Attempts++
+		// Checkpoint the run before contacting the paid service. Only scheduled
+		// runs consume the daily budget; cleanup never refunds those attempts.
+		if state.ManualRequestID == "" {
+			state.Attempts++
+		}
+		state.LastRunManual = state.ManualRequestID != ""
 		state.StartedAt, state.Fingerprint, state.Failed = now, fingerprint, false
 		state.InputKey = journalCurationInputKey(state.RunID)
 		if err := s.putJournalJSON(ctx, state.InputKey, corpus); err != nil {
@@ -491,6 +530,13 @@ func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurat
 			return err
 		}
 		if err := s.saveJournalCurationState(ctx, state); err != nil {
+			return err
+		}
+	}
+	// Claim the manual request after checkpointing its run, before paid work.
+	// A lost response is recoverable by the ordinary scheduled reconciler.
+	if state.ManualRequestID != "" {
+		if err := s.claimJournalManualRequest(ctx, state, now); err != nil {
 			return err
 		}
 	}
@@ -677,6 +723,7 @@ func (s *Server) cleanupJournalCuration(ctx context.Context, state *journalCurat
 	}
 	state.RunID, state.SessionID, state.InputKey = "", "", ""
 	state.Submitted, state.Cleaning = false, false
+	state.ManualRequestID = ""
 	state.ContinuationTurnID, state.ContinuationRemaining, state.ContinuationSubmitted = "", 0, false
 	return nil
 }
