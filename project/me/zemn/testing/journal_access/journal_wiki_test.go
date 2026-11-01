@@ -460,19 +460,32 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
-	// Match the calendar's browser time zone, including month boundaries.
-	currentMonth, err := driver.ExecuteScript(`return new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'}).format(new Date())`, nil)
+	// The date picker preserves the selected launch day, which can be in the
+	// previous month or year. Format that route date in the browser's time zone.
+	selectedURL, err := driver.CurrentURL()
 	if err != nil {
 		t.Fatal(err)
 	}
-	currentYear, err := driver.ExecuteScript(`return String(new Date().getFullYear())`, nil)
+	selectedRoute, err := url.Parse(selectedURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	selectedAt := selectedRoute.Query().Get("at")
+	if _, err := time.Parse(time.RFC3339Nano, selectedAt); err != nil {
+		t.Fatalf("selected launch day in %s: %v", selectedURL, err)
+	}
+	selectedMonth, err := driver.ExecuteScript(`return new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'}).format(new Date(arguments[0]))`, []any{selectedAt})
+	if err != nil {
+		t.Fatal(err)
+	}
+	selectedYear, err := driver.ExecuteScript(`return String(new Date(arguments[0]).getFullYear())`, []any{selectedAt})
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, view := range []struct{ name, link, visibleDate, period, child, title string }{
-		{"12-months-desktop", "Months", currentMonth.(string), "month", "day", "Experiments in attention"},
+		{"12-months-desktop", "Months", selectedMonth.(string), "month", "day", "Experiments in attention"},
 		{"13-weeks-desktop", "Weeks", "Monday", "week", "day", "Making room for steadier work"},
-		{"14-years-desktop", "Years", currentYear.(string), "year", "month", "A life with more room in it"},
+		{"14-years-desktop", "Years", selectedYear.(string), "year", "month", "A life with more room in it"},
 	} {
 		click(selenium.ByLinkText, view.link)
 		regionSelector := "[role='region'][aria-label='Journal " + view.period + "']"
