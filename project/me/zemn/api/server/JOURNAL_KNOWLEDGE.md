@@ -188,7 +188,9 @@ Each new request can incur paid model usage and can publish a validated result.
   workload identity configuration. The service account additionally needs
   Agents session create/list/read/delete, event write, turn read, and artifact
   read permissions and access to the configured model.
-- `JOURNAL_CURATOR_MODEL`: defaults to `gpt-6-astra`.
+- `JOURNAL_CURATOR_MODEL`: defaults to `gpt-5.6`. Hosted curation and entry
+  analysis/summary requests use medium reasoning effort; analysis and summaries also
+  use `gpt-5.6`.
 - `OPENAI_CURATOR_API_KEY`: optional dedicated credential for Agents curation.
   When absent, curation uses workload identity. Audio transcription continues using
   workload identity in either case.

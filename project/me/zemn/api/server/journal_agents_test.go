@@ -36,6 +36,10 @@ func TestJournalAgentsHostedCorpusAndIdempotentSubmission(t *testing.T) {
 			var payload struct {
 				Agent struct {
 					Instructions string `json:"instructions"`
+					Model        string `json:"model"`
+					Reasoning    struct {
+						Effort string `json:"effort"`
+					} `json:"reasoning"`
 				} `json:"agent"`
 				Input       any               `json:"input"`
 				Metadata    map[string]string `json:"metadata"`
@@ -49,6 +53,9 @@ func TestJournalAgentsHostedCorpusAndIdempotentSubmission(t *testing.T) {
 			}
 			if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
 				return nil, err
+			}
+			if payload.Agent.Model != "test-model" || payload.Agent.Reasoning.Effort != "medium" {
+				return nil, errors.New("hosted curator did not use configured model with medium reasoning effort")
 			}
 			if !strings.Contains(payload.Agent.Instructions, journalWritingInstructions) {
 				return nil, errors.New("hosted curator omitted shared writing guidance")
