@@ -1158,7 +1158,7 @@ describe('pulumi', () => {
 		expect(curator?.inputs['environment']).toMatchObject({
 			variables: {
 				JOURNAL_CURATION_ENABLED: 'true',
-				JOURNAL_CURATOR_MODEL: 'gpt-6-astra',
+				JOURNAL_CURATOR_MODEL: 'gpt-5.6',
 				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
 			},
 		});

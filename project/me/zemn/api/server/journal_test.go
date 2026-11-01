@@ -371,6 +371,10 @@ func TestOpenAISummaryUsesGeneratedRequestAndResponseTypes(t *testing.T) {
 		if payload["store"] != false {
 			return nil, fmt.Errorf("store = %v, want false", payload["store"])
 		}
+		reasoning, ok := payload["reasoning"].(map[string]any)
+		if !ok || reasoning["effort"] != "medium" {
+			return nil, fmt.Errorf("reasoning = %v, want medium effort", payload["reasoning"])
+		}
 		if payload["model"] != journalSummaryModel {
 			return nil, fmt.Errorf("model = %v, want %q", payload["model"], journalSummaryModel)
 		}

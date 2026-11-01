@@ -121,7 +121,12 @@ func (o *openAIJournalCurator) Prepare(ctx context.Context, runID string, corpus
 		}})
 	}
 	session, err := sessions.New(ctx, openai.BetaAgentSessionNewParams{
-		Agent:    openai.BetaAgentSessionNewParamsAgent{Model: openai.String(o.model), Instructions: openai.String(journalCuratorInstructions), MultiAgent: openai.MultiAgentConfigParam{Enabled: false}},
+		Agent: openai.BetaAgentSessionNewParamsAgent{
+			Model:        openai.String(o.model),
+			Instructions: openai.String(journalCuratorInstructions),
+			Reasoning:    openai.AgentReasoningParam{Effort: openai.AgentReasoningParamEffortMedium},
+			MultiAgent:   openai.MultiAgentConfigParam{Enabled: false},
+		},
 		Metadata: map[string]string{"journal_run": runID},
 		Environment: openai.EnvironmentParamUnion{OfParamOpenAIHosted: &openai.EnvironmentParamOpenAIHosted{
 			Network: openai.EnvironmentParamOpenAIHostedNetwork{Access: "disabled"}, Files: files,

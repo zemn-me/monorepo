@@ -42,7 +42,7 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 	}
 	model := os.Getenv("JOURNAL_CURATOR_MODEL")
 	if model == "" {
-		model = "gpt-6-astra"
+		model = "gpt-5.6"
 	}
 	objects := s3.NewFromConfig(cfg)
 	return &JournalWorker{server: &Server{

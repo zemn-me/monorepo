@@ -745,7 +745,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						JOURNAL_TABLE_NAME: journalTable.name,
 						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						JOURNAL_CURATION_ENABLED: 'true',
-						JOURNAL_CURATOR_MODEL: 'gpt-6-astra',
+						JOURNAL_CURATOR_MODEL: 'gpt-5.6',
 						...(args.journalWorkerEnvironment === 'production' &&
 						process.env['OPENAI_CURATOR_API_KEY']
 							? {
