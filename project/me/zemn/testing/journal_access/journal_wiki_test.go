@@ -460,7 +460,12 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
-	// The date picker preserves the selected launch day, which can be in the
+	// Use the rehearsal day for aggregate screenshots. Its week and month
+	// always contain another fixture day, even when the launch is the only
+	// day in a new month and correctly reuses its day summary instead.
+	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
+	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	// The date picker preserves the selected day, which can be in the
 	// previous month or year. Format that route date in the browser's time zone.
 	selectedURL, err := driver.CurrentURL()
 	if err != nil {
@@ -472,7 +477,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	selectedAt := selectedRoute.Query().Get("at")
 	if _, err := time.Parse(time.RFC3339Nano, selectedAt); err != nil {
-		t.Fatalf("selected launch day in %s: %v", selectedURL, err)
+		t.Fatalf("selected rehearsal day in %s: %v", selectedURL, err)
 	}
 	selectedMonth, err := driver.ExecuteScript(`return new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'}).format(new Date(arguments[0]))`, []any{selectedAt})
 	if err != nil {
