@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1345440577370918915"
+        ],
+        "editableUntil": "2021-01-02T19:43:25.379Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "286"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1345439471857184770",
+    "id_str": "1345440577370918915",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1345440577370918915",
+    "in_reply_to_status_id": "1345439471857184770",
+    "created_at": "Sat Jan 02 18:43:25 +0000 2021",
+    "favorited": false,
+    "full_text": "the issue I always run into (maybe some wiser than me know asolution) is having a sequence of ops with useful side-effects I'd like to capture:\n\nlocateFile(path) -&gt; parseAst(content) -&gt; getTitle(ast)\n\nthe user wants content, but also ast w/o making a ton of intermediate variables",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

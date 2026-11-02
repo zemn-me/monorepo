@@ -1,9 +1,10 @@
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 /**
  * @fileoverview
  * Runs the pulumi config in preview mode.
  */
 
-import * as stack from 'ts/pulumi/stack';
+import * as stack from '#root/ts/pulumi/stack.js';
 
 (async function main() {
 	await (await stack.production()).preview();

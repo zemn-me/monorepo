@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1169540814030155776"
+        ],
+        "editableUntil": "2019-09-05T10:20:33.739Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "hyobun",
+          "screen_name": "squizxy",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "2441512705",
+          "id": "2441512705"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/squizxy/status/1169354448033976320/video/1",
+          "source_status_id": "1169354448033976320",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/Skql2DmrL2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1169295972519694337/pu/img/C0QpZDRRwoBZ18YS.jpg",
+          "id_str": "1169295972519694337",
+          "source_user_id": "2441512705",
+          "id": "1169295972519694337",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1169295972519694337/pu/img/C0QpZDRRwoBZ18YS.jpg",
+          "source_user_id_str": "2441512705",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1169354448033976320",
+          "display_url": "pic.twitter.com/Skql2DmrL2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1169540814030155776",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1169540814030155776",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 05 09:20:33 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @squizxy: it's real minecraft bee hours https://t.co/Skql2DmrL2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/squizxy/status/1169354448033976320/video/1",
+          "source_status_id": "1169354448033976320",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/Skql2DmrL2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1169295972519694337/pu/img/C0QpZDRRwoBZ18YS.jpg",
+          "id_str": "1169295972519694337",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "21500",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169295972519694337/pu/vid/1280x720/BQH_u245_UgTwY0V.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169295972519694337/pu/vid/480x270/lcIDEpSfRy1geam8.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1169295972519694337/pu/pl/EofJtBHF_gM66jGO.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169295972519694337/pu/vid/640x360/UP5ZjUbPc56OfBmB.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2441512705",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1169295972519694337",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1169295972519694337/pu/img/C0QpZDRRwoBZ18YS.jpg",
+          "source_user_id_str": "2441512705",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1169354448033976320",
+          "display_url": "pic.twitter.com/Skql2DmrL2"
+        }
+      ]
+    }
+  }
+}

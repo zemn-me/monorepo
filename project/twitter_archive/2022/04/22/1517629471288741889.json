@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1517629471288741889"
+        ],
+        "editableUntil": "2022-04-22T22:50:36.804Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/1Lp25RKyDU",
+          "expanded_url": "https://github.com/google/error-prone/commit/afda5fd3e7874307634dffeafe2142a13f49aa9b",
+          "display_url": "github.com/google/error-p…",
+          "indices": [
+            "90",
+            "113"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "268"
+    ],
+    "favorite_count": "9",
+    "id_str": "1517629471288741889",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1517629471288741889",
+    "possibly_sensitive": false,
+    "created_at": "Fri Apr 22 22:20:36 +0000 2022",
+    "favorited": false,
+    "full_text": "I committed BanJNDI to ErrorProne, Google's Open Source Java static analysis system today https://t.co/1Lp25RKyDU\n\nit recursively bans every method within Java capable of directly or indirectly causing a JNDI lookup to occur (aka what caused the recent log4j incident)",
+    "lang": "en"
+  }
+}

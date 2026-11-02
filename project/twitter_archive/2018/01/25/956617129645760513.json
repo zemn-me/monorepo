@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "956617129645760513"
+        ],
+        "editableUntil": "2018-01-25T20:57:51.451Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jordan Rose",
+          "screen_name": "UINT_MIN",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "610555568",
+          "id": "610555568"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/UINT_MIN/status/956390109540044800/photo/1",
+          "source_status_id": "956390109540044800",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/0KFDKmoSxA",
+          "media_url": "http://pbs.twimg.com/media/DUXHFrmU8AAVLiQ.jpg",
+          "id_str": "956389396302852096",
+          "source_user_id": "610555568",
+          "id": "956389396302852096",
+          "media_url_https": "https://pbs.twimg.com/media/DUXHFrmU8AAVLiQ.jpg",
+          "source_user_id_str": "610555568",
+          "sizes": {
+            "medium": {
+              "w": "791",
+              "h": "499",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "429",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "791",
+              "h": "499",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "956390109540044800",
+          "display_url": "pic.twitter.com/0KFDKmoSxA"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "136"
+    ],
+    "favorite_count": "0",
+    "id_str": "956617129645760513",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "956617129645760513",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 25 19:57:51 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @UINT_MIN: Cool thing about small bitmaps with 8-bit pixels: a hex editor doubles as a (very weird) renderer. https://t.co/0KFDKmoSxA",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/UINT_MIN/status/956390109540044800/photo/1",
+          "source_status_id": "956390109540044800",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/0KFDKmoSxA",
+          "media_url": "http://pbs.twimg.com/media/DUXHFrmU8AAVLiQ.jpg",
+          "id_str": "956389396302852096",
+          "source_user_id": "610555568",
+          "id": "956389396302852096",
+          "media_url_https": "https://pbs.twimg.com/media/DUXHFrmU8AAVLiQ.jpg",
+          "source_user_id_str": "610555568",
+          "sizes": {
+            "medium": {
+              "w": "791",
+              "h": "499",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "429",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "791",
+              "h": "499",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "956390109540044800",
+          "display_url": "pic.twitter.com/0KFDKmoSxA"
+        }
+      ]
+    }
+  }
+}

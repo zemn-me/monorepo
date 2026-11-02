@@ -17,7 +17,7 @@ export class SafeForPublicReleaseError extends Error {
 export class NpmPackageUploadFailureError extends SafeForPublicReleaseError {
 	constructor(
 		public readonly npmPackage: npmPackage,
-		public readonly error?: Error
+		public override readonly error?: Error
 	) {
 		super(`Failed to upload npm package: ${npmPackage.name}`);
 	}
@@ -34,7 +34,9 @@ class npmPackage {
 			this.publishScript,
 			[]
 		);
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		if (o.stderr != '') console.error(o.stderr);
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		if (o.stdout != '') console.error(o.stdout);
 		return this;
 	}
@@ -106,7 +108,7 @@ async function main() {
 						pkg =>
 							`[${pkg.name}](https://npmjs.com/package/${pkg.name})`
 					)
-			  )}.`
+				)}.`
 			: ''
 	}.
 
@@ -114,7 +116,7 @@ ${
 	unsuccessful_npm_packages.length
 		? `The following NPM packages attempted an upload but failed: ${listify(
 				...unsuccessful_npm_packages.map(v => v.name)
-		  )}. This does not usually indicate an issue, I haven't programmed in recognition of rejection due to no update.`
+			)}. This does not usually indicate an issue, I haven't programmed in recognition of rejection due to no update.`
 		: ''
 }`;
 
@@ -133,13 +135,16 @@ ${
 		target_commitish: context.ref,
 	});
 
-	if (errors) {
+	if (errors.length) {
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		console.error('Some errors occurred, they are as follows:');
+		// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 		for (const error of errors) console.error(error);
 	}
 }
 
 main().catch(e => {
 	process.exitCode = 1;
+	// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 	console.error(e);
 });

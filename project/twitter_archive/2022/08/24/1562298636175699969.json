@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1562298636175699969"
+        ],
+        "editableUntil": "2022-08-24T05:09:55.626Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Roni",
+          "screen_name": "Deeronic",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "789935840700960768",
+          "id": "789935840700960768"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Deeronic/status/1562143277784121344/video/1",
+          "source_status_id": "1562143277784121344",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/sflCGHoPWj",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1562143224575266818/pu/img/94INeIkArS5tD79Z.jpg",
+          "id_str": "1562143224575266818",
+          "source_user_id": "789935840700960768",
+          "id": "1562143224575266818",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1562143224575266818/pu/img/94INeIkArS5tD79Z.jpg",
+          "source_user_id_str": "789935840700960768",
+          "sizes": {
+            "medium": {
+              "w": "576",
+              "h": "1020",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "384",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1020",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1562143277784121344",
+          "display_url": "pic.twitter.com/sflCGHoPWj"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1562298636175699969",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1562298636175699969",
+    "possibly_sensitive": false,
+    "created_at": "Wed Aug 24 04:39:55 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @Deeronic: Found another banana enjoyer https://t.co/sflCGHoPWj",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Deeronic/status/1562143277784121344/video/1",
+          "source_status_id": "1562143277784121344",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/sflCGHoPWj",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1562143224575266818/pu/img/94INeIkArS5tD79Z.jpg",
+          "id_str": "1562143224575266818",
+          "video_info": {
+            "aspect_ratio": [
+              "48",
+              "85"
+            ],
+            "duration_millis": "13490",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1562143224575266818/pu/vid/576x1020/4YJrMHiwJYneEqFE.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1562143224575266818/pu/vid/480x850/8HjlDj0RRcjJ0XNe.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1562143224575266818/pu/vid/320x566/_mbpViUgsIHmLCgR.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1562143224575266818/pu/pl/6rwJgd9lnkiztvMa.m3u8?tag=12&v=558"
+              }
+            ]
+          },
+          "source_user_id": "789935840700960768",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1562143224575266818",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1562143224575266818/pu/img/94INeIkArS5tD79Z.jpg",
+          "source_user_id_str": "789935840700960768",
+          "sizes": {
+            "medium": {
+              "w": "576",
+              "h": "1020",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "384",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1020",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1562143277784121344",
+          "display_url": "pic.twitter.com/sflCGHoPWj"
+        }
+      ]
+    }
+  }
+}

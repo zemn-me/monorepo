@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<title>PoC</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'"/>
+
+
+<body>
+	<script>
+		const i = document.createElement("iframe");
+		i.srcdoc = `<img src="https://example.com"/><img src="${
+				`${document.location.origin}/wallpaper.jpg`
+		}"/>`;
+
+		i.sandbox = "";
+
+		document.body.appendChild(i);
+	</script>
+
+</body>

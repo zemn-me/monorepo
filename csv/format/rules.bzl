@@ -4,7 +4,7 @@ def csv_format(name, src = None, out = None, separator = ",", **kwargs):
 
     native.genrule(
         name = name,
-        exec_tools = ["//go/cmd/csvpretty:csvpretty"],
+        tools = ["//go/cmd/csvpretty:csvpretty"],
         cmd_bash = """
             $(execpath //go/cmd/csvpretty:csvpretty) \\
                 --input "$<" \\

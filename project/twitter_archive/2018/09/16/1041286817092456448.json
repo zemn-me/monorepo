@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1041286817092456448"
+        ],
+        "editableUntil": "2018-09-16T12:24:58.025Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Reza Zadeh",
+          "screen_name": "Reza_Zadeh",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "92839676",
+          "id": "92839676"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Reza_Zadeh/status/1041184293559533568/video/1",
+          "source_status_id": "1041184293559533568",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/0O62wofvl7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1041183470171578369/pu/img/7DElzhD9987JQ86F.jpg",
+          "id_str": "1041183470171578369",
+          "source_user_id": "92839676",
+          "id": "1041183470171578369",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1041183470171578369/pu/img/7DElzhD9987JQ86F.jpg",
+          "source_user_id_str": "92839676",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1041184293559533568",
+          "display_url": "pic.twitter.com/0O62wofvl7"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "126"
+    ],
+    "favorite_count": "0",
+    "id_str": "1041286817092456448",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1041286817092456448",
+    "possibly_sensitive": false,
+    "created_at": "Sun Sep 16 11:24:58 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Reza_Zadeh: Naive Computer Vision model that hasn't been trained on both states of a glass door :) https://t.co/0O62wofvl7",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Reza_Zadeh/status/1041184293559533568/video/1",
+          "source_status_id": "1041184293559533568",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/0O62wofvl7",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1041183470171578369/pu/img/7DElzhD9987JQ86F.jpg",
+          "id_str": "1041183470171578369",
+          "video_info": {
+            "aspect_ratio": [
+              "203",
+              "360"
+            ],
+            "duration_millis": "30322",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1041183470171578369/pu/vid/406x720/AXQzIfIChDzCdMiB.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1041183470171578369/pu/vid/180x318/x5S7QTmpo-J8n1oQ.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1041183470171578369/pu/pl/wfI_xNqNp4ABuTOk.m3u8?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "92839676",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1041183470171578369",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1041183470171578369/pu/img/7DElzhD9987JQ86F.jpg",
+          "source_user_id_str": "92839676",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1041184293559533568",
+          "display_url": "pic.twitter.com/0O62wofvl7"
+        }
+      ]
+    }
+  }
+}

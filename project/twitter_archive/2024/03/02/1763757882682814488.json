@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1763757882682814488"
+        ],
+        "editableUntil": "2024-03-02T03:47:02.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1763757882682814488/photo/1",
+          "indices": [
+            "136",
+            "159"
+          ],
+          "url": "https://t.co/nilaoC5zaX",
+          "media_url": "http://pbs.twimg.com/media/GHogUxKaAAEhe4U.png",
+          "id_str": "1763757745235427329",
+          "id": "1763757745235427329",
+          "media_url_https": "https://pbs.twimg.com/media/GHogUxKaAAEhe4U.png",
+          "sizes": {
+            "small": {
+              "w": "384",
+              "h": "264",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "384",
+              "h": "264",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "384",
+              "h": "264",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/nilaoC5zaX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "159"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1763756596973498634",
+    "id_str": "1763757882682814488",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1763757882682814488",
+    "in_reply_to_status_id": "1763756596973498634",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 02 02:47:02 +0000 2024",
+    "favorited": false,
+    "full_text": "i assumed AWS generated these docs automatically or something but they actually have a typo in the response object shape so I guess not https://t.co/nilaoC5zaX",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1763757882682814488/photo/1",
+          "indices": [
+            "136",
+            "159"
+          ],
+          "url": "https://t.co/nilaoC5zaX",
+          "media_url": "http://pbs.twimg.com/media/GHogUxKaAAEhe4U.png",
+          "id_str": "1763757745235427329",
+          "id": "1763757745235427329",
+          "media_url_https": "https://pbs.twimg.com/media/GHogUxKaAAEhe4U.png",
+          "sizes": {
+            "small": {
+              "w": "384",
+              "h": "264",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "384",
+              "h": "264",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "384",
+              "h": "264",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/nilaoC5zaX"
+        }
+      ]
+    }
+  }
+}

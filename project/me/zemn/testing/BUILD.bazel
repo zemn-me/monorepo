@@ -1,0 +1,124 @@
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library", "js_test")
+load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+test_suite(
+    name = "integration_test",
+    tests = [
+        ":admin_integration_test",
+        ":journal_access_integration_test",
+        ":journal_integration_test",
+        ":site_integration_test",
+    ],
+)
+
+test_suite(
+    name = "journal_integration_test",
+    tests = ["//project/me/zemn/testing/journal:journal_test"],
+)
+
+test_suite(
+    name = "journal_access_integration_test",
+    tests = ["//project/me/zemn/testing/journal_access:journal_access_test"],
+)
+
+test_suite(
+    name = "admin_integration_test",
+    tests = ["//project/me/zemn/testing/admin:admin_test"],
+)
+
+test_suite(
+    name = "site_integration_test",
+    tests = ["//project/me/zemn/testing/site:site_test"],
+)
+
+itest_service(
+    name = "oidc_provider_itest_service",
+    args = [
+        "--port",
+        ":$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = "//project/me/zemn/testing/cmd/oidc_provider:oidc_provider",
+    http_health_check_address = "http://localhost:$${PORT}/.well-known/openid-configuration",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "browser_test.bzl",
+    ],
+)
+
+ts_project(
+    name = "ts",
+    srcs = ["browser_test.ts"],
+    data = [
+        "//project/me/zemn:build",
+    ],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/selenium-webdriver",
+        "//:node_modules/fast-glob",
+        "//:node_modules/jose",
+        "//:node_modules/selenium-webdriver",
+        "//ts/selenium",
+    ],
+)
+
+jest_test(
+    name = "testing_binary",
+    size = "medium",
+    srcs = ["browser_test.js"],
+    data = [
+        ":ts",
+        "//ts/oidc",
+    ],
+    tags = ["manual"],
+)
+
+service_test(
+    name = "testing",
+    size = "large",
+    services = [
+        "//project/me/zemn:itest_service_calendar_fixture",
+        ":oidc_provider_itest_service",
+    ],
+    test = ":testing_binary",
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["browser_test.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "project_me_zemn_testing",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+js_test(
+    name = "server_test",
+    size = "small",
+    data = [
+        "//project/me/zemn:build",
+        "//project/me/zemn/app/experiments/tiberian_sun",
+    ],
+    entry_point = "server_test.mjs",
+)
+
+js_library(
+    name = "server_test_mjs",
+    srcs = ["server_test.mjs"],
+    deps = [],
+)

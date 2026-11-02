@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1219018032586072065"
+        ],
+        "editableUntil": "2020-01-19T23:05:21.885Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Michael",
+          "screen_name": "MarioIsBroken",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "934843020536528897",
+          "id": "934843020536528897"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MarioIsBroken/status/1219017525884645376/video/1",
+          "source_status_id": "1219017525884645376",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/Sjz5dy93zq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1219017441927237632/pu/img/Bq0QPcxjNiUQn6Bq.jpg",
+          "id_str": "1219017441927237632",
+          "source_user_id": "934843020536528897",
+          "id": "1219017441927237632",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1219017441927237632/pu/img/Bq0QPcxjNiUQn6Bq.jpg",
+          "source_user_id_str": "934843020536528897",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1219017525884645376",
+          "display_url": "pic.twitter.com/Sjz5dy93zq"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "42"
+    ],
+    "favorite_count": "0",
+    "id_str": "1219018032586072065",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1219018032586072065",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 19 22:05:21 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @MarioIsBroken: https://t.co/Sjz5dy93zq",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MarioIsBroken/status/1219017525884645376/video/1",
+          "source_status_id": "1219017525884645376",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/Sjz5dy93zq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1219017441927237632/pu/img/Bq0QPcxjNiUQn6Bq.jpg",
+          "id_str": "1219017441927237632",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "9543",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219017441927237632/pu/vid/480x270/7xxEVOl4kwigym1E.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1219017441927237632/pu/pl/bRAmwjBXscej_PhI.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219017441927237632/pu/vid/1280x720/lN64QQ016sdBonLG.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1219017441927237632/pu/vid/640x360/T42NFT1WunFOaVS-.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "934843020536528897",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1219017441927237632",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1219017441927237632/pu/img/Bq0QPcxjNiUQn6Bq.jpg",
+          "source_user_id_str": "934843020536528897",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1219017525884645376",
+          "display_url": "pic.twitter.com/Sjz5dy93zq"
+        }
+      ]
+    }
+  }
+}

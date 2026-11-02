@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1308822060559478784"
+        ],
+        "editableUntil": "2020-09-23T18:34:30.632Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Kevin Schultz",
+          "screen_name": "FXS_MisterKevin",
+          "indices": [
+            "0",
+            "16"
+          ],
+          "id_str": "2190644732",
+          "id": "2190644732"
+        },
+        {
+          "name": "Chris Bratt",
+          "screen_name": "chrisbratt",
+          "indices": [
+            "17",
+            "28"
+          ],
+          "id_str": "143596802",
+          "id": "143596802"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "238"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1303436016322318336",
+    "id_str": "1308822060559478784",
+    "in_reply_to_user_id": "2190644732",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1308822060559478784",
+    "in_reply_to_status_id": "1303436016322318336",
+    "created_at": "Wed Sep 23 17:34:30 +0000 2020",
+    "favorited": false,
+    "full_text": "@FXS_MisterKevin @chrisbratt i find the discussion as to whether it was or was not in the game kind of strange. you should just be able to throw the old game binary in ghidra  and / or windbg and just check to see if there is an underflow",
+    "lang": "en",
+    "in_reply_to_screen_name": "FXS_MisterKevin",
+    "in_reply_to_user_id_str": "2190644732"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1091231434415566848"
+        ],
+        "editableUntil": "2019-02-01T08:07:02.721Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Armen",
+          "screen_name": "Rmenaut",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "3297461374",
+          "id": "3297461374"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Rmenaut/status/1090627643630792705/video/1",
+          "source_status_id": "1090627643630792705",
+          "indices": [
+            "32",
+            "55"
+          ],
+          "url": "https://t.co/wKwDIP5CIb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1090627084827820032/pu/img/inv7cBOPUMD1ZGvv.jpg",
+          "id_str": "1090627084827820032",
+          "source_user_id": "3297461374",
+          "id": "1090627084827820032",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1090627084827820032/pu/img/inv7cBOPUMD1ZGvv.jpg",
+          "source_user_id_str": "3297461374",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1090627643630792705",
+          "display_url": "pic.twitter.com/wKwDIP5CIb"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "55"
+    ],
+    "favorite_count": "0",
+    "id_str": "1091231434415566848",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1091231434415566848",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 01 07:07:02 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Rmenaut: YOU SHALL NOT PASS https://t.co/wKwDIP5CIb",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Rmenaut/status/1090627643630792705/video/1",
+          "source_status_id": "1090627643630792705",
+          "indices": [
+            "32",
+            "55"
+          ],
+          "url": "https://t.co/wKwDIP5CIb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1090627084827820032/pu/img/inv7cBOPUMD1ZGvv.jpg",
+          "id_str": "1090627084827820032",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "53621",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1090627084827820032/pu/vid/640x360/6sNC3I4V5do4nrR-.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1090627084827820032/pu/pl/Wkp_6JIGZRZzT5Aj.m3u8?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1090627084827820032/pu/vid/320x180/vjJAJStYqtokBvs4.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1090627084827820032/pu/vid/1280x720/FIjjCkaXUxVeW3kO.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "3297461374",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1090627084827820032",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1090627084827820032/pu/img/inv7cBOPUMD1ZGvv.jpg",
+          "source_user_id_str": "3297461374",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1090627643630792705",
+          "display_url": "pic.twitter.com/wKwDIP5CIb"
+        }
+      ]
+    }
+  }
+}

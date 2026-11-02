@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1243915388976594947"
+        ],
+        "editableUntil": "2020-03-28T15:58:34.219Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lumkins",
+          "screen_name": "LumkinsPlays",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "46864842",
+          "id": "46864842"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LumkinsPlays/status/1243858819714859009/video/1",
+          "source_status_id": "1243858819714859009",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/OBOUm8bzRD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1243858541301108736/pu/img/Psay9B6wSsmXXEzF.jpg",
+          "id_str": "1243858541301108736",
+          "source_user_id": "46864842",
+          "id": "1243858541301108736",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1243858541301108736/pu/img/Psay9B6wSsmXXEzF.jpg",
+          "source_user_id_str": "46864842",
+          "sizes": {
+            "medium": {
+              "w": "496",
+              "h": "960",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "496",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "351",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1243858819714859009",
+          "display_url": "pic.twitter.com/OBOUm8bzRD"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "1243915388976594947",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1243915388976594947",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 28 14:58:34 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @LumkinsPlays: Working until either 9am or whenever I burst into flames. https://t.co/OBOUm8bzRD",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LumkinsPlays/status/1243858819714859009/video/1",
+          "source_status_id": "1243858819714859009",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/OBOUm8bzRD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1243858541301108736/pu/img/Psay9B6wSsmXXEzF.jpg",
+          "id_str": "1243858541301108736",
+          "video_info": {
+            "aspect_ratio": [
+              "31",
+              "60"
+            ],
+            "duration_millis": "5776",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243858541301108736/pu/vid/496x960/wqaO0BabcGfXFstW.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243858541301108736/pu/vid/320x618/lVc-PnPCSFaeBPDn.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243858541301108736/pu/vid/360x696/lQRLc0P4vPmmURKM.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1243858541301108736/pu/pl/0UxOCJxUFqBd2Lcp.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "46864842",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1243858541301108736",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1243858541301108736/pu/img/Psay9B6wSsmXXEzF.jpg",
+          "source_user_id_str": "46864842",
+          "sizes": {
+            "medium": {
+              "w": "496",
+              "h": "960",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "496",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "351",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1243858819714859009",
+          "display_url": "pic.twitter.com/OBOUm8bzRD"
+        }
+      ]
+    }
+  }
+}

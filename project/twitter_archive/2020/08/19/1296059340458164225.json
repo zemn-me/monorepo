@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1296059340458164225"
+        ],
+        "editableUntil": "2020-08-19T13:20:01.040Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "NoBonzo",
+          "screen_name": "NoBonzo",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "923026157959749633",
+          "id": "923026157959749633"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NoBonzo/status/1295914915295686656/video/1",
+          "source_status_id": "1295914915295686656",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/HNKjZWkucq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1295914795594481665/pu/img/JATa6CgXuexSC5mp.jpg",
+          "id_str": "1295914795594481665",
+          "source_user_id": "923026157959749633",
+          "id": "1295914795594481665",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1295914795594481665/pu/img/JATa6CgXuexSC5mp.jpg",
+          "source_user_id_str": "923026157959749633",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1295914915295686656",
+          "display_url": "pic.twitter.com/HNKjZWkucq"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1296059340458164225",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1296059340458164225",
+    "possibly_sensitive": false,
+    "created_at": "Wed Aug 19 12:20:01 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @NoBonzo: the infamous and unstoppable reflecto-cubes https://t.co/HNKjZWkucq",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NoBonzo/status/1295914915295686656/video/1",
+          "source_status_id": "1295914915295686656",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/HNKjZWkucq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1295914795594481665/pu/img/JATa6CgXuexSC5mp.jpg",
+          "id_str": "1295914795594481665",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "26000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1295914795594481665/pu/pl/W7meAuCoPAwe2HIu.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1295914795594481665/pu/vid/480x270/AcpP0Hxh68i9gD1M.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1295914795594481665/pu/vid/1280x720/Q9URthLZBgsPyKvr.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1295914795594481665/pu/vid/640x360/R-IVpWrPHY_OUT8g.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "923026157959749633",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1295914795594481665",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1295914795594481665/pu/img/JATa6CgXuexSC5mp.jpg",
+          "source_user_id_str": "923026157959749633",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1295914915295686656",
+          "display_url": "pic.twitter.com/HNKjZWkucq"
+        }
+      ]
+    }
+  }
+}

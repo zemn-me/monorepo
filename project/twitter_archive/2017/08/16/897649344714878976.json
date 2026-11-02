@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "897649344714878976"
+        ],
+        "editableUntil": "2017-08-16T03:40:55.955Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kyle Hill",
+          "screen_name": "Sci_Phile",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "60709500",
+          "id": "60709500"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Sci_Phile/status/897532187263864832/video/1",
+          "source_status_id": "897532187263864832",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/DplQ4uZAPf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/897530964145971200/pu/img/o5_zO2bZFEIsSeoN.jpg",
+          "id_str": "897530964145971200",
+          "source_user_id": "60709500",
+          "id": "897530964145971200",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/897530964145971200/pu/img/o5_zO2bZFEIsSeoN.jpg",
+          "source_user_id_str": "60709500",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "897532187263864832",
+          "display_url": "pic.twitter.com/DplQ4uZAPf"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "0",
+    "id_str": "897649344714878976",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "897649344714878976",
+    "possibly_sensitive": false,
+    "created_at": "Wed Aug 16 02:40:55 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @Sci_Phile: It's hard to stay positive sometimes, so here's a bird realizing a love of drumming https://t.co/DplQ4uZAPf",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Sci_Phile/status/897532187263864832/video/1",
+          "source_status_id": "897532187263864832",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/DplQ4uZAPf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/897530964145971200/pu/img/o5_zO2bZFEIsSeoN.jpg",
+          "id_str": "897530964145971200",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "53758",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/897530964145971200/pu/pl/3PN3wOdWd1hkI2DQ.m3u8?v=cfc"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/897530964145971200/pu/vid/1280x720/GV203gIUy1BF1RY1.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/897530964145971200/pu/vid/320x180/5QVSkshircCuQbMa.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/897530964145971200/pu/vid/640x360/DBj4JhSbBt9HSAYw.mp4"
+              }
+            ]
+          },
+          "source_user_id": "60709500",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "897530964145971200",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/897530964145971200/pu/img/o5_zO2bZFEIsSeoN.jpg",
+          "source_user_id_str": "60709500",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "897532187263864832",
+          "display_url": "pic.twitter.com/DplQ4uZAPf"
+        }
+      ]
+    }
+  }
+}

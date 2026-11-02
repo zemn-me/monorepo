@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1265402818636251138"
+        ],
+        "editableUntil": "2020-05-26T23:01:56.667Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "moonpresnce.bsky.social",
+          "screen_name": "moonpresnce",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1077657217770360835",
+          "id": "1077657217770360835"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/samkalidi/status/921878274317238272/video/1",
+          "source_status_id": "921878274317238272",
+          "indices": [
+            "58",
+            "81"
+          ],
+          "url": "https://t.co/MQsw1aMxlu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/921878105689530369/pu/img/CKQg2jSmlCpn4JkZ.jpg",
+          "id_str": "921878105689530369",
+          "source_user_id": "102475469",
+          "id": "921878105689530369",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/921878105689530369/pu/img/CKQg2jSmlCpn4JkZ.jpg",
+          "source_user_id_str": "102475469",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "921878274317238272",
+          "display_url": "pic.twitter.com/MQsw1aMxlu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "81"
+    ],
+    "favorite_count": "0",
+    "id_str": "1265402818636251138",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1265402818636251138",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 26 22:01:56 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @moonpresnce: me running away from pyramid head in dbd https://t.co/MQsw1aMxlu",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/samkalidi/status/921878274317238272/video/1",
+          "source_status_id": "921878274317238272",
+          "indices": [
+            "58",
+            "81"
+          ],
+          "url": "https://t.co/MQsw1aMxlu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/921878105689530369/pu/img/CKQg2jSmlCpn4JkZ.jpg",
+          "id_str": "921878105689530369",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "24491",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/921878105689530369/pu/vid/240x240/sIyc2C7mgH9zlP_o.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/921878105689530369/pu/vid/480x480/fDaOtiJ-KwXBCP6v.mp4"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/921878105689530369/pu/vid/720x720/s0TjWu8qGQAy-0aT.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/921878105689530369/pu/pl/G_9M044iCTu3iGRm.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "102475469",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "921878105689530369",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/921878105689530369/pu/img/CKQg2jSmlCpn4JkZ.jpg",
+          "source_user_id_str": "102475469",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "921878274317238272",
+          "display_url": "pic.twitter.com/MQsw1aMxlu"
+        }
+      ]
+    }
+  }
+}

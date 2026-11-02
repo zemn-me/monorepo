@@ -1,0 +1,1225 @@
+import {
+	useInfiniteQuery,
+	useMutation,
+	useQueries,
+	useQuery,
+	useQueryClient,
+} from '@tanstack/react-query';
+import createFetchClient from 'openapi-fetch';
+import createClient from 'openapi-react-query';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type {
+	components,
+	paths,
+} from '#root/project/me/zemn/api/api_client.gen.js';
+import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
+import { uploadJournalAudio } from '#root/project/me/zemn/hook/journal_upload.js';
+import {
+	useServerSession,
+	useSessionClaims,
+} from '#root/project/me/zemn/hook/server_session.js';
+import {
+	Future,
+	future_and_then,
+	future_declare_dependency,
+	resolve,
+} from '#root/ts/future/future.js';
+import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
+import { noop } from '#root/ts/noop.js';
+import { watchOutParseIdToken } from '#root/ts/oidc/oidc.js';
+
+export type AnalyticsEvent =
+	paths['/analytics/beacon']['post']['requestBody']['content']['application/json'];
+
+export async function sendAnalyticsBeacon(
+	event: AnalyticsEvent
+): Promise<boolean> {
+	const client = createFetchClient<paths>({
+		baseUrl: ZEMN_ME_API_BASE,
+	});
+	const response = await client.POST('/analytics/beacon', {
+		body: event,
+		credentials: 'omit',
+		keepalive: true,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	return response.response.ok;
+}
+
+function extractIdTokenJti(id_token: string) {
+	const parsed = watchOutParseIdToken.safeParse(id_token);
+	if (!parsed.success) {
+		return undefined;
+	}
+
+	return parsed.data.jti;
+}
+
+export function useFetchClient(id_token?: string) {
+	return useMemo(
+		() =>
+			createFetchClient<paths>({
+				baseUrl: ZEMN_ME_API_BASE,
+				headers: {
+					Authorization: id_token ?? undefined,
+				},
+			}),
+		[id_token]
+	);
+}
+
+export function useFetchClientFuture<A, B>(id_token: Future<string, A, B>) {
+	return future_declare_dependency(
+		id_token,
+		resolve(
+			useFetchClient(
+				id_token(
+					v => v,
+					() => undefined,
+					() => undefined
+				)
+			)
+		)
+	);
+}
+
+export function useZemnMeApi(id_token?: string) {
+	const fetchClient = useFetchClient(id_token);
+
+	return useMemo(() => createClient(fetchClient), [fetchClient]);
+}
+
+function calendarICalURL(email: string) {
+	return new URL(
+		`/calendar/ical/${encodeURIComponent(email)}`,
+		ZEMN_ME_API_BASE
+	).toString();
+}
+
+function getCalendarICalQuery(email: string) {
+	return {
+		queryKey: ['get', '/calendar/ical/{email}', email],
+		queryFn: async () => {
+			const response = await fetch(calendarICalURL(email));
+			if (!response.ok) {
+				throw new Error(`/calendar/ical/{email}: ${response.status}`);
+			}
+			return response.text();
+		},
+		enabled: email !== '',
+	};
+}
+
+export function useGetCalendarICal(email: string) {
+	return useQueryFuture(useQuery(getCalendarICalQuery(email)));
+}
+
+export function useGetCalendarICals(emails: readonly string[]) {
+	return useQueries({
+		queries: emails.map(email => getCalendarICalQuery(email)),
+	}).map(useQueryFuture);
+}
+
+export function useGetGrievances(id_token: string) {
+	const fetchClient = useFetchClient(id_token);
+	return useQuery({
+		queryKey: ['get', '/grievances'],
+		queryFn: async () => {
+			const v = await fetchClient.GET('/grievances');
+			return v.data;
+		},
+		enabled: id_token !== '',
+	});
+}
+
+export function useGetAdminUid(id_token: string) {
+	const fetchClient = useFetchClient(id_token);
+	const jti = useMemo(() => extractIdTokenJti(id_token), [id_token]);
+	return useQuery({
+		queryKey: ['get', '/admin/uid', jti],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/admin/uid');
+			if (!resp.data) {
+				throw new Error('/admin/uid returned unexpected payload');
+			}
+			return resp.data.uid;
+		},
+		enabled: id_token !== '',
+	});
+}
+
+export function useGetAdminUsers(id_token: string) {
+	const fetchClient = useFetchClient(id_token);
+	const jti = useMemo(() => extractIdTokenJti(id_token), [id_token]);
+	return useQuery({
+		queryKey: ['get', '/admin/users', jti],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/admin/users');
+			if (!resp.data) {
+				throw new Error('/admin/users returned unexpected payload');
+			}
+			return resp.data;
+		},
+		enabled: id_token !== '',
+	});
+}
+
+export function useGetAdminAnalyticsEvents(
+	id_token: string,
+	cursor?: string,
+	limit = 25
+) {
+	const fetchClient = useFetchClient(id_token);
+	const jti = useMemo(() => extractIdTokenJti(id_token), [id_token]);
+	return useQuery({
+		queryKey: ['get', '/admin/analytics/events', jti, cursor, limit],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/admin/analytics/events', {
+				params: {
+					query: {
+						cursor,
+						limit,
+					},
+				},
+			});
+			if (!resp.data) {
+				throw new Error(
+					'/admin/analytics/events returned unexpected payload'
+				);
+			}
+			return resp.data;
+		},
+		enabled: id_token !== '',
+	});
+}
+
+export function useGetMeScopes<L, E>(id_token: Future<string, L, E>) {
+	const token = id_token(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(id_token);
+	const { session } = useServerSession();
+	const fetchClient = useFetchClient(token);
+	const qr = useQuery({
+		queryKey: ['get', '/me/scopes', claims?.jti],
+		initialData:
+			claims?.jti === session?.claims.jti ? session?.scopes : undefined,
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/me/scopes');
+			if (!resp.data)
+				throw new Error('/me/scopes returned unexpected payload');
+			return resp.data.scopes;
+		},
+		enabled: token !== undefined,
+	});
+	return claims
+		? useQueryFuture(qr)
+		: future_declare_dependency(id_token, useQueryFuture(qr));
+}
+
+function useinvalidateGrievances() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/grievances'],
+		});
+}
+
+function useinvalidateAdminUsers() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/admin/users'],
+		});
+}
+
+function useinvalidateMeScopes() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/me/scopes'],
+		});
+}
+
+function useinvalidateCallboxStatus() {
+	const queryClient = useQueryClient();
+	return () =>
+		queryClient.invalidateQueries({
+			queryKey: ['get', '/callbox'],
+		});
+}
+
+function useinvalidateCallboxEvents() {
+	const queryClient = useQueryClient();
+	return () =>
+		queryClient.invalidateQueries({
+			queryKey: ['get', '/callbox/events'],
+		});
+}
+
+function useinvalidateMinecraftWhitelist() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/minecraft/whitelist'],
+		});
+}
+
+function useinvalidateMinecraftStatus() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/minecraft/status'],
+		});
+}
+
+function useinvalidateJournal() {
+	const queryClient = useQueryClient();
+	return () =>
+		void queryClient.invalidateQueries({
+			queryKey: ['get', '/journal'],
+		});
+}
+
+export function useRefreshJournal() {
+	const queryClient = useQueryClient();
+	return useCallback(
+		() =>
+			queryClient.invalidateQueries({
+				queryKey: ['get', '/journal'],
+			}),
+		[queryClient]
+	);
+}
+
+export function usePostGrievances(id_token: string) {
+	const invalidateGrievances = useinvalidateGrievances();
+	return useZemnMeApi(id_token).useMutation('post', '/grievances', {
+		onSuccess: () => void invalidateGrievances(),
+	});
+}
+
+export function useDeleteGrievances(id_token: string) {
+	const invalidateGrievances = useinvalidateGrievances();
+	return useZemnMeApi(id_token).useMutation('delete', '/grievance/{id}', {
+		onSuccess: () => void invalidateGrievances(),
+	});
+}
+
+export function usePostAdminUsers(id_token: string) {
+	const invalidateAdminUsers = useinvalidateAdminUsers();
+	const invalidateMeScopes = useinvalidateMeScopes();
+	return useZemnMeApi(id_token).useMutation('post', '/admin/users', {
+		onSuccess: () => {
+			void invalidateAdminUsers();
+			void invalidateMeScopes();
+		},
+	});
+}
+
+export function usePutAdminUser(id_token: string) {
+	const invalidateAdminUsers = useinvalidateAdminUsers();
+	const invalidateMeScopes = useinvalidateMeScopes();
+	return useZemnMeApi(id_token).useMutation('put', '/admin/user', {
+		onSuccess: () => {
+			void invalidateAdminUsers();
+			void invalidateMeScopes();
+		},
+	});
+}
+
+export function useDeleteAdminUser(id_token: string) {
+	const invalidateAdminUsers = useinvalidateAdminUsers();
+	const invalidateMeScopes = useinvalidateMeScopes();
+	return useZemnMeApi(id_token).useMutation('delete', '/admin/user', {
+		onSuccess: () => {
+			void invalidateAdminUsers();
+			void invalidateMeScopes();
+		},
+	});
+}
+
+export function usePostMeKey<A, B>(
+	id_token: Future<string, A, B>,
+	onMutate: () => void = noop,
+	onSuccess: () => void = noop,
+	onError: () => void = noop
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateCallboxStatus = useinvalidateCallboxStatus();
+	const invalidateCallboxEvents = useinvalidateCallboxEvents();
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationKey: [
+			'post',
+			'/callbox',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+
+		mutationFn: fetchClient(
+			cl => (open: boolean) =>
+				cl.POST('/callbox', {
+					body: {
+						open,
+					},
+				}),
+			// i think in some edge cases this might happen
+			// in future this function will itself return a future
+			// so it can actuall never happen
+			() => (_open: boolean) => {
+				throw new Error('this should never happen');
+			},
+			() => (_open: boolean) => {
+				throw new Error('this should never happen');
+			}
+		),
+
+		onMutate: async open => {
+			onMutate();
+			await queryClient.cancelQueries({ queryKey: ['get', '/callbox'] });
+			// eagerly assume the query will succeed.
+			queryClient.setQueryData(
+				[
+					'get',
+					'/callbox',
+					id_token(
+						tok => extractIdTokenJti(tok),
+						() => undefined,
+						() => undefined
+					),
+				],
+				(): GetCallboxStatusSuccessResponse => ({
+					open,
+				})
+			);
+		},
+
+		onSuccess: async () => {
+			// Keep the control pending until polling reflects the confirmed write;
+			// an optimistic label is not yet safe to use for the next toggle.
+			await Promise.all([
+				invalidateCallboxStatus(),
+				invalidateCallboxEvents(),
+			]);
+			onSuccess();
+		},
+
+		onError: onError,
+	});
+}
+
+export type GetCallboxStatusSuccessResponse =
+	paths['/callbox']['get']['responses']['200']['content']['application/json'];
+
+export type GetCallboxEventsSuccessResponse =
+	paths['/callbox/events']['get']['responses']['200']['content']['application/json'];
+
+export type CallboxEvent = GetCallboxEventsSuccessResponse['events'][number];
+
+export type GetMinecraftStatusSuccessResponse =
+	paths['/minecraft/status']['get']['responses']['200']['content']['application/json'];
+
+export type GetMinecraftWhitelistSuccessResponse =
+	paths['/minecraft/whitelist']['get']['responses']['200']['content']['application/json'];
+
+export type PostMinecraftWakeSuccessResponse =
+	paths['/minecraft/wake']['post']['responses']['202']['content']['application/json'];
+
+export type MinecraftLogEvent = components['schemas']['MinecraftLogEvent'];
+
+export type MinecraftEventStreamState =
+	| 'closed'
+	| 'connecting'
+	| 'error'
+	| 'open';
+
+const maxMinecraftLogEvents = 80;
+const minecraftEventsReconnectDelayMs = 3000;
+
+type ServerSentEvent = {
+	readonly data: string;
+	readonly event: string;
+	readonly id?: string;
+};
+
+function minecraftEventsURL() {
+	const url = new URL('/minecraft/events', ZEMN_ME_API_BASE);
+	return url.toString();
+}
+
+function parseMinecraftLogEvent(data: string) {
+	const parsed = JSON.parse(data) as Partial<MinecraftLogEvent>;
+	if (
+		typeof parsed.id !== 'string' ||
+		typeof parsed.timestamp !== 'string' ||
+		typeof parsed.message !== 'string'
+	) {
+		return undefined;
+	}
+	return parsed as MinecraftLogEvent;
+}
+
+function dispatchServerSentEvent(
+	block: string,
+	onEvent: (event: ServerSentEvent) => void
+) {
+	let eventName = 'message';
+	let id: string | undefined;
+	const data: string[] = [];
+
+	for (const rawLine of block.split('\n')) {
+		const line = rawLine.endsWith('\r') ? rawLine.slice(0, -1) : rawLine;
+		if (line === '' || line.startsWith(':')) continue;
+
+		const separator = line.indexOf(':');
+		const field = separator === -1 ? line : line.slice(0, separator);
+		let value = separator === -1 ? '' : line.slice(separator + 1);
+		if (value.startsWith(' ')) value = value.slice(1);
+
+		switch (field) {
+			case 'data':
+				data.push(value);
+				break;
+			case 'event':
+				eventName = value;
+				break;
+			case 'id':
+				id = value;
+				break;
+		}
+	}
+
+	if (data.length === 0) return;
+	onEvent({ data: data.join('\n'), event: eventName, id });
+}
+
+async function readServerSentEvents(
+	body: ReadableStream<Uint8Array>,
+	onEvent: (event: ServerSentEvent) => void
+) {
+	const reader = body.getReader();
+	const decoder = new TextDecoder();
+	let buffer = '';
+
+	try {
+		for (;;) {
+			const { value, done } = await reader.read();
+			if (done) break;
+			buffer += decoder
+				.decode(value, { stream: true })
+				.replaceAll('\r\n', '\n')
+				.replaceAll('\r', '\n');
+
+			let boundary = buffer.indexOf('\n\n');
+			while (boundary !== -1) {
+				dispatchServerSentEvent(buffer.slice(0, boundary), onEvent);
+				buffer = buffer.slice(boundary + 2);
+				boundary = buffer.indexOf('\n\n');
+			}
+		}
+
+		buffer += decoder
+			.decode()
+			.replaceAll('\r\n', '\n')
+			.replaceAll('\r', '\n');
+		if (buffer.trim() !== '') {
+			dispatchServerSentEvent(buffer, onEvent);
+		}
+	} finally {
+		reader.releaseLock();
+	}
+}
+
+function abortableDelay(ms: number, signal: AbortSignal) {
+	return new Promise<void>((resolve, reject) => {
+		const timeout = window.setTimeout(resolve, ms);
+		signal.addEventListener(
+			'abort',
+			() => {
+				window.clearTimeout(timeout);
+				reject();
+			},
+			{ once: true }
+		);
+	});
+}
+
+async function streamMinecraftEvents(
+	token: string,
+	onLogEvent: (event: MinecraftLogEvent) => void,
+	onState: (state: MinecraftEventStreamState) => void,
+	signal: AbortSignal
+) {
+	while (!signal.aborted) {
+		onState('connecting');
+		try {
+			const response = await fetch(minecraftEventsURL(), {
+				headers: { Authorization: token },
+				signal,
+			});
+			if (!response.ok) {
+				throw new Error(
+					`/minecraft/events returned ${response.status}`
+				);
+			}
+			if (!response.body) {
+				throw new Error('/minecraft/events returned no response body');
+			}
+
+			onState('open');
+			await readServerSentEvents(response.body, event => {
+				if (event.event === 'minecraft.error') {
+					throw new Error(event.data);
+				}
+				if (event.event !== 'minecraft.log') return;
+				const logEvent = parseMinecraftLogEvent(event.data);
+				if (logEvent !== undefined) {
+					onLogEvent(logEvent);
+				}
+			});
+		} catch {
+			if (signal.aborted) break;
+			onState('error');
+			await abortableDelay(minecraftEventsReconnectDelayMs, signal).catch(
+				() => undefined
+			);
+			continue;
+		}
+
+		await abortableDelay(minecraftEventsReconnectDelayMs, signal).catch(
+			() => undefined
+		);
+	}
+	onState('closed');
+}
+
+export function useMinecraftEvents<A, B>(
+	id_token: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = id_token(
+		v => v,
+		() => undefined,
+		() => undefined
+	);
+	const [events, setEvents] = useState<MinecraftLogEvent[]>([]);
+	const [streamState, setStreamState] =
+		useState<MinecraftEventStreamState>('closed');
+
+	useEffect(() => {
+		if (!enabled || token === undefined) {
+			setStreamState('closed');
+			return;
+		}
+
+		setEvents([]);
+		setStreamState('connecting');
+		const controller = new AbortController();
+		void streamMinecraftEvents(
+			token,
+			logEvent => {
+				setEvents(current => {
+					if (current.some(existing => existing.id === logEvent.id)) {
+						return current;
+					}
+					return [...current, logEvent].slice(-maxMinecraftLogEvents);
+				});
+			},
+			setStreamState,
+			controller.signal
+		);
+
+		return () => {
+			controller.abort();
+		};
+	}, [enabled, token]);
+
+	return { events, streamState };
+}
+
+export type MinecraftHistoryEvent =
+	components['schemas']['MinecraftHistoryEvent'];
+
+export function useMinecraftHistory<A, B>(
+	idToken: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = idToken(
+		v => v,
+		() => undefined,
+		() => undefined
+	);
+	const client = useFetchClient(token);
+	const [before, setBefore] = useState(() => new Date().toISOString());
+	const query = useInfiniteQuery({
+		queryKey: ['get', '/minecraft/history', token, before],
+		initialPageParam: undefined as string | undefined,
+		queryFn: async ({ pageParam, signal }) => {
+			const response = await client.GET('/minecraft/history', {
+				params: { query: { before, nextToken: pageParam } },
+				signal,
+			});
+			if (!response.data)
+				throw new Error('Could not load activity history.');
+			return response.data;
+		},
+		getNextPageParam: page => page.nextToken,
+		enabled: enabled && token !== undefined,
+		gcTime: 0,
+		staleTime: Infinity,
+		refetchOnWindowFocus: false,
+	});
+	const { hasNextPage, isFetching, isError, fetchNextPage } = query;
+	useEffect(() => {
+		if (
+			enabled &&
+			token !== undefined &&
+			hasNextPage &&
+			!isFetching &&
+			!isError
+		) {
+			void fetchNextPage();
+		}
+	}, [enabled, token, hasNextPage, isFetching, isError, fetchNextPage]);
+	const events = useMemo(() => {
+		const unique = new Map<string, MinecraftHistoryEvent>();
+		for (const page of query.data?.pages ?? []) {
+			for (const event of page.events) unique.set(event.id, event);
+		}
+		return [...unique.values()].sort(
+			(a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp)
+		);
+	}, [query.data]);
+	return {
+		events: enabled && token !== undefined ? events : [],
+		before,
+		loading:
+			query.isPending ||
+			query.isFetching ||
+			(query.hasNextPage && !query.isError),
+		error: query.isError,
+		refresh: () => setBefore(new Date().toISOString()),
+	};
+}
+
+export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/minecraft/status',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/minecraft/status');
+			if (!resp.data) {
+				throw new Error(
+					'/minecraft/status returned unexpected payload'
+				);
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+		refetchInterval: 5000,
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function useGetJournal<A, B>(
+	id_token: Future<string, A, B>,
+	enabled = true,
+	browse?: paths['/journal']['get']['parameters']['query']
+) {
+	const token = id_token(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(id_token);
+	const fetchClient = useFetchClient(token);
+	const query = useQuery({
+		queryKey: ['get', '/journal', claims?.jti, ...(browse ? [browse] : [])],
+		staleTime: 10_000,
+		queryFn: async ({ signal }) => {
+			const response = await fetchClient.GET('/journal', {
+				signal,
+				params: { query: browse },
+			});
+			if (!response.data) {
+				throw new Error('/journal returned unexpected payload');
+			}
+			return response.data;
+		},
+		enabled: enabled && token !== undefined,
+		refetchInterval: query => {
+			const value = query.state.data;
+			return value?.entries.some(entry =>
+				['awaiting_upload', 'processing'].includes(entry.status)
+			)
+				? 3000
+				: // Aggregate summaries can finish after every entry is ready.
+					// Keep visible journals fresh instead of retaining that intermediate snapshot.
+					10000;
+		},
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(id_token, useQueryFuture(query));
+}
+
+export function useGetJournalWikiIndex<A, B>(
+	idToken: Future<string, A, B>,
+	enabled = true
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(idToken);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: ['get', '/journal', 'wiki', claims?.jti],
+		queryFn: async () => {
+			const response = await client.GET('/journal/wiki');
+			if (!response.data) throw new Error('Could not load the wiki.');
+			return response.data;
+		},
+		enabled: enabled && token !== undefined,
+		refetchInterval: 10000,
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
+}
+
+export function useGetJournalUploads<A, B>(
+	idToken: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(idToken);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: ['get', '/journal', 'uploads', claims?.jti],
+		queryFn: async ({ signal }) => {
+			const response = await client.GET('/journal/entries', { signal });
+			if (!response.data) throw new Error('Could not check voice notes.');
+			return response.data;
+		},
+		enabled: enabled && token !== undefined,
+		refetchInterval: 3000,
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
+}
+
+export function useGetJournalWikiPage<A, B>(
+	idToken: Future<string, A, B>,
+	pageId: string,
+	generation?: string
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(idToken);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: [
+			'get',
+			'/journal',
+			'wiki-page',
+			claims?.jti,
+			pageId,
+			generation,
+		],
+		queryFn: async () => {
+			const response = await client.GET('/journal/wiki/{pageId}', {
+				params: { path: { pageId } },
+			});
+			if (!response.data)
+				throw new Error(
+					'This page is unavailable or awaiting an update.'
+				);
+			return response.data;
+		},
+		enabled: token !== undefined,
+		refetchInterval: 10000,
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
+}
+
+export interface JournalAudioUpload {
+	readonly recordingStartedAt?: string;
+	readonly file: Blob;
+	readonly onProgress?: (progress: number | undefined) => void;
+	readonly contentType: components['schemas']['JournalEntryCreate']['contentType'];
+	readonly recordedAt: string;
+	readonly location?: components['schemas']['JournalLocation'];
+	readonly timeZone: string;
+}
+
+export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateJournal = useinvalidateJournal();
+	return useMutation({
+		mutationKey: ['post', '/journal/entries'],
+		networkMode: 'always',
+		mutationFn: fetchClient(
+			client => async (upload: JournalAudioUpload) => {
+				const response = await client.POST('/journal/entries', {
+					signal: AbortSignal.timeout(30_000),
+					body: {
+						recordingStartedAt: upload.recordingStartedAt,
+						contentType: upload.contentType,
+						recordedAt: upload.recordedAt,
+						location: upload.location,
+						timeZone: upload.timeZone,
+					},
+				});
+				if (!response.data) {
+					const cause =
+						typeof response.error === 'object' &&
+						response.error !== null &&
+						'cause' in response.error &&
+						typeof response.error.cause === 'string'
+							? response.error.cause
+							: 'Could not create journal entry.';
+					throw new Error(cause);
+				}
+				try {
+					await uploadJournalAudio(
+						response.data.upload,
+						upload.file,
+						upload.onProgress
+					);
+				} catch (error) {
+					await client
+						.DELETE('/journal/entries/{entryId}', {
+							signal: AbortSignal.timeout(10_000),
+							params: {
+								path: { entryId: response.data.entry.id },
+							},
+						})
+						.catch(() => undefined);
+					throw error;
+				}
+				return response.data.entry;
+			},
+			() => async () => {
+				throw new Error('authentication is still loading');
+			},
+			() => async () => {
+				throw new Error('authentication failed');
+			}
+		),
+		onSettled: invalidateJournal,
+	});
+}
+
+export function useDeleteJournalEntry<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateJournal = useinvalidateJournal();
+	return useMutation({
+		mutationKey: ['delete', '/journal/entries/{entryId}'],
+		mutationFn: fetchClient(
+			client => async (entryId: string) => {
+				const response = await client.DELETE(
+					'/journal/entries/{entryId}',
+					{ params: { path: { entryId } } }
+				);
+				if (!response.response.ok) {
+					const cause =
+						typeof response.error === 'object' &&
+						response.error !== null &&
+						'cause' in response.error &&
+						typeof response.error.cause === 'string'
+							? response.error.cause
+							: 'Could not delete the journal entry.';
+					throw new Error(cause);
+				}
+			},
+			() => async () => {
+				throw new Error('authentication is still loading');
+			},
+			() => async () => {
+				throw new Error('authentication failed');
+			}
+		),
+		onSettled: invalidateJournal,
+	});
+}
+
+export function useUpdateJournalEntryDate<A, B>(
+	id_token: Future<string, A, B>
+) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateJournal = useinvalidateJournal();
+	return useMutation({
+		mutationKey: ['patch', '/journal/entries/{entryId}'],
+		mutationFn: fetchClient(
+			client =>
+				async ({
+					entryId,
+					recordedDate,
+				}: {
+					readonly entryId: string;
+					readonly recordedDate: string;
+				}) => {
+					const response = await client.PATCH(
+						'/journal/entries/{entryId}',
+						{
+							body: { recordedDate },
+							params: { path: { entryId } },
+						}
+					);
+					if (!response.data) {
+						const cause =
+							typeof response.error === 'object' &&
+							response.error !== null &&
+							'cause' in response.error &&
+							typeof response.error.cause === 'string'
+								? response.error.cause
+								: 'Could not change the journal entry date.';
+						throw new Error(cause);
+					}
+					return response.data;
+				},
+			() => async () => {
+				throw new Error('authentication is still loading');
+			},
+			() => async () => {
+				throw new Error('authentication failed');
+			}
+		),
+		onSettled: invalidateJournal,
+	});
+}
+
+export function usePostMinecraftWake<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateMinecraftStatus = useinvalidateMinecraftStatus();
+
+	return useMutation({
+		mutationKey: [
+			'post',
+			'/minecraft/wake',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+		mutationFn: fetchClient(
+			cl => async () => {
+				const resp = await cl.POST('/minecraft/wake');
+				if (!resp.data) {
+					const cause =
+						typeof resp.error === 'object' &&
+						resp.error !== null &&
+						'cause' in resp.error &&
+						typeof resp.error.cause === 'string'
+							? resp.error.cause
+							: '/minecraft/wake returned unexpected payload';
+					throw new Error(cause);
+				}
+				return resp.data;
+			},
+			() => () => {
+				throw new Error('this should never happen');
+			},
+			() => () => {
+				throw new Error('this should never happen');
+			}
+		),
+		onSuccess: () => {
+			invalidateMinecraftStatus();
+		},
+	});
+}
+
+export function useGetMinecraftWhitelist<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/minecraft/whitelist',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async () => {
+			const resp = await fetchClient.GET('/minecraft/whitelist');
+			if (!resp.data) {
+				throw new Error(
+					'/minecraft/whitelist returned unexpected payload'
+				);
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function usePutMinecraftWhitelist<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClientFuture(id_token);
+	const invalidateMinecraftWhitelist = useinvalidateMinecraftWhitelist();
+
+	return useMutation({
+		mutationKey: [
+			'put',
+			'/minecraft/whitelist',
+			id_token(
+				tok => extractIdTokenJti(tok),
+				() => undefined,
+				() => undefined
+			),
+		],
+		mutationFn: fetchClient(
+			cl => async (username: string) => {
+				const resp = await cl.PUT('/minecraft/whitelist', {
+					body: { username },
+				});
+				if (!resp.data) {
+					const cause =
+						typeof resp.error === 'object' &&
+						resp.error !== null &&
+						'cause' in resp.error &&
+						typeof resp.error.cause === 'string'
+							? resp.error.cause
+							: '/minecraft/whitelist returned unexpected payload';
+					throw new Error(cause);
+				}
+				return resp.data;
+			},
+			() => (_username: string) => {
+				throw new Error('this should never happen');
+			},
+			() => (_username: string) => {
+				throw new Error('this should never happen');
+			}
+		),
+		onSuccess: () => {
+			invalidateMinecraftWhitelist();
+		},
+	});
+}
+
+export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
+	const fetchClient = useFetchClient(
+		id_token(
+			v => v,
+			() => undefined,
+			() => undefined
+		)
+	);
+	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
+	const q = useQuery({
+		queryKey: [
+			'get',
+			'/callbox',
+			jti(
+				v => v,
+				() => undefined,
+				() => undefined
+			),
+		],
+		queryFn: async ({ signal }) => {
+			const resp = await fetchClient.GET('/callbox', { signal });
+			if (!resp.data) {
+				throw new Error('/callbox returned unexpected payload');
+			}
+			return resp.data;
+		},
+		enabled: id_token(
+			() => true,
+			() => false,
+			() => false
+		),
+		refetchInterval: 1000,
+	});
+
+	return future_declare_dependency(id_token, useQueryFuture(q));
+}
+
+export function useGetCallboxEventsForToken(
+	id_token: string | undefined,
+	limit = 32
+) {
+	const fetchClient = useFetchClient(id_token);
+	const jti = useMemo(
+		() => (id_token ? extractIdTokenJti(id_token) : undefined),
+		[id_token]
+	);
+	return useInfiniteQuery({
+		queryKey: ['get', '/callbox/events', limit, jti],
+		queryFn: async ({ pageParam }) => {
+			const resp = await fetchClient.GET('/callbox/events', {
+				params: {
+					query: {
+						cursor: pageParam,
+						limit,
+					},
+				},
+			});
+			if (!resp.data) {
+				throw new Error('/callbox/events returned unexpected payload');
+			}
+			return resp.data;
+		},
+		initialPageParam: undefined as string | undefined,
+		getNextPageParam: lastPage => lastPage.nextCursor,
+		placeholderData: previousData => previousData,
+		enabled: Boolean(id_token),
+	});
+}

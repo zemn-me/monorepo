@@ -1,10 +1,9 @@
 import * as d3Scale from 'd3-scale';
 import React from 'react';
-import { isDefined as defined, must } from 'ts/guard';
-import * as matrix from 'ts/math/matrix';
-import * as vec from 'ts/math/vec';
 
-import * as svg from './index';
+import { isDefined as defined, must } from '#root/ts/guard.js';
+import * as vec from '#root/ts/math/vec.js';
+import * as svg from '#root/ts/svg/index.js';
 
 export type Num = number | { valueOf(): number };
 
@@ -84,13 +83,15 @@ export const Ticks: <N extends Num>(
 				const text = formatter(tick);
 				const pos = percScale(tick.valueOf())!;
 				const tickLength = 40;
-				const tickBottomPos = [pos, tickLength] as const;
+				const tickBottomPos: [number, number] = [pos, tickLength];
 
-				let tickPath: svg.Path<2> = [[pos, 0], tickBottomPos] as const;
+				let tickPath: svg.Path<2> = [[pos, 0], tickBottomPos];
 
 				let textMiddlePos: svg.Path<1> = [
-					vec.add(
-						vec.map(tickBottomPos, v => v.valueOf()),
+					vec.add<2>(
+						vec.map<2, number, number>(tickBottomPos, v =>
+							v.valueOf()
+						),
 						[
 							0,
 							direction == DIRECTION.Down
@@ -108,8 +109,8 @@ export const Ticks: <N extends Num>(
 					// gets the largest y
 					const offset: number = Math.max(
 						...tickPath
-							.map(([, /*x*/ y]) => y)
-							.concat(textMiddlePos.map(([, /*x*/ y]) => y))
+							.map(([/*x*/ , y]) => y!)
+							.concat(textMiddlePos.map(([/*x*/ , y]) => y!))
 					);
 
 					// this transform sets all y values to -y, flipping
@@ -118,31 +119,17 @@ export const Ticks: <N extends Num>(
 					// once we do that, we want to anchor the positions
 					// to the bottom instead of the top, so we take every
 					// position and subtract it from 100
-					// why am i doing this with matricies?
-					// I just want to be good at matricies someday...
-					const transform: matrix.Matrix<3, 3> = [
-						[1, 0, 0],
-						[0, -1, 0],
-						[0, -offset + 180, 1],
-					] as const;
+					// Apply that flip and shift directly to every point.
+					const transform = <L extends number>(
+						path: svg.Path<L>
+					): svg.Path<L> =>
+						vec.map<L, svg.Cartesian, svg.Cartesian>(
+							path,
+							([x, y]) => [x!, -y! - offset + 180] as svg.Cartesian
+						);
 
-					console.log(
-						'paths before transform...',
-						tickPath,
-						textMiddlePos
-					);
-
-					tickPath = svg.homog2Cart(
-						matrix.mul(svg.cart2Homog(tickPath), transform)
-					);
-					textMiddlePos = svg.homog2Cart(
-						matrix.mul(svg.cart2Homog(textMiddlePos), transform)
-					);
-					console.log(
-						'paths after transform...',
-						tickPath,
-						textMiddlePos
-					);
+					tickPath = transform<2>(tickPath);
+					textMiddlePos = transform<1>(textMiddlePos);
 				}
 
 				return (

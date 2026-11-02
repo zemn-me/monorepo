@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1699887754954649884"
+        ],
+        "editableUntil": "2023-09-07T21:49:57.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/rAHCL7UZxq",
+          "expanded_url": "https://nextjs.org/docs/messages/next-script-for-ga#using-gtagjs-recommended",
+          "display_url": "nextjs.org/docs/messages/…",
+          "indices": [
+            "219",
+            "242"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "242"
+    ],
+    "favorite_count": "2",
+    "id_str": "1699887754954649884",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1699887754954649884",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 07 20:49:57 +0000 2023",
+    "favorited": false,
+    "full_text": "Next.js currently recommends using gtag for Google Analytics, but doing so is a functional bypass to Content Security Policy, because an attacker can just add their malicious script to their own gtag and it'll pass CSP https://t.co/rAHCL7UZxq",
+    "lang": "en"
+  }
+}

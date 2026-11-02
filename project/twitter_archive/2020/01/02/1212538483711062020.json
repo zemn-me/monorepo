@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1212538483711062020"
+        ],
+        "editableUntil": "2020-01-02T01:57:57.049Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The monkey video somedays",
+          "screen_name": "FunnyMonkyVideo",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1154984352205496320",
+          "id": "1154984352205496320"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/FunnyMonkyVideo/status/1212536495740989440/video/1",
+          "source_status_id": "1212536495740989440",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/3ddpj7Xl8I",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1212536150356897792/pu/img/iAaFfDH_6EdJx82D.jpg",
+          "id_str": "1212536150356897792",
+          "source_user_id": "1154984352205496320",
+          "id": "1212536150356897792",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1212536150356897792/pu/img/iAaFfDH_6EdJx82D.jpg",
+          "source_user_id_str": "1154984352205496320",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1212536495740989440",
+          "display_url": "pic.twitter.com/3ddpj7Xl8I"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "103"
+    ],
+    "favorite_count": "0",
+    "id_str": "1212538483711062020",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1212538483711062020",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 02 00:57:57 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @FunnyMonkyVideo: Happy 2020 heres funny monky for good luck on this year :) https://t.co/3ddpj7Xl8I",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/FunnyMonkyVideo/status/1212536495740989440/video/1",
+          "source_status_id": "1212536495740989440",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/3ddpj7Xl8I",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1212536150356897792/pu/img/iAaFfDH_6EdJx82D.jpg",
+          "id_str": "1212536150356897792",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "32467",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1212536150356897792/pu/vid/1280x720/eqeNEBq7n8SPvv5a.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1212536150356897792/pu/pl/VZXI1PtInYAbS2ca.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1212536150356897792/pu/vid/640x360/TPa-Eyzyi27uS4xa.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1212536150356897792/pu/vid/480x270/eGephiKiqDMh8wWZ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1154984352205496320",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1212536150356897792",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1212536150356897792/pu/img/iAaFfDH_6EdJx82D.jpg",
+          "source_user_id_str": "1154984352205496320",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1212536495740989440",
+          "display_url": "pic.twitter.com/3ddpj7Xl8I"
+        }
+      ]
+    }
+  }
+}

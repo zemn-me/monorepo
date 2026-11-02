@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1001628429299716101"
+        ],
+        "editableUntil": "2018-05-30T01:56:41.558Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "ketnipz",
+          "screen_name": "Ketnipz",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "819914948361023489",
+          "id": "819914948361023489"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Ketnipz/status/1001627180051255296/video/1",
+          "source_status_id": "1001627180051255296",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/tAUCZOM6EP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1001627124627750913/pu/img/co4xE7tLq6sb5rVe.jpg",
+          "id_str": "1001627124627750913",
+          "source_user_id": "819914948361023489",
+          "id": "1001627124627750913",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1001627124627750913/pu/img/co4xE7tLq6sb5rVe.jpg",
+          "source_user_id_str": "819914948361023489",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "864",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "864",
+              "h": "1080",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1001627180051255296",
+          "display_url": "pic.twitter.com/tAUCZOM6EP"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "68"
+    ],
+    "favorite_count": "0",
+    "id_str": "1001628429299716101",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1001628429299716101",
+    "possibly_sensitive": false,
+    "created_at": "Wed May 30 00:56:41 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Ketnipz: A rainy day is my happy place 🌧 https://t.co/tAUCZOM6EP",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Ketnipz/status/1001627180051255296/video/1",
+          "source_status_id": "1001627180051255296",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/tAUCZOM6EP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1001627124627750913/pu/img/co4xE7tLq6sb5rVe.jpg",
+          "id_str": "1001627124627750913",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "18000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1001627124627750913/pu/pl/J93iT4_Sxcnflo-4.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1001627124627750913/pu/vid/512x640/FD5DUP4mwXiQ14PA.mp4?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1001627124627750913/pu/vid/256x320/PSD_u_J9ox4zi1dX.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "819914948361023489",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1001627124627750913",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1001627124627750913/pu/img/co4xE7tLq6sb5rVe.jpg",
+          "source_user_id_str": "819914948361023489",
+          "sizes": {
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "864",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "864",
+              "h": "1080",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1001627180051255296",
+          "display_url": "pic.twitter.com/tAUCZOM6EP"
+        }
+      ]
+    }
+  }
+}

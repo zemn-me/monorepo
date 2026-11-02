@@ -1,4 +1,4 @@
-load("//js:rules.bzl", "js_binary", "js_run_binary")
+load("//js:rules.bzl", "js_run_binary")
 
 def package_json(name, targets, template, version, depSpec):
     """
@@ -24,7 +24,7 @@ def package_json(name, targets, template, version, depSpec):
         ],
         args = [
             "--out",
-            "../../../$(execpath package.json)",
+            "../../../$(execpath package_new.json)",
             "--base",
             "../../../$(location //:package_json)",
             "--query",
@@ -38,5 +38,5 @@ def package_json(name, targets, template, version, depSpec):
             "--depOnlyOut",
             "../../../$(execpath " + depSpec + ")",
         ],
-        outs = ["package.json", depSpec],
+        outs = ["package_new.json", depSpec],
     )

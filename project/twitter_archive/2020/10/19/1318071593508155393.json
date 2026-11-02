@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1318071593508155393"
+        ],
+        "editableUntil": "2020-10-19T07:08:51.135Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "10",
+            "25"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/rvUriasLwc",
+          "expanded_url": "https://mksben.l0.cm/2020/10/discord-desktop-rce.html?m=1",
+          "display_url": "mksben.l0.cm/2020/10/discor…",
+          "indices": [
+            "214",
+            "237"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "237"
+    ],
+    "favorite_count": "0",
+    "id_str": "1318071593508155393",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1318071593508155393",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 19 06:08:51 +0000 2020",
+    "favorited": false,
+    "full_text": "i thought @kinugawamasato’s technique of looking at csp to determine embed regexes was really smart. I was trying the same thing but by reading the embeds code and couldn’t find any xss sinks. btw discord security https://t.co/rvUriasLwc",
+    "lang": "en"
+  }
+}

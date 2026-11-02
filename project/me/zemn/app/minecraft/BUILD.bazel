@@ -1,0 +1,69 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "minecraft",
+    srcs = [
+        "client.tsx",
+        "history.tsx",
+        "history_data.ts",
+        "page.tsx",
+    ],
+    assets = ["style.module.css"],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@fortawesome/free-solid-svg-icons",
+        "//:node_modules/@fortawesome/react-fontawesome",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//project/me/zemn/hook",
+        "//ts/future",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "history.tsx",
+        "history_data.ts",
+        "history_data_test.ts",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "minecraft_tests",
+    srcs = ["history_data_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":minecraft",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//project/me/zemn/hook",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["history_data_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":minecraft_tests"],
+)

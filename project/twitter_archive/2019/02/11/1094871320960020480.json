@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1094871320960020480"
+        ],
+        "editableUntil": "2019-02-11T09:10:39.299Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The Great Lange",
+          "screen_name": "GreatLange",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "4608395053",
+          "id": "4608395053"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GreatLange/status/1094761554807902208/video/1",
+          "source_status_id": "1094761554807902208",
+          "indices": [
+            "16",
+            "39"
+          ],
+          "url": "https://t.co/prd64EZuIf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1094761333151518720/pu/img/b_JmN1VXjeCcT_DR.jpg",
+          "id_str": "1094761333151518720",
+          "source_user_id": "4608395053",
+          "id": "1094761333151518720",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1094761333151518720/pu/img/b_JmN1VXjeCcT_DR.jpg",
+          "source_user_id_str": "4608395053",
+          "sizes": {
+            "large": {
+              "w": "480",
+              "h": "348",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "480",
+              "h": "348",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "348",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1094761554807902208",
+          "display_url": "pic.twitter.com/prd64EZuIf"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "39"
+    ],
+    "favorite_count": "0",
+    "id_str": "1094871320960020480",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1094871320960020480",
+    "possibly_sensitive": false,
+    "created_at": "Mon Feb 11 08:10:39 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @GreatLange: https://t.co/prd64EZuIf",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GreatLange/status/1094761554807902208/video/1",
+          "source_status_id": "1094761554807902208",
+          "indices": [
+            "16",
+            "39"
+          ],
+          "url": "https://t.co/prd64EZuIf",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1094761333151518720/pu/img/b_JmN1VXjeCcT_DR.jpg",
+          "id_str": "1094761333151518720",
+          "video_info": {
+            "aspect_ratio": [
+              "40",
+              "29"
+            ],
+            "duration_millis": "6967",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1094761333151518720/pu/vid/248x180/xwSTqzajtEDVdXps.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1094761333151518720/pu/vid/480x348/Nc4-KUNOfPUvpu9X.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1094761333151518720/pu/pl/ya4zpW7twA6wXvlg.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "4608395053",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1094761333151518720",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1094761333151518720/pu/img/b_JmN1VXjeCcT_DR.jpg",
+          "source_user_id_str": "4608395053",
+          "sizes": {
+            "large": {
+              "w": "480",
+              "h": "348",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "480",
+              "h": "348",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "348",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1094761554807902208",
+          "display_url": "pic.twitter.com/prd64EZuIf"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1578502262414274560"
+        ],
+        "editableUntil": "2022-10-07T22:17:21.170Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lolo",
+          "screen_name": "LolOverruled",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "213427681",
+          "id": "213427681"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LolOverruled/status/1578153056775991296/video/1",
+          "source_status_id": "1578153056775991296",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/UwmTmvAJC4",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1578153034076622853/pu/img/qkcrlsvN-ZKqLDH_.jpg",
+          "id_str": "1578153034076622853",
+          "source_user_id": "213427681",
+          "id": "1578153034076622853",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1578153034076622853/pu/img/qkcrlsvN-ZKqLDH_.jpg",
+          "source_user_id_str": "213427681",
+          "sizes": {
+            "medium": {
+              "w": "648",
+              "h": "576",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "648",
+              "h": "576",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "648",
+              "h": "576",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1578153056775991296",
+          "display_url": "pic.twitter.com/UwmTmvAJC4"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "97"
+    ],
+    "favorite_count": "0",
+    "id_str": "1578502262414274560",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1578502262414274560",
+    "possibly_sensitive": false,
+    "created_at": "Fri Oct 07 21:47:21 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @LolOverruled: no point in posting anymore I can’t do better than this https://t.co/UwmTmvAJC4",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LolOverruled/status/1578153056775991296/video/1",
+          "source_status_id": "1578153056775991296",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/UwmTmvAJC4",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1578153034076622853/pu/img/qkcrlsvN-ZKqLDH_.jpg",
+          "id_str": "1578153034076622853",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "8"
+            ],
+            "duration_millis": "9333",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1578153034076622853/pu/vid/648x576/uGDXcaeB8sYVCnmd.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1578153034076622853/pu/vid/302x270/m7crHvzKJkf8qbsi.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1578153034076622853/pu/vid/404x360/0YAmJDhFqxFPt5rj.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1578153034076622853/pu/pl/68ms3BoUh4gewXMQ.m3u8?tag=12&v=4a8"
+              }
+            ]
+          },
+          "source_user_id": "213427681",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1578153034076622853",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1578153034076622853/pu/img/qkcrlsvN-ZKqLDH_.jpg",
+          "source_user_id_str": "213427681",
+          "sizes": {
+            "medium": {
+              "w": "648",
+              "h": "576",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "648",
+              "h": "576",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "648",
+              "h": "576",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1578153056775991296",
+          "display_url": "pic.twitter.com/UwmTmvAJC4"
+        }
+      ]
+    }
+  }
+}

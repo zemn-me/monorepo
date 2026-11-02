@@ -1,0 +1,34 @@
+load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
+load("//go:rules.bzl", "go_library")
+
+"Generated defs for the openai apis."
+
+load("//bzl:rules.bzl", "bazel_lint")
+
+# Code generation needs the full Go SDK, including on remote executors.
+go_oapi_codegen(
+    name = "gen_api",
+    out = "api.go",
+    config = "codegen.yaml",
+    data = ["overlay.yaml"],
+    source = "@com_github_openai_openai_openapi//:openapi.yaml",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_library(
+    name = "openai",
+    srcs = [
+        "api.go",
+        "imports.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/openai",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_oapi_codegen_runtime//:runtime",
+        "@com_github_oapi_codegen_runtime//types",
+    ],
+)

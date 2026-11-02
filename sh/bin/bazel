@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# renovate:
+#   datasource=github-releases
+#   versioning=semver-coerced
+#   depName=bazelbuild/bazelisk
+BAZELISK_VERSION="v1.30.0"
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CACHE_DIR="${SCRIPT_DIR}/../../.script_cache/bazelisk/${BAZELISK_VERSION}"
+mkdir -p "${CACHE_DIR}"
+
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+case "${ARCH}" in
+  x86_64|amd64) ARCH="amd64";;
+  aarch64|arm64) ARCH="arm64";;
+esac
+
+ASSET=""
+case "${OS}" in
+  Linux)
+    if [ "${ARCH}" = "arm64" ]; then
+      ASSET="bazelisk-linux-arm64"
+    else
+      ASSET="bazelisk-linux-amd64"
+    fi
+    ;;
+  Darwin)
+    if [ "${ARCH}" = "arm64" ]; then
+      ASSET="bazelisk-darwin-arm64"
+    else
+      ASSET="bazelisk-darwin-amd64"
+    fi
+    ;;
+  Windows)
+    if [ "${ARCH}" = "arm64" ]; then
+      ASSET="bazelisk-windows-arm64.exe"
+    else
+      ASSET="bazelisk-windows-amd64.exe"
+    fi
+    ;;
+  *)
+    echo "Unsupported OS: '${OS}'. Exiting."
+    exit 1
+    ;;
+esac
+
+CACHED_BAZELISK="${CACHE_DIR}/${ASSET}"
+
+if [ ! -f "${CACHED_BAZELISK}" ]; then
+  DOWNLOAD_URL="https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/${ASSET}"
+  curl -s --fail -L \
+    "$DOWNLOAD_URL" \
+    -o "${CACHED_BAZELISK}"
+
+  case "${OS}" in
+    Linux|Darwin)
+      chmod +x "${CACHED_BAZELISK}"
+      ;;
+    # Windows requires no special execute permissions
+  esac
+fi
+
+exec "${CACHED_BAZELISK}" "$@"

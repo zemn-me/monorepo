@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1305983880206397447"
+        ],
+        "editableUntil": "2020-09-15T22:36:35.705Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1305983880206397447/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/0WBFhrBvwv",
+          "media_url": "http://pbs.twimg.com/media/Eh_I6L3X0AYtis0.png",
+          "id_str": "1305983318903738374",
+          "id": "1305983318903738374",
+          "media_url_https": "https://pbs.twimg.com/media/Eh_I6L3X0AYtis0.png",
+          "sizes": {
+            "small": {
+              "w": "623",
+              "h": "285",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "623",
+              "h": "285",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "623",
+              "h": "285",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/0WBFhrBvwv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "301"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1305981405529354240",
+    "id_str": "1305983880206397447",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1305983880206397447",
+    "in_reply_to_status_id": "1305981405529354240",
+    "possibly_sensitive": false,
+    "created_at": "Tue Sep 15 21:36:35 +0000 2020",
+    "favorited": false,
+    "full_text": "for all you sickos out there heres hasMember which takes a type guard and a key name, and returns a function that takes an object, and asserts it has a value on that key for which the type guard is true, i.e. guard.must(hasMember('num', guard.isNumber), { num: 1}) doesnt throw https://t.co/0WBFhrBvwv",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1305983880206397447/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/0WBFhrBvwv",
+          "media_url": "http://pbs.twimg.com/media/Eh_I6L3X0AYtis0.png",
+          "id_str": "1305983318903738374",
+          "id": "1305983318903738374",
+          "media_url_https": "https://pbs.twimg.com/media/Eh_I6L3X0AYtis0.png",
+          "sizes": {
+            "small": {
+              "w": "623",
+              "h": "285",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "623",
+              "h": "285",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "623",
+              "h": "285",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/0WBFhrBvwv"
+        }
+      ]
+    }
+  }
+}

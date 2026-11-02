@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1278158623840055296"
+        ],
+        "editableUntil": "2020-07-01T03:48:57.619Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Daniel Beauchamp",
+          "screen_name": "pushmatrix",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "91908253",
+          "id": "91908253"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pushmatrix/status/1277953972599508992/video/1",
+          "source_status_id": "1277953972599508992",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/Y61OzWU7D8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1277952190003511296/pu/img/lE4r8t2sQ6d5OziD.jpg",
+          "id_str": "1277952190003511296",
+          "source_user_id": "91908253",
+          "id": "1277952190003511296",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1277952190003511296/pu/img/lE4r8t2sQ6d5OziD.jpg",
+          "source_user_id_str": "91908253",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1277953972599508992",
+          "display_url": "pic.twitter.com/Y61OzWU7D8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "0",
+    "id_str": "1278158623840055296",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1278158623840055296",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 01 02:48:57 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @pushmatrix: After weeks of virtual training, I'm finally ready to cut my wife's lockdown hair. https://t.co/Y61OzWU7D8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pushmatrix/status/1277953972599508992/video/1",
+          "source_status_id": "1277953972599508992",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/Y61OzWU7D8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1277952190003511296/pu/img/lE4r8t2sQ6d5OziD.jpg",
+          "id_str": "1277952190003511296",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "14167",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1277952190003511296/pu/vid/320x320/aQl8HV_tmdLSxqlw.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1277952190003511296/pu/pl/dNU6N18nG6-mO-9C.m3u8?tag=10&v=42f"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1277952190003511296/pu/vid/720x720/BZHivMcgYIFwR1gA.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1277952190003511296/pu/vid/480x480/VZl1agy1UuPiFvgc.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "91908253",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1277952190003511296",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1277952190003511296/pu/img/lE4r8t2sQ6d5OziD.jpg",
+          "source_user_id_str": "91908253",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1277953972599508992",
+          "display_url": "pic.twitter.com/Y61OzWU7D8"
+        }
+      ]
+    }
+  }
+}

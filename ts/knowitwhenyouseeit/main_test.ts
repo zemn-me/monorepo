@@ -1,4 +1,6 @@
-import allowlist from 'ts/knowitwhenyouseeit';
+import { describe, expect, it } from '@jest/globals';
+
+import allowlist from '#root/ts/knowitwhenyouseeit/index.js';
 
 describe('Alg', () => {
 	const getMessage = allowlist(

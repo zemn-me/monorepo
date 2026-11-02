@@ -1,9 +1,11 @@
-load("//go:rules.bzl", "go_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+load("//md:rules.bzl", "md_files")
 
 go_binary(
     name = "csvpretty",
-    srcs = glob(["*.go"]),
+    embed = [":csvpretty_lib"],
     visibility = ["//visibility:public"],
 )
 
@@ -21,4 +23,26 @@ diff_test(
     name = "csvpretty_integration",
     file1 = "test_output.csv",
     file2 = "test_out.csv",
+)
+
+go_library(
+    name = "csvpretty_lib",
+    srcs = ["csvpretty.go"],
+    importpath = "github.com/zemn-me/monorepo/go/cmd/csvpretty",
+    visibility = ["//visibility:private"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "go_cmd_csvpretty",
+    srcs = ["README.md"],
+    refs = [
+        "test.csv",
+        "test_out.csv",
+    ],
+    visibility = ["//:__subpackages__"],
 )

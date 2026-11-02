@@ -1,0 +1,130 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1071364784237568000"
+        ],
+        "editableUntil": "2018-12-08T12:24:04.214Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kevin",
+          "screen_name": "rohk_infosec",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "714975830917517312",
+          "id": "714975830917517312"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1071364784237568000/photo/1",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/5wfyAxlssC",
+          "media_url": "http://pbs.twimg.com/media/Dt5AlOZWoAA04-K.jpg",
+          "id_str": "1071364769624530944",
+          "id": "1071364769624530944",
+          "media_url_https": "https://pbs.twimg.com/media/Dt5AlOZWoAA04-K.jpg",
+          "sizes": {
+            "large": {
+              "w": "779",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "779",
+              "h": "510",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "445",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/5wfyAxlssC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1071364434868658176",
+    "id_str": "1071364784237568000",
+    "in_reply_to_user_id": "714975830917517312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1071364784237568000",
+    "in_reply_to_status_id": "1071364434868658176",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 08 11:24:04 +0000 2018",
+    "favorited": false,
+    "full_text": "@rohk_infosec got a movie for you to watch https://t.co/5wfyAxlssC",
+    "lang": "en",
+    "in_reply_to_screen_name": "rohk_infosec",
+    "in_reply_to_user_id_str": "714975830917517312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1071364784237568000/photo/1",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/5wfyAxlssC",
+          "media_url": "http://pbs.twimg.com/media/Dt5AlOZWoAA04-K.jpg",
+          "id_str": "1071364769624530944",
+          "id": "1071364769624530944",
+          "media_url_https": "https://pbs.twimg.com/media/Dt5AlOZWoAA04-K.jpg",
+          "sizes": {
+            "large": {
+              "w": "779",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "779",
+              "h": "510",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "445",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/5wfyAxlssC"
+        }
+      ]
+    }
+  }
+}

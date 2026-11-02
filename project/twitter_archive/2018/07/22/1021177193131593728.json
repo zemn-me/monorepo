@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1021177193131593728"
+        ],
+        "editableUntil": "2018-07-23T00:36:30.054Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "non aesthetic things",
+          "screen_name": "PicturesFoIder",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "2538322138",
+          "id": "2538322138"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PicturesFoIder/status/1021125759384080384/video/1",
+          "source_status_id": "1021125759384080384",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/MHpLHjpW9V",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1021125731697512448/pu/img/CWrLkCFEjRrd5iwa.jpg",
+          "id_str": "1021125731697512448",
+          "source_user_id": "2538322138",
+          "id": "1021125731697512448",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1021125731697512448/pu/img/CWrLkCFEjRrd5iwa.jpg",
+          "source_user_id_str": "2538322138",
+          "sizes": {
+            "small": {
+              "w": "240",
+              "h": "240",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "240",
+              "h": "240",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "240",
+              "h": "240",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1021125759384080384",
+          "display_url": "pic.twitter.com/MHpLHjpW9V"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "43"
+    ],
+    "favorite_count": "0",
+    "id_str": "1021177193131593728",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1021177193131593728",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jul 22 23:36:30 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @PicturesFoIder: https://t.co/MHpLHjpW9V",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PicturesFoIder/status/1021125759384080384/video/1",
+          "source_status_id": "1021125759384080384",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/MHpLHjpW9V",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1021125731697512448/pu/img/CWrLkCFEjRrd5iwa.jpg",
+          "id_str": "1021125731697512448",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "7040",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1021125731697512448/pu/vid/240x240/BKC4jkP-d7-b5z19.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1021125731697512448/pu/pl/EhSmXO1bP_S5vOhQ.m3u8?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "2538322138",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1021125731697512448",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1021125731697512448/pu/img/CWrLkCFEjRrd5iwa.jpg",
+          "source_user_id_str": "2538322138",
+          "sizes": {
+            "small": {
+              "w": "240",
+              "h": "240",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "240",
+              "h": "240",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "240",
+              "h": "240",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1021125759384080384",
+          "display_url": "pic.twitter.com/MHpLHjpW9V"
+        }
+      ]
+    }
+  }
+}

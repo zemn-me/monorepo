@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1240846281804742657"
+        ],
+        "editableUntil": "2020-03-20T04:43:02.048Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "kevin",
+          "screen_name": "OkayJoJay",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "425971905",
+          "id": "425971905"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OkayJoJay/status/1240684891865411586/video/1",
+          "source_status_id": "1240684891865411586",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/FyIeLY45GO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1240684837616455683/pu/img/rNrx8RlWm95bQUV4.jpg",
+          "id_str": "1240684837616455683",
+          "source_user_id": "425971905",
+          "id": "1240684837616455683",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1240684837616455683/pu/img/rNrx8RlWm95bQUV4.jpg",
+          "source_user_id_str": "425971905",
+          "sizes": {
+            "medium": {
+              "w": "608",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "608",
+              "h": "1080",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1240684891865411586",
+          "display_url": "pic.twitter.com/FyIeLY45GO"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "99"
+    ],
+    "favorite_count": "0",
+    "id_str": "1240846281804742657",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1240846281804742657",
+    "possibly_sensitive": false,
+    "created_at": "Fri Mar 20 03:43:02 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @OkayJoJay: my new wfh coworker is so needy, I can’t get anything done 🙄 https://t.co/FyIeLY45GO",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OkayJoJay/status/1240684891865411586/video/1",
+          "source_status_id": "1240684891865411586",
+          "indices": [
+            "76",
+            "99"
+          ],
+          "url": "https://t.co/FyIeLY45GO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1240684837616455683/pu/img/rNrx8RlWm95bQUV4.jpg",
+          "id_str": "1240684837616455683",
+          "video_info": {
+            "aspect_ratio": [
+              "76",
+              "135"
+            ],
+            "duration_millis": "29067",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1240684837616455683/pu/pl/-QYtQta5iUx3ltko.m3u8?tag=10&v=a95"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1240684837616455683/pu/vid/320x568/xBjQOxlXxCSt-5B_.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1240684837616455683/pu/vid/608x1080/Zr1MG3Ikpw5auDrA.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1240684837616455683/pu/vid/360x638/Tcc3VIKTeKEqSdYt.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "425971905",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1240684837616455683",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1240684837616455683/pu/img/rNrx8RlWm95bQUV4.jpg",
+          "source_user_id_str": "425971905",
+          "sizes": {
+            "medium": {
+              "w": "608",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "608",
+              "h": "1080",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1240684891865411586",
+          "display_url": "pic.twitter.com/FyIeLY45GO"
+        }
+      ]
+    }
+  }
+}

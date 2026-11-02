@@ -1,0 +1,50 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "651383566895550465"
+        ],
+        "editableUntil": "2015-10-06T14:08:39.126Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "vim",
+          "indices": [
+            "0",
+            "4"
+          ]
+        },
+        {
+          "text": "golang",
+          "indices": [
+            "5",
+            "12"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "114"
+    ],
+    "favorite_count": "0",
+    "id_str": "651383566895550465",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "651383566895550465",
+    "created_at": "Tue Oct 06 13:08:39 +0000 2015",
+    "favorited": false,
+    "full_text": "#vim/#golang tip: plagiarism is easy! `:read!godoc -src net/http Server` to steal a useful canonical server struct",
+    "lang": "en"
+  }
+}

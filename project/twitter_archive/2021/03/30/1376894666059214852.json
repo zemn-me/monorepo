@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1376894666059214852"
+        ],
+        "editableUntil": "2021-03-30T14:50:44.511Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "banana /\\_/\\",
+          "screen_name": "0xBanana",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "17715312",
+          "id": "17715312"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/0xBanana/status/1376661305453641730/video/1",
+          "source_status_id": "1376661305453641730",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/bcjJ2JbDyn",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1376661281072119808/pu/img/XL4lREDbaBqdcXa8.jpg",
+          "id_str": "1376661281072119808",
+          "source_user_id": "17715312",
+          "id": "1376661281072119808",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1376661281072119808/pu/img/XL4lREDbaBqdcXa8.jpg",
+          "source_user_id_str": "17715312",
+          "sizes": {
+            "large": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1376661305453641730",
+          "display_url": "pic.twitter.com/bcjJ2JbDyn"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "67"
+    ],
+    "favorite_count": "0",
+    "id_str": "1376894666059214852",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1376894666059214852",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 30 13:50:44 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @0xBanana: Ancient Egyptian tumbler lock https://t.co/bcjJ2JbDyn",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/0xBanana/status/1376661305453641730/video/1",
+          "source_status_id": "1376661305453641730",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/bcjJ2JbDyn",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1376661281072119808/pu/img/XL4lREDbaBqdcXa8.jpg",
+          "id_str": "1376661281072119808",
+          "video_info": {
+            "aspect_ratio": [
+              "213",
+              "119"
+            ],
+            "duration_millis": "21200",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1376661281072119808/pu/pl/vbJTo0hksoQHCxNF.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1376661281072119808/pu/vid/426x238/KyKktArYDw0iCLg9.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "17715312",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1376661281072119808",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1376661281072119808/pu/img/XL4lREDbaBqdcXa8.jpg",
+          "source_user_id_str": "17715312",
+          "sizes": {
+            "large": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "426",
+              "h": "238",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1376661305453641730",
+          "display_url": "pic.twitter.com/bcjJ2JbDyn"
+        }
+      ]
+    }
+  }
+}

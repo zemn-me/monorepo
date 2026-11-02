@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1243601296034271232"
+        ],
+        "editableUntil": "2020-03-27T19:10:28.626Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "orange chimp",
+          "screen_name": "orangechimps",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1106038272411688960",
+          "id": "1106038272411688960"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/orangechimps/status/1243595394048651264/video/1",
+          "source_status_id": "1243595394048651264",
+          "indices": [
+            "110",
+            "133"
+          ],
+          "url": "https://t.co/eJfCQ369l0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1243595321814515717/pu/img/6kj86VWjoct0qZNx.jpg",
+          "id_str": "1243595321814515717",
+          "source_user_id": "1106038272411688960",
+          "id": "1243595321814515717",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1243595321814515717/pu/img/6kj86VWjoct0qZNx.jpg",
+          "source_user_id_str": "1106038272411688960",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1243595394048651264",
+          "display_url": "pic.twitter.com/eJfCQ369l0"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "FursuitFriday",
+          "indices": [
+            "95",
+            "109"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "133"
+    ],
+    "favorite_count": "0",
+    "id_str": "1243601296034271232",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1243601296034271232",
+    "possibly_sensitive": false,
+    "created_at": "Fri Mar 27 18:10:28 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @orangechimps: monkee call in furry reserves ,, war imminent, monki &amp; furry make ally \n #FursuitFriday https://t.co/eJfCQ369l0",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/orangechimps/status/1243595394048651264/video/1",
+          "source_status_id": "1243595394048651264",
+          "indices": [
+            "110",
+            "133"
+          ],
+          "url": "https://t.co/eJfCQ369l0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1243595321814515717/pu/img/6kj86VWjoct0qZNx.jpg",
+          "id_str": "1243595321814515717",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "46000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243595321814515717/pu/vid/480x270/xnjH-3ExF6K9LRZF.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243595321814515717/pu/vid/640x360/Eb6-YmqCC7CapSnS.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1243595321814515717/pu/pl/bq1fKHWMRqxRr6zR.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1106038272411688960",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1243595321814515717",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1243595321814515717/pu/img/6kj86VWjoct0qZNx.jpg",
+          "source_user_id_str": "1106038272411688960",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1243595394048651264",
+          "display_url": "pic.twitter.com/eJfCQ369l0"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1254809504266543105"
+        ],
+        "editableUntil": "2020-04-27T17:27:53.707Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "175"
+    ],
+    "favorite_count": "0",
+    "id_str": "1254809504266543105",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1254809504266543105",
+    "created_at": "Mon Apr 27 16:27:53 +0000 2020",
+    "favorited": false,
+    "full_text": "would just *love* for `(url: unknown) =&gt; [URL, url is URL | string]` to be valid typescript... it's just impossible to write composable parser / validators at the moment...",
+    "lang": "en"
+  }
+}

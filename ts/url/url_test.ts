@@ -1,4 +1,6 @@
-import * as Url from '.';
+import { describe, expect, it } from '@jest/globals';
+
+import * as Url from '#root/ts/url/index.js';
 
 describe('url', () => {
 	describe('LocalURL', () => {
@@ -7,8 +9,7 @@ describe('url', () => {
 		});
 
 		it('should work with template syntax', () => {
-			// eslint-disable-next-line no-unused-expressions
-			Url.Local.New`https://google.com`;
+			expect(() => Url.Local.New`https://google.com`).not.toThrow();
 		});
 
 		it('should not throw when DEPLOY_DOMAIN is set', () => {
@@ -16,7 +17,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'https://something.com';
 				expect(() => new Url.Local('/something')).not.toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 
@@ -25,22 +26,21 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'javascript://alert(1)';
 				expect(() => new Url.Local('/something')).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 	});
 
 	describe('URL', () => {
 		it('should work with template syntax', () => {
-			// eslint-disable-next-line no-unused-expressions
-			Url.URL.New`https://google.com`;
+			expect(() => Url.URL.New`https://google.com`).not.toThrow();
 		});
 		it('should not allow javascript URIs', () => {
 			try {
 				process.env['DEPLOY_DOMAIN'] = 'javascript://alert(1)';
 				expect(() => new Url.URL('javascript://alert(1)')).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 		it('should not allow random protocol URIs', () => {
@@ -48,7 +48,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = 'javascript://alert(1)';
 				expect(() => new Url.URL('skype://alert(1)')).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 		it.each([
@@ -61,7 +61,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = url;
 				expect(() => new Url.URL(url)).not.toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 		it.each([
@@ -73,7 +73,7 @@ describe('url', () => {
 				process.env['DEPLOY_DOMAIN'] = url;
 				expect(() => new Url.URL(url)).toThrow();
 			} finally {
-				delete process.env['DEPLOY_DOMAIN'];
+				delete process.env.DEPLOY_DOMAIN;
 			}
 		});
 	});

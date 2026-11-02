@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "971312702051274752"
+        ],
+        "editableUntil": "2018-03-07T10:12:48.943Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "T",
+          "screen_name": "tommyscafidi",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1347525818",
+          "id": "1347525818"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tommyscafidi/status/970922683301969920/video/1",
+          "source_status_id": "970922683301969920",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/uvA92kqcof",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/970922602586767365/pu/img/TpTVnlvLkqs4LqsS.jpg",
+          "id_str": "970922602586767365",
+          "source_user_id": "1347525818",
+          "id": "970922602586767365",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/970922602586767365/pu/img/TpTVnlvLkqs4LqsS.jpg",
+          "source_user_id_str": "1347525818",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "970922683301969920",
+          "display_url": "pic.twitter.com/uvA92kqcof"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "971312702051274752",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "971312702051274752",
+    "possibly_sensitive": false,
+    "created_at": "Wed Mar 07 09:12:48 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @tommyscafidi: yung lean on elon musk https://t.co/uvA92kqcof",
+    "lang": "tl",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tommyscafidi/status/970922683301969920/video/1",
+          "source_status_id": "970922683301969920",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/uvA92kqcof",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/970922602586767365/pu/img/TpTVnlvLkqs4LqsS.jpg",
+          "id_str": "970922602586767365",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "49568",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/970922602586767365/pu/vid/640x360/nqLST6UUIm0jVVHH.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/970922602586767365/pu/vid/320x180/h4yka3r_ugPWEY9d.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/970922602586767365/pu/vid/1280x720/bhKTjFbOLiB_vHeR.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/970922602586767365/pu/pl/BdOZMKenHtLBWMA-.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "1347525818",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "970922602586767365",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/970922602586767365/pu/img/TpTVnlvLkqs4LqsS.jpg",
+          "source_user_id_str": "1347525818",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "970922683301969920",
+          "display_url": "pic.twitter.com/uvA92kqcof"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1251748742249791488"
+        ],
+        "editableUntil": "2020-04-19T06:45:31.176Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "define",
+          "indices": [
+            "111",
+            "118"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "jpghost",
+          "screen_name": "_jpco",
+          "indices": [
+            "0",
+            "6"
+          ],
+          "id_str": "2861819394",
+          "id": "2861819394"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/SfGT7tIiQV",
+          "expanded_url": "https://www.drdobbs.com/the-new-c-x-macros/184401387",
+          "display_url": "drdobbs.com/the-new-c-x-ma…",
+          "indices": [
+            "257",
+            "280"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1251747951384227842",
+    "id_str": "1251748742249791488",
+    "in_reply_to_user_id": "2861819394",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1251748742249791488",
+    "in_reply_to_status_id": "1251747951384227842",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 19 05:45:31 +0000 2020",
+    "favorited": false,
+    "full_text": "@_jpco it's a pretty smart preprocessor convention actually, essentially you define a data table in terms of a #define statement of X(something, \"something\") -- arbitrary args\n\nthen you define a short macro around your use to select data from those calls \n\nhttps://t.co/SfGT7tIiQV",
+    "lang": "en",
+    "in_reply_to_screen_name": "_jpco",
+    "in_reply_to_user_id_str": "2861819394"
+  }
+}

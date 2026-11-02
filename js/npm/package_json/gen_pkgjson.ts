@@ -1,6 +1,9 @@
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { JSONSchemaForNPMPackageJsonFiles as packageJson } from '@schemastore/package';
 import { Command } from 'commander';
 import fs from 'fs/promises';
+
+import { githubIssuesPage } from '#root/ts/constants/constants.js';
 
 const depTypes = {
 	skip: (v: string) => v === '@bazel/runfiles',
@@ -29,14 +32,14 @@ const labelToNpmPackage = (label: string): string => {
         @npm//@ok/thing/file:test.txt -> @ok/thing
         @npm//ok-whatever:fuck -> ok-whatever
     */
-	const match = /^@npm\/\/(?::node_modules\/)?((?:@[^/:]+\/)?[^/:]+)/.exec(
-		label
-	);
+	const match =
+		/^@npm\/\/(?::node_modules\/)?((?:@[^/:]+\/)?[^/:]+)/.exec(label) ??
+		/^(?:@@?\/\/|\/\/):node_modules\/((?:@[^/:]+\/)?[^/:]+)/.exec(label);
 
 	if (match === null)
 		throw new Error(`${label} does not appear to be an NPM package.`);
 
-	return match[1];
+	return match[1]!;
 };
 
 interface GithubIssueUrlProps {
@@ -49,14 +52,14 @@ const githubIssueUrl = (props: GithubIssueUrlProps) => {
 	const params = new URLSearchParams();
 	const modifiedProps = {
 		...props,
-		labels: props.labels?.map(s => s.replace(',', ''))?.join(','),
+		labels: props.labels?.map(s => s.replace(',', '')).join(','),
 	};
 
 	for (const [key, value] of Object.entries(modifiedProps)) {
 		if (value) params.set(key, value);
 	}
 
-	const url = new URL('https://github.com/zemnmez/monorepo/issues/new');
+	const url = new URL(githubIssuesPage);
 	url.search = params.toString();
 	return url.toString();
 };
@@ -107,7 +110,9 @@ const main = async () => {
 		deps_list
 			.toString()
 			.split('\n')
-			.filter(v => v.startsWith('@npm//'))
+			.filter(v =>
+				/^(?:@npm\/\/|@@?\/\/:node_modules\/|\/\/:node_modules\/)/.test(v)
+			)
 			.map(v => labelToNpmPackage(v))
 	);
 
@@ -129,14 +134,17 @@ const main = async () => {
 		devDeps = new Map<string, string>();
 
 	for (const [pkgName, pkgVersion] of our_deps) {
-		[runDeps, devDeps][+depTypes.isDev(pkgName)].set(
+		[runDeps, devDeps]![+depTypes.isDev(pkgName)]!.set(
 			pkgName,
 			mustDefined(pkgVersion)
 		);
 	}
 
 	const template = JSON.parse((await fs.readFile(opts.merge)).toString());
-	const version = (await fs.readFile(opts.version)).toString();
+	const version = (await fs.readFile(opts.version))
+		.toString()
+		.trim()
+		.replace(/^v/, '');
 
 	const depData = {
 		dependencies: Object.fromEntries(runDeps),
@@ -148,7 +156,7 @@ const main = async () => {
 		...depData,
 		repository: {
 			type: 'git',
-			url: 'https://github.com/Zemnmez/monorepo.git',
+			url: 'git+https://github.com/zemn-me/monorepo.git',
 			directory: opts.package_name,
 		},
 		bugs: {

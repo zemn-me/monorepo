@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1193689770507034624"
+        ],
+        "editableUntil": "2019-11-11T01:39:53.629Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Tavis Ormandy",
+          "screen_name": "taviso",
+          "indices": [
+            "1",
+            "8"
+          ],
+          "id_str": "14453232",
+          "id": "14453232"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/JgWnqUA3rF",
+          "expanded_url": "https://www.youtube.com/watch?v=PHa1F3tT130",
+          "display_url": "youtube.com/watch?v=PHa1F3…",
+          "indices": [
+            "224",
+            "247"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "247"
+    ],
+    "favorite_count": "41",
+    "id_str": "1193689770507034624",
+    "truncated": false,
+    "retweet_count": "6",
+    "id": "1193689770507034624",
+    "possibly_sensitive": false,
+    "created_at": "Mon Nov 11 00:39:53 +0000 2019",
+    "favorited": false,
+    "full_text": ".@taviso has been building an instrumentation with the intention of fuzzing Simpsons Hit &amp; Run for glitches. definitely interested to eventually see proper bug finding techniques applied to finding speedrunning glitches\nhttps://t.co/JgWnqUA3rF",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1144582645201981445"
+        ],
+        "editableUntil": "2019-06-28T13:25:42.590Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/LlCZF78xHG",
+          "expanded_url": "https://golang.org/cmd/compile/#hdr-Compiler_Directives",
+          "display_url": "golang.org/cmd/compile/#h…",
+          "indices": [
+            "149",
+            "172"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1144582645201981445/photo/1",
+          "indices": [
+            "173",
+            "196"
+          ],
+          "url": "https://t.co/xc1Lm6kOF4",
+          "media_url": "http://pbs.twimg.com/media/D-JfsPeXkAA6SjN.jpg",
+          "id_str": "1144582468978315264",
+          "id": "1144582468978315264",
+          "media_url_https": "https://pbs.twimg.com/media/D-JfsPeXkAA6SjN.jpg",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "878",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1712",
+              "h": "1252",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "497",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/xc1Lm6kOF4"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "15",
+            "22"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "196"
+    ],
+    "favorite_count": "5",
+    "id_str": "1144582645201981445",
+    "truncated": false,
+    "retweet_count": "2",
+    "id": "1144582645201981445",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 28 12:25:42 +0000 2019",
+    "favorited": false,
+    "full_text": "here's a find! #golang has built in SourceMap like functionality where generated code can indicate the original line that produced this code segment!https://t.co/LlCZF78xHG https://t.co/xc1Lm6kOF4",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1144582645201981445/photo/1",
+          "indices": [
+            "173",
+            "196"
+          ],
+          "url": "https://t.co/xc1Lm6kOF4",
+          "media_url": "http://pbs.twimg.com/media/D-JfsPeXkAA6SjN.jpg",
+          "id_str": "1144582468978315264",
+          "id": "1144582468978315264",
+          "media_url_https": "https://pbs.twimg.com/media/D-JfsPeXkAA6SjN.jpg",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "878",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1712",
+              "h": "1252",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "497",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/xc1Lm6kOF4"
+        }
+      ]
+    }
+  }
+}

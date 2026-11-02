@@ -1,0 +1,54 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "697102107422228480"
+        ],
+        "editableUntil": "2016-02-09T17:57:48.597Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "125",
+            "132"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/30Fxpz5GHN",
+          "expanded_url": "http://golang.org/x/tools/cmd/godoc",
+          "display_url": "golang.org/x/tools/cmd/go…",
+          "indices": [
+            "64",
+            "87"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "132"
+    ],
+    "favorite_count": "1",
+    "id_str": "697102107422228480",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "697102107422228480",
+    "possibly_sensitive": false,
+    "created_at": "Tue Feb 09 16:57:48 +0000 2016",
+    "favorited": false,
+    "full_text": "People missing godoc: `go build -o \"$(go env GOPATH)/bin/godoc\" https://t.co/30Fxpz5GHN` provided GOPATH/bin is in your PATH #golang",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "859793298545881088"
+        ],
+        "editableUntil": "2017-05-03T16:34:31.217Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Nick Robinson",
+          "screen_name": "Babylonian",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "16523953",
+          "id": "16523953"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Babylonian/status/859647863894224898/video/1",
+          "source_status_id": "859647863894224898",
+          "indices": [
+            "22",
+            "45"
+          ],
+          "url": "https://t.co/6mfUygDiRJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/859647818511863808/pu/img/GLANLBVavhnRBrgX.jpg",
+          "id_str": "859647818511863808",
+          "source_user_id": "16523953",
+          "id": "859647818511863808",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/859647818511863808/pu/img/GLANLBVavhnRBrgX.jpg",
+          "source_user_id_str": "16523953",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "859647863894224898",
+          "display_url": "pic.twitter.com/6mfUygDiRJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "45"
+    ],
+    "favorite_count": "0",
+    "id_str": "859793298545881088",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "859793298545881088",
+    "possibly_sensitive": false,
+    "created_at": "Wed May 03 15:34:31 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @Babylonian: LMFAO https://t.co/6mfUygDiRJ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Babylonian/status/859647863894224898/video/1",
+          "source_status_id": "859647863894224898",
+          "indices": [
+            "22",
+            "45"
+          ],
+          "url": "https://t.co/6mfUygDiRJ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/859647818511863808/pu/img/GLANLBVavhnRBrgX.jpg",
+          "id_str": "859647818511863808",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "4867",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/859647818511863808/pu/vid/360x640/axxOFNQYWkt4pzlw.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/859647818511863808/pu/vid/720x1280/PlFggnWjXBvy5aXJ.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/859647818511863808/pu/pl/8Sk7EvjyYFVdwUI4.m3u8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/859647818511863808/pu/vid/180x320/B8AEiPuyglyfU67B.mp4"
+              }
+            ]
+          },
+          "source_user_id": "16523953",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "859647818511863808",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/859647818511863808/pu/img/GLANLBVavhnRBrgX.jpg",
+          "source_user_id_str": "16523953",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "859647863894224898",
+          "display_url": "pic.twitter.com/6mfUygDiRJ"
+        }
+      ]
+    }
+  }
+}

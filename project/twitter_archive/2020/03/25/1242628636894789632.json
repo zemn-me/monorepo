@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1242628636894789632"
+        ],
+        "editableUntil": "2020-03-25T02:45:28.616Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "soda",
+          "screen_name": "sodapop_ow",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "823158817231925248",
+          "id": "823158817231925248"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sodapop_ow/status/1242498988198244353/video/1",
+          "source_status_id": "1242498988198244353",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/eN5ZIX7IRv",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242498649579544584/pu/img/lUcXLygvUeEO648o.jpg",
+          "id_str": "1242498649579544584",
+          "source_user_id": "823158817231925248",
+          "id": "1242498649579544584",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242498649579544584/pu/img/lUcXLygvUeEO648o.jpg",
+          "source_user_id_str": "823158817231925248",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1242498988198244353",
+          "display_url": "pic.twitter.com/eN5ZIX7IRv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "91"
+    ],
+    "favorite_count": "0",
+    "id_str": "1242628636894789632",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1242628636894789632",
+    "possibly_sensitive": false,
+    "created_at": "Wed Mar 25 01:45:28 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @sodapop_ow: what the hollywood payload passenger sees mid-match https://t.co/eN5ZIX7IRv",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sodapop_ow/status/1242498988198244353/video/1",
+          "source_status_id": "1242498988198244353",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/eN5ZIX7IRv",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1242498649579544584/pu/img/lUcXLygvUeEO648o.jpg",
+          "id_str": "1242498649579544584",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "20733",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1242498649579544584/pu/pl/iVZvmawmLofytMBT.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242498649579544584/pu/vid/480x270/_Yza31w2dhAgK5FG.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242498649579544584/pu/vid/640x360/Gcg3rmjEI1taboJK.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1242498649579544584/pu/vid/1280x720/9OU1yelRO5hrNQGK.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "823158817231925248",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1242498649579544584",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1242498649579544584/pu/img/lUcXLygvUeEO648o.jpg",
+          "source_user_id_str": "823158817231925248",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1242498988198244353",
+          "display_url": "pic.twitter.com/eN5ZIX7IRv"
+        }
+      ]
+    }
+  }
+}

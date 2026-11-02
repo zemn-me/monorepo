@@ -1,13 +1,16 @@
-import immutable from 'immutable';
-import * as action from 'project/cultist/action';
-import * as element from 'project/cultist/element';
-import * as state from 'project/cultist/state';
+import * as immutable from 'immutable';
+
+import * as action from '#root/project/cultist/action.js';
+import * as element from '#root/project/cultist/element.js';
+import * as state from '#root/project/cultist/state/index.js';
 
 const cultist = {
 	state,
 	action,
 	element,
 } as const;
+
+import { describe, expect, test } from '@jest/globals';
 
 describe('decreaseQuantity', () => {
 	test('stacked', () => {
@@ -17,11 +20,9 @@ describe('decreaseQuantity', () => {
 			}),
 		});
 
-		const [[, el]] = cultist.action.decreaseQuantityBy(
-			'money',
-			elements,
-			5
-		);
+		const [a] = cultist.action.decreaseQuantityBy('money', elements, 5);
+
+		const [, el] = a!;
 
 		expect(el.quantity).toEqual(5);
 		expect(el.elementId).toEqual('money');

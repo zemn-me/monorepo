@@ -1,0 +1,25 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "buildozer",
+    actual = "@com_github_bazelbuild_buildtools//buildozer",
+    visibility = ["//:__subpackages__"],
+)
+
+sh_test(
+    name = "smoke",
+    srcs = ["smoke.sh"],
+    data = [":buildozer"],
+    env = {
+        "BUILDOZER_BINARY": "$(rlocationpath :buildozer)",
+    },
+    deps = [
+        "@rules_shell//shell/runfiles",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1766909693182808423"
+        ],
+        "editableUntil": "2024-03-10T20:31:13.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "kepe ✨",
+          "screen_name": "kepe__",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "997132361795080193",
+          "id": "997132361795080193"
+        },
+        {
+          "name": "Freya Holmér",
+          "screen_name": "FreyaHolmer",
+          "indices": [
+            "8",
+            "20"
+          ],
+          "id_str": "224130611",
+          "id": "224130611"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "160"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1766814573435228225",
+    "id_str": "1766909693182808423",
+    "in_reply_to_user_id": "997132361795080193",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1766909693182808423",
+    "in_reply_to_status_id": "1766814573435228225",
+    "created_at": "Sun Mar 10 19:31:13 +0000 2024",
+    "favorited": false,
+    "full_text": "@kepe__ @FreyaHolmer yeah this is the issue. if ‘as boolean’ did a typecast at runtime, it would break the typescript promise of compiling to regular javascript",
+    "lang": "en",
+    "in_reply_to_screen_name": "kepe__",
+    "in_reply_to_user_id_str": "997132361795080193"
+  }
+}

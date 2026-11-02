@@ -1,0 +1,174 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1125747250397831169"
+        ],
+        "editableUntil": "2019-05-07T14:00:34.524Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Nick Bourdakos",
+          "screen_name": "bourdakos1",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "879767428141531136",
+          "id": "879767428141531136"
+        },
+        {
+          "name": "TensorFlow",
+          "screen_name": "TensorFlow",
+          "indices": [
+            "61",
+            "72"
+          ],
+          "id_str": "254107028",
+          "id": "254107028"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bourdakos1/status/1125436388026060801/video/1",
+          "source_status_id": "1125436388026060801",
+          "indices": [
+            "95",
+            "118"
+          ],
+          "url": "https://t.co/mP0RDsPHMd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1125435585957593090/pu/img/CIOLEpnHKkHGCm7k.jpg",
+          "id_str": "1125435585957593090",
+          "source_user_id": "879767428141531136",
+          "id": "1125435585957593090",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1125435585957593090/pu/img/CIOLEpnHKkHGCm7k.jpg",
+          "source_user_id_str": "879767428141531136",
+          "sizes": {
+            "large": {
+              "w": "780",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "628",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "780",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1125436388026060801",
+          "display_url": "pic.twitter.com/mP0RDsPHMd"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "118"
+    ],
+    "favorite_count": "0",
+    "id_str": "1125747250397831169",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1125747250397831169",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 07 13:00:34 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @bourdakos1: Tried to do some simple emoji detection with @tensorflow.js\nWhat do you think? https://t.co/mP0RDsPHMd",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bourdakos1/status/1125436388026060801/video/1",
+          "source_status_id": "1125436388026060801",
+          "indices": [
+            "95",
+            "118"
+          ],
+          "url": "https://t.co/mP0RDsPHMd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1125435585957593090/pu/img/CIOLEpnHKkHGCm7k.jpg",
+          "id_str": "1125435585957593090",
+          "video_info": {
+            "aspect_ratio": [
+              "13",
+              "12"
+            ],
+            "duration_millis": "19263",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1125435585957593090/pu/vid/780x720/RGtlch3e1Lfmi-AN.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1125435585957593090/pu/vid/292x270/Q9zX5dwRwO0-sAH8.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1125435585957593090/pu/vid/390x360/-PUL3HACsRkSjM8h.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1125435585957593090/pu/pl/B1xM0zSjogc6-HXe.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "879767428141531136",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1125435585957593090",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1125435585957593090/pu/img/CIOLEpnHKkHGCm7k.jpg",
+          "source_user_id_str": "879767428141531136",
+          "sizes": {
+            "large": {
+              "w": "780",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "628",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "780",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1125436388026060801",
+          "display_url": "pic.twitter.com/mP0RDsPHMd"
+        }
+      ]
+    }
+  }
+}

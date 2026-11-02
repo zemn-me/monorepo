@@ -1,0 +1,22 @@
+/* biome-ignore-all lint/correctness/noRestrictedElements: this module intentionally uses restricted elements */
+'use client';
+import { forwardRef } from 'react';
+
+import { useMediaQuery } from '#root/ts/react/useMediaQuery/useMediaQuery.js';
+
+type BaseVideoProps = React.JSX.IntrinsicElements['video'];
+
+export type VideoProps = BaseVideoProps;
+
+export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
+	props: VideoProps,
+	ref
+) {
+	const prefersReducedMotion = useMediaQuery(
+		'(prefers-reduced-motion: reduce)'
+	);
+
+	const autoPlay = !prefersReducedMotion && props.autoPlay;
+
+	return <video ref={ref} {...{ ...props, autoPlay: autoPlay }} />;
+});

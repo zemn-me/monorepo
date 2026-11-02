@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1363905509351452680"
+        ],
+        "editableUntil": "2021-02-22T18:36:28.225Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "cait jr",
+          "screen_name": "kittynouveau",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1139254483962257409",
+          "id": "1139254483962257409"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kittynouveau/status/1363756006501736448/video/1",
+          "source_status_id": "1363756006501736448",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/QAIiWDlsVK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1363755972016111620/pu/img/TPN9hd2OkeC4sceB.jpg",
+          "id_str": "1363755972016111620",
+          "source_user_id": "1139254483962257409",
+          "id": "1363755972016111620",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1363755972016111620/pu/img/TPN9hd2OkeC4sceB.jpg",
+          "source_user_id_str": "1139254483962257409",
+          "sizes": {
+            "small": {
+              "w": "344",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "360",
+              "h": "712",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "360",
+              "h": "712",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1363756006501736448",
+          "display_url": "pic.twitter.com/QAIiWDlsVK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "53"
+    ],
+    "favorite_count": "0",
+    "id_str": "1363905509351452680",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1363905509351452680",
+    "possibly_sensitive": false,
+    "created_at": "Mon Feb 22 17:36:28 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @kittynouveau: my doodness https://t.co/QAIiWDlsVK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kittynouveau/status/1363756006501736448/video/1",
+          "source_status_id": "1363756006501736448",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/QAIiWDlsVK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1363755972016111620/pu/img/TPN9hd2OkeC4sceB.jpg",
+          "id_str": "1363755972016111620",
+          "video_info": {
+            "aspect_ratio": [
+              "45",
+              "89"
+            ],
+            "duration_millis": "15500",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1363755972016111620/pu/vid/320x632/gUWBYBMrKjJDdd7Z.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1363755972016111620/pu/vid/360x712/8CyhIKtPU33-SVHf.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1363755972016111620/pu/pl/P8tq-L6J2fI58aJh.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1139254483962257409",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1363755972016111620",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1363755972016111620/pu/img/TPN9hd2OkeC4sceB.jpg",
+          "source_user_id_str": "1139254483962257409",
+          "sizes": {
+            "small": {
+              "w": "344",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "360",
+              "h": "712",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "360",
+              "h": "712",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1363756006501736448",
+          "display_url": "pic.twitter.com/QAIiWDlsVK"
+        }
+      ]
+    }
+  }
+}

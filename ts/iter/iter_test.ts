@@ -1,4 +1,14 @@
-import * as iter from 'ts/iter';
+import { describe, expect, it, test } from '@jest/globals';
+
+import * as iter from '#root/ts/iter/index.js';
+
+describe('flatten', () => {
+	test('simple', () => {
+		expect([...iter.flatten([[1], [2, 2], [3, 3, 3]])]).toEqual([
+			1, 2, 2, 3, 3, 3,
+		]);
+	});
+});
 
 describe('reduce', () => {
 	test('sum', () => {

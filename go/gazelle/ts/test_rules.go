@@ -1,0 +1,70 @@
+package ts
+
+import (
+	"path"
+	"strings"
+
+	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/bazelbuild/bazel-gazelle/rule"
+)
+
+const testMainDepKey = "typescript:test_main_dep"
+
+type testRuleConfig struct {
+	mainName   string
+	srcs       []string
+	deps       depSet
+	needsJsdom bool
+}
+
+func (cfg testRuleConfig) hasTests() bool {
+	return len(cfg.srcs) > 0
+}
+
+func (cfg testRuleConfig) buildRules(args language.GenerateArgs, gen *[]*rule.Rule, imports *[]interface{}) {
+	if !cfg.hasTests() {
+		return
+	}
+
+	var testJS []string
+	for _, tf := range cfg.srcs {
+		testJS = append(testJS, strings.TrimSuffix(tf, path.Ext(tf))+".js")
+	}
+
+	testProjectName := cfg.mainName + "_tests"
+	testName := "tests"
+	if existingName, ok, multiple := findExistingJestTestName(args); multiple {
+		return
+	} else if ok {
+		testName = existingName
+	}
+	j := rule.NewRule("jest_test", testName)
+	j.SetAttr("srcs", testJS)
+	j.SetAttr("deps", []string{":" + testProjectName})
+	if cfg.needsJsdom {
+		j.SetAttr("jsdom", true)
+	}
+	j.SetAttr("visibility", []string{"//:__subpackages__"})
+	*gen = append(*gen, j)
+	*imports = append(*imports, nil)
+}
+
+func findExistingJestTestName(args language.GenerateArgs) (string, bool, bool) {
+	if args.File == nil {
+		return "", false, false
+	}
+	var existingName string
+	for _, r := range args.File.Rules {
+		if r.Kind() != "jest_test" {
+			continue
+		}
+		if existingName != "" {
+			return "", false, true
+		}
+		existingName = r.Name()
+	}
+	if existingName == "" {
+		return "", false, false
+	}
+	return existingName, true, false
+}

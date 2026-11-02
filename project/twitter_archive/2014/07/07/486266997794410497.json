@@ -1,0 +1,56 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "486266997794410497"
+        ],
+        "editableUntil": "2014-07-07T22:54:21.335Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mike West",
+          "screen_name": "mikewest",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "63163",
+          "id": "63163"
+        },
+        {
+          "name": "Egor Homakov",
+          "screen_name": "homakov",
+          "indices": [
+            "14",
+            "22"
+          ],
+          "id_str": "86890115",
+          "id": "86890115"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "486266997794410497",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "486266997794410497",
+    "created_at": "Mon Jul 07 21:54:21 +0000 2014",
+    "favorited": false,
+    "full_text": "RT @mikewest: @homakov: We made some changes to CSP2 to allow authors to mitigate; specifically, we'll be sending a header when CSP is acti…",
+    "lang": "en"
+  }
+}

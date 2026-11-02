@@ -1,11 +1,17 @@
-interface ReadonlyArrayOfLength<T, I extends number> extends ReadonlyArray<T> {
-	length: I;
+import { Tuple } from '#root/ts/tuple.js';
+
+export type Vector<I extends number = number, T = number> = Tuple<T, I>;
+
+export function magnitude(v: Vector): number {
+	return Math.sqrt(sum(v.map(v => v ** 2)));
 }
 
-export interface Vector<I extends number = number, T = number>
-	extends ReadonlyArrayOfLength<T, I> {
-	length: I;
+export function unit<N extends number>(v: Vector<N>): Vector<N> {
+	const mag = magnitude(v);
+	return map(v, x => x / mag);
 }
+
+export const normalise = unit;
 
 /**
  * Map a Vector, returning a new Vector.
@@ -14,7 +20,7 @@ export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
 ) => Vector<I, U> = (vec, c) =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	vec.map(c as any) as any;
 
 /**
@@ -37,23 +43,23 @@ export const imap: <T, U>(
 export const reverse: <I extends number, T>(v: Vector<I, T>) => Iterable<T> =
 	function* (v) {
 		for (let i = 0; i < v.length; i++) {
-			yield v[v.length - i - 1];
+			yield v[v.length - i - 1]!;
 		}
 	};
 
 export const as: <T, L extends number>(
 	v: readonly T[] & { length: L }
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 ) => Vector<L, T> = v => v as any;
 
-export const New: <N extends number>(n: number) => Vector<N, undefined> = n =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-	[...Array(n)] as any as Vector<any, undefined>;
+export function New<N extends number>(length: number): Vector<N, unknown> {
+	return [...Array(length)] as Vector<N, unknown>;
+}
 
 export const add: <I extends number>(
 	v1: Vector<I>,
 	v2: Vector<I>
-) => Vector<I> = (v1, v2) => map(v1, (v, i) => v + v2[i]);
+) => Vector<I> = (v1, v2) => map(v1, (v, i) => v + v2[i]!);
 
 export const mul: <I extends number>(v1: number, v2: Vector<I>) => Vector<I> = (
 	v1,
@@ -80,7 +86,7 @@ const _zip: <T1, T2, T3>(
 	fb: T3
 ) => Iterable<[T1 | T3, T2 | T3]> = function* (v1, v2, fb) {
 	const [a, b] = [v1[Symbol.iterator](), v2[Symbol.iterator]()];
-	for (let i = 0; ; i++) {
+	for (;;) {
 		const [ar, br] = [a.next(), b.next()];
 		const left = ar.done ? fb : ar.value;
 		const right = br.done ? fb : br.value;
@@ -92,13 +98,17 @@ const _zip: <T1, T2, T3>(
 };
 export const zip: {
 	<T1, T2, L extends number>(
-		v1: ReadonlyArrayOfLength<T1, L>,
-		v2: ReadonlyArrayOfLength<T2, L>
+		v1: Vector<L, T1>,
+		v2: Vector<L, T2>
 	): Iterable<[T1, T2]>;
+	<T1, T2>(
+		v1: Iterable<T1>,
+		v2: Iterable<T2>
+	): Iterable<[T1 | undefined, T2 | undefined]>;
 	<T1, T2, T3>(
 		v1: Iterable<T1>,
 		v2: Iterable<T2>,
 		fb: T3
 	): Iterable<[T1 | T3, T2 | T3]>;
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 } = _zip as any;

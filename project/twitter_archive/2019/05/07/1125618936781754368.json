@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1125618936781754368"
+        ],
+        "editableUntil": "2019-05-07T05:30:42.174Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "otduet",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/otduet/status/1125390364691640321/video/1",
+          "source_status_id": "1125390364691640321",
+          "indices": [
+            "102",
+            "125"
+          ],
+          "url": "https://t.co/DZj63CHo8B",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1125388660747177984/pu/img/_TU_h7gZXIrUMs1Z.jpg",
+          "id_str": "1125388660747177984",
+          "source_user_id": "785481562418741248",
+          "id": "1125388660747177984",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1125388660747177984/pu/img/_TU_h7gZXIrUMs1Z.jpg",
+          "source_user_id_str": "785481562418741248",
+          "sizes": {
+            "large": {
+              "w": "500",
+              "h": "280",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "500",
+              "h": "280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "500",
+              "h": "280",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1125390364691640321",
+          "display_url": "pic.twitter.com/DZj63CHo8B"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "125"
+    ],
+    "favorite_count": "0",
+    "id_str": "1125618936781754368",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1125618936781754368",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 07 04:30:42 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @otduet: First attempt at removing cars off the roads with neural nets. Will have to dream harder. https://t.co/DZj63CHo8B",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/otduet/status/1125390364691640321/video/1",
+          "source_status_id": "1125390364691640321",
+          "indices": [
+            "102",
+            "125"
+          ],
+          "url": "https://t.co/DZj63CHo8B",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1125388660747177984/pu/img/_TU_h7gZXIrUMs1Z.jpg",
+          "id_str": "1125388660747177984",
+          "video_info": {
+            "aspect_ratio": [
+              "25",
+              "14"
+            ],
+            "duration_millis": "39054",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1125388660747177984/pu/vid/320x180/YaJETkqIkEFyzSA1.mp4?tag=9"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1125388660747177984/pu/vid/500x280/i_Hfiag_qxGBVkAE.mp4?tag=9"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1125388660747177984/pu/pl/zNuKGxPftCWRBPsg.m3u8?tag=9"
+              }
+            ]
+          },
+          "source_user_id": "785481562418741248",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1125388660747177984",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1125388660747177984/pu/img/_TU_h7gZXIrUMs1Z.jpg",
+          "source_user_id_str": "785481562418741248",
+          "sizes": {
+            "large": {
+              "w": "500",
+              "h": "280",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "500",
+              "h": "280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "500",
+              "h": "280",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1125390364691640321",
+          "display_url": "pic.twitter.com/DZj63CHo8B"
+        }
+      ]
+    }
+  }
+}

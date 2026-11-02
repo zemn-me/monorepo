@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1320403170795917314"
+        ],
+        "editableUntil": "2020-10-25T17:33:42.479Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1320402304848351235/video/1",
+          "source_status_id": "1320402304848351235",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/BjdwA6QABX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1320401289839259650/pu/img/xOts3pyheUXPEAfJ.jpg",
+          "id_str": "1320401289839259650",
+          "source_user_id": "2275883743",
+          "id": "1320401289839259650",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1320401289839259650/pu/img/xOts3pyheUXPEAfJ.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1320402304848351235",
+          "display_url": "pic.twitter.com/BjdwA6QABX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "103"
+    ],
+    "favorite_count": "0",
+    "id_str": "1320403170795917314",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1320403170795917314",
+    "possibly_sensitive": false,
+    "created_at": "Sun Oct 25 16:33:42 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Bringing you the best in chicken-based drama since just now. https://t.co/BjdwA6QABX",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1320402304848351235/video/1",
+          "source_status_id": "1320402304848351235",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/BjdwA6QABX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1320401289839259650/pu/img/xOts3pyheUXPEAfJ.jpg",
+          "id_str": "1320401289839259650",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "29700",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1320401289839259650/pu/vid/720x720/9aM0GV7eGq_KuxQe.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1320401289839259650/pu/vid/480x480/oiYTbVvh0NRNL1Zt.mp4?tag=10"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1320401289839259650/pu/vid/320x320/6PkiUczHPKXDhNWS.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1320401289839259650/pu/pl/MZKt6nnxwLCNRF2q.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1320401289839259650",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1320401289839259650/pu/img/xOts3pyheUXPEAfJ.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1320402304848351235",
+          "display_url": "pic.twitter.com/BjdwA6QABX"
+        }
+      ]
+    }
+  }
+}

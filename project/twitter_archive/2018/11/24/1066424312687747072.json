@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1066424312687747072"
+        ],
+        "editableUntil": "2018-11-24T21:12:24.007Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "CodeHitchHiker",
+          "screen_name": "CodeHitchHiker",
+          "indices": [
+            "0",
+            "15"
+          ],
+          "id_str": "1247640594375204865",
+          "id": "1247640594375204865"
+        },
+        {
+          "name": "Go",
+          "screen_name": "golang",
+          "indices": [
+            "16",
+            "23"
+          ],
+          "id_str": "113419064",
+          "id": "113419064"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/Ii7iPo8EGb",
+          "expanded_url": "https://pastebin.com/8JMQ9iTQ",
+          "display_url": "pastebin.com/8JMQ9iTQ",
+          "indices": [
+            "45",
+            "68"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "217"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1066410050204381185",
+    "id_str": "1066424312687747072",
+    "in_reply_to_user_id": "15790639",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1066424312687747072",
+    "in_reply_to_status_id": "1066410050204381185",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 24 20:12:24 +0000 2018",
+    "favorited": false,
+    "full_text": "@codehitchhiker @golang Here's what I meant: https://t.co/Ii7iPo8EGb not sure how your code works so it might not actually work. Not that deep, just a suggestion. your code goes to indent depth = 6 and mine goes to 4.",
+    "lang": "en",
+    "in_reply_to_screen_name": "cherthedev",
+    "in_reply_to_user_id_str": "15790639"
+  }
+}

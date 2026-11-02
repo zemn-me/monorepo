@@ -26,11 +26,11 @@ with open(args.to_bump_out, mode='w', encoding='utf-8') as f:
     f.write(str(number+1))
 
 # Once the version has been bumped, generate the new version bump file.
-if args.lockfile_build_label != None and args.lockfile_build_rootpath != None and args.lockfile_out_rootpath != None:
+if args.lockfile_build_label is not None and args.lockfile_build_rootpath is not None and args.lockfile_out_rootpath is not None:
     subprocess.run(["bazelisk", "build", args.lockfile_build_label])
 
     # Copy the newly created lockfile across
     shutil.copyfile(
-        os.path.join("dist", "bin", args.lockfile_build_rootpath), 
+        os.path.join("dist", "bin", args.lockfile_build_rootpath),
         args.lockfile_out_rootpath
     )

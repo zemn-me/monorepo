@@ -1,3 +1,5 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -48,7 +50,9 @@ ts_project(
     srcs = ["save_test.ts"],
     deps = [
         ":save",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//project/cultist/example",
     ],
 )
@@ -65,7 +69,9 @@ ts_project(
     deps = [
         "element",
         ":action",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/node",
         "//project/cultist/state",
     ],
 )
@@ -122,4 +128,15 @@ ts_project(
 ts_project(
     name = "save",
     srcs = ["save.ts"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "project_cultist",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

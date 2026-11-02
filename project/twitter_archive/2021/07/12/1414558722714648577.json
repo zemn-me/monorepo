@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1414558722714648577"
+        ],
+        "editableUntil": "2021-07-12T13:14:15.382Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "ゼン",
+          "screen_name": "Zen_guya",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "4651842432",
+          "id": "4651842432"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zen_guya/status/1414109732231520257/video/1",
+          "source_status_id": "1414109732231520257",
+          "indices": [
+            "17",
+            "40"
+          ],
+          "url": "https://t.co/oqpvgzsyDb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1414109597627916288/pu/img/WNFMuBK9FTKYDPsv.jpg",
+          "id_str": "1414109597627916288",
+          "source_user_id": "4651842432",
+          "id": "1414109597627916288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1414109597627916288/pu/img/WNFMuBK9FTKYDPsv.jpg",
+          "source_user_id_str": "4651842432",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1414109732231520257",
+          "display_url": "pic.twitter.com/oqpvgzsyDb"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "40"
+    ],
+    "favorite_count": "0",
+    "id_str": "1414558722714648577",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1414558722714648577",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jul 12 12:14:15 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @Zen_guya: 威嚇 https://t.co/oqpvgzsyDb",
+    "lang": "zh",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zen_guya/status/1414109732231520257/video/1",
+          "source_status_id": "1414109732231520257",
+          "indices": [
+            "17",
+            "40"
+          ],
+          "url": "https://t.co/oqpvgzsyDb",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1414109597627916288/pu/img/WNFMuBK9FTKYDPsv.jpg",
+          "id_str": "1414109597627916288",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "16417",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1414109597627916288/pu/vid/480x270/YrEqlI9KyGBBxnbv.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1414109597627916288/pu/pl/kVAQ6zxNxkjWZXxF.m3u8?tag=12&v=cfc"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1414109597627916288/pu/vid/1280x720/mFDeI8Fdn8zFS2z0.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1414109597627916288/pu/vid/640x360/x_B9wCZDXM4LsrYB.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "4651842432",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1414109597627916288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1414109597627916288/pu/img/WNFMuBK9FTKYDPsv.jpg",
+          "source_user_id_str": "4651842432",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1414109732231520257",
+          "display_url": "pic.twitter.com/oqpvgzsyDb"
+        }
+      ]
+    }
+  }
+}

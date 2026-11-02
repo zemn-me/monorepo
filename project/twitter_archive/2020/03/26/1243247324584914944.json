@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1243247324584914944"
+        ],
+        "editableUntil": "2020-03-26T19:43:55.256Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Holly Graceful",
+          "screen_name": "HollyGraceful",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "3218740888",
+          "id": "3218740888"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/HollyGraceful/status/1243245586326990848/video/1",
+          "source_status_id": "1243245586326990848",
+          "indices": [
+            "81",
+            "104"
+          ],
+          "url": "https://t.co/Jn6sLBh6Bl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1243245343791288321/pu/img/WBIDQXFM5ONLmf3r.jpg",
+          "id_str": "1243245343791288321",
+          "source_user_id": "3218740888",
+          "id": "1243245343791288321",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1243245343791288321/pu/img/WBIDQXFM5ONLmf3r.jpg",
+          "source_user_id_str": "3218740888",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1243245586326990848",
+          "display_url": "pic.twitter.com/Jn6sLBh6Bl"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "104"
+    ],
+    "favorite_count": "0",
+    "id_str": "1243247324584914944",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1243247324584914944",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 26 18:43:55 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @HollyGraceful: Hedgehog hardware, but plot twist:\nIt’s running cat software. https://t.co/Jn6sLBh6Bl",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/HollyGraceful/status/1243245586326990848/video/1",
+          "source_status_id": "1243245586326990848",
+          "indices": [
+            "81",
+            "104"
+          ],
+          "url": "https://t.co/Jn6sLBh6Bl",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1243245343791288321/pu/img/WBIDQXFM5ONLmf3r.jpg",
+          "id_str": "1243245343791288321",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "42238",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243245343791288321/pu/vid/480x270/Z1RffH1mddtO9TIB.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1243245343791288321/pu/pl/GkiNjugI44ufotNs.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243245343791288321/pu/vid/640x360/j-aazp3DNGxXcwOG.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1243245343791288321/pu/vid/1280x720/wdiPChnYY7EaItOP.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3218740888",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1243245343791288321",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1243245343791288321/pu/img/WBIDQXFM5ONLmf3r.jpg",
+          "source_user_id_str": "3218740888",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1243245586326990848",
+          "display_url": "pic.twitter.com/Jn6sLBh6Bl"
+        }
+      ]
+    }
+  }
+}

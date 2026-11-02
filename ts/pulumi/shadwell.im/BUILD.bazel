@@ -1,0 +1,35 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+ts_project(
+    name = "shadwell.im",
+    srcs = ["index.ts"],
+    data = [
+        "//project/im/shadwell/anna:remix",
+        "//project/im/shadwell/kate:remix",
+        "//project/im/shadwell/lucy:remix",
+        "//project/im/shadwell/luke:remix",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//project/me/zemn/bio",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/lib/website",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)

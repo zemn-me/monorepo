@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1073180621500022787"
+        ],
+        "editableUntil": "2018-12-13T12:39:33.554Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "MachinePix",
+          "screen_name": "MachinePix",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "2444425802",
+          "id": "2444425802"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MachinePix/status/1072934116360744960/video/1",
+          "source_status_id": "1072934116360744960",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/TixNb0mI3x",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1072934071922233345/pu/img/pe6Up5equW86702e.jpg",
+          "id_str": "1072934071922233345",
+          "source_user_id": "2444425802",
+          "id": "1072934071922233345",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1072934071922233345/pu/img/pe6Up5equW86702e.jpg",
+          "source_user_id_str": "2444425802",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1072934116360744960",
+          "display_url": "pic.twitter.com/TixNb0mI3x"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "62"
+    ],
+    "favorite_count": "0",
+    "id_str": "1073180621500022787",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1073180621500022787",
+    "possibly_sensitive": false,
+    "created_at": "Thu Dec 13 11:39:33 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @MachinePix: Chain bending machine. https://t.co/TixNb0mI3x",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MachinePix/status/1072934116360744960/video/1",
+          "source_status_id": "1072934116360744960",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/TixNb0mI3x",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1072934071922233345/pu/img/pe6Up5equW86702e.jpg",
+          "id_str": "1072934071922233345",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "59033",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1072934071922233345/pu/pl/_nG2GHadaPhQ-0fA.m3u8?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1072934071922233345/pu/vid/480x480/hX9z-LZpyL6quLJ-.mp4?tag=6"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1072934071922233345/pu/vid/320x320/u1wDPgfEZ5jyQ2H1.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "2444425802",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1072934071922233345",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1072934071922233345/pu/img/pe6Up5equW86702e.jpg",
+          "source_user_id_str": "2444425802",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1072934116360744960",
+          "display_url": "pic.twitter.com/TixNb0mI3x"
+        }
+      ]
+    }
+  }
+}

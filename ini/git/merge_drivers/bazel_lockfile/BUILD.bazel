@@ -1,0 +1,30 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library")
+
+# keep
+py_binary(
+    name = "merge_driver",
+    srcs = ["merge_driver.py"],
+    data = [
+        "bazel-lockfile-merge.jq",
+        "//bin/host/gojq",
+    ],
+    env = {
+        "JQ_BINARY": "$(execpath //bin/host/gojq)",
+        "JQ_SCRIPT": "$(execpath :bazel-lockfile-merge.jq)",
+    },
+    visibility = [
+        "//ini/sl/merge_tools/bazel_lockfile:__subpackages__",
+    ],
+)
+
+py_library(
+    name = "bazel_lockfile",
+    srcs = ["merge_driver.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1059197178525057024"
+        ],
+        "editableUntil": "2018-11-04T22:34:20.949Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Gareth Lewin",
+          "screen_name": "garethlewin",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "14195214",
+          "id": "14195214"
+        },
+        {
+          "name": "Fugi",
+          "screen_name": "Fugiman",
+          "indices": [
+            "13",
+            "21"
+          ],
+          "id_str": "18919799",
+          "id": "18919799"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/bPplKjfCws",
+          "expanded_url": "https://blog.golang.org/error-handling-and-go",
+          "display_url": "blog.golang.org/error-handling…",
+          "indices": [
+            "206",
+            "229"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "229"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1059196875708874752",
+    "id_str": "1059197178525057024",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1059197178525057024",
+    "in_reply_to_status_id": "1059196875708874752",
+    "possibly_sensitive": false,
+    "created_at": "Sun Nov 04 21:34:20 +0000 2018",
+    "favorited": false,
+    "full_text": "@garethlewin @Fugiman 'it doesn't fit the standard middleware form defined by goji' i dont consider a very strong argument. Come up with your own middleware forms like in the http error handling segment of https://t.co/bPplKjfCws",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

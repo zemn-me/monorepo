@@ -1,0 +1,44 @@
+package jsonc_testdata
+
+const Example2 = `{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"module": "preserve",
+		"moduleResolution": "bundler",
+		"target": "es2020",
+		"strictFunctionTypes": true,
+		"esModuleInterop": true,
+		"strict": true,
+		"jsx": "react-jsx",
+		"resolveJsonModule": true,
+		"noUncheckedIndexedAccess": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"declaration": true,
+		"noImplicitOverride": true,
+		"forceConsistentCasingInFileNames": true,
+		"downlevelIteration": true,
+		"allowJs": true,
+		"declarationMap": true,
+		"lib": [
+			"DOM",
+			"ESNext"
+		],
+		"baseUrl": ".",
+		"paths": {
+			"#root/*": [
+				"*",
+				"dist/bin/*"
+			]
+		}
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"external"
+	]
+}
+`
+
+const Example2_Out = Example2

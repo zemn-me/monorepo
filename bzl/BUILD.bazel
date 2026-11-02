@@ -1,32 +1,48 @@
-load("@npm//:eslint/package_json.bzl", "bin")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load(":ubuntu_fallback_test.bzl", "ubuntu_fallback_test_suite")
 
-bin.eslint_binary(
-    name = "eslint",
-)
+exports_files([
+    "bazel_watcher_proto_rule.patch",
+    "buildifier_remote_runfiles.patch",
+    "curl_sys_link_curl.patch",
+    "gopls_x_tools.patch",
+    "pulumi_typescript5.patch",
+    "rules_itest_http_timeout.patch",
+    "rules_distroless_ubuntu_fallback.patch",
+    "rules_python_installer.patch",
+])
 
 sh_binary(
-    name = "affected_files",
+    name = "run_all_affected_tests",
     srcs = ["run_affected_tests.sh"],
 )
 
-sh_binary(
-    name = "fix",
-    srcs = ["fix.sh"],
-    data = [
-        ":eslint",
-        "//:buildifier",
-        "//css/lint",
-        "@go_sdk//:bin/gofmt",
-    ],
-    env = {
-        "FIX_CSS": "$(rootpath //css/lint)",
-        "FIX_BAZEL": "$(rootpath //:buildifier)",
-        "FIX_GO": "$(rootpath @go_sdk//:bin/gofmt)",
-        "FIX_JS": "$(location :eslint)",
-        "BAZEL_BINDIR": ".",
-    },
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "pip_requirements_test.bzl",
+        "rules.bzl",
+        "show_all_outputs.bzl",
+        "ubuntu_fallback_test.bzl",
     ],
 )
+
+sh_test(
+    name = "buildifier_remote_runfiles_test",
+    size = "small",
+    srcs = ["buildifier_remote_runfiles_test.sh"],
+    data = [
+        "@com_github_bazelbuild_buildtools//buildifier",
+        "@com_github_bazelbuild_buildtools//buildifier:runner.bash.template",
+    ],
+    env = {
+        "BUILDIFIER": "$(rlocationpath @com_github_bazelbuild_buildtools//buildifier)",
+        "RUNNER_TEMPLATE": "$(rlocationpath @com_github_bazelbuild_buildtools//buildifier:runner.bash.template)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
+ubuntu_fallback_test_suite(name = "ubuntu_fallback_tests")

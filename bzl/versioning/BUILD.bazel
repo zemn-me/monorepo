@@ -1,6 +1,41 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
 exports_files(
     [
         "bump.py",
+        "release.py",
     ],
     visibility = ["//visibility:public"],
+)
+
+py_binary(
+    name = "release",
+    srcs = ["release.py"],
+    visibility = ["//visibility:public"],
+    deps = [":versioning"],
+)
+
+py_test(
+    name = "release_test",
+    srcs = ["release_test.py"],
+    deps = [":versioning"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)
+
+py_library(
+    name = "versioning",
+    srcs = [
+        "bump.py",
+        "release.py",
+        "release_lib.py",
+    ],
+    visibility = ["//:__subpackages__"],
 )

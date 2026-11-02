@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "853426919517323264"
+        ],
+        "editableUntil": "2017-04-16T02:56:48.175Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Kevin",
+          "screen_name": "rohk_infosec",
+          "indices": [
+            "31",
+            "44"
+          ],
+          "id_str": "714975830917517312",
+          "id": "714975830917517312"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/PH9deNlLI8",
+          "expanded_url": "http://rohk.io/free-bits-on-twitch/",
+          "display_url": "rohk.io/free-bits-on-t…",
+          "indices": [
+            "46",
+            "69"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "69"
+    ],
+    "favorite_count": "25",
+    "id_str": "853426919517323264",
+    "truncated": false,
+    "retweet_count": "13",
+    "id": "853426919517323264",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 16 01:56:48 +0000 2017",
+    "favorited": false,
+    "full_text": "nice twitch vuln write up from @rohk_infosec  https://t.co/PH9deNlLI8",
+    "lang": "en"
+  }
+}

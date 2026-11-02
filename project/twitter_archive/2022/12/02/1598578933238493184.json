@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1598578933238493184"
+        ],
+        "editableUntil": "2022-12-02T07:54:52.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Gareth Lewin",
+          "screen_name": "garethlewin",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "14195214",
+          "id": "14195214"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "286"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1598578583605501952",
+    "id_str": "1598578933238493184",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1598578933238493184",
+    "in_reply_to_status_id": "1598578583605501952",
+    "created_at": "Fri Dec 02 07:24:52 +0000 2022",
+    "favorited": false,
+    "full_text": "@garethlewin i am not a cryptographer but i feel like on a non-cryptographic PRNG, re-rolling on a particular output could possibly cause the distribution of outputs to change i would guess as internal PRNG states would be biased toward being states following choice of forbidden values",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

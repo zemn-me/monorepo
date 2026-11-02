@@ -1,0 +1,13 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
+load("//bzl:rules.bzl", "bazel_lint")
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = ["@monorepo//:tsconfig"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

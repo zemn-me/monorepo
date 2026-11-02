@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1473705125692723216"
+        ],
+        "editableUntil": "2021-12-22T18:20:56.739Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Steve Ruiz",
+          "screen_name": "steveruizok",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "122246321",
+          "id": "122246321"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "275"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1473703044953124870",
+    "id_str": "1473705125692723216",
+    "in_reply_to_user_id": "122246321",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1473705125692723216",
+    "in_reply_to_status_id": "1473703044953124870",
+    "created_at": "Wed Dec 22 17:20:56 +0000 2021",
+    "favorited": false,
+    "full_text": "@steveruizok it’s because you use a generic that extends on the type, P. that P could be a type that has constraints that don’t apply to your interface, e.g. it might need an extra field – and so the type system cant prove that { numbers  } works for all possible values of P",
+    "lang": "en",
+    "in_reply_to_screen_name": "steveruizok",
+    "in_reply_to_user_id_str": "122246321"
+  }
+}

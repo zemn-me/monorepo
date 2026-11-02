@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "999415808504852480"
+        ],
+        "editableUntil": "2018-05-23T23:24:31.652Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Tim Soret",
+          "screen_name": "timsoret",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "14993649",
+          "id": "14993649"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/timsoret/status/998751421263699976/video/1",
+          "source_status_id": "998751421263699976",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/OScDPXd60S",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/998750604737495040/pu/img/1Jim1KZhMb7xkdyn.jpg",
+          "id_str": "998750604737495040",
+          "source_user_id": "14993649",
+          "id": "998750604737495040",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/998750604737495040/pu/img/1Jim1KZhMb7xkdyn.jpg",
+          "source_user_id_str": "14993649",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "998751421263699976",
+          "display_url": "pic.twitter.com/OScDPXd60S"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "100"
+    ],
+    "favorite_count": "0",
+    "id_str": "999415808504852480",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "999415808504852480",
+    "possibly_sensitive": false,
+    "created_at": "Wed May 23 22:24:31 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @timsoret: Insane animations in the opening of Ghost in the Shell on PS1. https://t.co/OScDPXd60S",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/timsoret/status/998751421263699976/video/1",
+          "source_status_id": "998751421263699976",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/OScDPXd60S",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/998750604737495040/pu/img/1Jim1KZhMb7xkdyn.jpg",
+          "id_str": "998750604737495040",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "97496",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/998750604737495040/pu/vid/960x720/A3g95jG-3RLHbVaW.mp4?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/998750604737495040/pu/vid/240x180/jaQ4_wa_1GfYlmTb.mp4?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/998750604737495040/pu/vid/480x360/dcBVgitxVqyTADQn.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/998750604737495040/pu/pl/wqe6VRM7IMrJiOII.m3u8?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "14993649",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "998750604737495040",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/998750604737495040/pu/img/1Jim1KZhMb7xkdyn.jpg",
+          "source_user_id_str": "14993649",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "998751421263699976",
+          "display_url": "pic.twitter.com/OScDPXd60S"
+        }
+      ]
+    }
+  }
+}

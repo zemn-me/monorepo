@@ -1,0 +1,13 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+
+md_files(
+    name = "github_versioning",
+    srcs = ["versioning.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

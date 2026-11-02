@@ -1,0 +1,43 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "592884656695021568"
+        ],
+        "editableUntil": "2015-04-28T03:54:52.077Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "90",
+            "97"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "138"
+    ],
+    "favorite_count": "0",
+    "id_str": "592884656695021568",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "592884656695021568",
+    "created_at": "Tue Apr 28 02:54:52 +0000 2015",
+    "favorited": false,
+    "full_text": "Because in canonical use the net/http package does not use Host headers, almost all naked #golang servers are vulnerable to DNS rebinding.",
+    "lang": "en"
+  }
+}

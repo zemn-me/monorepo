@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1461561600314273798"
+        ],
+        "editableUntil": "2021-11-19T06:06:54.673Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "d0nut 🦀",
+          "screen_name": "d0nutptr",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "2215109990",
+          "id": "2215109990"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "287"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1461560265674158083",
+    "id_str": "1461561600314273798",
+    "in_reply_to_user_id": "2215109990",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1461561600314273798",
+    "in_reply_to_status_id": "1461560265674158083",
+    "created_at": "Fri Nov 19 05:06:54 +0000 2021",
+    "favorited": false,
+    "full_text": "@d0nutptr it’s basically a set of stacked patches. its awesome. instead of a ‘branch’ and making a set of mostly immutable changes in sequence that get merged, you develop a series of whole *commits* each of which is a whole part of a feature with succeeding tests, which you can reorder",
+    "lang": "en",
+    "in_reply_to_screen_name": "d0nutptr",
+    "in_reply_to_user_id_str": "2215109990"
+  }
+}

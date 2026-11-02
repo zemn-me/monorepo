@@ -1,0 +1,29 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "react-query",
+    srcs = ["queryResult.ts"],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts/option",
+        "//ts/result",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["queryResult.ts"],
+    visibility = ["//:__subpackages__"],
+)

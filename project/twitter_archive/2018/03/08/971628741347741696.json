@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "971628741347741696"
+        ],
+        "editableUntil": "2018-03-08T07:08:38.583Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Jake Williams",
+          "screen_name": "MalwareJake",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "77346069",
+          "id": "77346069"
+        },
+        {
+          "name": "nite 0wl 🔑⬡",
+          "screen_name": "nite0wl",
+          "indices": [
+            "13",
+            "21"
+          ],
+          "id_str": "357870661",
+          "id": "357870661"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "274"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "971566666982330368",
+    "id_str": "971628741347741696",
+    "in_reply_to_user_id": "77346069",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "971628741347741696",
+    "in_reply_to_status_id": "971566666982330368",
+    "created_at": "Thu Mar 08 06:08:38 +0000 2018",
+    "favorited": false,
+    "full_text": "@MalwareJake @nite0wl alexa is a lot simpler than you think. there’s a very simple layer for detecting the wake word in a ring buffer. there’s a layer for parsing speech to text, and there’s a very simple set of configs (simpler than regex!) to map the text to functionality",
+    "lang": "en",
+    "in_reply_to_screen_name": "MalwareJake",
+    "in_reply_to_user_id_str": "77346069"
+  }
+}

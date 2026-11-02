@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1362937949441130496"
+        ],
+        "editableUntil": "2021-02-20T02:31:43.966Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Nate",
+          "screen_name": "n8gallagher",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "912849362",
+          "id": "912849362"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "144"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1362936869512646658",
+    "id_str": "1362937949441130496",
+    "in_reply_to_user_id": "912849362",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1362937949441130496",
+    "in_reply_to_status_id": "1362936869512646658",
+    "created_at": "Sat Feb 20 01:31:43 +0000 2021",
+    "favorited": false,
+    "full_text": "@n8gallagher the best way is probably just to load the json file as code, and spit the output into a textarea. Writing to disk is a massive pain",
+    "lang": "en",
+    "in_reply_to_screen_name": "n8gallagher",
+    "in_reply_to_user_id_str": "912849362"
+  }
+}

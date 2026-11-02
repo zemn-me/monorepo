@@ -1,15 +1,20 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
 
 ts_project(
     name = "link",
-    srcs = glob([
-        "*.ts",
-        "*.tsx",
-    ]),
+    srcs = glob(
+        [
+            "*.ts",
+            "*.tsx",
+        ],
+        allow_empty = True,
+    ),
     resolve_json_module = True,
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",
@@ -24,4 +29,9 @@ jest_test(
     srcs = ["link_test.js"],
     jsdom = True,
     deps = [":link"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

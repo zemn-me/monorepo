@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1043831258843893760"
+        ],
+        "editableUntil": "2018-09-23T12:55:40.212Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Yashar Ali 🐘",
+          "screen_name": "yashar",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "11744152",
+          "id": "11744152"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/yashar/status/1043328129064939522/video/1",
+          "source_status_id": "1043328129064939522",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/YE5XcLluBC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1043328034068160512/pu/img/W3qJj6dfjMOw9KqQ.jpg",
+          "id_str": "1043328034068160512",
+          "source_user_id": "11744152",
+          "id": "1043328034068160512",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1043328034068160512/pu/img/W3qJj6dfjMOw9KqQ.jpg",
+          "source_user_id_str": "11744152",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1043328129064939522",
+          "display_url": "pic.twitter.com/YE5XcLluBC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "59"
+    ],
+    "favorite_count": "0",
+    "id_str": "1043831258843893760",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1043831258843893760",
+    "possibly_sensitive": false,
+    "created_at": "Sun Sep 23 11:55:40 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @yashar: Holy cow this ad....wow https://t.co/YE5XcLluBC",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/yashar/status/1043328129064939522/video/1",
+          "source_status_id": "1043328129064939522",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/YE5XcLluBC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1043328034068160512/pu/img/W3qJj6dfjMOw9KqQ.jpg",
+          "id_str": "1043328034068160512",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "60060",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1043328034068160512/pu/vid/1280x720/OB1MMdPlFoDeBgZ7.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1043328034068160512/pu/vid/640x360/8zGuwp-0MbjiMInW.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1043328034068160512/pu/vid/320x180/FkDxTVbhxsuXvinV.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1043328034068160512/pu/pl/SegbOdiQQ1b6zuLo.m3u8?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "11744152",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1043328034068160512",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1043328034068160512/pu/img/W3qJj6dfjMOw9KqQ.jpg",
+          "source_user_id_str": "11744152",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1043328129064939522",
+          "display_url": "pic.twitter.com/YE5XcLluBC"
+        }
+      ]
+    }
+  }
+}

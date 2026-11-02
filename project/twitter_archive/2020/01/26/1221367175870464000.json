@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1221367175870464000"
+        ],
+        "editableUntil": "2020-01-26T10:40:01.289Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "豆柴くんちゃん",
+          "screen_name": "kunchan1011",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1202542070969204736",
+          "id": "1202542070969204736"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kunchan1011/status/1220949123517435905/video/1",
+          "source_status_id": "1220949123517435905",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/GT2wYjcFef",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1220949047780892678/pu/img/2UTyslJPGhTZB0BM.jpg",
+          "id_str": "1220949047780892678",
+          "source_user_id": "1202542070969204736",
+          "id": "1220949047780892678",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1220949047780892678/pu/img/2UTyslJPGhTZB0BM.jpg",
+          "source_user_id_str": "1202542070969204736",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1220949123517435905",
+          "display_url": "pic.twitter.com/GT2wYjcFef"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "53"
+    ],
+    "favorite_count": "0",
+    "id_str": "1221367175870464000",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1221367175870464000",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 26 09:40:01 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @kunchan1011: 両手を上げて困惑する犬。 https://t.co/GT2wYjcFef",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kunchan1011/status/1220949123517435905/video/1",
+          "source_status_id": "1220949123517435905",
+          "indices": [
+            "30",
+            "53"
+          ],
+          "url": "https://t.co/GT2wYjcFef",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1220949047780892678/pu/img/2UTyslJPGhTZB0BM.jpg",
+          "id_str": "1220949047780892678",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "20322",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1220949047780892678/pu/vid/640x360/SeMBn4hRDOrqQH7H.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1220949047780892678/pu/vid/480x270/3KCgUl7knvVYWf88.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1220949047780892678/pu/pl/mHQkiuZE-OVeSi7P.m3u8?tag=10&v=be9"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1220949047780892678/pu/vid/1280x720/DXekQ1IEUlROk8vG.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1202542070969204736",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1220949047780892678",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1220949047780892678/pu/img/2UTyslJPGhTZB0BM.jpg",
+          "source_user_id_str": "1202542070969204736",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1220949123517435905",
+          "display_url": "pic.twitter.com/GT2wYjcFef"
+        }
+      ]
+    }
+  }
+}

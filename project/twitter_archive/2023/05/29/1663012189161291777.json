@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1663012189161291777"
+        ],
+        "editableUntil": "2023-05-29T03:09:37.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "230"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1663012187840061440",
+    "id_str": "1663012189161291777",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1663012189161291777",
+    "in_reply_to_status_id": "1663012187840061440",
+    "created_at": "Mon May 29 02:39:37 +0000 2023",
+    "favorited": false,
+    "full_text": "terraform mitigates this kind of thing with 'plan', which an engineer can run with their own credentials and commit a manifest with a proven end state that should happen. pulumi is working toward this, but it's not there yet sadly",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1180730932191350784"
+        ],
+        "editableUntil": "2019-10-06T07:26:05.811Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "FooYa",
+          "screen_name": "iFooYa",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "137482245",
+          "id": "137482245"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/iFooYa/status/1180727538835972097/video/1",
+          "source_status_id": "1180727538835972097",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/uyC6dJZrHQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1180727433684586496/pu/img/5ubG5-IuRBIuuwrF.jpg",
+          "id_str": "1180727433684586496",
+          "source_user_id": "137482245",
+          "id": "1180727433684586496",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1180727433684586496/pu/img/5ubG5-IuRBIuuwrF.jpg",
+          "source_user_id_str": "137482245",
+          "sizes": {
+            "small": {
+              "w": "344",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "608",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "624",
+              "h": "1232",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1180727538835972097",
+          "display_url": "pic.twitter.com/uyC6dJZrHQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "51"
+    ],
+    "favorite_count": "0",
+    "id_str": "1180730932191350784",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1180730932191350784",
+    "possibly_sensitive": false,
+    "created_at": "Sun Oct 06 06:26:05 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @iFooYa: Another catfish https://t.co/uyC6dJZrHQ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/iFooYa/status/1180727538835972097/video/1",
+          "source_status_id": "1180727538835972097",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/uyC6dJZrHQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1180727433684586496/pu/img/5ubG5-IuRBIuuwrF.jpg",
+          "id_str": "1180727433684586496",
+          "video_info": {
+            "aspect_ratio": [
+              "39",
+              "77"
+            ],
+            "duration_millis": "45000",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1180727433684586496/pu/vid/624x1232/yMbkah6NORc6LIyq.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1180727433684586496/pu/pl/90QGCSu-anau6X9B.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1180727433684586496/pu/vid/360x710/DI51pPHW5rwpdbth.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1180727433684586496/pu/vid/320x630/_m42a1dMNQ3CJG6s.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "137482245",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1180727433684586496",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1180727433684586496/pu/img/5ubG5-IuRBIuuwrF.jpg",
+          "source_user_id_str": "137482245",
+          "sizes": {
+            "small": {
+              "w": "344",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "608",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "624",
+              "h": "1232",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1180727538835972097",
+          "display_url": "pic.twitter.com/uyC6dJZrHQ"
+        }
+      ]
+    }
+  }
+}

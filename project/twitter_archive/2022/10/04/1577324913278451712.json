@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1577324913278451712"
+        ],
+        "editableUntil": "2022-10-04T16:18:59.262Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "dani",
+          "screen_name": "kordeilogy",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1548902586",
+          "id": "1548902586"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kordeilogy/status/1577014484660469766/video/1",
+          "source_status_id": "1577014484660469766",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/FQOAPHgMV8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1577014254838116353/pu/img/MOEmPvyTKRFxXEBA.jpg",
+          "id_str": "1577014254838116353",
+          "source_user_id": "1548902586",
+          "id": "1577014254838116353",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1577014254838116353/pu/img/MOEmPvyTKRFxXEBA.jpg",
+          "source_user_id_str": "1548902586",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1577014484660469766",
+          "display_url": "pic.twitter.com/FQOAPHgMV8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1577324913278451712",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1577324913278451712",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 04 15:48:59 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @kordeilogy: This is extremely accurate https://t.co/FQOAPHgMV8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kordeilogy/status/1577014484660469766/video/1",
+          "source_status_id": "1577014484660469766",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/FQOAPHgMV8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1577014254838116353/pu/img/MOEmPvyTKRFxXEBA.jpg",
+          "id_str": "1577014254838116353",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "40880",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1577014254838116353/pu/vid/480x852/GwydqygUxDhTQgcH.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1577014254838116353/pu/pl/UgyMM8XxEMbgW1U9.m3u8?tag=12&v=02a"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1577014254838116353/pu/vid/320x568/72Sf40oXTheKqq2W.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1577014254838116353/pu/vid/576x1024/8S0kXAJR3tfh9Xm0.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1548902586",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1577014254838116353",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1577014254838116353/pu/img/MOEmPvyTKRFxXEBA.jpg",
+          "source_user_id_str": "1548902586",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1577014484660469766",
+          "display_url": "pic.twitter.com/FQOAPHgMV8"
+        }
+      ]
+    }
+  }
+}

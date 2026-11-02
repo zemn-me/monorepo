@@ -1,0 +1,254 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:best-practices", ":maintainLockFilesWeekly"],
+	"automerge": true,
+	"autodiscover": true,
+	"autodiscoverFilter": ["zemn-me/monorepo"],
+	"allowScripts": true,
+	"allowedUnsafeExecutions": ["bazelModDeps"],
+	"allowedCommands": ["^\\./sh/postUpgrade\\.sh$"],
+	"configMigration": true,
+	"platformAutomerge": true,
+	"platformCommit": "enabled",
+	"minimumReleaseAge": "3 days",
+	"prConcurrentLimit": 0,
+	"rollbackPrs": true,
+	"rangeStrategy": "pin",
+	"recreateWhen": "always",
+	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### v{{{release.version}}} \n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
+	"ignorePaths": ["**/monorepo/dist/**"],
+	"gitIgnoredAuthors": ["zemnmez+renovate@gmail.com"],
+	"customManagers": [
+		{
+			"customType": "regex",
+			"description": "Renovate directives",
+			"managerFilePatterns": [
+				"/^MODULE.bazel$/",
+				"/^WORKSPACE$/",
+				"/^sh/bin/bazel$/"
+			],
+			"matchStrings": [
+				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:python-version|golang-version|github-releases|github-tags|custom\\.[a-zA-Z0-9_.-]+))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)(?:\n#\\s*extractVersion\\s*=\\s*(?<extractVersion>.*))?\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
+			],
+			"datasourceTemplate": "{{{datasource}}}",
+			"currentValueTemplate": "{{{currentValue}}}",
+			"extractVersionTemplate": "{{{extractVersion}}}",
+			"versioningTemplate": "{{{versioning}}}",
+			"depNameTemplate": "{{{depName}}}"
+		},
+		{
+			"customType": "regex",
+			"description": "Renovate directives (git-refs digest)",
+			"managerFilePatterns": [
+				"/^MODULE.bazel$/",
+				"/^WORKSPACE$/",
+				"/^sh/bin/bazel$/"
+			],
+			"matchStrings": [
+				"#\\s*renovate:\\n#\\s*datasource\\s*=\\s*git-refs\\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\\n#\\s*depName\\s*=\\s*(?<depName>.*)\\n#\\s*refs-from\\s*=\\s*(?<refsFrom>.*)\\n[^=]+=\\s*\"(?<currentDigest>[^\"]*)\""
+			],
+			"datasourceTemplate": "git-refs",
+			"currentValueTemplate": "{{{refsFrom}}}",
+			"versioningTemplate": "{{{versioning}}}",
+			"packageNameTemplate": "{{{depName}}}",
+			"depNameTemplate": "{{{depName}}}"
+		},
+		{
+			"customType": "regex",
+			"description": "Minecraft Java server release embedded in the shared OCI image",
+			"managerFilePatterns": [
+				"/^project/me/zemn/minecraft/minecraft\\.env$/"
+			],
+			"matchStrings": ["(?:^|\\n)VERSION=(?<currentValue>[^\\s]+)"],
+			"datasourceTemplate": "custom.minecraft_java",
+			"depNameTemplate": "minecraft-java",
+			"versioningTemplate": "loose"
+		},
+		{
+			"customType": "regex",
+			"description": "Chrome for Testing browser and driver archives",
+			"managerFilePatterns": [
+				"/^MODULE.bazel$/"
+			],
+			"matchStrings": [
+				"https://storage.googleapis.com/chrome-for-testing-public/(?<currentValue>\\d+\\.\\d+\\.\\d+\\.\\d+)/"
+			],
+			"datasourceTemplate": "custom.chrome_stable",
+			"depNameTemplate": "chrome-for-testing",
+			"versioningTemplate": "loose"
+		}
+	],
+	"customDatasources": {
+		"johnvansickle_ffmpeg_release": {
+			"defaultRegistryUrlTemplate": "https://johnvansickle.com/ffmpeg/release-readme.txt",
+			"format": "plain"
+		},
+		"evermeet_ffmpeg_pub": {
+			"defaultRegistryUrlTemplate": "https://evermeet.cx/pub/ffmpeg/",
+			"format": "html"
+		},
+		"osxexperts_ffmpeg": {
+			"defaultRegistryUrlTemplate": "https://www.osxexperts.net/",
+			"format": "plain"
+		},
+		"minecraft_java": {
+			"defaultRegistryUrlTemplate": "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\": [versions[type = \"release\"].{\"version\": id, \"releaseTimestamp\": releaseTime}]}"
+			]
+		},
+		"chrome_stable": {
+			"defaultRegistryUrlTemplate": "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\": [{\"version\": channels.Stable.version}]}"
+			]
+		}
+	},
+	"packageRules": [
+		{
+			"matchDatasources": ["custom.johnvansickle_ffmpeg_release"],
+			"extractVersion": "^\\s*version:\\s*(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s*$",
+			"versioning": "loose"
+		},
+		{
+			"matchDatasources": ["custom.evermeet_ffmpeg_pub"],
+			"extractVersion": "^ffmpeg-(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\.zip$",
+			"versioning": "loose"
+		},
+		{
+			"matchDatasources": ["custom.osxexperts_ffmpeg"],
+			"extractVersion": "Download ffmpeg\\s+(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s+\\(Apple Silicon\\)",
+			"versioning": "loose"
+		},
+		{
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_oci"],
+			"allowedVersions": "!/1.8.0$/"
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"matchPackageNames": ["jlumbroso/free-disk-space"],
+			"versioning": "loose"
+		},
+		{
+			"matchManagers": ["npm"],
+			"matchPackageNames": ["twilio"],
+			"enabled": false
+		},
+		{
+			"description": "Let the gomod manager bump the go directive in go.mod",
+			"matchManagers": ["gomod"],
+			"matchDepNames": ["go"],
+			"matchDepTypes": ["golang"],
+			"rangeStrategy": "bump"
+		},
+		{
+			"description": "Use published upstream dates for the rules_oci release-age check",
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_oci"],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "bazel-contrib/rules_oci",
+			"extractVersion": "^v(?<version>.*)$"
+		},
+		{
+			"description": "Use published upstream dates for the rules_go release-age check",
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_go"],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "bazel-contrib/rules_go",
+			"extractVersion": "^v(?<version>.*)$"
+		},
+		{
+			"description": "Keep the Go SDK and both references to its Bazel build rules compatible",
+			"groupName": "Go toolchain",
+			"matchPackageNames": [
+				"go",
+				"github.com/bazelbuild/rules_go",
+				"bazel-contrib/rules_go",
+				"rules_go"
+			]
+		},
+		{
+			"description": "gopls imports x/tools internals, so update the two modules together",
+			"groupName": "Go language tools",
+			"matchManagers": ["gomod"],
+			"matchPackageNames": [
+				"golang.org/x/tools",
+				"golang.org/x/tools/gopls"
+			],
+			"minimumGroupSize": 2
+		},
+		{
+			"description": "Advance supported Python version floors without pinning transitive dependencies",
+			"matchManagers": ["pip-compile"],
+			"rangeStrategy": "bump"
+		},
+		{
+			"description": "Refresh generated Python locks as a unit",
+			"matchManagers": ["pip-compile"],
+			"matchDepTypes": ["indirect"],
+			"enabled": false
+		},
+		{
+			"matchManagers": [
+				"cargo",
+				"npm",
+				"bazel",
+				"custom.regex",
+				"gomod",
+				"pip-compile",
+				"pip_requirements",
+				"bazel",
+				"bazel-module",
+				"bazelisk"
+			],
+			"postUpgradeTasks": {
+				"commands": ["./sh/postUpgrade.sh"],
+				"executionMode": "branch",
+				"fileFilters": [
+					"Cargo.Bazel.lock",
+					"Cargo.toml",
+					"cargo-bazel-lock.json",
+					"**/*.ts",
+					"go.mod",
+					"MODULE.bazel",
+					"MODULE.bazel.lock",
+					"bzl/pnpm/integrity.json",
+					"gazelle_python.yaml",
+					"go.sum",
+					"pnpm-lock.yaml",
+					"requirements.txt",
+					"**/.release.lock",
+					"**/version/*",
+					"BUILD.bazel",
+					"**/BUILD.bazel"
+				],
+				"recreateWhen": "always"
+			}
+		},
+		{
+			"groupName": "pulumi_cli",
+			"matchPackageNames": ["/pulumi_cli_.*/"]
+		},
+		{
+			"description": "The Stable channel feed has no per-release timestamps",
+			"groupName": "Chrome for Testing",
+			"matchPackageNames": ["chrome-for-testing"],
+			"minimumReleaseAge": null
+		},
+		{
+			"description": "Keep the Bazel executable and downloaded Bazel source on the same release",
+			"groupName": "bazel",
+			"matchPackageNames": ["bazel", "bazelbuild/bazel"]
+		}
+	],
+	"rebaseWhen": "behind-base-branch",
+	"pip-compile": {
+		"managerFilePatterns": ["/^requirements\\.txt$/", "/^py/mitmproxy/requirements\\.txt$/"]
+	},
+	"pip_requirements": {
+		"enabled": false
+	}
+}

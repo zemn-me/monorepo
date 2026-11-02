@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1050428850335834113"
+        ],
+        "editableUntil": "2018-10-11T17:52:08.601Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Natalie",
+          "screen_name": "jbfan911",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "333664490",
+          "id": "333664490"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jbfan911/status/1050116116545228802/video/1",
+          "source_status_id": "1050116116545228802",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/dJcFg7pcyj",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1050116084492378112/pu/img/K1i4nWTlPdPuGkT9.jpg",
+          "id_str": "1050116084492378112",
+          "source_user_id": "333664490",
+          "id": "1050116084492378112",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1050116084492378112/pu/img/K1i4nWTlPdPuGkT9.jpg",
+          "source_user_id_str": "333664490",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1050116116545228802",
+          "display_url": "pic.twitter.com/dJcFg7pcyj"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "102"
+    ],
+    "favorite_count": "0",
+    "id_str": "1050428850335834113",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1050428850335834113",
+    "possibly_sensitive": false,
+    "created_at": "Thu Oct 11 16:52:08 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @jbfan911: happy world mental health day here’s me taking my antidepressant https://t.co/dJcFg7pcyj",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jbfan911/status/1050116116545228802/video/1",
+          "source_status_id": "1050116116545228802",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/dJcFg7pcyj",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1050116084492378112/pu/img/K1i4nWTlPdPuGkT9.jpg",
+          "id_str": "1050116084492378112",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "6365",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1050116084492378112/pu/vid/180x320/o9BAdv488MhNmZBj.mp4?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1050116084492378112/pu/vid/720x1280/fRadQQTMzB0pjU-k.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1050116084492378112/pu/pl/R9o5FVPTZaFfU-6g.m3u8?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1050116084492378112/pu/vid/360x640/ruecRlfSgKjKk-kd.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "333664490",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1050116084492378112",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1050116084492378112/pu/img/K1i4nWTlPdPuGkT9.jpg",
+          "source_user_id_str": "333664490",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1050116116545228802",
+          "display_url": "pic.twitter.com/dJcFg7pcyj"
+        }
+      ]
+    }
+  }
+}

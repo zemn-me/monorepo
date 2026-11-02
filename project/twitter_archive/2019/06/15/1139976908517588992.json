@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1139976908517588992"
+        ],
+        "editableUntil": "2019-06-15T20:24:09.394Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ben Yahr",
+          "screen_name": "benyahr",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "24996233",
+          "id": "24996233"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/benyahr/status/1139590816341667841/video/1",
+          "source_status_id": "1139590816341667841",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/Oc1NXzzXRT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1139589345688662017/pu/img/NejqrvvrLFSoV4SI.jpg",
+          "id_str": "1139589345688662017",
+          "source_user_id": "24996233",
+          "id": "1139589345688662017",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1139589345688662017/pu/img/NejqrvvrLFSoV4SI.jpg",
+          "source_user_id_str": "24996233",
+          "sizes": {
+            "medium": {
+              "w": "972",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "972",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "504",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1139590816341667841",
+          "display_url": "pic.twitter.com/Oc1NXzzXRT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "1139976908517588992",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1139976908517588992",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 15 19:24:09 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @benyahr: This is how I spent my afternoon. https://t.co/Oc1NXzzXRT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/benyahr/status/1139590816341667841/video/1",
+          "source_status_id": "1139590816341667841",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/Oc1NXzzXRT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1139589345688662017/pu/img/NejqrvvrLFSoV4SI.jpg",
+          "id_str": "1139589345688662017",
+          "video_info": {
+            "aspect_ratio": [
+              "27",
+              "20"
+            ],
+            "duration_millis": "128833",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1139589345688662017/pu/vid/364x270/t_SJrTP_bckHXbGm.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1139589345688662017/pu/vid/486x360/2chXyldw-7jav2J0.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1139589345688662017/pu/vid/972x720/mMLnCg98v9iHAOoR.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1139589345688662017/pu/pl/wxPWEv_uOzp1jHC5.m3u8?tag=10&v=db9"
+              }
+            ]
+          },
+          "source_user_id": "24996233",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1139589345688662017",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1139589345688662017/pu/img/NejqrvvrLFSoV4SI.jpg",
+          "source_user_id_str": "24996233",
+          "sizes": {
+            "medium": {
+              "w": "972",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "972",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "504",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1139590816341667841",
+          "display_url": "pic.twitter.com/Oc1NXzzXRT"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1398268456190025728"
+        ],
+        "editableUntil": "2021-05-28T14:22:33.184Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "midormeepo",
+          "screen_name": "midormeepo",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "2827020016",
+          "id": "2827020016"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/midormeepo/status/1398047201696288769/video/1",
+          "source_status_id": "1398047201696288769",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/aVDmzhfIit",
+          "media_url": "http://pbs.twimg.com/media/E2bcjGiWQAE88cG.jpg",
+          "id_str": "1398029070688993286",
+          "source_user_id": "2827020016",
+          "id": "1398029070688993286",
+          "media_url_https": "https://pbs.twimg.com/media/E2bcjGiWQAE88cG.jpg",
+          "source_user_id_str": "2827020016",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1398047201696288769",
+          "display_url": "pic.twitter.com/aVDmzhfIit"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "114"
+    ],
+    "favorite_count": "0",
+    "id_str": "1398268456190025728",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1398268456190025728",
+    "possibly_sensitive": false,
+    "created_at": "Fri May 28 13:22:33 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @midormeepo: it's pretty simple\n\nthere's puck, the dota 2 hero, and there's SUMAIL puck https://t.co/aVDmzhfIit",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/midormeepo/status/1398047201696288769/video/1",
+          "source_status_id": "1398047201696288769",
+          "indices": [
+            "91",
+            "114"
+          ],
+          "url": "https://t.co/aVDmzhfIit",
+          "media_url": "http://pbs.twimg.com/media/E2bcjGiWQAE88cG.jpg",
+          "id_str": "1398029070688993286",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "58383",
+            "variants": [
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1398029070688993286/vid/480x270/rRHEd_ylB1UanTgL.mp4?tag=14"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1398029070688993286/vid/1280x720/8Gz3DWV3NTKFtGEy.mp4?tag=14"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1398029070688993286/pl/Z17AZwzBuFPEk6jJ.m3u8?tag=14"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1398029070688993286/vid/640x360/NG88_Tt7krTOJXEM.mp4?tag=14"
+              }
+            ]
+          },
+          "source_user_id": "2827020016",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1398029070688993286",
+          "media_url_https": "https://pbs.twimg.com/media/E2bcjGiWQAE88cG.jpg",
+          "source_user_id_str": "2827020016",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1398047201696288769",
+          "display_url": "pic.twitter.com/aVDmzhfIit"
+        }
+      ]
+    }
+  }
+}

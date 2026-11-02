@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "743770071126937600"
+        ],
+        "editableUntil": "2016-06-17T12:39:38.193Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://tapbots.com/tweetbot\" rel=\"nofollow\">Tweetbot for iΟS</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "eevee 💨",
+          "screen_name": "eevee",
+          "indices": [
+            "0",
+            "6"
+          ],
+          "id_str": "14412937",
+          "id": "14412937"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "137"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "743377949731094532",
+    "id_str": "743770071126937600",
+    "in_reply_to_user_id": "14412937",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "743770071126937600",
+    "in_reply_to_status_id": "743377949731094532",
+    "created_at": "Fri Jun 17 11:39:38 +0000 2016",
+    "favorited": false,
+    "full_text": "@eevee oidc is actually p simple. It’s oauth + jwt with more emphasis on using state / nonce for replay protection\n\nAll oauth specs are 🗑",
+    "lang": "en",
+    "in_reply_to_screen_name": "eevee",
+    "in_reply_to_user_id_str": "14412937"
+  }
+}

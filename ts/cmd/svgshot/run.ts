@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 
 /**
  * @fileoverview The main entry point for svgshot.
@@ -8,7 +9,7 @@
  * I wouldn't worry about it too much.
  */
 
-import main from './lib';
+import main from '#root/ts/cmd/svgshot/lib.js';
 
 main()
 	.then(() => process.exit(0))

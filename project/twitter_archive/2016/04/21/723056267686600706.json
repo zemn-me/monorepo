@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "723056267686600706"
+        ],
+        "editableUntil": "2016-04-21T08:50:22.609Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mike West",
+          "screen_name": "mikewest",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "63163",
+          "id": "63163"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/6VUGu0H1gc",
+          "expanded_url": "https://tools.ietf.org/html/draft-ietf-httpbis-cookie-prefixes-00#section-3.2",
+          "display_url": "tools.ietf.org/html/draft-iet…",
+          "indices": [
+            "81",
+            "104"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "135"
+    ],
+    "favorite_count": "0",
+    "id_str": "723056267686600706",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "723056267686600706",
+    "possibly_sensitive": false,
+    "created_at": "Thu Apr 21 07:50:22 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @mikewest: Dropbox is serving `__Host-` prefixed cookies for CSRF protection! https://t.co/6VUGu0H1gc First I've see in the wild. :)",
+    "lang": "en"
+  }
+}

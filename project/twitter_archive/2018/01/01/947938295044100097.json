@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "947938295044100097"
+        ],
+        "editableUntil": "2018-01-01T22:11:16.037Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Louie Zong (on bluesky now)",
+          "screen_name": "everydaylouie",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2381033437",
+          "id": "2381033437"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/everydaylouie/status/925497499837652994/video/1",
+          "source_status_id": "925497499837652994",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/faXIofVvy8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/925497242500218882/pu/img/TNUiZuRZHc4vj52n.jpg",
+          "id_str": "925497242500218882",
+          "source_user_id": "2381033437",
+          "id": "925497242500218882",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/925497242500218882/pu/img/TNUiZuRZHc4vj52n.jpg",
+          "source_user_id_str": "2381033437",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "326",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "876",
+              "h": "420",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "876",
+              "h": "420",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "925497499837652994",
+          "display_url": "pic.twitter.com/faXIofVvy8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "56"
+    ],
+    "favorite_count": "0",
+    "id_str": "947938295044100097",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "947938295044100097",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 01 21:11:16 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @everydaylouie: ghost duet 👻🎵 https://t.co/faXIofVvy8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/everydaylouie/status/925497499837652994/video/1",
+          "source_status_id": "925497499837652994",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/faXIofVvy8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/925497242500218882/pu/img/TNUiZuRZHc4vj52n.jpg",
+          "id_str": "925497242500218882",
+          "video_info": {
+            "aspect_ratio": [
+              "73",
+              "35"
+            ],
+            "duration_millis": "50292",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/925497242500218882/pu/vid/374x180/og5dXxsOs81mp3ce.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/925497242500218882/pu/pl/K_pNw2o4ouTjpciU.m3u8?v=109"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/925497242500218882/pu/vid/750x360/IspJqKaVAF7VZikg.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2381033437",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "925497242500218882",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/925497242500218882/pu/img/TNUiZuRZHc4vj52n.jpg",
+          "source_user_id_str": "2381033437",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "326",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "876",
+              "h": "420",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "876",
+              "h": "420",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "925497499837652994",
+          "display_url": "pic.twitter.com/faXIofVvy8"
+        }
+      ]
+    }
+  }
+}

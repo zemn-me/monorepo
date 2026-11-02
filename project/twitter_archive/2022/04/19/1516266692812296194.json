@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1516266692812296194"
+        ],
+        "editableUntil": "2022-04-19T05:05:25.096Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "NCS_artist",
+          "screen_name": "ArtistNcs",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1122950017935974401",
+          "id": "1122950017935974401"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ArtistNcs/status/1516091544704536580/video/1",
+          "source_status_id": "1516091544704536580",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/VYFm6fFcqc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1516091518263738371/pu/img/BTRXq3jpNrU1l_yY.jpg",
+          "id_str": "1516091518263738371",
+          "source_user_id": "1122950017935974401",
+          "id": "1516091518263738371",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1516091518263738371/pu/img/BTRXq3jpNrU1l_yY.jpg",
+          "source_user_id_str": "1122950017935974401",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1516091544704536580",
+          "display_url": "pic.twitter.com/VYFm6fFcqc"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1516266692812296194",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1516266692812296194",
+    "possibly_sensitive": false,
+    "created_at": "Tue Apr 19 04:05:25 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @ArtistNcs: Batman’s hardest riddle yet https://t.co/VYFm6fFcqc",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ArtistNcs/status/1516091544704536580/video/1",
+          "source_status_id": "1516091544704536580",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/VYFm6fFcqc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1516091518263738371/pu/img/BTRXq3jpNrU1l_yY.jpg",
+          "id_str": "1516091518263738371",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "13633",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1516091518263738371/pu/vid/480x270/eQmJm9_dZsAdsKjM.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1516091518263738371/pu/pl/eZPO-8msJAIMGehf.m3u8?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1516091518263738371/pu/vid/640x360/-gwEEwPRequRjpjh.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1516091518263738371/pu/vid/1280x720/wd3KqidNkUHOwoJ8.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1122950017935974401",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1516091518263738371",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1516091518263738371/pu/img/BTRXq3jpNrU1l_yY.jpg",
+          "source_user_id_str": "1122950017935974401",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1516091544704536580",
+          "display_url": "pic.twitter.com/VYFm6fFcqc"
+        }
+      ]
+    }
+  }
+}

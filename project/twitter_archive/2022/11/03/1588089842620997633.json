@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1588089842620997633"
+        ],
+        "editableUntil": "2022-11-03T09:14:58.420Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Yugopnik",
+          "screen_name": "yugopnik",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "1015999862263951360",
+          "id": "1015999862263951360"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/yugopnik/status/1587917676906971136/video/1",
+          "source_status_id": "1587917676906971136",
+          "indices": [
+            "64",
+            "87"
+          ],
+          "url": "https://t.co/HzvijfbFp2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1587917607918866440/pu/img/N0tmd8G1b7KF1bEP.jpg",
+          "id_str": "1587917607918866440",
+          "source_user_id": "1015999862263951360",
+          "id": "1587917607918866440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1587917607918866440/pu/img/N0tmd8G1b7KF1bEP.jpg",
+          "source_user_id_str": "1015999862263951360",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1587917676906971136",
+          "display_url": "pic.twitter.com/HzvijfbFp2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "87"
+    ],
+    "favorite_count": "0",
+    "id_str": "1588089842620997633",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1588089842620997633",
+    "possibly_sensitive": false,
+    "created_at": "Thu Nov 03 08:44:58 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @yugopnik: This is some of the most meta shit I've ever seen https://t.co/HzvijfbFp2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/yugopnik/status/1587917676906971136/video/1",
+          "source_status_id": "1587917676906971136",
+          "indices": [
+            "64",
+            "87"
+          ],
+          "url": "https://t.co/HzvijfbFp2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1587917607918866440/pu/img/N0tmd8G1b7KF1bEP.jpg",
+          "id_str": "1587917607918866440",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "62134",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1587917607918866440/pu/vid/320x568/p6yYIJDqa2DUJCbg.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1587917607918866440/pu/vid/480x852/ADhUjlt7JzzCIvWI.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1587917607918866440/pu/pl/Zh0n9TRjodvIhp27.m3u8?tag=12&v=777"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1587917607918866440/pu/vid/576x1024/AKa1Jq_I4sFx9Nzm.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1015999862263951360",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1587917607918866440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1587917607918866440/pu/img/N0tmd8G1b7KF1bEP.jpg",
+          "source_user_id_str": "1015999862263951360",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1587917676906971136",
+          "display_url": "pic.twitter.com/HzvijfbFp2"
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,72 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_test")
 load("//yml:test.bzl", "yaml_lint_test")
 
+exports_files(["presubmit.yml"])
+
+filegroup(
+    name = "workflow_files",
+    srcs = glob(["*.yml"]),
+    visibility = ["//py/ci/staging_gate:__pkg__"],
+)
+
 yaml_lint_test(
-    name = "validation"
+    name = "validation",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "github_workflows",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "archive_checkout_test",
+    size = "small",
+    srcs = ["archive_checkout_test.py"],
+    args = ["$(rootpath staging.yml)"],
+    data = ["staging.yml"],
+    deps = ["@pip//pyyaml"],
+)
+
+sh_test(
+    name = "actionlint_test",
+    size = "small",
+    srcs = ["actionlint_test.sh"],
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ) + [
+        "@com_github_rhysd_actionlint//cmd/actionlint",
+    ],
+    env = {
+        "ACTIONLINT": "$(rlocationpath @com_github_rhysd_actionlint//cmd/actionlint)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
+sh_test(
+    name = "bootstrap_bazel_remote_cache_test",
+    size = "small",
+    srcs = ["bootstrap_bazel_remote_cache_test.sh"],
+    data = ["bootstrap_bazel_remote_cache.sh"],
+    env = {"BOOTSTRAP": "$(rlocationpath :bootstrap_bazel_remote_cache.sh)"},
+    deps = ["@rules_shell//shell/runfiles"],
 )

@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1384617559975071748"
+        ],
+        "editableUntil": "2021-04-20T22:18:45.905Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "279"
+    ],
+    "favorite_count": "4",
+    "id_str": "1384617559975071748",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1384617559975071748",
+    "created_at": "Tue Apr 20 21:18:45 +0000 2021",
+    "favorited": false,
+    "full_text": "imo having `&lt;iframe sandbox/&gt;`'s same-origin policy assign 'null' rather than some random origin identifier was a huge mistake. I've seen critical bugs because the  engineer wanted to prevent same origin access to some content but then had to trust the public 'null' origin",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1378469033054453765"
+        ],
+        "editableUntil": "2021-04-03T23:06:42.853Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Opra Zebb - oprazebb.com on bsky",
+          "screen_name": "OpraZebb",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "3547704197",
+          "id": "3547704197"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OpraZebb/status/1378012415435104256/video/1",
+          "source_status_id": "1378012415435104256",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/ZMTwciuONi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1378012293288562689/pu/img/qYJB8dLsBz70Fitt.jpg",
+          "id_str": "1378012293288562689",
+          "source_user_id": "3547704197",
+          "id": "1378012293288562689",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1378012293288562689/pu/img/qYJB8dLsBz70Fitt.jpg",
+          "source_user_id_str": "3547704197",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1378012415435104256",
+          "display_url": "pic.twitter.com/ZMTwciuONi"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "72"
+    ],
+    "favorite_count": "0",
+    "id_str": "1378469033054453765",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1378469033054453765",
+    "possibly_sensitive": false,
+    "created_at": "Sat Apr 03 22:06:42 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @OpraZebb: i was laughing so hard making this https://t.co/ZMTwciuONi",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OpraZebb/status/1378012415435104256/video/1",
+          "source_status_id": "1378012415435104256",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/ZMTwciuONi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1378012293288562689/pu/img/qYJB8dLsBz70Fitt.jpg",
+          "id_str": "1378012293288562689",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "6707",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1378012293288562689/pu/vid/640x360/xWxe7-o0_P2YngYB.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1378012293288562689/pu/vid/480x270/34atpkBcW1yQ2-99.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1378012293288562689/pu/pl/84ciltxwY-RXR0Gm.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1378012293288562689/pu/vid/1280x720/lNr_Vpk0E4Z_CKX5.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "3547704197",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1378012293288562689",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1378012293288562689/pu/img/qYJB8dLsBz70Fitt.jpg",
+          "source_user_id_str": "3547704197",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1378012415435104256",
+          "display_url": "pic.twitter.com/ZMTwciuONi"
+        }
+      ]
+    }
+  }
+}

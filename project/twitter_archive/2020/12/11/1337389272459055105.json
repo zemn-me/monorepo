@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337389272459055105"
+        ],
+        "editableUntil": "2020-12-11T14:30:24.702Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "🖲️ tom (moving era) 🖲️",
+          "screen_name": "slimefiend",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1037727307",
+          "id": "1037727307"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/slimefiend/status/1337267844661309441/video/1",
+          "source_status_id": "1337267844661309441",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/EMn9NgTIwT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337267790345097216/pr/img/nynGT7KFjwCkfVVr.jpg",
+          "id_str": "1337267790345097216",
+          "source_user_id": "1037727307",
+          "id": "1337267790345097216",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337267790345097216/pr/img/nynGT7KFjwCkfVVr.jpg",
+          "source_user_id_str": "1037727307",
+          "sizes": {
+            "medium": {
+              "w": "884",
+              "h": "560",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "884",
+              "h": "560",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "431",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1337267844661309441",
+          "display_url": "pic.twitter.com/EMn9NgTIwT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "62"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337389272459055105",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337389272459055105",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 11 13:30:24 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @slimefiend: I SWEAR TO FUCKING GOD https://t.co/EMn9NgTIwT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/slimefiend/status/1337267844661309441/video/1",
+          "source_status_id": "1337267844661309441",
+          "indices": [
+            "39",
+            "62"
+          ],
+          "url": "https://t.co/EMn9NgTIwT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1337267790345097216/pr/img/nynGT7KFjwCkfVVr.jpg",
+          "id_str": "1337267790345097216",
+          "video_info": {
+            "aspect_ratio": [
+              "221",
+              "140"
+            ],
+            "duration_millis": "23378",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337267790345097216/pr/vid/426x270/NrnBAw0s77uRsr9r.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1337267790345097216/pr/pl/1Wb5VAWziYsImAb1.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337267790345097216/pr/vid/884x560/EscwtHa5dEsBTcvx.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1337267790345097216/pr/vid/568x360/p2cA3d2yVlX9khSR.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1037727307",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1337267790345097216",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1337267790345097216/pr/img/nynGT7KFjwCkfVVr.jpg",
+          "source_user_id_str": "1037727307",
+          "sizes": {
+            "medium": {
+              "w": "884",
+              "h": "560",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "884",
+              "h": "560",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "431",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1337267844661309441",
+          "display_url": "pic.twitter.com/EMn9NgTIwT"
+        }
+      ]
+    }
+  }
+}

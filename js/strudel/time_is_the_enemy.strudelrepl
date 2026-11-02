@@ -1,0 +1,12 @@
+setcpm(53)
+
+$: sound("bd bd sd -, rd [rd rd]")._pianoroll()
+
+$: note("[f3*2] [-*2]".add(
+  "<0 - -5 ->"
+).add("-10")).sound("gm_pizzicato_strings").room(2)
+
+
+$:note(`[c@3, - eb@2, -*2 g]*2 -`
+  .add("36").add("<0 -5 -10 -15>"))
+  .sound("piano")._pianoroll()

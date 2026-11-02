@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "920957185982631936"
+        ],
+        "editableUntil": "2017-10-19T11:17:58.352Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Felicity Morse",
+          "screen_name": "FelicityMorse",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "347959437",
+          "id": "347959437"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/theipaper/status/920884973518884865/video/1",
+          "source_status_id": "920884973518884865",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/PcpFxayvLa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/920884738344214529/pu/img/ZulVjkmvpJUMc6f3.jpg",
+          "id_str": "920884738344214529",
+          "source_user_id": "205770556",
+          "id": "920884738344214529",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/920884738344214529/pu/img/ZulVjkmvpJUMc6f3.jpg",
+          "source_user_id_str": "205770556",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "920884973518884865",
+          "display_url": "pic.twitter.com/PcpFxayvLa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "79"
+    ],
+    "favorite_count": "0",
+    "id_str": "920957185982631936",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "920957185982631936",
+    "possibly_sensitive": false,
+    "created_at": "Thu Oct 19 10:17:58 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @FelicityMorse: This video is giving me endless joy  https://t.co/PcpFxayvLa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/theipaper/status/920884973518884865/video/1",
+          "source_status_id": "920884973518884865",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/PcpFxayvLa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/920884738344214529/pu/img/ZulVjkmvpJUMc6f3.jpg",
+          "id_str": "920884738344214529",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "92406",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/920884738344214529/pu/pl/Aw6O6bEcypB4njLe.m3u8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/920884738344214529/pu/vid/480x480/N-cCo_iCR3KE-k37.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/920884738344214529/pu/vid/240x240/bsUIDi6ayV8mwvRd.mp4"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/920884738344214529/pu/vid/720x720/aVQLW8dzXJRUG5f6.mp4"
+              }
+            ]
+          },
+          "source_user_id": "205770556",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "920884738344214529",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/920884738344214529/pu/img/ZulVjkmvpJUMc6f3.jpg",
+          "source_user_id_str": "205770556",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "920884973518884865",
+          "display_url": "pic.twitter.com/PcpFxayvLa"
+        }
+      ]
+    }
+  }
+}

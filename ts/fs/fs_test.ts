@@ -1,19 +1,32 @@
-import * as fs from 'ts/fs';
-import * as iter from 'ts/iter';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { expect, it } from '@jest/globals';
 
-describe('fs', () => {
-	describe('walk', () => {
-		it('should see all the expected files.', async () => {
-			const e = (await iter.unroll(fs.walk('ts/fs/testfiles/walk_base')))
-				.map(([, getPath]) => getPath())
-				.sort();
+import { walk } from '#root/ts/fs/index.js';
+import { unroll } from '#root/ts/iter/index.js';
 
-			const [a, b, c] = e;
+it('walks the root, nested directories, and every file', async () => {
+	const root = await mkdtemp(
+		path.join(process.env['TEST_TMPDIR'] ?? tmpdir(), 'walk-')
+	);
+	try {
+		await mkdir(path.join(root, 'nested'));
+		await writeFile(path.join(root, 'a.txt'), 'first');
+		await writeFile(path.join(root, 'nested', 'b.txt'), 'second');
 
-			expect(a.endsWith('ts/fs/testfiles/walk_base')).toBe(true);
+		const entries = await unroll(walk(root));
+		const paths = entries
+			.map(([, getPath]) => path.relative(root, getPath()))
+			.sort();
 
-			expect(b.endsWith('ts/fs/testfiles/walk_base/a.txt')).toBe(true);
-			expect(c.endsWith('ts/fs/testfiles/walk_base/b.txt')).toBe(true);
-		});
-	});
+		expect(paths).toEqual([
+			'',
+			'a.txt',
+			'nested',
+			path.join('nested', 'b.txt'),
+		]);
+	} finally {
+		await rm(root, { recursive: true, force: true });
+	}
 });

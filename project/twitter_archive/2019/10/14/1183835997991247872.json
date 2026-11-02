@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1183835997991247872"
+        ],
+        "editableUntil": "2019-10-14T21:04:31.187Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Reuters",
+          "screen_name": "Reuters",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "1652541",
+          "id": "1652541"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Reuters/status/1183832344949645315/video/1",
+          "source_status_id": "1183832344949645315",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/W8F1zEF5rh",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1183767781889564672/img/drWo54HFdjLnU_zx.jpg",
+          "id_str": "1183767781889564672",
+          "source_user_id": "1652541",
+          "id": "1183767781889564672",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1183767781889564672/img/drWo54HFdjLnU_zx.jpg",
+          "source_user_id_str": "1652541",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1183832344949645315",
+          "display_url": "pic.twitter.com/W8F1zEF5rh"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "93"
+    ],
+    "favorite_count": "0",
+    "id_str": "1183835997991247872",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1183835997991247872",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 14 20:04:31 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Reuters: Watch London police arrest protester dressed as broccoli https://t.co/W8F1zEF5rh",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Reuters/status/1183832344949645315/video/1",
+          "source_status_id": "1183832344949645315",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/W8F1zEF5rh",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1183767781889564672/img/drWo54HFdjLnU_zx.jpg",
+          "id_str": "1183767781889564672",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "21856",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1183767781889564672/vid/640x360/IHkUjSSMV3gXAXAS.mp4?tag=13"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1183767781889564672/vid/480x270/n_Q4BetdSiPb0a33.mp4?tag=13"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1183767781889564672/vid/1280x720/S2I8Cp6CmBEObPJv.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1183767781889564672/pl/g_rOvM2-FD_9r1Ir.m3u8?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "1652541",
+          "additional_media_info": {
+            "title": "London police arrest protester dressed as broccoli - News",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1183767781889564672",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1183767781889564672/img/drWo54HFdjLnU_zx.jpg",
+          "source_user_id_str": "1652541",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1183832344949645315",
+          "display_url": "pic.twitter.com/W8F1zEF5rh"
+        }
+      ]
+    }
+  }
+}

@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 /**
  * @fileoverview a test binary which deploys the Pulumi configuration
  * to staging and then destroys it.
@@ -8,12 +9,28 @@
  * and most importantly requires punching through the sandbox in various ways
  * to work, this is not exposed as a normal jest test.
  */
-import * as pulumi from '@pulumi/pulumi/automation';
-import { staging } from 'ts/pulumi/stack';
+import * as pulumi from '@pulumi/pulumi/automation/index.js';
+
+import { Command, Summarize } from '#root/ts/github/actions/index.js';
+import { prepareBoweryBugleRemoval } from '#root/ts/pulumi/retire_bowery_bugle.js';
+import { prepareLuluRetirement } from '#root/ts/pulumi/retire_lulu.js';
+import { staging } from '#root/ts/pulumi/stack.js';
+
+const Task =
+	(name: string) =>
+	<T>(p: Promise<T>): Promise<T> => {
+		console.log(Command('group')({})(name));
+		return p.finally(() => console.log(Command('endgroup')({})()));
+	};
 
 const millisecond = 1;
 const second = 1000 * millisecond;
 const minute = 60 * second;
+
+const waitForLockTask =
+	<T>(f: () => Promise<T>) =>
+	(cause: string) =>
+		Task(cause)(waitForLock(f, cause));
 
 async function waitForLock<T>(
 	f: () => Promise<T>,
@@ -22,11 +39,11 @@ async function waitForLock<T>(
 	const results: (T | Error)[] = [];
 	let lastResult: T | Error;
 	const startTime = +new Date();
-	const timeLimit = 10 * minute;
-	const step = 2 * minute;
+	const timeLimit = 45 * minute;
+	const step = 5 * minute;
 
 	do {
-		lastResult = await attempt(f);
+		lastResult = await attempt(f, cause);
 		results.push(lastResult);
 	} while (
 		lastResult instanceof Error &&
@@ -56,7 +73,7 @@ async function waitForLock<T>(
 
 	// if we failed due to timeout, wrap with a timeout error.
 
-	if (+new Date() - startTime > 10 * minute) {
+	if (+new Date() - startTime > 60 * minute * 3) {
 		const e = new Error(`${cause} timed out`);
 		e.cause = error;
 
@@ -76,16 +93,26 @@ async function attempt<T>(
 	} catch (e) {
 		const base = e instanceof Error ? e : new Error(`${e}`);
 
-		ret = new Error(`${cause} failed`);
+		ret = new Error(`${cause} failed: ${base.message}`);
 		ret.cause = base;
 	}
 
 	return ret;
 }
 
+function formatError(e: Error): string {
+	const messages: string[] = [];
+	let current: Error | undefined = e;
+	while (current) {
+		messages.push(current.message);
+		current = current.cause instanceof Error ? current.cause : undefined;
+	}
+	return messages.join(': ');
+}
+
 class MultiError extends Error {
 	constructor(public readonly errors: Error[]) {
-		super(errors.map(e => `${e}`).join('; '));
+		super(errors.map(formatError).join('; '));
 	}
 }
 
@@ -98,6 +125,10 @@ interface Args {
 	 * Destroy existing state before doing Pulumi up.
 	 */
 	overwrite: boolean;
+	/**
+	 * Reuse state from a staging deployment that just completed.
+	 */
+	skipRefresh?: boolean;
 }
 
 export async function main(args: Args) {
@@ -110,10 +141,11 @@ export async function main(args: Args) {
 
 	const s = staging();
 
-	const e1 = await waitForLock(
-		async () => s.then(v => v.refresh(baseConfig)),
-		'refreshing state'
-	);
+	const e1 = args.skipRefresh
+		? undefined
+		: await waitForLockTask(async () => s.then(v => v.refresh(baseConfig)))(
+				'refreshing state'
+			);
 
 	let e2: pulumi.DestroyResult | pulumi.UpResult | Error | undefined =
 		undefined;
@@ -124,16 +156,17 @@ export async function main(args: Args) {
 	// this ensures that the infrastructure gets to the desired state
 	// even if there are conflicts, but without necessarily waiting for
 	// a full destroy.
-	const e3 = await waitForLock(
-		async () => s.then(v => v.up(baseConfig)),
-		'deploying'
-	);
+	const e3 = await waitForLockTask(async () => {
+		const stack = await s;
+		await prepareLuluRetirement(stack);
+		await prepareBoweryBugleRemoval(stack);
+		return stack.up(baseConfig);
+	})('deploying');
 
 	if (args.overwrite && e3 instanceof Error) {
-		e2 = await waitForLock(
-			async () => s.then(v => v.destroy(baseConfig)),
-			'destroy initial state'
-		);
+		e2 = await waitForLockTask(async () =>
+			s.then(v => v.destroy(baseConfig))
+		)('destroy initial state');
 
 		if (!(e2 instanceof Error)) {
 			e2 = await waitForLock(
@@ -142,15 +175,13 @@ export async function main(args: Args) {
 			);
 		}
 	}
-	const e4 = await waitForLock(
-		async () => s.then(v => console.log(v.outputs())),
-		'outputs testing'
-	);
+	const e4 = await waitForLockTask(async () =>
+		s.then(v => console.log(v.outputs()))
+	)('outputs testing');
 	const e5 = !args.doNotTearDown
-		? await waitForLock(
-				async () => s.then(v => v.destroy(baseConfig)),
+		? await waitForLockTask(async () => s.then(v => v.destroy(baseConfig)))(
 				'destroy new state'
-		  )
+			)
 		: undefined;
 
 	const errors = [e1, e2, e3, e4, e5].filter(
@@ -158,6 +189,13 @@ export async function main(args: Args) {
 	);
 
 	if (errors.length > 0) throw new MultiError(errors);
+
+	await Summarize(
+		[e1, e2, e3, e4, e5]
+			.filter(<T>(v: T | Error): v is T => !(v instanceof Error))
+			.map(v => v?.summary.message)
+			.join(' ')
+	);
 }
 
 export default main;

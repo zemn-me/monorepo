@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1663012186434961410"
+        ],
+        "editableUntil": "2023-05-29T03:09:37.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "230"
+    ],
+    "favorite_count": "1",
+    "id_str": "1663012186434961410",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1663012186434961410",
+    "created_at": "Mon May 29 02:39:37 +0000 2023",
+    "favorited": false,
+    "full_text": "i really like pulumi in a lot of ways, but the testing story feels pretty sparse sometimes. I get CI failures on things as basic as 'having 2 resources with the same name' despite running a unit test that includes the whole layout",
+    "lang": "en"
+  }
+}

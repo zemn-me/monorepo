@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1171573498533371904"
+        ],
+        "editableUntil": "2019-09-11T00:57:43.490Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/ECIU2p7YXy",
+          "expanded_url": "https://play.golang.org/p/8PpL6BUEf9c",
+          "display_url": "play.golang.org/p/8PpL6BUEf9c",
+          "indices": [
+            "170",
+            "193"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "193"
+    ],
+    "favorite_count": "1",
+    "id_str": "1171573498533371904",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1171573498533371904",
+    "possibly_sensitive": false,
+    "created_at": "Tue Sep 10 23:57:43 +0000 2019",
+    "favorited": false,
+    "full_text": "i see a lot of really awful ways people deal with potentially differing json message types in a json stream in Go. since this is the 4th+ time here's a snippet to do it: https://t.co/ECIU2p7YXy",
+    "lang": "en"
+  }
+}

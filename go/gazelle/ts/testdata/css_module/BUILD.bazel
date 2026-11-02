@@ -1,0 +1,39 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+filegroup(
+    name = "fixtures",
+    srcs = [
+        "consumer.ts",
+        "style.module.css",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "css_module",
+    srcs = ["consumer.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@types/node",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["consumer.ts"],
+    visibility = ["//:__subpackages__"],
+)

@@ -1,0 +1,155 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1541381993296003074"
+        ],
+        "editableUntil": "2022-06-27T11:54:39.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1541381993296003074/photo/1",
+          "indices": [
+            "196",
+            "219"
+          ],
+          "url": "https://t.co/gWRNaW6ogw",
+          "media_url": "http://pbs.twimg.com/media/FWQV5rNWIAEpKwz.jpg",
+          "id_str": "1541381053062979585",
+          "id": "1541381053062979585",
+          "media_url_https": "https://pbs.twimg.com/media/FWQV5rNWIAEpKwz.jpg",
+          "sizes": {
+            "medium": {
+              "w": "1196",
+              "h": "270",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1196",
+              "h": "270",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "154",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/gWRNaW6ogw"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "219"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1541381989789536259",
+    "id_str": "1541381993296003074",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1541381993296003074",
+    "in_reply_to_status_id": "1541381989789536259",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 27 11:24:39 +0000 2022",
+    "favorited": false,
+    "full_text": "it seems like the draft RFC this is based on says it's vulnerable to \"replay\" and then suggest using MTLs for OAuth, which essentially makes the OAuth tokens only valid within a TLS session scope https://t.co/gWRNaW6ogw",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1541381993296003074/photo/1",
+          "indices": [
+            "196",
+            "219"
+          ],
+          "url": "https://t.co/gWRNaW6ogw",
+          "media_url": "http://pbs.twimg.com/media/FWQV5rNWIAEpKwz.jpg",
+          "id_str": "1541381053062979585",
+          "id": "1541381053062979585",
+          "media_url_https": "https://pbs.twimg.com/media/FWQV5rNWIAEpKwz.jpg",
+          "sizes": {
+            "medium": {
+              "w": "1196",
+              "h": "270",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1196",
+              "h": "270",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "154",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/gWRNaW6ogw"
+        },
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1541381993296003074/photo/1",
+          "indices": [
+            "196",
+            "219"
+          ],
+          "url": "https://t.co/gWRNaW6ogw",
+          "media_url": "http://pbs.twimg.com/media/FWQWOlnX0AAL9mT.jpg",
+          "id_str": "1541381412338782208",
+          "id": "1541381412338782208",
+          "media_url_https": "https://pbs.twimg.com/media/FWQWOlnX0AAL9mT.jpg",
+          "sizes": {
+            "large": {
+              "w": "1144",
+              "h": "412",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1144",
+              "h": "412",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "245",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/gWRNaW6ogw"
+        }
+      ]
+    }
+  }
+}

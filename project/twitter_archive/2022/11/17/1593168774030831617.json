@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1593168774030831617"
+        ],
+        "editableUntil": "2022-11-17T09:36:50.030Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "@securitymb@infosec.exchange",
+          "screen_name": "SecurityMB",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "2799802928",
+          "id": "2799802928"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SecurityMB/status/1592845396526919680/video/1",
+          "source_status_id": "1592845396526919680",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/w4gXnexISK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1592845357632946176/pu/img/E_7SpM-v0gyd9m5E.jpg",
+          "id_str": "1592845357632946176",
+          "source_user_id": "2799802928",
+          "id": "1592845357632946176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1592845357632946176/pu/img/E_7SpM-v0gyd9m5E.jpg",
+          "source_user_id_str": "2799802928",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "543",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1714",
+              "h": "776",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "308",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1592845396526919680",
+          "display_url": "pic.twitter.com/w4gXnexISK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "136"
+    ],
+    "favorite_count": "0",
+    "id_str": "1593168774030831617",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1593168774030831617",
+    "possibly_sensitive": false,
+    "created_at": "Thu Nov 17 09:06:50 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @SecurityMB: Just working on preparing a write-up for an unfixed bug in Chromium. Here's a little sneak peak. https://t.co/w4gXnexISK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SecurityMB/status/1592845396526919680/video/1",
+          "source_status_id": "1592845396526919680",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/w4gXnexISK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1592845357632946176/pu/img/E_7SpM-v0gyd9m5E.jpg",
+          "id_str": "1592845357632946176",
+          "video_info": {
+            "aspect_ratio": [
+              "857",
+              "388"
+            ],
+            "duration_millis": "20433",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1592845357632946176/pu/pl/WknmR2tT3W1XL1hD.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1592845357632946176/pu/vid/596x270/8eB-zjM0GODigdqW.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1592845357632946176/pu/vid/794x360/KHCg7dK0d2AEXbHg.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1592845357632946176/pu/vid/1590x720/Nn6Ancq-rRIA5QVk.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "2799802928",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1592845357632946176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1592845357632946176/pu/img/E_7SpM-v0gyd9m5E.jpg",
+          "source_user_id_str": "2799802928",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "543",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1714",
+              "h": "776",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "308",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1592845396526919680",
+          "display_url": "pic.twitter.com/w4gXnexISK"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "646672840893317120"
+        ],
+        "editableUntil": "2015-09-23T14:09:54.526Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "XSS",
+          "indices": [
+            "66",
+            "70"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Abdulrahman Alqabandi",
+          "screen_name": "Qab",
+          "indices": [
+            "3",
+            "7"
+          ],
+          "id_str": "15752350",
+          "id": "15752350"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/gwdjOewduL",
+          "expanded_url": "https://github.com/cure53/XSSChallengeWiki/wiki/prompt.ml#level-12",
+          "display_url": "github.com/cure53/XSSChal…",
+          "indices": [
+            "71",
+            "94"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "94"
+    ],
+    "favorite_count": "0",
+    "id_str": "646672840893317120",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "646672840893317120",
+    "possibly_sensitive": false,
+    "created_at": "Wed Sep 23 13:09:54 +0000 2015",
+    "favorited": false,
+    "full_text": "RT @Qab: this[630038579..toString(30)](1);\nWho needs eval anyway.\n#XSS https://t.co/gwdjOewduL",
+    "lang": "en"
+  }
+}

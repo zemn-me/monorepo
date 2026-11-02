@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1152435808072359937"
+        ],
+        "editableUntil": "2019-07-20T05:31:22.523Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "dizzy",
+          "screen_name": "dizzy",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "1071104846684676104",
+          "id": "1071104846684676104"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Dizzy/status/1152434902119399424/video/1",
+          "source_status_id": "1152434902119399424",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/7YnsKgbjek",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1152434655787999233/pu/img/mpBXJ4invMbuefzc.jpg",
+          "id_str": "1152434655787999233",
+          "source_user_id": "1071104846684676104",
+          "id": "1152434655787999233",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1152434655787999233/pu/img/mpBXJ4invMbuefzc.jpg",
+          "source_user_id_str": "1071104846684676104",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1152434902119399424",
+          "display_url": "pic.twitter.com/7YnsKgbjek"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "89"
+    ],
+    "favorite_count": "0",
+    "id_str": "1152435808072359937",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1152435808072359937",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jul 20 04:31:22 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Dizzy: Pathfinder grapple jump to insane slide bhop mechanics https://t.co/7YnsKgbjek",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Dizzy/status/1152434902119399424/video/1",
+          "source_status_id": "1152434902119399424",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/7YnsKgbjek",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1152434655787999233/pu/img/mpBXJ4invMbuefzc.jpg",
+          "id_str": "1152434655787999233",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "9787",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1152434655787999233/pu/vid/1280x720/6BgcGUybYHXT5j2R.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1152434655787999233/pu/pl/weB4rPqkFCptkEfD.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1152434655787999233/pu/vid/640x360/vPs0F0FRldnQ9_23.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1152434655787999233/pu/vid/480x270/4rCvu-1CXm2OGSSQ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1071104846684676104",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1152434655787999233",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1152434655787999233/pu/img/mpBXJ4invMbuefzc.jpg",
+          "source_user_id_str": "1071104846684676104",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1152434902119399424",
+          "display_url": "pic.twitter.com/7YnsKgbjek"
+        }
+      ]
+    }
+  }
+}

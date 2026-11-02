@@ -1,0 +1,23 @@
+*	@zemnmez
+
+# personal pages
+/project/im/shadwell/luke/* @zemnmez # @steadyon
+/project/im/shadwell/kate/pages/* @zemnmez # @quailemu
+/project/im/shadwell/kate/pages/_app.tsx @zemnmez
+/project/im/shadwell/kate/pages/_document.tsx @zemnmez
+/project/computer/lulu/* @zemnmez # @lulutries
+/ts/pulumi/eggsfordogs.com/* @eggsfordogs
+
+# list of files that dependabot might change
+# gotta all be owned by me until https://github.com/orgs/community/discussions/9636
+/cargo-bazel-lock.json @zemnmez
+/go.mod @zemnmez
+/go.sum @zemnmez
+/pnpm-lock.yaml @zemnmez
+/package.json @zemnmez
+/Cargo.Bazel.lock @zemnmez
+/Cargo.toml @zemnmez
+/.github/renovate-global.json @zemnmez
+/requirements.in @zemnmez
+/requirements.txt @zemnmez
+

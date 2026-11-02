@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1295816778996645889"
+        ],
+        "editableUntil": "2020-08-18T21:16:09.881Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dan Seljak",
+          "screen_name": "anotherglassbox",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1723624201",
+          "id": "1723624201"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/anotherglassbox/status/1295489088871641098/video/1",
+          "source_status_id": "1295489088871641098",
+          "indices": [
+            "112",
+            "135"
+          ],
+          "url": "https://t.co/f67qBHhYvD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1295489053450698753/pu/img/D-cwwiTfAvn8RZuw.jpg",
+          "id_str": "1295489053450698753",
+          "source_user_id": "1723624201",
+          "id": "1295489053450698753",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1295489053450698753/pu/img/D-cwwiTfAvn8RZuw.jpg",
+          "source_user_id_str": "1723624201",
+          "sizes": {
+            "small": {
+              "w": "608",
+              "h": "540",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "608",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "608",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1295489088871641098",
+          "display_url": "pic.twitter.com/f67qBHhYvD"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "135"
+    ],
+    "favorite_count": "0",
+    "id_str": "1295816778996645889",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1295816778996645889",
+    "possibly_sensitive": false,
+    "created_at": "Tue Aug 18 20:16:09 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @anotherglassbox: After a long day at work enjoy this Quebecer reacting to someone making \"homemade poutine\" https://t.co/f67qBHhYvD",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/anotherglassbox/status/1295489088871641098/video/1",
+          "source_status_id": "1295489088871641098",
+          "indices": [
+            "112",
+            "135"
+          ],
+          "url": "https://t.co/f67qBHhYvD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1295489053450698753/pu/img/D-cwwiTfAvn8RZuw.jpg",
+          "id_str": "1295489053450698753",
+          "video_info": {
+            "aspect_ratio": [
+              "152",
+              "135"
+            ],
+            "duration_millis": "44933",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1295489053450698753/pu/pl/xIJa57hkO7L3-NGZ.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1295489053450698753/pu/vid/404x360/DxXIIU6RRZFKnfDS.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1295489053450698753/pu/vid/304x270/JD-gnrdaxQKuH1bD.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1295489053450698753/pu/vid/608x540/WSvVAGiiMq6qD_UJ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1723624201",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1295489053450698753",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1295489053450698753/pu/img/D-cwwiTfAvn8RZuw.jpg",
+          "source_user_id_str": "1723624201",
+          "sizes": {
+            "small": {
+              "w": "608",
+              "h": "540",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "608",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "608",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1295489088871641098",
+          "display_url": "pic.twitter.com/f67qBHhYvD"
+        }
+      ]
+    }
+  }
+}

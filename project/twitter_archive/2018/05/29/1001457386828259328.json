@@ -1,0 +1,156 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1001457386828259328"
+        ],
+        "editableUntil": "2018-05-29T14:37:01.855Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Cliff Pickover",
+          "screen_name": "pickover",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "16176754",
+          "id": "16176754"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/YPK70FhNjY",
+          "expanded_url": "https://tinyurl.com/y8jb4a3c",
+          "display_url": "tinyurl.com/y8jb4a3c",
+          "indices": [
+            "83",
+            "106"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pickover/status/1001288256728850432/photo/1",
+          "source_status_id": "1001288256728850432",
+          "indices": [
+            "107",
+            "130"
+          ],
+          "url": "https://t.co/EnWI6NvnFa",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DeVKLKBUwAAj_qi.jpg",
+          "id_str": "1001288047688728576",
+          "source_user_id": "16176754",
+          "id": "1001288047688728576",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DeVKLKBUwAAj_qi.jpg",
+          "source_user_id_str": "16176754",
+          "sizes": {
+            "medium": {
+              "w": "280",
+              "h": "500",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "280",
+              "h": "500",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "280",
+              "h": "500",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1001288256728850432",
+          "display_url": "pic.twitter.com/EnWI6NvnFa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "130"
+    ],
+    "favorite_count": "0",
+    "id_str": "1001457386828259328",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1001457386828259328",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 29 13:37:01 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @pickover: Sweeping a laser over a blown-out candle. Revealing an unseen world.\nhttps://t.co/YPK70FhNjY https://t.co/EnWI6NvnFa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pickover/status/1001288256728850432/photo/1",
+          "source_status_id": "1001288256728850432",
+          "indices": [
+            "107",
+            "130"
+          ],
+          "url": "https://t.co/EnWI6NvnFa",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DeVKLKBUwAAj_qi.jpg",
+          "id_str": "1001288047688728576",
+          "video_info": {
+            "aspect_ratio": [
+              "14",
+              "25"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/DeVKLKBUwAAj_qi.mp4"
+              }
+            ]
+          },
+          "source_user_id": "16176754",
+          "id": "1001288047688728576",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DeVKLKBUwAAj_qi.jpg",
+          "source_user_id_str": "16176754",
+          "sizes": {
+            "medium": {
+              "w": "280",
+              "h": "500",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "280",
+              "h": "500",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "280",
+              "h": "500",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1001288256728850432",
+          "display_url": "pic.twitter.com/EnWI6NvnFa"
+        }
+      ]
+    }
+  }
+}

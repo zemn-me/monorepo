@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1113165295118458880"
+        ],
+        "editableUntil": "2019-04-02T20:44:22.624Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "problem goose",
+          "screen_name": "mammothfactory",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1873436504",
+          "id": "1873436504"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mammothfactory/status/1112843634200768514/video/1",
+          "source_status_id": "1112843634200768514",
+          "indices": [
+            "96",
+            "119"
+          ],
+          "url": "https://t.co/24ZwRWZNuc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1112843589116153857/pr/img/vzXPKjQBhPQ1E211.jpg",
+          "id_str": "1112843589116153857",
+          "source_user_id": "1873436504",
+          "id": "1112843589116153857",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1112843589116153857/pr/img/vzXPKjQBhPQ1E211.jpg",
+          "source_user_id_str": "1873436504",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1112843634200768514",
+          "display_url": "pic.twitter.com/24ZwRWZNuc"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "119"
+    ],
+    "favorite_count": "0",
+    "id_str": "1113165295118458880",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1113165295118458880",
+    "possibly_sensitive": false,
+    "created_at": "Tue Apr 02 19:44:22 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @mammothfactory: ah just what I needed at the grocery store, an ominous roving robot obelisk https://t.co/24ZwRWZNuc",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mammothfactory/status/1112843634200768514/video/1",
+          "source_status_id": "1112843634200768514",
+          "indices": [
+            "96",
+            "119"
+          ],
+          "url": "https://t.co/24ZwRWZNuc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1112843589116153857/pr/img/vzXPKjQBhPQ1E211.jpg",
+          "id_str": "1112843589116153857",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "10003",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1112843589116153857/pr/pl/cxcM7UO4X-Gm-77q.m3u8?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1112843589116153857/pr/vid/360x640/-ydEXEdwfut2Oa77.mp4?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1112843589116153857/pr/vid/720x1280/pWJ1p4PedptoPKsC.mp4?tag=8"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1112843589116153857/pr/vid/320x568/tKQoYzwXWiOtJxvq.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "1873436504",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1112843589116153857",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1112843589116153857/pr/img/vzXPKjQBhPQ1E211.jpg",
+          "source_user_id_str": "1873436504",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1112843634200768514",
+          "display_url": "pic.twitter.com/24ZwRWZNuc"
+        }
+      ]
+    }
+  }
+}

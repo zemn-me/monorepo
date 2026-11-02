@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "736177808456716289"
+        ],
+        "editableUntil": "2016-05-27T13:50:41.715Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Proteas",
+          "screen_name": "ProteasWang",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "487721663",
+          "id": "487721663"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ProteasWang/status/735796067782955009/photo/1",
+          "source_status_id": "735796067782955009",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/mMUku58tKT",
+          "media_url": "http://pbs.twimg.com/media/CjYSn6tUgAA8zN-.jpg",
+          "id_str": "735796066105196544",
+          "source_user_id": "487721663",
+          "id": "735796066105196544",
+          "media_url_https": "https://pbs.twimg.com/media/CjYSn6tUgAA8zN-.jpg",
+          "source_user_id_str": "487721663",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "897",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "508",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1298",
+              "h": "970",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "735796067782955009",
+          "display_url": "pic.twitter.com/mMUku58tKT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "103"
+    ],
+    "favorite_count": "0",
+    "id_str": "736177808456716289",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "736177808456716289",
+    "possibly_sensitive": false,
+    "created_at": "Fri May 27 12:50:41 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @ProteasWang: successfully ported AFL to iOS: change shmget() to shm_open(). https://t.co/mMUku58tKT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ProteasWang/status/735796067782955009/photo/1",
+          "source_status_id": "735796067782955009",
+          "indices": [
+            "80",
+            "103"
+          ],
+          "url": "https://t.co/mMUku58tKT",
+          "media_url": "http://pbs.twimg.com/media/CjYSn6tUgAA8zN-.jpg",
+          "id_str": "735796066105196544",
+          "source_user_id": "487721663",
+          "id": "735796066105196544",
+          "media_url_https": "https://pbs.twimg.com/media/CjYSn6tUgAA8zN-.jpg",
+          "source_user_id_str": "487721663",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "897",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "508",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1298",
+              "h": "970",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "735796067782955009",
+          "display_url": "pic.twitter.com/mMUku58tKT"
+        }
+      ]
+    }
+  }
+}

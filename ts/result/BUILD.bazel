@@ -1,0 +1,80 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js/npm:rules.bzl", "npm_pkg")
+load("//md:rules.bzl", "md_files", "readme")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "result",
+    srcs = ["result.ts"],
+    regenerator_runtime = False,
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = ["//:node_modules/@types/node"],
+)
+
+npm_pkg(
+    name = "npm_pkg",
+    srcs = [":result"],
+    entry_point = "result.ts",
+    major_version = "version/major",
+    minor_version = "version/minor",
+    patch_version = "version/patch",
+    pkg_json_base = "package.template.json",
+    readme = "README.md",
+    release_lock = ".release.lock",
+    test_version_on_main = True,
+    tgz = "npm_package",
+    visibility = [
+        "//ci:__subpackages__",
+        "//ts/pulumi:__subpackages__",
+    ],
+)
+
+readme(
+    name = "readme",
+    examples = ["//ts/result/examples:readme_examples"],
+    template = "README.template",
+)
+
+jest_test(
+    name = "tests",
+    srcs = [
+        "result_test.js",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":result_tests",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "ts_result",
+    srcs = [":readme"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "result.ts",
+        "result_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "result_tests",
+    srcs = ["result_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":result",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215356653282918402"
+        ],
+        "editableUntil": "2020-01-09T20:36:21.034Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "オピーチョ",
+          "screen_name": "opi_cho",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "914848540517588992",
+          "id": "914848540517588992"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/opi_cho/status/1215177113721950210/video/1",
+          "source_status_id": "1215177113721950210",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/ja2yV7k8Oe",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1215177083686539265/pu/img/0JjBiR6qAMum0YHB.jpg",
+          "id_str": "1215177083686539265",
+          "source_user_id": "914848540517588992",
+          "id": "1215177083686539265",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1215177083686539265/pu/img/0JjBiR6qAMum0YHB.jpg",
+          "source_user_id_str": "914848540517588992",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1215177113721950210",
+          "display_url": "pic.twitter.com/ja2yV7k8Oe"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "43"
+    ],
+    "favorite_count": "0",
+    "id_str": "1215356653282918402",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215356653282918402",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 19:36:21 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @opi_cho: ピピピーチョ https://t.co/ja2yV7k8Oe",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/opi_cho/status/1215177113721950210/video/1",
+          "source_status_id": "1215177113721950210",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/ja2yV7k8Oe",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1215177083686539265/pu/img/0JjBiR6qAMum0YHB.jpg",
+          "id_str": "1215177083686539265",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "4503",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1215177083686539265/pu/pl/kz5uIkacHcOZX5S4.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1215177083686539265/pu/vid/640x360/UllIW3evwiHVAcm1.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1215177083686539265/pu/vid/480x270/Ezexdj30MldO56bG.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1215177083686539265/pu/vid/1280x720/7pfEgf31WnhC2fTQ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "914848540517588992",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1215177083686539265",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1215177083686539265/pu/img/0JjBiR6qAMum0YHB.jpg",
+          "source_user_id_str": "914848540517588992",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1215177113721950210",
+          "display_url": "pic.twitter.com/ja2yV7k8Oe"
+        }
+      ]
+    }
+  }
+}

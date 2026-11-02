@@ -1,0 +1,33 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+genrule(
+    name = "gen_data_ts",
+    srcs = ["@com_github_factoriolab//:public/data/1.1/data.json"],
+    outs = ["data.ts"],
+    cmd_bash = """
+		echo '/* biome-ignore-all lint: generated file */' > $@
+		echo "import { FactorioVersionData } from '#root/ts/factorio/data/1.1/types.js'" >> $@
+		echo 'export const data: FactorioVersionData =' >> $@
+		cat $< >> $@
+	""",
+)
+
+ts_project(
+    name = "1.1",
+    srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["types.ts"],
+    visibility = ["//:__subpackages__"],
+)

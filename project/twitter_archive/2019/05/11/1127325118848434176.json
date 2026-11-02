@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1127325118848434176"
+        ],
+        "editableUntil": "2019-05-11T22:30:27.678Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Tim Dunn",
+          "screen_name": "MrTimDunn",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "248741839",
+          "id": "248741839"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MrTimDunn/status/1101414657418498049/video/1",
+          "source_status_id": "1101414657418498049",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/awe0oyOBCN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1101414483040366592/pu/img/x8Xo8pBzSIa2W6rr.jpg",
+          "id_str": "1101414483040366592",
+          "source_user_id": "248741839",
+          "id": "1101414483040366592",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1101414483040366592/pu/img/x8Xo8pBzSIa2W6rr.jpg",
+          "source_user_id_str": "248741839",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1101414657418498049",
+          "display_url": "pic.twitter.com/awe0oyOBCN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "97"
+    ],
+    "favorite_count": "0",
+    "id_str": "1127325118848434176",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1127325118848434176",
+    "possibly_sensitive": false,
+    "created_at": "Sat May 11 21:30:27 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @MrTimDunn: The world record for pulling a train...\nwith model trains. https://t.co/awe0oyOBCN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MrTimDunn/status/1101414657418498049/video/1",
+          "source_status_id": "1101414657418498049",
+          "indices": [
+            "74",
+            "97"
+          ],
+          "url": "https://t.co/awe0oyOBCN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1101414483040366592/pu/img/x8Xo8pBzSIa2W6rr.jpg",
+          "id_str": "1101414483040366592",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "95168",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1101414483040366592/pu/vid/640x360/oWdt5hmkAz7hKQD4.mp4?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1101414483040366592/pu/vid/320x180/oZdfzBFiLARHoN6e.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1101414483040366592/pu/vid/1280x720/PmGn_Ln-G0xKxTwW.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1101414483040366592/pu/pl/18kwxpl996-epZjH.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "248741839",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1101414483040366592",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1101414483040366592/pu/img/x8Xo8pBzSIa2W6rr.jpg",
+          "source_user_id_str": "248741839",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1101414657418498049",
+          "display_url": "pic.twitter.com/awe0oyOBCN"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "821744373872332800"
+        ],
+        "editableUntil": "2017-01-18T16:41:40.660Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "0",
+    "id_str": "821744373872332800",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "821744373872332800",
+    "created_at": "Wed Jan 18 15:41:40 +0000 2017",
+    "favorited": false,
+    "full_text": "today's regex that works but doesn't solve the problem is\n\\s+(?=(?:'(?:\\\\'|[^'])+'|[^'])+$)\nenjoy.",
+    "lang": "en"
+  }
+}

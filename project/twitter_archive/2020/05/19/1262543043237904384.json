@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1262543043237904384"
+        ],
+        "editableUntil": "2020-05-19T01:38:13.080Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jemma",
+          "screen_name": "Jem_Loader",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1653903578",
+          "id": "1653903578"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Jem_Loader/status/1262112182231277576/video/1",
+          "source_status_id": "1262112182231277576",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/1ECXxt8zsn",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1262112157799497729/pu/img/xyhu3LO2btklwEIb.jpg",
+          "id_str": "1262112157799497729",
+          "source_user_id": "1653903578",
+          "id": "1262112157799497729",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1262112157799497729/pu/img/xyhu3LO2btklwEIb.jpg",
+          "source_user_id_str": "1653903578",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1262112182231277576",
+          "display_url": "pic.twitter.com/1ECXxt8zsn"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "0",
+    "id_str": "1262543043237904384",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1262543043237904384",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 19 00:38:13 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Jem_Loader: I’ve never heard Worcestershire be pronounced like this before but I quite like it https://t.co/1ECXxt8zsn",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Jem_Loader/status/1262112182231277576/video/1",
+          "source_status_id": "1262112182231277576",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/1ECXxt8zsn",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1262112157799497729/pu/img/xyhu3LO2btklwEIb.jpg",
+          "id_str": "1262112157799497729",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "5402",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1262112157799497729/pu/vid/360x640/SCr4odS6muWwkeVv.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1262112157799497729/pu/pl/Kr9-T--mYV7vu9R0.m3u8?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1262112157799497729/pu/vid/320x568/86rLp1xk48bH2SGt.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1262112157799497729/pu/vid/576x1024/h7KuqMvb3rvI9jLh.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1653903578",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1262112157799497729",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1262112157799497729/pu/img/xyhu3LO2btklwEIb.jpg",
+          "source_user_id_str": "1653903578",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1262112182231277576",
+          "display_url": "pic.twitter.com/1ECXxt8zsn"
+        }
+      ]
+    }
+  }
+}

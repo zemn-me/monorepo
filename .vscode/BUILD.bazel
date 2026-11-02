@@ -1,0 +1,36 @@
+load("//md:rules.bzl", "md_files")
+
+"aliases for tasks so they dont get broken"
+
+load("//bzl:rules.bzl", "bazel_lint")
+
+alias(
+    name = "gen_rust_project",
+    actual = "//rs:gen_rust_project",
+)
+
+alias(
+    name = "activate_venv",
+    actual = "//:venv",
+)
+
+alias(
+    name = "ibazel",
+    actual = "//py/ibazel:ibazel_bin",
+)
+
+alias(
+    name = "install_sapling_hooks",
+    actual = "//py/devtools/prep:prep_bin",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "vscode",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)

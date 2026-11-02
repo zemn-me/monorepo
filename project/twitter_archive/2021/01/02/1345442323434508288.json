@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1345442323434508288"
+        ],
+        "editableUntil": "2021-01-02T19:50:21.673Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mario Zechner",
+          "screen_name": "badlogicgames",
+          "indices": [
+            "0",
+            "14"
+          ],
+          "id_str": "189876762",
+          "id": "189876762"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "164"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1345441987147821057",
+    "id_str": "1345442323434508288",
+    "in_reply_to_user_id": "189876762",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1345442323434508288",
+    "in_reply_to_status_id": "1345441987147821057",
+    "created_at": "Sat Jan 02 18:50:21 +0000 2021",
+    "favorited": false,
+    "full_text": "@badlogicgames yeah, it's underused imo. there are some nice patterns like:\n\ntype MyType string\n\nfunc (MyType) Type() { return \"mytype!\" }\n\nno receiver, just method",
+    "lang": "en",
+    "in_reply_to_screen_name": "badlogicgames",
+    "in_reply_to_user_id_str": "189876762"
+  }
+}

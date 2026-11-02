@@ -1,0 +1,55 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1042417767482306562"
+        ],
+        "editableUntil": "2018-09-19T15:18:57.610Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/sfK9ltNxZC",
+          "expanded_url": "https://discordapp.com/channels/@me",
+          "display_url": "discordapp.com/channels/@me",
+          "indices": [
+            "65",
+            "88"
+          ]
+        },
+        {
+          "url": "https://t.co/DnRxPzoIDx",
+          "expanded_url": "http://a.click",
+          "display_url": "a.click",
+          "indices": [
+            "175",
+            "198"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "216"
+    ],
+    "favorite_count": "2",
+    "id_str": "1042417767482306562",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1042417767482306562",
+    "possibly_sensitive": false,
+    "created_at": "Wed Sep 19 14:18:57 +0000 2018",
+    "favorited": false,
+    "full_text": "so discord has a hidden custom uri syntax... &lt;a href=\"discord:https://t.co/sfK9ltNxZC\"&gt;ggg&lt;/a&gt;\n&lt;script&gt;[...document.getElementsByTagName(\"a\")].forEach(a=&gt;https://t.co/DnRxPzoIDx())&lt;/script&gt;",
+    "lang": "en"
+  }
+}

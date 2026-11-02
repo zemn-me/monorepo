@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1275831863777656834"
+        ],
+        "editableUntil": "2020-06-24T17:43:14.791Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1275831863777656834/photo/1",
+          "indices": [
+            "281",
+            "304"
+          ],
+          "url": "https://t.co/EXJBliBxsZ",
+          "media_url": "http://pbs.twimg.com/media/EbSqRbzX0AAf1Ls.png",
+          "id_str": "1275831810950418432",
+          "id": "1275831810950418432",
+          "media_url_https": "https://pbs.twimg.com/media/EbSqRbzX0AAf1Ls.png",
+          "sizes": {
+            "large": {
+              "w": "637",
+              "h": "194",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "637",
+              "h": "194",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "637",
+              "h": "194",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/EXJBliBxsZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "304"
+    ],
+    "favorite_count": "4",
+    "id_str": "1275831863777656834",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1275831863777656834",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jun 24 16:43:14 +0000 2020",
+    "favorited": false,
+    "full_text": "reading posts about GraphQL is sometimes such a trip because the people implementing it don't seem to have a lot of experience with ... a whole bunch of stuff? I read a discussion today that was essentially 'enums seem like a lot of work when i can just use an untyped string', uh https://t.co/EXJBliBxsZ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1275831863777656834/photo/1",
+          "indices": [
+            "281",
+            "304"
+          ],
+          "url": "https://t.co/EXJBliBxsZ",
+          "media_url": "http://pbs.twimg.com/media/EbSqRbzX0AAf1Ls.png",
+          "id_str": "1275831810950418432",
+          "id": "1275831810950418432",
+          "media_url_https": "https://pbs.twimg.com/media/EbSqRbzX0AAf1Ls.png",
+          "sizes": {
+            "large": {
+              "w": "637",
+              "h": "194",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "637",
+              "h": "194",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "637",
+              "h": "194",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/EXJBliBxsZ"
+        }
+      ]
+    }
+  }
+}

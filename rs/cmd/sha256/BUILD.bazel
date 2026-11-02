@@ -1,11 +1,15 @@
-load("//rs:rules.bzl", "rust_binary")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//rs:rules.bzl", "rust_binary")
 
 package(default_visibility = ["//visibility:public"])
 
 rust_binary(
     name = "sha256",
-    srcs = glob(["*.rs"]),
+    srcs = glob(
+        ["*.rs"],
+        allow_empty = True,
+    ),
     deps = [
         "@cargo//:hex",
         "@cargo//:sha2",
@@ -20,11 +24,16 @@ genrule(
     ],
     cmd_bash = "$(location //rs/cmd/sha256) " +
                "$< > $@",
-    exec_tools = ["//rs/cmd/sha256"],
+    tools = ["//rs/cmd/sha256"],
 )
 
 diff_test(
     name = "tests",
     file1 = ":digest.golden.txt",
     file2 = ":digest.txt",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

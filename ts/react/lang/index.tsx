@@ -1,83 +1,141 @@
-import React from 'react';
+import memoizee from 'memoizee';
 
-export type Lang = string;
+export type Language = string;
 
-/**
- * TaggedText represents a Bcp47 tagged textual string.
- */
-export type TaggedText = readonly [Lang, React.ReactChild];
+export class TextType<L extends Language = Language, Text = string> {
+	constructor(
+		public readonly language: L,
+		public readonly text: Text
+	) {}
+	private localeGetter = memoizee(() => new Intl.Locale(this.language));
+	get locale(): Intl.Locale {
+		return this.localeGetter();
+	}
+}
 
-/**
- * Segment represents a selection of multiple TaggedText pieces,
- * each of which describes a possible choice of language string.
- */
-export type Text = TaggedText;
+export type Text<L extends Language = Language, Text = string> = TextType<
+	L,
+	Text
+>;
+
+export function Text<L extends Language = Language, Text = string>(
+	language: L,
+	text: Text
+): TextType<L, Text> {
+	return new TextType(language, text);
+}
+
+export type TextSelector<T extends Text = Text> = (
+	languages: readonly string[]
+) => T;
+
+export interface TextSelectionType<
+	Default extends Text = Text,
+	Choices extends readonly Text[] = readonly Text[],
+> {
+	readonly choices: Choices;
+	readonly defaultText: Default;
+}
+
+export type TextSelection<
+	Default extends Text = Text,
+	Choices extends readonly Text[] = readonly Text[],
+> = TextSelectionType<Default, Choices>;
+
+export function TextSelection<
+	Default extends Text,
+	const Choices extends readonly Text[],
+>(
+	defaultText: Default,
+	...choices: Choices
+): TextSelectionType<Default, Choices> {
+	return { choices, defaultText };
+}
+
+function canonicalLanguage(language: Language): string | undefined {
+	try {
+		return new Intl.Locale(language).toString();
+	} catch {
+		return undefined;
+	}
+}
+
+function resolveTextSelection<
+	Default extends Text,
+	const Choices extends readonly Text[],
+>(
+	selection: TextSelectionType<Default, Choices>,
+	languages: readonly string[]
+): Default | Choices[number] {
+	const texts = [selection.defaultText, ...selection.choices] as const;
+	const textsByLanguage = new Map(
+		texts.flatMap(text => {
+			const language = canonicalLanguage(text.language);
+			return language === undefined ? [] : [[language, text] as const];
+		})
+	);
+
+	for (const language of languages) {
+		const text = textsByLanguage.get(canonicalLanguage(language) ?? '');
+		if (text !== undefined) return text;
+	}
+
+	return selection.defaultText;
+}
+
+export function selectText<
+	Default extends Text,
+	const Choices extends readonly Text[],
+>(
+	defaultText: Default,
+	...choices: Choices
+): TextSelector<Default | Choices[number]> {
+	const selection = TextSelection(defaultText, ...choices);
+
+	return languages => resolveTextSelection(selection, languages);
+}
+
+export function resolveText<T extends Text>(
+	text: T | TextSelector<T>,
+	languages?: readonly string[]
+): T;
+export function resolveText<
+	Default extends Text,
+	const Choices extends readonly Text[],
+>(
+	text: TextSelectionType<Default, Choices>,
+	languages?: readonly string[]
+): Default | Choices[number];
+export function resolveText(
+	text: Text | TextSelector | TextSelectionType,
+	languages?: readonly string[]
+): Text;
+export function resolveText(
+	text: Text | TextSelector | TextSelectionType,
+	languages: readonly string[] = []
+): Text {
+	if (text instanceof TextType) return text;
+	if (typeof text === 'function') return text(languages);
+	return resolveTextSelection(text, languages);
+}
 
 /**
  * assign a language tag to a given text
  */
 export const tag: (
-	lang: Lang
-) => (
-	text: TemplateStringsArray,
-	...text2: { toString(): string }[]
-) => TaggedText =
+	lang: Language
+) => (text: TemplateStringsArray, ...text2: { toString(): string }[]) => Text =
 	lang =>
 	(text, ...text2) => {
 		const o: string[] = [];
 		for (let i = 0; i < Math.max(text.length, text2.length); i++)
 			o.push(text[i] ?? '', (text2[i] ?? '').toString());
-		return [lang, o.join('')] as const;
+		return Text(lang, o.join(''));
 	};
 
-/**
- * check if a Text is a TaggedText
- */
-export const textIsTaggedText = (text: Text): text is TaggedText =>
-	typeof text[0] == 'string';
+export const get = <L extends Language>(v: Text<L>): L => v.language;
 
-export const get: (t: Text) => Lang = ([lang]) => lang;
+// biome-ignore lint/complexity/noUselessTypeConstraint: this keeps generic inference stable
+export const text = <T extends unknown>(v: Text<string, T>): T => v.text;
 
-export const text: (t: Text) => React.ReactChild = ([, /* lang */ text]) =>
-	text;
-
-/**
- * The user's set locale (the user's language preference)
- */
-export const locale = React.createContext<readonly Lang[]>(['en-GB']);
-
-const getLangs = () => {
-	if (typeof navigator !== 'undefined')
-		return navigator?.languages ?? [navigator?.language];
-
-	return [];
-};
-
-export function useLocale() {
-	const [languages, setLanguages] = React.useState<readonly string[]>([
-		'en-GB',
-	]);
-
-	React.useEffect(() => {
-		const listener = () => {
-			setLanguages(() => getLangs());
-		};
-		window.addEventListener('languagechange', listener);
-		listener();
-		return () => window.removeEventListener('languagechange', listener);
-	}, [setLanguages]);
-
-	return languages;
-}
-
-export const LocaleProvider: React.FC<{
-	readonly children?: React.ReactNode;
-}> = ({ children }) => {
-	const languages = useLocale();
-	return <locale.Provider value={languages}>{children}</locale.Provider>;
-};
-
-/**
- * The contextual lang (the content's language)
- */
-export const lang = React.createContext<Lang>('en-GB');
+export { useLocale } from '#root/ts/react/lang/useLocale.js';

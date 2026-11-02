@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1169725156362719232"
+        ],
+        "editableUntil": "2019-09-05T22:33:04.376Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Alex Andreou",
+          "screen_name": "sturdyAlex",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "42371615",
+          "id": "42371615"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sturdyAlex/status/1169664123745054727/video/1",
+          "source_status_id": "1169664123745054727",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/3gqW2SwqMi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1169664077863489536/pu/img/AUKQedQp7yBHW8Su.jpg",
+          "id_str": "1169664077863489536",
+          "source_user_id": "42371615",
+          "id": "1169664077863489536",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1169664077863489536/pu/img/AUKQedQp7yBHW8Su.jpg",
+          "source_user_id_str": "42371615",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1169664123745054727",
+          "display_url": "pic.twitter.com/3gqW2SwqMi"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "84"
+    ],
+    "favorite_count": "0",
+    "id_str": "1169725156362719232",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1169725156362719232",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 05 21:33:04 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @sturdyAlex: “Please leave my town.”\n“I will, very soon.” https://t.co/3gqW2SwqMi",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sturdyAlex/status/1169664123745054727/video/1",
+          "source_status_id": "1169664123745054727",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/3gqW2SwqMi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1169664077863489536/pu/img/AUKQedQp7yBHW8Su.jpg",
+          "id_str": "1169664077863489536",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "3390",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169664077863489536/pu/vid/480x360/ZYwdlh3sUqydp6A7.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169664077863489536/pu/vid/360x270/hHpAS7jX4O4iVgdc.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169664077863489536/pu/vid/960x720/XZsdPghWIOEG9wC2.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1169664077863489536/pu/pl/mF-gQqd9EpTUtHlU.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "42371615",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1169664077863489536",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1169664077863489536/pu/img/AUKQedQp7yBHW8Su.jpg",
+          "source_user_id_str": "42371615",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1169664123745054727",
+          "display_url": "pic.twitter.com/3gqW2SwqMi"
+        }
+      ]
+    }
+  }
+}

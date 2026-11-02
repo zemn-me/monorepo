@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+
+js_library(
+    name = "a_js",
+    srcs = ["a.js"],
+    visibility = [":__subpackages__"],
+    deps = [],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "802018063289819136"
+        ],
+        "editableUntil": "2016-11-25T06:16:21.720Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mike West",
+          "screen_name": "mikewest",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "63163",
+          "id": "63163"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/p8ZlLxBh9Z",
+          "expanded_url": "https://codereview.chromium.org/2524013002",
+          "display_url": "codereview.chromium.org/2524013002",
+          "indices": [
+            "85",
+            "108"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "802018063289819136",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "802018063289819136",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 25 05:16:21 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @mikewest: As of ~tomorrow's Canary, the XSS auditor will be blocking by default: https://t.co/p8ZlLxBh9Z. Eventually, we'll remove filt…",
+    "lang": "en"
+  }
+}

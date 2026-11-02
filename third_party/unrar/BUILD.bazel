@@ -1,0 +1,11 @@
+load("//bzl:rules.bzl", "bazel_lint")
+
+exports_files(["unrar.BUILD.bazel"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "unrar.BUILD.bazel",
+    ],
+)

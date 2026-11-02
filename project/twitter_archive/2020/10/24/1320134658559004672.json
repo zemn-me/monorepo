@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1320134658559004672"
+        ],
+        "editableUntil": "2020-10-24T23:46:44.173Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Hamsters",
+          "screen_name": "hamstersmp4",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1055483621715439618",
+          "id": "1055483621715439618"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hamstersmp4/status/1320097965600550914/video/1",
+          "source_status_id": "1320097965600550914",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/kivJgC7ktX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1320097932985683973/pu/img/MATNAlgrZq1B3qrU.jpg",
+          "id_str": "1320097932985683973",
+          "source_user_id": "1055483621715439618",
+          "id": "1320097932985683973",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1320097932985683973/pu/img/MATNAlgrZq1B3qrU.jpg",
+          "source_user_id_str": "1055483621715439618",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1320097965600550914",
+          "display_url": "pic.twitter.com/kivJgC7ktX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1320134658559004672",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1320134658559004672",
+    "possibly_sensitive": false,
+    "created_at": "Sat Oct 24 22:46:44 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @hamstersmp4: What kind of dog is this https://t.co/kivJgC7ktX",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hamstersmp4/status/1320097965600550914/video/1",
+          "source_status_id": "1320097965600550914",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/kivJgC7ktX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1320097932985683973/pu/img/MATNAlgrZq1B3qrU.jpg",
+          "id_str": "1320097932985683973",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "9800",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1320097932985683973/pu/vid/320x320/PN17ztKBHPjwaJHX.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1320097932985683973/pu/vid/480x480/cRMR3Jn9f_QV1SuF.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1320097932985683973/pu/pl/XK7S2SsaaXJIByCJ.m3u8?tag=10"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1320097932985683973/pu/vid/640x640/wkI4zfpHuhp7PMQX.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1055483621715439618",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1320097932985683973",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1320097932985683973/pu/img/MATNAlgrZq1B3qrU.jpg",
+          "source_user_id_str": "1055483621715439618",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1320097965600550914",
+          "display_url": "pic.twitter.com/kivJgC7ktX"
+        }
+      ]
+    }
+  }
+}

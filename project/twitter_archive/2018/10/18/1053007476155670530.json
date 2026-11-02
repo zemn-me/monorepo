@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1053007476155670530"
+        ],
+        "editableUntil": "2018-10-18T20:38:40.905Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "CodeProject",
+          "screen_name": "codeproject",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "23667401",
+          "id": "23667401"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/codeproject/status/1052898654254714880/photo/1",
+          "source_status_id": "1052898654254714880",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/Oxjnn5ybvN",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DpyltcUX4AES_L6.jpg",
+          "id_str": "1052898613012193281",
+          "source_user_id": "23667401",
+          "id": "1052898613012193281",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DpyltcUX4AES_L6.jpg",
+          "source_user_id_str": "23667401",
+          "sizes": {
+            "large": {
+              "w": "728",
+              "h": "608",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "568",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "728",
+              "h": "608",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1052898654254714880",
+          "display_url": "pic.twitter.com/Oxjnn5ybvN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "101"
+    ],
+    "favorite_count": "0",
+    "id_str": "1053007476155670530",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1053007476155670530",
+    "possibly_sensitive": false,
+    "created_at": "Thu Oct 18 19:38:40 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @codeproject: A more accurate representation of what happened with YouTube https://t.co/Oxjnn5ybvN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/codeproject/status/1052898654254714880/photo/1",
+          "source_status_id": "1052898654254714880",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/Oxjnn5ybvN",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DpyltcUX4AES_L6.jpg",
+          "id_str": "1052898613012193281",
+          "video_info": {
+            "aspect_ratio": [
+              "91",
+              "76"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/DpyltcUX4AES_L6.mp4"
+              }
+            ]
+          },
+          "source_user_id": "23667401",
+          "id": "1052898613012193281",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DpyltcUX4AES_L6.jpg",
+          "source_user_id_str": "23667401",
+          "sizes": {
+            "large": {
+              "w": "728",
+              "h": "608",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "568",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "728",
+              "h": "608",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1052898654254714880",
+          "display_url": "pic.twitter.com/Oxjnn5ybvN"
+        }
+      ]
+    }
+  }
+}

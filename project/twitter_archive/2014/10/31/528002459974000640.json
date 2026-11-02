@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "528002459974000640"
+        ],
+        "editableUntil": "2014-10-31T02:56:10.926Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://erased766470_EM1XY7hZCU.com\" rel=\"nofollow\">erased766470_EM1XY7hZCU</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "125"
+    ],
+    "favorite_count": "0",
+    "id_str": "528002459974000640",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "528002459974000640",
+    "created_at": "Fri Oct 31 01:56:10 +0000 2014",
+    "favorited": false,
+    "full_text": "Dear gophers: close() is a signal, it is not freeing memory. You should not send a close signal twice, this is why it errors.",
+    "lang": "en"
+  }
+}

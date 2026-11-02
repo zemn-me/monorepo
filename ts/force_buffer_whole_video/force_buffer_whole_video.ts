@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 /**
  * @fileoverview The content of this file is a script which can be used to
  * fully buffer an HTML <video> element in an automatic manner which appears

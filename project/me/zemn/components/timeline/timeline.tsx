@@ -1,0 +1,315 @@
+'use client';
+import * as Immutable from 'immutable';
+import memoizee from 'memoizee';
+import React, { ReactElement } from 'react';
+
+import * as Bio from '#root/project/me/zemn/bio/index.js';
+import Link from '#root/project/me/zemn/components/Link/index.js';
+import { SectionLink } from '#root/project/me/zemn/components/SectionLink/SectionLink.js';
+import { splitEventsByStart } from '#root/project/me/zemn/components/timeline/events.js';
+import { romanize } from '#root/project/me/zemn/components/timeline/roman.js';
+import style from '#root/project/me/zemn/components/timeline/timeline.module.css';
+import * as lang from '#root/ts/react/lang/index.js';
+
+interface MutableText {
+	corpus: string;
+	language: string;
+}
+
+type ImmutableText = Immutable.Record<MutableText>;
+
+/**
+ * Needed so that lang.TaggedText can be used as a key in a map.
+ */
+const Text = Immutable.Record<MutableText>(
+	{
+		corpus: '',
+		language: 'Zzzz', // TR35 for unknown script https://unicode.org/reports/tr35/
+	},
+	'text'
+);
+
+function textToStringKey(t: ImmutableText): string {
+	return [t.get('language'), t.get('corpus')].join('-');
+}
+
+/**
+ * for a given set of strings, return the minimum number of
+ * characters we can choose from the list to ensure that
+ * each truncated string is unique.
+ */
+function shortestUniqueSample(strings: string[]): number {
+	const maxLength = strings.reduce(
+		(prev, current) => (current.length > prev ? current.length : prev),
+		-Infinity
+	);
+	for (let i = 1; i < maxLength; i++) {
+		const truncs = strings.map(v => v.slice(0, i));
+		if (truncs.length === [...new Set(truncs)].length) return i;
+	}
+
+	throw new Error('oops');
+}
+
+const eventIdPrefixCount = memoizee(() =>
+	shortestUniqueSample(Bio.Bio.timeline.map(v => v.id))
+);
+
+function shortIdForEvent(e: Bio.Event): string {
+	return e.id.slice(0, eventIdPrefixCount());
+}
+
+interface CorpusProps {
+	readonly children: lang.Text;
+}
+
+const sentanceTerminators = ['!', '.', '?', '…'];
+
+function needsFullStop(text: lang.Text): boolean {
+	if (text.locale.language !== 'en') return false;
+
+	if (sentanceTerminators.some(v => text.text.endsWith(v))) return false;
+
+	return true;
+}
+
+function fullStopIfNeeded(text: lang.Text): ReactElement | null {
+	if (needsFullStop(text)) return <>.</>;
+
+	return null;
+}
+
+function Publisher({ event: e }: { readonly event: Bio.Event }) {
+	if (e.publisher === undefined) return null;
+
+	return (
+		<>
+			<span className={style.publisher} lang={lang.get(e.publisher)}>
+				{e.publisher.text}
+			</span>
+			{fullStopIfNeeded(e.publisher)}{' '}
+		</>
+	);
+}
+
+/**
+ * Injects the victorian title-dot if needed.
+ * (it's a house-style thing I picked ages ago)
+ * @see https://www.reddit.com/r/AskLiteraryStudies/comments/n8mmno/why_do_we_no_longer_use_periodsfull_stops_in/gxtfw1y
+ */
+function Corpus({ children: text }: CorpusProps) {
+	return (
+		<>
+			{text.text}
+			{fullStopIfNeeded(text)}
+		</>
+	);
+}
+
+/**
+ * Given a map that contains a set, set a single item, expanding or creating
+ * the set if needed.
+ * @param v the map
+ * @param key the key in the map
+ * @param value the item to set
+ * @returns the same map that was put in
+ */
+function setManyMap<K, V>(
+	v: Immutable.OrderedMap<K, Immutable.List<V>>,
+	key: K,
+	value: V
+): Immutable.OrderedMap<K, Immutable.List<V>> {
+	return v.set(key, v.get(key, Immutable.List<V>()).concat(value));
+}
+
+function groupBy<T, Q>(
+	i: Iterable<T>,
+	select: (v: T) => Q
+): Immutable.Map<Q, Immutable.List<T>> {
+	let m = Immutable.OrderedMap<Q, Immutable.List<T>>();
+	for (const v of i) m = setManyMap(m, select(v), v);
+
+	return m;
+}
+
+function Event({ event: e }: { readonly event: Bio.Event }) {
+	return (
+		<article className={style.event}>
+			<Link href={e.url} id={e.id} lang={lang.get(e.title)}>
+				{e.title.text}
+				{/* this would be a <Corpus> but it looks ugly with the full stop inside the link. */}
+			</Link>
+			{fullStopIfNeeded(e.title)}{' '}
+			<Publisher event={e} />
+			{e.description ? (
+				<span lang={lang.get(e.description)}>
+					<Corpus>{e.description}</Corpus>
+				</span>
+			) : null}{' '}
+			<SectionLink href={`#${e.id}`}>§{shortIdForEvent(e)}.</SectionLink>
+			{e.location ? (
+				<address lang={lang.get(e.location.address)}>
+					<Link
+						href={`https://maps.google.com?${new URLSearchParams({
+							q: [e.location.latitude, e.location.longitude].join(', '),
+						})}`}
+					>
+						{e.location.address.text}
+					</Link>
+				</address>
+			) : null}
+		</article>
+	);
+}
+
+function Month({
+	month,
+	events,
+}: {
+	readonly month: ImmutableText;
+	readonly events: Iterable<Bio.Event>;
+}) {
+	return (
+		<div className={style.month}>
+			<header className={style.monthName} lang={month.get('language')}>
+				<Corpus>
+					{lang.Text(month.get('language'), month.get('corpus'))}
+				</Corpus>
+			</header>
+			<div className={style.content}>
+				{[...events].map((e, i) => (
+					<Event event={e} key={i} />
+				))}
+			</div>
+		</div>
+	);
+}
+
+function Year({
+	year,
+	months,
+}: {
+	readonly year: ImmutableText;
+	readonly months: Immutable.OrderedMap<
+		ImmutableText,
+		Immutable.List<Bio.Event>
+	>;
+}) {
+	const firstItem = months.first()?.first();
+	const fullYear = firstItem?.date.getFullYear() ?? 0;
+	return (
+		<div className={style.year}>
+			<div className={style.yearIndicator} lang={year.get('language')}>
+				{year.get('corpus')}
+			</div>
+			{/*↓ unicode for 'no specified language, roman numerals used for numbering'*/}
+			<div className={style.ageIndicator} lang="zxx-u-nu-romanlow">
+				{romanize(fullYear - Bio.Bio.birthdate.getFullYear())}
+			</div>
+
+			<div className={style.content}>
+				{[...months].map(([month, events]) => (
+					<Month
+						events={events}
+						key={textToStringKey(month)}
+						month={month}
+					/>
+				))}
+			</div>
+		</div>
+	);
+}
+
+function FutureEvents({
+	months,
+}: {
+	readonly months: Immutable.OrderedMap<
+		ImmutableText,
+		Immutable.List<Bio.Event>
+	>;
+}) {
+	if (months.isEmpty()) return null;
+
+	return (
+		<div className={style.year}>
+			<div
+				aria-label="Upcoming"
+				className={style.yearIndicator}
+				lang="zxx"
+				title="Upcoming"
+			>
+				∞
+			</div>
+			<div aria-hidden="true" className={style.ageIndicator} />
+
+			<div className={style.content}>
+				{[...months].map(([month, events]) => (
+					<Month
+						events={events}
+						key={textToStringKey(month)}
+						month={month}
+					/>
+				))}
+			</div>
+		</div>
+	);
+}
+
+export default function Timeline() {
+	// this spread is just because Intl.DateTimeFormat expects a mutable array.
+
+	const locales = [...lang.useLocale()];
+
+	const locale = Intl.DateTimeFormat.supportedLocalesOf(locales)[0];
+
+	const { futureMonths, years } = React.useMemo(() => {
+		const split = splitEventsByStart(Bio.Bio.timeline);
+
+		const years = groupBy(
+			Immutable.List(split.started).map(event => {
+				// depending on locale there may be different numbers of months etc.
+				const month: ImmutableText = Text({
+					corpus: Intl.DateTimeFormat(locale, {
+						month: 'long',
+					}).format(event.date),
+					language: locale,
+				});
+				const year: ImmutableText = Text({
+					corpus: Intl.DateTimeFormat(locale, {
+						year: 'numeric',
+					}).format(event.date),
+					language: locale,
+				});
+
+				return { ...event, month, year };
+			}),
+			v => v.year
+		).map(v => groupBy(v, i => i.month));
+
+		const futureMonths = groupBy(
+			Immutable.List(split.future).map(event => {
+				const month: ImmutableText = Text({
+					corpus: Intl.DateTimeFormat(locale, {
+						month: 'long',
+						year: 'numeric',
+					}).format(event.date),
+					language: locale,
+				});
+
+				return { ...event, month };
+			}),
+			v => v.month
+		);
+
+		return { futureMonths, years };
+	}, [locale]);
+
+	return (
+		<>
+			<FutureEvents months={futureMonths} />
+			{[...years].map(([year, months]) => (
+				<Year key={textToStringKey(year)} months={months} year={year} />
+			))}
+		</>
+	);
+}

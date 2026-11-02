@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1172185879361785857"
+        ],
+        "editableUntil": "2019-09-12T17:31:06.457Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Richard Davy",
+          "screen_name": "rd_pentest",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "794540490645536768",
+          "id": "794540490645536768"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/rd_pentest/status/1172175324827848704/video/1",
+          "source_status_id": "1172175324827848704",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/ZsbK5sEtoc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1172175278241714176/pu/img/SerBFxyqGIAMSnLp.jpg",
+          "id_str": "1172175278241714176",
+          "source_user_id": "794540490645536768",
+          "id": "1172175278241714176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1172175278241714176/pu/img/SerBFxyqGIAMSnLp.jpg",
+          "source_user_id_str": "794540490645536768",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "460",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1272",
+              "h": "860",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "811",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1172175324827848704",
+          "display_url": "pic.twitter.com/ZsbK5sEtoc"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "132"
+    ],
+    "favorite_count": "0",
+    "id_str": "1172185879361785857",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1172185879361785857",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 12 16:31:06 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @rd_pentest: Started playing with UAC bypasses today and found this - not seen it documented elsewhere... https://t.co/ZsbK5sEtoc",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/rd_pentest/status/1172175324827848704/video/1",
+          "source_status_id": "1172175324827848704",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/ZsbK5sEtoc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1172175278241714176/pu/img/SerBFxyqGIAMSnLp.jpg",
+          "id_str": "1172175278241714176",
+          "video_info": {
+            "aspect_ratio": [
+              "318",
+              "215"
+            ],
+            "duration_millis": "90033",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1172175278241714176/pu/vid/1064x720/_NhRNiCZrkP-9bMt.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1172175278241714176/pu/vid/398x270/leIloT9ihTdgZugU.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1172175278241714176/pu/pl/HgHiOrrYe3f8vcs3.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1172175278241714176/pu/vid/532x360/1OB9bn5nEZSrOsQH.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "794540490645536768",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1172175278241714176",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1172175278241714176/pu/img/SerBFxyqGIAMSnLp.jpg",
+          "source_user_id_str": "794540490645536768",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "460",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1272",
+              "h": "860",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "811",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1172175324827848704",
+          "display_url": "pic.twitter.com/ZsbK5sEtoc"
+        }
+      ]
+    }
+  }
+}

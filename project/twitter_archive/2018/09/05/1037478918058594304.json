@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1037478918058594304"
+        ],
+        "editableUntil": "2018-09-06T00:13:44.148Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1037478918058594304/photo/1",
+          "indices": [
+            "199",
+            "222"
+          ],
+          "url": "https://t.co/u3MtV5mIeE",
+          "media_url": "http://pbs.twimg.com/media/DmXdXoSWwAAMhO9.jpg",
+          "id_str": "1037478687199903744",
+          "id": "1037478687199903744",
+          "media_url_https": "https://pbs.twimg.com/media/DmXdXoSWwAAMhO9.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "109",
+              "h": "109",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "357",
+              "h": "109",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "357",
+              "h": "109",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "357",
+              "h": "109",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/u3MtV5mIeE"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "222"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1037478601405460481",
+    "id_str": "1037478918058594304",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1037478918058594304",
+    "in_reply_to_status_id": "1037478601405460481",
+    "possibly_sensitive": false,
+    "created_at": "Wed Sep 05 23:13:44 +0000 2018",
+    "favorited": false,
+    "full_text": "There's an interesting function pair HYPERLINK and ISURL, both of which don't work as properly documented, likely because some level of abstraction prevented sheets from generating its own pure HTML https://t.co/u3MtV5mIeE",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1037478918058594304/photo/1",
+          "indices": [
+            "199",
+            "222"
+          ],
+          "url": "https://t.co/u3MtV5mIeE",
+          "media_url": "http://pbs.twimg.com/media/DmXdXoSWwAAMhO9.jpg",
+          "id_str": "1037478687199903744",
+          "id": "1037478687199903744",
+          "media_url_https": "https://pbs.twimg.com/media/DmXdXoSWwAAMhO9.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "109",
+              "h": "109",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "357",
+              "h": "109",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "357",
+              "h": "109",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "357",
+              "h": "109",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/u3MtV5mIeE"
+        }
+      ]
+    }
+  }
+}

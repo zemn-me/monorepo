@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1112669222470144000"
+        ],
+        "editableUntil": "2019-04-01T11:53:09.688Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "275"
+    ],
+    "favorite_count": "7",
+    "id_str": "1112669222470144000",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1112669222470144000",
+    "created_at": "Mon Apr 01 10:53:09 +0000 2019",
+    "favorited": false,
+    "full_text": "its a tradition to come back to the twitter api every so often and realise it's still a garbage fire. only OAuth 1.0a (circa 2009) which has been deprecated since 2012 is supported. OAuth 2.0 is actually implemented, but it **cannot be used to authorize a user** (yes REALLY)",
+    "lang": "en"
+  }
+}

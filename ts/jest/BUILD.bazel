@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -9,9 +10,17 @@ ts_project(
 
 ts_project(
     name = "config_browser",
-    srcs = ["jest.browser.config.ts"],
+    srcs = [
+        "jest.browser.config.ts",
+        "jest.setup.ts",
+    ],
     deps = [
         # needed for the jsdom plugin
         "//:node_modules/jest-environment-jsdom",
     ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

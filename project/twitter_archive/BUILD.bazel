@@ -1,0 +1,58 @@
+"archive of all my old tweets."
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go/cmd/jsonschemavalidator:rules.bzl", "jsonschema_test")
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "twitter_archive_files",
+    srcs = glob(
+        ["**/*.json"],
+        allow_empty = True,
+    ),
+    visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+jsonschema_test(
+    name = "schema_valid",
+    srcs = glob(
+        ["**/*.json"],
+        allow_empty = True,
+    ),
+    schema = "//ts/twitter:json_schema",
+)
+
+genrule(
+    name = "list",
+    srcs = [
+        ":twitter_archive_files",
+    ],
+    outs = ["files.txt"],
+    cmd = """
+echo $(SRCS) | tr ' ' '\\n' > $@
+	""",
+)
+
+genrule(
+    name = "index",
+    srcs = [
+        ":twitter_archive_files",
+        ":list",
+    ],
+    outs = ["index.json"],
+    cmd = """
+$(execpath //project/twitter_archive/cmd/index) \\
+	-index $(location :list) \\
+	-output $@
+	""",
+    tools = [
+        "//project/twitter_archive/cmd/index",
+    ],
+    visibility = ["//:__subpackages__"],
+)

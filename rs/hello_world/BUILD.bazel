@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//rs:rules.bzl", "rust_binary", "rust_doc")
 
 package(default_visibility = ["//visibility:public"])
@@ -10,4 +11,9 @@ rust_binary(
 rust_doc(
     name = "hello_world_doc",
     crate = ":hello_world",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

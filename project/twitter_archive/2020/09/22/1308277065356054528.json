@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1308277065356054528"
+        ],
+        "editableUntil": "2020-09-22T06:28:53.650Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "トデス子'\\",
+          "screen_name": "todesking",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "3752201",
+          "id": "3752201"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "206"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1308275377408626688",
+    "id_str": "1308277065356054528",
+    "in_reply_to_user_id": "3752201",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1308277065356054528",
+    "in_reply_to_status_id": "1308275377408626688",
+    "created_at": "Tue Sep 22 05:28:53 +0000 2020",
+    "favorited": false,
+    "full_text": "@todesking unfortunately you cant do this. typescript can’t guess conditional types from flow analysis. instead you can write a simpler constraint and ‘upgrade’ to it. i can write a code example tomorrow :)",
+    "lang": "en",
+    "in_reply_to_screen_name": "todesking",
+    "in_reply_to_user_id_str": "3752201"
+  }
+}

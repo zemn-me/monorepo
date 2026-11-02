@@ -1,0 +1,33 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/cmd/journal_worker/JournalWorkerLambdaImage.js //project/me/zemn/api/cmd/journal_worker:oci_image
+
+ts_project(
+    name = "api",
+    srcs = [
+        "api.ts",
+    ],
+    visibility = [
+        "//ts/pulumi:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//project/me/zemn/api/cmd/api:oci_image",
+        "//project/me/zemn/api/cmd/journal_worker:oci_image",
+        "//ts/pulumi/lib",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["api.ts"],
+    visibility = ["//:__subpackages__"],
+)

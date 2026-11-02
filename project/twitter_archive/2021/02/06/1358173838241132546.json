@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1358173838241132546"
+        ],
+        "editableUntil": "2021-02-06T23:00:51.343Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "d0nut 🦀",
+          "screen_name": "d0nutptr",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "2215109990",
+          "id": "2215109990"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/cvYHjMckQ5",
+          "expanded_url": "https://pkg.go.dev/io#WriterTo",
+          "display_url": "pkg.go.dev/io#WriterTo",
+          "indices": [
+            "223",
+            "246"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "246"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1358173403597819904",
+    "id_str": "1358173838241132546",
+    "in_reply_to_user_id": "2215109990",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1358173838241132546",
+    "in_reply_to_status_id": "1358173403597819904",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 06 22:00:51 +0000 2021",
+    "favorited": false,
+    "full_text": "@d0nutptr So, values that can be read, can implement std::io::Read; but this API assumes each read will *consume* data. What if I have a value that can be *converted* to a readable. I'm trying to do something like WriterTo https://t.co/cvYHjMckQ5",
+    "lang": "en",
+    "in_reply_to_screen_name": "d0nutptr",
+    "in_reply_to_user_id_str": "2215109990"
+  }
+}

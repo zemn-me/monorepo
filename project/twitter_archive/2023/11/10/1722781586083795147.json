@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1722781586083795147"
+        ],
+        "editableUntil": "2023-11-10T02:01:52.513Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Sam Altman",
+          "screen_name": "sama",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "1605",
+          "id": "1605"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sama/status/1722766374588830101/photo/1",
+          "source_status_id": "1722766374588830101",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/VFIrGzPuMN",
+          "media_url": "http://pbs.twimg.com/media/F-h7LShbMAAg8Cf.jpg",
+          "id_str": "1722762291350024192",
+          "source_user_id": "1605",
+          "id": "1722762291350024192",
+          "media_url_https": "https://pbs.twimg.com/media/F-h7LShbMAAg8Cf.jpg",
+          "source_user_id_str": "1605",
+          "sizes": {
+            "large": {
+              "w": "2048",
+              "h": "1298",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "761",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "431",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1722766374588830101",
+          "display_url": "pic.twitter.com/VFIrGzPuMN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1722781586083795147",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1722781586083795147",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 10 01:01:52 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @sama: GPTs can save a lot of effort: https://t.co/VFIrGzPuMN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sama/status/1722766374588830101/photo/1",
+          "source_status_id": "1722766374588830101",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/VFIrGzPuMN",
+          "media_url": "http://pbs.twimg.com/media/F-h7LShbMAAg8Cf.jpg",
+          "id_str": "1722762291350024192",
+          "source_user_id": "1605",
+          "id": "1722762291350024192",
+          "media_url_https": "https://pbs.twimg.com/media/F-h7LShbMAAg8Cf.jpg",
+          "source_user_id_str": "1605",
+          "sizes": {
+            "large": {
+              "w": "2048",
+              "h": "1298",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "761",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "431",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1722766374588830101",
+          "display_url": "pic.twitter.com/VFIrGzPuMN"
+        }
+      ]
+    }
+  }
+}

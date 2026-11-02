@@ -8,8 +8,9 @@
 # testing
 /coverage
 
-# next.js
-.next/
+# React Router
+.react-router/
+.react-router-build/
 /out/
 
 # production
@@ -41,7 +42,6 @@ zemn.me/linear2/features/elements/garamond/EBGaramond12
 .bazelrc.user
 dist
 ./dist
-bazel-out
 node_modules
 external
 yarn-error.log
@@ -61,3 +61,12 @@ rust-project.json
 
 # ignore yarn since we use pnpm now
 yarn.lock
+# buildbuddy API key
+.auth.bazelrc
+.sl
+
+
+.script_cache
+
+
+.venv

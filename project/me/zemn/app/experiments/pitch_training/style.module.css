@@ -1,0 +1,67 @@
+.decks {
+	display: grid;
+	gap: 0.75em;
+	padding: 0;
+}
+
+.decks li {
+	display: grid;
+	gap: 0.15em;
+}
+
+.decks span {
+	font-size: 0.9em;
+}
+
+.linkButton {
+	display: inline;
+	padding: 0;
+	border: 0;
+	color: currentColor;
+	background: transparent;
+	font-style: italic;
+	text-decoration: underline;
+	text-decoration-color: var(--link-color);
+	cursor: pointer;
+}
+
+.linkButton:disabled {
+	color: currentColor;
+	cursor: wait;
+	opacity: 0.7;
+}
+
+.preview {
+	display: grid;
+	gap: 0.75em;
+	grid-column: 2 / span 12;
+	grid-template-columns: minmax(0, 1fr);
+	margin-block: 1em;
+}
+
+.preview.preview > * {
+	grid-column: 1 / -1;
+	margin-block: 0;
+}
+
+.cardPreview {
+	display: grid;
+	gap: 1em;
+	padding: 1em;
+	border: 1px solid currentColor;
+	text-align: center;
+}
+
+.cardFace {
+	display: grid;
+	gap: 0.5em;
+	justify-items: center;
+}
+
+.cardFace audio {
+	width: min(100%, 18em);
+}
+
+.previewControls button {
+	cursor: pointer;
+}

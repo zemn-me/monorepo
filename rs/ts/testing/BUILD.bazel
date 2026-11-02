@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//rs:rules.bzl", "rust_binary")
 load("//ts:rules.bzl", "ts_project")
 
@@ -5,7 +6,10 @@ package(default_visibility = ["//visibility:public"])
 
 rust_binary(
     name = "testing",
-    srcs = glob(["*.rs"]),
+    srcs = glob(
+        ["*.rs"],
+        allow_empty = True,
+    ),
     deps = ["//rs/ts"],
 )
 
@@ -13,7 +17,8 @@ genrule(
     name = "output",
     outs = ["output.ts"],
     cmd = """
-    $(location :testing) > $@
+	echo '/* biome-ignore-all lint: generated file */' > $@
+    $(location :testing) >> $@
     """,
     tools = [":testing"],
 )
@@ -21,5 +26,9 @@ genrule(
 ts_project(
     name = "output_ts",
     srcs = ["output.ts"],
-    ignores_lint = ["output.ts"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

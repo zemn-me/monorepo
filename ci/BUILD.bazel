@@ -1,50 +1,65 @@
-load("//ts:rules.bzl", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
+load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "ci",
-    data = [
-        "//VERSION",
-        "//project/ck3/recursive-vassals:mod_zip",
-        "//project/ck3/recursive-vassals:patch",
-        "//ts/cmd/svgshot:npm_pkg.publish",
-        "//ts/cmd/svgshot:npm_pkg.tgz",
-        "//ts/cmd/svgshot:package.json",
-        "//ts/do-sync:npm_pkg.publish",
-        "//ts/do-sync:npm_pkg.tgz",
-        "//ts/do-sync:package.json",
-        "//ts/knowitwhenyouseeit:npm_pkg.publish",
-        "//ts/knowitwhenyouseeit:npm_pkg.tgz",
-        "//ts/knowitwhenyouseeit:package.json",
-    ],
     deps = [
         "//:node_modules/@actions/github",
         "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@commander-js/extra-typings",
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//:node_modules/mime",
         "//ts",
-        "//ts/pulumi:pulumi_ts",
-        "//:node_modules/@commander-js/extra-typings"
+        "//ts/github/actions",
+        "//ts/pulumi",
     ],
+)
+
+alias(
+    name = "postupgrade",
+    actual = "@@//py/ci/post_upgrade:post_upgrade_bin",
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["bazel_test.js"],
+    deps = [":ci"],
 )
 
 js_binary(
     name = "presubmit",
-    data = [":ci"],
+    data = [
+        ":ci",
+        "//ci/bazel_bep:bep_annotator",
+        "//sh/bin:go",
+    ],
     entry_point = "presubmit.js",
+    env = {
+        "BAZEL_BEP_ANNOTATOR": "$(rlocationpath //ci/bazel_bep:bep_annotator)",
+        "GO_BINARY_LOCATION": "$(rlocationpath //sh/bin:go)",
+    },
 )
 
 js_binary(
     name = "postsubmit",
-    data = [":ci"],
+    data = [
+        ":ci",
+        "//VERSION",
+    ],
     entry_point = "postsubmit.js",
 )
 
 js_binary(
     name = "submit",
-    data = [":ci"],
+    data = [
+        ":ci",
+        "//VERSION",
+    ],
     entry_point = "submit.js",
 )
 
@@ -52,4 +67,16 @@ js_binary(
     name = "rollback",
     data = [":ci"],
     entry_point = "rollback.js",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["README.md"],
+    refs = ["//.github/workflows:presubmit.yml"],
+    visibility = ["//:__subpackages__"],
 )

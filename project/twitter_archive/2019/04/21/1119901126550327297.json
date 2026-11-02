@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1119901126550327297"
+        ],
+        "editableUntil": "2019-04-21T10:50:09.983Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "James Turner",
+          "screen_name": "JamesTurner_42",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "3405261700",
+          "id": "3405261700"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JamesTurner_42/status/1119503597031477248/video/1",
+          "source_status_id": "1119503597031477248",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/6tmm5Oc2Tz",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1119503540005638149/pu/img/-goE147MIjGqEZid.jpg",
+          "id_str": "1119503540005638149",
+          "source_user_id": "3405261700",
+          "id": "1119503540005638149",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1119503540005638149/pu/img/-goE147MIjGqEZid.jpg",
+          "source_user_id_str": "3405261700",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1119503597031477248",
+          "display_url": "pic.twitter.com/6tmm5Oc2Tz"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "82"
+    ],
+    "favorite_count": "0",
+    "id_str": "1119901126550327297",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1119901126550327297",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 21 09:50:09 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @JamesTurner_42: This Akira mural in Shibuya is awesome https://t.co/6tmm5Oc2Tz",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JamesTurner_42/status/1119503597031477248/video/1",
+          "source_status_id": "1119503597031477248",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/6tmm5Oc2Tz",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1119503540005638149/pu/img/-goE147MIjGqEZid.jpg",
+          "id_str": "1119503540005638149",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "27530",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1119503540005638149/pu/vid/1280x720/-yNoD_gGgLQBMhrb.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1119503540005638149/pu/pl/quuMon_AvC5QxdER.m3u8?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1119503540005638149/pu/vid/640x360/96NXSIs1nQzL9IA3.mp4?tag=8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1119503540005638149/pu/vid/320x180/l7UifQ9GTTDQ6Igl.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "3405261700",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1119503540005638149",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1119503540005638149/pu/img/-goE147MIjGqEZid.jpg",
+          "source_user_id_str": "3405261700",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1119503597031477248",
+          "display_url": "pic.twitter.com/6tmm5Oc2Tz"
+        }
+      ]
+    }
+  }
+}

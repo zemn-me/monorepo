@@ -1,4 +1,6 @@
-import { Scalable, Scale } from '.';
+import { describe, expect, test } from '@jest/globals';
+
+import { Scalable, Scale } from '#root/ts/math/scale/index.js';
 
 interface SquareProps {
 	h: number;
@@ -18,7 +20,7 @@ const square: Scalable<SquareProps> = {
 	},
 };
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 const table: [Scalable<any>, string[], any, [number, number], any][] = [
 	[
 		square,

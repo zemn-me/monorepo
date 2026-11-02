@@ -1,0 +1,90 @@
+import {
+	dehydrate,
+	HydrationBoundary,
+	QueryClient,
+} from '@tanstack/react-query';
+import {
+	data,
+	type LoaderFunctionArgs,
+	Outlet,
+	useLoaderData,
+} from 'react-router';
+import { journalBrowseQuery } from '#root/project/me/zemn/app/journal/periods.js';
+import { JournalRenderTime } from '#root/project/me/zemn/app/journal/render_time.js';
+import {
+	privateHeaders,
+	readSession,
+} from '#root/project/me/zemn/hook/session.server.js';
+import type { Metadata } from '#root/ts/remix/metadata.js';
+
+export const metadata: Metadata = {
+	title: 'Voice journal',
+	description: 'A private, transcript-linked voice journal.',
+};
+
+export const headers = () => privateHeaders;
+
+export async function loader({ request }: LoaderFunctionArgs) {
+	const auth = await readSession(request);
+	const queryClient = new QueryClient();
+	if (auth?.session.scopes.includes('journal_read')) {
+		const jti = auth.session.claims.jti;
+		const pageId = new URL(request.url).searchParams.get('wiki');
+		if (pageId === null) {
+			const url = new URL(request.url);
+			const browse = journalBrowseQuery(
+				url.pathname,
+				url.searchParams.get('at')
+			);
+			const response = await auth.client.GET('/journal', {
+				params: { query: browse },
+			});
+			if (!response.data)
+				throw new Response('Journal unavailable', {
+					status: response.response.status,
+					headers: privateHeaders,
+				});
+			queryClient.setQueryData(
+				['get', '/journal', jti, browse],
+				response.data
+			);
+		} else if (pageId === 'all') {
+			const response = await auth.client.GET('/journal/wiki');
+			if (!response.data)
+				throw new Response('Wiki unavailable', {
+					status: response.response.status,
+					headers: privateHeaders,
+				});
+			queryClient.setQueryData(
+				['get', '/journal', 'wiki', jti],
+				response.data
+			);
+		} else {
+			const page = await auth.client.GET('/journal/wiki/{pageId}', {
+				params: { path: { pageId } },
+			});
+			if (page.data)
+				queryClient.setQueryData(
+					['get', '/journal', 'wiki-page', jti, pageId, undefined],
+					page.data
+				);
+		}
+	}
+	return data(
+		{ dehydratedState: dehydrate(queryClient), renderedAt: Date.now() },
+		{ headers: privateHeaders }
+	);
+}
+
+export default function Layout() {
+	const { dehydratedState, renderedAt } = useLoaderData<typeof loader>();
+	return (
+		<HydrationBoundary state={dehydratedState}>
+			<JournalRenderTime.Provider value={renderedAt}>
+				<Outlet />
+			</JournalRenderTime.Provider>
+		</HydrationBoundary>
+	);
+}
+
+export const handle = { metadata };

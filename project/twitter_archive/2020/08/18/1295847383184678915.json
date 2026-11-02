@@ -1,0 +1,130 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1295847383184678915"
+        ],
+        "editableUntil": "2020-08-18T23:17:46.488Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "cassie",
+          "screen_name": "porglezomp",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "219444328",
+          "id": "219444328"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1295847383184678915/photo/1",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/AIj4YxHfo2",
+          "media_url": "http://pbs.twimg.com/media/EfvGUsUX0AEwdXe.png",
+          "id_str": "1295847376595439617",
+          "id": "1295847376595439617",
+          "media_url_https": "https://pbs.twimg.com/media/EfvGUsUX0AEwdXe.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "158",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1076",
+              "h": "250",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1076",
+              "h": "250",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/AIj4YxHfo2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "73"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1295814671145066500",
+    "id_str": "1295847383184678915",
+    "in_reply_to_user_id": "219444328",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1295847383184678915",
+    "in_reply_to_status_id": "1295814671145066500",
+    "possibly_sensitive": false,
+    "created_at": "Tue Aug 18 22:17:46 +0000 2020",
+    "favorited": false,
+    "full_text": "@porglezomp javascript already has this operator! https://t.co/AIj4YxHfo2",
+    "lang": "en",
+    "in_reply_to_screen_name": "porglezomp",
+    "in_reply_to_user_id_str": "219444328",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1295847383184678915/photo/1",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/AIj4YxHfo2",
+          "media_url": "http://pbs.twimg.com/media/EfvGUsUX0AEwdXe.png",
+          "id_str": "1295847376595439617",
+          "id": "1295847376595439617",
+          "media_url_https": "https://pbs.twimg.com/media/EfvGUsUX0AEwdXe.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "158",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1076",
+              "h": "250",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1076",
+              "h": "250",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/AIj4YxHfo2"
+        }
+      ]
+    }
+  }
+}

@@ -1,9 +1,10 @@
 import * as cultist from 'cultist';
 import * as fs from 'fs';
-import * as dot from 'solve/dot';
-import { map } from 'ts/iter';
-import { walk } from 'ts/tree';
-import { must, perhaps, select } from 'ts/util';
+
+import * as dot from '#root/project/cultist/solve/dot.js';
+import { map } from '#root/ts/iter/index.js';
+import { walk } from '#root/ts/tree.js';
+import { must, perhaps, select } from '#root/ts/util.js';
 
 import { quoteIfNotIdentifier } from './util';
 
@@ -55,7 +56,7 @@ export function caption(
 
 export function prettyList(...l: (string | { toString(): string })[]) {
 	return `(${l.length}): ${l
-		.map((l, i, a) => `(${i + 1}/${a.length}) ${l?.toString() ?? l}`)
+		.map((l, i, a) => `(${i + 1}/${a.length}) ${l.toString() ?? l}`)
 		.sort()
 		.join(';\n ')}`;
 }
@@ -71,7 +72,7 @@ function stateNodeCaption(
 	verb: (id: string) => cultist.Verb,
 	element: (id: string) => cultist.Element
 ) {
-	return s?.state ? shortBoardState(s.state, verb, element) : '(empty)';
+	return s.state ? shortBoardState(s.state, verb, element) : '(empty)';
 }
 
 function* SelectLegacy(

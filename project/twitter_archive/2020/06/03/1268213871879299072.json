@@ -1,0 +1,129 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1268213871879299072"
+        ],
+        "editableUntil": "2020-06-03T17:12:03.987Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "No Context Silent Hill",
+          "screen_name": "NoContextSilent",
+          "indices": [
+            "13",
+            "29"
+          ],
+          "id_str": "1082968500249997313",
+          "id": "1082968500249997313"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1268213871879299072/photo/1",
+          "indices": [
+            "246",
+            "269"
+          ],
+          "url": "https://t.co/c3xjlEB6ey",
+          "media_url": "http://pbs.twimg.com/media/EZmZnAYXQAEKAUZ.png",
+          "id_str": "1268213665477640193",
+          "id": "1268213665477640193",
+          "media_url_https": "https://pbs.twimg.com/media/EZmZnAYXQAEKAUZ.png",
+          "sizes": {
+            "small": {
+              "w": "440",
+              "h": "310",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "440",
+              "h": "310",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "440",
+              "h": "310",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/c3xjlEB6ey"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "269"
+    ],
+    "favorite_count": "9",
+    "in_reply_to_status_id_str": "1268159128763019264",
+    "id_str": "1268213871879299072",
+    "in_reply_to_user_id": "1115813157191192576",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1268213871879299072",
+    "in_reply_to_status_id": "1268159128763019264",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jun 03 16:12:03 +0000 2020",
+    "favorited": false,
+    "full_text": "@TyrnerRound @NoContextSilent do you have a source on this? looking at renders it looks much more like a shader to me. the key in the OP is that the mirror is an actual worldspace in the map, rather than an engine-level simulated one or a shader https://t.co/c3xjlEB6ey",
+    "lang": "en",
+    "in_reply_to_user_id_str": "1115813157191192576",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1268213871879299072/photo/1",
+          "indices": [
+            "246",
+            "269"
+          ],
+          "url": "https://t.co/c3xjlEB6ey",
+          "media_url": "http://pbs.twimg.com/media/EZmZnAYXQAEKAUZ.png",
+          "id_str": "1268213665477640193",
+          "id": "1268213665477640193",
+          "media_url_https": "https://pbs.twimg.com/media/EZmZnAYXQAEKAUZ.png",
+          "sizes": {
+            "small": {
+              "w": "440",
+              "h": "310",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "440",
+              "h": "310",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "440",
+              "h": "310",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/c3xjlEB6ey"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1509678419641995270"
+        ],
+        "editableUntil": "2022-04-01T00:45:58.368Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Rohan Padhye",
+          "screen_name": "moarbugs",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "1042652616650502144",
+          "id": "1042652616650502144"
+        },
+        {
+          "name": "Vincent Hellendoorn",
+          "screen_name": "VHellendoorn",
+          "indices": [
+            "18",
+            "31"
+          ],
+          "id_str": "2401442854",
+          "id": "2401442854"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "310"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1509584986172706820",
+    "id_str": "1509678419641995270",
+    "in_reply_to_user_id": "1042652616650502144",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1509678419641995270",
+    "in_reply_to_status_id": "1509584986172706820",
+    "created_at": "Thu Mar 31 23:45:58 +0000 2022",
+    "favorited": false,
+    "full_text": "@moarbugs @msconf @VHellendoorn does the tokenization step remove the content of those tokens (i.e. the analysis is on lex-token kind)? because I feel that on a character-by-character basis, human code will be less predictable as it will be filled with natural language idents which dont do much for the fuzzer",
+    "lang": "en",
+    "in_reply_to_screen_name": "moarbugs",
+    "in_reply_to_user_id_str": "1042652616650502144"
+  }
+}

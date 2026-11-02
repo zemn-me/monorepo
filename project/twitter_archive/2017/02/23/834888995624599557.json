@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "834888995624599557"
+        ],
+        "editableUntil": "2017-02-23T23:13:42.701Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "drewtoothpaste.bsky.social",
+          "screen_name": "drewtoothpaste",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "14248784",
+          "id": "14248784"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/drewtoothpaste/status/834888222903795712/video/1",
+          "source_status_id": "834888222903795712",
+          "indices": [
+            "82",
+            "105"
+          ],
+          "url": "https://t.co/DU3IRlPGWO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/834887889221586946/pu/img/QrVIJEGcZTMYz7E6.jpg",
+          "id_str": "834887889221586946",
+          "source_user_id": "14248784",
+          "id": "834887889221586946",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/834887889221586946/pu/img/QrVIJEGcZTMYz7E6.jpg",
+          "source_user_id_str": "14248784",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "834888222903795712",
+          "display_url": "pic.twitter.com/DU3IRlPGWO"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "105"
+    ],
+    "favorite_count": "0",
+    "id_str": "834888995624599557",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "834888995624599557",
+    "possibly_sensitive": false,
+    "created_at": "Thu Feb 23 22:13:42 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @drewtoothpaste: Holy fucking shit did you guys see the new vid from Anonymous https://t.co/DU3IRlPGWO",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/drewtoothpaste/status/834888222903795712/video/1",
+          "source_status_id": "834888222903795712",
+          "indices": [
+            "82",
+            "105"
+          ],
+          "url": "https://t.co/DU3IRlPGWO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/834887889221586946/pu/img/QrVIJEGcZTMYz7E6.jpg",
+          "id_str": "834887889221586946",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "45000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/834887889221586946/pu/vid/320x180/ZZUCfmMYF-lTXECz.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/834887889221586946/pu/vid/640x360/8chzu1bnt-waXWcp.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/834887889221586946/pu/vid/1280x720/ZvG4Obb7HX0hLWGc.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/834887889221586946/pu/pl/0vEAdVzJJeDmthIM.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "14248784",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "834887889221586946",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/834887889221586946/pu/img/QrVIJEGcZTMYz7E6.jpg",
+          "source_user_id_str": "14248784",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "834888222903795712",
+          "display_url": "pic.twitter.com/DU3IRlPGWO"
+        }
+      ]
+    }
+  }
+}

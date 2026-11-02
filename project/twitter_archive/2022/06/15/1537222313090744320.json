@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1537222313090744320"
+        ],
+        "editableUntil": "2022-06-16T00:25:34.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1537222313090744320/photo/1",
+          "indices": [
+            "240",
+            "263"
+          ],
+          "url": "https://t.co/zCL3KKp6UM",
+          "media_url": "http://pbs.twimg.com/media/FVVKKvpVEAIO85k.png",
+          "id_str": "1537216396265852930",
+          "id": "1537216396265852930",
+          "media_url_https": "https://pbs.twimg.com/media/FVVKKvpVEAIO85k.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "96",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1004",
+              "h": "142",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1004",
+              "h": "142",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "142",
+              "h": "142",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/zCL3KKp6UM"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "263"
+    ],
+    "favorite_count": "2",
+    "id_str": "1537222313090744320",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1537222313090744320",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jun 15 23:55:34 +0000 2022",
+    "favorited": false,
+    "full_text": "found out this somewhat insane caveat for the protocol that all crypto wallets use?\n\nThis protocol, BIPS-32, is often compared to traditional PKI (the padlock in your web browser) in that it creates a tree of cryptographically linked keys, https://t.co/zCL3KKp6UM",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1537222313090744320/photo/1",
+          "indices": [
+            "240",
+            "263"
+          ],
+          "url": "https://t.co/zCL3KKp6UM",
+          "media_url": "http://pbs.twimg.com/media/FVVKKvpVEAIO85k.png",
+          "id_str": "1537216396265852930",
+          "id": "1537216396265852930",
+          "media_url_https": "https://pbs.twimg.com/media/FVVKKvpVEAIO85k.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "96",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1004",
+              "h": "142",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1004",
+              "h": "142",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "142",
+              "h": "142",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/zCL3KKp6UM"
+        }
+      ]
+    }
+  }
+}

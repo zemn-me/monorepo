@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1352641582407815168"
+        ],
+        "editableUntil": "2021-01-22T16:37:38.768Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "out of context dogs",
+          "screen_name": "dogsoutofcontxt",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "1111469989461028864",
+          "id": "1111469989461028864"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dogsoutofcontxt/status/1352420384734240769/video/1",
+          "source_status_id": "1352420384734240769",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/l6M1vyKHe0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1352420366044459009/pu/img/ikf5zKdvzS8E-FLj.jpg",
+          "id_str": "1352420366044459009",
+          "source_user_id": "1111469989461028864",
+          "id": "1352420366044459009",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1352420366044459009/pu/img/ikf5zKdvzS8E-FLj.jpg",
+          "source_user_id_str": "1111469989461028864",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1352420384734240769",
+          "display_url": "pic.twitter.com/l6M1vyKHe0"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "44"
+    ],
+    "favorite_count": "0",
+    "id_str": "1352641582407815168",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1352641582407815168",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jan 22 15:37:38 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @dogsoutofcontxt: https://t.co/l6M1vyKHe0",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dogsoutofcontxt/status/1352420384734240769/video/1",
+          "source_status_id": "1352420384734240769",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/l6M1vyKHe0",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1352420366044459009/pu/img/ikf5zKdvzS8E-FLj.jpg",
+          "id_str": "1352420366044459009",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "8033",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1352420366044459009/pu/vid/320x568/uqTnN-H5bEA0P10C.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1352420366044459009/pu/vid/576x1024/gt7uX4GYZIUhc7nN.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1352420366044459009/pu/pl/StW7kswYxCU3r8Ru.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1352420366044459009/pu/vid/360x640/qXCl8ulh3gg-7JPe.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1111469989461028864",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1352420366044459009",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1352420366044459009/pu/img/ikf5zKdvzS8E-FLj.jpg",
+          "source_user_id_str": "1111469989461028864",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1352420384734240769",
+          "display_url": "pic.twitter.com/l6M1vyKHe0"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "785406042494513152"
+        ],
+        "editableUntil": "2016-10-10T10:06:07.326Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Cat of The Day",
+          "screen_name": "CatotDay",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "737359042679562240",
+          "id": "737359042679562240"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CatotDay/status/785031007321853952/video/1",
+          "source_status_id": "785031007321853952",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/Oto2y4jjsU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/785030481276444672/pu/img/zalruo_pnowM5MVN.jpg",
+          "id_str": "785030481276444672",
+          "source_user_id": "737359042679562240",
+          "id": "785030481276444672",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/785030481276444672/pu/img/zalruo_pnowM5MVN.jpg",
+          "source_user_id_str": "737359042679562240",
+          "sizes": {
+            "small": {
+              "w": "450",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "450",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "450",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "785031007321853952",
+          "display_url": "pic.twitter.com/Oto2y4jjsU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "77"
+    ],
+    "favorite_count": "0",
+    "id_str": "785406042494513152",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "785406042494513152",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 10 09:06:07 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @CatotDay: Hero cat saving his owner from drowning https://t.co/Oto2y4jjsU",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CatotDay/status/785031007321853952/video/1",
+          "source_status_id": "785031007321853952",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/Oto2y4jjsU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/785030481276444672/pu/img/zalruo_pnowM5MVN.jpg",
+          "id_str": "785030481276444672",
+          "video_info": {
+            "aspect_ratio": [
+              "5",
+              "4"
+            ],
+            "duration_millis": "35258",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/785030481276444672/pu/vid/450x360/yLqcvfRSlHCk-vSG.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/785030481276444672/pu/pl/8MdubnVXsD6psZ9p.m3u8"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/785030481276444672/pu/vid/224x180/a266tANfTBeQ6rh-.mp4"
+              }
+            ]
+          },
+          "source_user_id": "737359042679562240",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "785030481276444672",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/785030481276444672/pu/img/zalruo_pnowM5MVN.jpg",
+          "source_user_id_str": "737359042679562240",
+          "sizes": {
+            "small": {
+              "w": "450",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "450",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "450",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "785031007321853952",
+          "display_url": "pic.twitter.com/Oto2y4jjsU"
+        }
+      ]
+    }
+  }
+}

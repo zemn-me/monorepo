@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 export default {
 	testEnvironment: 'node',
 	haste: {

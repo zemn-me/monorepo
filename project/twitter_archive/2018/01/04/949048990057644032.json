@@ -1,0 +1,124 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "949048990057644032"
+        ],
+        "editableUntil": "2018-01-04T23:44:46.364Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/sIx9c1IhHn",
+          "expanded_url": "https://support.google.com/faqs/answer/7625886",
+          "display_url": "support.google.com/faqs/answer/76…",
+          "indices": [
+            "91",
+            "114"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/949048990057644032/photo/1",
+          "indices": [
+            "162",
+            "185"
+          ],
+          "url": "https://t.co/BvL2tkdGnv",
+          "media_url": "http://pbs.twimg.com/media/DSuyd5SXcAALswP.jpg",
+          "id_str": "949048373155426304",
+          "id": "949048373155426304",
+          "media_url_https": "https://pbs.twimg.com/media/DSuyd5SXcAALswP.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "101",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "106",
+              "h": "106",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "715",
+              "h": "106",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "715",
+              "h": "106",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/BvL2tkdGnv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "185"
+    ],
+    "favorite_count": "1",
+    "id_str": "949048990057644032",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "949048990057644032",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 04 22:44:46 +0000 2018",
+    "favorited": false,
+    "full_text": "💯 explanation of the spectre (\"branch target injection\") mitigation from google, retpoline\nhttps://t.co/sIx9c1IhHn\n\n(uses loops to prevent speculative execution) https://t.co/BvL2tkdGnv",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/949048990057644032/photo/1",
+          "indices": [
+            "162",
+            "185"
+          ],
+          "url": "https://t.co/BvL2tkdGnv",
+          "media_url": "http://pbs.twimg.com/media/DSuyd5SXcAALswP.jpg",
+          "id_str": "949048373155426304",
+          "id": "949048373155426304",
+          "media_url_https": "https://pbs.twimg.com/media/DSuyd5SXcAALswP.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "101",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "106",
+              "h": "106",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "715",
+              "h": "106",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "715",
+              "h": "106",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/BvL2tkdGnv"
+        }
+      ]
+    }
+  }
+}

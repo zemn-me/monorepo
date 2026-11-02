@@ -1,0 +1,25 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+genrule(
+    name = "gen_test_results",
+    srcs = ["a.ts"],
+    outs = ["output.txt"],
+    cmd = """
+    $(location //rs/ts/cmd/extract_imports) $(location :a.ts) > $@
+    """,
+    tools = [
+        "//rs/ts/cmd/extract_imports",
+    ],
+)
+
+diff_test(
+    name = "works_test",
+    file1 = "expected.txt",
+    file2 = ":gen_test_results",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

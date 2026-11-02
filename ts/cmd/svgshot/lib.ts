@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { exec } from 'child_process';
 import { Command } from 'commander';
 import { readFile, writeFile } from 'fs/promises';
@@ -141,7 +142,7 @@ export const main = async (argv: string[] = process.argv) => {
 				waitUntil: 'networkidle2',
 				timeout,
 			});
-		} catch (e) {
+		} catch (_) {
 			// if the network doesn't go idle, we still take the screenshot
 		}
 
@@ -202,13 +203,13 @@ export const main = async (argv: string[] = process.argv) => {
 		const fileName =
 			out === undefined
 				? ((await page.title()).trim() || page.url()).replace(
-						// https://github.com/Zemnmez/monorepo/security/code-scanning/1
+						// https://github.com/zemn-me/monorepo/security/code-scanning/1
 						// All non-letter unicode bits.
 						// nodejs is not really aware of what parts of the path
 						// are dangerous.
 						/\P{L}/gu,
 						'_'
-				  ) + '.svg'
+					) + '.svg'
 				: out;
 
 		const svgContents = (await readFile(svgFile, 'utf8')).toString();

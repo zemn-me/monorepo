@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1545066593608118272"
+        ],
+        "editableUntil": "2022-07-07T15:55:56.522Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Matt",
+          "screen_name": "matthwatson",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "164903181",
+          "id": "164903181"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/matthwatson/status/1545010077945344000/video/1",
+          "source_status_id": "1545010077945344000",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/bNt3SoCFdT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1545010057741406208/pu/img/vFRfjz81Qs4wGMAm.jpg",
+          "id_str": "1545010057741406208",
+          "source_user_id": "164903181",
+          "id": "1545010057741406208",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1545010057741406208/pu/img/vFRfjz81Qs4wGMAm.jpg",
+          "source_user_id_str": "164903181",
+          "sizes": {
+            "large": {
+              "w": "886",
+              "h": "472",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "886",
+              "h": "472",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "362",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1545010077945344000",
+          "display_url": "pic.twitter.com/bNt3SoCFdT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "1545066593608118272",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1545066593608118272",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jul 07 15:25:56 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @matthwatson: Boris Johnson’s Final Message https://t.co/bNt3SoCFdT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/matthwatson/status/1545010077945344000/video/1",
+          "source_status_id": "1545010077945344000",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/bNt3SoCFdT",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1545010057741406208/pu/img/vFRfjz81Qs4wGMAm.jpg",
+          "id_str": "1545010057741406208",
+          "video_info": {
+            "aspect_ratio": [
+              "443",
+              "236"
+            ],
+            "duration_millis": "7326",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1545010057741406208/pu/vid/506x270/-utTt8F-SVRb43i1.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1545010057741406208/pu/vid/886x472/35MLeAk3B4JTexix.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1545010057741406208/pu/pl/EdmmXzf9nRALoRE4.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "164903181",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1545010057741406208",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1545010057741406208/pu/img/vFRfjz81Qs4wGMAm.jpg",
+          "source_user_id_str": "164903181",
+          "sizes": {
+            "large": {
+              "w": "886",
+              "h": "472",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "886",
+              "h": "472",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "362",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1545010077945344000",
+          "display_url": "pic.twitter.com/bNt3SoCFdT"
+        }
+      ]
+    }
+  }
+}

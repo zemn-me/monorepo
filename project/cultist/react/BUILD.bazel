@@ -1,3 +1,5 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -6,15 +8,28 @@ ts_project(
     name = "react",
     srcs = [
         "index.tsx",
-        "table.module.css",
         "table.tsx",
+    ],
+    assets = [
+        "table.module.css",
     ],
     resolve_json_module = True,
     deps = [
-        "//:base_defs",
+        ":table_module_css",
         "//:node_modules/@types/d3-scale",
         "//:node_modules/@types/react",
         "//:node_modules/react",
         "//project/cultist/state",
     ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+css_module(
+    name = "table_module_css",
+    src = "table.module.css",
+    visibility = ["//:__subpackages__"],
 )

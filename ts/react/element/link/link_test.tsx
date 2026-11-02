@@ -1,8 +1,11 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* biome-ignore-all lint/correctness/noRestrictedElements: this module intentionally uses restricted elements */
+
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-import * as Url from 'ts/url';
+
+import * as Url from '#root/ts/url/index.js';
 
 import { Link } from '.';
 
@@ -36,7 +39,7 @@ describe('link', () => {
 
 			const anchor: HTMLAnchorElement = container?.querySelector(
 				'.target'
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 			) as any;
 			expect(anchor).not.toBeUndefined();
 			expect(anchor).toBeInstanceOf(HTMLAnchorElement);
@@ -53,7 +56,7 @@ describe('link', () => {
 
 			const anchor: HTMLAnchorElement = container?.querySelector(
 				'.target'
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 			) as any;
 			expect(anchor).not.toBeUndefined();
 			expect(anchor).toBeInstanceOf(HTMLAnchorElement);

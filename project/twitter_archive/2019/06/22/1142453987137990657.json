@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1142453987137990657"
+        ],
+        "editableUntil": "2019-06-22T16:27:10.959Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "mark",
+          "screen_name": "mwilcox",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "8720422",
+          "id": "8720422"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mwilcox/status/1142449135783751680/photo/1",
+          "source_status_id": "1142449135783751680",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/iuZZqVN5uo",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/D9rLalaXkAAsWPy.jpg",
+          "id_str": "1142449113071587328",
+          "source_user_id": "8720422",
+          "id": "1142449113071587328",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/D9rLalaXkAAsWPy.jpg",
+          "source_user_id_str": "8720422",
+          "sizes": {
+            "small": {
+              "w": "440",
+              "h": "330",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "440",
+              "h": "330",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "440",
+              "h": "330",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1142449135783751680",
+          "display_url": "pic.twitter.com/iuZZqVN5uo"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "51"
+    ],
+    "favorite_count": "0",
+    "id_str": "1142453987137990657",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1142453987137990657",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 22 15:27:10 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @mwilcox: current status https://t.co/iuZZqVN5uo",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mwilcox/status/1142449135783751680/photo/1",
+          "source_status_id": "1142449135783751680",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/iuZZqVN5uo",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/D9rLalaXkAAsWPy.jpg",
+          "id_str": "1142449113071587328",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/D9rLalaXkAAsWPy.mp4"
+              }
+            ]
+          },
+          "source_user_id": "8720422",
+          "id": "1142449113071587328",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/D9rLalaXkAAsWPy.jpg",
+          "source_user_id_str": "8720422",
+          "sizes": {
+            "small": {
+              "w": "440",
+              "h": "330",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "440",
+              "h": "330",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "440",
+              "h": "330",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1142449135783751680",
+          "display_url": "pic.twitter.com/iuZZqVN5uo"
+        }
+      ]
+    }
+  }
+}

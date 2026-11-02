@@ -1,0 +1,153 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1100377781421203456"
+        ],
+        "editableUntil": "2019-02-26T13:51:21.778Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "tobyfox",
+          "screen_name": "tobyfox",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "39157744",
+          "id": "39157744"
+        },
+        {
+          "name": "ファミ通.com",
+          "screen_name": "famitsu",
+          "indices": [
+            "46",
+            "54"
+          ],
+          "id_str": "5921162",
+          "id": "5921162"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/bXRHU0Wnki",
+          "expanded_url": "https://www.famitsu.com/news/201902/26172492.html",
+          "display_url": "famitsu.com/news/201902/26…",
+          "indices": [
+            "55",
+            "78"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tobyfox/status/1100339081697841152/photo/1",
+          "source_status_id": "1100339081697841152",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/a3thtZlSCV",
+          "media_url": "http://pbs.twimg.com/media/D0Ut_2KVsAAkbov.jpg",
+          "id_str": "1100336258855841792",
+          "source_user_id": "39157744",
+          "id": "1100336258855841792",
+          "media_url_https": "https://pbs.twimg.com/media/D0Ut_2KVsAAkbov.jpg",
+          "source_user_id_str": "39157744",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "581",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "549",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "581",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1100339081697841152",
+          "display_url": "pic.twitter.com/a3thtZlSCV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "102"
+    ],
+    "favorite_count": "0",
+    "id_str": "1100377781421203456",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1100377781421203456",
+    "possibly_sensitive": false,
+    "created_at": "Tue Feb 26 12:51:21 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @tobyfox: I drew the cover of the upcoming @famitsu https://t.co/bXRHU0Wnki https://t.co/a3thtZlSCV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/tobyfox/status/1100339081697841152/photo/1",
+          "source_status_id": "1100339081697841152",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/a3thtZlSCV",
+          "media_url": "http://pbs.twimg.com/media/D0Ut_2KVsAAkbov.jpg",
+          "id_str": "1100336258855841792",
+          "source_user_id": "39157744",
+          "id": "1100336258855841792",
+          "media_url_https": "https://pbs.twimg.com/media/D0Ut_2KVsAAkbov.jpg",
+          "source_user_id_str": "39157744",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "581",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "549",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "581",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1100339081697841152",
+          "display_url": "pic.twitter.com/a3thtZlSCV"
+        }
+      ]
+    }
+  }
+}

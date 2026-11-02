@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1110230661498064897"
+        ],
+        "editableUntil": "2019-03-25T18:23:11.446Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Dave Aitel",
+          "screen_name": "daveaitel",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "8371802",
+          "id": "8371802"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "289"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1110228361849327616",
+    "id_str": "1110230661498064897",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1110230661498064897",
+    "in_reply_to_status_id": "1110228361849327616",
+    "created_at": "Mon Mar 25 17:23:11 +0000 2019",
+    "favorited": false,
+    "full_text": "@daveaitel the point you make about 'only fixing one-offs' in your static analysis i call 'whack-a-mole security engineering', a term i am vaguely trying to coin. it's insane to me that it's not even possible in some orgs for security incidents to cause fixes at high levels of abstraction",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

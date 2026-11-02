@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1099308509164908544"
+        ],
+        "editableUntil": "2019-02-23T15:02:27.406Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1099308509164908544/photo/1",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/JN9Yl2RsBu",
+          "media_url": "http://pbs.twimg.com/media/D0GG8X7X0AE8yvc.png",
+          "id_str": "1099308155828424705",
+          "id": "1099308155828424705",
+          "media_url_https": "https://pbs.twimg.com/media/D0GG8X7X0AE8yvc.png",
+          "sizes": {
+            "large": {
+              "w": "441",
+              "h": "192",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "441",
+              "h": "192",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "441",
+              "h": "192",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/JN9Yl2RsBu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "76"
+    ],
+    "favorite_count": "3",
+    "in_reply_to_status_id_str": "1098261974968922112",
+    "id_str": "1099308509164908544",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1099308509164908544",
+    "in_reply_to_status_id": "1098261974968922112",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 23 14:02:27 +0000 2019",
+    "favorited": false,
+    "full_text": "here's the solution!\n\nnb: +[] == 0 but +[\"x\"] == NaN https://t.co/JN9Yl2RsBu",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1099308509164908544/photo/1",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/JN9Yl2RsBu",
+          "media_url": "http://pbs.twimg.com/media/D0GG8X7X0AE8yvc.png",
+          "id_str": "1099308155828424705",
+          "id": "1099308155828424705",
+          "media_url_https": "https://pbs.twimg.com/media/D0GG8X7X0AE8yvc.png",
+          "sizes": {
+            "large": {
+              "w": "441",
+              "h": "192",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "441",
+              "h": "192",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "441",
+              "h": "192",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/JN9Yl2RsBu"
+        }
+      ]
+    }
+  }
+}

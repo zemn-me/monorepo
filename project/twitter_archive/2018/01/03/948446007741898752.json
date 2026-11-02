@@ -1,0 +1,130 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "948446007741898752"
+        ],
+        "editableUntil": "2018-01-03T07:48:44.177Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "jessica a. m.",
+          "screen_name": "my2k",
+          "indices": [
+            "0",
+            "5"
+          ],
+          "id_str": "6131952",
+          "id": "6131952"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/948446007741898752/photo/1",
+          "indices": [
+            "261",
+            "284"
+          ],
+          "url": "https://t.co/Jy6STiYpQv",
+          "media_url": "http://pbs.twimg.com/media/DSmONPUWkAAh_S-.jpg",
+          "id_str": "948445554639540224",
+          "id": "948445554639540224",
+          "media_url_https": "https://pbs.twimg.com/media/DSmONPUWkAAh_S-.jpg",
+          "sizes": {
+            "small": {
+              "w": "423",
+              "h": "59",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "59",
+              "h": "59",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "423",
+              "h": "59",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "423",
+              "h": "59",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/Jy6STiYpQv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "284"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "948255786332971009",
+    "id_str": "948446007741898752",
+    "in_reply_to_user_id": "6131952",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "948446007741898752",
+    "in_reply_to_status_id": "948255786332971009",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 03 06:48:44 +0000 2018",
+    "favorited": false,
+    "full_text": "@my2k for anyone interested: this mode is for testing mobile websites and, when loading a webpage identifies itself as a mobile browser via the user-agent header. instagram seems to actually suppress the upload interface unless you identify as a mobile browser https://t.co/Jy6STiYpQv",
+    "lang": "en",
+    "in_reply_to_screen_name": "my2k",
+    "in_reply_to_user_id_str": "6131952",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/948446007741898752/photo/1",
+          "indices": [
+            "261",
+            "284"
+          ],
+          "url": "https://t.co/Jy6STiYpQv",
+          "media_url": "http://pbs.twimg.com/media/DSmONPUWkAAh_S-.jpg",
+          "id_str": "948445554639540224",
+          "id": "948445554639540224",
+          "media_url_https": "https://pbs.twimg.com/media/DSmONPUWkAAh_S-.jpg",
+          "sizes": {
+            "small": {
+              "w": "423",
+              "h": "59",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "59",
+              "h": "59",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "423",
+              "h": "59",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "423",
+              "h": "59",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/Jy6STiYpQv"
+        }
+      ]
+    }
+  }
+}

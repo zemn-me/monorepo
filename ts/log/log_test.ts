@@ -1,4 +1,6 @@
-import * as log from './log';
+import { describe, expect, it } from '@jest/globals';
+
+import * as log from '#root/ts/log/log.js';
 
 class MockConsole
 	implements Pick<typeof window.console, 'error' | 'log' | 'info'>

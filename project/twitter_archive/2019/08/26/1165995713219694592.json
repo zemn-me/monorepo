@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1165995713219694592"
+        ],
+        "editableUntil": "2019-08-26T15:33:35.841Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Michée Lengronne",
+          "screen_name": "MicheeLengronne",
+          "indices": [
+            "0",
+            "16"
+          ],
+          "id_str": "137964274",
+          "id": "137964274"
+        },
+        {
+          "name": "Frederic Jacobs",
+          "screen_name": "FredericJacobs",
+          "indices": [
+            "17",
+            "32"
+          ],
+          "id_str": "18018877",
+          "id": "18018877"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/svSDgdrdXc",
+          "expanded_url": "https://law.stackexchange.com/questions/27908/gdpr-recaptcha-with-users-consent",
+          "display_url": "law.stackexchange.com/questions/2790…",
+          "indices": [
+            "288",
+            "311"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "311"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1165994185784254467",
+    "id_str": "1165995713219694592",
+    "in_reply_to_user_id": "137964274",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1165995713219694592",
+    "in_reply_to_status_id": "1165994185784254467",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 26 14:33:35 +0000 2019",
+    "favorited": false,
+    "full_text": "@MicheeLengronne @FredericJacobs if your login system doesn't already have csrf protection it's a broken login system. csrf tokens provide what i'd consider the absolute *minimum* of protection against spammers and certainly are no replacement for a CAPTCHA. CAPTCHAs are GDPR compliant. https://t.co/svSDgdrdXc",
+    "lang": "en",
+    "in_reply_to_screen_name": "MicheeLengronne",
+    "in_reply_to_user_id_str": "137964274"
+  }
+}

@@ -1,10 +1,11 @@
-import * as Camera from 'ts/math/camera';
-import * as Canvas from 'ts/math/canvas';
-import * as conv from 'ts/math/conv';
-import { EulerAngle } from 'ts/math/euler_angle';
-import * as Homog from 'ts/math/homog';
-import * as Matrix from 'ts/math/matrix';
-import * as Quaternion from 'ts/math/quaternion';
+import * as Camera from '#root/ts/math/camera.js';
+import * as Canvas from '#root/ts/math/canvas/index.js';
+import * as cartesian from '#root/ts/math/cartesian.js';
+import * as conv from '#root/ts/math/conv.js';
+import { EulerAngle } from '#root/ts/math/euler_angle.js';
+import * as Homog from '#root/ts/math/homog.js';
+import * as Quaternion from '#root/ts/math/quaternion.js';
+import { map } from '#root/ts/math/vec';
 
 export class Square implements Canvas.Drawable2D {
 	public readonly r: number;
@@ -45,8 +46,9 @@ class As3D<T extends Canvas.Drawable2D> implements Canvas.Drawable3D {
 	public lines3D(): Homog.Line3D[] {
 		return this.target.lines2D().map(line =>
 			line.map((point: Homog.Point2D): Homog.Point3D => {
-				const [[x], [y], [scale]] = point;
-				return [[x], [y], [0], [scale]] as const;
+				const [xi, yi, scalei] = point;
+				const [[x], [y], [scale]] = [xi!, yi!, scalei!];
+				return [[x!], [y!], [0], [scale!]] as const;
 			})
 		);
 	}
@@ -61,9 +63,9 @@ export class Translate3D<T extends Canvas.Drawable3D>
 	) {}
 
 	public lines3D(): Homog.Line3D[] {
-		return this.target
-			.lines3D()
-			.map(line => line.map(point => Matrix.add(point, this.by)));
+		return map(this.target.lines3D(), line =>
+			map(line, point => cartesian.add<1, 4>(point, this.by))
+		);
 	}
 }
 
@@ -86,16 +88,18 @@ export class Cube implements Canvas.Drawable3D {
 			[this.diameter],
 			[1],
 		] as const);
-		const [[ATL, ATR, ABR, ABL]] = A.lines3D();
-		const [[BTL, BTR, BBR, BBL]] = B.lines3D();
+		const [row1] = A.lines3D();
+		const [ATL, ATR, ABR, ABL] = row1!;
+		const [row2] = B.lines3D();
+		const [BTL, BTR, BBR, BBL] = row2!;
 
 		return [
 			...A.lines3D(),
 			...B.lines3D(),
-			[ATL, BTL],
-			[ATR, BTR],
-			[ABR, BBR],
-			[ABL, BBL],
+			[ATL!, BTL!],
+			[ATR!, BTR!],
+			[ABR!, BBR!],
+			[ABL!, BBL!],
 		];
 	}
 }
@@ -132,19 +136,24 @@ export class QuaternionMultiply<
 	) {}
 	lines3D() {
 		return this.value.lines3D().map(line =>
-			line.map(point => {
-				const [[x], [y], [z]] = Homog.pointToCart(point);
-				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
-					x,
-					y,
-					z,
+			line.map((point): Homog.Point3D => {
+				const [xi, yi, zi] = Homog.pointToCart(point);
+				const [[x], [y], [z]] = [xi!, yi!, zi!];
+				const q1: Quaternion.Quaternion = Quaternion.from(
+					x!,
+					y!,
+					z!,
 					0
 				);
 				const q2 = this.quaternion;
-				const n = q1.multiply(q2);
+				const n = Quaternion.multiply(q1, q2);
 
-				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
-				return [[nx], [ny], [nz], [1]] as const;
+				const [nx = 0, ny = 0, nz = 0] = [
+					Quaternion.x(n),
+					Quaternion.y(n),
+					Quaternion.z(n),
+				];
+				return [[nx], [ny], [nz], [1]];
 			})
 		);
 	}
@@ -163,23 +172,31 @@ export class QuaternionRotate<
 		public readonly rotation: Q
 	) {}
 	lines3D() {
-		const [[rx], [ry], [rz]] = this.rotation;
+		const [rxi, ryi, rzi] = this.rotation;
+		const [[rx], [ry], [rz]] = [rxi!, ryi!, rzi!];
 		// this whole class was kind of a mistake. but i preserve this mistake
 		// here so that the tests pass.
-		const rQ = conv.Quaternion.fromEulerAngles(new EulerAngle(rx, ry, rz));
+		const rQ = conv.Quaternion.fromEulerAngles(
+			new EulerAngle(rx!, ry!, rz!)
+		);
 		return this.value.lines3D().map(line =>
-			line.map(point => {
-				const [[x], [y], [z]] = Homog.pointToCart(point);
-				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
-					x,
-					y,
-					z,
+			line.map((point): Homog.Point3D => {
+				const [xi, yi, zi] = Homog.pointToCart(point);
+				const [[x], [y], [z]] = [xi!, yi!, zi!];
+				const q1: Quaternion.Quaternion = Quaternion.from(
+					x!,
+					y!,
+					z!,
 					0
 				);
 				// technically incorrect. should be removed sometime.
-				const n = q1.multiply(rQ);
+				const n = Quaternion.multiply(q1, rQ);
 
-				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
+				const [nx = 0, ny = 0, nz = 0] = [
+					Quaternion.x(n),
+					Quaternion.y(n),
+					Quaternion.z(n),
+				];
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);

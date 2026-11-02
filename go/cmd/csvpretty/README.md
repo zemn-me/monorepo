@@ -4,12 +4,12 @@ CSVPretty
 
 CSVPretty is a small tool that pretty prints CSV files.
 
-There are many tools online that claim to pretty print CSV files when 
+There are many tools online that claim to pretty print CSV files when
 really they are just reformatted for display. This tool produces files
 which actually *are* CSV files, just with the columns aligned with the
 [Elastic Tabstops] algorithm.
 
-The CSV files should produce identical data when parsed provided your 
+The CSV files should produce identical data when parsed provided your
 CSV parser is configured to drop preceeding whitespace in CSV records
 (see [Limitations]).
 
@@ -51,14 +51,14 @@ Installation
 
 With a working Go setup, and `$GOPATH/bin` in your `$PATH`:
 ```bash
-go get github.com/zemnmez/monorepo/go/cmd/csvpretty -u
+go get github.com/zemn-me/monorepo/go/cmd/csvpretty -u
 ```
 
 If you want to quickly use `csvpretty` and you have `go` installed, you can
 just:
 
 ```bash
-go run github.com/zemnmez/monorepo/go/cmd/csvpretty
+go run github.com/zemn-me/monorepo/go/cmd/csvpretty
 ```
 
 With whatever args you desire.
@@ -83,7 +83,7 @@ Limitations
 
 The only limitation to CSVPretty is that your CSV parser drops leading
 whitespace in records. This is a common option that's tenuously
-considered part of the CSV format. In Go, for example you can set the 
+considered part of the CSV format. In Go, for example you can set the
 TrimLeadingSpace field of [csv.Reader] to `true` for this.
 
 [csv.Reader]: https://godoc.org/encoding/csv

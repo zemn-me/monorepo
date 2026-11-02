@@ -1,5 +1,8 @@
 import * as aws from '@pulumi/aws';
+import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as pulumi from '@pulumi/pulumi';
+
+import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 
 const second = 1;
 const minute = 60 * second;
@@ -16,7 +19,15 @@ export interface Args {
 	 * @example
 	 * "mywebsite.com."
 	 */
-	domain: string | undefined;
+	domain: pulumi.Input<string> | undefined;
+
+	tags?: pulumi.Input<Record<string, pulumi.Input<string>>>;
+
+	/**
+	 * Don't deploy a cost allocation tag.
+	 * AWS doesn't let you do this in one go.
+	 */
+	noCostAllocationTag?: boolean;
 }
 
 /**
@@ -31,11 +42,25 @@ export class Certificate extends pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:lib:Certificate', name, args, opts);
 
+		const tag = name;
+		const tags = mergeTags(args.tags, tagTrue(tag));
+
+		if (!args.noCostAllocationTag)
+			new CostAllocationTag(
+				name,
+				{
+					status: 'Active',
+					tagKey: tag,
+				},
+				{ parent: this }
+			);
+
 		const cert = new aws.acm.Certificate(
 			`${name}_cert`,
 			{
 				domainName: args.domain,
 				validationMethod: 'DNS',
+				tags,
 			},
 			{
 				parent: this,
@@ -45,9 +70,9 @@ export class Certificate extends pulumi.ComponentResource {
 		const validatingRecord = new aws.route53.Record(
 			`${name}_validating_record`,
 			{
-				name: cert.domainValidationOptions[0].resourceRecordName,
-				records: [cert.domainValidationOptions[0].resourceRecordValue],
-				type: cert.domainValidationOptions[0].resourceRecordType,
+				name: cert.domainValidationOptions[0]!.resourceRecordName,
+				records: [cert.domainValidationOptions[0]!.resourceRecordValue],
+				type: cert.domainValidationOptions[0]!.resourceRecordType,
 				zoneId: args.zoneId,
 				ttl: 1 * minute, // because these really don't need to be cached
 			},

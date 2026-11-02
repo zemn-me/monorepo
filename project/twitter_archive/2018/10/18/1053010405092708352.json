@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1053010405092708352"
+        ],
+        "editableUntil": "2018-10-18T20:50:19.218Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "DOOM",
+          "screen_name": "DOOM",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "113696373",
+          "id": "113696373"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DOOM/status/1031584388897800194/photo/1",
+          "source_status_id": "1031584388897800194",
+          "indices": [
+            "17",
+            "40"
+          ],
+          "url": "https://t.co/55bShef4Vt",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DlDseYsWwAAgvIb.jpg",
+          "id_str": "1031584321436565504",
+          "source_user_id": "113696373",
+          "id": "1031584321436565504",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DlDseYsWwAAgvIb.jpg",
+          "source_user_id_str": "113696373",
+          "sizes": {
+            "medium": {
+              "w": "600",
+              "h": "338",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "600",
+              "h": "338",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "600",
+              "h": "338",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1031584388897800194",
+          "display_url": "pic.twitter.com/55bShef4Vt"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "40"
+    ],
+    "favorite_count": "0",
+    "id_str": "1053010405092708352",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1053010405092708352",
+    "possibly_sensitive": false,
+    "created_at": "Thu Oct 18 19:50:19 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @DOOM: bop it https://t.co/55bShef4Vt",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DOOM/status/1031584388897800194/photo/1",
+          "source_status_id": "1031584388897800194",
+          "indices": [
+            "17",
+            "40"
+          ],
+          "url": "https://t.co/55bShef4Vt",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DlDseYsWwAAgvIb.jpg",
+          "id_str": "1031584321436565504",
+          "video_info": {
+            "aspect_ratio": [
+              "300",
+              "169"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/DlDseYsWwAAgvIb.mp4"
+              }
+            ]
+          },
+          "source_user_id": "113696373",
+          "id": "1031584321436565504",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DlDseYsWwAAgvIb.jpg",
+          "source_user_id_str": "113696373",
+          "sizes": {
+            "medium": {
+              "w": "600",
+              "h": "338",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "600",
+              "h": "338",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "600",
+              "h": "338",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1031584388897800194",
+          "display_url": "pic.twitter.com/55bShef4Vt"
+        }
+      ]
+    }
+  }
+}

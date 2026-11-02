@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "959651268347166720"
+        ],
+        "editableUntil": "2018-02-03T05:54:26.489Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Oskar Stålberg",
+          "screen_name": "OskSta",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "767755917890842624",
+          "id": "767755917890842624"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OskSta/status/959530111187013632/photo/1",
+          "source_status_id": "959530111187013632",
+          "indices": [
+            "105",
+            "128"
+          ],
+          "url": "https://t.co/vfJAc0N6y8",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DVDvPtTXcAEkPUG.jpg",
+          "id_str": "959529773767815169",
+          "source_user_id": "767755917890842624",
+          "id": "959529773767815169",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DVDvPtTXcAEkPUG.jpg",
+          "source_user_id_str": "767755917890842624",
+          "sizes": {
+            "small": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "959530111187013632",
+          "display_url": "pic.twitter.com/vfJAc0N6y8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "128"
+    ],
+    "favorite_count": "0",
+    "id_str": "959651268347166720",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "959651268347166720",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 03 04:54:26 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @OskSta: I've been tweaking the foliage system today. It now supports multiple grass types per level. https://t.co/vfJAc0N6y8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OskSta/status/959530111187013632/photo/1",
+          "source_status_id": "959530111187013632",
+          "indices": [
+            "105",
+            "128"
+          ],
+          "url": "https://t.co/vfJAc0N6y8",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/DVDvPtTXcAEkPUG.jpg",
+          "id_str": "959529773767815169",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/DVDvPtTXcAEkPUG.mp4"
+              }
+            ]
+          },
+          "source_user_id": "767755917890842624",
+          "id": "959529773767815169",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/DVDvPtTXcAEkPUG.jpg",
+          "source_user_id_str": "767755917890842624",
+          "sizes": {
+            "small": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "420",
+              "h": "420",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "959530111187013632",
+          "display_url": "pic.twitter.com/vfJAc0N6y8"
+        }
+      ]
+    }
+  }
+}

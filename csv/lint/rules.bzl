@@ -1,5 +1,5 @@
-load("//csv/format:rules.bzl", "csv_format")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("//csv/format:rules.bzl", "csv_format")
 
 def csv_lint_test(name, srcs = [], **kwargs):
     for src in srcs:

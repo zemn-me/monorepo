@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1274040349237882881"
+        ],
+        "editableUntil": "2020-06-19T19:04:24.440Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "283"
+    ],
+    "favorite_count": "3",
+    "id_str": "1274040349237882881",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1274040349237882881",
+    "created_at": "Fri Jun 19 18:04:24 +0000 2020",
+    "favorited": false,
+    "full_text": "just wanted to share the algorithm i derived in discord for how high you need to drop an egg from to break it. using code instead of math notation for readability\n\n( breakingWeight: kg, splatTime: secs, mass: kg): meters =&gt; (breakingWeight * 9.8 * splatTime / mass) ** 2 / 2 * 9.8",
+    "lang": "en"
+  }
+}

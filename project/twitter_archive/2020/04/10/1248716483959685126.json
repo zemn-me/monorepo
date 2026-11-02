@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1248716483959685126"
+        ],
+        "editableUntil": "2020-04-10T21:56:24.463Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "el musico mascarado",
+          "screen_name": "thiagoa_tag",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "308590510",
+          "id": "308590510"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/thiagoa_tag/status/1248435452501274624/video/1",
+          "source_status_id": "1248435452501274624",
+          "indices": [
+            "63",
+            "86"
+          ],
+          "url": "https://t.co/DOASfzXUDC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1248435413901094912/pu/img/ldorDtNdnmwKkhfi.jpg",
+          "id_str": "1248435413901094912",
+          "source_user_id": "308590510",
+          "id": "1248435413901094912",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1248435413901094912/pu/img/ldorDtNdnmwKkhfi.jpg",
+          "source_user_id_str": "308590510",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1248435452501274624",
+          "display_url": "pic.twitter.com/DOASfzXUDC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "86"
+    ],
+    "favorite_count": "0",
+    "id_str": "1248716483959685126",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1248716483959685126",
+    "possibly_sensitive": false,
+    "created_at": "Fri Apr 10 20:56:24 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @thiagoa_tag: esse vídeo acabou com todas as minhas forças: https://t.co/DOASfzXUDC",
+    "lang": "pt",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/thiagoa_tag/status/1248435452501274624/video/1",
+          "source_status_id": "1248435452501274624",
+          "indices": [
+            "63",
+            "86"
+          ],
+          "url": "https://t.co/DOASfzXUDC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1248435413901094912/pu/img/ldorDtNdnmwKkhfi.jpg",
+          "id_str": "1248435413901094912",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "8320",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1248435413901094912/pu/vid/480x270/hYdyvIkEbrQ8-6Zt.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1248435413901094912/pu/pl/tRZP1Yls2zgDajI_.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1248435413901094912/pu/vid/1280x720/DN-k3w73SAC7lF14.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1248435413901094912/pu/vid/640x360/dfTQ38zm9KYL2e7g.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "308590510",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1248435413901094912",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1248435413901094912/pu/img/ldorDtNdnmwKkhfi.jpg",
+          "source_user_id_str": "308590510",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1248435452501274624",
+          "display_url": "pic.twitter.com/DOASfzXUDC"
+        }
+      ]
+    }
+  }
+}

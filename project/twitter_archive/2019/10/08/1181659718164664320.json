@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1181659718164664320"
+        ],
+        "editableUntil": "2019-10-08T20:56:45.643Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "hackerone",
+          "indices": [
+            "107",
+            "117"
+          ]
+        },
+        {
+          "text": "bugbounty",
+          "indices": [
+            "118",
+            "128"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "publiclyDisclosed",
+          "screen_name": "disclosedh1",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2481701395",
+          "id": "2481701395"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/efMq8B2UMO",
+          "expanded_url": "https://hackerone.com/reports/374007",
+          "display_url": "hackerone.com/reports/374007",
+          "indices": [
+            "83",
+            "106"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1181659718164664320",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1181659718164664320",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 08 19:56:45 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @disclosedh1: U.S. Dept Of Defense disclosed a bug submitted by alyssa_herrera: https://t.co/efMq8B2UMO #hackerone #bugbounty https://t.…",
+    "lang": "en"
+  }
+}

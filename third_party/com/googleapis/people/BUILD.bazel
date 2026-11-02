@@ -1,0 +1,34 @@
+load("@npm//:openapi-typescript/package_json.bzl", oapi_ts = "bin")
+load("//js:rules.bzl", "js_library")
+
+genrule(
+    name = "copy_openapi.yaml",
+    srcs = ["@apis.guru//:APIs/googleapis.com/people/v1/openapi.yaml"],
+    outs = [
+        "openapi.yaml",
+    ],
+    cmd = "cp $< $@",
+)
+
+oapi_ts.openapi_typescript(
+    name = "ts_client_gen",
+    srcs = [
+        "openapi.yaml",
+    ],
+    outs = [
+        "api_client.gen.d.ts",
+    ],
+    args = [
+        "$(rootpath openapi.yaml)",
+        "-o",
+        "$(rootpath api_client.gen.d.ts)",
+    ],
+)
+
+js_library(
+    name = "ts_client",
+    srcs = ["api_client.gen.d.ts"],
+    visibility = [
+        "//:__subpackages__",
+    ],
+)

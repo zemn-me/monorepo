@@ -2,7 +2,8 @@ import * as path from 'node:path';
 
 import * as fs from 'fs';
 import { readdir } from 'fs/promises';
-import * as iter from 'ts/iter';
+
+import * as iter from '#root/ts/iter/index.js';
 
 type Dirent = fs.Dirent;
 
@@ -44,6 +45,7 @@ async function* _walk(
 		isSocket() {
 			return false;
 		},
+		parentPath: '.',
 		path: await path,
 	};
 	yield* iter.asyncWalkPath<Dirent>(
@@ -54,7 +56,7 @@ async function* _walk(
 			v.isDirectory()
 				? readdir(getPath(v, ...parents), {
 						withFileTypes: true,
-				  })
+					})
 				: []
 	);
 }

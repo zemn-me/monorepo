@@ -1,0 +1,161 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1032875182682071040"
+        ],
+        "editableUntil": "2018-08-24T07:20:08.101Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kristen",
+          "screen_name": "KittyPlays",
+          "indices": [
+            "50",
+            "61"
+          ],
+          "id_str": "2222629992",
+          "id": "2222629992"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1032875182682071040/video/1",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/L3Zkc78dko",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1032875135735218178/pu/img/uOtoOnhNDfwIfRti.jpg",
+          "id_str": "1032875135735218178",
+          "id": "1032875135735218178",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1032875135735218178/pu/img/uOtoOnhNDfwIfRti.jpg",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/L3Zkc78dko"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "96"
+    ],
+    "favorite_count": "12",
+    "in_reply_to_status_id_str": "1032855057614626817",
+    "id_str": "1032875182682071040",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1032875182682071040",
+    "in_reply_to_status_id": "1032855057614626817",
+    "possibly_sensitive": false,
+    "created_at": "Fri Aug 24 06:20:08 +0000 2018",
+    "favorited": false,
+    "full_text": "last one :) made a little physics demo to go with @KittyPlays’s rad case https://t.co/L3Zkc78dko",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1032875182682071040/video/1",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/L3Zkc78dko",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1032875135735218178/pu/img/uOtoOnhNDfwIfRti.jpg",
+          "id_str": "1032875135735218178",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "28320",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1032875135735218178/pu/pl/tXiNLq9BBlzja_eY.m3u8?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1032875135735218178/pu/vid/360x640/3mrlB3-vSZJmjD-y.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1032875135735218178/pu/vid/180x320/gHp2pL_R3ZO_rf4w.mp4?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1032875135735218178/pu/vid/720x1280/BstbwWflrT-0HkkK.mp4?tag=5"
+              }
+            ]
+          },
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1032875135735218178",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1032875135735218178/pu/img/uOtoOnhNDfwIfRti.jpg",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "display_url": "pic.twitter.com/L3Zkc78dko"
+        }
+      ]
+    }
+  }
+}

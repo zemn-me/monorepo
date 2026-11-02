@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1142966592017485824"
+        ],
+        "editableUntil": "2019-06-24T02:24:05.486Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "michael shillingburg",
+          "screen_name": "shillingburger",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "18111764",
+          "id": "18111764"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/shillingburger/status/1142942184443973633/video/1",
+          "source_status_id": "1142942184443973633",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/jPYSiYspYu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1142941895242502144/pu/img/tFkHTn2i1sAZucUI.jpg",
+          "id_str": "1142941895242502144",
+          "source_user_id": "18111764",
+          "id": "1142941895242502144",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1142941895242502144/pu/img/tFkHTn2i1sAZucUI.jpg",
+          "source_user_id_str": "18111764",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "490",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1000",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1000",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1142942184443973633",
+          "display_url": "pic.twitter.com/jPYSiYspYu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "84"
+    ],
+    "favorite_count": "0",
+    "id_str": "1142966592017485824",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1142966592017485824",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 24 01:24:05 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @shillingburger: i dunno what i'm making but here it is ? https://t.co/jPYSiYspYu",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/shillingburger/status/1142942184443973633/video/1",
+          "source_status_id": "1142942184443973633",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/jPYSiYspYu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1142941895242502144/pu/img/tFkHTn2i1sAZucUI.jpg",
+          "id_str": "1142941895242502144",
+          "video_info": {
+            "aspect_ratio": [
+              "25",
+              "18"
+            ],
+            "duration_millis": "25946",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1142941895242502144/pu/vid/500x360/HUb16A9MAPpe82kX.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1142941895242502144/pu/vid/374x270/VY-IPy3lPcv6TNH8.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1142941895242502144/pu/vid/1000x720/x2RmzbjsZ_hbHagQ.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1142941895242502144/pu/pl/GwckYz4JmavuUrSq.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "18111764",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1142941895242502144",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1142941895242502144/pu/img/tFkHTn2i1sAZucUI.jpg",
+          "source_user_id_str": "18111764",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "490",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1000",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1000",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1142942184443973633",
+          "display_url": "pic.twitter.com/jPYSiYspYu"
+        }
+      ]
+    }
+  }
+}

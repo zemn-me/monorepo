@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1198342447497125890"
+        ],
+        "editableUntil": "2019-11-23T21:47:58.266Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/EpwKuCNFG2",
+          "expanded_url": "https://www.npmjs.com/package/concat-stream",
+          "display_url": "npmjs.com/package/concat…",
+          "indices": [
+            "189",
+            "212"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "212"
+    ],
+    "favorite_count": "2",
+    "id_str": "1198342447497125890",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1198342447497125890",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 23 20:47:58 +0000 2019",
+    "favorited": false,
+    "full_text": "things that are in node: Buffer, Stream\nthings that aren't in node: a way to read a Stream into a Buffer\nthe 'solution': 12 Million people per week using this third-party 144 line package: https://t.co/EpwKuCNFG2",
+    "lang": "en"
+  }
+}

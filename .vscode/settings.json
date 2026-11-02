@@ -1,22 +1,129 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"html.autoClosingTags": false,
+	"editor.rulers": [79, 210],
+	"editor.wordWrap": "bounded",
 	"editor.wordWrapColumn": 80,
-	"editor.wordBasedSuggestions": false,
-	"[mdx]": {
-		"editor.wordWrap": "bounded",
-		"editor.wordWrapColumn": 80
+	"editor.wordBasedSuggestions": "off",
+	"files.associations": {
+		"*.bzl": "starlark",
+		"*.bazel": "starlark",
+		"WORKSPACE": "starlark",
+		"*.log": "ansi"
+	},
+	"json.validate.enable": true,
+	"editor.formatOnType": true,
+	"[jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[css]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[starlark]": {
+		"editor.defaultFormatter": "BazelBuild.vscode-bazel",
+		"editor.formatOnSave": true
 	},
 	"files.watcherExclude": {
 		"**/.git/objects/**": true,
 		"**/.git/subtree-cache/**": true,
 		"**/node_modules/*/**": true,
 		"**/.hg/store/**": true,
-		"**/bazel-out": true
+		"**/dist/out": true
 	},
-	"githubPullRequests.ignoredPullRequestBranches": [
-		"main"
-	],
+	"[rust]": {
+		"editor.formatOnSaveMode": "file",
+		"editor.defaultFormatter": "rust-lang.rust-analyzer",
+		"editor.formatOnSave": true
+	},
+	"githubPullRequests.ignoredPullRequestBranches": ["main"],
 	"task.allowAutomaticTasks": "on",
-	"rust-analyzer.procMacro.enable": true
+	"rust-analyzer.procMacro.enable": true,
+	"biome.lsp.bin": "./sh/bin/biome",
+	"eslint.enable": true,
+	"eslint.format.enable": true,
+	"eslint.experimental.useFlatConfig": true,
+	"eslint.onIgnoredFiles": "warn",
+	"eslint.run": "onSave",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always",
+		"source.fixAll.biome": "explicit",
+		"source.organizeImports.biome": "explicit"
+	},
+	"go.goroot": "${workspaceFolder}/dist/${workspaceFolderBasename}/external/go_sdk",
+	"go.toolsEnvVars": {
+		"GOPACKAGESDRIVER": "${workspaceFolder}/sh/bin/gopackagesdriver"
+	},
+	"go.toolsManagement.autoUpdate": false,
+	"go.toolsManagement.checkForUpdates": "local",
+	"go.enableCodeLens": {
+		"runtest": false
+	},
+	"gopls": {
+		"build.directoryFilters": ["-dist"],
+		"formatting.gofumpt": true,
+		"formatting.local": "github.com/zemn-me/monorepo",
+		"ui.completion.usePlaceholders": true,
+		"ui.semanticTokens": true,
+		"ui.codelenses": {
+			"gc_details": false,
+			"regenerate_cgo": false,
+			"generate": false,
+			"test": false,
+			"tidy": false,
+			"upgrade_dependency": false,
+			"vendor": false
+		}
+	},
+	"go.useLanguageServer": true,
+	"go.buildOnSave": "off",
+	"go.lintOnSave": "off",
+	"go.vetOnSave": "off",
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"go.alternateTools": {
+		"go": "${workspaceFolder}/sh/bin/go",
+		"goimports": "${workspaceFolder}/sh/bin/goimports",
+		"staticcheck": "${workspaceFolder}/sh/bin/staticcheck",
+		"gopls": "${workspaceFolder}/sh/bin/gopls",
+		"dlv": "${workspaceFolder}/sh/bin/dlv"
+	},
+	"terminal.integrated.enableImages": true,
+	"terminal.integrated.env.linux": {
+		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
+	},
+	"terminal.integrated.env.osx": {
+		"PATH": "${workspaceFolder}/sh/bin:${env:PATH}"
+	},
+	"bazel.buildifierFixOnFormat": true,
+	"bazel.executable": "./sh/bin/bazel",
+	"mypy-type-checker.importStrategy": "useBundled",
+	"mypy-type-checker.args": ["--python-executable=.venv/bin/python3"],
+	"python.analysis.autoImportCompletions": true,
+	"python.analysis.typeCheckingMode": "basic",
+	"python.terminal.activateEnvInCurrentTerminal": true,
+	"javascript.preferences.autoImportFileExcludePatterns": ["**/_*"],
+	"typescript.preferences.autoImportFileExcludePatterns": ["**/_*"],
+	"bazel.buildifierExecutable": "./sh/bin/buildifier",
+	"python-envs.defaultEnvManager": "ms-python.python:system"
 }

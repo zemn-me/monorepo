@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//:__subpackages__"])
@@ -5,6 +6,7 @@ package(default_visibility = ["//:__subpackages__"])
 ts_project(
     name = "log",
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
     ],
@@ -16,4 +18,9 @@ jest_test(
         "log_test.js",
     ],
     deps = [":log"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

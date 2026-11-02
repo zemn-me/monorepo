@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1403868460795432961"
+        ],
+        "editableUntil": "2021-06-13T01:14:58.325Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Blue Maelstrom @bluemaelstrom.bsky.social",
+          "screen_name": "silbmaerto",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "271207691",
+          "id": "271207691"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/silbmaerto/status/1403541703500435456/video/1",
+          "source_status_id": "1403541703500435456",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/bS6zcu9TMY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1403541388688510997/pu/img/I7RnhDJRHJIuu57Y.jpg",
+          "id_str": "1403541388688510997",
+          "source_user_id": "271207691",
+          "id": "1403541388688510997",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1403541388688510997/pu/img/I7RnhDJRHJIuu57Y.jpg",
+          "source_user_id_str": "271207691",
+          "sizes": {
+            "medium": {
+              "w": "1084",
+              "h": "926",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1084",
+              "h": "926",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "581",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1403541703500435456",
+          "display_url": "pic.twitter.com/bS6zcu9TMY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "102"
+    ],
+    "favorite_count": "0",
+    "id_str": "1403868460795432961",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1403868460795432961",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jun 13 00:14:58 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @silbmaerto: Tonight we are proud to present an exclusive E3 World Premiere https://t.co/bS6zcu9TMY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/silbmaerto/status/1403541703500435456/video/1",
+          "source_status_id": "1403541703500435456",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/bS6zcu9TMY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1403541388688510997/pu/img/I7RnhDJRHJIuu57Y.jpg",
+          "id_str": "1403541388688510997",
+          "video_info": {
+            "aspect_ratio": [
+              "542",
+              "463"
+            ],
+            "duration_millis": "62363",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1403541388688510997/pu/vid/842x720/ivjpV5fy1fXAke3-.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1403541388688510997/pu/vid/316x270/gY13RUHoct0wLAJQ.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1403541388688510997/pu/vid/420x360/1yyKfB56uhUDBvXC.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1403541388688510997/pu/pl/maF5U264LD336cIB.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "271207691",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1403541388688510997",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1403541388688510997/pu/img/I7RnhDJRHJIuu57Y.jpg",
+          "source_user_id_str": "271207691",
+          "sizes": {
+            "medium": {
+              "w": "1084",
+              "h": "926",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1084",
+              "h": "926",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "581",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1403541703500435456",
+          "display_url": "pic.twitter.com/bS6zcu9TMY"
+        }
+      ]
+    }
+  }
+}

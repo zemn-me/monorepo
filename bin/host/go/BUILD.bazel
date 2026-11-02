@@ -1,0 +1,13 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:sdk_tool.bzl", "go_sdk_tool")
+
+go_sdk_tool(
+    name = "go",
+    goroot_relative_path = "bin/go",
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

@@ -1,3 +1,4 @@
+load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "ts_project")
 
 exports_files(
@@ -11,5 +12,13 @@ ts_project(
     visibility = ["//visibility:public"],
     deps = [
         "//:node_modules/@types/node",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
     ],
 )

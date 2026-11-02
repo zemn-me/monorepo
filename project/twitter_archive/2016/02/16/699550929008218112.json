@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "699550929008218112"
+        ],
+        "editableUntil": "2016-02-16T12:08:33.160Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "152"
+    ],
+    "favorite_count": "0",
+    "id_str": "699550929008218112",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "699550929008218112",
+    "created_at": "Tue Feb 16 11:08:33 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @kinugawamasato: Firefox、try...catchをこんな風に書けたのか。1がアラート。\n&lt;script&gt;\ntry{\na\n}catch(e if 1==1){\nalert(1);\n}catch(e){\nalert(2);\n}\n&lt;/script&gt;\nht…",
+    "lang": "ja"
+  }
+}

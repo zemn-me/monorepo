@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1429774483318099974"
+        ],
+        "editableUntil": "2021-08-23T12:56:15.405Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Igor Savin",
+          "screen_name": "kibertoad",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "27432293",
+          "id": "27432293"
+        },
+        {
+          "name": "Mario Zechner",
+          "screen_name": "badlogicgames",
+          "indices": [
+            "11",
+            "25"
+          ],
+          "id_str": "189876762",
+          "id": "189876762"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "303"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1429773077416665090",
+    "id_str": "1429774483318099974",
+    "in_reply_to_user_id": "27432293",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1429774483318099974",
+    "in_reply_to_status_id": "1429773077416665090",
+    "created_at": "Mon Aug 23 11:56:15 +0000 2021",
+    "favorited": false,
+    "full_text": "@kibertoad @badlogicgames bypassing babel entirely is missing what babel is for – but my point is about the node / typescript ecosystem, not node specifically. if you want criticisms of node, a lot of its apis are clunky and platform specific and the language needs an actual dependency management story",
+    "lang": "en",
+    "in_reply_to_screen_name": "kibertoad",
+    "in_reply_to_user_id_str": "27432293"
+  }
+}

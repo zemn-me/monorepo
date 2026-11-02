@@ -1,0 +1,493 @@
+package apiserver
+
+import (
+	"context"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"errors"
+	"log"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/getkin/kin-openapi/openapi3filter"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
+	middleware "github.com/oapi-codegen/nethttp-middleware"
+	"github.com/twilio/twilio-go"
+
+	jose "github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/cryptosigner"
+
+	apiSpec "github.com/zemn-me/monorepo/project/me/zemn/api"
+	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
+)
+
+// DynamoDBClient captures the minimal subset of the DynamoDB API used by the server.
+type DynamoDBClient interface {
+	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
+	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
+	GetItem(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error)
+	DeleteItem(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error)
+	Scan(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error)
+	DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error)
+	CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error)
+}
+
+// Ensure the real DynamoDB client implements the interface.
+var _ DynamoDBClient = (*dynamodb.Client)(nil)
+var _ JournalObjectStore = (*s3.Client)(nil)
+var _ JournalPresigner = (*s3.PresignClient)(nil)
+
+// Server holds the DynamoDB client and table names.
+type Server struct {
+	ddb                  DynamoDBClient
+	analyticsTableName   string
+	settingsTableName    string
+	grievancesTableName  string
+	usersTableName       string
+	keyRequestsTableName string
+	journalTableName     string
+	oauthTableName       string
+	oauthMetadataClient  *http.Client
+	oidcOptions          auth.OIDCOptions
+	journalMCP           http.Handler
+	journalBucketName    string
+	rt                   *chi.Mux
+	http.Handler
+	log                    *log.Logger
+	twilioSharedSecret     string
+	twilioClient           *twilio.RestClient
+	sendText               func(ctx context.Context, to, from, body string) error
+	fetchCalendarICal      calendarICalFetcher
+	minecraftRCON          minecraftRCONCommander
+	minecraftWake          minecraftWakeRequester
+	minecraftLogs          minecraftLogTailer
+	minecraftServerAddress string
+	journalAI              JournalAI
+	journalCurator         JournalCurator
+	journalCurationEnabled bool
+	journalObjects         JournalObjectStore
+	journalPresigner       JournalPresigner
+	journalHierarchyMu     sync.Mutex
+	// kms in production, dummy in testing.
+	signingKey jose.JSONWebKey
+}
+
+type NewServerOptions struct {
+	LocalStack bool
+	// AllowRequestHostOIDCIssuer permits request-derived issuers for local
+	// development. Leave false in deployed servers.
+	AllowRequestHostOIDCIssuer bool
+	// AllowLocalhostAnalytics permits local development origins to post
+	// analytics beacons. Leave false for production.
+	AllowLocalhostAnalytics bool
+	// Journal dependencies may be replaced by the local development server.
+	// Production leaves these unset and uses the configured AWS clients.
+	JournalAI              JournalAI
+	JournalCurationEnabled bool
+	JournalCurator         JournalCurator
+	JournalObjects         JournalObjectStore
+	JournalPresigner       JournalPresigner
+}
+
+// NewServer initialises the DynamoDB client and HTTP router.
+func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
+	spec, err := openapi3.NewLoader().LoadFromData([]byte(apiSpec.Spec))
+	if err != nil {
+		return nil, err
+	}
+
+	spec.Servers = nil
+
+	configureTestOIDCIssuerFromEnv()
+
+	// Optional endpoint override (DynamoDB Local / LocalStack).
+	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
+	var cfg aws.Config
+	if endpoint != "" {
+		loadOpts := []func(*config.LoadOptions) error{
+			config.WithEndpointResolver(aws.EndpointResolverFunc(
+				func(service, region string) (aws.Endpoint, error) {
+					if service == dynamodb.ServiceID {
+						return aws.Endpoint{URL: endpoint}, nil
+					}
+					return aws.Endpoint{}, &aws.EndpointNotFoundError{}
+				})),
+		}
+		if opts.LocalStack {
+			loadOpts = append(loadOpts, config.WithCredentialsProvider(credentials.StaticCredentialsProvider{
+				Value: aws.Credentials{AccessKeyID: "LOCALSTACK", SecretAccessKey: "LOCALSTACK"},
+			}))
+		}
+		cfg, err = config.LoadDefaultConfig(ctx, loadOpts...)
+	} else {
+		cfg, err = config.LoadDefaultConfig(ctx)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	settingsTableName := os.Getenv("DYNAMODB_TABLE_NAME")
+	analyticsTableName := os.Getenv("ANALYTICS_TABLE_NAME")
+	grievancesTableName := os.Getenv("GRIEVANCES_TABLE_NAME")
+	usersTableName := os.Getenv("USERS_TABLE_NAME")
+	keyRequestsTableName := os.Getenv("CALLBOX_KEY_TABLE_NAME")
+	journalTableName := os.Getenv("JOURNAL_TABLE_NAME")
+	journalBucketName := os.Getenv("JOURNAL_BUCKET_NAME")
+
+	r := chi.NewRouter()
+	r.Use(analyticsRequestContext)
+	r.Use(protocolHTTPContext)
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions, http.MethodPatch},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
+		MaxAge:         300,
+	}))
+
+	journalObjects := opts.JournalObjects
+	journalPresigner := opts.JournalPresigner
+	if journalObjects == nil {
+		s3Objects := s3.NewFromConfig(cfg)
+		journalObjects = s3Objects
+		if journalPresigner == nil {
+			journalPresigner = s3.NewPresignClient(s3Objects)
+		}
+	}
+	s := &Server{
+		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
+		ddb:                  dynamodb.NewFromConfig(cfg),
+		analyticsTableName:   analyticsTableName,
+		settingsTableName:    settingsTableName,
+		grievancesTableName:  grievancesTableName,
+		usersTableName:       usersTableName,
+		keyRequestsTableName: keyRequestsTableName,
+		journalTableName:     journalTableName,
+		oauthTableName:       os.Getenv("OAUTH_TABLE_NAME"),
+		oidcOptions:          auth.OIDCOptions{AllowRequestHostIssuer: opts.AllowRequestHostOIDCIssuer},
+		journalBucketName:    journalBucketName,
+		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
+		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{
+			Username: os.Getenv("TWILIO_API_KEY_SID"),
+			Password: os.Getenv("TWILIO_AUTH_TOKEN"),
+		}),
+		fetchCalendarICal:      defaultCalendarICalFetcher(),
+		minecraftRCON:          minecraftRCONCommanderFromEnv(cfg),
+		minecraftWake:          minecraftWakeRequesterFromEnv(cfg),
+		minecraftLogs:          minecraftLogTailerFromEnv(cfg),
+		minecraftServerAddress: minecraftServerAddressFromEnv(),
+		journalAI:              opts.JournalAI,
+		journalCurator:         opts.JournalCurator,
+		journalCurationEnabled: opts.JournalCurationEnabled || os.Getenv("JOURNAL_CURATION_ENABLED") == "true",
+		journalObjects:         journalObjects,
+		journalPresigner:       journalPresigner,
+	}
+	s.sendText = func(ctx context.Context, to, from, body string) error {
+		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
+	}
+
+	s.signingKey, err = provisionSigningKey(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	auth.ScopeResolver = s.resolveScopes
+
+	s.journalMCP = s.journalMCPHandler()
+	r.Use(middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
+		Options:              openapi3filter.Options{AuthenticationFunc: s.authenticateAPI},
+		ErrorHandlerWithOpts: protocolValidationError,
+	}))
+	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
+	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
+	return s, nil
+}
+
+func journalPrivateCacheHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/journal" || strings.HasPrefix(r.URL.Path, "/journal/") {
+			w.Header().Set("Cache-Control", "private, no-store")
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func analyticsBeaconHandler(next http.Handler, allowLocalhostOrigin bool) http.Handler {
+	analyticsHandler := analyticsBeaconOriginMiddleware(next, allowLocalhostOrigin)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/analytics/beacon" {
+			analyticsHandler.ServeHTTP(w, r)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func analyticsBeaconOriginMiddleware(next http.Handler, allowLocalhostOrigin bool) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if !analyticsBeaconOriginAllowed(origin, allowLocalhostOrigin) {
+			http.Error(w, "origin not allowed", http.StatusForbidden)
+			return
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Add("Vary", "Access-Control-Request-Method")
+		w.Header().Add("Vary", "Access-Control-Request-Headers")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func analyticsBeaconOriginAllowed(origin string, allowLocalhostOrigin bool) bool {
+	if origin == "" {
+		return false
+	}
+
+	u, err := url.Parse(origin)
+	if err != nil {
+		return false
+	}
+
+	if analyticsBeaconLocalhostOrigin(u) {
+		return allowLocalhostOrigin
+	}
+
+	if u.Scheme != "https" {
+		return false
+	}
+
+	return analyticsBeaconHostAllowed(u.Host)
+}
+
+func analyticsBeaconLocalhostOrigin(u *url.URL) bool {
+	switch u.Hostname() {
+	case "localhost", "127.0.0.1", "::1":
+		return true
+	default:
+		return false
+	}
+}
+
+func analyticsBeaconHostAllowed(host string) bool {
+	for _, domain := range []string{
+		"zemn.me",
+		"baby.computer",
+		"pleaseintroducemetoyour.dog",
+		"eggsfordogs.com",
+	} {
+		if host == domain || strings.HasSuffix(host, "."+domain) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func provisionSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
+	if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
+		return provisionKMSSigningKey(ctx)
+	}
+
+	return provisionTestingSigningKey(ctx)
+}
+
+func newOpaqueSignerJWK(keyID string, signer jose.OpaqueSigner) jose.JSONWebKey {
+	alg := string(jose.ES256)
+	if algs := signer.Algs(); len(algs) > 0 {
+		alg = string(algs[0])
+	}
+
+	return jose.JSONWebKey{
+		Key:       signer,
+		KeyID:     keyID,
+		Algorithm: alg,
+		Use:       "sig",
+	}
+}
+
+func provisionTestingSigningKey(_ context.Context) (k jose.JSONWebKey, err error) {
+	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		return
+	}
+
+	signer := cryptosigner.Opaque(priv)
+	k = newOpaqueSignerJWK("fake123", signer)
+	return
+}
+
+func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
+	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
+	if jwtKmsKeyId == "" {
+		err = errors.New("OIDC_JWT_KMS_KEY_ID not set")
+		return
+	}
+
+	jwtKmsPublicKey := os.Getenv("OIDC_JWT_PUBLIC_KEY")
+
+	if jwtKmsPublicKey == "" {
+		err = errors.New("OIDC_JWT_PUBLIC_KEY not set")
+		return
+	}
+
+	signer, err := NewKMSOpaqueSigner(ctx, jwtKmsKeyId, jwtKmsPublicKey)
+	if err != nil {
+		return
+	}
+	k = newOpaqueSignerJWK(jwtKmsKeyId, signer)
+
+	return
+}
+
+// ProvisionTables creates missing tables and waits until they are ACTIVE.
+// It mirrors the schemas defined in Pulumi (id/hash key & optional when/range key).
+func (s *Server) ProvisionTables(ctx context.Context) error {
+	type tableSpec struct {
+		Name    string
+		Attrs   []types.AttributeDefinition
+		Keys    []types.KeySchemaElement
+		Indexes []types.GlobalSecondaryIndex
+	}
+
+	specs := []tableSpec{
+		{
+			Name: s.oauthTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+		},
+		{
+			Name: s.analyticsTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("feed"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Indexes: []types.GlobalSecondaryIndex{{
+				IndexName: aws.String(analyticsFeedIndexName),
+				KeySchema: []types.KeySchemaElement{
+					{AttributeName: aws.String("feed"), KeyType: types.KeyTypeHash},
+					{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+				},
+				Projection: &types.Projection{ProjectionType: types.ProjectionTypeAll},
+			}},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.settingsTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.grievancesTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+		},
+		{
+			Name: s.usersTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.keyRequestsTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+		{
+			Name: s.journalTableName,
+			Attrs: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+				{AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			Keys: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+				{AttributeName: aws.String("when"), KeyType: types.KeyTypeRange},
+			},
+		},
+	}
+
+	for _, spec := range specs {
+		if spec.Name == "" {
+			continue // table disabled via envvar
+		}
+
+		// Does the table already exist?
+		_, err := s.ddb.DescribeTable(ctx, &dynamodb.DescribeTableInput{TableName: aws.String(spec.Name)})
+		if err != nil {
+			var rnfe *types.ResourceNotFoundException
+			if errors.As(err, &rnfe) {
+				s.log.Printf("table %q not found – creating", spec.Name)
+				_, err := s.ddb.CreateTable(ctx, &dynamodb.CreateTableInput{
+					TableName:                 aws.String(spec.Name),
+					AttributeDefinitions:      spec.Attrs,
+					KeySchema:                 spec.Keys,
+					GlobalSecondaryIndexes:    spec.Indexes,
+					BillingMode:               types.BillingModePayPerRequest,
+					DeletionProtectionEnabled: aws.Bool(false),
+				})
+				if err != nil {
+					return err
+				}
+			} else {
+				return err
+			}
+		}
+
+		waiter := dynamodb.NewTableExistsWaiter(s.ddb)
+		if err := waiter.Wait(ctx, &dynamodb.DescribeTableInput{TableName: aws.String(spec.Name)}, 5*time.Minute); err != nil {
+			return err
+		}
+		s.log.Printf("table %q ready", spec.Name)
+	}
+	return nil
+}

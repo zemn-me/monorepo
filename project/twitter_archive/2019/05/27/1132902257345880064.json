@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1132902257345880064"
+        ],
+        "editableUntil": "2019-05-27T07:52:01.114Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "loren schmidt",
+          "screen_name": "lorenschmidt",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "84623872",
+          "id": "84623872"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/lorenschmidt/status/1132610888865910784/photo/1",
+          "source_status_id": "1132610888865910784",
+          "indices": [
+            "117",
+            "140"
+          ],
+          "url": "https://t.co/KNWjNuDNOQ",
+          "media_url": "http://pbs.twimg.com/media/D7fXmQmWwAAfzwA.png",
+          "id_str": "1132610883597811712",
+          "source_user_id": "84623872",
+          "id": "1132610883597811712",
+          "media_url_https": "https://pbs.twimg.com/media/D7fXmQmWwAAfzwA.png",
+          "source_user_id_str": "84623872",
+          "sizes": {
+            "large": {
+              "w": "2048",
+              "h": "1152",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1132610888865910784",
+          "display_url": "pic.twitter.com/KNWjNuDNOQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1132902257345880064",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1132902257345880064",
+    "possibly_sensitive": false,
+    "created_at": "Mon May 27 06:52:01 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @lorenschmidt: an editor bug (incorrect treatment of room edges?) caused this beautiful memory corruption glitch. https://t.co/KNWjNuDNOQ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/lorenschmidt/status/1132610888865910784/photo/1",
+          "source_status_id": "1132610888865910784",
+          "indices": [
+            "117",
+            "140"
+          ],
+          "url": "https://t.co/KNWjNuDNOQ",
+          "media_url": "http://pbs.twimg.com/media/D7fXmQmWwAAfzwA.png",
+          "id_str": "1132610883597811712",
+          "source_user_id": "84623872",
+          "id": "1132610883597811712",
+          "media_url_https": "https://pbs.twimg.com/media/D7fXmQmWwAAfzwA.png",
+          "source_user_id_str": "84623872",
+          "sizes": {
+            "large": {
+              "w": "2048",
+              "h": "1152",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1132610888865910784",
+          "display_url": "pic.twitter.com/KNWjNuDNOQ"
+        }
+      ]
+    }
+  }
+}

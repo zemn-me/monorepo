@@ -1,0 +1,132 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "815765640594288640"
+        ],
+        "editableUntil": "2017-01-02T04:44:19.567Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zemnmez/status/815765640594288640/photo/1",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/WJSDtUXXRh",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/C1Iue4hWQAA__ET.jpg",
+          "id_str": "815765590610690048",
+          "id": "815765590610690048",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/C1Iue4hWQAA__ET.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "60",
+              "h": "60",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "182",
+              "h": "60",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "182",
+              "h": "60",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "182",
+              "h": "60",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/WJSDtUXXRh"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "74"
+    ],
+    "favorite_count": "11",
+    "in_reply_to_status_id_str": "815743782419316736",
+    "id_str": "815765640594288640",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "815765640594288640",
+    "in_reply_to_status_id": "815743782419316736",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 02 03:44:19 +0000 2017",
+    "favorited": false,
+    "full_text": "this is the most fun I have had with setInterval() https://t.co/WJSDtUXXRh",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zemnmez/status/815765640594288640/photo/1",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/WJSDtUXXRh",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/C1Iue4hWQAA__ET.jpg",
+          "id_str": "815765590610690048",
+          "video_info": {
+            "aspect_ratio": [
+              "91",
+              "30"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/C1Iue4hWQAA__ET.mp4"
+              }
+            ]
+          },
+          "id": "815765590610690048",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/C1Iue4hWQAA__ET.jpg",
+          "sizes": {
+            "thumb": {
+              "w": "60",
+              "h": "60",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "182",
+              "h": "60",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "182",
+              "h": "60",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "182",
+              "h": "60",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "display_url": "pic.twitter.com/WJSDtUXXRh"
+        }
+      ]
+    }
+  }
+}

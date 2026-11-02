@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1292117146710024193"
+        ],
+        "editableUntil": "2020-08-08T16:15:08.808Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "ニック",
+          "screen_name": "ru_ruru831",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1555372206678425600",
+          "id": "1555372206678425600"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Chiro_chan_neko/status/1260545264550424576/video/1",
+          "source_status_id": "1260545264550424576",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/UtfRxQ5ERz",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1260544929090007040/pu/img/2KHG4Rol3tikKzQq.jpg",
+          "id_str": "1260544929090007040",
+          "source_user_id": "793475622198620160",
+          "id": "1260544929090007040",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1260544929090007040/pu/img/2KHG4Rol3tikKzQq.jpg",
+          "source_user_id_str": "793475622198620160",
+          "sizes": {
+            "medium": {
+              "w": "460",
+              "h": "344",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "460",
+              "h": "344",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "460",
+              "h": "344",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1260545264550424576",
+          "display_url": "pic.twitter.com/UtfRxQ5ERz"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "44"
+    ],
+    "favorite_count": "0",
+    "id_str": "1292117146710024193",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1292117146710024193",
+    "possibly_sensitive": false,
+    "created_at": "Sat Aug 08 15:15:08 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @ru_ruru831: 滑空気分 https://t.co/UtfRxQ5ERz",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Chiro_chan_neko/status/1260545264550424576/video/1",
+          "source_status_id": "1260545264550424576",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/UtfRxQ5ERz",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1260544929090007040/pu/img/2KHG4Rol3tikKzQq.jpg",
+          "id_str": "1260544929090007040",
+          "video_info": {
+            "aspect_ratio": [
+              "115",
+              "86"
+            ],
+            "duration_millis": "8008",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1260544929090007040/pu/pl/rzmMwej3592i5eZz.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1260544929090007040/pu/vid/460x344/E-kcHBsJta0VlrNF.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1260544929090007040/pu/vid/360x270/tOdlMx-IIpgr8vrj.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "793475622198620160",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1260544929090007040",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1260544929090007040/pu/img/2KHG4Rol3tikKzQq.jpg",
+          "source_user_id_str": "793475622198620160",
+          "sizes": {
+            "medium": {
+              "w": "460",
+              "h": "344",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "460",
+              "h": "344",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "460",
+              "h": "344",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1260545264550424576",
+          "display_url": "pic.twitter.com/UtfRxQ5ERz"
+        }
+      ]
+    }
+  }
+}

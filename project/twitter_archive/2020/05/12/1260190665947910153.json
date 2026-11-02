@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1260190665947910153"
+        ],
+        "editableUntil": "2020-05-12T13:50:42.629Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Erik Strobl 🦝",
+          "screen_name": "erikstrobl",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "58066144",
+          "id": "58066144"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bennyjohnson/status/1259954670660878337/video/1",
+          "source_status_id": "1259954670660878337",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/x2oPAUyCpe",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1259954556164804613/pu/img/UXzehoZliSRNx9Sq.jpg",
+          "id_str": "1259954556164804613",
+          "source_user_id": "15212187",
+          "id": "1259954556164804613",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1259954556164804613/pu/img/UXzehoZliSRNx9Sq.jpg",
+          "source_user_id_str": "15212187",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1259954670660878337",
+          "display_url": "pic.twitter.com/x2oPAUyCpe"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "79"
+    ],
+    "favorite_count": "0",
+    "id_str": "1260190665947910153",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1260190665947910153",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 12 12:50:42 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @erikstrobl: maybe the funniest video I’ve ever seen https://t.co/x2oPAUyCpe",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bennyjohnson/status/1259954670660878337/video/1",
+          "source_status_id": "1259954670660878337",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/x2oPAUyCpe",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1259954556164804613/pu/img/UXzehoZliSRNx9Sq.jpg",
+          "id_str": "1259954556164804613",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "53969",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1259954556164804613/pu/pl/AzT1yUR2BqMb_-8y.m3u8?tag=10&v=1b8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1259954556164804613/pu/vid/640x360/QwIvGRJDSWrXpmUB.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1259954556164804613/pu/vid/480x270/40R2x2fAJLQJhInl.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1259954556164804613/pu/vid/1280x720/Kxm-YrQn6tWrOowg.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "15212187",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1259954556164804613",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1259954556164804613/pu/img/UXzehoZliSRNx9Sq.jpg",
+          "source_user_id_str": "15212187",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1259954670660878337",
+          "display_url": "pic.twitter.com/x2oPAUyCpe"
+        }
+      ]
+    }
+  }
+}

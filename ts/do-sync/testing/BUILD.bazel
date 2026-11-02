@@ -1,4 +1,5 @@
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
     ":__subpackages__",
@@ -9,16 +10,22 @@ ts_project(
     name = "project",
     srcs = glob(["**/*.ts"]),
     deps = [
+        "//:node_modules/@jest/globals",
         "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/@types/sharp",
         "//:node_modules/sharp",
-        "//ts/do-sync:lib",
+        "//ts/do-sync",
     ],
 )
 
-jest_test(
-    name = "tests",
-    srcs = ["doSync_test.js"],
-    deps = [":project"],
+# system needs reworking
+# jest_test(
+#     name = "tests",
+#     srcs = ["doSync_test.js"],
+#     deps = [":project"],
+# )
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
 )

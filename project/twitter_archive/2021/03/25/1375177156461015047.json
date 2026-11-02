@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1375177156461015047"
+        ],
+        "editableUntil": "2021-03-25T21:05:58.313Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "cait jr",
+          "screen_name": "kittynouveau",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1139254483962257409",
+          "id": "1139254483962257409"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kittynouveau/status/1375173967372292101/video/1",
+          "source_status_id": "1375173967372292101",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/eIHbf7fvCQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1375173898128396288/pu/img/an3Px-gRUnfwKihf.jpg",
+          "id_str": "1375173898128396288",
+          "source_user_id": "1139254483962257409",
+          "id": "1375173898128396288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1375173898128396288/pu/img/an3Px-gRUnfwKihf.jpg",
+          "source_user_id_str": "1139254483962257409",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1375173967372292101",
+          "display_url": "pic.twitter.com/eIHbf7fvCQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1375177156461015047",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1375177156461015047",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 25 20:05:58 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @kittynouveau: instant chaos generator https://t.co/eIHbf7fvCQ",
+    "lang": "es",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kittynouveau/status/1375173967372292101/video/1",
+          "source_status_id": "1375173967372292101",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/eIHbf7fvCQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1375173898128396288/pu/img/an3Px-gRUnfwKihf.jpg",
+          "id_str": "1375173898128396288",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "13833",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1375173898128396288/pu/vid/320x568/SPv4hOCEcHjGEX0D.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1375173898128396288/pu/vid/576x1024/F_u1ZQcSQ1qTrbAR.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1375173898128396288/pu/vid/480x852/PXFrHqb29Pc5yBg8.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1375173898128396288/pu/pl/q2GcN7IPf1IdKWL1.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1139254483962257409",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1375173898128396288",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1375173898128396288/pu/img/an3Px-gRUnfwKihf.jpg",
+          "source_user_id_str": "1139254483962257409",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1375173967372292101",
+          "display_url": "pic.twitter.com/eIHbf7fvCQ"
+        }
+      ]
+    }
+  }
+}

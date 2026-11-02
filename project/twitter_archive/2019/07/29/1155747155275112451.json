@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1155747155275112451"
+        ],
+        "editableUntil": "2019-07-29T08:49:29.218Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "AleC",
+          "screen_name": "Ouaisfr",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "918158671321890816",
+          "id": "918158671321890816"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Ouaisfr/status/1155210541998071808/video/1",
+          "source_status_id": "1155210541998071808",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/hpNzkrd8rB",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1155210464156012544/pu/img/80gntc2PtDRiGmDD.jpg",
+          "id_str": "1155210464156012544",
+          "source_user_id": "918158671321890816",
+          "id": "1155210464156012544",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1155210464156012544/pu/img/80gntc2PtDRiGmDD.jpg",
+          "source_user_id_str": "918158671321890816",
+          "sizes": {
+            "small": {
+              "w": "432",
+              "h": "640",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "432",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "432",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1155210541998071808",
+          "display_url": "pic.twitter.com/hpNzkrd8rB"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "Titanic",
+          "indices": [
+            "40",
+            "48"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "72"
+    ],
+    "favorite_count": "0",
+    "id_str": "1155747155275112451",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1155747155275112451",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jul 29 07:49:29 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Ouaisfr: I love this new version of #Titanic https://t.co/hpNzkrd8rB",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Ouaisfr/status/1155210541998071808/video/1",
+          "source_status_id": "1155210541998071808",
+          "indices": [
+            "49",
+            "72"
+          ],
+          "url": "https://t.co/hpNzkrd8rB",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1155210464156012544/pu/img/80gntc2PtDRiGmDD.jpg",
+          "id_str": "1155210464156012544",
+          "video_info": {
+            "aspect_ratio": [
+              "27",
+              "40"
+            ],
+            "duration_millis": "14900",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1155210464156012544/pu/vid/320x474/w3s1tvJrZR1emSNg.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1155210464156012544/pu/pl/oq4xMWRk69uXs07a.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1155210464156012544/pu/vid/432x640/dSp_OMDz4j_w4ugZ.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "918158671321890816",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1155210464156012544",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1155210464156012544/pu/img/80gntc2PtDRiGmDD.jpg",
+          "source_user_id_str": "918158671321890816",
+          "sizes": {
+            "small": {
+              "w": "432",
+              "h": "640",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "432",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "432",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1155210541998071808",
+          "display_url": "pic.twitter.com/hpNzkrd8rB"
+        }
+      ]
+    }
+  }
+}

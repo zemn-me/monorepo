@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1063996568674729985"
+        ],
+        "editableUntil": "2018-11-18T04:25:24.729Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "chan",
+          "screen_name": "chanbanhi",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "920852919569743872",
+          "id": "920852919569743872"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chanbanhi/status/1063549958710800385/video/1",
+          "source_status_id": "1063549958710800385",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/TmZQcJleQx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1063549850715910145/pu/img/F-9viP1e9b199TIV.jpg",
+          "id_str": "1063549850715910145",
+          "source_user_id": "920852919569743872",
+          "id": "1063549850715910145",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1063549850715910145/pu/img/F-9viP1e9b199TIV.jpg",
+          "source_user_id_str": "920852919569743872",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1063549958710800385",
+          "display_url": "pic.twitter.com/TmZQcJleQx"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "38"
+    ],
+    "favorite_count": "0",
+    "id_str": "1063996568674729985",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1063996568674729985",
+    "possibly_sensitive": false,
+    "created_at": "Sun Nov 18 03:25:24 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @chanbanhi: https://t.co/TmZQcJleQx",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chanbanhi/status/1063549958710800385/video/1",
+          "source_status_id": "1063549958710800385",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/TmZQcJleQx",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1063549850715910145/pu/img/F-9viP1e9b199TIV.jpg",
+          "id_str": "1063549850715910145",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "5800",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1063549850715910145/pu/vid/640x360/UkQ02p0UcqOgBqvy.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1063549850715910145/pu/pl/KkiGdSOSQzo6lj6Y.m3u8?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1063549850715910145/pu/vid/320x180/GMoGAG1jTbafEsfj.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "920852919569743872",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1063549850715910145",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1063549850715910145/pu/img/F-9viP1e9b199TIV.jpg",
+          "source_user_id_str": "920852919569743872",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1063549958710800385",
+          "display_url": "pic.twitter.com/TmZQcJleQx"
+        }
+      ]
+    }
+  }
+}

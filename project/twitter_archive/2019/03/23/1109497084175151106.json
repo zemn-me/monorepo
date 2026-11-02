@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1109497084175151106"
+        ],
+        "editableUntil": "2019-03-23T17:48:12.983Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Zeltik",
+          "screen_name": "Zeltik",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "3092098133",
+          "id": "3092098133"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zeltik/status/1108786792566845440/video/1",
+          "source_status_id": "1108786792566845440",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/pvdJnAwhHa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1108786618029260803/pu/img/CZvnPcXE3LCLrc3x.jpg",
+          "id_str": "1108786618029260803",
+          "source_user_id": "3092098133",
+          "id": "1108786618029260803",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1108786618029260803/pu/img/CZvnPcXE3LCLrc3x.jpg",
+          "source_user_id_str": "3092098133",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1108786792566845440",
+          "display_url": "pic.twitter.com/pvdJnAwhHa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "60"
+    ],
+    "favorite_count": "0",
+    "id_str": "1109497084175151106",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1109497084175151106",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 23 16:48:12 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Zeltik: \"why do you main Ganon?\" https://t.co/pvdJnAwhHa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Zeltik/status/1108786792566845440/video/1",
+          "source_status_id": "1108786792566845440",
+          "indices": [
+            "37",
+            "60"
+          ],
+          "url": "https://t.co/pvdJnAwhHa",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1108786618029260803/pu/img/CZvnPcXE3LCLrc3x.jpg",
+          "id_str": "1108786618029260803",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "24733",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1108786618029260803/pu/vid/640x360/TVK9wCkIruFLQoFR.mp4?tag=8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1108786618029260803/pu/vid/320x180/BI5HmR6ep6WAuZj0.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1108786618029260803/pu/pl/H5VhBfjBZ-Q7FS5p.m3u8?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1108786618029260803/pu/vid/1280x720/G7nUJKENdE8QNQeL.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "3092098133",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1108786618029260803",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1108786618029260803/pu/img/CZvnPcXE3LCLrc3x.jpg",
+          "source_user_id_str": "3092098133",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1108786792566845440",
+          "display_url": "pic.twitter.com/pvdJnAwhHa"
+        }
+      ]
+    }
+  }
+}

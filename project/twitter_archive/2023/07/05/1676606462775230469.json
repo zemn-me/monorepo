@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1676606462775230469"
+        ],
+        "editableUntil": "2023-07-05T15:58:25.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Gareth Lewin",
+          "screen_name": "garethlewin",
+          "indices": [
+            "10",
+            "22"
+          ],
+          "id_str": "14195214",
+          "id": "14195214"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "201"
+    ],
+    "favorite_count": "0",
+    "id_str": "1676606462775230469",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1676606462775230469",
+    "created_at": "Wed Jul 05 14:58:25 +0000 2023",
+    "favorited": false,
+    "full_text": "so (maybe @garethlewin) whats the IAC CI process that’s in vogue today like? is it push to staging / roll forward to production? whats the best way to not merge PRs that would fail terraform or pulumi?",
+    "lang": "en"
+  }
+}

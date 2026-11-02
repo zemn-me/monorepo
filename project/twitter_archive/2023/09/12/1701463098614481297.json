@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1701463098614481297"
+        ],
+        "editableUntil": "2023-09-12T06:09:49.022Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "rémi",
+          "screen_name": "ok_remi_ok",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1876088137",
+          "id": "1876088137"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ok_remi_ok/status/1701403543935049872/video/1",
+          "source_status_id": "1701403543935049872",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ZbjPHBwuUF",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1701403411638263808/pu/img/9eEAfCIJmdcoaGFZ.jpg",
+          "id_str": "1701403411638263808",
+          "source_user_id": "1876088137",
+          "id": "1701403411638263808",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1701403411638263808/pu/img/9eEAfCIJmdcoaGFZ.jpg",
+          "source_user_id_str": "1876088137",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "377",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1052",
+              "h": "584",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1052",
+              "h": "584",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1701403543935049872",
+          "display_url": "pic.twitter.com/ZbjPHBwuUF"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1701463098614481297",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1701463098614481297",
+    "possibly_sensitive": false,
+    "created_at": "Tue Sep 12 05:09:49 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @ok_remi_ok: little steps but i added conditions and events to the dialogue system https://t.co/ZbjPHBwuUF",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ok_remi_ok/status/1701403543935049872/video/1",
+          "source_status_id": "1701403543935049872",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ZbjPHBwuUF",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1701403411638263808/pu/img/9eEAfCIJmdcoaGFZ.jpg",
+          "id_str": "1701403411638263808",
+          "video_info": {
+            "aspect_ratio": [
+              "263",
+              "146"
+            ],
+            "duration_millis": "95283",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1701403411638263808/pu/vid/avc1/486x270/Uaanc3Lxmkafuzj3.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1701403411638263808/pu/pl/QIOITH4_TlMZ9oNH.m3u8?tag=12&v=d1d"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1701403411638263808/pu/vid/avc1/648x360/UloPRm2TAWOC21MV.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1701403411638263808/pu/vid/avc1/1052x584/jkXfkG_mCjLDiDoa.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1876088137",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1701403411638263808",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1701403411638263808/pu/img/9eEAfCIJmdcoaGFZ.jpg",
+          "source_user_id_str": "1876088137",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "377",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1052",
+              "h": "584",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1052",
+              "h": "584",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1701403543935049872",
+          "display_url": "pic.twitter.com/ZbjPHBwuUF"
+        }
+      ]
+    }
+  }
+}

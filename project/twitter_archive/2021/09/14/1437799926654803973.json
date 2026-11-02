@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1437799926654803973"
+        ],
+        "editableUntil": "2021-09-14T16:26:30.202Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/uIUKBvqgUR",
+          "expanded_url": "https://stackoverflow.com/a/432518/1034533",
+          "display_url": "stackoverflow.com/a/432518/10345…",
+          "indices": [
+            "0",
+            "23"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "116"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1437799377695825928",
+    "id_str": "1437799926654803973",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1437799926654803973",
+    "in_reply_to_status_id": "1437799377695825928",
+    "possibly_sensitive": false,
+    "created_at": "Tue Sep 14 15:26:30 +0000 2021",
+    "favorited": false,
+    "full_text": "https://t.co/uIUKBvqgUR seems like the canon way to do this might be to make a new commit, then merge it with HEAD~1",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

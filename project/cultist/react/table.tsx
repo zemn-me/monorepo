@@ -1,5 +1,7 @@
-import * as State from 'project/cultist/state';
-import React from 'react';
+import React, { Fragment } from 'react';
+
+import * as State from '#root/project/cultist/state/index.js';
+import { map } from '#root/ts/iter/index.js';
 // stubbed out because IDK how to fix style issues right now.
 //import style from './table.module.css';
 
@@ -32,7 +34,7 @@ export const Table: React.FC<Readonly<TableProps>> = ({
 	);
 	return (
 		<>
-			{state.metainfo ? (
+			{state.metainfo && state.metainfo.VERSIONNUMBER !== undefined ? (
 				<figure>
 					<figcaption>Metadata</figcaption>
 					<dl>
@@ -55,6 +57,60 @@ export const Table: React.FC<Readonly<TableProps>> = ({
 			) : null}
 
 			<Board onElementMove={onElementMove} state={state} />
+
+			{state.decks && state.decks.size > 0 ? (
+				<figure>
+					<figcaption>Decks</figcaption>
+					<dl>
+						{[
+							...map(state.decks.entries(), ([k, v]) => (
+								<Fragment key={k}>
+									<dl>{k}</dl>
+									<dd>
+										<dl>
+											{v.cards && v.cards.size > 0 ? (
+												<Fragment>
+													<dt>Cards</dt>
+													<dd>
+														<ol>
+															{v.cards.map(
+																card => (
+																	<li>
+																		{card}
+																	</li>
+																)
+															)}
+														</ol>
+													</dd>
+												</Fragment>
+											) : null}
+										</dl>
+										<dl>
+											{v.eliminatedCards &&
+											v.eliminatedCards.size > 0 ? (
+												<Fragment>
+													<dt>Eliminated Cards</dt>
+													<dd>
+														<ol>
+															{v.eliminatedCards.map(
+																card => (
+																	<li>
+																		{card}
+																	</li>
+																)
+															)}
+														</ol>
+													</dd>
+												</Fragment>
+											) : null}
+										</dl>
+									</dd>
+								</Fragment>
+							)),
+						]}
+					</dl>
+				</figure>
+			) : null}
 		</>
 	);
 };
@@ -201,7 +257,11 @@ export const Deck: React.FC<Readonly<DeckProps>> = ({ name, deck }) => (
 		{(deck.cards?.size ?? 0) > 0 ? (
 			<figure>
 				<figcaption>Cards</figcaption>
-				<ol>{deck.cards?.map(name => <li key={name}>{name}</li>)}</ol>
+				<ol>
+					{deck.cards?.map(name => (
+						<li key={name}>{name}</li>
+					))}
+				</ol>
 			</figure>
 		) : null}
 	</figure>
@@ -221,16 +281,19 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 	element: e,
 }) => {
 	const onDragStart: React.DragEventHandler<HTMLDivElement> =
-		React.useCallback(ev => {
-			if (!ev.dataTransfer) return;
-			ev.dataTransfer.effectAllowed = 'move';
-			ev.dataTransfer.setData(
-				'application/json+elementKey',
-				JSON.stringify({
-					elementKey,
-				})
-			);
-		}, []);
+		React.useCallback(
+			ev => {
+				if (!('datatransfer' in ev)) return;
+				ev.dataTransfer.effectAllowed = 'move';
+				ev.dataTransfer.setData(
+					'application/json+elementKey',
+					JSON.stringify({
+						elementKey,
+					})
+				);
+			},
+			[elementKey]
+		);
 	return (
 		<foreignObject
 			height={h}
@@ -240,7 +303,7 @@ export const Card: React.FC<Readonly<CardProps>> = ({
 		>
 			{/* needed to inject xmlns, not in types */}
 			<div
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 				{...({ xmlns: 'http://www.w3.org/1999/xhtml' } as any)}
 				draggable="true"
 				onDragStart={onDragStart}

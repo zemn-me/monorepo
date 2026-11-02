@@ -1,0 +1,21 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@zemnmez/tabwriter",
+	"description": "Format tab-separated text with elastic tabstops in TypeScript",
+	"main": "tabwriter.js",
+	"type": "module",
+	"types": "index.d.ts",
+	"author": "zemnmez",
+	"license": "MIT",
+	"keywords": [
+		"typescript",
+		"tabwriter",
+		"elastic-tabstops",
+		"text",
+		"formatting"
+	],
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	}
+}

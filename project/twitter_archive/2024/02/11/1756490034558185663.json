@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1756490034558185663"
+        ],
+        "editableUntil": "2024-02-11T02:27:12.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Theo",
+          "screen_name": "t3dotgg",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "58855664",
+          "id": "58855664"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/t5ZlioQIbW",
+          "expanded_url": "https://nextjs.org/docs/app/api-reference/functions/next-request#ip",
+          "display_url": "nextjs.org/docs/app/api-r…",
+          "indices": [
+            "125",
+            "148"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "148"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1756483988510920781",
+    "id_str": "1756490034558185663",
+    "in_reply_to_user_id": "786375418685165568",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1756490034558185663",
+    "in_reply_to_status_id": "1756483988510920781",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 11 01:27:12 +0000 2024",
+    "favorited": false,
+    "full_text": "@t3dotgg have you tested that you can't just change the x-forwarded-for header to bypass the rate limit as the docs suggest? https://t.co/t5ZlioQIbW",
+    "lang": "en",
+    "in_reply_to_screen_name": "theo",
+    "in_reply_to_user_id_str": "786375418685165568"
+  }
+}

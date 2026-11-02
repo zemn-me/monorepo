@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1177608115996389377"
+        ],
+        "editableUntil": "2019-09-27T16:37:08.411Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Tomek Sułkowski",
+          "screen_name": "sulco",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "18118070",
+          "id": "18118070"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sulco/status/1177559150563344384/video/1",
+          "source_status_id": "1177559150563344384",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/bxA1otzCjN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1177558925463425024/pu/img/k8hd9W45tAgvkl7P.jpg",
+          "id_str": "1177558925463425024",
+          "source_user_id": "18118070",
+          "id": "1177558925463425024",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1177558925463425024/pu/img/k8hd9W45tAgvkl7P.jpg",
+          "source_user_id_str": "18118070",
+          "sizes": {
+            "medium": {
+              "w": "1048",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1048",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "467",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1177559150563344384",
+          "display_url": "pic.twitter.com/bxA1otzCjN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "95"
+    ],
+    "favorite_count": "0",
+    "id_str": "1177608115996389377",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1177608115996389377",
+    "possibly_sensitive": false,
+    "created_at": "Fri Sep 27 15:37:08 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @sulco: That feeling when you first discovered `document.designMode` https://t.co/bxA1otzCjN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sulco/status/1177559150563344384/video/1",
+          "source_status_id": "1177559150563344384",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/bxA1otzCjN",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1177558925463425024/pu/img/k8hd9W45tAgvkl7P.jpg",
+          "id_str": "1177558925463425024",
+          "video_info": {
+            "aspect_ratio": [
+              "131",
+              "90"
+            ],
+            "duration_millis": "42066",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1177558925463425024/pu/pl/_6j7u5BihSzT6PNX.m3u8?tag=10&v=a6e"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1177558925463425024/pu/vid/524x360/S4bjnIdl8-4K1vuN.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1177558925463425024/pu/vid/392x270/hlyHq0JdB9Mnd7Dc.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1177558925463425024/pu/vid/1048x720/ZuTMe3fV5FnbJNMy.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "18118070",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1177558925463425024",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1177558925463425024/pu/img/k8hd9W45tAgvkl7P.jpg",
+          "source_user_id_str": "18118070",
+          "sizes": {
+            "medium": {
+              "w": "1048",
+              "h": "720",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1048",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "467",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1177559150563344384",
+          "display_url": "pic.twitter.com/bxA1otzCjN"
+        }
+      ]
+    }
+  }
+}

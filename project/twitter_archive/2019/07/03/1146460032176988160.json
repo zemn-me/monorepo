@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1146460032176988160"
+        ],
+        "editableUntil": "2019-07-03T17:45:46.525Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Dave Aitel",
+          "screen_name": "daveaitel",
+          "indices": [
+            "14",
+            "24"
+          ],
+          "id_str": "8371802",
+          "id": "8371802"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/UnCxeOGU5f",
+          "expanded_url": "https://swtch.com/~rsc/regexp/regexp1.html",
+          "display_url": "swtch.com/~rsc/regexp/re…",
+          "indices": [
+            "174",
+            "197"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "291"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1146175947026173952",
+    "id_str": "1146460032176988160",
+    "in_reply_to_user_id": "4473560733",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1146460032176988160",
+    "in_reply_to_status_id": "1146175947026173952",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 03 16:45:46 +0000 2019",
+    "favorited": false,
+    "full_text": "@1HommeAzerty @daveaitel i didnt think this was a solvable problem until i started using go's regex implementation which is guaranteed to run in linear time vs size of input https://t.co/UnCxeOGU5f\n\nit does this by removing a few operators which, frankly it's not at all hard to live without",
+    "lang": "en",
+    "in_reply_to_user_id_str": "4473560733"
+  }
+}

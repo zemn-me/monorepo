@@ -1,5 +1,20 @@
-load("//rs:rules.bzl", "rust_binary")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["wrapper.template.sh"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
+)
+
+md_files(
+    name = "bzl_run_in_workspace",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
+)

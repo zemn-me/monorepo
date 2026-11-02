@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1107819781422489601"
+        ],
+        "editableUntil": "2019-03-19T02:43:12.844Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "nowthisnews",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nowthisnews/status/1107462374007558145/video/1",
+          "source_status_id": "1107462374007558145",
+          "indices": [
+            "106",
+            "129"
+          ],
+          "url": "https://t.co/YJIyPjslfp",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1106600932157149185/img/xHPCHagp-lHC2UUY.jpg",
+          "id_str": "1106600932157149185",
+          "source_user_id": "701725963",
+          "id": "1106600932157149185",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1106600932157149185/img/xHPCHagp-lHC2UUY.jpg",
+          "source_user_id_str": "701725963",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1107462374007558145",
+          "display_url": "pic.twitter.com/YJIyPjslfp"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "129"
+    ],
+    "favorite_count": "0",
+    "id_str": "1107819781422489601",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1107819781422489601",
+    "possibly_sensitive": false,
+    "created_at": "Tue Mar 19 01:43:12 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @nowthisnews: Please enjoy Irish Prime Minister Leo Varadkar bringing his boyfriend to meet Mike Pence https://t.co/YJIyPjslfp",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/nowthisnews/status/1107462374007558145/video/1",
+          "source_status_id": "1107462374007558145",
+          "indices": [
+            "106",
+            "129"
+          ],
+          "url": "https://t.co/YJIyPjslfp",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1106600932157149185/img/xHPCHagp-lHC2UUY.jpg",
+          "id_str": "1106600932157149185",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "68869",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1106600932157149185/vid/480x480/iTi8sNHmgeQl3w7I.mp4?tag=11"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1106600932157149185/vid/720x720/-2tIsYzf7GwqhlYH.mp4?tag=11"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1106600932157149185/pl/w5LhKFEB9aIXLkuK.m3u8?tag=11&v=a6a"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1106600932157149185/vid/320x320/4r8rJX36qWpFsr7A.mp4?tag=11"
+              }
+            ]
+          },
+          "source_user_id": "701725963",
+          "additional_media_info": {
+            "title": "Irish Prime Minister Brought His Boyfriend To Meet Mike Pence",
+            "description": "Please enjoy Irish Prime Minister Leo Varadkar bringing his boyfriend to meet Mike Pence",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1106600932157149185",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1106600932157149185/img/xHPCHagp-lHC2UUY.jpg",
+          "source_user_id_str": "701725963",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1107462374007558145",
+          "display_url": "pic.twitter.com/YJIyPjslfp"
+        }
+      ]
+    }
+  }
+}

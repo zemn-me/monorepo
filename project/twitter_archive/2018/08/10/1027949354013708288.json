@@ -1,0 +1,158 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1027949354013708288"
+        ],
+        "editableUntil": "2018-08-10T17:06:39.029Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "publiclyDisclosed",
+          "screen_name": "disclosedh1",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2481701395",
+          "id": "2481701395"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/AURvFtwAOD",
+          "expanded_url": "https://hackerone.com/reports/392797",
+          "display_url": "hackerone.com/reports/392797",
+          "indices": [
+            "59",
+            "82"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/disclosedh1/status/1027947731262865408/photo/1",
+          "source_status_id": "1027947731262865408",
+          "indices": [
+            "105",
+            "128"
+          ],
+          "url": "https://t.co/RFIohKELKV",
+          "media_url": "http://pbs.twimg.com/media/DkQBA2MXgAcE3u0.jpg",
+          "id_str": "1027947729006329863",
+          "source_user_id": "2481701395",
+          "id": "1027947729006329863",
+          "media_url_https": "https://pbs.twimg.com/media/DkQBA2MXgAcE3u0.jpg",
+          "source_user_id_str": "2481701395",
+          "sizes": {
+            "small": {
+              "w": "500",
+              "h": "180",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "500",
+              "h": "180",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "500",
+              "h": "180",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1027947731262865408",
+          "display_url": "pic.twitter.com/RFIohKELKV"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "hackerone",
+          "indices": [
+            "83",
+            "93"
+          ]
+        },
+        {
+          "text": "bugbounty",
+          "indices": [
+            "94",
+            "104"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "128"
+    ],
+    "favorite_count": "0",
+    "id_str": "1027949354013708288",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1027949354013708288",
+    "possibly_sensitive": false,
+    "created_at": "Fri Aug 10 16:06:39 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @disclosedh1: Laravel disclosed a bug submitted by x1m: https://t.co/AURvFtwAOD #hackerone #bugbounty https://t.co/RFIohKELKV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/disclosedh1/status/1027947731262865408/photo/1",
+          "source_status_id": "1027947731262865408",
+          "indices": [
+            "105",
+            "128"
+          ],
+          "url": "https://t.co/RFIohKELKV",
+          "media_url": "http://pbs.twimg.com/media/DkQBA2MXgAcE3u0.jpg",
+          "id_str": "1027947729006329863",
+          "source_user_id": "2481701395",
+          "id": "1027947729006329863",
+          "media_url_https": "https://pbs.twimg.com/media/DkQBA2MXgAcE3u0.jpg",
+          "source_user_id_str": "2481701395",
+          "sizes": {
+            "small": {
+              "w": "500",
+              "h": "180",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "500",
+              "h": "180",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "500",
+              "h": "180",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1027947731262865408",
+          "display_url": "pic.twitter.com/RFIohKELKV"
+        }
+      ]
+    }
+  }
+}

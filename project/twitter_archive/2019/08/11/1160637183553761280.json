@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1160637183553761280"
+        ],
+        "editableUntil": "2019-08-11T20:40:42.812Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "mandatory.bsky.social",
+          "screen_name": "IAmMandatory",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "785694042",
+          "id": "785694042"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/daBA6RyBSS",
+          "expanded_url": "https://app.refinery.io/import?q=ymec5nkycnt4",
+          "display_url": "app.refinery.io/import?q=ymec5…",
+          "indices": [
+            "98",
+            "121"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1160637183553761280",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1160637183553761280",
+    "possibly_sensitive": false,
+    "created_at": "Sun Aug 11 19:40:42 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @IAmMandatory: Wrote a Serverless version of XSS Hunter in Refinery :) deployable in 2 minutes https://t.co/daBA6RyBSS https://t.co/ORps…",
+    "lang": "en"
+  }
+}

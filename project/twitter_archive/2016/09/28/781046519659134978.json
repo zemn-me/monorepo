@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "781046519659134978"
+        ],
+        "editableUntil": "2016-09-28T09:22:56.086Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Max",
+          "screen_name": "MaxOfS2D",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "800692318051274754",
+          "id": "800692318051274754"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MaxOfS2D/status/781035768764633092/photo/1",
+          "source_status_id": "781035768764633092",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/HbhIMQdKW6",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/CtbL0-IWIAE4E9e.jpg",
+          "id_str": "781035696286998529",
+          "source_user_id": "5375922",
+          "id": "781035696286998529",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/CtbL0-IWIAE4E9e.jpg",
+          "source_user_id_str": "5375922",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "781035768764633092",
+          "display_url": "pic.twitter.com/HbhIMQdKW6"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "68"
+    ],
+    "favorite_count": "0",
+    "id_str": "781046519659134978",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "781046519659134978",
+    "possibly_sensitive": false,
+    "created_at": "Wed Sep 28 08:22:56 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @MaxOfS2D: This did not work as expected. https://t.co/HbhIMQdKW6",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MaxOfS2D/status/781035768764633092/photo/1",
+          "source_status_id": "781035768764633092",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/HbhIMQdKW6",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/CtbL0-IWIAE4E9e.jpg",
+          "id_str": "781035696286998529",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/CtbL0-IWIAE4E9e.mp4"
+              }
+            ]
+          },
+          "source_user_id": "5375922",
+          "id": "781035696286998529",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/CtbL0-IWIAE4E9e.jpg",
+          "source_user_id_str": "5375922",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "781035768764633092",
+          "display_url": "pic.twitter.com/HbhIMQdKW6"
+        }
+      ]
+    }
+  }
+}

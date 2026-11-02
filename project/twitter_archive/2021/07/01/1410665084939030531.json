@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1410665084939030531"
+        ],
+        "editableUntil": "2021-07-01T19:22:19.796Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jamie Kyle is on 🦋",
+          "screen_name": "buildsghost",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1175464650395111424",
+          "id": "1175464650395111424"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/buildsghost/status/1410519436260352002/video/1",
+          "source_status_id": "1410519436260352002",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/gSdHlngmaX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1410519383349161988/pu/img/2zdB3OqgPmJ29AOb.jpg",
+          "id_str": "1410519383349161988",
+          "source_user_id": "1175464650395111424",
+          "id": "1410519383349161988",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1410519383349161988/pu/img/2zdB3OqgPmJ29AOb.jpg",
+          "source_user_id_str": "1175464650395111424",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1410519436260352002",
+          "display_url": "pic.twitter.com/gSdHlngmaX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "82"
+    ],
+    "favorite_count": "0",
+    "id_str": "1410665084939030531",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1410665084939030531",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jul 01 18:22:19 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @buildsghost: I was not prepared for the ending of this https://t.co/gSdHlngmaX",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/buildsghost/status/1410519436260352002/video/1",
+          "source_status_id": "1410519436260352002",
+          "indices": [
+            "59",
+            "82"
+          ],
+          "url": "https://t.co/gSdHlngmaX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1410519383349161988/pu/img/2zdB3OqgPmJ29AOb.jpg",
+          "id_str": "1410519383349161988",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "57600",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1410519383349161988/pu/pl/SSbEptzXKmm-ez95.m3u8?tag=12&v=43b"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1410519383349161988/pu/vid/320x568/CvTuyvNt7b3s9XN2.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1410519383349161988/pu/vid/480x852/iGRJ859X2glwk5pI.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1410519383349161988/pu/vid/576x1024/86hS_chYZ2cR23ho.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1175464650395111424",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1410519383349161988",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1410519383349161988/pu/img/2zdB3OqgPmJ29AOb.jpg",
+          "source_user_id_str": "1175464650395111424",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1410519436260352002",
+          "display_url": "pic.twitter.com/gSdHlngmaX"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "924520341434548224"
+        ],
+        "editableUntil": "2017-10-29T07:16:40.812Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "柴犬だいふく",
+          "screen_name": "daifuku_channel",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "2234820726",
+          "id": "2234820726"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/daifuku_channel/status/918098802120130560/video/1",
+          "source_status_id": "918098802120130560",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/FIMKDtSYui",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/918098366076030976/pu/img/ovviUicPkJcjD-xi.jpg",
+          "id_str": "918098366076030976",
+          "source_user_id": "2234820726",
+          "id": "918098366076030976",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/918098366076030976/pu/img/ovviUicPkJcjD-xi.jpg",
+          "source_user_id_str": "2234820726",
+          "sizes": {
+            "large": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "918098802120130560",
+          "display_url": "pic.twitter.com/FIMKDtSYui"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "笑ったら寝ろ",
+          "indices": [
+            "74",
+            "81"
+          ]
+        },
+        {
+          "text": "柴犬だいふくベストセレクション",
+          "indices": [
+            "82",
+            "98"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "0",
+    "id_str": "924520341434548224",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "924520341434548224",
+    "possibly_sensitive": false,
+    "created_at": "Sun Oct 29 06:16:40 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @daifuku_channel: ま、マネすんなよ〜🐶💢やめろよー💦\nDon't mimic me\n\nぜひ音ありで見て笑ってください！！\n\n#笑ったら寝ろ\n#柴犬だいふくベストセレクション https://t.co/FIMKDtSYui",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/daifuku_channel/status/918098802120130560/video/1",
+          "source_status_id": "918098802120130560",
+          "indices": [
+            "99",
+            "122"
+          ],
+          "url": "https://t.co/FIMKDtSYui",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/918098366076030976/pu/img/ovviUicPkJcjD-xi.jpg",
+          "id_str": "918098366076030976",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "60000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/918098366076030976/pu/pl/1jXLHZqLnoscBs78.m3u8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/918098366076030976/pu/vid/320x180/n0Ie9Lk-spKM-HT8.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/918098366076030976/pu/vid/640x360/aN4FoRPQ8eaYbqQw.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2234820726",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "918098366076030976",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/918098366076030976/pu/img/ovviUicPkJcjD-xi.jpg",
+          "source_user_id_str": "2234820726",
+          "sizes": {
+            "large": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "918098802120130560",
+          "display_url": "pic.twitter.com/FIMKDtSYui"
+        }
+      ]
+    }
+  }
+}
