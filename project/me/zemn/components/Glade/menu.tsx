@@ -1,6 +1,7 @@
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 import style from '#root/project/me/zemn/components/Glade/menu.module.css';
 import { InlineLogin } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
@@ -10,6 +11,7 @@ import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 import { navSections } from '#root/project/me/zemn/navigation/navigation.js';
 
 export function GladeMenu() {
+	const pathname = useLocation().pathname;
 	const detailsRef = useRef<HTMLDetailsElement | null>(null);
 	const [fut_idToken] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
@@ -18,6 +20,10 @@ export function GladeMenu() {
 		() => false,
 		() => false
 	);
+
+	useEffect(() => {
+		if (detailsRef.current) detailsRef.current.open = false;
+	}, [pathname]);
 
 	useEffect(() => {
 		const onPointerDown = (event: PointerEvent) => {

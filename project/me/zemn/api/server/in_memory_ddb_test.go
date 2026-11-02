@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"reflect"
 	"sort"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -64,6 +65,12 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 
 		records := make([]analyticsEventRecord, 0, len(db.analytics))
 		for _, rec := range db.analytics {
+			if lower, ok := in.ExpressionAttributeValues[":start"].(*types.AttributeValueMemberS); ok && rec.When < lower.Value {
+				continue
+			}
+			if upper, ok := in.ExpressionAttributeValues[":end"].(*types.AttributeValueMemberS); ok && rec.When > upper.Value {
+				continue
+			}
 			if feed != "" && rec.Feed != feed {
 				continue
 			}
@@ -136,7 +143,7 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 			records = append(records, rec)
 		}
 		sort.SliceStable(records, func(i, j int) bool {
-			if aws.ToBool(in.ScanIndexForward) {
+			if in.ScanIndexForward == nil || *in.ScanIndexForward {
 				return keyTableRecordWhen(records[i]) < keyTableRecordWhen(records[j])
 			}
 			return keyTableRecordWhen(records[i]) > keyTableRecordWhen(records[j])
@@ -191,16 +198,35 @@ func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, o
 		for index, existing := range db.journal {
 			if keyTableRecordID(existing) == id && keyTableRecordWhen(existing) == when {
 				if in.ConditionExpression != nil {
-					return nil, &types.ConditionalCheckFailedException{}
+					if expected, checksEntry := in.ExpressionAttributeValues[":previousEntry"]; checksEntry {
+						if !reflect.DeepEqual(expected, existing["entry"]) {
+							return nil, &types.ConditionalCheckFailedException{}
+						}
+					} else {
+						expected, checksVersion := in.ExpressionAttributeValues[":version"].(*types.AttributeValueMemberS)
+						actual, hasVersion := existing["version"].(*types.AttributeValueMemberS)
+						if !checksVersion || !hasVersion || expected.Value != actual.Value {
+							return nil, &types.ConditionalCheckFailedException{}
+						}
+					}
 				}
 				db.journal[index] = copyDynamoItem(in.Item)
 				return &dynamodb.PutItemOutput{}, nil
 			}
 		}
+		if _, checksEntry := in.ExpressionAttributeValues[":previousEntry"]; checksEntry {
+			return nil, &types.ConditionalCheckFailedException{}
+		}
 		db.journal = append(db.journal, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil
 	}
 	if in.TableName != nil && *in.TableName == "keys" {
+		for index, existing := range db.keyRecords {
+			if keyTableRecordID(existing) == keyTableRecordID(in.Item) && keyTableRecordWhen(existing) == keyTableRecordWhen(in.Item) {
+				db.keyRecords[index] = copyDynamoItem(in.Item)
+				return &dynamodb.PutItemOutput{}, nil
+			}
+		}
 		db.keyRecords = append(db.keyRecords, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil
 	}

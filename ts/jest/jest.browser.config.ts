@@ -1,5 +1,6 @@
 export default {
 	testEnvironment: 'jsdom',
+	setupFiles: ['<rootDir>/ts/jest/jest.setup.js'],
 	haste: {
 		enableSymlinks: true,
 	},

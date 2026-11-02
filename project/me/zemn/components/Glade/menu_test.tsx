@@ -51,6 +51,10 @@ jest.unstable_mockModule(
 	})
 );
 
+jest.unstable_mockModule('react-router', () => ({
+	useLocation: () => ({ pathname: '/' }),
+}));
+
 let grantedScopes: readonly string[] = [];
 
 jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeApi.js', () => ({
@@ -71,7 +75,7 @@ jest.unstable_mockModule('#root/project/me/zemn/hook/useZemnMeAuth.js', () => ({
 	],
 }));
 
-let GladeMenu: () => JSX.Element;
+let GladeMenu: () => React.JSX.Element;
 let container: HTMLDivElement;
 let root: Root;
 

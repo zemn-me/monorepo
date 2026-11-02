@@ -2,7 +2,8 @@ import React from 'react';
 
 import * as vector from '#root/ts/math/vec.js';
 
-type PropsOf<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
+type PropsOf<T extends keyof React.JSX.IntrinsicElements> =
+	React.JSX.IntrinsicElements[T];
 
 export enum SVGNodeType {
 	Path,

@@ -1,6 +1,7 @@
 import '#root/ts/pulumi/setMocks.js';
 
 import { createRequire } from 'node:module';
+import { runInNewContext } from 'node:vm';
 import { describe, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 import { serializeFunction } from '@pulumi/pulumi/runtime/closure/serializeClosure.js';
@@ -25,7 +26,8 @@ import {
 	sanitizeAwsTargetGroupName,
 } from '#root/ts/pulumi/lib/awsNames.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
-import { mockResources } from '#root/ts/pulumi/setMocks.js';
+import { mockCalls, mockResources } from '#root/ts/pulumi/setMocks.js';
+import { lambdaArchiveViolations } from './lambda_archives.js';
 
 const require = createRequire(import.meta.url);
 
@@ -36,6 +38,18 @@ const resourceInputText = (input: unknown) =>
 	typeof input === 'string' ? input : JSON.stringify(input);
 
 const awsAlphaNumericHyphenUnderscoreNameInputs = [
+	{
+		input: 'name',
+		type: 'aws:cloudfront/cachePolicy:CachePolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/originRequestPolicy:OriginRequestPolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/responseHeadersPolicy:ResponseHeadersPolicy',
+	},
 	{
 		input: 'name',
 		type: 'aws:cloudfront/function:Function',
@@ -78,6 +92,223 @@ const awsLambdaFunctionNameMaxLength = 64;
 const pulumiAutoNameRandomSuffixLength = 7;
 const awsElbv2NamePattern = /^[A-Za-z0-9-]+$/;
 
+const s3BucketNameViolations = (
+	resources: readonly pulumi.runtime.MockResourceArgs[]
+) =>
+	resources
+		.filter(resource =>
+			['aws:s3/bucket:Bucket', 'aws:s3/bucketV2:BucketV2'].includes(
+				resource.type
+			)
+		)
+		.flatMap(resource => {
+			// Mocks skip provider defaults. S3 AutoNameTransform lowercases and
+			// truncates the logical name to fit a hyphen and seven random characters.
+			// https://github.com/pulumi/pulumi-aws/blob/v7.48.0/provider/resource_overrides.go
+			const bucket =
+				resource.inputs['bucket'] ??
+				`${resource.name.toLowerCase().slice(0, 63 - 1 - pulumiAutoNameRandomSuffixLength)}-1234567`;
+			// General-purpose buckets in the shared global namespace:
+			// https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+			if (
+				typeof bucket === 'string' &&
+				/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/.test(bucket) &&
+				!bucket.includes('..') &&
+				!/^\d+\.\d+\.\d+\.\d+$/.test(bucket) &&
+				!/^(xn--|sthree-|amzn-s3-demo-)/.test(bucket) &&
+				!/(-s3alias|--ol-s3|\.mrap|--x-s3|--table-s3|-an)$/.test(bucket)
+			) {
+				return [];
+			}
+			return [
+				`${resource.type} ${JSON.stringify(resource.name)} has invalid S3 bucket name ${JSON.stringify(bucket)} (${resource.inputs['bucket'] === undefined ? 'Pulumi auto-name' : 'explicit bucket input'}). Use deriveBucketName for the logical name or set a valid bucket input.`,
+			];
+		});
+
+const expectValidS3BucketNames = () => {
+	expect(
+		mockResources.some(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' ||
+				resource.type === 'aws:s3/bucket:Bucket'
+		)
+	).toBe(true);
+	const violations = s3BucketNameViolations(mockResources);
+	if (violations.length > 0) {
+		throw new Error(
+			`S3 bucket name validation failed:\n${violations.join('\n')}`
+		);
+	}
+};
+
+const expectValidAwsNames = (
+	resources: readonly pulumi.runtime.MockResourceArgs[] = mockResources
+) => {
+	const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
+		({ input, type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs[input];
+					if (typeof value !== 'string') {
+						if (
+							isAwsAlphaNumericHyphenUnderscoreName(resource.name)
+						) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
+						];
+					}
+					if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
+					];
+				})
+	);
+	if (awsNameViolations.length > 0) {
+		throw new Error(
+			`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const lambdaFunctionNameViolations = awsLambdaFunctionNameInputs.flatMap(
+		({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['name'];
+					if (typeof value === 'string') {
+						if (isAwsLambdaFunctionName(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					}
+
+					const implicitNamePrefix = `${resource.name}-`;
+					const implicitNameLength =
+						implicitNamePrefix.length +
+						pulumiAutoNameRandomSuffixLength;
+					if (
+						implicitNameLength <= awsLambdaFunctionNameMaxLength &&
+						isAwsAlphaNumericHyphenUnderscoreName(
+							implicitNamePrefix
+						)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set name to an explicit valid Lambda function name.`,
+					];
+				})
+	);
+	if (lambdaFunctionNameViolations.length > 0) {
+		throw new Error(
+			`AWS Lambda function name validation failed:\n${lambdaFunctionNameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const lambdaPermissionStatementIdViolations =
+		awsLambdaPermissionStatementIdInputs.flatMap(({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['statementId'];
+					if (typeof value === 'string') {
+						if (isAwsLambdaStatementId(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(value)} from its explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					}
+
+					if (isAwsLambdaStatementId(resource.name)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set statementId to an explicit valid Lambda permission statement ID.`,
+					];
+				})
+		);
+	if (lambdaPermissionStatementIdViolations.length > 0) {
+		throw new Error(
+			`AWS Lambda permission statement ID validation failed:\n${lambdaPermissionStatementIdViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
+		resources
+			.filter(resource => resource.type === type)
+			.flatMap(resource => {
+				const value = resource.inputs['name'];
+				if (typeof value === 'string') {
+					if (isAwsElbv2Name(value)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+					];
+				}
+
+				const implicitNamePrefix = `${resource.name}-`;
+				const implicitNameLength =
+					implicitNamePrefix.length +
+					pulumiAutoNameRandomSuffixLength;
+				if (
+					implicitNameLength <= awsElbv2NameMaxLength &&
+					awsElbv2NamePattern.test(implicitNamePrefix)
+				) {
+					return [];
+				}
+
+				return [
+					`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
+				];
+			})
+	);
+	if (elbv2NameViolations.length > 0) {
+		throw new Error(
+			`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const ecsTaskDefinitionFamilyViolations =
+		awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['family'];
+					if (
+						typeof value === 'string' &&
+						isAwsEcsTaskFamilyName(value)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+					];
+				})
+		);
+	if (ecsTaskDefinitionFamilyViolations.length > 0) {
+		throw new Error(
+			`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+};
+
 interface AwsAssumeRoleStatement {
 	Condition: {
 		StringEquals: Record<string, string>;
@@ -101,6 +332,42 @@ interface EcrLifecyclePolicy {
 }
 
 describe('pulumi', () => {
+	test.each(awsAlphaNumericHyphenUnderscoreNameInputs)(
+		'rejects invalid explicit and auto-named $type resources',
+		({ type, input }) => {
+			const resource = (
+				name: string,
+				inputs = {}
+			): pulumi.runtime.MockResourceArgs => ({
+				type,
+				name,
+				inputs,
+				custom: true,
+			});
+			for (const name of [
+				'monorepo_zemn.me_cache',
+				'spaces in name',
+				'slash/name',
+				'bad!name',
+			]) {
+				expect(() => expectValidAwsNames([resource(name)])).toThrow(
+					'AWS physical name'
+				);
+				expect(() =>
+					expectValidAwsNames([resource('valid', { [input]: name })])
+				).toThrow('AWS physical name');
+			}
+			expect(() =>
+				expectValidAwsNames([
+					resource('monorepo_zemn_me_cache'),
+					resource('logical.names.can.contain.dots', {
+						[input]: 'valid-explicit_name',
+					}),
+				])
+			).not.toThrow();
+		}
+	);
+
 	test('loads its package-local TypeScript 5 compiler API', () => {
 		const typescript = require('@pulumi/pulumi/typescript-shim.js') as {
 			version: string;
@@ -117,6 +384,56 @@ describe('pulumi', () => {
 			'monorepo-zemn.me-api-journal-audio-bucket'
 		);
 	});
+
+	test.each(['aws:s3/bucket:Bucket', 'aws:s3/bucketV2:BucketV2'])(
+		'validates physical names of %s resources',
+		type => {
+			const resource = (name: string, inputs = {}) => ({
+				type,
+				name,
+				inputs,
+			});
+			const invalidLogicalName = 'monorepo_example_backend_pdfs';
+			expect(
+				s3BucketNameViolations([resource(invalidLogicalName)])
+			).toEqual([expect.stringContaining(invalidLogicalName)]);
+			for (const bucket of [
+				'ab',
+				'a'.repeat(64),
+				'UPPERCASE',
+				'has_underscore',
+				'-leading',
+				'trailing-',
+				'two..dots',
+				'192.168.5.4',
+				'xn--bucket',
+				'sthree-bucket',
+				'amzn-s3-demo-bucket',
+				'bucket-s3alias',
+				'bucket--ol-s3',
+				'bucket.mrap',
+				'bucket--x-s3',
+				'bucket--table-s3',
+				'bucket-an',
+			]) {
+				expect(
+					s3BucketNameViolations([resource('valid', { bucket })])
+				).toEqual([expect.stringContaining(JSON.stringify(bucket))]);
+			}
+			expect(
+				s3BucketNameViolations([
+					resource(deriveBucketName(invalidLogicalName)),
+					resource('Uppercase'),
+					resource('a'.repeat(100)),
+					resource(invalidLogicalName, {
+						bucket: 'valid.example-bucket',
+					}),
+					resource('valid', { bucket: 'a'.repeat(63) }),
+					resource('valid', { bucket: 'abc' }),
+				])
+			).toEqual([]);
+		}
+	);
 
 	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
 		expect(
@@ -180,10 +497,14 @@ describe('pulumi', () => {
 		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
 	});
 
-	test('staging minecraft uses staging-specific resources', async () => {
+	test('staging uses staging-specific resources', async () => {
 		mockResources.splice(0);
+		mockCalls.splice(0);
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
+		expectValidS3BucketNames();
+		expectValidAwsNames();
+		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
 
 		expect(
 			mockResources.some(
@@ -192,6 +513,27 @@ describe('pulumi', () => {
 					'aws:iam/outboundWebIdentityFederation:OutboundWebIdentityFederation'
 			)
 		).toBe(false);
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53domains/domain:Domain'
+			)
+		).toBe(false);
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('staging.waxingincandescent.com');
+		expect(mockCalls).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					token: 'aws:route53/getZone:getZone',
+					inputs: { name: 'waxingincandescent.com.', privateZone: false },
+				}),
+			])
+		);
+
 		const stagingJournalWorker = mockResources.find(
 			resource =>
 				resource.type === 'aws:lambda/function:Function' &&
@@ -334,6 +676,43 @@ describe('pulumi', () => {
 		expect(protectedResources).toEqual([]);
 	});
 
+	test('only the production curator receives the dedicated OpenAI key', async () => {
+		const previousKey = process.env['OPENAI_CURATOR_API_KEY'];
+		process.env['OPENAI_CURATOR_API_KEY'] = 'test-curator-credential';
+		try {
+			for (const staging of [false, true]) {
+				mockResources.splice(0);
+				new project.Component(
+					`curator-key-${staging ? 'staging' : 'production'}`,
+					{ staging }
+				);
+				await pulumi.runtime.disconnect();
+				const recipients = mockResources.filter(
+					resource =>
+						resource.type === 'aws:lambda/function:Function' &&
+						resourceInputText(resource.inputs).includes(
+							'test-curator-credential'
+						)
+				);
+				expect(recipients.map(resource => resource.name)).toEqual(
+					staging ? [] : ['journalcuratorlambda']
+				);
+			}
+		} finally {
+			if (previousKey === undefined)
+				delete process.env['OPENAI_CURATOR_API_KEY'];
+			else process.env['OPENAI_CURATOR_API_KEY'] = previousKey;
+		}
+		expect(githubActionsSecretAccessByWorkflow.submit).toContain(
+			githubActionsSecretIds.openAICuratorApiKey
+		);
+		for (const scope of ['presubmit', 'staging', 'renovate'] as const) {
+			expect(githubActionsSecretAccessByWorkflow[scope]).not.toContain(
+				githubActionsSecretIds.openAICuratorApiKey
+			);
+		}
+	});
+
 	test('smoke', async () => {
 		mockResources.splice(0);
 		new project.Component('monorepo', {
@@ -342,6 +721,33 @@ describe('pulumi', () => {
 			openAIServiceAccountId: 'openai-production-service-account',
 		});
 		await pulumi.runtime.disconnect();
+		expectValidS3BucketNames();
+		expectValidAwsNames();
+		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
+
+		expect(
+			mockResources.find(
+				resource => resource.name === 'monorepo_waxingincandescent_domain'
+			)
+		).toMatchObject({
+			type: 'aws:route53domains/domain:Domain',
+			inputs: {
+				domainName: 'waxingincandescent.com',
+				durationInYears: 1,
+				autoRenew: true,
+				adminPrivacy: true,
+				registrantPrivacy: true,
+				techPrivacy: true,
+				transferLock: true,
+			},
+		});
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('waxingincandescent.com');
 
 		const npmPublishCommands = mockResources
 			.filter(resource => resource.type === 'command:local:Command')
@@ -351,6 +757,7 @@ describe('pulumi', () => {
 			'monorepo_future_npm_publish',
 			'monorepo_knowitwhenyouseeit_npm_publish',
 			'monorepo_result_npm_publish',
+			'monorepo_tabwriter_npm_publish',
 		]);
 		for (const command of npmPublishCommands) {
 			expect(command.inputs['environment']).toEqual({
@@ -358,160 +765,6 @@ describe('pulumi', () => {
 			});
 		}
 
-		const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
-			({ input, type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs[input];
-						if (typeof value !== 'string') {
-							if (isAwsAlphaNumericHyphenUnderscoreName(resource.name)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
-							];
-						}
-						if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
-						];
-					})
-		);
-		if (awsNameViolations.length > 0) {
-			throw new Error(
-				`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const lambdaFunctionNameViolations = awsLambdaFunctionNameInputs.flatMap(
-			({ type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs['name'];
-						if (typeof value === 'string') {
-							if (isAwsLambdaFunctionName(value)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
-							];
-						}
-
-						const implicitNamePrefix = `${resource.name}-`;
-						const implicitNameLength =
-							implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
-						if (
-							implicitNameLength <= awsLambdaFunctionNameMaxLength &&
-							isAwsAlphaNumericHyphenUnderscoreName(implicitNamePrefix)
-						) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set name to an explicit valid Lambda function name.`,
-						];
-					})
-		);
-		if (lambdaFunctionNameViolations.length > 0) {
-			throw new Error(
-				`AWS Lambda function name validation failed:\n${lambdaFunctionNameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const lambdaPermissionStatementIdViolations =
-			awsLambdaPermissionStatementIdInputs.flatMap(({ type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs['statementId'];
-						if (typeof value === 'string') {
-							if (isAwsLambdaStatementId(value)) {
-								return [];
-							}
-
-							return [
-								`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(value)} from its explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
-							];
-						}
-
-						if (isAwsLambdaStatementId(resource.name)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set statementId to an explicit valid Lambda permission statement ID.`,
-						];
-					})
-			);
-		if (lambdaPermissionStatementIdViolations.length > 0) {
-			throw new Error(
-				`AWS Lambda permission statement ID validation failed:\n${lambdaPermissionStatementIdViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
-			mockResources
-				.filter(resource => resource.type === type)
-				.flatMap(resource => {
-					const value = resource.inputs['name'];
-					if (typeof value === 'string') {
-						if (isAwsElbv2Name(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
-						];
-					}
-
-					const implicitNamePrefix = `${resource.name}-`;
-					const implicitNameLength =
-						implicitNamePrefix.length + pulumiAutoNameRandomSuffixLength;
-					if (
-						implicitNameLength <= awsElbv2NameMaxLength &&
-						awsElbv2NamePattern.test(implicitNamePrefix)
-					) {
-						return [];
-					}
-
-					return [
-						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
-					];
-				})
-		);
-		if (elbv2NameViolations.length > 0) {
-			throw new Error(
-				`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
-
-		const ecsTaskDefinitionFamilyViolations =
-			awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
-				mockResources
-					.filter(resource => resource.type === type)
-					.flatMap(resource => {
-						const value = resource.inputs['family'];
-						if (typeof value === 'string' && isAwsEcsTaskFamilyName(value)) {
-							return [];
-						}
-
-						return [
-							`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
-						];
-					})
-			);
-		if (ecsTaskDefinitionFamilyViolations.length > 0) {
-			throw new Error(
-				`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
-			);
-		}
 
 		expect(
 			mockResources.some(
@@ -640,7 +893,8 @@ describe('pulumi', () => {
 		const githubProvider = mockResources.find(
 			resource =>
 				resource.type ===
-				'gcp:iam/workloadIdentityPoolProvider:WorkloadIdentityPoolProvider'
+					'gcp:iam/workloadIdentityPoolProvider:WorkloadIdentityPoolProvider' &&
+				resource.inputs['workloadIdentityPoolId'] === 'github'
 		);
 		expect(githubProvider?.inputs['attributeCondition']).toContain(
 			'assertion.repository == "zemn-me/monorepo"'
@@ -654,15 +908,76 @@ describe('pulumi', () => {
 		expect(githubProvider?.inputs['attributeCondition']).toContain(
 			'assertion.workflow_ref'
 		);
-		expect(githubProvider?.inputs['attributeCondition']).toContain(
-			'assertion.event_name == "pull_request"'
-		);
-		expect(githubProvider?.inputs['attributeCondition']).toContain(
-			'assertion.sub == "repo:zemn-me/monorepo:pull_request"'
-		);
-		expect(githubProvider?.inputs['attributeCondition']).toContain(
-			'assertion.ref.startsWith("refs/pull/")'
-		);
+		if (githubProvider === undefined) {
+			throw new Error('missing GitHub OIDC provider');
+		}
+		const providerCondition = githubProvider.inputs['attributeCondition'];
+		const scopeExpression = (
+			githubProvider.inputs['attributeMapping'] as Record<
+				'attribute.workflow_scope',
+				string
+			>
+		)['attribute.workflow_scope'];
+		expect(typeof providerCondition).toBe('string');
+		const queueRef = 'refs/heads/gh-readonly-queue/main/pr-14577-example';
+		const identity = (workflow: string, ref: string, event: string) => ({
+			event_name: event,
+			ref,
+			repository: 'zemn-me/monorepo',
+			repository_id: '275403409',
+			repository_owner: 'zemn-me',
+			repository_owner_id: '145876100',
+			sub: 'repo:zemn-me/monorepo:pull_request',
+			workflow_ref: `zemn-me/monorepo/.github/workflows/${workflow}.yml@${ref}`,
+		});
+		// These generated CEL expressions use the common JS/CEL subset:
+		// string equality, startsWith, boolean operators and ternaries.
+		const evaluate = (expression: string, assertion: object) =>
+			runInNewContext(expression, { assertion });
+		for (const workflow of ['presubmit', 'staging', 'submit', 'renovate']) {
+			for (const event of ['pull_request', 'pull_request_target']) {
+				const assertion = identity(
+					workflow,
+					'refs/pull/14577/merge',
+					event
+				);
+				expect(evaluate(providerCondition as string, assertion)).toBe(
+					false
+				);
+				expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+			}
+		}
+		// Queue-shaped workflow refs cannot turn a PR event into a merge group.
+		for (const event of ['pull_request', 'pull_request_target', 'push']) {
+			const assertion = identity('presubmit', queueRef, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(
+				false
+			);
+			expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+		}
+		for (const [workflow, ref, event] of [
+			['presubmit', queueRef, 'merge_group'],
+			['staging', queueRef, 'merge_group'],
+			['submit', 'refs/heads/main', 'push'],
+			['renovate', 'refs/heads/main', 'workflow_dispatch'],
+		] as const) {
+			const assertion = identity(workflow, ref, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(true);
+			expect(evaluate(scopeExpression, assertion)).toBe(workflow);
+			for (const override of [
+				{ repository: 'attacker/monorepo' },
+				{ repository_id: '1' },
+				{ repository_owner_id: '1' },
+				{ ref: 'refs/pull/14577/merge' },
+			]) {
+				expect(
+					evaluate(providerCondition as string, {
+						...assertion,
+						...override,
+					})
+				).toBe(false);
+			}
+		}
 		expect(githubProvider?.inputs['attributeMapping']).toMatchObject({
 			'attribute.repository': 'assertion.repository',
 			'attribute.repository_id': 'assertion.repository_id',
@@ -672,11 +987,76 @@ describe('pulumi', () => {
 			'google.subject': 'assertion.sub',
 		});
 
+		const prCachePoolPath =
+			'projects/845702659200/locations/global/workloadIdentityPools/github-presubmit-cache';
+		const prCacheMember = `principalSet://iam.googleapis.com/${prCachePoolPath}/attribute.repository_id/275403409`;
+		const prCacheProvider = mockResources.find(
+			resource =>
+				resource.type ===
+					'gcp:iam/workloadIdentityPoolProvider:WorkloadIdentityPoolProvider' &&
+				resource.inputs['workloadIdentityPoolId'] ===
+					'github-presubmit-cache'
+		);
+		if (!prCacheProvider)
+			throw new Error('missing isolated PR cache provider');
+		const prIdentity = identity(
+			'presubmit',
+			'refs/pull/123/merge',
+			'pull_request'
+		);
+		const prCondition = prCacheProvider.inputs[
+			'attributeCondition'
+		] as string;
+		expect(evaluate(prCondition, prIdentity)).toBe(true);
+		for (const override of [
+			{ repository: 'attacker/monorepo' },
+			{ repository_id: '1' },
+			{ repository_owner: 'attacker' },
+			{ repository_owner_id: '1' },
+			{ event_name: 'pull_request_target' },
+			{ event_name: 'push' },
+			{ event_name: 'merge_group' },
+			{ ref: 'refs/heads/main' },
+			{ ref: 'refs/pull/123/head' },
+			{
+				workflow_ref:
+					'zemn-me/monorepo/.github/workflows/staging.yml@refs/pull/123/merge',
+			},
+			{
+				workflow_ref:
+					'zemn-me/monorepo/.github/workflows/presubmit.yml@refs/heads/main',
+			},
+			{ sub: 'repo:zemn-me/monorepo:environment:production' },
+		]) {
+			expect(evaluate(prCondition, { ...prIdentity, ...override })).toBe(
+				false
+			);
+		}
+		// All grants into the separate pool must resolve to this one secret.
+		// This also rejects project-wide roles and service-account impersonation.
+		const prCacheGrants = mockResources.filter(resource =>
+			resourceInputText(resource.inputs).includes(`${prCachePoolPath}/`)
+		);
+		expect(prCacheGrants).toHaveLength(1);
+		expect(prCacheGrants[0]?.type).toBe(
+			'gcp:secretmanager/secretIamMember:SecretIamMember'
+		);
+		expect(prCacheGrants[0]?.inputs).toEqual({
+			member: prCacheMember,
+			project: 'extreme-cycling-441523-a9',
+			role: 'roles/secretmanager.secretAccessor',
+			secretId:
+				'monorepo_github_actions_secrets_github-actions-readonly-buildbuddy-api-key-id',
+		});
+
 		const workloadIdentityUsers = mockResources.filter(
-			resource => resource.type === 'gcp:serviceaccount/iAMMember:IAMMember'
+			resource =>
+				resource.type === 'gcp:serviceaccount/iAMMember:IAMMember'
 		);
 		expect(
-			workloadIdentityUsers.map(resource => resource.inputs['member']).sort()
+			workloadIdentityUsers
+				.map(resource => resource.inputs['member'])
+				.sort()
 		).toEqual([
 			workflowScopePrincipal('staging'),
 			workflowScopePrincipal('submit'),
@@ -692,7 +1072,9 @@ describe('pulumi', () => {
 		const expectedSecretIds = Object.values(githubActionsSecretIds).sort();
 		const secretIds = mockResources
 			.filter(
-				resource => resource.type === 'gcp:secretmanager/secret:Secret'
+				resource =>
+					resource.type === 'gcp:secretmanager/secret:Secret' &&
+					resource.name.startsWith('monorepo_github_actions_secrets_')
 			)
 			.map(resource => resource.inputs['secretId'])
 			.sort();
@@ -700,7 +1082,9 @@ describe('pulumi', () => {
 
 		const secretIamMembers = mockResources.filter(
 			resource =>
-				resource.type === 'gcp:secretmanager/secretIamMember:SecretIamMember'
+				resource.type ===
+					'gcp:secretmanager/secretIamMember:SecretIamMember' &&
+				resource.name.startsWith('monorepo_github_actions_secrets_')
 		);
 		const expectedSecretIamMemberNames = Object.entries(
 			githubActionsSecretAccessByWorkflow
@@ -709,16 +1093,23 @@ describe('pulumi', () => {
 				secretIds.map(
 					secretId =>
 						`monorepo_github_actions_secrets_${workflowScope}_${secretId}_accessor`
-					)
+				)
 			)
 			.sort();
 		expect(secretIamMembers.map(resource => resource.name).sort()).toEqual(
-			expectedSecretIamMemberNames
+			[
+				...expectedSecretIamMemberNames,
+				'monorepo_github_actions_secrets_pr_cache_accessor',
+			].sort()
 		);
 		for (const secretIamMember of secretIamMembers) {
-			expect(secretIamMember.inputs['member']).toContain(
-				'/attribute.workflow_scope/'
-			);
+			if (secretIamMember.name.endsWith('_pr_cache_accessor')) {
+				expect(secretIamMember.inputs['member']).toBe(prCacheMember);
+			} else {
+				expect(secretIamMember.inputs['member']).toContain(
+					'/attribute.workflow_scope/'
+				);
+			}
 			expect(secretIamMember.inputs['member']).not.toContain(
 				'monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com'
 			);
@@ -757,6 +1148,63 @@ describe('pulumi', () => {
 			},
 		});
 		expect(journalWorker?.inputs['reservedConcurrentExecutions']).toBe(1);
+		const curator = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalcuratorlambda'
+		);
+		expect(curator?.inputs['timeout']).toBe(120);
+		expect(curator?.inputs['reservedConcurrentExecutions']).toBe(1);
+		expect(curator?.inputs['environment']).toMatchObject({
+			variables: {
+				JOURNAL_CURATION_ENABLED: 'true',
+				JOURNAL_CURATOR_MODEL: 'gpt-5.6',
+				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
+			},
+		});
+		const journalBucket = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' &&
+				resource.name === 'monorepo-zemn.me-api-journal-audio-bucket'
+		);
+		expect(journalBucket).toBeDefined();
+		expect(journalBucket?.inputs['forceDestroy']).not.toBe(true);
+		const journalVersioning = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketVersioningV2:BucketVersioningV2' &&
+				resource.name.endsWith('-journal-versioning')
+		);
+		expect(journalVersioning?.inputs['versioningConfiguration']).toEqual({
+			status: 'Enabled',
+		});
+		expect(
+			mockResources.filter(
+				resource =>
+					resource.type.includes('bucketLifecycle') &&
+					resource.inputs['bucket'] === `${journalBucket?.name}-id`
+			)
+		).toHaveLength(0);
+		const uploadNotification = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketNotification:BucketNotification' &&
+				resource.name.endsWith('-journal-upload-notification')
+		);
+		expect(uploadNotification?.inputs['lambdaFunctions']).toEqual([
+			expect.objectContaining({
+				filterPrefix: 'entries/',
+				filterSuffix: 'source',
+			}),
+		]);
+
+		const curatorSchedule = mockResources.find(
+			resource =>
+				resource.type === 'aws:cloudwatch/eventRule:EventRule' &&
+				resource.name.endsWith('-journal-summary-schedule')
+		);
+		expect(curatorSchedule?.inputs['scheduleExpression']).toBe(
+			'rate(5 minutes)'
+		);
+
 		expect(
 			mockResources.filter(
 				resource =>

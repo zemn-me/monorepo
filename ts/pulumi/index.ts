@@ -14,9 +14,9 @@ import {
 	getTwilioPhoneNumber,
 	TwilioPhoneNumber,
 } from '#root/ts/pulumi/lib/twilio/phone_number.js';
-import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
+import * as WaxingIncandescent from '#root/ts/pulumi/waxingincandescent.com/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
@@ -207,6 +207,11 @@ export class Component extends Pulumi.ComponentResource {
 					path: 'ts/result',
 					resourceName: 'result',
 				},
+				{
+					name: '@zemnmez/tabwriter',
+					path: 'ts/text/tabwriter',
+					resourceName: 'tabwriter',
+				},
 			]) {
 				const target = `monorepo/${npmPackage.path}/npm_pkg`;
 				new NpmPackage(
@@ -352,8 +357,8 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		new Lulu.Component(
-			`${name}_lulu`,
+		new WaxingIncandescent.Component(
+			`${name}_waxingincandescent`,
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);

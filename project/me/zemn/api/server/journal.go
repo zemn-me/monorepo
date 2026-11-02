@@ -28,7 +28,7 @@ import (
 const (
 	journalOwnerSubject        = "thomas"
 	journalLocalOwnerSubject   = "integration-test-local"
-	maxJournalAudioBytes       = 25 * 1024 * 1024
+	maxJournalAudioBytes       = 256 * 1024 * 1024
 	journalPlaybackURLLifetime = 24 * time.Hour
 	journalUploadURLLifetime   = 5 * time.Minute
 )
@@ -93,19 +93,29 @@ func journalEntryIDFromKey(key string) (string, bool) {
 }
 
 func (s *Server) listJournalRecords(ctx context.Context, subject string) ([]JournalStoredRecord, error) {
-	out, err := s.ddb.Query(ctx, &dynamodb.QueryInput{
+	input := &dynamodb.QueryInput{
 		TableName:              aws.String(s.journalTableName),
+		ConsistentRead:         aws.Bool(true),
 		KeyConditionExpression: aws.String("id = :id"),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":id": &types.AttributeValueMemberS{Value: subject},
 		},
-	})
-	if err != nil {
-		return nil, err
 	}
 	var records []JournalStoredRecord
-	if err := attributevalue.UnmarshalListOfMaps(out.Items, &records); err != nil {
-		return nil, err
+	for {
+		out, err := s.ddb.Query(ctx, input)
+		if err != nil {
+			return nil, err
+		}
+		var page []JournalStoredRecord
+		if err := attributevalue.UnmarshalListOfMaps(out.Items, &page); err != nil {
+			return nil, err
+		}
+		records = append(records, page...)
+		if len(out.LastEvaluatedKey) == 0 {
+			break
+		}
+		input.ExclusiveStartKey = out.LastEvaluatedKey
 	}
 	return records, nil
 }
@@ -144,6 +154,7 @@ func journalEntryMetadata(entry JournalStoredEntry) JournalEntryMetadata {
 		SchemaVersion: 1,
 		Id:            entry.Id,
 		RecordedAt:    entry.RecordedAt,
+		Location:      entry.Location,
 		TimeZone:      entry.TimeZone,
 		DurationMs:    entry.DurationMs,
 		ContentType:   entry.ContentType,
@@ -152,9 +163,11 @@ func journalEntryMetadata(entry JournalStoredEntry) JournalEntryMetadata {
 		AudioKey:      entry.AudioKey,
 		Status:        entry.Status,
 	}
+	metadata.RecordingStartedAt = entry.RecordingStartedAt
 	if entry.Error != "" {
 		metadata.Error = &entry.Error
 	}
+	metadata.ProcessingProgress = entry.ProcessingProgress
 	return metadata
 }
 
@@ -195,24 +208,34 @@ func (s *Server) journalAudioURL(ctx context.Context, entry JournalStoredEntry) 
 }
 
 func (s *Server) apiJournalEntry(ctx context.Context, entry JournalStoredEntry) JournalEntry {
+	result := journalEntryContent(entry)
+	result.AudioUrl = s.journalAudioURL(ctx, entry)
+	return result
+}
+
+func journalEntryContent(entry JournalStoredEntry) JournalEntry {
 	result := JournalEntry{
 		SchemaVersion: 1,
 		Id:            openapiUUID(entry.Id),
 		RecordedAt:    entry.RecordedAt,
+		Title:         entry.Title,
+		Location:      entry.Location,
 		TimeZone:      entry.TimeZone,
 		DurationMs:    entry.DurationMs,
 		ContentType:   entry.ContentType,
 		ByteLength:    entry.ByteLength,
+		ContentSha256: entry.ContentSha256,
 		Status:        JournalEntryStatus(entry.Status),
-		AudioUrl:      s.journalAudioURL(ctx, entry),
 		Transcript:    entry.Transcript,
 	}
+	result.RecordingStartedAt = entry.RecordingStartedAt
 	if entry.Error != "" {
 		result.Error = &entry.Error
 	}
 	if entry.Summary != nil {
 		result.Summary = entry.Summary
 	}
+	result.ProcessingProgress = entry.ProcessingProgress
 	return result
 }
 
@@ -221,7 +244,7 @@ func openapiUUID(value string) uuid.UUID {
 	return parsed
 }
 
-func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (GetJournalResponseObject, error) {
+func (s *Server) GetJournal(ctx context.Context, request GetJournalRequestObject) (GetJournalResponseObject, error) {
 	subject, err := journalSubject(ctx)
 	if err != nil {
 		return nil, err
@@ -230,15 +253,49 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 	if err != nil {
 		return nil, err
 	}
+	generation, curationState, err := s.journalPublishedGeneration(ctx, records)
+	if err != nil {
+		return nil, err
+	}
+	records = applyJournalGeneration(records, generation)
+	var browse *JournalBrowse
+	var start, end time.Time
+	view := ""
+	if request.Params.View != nil {
+		view = string(*request.Params.View)
+		sort.SliceStable(records, func(i, j int) bool {
+			if records[i].Entry == nil {
+				return false
+			}
+			if records[j].Entry == nil {
+				return true
+			}
+			return records[i].Entry.RecordedAt.After(records[j].Entry.RecordedAt)
+		})
+		selection, from, to := journalBrowse(records, view, request.Params.At, time.Now().UTC())
+		browse, start, end = &selection, from, to
+	}
 	entries := make([]JournalEntry, 0)
 	summaries := make([]JournalSummary, 0)
 	now := time.Now().UTC()
 	for _, record := range records {
 		if record.Entry != nil && journalEntryIsVisible(*record.Entry, now) {
-			entries = append(entries, s.apiJournalEntry(ctx, *record.Entry))
+			if browse == nil || (view == "day" && !record.Entry.RecordedAt.Before(start) && record.Entry.RecordedAt.Before(end)) || (view == "overview" && len(entries) < 5) || record.Entry.Status != JournalEntryStatusReady {
+				if browse != nil && view == "overview" && record.Entry.Status == JournalEntryStatusReady {
+					entry := journalEntryContent(*record.Entry)
+					entry.Transcript = []JournalTranscriptSegment{}
+					entries = append(entries, entry)
+				} else {
+					entries = append(entries, s.apiJournalEntry(ctx, *record.Entry))
+				}
+			}
 		}
-		if record.Summary != nil {
-			summaries = append(summaries, *record.Summary)
+		if summary := record.Summary; summary != nil {
+			midpoint := summary.Start.Add(summary.End.Sub(summary.Start) / 2)
+			selected := string(summary.Period) == view && !midpoint.Before(start) && midpoint.Before(end)
+			if browse == nil || (view == "overview" && summary.Period == JournalSummaryPeriodJournal) || selected {
+				summaries = append(summaries, *summary)
+			}
 		}
 	}
 	sort.Slice(entries, func(i, j int) bool { return entries[i].RecordedAt.After(entries[j].RecordedAt) })
@@ -248,12 +305,40 @@ func (s *Server) GetJournal(ctx context.Context, _ GetJournalRequestObject) (Get
 		}
 		return summaries[i].Start.After(summaries[j].Start)
 	})
-	return GetJournal200JSONResponse{Entries: entries, Summaries: summaries}, nil
+	result := GetJournal200JSONResponse{Entries: entries, Summaries: summaries, Browse: browse}
+	wiki := make([]JournalWikiIndexEntry, 0, len(generation.Result.Pages))
+	for _, page := range generation.Result.Pages {
+		wiki = append(wiki, JournalWikiIndexEntry{Id: page.Id, Title: page.Title, Kind: string(page.Kind), Aliases: page.Aliases})
+	}
+	sort.Slice(wiki, func(i, j int) bool { return wiki[i].Title < wiki[j].Title })
+	result.Wiki = &wiki
+	if s.journalCurationEnabled || curationState.Version != "" {
+		status := JournalCurationStatus{Status: JournalCurationStatusStatusPending}
+		_, fingerprint := journalCorpusHashes(journalCorpusFromRecords(records))
+		if curationState.PublishedFingerprint == fingerprint && len(generation.Sources) > 0 {
+			status.Status = JournalCurationStatusStatusReady
+		}
+		if curationState.RunID != "" && !curationState.Cleaning {
+			status.Status = JournalCurationStatusStatusRunning
+		}
+		if curationState.Failed {
+			status.Status = JournalCurationStatusStatusFailed
+		}
+		if !curationState.PublishedAt.IsZero() {
+			status.UpdatedAt = &curationState.PublishedAt
+			status.Generation = &curationState.PublishedKey
+		}
+		result.Curation = &status
+	}
+	if browse != nil {
+		browse.Sources = journalBrowseSources(records, entries, summaries)
+	}
+	return result, nil
 }
 
 func journalEntryIsVisible(entry JournalStoredEntry, now time.Time) bool {
 	switch entry.Status {
-	case JournalEntryStatusReady, JournalEntryStatusProcessing:
+	case JournalEntryStatusReady, JournalEntryStatusProcessing, JournalEntryStatusFailed:
 		return true
 	case JournalEntryStatusAwaitingUpload:
 		return entry.UploadExpiresAt != nil && now.Before(*entry.UploadExpiresAt)
@@ -710,12 +795,17 @@ func (s *Server) PostJournalEntries(ctx context.Context, request PostJournalEntr
 		SchemaVersion:   1,
 		Id:              entryID,
 		RecordedAt:      request.Body.RecordedAt,
+		Location:        request.Body.Location,
 		TimeZone:        request.Body.TimeZone,
 		ContentType:     contentType,
 		AudioKey:        journalEntryKey(entryID),
 		UploadExpiresAt: &expiresAt,
 		Status:          JournalEntryStatusAwaitingUpload,
 		Transcript:      []JournalTranscriptSegment{},
+	}
+	entry.RecordingStartedAt = request.Body.RecordingStartedAt
+	if entry.RecordingStartedAt != nil {
+		entry.RecordedAt = *entry.RecordingStartedAt
 	}
 	if err := s.putJournalRecord(ctx, JournalStoredRecord{
 		Id: subject, When: journalEntryRecordKey(entryID), Kind: JournalStoredRecordKindEntry, Entry: &entry,
@@ -765,6 +855,13 @@ func (s *Server) PatchJournalEntriesEntryId(ctx context.Context, request PatchJo
 	entry.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, request.Body.RecordedDate)
 	if err != nil {
 		return PatchJournalEntriesEntryId400JSONResponse{Cause: "recordedDate must be a valid calendar date"}, nil
+	}
+	generation, _, err := s.journalPublishedGeneration(ctx, records)
+	if err != nil {
+		return nil, err
+	}
+	if title, ok := generation.Titles[entry.Id]; ok {
+		entry.Title = ptr(title)
 	}
 	if entry.RecordedAt.Equal(previous.RecordedAt) {
 		return PatchJournalEntriesEntryId200JSONResponse(s.apiJournalEntry(ctx, *entry)), nil
@@ -969,6 +1066,7 @@ func (s *Server) journalObjectSHA256(ctx context.Context, bucket, key string, si
 
 func (s *Server) failJournalEntry(ctx context.Context, subject string, entry JournalStoredEntry, cause error) error {
 	entry.Status = JournalEntryStatusFailed
+	entry.ProcessingProgress = nil
 	entry.Error = cause.Error()
 	if err := s.updateJournalEntry(ctx, subject, entry); err != nil {
 		return err
@@ -1007,6 +1105,9 @@ var journalAggregatePeriods = []JournalSummaryPeriod{
 }
 
 func (s *Server) refreshJournalSummariesForEntries(ctx context.Context, entries ...JournalStoredEntry) error {
+	if s.journalCurationEnabled {
+		return nil
+	}
 	s.journalHierarchyMu.Lock()
 	defer s.journalHierarchyMu.Unlock()
 	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
@@ -1035,6 +1136,9 @@ func (s *Server) refreshJournalSummariesForEntry(ctx context.Context, entry Jour
 // RefreshJournalSummaries backfills elapsed calendar periods and the current
 // whole-journal overview without regenerating unchanged source material.
 func (s *Server) RefreshJournalSummaries(ctx context.Context, now time.Time) error {
+	if s.journalCurationEnabled {
+		return s.RefreshJournalKnowledge(ctx, now)
+	}
 	s.journalHierarchyMu.Lock()
 	defer s.journalHierarchyMu.Unlock()
 	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
@@ -1106,7 +1210,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	}
 	entry.ByteLength = size
 	if size <= 0 || size > maxJournalAudioBytes {
-		cause := fmt.Errorf("uploaded audio length %d is outside the allowed range of 1 byte to 25 MiB", size)
+		cause := fmt.Errorf("uploaded audio length %d is outside the allowed range of 1 byte to 256 MiB", size)
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, cause)
 		return cause
 	}
@@ -1125,6 +1229,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		return s.deleteJournalEntry(ctx, journalOwnerSubject, *entry)
 	}
 	entry.Status = JournalEntryStatusProcessing
+	entry.ProcessingProgress = &JournalProcessingProgress{Stage: JournalProcessingProgressStageTranscribing}
 	entry.Error = ""
 	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
 		return err
@@ -1147,16 +1252,38 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 	if entry.ContentType == "audio/mp4" {
 		audio, finishMetadata = observeQuickTimeCreationTime(audio)
 	}
-	transcription, err := s.journalAI.Transcribe(ctx, audio, entry.ContentType)
+	var transcription JournalTranscriptionResult
+	if ai, ok := s.journalAI.(interface {
+		TranscribeWithProgress(context.Context, io.Reader, string, func(int, int) error) (JournalTranscriptionResult, error)
+	}); ok {
+		transcription, err = ai.TranscribeWithProgress(ctx, audio, entry.ContentType, func(completed, total int) error {
+			entry.ProcessingProgress = &JournalProcessingProgress{Stage: JournalProcessingProgressStageTranscribing, CompletedChunks: completed, TotalChunks: total}
+			return s.updateJournalEntry(ctx, journalOwnerSubject, *entry)
+		})
+	} else {
+		transcription, err = s.journalAI.Transcribe(ctx, audio, entry.ContentType)
+	}
 	embeddedRecordedAt, hasEmbeddedRecordedAt := finishMetadata()
 	if err != nil {
 		_ = s.failJournalEntry(ctx, journalOwnerSubject, *entry, err)
 		return err
 	}
-	if hasEmbeddedRecordedAt {
+	if hasEmbeddedRecordedAt && entry.RecordingStartedAt == nil {
 		entry.RecordedAt = embeddedRecordedAt
 	}
 	entry.DurationMs = transcription.DurationMs
+	entry.Transcript = transcription.Segments
+	if s.journalCurationEnabled {
+		// The scheduled curator owns diary prose; uploads only transcribe.
+		entry.Status = JournalEntryStatusReady
+		entry.ProcessingProgress = nil
+		return s.updateJournalEntry(ctx, journalOwnerSubject, *entry)
+	} else {
+		entry.ProcessingProgress.Stage = JournalProcessingProgressStageSummarizing
+	}
+	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
+		return err
+	}
 	sources := transcriptSources(entry.Id, transcription.Segments)
 	analysis, err := s.journalAI.AnalyzeEntry(ctx, entry.RecordedAt, entry.TimeZone, sources)
 	if err != nil {
@@ -1185,6 +1312,7 @@ func (s *Server) ProcessJournalUpload(ctx context.Context, bucket, key string, s
 		sourceFingerprint,
 	))
 	entry.Status = JournalEntryStatusReady
+	entry.ProcessingProgress = nil
 	if err := s.updateJournalEntry(ctx, journalOwnerSubject, *entry); err != nil {
 		return err
 	}

@@ -22,6 +22,8 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
         outs = [out_base_name + ".mp4"],
     )
 
+    # libvpx otherwise derives its thread count from the executor CPU count,
+    # changing encoded bytes even with -bitexact.
     native.genrule(
         name = name + "_webm",
         srcs = [src, "//bin/host/ffmpeg"],
@@ -29,6 +31,7 @@ def transcode_web(name, src = None, out_base_name = "out", max_bitrate = "4.5M",
             $(location //bin/host/ffmpeg) -i $(location """ + src + """) \\
                 -bitexact \\
                 -c:v libvpx \\
+                -threads:v 1 \\
                 -crf 30 \\
                 -bufsize 2M \\
                 -an \\

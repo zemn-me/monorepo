@@ -1,0 +1,60 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/remix:rules.bzl", "remix_project")
+
+package(default_visibility = ["//ts/pulumi:__subpackages__"])
+
+remix_project(
+    name = "remix",
+    srcs = ["//ts/pulumi/waxingincandescent.com/app"],
+)
+
+ts_project(
+    name = "waxingincandescent.com",
+    srcs = ["index.ts"],
+    data = [":remix"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//ts/pulumi/lib/website",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+go_test(
+    name = "waxingincandescent_com_test",
+    size = "small",
+    srcs = ["site_test.go"],
+    data = [":remix"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@io_bazel_rules_go//go/runfiles",
+    ],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
+)

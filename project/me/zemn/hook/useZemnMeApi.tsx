@@ -8,12 +8,16 @@ import {
 import createFetchClient from 'openapi-fetch';
 import createClient from 'openapi-react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
 import type {
 	components,
 	paths,
 } from '#root/project/me/zemn/api/api_client.gen.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
+import { uploadJournalAudio } from '#root/project/me/zemn/hook/journal_upload.js';
+import {
+	useServerSession,
+	useSessionClaims,
+} from '#root/project/me/zemn/hook/server_session.js';
 import {
 	Future,
 	future_and_then,
@@ -193,41 +197,29 @@ export function useGetAdminAnalyticsEvents(
 }
 
 export function useGetMeScopes<L, E>(id_token: Future<string, L, E>) {
-	const fetchClient = useFetchClient(
-		id_token(
-			token => token,
-			() => undefined,
-			() => undefined
-		)
+	const token = id_token(
+		value => value,
+		() => undefined,
+		() => undefined
 	);
-
-	const jti = future_and_then(id_token, tok => extractIdTokenJti(tok));
-
+	const claims = useSessionClaims(id_token);
+	const { session } = useServerSession();
+	const fetchClient = useFetchClient(token);
 	const qr = useQuery({
-		queryKey: [
-			'get',
-			'/me/scopes',
-			jti(
-				j => j,
-				() => undefined,
-				() => undefined
-			),
-		],
+		queryKey: ['get', '/me/scopes', claims?.jti],
+		initialData:
+			claims?.jti === session?.claims.jti ? session?.scopes : undefined,
 		queryFn: async () => {
 			const resp = await fetchClient.GET('/me/scopes');
-			if (!resp.data) {
+			if (!resp.data)
 				throw new Error('/me/scopes returned unexpected payload');
-			}
 			return resp.data.scopes;
 		},
-		enabled: id_token(
-			() => true,
-			() => false,
-			() => false
-		),
+		enabled: token !== undefined,
 	});
-
-	return future_declare_dependency(id_token, useQueryFuture(qr));
+	return claims
+		? useQueryFuture(qr)
+		: future_declare_dependency(id_token, useQueryFuture(qr));
 }
 
 function useinvalidateGrievances() {
@@ -257,7 +249,7 @@ function useinvalidateMeScopes() {
 function useinvalidateCallboxStatus() {
 	const queryClient = useQueryClient();
 	return () =>
-		void queryClient.invalidateQueries({
+		queryClient.invalidateQueries({
 			queryKey: ['get', '/callbox'],
 		});
 }
@@ -265,7 +257,7 @@ function useinvalidateCallboxStatus() {
 function useinvalidateCallboxEvents() {
 	const queryClient = useQueryClient();
 	return () =>
-		void queryClient.invalidateQueries({
+		queryClient.invalidateQueries({
 			queryKey: ['get', '/callbox/events'],
 		});
 }
@@ -392,8 +384,9 @@ export function usePostMeKey<A, B>(
 			}
 		),
 
-		onMutate: open => {
+		onMutate: async open => {
 			onMutate();
+			await queryClient.cancelQueries({ queryKey: ['get', '/callbox'] });
 			// eagerly assume the query will succeed.
 			queryClient.setQueryData(
 				[
@@ -411,10 +404,13 @@ export function usePostMeKey<A, B>(
 			);
 		},
 
-		onSuccess: () => {
-			// sync with server
-			invalidateCallboxStatus();
-			invalidateCallboxEvents();
+		onSuccess: async () => {
+			// Keep the control pending until polling reflects the confirmed write;
+			// an optimistic label is not yet safe to use for the next toggle.
+			await Promise.all([
+				invalidateCallboxStatus(),
+				invalidateCallboxEvents(),
+			]);
 			onSuccess();
 		},
 
@@ -651,6 +647,71 @@ export function useMinecraftEvents<A, B>(
 	return { events, streamState };
 }
 
+export type MinecraftHistoryEvent =
+	components['schemas']['MinecraftHistoryEvent'];
+
+export function useMinecraftHistory<A, B>(
+	idToken: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = idToken(
+		v => v,
+		() => undefined,
+		() => undefined
+	);
+	const client = useFetchClient(token);
+	const [before, setBefore] = useState(() => new Date().toISOString());
+	const query = useInfiniteQuery({
+		queryKey: ['get', '/minecraft/history', token, before],
+		initialPageParam: undefined as string | undefined,
+		queryFn: async ({ pageParam, signal }) => {
+			const response = await client.GET('/minecraft/history', {
+				params: { query: { before, nextToken: pageParam } },
+				signal,
+			});
+			if (!response.data)
+				throw new Error('Could not load activity history.');
+			return response.data;
+		},
+		getNextPageParam: page => page.nextToken,
+		enabled: enabled && token !== undefined,
+		gcTime: 0,
+		staleTime: Infinity,
+		refetchOnWindowFocus: false,
+	});
+	const { hasNextPage, isFetching, isError, fetchNextPage } = query;
+	useEffect(() => {
+		if (
+			enabled &&
+			token !== undefined &&
+			hasNextPage &&
+			!isFetching &&
+			!isError
+		) {
+			void fetchNextPage();
+		}
+	}, [enabled, token, hasNextPage, isFetching, isError, fetchNextPage]);
+	const events = useMemo(() => {
+		const unique = new Map<string, MinecraftHistoryEvent>();
+		for (const page of query.data?.pages ?? []) {
+			for (const event of page.events) unique.set(event.id, event);
+		}
+		return [...unique.values()].sort(
+			(a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp)
+		);
+	}, [query.data]);
+	return {
+		events: enabled && token !== undefined ? events : [],
+		before,
+		loading:
+			query.isPending ||
+			query.isFetching ||
+			(query.hasNextPage && !query.isError),
+		error: query.isError,
+		refresh: () => setBefore(new Date().toISOString()),
+	};
+}
+
 export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 	const fetchClient = useFetchClient(
 		id_token(
@@ -690,53 +751,146 @@ export function useGetMinecraftStatus<A, B>(id_token: Future<string, A, B>) {
 	return future_declare_dependency(id_token, useQueryFuture(q));
 }
 
-export function useGetJournal<A, B>(id_token: Future<string, A, B>) {
-	const fetchClient = useFetchClient(
-		id_token(
-			value => value,
-			() => undefined,
-			() => undefined
-		)
+export function useGetJournal<A, B>(
+	id_token: Future<string, A, B>,
+	enabled = true,
+	browse?: paths['/journal']['get']['parameters']['query']
+) {
+	const token = id_token(
+		value => value,
+		() => undefined,
+		() => undefined
 	);
-	const jti = future_and_then(id_token, token => extractIdTokenJti(token));
+	const claims = useSessionClaims(id_token);
+	const fetchClient = useFetchClient(token);
 	const query = useQuery({
-		queryKey: [
-			'get',
-			'/journal',
-			jti(
-				value => value,
-				() => undefined,
-				() => undefined
-			),
-		],
-		queryFn: async () => {
-			const response = await fetchClient.GET('/journal');
+		queryKey: ['get', '/journal', claims?.jti, ...(browse ? [browse] : [])],
+		staleTime: 10_000,
+		queryFn: async ({ signal }) => {
+			const response = await fetchClient.GET('/journal', {
+				signal,
+				params: { query: browse },
+			});
 			if (!response.data) {
 				throw new Error('/journal returned unexpected payload');
 			}
 			return response.data;
 		},
-		enabled: id_token(
-			() => true,
-			() => false,
-			() => false
-		),
+		enabled: enabled && token !== undefined,
 		refetchInterval: query => {
 			const value = query.state.data;
 			return value?.entries.some(entry =>
 				['awaiting_upload', 'processing'].includes(entry.status)
 			)
 				? 3000
-				: false;
+				: // Aggregate summaries can finish after every entry is ready.
+					// Keep visible journals fresh instead of retaining that intermediate snapshot.
+					10000;
 		},
 	});
-	return future_declare_dependency(id_token, useQueryFuture(query));
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(id_token, useQueryFuture(query));
+}
+
+export function useGetJournalWikiIndex<A, B>(
+	idToken: Future<string, A, B>,
+	enabled = true
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(idToken);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: ['get', '/journal', 'wiki', claims?.jti],
+		queryFn: async () => {
+			const response = await client.GET('/journal/wiki');
+			if (!response.data) throw new Error('Could not load the wiki.');
+			return response.data;
+		},
+		enabled: enabled && token !== undefined,
+		refetchInterval: 10000,
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
+}
+
+export function useGetJournalUploads<A, B>(
+	idToken: Future<string, A, B>,
+	enabled: boolean
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(idToken);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: ['get', '/journal', 'uploads', claims?.jti],
+		queryFn: async ({ signal }) => {
+			const response = await client.GET('/journal/entries', { signal });
+			if (!response.data) throw new Error('Could not check voice notes.');
+			return response.data;
+		},
+		enabled: enabled && token !== undefined,
+		refetchInterval: 3000,
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
+}
+
+export function useGetJournalWikiPage<A, B>(
+	idToken: Future<string, A, B>,
+	pageId: string,
+	generation?: string
+) {
+	const token = idToken(
+		value => value,
+		() => undefined,
+		() => undefined
+	);
+	const claims = useSessionClaims(idToken);
+	const client = useFetchClient(token);
+	const query = useQuery({
+		queryKey: [
+			'get',
+			'/journal',
+			'wiki-page',
+			claims?.jti,
+			pageId,
+			generation,
+		],
+		queryFn: async () => {
+			const response = await client.GET('/journal/wiki/{pageId}', {
+				params: { path: { pageId } },
+			});
+			if (!response.data)
+				throw new Error(
+					'This page is unavailable or awaiting an update.'
+				);
+			return response.data;
+		},
+		enabled: token !== undefined,
+		refetchInterval: 10000,
+	});
+	return claims
+		? useQueryFuture(query)
+		: future_declare_dependency(idToken, useQueryFuture(query));
 }
 
 export interface JournalAudioUpload {
+	readonly recordingStartedAt?: string;
 	readonly file: Blob;
+	readonly onProgress?: (progress: number | undefined) => void;
 	readonly contentType: components['schemas']['JournalEntryCreate']['contentType'];
 	readonly recordedAt: string;
+	readonly location?: components['schemas']['JournalLocation'];
 	readonly timeZone: string;
 }
 
@@ -745,12 +899,16 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 	const invalidateJournal = useinvalidateJournal();
 	return useMutation({
 		mutationKey: ['post', '/journal/entries'],
+		networkMode: 'always',
 		mutationFn: fetchClient(
 			client => async (upload: JournalAudioUpload) => {
 				const response = await client.POST('/journal/entries', {
+					signal: AbortSignal.timeout(30_000),
 					body: {
+						recordingStartedAt: upload.recordingStartedAt,
 						contentType: upload.contentType,
 						recordedAt: upload.recordedAt,
+						location: upload.location,
 						timeZone: upload.timeZone,
 					},
 				});
@@ -765,19 +923,15 @@ export function usePostJournalEntry<A, B>(id_token: Future<string, A, B>) {
 					throw new Error(cause);
 				}
 				try {
-					const uploaded = await fetch(response.data.upload.url, {
-						body: upload.file,
-						headers: response.data.upload.headers,
-						method: response.data.upload.method,
-					});
-					if (!uploaded.ok) {
-						throw new Error(
-							`Audio upload failed (${uploaded.status}).`
-						);
-					}
+					await uploadJournalAudio(
+						response.data.upload,
+						upload.file,
+						upload.onProgress
+					);
 				} catch (error) {
 					await client
 						.DELETE('/journal/entries/{entryId}', {
+							signal: AbortSignal.timeout(10_000),
 							params: {
 								path: { entryId: response.data.entry.id },
 							},
@@ -1020,8 +1174,8 @@ export function useGetMeKeyStatus<A, B>(id_token: Future<string, A, B>) {
 				() => undefined
 			),
 		],
-		queryFn: async () => {
-			const resp = await fetchClient.GET('/callbox');
+		queryFn: async ({ signal }) => {
+			const resp = await fetchClient.GET('/callbox', { signal });
 			if (!resp.data) {
 				throw new Error('/callbox returned unexpected payload');
 			}

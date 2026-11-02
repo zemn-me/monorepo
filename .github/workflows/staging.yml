@@ -45,6 +45,21 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
+      # Main may not yet contain the archive fallback. Seed it from the candidate
+      # outside the checkout so it also survives switching back to the candidate.
+      - name: Checkout candidate dependency archives
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: dependency-archives
+          sparse-checkout: third_party/bazel_distdir
+      - name: Seed dependency archives for both staging builds
+        run: |
+          mkdir -p "$RUNNER_TEMP/bazel-distdir"
+          if [ -d dependency-archives/third_party/bazel_distdir ]; then
+            cp -R dependency-archives/third_party/bazel_distdir/. "$RUNNER_TEMP/bazel-distdir/"
+          fi
+          # Keep the temporary checkout out of subsequent Gazelle scans.
+          rm -rf -- dependency-archives
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets.
         id: secret_auth
@@ -70,7 +85,7 @@ jobs:
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Configure AWS credentials via OIDC (staging)
-        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
           role-session-name: github-actions-${{ github.run_id }}
@@ -83,10 +98,10 @@ jobs:
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
-            $BAZEL build --config=ci --tool_tag=staging //ci:presubmit && \
+            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
-            $BAZEL run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
+            $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
             --overwrite && \
             echo "::endgroup::"
         env:
@@ -108,17 +123,19 @@ jobs:
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Re-configure AWS credentials via OIDC (staging)
-        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
           role-session-name: github-actions-${{ github.run_id }}
           aws-region: us-east-1
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
+        # main just refreshed and deployed staging, so reuse its current state.
         run: |
          ./.github/workflows/prepare_ci.sh
-         $BAZEL run --tool_tag=staging //ci:presubmit -- \
+         $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --tool_tag=staging //ci:presubmit -- \
          --skip-bazel-tests \
+         --skip-pulumi-refresh \
          --dirty
         env:
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}

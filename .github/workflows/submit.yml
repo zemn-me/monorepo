@@ -96,6 +96,7 @@ jobs:
           secrets: |-
             buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
             personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
+            openai_curator_api_key:extreme-cycling-441523-a9/github-actions-openai-curator-api-key
             pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
             twilio_account_sid:extreme-cycling-441523-a9/github-actions-twilio-account-sid
             twilio_api_key_sid:extreme-cycling-441523-a9/github-actions-twilio-api-key-sid
@@ -108,7 +109,7 @@ jobs:
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
           role-session-name: github-actions-${{ github.run_id }}
@@ -134,3 +135,4 @@ jobs:
           # i guess if you exfil this secret you can also call me instead
           # of making a security report 🤣
           PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number }}
+          OPENAI_CURATOR_API_KEY: ${{ steps.secrets.outputs.openai_curator_api_key }}

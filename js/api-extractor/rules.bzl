@@ -12,9 +12,7 @@ def _api_extractor_impl(ctx):
         [".."] * len(ctx.label.package.split("/")),
     )
     entry_point = "<projectFolder>/" + ctx.file.entry_point.short_path
-    extractor_report_folder = extractor_report.short_path[
-        :extractor_report.short_path.rfind("/")
-    ]
+    extractor_report_folder = extractor_report.short_path[:extractor_report.short_path.rfind("/")]
 
     ctx.actions.write(
         output = config,
@@ -74,6 +72,8 @@ def _api_extractor_impl(ctx):
         progress_message = "Extracting the public TypeScript API for %{label}",
         env = {
             "BAZEL_BINDIR": ctx.var["BINDIR"],
+            # The rules_js launcher replays both streams when extraction fails.
+            "JS_BINARY__SILENT_ON_SUCCESS": "1",
         },
     )
 

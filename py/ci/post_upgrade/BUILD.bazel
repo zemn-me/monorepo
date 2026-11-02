@@ -7,6 +7,7 @@ py_library(
     srcs = [
         "__init__.py",
         "integrity.py",
+        "pnpm.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -16,12 +17,15 @@ py_binary(
     srcs = ["__main__.py"],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
-    deps = [":post_upgrade"],
 )
 
 py_test(
     name = "post_upgrade_test",
     srcs = ["__test__.py"],
+    data = [
+        "//:MODULE.bazel",
+        "//:sh/postUpgrade.sh",
+    ],
     main = "__test__.py",
     deps = [":post_upgrade"],
 )

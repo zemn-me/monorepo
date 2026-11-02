@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
+import { Link } from '#root/ts/react/router/Link/index.js';
 import { Video } from '#root/ts/react/Video/video.js';
 import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
 

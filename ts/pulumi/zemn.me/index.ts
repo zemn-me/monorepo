@@ -75,8 +75,8 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_zemn_me`,
 			{
 				index: 'project/me/zemn/build/index.html',
-				notFound: 'project/me/zemn/build/404.html',
 				directory: 'project/me/zemn/build',
+				serverDirectory: 'project/me/zemn/server',
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,

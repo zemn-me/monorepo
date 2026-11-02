@@ -1,0 +1,1 @@
+- New `Bio.timeline` events must also have their IDs ranked in `priority.json`; the bio tests enforce coverage. This file stores editorial ranking, not chronological order.

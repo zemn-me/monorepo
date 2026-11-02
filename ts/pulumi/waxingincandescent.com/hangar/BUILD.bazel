@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+genrule(
+    name = "extract",
+    srcs = ["@doom1_shareware//file"],
+    outs = ["geometry.ts"],
+    cmd = "$(location //py/doom_wireframe:doom_wireframe_bin) $(location @doom1_shareware//file) E1M1 $@",
+    tools = ["//py/doom_wireframe:doom_wireframe_bin"],
+)
+
+ts_project(
+    name = "hangar",
+    srcs = ["geometry.ts"],
+    visibility = ["//ts/pulumi/waxingincandescent.com:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

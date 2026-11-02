@@ -52,6 +52,30 @@
 			"versioningTemplate": "{{{versioning}}}",
 			"packageNameTemplate": "{{{depName}}}",
 			"depNameTemplate": "{{{depName}}}"
+		},
+		{
+			"customType": "regex",
+			"description": "Minecraft Java server release embedded in the shared OCI image",
+			"managerFilePatterns": [
+				"/^project/me/zemn/minecraft/minecraft\\.env$/"
+			],
+			"matchStrings": ["(?:^|\\n)VERSION=(?<currentValue>[^\\s]+)"],
+			"datasourceTemplate": "custom.minecraft_java",
+			"depNameTemplate": "minecraft-java",
+			"versioningTemplate": "loose"
+		},
+		{
+			"customType": "regex",
+			"description": "Chrome for Testing browser and driver archives",
+			"managerFilePatterns": [
+				"/^MODULE.bazel$/"
+			],
+			"matchStrings": [
+				"https://storage.googleapis.com/chrome-for-testing-public/(?<currentValue>\\d+\\.\\d+\\.\\d+\\.\\d+)/"
+			],
+			"datasourceTemplate": "custom.chrome_stable",
+			"depNameTemplate": "chrome-for-testing",
+			"versioningTemplate": "loose"
 		}
 	],
 	"customDatasources": {
@@ -66,6 +90,20 @@
 		"osxexperts_ffmpeg": {
 			"defaultRegistryUrlTemplate": "https://www.osxexperts.net/",
 			"format": "plain"
+		},
+		"minecraft_java": {
+			"defaultRegistryUrlTemplate": "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\": [versions[type = \"release\"].{\"version\": id, \"releaseTimestamp\": releaseTime}]}"
+			]
+		},
+		"chrome_stable": {
+			"defaultRegistryUrlTemplate": "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json",
+			"format": "json",
+			"transformTemplates": [
+				"{\"releases\": [{\"version\": channels.Stable.version}]}"
+			]
 		}
 	},
 	"packageRules": [
@@ -107,11 +145,45 @@
 			"rangeStrategy": "bump"
 		},
 		{
+			"description": "Use published upstream dates for the rules_oci release-age check",
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_oci"],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "bazel-contrib/rules_oci",
+			"extractVersion": "^v(?<version>.*)$"
+		},
+		{
+			"description": "Use published upstream dates for the rules_go release-age check",
+			"matchManagers": ["bazel-module"],
+			"matchPackageNames": ["rules_go"],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "bazel-contrib/rules_go",
+			"extractVersion": "^v(?<version>.*)$"
+		},
+		{
+			"description": "Keep the Go SDK and both references to its Bazel build rules compatible",
+			"groupName": "Go toolchain",
+			"matchPackageNames": [
+				"go",
+				"github.com/bazelbuild/rules_go",
+				"bazel-contrib/rules_go",
+				"rules_go"
+			]
+		},
+		{
 			"description": "gopls imports x/tools internals, so update the two modules together",
 			"groupName": "Go language tools",
 			"matchManagers": ["gomod"],
-			"matchPackageNames": ["golang.org/x/tools", "golang.org/x/tools/gopls"],
+			"matchPackageNames": [
+				"golang.org/x/tools",
+				"golang.org/x/tools/gopls"
+			],
 			"minimumGroupSize": 2
+		},
+		{
+			"description": "Advance supported Python version floors without pinning transitive dependencies",
+			"matchManagers": ["pip-compile"],
+			"rangeStrategy": "bump"
 		},
 		{
 			"description": "Refresh generated Python locks as a unit",
@@ -133,7 +205,7 @@
 				"bazelisk"
 			],
 			"postUpgradeTasks": {
-				"commands": ["./sh/postUpgrade.sh", "./sh/postUpgrade.sh"],
+				"commands": ["./sh/postUpgrade.sh"],
 				"executionMode": "branch",
 				"fileFilters": [
 					"Cargo.Bazel.lock",
@@ -143,12 +215,15 @@
 					"go.mod",
 					"MODULE.bazel",
 					"MODULE.bazel.lock",
+					"bzl/pnpm/integrity.json",
 					"gazelle_python.yaml",
 					"go.sum",
 					"pnpm-lock.yaml",
 					"requirements.txt",
 					"**/.release.lock",
-					"**/version/*"
+					"**/version/*",
+					"BUILD.bazel",
+					"**/BUILD.bazel"
 				],
 				"recreateWhen": "always"
 			}
@@ -158,13 +233,22 @@
 			"matchPackageNames": ["/pulumi_cli_.*/"]
 		},
 		{
-			"groupName": "chromedriver",
-			"matchPackageNames": ["/com_googleapis_storage_chromedriver.*/"]
+			"description": "The Stable channel feed has no per-release timestamps",
+			"groupName": "Chrome for Testing",
+			"matchPackageNames": ["chrome-for-testing"],
+			"minimumReleaseAge": null
 		},
 		{
 			"description": "Keep the Bazel executable and downloaded Bazel source on the same release",
 			"groupName": "bazel",
 			"matchPackageNames": ["bazel", "bazelbuild/bazel"]
 		}
-	]
+	],
+	"rebaseWhen": "behind-base-branch",
+	"pip-compile": {
+		"managerFilePatterns": ["/^requirements\\.txt$/", "/^py/mitmproxy/requirements\\.txt$/"]
+	},
+	"pip_requirements": {
+		"enabled": false
+	}
 }

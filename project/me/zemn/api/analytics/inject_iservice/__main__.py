@@ -33,23 +33,23 @@ def main() -> None:
     if not api_service_port:
         sys.exit("API service port is not set in ASSIGNED_PORTS")
 
-    os.environ["NEXT_PUBLIC_ZEMN_ME_API_BASE"] = (
+    os.environ["PUBLIC_ZEMN_ME_API_BASE"] = (
         "http://localhost:" + str(api_service_port)
     )
 
-    nextjs_bin_rlocation = os.getenv("NEXTJS_BINARY")
-    if not nextjs_bin_rlocation:
-        raise RuntimeError("NEXTJS_BINARY is not set")
+    remix_bin_rlocation = os.getenv("REMIX_BINARY")
+    if not remix_bin_rlocation:
+        raise RuntimeError("REMIX_BINARY is not set")
 
     r = runfiles.Create()
     if r is None:
         raise RuntimeError("Runfiles not found. Ensure this script is run in Bazel.")
 
-    nextjs_bin = r.Rlocation(nextjs_bin_rlocation)
-    if not nextjs_bin:
-        raise RuntimeError(f"Next.js binary not found at {nextjs_bin_rlocation}")
+    remix_bin = r.Rlocation(remix_bin_rlocation)
+    if not remix_bin:
+        raise RuntimeError(f"React Router binary not found at {remix_bin_rlocation}")
 
-    os.execvp(nextjs_bin, [nextjs_bin, *sys.argv[1:]])
+    os.execvp(remix_bin, [remix_bin, *sys.argv[1:]])
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -12,8 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
-// JournalWorker transcribes uploaded audio and creates its cited entry summary.
-// Scheduled invocations use it to finalize elapsed aggregate periods.
+// JournalWorker transcribes uploads and advances asynchronous cloud curation.
 type JournalWorker struct {
 	server *Server
 }
@@ -34,13 +34,25 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 	if err != nil {
 		return nil, err
 	}
+	curatorAI := journalAI.(*openAIJournalAI)
+	// Hosted curation can use a dedicated key while audio processing continues
+	// to authenticate with workload identity. Removing the key restores WIF.
+	if apiKey := strings.TrimSpace(os.Getenv("OPENAI_CURATOR_API_KEY")); apiKey != "" {
+		curatorAI = newOpenAIJournalAI(apiKey).(*openAIJournalAI)
+	}
+	model := os.Getenv("JOURNAL_CURATOR_MODEL")
+	if model == "" {
+		model = "gpt-5.6"
+	}
 	objects := s3.NewFromConfig(cfg)
 	return &JournalWorker{server: &Server{
-		ddb:               dynamodb.NewFromConfig(cfg),
-		journalTableName:  table,
-		journalBucketName: bucket,
-		journalObjects:    objects,
-		journalAI:         journalAI,
+		ddb:                    dynamodb.NewFromConfig(cfg),
+		journalTableName:       table,
+		journalBucketName:      bucket,
+		journalObjects:         objects,
+		journalAI:              journalAI,
+		journalCurationEnabled: true,
+		journalCurator:         &openAIJournalCurator{ai: curatorAI, model: model},
 	}}, nil
 }
 
@@ -49,5 +61,9 @@ func (w *JournalWorker) ProcessUpload(ctx context.Context, bucket, key string, s
 }
 
 func (w *JournalWorker) RefreshSummaries(ctx context.Context, now time.Time) error {
-	return w.server.RefreshJournalSummaries(ctx, now)
+	return w.server.RefreshJournalKnowledge(ctx, now)
+}
+
+func (w *JournalWorker) RunCuration(ctx context.Context, now time.Time, requestID string) error {
+	return w.server.RunJournalCuration(ctx, now, requestID)
 }

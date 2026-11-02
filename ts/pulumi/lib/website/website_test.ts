@@ -1,0 +1,249 @@
+import {
+	mkdirSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	symlinkSync,
+	writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { afterEach, expect, test } from '@jest/globals';
+import * as pulumi from '@pulumi/pulumi';
+import Website from './website.js';
+
+const directories: string[] = [];
+afterEach(() => {
+	for (const directory of directories.splice(0))
+		rmSync(directory, { recursive: true, force: true });
+});
+const resources: pulumi.runtime.MockResourceArgs[] = [];
+const retained = new Map<string, boolean | undefined>();
+const options: pulumi.ComponentResourceOptions = {
+	transformations: [
+		args => {
+			retained.set(args.name, args.opts.retainOnDelete);
+			return undefined;
+		},
+	],
+};
+void pulumi.runtime.setMocks({
+	newResource: args => {
+		if (args.type === 'aws:cloudfront/cachePolicy:CachePolicy') {
+			// Pulumi derives the physical name from the logical name by default.
+			expect(args.inputs['name'] ?? args.name).toMatch(
+				/^[A-Za-z0-9_-]+$/
+			);
+		}
+		resources.push(args);
+		return {
+			id: args.name,
+			state: {
+				...args.inputs,
+				name: args.inputs['name'] ?? args.name,
+				arn: `arn:aws:example:us-east-1:123456789012:${args.name}`,
+				apiEndpoint:
+					'https://example.execute-api.us-east-1.amazonaws.com',
+				executionArn:
+					'arn:aws:execute-api:us-east-1:123456789012:example',
+				bucketRegionalDomainName: 'example.s3.us-east-1.amazonaws.com',
+				result: 'origin-secret',
+				domainValidationOptions: [
+					{
+						resourceRecordName: '_validation.example.com',
+						resourceRecordValue: 'validation',
+						resourceRecordType: 'CNAME',
+					},
+				],
+			},
+		};
+	},
+	call: args => args.inputs,
+});
+
+test('hybrid hosting keeps static sites intact and separates asset caching from request-aware SSR', async () => {
+	const root = mkdtempSync(
+		path.join(process.env['TEST_TMPDIR'] ?? tmpdir(), 'website-')
+	);
+	directories.push(root);
+	const directory = path.join(root, 'public');
+	mkdirSync(directory);
+	writeFileSync(path.join(directory, 'index.html'), '<html>Home</html>');
+	writeFileSync(path.join(directory, '404.html'), '<html>Not found</html>');
+	const serverDirectory = path.join(root, 'server');
+	mkdirSync(serverDirectory);
+	writeFileSync(
+		path.join(serverDirectory, 'assets.json'),
+		JSON.stringify(['/assets/*', '/sha256/*', '/icon.svg'])
+	);
+	const bundleDirectory = path.join(root, 'bundle');
+	mkdirSync(bundleDirectory);
+	writeFileSync(
+		path.join(bundleDirectory, 'handler.mjs'),
+		'const respond = () => ({statusCode: 200, body: "Packaged response"}); export {respond as handler};'
+	);
+	mkdirSync(path.join(bundleDirectory, 'prerendered'));
+	writeFileSync(
+		path.join(bundleDirectory, 'prerendered/index.html'),
+		'<html>Snapshot</html>'
+	);
+	symlinkSync(
+		path.join(bundleDirectory, 'handler.mjs'),
+		path.join(serverDirectory, 'handler.mjs')
+	);
+	symlinkSync(
+		path.join(bundleDirectory, 'prerendered'),
+		path.join(serverDirectory, 'prerendered')
+	);
+	const args = {
+		directory,
+		index: path.join(directory, 'index.html'),
+		notFound: path.join(directory, '404.html'),
+		domain: 'example.com',
+		zoneId: 'zone',
+		email: false,
+		noIndex: false,
+	};
+	new Website('static', args, options);
+	new Website(
+		'hybrid.zemn.me',
+		{
+			...args,
+			serverDirectory,
+			wellKnownOidcDomain: 'api.example.com',
+		},
+		options
+	);
+	await pulumi.runtime.disconnect();
+
+	const resource = (type: string, name: string) => {
+		const value = resources.find(
+			item => item.type === type && item.name === name
+		);
+		expect(value).toBeDefined();
+		return value!.inputs;
+	};
+	// Retained objects require a retained bucket to avoid BucketNotEmpty during
+	// stack removal. Check both hosting modes, shared by staging and production.
+	for (const name of ['static-bucket', 'hybrid.zemn.me-bucket']) {
+		expect(retained.get(name)).toBe(true);
+	}
+	const staticSite = resource(
+		'aws:cloudfront/distribution:Distribution',
+		'static_cloudfront_distribution'
+	);
+	expect(staticSite['defaultRootObject']).toBe('index');
+	expect(staticSite['defaultCacheBehavior']).toMatchObject({
+		targetOriginId: 'static_cloudfront_distribution',
+		forwardedValues: { queryString: false, cookies: { forward: 'none' } },
+	});
+	expect(
+		resources.filter(item => item.type === 'aws:lambda/function:Function')
+	).toHaveLength(1);
+	const site = resource(
+		'aws:cloudfront/distribution:Distribution',
+		'hybrid.zemn.me_cloudfront_distribution'
+	);
+	expect(site['defaultRootObject']).toBeUndefined();
+	expect(site['defaultCacheBehavior']).toMatchObject({
+		targetOriginId: 'hybrid.zemn.me_remix',
+		cachePolicyId: 'hybrid_zemn_me_remix_cache',
+		originRequestPolicyId: 'b689b0a8-53d0-40ab-baf2-68738e2966ac',
+		allowedMethods: expect.arrayContaining([
+			'GET',
+			'HEAD',
+			'POST',
+			'PUT',
+			'PATCH',
+			'DELETE',
+		]),
+	});
+	expect(site['defaultCacheBehavior']).not.toHaveProperty('forwardedValues');
+	expect(site['customErrorResponses']).toEqual(
+		expect.arrayContaining([
+			{ errorCode: 404, errorCachingMinTtl: 0 },
+			{ errorCode: 500, errorCachingMinTtl: 0 },
+		])
+	);
+	expect(site['orderedCacheBehaviors']).toEqual(
+		expect.arrayContaining([
+			expect.objectContaining({
+				pathPattern: '/assets/*',
+				targetOriginId: 'hybrid.zemn.me_cloudfront_distribution',
+			}),
+			expect.objectContaining({
+				pathPattern: '/sha256/*',
+				targetOriginId: 'hybrid.zemn.me_cloudfront_distribution',
+			}),
+			expect.objectContaining({
+				pathPattern: '/.well-known/jwks.json',
+				targetOriginId: 'hybrid.zemn.me_oidc_api',
+			}),
+		])
+	);
+	expect(site['origins']).toEqual(
+		expect.arrayContaining([
+			expect.objectContaining({
+				originId: 'hybrid.zemn.me_remix',
+				domainName: 'example.execute-api.us-east-1.amazonaws.com',
+				customHeaders: [
+					{ name: 'X-Remix-Origin-Secret', value: 'origin-secret' },
+				],
+			}),
+		])
+	);
+	const policy = resource(
+		'aws:cloudfront/cachePolicy:CachePolicy',
+		'hybrid_zemn_me_remix_cache'
+	);
+	expect(policy).toMatchObject({
+		minTtl: 0,
+		defaultTtl: 0,
+		parametersInCacheKeyAndForwardedToOrigin: {
+			cookiesConfig: { cookieBehavior: 'all' },
+			queryStringsConfig: { queryStringBehavior: 'all' },
+			headersConfig: {
+				headers: {
+					items: expect.arrayContaining([
+						'Authorization',
+						'Accept',
+						'Origin',
+					]),
+				},
+			},
+		},
+	});
+	const lambda = resource(
+		'aws:lambda/function:Function',
+		'hybrid_zemn_me_remix'
+	);
+	const code = lambda['code'];
+	expect(pulumi.asset.AssetArchive.isInstance(code)).toBe(true);
+	const files = await code.assets;
+	expect(Object.keys(files).sort()).toEqual([
+		'assets.json',
+		'handler.mjs',
+		'prerendered/index.html',
+	]);
+	const handler = await import(
+		pathToFileURL(await files['handler.mjs'].path).href
+	);
+	expect(await handler.handler()).toEqual({
+		statusCode: 200,
+		body: 'Packaged response',
+	});
+	expect(
+		readFileSync(await files['prerendered/index.html'].path, 'utf8')
+	).toBe('<html>Snapshot</html>');
+	expect(lambda).toMatchObject({
+		runtime: 'nodejs24.x',
+		handler: 'handler.handler',
+		environment: {
+			variables: {
+				PUBLIC_ORIGIN: 'https://example.com',
+				REMIX_ORIGIN_SECRET: 'origin-secret',
+			},
+		},
+	});
+});

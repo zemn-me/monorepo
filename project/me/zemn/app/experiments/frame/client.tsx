@@ -430,7 +430,7 @@ export function FrameClient() {
 	);
 	const frameOptionsInfo = Result.zip(artInfo, errataInfo);
 
-	const frameOptions: JSX.Element = Result.unwrap_or_else(
+	const frameOptions: React.JSX.Element = Result.unwrap_or_else(
 		Result.and_then(
 			Result.and_then(
 				frameOptionsInfo,
