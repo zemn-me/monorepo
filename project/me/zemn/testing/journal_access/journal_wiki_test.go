@@ -308,6 +308,22 @@ func TestJournalReviewScreenshots(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+	selectedDate := func() string {
+		t.Helper()
+		selectedURL, err := driver.CurrentURL()
+		if err != nil {
+			t.Fatal(err)
+		}
+		selectedRoute, err := url.Parse(selectedURL)
+		if err != nil {
+			t.Fatal(err)
+		}
+		at := selectedRoute.Query().Get("at")
+		if _, err := time.Parse(time.RFC3339Nano, at); err != nil {
+			t.Fatalf("selected journal day in %s: %v", selectedURL, err)
+		}
+		return at
+	}
 	save := func(name string, data []byte) {
 		t.Helper()
 		directory := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
@@ -408,8 +424,10 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	save("09-launch-day-desktop", data)
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
 	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	weekAt := selectedDate()
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
 	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
+	monthAt := selectedDate()
 	if err := earlier.Click(); err != nil {
 		t.Fatal(err)
 	}
@@ -460,33 +478,37 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
-	// The date picker preserves the selected launch day, which can be in the
-	// previous month or year. Format that route date in the browser's time zone.
-	selectedURL, err := driver.CurrentURL()
+	// Aggregates need two child periods. The rehearsal's week and river walk's
+	// month meet that requirement even when the launch begins a new period.
+	root.RawQuery = url.Values{"at": {monthAt}}.Encode()
+	root.Path = "/journal/day"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
+	for _, title := range []string{"Jo's practical questions", "Lantern begins on paper"} {
+		click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
+		find(selenium.ByXPATH, `//summary[.//strong[normalize-space()="`+title+`"]]`)
+	}
+	// The paper prototype's year contains another fixture month even in January.
+	yearAt := selectedDate()
+	selectedMonth, err := driver.ExecuteScript(`return new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'}).format(new Date(arguments[0]))`, []any{monthAt})
 	if err != nil {
 		t.Fatal(err)
 	}
-	selectedRoute, err := url.Parse(selectedURL)
+	selectedYear, err := driver.ExecuteScript(`return String(new Date(arguments[0]).getFullYear())`, []any{yearAt})
 	if err != nil {
 		t.Fatal(err)
 	}
-	selectedAt := selectedRoute.Query().Get("at")
-	if _, err := time.Parse(time.RFC3339Nano, selectedAt); err != nil {
-		t.Fatalf("selected launch day in %s: %v", selectedURL, err)
-	}
-	selectedMonth, err := driver.ExecuteScript(`return new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'}).format(new Date(arguments[0]))`, []any{selectedAt})
-	if err != nil {
-		t.Fatal(err)
-	}
-	selectedYear, err := driver.ExecuteScript(`return String(new Date(arguments[0]).getFullYear())`, []any{selectedAt})
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, view := range []struct{ name, link, visibleDate, period, child, title string }{
-		{"12-months-desktop", "Months", selectedMonth.(string), "month", "day", "Experiments in attention"},
-		{"13-weeks-desktop", "Weeks", "Monday", "week", "day", "Making room for steadier work"},
-		{"14-years-desktop", "Years", selectedYear.(string), "year", "month", "A life with more room in it"},
+	for _, view := range []struct{ name, link, at, visibleDate, period, child, title string }{
+		{"12-months-desktop", "Months", monthAt, selectedMonth.(string), "month", "day", "Experiments in attention"},
+		{"13-weeks-desktop", "Weeks", weekAt, "Monday", "week", "day", "Making room for steadier work"},
+		{"14-years-desktop", "Years", yearAt, selectedYear.(string), "year", "month", "A life with more room in it"},
 	} {
+		root.RawQuery = url.Values{"at": {view.at}}.Encode()
+		if err := driver.Get(root.String()); err != nil {
+			t.Fatal(err)
+		}
 		click(selenium.ByLinkText, view.link)
 		regionSelector := "[role='region'][aria-label='Journal " + view.period + "']"
 		find(selenium.ByCSSSelector, regionSelector)
