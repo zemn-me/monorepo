@@ -1,4 +1,6 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
+load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_library")
 
 # Add rules here to build your software
@@ -12,11 +14,13 @@ load("//py:rules.bzl", "py_library")
 load("@aspect_rules_py//py:defs.bzl", "py_venv")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@npm//:defs.bzl", "npm_link_all_packages")
-load("@npm//:renovate/package_json.bzl", "bin")
 load("@pip//:requirements.bzl", "all_whl_requirements")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:pip_requirements_test.bzl", "pip_requirements_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/binary_with_args:binary_with_args.bzl", "binary_with_args")
 load("//go/cmd/version_sync:go_version_sync.bzl", "go_version_sync")
@@ -26,8 +30,30 @@ package(default_visibility = [":__subpackages__"])
 
 compile_pip_requirements(
     name = "requirements",
+    timeout = "moderate",
     src = "requirements.in",
+    # Renovate reads this command to discover the source and solver options.
+    env = {"CUSTOM_COMPILE_COMMAND": "pip-compile --allow-unsafe --generate-hashes --resolver=backtracking --output-file=requirements.txt requirements.in"},
+    py_test = pip_requirements_test,
     requirements_txt = "requirements.txt",
+)
+
+js_library(
+    name = "renovate_bazel_inputs",
+    srcs = [
+        "MODULE.bazel",
+        "go.mod",
+    ],
+    visibility = ["//.github:__pkg__"],
+)
+
+js_library(
+    name = "renovate_python_inputs",
+    srcs = [
+        "requirements.in",
+        "requirements.txt",
+    ],
+    visibility = ["//.github:__pkg__"],
 )
 
 # implement fix api
@@ -40,6 +66,16 @@ alias(
 alias(
     name = "fix",
     actual = "//bzl/fix_api:fix_all",
+)
+
+alias(
+    name = "format",
+    actual = "//bzl/format",
+)
+
+alias(
+    name = "format.check",
+    actual = "//bzl/format:format.check",
 )
 
 alias(
@@ -61,22 +97,65 @@ ts_config(
 
 js_library(
     name = "base_defs",
-    srcs = ["Global.d.ts"],
+    srcs = ["Global.d.ts"],  # keep
+    deps = [],  # keep
 )
 
 exports_files(
     [
         "ruff.toml",
+        "biome.json",
         ".prettierrc.json",
         "package.json",
         "tsconfig.json",
         ".gitignore",
         ".editorconfig",
-        "css_loader.d.ts",
         ".git",
-        "jsconfig.json",
+        "sh/postUpgrade.sh",
     ],
     visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "workspace_status_test",
+    size = "small",
+    srcs = ["workspace_status_test.sh"],
+    data = ["workspace_status.sh"],
+    env = {
+        "WORKSPACE_STATUS": "$(rlocationpath //:workspace_status.sh)",
+    },
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
+sh_test(
+    name = "bazel_source_version_test",
+    size = "small",
+    srcs = ["bazel_source_version_test.sh"],
+    data = [
+        ".bazelversion",
+        "MODULE.bazel",
+    ],
+    env = {
+        "BAZEL_SOURCE_MODULE": "$(rlocationpath //:MODULE.bazel)",
+        "BAZEL_VERSION_FILE": "$(rlocationpath //:.bazelversion)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+sh_binary(
+    name = "bazel_source_version_test.fix",
+    srcs = ["bazel_source_version_test_fix.sh"],
+)
+
+sh_test(
+    name = "bazel_source_version_fix_test",
+    size = "small",
+    srcs = ["bazel_source_version_fix_test.sh"],
+    data = [":bazel_source_version_test.fix"],
+    env = {
+        "BAZEL_SOURCE_VERSION_FIXER": "$(rlocationpath //:bazel_source_version_test.fix)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
 copy_to_bin(
@@ -105,40 +184,18 @@ copy_to_bin(
     srcs = ["package.json"],
 )
 
-bin.renovate_config_validator_test(
-    name = "validate_renovate_config_test",
-    args = ["$(location renovate.json)"],
-    data = ["renovate.json"],
-)
-
 npm_link_all_packages(name = "node_modules")
+
+genrule(
+    name = "sqljs_wasm",
+    srcs = ["//:node_modules/sql.js"],
+    outs = ["sql-wasm.wasm"],
+    cmd = "for package in $(locations //:node_modules/sql.js); do if [ -f $$package/dist/sql-wasm.wasm ]; then cp $$package/dist/sql-wasm.wasm $@; exit 0; fi; done; exit 1",
+    visibility = ["//visibility:public"],
+)
 
 go_version_sync(
     name = "go_version_sync",
-)
-
-js_library(
-    name = "eslintrc",
-    srcs = [
-        ":eslint.config.js",
-        "//:.gitignore",
-        "//:editorconfig",
-        "//:package_json",
-        "//:prettierrc",
-        "//:tsconfig",
-    ],
-    deps = [
-        "//:node_modules/@eslint/compat",
-        "//:node_modules/@eslint/js",
-        "//:node_modules/@next/eslint-plugin-next",
-        "//:node_modules/eslint-mdx",
-        "//:node_modules/eslint-plugin-jest",
-        "//:node_modules/eslint-plugin-mdx",
-        "//:node_modules/eslint-plugin-react",
-        "//:node_modules/eslint-plugin-react-hooks",
-        "//:node_modules/eslint-plugin-simple-import-sort",
-        "//:node_modules/typescript-eslint",
-    ],
 )
 
 # This rule fetches the metadata for python packages we depend on. That data is
@@ -189,6 +246,8 @@ gazelle_binary(
         "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
         "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
         "//go/gazelle/bazel",
+        "//go/gazelle/css",
+        "//go/gazelle/md",
         "//go/gazelle/ts",
         "//go/gazelle/ts/config",
         "//go/gazelle/js",
@@ -224,19 +283,31 @@ py_venv(
     name = "venv",
     deps = [
         "//bzl/versioning",
+        "//bzl/versioning:release",
         "//ini/git/merge_drivers/bazel_lockfile",
-        "//project/zemn.me/inject_iservice:inject_iservice_bin",
+        "//md:md_py",
+        "//md:readme_main",
+        "//project/me/zemn/api/analytics/inject_iservice:inject_iservice_bin",
+        "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",
-        "//py/ci/postUpgrade:postUpgrade_bin",
+        "//py/ci",
+        "//py/ci/cancel_obsolete_staging",
+        "//py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin",
+        "//py/ci/post_upgrade",
+        "//py/ci/post_upgrade:post_upgrade_bin",
         "//py/copy_to_workspace:copy_to_workspace_bin",
         "//py/devtools",
         "//py/devtools/prep",
         "//py/devtools/prep:prep_bin",
+        "//py/doom_wireframe",
+        "//py/doom_wireframe:doom_wireframe_bin",
         "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
         "//py/ipynb",
         "//py/ipynb:ipynb_bin",
         "//py/time/hemisphere:hemisphere_bin",
+        "//ts/pulumi/eggsfordogs.com:eggsfordogs.com_py",
+        "//ts/pulumi/eggsfordogs.com:static_server",
         "//ts/pulumi/lib/oci/example/python:python_bin",
     ],
 )
@@ -260,7 +331,9 @@ binary_with_args(
     name = "pnpm_lockfile_validation_bin",
     args = [
         "i",
-        #        "--lockfile-only", # https://github.com/pnpm/pnpm/issues/6962#issuecomment-2985146457
+        "--lockfile-only",
+        "--offline",
+        "--ignore-scripts",
         "--frozen-lockfile",
     ],
     binary = "@pnpm",
@@ -270,4 +343,24 @@ binary_with_args(
     ],
     tags = ["no-sandbox"],
     test = True,
+)
+
+# gazelle:resolve typescript typescript #root/third_party/com/googleapis/people/api_client.gen.js //third_party/com/googleapis/people:ts_client
+# gazelle:map_kind proto_library proto_library @com_google_protobuf//bazel:proto_library.bzl
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/cmd/api/ApiZemnMeLambdaImage.js //project/me/zemn/api/cmd/api:oci_image
+
+md_files(
+    name = "md",
+    srcs = [
+        "AGENTS.md",
+        "README.md",
+        "SECURITY.md",
+    ],
+    refs = [
+        "//sh/bin:buildifier",
+        "//sh/bin:go",
+        "//sh/bin:pnpm",
+        "//sh/bin:bazel",
+    ],
+    visibility = ["//:__subpackages__"],
 )

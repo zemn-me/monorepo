@@ -1,0 +1,436 @@
+package apiserver
+
+import (
+	"context"
+	"reflect"
+	"sort"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+)
+
+type inMemoryDDB struct {
+	records    []SettingsRecord
+	analytics  []analyticsEventRecord
+	grievances map[string]grievanceRecord
+	users      map[string]userRecord
+	keyRecords []map[string]types.AttributeValue
+	journal    []map[string]types.AttributeValue
+}
+
+func (db inMemoryDDB) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
+	// In-memory DDB does not need to create tables.
+	return &dynamodb.CreateTableOutput{}, nil
+}
+
+func (db *inMemoryDDB) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
+	// In-memory DDB does not need to describe tables.
+	return &dynamodb.DescribeTableOutput{
+		Table: &types.TableDescription{
+			TableName: params.TableName,
+			KeySchema: []types.KeySchemaElement{
+				{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash},
+			},
+			AttributeDefinitions: []types.AttributeDefinition{
+				{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS},
+			},
+			TableStatus: types.TableStatusActive,
+		},
+	}, nil
+}
+
+func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := ""
+		if value, ok := in.ExpressionAttributeValues[":id"].(*types.AttributeValueMemberS); ok {
+			id = value.Value
+		}
+		items := make([]map[string]types.AttributeValue, 0, len(db.journal))
+		for _, item := range db.journal {
+			if id == "" || keyTableRecordID(item) == id {
+				items = append(items, copyDynamoItem(item))
+			}
+		}
+		return &dynamodb.QueryOutput{Items: items}, nil
+	}
+	if in.TableName != nil && *in.TableName == "analytics" {
+		feed := ""
+		if v, ok := in.ExpressionAttributeValues[":feed"]; ok {
+			if s, ok := v.(*types.AttributeValueMemberS); ok {
+				feed = s.Value
+			}
+		}
+
+		records := make([]analyticsEventRecord, 0, len(db.analytics))
+		for _, rec := range db.analytics {
+			if lower, ok := in.ExpressionAttributeValues[":start"].(*types.AttributeValueMemberS); ok && rec.When < lower.Value {
+				continue
+			}
+			if upper, ok := in.ExpressionAttributeValues[":end"].(*types.AttributeValueMemberS); ok && rec.When > upper.Value {
+				continue
+			}
+			if feed != "" && rec.Feed != feed {
+				continue
+			}
+			records = append(records, rec)
+		}
+		sort.Slice(records, func(i, j int) bool {
+			if in.ScanIndexForward != nil && *in.ScanIndexForward {
+				return records[i].When < records[j].When
+			}
+			return records[i].When > records[j].When
+		})
+
+		start := 0
+		if len(in.ExclusiveStartKey) > 0 {
+			cursorID := keyTableRecordID(in.ExclusiveStartKey)
+			cursorWhen := keyTableRecordWhen(in.ExclusiveStartKey)
+			for i, rec := range records {
+				if rec.Id == cursorID && rec.When == cursorWhen {
+					start = i + 1
+					break
+				}
+			}
+		}
+
+		limit := len(records)
+		if in.Limit != nil && *in.Limit > 0 && int(*in.Limit) < limit {
+			limit = int(*in.Limit)
+		}
+
+		end := start + limit
+		if end > len(records) {
+			end = len(records)
+		}
+
+		items := make([]map[string]types.AttributeValue, 0, end-start)
+		for _, rec := range records[start:end] {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+
+		var lastEvaluatedKey map[string]types.AttributeValue
+		if end < len(records) && end > start {
+			last := records[end-1]
+			lastEvaluatedKey = map[string]types.AttributeValue{
+				"id":   &types.AttributeValueMemberS{Value: last.Id},
+				"when": &types.AttributeValueMemberS{Value: last.When},
+				"feed": &types.AttributeValueMemberS{Value: last.Feed},
+			}
+		}
+		return &dynamodb.QueryOutput{
+			Items:            items,
+			LastEvaluatedKey: lastEvaluatedKey,
+		}, nil
+	}
+	if in.TableName != nil && *in.TableName == "keys" {
+		id := ""
+		if v, ok := in.ExpressionAttributeValues[":id"]; ok {
+			if s, ok := v.(*types.AttributeValueMemberS); ok {
+				id = s.Value
+			}
+		}
+		var records []map[string]types.AttributeValue
+		for _, rec := range db.keyRecords {
+			if id != "" && keyTableRecordID(rec) != id {
+				continue
+			}
+			records = append(records, rec)
+		}
+		sort.SliceStable(records, func(i, j int) bool {
+			if in.ScanIndexForward == nil || *in.ScanIndexForward {
+				return keyTableRecordWhen(records[i]) < keyTableRecordWhen(records[j])
+			}
+			return keyTableRecordWhen(records[i]) > keyTableRecordWhen(records[j])
+		})
+		start := 0
+		if len(in.ExclusiveStartKey) > 0 {
+			startID := keyTableRecordID(in.ExclusiveStartKey)
+			startWhen := keyTableRecordWhen(in.ExclusiveStartKey)
+			for i, rec := range records {
+				if keyTableRecordID(rec) == startID && keyTableRecordWhen(rec) == startWhen {
+					start = i + 1
+					break
+				}
+			}
+		}
+		limit := len(records)
+		if in.Limit != nil && int(*in.Limit) < limit {
+			limit = int(*in.Limit)
+		}
+		var items []map[string]types.AttributeValue
+		end := start + limit
+		if end > len(records) {
+			end = len(records)
+		}
+		for _, rec := range records[start:end] {
+			items = append(items, copyDynamoItem(rec))
+		}
+		var lastEvaluatedKey map[string]types.AttributeValue
+		if end < len(records) && len(items) > 0 {
+			last := items[len(items)-1]
+			lastEvaluatedKey = map[string]types.AttributeValue{
+				"id":   last["id"],
+				"when": last["when"],
+			}
+		}
+		return &dynamodb.QueryOutput{Items: items, LastEvaluatedKey: lastEvaluatedKey}, nil
+	}
+	if len(db.records) == 0 {
+		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
+	}
+	item, err := attributevalue.MarshalMap(db.records[len(db.records)-1])
+	if err != nil {
+		return nil, err
+	}
+	return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{item}}, nil
+}
+
+func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		when := keyTableRecordWhen(in.Item)
+		id := keyTableRecordID(in.Item)
+		for index, existing := range db.journal {
+			if keyTableRecordID(existing) == id && keyTableRecordWhen(existing) == when {
+				if in.ConditionExpression != nil {
+					if expected, checksEntry := in.ExpressionAttributeValues[":previousEntry"]; checksEntry {
+						if !reflect.DeepEqual(expected, existing["entry"]) {
+							return nil, &types.ConditionalCheckFailedException{}
+						}
+					} else {
+						expected, checksVersion := in.ExpressionAttributeValues[":version"].(*types.AttributeValueMemberS)
+						actual, hasVersion := existing["version"].(*types.AttributeValueMemberS)
+						if !checksVersion || !hasVersion || expected.Value != actual.Value {
+							return nil, &types.ConditionalCheckFailedException{}
+						}
+					}
+				}
+				db.journal[index] = copyDynamoItem(in.Item)
+				return &dynamodb.PutItemOutput{}, nil
+			}
+		}
+		if _, checksEntry := in.ExpressionAttributeValues[":previousEntry"]; checksEntry {
+			return nil, &types.ConditionalCheckFailedException{}
+		}
+		db.journal = append(db.journal, copyDynamoItem(in.Item))
+		return &dynamodb.PutItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "keys" {
+		for index, existing := range db.keyRecords {
+			if keyTableRecordID(existing) == keyTableRecordID(in.Item) && keyTableRecordWhen(existing) == keyTableRecordWhen(in.Item) {
+				db.keyRecords[index] = copyDynamoItem(in.Item)
+				return &dynamodb.PutItemOutput{}, nil
+			}
+		}
+		db.keyRecords = append(db.keyRecords, copyDynamoItem(in.Item))
+		return &dynamodb.PutItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "analytics" {
+		var rec analyticsEventRecord
+		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+			return nil, err
+		}
+		db.analytics = append(db.analytics, rec)
+		return &dynamodb.PutItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "grievances" {
+		var rec grievanceRecord
+		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+			return nil, err
+		}
+		if db.grievances == nil {
+			db.grievances = map[string]grievanceRecord{}
+		}
+		db.grievances[rec.Id] = rec
+		return &dynamodb.PutItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "users" {
+		var rec userRecord
+		if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+			return nil, err
+		}
+		if db.users == nil {
+			db.users = map[string]userRecord{}
+		}
+		db.users[rec.Id] = rec
+		return &dynamodb.PutItemOutput{}, nil
+	}
+	var rec SettingsRecord
+	if err := attributevalue.UnmarshalMap(in.Item, &rec); err != nil {
+		return nil, err
+	}
+	db.records = append(db.records, rec)
+	return &dynamodb.PutItemOutput{}, nil
+}
+
+func (db *inMemoryDDB) GetItem(ctx context.Context, in *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := keyTableRecordID(in.Key)
+		when := keyTableRecordWhen(in.Key)
+		for _, item := range db.journal {
+			if keyTableRecordID(item) == id && keyTableRecordWhen(item) == when {
+				return &dynamodb.GetItemOutput{Item: copyDynamoItem(item)}, nil
+			}
+		}
+		return &dynamodb.GetItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "grievances" {
+		if db.grievances == nil {
+			return &dynamodb.GetItemOutput{}, nil
+		}
+		id := in.Key["id"].(*types.AttributeValueMemberS).Value
+		rec, ok := db.grievances[id]
+		if !ok {
+			return &dynamodb.GetItemOutput{}, nil
+		}
+		item, err := attributevalue.MarshalMap(rec)
+		if err != nil {
+			return nil, err
+		}
+		return &dynamodb.GetItemOutput{Item: item}, nil
+	}
+	if in.TableName != nil && *in.TableName == "users" {
+		if db.users == nil {
+			return &dynamodb.GetItemOutput{}, nil
+		}
+		id := in.Key["id"].(*types.AttributeValueMemberS).Value
+		rec, ok := db.users[id]
+		if !ok {
+			return &dynamodb.GetItemOutput{}, nil
+		}
+		item, err := attributevalue.MarshalMap(rec)
+		if err != nil {
+			return nil, err
+		}
+		return &dynamodb.GetItemOutput{Item: item}, nil
+	}
+	return &dynamodb.GetItemOutput{}, nil
+}
+
+func (db *inMemoryDDB) DeleteItem(ctx context.Context, in *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+	if in.TableName != nil && *in.TableName == "journal" {
+		id := keyTableRecordID(in.Key)
+		when := keyTableRecordWhen(in.Key)
+		for index, item := range db.journal {
+			if keyTableRecordID(item) == id && keyTableRecordWhen(item) == when {
+				db.journal = append(db.journal[:index], db.journal[index+1:]...)
+				break
+			}
+		}
+		return &dynamodb.DeleteItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "grievances" {
+		if db.grievances != nil {
+			id := in.Key["id"].(*types.AttributeValueMemberS).Value
+			delete(db.grievances, id)
+		}
+		return &dynamodb.DeleteItemOutput{}, nil
+	}
+	if in.TableName != nil && *in.TableName == "users" {
+		if db.users != nil {
+			id := in.Key["id"].(*types.AttributeValueMemberS).Value
+			delete(db.users, id)
+		}
+		return &dynamodb.DeleteItemOutput{}, nil
+	}
+	return &dynamodb.DeleteItemOutput{}, nil
+}
+
+func (db *inMemoryDDB) Scan(ctx context.Context, in *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+	if in.TableName != nil && *in.TableName == "analytics" {
+		var items []map[string]types.AttributeValue
+		start := 0
+		if len(in.ExclusiveStartKey) > 0 {
+			cursorID := keyTableRecordID(in.ExclusiveStartKey)
+			cursorWhen := keyTableRecordWhen(in.ExclusiveStartKey)
+			for i, rec := range db.analytics {
+				if rec.Id == cursorID && rec.When == cursorWhen {
+					start = i + 1
+					break
+				}
+			}
+		}
+
+		limit := len(db.analytics)
+		if in.Limit != nil && *in.Limit > 0 && int(*in.Limit) < limit {
+			limit = int(*in.Limit)
+		}
+
+		end := start + limit
+		if end > len(db.analytics) {
+			end = len(db.analytics)
+		}
+		for _, rec := range db.analytics[start:end] {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+
+		var lastEvaluatedKey map[string]types.AttributeValue
+		if end < len(db.analytics) && end > start {
+			last := db.analytics[end-1]
+			lastEvaluatedKey = map[string]types.AttributeValue{
+				"id":   &types.AttributeValueMemberS{Value: last.Id},
+				"when": &types.AttributeValueMemberS{Value: last.When},
+			}
+		}
+		return &dynamodb.ScanOutput{
+			Items:            items,
+			LastEvaluatedKey: lastEvaluatedKey,
+		}, nil
+	}
+	if in.TableName != nil && *in.TableName == "grievances" {
+		var items []map[string]types.AttributeValue
+		for _, rec := range db.grievances {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+		return &dynamodb.ScanOutput{Items: items}, nil
+	}
+	if in.TableName != nil && *in.TableName == "users" {
+		var items []map[string]types.AttributeValue
+		for _, rec := range db.users {
+			item, err := attributevalue.MarshalMap(rec)
+			if err != nil {
+				return nil, err
+			}
+			items = append(items, item)
+		}
+		return &dynamodb.ScanOutput{Items: items}, nil
+	}
+	return &dynamodb.ScanOutput{}, nil
+}
+
+func keyTableRecordID(item map[string]types.AttributeValue) string {
+	id, ok := item["id"].(*types.AttributeValueMemberS)
+	if !ok {
+		return ""
+	}
+	return id.Value
+}
+
+func keyTableRecordWhen(item map[string]types.AttributeValue) string {
+	when, ok := item["when"].(*types.AttributeValueMemberS)
+	if !ok {
+		return ""
+	}
+	return when.Value
+}
+
+func copyDynamoItem(item map[string]types.AttributeValue) map[string]types.AttributeValue {
+	copied := make(map[string]types.AttributeValue, len(item))
+	for key, value := range item {
+		copied[key] = value
+	}
+	return copied
+}

@@ -58,3 +58,9 @@ ts_project(
         "//ts/pulumi/lib",
     ],
 )
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["hello_world.ts"],
+    visibility = ["//:__subpackages__"],
+)

@@ -1,5 +1,4 @@
 // this rule seems to be sus in this context
-/* eslint array-element-newline: "off" */
 import { describe, expect, it, test } from '@jest/globals';
 import { range } from 'd3-array';
 

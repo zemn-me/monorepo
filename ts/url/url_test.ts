@@ -33,7 +33,6 @@ describe('url', () => {
 
 	describe('URL', () => {
 		it('should work with template syntax', () => {
-			 
 			expect(() => Url.URL.New`https://google.com`).not.toThrow();
 		});
 		it('should not allow javascript URIs', () => {

@@ -1,0 +1,27 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "auth",
+    srcs = ["oidc.go"],
+    importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/server/auth",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_coreos_go_oidc//:go-oidc",
+        "@com_github_getkin_kin_openapi//openapi3",
+        "@com_github_getkin_kin_openapi//openapi3filter",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+go_test(
+    name = "auth_test",
+    srcs = ["oidc_test.go"],
+    embed = [":auth"],
+    deps = ["@com_github_getkin_kin_openapi//openapi3"],
+)

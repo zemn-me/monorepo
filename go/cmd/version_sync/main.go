@@ -36,7 +36,9 @@ func main() {
 }
 
 // Do orchestrates reading versions from go.mod and MODULE.bazel, compares them,
-// and updates where needed if -fix is set.
+// and updates where needed if -fix is set. The go directive in go.mod is the
+// source of truth; MODULE.bazel and an optional toolchain directive are synced
+// to it.
 func Do() error {
 	// 1. Read versions from go.mod (both 'go' and 'toolchain go')
 	goModVersion, toolchainVersion, err := readGoModVersions(goModPath)
@@ -50,29 +52,26 @@ func Do() error {
 		return fmt.Errorf("failed to read MODULE.bazel: %w", err)
 	}
 
-	// 3. Determine the highest version amongst what's found
-	latest, err := getLatestVersionOfAll([]string{goModVersion, bazelGoVersion, toolchainVersion})
+	// 3. Use the go directive from go.mod as the desired version.
+	desired, err := canonicalGoModVersion(goModVersion, toolchainVersion, bazelGoVersion)
 	if err != nil {
-		return fmt.Errorf("failed to compute latest version: %w", err)
+		return err
 	}
 
 	// If we're just checking consistency, fail if there's a mismatch
 	if !fixDiscrepancy {
-		// If any two differ, we consider that inconsistent
-		if (goModVersion != "" && goModVersion != latest) ||
-			(toolchainVersion != "" && toolchainVersion != latest) ||
-			bazelGoVersion != latest {
-			return fmt.Errorf("versions are inconsistent; run with -fix to synchronise to %s", latest)
+		if (toolchainVersion != "" && toolchainVersion != desired) ||
+			bazelGoVersion != desired {
+			return fmt.Errorf("versions are inconsistent with go.mod go directive %s; run with -fix to synchronise", desired)
 		}
 		return nil
 	}
 
-	// 4. Fix go.mod lines if needed. We only rewrite when the existing
-	// version lines are present and differ from the desired version.
-	changeGoVersion := goModVersion != "" && goModVersion != latest
-	changeToolchain := toolchainVersion != "" && toolchainVersion != latest
-	if changeGoVersion || changeToolchain {
-		if err := rewriteGoMod(goModPath, outputGoMod, latest); err != nil {
+	// 4. Fix optional toolchain line if needed. The go directive itself is
+	// authoritative, so we never bump it from MODULE.bazel.
+	changeToolchain := toolchainVersion != "" && toolchainVersion != desired
+	if changeToolchain {
+		if err := rewriteGoMod(goModPath, outputGoMod, desired); err != nil {
 			return fmt.Errorf("failed to update go.mod: %w", err)
 		}
 	} else if outputGoMod != "" {
@@ -83,8 +82,8 @@ func Do() error {
 	}
 
 	// 5. Fix MODULE.bazel if needed
-	if bazelGoVersion != latest {
-		if err := rewriteBazelGoVersion(bazelPath, outputBazel, latest); err != nil {
+	if bazelGoVersion != desired {
+		if err := rewriteBazelGoVersion(bazelPath, outputBazel, desired); err != nil {
 			return fmt.Errorf("failed to update MODULE.bazel: %w", err)
 		}
 	} else if outputBazel != "" {
@@ -98,7 +97,7 @@ func Do() error {
 
 // readGoModVersions returns two strings: (goVersion, toolchainGoVersion).
 // If a line "go X" is found, that becomes goVersion.
-// If a line "toolchain go Y" is found, that becomes toolchainGoVersion.
+// If a line "toolchain goY" is found, that becomes toolchainGoVersion.
 func readGoModVersions(path string) (string, string, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -113,7 +112,7 @@ func readGoModVersions(path string) (string, string, error) {
 
 	scanner := bufio.NewScanner(file)
 	reGo := regexp.MustCompile(`^go\s+(\S+)$`)
-	reToolchain := regexp.MustCompile(`^toolchain\s+go\s+(\S+)$`)
+	reToolchain := regexp.MustCompile(`^toolchain\s+go\s*(\S+)$`)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -133,7 +132,35 @@ func readGoModVersions(path string) (string, string, error) {
 	return goVersion, toolchainGoVersion, nil
 }
 
-// rewriteGoMod updates both `go <version>` and `toolchain go <version>` lines (if present).
+func canonicalGoModVersion(goModVersion, toolchainVersion, bazelGoVersion string) (string, error) {
+	if goModVersion == "" {
+		return "", fmt.Errorf("no go directive found in go.mod")
+	}
+	if err := validateGoVersion("go.mod go directive", goModVersion); err != nil {
+		return "", err
+	}
+	if err := validateGoVersion("MODULE.bazel GO_VERSION", bazelGoVersion); err != nil {
+		return "", err
+	}
+	if toolchainVersion != "" {
+		if err := validateGoVersion("go.mod toolchain directive", toolchainVersion); err != nil {
+			return "", err
+		}
+	}
+	return goModVersion, nil
+}
+
+func validateGoVersion(name, version string) error {
+	if version == "" {
+		return fmt.Errorf("%s is empty", name)
+	}
+	if _, err := semver.ParseTolerant(version); err != nil {
+		return fmt.Errorf("%s has invalid semver version %q: %w", name, version, err)
+	}
+	return nil
+}
+
+// rewriteGoMod updates both `go <version>` and `toolchain go<version>` lines (if present).
 func rewriteGoMod(srcPath, outputPath, newVersion string) error {
 	contents, err := os.ReadFile(srcPath)
 	if err != nil {
@@ -142,14 +169,14 @@ func rewriteGoMod(srcPath, outputPath, newVersion string) error {
 	lines := strings.Split(string(contents), "\n")
 
 	reGo := regexp.MustCompile(`^go\s+(\S+)$`)
-	reToolchain := regexp.MustCompile(`^toolchain\s+go\s+(\S+)$`)
+	reToolchain := regexp.MustCompile(`^toolchain\s+go\s*(\S+)$`)
 
 	for i, line := range lines {
 		switch {
 		case reGo.MatchString(line):
 			lines[i] = "go " + newVersion
 		case reToolchain.MatchString(line):
-			lines[i] = "toolchain go " + newVersion
+			lines[i] = "toolchain go" + newVersion
 		}
 	}
 
@@ -220,33 +247,4 @@ func copyFile(src, dst string) error {
 		return err
 	}
 	return os.WriteFile(dst, data, 0644)
-}
-
-// getLatestVersionOfAll finds the highest semver among a list of versions (some may be empty).
-func getLatestVersionOfAll(versions []string) (string, error) {
-	var maxVer *semver.Version
-	for _, v := range versions {
-		if v == "" {
-			continue
-		}
-		parsed, err := semver.ParseTolerant(v)
-		if err != nil {
-			return "", fmt.Errorf("invalid semver version: %s (%w)", v, err)
-		}
-		if maxVer == nil || parsed.GT(*maxVer) {
-			maxVer = &parsed
-		}
-	}
-	if maxVer == nil {
-		return "", fmt.Errorf("no valid version discovered")
-	}
-	return maxVer.String(), nil
-}
-
-// safeStr helps printing empty-version placeholders gracefully.
-func safeStr(s string) string {
-	if s == "" {
-		return "N/A"
-	}
-	return s
 }

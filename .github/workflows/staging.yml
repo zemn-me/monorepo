@@ -18,18 +18,22 @@ env:
 jobs:
   Staging:
     permissions:
+      contents: read
       id-token: write
     # Pulumi doesn't like it when multiple deploys are attempted at once.
     # This is also enforced at the pulumi layer, but i'm sure github actions
     # would make me pay while that thread waits to acquire the lock.
-    concurrency: pulumi_staging
+    concurrency:
+      group: pulumi_deploy
+      cancel-in-progress: false
+      queue: max
     # only bother with this when we reach the merge queue
 
     # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # main
         with:
           android: true
           dotnet: true
@@ -38,16 +42,54 @@ jobs:
           large-packages: false
           swap-storage: true
       - name: Checkout main branch
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
-      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3
+      # Main may not yet contain the archive fallback. Seed it from the candidate
+      # outside the checkout so it also survives switching back to the candidate.
+      - name: Checkout candidate dependency archives
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: dependency-archives
+          sparse-checkout: third_party/bazel_distdir
+      - name: Seed dependency archives for both staging builds
+        run: |
+          mkdir -p "$RUNNER_TEMP/bazel-distdir"
+          if [ -d dependency-archives/third_party/bazel_distdir ]; then
+            cp -R dependency-archives/third_party/bazel_distdir/. "$RUNNER_TEMP/bazel-distdir/"
+          fi
+          # Keep the temporary checkout out of subsequent Gazelle scans.
+          rm -rf -- dependency-archives
+      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
+        name: Acquire federated GCloud credentials for secrets.
+        id: secret_auth
+        with:
+          project_id: 'extreme-cycling-441523-a9'
+          workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
+      - uses: 'google-github-actions/get-secretmanager-secrets@bc9c54b29fdffb8a47776820a7d26e77b379d262' # v3.0.0
+        name: Read CI secrets from Secret Manager
+        id: secrets
+        with:
+          secrets: |-
+            buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
+            personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
+            pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
+            twilio_account_sid:extreme-cycling-441523-a9/github-actions-twilio-account-sid
+            twilio_api_key_sid:extreme-cycling-441523-a9/github-actions-twilio-api-key-sid
+            twilio_auth_token:extreme-cycling-441523-a9/github-actions-twilio-auth-token
+      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire GCloud credentials for first deploy.
         id: auth
         with:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Configure AWS credentials via OIDC (staging)
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
+          role-session-name: github-actions-${{ github.run_id }}
+          aws-region: us-east-1
       - name: Pulumi up from origin/main to staging
         # dirty used here so the state transition is main -> candidate
         # we test if the script exists so we don't fail as a result of it
@@ -56,45 +98,49 @@ jobs:
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
-            $BAZEL build --config=ci --tool_tag=staging //ci:presubmit && \
+            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
-            $BAZEL run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
+            $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
             --overwrite && \
             echo "::endgroup::"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
+          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
+          TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
+          TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid }}
+          TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token }}
           # i guess if you exfil this secret you can also call me instead
           # of making a security report 🤣
-          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
+          PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number }}
       - name: Switch back to candidate branch
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Re-acquire GCloud credentials after checkout...
         id: auth2
         with:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
+      - name: Re-configure AWS credentials via OIDC (staging)
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
+          role-session-name: github-actions-${{ github.run_id }}
+          aws-region: us-east-1
       - name: Deploy candidate branch to Staging
         # we can run this dirty since the next run will --overwrite anyway
+        # main just refreshed and deployed staging, so reuse its current state.
         run: |
          ./.github/workflows/prepare_ci.sh
-         $BAZEL run --tool_tag=staging //ci:presubmit -- \
+         $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --tool_tag=staging //ci:presubmit -- \
          --skip-bazel-tests \
+         --skip-pulumi-refresh \
          --dirty
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_SECRET }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          PERSONAL_PHONE_NUMBER: ${{ secrets.PERSONAL_PHONE_NUMBER }}
+          PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
+          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
+          TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
+          TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid }}
+          TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token }}
+          PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number }}

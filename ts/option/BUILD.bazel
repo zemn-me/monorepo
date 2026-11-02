@@ -3,13 +3,18 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "option",
+    srcs = [
+        "option.ts",
+        "types.ts",
+    ],
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
         "//ts",
+        "//ts/either",
+        "//ts/result",
     ],
 )
 
@@ -18,12 +23,34 @@ jest_test(
     srcs = [
         "option_test.js",
     ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        ":option",
+        ":option_tests",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "option.ts",
+        "option_test.ts",
+        "types.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "option_tests",
+    srcs = ["option_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":option",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
 )

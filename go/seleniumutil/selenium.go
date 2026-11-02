@@ -1,8 +1,14 @@
 package selenium
 
 import (
+	"bytes"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net"
+	"net/http"
 	"os"
 
 	"github.com/bazelbuild/rules_go/go/runfiles"
@@ -12,11 +18,18 @@ import (
 // Driver embeds selenium.WebDriver and cleans itself up via Close().
 type Driver struct {
 	selenium.WebDriver
-	svc *selenium.Service
+	svc             *selenium.Service
+	url             string
+	logFile         *os.File
+	debuggerAddress string
 }
 
 // Close satisfies io.Closer.
 func (d *Driver) Close() error {
+	if d.logFile != nil {
+		defer os.Remove(d.logFile.Name())
+		defer d.logFile.Close()
+	}
 	if d.WebDriver != nil {
 		_ = d.WebDriver.Quit()
 	}
@@ -29,6 +42,17 @@ func (d *Driver) Close() error {
 // New starts chromedriver on a free port, opens a headless Chrome session,
 // and returns a Driver ready to use.
 func New() (*Driver, error) {
+	return NewWithChromeArguments()
+}
+
+// NewWithChromeArguments starts a driver with additional Chromium flags.
+func NewWithChromeArguments(additionalArguments ...string) (*Driver, error) {
+	return NewWithChromeCapabilities(nil, additionalArguments...)
+}
+
+// NewWithChromeCapabilities starts a driver with additional session capabilities
+// and Chromium arguments, for example browser-console logging preferences.
+func NewWithChromeCapabilities(additionalCapabilities selenium.Capabilities, additionalArguments ...string) (*Driver, error) {
 	chrome, err := runfiles.Rlocation(chromiumRlocationPath)
 	if err != nil {
 		return nil, fmt.Errorf("locate chromium: %w", err)
@@ -52,34 +76,225 @@ func New() (*Driver, error) {
 		return nil, err
 	}
 
+	logFile, err := os.CreateTemp("", "chromedriver-*.log")
+	if err != nil {
+		return nil, fmt.Errorf("create chromedriver startup log: %w", err)
+	}
+	keepLog := false
+	defer func() {
+		if !keepLog {
+			logFile.Close()
+			os.Remove(logFile.Name())
+		}
+	}()
+
 	svc, err := selenium.NewChromeDriverService(
 		driverBin, port,
-		selenium.ChromeDriver(chrome), // tell driver where Chromium lives
+		selenium.Output(logFile),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("start chromedriver: %w", err)
 	}
 
-	caps := selenium.Capabilities{
-		"browserName": "chrome",
-		"goog:chromeOptions": map[string]any{
-			"binary": chrome,
-			"args": []string{
-				"--headless",
-				"--no-sandbox",
-				"--disable-dev-shm-usage",
-			},
-		},
-	}
-
-	wd, err := selenium.NewRemote(caps,
-		fmt.Sprintf("http://localhost:%d/wd/hub", port))
+	debuggerPort, err := freePort()
 	if err != nil {
 		_ = svc.Stop()
 		return nil, err
 	}
+	chromeArguments := []string{
+		"--headless",
+		"--no-sandbox",
+		"--disable-dev-shm-usage",
+		// Keep the browser's debugging endpoint available to passive observers.
+		// The Selenium client discards W3C's returned debuggerAddress capability.
+		fmt.Sprintf("--remote-debugging-port=%d", debuggerPort),
+	}
+	chromeArguments = append(chromeArguments, additionalArguments...)
+	caps := selenium.Capabilities{
+		"browserName": "chrome",
+		"goog:chromeOptions": map[string]any{
+			"binary": chrome,
+			"args":   chromeArguments,
+		},
+	}
 
-	return &Driver{WebDriver: wd, svc: svc}, nil
+	for key, value := range additionalCapabilities {
+		if key == "goog:chromeOptions" {
+			// Preserve the Bazel-selected binary and arguments when callers add
+			// options such as ChromeDriver's excludeSwitches.
+			if options, ok := value.(map[string]any); ok {
+				for name, option := range options {
+					caps[key].(map[string]any)[name] = option
+				}
+				continue
+			}
+		}
+		caps[key] = value
+	}
+
+	remoteURL := fmt.Sprintf("http://localhost:%d/wd/hub", port)
+	wd, err := selenium.NewRemote(caps, remoteURL)
+	if err != nil {
+		_ = svc.Stop()
+		log, _ := os.ReadFile(logFile.Name())
+		return nil, fmt.Errorf("%w\nChromeDriver startup log:\n%s", err, log)
+	}
+
+	keepLog = true
+	return &Driver{WebDriver: wd, svc: svc, url: remoteURL, logFile: logFile, debuggerAddress: fmt.Sprintf("127.0.0.1:%d", debuggerPort)}, nil
+}
+
+// SetTimezoneOverride configures Chromium to report the provided time zone ID.
+func (d *Driver) SetTimezoneOverride(tz string) error {
+	if d.WebDriver == nil {
+		return fmt.Errorf("web driver not initialized")
+	}
+	sessionID := d.SessionID()
+	if sessionID == "" {
+		return fmt.Errorf("missing session id")
+	}
+	payload := map[string]any{
+		"cmd": "Emulation.setTimezoneOverride",
+		"params": map[string]string{
+			"timezoneId": tz,
+		},
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("marshal timezone payload: %w", err)
+	}
+
+	// it's crazy that codex had a hard time setting the time zone
+	// and decided to just hand-form this
+	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
+	if err := d.postChromiumCommand(primary, body, nil); err != nil {
+		var statusErr *httpStatusError
+		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
+			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
+			return d.postChromiumCommand(fallback, body, nil)
+		}
+		return err
+	}
+	return nil
+}
+
+// ExecuteChromiumCommand sends a Chrome DevTools Protocol command through
+// chromedriver.
+func (d *Driver) ExecuteChromiumCommand(cmd string, params map[string]any) error {
+	return d.executeChromiumCommand(cmd, params, nil)
+}
+
+func (d *Driver) executeChromiumCommand(cmd string, params map[string]any, result any) error {
+	if d.WebDriver == nil {
+		return fmt.Errorf("web driver not initialized")
+	}
+	sessionID := d.SessionID()
+	if sessionID == "" {
+		return fmt.Errorf("missing session id")
+	}
+	payload := map[string]any{
+		"cmd":    cmd,
+		"params": params,
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("marshal chromium command payload: %w", err)
+	}
+
+	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
+	if err := d.postChromiumCommand(primary, body, result); err != nil {
+		var statusErr *httpStatusError
+		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
+			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
+			return d.postChromiumCommand(fallback, body, result)
+		}
+		return err
+	}
+	return nil
+}
+
+// ViewScreenshot captures the visible browser view without asking Chromium to
+// resize and copy its compositor surface, which can stall animated WebGL pages.
+func (d *Driver) ViewScreenshot() ([]byte, error) {
+	var result struct {
+		Data string `json:"data"`
+	}
+	if err := d.executeChromiumCommand("Page.captureScreenshot", map[string]any{"format": "png", "fromSurface": false}, &result); err != nil {
+		return nil, err
+	}
+	if result.Data == "" {
+		return nil, fmt.Errorf("chromium returned an empty screenshot")
+	}
+	return base64.StdEncoding.DecodeString(result.Data)
+}
+
+// SetLocaleOverride configures Chromium to report the provided locale.
+func (d *Driver) SetLocaleOverride(locale string) error {
+	if d.WebDriver == nil {
+		return fmt.Errorf("web driver not initialized")
+	}
+	sessionID := d.SessionID()
+	if sessionID == "" {
+		return fmt.Errorf("missing session id")
+	}
+	payload := map[string]any{
+		"cmd": "Emulation.setLocaleOverride",
+		"params": map[string]string{
+			"locale": locale,
+		},
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("marshal locale payload: %w", err)
+	}
+
+	primary := fmt.Sprintf("%s/session/%s/chromium/send_command_and_get_result", d.url, sessionID)
+	if err := d.postChromiumCommand(primary, body, nil); err != nil {
+		var statusErr *httpStatusError
+		if errors.As(err, &statusErr) && statusErr.Code == http.StatusNotFound {
+			fallback := fmt.Sprintf("%s/session/%s/chromium/send_command", d.url, sessionID)
+			return d.postChromiumCommand(fallback, body, nil)
+		}
+		return err
+	}
+	return nil
+}
+
+type httpStatusError struct {
+	Code int
+	Body string
+}
+
+func (e *httpStatusError) Error() string {
+	return fmt.Sprintf("chromium command failed (%d): %s", e.Code, e.Body)
+}
+
+func (d *Driver) postChromiumCommand(url string, body []byte, result any) error {
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(body))
+	if err != nil {
+		return fmt.Errorf("build chromium request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := selenium.HTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("execute chromium command: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= 300 {
+		msg, _ := io.ReadAll(resp.Body)
+		return &httpStatusError{Code: resp.StatusCode, Body: string(msg)}
+	}
+	if result == nil {
+		_, _ = io.Copy(io.Discard, resp.Body)
+		return nil
+	}
+	var response struct {
+		Value json.RawMessage `json:"value"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return fmt.Errorf("decode chromium response: %w", err)
+	}
+	return json.Unmarshal(response.Value, result)
 }
 
 // freePort asks the kernel for any available TCP port.

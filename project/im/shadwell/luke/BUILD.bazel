@@ -1,0 +1,34 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//ts/remix:rules.bzl", "remix_project")
+
+package(default_visibility = ["//ts/pulumi/shadwell.im:__subpackages__"])
+
+remix_project(
+    name = "remix",
+    srcs = ["//project/im/shadwell/luke/app"],
+)
+
+# bazel run //project/im/shadwell/luke
+# to test the website.
+alias(
+    name = "luke",
+    actual = ":dev",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
+)

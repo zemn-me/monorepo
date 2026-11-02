@@ -1,0 +1,8 @@
+import style from '#root/project/me/zemn/components/Link/link.module.css';
+import BaseRedirect, { Props } from '#root/ts/remix/component/Redirect/app.js';
+
+export type RedirectProps = Props;
+
+export function Redirect({ ...props }: RedirectProps) {
+	return <BaseRedirect {...{ linkClassName: style.link, ...props }} />;
+}

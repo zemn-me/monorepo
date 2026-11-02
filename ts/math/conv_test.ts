@@ -18,31 +18,31 @@ describe('Conversions', () => {
 		);
 		const q = Q.fromEulerAngles(eulerAngles);
 
-		const expectedQ = new quaternion.Quaternion(
+		const expectedQ = quaternion.from(
 			0.6532814824381883,
 			0.27059805007309856,
 			0.27059805007309856,
 			0.6532814824381883
 		);
-		expect(q.x).toBeCloseTo(expectedQ.x);
-		expect(q.y).toBeCloseTo(expectedQ.y);
-		expect(q.z).toBeCloseTo(expectedQ.z);
-		expect(q.w).toBeCloseTo(expectedQ.w);
+		expect(quaternion.x(q)).toBeCloseTo(quaternion.x(expectedQ));
+		expect(quaternion.y(q)).toBeCloseTo(quaternion.y(expectedQ));
+		expect(quaternion.z(q)).toBeCloseTo(quaternion.z(expectedQ));
+		expect(quaternion.w(q)).toBeCloseTo(quaternion.w(expectedQ));
 	});
 
 	test('Quaternion from Point3D', () => {
 		const point3D: cartesian.Point3D = [[1], [2], [3]] as const;
 		const q = Q.fromPoint3D(point3D);
 
-		const expectedQ = new quaternion.Quaternion(1, 2, 3, 0);
-		expect(q.x).toBeCloseTo(expectedQ.x);
-		expect(q.y).toBeCloseTo(expectedQ.y);
-		expect(q.z).toBeCloseTo(expectedQ.z);
-		expect(q.w).toBeCloseTo(expectedQ.w);
+		const expectedQ = quaternion.from(1, 2, 3, 0);
+		expect(quaternion.x(q)).toBeCloseTo(quaternion.x(expectedQ));
+		expect(quaternion.y(q)).toBeCloseTo(quaternion.y(expectedQ));
+		expect(quaternion.z(q)).toBeCloseTo(quaternion.z(expectedQ));
+		expect(quaternion.w(q)).toBeCloseTo(quaternion.w(expectedQ));
 	});
 
 	test('Point3D from Quaternion', () => {
-		const q = new quaternion.Quaternion(1, 2, 3, 0);
+		const q = quaternion.from(1, 2, 3, 0);
 		const point3D = C.fromQuaternion(q);
 
 		const expectedPoint3D: cartesian.Point3D = [[1], [2], [3]] as const;
@@ -52,7 +52,7 @@ describe('Conversions', () => {
 	});
 
 	test.skip('EulerAngle from Quaternion', () => {
-		const q = new quaternion.Quaternion(
+		const q = quaternion.from(
 			0.6532814824381883,
 			0.27059805007309856,
 			0.27059805007309856,

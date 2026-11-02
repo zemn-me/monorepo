@@ -233,12 +233,13 @@ impl<W: io::Write> WriteTo<W> for Import {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub enum Statement {
     Declaration(Declare),
     Import(Import),
     Export(Export),
     // the empty statement (i.e. ";")
+    #[default]
     Empty,
 }
 
@@ -257,12 +258,6 @@ impl convert::From<Import> for Statement {
 impl convert::From<Export> for Statement {
     fn from(v: Export) -> Self {
         Self::Export(v)
-    }
-}
-
-impl Default for Statement {
-    fn default() -> Self {
-        Self::Empty
     }
 }
 

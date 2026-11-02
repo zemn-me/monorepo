@@ -514,10 +514,11 @@ type Enumerate<N extends number> = EnumerateInternal<N>;
 
 type RangeInclusive<F extends number, T extends number> = F extends T ? F : Exclude<Enumerate<T>, Enumerate<F>> | T;
 
-type AllowedLengths<S extends FieldSymbol> =
-	FieldMeta<S>['allowedLengths'] extends readonly number[]
-		? FieldMeta<S>['allowedLengths'][number]
-		: RangeInclusive<FieldMeta<S>['minLength'], FieldMeta<S>['maxLength']>;
+type AllowedLengths<S extends FieldSymbol> = S extends FieldSymbol
+	? FieldMeta<S> extends { readonly allowedLengths: readonly (infer L extends number)[] }
+		? L
+		: RangeInclusive<FieldMeta<S>['minLength'], FieldMeta<S>['maxLength']>
+	: never;
 
 type BuildArray<Length extends number, Acc extends unknown[] = []> = Acc['length'] extends Length
 	? Acc
@@ -531,9 +532,11 @@ type RepeatCharInternal<
 	Acc extends string = '',
 > = Count extends 0 ? Acc : RepeatCharInternal<Char, Decrement<Count>, `${Acc}${Char}`>;
 
-type RepeatChar<Char extends string, Count extends number> = Count extends number
-	? RepeatCharInternal<Char, Count>
-	: never;
+type RepeatChar<Char extends string, Count extends number> = number extends Count
+	? string
+	: Count extends number
+		? RepeatCharInternal<Char, Count>
+		: never;
 
 export type FieldString<S extends FieldSymbol> = RepeatChar<S, AllowedLengths<S>>;
 
@@ -546,10 +549,12 @@ type StringToTuple<S extends string, Acc extends unknown[] = []> = S extends `${
 type StringLength<S extends string> = StringToTuple<S>['length'];
 
 export type FieldLengthMetadata<S extends FieldSymbol, L extends number> =
-	`${L}` extends keyof FieldMeta<S>['lengthInfo']
-		? FieldMeta<S>['lengthInfo'][`${L}`]
-		: FieldMeta<S>['fallback'] extends FieldLengthInfo
-			? FieldMeta<S>['fallback']
+	number extends L
+		? FieldLengthInfo
+		: L extends keyof FieldMeta<S>['lengthInfo']
+		? FieldMeta<S>['lengthInfo'][L]
+		: FieldMeta<S> extends { readonly fallback: infer F extends FieldLengthInfo }
+			? F
 			: never;
 
 export type LDMLFieldToken<
@@ -561,7 +566,7 @@ export type LDMLFieldToken<
 	readonly symbol: S;
 	readonly length: L;
 	readonly raw: Raw;
-	readonly definition: FieldMeta<S>;
+	readonly definition: FieldMeta<S> & FieldDefinition;
 	readonly presentation: FieldLengthMetadata<S, L>;
 };
 
@@ -583,7 +588,7 @@ type ParseQuoted<
 			? Next extends "'"
 				? ParseQuoted<After, `${Acc}'`>
 				: [Acc, Rest]
-			: never
+			: [Acc, '']
 		: ParseQuoted<Rest, `${Acc}${Char}`>
 	: never;
 
@@ -656,7 +661,7 @@ const literalNeedsQuoting = (value: string): boolean =>
 const escapeLiteral = (value: string): string => value.replace(/'/g, "''");
 
 const validateLength = (symbol: FieldSymbol, length: number): void => {
-	const definition = LDML_FIELDS[symbol];
+	const definition: LDMLFieldToken['definition'] = LDML_FIELDS[symbol];
 	const allowedSet = definition.allowedLengths;
 	if (allowedSet) {
 		if (!allowedSet.includes(length)) {
@@ -677,7 +682,7 @@ const materializeFieldToken = (raw: string): LDMLFieldToken => {
 	const symbol = raw[0] as FieldSymbol;
 	const length = raw.length;
 	validateLength(symbol, length);
-	const definition = LDML_FIELDS[symbol];
+	const definition: LDMLFieldToken['definition'] = LDML_FIELDS[symbol];
 	const presentation =
 		definition.lengthInfo[length as keyof typeof definition.lengthInfo] ?? definition.fallback;
 	if (!presentation) {
@@ -695,7 +700,7 @@ const materializeFieldToken = (raw: string): LDMLFieldToken => {
 	};
 };
 
-const makeLiteralToken = (value: string, raw: string, quoted: boolean): LDMLLiteralToken => ({
+const makeLiteralToken = <const Value extends string>(value: Value, raw: string, quoted: boolean): LDMLLiteralToken<Value> => ({
 	kind: 'literal',
 	value,
 	raw,
@@ -804,10 +809,11 @@ export function compileLDML(tokens: readonly (LDMLToken | Omit<LDMLLiteralToken,
 export function createFieldToken<const S extends FieldSymbol, const L extends AllowedLengths<S>>(
 	symbol: S,
 	length: L,
-): LDMLFieldToken<S, L, RepeatChar<S, L>> {
+): LDMLFieldToken<S, L, RepeatChar<S, L>>;
+export function createFieldToken(symbol: FieldSymbol, length: number): LDMLFieldToken {
 	validateLength(symbol, length);
 	const raw = symbol.repeat(length);
-	return materializeFieldToken(raw) as LDMLFieldToken<S, L, RepeatChar<S, L>>;
+	return materializeFieldToken(raw);
 }
 
 export function createLiteralToken<const Value extends string>(

@@ -1,0 +1,1304 @@
+.locationMap {
+	position: relative;
+	block-size: 144px;
+	overflow: hidden;
+	border-radius: 0.5rem;
+	margin-block: 0.75rem;
+	background: #e6e9e5;
+	isolation: isolate;
+}
+.locationMap > img {
+	position: absolute;
+	max-width: none;
+}
+.mapPin {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	display: grid;
+	place-items: center;
+	inline-size: 44px;
+	block-size: 44px;
+	border-radius: 50%;
+	text-decoration: none;
+}
+.mapPin > span {
+	display: grid;
+	place-items: center;
+	box-sizing: border-box;
+	inline-size: 24px;
+	block-size: 24px;
+	border: 2px solid white;
+	border-radius: 50%;
+	background: #9b3232;
+	color: white;
+	box-shadow: 0 1px 4px #0006;
+	font-size: 10px;
+}
+.mapPin:focus-visible {
+	outline: 2px solid #152e56;
+	outline-offset: 0;
+	z-index: 1;
+}
+.mapAttribution {
+	position: absolute;
+	inset-block-end: 0;
+	inset-inline-end: 0;
+	background: #fffffff0;
+	color: #222;
+	font: 12px / 1.5 sans-serif;
+	padding-inline: 4px;
+}
+.mapAttribution a {
+	color: inherit;
+}
+
+.page {
+	--journal-muted: color-mix(
+		in srgb,
+		var(--foreground-color) 80%,
+		var(--background-color)
+	);
+	--journal-line: color-mix(
+		in srgb,
+		var(--foreground-color) 20%,
+		var(--background-color)
+	);
+	--journal-soft-line: color-mix(
+		in srgb,
+		var(--foreground-color) 11%,
+		var(--background-color)
+	);
+	--journal-surface: color-mix(
+		in srgb,
+		var(--foreground-color) 4%,
+		var(--background-color)
+	);
+	--journal-recording: #d70015;
+	--journal-sticky-navigation-height: 3.5rem;
+	box-sizing: border-box;
+	margin-inline: auto;
+	max-width: 52em;
+	padding: 0 1.25em 4em;
+}
+
+.page :where(h1, h2, h3, h4, h5, h6, strong, b) {
+	font-weight: inherit;
+}
+
+.dropTarget::after {
+	border: 2px dashed currentColor;
+	content: "";
+	inset: 1em;
+	pointer-events: none;
+	position: fixed;
+	z-index: 20;
+}
+
+.dropOverlay {
+	align-items: center;
+	backdrop-filter: blur(0.4em);
+	background: color-mix(in srgb, var(--background-color) 85%, transparent);
+	display: flex;
+	font-size: 1.25em;
+	gap: 0.65em;
+	inset: 1em;
+	justify-content: center;
+	pointer-events: none;
+	position: fixed;
+	z-index: 19;
+}
+
+.hero {
+	max-width: 42em;
+	margin-block-end: 1.5em;
+}
+
+.hero h1 {
+	margin-block: 0;
+}
+
+.recorder {
+	align-items: center;
+	display: flex;
+	flex: 0 0 auto;
+	gap: 0.5em;
+	margin: 0;
+	margin-inline-start: auto;
+	padding: 0;
+}
+
+.recorder[data-recording],
+.recorder[data-notice] {
+	flex-wrap: wrap;
+	flex: 1 1 100%;
+	order: 2;
+	padding-block-end: 0.65em;
+}
+
+.recorder p {
+	color: var(--journal-muted);
+	font-size: 0.85em;
+	margin: 0;
+	max-width: 16em;
+}
+
+.recorder .recordingNotice {
+	flex: 1 1 100%;
+	max-width: none;
+}
+
+.recorder button,
+.page > button,
+.uploadButton {
+	align-items: center;
+	background: var(--foreground-color);
+	border: 1px solid var(--foreground-color);
+	color: var(--background-color);
+	cursor: pointer;
+	display: inline-flex;
+	font: inherit;
+	gap: 0.5em;
+	padding: 0.65em 0.9em;
+	transition:
+		transform 120ms ease,
+		opacity 120ms ease;
+}
+
+.uploadButton {
+	position: relative;
+}
+
+.recorder button,
+.uploadButton {
+	block-size: 2.75em;
+	border-radius: 999px;
+	box-sizing: border-box;
+	inline-size: 2.75em;
+	justify-content: center;
+	padding: 0;
+}
+
+.recorder button:not(:disabled):active,
+.uploadButton:active {
+	transform: scale(0.97);
+}
+
+.recorder .submitButton {
+	background: var(--journal-recording);
+	border-color: var(--journal-recording);
+	color: white;
+}
+
+.recorder .cancelButton {
+	background: transparent;
+	border-color: currentColor;
+	color: inherit;
+}
+
+.recordButton {
+	position: relative;
+}
+
+@keyframes journal-upload-spin {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+.spinning,
+.statusIndicator[data-state="busy"] > svg {
+	animation: journal-upload-spin 1s linear infinite;
+}
+
+.statusIndicator {
+	block-size: 1.5em;
+	align-items: center;
+	color: var(--journal-muted);
+	display: inline-flex;
+	flex: 0 0 auto;
+	justify-content: center;
+	inline-size: 1.5em;
+}
+
+.statusIndicator[data-state="error"] {
+	color: var(--journal-recording);
+}
+
+.visuallyHidden {
+	clip-path: inset(50%);
+	block-size: 1px;
+	inline-size: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.placeholder {
+	display: grid;
+	gap: 0.8em;
+	margin-block: 1.5em;
+	max-inline-size: 36em;
+}
+
+.placeholder > span[aria-hidden] {
+	animation: journal-placeholder-pulse 1.5s ease-in-out infinite alternate;
+	background: var(--journal-soft-line);
+	block-size: 0.65em;
+	border-radius: 1em;
+}
+
+.placeholder > span:last-child {
+	inline-size: 65%;
+}
+
+@keyframes journal-placeholder-pulse {
+	to {
+		opacity: 0.4;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.spinning,
+	.statusIndicator[data-state="busy"] > svg,
+	.placeholder > span[aria-hidden] {
+		animation: none;
+	}
+}
+
+.page :where(button, a, summary):focus-visible,
+.uploadButton:focus-within {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+.waveform {
+	block-size: 3em;
+	color: var(--journal-recording);
+	display: block;
+	flex: 1 1 4em;
+	inline-size: 100%;
+	min-inline-size: 3em;
+}
+
+.uploadButton input {
+	clip-path: inset(50%);
+	height: 1px;
+	inline-size: 1px;
+	overflow: clip;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.recorder button:disabled,
+.page > button:disabled {
+	cursor: wait;
+	opacity: 0.55;
+}
+
+.notice {
+	align-items: center;
+	border: 1px solid currentColor;
+	display: flex;
+	gap: 0.75em;
+	padding: 1em;
+}
+
+.entry > summary {
+	cursor: pointer;
+	padding-block: 0.5em;
+}
+
+.journalToolbar {
+	align-items: center;
+	background: var(--background-color);
+	border-block-end: 1px solid var(--journal-soft-line);
+	box-sizing: border-box;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	margin-block-end: 1.5em;
+	max-width: 42em;
+	min-block-size: 56px;
+	position: sticky;
+	top: var(--glade-bar-block-size, 0px);
+	z-index: 7;
+}
+
+.periodList {
+	display: grid;
+	gap: 2em;
+}
+
+.dayList {
+	overflow-anchor: none;
+}
+
+.calendarNavigation {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	min-inline-size: 0;
+}
+
+.calendarNavigation > a,
+.calendarNavigation > span,
+.datePicker > summary {
+	align-items: center;
+	box-sizing: border-box;
+	display: inline-flex;
+	justify-content: center;
+	min-block-size: 44px;
+	min-inline-size: 44px;
+	text-decoration: none;
+}
+
+.calendarNavigation > span {
+	opacity: 0.35;
+}
+
+.datePicker > summary {
+	cursor: pointer;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0.5em;
+}
+
+.datePicker > summary::-webkit-details-marker {
+	display: none;
+}
+
+.datePicker > summary svg {
+	font-size: 0.6em;
+}
+
+.dateChoices {
+	background: var(--background-color);
+	border: 1px solid var(--journal-soft-line);
+	border-radius: 0.75em;
+	box-shadow: 0 0.5em 1.5em #0002;
+	box-sizing: border-box;
+	inset-inline-start: 0;
+	inline-size: 23rem;
+	max-inline-size: 100%;
+	max-block-size: calc(
+		100dvh -
+		var(--glade-bar-block-size, 0px) -
+		var(--journal-sticky-navigation-height) -
+		1em
+	);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 0.75em;
+	position: absolute;
+	z-index: 8;
+}
+
+.calendarHeading {
+	align-items: center;
+	display: grid;
+	grid-template-columns: 44px 1fr 44px;
+	margin-block-end: 0.5em;
+}
+
+.calendarHeading button,
+.calendarPeriods button,
+.calendarDays a {
+	align-items: center;
+	background: transparent;
+	border: 0;
+	border-radius: 0.4em;
+	color: inherit;
+	cursor: pointer;
+	display: flex;
+	font: inherit;
+	justify-content: center;
+	min-block-size: 44px;
+	padding: 0;
+	text-decoration: none;
+}
+
+.calendarHeading button {
+	gap: 0.5em;
+}
+
+.calendarHeading svg {
+	font-size: 0.6em;
+}
+
+.calendarDays {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendarWeekday {
+	color: var(--journal-muted);
+	font-size: 0.75em;
+	padding-block: 0.5em;
+	text-align: center;
+}
+
+.calendarPeriods {
+	display: grid;
+	gap: 0.25em;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.calendarPeriods button {
+	min-block-size: 52px;
+}
+
+.calendarDays a[aria-current="date"],
+.calendarPeriods button[aria-pressed="true"] {
+	background: var(--foreground-color);
+	color: var(--background-color);
+}
+
+.calendarHeading button:hover,
+.calendarPeriods button:hover,
+.calendarDays a:hover {
+	box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.calendarSummaries,
+.calendarFooter {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+}
+
+.calendarSummaries {
+	border-block-start: 1px solid var(--journal-soft-line);
+	margin-block-start: 0.75em;
+	padding-block-start: 0.25em;
+}
+
+.calendarSummaries a,
+.calendarFooter a {
+	align-items: center;
+	display: inline-flex;
+	font-size: 0.85em;
+	gap: 0.5em;
+	min-block-size: 44px;
+	padding-inline: 0.5em;
+	text-decoration: none;
+}
+
+.calendarFooter a {
+	color: var(--journal-muted);
+}
+
+.periodOverviewList {
+	gap: 0;
+	max-width: 42em;
+}
+
+.period {
+	min-width: 0;
+	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
+}
+
+.period > h3 {
+	margin-block: 0 0.75em;
+}
+
+.periodDisclosure {
+	border-block-end: 1px solid var(--journal-soft-line);
+}
+
+.periodDisclosure > summary,
+.entry > summary {
+	align-items: center;
+	cursor: pointer;
+	display: grid;
+	gap: 0.8em;
+	grid-template-columns: minmax(9em, 15em) minmax(0, 1fr) auto;
+	list-style: none;
+	min-block-size: 3.25em;
+	padding: 0.65em 0.25em;
+}
+
+.periodDisclosure > summary::-webkit-details-marker,
+.entry > summary::-webkit-details-marker {
+	display: none;
+}
+
+.periodDate,
+.periodChildDate,
+.entryTime {
+	color: var(--journal-muted);
+	font-size: 0.85em;
+}
+
+.periodTitle {
+	min-width: 0;
+}
+
+.periodChevron,
+.periodChildChevron {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+	transition: transform 160ms ease;
+}
+
+.periodDisclosure[open] > summary .periodChevron {
+	transform: rotate(180deg);
+}
+
+.periodDisclosureBody {
+	padding-block-end: 0.75em;
+}
+
+.periodChildren {
+	list-style: none;
+	margin: 0.5em 0 0;
+	padding: 0;
+}
+
+.periodChildren li {
+	border-block-start: 1px solid var(--journal-soft-line);
+}
+
+.periodChildren a {
+	align-items: center;
+	display: grid;
+	gap: 0.8em;
+	grid-template-columns: minmax(9em, 15em) minmax(0, 1fr) auto;
+	padding: 0.8em 0.25em;
+	text-decoration: none;
+}
+
+.periodChildren a:hover strong,
+.periodChildren a:focus-visible strong {
+	text-decoration: underline;
+}
+
+.periodChildChevron {
+	transform: rotate(-90deg);
+}
+
+.summary {
+	background: var(--journal-surface);
+	border: 1px solid var(--journal-soft-line);
+	border-radius: 1rem;
+	margin-block: 0.75em 1.25em;
+	max-width: 42em;
+	padding: 1.1em 1.25em;
+}
+
+.summaryEmbedded {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	margin-block: 0;
+	padding: 1em 0 0;
+}
+
+.summary header p {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+	margin: 0;
+}
+
+.summary h3 {
+	margin-block: 0.2em 0.6em;
+}
+
+.summary h4 {
+	border-block-end: 1px solid var(--journal-soft-line);
+	font-size: 1.05em;
+	margin-block: 1.5em 0.65em;
+	padding-block-end: 0.35em;
+}
+
+.summary ul {
+	padding-inline-start: 1.25em;
+}
+
+.citation a {
+	background: none;
+	border: 0;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	padding: 0;
+	scroll-margin-block-start: calc(
+		var(--journal-sticky-navigation-height) +
+		0.5rem
+	);
+	text-decoration: underline;
+	text-decoration-color: var(--link-color);
+}
+
+.citation {
+	font-size: 0.75em;
+	line-height: 0;
+	margin-inline: 0.1em;
+}
+
+.entry {
+	border-block-end: 1px solid var(--journal-soft-line);
+	max-width: 42em;
+}
+
+.pendingEntries {
+	display: grid;
+	gap: 0.5em;
+	margin-block-end: 1.5em;
+}
+
+.pendingEntries .entry {
+	margin-inline-start: 0;
+}
+
+.entryTime {
+	font-variant-numeric: tabular-nums;
+}
+
+.entryHeading {
+	align-items: baseline;
+	display: flex;
+	gap: 0.75em;
+	min-width: 0;
+}
+
+.entryTitle {
+	min-width: 0;
+}
+
+.entryChevron {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+	transition: transform 160ms ease;
+}
+
+.entry[open] > summary .entryChevron {
+	transform: rotate(180deg);
+}
+
+.audioDock {
+	background: var(--background-color);
+	box-sizing: border-box;
+	max-width: 42em;
+	padding-block: 0.5em;
+	position: sticky;
+	top: calc(
+		var(--glade-bar-block-size, 0px) +
+		var(--journal-sticky-navigation-height)
+	);
+	z-index: 5;
+}
+
+.audio {
+	display: block;
+	width: 100%;
+}
+
+.transcriptScroller {
+	border-block: 1px solid var(--journal-line);
+	max-block-size: min(45vh, 22rem);
+	max-width: 42em;
+	overflow-y: auto;
+	scrollbar-gutter: stable;
+}
+
+.transcript {
+	line-height: 1.75;
+	margin-block: 0;
+	max-width: 42em;
+	padding-block: 1em;
+}
+
+.transcriptFollowing {
+	padding-block: calc(min(45vh, 22rem) / 2 - 0.875em);
+}
+
+.transcriptParagraph {
+	margin-block: 0;
+}
+
+.transcriptParagraph + .transcriptParagraph {
+	margin-block-start: 1em;
+}
+
+.transcriptParagraphTimestamp {
+	color: var(--journal-muted);
+	font-size: 0.75em;
+	font-variant-numeric: tabular-nums;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.transcriptParagraphTimestamp:hover,
+.transcriptParagraphTimestamp:focus-visible {
+	text-decoration: underline;
+}
+
+.transcriptSegment {
+	scroll-margin-block-start: 2em;
+}
+
+.transcriptSegment a {
+	border-radius: 0.15em;
+	color: inherit;
+	cursor: pointer;
+	position: relative;
+	text-decoration: none;
+}
+
+.transcriptSegment[data-journal-currently-spoken] a,
+.transcriptSegment a:hover,
+.transcriptSegment a:focus-visible,
+.transcriptSegment:target a {
+	background: var(--highlight-color);
+	color: var(--highlight-foreground-color);
+	outline-offset: 0.15em;
+}
+
+.transcriptTimestamp {
+	background: var(--foreground-color);
+	border-radius: 0.2em;
+	bottom: calc(100% + 0.3em);
+	color: var(--background-color);
+	font-size: 0.7em;
+	font-variant-numeric: tabular-nums;
+	left: 0;
+	line-height: 1;
+	opacity: 0;
+	padding: 0.35em 0.45em;
+	pointer-events: none;
+	position: absolute;
+	transform: translateY(0.2em);
+	transition:
+		opacity 100ms ease,
+		transform 100ms ease;
+	white-space: nowrap;
+	z-index: 1;
+}
+
+.transcriptSegment a:hover .transcriptTimestamp,
+.transcriptSegment a:focus-visible .transcriptTimestamp,
+.transcriptSegment a:active .transcriptTimestamp {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.deleteControl {
+	border-block-start: 1px solid var(--journal-line);
+	margin-block-start: 1.5em;
+	max-width: 42em;
+	padding-block-start: 1em;
+}
+
+.dateEditorDisclosure {
+	margin-block-start: 1.25em;
+	max-width: 42em;
+}
+
+.dateEditorDisclosure button {
+	background: transparent;
+	border: 0;
+	color: var(--journal-muted);
+	cursor: pointer;
+	font: inherit;
+	font-size: 0.85em;
+	padding: 0.25em 0;
+	text-decoration: underline;
+	text-decoration-color: transparent;
+	text-underline-offset: 0.2em;
+	transition:
+		color 120ms ease,
+		text-decoration-color 120ms ease;
+}
+
+.dateEditorDisclosure button:hover,
+.dateEditorDisclosure button:focus-visible {
+	color: inherit;
+	text-decoration-color: currentColor;
+}
+
+.dateEditor {
+	align-items: flex-end;
+	border-block-start: 1px solid var(--journal-line);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75em;
+	margin-block-start: 1.5em;
+	max-width: 42em;
+	padding-block-start: 1em;
+}
+
+.dateEditor label {
+	display: grid;
+	gap: 0.25em;
+}
+
+.dateEditorActions {
+	display: flex;
+	gap: 0.5em;
+}
+
+.dateEditor input,
+.dateEditor button {
+	box-sizing: border-box;
+	font: inherit;
+	min-block-size: 2.5em;
+}
+
+.dateEditor .dateEditorCancel {
+	background: transparent;
+	border-color: var(--journal-line);
+	color: inherit;
+}
+
+.dateEditor button {
+	background: var(--foreground-color);
+	border: 1px solid var(--foreground-color);
+	color: var(--background-color);
+	cursor: pointer;
+	padding-inline: 0.9em;
+}
+
+.dateEditor button:disabled {
+	cursor: default;
+	opacity: 0.55;
+}
+
+.dateEditor p {
+	color: var(--journal-recording);
+	flex-basis: 100%;
+	margin-block: 0;
+}
+
+.deleteTrack {
+	background: color-mix(in srgb, currentColor 6%, transparent);
+	block-size: 2.75em;
+	border: 1px solid var(--journal-line);
+	box-sizing: border-box;
+	overflow: hidden;
+	position: relative;
+}
+
+.deleteLabel {
+	align-items: center;
+	color: var(--journal-muted);
+	display: flex;
+	font-size: 0.8em;
+	inset: 0;
+	justify-content: center;
+	pointer-events: none;
+	position: absolute;
+	text-transform: uppercase;
+	user-select: none;
+	z-index: 2;
+}
+
+.deleteProgress {
+	background: color-mix(in srgb, var(--journal-recording) 18%, transparent);
+	block-size: 100%;
+	inset-block-start: 0;
+	inset-inline-start: 0;
+	pointer-events: none;
+	position: absolute;
+}
+
+.deleteThumb {
+	align-items: center;
+	background: var(--journal-recording);
+	block-size: calc(2.75em - 2px);
+	border: 0;
+	color: white;
+	cursor: grab;
+	display: flex;
+	font: inherit;
+	font-size: 1.1em;
+	inset-block-start: 0;
+	inline-size: calc(2.75em - 2px);
+	justify-content: center;
+	padding: 0;
+	position: absolute;
+	touch-action: none;
+	user-select: none;
+	z-index: 3;
+}
+
+.deleteThumb:active {
+	cursor: grabbing;
+}
+
+.deleteThumb:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: -4px;
+}
+
+.deleteThumb:disabled {
+	cursor: wait;
+	opacity: 0.65;
+}
+
+.deleteFailure {
+	color: var(--journal-recording);
+	margin-block: 0.5em 0;
+}
+
+.empty {
+	color: var(--journal-muted);
+	margin-block: 2em;
+	text-align: center;
+}
+
+.recent {
+	margin-block-start: 2.5em;
+	max-width: 42em;
+}
+
+.recent > header {
+	align-items: baseline;
+	display: flex;
+	justify-content: space-between;
+}
+
+.recent > header h2 {
+	margin: 0;
+}
+
+.recent ol {
+	list-style: none;
+	margin: 0.75em 0 0;
+	padding: 0;
+}
+
+.recent li {
+	border-block-start: 1px solid var(--journal-soft-line);
+}
+
+.recent li a {
+	align-items: baseline;
+	display: grid;
+	gap: 0.25em 1em;
+	grid-template-columns: minmax(7em, auto) 1fr auto;
+	padding: 0.9em 0.25em;
+	text-decoration: none;
+}
+
+.recent li a:hover strong,
+.recent li a:focus-visible strong {
+	text-decoration: underline;
+}
+
+.recentDate,
+.recentTime {
+	color: var(--journal-muted);
+	font-size: 0.85em;
+}
+
+.recentTime {
+	font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 40rem) {
+	.entry > summary {
+		align-items: baseline;
+		gap: 0.25em 0.65em;
+		grid-template-columns: 1fr auto;
+	}
+
+	.entryTime {
+		grid-column: 1 / -1;
+	}
+
+	.entryHeading {
+		gap: 0.5em;
+	}
+
+	.periodDisclosure > summary,
+	.periodChildren a {
+		align-items: baseline;
+		gap: 0.25em 0.65em;
+		grid-template-columns: 1fr auto;
+	}
+
+	.periodDate,
+	.periodChildDate {
+		grid-column: 1 / -1;
+	}
+
+	.recent li a {
+		grid-template-columns: 1fr auto;
+	}
+
+	.recentDate {
+		grid-column: 1 / -1;
+	}
+}
+
+.mcpSetup {
+	border-block-start: 1px solid var(--journal-line);
+	margin-block-start: 3em;
+	max-width: 42em;
+	padding-block-start: 1em;
+}
+
+.mcpSetup summary {
+	cursor: pointer;
+	padding-block: 0.5em;
+}
+
+.mcpSetup li + li {
+	margin-block-start: 1em;
+}
+
+.mcpSetup pre {
+	background: var(--journal-surface);
+	border: 1px solid var(--journal-soft-line);
+	padding: 0.75em;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.recordingTime {
+	align-items: center;
+	display: flex;
+	gap: 0.5em;
+	font-variant-numeric: tabular-nums;
+}
+
+.recordingTime::before {
+	background: var(--journal-recording);
+	border-radius: 50%;
+	block-size: 0.5em;
+	inline-size: 0.5em;
+	content: "";
+}
+
+.localRecordings {
+	margin-block: 0 1.5em;
+	max-width: 42em;
+}
+
+.localRecordings ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.localRecordings li {
+	border-block-end: 1px solid var(--journal-soft-line);
+}
+
+.localRecording > summary {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	gap: 0.75em;
+	list-style: none;
+	min-block-size: 3.5em;
+	padding-block: 0.65em;
+}
+
+.localRecording > summary::-webkit-details-marker,
+.removeRecording > summary::-webkit-details-marker {
+	display: none;
+}
+
+.localRecordingHeading {
+	display: grid;
+	flex: 1;
+	gap: 0.25em;
+	min-inline-size: 0;
+}
+
+.localRecordingHeading > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.localRecordingHeading small,
+.localRecordingActions > small {
+	color: var(--journal-muted);
+	font-size: 0.8em;
+}
+
+.localRecording[open] > summary .entryChevron {
+	transform: rotate(180deg);
+}
+
+.localRecordingActions {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25em;
+	padding-block: 0.5em;
+}
+
+.localRecordingActions > small {
+	margin-inline-end: auto;
+}
+
+.localRecordingActions button,
+.localRecordingActions a,
+.removeRecording > summary {
+	align-items: center;
+	background: transparent;
+	border: 0;
+	border-radius: 0.5em;
+	box-sizing: border-box;
+	color: inherit;
+	cursor: pointer;
+	display: inline-flex;
+	font: inherit;
+	justify-content: center;
+	min-block-size: 44px;
+	min-inline-size: 44px;
+	padding: 0.5em;
+	text-decoration: none;
+}
+
+.localRecordingActions :where(button, a, summary):hover {
+	background: var(--journal-surface);
+}
+
+.localRecordingActions button:disabled {
+	cursor: default;
+	opacity: 0.4;
+}
+
+.removeRecording {
+	position: relative;
+}
+
+.removeRecording > div {
+	background: var(--background-color);
+	border: 1px solid var(--journal-line);
+	border-radius: 0.75em;
+	box-shadow: 0 0.5em 2em #0002;
+	inline-size: min(18em, 65vw);
+	inset-inline-end: 0;
+	padding: 1em;
+	position: absolute;
+	z-index: 8;
+}
+
+.removeRecording p {
+	margin-block: 0 0.5em;
+}
+.removeRecording button {
+	color: var(--journal-recording);
+}
+
+@media (max-width: 40rem) {
+	.recorder[data-recording] {
+		gap: 0.5em;
+	}
+	.waveform {
+		flex-basis: 4em;
+		min-inline-size: 3em;
+	}
+	.recordingTime {
+		font-size: 0.85em;
+	}
+}
+
+.progressRing {
+	display: inline-flex;
+	inline-size: 1.5em;
+	block-size: 1.5em;
+	flex: 0 0 auto;
+}
+.progressRing svg {
+	inline-size: 100%;
+	block-size: 100%;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+.progressTrack {
+	opacity: 0.2;
+}
+.uploadProgress {
+	position: absolute;
+	inset: -5px;
+	pointer-events: none;
+	color: var(--foreground-color);
+	display: grid;
+	place-items: center;
+}
+.uploadProgress > .progressRing {
+	inline-size: 100%;
+	block-size: 100%;
+}
+.uploadProgress > .statusIndicator {
+	position: absolute;
+	inset-inline-start: 100%;
+}
+
+.wikiNavigation {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-inline-size: 44px;
+	min-block-size: 44px;
+	padding-inline: 0.5rem;
+	flex-shrink: 0;
+}
+.wikiNavigation[aria-current="page"] {
+	font-weight: 700;
+	text-underline-offset: 0.3em;
+}
+.wiki {
+	max-inline-size: 48rem;
+	margin-block: 1.5rem;
+}
+.wikiHeader {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 1rem;
+}
+.wikiHeader h2 {
+	margin: 0;
+}
+.wikiSearch {
+	display: grid;
+	gap: 0.5rem;
+	margin-block: 1.5rem;
+}
+.wikiSearch input {
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-block-size: 44px;
+	font: inherit;
+	padding: 0.5rem 0.75rem;
+	color: inherit;
+	background: transparent;
+	border: 1px solid currentColor;
+	border-radius: 0.5rem;
+}
+.wikiIndex {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+	gap: 0.75rem;
+}
+.wikiIndex a {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-block-size: 44px;
+	padding: 0.75rem;
+	border: 1px solid currentColor;
+	border-radius: 0.5rem;
+	text-decoration: none;
+}
+.wikiIndex a span,
+.wikiKind {
+	font-size: 0.85em;
+}
+.wikiIntro {
+	margin-block: 1.5rem;
+}
+
+.recordingFailure {
+	overflow-wrap: anywhere;
+}

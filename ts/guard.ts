@@ -27,18 +27,21 @@ export function and<I, A extends I, B extends I>(
 	f1: (v: I) => v is A,
 	f2: (v: I) => v is B
 ) {
-	return (v: I): v is A & B => f1(v) && f2(v)
+	return (v: I): v is A & B => f1(v) && f2(v);
 }
 
-export function firstItemIs<I, O extends I>(
-	f: (v: I) => v is O
-) {
-	return function <T extends unknown[]>(v: readonly [I, ...T]): v is readonly [O, ...T] {
+export function firstItemIs<I, O extends I>(f: (v: I) => v is O) {
+	return function <T extends unknown[]>(
+		v: readonly [I, ...T]
+	): v is readonly [O, ...T] {
 		return f(v[0]);
-	}
+	};
 }
 
-export function impossible(v: never, then: (v: never) => Error): asserts v is never {
+export function impossible(
+	v: never,
+	then: (v: never) => Error
+): asserts v is never {
 	throw then(v);
 }
 

@@ -3,6 +3,8 @@ load("//ts:rules.bzl", "ts_project")
 
 ts_project(
     name = "voice",
+    srcs = ["voice.ts"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
@@ -15,4 +17,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["voice.ts"],
+    visibility = ["//:__subpackages__"],
 )

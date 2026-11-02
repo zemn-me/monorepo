@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 
@@ -17,7 +18,17 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//go/flag/flagutil",
+        "@com_github_deepteams_webp//:webp",
+        "@org_golang_x_image//draw",
     ],
+)
+
+go_test(
+    name = "transcode_test",
+    size = "small",
+    srcs = ["transcode_test.go"],
+    embed = [":transcode_lib"],
+    deps = ["@com_github_deepteams_webp//:webp"],
 )
 
 bazel_lint(

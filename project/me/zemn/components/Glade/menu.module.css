@@ -1,0 +1,125 @@
+.hamburgerNav {
+	display: grid;
+	position: relative;
+	justify-self: end;
+	pointer-events: all;
+	z-index: 4;
+}
+
+.hamburgerDetails {
+	display: inline-block;
+	position: relative;
+}
+
+.hamburgerButton {
+	list-style: none;
+	display: grid;
+	place-items: center;
+	width: var(--glade-control-size, 44px);
+	height: var(--glade-control-size, 44px);
+	border: none;
+	background: transparent;
+	color: var(--foreground-color);
+	cursor: pointer;
+	position: relative;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.hamburgerButton:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+	border-radius: 0.25rem;
+}
+
+.hamburgerIconClosed,
+.hamburgerIconOpen {
+	display: grid;
+	position: absolute;
+	inset: 0;
+	place-items: center;
+	transition:
+		opacity 180ms ease,
+		transform 180ms ease;
+}
+
+.hamburgerIconOpen {
+	opacity: 0;
+	transform: rotate(-90deg) scale(0.75);
+}
+
+.hamburgerButton::-webkit-details-marker {
+	display: none;
+}
+
+.hamburgerDetails[open] .hamburgerIconClosed {
+	opacity: 0;
+	transform: rotate(90deg) scale(0.75);
+}
+
+.hamburgerDetails[open] .hamburgerIconOpen {
+	opacity: 1;
+	transform: rotate(0deg) scale(1);
+}
+
+.hamburgerMenu {
+	margin-top: 0.75rem;
+	padding: 0.75rem 1rem;
+	display: grid;
+	gap: 0;
+	min-width: 0;
+	width: min(16rem, calc(100vw - 3rem));
+	max-height: min(70vh, calc(100vh - 5rem));
+	overflow-y: auto;
+	position: absolute;
+	right: 0;
+	background: var(--background-color);
+	border: 1px solid
+		color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	border-radius: 0.75rem;
+	box-sizing: border-box;
+	scrollbar-gutter: stable;
+}
+
+.hamburgerSection {
+	display: grid;
+	gap: 0.35rem;
+}
+
+.hamburgerSection + .hamburgerSection {
+	margin-top: 0.6rem;
+	padding-top: 0.6rem;
+	border-top: 1px solid
+		color-mix(in srgb, var(--foreground-color) 16%, transparent);
+}
+
+.hamburgerSectionLabel {
+	margin: 0;
+	color: color-mix(in srgb, var(--foreground-color) 72%, transparent);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.hamburgerLinks {
+	display: grid;
+	gap: 0.35rem;
+}
+
+.hamburgerLink {
+	color: inherit;
+	letter-spacing: 0;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+}
+
+.inlineLoginCopy {
+	margin-top: 0.6rem;
+	padding-top: 0.6rem;
+	border-top: 1px solid
+		color-mix(in srgb, var(--foreground-color) 20%, transparent);
+	font-size: 0.9rem;
+}

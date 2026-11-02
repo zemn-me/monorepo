@@ -1,6 +1,7 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
-load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
 package(default_visibility = ["//ci:__subpackages__"])
@@ -9,64 +10,91 @@ yaml_lint_test(
     name = "validate_yml",
 )
 
-ts_project(
-    name = "pulumi_ts",
-    data = [
-        ":pulumi_local",
-        "//project/zemn.me:next",
-        "//ts/pulumi/shadwell.im/thomas",
-        "//ts/pulumi/zemn.me/availability:next",
-        "//ts/pulumi/zemn.me/static",
-    ],
-    deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//:node_modules/@pulumi/random",
-        "//:node_modules/@types/cross-spawn",
-        "//:node_modules/@types/jest",
-        "//:node_modules/cross-spawn",
-        "//project/zemn.me/bio",
-        "//ts/github/actions",
-        "//ts/pulumi/baby.computer:pulumi_ts",
-        "//ts/pulumi/eggsfordogs.com:pulumi_ts",
-        "//ts/pulumi/github.com/zemn-me/do-sync",
-        "//ts/pulumi/lib",
-        "//ts/pulumi/lib/twilio",
-        "//ts/pulumi/lib/website",
-        "//ts/pulumi/lulu.computer:pulumi_ts",
-        "//ts/pulumi/pleaseintroducemetoyour.dog:ts",
-        "//ts/pulumi/shadwell.im",
-        "//ts/pulumi/zemn.me/api",
-        "//ts/pulumi/zemn.me/forge",
-        "//ts/pulumi/zemn.me/hello_world:ts",
-    ],
-)
-
-jest_test(
-    name = "tests",
-    srcs = ["pulumi_test.js"],
-    deps = [":pulumi_ts"],
-)
-
 js_binary(
     name = "preview",
     data = [
-        ":pulumi_ts",
+        ":pulumi",
     ],
     entry_point = "preview.js",
-)
-
-genrule(
-    name = "pulumi_local",
-    srcs = ["//bin/linux/pulumi"],
-    outs = ["pulumi"],
-    cmd = """
-cp $< $@
-    """,
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "pulumi",
+    srcs = [
+        "deploy_to_staging.ts",
+        "github_actions_secrets.ts",
+        "index.ts",
+        "preview.ts",
+        "retire_bowery_bugle.ts",
+        "retire_lulu.ts",
+        "setMocks.ts",
+        "stack.ts",
+    ],
+    data = [
+        ":pulumi_local",
+        "//js/npm:publish",
+        "//project/im/shadwell/thomas",
+        "//project/me/zemn:remix",
+        "//ts/do-sync:npm_pkg_publish_data",
+        "//ts/future:npm_pkg_publish_data",
+        "//ts/knowitwhenyouseeit:npm_pkg_publish_data",
+        "//ts/pulumi/zemn.me/availability:remix",
+        "//ts/pulumi/zemn.me/static",
+        "//ts/result:npm_pkg_publish_data",
+        "//ts/text/tabwriter:npm_pkg_publish_data",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/gcp",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/random",
+        "//:node_modules/@types/node",
+        "//ts/github/actions",
+        "//ts/pulumi/baby.computer",
+        "//ts/pulumi/eggsfordogs.com",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/lib/npm",
+        "//ts/pulumi/lib/twilio",
+        "//ts/pulumi/pleaseintroducemetoyour.dog",
+        "//ts/pulumi/shadwell.im",
+        "//ts/pulumi/waxingincandescent.com",
+        "//ts/pulumi/zemn.me",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "deploy_to_staging.ts",
+        "github_actions_secrets.ts",
+        "index.ts",
+        "preview.ts",
+        "retire_bowery_bugle.ts",
+        "retire_lulu.ts",
+        "setMocks.ts",
+        "stack.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+genrule(
+    name = "pulumi_local",
+    srcs = ["//bin/linux/pulumi"],
+    outs = ["pulumi_bin"],
+    cmd = """
+cp $< $@
+    """,
+)
+
+md_files(
+    name = "ts_pulumi",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

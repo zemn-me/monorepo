@@ -1,4 +1,4 @@
 import { thing1 } from '#root/go/gazelle/js/example/node/a.js';
 
-// eslint-disable-next-line no-console
+// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
 console.log(thing1);

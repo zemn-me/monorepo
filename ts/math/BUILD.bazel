@@ -1,14 +1,19 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "math",
     srcs = [
         "camera.ts",
+        "camera_pose.ts",
         "cartesian.ts",
         "conv.ts",
         "degree.ts",
+        "dual_quaternion.ts",
         "euler_angle.ts",
+        "face_bsp.ts",
         "homog.ts",
         "lookAt.ts",
         "matrix.ts",
@@ -16,7 +21,10 @@ ts_project(
         "raster.ts",
         "scale.ts",
         "tuple.ts",
+        "type_math.ts",
         "vec.ts",
+        "wireframe.ts",
+        "wireframe_render.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -24,16 +32,26 @@ ts_project(
         "//:node_modules/@types/ramda",
         "//:node_modules/ramda",
         "//ts",
+        "//ts/either",
+        "//ts/result",
     ],
 )
 
 jest_test(
     name = "tests",
     srcs = [
+        "camera_pose_test.js",
         "camera_test.js",
         "conv_test.js",
+        "dual_quaternion_test.js",
+        "face_bsp_test.js",
+        "lookAt_test.js",
         "math_test.js",
+        "matrix_test.js",
         "quaternion_test.js",
+        "type_math_test.js",
+        "wireframe_render_test.js",
+        "wireframe_test.js",
     ],
     visibility = ["//:__subpackages__"],
     deps = [":math_tests"],
@@ -49,22 +67,37 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "camera.ts",
+        "camera_pose.ts",
+        "camera_pose_test.ts",
         "camera_test.ts",
         "cartesian.ts",
         "conv.ts",
         "conv_test.ts",
         "degree.ts",
+        "dual_quaternion.ts",
+        "dual_quaternion_test.ts",
         "euler_angle.ts",
+        "face_bsp.ts",
+        "face_bsp_test.ts",
         "homog.ts",
         "lookAt.ts",
+        "lookAt_test.ts",
         "math_test.ts",
         "matrix.ts",
+        "matrix_map_bench.ts",
+        "matrix_test.ts",
         "quaternion.ts",
         "quaternion_test.ts",
         "raster.ts",
         "scale.ts",
         "tuple.ts",
+        "type_math.ts",
+        "type_math_test.ts",
         "vec.ts",
+        "wireframe.ts",
+        "wireframe_render.ts",
+        "wireframe_render_test.ts",
+        "wireframe_test.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -72,16 +105,46 @@ filegroup(
 ts_project(
     name = "math_tests",
     srcs = [
+        "camera_pose_test.ts",
         "camera_test.ts",
         "conv_test.ts",
+        "dual_quaternion_test.ts",
+        "face_bsp_test.ts",
+        "lookAt_test.ts",
         "math_test.ts",
+        "matrix_test.ts",
         "quaternion_test.ts",
+        "type_math_test.ts",
+        "wireframe_render_test.ts",
+        "wireframe_test.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":math",
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
-        "//ts/math/camera",
+        "//ts/result",
     ],
+)
+
+ts_project(
+    name = "matrix_map_bench_ts",
+    srcs = ["matrix_map_bench.ts"],
+    deps = [
+        ":math",
+        "//:node_modules/@types/node",
+    ],
+)
+
+js_binary(
+    name = "matrix_map_bench",
+    data = [":matrix_map_bench_ts"],
+    entry_point = "matrix_map_bench.js",
+    tags = ["manual"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

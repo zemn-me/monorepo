@@ -3,9 +3,7 @@ import { Tuple } from '#root/ts/tuple.js';
 export type Vector<I extends number = number, T = number> = Tuple<T, I>;
 
 export function magnitude(v: Vector): number {
-	return Math.sqrt(
-		sum(
-		v.map(v => v ** 2)))
+	return Math.sqrt(sum(v.map(v => v ** 2)));
 }
 
 export function unit<N extends number>(v: Vector<N>): Vector<N> {
@@ -22,7 +20,7 @@ export const map: <I extends number, T, U>(
 	vec: Vector<I, T>,
 	callbackFn: (value: T, index: number, array: Vector<I, T>) => U
 ) => Vector<I, U> = (vec, c) =>
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 	vec.map(c as any) as any;
 
 /**
@@ -51,7 +49,7 @@ export const reverse: <I extends number, T>(v: Vector<I, T>) => Iterable<T> =
 
 export const as: <T, L extends number>(
 	v: readonly T[] & { length: L }
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 ) => Vector<L, T> = v => v as any;
 
 export function New<N extends number>(length: number): Vector<N, unknown> {
@@ -88,7 +86,7 @@ const _zip: <T1, T2, T3>(
 	fb: T3
 ) => Iterable<[T1 | T3, T2 | T3]> = function* (v1, v2, fb) {
 	const [a, b] = [v1[Symbol.iterator](), v2[Symbol.iterator]()];
-	for (let i = 0; ; i++) {
+	for (;;) {
 		const [ar, br] = [a.next(), b.next()];
 		const left = ar.done ? fb : ar.value;
 		const right = br.done ? fb : br.value;
@@ -105,12 +103,12 @@ export const zip: {
 	): Iterable<[T1, T2]>;
 	<T1, T2>(
 		v1: Iterable<T1>,
-		v2: Iterable<T2>,
+		v2: Iterable<T2>
 	): Iterable<[T1 | undefined, T2 | undefined]>;
 	<T1, T2, T3>(
 		v1: Iterable<T1>,
 		v2: Iterable<T2>,
 		fb: T3
 	): Iterable<[T1 | T3, T2 | T3]>;
-	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+	/* biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any */
 } = _zip as any;

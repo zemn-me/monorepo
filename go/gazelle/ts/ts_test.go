@@ -1,6 +1,7 @@
 package ts_test
 
 import (
+	"flag"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -15,6 +16,7 @@ import (
 	bzl "github.com/bazelbuild/buildtools/build"
 	"github.com/bazelbuild/rules_go/go/runfiles"
 
+	css "github.com/zemn-me/monorepo/go/gazelle/css"
 	ts "github.com/zemn-me/monorepo/go/gazelle/ts"
 )
 
@@ -46,6 +48,15 @@ func newTestConfig(t *testing.T) *config.Config {
 	cfg := config.New()
 	cfg.RepoRoot = root
 	cfg.WorkDir = root
+
+	var rc resolve.Configurer
+	fs := flag.NewFlagSet("test", flag.ContinueOnError)
+	rc.RegisterFlags(fs, "", cfg)
+	if err := rc.CheckFlags(fs, cfg); err != nil {
+		t.Fatalf("resolve.CheckFlags: %v", err)
+	}
+	rc.Configure(cfg, "", nil)
+
 	return cfg
 }
 
@@ -54,10 +65,15 @@ func generateRulesOnly(t *testing.T, rel string, files []string) language.Genera
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
 	lang.Configure(cfg, "", nil)
 
 	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
 	lang.Configure(dirCfg, rel, nil)
 
 	args := language.GenerateArgs{
@@ -75,10 +91,15 @@ func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[st
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
 	lang.Configure(cfg, "", nil)
 
 	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
 	lang.Configure(dirCfg, rel, nil)
 
 	args := language.GenerateArgs{
@@ -88,13 +109,19 @@ func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[st
 		RegularFiles: files,
 	}
 
-	result := lang.GenerateRules(args)
+	cssResult := cssLang.GenerateRules(args)
+	tsResult := lang.GenerateRules(args)
 
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+	idx := buildRuleIndex(t, cfg, lang, cssLang, defaultIndexPackages(), false)
 	all := make(map[string]*rule.Rule)
-	for i, generated := range result.Gen {
+	for _, generated := range cssResult.Gen {
 		all[generated.Name()] = generated
-		if imports := result.Imports[i]; imports != nil {
+		idx.AddRule(dirCfg, generated, rule.EmptyFile("", rel))
+	}
+	idx.Finish()
+	for i, generated := range tsResult.Gen {
+		all[generated.Name()] = generated
+		if imports := tsResult.Imports[i]; imports != nil {
 			lbl := label.New("", rel, generated.Name())
 			lang.Resolve(dirCfg, idx, nil, generated, imports, lbl)
 		}
@@ -108,10 +135,15 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 
 	cfg := newTestConfig(t)
 
-	var lang ts.Language
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
 	lang.Configure(cfg, "", nil)
 
 	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
 	lang.Configure(dirCfg, rel, nil)
 
 	args := language.GenerateArgs{
@@ -121,28 +153,33 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 		RegularFiles: files,
 	}
 
-	result := lang.GenerateRules(args)
+	cssResult := cssLang.GenerateRules(args)
+	tsResult := lang.GenerateRules(args)
 	var (
 		projectRule    *rule.Rule
 		projectImports interface{}
 	)
-	for i, generated := range result.Gen {
+	for i, generated := range tsResult.Gen {
 		if generated.Kind() == "ts_project" {
 			projectRule = generated
-			projectImports = result.Imports[i]
+			projectImports = tsResult.Imports[i]
 			break
 		}
 	}
 
 	if projectRule == nil {
-		t.Fatalf("expected to generate a ts_project rule, but got %d rules", len(result.Gen))
+		t.Fatalf("expected to generate a ts_project rule, but got %d rules", len(tsResult.Gen))
 	}
 
 	r := projectRule
 	imports := projectImports
 
 	lbl := label.New("", rel, r.Name())
-	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver { return nil })
+	idx := buildRuleIndex(t, cfg, lang, cssLang, defaultIndexPackages(), false)
+	for _, generated := range cssResult.Gen {
+		idx.AddRule(dirCfg, generated, rule.EmptyFile("", rel))
+	}
+	idx.Finish()
 
 	lang.Resolve(dirCfg, idx, nil, r, imports, lbl)
 
@@ -150,6 +187,78 @@ func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string,
 	deps := r.AttrStrings("deps")
 
 	return srcs, deps
+}
+
+func defaultIndexPackages() []string {
+	return []string{
+		"go/gazelle/ts/testdata/dependency",
+		"ts",
+		"ts/iter",
+		"ts/math",
+		"ts/time",
+	}
+}
+
+func buildRuleIndex(t *testing.T, cfg *config.Config, lang ts.Language, cssLang css.Language, packages []string, finish bool) *resolve.RuleIndex {
+	t.Helper()
+
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver {
+		if r.Kind() == "css_module" {
+			return cssLang
+		}
+		return lang
+	}, lang, cssLang)
+	for _, pkgRel := range packages {
+		ruleName := ruleNameForPackage(pkgRel)
+		if ruleName == "" {
+			t.Fatalf("no rule name for package %s", pkgRel)
+		}
+		srcs := packageSrcsForIndex(pkgRel)
+		r := rule.NewRule("ts_project", ruleName)
+		if len(srcs) > 0 {
+			r.SetAttr("srcs", srcs)
+		}
+		f := rule.EmptyFile("", pkgRel)
+		idx.AddRule(cfg, r, f)
+	}
+	if finish {
+		idx.Finish()
+	}
+	return idx
+}
+
+func ruleNameForPackage(pkgRel string) string {
+	switch pkgRel {
+	case "go/gazelle/ts/testdata/dependency":
+		return "dependency"
+	case "ts":
+		return "ts"
+	case "ts/iter":
+		return "iter"
+	case "ts/math":
+		return "math"
+	case "ts/time":
+		return "time"
+	default:
+		return ""
+	}
+}
+
+func packageSrcsForIndex(pkgRel string) []string {
+	switch pkgRel {
+	case "go/gazelle/ts/testdata/dependency":
+		return []string{"dep.ts"}
+	case "ts":
+		return []string{"tuple.ts"}
+	case "ts/iter":
+		return []string{"index.ts"}
+	case "ts/math":
+		return []string{"cartesian.ts"}
+	case "ts/time":
+		return []string{"duration.ts"}
+	default:
+		return nil
+	}
 }
 
 func assertContains(t *testing.T, haystack []string, needle string) {
@@ -161,6 +270,16 @@ func assertContains(t *testing.T, haystack []string, needle string) {
 		}
 	}
 	t.Fatalf("expected %q to be present in %v", needle, haystack)
+}
+
+func assertNotContains(t *testing.T, haystack []string, needle string) {
+	t.Helper()
+
+	for _, item := range haystack {
+		if item == needle {
+			t.Fatalf("expected %q to be absent in %v", needle, haystack)
+		}
+	}
 }
 
 func TestGenerateRulesExampleSimple(t *testing.T) {
@@ -175,6 +294,30 @@ func TestGenerateRulesExampleSimple(t *testing.T) {
 	}
 
 	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestGenerateRulesAddsCSSModuleTarget(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/css_module"
+	files := []string{"consumer.ts", "style.module.css"}
+
+	rules := generateAndResolveAllRules(t, rel, files)
+
+	cssRule, ok := rules["style_module_css"]
+	if !ok {
+		t.Fatalf("expected style_module_css rule to be generated, rules: %v", rules)
+	}
+	if cssRule.Kind() != "css_module" {
+		t.Fatalf("style_module_css kind mismatch: got %s want css_module", cssRule.Kind())
+	}
+	if got := cssRule.AttrString("src"); got != "style.module.css" {
+		t.Fatalf("style_module_css src mismatch: got %q want style.module.css", got)
+	}
+
+	tsRule, ok := rules["css_module"]
+	if !ok {
+		t.Fatalf("expected css_module ts_project rule to be generated, rules: %v", rules)
+	}
+	assertContains(t, tsRule.AttrStrings("deps"), ":style_module_css")
 }
 
 func TestResolveAddsRepositoryDependencyFromAlias(t *testing.T) {
@@ -260,12 +403,17 @@ func TestGenerateRulesAddsJsdomAttributeWhenDirectivePresent(t *testing.T) {
 		t.Fatalf("expected jest_test rule to have a jsdom attribute")
 	}
 
-	lit, ok := attr.(*bzl.LiteralExpr)
-	if !ok {
-		t.Fatalf("expected jsdom attribute to be a literal, got %T", attr)
-	}
-	if lit.Token != "True" {
-		t.Fatalf("expected jsdom attribute to be True, got %s", lit.Token)
+	switch expr := attr.(type) {
+	case *bzl.Ident:
+		if expr.Name != "True" {
+			t.Fatalf("expected jsdom attribute to be True, got %s", expr.Name)
+		}
+	case *bzl.LiteralExpr:
+		if expr.Token != "True" {
+			t.Fatalf("expected jsdom attribute to be True, got %s", expr.Token)
+		}
+	default:
+		t.Fatalf("expected jsdom attribute to be True, got %T", attr)
 	}
 }
 

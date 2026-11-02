@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
@@ -38,6 +38,11 @@ const cmd = new Command('presubmit')
 		false
 	)
 	.option(
+		'--skip-pulumi-refresh',
+		'Skip refreshing Pulumi state when staging was just deployed in the same workflow.',
+		false
+	)
+	.option(
 		'--skip-pulumi-deploy',
 		`${
 			'Skip doing the pulumi deploy once bazel testing is completed. ' +
@@ -56,8 +61,6 @@ const cmd = new Command('presubmit')
 			);
 		console.log('Executing in detected directory', cwd);
 
-
-
 		// this is placed first since it builds everything in parallel
 		// so serial operations coming after take 0 time to build.
 		if (!o.skipBazelTests) {
@@ -68,15 +71,22 @@ const cmd = new Command('presubmit')
 					'//...',
 					'--noshow_progress',
 					'--ui_event_filters=-stdout',
-					'--noshow_loading_progress',
+					'--noshow_loading_progress'
 				)
 			);
 			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...', '--keep_going', "--config=ci")
+				Bazel.Bazel(
+					cwd,
+					'test',
+					'//...',
+					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
+					...(process.env['BAZEL_TEST_UNCACHED'] === 'true'
+						? ['--nocache_test_results']
+						: [])
+				)
 			);
 			// perform all the normal tests
 		}
-
 
 		await Task('check if we might need to run go.mod')(
 			new Promise<void>((ok, error) =>
@@ -99,15 +109,26 @@ const cmd = new Command('presubmit')
 							stdio: 'inherit',
 						}
 					)
-					.on('close', code =>
-						code == 0
-							? ok()
-							: error(
-									new Error(
-										`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
-									)
-								)
-					)
+					.on('close', code => {
+						if (code == 0) {
+							ok();
+							return;
+						}
+
+						console.log(
+							WorkflowCommand('error')({
+								file: 'go.mod',
+								title: 'go mod tidy failed',
+							})(
+								`Go mod tidy exited with ${code}. Run bazel run //sh/bin:go mod tidy and commit the resulting go.mod/go.sum changes.`
+							)
+						);
+						error(
+							new Error(
+								`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
+							)
+						);
+					})
 			)
 		);
 
@@ -148,6 +169,7 @@ const cmd = new Command('presubmit')
 				deploy_to_staging({
 					overwrite: o.overwrite,
 					doNotTearDown: o.dirty,
+					skipRefresh: o.skipPulumiRefresh,
 				})
 			);
 		}

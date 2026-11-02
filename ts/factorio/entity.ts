@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { OneBasedIndex } from '#root/ts/factorio/base';
 import { Color } from '#root/ts/factorio/color.js';
+import { ComparatorString } from '#root/ts/factorio/comparator_string.js';
 import { Connection } from '#root/ts/factorio/connection.js';
 import { ControlBehavior } from '#root/ts/factorio/control_behavior.js';
 import { EntityNumber } from '#root/ts/factorio/entity_number.js';
@@ -9,6 +10,7 @@ import { Float } from '#root/ts/factorio/float.js';
 import { InfinitySettings } from '#root/ts/factorio/infinty_settings.js';
 import { Int } from '#root/ts/factorio/int.js';
 import { Inventory } from '#root/ts/factorio/inventory.js';
+import { ItemCountType } from '#root/ts/factorio/item_count_type.js';
 import { ItemFilterObject } from '#root/ts/factorio/item_filter_object.js';
 import { ItemRequestObject } from '#root/ts/factorio/item_request_object.js';
 import { LogisticFilter } from '#root/ts/factorio/logistic_filter.js';
@@ -19,7 +21,6 @@ import { SpeakerAlertParameter } from '#root/ts/factorio/speaker_alert_parameter
 import { SpeakerParameter } from '#root/ts/factorio/speaker_parameter.js';
 import { Tags } from '#root/ts/factorio/tags.js';
 import { Uint8 } from '#root/ts/factorio/uint8.js';
-
 
 const EntityItemInventorySlot = z.strictObject({
 	/** Index of the inventory this stack lives in (Factorio 1-based). */
@@ -49,6 +50,13 @@ const Something = z.strictObject({
 const EntityPriorityListEntry = z.strictObject({
 	index: OneBasedIndex,
 	name: z.string(),
+});
+
+const EntityFilterObject = z.strictObject({
+	name: z.string(),
+	quality: Quality.optional(),
+	comparator: ComparatorString.optional(),
+	count: ItemCountType.optional(),
 });
 
 export const Entity = z.strictObject({
@@ -86,13 +94,14 @@ export const Entity = z.strictObject({
 	/**
 	 * Item requests by this entity, this is what defines the item-request-proxy when the blueprint is placed, optional. #Item request object
 	 */
-	items:
-		z.union([
+	items: z
+		.union([
 			z.array(ItemRequestObject),
 			ItemRequestObject,
 			z.array(EntityItemSlot),
 			EntityItemSlot,
-		]).optional(),
+		])
+		.optional(),
 	/**
 	 * Name of the recipe prototype this assembling machine is set to, optional, string.
 	 */
@@ -128,7 +137,7 @@ export const Entity = z.strictObject({
 	/**
 	 * Filter of the splitter, optional. Name of the item prototype the filter is set to, string.
 	 */
-	filter: z.string().optional(),
+	filter: z.union([z.string(), EntityFilterObject]).optional(),
 	/**
 	 * Filters of the filter inserter or loader, optional. Array of #Item filter objects.
 	 */
@@ -152,11 +161,10 @@ export const Entity = z.strictObject({
 	/**
 	 * Used by Prototype/LogisticContainer, optional. #Logistic filter object.
 	 */
-	request_filters:
-		z.union([
-			Something,
-			z.array(LogisticFilter),
-		]).optional().nullable(),
+	request_filters: z
+		.union([Something, z.array(LogisticFilter)])
+		.optional()
+		.nullable(),
 	request_missing_construction_materials: z.boolean().optional(),
 	use_filters: z.boolean().optional(),
 	'priority-list': z.array(EntityPriorityListEntry).optional(),
@@ -215,7 +223,7 @@ export const Entity = z.strictObject({
 	buffer_size: z.number().optional(),
 
 	recipe_quality: z.optional(Quality),
-	quality: Quality.optional()
+	quality: Quality.optional(),
 });
 
 export type Entity = z.TypeOf<typeof Entity>;

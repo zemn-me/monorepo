@@ -1,60 +1,173 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_binary", "py_library")
 load("//ts:rules.bzl", "ts_project")
-load("//ts/next.js:rules.bzl", "next_project")
+load("//ts/remix:rules.bzl", "remix_itest_service", "remix_project")
+
+# gazelle:python_library_naming_convention $package_name$_py
+# gazelle:exclude analytics_test.go
+# gazelle:exclude park_test.go
 
 package(default_visibility = ["//ts/pulumi:__subpackages__"])
 
-next_project(
-    name = "next",
-    srcs = [":next_ts"],
+remix_project(
+    name = "remix",
+    srcs = ["//ts/pulumi/eggsfordogs.com/app"],
 )
 
-# bazel run //ts/pulumi/eggsfordogs.com
-# to test the website.
-alias(
-    name = "eggsfordogs.com",
-    actual = ":dev",
-)
-
-ts_project(
-    name = "next_ts",
-    srcs = glob(
-        [
-            "app/*.tsx",
-            "app/*.ts",
-        ],
-        allow_empty = True,
-    ),
-    assets = glob(
-        ["app/*.css"],
-        allow_empty = True,
-    ),
+py_binary(
+    name = "inject_iservice_bin",
+    srcs = ["//project/me/zemn/api/analytics/inject_iservice:__main__.py"],
+    data = [":dev"],
+    env = {
+        "REMIX_BINARY": "$(rlocationpath :dev)",
+    },
+    main = "//project/me/zemn/api/analytics/inject_iservice:__main__.py",
     deps = [
-        "//:node_modules/@types/react",
-        "//:node_modules/@types/seedrandom",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//:node_modules/seedrandom",
-        "//ts/iter",
-        "//ts/math/sim",
-        "//ts/next.js",
-        "//ts/time",
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
     ],
 )
 
-ts_project(
-    name = "pulumi_ts",
-    srcs = ["index.ts"],
-    data = [":next"],
-    deps = [
-        "//:node_modules/@pulumi/aws",
-        "//:node_modules/@pulumi/pulumi",
-        "//ts/pulumi/lib",
-        "//ts/pulumi/lib/website",
-    ],
+remix_itest_service(
+    name = "itest_service",
+    exe = ":inject_iservice_bin",
+    http_health_check_address = "http://localhost:$${PORT}/",
+    deps = ["//project/me/zemn/api/cmd/localserver:localserver_itest_service"],
+)
+
+service_test(
+    name = "analytics_integration_test",
+    flaky = True,
+    services = [":itest_service"],
+    test = ":analytics_test",
+)
+
+go_test(
+    name = "analytics_test",
+    srcs = ["analytics_test.go"],
+    tags = ["manual"],
+    deps = ["//go/seleniumutil/analytics"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "eggsfordogs.com",
+    srcs = ["index.ts"],
+    data = [":remix"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/lib/website",
+    ],
+)
+
+service_test(
+    name = "park_integration_test",
+    services = [":itest_service"],
+    test = ":park_browser_test",
+)
+
+go_test(
+    name = "park_browser_test",
+    srcs = ["park_test.go"],
+    tags = ["manual"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+md_files(
+    name = "md",
+    srcs = [
+        "AGENTS.md",
+        "PERFORMANCE.md",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+service_test(
+    name = "park_benchmark",
+    args = [
+        "-test.run=^$$",
+        "-test.bench=BenchmarkParkFrames",
+        "-test.benchtime=1x",
+        "-test.v",
+    ],
+    services = [":itest_service"],
+    tags = ["manual"],
+    test = ":park_browser_test",
+)
+
+py_binary(
+    name = "static_server",
+    srcs = ["static_server.py"],
+    data = [":build"],
+    env = {"PARK_BUILD_DIR": "$(rlocationpath :build)"},
+    main = "static_server.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+itest_service(
+    name = "static_service",
+    args = ["$${PORT}"],
+    autoassign_port = True,
+    exe = ":static_server",
+    http_health_check_address = "http://localhost:$${PORT}/",
+)
+
+service_test(
+    name = "park_production_test",
+    services = [":static_service"],
+    test = ":park_browser_test",
+)
+
+py_library(
+    name = "eggsfordogs.com_py",
+    srcs = ["static_server.py"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+service_test(
+    name = "park_production_benchmark",
+    args = [
+        "-test.run=^$$",
+        "-test.bench=BenchmarkParkFrames",
+        "-test.benchtime=1x",
+        "-test.v",
+    ],
+    services = [":static_service"],
+    tags = ["manual"],
+    test = ":park_browser_test",
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
 )

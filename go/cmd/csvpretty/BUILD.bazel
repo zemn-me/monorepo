@@ -1,6 +1,7 @@
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
+load("//md:rules.bzl", "md_files")
 
 go_binary(
     name = "csvpretty",
@@ -34,4 +35,14 @@ go_library(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "go_cmd_csvpretty",
+    srcs = ["README.md"],
+    refs = [
+        "test.csv",
+        "test_out.csv",
+    ],
+    visibility = ["//:__subpackages__"],
 )

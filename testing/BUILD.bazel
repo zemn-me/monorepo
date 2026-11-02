@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_test")
 load("//ts:rules.bzl", "jest_test", "ts_project")
@@ -49,7 +50,7 @@ sh_test(
         "VALIDATION_BIN": "$(rlocationpath //:pnpm_lockfile_validation_bin)",
         "GOJQ_BINARY": "$(rlocationpath //sh/bin:gojq)",
     },
-    deps = ["@bazel_tools//tools/bash/runfiles"],
+    deps = ["@rules_shell//shell/runfiles"],
 )
 
 bazel_lint(

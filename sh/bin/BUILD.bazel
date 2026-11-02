@@ -1,19 +1,17 @@
+load("@npm//:@biomejs/biome/package_json.bzl", biome_bin = "bin")
 load("@npm//:@openai/codex/package_json.bzl", codex_bin = "bin")
-load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 
 package(default_visibility = ["//:__subpackages__"])
+
+exports_files(["bazel"])
 
 codex_bin.codex_binary(
     name = "codex_cli",
 )
 
-eslint_bin.eslint_binary(
-    name = "eslint",
-    data = [
-        "@@//:eslintrc",
-    ],
-)
+biome_bin.biome_binary(name = "biome")
 
 alias(
     name = "gazelle",
@@ -125,7 +123,23 @@ alias(
     actual = "//bin/linux/pulumi",
 )
 
+alias(
+    name = "cargo",
+    actual = "@cargo//:cargo__cargo",
+)
+
+alias(
+    name = "rg",
+    actual = "@bindeps//:ripgrep__rg",
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "sh_bin",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
 )

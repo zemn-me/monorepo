@@ -45,7 +45,7 @@ if [ $machine == "Windows" ]; then
 	# avoid missing linters on windows platform
 	args=("--aspects=$(echo //bzl/lint:linters.bzl%{ruff} | tr ' ' ',')")
 else
-	args=("--aspects=$(echo //bzl/lint:linters.bzl%{eslint,ruff} | tr ' ' ',')")
+	args=("--aspects=$(echo //bzl/lint:linters.bzl%{biome,ruff} | tr ' ' ',')")
 fi
 
 # NB: perhaps --remote_download_toplevel is needed as well with remote execution?

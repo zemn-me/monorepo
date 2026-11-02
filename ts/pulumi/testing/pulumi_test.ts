@@ -1,0 +1,1307 @@
+import '#root/ts/pulumi/setMocks.js';
+
+import { createRequire } from 'node:module';
+import { runInNewContext } from 'node:vm';
+import { describe, expect, test } from '@jest/globals';
+import * as pulumi from '@pulumi/pulumi';
+import { serializeFunction } from '@pulumi/pulumi/runtime/closure/serializeClosure.js';
+
+import {
+	githubActionsSecretAccessByWorkflow,
+	githubActionsSecretIds,
+} from '#root/ts/pulumi/github_actions_secrets.js';
+import * as project from '#root/ts/pulumi/index.js';
+import {
+	isAwsAlphaNumericHyphenUnderscoreName,
+	isAwsEcsTaskFamilyName,
+	isAwsElbv2Name,
+	isAwsLambdaFunctionName,
+	isAwsLambdaStatementId,
+	isAwsTargetGroupName,
+	sanitizeAwsAlphaNumericHyphenUnderscoreName,
+	sanitizeAwsEcsTaskFamilyName,
+	sanitizeAwsElbv2Name,
+	sanitizeAwsLambdaFunctionName,
+	sanitizeAwsLambdaStatementId,
+	sanitizeAwsTargetGroupName,
+} from '#root/ts/pulumi/lib/awsNames.js';
+import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
+import { mockCalls, mockResources } from '#root/ts/pulumi/setMocks.js';
+import { lambdaArchiveViolations } from './lambda_archives.js';
+
+const require = createRequire(import.meta.url);
+
+const workflowScopePrincipal = (workflowScope: string) =>
+	`principalSet://iam.googleapis.com/projects/845702659200/locations/global/workloadIdentityPools/github/attribute.workflow_scope/${workflowScope}`;
+
+const resourceInputText = (input: unknown) =>
+	typeof input === 'string' ? input : JSON.stringify(input);
+
+const awsAlphaNumericHyphenUnderscoreNameInputs = [
+	{
+		input: 'name',
+		type: 'aws:cloudfront/cachePolicy:CachePolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/originRequestPolicy:OriginRequestPolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/responseHeadersPolicy:ResponseHeadersPolicy',
+	},
+	{
+		input: 'name',
+		type: 'aws:cloudfront/function:Function',
+	},
+	{
+		input: 'name',
+		type: 'aws:ecs/cluster:Cluster',
+	},
+	{
+		input: 'name',
+		type: 'aws:ecs/service:Service',
+	},
+] as const;
+
+const awsElbv2NameInputs = [
+	{
+		type: 'aws:lb/loadBalancer:LoadBalancer',
+	},
+	{
+		type: 'aws:lb/targetGroup:TargetGroup',
+	},
+] as const;
+const awsEcsTaskDefinitionFamilyInputs = [
+	{
+		type: 'aws:ecs/taskDefinition:TaskDefinition',
+	},
+] as const;
+const awsLambdaFunctionNameInputs = [
+	{
+		type: 'aws:lambda/function:Function',
+	},
+] as const;
+const awsLambdaPermissionStatementIdInputs = [
+	{
+		type: 'aws:lambda/permission:Permission',
+	},
+] as const;
+const awsElbv2NameMaxLength = 32;
+const awsLambdaFunctionNameMaxLength = 64;
+const pulumiAutoNameRandomSuffixLength = 7;
+const awsElbv2NamePattern = /^[A-Za-z0-9-]+$/;
+
+const s3BucketNameViolations = (
+	resources: readonly pulumi.runtime.MockResourceArgs[]
+) =>
+	resources
+		.filter(resource =>
+			['aws:s3/bucket:Bucket', 'aws:s3/bucketV2:BucketV2'].includes(
+				resource.type
+			)
+		)
+		.flatMap(resource => {
+			// Mocks skip provider defaults. S3 AutoNameTransform lowercases and
+			// truncates the logical name to fit a hyphen and seven random characters.
+			// https://github.com/pulumi/pulumi-aws/blob/v7.48.0/provider/resource_overrides.go
+			const bucket =
+				resource.inputs['bucket'] ??
+				`${resource.name.toLowerCase().slice(0, 63 - 1 - pulumiAutoNameRandomSuffixLength)}-1234567`;
+			// General-purpose buckets in the shared global namespace:
+			// https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+			if (
+				typeof bucket === 'string' &&
+				/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/.test(bucket) &&
+				!bucket.includes('..') &&
+				!/^\d+\.\d+\.\d+\.\d+$/.test(bucket) &&
+				!/^(xn--|sthree-|amzn-s3-demo-)/.test(bucket) &&
+				!/(-s3alias|--ol-s3|\.mrap|--x-s3|--table-s3|-an)$/.test(bucket)
+			) {
+				return [];
+			}
+			return [
+				`${resource.type} ${JSON.stringify(resource.name)} has invalid S3 bucket name ${JSON.stringify(bucket)} (${resource.inputs['bucket'] === undefined ? 'Pulumi auto-name' : 'explicit bucket input'}). Use deriveBucketName for the logical name or set a valid bucket input.`,
+			];
+		});
+
+const expectValidS3BucketNames = () => {
+	expect(
+		mockResources.some(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' ||
+				resource.type === 'aws:s3/bucket:Bucket'
+		)
+	).toBe(true);
+	const violations = s3BucketNameViolations(mockResources);
+	if (violations.length > 0) {
+		throw new Error(
+			`S3 bucket name validation failed:\n${violations.join('\n')}`
+		);
+	}
+};
+
+const expectValidAwsNames = (
+	resources: readonly pulumi.runtime.MockResourceArgs[] = mockResources
+) => {
+	const awsNameViolations = awsAlphaNumericHyphenUnderscoreNameInputs.flatMap(
+		({ input, type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs[input];
+					if (typeof value !== 'string') {
+						if (
+							isAwsAlphaNumericHyphenUnderscoreName(resource.name)
+						) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores. Set ${input}: sanitizeAwsAlphaNumericHyphenUnderscoreName(${JSON.stringify(resource.name)}).`,
+						];
+					}
+					if (isAwsAlphaNumericHyphenUnderscoreName(value)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit ${JSON.stringify(input)} input. That name is invalid for AWS and will fail during deployment because AWS only allows letters, numbers, hyphens, and underscores.`,
+					];
+				})
+	);
+	if (awsNameViolations.length > 0) {
+		throw new Error(
+			`AWS physical name validation failed:\n${awsNameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const lambdaFunctionNameViolations = awsLambdaFunctionNameInputs.flatMap(
+		({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['name'];
+					if (typeof value === 'string') {
+						if (isAwsLambdaFunctionName(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					}
+
+					const implicitNamePrefix = `${resource.name}-`;
+					const implicitNameLength =
+						implicitNamePrefix.length +
+						pulumiAutoNameRandomSuffixLength;
+					if (
+						implicitNameLength <= awsLambdaFunctionNameMaxLength &&
+						isAwsAlphaNumericHyphenUnderscoreName(
+							implicitNamePrefix
+						)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses Lambda function name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because Lambda function names must be 64 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set name to an explicit valid Lambda function name.`,
+					];
+				})
+	);
+	if (lambdaFunctionNameViolations.length > 0) {
+		throw new Error(
+			`AWS Lambda function name validation failed:\n${lambdaFunctionNameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const lambdaPermissionStatementIdViolations =
+		awsLambdaPermissionStatementIdInputs.flatMap(({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['statementId'];
+					if (typeof value === 'string') {
+						if (isAwsLambdaStatementId(value)) {
+							return [];
+						}
+
+						return [
+							`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(value)} from its explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+						];
+					}
+
+					if (isAwsLambdaStatementId(resource.name)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses Lambda permission statement ID ${JSON.stringify(resource.name)} from its logical resource name because it has no explicit "statementId" input. That statement ID is invalid for AWS and will fail during deployment because Lambda permission statement IDs must be 100 characters or fewer and contain only letters, numbers, hyphens, and underscores. Set statementId to an explicit valid Lambda permission statement ID.`,
+					];
+				})
+		);
+	if (lambdaPermissionStatementIdViolations.length > 0) {
+		throw new Error(
+			`AWS Lambda permission statement ID validation failed:\n${lambdaPermissionStatementIdViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const elbv2NameViolations = awsElbv2NameInputs.flatMap(({ type }) =>
+		resources
+			.filter(resource => resource.type === type)
+			.flatMap(resource => {
+				const value = resource.inputs['name'];
+				if (typeof value === 'string') {
+					if (isAwsElbv2Name(value)) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name ${JSON.stringify(value)} from its explicit "name" input. That name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens.`,
+					];
+				}
+
+				const implicitNamePrefix = `${resource.name}-`;
+				const implicitNameLength =
+					implicitNamePrefix.length +
+					pulumiAutoNameRandomSuffixLength;
+				if (
+					implicitNameLength <= awsElbv2NameMaxLength &&
+					awsElbv2NamePattern.test(implicitNamePrefix)
+				) {
+					return [];
+				}
+
+				return [
+					`${type} resource ${JSON.stringify(resource.name)} chooses AWS physical name prefix ${JSON.stringify(implicitNamePrefix)} plus ${pulumiAutoNameRandomSuffixLength} random Pulumi auto-name characters because it has no explicit "name" input. That generated name is invalid for AWS and will fail during deployment because ELBv2 names must be 32 characters or fewer and contain only letters, numbers, and hyphens. Set name to an explicit valid ELBv2 name.`,
+				];
+			})
+	);
+	if (elbv2NameViolations.length > 0) {
+		throw new Error(
+			`AWS ELBv2 name validation failed:\n${elbv2NameViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+
+	const ecsTaskDefinitionFamilyViolations =
+		awsEcsTaskDefinitionFamilyInputs.flatMap(({ type }) =>
+			resources
+				.filter(resource => resource.type === type)
+				.flatMap(resource => {
+					const value = resource.inputs['family'];
+					if (
+						typeof value === 'string' &&
+						isAwsEcsTaskFamilyName(value)
+					) {
+						return [];
+					}
+
+					return [
+						`${type} resource ${JSON.stringify(resource.name)} chooses ECS task definition family ${JSON.stringify(value)}. That name is invalid for AWS and will fail during deployment because ECS task families must be 255 characters or fewer and contain only letters, numbers, hyphens, and underscores.`,
+					];
+				})
+		);
+	if (ecsTaskDefinitionFamilyViolations.length > 0) {
+		throw new Error(
+			`AWS ECS task definition family validation failed:\n${ecsTaskDefinitionFamilyViolations.map(violation => `- ${violation}`).join('\n')}`
+		);
+	}
+};
+
+interface AwsAssumeRoleStatement {
+	Condition: {
+		StringEquals: Record<string, string>;
+		StringLike: Record<string, string>;
+	};
+	Sid: string;
+}
+
+interface EcrLifecyclePolicy {
+	rules: {
+		action: {
+			type: string;
+		};
+		description: string;
+		selection: {
+			countNumber: number;
+			countType: string;
+			tagStatus: string;
+		};
+	}[];
+}
+
+describe('pulumi', () => {
+	test.each(awsAlphaNumericHyphenUnderscoreNameInputs)(
+		'rejects invalid explicit and auto-named $type resources',
+		({ type, input }) => {
+			const resource = (
+				name: string,
+				inputs = {}
+			): pulumi.runtime.MockResourceArgs => ({
+				type,
+				name,
+				inputs,
+				custom: true,
+			});
+			for (const name of [
+				'monorepo_zemn.me_cache',
+				'spaces in name',
+				'slash/name',
+				'bad!name',
+			]) {
+				expect(() => expectValidAwsNames([resource(name)])).toThrow(
+					'AWS physical name'
+				);
+				expect(() =>
+					expectValidAwsNames([resource('valid', { [input]: name })])
+				).toThrow('AWS physical name');
+			}
+			expect(() =>
+				expectValidAwsNames([
+					resource('monorepo_zemn_me_cache'),
+					resource('logical.names.can.contain.dots', {
+						[input]: 'valid-explicit_name',
+					}),
+				])
+			).not.toThrow();
+		}
+	);
+
+	test('loads its package-local TypeScript 5 compiler API', () => {
+		const typescript = require('@pulumi/pulumi/typescript-shim.js') as {
+			version: string;
+		};
+		expect(typescript.version).toBe('5.9.3');
+	});
+
+	test('serializes closures with the installed TypeScript API', async () => {
+		await expect(serializeFunction(() => 42)).resolves.toBeDefined();
+	});
+
+	test('derives S3-compatible bucket names', () => {
+		expect(deriveBucketName('monorepo_zemn.me_api-journal-audio')).toBe(
+			'monorepo-zemn.me-api-journal-audio-bucket'
+		);
+	});
+
+	test.each(['aws:s3/bucket:Bucket', 'aws:s3/bucketV2:BucketV2'])(
+		'validates physical names of %s resources',
+		type => {
+			const resource = (name: string, inputs = {}) => ({
+				type,
+				name,
+				inputs,
+			});
+			const invalidLogicalName = 'monorepo_example_backend_pdfs';
+			expect(
+				s3BucketNameViolations([resource(invalidLogicalName)])
+			).toEqual([expect.stringContaining(invalidLogicalName)]);
+			for (const bucket of [
+				'ab',
+				'a'.repeat(64),
+				'UPPERCASE',
+				'has_underscore',
+				'-leading',
+				'trailing-',
+				'two..dots',
+				'192.168.5.4',
+				'xn--bucket',
+				'sthree-bucket',
+				'amzn-s3-demo-bucket',
+				'bucket-s3alias',
+				'bucket--ol-s3',
+				'bucket.mrap',
+				'bucket--x-s3',
+				'bucket--table-s3',
+				'bucket-an',
+			]) {
+				expect(
+					s3BucketNameViolations([resource('valid', { bucket })])
+				).toEqual([expect.stringContaining(JSON.stringify(bucket))]);
+			}
+			expect(
+				s3BucketNameViolations([
+					resource(deriveBucketName(invalidLogicalName)),
+					resource('Uppercase'),
+					resource('a'.repeat(100)),
+					resource(invalidLogicalName, {
+						bucket: 'valid.example-bucket',
+					}),
+					resource('valid', { bucket: 'a'.repeat(63) }),
+					resource('valid', { bucket: 'abc' }),
+				])
+			).toEqual([]);
+		}
+	);
+
+	test('sanitizes AWS alphanumeric hyphen underscore names', () => {
+		expect(
+			sanitizeAwsAlphaNumericHyphenUnderscoreName(
+				'monorepo_zemn.me_minecraft-cluster'
+			)
+		).toBe('monorepo_zemn_me_minecraft-cluster');
+
+		expect(
+			isAwsAlphaNumericHyphenUnderscoreName(
+				'monorepo_zemn_me_minecraft-cluster'
+			)
+		).toBe(true);
+		expect(
+			isAwsAlphaNumericHyphenUnderscoreName(
+				'monorepo_zemn.me_minecraft-cluster'
+			)
+		).toBe(false);
+
+		expect(sanitizeAwsTargetGroupName('monorepo_zemn.me_minecraft-tg')).toBe(
+			'monorepo-zemn-me-minecraft-tg'
+		);
+		expect(isAwsTargetGroupName('monorepo-zemn-me-minecraft-tg')).toBe(true);
+		expect(sanitizeAwsElbv2Name('monorepo_zemn.me_minecraft-nlb')).toBe(
+			'monorepo-zemn-me-minecraft-nlb'
+		);
+		expect(isAwsElbv2Name('monorepo-zemn-me-minecraft-nlb')).toBe(true);
+
+		expect(sanitizeAwsEcsTaskFamilyName('monorepo_zemn.me_minecraft')).toBe(
+			'monorepo_zemn_me_minecraft'
+		);
+		expect(isAwsEcsTaskFamilyName('monorepo_zemn_me_minecraft')).toBe(true);
+		expect(isAwsEcsTaskFamilyName('monorepo_zemn.me_minecraft')).toBe(false);
+
+		expect(sanitizeAwsLambdaFunctionName('monorepo_zemn.me_minecraft-wake')).toBe(
+			'monorepo_zemn_me_minecraft-wake'
+		);
+		expect(isAwsLambdaFunctionName('monorepo_zemn_me_minecraft-wake')).toBe(
+			true
+		);
+		expect(isAwsLambdaFunctionName('monorepo_zemn.me_minecraft-wake')).toBe(
+			false
+		);
+		expect(sanitizeAwsLambdaFunctionName('x'.repeat(65))).toHaveLength(64);
+
+		expect(
+			sanitizeAwsLambdaStatementId(
+				'monorepo_zemn.me_minecraft_eventbridge_permission'
+			)
+		).toBe('monorepo_zemn_me_minecraft_eventbridge_permission');
+		expect(
+			isAwsLambdaStatementId(
+				'monorepo_zemn_me_minecraft_eventbridge_permission'
+			)
+		).toBe(true);
+		expect(
+			isAwsLambdaStatementId(
+				'monorepo_zemn.me_minecraft_eventbridge_permission'
+			)
+		).toBe(false);
+		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
+	});
+
+	test('staging uses staging-specific resources', async () => {
+		mockResources.splice(0);
+		mockCalls.splice(0);
+		new project.Component('monorepo', { staging: true });
+		await pulumi.runtime.disconnect();
+		expectValidS3BucketNames();
+		expectValidAwsNames();
+		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
+
+		expect(
+			mockResources.some(
+				resource =>
+					resource.type ===
+					'aws:iam/outboundWebIdentityFederation:OutboundWebIdentityFederation'
+			)
+		).toBe(false);
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53domains/domain:Domain'
+			)
+		).toBe(false);
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('staging.waxingincandescent.com');
+		expect(mockCalls).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					token: 'aws:route53/getZone:getZone',
+					inputs: { name: 'waxingincandescent.com.', privateZone: false },
+				}),
+			])
+		);
+
+		const stagingJournalWorker = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalworkerlambda'
+		);
+		expect(
+			resourceInputText(stagingJournalWorker?.inputs['environment'])
+		).not.toContain('OPENAI_IDENTITY_PROVIDER_ID');
+		const stagingJournalWorkerRole = mockResources.find(
+			resource =>
+				resource.type === 'aws:iam/role:Role' &&
+				resource.name.endsWith('-journal-worker-role')
+		);
+		expect(stagingJournalWorkerRole?.inputs['name']).toBe(
+			'monorepo_zemn.me_api-journal-worker-staging'
+		);
+
+		expect(
+			mockResources.some(
+				resource =>
+					resource.name.includes('_minecraft_') &&
+					resource.type.startsWith('aws:lb/')
+			)
+		).toBe(false);
+
+		const minecraftPrivateZone = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft_private_zone')
+		);
+		expect(minecraftPrivateZone?.inputs['name']).toBe(
+			'internal.minecraft.staging.zemn.me'
+		);
+
+		const minecraftRconRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_rcon_dns')
+		);
+		expect(minecraftRconRecord?.inputs).toMatchObject({
+			name: 'rcon.internal.minecraft.staging.zemn.me',
+			records: ['10.42.0.254'],
+			ttl: 30,
+			type: 'A',
+		});
+
+		const minecraftCluster = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/cluster:Cluster' &&
+				resource.name.endsWith('_minecraft_cluster')
+		);
+		expect(minecraftCluster?.inputs['name']).toBe(
+			'zemn_me_minecraft_staging_cluster'
+		);
+
+		const minecraftTaskDefinition = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/taskDefinition:TaskDefinition' &&
+				resource.name.endsWith('_minecraft_task')
+		);
+		expect(minecraftTaskDefinition?.inputs['family']).toBe(
+			'zemn_me_minecraft_staging_task'
+		);
+
+		const minecraftService = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/service:Service' &&
+				resource.name.endsWith('_minecraft_service')
+		);
+		expect(minecraftService?.inputs['name']).toBe(
+			'zemn_me_minecraft_staging_service'
+		);
+
+		const minecraftWakeFunction = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name.endsWith('_minecraft_wake')
+		);
+		expect(minecraftWakeFunction?.inputs['name']).toBe(
+			'zemn_me_minecraft_staging_wake'
+		);
+
+		const minecraftEventbridgePermission = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/permission:Permission' &&
+				resource.name.endsWith('_minecraft_eventbridge_permission')
+		);
+		expect(minecraftEventbridgePermission?.inputs['statementId']).toBe(
+			'monorepo_zemn_me_minecraft_eventbridge_permission'
+		);
+
+		const minecraftRecords = mockResources.filter(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.includes('_minecraft_')
+		);
+		expect(minecraftRecords.length).toBeGreaterThan(0);
+		for (const record of minecraftRecords) {
+			expect(resourceInputText(record.inputs['name'])).toContain(
+				'staging.zemn.me'
+			);
+			expect(resourceInputText(record.inputs['name'])).not.toContain(
+				'minecraft.zemn.me'
+			);
+		}
+
+		expect(
+			mockResources.some(
+				resource => resource.type === 'aws:route53/queryLog:QueryLog'
+			)
+		).toBe(false);
+		expect(
+			mockResources.some(
+				resource =>
+					resource.type === 'aws:route53/zone:Zone' &&
+					resource.name.endsWith('_minecraft_zone')
+			)
+		).toBe(false);
+	});
+
+	test('staging resources are not protected', async () => {
+		mockResources.splice(0);
+		const protectedResources: string[] = [];
+		new project.Component(
+			'monorepo',
+			{ staging: true },
+			{
+				transformations: [
+					args => {
+						if (args.opts.protect === true) {
+							protectedResources.push(`${args.type} ${args.name}`);
+						}
+						return undefined;
+					},
+				],
+			}
+		);
+		await pulumi.runtime.disconnect();
+
+		expect(protectedResources).toEqual([]);
+	});
+
+	test('only the production curator receives the dedicated OpenAI key', async () => {
+		const previousKey = process.env['OPENAI_CURATOR_API_KEY'];
+		process.env['OPENAI_CURATOR_API_KEY'] = 'test-curator-credential';
+		try {
+			for (const staging of [false, true]) {
+				mockResources.splice(0);
+				new project.Component(
+					`curator-key-${staging ? 'staging' : 'production'}`,
+					{ staging }
+				);
+				await pulumi.runtime.disconnect();
+				const recipients = mockResources.filter(
+					resource =>
+						resource.type === 'aws:lambda/function:Function' &&
+						resourceInputText(resource.inputs).includes(
+							'test-curator-credential'
+						)
+				);
+				expect(recipients.map(resource => resource.name)).toEqual(
+					staging ? [] : ['journalcuratorlambda']
+				);
+			}
+		} finally {
+			if (previousKey === undefined)
+				delete process.env['OPENAI_CURATOR_API_KEY'];
+			else process.env['OPENAI_CURATOR_API_KEY'] = previousKey;
+		}
+		expect(githubActionsSecretAccessByWorkflow.submit).toContain(
+			githubActionsSecretIds.openAICuratorApiKey
+		);
+		for (const scope of ['presubmit', 'staging', 'renovate'] as const) {
+			expect(githubActionsSecretAccessByWorkflow[scope]).not.toContain(
+				githubActionsSecretIds.openAICuratorApiKey
+			);
+		}
+	});
+
+	test('smoke', async () => {
+		mockResources.splice(0);
+		new project.Component('monorepo', {
+			staging: false,
+			openAIIdentityProviderId: 'openai-provider',
+			openAIServiceAccountId: 'openai-production-service-account',
+		});
+		await pulumi.runtime.disconnect();
+		expectValidS3BucketNames();
+		expectValidAwsNames();
+		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
+
+		expect(
+			mockResources.find(
+				resource => resource.name === 'monorepo_waxingincandescent_domain'
+			)
+		).toMatchObject({
+			type: 'aws:route53domains/domain:Domain',
+			inputs: {
+				domainName: 'waxingincandescent.com',
+				durationInYears: 1,
+				autoRenew: true,
+				adminPrivacy: true,
+				registrantPrivacy: true,
+				techPrivacy: true,
+				transferLock: true,
+			},
+		});
+		expect(
+			mockResources.find(
+				resource =>
+					resource.name ===
+					'monorepo_waxingincandescent_website_distribution_record'
+			)?.inputs.name
+		).toBe('waxingincandescent.com');
+
+		const npmPublishCommands = mockResources
+			.filter(resource => resource.type === 'command:local:Command')
+			.filter(resource => resource.name.endsWith('_npm_publish'));
+		expect(npmPublishCommands.map(resource => resource.name).sort()).toEqual([
+			'monorepo_do_sync_npm_publish',
+			'monorepo_future_npm_publish',
+			'monorepo_knowitwhenyouseeit_npm_publish',
+			'monorepo_result_npm_publish',
+			'monorepo_tabwriter_npm_publish',
+		]);
+		for (const command of npmPublishCommands) {
+			expect(command.inputs['environment']).toEqual({
+				NPM_CONFIG_PROVENANCE: 'true',
+			});
+		}
+
+
+		expect(
+			mockResources.some(
+				resource =>
+					resource.name.includes('_minecraft_') &&
+					resource.type.startsWith('aws:lb/')
+			)
+		).toBe(false);
+
+		const minecraftPrivateZone = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft_private_zone')
+		);
+		expect(minecraftPrivateZone?.inputs['name']).toBe(
+			'internal.minecraft.zemn.me'
+		);
+
+		const minecraftCluster = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/cluster:Cluster' &&
+				resource.name.endsWith('_minecraft_cluster')
+		);
+		expect(minecraftCluster?.inputs['name']).toBe(
+			'zemn_me_minecraft_production_cluster'
+		);
+
+		const minecraftTaskDefinition = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/taskDefinition:TaskDefinition' &&
+				resource.name.endsWith('_minecraft_task')
+		);
+		expect(minecraftTaskDefinition?.inputs['family']).toBe(
+			'zemn_me_minecraft_production_task'
+		);
+
+		const minecraftService = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecs/service:Service' &&
+				resource.name.endsWith('_minecraft_service')
+		);
+		expect(minecraftService?.inputs['name']).toBe(
+			'zemn_me_minecraft_production_service'
+		);
+
+		const minecraftWakeFunction = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name.endsWith('_minecraft_wake')
+		);
+		expect(minecraftWakeFunction?.inputs['name']).toBe(
+			'zemn_me_minecraft_production_wake'
+		);
+
+		const minecraftEventbridgePermission = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/permission:Permission' &&
+				resource.name.endsWith('_minecraft_eventbridge_permission')
+		);
+		expect(minecraftEventbridgePermission?.inputs['statementId']).toBe(
+			'monorepo_zemn_me_minecraft_eventbridge_permission'
+		);
+
+		const minecraftLogsPermission = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/permission:Permission' &&
+				resource.name.endsWith('_minecraft_logs_permission')
+		);
+		expect(minecraftLogsPermission?.inputs['statementId']).toBe(
+			'monorepo_zemn_me_minecraft_logs_permission'
+		);
+
+		const minecraftZone = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/zone:Zone' &&
+				resource.name.endsWith('_minecraft_zone')
+		);
+		expect(minecraftZone?.inputs['name']).toBe('minecraft.zemn.me');
+
+		const minecraftZoneDelegation = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_zone_delegation')
+		);
+		expect(minecraftZoneDelegation?.inputs).toMatchObject({
+			name: 'minecraft.zemn.me',
+			type: 'NS',
+		});
+
+		const minecraftPublicRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_public_dns')
+		);
+		expect(minecraftPublicRecord?.inputs).toMatchObject({
+			name: 'minecraft.zemn.me',
+			records: ['192.0.2.1'],
+			ttl: 30,
+			type: 'A',
+		});
+
+		const minecraftServerRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_server_dns')
+		);
+		expect(minecraftServerRecord?.inputs).toMatchObject({
+			name: 'server.minecraft.zemn.me',
+			records: ['192.0.2.1'],
+			ttl: 30,
+			type: 'A',
+		});
+
+		const minecraftRconRecord = mockResources.find(
+			resource =>
+				resource.type === 'aws:route53/record:Record' &&
+				resource.name.endsWith('_minecraft_rcon_dns')
+		);
+		expect(minecraftRconRecord?.inputs).toMatchObject({
+			name: 'rcon.internal.minecraft.zemn.me',
+			records: ['10.42.0.254'],
+			ttl: 30,
+			type: 'A',
+		});
+
+		const githubProvider = mockResources.find(
+			resource =>
+				resource.type ===
+					'gcp:iam/workloadIdentityPoolProvider:WorkloadIdentityPoolProvider' &&
+				resource.inputs['workloadIdentityPoolId'] === 'github'
+		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.repository == "zemn-me/monorepo"'
+		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.repository_id == "275403409"'
+		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.repository_owner_id == "145876100"'
+		);
+		expect(githubProvider?.inputs['attributeCondition']).toContain(
+			'assertion.workflow_ref'
+		);
+		if (githubProvider === undefined) {
+			throw new Error('missing GitHub OIDC provider');
+		}
+		const providerCondition = githubProvider.inputs['attributeCondition'];
+		const scopeExpression = (
+			githubProvider.inputs['attributeMapping'] as Record<
+				'attribute.workflow_scope',
+				string
+			>
+		)['attribute.workflow_scope'];
+		expect(typeof providerCondition).toBe('string');
+		const queueRef = 'refs/heads/gh-readonly-queue/main/pr-14577-example';
+		const identity = (workflow: string, ref: string, event: string) => ({
+			event_name: event,
+			ref,
+			repository: 'zemn-me/monorepo',
+			repository_id: '275403409',
+			repository_owner: 'zemn-me',
+			repository_owner_id: '145876100',
+			sub: 'repo:zemn-me/monorepo:pull_request',
+			workflow_ref: `zemn-me/monorepo/.github/workflows/${workflow}.yml@${ref}`,
+		});
+		// These generated CEL expressions use the common JS/CEL subset:
+		// string equality, startsWith, boolean operators and ternaries.
+		const evaluate = (expression: string, assertion: object) =>
+			runInNewContext(expression, { assertion });
+		for (const workflow of ['presubmit', 'staging', 'submit', 'renovate']) {
+			for (const event of ['pull_request', 'pull_request_target']) {
+				const assertion = identity(
+					workflow,
+					'refs/pull/14577/merge',
+					event
+				);
+				expect(evaluate(providerCondition as string, assertion)).toBe(
+					false
+				);
+				expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+			}
+		}
+		// Queue-shaped workflow refs cannot turn a PR event into a merge group.
+		for (const event of ['pull_request', 'pull_request_target', 'push']) {
+			const assertion = identity('presubmit', queueRef, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(
+				false
+			);
+			expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+		}
+		for (const [workflow, ref, event] of [
+			['presubmit', queueRef, 'merge_group'],
+			['staging', queueRef, 'merge_group'],
+			['submit', 'refs/heads/main', 'push'],
+			['renovate', 'refs/heads/main', 'workflow_dispatch'],
+		] as const) {
+			const assertion = identity(workflow, ref, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(true);
+			expect(evaluate(scopeExpression, assertion)).toBe(workflow);
+			for (const override of [
+				{ repository: 'attacker/monorepo' },
+				{ repository_id: '1' },
+				{ repository_owner_id: '1' },
+				{ ref: 'refs/pull/14577/merge' },
+			]) {
+				expect(
+					evaluate(providerCondition as string, {
+						...assertion,
+						...override,
+					})
+				).toBe(false);
+			}
+		}
+		expect(githubProvider?.inputs['attributeMapping']).toMatchObject({
+			'attribute.repository': 'assertion.repository',
+			'attribute.repository_id': 'assertion.repository_id',
+			'attribute.repository_owner_id': 'assertion.repository_owner_id',
+			'attribute.workflow_ref': 'assertion.workflow_ref',
+			'attribute.workflow_scope': expect.stringContaining('submit'),
+			'google.subject': 'assertion.sub',
+		});
+
+		const prCachePoolPath =
+			'projects/845702659200/locations/global/workloadIdentityPools/github-presubmit-cache';
+		const prCacheMember = `principalSet://iam.googleapis.com/${prCachePoolPath}/attribute.repository_id/275403409`;
+		const prCacheProvider = mockResources.find(
+			resource =>
+				resource.type ===
+					'gcp:iam/workloadIdentityPoolProvider:WorkloadIdentityPoolProvider' &&
+				resource.inputs['workloadIdentityPoolId'] ===
+					'github-presubmit-cache'
+		);
+		if (!prCacheProvider)
+			throw new Error('missing isolated PR cache provider');
+		const prIdentity = identity(
+			'presubmit',
+			'refs/pull/123/merge',
+			'pull_request'
+		);
+		const prCondition = prCacheProvider.inputs[
+			'attributeCondition'
+		] as string;
+		expect(evaluate(prCondition, prIdentity)).toBe(true);
+		for (const override of [
+			{ repository: 'attacker/monorepo' },
+			{ repository_id: '1' },
+			{ repository_owner: 'attacker' },
+			{ repository_owner_id: '1' },
+			{ event_name: 'pull_request_target' },
+			{ event_name: 'push' },
+			{ event_name: 'merge_group' },
+			{ ref: 'refs/heads/main' },
+			{ ref: 'refs/pull/123/head' },
+			{
+				workflow_ref:
+					'zemn-me/monorepo/.github/workflows/staging.yml@refs/pull/123/merge',
+			},
+			{
+				workflow_ref:
+					'zemn-me/monorepo/.github/workflows/presubmit.yml@refs/heads/main',
+			},
+			{ sub: 'repo:zemn-me/monorepo:environment:production' },
+		]) {
+			expect(evaluate(prCondition, { ...prIdentity, ...override })).toBe(
+				false
+			);
+		}
+		// All grants into the separate pool must resolve to this one secret.
+		// This also rejects project-wide roles and service-account impersonation.
+		const prCacheGrants = mockResources.filter(resource =>
+			resourceInputText(resource.inputs).includes(`${prCachePoolPath}/`)
+		);
+		expect(prCacheGrants).toHaveLength(1);
+		expect(prCacheGrants[0]?.type).toBe(
+			'gcp:secretmanager/secretIamMember:SecretIamMember'
+		);
+		expect(prCacheGrants[0]?.inputs).toEqual({
+			member: prCacheMember,
+			project: 'extreme-cycling-441523-a9',
+			role: 'roles/secretmanager.secretAccessor',
+			secretId:
+				'monorepo_github_actions_secrets_github-actions-readonly-buildbuddy-api-key-id',
+		});
+
+		const workloadIdentityUsers = mockResources.filter(
+			resource =>
+				resource.type === 'gcp:serviceaccount/iAMMember:IAMMember'
+		);
+		expect(
+			workloadIdentityUsers
+				.map(resource => resource.inputs['member'])
+				.sort()
+		).toEqual([
+			workflowScopePrincipal('staging'),
+			workflowScopePrincipal('submit'),
+		]);
+		for (const workloadIdentityUser of workloadIdentityUsers) {
+			expect(workloadIdentityUser.inputs).toMatchObject({
+				role: 'roles/iam.workloadIdentityUser',
+				serviceAccountId:
+					'projects/extreme-cycling-441523-a9/serviceAccounts/monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com',
+			});
+		}
+
+		const expectedSecretIds = Object.values(githubActionsSecretIds).sort();
+		const secretIds = mockResources
+			.filter(
+				resource =>
+					resource.type === 'gcp:secretmanager/secret:Secret' &&
+					resource.name.startsWith('monorepo_github_actions_secrets_')
+			)
+			.map(resource => resource.inputs['secretId'])
+			.sort();
+		expect(secretIds).toEqual(expectedSecretIds);
+
+		const secretIamMembers = mockResources.filter(
+			resource =>
+				resource.type ===
+					'gcp:secretmanager/secretIamMember:SecretIamMember' &&
+				resource.name.startsWith('monorepo_github_actions_secrets_')
+		);
+		const expectedSecretIamMemberNames = Object.entries(
+			githubActionsSecretAccessByWorkflow
+		)
+			.flatMap(([workflowScope, secretIds]) =>
+				secretIds.map(
+					secretId =>
+						`monorepo_github_actions_secrets_${workflowScope}_${secretId}_accessor`
+				)
+			)
+			.sort();
+		expect(secretIamMembers.map(resource => resource.name).sort()).toEqual(
+			[
+				...expectedSecretIamMemberNames,
+				'monorepo_github_actions_secrets_pr_cache_accessor',
+			].sort()
+		);
+		for (const secretIamMember of secretIamMembers) {
+			if (secretIamMember.name.endsWith('_pr_cache_accessor')) {
+				expect(secretIamMember.inputs['member']).toBe(prCacheMember);
+			} else {
+				expect(secretIamMember.inputs['member']).toContain(
+					'/attribute.workflow_scope/'
+				);
+			}
+			expect(secretIamMember.inputs['member']).not.toContain(
+				'monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com'
+			);
+			expect(secretIamMember.inputs).toMatchObject({
+				role: 'roles/secretmanager.secretAccessor',
+			});
+		}
+
+		const journalWorkerRole = mockResources.find(
+			resource =>
+				resource.type === 'aws:iam/role:Role' &&
+				resource.name.endsWith('-journal-worker-role')
+		);
+		expect(journalWorkerRole?.inputs['name']).toBe(
+			'monorepo_zemn.me_api-journal-worker-production'
+		);
+		const journalWorkerPolicies = resourceInputText(
+			journalWorkerRole?.inputs['inlinePolicies']
+		);
+		expect(journalWorkerPolicies).toContain('sts:GetWebIdentityToken');
+		expect(journalWorkerPolicies).toContain('https://api.openai.com/v1');
+		expect(journalWorkerPolicies).toContain('sts:DurationSeconds');
+
+		const journalWorker = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalworkerlambda'
+		);
+		expect(
+			resourceInputText(journalWorker?.inputs['environment'])
+		).not.toContain('OPENAI_API_KEY');
+		expect(journalWorker?.inputs['environment']).toMatchObject({
+			variables: {
+				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
+				OPENAI_SERVICE_ACCOUNT_ID: 'openai-production-service-account',
+			},
+		});
+		expect(journalWorker?.inputs['reservedConcurrentExecutions']).toBe(1);
+		const curator = mockResources.find(
+			resource =>
+				resource.type === 'aws:lambda/function:Function' &&
+				resource.name === 'journalcuratorlambda'
+		);
+		expect(curator?.inputs['timeout']).toBe(120);
+		expect(curator?.inputs['reservedConcurrentExecutions']).toBe(1);
+		expect(curator?.inputs['environment']).toMatchObject({
+			variables: {
+				JOURNAL_CURATION_ENABLED: 'true',
+				JOURNAL_CURATOR_MODEL: 'gpt-5.6',
+				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
+			},
+		});
+		const journalBucket = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketV2:BucketV2' &&
+				resource.name === 'monorepo-zemn.me-api-journal-audio-bucket'
+		);
+		expect(journalBucket).toBeDefined();
+		expect(journalBucket?.inputs['forceDestroy']).not.toBe(true);
+		const journalVersioning = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketVersioningV2:BucketVersioningV2' &&
+				resource.name.endsWith('-journal-versioning')
+		);
+		expect(journalVersioning?.inputs['versioningConfiguration']).toEqual({
+			status: 'Enabled',
+		});
+		expect(
+			mockResources.filter(
+				resource =>
+					resource.type.includes('bucketLifecycle') &&
+					resource.inputs['bucket'] === `${journalBucket?.name}-id`
+			)
+		).toHaveLength(0);
+		const uploadNotification = mockResources.find(
+			resource =>
+				resource.type === 'aws:s3/bucketNotification:BucketNotification' &&
+				resource.name.endsWith('-journal-upload-notification')
+		);
+		expect(uploadNotification?.inputs['lambdaFunctions']).toEqual([
+			expect.objectContaining({
+				filterPrefix: 'entries/',
+				filterSuffix: 'source',
+			}),
+		]);
+
+		const curatorSchedule = mockResources.find(
+			resource =>
+				resource.type === 'aws:cloudwatch/eventRule:EventRule' &&
+				resource.name.endsWith('-journal-summary-schedule')
+		);
+		expect(curatorSchedule?.inputs['scheduleExpression']).toBe(
+			'rate(5 minutes)'
+		);
+
+		expect(
+			mockResources.filter(
+				resource =>
+					resource.type ===
+					'aws:iam/outboundWebIdentityFederation:OutboundWebIdentityFederation'
+			)
+		).toHaveLength(1);
+
+		const awsIamRoles = mockResources.filter(
+			resource => resource.type === 'aws:iam/role:Role'
+		);
+		const githubActionsRole = awsIamRoles.find(
+			resource => resource.name === 'monorepo_github_actions_role'
+		);
+		const githubActionsRolePolicy = resourceInputText(
+			githubActionsRole?.inputs['assumeRolePolicy']
+		);
+		const awsTrustPolicy = JSON.parse(githubActionsRolePolicy) as {
+			Statement: AwsAssumeRoleStatement[];
+		};
+		const awsTrustStatements = Object.fromEntries(
+			awsTrustPolicy.Statement.map(statement => [statement.Sid, statement])
+		);
+		expect(Object.keys(awsTrustStatements).sort()).toEqual([
+			'StagingMergeQueue',
+			'SubmitMain',
+		]);
+		const awsTrustStatement = (sid: string) => {
+			const statement = awsTrustStatements[sid];
+			expect(statement).toBeDefined();
+			if (!statement) {
+				throw new Error(`Missing AWS trust statement ${sid}`);
+			}
+			return statement;
+		};
+		const submitMainStatement = awsTrustStatement('SubmitMain');
+		const stagingMergeQueueStatement = awsTrustStatement('StagingMergeQueue');
+		expect(submitMainStatement.Condition.StringEquals).toMatchObject({
+			'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+			'token.actions.githubusercontent.com:repository':
+				'zemn-me/monorepo',
+			'token.actions.githubusercontent.com:repository_id': '275403409',
+			'token.actions.githubusercontent.com:workflow': 'Submit',
+		});
+		expect(submitMainStatement.Condition.StringLike).toEqual({
+			'token.actions.githubusercontent.com:ref': 'refs/heads/main',
+			'token.actions.githubusercontent.com:sub':
+				'repo:zemn-me/monorepo:ref:refs/heads/main',
+		});
+		expect(stagingMergeQueueStatement.Condition.StringEquals).toMatchObject({
+			'token.actions.githubusercontent.com:repository':
+				'zemn-me/monorepo',
+			'token.actions.githubusercontent.com:repository_id': '275403409',
+			'token.actions.githubusercontent.com:workflow': 'Staging',
+		});
+		expect(stagingMergeQueueStatement.Condition.StringLike).toEqual({
+			'token.actions.githubusercontent.com:ref':
+				'refs/heads/gh-readonly-queue/*',
+			'token.actions.githubusercontent.com:sub':
+				'repo:zemn-me/monorepo:ref:refs/heads/gh-readonly-queue/*',
+		});
+
+		const awsRolePolicyAttachments = mockResources.filter(
+			resource =>
+				resource.type ===
+				'aws:iam/rolePolicyAttachment:RolePolicyAttachment'
+		);
+		expect(
+			awsRolePolicyAttachments.find(
+				resource => resource.name === 'monorepo_github_actions_admin'
+			)?.inputs['policyArn']
+		).toBe('arn:aws:iam::aws:policy/AdministratorAccess');
+
+		const apiImageLifecyclePolicy = mockResources.find(
+			resource =>
+				resource.type === 'aws:ecr/lifecyclePolicy:LifecyclePolicy' &&
+				resourceInputText(resource.inputs['policy']).includes(
+					'Keep recent API images'
+				)
+		);
+		expect(apiImageLifecyclePolicy).toBeDefined();
+		const apiImageLifecycle = JSON.parse(
+			resourceInputText(apiImageLifecyclePolicy?.inputs['policy'])
+		) as EcrLifecyclePolicy;
+		expect(apiImageLifecycle.rules).toEqual([
+			{
+				rulePriority: 1,
+				description: 'Keep recent API images',
+				selection: {
+					tagStatus: 'untagged',
+					countType: 'imageCountMoreThan',
+					countNumber: 10,
+				},
+				action: {
+					type: 'expire',
+				},
+			},
+		]);
+	});
+});

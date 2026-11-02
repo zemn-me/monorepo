@@ -14,8 +14,6 @@ import { LogisticSection } from '#root/ts/factorio/logistic_section.js';
 import { ProgrammableSpeakerCircuitParameters } from '#root/ts/factorio/programmable_speaker_circuit_parameters.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 
-
-
 export const ControlBehavior = z.strictObject({
 	/**
 	 * CircuitCondition
@@ -151,6 +149,10 @@ export const ControlBehavior = z.strictObject({
 	read_recipe_finished: z.boolean().optional(),
 	/** Signal that receives recipe finished events. */
 	recipe_finished_signal: SignalID.optional(),
+	/** Whether to include this chest's contents when crafting via requests. */
+	include_in_crafting: z.boolean().optional(),
+	/** Whether to include this chest's contents as fuel via requests. */
+	include_fuel: z.boolean().optional(),
 	/** Signal representing working state. */
 	working_signal: SignalID.optional(),
 	/** Whether to read the moving-from station (for trains). */
@@ -212,9 +214,11 @@ export const ControlBehavior = z.strictObject({
 	 */
 	decider_conditions: DeciderCombinatorParameters.optional(),
 	/** Filter sections for combinators (Factorio 2.0). */
-	sections: z.strictObject({
-		sections: z.array(LogisticSection)
-	}).optional(),
+	sections: z
+		.strictObject({
+			sections: z.array(LogisticSection),
+		})
+		.optional(),
 	/**
 	 * ProgrammableSpeakerCircuitParameters
 	 */

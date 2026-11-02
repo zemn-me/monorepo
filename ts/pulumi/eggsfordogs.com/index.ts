@@ -9,7 +9,6 @@ export interface Args {
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 }
 
-
 export class Component extends Pulumi.ComponentResource {
 	site: Website;
 	constructor(
@@ -19,28 +18,30 @@ export class Component extends Pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:eggsfordogs.com', name, args, opts);
 
-
 		const tags = args.tags;
 
-		const domainName = [...(args.staging ? ['staging'] : []), "eggsfordogs.com"].join('.');
+		const domainName = [
+			...(args.staging ? ['staging'] : []),
+			'eggsfordogs.com',
+		].join('.');
 
 		new BlueskyDisplayNameClaim(
 			`${name}_bluesky_claim`,
 			{
 				zoneId: args.zoneId,
 				displayname: domainName,
-				did: "did:plc:7npbillg4uotx5cdcbvnjhpn"
+				did: 'did:plc:7npbillg4uotx5cdcbvnjhpn',
 			},
-			{ parent: this}
-		)
+			{ parent: this }
+		);
 
 		this.site = new Website(
 			`${name}_eggsfordogs.com`,
 			{
-				index: 'ts/pulumi/eggsfordogs.com/out/index.html',
-				notFound: 'ts/pulumi/eggsfordogs.com/out/index.html',
+				index: 'ts/pulumi/eggsfordogs.com/build/index.html',
+				notFound: 'ts/pulumi/eggsfordogs.com/build/index.html',
 				tags,
-				directory: 'ts/pulumi/eggsfordogs.com/out',
+				directory: 'ts/pulumi/eggsfordogs.com/build',
 				zoneId: args.zoneId,
 				domain: domainName,
 				noIndex: args.staging,

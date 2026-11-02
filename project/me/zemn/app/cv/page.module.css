@@ -1,0 +1,375 @@
+.page {
+	--foreground-color: #000;
+	--background-color: #fff;
+
+	min-height: 100vh;
+	padding: 2rem;
+	overflow: auto;
+	color: var(--foreground-color);
+	background: #f3f3f0;
+	font-family: Lora, Georgia, "Times New Roman", serif;
+}
+
+.cv {
+	box-sizing: border-box;
+	width: min(210mm, 100%);
+	min-height: 297mm;
+	margin: auto;
+	padding: 20mm 30mm;
+	overflow: visible;
+	background: var(--background-color);
+	border: 1px solid var(--foreground-color);
+	font-size: 80%;
+}
+
+.cv a {
+	text-decoration: none;
+}
+
+.longCV {
+	display: block;
+	overflow: visible;
+}
+
+.longCV .header {
+	margin-bottom: 0;
+}
+
+.longCV .rule {
+	margin-bottom: 1.4em;
+}
+
+.longCV .experience {
+	display: block;
+}
+
+.longCV .work,
+.longCV .note {
+	break-inside: avoid;
+}
+
+.longCV .work {
+	margin-bottom: 1em;
+}
+
+.longCV .notes {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1em 2em;
+	margin-bottom: 1em;
+	text-align: left;
+}
+
+.longCV .future {
+	display: block;
+	width: 3em;
+	height: 2.4em;
+	margin: 3em auto 0;
+}
+
+.header {
+	grid-area: header;
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	grid:
+		"website icon date" min-content
+		". . ." 1em
+		"phone name email" min-content
+		". . ." 2em / 1fr 1fr 1fr;
+}
+
+.website {
+	grid-area: website;
+}
+
+.headerIcon {
+	grid-area: icon;
+	width: 5.7em;
+	height: 2.5em;
+}
+
+.phone {
+	grid-area: phone;
+}
+
+.email {
+	grid-area: email;
+}
+
+.name {
+	grid-area: name;
+	margin: 0;
+	font-size: larger;
+	font-weight: inherit;
+	text-transform: lowercase;
+}
+
+.date {
+	grid-area: date;
+}
+
+.rule {
+	display: flex;
+	align-items: center;
+	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
+	text-align: center;
+	text-transform: lowercase;
+}
+
+.rule::before,
+.rule::after {
+	content: "";
+	flex: 1;
+	border-bottom: 0.0625rem solid currentColor;
+}
+
+.rule span {
+	padding: 0 0.5em;
+}
+
+.experienceTitle {
+	grid-area: experience-title;
+}
+
+.worksTitle {
+	grid-area: works-title;
+}
+
+.experience {
+	grid-area: experience;
+	display: grid;
+	align-content: start;
+}
+
+.work {
+	display: grid;
+	grid:
+		"employer employer . start dash end" min-content
+		"position position . duration duration duration" min-content
+		". . . . . ." 0.4em
+		". content content content content content" min-content
+		". . . . . ." 1em / 1em 1fr 1em 4.5em 1.5em 4.5em;
+}
+
+.work::before {
+	content: "-";
+	grid-area: dash;
+	justify-self: center;
+	opacity: 0.6;
+}
+
+.employer {
+	grid-area: employer;
+	font-weight: 700;
+	font-style: italic;
+}
+
+.position {
+	grid-area: position;
+}
+
+.start {
+	grid-area: start;
+	justify-self: end;
+	white-space: nowrap;
+	opacity: 0.6;
+}
+
+.end {
+	grid-area: end;
+	justify-self: end;
+	white-space: nowrap;
+	opacity: 0.6;
+}
+
+.duration {
+	grid-area: duration;
+	justify-self: end;
+	white-space: nowrap;
+	opacity: 0.4;
+}
+
+.content {
+	grid-area: content;
+}
+
+.content p {
+	margin: 0;
+}
+
+.content p::first-letter {
+	text-transform: uppercase;
+}
+
+.notes {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 0 1em;
+	align-items: start;
+	text-align: center;
+}
+
+.works {
+	grid-area: works;
+}
+
+.works2 {
+	grid-area: works2;
+}
+
+.note {
+	min-width: 0;
+	display: grid;
+	grid-template-rows: min-content 1fr;
+	gap: 0.35em;
+}
+
+.noteTitle {
+	color: inherit;
+	font-style: italic;
+}
+
+.citationText {
+	font-style: normal;
+}
+
+.citationPublisher {
+	font-style: italic;
+}
+
+.description {
+	margin: 0;
+	opacity: 0.7;
+}
+
+.future {
+	grid-area: future;
+	width: 100%;
+	height: 100%;
+	margin: auto;
+	fill: var(--foreground-color);
+	stroke: none;
+}
+
+@media screen and (max-width: 860px) {
+	.page {
+		padding: 0.75rem;
+	}
+
+	.cv {
+		min-height: auto;
+		padding: 1.25rem;
+		display: block;
+	}
+
+	.future {
+		display: none;
+	}
+
+	.header {
+		gap: 0.75em;
+		grid:
+			"icon" min-content
+			"name" min-content
+			"website" min-content
+			"email" min-content
+			"phone" min-content
+			"date" min-content / 1fr;
+		margin-bottom: 2rem;
+	}
+
+	.rule {
+		margin: 2rem 0 1rem;
+	}
+
+	.experience,
+	.notes {
+		margin-bottom: 1rem;
+	}
+
+	.work {
+		grid:
+			"employer employer" min-content
+			"position position" min-content
+			"start end" min-content
+			"duration duration" min-content
+			"content content" min-content / 1fr 1fr;
+		gap: 0.25em 1em;
+		margin-bottom: 1.5em;
+	}
+
+	.work::before {
+		display: none;
+	}
+
+	.start {
+		justify-self: start;
+	}
+
+	.end,
+	.duration {
+		justify-self: end;
+	}
+
+	.notes {
+		grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+		gap: 1em;
+	}
+}
+
+@media print {
+	:global(body):has(.page) > :global(:not([data-glade-layout])) {
+		display: none !important;
+	}
+
+	:global([data-glade-layout]):has(.page),
+	:global([data-glade-content]):has(.page) {
+		display: block !important;
+	}
+
+	:global([data-glade-layout]):has(.page) :global([data-glade-banner]),
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) {
+		display: none !important;
+	}
+
+	:global([data-glade-content]):has(.page) {
+		padding: 0 !important;
+	}
+
+	.page {
+		min-height: auto;
+		padding: 0;
+		overflow: visible;
+		background: var(--background-color);
+	}
+
+	.cv {
+		width: 210mm;
+		min-height: calc(297mm - 12mm);
+		margin: 0 auto;
+		padding: 20mm 30mm;
+		border: 0;
+	}
+
+	.longCV {
+		height: auto;
+		overflow: visible;
+		box-decoration-break: clone;
+		-webkit-box-decoration-break: clone;
+	}
+}
+
+@page {
+	size: A4;
+	margin: 0 0 12mm;
+
+	@bottom-right {
+		content: "Pg. " counter(page) "/" counter(pages);
+		padding-right: 30mm;
+		font-family: Lora, Georgia, "Times New Roman", serif;
+		font-size: 8pt;
+		vertical-align: middle;
+	}
+}

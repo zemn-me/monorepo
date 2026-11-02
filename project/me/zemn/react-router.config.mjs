@@ -1,0 +1,25 @@
+export default {
+	ssr: true,
+	buildDirectory: '.react-router-build',
+	routeDiscovery: { mode: 'initial' },
+	prerender: ({ getStaticPaths }) => [
+		// Authenticated and backend-driven pages must run at request time.
+		...getStaticPaths().filter(
+			path =>
+				!/^\/(auth|journal|admin|callback|key|healthz)(\/|$)/.test(path) &&
+				path !== '/experiments/tiberian-sun'
+		),
+		...[
+			'/src',
+			'/src/issues',
+			'/src/pulls',
+			'/src/discussions',
+			'/src/actions',
+			'/src/projects',
+			'/src/wiki',
+			'/src/security',
+			'/src/insights',
+			'/src/commits',
+		],
+	],
+};

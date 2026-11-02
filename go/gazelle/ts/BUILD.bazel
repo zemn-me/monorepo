@@ -5,6 +5,7 @@ load("//go:rules.bzl", "go_library")
 go_library(
     name = "ts",
     srcs = [
+        "implied_deps.go",
         "suppressions.go",
         "test_rules.go",
         "ts.go",
@@ -25,21 +26,27 @@ go_library(
 
 go_test(
     name = "ts_test",
-    srcs = ["ts_test.go"],
+    srcs = [
+        "label_test.go",
+        "ts_test.go",
+    ],
     data = [
         "//:package.json",
         "//:tsconfig.json",
         "//go/gazelle/ts/example/duration:all_ts_srcs",
         "//go/gazelle/ts/example/simple:all_ts_srcs",
+        "//go/gazelle/ts/testdata/css_module:fixtures",
         "//go/gazelle/ts/testdata/dependency:all_ts_srcs",
         "//go/gazelle/ts/testdata/jsdom:all_ts_srcs",
         "//go/gazelle/ts/testdata/submodule:all_ts_srcs",
         "//go/gazelle/ts/testdata/uses_option:all_ts_srcs",
+        "//project/me/zemn/app/admin:all_ts_srcs",
         "//ts/math/mesh:all_ts_srcs",
         "//ts/math/shape:all_ts_srcs",
     ],
+    embed = [":ts"],
     deps = [
-        ":ts",
+        "//go/gazelle/css",
         "@bazel_gazelle//config",
         "@bazel_gazelle//label",
         "@bazel_gazelle//language",

@@ -1,13 +1,21 @@
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
+import * as gcp from '@pulumi/gcp';
 import * as Pulumi from '@pulumi/pulumi';
 
-import { bskyDid } from '#root/project/zemn.me/bio/bio.js';
+import { bskyDid } from '#root/project/me/zemn/bio/bio.js';
 import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import Website from '#root/ts/pulumi/lib/website/website.js';
-import { ApiZemnMe } from '#root/ts/pulumi/zemn.me/api/api.js';
+import {
+	ApiZemnMe,
+	openAIWorkloadIdentityAudience,
+} from '#root/ts/pulumi/zemn.me/api/api.js';
 import { GcpWorkstation } from '#root/ts/pulumi/zemn.me/forge/forge.js';
 import { LambdaHelloWorld } from '#root/ts/pulumi/zemn.me/hello_world/hello_world.js';
+import {
+	type MinecraftEnvironmentName,
+	MinecraftOnDemand,
+} from '#root/ts/pulumi/zemn.me/minecraft/minecraft.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -15,14 +23,23 @@ export interface Args {
 	protectDatabases: boolean;
 	noIndex: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
-	gcpProjectId: Pulumi.Input<string>
-	callboxPhoneNumber: Pulumi.Input<string>
-	twilioSharedSecret: Pulumi.Input<string>
-	cloudWorkstations?: Pulumi.Input<boolean>
+	gcpProjectId: Pulumi.Input<string>;
+	callboxPhoneNumber: Pulumi.Input<string>;
+	twilioSharedSecret: Pulumi.Input<string>;
+	cloudWorkstations?: Pulumi.Input<boolean>;
+	journalWorkerEnvironment: 'staging' | 'production';
+	minecraftEnvironment?: MinecraftEnvironmentName;
+	minecraftManageDnsWake?: boolean;
+	minecraftOnDemand?: boolean;
+	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	openAIIdentityProviderId?: Pulumi.Input<string>;
+	openAIServiceAccountId?: Pulumi.Input<string>;
 }
 
 export class Component extends Pulumi.ComponentResource {
 	site: Website;
+	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+	readonly openAIWorkloadIdentityAudience = openAIWorkloadIdentityAudience;
 	constructor(
 		name: string,
 		args: Args,
@@ -42,34 +59,49 @@ export class Component extends Pulumi.ComponentResource {
 		);
 
 		new LambdaHelloWorld(`${name}_fargate`, {
-			tags: args.tags
+			tags: args.tags,
 		});
+
+		const peopleService = new gcp.projects.Service(
+			'peopleservice',
+			{
+				service: 'people.googleapis.com',
+				disableOnDestroy: false,
+			},
+			{ parent: this }
+		);
 
 		this.site = new Website(
 			`${name}_zemn_me`,
 			{
-				index: 'project/zemn.me/out/index.html',
-				notFound: 'project/zemn.me/out/404.html',
-				directory: 'project/zemn.me/out',
+				index: 'project/me/zemn/build/index.html',
+				directory: 'project/me/zemn/build',
+				serverDirectory: 'project/me/zemn/server',
 				zoneId: args.zoneId,
 				domain: args.domain,
-                                noIndex: args.noIndex,
-                                email: false,
-                                otherTXTRecords: [
-                                        "google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag"
-                                ],
-                                tags,
-                                wellKnownOidcDomain: ['api', args.domain].join('.'),
-                        },
-                        { parent: this }
-                );
+				noIndex: args.noIndex,
+				email: false,
+				otherTXTRecords: [
+					'google-site-verification=Eocoh5nOKEaypNal4oA8OInUzoY9aTTsulvv8aG7Aag',
+				],
+				tags,
+				wellKnownOidcDomain: ['api', args.domain].join('.'),
+			},
+			{
+				parent: this,
+				dependsOn: [
+					// for using contacts
+					peopleService,
+				],
+			}
+		);
 
 		const availability = new Website(
 			`${name}_availability_zemn_me_website`,
 			{
-				index: 'ts/pulumi/zemn.me/availability/out/index.html',
-				notFound: 'ts/pulumi/zemn.me/availability/out/404.html',
-				directory: 'ts/pulumi/zemn.me/availability/out',
+				index: 'ts/pulumi/zemn.me/availability/build/index.html',
+				notFound: 'ts/pulumi/zemn.me/availability/build/404.html',
+				directory: 'ts/pulumi/zemn.me/availability/build',
 				zoneId: args.zoneId,
 				domain: ['availability', args.domain].join('.'),
 				noIndex: true, // args.noIndex,
@@ -90,33 +122,78 @@ export class Component extends Pulumi.ComponentResource {
 				noIndex: true,
 				email: false,
 				noCostAllocationTag: true,
-				tags
+				tags,
 			},
-		{ parent: this })
+			{ parent: this }
+		);
 
 		new BlueskyDisplayNameClaim(
 			`${name}_bluesky_claim`,
 			{
 				zoneId: args.zoneId,
 				displayname: args.domain,
-				did: bskyDid
+				did: bskyDid,
 			},
-			{ parent: this}
-		)
+			{ parent: this }
+		);
 
-		new ApiZemnMe(`${name}_api`, {
-			domain: ['api', args.domain].join("."),
-			zoneId: args.zoneId,
-			callboxPhoneNumber: args.callboxPhoneNumber,
-			protectDatabases: args.protectDatabases,
-			twilioSharedSecret: args.twilioSharedSecret,
-		}, { parent: this, dependsOn: Static });
+		const minecraft = args.minecraftOnDemand
+			? new MinecraftOnDemand(
+					`${name}_minecraft`,
+					{
+						zoneId: args.zoneId,
+						domain: args.domain,
+						environmentName: args.minecraftEnvironment ?? 'production',
+						manageDnsWake: args.minecraftManageDnsWake ?? true,
+						operators: args.minecraftOperators,
+						tags,
+					},
+					{ parent: this }
+				)
+			: undefined;
 
-		if (args.cloudWorkstations) new GcpWorkstation(`${name}_workstation`, {
-			location: 'us-central1',
-			project: args.gcpProjectId,
-		}, { parent: this });
+		const api = new ApiZemnMe(
+			`${name}_api`,
+			{
+				domain: ['api', args.domain].join('.'),
+				zoneId: args.zoneId,
+				journalWorkerEnvironment: args.journalWorkerEnvironment,
+				callboxPhoneNumber: args.callboxPhoneNumber,
+				protectDatabases: args.protectDatabases,
+				twilioSharedSecret: args.twilioSharedSecret,
+				minecraftRconBridgeFunctionArn:
+					minecraft?.rconBridgeFunctionArn,
+				minecraftRconBridgeFunctionName:
+					minecraft?.rconBridgeFunctionName,
+				minecraftLogGroupArn: minecraft?.taskLogGroupArn,
+				minecraftLogGroupName: minecraft?.taskLogGroupName,
+				minecraftServerAddress: args.domain,
+				minecraftWakeFunctionArn: minecraft?.wakeFunctionArn,
+				minecraftWakeFunctionName: minecraft?.wakeFunctionName,
+				openAIIdentityProviderId: args.openAIIdentityProviderId,
+				openAIServiceAccountId: args.openAIServiceAccountId,
+			},
+			{ parent: this, dependsOn: Static }
+		);
+		this.journalWorkerRoleArn = api.journalWorkerRoleArn;
 
-		super.registerOutputs({ site: this.site, availability, Static });
+		if (args.cloudWorkstations)
+			new GcpWorkstation(
+				`${name}_workstation`,
+				{
+					location: 'us-central1',
+					project: args.gcpProjectId,
+				},
+				{ parent: this }
+			);
+
+		super.registerOutputs({
+			site: this.site,
+			availability,
+			Static,
+			minecraft,
+			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			openAIWorkloadIdentityAudience: this.openAIWorkloadIdentityAudience,
+		});
 	}
 }
