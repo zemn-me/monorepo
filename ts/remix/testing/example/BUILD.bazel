@@ -40,6 +40,11 @@ remix_itest_service(
 
 service_test(
     name = "development_test",
+    # Vite compiles while Chromium exercises the development server.
+    exec_properties = {
+        "test.EstimatedCPU": "4",
+        "test.EstimatedMemory": "4GB",
+    },
     services = [":dev_service"],
     test = ":browser_test",
 )

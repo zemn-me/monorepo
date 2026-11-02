@@ -246,7 +246,7 @@
 	],
 	"rebaseWhen": "behind-base-branch",
 	"pip-compile": {
-		"managerFilePatterns": ["/^requirements\\.txt$/"]
+		"managerFilePatterns": ["/^requirements\\.txt$/", "/^py/mitmproxy/requirements\\.txt$/"]
 	},
 	"pip_requirements": {
 		"enabled": false

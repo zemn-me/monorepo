@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
       - name: Cancel obsolete checks and pending staging deployments
         run: |
-          ./sh/bin/bazel run --config=ci \
+          ./sh/bin/bazel run --config=ci-local \
             //py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin -- \
             --execute
         env:

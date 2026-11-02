@@ -200,6 +200,19 @@ export function useRecordingQueue(options: QueueOptions) {
 		};
 	}, [refresh, sync, options.canSync]);
 
+	// New drafts can arrive while another upload owns the lock. Drain the next
+	// batch after that upload releases it, and reconcile new server confirmations
+	// immediately; the interval remains a fallback for failed requests.
+	const queuedIDs = recordings
+		.filter(draft => draft.state === 'queued')
+		.map(draft => draft.id)
+		.join('\0');
+	const readyEntryIDs = options.readyEntryIDs.join('\0');
+	const hasSyncErrors = Object.keys(errors).length > 0;
+	useEffect(() => {
+		if (!hasSyncErrors && (queuedIDs || readyEntryIDs)) void sync();
+	}, [hasSyncErrors, queuedIDs, readyEntryIDs, sync]);
+
 	const keep = useCallback(
 		async (draft: LocalRecording, durable = false) => {
 			try {
@@ -328,9 +341,7 @@ function LocalRecordingRow({
 		Boolean(draft.uploadedAt && Date.now() - draft.uploadedAt > 120_000);
 	const failure =
 		queue.errors[draft.id] ??
-		(confirmationMissing
-			? 'Could not confirm this upload.'
-			: undefined) ??
+		(confirmationMissing ? 'Could not confirm this upload.' : undefined) ??
 		(processingFailed
 			? remoteEntry.error || 'Could not process this voice note.'
 			: undefined);

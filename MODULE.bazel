@@ -9,11 +9,94 @@ module(
     name = "monorepo",
 )
 
-bazel_dep(name = "rules_oci", version = "2.2.7")
+# renovate:
+# datasource = github-releases
+# versioning = semver
+# depName = bazel-contrib/rules_oci
+# extractVersion = ^v(?<version>.*)$
+RULES_OCI_VERSION = "2.3.3"
+
+bazel_dep(name = "rules_oci", version = RULES_OCI_VERSION)
+
+# Upstream publishes releases before BCR. Keep the release archive and module
+# version together so Renovate can refresh both without a registry publication.
+archive_override(
+    module_name = "rules_oci",
+    integrity = "sha256-JD6sh+xB1o0dnm0hiEpQ7CjgMfcCsLn83H+Xw/PVOJo=",
+    strip_prefix = "rules_oci-" + RULES_OCI_VERSION,
+    # auto-integrity
+    urls = ["https://github.com/bazel-contrib/rules_oci/releases/download/v" + RULES_OCI_VERSION + "/rules_oci-v" + RULES_OCI_VERSION + ".tar.gz"],
+)
 
 # For testing, we also recommend https://registry.bazel.build/modules/container_structure_test
 bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "emsdk", version = "5.0.7")
 bazel_dep(name = "rules_license", version = "1.0.0")
+
+# Linux platforms and their matching compiler for --config=remote.
+bazel_dep(name = "toolchains_buildbuddy", version = "0.0.4")
+
+buildbuddy = use_extension("@toolchains_buildbuddy//:extensions.bzl", "buildbuddy")
+
+# BuildBuddy publishes its official executor images in gcr.io/flame-public.
+# Application/runtime dependencies are declared below.
+buildbuddy.platform(
+    container_image = "docker://gcr.io/flame-public/rbe-ubuntu22-04@sha256:19a6ae9d1f58f24020b2d672919e8e4ea859e1389497dc2ddcb28bb9818becf8",
+)
+buildbuddy.gcc_toolchain(gcc_major_version = "11")
+
+# Package archives and indices are pinned by snapshot and MODULE.bazel.lock.
+bazel_dep(name = "rules_distroless", version = "0.9.4")
+single_version_override(
+    module_name = "rules_distroless",
+    patch_strip = 1,
+    patches = ["//bzl:rules_distroless_ubuntu_fallback.patch"],
+)
+
+apt = use_extension("@rules_distroless//apt:extensions.bzl", "apt")
+apt.sources_list(
+    architectures = ["amd64"],
+    components = ["main"],
+    suites = [
+        "jammy",
+        "jammy-updates",
+        "jammy-security",
+    ],
+    types = ["deb"],
+    uris = ["https://snapshot.ubuntu.com/ubuntu/20261001T000000Z"],
+)
+apt.install(
+    dependency_set = "chromium_packages",
+    packages = [
+        "fonts-liberation",
+        "libasound2",
+        "libatk-bridge2.0-0",
+        "libatk1.0-0",
+        "libcairo2",
+        "libcups2",
+        "libdbus-1-3",
+        "libdrm2",
+        "libgbm1",
+        "libglib2.0-0",
+        "libnspr4",
+        "libnss3",
+        "libpango-1.0-0",
+        "libx11-6",
+        "libxcb1",
+        "libxcomposite1",
+        "libxdamage1",
+        "libxext6",
+        "libxfixes3",
+        "libxkbcommon0",
+        "libxrandr2",
+    ],
+    suites = [
+        "jammy",
+        "jammy-updates",
+        "jammy-security",
+    ],
+)
+use_repo(apt, "chromium_packages")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 
@@ -90,6 +173,15 @@ use_repo(
 )
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+
+# Keep APE runtime downloads available when cosmo.zip is unreachable.
+bazel_dep(name = "ape", version = "1.0.1")
+
+cosmos = use_extension("@ape//ape/cosmos:defs.bzl", "ape_cosmos")
+cosmos.url(
+    template = "https://gitlab.arm.com/api/v4/projects/bazel%2Fape/packages/generic/cosmos.zip/{version}/{name}",
+)
+
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
@@ -97,15 +189,68 @@ bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.9.0", dev_dependency = True)
 
 bazel_dep(name = "rules_pkg", version = "1.2.0")
-bazel_dep(name = "rules_python", version = "1.8.0")
+bazel_dep(name = "rules_python", version = "2.4.2")
+
+# Keep the installer and resolver on a compatible pip API for Python 3.15.
+single_version_override(
+    module_name = "rules_python",
+    patch_strip = 1,
+    patches = ["//bzl:rules_python_installer.patch"],
+)
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+
+# Register the stable runtime explicitly while the rules_python minor mapping
+# still selects a release candidate. Keep immutable publisher archives and hashes.
+
+python.single_version_platform_override(
+    platform = "aarch64-apple-darwin",
+    python_version = "3.15.0",
+    sha256 = "473e6213a1c55da12e60642249a6201fe9dca841b4ad8c59149798846ed87c62",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-aarch64-apple-darwin-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "x86_64-apple-darwin",
+    python_version = "3.15.0",
+    sha256 = "76253e5619694b66e817a091bbdbf3db89bb0aff6d77a9ac7aae2ce96218ed0d",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-x86_64-apple-darwin-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "aarch64-unknown-linux-gnu",
+    python_version = "3.15.0",
+    sha256 = "00345e47b7f42d10ec60d28b2ccad6b1f33c40697f0ae57ee15d70896efad0b5",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "x86_64-unknown-linux-gnu",
+    python_version = "3.15.0",
+    sha256 = "46edc8f6fccade47dc38001ef2d4094d9cedd21a1863d9b44b2a02c1ee76b94d",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "aarch64-pc-windows-msvc",
+    python_version = "3.15.0",
+    sha256 = "33fb6162a4fcaed7b7683622638f8b22bf7d722acb461793f991d6522c9787cb",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-aarch64-pc-windows-msvc-install_only_stripped.tar.gz"],
+)
+python.single_version_platform_override(
+    platform = "x86_64-pc-windows-msvc",
+    python_version = "3.15.0",
+    sha256 = "0943854634fa0fc4faf2a37d900bc7e1a6f89afd7ac576b22d17f39142c63b55",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0%2B20261009-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"],
+)
 
 # renovate:
 # 	datasource=python-version
 # 	versioning=python
 # 	depName=python
-PYTHON_VERSION = "3.14"
+PYTHON_VERSION = "3.15.0"
 
 python.toolchain(
     is_default = True,
@@ -114,28 +259,49 @@ python.toolchain(
 python.toolchain(
     python_version = "3.10",
 )
+
+# The standalone interception CLI has a narrower native-wheel and Tornado
+# compatibility range than the notebook environment.
+python.toolchain(
+    python_version = "3.14",
+)
 use_repo(python, "python_3_14")
 use_repo(python, "python_3_10")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
+    # Resolve wheel variants by target OS/CPU instead of the machine running Bazel.
+    experimental_index_url = "https://pypi.org/simple",
     hub_name = "pip",
     python_version = PYTHON_VERSION,
     requirements_lock = "//:requirements.txt",
+    target_platforms = [
+        "linux_x86_64",
+        "osx_aarch64",
+        "osx_x86_64",
+    ],
 )
-use_repo(pip, "pip")
+pip.parse(
+    experimental_index_url = "https://pypi.org/simple",
+    hub_name = "mitmproxy_pip",
+    python_version = "3.14",
+    requirements_lock = "//py/mitmproxy:requirements.txt",
+    target_platforms = [
+        "linux_x86_64",
+        "osx_aarch64",
+        "osx_x86_64",
+    ],
+)
+use_repo(pip, "mitmproxy_pip", "pip")
 
 bazel_dep(name = "aspect_rules_swc", version = "2.6.0")
 bazel_dep(name = "aspect_rules_js", version = "2.9.2")
 
-####### Node.js version #########
-# By default you get the node version from DEFAULT_NODE_VERSION in @rules_nodejs//nodejs:repositories.bzl
-# Optionally you can pin a different node version:
+# Keep the repository's default Node version; SDK dependencies must not select an older one.
 bazel_dep(name = "rules_nodejs", version = "6.7.3")
-#node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 
-#node.toolchain(node_version = "18.13.0")
-#################################
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain()
 
 pnpm = use_extension("//bzl/pnpm:extensions.bzl", "pnpm", dev_dependency = True)
 pnpm.tool(
@@ -175,11 +341,11 @@ use_repo(rules_ts_ext, "npm_typescript")
 
 bazel_dep(name = "aspect_rules_lint", version = "1.13.0")
 bazel_dep(name = "bazel_features", version = "1.42.1")
-bazel_dep(name = "rules_go", version = "0.64.1", repo_name = "io_bazel_rules_go")
+bazel_dep(name = "rules_go", version = "0.65.0", repo_name = "io_bazel_rules_go")
 bazel_dep(name = "gazelle", version = "0.51.3", repo_name = "bazel_gazelle")
 
 # Synced from go.mod by //:go_version_sync.
-GO_VERSION = "1.27.1"
+GO_VERSION = "1.27.3"
 
 go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.download(version = GO_VERSION)
@@ -198,14 +364,21 @@ go_deps.gazelle_override(
     directives = ["gazelle:proto disable_global"],
     path = "github.com/nyaruka/phonenumbers/v2",
 )
+
+# Buildifier's wrapper must handle regular runfiles on remote executors.
+go_deps.module_override(
+    patch_strip = 1,
+    patches = ["//bzl:buildifier_remote_runfiles.patch"],
+    path = "github.com/bazelbuild/buildtools",
+)
 go_deps.module_override(
     patch_strip = 1,
     patches = ["//bzl:bazel_watcher_proto_rule.patch"],
     path = "github.com/bazelbuild/bazel-watcher",
 )
 
-# gopls 0.23 predates internal API changes in x/tools 0.49, required by
-# x/image. Remove this compatibility patch when gopls adopts those APIs.
+# gopls 0.24 predates the cursor helper move and inliner API in x/tools 0.52.
+# Remove this compatibility patch when gopls adopts those APIs.
 go_deps.module_override(
     patch_strip = 1,
     patches = ["//bzl:gopls_x_tools.patch"],
@@ -251,6 +424,7 @@ use_repo(
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",
     "com_github_openai_openai_go_v3",
+    "com_github_rhysd_actionlint",
     "com_github_sergi_go_diff",
     "com_github_tdewolff_parse_v2",
     "com_github_tebeka_selenium",
@@ -263,7 +437,7 @@ use_repo(
     "org_golang_x_tools_gopls",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "1.8.0")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "2.4.2")
 bazel_dep(name = "aspect_rules_py", version = "1.8.4")
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -301,6 +475,7 @@ load("@@//bin/host/chromium:linux_chromium.bzl", "linux_chromium")
 linux_chromium(
     name = "in_bin",
     executable_src = "chrome-linux64/chrome",
+    runtime = "@@//bin/host/chromium:linux_runtime",
     srcs = glob(["chrome-linux64/**"], allow_empty=True),
     visibility = ["//visibility:public"],
 )
@@ -378,9 +553,20 @@ visibility = [ "//visibility:public" ]
 )
 """
 
+chromedriver_linux_buildfile = """
+load("@@//bin/host/chromium:linux_chromium.bzl", "linux_chromium")
+linux_chromium(
+    name = "in_bin",
+    executable_src = "chromedriver",
+    srcs = glob(["chromedriver*"], allow_empty=True),
+    runtime = "@@//bin/host/chromium:linux_runtime",
+    visibility = ["//visibility:public"],
+)
+"""
+
 http_archive(
     name = "com_googleapis_storage_chromedriver_linux_x64",
-    build_file_content = chromedriver_buildfile,
+    build_file_content = chromedriver_linux_buildfile,
     sha256 = "cc99c87cfd10e1da1b7d42ea9800a211df279f5a47c19a55b02c927cb9f606c2",
     strip_prefix = "chromedriver-linux64",
     # auto-integrity
@@ -497,12 +683,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_X64 = "3.267.0"
+PULUMI_CLI_VERSION_LINUX_X64 = "3.273.0"
 
 http_archive(
     name = "pulumi_cli_linux_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "527c1ce7c16cb38525a96d55422f221e819476e2b0743ae55c9862ad775ae10a",
+    sha256 = "ec08f86671fd58f0a186540e1cee00066393beaf5c6716b0075f690919800432",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_X64 + "-linux-x64.tar.gz",
@@ -513,12 +699,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.267.0"
+PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.273.0"
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "e37c190bd9032d69e973936547a663caf0b31ee154360de92f637be39fa50c4a",
+    sha256 = "e47239e0fbfc6602c22f1c298abc4758a23fb1c0a37a69348cbebe6eccb817f8",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
@@ -529,12 +715,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_X64 = "3.267.0"
+PULUMI_CLI_VERSION_DARWIN_X64 = "3.273.0"
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "4e5cb36cfc791d3d76651791ee0c91d15a512eb79d04013b7819a7baf9e664f8",
+    sha256 = "ce6be877da705f622750427b5c1bbf1f9b188eb37d1d175ebedbfab1745b4191",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_X64 + "-darwin-x64.tar.gz",
@@ -545,14 +731,14 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_ARM64 = "3.267.0"
+PULUMI_CLI_VERSION_LINUX_ARM64 = "3.273.0"
 
 http_archive(
     name = "pulumi_cli_linux_arm64",
     build_file_content = """
 exports_files(glob(["**/*"], allow_empty=True))
 """,
-    sha256 = "e01a439cd1273819c9e836d86cc34c0bcca703a0dd06137c74053bcd49a45e6e",
+    sha256 = "c2e1b600b37d9d84551259b6f391f5035e336dfe63c49412f22d855a91995ed5",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "-linux-arm64.tar.gz",
@@ -563,12 +749,12 @@ exports_files(glob(["**/*"], allow_empty=True))
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.267.0"
+PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.273.0"
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "1ab825835dd10955de266c8a35e4e34fb4010ddff37729b5edc8f3ead7781099",
+    sha256 = "83f14961cf483b252106e3a09b77c9fb96464248dae345febacdbb525d6227a2",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "-windows-arm64.zip",
@@ -579,12 +765,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_X64 = "3.267.0"
+PULUMI_CLI_VERSION_WINDOWS_X64 = "3.273.0"
 
 http_archive(
     name = "pulumi_cli_windows_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "296f64cfc2b86471ee6274f0b15fc8e4a880f13886fe6cb2adbd6813fe75c326",
+    sha256 = "8e0f7c4014dc9dc206605cc82fcecc20e49e8acb283259f260e77f6f8f006fd1",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "-windows-x64.zip",
@@ -606,11 +792,11 @@ single_version_override(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=bazelbuild/bazel
-BAZEL_SOURCE_VERSION = "9.2.0"
+BAZEL_SOURCE_VERSION = "9.3.1"
 
 http_archive(
     name = "bazel_source",
-    integrity = "sha256-CdZaJdbNX9Zd8cLd0PlPxPdgBSdcaUx+BysFRfE7b90=",
+    integrity = "sha256-bYk6ocmnimT07ynTztOfLN5VG92oRbz4jvkRAWHcZ9U=",
     strip_prefix = "bazel-" + BAZEL_SOURCE_VERSION,
     # auto-integrity
     url = "https://github.com/bazelbuild/bazel/archive/refs/tags/" + BAZEL_SOURCE_VERSION + ".zip",
@@ -630,13 +816,13 @@ http_file(
 # 	datasource=github-tags
 # 	versioning=loose
 # 	depName=eggert/tz
-TZ_VERSION = "2026e"
+TZ_VERSION = "2026f"
 
 http_archive(
     name = "com_github_eggbert_tz",
     build_file_content = """
 exports_files(glob(["**/*"]))""",
-    integrity = "sha256-d08vX875wJMxG/auGAzbYN9uWPFV83hU1WGiIUibe0o=",
+    integrity = "sha256-KGceA1UTbqqzJwS/rmrsmjF8NI8TP2abcAYn2i0RWcQ=",
     strip_prefix = "tz-" + TZ_VERSION,
     # auto-integrity
     url = "https://github.com/eggert/tz/archive/refs/tags/" + TZ_VERSION + ".zip",
@@ -652,7 +838,7 @@ rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_t
 # 	datasource=github-releases
 # 	versioning=rust
 # 	depName=rust-lang/rust
-RUST_VERSION = "1.99.0"
+RUST_VERSION = "1.99.1"
 
 rust.toolchain(
     edition = "2021",
@@ -673,6 +859,12 @@ use_repo(rust_host_tools, "rust_host_tools_nightly")
 register_toolchains("@rust_toolchains//:all")
 
 crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+
+# openssl-sys executes openssl-src's builder; the vendored tree is runtime data.
+crate.annotation(
+    crate = "openssl-src",
+    data_glob = ["openssl/**"],
+)
 crate.annotation(
     crate = "curl-sys",
     patch_args = ["-p1"],
@@ -711,13 +903,13 @@ use_repo(bindeps, "bindeps")
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=astral-sh/ruff
-RUFF_VERSION = "0.16.10"
+RUFF_VERSION = "0.17.3"
 
 # For Apple Silicon macOS
 http_archive(
     name = "ruff_aarch64-apple-darwin",
     build_file_content = "exports_files(['ruff'])",
-    integrity = "sha256-8FHNMG3iaRJioFdPiFfNH01r/NRICE6iPWG5wcN99RA=",
+    integrity = "sha256-EY9xIaqDh4VnK/YSSH91WokQi7X0Tg89+WxZZ6cmFPk=",
     strip_prefix = "ruff-aarch64-apple-darwin",
     # auto-integrity
     url = "https://github.com/astral-sh/ruff/releases/download/" + RUFF_VERSION + "/ruff-aarch64-apple-darwin.tar.gz",
@@ -762,7 +954,7 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=loose
 # 	depName=facebook/sapling
-SAPLING_VERSION = "0.2.20260929-102736+288e0c2d"
+SAPLING_VERSION = "0.2.20261028-123539+7415fb2f"
 
 http_archive(
     name = "sapling_linux_amd64",
@@ -774,7 +966,7 @@ filegroup(
     srcs = glob(["**"], exclude = ["BUILD", "BUILD.bazel", "MODULE.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
 )
 """,
-    sha256 = "7a6d3cf76ad2f215946870c28c779fe31b1c514ef23060ff9db1b844c5bc0f74",
+    sha256 = "05aa40cca1a7ba29179a24d56738ba138db4267bf552c66f95e60c341599af3d",
     strip_prefix = "sapling-" + SAPLING_VERSION.replace("+", "-"),
     # auto-integrity
     url = "https://github.com/facebook/sapling/archive/refs/tags/" + SAPLING_VERSION + ".tar.gz",
@@ -847,3 +1039,135 @@ exports_files(glob(["**/*"], allow_empty=True))
 )
 
 bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# OpenTS is fetched as source only; its Windows build and game data are unused.
+http_archive(
+    name = "opents",
+    build_file = "//third_party/opents:BUILD.opents",
+    patch_args = ["-p1"],
+    patches = ["//third_party/opents:portable_lcw.patch"],
+    sha256 = "b37dc2bddc1e26004e76a583f29eb74d66d32bbd43da416fe53489e14b4b48f0",
+    strip_prefix = "OpenTS-51b52aa3839281471496652ecfcedb40ca85dbc4",
+    url = "https://github.com/OpenTS-Developers/OpenTS/archive/51b52aa3839281471496652ecfcedb40ca85dbc4.tar.gz",
+)
+
+# The source port has removed the engine's Windows dependency; this build replaces
+# its remaining macOS platform calls with browser implementations.
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "opents_web",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["VERSION"])
+filegroup(
+    name = "sources",
+    srcs = glob(["**"], exclude = ["archive/**", "dist/**", "tests/**", "manual/**"]),
+)
+""",
+    commit = "92f0aa9009506c2c090846d3a924bb5a163c4349",
+    patch_args = ["-p1"],
+    patches = ["//third_party/opents:web.patch"],
+    recursive_init_submodules = True,
+    remote = "https://github.com/TFrey98/OpenTS_mac.git",
+)
+
+emscripten_deps = use_extension("@emsdk//:emscripten_deps.bzl", "emscripten_deps")
+use_repo(
+    emscripten_deps,
+    "emscripten_bin_linux",
+    "emscripten_bin_linux_arm64",
+    "emscripten_bin_mac",
+    "emscripten_bin_mac_arm64",
+)
+
+# The original EA 2010 freeware package, preserved with its original installation tree.
+# Provenance: https://archive.org/details/command-and-conquer-tiberian-sun
+
+http_file(
+    name = "tiberian_sun_freeware",
+    downloaded_file_path = "OfficialCnCTiberianSun.rar",
+    sha256 = "b04219e715511de9baa2feb9827013c8e106f8d6b9b563936b8a2f650305dec5",
+    urls = ["https://archive.org/download/command-and-conquer-tiberian-sun/OfficialCnCTiberianSun.rar"],
+)
+
+# Build-time extraction only; this executable is not part of the browser runtime.
+http_archive(
+    name = "unrar",
+    build_file = "//third_party/unrar:unrar.BUILD.bazel",
+    sha256 = "634900842a3737d9cc15bbcc71d4c74cc713437e0bca296a573424fe5f2660ab",
+    strip_prefix = "unrar",
+    # auto-integrity
+    urls = ["https://www.rarlab.com/rar/unrarsrc-7.3.1.tar.gz"],
+)
+
+# Source-only original C&C engines; browser outputs are built locally.
+http_archive(
+    name = "vanilla_conquer",
+    build_file = "//third_party/vanilla_conquer:BUILD.vanilla",
+    patch_args = ["-p1"],
+    patches = ["//third_party/vanilla_conquer:web.patch"],
+    sha256 = "e0a90c08ed6643797255e15bb34044cf687e4580b2582afead42522920fd2559",
+    strip_prefix = "Vanilla-Conquer-ce83b59edd99cccac6cebaae054ca04962c744b7",
+    url = "https://github.com/TheAssemblyArmada/Vanilla-Conquer/archive/ce83b59edd99cccac6cebaae054ca04962c744b7.tar.gz",
+)
+
+http_archive(
+    name = "vanilla_sdl2",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["CMakeLists.txt", "LICENSE.txt"])
+filegroup(name = "sources", srcs = glob(["**"]))
+""",
+    sha256 = "03f9d7c191a837525c9cda6406af2f2e48be02b5e7eb03d949cc9f1e9ca41c8b",
+    strip_prefix = "SDL-release-2.32.10",
+    url = "https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.32.10.tar.gz",
+)
+
+# Preserved EA freeware discs; only selected data is packaged for the browser.
+http_file(
+    name = "red_alert_freeware",
+    downloaded_file_path = "RA_Allies.zip",
+    sha256 = "3b09edca3f93cb50a8d38d163f0c93540c2015f0b7b441cad35cda6d766876d7",
+    urls = ["https://downloads.cnc-comm.com/red-alert/iso/RA_Allies.zip"],
+)
+
+http_file(
+    name = "red_alert_soviet_freeware",
+    downloaded_file_path = "RA_Soviet.zip",
+    sha256 = "8cc097511109f27d853d8e210503139aebc4a3d7fe46af3bd0b9dfb3bd1238a7",
+    urls = ["https://downloads.cnc-comm.com/red-alert/iso/RA_Soviet.zip"],
+)
+
+http_file(
+    name = "tiberian_dawn_freeware",
+    downloaded_file_path = "CNC95_GDI.zip",
+    sha256 = "5c35e23ae74dd5d7d6cea58822eb45a2f87548d5507ef65ae584994859e84c75",
+    urls = ["https://downloads.cnc-comm.com/command-and-conquer/iso/CNC95_GDI.zip"],
+)
+
+# Build-time only: original Gold discs store installed assets in InstallShield v3.
+http_archive(
+    name = "unshieldv3",
+    build_file_content = """
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+package(default_visibility = ["//visibility:public"])
+config_setting(name = "macos", constraint_values = ["@platforms//os:macos"])
+cc_library(name = "blast", srcs = ["blast.c"], hdrs = ["blast.h"])
+genrule(
+    name = "config",
+    outs = ["config.h"],
+    cmd = "echo '#define CMAKE_PROJECT_NAME \\\"unshieldv3\\\"' > $@; echo '#define CMAKE_PROJECT_VER \\\"0.2.2\\\"' >> $@",
+)
+cc_binary(
+    name = "unshieldv3",
+    srcs = ["main.cpp", "ISArchiveV3.cpp", "ISArchiveV3.h", ":config"],
+    copts = ["-std=c++17"] + select({":macos": ["-mmacosx-version-min=10.15"], "//conditions:default": []}),
+    linkopts = select({":macos": ["-mmacosx-version-min=10.15"], "//conditions:default": []}),
+    deps = [":blast"],
+)
+""",
+    sha256 = "25270989563a7a56b8ad3a86f513ca940c63554d1c21bb03e6423ab713c6cfe1",
+    strip_prefix = "unshieldv3-4e5700fb97ba9f0338b49c1031834ce42177f265",
+    url = "https://github.com/wfr/unshieldv3/archive/4e5700fb97ba9f0338b49c1031834ce42177f265.tar.gz",
+)

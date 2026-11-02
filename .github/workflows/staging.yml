@@ -13,10 +13,7 @@ on:   # yamllint disable-line rule:truthy
       - renovate/**
 
 env:
-  BAZEL: >-
-    ./sh/bin/bazel
-    --distdir=${{ runner.temp }}/bazel-distdir/ape
-    --distdir=${{ runner.temp }}/bazel-distdir/rules_diff
+  BAZEL: ./sh/bin/bazel
 
 jobs:
   Staging:
@@ -61,6 +58,8 @@ jobs:
           if [ -d dependency-archives/third_party/bazel_distdir ]; then
             cp -R dependency-archives/third_party/bazel_distdir/. "$RUNNER_TEMP/bazel-distdir/"
           fi
+          # Keep the temporary checkout out of subsequent Gazelle scans.
+          rm -rf -- dependency-archives
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets.
         id: secret_auth
@@ -99,10 +98,10 @@ jobs:
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
-            $BAZEL build --config=ci --tool_tag=staging //ci:presubmit && \
+            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
-            $BAZEL run --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
+            $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
             --overwrite && \
             echo "::endgroup::"
         env:
@@ -134,7 +133,7 @@ jobs:
         # main just refreshed and deployed staging, so reuse its current state.
         run: |
          ./.github/workflows/prepare_ci.sh
-         $BAZEL run --tool_tag=staging //ci:presubmit -- \
+         $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --tool_tag=staging //ci:presubmit -- \
          --skip-bazel-tests \
          --skip-pulumi-refresh \
          --dirty

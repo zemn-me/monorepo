@@ -42,7 +42,7 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 	}
 	model := os.Getenv("JOURNAL_CURATOR_MODEL")
 	if model == "" {
-		model = "gpt-6-astra"
+		model = "gpt-5.6"
 	}
 	objects := s3.NewFromConfig(cfg)
 	return &JournalWorker{server: &Server{
@@ -62,4 +62,8 @@ func (w *JournalWorker) ProcessUpload(ctx context.Context, bucket, key string, s
 
 func (w *JournalWorker) RefreshSummaries(ctx context.Context, now time.Time) error {
 	return w.server.RefreshJournalKnowledge(ctx, now)
+}
+
+func (w *JournalWorker) RunCuration(ctx context.Context, now time.Time, requestID string) error {
+	return w.server.RunJournalCuration(ctx, now, requestID)
 }

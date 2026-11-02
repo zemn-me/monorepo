@@ -1,6 +1,16 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 exports_files(["integrity.json"])
+
+sh_test(
+    name = "offline_lockfile_test",
+    size = "small",
+    srcs = ["offline_lockfile_test.sh"],
+    data = ["@pnpm"],
+    env = {"PNPM": "$(rlocationpath @pnpm)"},
+    deps = ["@rules_shell//shell/runfiles"],
+)
 
 bazel_lint(
     name = "bazel_lint",

@@ -6,7 +6,8 @@ export default {
 		// Authenticated and backend-driven pages must run at request time.
 		...getStaticPaths().filter(
 			path =>
-				!/^\/(auth|journal|admin|callback|key|healthz)(\/|$)/.test(path)
+				!/^\/(auth|journal|admin|callback|key|healthz)(\/|$)/.test(path) &&
+				path !== '/experiments/tiberian-sun'
 		),
 		...[
 			'/src',

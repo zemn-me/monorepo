@@ -61,6 +61,7 @@ type Server struct {
 	journalTableName     string
 	oauthTableName       string
 	oauthMetadataClient  *http.Client
+	oidcOptions          auth.OIDCOptions
 	journalMCP           http.Handler
 	journalBucketName    string
 	rt                   *chi.Mux
@@ -86,6 +87,9 @@ type Server struct {
 
 type NewServerOptions struct {
 	LocalStack bool
+	// AllowRequestHostOIDCIssuer permits request-derived issuers for local
+	// development. Leave false in deployed servers.
+	AllowRequestHostOIDCIssuer bool
 	// AllowLocalhostAnalytics permits local development origins to post
 	// analytics beacons. Leave false for production.
 	AllowLocalhostAnalytics bool
@@ -172,6 +176,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		keyRequestsTableName: keyRequestsTableName,
 		journalTableName:     journalTableName,
 		oauthTableName:       os.Getenv("OAUTH_TABLE_NAME"),
+		oidcOptions:          auth.OIDCOptions{AllowRequestHostIssuer: opts.AllowRequestHostOIDCIssuer},
 		journalBucketName:    journalBucketName,
 		twilioSharedSecret:   os.Getenv("TWILIO_SHARED_SECRET"),
 		twilioClient: twilio.NewRestClientWithParams(twilio.ClientParams{

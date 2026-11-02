@@ -17,16 +17,26 @@ import (
 type journalEventProcessor interface {
 	ProcessUpload(context.Context, string, string, int64) error
 	RefreshSummaries(context.Context, time.Time) error
+	RunCuration(context.Context, time.Time, string) error
 }
 
 func handleEvent(ctx context.Context, worker journalEventProcessor, event json.RawMessage) error {
 	var envelope struct {
-		Records []json.RawMessage `json:"Records"`
-		Source  string            `json:"source"`
-		Time    time.Time         `json:"time"`
+		Records   []json.RawMessage `json:"Records"`
+		Source    string            `json:"source"`
+		Time      time.Time         `json:"time"`
+		RequestID string            `json:"requestId"`
 	}
 	if err := json.Unmarshal(event, &envelope); err != nil {
 		return err
+	}
+	if envelope.Source == "journal.manual" {
+		if envelope.RequestID == "" || len(envelope.Records) > 0 {
+			return errors.New("manual journal event requires a request ID and no upload records")
+		}
+		// Only IAM-authorized Lambda invocation reaches this handler. Use server
+		// time rather than allowing the caller to advance scheduling clocks.
+		return worker.RunCuration(ctx, time.Now().UTC(), envelope.RequestID)
 	}
 	if len(envelope.Records) > 0 {
 		var upload events.S3Event

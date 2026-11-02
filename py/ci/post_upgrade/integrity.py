@@ -83,7 +83,7 @@ def _resolve_expr(expr: str, var_values: dict[str, str]) -> str:
     return out
 
 
-def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
+def _archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
     # Starlark strings can contain complete BUILD snippets, including closing
     # parentheses and apparent archive calls. Tokenization keeps those opaque.
     line_offsets = [0]
@@ -114,15 +114,45 @@ def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
         elif start is not None and token.type == tokenize.OP and token.string == "(":
             depth = 1
         else:
-            start = offset(token.start) if token.type == tokenize.NAME and token.string == "http_archive" else None
+            start = offset(token.start) if token.type == tokenize.NAME and token.string in ("http_archive", "archive_override") else None
     return blocks
 
 
 def _extract_archive_name(block: str) -> str:
-    match = re.search(r"^\s*name\s*=\s*\"([^\"]+)\"", block, re.MULTILINE)
+    match = re.search(r"^\s*(?:name|module_name)\s*=\s*\"([^\"]+)\"", block, re.MULTILINE)
     if not match:
-        raise Exception("Failed to find http_archive name")
+        raise Exception("Failed to find archive name or module_name")
     return match.group(1)
+
+
+def _first_url_list_entry(source: str) -> str:
+    # Stop at the first list separator, keeping commas in calls and brackets
+    # inside URL strings opaque. Preserve the expression for the URL resolver.
+    source = "[" + source
+    lines = source.splitlines(keepends=True)
+    tokens = tokenize.generate_tokens(io.StringIO(source).readline)
+    next(tokens)  # Opening list bracket keeps multiline entries within one expression.
+    start: tuple[int, int] | None = None
+    depth = 0
+    for token in tokens:
+        if token.type in (tokenize.COMMENT, tokenize.NL, tokenize.NEWLINE):
+            continue
+        if token.type == tokenize.OP:
+            if depth == 0 and token.string in (",", "]"):
+                if start is None:
+                    break
+                row, column = start
+                begin = sum(map(len, lines[:row - 1])) + column
+                row, column = token.start
+                end = sum(map(len, lines[:row - 1])) + column
+                return source[begin:end].strip()
+            if token.string in ("(", "[", "{"):
+                depth += 1
+            elif token.string in (")", "]", "}"):
+                depth -= 1
+        if start is None:
+            start = token.start
+    raise Exception("Failed to find urls entry after auto-integrity")
 
 
 def _extract_url_expr(block: str) -> str:
@@ -136,17 +166,10 @@ def _extract_url_expr(block: str) -> str:
                 url_match = re.match(r"url\s*=\s*(.+?),\s*$", follow)
                 if url_match:
                     return url_match.group(1).strip()
-                if follow.startswith("urls") and follow.endswith("["):
-                    for entry in lines[follow_idx + 1:]:
-                        entry = entry.strip()
-                        if "]" in entry:
-                            break
-                        if not entry or entry == ",":
-                            continue
-                        entry_match = re.match(r"(.+?),\s*$", entry)
-                        if entry_match:
-                            return entry_match.group(1).strip()
-                    raise Exception("Failed to find urls entry after auto-integrity")
+                urls_match = re.match(r"urls\s*=\s*\[", follow)
+                if urls_match:
+                    source = "\n".join([follow[urls_match.end():], *lines[follow_idx + 1:]])
+                    return _first_url_list_entry(source)
                 raise Exception("auto-integrity must be followed by url or urls")
     raise Exception("Missing auto-integrity marker")
 
@@ -191,7 +214,7 @@ def update_module_bazel_text(
     # block an unrelated update on an unavailable historical release.
     baseline_urls = _archive_urls(baseline) if baseline is not None else {}
     updated = module_text
-    blocks = _http_archive_blocks(module_text)
+    blocks = _archive_blocks(module_text)
     for start, end, archive_block in reversed(blocks):
         if "auto-integrity" not in archive_block:
             continue
@@ -217,7 +240,7 @@ def _archive_urls(module_text: str) -> dict[str, str]:
     variables = dict(re.findall(r'^([A-Z0-9_]+)\s*=\s*"([^"]+)"', module_text, re.MULTILINE))
     return {
         _extract_archive_name(block): _resolve_expr(_extract_url_expr(block), variables)
-        for _, _, block in _http_archive_blocks(module_text)
+        for _, _, block in _archive_blocks(module_text)
         if "auto-integrity" in block
     }
 
