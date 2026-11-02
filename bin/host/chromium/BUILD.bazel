@@ -1,5 +1,6 @@
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load(":runtime.bzl", "chromium_runtime")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -51,6 +52,16 @@ config_setting(
     ],
 )
 
+chromium_runtime(
+    name = "linux_runtime",
+    archive = "@chromium_packages//:flat",
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 alias(
     name = "chromium",
     actual = select({
@@ -75,5 +86,9 @@ sh_test(
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    srcs = [
+        "BUILD.bazel",
+        "linux_chromium.bzl",
+        "runtime.bzl",
+    ],
 )

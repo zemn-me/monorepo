@@ -26,7 +26,8 @@ func (d Time) String() string {
 	if zone == "Local" {
 		zone = "UTC"
 	}
-	return fmt.Sprintf("%s[%s]", d.Format(time.RFC3339Nano), zone)
+	// Keep fractional seconds fixed-width for DynamoDB string sort keys.
+	return fmt.Sprintf("%s[%s]", d.Format("2006-01-02T15:04:05.000000000Z07:00"), zone)
 }
 
 func Now() Time {

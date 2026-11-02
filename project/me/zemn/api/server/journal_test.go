@@ -371,12 +371,19 @@ func TestOpenAISummaryUsesGeneratedRequestAndResponseTypes(t *testing.T) {
 		if payload["store"] != false {
 			return nil, fmt.Errorf("store = %v, want false", payload["store"])
 		}
+		reasoning, ok := payload["reasoning"].(map[string]any)
+		if !ok || reasoning["effort"] != "medium" {
+			return nil, fmt.Errorf("reasoning = %v, want medium effort", payload["reasoning"])
+		}
 		if payload["model"] != journalSummaryModel {
 			return nil, fmt.Errorf("model = %v, want %q", payload["model"], journalSummaryModel)
 		}
 		instructions, ok := payload["instructions"].(string)
 		if !ok {
 			return nil, fmt.Errorf("instructions = %T, want string", payload["instructions"])
+		}
+		if !strings.Contains(instructions, journalWritingInstructions) {
+			return nil, errors.New("summary request omitted shared writing guidance")
 		}
 		if instructions != journalSummaryInstructions {
 			return nil, errors.New("request did not use the journal narrative summary instructions")
@@ -464,6 +471,10 @@ func TestOpenAIEntryAnalysisInfersExplicitEntryDate(t *testing.T) {
 		var payload map[string]any
 		if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
 			return nil, err
+		}
+		instructions, _ := payload["instructions"].(string)
+		if !strings.Contains(instructions, journalWritingInstructions) {
+			return nil, errors.New("entry analysis omitted shared writing guidance")
 		}
 		if payload["instructions"] != journalEntryAnalysisInstructions {
 			return nil, errors.New("request did not use the journal entry date instructions")
@@ -753,6 +764,70 @@ func TestProcessJournalUploadUsesSpokenDateOverContainerMetadata(t *testing.T) {
 	}
 }
 
+func TestProcessJournalUploadPreservesBrowserRecordingStart(t *testing.T) {
+	fallbackRecordedAt := time.Date(2026, time.August, 14, 18, 25, 0, 0, time.UTC)
+	embeddedRecordedAt := time.Date(2026, time.August, 12, 19, 16, 0, 0, time.UTC)
+	for _, test := range []struct {
+		name        string
+		contentType string
+		audio       []byte
+		want        time.Time
+	}{
+		{
+			name:        "fallback timestamp",
+			contentType: "audio/wav",
+			audio:       []byte("audio without creation metadata"),
+			want:        fallbackRecordedAt,
+		},
+		{
+			name:        "embedded timestamp",
+			contentType: "audio/mp4",
+			audio:       testMP4(embeddedRecordedAt, 0),
+			want:        fallbackRecordedAt,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			db := &inMemoryDDB{}
+			objects := &fakeJournalObjects{}
+			server := &Server{
+				ddb: db, journalTableName: "journal", journalBucketName: "journal-audio",
+				journalObjects: objects, journalPresigner: fakeJournalPresigner{},
+				journalAI: fakeJournalAI{},
+			}
+			ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
+				Issuer: "https://api.zemn.me", Subject: journalOwnerSubject,
+			})
+			response, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{
+				Body: &JournalEntryCreate{
+					ContentType:        JournalEntryCreateContentType(test.contentType),
+					RecordedAt:         time.Now(),
+					RecordingStartedAt: &fallbackRecordedAt,
+					TimeZone:           "America/Los_Angeles",
+				},
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			entryID := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
+			objects.objects[journalEntryKey(entryID)] = test.audio
+			if err := server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(entryID), int64(len(test.audio))); err != nil {
+				t.Fatal(err)
+			}
+			journalResponse, err := server.GetJournal(ctx, GetJournalRequestObject{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			entry := journalResponse.(GetJournal200JSONResponse).Entries[0]
+			if !entry.RecordedAt.Equal(test.want) {
+				t.Fatalf("recordedAt = %v, want %v", entry.RecordedAt, test.want)
+			}
+			if entry.Summary == nil || !entry.Summary.Start.Equal(test.want) {
+				t.Fatalf("entry summary = %#v, want start %v", entry.Summary, test.want)
+			}
+		})
+	}
+}
+
 func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	db := &inMemoryDDB{}
 	objects := &fakeJournalObjects{}
@@ -770,6 +845,7 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 		Body: &JournalEntryCreate{
 			ContentType: JournalEntryCreateContentType("audio/mp4"),
 			RecordedAt:  fallbackRecordedAt,
+			Location:    &JournalLocation{Latitude: 40.7, Longitude: -74, AccuracyMeters: 25, CapturedAt: fallbackRecordedAt},
 			TimeZone:    "America/Los_Angeles",
 		},
 	})
@@ -887,6 +963,9 @@ func TestCreateAndProcessJournalUploadOmitsSingletonAggregates(t *testing.T) {
 	var metadata JournalEntryMetadata
 	if err := json.Unmarshal(objects.objects["entries/"+entryID+"/metadata.json"], &metadata); err != nil {
 		t.Fatal(err)
+	}
+	if metadata.Location == nil || metadata.Location.Latitude != 40.7 || journal.Entries[0].Location == nil || journal.Entries[0].Location.Longitude != -74 {
+		t.Fatalf("recording location did not survive processing: metadata=%+v, entry=%+v", metadata.Location, journal.Entries[0].Location)
 	}
 	if metadata.Id != entryID || metadata.Status != JournalEntryStatusReady || !metadata.RecordedAt.Equal(audioRecordedAt) {
 		t.Fatalf("metadata = %#v, want ready entry %s", metadata, entryID)
@@ -1054,6 +1133,9 @@ func TestJournalDuplicateAudioHashKeepsSingleEntry(t *testing.T) {
 	if len(journal.Entries) != 1 || journal.Entries[0].Id.String() != entryIDs[0] {
 		t.Fatalf("entries = %#v, want only the first copy %s", journal.Entries, entryIDs[0])
 	}
+	if journal.Entries[0].ContentSha256 != fmt.Sprintf("%x", sha256.Sum256(audio)) {
+		t.Fatal("completed entry did not expose its audio hash for duplicate reconciliation")
+	}
 	if got := len(ai.periods); got != 1 || ai.periods[0] != "entry" {
 		t.Fatalf("AI summary calls = %v, want one entry call", ai.periods)
 	}
@@ -1095,8 +1177,8 @@ func TestJournalUploadSizeComesFromObjectEvent(t *testing.T) {
 		t.Fatal(err)
 	}
 	journal := journalResponse.(GetJournal200JSONResponse)
-	if len(journal.Entries) != 0 {
-		t.Fatalf("journal entries = %#v, want failed upload omitted", journal.Entries)
+	if len(journal.Entries) != 1 || journal.Entries[0].Status != JournalEntryStatusFailed || journal.Entries[0].Error == nil || !strings.Contains(*journal.Entries[0].Error, "outside the allowed range") {
+		t.Fatalf("journal entries = %#v, want failed upload with its error", journal.Entries)
 	}
 	records, err := server.listJournalRecords(ctx, journalOwnerSubject)
 	if err != nil {
@@ -1111,7 +1193,7 @@ func TestJournalUploadSizeComesFromObjectEvent(t *testing.T) {
 	}
 }
 
-func TestGetJournalShowsOnlyReadyAndActiveEntries(t *testing.T) {
+func TestGetJournalShowsReadyActiveAndFailedEntries(t *testing.T) {
 	db := &inMemoryDDB{}
 	server := &Server{ddb: db, journalTableName: "journal"}
 	ctx := context.WithValue(context.Background(), auth.IDTokenKey, &auth.IDToken{
@@ -1150,6 +1232,7 @@ func TestGetJournalShowsOnlyReadyAndActiveEntries(t *testing.T) {
 		"00000000-0000-4000-8000-000000000011",
 		"00000000-0000-4000-8000-000000000012",
 		"00000000-0000-4000-8000-000000000013",
+		"00000000-0000-4000-8000-000000000014",
 	}; !slices.Equal(got, want) {
 		t.Fatalf("visible entry IDs = %v, want %v", got, want)
 	}
@@ -1427,5 +1510,63 @@ func TestProcessJournalUploadIgnoresSidecarNotifications(t *testing.T) {
 	server := &Server{journalBucketName: "journal-audio"}
 	if err := server.ProcessJournalUpload(context.Background(), "journal-audio", "entries/id/metadata.json", 1); err != nil {
 		t.Fatal(err)
+	}
+}
+
+type progressInspectingJournalAI struct {
+	fakeJournalAI
+	inspect func() error
+	fail    bool
+}
+
+func (ai progressInspectingJournalAI) AnalyzeEntry(ctx context.Context, at time.Time, zone string, sources []JournalSummarySource) (JournalEntryAnalysisResult, error) {
+	if err := ai.inspect(); err != nil {
+		return JournalEntryAnalysisResult{}, err
+	}
+	if ai.fail {
+		return JournalEntryAnalysisResult{}, errors.New("summary failed")
+	}
+	return ai.fakeJournalAI.AnalyzeEntry(ctx, at, zone, sources)
+}
+
+func TestJournalProcessingProgressLifecycle(t *testing.T) {
+	for _, fail := range []bool{false, true} {
+		t.Run(fmt.Sprintf("summary_failure_%v", fail), func(t *testing.T) {
+			objects := &fakeJournalObjects{}
+			server := &Server{ddb: &inMemoryDDB{}, journalTableName: "journal", journalBucketName: "journal-audio", journalObjects: objects, journalPresigner: fakeJournalPresigner{}}
+			ctx := context.WithValue(t.Context(), auth.IDTokenKey, &auth.IDToken{Issuer: "https://api.zemn.me", Subject: journalOwnerSubject})
+			inspected := false
+			server.journalAI = progressInspectingJournalAI{fail: fail, inspect: func() error {
+				response, err := server.GetJournal(ctx, GetJournalRequestObject{})
+				if err != nil {
+					return err
+				}
+				entry := response.(GetJournal200JSONResponse).Entries[0]
+				if entry.ProcessingProgress == nil || entry.ProcessingProgress.Stage != JournalProcessingProgressStageSummarizing || len(entry.Transcript) == 0 {
+					return fmt.Errorf("transcript/summary stage not published: %+v", entry)
+				}
+				inspected = true
+				return nil
+			}}
+			response, err := server.PostJournalEntries(ctx, PostJournalEntriesRequestObject{Body: &JournalEntryCreate{ContentType: "audio/wav", RecordedAt: time.Now(), TimeZone: "UTC"}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			id := response.(PostJournalEntries201JSONResponse).Entry.Id.String()
+			objects.objects[journalEntryKey(id)] = []byte("audio")
+			err = server.ProcessJournalUpload(ctx, "journal-audio", journalEntryKey(id), 5)
+			if (err != nil) != fail || !inspected {
+				t.Fatalf("processing error=%v, inspected=%v", err, inspected)
+			}
+			records, err := server.listJournalRecords(ctx, journalOwnerSubject)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, record := range records {
+				if record.Entry != nil && record.Entry.ProcessingProgress != nil {
+					t.Fatal("finished entry retained stale progress")
+				}
+			}
+		})
 	}
 }

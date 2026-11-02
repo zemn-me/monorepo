@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -140,4 +141,10 @@ js_binary(
     data = [":matrix_map_bench_ts"],
     entry_point = "matrix_map_bench.js",
     tags = ["manual"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

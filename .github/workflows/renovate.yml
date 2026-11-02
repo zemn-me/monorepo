@@ -9,6 +9,7 @@ concurrency:
   # do not attempt to run overlapping instances.
   group: renovate
 on: # yamllint disable-line rule:truthy
+  workflow_dispatch:
   schedule:
     # The "*" (#42, asterisk) character has special semantics in YAML, so this
     # string has to be quoted.
@@ -22,6 +23,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Read tested Renovate version
+        run: |
+          python3 - <<'PYTHON' >> "$GITHUB_ENV"
+          import json
+          with open("package.json") as manifest:
+              print("RENOVATE_VERSION=" + json.load(manifest)["devDependencies"]["renovate"])
+          PYTHON
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets...
         id: secret_auth
@@ -35,9 +43,11 @@ jobs:
           secrets: |-
             gh_pat:extreme-cycling-441523-a9/github-actions-gh-pat
       - name: Self-hosted Renovate
-        uses: renovatebot/github-action@39b914146caeff8cd512e61c8992f1d5913af85c # v46.2.5
+        uses: renovatebot/github-action@2804199d260ad00c1fae0e9e842888369391c776 # v46.3.10
         with:
           configurationFile: .github/renovate-global.json
+          docker-cmd-file: .github/renovate-entrypoint.sh
+          docker-user: root
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
     env:

@@ -1,16 +1,20 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 exports_files(["security.txt"])
 
 ts_project(
     name = "website",
-    srcs = ["website.ts"],
+    srcs = [
+        "remix.ts",
+        "website.ts",
+    ],
     data = ["security.txt"],
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/random",
         "//:node_modules/@types/mime",
         "//:node_modules/@types/node",
         "//:node_modules/file-type",
@@ -27,6 +31,29 @@ bazel_lint(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["website.ts"],
+    srcs = [
+        "remix.ts",
+        "website.ts",
+        "website_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "website_tests",
+    srcs = ["website_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":website",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["website_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":website_tests"],
 )

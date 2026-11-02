@@ -1,0 +1,560 @@
+'use client';
+
+import {
+	faArrowRotateRight,
+	faChevronDown,
+	faDownload,
+	faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
+import { maxUploadBytes } from '#root/project/me/zemn/app/journal/recording.js';
+import {
+	getRecording,
+	type LocalRecording,
+	listRecordings,
+	recordingBlob,
+	recordingLock,
+	removeRecording,
+	saveRecording,
+} from '#root/project/me/zemn/app/journal/recording_store.js';
+import { JournalStatus } from '#root/project/me/zemn/app/journal/status.js';
+import style from '#root/project/me/zemn/app/journal/style.module.css';
+import type { JournalAudioUpload } from '#root/project/me/zemn/hook/useZemnMeApi.js';
+import {
+	Date as LocalizedDate,
+	Time as LocalizedTime,
+} from '#root/ts/react/lang/date.js';
+
+type JournalEntry =
+	import('#root/project/me/zemn/api/api_client.gen.js').components['schemas']['JournalEntry'];
+
+interface QueueOptions {
+	readonly entries: readonly JournalEntry[];
+	readonly owner: string | undefined;
+	readonly canSync: boolean;
+	readonly upload: (
+		audio: JournalAudioUpload
+	) => Promise<{ readonly id: string }>;
+	readonly readyEntryIDs: readonly string[];
+}
+
+export function useRecordingQueue(options: QueueOptions) {
+	const current = useRef(options);
+	current.current = options;
+	const [recordings, setRecordings] = useState<LocalRecording[]>([]);
+	const [memory, setMemory] = useState<LocalRecording[]>([]);
+	const [syncing, setSyncing] = useState<string>();
+	const [uploadProgress, setUploadProgress] = useState<number>();
+	const [errors, setErrors] = useState<Record<string, string>>({});
+	const [storageError, setStorageError] = useState<string>();
+	const owner = options.owner;
+
+	const refresh = useCallback(async () => {
+		if (!owner) return;
+		try {
+			const saved = await listRecordings(owner);
+			if (current.current.owner === owner) {
+				setRecordings(saved);
+				setStorageError(undefined);
+			}
+		} catch {
+			if (current.current.owner === owner)
+				setStorageError(
+					'Could not open saved recordings. Free device storage and reload this page.'
+				);
+		}
+	}, [owner]);
+
+	const sync = useCallback(async () => {
+		if (!owner || !current.current.canSync || !navigator.onLine) return;
+		try {
+			await navigator.locks.request(
+				`journal-sync:${owner}`,
+				{ ifAvailable: true },
+				async lock => {
+					if (!lock) return;
+					for (const draft of await listRecordings(owner)) {
+						if (
+							current.current.owner !== owner ||
+							!current.current.canSync
+						)
+							break;
+						if (
+							draft.remoteEntryID &&
+							current.current.readyEntryIDs.includes(
+								draft.remoteEntryID
+							)
+						) {
+							await removeRecording(owner, draft.id);
+							continue;
+						}
+						// A duplicate upload is removed by the worker. Only discard its
+						// local copy after matching the bytes to a completed entry.
+						if (
+							draft.state === 'uploaded' &&
+							!current.current.entries.some(
+								entry => entry.id === draft.remoteEntryID
+							)
+						) {
+							const file = recordingBlob(draft);
+							const candidates = current.current.entries.filter(
+								entry =>
+									entry.status === 'ready' &&
+									entry.byteLength === file.size &&
+									entry.contentSha256
+							);
+							if (candidates.length > 0) {
+								const digest = new Uint8Array(
+									await crypto.subtle.digest(
+										'SHA-256',
+										await file.arrayBuffer()
+									)
+								);
+								const hash = Array.from(digest, byte =>
+									byte.toString(16).padStart(2, '0')
+								).join('');
+								if (
+									current.current.owner === owner &&
+									current.current.entries.some(
+										entry =>
+											entry.status === 'ready' &&
+											entry.contentSha256 === hash
+									)
+								) {
+									await removeRecording(owner, draft.id);
+									continue;
+								}
+							}
+						}
+						if (draft.state !== 'queued') continue;
+						const file = recordingBlob(draft);
+						if (file.size === 0 || file.size > maxUploadBytes)
+							continue;
+						setSyncing(draft.id);
+						setUploadProgress(undefined);
+						try {
+							const entry = await current.current.upload({
+								recordingStartedAt: draft.recordingStartedAt,
+								file,
+								contentType: draft.contentType,
+								recordedAt: draft.recordedAt,
+								location: draft.location,
+								timeZone: draft.timeZone,
+								onProgress: setUploadProgress,
+							});
+							// Keep the local audio until transcription is confirmed ready.
+							await saveRecording({
+								...draft,
+								state: 'uploaded',
+								remoteEntryID: entry.id,
+								uploadedAt: Date.now(),
+							});
+							setErrors(previous => {
+								const next = { ...previous };
+								delete next[draft.id];
+								return next;
+							});
+						} catch (error) {
+							setErrors(previous => ({
+								...previous,
+								[draft.id]:
+									error instanceof Error && error.message
+										? error.message
+										: 'Audio upload failed.',
+							}));
+							break;
+						} finally {
+							setSyncing(undefined);
+							setUploadProgress(undefined);
+						}
+					}
+				}
+			);
+		} catch {
+			if (current.current.owner === owner)
+				setStorageError(
+					'Could not update saved recordings. Download a backup before leaving this page.'
+				);
+		}
+		await refresh();
+	}, [owner, refresh]);
+
+	useEffect(() => {
+		setRecordings([]);
+		setErrors({});
+		setSyncing(undefined);
+		setUploadProgress(undefined);
+		void refresh().then(sync);
+		const retry = () => {
+			void sync();
+		};
+		const timer = window.setInterval(retry, 15_000);
+		window.addEventListener('online', retry);
+		window.addEventListener('focus', retry);
+		return () => {
+			window.clearInterval(timer);
+			window.removeEventListener('online', retry);
+			window.removeEventListener('focus', retry);
+		};
+	}, [refresh, sync, options.canSync]);
+
+	// New drafts can arrive while another upload owns the lock. Drain the next
+	// batch after that upload releases it, and reconcile new server confirmations
+	// immediately; the interval remains a fallback for failed requests.
+	const queuedIDs = recordings
+		.filter(draft => draft.state === 'queued')
+		.map(draft => draft.id)
+		.join('\0');
+	const readyEntryIDs = options.readyEntryIDs.join('\0');
+	const hasSyncErrors = Object.keys(errors).length > 0;
+	useEffect(() => {
+		if (!hasSyncErrors && (queuedIDs || readyEntryIDs)) void sync();
+	}, [hasSyncErrors, queuedIDs, readyEntryIDs, sync]);
+
+	const keep = useCallback(
+		async (draft: LocalRecording, durable = false) => {
+			try {
+				if (!durable) await saveRecording(draft);
+				setMemory(previous =>
+					previous.filter(item => item.id !== draft.id)
+				);
+				await refresh();
+				void sync();
+			} catch {
+				setMemory(previous => [
+					...previous.filter(item => item.id !== draft.id),
+					draft,
+				]);
+				setStorageError(
+					'Could not save this recording on your device. Download it before leaving this page.'
+				);
+			}
+		},
+		[refresh, sync]
+	);
+
+	const retry = useCallback(
+		async (draft: LocalRecording) => {
+			await navigator.locks.request(
+				recordingLock(draft.owner),
+				{ ifAvailable: true },
+				async recording => {
+					if (!recording) return;
+					await navigator.locks.request(
+						`journal-sync:${draft.owner}`,
+						{ ifAvailable: true },
+						async lock => {
+							if (!lock || current.current.owner !== draft.owner)
+								return;
+							const saved = memory.some(
+								item => item.id === draft.id
+							)
+								? draft
+								: ((await getRecording(
+										draft.owner,
+										draft.id
+									)) ?? draft);
+							await keep({
+								...saved,
+								state: 'queued',
+								remoteEntryID: undefined,
+								uploadedAt: undefined,
+							});
+						}
+					);
+				}
+			);
+			await sync();
+		},
+		[keep, memory, sync]
+	);
+
+	const discard = useCallback(
+		async (draft: LocalRecording) => {
+			await navigator.locks.request(
+				recordingLock(draft.owner),
+				{ ifAvailable: true },
+				async recording => {
+					if (!recording) return;
+					await navigator.locks.request(
+						`journal-sync:${draft.owner}`,
+						{ ifAvailable: true },
+						async lock => {
+							if (!lock || current.current.owner !== draft.owner)
+								return;
+							await removeRecording(draft.owner, draft.id);
+							setMemory(previous =>
+								previous.filter(item => item.id !== draft.id)
+							);
+						}
+					);
+				}
+			);
+			await refresh();
+		},
+		[refresh]
+	);
+
+	const emergencyIDs = new Set(memory.map(item => item.id));
+	return {
+		recordings: [
+			...recordings.filter(item => !emergencyIDs.has(item.id)),
+			...memory,
+		].filter(item => item.owner === owner),
+		entries: options.entries,
+		emergencyIDs,
+		syncing,
+		uploadProgress,
+		errors,
+		storageError,
+		keep,
+		retry,
+		discard,
+		refresh,
+	};
+}
+
+function LocalRecordingRow({
+	draft,
+	queue,
+}: {
+	readonly draft: LocalRecording;
+	readonly queue: ReturnType<typeof useRecordingQueue>;
+}) {
+	const [url, setURL] = useState<string>();
+	const [actionError, setActionError] = useState<string>();
+	const file = recordingBlob(draft);
+	useEffect(() => {
+		const url = URL.createObjectURL(recordingBlob(draft));
+		setURL(url);
+		return () => URL.revokeObjectURL(url);
+	}, [draft]);
+	const remoteEntry = queue.entries.find(
+		entry => entry.id === draft.remoteEntryID
+	);
+	const processingFailed = remoteEntry?.status === 'failed';
+	const confirmationMissing =
+		draft.state === 'uploaded' &&
+		!remoteEntry &&
+		Boolean(draft.uploadedAt && Date.now() - draft.uploadedAt > 120_000);
+	const failure =
+		queue.errors[draft.id] ??
+		(confirmationMissing ? 'Could not confirm this upload.' : undefined) ??
+		(processingFailed
+			? remoteEntry.error || 'Could not process this voice note.'
+			: undefined);
+	const tooLarge = file.size > maxUploadBytes;
+	const uploading = queue.syncing === draft.id;
+	const emergency = queue.emergencyIDs.has(draft.id);
+	const canRetry =
+		!uploading &&
+		(processingFailed ||
+			!draft.uploadedAt ||
+			Date.now() - draft.uploadedAt > 120_000);
+	const status =
+		emergency || tooLarge || failure
+			? 'error'
+			: uploading || draft.state === 'uploaded'
+				? 'busy'
+				: draft.state === 'recording'
+					? 'interrupted'
+					: 'queued';
+	const label = emergency
+		? 'Recording not saved'
+		: tooLarge
+			? 'Recording too large'
+			: uploading
+				? 'Syncing voice note'
+				: confirmationMissing
+					? 'Upload not confirmed'
+					: processingFailed
+						? 'Processing failed'
+						: draft.state === 'uploaded'
+							? !remoteEntry
+								? 'Confirming voice note'
+								: remoteEntry.processingProgress?.stage ===
+										'summarizing'
+									? 'Preparing summary'
+									: 'Transcribing voice note'
+							: draft.state === 'recording'
+								? 'Interrupted recording'
+								: failure
+									? 'Upload failed'
+									: 'Waiting to sync';
+	return (
+		<li>
+			<details
+				className={style.localRecording}
+				open={emergency || tooLarge || Boolean(failure) || undefined}
+			>
+				<summary title={label}>
+					<div className={style.localRecordingHeading}>
+						<span>
+							{draft.name === 'voice-note.webm' ||
+							/^voice-note-\d{4}-\d{2}-\d{2}T/.test(draft.name)
+								? 'Voice note'
+								: draft.name}
+						</span>
+						<small>
+							<LocalizedDate date={new Date(draft.recordedAt)} />{' '}
+							·{' '}
+							<LocalizedTime date={new Date(draft.recordedAt)} />
+						</small>
+					</div>
+					{!uploading && remoteEntry?.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={remoteEntry.processingProgress}
+						/>
+					) : (
+						<JournalStatus
+							label={label}
+							state={status}
+							progress={
+								uploading ? queue.uploadProgress : undefined
+							}
+						/>
+					)}
+					<FontAwesomeIcon
+						aria-hidden="true"
+						className={style.entryChevron}
+						icon={faChevronDown}
+					/>
+				</summary>
+				{failure && (
+					<p className={style.recordingFailure} role="alert">
+						{failure}
+						{/[.!?]$/.test(failure) ? ' ' : '. '}
+						{processingFailed || confirmationMissing
+							? 'Your recording is saved on this device. Retry or download it.'
+							: 'Your recording is saved on this device. Will retry automatically.'}
+					</p>
+				)}
+				{emergency && (
+					<p role="alert">
+						Download this recording before leaving; it couldn’t be
+						saved.
+					</p>
+				)}
+				{tooLarge && (
+					<p role="alert">
+						Audio exceeds 256 MiB. Download and split it to sync.
+					</p>
+				)}
+				<audio
+					aria-label="Preview local recording"
+					className={style.audio}
+					controls
+					preload="none"
+					src={url}
+				/>
+				<div className={style.localRecordingActions}>
+					<small>{(file.size / 1_000_000).toFixed(1)} MB</small>
+					<a
+						aria-label="Download audio"
+						download={draft.name}
+						href={url}
+						title="Download audio"
+					>
+						<FontAwesomeIcon aria-hidden="true" icon={faDownload} />
+					</a>
+					{!tooLarge && file.size > 0 && (
+						<button
+							aria-label={
+								draft.state === 'recording'
+									? 'Sync saved audio'
+									: 'Retry sync'
+							}
+							disabled={!canRetry}
+							onClick={() => {
+								void queue
+									.retry(draft)
+									.catch(() =>
+										setActionError(
+											'Could not retry. Your local recording has been kept.'
+										)
+									);
+							}}
+							title="Retry sync"
+							type="button"
+						>
+							<FontAwesomeIcon
+								aria-hidden="true"
+								icon={faArrowRotateRight}
+							/>
+						</button>
+					)}
+					<details className={style.removeRecording}>
+						<summary
+							aria-label="Remove local copy"
+							title="Remove local copy"
+						>
+							<FontAwesomeIcon
+								aria-hidden="true"
+								icon={faTrashCan}
+							/>
+						</summary>
+						<div>
+							<p>
+								Delete this device’s copy? Unsynced audio will
+								be lost.
+							</p>
+							<button
+								disabled={uploading}
+								onClick={() => {
+									void queue
+										.discard(draft)
+										.catch(() =>
+											setActionError(
+												'Could not remove the local recording.'
+											)
+										);
+								}}
+								type="button"
+							>
+								Delete local recording
+							</button>
+						</div>
+					</details>
+				</div>
+				{actionError && <p role="alert">{actionError}</p>}
+			</details>
+		</li>
+	);
+}
+
+export function LocalRecordings({
+	queue,
+	activeID,
+}: {
+	readonly queue: ReturnType<typeof useRecordingQueue>;
+	readonly activeID?: string;
+}) {
+	const recordings = queue.recordings.filter(item => item.id !== activeID);
+	return (
+		<>
+			{queue.storageError && (
+				<p className={style.notice} role="alert">
+					{queue.storageError}
+				</p>
+			)}
+			{recordings.length > 0 && (
+				<section
+					aria-label="Local recordings"
+					className={style.localRecordings}
+				>
+					<ul>
+						{recordings.map(draft => (
+							<LocalRecordingRow
+								draft={draft}
+								key={draft.id}
+								queue={queue}
+							/>
+						))}
+					</ul>
+				</section>
+			)}
+		</>
+	);
+}

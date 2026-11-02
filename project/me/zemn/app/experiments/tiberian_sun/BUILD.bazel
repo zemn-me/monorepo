@@ -1,0 +1,61 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/remix:public_assets.bzl", "hashed_public_assets")
+
+hashed_public_assets(
+    name = "runtime",
+    outs = ["assets.ts"],
+    assets = {
+        "//project/tiberian_sun/web:javascript": "engineJavaScript",
+        "//project/tiberian_sun/web:wasm": "engineWasm",
+        "//project/tiberian_sun/web:data": "engineData",
+        "//project/tiberian_sun/assets:game_data": "gameData",
+        "//project/tiberian_sun/assets:game_license": "gameLicense",
+        "//project/tiberian_sun:LICENSE.md": "license",
+        "@opents_web//:THIRD_PARTY_NOTICES.md": "thirdPartyNotices",
+    },
+    public_dir = "sha256",
+)
+
+ts_project(
+    name = "tiberian_sun",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+        ":runtime_generated",
+    ],
+    assets = ["style.module.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//:node_modules/react-router",
+        "//project/me/zemn/components/Link",
+        "//project/tiberian_sun/web",
+        "//ts/future",
+        "//ts/remix",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)

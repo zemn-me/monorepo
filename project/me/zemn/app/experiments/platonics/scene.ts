@@ -51,24 +51,57 @@ export interface MovementInput {
 	readonly jump: boolean;
 }
 
-export interface SolidInstance {
-	readonly kind: SolidKind;
-	readonly position: Point3D;
-	readonly segments: readonly Segment3D[];
-	readonly spinAxis: Point3D;
-	readonly spinPhase: number;
-	readonly spinRate: number;
-	readonly stroke: string;
-	readonly width: number;
-	readonly opacity: number;
+/** Scene records stay in memory; consume each record once per solid or frame. */
+export type SolidInstance = <R>(
+	use: (
+		kind: SolidKind,
+		position: Point3D,
+		segments: readonly Segment3D[],
+		spinAxis: Point3D,
+		spinPhase: number,
+		spinRate: number,
+		stroke: string,
+		width: number,
+		opacity: number
+	) => R
+) => R;
+
+function solidInstance(
+	kind: SolidKind,
+	position: Point3D,
+	segments: readonly Segment3D[],
+	spinAxis: Point3D,
+	spinPhase: number,
+	spinRate: number,
+	stroke: string,
+	width: number,
+	opacity: number
+): SolidInstance {
+	return use =>
+		use(
+			kind,
+			position,
+			segments,
+			spinAxis,
+			spinPhase,
+			spinRate,
+			stroke,
+			width,
+			opacity
+		);
 }
 
-export interface PlatonicField {
-	readonly solids: readonly SolidInstance[];
-	readonly staticSegments: readonly WorldSegment[];
-	readonly solidCount: number;
-	readonly segmentCount: number;
-}
+export type PlatonicField = <R>(
+	use: (
+		solids: readonly SolidInstance[],
+		staticSegments: readonly WorldSegment[],
+		solidCount: number,
+		segmentCount: number
+	) => R
+) => R;
+
+export const fieldSolidCount = (field: PlatonicField) =>
+	field((_solids, _segments, count) => count);
 
 export type WorldSegment = StyledSegment3D;
 export type RenderedSegment = RenderedSegment2D;
@@ -129,7 +162,10 @@ function segmentsFromVertices(vertices: readonly Point3D[]): Segment3D[] {
 	const segments: Segment3D[] = [];
 	for (let start = 0; start < vertices.length; start++) {
 		for (let end = start + 1; end < vertices.length; end++) {
-			if (distance3(vertices[start]!, vertices[end]!) <= nearest + tolerance) {
+			if (
+				distance3(vertices[start]!, vertices[end]!) <=
+				nearest + tolerance
+			) {
 				segments.push([vertices[start]!, vertices[end]!] as const);
 			}
 		}
@@ -320,32 +356,36 @@ function createSolidInstances(): SolidInstance[] {
 					column;
 				const kind = SOLID_KINDS[index % SOLID_KINDS.length]!;
 				const shapeForKind = SHAPES_BY_KIND[kind];
-				const radius = 1.08 + ((column * 3 + row * 5 + layer) % 6) * 0.16;
+				const radius =
+					1.08 + ((column * 3 + row * 5 + layer) % 6) * 0.16;
 				const xOffset = (row % 2 === 0 ? -0.5 : 0.5) * 1.25;
 				const yOffset = ((column + row) % 3) * 0.34;
 				const position = point<3>(
-					(column - (FIELD_COLUMNS - 1) / 2) * FIELD_SPACING + xOffset,
+					(column - (FIELD_COLUMNS - 1) / 2) * FIELD_SPACING +
+						xOffset,
 					EYE_HEIGHT + 2.15 + layer * 4.65 + yOffset,
 					(row - (FIELD_ROWS - 1) / 2) * FIELD_SPACING +
 						FIELD_Z_OFFSET +
 						layer * 1.55
 				);
 
-				solids.push({
-					kind,
-					position,
-					segments: scaleSegments(shapeForKind.segments, radius),
-					spinAxis: point<3>(
-						((column % 3) - 1) * 0.5,
-						0.8 + layer * 0.25,
-						((row % 3) - 1) * 0.45
-					),
-					spinPhase: index * 0.773,
-					spinRate: 0.32 + (index % 7) * 0.045,
-					stroke: SHAPE_COLORS[kind],
-					width: shapeForKind.edgeCount >= 30 ? 0.95 : 1.18,
-					opacity: shapeForKind.edgeCount >= 30 ? 0.78 : 0.88,
-				});
+				solids.push(
+					solidInstance(
+						kind,
+						position,
+						scaleSegments(shapeForKind.segments, radius),
+						point<3>(
+							((column % 3) - 1) * 0.5,
+							0.8 + layer * 0.25,
+							((row % 3) - 1) * 0.45
+						),
+						index * 0.773,
+						0.32 + (index % 7) * 0.045,
+						SHAPE_COLORS[kind],
+						shapeForKind.edgeCount >= 30 ? 0.95 : 1.18,
+						shapeForKind.edgeCount >= 30 ? 0.78 : 0.88
+					)
+				);
 			}
 		}
 	}
@@ -393,9 +433,15 @@ export function stepPlayer(
 	return {
 		...pose,
 		position: point<3>(
-			Math.max(-WORLD_EXTENT + 1, Math.min(WORLD_EXTENT - 1, x(unclamped))),
+			Math.max(
+				-WORLD_EXTENT + 1,
+				Math.min(WORLD_EXTENT - 1, x(unclamped))
+			),
 			nextY,
-			Math.max(-WORLD_EXTENT + 1, Math.min(WORLD_EXTENT - 1, z(unclamped)))
+			Math.max(
+				-WORLD_EXTENT + 1,
+				Math.min(WORLD_EXTENT - 1, z(unclamped))
+			)
 		),
 		verticalVelocity: landed ? 0 : nextVerticalVelocity,
 	};
@@ -406,66 +452,92 @@ export function createPlatonicField(): PlatonicField {
 	const staticSegments = createGridSegments();
 	const segmentCount =
 		staticSegments.length +
-		solids.reduce((total, solid) => total + solid.segments.length, 0);
+		solids.reduce(
+			(total, solid) =>
+				total + solid((_kind, _position, segments) => segments.length),
+			0
+		);
 
-	return {
-		solids,
-		staticSegments,
-		solidCount: solids.length,
-		segmentCount,
-	};
+	return use => use(solids, staticSegments, solids.length, segmentCount);
 }
 
 export function createFrameSegments(
 	field: PlatonicField,
 	timeSeconds: number,
-	solidLimit = field.solidCount
+	solidLimit = fieldSolidCount(field)
 ): WorldSegment[] {
-	const scene: WorldSegment[] = [...field.staticSegments];
-	const renderedSolidCount = Math.max(
-		0,
-		Math.min(field.solids.length, Math.trunc(solidLimit))
-	);
-
-	for (let solidIndex = 0; solidIndex < renderedSolidCount; solidIndex++) {
-		const solid = field.solids[solidIndex]!;
-		const rotation = unwrap(
-			Quaternion.fromAxisAngle(
-				solid.spinAxis,
-				solid.spinPhase + timeSeconds * solid.spinRate
-			)
+	return field((solids, staticSegments) => {
+		const scene: WorldSegment[] = [...staticSegments];
+		const renderedSolidCount = Math.max(
+			0,
+			Math.min(solids.length, Math.trunc(solidLimit))
 		);
-		for (const segment of unwrap(
-			rigidTransform(solid.segments, rotation, solid.position)
-		)) {
-			scene.push(
-				styleSegment(segment, {
-					stroke: solid.stroke,
-					width: solid.width,
-					opacity: solid.opacity,
-				})
+
+		for (
+			let solidIndex = 0;
+			solidIndex < renderedSolidCount;
+			solidIndex++
+		) {
+			solids[solidIndex]!(
+				(
+					_kind,
+					position,
+					segments,
+					spinAxis,
+					spinPhase,
+					spinRate,
+					stroke,
+					width,
+					opacity
+				) => {
+					const rotation = unwrap(
+						Quaternion.fromAxisAngle(
+							spinAxis,
+							spinPhase + timeSeconds * spinRate
+						)
+					);
+					for (const segment of unwrap(
+						rigidTransform(segments, rotation, position)
+					)) {
+						scene.push(
+							styleSegment(segment, {
+								stroke,
+								width,
+								opacity,
+							})
+						);
+					}
+				}
 			);
 		}
-	}
 
-	return scene;
+		return scene;
+	});
 }
 
 export function segmentCountForSolidLimit(
 	field: PlatonicField,
 	solidLimit: number
 ): number {
-	const renderedSolidCount = Math.max(
-		0,
-		Math.min(field.solids.length, Math.trunc(solidLimit))
-	);
-	let segmentCount = field.staticSegments.length;
+	return field((solids, staticSegments) => {
+		const renderedSolidCount = Math.max(
+			0,
+			Math.min(solids.length, Math.trunc(solidLimit))
+		);
+		let segmentCount = staticSegments.length;
 
-	for (let solidIndex = 0; solidIndex < renderedSolidCount; solidIndex++) {
-		segmentCount += field.solids[solidIndex]!.segments.length;
-	}
+		for (
+			let solidIndex = 0;
+			solidIndex < renderedSolidCount;
+			solidIndex++
+		) {
+			segmentCount += solids[solidIndex]!(
+				(_kind, _position, segments) => segments.length
+			);
+		}
 
-	return segmentCount;
+		return segmentCount;
+	});
 }
 
 export function projectPoint(
@@ -498,7 +570,7 @@ export function renderScene(
 	width: number,
 	height: number,
 	timeSeconds = 0,
-	solidLimit = field.solidCount
+	solidLimit = fieldSolidCount(field)
 ): Result<RenderedSegment[], Error> {
 	return renderSegments(
 		createFrameSegments(field, timeSeconds, solidLimit),

@@ -1,10 +1,11 @@
 'use client';
 
 import {
-	faCheck,
+	faBookOpen,
 	faChevronDown,
 	faMicrophone,
-	faStop,
+	faSpinner,
+	faTrashCan,
 	faTriangleExclamation,
 	faUpload,
 } from '@fortawesome/free-solid-svg-icons';
@@ -19,23 +20,50 @@ import {
 	PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
-	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
 } from 'react';
-import ReactMarkdown, { type Components } from 'react-markdown';
 import { Temporal } from 'temporal-polyfill';
-
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
-import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
+import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
+import { JournalMCPSetup } from '#root/project/me/zemn/app/journal/mcp_setup.js';
+import {
+	childPeriodsFor,
+	journalBrowseQuery,
+} from '#root/project/me/zemn/app/journal/periods.js';
+import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
+import {
+	type RecordingSession,
+	startLocalRecording,
+} from '#root/project/me/zemn/app/journal/recording.js';
+import {
+	LocalRecordings,
+	useRecordingQueue,
+} from '#root/project/me/zemn/app/journal/recording_queue.js';
+import { type LocalRecording } from '#root/project/me/zemn/app/journal/recording_store.js';
+import { useJournalRenderTime } from '#root/project/me/zemn/app/journal/render_time.js';
+import {
+	JournalPlaceholder,
+	JournalProgress,
+	JournalStatus,
+} from '#root/project/me/zemn/app/journal/status.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
+import { Markdown } from '#root/project/me/zemn/components/Article/markdown.js';
+import {
+	type MarkdownComponents,
+	markdownComponents,
+} from '#root/project/me/zemn/components/Article/markdown_components.js';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
+import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
 	useDeleteJournalEntry,
 	useGetJournal,
+	useGetJournalUploads,
+	useGetJournalWikiIndex,
+	useGetJournalWikiPage,
 	useGetMeScopes,
 	usePostJournalEntry,
 	useRefreshJournal,
@@ -51,6 +79,9 @@ import {
 
 type Journal = components['schemas']['Journal'];
 type JournalCitation = components['schemas']['JournalCitation'];
+type JournalWikiPageView = components['schemas']['JournalWikiPageView'];
+type JournalWikiIndex = components['schemas']['JournalWikiIndex'];
+type JournalCurationStatus = components['schemas']['JournalCurationStatus'];
 type JournalEntry = components['schemas']['JournalEntry'];
 type JournalTranscriptSegment = JournalEntry['transcript'][number];
 type JournalSummary = components['schemas']['JournalSummary'];
@@ -62,7 +93,6 @@ export type JournalRoute = 'year' | 'month' | 'week' | 'day';
 
 const journalReadScope = 'journal_read';
 const journalWriteScope = 'journal_write';
-const maxJournalAudioBytes = 25 * 1024 * 1024;
 const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -170,6 +200,17 @@ function followsLinkNormally(event: ReactMouseEvent<HTMLAnchorElement>) {
 	);
 }
 
+type JournalCitationPlayback = Pick<
+	JournalPlayback,
+	| 'hrefForSegment'
+	| 'labelForSegment'
+	| 'playSegment'
+	| 'playingEntryID'
+	| 'playingSegmentID'
+	| 'quoteForSegment'
+	| 'titleForEntry'
+>;
+
 interface JournalPlayback {
 	readonly activeEntryID: string | undefined;
 	readonly hrefForSegment: (entryID: string, segmentID: string) => string;
@@ -182,7 +223,8 @@ interface JournalPlayback {
 	readonly removeEntry: (entryID: string) => void;
 	readonly registerAudio: (
 		entryID: string,
-		audio: HTMLAudioElement | null
+		audio: HTMLAudioElement | null,
+		play: (time: number) => void
 	) => void;
 	readonly started: (entryID: string) => void;
 	readonly stopped: (entryID: string, time: number) => void;
@@ -195,8 +237,11 @@ function useJournalPlayback(
 	navigationKey = ''
 ): JournalPlayback {
 	const audioElements = useRef(new Map<string, HTMLAudioElement>());
-	const appliedNavigation = useRef<string>();
-	const pendingSeekTimes = useRef(new Map<string, number>());
+	const audioPlayRequests = useRef(new Map<string, (time: number) => void>());
+	const pendingPlayback = useRef<
+		{ entryID: string; time: number } | undefined
+	>(undefined);
+	const appliedNavigation = useRef<string | undefined>(undefined);
 	const entriesRef = useRef(journal.entries);
 	entriesRef.current = journal.entries;
 	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
@@ -212,11 +257,28 @@ function useJournalPlayback(
 	const playingRef = useRef(playing);
 	playingRef.current = playing;
 	const registerAudio = useCallback(
-		(entryID: string, audio: HTMLAudioElement | null) => {
-			if (audio) audioElements.current.set(entryID, audio);
-			else {
+		(
+			entryID: string,
+			audio: HTMLAudioElement | null,
+			play: (time: number) => void
+		) => {
+			if (audio) {
+				audioElements.current.set(entryID, audio);
+				audioPlayRequests.current.set(entryID, play);
+				if (pendingPlayback.current?.entryID === entryID) {
+					const { time } = pendingPlayback.current;
+					pendingPlayback.current = undefined;
+					let parent: HTMLElement | null = audio;
+					while (parent) {
+						if (parent instanceof HTMLDetailsElement)
+							parent.open = true;
+						parent = parent.parentElement;
+					}
+					play(time);
+				}
+			} else {
 				audioElements.current.delete(entryID);
-				pendingSeekTimes.current.delete(entryID);
+				audioPlayRequests.current.delete(entryID);
 			}
 		},
 		[]
@@ -227,25 +289,9 @@ function useJournalPlayback(
 		}
 	}, []);
 	const seekAndPlay = useCallback((entryID: string, time: number) => {
-		const audio = audioElements.current.get(entryID);
-		if (!audio) return false;
-		const target = Math.max(0, time);
-		pendingSeekTimes.current.set(entryID, target);
-		const seek = () => {
-			if (audioElements.current.get(entryID) !== audio) return;
-			const pending = pendingSeekTimes.current.get(entryID);
-			if (pending === undefined) return;
-			pendingSeekTimes.current.delete(entryID);
-			if (Math.abs(audio.currentTime - pending) >= 0.25) {
-				audio.currentTime = pending;
-			}
-		};
-		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
-			audio.addEventListener('loadedmetadata', seek, { once: true });
-		} else {
-			seek();
-		}
-		void audio.play().catch(() => undefined);
+		const play = audioPlayRequests.current.get(entryID);
+		if (!play) return false;
+		play(Math.max(0, time));
 		return true;
 	}, []);
 	const updateCursor = useCallback(
@@ -355,9 +401,12 @@ function useJournalPlayback(
 		[segmentFor]
 	);
 	const titleForEntry = useCallback(
-		(entryID: string) =>
-			journal.entries.find(value => value.id === entryID)?.summary
-				?.title ?? '',
+		(entryID: string) => {
+			const entry = journal.entries.find(value => value.id === entryID);
+			if (!entry) return '';
+			const date = journalEntryDate(entry).toPlainDate().toString();
+			return entry.summary ? `${date}: ${entry.summary.title}` : date;
+		},
 		[journal.entries]
 	);
 	const playSegment = useCallback(
@@ -384,7 +433,6 @@ function useJournalPlayback(
 		(entryID: string) => {
 			const audio = audioElements.current.get(entryID);
 			audio?.pause();
-			pendingSeekTimes.current.delete(entryID);
 			if (playingRef.current?.entryID === entryID) {
 				playingRef.current = undefined;
 				setPlaying(undefined);
@@ -400,13 +448,16 @@ function useJournalPlayback(
 		(force = false) => {
 			const location = `${window.location.pathname}${window.location.search}`;
 			if (!force && appliedNavigation.current === location) return;
-			appliedNavigation.current = location;
 			const parameters = new URLSearchParams(window.location.search);
 			const entryID = parameters.get('entry');
 			const timeValue = parameters.get('t');
-			if (!entryID || timeValue === null) return;
+			if (!entryID || timeValue === null) {
+				pendingPlayback.current = undefined;
+				return;
+			}
 			const time = Number(timeValue);
 			if (!Number.isFinite(time)) return;
+			pendingPlayback.current = { entryID, time };
 			cursorRef.current = { entry: entryID, t: time };
 			const entry = entriesRef.current.find(
 				value => value.id === entryID
@@ -426,7 +477,12 @@ function useJournalPlayback(
 				parent = parent.parentElement;
 			}
 			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			seekAndPlay(entryID, time);
+			// Back can arrive before a newly selected day's audio mounts.
+			// Leave the cursor pending until that recording is available.
+			if (seekAndPlay(entryID, time)) {
+				pendingPlayback.current = undefined;
+				appliedNavigation.current = location;
+			}
 		},
 		[pauseOthers, seekAndPlay]
 	);
@@ -435,9 +491,15 @@ function useJournalPlayback(
 	}, [applyURLCursor, navigationKey]);
 	useEffect(() => {
 		const applyBrowserNavigation = () => applyURLCursor(true);
+		const restorePage = (event: PageTransitionEvent) => {
+			if (event.persisted) applyURLCursor(true);
+		};
 		window.addEventListener('popstate', applyBrowserNavigation);
-		return () =>
+		window.addEventListener('pageshow', restorePage);
+		return () => {
 			window.removeEventListener('popstate', applyBrowserNavigation);
+			window.removeEventListener('pageshow', restorePage);
+		};
 	}, [applyURLCursor]);
 	return useMemo(
 		() => ({
@@ -494,7 +556,7 @@ function SummaryBlock({
 	readonly block: JournalSummaryBlock;
 	readonly citationIDs: readonly string[];
 	readonly links: readonly SummaryCitationLink[];
-	readonly playback: JournalPlayback;
+	readonly playback: JournalCitationPlayback;
 }) {
 	const { linksByHref, markdown } = useMemo(() => {
 		const referenced = new Set<number>();
@@ -533,16 +595,25 @@ function SummaryBlock({
 			markdown: renderedMarkdown,
 		};
 	}, [block.markdown, citationIDs, links]);
-	const markdownComponents = useMemo<Components>(
+	const components = useMemo<MarkdownComponents>(
 		() => ({
-			a: ({ children, href }) => {
+			h2: markdownComponents.h4,
+			h3: markdownComponents.h5,
+			a: ({ children, href, node: _node, ...props }) => {
+				const Anchor = markdownComponents.a;
 				const resolved = href ? linksByHref.get(href) : undefined;
-				if (!resolved) return <a href={href}>{children}</a>;
+				if (!resolved)
+					return (
+						<Link {...props} href={href}>
+							{children}
+						</Link>
+					);
 				const { citationID, link } = resolved;
 				const { citation } = link;
 				return (
 					<sup className={style.citation}>
-						<a
+						<Anchor
+							{...props}
 							aria-label={`Play source at ${link.label}`}
 							data-citation-entry-id={citation.entryId}
 							data-citation-segment-id={citation.segmentId}
@@ -563,7 +634,7 @@ function SummaryBlock({
 							}}
 						>
 							[{children}]
-						</a>
+						</Anchor>
 					</sup>
 				);
 			},
@@ -573,9 +644,7 @@ function SummaryBlock({
 
 	return (
 		<div data-journal-summary-block>
-			<ReactMarkdown components={markdownComponents}>
-				{markdown}
-			</ReactMarkdown>
+			<Markdown components={components}>{markdown}</Markdown>
 		</div>
 	);
 }
@@ -591,7 +660,7 @@ function SummaryCardView({
 	summary,
 	timeZone,
 }: {
-	readonly playback: JournalPlayback;
+	readonly playback: JournalCitationPlayback;
 	readonly showPeriod?: boolean;
 	readonly showTitle?: boolean;
 	readonly summary: JournalSummary;
@@ -655,10 +724,7 @@ function SummaryCardView({
 				<header>
 					{showPeriod && (
 						<p>
-							<PeriodDate
-								summary={summary}
-								timeZone={timeZone}
-							/>
+							<PeriodDate summary={summary} timeZone={timeZone} />
 						</p>
 					)}
 					{showTitle && <h3>{summary.title}</h3>}
@@ -685,7 +751,7 @@ function SummaryCardView({
 							<cite>{link.title}</cite>.{' '}
 						</>
 					)}
-					“{link.quote}” <a href={link.href}>{link.label}</a>
+					“{link.quote}” <Link href={link.href}>{link.label}</Link>
 				</span>
 			))}
 			<FootnotePreviews root={article} />
@@ -905,7 +971,7 @@ function SwipeToDelete({
 	readonly onDeleting: (entryID: string) => void;
 }) {
 	const trackRef = useRef<HTMLDivElement>(null);
-	const draggingPointer = useRef<number>();
+	const draggingPointer = useRef<number | undefined>(undefined);
 	const progressRef = useRef(0);
 	const [progress, setProgress] = useState(0);
 	const [deleting, setDeleting] = useState(false);
@@ -1161,7 +1227,8 @@ function JournalAudio({
 	const refreshJournal = useRefreshJournal();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const playRequested = useRef(false);
-	const stallRecoveryTimer = useRef<number>();
+	const pendingSeek = useRef<number | undefined>(undefined);
+	const stallRecoveryTimer = useRef<number | undefined>(undefined);
 	const [source, setSource] = useState(audioURL);
 	const [recovery, setRecovery] = useState<{
 		readonly failedSource: string;
@@ -1177,23 +1244,60 @@ function JournalAudio({
 		stallRecoveryTimer.current = undefined;
 	}, []);
 	const recoverPlayback = useCallback(
-		(audio: HTMLAudioElement) => {
+		(audio: HTMLAudioElement, time = audio.currentTime) => {
 			cancelStallRecovery();
 			if (recoveryRef.current?.failedSource === source) return;
 			const next = {
 				failedSource: source,
 				play: playRequested.current && !audio.ended,
-				time: audio.currentTime,
+				time: pendingSeek.current ?? time,
 			};
 			recoveryRef.current = next;
 			setRecovery(next);
 			void refreshJournal().catch(() => {
-				if (recoveryRef.current !== next) return;
+				if (recoveryRef.current?.failedSource !== next.failedSource)
+					return;
 				recoveryRef.current = undefined;
 				setRecovery(undefined);
 			});
 		},
 		[cancelStallRecovery, refreshJournal, source]
+	);
+	const requestPlayback = useCallback(
+		(time: number) => {
+			const audio = audioRef.current;
+			if (!audio) return;
+			// Record intent before play(): an already-failed element can reject
+			// without emitting a play event, and a refresh may already be pending.
+			playRequested.current = true;
+			pendingSeek.current = time;
+			const recovering = recoveryRef.current;
+			if (recovering) {
+				const next = { ...recovering, play: true, time };
+				recoveryRef.current = next;
+				setRecovery(next);
+				return;
+			}
+			if (audio.error) {
+				recoverPlayback(audio, time);
+				return;
+			}
+			const seek = () => {
+				if (audioRef.current !== audio) return;
+				const target = pendingSeek.current;
+				if (target === undefined) return;
+				pendingSeek.current = undefined;
+				if (Math.abs(audio.currentTime - target) >= 0.25)
+					audio.currentTime = target;
+			};
+			if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
+				audio.addEventListener('loadedmetadata', seek, { once: true });
+			} else {
+				seek();
+			}
+			void audio.play().catch(() => undefined);
+		},
+		[recoverPlayback]
 	);
 	const scheduleStallRecovery = useCallback(
 		(audio: HTMLAudioElement) => {
@@ -1224,10 +1328,12 @@ function JournalAudio({
 		const audio = audioRef.current;
 		if (!audio) return;
 		const restore = () => {
+			if (recoveryRef.current !== recovery) return;
 			if (Math.abs(audio.currentTime - recovery.time) >= 0.25) {
 				audio.currentTime = recovery.time;
 			}
 			recoveryRef.current = undefined;
+			pendingSeek.current = undefined;
 			setRecovery(undefined);
 			if (recovery.play) {
 				void audio.play().catch(() => undefined);
@@ -1297,7 +1403,7 @@ function JournalAudio({
 				preload="metadata"
 				ref={audio => {
 					audioRef.current = audio;
-					playback.registerAudio(entry.id, audio);
+					playback.registerAudio(entry.id, audio, requestPlayback);
 				}}
 				src={source}
 			/>
@@ -1319,17 +1425,17 @@ function EntryCard({
 		recordedDate: string
 	) => Promise<void>;
 }) {
-	const title =
-		entry.summary?.title ??
-		(entry.status === 'failed'
-			? 'Processing failed'
-			: entry.status === 'ready'
-				? 'Untitled entry'
-				: entry.status === 'processing'
-					? 'Transcribing voice note…'
-					: 'Uploading voice note…');
+	const title = entry.title ?? entry.summary?.title ?? 'Voice note';
 	return (
-		<details className={style.entry} id={`entry-${entry.id}`}>
+		<details
+			className={style.entry}
+			id={`entry-${entry.id}`}
+			open={
+				entry.status === 'failed' ||
+				playback.activeEntryID === entry.id ||
+				undefined
+			}
+		>
 			<summary>
 				<LocalizedTime
 					className={style.entryTime}
@@ -1337,10 +1443,23 @@ function EntryCard({
 				/>
 				<span className={style.entryHeading}>
 					<strong className={style.entryTitle}>{title}</strong>
-					{entry.status !== 'ready' && (
-						<small className={style.status}>
-							{entry.status.replace('_', ' ')}
-						</small>
+					{entry.status === 'processing' ? (
+						<JournalProcessingStatus
+							progress={entry.processingProgress}
+						/>
+					) : (
+						entry.status !== 'ready' && (
+							<JournalStatus
+								label={
+									entry.status === 'failed'
+										? 'Processing failed'
+										: 'Uploading voice note'
+								}
+								state={
+									entry.status === 'failed' ? 'error' : 'busy'
+								}
+							/>
+						)
 					)}
 				</span>
 				<FontAwesomeIcon
@@ -1349,16 +1468,18 @@ function EntryCard({
 					icon={faChevronDown}
 				/>
 			</summary>
-			{entry.status === 'processing' && (
-				<p className={style.entryProgress} role="status">
-					Transcribing voice note…
-				</p>
+			{['processing', 'awaiting_upload'].includes(entry.status) && (
+				<JournalPlaceholder
+					label={
+						entry.status === 'processing'
+							? entry.processingProgress?.stage === 'summarizing'
+								? 'Preparing summary'
+								: 'Preparing transcript'
+							: 'Uploading audio'
+					}
+				/>
 			)}
-			{entry.status === 'awaiting_upload' && (
-				<p className={style.entryProgress} role="status">
-					Uploading voice note…
-				</p>
-			)}
+			<JournalMap entries={[entry]} />
 			{entry.audioUrl && (
 				<JournalAudio
 					audioURL={entry.audioUrl}
@@ -1366,7 +1487,14 @@ function EntryCard({
 					playback={playback}
 				/>
 			)}
-			{entry.error && <p className={style.notice}>{entry.error}</p>}
+			{(entry.error || entry.status === 'failed') && (
+				<p className={style.recordingFailure} role="alert">
+					{entry.error || 'Could not process this voice note.'}
+				</p>
+			)}
+			{entry.status === 'ready' && !entry.summary && (
+				<p className={style.wikiKind}>Analysis pending</p>
+			)}
 			{entry.summary && (
 				<SummaryCard
 					playback={playback}
@@ -1414,6 +1542,7 @@ function PendingEntries({
 }
 
 const journalSelectionQuery = {
+	wiki: parseAsString,
 	at: parseAsString,
 	year: parseAsString,
 	month: parseAsString,
@@ -1432,6 +1561,7 @@ interface JournalPeriodNode {
 	readonly period: AggregatePeriod;
 	readonly start: string;
 	readonly summary?: JournalSummary;
+	readonly title?: string;
 }
 
 function periodContains(period: JournalPeriodNode, timestamp: string) {
@@ -1475,7 +1605,21 @@ function periodBounds(entry: JournalEntry, period: AggregatePeriod) {
 	};
 }
 
-function periodsFor(journal: Journal, period: AggregatePeriod) {
+function periodsFor(
+	journal: Journal,
+	period: AggregatePeriod
+): JournalPeriodNode[] {
+	if (journal.browse)
+		return journal.browse.periods
+			.filter(node => node.period === period)
+			.map(node => ({
+				...node,
+				summary: journal.summaries.find(
+					summary =>
+						summary.period === period &&
+						periodContains(node, periodMidpoint(summary))
+				),
+			}));
 	const nodes = new Map<number, JournalPeriodNode>();
 	for (const entry of journal.entries) {
 		if (
@@ -1492,6 +1636,7 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 		});
 	}
 	for (const summary of journal.summaries) {
+		if (journal.curation) continue;
 		if (summary.period !== period) continue;
 		const start = Date.parse(summary.start);
 		const existing = nodes.get(start);
@@ -1509,16 +1654,6 @@ function periodsFor(journal: Journal, period: AggregatePeriod) {
 	);
 }
 
-function containingPeriod(
-	journal: Journal,
-	period: AggregatePeriod,
-	timestamp: string
-) {
-	return periodsFor(journal, period).find(node =>
-		periodContains(node, timestamp)
-	);
-}
-
 function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
 	const pathname = `/journal/${route}`;
 	const query = new URLSearchParams(
@@ -1529,19 +1664,23 @@ function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
 	return query.size > 0 ? `${pathname}?${query}` : pathname;
 }
 
-function periodMidpoint(period: JournalPeriodNode) {
+function periodMidpoint(period: Pick<JournalPeriodNode, 'start' | 'end'>) {
 	return new Date(
 		(Date.parse(period.start) + Date.parse(period.end)) / 2
 	).toISOString();
 }
 
 function PeriodDisclosure({
+	timeZone,
+	curation,
 	children,
 	initiallyOpen,
 	nextRoute,
 	node,
 	playback,
 }: {
+	readonly timeZone?: string;
+	readonly curation: boolean;
 	readonly children: readonly JournalPeriodNode[];
 	readonly initiallyOpen: boolean;
 	readonly nextRoute: JournalRoute;
@@ -1557,15 +1696,19 @@ function PeriodDisclosure({
 		<details
 			className={style.periodDisclosure}
 			data-journal-period-disclosure={node.period}
-			onToggle={(event) => setOpen(event.currentTarget.open)}
+			onToggle={event => setOpen(event.currentTarget.open)}
 			open={open}
 		>
 			<summary>
 				<span className={style.periodDate}>
-					<PeriodDate summary={node} />
+					<PeriodDate summary={node} timeZone={timeZone} />
 				</span>
 				<strong className={style.periodTitle}>
-					{node.summary?.title ?? 'Summary in progress…'}
+					{node.summary?.title ??
+						node.title ??
+						(curation
+							? 'Browse recordings'
+							: 'Summary in progress…')}
 				</strong>
 				<FontAwesomeIcon
 					aria-hidden="true"
@@ -1596,11 +1739,17 @@ function PeriodDisclosure({
 									})}
 								>
 									<span className={style.periodChildDate}>
-										<PeriodDate summary={child} />
+										<PeriodDate
+											summary={child}
+											timeZone={timeZone}
+										/>
 									</span>
 									<strong>
 										{child.summary?.title ??
-											'Summary in progress…'}
+											child.title ??
+											(curation
+												? 'Browse recordings'
+												: 'Summary in progress…')}
 									</strong>
 									<FontAwesomeIcon
 										aria-hidden="true"
@@ -1618,114 +1767,252 @@ function PeriodDisclosure({
 }
 
 function citationDestination(journal: Journal, entryID: string) {
-	const entry = journal.entries.find(value => value.id === entryID);
+	const entry = [...journal.entries, ...(journal.browse?.sources ?? [])].find(
+		value => value.id === entryID
+	);
 	if (!entry) return '/journal';
 	return journalHref('day', { at: entry.recordedAt });
 }
 
-const journalViews = [undefined, 'year', 'month', 'week', 'day'] as const;
-
-function zoomLevelLabel(route: JournalRoute | undefined) {
-	if (route === undefined) return 'Overview';
-	return `${route.charAt(0).toUpperCase()}${route.slice(1)}s`;
-}
-
-function ZoomNavigation({
+function JournalDatePicker({
+	journal,
 	focus,
 	route,
 }: {
+	readonly journal: Journal;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
-	const [visibleRoute, setVisibleRoute] = useState(route);
-	const navigation = useRef<HTMLElement>(null);
-	const [indicator, setIndicator] = useState({
-		inlineSize: 0,
-		offset: 0,
-	});
-	useEffect(() => setVisibleRoute(route), [route]);
-	useLayoutEffect(() => {
-		const navigationElement = navigation.current;
-		const selected = navigationElement?.querySelector<HTMLAnchorElement>(
-			`a[data-journal-view="${visibleRoute ?? 'overview'}"]`
+	const timeZone = journal.browse?.timeZone ?? 'UTC';
+	const selected = Temporal.Instant.from(focus).toZonedDateTimeISO(timeZone);
+	const [date, setDate] = useState(selected.with({ day: 1 }));
+	const [view, setView] = useState<'day' | 'month' | 'year'>(
+		route === 'year' ? 'month' : 'day'
+	);
+	const heading = useRef<HTMLButtonElement>(null);
+	const yearStart = Math.floor(date.year / 12) * 12;
+	const monthName = date.toLocaleString(undefined, { month: 'long' });
+	const firstDay = date.with({ day: 1 }).startOfDay();
+	const monthAt = (
+		date.year === selected.year && date.month === selected.month
+			? selected
+			: firstDay.with({ hour: 12 })
+	)
+		.toInstant()
+		.toString();
+	const selectedDay = selected.toPlainDate().toString();
+	const changeView = (next: typeof view) => {
+		setView(next);
+		heading.current?.focus();
+	};
+	const step = (direction: number) =>
+		setDate(value =>
+			value.add(
+				view === 'day'
+					? { months: direction }
+					: { years: direction * (view === 'year' ? 12 : 1) }
+			)
 		);
-		if (!navigationElement || !selected) return;
-		const updateIndicator = () => {
-			const navigationBounds = navigationElement.getBoundingClientRect();
-			const selectedBounds = selected.getBoundingClientRect();
-			setIndicator({
-				inlineSize: selectedBounds.width,
-				offset:
-					selectedBounds.left -
-					navigationBounds.left +
-					navigationElement.scrollLeft,
-			});
-		};
-		updateIndicator();
-		const observer = new ResizeObserver(updateIndicator);
-		observer.observe(navigationElement);
-		observer.observe(selected);
-		return () => observer.disconnect();
-	}, [visibleRoute]);
-	const href = (destination: JournalRoute | undefined) =>
-		destination
-			? journalHref(destination, { at: focus })
-			: `/journal?${new URLSearchParams({ at: focus })}`;
+	const stepLabel =
+		view === 'day' ? 'month' : view === 'month' ? 'year' : '12 years';
 	return (
-		<nav
-			aria-label="Browse journal"
-			className={style.zoomNavigation}
-			ref={navigation}
-		>
-			<span
-				aria-hidden="true"
-				className={style.zoomIndicator}
-				data-ready={indicator.inlineSize > 0 ? '' : undefined}
-				data-journal-view-indicator
-				style={{
-					inlineSize: indicator.inlineSize,
-					transform: `translateX(${indicator.offset}px)`,
-				}}
-			/>
-			{journalViews.map(destination => (
-				<Link
-					aria-current={
-						destination === visibleRoute ? 'page' : undefined
-					}
-					data-journal-view={destination ?? 'overview'}
-					href={href(destination)}
-					key={destination ?? 'overview'}
-					onClick={event => {
-						if (
-							event.button === 0 &&
-							!event.metaKey &&
-							!event.ctrlKey &&
-							!event.shiftKey &&
-							!event.altKey
-						) {
-							setVisibleRoute(destination);
-						}
-					}}
+		<>
+			<header className={style.calendarHeading}>
+				<button
+					type="button"
+					aria-label={`Previous ${stepLabel}`}
+					title={`Previous ${stepLabel}`}
+					onClick={() => step(-1)}
 				>
-					{zoomLevelLabel(destination)}
+					‹
+				</button>
+				<button
+					type="button"
+					ref={heading}
+					aria-label={
+						view === 'month' ? 'Choose year' : 'Choose month'
+					}
+					title={view === 'month' ? 'Choose year' : 'Choose month'}
+					onClick={() =>
+						changeView(view === 'month' ? 'year' : 'month')
+					}
+				>
+					{view === 'day'
+						? `${monthName} ${date.year}`
+						: view === 'month'
+							? date.year
+							: `${yearStart}–${yearStart + 11}`}
+					<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
+				</button>
+				<button
+					type="button"
+					aria-label={`Next ${stepLabel}`}
+					title={`Next ${stepLabel}`}
+					onClick={() => step(1)}
+				>
+					›
+				</button>
+			</header>
+			{view === 'day' ? (
+				<div
+					className={style.calendarDays}
+					role="group"
+					aria-label={`${monthName} ${date.year}`}
+				>
+					{Array.from({ length: 7 }, (_, index) => (
+						<span className={style.calendarWeekday} key={index}>
+							{firstDay
+								.add({ days: index + 1 - firstDay.dayOfWeek })
+								.toLocaleString(undefined, {
+									weekday: 'narrow',
+								})}
+						</span>
+					))}
+					{Array.from(
+						{ length: firstDay.dayOfWeek - 1 },
+						(_, index) => (
+							<span key={`space-${index}`} />
+						)
+					)}
+					{Array.from({ length: date.daysInMonth }, (_, index) => {
+						const day = firstDay
+							.add({ days: index })
+							.with({ hour: 12 });
+						return (
+							<Link
+								key={day.day}
+								href={journalHref('day', {
+									at: day.toInstant().toString(),
+								})}
+								aria-label={day.toLocaleString('en-GB', {
+									day: 'numeric',
+									month: 'long',
+									year: 'numeric',
+								})}
+								aria-current={
+									day.toPlainDate().toString() === selectedDay
+										? 'date'
+										: undefined
+								}
+							>
+								{day.day}
+							</Link>
+						);
+					})}
+				</div>
+			) : (
+				<div
+					className={style.calendarPeriods}
+					role="group"
+					aria-label={
+						view === 'month'
+							? `Months in ${date.year}`
+							: 'Choose a year'
+					}
+				>
+					{Array.from({ length: 12 }, (_, index) => {
+						const value =
+							view === 'month' ? index + 1 : yearStart + index;
+						const period =
+							view === 'month'
+								? date.with({ month: value })
+								: date.with({ year: value });
+						const current =
+							view === 'month'
+								? value === selected.month &&
+									date.year === selected.year
+								: value === selected.year;
+						return (
+							<button
+								key={value}
+								type="button"
+								aria-pressed={current}
+								onClick={() => {
+									setDate(period);
+									changeView(
+										view === 'month' ? 'day' : 'month'
+									);
+								}}
+							>
+								{view === 'month'
+									? period.toLocaleString(undefined, {
+											month: 'short',
+										})
+									: value}
+							</button>
+						);
+					})}
+				</div>
+			)}
+			<div className={style.calendarSummaries}>
+				<Link
+					aria-label={
+						view === 'day' ? 'Month summary' : 'Year summary'
+					}
+					href={journalHref(view === 'day' ? 'month' : 'year', {
+						at: monthAt,
+					})}
+				>
+					{view === 'day' ? monthName : date.year} summary{' '}
+					<span aria-hidden="true">↗</span>
 				</Link>
-			))}
-		</nav>
+				{view === 'day' && (
+					<Link
+						aria-label="Week summary"
+						href={journalHref('week', {
+							at: monthAt,
+						})}
+					>
+						Week summary
+					</Link>
+				)}
+			</div>
+			<nav aria-label="Browse journal" className={style.calendarFooter}>
+				<Link
+					href={`/journal?${new URLSearchParams({ at: focus })}`}
+					aria-current={route === undefined ? 'page' : undefined}
+				>
+					Overview
+				</Link>
+				<Link href="/journal?wiki=all">Wiki</Link>
+			</nav>
+		</>
 	);
 }
 
 function JournalToolbar({
+	journal,
+	wiki = false,
 	actions,
 	focus,
 	route,
 }: {
+	readonly journal?: Journal;
+	readonly wiki?: boolean;
 	readonly actions?: ReactNode;
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
 	return (
 		<div className={style.journalToolbar} data-journal-toolbar>
-			<ZoomNavigation focus={focus} route={route} />
+			{journal ? (
+				<CalendarNavigation
+					journal={journal}
+					focus={focus}
+					route={route}
+				/>
+			) : (
+				<Link href="/journal">Browse journal</Link>
+			)}
+			{!journal && (
+				<Link
+					className={style.wikiNavigation}
+					href="/journal?wiki=all"
+					aria-current={wiki ? 'page' : undefined}
+				>
+					Wiki
+				</Link>
+			)}
 			{actions}
 		</div>
 	);
@@ -1738,7 +2025,6 @@ function PeriodList({
 	nextRoute,
 	period,
 	playback,
-	setFocus,
 	updateEntryDate,
 }: {
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
@@ -1747,193 +2033,222 @@ function PeriodList({
 	readonly nextRoute?: JournalRoute;
 	readonly period: AggregatePeriod;
 	readonly playback: JournalPlayback;
-	readonly setFocus: (focus: string) => void;
 	readonly updateEntryDate?: (
 		entryID: string,
 		recordedDate: string
 	) => Promise<void>;
 }) {
-	const periods = useMemo(
-		() => periodsFor(journal, period),
-		[journal, period]
-	);
-	const childPeriods = useMemo(
-		() => (nextRoute ? periodsFor(journal, nextRoute) : []),
-		[journal, nextRoute]
-	);
-	const listRef = useRef<HTMLDivElement>(null);
-	const positionedPeriod = useRef<AggregatePeriod>();
-	const focusRef = useRef(focus);
-	focusRef.current = focus;
-
-	useEffect(() => {
-		const fallbackPeriod = periods[0];
-		if (positionedPeriod.current === period || fallbackPeriod === undefined)
-			return;
-		positionedPeriod.current = period;
-		const frame = window.requestAnimationFrame(() => {
-			const element = listRef.current?.querySelector<HTMLElement>(
-				`[data-journal-period-start="${CSS.escape(
-					containingPeriod(journal, period, focusRef.current)
-						?.start ?? fallbackPeriod.start
-				)}"]`
-			);
-			if (!element) return;
-			const node = periods.find(
-				candidate =>
-					candidate.start === element.dataset.journalPeriodStart
-			);
-			if (!node) return;
-			const duration = Date.parse(node.end) - Date.parse(node.start);
-			const fraction = Math.max(
-				0,
-				Math.min(
-					1,
-					(Date.parse(focusRef.current) - Date.parse(node.start)) /
-						duration
-				)
-			);
-			const bounds = element.getBoundingClientRect();
-			window.scrollTo({
-				behavior: 'auto',
-				top:
-					window.scrollY +
-					bounds.top +
-					bounds.height * fraction -
-					window.innerHeight / 2,
-			});
-		});
-		return () => window.cancelAnimationFrame(frame);
-	}, [journal, period, periods]);
-
-	useEffect(() => {
-		let frame = 0;
-		const update = () => {
-			frame = 0;
-			const elements = Array.from(
-				listRef.current?.querySelectorAll<HTMLElement>(
-					'[data-journal-period-start]'
-				) ?? []
-			);
-			if (elements.length === 0) return;
-			const viewportMiddle = window.innerHeight / 2;
-			const element = elements.reduce((closest, candidate) => {
-				const bounds = candidate.getBoundingClientRect();
-				const distance =
-					viewportMiddle < bounds.top
-						? bounds.top - viewportMiddle
-						: viewportMiddle > bounds.bottom
-							? viewportMiddle - bounds.bottom
-							: 0;
-				const closestBounds = closest.getBoundingClientRect();
-				const closestDistance =
-					viewportMiddle < closestBounds.top
-						? closestBounds.top - viewportMiddle
-						: viewportMiddle > closestBounds.bottom
-							? viewportMiddle - closestBounds.bottom
-							: 0;
-				return distance < closestDistance ? candidate : closest;
-			});
-			const node = periods.find(
-				candidate =>
-					candidate.start === element.dataset.journalPeriodStart
-			);
-			if (!node) return;
-			const bounds = element.getBoundingClientRect();
-			const fraction = Math.max(
-				0,
-				Math.min(1, (viewportMiddle - bounds.top) / bounds.height)
-			);
-			const timestamp = new Date(
-				Date.parse(node.start) +
-					(Date.parse(node.end) - Date.parse(node.start)) * fraction
-			).toISOString();
-			if (timestamp !== focusRef.current) {
-				focusRef.current = timestamp;
-				setFocus(timestamp);
-			}
-		};
-		const scheduleUpdate = () => {
-			if (frame === 0) frame = window.requestAnimationFrame(update);
-		};
-		window.addEventListener('scroll', scheduleUpdate, { passive: true });
-		window.addEventListener('resize', scheduleUpdate);
-		scheduleUpdate();
-		return () => {
-			window.removeEventListener('scroll', scheduleUpdate);
-			window.removeEventListener('resize', scheduleUpdate);
-			if (frame !== 0) window.cancelAnimationFrame(frame);
-		};
-	}, [periods, setFocus]);
-
-	if (periods.length === 0) {
-		return <p className={style.empty}>No {period}s yet.</p>;
-	}
+	const periods = periodsFor(journal, period);
+	const node = periods.find(node => periodContains(node, focus));
+	const children =
+		nextRoute && node
+			? childPeriodsFor(periodsFor(journal, nextRoute), node)
+			: [];
+	const entries = node
+		? journal.entries.filter(
+				entry =>
+					entry.status === 'ready' &&
+					periodContains(node, entry.recordedAt)
+			)
+		: [];
+	if (!node) return <p className={style.empty}>No entries in this period.</p>;
 	return (
 		<div
-			className={`${style.periodList} ${nextRoute ? style.periodOverviewList : ''}`}
-			ref={listRef}
+			className={`${style.periodList} ${period === 'day' ? style.dayList : style.periodOverviewList}`}
+			role="region"
+			aria-label={`Journal ${period}`}
 		>
-			{periods.map(node => (
-				<section
-					className={style.period}
-					data-journal-period-start={node.start}
-					key={node.id}
-				>
-					{nextRoute ? (
-						<PeriodDisclosure
-							children={childPeriodsFor(childPeriods, node)}
-							initiallyOpen={periodContains(node, focus)}
-							nextRoute={nextRoute}
-							node={node}
-							playback={playback}
-						/>
-					) : (
-						<>
-							<h3>
-								<PeriodDate summary={node} />
-							</h3>
-							{node.summary && (
-								<SummaryCard
-									playback={playback}
-									showPeriod={false}
-									summary={node.summary}
-								/>
-							)}
-						</>
-					)}
-					{period === 'day' &&
-						journal.entries
-							.filter(
-								entry =>
-									entry.status === 'ready' &&
-									periodContains(node, entry.recordedAt)
-							)
-							.map(entry => (
-								<EntryCard
-									deleteEntry={deleteEntry}
-									entry={entry}
-									key={entry.id}
-									playback={playback}
-									updateEntryDate={updateEntryDate}
-								/>
-							))}
-				</section>
-			))}
+			<section
+				className={style.period}
+				data-journal-period-start={node.start}
+			>
+				{nextRoute ? (
+					<PeriodDisclosure
+						timeZone={journal.browse?.timeZone}
+						key={node.id}
+						curation={journal.curation !== undefined}
+						children={children}
+						initiallyOpen
+						nextRoute={nextRoute}
+						node={node}
+						playback={playback}
+					/>
+				) : (
+					<>
+						{node.summary && (
+							<SummaryCard
+								playback={playback}
+								showPeriod={false}
+								summary={node.summary}
+							/>
+						)}
+					</>
+				)}
+				<JournalMap
+					entries={
+						period === 'day'
+							? entries
+							: (journal.browse?.locations ?? [])
+					}
+				/>
+				{period === 'day' && (
+					<>
+						{entries.length === 0 && (
+							<p className={style.empty}>
+								No recordings this day.
+							</p>
+						)}
+						{entries.map(entry => (
+							<EntryCard
+								deleteEntry={deleteEntry}
+								entry={entry}
+								key={entry.id}
+								playback={playback}
+								updateEntryDate={updateEntryDate}
+							/>
+						))}
+					</>
+				)}
+			</section>
 		</div>
+	);
+}
+
+function CalendarNavigation({
+	journal,
+	focus,
+	route,
+}: {
+	readonly journal: Journal;
+	readonly focus: string;
+	readonly route?: JournalRoute;
+}) {
+	const picker = useRef<HTMLDetailsElement>(null);
+	const fitPicker = useCallback(() => {
+		if (!picker.current?.open) return;
+		const panel =
+			picker.current.querySelector<HTMLDivElement>(':scope > div');
+		if (!panel) return;
+		panel.style.maxBlockSize = `${Math.max(44, window.innerHeight - panel.getBoundingClientRect().top - 16)}px`;
+	}, []);
+	useEffect(() => {
+		const closeOutside = (event: PointerEvent) => {
+			if (
+				event.target instanceof Node &&
+				!picker.current?.contains(event.target)
+			) {
+				picker.current?.removeAttribute('open');
+			}
+		};
+		const closeOnEscape = (event: KeyboardEvent) => {
+			if (event.key !== 'Escape' || !picker.current?.open) return;
+			picker.current.removeAttribute('open');
+			picker.current.querySelector('summary')?.focus();
+		};
+		window.addEventListener('resize', fitPicker);
+		window.addEventListener('scroll', fitPicker, true);
+		document.addEventListener('pointerdown', closeOutside);
+		document.addEventListener('keydown', closeOnEscape);
+		return () => {
+			window.removeEventListener('resize', fitPicker);
+			window.removeEventListener('scroll', fitPicker, true);
+			document.removeEventListener('pointerdown', closeOutside);
+			document.removeEventListener('keydown', closeOnEscape);
+		};
+	}, [fitPicker]);
+	const browse = journal.browse;
+	if (!browse) return null;
+	return (
+		<nav
+			className={style.calendarNavigation}
+			aria-label="Choose journal date"
+		>
+			{route &&
+				(browse.previous ? (
+					<Link
+						aria-label={`Previous ${route}`}
+						title={`Previous ${route}`}
+						href={journalHref(route, { at: browse.previous })}
+					>
+						←
+					</Link>
+				) : (
+					<span aria-disabled="true" aria-label={`Previous ${route}`}>
+						←
+					</span>
+				))}
+			<details
+				ref={picker}
+				onToggle={fitPicker}
+				className={style.datePicker}
+				key={`${route}-${focus}`}
+			>
+				<summary aria-label="Choose journal date">
+					{route
+						? Temporal.Instant.from(focus)
+								.toZonedDateTimeISO(browse.timeZone)
+								.toLocaleString(
+									undefined,
+									route === 'year'
+										? { year: 'numeric' }
+										: route === 'month'
+											? { year: 'numeric', month: 'long' }
+											: {
+													year: 'numeric',
+													month: 'short',
+													day: 'numeric',
+												}
+								)
+						: 'Overview'}{' '}
+					<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
+				</summary>
+				<div
+					className={style.dateChoices}
+					onClick={event => {
+						if (
+							event.target instanceof Element &&
+							event.target.closest('a')
+						)
+							picker.current?.removeAttribute('open');
+					}}
+				>
+					<JournalDatePicker
+						key={`${route}-${focus}`}
+						journal={journal}
+						focus={focus}
+						route={route}
+					/>
+				</div>
+			</details>
+			{route &&
+				(browse.next ? (
+					<Link
+						aria-label={`Next ${route}`}
+						title={`Next ${route}`}
+						href={journalHref(route, { at: browse.next })}
+					>
+						→
+					</Link>
+				) : (
+					<span aria-disabled="true" aria-label={`Next ${route}`}>
+						→
+					</span>
+				))}
+		</nav>
 	);
 }
 
 function RecentEntries({ journal }: { readonly journal: Journal }) {
 	const entries = [...journal.entries]
 		.filter(entry => entry.status === 'ready')
-		.sort(
-			(a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt)
-		)
+		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))
 		.slice(0, 5);
 	if (entries.length === 0) return null;
 	return (
-		<section aria-labelledby="recent-journal-entries" className={style.recent}>
+		<section
+			aria-labelledby="recent-journal-entries"
+			className={style.recent}
+		>
 			<header>
 				<h2 id="recent-journal-entries">Recent entries</h2>
 				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
@@ -1943,12 +2258,16 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 			<ol>
 				{entries.map(entry => (
 					<li key={entry.id}>
-						<Link href={journalHref('day', { at: entry.recordedAt })}>
+						<Link
+							href={journalHref('day', { at: entry.recordedAt })}
+						>
 							<span className={style.recentDate}>
 								<LocalizedDate date={journalEntryDate(entry)} />
 							</span>
 							<strong>
-								{entry.summary?.title ?? 'Untitled entry'}
+								{entry.title ??
+									entry.summary?.title ??
+									'Untitled entry'}
 							</strong>
 							<span className={style.recentTime}>
 								<LocalizedTime date={journalEntryDate(entry)} />
@@ -1961,8 +2280,230 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 	);
 }
 
+function WikiHeader({
+	index = false,
+	curation,
+}: {
+	readonly index?: boolean;
+	readonly curation?: JournalCurationStatus;
+}) {
+	return (
+		<>
+			<header className={style.wikiHeader}>
+				<h2>
+					{index ? (
+						'Wiki'
+					) : (
+						<Link href="/journal?wiki=all">Wiki</Link>
+					)}
+				</h2>
+				{curation?.updatedAt && (
+					<small>
+						Updated{' '}
+						<LocalizedDate date={new Date(curation.updatedAt)} />
+					</small>
+				)}
+			</header>
+			{curation?.status === 'failed' && (
+				<p role="status">
+					The latest update could not finish. It will retry
+					automatically.
+				</p>
+			)}
+		</>
+	);
+}
+
+function WikiArticle({ page }: { readonly page: JournalWikiPageView }) {
+	const playback = useMemo<JournalCitationPlayback>(() => {
+		const key = (entryID: string, segmentID: string) =>
+			JSON.stringify([entryID, segmentID]);
+		const sources = new Map(
+			page.sources.map(source => [
+				key(source.entryId, source.segmentId),
+				source,
+			])
+		);
+		const entries = new Map(
+			page.sources.map(source => [source.entryId, source])
+		);
+		const quotes = new Map(
+			page.blocks
+				.flatMap(block => block.citations)
+				.map(citation => [
+					key(citation.entryId, citation.segmentId),
+					citation.quote,
+				])
+		);
+		return {
+			hrefForSegment: (entryID, segmentID) => {
+				const source = sources.get(key(entryID, segmentID));
+				return journalPlaybackHref(
+					entryID,
+					(source?.startMs ?? 0) / 1000,
+					journalHref('day', { at: source?.recordedAt })
+				);
+			},
+			labelForSegment: (entryID, segmentID) =>
+				mediaTimestamp(
+					sources.get(key(entryID, segmentID))?.startMs ?? 0
+				),
+			quoteForSegment: (entryID, segmentID) =>
+				quotes.get(key(entryID, segmentID)) ?? '',
+			titleForEntry: entryID => {
+				const source = entries.get(entryID);
+				if (!source) return '';
+				const date = Temporal.Instant.from(source.recordedAt)
+					.toZonedDateTimeISO(source.timeZone)
+					.toPlainDate()
+					.toString();
+				return source.title ? `${date}: ${source.title}` : date;
+			},
+			playSegment: () => false,
+			playingEntryID: undefined,
+			playingSegmentID: undefined,
+		};
+	}, [page]);
+	return (
+		<>
+			<WikiHeader curation={page.curation} />
+			<p className={style.wikiKind}>{page.kind}</p>
+			<SummaryCard
+				playback={playback}
+				showPeriod={false}
+				summary={{
+					schemaVersion: 1,
+					id: `wiki:${page.id}`,
+					title: page.title,
+					blocks: page.blocks,
+					period: 'journal',
+					start: '',
+					end: '',
+				}}
+			/>
+			{page.aliases.length > 0 && (
+				<p>Also known as {page.aliases.join(', ')}</p>
+			)}
+		</>
+	);
+}
+
+function JournalWikiPage({ pageID }: { readonly pageID: string }) {
+	const [token] = useZemnMeAuth();
+	const page = useGetJournalWikiPage(token, pageID);
+	return page(
+		value => <WikiArticle page={value} />,
+		() => (
+			<>
+				<WikiHeader />
+				<JournalPlaceholder label="Loading wiki page" />
+			</>
+		),
+		() => (
+			<>
+				<WikiHeader />
+				<p role="status">
+					This page is unavailable or awaiting an update.
+				</p>
+			</>
+		)
+	);
+}
+
+function WikiIndex({
+	index,
+	query,
+	setQuery,
+}: {
+	readonly index: JournalWikiIndex;
+	readonly query: string;
+	readonly setQuery: (query: string) => void;
+}) {
+	const pages = index.pages;
+	const matches = pages.filter(page =>
+		[page.title, ...page.aliases]
+			.join(' ')
+			.toLocaleLowerCase()
+			.includes(query.toLocaleLowerCase())
+	);
+	return (
+		<>
+			<WikiHeader curation={index.curation} index />
+			<label className={style.wikiSearch}>
+				Find a person, place, or project
+				<input
+					type="search"
+					value={query}
+					onChange={event => setQuery(event.currentTarget.value)}
+				/>
+			</label>
+			{matches.length > 0 ? (
+				<ul className={style.wikiIndex}>
+					{matches.map(page => (
+						<li key={page.id}>
+							<Link href={`/journal?wiki=${page.id}`}>
+								<strong>{page.title}</strong>
+								<span>{page.kind}</span>
+							</Link>
+						</li>
+					))}
+				</ul>
+			) : (
+				<p>
+					{pages.length
+						? 'No matching pages.'
+						: index.hasEntries
+							? 'Wiki pages will appear after the diary is analyzed.'
+							: 'Record a diary entry to begin.'}
+				</p>
+			)}
+		</>
+	);
+}
+
+function JournalWikiIndex({
+	query,
+	setQuery,
+}: {
+	readonly query: string;
+	readonly setQuery: (query: string) => void;
+}) {
+	const [token] = useZemnMeAuth();
+	const index = useGetJournalWikiIndex(token);
+	return index(
+		value => <WikiIndex index={value} query={query} setQuery={setQuery} />,
+		() => (
+			<>
+				<WikiHeader index />
+				<JournalPlaceholder label="Loading wiki" />
+			</>
+		),
+		() => (
+			<>
+				<WikiHeader index />
+				<p role="alert">Could not load the wiki.</p>
+			</>
+		)
+	);
+}
+
+function JournalWiki({ pageID }: { readonly pageID: string }) {
+	const [query, setQuery] = useState('');
+	return (
+		<section className={style.wiki} aria-label="Diary wiki">
+			{pageID === 'all' ? (
+				<JournalWikiIndex query={query} setQuery={setQuery} />
+			) : (
+				<JournalWikiPage pageID={pageID} />
+			)}
+		</section>
+	);
+}
+
 function JournalBrowser({
 	actions,
+	localRecordings,
+	localEntryIDs,
 	deleteEntry,
 	journal,
 	route,
@@ -1971,66 +2512,83 @@ function JournalBrowser({
 	readonly actions?: ReactNode;
 	readonly deleteEntry?: (entryID: string) => Promise<void>;
 	readonly journal: Journal;
+	readonly localRecordings: ReactNode;
+	readonly localEntryIDs: readonly (string | undefined)[];
 	readonly route?: JournalRoute;
 	readonly updateEntryDate?: (
 		entryID: string,
 		recordedDate: string
 	) => Promise<void>;
 }) {
-	const [rawSelection, setRawSelection] = useQueryStates(
-		journalSelectionQuery,
-		{
-			history: 'replace',
-			shallow: true,
-			throttleMs: 250,
-		}
-	);
+	const renderTime = useJournalRenderTime();
+	const [rawSelection] = useQueryStates(journalSelectionQuery, {
+		history: 'replace',
+		shallow: true,
+		throttleMs: 250,
+	});
 	const aggregateCitationDestination = useCallback(
 		(entryID: string) => citationDestination(journal, entryID),
 		[journal]
 	);
 	const playback = useJournalPlayback(
-		journal,
+		{
+			...journal,
+			entries: [...(journal.browse?.sources ?? []), ...journal.entries],
+		},
 		aggregateCitationDestination,
-		route ?? 'overview'
+		`${route ?? 'overview'}:${journal.browse?.focus ?? rawSelection.at ?? ''}`
 	);
-	const pendingEntries = journal.entries.filter(entry =>
-		['awaiting_upload', 'processing'].includes(entry.status)
+	const pendingEntries = journal.entries.filter(
+		entry =>
+			['awaiting_upload', 'processing', 'failed'].includes(
+				entry.status
+			) && !localEntryIDs.includes(entry.id)
 	);
 	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
+		.filter(period => rawSelection[period] !== null)
 		.map(period =>
 			periodsFor(journal, period).find(
 				node => node.id === rawSelection[period]
 			)
 		)
 		.find(node => node !== undefined)?.start;
-	const newestEntry = journal.entries
-		.filter(entry => entry.status !== 'failed')
-		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))[0];
-	const focus =
-		rawSelection.at ??
-		legacyFocus ??
-		newestEntry?.recordedAt ??
-		new Date().toISOString();
-	const setFocus = useCallback(
-		(next: string) => {
-			void setRawSelection({ at: next }, { history: 'replace' });
-		},
-		[setRawSelection]
+	const newestEntry = useMemo(
+		() =>
+			journal.entries
+				.filter(entry => entry.status !== 'failed')
+				.sort(
+					(a, b) =>
+						Date.parse(b.recordedAt) - Date.parse(a.recordedAt)
+				)[0],
+		[journal.entries]
 	);
+	const focus =
+		(rawSelection.at && Number.isFinite(Date.parse(rawSelection.at))
+			? rawSelection.at
+			: undefined) ??
+		legacyFocus ??
+		journal.browse?.focus ??
+		newestEntry?.recordedAt ??
+		new Date(renderTime).toISOString();
 
 	if (route === undefined) {
 		const readyEntries = journal.entries.filter(
 			entry => entry.status === 'ready'
 		);
-		const summary =
-			journal.summaries.find(value => value.period === 'journal') ??
-			(readyEntries.length === 1
-				? readyEntries.at(0)?.summary
-				: undefined);
+		const summary = journal.curation
+			? undefined
+			: (journal.summaries.find(value => value.period === 'journal') ??
+				(readyEntries.length === 1
+					? readyEntries.at(0)?.summary
+					: undefined));
 		return (
 			<div>
-				<JournalToolbar actions={actions} focus={focus} />
+				<JournalToolbar
+					journal={journal}
+					actions={actions}
+					focus={focus}
+				/>
+				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				{summary ? (
 					<SummaryCard
@@ -2038,15 +2596,28 @@ function JournalBrowser({
 						showPeriod={false}
 						summary={summary}
 					/>
+				) : journal.curation ? (
+					<p className={style.wikiIntro}>
+						<Link href="/journal?wiki=all">
+							Explore the diary wiki
+						</Link>{' '}
+						for people, places, and projects across your recordings.
+					</p>
 				) : readyEntries.length > 1 ? (
-					<p className={style.empty} role="status">
-						Preparing the journal overview…
-					</p>
+					<JournalPlaceholder label="Preparing journal overview" />
 				) : (
-					<p className={style.empty}>
-						Your journal overview will grow as you add entries.
-					</p>
+					pendingEntries.length === 0 &&
+					localEntryIDs.length === 0 && (
+						<div className={style.empty}>
+							<FontAwesomeIcon
+								aria-hidden="true"
+								icon={faBookOpen}
+							/>
+							<p>No entries yet</p>
+						</div>
+					)
 				)}
+				<JournalMap entries={readyEntries} />
 				<RecentEntries journal={journal} />
 			</div>
 		);
@@ -2054,12 +2625,18 @@ function JournalBrowser({
 
 	const nextRoute: Partial<Record<JournalRoute, JournalRoute>> = {
 		year: 'month',
-		month: 'week',
+		month: 'day',
 		week: 'day',
 	};
 	return (
 		<div>
-			<JournalToolbar actions={actions} focus={focus} route={route} />
+			<JournalToolbar
+				journal={journal}
+				actions={actions}
+				focus={focus}
+				route={route}
+			/>
+			{localRecordings}
 			<PendingEntries entries={pendingEntries} playback={playback} />
 			<PeriodList
 				deleteEntry={deleteEntry}
@@ -2068,7 +2645,6 @@ function JournalBrowser({
 				nextRoute={nextRoute[route]}
 				period={route}
 				playback={playback}
-				setFocus={setFocus}
 				updateEntryDate={updateEntryDate}
 			/>
 		</div>
@@ -2244,7 +2820,9 @@ function DevelopmentJournalTools() {
 					})
 						.then(response => {
 							if (!response.ok)
-								throw new Error('Could not add sample entries.');
+								throw new Error(
+									'Could not add sample entries.'
+								);
 							return refreshJournal();
 						})
 						.then(() => setStatus('complete'))
@@ -2260,7 +2838,9 @@ function DevelopmentJournalTools() {
 				}}
 				type="button"
 			>
-				{status === 'seeding' ? 'Adding entries…' : 'Add sample entries'}
+				{status === 'seeding'
+					? 'Adding entries…'
+					: 'Add sample entries'}
 			</button>
 			{status === 'complete' && (
 				<small role="status" style={{ flexBasis: '100%' }}>
@@ -2287,9 +2867,18 @@ export default function JournalPageClient({
 }: {
 	readonly route?: JournalRoute;
 }) {
+	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
-	const journal = useGetJournal(idToken);
+	const [selection] = useQueryStates(journalSelectionQuery);
+	const isWiki = selection.wiki !== null;
+	const [hasLocalRecordings, setHasLocalRecordings] = useState(false);
+	const journal = useGetJournal(
+		idToken,
+		!isWiki,
+		journalBrowseQuery(`/journal/${route ?? ''}`, selection.at)
+	);
+	const uploads = useGetJournalUploads(idToken, hasLocalRecordings);
 	const createEntry = usePostJournalEntry(idToken);
 	const deleteEntry = useDeleteJournalEntry(idToken);
 	const updateEntryDate = useUpdateJournalEntryDate(idToken);
@@ -2303,12 +2892,14 @@ export default function JournalPageClient({
 		[updateEntryDate]
 	);
 	const resetCreateEntry = createEntry.reset;
-	const recorder = useRef<MediaRecorder>();
-	const recordingDisposition = useRef<'discard' | 'submit'>('discard');
-	const chunks = useRef<Blob[]>([]);
+	const recorder = useRef<RecordingSession | undefined>(undefined);
+	const [recordingBusy, setRecordingBusy] = useState(false);
+	const [recordingElapsed, setRecordingElapsed] = useState(0);
 	const [recording, setRecording] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
 	const [recordingError, setRecordingError] = useState<string>();
+	const [recordingLocationError, setRecordingLocationError] =
+		useState<string>();
 	const [draggingFile, setDraggingFile] = useState(false);
 	const dragDepth = useRef(0);
 	const hasReadScope = scopes(
@@ -2321,11 +2912,56 @@ export default function JournalPageClient({
 		() => false,
 		() => false
 	);
-	const isLoggedIn = idToken(
-		() => true,
-		() => false,
-		() => false
-	);
+	const claims = useSessionClaims(idToken);
+	const isLoggedIn = claims !== undefined;
+	const owner = claims ? JSON.stringify([claims.iss, claims.sub]) : undefined;
+	const currentOwner = useRef(owner);
+	currentOwner.current = owner;
+	const queue = useRecordingQueue({
+		owner,
+		canSync:
+			hasWriteScope &&
+			idToken(
+				() => true,
+				() => false,
+				() => false
+			),
+		upload: createJournalEntry,
+		entries: uploads(
+			value => value.entries,
+			() => [],
+			() => []
+		),
+		readyEntryIDs: uploads(
+			value =>
+				value.entries
+					.filter(entry => entry.status === 'ready')
+					.map(entry => entry.id),
+			() => [],
+			() => []
+		),
+	});
+	useEffect(() => {
+		setHasLocalRecordings(queue.recordings.length > 0);
+	}, [queue.recordings.length]);
+	const keepRecording = queue.keep;
+	const refreshRecordings = queue.refresh;
+	useEffect(() => {
+		currentOwner.current = owner;
+		setRecordingLocationError(undefined);
+		return () => {
+			currentOwner.current = undefined;
+			recorder.current?.stop();
+		};
+	}, [owner]);
+	useEffect(() => {
+		if (!recordingStream && queue.emergencyIDs.size === 0) return;
+		const warn = (event: BeforeUnloadEvent) => {
+			event.preventDefault();
+		};
+		window.addEventListener('beforeunload', warn);
+		return () => window.removeEventListener('beforeunload', warn);
+	}, [recordingStream, queue.emergencyIDs.size]);
 	const promptForLogin = promptForLoginFuture(
 		value => value,
 		() => undefined,
@@ -2347,19 +2983,22 @@ export default function JournalPageClient({
 	const submitAudio = useCallback(
 		async (blob: Blob, recordedAt: Date) => {
 			resetSubmission();
-			if (blob.size <= 0 || blob.size > maxJournalAudioBytes) {
-				throw new Error(
-					'Voice notes must be between 1 byte and 25 MiB.'
-				);
-			}
-			await createJournalEntry({
-				file: blob,
-				contentType: normalizedContentType(blob),
+			if (!owner) throw new Error('Sign in before saving a voice note.');
+			if (blob.size === 0) throw new Error('The audio file is empty.');
+			const contentType = normalizedContentType(blob);
+			const draft: LocalRecording = {
+				id: crypto.randomUUID(),
+				owner,
+				parts: [blob],
+				contentType,
 				recordedAt: recordedAt.toISOString(),
 				timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-			});
+				name: blob instanceof File ? blob.name : 'voice-note.webm',
+				state: 'queued',
+			};
+			await keepRecording(draft);
 		},
-		[createJournalEntry, resetSubmission]
+		[keepRecording, owner, resetSubmission]
 	);
 
 	const submitFiles = useCallback(
@@ -2432,52 +3071,50 @@ export default function JournalPageClient({
 
 	const startRecording = async () => {
 		resetSubmission();
-		let stream: MediaStream | undefined;
+		setRecordingLocationError(undefined);
+		if (!owner) {
+			setRecordingError('Sign in before recording a voice note.');
+			return;
+		}
+		setRecordingBusy(true);
+		let session: RecordingSession | undefined;
 		try {
-			const activeStream = await navigator.mediaDevices.getUserMedia({
-				audio: true,
+			session = await startLocalRecording(owner, {
+				tick: setRecordingElapsed,
+				locationError: message => {
+					if (currentOwner.current === owner)
+						setRecordingLocationError(message);
+				},
+				finished: (draft, durable, message) => {
+					if (recorder.current === session) {
+						recorder.current = undefined;
+						setRecordingStream(undefined);
+						setRecording(false);
+						setRecordingBusy(false);
+					}
+					if (message) setRecordingError(message);
+					if (draft) void keepRecording(draft, durable);
+					else void refreshRecordings();
+				},
 			});
-			stream = activeStream;
-			const mediaRecorder = new MediaRecorder(activeStream);
-			recorder.current = mediaRecorder;
-			recordingDisposition.current = 'discard';
-			chunks.current = [];
-			mediaRecorder.ondataavailable = event => {
-				if (event.data.size > 0) chunks.current.push(event.data);
-			};
-			mediaRecorder.onstop = () => {
-				const disposition = recordingDisposition.current;
-				const recordedChunks = chunks.current;
-				chunks.current = [];
-				recorder.current = undefined;
-				activeStream.getTracks().forEach(track => track.stop());
-				setRecordingStream(undefined);
-				setRecording(false);
-				if (disposition === 'submit') {
-					const blob = new Blob(recordedChunks, {
-						type: mediaRecorder.mimeType,
-					});
-					void submitAudio(blob, new Date()).catch(error =>
-						setRecordingError(errorMessage(error))
-					);
-				}
-			};
-			mediaRecorder.start();
-			setRecordingStream(activeStream);
+			if (currentOwner.current !== owner) {
+				session.stop();
+				return;
+			}
+			recorder.current = session;
+			setRecordingStream(session.stream);
 			setRecording(true);
+			setRecordingBusy(false);
 		} catch (error) {
-			stream?.getTracks().forEach(track => track.stop());
+			setRecordingBusy(false);
 			setRecordingError(errorMessage(error));
 		}
 	};
 
 	const endRecording = (disposition: 'discard' | 'submit') => {
-		const mediaRecorder = recorder.current;
-		if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
-		recordingDisposition.current = disposition;
-		mediaRecorder.stop();
-		setRecordingStream(undefined);
-		setRecording(false);
+		if (!recorder.current) return;
+		setRecordingBusy(true);
+		recorder.current.stop(disposition === 'discard');
 	};
 
 	const uploadFiles = (event: ChangeEvent<HTMLInputElement>) => {
@@ -2491,21 +3128,33 @@ export default function JournalPageClient({
 	const captureControls = hasWriteScope ? (
 		<section
 			aria-label="Create a journal entry"
-			aria-busy={createEntry.isPending}
+			aria-busy={recordingBusy || queue.syncing !== undefined}
 			className={style.recorder}
 			data-recording={recordingStream ? '' : undefined}
-			data-uploading={createEntry.isPending ? '' : undefined}
+			data-notice={
+				recordingError || recordingLocationError ? '' : undefined
+			}
+			data-uploading={queue.syncing ? '' : undefined}
 		>
 			{!recordingStream && (
-				<label
-					className={style.uploadButton}
-					title="Import voice memo"
-				>
+				<label className={style.uploadButton} title="Import voice memo">
 					<FontAwesomeIcon icon={faUpload} />
+					{queue.syncing && (
+						<span className={style.uploadProgress}>
+							{queue.uploadProgress === undefined ? (
+								<JournalStatus label="Preparing upload" />
+							) : (
+								<JournalProgress
+									label="Uploading voice note"
+									progress={queue.uploadProgress}
+								/>
+							)}
+						</span>
+					)}
 					<input
 						accept="audio/*,.m4a"
 						aria-label="Import voice memo"
-						disabled={createEntry.isPending}
+						disabled={recordingBusy}
 						multiple
 						onChange={uploadFiles}
 						type="file"
@@ -2514,38 +3163,58 @@ export default function JournalPageClient({
 			)}
 			<button
 				aria-label={
-					createEntry.isPending
-						? 'Uploading voice note'
+					recordingBusy
+						? recording
+							? 'Saving voice note'
+							: 'Starting microphone'
 						: recording
-							? 'Submit note'
+							? 'Stop and upload'
 							: 'Record a note'
 				}
 				className={`${style.recordButton} ${recording ? style.submitButton : ''}`}
-				disabled={createEntry.isPending}
+				disabled={recordingBusy}
 				onClick={
-					recording
-						? () => endRecording('submit')
-						: startRecording
+					recording ? () => endRecording('submit') : startRecording
 				}
-				title={recording ? 'Finish recording' : 'Record a note'}
+				title={recording ? 'Stop and upload' : 'Record a note'}
 				type="button"
 			>
-				<FontAwesomeIcon icon={recording ? faCheck : faMicrophone} />
+				<FontAwesomeIcon
+					aria-hidden="true"
+					className={recordingBusy ? style.spinning : undefined}
+					icon={
+						recordingBusy
+							? faSpinner
+							: recording
+								? faUpload
+								: faMicrophone
+					}
+				/>
 			</button>
 			{recordingStream && (
 				<>
 					<RecordingWaveform stream={recordingStream} />
+					<div className={style.recordingTime}>
+						<span role="timer" aria-label="Recording duration">
+							{mediaTimestamp(recordingElapsed)}
+						</span>
+					</div>
 					<button
 						aria-label="Cancel recording"
+						disabled={recordingBusy}
 						className={style.cancelButton}
 						onClick={() => endRecording('discard')}
 						type="button"
 					>
-						<FontAwesomeIcon icon={faStop} />
+						<FontAwesomeIcon aria-hidden="true" icon={faTrashCan} />
 					</button>
 				</>
 			)}
-			{recordingError && <p>{recordingError}</p>}
+			{(recordingError || recordingLocationError) && (
+				<p className={style.recordingNotice} role="status">
+					{recordingError || recordingLocationError}
+				</p>
+			)}
 		</section>
 	) : undefined;
 
@@ -2571,7 +3240,7 @@ export default function JournalPageClient({
 					onClick={() => void promptForLogin?.()}
 					type="button"
 				>
-					Sign in to open your journal
+					Sign in
 				</button>
 			) : !hasReadScope ? (
 				<p className={style.notice}>
@@ -2581,33 +3250,85 @@ export default function JournalPageClient({
 			) : (
 				<>
 					{isDevelopment && <DevelopmentJournalTools />}
-					{journal(
-						value => (
-							<JournalBrowser
+					{isWiki ? (
+						<div>
+							<JournalToolbar
 								actions={captureControls}
-								deleteEntry={
-									hasWriteScope
-										? deleteJournalEntry
-										: undefined
-								}
-								journal={value}
+								focus={selection.at ?? ''}
 								route={route}
-								updateEntryDate={
-									hasWriteScope
-										? updateJournalEntryDate
-										: undefined
-								}
+								wiki
 							/>
-						),
-						() => (
-							<p>Loading your journal…</p>
-						),
-						error => (
-							<p className={style.notice}>
-								{errorMessage(error)}
-							</p>
+							<LocalRecordings
+								queue={queue}
+								activeID={recorder.current?.id}
+							/>
+							<JournalWiki pageID={selection.wiki ?? 'all'} />
+						</div>
+					) : (
+						journal(
+							value => (
+								<JournalBrowser
+									localRecordings={
+										<LocalRecordings
+											queue={queue}
+											activeID={recorder.current?.id}
+										/>
+									}
+									localEntryIDs={queue.recordings.map(
+										draft => draft.remoteEntryID
+									)}
+									actions={captureControls}
+									deleteEntry={
+										hasWriteScope
+											? deleteJournalEntry
+											: undefined
+									}
+									journal={value}
+									route={route}
+									updateEntryDate={
+										hasWriteScope
+											? updateJournalEntryDate
+											: undefined
+									}
+								/>
+							),
+							() => (
+								<>
+									<JournalToolbar
+										route={route}
+										actions={captureControls}
+										focus={new Date(
+											renderTime
+										).toISOString()}
+									/>
+									<LocalRecordings
+										queue={queue}
+										activeID={recorder.current?.id}
+									/>
+									<JournalPlaceholder label="Loading journal" />
+								</>
+							),
+							error => (
+								<>
+									<JournalToolbar
+										route={route}
+										actions={captureControls}
+										focus={new Date(
+											renderTime
+										).toISOString()}
+									/>
+									<LocalRecordings
+										queue={queue}
+										activeID={recorder.current?.id}
+									/>
+									<p className={style.notice}>
+										{errorMessage(error)}
+									</p>
+								</>
+							)
 						)
 					)}
+					<JournalMCPSetup />
 				</>
 			)}
 		</main>

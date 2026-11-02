@@ -1,6 +1,23 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { childPeriodsFor } from '#root/project/me/zemn/app/journal/periods.js';
+import {
+	childPeriodsFor,
+	journalBrowseQuery,
+} from '#root/project/me/zemn/app/journal/periods.js';
+
+test('server and client calendar requests select the same bounded view', () => {
+	expect(journalBrowseQuery('/journal/day', '2026-03-08T12:00:00Z')).toEqual({
+		view: 'day',
+		at: '2026-03-08T12:00:00Z',
+	});
+	expect(journalBrowseQuery('/journal/month', null)).toEqual({
+		view: 'month',
+	});
+	expect(journalBrowseQuery('/journal', null)).toEqual({ view: 'overview' });
+	expect(journalBrowseQuery('/journal/year', 'invalid')).toEqual({
+		view: 'year',
+	});
+});
 
 const september = {
 	start: '2026-09-01T00:00:00-07:00',
@@ -60,7 +77,10 @@ describe('journal child periods', () => {
 			start: '2026-09-14T00:00:00-07:00',
 			end: '2026-09-21T00:00:00-07:00',
 		};
-		const result = childPeriodsFor([lastWeek, middleWeek, firstWeek], september);
+		const result = childPeriodsFor(
+			[lastWeek, middleWeek, firstWeek],
+			september
+		);
 		expect(result).toEqual([lastWeek, middleWeek, firstWeek]);
 		expect(result[0]).toBe(lastWeek);
 	});

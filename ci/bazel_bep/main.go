@@ -259,7 +259,7 @@ func (a annotator) testSummaryAnnotations(label string, summary *bep.TestSummary
 	}
 
 	level := "error"
-	if status == bep.TestStatus_FLAKY || status == bep.TestStatus_NO_STATUS {
+	if status == bep.TestStatus_NO_STATUS {
 		level = "warning"
 	}
 

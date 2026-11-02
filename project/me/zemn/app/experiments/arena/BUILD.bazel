@@ -1,9 +1,7 @@
-load("//md:rules.bzl", "md_files")
-
-# gazelle:resolve js #root/project/me/zemn/app/experiments/arena/level.js //project/me/zemn/app/experiments/arena:arena
-
+# gazelle:resolve typescript #root/project/me/zemn/app/experiments/arena/level.js //project/me/zemn/app/experiments/arena:arena
 load("//bzl:rules.bzl", "bazel_lint")
 load("//css/module:rules.bzl", "css_module")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -26,14 +24,11 @@ ts_project(
         ":style_module_css",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/react-dom",
         "//ts/3d",
         "//ts/doom",
         "//ts/math",
-        "//ts/next.js/types/next-compiled",
+        "//ts/remix",
     ],
 )
 

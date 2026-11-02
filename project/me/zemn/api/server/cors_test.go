@@ -40,7 +40,6 @@ func TestAnalyticsBeaconCORSAllowsKnownOrigin(t *testing.T) {
 
 	for _, origin := range []string{
 		"https://zemn.me",
-		"https://lulu.computer",
 		"https://baby.computer",
 		"https://pleaseintroducemetoyour.dog",
 		"https://staging.pleaseintroducemetoyour.dog",
@@ -183,4 +182,12 @@ func newAnalyticsBeaconTestHandler(s *Server, allowLocalhostOrigin bool) http.Ha
 		MaxAge:         300,
 	}))
 	return analyticsBeaconHandler(HandlerFromMux(NewStrictHandler(s, nil), r), allowLocalhostOrigin)
+}
+
+func TestAnalyticsBeaconRejectsRetiredLuluOrigin(t *testing.T) {
+	for _, host := range []string{"lulu.computer", "staging.lulu.computer"} {
+		if analyticsBeaconHostAllowed(host) {
+			t.Errorf("retired host %s remains allowed", host)
+		}
+	}
 }

@@ -8,6 +8,7 @@ import {
 	FIELD_COLUMNS,
 	FIELD_LAYERS,
 	FIELD_ROWS,
+	fieldSolidCount,
 	type MovementInput,
 	PLATONIC_SHAPES,
 	renderScene,
@@ -38,12 +39,16 @@ describe('platonic stress scene', () => {
 
 	test('creates a dense deterministic field', () => {
 		const field = createPlatonicField();
-		const kinds = new Set(field.solids.map(solid => solid.kind));
+		const kinds = new Set(
+			field(solids => solids.map(solid => solid(kind => kind)))
+		);
 
-		expect(field.solidCount).toBe(
+		expect(fieldSolidCount(field)).toBe(
 			FIELD_COLUMNS * FIELD_ROWS * FIELD_LAYERS
 		);
-		expect(field.segmentCount).toBeGreaterThan(6000);
+		expect(
+			field((_solids, _segments, _count, segmentCount) => segmentCount)
+		).toBeGreaterThan(6000);
 		expect(kinds).toEqual(
 			new Set([
 				'tetrahedron',
@@ -57,7 +62,9 @@ describe('platonic stress scene', () => {
 
 	test('animation time changes solid geometry', () => {
 		const field = createPlatonicField();
-		const firstDynamicIndex = field.staticSegments.length;
+		const firstDynamicIndex = field(
+			(_solids, staticSegments) => staticSegments.length
+		);
 		const atStart = createFrameSegments(field, 0)[firstDynamicIndex]!;
 		const later = createFrameSegments(field, 2)[firstDynamicIndex]!;
 
@@ -69,9 +76,14 @@ describe('platonic stress scene', () => {
 		const staticOnly = createFrameSegments(field, 0, 0);
 		const oneSolid = createFrameSegments(field, 0, 1);
 
-		expect(staticOnly).toHaveLength(field.staticSegments.length);
+		expect(staticOnly).toHaveLength(
+			field((_solids, staticSegments) => staticSegments.length)
+		);
 		expect(oneSolid).toHaveLength(
-			field.staticSegments.length + field.solids[0]!.segments.length
+			field((_solids, staticSegments) => staticSegments.length) +
+				field(solids =>
+					solids[0]!((_kind, _position, segments) => segments.length)
+				)
 		);
 		expect(segmentCountForSolidLimit(field, 1)).toBe(oneSolid.length);
 	});

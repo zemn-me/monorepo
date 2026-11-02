@@ -186,6 +186,17 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this, protect: args.protectDatabases }
 		);
 
+		const oauthTable = new aws.dynamodb.Table(
+			`${name}-oauth`,
+			{
+				attributes: [{ name: 'id', type: 'S' }],
+				billingMode: 'PAY_PER_REQUEST',
+				hashKey: 'id',
+				ttl: { attributeName: 'expires', enabled: true },
+			},
+			{ parent: this, protect: args.protectDatabases }
+		);
+
 		const journalTable = new aws.dynamodb.Table(
 			`${name}-journal`,
 			{
@@ -282,6 +293,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 							usersTable.arn,
 							keyRequestsTable.arn,
 							journalTable.arn,
+							oauthTable.arn,
 						]).apply(
 							([
 								settingsArn,
@@ -290,6 +302,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 								usersArn,
 								keyArn,
 								journalArn,
+								oauthArn,
 							]) =>
 								JSON.stringify({
 									Version: '2012-10-17',
@@ -312,6 +325,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 												usersArn,
 												keyArn,
 												journalArn,
+												oauthArn,
 											],
 										},
 									],
@@ -613,6 +627,13 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						USERS_TABLE_NAME: usersTable.name,
 						CALLBOX_KEY_TABLE_NAME: keyRequestsTable.name,
 						JOURNAL_TABLE_NAME: journalTable.name,
+						JOURNAL_CURATION_ENABLED: 'true',
+						OAUTH_TABLE_NAME: oauthTable.name,
+						ZEMN_API_ORIGIN: `https://${args.domain}`,
+						OAUTH_FRONTEND_ORIGIN:
+							args.journalWorkerEnvironment === 'staging'
+								? 'https://staging.zemn.me'
+								: 'https://zemn.me',
 						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 						...(args.minecraftRconBridgeFunctionName === undefined
@@ -664,6 +685,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				environment: {
 					variables: {
 						JOURNAL_TABLE_NAME: journalTable.name,
+						JOURNAL_CURATION_ENABLED: 'true',
 						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						...(args.openAIIdentityProviderId === undefined
 							? {}
@@ -707,12 +729,51 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: journalBucket, dependsOn: permitJournalBucket }
 		);
 
+		// The coordinator returns while its cloud session runs. Keep it separate
+		// from audio processing so long uploads cannot delay run reconciliation.
+		const journalCurator = new LambdaFunction(
+			'journalcuratorlambda',
+			{
+				packageType: 'Image',
+				role: journalWorkerRole.arn,
+				imageUri: journalWorkerImage.url,
+				timeout: 120,
+				memorySize: 1024,
+				reservedConcurrentExecutions: 1,
+				environment: {
+					variables: {
+						JOURNAL_TABLE_NAME: journalTable.name,
+						JOURNAL_BUCKET_NAME: journalBucket.bucket,
+						JOURNAL_CURATION_ENABLED: 'true',
+						JOURNAL_CURATOR_MODEL: 'gpt-5.6',
+						...(args.journalWorkerEnvironment === 'production' &&
+						process.env['OPENAI_CURATOR_API_KEY']
+							? {
+									OPENAI_CURATOR_API_KEY: Pulumi.secret(
+										process.env['OPENAI_CURATOR_API_KEY']
+									),
+								}
+							: {}),
+						...(args.openAIIdentityProviderId === undefined
+							? {}
+							: {
+									OPENAI_IDENTITY_PROVIDER_ID:
+										args.openAIIdentityProviderId,
+									OPENAI_SERVICE_ACCOUNT_ID:
+										args.openAIServiceAccountId,
+								}),
+					},
+				},
+			},
+			{ parent: this }
+		).function;
+
 		const journalSummarySchedule = new aws.cloudwatch.EventRule(
 			`${name}-journal-summary-schedule`,
 			{
 				description:
-					'Backfill elapsed journal summaries after missed or failed upload processing.',
-				scheduleExpression: 'cron(5 * * * ? *)',
+					'Reconcile cloud diary curation; one run per 24 hours with at most two retries after failure.',
+				scheduleExpression: 'rate(5 minutes)',
 			},
 			{ parent: this }
 		);
@@ -721,7 +782,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			`${name}-journal-summary-schedule-permission`,
 			{
 				action: 'lambda:InvokeFunction',
-				function: journalWorker.name,
+				function: journalCurator.name,
 				principal: 'events.amazonaws.com',
 				sourceArn: journalSummarySchedule.arn,
 				statementId: 'journal-summary-schedule-invoke',
@@ -732,7 +793,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 		new aws.cloudwatch.EventTarget(
 			`${name}-journal-summary-schedule-target`,
 			{
-				arn: journalWorker.arn,
+				arn: journalCurator.arn,
 				rule: journalSummarySchedule.name,
 			},
 			{

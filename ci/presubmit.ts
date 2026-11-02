@@ -38,6 +38,11 @@ const cmd = new Command('presubmit')
 		false
 	)
 	.option(
+		'--skip-pulumi-refresh',
+		'Skip refreshing Pulumi state when staging was just deployed in the same workflow.',
+		false
+	)
+	.option(
 		'--skip-pulumi-deploy',
 		`${
 			'Skip doing the pulumi deploy once bazel testing is completed. ' +
@@ -70,7 +75,15 @@ const cmd = new Command('presubmit')
 				)
 			);
 			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...', '--keep_going', '--config=ci')
+				Bazel.Bazel(
+					cwd,
+					'test',
+					'//...',
+					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
+					...(process.env['BAZEL_TEST_UNCACHED'] === 'true'
+						? ['--nocache_test_results']
+						: [])
+				)
 			);
 			// perform all the normal tests
 		}
@@ -156,6 +169,7 @@ const cmd = new Command('presubmit')
 				deploy_to_staging({
 					overwrite: o.overwrite,
 					doNotTearDown: o.dirty,
+					skipRefresh: o.skipPulumiRefresh,
 				})
 			);
 		}

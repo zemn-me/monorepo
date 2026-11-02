@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 
 import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context.js';
 
-export type SectionProps = JSX.IntrinsicElements['section'];
+export type SectionProps = React.JSX.IntrinsicElements['section'];
 
 export function Section({ children, ...props }: SectionProps) {
 	const portal = useContext(tocSegment);

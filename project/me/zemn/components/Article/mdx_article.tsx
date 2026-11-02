@@ -1,16 +1,10 @@
 import { cloneElement, ReactElement } from 'react';
 
 import { Article } from '#root/project/me/zemn/components/Article/article.js';
-import { CodeBlock } from '#root/project/me/zemn/components/Article/code_highlight.js';
 import {
-	H1,
-	H2,
-	H3,
-	H4,
-	H5,
-} from '#root/project/me/zemn/components/Article/heading.js';
-import { Section } from '#root/project/me/zemn/components/Article/section.js';
-import Link from '#root/project/me/zemn/components/Link/index.js';
+	type MarkdownComponents,
+	markdownComponents,
+} from '#root/project/me/zemn/components/Article/markdown_components.js';
 
 interface Frontmatter {
 	layout?: string;
@@ -22,45 +16,21 @@ interface Frontmatter {
 	medium?: string;
 }
 
-type MDXComponentTypes =
-	| 'a'
-	| 'blockquote'
-	| 'code'
-	| 'em'
-	| `h${1 | 2 | 3 | 4 | 5}`
-	| 'p'
-	| 'pre'
-	| 'section';
-
 interface MDXContentProps {
-	components?: {
-		[k in MDXComponentTypes]?: (
-			props: k extends keyof JSX.IntrinsicElements
-				? JSX.IntrinsicElements[k]
-				: never
-		) => ReactElement | null;
-	};
+	components?: MarkdownComponents;
 }
 
 export interface MDXArticleProps {
 	readonly frontmatter?: Frontmatter;
 	readonly children: ReactElement<MDXContentProps>;
+	readonly components?: MarkdownComponents;
 }
 
 export function MDXArticle(props: MDXArticleProps) {
 	return (
 		<Article {...props.frontmatter}>
 			{cloneElement(props.children, {
-				components: {
-					h1: H1,
-					h2: H2,
-					h3: H3,
-					h4: H4,
-					h5: H5,
-					a: Link,
-					pre: CodeBlock,
-					section: Section,
-				},
+				components: { ...markdownComponents, ...props.components },
 			})}
 		</Article>
 	);

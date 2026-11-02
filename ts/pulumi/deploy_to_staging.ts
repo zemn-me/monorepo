@@ -12,6 +12,8 @@
 import * as pulumi from '@pulumi/pulumi/automation/index.js';
 
 import { Command, Summarize } from '#root/ts/github/actions/index.js';
+import { prepareBoweryBugleRemoval } from '#root/ts/pulumi/retire_bowery_bugle.js';
+import { prepareLuluRetirement } from '#root/ts/pulumi/retire_lulu.js';
 import { staging } from '#root/ts/pulumi/stack.js';
 
 const Task =
@@ -123,6 +125,10 @@ interface Args {
 	 * Destroy existing state before doing Pulumi up.
 	 */
 	overwrite: boolean;
+	/**
+	 * Reuse state from a staging deployment that just completed.
+	 */
+	skipRefresh?: boolean;
 }
 
 export async function main(args: Args) {
@@ -135,9 +141,11 @@ export async function main(args: Args) {
 
 	const s = staging();
 
-	const e1 = await waitForLockTask(async () =>
-		s.then(v => v.refresh(baseConfig))
-	)('refreshing state');
+	const e1 = args.skipRefresh
+		? undefined
+		: await waitForLockTask(async () => s.then(v => v.refresh(baseConfig)))(
+				'refreshing state'
+			);
 
 	let e2: pulumi.DestroyResult | pulumi.UpResult | Error | undefined =
 		undefined;
@@ -148,9 +156,12 @@ export async function main(args: Args) {
 	// this ensures that the infrastructure gets to the desired state
 	// even if there are conflicts, but without necessarily waiting for
 	// a full destroy.
-	const e3 = await waitForLockTask(async () => s.then(v => v.up(baseConfig)))(
-		'deploying'
-	);
+	const e3 = await waitForLockTask(async () => {
+		const stack = await s;
+		await prepareLuluRetirement(stack);
+		await prepareBoweryBugleRemoval(stack);
+		return stack.up(baseConfig);
+	})('deploying');
 
 	if (args.overwrite && e3 instanceof Error) {
 		e2 = await waitForLockTask(async () =>

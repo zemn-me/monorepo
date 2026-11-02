@@ -3,7 +3,7 @@ import React from 'react';
 
 import style from '#root/project/me/zemn/components/TimeEye/TimeEye.module.css';
 
-export const TimeEye: React.FC<JSX.IntrinsicElements['svg']> = ({
+export const TimeEye: React.FC<React.JSX.IntrinsicElements['svg']> = ({
 	className,
 	...props
 }) => (

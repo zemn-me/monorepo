@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -271,5 +272,26 @@ func writeEvent(t *testing.T, w *bytes.Buffer, event *bep.BuildEvent) {
 	t.Helper()
 	if _, err := protodelim.MarshalTo(w, event); err != nil {
 		t.Fatal(err)
+	}
+}
+
+// Bazel may exit successfully after a retry passes. The annotation is also
+// consumed by ci/bazel.ts, which must reject that result before merge.
+func TestFlakyTestIsAnError(t *testing.T) {
+	var stream bytes.Buffer
+	writeEvent(t, &stream, &bep.BuildEvent{
+		Id: &bep.BuildEventId{Id: &bep.BuildEventId_TestSummary{
+			TestSummary: &bep.BuildEventId_TestSummaryId{Label: "//example:integration_test"},
+		}},
+		Payload: &bep.BuildEvent_TestSummary{TestSummary: &bep.TestSummary{
+			OverallStatus: bep.TestStatus_FLAKY,
+		}},
+	})
+	var out bytes.Buffer
+	if err := annotateBEP(&stream, &out, t.TempDir()); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasPrefix(out.String(), "::error ") || !strings.Contains(out.String(), "FLAKY") {
+		t.Fatalf("flaky result must block presubmit, got: %s", out.String())
 	}
 }

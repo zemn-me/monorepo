@@ -9,7 +9,7 @@ load("//go/jsonschema:rules.bzl", "jsonschema_gen")
 # and i dont know why...
 jsonschema_gen(
     name = "twitter_gen",
-    src = "//ts/twitter:json_schema",
+    src = "//ts/twitter:json_schema_go",
     outs = ["gen.go"],
     package = "twitter",
 )

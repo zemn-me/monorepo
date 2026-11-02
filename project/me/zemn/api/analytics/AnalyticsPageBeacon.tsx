@@ -1,7 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 const analyticsSessionStorageKey = 'ZEMN_ANALYTICS_SESSION_ID';
 
@@ -88,12 +88,21 @@ function collectEngagement() {
 }
 
 export function AnalyticsPageBeacon({
-	apiBase = process.env['NEXT_PUBLIC_ZEMN_ME_API_BASE'] ?? 'https://api.zemn.me',
+	apiBase = process.env['PUBLIC_ZEMN_ME_API_BASE'] ?? 'https://api.zemn.me',
 }: AnalyticsPageBeaconProps) {
-	const pathname = usePathname();
+	const pathname = useLocation().pathname;
 	const lastSentKey = useRef<string | null>(null);
 
 	useEffect(() => {
+		// Local previews of the production artifact must not send test traffic
+		// to production analytics. A configured local API still receives it.
+		if (
+			['localhost', '127.0.0.1', '[::1]'].includes(
+				window.location.hostname
+			) &&
+			new URL(apiBase, window.location.href).hostname === 'api.zemn.me'
+		)
+			return;
 		const pageKey = `${pathname}?${window.location.search}`;
 		if (lastSentKey.current === pageKey) {
 			return;
@@ -118,4 +127,3 @@ export function AnalyticsPageBeacon({
 
 	return null;
 }
-
