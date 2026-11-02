@@ -1,0 +1,71 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1354918666085785606"
+        ],
+        "editableUntil": "2021-01-28T23:25:57.823Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "りいんちゃん",
+          "screen_name": "reinforchu",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "178685274",
+          "id": "178685274"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/qDOvU5uSSx",
+          "expanded_url": "http://mywebsite.com",
+          "display_url": "mywebsite.com",
+          "indices": [
+            "40",
+            "63"
+          ]
+        },
+        {
+          "url": "https://t.co/qDOvU5uSSx",
+          "expanded_url": "http://mywebsite.com",
+          "display_url": "mywebsite.com",
+          "indices": [
+            "96",
+            "119"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "146"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1354918050353405953",
+    "id_str": "1354918666085785606",
+    "in_reply_to_user_id": "178685274",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1354918666085785606",
+    "in_reply_to_status_id": "1354918050353405953",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 28 22:25:57 +0000 2021",
+    "favorited": false,
+    "full_text": "@reinforchu is the issue here that, say https://t.co/qDOvU5uSSx can execute code on view-source:https://t.co/qDOvU5uSSx? what can you do with that",
+    "lang": "en",
+    "in_reply_to_screen_name": "reinforchu",
+    "in_reply_to_user_id_str": "178685274"
+  }
+}

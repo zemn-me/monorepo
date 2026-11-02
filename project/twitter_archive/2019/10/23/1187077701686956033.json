@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1187077701686956033"
+        ],
+        "editableUntil": "2019-10-23T19:45:53.576Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/x7nhwBfAy3",
+          "expanded_url": "https://blog.chromium.org/2019/10/developers-get-ready-for-new.html",
+          "display_url": "blog.chromium.org/2019/10/develo…",
+          "indices": [
+            "92",
+            "115"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "115"
+    ],
+    "favorite_count": "15",
+    "id_str": "1187077701686956033",
+    "truncated": false,
+    "retweet_count": "11",
+    "id": "1187077701686956033",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 23 18:45:53 +0000 2019",
+    "favorited": false,
+    "full_text": "google chrome is literally patching out most csrf by making all cookies SameSite by default https://t.co/x7nhwBfAy3",
+    "lang": "en"
+  }
+}

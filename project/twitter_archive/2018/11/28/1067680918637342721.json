@@ -1,0 +1,177 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1067680918637342721"
+        ],
+        "editableUntil": "2018-11-28T08:25:42.212Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "NXOnNetflix",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        },
+        {
+          "name": "Netflix",
+          "screen_name": "netflix",
+          "indices": [
+            "102",
+            "110"
+          ],
+          "id_str": "16573941",
+          "id": "16573941"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NXOnNetflix/status/1067644277847539712/video/1",
+          "source_status_id": "1067644277847539712",
+          "indices": [
+            "112",
+            "135"
+          ],
+          "url": "https://t.co/bKe0d8EKoH",
+          "media_url": "http://pbs.twimg.com/media/DtDecdAUcAAlDOA.jpg",
+          "id_str": "1067597584795979776",
+          "source_user_id": "999720386014019584",
+          "id": "1067597584795979776",
+          "media_url_https": "https://pbs.twimg.com/media/DtDecdAUcAAlDOA.jpg",
+          "source_user_id_str": "999720386014019584",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1067644277847539712",
+          "display_url": "pic.twitter.com/bKe0d8EKoH"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "135"
+    ],
+    "favorite_count": "0",
+    "id_str": "1067680918637342721",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1067680918637342721",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 28 07:25:42 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @NXOnNetflix: Guess it’s time to announce that Cowboy Bebop, the live-action series, is heading to @Netflix. https://t.co/bKe0d8EKoH",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NXOnNetflix/status/1067644277847539712/video/1",
+          "source_status_id": "1067644277847539712",
+          "indices": [
+            "112",
+            "135"
+          ],
+          "url": "https://t.co/bKe0d8EKoH",
+          "media_url": "http://pbs.twimg.com/media/DtDecdAUcAAlDOA.jpg",
+          "id_str": "1067597584795979776",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "14556",
+            "variants": [
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1067597584795979776/vid/240x240/5hPb3F4GYuipzCGh.mp4?tag=8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1067597584795979776/vid/480x480/RRWenJpEEZlM-2Sv.mp4?tag=8"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1067597584795979776/vid/720x720/tyZuj18r81JWl_om.mp4?tag=8"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1067597584795979776/pl/0-WKQ7QZQrF4Xs9Y.m3u8?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "999720386014019584",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1067597584795979776",
+          "media_url_https": "https://pbs.twimg.com/media/DtDecdAUcAAlDOA.jpg",
+          "source_user_id_str": "999720386014019584",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1067644277847539712",
+          "display_url": "pic.twitter.com/bKe0d8EKoH"
+        }
+      ]
+    }
+  }
+}

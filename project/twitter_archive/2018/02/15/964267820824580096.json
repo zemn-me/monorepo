@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "964267820824580096"
+        ],
+        "editableUntil": "2018-02-15T23:38:58.371Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Twitch",
+          "screen_name": "Twitch",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "309366491",
+          "id": "309366491"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Twitch/status/964264399711145985/video/1",
+          "source_status_id": "964264399711145985",
+          "indices": [
+            "97",
+            "120"
+          ],
+          "url": "https://t.co/BZHOSqsDOc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/964264374474027013/pu/img/0036PBqKvpMLwBtk.jpg",
+          "id_str": "964264374474027013",
+          "source_user_id": "309366491",
+          "id": "964264374474027013",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/964264374474027013/pu/img/0036PBqKvpMLwBtk.jpg",
+          "source_user_id_str": "309366491",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "964264399711145985",
+          "display_url": "pic.twitter.com/BZHOSqsDOc"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "120"
+    ],
+    "favorite_count": "0",
+    "id_str": "964267820824580096",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "964267820824580096",
+    "possibly_sensitive": false,
+    "created_at": "Thu Feb 15 22:38:58 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @Twitch: Get a Room and bring your community together with new always-on, custom chat spaces. https://t.co/BZHOSqsDOc",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Twitch/status/964264399711145985/video/1",
+          "source_status_id": "964264399711145985",
+          "indices": [
+            "97",
+            "120"
+          ],
+          "url": "https://t.co/BZHOSqsDOc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/964264374474027013/pu/img/0036PBqKvpMLwBtk.jpg",
+          "id_str": "964264374474027013",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "30030",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/964264374474027013/pu/pl/ORNlspChHUWYSShP.m3u8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/964264374474027013/pu/vid/1280x720/pAIo_NF-_e6FW6Uh.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/964264374474027013/pu/vid/640x360/Tgkm1FyiNmx6uA-K.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/964264374474027013/pu/vid/320x180/h4CYlp7VXO29ad4A.mp4"
+              }
+            ]
+          },
+          "source_user_id": "309366491",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "964264374474027013",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/964264374474027013/pu/img/0036PBqKvpMLwBtk.jpg",
+          "source_user_id_str": "309366491",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "964264399711145985",
+          "display_url": "pic.twitter.com/BZHOSqsDOc"
+        }
+      ]
+    }
+  }
+}

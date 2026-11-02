@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1478443803908345861"
+        ],
+        "editableUntil": "2022-01-04T20:10:45.666Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jack Druce",
+          "screen_name": "Jackdruce",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "116628049",
+          "id": "116628049"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Jackdruce/status/1478145072331833344/video/1",
+          "source_status_id": "1478145072331833344",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/NHc9QpSreq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1478144329117929473/pu/img/hbWhZ6AoDbr3FW8J.jpg",
+          "id_str": "1478144329117929473",
+          "source_user_id": "116628049",
+          "id": "1478144329117929473",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1478144329117929473/pu/img/hbWhZ6AoDbr3FW8J.jpg",
+          "source_user_id_str": "116628049",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1478145072331833344",
+          "display_url": "pic.twitter.com/NHc9QpSreq"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "76"
+    ],
+    "favorite_count": "0",
+    "id_str": "1478443803908345861",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1478443803908345861",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 04 19:10:45 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @Jackdruce: Ultimate motivation for entrepreneurs https://t.co/NHc9QpSreq",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Jackdruce/status/1478145072331833344/video/1",
+          "source_status_id": "1478145072331833344",
+          "indices": [
+            "53",
+            "76"
+          ],
+          "url": "https://t.co/NHc9QpSreq",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1478144329117929473/pu/img/hbWhZ6AoDbr3FW8J.jpg",
+          "id_str": "1478144329117929473",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "102549",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1478144329117929473/pu/vid/1280x720/wBc8WW7Hv3IwDs1w.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1478144329117929473/pu/pl/dR9OGX6SWX2iQHB6.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1478144329117929473/pu/vid/480x270/ObHgUeI4NcHIeTjH.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1478144329117929473/pu/vid/640x360/EU-IWCwiJVYwePJ4.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "116628049",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1478144329117929473",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1478144329117929473/pu/img/hbWhZ6AoDbr3FW8J.jpg",
+          "source_user_id_str": "116628049",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1478145072331833344",
+          "display_url": "pic.twitter.com/NHc9QpSreq"
+        }
+      ]
+    }
+  }
+}

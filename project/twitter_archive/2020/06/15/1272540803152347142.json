@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1272540803152347142"
+        ],
+        "editableUntil": "2020-06-15T15:45:44.793Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/OgnVHUeA0X",
+          "expanded_url": "https://downloadmirror.intel.com/27796/eng/Release%20Notes.txt",
+          "display_url": "downloadmirror.intel.com/27796/eng/Rele…",
+          "indices": [
+            "192",
+            "215"
+          ]
+        },
+        {
+          "url": "https://t.co/QnF6MhWN7T",
+          "expanded_url": "https://downloadcenter.intel.com/download/27796/Thunderbolt-3-Driver-for-Windows-Server-2016-for-NUC6i7KYK-NUC8i7HNK-NUC8i7HVK?wapkw=27796",
+          "display_url": "downloadcenter.intel.com/download/27796…",
+          "indices": [
+            "256",
+            "279"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "279"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1272540802103861252",
+    "id_str": "1272540803152347142",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1272540803152347142",
+    "in_reply_to_status_id": "1272540802103861252",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 15 14:45:44 +0000 2020",
+    "favorited": false,
+    "full_text": "The driver for my motherboard comes with a release notes.txt file that states:\n  DSL6540/6340  Series - \"Alpine Ridge\"  \n  JHL6540/6340  Series - \"Alpine Ridge\" [...]\n\nso i googled it and got https://t.co/OgnVHUeA0X\n\nthen found my way to the source, here: https://t.co/QnF6MhWN7T",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

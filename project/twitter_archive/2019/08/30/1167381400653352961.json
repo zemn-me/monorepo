@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1167381400653352961"
+        ],
+        "editableUntil": "2019-08-30T11:19:49.470Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Command Line Magic",
+          "screen_name": "climagic",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "91333167",
+          "id": "91333167"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "144"
+    ],
+    "favorite_count": "0",
+    "id_str": "1167381400653352961",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1167381400653352961",
+    "created_at": "Fri Aug 30 10:19:49 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @climagic: man bash | sed 's/./&amp;\\n/g' | awk -v mx=$COLUMNS -v my=$LINES 'BEGIN{x=y=e=f=1}{if(x==mx||!x){e*=-1};if(y==my||!y){f*=-1};x+=e…",
+    "lang": "en"
+  }
+}

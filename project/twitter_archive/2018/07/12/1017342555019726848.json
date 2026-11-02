@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1017342555019726848"
+        ],
+        "editableUntil": "2018-07-12T10:39:01.084Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "the \"tee\" in \"tired\"",
+          "screen_name": "eggemperor",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1306521694874546176",
+          "id": "1306521694874546176"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/eggemperor/status/1016970548256141312/video/1",
+          "source_status_id": "1016970548256141312",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/Qww0ujJxcu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1016970386297245696/pu/img/dxKhC84g69HBql1l.jpg",
+          "id_str": "1016970386297245696",
+          "source_user_id": "2801201899",
+          "id": "1016970386297245696",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1016970386297245696/pu/img/dxKhC84g69HBql1l.jpg",
+          "source_user_id_str": "2801201899",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1016970548256141312",
+          "display_url": "pic.twitter.com/Qww0ujJxcu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "68"
+    ],
+    "favorite_count": "0",
+    "id_str": "1017342555019726848",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1017342555019726848",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jul 12 09:39:01 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @eggemperor: its 5am im fucking delirious https://t.co/Qww0ujJxcu",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/eggemperor/status/1016970548256141312/video/1",
+          "source_status_id": "1016970548256141312",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/Qww0ujJxcu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1016970386297245696/pu/img/dxKhC84g69HBql1l.jpg",
+          "id_str": "1016970386297245696",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "20854",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1016970386297245696/pu/pl/JvdTA8-DaASMM1wZ.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016970386297245696/pu/vid/640x360/wweTt-04f5ZPCuGz.mp4?tag=3"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016970386297245696/pu/vid/1280x720/-_an8TrY19MMB4oF.mp4?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1016970386297245696/pu/vid/320x180/fJcojboEBY8b3Yh9.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "2801201899",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1016970386297245696",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1016970386297245696/pu/img/dxKhC84g69HBql1l.jpg",
+          "source_user_id_str": "2801201899",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1016970548256141312",
+          "display_url": "pic.twitter.com/Qww0ujJxcu"
+        }
+      ]
+    }
+  }
+}

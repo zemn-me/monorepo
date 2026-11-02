@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1590113822668640257"
+        ],
+        "editableUntil": "2022-11-08T23:17:32.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "279"
+    ],
+    "favorite_count": "4",
+    "id_str": "1590113822668640257",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1590113822668640257",
+    "created_at": "Tue Nov 08 22:47:32 +0000 2022",
+    "favorited": false,
+    "full_text": "i dont think its wise to talk about what I was looking at right now, but I saw a web app use a security critical MessageChannel in an IIFE. This makes it hard for injected XSS to (ab)use it, but I found you can override globalThis.MessagePort.prototype.postMessage to hook them 😈",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,32 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "expire_on_delete",
+    srcs = [
+        "expire_on_delete.ts",
+    ],
+    visibility = [
+        "//:__subpackages__",
+    ],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//ts/pulumi/lib",
+        "//ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete:oci_image",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["expire_on_delete.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+# gazelle:resolve typescript typescript #root/ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete/ExpireOnDeleteLambdaImage.js //ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete:oci_image

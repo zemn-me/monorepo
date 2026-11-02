@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215109350462840833"
+        ],
+        "editableUntil": "2020-01-09T04:13:39.447Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Casper",
+          "screen_name": "CasperSpicy",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "891398407138402304",
+          "id": "891398407138402304"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/casperspicy/status/1214596442494517248/video/1",
+          "source_status_id": "1214596442494517248",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/rpwIOHh8u5",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214595845808635904/pu/img/H7EsT8vHOpG2ybG8.jpg",
+          "id_str": "1214595845808635904",
+          "source_user_id": "891398407138402304",
+          "id": "1214595845808635904",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214595845808635904/pu/img/H7EsT8vHOpG2ybG8.jpg",
+          "source_user_id_str": "891398407138402304",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1214596442494517248",
+          "display_url": "pic.twitter.com/rpwIOHh8u5"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "85"
+    ],
+    "favorite_count": "0",
+    "id_str": "1215109350462840833",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215109350462840833",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 03:13:39 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @casperspicy: Why Twitch doesn't have call center support. https://t.co/rpwIOHh8u5",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/casperspicy/status/1214596442494517248/video/1",
+          "source_status_id": "1214596442494517248",
+          "indices": [
+            "62",
+            "85"
+          ],
+          "url": "https://t.co/rpwIOHh8u5",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214595845808635904/pu/img/H7EsT8vHOpG2ybG8.jpg",
+          "id_str": "1214595845808635904",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "102669",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214595845808635904/pu/vid/480x270/bcPROQaWZ5GoxUvK.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1214595845808635904/pu/pl/n-nx5AiiHNLZ-Du3.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214595845808635904/pu/vid/640x360/JbqpBhQt1tEmSo-I.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214595845808635904/pu/vid/1280x720/Sx2CKC53IvLwmfM2.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "891398407138402304",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1214595845808635904",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214595845808635904/pu/img/H7EsT8vHOpG2ybG8.jpg",
+          "source_user_id_str": "891398407138402304",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1214596442494517248",
+          "display_url": "pic.twitter.com/rpwIOHh8u5"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1041723550703517697"
+        ],
+        "editableUntil": "2018-09-17T17:20:23.432Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Dave Aitel",
+          "screen_name": "daveaitel",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "8371802",
+          "id": "8371802"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/cIcaanz65u",
+          "expanded_url": "http://person.name",
+          "display_url": "person.name",
+          "indices": [
+            "195",
+            "218"
+          ]
+        },
+        {
+          "url": "https://t.co/I98VfKyn3b",
+          "expanded_url": "http://person.family",
+          "display_url": "person.family",
+          "indices": [
+            "230",
+            "253"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "284"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1041721992892895233",
+    "id_str": "1041723550703517697",
+    "in_reply_to_user_id": "8371802",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1041723550703517697",
+    "in_reply_to_status_id": "1041721992892895233",
+    "possibly_sensitive": false,
+    "created_at": "Mon Sep 17 16:20:23 +0000 2018",
+    "favorited": false,
+    "full_text": "@daveaitel object destructuring syntax combined with modern 'for ... of' iterator\nfor (var {name: n, family: {father: f}} of people) is almost exactly like\nfor (var person of people) {\n  var n = https://t.co/cIcaanz65u;\n  var f = https://t.co/I98VfKyn3b.father;\n  console.log(// ...\n}",
+    "lang": "en",
+    "in_reply_to_screen_name": "daveaitel",
+    "in_reply_to_user_id_str": "8371802"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1335040622894395395"
+        ],
+        "editableUntil": "2020-12-05T02:57:43.010Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The Simpsons",
+          "screen_name": "simpsons_vids",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "4342366521",
+          "id": "4342366521"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/simpsons_vids/status/1334969950675537920/video/1",
+          "source_status_id": "1334969950675537920",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/N7qW71aUmd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1334969917486100484/pu/img/50h0neTKfIgfpmMp.jpg",
+          "id_str": "1334969917486100484",
+          "source_user_id": "4342366521",
+          "id": "1334969917486100484",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1334969917486100484/pu/img/50h0neTKfIgfpmMp.jpg",
+          "source_user_id_str": "4342366521",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1334969950675537920",
+          "display_url": "pic.twitter.com/N7qW71aUmd"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "42"
+    ],
+    "favorite_count": "0",
+    "id_str": "1335040622894395395",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1335040622894395395",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 05 01:57:43 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @simpsons_vids: https://t.co/N7qW71aUmd",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/simpsons_vids/status/1334969950675537920/video/1",
+          "source_status_id": "1334969950675537920",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/N7qW71aUmd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1334969917486100484/pu/img/50h0neTKfIgfpmMp.jpg",
+          "id_str": "1334969917486100484",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "16745",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1334969917486100484/pu/vid/720x540/ql0whU-igMjYECsa.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1334969917486100484/pu/vid/360x270/MOwlMJ3eD9O3QtRX.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1334969917486100484/pu/pl/M4d3cwPDRwQQCdMU.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1334969917486100484/pu/vid/480x360/T5nYQpry_9zQNweu.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "4342366521",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1334969917486100484",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1334969917486100484/pu/img/50h0neTKfIgfpmMp.jpg",
+          "source_user_id_str": "4342366521",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "720",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1334969950675537920",
+          "display_url": "pic.twitter.com/N7qW71aUmd"
+        }
+      ]
+    }
+  }
+}

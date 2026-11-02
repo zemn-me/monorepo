@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1430492435352858626"
+        ],
+        "editableUntil": "2021-08-25T12:29:08.509Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "translated cats",
+          "screen_name": "TranslatedCats",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1251867613052973056",
+          "id": "1251867613052973056"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TranslatedCats/status/1364535313889193989/video/1",
+          "source_status_id": "1364535313889193989",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/dq6kosM7oO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1364534097268342785/pu/img/qIj4Nqa2v9zymQi3.jpg",
+          "id_str": "1364534097268342785",
+          "source_user_id": "1251867613052973056",
+          "id": "1364534097268342785",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1364534097268342785/pu/img/qIj4Nqa2v9zymQi3.jpg",
+          "source_user_id_str": "1251867613052973056",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1364535313889193989",
+          "display_url": "pic.twitter.com/dq6kosM7oO"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "63"
+    ],
+    "favorite_count": "0",
+    "id_str": "1430492435352858626",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1430492435352858626",
+    "possibly_sensitive": false,
+    "created_at": "Wed Aug 25 11:29:08 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @TranslatedCats: Why did that happen?https://t.co/dq6kosM7oO",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TranslatedCats/status/1364535313889193989/video/1",
+          "source_status_id": "1364535313889193989",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/dq6kosM7oO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1364534097268342785/pu/img/qIj4Nqa2v9zymQi3.jpg",
+          "id_str": "1364534097268342785",
+          "video_info": {
+            "aspect_ratio": [
+              "203",
+              "360"
+            ],
+            "duration_millis": "26059",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1364534097268342785/pu/vid/320x566/h3uNTsvCQheKfrIf.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1364534097268342785/pu/vid/406x720/JQUpA0bPxlevRA-r.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1364534097268342785/pu/pl/MVkZg2Y5omBuXbTj.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1251867613052973056",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1364534097268342785",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1364534097268342785/pu/img/qIj4Nqa2v9zymQi3.jpg",
+          "source_user_id_str": "1251867613052973056",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1364535313889193989",
+          "display_url": "pic.twitter.com/dq6kosM7oO"
+        }
+      ]
+    }
+  }
+}

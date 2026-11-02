@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1389673130986196998"
+        ],
+        "editableUntil": "2021-05-04T21:07:47.962Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Barry Dorrans",
+          "screen_name": "blowdart",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "1847381",
+          "id": "1847381"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/TNrnoFZS8P",
+          "expanded_url": "http://window.name",
+          "display_url": "window.name",
+          "indices": [
+            "118",
+            "141"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "141"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1389672020829360129",
+    "id_str": "1389673130986196998",
+    "in_reply_to_user_id": "1847381",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1389673130986196998",
+    "in_reply_to_status_id": "1389672020829360129",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 04 20:07:47 +0000 2021",
+    "favorited": false,
+    "full_text": "@blowdart it's possible that it's a postMessage fallback and they expect it to fail -- to see if the browser supports https://t.co/TNrnoFZS8P",
+    "lang": "en",
+    "in_reply_to_screen_name": "blowdart",
+    "in_reply_to_user_id_str": "1847381"
+  }
+}

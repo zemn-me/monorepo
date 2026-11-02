@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1592272274480328709"
+        ],
+        "editableUntil": "2022-11-14T22:14:27.881Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "neural oscillator of uncertain significance",
+          "screen_name": "mycoliza",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "793795",
+          "id": "793795"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mycoliza/status/1592248742060920832/video/1",
+          "source_status_id": "1592248742060920832",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/d6GTTzHgVu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1592248365751840768/pu/img/e4rz8uKMR_tWyKMZ.jpg",
+          "id_str": "1592248365751840768",
+          "source_user_id": "793795",
+          "id": "1592248365751840768",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1592248365751840768/pu/img/e4rz8uKMR_tWyKMZ.jpg",
+          "source_user_id_str": "793795",
+          "sizes": {
+            "large": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1592248742060920832",
+          "display_url": "pic.twitter.com/d6GTTzHgVu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "73"
+    ],
+    "favorite_count": "0",
+    "id_str": "1592272274480328709",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1592272274480328709",
+    "possibly_sensitive": false,
+    "created_at": "Mon Nov 14 21:44:27 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @mycoliza: check out this sick rust type error https://t.co/d6GTTzHgVu",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mycoliza/status/1592248742060920832/video/1",
+          "source_status_id": "1592248742060920832",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/d6GTTzHgVu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1592248365751840768/pu/img/e4rz8uKMR_tWyKMZ.jpg",
+          "id_str": "1592248365751840768",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "72528",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1592248365751840768/pu/vid/540x960/duXMvWnrjlilIigP.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1592248365751840768/pu/vid/320x568/BVmZ6zpqIzjiF_Xc.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1592248365751840768/pu/vid/480x852/Y4gccbaMCWxMaP2G.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1592248365751840768/pu/pl/euZUON9YZa2Ie3OM.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "793795",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1592248365751840768",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1592248365751840768/pu/img/e4rz8uKMR_tWyKMZ.jpg",
+          "source_user_id_str": "793795",
+          "sizes": {
+            "large": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1592248742060920832",
+          "display_url": "pic.twitter.com/d6GTTzHgVu"
+        }
+      ]
+    }
+  }
+}

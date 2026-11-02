@@ -1,0 +1,180 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_library")
+load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "ts_project")
+load("//ts/remix:rules.bzl", "remix_itest_service", "remix_itest_service_dev", "remix_project")
+
+package(default_visibility = ["//visibility:public"])
+
+# gazelle:exclude index.ts
+
+ts_project(
+    name = "ts",
+    assets = glob(
+        [
+            "**/*.css",
+            "**/*.svg",
+        ],
+        allow_empty = True,
+    ),
+    deps = [
+        "//project/me/zemn/app",
+        "//project/me/zemn/app/2026/endings",
+        "//project/me/zemn/app/about",
+        "//project/me/zemn/app/admin",
+        "//project/me/zemn/app/admin/analytics",
+        "//project/me/zemn/app/admin/users",
+        "//project/me/zemn/app/article",
+        "//project/me/zemn/app/article/2014/csp",
+        "//project/me/zemn/app/article/2019/cors",
+        "//project/me/zemn/app/article/2020/icloud",
+        "//project/me/zemn/app/article/2024/clean",
+        "//project/me/zemn/app/article/2024/missing",
+        "//project/me/zemn/app/article/2026/kasimir",
+        "//project/me/zemn/app/availability",
+        "//project/me/zemn/app/bluesky",
+        "//project/me/zemn/app/callback",
+        "//project/me/zemn/app/cv",
+        "//project/me/zemn/app/experiments",
+        "//project/me/zemn/app/experiments/arena",
+        "//project/me/zemn/app/experiments/article",
+        "//project/me/zemn/app/experiments/cultist",
+        "//project/me/zemn/app/experiments/cv",
+        "//project/me/zemn/app/experiments/elastictabs",
+        "//project/me/zemn/app/experiments/emoji/flag",
+        "//project/me/zemn/app/experiments/factorio",
+        "//project/me/zemn/app/experiments/factorio/blueprint",
+        "//project/me/zemn/app/experiments/factorio/blueprint/book",
+        "//project/me/zemn/app/experiments/factorio/blueprint/parse",
+        "//project/me/zemn/app/experiments/factorio/blueprint/request",
+        "//project/me/zemn/app/experiments/factorio/blueprint/wall",
+        "//project/me/zemn/app/experiments/frame",
+        "//project/me/zemn/app/experiments/geometry_of_music",
+        "//project/me/zemn/app/experiments/pitch_training",
+        "//project/me/zemn/app/experiments/platonics",
+        "//project/me/zemn/app/experiments/rays",
+        "//project/me/zemn/app/experiments/tiberian_sun",
+        "//project/me/zemn/app/experiments/toc",
+        "//project/me/zemn/app/experiments/vanilla_conquer",
+        "//project/me/zemn/app/github",
+        "//project/me/zemn/app/grievanceportal",
+        "//project/me/zemn/app/healthcheck/bad",
+        "//project/me/zemn/app/healthz",
+        "//project/me/zemn/app/journal",
+        "//project/me/zemn/app/journal/connect",
+        "//project/me/zemn/app/journal/day",
+        "//project/me/zemn/app/journal/month",
+        "//project/me/zemn/app/journal/week",
+        "//project/me/zemn/app/journal/year",
+        "//project/me/zemn/app/key",
+        "//project/me/zemn/app/linkedin",
+        "//project/me/zemn/app/minecraft",
+        "//project/me/zemn/app/src/[[...slug]]",
+        "//project/me/zemn/app/tool/elastictabs",
+        "//project/me/zemn/app/twitter",
+    ],
+)
+
+remix_project(
+    name = "remix",
+    srcs = [
+        ":ts",
+        "//project/me/zemn/public:files",
+    ],
+    server = True,
+)
+
+# Build after rules_itest allocates public API/OIDC ports, using deployment inputs.
+js_binary(
+    name = "production_test_server",
+    testonly = True,
+    data = [":build_bin"],
+    entry_point = "//ts/remix:runner",
+    fixed_args = [
+        "build-start",
+        "project/me/zemn",
+        "--server",
+    ],
+)
+
+remix_itest_service(
+    name = "itest_service",
+    testonly = True,
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_production_bin",
+    health_check_timeout = "300s",
+    http_health_check_address = "http://localhost:$${PORT}/healthz",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+remix_itest_service(
+    name = "itest_service_calendar_fixture",
+    testonly = True,
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_production_bin",
+    health_check_timeout = "300s",
+    http_health_check_address = "http://localhost:$${PORT}/healthz",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+remix_itest_service_dev(
+    name = "itest_service_dev",
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_bin",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+remix_itest_service_dev(
+    name = "itest_service_dev_prod_env",
+    exe = "//project/me/zemn/inject_iservice:inject_iservice_prod_env_bin",
+    deps = [
+        "//project/me/zemn/api/cmd/localserver:localserver_itest_service",
+        "//project/me/zemn/testing:oidc_provider_itest_service",
+    ],
+)
+
+alias(
+    name = "zemn",
+    actual = ":itest_service_dev_prod_env",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/api_client.gen //project/me/zemn/api:ts_client_dts
+# gazelle:resolve typescript typescript #root/project/me/zemn/api/api_client.gen.js //project/me/zemn/api:ts_client_dts
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+md_files(
+    name = "project_me_zemn",
+    srcs = [
+        "AGENTS.md",
+        "README.md",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
+)

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1242083431166676997"
+        ],
+        "editableUntil": "2020-03-23T14:39:01.441Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1241977238888873985/video/1",
+          "source_status_id": "1241977238888873985",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/nMKuoXXeCw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1241977207620337667/pu/img/lQzCfcrCL0r1nWN5.jpg",
+          "id_str": "1241977207620337667",
+          "source_user_id": "2275883743",
+          "id": "1241977207620337667",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1241977207620337667/pu/img/lQzCfcrCL0r1nWN5.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1241977238888873985",
+          "display_url": "pic.twitter.com/nMKuoXXeCw"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "59"
+    ],
+    "favorite_count": "0",
+    "id_str": "1242083431166676997",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1242083431166676997",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 23 13:39:01 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Two weeks old... https://t.co/nMKuoXXeCw",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1241977238888873985/video/1",
+          "source_status_id": "1241977238888873985",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/nMKuoXXeCw",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1241977207620337667/pu/img/lQzCfcrCL0r1nWN5.jpg",
+          "id_str": "1241977207620337667",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "5000",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1241977207620337667/pu/pl/yXrqNwLkiDUlN-Mc.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1241977207620337667/pu/vid/960x540/tnys0pGjf4_2H0l5.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1241977207620337667/pu/vid/480x270/wPCMJTjSqkpAuaRc.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1241977207620337667/pu/vid/640x360/M1a_NVSuoR1zjU6f.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1241977207620337667",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1241977207620337667/pu/img/lQzCfcrCL0r1nWN5.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "large": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "960",
+              "h": "540",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1241977238888873985",
+          "display_url": "pic.twitter.com/nMKuoXXeCw"
+        }
+      ]
+    }
+  }
+}

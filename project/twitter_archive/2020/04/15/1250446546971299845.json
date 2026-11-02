@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1250446546971299845"
+        ],
+        "editableUntil": "2020-04-15T16:31:03.628Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Halvar Flake",
+          "screen_name": "halvarflake",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "15276283",
+          "id": "15276283"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/BNZuCvwGiU",
+          "expanded_url": "https://godoc.org/time#Time.MarshalJSON",
+          "display_url": "godoc.org/time#Time.Mars…",
+          "indices": [
+            "159",
+            "182"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "182"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1250386172456718337",
+    "id_str": "1250446546971299845",
+    "in_reply_to_user_id": "15276283",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1250446546971299845",
+    "in_reply_to_status_id": "1250386172456718337",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 15 15:31:03 +0000 2020",
+    "favorited": false,
+    "full_text": "@halvarflake I'm pretty confused here. JSON can't have integer keys, so you can't do this as integers, ever? time.Time can marshal itself to a JSON string via https://t.co/BNZuCvwGiU",
+    "lang": "en",
+    "in_reply_to_screen_name": "halvarflake",
+    "in_reply_to_user_id_str": "15276283"
+  }
+}

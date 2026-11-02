@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1217131041422544901"
+        ],
+        "editableUntil": "2020-01-14T18:07:08.133Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Big A-ron (@littlepaisano.bsky.social)",
+          "screen_name": "little_paisano",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1091716293076631553",
+          "id": "1091716293076631553"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/little_paisano/status/1216794801007484929/video/1",
+          "source_status_id": "1216794801007484929",
+          "indices": [
+            "34",
+            "57"
+          ],
+          "url": "https://t.co/apldaJ41ii",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1216794764223426561/pr/img/qPDrk4h2YNJoNTmU.jpg",
+          "id_str": "1216794764223426561",
+          "source_user_id": "1091716293076631553",
+          "id": "1216794764223426561",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1216794764223426561/pr/img/qPDrk4h2YNJoNTmU.jpg",
+          "source_user_id_str": "1091716293076631553",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "340",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1280",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "600",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1216794801007484929",
+          "display_url": "pic.twitter.com/apldaJ41ii"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "57"
+    ],
+    "favorite_count": "0",
+    "id_str": "1217131041422544901",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1217131041422544901",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 14 17:07:08 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @little_paisano: Le pufferfish https://t.co/apldaJ41ii",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/little_paisano/status/1216794801007484929/video/1",
+          "source_status_id": "1216794801007484929",
+          "indices": [
+            "34",
+            "57"
+          ],
+          "url": "https://t.co/apldaJ41ii",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1216794764223426561/pr/img/qPDrk4h2YNJoNTmU.jpg",
+          "id_str": "1216794764223426561",
+          "video_info": {
+            "aspect_ratio": [
+              "2",
+              "1"
+            ],
+            "duration_millis": "5267",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216794764223426561/pr/vid/1280x640/3p8AMBSKWa40PG98.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216794764223426561/pr/vid/540x270/lY7p8Vdm_CZcfyNB.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216794764223426561/pr/vid/720x360/i5fzudowbJ4uVyhT.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1216794764223426561/pr/pl/JBosk0KRDhncoltJ.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1091716293076631553",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1216794764223426561",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1216794764223426561/pr/img/qPDrk4h2YNJoNTmU.jpg",
+          "source_user_id_str": "1091716293076631553",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "340",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1280",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "600",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1216794801007484929",
+          "display_url": "pic.twitter.com/apldaJ41ii"
+        }
+      ]
+    }
+  }
+}

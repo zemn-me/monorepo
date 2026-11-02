@@ -1,0 +1,161 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1478443983730659328"
+        ],
+        "editableUntil": "2022-01-04T20:11:28.539Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Simon Lee",
+          "screen_name": "simonxxoo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3185437874",
+          "id": "3185437874"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/simonxxoo/status/1478246583141474304/photo/1",
+          "source_status_id": "1478246583141474304",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/bAZRGtxz74",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/FIPJH1qUUAE_0hH.jpg",
+          "id_str": "1478246239208493057",
+          "source_user_id": "3185437874",
+          "id": "1478246239208493057",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/FIPJH1qUUAE_0hH.jpg",
+          "source_user_id_str": "3185437874",
+          "sizes": {
+            "medium": {
+              "w": "690",
+              "h": "490",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "483",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "690",
+              "h": "490",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1478246583141474304",
+          "display_url": "pic.twitter.com/bAZRGtxz74"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "blender",
+          "indices": [
+            "50",
+            "58"
+          ]
+        },
+        {
+          "text": "blender3d",
+          "indices": [
+            "59",
+            "69"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "93"
+    ],
+    "favorite_count": "0",
+    "id_str": "1478443983730659328",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1478443983730659328",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 04 19:11:28 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @simonxxoo: I draw this with particle system~\n\n#blender #blender3d https://t.co/bAZRGtxz74",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/simonxxoo/status/1478246583141474304/photo/1",
+          "source_status_id": "1478246583141474304",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/bAZRGtxz74",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/FIPJH1qUUAE_0hH.jpg",
+          "id_str": "1478246239208493057",
+          "video_info": {
+            "aspect_ratio": [
+              "69",
+              "49"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/FIPJH1qUUAE_0hH.mp4"
+              }
+            ]
+          },
+          "source_user_id": "3185437874",
+          "id": "1478246239208493057",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/FIPJH1qUUAE_0hH.jpg",
+          "source_user_id_str": "3185437874",
+          "sizes": {
+            "medium": {
+              "w": "690",
+              "h": "490",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "483",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "690",
+              "h": "490",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1478246583141474304",
+          "display_url": "pic.twitter.com/bAZRGtxz74"
+        }
+      ]
+    }
+  }
+}

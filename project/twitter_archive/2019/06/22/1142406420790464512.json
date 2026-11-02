@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1142406420790464512"
+        ],
+        "editableUntil": "2019-06-22T13:18:10.258Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "hairydoughnut",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hairydoughnut/status/1141231354002268160/video/1",
+          "source_status_id": "1141231354002268160",
+          "indices": [
+            "29",
+            "52"
+          ],
+          "url": "https://t.co/zyXwUDLpaD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1141231285744099329/pu/img/dZDkthsjkNas10ch.jpg",
+          "id_str": "1141231285744099329",
+          "source_user_id": "255108166",
+          "id": "1141231285744099329",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1141231285744099329/pu/img/dZDkthsjkNas10ch.jpg",
+          "source_user_id_str": "255108166",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "896",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "546",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "896",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1141231354002268160",
+          "display_url": "pic.twitter.com/zyXwUDLpaD"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "52"
+    ],
+    "favorite_count": "0",
+    "id_str": "1142406420790464512",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1142406420790464512",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jun 22 12:18:10 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @hairydoughnut: U OK HUN? https://t.co/zyXwUDLpaD",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hairydoughnut/status/1141231354002268160/video/1",
+          "source_status_id": "1141231354002268160",
+          "indices": [
+            "29",
+            "52"
+          ],
+          "url": "https://t.co/zyXwUDLpaD",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1141231285744099329/pu/img/dZDkthsjkNas10ch.jpg",
+          "id_str": "1141231285744099329",
+          "video_info": {
+            "aspect_ratio": [
+              "45",
+              "56"
+            ],
+            "duration_millis": "30354",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1141231285744099329/pu/vid/360x448/1EX9Tz4KWNhZvTua.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1141231285744099329/pu/pl/DDBkOUN7H5A42SPn.m3u8?tag=10&v=0e3"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1141231285744099329/pu/vid/320x398/1oQ9P-T-uOw_ZPf6.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1141231285744099329/pu/vid/720x896/_XMEz-n80yNbT_6N.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "255108166",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1141231285744099329",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1141231285744099329/pu/img/dZDkthsjkNas10ch.jpg",
+          "source_user_id_str": "255108166",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "896",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "546",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "896",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1141231354002268160",
+          "display_url": "pic.twitter.com/zyXwUDLpaD"
+        }
+      ]
+    }
+  }
+}

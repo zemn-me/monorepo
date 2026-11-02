@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1267067870510493696"
+        ],
+        "editableUntil": "2020-05-31T13:18:15.969Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Timothy Burke",
+          "screen_name": "bubbaprog",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "62103",
+          "id": "62103"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bubbaprog/status/1266916809569185799/video/1",
+          "source_status_id": "1266916809569185799",
+          "indices": [
+            "69",
+            "92"
+          ],
+          "url": "https://t.co/mLfSJvMGvZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1266916773154238466/pu/img/_blBC6jiJVysbBBx.jpg",
+          "id_str": "1266916773154238466",
+          "source_user_id": "62103",
+          "id": "1266916773154238466",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1266916773154238466/pu/img/_blBC6jiJVysbBBx.jpg",
+          "source_user_id_str": "62103",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1266916809569185799",
+          "display_url": "pic.twitter.com/mLfSJvMGvZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "92"
+    ],
+    "favorite_count": "0",
+    "id_str": "1267067870510493696",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1267067870510493696",
+    "possibly_sensitive": false,
+    "created_at": "Sun May 31 12:18:15 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @bubbaprog: \"Unclear where they may have gotten that cheesecake.\" https://t.co/mLfSJvMGvZ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bubbaprog/status/1266916809569185799/video/1",
+          "source_status_id": "1266916809569185799",
+          "indices": [
+            "69",
+            "92"
+          ],
+          "url": "https://t.co/mLfSJvMGvZ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1266916773154238466/pu/img/_blBC6jiJVysbBBx.jpg",
+          "id_str": "1266916773154238466",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "15182",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1266916773154238466/pu/pl/OOjyDPGUdS0Vd3sd.m3u8?tag=10&v=dec"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1266916773154238466/pu/vid/480x270/Out4NF1xVSR0SV_Y.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1266916773154238466/pu/vid/640x360/qIpDH6eimywyDiKo.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1266916773154238466/pu/vid/1280x720/x0GiJJhjQ74ql3d1.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "62103",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1266916773154238466",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1266916773154238466/pu/img/_blBC6jiJVysbBBx.jpg",
+          "source_user_id_str": "62103",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1266916809569185799",
+          "display_url": "pic.twitter.com/mLfSJvMGvZ"
+        }
+      ]
+    }
+  }
+}

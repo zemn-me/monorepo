@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "997978495778283522"
+        ],
+        "editableUntil": "2018-05-20T00:13:09.594Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dille 🕊",
+          "screen_name": "dillelicious",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "3148932501",
+          "id": "3148932501"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dillelicious/status/997285669906116611/video/1",
+          "source_status_id": "997285669906116611",
+          "indices": [
+            "55",
+            "78"
+          ],
+          "url": "https://t.co/5r8hWNSBWR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/997285567841816576/pu/img/sbVWmJZpjz1pp-_0.jpg",
+          "id_str": "997285567841816576",
+          "source_user_id": "3148932501",
+          "id": "997285567841816576",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/997285567841816576/pu/img/sbVWmJZpjz1pp-_0.jpg",
+          "source_user_id_str": "3148932501",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "997285669906116611",
+          "display_url": "pic.twitter.com/5r8hWNSBWR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "78"
+    ],
+    "favorite_count": "0",
+    "id_str": "997978495778283522",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "997978495778283522",
+    "possibly_sensitive": false,
+    "created_at": "Sat May 19 23:13:09 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @dillelicious: Ollie seems to be convinced at least https://t.co/5r8hWNSBWR",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dillelicious/status/997285669906116611/video/1",
+          "source_status_id": "997285669906116611",
+          "indices": [
+            "55",
+            "78"
+          ],
+          "url": "https://t.co/5r8hWNSBWR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/997285567841816576/pu/img/sbVWmJZpjz1pp-_0.jpg",
+          "id_str": "997285567841816576",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "20874",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/997285567841816576/pu/vid/640x360/9wM-LP9XReTGGBim.mp4?tag=3"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/997285567841816576/pu/vid/1280x720/uZBo-9mDA5II3I6_.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/997285567841816576/pu/pl/geahUVXYI6TzNNTE.m3u8?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/997285567841816576/pu/vid/320x180/uy0Dga0wRMuTP7j-.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "3148932501",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "997285567841816576",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/997285567841816576/pu/img/sbVWmJZpjz1pp-_0.jpg",
+          "source_user_id_str": "3148932501",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "997285669906116611",
+          "display_url": "pic.twitter.com/5r8hWNSBWR"
+        }
+      ]
+    }
+  }
+}

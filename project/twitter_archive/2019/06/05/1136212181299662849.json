@@ -1,0 +1,65 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1136212181299662849"
+        ],
+        "editableUntil": "2019-06-05T11:04:28.480Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "golang",
+          "indices": [
+            "18",
+            "25"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Brad Fitzpatrick 🌻",
+          "screen_name": "bradfitz",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "650013",
+          "id": "650013"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/nR244xUkZy",
+          "expanded_url": "https://github.com/golang/proposal/blob/master/design/32437-try-builtin.md#proposal-a-built-in-go-error-check-function-try",
+          "display_url": "github.com/golang/proposa…",
+          "indices": [
+            "88",
+            "111"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "111"
+    ],
+    "favorite_count": "0",
+    "id_str": "1136212181299662849",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1136212181299662849",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jun 05 10:04:28 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @bradfitz: New #golang error handling language change design doc:\n\ntry() built-in...\nhttps://t.co/nR244xUkZy",
+    "lang": "en"
+  }
+}

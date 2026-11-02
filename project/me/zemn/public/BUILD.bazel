@@ -1,0 +1,30 @@
+#gazelle:ignore
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//ts/remix:public_assets.bzl", "collect_public_assets")
+
+package(default_visibility = ["//project/me/zemn:__subpackages__"])
+
+js_library(
+    name = "files",
+    srcs = [
+        "icon.svg",
+        "robots.txt",
+        "wallpaper.jpg",
+        ":content_addressed_public_assets",
+        "//project/me/zemn/public/poc",
+    ],
+)
+
+collect_public_assets(
+    name = "content_addressed_public_assets",
+    public_dir = "sha256",
+    deps = [
+        "//project/me/zemn:ts",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

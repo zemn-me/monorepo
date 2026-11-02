@@ -1,0 +1,40 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1675906243829936128"
+        ],
+        "editableUntil": "2023-07-03T17:36:00.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "150"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1675906242261266440",
+    "id_str": "1675906243829936128",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1675906243829936128",
+    "in_reply_to_status_id": "1675906242261266440",
+    "created_at": "Mon Jul 03 16:36:00 +0000 2023",
+    "favorited": false,
+    "full_text": "this is effectively a race condition; without a synchronised clock, there is a small chance two inserter arms will attempt to fill the same item delta",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1207312643507269633"
+        ],
+        "editableUntil": "2019-12-18T15:52:19.653Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Wez",
+          "screen_name": "Big_Wezza",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "777087700218314752",
+          "id": "777087700218314752"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/thismorning/status/1146040456385630208/video/1",
+          "source_status_id": "1146040456385630208",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/noffIFvlaL",
+          "media_url": "http://pbs.twimg.com/media/D-eNrSIWkAIREde.jpg",
+          "id_str": "1146037064842010629",
+          "source_user_id": "19291952",
+          "id": "1146037064842010629",
+          "media_url_https": "https://pbs.twimg.com/media/D-eNrSIWkAIREde.jpg",
+          "source_user_id_str": "19291952",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1146040456385630208",
+          "display_url": "pic.twitter.com/noffIFvlaL"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "91"
+    ],
+    "favorite_count": "0",
+    "id_str": "1207312643507269633",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1207312643507269633",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 18 14:52:19 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @Big_Wezza: this morning will always have the best content 😂😂😂😂😂 https://t.co/noffIFvlaL",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/thismorning/status/1146040456385630208/video/1",
+          "source_status_id": "1146040456385630208",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/noffIFvlaL",
+          "media_url": "http://pbs.twimg.com/media/D-eNrSIWkAIREde.jpg",
+          "id_str": "1146037064842010629",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "59040",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1146037064842010629/vid/720x720/FwG17ntw_x-K6dmY.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1146037064842010629/pl/uGvoFo9QQnM18wd5.m3u8?tag=13&v=059"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1146037064842010629/vid/320x320/45dWAWhc8-bHza2V.mp4?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1146037064842010629/vid/480x480/ozXdTBYmbLwrvROJ.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "19291952",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1146037064842010629",
+          "media_url_https": "https://pbs.twimg.com/media/D-eNrSIWkAIREde.jpg",
+          "source_user_id_str": "19291952",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1146040456385630208",
+          "display_url": "pic.twitter.com/noffIFvlaL"
+        }
+      ]
+    }
+  }
+}

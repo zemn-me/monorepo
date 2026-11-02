@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1298742130903580675"
+        ],
+        "editableUntil": "2020-08-26T23:00:28.126Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Scooter (@fl0werg1rl.dev on bsky) 🦊",
+          "screen_name": "FamiliarScoot",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2842833988",
+          "id": "2842833988"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/FamiliarScoot/status/1298653007123554304/video/1",
+          "source_status_id": "1298653007123554304",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/fRseT1LJVR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1298652937363824640/pu/img/WZpfTtbWatcM0Dbx.jpg",
+          "id_str": "1298652937363824640",
+          "source_user_id": "2842833988",
+          "id": "1298652937363824640",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1298652937363824640/pu/img/WZpfTtbWatcM0Dbx.jpg",
+          "source_user_id_str": "2842833988",
+          "sizes": {
+            "large": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1298653007123554304",
+          "display_url": "pic.twitter.com/fRseT1LJVR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "42"
+    ],
+    "favorite_count": "0",
+    "id_str": "1298742130903580675",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1298742130903580675",
+    "possibly_sensitive": false,
+    "created_at": "Wed Aug 26 22:00:28 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @FamiliarScoot: https://t.co/fRseT1LJVR",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/FamiliarScoot/status/1298653007123554304/video/1",
+          "source_status_id": "1298653007123554304",
+          "indices": [
+            "19",
+            "42"
+          ],
+          "url": "https://t.co/fRseT1LJVR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1298652937363824640/pu/img/WZpfTtbWatcM0Dbx.jpg",
+          "id_str": "1298652937363824640",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "6507",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1298652937363824640/pu/vid/320x568/l2HarqILDx9riWjB.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1298652937363824640/pu/vid/360x640/fTS-__ZnnYW7iO5I.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1298652937363824640/pu/vid/540x960/ah7TgWGgT-a7rpH1.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1298652937363824640/pu/pl/kLxCPbVwShLFmi-f.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2842833988",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1298652937363824640",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1298652937363824640/pu/img/WZpfTtbWatcM0Dbx.jpg",
+          "source_user_id_str": "2842833988",
+          "sizes": {
+            "large": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "960",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1298653007123554304",
+          "display_url": "pic.twitter.com/fRseT1LJVR"
+        }
+      ]
+    }
+  }
+}

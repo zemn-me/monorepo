@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1761887155549610426"
+        ],
+        "editableUntil": "2024-02-25T23:53:26.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "226"
+    ],
+    "favorite_count": "2",
+    "id_str": "1761887155549610426",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1761887155549610426",
+    "created_at": "Sun Feb 25 22:53:26 +0000 2024",
+    "favorited": false,
+    "full_text": "so what are people doing with zod and forms? cause it feels intuitive to me that I should be able to do z.something().describe('my form') and generate a form, and it seems like i can't. are people writing large manual bindings",
+    "lang": "en"
+  }
+}

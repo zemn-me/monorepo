@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1146343487568306177"
+        ],
+        "editableUntil": "2019-07-03T10:02:40.125Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Wimmer",
+          "screen_name": "wimmerrad",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1033879279308890112",
+          "id": "1033879279308890112"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/wimmerrad/status/1146080670801911808/video/1",
+          "source_status_id": "1146080670801911808",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/LwWvLEOhlR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1146080601839153153/pu/img/8oAOP-qFU-EX-Y7C.jpg",
+          "id_str": "1146080601839153153",
+          "source_user_id": "1033879279308890112",
+          "id": "1146080601839153153",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1146080601839153153/pu/img/8oAOP-qFU-EX-Y7C.jpg",
+          "source_user_id_str": "1033879279308890112",
+          "sizes": {
+            "medium": {
+              "w": "956",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "512",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "956",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1146080670801911808",
+          "display_url": "pic.twitter.com/LwWvLEOhlR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "38"
+    ],
+    "favorite_count": "0",
+    "id_str": "1146343487568306177",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1146343487568306177",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jul 03 09:02:40 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @wimmerrad: https://t.co/LwWvLEOhlR",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/wimmerrad/status/1146080670801911808/video/1",
+          "source_status_id": "1146080670801911808",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/LwWvLEOhlR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1146080601839153153/pu/img/8oAOP-qFU-EX-Y7C.jpg",
+          "id_str": "1146080601839153153",
+          "video_info": {
+            "aspect_ratio": [
+              "239",
+              "180"
+            ],
+            "duration_millis": "13314",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1146080601839153153/pu/vid/478x360/2D1VlwaYesMYyNfF.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1146080601839153153/pu/vid/956x720/NwyJktu1xkgqI4Gc.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1146080601839153153/pu/pl/Xap5XG85boYEGvYv.m3u8?tag=10&v=cfc"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1146080601839153153/pu/vid/358x270/Xoh94d8G1ktbsG1e.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1033879279308890112",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1146080601839153153",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1146080601839153153/pu/img/8oAOP-qFU-EX-Y7C.jpg",
+          "source_user_id_str": "1033879279308890112",
+          "sizes": {
+            "medium": {
+              "w": "956",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "512",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "956",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1146080670801911808",
+          "display_url": "pic.twitter.com/LwWvLEOhlR"
+        }
+      ]
+    }
+  }
+}

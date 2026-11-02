@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215167556824260608"
+        ],
+        "editableUntil": "2020-01-09T08:04:56.925Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Klara",
+          "screen_name": "klara_sjo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "742371799116222464",
+          "id": "742371799116222464"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/klara_sjo/status/1214961890927022085/video/1",
+          "source_status_id": "1214961890927022085",
+          "indices": [
+            "92",
+            "115"
+          ],
+          "url": "https://t.co/HF7CheoiY8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214961770022014977/pu/img/pycB8dVRXeOJLVcC.jpg",
+          "id_str": "1214961770022014977",
+          "source_user_id": "742371799116222464",
+          "id": "1214961770022014977",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214961770022014977/pu/img/pycB8dVRXeOJLVcC.jpg",
+          "source_user_id_str": "742371799116222464",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1214961890927022085",
+          "display_url": "pic.twitter.com/HF7CheoiY8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "115"
+    ],
+    "favorite_count": "0",
+    "id_str": "1215167556824260608",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215167556824260608",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 07:04:56 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @klara_sjo: You'd think Canadians would have learnt how to drive in ice and snow by now. https://t.co/HF7CheoiY8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/klara_sjo/status/1214961890927022085/video/1",
+          "source_status_id": "1214961890927022085",
+          "indices": [
+            "92",
+            "115"
+          ],
+          "url": "https://t.co/HF7CheoiY8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214961770022014977/pu/img/pycB8dVRXeOJLVcC.jpg",
+          "id_str": "1214961770022014977",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "29963",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1214961770022014977/pu/pl/KjbSGbRNNkanE8D-.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214961770022014977/pu/vid/1280x720/8bw3fxwdi2Pg1Z3N.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214961770022014977/pu/vid/480x270/9dbDTQ-uoHDTDUut.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214961770022014977/pu/vid/640x360/6GYO9k5oO4Wyna9X.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "742371799116222464",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1214961770022014977",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214961770022014977/pu/img/pycB8dVRXeOJLVcC.jpg",
+          "source_user_id_str": "742371799116222464",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1214961890927022085",
+          "display_url": "pic.twitter.com/HF7CheoiY8"
+        }
+      ]
+    }
+  }
+}

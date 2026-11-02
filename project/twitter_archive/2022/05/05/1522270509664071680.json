@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1522270509664071680"
+        ],
+        "editableUntil": "2022-05-05T18:42:26.579Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Oregon Zoo",
+          "screen_name": "OregonZoo",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "14336662",
+          "id": "14336662"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OregonZoo/status/1522241542034915329/video/1",
+          "source_status_id": "1522241542034915329",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/xpIxcBlZhG",
+          "media_url": "http://pbs.twimg.com/media/FSAWTI-VcAo4R-P.jpg",
+          "id_str": "1522240267226472448",
+          "source_user_id": "14336662",
+          "id": "1522240267226472448",
+          "media_url_https": "https://pbs.twimg.com/media/FSAWTI-VcAo4R-P.jpg",
+          "source_user_id_str": "14336662",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1522241542034915329",
+          "display_url": "pic.twitter.com/xpIxcBlZhG"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "67"
+    ],
+    "favorite_count": "0",
+    "id_str": "1522270509664071680",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1522270509664071680",
+    "possibly_sensitive": false,
+    "created_at": "Thu May 05 17:42:26 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @OregonZoo: Happy 6th birthday to Maple! https://t.co/xpIxcBlZhG",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OregonZoo/status/1522241542034915329/video/1",
+          "source_status_id": "1522241542034915329",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/xpIxcBlZhG",
+          "media_url": "http://pbs.twimg.com/media/FSAWTI-VcAo4R-P.jpg",
+          "id_str": "1522240267226472448",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "44866",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1522240267226472448/vid/320x320/FNOigmZ2_HB7NodA.mp4?tag=14"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1522240267226472448/vid/720x720/rFvO95dSNVRxn7o1.mp4?tag=14"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1522240267226472448/vid/540x540/DXYjvR2Vyhd3ejKM.mp4?tag=14"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1522240267226472448/pl/DMNh3zbtgpRHewKi.m3u8?tag=14"
+              }
+            ]
+          },
+          "source_user_id": "14336662",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1522240267226472448",
+          "media_url_https": "https://pbs.twimg.com/media/FSAWTI-VcAo4R-P.jpg",
+          "source_user_id_str": "14336662",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1522241542034915329",
+          "display_url": "pic.twitter.com/xpIxcBlZhG"
+        }
+      ]
+    }
+  }
+}

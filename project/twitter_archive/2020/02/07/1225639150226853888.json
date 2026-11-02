@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1225639150226853888"
+        ],
+        "editableUntil": "2020-02-07T05:35:19.345Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "mandatory.bsky.social",
+          "screen_name": "IAmMandatory",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "785694042",
+          "id": "785694042"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IAmMandatory/status/1225629369453801472/photo/1",
+          "source_status_id": "1225629369453801472",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/unk1XAdQux",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/EQJPaQ2VAAArkXj.jpg",
+          "id_str": "1225629361216225280",
+          "source_user_id": "785694042",
+          "id": "1225629361216225280",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/EQJPaQ2VAAArkXj.jpg",
+          "source_user_id_str": "785694042",
+          "sizes": {
+            "small": {
+              "w": "600",
+              "h": "336",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "600",
+              "h": "336",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "600",
+              "h": "336",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1225629369453801472",
+          "display_url": "pic.twitter.com/unk1XAdQux"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "77"
+    ],
+    "favorite_count": "0",
+    "id_str": "1225639150226853888",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1225639150226853888",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 07 04:35:19 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @IAmMandatory: Weird virtualbox bug, but I like it https://t.co/unk1XAdQux",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/IAmMandatory/status/1225629369453801472/photo/1",
+          "source_status_id": "1225629369453801472",
+          "indices": [
+            "54",
+            "77"
+          ],
+          "url": "https://t.co/unk1XAdQux",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/EQJPaQ2VAAArkXj.jpg",
+          "id_str": "1225629361216225280",
+          "video_info": {
+            "aspect_ratio": [
+              "25",
+              "14"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/EQJPaQ2VAAArkXj.mp4"
+              }
+            ]
+          },
+          "source_user_id": "785694042",
+          "id": "1225629361216225280",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/EQJPaQ2VAAArkXj.jpg",
+          "source_user_id_str": "785694042",
+          "sizes": {
+            "small": {
+              "w": "600",
+              "h": "336",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "600",
+              "h": "336",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "600",
+              "h": "336",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1225629369453801472",
+          "display_url": "pic.twitter.com/unk1XAdQux"
+        }
+      ]
+    }
+  }
+}

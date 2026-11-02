@@ -1,0 +1,116 @@
+# gazelle:resolve py project.vanilla_conquer.assets.package_data //project/vanilla_conquer/assets:package_data_lib
+# gazelle:exclude package_data.py
+# gazelle:exclude package_cinematics.py
+# gazelle:resolve py project.vanilla_conquer.assets.package_cinematics //project/vanilla_conquer/assets:package_cinematics_lib
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+load("//ts:rules.bzl", "ts_project")
+load(":cinematics.bzl", "cinematics")
+
+package(default_visibility = ["//:__subpackages__"])
+
+py_binary(
+    name = "package_cinematics",
+    srcs = ["package_cinematics.py"],  # keep
+    main = "package_cinematics.py",
+    deps = [":package_data_lib"],  # keep
+)
+
+py_library(
+    name = "package_cinematics_lib",
+    srcs = ["package_cinematics.py"],
+    deps = [":package_data_lib"],
+)  # keep
+
+cinematics(
+    name = "ra_cinematics",
+    allied = "@red_alert_freeware//file",
+    mixtool = "@vanilla_conquer//:vanillamix",
+    soviet = "@red_alert_soviet_freeware//file",
+)
+
+ts_project(
+    name = "cinematics",
+    srcs = [":ra_cinematics"],
+)
+
+py_binary(
+    name = "package_data",
+    srcs = ["package_data.py"],  # keep
+    main = "package_data.py",
+)
+
+py_test(
+    name = "package_data_test",
+    srcs = ["package_data_test.py"],
+    deps = ["//project/vanilla_conquer/assets:package_data_lib"],
+)
+
+genrule(
+    name = "ra_freeware",
+    srcs = ["@red_alert_freeware//file"],
+    outs = [
+        "ra.data.gz",
+        "ra-readme.txt",
+    ],
+    cmd = "$(execpath :package_data) --unshield $(execpath @unshieldv3//:unshieldv3) --game ra --archive $(execpath @red_alert_freeware//file) --mixtool $(execpath @vanilla_conquer//:vanillamix) --output $(location ra.data.gz) --notice-output $(location ra-readme.txt)",
+    tools = [
+        ":package_data",
+        "@unshieldv3",
+        "@vanilla_conquer//:vanillamix",
+    ],
+)
+
+filegroup(
+    name = "ra_data",
+    srcs = ["ra.data.gz"],
+)
+
+filegroup(
+    name = "ra_notice",
+    srcs = ["ra-readme.txt"],
+)
+
+genrule(
+    name = "td_freeware",
+    srcs = ["@tiberian_dawn_freeware//file"],
+    outs = [
+        "td.data.gz",
+        "td-readme.wri",
+    ],
+    cmd = "$(execpath :package_data) --unshield $(execpath @unshieldv3//:unshieldv3) --game td --archive $(execpath @tiberian_dawn_freeware//file) --mixtool $(execpath @vanilla_conquer//:vanillamix) --output $(location td.data.gz) --notice-output $(location td-readme.wri)",
+    tools = [
+        ":package_data",
+        "@unshieldv3",
+        "@vanilla_conquer//:vanillamix",
+    ],
+)
+
+filegroup(
+    name = "td_data",
+    srcs = ["td.data.gz"],
+)
+
+filegroup(
+    name = "td_notice",
+    srcs = ["td-readme.wri"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "cinematics.bzl",
+    ],
+)
+
+py_library(
+    name = "package_data_lib",
+    srcs = ["package_data.py"],
+)  # keep
+
+py_test(
+    name = "package_cinematics_test",
+    srcs = ["package_cinematics_test.py"],
+    deps = ["//project/vanilla_conquer/assets:package_cinematics_lib"],
+)

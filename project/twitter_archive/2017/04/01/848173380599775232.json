@@ -1,0 +1,50 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "848173380599775232"
+        ],
+        "editableUntil": "2017-04-01T15:01:06.891Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "penny",
+          "screen_name": "pennysucks",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "1280374742495531009",
+          "id": "1280374742495531009"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "105"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "848172794206728192",
+    "id_str": "848173380599775232",
+    "in_reply_to_user_id": "775002344249520128",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "848173380599775232",
+    "in_reply_to_status_id": "848172794206728192",
+    "created_at": "Sat Apr 01 14:01:06 +0000 2017",
+    "favorited": false,
+    "full_text": "@pennysucks this is what id do\nPOST /items HTTP/1.1\nitem body\n\nHTTP/1.1 201 CREATED\nLocation: /items/2038",
+    "lang": "en",
+    "in_reply_to_user_id_str": "775002344249520128"
+  }
+}

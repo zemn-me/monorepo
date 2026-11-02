@@ -6,16 +6,57 @@ import (
 	"image/jpeg"
 	"image/png"
 	"io"
+
+	"github.com/deepteams/webp"
 )
 
-var mimeToEncoder = map[string]func(io.Writer, image.Image) error{
-	"image/gif": func(w io.Writer, i image.Image) error {
+type EncodeOptions struct {
+	Quality int
+}
+
+var mimeToEncoder = map[string]func(io.Writer, image.Image, EncodeOptions) error{
+	"image/gif": func(w io.Writer, i image.Image, _ EncodeOptions) error {
 		return gif.Encode(w, i, nil)
 	},
-	"image/png": func(w io.Writer, i image.Image) error {
+	"image/png": func(w io.Writer, i image.Image, _ EncodeOptions) error {
 		return png.Encode(w, i)
 	},
-	"image/jpeg": func(w io.Writer, i image.Image) error {
-		return jpeg.Encode(w, i, nil)
+	"image/jpeg": func(w io.Writer, i image.Image, options EncodeOptions) error {
+		return jpeg.Encode(w, i, jpegEncodeOptions(options.Quality))
 	},
+	"image/webp": func(w io.Writer, i image.Image, options EncodeOptions) error {
+		return webp.Encode(w, i, webpEncodeOptions(options.Quality))
+	},
+}
+
+func jpegEncodeOptions(quality int) *jpeg.Options {
+	if quality == 0 {
+		return nil
+	}
+
+	if quality < 1 {
+		quality = 1
+	}
+
+	if quality > 100 {
+		quality = 100
+	}
+
+	return &jpeg.Options{Quality: quality}
+}
+
+func webpEncodeOptions(quality int) *webp.EncoderOptions {
+	if quality == 0 {
+		return webp.DefaultOptions()
+	}
+
+	if quality < 1 {
+		quality = 1
+	}
+
+	if quality > 100 {
+		quality = 100
+	}
+
+	return webp.OptionsForPreset(webp.PresetPhoto, float32(quality))
 }

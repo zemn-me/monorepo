@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "947527761475915776"
+        ],
+        "editableUntil": "2017-12-31T18:59:57.207Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Greg Hogben",
+          "screen_name": "MyDaughtersArmy",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "2196201139",
+          "id": "2196201139"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MyDaughtersArmy/status/947094207012966402/video/1",
+          "source_status_id": "947094207012966402",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/ZF0BRYYStW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/947093074412560385/pu/img/paShQ16qzfUgqRde.jpg",
+          "id_str": "947093074412560385",
+          "source_user_id": "2196201139",
+          "id": "947093074412560385",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/947093074412560385/pu/img/paShQ16qzfUgqRde.jpg",
+          "source_user_id_str": "2196201139",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "947094207012966402",
+          "display_url": "pic.twitter.com/ZF0BRYYStW"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "63"
+    ],
+    "favorite_count": "0",
+    "id_str": "947527761475915776",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "947527761475915776",
+    "possibly_sensitive": false,
+    "created_at": "Sun Dec 31 17:59:57 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @MyDaughtersArmy: A bubble freezing. https://t.co/ZF0BRYYStW",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MyDaughtersArmy/status/947094207012966402/video/1",
+          "source_status_id": "947094207012966402",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/ZF0BRYYStW",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/947093074412560385/pu/img/paShQ16qzfUgqRde.jpg",
+          "id_str": "947093074412560385",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "20644",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/947093074412560385/pu/pl/qHf0mmDkCar6ZaQC.m3u8?v=cfc"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/947093074412560385/pu/vid/480x480/aCAi-gupVjVsvStM.mp4"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/947093074412560385/pu/vid/720x720/LHGxswMYmR_rQABe.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/947093074412560385/pu/vid/240x240/QKeKHmu25yHqiVdn.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2196201139",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "947093074412560385",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/947093074412560385/pu/img/paShQ16qzfUgqRde.jpg",
+          "source_user_id_str": "2196201139",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "947094207012966402",
+          "display_url": "pic.twitter.com/ZF0BRYYStW"
+        }
+      ]
+    }
+  }
+}

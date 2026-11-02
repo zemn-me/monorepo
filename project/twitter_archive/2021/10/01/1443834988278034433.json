@@ -1,0 +1,156 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1443834988278034433"
+        ],
+        "editableUntil": "2021-10-01T08:07:41.019Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Pokémon",
+          "screen_name": "Pokemon",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "96879107",
+          "id": "96879107"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Pokemon/status/1443833345364971520/video/1",
+          "source_status_id": "1443833345364971520",
+          "indices": [
+            "16",
+            "39"
+          ],
+          "url": "https://t.co/5eJuoORghO",
+          "media_url": "http://pbs.twimg.com/media/FAmGxjyXMAQv1RO.png",
+          "id_str": "1443833314801037317",
+          "source_user_id": "96879107",
+          "id": "1443833314801037317",
+          "media_url_https": "https://pbs.twimg.com/media/FAmGxjyXMAQv1RO.png",
+          "source_user_id_str": "96879107",
+          "sizes": {
+            "medium": {
+              "w": "400",
+              "h": "240",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "400",
+              "h": "240",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "400",
+              "h": "240",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1443833345364971520",
+          "display_url": "pic.twitter.com/5eJuoORghO"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "39"
+    ],
+    "favorite_count": "0",
+    "id_str": "1443834988278034433",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1443834988278034433",
+    "possibly_sensitive": false,
+    "created_at": "Fri Oct 01 07:07:41 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @Pokemon: 🔊👻 https://t.co/5eJuoORghO",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Pokemon/status/1443833345364971520/video/1",
+          "source_status_id": "1443833345364971520",
+          "indices": [
+            "16",
+            "39"
+          ],
+          "url": "https://t.co/5eJuoORghO",
+          "media_url": "http://pbs.twimg.com/media/FAmGxjyXMAQv1RO.png",
+          "id_str": "1443833314801037317",
+          "video_info": {
+            "aspect_ratio": [
+              "5",
+              "3"
+            ],
+            "duration_millis": "30864",
+            "variants": [
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1443833314801037317/vid/400x240/yv3kVa-eXdqxSAi9.mp4?tag=14"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1443833314801037317/pl/iWLhP9D-KBGqTPeN.m3u8?tag=14"
+              }
+            ]
+          },
+          "source_user_id": "96879107",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "monetizable": false
+          },
+          "id": "1443833314801037317",
+          "media_url_https": "https://pbs.twimg.com/media/FAmGxjyXMAQv1RO.png",
+          "source_user_id_str": "96879107",
+          "sizes": {
+            "medium": {
+              "w": "400",
+              "h": "240",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "400",
+              "h": "240",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "400",
+              "h": "240",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1443833345364971520",
+          "display_url": "pic.twitter.com/5eJuoORghO"
+        }
+      ]
+    }
+  }
+}

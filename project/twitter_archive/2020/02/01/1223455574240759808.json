@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1223455574240759808"
+        ],
+        "editableUntil": "2020-02-01T04:58:34.261Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "BearTrapShit",
+          "screen_name": "polosnow100",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "264328747",
+          "id": "264328747"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/polosnow100/status/1223004119696277506/video/1",
+          "source_status_id": "1223004119696277506",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/TjI50gCpo2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1223003870550462466/pu/img/JWJu1Dnr99HWE-tl.jpg",
+          "id_str": "1223003870550462466",
+          "source_user_id": "264328747",
+          "id": "1223003870550462466",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1223003870550462466/pu/img/JWJu1Dnr99HWE-tl.jpg",
+          "source_user_id_str": "264328747",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1223004119696277506",
+          "display_url": "pic.twitter.com/TjI50gCpo2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1223455574240759808",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1223455574240759808",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 01 03:58:34 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @polosnow100: I really got finessed 😭 https://t.co/TjI50gCpo2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/polosnow100/status/1223004119696277506/video/1",
+          "source_status_id": "1223004119696277506",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/TjI50gCpo2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1223003870550462466/pu/img/JWJu1Dnr99HWE-tl.jpg",
+          "id_str": "1223003870550462466",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "56267",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1223003870550462466/pu/vid/360x640/D7PXq9rYocgX73A9.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1223003870550462466/pu/vid/320x568/mwtYcg3XsJ02YdSZ.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1223003870550462466/pu/pl/vNde0rFIBic8v48q.m3u8?tag=10&v=517"
+              }
+            ]
+          },
+          "source_user_id": "264328747",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1223003870550462466",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1223003870550462466/pu/img/JWJu1Dnr99HWE-tl.jpg",
+          "source_user_id_str": "264328747",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1223004119696277506",
+          "display_url": "pic.twitter.com/TjI50gCpo2"
+        }
+      ]
+    }
+  }
+}

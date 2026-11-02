@@ -35,6 +35,9 @@ impl convert::From<ExtractImportsError> for ExtractImportsCmdError {
     }
 }
 
+// below is due to passing the output of `println!` to Result::Ok -- but this
+// is intentional on my part.
+#[allow(clippy::unit_arg)]
 fn act() -> Result<(), ExtractImportsCmdError> {
     Result::Ok(println!(
         "{}",

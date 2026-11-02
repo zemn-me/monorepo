@@ -1,0 +1,56 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "863826815474946050"
+        ],
+        "editableUntil": "2017-05-14T19:42:16.592Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "chrisczub",
+          "screen_name": "chrisczub",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "9696192",
+          "id": "9696192"
+        },
+        {
+          "name": "Bethesda",
+          "screen_name": "bethesda",
+          "indices": [
+            "52",
+            "61"
+          ],
+          "id_str": "23645599",
+          "id": "23645599"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "863826815474946050",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "863826815474946050",
+    "created_at": "Sun May 14 18:42:16 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @chrisczub: Does anybody have a security contact @bethesda ? I found privesc in their launcher, security@bethesda.net bounces and they h…",
+    "lang": "en"
+  }
+}

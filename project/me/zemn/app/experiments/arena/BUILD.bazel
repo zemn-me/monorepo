@@ -1,0 +1,71 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "arena",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+        "scene.ts",
+    ],
+    assets = glob(
+        [
+            "**/*.css",
+            "**/*.svg",
+        ],
+        allow_empty = True,
+    ),
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//ts/math",
+        "//ts/remix",
+        "//ts/result",
+    ],
+)
+
+ts_project(
+    name = "arena_tests",
+    srcs = ["scene_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":arena",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//ts/math",
+        "//ts/result",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["scene_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":arena_tests"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+        "scene.ts",
+        "scene_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)

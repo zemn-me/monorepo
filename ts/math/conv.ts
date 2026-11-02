@@ -1,5 +1,6 @@
 import * as cartesian from '#root/ts/math/cartesian.js';
 import * as euler_angle from '#root/ts/math/euler_angle.js';
+import * as homogenous from '#root/ts/math/homog.js';
 import * as quaternion from '#root/ts/math/quaternion.js';
 
 export const Quaternion = {
@@ -16,28 +17,42 @@ export const Quaternion = {
 		const y = cr * sp * cy + sr * cp * sy;
 		const z = cr * cp * sy - sr * sp * cy;
 
-		return new quaternion.Quaternion(x, y, z, w);
+		return quaternion.from(x, y, z, w);
 	},
 
 	fromPoint3D(pts: cartesian.Point3D): quaternion.Quaternion {
-		const [[x], [y], [z]] = pts!;
-		return new quaternion.Quaternion(x!, y!, z!, 0);
+		return quaternion.from(
+			cartesian.x(pts),
+			cartesian.y(pts),
+			cartesian.z(pts),
+			0
+		);
 	},
 };
 
 export const Cartestian = {
 	fromQuaternion(q: quaternion.Quaternion): cartesian.Point3D {
-		return [[q.x], [q.y], [q.z]] as const;
+		return cartesian.point<3>(quaternion.x(q), quaternion.y(q), quaternion.z(q));
 	},
 };
 
 export const Euler = {
 	fromQuaternion(q: quaternion.Quaternion): euler_angle.EulerAngle {
-		const sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
-		const cosr_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
+		const sinr_cosp =
+			2 *
+			(quaternion.w(q) * quaternion.x(q) +
+				quaternion.y(q) * quaternion.z(q));
+		const cosr_cosp =
+			1 -
+			2 *
+				(quaternion.x(q) * quaternion.x(q) +
+					quaternion.y(q) * quaternion.y(q));
 		const roll = Math.atan2(sinr_cosp, cosr_cosp);
 
-		const sinp = 2 * (q.w * q.y - q.z * q.x);
+		const sinp =
+			2 *
+			(quaternion.w(q) * quaternion.y(q) -
+				quaternion.z(q) * quaternion.x(q));
 		let pitch;
 		if (Math.abs(sinp) >= 1) {
 			pitch = (Math.sign(sinp) * Math.PI) / 2;
@@ -45,10 +60,26 @@ export const Euler = {
 			pitch = Math.asin(sinp);
 		}
 
-		const siny_cosp = 2 * (q.w * q.z + q.x * q.y);
-		const cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
+		const siny_cosp =
+			2 *
+			(quaternion.w(q) * quaternion.z(q) +
+				quaternion.x(q) * quaternion.y(q));
+		const cosy_cosp =
+			1 -
+			2 *
+				(quaternion.y(q) * quaternion.y(q) +
+					quaternion.z(q) * quaternion.z(q));
 		const yaw = Math.atan2(siny_cosp, cosy_cosp);
 
 		return new euler_angle.EulerAngle(pitch, yaw, roll);
 	},
 };
+
+export const homogToCart = <N extends number>(
+	pt: homogenous.Point<N>
+): cartesian.Point<N> =>
+	cartesian.scale(homogenous.nonw<N>(pt), homogenous.w<N>(pt));
+
+export const cartToHomog = <N extends number>(
+	pt: cartesian.Point<N>
+): homogenous.Point<N> => [...pt, [1]] as homogenous.Point<N>;

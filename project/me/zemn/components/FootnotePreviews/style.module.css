@@ -1,0 +1,15 @@
+.tooltip {
+	background: var(--background-color);
+	border: 1px solid color-mix(in srgb, currentcolor 35%, transparent);
+	box-shadow: 0 0.35em 1.2em rgb(0 0 0 / 18%);
+	box-sizing: border-box;
+	color: var(--foreground-color);
+	font-size: 0.875rem;
+	line-height: 1.45;
+	max-width: min(28rem, calc(100vw - 1.5rem));
+	padding: 0.7em 0.85em;
+	pointer-events: none;
+	position: fixed;
+	width: max-content;
+	z-index: 20;
+}

@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1707518806615339096"
+        ],
+        "editableUntil": "2023-09-28T23:13:02.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "trav",
+          "screen_name": "techsavvytravvy",
+          "indices": [
+            "0",
+            "16"
+          ],
+          "id_str": "31472652",
+          "id": "31472652"
+        },
+        {
+          "name": "TypeScript",
+          "screen_name": "typescript",
+          "indices": [
+            "17",
+            "28"
+          ],
+          "id_str": "809233214",
+          "id": "809233214"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/bkMoGa5S1N",
+          "expanded_url": "https://stackoverflow.com/questions/13315131/enforcing-the-type-of-the-indexed-members-of-a-typescript-object",
+          "display_url": "stackoverflow.com/questions/1331…",
+          "indices": [
+            "123",
+            "146"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "146"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1707515111286468646",
+    "id_str": "1707518806615339096",
+    "in_reply_to_user_id": "31472652",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1707518806615339096",
+    "in_reply_to_status_id": "1707515111286468646",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 28 22:13:02 +0000 2023",
+    "favorited": false,
+    "full_text": "@techsavvytravvy @typescript type strict&lt;T&gt; = { [key:keyof T]: T[keyof T] } &amp; T\n\nor key: string, I forget which\n\nhttps://t.co/bkMoGa5S1N",
+    "lang": "en",
+    "in_reply_to_screen_name": "techsavvytravvy",
+    "in_reply_to_user_id_str": "31472652"
+  }
+}

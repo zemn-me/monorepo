@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1199025565845602304"
+        ],
+        "editableUntil": "2019-11-25T19:02:26.372Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "cohost.org/iximeow 🐀",
+          "screen_name": "iximeow",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "629126745",
+          "id": "629126745"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "220"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1199025225180098566",
+    "id_str": "1199025565845602304",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1199025565845602304",
+    "in_reply_to_status_id": "1199025225180098566",
+    "created_at": "Mon Nov 25 18:02:26 +0000 2019",
+    "favorited": false,
+    "full_text": "@iximeow people think because wasm executes in the Javascript sandbox it makes wasm safe -- but this only applies as far as the integrity of the system is concerned. I do not want to have to deal with buffer overflow XSS",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

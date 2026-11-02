@@ -1,0 +1,180 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1714161240359182365"
+        ],
+        "editableUntil": "2023-10-17T07:07:41.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "HackerOne",
+          "screen_name": "Hacker0x01",
+          "indices": [
+            "21",
+            "32"
+          ],
+          "id_str": "2177038028",
+          "id": "2177038028"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/grIJkhcvw0",
+          "expanded_url": "https://hackerone.com/reports/498355",
+          "display_url": "hackerone.com/reports/498355",
+          "indices": [
+            "90",
+            "113"
+          ]
+        },
+        {
+          "url": "https://t.co/GzZBcbnwLd",
+          "expanded_url": "https://support.hackerone.com/support/tickets/487685",
+          "display_url": "support.hackerone.com/support/ticket…",
+          "indices": [
+            "156",
+            "179"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1714161240359182365/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/f3kAUfV3RJ",
+          "media_url": "http://pbs.twimg.com/media/F8nsOCAbkAAAbht.jpg",
+          "id_str": "1714160858992185344",
+          "id": "1714160858992185344",
+          "media_url_https": "https://pbs.twimg.com/media/F8nsOCAbkAAAbht.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "388",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1180",
+              "h": "674",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1180",
+              "h": "674",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/f3kAUfV3RJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "301"
+    ],
+    "favorite_count": "12",
+    "id_str": "1714161240359182365",
+    "truncated": false,
+    "retweet_count": "3",
+    "id": "1714161240359182365",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 17 06:07:41 +0000 2023",
+    "favorited": false,
+    "full_text": "has been 5 years but @Hacker0x01 seem to be trying still to prevent disclosure of my bug (https://t.co/grIJkhcvw0) to the public. My request for mediation (https://t.co/GzZBcbnwLd) was closed after 3 days without even saying anything. I guess the guidelines don't mean anything https://t.co/f3kAUfV3RJ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1714161240359182365/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/f3kAUfV3RJ",
+          "media_url": "http://pbs.twimg.com/media/F8nsOCAbkAAAbht.jpg",
+          "id_str": "1714160858992185344",
+          "id": "1714160858992185344",
+          "media_url_https": "https://pbs.twimg.com/media/F8nsOCAbkAAAbht.jpg",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "388",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1180",
+              "h": "674",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1180",
+              "h": "674",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/f3kAUfV3RJ"
+        },
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1714161240359182365/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/f3kAUfV3RJ",
+          "media_url": "http://pbs.twimg.com/media/F8nsj-_boAAmJzi.png",
+          "id_str": "1714161236139810816",
+          "id": "1714161236139810816",
+          "media_url_https": "https://pbs.twimg.com/media/F8nsj-_boAAmJzi.png",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "165",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1456",
+              "h": "200",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "93",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/f3kAUfV3RJ"
+        }
+      ]
+    }
+  }
+}

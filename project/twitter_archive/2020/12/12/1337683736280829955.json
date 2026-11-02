@@ -1,0 +1,153 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1337683736280829955"
+        ],
+        "editableUntil": "2020-12-12T10:00:30.348Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "⚇",
+          "screen_name": "_plorf",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "1310742831573721088",
+          "id": "1310742831573721088"
+        },
+        {
+          "name": "http://heather.flowers",
+          "screen_name": "HTHRFLWRS",
+          "indices": [
+            "12",
+            "22"
+          ],
+          "id_str": "2744829304",
+          "id": "2744829304"
+        },
+        {
+          "name": "Itzu Tak",
+          "screen_name": "Itszutak",
+          "indices": [
+            "23",
+            "32"
+          ],
+          "id_str": "279897935",
+          "id": "279897935"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/_plorf/status/1337441432311894016/photo/1",
+          "source_status_id": "1337441432311894016",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/vO7TA8nLMB",
+          "media_url": "http://pbs.twimg.com/media/Eo-L5J_XIAYft_B.jpg",
+          "id_str": "1337441428402806790",
+          "source_user_id": "1310742831573721088",
+          "id": "1337441428402806790",
+          "media_url_https": "https://pbs.twimg.com/media/Eo-L5J_XIAYft_B.jpg",
+          "source_user_id_str": "1310742831573721088",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "326",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "326",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "326",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1337441432311894016",
+          "display_url": "pic.twitter.com/vO7TA8nLMB"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "56"
+    ],
+    "favorite_count": "0",
+    "id_str": "1337683736280829955",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1337683736280829955",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 12 09:00:30 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @_plorf: @HTHRFLWRS @Itszutak https://t.co/vO7TA8nLMB",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/_plorf/status/1337441432311894016/photo/1",
+          "source_status_id": "1337441432311894016",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/vO7TA8nLMB",
+          "media_url": "http://pbs.twimg.com/media/Eo-L5J_XIAYft_B.jpg",
+          "id_str": "1337441428402806790",
+          "source_user_id": "1310742831573721088",
+          "id": "1337441428402806790",
+          "media_url_https": "https://pbs.twimg.com/media/Eo-L5J_XIAYft_B.jpg",
+          "source_user_id_str": "1310742831573721088",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "326",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "326",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "326",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1337441432311894016",
+          "display_url": "pic.twitter.com/vO7TA8nLMB"
+        }
+      ]
+    }
+  }
+}

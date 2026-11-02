@@ -1,0 +1,43 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1098230519765049344"
+        ],
+        "editableUntil": "2019-02-20T15:38:54.705Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "javascript",
+          "indices": [
+            "19",
+            "30"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "273"
+    ],
+    "favorite_count": "12",
+    "id_str": "1098230519765049344",
+    "truncated": false,
+    "retweet_count": "2",
+    "id": "1098230519765049344",
+    "created_at": "Wed Feb 20 14:38:54 +0000 2019",
+    "favorited": false,
+    "full_text": "hi friends! little #javascript challenge:\n\nlet's say I have a function, fn(\"a\", \"b\", \"c\") == \"a.b.c\" for any args\n\ncan you write a function fn2 for which fn2(fn)(\"a\")(\"b\")(\"c\")() == \"a.b.c\" and fn2(fn)(\"a\", \"b\")(\"c\") == \"a.b.c\"\n\ni have a solution in 45 chars :)\n\ngood luck!",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1001450241609039872"
+        ],
+        "editableUntil": "2018-05-29T14:08:38.302Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mayapolarbear",
+          "screen_name": "mayapolarbear",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "942400326359019520",
+          "id": "942400326359019520"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mayapolarbear/status/1001442917574234112/video/1",
+          "source_status_id": "1001442917574234112",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/ddC4msK8VR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1001442698144960512/pu/img/HGnRO81d_Ws1qkLi.jpg",
+          "id_str": "1001442698144960512",
+          "source_user_id": "942400326359019520",
+          "id": "1001442698144960512",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1001442698144960512/pu/img/HGnRO81d_Ws1qkLi.jpg",
+          "source_user_id_str": "942400326359019520",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1001442917574234112",
+          "display_url": "pic.twitter.com/ddC4msK8VR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "68"
+    ],
+    "favorite_count": "0",
+    "id_str": "1001450241609039872",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1001450241609039872",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 29 13:08:38 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @mayapolarbear: Give her already an oscar https://t.co/ddC4msK8VR",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mayapolarbear/status/1001442917574234112/video/1",
+          "source_status_id": "1001442917574234112",
+          "indices": [
+            "45",
+            "68"
+          ],
+          "url": "https://t.co/ddC4msK8VR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1001442698144960512/pu/img/HGnRO81d_Ws1qkLi.jpg",
+          "id_str": "1001442698144960512",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "35110",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1001442698144960512/pu/vid/240x240/1B2OPUNPHsuLBaKe.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1001442698144960512/pu/pl/hefbEbj57BQrm9es.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1001442698144960512/pu/vid/480x480/S72jRy6u4SVn_8rW.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "942400326359019520",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1001442698144960512",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1001442698144960512/pu/img/HGnRO81d_Ws1qkLi.jpg",
+          "source_user_id_str": "942400326359019520",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1001442917574234112",
+          "display_url": "pic.twitter.com/ddC4msK8VR"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "883006205484040194"
+        ],
+        "editableUntil": "2017-07-06T17:54:19.506Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/ypHE4ysYCV",
+          "expanded_url": "https://www.w3.org/TR/cors/#access-control-allow-origin-response-header",
+          "display_url": "w3.org/TR/cors/#acces…",
+          "indices": [
+            "102",
+            "125"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "125"
+    ],
+    "favorite_count": "0",
+    "id_str": "883006205484040194",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "883006205484040194",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jul 06 16:54:19 +0000 2017",
+    "favorited": false,
+    "full_text": "TIL CORS's `origin-list-or-null` is not in fact, an origin list or null, but a single origin or null.\nhttps://t.co/ypHE4ysYCV",
+    "lang": "en"
+  }
+}

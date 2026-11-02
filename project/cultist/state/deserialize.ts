@@ -2,7 +2,7 @@
  * @fileoverview like save state, but more sane.
  */
 
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 
 import * as Save from '#root/project/cultist/save.js';
 import * as State from '#root/project/cultist/state/state.js';
@@ -65,7 +65,7 @@ export function deck(s: Save.Deck): State.Deck {
 	const { eliminatedCards, ...otherCards } = s;
 	const cardList = [];
 
-	for (const [cardInd, card] of Object.entries(otherCards ?? {})) {
+	for (const [cardInd, card] of Object.entries(otherCards)) {
 		if (card instanceof Array)
 			throw new Error(
 				`'${cardInd}' should be single card, not multiple ${card}`

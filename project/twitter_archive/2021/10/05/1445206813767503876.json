@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1445206813767503876"
+        ],
+        "editableUntil": "2021-10-05T02:58:49.703Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Todd Spence",
+          "screen_name": "Todd_Spence",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "175264457",
+          "id": "175264457"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Todd_Spence/status/1444891026980839432/video/1",
+          "source_status_id": "1444891026980839432",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/SL180o2QrV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1444724936229097477/pu/img/Qxbsb3jkZftHef6n.jpg",
+          "id_str": "1444724936229097477",
+          "source_user_id": "175264457",
+          "id": "1444724936229097477",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1444724936229097477/pu/img/Qxbsb3jkZftHef6n.jpg",
+          "source_user_id_str": "175264457",
+          "sizes": {
+            "medium": {
+              "w": "960",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1444891026980839432",
+          "display_url": "pic.twitter.com/SL180o2QrV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "95"
+    ],
+    "favorite_count": "0",
+    "id_str": "1445206813767503876",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1445206813767503876",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 05 01:58:49 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @Todd_Spence: This continues to be the greatest squirrel feeder ever https://t.co/SL180o2QrV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Todd_Spence/status/1444891026980839432/video/1",
+          "source_status_id": "1444891026980839432",
+          "indices": [
+            "72",
+            "95"
+          ],
+          "url": "https://t.co/SL180o2QrV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1444724936229097477/pu/img/Qxbsb3jkZftHef6n.jpg",
+          "id_str": "1444724936229097477",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "7000",
+            "variants": [
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1444724936229097477/pu/vid/480x600/pV02pyxR44LR9FUS.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1444724936229097477/pu/vid/320x400/2zCG9oZHLup_Mc14.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1444724936229097477/pu/pl/qUvUEBW1V2TSqvWz.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1444724936229097477/pu/vid/720x900/qNhazG0iBQheht7w.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "175264457",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1444724936229097477",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1444724936229097477/pu/img/Qxbsb3jkZftHef6n.jpg",
+          "source_user_id_str": "175264457",
+          "sizes": {
+            "medium": {
+              "w": "960",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "544",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "960",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1444891026980839432",
+          "display_url": "pic.twitter.com/SL180o2QrV"
+        }
+      ]
+    }
+  }
+}

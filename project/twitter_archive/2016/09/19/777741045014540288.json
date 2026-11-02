@@ -1,0 +1,165 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "777741045014540288"
+        ],
+        "editableUntil": "2016-09-19T06:28:09.518Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mashable",
+          "screen_name": "mashable",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "972651",
+          "id": "972651"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MashableNews/status/777703601690947585/video/1",
+          "source_status_id": "777703601690947585",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/DKOVG4NQS3",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/777703173842579456/img/RBO0uIlb1JCz4r43.jpg",
+          "id_str": "777703173842579456",
+          "source_user_id": "372502604",
+          "id": "777703173842579456",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/777703173842579456/img/RBO0uIlb1JCz4r43.jpg",
+          "source_user_id_str": "372502604",
+          "sizes": {
+            "small": {
+              "w": "570",
+              "h": "310",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "570",
+              "h": "310",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "570",
+              "h": "310",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "777703601690947585",
+          "display_url": "pic.twitter.com/DKOVG4NQS3"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "Emmys",
+          "indices": [
+            "58",
+            "64"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "93"
+    ],
+    "favorite_count": "0",
+    "id_str": "777741045014540288",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "777741045014540288",
+    "possibly_sensitive": false,
+    "created_at": "Mon Sep 19 05:28:09 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @mashable: Rami Malek of 'Mr. Robot' can't believe his #Emmys win! https://t.co/DKOVG4NQS3",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MashableNews/status/777703601690947585/video/1",
+          "source_status_id": "777703601690947585",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/DKOVG4NQS3",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/777703173842579456/img/RBO0uIlb1JCz4r43.jpg",
+          "id_str": "777703173842579456",
+          "video_info": {
+            "aspect_ratio": [
+              "57",
+              "31"
+            ],
+            "duration_millis": "16084",
+            "variants": [
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/777703173842579456/vid/330x180/Jb75UcW2HXcu_lGH.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/777703173842579456/pl/8vbkadX7ee1Pr7z4.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "372502604",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "777703173842579456",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/777703173842579456/img/RBO0uIlb1JCz4r43.jpg",
+          "source_user_id_str": "372502604",
+          "sizes": {
+            "small": {
+              "w": "570",
+              "h": "310",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "570",
+              "h": "310",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "570",
+              "h": "310",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "777703601690947585",
+          "display_url": "pic.twitter.com/DKOVG4NQS3"
+        }
+      ]
+    }
+  }
+}

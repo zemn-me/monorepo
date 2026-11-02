@@ -1,0 +1,140 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1067784510337679360"
+        ],
+        "editableUntil": "2018-11-28T15:17:20.398Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "hello",
+          "screen_name": "KardOnIce",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "4838839944",
+          "id": "4838839944"
+        },
+        {
+          "name": "Fake “Unicode.” 🩵🆓",
+          "screen_name": "FakeUnicode",
+          "indices": [
+            "11",
+            "23"
+          ],
+          "id_str": "2183231114",
+          "id": "2183231114"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1067784510337679360/photo/1",
+          "indices": [
+            "244",
+            "267"
+          ],
+          "url": "https://t.co/OCu8AWuoGJ",
+          "media_url": "http://pbs.twimg.com/media/DtGHra4WkAALskj.jpg",
+          "id_str": "1067783766683324416",
+          "id": "1067783766683324416",
+          "media_url_https": "https://pbs.twimg.com/media/DtGHra4WkAALskj.jpg",
+          "sizes": {
+            "large": {
+              "w": "250",
+              "h": "158",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "250",
+              "h": "158",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "250",
+              "h": "158",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/OCu8AWuoGJ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "267"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1067783054083715077",
+    "id_str": "1067784510337679360",
+    "in_reply_to_user_id": "4838839944",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1067784510337679360",
+    "in_reply_to_status_id": "1067783054083715077",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 28 14:17:20 +0000 2018",
+    "favorited": false,
+    "full_text": "@KardOnIce @FakeUnicode you can't add a rune and an int32. it throws an error if you try.\n\nyou are correct that you can do \"hello\"[0] + 5, though. Strings, as you say are immutable byte arrays. i cannot imagine why you would do that either 1/2 https://t.co/OCu8AWuoGJ",
+    "lang": "en",
+    "in_reply_to_screen_name": "KardOnIce",
+    "in_reply_to_user_id_str": "4838839944",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1067784510337679360/photo/1",
+          "indices": [
+            "244",
+            "267"
+          ],
+          "url": "https://t.co/OCu8AWuoGJ",
+          "media_url": "http://pbs.twimg.com/media/DtGHra4WkAALskj.jpg",
+          "id_str": "1067783766683324416",
+          "id": "1067783766683324416",
+          "media_url_https": "https://pbs.twimg.com/media/DtGHra4WkAALskj.jpg",
+          "sizes": {
+            "large": {
+              "w": "250",
+              "h": "158",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "250",
+              "h": "158",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "250",
+              "h": "158",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/OCu8AWuoGJ"
+        }
+      ]
+    }
+  }
+}

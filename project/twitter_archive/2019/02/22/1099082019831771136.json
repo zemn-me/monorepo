@@ -1,0 +1,141 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1099082019831771136"
+        ],
+        "editableUntil": "2019-02-23T00:02:28.141Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "bird/h",
+          "screen_name": "BirdPerHour",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2965150132",
+          "id": "2965150132"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BirdPerHour/status/1099081764864176128/photo/1",
+          "source_status_id": "1099081764864176128",
+          "indices": [
+            "26",
+            "49"
+          ],
+          "url": "https://t.co/0qLIu1IKpT",
+          "media_url": "http://pbs.twimg.com/media/D0C5ClsWsAAw9id.jpg",
+          "id_str": "1099081763207426048",
+          "source_user_id": "2965150132",
+          "id": "1099081763207426048",
+          "media_url_https": "https://pbs.twimg.com/media/D0C5ClsWsAAw9id.jpg",
+          "source_user_id_str": "2965150132",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "453",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "2048",
+              "h": "1365",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1099081764864176128",
+          "display_url": "pic.twitter.com/0qLIu1IKpT"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "birdbot",
+          "indices": [
+            "17",
+            "25"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "49"
+    ],
+    "favorite_count": "0",
+    "id_str": "1099082019831771136",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1099082019831771136",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 22 23:02:28 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @BirdPerHour: #birdbot https://t.co/0qLIu1IKpT",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BirdPerHour/status/1099081764864176128/photo/1",
+          "source_status_id": "1099081764864176128",
+          "indices": [
+            "26",
+            "49"
+          ],
+          "url": "https://t.co/0qLIu1IKpT",
+          "media_url": "http://pbs.twimg.com/media/D0C5ClsWsAAw9id.jpg",
+          "id_str": "1099081763207426048",
+          "source_user_id": "2965150132",
+          "id": "1099081763207426048",
+          "media_url_https": "https://pbs.twimg.com/media/D0C5ClsWsAAw9id.jpg",
+          "source_user_id_str": "2965150132",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "453",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "2048",
+              "h": "1365",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "800",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1099081764864176128",
+          "display_url": "pic.twitter.com/0qLIu1IKpT"
+        }
+      ]
+    }
+  }
+}

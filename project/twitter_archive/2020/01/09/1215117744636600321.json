@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1215117744636600321"
+        ],
+        "editableUntil": "2020-01-09T04:47:00.774Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": ".",
+          "screen_name": "iluvthispart",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "4844281671",
+          "id": "4844281671"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/iluvthispart/status/1214971221860683776/video/1",
+          "source_status_id": "1214971221860683776",
+          "indices": [
+            "117",
+            "140"
+          ],
+          "url": "https://t.co/3cd1gEjBlU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214971183591907328/pu/img/ljUmrlRKXHlPV34h.jpg",
+          "id_str": "1214971183591907328",
+          "source_user_id": "4844281671",
+          "id": "1214971183591907328",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214971183591907328/pu/img/ljUmrlRKXHlPV34h.jpg",
+          "source_user_id_str": "4844281671",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1214971221860683776",
+          "display_url": "pic.twitter.com/3cd1gEjBlU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1215117744636600321",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1215117744636600321",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 09 03:47:00 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @iluvthispart: One of my favorite videos is Billy Joel talking about how much he hates \"We Didn't Start The Fire\" https://t.co/3cd1gEjBlU",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/iluvthispart/status/1214971221860683776/video/1",
+          "source_status_id": "1214971221860683776",
+          "indices": [
+            "117",
+            "140"
+          ],
+          "url": "https://t.co/3cd1gEjBlU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214971183591907328/pu/img/ljUmrlRKXHlPV34h.jpg",
+          "id_str": "1214971183591907328",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "54058",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1214971183591907328/pu/pl/RitYBrzSuOXzl6x8.m3u8?tag=10&v=ec1"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214971183591907328/pu/vid/480x360/7kvvmOdoQPMkl2z6.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214971183591907328/pu/vid/360x270/hF1CsMBFrFNRLKY2.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "4844281671",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1214971183591907328",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214971183591907328/pu/img/ljUmrlRKXHlPV34h.jpg",
+          "source_user_id_str": "4844281671",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1214971221860683776",
+          "display_url": "pic.twitter.com/3cd1gEjBlU"
+        }
+      ]
+    }
+  }
+}

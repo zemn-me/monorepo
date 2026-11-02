@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "analytics",
+    srcs = ["analytics.go"],
+    importpath = "github.com/zemn-me/monorepo/go/seleniumutil/analytics",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

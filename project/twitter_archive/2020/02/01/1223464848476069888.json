@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1223464848476069888"
+        ],
+        "editableUntil": "2020-02-01T05:35:25.411Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Friday Night",
+          "screen_name": "Killer7Friday",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "1213846076534341638",
+          "id": "1213846076534341638"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Killer7Friday/status/1223365340211499009/video/1",
+          "source_status_id": "1223365340211499009",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/2x8QozXNtu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1216556802537639936/pu/img/mI2jTFVK8g6S0mDH.jpg",
+          "id_str": "1216556802537639936",
+          "source_user_id": "1213846076534341638",
+          "id": "1216556802537639936",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1216556802537639936/pu/img/mI2jTFVK8g6S0mDH.jpg",
+          "source_user_id_str": "1213846076534341638",
+          "sizes": {
+            "large": {
+              "w": "868",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "868",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "564",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1223365340211499009",
+          "display_url": "pic.twitter.com/2x8QozXNtu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "91"
+    ],
+    "favorite_count": "0",
+    "id_str": "1223464848476069888",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1223464848476069888",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 01 04:35:25 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Killer7Friday: There's always time for fun...It's Friday night. https://t.co/2x8QozXNtu",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Killer7Friday/status/1223365340211499009/video/1",
+          "source_status_id": "1223365340211499009",
+          "indices": [
+            "68",
+            "91"
+          ],
+          "url": "https://t.co/2x8QozXNtu",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1216556802537639936/pu/img/mI2jTFVK8g6S0mDH.jpg",
+          "id_str": "1216556802537639936",
+          "video_info": {
+            "aspect_ratio": [
+              "217",
+              "180"
+            ],
+            "duration_millis": "10511",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1216556802537639936/pu/pl/t0tCxFj4T_5Oi-dH.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216556802537639936/pu/vid/868x720/1TD4e4d2XNFvtS7A.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216556802537639936/pu/vid/434x360/vRBbUGbcvrFqFonp.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1216556802537639936/pu/vid/324x270/5fvtRDzH4DAK25TL.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1213846076534341638",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1216556802537639936",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1216556802537639936/pu/img/mI2jTFVK8g6S0mDH.jpg",
+          "source_user_id_str": "1213846076534341638",
+          "sizes": {
+            "large": {
+              "w": "868",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "868",
+              "h": "720",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "564",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1223365340211499009",
+          "display_url": "pic.twitter.com/2x8QozXNtu"
+        }
+      ]
+    }
+  }
+}

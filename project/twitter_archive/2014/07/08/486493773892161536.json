@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "486493773892161536"
+        ],
+        "editableUntil": "2014-07-08T13:55:28.970Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://erased766470_EM1XY7hZCU.com\" rel=\"nofollow\">erased766470_EM1XY7hZCU</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "http://t.co/K5e5OBpbmp",
+          "expanded_url": "http://miki.it/blog/2014/7/8/abusing-jsonp-with-rosetta-flash/",
+          "display_url": "miki.it/blog/2014/7/8/…",
+          "indices": [
+            "68",
+            "90"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "123"
+    ],
+    "favorite_count": "0",
+    "id_str": "486493773892161536",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "486493773892161536",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jul 08 12:55:28 +0000 2014",
+    "favorited": false,
+    "full_text": "Non-alphanum rejection no longer prevents flash based XSS in JSONP: http://t.co/K5e5OBpbmp (recommends prepend /**/ et al).",
+    "lang": "en"
+  }
+}

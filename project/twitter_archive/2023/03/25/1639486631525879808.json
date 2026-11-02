@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1639486631525879808"
+        ],
+        "editableUntil": "2023-03-25T05:07:27.801Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "George Batchelor",
+          "screen_name": "georgebatch",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "93945881",
+          "id": "93945881"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/georgebatch/status/1639304460336857089/photo/1",
+          "source_status_id": "1639304460336857089",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/CmKYWefIuf",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/Fr_6g0AXwAchrBu.jpg",
+          "id_str": "1639304231009107975",
+          "source_user_id": "93945881",
+          "id": "1639304231009107975",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Fr_6g0AXwAchrBu.jpg",
+          "source_user_id_str": "93945881",
+          "sizes": {
+            "large": {
+              "w": "1150",
+              "h": "560",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1150",
+              "h": "560",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "331",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1639304460336857089",
+          "display_url": "pic.twitter.com/CmKYWefIuf"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "44"
+    ],
+    "favorite_count": "0",
+    "id_str": "1639486631525879808",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1639486631525879808",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 25 04:37:27 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @georgebatch: rat https://t.co/CmKYWefIuf",
+    "lang": "und",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/georgebatch/status/1639304460336857089/photo/1",
+          "source_status_id": "1639304460336857089",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/CmKYWefIuf",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/Fr_6g0AXwAchrBu.jpg",
+          "id_str": "1639304231009107975",
+          "video_info": {
+            "aspect_ratio": [
+              "115",
+              "56"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/Fr_6g0AXwAchrBu.mp4"
+              }
+            ]
+          },
+          "source_user_id": "93945881",
+          "id": "1639304231009107975",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Fr_6g0AXwAchrBu.jpg",
+          "source_user_id_str": "93945881",
+          "sizes": {
+            "large": {
+              "w": "1150",
+              "h": "560",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1150",
+              "h": "560",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "331",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1639304460336857089",
+          "display_url": "pic.twitter.com/CmKYWefIuf"
+        }
+      ]
+    }
+  }
+}

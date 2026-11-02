@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { exec } from 'child_process';
 import { Command } from 'commander';
 import { readFile, writeFile } from 'fs/promises';

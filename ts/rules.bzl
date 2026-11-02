@@ -2,7 +2,7 @@ load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("//bzl/lint:linters.bzl", "eslint_test")
+load("//bzl/lint:linters.bzl", "biome_test")
 load("//js:rules.bzl", _js_binary = "js_binary")
 load("//js/jest:rules.bzl", _jest_test = "jest_test")
 
@@ -25,7 +25,7 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
     jest_config = None
 
     if srcs == None:
-        srcs = [paths.replace_extension(p, ".js") for p in native.glob(["*_test.ts"])]
+        srcs = [paths.replace_extension(p, ".js") for p in native.glob(["*_test.ts"], allow_empty = True)]
 
     if jsdom:
         jest_config = "//ts/jest:jest.browser.config.js"
@@ -41,21 +41,22 @@ def jest_test(jsdom = None, srcs = None, deps = [], **kwargs):
         **kwargs
     )
 
-def ts_lint(name, **kwargs):
-    eslint_test(
+def ts_lint(name, size = "small", **kwargs):
+    biome_test(
         name = name,
+        size = size,
         **kwargs
     )
 
-def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, tags = [], **kwargs):
+def ts_project(name, visibility = None, lint = True, deps = [], data = [], resolve_json_module = True, srcs = None, tsconfig = "//:tsconfig", preserve_jsx = None, regenerator_runtime = True, tags = [], **kwargs):
     """
     Compile a set of typescript files, dependencies, runtime data and other source files into typescript types and source maps.
 
-    Also generates an _typings tag (typescript types) and an _lint tag
+    Also generates a _types tag (typescript types) and an _lint tag
     (lint tests).
 
     Note that there isn't a way to exempt specific files from aspect_rules_lint as I can see,
-    so deps which are invalid eslint files should instead use an /* eslint-disable */ comment.
+    so deps which are invalid Biome inputs should instead use a lint suppression comment.
 
     Args:
         name: build tag name
@@ -66,20 +67,29 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
         srcs: typescript source files
         tsconfig: the tsconfig file to use (defaults to //:tsconfig)
         preserve_jsx: passed to the aspect_rules_js ts_project rule
+        regenerator_runtime: include the SWC regenerator runtime dependency
         tags: test tags
         lint: use to skip linting. Do not use this lightly! only needs to be used where the file is HUGE.
         **kwargs: passed to the ts_project rule
     """
     if srcs == None:
-        srcs = native.glob(["**/*.ts", "**/*.tsx"])
+        srcs = native.glob(["**/*.ts", "**/*.tsx"], allow_empty = True)
 
     # needed because package.json tells node it can use ESM resolution at runtime
     # and all code is now esm.
     data = data + ["//:package_json"]
     srcs = srcs + ["//:package_json"]
 
-    # swc injects this
-    deps = deps + ["//:node_modules/regenerator-runtime"]
+    if "//:node_modules/@types/node" not in deps:
+        deps = deps + ["//:node_modules/@types/node"]
+
+    if "//:base_defs" not in deps:
+        deps = deps + ["//:base_defs"]
+
+    # SWC injects this when it lowers generators or async functions. Targets
+    # whose emitted JavaScript retains those native constructs can omit it.
+    if regenerator_runtime:
+        deps = deps + ["//:node_modules/regenerator-runtime"]
 
     _ts_project(
         name = name,
@@ -102,4 +112,4 @@ def ts_project(name, visibility = None, lint = True, deps = [], data = [], resol
     )
 
     if lint:
-        ts_lint(name = name + "_lint", srcs = [name + "_typings"], tags = tags)
+        ts_lint(name = name + "_lint", srcs = [name + "_types"], tags = tags)

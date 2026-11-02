@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1582493281597825025"
+        ],
+        "editableUntil": "2022-10-18T22:36:14.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/ATYmGfaLYa",
+          "expanded_url": "https://github.com/microsoft/vscode/security/advisories/GHSA-q6rv-h25q-6pj6",
+          "display_url": "github.com/microsoft/vsco…",
+          "indices": [
+            "253",
+            "276"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "276"
+    ],
+    "favorite_count": "8",
+    "in_reply_to_status_id_str": "1582493280427659264",
+    "id_str": "1582493281597825025",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1582493281597825025",
+    "in_reply_to_status_id": "1582493280427659264",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 18 22:06:14 +0000 2022",
+    "favorited": false,
+    "full_text": "There is no technical writeup at this time as I was not informed of this disclosure on Microsoft's end, I'll be working on one today.\n\nThe \"workaround\" described in the GitHub disclosure does not work. The vulnerability works from a link in a browser.\n\nhttps://t.co/ATYmGfaLYa",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

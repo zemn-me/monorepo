@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1070177491875192832"
+        ],
+        "editableUntil": "2018-12-05T05:46:11.656Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "おまる丸",
+          "screen_name": "oma_ru_maru",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1340815244",
+          "id": "1340815244"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/oma_ru_maru/status/1069919788632174592/video/1",
+          "source_status_id": "1069919788632174592",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/JF8laRHlT4",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1069919716985061376/pu/img/t9X_L2NG0BOSbYNj.jpg",
+          "id_str": "1069919716985061376",
+          "source_user_id": "1340815244",
+          "id": "1069919716985061376",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1069919716985061376/pu/img/t9X_L2NG0BOSbYNj.jpg",
+          "source_user_id_str": "1340815244",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1069919788632174592",
+          "display_url": "pic.twitter.com/JF8laRHlT4"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1070177491875192832",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1070177491875192832",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 05 04:46:11 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @oma_ru_maru: 中身こんなです！グロスファインペーパー綺麗！！ https://t.co/JF8laRHlT4",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/oma_ru_maru/status/1069919788632174592/video/1",
+          "source_status_id": "1069919788632174592",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/JF8laRHlT4",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1069919716985061376/pu/img/t9X_L2NG0BOSbYNj.jpg",
+          "id_str": "1069919716985061376",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "31390",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1069919716985061376/pu/vid/320x568/MVFl6dkwqAZAFf3t.mp4?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1069919716985061376/pu/vid/720x1280/Ud5zUwxaoVSOKjkA.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1069919716985061376/pu/pl/OiQDJ9UrsVRY0K2O.m3u8?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1069919716985061376/pu/vid/360x640/hA6qUi2NaeiV84qZ.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "1340815244",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1069919716985061376",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1069919716985061376/pu/img/t9X_L2NG0BOSbYNj.jpg",
+          "source_user_id_str": "1340815244",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1069919788632174592",
+          "display_url": "pic.twitter.com/JF8laRHlT4"
+        }
+      ]
+    }
+  }
+}

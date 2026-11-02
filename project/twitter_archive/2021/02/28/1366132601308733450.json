@@ -1,0 +1,72 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1366132601308733450"
+        ],
+        "editableUntil": "2021-02-28T22:06:08.325Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Herman J. Radtke III",
+          "screen_name": "hermanradtke",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "59876870",
+          "id": "59876870"
+        },
+        {
+          "name": "d0nut 🦀",
+          "screen_name": "d0nutptr",
+          "indices": [
+            "14",
+            "23"
+          ],
+          "id_str": "2215109990",
+          "id": "2215109990"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/yXLXejUYUk",
+          "expanded_url": "http://crates.io",
+          "display_url": "crates.io",
+          "indices": [
+            "64",
+            "87"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "172"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1366131468196487168",
+    "id_str": "1366132601308733450",
+    "in_reply_to_user_id": "59876870",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1366132601308733450",
+    "in_reply_to_status_id": "1366131468196487168",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 28 21:06:08 +0000 2021",
+    "favorited": false,
+    "full_text": "@hermanradtke @d0nutptr 1 in every 1,000 crates downloaded from https://t.co/yXLXejUYUk is the `regex` crate, for a total of 32M downloads. it gets 55,000 downloads *a day*",
+    "lang": "en",
+    "in_reply_to_screen_name": "hermanradtke",
+    "in_reply_to_user_id_str": "59876870"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1234093167982583809"
+        ],
+        "editableUntil": "2020-03-01T13:28:34.246Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Miss Pauling",
+          "screen_name": "misspau1ing",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "1238656178432999424",
+          "id": "1238656178432999424"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1234093167982583809/photo/1",
+          "indices": [
+            "13",
+            "36"
+          ],
+          "url": "https://t.co/i1m5uR6iNb",
+          "media_url": "http://pbs.twimg.com/media/ESBhMYlW4AYxxmN.jpg",
+          "id_str": "1234093163284979718",
+          "id": "1234093163284979718",
+          "media_url_https": "https://pbs.twimg.com/media/ESBhMYlW4AYxxmN.jpg",
+          "sizes": {
+            "medium": {
+              "w": "554",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "946",
+              "h": "2048",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "314",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/i1m5uR6iNb"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "36"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1233855937682657280",
+    "id_str": "1234093167982583809",
+    "in_reply_to_user_id": "1199180772759883776",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1234093167982583809",
+    "in_reply_to_status_id": "1233855937682657280",
+    "possibly_sensitive": false,
+    "created_at": "Sun Mar 01 12:28:34 +0000 2020",
+    "favorited": false,
+    "full_text": "@misspau1ing https://t.co/i1m5uR6iNb",
+    "lang": "qme",
+    "in_reply_to_user_id_str": "1199180772759883776",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1234093167982583809/photo/1",
+          "indices": [
+            "13",
+            "36"
+          ],
+          "url": "https://t.co/i1m5uR6iNb",
+          "media_url": "http://pbs.twimg.com/media/ESBhMYlW4AYxxmN.jpg",
+          "id_str": "1234093163284979718",
+          "id": "1234093163284979718",
+          "media_url_https": "https://pbs.twimg.com/media/ESBhMYlW4AYxxmN.jpg",
+          "sizes": {
+            "medium": {
+              "w": "554",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "946",
+              "h": "2048",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "314",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/i1m5uR6iNb"
+        }
+      ]
+    }
+  }
+}

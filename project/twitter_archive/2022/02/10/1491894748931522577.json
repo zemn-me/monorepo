@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1491894748931522577"
+        ],
+        "editableUntil": "2022-02-10T23:00:00.866Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/qsVS8zPrcf",
+          "expanded_url": "https://errorprone.info/bugpattern/BanSerializableRead",
+          "display_url": "errorprone.info/bugpattern/Ban…",
+          "indices": [
+            "233",
+            "256"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "256"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1491894313701179398",
+    "id_str": "1491894748931522577",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1491894748931522577",
+    "in_reply_to_status_id": "1491894313701179398",
+    "possibly_sensitive": false,
+    "created_at": "Thu Feb 10 22:00:00 +0000 2022",
+    "favorited": false,
+    "full_text": "should add that I added a checker to Google's open source java security static analysis checker, errorprone that finds direct uses of Serializable (the root cause of the JNDI vuln), but it wont work for JNDI issues specifically, yet https://t.co/qsVS8zPrcf",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

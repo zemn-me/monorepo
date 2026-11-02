@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1598578583605501952"
+        ],
+        "editableUntil": "2022-12-02T07:53:29.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Gareth Lewin",
+          "screen_name": "garethlewin",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "14195214",
+          "id": "14195214"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "286"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1598577955101237248",
+    "id_str": "1598578583605501952",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1598578583605501952",
+    "in_reply_to_status_id": "1598577955101237248",
+    "created_at": "Fri Dec 02 07:23:29 +0000 2022",
+    "favorited": false,
+    "full_text": "@garethlewin i believe this approach should be fast without re-rolling every time we get a 'forbidden' value. I think re-rolling should be fine, but I wonder about its effect on the internal state of non-cryptographic PRNGs because they'd have some guaranteed state whenever they reroll",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

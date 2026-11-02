@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1054554152641138689"
+        ],
+        "editableUntil": "2018-10-23T03:04:37.315Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "@pissed_eagle@birdbutt.com",
+          "screen_name": "pissed_eagle",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "431280258",
+          "id": "431280258"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pissed_eagle/status/1054045861704069121/video/1",
+          "source_status_id": "1054045861704069121",
+          "indices": [
+            "24",
+            "47"
+          ],
+          "url": "https://t.co/ZoIwR7aaou",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1054045820541132802/pu/img/C__1YJJH1rDqFN1N.jpg",
+          "id_str": "1054045820541132802",
+          "source_user_id": "431280258",
+          "id": "1054045820541132802",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1054045820541132802/pu/img/C__1YJJH1rDqFN1N.jpg",
+          "source_user_id_str": "431280258",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1054045861704069121",
+          "display_url": "pic.twitter.com/ZoIwR7aaou"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "47"
+    ],
+    "favorite_count": "0",
+    "id_str": "1054554152641138689",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1054554152641138689",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 23 02:04:37 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @pissed_eagle: Hello https://t.co/ZoIwR7aaou",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/pissed_eagle/status/1054045861704069121/video/1",
+          "source_status_id": "1054045861704069121",
+          "indices": [
+            "24",
+            "47"
+          ],
+          "url": "https://t.co/ZoIwR7aaou",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1054045820541132802/pu/img/C__1YJJH1rDqFN1N.jpg",
+          "id_str": "1054045820541132802",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "10434",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1054045820541132802/pu/vid/640x640/H_L2_t66BzE3YJaM.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1054045820541132802/pu/pl/jJK04O1sgGpmrKAi.m3u8?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1054045820541132802/pu/vid/480x480/t8OFu1QqkejMewV4.mp4?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1054045820541132802/pu/vid/240x240/JPoVwztLxm3_pPez.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "431280258",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1054045820541132802",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1054045820541132802/pu/img/C__1YJJH1rDqFN1N.jpg",
+          "source_user_id_str": "431280258",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1054045861704069121",
+          "display_url": "pic.twitter.com/ZoIwR7aaou"
+        }
+      ]
+    }
+  }
+}

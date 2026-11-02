@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1113025327717142528"
+        ],
+        "editableUntil": "2019-04-02T11:28:11.795Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The Dodo",
+          "screen_name": "dodo",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "1604444052",
+          "id": "1604444052"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dodo/status/1112776644454813696/video/1",
+          "source_status_id": "1112776644454813696",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/6NASfQxqHy",
+          "media_url": "http://pbs.twimg.com/media/D3Ej5fFX0AIjIJP.jpg",
+          "id_str": "1112709150016966657",
+          "source_user_id": "1604444052",
+          "id": "1112709150016966657",
+          "media_url_https": "https://pbs.twimg.com/media/D3Ej5fFX0AIjIJP.jpg",
+          "source_user_id_str": "1604444052",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1112776644454813696",
+          "display_url": "pic.twitter.com/6NASfQxqHy"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "100"
+    ],
+    "favorite_count": "0",
+    "id_str": "1113025327717142528",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1113025327717142528",
+    "possibly_sensitive": false,
+    "created_at": "Tue Apr 02 10:28:11 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @dodo: Guy biking across the world finds a kitten he can't leave behind 😻 https://t.co/6NASfQxqHy",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dodo/status/1112776644454813696/video/1",
+          "source_status_id": "1112776644454813696",
+          "indices": [
+            "77",
+            "100"
+          ],
+          "url": "https://t.co/6NASfQxqHy",
+          "media_url": "http://pbs.twimg.com/media/D3Ej5fFX0AIjIJP.jpg",
+          "id_str": "1112709150016966657",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "180213",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1112709150016966657/pl/KrJ9gqE3QZT4lMvR.m3u8?tag=11"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1112709150016966657/vid/480x480/Gi8Jufw4L6_svHWT.mp4?tag=11"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1112709150016966657/vid/720x720/pcWWBBxQ3Go7O7BF.mp4?tag=11"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1112709150016966657/vid/320x320/UWjnWnuCBH2J2Sj8.mp4?tag=11"
+              }
+            ]
+          },
+          "source_user_id": "1604444052",
+          "additional_media_info": {
+            "title": "Guy Biking Across The World Picks Up A Stray Kitten",
+            "description": "",
+            "embeddable": true,
+            "monetizable": true
+          },
+          "id": "1112709150016966657",
+          "media_url_https": "https://pbs.twimg.com/media/D3Ej5fFX0AIjIJP.jpg",
+          "source_user_id_str": "1604444052",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1112776644454813696",
+          "display_url": "pic.twitter.com/6NASfQxqHy"
+        }
+      ]
+    }
+  }
+}

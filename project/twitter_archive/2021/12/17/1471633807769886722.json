@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1471633807769886722"
+        ],
+        "editableUntil": "2021-12-17T01:10:16.063Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "elementnumber46.bsky.social",
+          "screen_name": "elementnumber46",
+          "indices": [
+            "0",
+            "16"
+          ],
+          "id_str": "2550189044",
+          "id": "2550189044"
+        },
+        {
+          "name": "zoro respecter",
+          "screen_name": "myspace4dogs",
+          "indices": [
+            "39",
+            "52"
+          ],
+          "id_str": "1302414259251482626",
+          "id": "1302414259251482626"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "290"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1471630411373715456",
+    "id_str": "1471633807769886722",
+    "in_reply_to_user_id": "2550189044",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1471633807769886722",
+    "in_reply_to_status_id": "1471630411373715456",
+    "created_at": "Fri Dec 17 00:10:16 +0000 2021",
+    "favorited": false,
+    "full_text": "@elementnumber46 i believe (and please @myspace4dogs correct me if i miss something). ASLR makes memory locations not known at exploit time, and the overflow point is not executable memory. since the image format is turing complete, you can use it to determine the memory addresses you need",
+    "lang": "en",
+    "in_reply_to_screen_name": "elementnumber46",
+    "in_reply_to_user_id_str": "2550189044"
+  }
+}

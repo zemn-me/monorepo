@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "934425612554563584"
+        ],
+        "editableUntil": "2017-11-25T15:16:41.478Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Unclear 💛🧡🤎",
+          "screen_name": "DoctorNuclear",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "14593056",
+          "id": "14593056"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DoctorNuclear/status/933885002214813696/video/1",
+          "source_status_id": "933885002214813696",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/HGzFkGyzOV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/933884975065133056/pu/img/B07TJgOaDg8Xa9mo.jpg",
+          "id_str": "933884975065133056",
+          "source_user_id": "14593056",
+          "id": "933884975065133056",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/933884975065133056/pu/img/B07TJgOaDg8Xa9mo.jpg",
+          "source_user_id_str": "14593056",
+          "sizes": {
+            "medium": {
+              "w": "352",
+              "h": "240",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "352",
+              "h": "240",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "352",
+              "h": "240",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "933885002214813696",
+          "display_url": "pic.twitter.com/HGzFkGyzOV"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "88"
+    ],
+    "favorite_count": "0",
+    "id_str": "934425612554563584",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "934425612554563584",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 25 14:16:41 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @DoctorNuclear: &gt;Visit his or her campsite\n\n&gt;Give kudos https://t.co/HGzFkGyzOV",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DoctorNuclear/status/933885002214813696/video/1",
+          "source_status_id": "933885002214813696",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/HGzFkGyzOV",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/933884975065133056/pu/img/B07TJgOaDg8Xa9mo.jpg",
+          "id_str": "933884975065133056",
+          "video_info": {
+            "aspect_ratio": [
+              "22",
+              "15"
+            ],
+            "duration_millis": "6940",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/933884975065133056/pu/pl/wrce3ER4mP4dpLMI.m3u8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/933884975065133056/pu/vid/264x180/kylu-JO6-lRNKRPi.mp4"
+              }
+            ]
+          },
+          "source_user_id": "14593056",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "933884975065133056",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/933884975065133056/pu/img/B07TJgOaDg8Xa9mo.jpg",
+          "source_user_id_str": "14593056",
+          "sizes": {
+            "medium": {
+              "w": "352",
+              "h": "240",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "352",
+              "h": "240",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "352",
+              "h": "240",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "933885002214813696",
+          "display_url": "pic.twitter.com/HGzFkGyzOV"
+        }
+      ]
+    }
+  }
+}

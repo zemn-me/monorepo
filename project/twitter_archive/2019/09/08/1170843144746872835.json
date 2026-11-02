@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1170843144746872835"
+        ],
+        "editableUntil": "2019-09-09T00:35:33.578Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1170843144746872835/photo/1",
+          "indices": [
+            "179",
+            "202"
+          ],
+          "url": "https://t.co/mRNAxx5Wp4",
+          "media_url": "http://pbs.twimg.com/media/ED-rokRWsAIAGH5.png",
+          "id_str": "1170843141559201794",
+          "id": "1170843141559201794",
+          "media_url_https": "https://pbs.twimg.com/media/ED-rokRWsAIAGH5.png",
+          "sizes": {
+            "large": {
+              "w": "588",
+              "h": "188",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "588",
+              "h": "188",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "588",
+              "h": "188",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/mRNAxx5Wp4"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "202"
+    ],
+    "favorite_count": "1",
+    "id_str": "1170843144746872835",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1170843144746872835",
+    "possibly_sensitive": false,
+    "created_at": "Sun Sep 08 23:35:33 +0000 2019",
+    "favorited": false,
+    "full_text": "i am working on a project and for some reason i am generating almost everything based on protobuf and graphql definitions. of 15,682 lines of code, 14,950 are currently generated https://t.co/mRNAxx5Wp4",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1170843144746872835/photo/1",
+          "indices": [
+            "179",
+            "202"
+          ],
+          "url": "https://t.co/mRNAxx5Wp4",
+          "media_url": "http://pbs.twimg.com/media/ED-rokRWsAIAGH5.png",
+          "id_str": "1170843141559201794",
+          "id": "1170843141559201794",
+          "media_url_https": "https://pbs.twimg.com/media/ED-rokRWsAIAGH5.png",
+          "sizes": {
+            "large": {
+              "w": "588",
+              "h": "188",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "588",
+              "h": "188",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "588",
+              "h": "188",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/mRNAxx5Wp4"
+        }
+      ]
+    }
+  }
+}

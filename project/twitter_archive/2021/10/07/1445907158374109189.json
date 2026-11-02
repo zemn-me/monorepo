@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1445907158374109189"
+        ],
+        "editableUntil": "2021-10-07T01:21:44.869Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "👻ferb👻",
+          "screen_name": "ferbyderb",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "1203074148022530048",
+          "id": "1203074148022530048"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ferbyderb/status/1445490972440203267/video/1",
+          "source_status_id": "1445490972440203267",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/RWmrBWFu1O",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1445490803355176971/pu/img/YHnUX0RF-ThDgxX6.jpg",
+          "id_str": "1445490803355176971",
+          "source_user_id": "1203074148022530048",
+          "id": "1445490803355176971",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1445490803355176971/pu/img/YHnUX0RF-ThDgxX6.jpg",
+          "source_user_id_str": "1203074148022530048",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1445490972440203267",
+          "display_url": "pic.twitter.com/RWmrBWFu1O"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "38"
+    ],
+    "favorite_count": "0",
+    "id_str": "1445907158374109189",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1445907158374109189",
+    "possibly_sensitive": false,
+    "created_at": "Thu Oct 07 00:21:44 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @ferbyderb: https://t.co/RWmrBWFu1O",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ferbyderb/status/1445490972440203267/video/1",
+          "source_status_id": "1445490972440203267",
+          "indices": [
+            "15",
+            "38"
+          ],
+          "url": "https://t.co/RWmrBWFu1O",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1445490803355176971/pu/img/YHnUX0RF-ThDgxX6.jpg",
+          "id_str": "1445490803355176971",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "55635",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1445490803355176971/pu/pl/mfU6mar5W3coFzfo.m3u8?tag=12"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1445490803355176971/pu/vid/360x360/_SNRb8uUsrkfgZwD.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1203074148022530048",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1445490803355176971",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1445490803355176971/pu/img/YHnUX0RF-ThDgxX6.jpg",
+          "source_user_id_str": "1203074148022530048",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1445490972440203267",
+          "display_url": "pic.twitter.com/RWmrBWFu1O"
+        }
+      ]
+    }
+  }
+}

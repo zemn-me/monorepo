@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1598511416163840000"
+        ],
+        "editableUntil": "2022-12-02T03:26:35.176Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "chompie",
+          "screen_name": "chompie1337",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1179223837742915584",
+          "id": "1179223837742915584"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chompie1337/status/1598447622309793799/video/1",
+          "source_status_id": "1598447622309793799",
+          "indices": [
+            "116",
+            "139"
+          ],
+          "url": "https://t.co/6CA1xmbc1n",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1598447581897674771/pu/img/G9_8cOyAyW-3YplM.jpg",
+          "id_str": "1598447581897674771",
+          "source_user_id": "1179223837742915584",
+          "id": "1598447581897674771",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1598447581897674771/pu/img/G9_8cOyAyW-3YplM.jpg",
+          "source_user_id_str": "1179223837742915584",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1598447622309793799",
+          "display_url": "pic.twitter.com/6CA1xmbc1n"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "139"
+    ],
+    "favorite_count": "0",
+    "id_str": "1598511416163840000",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1598511416163840000",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 02 02:56:35 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @chompie1337: this lady microwaving a croissant is eerily similar to my day to day life as a security researcher https://t.co/6CA1xmbc1n",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chompie1337/status/1598447622309793799/video/1",
+          "source_status_id": "1598447622309793799",
+          "indices": [
+            "116",
+            "139"
+          ],
+          "url": "https://t.co/6CA1xmbc1n",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1598447581897674771/pu/img/G9_8cOyAyW-3YplM.jpg",
+          "id_str": "1598447581897674771",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "15166",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1598447581897674771/pu/pl/TGynvbUcwOhcLAg7.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1598447581897674771/pu/vid/576x1024/rLSSfW698r8EzVQt.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1598447581897674771/pu/vid/480x852/VL5ubft9z4kx-nzb.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1598447581897674771/pu/vid/320x568/KnAX4MkqydM6nS9P.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1179223837742915584",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1598447581897674771",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1598447581897674771/pu/img/G9_8cOyAyW-3YplM.jpg",
+          "source_user_id_str": "1179223837742915584",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1598447622309793799",
+          "display_url": "pic.twitter.com/6CA1xmbc1n"
+        }
+      ]
+    }
+  }
+}

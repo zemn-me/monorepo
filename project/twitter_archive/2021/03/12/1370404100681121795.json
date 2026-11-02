@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1370404100681121795"
+        ],
+        "editableUntil": "2021-03-12T16:59:33.136Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "jubilee 🏳️‍🌈parody🏳️‍⚧️",
+          "screen_name": "workingjubilee",
+          "indices": [
+            "0",
+            "15"
+          ],
+          "id_str": "1107835175411421184",
+          "id": "1107835175411421184"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "308"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1370403159911194625",
+    "id_str": "1370404100681121795",
+    "in_reply_to_user_id": "1107835175411421184",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1370404100681121795",
+    "in_reply_to_status_id": "1370403159911194625",
+    "created_at": "Fri Mar 12 15:59:33 +0000 2021",
+    "favorited": false,
+    "full_text": "@workingjubilee so then, let's say: \n\npub trait ReaderFrom {\n    fn read_from(&amp;mut self, r: &amp;mut dyn ReadSeeker) -&gt; Result&lt;u64, Box&lt;dyn Error&gt;&gt;\n}\n\nand\n\npub trait WriterTo {\n    fn write_to(&amp;self, w: &amp;mut dyn io::Write) -&gt; Result&lt;u64, Box&lt;dyn Error&gt;&gt;;\n}\n\nand\n\n...",
+    "lang": "en",
+    "in_reply_to_screen_name": "workingjubilee",
+    "in_reply_to_user_id_str": "1107835175411421184"
+  }
+}

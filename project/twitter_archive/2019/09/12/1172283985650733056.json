@@ -1,0 +1,124 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1172283985650733056"
+        ],
+        "editableUntil": "2019-09-13T00:00:56.819Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/N4bZFepDoE",
+          "expanded_url": "https://github.com/microsoft/TypeScript/issues/28102#issuecomment-506263992",
+          "display_url": "github.com/microsoft/Type…",
+          "indices": [
+            "70",
+            "93"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1172283985650733056/photo/1",
+          "indices": [
+            "94",
+            "117"
+          ],
+          "url": "https://t.co/zECeyTIaFs",
+          "media_url": "http://pbs.twimg.com/media/EETKEi_X4AAUwba.png",
+          "id_str": "1172283982484070400",
+          "id": "1172283982484070400",
+          "media_url_https": "https://pbs.twimg.com/media/EETKEi_X4AAUwba.png",
+          "sizes": {
+            "small": {
+              "w": "675",
+              "h": "386",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "675",
+              "h": "386",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "675",
+              "h": "386",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/zECeyTIaFs"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "117"
+    ],
+    "favorite_count": "0",
+    "id_str": "1172283985650733056",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1172283985650733056",
+    "possibly_sensitive": false,
+    "created_at": "Thu Sep 12 23:00:56 +0000 2019",
+    "favorited": false,
+    "full_text": "thought id share this interesting typescript bug that just got closed https://t.co/N4bZFepDoE https://t.co/zECeyTIaFs",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1172283985650733056/photo/1",
+          "indices": [
+            "94",
+            "117"
+          ],
+          "url": "https://t.co/zECeyTIaFs",
+          "media_url": "http://pbs.twimg.com/media/EETKEi_X4AAUwba.png",
+          "id_str": "1172283982484070400",
+          "id": "1172283982484070400",
+          "media_url_https": "https://pbs.twimg.com/media/EETKEi_X4AAUwba.png",
+          "sizes": {
+            "small": {
+              "w": "675",
+              "h": "386",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "675",
+              "h": "386",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "675",
+              "h": "386",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/zECeyTIaFs"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1238928866942599168"
+        ],
+        "editableUntil": "2020-03-14T21:43:54.721Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ryan LeFevre",
+          "screen_name": "feve10",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "42142546",
+          "id": "42142546"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/feve10/status/1238304745116389376/video/1",
+          "source_status_id": "1238304745116389376",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/BmkQyNrmTU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1238304713038344192/pu/img/KdHCLzmN_3FecPPb.jpg",
+          "id_str": "1238304713038344192",
+          "source_user_id": "42142546",
+          "id": "1238304713038344192",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1238304713038344192/pu/img/KdHCLzmN_3FecPPb.jpg",
+          "source_user_id_str": "42142546",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1238304745116389376",
+          "display_url": "pic.twitter.com/BmkQyNrmTU"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "88"
+    ],
+    "favorite_count": "0",
+    "id_str": "1238928866942599168",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1238928866942599168",
+    "possibly_sensitive": false,
+    "created_at": "Sat Mar 14 20:43:54 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @feve10: This may be the only time this clip will be relevant https://t.co/BmkQyNrmTU",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/feve10/status/1238304745116389376/video/1",
+          "source_status_id": "1238304745116389376",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/BmkQyNrmTU",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1238304713038344192/pu/img/KdHCLzmN_3FecPPb.jpg",
+          "id_str": "1238304713038344192",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "9443",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1238304713038344192/pu/vid/640x360/5MSzeUl0PW4im6ZG.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1238304713038344192/pu/vid/480x270/PH1O9urTvtYEIZZm.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1238304713038344192/pu/pl/7gBlApPlAu9AV1l0.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "42142546",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1238304713038344192",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1238304713038344192/pu/img/KdHCLzmN_3FecPPb.jpg",
+          "source_user_id_str": "42142546",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1238304745116389376",
+          "display_url": "pic.twitter.com/BmkQyNrmTU"
+        }
+      ]
+    }
+  }
+}

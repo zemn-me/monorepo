@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: oapi-codegen compatibility
+  version: 1.0.0
+actions:
+  # oapi-codegen emits the nested nullable(string-or-array) union as an
+  # anonymous struct without union unmarshalling methods. Preserve the exact
+  # API value as raw JSON so either valid variant can be decoded when needed.
+  - target: $.components.schemas.Response.allOf[2].properties.instructions
+    update:
+      x-go-type: json.RawMessage
+      x-go-type-import:
+        path: encoding/json
+        name: json
+  - target: $.components.schemas.BetaResponse.allOf[2].properties.instructions
+    update:
+      x-go-type: json.RawMessage
+      x-go-type-import:
+        path: encoding/json
+        name: json
+  # oapi-codegen cannot map discriminators whose variants are inline allOf or
+  # nested oneOf schemas. Removing only the discriminator retains each union
+  # and all of its generated variants.
+  - target: $.components.schemas.BetaResponsesServerEvent.discriminator
+    remove: true
+  - target: $.components.schemas.ResponsesServerEvent.discriminator
+    remove: true
+  - target: $.components.schemas.RealtimeTurnDetection.anyOf[0].discriminator
+    remove: true

@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1093262354094030848"
+        ],
+        "editableUntil": "2019-02-06T22:37:11.705Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/VaFdCpcgOK",
+          "expanded_url": "https://twitter.com/wugeej/status/1090028823280644096",
+          "display_url": "twitter.com/wugeej/status/…",
+          "indices": [
+            "99",
+            "122"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "38",
+    "id_str": "1093262354094030848",
+    "truncated": false,
+    "retweet_count": "8",
+    "id": "1093262354094030848",
+    "possibly_sensitive": false,
+    "created_at": "Wed Feb 06 21:37:11 +0000 2019",
+    "favorited": false,
+    "full_text": "turns out that alternate RCE path I used with steam affects chrome as a whole, and it's fixed now: https://t.co/VaFdCpcgOK",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1358174221537587200"
+        ],
+        "editableUntil": "2021-02-06T23:02:22.728Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "d0nut 🦀",
+          "screen_name": "d0nutptr",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "2215109990",
+          "id": "2215109990"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "130"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1358173838241132546",
+    "id_str": "1358174221537587200",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1358174221537587200",
+    "in_reply_to_status_id": "1358173838241132546",
+    "created_at": "Sat Feb 06 22:02:22 +0000 2021",
+    "favorited": false,
+    "full_text": "@d0nutptr I'm writing a parser, and ideally I want each AST node to be writable, but not consumed upon writing if that makes sense",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1532782806799044609"
+        ],
+        "editableUntil": "2022-06-03T18:24:33.525Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jake Kanter",
+          "screen_name": "Jake_Kanter",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "25998415",
+          "id": "25998415"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SkyNews/status/1532708007263477763/video/1",
+          "source_status_id": "1532708007263477763",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/6z0WjUO2wn",
+          "media_url": "http://pbs.twimg.com/media/FcKqBvpX0AscFF2.jpg",
+          "id_str": "1532703345579786241",
+          "source_user_id": "7587032",
+          "id": "1532703345579786241",
+          "media_url_https": "https://pbs.twimg.com/media/FcKqBvpX0AscFF2.jpg",
+          "source_user_id_str": "7587032",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1532708007263477763",
+          "display_url": "pic.twitter.com/6z0WjUO2wn"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1532782806799044609",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1532782806799044609",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 03 17:54:33 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @Jake_Kanter: On a weekend of Queen anecdotes, this won't be matched. Just lovely. https://t.co/6z0WjUO2wn",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SkyNews/status/1532708007263477763/video/1",
+          "source_status_id": "1532708007263477763",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/6z0WjUO2wn",
+          "media_url": "http://pbs.twimg.com/media/FcKqBvpX0AscFF2.jpg",
+          "id_str": "1532703345579786241",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "88920",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1532703345579786241/pl/IrnFn3-lE81VWALe.m3u8?tag=14&v=da1"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1532703345579786241/vid/480x852/FdZ6cl5l2XvLKOZH.mp4?tag=14"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1532703345579786241/vid/720x1280/vcKCbPG_z8fjtGr8.mp4?tag=14"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1532703345579786241/vid/320x568/xQlETodOfBxiZ-QN.mp4?tag=14"
+              }
+            ]
+          },
+          "source_user_id": "7587032",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1532703345579786241",
+          "media_url_https": "https://pbs.twimg.com/media/FcKqBvpX0AscFF2.jpg",
+          "source_user_id_str": "7587032",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1532708007263477763",
+          "display_url": "pic.twitter.com/6z0WjUO2wn"
+        }
+      ]
+    }
+  }
+}

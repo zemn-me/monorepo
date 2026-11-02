@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
@@ -15,13 +16,13 @@ ts_project(
         "//:node_modules/mime",
         "//ts",
         "//ts/github/actions",
-        "//ts/pulumi:pulumi_ts",
+        "//ts/pulumi",
     ],
 )
 
 alias(
     name = "postupgrade",
-    actual = "@@//py/ci/postUpgrade:postUpgrade_bin",
+    actual = "@@//py/ci/post_upgrade:post_upgrade_bin",
 )
 
 jest_test(
@@ -34,10 +35,12 @@ js_binary(
     name = "presubmit",
     data = [
         ":ci",
+        "//ci/bazel_bep:bep_annotator",
         "//sh/bin:go",
     ],
     entry_point = "presubmit.js",
     env = {
+        "BAZEL_BEP_ANNOTATOR": "$(rlocationpath //ci/bazel_bep:bep_annotator)",
         "GO_BINARY_LOCATION": "$(rlocationpath //sh/bin:go)",
     },
 )
@@ -47,8 +50,6 @@ js_binary(
     data = [
         ":ci",
         "//VERSION",
-        "//project/ck3/recursive-vassals:mod_zip",
-        "//project/ck3/recursive-vassals:patch",
     ],
     entry_point = "postsubmit.js",
 )
@@ -58,8 +59,6 @@ js_binary(
     data = [
         ":ci",
         "//VERSION",
-        "//project/ck3/recursive-vassals:mod_zip",
-        "//project/ck3/recursive-vassals:patch",
     ],
     entry_point = "submit.js",
 )
@@ -73,4 +72,11 @@ js_binary(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["README.md"],
+    refs = ["//.github/workflows:presubmit.yml"],
+    visibility = ["//:__subpackages__"],
 )

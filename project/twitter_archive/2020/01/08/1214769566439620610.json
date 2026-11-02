@@ -1,0 +1,154 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1214769566439620610"
+        ],
+        "editableUntil": "2020-01-08T05:43:28.623Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1214623557881384962/video/1",
+          "source_status_id": "1214623557881384962",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/eXsDm7wZKC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214623533424414720/pu/img/Uf8Sb9PqYkjrTLDB.jpg",
+          "id_str": "1214623533424414720",
+          "source_user_id": "2275883743",
+          "id": "1214623533424414720",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214623533424414720/pu/img/Uf8Sb9PqYkjrTLDB.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "small": {
+              "w": "264",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "264",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "264",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1214623557881384962",
+          "display_url": "pic.twitter.com/eXsDm7wZKC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "63"
+    ],
+    "favorite_count": "0",
+    "id_str": "1214769566439620610",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1214769566439620610",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 08 04:43:28 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Sea legs of the day. https://t.co/eXsDm7wZKC",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1214623557881384962/video/1",
+          "source_status_id": "1214623557881384962",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/eXsDm7wZKC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1214623533424414720/pu/img/Uf8Sb9PqYkjrTLDB.jpg",
+          "id_str": "1214623533424414720",
+          "video_info": {
+            "aspect_ratio": [
+              "11",
+              "20"
+            ],
+            "duration_millis": "15034",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1214623533424414720/pu/vid/264x480/BaTp2UV0wG6_6iFy.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1214623533424414720/pu/pl/tY2Q4g60yqdey-QY.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1214623533424414720",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1214623533424414720/pu/img/Uf8Sb9PqYkjrTLDB.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "small": {
+              "w": "264",
+              "h": "480",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "264",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "264",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1214623557881384962",
+          "display_url": "pic.twitter.com/eXsDm7wZKC"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1233515095235407873"
+        ],
+        "editableUntil": "2020-02-28T23:11:30.963Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Insider Food",
+          "screen_name": "insiderfood",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "4805771380",
+          "id": "4805771380"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/InsiderFood/status/1232208376513298433/video/1",
+          "source_status_id": "1232208376513298433",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/bH9XZDdF3a",
+          "media_url": "http://pbs.twimg.com/media/GcMPYIKXwAABpl6.jpg",
+          "id_str": "1231976009995636737",
+          "source_user_id": "4805771380",
+          "id": "1231976009995636737",
+          "media_url_https": "https://pbs.twimg.com/media/GcMPYIKXwAABpl6.jpg",
+          "source_user_id_str": "4805771380",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1232208376513298433",
+          "display_url": "pic.twitter.com/bH9XZDdF3a"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "126"
+    ],
+    "favorite_count": "0",
+    "id_str": "1233515095235407873",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1233515095235407873",
+    "possibly_sensitive": false,
+    "created_at": "Fri Feb 28 22:11:30 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @InsiderFood: Italian-Cockney café E. Pellicci serves the most iconic English breakfast in London 🍳 https://t.co/bH9XZDdF3a",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/InsiderFood/status/1232208376513298433/video/1",
+          "source_status_id": "1232208376513298433",
+          "indices": [
+            "103",
+            "126"
+          ],
+          "url": "https://t.co/bH9XZDdF3a",
+          "media_url": "http://pbs.twimg.com/media/GcMPYIKXwAABpl6.jpg",
+          "id_str": "1231976009995636737",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "482857",
+            "variants": [
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1231976009995636737/vid/720x720/w0WOAKtJ6eG8ecf4.mp4?tag=13"
+              },
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1231976009995636737/vid/320x320/EQJ_RcNmRtHFR7cW.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1231976009995636737/pl/SiDWyoHnqwwivLkI.m3u8?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1231976009995636737/vid/480x480/pkFbnwo25R15AEV-.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "4805771380",
+          "additional_media_info": {
+            "title": "Why E. Pellicci serves the most iconic English breakfast in London",
+            "description": "E. Pellicci in Bethnal Green Road in East London has been serving a legendary English Breakfast since 1900. Here's what it's like to eat there.",
+            "call_to_actions": {
+              "watch_now": {
+                "url": "https://www.insider.com"
+              }
+            },
+            "monetizable": true
+          },
+          "id": "1231976009995636737",
+          "media_url_https": "https://pbs.twimg.com/media/GcMPYIKXwAABpl6.jpg",
+          "source_user_id_str": "4805771380",
+          "sizes": {
+            "medium": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1232208376513298433",
+          "display_url": "pic.twitter.com/bH9XZDdF3a"
+        }
+      ]
+    }
+  }
+}

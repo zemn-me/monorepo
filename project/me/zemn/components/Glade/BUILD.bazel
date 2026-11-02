@@ -1,0 +1,98 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "Glade",
+    srcs = [
+        "glade.tsx",
+        "heraldic_shield.tsx",
+        "menu.tsx",
+    ],
+    assets = [
+        "menu.module.css",
+        "style.module.css",
+    ],
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        ":menu_module_css",
+        ":style_module_css",
+        "//:node_modules/@fortawesome/free-solid-svg-icons",
+        "//:node_modules/@fortawesome/react-fontawesome",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//:node_modules/react-router",
+        "//:node_modules/react-spring",
+        "//project/me/zemn/bio",
+        "//project/me/zemn/components/DividerHeading",
+        "//project/me/zemn/components/HeroVideo",
+        "//project/me/zemn/components/InlineLogin",
+        "//project/me/zemn/components/Link",
+        "//project/me/zemn/components/TimeEye",
+        "//project/me/zemn/components/ZemnmezLogo",
+        "//project/me/zemn/hook",
+        "//project/me/zemn/navigation",
+        "//ts/constants",
+        "//ts/react/lang",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "glade.tsx",
+        "glade_test.tsx",
+        "heraldic_shield.tsx",
+        "menu.tsx",
+        "menu_test.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "Glade_tests",
+    srcs = [
+        "glade_test.tsx",
+        "menu_test.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":Glade",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@react-spring/rafz",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = [
+        "glade_test.js",
+        "menu_test.js",
+    ],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":Glade_tests"],
+)
+
+css_module(
+    name = "menu_module_css",
+    src = "menu.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)

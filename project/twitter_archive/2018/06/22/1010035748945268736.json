@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1010035748945268736"
+        ],
+        "editableUntil": "2018-06-22T06:44:22.762Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1010035748945268736",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1010035748945268736",
+    "created_at": "Fri Jun 22 05:44:22 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @kinugawamasato: 対策前のコードではこの後XHRのURLに使っていて、hashにtoStringが与えられたとすれば、\"/4h/function toString() { [native code] }\" というパスにXHRすることになるはず。そのレスポン…",
+    "lang": "ja"
+  }
+}

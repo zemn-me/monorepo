@@ -1,0 +1,165 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1031275238497996800"
+        ],
+        "editableUntil": "2018-08-19T21:22:31.682Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Kevin",
+          "screen_name": "rohk_infosec",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "714975830917517312",
+          "id": "714975830917517312"
+        },
+        {
+          "name": "HackerOne",
+          "screen_name": "Hacker0x01",
+          "indices": [
+            "38",
+            "49"
+          ],
+          "id_str": "2177038028",
+          "id": "2177038028"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/rohk_infosec/status/1031065603698647040/photo/1",
+          "source_status_id": "1031065603698647040",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/voar4JBjzG",
+          "media_url": "http://pbs.twimg.com/media/Dk8UsoRVsAICART.jpg",
+          "id_str": "1031065596648075266",
+          "source_user_id": "714975830917517312",
+          "id": "1031065596648075266",
+          "media_url_https": "https://pbs.twimg.com/media/Dk8UsoRVsAICART.jpg",
+          "source_user_id_str": "714975830917517312",
+          "sizes": {
+            "large": {
+              "w": "1536",
+              "h": "2048",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "510",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "900",
+              "h": "1200",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1031065603698647040",
+          "display_url": "pic.twitter.com/voar4JBjzG"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "h1702",
+          "indices": [
+            "50",
+            "56"
+          ]
+        },
+        {
+          "text": "h17022018",
+          "indices": [
+            "57",
+            "67"
+          ]
+        },
+        {
+          "text": "bugbounty",
+          "indices": [
+            "68",
+            "78"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "102"
+    ],
+    "favorite_count": "0",
+    "id_str": "1031275238497996800",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1031275238497996800",
+    "possibly_sensitive": false,
+    "created_at": "Sun Aug 19 20:22:31 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @rohk_infosec: Framed and mounted. @Hacker0x01 #h1702 #h17022018 #bugbounty https://t.co/voar4JBjzG",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/rohk_infosec/status/1031065603698647040/photo/1",
+          "source_status_id": "1031065603698647040",
+          "indices": [
+            "79",
+            "102"
+          ],
+          "url": "https://t.co/voar4JBjzG",
+          "media_url": "http://pbs.twimg.com/media/Dk8UsoRVsAICART.jpg",
+          "id_str": "1031065596648075266",
+          "source_user_id": "714975830917517312",
+          "id": "1031065596648075266",
+          "media_url_https": "https://pbs.twimg.com/media/Dk8UsoRVsAICART.jpg",
+          "source_user_id_str": "714975830917517312",
+          "sizes": {
+            "large": {
+              "w": "1536",
+              "h": "2048",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "510",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "900",
+              "h": "1200",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1031065603698647040",
+          "display_url": "pic.twitter.com/voar4JBjzG"
+        }
+      ]
+    }
+  }
+}

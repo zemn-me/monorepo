@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1522655589737795584"
+        ],
+        "editableUntil": "2022-05-06T19:42:36.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "8",
+    "id_str": "1522655589737795584",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1522655589737795584",
+    "created_at": "Fri May 06 19:12:36 +0000 2022",
+    "favorited": false,
+    "full_text": "some fun vscode security tidbits:\n\ndid you know VSCode invented its own javascript: uri injection? Actual XSS is hard to come by in VS Code, but the internal protocol command: is pretty much ACE, and can launch and run programs on your computer. it also works as a data-href attr!",
+    "lang": "en"
+  }
+}

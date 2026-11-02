@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1067778055119212546"
+        ],
+        "editableUntil": "2018-11-28T14:51:41.354Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "hello",
+          "screen_name": "KardOnIce",
+          "indices": [
+            "0",
+            "10"
+          ],
+          "id_str": "4838839944",
+          "id": "4838839944"
+        },
+        {
+          "name": "Fake “Unicode.” 🩵🆓",
+          "screen_name": "FakeUnicode",
+          "indices": [
+            "11",
+            "23"
+          ],
+          "id_str": "2183231114",
+          "id": "2183231114"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "307"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1067769685511454720",
+    "id_str": "1067778055119212546",
+    "in_reply_to_user_id": "4838839944",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1067778055119212546",
+    "in_reply_to_status_id": "1067769685511454720",
+    "created_at": "Wed Nov 28 13:51:41 +0000 2018",
+    "favorited": false,
+    "full_text": "@KardOnIce @FakeUnicode &gt; strings are dumb bytes unless they contain Unicode data\nstrings are bytes *defined* to be containing UTF-8 data. You can put whatever you want in a string. If it's characters, it's UTF-8\n&gt; simple [...] allow you to cast [...] a rune numeric value\na rune *is* a numeric value?",
+    "lang": "en",
+    "in_reply_to_screen_name": "KardOnIce",
+    "in_reply_to_user_id_str": "4838839944"
+  }
+}

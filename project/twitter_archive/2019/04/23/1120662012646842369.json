@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1120662012646842369"
+        ],
+        "editableUntil": "2019-04-23T13:13:39.365Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "sak’s rkive 📂",
+          "screen_name": "glosstradamus",
+          "indices": [
+            "0",
+            "14"
+          ],
+          "id_str": "1393406249748688897",
+          "id": "1393406249748688897"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "293"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1120661490762121216",
+    "id_str": "1120662012646842369",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1120662012646842369",
+    "in_reply_to_status_id": "1120661490762121216",
+    "created_at": "Tue Apr 23 12:13:39 +0000 2019",
+    "favorited": false,
+    "full_text": "@glosstradamus if we use the browser's own url parser via `new URL` or `HTMLAnchorElement.scheme`, we get a url parse that is a direct reflection of how the browser will interpret it, so it's nigh impossible that the parser itself will allow your controls to be bypassed by getting messed with",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

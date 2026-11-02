@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1466101856556388356"
+        ],
+        "editableUntil": "2021-12-01T18:48:16.115Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/jWUwFRTf5D",
+          "expanded_url": "https://github.com/ConsenSys/eth-lightwallet",
+          "display_url": "github.com/ConsenSys/eth-…",
+          "indices": [
+            "136",
+            "159"
+          ]
+        },
+        {
+          "url": "https://t.co/2Z8V7hqZdJ",
+          "expanded_url": "https://twitter.com/lithdew/status/1465972660798513161",
+          "display_url": "twitter.com/lithdew/status…",
+          "indices": [
+            "279",
+            "302"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "302"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1465961883207225346",
+    "id_str": "1466101856556388356",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1466101856556388356",
+    "in_reply_to_status_id": "1465961883207225346",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 01 17:48:16 +0000 2021",
+    "favorited": false,
+    "full_text": "I’m told subkeying exists in eth (or, kinda exists) in this standard ‘BIP-32’ which is used by a couple of wallets, including metamask: https://t.co/jWUwFRTf5D\n\nThis is functionally a way to create a lot of child keys from a parent key – but doesn’t support revoke or expiration https://t.co/2Z8V7hqZdJ",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1345638427778170881"
+        ],
+        "editableUntil": "2021-01-03T08:49:36.592Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Scratch.",
+          "screen_name": "Scrxtchy",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "28358379",
+          "id": "28358379"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1345638427778170881/photo/1",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/Dbw7IJafWT",
+          "media_url": "http://pbs.twimg.com/media/EqyrBDUXYAA8dlc.png",
+          "id_str": "1345638423235878912",
+          "id": "1345638423235878912",
+          "media_url_https": "https://pbs.twimg.com/media/EqyrBDUXYAA8dlc.png",
+          "sizes": {
+            "thumb": {
+              "w": "87",
+              "h": "87",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "708",
+              "h": "87",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "708",
+              "h": "87",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "84",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/Dbw7IJafWT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "101"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1345637953897304064",
+    "id_str": "1345638427778170881",
+    "in_reply_to_user_id": "28358379",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1345638427778170881",
+    "in_reply_to_status_id": "1345637953897304064",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jan 03 07:49:36 +0000 2021",
+    "favorited": false,
+    "full_text": "@Scrxtchy kinda funny because websockets have their own ping / pong heartbeat https://t.co/Dbw7IJafWT",
+    "lang": "en",
+    "in_reply_to_screen_name": "Scrxtchy",
+    "in_reply_to_user_id_str": "28358379",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1345638427778170881/photo/1",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/Dbw7IJafWT",
+          "media_url": "http://pbs.twimg.com/media/EqyrBDUXYAA8dlc.png",
+          "id_str": "1345638423235878912",
+          "id": "1345638423235878912",
+          "media_url_https": "https://pbs.twimg.com/media/EqyrBDUXYAA8dlc.png",
+          "sizes": {
+            "thumb": {
+              "w": "87",
+              "h": "87",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "708",
+              "h": "87",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "708",
+              "h": "87",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "84",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/Dbw7IJafWT"
+        }
+      ]
+    }
+  }
+}

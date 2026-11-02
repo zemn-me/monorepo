@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1141655467535622145"
+        ],
+        "editableUntil": "2019-06-20T11:34:09.050Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ellingson",
+          "screen_name": "ellingson",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "4828",
+          "id": "4828"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ellingson/status/1141142015779864576/video/1",
+          "source_status_id": "1141142015779864576",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/YHDiUiGXD6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1141141819951943680/pu/img/0_l1-JeroIcoJ7E5.jpg",
+          "id_str": "1141141819951943680",
+          "source_user_id": "4828",
+          "id": "1141141819951943680",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1141141819951943680/pu/img/0_l1-JeroIcoJ7E5.jpg",
+          "source_user_id_str": "4828",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1141142015779864576",
+          "display_url": "pic.twitter.com/YHDiUiGXD6"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "88"
+    ],
+    "favorite_count": "0",
+    "id_str": "1141655467535622145",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1141655467535622145",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jun 20 10:34:09 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @ellingson: I plugged my black and white tv into an old Roku. https://t.co/YHDiUiGXD6",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ellingson/status/1141142015779864576/video/1",
+          "source_status_id": "1141142015779864576",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/YHDiUiGXD6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1141141819951943680/pu/img/0_l1-JeroIcoJ7E5.jpg",
+          "id_str": "1141141819951943680",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "53778",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1141141819951943680/pu/vid/320x320/8h1BUMFqgkWELlI3.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1141141819951943680/pu/pl/KMSWRgdMvbrf-f7-.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1141141819951943680/pu/vid/480x480/xycRRfSWYEVqumo-.mp4?tag=10"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1141141819951943680/pu/vid/720x720/YJ3RFO2YwtJoHnU2.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "4828",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1141141819951943680",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1141141819951943680/pu/img/0_l1-JeroIcoJ7E5.jpg",
+          "source_user_id_str": "4828",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1141142015779864576",
+          "display_url": "pic.twitter.com/YHDiUiGXD6"
+        }
+      ]
+    }
+  }
+}

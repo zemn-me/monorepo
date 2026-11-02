@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1222562013387247616"
+        ],
+        "editableUntil": "2020-01-29T17:47:52.752Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "seanatar",
+          "screen_name": "Seanatar",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "710997730496110592",
+          "id": "710997730496110592"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Seanatar/status/1222332190287155203/video/1",
+          "source_status_id": "1222332190287155203",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/1UVEIu108K",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1222332093579120640/pu/img/P6doEF9kChtpMDCL.jpg",
+          "id_str": "1222332093579120640",
+          "source_user_id": "710997730496110592",
+          "id": "1222332093579120640",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1222332093579120640/pu/img/P6doEF9kChtpMDCL.jpg",
+          "source_user_id_str": "710997730496110592",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1222332190287155203",
+          "display_url": "pic.twitter.com/1UVEIu108K"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "44"
+    ],
+    "favorite_count": "0",
+    "id_str": "1222562013387247616",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1222562013387247616",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jan 29 16:47:52 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @Seanatar: oh god https://t.co/1UVEIu108K",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Seanatar/status/1222332190287155203/video/1",
+          "source_status_id": "1222332190287155203",
+          "indices": [
+            "21",
+            "44"
+          ],
+          "url": "https://t.co/1UVEIu108K",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1222332093579120640/pu/img/P6doEF9kChtpMDCL.jpg",
+          "id_str": "1222332093579120640",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "14767",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222332093579120640/pu/vid/640x360/8DlFlLe9iuDpkKVm.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222332093579120640/pu/vid/1280x720/wLk1xVxIPl5A30V-.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1222332093579120640/pu/pl/ikU3MnTGK7UGx3LP.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1222332093579120640/pu/vid/480x270/6ho2C8buNOYtw-H9.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "710997730496110592",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1222332093579120640",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1222332093579120640/pu/img/P6doEF9kChtpMDCL.jpg",
+          "source_user_id_str": "710997730496110592",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1222332190287155203",
+          "display_url": "pic.twitter.com/1UVEIu108K"
+        }
+      ]
+    }
+  }
+}

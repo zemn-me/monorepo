@@ -1,0 +1,55 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1808119173517828555"
+        ],
+        "editableUntil": "2024-07-02T13:42:58.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/5wGJ72r0M2",
+          "expanded_url": "https://github.com/prettier/prettier/pull/14627",
+          "display_url": "github.com/prettier/prett…",
+          "indices": [
+            "102",
+            "125"
+          ]
+        },
+        {
+          "url": "https://t.co/BWCrMuG7Xg",
+          "expanded_url": "https://github.com/prettier/prettier/pull/15533",
+          "display_url": "github.com/prettier/prett…",
+          "indices": [
+            "244",
+            "267"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "267"
+    ],
+    "favorite_count": "1",
+    "id_str": "1808119173517828555",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1808119173517828555",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jul 02 12:42:58 +0000 2024",
+    "favorited": false,
+    "full_text": "bro what is going on at Prettier:\n* had some issues with symlink cycles, made *any* symlink an error: https://t.co/5wGJ72r0M2\n* breaks people's CI, functionality changed to *invisibly fail* if a symlink is encountered unless not part of a glob https://t.co/BWCrMuG7Xg",
+    "lang": "en"
+  }
+}

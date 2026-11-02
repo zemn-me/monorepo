@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1273355451116204033"
+        ],
+        "editableUntil": "2020-06-17T21:42:52.003Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jesse",
+          "screen_name": "MuskTillDawn",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "20087000",
+          "id": "20087000"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MuskTillDawn/status/1272968269025226752/video/1",
+          "source_status_id": "1272968269025226752",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/FyR1K1EyuF",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1272968243066568705/pu/img/z8o3e6zOZfBiUAF2.jpg",
+          "id_str": "1272968243066568705",
+          "source_user_id": "20087000",
+          "id": "1272968243066568705",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1272968243066568705/pu/img/z8o3e6zOZfBiUAF2.jpg",
+          "source_user_id_str": "20087000",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1272968269025226752",
+          "display_url": "pic.twitter.com/FyR1K1EyuF"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "94"
+    ],
+    "favorite_count": "0",
+    "id_str": "1273355451116204033",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1273355451116204033",
+    "possibly_sensitive": false,
+    "created_at": "Wed Jun 17 20:42:52 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @MuskTillDawn: Hey I’m at a grocery store and what the fuck is this https://t.co/FyR1K1EyuF",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MuskTillDawn/status/1272968269025226752/video/1",
+          "source_status_id": "1272968269025226752",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/FyR1K1EyuF",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1272968243066568705/pu/img/z8o3e6zOZfBiUAF2.jpg",
+          "id_str": "1272968243066568705",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "4003",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1272968243066568705/pu/vid/360x640/PTD4Fx_M64ey7rDI.mp4?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1272968243066568705/pu/vid/320x568/2kUpemkrBEAs3G7M.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1272968243066568705/pu/pl/qmF4Ce27qKpfAp7k.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1272968243066568705/pu/vid/720x1280/HDuuIaYkK9nOV60B.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "20087000",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1272968243066568705",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1272968243066568705/pu/img/z8o3e6zOZfBiUAF2.jpg",
+          "source_user_id_str": "20087000",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1272968269025226752",
+          "display_url": "pic.twitter.com/FyR1K1EyuF"
+        }
+      ]
+    }
+  }
+}

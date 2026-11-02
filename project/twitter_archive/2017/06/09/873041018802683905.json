@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "873041018802683905"
+        ],
+        "editableUntil": "2017-06-09T05:56:13.857Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "danhewittsky",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/danhewittsky/status/872985973709295617/video/1",
+          "source_status_id": "872985973709295617",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/XyIE5oYt7H",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/872985922681401344/pu/img/Y_B_DfWGNlusV7jz.jpg",
+          "id_str": "872985922681401344",
+          "source_user_id": "112819661",
+          "id": "872985922681401344",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/872985922681401344/pu/img/Y_B_DfWGNlusV7jz.jpg",
+          "source_user_id_str": "112819661",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "872985973709295617",
+          "display_url": "pic.twitter.com/XyIE5oYt7H"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "873041018802683905",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "873041018802683905",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jun 09 04:56:13 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @danhewittsky: Worst high 5 of all time...? https://t.co/XyIE5oYt7H",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/danhewittsky/status/872985973709295617/video/1",
+          "source_status_id": "872985973709295617",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/XyIE5oYt7H",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/872985922681401344/pu/img/Y_B_DfWGNlusV7jz.jpg",
+          "id_str": "872985922681401344",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "3268",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/872985922681401344/pu/pl/eXG0f3-4FnK0wHRb.m3u8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/872985922681401344/pu/vid/640x360/gTWdzzmUrEOX-zPm.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/872985922681401344/pu/vid/320x180/b_R--ACFNe9ScnQH.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/872985922681401344/pu/vid/1280x720/wBo4Ox3MTrakxhq3.mp4"
+              }
+            ]
+          },
+          "source_user_id": "112819661",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "872985922681401344",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/872985922681401344/pu/img/Y_B_DfWGNlusV7jz.jpg",
+          "source_user_id_str": "112819661",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "872985973709295617",
+          "display_url": "pic.twitter.com/XyIE5oYt7H"
+        }
+      ]
+    }
+  }
+}

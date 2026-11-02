@@ -1,0 +1,114 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1847180755291853069"
+        ],
+        "editableUntil": "2024-10-18T08:39:45.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1847180755291853069/photo/1",
+          "indices": [
+            "138",
+            "161"
+          ],
+          "url": "https://t.co/PRNNJbdtsa",
+          "media_url": "http://pbs.twimg.com/media/GaKBG4QacAAiwdS.png",
+          "id_str": "1847180752355749888",
+          "id": "1847180752355749888",
+          "media_url_https": "https://pbs.twimg.com/media/GaKBG4QacAAiwdS.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "472",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "931",
+              "h": "646",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "931",
+              "h": "646",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/PRNNJbdtsa"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "161"
+    ],
+    "favorite_count": "3",
+    "id_str": "1847180755291853069",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1847180755291853069",
+    "possibly_sensitive": false,
+    "created_at": "Fri Oct 18 07:39:45 +0000 2024",
+    "favorited": false,
+    "full_text": "the golang openapi spec type generator generated a bunch of anonymous felds and this is the only way to instantiate them i'm goign to cry https://t.co/PRNNJbdtsa",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1847180755291853069/photo/1",
+          "indices": [
+            "138",
+            "161"
+          ],
+          "url": "https://t.co/PRNNJbdtsa",
+          "media_url": "http://pbs.twimg.com/media/GaKBG4QacAAiwdS.png",
+          "id_str": "1847180752355749888",
+          "id": "1847180752355749888",
+          "media_url_https": "https://pbs.twimg.com/media/GaKBG4QacAAiwdS.png",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "472",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "931",
+              "h": "646",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "931",
+              "h": "646",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/PRNNJbdtsa"
+        }
+      ]
+    }
+  }
+}

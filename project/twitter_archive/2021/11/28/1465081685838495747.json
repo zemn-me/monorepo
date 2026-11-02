@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1465081685838495747"
+        ],
+        "editableUntil": "2021-11-28T23:14:28.462Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lynn (finally free)",
+          "screen_name": "chordbug",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "807585861965664257",
+          "id": "807585861965664257"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chordbug/status/1465081335589048330/video/1",
+          "source_status_id": "1465081335589048330",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/I6pjSOCRWv",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1465080792846147589/pu/img/7OB41RhiDtTVGHoq.jpg",
+          "id_str": "1465080792846147589",
+          "source_user_id": "807585861965664257",
+          "id": "1465080792846147589",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1465080792846147589/pu/img/7OB41RhiDtTVGHoq.jpg",
+          "source_user_id_str": "807585861965664257",
+          "sizes": {
+            "large": {
+              "w": "1460",
+              "h": "526",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "432",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "245",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1465081335589048330",
+          "display_url": "pic.twitter.com/I6pjSOCRWv"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "96"
+    ],
+    "favorite_count": "0",
+    "id_str": "1465081685838495747",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1465081685838495747",
+    "possibly_sensitive": false,
+    "created_at": "Sun Nov 28 22:14:28 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @chordbug: this is how I align stuff using multiple cursors in vscode https://t.co/I6pjSOCRWv",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/chordbug/status/1465081335589048330/video/1",
+          "source_status_id": "1465081335589048330",
+          "indices": [
+            "73",
+            "96"
+          ],
+          "url": "https://t.co/I6pjSOCRWv",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1465080792846147589/pu/img/7OB41RhiDtTVGHoq.jpg",
+          "id_str": "1465080792846147589",
+          "video_info": {
+            "aspect_ratio": [
+              "730",
+              "263"
+            ],
+            "duration_millis": "11616",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1465080792846147589/pu/vid/998x360/xN-UcYV8CenoQTTi.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1465080792846147589/pu/pl/eOcqJLLJc0-0sR7s.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1465080792846147589/pu/vid/1460x526/xrbmSvytlUa58nLS.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1465080792846147589/pu/vid/748x270/JM80Ii46GAXTNJ8W.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "807585861965664257",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1465080792846147589",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1465080792846147589/pu/img/7OB41RhiDtTVGHoq.jpg",
+          "source_user_id_str": "807585861965664257",
+          "sizes": {
+            "large": {
+              "w": "1460",
+              "h": "526",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "432",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "245",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1465081335589048330",
+          "display_url": "pic.twitter.com/I6pjSOCRWv"
+        }
+      ]
+    }
+  }
+}

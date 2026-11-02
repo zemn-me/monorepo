@@ -1,0 +1,82 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1182011083718086658"
+        ],
+        "editableUntil": "2019-10-09T20:12:57.719Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Filippo Valsorda @filippo.abyssdomain.expert",
+          "screen_name": "FiloSottile",
+          "indices": [
+            "13",
+            "25"
+          ],
+          "id_str": "51049452",
+          "id": "51049452"
+        },
+        {
+          "name": "William (Bill) Kennedy",
+          "screen_name": "goinggodotnet",
+          "indices": [
+            "26",
+            "40"
+          ],
+          "id_str": "1681855874",
+          "id": "1681855874"
+        },
+        {
+          "name": "Jon Calhoun",
+          "screen_name": "joncalhoun",
+          "indices": [
+            "41",
+            "52"
+          ],
+          "id_str": "14943133",
+          "id": "14943133"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/5GqdJFOQqY",
+          "expanded_url": "https://golang.org/pkg/net/http/#Hijacker",
+          "display_url": "golang.org/pkg/net/http/#…",
+          "indices": [
+            "103",
+            "126"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "126"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1182010492283428864",
+    "id_str": "1182011083718086658",
+    "in_reply_to_user_id": "829159886",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1182011083718086658",
+    "in_reply_to_status_id": "1182010492283428864",
+    "possibly_sensitive": false,
+    "created_at": "Wed Oct 09 19:12:57 +0000 2019",
+    "favorited": false,
+    "full_text": "@aaronhnatiw @FiloSottile @goinggodotnet @joncalhoun you can use http.Hikacker to get the raw net.Conn https://t.co/5GqdJFOQqY",
+    "lang": "en",
+    "in_reply_to_screen_name": "TheHackerDev",
+    "in_reply_to_user_id_str": "829159886"
+  }
+}

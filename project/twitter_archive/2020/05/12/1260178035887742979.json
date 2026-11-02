@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1260178035887742979"
+        ],
+        "editableUntil": "2020-05-12T13:00:31.388Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Gators Daily 🐊",
+          "screen_name": "GatorsDaily",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "1185212394634727424",
+          "id": "1185212394634727424"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GatorsDaily/status/1259952291249086471/video/1",
+          "source_status_id": "1259952291249086471",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/7LBvbrjTCd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1259952192536141825/pu/img/BLy9IzB6I6wgQSSq.jpg",
+          "id_str": "1259952192536141825",
+          "source_user_id": "1185212394634727424",
+          "id": "1259952192536141825",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1259952192536141825/pu/img/BLy9IzB6I6wgQSSq.jpg",
+          "source_user_id_str": "1185212394634727424",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1259952291249086471",
+          "display_url": "pic.twitter.com/7LBvbrjTCd"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1260178035887742979",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1260178035887742979",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 12 12:00:31 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @GatorsDaily: Baby croco does nyom nyom and gets pets https://t.co/7LBvbrjTCd",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/GatorsDaily/status/1259952291249086471/video/1",
+          "source_status_id": "1259952291249086471",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/7LBvbrjTCd",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1259952192536141825/pu/img/BLy9IzB6I6wgQSSq.jpg",
+          "id_str": "1259952192536141825",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "30967",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1259952192536141825/pu/pl/c7YPfJydOwiWBaZO.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1259952192536141825/pu/vid/640x360/1m9VUo3adBrH9EI9.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1259952192536141825/pu/vid/480x270/Kk5iIYxDN0OacWbk.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1185212394634727424",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1259952192536141825",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1259952192536141825/pu/img/BLy9IzB6I6wgQSSq.jpg",
+          "source_user_id_str": "1185212394634727424",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1259952291249086471",
+          "display_url": "pic.twitter.com/7LBvbrjTCd"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "844561541286576128"
+        ],
+        "editableUntil": "2017-03-22T15:48:57.294Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Mike West",
+          "screen_name": "mikewest",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "63163",
+          "id": "63163"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/KAL3jtF6RN",
+          "expanded_url": "https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/",
+          "display_url": "html5rocks.com/en/tutorials/s…",
+          "indices": [
+            "21",
+            "44"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "137"
+    ],
+    "favorite_count": "0",
+    "id_str": "844561541286576128",
+    "in_reply_to_user_id": "63163",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "844561541286576128",
+    "possibly_sensitive": false,
+    "created_at": "Wed Mar 22 14:48:57 +0000 2017",
+    "favorited": false,
+    "full_text": "@mikewest I saw this https://t.co/KAL3jtF6RN which is awesome. What's your opinion on communicating sensitive data to a sandboxed iframe?",
+    "lang": "en",
+    "in_reply_to_screen_name": "mikewest",
+    "in_reply_to_user_id_str": "63163"
+  }
+}

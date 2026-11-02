@@ -1,0 +1,150 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1071028725737816070"
+        ],
+        "editableUntil": "2018-12-07T14:08:41.624Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1071028725737816070/photo/1",
+          "indices": [
+            "196",
+            "219"
+          ],
+          "url": "https://t.co/HjqjEtzj4l",
+          "media_url": "http://pbs.twimg.com/media/Dt0O3wTWsAE1tZA.jpg",
+          "id_str": "1071028637405720577",
+          "id": "1071028637405720577",
+          "media_url_https": "https://pbs.twimg.com/media/Dt0O3wTWsAE1tZA.jpg",
+          "sizes": {
+            "large": {
+              "w": "466",
+              "h": "173",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "466",
+              "h": "173",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "466",
+              "h": "173",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/HjqjEtzj4l"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "219"
+    ],
+    "favorite_count": "7",
+    "id_str": "1071028725737816070",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1071028725737816070",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 07 13:08:41 +0000 2018",
+    "favorited": false,
+    "full_text": "turns out different svg elements in the same html5 document can reference each other. kinda weird. the word 'hi' is trying to put itself inside the triangle that's in an entirely separate element https://t.co/HjqjEtzj4l",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1071028725737816070/photo/1",
+          "indices": [
+            "196",
+            "219"
+          ],
+          "url": "https://t.co/HjqjEtzj4l",
+          "media_url": "http://pbs.twimg.com/media/Dt0O3wTWsAE1tZA.jpg",
+          "id_str": "1071028637405720577",
+          "id": "1071028637405720577",
+          "media_url_https": "https://pbs.twimg.com/media/Dt0O3wTWsAE1tZA.jpg",
+          "sizes": {
+            "large": {
+              "w": "466",
+              "h": "173",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "466",
+              "h": "173",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "466",
+              "h": "173",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/HjqjEtzj4l"
+        },
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1071028725737816070/photo/1",
+          "indices": [
+            "196",
+            "219"
+          ],
+          "url": "https://t.co/HjqjEtzj4l",
+          "media_url": "http://pbs.twimg.com/media/Dt0O6MfWkAA_xVA.jpg",
+          "id_str": "1071028679331975168",
+          "id": "1071028679331975168",
+          "media_url_https": "https://pbs.twimg.com/media/Dt0O6MfWkAA_xVA.jpg",
+          "sizes": {
+            "medium": {
+              "w": "424",
+              "h": "200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "424",
+              "h": "200",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "424",
+              "h": "200",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/HjqjEtzj4l"
+        }
+      ]
+    }
+  }
+}

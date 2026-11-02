@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1562953796073861122"
+        ],
+        "editableUntil": "2022-08-26T00:33:17.918Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "heartymcfarty",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/heartymcfarty/status/1562496553503571968/video/1",
+          "source_status_id": "1562496553503571968",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/idK48jUReo",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1562496511489048576/pu/img/hrfIkBdu_zGv2qO0.jpg",
+          "id_str": "1562496511489048576",
+          "source_user_id": "1182417554314334211",
+          "id": "1562496511489048576",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1562496511489048576/pu/img/hrfIkBdu_zGv2qO0.jpg",
+          "source_user_id_str": "1182417554314334211",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1562496553503571968",
+          "display_url": "pic.twitter.com/idK48jUReo"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "73"
+    ],
+    "favorite_count": "0",
+    "id_str": "1562953796073861122",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1562953796073861122",
+    "possibly_sensitive": false,
+    "created_at": "Fri Aug 26 00:03:17 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @heartymcfarty: This made me smile so hard wtf https://t.co/idK48jUReo",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/heartymcfarty/status/1562496553503571968/video/1",
+          "source_status_id": "1562496553503571968",
+          "indices": [
+            "50",
+            "73"
+          ],
+          "url": "https://t.co/idK48jUReo",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1562496511489048576/pu/img/hrfIkBdu_zGv2qO0.jpg",
+          "id_str": "1562496511489048576",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "16633",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1562496511489048576/pu/vid/576x1024/seGkkrhZlR7i414C.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1562496511489048576/pu/vid/320x568/Saq15fG34ivVx4yJ.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1562496511489048576/pu/vid/480x852/8IcmYVRQj9ZUjqmh.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1562496511489048576/pu/pl/MYXGu7xeJkhgNG-a.m3u8?tag=12&v=28d"
+              }
+            ]
+          },
+          "source_user_id": "1182417554314334211",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1562496511489048576",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1562496511489048576/pu/img/hrfIkBdu_zGv2qO0.jpg",
+          "source_user_id_str": "1182417554314334211",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "576",
+              "h": "1024",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1562496553503571968",
+          "display_url": "pic.twitter.com/idK48jUReo"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1157830264732704772"
+        ],
+        "editableUntil": "2019-08-04T02:47:01.215Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "James",
+          "screen_name": "NitroRad",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "805861070",
+          "id": "805861070"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NitroRad/status/1157508968610242560/video/1",
+          "source_status_id": "1157508968610242560",
+          "indices": [
+            "85",
+            "108"
+          ],
+          "url": "https://t.co/TpB5kVXFSP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1157508331575136256/pu/img/u-er9xl_2romlDlb.jpg",
+          "id_str": "1157508331575136256",
+          "source_user_id": "805861070",
+          "id": "1157508331575136256",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1157508331575136256/pu/img/u-er9xl_2romlDlb.jpg",
+          "source_user_id_str": "805861070",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1157508968610242560",
+          "display_url": "pic.twitter.com/TpB5kVXFSP"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "108"
+    ],
+    "favorite_count": "0",
+    "id_str": "1157830264732704772",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1157830264732704772",
+    "possibly_sensitive": false,
+    "created_at": "Sun Aug 04 01:47:01 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @NitroRad: remember playstations super weird partnership with subway in like 2011 https://t.co/TpB5kVXFSP",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NitroRad/status/1157508968610242560/video/1",
+          "source_status_id": "1157508968610242560",
+          "indices": [
+            "85",
+            "108"
+          ],
+          "url": "https://t.co/TpB5kVXFSP",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1157508331575136256/pu/img/u-er9xl_2romlDlb.jpg",
+          "id_str": "1157508331575136256",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "3603",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1157508331575136256/pu/vid/480x270/R8sqV1myTeGh7L7E.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1157508331575136256/pu/vid/1280x720/z_JiUEItBcwbTdZS.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1157508331575136256/pu/vid/640x360/UeDvMkN0p6LdSJLY.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1157508331575136256/pu/pl/9STJTJa_-S88kOn8.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "805861070",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1157508331575136256",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1157508331575136256/pu/img/u-er9xl_2romlDlb.jpg",
+          "source_user_id_str": "805861070",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1157508968610242560",
+          "display_url": "pic.twitter.com/TpB5kVXFSP"
+        }
+      ]
+    }
+  }
+}

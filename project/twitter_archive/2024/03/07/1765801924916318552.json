@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1765801924916318552"
+        ],
+        "editableUntil": "2024-03-07T19:09:20.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/uOVK81dlsV",
+          "expanded_url": "https://openid.net/specs/fapi-grant-management.html",
+          "display_url": "openid.net/specs/fapi-gra…",
+          "indices": [
+            "214",
+            "237"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "237"
+    ],
+    "favorite_count": "2",
+    "id_str": "1765801924916318552",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1765801924916318552",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 07 18:09:20 +0000 2024",
+    "favorited": false,
+    "full_text": "found out today that when an OAuth integration remembers your previous grant and caches it, that's actually undefined behaviour in the core spec and until this doc was written was essentially a cultural convention https://t.co/uOVK81dlsV",
+    "lang": "en"
+  }
+}

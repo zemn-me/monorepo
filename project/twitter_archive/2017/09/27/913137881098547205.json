@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "913137881098547205"
+        ],
+        "editableUntil": "2017-09-27T21:26:50.792Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://about.twitter.com/products/tweetdeck\" rel=\"nofollow\">TweetDeck</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "mehedi",
+          "screen_name": "mehedih_",
+          "indices": [
+            "10",
+            "19"
+          ],
+          "id_str": "2337242269",
+          "id": "2337242269"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "210"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "913135463283789824",
+    "id_str": "913137881098547205",
+    "in_reply_to_user_id": "518219839",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "913137881098547205",
+    "in_reply_to_status_id": "913135463283789824",
+    "created_at": "Wed Sep 27 20:26:50 +0000 2017",
+    "favorited": false,
+    "full_text": "@Prockzed @mehedih_ my patched getTweetLength returns negative for tweets &lt;140 chrs to get the counter to work ... unfortunately this has the side-effect of breaking DMs, since DMs check chars being &gt;0 :(",
+    "lang": "en",
+    "in_reply_to_screen_name": "Zakail_",
+    "in_reply_to_user_id_str": "518219839"
+  }
+}

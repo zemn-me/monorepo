@@ -1,0 +1,119 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1318197086005923841"
+        ],
+        "editableUntil": "2020-10-19T15:27:30.878Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1318197086005923841/photo/1",
+          "indices": [
+            "108",
+            "131"
+          ],
+          "url": "https://t.co/qz41RVNXBu",
+          "media_url": "http://pbs.twimg.com/media/EkstLVmW0AEkfXn.png",
+          "id_str": "1318196988735836161",
+          "id": "1318196988735836161",
+          "media_url_https": "https://pbs.twimg.com/media/EkstLVmW0AEkfXn.png",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "318",
+              "h": "302",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "318",
+              "h": "302",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "318",
+              "h": "302",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/qz41RVNXBu"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "131"
+    ],
+    "favorite_count": "4",
+    "in_reply_to_status_id_str": "1318195051885887489",
+    "id_str": "1318197086005923841",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1318197086005923841",
+    "in_reply_to_status_id": "1318195051885887489",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 19 14:27:30 +0000 2020",
+    "favorited": false,
+    "full_text": "me trying to deal with the parser I am importing from npm because I thought my own parser would be too ugly https://t.co/qz41RVNXBu",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1318197086005923841/photo/1",
+          "indices": [
+            "108",
+            "131"
+          ],
+          "url": "https://t.co/qz41RVNXBu",
+          "media_url": "http://pbs.twimg.com/media/EkstLVmW0AEkfXn.png",
+          "id_str": "1318196988735836161",
+          "id": "1318196988735836161",
+          "media_url_https": "https://pbs.twimg.com/media/EkstLVmW0AEkfXn.png",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "318",
+              "h": "302",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "318",
+              "h": "302",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "318",
+              "h": "302",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/qz41RVNXBu"
+        }
+      ]
+    }
+  }
+}

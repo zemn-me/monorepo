@@ -1,0 +1,6 @@
+diff --git a/runner/service_instance.go b/runner/service_instance.go
+--- a/runner/service_instance.go
++++ b/runner/service_instance.go
+@@ -106 +106 @@ var httpClient = http.Client{
+-	Timeout: 50 * time.Millisecond,
++	Timeout: 5 * time.Second,

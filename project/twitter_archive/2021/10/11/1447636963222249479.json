@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1447636963222249479"
+        ],
+        "editableUntil": "2021-10-11T19:55:22.483Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "John B. Holbein",
+          "screen_name": "JohnHolbein1",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "289461078",
+          "id": "289461078"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JohnHolbein1/status/1446952172818731019/video/1",
+          "source_status_id": "1446952172818731019",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/zIaSkQrqr2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1446951909512945665/pu/img/wgQgvczqyZowTjgz.jpg",
+          "id_str": "1446951909512945665",
+          "source_user_id": "289461078",
+          "id": "1446951909512945665",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1446951909512945665/pu/img/wgQgvczqyZowTjgz.jpg",
+          "source_user_id_str": "289461078",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1446952172818731019",
+          "display_url": "pic.twitter.com/zIaSkQrqr2"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1447636963222249479",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1447636963222249479",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 11 18:55:22 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @JohnHolbein1: the spread of COVID-19 visualized https://t.co/zIaSkQrqr2",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JohnHolbein1/status/1446952172818731019/video/1",
+          "source_status_id": "1446952172818731019",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/zIaSkQrqr2",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1446951909512945665/pu/img/wgQgvczqyZowTjgz.jpg",
+          "id_str": "1446951909512945665",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "61500",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1446951909512945665/pu/vid/1280x720/kjAd9kbHJjTzeQ-Y.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1446951909512945665/pu/vid/480x270/jteF0zSAGMuh0Ypg.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1446951909512945665/pu/vid/640x360/ukb-IeShFoH25WVL.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1446951909512945665/pu/pl/aFWzGfFSEqVV19f4.m3u8?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "289461078",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1446951909512945665",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1446951909512945665/pu/img/wgQgvczqyZowTjgz.jpg",
+          "source_user_id_str": "289461078",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1446952172818731019",
+          "display_url": "pic.twitter.com/zIaSkQrqr2"
+        }
+      ]
+    }
+  }
+}

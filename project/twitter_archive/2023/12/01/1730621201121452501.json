@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1730621201121452501"
+        ],
+        "editableUntil": "2023-12-01T17:13:42.391Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ben Naumann",
+          "screen_name": "InternetJumbo",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "575825587",
+          "id": "575825587"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/InternetJumbo/status/1730396602911592780/video/1",
+          "source_status_id": "1730396602911592780",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/ReDeV3rS8q",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1730395774624649216/pu/img/E-MWJQcLzlJHIRg5.jpg",
+          "id_str": "1730395774624649216",
+          "source_user_id": "575825587",
+          "id": "1730395774624649216",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1730395774624649216/pu/img/E-MWJQcLzlJHIRg5.jpg",
+          "source_user_id_str": "575825587",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1920",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1730396602911592780",
+          "display_url": "pic.twitter.com/ReDeV3rS8q"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "93"
+    ],
+    "favorite_count": "0",
+    "id_str": "1730621201121452501",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1730621201121452501",
+    "possibly_sensitive": false,
+    "created_at": "Fri Dec 01 16:13:42 +0000 2023",
+    "favorited": false,
+    "full_text": "RT @InternetJumbo: 13th Century Tiktok Live Streamer (Plunder Reveal) https://t.co/ReDeV3rS8q",
+    "lang": "da",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/InternetJumbo/status/1730396602911592780/video/1",
+          "source_status_id": "1730396602911592780",
+          "indices": [
+            "70",
+            "93"
+          ],
+          "url": "https://t.co/ReDeV3rS8q",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1730395774624649216/pu/img/E-MWJQcLzlJHIRg5.jpg",
+          "id_str": "1730395774624649216",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "43633",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1730395774624649216/pu/pl/nN859rnJLblrTtOP.m3u8?tag=12&v=c31"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1730395774624649216/pu/vid/avc1/480x852/K8zAgqEP60P2xY30.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1730395774624649216/pu/vid/avc1/320x568/05xN23_pBT5MpZ4q.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1730395774624649216/pu/vid/avc1/720x1280/JXxzbKyL9RVklj3-.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "575825587",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1730395774624649216",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1730395774624649216/pu/img/E-MWJQcLzlJHIRg5.jpg",
+          "source_user_id_str": "575825587",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1080",
+              "h": "1920",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1730396602911592780",
+          "display_url": "pic.twitter.com/ReDeV3rS8q"
+        }
+      ]
+    }
+  }
+}

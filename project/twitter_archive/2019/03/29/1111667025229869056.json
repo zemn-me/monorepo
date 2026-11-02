@@ -1,0 +1,133 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1111667025229869056"
+        ],
+        "editableUntil": "2019-03-29T17:30:47.246Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mike Murphy",
+          "screen_name": "mcwm",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "15535595",
+          "id": "15535595"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mcwm/status/1111257837127303169/photo/1",
+          "source_status_id": "1111257837127303169",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/4OlSNhYcIf",
+          "media_url": "http://pbs.twimg.com/media/D2v7HJTXcAAk84n.jpg",
+          "id_str": "1111257833251762176",
+          "source_user_id": "15535595",
+          "id": "1111257833251762176",
+          "media_url_https": "https://pbs.twimg.com/media/D2v7HJTXcAAk84n.jpg",
+          "source_user_id_str": "15535595",
+          "sizes": {
+            "small": {
+              "w": "409",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "722",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1232",
+              "h": "2048",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1111257837127303169",
+          "display_url": "pic.twitter.com/4OlSNhYcIf"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "136"
+    ],
+    "favorite_count": "0",
+    "id_str": "1111667025229869056",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1111667025229869056",
+    "possibly_sensitive": false,
+    "created_at": "Fri Mar 29 16:30:47 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @mcwm: Whatever this broken email I’ve seemingly gotten by mistake is, it’s the best pitch I’ve ever received https://t.co/4OlSNhYcIf",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mcwm/status/1111257837127303169/photo/1",
+          "source_status_id": "1111257837127303169",
+          "indices": [
+            "113",
+            "136"
+          ],
+          "url": "https://t.co/4OlSNhYcIf",
+          "media_url": "http://pbs.twimg.com/media/D2v7HJTXcAAk84n.jpg",
+          "id_str": "1111257833251762176",
+          "source_user_id": "15535595",
+          "id": "1111257833251762176",
+          "media_url_https": "https://pbs.twimg.com/media/D2v7HJTXcAAk84n.jpg",
+          "source_user_id_str": "15535595",
+          "sizes": {
+            "small": {
+              "w": "409",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "722",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1232",
+              "h": "2048",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1111257837127303169",
+          "display_url": "pic.twitter.com/4OlSNhYcIf"
+        }
+      ]
+    }
+  }
+}

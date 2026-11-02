@@ -1,0 +1,150 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1470196632713326593"
+        ],
+        "editableUntil": "2021-12-13T01:59:26.828Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Matti Palli 🧙‍♂️",
+          "screen_name": "tritlo",
+          "indices": [
+            "0",
+            "7"
+          ],
+          "id_str": "105945478",
+          "id": "105945478"
+        },
+        {
+          "name": "deech",
+          "screen_name": "deech",
+          "indices": [
+            "8",
+            "14"
+          ],
+          "id_str": "14572517",
+          "id": "14572517"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/wyeID44CvN",
+          "expanded_url": "https://www.veracode.com/blog/research/exploiting-jndi-injections-java",
+          "display_url": "veracode.com/blog/research/…",
+          "indices": [
+            "73",
+            "96"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1470196632713326593/photo/1",
+          "indices": [
+            "281",
+            "304"
+          ],
+          "url": "https://t.co/26FbA4ngKm",
+          "media_url": "http://pbs.twimg.com/media/FGcvZsBUUAEIhyM.png",
+          "id_str": "1470195921719676929",
+          "id": "1470195921719676929",
+          "media_url_https": "https://pbs.twimg.com/media/FGcvZsBUUAEIhyM.png",
+          "sizes": {
+            "medium": {
+              "w": "872",
+              "h": "239",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "872",
+              "h": "239",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "186",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/26FbA4ngKm"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "304"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1470194939485032449",
+    "id_str": "1470196632713326593",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1470196632713326593",
+    "in_reply_to_status_id": "1470194939485032449",
+    "possibly_sensitive": false,
+    "created_at": "Mon Dec 13 00:59:26 +0000 2021",
+    "favorited": false,
+    "full_text": "@tritlo @deech Take a look at this example of JNDI injection, from here: https://t.co/wyeID44CvN\n\nDoes it make sense to you that lookup(name) should execute arbitrary user-input code?\n\nIf you wrote this, would you expect and / or know how to sanitize this against code evaluation? https://t.co/26FbA4ngKm",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1470196632713326593/photo/1",
+          "indices": [
+            "281",
+            "304"
+          ],
+          "url": "https://t.co/26FbA4ngKm",
+          "media_url": "http://pbs.twimg.com/media/FGcvZsBUUAEIhyM.png",
+          "id_str": "1470195921719676929",
+          "id": "1470195921719676929",
+          "media_url_https": "https://pbs.twimg.com/media/FGcvZsBUUAEIhyM.png",
+          "sizes": {
+            "medium": {
+              "w": "872",
+              "h": "239",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "872",
+              "h": "239",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "186",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/26FbA4ngKm"
+        }
+      ]
+    }
+  }
+}

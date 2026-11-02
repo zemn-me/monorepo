@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1102558403229036545"
+        ],
+        "editableUntil": "2019-03-04T14:16:22.531Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "hayden_burkhart",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hayden_burkhart/status/1102021616324698113/video/1",
+          "source_status_id": "1102021616324698113",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/cGTSyOtxdt",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1102021251260801024/pu/img/duJPqOqu-45671h3.jpg",
+          "id_str": "1102021251260801024",
+          "source_user_id": "1315597279",
+          "id": "1102021251260801024",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1102021251260801024/pu/img/duJPqOqu-45671h3.jpg",
+          "source_user_id_str": "1315597279",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1102021616324698113",
+          "display_url": "pic.twitter.com/cGTSyOtxdt"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "66"
+    ],
+    "favorite_count": "0",
+    "id_str": "1102558403229036545",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1102558403229036545",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 04 13:16:22 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @hayden_burkhart: she didn’t even knock https://t.co/cGTSyOtxdt",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/hayden_burkhart/status/1102021616324698113/video/1",
+          "source_status_id": "1102021616324698113",
+          "indices": [
+            "43",
+            "66"
+          ],
+          "url": "https://t.co/cGTSyOtxdt",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1102021251260801024/pu/img/duJPqOqu-45671h3.jpg",
+          "id_str": "1102021251260801024",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "6833",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1102021251260801024/pu/pl/iYi8FfCkYwOeiHq7.m3u8?tag=6"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1102021251260801024/pu/vid/320x568/XkcY1EBXj2ckF3ut.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1102021251260801024/pu/vid/360x640/kB3U1JERkSAXLpB6.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "1315597279",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1102021251260801024",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1102021251260801024/pu/img/duJPqOqu-45671h3.jpg",
+          "source_user_id_str": "1315597279",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1102021616324698113",
+          "display_url": "pic.twitter.com/cGTSyOtxdt"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "809126001313808384"
+        ],
+        "editableUntil": "2016-12-14T21:00:46.204Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "MLTs (?〈THOUGHTS〉.*)",
+          "screen_name": "ret2libc",
+          "indices": [
+            "0",
+            "9"
+          ],
+          "id_str": "2986540899",
+          "id": "2986540899"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/ULa1F75XVG",
+          "expanded_url": "http://dotgov.gov",
+          "display_url": "dotgov.gov",
+          "indices": [
+            "43",
+            "66"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "139"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "809124946094018560",
+    "id_str": "809126001313808384",
+    "in_reply_to_user_id": "2986540899",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "809126001313808384",
+    "in_reply_to_status_id": "809124946094018560",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 14 20:00:46 +0000 2016",
+    "favorited": false,
+    "full_text": "@ret2libc @0x6D6172696F hi i'm a rando. in https://t.co/ULa1F75XVG site, the injection is rendered to dom after the auditor runs, ie via js",
+    "lang": "en",
+    "in_reply_to_screen_name": "ret2libc",
+    "in_reply_to_user_id_str": "2986540899"
+  }
+}

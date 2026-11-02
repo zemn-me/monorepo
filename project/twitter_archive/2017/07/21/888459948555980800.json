@@ -1,0 +1,143 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "888459948555980800"
+        ],
+        "editableUntil": "2017-07-21T19:05:33.180Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "John Lam",
+          "screen_name": "john_lam",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "14076724",
+          "id": "14076724"
+        },
+        {
+          "name": "Internet of Shit",
+          "screen_name": "internetofshit",
+          "indices": [
+            "78",
+            "93"
+          ],
+          "id_str": "3356531254",
+          "id": "3356531254"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/john_lam/status/888442492051259392/photo/1",
+          "source_status_id": "888442492051259392",
+          "indices": [
+            "94",
+            "117"
+          ],
+          "url": "https://t.co/KcV67E74Uo",
+          "media_url": "http://pbs.twimg.com/media/DFRhvNcVoAAuqyf.jpg",
+          "id_str": "888442490189094912",
+          "source_user_id": "14076724",
+          "id": "888442490189094912",
+          "media_url_https": "https://pbs.twimg.com/media/DFRhvNcVoAAuqyf.jpg",
+          "source_user_id_str": "14076724",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "768",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1024",
+              "h": "768",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "888442492051259392",
+          "display_url": "pic.twitter.com/KcV67E74Uo"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "117"
+    ],
+    "favorite_count": "0",
+    "id_str": "888459948555980800",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "888459948555980800",
+    "possibly_sensitive": false,
+    "created_at": "Fri Jul 21 18:05:33 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @john_lam: Check out this stack trace on a FAUCET. I have now seen it all. @internetofshit https://t.co/KcV67E74Uo",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/john_lam/status/888442492051259392/photo/1",
+          "source_status_id": "888442492051259392",
+          "indices": [
+            "94",
+            "117"
+          ],
+          "url": "https://t.co/KcV67E74Uo",
+          "media_url": "http://pbs.twimg.com/media/DFRhvNcVoAAuqyf.jpg",
+          "id_str": "888442490189094912",
+          "source_user_id": "14076724",
+          "id": "888442490189094912",
+          "media_url_https": "https://pbs.twimg.com/media/DFRhvNcVoAAuqyf.jpg",
+          "source_user_id_str": "14076724",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "510",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "768",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1024",
+              "h": "768",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "888442492051259392",
+          "display_url": "pic.twitter.com/KcV67E74Uo"
+        }
+      ]
+    }
+  }
+}

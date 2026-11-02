@@ -1,9 +1,9 @@
 import * as Camera from '#root/ts/math/camera.js';
 import * as Canvas from '#root/ts/math/canvas/index.js';
+import * as cartesian from '#root/ts/math/cartesian.js';
 import * as conv from '#root/ts/math/conv.js';
 import { EulerAngle } from '#root/ts/math/euler_angle.js';
 import * as Homog from '#root/ts/math/homog.js';
-import * as Matrix from '#root/ts/math/matrix.js';
 import * as Quaternion from '#root/ts/math/quaternion.js';
 import { map } from '#root/ts/math/vec';
 
@@ -64,7 +64,7 @@ export class Translate3D<T extends Canvas.Drawable3D>
 
 	public lines3D(): Homog.Line3D[] {
 		return map(this.target.lines3D(), line =>
-			map(line, point => Matrix.add<1, 4>(point, this.by))
+			map(line, point => cartesian.add<1, 4>(point, this.by))
 		);
 	}
 }
@@ -139,16 +139,20 @@ export class QuaternionMultiply<
 			line.map((point): Homog.Point3D => {
 				const [xi, yi, zi] = Homog.pointToCart(point);
 				const [[x], [y], [z]] = [xi!, yi!, zi!];
-				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
+				const q1: Quaternion.Quaternion = Quaternion.from(
 					x!,
 					y!,
 					z!,
 					0
 				);
 				const q2 = this.quaternion;
-				const n = q1.multiply(q2);
+				const n = Quaternion.multiply(q1, q2);
 
-				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
+				const [nx = 0, ny = 0, nz = 0] = [
+					Quaternion.x(n),
+					Quaternion.y(n),
+					Quaternion.z(n),
+				];
 				return [[nx], [ny], [nz], [1]];
 			})
 		);
@@ -179,16 +183,20 @@ export class QuaternionRotate<
 			line.map((point): Homog.Point3D => {
 				const [xi, yi, zi] = Homog.pointToCart(point);
 				const [[x], [y], [z]] = [xi!, yi!, zi!];
-				const q1: Quaternion.Quaternion = new Quaternion.Quaternion(
+				const q1: Quaternion.Quaternion = Quaternion.from(
 					x!,
 					y!,
 					z!,
 					0
 				);
 				// technically incorrect. should be removed sometime.
-				const n = q1.multiply(rQ);
+				const n = Quaternion.multiply(q1, rQ);
 
-				const [nx = 0, ny = 0, nz = 0] = [n.x, n.y, n.z];
+				const [nx = 0, ny = 0, nz = 0] = [
+					Quaternion.x(n),
+					Quaternion.y(n),
+					Quaternion.z(n),
+				];
 				return [[nx], [ny], [nz], [1]] as const;
 			})
 		);

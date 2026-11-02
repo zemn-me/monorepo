@@ -3,11 +3,8 @@
 	"tasks": [
 		{
 			"label": "Rust: rust-project.json",
-			"command": "bazelisk",
-			"args": [
-				"run",
-				"//.vscode:gen_rust_project"
-			],
+			"command": "${workspaceFolder}/sh/bin/bazel",
+			"args": ["run", "//.vscode:gen_rust_project"],
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
@@ -17,24 +14,18 @@
 				"reveal": "never",
 				"group": "preprep",
 				"close": true,
-				"panel": "dedicated",
-			},
-			"runOptions": {
-				"runOn": "folderOpen"
+				"panel": "dedicated"
 			}
 		},
 		{
 			"label": "Python: Venv",
-			"command": "bazelisk",
+			"command": "${workspaceFolder}/sh/bin/bazel",
 			"args": [
 				"run",
 				"//.vscode:ibazel",
 				"run",
 				"//.vscode:activate_venv"
 			],
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
@@ -42,7 +33,7 @@
 				"close": true,
 				"reveal": "never",
 				"group": "preprep",
-				"panel": "dedicated",
+				"panel": "dedicated"
 			},
 			"isBackground": true,
 			"problemMatcher": {
@@ -59,13 +50,13 @@
 				"background": {
 					"activeOnStart": true,
 					"beginsPattern": "^iBazel +\\[[^\\]]+\\]: Notifying of changes$",
-					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$",
+					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$"
 				}
 			}
 		},
 		{
 			"label": "Sapling: install hooks",
-			"command": "bazelisk",
+			"command": "${workspaceFolder}/sh/bin/bazel",
 			"args": [
 				"run",
 				"//.vscode:install_sapling_hooks",
@@ -76,7 +67,7 @@
 				"close": true,
 				"group": "preprep",
 				"reveal": "never",
-				"panel": "dedicated",
+				"panel": "dedicated"
 			},
 			"group": "build",
 			"runOptions": {

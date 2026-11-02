@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1080623306007609344"
+        ],
+        "editableUntil": "2019-01-03T01:34:07.819Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Sam Friedman",
+          "screen_name": "sammyashermusic",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "872200865607581696",
+          "id": "872200865607581696"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sammyashermusic/status/1076928358074597376/video/1",
+          "source_status_id": "1076928358074597376",
+          "indices": [
+            "107",
+            "130"
+          ],
+          "url": "https://t.co/UyirZ57fZC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1076927908461965313/pu/img/wmQkELMAbeZPyHBr.jpg",
+          "id_str": "1076927908461965313",
+          "source_user_id": "872200865607581696",
+          "id": "1076927908461965313",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1076927908461965313/pu/img/wmQkELMAbeZPyHBr.jpg",
+          "source_user_id_str": "872200865607581696",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1076928358074597376",
+          "display_url": "pic.twitter.com/UyirZ57fZC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "130"
+    ],
+    "favorite_count": "0",
+    "id_str": "1080623306007609344",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1080623306007609344",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 03 00:34:07 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @sammyashermusic: Working on some duet improv with my top student, please be kind, he's still learning. https://t.co/UyirZ57fZC",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sammyashermusic/status/1076928358074597376/video/1",
+          "source_status_id": "1076928358074597376",
+          "indices": [
+            "107",
+            "130"
+          ],
+          "url": "https://t.co/UyirZ57fZC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1076927908461965313/pu/img/wmQkELMAbeZPyHBr.jpg",
+          "id_str": "1076927908461965313",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "53366",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1076927908461965313/pu/vid/720x1280/Rk8SF_mTC75VUMnZ.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1076927908461965313/pu/pl/ueM5GgJaPfruAI1S.m3u8?tag=6"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1076927908461965313/pu/vid/320x568/FRlvQX1TVCb8Fn9F.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1076927908461965313/pu/vid/360x640/iuTJtw1bPnB9c19Y.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "872200865607581696",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1076927908461965313",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1076927908461965313/pu/img/wmQkELMAbeZPyHBr.jpg",
+          "source_user_id_str": "872200865607581696",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1076928358074597376",
+          "display_url": "pic.twitter.com/UyirZ57fZC"
+        }
+      ]
+    }
+  }
+}

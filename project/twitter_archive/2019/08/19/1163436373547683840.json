@@ -1,0 +1,165 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1163436373547683840"
+        ],
+        "editableUntil": "2019-08-19T14:03:41.713Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Larry Kim",
+          "screen_name": "larrykim",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "17850785",
+          "id": "17850785"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/larrykim/status/1163375047685242885/video/1",
+          "source_status_id": "1163375047685242885",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/0jOX6Iep0u",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1163355802809225216/img/Qt-S8xfgfYbArCbN.jpg",
+          "id_str": "1163355802809225216",
+          "source_user_id": "17850785",
+          "id": "1163355802809225216",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1163355802809225216/img/Qt-S8xfgfYbArCbN.jpg",
+          "source_user_id_str": "17850785",
+          "sizes": {
+            "small": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1163375047685242885",
+          "display_url": "pic.twitter.com/0jOX6Iep0u"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "MondayMotivation",
+          "indices": [
+            "14",
+            "31"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "132"
+    ],
+    "favorite_count": "0",
+    "id_str": "1163436373547683840",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1163436373547683840",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 19 13:03:41 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @larrykim: #MondayMotivation: \n\nSuccess is a result of consistent practice of winning skills and actions. https://t.co/0jOX6Iep0u",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/larrykim/status/1163375047685242885/video/1",
+          "source_status_id": "1163375047685242885",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/0jOX6Iep0u",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1163355802809225216/img/Qt-S8xfgfYbArCbN.jpg",
+          "id_str": "1163355802809225216",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "5"
+            ],
+            "duration_millis": "50100",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1163355802809225216/pl/toZtPztR2p8s0YZh.m3u8?tag=13"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1163355802809225216/vid/320x400/wEPNUM4T2pHY8Sfv.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "17850785",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1163355802809225216",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1163355802809225216/img/Qt-S8xfgfYbArCbN.jpg",
+          "source_user_id_str": "17850785",
+          "sizes": {
+            "small": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "320",
+              "h": "400",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1163375047685242885",
+          "display_url": "pic.twitter.com/0jOX6Iep0u"
+        }
+      ]
+    }
+  }
+}

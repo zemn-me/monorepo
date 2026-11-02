@@ -1,0 +1,33 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "md",
+    srcs = ["md.go"],
+    importpath = "github.com/zemn-me/monorepo/go/gazelle/md",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_gazelle//config",
+        "@bazel_gazelle//label",
+        "@bazel_gazelle//language",
+        "@bazel_gazelle//repo",
+        "@bazel_gazelle//resolve",
+        "@bazel_gazelle//rule",
+    ],
+)
+
+go_test(
+    name = "md_test",
+    srcs = ["md_test.go"],
+    embed = [":md"],
+    deps = [
+        "@bazel_gazelle//config",
+        "@bazel_gazelle//language",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

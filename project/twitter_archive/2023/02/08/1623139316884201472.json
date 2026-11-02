@@ -1,0 +1,124 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1623139316884201472"
+        ],
+        "editableUntil": "2023-02-08T02:29:04.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/00OtFxYEqb",
+          "expanded_url": "https://graph.bunnypa.ws",
+          "display_url": "graph.bunnypa.ws",
+          "indices": [
+            "0",
+            "23"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1623139316884201472/photo/1",
+          "indices": [
+            "186",
+            "209"
+          ],
+          "url": "https://t.co/DJsLKA3BiZ",
+          "media_url": "http://pbs.twimg.com/media/FoaL80YagAAIquf.jpg",
+          "id_str": "1623138592683098112",
+          "id": "1623138592683098112",
+          "media_url_https": "https://pbs.twimg.com/media/FoaL80YagAAIquf.jpg",
+          "sizes": {
+            "small": {
+              "w": "661",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1167",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1992",
+              "h": "2048",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/DJsLKA3BiZ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "209"
+    ],
+    "favorite_count": "25",
+    "id_str": "1623139316884201472",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1623139316884201472",
+    "possibly_sensitive": false,
+    "created_at": "Wed Feb 08 01:59:04 +0000 2023",
+    "favorited": false,
+    "full_text": "https://t.co/00OtFxYEqb does a community based clustering of the people you follow on twitter.\n\nthe graph it produces is really interesting and I did my best to annotate the communities https://t.co/DJsLKA3BiZ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1623139316884201472/photo/1",
+          "indices": [
+            "186",
+            "209"
+          ],
+          "url": "https://t.co/DJsLKA3BiZ",
+          "media_url": "http://pbs.twimg.com/media/FoaL80YagAAIquf.jpg",
+          "id_str": "1623138592683098112",
+          "id": "1623138592683098112",
+          "media_url_https": "https://pbs.twimg.com/media/FoaL80YagAAIquf.jpg",
+          "sizes": {
+            "small": {
+              "w": "661",
+              "h": "680",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1167",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1992",
+              "h": "2048",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/DJsLKA3BiZ"
+        }
+      ]
+    }
+  }
+}

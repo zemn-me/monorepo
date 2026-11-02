@@ -1,0 +1,169 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1062504749344403456"
+        ],
+        "editableUntil": "2018-11-14T01:37:27.284Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Rajiv",
+          "screen_name": "jiffington",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "14355138",
+          "id": "14355138"
+        },
+        {
+          "name": "尾道市立美術館",
+          "screen_name": "bijutsu1",
+          "indices": [
+            "99",
+            "108"
+          ],
+          "id_str": "1149699632",
+          "id": "1149699632"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jiffington/status/1062471505496469504/video/1",
+          "source_status_id": "1062471505496469504",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/WK4M3Y51hc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1062469605682229248/pu/img/g34rMZS3oRw3yaoI.jpg",
+          "id_str": "1062469605682229248",
+          "source_user_id": "14355138",
+          "id": "1062469605682229248",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1062469605682229248/pu/img/g34rMZS3oRw3yaoI.jpg",
+          "source_user_id_str": "14355138",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1062471505496469504",
+          "display_url": "pic.twitter.com/WK4M3Y51hc"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "132"
+    ],
+    "favorite_count": "0",
+    "id_str": "1062504749344403456",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1062504749344403456",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 14 00:37:27 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @jiffington: A museum in Japan spends most of its day refusing entry to 2 cats trying to get in @bijutsu1 https://t.co/WK4M3Y51hc",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jiffington/status/1062471505496469504/video/1",
+          "source_status_id": "1062471505496469504",
+          "indices": [
+            "109",
+            "132"
+          ],
+          "url": "https://t.co/WK4M3Y51hc",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1062469605682229248/pu/img/g34rMZS3oRw3yaoI.jpg",
+          "id_str": "1062469605682229248",
+          "video_info": {
+            "aspect_ratio": [
+              "203",
+              "360"
+            ],
+            "duration_millis": "75933",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1062469605682229248/pu/vid/180x318/DXvAcgqzAGChnK9T.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1062469605682229248/pu/vid/406x720/x1qjAlwVLWE2xYrB.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1062469605682229248/pu/pl/Op1_XtQOQF5gtlNM.m3u8?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "14355138",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1062469605682229248",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1062469605682229248/pu/img/g34rMZS3oRw3yaoI.jpg",
+          "source_user_id_str": "14355138",
+          "sizes": {
+            "medium": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "406",
+              "h": "720",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1062471505496469504",
+          "display_url": "pic.twitter.com/WK4M3Y51hc"
+        }
+      ]
+    }
+  }
+}

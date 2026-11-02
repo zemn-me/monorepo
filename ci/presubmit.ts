@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import child_process from 'node:child_process';
 
 import { Command } from '@commander-js/extra-typings';
@@ -38,20 +38,17 @@ const cmd = new Command('presubmit')
 		false
 	)
 	.option(
+		'--skip-pulumi-refresh',
+		'Skip refreshing Pulumi state when staging was just deployed in the same workflow.',
+		false
+	)
+	.option(
 		'--skip-pulumi-deploy',
 		`${
 			'Skip doing the pulumi deploy once bazel testing is completed. ' +
 			'This is used for GitHub concurrency groups (since only one deploy may happen at a time).'
 		}`,
 		false
-	)
-	.option(
-		'--dangerously-skip-pnpm-lockfile-validation',
-		`${
-			'Skip presubmit package.json:pnpm-lock.yaml validation. ' +
-			'This is a really dangerous thing to do because it can create a desynchronization ' +
-			'that only manifests in some revision down the line.'
-		}`
 	)
 	.action(async o => {
 		// this is unfortunately necessary because my arm mac chokes on getting a running
@@ -67,140 +64,104 @@ const cmd = new Command('presubmit')
 		// this is placed first since it builds everything in parallel
 		// so serial operations coming after take 0 time to build.
 		if (!o.skipBazelTests) {
+			await Task('Test all bazel code works.')(
+				Bazel.Bazel(
+					cwd,
+					'query',
+					'//...',
+					'--noshow_progress',
+					'--ui_event_filters=-stdout',
+					'--noshow_loading_progress'
+				)
+			);
 			await Task('Run all bazel tests.')(
-				Bazel.Bazel(cwd, 'test', '//...', '--keep_going')
+				Bazel.Bazel(
+					cwd,
+					'test',
+					'//...',
+					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
+					...(process.env['BAZEL_TEST_UNCACHED'] === 'true'
+						? ['--nocache_test_results']
+						: [])
+				)
 			);
 			// perform all the normal tests
 		}
 
-		await Task('check if we might need to run go.mod')(new Promise<void>((ok, error) =>
-			child_process
-				.spawn(
-					'bazelisk',
-					[
-						'run',
-						'--tool_tag=presubmit',
-						// it would be better to use the binary directly in our
-						// runfiles, but then the go binary itself has runfiles issues
-						// for some reason...
+		await Task('check if we might need to run go.mod')(
+			new Promise<void>((ok, error) =>
+				child_process
+					.spawn(
+						'bazelisk',
+						[
+							'run',
+							'--tool_tag=presubmit',
+							// it would be better to use the binary directly in our
+							// runfiles, but then the go binary itself has runfiles issues
+							// for some reason...
 
-						'//sh/bin:go',
-						'mod',
-						'tidy',
-					],
-					{
-						cwd,
-						stdio: 'inherit',
-					}
-				)
-				.on('close', code =>
-					code == 0
-						? ok()
-						: error(
-								new Error(
-									`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
-								)
+							'//sh/bin:go',
+							'mod',
+							'tidy',
+						],
+						{
+							cwd,
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code => {
+						if (code == 0) {
+							ok();
+							return;
+						}
+
+						console.log(
+							WorkflowCommand('error')({
+								file: 'go.mod',
+								title: 'go mod tidy failed',
+							})(
+								`Go mod tidy exited with ${code}. Run bazel run //sh/bin:go mod tidy and commit the resulting go.mod/go.sum changes.`
 							)
-				)
-		));
-
-		await Task("Gazelle repos")(new Promise<void>((ok, error) => {
-			child_process
-				.spawn(
-					'bazelisk',
-					[
-						'run',
-						'--tool_tag=presubmit',
-						'//:gazelle-update-repos',
-						'--',
-						'-strict',
-					],
-					{
-						cwd,
-						stdio: 'inherit',
-					}
-				)
-				.on('close', code =>
-					code == 0
-						? ok()
-						: error(
+						);
+						error(
 							new Error(
-								`Gazelle update repos exited with ${code}. This likely means that it needs to be run to add / remove repos.`
+								`Go mod tidy exited with ${code}. This likely means that it needs to be run to add / remove deps.`
 							)
-						)
-				)
-		}));
+						);
+					})
+			)
+		);
 
-		await Task("Gazelle")(new Promise<void>((ok, error) =>
-			child_process
-				.spawn(
-					'bazelisk',
-					[
-						'run',
-						'//:gazelle',
-						'--tool_tag=presubmit',
-						'--',
-						'--mode',
-						'diff',
-						'--strict',
-					],
-					{
-						cwd,
-						stdio: 'inherit',
-					}
-				)
-				.on('close', code =>
-					code == 0
-						? ok()
-						: error(
-								new Error(
-									`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
+		await Task('Gazelle')(
+			new Promise<void>((ok, error) =>
+				child_process
+					.spawn(
+						'bazelisk',
+						[
+							'run',
+							'//:gazelle',
+							'--tool_tag=presubmit',
+							'--',
+							'--mode',
+							'diff',
+							'--strict',
+						],
+						{
+							cwd,
+							stdio: 'inherit',
+						}
+					)
+					.on('close', code =>
+						code == 0
+							? ok()
+							: error(
+									new Error(
+										`Gazelle exited with ${code}. This likely means that it needs to be run to fix code.`
+									)
 								)
-							)
-				)
-		));
-
-		// validate the pnpm lockfile.
-		if (!o.dangerouslySkipPnpmLockfileValidation) {
-			await Task('Validate the PNPM lockfile.')(
-				new Promise<void>((ok, err) =>
-					child_process
-						.spawn(
-							// TODO(zemnmez): this should be changed to be the local bazel
-							// version once this issue is fixed:
-							// https://github.com/pnpm/pnpm/issues/6962
-							'npm',
-							[
-								'exec',
-								'--yes',
-								'--package',
-								'pnpm@8.6.12',
-								'--',
-								'pnpm',
-								'i',
-								'--frozen-lockfile',
-								'--lockfile-only',
-								// Due to this issue:
-								// https://github.com/pnpm/pnpm/issues/6962
-								// specifying --dir causes --frozen-lockfile to be ignored.
-								/*							'--dir',
-							// aspect_rules_js uses this as their example;
-							// I think the script might pull in some patches etc
-							// so we have to be a bit smarter than just setting
-							// cwd when we launch the binary.
-							cwd, */
-							],
-							{
-								cwd,
-								stdio: 'inherit',
-							}
-						)
-						.on('close', code =>
-							code != 0 ? err(`exit ${code}`) : ok()
-						)
-				)
-			);
-		}
+					)
+			)
+		);
 
 		// attempt a deploy of pulumi to staging, and tear it down.
 		if (!o.skipPulumiDeploy) {
@@ -208,6 +169,7 @@ const cmd = new Command('presubmit')
 				deploy_to_staging({
 					overwrite: o.overwrite,
 					doNotTearDown: o.dirty,
+					skipRefresh: o.skipPulumiRefresh,
 				})
 			);
 		}

@@ -1,0 +1,107 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1366129310269071360"
+        ],
+        "editableUntil": "2021-02-28T21:53:03.680Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "ragona",
+          "screen_name": "ryanragona",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "840418590",
+          "id": "840418590"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/qlzEETzwVU",
+          "expanded_url": "https://crates.io/crates/regex",
+          "display_url": "crates.io/crates/regex",
+          "indices": [
+            "64",
+            "87"
+          ]
+        },
+        {
+          "url": "https://t.co/5BUVclnwJY",
+          "expanded_url": "https://crates.io/crates/log",
+          "display_url": "crates.io/crates/log",
+          "indices": [
+            "106",
+            "129"
+          ]
+        },
+        {
+          "url": "https://t.co/GII6Heyvly",
+          "expanded_url": "https://crates.io/crates/base64",
+          "display_url": "crates.io/crates/base64",
+          "indices": [
+            "138",
+            "161"
+          ]
+        },
+        {
+          "url": "https://t.co/T4gs696Ex2",
+          "expanded_url": "https://crates.io/crates/serde_json",
+          "display_url": "crates.io/crates/serde_j…",
+          "indices": [
+            "168",
+            "191"
+          ]
+        },
+        {
+          "url": "https://t.co/Qt43eRxvil",
+          "expanded_url": "https://crates.io/crates/url",
+          "display_url": "crates.io/crates/url",
+          "indices": [
+            "197",
+            "220"
+          ]
+        },
+        {
+          "url": "https://t.co/HIoqm3PSw6",
+          "expanded_url": "https://crates.io/crates?sort=downloads",
+          "display_url": "crates.io/crates?sort=do…",
+          "indices": [
+            "257",
+            "280"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "280"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1366128297260670976",
+    "id_str": "1366129310269071360",
+    "in_reply_to_user_id": "840418590",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1366129310269071360",
+    "in_reply_to_status_id": "1366128297260670976",
+    "possibly_sensitive": false,
+    "created_at": "Sun Feb 28 20:53:03 +0000 2021",
+    "favorited": false,
+    "full_text": "@ryanragona there's a long list here. No regex parsing, instead https://t.co/qlzEETzwVU, logging, instead https://t.co/5BUVclnwJY, base64 https://t.co/GII6Heyvly, json https://t.co/T4gs696Ex2, url https://t.co/Qt43eRxvil etc etc... Just take a look at this https://t.co/HIoqm3PSw6",
+    "lang": "en",
+    "in_reply_to_screen_name": "ryanragona",
+    "in_reply_to_user_id_str": "840418590"
+  }
+}

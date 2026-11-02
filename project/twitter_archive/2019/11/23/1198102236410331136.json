@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1198102236410331136"
+        ],
+        "editableUntil": "2019-11-23T05:53:27.480Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "createstreets",
+          "screen_name": "createstreets",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "988467944",
+          "id": "988467944"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BBCArchive/status/1197516451227283456/video/1",
+          "source_status_id": "1197516451227283456",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/FGQlAZ8XWI",
+          "media_url": "http://pbs.twimg.com/media/EJ5u1dWWkAAujgv.jpg",
+          "id_str": "1197515230294806529",
+          "source_user_id": "51023770",
+          "id": "1197515230294806529",
+          "media_url_https": "https://pbs.twimg.com/media/EJ5u1dWWkAAujgv.jpg",
+          "source_user_id_str": "51023770",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1197516451227283456",
+          "display_url": "pic.twitter.com/FGQlAZ8XWI"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "59"
+    ],
+    "favorite_count": "0",
+    "id_str": "1198102236410331136",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1198102236410331136",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 23 04:53:27 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @createstreets: Belfast in 1973\n https://t.co/FGQlAZ8XWI",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BBCArchive/status/1197516451227283456/video/1",
+          "source_status_id": "1197516451227283456",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/FGQlAZ8XWI",
+          "media_url": "http://pbs.twimg.com/media/EJ5u1dWWkAAujgv.jpg",
+          "id_str": "1197515230294806529",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "200120",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1197515230294806529/vid/480x360/lBh4m5gGgvo49n-m.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1197515230294806529/pl/GQW4SnLxH5I-MMH3.m3u8?tag=13"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1197515230294806529/vid/640x480/7llD0ZcJrDbpOxw6.mp4?tag=13"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1197515230294806529/vid/360x270/tM66kbcF5GW7uBa2.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "51023770",
+          "additional_media_info": {
+            "title": "This clip is from Nationwide.",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1197515230294806529",
+          "media_url_https": "https://pbs.twimg.com/media/EJ5u1dWWkAAujgv.jpg",
+          "source_user_id_str": "51023770",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1197516451227283456",
+          "display_url": "pic.twitter.com/FGQlAZ8XWI"
+        }
+      ]
+    }
+  }
+}

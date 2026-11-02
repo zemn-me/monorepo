@@ -1,0 +1,79 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "841382865262804992"
+        ],
+        "editableUntil": "2017-03-13T21:18:01.873Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://about.twitter.com/products/tweetdeck\" rel=\"nofollow\">TweetDeck</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "JWE",
+          "indices": [
+            "59",
+            "63"
+          ]
+        },
+        {
+          "text": "crypto",
+          "indices": [
+            "99",
+            "106"
+          ]
+        },
+        {
+          "text": "ec",
+          "indices": [
+            "107",
+            "110"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "asanso.eth",
+          "screen_name": "asanso",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "23515941",
+          "id": "23515941"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/XPjzlcWkpb",
+          "expanded_url": "http://blog.intothesymmetry.com/2017/03/critical-vulnerability-in-json-web.html",
+          "display_url": "blog.intothesymmetry.com/2017/03/critic…",
+          "indices": [
+            "111",
+            "134"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "841382865262804992",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "841382865262804992",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 13 20:18:01 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @asanso: Critical vulnerability in JSON Web Encryption (#JWE)  - RFC 7516  Invalid Curve Attack #crypto #ec https://t.co/XPjzlcWkpb http…",
+    "lang": "en"
+  }
+}

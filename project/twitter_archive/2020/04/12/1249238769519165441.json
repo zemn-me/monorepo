@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1249238769519165441"
+        ],
+        "editableUntil": "2020-04-12T08:31:47.044Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "rémi",
+          "screen_name": "ok_remi_ok",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "1876088137",
+          "id": "1876088137"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ok_remi_ok/status/1249095693265969153/video/1",
+          "source_status_id": "1249095693265969153",
+          "indices": [
+            "69",
+            "92"
+          ],
+          "url": "https://t.co/bwbqGokKB5",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1249095638685569029/pu/img/btNzNEq2Dgoufzwx.jpg",
+          "id_str": "1249095638685569029",
+          "source_user_id": "1876088137",
+          "id": "1249095638685569029",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1249095638685569029/pu/img/btNzNEq2Dgoufzwx.jpg",
+          "source_user_id_str": "1876088137",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "601",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "792",
+              "h": "700",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "792",
+              "h": "700",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1249095693265969153",
+          "display_url": "pic.twitter.com/bwbqGokKB5"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "92"
+    ],
+    "favorite_count": "0",
+    "id_str": "1249238769519165441",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1249238769519165441",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 12 07:31:47 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @ok_remi_ok: tutorial: how to make a simple walk cycle in blender https://t.co/bwbqGokKB5",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ok_remi_ok/status/1249095693265969153/video/1",
+          "source_status_id": "1249095693265969153",
+          "indices": [
+            "69",
+            "92"
+          ],
+          "url": "https://t.co/bwbqGokKB5",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1249095638685569029/pu/img/btNzNEq2Dgoufzwx.jpg",
+          "id_str": "1249095638685569029",
+          "video_info": {
+            "aspect_ratio": [
+              "198",
+              "175"
+            ],
+            "duration_millis": "13900",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1249095638685569029/pu/vid/406x360/pDBY5Sq7e9gGozVE.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1249095638685569029/pu/vid/792x700/ZOV8akMgFAds9S4D.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1249095638685569029/pu/vid/304x270/_8RD4tPt49S8hl7-.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1249095638685569029/pu/pl/AWISK3HjXAl5drHP.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1876088137",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1249095638685569029",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1249095638685569029/pu/img/btNzNEq2Dgoufzwx.jpg",
+          "source_user_id_str": "1876088137",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "601",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "792",
+              "h": "700",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "792",
+              "h": "700",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1249095693265969153",
+          "display_url": "pic.twitter.com/bwbqGokKB5"
+        }
+      ]
+    }
+  }
+}

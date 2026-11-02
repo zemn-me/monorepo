@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1137565642515779584"
+        ],
+        "editableUntil": "2019-06-09T04:42:38.780Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "michael shillingburg",
+          "screen_name": "shillingburger",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "18111764",
+          "id": "18111764"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/heyshilly/status/832455171913326592/video/1",
+          "source_status_id": "832455171913326592",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/5jQP7v4cB6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/832455130544951299/pu/img/iCMkqf7rZohZtMtB.jpg",
+          "id_str": "832455130544951299",
+          "source_user_id": "18111764",
+          "id": "832455130544951299",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/832455130544951299/pu/img/iCMkqf7rZohZtMtB.jpg",
+          "source_user_id_str": "18111764",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "832455171913326592",
+          "display_url": "pic.twitter.com/5jQP7v4cB6"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "94"
+    ],
+    "favorite_count": "0",
+    "id_str": "1137565642515779584",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1137565642515779584",
+    "possibly_sensitive": false,
+    "created_at": "Sun Jun 09 03:42:38 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @shillingburger: great view from the olive garden in times square!! https://t.co/5jQP7v4cB6",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/heyshilly/status/832455171913326592/video/1",
+          "source_status_id": "832455171913326592",
+          "indices": [
+            "71",
+            "94"
+          ],
+          "url": "https://t.co/5jQP7v4cB6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/832455130544951299/pu/img/iCMkqf7rZohZtMtB.jpg",
+          "id_str": "832455130544951299",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "5200",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/832455130544951299/pu/pl/Mkcq63DgviFjbbXX.m3u8"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/832455130544951299/pu/vid/360x640/KYBA0G3GjZblptZC.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/832455130544951299/pu/vid/180x320/bgdEnwqzUZkBNpZR.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/832455130544951299/pu/vid/720x1280/f3vpdX-3noQNShAQ.mp4"
+              }
+            ]
+          },
+          "source_user_id": "18111764",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "832455130544951299",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/832455130544951299/pu/img/iCMkqf7rZohZtMtB.jpg",
+          "source_user_id_str": "18111764",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "832455171913326592",
+          "display_url": "pic.twitter.com/5jQP7v4cB6"
+        }
+      ]
+    }
+  }
+}

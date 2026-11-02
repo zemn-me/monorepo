@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1507101487037497351"
+        ],
+        "editableUntil": "2022-03-24T22:06:09.758Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Matthew Garrett (@mjg59@nondeterministic.computer)",
+          "screen_name": "mjg59",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "229502009",
+          "id": "229502009"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/SgbyRMCfw4",
+          "expanded_url": "https://github.com/golang/go/issues/1435",
+          "display_url": "github.com/golang/go/issu…",
+          "indices": [
+            "38",
+            "61"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1507101487037497351",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1507101487037497351",
+    "possibly_sensitive": false,
+    "created_at": "Thu Mar 24 21:06:09 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @mjg59: This was eventually fixed (https://t.co/SgbyRMCfw4 has all the details) but if you want POSIX semantics under Linux you either n…",
+    "lang": "en"
+  }
+}

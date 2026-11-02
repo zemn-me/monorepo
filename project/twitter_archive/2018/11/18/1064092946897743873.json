@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1064092946897743873"
+        ],
+        "editableUntil": "2018-11-18T10:48:23.088Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Goth Ms. Frizzle",
+          "screen_name": "spookperson",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "369219105",
+          "id": "369219105"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/spookperson/status/1063681223157927936/video/1",
+          "source_status_id": "1063681223157927936",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ktEqOPCP00",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1063681172499308544/pu/img/P3wmCEuMw8zgjVMW.jpg",
+          "id_str": "1063681172499308544",
+          "source_user_id": "369219105",
+          "id": "1063681172499308544",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1063681172499308544/pu/img/P3wmCEuMw8zgjVMW.jpg",
+          "source_user_id_str": "369219105",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1063681223157927936",
+          "display_url": "pic.twitter.com/ktEqOPCP00"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "109"
+    ],
+    "favorite_count": "0",
+    "id_str": "1064092946897743873",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1064092946897743873",
+    "possibly_sensitive": false,
+    "created_at": "Sun Nov 18 09:48:23 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @spookperson: \"christian are you crying over the video of happy clydesdales again\" https://t.co/ktEqOPCP00",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/spookperson/status/1063681223157927936/video/1",
+          "source_status_id": "1063681223157927936",
+          "indices": [
+            "86",
+            "109"
+          ],
+          "url": "https://t.co/ktEqOPCP00",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1063681172499308544/pu/img/P3wmCEuMw8zgjVMW.jpg",
+          "id_str": "1063681172499308544",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "30000",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1063681172499308544/pu/vid/320x320/2ZSV2N3pZS2PdE2T.mp4?tag=7"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1063681172499308544/pu/vid/480x480/gchSe0zzlG5Jonqp.mp4?tag=7"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1063681172499308544/pu/pl/-22XHhB9JKkTFOfo.m3u8?tag=7"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1063681172499308544/pu/vid/720x720/Z0yYs63viY64E_mT.mp4?tag=7"
+              }
+            ]
+          },
+          "source_user_id": "369219105",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1063681172499308544",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1063681172499308544/pu/img/P3wmCEuMw8zgjVMW.jpg",
+          "source_user_id_str": "369219105",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1063681223157927936",
+          "display_url": "pic.twitter.com/ktEqOPCP00"
+        }
+      ]
+    }
+  }
+}

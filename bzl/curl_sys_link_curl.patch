@@ -1,0 +1,21 @@
+diff --git a/build.rs b/build.rs
+index c3a6123..9f43586 100644
+--- a/build.rs
++++ b/build.rs
+@@ -24,7 +24,7 @@ fn main() {
+     // ABI-compatible Cargo.
+     if cfg!(feature = "force-system-lib-on-osx") && target.contains("apple") {
+-        return println!("cargo:rustc-flags=-l curl");
++        return println!("cargo:rustc-flags=-lcurl");
+     }
+ 
+     // If the static-curl feature is disabled, probe for a system-wide libcurl.
+@@ -32,7 +32,7 @@ fn main() {
+         // OSX ships libcurl by default, so we just use that version
+         // so long as it has the right features enabled.
+         if target.contains("apple") && (!cfg!(feature = "http2") || curl_config_reports_http2()) {
+-            return println!("cargo:rustc-flags=-l curl");
++            return println!("cargo:rustc-flags=-lcurl");
+         }
+ 
+         // Next, fall back and try to use pkg-config if its available.

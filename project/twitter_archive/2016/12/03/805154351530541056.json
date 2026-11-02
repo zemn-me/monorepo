@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "805154351530541056"
+        ],
+        "editableUntil": "2016-12-03T21:58:51.106Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "はやみ",
+          "screen_name": "milchre1s",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "66713570",
+          "id": "66713570"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/milchre1s/status/798524033281060864/video/1",
+          "source_status_id": "798524033281060864",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/MoGoCOy9wj",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/798516590820003840/pu/img/ZsAe9EGYvMnhbuGL.jpg",
+          "id_str": "798516590820003840",
+          "source_user_id": "66713570",
+          "id": "798516590820003840",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/798516590820003840/pu/img/ZsAe9EGYvMnhbuGL.jpg",
+          "source_user_id_str": "66713570",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "798524033281060864",
+          "display_url": "pic.twitter.com/MoGoCOy9wj"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "51"
+    ],
+    "favorite_count": "0",
+    "id_str": "805154351530541056",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "805154351530541056",
+    "possibly_sensitive": false,
+    "created_at": "Sat Dec 03 20:58:51 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @milchre1s: さっきかったVRゲーです https://t.co/MoGoCOy9wj",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/milchre1s/status/798524033281060864/video/1",
+          "source_status_id": "798524033281060864",
+          "indices": [
+            "28",
+            "51"
+          ],
+          "url": "https://t.co/MoGoCOy9wj",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/798516590820003840/pu/img/ZsAe9EGYvMnhbuGL.jpg",
+          "id_str": "798516590820003840",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "43690",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/798516590820003840/pu/vid/640x360/fsI-QP_yYK7pcBPD.mp4"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/798516590820003840/pu/vid/320x180/LeCfD0v9D6Nuggow.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/798516590820003840/pu/vid/1280x720/Vv3Q5rPJW3x-PqQf.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/798516590820003840/pu/pl/rmjk36U7eBwjrpkK.m3u8"
+              }
+            ]
+          },
+          "source_user_id": "66713570",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "798516590820003840",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/798516590820003840/pu/img/ZsAe9EGYvMnhbuGL.jpg",
+          "source_user_id_str": "66713570",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "798524033281060864",
+          "display_url": "pic.twitter.com/MoGoCOy9wj"
+        }
+      ]
+    }
+  }
+}

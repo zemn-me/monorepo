@@ -1,0 +1,15 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@zemnmez/result",
+	"description": "A tiny, purely functional TypeScript implementation of Rust's Result type",
+	"main": "result.js",
+	"type": "module",
+	"types": "index.d.ts",
+	"author": "zemnmez",
+	"license": "MIT",
+	"keywords": ["typescript", "rust", "result", "functional", "error-handling"],
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	}
+}

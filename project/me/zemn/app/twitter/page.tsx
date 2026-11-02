@@ -1,0 +1,13 @@
+import { links } from '#root/project/me/zemn/bio/index.js';
+import { Redirect } from '#root/project/me/zemn/components/Redirect/Redirect.js';
+import { Metadata } from '#root/ts/remix/metadata.js';
+
+export default function Page() {
+	return <Redirect to={links.get('twitter')!.href} />;
+}
+
+export const metadata: Metadata = {
+	description: 'Redirect to my twitter',
+};
+
+export const handle = { metadata };

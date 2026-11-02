@@ -1,0 +1,20 @@
+--- a/third_party/bazel/master/src/main/protobuf/analysis/BUILD.bazel
++++ b/third_party/bazel/master/src/main/protobuf/analysis/BUILD.bazel
+@@ -1,4 +1,4 @@
+-load("@rules_proto//proto:defs.bzl", "proto_library")
++load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
+ load("@io_bazel_rules_go//go:def.bzl", "go_library")
+ load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+ 
+ proto_library(
+     name = "analysis_proto",
+--- a/third_party/bazel/master/src/main/protobuf/blaze_query/BUILD.bazel
++++ b/third_party/bazel/master/src/main/protobuf/blaze_query/BUILD.bazel
+@@ -1,4 +1,4 @@
+-load("@rules_proto//proto:defs.bzl", "proto_library")
++load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
+ load("@io_bazel_rules_go//go:def.bzl", "go_library")
+ load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+ 
+ proto_library(
+     name = "blaze_query_proto",

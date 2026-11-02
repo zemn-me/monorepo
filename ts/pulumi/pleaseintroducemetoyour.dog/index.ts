@@ -2,7 +2,7 @@ import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website from '#root/ts/pulumi/lib/website/website.js';
 
 export interface Args {
 	/**
@@ -48,12 +48,14 @@ export class Component extends Pulumi.ComponentResource {
 		const website = new Website(
 			`${name}_pleaseintroducemetoyour_dog_website`,
 			{
-				index: 'ts/pulumi/pleaseintroducemetoyour.dog/out/index.html',
-				notFound: 'ts/pulumi/pleaseintroducemetoyour.dog/out/404.html',
-				directory: 'ts/pulumi/pleaseintroducemetoyour.dog/out',
+				index: 'ts/pulumi/pleaseintroducemetoyour.dog/build/index.html',
+				notFound:
+					'ts/pulumi/pleaseintroducemetoyour.dog/build/404.html',
+				directory: 'ts/pulumi/pleaseintroducemetoyour.dog/build',
 				zoneId: args.zoneId,
 				domain: args.domain,
 				noIndex: args.noIndex,
+				email: true,
 				tags,
 			},
 			{ parent: this }

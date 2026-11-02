@@ -1,0 +1,79 @@
+.inlineLogin {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+	text-decoration-color: var(--link-color);
+	text-decoration: underline;
+}
+
+.inlineLogin:disabled {
+	cursor: default;
+	text-decoration: none;
+}
+
+.error {
+	color: var(--error-color);
+}
+
+.indicator {
+	display: inline-block;
+	height: auto;
+	width: 0.6em;
+	vertical-align: middle;
+}
+
+.loggedIn {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3em;
+	max-width: 100%;
+}
+
+.loggedInText {
+	min-width: 0;
+	max-width: 16em;
+	overflow-wrap: anywhere;
+	white-space: normal;
+}
+
+.accountActions {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15em;
+}
+
+.accountAction {
+	display: inline-grid;
+	place-items: center;
+	width: 1.6em;
+	height: 1.6em;
+	padding: 0;
+	border: 0;
+	border-radius: 0.25em;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+.accountAction:hover,
+.accountAction:focus-visible {
+	background: color-mix(in srgb, currentcolor 12%, transparent);
+}
+
+.accountAction svg {
+	width: 0.9em;
+	height: 0.9em;
+}
+
+.profilePicture {
+	height: 1.2em;
+	width: 1.2em;
+	border-radius: 50%;
+	object-fit: cover;
+}

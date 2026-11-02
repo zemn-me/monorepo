@@ -1,0 +1,156 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1592596459169673216"
+        ],
+        "editableUntil": "2022-11-15T19:42:39.534Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "PortSwigger Research",
+          "screen_name": "PortSwiggerRes",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1177545689460592640",
+          "id": "1177545689460592640"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/kXIqj3tpAU",
+          "expanded_url": "https://portswigger.net/research/stealing-passwords-from-infosec-mastodon-without-bypassing-csp",
+          "display_url": "portswigger.net/research/steal…",
+          "indices": [
+            "86",
+            "109"
+          ]
+        }
+      ],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PortSwiggerRes/status/1592517844851228672/photo/1",
+          "source_status_id": "1592517844851228672",
+          "indices": [
+            "110",
+            "133"
+          ],
+          "url": "https://t.co/wFfyCViULT",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/Fhm9QfJXEAEnEN1.jpg",
+          "id_str": "1592512034188496897",
+          "source_user_id": "1177545689460592640",
+          "id": "1592512034188496897",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Fhm9QfJXEAEnEN1.jpg",
+          "source_user_id_str": "1177545689460592640",
+          "sizes": {
+            "large": {
+              "w": "800",
+              "h": "558",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "474",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "800",
+              "h": "558",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1592517844851228672",
+          "display_url": "pic.twitter.com/wFfyCViULT"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "133"
+    ],
+    "favorite_count": "0",
+    "id_str": "1592596459169673216",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1592596459169673216",
+    "possibly_sensitive": false,
+    "created_at": "Tue Nov 15 19:12:39 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @PortSwiggerRes: Stealing passwords from infosec Mastodon - without bypassing CSP\n\nhttps://t.co/kXIqj3tpAU https://t.co/wFfyCViULT",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PortSwiggerRes/status/1592517844851228672/photo/1",
+          "source_status_id": "1592517844851228672",
+          "indices": [
+            "110",
+            "133"
+          ],
+          "url": "https://t.co/wFfyCViULT",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/Fhm9QfJXEAEnEN1.jpg",
+          "id_str": "1592512034188496897",
+          "video_info": {
+            "aspect_ratio": [
+              "400",
+              "279"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/Fhm9QfJXEAEnEN1.mp4"
+              }
+            ]
+          },
+          "source_user_id": "1177545689460592640",
+          "id": "1592512034188496897",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Fhm9QfJXEAEnEN1.jpg",
+          "source_user_id_str": "1177545689460592640",
+          "sizes": {
+            "large": {
+              "w": "800",
+              "h": "558",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "474",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "800",
+              "h": "558",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "1592517844851228672",
+          "display_url": "pic.twitter.com/wFfyCViULT"
+        }
+      ]
+    }
+  }
+}

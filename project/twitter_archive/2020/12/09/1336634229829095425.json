@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1336634229829095425"
+        ],
+        "editableUntil": "2020-12-09T12:30:08.511Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "hyobun",
+          "screen_name": "squizxy",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "2441512705",
+          "id": "2441512705"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/squizxy/status/1336400158024753154/video/1",
+          "source_status_id": "1336400158024753154",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/Kdlhjpzg26",
+          "media_url": "http://pbs.twimg.com/media/EorqLtDVgAAB6cL.png",
+          "id_str": "1336137481289285635",
+          "source_user_id": "2441512705",
+          "id": "1336137481289285635",
+          "media_url_https": "https://pbs.twimg.com/media/EorqLtDVgAAB6cL.png",
+          "source_user_id_str": "2441512705",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1336400158024753154",
+          "display_url": "pic.twitter.com/Kdlhjpzg26"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "70"
+    ],
+    "favorite_count": "0",
+    "id_str": "1336634229829095425",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1336634229829095425",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 09 11:30:08 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @squizxy: reject humanity, return to monkey https://t.co/Kdlhjpzg26",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/squizxy/status/1336400158024753154/video/1",
+          "source_status_id": "1336400158024753154",
+          "indices": [
+            "47",
+            "70"
+          ],
+          "url": "https://t.co/Kdlhjpzg26",
+          "media_url": "http://pbs.twimg.com/media/EorqLtDVgAAB6cL.png",
+          "id_str": "1336137481289285635",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "30167",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1336137481289285635/vid/1280x720/-MuVpUqf6yEMhcJg.mp4?tag=13"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1336137481289285635/vid/480x270/H-nmOj2d6iwIiowT.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1336137481289285635/pl/KGeyUf3Tk0dF7WO6.m3u8?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1336137481289285635/vid/640x360/o6B18GcVhsU0WhAT.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "2441512705",
+          "additional_media_info": {
+            "title": "",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1336137481289285635",
+          "media_url_https": "https://pbs.twimg.com/media/EorqLtDVgAAB6cL.png",
+          "source_user_id_str": "2441512705",
+          "sizes": {
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1336400158024753154",
+          "display_url": "pic.twitter.com/Kdlhjpzg26"
+        }
+      ]
+    }
+  }
+}

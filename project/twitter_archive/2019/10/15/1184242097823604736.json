@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1184242097823604736"
+        ],
+        "editableUntil": "2019-10-15T23:58:12.932Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dick King-Smith HQ",
+          "screen_name": "DickKingSmith",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2275883743",
+          "id": "2275883743"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1183999007472963584/video/1",
+          "source_status_id": "1183999007472963584",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/MUp0Us2Odp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1183998983464767488/pu/img/2N1Gwf1KMxBXC1uJ.jpg",
+          "id_str": "1183998983464767488",
+          "source_user_id": "2275883743",
+          "id": "1183998983464767488",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1183998983464767488/pu/img/2N1Gwf1KMxBXC1uJ.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "718",
+              "h": "404",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "718",
+              "h": "404",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1183999007472963584",
+          "display_url": "pic.twitter.com/MUp0Us2Odp"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1184242097823604736",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1184242097823604736",
+    "possibly_sensitive": false,
+    "created_at": "Tue Oct 15 22:58:12 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @DickKingSmith: Injustice of the day. https://t.co/MUp0Us2Odp",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DickKingSmith/status/1183999007472963584/video/1",
+          "source_status_id": "1183999007472963584",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/MUp0Us2Odp",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1183998983464767488/pu/img/2N1Gwf1KMxBXC1uJ.jpg",
+          "id_str": "1183998983464767488",
+          "video_info": {
+            "aspect_ratio": [
+              "359",
+              "202"
+            ],
+            "duration_millis": "14682",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1183998983464767488/pu/vid/478x270/D17eZfot3s4hc62E.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1183998983464767488/pu/pl/U9fDIwSfWXqyM2g_.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1183998983464767488/pu/vid/718x404/gi4iDpIgT4gqoMgN.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2275883743",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1183998983464767488",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1183998983464767488/pu/img/2N1Gwf1KMxBXC1uJ.jpg",
+          "source_user_id_str": "2275883743",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "718",
+              "h": "404",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "718",
+              "h": "404",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1183999007472963584",
+          "display_url": "pic.twitter.com/MUp0Us2Odp"
+        }
+      ]
+    }
+  }
+}

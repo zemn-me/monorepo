@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1065699861436223492"
+        ],
+        "editableUntil": "2018-11-22T21:13:41.369Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "user was banned for this post",
+          "screen_name": "carlocavaluzzi",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "15257489",
+          "id": "15257489"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/carlocavaluzzi/status/1065647560251961344/video/1",
+          "source_status_id": "1065647560251961344",
+          "indices": [
+            "94",
+            "117"
+          ],
+          "url": "https://t.co/b3OGbxWuFC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1065647128393863169/pu/img/y5yx6fK-BSBSZ2Ek.jpg",
+          "id_str": "1065647128393863169",
+          "source_user_id": "15257489",
+          "id": "1065647128393863169",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1065647128393863169/pu/img/y5yx6fK-BSBSZ2Ek.jpg",
+          "source_user_id_str": "15257489",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1065647560251961344",
+          "display_url": "pic.twitter.com/b3OGbxWuFC"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "117"
+    ],
+    "favorite_count": "0",
+    "id_str": "1065699861436223492",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1065699861436223492",
+    "possibly_sensitive": false,
+    "created_at": "Thu Nov 22 20:13:41 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @carlocavaluzzi: could not sleep all night because I kept thinking about making this video https://t.co/b3OGbxWuFC",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/carlocavaluzzi/status/1065647560251961344/video/1",
+          "source_status_id": "1065647560251961344",
+          "indices": [
+            "94",
+            "117"
+          ],
+          "url": "https://t.co/b3OGbxWuFC",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1065647128393863169/pu/img/y5yx6fK-BSBSZ2Ek.jpg",
+          "id_str": "1065647128393863169",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "11167",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1065647128393863169/pu/vid/320x180/_gFZh0wy8xyPRq6y.mp4?tag=5"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1065647128393863169/pu/vid/1280x720/mE1nkDPxppw1eD-W.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1065647128393863169/pu/vid/640x360/NAg4u7iu7vgQTUpt.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1065647128393863169/pu/pl/4woth8TLc0xsAC65.m3u8?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "15257489",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1065647128393863169",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1065647128393863169/pu/img/y5yx6fK-BSBSZ2Ek.jpg",
+          "source_user_id_str": "15257489",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1065647560251961344",
+          "display_url": "pic.twitter.com/b3OGbxWuFC"
+        }
+      ]
+    }
+  }
+}

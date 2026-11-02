@@ -1,0 +1,54 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1226261906677207042"
+        ],
+        "editableUntil": "2020-02-08T22:49:56.053Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "typescript",
+          "indices": [
+            "0",
+            "11"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/Id4Twpgo40",
+          "expanded_url": "https://www.typescriptlang.org/play/#code/PTAEBMFMGcGMCcCWAjGpEBdqQDYDNQBDaUAbQEYAaAJkoGYBdAWACgMBPAB0lE8PkIBbEgF5QABX5DIGSPGgAeVqBWgAFIQBcoKqGTbaoWNroBKUCIB8O1pYDcrViFAByeJFgB7AG5zoL0AwACx4+AUEZOSIAO2jPDEIMRE9o6ABCJzAoOCRUEkxsfCJoTUyjFOgMUEFtDW1dfVBDY1AzC2tyVi9UqprlVTUAOmGwoRLeKWFzKxsWEX6VNWmOhxYygHcQ6NB1nnBPQJDQd195SEpArhgERE4qgHNIaLlEtFGI2XhQaOl01g5uLwLGRdIZGKtMmBupVqtRau9oAB9AAM9QuCMR5AM6MmSLhrWWs2hvThC3Uw0GCO0nEJnTmZKW7R0diAA",
+          "display_url": "typescriptlang.org/play/#code/PTA…",
+          "indices": [
+            "273",
+            "296"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "296"
+    ],
+    "favorite_count": "3",
+    "id_str": "1226261906677207042",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1226261906677207042",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 08 21:49:56 +0000 2020",
+    "favorited": false,
+    "full_text": "#typescript secret: tuples are secretly function parameters!\n\n// type params = [1,2,3]\ntype params = Parameters&lt;\n    (a: 1, b: 2, c: 3) =&gt; 1\n&gt;;\n\n// names are back!\n// const m: (a: 1, b: 2, c: 3) =&gt; 1\nconst m:\n    (...params: params) =&gt; 1\n=\n    () =&gt; 1\n;\n\nhttps://t.co/Id4Twpgo40",
+    "lang": "en"
+  }
+}

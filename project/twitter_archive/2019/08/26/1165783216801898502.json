@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1165783216801898502"
+        ],
+        "editableUntil": "2019-08-26T01:29:12.747Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Maksim Shudrak",
+          "screen_name": "MShudrak",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "880120724429602816",
+          "id": "880120724429602816"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MShudrak/status/1165509956256165893/video/1",
+          "source_status_id": "1165509956256165893",
+          "indices": [
+            "58",
+            "81"
+          ],
+          "url": "https://t.co/0lmXAYL7Ne",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1165509824244699136/pu/img/sTMZSQSZc-3awByT.jpg",
+          "id_str": "1165509824244699136",
+          "source_user_id": "880120724429602816",
+          "id": "1165509824244699136",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1165509824244699136/pu/img/sTMZSQSZc-3awByT.jpg",
+          "source_user_id_str": "880120724429602816",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "372",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1520",
+              "h": "832",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "657",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1165509956256165893",
+          "display_url": "pic.twitter.com/0lmXAYL7Ne"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "fuzzing",
+          "indices": [
+            "49",
+            "57"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "81"
+    ],
+    "favorite_count": "0",
+    "id_str": "1165783216801898502",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1165783216801898502",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 26 00:29:12 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @MShudrak: That's how AFL mutates input file.\n#fuzzing https://t.co/0lmXAYL7Ne",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/MShudrak/status/1165509956256165893/video/1",
+          "source_status_id": "1165509956256165893",
+          "indices": [
+            "58",
+            "81"
+          ],
+          "url": "https://t.co/0lmXAYL7Ne",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1165509824244699136/pu/img/sTMZSQSZc-3awByT.jpg",
+          "id_str": "1165509824244699136",
+          "video_info": {
+            "aspect_ratio": [
+              "95",
+              "52"
+            ],
+            "duration_millis": "135800",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1165509824244699136/pu/pl/L18uddeRsIhGP9l-.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1165509824244699136/pu/vid/656x360/jaLUf1oVJakn5RiB.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1165509824244699136/pu/vid/492x270/9Y2t15fCHRM1rNJv.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1165509824244699136/pu/vid/1314x720/HiLd-C271uSYDQxN.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "880120724429602816",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1165509824244699136",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1165509824244699136/pu/img/sTMZSQSZc-3awByT.jpg",
+          "source_user_id_str": "880120724429602816",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "372",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "1520",
+              "h": "832",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "657",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1165509956256165893",
+          "display_url": "pic.twitter.com/0lmXAYL7Ne"
+        }
+      ]
+    }
+  }
+}

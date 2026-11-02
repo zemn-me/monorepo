@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1130030811627941888"
+        ],
+        "editableUntil": "2019-05-19T09:41:55.106Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "woutmees (also on bluesky)",
+          "screen_name": "woutmees",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "1046863441007403008",
+          "id": "1046863441007403008"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/woutmees/status/1129532409266003968/video/1",
+          "source_status_id": "1129532409266003968",
+          "indices": [
+            "117",
+            "140"
+          ],
+          "url": "https://t.co/wPT1ttV18O",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1129532361425674240/pu/img/qOwoP-7OZzNDzD6k.jpg",
+          "id_str": "1129532361425674240",
+          "source_user_id": "1046863441007403008",
+          "id": "1129532361425674240",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1129532361425674240/pu/img/qOwoP-7OZzNDzD6k.jpg",
+          "source_user_id_str": "1046863441007403008",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1129532409266003968",
+          "display_url": "pic.twitter.com/wPT1ttV18O"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1130030811627941888",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1130030811627941888",
+    "possibly_sensitive": false,
+    "created_at": "Sun May 19 08:41:55 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @woutmees: Reminder that Toby Fox made this video in 2012.\n\nAs long as I live, I will not let people forget this. https://t.co/wPT1ttV18O",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/woutmees/status/1129532409266003968/video/1",
+          "source_status_id": "1129532409266003968",
+          "indices": [
+            "117",
+            "140"
+          ],
+          "url": "https://t.co/wPT1ttV18O",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1129532361425674240/pu/img/qOwoP-7OZzNDzD6k.jpg",
+          "id_str": "1129532361425674240",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "28895",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1129532361425674240/pu/vid/240x180/nkKOWcNU1CYoSnXR.mp4?tag=9"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1129532361425674240/pu/pl/A3QgIDWRki3fk_zz.m3u8?tag=9"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1129532361425674240/pu/vid/480x360/mIj55utv6v4e2NoJ.mp4?tag=9"
+              }
+            ]
+          },
+          "source_user_id": "1046863441007403008",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1129532361425674240",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1129532361425674240/pu/img/qOwoP-7OZzNDzD6k.jpg",
+          "source_user_id_str": "1046863441007403008",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "480",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1129532409266003968",
+          "display_url": "pic.twitter.com/wPT1ttV18O"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "966488382837874688"
+        ],
+        "editableUntil": "2018-02-22T02:42:41.611Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "71",
+            "86"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/CsMHJkePbi",
+          "expanded_url": "http://mksben.l0.cm/2015/10/css-based-attack-abusing-unicode-range.html",
+          "display_url": "mksben.l0.cm/2015/10/css-ba…",
+          "indices": [
+            "230",
+            "253"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "253"
+    ],
+    "favorite_count": "2",
+    "id_str": "966488382837874688",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "966488382837874688",
+    "possibly_sensitive": false,
+    "created_at": "Thu Feb 22 01:42:41 +0000 2018",
+    "favorited": false,
+    "full_text": "people who think the css value selector exfiltration technique is cool @kinugawamasato came up with a similar CSS based exfil. technique that can attack any text on the page using custom font rules in a similar vein some time ago https://t.co/CsMHJkePbi",
+    "lang": "en"
+  }
+}

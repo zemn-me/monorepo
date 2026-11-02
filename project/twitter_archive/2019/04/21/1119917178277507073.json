@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1119917178277507073"
+        ],
+        "editableUntil": "2019-04-21T11:53:57.013Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "jimby 🌱",
+          "screen_name": "JimmyWhetzel",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "336310362",
+          "id": "336310362"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JimmyWhetzel/status/1119753573812920323/video/1",
+          "source_status_id": "1119753573812920323",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/gBpJlZ16Zo",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1119753508000030727/pu/img/Dmnx3Reue1F0BOJ1.jpg",
+          "id_str": "1119753508000030727",
+          "source_user_id": "336310362",
+          "id": "1119753508000030727",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1119753508000030727/pu/img/Dmnx3Reue1F0BOJ1.jpg",
+          "source_user_id_str": "336310362",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1119753573812920323",
+          "display_url": "pic.twitter.com/gBpJlZ16Zo"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "64"
+    ],
+    "favorite_count": "0",
+    "id_str": "1119917178277507073",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1119917178277507073",
+    "possibly_sensitive": false,
+    "created_at": "Sun Apr 21 10:53:57 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @JimmyWhetzel: RT to bless a timeline https://t.co/gBpJlZ16Zo",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/JimmyWhetzel/status/1119753573812920323/video/1",
+          "source_status_id": "1119753573812920323",
+          "indices": [
+            "41",
+            "64"
+          ],
+          "url": "https://t.co/gBpJlZ16Zo",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1119753508000030727/pu/img/Dmnx3Reue1F0BOJ1.jpg",
+          "id_str": "1119753508000030727",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "20773",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1119753508000030727/pu/pl/5gXrca6b9C0ATg-H.m3u8?tag=8&v=cfc"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1119753508000030727/pu/vid/360x640/bjRaTueXanQ1b0bX.mp4?tag=8"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1119753508000030727/pu/vid/320x568/qHL7Ep0miHQx3ydM.mp4?tag=8"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1119753508000030727/pu/vid/720x1280/nn2UNeEAyezlNevf.mp4?tag=8"
+              }
+            ]
+          },
+          "source_user_id": "336310362",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1119753508000030727",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1119753508000030727/pu/img/Dmnx3Reue1F0BOJ1.jpg",
+          "source_user_id_str": "336310362",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1119753573812920323",
+          "display_url": "pic.twitter.com/gBpJlZ16Zo"
+        }
+      ]
+    }
+  }
+}

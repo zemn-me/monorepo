@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1169784506770972672"
+        ],
+        "editableUntil": "2019-09-06T02:28:54.616Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "CSPAN 5",
+          "screen_name": "CSPANFive",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3091735275",
+          "id": "3091735275"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CSPANFive/status/1169783219329359872/video/1",
+          "source_status_id": "1169783219329359872",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/74zIc7U7AO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1169783178753716224/pu/img/Jj_g5bhlDgPM1Bp7.jpg",
+          "id_str": "1169783178753716224",
+          "source_user_id": "3091735275",
+          "id": "1169783178753716224",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1169783178753716224/pu/img/Jj_g5bhlDgPM1Bp7.jpg",
+          "source_user_id_str": "3091735275",
+          "sizes": {
+            "large": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1169783219329359872",
+          "display_url": "pic.twitter.com/74zIc7U7AO"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "43"
+    ],
+    "favorite_count": "0",
+    "id_str": "1169784506770972672",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1169784506770972672",
+    "possibly_sensitive": false,
+    "created_at": "Fri Sep 06 01:28:54 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @CSPANFive: Ummm https://t.co/74zIc7U7AO",
+    "lang": "und",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/CSPANFive/status/1169783219329359872/video/1",
+          "source_status_id": "1169783219329359872",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/74zIc7U7AO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1169783178753716224/pu/img/Jj_g5bhlDgPM1Bp7.jpg",
+          "id_str": "1169783178753716224",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "28896",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169783178753716224/pu/vid/640x360/di2gdRucf8xwmBBP.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1169783178753716224/pu/pl/Ij_usS0h093aqWP8.m3u8?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169783178753716224/pu/vid/480x270/u5CqTvjjHHbtErdq.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1169783178753716224/pu/vid/1024x576/NCY1YOiVeZFJu9B-.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3091735275",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1169783178753716224",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1169783178753716224/pu/img/Jj_g5bhlDgPM1Bp7.jpg",
+          "source_user_id_str": "3091735275",
+          "sizes": {
+            "large": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1024",
+              "h": "576",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1169783219329359872",
+          "display_url": "pic.twitter.com/74zIc7U7AO"
+        }
+      ]
+    }
+  }
+}

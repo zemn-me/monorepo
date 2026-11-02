@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1265480234356408320"
+        ],
+        "editableUntil": "2020-05-27T04:09:34.013Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Dog Solution",
+          "screen_name": "DogSolutions",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "40343143",
+          "id": "40343143"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DogSolutions/status/1265325665433288706/video/1",
+          "source_status_id": "1265325665433288706",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/qdxq3gG8re",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1265325488664444928/pu/img/j0x_YskrTZNhTWye.jpg",
+          "id_str": "1265325488664444928",
+          "source_user_id": "40343143",
+          "id": "1265325488664444928",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1265325488664444928/pu/img/j0x_YskrTZNhTWye.jpg",
+          "source_user_id_str": "40343143",
+          "sizes": {
+            "small": {
+              "w": "545",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "958",
+              "h": "1196",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "958",
+              "h": "1196",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1265325665433288706",
+          "display_url": "pic.twitter.com/qdxq3gG8re"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "83"
+    ],
+    "favorite_count": "0",
+    "id_str": "1265480234356408320",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1265480234356408320",
+    "possibly_sensitive": false,
+    "created_at": "Wed May 27 03:09:34 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @DogSolutions: Obvious solution, not alweys the best one https://t.co/qdxq3gG8re",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DogSolutions/status/1265325665433288706/video/1",
+          "source_status_id": "1265325665433288706",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/qdxq3gG8re",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1265325488664444928/pu/img/j0x_YskrTZNhTWye.jpg",
+          "id_str": "1265325488664444928",
+          "video_info": {
+            "aspect_ratio": [
+              "479",
+              "598"
+            ],
+            "duration_millis": "5000",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1265325488664444928/pu/vid/320x398/mrnoyBpjDCrFsHx4.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1265325488664444928/pu/vid/720x898/KmloB4uOqeQH2nqL.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1265325488664444928/pu/pl/UV1-zeJ5qTuXOhgA.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1265325488664444928/pu/vid/360x448/zKJ1vG4UmigxOQLv.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "40343143",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1265325488664444928",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1265325488664444928/pu/img/j0x_YskrTZNhTWye.jpg",
+          "source_user_id_str": "40343143",
+          "sizes": {
+            "small": {
+              "w": "545",
+              "h": "680",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "958",
+              "h": "1196",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "958",
+              "h": "1196",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1265325665433288706",
+          "display_url": "pic.twitter.com/qdxq3gG8re"
+        }
+      ]
+    }
+  }
+}

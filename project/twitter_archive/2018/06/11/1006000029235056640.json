@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1006000029235056640"
+        ],
+        "editableUntil": "2018-06-11T03:27:52.203Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "E3",
+          "screen_name": "E3",
+          "indices": [
+            "3",
+            "6"
+          ],
+          "id_str": "19413393",
+          "id": "19413393"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/E3/status/1005998303262076928/video/1",
+          "source_status_id": "1005998303262076928",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/NykHx4SOzk",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1005998247825903616/pu/img/psHQDi3yjTCmarh3.jpg",
+          "id_str": "1005998247825903616",
+          "source_user_id": "19413393",
+          "id": "1005998247825903616",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1005998247825903616/pu/img/psHQDi3yjTCmarh3.jpg",
+          "source_user_id_str": "19413393",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1005998303262076928",
+          "display_url": "pic.twitter.com/NykHx4SOzk"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "59"
+    ],
+    "favorite_count": "0",
+    "id_str": "1006000029235056640",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1006000029235056640",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jun 11 02:27:52 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @E3: Where is Skyrim going next? https://t.co/NykHx4SOzk",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/E3/status/1005998303262076928/video/1",
+          "source_status_id": "1005998303262076928",
+          "indices": [
+            "36",
+            "59"
+          ],
+          "url": "https://t.co/NykHx4SOzk",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1005998247825903616/pu/img/psHQDi3yjTCmarh3.jpg",
+          "id_str": "1005998247825903616",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "15167",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1005998247825903616/pu/pl/wXwtPz9TQgJKmjNv.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1005998247825903616/pu/vid/640x360/bH26tANiAPFWhiWn.mp4?tag=3"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1005998247825903616/pu/vid/320x180/8INmH7Kg9zoRP668.mp4?tag=3"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1005998247825903616/pu/vid/1280x720/_uePZVzgqTNQan7L.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "19413393",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1005998247825903616",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1005998247825903616/pu/img/psHQDi3yjTCmarh3.jpg",
+          "source_user_id_str": "19413393",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1005998303262076928",
+          "display_url": "pic.twitter.com/NykHx4SOzk"
+        }
+      ]
+    }
+  }
+}

@@ -1,3 +1,5 @@
+load("//md:rules.bzl", "md_files")
+
 "aliases for tasks so they dont get broken"
 
 load("//bzl:rules.bzl", "bazel_lint")
@@ -19,10 +21,16 @@ alias(
 
 alias(
     name = "install_sapling_hooks",
-    actual = "//.vscode/prep:prep_bin",
+    actual = "//py/devtools/prep:prep_bin",
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "vscode",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -1,0 +1,54 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1414551605362499587"
+        ],
+        "editableUntil": "2021-07-12T12:45:58.473Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [
+        {
+          "text": "XSS",
+          "indices": [
+            "84",
+            "88"
+          ]
+        }
+      ],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "koto",
+          "screen_name": "kkotowicz",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "7863612",
+          "id": "7863612"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "1414551605362499587",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1414551605362499587",
+    "created_at": "Mon Jul 12 11:45:58 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @kkotowicz: Where's Trusted Types? How and where are they used?  Did we kill DOM #XSS already?\n\nAnswer to all these - and more - questio…",
+    "lang": "en"
+  }
+}

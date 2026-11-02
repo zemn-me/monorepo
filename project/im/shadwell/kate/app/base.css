@@ -1,0 +1,13 @@
+:root {
+	color-scheme: light;
+}
+
+body {
+	margin: 0;
+	font-family: 'Manrope', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+	background:
+		radial-gradient(circle at 20% 20%, #f1f3ff 0, transparent 30%),
+		radial-gradient(circle at 80% 0%, #e6fff3 0, transparent 28%),
+		linear-gradient(135deg, #fdfbff 0%, #f6fff9 100%);
+	color: #17212a;
+}

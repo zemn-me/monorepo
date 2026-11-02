@@ -6,7 +6,7 @@ BAD=1
 
 echo "Testing to see if renovate config is already broken..."
 
-if ! bazel test //:validate_renovate_config_test; then
+if ! bazel test //.github:validate_renovate_config_test; then
     echo "Renovate config appears already broken, striking off this commit."
     exit $CANNOT_BE_TESTED
 fi
@@ -21,7 +21,7 @@ echo "See if it breaks..."
 
 EXIT_CODE=$CANNOT_BE_TESTED
 
-if bazel test //:validate_renovate_config_test; then
+if bazel test //.github:validate_renovate_config_test; then
     echo "Pass."
     EXIT_CODE=$GOOD
     else

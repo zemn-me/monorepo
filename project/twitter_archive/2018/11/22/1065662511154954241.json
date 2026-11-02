@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1065662511154954241"
+        ],
+        "editableUntil": "2018-11-22T18:45:16.368Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Sega Protogenesis",
+          "screen_name": "gravislizard",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "267370489",
+          "id": "267370489"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/gravislizard/status/1065470686456508416/video/1",
+          "source_status_id": "1065470686456508416",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/umwG1l3H21",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1065470658539225090/pr/img/G9Qdwz120K1Ysx0D.jpg",
+          "id_str": "1065470658539225090",
+          "source_user_id": "267370489",
+          "id": "1065470658539225090",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1065470658539225090/pr/img/G9Qdwz120K1Ysx0D.jpg",
+          "source_user_id_str": "267370489",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1065470686456508416",
+          "display_url": "pic.twitter.com/umwG1l3H21"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "79"
+    ],
+    "favorite_count": "0",
+    "id_str": "1065662511154954241",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1065662511154954241",
+    "possibly_sensitive": false,
+    "created_at": "Thu Nov 22 17:45:16 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @gravislizard: android shitware is out of this world https://t.co/umwG1l3H21",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/gravislizard/status/1065470686456508416/video/1",
+          "source_status_id": "1065470686456508416",
+          "indices": [
+            "56",
+            "79"
+          ],
+          "url": "https://t.co/umwG1l3H21",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1065470658539225090/pr/img/G9Qdwz120K1Ysx0D.jpg",
+          "id_str": "1065470658539225090",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "10811",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1065470658539225090/pr/vid/720x1280/5yR4my-YnbyMwsMP.mp4?tag=5"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1065470658539225090/pr/pl/Og3gwF5Sail_kp1M.m3u8?tag=5"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1065470658539225090/pr/vid/180x320/zoGf7Nvy7TvflXTT.mp4?tag=5"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1065470658539225090/pr/vid/360x640/DCjnI3pW9jAFMiny.mp4?tag=5"
+              }
+            ]
+          },
+          "source_user_id": "267370489",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1065470658539225090",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1065470658539225090/pr/img/G9Qdwz120K1Ysx0D.jpg",
+          "source_user_id_str": "267370489",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1065470686456508416",
+          "display_url": "pic.twitter.com/umwG1l3H21"
+        }
+      ]
+    }
+  }
+}

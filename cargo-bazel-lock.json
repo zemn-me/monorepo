@@ -1,5 +1,5 @@
 {
-  "checksum": "84d8680eb4b4a6a748c837cd6a6362f0529f572b2b702b202b9f6747e5339299",
+  "checksum": "3f0e56ea745f2622b40dc41f0b6b39a8c33792252c987f8b73a8a45afb6e4e18",
   "crates": {
     "Inflector 0.11.4": {
       "name": "Inflector",
@@ -332,7 +332,7 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             }
           ],
@@ -909,7 +909,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -1040,7 +1040,7 @@
                 "target": "addr2line"
               },
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -1705,7 +1705,7 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.128",
+              "id": "serde_json 1.0.136",
               "target": "serde_json"
             }
           ],
@@ -1871,12 +1871,6 @@
                 "target": "iana_time_zone"
               }
             ],
-            "aarch64-fuchsia": [
-              {
-                "id": "iana-time-zone 0.1.60",
-                "target": "iana_time_zone"
-              }
-            ],
             "aarch64-linux-android": [
               {
                 "id": "android-tzdata 0.1.1",
@@ -1891,6 +1885,12 @@
               {
                 "id": "windows-targets 0.52.6",
                 "target": "windows_targets"
+              }
+            ],
+            "aarch64-unknown-fuchsia": [
+              {
+                "id": "iana-time-zone 0.1.60",
+                "target": "iana_time_zone"
               }
             ],
             "aarch64-unknown-linux-gnu": [
@@ -1991,12 +1991,6 @@
                 "target": "iana_time_zone"
               }
             ],
-            "x86_64-fuchsia": [
-              {
-                "id": "iana-time-zone 0.1.60",
-                "target": "iana_time_zone"
-              }
-            ],
             "x86_64-linux-android": [
               {
                 "id": "android-tzdata 0.1.1",
@@ -2014,6 +2008,12 @@
               }
             ],
             "x86_64-unknown-freebsd": [
+              {
+                "id": "iana-time-zone 0.1.60",
+                "target": "iana_time_zone"
+              }
+            ],
+            "x86_64-unknown-fuchsia": [
               {
                 "id": "iana-time-zone 0.1.60",
                 "target": "iana_time_zone"
@@ -2130,13 +2130,13 @@
                 "target": "ansi_term"
               }
             ],
-            "aarch64-fuchsia": [
+            "aarch64-linux-android": [
               {
                 "id": "ansi_term 0.12.1",
                 "target": "ansi_term"
               }
             ],
-            "aarch64-linux-android": [
+            "aarch64-unknown-fuchsia": [
               {
                 "id": "ansi_term 0.12.1",
                 "target": "ansi_term"
@@ -2244,7 +2244,7 @@
                 "target": "ansi_term"
               }
             ],
-            "wasm32-wasi": [
+            "wasm32-wasip1": [
               {
                 "id": "ansi_term 0.12.1",
                 "target": "ansi_term"
@@ -2262,12 +2262,6 @@
                 "target": "ansi_term"
               }
             ],
-            "x86_64-fuchsia": [
-              {
-                "id": "ansi_term 0.12.1",
-                "target": "ansi_term"
-              }
-            ],
             "x86_64-linux-android": [
               {
                 "id": "ansi_term 0.12.1",
@@ -2275,6 +2269,12 @@
               }
             ],
             "x86_64-unknown-freebsd": [
+              {
+                "id": "ansi_term 0.12.1",
+                "target": "ansi_term"
+              }
+            ],
+            "x86_64-unknown-fuchsia": [
               {
                 "id": "ansi_term 0.12.1",
                 "target": "ansi_term"
@@ -2309,14 +2309,14 @@
       ],
       "license_file": "LICENSE-MIT"
     },
-    "clap 4.5.18": {
+    "clap 4.5.26": {
       "name": "clap",
-      "version": "4.5.18",
+      "version": "4.5.26",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap/4.5.18/download",
-          "sha256": "b0956a43b323ac1afaffc053ed5c4b7c1f1800bacd1683c353aabbb752515dd3"
+          "url": "https://static.crates.io/crates/clap/4.5.26/download",
+          "sha256": "a8eb5e908ef3a6efbe1ed62520fb7287959888c88485abe072543190ecc66783"
         }
       },
       "targets": [
@@ -2366,7 +2366,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap_builder 4.5.18",
+              "id": "clap_builder 4.5.26",
               "target": "clap_builder"
             }
           ],
@@ -2376,13 +2376,13 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "clap_derive 4.5.18",
+              "id": "clap_derive 4.5.24",
               "target": "clap_derive"
             }
           ],
           "selects": {}
         },
-        "version": "4.5.18"
+        "version": "4.5.26"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2391,14 +2391,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_builder 4.5.18": {
+    "clap_builder 4.5.26": {
       "name": "clap_builder",
-      "version": "4.5.18",
+      "version": "4.5.26",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_builder/4.5.18/download",
-          "sha256": "4d72166dd41634086d5803a47eb71ae740e61d84709c36f3c34110173db3961b"
+          "url": "https://static.crates.io/crates/clap_builder/4.5.26/download",
+          "sha256": "96b01801b5fc6a0a232407abc821660c9c6d25a1cafc0d4f85f29fb8d9afc121"
         }
       },
       "targets": [
@@ -2442,7 +2442,7 @@
               "target": "anstyle"
             },
             {
-              "id": "clap_lex 0.7.1",
+              "id": "clap_lex 0.7.4",
               "target": "clap_lex"
             },
             {
@@ -2453,7 +2453,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.18"
+        "version": "4.5.26"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2462,14 +2462,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_derive 4.5.18": {
+    "clap_derive 4.5.24": {
       "name": "clap_derive",
-      "version": "4.5.18",
+      "version": "4.5.24",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_derive/4.5.18/download",
-          "sha256": "4ac6a0c7b1a9e9a5186361f67dfa1b88213572f427fb9ab038efb2bd8c582dab"
+          "url": "https://static.crates.io/crates/clap_derive/4.5.24/download",
+          "sha256": "54b755194d6389280185988721fffba69495eed5ee9feeee9a599b53db80318c"
         }
       },
       "targets": [
@@ -2519,7 +2519,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "4.5.18"
+        "version": "4.5.24"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2528,14 +2528,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "clap_lex 0.7.1": {
+    "clap_lex 0.7.4": {
       "name": "clap_lex",
-      "version": "0.7.1",
+      "version": "0.7.4",
       "package_url": "https://github.com/clap-rs/clap",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/clap_lex/0.7.1/download",
-          "sha256": "4b82cf0babdbd58558212896d1a4272303a57bdb245c2bf1147185fb45640e70"
+          "url": "https://static.crates.io/crates/clap_lex/0.7.4/download",
+          "sha256": "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
         }
       },
       "targets": [
@@ -2558,7 +2558,7 @@
           "**"
         ],
         "edition": "2021",
-        "version": "0.7.1"
+        "version": "0.7.4"
       },
       "license": "MIT OR Apache-2.0",
       "license_ids": [
@@ -2748,14 +2748,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "command_attr 0.5.2": {
+    "command_attr 0.5.3": {
       "name": "command_attr",
-      "version": "0.5.2",
+      "version": "0.5.3",
       "package_url": null,
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/command_attr/0.5.2/download",
-          "sha256": "88da8d7e9fe6f30d8e3fcf72d0f84102b49de70fece952633e8439e89bdc7631"
+          "url": "https://static.crates.io/crates/command_attr/0.5.3/download",
+          "sha256": "6fcc89439e1bb4e19050a9586a767781a3060000d2f3296fd2a40597ad9421c5"
         }
       },
       "targets": [
@@ -2795,7 +2795,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "0.5.2"
+        "version": "0.5.3"
       },
       "license": "ISC",
       "license_ids": [
@@ -2846,7 +2846,7 @@
               "target": "core_foundation_sys"
             },
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             }
           ],
@@ -2942,25 +2942,25 @@
           "selects": {
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"aarch64\", target_os = \"linux\"))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"aarch64\", target_vendor = \"apple\"))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(all(target_arch = \"loongarch64\", target_os = \"linux\"))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ]
@@ -3622,19 +3622,19 @@
           "selects": {
             "cfg(target_os = \"hermit\")": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(target_os = \"wasi\")": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -4195,13 +4195,13 @@
             "aarch64-apple-ios-sim": [
               "default"
             ],
-            "aarch64-fuchsia": [
-              "default"
-            ],
             "aarch64-linux-android": [
               "default"
             ],
             "aarch64-pc-windows-msvc": [
+              "default"
+            ],
+            "aarch64-unknown-fuchsia": [
               "default"
             ],
             "aarch64-unknown-linux-gnu": [
@@ -4261,9 +4261,6 @@
             "x86_64-apple-ios": [
               "default"
             ],
-            "x86_64-fuchsia": [
-              "default"
-            ],
             "x86_64-linux-android": [
               "default"
             ],
@@ -4271,6 +4268,9 @@
               "default"
             ],
             "x86_64-unknown-freebsd": [
+              "default"
+            ],
+            "x86_64-unknown-fuchsia": [
               "default"
             ],
             "x86_64-unknown-linux-gnu": [
@@ -4351,13 +4351,13 @@
             "aarch64-apple-ios-sim": [
               "default"
             ],
-            "aarch64-fuchsia": [
-              "default"
-            ],
             "aarch64-linux-android": [
               "default"
             ],
             "aarch64-pc-windows-msvc": [
+              "default"
+            ],
+            "aarch64-unknown-fuchsia": [
               "default"
             ],
             "aarch64-unknown-linux-gnu": [
@@ -4417,9 +4417,6 @@
             "x86_64-apple-ios": [
               "default"
             ],
-            "x86_64-fuchsia": [
-              "default"
-            ],
             "x86_64-linux-android": [
               "default"
             ],
@@ -4427,6 +4424,9 @@
               "default"
             ],
             "x86_64-unknown-freebsd": [
+              "default"
+            ],
+            "x86_64-unknown-fuchsia": [
               "default"
             ],
             "x86_64-unknown-linux-gnu": [
@@ -4595,13 +4595,13 @@
             "aarch64-apple-ios-sim": [
               "default"
             ],
-            "aarch64-fuchsia": [
-              "default"
-            ],
             "aarch64-linux-android": [
               "default"
             ],
             "aarch64-pc-windows-msvc": [
+              "default"
+            ],
+            "aarch64-unknown-fuchsia": [
               "default"
             ],
             "aarch64-unknown-linux-gnu": [
@@ -4661,9 +4661,6 @@
             "x86_64-apple-ios": [
               "default"
             ],
-            "x86_64-fuchsia": [
-              "default"
-            ],
             "x86_64-linux-android": [
               "default"
             ],
@@ -4671,6 +4668,9 @@
               "default"
             ],
             "x86_64-unknown-freebsd": [
+              "default"
+            ],
+            "x86_64-unknown-fuchsia": [
               "default"
             ],
             "x86_64-unknown-linux-gnu": [
@@ -4789,7 +4789,7 @@
               "default",
               "futures-macro"
             ],
-            "wasm32-wasi": [
+            "wasm32-wasip1": [
               "async-await",
               "async-await-macro",
               "default",
@@ -4848,7 +4848,7 @@
                 "target": "futures_macro"
               }
             ],
-            "wasm32-wasi": [
+            "wasm32-wasip1": [
               {
                 "id": "futures-macro 0.3.30",
                 "target": "futures_macro"
@@ -5050,7 +5050,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ]
@@ -5215,7 +5215,7 @@
               "target": "slab"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -5279,13 +5279,13 @@
             "aarch64-apple-ios-sim": [
               "raw"
             ],
-            "aarch64-fuchsia": [
-              "raw"
-            ],
             "aarch64-linux-android": [
               "raw"
             ],
             "aarch64-pc-windows-msvc": [
+              "raw"
+            ],
+            "aarch64-unknown-fuchsia": [
               "raw"
             ],
             "aarch64-unknown-linux-gnu": [
@@ -5345,9 +5345,6 @@
             "x86_64-apple-ios": [
               "raw"
             ],
-            "x86_64-fuchsia": [
-              "raw"
-            ],
             "x86_64-linux-android": [
               "raw"
             ],
@@ -5355,6 +5352,9 @@
               "raw"
             ],
             "x86_64-unknown-freebsd": [
+              "raw"
+            ],
+            "x86_64-unknown-fuchsia": [
               "raw"
             ],
             "x86_64-unknown-linux-gnu": [
@@ -5497,7 +5497,7 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             }
           ],
@@ -6046,7 +6046,7 @@
               "target": "socket2"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -6121,7 +6121,7 @@
               "target": "rustls"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -6781,14 +6781,14 @@
       ],
       "license_file": null
     },
-    "libc 0.2.155": {
+    "libc 0.2.169": {
       "name": "libc",
-      "version": "0.2.155",
+      "version": "0.2.169",
       "package_url": "https://github.com/rust-lang/libc",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/libc/0.2.155/download",
-          "sha256": "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
+          "url": "https://static.crates.io/crates/libc/0.2.169/download",
+          "sha256": "b5aba8db14291edd000dfcc4d620c7ebfb122c613afb886ca8803fa4e128a20a"
         }
       },
       "targets": [
@@ -6837,15 +6837,15 @@
               "default",
               "std"
             ],
-            "aarch64-fuchsia": [
-              "default",
-              "std"
-            ],
             "aarch64-linux-android": [
               "default",
               "std"
             ],
             "aarch64-pc-windows-msvc": [
+              "default",
+              "std"
+            ],
+            "aarch64-unknown-fuchsia": [
               "default",
               "std"
             ],
@@ -6909,7 +6909,7 @@
               "default",
               "std"
             ],
-            "wasm32-wasi": [
+            "wasm32-wasip1": [
               "default",
               "std"
             ],
@@ -6918,10 +6918,6 @@
               "std"
             ],
             "x86_64-apple-ios": [
-              "default",
-              "std"
-            ],
-            "x86_64-fuchsia": [
               "default",
               "std"
             ],
@@ -6934,6 +6930,10 @@
               "std"
             ],
             "x86_64-unknown-freebsd": [
+              "default",
+              "std"
+            ],
+            "x86_64-unknown-fuchsia": [
               "default",
               "std"
             ],
@@ -6954,14 +6954,14 @@
         "deps": {
           "common": [
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
-        "edition": "2015",
-        "version": "0.2.155"
+        "edition": "2021",
+        "version": "0.2.169"
       },
       "build_script_attrs": {
         "compile_data_glob": [
@@ -7524,7 +7524,7 @@
             ],
             "cfg(target_os = \"wasi\")": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -7534,7 +7534,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -7582,7 +7582,7 @@
         "deps": {
           "common": [
             {
-              "id": "clap 4.5.18",
+              "id": "clap 4.5.26",
               "target": "clap"
             },
             {
@@ -7594,11 +7594,11 @@
               "target": "rxp"
             },
             {
-              "id": "serde_json 1.0.128",
+              "id": "serde_json 1.0.136",
               "target": "serde_json"
             },
             {
-              "id": "serenity 0.12.2",
+              "id": "serenity 0.12.4",
               "target": "serenity"
             },
             {
@@ -7626,7 +7626,7 @@
               "target": "swc_ecma_parser"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -8190,7 +8190,7 @@
             ],
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -9383,145 +9383,145 @@
           "selects": {
             "aarch64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-apple-ios": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-apple-ios-sim": [
               {
-                "id": "libc 0.2.155",
-                "target": "libc"
-              }
-            ],
-            "aarch64-fuchsia": [
-              {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
+                "target": "libc"
+              }
+            ],
+            "aarch64-unknown-fuchsia": [
+              {
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "aarch64-unknown-nto-qnx710": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "arm-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "armv7-linux-androideabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "armv7-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "i686-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "powerpc-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "s390x-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-apple-ios": [
               {
-                "id": "libc 0.2.155",
-                "target": "libc"
-              }
-            ],
-            "x86_64-fuchsia": [
-              {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
+                "target": "libc"
+              }
+            ],
+            "x86_64-unknown-fuchsia": [
+              {
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
             "x86_64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ]
@@ -10090,32 +10090,6 @@
                 "target": "webpki_roots"
               }
             ],
-            "aarch64-fuchsia": [
-              {
-                "id": "hyper-rustls 0.24.2",
-                "target": "hyper_rustls"
-              },
-              {
-                "id": "rustls 0.21.12",
-                "target": "rustls"
-              },
-              {
-                "id": "rustls-pemfile 1.0.4",
-                "target": "rustls_pemfile"
-              },
-              {
-                "id": "tokio-rustls 0.24.1",
-                "target": "tokio_rustls"
-              },
-              {
-                "id": "tokio-util 0.7.11",
-                "target": "tokio_util"
-              },
-              {
-                "id": "webpki-roots 0.25.4",
-                "target": "webpki_roots"
-              }
-            ],
             "aarch64-linux-android": [
               {
                 "id": "hyper-rustls 0.24.2",
@@ -10143,6 +10117,32 @@
               }
             ],
             "aarch64-pc-windows-msvc": [
+              {
+                "id": "hyper-rustls 0.24.2",
+                "target": "hyper_rustls"
+              },
+              {
+                "id": "rustls 0.21.12",
+                "target": "rustls"
+              },
+              {
+                "id": "rustls-pemfile 1.0.4",
+                "target": "rustls_pemfile"
+              },
+              {
+                "id": "tokio-rustls 0.24.1",
+                "target": "tokio_rustls"
+              },
+              {
+                "id": "tokio-util 0.7.11",
+                "target": "tokio_util"
+              },
+              {
+                "id": "webpki-roots 0.25.4",
+                "target": "webpki_roots"
+              }
+            ],
+            "aarch64-unknown-fuchsia": [
               {
                 "id": "hyper-rustls 0.24.2",
                 "target": "hyper_rustls"
@@ -10366,7 +10366,7 @@
                 "target": "pin_project_lite"
               },
               {
-                "id": "tokio 1.40.0",
+                "id": "tokio 1.43.0",
                 "target": "tokio"
               }
             ],
@@ -10376,7 +10376,7 @@
                 "target": "js_sys"
               },
               {
-                "id": "serde_json 1.0.128",
+                "id": "serde_json 1.0.136",
                 "target": "serde_json"
               },
               {
@@ -10696,7 +10696,7 @@
                 "target": "wasm_streams"
               }
             ],
-            "wasm32-wasi": [
+            "wasm32-wasip1": [
               {
                 "id": "wasm-streams 0.4.0",
                 "target": "wasm_streams"
@@ -10729,32 +10729,6 @@
               }
             ],
             "x86_64-apple-ios": [
-              {
-                "id": "hyper-rustls 0.24.2",
-                "target": "hyper_rustls"
-              },
-              {
-                "id": "rustls 0.21.12",
-                "target": "rustls"
-              },
-              {
-                "id": "rustls-pemfile 1.0.4",
-                "target": "rustls_pemfile"
-              },
-              {
-                "id": "tokio-rustls 0.24.1",
-                "target": "tokio_rustls"
-              },
-              {
-                "id": "tokio-util 0.7.11",
-                "target": "tokio_util"
-              },
-              {
-                "id": "webpki-roots 0.25.4",
-                "target": "webpki_roots"
-              }
-            ],
-            "x86_64-fuchsia": [
               {
                 "id": "hyper-rustls 0.24.2",
                 "target": "hyper_rustls"
@@ -10833,6 +10807,32 @@
               }
             ],
             "x86_64-unknown-freebsd": [
+              {
+                "id": "hyper-rustls 0.24.2",
+                "target": "hyper_rustls"
+              },
+              {
+                "id": "rustls 0.21.12",
+                "target": "rustls"
+              },
+              {
+                "id": "rustls-pemfile 1.0.4",
+                "target": "rustls_pemfile"
+              },
+              {
+                "id": "tokio-rustls 0.24.1",
+                "target": "tokio_rustls"
+              },
+              {
+                "id": "tokio-util 0.7.11",
+                "target": "tokio_util"
+              },
+              {
+                "id": "webpki-roots 0.25.4",
+                "target": "webpki_roots"
+              }
+            ],
+            "x86_64-unknown-fuchsia": [
               {
                 "id": "hyper-rustls 0.24.2",
                 "target": "hyper_rustls"
@@ -11019,7 +11019,7 @@
           "selects": {
             "cfg(all(any(target_os = \"android\", target_os = \"linux\"), any(target_arch = \"aarch64\", target_arch = \"arm\")))": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -11219,7 +11219,7 @@
                 "alias": "libc_errno"
               },
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -12305,14 +12305,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "serde_json 1.0.128": {
+    "serde_json 1.0.136": {
       "name": "serde_json",
-      "version": "1.0.128",
+      "version": "1.0.136",
       "package_url": "https://github.com/serde-rs/json",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/serde_json/1.0.128/download",
-          "sha256": "6ff5456707a1de34e7e37f2a6fd3d3f808c318259cbd01ab6377795054b483d8"
+          "url": "https://static.crates.io/crates/serde_json/1.0.136/download",
+          "sha256": "336a0c23cf42a38d9eaa7cd22c7040d04e1228a19a933890805ffd00a16437d2"
         }
       },
       "targets": [
@@ -12372,14 +12372,14 @@
               "target": "serde"
             },
             {
-              "id": "serde_json 1.0.128",
+              "id": "serde_json 1.0.136",
               "target": "build_script_build"
             }
           ],
           "selects": {}
         },
         "edition": "2021",
-        "version": "1.0.128"
+        "version": "1.0.136"
       },
       "build_script_attrs": {
         "compile_data_glob": [
@@ -12456,14 +12456,14 @@
       ],
       "license_file": "LICENSE-APACHE"
     },
-    "serenity 0.12.2": {
+    "serenity 0.12.4": {
       "name": "serenity",
-      "version": "0.12.2",
+      "version": "0.12.4",
       "package_url": "https://github.com/serenity-rs/serenity.git",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/serenity/0.12.2/download",
-          "sha256": "880a04106592d0a8f5bdacb1d935889bfbccb4a14f7074984d9cd857235d34ac"
+          "url": "https://static.crates.io/crates/serenity/0.12.4/download",
+          "sha256": "3d72ec4323681bf9a3cabe40fd080abc2435859b502a1b5aa9bf693f125bfa76"
         }
       },
       "targets": [
@@ -12600,11 +12600,11 @@
               "target": "serde_cow"
             },
             {
-              "id": "serde_json 1.0.128",
+              "id": "serde_json 1.0.136",
               "target": "serde_json"
             },
             {
-              "id": "serenity 0.12.2",
+              "id": "serenity 0.12.4",
               "target": "build_script_build"
             },
             {
@@ -12617,7 +12617,7 @@
               "alias": "dep_time"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -12651,13 +12651,13 @@
               "target": "async_trait"
             },
             {
-              "id": "command_attr 0.5.2",
+              "id": "command_attr 0.5.3",
               "target": "command_attr"
             }
           ],
           "selects": {}
         },
-        "version": "0.12.2"
+        "version": "0.12.4"
       },
       "build_script_attrs": {
         "compile_data_glob": [
@@ -13223,7 +13223,7 @@
           "selects": {
             "cfg(unix)": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               }
             ],
@@ -13376,7 +13376,7 @@
               "target": "cfg_if"
             },
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             },
             {
@@ -14278,12 +14278,6 @@
                 "target": "stacker"
               }
             ],
-            "aarch64-fuchsia": [
-              {
-                "id": "stacker 0.1.15",
-                "target": "stacker"
-              }
-            ],
             "aarch64-linux-android": [
               {
                 "id": "stacker 0.1.15",
@@ -14291,6 +14285,12 @@
               }
             ],
             "aarch64-pc-windows-msvc": [
+              {
+                "id": "stacker 0.1.15",
+                "target": "stacker"
+              }
+            ],
+            "aarch64-unknown-fuchsia": [
               {
                 "id": "stacker 0.1.15",
                 "target": "stacker"
@@ -14380,12 +14380,6 @@
                 "target": "stacker"
               }
             ],
-            "x86_64-fuchsia": [
-              {
-                "id": "stacker 0.1.15",
-                "target": "stacker"
-              }
-            ],
             "x86_64-linux-android": [
               {
                 "id": "stacker 0.1.15",
@@ -14399,6 +14393,12 @@
               }
             ],
             "x86_64-unknown-freebsd": [
+              {
+                "id": "stacker 0.1.15",
+                "target": "stacker"
+              }
+            ],
+            "x86_64-unknown-fuchsia": [
               {
                 "id": "stacker 0.1.15",
                 "target": "stacker"
@@ -14970,7 +14970,7 @@
               "target": "core_foundation_sys"
             },
             {
-              "id": "libc 0.2.155",
+              "id": "libc 0.2.169",
               "target": "libc"
             },
             {
@@ -15606,14 +15606,14 @@
       ],
       "license_file": "LICENSE-APACHE.md"
     },
-    "tokio 1.40.0": {
+    "tokio 1.43.0": {
       "name": "tokio",
-      "version": "1.40.0",
+      "version": "1.43.0",
       "package_url": "https://github.com/tokio-rs/tokio",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/tokio/1.40.0/download",
-          "sha256": "e2b070231665d27ad9ec9b8df639893f46727666c6767db40317fbe920a5d998"
+          "url": "https://static.crates.io/crates/tokio/1.43.0/download",
+          "sha256": "3d61fa4ffa3de412bfea335c6ecff681de2b609ba3c77ef3e00e521813a9ed9e"
         }
       },
       "targets": [
@@ -15682,7 +15682,7 @@
           "selects": {
             "aarch64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15692,7 +15692,7 @@
             ],
             "aarch64-apple-ios": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15702,17 +15702,7 @@
             ],
             "aarch64-apple-ios-sim": [
               {
-                "id": "libc 0.2.155",
-                "target": "libc"
-              },
-              {
-                "id": "socket2 0.5.7",
-                "target": "socket2"
-              }
-            ],
-            "aarch64-fuchsia": [
-              {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15722,7 +15712,7 @@
             ],
             "aarch64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15740,9 +15730,19 @@
                 "target": "windows_sys"
               }
             ],
+            "aarch64-unknown-fuchsia": [
+              {
+                "id": "libc 0.2.169",
+                "target": "libc"
+              },
+              {
+                "id": "socket2 0.5.7",
+                "target": "socket2"
+              }
+            ],
             "aarch64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15752,7 +15752,7 @@
             ],
             "aarch64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15762,7 +15762,7 @@
             ],
             "aarch64-unknown-nto-qnx710": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15772,7 +15772,7 @@
             ],
             "arm-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15782,7 +15782,7 @@
             ],
             "armv7-linux-androideabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15792,7 +15792,7 @@
             ],
             "armv7-unknown-linux-gnueabi": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15808,7 +15808,7 @@
             ],
             "i686-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15818,7 +15818,7 @@
             ],
             "i686-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15838,7 +15838,7 @@
             ],
             "i686-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15848,7 +15848,7 @@
             ],
             "i686-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15858,7 +15858,7 @@
             ],
             "powerpc-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15880,7 +15880,7 @@
             ],
             "s390x-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15902,7 +15902,7 @@
             ],
             "x86_64-apple-darwin": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15912,17 +15912,7 @@
             ],
             "x86_64-apple-ios": [
               {
-                "id": "libc 0.2.155",
-                "target": "libc"
-              },
-              {
-                "id": "socket2 0.5.7",
-                "target": "socket2"
-              }
-            ],
-            "x86_64-fuchsia": [
-              {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15932,7 +15922,7 @@
             ],
             "x86_64-linux-android": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15952,7 +15942,17 @@
             ],
             "x86_64-unknown-freebsd": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
+                "target": "libc"
+              },
+              {
+                "id": "socket2 0.5.7",
+                "target": "socket2"
+              }
+            ],
+            "x86_64-unknown-fuchsia": [
+              {
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15962,7 +15962,7 @@
             ],
             "x86_64-unknown-linux-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15972,7 +15972,7 @@
             ],
             "x86_64-unknown-nixos-gnu": [
               {
-                "id": "libc 0.2.155",
+                "id": "libc 0.2.169",
                 "target": "libc"
               },
               {
@@ -15992,13 +15992,13 @@
         "proc_macro_deps": {
           "common": [
             {
-              "id": "tokio-macros 2.4.0",
+              "id": "tokio-macros 2.5.0",
               "target": "tokio_macros"
             }
           ],
           "selects": {}
         },
-        "version": "1.40.0"
+        "version": "1.43.0"
       },
       "license": "MIT",
       "license_ids": [
@@ -16006,14 +16006,14 @@
       ],
       "license_file": "LICENSE"
     },
-    "tokio-macros 2.4.0": {
+    "tokio-macros 2.5.0": {
       "name": "tokio-macros",
-      "version": "2.4.0",
+      "version": "2.5.0",
       "package_url": "https://github.com/tokio-rs/tokio",
       "repository": {
         "Http": {
-          "url": "https://static.crates.io/crates/tokio-macros/2.4.0/download",
-          "sha256": "693d596312e88961bc67d7f1f97af8a70227d9f90c31bba5806eec004978d752"
+          "url": "https://static.crates.io/crates/tokio-macros/2.5.0/download",
+          "sha256": "6e06d43f1345a3bcd39f6a56dbb7dcab2ba47e68e8ac134855e7e2bdbaf8cab8"
         }
       },
       "targets": [
@@ -16053,7 +16053,7 @@
           "selects": {}
         },
         "edition": "2021",
-        "version": "2.4.0"
+        "version": "2.5.0"
       },
       "license": "MIT",
       "license_ids": [
@@ -16105,7 +16105,7 @@
               "target": "rustls"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -16171,7 +16171,7 @@
               "alias": "pki_types"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -16250,7 +16250,7 @@
               "target": "rustls_pki_types"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             },
             {
@@ -16333,7 +16333,7 @@
               "target": "pin_project_lite"
             },
             {
-              "id": "tokio 1.40.0",
+              "id": "tokio 1.43.0",
               "target": "tokio"
             }
           ],
@@ -20627,7 +20627,7 @@
     }
   },
   "binary_crates": [
-    "clap 4.5.18",
+    "clap 4.5.26",
     "phf_generator 0.11.2",
     "pulldown-cmark 0.9.6",
     "rxp 0.2.0"
@@ -20645,15 +20645,15 @@
     "aarch64-apple-ios-sim": [
       "aarch64-apple-ios-sim"
     ],
-    "aarch64-fuchsia": [
-      "aarch64-fuchsia"
-    ],
     "aarch64-linux-android": [
       "aarch64-linux-android"
     ],
     "aarch64-pc-windows-gnullvm": [],
     "aarch64-pc-windows-msvc": [
       "aarch64-pc-windows-msvc"
+    ],
+    "aarch64-unknown-fuchsia": [
+      "aarch64-unknown-fuchsia"
     ],
     "aarch64-unknown-linux-gnu": [
       "aarch64-unknown-linux-gnu",
@@ -20706,8 +20706,8 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-nto-qnx710",
       "armv7-linux-androideabi",
       "i686-apple-darwin",
@@ -20720,12 +20720,12 @@
       "thumbv7em-none-eabi",
       "thumbv8m.main-none-eabi",
       "wasm32-unknown-unknown",
-      "wasm32-wasi",
+      "wasm32-wasip1",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-none"
     ],
     "cfg(all(target_arch = \"aarch64\", target_env = \"msvc\", not(windows_raw_dylib)))": [
@@ -20764,9 +20764,9 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
       "aarch64-pc-windows-msvc",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20782,10 +20782,10 @@
       "thumbv8m.main-none-eabi",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-pc-windows-msvc",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu",
       "x86_64-unknown-none"
@@ -20794,9 +20794,9 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
       "aarch64-pc-windows-msvc",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20807,10 +20807,10 @@
       "i686-unknown-linux-gnu",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-pc-windows-msvc",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu",
       "x86_64-unknown-none"
@@ -20819,9 +20819,9 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
       "aarch64-pc-windows-msvc",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20832,10 +20832,10 @@
       "i686-unknown-linux-gnu",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-pc-windows-msvc",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu",
       "x86_64-unknown-none"
@@ -20852,8 +20852,8 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20866,12 +20866,12 @@
       "i686-unknown-linux-gnu",
       "powerpc-unknown-linux-gnu",
       "s390x-unknown-linux-gnu",
-      "wasm32-wasi",
+      "wasm32-wasip1",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu"
     ],
@@ -20879,8 +20879,8 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20898,12 +20898,12 @@
       "thumbv7em-none-eabi",
       "thumbv8m.main-none-eabi",
       "wasm32-unknown-unknown",
-      "wasm32-wasi",
+      "wasm32-wasip1",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu",
       "x86_64-unknown-none"
@@ -20912,9 +20912,9 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
       "aarch64-pc-windows-msvc",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20934,10 +20934,10 @@
       "thumbv8m.main-none-eabi",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-pc-windows-msvc",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu",
       "x86_64-unknown-none"
@@ -20945,7 +20945,7 @@
     "cfg(skeptic)": [],
     "cfg(target_arch = \"wasm32\")": [
       "wasm32-unknown-unknown",
-      "wasm32-wasi"
+      "wasm32-wasip1"
     ],
     "cfg(target_feature = \"atomics\")": [],
     "cfg(target_os = \"android\")": [
@@ -20963,7 +20963,7 @@
     ],
     "cfg(target_os = \"redox\")": [],
     "cfg(target_os = \"wasi\")": [
-      "wasm32-wasi"
+      "wasm32-wasip1"
     ],
     "cfg(target_os = \"windows\")": [
       "aarch64-pc-windows-msvc",
@@ -20975,8 +20975,8 @@
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
       "aarch64-apple-ios-sim",
-      "aarch64-fuchsia",
       "aarch64-linux-android",
+      "aarch64-unknown-fuchsia",
       "aarch64-unknown-linux-gnu",
       "aarch64-unknown-nixos-gnu",
       "aarch64-unknown-nto-qnx710",
@@ -20991,9 +20991,9 @@
       "s390x-unknown-linux-gnu",
       "x86_64-apple-darwin",
       "x86_64-apple-ios",
-      "x86_64-fuchsia",
       "x86_64-linux-android",
       "x86_64-unknown-freebsd",
+      "x86_64-unknown-fuchsia",
       "x86_64-unknown-linux-gnu",
       "x86_64-unknown-nixos-gnu"
     ],
@@ -21040,17 +21040,14 @@
     "wasm32-unknown-unknown": [
       "wasm32-unknown-unknown"
     ],
-    "wasm32-wasi": [
-      "wasm32-wasi"
+    "wasm32-wasip1": [
+      "wasm32-wasip1"
     ],
     "x86_64-apple-darwin": [
       "x86_64-apple-darwin"
     ],
     "x86_64-apple-ios": [
       "x86_64-apple-ios"
-    ],
-    "x86_64-fuchsia": [
-      "x86_64-fuchsia"
     ],
     "x86_64-linux-android": [
       "x86_64-linux-android"
@@ -21062,6 +21059,9 @@
     ],
     "x86_64-unknown-freebsd": [
       "x86_64-unknown-freebsd"
+    ],
+    "x86_64-unknown-fuchsia": [
+      "x86_64-unknown-fuchsia"
     ],
     "x86_64-unknown-linux-gnu": [
       "x86_64-unknown-linux-gnu",
@@ -21075,18 +21075,19 @@
     ]
   },
   "direct_deps": [
-    "clap 4.5.18",
+    "clap 4.5.26",
     "hex 0.4.3",
     "rxp 0.2.0",
-    "serde_json 1.0.128",
-    "serenity 0.12.2",
+    "serde_json 1.0.136",
+    "serenity 0.12.4",
     "sha2 0.10.8",
     "swc_allocator 0.1.6",
     "swc_atoms 1.0.0",
     "swc_common 0.36.0",
     "swc_ecma_ast 0.117.0",
     "swc_ecma_parser 0.148.0",
-    "tokio 1.40.0"
+    "tokio 1.43.0"
   ],
-  "direct_dev_deps": []
+  "direct_dev_deps": [],
+  "unused_patches": []
 }

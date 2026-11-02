@@ -1,0 +1,21 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("//bzl:rules.bzl", "bazel_lint")
+
+sh_binary(
+    name = "pnpm",
+    srcs = [
+        "pnpm_bazel.sh",
+    ],
+    data = [
+        "@pnpm",
+    ],
+    visibility = ["//sh:__subpackages__"],
+    deps = [
+        "@rules_shell//shell/runfiles",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

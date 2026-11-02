@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1368394725955362818"
+        ],
+        "editableUntil": "2021-03-07T03:55:00.869Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "",
+          "screen_name": "smalfrog",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "-1",
+          "id": "-1"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/smalfrog/status/1367885480314953731/video/1",
+          "source_status_id": "1367885480314953731",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/frNM8CthVt",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1367885428485947392/pu/img/GMaEDNNohMI_tlSF.jpg",
+          "id_str": "1367885428485947392",
+          "source_user_id": "1247570143619747841",
+          "id": "1367885428485947392",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1367885428485947392/pu/img/GMaEDNNohMI_tlSF.jpg",
+          "source_user_id_str": "1247570143619747841",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "692",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "368",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "649",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1367885480314953731",
+          "display_url": "pic.twitter.com/frNM8CthVt"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "74"
+    ],
+    "favorite_count": "0",
+    "id_str": "1368394725955362818",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1368394725955362818",
+    "possibly_sensitive": false,
+    "created_at": "Sun Mar 07 02:55:00 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @smalfrog: me when i finally get ahold of kirby https://t.co/frNM8CthVt",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/smalfrog/status/1367885480314953731/video/1",
+          "source_status_id": "1367885480314953731",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/frNM8CthVt",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1367885428485947392/pu/img/GMaEDNNohMI_tlSF.jpg",
+          "id_str": "1367885428485947392",
+          "video_info": {
+            "aspect_ratio": [
+              "320",
+              "173"
+            ],
+            "duration_millis": "14780",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1367885428485947392/pu/vid/498x270/XgMf962yQjpML5_2.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1367885428485947392/pu/vid/664x360/2XZDlCTdkKuYpGjC.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1367885428485947392/pu/pl/KnujC3x60xA4TdjP.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1367885428485947392/pu/vid/1280x692/gQh0-tzGx7o0BNAH.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1247570143619747841",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1367885428485947392",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1367885428485947392/pu/img/GMaEDNNohMI_tlSF.jpg",
+          "source_user_id_str": "1247570143619747841",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "692",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "368",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "649",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1367885480314953731",
+          "display_url": "pic.twitter.com/frNM8CthVt"
+        }
+      ]
+    }
+  }
+}

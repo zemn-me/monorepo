@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1346555449898885123"
+        ],
+        "editableUntil": "2021-01-05T21:33:31.703Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Lydia Nicholas",
+          "screen_name": "LydNicholas",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "134441905",
+          "id": "134441905"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LydNicholas/status/1346459292489101313/video/1",
+          "source_status_id": "1346459292489101313",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/hkYs1bdKSi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1346459267327545348/pu/img/e6wCw0NUX1dPFhZb.jpg",
+          "id_str": "1346459267327545348",
+          "source_user_id": "134441905",
+          "id": "1346459267327545348",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1346459267327545348/pu/img/e6wCw0NUX1dPFhZb.jpg",
+          "source_user_id_str": "134441905",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1346459292489101313",
+          "display_url": "pic.twitter.com/hkYs1bdKSi"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "90"
+    ],
+    "favorite_count": "0",
+    "id_str": "1346555449898885123",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1346555449898885123",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 05 20:33:31 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @LydNicholas: I haven't stopped laughing and think I never will https://t.co/hkYs1bdKSi",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/LydNicholas/status/1346459292489101313/video/1",
+          "source_status_id": "1346459292489101313",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/hkYs1bdKSi",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1346459267327545348/pu/img/e6wCw0NUX1dPFhZb.jpg",
+          "id_str": "1346459267327545348",
+          "video_info": {
+            "aspect_ratio": [
+              "4",
+              "3"
+            ],
+            "duration_millis": "9067",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1346459267327545348/pu/vid/360x270/y9a5vwctTOg2ps5d.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1346459267327545348/pu/vid/480x360/VSal6glT1B_uuJce.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1346459267327545348/pu/pl/tnaYt2Hp9YD8DIwa.m3u8?tag=10&v=a93"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1346459267327545348/pu/vid/640x480/EvKT00LhJ4HELKGy.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "134441905",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1346459267327545348",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1346459267327545348/pu/img/e6wCw0NUX1dPFhZb.jpg",
+          "source_user_id_str": "134441905",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "640",
+              "h": "480",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1346459292489101313",
+          "display_url": "pic.twitter.com/hkYs1bdKSi"
+        }
+      ]
+    }
+  }
+}

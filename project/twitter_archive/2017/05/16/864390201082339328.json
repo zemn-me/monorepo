@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "864390201082339328"
+        ],
+        "editableUntil": "2017-05-16T09:00:58.188Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "bp",
+          "screen_name": "valenzuelabp",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "129188672",
+          "id": "129188672"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/valenzuelabp/status/859956758348873730/video/1",
+          "source_status_id": "859956758348873730",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/ocPcc7ZZXK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/859956503834316800/pu/img/vAxvY9HfCAdmU8e8.jpg",
+          "id_str": "859956503834316800",
+          "source_user_id": "129188672",
+          "id": "859956503834316800",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/859956503834316800/pu/img/vAxvY9HfCAdmU8e8.jpg",
+          "source_user_id_str": "129188672",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "859956758348873730",
+          "display_url": "pic.twitter.com/ocPcc7ZZXK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "56"
+    ],
+    "favorite_count": "0",
+    "id_str": "864390201082339328",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "864390201082339328",
+    "possibly_sensitive": false,
+    "created_at": "Tue May 16 08:00:58 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @valenzuelabp: jamming w birb https://t.co/ocPcc7ZZXK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/valenzuelabp/status/859956758348873730/video/1",
+          "source_status_id": "859956758348873730",
+          "indices": [
+            "33",
+            "56"
+          ],
+          "url": "https://t.co/ocPcc7ZZXK",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/859956503834316800/pu/img/vAxvY9HfCAdmU8e8.jpg",
+          "id_str": "859956503834316800",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "23549",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/859956503834316800/pu/pl/4ar6UFB5D-tET8ax.m3u8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/859956503834316800/pu/vid/320x180/7iGCj0zfVhi71H1J.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/859956503834316800/pu/vid/1280x720/Pxo0TIKrOALYBIkW.mp4"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/859956503834316800/pu/vid/640x360/rbkDGy2dNj1gqYRp.mp4"
+              }
+            ]
+          },
+          "source_user_id": "129188672",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "859956503834316800",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/859956503834316800/pu/img/vAxvY9HfCAdmU8e8.jpg",
+          "source_user_id_str": "129188672",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "859956758348873730",
+          "display_url": "pic.twitter.com/ocPcc7ZZXK"
+        }
+      ]
+    }
+  }
+}

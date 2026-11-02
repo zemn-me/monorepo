@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "806485203065700352"
+        ],
+        "editableUntil": "2016-12-07T14:07:10.838Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "4",
+          "screen_name": "4eyes_",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "21114125",
+          "id": "21114125"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/4eyes_/status/805851294292381696/video/1",
+          "source_status_id": "805851294292381696",
+          "indices": [
+            "96",
+            "119"
+          ],
+          "url": "https://t.co/QqbvrVxdu8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/805851209219375105/pu/img/_olv8mmi8zl0XU4K.jpg",
+          "id_str": "805851209219375105",
+          "source_user_id": "21114125",
+          "id": "805851209219375105",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/805851209219375105/pu/img/_olv8mmi8zl0XU4K.jpg",
+          "source_user_id_str": "21114125",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "805851294292381696",
+          "display_url": "pic.twitter.com/QqbvrVxdu8"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "119"
+    ],
+    "favorite_count": "0",
+    "id_str": "806485203065700352",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "806485203065700352",
+    "possibly_sensitive": false,
+    "created_at": "Wed Dec 07 13:07:10 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @4eyes_: I found this in a charity shop. It used to sing a tune, now all it says is \"Skin\" 👀 https://t.co/QqbvrVxdu8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/4eyes_/status/805851294292381696/video/1",
+          "source_status_id": "805851294292381696",
+          "indices": [
+            "96",
+            "119"
+          ],
+          "url": "https://t.co/QqbvrVxdu8",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/805851209219375105/pu/img/_olv8mmi8zl0XU4K.jpg",
+          "id_str": "805851209219375105",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "8906",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/805851209219375105/pu/vid/360x640/psjxZEg35Q1XzSGr.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/805851209219375105/pu/pl/MCcieYtlSnH7jXn0.m3u8"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/805851209219375105/pu/vid/180x320/kyu5Ed0z-hVW1UuP.mp4"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/805851209219375105/pu/vid/720x1280/k2VKqzzZrRSEdaM_.mp4"
+              }
+            ]
+          },
+          "source_user_id": "21114125",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "805851209219375105",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/805851209219375105/pu/img/_olv8mmi8zl0XU4K.jpg",
+          "source_user_id_str": "21114125",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "805851294292381696",
+          "display_url": "pic.twitter.com/QqbvrVxdu8"
+        }
+      ]
+    }
+  }
+}

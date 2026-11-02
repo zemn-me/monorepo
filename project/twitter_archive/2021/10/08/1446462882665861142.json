@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1446462882665861142"
+        ],
+        "editableUntil": "2021-10-08T14:09:59.865Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Killian Sundermann",
+          "screen_name": "killersundymann",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "707203752",
+          "id": "707203752"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/killersundymann/status/1446131283969589250/video/1",
+          "source_status_id": "1446131283969589250",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/AoPgWJpK6L",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1446130608611094528/pu/img/cqh2oedaxeNfUhrj.jpg",
+          "id_str": "1446130608611094528",
+          "source_user_id": "707203752",
+          "id": "1446130608611094528",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1446130608611094528/pu/img/cqh2oedaxeNfUhrj.jpg",
+          "source_user_id_str": "707203752",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1446131283969589250",
+          "display_url": "pic.twitter.com/AoPgWJpK6L"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "84"
+    ],
+    "favorite_count": "0",
+    "id_str": "1446462882665861142",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1446462882665861142",
+    "possibly_sensitive": false,
+    "created_at": "Fri Oct 08 13:09:59 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @killersundymann: Irish and German people offering things https://t.co/AoPgWJpK6L",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/killersundymann/status/1446131283969589250/video/1",
+          "source_status_id": "1446131283969589250",
+          "indices": [
+            "61",
+            "84"
+          ],
+          "url": "https://t.co/AoPgWJpK6L",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1446130608611094528/pu/img/cqh2oedaxeNfUhrj.jpg",
+          "id_str": "1446130608611094528",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "36933",
+            "variants": [
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1446130608611094528/pu/vid/320x568/_rso9zIcI5FbKGva.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1446130608611094528/pu/pl/qeCfxd2CBw4Qpjyi.m3u8?tag=12&v=10d"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1446130608611094528/pu/vid/480x852/j4fXtVUVOR9ycE33.mp4?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1446130608611094528/pu/vid/720x1280/uZTQRuEsAjPm1Kdr.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "707203752",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1446130608611094528",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1446130608611094528/pu/img/cqh2oedaxeNfUhrj.jpg",
+          "source_user_id_str": "707203752",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1446131283969589250",
+          "display_url": "pic.twitter.com/AoPgWJpK6L"
+        }
+      ]
+    }
+  }
+}

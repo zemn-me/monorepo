@@ -1,0 +1,150 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1720313274439512065"
+        ],
+        "editableUntil": "2023-11-03T06:33:41.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1720313274439512065/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/x5wTZCSfyK",
+          "media_url": "http://pbs.twimg.com/media/F9_HTYnbgAEdizw.jpg",
+          "id_str": "1720312718518091777",
+          "id": "1720312718518091777",
+          "media_url_https": "https://pbs.twimg.com/media/F9_HTYnbgAEdizw.jpg",
+          "sizes": {
+            "small": {
+              "w": "525",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "713",
+              "h": "923",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "713",
+              "h": "923",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/x5wTZCSfyK"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "301"
+    ],
+    "favorite_count": "3",
+    "id_str": "1720313274439512065",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1720313274439512065",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 03 05:33:41 +0000 2023",
+    "favorited": false,
+    "full_text": "the React 'useExternalStore' examples seem to contradict each other. one example is 'Subscribing to a browser API'\n\nwhich is then followed by a notice that the server and client must respond identically.\n\nif they responded the same why would I be subscribing to a browser API!? https://t.co/x5wTZCSfyK",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1720313274439512065/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/x5wTZCSfyK",
+          "media_url": "http://pbs.twimg.com/media/F9_HTYnbgAEdizw.jpg",
+          "id_str": "1720312718518091777",
+          "id": "1720312718518091777",
+          "media_url_https": "https://pbs.twimg.com/media/F9_HTYnbgAEdizw.jpg",
+          "sizes": {
+            "small": {
+              "w": "525",
+              "h": "680",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "713",
+              "h": "923",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "713",
+              "h": "923",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/x5wTZCSfyK"
+        },
+        {
+          "expanded_url": "https://twitter.com/zemnmez/status/1720313274439512065/photo/1",
+          "indices": [
+            "278",
+            "301"
+          ],
+          "url": "https://t.co/x5wTZCSfyK",
+          "media_url": "http://pbs.twimg.com/media/F9_HdqubMAAOscJ.png",
+          "id_str": "1720312895177961472",
+          "id": "1720312895177961472",
+          "media_url_https": "https://pbs.twimg.com/media/F9_HdqubMAAOscJ.png",
+          "sizes": {
+            "large": {
+              "w": "610",
+              "h": "385",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "610",
+              "h": "385",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "610",
+              "h": "385",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "display_url": "pic.twitter.com/x5wTZCSfyK"
+        }
+      ]
+    }
+  }
+}

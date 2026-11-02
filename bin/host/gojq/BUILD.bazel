@@ -1,3 +1,4 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 
 alias(
@@ -16,7 +17,7 @@ sh_test(
         "GOJQ_BINARY": "$(rlocationpath :gojq)",
     },
     deps = [
-        "@bazel_tools//tools/bash/runfiles",
+        "@rules_shell//shell/runfiles",
     ],
 )
 

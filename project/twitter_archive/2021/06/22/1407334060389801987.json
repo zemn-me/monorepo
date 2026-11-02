@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1407334060389801987"
+        ],
+        "editableUntil": "2021-06-22T14:46:01.656Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Mikhail Pletnev",
+          "screen_name": "mpltnv",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "1002605780414205952",
+          "id": "1002605780414205952"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mpltnv/status/1406916654983008262/video/1",
+          "source_status_id": "1406916654983008262",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/bux2Z7Sf5s",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1406916603774750723/pu/img/P41NYOPKxrjWuSj-.jpg",
+          "id_str": "1406916603774750723",
+          "source_user_id": "1002605780414205952",
+          "id": "1406916603774750723",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1406916603774750723/pu/img/P41NYOPKxrjWuSj-.jpg",
+          "source_user_id_str": "1002605780414205952",
+          "sizes": {
+            "large": {
+              "w": "576",
+              "h": "340",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "576",
+              "h": "340",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "576",
+              "h": "340",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1406916654983008262",
+          "display_url": "pic.twitter.com/bux2Z7Sf5s"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "98"
+    ],
+    "favorite_count": "0",
+    "id_str": "1407334060389801987",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1407334060389801987",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jun 22 13:46:01 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @mpltnv: Обнаружил клевый мультик с наглядным объяснением работы вакцин https://t.co/bux2Z7Sf5s",
+    "lang": "ru",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/mpltnv/status/1406916654983008262/video/1",
+          "source_status_id": "1406916654983008262",
+          "indices": [
+            "75",
+            "98"
+          ],
+          "url": "https://t.co/bux2Z7Sf5s",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1406916603774750723/pu/img/P41NYOPKxrjWuSj-.jpg",
+          "id_str": "1406916603774750723",
+          "video_info": {
+            "aspect_ratio": [
+              "144",
+              "85"
+            ],
+            "duration_millis": "58500",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1406916603774750723/pu/vid/576x340/K3wAweTbSBMCPwsO.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1406916603774750723/pu/pl/rsv2KOrmYauOI7fT.m3u8?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1406916603774750723/pu/vid/456x270/KhsOApCTTE5bPmEm.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "1002605780414205952",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1406916603774750723",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1406916603774750723/pu/img/P41NYOPKxrjWuSj-.jpg",
+          "source_user_id_str": "1002605780414205952",
+          "sizes": {
+            "large": {
+              "w": "576",
+              "h": "340",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "576",
+              "h": "340",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "576",
+              "h": "340",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1406916654983008262",
+          "display_url": "pic.twitter.com/bux2Z7Sf5s"
+        }
+      ]
+    }
+  }
+}

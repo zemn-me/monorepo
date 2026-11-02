@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "728033423613366272"
+        ],
+        "editableUntil": "2016-05-05T02:27:49.053Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Fake “Unicode.” 🩵🆓",
+          "screen_name": "FakeUnicode",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "2183231114",
+          "id": "2183231114"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "150"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "728031336825556993",
+    "id_str": "728033423613366272",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "728033423613366272",
+    "in_reply_to_status_id": "728031336825556993",
+    "created_at": "Thu May 05 01:27:49 +0000 2016",
+    "favorited": false,
+    "full_text": "@FakeUnicode @XMPPwocky OK, so &lt;/(\\d.*)&gt; makes a comment (parsed as) &lt;!--\\1--&gt; and any html tag with '#' in it is parsed as though escaped",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

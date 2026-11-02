@@ -1,0 +1,67 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "733696139132850178"
+        ],
+        "editableUntil": "2016-05-20T17:29:25.641Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "GitHub Security",
+          "screen_name": "GitHubSecurity",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "1602746592",
+          "id": "1602746592"
+        },
+        {
+          "name": "Eldar Zaitov",
+          "screen_name": "kyprizel",
+          "indices": [
+            "30",
+            "39"
+          ],
+          "id_str": "88532643",
+          "id": "88532643"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/sNQFDE74Ps",
+          "expanded_url": "https://bounty.github.com/researchers/kyprizel.html",
+          "display_url": "bounty.github.com/researchers/ky…",
+          "indices": [
+            "103",
+            "126"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "126"
+    ],
+    "favorite_count": "0",
+    "id_str": "733696139132850178",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "733696139132850178",
+    "possibly_sensitive": false,
+    "created_at": "Fri May 20 16:29:25 +0000 2016",
+    "favorited": false,
+    "full_text": "RT @GitHubSecurity: Thanks to @kyprizel for finding RCE in the GitHub Enterprise management interface! https://t.co/sNQFDE74Ps",
+    "lang": "en"
+  }
+}

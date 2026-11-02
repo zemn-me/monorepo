@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1441945499158855681"
+        ],
+        "editableUntil": "2021-09-26T02:59:31.708Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "griff",
+          "screen_name": "grifferslol",
+          "indices": [
+            "3",
+            "15"
+          ],
+          "id_str": "2931907165",
+          "id": "2931907165"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/grifferslol/status/1441550408174997505/video/1",
+          "source_status_id": "1441550408174997505",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/p50YNBmUaR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1441550184010305538/pu/img/ZxbER-Kcaf5MuRoO.jpg",
+          "id_str": "1441550184010305538",
+          "source_user_id": "2931907165",
+          "id": "1441550184010305538",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1441550184010305538/pu/img/ZxbER-Kcaf5MuRoO.jpg",
+          "source_user_id_str": "2931907165",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1441550408174997505",
+          "display_url": "pic.twitter.com/p50YNBmUaR"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "80"
+    ],
+    "favorite_count": "0",
+    "id_str": "1441945499158855681",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1441945499158855681",
+    "possibly_sensitive": false,
+    "created_at": "Sun Sep 26 01:59:31 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @grifferslol: i need to know what she’s preparing for https://t.co/p50YNBmUaR",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/grifferslol/status/1441550408174997505/video/1",
+          "source_status_id": "1441550408174997505",
+          "indices": [
+            "57",
+            "80"
+          ],
+          "url": "https://t.co/p50YNBmUaR",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1441550184010305538/pu/img/ZxbER-Kcaf5MuRoO.jpg",
+          "id_str": "1441550184010305538",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "16766",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1441550184010305538/pu/pl/EC43bOG-TeuG4uYo.m3u8?tag=12&v=cb7"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1441550184010305538/pu/vid/320x568/GMeULPQ4huFKRxgv.mp4?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1441550184010305538/pu/vid/360x640/ydDT9tzpA7zwbjYr.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "2931907165",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1441550184010305538",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1441550184010305538/pu/img/ZxbER-Kcaf5MuRoO.jpg",
+          "source_user_id_str": "2931907165",
+          "sizes": {
+            "large": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "360",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1441550408174997505",
+          "display_url": "pic.twitter.com/p50YNBmUaR"
+        }
+      ]
+    }
+  }
+}

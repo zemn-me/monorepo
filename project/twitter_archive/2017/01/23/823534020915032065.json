@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "823534020915032065"
+        ],
+        "editableUntil": "2017-01-23T15:13:05.765Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "dave",
+          "screen_name": "beesandbombs",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "2577700700",
+          "id": "2577700700"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/beesandbombs/status/823532516162359300/photo/1",
+          "source_status_id": "823532516162359300",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/Y3pdI5MJB4",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/C23FmkoW8AAQbBh.jpg",
+          "id_str": "823531573337321472",
+          "source_user_id": "2577700700",
+          "id": "823531573337321472",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/C23FmkoW8AAQbBh.jpg",
+          "source_user_id_str": "2577700700",
+          "sizes": {
+            "small": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "823532516162359300",
+          "display_url": "pic.twitter.com/Y3pdI5MJB4"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "43"
+    ],
+    "favorite_count": "0",
+    "id_str": "823534020915032065",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "823534020915032065",
+    "possibly_sensitive": false,
+    "created_at": "Mon Jan 23 14:13:05 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @beesandbombs: 🔲 https://t.co/Y3pdI5MJB4",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/beesandbombs/status/823532516162359300/photo/1",
+          "source_status_id": "823532516162359300",
+          "indices": [
+            "20",
+            "43"
+          ],
+          "url": "https://t.co/Y3pdI5MJB4",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/C23FmkoW8AAQbBh.jpg",
+          "id_str": "823531573337321472",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/C23FmkoW8AAQbBh.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2577700700",
+          "id": "823531573337321472",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/C23FmkoW8AAQbBh.jpg",
+          "source_user_id_str": "2577700700",
+          "sizes": {
+            "small": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "500",
+              "h": "500",
+              "resize": "fit"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "823532516162359300",
+          "display_url": "pic.twitter.com/Y3pdI5MJB4"
+        }
+      ]
+    }
+  }
+}

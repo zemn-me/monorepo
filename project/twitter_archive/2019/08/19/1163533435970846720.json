@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1163533435970846720"
+        ],
+        "editableUntil": "2019-08-19T20:29:23.198Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "NVIDIA GeForce UK",
+          "screen_name": "NVIDIAGeForceUK",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "87652326",
+          "id": "87652326"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NVIDIAGeForceUK/status/1163345081430134789/video/1",
+          "source_status_id": "1163345081430134789",
+          "indices": [
+            "88",
+            "111"
+          ],
+          "url": "https://t.co/HMxDCYcmR8",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1163344872658673665/img/SeEzd92IYyYe96DE.jpg",
+          "id_str": "1163344872658673665",
+          "source_user_id": "87652326",
+          "id": "1163344872658673665",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1163344872658673665/img/SeEzd92IYyYe96DE.jpg",
+          "source_user_id_str": "87652326",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1163345081430134789",
+          "display_url": "pic.twitter.com/HMxDCYcmR8"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "RTXOn",
+          "indices": [
+            "81",
+            "87"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "111"
+    ],
+    "favorite_count": "0",
+    "id_str": "1163533435970846720",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1163533435970846720",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 19 19:29:23 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @NVIDIAGeForceUK: We are bringing jaw-dropping DXR ray tracing to Minecraft!  #RTXOn https://t.co/HMxDCYcmR8",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/NVIDIAGeForceUK/status/1163345081430134789/video/1",
+          "source_status_id": "1163345081430134789",
+          "indices": [
+            "88",
+            "111"
+          ],
+          "url": "https://t.co/HMxDCYcmR8",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/1163344872658673665/img/SeEzd92IYyYe96DE.jpg",
+          "id_str": "1163344872658673665",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "59000",
+            "variants": [
+              {
+                "bitrate": "432000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1163344872658673665/vid/320x320/uhPUSvx7me1Txovf.mp4?tag=13"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1163344872658673665/vid/480x480/1uSV_NM7QMeq2F6a.mp4?tag=13"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1163344872658673665/pl/8VHVUPLVMusLOy3r.m3u8?tag=13"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1163344872658673665/vid/720x720/SelR4oxjEtpBAiWb.mp4?tag=13"
+              }
+            ]
+          },
+          "source_user_id": "87652326",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1163344872658673665",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1163344872658673665/img/SeEzd92IYyYe96DE.jpg",
+          "source_user_id_str": "87652326",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1163345081430134789",
+          "display_url": "pic.twitter.com/HMxDCYcmR8"
+        }
+      ]
+    }
+  }
+}

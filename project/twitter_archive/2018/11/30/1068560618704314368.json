@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1068560618704314368"
+        ],
+        "editableUntil": "2018-11-30T18:41:19.052Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Go",
+          "screen_name": "golang",
+          "indices": [
+            "55",
+            "62"
+          ],
+          "id_str": "113419064",
+          "id": "113419064"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/UmFOs7lTLE",
+          "expanded_url": "https://github.com/golang/go/issues/29012",
+          "display_url": "github.com/golang/go/issu…",
+          "indices": [
+            "64",
+            "87"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "87"
+    ],
+    "favorite_count": "1",
+    "id_str": "1068560618704314368",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1068560618704314368",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 30 17:41:19 +0000 2018",
+    "favorited": false,
+    "full_text": "i'm proposing that `rune` and `int32` are unaliased in @golang:\nhttps://t.co/UmFOs7lTLE",
+    "lang": "en"
+  }
+}

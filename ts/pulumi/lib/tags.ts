@@ -1,6 +1,6 @@
 import { all, Input } from '@pulumi/pulumi';
 
-type TagSet = Input<Record<string, Input<string>>>;
+export type TagSet = Input<Record<string, Input<string>>>;
 
 export const mergeTags = (a?: TagSet, b?: TagSet): TagSet =>
 	all([a, b]).apply(([a, b]) => ({ ...a, ...b }));

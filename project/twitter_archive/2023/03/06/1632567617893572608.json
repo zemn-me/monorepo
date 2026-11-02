@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1632567617893572608"
+        ],
+        "editableUntil": "2023-03-06T02:53:46.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "dan_abramov",
+          "screen_name": "dan_abramov",
+          "indices": [
+            "0",
+            "12"
+          ],
+          "id_str": "1823396792068648967",
+          "id": "1823396792068648967"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/xeVLCN0JdZ",
+          "expanded_url": "https://lit.dev/docs/v1/components/lifecycle/",
+          "display_url": "lit.dev/docs/v1/compon…",
+          "indices": [
+            "99",
+            "122"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "122"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1632565682687582208",
+    "id_str": "1632567617893572608",
+    "in_reply_to_user_id": "70345946",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1632567617893572608",
+    "in_reply_to_status_id": "1632565682687582208",
+    "possibly_sensitive": false,
+    "created_at": "Mon Mar 06 02:23:46 +0000 2023",
+    "favorited": false,
+    "full_text": "@dan_abramov not really sure I understand the server response part, but here's the lifecycle model https://t.co/xeVLCN0JdZ",
+    "lang": "en",
+    "in_reply_to_user_id_str": "70345946"
+  }
+}

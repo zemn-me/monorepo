@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1035262141237002240"
+        ],
+        "editableUntil": "2018-08-30T21:25:03.368Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "wint32_t",
+          "screen_name": "dril_rs",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "1034935268514516992",
+          "id": "1034935268514516992"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "139"
+    ],
+    "favorite_count": "0",
+    "id_str": "1035262141237002240",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1035262141237002240",
+    "created_at": "Thu Aug 30 20:25:03 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @dril_rs: Type Check: 40 sec\nHIR: 30 sec\nMIR: 50 sec\nLLVM IR: 27 min\nBinary Output: 30 sec\nsomeone who is good at compilers please help…",
+    "lang": "en"
+  }
+}

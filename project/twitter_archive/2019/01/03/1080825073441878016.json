@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1080825073441878016"
+        ],
+        "editableUntil": "2019-01-03T14:55:52.924Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "おかたけ",
+          "screen_name": "bamboohill",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "17986694",
+          "id": "17986694"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bamboohill/status/1080633577342001152/video/1",
+          "source_status_id": "1080633577342001152",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/7LZETHkv5H",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1080633535268933632/pu/img/uxlihX6Jv1JWuxL-.jpg",
+          "id_str": "1080633535268933632",
+          "source_user_id": "17986694",
+          "id": "1080633535268933632",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1080633535268933632/pu/img/uxlihX6Jv1JWuxL-.jpg",
+          "source_user_id_str": "17986694",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1080633577342001152",
+          "display_url": "pic.twitter.com/7LZETHkv5H"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "67"
+    ],
+    "favorite_count": "0",
+    "id_str": "1080825073441878016",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1080825073441878016",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jan 03 13:55:52 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @bamboohill: 100hz更新してみると…。すげーうるさいかもしれぬ。 https://t.co/7LZETHkv5H",
+    "lang": "ja",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/bamboohill/status/1080633577342001152/video/1",
+          "source_status_id": "1080633577342001152",
+          "indices": [
+            "44",
+            "67"
+          ],
+          "url": "https://t.co/7LZETHkv5H",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1080633535268933632/pu/img/uxlihX6Jv1JWuxL-.jpg",
+          "id_str": "1080633535268933632",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "18230",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1080633535268933632/pu/vid/320x180/X1NGljt1633rvPdE.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1080633535268933632/pu/pl/SxiuHn-uY6FBcp2j.m3u8?tag=6"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1080633535268933632/pu/vid/1280x720/fD7ZR7QRieMfQ0qE.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1080633535268933632/pu/vid/640x360/JCqrvwXyETKOy1x5.mp4?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "17986694",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1080633535268933632",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1080633535268933632/pu/img/uxlihX6Jv1JWuxL-.jpg",
+          "source_user_id_str": "17986694",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1080633577342001152",
+          "display_url": "pic.twitter.com/7LZETHkv5H"
+        }
+      ]
+    }
+  }
+}

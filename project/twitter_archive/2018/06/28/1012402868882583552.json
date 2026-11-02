@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1012402868882583552"
+        ],
+        "editableUntil": "2018-06-28T19:30:28.134Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Overwatch",
+          "screen_name": "PlayOverwatch",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "2420931980",
+          "id": "2420931980"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PlayOverwatch/status/1012334868544479232/video/1",
+          "source_status_id": "1012334868544479232",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/0Fdpg2iBcs",
+          "media_url": "http://pbs.twimg.com/media/DgyA5EYVMAE8aLs.jpg",
+          "id_str": "1012324777971703809",
+          "source_user_id": "2420931980",
+          "id": "1012324777971703809",
+          "media_url_https": "https://pbs.twimg.com/media/DgyA5EYVMAE8aLs.jpg",
+          "source_user_id_str": "2420931980",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1012334868544479232",
+          "display_url": "pic.twitter.com/0Fdpg2iBcs"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "65"
+    ],
+    "favorite_count": "0",
+    "id_str": "1012402868882583552",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1012402868882583552",
+    "possibly_sensitive": false,
+    "created_at": "Thu Jun 28 18:30:28 +0000 2018",
+    "favorited": false,
+    "full_text": "RT @PlayOverwatch: The champion revealed. https://t.co/0Fdpg2iBcs",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PlayOverwatch/status/1012334868544479232/video/1",
+          "source_status_id": "1012334868544479232",
+          "indices": [
+            "42",
+            "65"
+          ],
+          "url": "https://t.co/0Fdpg2iBcs",
+          "media_url": "http://pbs.twimg.com/media/DgyA5EYVMAE8aLs.jpg",
+          "id_str": "1012324777971703809",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "10000",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1012324777971703809/vid/1280x720/h_FAf6rdFodax7wa.mp4?tag=3"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/1012324777971703809/pl/8YOfmTz4EGqBInVj.m3u8?tag=3"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1012324777971703809/vid/640x360/sCKD-bv-7eFDQWmH.mp4?tag=3"
+              },
+              {
+                "bitrate": "288000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/1012324777971703809/vid/320x180/26fu6CJ6PhHbJ349.mp4?tag=3"
+              }
+            ]
+          },
+          "source_user_id": "2420931980",
+          "additional_media_info": {
+            "title": "Champion Revealed | Overwatch",
+            "description": "",
+            "embeddable": true,
+            "monetizable": false
+          },
+          "id": "1012324777971703809",
+          "media_url_https": "https://pbs.twimg.com/media/DgyA5EYVMAE8aLs.jpg",
+          "source_user_id_str": "2420931980",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1012334868544479232",
+          "display_url": "pic.twitter.com/0Fdpg2iBcs"
+        }
+      ]
+    }
+  }
+}

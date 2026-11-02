@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1461091787154460674"
+        ],
+        "editableUntil": "2021-11-17T23:00:02.487Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "jx",
+          "screen_name": "jxiaoo",
+          "indices": [
+            "3",
+            "10"
+          ],
+          "id_str": "197803832",
+          "id": "197803832"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jxiaoo/status/1461067899330777092/video/1",
+          "source_status_id": "1461067899330777092",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/xPbI6FjFWO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1461067441249951751/pu/img/AucAZUeJaHBOwAZk.jpg",
+          "id_str": "1461067441249951751",
+          "source_user_id": "197803832",
+          "id": "1461067441249951751",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1461067441249951751/pu/img/AucAZUeJaHBOwAZk.jpg",
+          "source_user_id_str": "197803832",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1040",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "368",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "650",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1461067899330777092",
+          "display_url": "pic.twitter.com/xPbI6FjFWO"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "83"
+    ],
+    "favorite_count": "0",
+    "id_str": "1461091787154460674",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1461091787154460674",
+    "possibly_sensitive": false,
+    "created_at": "Wed Nov 17 22:00:02 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @jxiaoo: paul atreides pushing sasuke in a shopping cart https://t.co/xPbI6FjFWO",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/jxiaoo/status/1461067899330777092/video/1",
+          "source_status_id": "1461067899330777092",
+          "indices": [
+            "60",
+            "83"
+          ],
+          "url": "https://t.co/xPbI6FjFWO",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1461067441249951751/pu/img/AucAZUeJaHBOwAZk.jpg",
+          "id_str": "1461067441249951751",
+          "video_info": {
+            "aspect_ratio": [
+              "24",
+              "13"
+            ],
+            "duration_millis": "18581",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1461067441249951751/pu/pl/g90PIs_IeCHyZ7lY.m3u8?tag=12"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1461067441249951751/pu/vid/1328x720/LCmwTVayR0qmgSvh.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1461067441249951751/pu/vid/664x360/A3eorTHDINjzZyFd.mp4?tag=12"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1461067441249951751/pu/vid/498x270/Qv-InNA-hpNBCrc_.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "197803832",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1461067441249951751",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1461067441249951751/pu/img/AucAZUeJaHBOwAZk.jpg",
+          "source_user_id_str": "197803832",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1040",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "680",
+              "h": "368",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "650",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1461067899330777092",
+          "display_url": "pic.twitter.com/xPbI6FjFWO"
+        }
+      ]
+    }
+  }
+}

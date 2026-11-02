@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1591285955973242881"
+        ],
+        "editableUntil": "2022-11-12T04:55:11.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/McbVEjfDJ9",
+          "expanded_url": "https://github.com/samscott89/serde_qs/blob/main/src/ser.rs",
+          "display_url": "github.com/samscott89/ser…",
+          "indices": [
+            "235",
+            "258"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "258"
+    ],
+    "favorite_count": "5",
+    "id_str": "1591285955973242881",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1591285955973242881",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 12 04:25:11 +0000 2022",
+    "favorited": false,
+    "full_text": "i'll be honest, i still dont understand rust at all. every time i try to do something it ends up way more complicated than expected. why is it 1000+ lines of code to implement URL Encoding, and why is half of it metaprogramming macros https://t.co/McbVEjfDJ9",
+    "lang": "en"
+  }
+}

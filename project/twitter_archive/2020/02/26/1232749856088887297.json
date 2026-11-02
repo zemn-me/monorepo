@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1232749856088887297"
+        ],
+        "editableUntil": "2020-02-26T20:30:43.733Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "276"
+    ],
+    "favorite_count": "3",
+    "id_str": "1232749856088887297",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1232749856088887297",
+    "created_at": "Wed Feb 26 19:30:43 +0000 2020",
+    "favorited": false,
+    "full_text": "i think a funny thing about modern web stuff is that a lot of problems have no standard solution at small scale. for example, how do you serve a bunch of really high res images at various scales in a static app? oh, just either stand up an image resize service or pay for SaaS",
+    "lang": "en"
+  }
+}

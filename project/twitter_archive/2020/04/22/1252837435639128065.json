@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1252837435639128065"
+        ],
+        "editableUntil": "2020-04-22T06:51:35.907Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Out of Context Virtual Youtubers",
+          "screen_name": "OutofVTubers",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "1041487319751024640",
+          "id": "1041487319751024640"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OutofVtubers/status/1210803484687122432/video/1",
+          "source_status_id": "1210803484687122432",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/HbHMoFHeRQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1210803467414933507/pu/img/A-8tL66DkiYUtbex.jpg",
+          "id_str": "1210803467414933507",
+          "source_user_id": "1041487319751024640",
+          "id": "1210803467414933507",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1210803467414933507/pu/img/A-8tL66DkiYUtbex.jpg",
+          "source_user_id_str": "1041487319751024640",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1210803484687122432",
+          "display_url": "pic.twitter.com/HbHMoFHeRQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "41"
+    ],
+    "favorite_count": "0",
+    "id_str": "1252837435639128065",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1252837435639128065",
+    "possibly_sensitive": false,
+    "created_at": "Wed Apr 22 05:51:35 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @OutofVTubers: https://t.co/HbHMoFHeRQ",
+    "lang": "zxx",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/OutofVtubers/status/1210803484687122432/video/1",
+          "source_status_id": "1210803484687122432",
+          "indices": [
+            "18",
+            "41"
+          ],
+          "url": "https://t.co/HbHMoFHeRQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1210803467414933507/pu/img/A-8tL66DkiYUtbex.jpg",
+          "id_str": "1210803467414933507",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "8167",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1210803467414933507/pu/vid/480x270/g5CwubVtbzA7mf1j.mp4?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1210803467414933507/pu/vid/640x360/4X84PLq6laPrydnk.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1210803467414933507/pu/pl/txbW4dVuJDraWpR3.m3u8?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1041487319751024640",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1210803467414933507",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1210803467414933507/pu/img/A-8tL66DkiYUtbex.jpg",
+          "source_user_id_str": "1041487319751024640",
+          "sizes": {
+            "large": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "medium": {
+              "w": "640",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1210803484687122432",
+          "display_url": "pic.twitter.com/HbHMoFHeRQ"
+        }
+      ]
+    }
+  }
+}

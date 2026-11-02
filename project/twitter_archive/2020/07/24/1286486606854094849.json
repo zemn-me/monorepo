@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1286486606854094849"
+        ],
+        "editableUntil": "2020-07-24T03:21:23.496Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Thaviel",
+          "screen_name": "Thaviel",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "191668780",
+          "id": "191668780"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "258"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1286485253553639430",
+    "id_str": "1286486606854094849",
+    "in_reply_to_user_id": "191668780",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1286486606854094849",
+    "in_reply_to_status_id": "1286485253553639430",
+    "created_at": "Fri Jul 24 02:21:23 +0000 2020",
+    "favorited": false,
+    "full_text": "@Thaviel you can destructure an object using variable -- or more importantly in this case, constant Symbol keys. i didnt know that syntax existed. Symbols are an interesting use case for this because all newly instantiated symbols are guaranteed to be unique",
+    "lang": "en",
+    "in_reply_to_screen_name": "Thaviel",
+    "in_reply_to_user_id_str": "191668780"
+  }
+}

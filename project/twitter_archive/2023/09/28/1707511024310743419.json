@@ -1,0 +1,61 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1707511024310743419"
+        ],
+        "editableUntil": "2023-09-28T22:42:06.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "alice",
+          "screen_name": "__justplaying",
+          "indices": [
+            "0",
+            "14"
+          ],
+          "id_str": "1294737900236681223",
+          "id": "1294737900236681223"
+        },
+        {
+          "name": "River_Tam",
+          "screen_name": "RiverTamYDN",
+          "indices": [
+            "15",
+            "27"
+          ],
+          "id_str": "898843662",
+          "id": "898843662"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "188"
+    ],
+    "favorite_count": "28",
+    "in_reply_to_status_id_str": "1707487248654954588",
+    "id_str": "1707511024310743419",
+    "in_reply_to_user_id": "1294737900236681223",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1707511024310743419",
+    "in_reply_to_status_id": "1707487248654954588",
+    "created_at": "Thu Sep 28 21:42:06 +0000 2023",
+    "favorited": false,
+    "full_text": "@__justplaying @RiverTamYDN i think what is happening here is it's going through a markdown parser (perhaps to try to prevent markdown injection) and 100000000 is the cap for bullet points",
+    "lang": "en",
+    "in_reply_to_screen_name": "__justplaying",
+    "in_reply_to_user_id_str": "1294737900236681223"
+  }
+}

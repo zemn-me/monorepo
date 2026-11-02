@@ -1,0 +1,167 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "913998971600756736"
+        ],
+        "editableUntil": "2017-09-30T06:28:30.766Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "The Dodo",
+          "screen_name": "dodo",
+          "indices": [
+            "3",
+            "8"
+          ],
+          "id_str": "1604444052",
+          "id": "1604444052"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dodo/status/913826970412097536/video/1",
+          "source_status_id": "913826970412097536",
+          "indices": [
+            "97",
+            "120"
+          ],
+          "url": "https://t.co/NLHiOoOKn0",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/912774417796694018/img/CJfiIQ7YSOUdDWK5.jpg",
+          "id_str": "912774417796694018",
+          "source_user_id": "1604444052",
+          "id": "912774417796694018",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/912774417796694018/img/CJfiIQ7YSOUdDWK5.jpg",
+          "source_user_id_str": "1604444052",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "913826970412097536",
+          "display_url": "pic.twitter.com/NLHiOoOKn0"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "120"
+    ],
+    "favorite_count": "0",
+    "id_str": "913998971600756736",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "913998971600756736",
+    "possibly_sensitive": false,
+    "created_at": "Sat Sep 30 05:28:30 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @dodo: Wrapping up baby bats like burritos is the most adorable way to make them feel safe ❤️ https://t.co/NLHiOoOKn0",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/dodo/status/913826970412097536/video/1",
+          "source_status_id": "913826970412097536",
+          "indices": [
+            "97",
+            "120"
+          ],
+          "url": "https://t.co/NLHiOoOKn0",
+          "media_url": "http://pbs.twimg.com/amplify_video_thumb/912774417796694018/img/CJfiIQ7YSOUdDWK5.jpg",
+          "id_str": "912774417796694018",
+          "video_info": {
+            "aspect_ratio": [
+              "1",
+              "1"
+            ],
+            "duration_millis": "37971",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/912774417796694018/vid/480x480/V_hwwR2of0kNC0vk.mp4"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/amplify_video/912774417796694018/pl/u-yyYW5dOr14vNIf.m3u8"
+              },
+              {
+                "bitrate": "1280000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/912774417796694018/vid/720x720/oDqT5idwbnU6nsdt.mp4"
+              },
+              {
+                "bitrate": "320000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/amplify_video/912774417796694018/vid/240x240/zKgPiUvAMrPc9Xl6.mp4"
+              }
+            ]
+          },
+          "source_user_id": "1604444052",
+          "additional_media_info": {
+            "title": "How To Make Baby Bat Burritos",
+            "description": "",
+            "embeddable": true,
+            "monetizable": true
+          },
+          "id": "912774417796694018",
+          "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/912774417796694018/img/CJfiIQ7YSOUdDWK5.jpg",
+          "source_user_id_str": "1604444052",
+          "sizes": {
+            "large": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "720",
+              "h": "720",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "913826970412097536",
+          "display_url": "pic.twitter.com/NLHiOoOKn0"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1310534467027599360"
+        ],
+        "editableUntil": "2020-09-28T11:59:00.149Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Ben B. Singer",
+          "screen_name": "BenBSinger",
+          "indices": [
+            "3",
+            "14"
+          ],
+          "id_str": "263435285",
+          "id": "263435285"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BenBSinger/status/1310392028933615617/video/1",
+          "source_status_id": "1310392028933615617",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/DW9Cfg7ER6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1310347129878204418/pu/img/-oiENjkIJPiTlksu.jpg",
+          "id_str": "1310347129878204418",
+          "source_user_id": "263435285",
+          "id": "1310347129878204418",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1310347129878204418/pu/img/-oiENjkIJPiTlksu.jpg",
+          "source_user_id_str": "263435285",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "540",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "540",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1310392028933615617",
+          "display_url": "pic.twitter.com/DW9Cfg7ER6"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "90"
+    ],
+    "favorite_count": "0",
+    "id_str": "1310534467027599360",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1310534467027599360",
+    "possibly_sensitive": false,
+    "created_at": "Mon Sep 28 10:59:00 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @BenBSinger: Tai's mom is the most underrated Digimon character https://t.co/DW9Cfg7ER6",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/BenBSinger/status/1310392028933615617/video/1",
+          "source_status_id": "1310392028933615617",
+          "indices": [
+            "67",
+            "90"
+          ],
+          "url": "https://t.co/DW9Cfg7ER6",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1310347129878204418/pu/img/-oiENjkIJPiTlksu.jpg",
+          "id_str": "1310347129878204418",
+          "video_info": {
+            "aspect_ratio": [
+              "3",
+              "2"
+            ],
+            "duration_millis": "46113",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1310347129878204418/pu/pl/dhVgGZQGcVe9Q0jD.m3u8?tag=10&v=9bf"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1310347129878204418/pu/vid/540x360/f4xSr52HzidrYFuB.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1310347129878204418/pu/vid/404x270/DKt_WdEbOgjSRmbs.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "263435285",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1310347129878204418",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1310347129878204418/pu/img/-oiENjkIJPiTlksu.jpg",
+          "source_user_id_str": "263435285",
+          "sizes": {
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "540",
+              "h": "360",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "540",
+              "h": "360",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "540",
+              "h": "360",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1310392028933615617",
+          "display_url": "pic.twitter.com/DW9Cfg7ER6"
+        }
+      ]
+    }
+  }
+}

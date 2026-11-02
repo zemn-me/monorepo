@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1200249170558410752"
+        ],
+        "editableUntil": "2019-11-29T04:04:36.469Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "gumbo 🦇",
+          "screen_name": "kiravolo",
+          "indices": [
+            "3",
+            "12"
+          ],
+          "id_str": "3033986003",
+          "id": "3033986003"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kiravolo/status/1199794532017156097/video/1",
+          "source_status_id": "1199794532017156097",
+          "indices": [
+            "34",
+            "57"
+          ],
+          "url": "https://t.co/AnZfxZH3HH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1199794511859175424/pu/img/p_1OkGmVxXf_oIji.jpg",
+          "id_str": "1199794511859175424",
+          "source_user_id": "3033986003",
+          "id": "1199794511859175424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1199794511859175424/pu/img/p_1OkGmVxXf_oIji.jpg",
+          "source_user_id_str": "3033986003",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1199794532017156097",
+          "display_url": "pic.twitter.com/AnZfxZH3HH"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "57"
+    ],
+    "favorite_count": "0",
+    "id_str": "1200249170558410752",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1200249170558410752",
+    "possibly_sensitive": false,
+    "created_at": "Fri Nov 29 03:04:36 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @kiravolo: BUENOS DIAS DUSKULL https://t.co/AnZfxZH3HH",
+    "lang": "es",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/kiravolo/status/1199794532017156097/video/1",
+          "source_status_id": "1199794532017156097",
+          "indices": [
+            "34",
+            "57"
+          ],
+          "url": "https://t.co/AnZfxZH3HH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1199794511859175424/pu/img/p_1OkGmVxXf_oIji.jpg",
+          "id_str": "1199794511859175424",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "4000",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1199794511859175424/pu/vid/480x270/T3HmGgLEUpC1HV-m.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1199794511859175424/pu/pl/bTqhkEQbzgnL2KNK.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1199794511859175424/pu/vid/640x360/iQBb-F8v8Eu6hrl0.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1199794511859175424/pu/vid/1280x720/vDUU6MhWq4kpsybh.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "3033986003",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1199794511859175424",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1199794511859175424/pu/img/p_1OkGmVxXf_oIji.jpg",
+          "source_user_id_str": "3033986003",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1199794532017156097",
+          "display_url": "pic.twitter.com/AnZfxZH3HH"
+        }
+      ]
+    }
+  }
+}

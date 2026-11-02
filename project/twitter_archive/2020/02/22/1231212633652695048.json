@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1231212633652695048"
+        ],
+        "editableUntil": "2020-02-22T14:42:21.344Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "hyobun",
+          "screen_name": "squizxy",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "2441512705",
+          "id": "2441512705"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/squizxy/status/1230945287830753280/video/1",
+          "source_status_id": "1230945287830753280",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/STQkGD8VPH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1230865737578950658/pu/img/5bTm0MJg_jwi8Cd0.jpg",
+          "id_str": "1230865737578950658",
+          "source_user_id": "2441512705",
+          "id": "1230865737578950658",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1230865737578950658/pu/img/5bTm0MJg_jwi8Cd0.jpg",
+          "source_user_id_str": "2441512705",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1230945287830753280",
+          "display_url": "pic.twitter.com/STQkGD8VPH"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "88"
+    ],
+    "favorite_count": "0",
+    "id_str": "1231212633652695048",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1231212633652695048",
+    "possibly_sensitive": false,
+    "created_at": "Sat Feb 22 13:42:21 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @squizxy: one copy of doom eternal and animal crossing please https://t.co/STQkGD8VPH",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/squizxy/status/1230945287830753280/video/1",
+          "source_status_id": "1230945287830753280",
+          "indices": [
+            "65",
+            "88"
+          ],
+          "url": "https://t.co/STQkGD8VPH",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1230865737578950658/pu/img/5bTm0MJg_jwi8Cd0.jpg",
+          "id_str": "1230865737578950658",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "22333",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1230865737578950658/pu/pl/Z4f1G_8dUeNx3dp9.m3u8?tag=10"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1230865737578950658/pu/vid/640x360/Gwo07wqIZzIVfIWQ.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1230865737578950658/pu/vid/480x270/VSIwAp1ceduAOsgG.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1230865737578950658/pu/vid/1280x720/L_SFG6RpwnSY0kwS.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "2441512705",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1230865737578950658",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1230865737578950658/pu/img/5bTm0MJg_jwi8Cd0.jpg",
+          "source_user_id_str": "2441512705",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1230945287830753280",
+          "display_url": "pic.twitter.com/STQkGD8VPH"
+        }
+      ]
+    }
+  }
+}

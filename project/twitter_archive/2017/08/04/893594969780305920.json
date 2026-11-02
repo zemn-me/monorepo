@@ -1,0 +1,46 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "893594969780305920"
+        ],
+        "editableUntil": "2017-08-04T23:10:17.644Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Masato Kinugawa",
+          "screen_name": "kinugawamasato",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "104911452",
+          "id": "104911452"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "140"
+    ],
+    "favorite_count": "0",
+    "id_str": "893594969780305920",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "893594969780305920",
+    "created_at": "Fri Aug 04 22:10:17 +0000 2017",
+    "favorited": false,
+    "full_text": "RT @kinugawamasato: All domains using CloudFlare have a CSP bypass gadget. Don't use 'unsafe-eval' for CloudFlare domains.\nPoC: https://t.c…",
+    "lang": "en"
+  }
+}

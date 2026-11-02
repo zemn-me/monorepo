@@ -1,0 +1,141 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1227047663662772224"
+        ],
+        "editableUntil": "2020-02-11T02:52:15.117Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "JohnSandwich",
+          "screen_name": "John_Sand_wich",
+          "indices": [
+            "3",
+            "18"
+          ],
+          "id_str": "937246178583887873",
+          "id": "937246178583887873"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/John_Sand_wich/status/1199884300876824576/photo/1",
+          "source_status_id": "1199884300876824576",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/KXewdifXli",
+          "media_url": "http://pbs.twimg.com/media/EKbYZp_UUAYUOSO.jpg",
+          "id_str": "1199884286020571142",
+          "source_user_id": "937246178583887873",
+          "id": "1199884286020571142",
+          "media_url_https": "https://pbs.twimg.com/media/EKbYZp_UUAYUOSO.jpg",
+          "source_user_id_str": "937246178583887873",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1199884300876824576",
+          "display_url": "pic.twitter.com/KXewdifXli"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "PokemonSwordSheild",
+          "indices": [
+            "20",
+            "39"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "63"
+    ],
+    "favorite_count": "0",
+    "id_str": "1227047663662772224",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1227047663662772224",
+    "possibly_sensitive": false,
+    "created_at": "Tue Feb 11 01:52:15 +0000 2020",
+    "favorited": false,
+    "full_text": "RT @John_Sand_wich: #PokemonSwordSheild https://t.co/KXewdifXli",
+    "lang": "qme",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/John_Sand_wich/status/1199884300876824576/photo/1",
+          "source_status_id": "1199884300876824576",
+          "indices": [
+            "40",
+            "63"
+          ],
+          "url": "https://t.co/KXewdifXli",
+          "media_url": "http://pbs.twimg.com/media/EKbYZp_UUAYUOSO.jpg",
+          "id_str": "1199884286020571142",
+          "source_user_id": "937246178583887873",
+          "id": "1199884286020571142",
+          "media_url_https": "https://pbs.twimg.com/media/EKbYZp_UUAYUOSO.jpg",
+          "source_user_id_str": "937246178583887873",
+          "sizes": {
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1199884300876824576",
+          "display_url": "pic.twitter.com/KXewdifXli"
+        }
+      ]
+    }
+  }
+}

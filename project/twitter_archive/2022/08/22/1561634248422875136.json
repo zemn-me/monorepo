@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1561634248422875136"
+        ],
+        "editableUntil": "2022-08-22T09:09:53.242Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "TheChunkierBean",
+          "screen_name": "TheChunkierBean",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "2735554246",
+          "id": "2735554246"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TheChunkierBean/status/1561124833743831040/video/1",
+          "source_status_id": "1561124833743831040",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/GORQx2m7CM",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1561124447905615874/pu/img/238rIy95Zymcn780.jpg",
+          "id_str": "1561124447905615874",
+          "source_user_id": "2735554246",
+          "id": "1561124447905615874",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1561124447905615874/pu/img/238rIy95Zymcn780.jpg",
+          "source_user_id_str": "2735554246",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1561124833743831040",
+          "display_url": "pic.twitter.com/GORQx2m7CM"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "75"
+    ],
+    "favorite_count": "0",
+    "id_str": "1561634248422875136",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1561634248422875136",
+    "possibly_sensitive": false,
+    "created_at": "Mon Aug 22 08:39:53 +0000 2022",
+    "favorited": false,
+    "full_text": "RT @TheChunkierBean: Halo 2 but it came out in 2007 https://t.co/GORQx2m7CM",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/TheChunkierBean/status/1561124833743831040/video/1",
+          "source_status_id": "1561124833743831040",
+          "indices": [
+            "52",
+            "75"
+          ],
+          "url": "https://t.co/GORQx2m7CM",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1561124447905615874/pu/img/238rIy95Zymcn780.jpg",
+          "id_str": "1561124447905615874",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "21666",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1561124447905615874/pu/vid/480x270/Aa36x3zHlQlsoJ6J.mp4?tag=12"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1561124447905615874/pu/vid/640x360/gEDWRUdd2b7va1T8.mp4?tag=12"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1561124447905615874/pu/pl/W2KjqXefB3pUx1tP.m3u8?tag=12&v=e4d"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1561124447905615874/pu/vid/1280x720/Dg5eoRtLSK1j-UHp.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "2735554246",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1561124447905615874",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1561124447905615874/pu/img/238rIy95Zymcn780.jpg",
+          "source_user_id_str": "2735554246",
+          "sizes": {
+            "large": {
+              "w": "1920",
+              "h": "1080",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1561124833743831040",
+          "display_url": "pic.twitter.com/GORQx2m7CM"
+        }
+      ]
+    }
+  }
+}

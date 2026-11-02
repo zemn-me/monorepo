@@ -1,4 +1,3 @@
-
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
@@ -7,7 +6,7 @@ import { z } from 'zod';
 
 import { isDefined, isNotNull } from '#root/ts/guard.js';
 import { isString } from '#root/ts/guards.js';
-import { Link } from '#root/ts/react/next/Link/index.js';
+import { Link } from '#root/ts/react/router/Link/index.js';
 import { Video } from '#root/ts/react/Video/video.js';
 import { RedditPost, RedditSearchResponse } from '#root/ts/reddit/reddit';
 
@@ -123,7 +122,7 @@ export function DogsOfTheDay() {
 	return (
 		<>
 			<h1>Top doggoes of the day!!</h1>
-			{doggs.isLoading ? `we are loading the dogs!! 🐕 🐶` : null}
+			{doggs.isFetching ? `we are loading the dogs!! 🐕 🐶` : null}
 			{doggs.isError ? (
 				<p>
 					we had an issue loading the doggs... 🐕😭 ...{' '}
@@ -136,9 +135,12 @@ export function DogsOfTheDay() {
 					{doggs.data.data.children.map((post, i) => (
 						<Post key={i} {...post.data} />
 					))}{' '}
-					<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>{' '}
 				</>
 			) : null}
+
+			{doggs.isSuccess ? null : (
+				<h1>That’s all for today ‼️ Check back tomorrow 🐕</h1>
+			)}
 
 			<footer>for baby 2016-{new Date().getFullYear()}</footer>
 		</>

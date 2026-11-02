@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1366131127354802181"
+        ],
+        "editableUntil": "2021-02-28T22:00:16.907Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "ragona",
+          "screen_name": "ryanragona",
+          "indices": [
+            "0",
+            "11"
+          ],
+          "id_str": "840418590",
+          "id": "840418590"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "293"
+    ],
+    "favorite_count": "0",
+    "in_reply_to_status_id_str": "1366130661724192768",
+    "id_str": "1366131127354802181",
+    "in_reply_to_user_id": "840418590",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1366131127354802181",
+    "in_reply_to_status_id": "1366130661724192768",
+    "created_at": "Sun Feb 28 21:00:16 +0000 2021",
+    "favorited": false,
+    "full_text": "@ryanragona &gt; adding dependencies is such a common action that it doesn't really strike me as an issue.\nthis is the NPM problem. how much of that is a problem is a discussion in itself.\n\nthe golang /x/ path stuff is different; it only implemented very edge-case stuff like the ssh protocol,",
+    "lang": "en",
+    "in_reply_to_screen_name": "ryanragona",
+    "in_reply_to_user_id_str": "840418590"
+  }
+}

@@ -1,0 +1,479 @@
+package ts_test
+
+import (
+	"flag"
+	"os"
+	"path/filepath"
+	"reflect"
+	"strings"
+	"testing"
+
+	"github.com/bazelbuild/bazel-gazelle/config"
+	"github.com/bazelbuild/bazel-gazelle/label"
+	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/bazelbuild/bazel-gazelle/resolve"
+	"github.com/bazelbuild/bazel-gazelle/rule"
+	bzl "github.com/bazelbuild/buildtools/build"
+	"github.com/bazelbuild/rules_go/go/runfiles"
+
+	css "github.com/zemn-me/monorepo/go/gazelle/css"
+	ts "github.com/zemn-me/monorepo/go/gazelle/ts"
+)
+
+func repoRoot(t *testing.T) string {
+	t.Helper()
+
+	if ws := os.Getenv("BUILD_WORKSPACE_DIRECTORY"); ws != "" {
+		return ws
+	}
+
+	rf, err := runfiles.New()
+	if err != nil {
+		t.Fatalf("runfiles.New: %v", err)
+	}
+
+	pkgPath, err := rf.Rlocation("_main/package.json")
+	if err != nil {
+		t.Fatalf("runfiles package.json: %v", err)
+	}
+
+	return filepath.Dir(pkgPath)
+}
+
+func newTestConfig(t *testing.T) *config.Config {
+	t.Helper()
+
+	root := repoRoot(t)
+
+	cfg := config.New()
+	cfg.RepoRoot = root
+	cfg.WorkDir = root
+
+	var rc resolve.Configurer
+	fs := flag.NewFlagSet("test", flag.ContinueOnError)
+	rc.RegisterFlags(fs, "", cfg)
+	if err := rc.CheckFlags(fs, cfg); err != nil {
+		t.Fatalf("resolve.CheckFlags: %v", err)
+	}
+	rc.Configure(cfg, "", nil)
+
+	return cfg
+}
+
+func generateRulesOnly(t *testing.T, rel string, files []string) language.GenerateResult {
+	t.Helper()
+
+	cfg := newTestConfig(t)
+
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
+	lang.Configure(cfg, "", nil)
+
+	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
+	lang.Configure(dirCfg, rel, nil)
+
+	args := language.GenerateArgs{
+		Config:       dirCfg,
+		Dir:          filepath.Join(cfg.RepoRoot, rel),
+		Rel:          rel,
+		RegularFiles: files,
+	}
+
+	return lang.GenerateRules(args)
+}
+
+func generateAndResolveAllRules(t *testing.T, rel string, files []string) map[string]*rule.Rule {
+	t.Helper()
+
+	cfg := newTestConfig(t)
+
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
+	lang.Configure(cfg, "", nil)
+
+	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
+	lang.Configure(dirCfg, rel, nil)
+
+	args := language.GenerateArgs{
+		Config:       dirCfg,
+		Dir:          filepath.Join(cfg.RepoRoot, rel),
+		Rel:          rel,
+		RegularFiles: files,
+	}
+
+	cssResult := cssLang.GenerateRules(args)
+	tsResult := lang.GenerateRules(args)
+
+	idx := buildRuleIndex(t, cfg, lang, cssLang, defaultIndexPackages(), false)
+	all := make(map[string]*rule.Rule)
+	for _, generated := range cssResult.Gen {
+		all[generated.Name()] = generated
+		idx.AddRule(dirCfg, generated, rule.EmptyFile("", rel))
+	}
+	idx.Finish()
+	for i, generated := range tsResult.Gen {
+		all[generated.Name()] = generated
+		if imports := tsResult.Imports[i]; imports != nil {
+			lbl := label.New("", rel, generated.Name())
+			lang.Resolve(dirCfg, idx, nil, generated, imports, lbl)
+		}
+	}
+
+	return all
+}
+
+func generateAndResolveRule(t *testing.T, rel string, files []string) ([]string, []string) {
+	t.Helper()
+
+	cfg := newTestConfig(t)
+
+	var (
+		lang    ts.Language
+		cssLang css.Language
+	)
+	cssLang.Configure(cfg, "", nil)
+	lang.Configure(cfg, "", nil)
+
+	dirCfg := cfg.Clone()
+	cssLang.Configure(dirCfg, rel, nil)
+	lang.Configure(dirCfg, rel, nil)
+
+	args := language.GenerateArgs{
+		Config:       dirCfg,
+		Dir:          filepath.Join(cfg.RepoRoot, rel),
+		Rel:          rel,
+		RegularFiles: files,
+	}
+
+	cssResult := cssLang.GenerateRules(args)
+	tsResult := lang.GenerateRules(args)
+	var (
+		projectRule    *rule.Rule
+		projectImports interface{}
+	)
+	for i, generated := range tsResult.Gen {
+		if generated.Kind() == "ts_project" {
+			projectRule = generated
+			projectImports = tsResult.Imports[i]
+			break
+		}
+	}
+
+	if projectRule == nil {
+		t.Fatalf("expected to generate a ts_project rule, but got %d rules", len(tsResult.Gen))
+	}
+
+	r := projectRule
+	imports := projectImports
+
+	lbl := label.New("", rel, r.Name())
+	idx := buildRuleIndex(t, cfg, lang, cssLang, defaultIndexPackages(), false)
+	for _, generated := range cssResult.Gen {
+		idx.AddRule(dirCfg, generated, rule.EmptyFile("", rel))
+	}
+	idx.Finish()
+
+	lang.Resolve(dirCfg, idx, nil, r, imports, lbl)
+
+	srcs := r.AttrStrings("srcs")
+	deps := r.AttrStrings("deps")
+
+	return srcs, deps
+}
+
+func defaultIndexPackages() []string {
+	return []string{
+		"go/gazelle/ts/testdata/dependency",
+		"ts",
+		"ts/iter",
+		"ts/math",
+		"ts/time",
+	}
+}
+
+func buildRuleIndex(t *testing.T, cfg *config.Config, lang ts.Language, cssLang css.Language, packages []string, finish bool) *resolve.RuleIndex {
+	t.Helper()
+
+	idx := resolve.NewRuleIndex(func(r *rule.Rule, pkgRel string) resolve.Resolver {
+		if r.Kind() == "css_module" {
+			return cssLang
+		}
+		return lang
+	}, lang, cssLang)
+	for _, pkgRel := range packages {
+		ruleName := ruleNameForPackage(pkgRel)
+		if ruleName == "" {
+			t.Fatalf("no rule name for package %s", pkgRel)
+		}
+		srcs := packageSrcsForIndex(pkgRel)
+		r := rule.NewRule("ts_project", ruleName)
+		if len(srcs) > 0 {
+			r.SetAttr("srcs", srcs)
+		}
+		f := rule.EmptyFile("", pkgRel)
+		idx.AddRule(cfg, r, f)
+	}
+	if finish {
+		idx.Finish()
+	}
+	return idx
+}
+
+func ruleNameForPackage(pkgRel string) string {
+	switch pkgRel {
+	case "go/gazelle/ts/testdata/dependency":
+		return "dependency"
+	case "ts":
+		return "ts"
+	case "ts/iter":
+		return "iter"
+	case "ts/math":
+		return "math"
+	case "ts/time":
+		return "time"
+	default:
+		return ""
+	}
+}
+
+func packageSrcsForIndex(pkgRel string) []string {
+	switch pkgRel {
+	case "go/gazelle/ts/testdata/dependency":
+		return []string{"dep.ts"}
+	case "ts":
+		return []string{"tuple.ts"}
+	case "ts/iter":
+		return []string{"index.ts"}
+	case "ts/math":
+		return []string{"cartesian.ts"}
+	case "ts/time":
+		return []string{"duration.ts"}
+	default:
+		return nil
+	}
+}
+
+func assertContains(t *testing.T, haystack []string, needle string) {
+	t.Helper()
+
+	for _, item := range haystack {
+		if item == needle {
+			return
+		}
+	}
+	t.Fatalf("expected %q to be present in %v", needle, haystack)
+}
+
+func assertNotContains(t *testing.T, haystack []string, needle string) {
+	t.Helper()
+
+	for _, item := range haystack {
+		if item == needle {
+			t.Fatalf("expected %q to be absent in %v", needle, haystack)
+		}
+	}
+}
+
+func TestGenerateRulesExampleSimple(t *testing.T) {
+	rel := "go/gazelle/ts/example/simple"
+	files := []string{"hello.ts", "hello_test.ts"}
+
+	srcs, deps := generateAndResolveRule(t, rel, files)
+
+	wantSrcs := []string{"hello.ts"}
+	if !reflect.DeepEqual(srcs, wantSrcs) {
+		t.Fatalf("srcs mismatch: got %v want %v", srcs, wantSrcs)
+	}
+
+	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestGenerateRulesAddsCSSModuleTarget(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/css_module"
+	files := []string{"consumer.ts", "style.module.css"}
+
+	rules := generateAndResolveAllRules(t, rel, files)
+
+	cssRule, ok := rules["style_module_css"]
+	if !ok {
+		t.Fatalf("expected style_module_css rule to be generated, rules: %v", rules)
+	}
+	if cssRule.Kind() != "css_module" {
+		t.Fatalf("style_module_css kind mismatch: got %s want css_module", cssRule.Kind())
+	}
+	if got := cssRule.AttrString("src"); got != "style.module.css" {
+		t.Fatalf("style_module_css src mismatch: got %q want style.module.css", got)
+	}
+
+	tsRule, ok := rules["css_module"]
+	if !ok {
+		t.Fatalf("expected css_module ts_project rule to be generated, rules: %v", rules)
+	}
+	assertContains(t, tsRule.AttrStrings("deps"), ":style_module_css")
+}
+
+func TestResolveAddsRepositoryDependencyFromAlias(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/uses_option"
+	files := []string{"sample.ts"}
+
+	_, deps := generateAndResolveRule(t, rel, files)
+
+	assertContains(t, deps, "//go/gazelle/ts/testdata/dependency")
+	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestResolveAddsTsTimeDependency(t *testing.T) {
+	rel := "go/gazelle/ts/example/duration"
+	files := []string{"duration.ts", "duration_test.ts"}
+
+	_, deps := generateAndResolveRule(t, rel, files)
+
+	found := false
+	for _, dep := range deps {
+		if strings.HasPrefix(dep, "//ts/time") {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatalf("expected dependency on //ts/time, got %v", deps)
+	}
+	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestResolveAddsMeshDependencies(t *testing.T) {
+	rel := "ts/math/mesh"
+	files := []string{"mesh.ts"}
+
+	_, deps := generateAndResolveRule(t, rel, files)
+
+	foundMath := false
+	for _, dep := range deps {
+		if strings.HasPrefix(dep, "//ts/math") {
+			foundMath = true
+			break
+		}
+	}
+	if !foundMath {
+		t.Fatalf("expected dependency on ts/math, got %v", deps)
+	}
+	assertContains(t, deps, "//ts/iter")
+	assertContains(t, deps, "//:node_modules/@types/node")
+}
+
+func TestGenerateRulesSuppressedPackage(t *testing.T) {
+	rel := "project/cultist"
+	files := []string{"action.ts"}
+
+	result := generateRulesOnly(t, rel, files)
+
+	if len(result.Gen) != 0 {
+		t.Fatalf("expected no rules for suppressed package %q, got %d", rel, len(result.Gen))
+	}
+}
+
+func TestGenerateRulesAddsJsdomAttributeWhenDirectivePresent(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/jsdom"
+	files := []string{"foo.ts", "foo_test.ts"}
+
+	result := generateRulesOnly(t, rel, files)
+
+	var jestRule *rule.Rule
+	for _, generated := range result.Gen {
+		if generated.Kind() == "jest_test" {
+			jestRule = generated
+			break
+		}
+	}
+
+	if jestRule == nil {
+		t.Fatalf("expected to generate a jest_test rule, but none was found")
+	}
+
+	attr := jestRule.Attr("jsdom")
+	if attr == nil {
+		t.Fatalf("expected jest_test rule to have a jsdom attribute")
+	}
+
+	switch expr := attr.(type) {
+	case *bzl.Ident:
+		if expr.Name != "True" {
+			t.Fatalf("expected jsdom attribute to be True, got %s", expr.Name)
+		}
+	case *bzl.LiteralExpr:
+		if expr.Token != "True" {
+			t.Fatalf("expected jsdom attribute to be True, got %s", expr.Token)
+		}
+	default:
+		t.Fatalf("expected jsdom attribute to be True, got %T", attr)
+	}
+}
+
+func TestGenerateRulesSeparatesTestSources(t *testing.T) {
+	rel := "ts/math/shape"
+	files := []string{"index.ts", "shape_test.tsx"}
+
+	result := generateRulesOnly(t, rel, files)
+
+	var (
+		mainRule *rule.Rule
+		testRule *rule.Rule
+	)
+	for _, generated := range result.Gen {
+		if generated.Kind() != "ts_project" {
+			continue
+		}
+		switch generated.Name() {
+		case "shape":
+			mainRule = generated
+		case "shape_tests":
+			testRule = generated
+		}
+	}
+
+	if mainRule == nil || testRule == nil {
+		t.Fatalf("expected both shape and shape_tests ts_project rules, got %v", result.Gen)
+	}
+
+	mainSrcs := mainRule.AttrStrings("srcs")
+	if !reflect.DeepEqual(mainSrcs, []string{"index.ts"}) {
+		t.Fatalf("shape srcs mismatch: got %v want [index.ts]", mainSrcs)
+	}
+
+	testSrcs := testRule.AttrStrings("srcs")
+	if !reflect.DeepEqual(testSrcs, []string{"shape_test.tsx"}) {
+		t.Fatalf("shape_tests srcs mismatch: got %v want [shape_test.tsx]", testSrcs)
+	}
+}
+
+func TestResolveKeepsTestDependencyOnMainRule(t *testing.T) {
+	rel := "ts/math/mesh"
+	files := []string{"mesh.ts", "mesh_test.ts"}
+
+	rules := generateAndResolveAllRules(t, rel, files)
+
+	testRule, ok := rules["mesh_tests"]
+	if !ok {
+		t.Fatalf("expected mesh_tests rule to be generated, rules: %v", rules)
+	}
+
+	deps := testRule.AttrStrings("deps")
+	assertContains(t, deps, ":mesh")
+}
+
+func TestResolveMapsSubmoduleImportToRootModule(t *testing.T) {
+	rel := "go/gazelle/ts/testdata/submodule"
+	files := []string{"consumer.ts"}
+
+	_, deps := generateAndResolveRule(t, rel, files)
+
+	assertContains(t, deps, "//:node_modules/react-dom")
+}

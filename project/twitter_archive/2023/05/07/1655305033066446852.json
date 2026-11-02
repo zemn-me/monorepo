@@ -1,0 +1,35 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1655305033066446852"
+        ],
+        "editableUntil": "2023-05-07T20:44:08.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "208"
+    ],
+    "favorite_count": "0",
+    "id_str": "1655305033066446852",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1655305033066446852",
+    "created_at": "Sun May 07 20:14:08 +0000 2023",
+    "favorited": false,
+    "full_text": "does anyone know if the dynamic import esmodule syntax resolves promises exported from that module. like if I have a module `export new Promise(() =&gt; {})` does `await import(\"myModule\")` just never resolve",
+    "lang": "en"
+  }
+}

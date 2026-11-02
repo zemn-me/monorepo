@@ -1,0 +1,60 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1716562632419987534"
+        ],
+        "editableUntil": "2023-10-23T22:09:58.000Z",
+        "editsRemaining": "5",
+        "isEditEligible": false
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [],
+      "urls": [
+        {
+          "url": "https://t.co/qWI1IrpDd3",
+          "expanded_url": "https://github.com/brix/crypto-js/security/advisories/GHSA-xwcq-pm8m-c4vf",
+          "display_url": "github.com/brix/crypto-js…",
+          "indices": [
+            "46",
+            "69"
+          ]
+        },
+        {
+          "url": "https://t.co/7IhxXlm1UJ",
+          "expanded_url": "https://github.com/entronad/crypto-es/security/advisories/GHSA-mpj8-q39x-wq5h",
+          "display_url": "github.com/entronad/crypt…",
+          "indices": [
+            "87",
+            "110"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "141"
+    ],
+    "favorite_count": "6",
+    "in_reply_to_status_id_str": "1714513369745830026",
+    "id_str": "1716562632419987534",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "1",
+    "id": "1716562632419987534",
+    "in_reply_to_status_id": "1714513369745830026",
+    "possibly_sensitive": false,
+    "created_at": "Mon Oct 23 21:09:58 +0000 2023",
+    "favorited": false,
+    "full_text": "this issue was just disclosed to crypto-js as https://t.co/qWI1IrpDd3 and crypto-es as https://t.co/7IhxXlm1UJ\n\nthanks for the help everyone!",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

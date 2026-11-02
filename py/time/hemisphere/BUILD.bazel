@@ -1,0 +1,45 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
+load("//py:rules.bzl", "py_binary")
+
+package(default_visibility = ["//:__subpackages__"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+py_binary(
+    name = "hemisphere_bin",
+    srcs = ["__main__.py"],
+    data = [
+        "//etc:zone1970.tab",
+    ],
+    env = {
+        "ZONE_TAB": "$(rlocationpath //etc:zone1970.tab)",
+    },
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@rules_python//python/runfiles"],
+)
+
+genrule(
+    name = "tz_to_hemisphere",
+    srcs = ["//etc:zone1970.tab"],
+    outs = [
+        "tz_to_hemisphere.json",
+    ],
+    cmd = """
+		ZONE_TAB=$(rlocationpath //etc:zone1970.tab) $(execpath :hemisphere_bin) > $@
+	""",
+    tools = [
+        ":hemisphere_bin",
+    ],
+)
+
+js_library(
+    name = "tz_to_hemisphere_js",
+    srcs = [
+        "tz_to_hemisphere.json",
+    ],
+)

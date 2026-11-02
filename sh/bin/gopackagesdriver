@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
+#
+export GOPACKAGESDRIVER_BAZEL="$(realpath $(dirname ${BASH_SOURCE[0]})/bazel)"
 "$(dirname ${BASH_SOURCE[0]})/run_lazily.sh" //sh/bin:gopackagesdriver "${@}"

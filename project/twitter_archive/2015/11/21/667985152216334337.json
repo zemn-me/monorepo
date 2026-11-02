@@ -1,0 +1,57 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "667985152216334337"
+        ],
+        "editableUntil": "2015-11-21T09:37:25.509Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "comex",
+          "screen_name": "comex",
+          "indices": [
+            "3",
+            "9"
+          ],
+          "id_str": "14550962",
+          "id": "14550962"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/UAhObXSZST",
+          "expanded_url": "https://lkml.org/lkml/2015/11/18/9",
+          "display_url": "lkml.org/lkml/2015/11/1…",
+          "indices": [
+            "107",
+            "130"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "130"
+    ],
+    "favorite_count": "0",
+    "id_str": "667985152216334337",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "667985152216334337",
+    "possibly_sensitive": false,
+    "created_at": "Sat Nov 21 08:37:25 +0000 2015",
+    "favorited": false,
+    "full_text": "RT @comex: “Hello,\nI've developed a new encryption algorithm, which [..] practically impossible to break.”\nhttps://t.co/UAhObXSZST",
+    "lang": "en"
+  }
+}

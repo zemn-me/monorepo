@@ -1,0 +1,172 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1201244900156694529"
+        ],
+        "editableUntil": "2019-12-01T22:01:16.905Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "PLDH",
+          "screen_name": "PLDHnet",
+          "indices": [
+            "3",
+            "11"
+          ],
+          "id_str": "50251384",
+          "id": "50251384"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PLDHnet/status/1201244580194074624/video/1",
+          "source_status_id": "1201244580194074624",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/paw1trhS6o",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1200906094844891136/pu/img/U6dyrM0gndgV_JnN.jpg",
+          "id_str": "1200906094844891136",
+          "source_user_id": "50251384",
+          "id": "1200906094844891136",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1200906094844891136/pu/img/U6dyrM0gndgV_JnN.jpg",
+          "source_user_id_str": "50251384",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1201244580194074624",
+          "display_url": "pic.twitter.com/paw1trhS6o"
+        }
+      ],
+      "hashtags": [
+        {
+          "text": "SwShSpoilers",
+          "indices": [
+            "64",
+            "77"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "101"
+    ],
+    "favorite_count": "0",
+    "id_str": "1201244900156694529",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1201244900156694529",
+    "possibly_sensitive": false,
+    "created_at": "Sun Dec 01 21:01:16 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @PLDHnet: Here's Leon crying in the rain. Use as you please. #SwShSpoilers https://t.co/paw1trhS6o",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/PLDHnet/status/1201244580194074624/video/1",
+          "source_status_id": "1201244580194074624",
+          "indices": [
+            "78",
+            "101"
+          ],
+          "url": "https://t.co/paw1trhS6o",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1200906094844891136/pu/img/U6dyrM0gndgV_JnN.jpg",
+          "id_str": "1200906094844891136",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "10010",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1200906094844891136/pu/vid/640x360/ncZMO_MkVWW5oD-d.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1200906094844891136/pu/pl/_KVh-vcKENNLEHw8.m3u8?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1200906094844891136/pu/vid/1280x720/ssILGmeCi6yyVWCE.mp4?tag=10"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1200906094844891136/pu/vid/480x270/AEechyCrOoLqnK8g.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "50251384",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1200906094844891136",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1200906094844891136/pu/img/U6dyrM0gndgV_JnN.jpg",
+          "source_user_id_str": "50251384",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1201244580194074624",
+          "display_url": "pic.twitter.com/paw1trhS6o"
+        }
+      ]
+    }
+  }
+}

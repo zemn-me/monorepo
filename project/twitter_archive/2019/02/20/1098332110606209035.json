@@ -1,0 +1,51 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1098332110606209035"
+        ],
+        "editableUntil": "2019-02-20T22:22:35.849Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "Michael Ossareh",
+          "screen_name": "ossareh",
+          "indices": [
+            "0",
+            "8"
+          ],
+          "id_str": "77423",
+          "id": "77423"
+        }
+      ],
+      "urls": []
+    },
+    "display_text_range": [
+      "0",
+      "182"
+    ],
+    "favorite_count": "1",
+    "in_reply_to_status_id_str": "1098327479805186048",
+    "id_str": "1098332110606209035",
+    "in_reply_to_user_id": "77423",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1098332110606209035",
+    "in_reply_to_status_id": "1098327479805186048",
+    "created_at": "Wed Feb 20 21:22:35 +0000 2019",
+    "favorited": false,
+    "full_text": "@ossareh this is fine. essentially the issue comes when you're verifying hashes sent by a *user* and then they can just specify 1 iteration and all the protections of hashing go away",
+    "lang": "en",
+    "in_reply_to_screen_name": "ossareh",
+    "in_reply_to_user_id_str": "77423"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1135720537706115072"
+        ],
+        "editableUntil": "2019-06-04T02:30:51.513Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "it's dev!",
+          "screen_name": "DevPalmer",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "2159340289",
+          "id": "2159340289"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DevPalmer/status/1135630379556265991/video/1",
+          "source_status_id": "1135630379556265991",
+          "indices": [
+            "115",
+            "138"
+          ],
+          "url": "https://t.co/v7xqbHo2nX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1135630136689213440/pu/img/ShlTwP6jBOWSyl7X.jpg",
+          "id_str": "1135630136689213440",
+          "source_user_id": "2159340289",
+          "id": "1135630136689213440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1135630136689213440/pu/img/ShlTwP6jBOWSyl7X.jpg",
+          "source_user_id_str": "2159340289",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1135630379556265991",
+          "display_url": "pic.twitter.com/v7xqbHo2nX"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "138"
+    ],
+    "favorite_count": "0",
+    "id_str": "1135720537706115072",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1135720537706115072",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jun 04 01:30:51 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @DevPalmer: Compilation of every time my simulation project became an abomination or otherwise destroyed itself https://t.co/v7xqbHo2nX",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/DevPalmer/status/1135630379556265991/video/1",
+          "source_status_id": "1135630379556265991",
+          "indices": [
+            "115",
+            "138"
+          ],
+          "url": "https://t.co/v7xqbHo2nX",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1135630136689213440/pu/img/ShlTwP6jBOWSyl7X.jpg",
+          "id_str": "1135630136689213440",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "55417",
+            "variants": [
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1135630136689213440/pu/vid/320x180/FWqxKjmkBb2awiMm.mp4?tag=9"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1135630136689213440/pu/pl/YqVNTAP8hFAaZdc7.m3u8?tag=9"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1135630136689213440/pu/vid/640x360/_g6ZcbvXqFPoRcRE.mp4?tag=9"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1135630136689213440/pu/vid/1280x720/meOPjW4MlocYao2u.mp4?tag=9"
+              }
+            ]
+          },
+          "source_user_id": "2159340289",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1135630136689213440",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1135630136689213440/pu/img/ShlTwP6jBOWSyl7X.jpg",
+          "source_user_id_str": "2159340289",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1135630379556265991",
+          "display_url": "pic.twitter.com/v7xqbHo2nX"
+        }
+      ]
+    }
+  }
+}

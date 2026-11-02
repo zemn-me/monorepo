@@ -1,0 +1,159 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1447165838352584712"
+        ],
+        "editableUntil": "2021-10-10T12:43:17.561Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Jim Burke",
+          "screen_name": "Barcajim3",
+          "indices": [
+            "3",
+            "13"
+          ],
+          "id_str": "3291643006",
+          "id": "3291643006"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Barcajim3/status/1405452969659731971/video/1",
+          "source_status_id": "1405452969659731971",
+          "indices": [
+            "98",
+            "121"
+          ],
+          "url": "https://t.co/AjdhwpVkfs",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1405452890257465349/pu/img/25nqAyPquCkLwgw3.jpg",
+          "id_str": "1405452890257465349",
+          "source_user_id": "3291643006",
+          "id": "1405452890257465349",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1405452890257465349/pu/img/25nqAyPquCkLwgw3.jpg",
+          "source_user_id_str": "3291643006",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "480",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1405452969659731971",
+          "display_url": "pic.twitter.com/AjdhwpVkfs"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "121"
+    ],
+    "favorite_count": "0",
+    "id_str": "1447165838352584712",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1447165838352584712",
+    "possibly_sensitive": false,
+    "created_at": "Sun Oct 10 11:43:17 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @Barcajim3: For all the \"I'm living my best life\" lads.\n\nThe bar has been raised by this fella https://t.co/AjdhwpVkfs",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/Barcajim3/status/1405452969659731971/video/1",
+          "source_status_id": "1405452969659731971",
+          "indices": [
+            "98",
+            "121"
+          ],
+          "url": "https://t.co/AjdhwpVkfs",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1405452890257465349/pu/img/25nqAyPquCkLwgw3.jpg",
+          "id_str": "1405452890257465349",
+          "video_info": {
+            "aspect_ratio": [
+              "3",
+              "4"
+            ],
+            "duration_millis": "57622",
+            "variants": [
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1405452890257465349/pu/pl/YvQmRRdcG3Z6mbmg.m3u8?tag=12"
+              },
+              {
+                "bitrate": "950000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1405452890257465349/pu/vid/480x640/91ltJbH-TERIt6DX.mp4?tag=12"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1405452890257465349/pu/vid/320x426/84fpMnDE9wyQL7Z4.mp4?tag=12"
+              }
+            ]
+          },
+          "source_user_id": "3291643006",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1405452890257465349",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1405452890257465349/pu/img/25nqAyPquCkLwgw3.jpg",
+          "source_user_id_str": "3291643006",
+          "sizes": {
+            "medium": {
+              "w": "480",
+              "h": "640",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "large": {
+              "w": "480",
+              "h": "640",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "480",
+              "h": "640",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1405452969659731971",
+          "display_url": "pic.twitter.com/AjdhwpVkfs"
+        }
+      ]
+    }
+  }
+}

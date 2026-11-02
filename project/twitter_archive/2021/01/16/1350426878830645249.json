@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1350426878830645249"
+        ],
+        "editableUntil": "2021-01-16T13:57:12.288Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Colin Rourke",
+          "screen_name": "ballin_rourke",
+          "indices": [
+            "3",
+            "17"
+          ],
+          "id_str": "1244874260482600960",
+          "id": "1244874260482600960"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ballin_rourke/status/1350097240304603139/video/1",
+          "source_status_id": "1350097240304603139",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/7qOrcmvTiQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1350097015674437633/pu/img/V-v8IEpv2VZ7vUWV.jpg",
+          "id_str": "1350097015674437633",
+          "source_user_id": "1244874260482600960",
+          "id": "1350097015674437633",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1350097015674437633/pu/img/V-v8IEpv2VZ7vUWV.jpg",
+          "source_user_id_str": "1244874260482600960",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1350097240304603139",
+          "display_url": "pic.twitter.com/7qOrcmvTiQ"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "74"
+    ],
+    "favorite_count": "0",
+    "id_str": "1350426878830645249",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1350426878830645249",
+    "possibly_sensitive": false,
+    "created_at": "Sat Jan 16 12:57:12 +0000 2021",
+    "favorited": false,
+    "full_text": "RT @ballin_rourke: Waiting inside the Trojan Horse https://t.co/7qOrcmvTiQ",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/ballin_rourke/status/1350097240304603139/video/1",
+          "source_status_id": "1350097240304603139",
+          "indices": [
+            "51",
+            "74"
+          ],
+          "url": "https://t.co/7qOrcmvTiQ",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1350097015674437633/pu/img/V-v8IEpv2VZ7vUWV.jpg",
+          "id_str": "1350097015674437633",
+          "video_info": {
+            "aspect_ratio": [
+              "9",
+              "16"
+            ],
+            "duration_millis": "68335",
+            "variants": [
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1350097015674437633/pu/vid/360x640/ekPIUGm50o4xJH7Q.mp4?tag=10"
+              },
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1350097015674437633/pu/vid/720x1280/sH216FYC2YL8c9RI.mp4?tag=10"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1350097015674437633/pu/pl/OhpBUvNxISDe8Jn2.m3u8?tag=10"
+              },
+              {
+                "bitrate": "632000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1350097015674437633/pu/vid/320x568/ckX_AriggGyJwOSX.mp4?tag=10"
+              }
+            ]
+          },
+          "source_user_id": "1244874260482600960",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1350097015674437633",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1350097015674437633/pu/img/V-v8IEpv2VZ7vUWV.jpg",
+          "source_user_id_str": "1244874260482600960",
+          "sizes": {
+            "medium": {
+              "w": "675",
+              "h": "1200",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "720",
+              "h": "1280",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "383",
+              "h": "680",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1350097240304603139",
+          "display_url": "pic.twitter.com/7qOrcmvTiQ"
+        }
+      ]
+    }
+  }
+}

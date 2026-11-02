@@ -22,7 +22,8 @@ def jest_test(name, srcs = [], env = {}, data = [], deps = [], jest_config = "//
     jest.jest_test(
         name = name,
         data = data + ["//js:mandatory_data"],
-        args = args,
+        # Service harnesses invoke this launcher directly, outside bazel test.
+        fixed_args = args,
         env = dict({
             "NODE_OPTIONS": "--experimental-vm-modules",
         }, **env),
@@ -32,6 +33,7 @@ def jest_test(name, srcs = [], env = {}, data = [], deps = [], jest_config = "//
     # This rule is used specifically to update snapshots via `bazel run`
     jest.jest_binary(
         name = "%s.update" % name,
+        testonly = True,
         data = data,
-        args = args + ["-u"],
+        fixed_args = args + ["-u"],
     )

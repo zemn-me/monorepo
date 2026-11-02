@@ -1,0 +1,164 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1082582190377054208"
+        ],
+        "editableUntil": "2019-01-08T11:18:02.247Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "Sesame Street",
+          "screen_name": "sesamestreet",
+          "indices": [
+            "3",
+            "16"
+          ],
+          "id_str": "86330674",
+          "id": "86330674"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sesamestreet/status/1082302059985158146/video/1",
+          "source_status_id": "1082302059985158146",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/1fv2UMbqgY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1082300052129878016/pu/img/iBxK4SqqRmoXklSt.jpg",
+          "id_str": "1082300052129878016",
+          "source_user_id": "86330674",
+          "id": "1082300052129878016",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1082300052129878016/pu/img/iBxK4SqqRmoXklSt.jpg",
+          "source_user_id_str": "86330674",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "1082302059985158146",
+          "display_url": "pic.twitter.com/1fv2UMbqgY"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "89"
+    ],
+    "favorite_count": "0",
+    "id_str": "1082582190377054208",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1082582190377054208",
+    "possibly_sensitive": false,
+    "created_at": "Tue Jan 08 10:18:02 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @sesamestreet: Negotiating that new year salary increase like: https://t.co/1fv2UMbqgY",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/sesamestreet/status/1082302059985158146/video/1",
+          "source_status_id": "1082302059985158146",
+          "indices": [
+            "66",
+            "89"
+          ],
+          "url": "https://t.co/1fv2UMbqgY",
+          "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/1082300052129878016/pu/img/iBxK4SqqRmoXklSt.jpg",
+          "id_str": "1082300052129878016",
+          "video_info": {
+            "aspect_ratio": [
+              "16",
+              "9"
+            ],
+            "duration_millis": "25893",
+            "variants": [
+              {
+                "bitrate": "2176000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1082300052129878016/pu/vid/1280x720/dL25FmKwr_6bYScR.mp4?tag=6"
+              },
+              {
+                "bitrate": "832000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1082300052129878016/pu/vid/640x360/iC2SP2LVx9h7YYvw.mp4?tag=6"
+              },
+              {
+                "bitrate": "256000",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/ext_tw_video/1082300052129878016/pu/vid/320x180/L_E481lO3YEZUPsn.mp4?tag=6"
+              },
+              {
+                "content_type": "application/x-mpegURL",
+                "url": "https://video.twimg.com/ext_tw_video/1082300052129878016/pu/pl/GYHAXxgCOdOWT5lR.m3u8?tag=6"
+              }
+            ]
+          },
+          "source_user_id": "86330674",
+          "additional_media_info": {
+            "monetizable": false
+          },
+          "id": "1082300052129878016",
+          "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1082300052129878016/pu/img/iBxK4SqqRmoXklSt.jpg",
+          "source_user_id_str": "86330674",
+          "sizes": {
+            "large": {
+              "w": "1280",
+              "h": "720",
+              "resize": "fit"
+            },
+            "medium": {
+              "w": "1200",
+              "h": "675",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            },
+            "small": {
+              "w": "680",
+              "h": "383",
+              "resize": "fit"
+            }
+          },
+          "type": "video",
+          "source_status_id_str": "1082302059985158146",
+          "display_url": "pic.twitter.com/1fv2UMbqgY"
+        }
+      ]
+    }
+  }
+}

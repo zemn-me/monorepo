@@ -1,8 +1,10 @@
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 
+import { bskyDid } from '#root/project/me/zemn/bio/bio.js';
+import { BlueskyDisplayNameClaim } from '#root/ts/pulumi/lib/bluesky_username_claim.js';
 import { mergeTags, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import Website from '#root/ts/pulumi/lib/website.js';
+import Website from '#root/ts/pulumi/lib/website/website.js';
 
 export interface Args {
 	zoneId: Pulumi.Input<string>;
@@ -37,50 +39,65 @@ export class Component extends Pulumi.ComponentResource {
 		this.site = new Website(
 			`${name}_thomas_shadwell_im_website`,
 			{
-				index: 'ts/pulumi/shadwell.im/thomas/index.html',
-				directory: 'ts/pulumi/shadwell.im/thomas/',
+				index: 'project/im/shadwell/thomas/index.html',
+				directory: 'project/im/shadwell/thomas/',
 				zoneId: args.zoneId,
 				domain: ['thomas', args.domain].join('.'),
 				noIndex: args.noIndex,
 				tags,
+				email: false,
+			},
+			{ parent: this }
+		);
+
+		new BlueskyDisplayNameClaim(
+			`${name}_bsky_name_claim`,
+			{
+				zoneId: args.zoneId,
+				displayname: ['thomas', args.domain].join('.'),
+				did: bskyDid,
 			},
 			{ parent: this }
 		);
 
 		const luke = new Website(`${name}_luke_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/luke/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/luke/out',
+			index: 'project/im/shadwell/luke/build/index.html',
+			directory: 'project/im/shadwell/luke/build',
 			zoneId: args.zoneId,
 			domain: ['luke', args.domain].join('.'),
 			noIndex: args.noIndex,
+			email: false,
 			tags,
 		});
 
 		const kate = new Website(`${name}_kate_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/kate/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/kate/out',
+			index: 'project/im/shadwell/kate/build/index.html',
+			directory: 'project/im/shadwell/kate/build',
 			zoneId: args.zoneId,
 			domain: ['kate', args.domain].join('.'),
 			noIndex: args.noIndex,
+			email: false,
 			tags,
 		});
 
 		const anna = new Website(`${name}_anna_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/anna/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/anna/out',
+			index: 'project/im/shadwell/anna/build/index.html',
+			directory: 'project/im/shadwell/anna/build',
 			zoneId: args.zoneId,
 			domain: ['anna', args.domain].join('.'),
 			noIndex: args.noIndex,
 			noCostAllocationTag: true,
+			email: false,
 			tags,
 		});
 
 		const lucy = new Website(`${name}_lucy_shadwell_im_website`, {
-			index: 'ts/pulumi/shadwell.im/lucy/out/index.html',
-			directory: 'ts/pulumi/shadwell.im/lucy/out',
+			index: 'project/im/shadwell/lucy/build/index.html',
+			directory: 'project/im/shadwell/lucy/build',
 			zoneId: args.zoneId,
 			domain: ['lucy', args.domain].join('.'),
 			noIndex: args.noIndex,
+			email: false,
 			tags,
 		});
 

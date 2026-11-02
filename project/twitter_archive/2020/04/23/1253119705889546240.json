@@ -1,0 +1,71 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1253119705889546240"
+        ],
+        "editableUntil": "2020-04-23T01:33:14.379Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "user_mentions": [
+        {
+          "name": "walking mirage",
+          "screen_name": "atomicthumbs",
+          "indices": [
+            "0",
+            "13"
+          ],
+          "id_str": "14063776",
+          "id": "14063776"
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/9hGWdSKc7N",
+          "expanded_url": "http://tab.id",
+          "display_url": "tab.id",
+          "indices": [
+            "143",
+            "166"
+          ]
+        },
+        {
+          "url": "https://t.co/9hGWdSKc7N",
+          "expanded_url": "http://tab.id",
+          "display_url": "tab.id",
+          "indices": [
+            "224",
+            "247"
+          ]
+        }
+      ]
+    },
+    "display_text_range": [
+      "0",
+      "294"
+    ],
+    "favorite_count": "2",
+    "in_reply_to_status_id_str": "1253118991918338048",
+    "id_str": "1253119705889546240",
+    "in_reply_to_user_id": "601449312",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1253119705889546240",
+    "in_reply_to_status_id": "1253118991918338048",
+    "possibly_sensitive": false,
+    "created_at": "Thu Apr 23 00:33:14 +0000 2020",
+    "favorited": false,
+    "full_text": "@atomicthumbs var sleep = async (ms) =&gt;\nnew Promise(ok =&gt; setTimeout(ok, ms));\n\nfor (let tab of tabs.length) {\nchrome.tabs.executeScript(https://t.co/9hGWdSKc7N, { file: \"assets/jquery.js\"});\nchrome.tabs.executeScript(https://t.co/9hGWdSKc7N, { file: \"d1alltabs.js\" });\nawait sleep(500)\n}",
+    "lang": "en",
+    "in_reply_to_screen_name": "zemnmez",
+    "in_reply_to_user_id_str": "601449312"
+  }
+}

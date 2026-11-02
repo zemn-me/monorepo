@@ -1,4 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js/npm:rules.bzl", "npm_pkg")
+load("//md:rules.bzl", "md_files", "readme")
 load("//ts:rules.bzl", "ts_project")
 
 package(default_visibility = [
@@ -18,7 +20,38 @@ ts_project(
     deps = DEPS,
 )
 
+readme(
+    name = "readme",
+    examples = ["//ts/do-sync/examples:readme_examples"],
+    template = "README.template",
+)
+
+npm_pkg(
+    name = "npm_pkg",
+    srcs = [":do-sync"],
+    entry_point = "index.ts",
+    files = ["LICENSE"],
+    major_version = "version/MAJOR",
+    minor_version = "version/MINOR",
+    patch_version = "version/PATCH",
+    pkg_json_base = "package.template.json",
+    readme = "README.md",
+    release_lock = ".release.lock",
+    test_version_on_main = True,
+    tgz = "npm_package",
+    visibility = [
+        "//ci:__subpackages__",
+        "//ts/pulumi:__subpackages__",
+    ],
+)
+
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "ts_do_sync",
+    srcs = [":readme"],
+    visibility = ["//:__subpackages__"],
 )

@@ -1,0 +1,146 @@
+{
+  "tweet": {
+    "edit_info": {
+      "initial": {
+        "editTweetIds": [
+          "1122264911902584833"
+        ],
+        "editableUntil": "2019-04-27T23:23:00.328Z",
+        "editsRemaining": "5",
+        "isEditEligible": true
+      }
+    },
+    "retweeted": false,
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "entities": {
+      "user_mentions": [
+        {
+          "name": "SwiftOnSecurity",
+          "screen_name": "SwiftOnSecurity",
+          "indices": [
+            "3",
+            "19"
+          ],
+          "id_str": "2436389418",
+          "id": "2436389418"
+        }
+      ],
+      "urls": [],
+      "symbols": [],
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SwiftOnSecurity/status/689865666489221120/photo/1",
+          "source_status_id": "689865666489221120",
+          "indices": [
+            "102",
+            "125"
+          ],
+          "url": "https://t.co/zSbSX644UN",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/CZLk9rBU8AAAJyq.png",
+          "id_str": "689865441112551424",
+          "source_user_id": "2436389418",
+          "id": "689865441112551424",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/CZLk9rBU8AAAJyq.png",
+          "source_user_id_str": "2436389418",
+          "sizes": {
+            "medium": {
+              "w": "475",
+              "h": "267",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "475",
+              "h": "267",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "475",
+              "h": "267",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "photo",
+          "source_status_id_str": "689865666489221120",
+          "display_url": "pic.twitter.com/zSbSX644UN"
+        }
+      ],
+      "hashtags": []
+    },
+    "display_text_range": [
+      "0",
+      "125"
+    ],
+    "favorite_count": "0",
+    "id_str": "1122264911902584833",
+    "truncated": false,
+    "retweet_count": "0",
+    "id": "1122264911902584833",
+    "possibly_sensitive": false,
+    "created_at": "Sat Apr 27 22:23:00 +0000 2019",
+    "favorited": false,
+    "full_text": "RT @SwiftOnSecurity: \"Your password is safely encrypted, only our customer service agents can see it\" https://t.co/zSbSX644UN",
+    "lang": "en",
+    "extended_entities": {
+      "media": [
+        {
+          "expanded_url": "https://twitter.com/SwiftOnSecurity/status/689865666489221120/photo/1",
+          "source_status_id": "689865666489221120",
+          "indices": [
+            "102",
+            "125"
+          ],
+          "url": "https://t.co/zSbSX644UN",
+          "media_url": "http://pbs.twimg.com/tweet_video_thumb/CZLk9rBU8AAAJyq.png",
+          "id_str": "689865441112551424",
+          "video_info": {
+            "aspect_ratio": [
+              "475",
+              "267"
+            ],
+            "variants": [
+              {
+                "bitrate": "0",
+                "content_type": "video/mp4",
+                "url": "https://video.twimg.com/tweet_video/CZLk9rBU8AAAJyq.mp4"
+              }
+            ]
+          },
+          "source_user_id": "2436389418",
+          "id": "689865441112551424",
+          "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/CZLk9rBU8AAAJyq.png",
+          "source_user_id_str": "2436389418",
+          "sizes": {
+            "medium": {
+              "w": "475",
+              "h": "267",
+              "resize": "fit"
+            },
+            "large": {
+              "w": "475",
+              "h": "267",
+              "resize": "fit"
+            },
+            "small": {
+              "w": "475",
+              "h": "267",
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": "150",
+              "h": "150",
+              "resize": "crop"
+            }
+          },
+          "type": "animated_gif",
+          "source_status_id_str": "689865666489221120",
+          "display_url": "pic.twitter.com/zSbSX644UN"
+        }
+      ]
+    }
+  }
+}
