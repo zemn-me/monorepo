@@ -78,6 +78,21 @@ run --incompatible_strict_action_env
 # collect coverage information from test targets
 coverage --instrument_test_targets
 
+# Build and test on BuildBuddy's Linux amd64 executors with --config=remote.
+# Credentials belong in the ignored .auth.bazelrc; see README.md.
+build:remote --bes_results_url=https://app.buildbuddy.io/invocation/
+build:remote --bes_backend=grpcs://remote.buildbuddy.io
+build:remote --remote_cache=grpcs://remote.buildbuddy.io
+build:remote --remote_executor=grpcs://remote.buildbuddy.io
+build:remote --remote_timeout=10m
+build:remote --remote_download_outputs=toplevel
+build:remote --remote_cache_compression
+build:remote --jobs=50
+build:remote --platforms=@toolchains_buildbuddy//platforms:linux_x86_64
+build:remote --extra_execution_platforms=@toolchains_buildbuddy//platforms:linux_x86_64
+build:remote --extra_toolchains=@toolchains_buildbuddy//toolchains/cc:ubuntu_gcc_x86_64
+build:remote --tool_java_runtime_version=remotejdk_17
+
 # Load any settings specific to the current user.
 # .bazelrc.user should appear in .gitignore so that settings are not shared with team members
 # This needs to be last statement in this
@@ -117,11 +132,21 @@ query --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 
 common --lockfile_mode=refresh
 
-common:ci --lockfile_mode=error
-common:ci --build_metadata=ROLE=CI
-common:ci --keep_going
-common:ci --show_progress
-common --test_verbose_timeout_warnings
+# CI builds use the same remote execution profile as local --config=remote.
+# Presubmits add cache restrictions; credential-free jobs use ci-local.
+common:ci --config=ci-local
+build:ci --config=remote
+
+# Presubmits may upload inputs for RBE, but cannot publish local action results.
+# The presubmit credential must independently deny action-cache updates.
+common:ci-presubmit --config=ci
+build:ci-presubmit --remote_upload_local_results=false
+build:ci-presubmit --bes_backend=
+
+common:ci-local --lockfile_mode=error
+common:ci-local --build_metadata=ROLE=CI
+common:ci-local --keep_going
+common:ci-local --show_progress
 
 
 common --experimental_remote_cache_compression_threshold=100
@@ -131,9 +156,15 @@ common --check_direct_dependencies=error
 # in regular usage, don't use all of the host ram for bazel.
 common --local_resources=memory=HOST_RAM*.5
 # in ci use it all
-common:ci --local_resources=memory=HOST_RAM
+common:ci-local --local_resources=memory=HOST_RAM
 
 # Original, checksum-verified release archives avoid an unavailable GitLab host.
 # Separate directories are needed because both upstream archives are src.tar.gz.
 common --distdir=third_party/bazel_distdir/ape
 common --distdir=third_party/bazel_distdir/rules_diff
+
+# Stress the asset-backed browser scenario before merge. Each run must pass;
+# retries must not turn intermittent failures into a green presubmit.
+test:ci-local --runs_per_test=^//project/tiberian_sun/testing:integration_test$@5
+test:ci-local --flaky_test_attempts=1
+test:ci-local --noruns_per_test_detects_flakes

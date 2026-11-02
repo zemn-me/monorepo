@@ -1,410 +1,45 @@
 package testing_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
+	"github.com/tebeka/selenium"
 	"image"
-	"image/png"
 	"math"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/tebeka/selenium"
-	"github.com/tebeka/selenium/log"
-	seleniumutil "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
-// The game draws its controls on a canvas. Drive real input and inspect the
-// rendered pixels and the engine's browser console rather than adding a game API.
-func TestFreewareSkirmish(t *testing.T)         { playFreeware(t, "play") }
-func TestGameDownloadFailure(t *testing.T)      { playFreeware(t, "error") }
-func TestGameDownloadFailurePhone(t *testing.T) { playFreeware(t, "error-phone") }
-
-func TestReactNavigation(t *testing.T) { playFreeware(t, "navigate") }
-
-func TestWindowExit(t *testing.T) { playFreeware(t, "back") }
-
-func TestDirectVisitExit(t *testing.T) { playFreeware(t, "direct") }
-
-func playFreeware(t *testing.T, mode string) {
-	quit := mode == "back" || mode == "direct"
-
-	var ports struct {
-		Site string `json:"@@//project/tiberian_sun/testing:site"`
-	}
-	if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.Site == "" {
-		t.Fatalf("assigned site port: %v", err)
-	}
-	driver := newGameBrowser(t, "--window-size=1280,1100")
-	defer driver.Close()
-	var messages strings.Builder
-	readGameLog := func() (string, error) {
-		entries, err := driver.Log(log.Browser)
-		for _, entry := range entries {
-			if strings.Contains(entry.Message, "Minified React error #418") || strings.Contains(entry.Message, "Hydration failed") {
-				t.Errorf("React hydration failed: %s", entry.Message)
-			}
-			if (strings.Contains(entry.Message, "skirmish.rml opened") || strings.Contains(entry.Message, "Finished unit generation")) && entry.Level != log.Info {
-				t.Errorf("routine game diagnostic has level %s, want INFO: %s", entry.Level, entry.Message)
-			}
-			messages.WriteString(entry.Message)
-			messages.WriteByte('\n')
-		}
-		return messages.String(), err
-	}
-
-	var clock *seleniumutil.VirtualClock
-	defer func() {
-		if clock == nil {
-			return
-		}
-		if shot, err := driver.Screenshot(); err == nil {
-			dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR")
-			if dir != "" {
-				_ = os.WriteFile(filepath.Join(dir, t.Name()+".png"), shot, 0644)
-			}
-		}
-		if t.Failed() {
-			text, _ := readGameLog()
-			t.Log(text)
-		}
-	}()
-	width, height := 800, 600
-	if mode == "error-phone" {
-		width, height = 390, 844
-	}
-	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
-		t.Fatal(err)
-	}
-	base := "http://localhost:" + ports.Site
-	if mode == "back" {
-		// A real previous document must survive quitting, rather than a fixed redirect.
-		if err := driver.Get(base + "/experiments?from=tiberian-sun-test"); err != nil {
-			t.Fatal(err)
-		}
-	}
-	var err error
-	clock, err = seleniumutil.NewVirtualClock(driver)
-	if err != nil {
-		t.Fatal(err)
-	}
-	advance := func(duration time.Duration) {
-		t.Helper()
-		// Bound long advances while keeping short input gestures atomic:
-		// Exit may restore an older document without the injected clock.
-		// A long tick can render hundreds of frames before returning control.
-		for duration > 0 {
-			step := min(duration, 100*time.Millisecond)
-			if err := clock.Advance(step); err != nil {
-				t.Fatal(err)
-			}
-			duration -= step
-		}
-	}
-	wait := func(condition selenium.Condition, timeout time.Duration, intervals ...time.Duration) error {
-		step := 100 * time.Millisecond
-		if len(intervals) > 0 {
-			step = intervals[0]
-		}
-		for elapsed := time.Duration(0); ; elapsed += step {
-			ready, err := condition(driver)
-			if err != nil || ready {
-				return err
-			}
-			if elapsed >= timeout {
-				return fmt.Errorf("condition not met after %s simulated time", timeout)
-			}
-			advance(step)
-		}
-	}
-
-	if strings.HasPrefix(mode, "error") {
-		if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
-			t.Fatal(err)
-		}
-		if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*.gz"}}); err != nil {
-			t.Fatal(err)
-		}
-	}
-	var documentOrigin interface{}
-	if mode == "navigate" {
-		if err := driver.Get(base + "/"); err != nil {
-			t.Fatal(err)
-		}
-		if err := driver.Get(base + "/experiments?from=react-game-test"); err != nil {
-			t.Fatal(err)
-		}
-		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			elements, err := w.FindElements(selenium.ByCSSSelector, "button[aria-label='Go back']")
-			return len(elements) > 0, err
-		}, 30*time.Second); err != nil {
-			t.Fatal(err)
-		}
-		documentOrigin, _ = driver.ExecuteScript("return performance.timeOrigin", nil)
-		link, err := driver.FindElement(selenium.ByCSSSelector, "a[href='/experiments/tiberian-sun']")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := link.Click(); err != nil {
-			t.Fatal(err)
-		}
-	} else if err := driver.Get(base + "/experiments/tiberian-sun"); err != nil {
-		t.Fatal(err)
-	}
-	if strings.HasPrefix(mode, "error") {
-		// Fail the actual download at the network layer; no app state is seeded.
-		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			status, err := w.FindElement(selenium.ByCSSSelector, "[role='status']")
-			if err != nil {
-				return false, nil
-			}
-			text, _ := status.Text()
-			valid, err := w.ExecuteScript(`const s=arguments[0],r=s.getBoundingClientRect();return document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{status})
-			return strings.Contains(text, "Could not start the game") && valid == true, err
-		}, 30*time.Second); err != nil {
-			t.Fatalf("download failure is not visible and focused at width %d: %v", width, err)
-		}
-		text, _ := readGameLog()
-		if strings.Contains(text, "Game Init Completed.") {
-			t.Fatal("engine started after its game download failed")
-		}
-		return
-	}
-	if buttons, err := driver.FindElements(selenium.ByCSSSelector, "button#launch"); err != nil || len(buttons) != 0 {
-		t.Fatalf("game should start on navigation without a launch button: %v", err)
-	}
-	if err := wait(func(w selenium.WebDriver) (bool, error) {
-		el, err := w.FindElement(selenium.ByCSSSelector, "[role=status]")
-		if err != nil {
-			return false, nil
-		}
-		raw, _ := w.ExecuteScript("return arguments[0].textContent", []interface{}{el})
-		text, _ := raw.(string)
-		if strings.Contains(text, "Could not") || strings.Contains(text, "stopped") {
-			return false, fmt.Errorf("startup: %s", text)
-		}
-		return strings.Contains(text, "Game running"), nil
-	}, 120*time.Second); err != nil {
-		t.Fatal(err)
-	}
-
-	if mode == "direct" {
-		// Model opening a link in a fresh tab, with no earlier document to return to.
-		if err := driver.ExecuteChromiumCommand("Page.resetNavigationHistory", map[string]any{}); err != nil {
-			t.Fatal(err)
-		}
-	}
-	canvas, err := driver.FindElement(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
-	if err != nil {
-		t.Fatal(err)
-	}
-	snapshot := func() image.Image {
-		t.Helper()
-		data, err := driver.Screenshot()
-		if err != nil {
-			t.Fatal(err)
-		}
-		frame, err := png.Decode(bytes.NewReader(data))
-		if err != nil {
-			t.Fatal(err)
-		}
-		return frame
-	}
-	waitPixels := func(label string, rect image.Rectangle, predicate func(uint32, uint32, uint32) bool, minimum int) {
-		t.Helper()
-		var count int
-
-		err := wait(func(selenium.WebDriver) (bool, error) {
-			frame := snapshot()
-			count = 0
-			for y := rect.Min.Y; y < rect.Max.Y; y++ {
-				for x := rect.Min.X; x < rect.Max.X; x++ {
-					px := frame.Bounds().Min.X + x*frame.Bounds().Dx()/800
-					py := frame.Bounds().Min.Y + y*frame.Bounds().Dy()/600
-					red, green, blue, _ := frame.At(px, py).RGBA()
-					if predicate(red>>8, green>>8, blue>>8) {
-						count++
-					}
-				}
-			}
-			return count >= minimum, nil
-		}, 45*time.Second, 300*time.Millisecond)
-		if err != nil {
-			t.Fatalf("%s: %d matching pixels: %v", label, count, err)
-		}
-	}
-	screenPoint := func(x, y int) (int, int) {
-		t.Helper()
-		rect, err := driver.ExecuteScript("const r=arguments[0].getBoundingClientRect(); return [r.left,r.top,r.width,r.height]", []interface{}{canvas})
-		if err != nil {
-			t.Fatal(err)
-		}
-		box := rect.([]interface{})
-		px := int(box[0].(float64) + float64(x)*box[2].(float64)/800)
-		py := int(box[1].(float64) + float64(y)*box[3].(float64)/600)
-		return px, py
-	}
-	dispatch := func(px, py int, kind string, buttons int) {
-		t.Helper()
-		if err := driver.ExecuteChromiumCommand("Input.dispatchMouseEvent", map[string]any{"type": kind, "x": px, "y": py, "button": "left", "buttons": buttons, "clickCount": 1}); err != nil {
-			t.Fatal(err)
-		}
-	}
-	pointer := func(x, y int, kind string, buttons int) {
-		t.Helper()
-		px, py := screenPoint(x, y)
-		dispatch(px, py, kind, buttons)
-	}
-	mouse := func(x, y int, click bool) {
-		t.Helper()
-		// Exit navigates on press; resolve the canvas before either half of the click.
-		px, py := screenPoint(x, y)
-		dispatch(px, py, "mouseMoved", 0)
-		if click {
-			dispatch(px, py, "mousePressed", 1)
-			advance(80 * time.Millisecond)
-			dispatch(px, py, "mouseReleased", 0)
-		}
-	}
-	click := func(x, y int) { t.Helper(); mouse(x, y, true) }
-	colored := func(r, g, b uint32) bool { return r > 35 || g > 35 || b > 35 }
-	cyan := func(r, g, b uint32) bool { return g > 100 && b > 100 && g > r+30 && b > r+30 }
-	green := func(r, g, b uint32) bool { return g > 100 && g > b+50 && g > r }
-	waitPixels("game selector rendered", image.Rect(100, 150, 360, 470), colored, 15000)
-	// Artwork appears before the selector starts accepting input. With time
-	// paused, wait for its hover response rather than relying on elapsed wall time.
-	white := func(r, g, b uint32) bool { return r > 200 && g > 200 && b > 200 }
-	mouse(120, 110, false)
-	waitPixels("interactive game selector", image.Rect(105, 102, 140, 120), white, 30)
-	if mode == "navigate" {
-		origin, _ := driver.ExecuteScript("return performance.timeOrigin", nil)
-		if origin != documentOrigin {
-			t.Fatal("game navigation replaced the React document")
-		}
-		if err := driver.Back(); err != nil {
-			t.Fatal(err)
-		}
-		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			current, err := w.CurrentURL()
-			if err != nil {
-				return false, err
-			}
-			text, err := readGameLog()
-			canvases, _ := w.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
-			overflow, _ := w.ExecuteScript("return document.body.style.overflow", nil)
-			return current == base+"/experiments?from=react-game-test" && len(canvases) == 0 && overflow == "" && strings.Contains(text, "Tiberian Sun runtime stopped"), err
-		}, 30*time.Second); err != nil {
-			t.Fatalf("React unmount did not stop the engine and restore the page: %v", err)
-		}
-		link, err := driver.FindElement(selenium.ByCSSSelector, "a[href='/experiments/tiberian-sun']")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := link.Click(); err != nil {
-			t.Fatal(err)
-		}
-		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			canvases, err := w.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
-			if err != nil || len(canvases) == 0 {
-				return false, err
-			}
-			canvas = canvases[0]
-			return true, nil
-		}, 30*time.Second); err != nil {
-			t.Fatal(err)
-		}
-		waitPixels("game selector rendered after remount", image.Rect(100, 150, 360, 470), colored, 15000)
-		mouse(120, 110, false)
-		waitPixels("interactive selector after remount", image.Rect(105, 102, 140, 120), white, 30)
-		text, _ := readGameLog()
-		if strings.Count(text, "Game Init Completed.") != 2 {
-			t.Fatal("game did not start exactly once per React mount")
-		}
-		origin, _ = driver.ExecuteScript("return performance.timeOrigin", nil)
-		if origin != documentOrigin {
-			t.Fatal("game remount replaced the React document")
-		}
-		click(120, 110)
-		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			url, err := w.CurrentURL()
-			return url == base+"/experiments?from=react-game-test", err
-		}, 30*time.Second); err != nil {
-			t.Fatal(err)
-		}
-		return
-	}
-	if quit {
-		click(120, 110) // Exit from the original game selector.
-		if err := wait(func(w selenium.WebDriver) (bool, error) {
-			current, err := w.CurrentURL()
-			destination := base + "/experiments"
-			if mode == "back" {
-				destination += "?from=tiberian-sun-test"
-			}
-			return current == destination, err
-		}, 30*time.Second); err != nil {
-			t.Fatalf("quitting did not return to the previous page: %v", err)
-		}
-
-		return
-	}
-	click(240, 300) // Original Tiberian Sun disc.
-	waitPixels("main menu ready", image.Rect(320, 240, 480, 450), cyan, 150)
-	mouse(400, 408, false)
-	waitPixels("interactive Skirmish highlight", image.Rect(366, 400, 436, 418), white, 40)
-	click(400, 408) // Skirmish.
-	waitPixels("skirmish setup ready", image.Rect(548, 458, 568, 472), green, 15)
-	if err := wait(func(w selenium.WebDriver) (bool, error) {
-		text, err := readGameLog()
-		return strings.Contains(text, "skirmish.rml opened"), err
-	}, 30*time.Second); err != nil {
-		t.Fatalf("skirmish controls did not finish opening: %v", err)
-	}
-	click(558, 465) // Start the default Grand Canyon skirmish against an AI.
-	if err := wait(func(w selenium.WebDriver) (bool, error) {
-		text, err := readGameLog()
-		return strings.Contains(text, "Finished unit generation"), err
-	}, 60*time.Second); err != nil {
-		t.Fatalf("scenario did not generate units: %v", err)
-	}
-	waitPixels("terrain and units rendered", image.Rect(150, 140, 500, 350), colored, 15000)
-	// Spawn positions and MCV facing vary with the scenario seed. Box-select
-	// the starting army so the deployment check does not rely on a sprite pixel.
-	pointer(120, 100, "mouseMoved", 0)
-	pointer(120, 100, "mousePressed", 1)
-	for step := 1; step <= 10; step++ {
-		pointer(120+step*39, 100+step*26, "mouseMoved", 1)
-		advance(25 * time.Millisecond)
-	}
-	pointer(510, 360, "mouseReleased", 0)
-	if err := canvas.SendKeys("d"); err != nil {
-		t.Fatal(err)
-	}
-	waitPixels("construction yard unlocks power plant", image.Rect(656, 178, 719, 220), colored, 1100)
+func TestFreewareSkirmish(t *testing.T) {
+	g := newFreewareBrowser(t)
+	g.navigate()
+	g.waitRunning()
+	g.waitSelector()
+	g.startSkirmish()
+	g.waitPixels("terrain and units rendered", image.Rect(150, 140, 500, 350), colored, 15000)
+	g.deployStartingArmy()
 	// Run ten seconds of the actual simulation without waiting ten wall seconds.
 	// Advancing at the browser layer covers native engine time and async waits.
-	beforeAdvance, err := driver.ExecuteScript("return performance.now()", nil)
+	beforeAdvance, err := g.driver.ExecuteScript("return performance.now()", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	before := snapshot()
+	before := g.snapshot()
 	advancedAt := time.Now()
-	advance(10 * time.Second)
+	g.advance(10 * time.Second)
 	t.Logf("advanced ten seconds of game time in %s", time.Since(advancedAt))
-	afterAdvance, err := driver.ExecuteScript("return performance.now()", nil)
+	afterAdvance, err := g.driver.ExecuteScript("return performance.now()", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if math.Abs(afterAdvance.(float64)-beforeAdvance.(float64)-10000) > 1 {
 		t.Fatalf("game clock did not advance by ten virtual seconds")
 	}
-	if err := wait(func(selenium.WebDriver) (bool, error) {
-		frame := snapshot()
+	if err := g.wait(func(selenium.WebDriver) (bool, error) {
+		frame := g.snapshot()
 		changed := 0
 		for y := 140; y < 400; y++ {
 			for x := 150; x < 500; x++ {
@@ -417,36 +52,36 @@ func playFreeware(t *testing.T, mode string) {
 	}, 15*time.Second, time.Second); err != nil {
 		t.Fatalf("simulation stopped animating: %v", err)
 	}
-	status, _ := driver.FindElement(selenium.ByCSSSelector, "[role=status]")
-	raw, _ := driver.ExecuteScript("return arguments[0].textContent", []interface{}{status})
+	status, _ := g.driver.FindElement(selenium.ByCSSSelector, "[role=status]")
+	raw, _ := g.driver.ExecuteScript("return arguments[0].textContent", []interface{}{status})
 	text, _ := raw.(string)
 	// The game occupies the viewport and the surrounding page stays out of play.
-	layout, err := driver.ExecuteScript(`const c=arguments[0], r=c.getBoundingClientRect(); return getComputedStyle(document.querySelector('main')).display === 'none' && r.x === 0 && r.y === 0 && r.width === innerWidth && r.height === innerHeight`, []interface{}{canvas})
+	layout, err := g.driver.ExecuteScript(`const c=arguments[0], r=c.getBoundingClientRect(); return getComputedStyle(document.querySelector('main')).display === 'none' && r.x === 0 && r.y === 0 && r.width === innerWidth && r.height === innerHeight`, []interface{}{g.canvas})
 	if err != nil || layout != true {
 		t.Fatalf("game does not fill the window: %v %v", layout, err)
 	}
-	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 1440, "height": 900, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+	if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 1440, "height": 900, "screenWidth": 1440, "screenHeight": 900, "deviceScaleFactor": 2, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
-	if err := wait(func(w selenium.WebDriver) (bool, error) {
-		value, err := w.ExecuteScript("return arguments[0].width === 1440 && arguments[0].height === 900", []interface{}{canvas})
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		value, err := w.ExecuteScript("return arguments[0].width === 960 && arguments[0].height === 600", []interface{}{g.canvas})
 		return value == true, err
 	}, 30*time.Second); err != nil {
 		t.Fatalf("framebuffer did not adapt to larger window: %v", err)
 	}
 	// A genuine mode change updates the terrain and sidebar surfaces too.
-	if err := wait(func(w selenium.WebDriver) (bool, error) {
-		text, err := readGameLog()
-		return strings.Contains(text, "VisibleRect: 1440x900") && strings.Contains(text, "Mode change complete."), err
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		text, err := g.readGameLog()
+		return strings.Contains(text, "VisibleRect: 960x600") && strings.Contains(text, "Mode change complete."), err
 	}, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := wait(func(selenium.WebDriver) (bool, error) {
-		frame := snapshot()
+	if err := g.wait(func(selenium.WebDriver) (bool, error) {
+		frame := g.snapshot()
 		count := 0
 		for y := 178; y < 220; y++ {
-			for x := 1296; x < 1359; x++ {
-				r, g, b, _ := frame.At(x*frame.Bounds().Dx()/1440, y*frame.Bounds().Dy()/900).RGBA()
+			for x := 816; x < 879; x++ {
+				r, g, b, _ := frame.At(x*frame.Bounds().Dx()/960, y*frame.Bounds().Dy()/600).RGBA()
 				if colored(r>>8, g>>8, b>>8) {
 					count++
 				}
@@ -456,7 +91,347 @@ func playFreeware(t *testing.T, mode string) {
 	}, 15*time.Second, 300*time.Millisecond); err != nil {
 		t.Fatalf("sidebar did not redraw at the larger resolution: %v", err)
 	}
+	// The same full-screen view survives resolution and density changes, while
+	// a smaller window on that display shows less terrain at the same scale.
+	for _, size := range []struct {
+		name                                                          string
+		windowWidth, windowHeight, screenWidth, screenHeight, density int
+		frameWidth, frameHeight                                       int
+	}{
+		{"high resolution", 2880, 1800, 2880, 1800, 1, 960, 600},
+		{"high density", 2880, 1800, 2880, 1800, 2, 960, 600},
+		{"smaller window", 2400, 1800, 2880, 1800, 1, 800, 600},
+		{"ultrawide", 3440, 1440, 3440, 1440, 1, 1433, 600},
+		{"small display", 640, 480, 640, 480, 1, 800, 600},
+	} {
+		t.Run(size.name, func(t *testing.T) {
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+				"width": size.windowWidth, "height": size.windowHeight,
+				"screenWidth": size.screenWidth, "screenHeight": size.screenHeight,
+				"deviceScaleFactor": size.density, "mobile": false,
+			}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+				value, err := w.ExecuteScript(`const [c,w,h]=arguments,r=c.getBoundingClientRect();
+				return c.width===w && c.height===h && Math.abs(r.width/r.height-w/h)<0.001 &&
+				Math.abs(r.x-(innerWidth-r.width)/2)<1 && Math.abs(r.y-(innerHeight-r.height)/2)<1`, []interface{}{g.canvas, size.frameWidth, size.frameHeight})
+				return value == true, err
+			}, 30*time.Second); err != nil {
+				t.Fatalf("framebuffer did not adapt to display: %v", err)
+			}
+		})
+	}
 	if !strings.Contains(text, "Game running") {
 		t.Fatalf("runtime failed: %s", text)
+	}
+}
+
+func TestGameDownloadFailure(t *testing.T) {
+	for _, viewport := range []struct {
+		name          string
+		width, height int
+	}{{"desktop", 800, 600}, {"phone", 390, 844}} {
+		t.Run(viewport.name, func(t *testing.T) {
+			g := newFreewareBrowser(t)
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": viewport.width, "height": viewport.height, "deviceScaleFactor": 1, "mobile": false}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*.gz"}}); err != nil {
+				t.Fatal(err)
+			}
+			g.navigate()
+			// Fail the actual download at the network layer; no app state is seeded.
+			if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+				status, err := w.FindElement(selenium.ByCSSSelector, "[role='status']")
+				if err != nil {
+					return false, nil
+				}
+				text, _ := status.Text()
+				valid, err := w.ExecuteScript(`const s=arguments[0],r=s.getBoundingClientRect();return document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{status})
+				return strings.Contains(text, "Could not start the game") && valid == true, err
+			}, 30*time.Second); err != nil {
+				t.Fatalf("download failure is not visible and focused at width %d: %v", viewport.width, err)
+			}
+			text, _ := g.readGameLog()
+			if strings.Contains(text, "Game Init Completed.") {
+				t.Fatal("engine started after its game download failed")
+			}
+		})
+	}
+}
+
+func TestMenuContain(t *testing.T) {
+	g := newFreewareBrowser(t)
+	g.navigate()
+	g.waitRunning()
+	g.waitSelector()
+	g.scaledMenus = true
+	// Resize while a menu is open, checking both width- and height-limited
+	// layouts at high pixel density. Hover pixels prove hit testing follows.
+	for _, size := range [][2]int{{1920, 1080}, {900, 1440}, {390, 844}, {1920, 1080}} {
+		g.menuWidth, g.menuHeight = size[0], size[1]
+		if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": g.menuWidth, "height": g.menuHeight, "screenWidth": g.menuWidth, "screenHeight": g.menuHeight, "deviceScaleFactor": 2, "mobile": false}); err != nil {
+			t.Fatal(err)
+		}
+		if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+			value, err := w.ExecuteScript(`const c=arguments[0], r=c.getBoundingClientRect(), s=Math.min(innerWidth/800,innerHeight/600); return Math.abs(r.width-800*s)<1 && Math.abs(r.height-600*s)<1 && Math.abs(r.x-(innerWidth-r.width)/2)<1 && Math.abs(r.y-(innerHeight-r.height)/2)<1`, []interface{}{g.canvas})
+			return value == true, err
+		}, 30*time.Second); err != nil {
+			layout, _ := g.driver.ExecuteScript("const c=arguments[0], r=c.getBoundingClientRect(); return JSON.stringify({width:c.width,height:c.height,rect:r.toJSON(),viewport:[innerWidth,innerHeight],aspect:c.style.getPropertyValue('--game-aspect')})", []interface{}{g.canvas})
+			t.Fatalf("menu contain at %dx%d: %v; %v", g.menuWidth, g.menuHeight, err, layout)
+		}
+		minimum := 30
+		if g.menuWidth < 800 {
+			// Downsampling antialiases the thin highlight strokes on phones.
+			minimum = 15
+		}
+		// CSS settles before SDL consumes its resize event. Keep moving the
+		// pointer until the native highlight proves the new scale is ready.
+		g.waitPixels("resized selector hover", image.Rect(105, 102, 140, 120), white, minimum, func() { g.mouse(120, 110, false) })
+		if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+			shot, err := g.driver.Screenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(dir, fmt.Sprintf("menu-%dx%d.png", g.menuWidth, g.menuHeight)), shot, 0644); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	g.startSkirmish()
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		value, err := w.ExecuteScript(`const c=arguments[0],r=c.getBoundingClientRect(); return c.width===1067 && c.height===600 && Math.abs(r.x)<1 && Math.abs(r.y)<1 && Math.abs(r.width-innerWidth)<1 && Math.abs(r.height-innerHeight)<1`, []interface{}{g.canvas})
+		return value == true, err
+	}, 30*time.Second); err != nil {
+		t.Fatalf("scaled menus did not transition to viewport-sized gameplay: %v", err)
+	}
+}
+
+func TestReactNavigation(t *testing.T) {
+	g := newFreewareBrowser(t)
+	g.installClock()
+	var documentOrigin interface{}
+	if err := g.driver.Get(g.base + "/"); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.driver.Get(g.base + "/experiments?from=react-game-test"); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		elements, err := w.FindElements(selenium.ByCSSSelector, "button[aria-label='Go back']")
+		return len(elements) > 0, err
+	}, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	documentOrigin, _ = g.driver.ExecuteScript("return performance.timeOrigin", nil)
+	link, err := g.driver.FindElement(selenium.ByCSSSelector, "a[href='/experiments/tiberian-sun']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := link.Click(); err != nil {
+		t.Fatal(err)
+	}
+	g.waitRunning()
+	g.waitSelector()
+	origin, _ := g.driver.ExecuteScript("return performance.timeOrigin", nil)
+	if origin != documentOrigin {
+		t.Fatal("game navigation replaced the React document")
+	}
+	if err := g.driver.Back(); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		current, err := w.CurrentURL()
+		if err != nil {
+			return false, err
+		}
+		text, err := g.readGameLog()
+		canvases, _ := w.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
+		overflow, _ := w.ExecuteScript("return document.body.style.overflow", nil)
+		return current == g.base+"/experiments?from=react-game-test" && len(canvases) == 0 && overflow == "" && strings.Contains(text, "Tiberian Sun runtime stopped"), err
+	}, 30*time.Second); err != nil {
+		t.Fatalf("React unmount did not stop the engine and restore the page: %v", err)
+	}
+	link, err = g.driver.FindElement(selenium.ByCSSSelector, "a[href='/experiments/tiberian-sun']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := link.Click(); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		canvases, err := w.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
+		if err != nil || len(canvases) == 0 {
+			return false, err
+		}
+		g.canvas = canvases[0]
+		return true, nil
+	}, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	g.waitPixels("game selector rendered after remount", image.Rect(100, 150, 360, 470), colored, 15000)
+	g.mouse(120, 110, false)
+	g.waitPixels("interactive selector after remount", image.Rect(105, 102, 140, 120), white, 30)
+	canvases, err := g.driver.FindElements(selenium.ByCSSSelector, "canvas[aria-label='Tiberian Sun game']")
+	if err != nil || len(canvases) != 1 {
+		t.Fatalf("remounted game has %d canvases: %v", len(canvases), err)
+	}
+	origin, _ = g.driver.ExecuteScript("return performance.timeOrigin", nil)
+	if origin != documentOrigin {
+		t.Fatal("game remount replaced the React document")
+	}
+	g.click(120, 110)
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		url, err := w.CurrentURL()
+		return url == g.base+"/experiments?from=react-game-test", err
+	}, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestWindowExit(t *testing.T) {
+	g := newFreewareBrowser(t)
+	if err := g.driver.Get(g.base + "/experiments?from=tiberian-sun-test"); err != nil {
+		t.Fatal(err)
+	}
+	g.navigate()
+	g.waitRunning()
+	g.waitSelector()
+	g.click(120, 110) // Exit from the original game selector.
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		current, err := w.CurrentURL()
+		return current == g.base+"/experiments?from=tiberian-sun-test", err
+	}, 30*time.Second); err != nil {
+		t.Fatalf("quitting did not return to the previous page: %v", err)
+	}
+}
+
+func TestDirectVisitExit(t *testing.T) {
+	g := newFreewareBrowser(t)
+	g.navigate()
+	g.waitRunning()
+	g.waitSelector()
+	if err := g.driver.ExecuteChromiumCommand("Page.resetNavigationHistory", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	g.click(120, 110) // Exit from the original game selector.
+	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+		current, err := w.CurrentURL()
+		return current == g.base+"/experiments", err
+	}, 30*time.Second); err != nil {
+		t.Fatalf("quitting did not return to the previous page: %v", err)
+	}
+}
+
+func TestPhoneSkirmishGameplay(t *testing.T) {
+	g := newFreewareBrowser(t)
+	g.navigate()
+	g.waitRunning()
+	g.waitSelector()
+	g.startSkirmish()
+	if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+		t.Fatal(err)
+	}
+	g.touchInput = true
+	g.deployStartingArmy()
+	// Keep gameplay centered on the same starting army after each mode change.
+	for _, size := range []struct {
+		name                                   string
+		width, height, frameWidth, frameHeight int
+	}{
+		{"iphone-portrait", 390, 844, 360, 779},
+		{"iphone-landscape", 844, 390, 675, 312},
+		{"large-iphone-portrait", 430, 932, 360, 780},
+		{"large-iphone-landscape", 932, 430, 746, 344},
+	} {
+		t.Run(size.name, func(t *testing.T) {
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setTouchEmulationEnabled", map[string]any{"enabled": true, "maxTouchPoints": 5}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": size.width, "height": size.height, "screenWidth": size.width, "screenHeight": size.height, "deviceScaleFactor": 3, "mobile": true}); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.wait(func(w selenium.WebDriver) (bool, error) {
+				value, err := w.ExecuteScript(`const [c,w,h]=arguments,r=c.getBoundingClientRect();return c.width===w&&c.height===h&&Math.abs(r.width-innerWidth)<1&&Math.abs(r.height-innerHeight)<1`, []interface{}{g.canvas, size.frameWidth, size.frameHeight})
+				return value == true, err
+			}, 30*time.Second); err != nil {
+				t.Fatalf("phone framebuffer: %v", err)
+			}
+			if err := g.canvas.SendKeys("h"); err != nil {
+				t.Fatal(err)
+			}
+			if err := g.wait(func(selenium.WebDriver) (bool, error) {
+				frame := g.snapshot()
+				visible := 0
+				for y := 20; y < size.frameHeight; y += 4 {
+					for x := 0; x < size.frameWidth-168; x += 4 {
+						r, g, b, _ := frame.At(x*frame.Bounds().Dx()/size.frameWidth, y*frame.Bounds().Dy()/size.frameHeight).RGBA()
+						if colored(r>>8, g>>8, b>>8) {
+							visible++
+						}
+					}
+				}
+				return visible > 200, nil
+			}, 30*time.Second); err != nil {
+				t.Fatalf("phone battlefield remained blank: %v", err)
+			}
+			// Box-select the visible army, just as when dragging a finger
+			// across the battlefield, then let the simulation run hands-free.
+			startX, startY := 10*size.width/size.frameWidth, 30*size.height/size.frameHeight
+			endX, endY := (size.frameWidth-170)*size.width/size.frameWidth, size.height-1
+			g.touchAt(startX, startY, "touchStart")
+			for step := 1; step <= 8; step++ {
+				g.touchAt(startX+(endX-startX)*step/8, startY+(endY-startY)*step/8, "touchMove")
+				g.advance(25 * time.Millisecond)
+			}
+			g.touchAt(endX, endY, "touchEnd")
+			before := g.snapshot()
+			g.advance(2 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("battlefield moved while the player waited: %.1f%% stationary terrain", stable*100)
+			}
+			// Give the selected army a ground order and continue playing.
+			targetX := (size.frameWidth - 168) * size.width * 3 / (size.frameWidth * 4)
+			targetY := size.height * 3 / 4
+			g.touchAt(targetX, targetY, "touchStart")
+			g.advance(80 * time.Millisecond)
+			g.touchAt(targetX, targetY, "touchEnd")
+			before = g.snapshot()
+			g.advance(3 * time.Second)
+			if stable := g.stationaryBattlefield(t, before, g.snapshot(), size.frameWidth, size.frameHeight); stable < 0.75 {
+				t.Fatalf("view drifted while units carried out their orders: %.1f%% stationary terrain", stable*100)
+			}
+			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
+				shot, err := g.driver.Screenshot()
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(filepath.Join(dir, size.name+".png"), shot, 0644); err != nil {
+					t.Fatal(err)
+				}
+			}
+		})
+	}
+	// Switching to a real mouse still permits intentional camera movement.
+	g.touchInput = false
+	moved := 0.0
+	for _, x := range []int{1, 931} {
+		g.dispatch(400, 215, "mouseMoved", 0)
+		g.advance(300 * time.Millisecond)
+		if err := g.canvas.SendKeys("h"); err != nil {
+			t.Fatal(err)
+		}
+		g.advance(100 * time.Millisecond)
+		before := g.snapshot()
+		g.dispatch(x, 215, "mouseMoved", 0)
+		g.advance(time.Second)
+		moved = math.Max(moved, 1-g.stationaryBattlefield(t, before, g.snapshot(), 746, 344))
+	}
+	if moved < 0.25 {
+		t.Fatalf("mouse camera controls did not move the view: %.1f%%", moved*100)
 	}
 }

@@ -10,11 +10,18 @@ import (
 
 func newGameBrowser(t *testing.T, arguments ...string) *seleniumutil.Driver {
 	t.Helper()
+	return newGameBrowserWithCapabilities(t, nil, arguments...)
+}
+
+func newGameBrowserWithCapabilities(t *testing.T, capabilities selenium.Capabilities, arguments ...string) *seleniumutil.Driver {
+	t.Helper()
 	arguments = append([]string{"--use-angle=swiftshader", "--enable-unsafe-swiftshader"}, arguments...)
-	driver, err := seleniumutil.NewWithChromeCapabilities(selenium.Capabilities{
-		"pageLoadStrategy":  "eager",
-		"goog:loggingPrefs": map[string]string{"browser": "ALL"},
-	}, arguments...)
+	if capabilities == nil {
+		capabilities = selenium.Capabilities{}
+	}
+	capabilities["pageLoadStrategy"] = "eager"
+	capabilities["goog:loggingPrefs"] = map[string]string{"browser": "ALL"}
+	driver, err := seleniumutil.NewWithChromeCapabilities(capabilities, arguments...)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -123,11 +123,13 @@ diff --git a/code/conquer.cpp b/code/conquer.cpp
 index 49b7913..3ab1cdc 100644
 --- a/code/conquer.cpp
 +++ b/code/conquer.cpp
-@@ -522,6 +522,7 @@ void Main_Game(int argc, char * argv[])
+@@ -522,6 +522,9 @@ void Main_Game(int argc, char * argv[])
   *=============================================================================================*/
  void Call_Back(void)
  {
-+	Web_Yield(1);
++	// Multiplayer pumps window events in IPX_Call_Back, which already yields.
++	if (Session.Type != GAME_IPX && Session.Type != GAME_INTERNET)
++		Web_Yield(1);
  	/*
  	**	Music and speech maintenance
  	*/
@@ -612,13 +614,15 @@ diff --git a/code/startup.cpp b/code/startup.cpp
 diff --git a/code/sdl/sdlwindow.cpp b/code/sdl/sdlwindow.cpp
 --- a/code/sdl/sdlwindow.cpp
 +++ b/code/sdl/sdlwindow.cpp
-@@ -300,7 +300,7 @@
+@@ -300,7 +300,8 @@
  		return(false);
  	}
  
 -	SDL_WindowFlags flags = SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL;
+-	flags |= SDL_WINDOW_RESIZABLE;
 +	SDL_WindowFlags flags = SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL;
- 	flags |= SDL_WINDOW_RESIZABLE;
++	// Web_Update_Display owns backing resolution; SDL's CSS resize callback
++	// otherwise resizes fixed menu buffers behind the renderer's back.
  
  	_Window = SDL_CreateWindow("Tiberian Sun", width, height, flags);
 diff --git a/code/mainloop.cpp b/code/mainloop.cpp
@@ -713,14 +717,43 @@ diff --git a/code/mplayer.cpp b/code/mplayer.cpp
 diff --git a/code/queue.cpp b/code/queue.cpp
 --- a/code/queue.cpp
 +++ b/code/queue.cpp
-@@ -735,6 +735,10 @@
+@@ -735,6 +735,13 @@
  	// Compute the Game's CRC
  	//------------------------------------------------------------------------
  	Compute_Game_CRC();
 +#ifdef __EMSCRIPTEN__
 +	// Periodic checksums make connection stalls and desynchronization diagnosable.
-+	if (Frame % 120 == 0) DebugString("Multiplayer frame %d checksum %08x\n", Frame, GameCRC);
++	if (Frame % 120 == 0) {
++		DebugString("Multiplayer frame %d checksum %08x\n", Frame, GameCRC);
++		EM_ASM({ Module.webNetwork.report($0, $1, $2, $3); }, Frame, Session.DesiredFrameRate, Session.FrameSendRate, Session.MaxAhead);
++	}
 +#endif
  
  	/*
  	**	A deliberate mismatch waits for the startup suppression to expire, or the checksum
+diff --git a/code/ui/uienginehost.cpp b/code/ui/uienginehost.cpp
+--- a/code/ui/uienginehost.cpp
++++ b/code/ui/uienginehost.cpp
+@@ -60,2 +60,5 @@
+-			frame.ScaleX = scale.ScaleX;
+-			frame.ScaleY = scale.ScaleY;
++			// Scale menus independently of gameplay resolution. Rml uses the
++			// smaller ratio for artwork, fonts and controls, preserving aspect
++			// while its input stays in the same drawable coordinate system.
++			frame.ScaleX = (float)frame.Width / 800.0f;
++			frame.ScaleY = (float)frame.Height / 600.0f;
+diff --git a/code/scroll.cpp b/code/scroll.cpp
+--- a/code/scroll.cpp
++++ b/code/scroll.cpp
+@@ -404,2 +404,9 @@
+-void ScrollClass::Scroll_Edge(Point2D const & point)
+-{
++void ScrollClass::Scroll_Edge(Point2D const & point)
++{
++	// Released touches retain a synthetic mouse position but cannot hover.
++	// Clear inertia too, so an earlier edge gesture cannot coast indefinitely.
++	if (!Web_Mouse_Hover_Active()) {
++		Inertia = 0;
++		_EdgeScrollRemainder = 0.0;
++		return;
++	}

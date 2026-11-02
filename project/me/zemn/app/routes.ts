@@ -2,7 +2,18 @@ import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
 	{ path: 'auth/session', file: 'auth-session.js' },
-	{ path: 'experiments/tiberian-sun', file: 'experiments/tiberian_sun/page.js' },
+	{
+		path: 'experiments/red-alert',
+		file: 'experiments/vanilla_conquer/red_alert.js',
+	},
+	{
+		path: 'experiments/command-and-conquer',
+		file: 'experiments/vanilla_conquer/command_and_conquer.js',
+	},
+	{
+		path: 'experiments/tiberian-sun',
+		file: 'experiments/tiberian_sun/page.js',
+	},
 	{
 		file: 'glade-layout.js',
 		children: [

@@ -1,4 +1,6 @@
 .screen {
+	display: grid;
+	place-items: center;
 	position: fixed;
 	inset: 0;
 	z-index: 1;
@@ -9,8 +11,8 @@
 
 .canvas {
 	display: block;
-	width: 100%;
-	height: 100%;
+	width: min(100vw, calc(100vh * var(--game-aspect, 1.3333333333)));
+	height: min(100vh, calc(100vw / var(--game-aspect, 1.3333333333)));
 	object-fit: contain;
 	background: #000;
 	outline: none;

@@ -1,38 +1,62 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <rml>
 <head>
-<title>Internet connection</title>
+<title>Play online</title>
 <link type="text/template" href="dialog.rml"/>
 <style>
 #reveal { width: 640dp; height: 450dp; top: 50%; margin-top: -225dp; }
 #content { position: relative; padding: 0; }
 #content > * { position: absolute; margin: 0; }
-#title { left: 28dp; top: 16dp; }
-#status { left: 28dp; top: 42dp; width: 580dp; height: 40dp; }
-textarea { left: 28dp; width: 580dp; height: 72dp; box-sizing: border-box; font-size: 12dp; }
-button { width: 175dp; }
-#invite { left: 28dp; top: 85dp; }
-#copy { left: 230dp; top: 85dp; }
-#code { top: 125dp; }
-#label { left: 28dp; top: 205dp; }
-#input { top: 230dp; }
-#paste { left: 28dp; top: 315dp; }
-#accept { left: 230dp; top: 315dp; }
-#continue { left: 28dp; top: 365dp; width: 220dp; }
-#cancel { left: 280dp; top: 365dp; }
+#progress { left: 28dp; top: 16dp; }
+#title { left: 28dp; top: 46dp; font-size: 22dp; }
+#hint { left: 28dp; top: 86dp; width: 580dp; }
+textarea { left: 28dp; top: 132dp; width: 580dp; height: 100dp; box-sizing: border-box; font-size: 12dp; }
+button {
+  height: 44dp; width: 220dp; padding: 12dp 8dp;
+  border: 1dp #4eb6dc; background-color: #152128;
+  decorator: none; line-height: 18dp;
+}
+button:hover, button:focus { color: #ffffff; border-color: #ffffff; }
+button:active {
+  top: auto; padding: 12dp 8dp; border-width: 1dp;
+  decorator: none; background-color: #263d48;
+}
+/* Generic RmlUi buttons use the engine's disabled attribute for interaction.
+   Mirror it as a class so hover/focus styling also reflects that state. */
+button.disabled {
+  decorator: none; color: #387f00;
+  background-color: #152128; border-color: #285564;
+}
+#host { left: 28dp; top: 154dp; }
+#join { left: 28dp; top: 218dp; }
+#copy { left: 28dp; top: 132dp; }
+#paste { left: 28dp; top: 250dp; }
+#next { left: 340dp; top: 132dp; width: 268dp; }
+#accept { left: 340dp; top: 250dp; width: 268dp; }
+#share-status { left: 28dp; top: 190dp; width: 580dp; height: 80dp; }
+#status { left: 28dp; top: 310dp; width: 580dp; height: 48dp; }
+#back { left: 28dp; top: 375dp; width: 150dp; }
+#cancel { left: 448dp; top: 375dp; width: 160dp; }
+#continue { left: 28dp; top: 250dp; width: 300dp; }
+#lobby { left: 28dp; top: 145dp; width: 580dp; }
 </style>
 </head>
 <body template="dialog" data-model="webpeer">
-<p id="title">Internet: direct connection</p>
-<p id="status">{{status}}</p>
-<button id="invite" data-event-click="queue('invite')">Create invitation</button>
-<button id="copy" data-event-click="queue('copy')">Copy your code</button>
-<textarea id="code" readonly="readonly" data-value="code"/>
-<p id="label">Paste your opponent's invitation or reply:</p>
-<textarea id="input" maxlength="65536" data-value="input" data-event-change="queue('input', 0, ev.value)"/>
-<button id="paste" data-event-click="queue('paste')">Paste code</button>
-<button id="accept" data-event-click="queue('accept')">Accept code</button>
-<button id="continue" data-event-click="queue('continue')">Continue to lobby</button>
+<p id="progress">{{progress}}</p>
+<p id="title">{{title}}</p>
+<p id="hint">{{hint}}</p>
+<button id="host" data-if="choose" data-event-click="queue('invite')">Host a game</button>
+<button id="join" data-if="choose" data-event-click="queue('join')">Join a game</button>
+<button id="copy" data-if="share" data-attrif-disabled="unavailable" data-class-disabled="unavailable" data-event-click="queue('copy')">{{copy_label}}</button>
+<button id="next" data-if="host_share" data-attrif-disabled="unavailable" data-class-disabled="unavailable" data-event-click="queue('next')">Next: enter reply</button>
+<textarea id="input" data-if="receive" maxlength="65536" data-value="input" data-event-change="queue('input', 0, ev.value)"/>
+<button id="paste" data-if="receive" data-attrif-disabled="busy" data-class-disabled="busy" data-event-click="queue('paste')">Paste from clipboard</button>
+<button id="accept" data-if="receive" data-attrif-disabled="cannot_accept" data-class-disabled="cannot_accept" data-event-click="queue('accept')">{{accept_label}}</button>
+<p id="lobby" data-if="connected">{{lobby}}</p>
+<button id="continue" data-if="connected" data-event-click="queue('continue')">Continue to lobby</button>
+<p id="share-status" data-if="share">{{status}}</p>
+<p id="status" data-if="!share">{{status}}</p>
+<button id="back" data-if="can_back" data-attrif-disabled="busy" data-class-disabled="busy" data-event-click="queue('back')">Back</button>
 <button id="cancel" data-event-click="queue('cancel')">Cancel</button>
 </body>
 </rml>

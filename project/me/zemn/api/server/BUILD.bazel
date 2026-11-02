@@ -1,9 +1,13 @@
 load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
 load("//go:rules.bzl", "go_library")
 load("//md:rules.bzl", "md_files")
+
+# The shared contracts require the dedicated DynamoDB service harness.
+# gazelle:exclude ddb_contract_test.go
 
 bazel_lint(
     name = "bazel_lint",
@@ -52,8 +56,11 @@ go_library(
         "imports.go",
         "journal.go",
         "journal_agents.go",
+        "journal_artifacts.go",
         "journal_audio_metadata.go",
+        "journal_browse.go",
         "journal_curation.go",
+        "journal_manual.go",
         "journal_mcp.go",
         "journal_openai.go",
         "journal_schema.go",
@@ -77,6 +84,7 @@ go_library(
         "security_txt.go",
         "server.go",
         "sms.go",
+        "timezone.go",
         "token_exchange.go",
         "users.go",
         "uuid.go",
@@ -146,8 +154,11 @@ go_test(
         "in_memory_ddb_test.go",
         "journal_agents_live_test.go",
         "journal_agents_test.go",
+        "journal_artifacts_test.go",
+        "journal_browse_test.go",
         "journal_curation_test.go",
         "journal_date_integration_test.go",
+        "journal_manual_test.go",
         "journal_mcp_test.go",
         "journal_schema_test.go",
         "journal_test.go",
@@ -192,6 +203,7 @@ go_test(
         "@com_github_google_uuid//:uuid",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
         "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
+        "@com_github_openai_openai_go_v3//:openai-go",
         "@com_github_twilio_twilio_go//twiml",
         "@com_github_xeipuuv_gojsonschema//:gojsonschema",
         "@io_bazel_rules_go//go/runfiles",
@@ -206,4 +218,30 @@ md_files(
         "JOURNAL_MCP.md",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+# Compare the fake with the maintained DynamoDB implementation in an isolated
+# service sandbox. The underlying binary must run through the service test.
+go_test(
+    name = "ddb_contract_test",
+    srcs = [
+        "ddb_contract_test.go",
+        "in_memory_ddb_test.go",
+    ],  # keep
+    embed = [":server"],
+    tags = ["manual"],
+    deps = [
+        "//project/me/zemn/api/server/auth",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@com_github_google_uuid//:uuid",
+    ],
+)
+
+service_test(
+    name = "ddb_contract_integration_test",
+    services = ["//java/software/amazon/dynamodb:dynamodb"],
+    test = ":ddb_contract_test",
 )

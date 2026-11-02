@@ -28,7 +28,7 @@ genrule(
 py_test(
     name = "package_data_test",
     srcs = ["package_data_test.py"],  # keep
-    deps = [":package_data_lib"],
+    deps = [":package_data_lib"],  # keep
 )
 
 bazel_lint(
@@ -38,7 +38,7 @@ bazel_lint(
 
 py_library(
     name = "package_data_lib",
-    srcs = ["package_data.py"],
+    srcs = ["package_data.py"],  # keep
 )
 
 filegroup(

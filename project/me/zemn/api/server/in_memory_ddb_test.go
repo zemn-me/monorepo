@@ -143,7 +143,7 @@ func (db *inMemoryDDB) Query(ctx context.Context, in *dynamodb.QueryInput, optFn
 			records = append(records, rec)
 		}
 		sort.SliceStable(records, func(i, j int) bool {
-			if aws.ToBool(in.ScanIndexForward) {
+			if in.ScanIndexForward == nil || *in.ScanIndexForward {
 				return keyTableRecordWhen(records[i]) < keyTableRecordWhen(records[j])
 			}
 			return keyTableRecordWhen(records[i]) > keyTableRecordWhen(records[j])
@@ -221,6 +221,12 @@ func (db *inMemoryDDB) PutItem(ctx context.Context, in *dynamodb.PutItemInput, o
 		return &dynamodb.PutItemOutput{}, nil
 	}
 	if in.TableName != nil && *in.TableName == "keys" {
+		for index, existing := range db.keyRecords {
+			if keyTableRecordID(existing) == keyTableRecordID(in.Item) && keyTableRecordWhen(existing) == keyTableRecordWhen(in.Item) {
+				db.keyRecords[index] = copyDynamoItem(in.Item)
+				return &dynamodb.PutItemOutput{}, nil
+			}
+		}
 		db.keyRecords = append(db.keyRecords, copyDynamoItem(in.Item))
 		return &dynamodb.PutItemOutput{}, nil
 	}

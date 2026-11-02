@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 const result = await build({
-    entryPoints: [fileURLToPath(new URL('./virtual_clock.mjs', import.meta.url))],
+    entryPoints: [fileURLToPath(new URL('./virtual_clock_entry.js', import.meta.url))],
     bundle: true,
     write: false,
     platform: 'browser',

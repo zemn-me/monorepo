@@ -10,11 +10,17 @@
   classes, IDs, or globals. Assert that UI state instead of polling internal
   APIs or databases when the UI can expose it.
 - Group tests by surface (for example, `/admin` or `/grievanceportal`), with
-  shared helpers in `*_helpers_test.go`.
+  shared helpers in the test-only `browserhelpers` package.
 - The local OIDC provider advertises Google contact scopes for auth-flow
   compatibility, but its access token is not a Google API token. Gate
   browser Google API calls on the real Google issuer.
 
-- `:integration_test` runs the regular login and journal flows against a
-  production bundle and server. Its frontend builds after `rules_itest` assigns
-  the API/OIDC ports; keep it on the deployment build pipeline, not Vite dev.
+- `:integration_test` collects the surface-specific browser targets. Each has
+  its own production bundle and service stack. The frontend builds after
+  `rules_itest` assigns the API/OIDC ports; keep it on the deployment build
+  pipeline, not Vite dev.
+
+- Each browser surface has its own Go package. Gazelle generates its
+  `browser_test` rule through `gazelle:map_kind`; the macro provides the
+  service harness. Add tests to the matching package and let Gazelle manage
+  sources and dependencies.

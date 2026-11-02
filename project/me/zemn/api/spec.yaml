@@ -1029,10 +1029,38 @@ components:
             $ref: '#/components/schemas/JournalTranscriptSegment'
         summary:
           $ref: '#/components/schemas/JournalSummary'
+    JournalBrowsePeriod:
+      type: object
+      required: [id, period, start, end]
+      properties:
+        id: {type: string}
+        period: {type: string, enum: [year, month, week, day]}
+        start: {type: string, format: date-time}
+        end: {type: string, format: date-time}
+        title: {type: string}
+    JournalBrowse:
+      type: object
+      required: [focus, timeZone, periods, sources, locations]
+      properties:
+        locations:
+          type: array
+          items: {$ref: '#/components/schemas/JournalEntry'}
+        sources:
+          type: array
+          items: {$ref: '#/components/schemas/JournalEntry'}
+        focus: {type: string, format: date-time}
+        timeZone: {type: string}
+        previous: {type: string, format: date-time}
+        next: {type: string, format: date-time}
+        periods:
+          type: array
+          items: {$ref: '#/components/schemas/JournalBrowsePeriod'}
     Journal:
       type: object
       required: [entries, summaries]
       properties:
+        browse:
+          $ref: '#/components/schemas/JournalBrowse'
         entries:
           type: array
           items:
@@ -2908,7 +2936,14 @@ paths:
   /journal:
     get:
       summary: Get the caller's voice journal.
-      description: Return transcript entries and citation-preserving time summaries.
+      description: Return transcript entries and citation-preserving time summaries. Calendar browsing returns only the selected period's content and lightweight date choices.
+      parameters:
+        - name: view
+          in: query
+          schema: {type: string, enum: [overview, year, month, week, day]}
+        - name: at
+          in: query
+          schema: {type: string, format: date-time}
       security:
         - OIDC: [journal_read]
       responses:

@@ -6,6 +6,12 @@ load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
 
+filegroup(
+    name = "workflow_files",
+    srcs = glob(["*.yml"]),
+    visibility = ["//py/ci/staging_gate:__pkg__"],
+)
+
 yaml_lint_test(
     name = "validation",
 )
@@ -19,6 +25,15 @@ md_files(
     name = "github_workflows",
     srcs = ["README.md"],
     visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "archive_checkout_test",
+    size = "small",
+    srcs = ["archive_checkout_test.py"],
+    args = ["$(rootpath staging.yml)"],
+    data = ["staging.yml"],
+    deps = ["@pip//pyyaml"],
 )
 
 sh_test(
@@ -47,10 +62,19 @@ sh_test(
     deps = ["@rules_shell//shell/runfiles"],
 )
 
+sh_test(
+    name = "bootstrap_bazel_remote_cache_test",
+    size = "small",
+    srcs = ["bootstrap_bazel_remote_cache_test.sh"],
+    data = ["bootstrap_bazel_remote_cache.sh"],
+    env = {"BOOTSTRAP": "$(rlocationpath :bootstrap_bazel_remote_cache.sh)"},
+    deps = ["@rules_shell//shell/runfiles"],
+)
+
 py_test(
     name = "bazel_commands_test",
     size = "small",
-    srcs = ["bazel_commands_test.py"],  # keep
+    srcs = ["bazel_commands_test.py"],  # keep: each test executes the workflow files passed in args
     args = ["$(rootpath %s)" % path for path in glob(
         [
             "*.yml",

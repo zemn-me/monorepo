@@ -1,20 +1,9 @@
-import { ChildProcess, spawn } from 'node:child_process';
-import http from 'node:http';
 import Path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import { runfiles } from '@bazel/runfiles';
-import {
-	afterAll,
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-} from '@jest/globals';
+import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
 import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
-import handler from 'serve-handler';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
@@ -29,9 +18,7 @@ const pathsThatMayError = new Set(['healthcheck/bad', 'poc/c/', 'callback']);
 
 describe('zemn.me website', () => {
 	describe('Endpoint Tests', () => {
-		let server: http.Server;
 		let origin: string;
-		let apiProc: ChildProcess;
 		let apiOrigin: string;
 		let driver: ThenableWebDriver;
 		const paths = glob
@@ -42,62 +29,26 @@ describe('zemn.me website', () => {
 		paths.push('journal', 'admin', 'callback', 'key', 'healthz');
 		paths.sort();
 
-		beforeAll(async () => {
-			const { handleRequest, createNodeListener, staticPaths } =
-				await import(
-					pathToFileURL(Path.join(base, '../server/handler.mjs')).href
-				);
-			const listener = createNodeListener(handleRequest);
-			server = http
-				.createServer((rq, rw) => {
-					if (
-						staticPaths.includes(
-							new URL(rq.url!, 'http://localhost').pathname
-						)
-					)
-						void handler(rq, rw, { public: base });
-					else void listener(rq, rw);
-				})
-				.listen();
-
-			const addressInfo = server.address();
-
-			if (addressInfo == null || typeof addressInfo === 'string') {
-				throw new Error('Not AddressInfo');
-			}
-
-			origin = `http://localhost:${addressInfo.port}`;
-
-			const apiBin = resolveRunfilesPath(
-				'project/me/zemn/api/cmd/localserver/localserver_/localserver'
+		beforeAll(() => {
+			const ports = JSON.parse(process.env['ASSIGNED_PORTS'] ?? '{}') as Record<
+				string,
+				string
+			>;
+			const serviceOrigin = (service: string): string => {
+				const port = ports[service];
+				if (!port) throw new Error(`Missing assigned port for ${service}`);
+				return `http://localhost:${port}`;
+			};
+			origin = serviceOrigin(
+				'@@//project/me/zemn:itest_service_calendar_fixture'
 			);
-			apiProc = spawn(apiBin, {
-				stdio: ['ignore', 'pipe', 'inherit'],
-			});
-			apiOrigin = await new Promise<string>((resolve, reject) => {
-				apiProc.stdout!.on('data', chunk => {
-					const m = /PORT=(\d+)/.exec(chunk.toString());
-					if (m) {
-						resolve(`http://localhost:${m[1]}`);
-					}
-				});
-				apiProc.once('error', reject);
-				setTimeout(
-					() => reject(new Error('api server did not start')),
-					10000
-				);
-			});
+			apiOrigin = serviceOrigin(
+				'@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service'
+			);
 		});
 
 		beforeEach(async () => {
 			driver = Driver().forBrowser(Browser.CHROME).build();
-		});
-
-		afterAll(async () => {
-			apiProc.kill();
-			await new Promise<void>((resolve, reject) => {
-				server.close(err => (err ? reject(err) : resolve()));
-			});
 		});
 
 		const testEndpoint = async (endpoint: string) => {
@@ -370,6 +321,8 @@ describe('zemn.me website', () => {
 					'Requester chest generator',
 					'Blueprint wall generator',
 					'Blueprint book',
+					'Red Alert',
+					'Command & Conquer',
 					'Tiberian Sun',
 					'Cultist simulator',
 				]);

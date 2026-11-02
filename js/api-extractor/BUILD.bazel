@@ -9,5 +9,8 @@ bin.api_extractor_binary(
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
 )

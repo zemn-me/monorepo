@@ -56,6 +56,8 @@ export const githubActionsSecretAccessByWorkflow = {
 
 const workloadIdentityPoolId = 'github';
 const workloadIdentityProviderId = 'my-repo';
+const prCachePoolId = 'github-presubmit-cache';
+const prCachePrincipal = `principalSet://iam.googleapis.com/projects/${gcpProjectNumber}/locations/global/workloadIdentityPools/${prCachePoolId}/attribute.repository_id/${githubRepositoryId}`;
 const githubActionsServiceAccountEmail = `monorepo-root@${gcpProjectId}.iam.gserviceaccount.com`;
 const githubActionsServiceAccountName = `projects/${gcpProjectId}/serviceAccounts/${githubActionsServiceAccountEmail}`;
 const presubmitWorkflowRef = `${githubRepository}/.github/workflows/presubmit.yml`;
@@ -163,6 +165,50 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 			}
 		);
 
+		// PRs can change their workflow and read any supplied credentials. Keep
+		// their identity in a separate pool with only the cache-key secret grant.
+		const prCachePool = new gcp.iam.WorkloadIdentityPool(
+			`${name}_pr_cache_pool`,
+			{
+				description:
+					'Untrusted PR access to the read-only build cache.',
+				displayName: 'GitHub PR cache',
+				project: gcpProjectId,
+				workloadIdentityPoolId: prCachePoolId,
+			},
+			{ dependsOn: services, parent: this, protect: true }
+		);
+		const prCacheProvider = new gcp.iam.WorkloadIdentityPoolProvider(
+			`${name}_pr_cache_provider`,
+			{
+				attributeCondition: [
+					`assertion.repository == "${githubRepository}"`,
+					`assertion.repository_id == "${githubRepositoryId}"`,
+					`assertion.repository_owner == "${githubRepositoryOwner}"`,
+					`assertion.repository_owner_id == "${githubRepositoryOwnerId}"`,
+					'assertion.event_name == "pull_request"',
+					'assertion.ref.startsWith("refs/pull/")',
+					'assertion.ref.endsWith("/merge")',
+					`assertion.workflow_ref == "${presubmitWorkflowRef}@" + assertion.ref`,
+					`assertion.sub == "repo:${githubRepository}:pull_request"`,
+				].join(' && '),
+				attributeMapping: {
+					'attribute.repository_id': 'assertion.repository_id',
+					'google.subject': 'assertion.sub',
+				},
+				description:
+					'PR presubmit cache access without deployment privileges.',
+				displayName: 'PR read-only cache',
+				oidc: {
+					issuerUri: 'https://token.actions.githubusercontent.com',
+				},
+				project: gcpProjectId,
+				workloadIdentityPoolId: prCachePool.workloadIdentityPoolId,
+				workloadIdentityPoolProviderId: workloadIdentityProviderId,
+			},
+			{ dependsOn: services, parent: this, protect: true }
+		);
+
 		for (const workflowScope of ['staging', 'submit'] as const) {
 			new gcp.serviceaccount.IAMMember(
 				`${name}_${workflowScope}_workload_identity_user`,
@@ -214,7 +260,29 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 			for (const secretId of secretIds) {
 				const secret = secrets.get(secretId);
 				if (secret === undefined) {
-					throw new Error(`missing GitHub Actions secret ${secretId}`);
+					throw new Error(
+						`missing GitHub Actions secret ${secretId}`
+					);
+				}
+
+				if (
+					workflowScope === 'presubmit' &&
+					secretId === githubActionsSecretIds.readonlyBuildbuddyApiKey
+				) {
+					new gcp.secretmanager.SecretIamMember(
+						`${name}_pr_cache_accessor`,
+						{
+							member: prCachePrincipal,
+							project: gcpProjectId,
+							role: 'roles/secretmanager.secretAccessor',
+							secretId: secret.id,
+						},
+						{
+							dependsOn: prCacheProvider,
+							parent: secret,
+							protect: true,
+						}
+					);
 				}
 
 				new gcp.secretmanager.SecretIamMember(
@@ -234,6 +302,7 @@ export class GitHubActionsSecrets extends pulumi.ComponentResource {
 			githubActionsServiceAccount: githubActionsServiceAccountEmail,
 			secrets: [...secrets.values()],
 			workloadIdentityProvider: provider.name,
+			prCacheIdentityProvider: prCacheProvider.name,
 		});
 	}
 }

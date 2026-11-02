@@ -50,6 +50,69 @@ class TestPnpmIntegrity(unittest.TestCase):
 
 
 class TestAutoIntegrity(unittest.TestCase):
+    def test_archive_override_tracks_release_variable(self):
+        module = '''VERSION = "2.3.3"
+archive_override(
+    module_name = "rules_oci",
+    integrity = "old",
+    strip_prefix = "rules_oci-" + VERSION,
+    # auto-integrity
+    urls = ["https://example.com/v" + VERSION + "/rules_oci-v" + VERSION + ".tar.gz"],
+)
+'''
+        calls = []
+
+        def fetcher(url):
+            calls.append(url)
+            return b"reviewed release"
+
+        updated = update_module_bazel_text(module, fetcher, module.replace('VERSION = "2.3.3"', 'VERSION = "2.3.0"'))
+        self.assertEqual(calls, ["https://example.com/v2.3.3/rules_oci-v2.3.3.tar.gz"])
+        expected = "sha256-" + base64.b64encode(hashlib.sha256(b"reviewed release").digest()).decode()
+        self.assertIn(f'integrity = "{expected}"', updated)
+        calls.clear()
+        self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+        self.assertEqual(calls, [])
+
+    def test_repository_module_baseline(self):
+        module = Path("MODULE.bazel").read_text()
+
+        def fetcher(url):
+            self.fail(f"Unchanged archive should not be fetched: {url}")
+
+        self.assertEqual(update_module_bazel_text(module, fetcher, module), module)
+
+    def test_url_list_layouts(self):
+        for urls in [
+            '["https://example.com/release.zip"]',
+            '["https://example.com/release.zip",]',
+            '[\n        "https://example.com/release.zip"\n    ]',
+            '["https://example.com/release.zip".replace("]", "unused")]',
+            '["https://example.com/release.zip", "https://example.com/mirror.zip"]',
+            '[\n        "https://example.com/release.zip",\n    ]',
+            '[  # primary mirror\n        "https://example.com/" + VERSION.replace("+", "-") + ".zip",\n    ]',
+        ]:
+            with self.subTest(urls=urls):
+                module = f'''VERSION = "release"
+http_archive(
+    name = "tool",
+    sha256 = "stale",
+    # auto-integrity
+    urls = {urls},
+)
+'''
+                calls = []
+
+                def fetcher(url):
+                    calls.append(url)
+                    return b"release"
+
+                updated = update_module_bazel_text(module, fetcher)
+                self.assertEqual(calls, ["https://example.com/release.zip"])
+                self.assertIn(hashlib.sha256(b"release").hexdigest(), updated)
+                self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+                self.assertEqual(len(calls), 1)
+
     def test_multiline_build_content_does_not_end_archive(self):
         module = '''# http_archive(ignored comment
 TEXT = "http_archive(ignored string"

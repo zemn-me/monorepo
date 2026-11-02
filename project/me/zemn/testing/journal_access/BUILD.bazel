@@ -1,0 +1,27 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//project/me/zemn/testing:browser_test.bzl", "browser_test")
+
+# gazelle:map_kind go_test browser_test //project/me/zemn/testing:browser_test.bzl
+
+package(default_visibility = ["//project/me/zemn/testing:__pkg__"])
+
+browser_test(
+    name = "journal_access_test",
+    srcs = [
+        "journal_oauth_test.go",
+        "journal_pagination_test.go",
+        "journal_ssr_test.go",
+        "journal_wiki_test.go",
+    ],
+    deps = [
+        "//go/seleniumutil",
+        "//project/me/zemn/testing/browserhelpers",
+        "@com_github_modelcontextprotocol_go_sdk//mcp",
+        "@com_github_tebeka_selenium//:selenium",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
