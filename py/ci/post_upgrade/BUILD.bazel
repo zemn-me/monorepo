@@ -1,0 +1,42 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+py_library(
+    name = "post_upgrade",
+    srcs = [
+        "__init__.py",
+        "integrity.py",
+        "pnpm.py",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+py_binary(
+    name = "post_upgrade_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "post_upgrade_test",
+    srcs = ["__test__.py"],
+    data = [
+        "//:MODULE.bazel",
+        "//:sh/postUpgrade.sh",
+    ],
+    main = "__test__.py",
+    deps = [":post_upgrade"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "py_ci_post_upgrade",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)

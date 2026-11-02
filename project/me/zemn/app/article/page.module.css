@@ -1,0 +1,93 @@
+.page {
+	padding-block-end: 4rem;
+}
+
+.introduction {
+	margin: 0 auto 3rem;
+	max-width: 32rem;
+	padding-inline: 1.25rem;
+	text-align: center;
+}
+
+.years,
+.entries {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.year + .year {
+	margin-block-start: 2.5rem;
+}
+
+.yearHeading {
+	align-items: baseline;
+	display: grid;
+	gap: 0.7rem;
+	grid-template-columns: auto auto minmax(2rem, 1fr);
+	margin: 0 1.25rem 0.8rem;
+}
+
+.yearHeading::after {
+	border-block-start: 1px solid currentColor;
+	content: "";
+	inline-size: 100%;
+}
+
+.yearHeading h2 {
+	font-size: 1.1em;
+	margin: 0;
+}
+
+.age {
+	font-size: 0.8em;
+	font-style: italic;
+	opacity: 0.72;
+}
+
+.entries {
+	border-block-start: 1px solid
+		color-mix(in srgb, currentColor 28%, transparent);
+	margin-inline: 1.25rem;
+}
+
+.entry {
+	align-items: baseline;
+	border-block-end: 1px solid
+		color-mix(in srgb, currentColor 28%, transparent);
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: minmax(6.5rem, 0.28fr) minmax(0, 1fr);
+	padding-block: 0.85rem;
+}
+
+.date {
+	font-style: italic;
+	opacity: 0.72;
+}
+
+.article h3,
+.article p {
+	margin: 0;
+}
+
+.article h3 {
+	font-size: 1em;
+}
+
+.article p {
+	line-height: 1.45;
+	margin-block-start: 0.25rem;
+	max-width: 34rem;
+}
+
+@media (max-width: 34rem) {
+	.entry {
+		gap: 0.25rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.date {
+		font-size: 0.85em;
+	}
+}

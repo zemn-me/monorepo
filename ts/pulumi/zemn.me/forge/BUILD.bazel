@@ -20,3 +20,9 @@ bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
 )
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["forge.ts"],
+    visibility = ["//:__subpackages__"],
+)

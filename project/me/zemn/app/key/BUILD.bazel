@@ -1,0 +1,48 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "key",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    assets = ["style.module.css"],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/classnames",
+        "//:node_modules/react",
+        "//:node_modules/temporal-polyfill",
+        "//:node_modules/web-haptics",
+        "//project/me/zemn/components/InlineLogin",
+        "//project/me/zemn/components/ProgressCircle",
+        "//project/me/zemn/hook",
+        "//ts/react/lang",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "client.tsx",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)

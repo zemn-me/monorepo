@@ -4,6 +4,12 @@ import { Int } from '#root/ts/factorio/int.js';
 import { SignalID } from '#root/ts/factorio/signal_id.js';
 
 export const ArithmeticCombinatorParameters = z.strictObject({
+	first_signal_networks: z
+		.strictObject({
+			red: z.boolean(),
+			green: z.boolean(),
+		})
+		.optional(),
 	/**
 	 * First signal to use in an operation. If not specified, the second argument will be the value of first_constant.
 	 */
@@ -13,6 +19,12 @@ export const ArithmeticCombinatorParameters = z.strictObject({
 	 * Second signal to use in an operation. If not specified, the second argument will be the value of second_constant.
 	 */
 	second_signal: SignalID.optional(),
+	second_signal_networks: z
+		.strictObject({
+			red: z.boolean(),
+			green: z.boolean(),
+		})
+		.optional(),
 	/**
 	 * Constant to use as the first argument of the operation. Has no effect when first_signal is set. Defaults to 0.
 	 */

@@ -7,5 +7,5 @@ import { isNorthernHemisphereTz } from '#root/ts/time/hemisphere/is_hemisphere';
 export function isNorthernHemisphere(
 	timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
 ): boolean {
-	return isNorthernHemisphereTz(timeZone)
+	return isNorthernHemisphereTz(timeZone);
 }

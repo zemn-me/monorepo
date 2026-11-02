@@ -4,10 +4,7 @@
 		{
 			"label": "Rust: rust-project.json",
 			"command": "${workspaceFolder}/sh/bin/bazel",
-			"args": [
-				"run",
-				"//.vscode:gen_rust_project"
-			],
+			"args": ["run", "//.vscode:gen_rust_project"],
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
@@ -17,10 +14,7 @@
 				"reveal": "never",
 				"group": "preprep",
 				"close": true,
-				"panel": "dedicated",
-			},
-			"runOptions": {
-				"runOn": "folderOpen"
+				"panel": "dedicated"
 			}
 		},
 		{
@@ -32,9 +26,6 @@
 				"run",
 				"//.vscode:activate_venv"
 			],
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
@@ -42,7 +33,7 @@
 				"close": true,
 				"reveal": "never",
 				"group": "preprep",
-				"panel": "dedicated",
+				"panel": "dedicated"
 			},
 			"isBackground": true,
 			"problemMatcher": {
@@ -59,7 +50,7 @@
 				"background": {
 					"activeOnStart": true,
 					"beginsPattern": "^iBazel +\\[[^\\]]+\\]: Notifying of changes$",
-					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$",
+					"endsPattern": "^iBazel +\\[[^\\]]+\\]: Starting...$"
 				}
 			}
 		},
@@ -76,7 +67,7 @@
 				"close": true,
 				"group": "preprep",
 				"reveal": "never",
-				"panel": "dedicated",
+				"panel": "dedicated"
 			},
 			"group": "build",
 			"runOptions": {

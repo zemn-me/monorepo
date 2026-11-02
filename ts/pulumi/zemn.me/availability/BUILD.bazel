@@ -1,33 +1,29 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
-load("//ts/next.js:rules.bzl", "next_project")
+load("//js:rules.bzl", "js_library")
+load("//ts/remix:rules.bzl", "remix_project")
 
 package(default_visibility = ["//visibility:public"])
 
-ts_project(
-    name = "ts",
-    assets = glob(["**/*.css"]),
-    deps = [
-        "//:node_modules/@types/react",
-        "//:node_modules/immutable",
-        "//:node_modules/next",
-        "//:node_modules/react",
-        "//project/zemn.me/bio",
-        "//ts/iter",
-        "//ts/next.js",
-        "//ts/react/lang",
-        "//ts/react/next/Link",
-    ],
-)
-
-next_project(
-    name = "next",
+remix_project(
+    name = "remix",
     srcs = [
-        ":ts",
+        "//ts/pulumi/zemn.me/availability/app",
     ],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+js_library(
+    name = "react-router_config_mjs",
+    srcs = ["react-router.config.mjs"],
+    deps = [],
+)
+
+js_library(
+    name = "vite_config_mjs",
+    srcs = ["vite.config.mjs"],
+    deps = [],
 )

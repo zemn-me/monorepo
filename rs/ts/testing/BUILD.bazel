@@ -17,7 +17,7 @@ genrule(
     name = "output",
     outs = ["output.ts"],
     cmd = """
-	echo '/* eslint-disable */' > $@
+	echo '/* biome-ignore-all lint: generated file */' > $@
     $(location :testing) >> $@
     """,
     tools = [":testing"],

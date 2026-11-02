@@ -10,7 +10,10 @@ ts_project(
 
 ts_project(
     name = "config_browser",
-    srcs = ["jest.browser.config.ts"],
+    srcs = [
+        "jest.browser.config.ts",
+        "jest.setup.ts",
+    ],
     deps = [
         # needed for the jsdom plugin
         "//:node_modules/jest-environment-jsdom",

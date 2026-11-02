@@ -1,5 +1,71 @@
+load("@npm//:renovate/package_json.bzl", "bin")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library", "js_test")
+load("//md:rules.bzl", "md_files")
 load("//yml:test.bzl", "yaml_lint_test")
+
+exports_files(["renovate-global.json"])
+
+js_test(
+    name = "renovate_bazel_releases_test",
+    size = "small",
+    data = [
+        "renovate-global.json",
+        "//:node_modules/renovate",
+        "//:renovate_bazel_inputs",
+    ],
+    entry_point = "renovate_bazel_releases_test.mjs",
+)
+
+js_library(
+    name = "renovate_bazel_releases_test_mjs",
+    srcs = ["renovate_bazel_releases_test.mjs"],
+    deps = ["//:node_modules/renovate"],
+)
+
+js_test(
+    name = "renovate_pnpm_test",
+    size = "small",
+    data = [
+        ":renovate_pnpm_test_mjs",
+        "//:package_json",
+        "@pnpm",
+    ],
+    entry_point = "renovate_pnpm_test.mjs",
+    env = {
+        "PACKAGE_JSON": "$(rlocationpath //:package_json)",
+        "PNPM_BIN": "$(rlocationpath @pnpm//:pnpm)",
+    },
+)
+
+js_library(
+    name = "renovate_pnpm_test_mjs",
+    srcs = ["renovate_pnpm_test.mjs"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/renovate",
+    ],
+)
+
+js_test(
+    name = "renovate_python_lock_test",
+    data = [
+        "renovate-global.json",
+        "//:node_modules/renovate",
+        "//:renovate_python_inputs",
+        "//py/mitmproxy:renovate_python_inputs",
+    ],
+    entry_point = "renovate_python_lock_test.mjs",
+)
+
+bin.renovate_config_validator_test(
+    name = "validate_renovate_config_test",
+    args = [
+        "$(location renovate-global.json)",
+        "--strict",
+    ],
+    data = ["renovate-global.json"],
+)
 
 yaml_lint_test(
     name = "validation",
@@ -8,4 +74,16 @@ yaml_lint_test(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "github",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+js_library(
+    name = "renovate_python_lock_test_mjs",
+    srcs = ["renovate_python_lock_test.mjs"],
+    deps = ["//:node_modules/renovate"],
 )

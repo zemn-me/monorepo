@@ -1,0 +1,23 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
+
+py_binary(
+    name = "inject_iservice_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//pydantic",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+exports_files(
+    ["__main__.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

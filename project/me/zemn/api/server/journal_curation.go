@@ -1,0 +1,735 @@
+package apiserver
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"log"
+	"net/url"
+	"regexp"
+	"sort"
+	"strings"
+	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/google/uuid"
+)
+
+const journalCurationKey = "CURATION"
+const journalCurationMaxBytes = 48 * 1024 * 1024
+const journalCurationRunBudget = 30 * time.Minute
+
+// Bump when the output contract or writing policy changes so unchanged diaries refresh.
+const journalCurationVersion = "8"
+
+func journalCurationInputKey(runID string) string {
+	return "curation/runs/" + runID + "/input.json"
+}
+
+// The application, not the sandbox, owns publication and credentials.
+type JournalCurator interface {
+	Prepare(context.Context, string, []byte) (string, error)
+	Start(context.Context, string, string, time.Duration) error
+	Collect(context.Context, string) (*JournalCurationResult, error)
+	Cleanup(context.Context, string, string) error
+}
+
+type journalCurationState struct {
+	ManualRequestID       string        `dynamodbav:"manual_request_id"`
+	LastRunManual         bool          `dynamodbav:"last_run_manual"`
+	ID                    string        `dynamodbav:"id"`
+	When                  string        `dynamodbav:"when"`
+	Version               string        `dynamodbav:"version"`
+	LeaseUntil            time.Time     `dynamodbav:"lease_until"`
+	RunID                 string        `dynamodbav:"run_id"`
+	SessionID             string        `dynamodbav:"session_id"`
+	Submitted             bool          `dynamodbav:"submitted"`
+	ContinuationTurnID    string        `dynamodbav:"continuation_turn_id"`
+	ContinuationRemaining time.Duration `dynamodbav:"continuation_remaining"`
+	ContinuationSubmitted bool          `dynamodbav:"continuation_submitted"`
+	StartedAt             time.Time     `dynamodbav:"started_at"`
+	AttemptWindowStart    time.Time     `dynamodbav:"attempt_window_start"`
+	Attempts              int           `dynamodbav:"attempts"`
+	InputKey              string        `dynamodbav:"input_key"`
+	Fingerprint           string        `dynamodbav:"fingerprint"`
+	PublishedKey          string        `dynamodbav:"published_key"`
+	PublishedWikiKey      string        `dynamodbav:"published_wiki_key"`
+	PublishedFingerprint  string        `dynamodbav:"published_fingerprint"`
+	PublishedAt           time.Time     `dynamodbav:"published_at"`
+	Failed                bool          `dynamodbav:"failed"`
+	Cleaning              bool          `dynamodbav:"cleaning"`
+}
+
+type journalCorpusEntry struct {
+	ID         string                     `json:"id"`
+	RecordedAt time.Time                  `json:"recordedAt"`
+	TimeZone   string                     `json:"timeZone"`
+	Transcript []JournalTranscriptSegment `json:"transcript"`
+	Summary    *JournalSummary            `json:"summary,omitempty"`
+}
+
+type journalCorpus struct {
+	Version      string                `json:"version"`
+	Entries      []journalCorpusEntry  `json:"entries"`
+	Summaries    []JournalSummary      `json:"summaries"`
+	Previous     JournalCurationResult `json:"previous"`
+	OutputSchema any                   `json:"outputSchema"`
+}
+
+type journalGeneration struct {
+	// Recording labels remain available independently of filtered prose.
+	Titles  map[string]string     `json:"-"`
+	Sources map[string]string     `json:"sources"`
+	Result  JournalCurationResult `json:"result"`
+}
+
+func journalCorpusFromRecords(records []JournalStoredRecord) journalCorpus {
+	corpus := journalCorpus{Version: journalCurationVersion, Entries: []journalCorpusEntry{}, Summaries: []JournalSummary{}}
+	for _, record := range records {
+		if e := record.Entry; e != nil && e.Status == JournalEntryStatusReady {
+			corpus.Entries = append(corpus.Entries, journalCorpusEntry{ID: e.Id, RecordedAt: e.RecordedAt, TimeZone: e.TimeZone, Transcript: e.Transcript, Summary: e.Summary})
+		}
+		if record.Summary != nil {
+			corpus.Summaries = append(corpus.Summaries, *record.Summary)
+		}
+	}
+	sort.Slice(corpus.Entries, func(i, j int) bool { return corpus.Entries[i].ID < corpus.Entries[j].ID })
+	return corpus
+}
+
+func journalCorpusHashes(corpus journalCorpus) (map[string]string, string) {
+	hashes := map[string]string{}
+	for _, entry := range corpus.Entries {
+		entry.Summary = nil // Derived output must not make its own inputs dirty.
+		data, _ := json.Marshal(entry)
+		hashes[entry.ID] = fmt.Sprintf("%x", sha256.Sum256(data))
+	}
+	data, _ := json.Marshal(struct {
+		Version string
+		Sources map[string]string
+	}{journalCurationVersion, hashes})
+	return hashes, fmt.Sprintf("%x", sha256.Sum256(data))
+}
+
+func journalCorpusSources(corpus journalCorpus) []JournalSummarySource {
+	var sources []JournalSummarySource
+	for _, entry := range corpus.Entries {
+		sources = append(sources, transcriptSources(entry.ID, entry.Transcript)...)
+	}
+	return sources
+}
+
+func (s *Server) readJournalCurationState(ctx context.Context) (journalCurationState, error) {
+	state := journalCurationState{ID: journalOwnerSubject, When: journalCurationKey}
+	result, err := s.ddb.GetItem(ctx, &dynamodb.GetItemInput{
+		TableName: aws.String(s.journalTableName), ConsistentRead: aws.Bool(true),
+		Key: map[string]types.AttributeValue{"id": &types.AttributeValueMemberS{Value: journalOwnerSubject}, "when": &types.AttributeValueMemberS{Value: journalCurationKey}},
+	})
+	if err != nil {
+		return state, err
+	}
+	if len(result.Item) > 0 {
+		err = attributevalue.UnmarshalMap(result.Item, &state)
+	}
+	return state, err
+}
+
+func (s *Server) saveJournalCurationState(ctx context.Context, state *journalCurationState) error {
+	previous := state.Version
+	next := *state
+	next.Version = uuid.NewString()
+	item, err := attributevalue.MarshalMap(next)
+	if err != nil {
+		return err
+	}
+	input := &dynamodb.PutItemInput{TableName: aws.String(s.journalTableName), Item: item, ConditionExpression: aws.String("attribute_not_exists(#version)"), ExpressionAttributeNames: map[string]string{"#version": "version"}}
+	if previous != "" {
+		input.ConditionExpression = aws.String("#version = :version")
+		input.ExpressionAttributeValues = map[string]types.AttributeValue{":version": &types.AttributeValueMemberS{Value: previous}}
+	}
+	if _, err = s.ddb.PutItem(ctx, input); err == nil {
+		*state = next
+	}
+	return err
+}
+
+func (s *Server) readJournalCurationJSON(ctx context.Context, key string, target any) error {
+	object, err := s.journalObjects.GetObject(ctx, &s3.GetObjectInput{Bucket: aws.String(s.journalBucketName), Key: aws.String(key)})
+	if err != nil {
+		return err
+	}
+	defer object.Body.Close()
+	return decodeJournalCurationJSON(object.Body, target)
+}
+
+func decodeJournalCurationJSON(reader io.Reader, target any) error {
+	data, err := io.ReadAll(io.LimitReader(reader, journalCurationMaxBytes+1))
+	if err != nil {
+		return err
+	}
+	if len(data) > journalCurationMaxBytes {
+		return errors.New("journal curation document exceeds size limit")
+	}
+	decoder := json.NewDecoder(strings.NewReader(string(data)))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(target); err != nil {
+		return err
+	}
+	if decoder.Decode(new(any)) != io.EOF {
+		return errors.New("unexpected trailing curation data")
+	}
+	return nil
+}
+
+// Keep the last published knowledge visible while the curator catches up with
+// date corrections or new recordings. Only blocks whose quoted primary evidence
+// was deleted or changed are removed; metadata edits never clear the diary.
+func (s *Server) journalPublishedGeneration(ctx context.Context, records []JournalStoredRecord) (journalGeneration, journalCurationState, error) {
+	state, err := s.readJournalCurationState(ctx)
+	var generation journalGeneration
+	if err != nil || state.PublishedKey == "" {
+		return generation, state, err
+	}
+	if err := s.readJournalCurationJSON(ctx, state.PublishedKey, &generation); err != nil {
+		return journalGeneration{}, state, err
+	}
+	corpus := journalCorpusFromRecords(records)
+	allowed := journalAllowedCitations(journalCorpusSources(corpus))
+	current := map[string]bool{}
+	for _, entry := range corpus.Entries {
+		current[entry.ID] = true
+	}
+	result := JournalCurationResult{Entries: []JournalCuratedEntry{}, Pages: []JournalWikiPage{}}
+	generation.Titles = map[string]string{}
+	for _, analysis := range generation.Result.Entries {
+		id := analysis.EntryId.String()
+		if !current[id] {
+			continue
+		}
+		generation.Titles[id] = analysis.Title
+		analysis.Blocks = filterJournalBlocks(analysis.Blocks, allowed)
+		if len(analysis.Blocks) > 0 {
+			result.Entries = append(result.Entries, analysis)
+		}
+	}
+	for _, page := range generation.Result.Pages {
+		page.Blocks = filterJournalBlocks(page.Blocks, allowed)
+		if len(page.Blocks) > 0 {
+			result.Pages = append(result.Pages, page)
+		}
+	}
+	generation.Result = result
+	return generation, state, nil
+}
+
+func filterJournalBlocks(blocks []JournalSummaryBlock, allowed map[JournalCitation]struct{}) []JournalSummaryBlock {
+	result := make([]JournalSummaryBlock, 0, len(blocks))
+	for _, block := range blocks {
+		if validateJournalCitationEvidence(block.Citations, allowed) == nil {
+			result = append(result, block)
+		}
+	}
+	return result
+}
+
+func filterJournalSummary(summary *JournalSummary, allowed map[JournalCitation]struct{}) *JournalSummary {
+	if summary == nil {
+		return nil
+	}
+	filtered := *summary
+	filtered.Blocks = filterJournalBlocks(summary.Blocks, allowed)
+	if len(filtered.Blocks) == 0 {
+		return nil
+	}
+	return &filtered
+}
+
+var journalWikiLinkPattern = regexp.MustCompile(`\]\(\s*([^)]*)\)`)
+
+func validateJournalWikiLinks(blocks []JournalSummaryBlock, pages map[string]bool) error {
+	for _, block := range blocks {
+		// Generated prose only links to known wiki pages. Citations use footnotes.
+		prose := journalCitationReferencePattern.ReplaceAllString(block.Markdown, "")
+		if strings.Contains(prose, "][") || strings.Contains(prose, "]:") || strings.Contains(prose, "![") || strings.Contains(prose, "<") {
+			return errors.New("use inline wiki links and numbered citation references only")
+		}
+		for _, match := range journalWikiLinkPattern.FindAllStringSubmatch(block.Markdown, -1) {
+			u, err := url.Parse(strings.TrimSpace(match[1]))
+			if err != nil || u.Path != "/journal" || u.Host != "" || u.Scheme != "" || u.Fragment != "" || len(u.Query()) != 1 || len(u.Query()["wiki"]) != 1 || !pages[u.Query().Get("wiki")] {
+				return errors.New("curation contains an unknown wiki link")
+			}
+		}
+	}
+	return nil
+}
+
+func validateJournalCuration(result JournalCurationResult, corpus journalCorpus) error {
+	if err := validateJournalCurationSchema(result); err != nil {
+		return err
+	}
+	allowed := journalAllowedCitations(journalCorpusSources(corpus))
+	entries := map[string]bool{}
+	for _, e := range corpus.Entries {
+		entries[e.ID] = true
+	}
+	corrections := map[string]bool{}
+	for _, correction := range result.DateCorrections {
+		id := correction.EntryId.String()
+		if !entries[id] || corrections[id] {
+			return errors.New("unknown or duplicate date correction")
+		}
+		corrections[id] = true
+		if _, err := time.Parse(time.DateOnly, correction.RecordedDate); err != nil {
+			return errors.New("invalid corrected recording date")
+		}
+		if len(correction.Citations) == 0 {
+			return errors.New("date correction requires original evidence")
+		}
+		if err := validateJournalCitationEvidence(correction.Citations, allowed); err != nil {
+			return err
+		}
+		for _, citation := range correction.Citations {
+			if citation.EntryId != id {
+				return errors.New("date correction must cite its own recording")
+			}
+		}
+		for _, entry := range corpus.Entries {
+			if entry.ID == id {
+				if _, err := journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, correction.RecordedDate); err != nil {
+					return err
+				}
+			}
+		}
+	}
+	pages := map[string]bool{}
+	for _, page := range result.Pages {
+		id := page.Id.String()
+		if page.Id == uuid.Nil || pages[id] {
+			return errors.New("invalid or duplicate wiki page")
+		}
+		pages[id] = true
+	}
+	if len(result.Entries) != len(entries) {
+		return errors.New("curation must account for every completed entry")
+	}
+	for _, entry := range result.Entries {
+		id := entry.EntryId.String()
+		if !entries[id] {
+			return errors.New("unknown or duplicate curated entry")
+		}
+		delete(entries, id)
+		if err := validateJournalSummaryEvidence(JournalSummaryResult{Title: entry.Title, Blocks: entry.Blocks}, allowed); err != nil {
+			return err
+		}
+		// An entry analysis must describe the entry itself, not only other dates.
+		cited := false
+		for _, block := range entry.Blocks {
+			for _, citation := range block.Citations {
+				if citation.EntryId == id {
+					cited = true
+				}
+			}
+		}
+		if !cited {
+			return errors.New("entry analysis does not cite its own recording")
+		}
+		if err := validateJournalWikiLinks(entry.Blocks, pages); err != nil {
+			return err
+		}
+	}
+	for _, page := range result.Pages {
+		if err := validateJournalSummaryEvidence(JournalSummaryResult{Title: page.Title, Blocks: page.Blocks}, allowed); err != nil {
+			return err
+		}
+		if err := validateJournalWikiLinks(page.Blocks, pages); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Legacy summaries are also checked against live primary sources. Stopping
+// hierarchy writes must not leave quotations from deleted recordings readable.
+func filterJournalLegacyEvidence(records []JournalStoredRecord) []JournalStoredRecord {
+	allowed := journalAllowedCitations(journalCorpusSources(journalCorpusFromRecords(records)))
+	result := make([]JournalStoredRecord, 0, len(records))
+	for _, record := range records {
+		if record.Summary != nil {
+			record.Summary = filterJournalSummary(record.Summary, allowed)
+			if record.Summary == nil {
+				continue
+			}
+		}
+		if record.Entry != nil && record.Entry.Summary != nil {
+			entry := *record.Entry
+			if entry.Title == nil {
+				entry.Title = ptr(entry.Summary.Title)
+			}
+			entry.Summary = filterJournalSummary(entry.Summary, allowed)
+			record.Entry = &entry
+		}
+		result = append(result, record)
+	}
+	return result
+}
+
+func applyJournalGeneration(records []JournalStoredRecord, generation journalGeneration) []JournalStoredRecord {
+	analyses := map[string]JournalCuratedEntry{}
+	for _, analysis := range generation.Result.Entries {
+		analyses[analysis.EntryId.String()] = analysis
+	}
+	result := filterJournalLegacyEvidence(records)
+	for i, record := range result {
+		if record.Entry == nil {
+			continue
+		}
+		entry := *record.Entry
+		if title, ok := generation.Titles[entry.Id]; ok {
+			entry.Title = ptr(title)
+		}
+		if analysis, ok := analyses[entry.Id]; ok {
+			entry.Summary = ptr(summaryRecord("entry:"+entry.Id, JournalSummaryPeriodEntry, entry.RecordedAt, entry.RecordedAt.Add(time.Duration(entry.DurationMs)*time.Millisecond), JournalSummaryResult{Title: analysis.Title, Blocks: analysis.Blocks}, generation.Sources[entry.Id]))
+		}
+		result[i].Entry = &entry
+	}
+	return result
+}
+
+// RefreshJournalKnowledge advances one durable run without holding a Lambda
+// open for the cloud agent. A five-minute schedule reconciles work; new paid
+// work starts once per 24 hours, with at most two retries after failure.
+// Conditional state versions fence concurrent calls.
+func (s *Server) RefreshJournalKnowledge(ctx context.Context, now time.Time) error {
+	return s.refreshJournalKnowledge(ctx, now, "")
+}
+
+func (s *Server) refreshJournalKnowledge(ctx context.Context, now time.Time, manualRequestID string) error {
+	if s.journalCurator == nil {
+		return errors.New("journal curator is not configured")
+	}
+	state, err := s.readJournalCurationState(ctx)
+	if err != nil {
+		return err
+	}
+	if manualRequestID != "" {
+		existing, err := s.journalManualRequestRun(ctx, manualRequestID)
+		if err != nil {
+			return err
+		}
+		if existing != "" {
+			return nil
+		}
+		if state.RunID != "" || state.Cleaning || (state.ManualRequestID != "" && state.ManualRequestID != manualRequestID) {
+			return errors.New("journal curation already has an active or pending run")
+		}
+	}
+	if now.Before(state.LeaseUntil) {
+		if manualRequestID != "" {
+			return errors.New("journal curator is busy; retry the same request ID")
+		}
+		return nil
+	}
+	if manualRequestID != "" {
+		state.ManualRequestID = manualRequestID
+	}
+	state.LeaseUntil = now.Add(3 * time.Minute)
+	if err := s.saveJournalCurationState(ctx, &state); err != nil {
+		var conflict *types.ConditionalCheckFailedException
+		if errors.As(err, &conflict) {
+			if manualRequestID != "" {
+				return errors.New("journal curator is busy; retry the same request ID")
+			}
+			return nil
+		}
+		return err
+	}
+	// Persist the latest state even on a retryable transport failure. Error
+	// details stay out of diary data because provider errors can contain text.
+	err = s.advanceJournalCuration(ctx, &state, now)
+	state.LeaseUntil = time.Time{}
+	saveErr := s.saveJournalCurationState(ctx, &state)
+	return errors.Join(err, saveErr)
+}
+
+func (s *Server) advanceJournalCuration(ctx context.Context, state *journalCurationState, now time.Time) error {
+	if state.Cleaning {
+		return s.cleanupJournalCuration(ctx, state)
+	}
+
+	records, err := s.listJournalRecords(ctx, journalOwnerSubject)
+	if err != nil {
+		return err
+	}
+	corpus := journalCorpusFromRecords(filterJournalLegacyEvidence(records))
+	hashes, fingerprint := journalCorpusHashes(corpus)
+	if state.RunID == "" {
+		if len(corpus.Entries) == 0 {
+			if state.ManualRequestID != "" {
+				state.ManualRequestID = ""
+				return errors.New("journal has no completed recordings to curate")
+			}
+			return nil
+		}
+		if state.ManualRequestID == "" {
+			if fingerprint == state.PublishedFingerprint || now.Before(state.StartedAt.Add(time.Hour)) {
+				return nil
+			}
+			// Count the last run from checkpoints predating the daily budget.
+			if state.AttemptWindowStart.IsZero() && !state.StartedAt.IsZero() && !state.LastRunManual {
+				state.AttemptWindowStart, state.Attempts = state.StartedAt, 1
+			}
+			if !state.AttemptWindowStart.IsZero() && now.Before(state.AttemptWindowStart.Add(24*time.Hour)) {
+				if state.Attempts > 0 && (!state.Failed || state.Attempts >= 3) {
+					return nil
+				}
+			} else {
+				state.AttemptWindowStart, state.Attempts = now, 0
+			}
+		}
+		generation, _, err := s.journalPublishedGeneration(ctx, records)
+		if err != nil {
+			return err
+		}
+		corpus.Previous = generation.Result
+		schema, err := journalCurationOutputSchema()
+		if err != nil {
+			return err
+		}
+		corpus.OutputSchema = schema
+		data, err := json.Marshal(corpus)
+		if err != nil {
+			return err
+		}
+		// Inline files are split below the documented per-file and request limits.
+		// Refuse an oversized corpus explicitly; never curate a truncated history.
+		if len(data) > journalCurationMaxBytes {
+			return errors.New("journal corpus exceeds document capacity")
+		}
+		if _, err := compressJournalCorpus(data); err != nil {
+			return err
+		}
+		state.RunID = uuid.NewString()
+		// Checkpoint the run before contacting the paid service. Only scheduled
+		// runs consume the daily budget; cleanup never refunds those attempts.
+		if state.ManualRequestID == "" {
+			state.Attempts++
+		}
+		state.LastRunManual = state.ManualRequestID != ""
+		state.StartedAt, state.Fingerprint, state.Failed = now, fingerprint, false
+		state.InputKey = journalCurationInputKey(state.RunID)
+		if err := s.putJournalJSON(ctx, state.InputKey, corpus); err != nil {
+			state.RunID = ""
+			state.Failed = true
+			return err
+		}
+		if err := s.saveJournalCurationState(ctx, state); err != nil {
+			return err
+		}
+	}
+	// Claim the manual request after checkpointing its run, before paid work.
+	// A lost response is recoverable by the ordinary scheduled reconciler.
+	if state.ManualRequestID != "" {
+		if err := s.claimJournalManualRequest(ctx, state, now); err != nil {
+			return err
+		}
+	}
+	// Deletion, date correction or another upload must not be overwritten by
+	// an agent that worked on an older snapshot.
+	if state.Fingerprint != fingerprint {
+		state.Cleaning, state.Failed = true, true
+		return nil
+	}
+	deadlineExpired := !now.Before(state.StartedAt.Add(journalCurationRunBudget))
+	if deadlineExpired && (!state.Submitted || state.SessionID == "") {
+		return s.expireJournalCuration(ctx, state)
+	}
+	if state.SessionID == "" {
+		var snapshot journalCorpus
+		if err := s.readJournalCurationJSON(ctx, state.InputKey, &snapshot); err != nil {
+			return err
+		}
+		data, err := json.Marshal(snapshot)
+		if err != nil {
+			return err
+		}
+		sessionID, err := s.journalCurator.Prepare(ctx, state.RunID, data)
+		if err != nil {
+			return err
+		}
+		state.SessionID = sessionID
+		// Persist identity before sending input. Start uses a durable idempotency
+		// key, so a lost response cannot start a second paid turn.
+		if err := s.saveJournalCurationState(ctx, state); err != nil {
+			return err
+		}
+	}
+	if !state.Submitted {
+		if err := s.journalCurator.Start(ctx, state.SessionID, state.RunID, journalCurationRunBudget); err != nil {
+			return err
+		}
+		state.Submitted = true
+		return nil
+	}
+	if !deadlineExpired && state.ContinuationTurnID != "" && !state.ContinuationSubmitted {
+		return s.submitJournalContinuation(ctx, state)
+	}
+	result, err := s.journalCurator.Collect(ctx, state.SessionID)
+	// A turn may have finished between the last schedule tick and the deadline.
+	// Collect its completed output, but never submit more work after the budget.
+	if deadlineExpired && (err != nil || result == nil) {
+		return s.expireJournalCuration(ctx, state)
+	}
+	if err != nil {
+		var incomplete *journalCuratorIncompleteError
+		if errors.As(err, &incomplete) {
+			if state.ContinuationTurnID == incomplete.turnID {
+				return nil
+			}
+			state.ContinuationTurnID = incomplete.turnID
+			state.ContinuationRemaining = journalCurationRunBudget - now.Sub(state.StartedAt)
+			state.ContinuationSubmitted = false
+			// Persist the exact logical message before submission. A lost response or
+			// restart reuses both its key and remaining-time text without paid duplicates.
+			if err := s.saveJournalCurationState(ctx, state); err != nil {
+				return err
+			}
+			log.Printf("%s; continuing with %s remaining", incomplete, state.ContinuationRemaining)
+			return s.submitJournalContinuation(ctx, state)
+		}
+		var terminal *journalCuratorTerminalError
+		if errors.As(err, &terminal) {
+			state.Cleaning, state.Failed = true, true
+		}
+		return err
+	}
+	if result == nil {
+		return nil
+	}
+	if err := validateJournalCuration(*result, corpus); err != nil {
+		state.Cleaning, state.Failed = true, true
+		return fmt.Errorf("invalid journal curation: %w", err)
+	}
+	// Apply only validated, evidence-backed changes to the snapshot. A conditional
+	// write refuses a concurrent user edit or deletion without resurrecting it.
+	for _, correction := range result.DateCorrections {
+		for i := range records {
+			entry := records[i].Entry
+			if entry == nil || entry.Id != correction.EntryId.String() {
+				continue
+			}
+			corrected := *entry
+			corrected.RecordedAt, err = journalTimestampOnLocalDate(entry.RecordedAt, entry.TimeZone, correction.RecordedDate)
+			if err != nil {
+				return err
+			}
+			if corrected.RecordedAt.Equal(entry.RecordedAt) {
+				continue
+			}
+			if corrected.Summary != nil {
+				summary := *corrected.Summary
+				summary.Start = corrected.RecordedAt
+				summary.End = corrected.RecordedAt.Add(time.Duration(corrected.DurationMs) * time.Millisecond)
+				corrected.Summary = &summary
+			}
+			if err := s.correctJournalCuratorDate(ctx, records[i], corrected); err != nil {
+				state.Cleaning, state.Failed = true, true
+				return err
+			}
+			records[i].Entry = &corrected
+		}
+	}
+	// Include the agent's own corrections in the published fingerprint so they
+	// do not schedule a redundant curation run for the same generated knowledge.
+	hashes, fingerprint = journalCorpusHashes(journalCorpusFromRecords(records))
+	key := "curation/generations/" + state.RunID + ".json"
+	if err := s.putJournalJSON(ctx, key, journalGeneration{Sources: hashes, Result: *result}); err != nil {
+		return err
+	}
+	wikiKey, err := s.writeJournalWikiGeneration(ctx, key, *result)
+	if err != nil {
+		return err
+	}
+	// Recheck after artifact validation and date corrections. Concurrent source
+	// changes must not publish output built from an older snapshot.
+	records, err = s.listJournalRecords(ctx, journalOwnerSubject)
+	if err != nil {
+		return err
+	}
+	_, current := journalCorpusHashes(journalCorpusFromRecords(records))
+	if current != fingerprint {
+		state.Cleaning = true
+		return nil
+	}
+	state.PublishedKey, state.PublishedWikiKey, state.PublishedFingerprint, state.PublishedAt = key, wikiKey, fingerprint, now
+	state.Cleaning, state.Failed = true, false
+	return nil
+}
+
+func (s *Server) correctJournalCuratorDate(ctx context.Context, previous JournalStoredRecord, corrected JournalStoredEntry) error {
+	next := previous
+	next.Entry = &corrected
+	item, err := attributevalue.MarshalMap(next)
+	if err != nil {
+		return err
+	}
+	expected, err := attributevalue.Marshal(previous.Entry)
+	if err != nil {
+		return err
+	}
+	_, err = s.ddb.PutItem(ctx, &dynamodb.PutItemInput{
+		TableName: aws.String(s.journalTableName), Item: item,
+		ConditionExpression:       aws.String("#entry = :previousEntry"),
+		ExpressionAttributeNames:  map[string]string{"#entry": "entry"},
+		ExpressionAttributeValues: map[string]types.AttributeValue{":previousEntry": expected},
+	})
+	if err != nil {
+		return err
+	}
+	return s.writeJournalEntryFiles(ctx, corrected)
+}
+
+func (s *Server) submitJournalContinuation(ctx context.Context, state *journalCurationState) error {
+	key := state.RunID + ":continue:" + state.ContinuationTurnID
+	if err := s.journalCurator.Start(ctx, state.SessionID, key, state.ContinuationRemaining); err != nil {
+		return err
+	}
+	state.ContinuationSubmitted = true
+	return nil
+}
+
+func (s *Server) cleanupJournalCuration(ctx context.Context, state *journalCurationState) error {
+	// A damaged checkpoint must never turn temporary-file cleanup into
+	// deletion of an original recording or another run's artifacts.
+	if state.InputKey != "" {
+		runID, err := uuid.Parse(state.RunID)
+		if err != nil || runID == uuid.Nil || runID.String() != state.RunID || state.InputKey != journalCurationInputKey(state.RunID) {
+			return errors.New("refusing to clean an unexpected journal input key")
+		}
+	}
+	if err := s.journalCurator.Cleanup(ctx, state.RunID, state.SessionID); err != nil {
+		return err
+	}
+	if state.InputKey != "" {
+		if _, err := s.journalObjects.DeleteObject(ctx, &s3.DeleteObjectInput{Bucket: aws.String(s.journalBucketName), Key: aws.String(state.InputKey)}); err != nil {
+			return err
+		}
+	}
+	state.RunID, state.SessionID, state.InputKey = "", "", ""
+	state.Submitted, state.Cleaning = false, false
+	state.ManualRequestID = ""
+	state.ContinuationTurnID, state.ContinuationRemaining, state.ContinuationSubmitted = "", 0, false
+	return nil
+}
+
+func (s *Server) expireJournalCuration(ctx context.Context, state *journalCurationState) error {
+	state.Cleaning, state.Failed = true, true
+	log.Printf("journal curation reached 30-minute run budget; run=%s session=%s", state.RunID, state.SessionID)
+	return s.cleanupJournalCuration(ctx, state)
+}

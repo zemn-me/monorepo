@@ -1,0 +1,49 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "article",
+    srcs = [
+        "articles.ts",
+        "page.tsx",
+    ],
+    assets = glob(
+        ["**/*.css"],
+        allow_empty = True,
+    ),
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        ":page_module_css",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//mdx/article/2019/cors:cors_js",  # keep
+        "//project/me/zemn/bio",
+        "//project/me/zemn/components/DividerHeading",
+        "//project/me/zemn/components/Link",
+        "//project/me/zemn/components/timeline",
+        "//ts/remix",
+        "//ts/time",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "articles.ts",
+        "page.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "page_module_css",
+    src = "page.module.css",
+    visibility = ["//:__subpackages__"],
+)

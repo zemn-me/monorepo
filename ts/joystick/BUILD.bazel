@@ -1,0 +1,42 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "joystick",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+ts_project(
+    name = "joystick_tests",
+    srcs = ["joystick_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":joystick",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["joystick_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":joystick_tests"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "index.ts",
+        "joystick_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)

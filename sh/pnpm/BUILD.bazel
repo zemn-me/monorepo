@@ -1,3 +1,4 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//bzl:rules.bzl", "bazel_lint")
 
 sh_binary(
@@ -8,10 +9,10 @@ sh_binary(
     data = [
         "@pnpm",
     ],
-    env = {
-        "PNPM_BINARY": "$(rootpath @pnpm)",
-    },
     visibility = ["//sh:__subpackages__"],
+    deps = [
+        "@rules_shell//shell/runfiles",
+    ],
 )
 
 bazel_lint(

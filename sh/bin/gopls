@@ -1,2 +1,37 @@
 #!/usr/bin/env bash
-"$(dirname ${BASH_SOURCE[0]})/run_lazily.sh" //sh/bin:gopls "${@}"
+set -euo pipefail
+
+SH_BINDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "$SH_BINDIR/../.." && pwd)"
+
+go_directive_version() {
+    awk '$1 == "go" { print "go" $2; exit }' "$WORKSPACE_ROOT/go.mod"
+}
+
+module_version() {
+    awk '$1 == "golang.org/x/tools/gopls" { print $2; exit }' "$WORKSPACE_ROOT/go.mod"
+}
+
+if [[ "$#" -eq 1 && "$1" == "version" ]]; then
+    printf 'golang.org/x/tools/gopls %s\n' "$(module_version)"
+    exit 0
+fi
+
+if [[ "$#" -eq 2 && "$1" == "version" && "$2" == "-json" ]]; then
+    version="$(module_version)"
+    go_version="$(go_directive_version)"
+    cat <<EOF
+{
+	"GoVersion": "$go_version",
+	"Path": "golang.org/x/tools/gopls",
+	"Main": {
+		"Path": "golang.org/x/tools/gopls",
+		"Version": "$version"
+	},
+	"Version": "$version"
+}
+EOF
+    exit 0
+fi
+
+"$SH_BINDIR/run_lazily.sh" //sh/bin:gopls "${@}"

@@ -1,112 +1,11 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": [
-		"config:best-practices",
-		":maintainLockFilesWeekly"
-	],
-	"automerge": true,
-	"autodiscover": true,
-	"configMigration": true,
-	"platformAutomerge": true,
-	"platformCommit": "enabled",
-	"prConcurrentLimit": 0,
-	"allowScripts": true,
-	"rollbackPrs": true,
-	"rangeStrategy": "pin",
-	"recreateWhen": "always",
-	"commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{# if release.releaseNotes}}##### v{{{release.version}}} \n\n{{{release.releaseNotes.body}}}{{/if}}{{/each}}{{/if}}",
-	"ignorePaths": [
-		"**/monorepo/dist/**"
-	],
-	"gitIgnoredAuthors": [
-		"zemnmez+renovate@gmail.com"
-	],
-	"autodiscoverFilter": [
-		"zemn-me/monorepo"
-	],
-	"allowedPostUpgradeCommands": [
-		"./sh/postUpgrade.sh"
-	],
-	"customManagers": [
-		{
-			"customType": "regex",
-			"description": "Renovate directives",
-			"fileMatch": [
-				"^MODULE.bazel$",
-				"^WORKSPACE$",
-				"^sh/bin/bazel$"
-			],
-			"matchStrings": [
-				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>.*)\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
-			],
-			"datasourceTemplate": "{{{datasource}}}",
-			"currentValueTemplate": "{{{currentValue}}}",
-			"versioningTemplate": "{{{versioning}}}",
-			"depNameTemplate": "{{{depName}}}"
-		}
-	],
 	"packageRules": [
 		{
-			"matchManagers": [
-				"bazel-module"
-			],
-			"matchPackageNames": [
-				"rules_oci"
-			],
-			"allowedVersions": "!/1.8.0$/"
-		},
-		{
-			"matchManagers": [
-				"npm"
-			],
-			"matchPackageNames": [
-				"twilio"
-			],
-			"enabled": false
-		},
-		{
-			"matchManagers": [
-				"cargo",
-				"bazel",
-				"custom.regex",
-				"gomod",
-				"pip-compile",
-				"pip_requirements",
-				"bazel",
-				"bazel-module",
-				"bazelisk"
-			],
-			"postUpgradeTasks": {
-				"commands": [
-					"./sh/postUpgrade.sh"
-				],
-				"executionMode": "branch",
-				"fileFilters": [
-					"Cargo.Bazel.lock",
-					"Cargo.toml",
-					"cargo-bazel-lock.json",
-					"**/*.ts",
-					"go.mod",
-					"MODULE.bazel",
-					"MODULE.bazel.lock",
-					"gazelle_python.yaml",
-					"go.sum",
-					"requirements.txt"
-				],
-				"recreateWhen": "always"
-			}
-		},
-		{
-			"groupName": "pulumi_cli",
-			"matchPackageNames": [
-				"/pulumi_cli_.*/"
-			]
-		},
-		{
-			"groupName": "chromedriver",
-			"matchPackageNames": [
-				"/com_googleapis_storage_chromedriver.*/"
-			]
+			"description": "Pulumi still loads the TypeScript 5 compiler API through this alias",
+			"enabled": false,
+			"matchDepNames": ["typescript5"],
+			"matchManagers": ["npm"]
 		}
 	]
 }

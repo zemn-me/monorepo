@@ -1,22 +1,45 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
-package(default_visibility = ["//ts:__subpackages__"])
-
 ts_project(
     name = "reddit",
+    srcs = [
+        "reddit.ts",
+        "response_example.ts",
+    ],
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//:node_modules/@jest/globals",
-        "//:node_modules/@types/jest",
         "//:node_modules/@types/node",
         "//:node_modules/zod",
     ],
 )
 
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "reddit.ts",
+        "reddit_test.ts",
+        "response_example.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "reddit_tests",
+    srcs = ["reddit_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":reddit",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
 jest_test(
-    name = "test",
+    name = "tests",
     srcs = ["reddit_test.js"],
-    deps = [":reddit"],
+    visibility = ["//:__subpackages__"],
+    deps = [":reddit_tests"],
 )
 
 bazel_lint(

@@ -1,6 +1,6 @@
 import { flatten } from '#root/ts/iter';
 import * as Braille from '#root/ts/math/canvas/braille/braille.js';
-import { Line2D, Line3D, point, Point2D } from '#root/ts/math/cartesian';
+import { Line2D, Line3D, Point2D, point } from '#root/ts/math/cartesian';
 import * as Homog from '#root/ts/math/homog';
 import { project } from '#root/ts/math/space/render/project';
 

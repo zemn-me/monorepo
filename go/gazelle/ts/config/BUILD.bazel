@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_library")
 
@@ -14,6 +15,16 @@ go_library(
         "@bazel_gazelle//repo",
         "@bazel_gazelle//resolve",
         "@bazel_gazelle//rule",
+    ],
+)
+
+go_test(
+    name = "config_test",
+    srcs = ["config_test.go"],
+    data = ["//:tsconfig.json"],
+    deps = [
+        ":config",
+        "@io_bazel_rules_go//go/runfiles",
     ],
 )
 

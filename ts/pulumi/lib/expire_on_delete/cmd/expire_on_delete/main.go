@@ -5,8 +5,8 @@
 // not percolated to the CDN yet, so it serves an old version of the file with
 // references to now removed content-addressible objects.
 //
-// You can set a lifecycle policy to delete objects with the "soft_deleted" tag
-// once this is set up.
+// You can set a lifecycle policy to delete objects with the "expire_on_delete"
+// tag once this is set up.
 package main
 
 import (
@@ -53,7 +53,7 @@ func processDeletedObject(ctx context.Context, client *s3.Client, bucket, key st
 		Key:    aws.String(key),
 		Tagging: &types.Tagging{
 			TagSet: []types.Tag{
-				{Key: aws.String("soft_deleted"), Value: aws.String("true")},
+				{Key: aws.String("expire_on_delete"), Value: aws.String("true")},
 			},
 		},
 	})

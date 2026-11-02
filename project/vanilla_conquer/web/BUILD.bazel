@@ -1,0 +1,141 @@
+# gazelle:exclude build_engine.py
+# gazelle:exclude reproducibility_test.py
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary")
+load("//ts:rules.bzl", "ts_project")
+load(":build.bzl", "engine_build")
+
+package(default_visibility = ["//:__subpackages__"])
+
+config_setting(
+    name = "mac_arm64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+config_setting(
+    name = "mac_x86_64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+config_setting(
+    name = "linux_arm64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+py_binary(
+    name = "build_engine",
+    srcs = ["build_engine.py"],  # keep
+    main = "build_engine.py",
+    visibility = ["//:__subpackages__"],
+)
+
+engine_build(
+    name = "vanillara",
+    srcs = ["@vanilla_conquer//:sources"],
+    compiler = select({
+        ":mac_arm64": "@emscripten_bin_mac_arm64//:emscripten/emcc.py",
+        ":mac_x86_64": "@emscripten_bin_mac//:emscripten/emcc.py",
+        ":linux_arm64": "@emscripten_bin_linux_arm64//:emscripten/emcc.py",
+        "//conditions:default": "@emscripten_bin_linux//:emscripten/emcc.py",
+    }),
+    game = "vanillara",
+    marker = "@vanilla_conquer//:CMakeLists.txt",
+    overlay = [
+        "FindSDL2.cmake",
+        "FindOpenAL.cmake",
+        "Web.cmake",
+    ],
+    overlay_marker = "Web.cmake",
+    sdk = select({
+        ":mac_arm64": "@emscripten_bin_mac_arm64//:all",
+        ":mac_x86_64": "@emscripten_bin_mac//:all",
+        ":linux_arm64": "@emscripten_bin_linux_arm64//:all",
+        "//conditions:default": "@emscripten_bin_linux//:all",
+    }),
+    sdl = ["@vanilla_sdl2//:sources"],
+    sdl_marker = "@vanilla_sdl2//:CMakeLists.txt",
+)
+
+engine_build(
+    name = "vanillatd",
+    srcs = ["@vanilla_conquer//:sources"],
+    compiler = select({
+        ":mac_arm64": "@emscripten_bin_mac_arm64//:emscripten/emcc.py",
+        ":mac_x86_64": "@emscripten_bin_mac//:emscripten/emcc.py",
+        ":linux_arm64": "@emscripten_bin_linux_arm64//:emscripten/emcc.py",
+        "//conditions:default": "@emscripten_bin_linux//:emscripten/emcc.py",
+    }),
+    game = "vanillatd",
+    marker = "@vanilla_conquer//:CMakeLists.txt",
+    overlay = [
+        "FindSDL2.cmake",
+        "FindOpenAL.cmake",
+        "Web.cmake",
+    ],
+    overlay_marker = "Web.cmake",
+    sdk = select({
+        ":mac_arm64": "@emscripten_bin_mac_arm64//:all",
+        ":mac_x86_64": "@emscripten_bin_mac//:all",
+        ":linux_arm64": "@emscripten_bin_linux_arm64//:all",
+        "//conditions:default": "@emscripten_bin_linux//:all",
+    }),
+    sdl = ["@vanilla_sdl2//:sources"],
+    sdl_marker = "@vanilla_sdl2//:CMakeLists.txt",
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "build.bzl",
+    ],
+)
+
+ts_project(
+    name = "web",
+    srcs = ["launcher.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//ts/pointer",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["launcher.ts"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "ra_javascript",
+    srcs = [":vanillara"],
+    output_group = "javascript",
+)
+
+filegroup(
+    name = "ra_wasm",
+    srcs = [":vanillara"],
+    output_group = "wasm",
+)
+
+filegroup(
+    name = "td_javascript",
+    srcs = [":vanillatd"],
+    output_group = "javascript",
+)
+
+filegroup(
+    name = "td_wasm",
+    srcs = [":vanillatd"],
+    output_group = "wasm",
+)

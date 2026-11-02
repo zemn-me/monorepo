@@ -12,11 +12,18 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 # --- end runfiles.bash initialization v3 ---
 
 
-# this is a hack because the go_bin_runner chdirs into BUILD_WORKING_DIRECTORY
-# which may make sense in some contexts but does not make sense in a smoke test.
-# https://github.com/bazelbuild/rules_go/blob/0a6311cdc4a643f9f99b8109c44773f4a295c60e/go/tools/go_bin_runner/main.go#L34
 echo testing go...
-GOMODCACHE=$TEST_TMPDIR/modcache HOME=$TEST_TMPDIR/home BUILD_WORKING_DIRECTORY="." $(rlocation $GO_BINARY) version
+go_binary="$(rlocation "$GO_BINARY")"
+export GOMODCACHE="$TEST_TMPDIR/modcache" HOME="$TEST_TMPDIR/home"
+"$go_binary" version
+# Exercise the declared compiler and standard library, not only the executable.
+cat > "$TEST_TMPDIR/sdk_smoke.go" <<'GO'
+package main
+import "fmt"
+func main() { fmt.Print("sdk works") }
+GO
+result="$(CGO_ENABLED=0 GO111MODULE=off GOTOOLCHAIN=local GOCACHE="$TEST_TMPDIR/gocache" "$go_binary" run "$TEST_TMPDIR/sdk_smoke.go")"
+[[ "$result" == 'sdk works' ]]
 
 
 

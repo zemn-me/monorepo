@@ -1,24 +1,140 @@
+import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import { Budget } from '@pulumi/aws/budgets/index.js';
 import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
-import * as random from "@pulumi/random";
+import * as random from '@pulumi/random';
 
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
-import { DoSync } from '#root/ts/pulumi/github.com/zemn-me/do-sync/do_sync.js';
+import { GitHubActionsSecrets } from '#root/ts/pulumi/github_actions_secrets.js';
+import { NpmPackage } from '#root/ts/pulumi/lib/npm/package.js';
 import { mergeTags, tagsToFilter, tagTrue } from '#root/ts/pulumi/lib/tags.js';
-import { getTwilioPhoneNumber, TwilioPhoneNumber } from '#root/ts/pulumi/lib/twilio/phone_number.js';
-import * as Lulu from '#root/ts/pulumi/lulu.computer/index.js';
+import {
+	getTwilioPhoneNumber,
+	TwilioPhoneNumber,
+} from '#root/ts/pulumi/lib/twilio/phone_number.js';
 import * as PleaseIntroduceMeToYourDog from '#root/ts/pulumi/pleaseintroducemetoyour.dog/index.js';
 import * as ShadwellIm from '#root/ts/pulumi/shadwell.im/index.js';
+import * as WaxingIncandescent from '#root/ts/pulumi/waxingincandescent.com/index.js';
 import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
-
-
 
 export interface Args {
 	staging: boolean;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
+	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
+	openAIIdentityProviderId?: Pulumi.Input<string>;
+	openAIServiceAccountId?: Pulumi.Input<string>;
+}
+
+interface AwsGitHubActionsOidcArgs {
+	tags: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
+}
+
+interface GitHubActionsAwsTrustGrant {
+	ref: string;
+	sid: string;
+	subject: string;
+	workflow: string;
+}
+
+const githubRepository = 'zemn-me/monorepo';
+const githubRepositoryId = '275403409';
+
+function isMockRuntime(): boolean {
+	return Pulumi.runtime.getMonitor()?.constructor.name === 'MockMonitor';
+}
+
+class AwsGitHubActionsOidc extends Pulumi.ComponentResource {
+	provider: aws.iam.OpenIdConnectProvider;
+	role: aws.iam.Role;
+
+	constructor(
+		name: string,
+		args: AwsGitHubActionsOidcArgs,
+		opts?: Pulumi.ComponentResourceOptions
+	) {
+		super('ts:pulumi:AwsGitHubActionsOidc', name, args, opts);
+
+		const githubOidcUrl = 'https://token.actions.githubusercontent.com';
+
+		this.provider = new aws.iam.OpenIdConnectProvider(
+			`${name}_provider`,
+			{
+				clientIdLists: ['sts.amazonaws.com'],
+				thumbprintLists: ['6938fd4d98bab03faadb97b34396831e3780aea1'],
+				url: githubOidcUrl,
+			},
+			{ parent: this, protect: true }
+		);
+
+		const githubAssumeRolePolicy = (grants: GitHubActionsAwsTrustGrant[]) =>
+			this.provider.arn.apply(arn =>
+				JSON.stringify({
+					Version: '2012-10-17',
+					Statement: grants.map(grant => ({
+						Sid: grant.sid,
+						Effect: 'Allow',
+						Principal: { Federated: arn },
+						Action: 'sts:AssumeRoleWithWebIdentity',
+						Condition: {
+							StringEquals: {
+								'token.actions.githubusercontent.com:aud':
+									'sts.amazonaws.com',
+								'token.actions.githubusercontent.com:repository':
+									githubRepository,
+								'token.actions.githubusercontent.com:repository_id':
+									githubRepositoryId,
+								'token.actions.githubusercontent.com:workflow':
+									grant.workflow,
+							},
+							StringLike: {
+								'token.actions.githubusercontent.com:ref':
+									grant.ref,
+								'token.actions.githubusercontent.com:sub':
+									grant.subject,
+							},
+						},
+					})),
+				})
+			);
+
+		this.role = new aws.iam.Role(
+			`${name}_role`,
+			{
+				assumeRolePolicy: githubAssumeRolePolicy([
+					{
+						ref: 'refs/heads/main',
+						sid: 'SubmitMain',
+						subject: `repo:${githubRepository}:ref:refs/heads/main`,
+						workflow: 'Submit',
+					},
+					{
+						ref: 'refs/heads/gh-readonly-queue/*',
+						sid: 'StagingMergeQueue',
+						subject: `repo:${githubRepository}:ref:refs/heads/gh-readonly-queue/*`,
+						workflow: 'Staging',
+					},
+				]),
+				tags: args.tags,
+			},
+			{ dependsOn: this.provider, parent: this, protect: true }
+		);
+
+		new aws.iam.RolePolicyAttachment(
+			`${name}_admin`,
+			{
+				role: this.role.name,
+				policyArn: 'arn:aws:iam::aws:policy/AdministratorAccess',
+			},
+			{ parent: this, protect: true }
+		);
+
+		this.registerOutputs({
+			providerArn: this.provider.arn,
+			roleArn: this.role.arn,
+		});
+	}
 }
 
 /**
@@ -28,6 +144,9 @@ export class Component extends Pulumi.ComponentResource {
 	pleaseIntroduceMeToYourDog: PleaseIntroduceMeToYourDog.Component;
 	zemnMe: ZemnMe.Component;
 	shadwellIm: ShadwellIm.Component;
+	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+	readonly openAIWorkloadIdentityAudience: string;
+	readonly openAIWorkloadIdentityIssuer?: Pulumi.Output<string>;
 	constructor(
 		name: string,
 		args: Args,
@@ -35,7 +154,81 @@ export class Component extends Pulumi.ComponentResource {
 	) {
 		super('ts:pulumi:Component', name, args, opts);
 		const tag = name;
-		const tags = mergeTags(args.tags, tagTrue(tag));
+		const tagsa = mergeTags(args.tags, tagTrue(tag));
+		const tags = mergeTags(
+			tagsa,
+			tagTrue(args.staging ? 'staging' : 'production')
+		);
+
+		const githubActionsOidc = args.staging
+			? undefined
+			: new AwsGitHubActionsOidc(
+					`${name}_github_actions`,
+					{ tags },
+					{ parent: this }
+				);
+		const githubActionsSecrets = args.staging
+			? undefined
+			: new GitHubActionsSecrets(`${name}_github_actions_secrets`, {
+					parent: this,
+				});
+		// AWS exposes a single outbound issuer for the account. Production owns
+		// that shared resource; the staging worker has its own OpenAI mapping.
+		const openAIOutboundIdentity = args.staging
+			? undefined
+			: new aws.iam.OutboundWebIdentityFederation(
+					`${name}_openai_outbound_identity`,
+					{},
+					{ parent: this }
+				);
+		this.openAIWorkloadIdentityIssuer =
+			openAIOutboundIdentity?.issuerIdentifier;
+
+		if (!args.staging) {
+			const publisher = runfiles.resolve('monorepo/js/npm/publish_/publish');
+			for (const npmPackage of [
+				{
+					name: 'do-sync',
+					path: 'ts/do-sync',
+					resourceName: 'do_sync',
+				},
+				{
+					name: '@zemnmez/future',
+					path: 'ts/future',
+					resourceName: 'future',
+				},
+				{
+					name: 'knowitwhenyouseeit',
+					path: 'ts/knowitwhenyouseeit',
+					resourceName: 'knowitwhenyouseeit',
+				},
+				{
+					name: '@zemnmez/result',
+					path: 'ts/result',
+					resourceName: 'result',
+				},
+				{
+					name: '@zemnmez/tabwriter',
+					path: 'ts/text/tabwriter',
+					resourceName: 'tabwriter',
+				},
+			]) {
+				const target = `monorepo/${npmPackage.path}/npm_pkg`;
+				new NpmPackage(
+					`${name}_${npmPackage.resourceName}_npm`,
+					{
+						archive: runfiles.resolve(`${target}.tgz`),
+						packageDirectory: runfiles.resolve(target),
+						packageName: npmPackage.name,
+						publish: publisher,
+						versionFile: runfiles.resolve(
+							`${target}_version.version.txt`
+						),
+					},
+					{ parent: this }
+				);
+			}
+		}
 
 		new CostAllocationTag(
 			`${name}_cost_tag`,
@@ -99,36 +292,33 @@ export class Component extends Pulumi.ComponentResource {
 		);
 
 		const twilioSharedSecret = new random.RandomPassword(
-			"callbox_twilio_shared_secret",
+			'callbox_twilio_shared_secret',
 			{
 				length: 16,
 			},
-			{ parent: this}
+			{ parent: this }
 		);
 
 		const voiceUrl = twilioSharedSecret.result.apply(
-			secret => `https://api.zemn.me/phone/init?secret=${encodeURIComponent(secret)}`
+			secret =>
+				`https://api.zemn.me/phone/init?secret=${encodeURIComponent(secret)}`
 		);
 
-		const twilioOptions = voiceUrl.apply(
-			voiceUrl => ({
-				voiceMethod: 'POST',
-				voiceUrl
-			})
-		);
+		const twilioOptions = voiceUrl.apply(voiceUrl => ({
+			voiceMethod: 'POST',
+			voiceUrl,
+		}));
 
-
-		const callboxPhone = new TwilioPhoneNumber(`callboxphonenumber2`, {
-			countryCode: 'US',
-			options: twilioOptions,
-		}, { parent: this, protect: !args.staging });
-
-		// because i cant work out how to make outs happen from a
-		// DynamicProvider
-		const phoneNumberInfo = callboxPhone.id.apply(
-			v => getTwilioPhoneNumber(v)
-		);
-
+		const phoneNumberInfo = isMockRuntime()
+			? { phoneNumber: Pulumi.output('dummy') }
+			: new TwilioPhoneNumber(
+					`callboxphonenumber2`,
+					{
+						countryCode: 'US',
+						options: twilioOptions,
+					},
+					{ parent: this, protect: !args.staging }
+				).id.apply(v => getTwilioPhoneNumber(v));
 
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
@@ -142,9 +332,19 @@ export class Component extends Pulumi.ComponentResource {
 				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 				twilioSharedSecret: twilioSharedSecret.result,
+				journalWorkerEnvironment: args.staging ? 'staging' : 'production',
+				minecraftOnDemand: true,
+				minecraftEnvironment: args.staging ? 'staging' : 'production',
+				minecraftManageDnsWake: !args.staging,
+				minecraftOperators: args.minecraftOperators ?? ['zemnmez'],
+				openAIIdentityProviderId: args.openAIIdentityProviderId,
+				openAIServiceAccountId: args.openAIServiceAccountId,
 			},
 			{ parent: this }
 		);
+		this.journalWorkerRoleArn = this.zemnMe.journalWorkerRoleArn;
+		this.openAIWorkloadIdentityAudience =
+			this.zemnMe.openAIWorkloadIdentityAudience;
 
 		this.shadwellIm = new ShadwellIm.Component(
 			`${name}_shadwell.im`,
@@ -157,9 +357,8 @@ export class Component extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-
-		new Lulu.Component(
-			`${name}_lulu`,
+		new WaxingIncandescent.Component(
+			`${name}_waxingincandescent`,
 			{ staging: args.staging, tags },
 			{ parent: this }
 		);
@@ -167,27 +366,23 @@ export class Component extends Pulumi.ComponentResource {
 		new Baby.Component(
 			`${name}_baby`,
 			{ staging: args.staging, tags },
-			{parent: this },
-		)
-
-		new DoSync(
-			`${name}_do_sync`,
-			{staging: args.staging, tags},
-			{ parent: this}
-		)
+			{ parent: this }
+		);
 
 		/**
 		 * This zone is for @eggsfordogs to point their namecheap record at;
 		 * all the other domains are registered with AWS, so the logic is a
 		 * bit different.
 		 */
-		const eggsForDogsDotComZoneId =
-			args.staging
-				// staging needs to share the same zone as prod
-				? Pulumi.output(aws.route53.getZone({ name: 'eggsfordogs.com' })
-					// deleting this infra may crash something...
-					.then(v => v.zoneId))
-				: new aws.route53.Zone(
+		const eggsForDogsDotComZoneId = args.staging
+			? // staging needs to share the same zone as prod
+				Pulumi.output(
+					aws.route53
+						.getZone({ name: 'eggsfordogs.com' })
+						// deleting this infra may crash something...
+						.then(v => v.zoneId)
+				)
+			: new aws.route53.Zone(
 					`${name}_eggsfordogs.com_zone`,
 					{
 						name: 'eggsfordogs.com',
@@ -204,6 +399,12 @@ export class Component extends Pulumi.ComponentResource {
 		super.registerOutputs({
 			pleaseIntroduceMeToYourDog: this.pleaseIntroduceMeToYourDog,
 			eggsForDogsDotComZoneId,
+			githubActionsRoleArn: githubActionsOidc?.role.arn,
+			githubActionsSecrets,
+			githubOidcProviderArn: githubActionsOidc?.provider.arn,
+			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			openAIWorkloadIdentityAudience: this.openAIWorkloadIdentityAudience,
+			openAIWorkloadIdentityIssuer: this.openAIWorkloadIdentityIssuer,
 		});
 	}
 }

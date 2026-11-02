@@ -8,6 +8,7 @@ ts_project(
         "//:__subpackages__",
     ],
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/openapi-fetch",
         "//:node_modules/openapi-typescript-helpers",
         "//ts/result",
@@ -17,4 +18,10 @@ ts_project(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["fetchResult.ts"],
+    visibility = ["//:__subpackages__"],
 )

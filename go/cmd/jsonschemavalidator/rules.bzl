@@ -1,3 +1,5 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
 def jsonschema_test(name, srcs, schema):
     test_names = []
     batch_size = 1000  # Number of srcs per batch
@@ -8,7 +10,7 @@ def jsonschema_test(name, srcs, schema):
         batch_name = "{}.batch_{}".format(name, i // batch_size + 1)
         test_names.append(batch_name)
 
-        native.sh_test(
+        sh_test(
             name = batch_name,
             size = "small",
             srcs = ["//go/cmd/jsonschemavalidator:jsonschema_test.sh"],

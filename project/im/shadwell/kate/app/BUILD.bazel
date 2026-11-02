@@ -1,0 +1,50 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "app",
+    srcs = [
+        "not-found.tsx",
+        "page.tsx",
+        "root.tsx",
+        "routes.ts",
+    ],
+    assets = [
+        "base.css",
+        "page.module.css",
+    ],
+    visibility = ["//project/im/shadwell/kate:__pkg__"],
+    deps = [
+        ":page_module_css",
+        "//:node_modules/@react-router/dev",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/react",
+        "//:node_modules/react-router",
+        "//ts/remix",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "not-found.tsx",
+        "page.tsx",
+        "root.tsx",
+        "routes.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+css_module(
+    name = "page_module_css",
+    src = "page.module.css",
+    visibility = ["//:__subpackages__"],
+)

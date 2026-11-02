@@ -1,0 +1,242 @@
+import type { UseQueryResult } from '@tanstack/react-query';
+
+/**
+ * A value which hasn't arrived yet.
+ */
+export type Future<Then, Loading, Error> = <T1, T2, T3>(
+	/**
+	 * Executed when the {@link Future} succeeds.
+	 */
+	then: (value: Then) => T1,
+	/**
+	 * Executed when the {@link Future} is loading.
+	 */
+	loading: (value: Loading) => T2,
+	/**
+	 * Executed when the {@link Future} errors.
+	 */
+	error: (value: Error) => T3
+) => T1 | T2 | T3;
+
+/**
+ * A {@link Future} that is never loading
+ * and never errors.
+ */
+export const resolve =
+	<Then, Loading = never, Error = never>(
+		then_value: Then
+	): Future<Then, Loading, Error> =>
+	(then, _loading, _error) =>
+		then(then_value);
+
+/**
+ * A {@link Future} that always errors.
+ */
+export const error =
+	<Error, Loading = never, Then = never>(
+		error_value: Error
+	): Future<Then, Loading, Error> =>
+	(_then, _loading, error) =>
+		error(error_value);
+
+/**
+ * A {@link Future} that is always loading.
+ */
+export const loading =
+	<Loading, Then = never, Error = never>(
+		loading_value: Loading
+	): Future<Then, Loading, Error> =>
+	(_then, loading, _error) =>
+		loading(loading_value);
+
+export {
+	error as future_error,
+	loading as future_loading,
+	resolve as future_resolve,
+};
+
+/**
+ * Convert a React Query result into a {@link Future}.
+ */
+export function useQueryFuture<Then, Error>(
+	result: UseQueryResult<Then, Error>
+): Future<Then, void, Error> {
+	switch (result.status) {
+		case 'success':
+			return resolve(result.data);
+		case 'pending':
+			return loading(undefined);
+		case 'error':
+			return error(result.error);
+	}
+}
+
+/**
+ * Execute a {@link Future} with a set of handlers.
+ *
+ * This is identical to calling the future directly, but
+ * may read better.
+ */
+export const future = <Then, Loading, Error, T1, T2, T3>(
+	f: Future<Then, Loading, Error>,
+	then: (value: Then) => T1,
+	onLoading: (value: Loading) => T2,
+	onError: (value: Error) => T3
+): T1 | T2 | T3 => f(then, onLoading, onError);
+
+/**
+ * Modify the contained value of an {@link Future} on success.
+ */
+export const future_and_then = <Then, Loading, Error, NewThen>(
+	future: Future<Then, Loading, Error>,
+	f_then: (value: Then) => NewThen
+): Future<NewThen, Loading, Error> =>
+	future(
+		actual => resolve(f_then(actual)),
+		l => loading(l),
+		e => error(e)
+	);
+
+export const future_flatten_then = <Then, Loading1, Error1, Loading2, Error2>(
+	a: Future<Future<Then, Loading1, Error1>, Loading2, Error2>
+): Future<Then, Loading1 | Loading2, Error1 | Error2> =>
+	a(
+		then1 =>
+			then1(
+				then => resolve(then),
+				loading2 => loading(loading2),
+				error2 => error(error2)
+			),
+		loading1 => loading(loading1),
+		error1 => error(error1)
+	);
+
+export function future_collect<Then, Loading, Error>(
+	futures: readonly Future<Then, Loading, Error>[]
+): Future<readonly Then[], Loading, Error> {
+	return futures.reduce<Future<readonly Then[], Loading, Error>>(
+		(collected, next) =>
+			coincide_then(collected, next, (values, value) => [
+				...values,
+				value,
+			]),
+		resolve([])
+	);
+}
+
+export function future_collect_incremental<Then, Loading, Error>(
+	futures: readonly Future<Then, Loading, Error>[]
+): Future<readonly Then[], Loading, Error> {
+	const values: Then[] = [];
+	const loadings: Loading[] = [];
+	const errors: Error[] = [];
+
+	for (const future of futures) {
+		future(
+			value => values.push(value),
+			value => loadings.push(value),
+			value => errors.push(value)
+		);
+	}
+
+	if (errors.length > 0) {
+		return error(errors[0]!);
+	}
+
+	if (values.length > 0) {
+		return resolve(values);
+	}
+
+	if (loadings.length > 0) {
+		return loading(loadings[0]!);
+	}
+
+	return resolve(values);
+}
+
+export const coincide_then = <
+	Then1,
+	Loading1,
+	Error1,
+	Then2,
+	Loading2,
+	Error2,
+	NewThen,
+>(
+	future1: Future<Then1, Loading1, Error1>,
+	future2: Future<Then2, Loading2, Error2>,
+	then: (a: Then1, b: Then2) => NewThen
+): Future<NewThen, Loading1 | Loading2, Error1 | Error2> =>
+	future1(
+		then1 =>
+			future2(
+				then2 => resolve(then(then1, then2)),
+				loading2 => loading(loading2),
+				error2 => error(error2)
+			),
+		loading1 =>
+			future2(
+				() => loading(loading1),
+				() => loading(loading1),
+				error2 => error(error2)
+			),
+		error1 =>
+			future2(
+				() => error(error1),
+				() => error(error1),
+				() => error(error1)
+			)
+	);
+
+/**
+ * Declare that a {@link Future} depends on another {@link Future}.
+ *
+ * This can be used when it's not possible to {@link future_and_then} pipeline
+ * the future but they're co-dependent, such as when using useQuery (which
+ * cannot have functions returned if using `localStorage`).
+ *
+ * If you *don't* use this function to declare the dependency,
+ * then the child future will often show a loading state if
+ * the parent future is in error.
+ *
+ * (1)	if the child has loaded then child is always returned
+ * (2)	if child is in error and parent is in error,
+ * 		then parent error is returned
+ * usw
+ */
+export function future_declare_dependency<T1, T2, L1, L2, E1, E2>(
+	parent: Future<T1, L1, E1>,
+	child: Future<T2, L2, E2>
+): Future<T2, L1 | L2, E1 | E2> {
+	return parent(
+		(/*parent_then*/) =>
+			child(
+				child_then => resolve(child_then),
+				child_loading => loading(child_loading),
+				child_error => error(child_error)
+			),
+		parent_loading =>
+			child(
+				child_then => resolve(child_then),
+				(/*child_loading*/) => loading(parent_loading),
+				(/*child_error*/) => loading(parent_loading)
+			),
+		parent_error =>
+			child(
+				child_then => resolve(child_then),
+				child_loading => loading(child_loading),
+				(/*child_error*/) => error(parent_error)
+			)
+	);
+}
+
+export function future_or_else<T, L, E, E2>(
+	fut: Future<T, L, E>,
+	f: (e: E) => E2
+): Future<T, L, E2> {
+	return fut(
+		t => resolve(t),
+		l => loading(l),
+		e => error(f(e))
+	);
+}

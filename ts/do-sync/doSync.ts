@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-/* eslint-disable no-console */
+/* biome-ignore-all lint/suspicious/noConsole: this file intentionally writes to the console */
 import { SpawnSyncOptions } from 'child_process';
 import crossSpawn from 'cross-spawn';
 
@@ -52,7 +51,7 @@ export type AsyncFn<I extends Value[], O extends Value> = (
 	...v: I
 ) => Promise<O>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 const gen: (input: Value[], fn: AsyncFn<any, any>) => string = (input, fn) => `
 const main = async () => {
     console.log(JSON.stringify({ type: "success", value: await (${fn})(...${JSON.stringify(
@@ -101,7 +100,7 @@ export const doSync: <I extends Value[], O extends Value>(
 		const rsp: Response = JSON.parse(proc.stdout.toString('utf-8'));
 
 		if (rsp.type == 'failure') throw rsp.value;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
 		return rsp.value as any;
 	};
 

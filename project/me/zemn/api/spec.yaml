@@ -1,0 +1,3931 @@
+# yaml-language-server: $schema=https://spec.openapis.org/oas/3.1/schema/2025-02-13
+openapi: 3.1.0
+info:
+  title: zemn.me API
+  version: 0.0.0
+
+servers:
+  - url: https://api.zemn.me
+    description: Production
+  - url: https://api.staging.zemn.me
+    description: Staging
+
+components:
+  responses:
+    MCPOAuthError:
+      description: OAuth protocol error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MCPOAuthError'
+    MCPTransportError:
+      description: Transport or authentication error. Authentication failures include the resource metadata URL and required scope.
+      headers:
+        WWW-Authenticate:
+          schema: { type: string }
+      content:
+        application/json:
+          schema: {}
+        text/plain:
+          schema: { type: string }
+  securitySchemes:
+    JournalMCPBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Resource-bound journal_read access token issued through journal OAuth.
+    JournalConsentBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Website identity token used to approve or deny a journal connection.
+    OIDC:
+      type: openIdConnect
+      # todo: own issuer!
+      openIdConnectUrl: "https://api.zemn.me"
+  schemas:
+    MCPMessage:
+      type: object
+      description: JSON-RPC 2.0 request, notification, or response. MCP validates method-specific payloads and advertises tool schemas through tools/list.
+      required: [jsonrpc]
+      x-go-type: json.RawMessage
+      properties:
+        jsonrpc:
+          type: string
+          enum: ['2.0']
+        id: {}
+        method:
+          type: string
+        params: {}
+        result: {}
+        error:
+          type: object
+      anyOf:
+        - required: [method]
+        - required: [result, id]
+        - required: [error, id]
+    MCPOAuthError:
+      type: object
+      required: [error, error_description]
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    MCPOAuthClient:
+      type: object
+      required: [client_name, redirect_uris]
+      properties:
+        client_id:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        redirect_uris:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+            maxLength: 2048
+        grant_types:
+          type: array
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
+        response_types:
+          type: array
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
+        token_endpoint_auth_method:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        token_endpoint_auth_methods_supported:
+          description: Methods supported by a Client ID Metadata Document. For dynamic registration, token_endpoint_auth_method remains the requested method.
+          type: array
+          minItems: 1
+          x-go-type-skip-optional-pointer: true
+          items: { type: string }
+    MCPOAuthRegisteredClient:
+      allOf:
+        - $ref: '#/components/schemas/MCPOAuthClient'
+        - type: object
+          required: [client_id]
+          properties:
+            client_id:
+              type: string
+              minLength: 1
+    MCPOAuthTokenRequest:
+      type: object
+      required: [grant_type, client_id, resource]
+      properties:
+        grant_type:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_id:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        resource:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        scope:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        code:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        redirect_uri:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        code_verifier:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        refresh_token:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_secret:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_assertion:
+          description: Client assertions are unsupported and rejected by this public-client token endpoint.
+          type: string
+          x-go-type-skip-optional-pointer: true
+        client_assertion_type:
+          type: string
+          x-go-type-skip-optional-pointer: true
+    MCPOAuthTokenResponse:
+      type: object
+      required: [access_token, token_type, expires_in, scope]
+      properties:
+        access_token: { type: string }
+        token_type:
+          type: string
+          enum: [Bearer]
+        expires_in: { type: integer, minimum: 0 }
+        scope:
+          type: string
+          enum: [journal_read]
+        refresh_token:
+          type: string
+          x-go-type-skip-optional-pointer: true
+    MCPOAuthRevocation:
+      type: object
+      required: [client_id, token]
+      properties:
+        client_id: { type: string }
+        token: { type: string }
+        token_type_hint:
+          type: string
+          x-go-type-skip-optional-pointer: true
+    OAuthConsentDecision:
+      type: object
+      required: [approve]
+      properties:
+        approve: { type: boolean }
+    MCPResourceMetadata:
+      type: object
+      required: [resource, authorization_servers, scopes_supported, bearer_methods_supported, resource_name]
+      properties:
+        resource: { type: string }
+        resource_name: { type: string }
+        authorization_servers:
+          type: array
+          items: { type: string }
+        scopes_supported:
+          type: array
+          items: { type: string }
+        bearer_methods_supported:
+          type: array
+          items: { type: string }
+    MCPAuthorizationServerMetadata:
+      type: object
+      required: [issuer, authorization_endpoint, token_endpoint, registration_endpoint, revocation_endpoint, response_types_supported, grant_types_supported, token_endpoint_auth_methods_supported, revocation_endpoint_auth_methods_supported, code_challenge_methods_supported, scopes_supported, client_id_metadata_document_supported, authorization_response_iss_parameter_supported]
+      properties:
+        issuer:
+          type: string
+        authorization_endpoint:
+          type: string
+        token_endpoint:
+          type: string
+        registration_endpoint:
+          type: string
+        revocation_endpoint:
+          type: string
+        response_types_supported:
+          type: array
+          items: { type: string }
+        grant_types_supported:
+          type: array
+          items: { type: string }
+        token_endpoint_auth_methods_supported:
+          type: array
+          items: { type: string }
+        revocation_endpoint_auth_methods_supported:
+          type: array
+          items: { type: string }
+        code_challenge_methods_supported:
+          type: array
+          items: { type: string }
+        scopes_supported:
+          type: array
+          items: { type: string }
+        client_id_metadata_document_supported:
+          type: boolean
+        authorization_response_iss_parameter_supported:
+          type: boolean
+    OIDCIssuer:
+      type: string
+      format: uri
+      description: >
+        The server issuing the id_token (the `iss` field of the token).
+      example:
+        https://api.zemn.me
+    OIDCSubject:
+      type: string
+      description: >
+        The unique never reused identifier for a user.
+      example: user_2f7a3b91c8d24a7f
+    OAuthConsentDetails:
+      type: object
+      required: [client_name, client_id, redirect_uri, scope]
+      properties:
+        client_name:
+          type: string
+        client_id:
+          type: string
+        redirect_uri:
+          type: string
+        scope:
+          type: string
+          enum: [journal_read]
+    OAuthConsentResult:
+      type: object
+      required: [redirect_uri]
+      properties:
+        redirect_uri:
+          type: string
+    OAuthClientId:
+      type: string
+      description: OAuth 2.0 client identifier registered with the provider.
+      example: zemn-web
+    TokenExchangeTokenType: # just the supported ones!
+      type: string
+      description: Token type identifiers accepted by the token exchange endpoint.
+      enum:
+        - urn:ietf:params:oauth:token-type:access_token
+        - urn:ietf:params:oauth:token-type:id_token
+        - urn:ietf:params:oauth:token-type:refresh_token
+    TokenExchangeRequest:
+      description: RFC8693 token exchange (form-encoded)
+      type: object
+      required: [grant_type, subject_token, subject_token_type]
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/OAuthGrantType'
+          example: urn:ietf:params:oauth:grant-type:token-exchange
+        resource:
+          description: Optional resource indicator (can repeat)
+          nullable: true
+          oneOf:
+            - type: string
+            - type: array
+              items: { type: string }
+        audience:
+          description: Optional audience (can repeat)
+          nullable: true
+          oneOf:
+            - type: string
+            - type: array
+              items: { type: string }
+        scope:
+          type: string
+          nullable: true
+          description: Space-delimited scopes to apply to the issued token.
+        requested_token_type:
+          description: >
+            Desired type of the issued token.
+            e.g., urn:ietf:params:oauth:token-type:access_token | id_token | refresh_token | jwt
+          nullable: true
+          $ref: '#/components/schemas/TokenExchangeTokenType'
+        subject_token:
+          type: string
+          description: The token representing the subject of the request.
+        subject_token_type:
+          description: Type of subject_token (e.g., …:access_token, …:id_token, …:jwt, …:saml2)
+          $ref: '#/components/schemas/TokenExchangeTokenType'
+#        actor_token:
+#          type: string
+#          description: Optional actor token (on-behalf-of/impersonation)
+#        actor_token_type:
+#          type: string
+#          description: Type of actor_token
+#        requested_subject:
+#          type: string
+#          description: Optional identifier for desired subject (deployment-specific)
+        # Standard OAuth client auth parameters if using client_secret_post:
+        client_id:
+          type: string
+          nullable: true
+          description: OAuth client identifier when using `client_secret_post`.
+          example: zemn-web
+        client_secret:
+          type: string
+          nullable: true
+          description: OAuth client secret when using `client_secret_post`.
+      example:
+        grant_type: urn:ietf:params:oauth:grant-type:token-exchange
+        subject_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        subject_token_type: urn:ietf:params:oauth:token-type:id_token
+        requested_token_type: urn:ietf:params:oauth:token-type:access_token
+        audience: https://api.zemn.me
+        scope: callbox_key grievance_portal minecraft
+        client_id: zemn-web
+
+    TokenResponse:
+      description: OAuth 2.0 successful token response (RFC6749/RFC8693)
+      type: object
+      required: [access_token, issued_token_type, token_type, expires_in]
+      properties:
+        access_token:
+          type: string
+          description: >
+            The returned token. For legacy reasons, it
+            is always called "access_token", even if it
+            is not an access token.
+        issued_token_type:
+          $ref: '#/components/schemas/TokenExchangeTokenType'
+          description: Echoes the actual type issued (RFC8693 §2.2)
+          example: urn:ietf:params:oauth:token-type:access_token
+        token_type:
+          type: string
+          description: Token usage type understood by the client, typically `Bearer`.
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Lifetime of the returned token, in seconds.
+          example: 3600
+        scope:
+          type: string
+          description: Space-delimited scopes granted in the issued token.
+          example: callbox_key grievance_portal minecraft
+      example:
+        access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        issued_token_type: urn:ietf:params:oauth:token-type:access_token
+        token_type: Bearer
+        expires_in: 3600
+        scope: callbox_key grievance_portal minecraft
+
+    OAuthError:
+      description: RFC6749 error response
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          enum: [invalid_request, invalid_client, invalid_grant, unauthorized_client, unsupported_grant_type, invalid_scope]
+        error_description:
+          type: string
+          description: Human-readable detail intended to help the client fix the request.
+          example: subject_token_type is required
+        error_uri:
+          type: string
+          format: uri
+          description: URL with more information about the error condition.
+      example:
+        error: invalid_request
+        error_description: subject_token_type is required
+    OAuthGrantType: # just the supported ones!
+      type: string
+      description: OAuth grant type supported by this endpoint.
+      enum:
+        - authorization_code
+        - refresh_token
+        - urn:ietf:params:oauth:grant-type:token-exchange
+    OAuthScopes:
+      type: object
+      description: Known OAuth scope names used by zemn.me.
+      properties:
+        admin_uid_read:
+          type: boolean
+        admin_analytics_read:
+          type: boolean
+        admin_users_read:
+          type: boolean
+        admin_users_manage:
+          type: boolean
+        callbox_settings_read:
+          type: boolean
+        callbox_settings_write:
+          type: boolean
+        callbox_key:
+          type: boolean
+        callbox_key_logs_read:
+          type: boolean
+        grievance_portal:
+          type: boolean
+        journal_read:
+          type: boolean
+        journal_write:
+          type: boolean
+        minecraft:
+          type: boolean
+    JournalCitation:
+      type: object
+      required: [entryId, segmentId, quote]
+      properties:
+        entryId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: entry_id
+        segmentId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: segment_id
+        quote:
+          type: string
+          description: Exact supporting text quoted from the cited transcript segment.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: quote
+    JournalTranscriptSegment:
+      type: object
+      required: [id, startMs, endMs, text]
+      properties:
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        startMs:
+          type: integer
+          format: int64
+          x-oapi-codegen-extra-tags:
+            dynamodbav: start_ms
+        endMs:
+          type: integer
+          format: int64
+          x-oapi-codegen-extra-tags:
+            dynamodbav: end_ms
+        text:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: text
+    JournalSummaryBlock:
+      type: object
+      required: [markdown, citations]
+      properties:
+        markdown:
+          type: string
+          description: Markdown containing one-based numbered footnote references such as `[^1]` immediately after the claims they support. Each reference indexes the citations array; clients render the citation's source details separately.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: markdown
+        citations:
+          type: array
+          description: Ordered transcript citations referenced from markdown; every item must appear in markdown as its one-based footnote reference and is rendered with the quoted transcript segment and a timestamp link.
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: citations
+    JournalSummary:
+      type: object
+      required: [schemaVersion, id, period, start, end, title, blocks]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+          x-oapi-codegen-extra-tags:
+            dynamodbav: schema_version
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        period:
+          type: string
+          enum: [entry, day, week, month, year, journal]
+          x-oapi-codegen-extra-tags:
+            dynamodbav: period
+        start:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: start
+        end:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: end
+        title:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: title
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: blocks
+        sourceFingerprint:
+          type: string
+          description: Hash of the ordered source material used to avoid regenerating an unchanged aggregate summary.
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'source_fingerprint,omitempty'
+    JournalWikiPage:
+      type: object
+      required: [id, title, kind, aliases, blocks]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 200
+        kind:
+          type: string
+          enum: [person, place, project, subject]
+        aliases:
+          type: array
+          maxItems: 50
+          items:
+            type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalWikiSource:
+      type: object
+      description: Recording metadata needed to link a wiki citation without downloading its transcript or audio.
+      required: [entryId, segmentId, recordedAt, timeZone, startMs]
+      properties:
+        entryId:
+          type: string
+        segmentId:
+          type: string
+        recordedAt:
+          type: string
+          format: date-time
+        timeZone:
+          type: string
+        startMs:
+          type: integer
+          format: int64
+        title:
+          type: string
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+    JournalWikiPageView:
+      allOf:
+        - $ref: '#/components/schemas/JournalWikiPage'
+        - type: object
+          required: [sources]
+          properties:
+            sources:
+              type: array
+              items:
+                $ref: '#/components/schemas/JournalWikiSource'
+            curation:
+              $ref: '#/components/schemas/JournalCurationStatus'
+    JournalWikiIndex:
+      type: object
+      required: [pages, hasEntries]
+      properties:
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalWikiIndexEntry'
+        hasEntries:
+          type: boolean
+        curation:
+          $ref: '#/components/schemas/JournalCurationStatus'
+    JournalUploads:
+      type: object
+      description: Upload confirmation and processing metadata, without transcript, summary, or signed audio URLs.
+      required: [entries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+    JournalWikiIndexEntry:
+      type: object
+      required: [id, title, kind, aliases]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        kind:
+          type: string
+        aliases:
+          type: array
+          items:
+            type: string
+    JournalCuratedEntry:
+      type: object
+      required: [entryId, title, blocks]
+      properties:
+        entryId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalCuratedDateCorrection:
+      type: object
+      description: A recording date clearly established by original transcript evidence, preserving the recording's local time and time zone.
+      required: [entryId, recordedDate, citations]
+      properties:
+        entryId:
+          type: string
+          format: uuid
+        recordedDate:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+        citations:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+    JournalCurationResult:
+      type: object
+      description: Complete proposed generation. Citation quotes always refer to original transcript text, including when prose explains a likely transcription error. Wiki links use /journal?wiki=<page UUID>.
+      required: [entries, pages]
+      properties:
+        dateCorrections:
+          type: array
+          description: Apply only clear recording-date corrections supported by this recording's transcript. Omit or leave empty when no correction is justified.
+          x-go-type-skip-optional-pointer: true
+          items:
+            $ref: '#/components/schemas/JournalCuratedDateCorrection'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalCuratedEntry'
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalWikiPage'
+    JournalCurationStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [pending, running, ready, failed]
+        updatedAt:
+          type: string
+          format: date-time
+        generation:
+          type: string
+    JournalSummaryResult:
+      type: object
+      description: Structured model output before trusted period metadata is attached.
+      required: [title, blocks]
+      properties:
+        title:
+          type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummaryBlock'
+    JournalEntryAnalysisResult:
+      type: object
+      description: Structured entry analysis before trusted journal metadata is attached.
+      required: [summary, recordedDate]
+      properties:
+        summary:
+          $ref: '#/components/schemas/JournalSummaryResult'
+        recordedDate:
+          type: string
+          pattern: '^(|\d{4}-\d{2}-\d{2})$'
+          description: Local calendar date explicitly assigned by the speaker to this journal entry, or an empty string when the transcript does not establish one.
+    JournalSummarySource:
+      type: object
+      description: Citation-preserving source supplied to hierarchical summarization.
+      required: [label, text, citations]
+      properties:
+        label:
+          type: string
+        text:
+          type: string
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalCitation'
+    JournalTranscriptionResult:
+      type: object
+      description: Trusted transcription output derived from uploaded audio.
+      required: [durationMs, segments]
+      properties:
+        durationMs:
+          type: integer
+          format: int64
+          minimum: 0
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalProcessingProgress:
+      type: object
+      required: [stage, completedChunks, totalChunks]
+      properties:
+        stage:
+          type: string
+          enum: [transcribing, summarizing]
+          x-enum-varnames: [JournalProcessingProgressStageTranscribing, JournalProcessingProgressStageSummarizing]
+        completedChunks:
+          type: integer
+          minimum: 0
+        totalChunks:
+          type: integer
+          minimum: 0
+          description: Zero until decoding has established the complete chunk count.
+    JournalTranscriptFile:
+      type: object
+      description: Versioned transcript document stored alongside journal audio.
+      required: [schemaVersion, entryId, segments]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        entryId:
+          type: string
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+    JournalLocation:
+      type: object
+      required: [latitude, longitude, accuracyMeters, capturedAt]
+      properties:
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+        accuracyMeters:
+          type: number
+          format: double
+          minimum: 0
+          description: Estimated horizontal accuracy radius in metres.
+        capturedAt:
+          type: string
+          format: date-time
+    JournalEntryStatus:
+      type: string
+      enum: [awaiting_upload, processing, ready, failed]
+    JournalEntryMetadata:
+      type: object
+      description: Versioned metadata document stored alongside journal audio. Browser recordingStartedAt takes precedence over container metadata.
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status]
+      properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
+        schemaVersion:
+          type: integer
+          const: 1
+        id:
+          type: string
+        recordedAt:
+          type: string
+          format: date-time
+          description: Recording time, derived from embedded audio metadata when available and otherwise from the upload request fallback.
+        location:
+          $ref: '#/components/schemas/JournalLocation'
+        timeZone:
+          type: string
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentType:
+          type: string
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        audioKey:
+          type: string
+        processingProgress:
+          $ref: '#/components/schemas/JournalProcessingProgress'
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+        error:
+          type: string
+    JournalStoredEntry:
+      type: object
+      description: Complete entry representation indexed in DynamoDB.
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, audioKey, status, transcript]
+      properties:
+        title:
+          type: string
+          description: Recording label, retained across recording-date corrections independently of generated analysis.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'title,omitempty'
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'recording_started_at,omitempty'
+        schemaVersion:
+          type: integer
+          const: 1
+          x-oapi-codegen-extra-tags:
+            dynamodbav: schema_version
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        recordedAt:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            dynamodbav: recorded_at
+        location:
+          $ref: '#/components/schemas/JournalLocation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'location,omitempty'
+        timeZone:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: time_zone
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'duration_ms,omitempty'
+        contentType:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: content_type
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'byte_length,omitempty'
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'content_sha256,omitempty'
+        audioKey:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: audio_key
+        uploadExpiresAt:
+          type: string
+          format: date-time
+          description: Time after which an awaiting upload can no longer be active.
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'upload_expires_at,omitempty'
+        processingProgress:
+          $ref: '#/components/schemas/JournalProcessingProgress'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'processing_progress,omitempty'
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: status
+        error:
+          type: string
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'error,omitempty'
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'transcript,omitempty'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'summary,omitempty'
+    JournalContentHashReservation:
+      type: object
+      description: Atomic ownership record preventing the same audio content from becoming multiple entries.
+      required: [sha256, entryId]
+      properties:
+        sha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: sha256
+        entryId:
+          type: string
+          format: uuid
+          x-oapi-codegen-extra-tags:
+            dynamodbav: entry_id
+    JournalStoredRecord:
+      type: object
+      description: DynamoDB envelope for an entry, aggregate summary, or content-hash reservation.
+      required: [id, when, kind]
+      properties:
+        id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: id
+        when:
+          type: string
+          x-oapi-codegen-extra-tags:
+            dynamodbav: when
+        kind:
+          type: string
+          enum: [entry, summary, content_hash]
+          x-oapi-codegen-extra-tags:
+            dynamodbav: kind
+        entry:
+          $ref: '#/components/schemas/JournalStoredEntry'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'entry,omitempty'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'summary,omitempty'
+        contentHash:
+          $ref: '#/components/schemas/JournalContentHashReservation'
+          x-oapi-codegen-extra-tags:
+            dynamodbav: 'content_hash,omitempty'
+    JournalEntry:
+      type: object
+      required: [schemaVersion, id, recordedAt, timeZone, contentType, status, transcript]
+      properties:
+        title:
+          type: string
+          description: Recording label, retained across recording-date corrections independently of generated analysis.
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
+        schemaVersion:
+          type: integer
+          const: 1
+        id:
+          type: string
+          format: uuid
+        recordedAt:
+          type: string
+          format: date-time
+        location:
+          $ref: '#/components/schemas/JournalLocation'
+        timeZone:
+          type: string
+        durationMs:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentType:
+          type: string
+        byteLength:
+          type: integer
+          format: int64
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        contentSha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          description: SHA-256 of the original audio, used to recognize completed duplicate uploads.
+          x-go-type-skip-optional-pointer: true
+          x-omitempty: true
+        processingProgress:
+          $ref: '#/components/schemas/JournalProcessingProgress'
+        status:
+          $ref: '#/components/schemas/JournalEntryStatus'
+        error:
+          type: string
+        audioUrl:
+          type: string
+          format: uri
+        transcript:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTranscriptSegment'
+        summary:
+          $ref: '#/components/schemas/JournalSummary'
+    JournalBrowsePeriod:
+      type: object
+      required: [id, period, start, end]
+      properties:
+        id: {type: string}
+        period: {type: string, enum: [year, month, week, day]}
+        start: {type: string, format: date-time}
+        end: {type: string, format: date-time}
+        title: {type: string}
+    JournalBrowse:
+      type: object
+      required: [focus, timeZone, periods, sources, locations]
+      properties:
+        locations:
+          type: array
+          items: {$ref: '#/components/schemas/JournalEntry'}
+        sources:
+          type: array
+          items: {$ref: '#/components/schemas/JournalEntry'}
+        focus: {type: string, format: date-time}
+        timeZone: {type: string}
+        previous: {type: string, format: date-time}
+        next: {type: string, format: date-time}
+        periods:
+          type: array
+          items: {$ref: '#/components/schemas/JournalBrowsePeriod'}
+    Journal:
+      type: object
+      required: [entries, summaries]
+      properties:
+        browse:
+          $ref: '#/components/schemas/JournalBrowse'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalSummary'
+        wiki:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalWikiIndexEntry'
+        curation:
+          $ref: '#/components/schemas/JournalCurationStatus'
+    JournalEntryCreate:
+      type: object
+      required: [contentType, recordedAt, timeZone]
+      properties:
+        recordingStartedAt:
+          type: string
+          format: date-time
+          description: Capture start time supplied by the browser recorder; takes precedence over container metadata. A spoken entry date may still override the calendar date.
+        contentType:
+          type: string
+          enum: [audio/mp4, audio/mpeg, audio/ogg, audio/wav, audio/webm]
+        recordedAt:
+          type: string
+          format: date-time
+          description: Fallback recording time used when the uploaded audio container does not provide its own creation timestamp.
+        location:
+          $ref: '#/components/schemas/JournalLocation'
+        timeZone:
+          type: string
+          description: IANA time zone used to derive calendar summary periods.
+    JournalEntryDateUpdate:
+      type: object
+      required: [recordedDate]
+      properties:
+        recordedDate:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          description: Local calendar date to assign while preserving the entry's local time of day and time zone.
+    JournalUpload:
+      type: object
+      required: [url, method, headers, expiresAt]
+      properties:
+        url:
+          type: string
+          format: uri
+        method:
+          type: string
+          const: PUT
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        expiresAt:
+          type: string
+          format: date-time
+    JournalEntryCreateResponse:
+      type: object
+      required: [entry, upload]
+      properties:
+        entry:
+          $ref: '#/components/schemas/JournalEntry'
+        upload:
+          $ref: '#/components/schemas/JournalUpload'
+    IdToken:
+      type: object
+      description: >
+        OpenID Connect **ID Token** claims set (the payload of a signed JWT).
+        Conveys who issued the token, for whom (`aud`), which subject (`sub`),
+        when it expires (`exp`) and was issued (`iat`), plus optional
+        authentication context (e.g., `auth_time`, `acr`, `amr`) and
+        flow-specific hashes (`at_hash`, `c_hash`). Must be **JWS-signed**;
+        may be JWE-encrypted (sign **then** encrypt).
+      required:
+        - iss
+        - sub
+        - aud
+        - exp
+        - iat
+      properties:
+        iss:
+          $ref: '#/components/schemas/OIDCIssuer'
+          description: >
+            **Issuer Identifier** — HTTPS URL (case-sensitive) for the OP.
+            Must exactly match the provider’s discovery `issuer`.
+            **No query or fragment** allowed.
+        sub:
+          $ref: '#/components/schemas/OIDCSubject'
+          description: >
+            **Subject Identifier** — locally unique, never reassigned.
+            Case-sensitive string (≤255 ASCII). Uniqueness is guaranteed only
+            by the pair (`iss`, `sub`).
+        aud:
+          $ref: '#/components/schemas/OAuthClientId'
+          description: >
+            **Audience** — identifies recipients the token is intended for.
+            Must include the RP’s OAuth `client_id`. Commonly a single string,
+            but may be an array when multiple audiences are present.
+        exp:
+          type: integer
+          format: int64
+          description: >
+            **Expiration time** (UTC seconds since 1970-01-01T00:00:00Z).
+            Current time **must** be before `exp`. Small clock skew allowance is acceptable.
+        iat:
+          type: integer
+          format: int64
+          description: >
+            **Issued-at time** (UTC seconds since epoch). RPs may reject tokens
+            issued too far in the past to bound nonce storage and replay windows.
+        jti:
+          type: string
+          description: >
+            **JWT ID** — unique identifier for the token.
+        auth_time:
+          type: integer
+          format: int64
+          description: >
+            **End-User authentication time** (UTC seconds). REQUIRED if the RP
+            sent `max_age` or requested `auth_time` as an Essential Claim; otherwise OPTIONAL.
+        nonce:
+          type: string
+          description: >
+            **Nonce** to bind client session to the ID Token and mitigate replay.
+            If the RP supplied a nonce in the auth request, this **must** be present
+            and equal. OPs should not transform it.
+        scope:
+          type: string
+          description: Space-delimited OAuth scopes granted to this subject.
+        acr:
+          type: string
+          description: >
+            **Authentication Context Class Reference.** String naming the assurance
+            class satisfied (e.g., an absolute URI or a registered name).
+            Interpreted by agreement between RP and OP.
+        amr:
+          type: array
+          description: >
+            **Authentication Methods References.** Identifiers for methods used
+            (e.g., `pwd`, `otp`). Values should come from IANA AMR registry; unregistered
+            values are allowed by agreement.
+          items:
+            type: string
+        azp:
+          type: string
+          description: >
+            **Authorized party.** If present, must equal the OAuth `client_id` to which
+            this ID Token was issued. Typically occurs only with extensions.
+        # Flow-dependent hashes (JWS 'alg' defines the hash function family)
+        at_hash:
+          type: string
+          description: >
+            **Access Token hash.** Base64url(left-most half of hash(ASCII(access_token))).
+            REQUIRED when an Access Token is returned from the Authorization Endpoint
+            (`response_type` includes `token`); OPTIONAL/omitted otherwise.
+        c_hash:
+          type: string
+          description: >
+            **Authorization Code hash.** Base64url(left-most half of hash(ASCII(code))).
+            REQUIRED when an Authorization Code is returned from the Authorization Endpoint
+            alongside an ID Token (Hybrid); OPTIONAL/omitted otherwise.
+        # Common profile/user claims may appear here or be fetched from UserInfo:
+        name:
+          type: string
+          description: End-User’s full display name.
+        given_name:
+          type: string
+          description: End-User’s given/first name(s).
+        family_name:
+          type: string
+          description: End-User’s surname(s).
+        middle_name:
+          type: string
+          description: End-User’s middle name(s).
+        nickname:
+          type: string
+          description: Casual name; may differ from `given_name`.
+        preferred_username:
+          type: string
+          description: User’s preferred handle at the RP (not guaranteed unique).
+        profile:
+          type: string
+          format: uri
+          description: URL of the End-User’s profile page.
+        picture:
+          type: string
+          format: uri
+          description: URL of a profile **image** (direct image URL, not a page).
+        website:
+          type: string
+          format: uri
+          description: URL of the End-User’s website/blog.
+        email:
+          type: string
+          description: Preferred email address (RFC 5322 `addr-spec`). Not guaranteed unique.
+        email_verified:
+          type: boolean
+          description: >
+            Whether the OP verified control of `email` at verification time (true/false).
+        gender:
+          type: string
+          description: End-User’s gender (values often `female` / `male`; others allowed).
+        birthdate:
+          type: string
+          description: >
+            ISO 8601 date. Year may be `"0000"` to indicate omission; `YYYY` alone is allowed.
+        zoneinfo:
+          type: string
+          description: IANA Time Zone (e.g., `Europe/Paris`, `America/Los_Angeles`).
+        locale:
+          type: string
+          description: BCP 47 language tag (e.g., `en-GB`, `fr-CA`).
+        phone_number:
+          type: string
+          description: Preferred phone number (E.164 recommended).
+        phone_number_verified:
+          type: boolean
+          description: >
+            Whether the OP verified control of `phone_number`. If true, number should be E.164.
+        address:
+          $ref: '#/components/schemas/Address'
+        updated_at:
+          type: integer
+          format: int64
+          description: >
+            Seconds since epoch when End-User information was last updated.
+        # Aggregated/Distributed Claims support:
+        _claim_names:
+          type: object
+          additionalProperties:
+            type: string
+          description: >
+            Maps claim names to source keys found in `_claim_sources` for aggregated/distributed claims.
+        _claim_sources:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: object
+                description: Aggregated claims (embedded as a JWT).
+                properties:
+                  JWT:
+                    type: string
+                    description: JWT carrying the aggregated claims.
+                required: [JWT]
+              - type: object
+                description: Distributed claims (reference to an external endpoint).
+                properties:
+                  endpoint:
+                    type: string
+                    format: uri
+                    description: OAuth 2.0 resource endpoint returning the claim(s) as a JWT.
+                  access_token:
+                    type: string
+                    description: Bearer token to retrieve the distributed claims (optional).
+                required: [endpoint]
+      example:
+        iss: "https://server.example.com"
+        sub: "24400320"
+        aud: "s6BhdRkqt3"
+        exp: 1311281970
+        iat: 1311280970
+        nonce: "n-0S6_WzA2Mj"
+        auth_time: 1311280969
+        acr: "urn:mace:incommon:iap:silver"
+        amr: ["pwd", "otp"]
+        at_hash: "77QmUPtjPfzWtF2AnpK9RQ"
+        c_hash: "LDktKdoQak3Pk0cnXxCltA"
+
+    Address:
+      type: object
+      description: >
+        Postal address claim. Providers may return only a subset. `formatted` may
+        contain multiple lines (`\n` or `\r\n`).
+      properties:
+        formatted:
+          type: string
+          description: Full mailing address, formatted for display.
+        street_address:
+          type: string
+          description: Street address (may include house number, PO Box; multi-line allowed).
+        locality:
+          type: string
+          description: City / locality.
+        region:
+          type: string
+          description: State / province / prefecture / region.
+        postal_code:
+          type: string
+          description: ZIP / postal code.
+        country:
+          type: string
+          description: Country name.
+      example:
+        formatted: "1234 Hollywood Blvd.\nLos Angeles, CA 90210\nUnited States"
+        street_address: "1234 Hollywood Blvd."
+        locality: "Los Angeles"
+        region: "CA"
+        postal_code: "90210"
+        country: "United States"
+    Link:
+      type: object
+      required: [rel, href]
+      properties:
+        rel:
+          type: string
+          description: Registered or extension relation describing the linked resource.
+          example: http://openid.net/specs/connect/1.0/issuer
+        href:
+          type: string
+          format: uri
+          description: Absolute URL for the related resource.
+          example: https://api.zemn.me
+      example:
+        rel: http://openid.net/specs/connect/1.0/issuer
+        href: https://api.zemn.me
+    JRD:
+      description: |
+        JSON Resource Descriptor (JRD) as defined in [RFC 6415](https://datatracker.ietf.org/doc/html/rfc6415).
+        Used for WebFinger discovery.
+      type: object
+      required: [subject, links]
+      properties:
+        subject:
+          type: string
+          description: Identifier that was looked up, usually a URL or `acct:` URI.
+          example: acct:alice@zemn.me
+        links:
+          type: array
+          items: { $ref: '#/components/schemas/Link' }
+      example:
+        subject: acct:alice@zemn.me
+        links:
+          - rel: http://openid.net/specs/connect/1.0/issuer
+            href: https://api.zemn.me
+    JWK:
+      type: object
+      required: [kty, alg, use, crv, x, y, kid]
+      properties:
+        kty:
+          type: string
+          description: Key type.
+          example: EC
+        alg:
+          type: string
+          description: Algorithm intended for this key.
+          example: ES256
+        use:
+          type: string
+          description: Public key use.
+          example: sig
+        crv:
+          type: string
+          description: Elliptic curve name for EC keys.
+          example: P-256
+        x:
+          type: string
+          description: Base64url-encoded x coordinate.
+          example: f83OJ3D2xF4Q...
+        y:
+          type: string
+          description: Base64url-encoded y coordinate.
+          example: x_FEzRu9m4w6...
+        kid:
+          type: string
+          description: Key identifier used for key selection and rotation.
+          example: main-2026-01
+      example:
+        kty: EC
+        alg: ES256
+        use: sig
+        crv: P-256
+        x: f83OJ3D2xF4Q...
+        y: x_FEzRu9m4w6...
+        kid: main-2026-01
+    JWKS:
+      type: object
+      required: [keys]
+      properties:
+        keys:
+          type: array
+          items: { $ref: '#/components/schemas/JWK' }
+          description: Public signing keys currently published by the issuer.
+      example:
+        keys:
+          - kty: EC
+            alg: ES256
+            use: sig
+            crv: P-256
+            x: f83OJ3D2xF4Q...
+            y: x_FEzRu9m4w6...
+            kid: main-2026-01
+    OIDCConfiguration:
+      type: object
+      description: |
+        Subset of fields listed in spec §3.
+        Feel free to extend locally: add extra properties without fear of
+        breaking non-OIDC consumers, provided you preserve existing names.
+      required:
+        - issuer
+        - authorization_endpoint
+        - jwks_uri
+        - response_types_supported
+        - subject_types_supported
+        - id_token_signing_alg_values_supported
+      properties:
+        issuer:
+          type: string
+          format: uri
+          description: HTTPS URL; must match both discovery URL & ID-token `iss`.
+        authorization_endpoint:
+          type: string
+          format: uri
+        token_endpoint:
+          type: string
+          format: uri
+          description: Required unless OP only supports Implicit flow.
+        userinfo_endpoint:
+          type: string
+          format: uri
+        jwks_uri:
+          type: string
+          format: uri
+        registration_endpoint:
+          type: string
+          format: uri
+        scopes_supported:
+          type: array
+          items: { type: string }
+        response_types_supported:
+          type: array
+          items: { type: string }
+        response_modes_supported:
+          type: array
+          items: { type: string }
+        grant_types_supported:
+          type: array
+          items:
+              $ref: '#/components/schemas/OAuthGrantType'
+        subject_types_supported:
+          type: array
+          items:
+            type: string
+            enum: [public, pairwise]
+        acr_values_supported:
+          type: array
+          items: { type: string }
+        id_token_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        id_token_encryption_alg_values_supported:
+          type: array
+          items: { type: string }
+        id_token_encryption_enc_values_supported:
+          type: array
+          items: { type: string }
+        userinfo_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        userinfo_encryption_alg_values_supported:
+          type: array
+          items: { type: string }
+        userinfo_encryption_enc_values_supported:
+          type: array
+          items: { type: string }
+        request_object_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        request_object_encryption_alg_values_supported:
+          type: array
+          items: { type: string }
+        request_object_encryption_enc_values_supported:
+          type: array
+          items: { type: string }
+        code_challenge_methods_supported:
+          type: array
+          items: { type: string }
+        client_id_metadata_document_supported:
+          type: boolean
+        authorization_response_iss_parameter_supported:
+          type: boolean
+        revocation_endpoint:
+          type: string
+          format: uri
+        token_endpoint_auth_methods_supported:
+          type: array
+          items:
+            type: string
+            enum: [none, client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt]
+        token_endpoint_auth_signing_alg_values_supported:
+          type: array
+          items: { type: string }
+        display_values_supported:
+          type: array
+          items: { type: string }
+        claim_types_supported:
+          type: array
+          items:
+            type: string
+            enum: [normal, aggregated, distributed]
+        claims_supported:
+          type: array
+          items: { type: string }
+        claims_locales_supported:
+          type: array
+          items: { type: string }
+        ui_locales_supported:
+          type: array
+          items: { type: string }
+        claims_parameter_supported:
+          type: boolean
+          description: Whether the authorization request supports the OIDC `claims` parameter.
+        request_parameter_supported:
+          type: boolean
+          description: Whether signed request objects may be passed by value in the `request` parameter.
+        request_uri_parameter_supported:
+          type: boolean
+          description: Whether signed request objects may be passed by reference in the `request_uri` parameter.
+        require_request_uri_registration:
+          type: boolean
+          description: Whether `request_uri` values must be pre-registered.
+        service_documentation:
+          type: string
+          format: uri
+          description: Human-readable documentation URL for this provider.
+        op_policy_uri:
+          type: string
+          format: uri
+          description: URL of the provider's relying-party policy.
+        op_tos_uri:
+          type: string
+          format: uri
+          description: URL of the provider's terms of service.
+      example:
+        issuer: https://api.zemn.me
+        authorization_endpoint: https://api.zemn.me/oauth2/authorize
+        token_endpoint: https://api.zemn.me/oauth2/token
+        jwks_uri: https://api.zemn.me/.well-known/jwks.json
+        userinfo_endpoint: https://api.zemn.me/oauth2/userinfo
+        scopes_supported: [openid, profile, email, callbox_key, journal_read, journal_write, minecraft]
+        response_types_supported: [code]
+        grant_types_supported: [urn:ietf:params:oauth:grant-type:token-exchange]
+        subject_types_supported: [public]
+        id_token_signing_alg_values_supported: [ES256]
+    TwilioCallRequest:
+      type: object
+      description: Parameters sent by Twilio in requests to your webhook for handling a call.
+      properties:
+        CallSid:
+          type: string
+          description: A unique identifier for this call, generated by Twilio.
+        AccountSid:
+          type: string
+          pattern: '^AC[a-fA-F0-9]{32}$'
+          description: Your Twilio account ID (34 characters, starting with 'AC').
+        From:
+          type: string
+          description: >
+            The initiator's phone number or client identifier. E.164 format (e.g., +16175551212) or client: scheme.
+        To:
+          type: string
+          description: >
+            The called party's phone number or client identifier. E.164 format or client: scheme.
+        CallStatus:
+          type: string
+          enum: [queued, ringing, in-progress, completed, busy, failed, no-answer, canceled]
+          description: The current status of the call.
+        ApiVersion:
+          type: string
+          description: Twilio API version used for this call (e.g., 2010-04-01).
+        Direction:
+          type: string
+          enum: [inbound, outbound-api, outbound-dial]
+          description: The direction of the call.
+        ForwardedFrom:
+          type: string
+          nullable: true
+          description: The number from which the call was forwarded, if applicable.
+        CallerName:
+          type: string
+          nullable: true
+          description: >
+            Caller ID name if VoiceCallerIdLookup is enabled on the number.
+        ParentCallSid:
+          type: string
+          nullable: true
+          description: Identifier for the parent call if this is a sub-call (e.g., leg of a call).
+        CallToken:
+          type: string
+          nullable: true
+          description: A token used for call forwarding, if applicable.
+        FromCity:
+          type: string
+          nullable: true
+          description: The city of the caller, if available.
+        FromState:
+          type: string
+          nullable: true
+          description: The state or province of the caller, if available.
+        FromZip:
+          type: string
+          nullable: true
+          description: The postal code of the caller, if available.
+        FromCountry:
+          type: string
+          nullable: true
+          description: The country of the caller, if available.
+        ToCity:
+          type: string
+          nullable: true
+          description: The city of the called party, if available.
+        ToState:
+          type: string
+          nullable: true
+          description: The state or province of the called party, if available.
+        ToZip:
+          type: string
+          nullable: true
+          description: The postal code of the called party, if available.
+        ToCountry:
+          type: string
+          nullable: true
+          description: The country of the called party, if available.
+        Digits:
+          type: string
+          nullable: true
+          description: Digits entered by the caller in response to a prompt.
+      example:
+        CallSid: CA1234567890abcdef1234567890abcd
+        AccountSid: AC1234567890abcdef1234567890abcd
+        From: "+14155550123"
+        To: "+14155559876"
+        CallStatus: in-progress
+        ApiVersion: "2010-04-01"
+        Direction: inbound
+        Digits: "56734"
+      required:
+        - CallSid
+        - AccountSid
+        - From
+        - To
+        - CallStatus
+        - ApiVersion
+        - Direction
+    Authorizer:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          $ref: "#/components/schemas/PhoneNumber"
+      description: Authorizer contact that may approve visitor entry over the phone.
+      example:
+        phoneNumber: "+14155550123"
+    PhoneNumber:
+      description: A single E.164 phone number.
+      example: "+447823423420"
+      type: string
+      pattern: ^\+[1-9]\d{1,14}$
+
+    EntryCode:
+      description: A 5 digit PIN-like entry code that may be used by a user.
+      example: "56734"
+      type: string
+      pattern: ^\d{5}$
+
+    EntryCodeEntry:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          $ref: "#/components/schemas/EntryCode"
+      description: Entry code currently accepted by the callbox.
+      example:
+        code: "56734"
+
+    CallboxSettings:
+      description: >
+        Settings object used by the callbox.
+      type: object
+      required:
+        - authorizers
+        - fallbackPhone
+        - entryCodes
+      properties:
+
+        partyMode:
+          description: >
+            Whether the callbox is in party mode. In party mode, the callbox
+            will not ask for a code and will immediately open the door.
+          type: boolean
+
+        authorizers:
+          description: >
+            A list of E.164 phone numbers. Authorizers are phone numbers that
+            can be requested by the visitor — the callbox will then connect the
+            authorizer who may press 9 at any time to approve visitor entry.
+          type: array
+          items:
+            $ref: "#/components/schemas/Authorizer"
+
+        fallbackPhone:
+          description: >
+            This number is called when the visitor does not request anything
+            specific, or if the visitor fails to get in via some other method.
+
+            It is a single E.164 phone number.
+
+          $ref: "#/components/schemas/PhoneNumber"
+
+        entryCodes:
+          description: >
+            A set of PIN-like numbers that may be used for immediate entry.
+          type: array
+          items:
+            $ref: "#/components/schemas/EntryCodeEntry"
+      example:
+        partyMode: false
+        authorizers:
+          - phoneNumber: "+14155550123"
+          - phoneNumber: "+14155550124"
+        fallbackPhone: "+14155550999"
+        entryCodes:
+          - code: "56734"
+          - code: "48192"
+
+    CallboxEvent:
+      description: A human-facing callbox state event.
+      type: object
+      required:
+        - id
+        - when
+        - open
+        - actor
+        - action
+      properties:
+        id:
+          type: string
+          description: Stable event identifier.
+        when:
+          type: string
+          format: date-time
+          description: Time when this callbox state event was recorded.
+        open:
+          type: boolean
+          description: Whether this event opened or locked the door.
+        actor:
+          type: string
+          description: Friendly name for the person or flow associated with the event.
+        actorEmail:
+          type: string
+          description: Email address for the actor, if known.
+        actorGivenName:
+          type: string
+          description: Given name for the actor, if known.
+        actorFamilyName:
+          type: string
+          description: Family name for the actor, if known.
+        action:
+          type: string
+          enum: [unlocked, locked]
+          description: Display action for this event.
+        source:
+          type: string
+          description: Backend source that produced the event.
+        subject:
+          type: string
+          description: Authenticated subject associated with the event, if known.
+      example:
+        id: "CALLBOX_DOOR_OPEN_EVENTS#2026-03-30T18:31:54.902Z[UTC]"
+        when: "2026-03-30T18:31:54.902Z"
+        open: true
+        actor: Thomas
+        actorEmail: thomas@example.com
+        actorGivenName: Thomas
+        actorFamilyName: Shadwell
+        action: unlocked
+        source: web_key_request
+        subject: thomas
+
+    CallboxEventsResponse:
+      description: Paginated callbox state events.
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/CallboxEvent"
+        nextCursor:
+          type: string
+          description: Opaque cursor for the next page of older events.
+      example:
+        events:
+          - id: "CALLBOX_DOOR_OPEN_EVENTS#2026-03-30T18:31:54.902Z[UTC]"
+            when: "2026-03-30T18:31:54.902Z"
+            open: true
+            actor: Thomas
+            actorEmail: thomas@example.com
+            actorGivenName: Thomas
+            actorFamilyName: Shadwell
+            action: unlocked
+            source: web_key_request
+            subject: thomas
+        nextCursor: eyJpZCI6IkNBTE...
+
+    MinecraftStatus:
+      description: Current Minecraft server status from RCON.
+      type: object
+      required:
+        - serverAddress
+        - serverState
+        - onlinePlayers
+        - rconReachable
+      properties:
+        serverAddress:
+          type: string
+          description: Address users should add in Minecraft.
+          example: zemn.me
+        serverState:
+          type: string
+          description: Current server state from the web API's perspective.
+          example: online
+        onlinePlayers:
+          type: integer
+          minimum: 0
+          description: Number of players currently online.
+          example: 2
+        maxPlayers:
+          type: integer
+          minimum: 0
+          description: Maximum player capacity reported by the server, if available.
+          example: 20
+        rconReachable:
+          type: boolean
+          description: Whether the API could reach the Minecraft server over RCON.
+          example: true
+        message:
+          type: string
+          description: Human-readable status detail.
+          example: There are 2 of a max of 20 players online
+
+    MinecraftLogEvent:
+      description: One Minecraft server log event delivered over the server-sent event stream.
+      type: object
+      required:
+        - id
+        - timestamp
+        - message
+      properties:
+        id:
+          type: string
+          description: Stable CloudWatch Logs event identifier.
+        timestamp:
+          type: string
+          format: date-time
+          description: Time the Minecraft server emitted the log event.
+        stream:
+          type: string
+          description: CloudWatch Logs stream name.
+        message:
+          type: string
+          description: Minecraft server log line.
+          example: "[12:34:56] [Server thread/INFO]: <zemnmez> hello"
+
+    MinecraftHistoryEvent:
+      type: object
+      required: [id, timestamp, kind]
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        kind:
+          type: string
+          enum: [login, logout, server_on, server_off]
+        player:
+          type: string
+          description: Minecraft username for login and logout events.
+        instance:
+          type: string
+          description: Opaque server instance identifier used to pair events across restarts.
+
+    MinecraftHistory:
+      type: object
+      required: [events]
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinecraftHistoryEvent'
+        nextToken:
+          type: string
+          description: Continue loading even when this page contains no events.
+
+    MinecraftWake:
+      description: Result of requesting the Minecraft server to wake.
+      type: object
+      required:
+        - serverAddress
+        - wakeRequested
+      properties:
+        serverAddress:
+          type: string
+          description: Address users should add in Minecraft.
+          example: zemn.me
+        wakeRequested:
+          type: boolean
+          description: Whether the wake request was accepted.
+          example: true
+        message:
+          type: string
+          description: Human-readable wake detail.
+          example: Wake-up requested
+
+    MinecraftWhitelist:
+      description: The authenticated user's Minecraft whitelist state.
+      type: object
+      required:
+        - serverAddress
+      properties:
+        serverAddress:
+          type: string
+          description: Address users should add in Minecraft.
+          example: zemn.me
+        username:
+          type: string
+          description: Minecraft Java username currently associated with this account.
+          pattern: '^[A-Za-z0-9_]{3,16}$'
+          example: zemnmez
+
+    MinecraftWhitelistUpdate:
+      description: Update the authenticated user's Minecraft whitelist username.
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Minecraft Java username to add to the server whitelist.
+          pattern: '^[A-Za-z0-9_]{3,16}$'
+          example: zemnmez
+
+    Error:
+      description: >
+        Sent if an error occurs.
+      type: object
+      required:
+        - cause
+      properties:
+        cause:
+          type: string
+          example: Too many concurrent requests.
+      example:
+        cause: Too many concurrent requests.
+    GetPhoneNumberResponse:
+      description: >
+        Object representing the current callbox phone number.
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          $ref: "#/components/schemas/PhoneNumber"
+      example:
+        phoneNumber: "+14155559876"
+
+    GrievancePoster:
+      type: object
+      description: Poster identity attached to a grievance when available.
+      required:
+        - sub
+      properties:
+        sub:
+          $ref: '#/components/schemas/OIDCSubject'
+          description: OIDC subject identifier for the poster.
+        email_address:
+          type: string
+          format: email
+          description: Email address of the user who submitted the grievance.
+        given_name:
+          type: string
+          description: Poster’s given/first name(s).
+        family_name:
+          type: string
+          description: Poster’s surname(s).
+      example:
+        sub: user_2f7a3b91c8d24a7f
+        email_address: alex@example.com
+        given_name: Alex
+        family_name: Rivera
+    Grievance:
+      type: object
+      description: Stored grievance entry shown in the grievance portal.
+      required:
+        - description
+        - priority
+        - created
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Stable grievance identifier.
+        name:
+          type: string
+          deprecated: true
+          description: Deprecated; use `poster` for attribution instead.
+        poster:
+          allOf:
+            - $ref: '#/components/schemas/GrievancePoster'
+          nullable: true
+          description: Poster identity details; null for legacy entries.
+        description:
+          type: string
+          description: Free-form grievance text entered by the user.
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Relative urgency on a 1 to 10 scale.
+        created:
+          type: string
+          format: date-time
+          description: When the grievance was created.
+        timeZone:
+          type: string
+          description: Client IANA time zone
+      example:
+        id: 7b7d9e72-86cb-4df3-9520-a8c1372d7c1b
+        poster:
+          sub: user_2f7a3b91c8d24a7f
+          email_address: alex@example.com
+          given_name: Alex
+          family_name: Rivera
+        description: The intercom speaker is too quiet after 9pm.
+        priority: 6
+        created: "2026-03-28T19:14:22Z"
+        timeZone: America/Los_Angeles
+    NewGrievance:
+      type: object
+      description: Payload used to submit or replace a grievance.
+      required:
+        - description
+        - priority
+      properties:
+        name:
+          type: string
+          deprecated: true
+          description: Deprecated; use `poster` for attribution instead.
+        description:
+          type: string
+          description: Free-form grievance text entered by the user.
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Relative urgency on a 1 to 10 scale.
+        timeZone:
+          type: string
+          description: Client IANA time zone
+      example:
+        description: The intercom speaker is too quiet after 9pm.
+        priority: 6
+        timeZone: America/Los_Angeles
+    User:
+      type: object
+      description: User record available to the admin token-exchange API.
+      required:
+        - id
+        - deletable
+      properties:
+        id:
+          type: string
+          description: Local OIDC subject used by zemn.me
+        deletable:
+          type: boolean
+          description: Whether this user may currently be deleted.
+        subjectIds:
+          type: array
+          description: Subject identifiers for linked upstream identities.
+          items:
+            type: string
+            format: uri
+        emails:
+          type: array
+          description: Email addresses associated with the user.
+          items:
+            type: string
+            format: email
+        issuer:
+          $ref: '#/components/schemas/OIDCIssuer'
+        provider:
+          type: string
+          format: uri
+          description: Upstream provider URL for the linked identity.
+        audience:
+          $ref: '#/components/schemas/OAuthClientId'
+        remoteSubject:
+          $ref: '#/components/schemas/OIDCSubject'
+        name:
+          type: string
+        givenName:
+          type: string
+        familyName:
+          type: string
+        picture:
+          type: string
+          format: uri
+        emailVerified:
+          type: boolean
+        scopes:
+          type: array
+          description: Scopes that may be granted to tokens for this user.
+          items:
+            type: string
+      example:
+        id: user_2f7a3b91c8d24a7f
+        deletable: true
+        subjectIds:
+          - "https://accounts.google.com#1133557799"
+        emails:
+          - alex@example.com
+        issuer: https://accounts.google.com
+        provider: https://accounts.google.com
+        audience: zemn-web
+        remoteSubject: "1133557799"
+        name: Alex Rivera
+        givenName: Alex
+        familyName: Rivera
+        picture: https://example.com/avatar/alex.jpg
+        emailVerified: true
+        scopes: [callbox_key, grievance_portal, minecraft]
+    NewUser:
+      type: object
+      description: Payload used to create a user that can participate in token exchange.
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: Primary email address for the new user.
+        scopes:
+          type: array
+          description: Scopes the created user is allowed to request.
+          items:
+            type: string
+      example:
+        email: alex@example.com
+        scopes: [callbox_key, grievance_portal, minecraft]
+    UpdateUser:
+      type: object
+      description: Self-service user update payload.
+      properties:
+        email:
+          type: string
+          format: email
+          description: Replacement primary email address.
+        scopes:
+          type: array
+          description: Replacement scope list for the current user.
+          items:
+            type: string
+      example:
+        email: alex@example.com
+        scopes: [grievance_portal]
+    AdminUserUpdateRequest:
+      type: object
+      description: Admin payload for replacing selected fields on a user record.
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Local user identifier to update.
+        emails:
+          type: array
+          description: Full set of email addresses to store for the user.
+          items:
+            type: string
+            format: email
+        givenName:
+          type: string
+          description: User's given name.
+        familyName:
+          type: string
+          description: User's family name.
+        scopes:
+          type: array
+          description: Full set of scopes allowed for the user.
+          items:
+            type: string
+        subjectIds:
+          type: array
+          description: Full set of linked upstream subject identifiers.
+          items:
+            type: string
+            format: uri
+      example:
+        id: user_2f7a3b91c8d24a7f
+        emails: [alex@example.com]
+        givenName: Alex
+        familyName: Rivera
+        scopes: [callbox_key, grievance_portal]
+        subjectIds: ["https://accounts.google.com#1133557799"]
+    AdminUserDeleteRequest:
+      type: object
+      description: Admin payload identifying a user record to delete.
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Local user identifier to delete.
+      example:
+        id: user_2f7a3b91c8d24a7f
+    AnalyticsPage:
+      type: object
+      description: Page-level metadata captured for an analytics event.
+      properties:
+        urlPath:
+          type: string
+          description: Path component of the current page URL.
+          example: /grievances
+        title:
+          type: string
+          description: Browser page title at the time of the event.
+          example: Grievance Portal
+        referrer:
+          type: string
+          format: uri
+          description: Referrer URL, if one was present.
+          example: https://zemn.me/
+        utmSource:
+          type: string
+          description: UTM source query parameter.
+        utmMedium:
+          type: string
+          description: UTM medium query parameter.
+        utmCampaign:
+          type: string
+          description: UTM campaign query parameter.
+        utmTerm:
+          type: string
+          description: UTM term query parameter.
+        utmContent:
+          type: string
+          description: UTM content query parameter.
+    AnalyticsContext:
+      type: object
+      description: Browser and device context captured alongside the event.
+      properties:
+        screen:
+          $ref: '#/components/schemas/AnalyticsDimensions'
+        viewport:
+          $ref: '#/components/schemas/AnalyticsDimensions'
+        locale:
+          type: string
+          description: Browser locale, usually a BCP 47 language tag.
+          example: en-US
+        timeZone:
+          type: string
+          description: Browser-reported IANA time zone.
+          example: America/Los_Angeles
+        userAgent:
+          type: string
+          description: Raw browser user agent string.
+    AnalyticsDimensions:
+      type: object
+      description: Width and height pair measured in CSS pixels.
+      required:
+        - width
+        - height
+      properties:
+        width:
+          type: integer
+          description: Width in CSS pixels.
+          example: 1440
+        height:
+          type: integer
+          description: Height in CSS pixels.
+          example: 900
+    AnalyticsPerformance:
+      type: object
+      description: Performance timings and web-vitals style measurements for the page load.
+      properties:
+        navigationType:
+          type: string
+          description: Navigation classification from the Performance API.
+          example: navigate
+        loadMs:
+          type: number
+          description: Total page load time in milliseconds.
+          example: 842.4
+        lcpMs:
+          type: number
+          description: Largest Contentful Paint in milliseconds.
+          example: 1280.5
+        cls:
+          type: number
+          description: Cumulative Layout Shift score.
+          example: 0.02
+        inpMs:
+          type: number
+          description: Interaction to Next Paint in milliseconds.
+          example: 86.7
+    AnalyticsEngagement:
+      type: object
+      description: Aggregate engagement data captured during the session.
+      properties:
+        activeMs:
+          type: integer
+          description: Milliseconds the page was actively engaged with.
+          example: 18234
+        totalMs:
+          type: integer
+          description: Total milliseconds the page remained open.
+          example: 45221
+        scrollDepthPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Furthest scroll depth reached, from 0 to 100.
+          example: 75
+        visibilityState:
+          type: string
+          description: Final `document.visibilityState` observed when the event was sent.
+          example: visible
+    AnalyticsEvent:
+      type: object
+      description: Anonymous analytics beacon emitted by the frontend.
+      required:
+        - eventName
+        - eventTime
+        - eventId
+        - sessionId
+      properties:
+        eventName:
+          type: string
+          description: Stable event name emitted by the client.
+          example: page_view
+        eventTime:
+          type: string
+          format: date-time
+          description: Client timestamp for when the event occurred.
+          example: "2026-03-30T18:22:11.384Z"
+        eventId:
+          type: string
+          description: Unique identifier for this event payload.
+          example: evt_01HTZVK0M2G5X2DQ3R5K7R0T0A
+        sessionId:
+          type: string
+          description: Client-generated session identifier used to group events.
+          example: sess_01HTZVJH4Y9P72P0P8B7R8Q5JZ
+        anonymousId:
+          type: string
+          description: Longer-lived anonymous visitor identifier, if available.
+          example: anon_01HTZVJ8CN1F8XFW0HQN2NQ2TE
+        page:
+          $ref: '#/components/schemas/AnalyticsPage'
+        context:
+          $ref: '#/components/schemas/AnalyticsContext'
+        performance:
+          $ref: '#/components/schemas/AnalyticsPerformance'
+        engagement:
+          $ref: '#/components/schemas/AnalyticsEngagement'
+        properties:
+          type: object
+          additionalProperties: true
+          description: Event-specific custom properties.
+      example:
+        eventName: page_view
+        eventTime: "2026-03-30T18:22:11.384Z"
+        eventId: evt_01HTZVK0M2G5X2DQ3R5K7R0T0A
+        sessionId: sess_01HTZVJH4Y9P72P0P8B7R8Q5JZ
+        anonymousId: anon_01HTZVJ8CN1F8XFW0HQN2NQ2TE
+        page:
+          urlPath: /grievances
+          title: Grievance Portal
+          referrer: https://zemn.me/
+        context:
+          screen:
+            width: 1440
+            height: 900
+          viewport:
+            width: 1280
+            height: 742
+          locale: en-US
+          timeZone: America/Los_Angeles
+          userAgent: Mozilla/5.0
+        performance:
+          navigationType: navigate
+          loadMs: 842.4
+          lcpMs: 1280.5
+          cls: 0.02
+          inpMs: 86.7
+        engagement:
+          activeMs: 18234
+          totalMs: 45221
+          scrollDepthPercent: 75
+          visibilityState: visible
+        properties:
+          route: /grievances
+    AdminAnalyticsEvent:
+      type: object
+      description: Stored analytics event visible to administrators.
+      required:
+        - id
+        - when
+        - receivedAt
+        - event
+      properties:
+        id:
+          type: string
+          description: Session identifier used as the analytics table partition key.
+        when:
+          type: string
+          description: Analytics table sort key, formatted as event timestamp plus event id.
+          example: "2026-03-30T18:22:11.384Z#evt_01HTZVK0M2G5X2DQ3R5K7R0T0A"
+        receivedAt:
+          type: string
+          format: date-time
+          description: Server timestamp for when the beacon was stored.
+        origin:
+          type: string
+          description: Request Origin header captured during ingest.
+        sourceIp:
+          type: string
+          description: Source IP inferred from X-Forwarded-For or RemoteAddr during ingest.
+        event:
+          $ref: '#/components/schemas/AnalyticsEvent'
+    AdminAnalyticsEventsResponse:
+      type: object
+      description: Paginated stored analytics events.
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminAnalyticsEvent'
+        nextCursor:
+          type: string
+          description: Cursor to pass to the next request, if more events are available.
+    AnalyticsAccepted:
+      type: object
+      description: Minimal acknowledgement returned once the beacon has been queued.
+      required:
+        - accepted
+      properties:
+        accepted:
+          type: boolean
+          description: Whether the event was accepted for processing.
+          example: true
+      example:
+        accepted: true
+
+paths:
+  /.well-known/oauth-authorization-server:
+    get:
+      operationId: getMCPAuthorizationMetadata
+      tags: [Journal OAuth]
+      summary: Discover journal OAuth capabilities.
+      security: []
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPAuthorizationServerMetadata'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /.well-known/oauth-protected-resource:
+    get:
+      operationId: getOAuthResourceMetadata
+      tags: [Journal OAuth]
+      summary: Discover journal OAuth capabilities.
+      security: []
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPResourceMetadata'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /.well-known/oauth-protected-resource/journal/mcp:
+    get:
+      operationId: getMCPResourceMetadata
+      tags: [Journal OAuth]
+      summary: Discover journal OAuth capabilities.
+      security: []
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPResourceMetadata'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/register:
+    post:
+      operationId: registerMCPClient
+      tags: [Journal OAuth]
+      summary: Register a public OAuth client.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPOAuthClient'
+      responses:
+        '201':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPOAuthRegisteredClient'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/authorize:
+    get:
+      operationId: authorizeMCPClient
+      tags: [Journal OAuth]
+      summary: Start authorization with explicit consent and S256 PKCE.
+      security: []
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: redirect_uri
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: response_type
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: resource
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: code_challenge
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: code_challenge_method
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 8192
+            x-go-type-skip-optional-pointer: true
+      responses:
+        '302':
+          description: Open the website consent page.
+          headers:
+            Location:
+              required: true
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/requests/{requestId}:
+    get:
+      operationId: getMCPConsent
+      tags: [Journal OAuth]
+      summary: Read the client and requested permission.
+      security: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthConsentDetails'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+    post:
+      operationId: decideMCPConsent
+      tags: [Journal OAuth]
+      summary: Approve or deny a journal connection.
+      security:
+        - JournalConsentBearer: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthConsentDecision'
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthConsentResult'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/mcp/token:
+    post:
+      operationId: exchangeMCPToken
+      tags: [Journal OAuth]
+      summary: Redeem a single-use code or rotate a refresh token.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MCPOAuthTokenRequest'
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPOAuthTokenResponse'
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /oauth2/mcp/revoke:
+    post:
+      operationId: revokeMCPToken
+      tags: [Journal OAuth]
+      summary: Revoke a journal OAuth connection.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MCPOAuthRevocation'
+      responses:
+        '200':
+          description: Successful response.
+        '400':
+          $ref: '#/components/responses/MCPOAuthError'
+        '401':
+          $ref: '#/components/responses/MCPOAuthError'
+        '403':
+          $ref: '#/components/responses/MCPOAuthError'
+        '503':
+          $ref: '#/components/responses/MCPOAuthError'
+  /journal/mcp:
+    get:
+      operationId: getJournalMCP
+      tags: [Journal]
+      summary: Journal MCP Streamable HTTP transport.
+      description: Stateless JSON responses; authenticated GET and DELETE return 405 because standalone SSE and sessions are not supported. POST accepts one JSON-RPC message. Notifications and client responses receive 202. Tools remain discoverable through MCP tools/list.
+      security:
+        - JournalMCPBearer: []
+      parameters:
+        - name: MCP-Protocol-Version
+          in: header
+          schema: { type: string }
+        - name: Mcp-Session-Id
+          in: header
+          schema: { type: string }
+      responses:
+        '200':
+          description: JSON-RPC response, including method and tool errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPMessage'
+        '202':
+          description: Notification or response accepted.
+        '405':
+          description: This stateless endpoint does not offer sessions or standalone SSE.
+          headers:
+            Allow:
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPTransportError'
+        '401':
+          $ref: '#/components/responses/MCPTransportError'
+        '403':
+          $ref: '#/components/responses/MCPTransportError'
+        '406':
+          $ref: '#/components/responses/MCPTransportError'
+        '413':
+          $ref: '#/components/responses/MCPTransportError'
+        '415':
+          $ref: '#/components/responses/MCPTransportError'
+        '500':
+          $ref: '#/components/responses/MCPTransportError'
+    post:
+      operationId: postJournalMCP
+      tags: [Journal]
+      summary: Journal MCP Streamable HTTP transport.
+      description: Stateless JSON responses; authenticated GET and DELETE return 405 because standalone SSE and sessions are not supported. POST accepts one JSON-RPC message. Notifications and client responses receive 202. Tools remain discoverable through MCP tools/list.
+      security:
+        - JournalMCPBearer: []
+      parameters:
+        - name: MCP-Protocol-Version
+          in: header
+          schema: { type: string }
+        - name: Mcp-Session-Id
+          in: header
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPMessage'
+      responses:
+        '200':
+          description: JSON-RPC response, including method and tool errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPMessage'
+        '202':
+          description: Notification or response accepted.
+        '405':
+          description: This stateless endpoint does not offer sessions or standalone SSE.
+          headers:
+            Allow:
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPTransportError'
+        '401':
+          $ref: '#/components/responses/MCPTransportError'
+        '403':
+          $ref: '#/components/responses/MCPTransportError'
+        '406':
+          $ref: '#/components/responses/MCPTransportError'
+        '413':
+          $ref: '#/components/responses/MCPTransportError'
+        '415':
+          $ref: '#/components/responses/MCPTransportError'
+        '500':
+          $ref: '#/components/responses/MCPTransportError'
+    delete:
+      operationId: deleteJournalMCP
+      tags: [Journal]
+      summary: Journal MCP Streamable HTTP transport.
+      description: Stateless JSON responses; authenticated GET and DELETE return 405 because standalone SSE and sessions are not supported. POST accepts one JSON-RPC message. Notifications and client responses receive 202. Tools remain discoverable through MCP tools/list.
+      security:
+        - JournalMCPBearer: []
+      parameters:
+        - name: MCP-Protocol-Version
+          in: header
+          schema: { type: string }
+        - name: Mcp-Session-Id
+          in: header
+          schema: { type: string }
+      responses:
+        '200':
+          description: JSON-RPC response, including method and tool errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPMessage'
+        '202':
+          description: Notification or response accepted.
+        '405':
+          description: This stateless endpoint does not offer sessions or standalone SSE.
+          headers:
+            Allow:
+              schema: { type: string }
+        '400':
+          $ref: '#/components/responses/MCPTransportError'
+        '401':
+          $ref: '#/components/responses/MCPTransportError'
+        '403':
+          $ref: '#/components/responses/MCPTransportError'
+        '406':
+          $ref: '#/components/responses/MCPTransportError'
+        '413':
+          $ref: '#/components/responses/MCPTransportError'
+        '415':
+          $ref: '#/components/responses/MCPTransportError'
+        '500':
+          $ref: '#/components/responses/MCPTransportError'
+  /journal:
+    get:
+      summary: Get the caller's voice journal.
+      description: Return transcript entries and citation-preserving time summaries. Calendar browsing returns only the selected period's content and lightweight date choices.
+      parameters:
+        - name: view
+          in: query
+          schema: {type: string, enum: [overview, year, month, week, day]}
+        - name: at
+          in: query
+          schema: {type: string, format: date-time}
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: The caller's journal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journal'
+  /journal/wiki:
+    get:
+      summary: List the caller's diary wiki pages without loading the journal recordings.
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: Wiki page names and the latest curation status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalWikiIndex'
+  /journal/wiki/{pageId}:
+    get:
+      summary: Read a cited wiki page from the caller's private diary.
+      security:
+        - OIDC: [journal_read]
+      parameters:
+        - name: pageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: A published wiki page with cross-diary citations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalWikiPageView'
+        "404":
+          description: Page unavailable or being rebuilt after a source correction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /journal/entries:
+    get:
+      summary: List upload confirmation and processing metadata without journal content.
+      security:
+        - OIDC: [journal_read]
+      responses:
+        "200":
+          description: Visible recording status and upload confirmation metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalUploads'
+    post:
+      summary: Create a voice journal entry.
+      description: Create an awaiting-upload journal entry and return a short-lived URL for uploading its audio directly to private object storage.
+      security:
+        - OIDC: [journal_write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryCreate'
+      responses:
+        "201":
+          description: Created journal entry and its short-lived upload authorization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntryCreateResponse'
+        "400":
+          description: Invalid audio or time zone.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /journal/entries/{entryId}:
+    patch:
+      summary: Correct the date of a voice journal entry.
+      description: Move a completed entry to another local calendar date and rebuild the affected journal summaries.
+      security:
+        - OIDC: [journal_write]
+      parameters:
+        - name: entryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryDateUpdate'
+      responses:
+        "200":
+          description: The corrected journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntry'
+        "400":
+          description: The requested local date is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The journal entry does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "409":
+          description: The journal entry has not finished processing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a voice journal entry.
+      description: Permanently remove an awaiting-upload or completed entry, its private audio, transcript, summary, and aggregate references. Entries actively being processed cannot be deleted.
+      security:
+        - OIDC: [journal_write]
+      parameters:
+        - name: entryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: The entry was permanently removed or no longer exists.
+        "409":
+          description: The entry is actively being processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /phone/init:
+    post:
+      summary: Entry point for Twilio callbox phone number.
+      description: Accepts the initial webhook Twilio sends when a visitor calls the callbox number.
+      parameters:
+        - name: secret
+          in: query
+          description: Auth secret.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/TwilioCallRequest"
+            example:
+              CallSid: CA1234567890abcdef1234567890abcd
+              AccountSid: AC1234567890abcdef1234567890abcd
+              From: "+14155550123"
+              To: "+14155559876"
+              CallStatus: in-progress
+              ApiVersion: "2010-04-01"
+              Direction: inbound
+  /phone/handleEntry:
+    get:
+      description: Process keypad digits or dial callbacks while a visitor navigates the callbox flow.
+      parameters:
+        - name: secret
+          in: query
+          description: Auth secret.
+          required: true
+          schema:
+            type: string
+        - name: Digits
+          in: query
+          description: digits entered by user.
+          allowEmptyValue: true
+          required: false
+          schema:
+            type: string
+        - name: DialCallStatus
+          in: query
+          description: Final status of the previous Dial attempt when Twilio calls back.
+          required: false
+          schema:
+            type: string
+        - name: attempt
+          in: query
+          description: The next Dial attempt number when retrying authorizers.
+          required: false
+          schema:
+            type: integer
+      summary: Handles entering an authorizer for the callbox phone number.
+      responses:
+        "200":
+          description: TwiML instructions for the next step in the call flow.
+          content:
+            application/xml:
+              schema:
+                type: string
+              example: |
+                <?xml version="1.0" encoding="UTF-8"?>
+                <Response><Say>Please enter your code.</Say><Gather numDigits="5" /></Response>
+
+  /minecraft/status:
+    get:
+      summary: Get Minecraft server status.
+      description: Return the current online player count from the Minecraft server over the secure RCON bridge.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "200":
+          description: Current Minecraft server status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftStatus'
+        "503":
+          description: Minecraft RCON is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/wake:
+    post:
+      summary: Wake the Minecraft server.
+      description: Request that the on-demand Minecraft server be started.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "202":
+          description: Wake request accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftWake'
+        "503":
+          description: Minecraft wake bridge is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/history:
+    get:
+      summary: Get all recorded Minecraft player and server activity.
+      description: Paginated history from all retained server logs. History predating log retention is unavailable.
+      security:
+        - OIDC: [minecraft]
+      parameters:
+        - in: query
+          name: nextToken
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 1024
+        - in: query
+          name: before
+          required: true
+          description: Exclusive end time, kept constant while paging through a snapshot.
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: One page of activity history, in chronological order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftHistory'
+        '503':
+          description: History is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/events:
+    get:
+      summary: Stream Minecraft server events.
+      description: Stream Minecraft server log lines as server-sent events. Each `minecraft.log` event contains a JSON-encoded `MinecraftLogEvent`.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "200":
+          description: Server-sent Minecraft log events.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        "503":
+          description: Minecraft event log stream is not currently configured.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /minecraft/whitelist:
+    get:
+      summary: Get the caller's Minecraft whitelist username.
+      description: Return the Minecraft username currently associated with the authenticated account.
+      security:
+        - OIDC: [minecraft]
+      responses:
+        "200":
+          description: Current Minecraft whitelist state for the caller.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftWhitelist'
+    put:
+      summary: Set the caller's Minecraft whitelist username.
+      description: Associate one Minecraft username with the authenticated account and sync it to the server whitelist via RCON.
+      security:
+        - OIDC: [minecraft]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MinecraftWhitelistUpdate'
+      responses:
+        "200":
+          description: Updated Minecraft whitelist state for the caller.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinecraftWhitelist'
+        "400":
+          description: Invalid username.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Minecraft RCON is not currently reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /callbox:
+    post:
+      summary: Set callbox lock state.
+      description: Record a door-open or door-close request initiated by an authenticated caller.
+      security:
+        - OIDC: [callbox_key]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [open]
+              properties:
+                open:
+                  type: boolean
+                  description: "`true` to request the door be opened, `false` to request it be closed."
+              example:
+                open: true
+      responses:
+        "200":
+          description: Recorded callbox state request.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [subject, when]
+                properties:
+                  subject:
+                    type: string
+                    description: Authenticated subject that made the request.
+                  when:
+                    type: string
+                    description: Timestamp when the request was recorded.
+              example:
+                subject: user_2f7a3b91c8d24a7f
+                when: "2026-03-30T18:31:54.902Z"
+    get:
+      summary: Get callbox door status.
+      description: Return the backend's best current view of whether the callbox door is open.
+      security:
+        - OIDC: [callbox_key]
+      responses:
+        "200":
+          description: Current inferred door-open status.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [open]
+                properties:
+                  open:
+                    type: boolean
+                    description: Whether the door is currently believed to be open.
+                  lastOpenedAt:
+                    type: string
+                    description: Most recent time the door was opened, if known.
+                  openUntil:
+                    type: string
+                    description: Time after which the door should be considered closed, if applicable.
+                  source:
+                    type: string
+                    description: Source that most recently updated the inferred state.
+                  subject:
+                    type: string
+                    description: Subject associated with the most recent state-changing request.
+              example:
+                open: true
+                lastOpenedAt: "2026-03-30T18:31:54.902Z"
+                openUntil: "2026-03-30T18:32:14.902Z"
+                source: manual_unlock
+                subject: user_2f7a3b91c8d24a7f
+
+  /callbox/events:
+    get:
+      summary: List callbox door events.
+      description: Return a paginated, newest-first feed of callbox lock and unlock events.
+      security:
+        - OIDC: [callbox_key_logs_read]
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Opaque cursor from a previous response.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 32
+          description: Maximum number of events to return.
+      responses:
+        "200":
+          description: Page of callbox events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallboxEventsResponse'
+
+
+  /callbox/settings:
+    post:
+      description: >
+        Return the current callbox settings.
+      security:
+        - OIDC: [callbox_settings_write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CallboxSettings"
+      responses:
+        "200":
+          description: >
+            Settings as synced with the backend.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallboxSettings'
+        "500":
+            description: Error.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+    get:
+      description: >
+        Returns the current settings for the callbox.
+      security:
+        - OIDC: [callbox_settings_read]
+      responses:
+        "500":
+          description: >
+            Something went wrong.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "200":
+          description: >
+            Returns a list of phone numbers representing users
+            who are authorised to approve entry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallboxSettings'
+  /phone/number:
+    get:
+      summary: Returns the current phone number for the callbox.
+      description: Return the public Twilio number currently assigned to the callbox flow.
+      security:
+        - OIDC: [callbox_settings_read]
+      responses:
+        "200":
+          description: It worked!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPhoneNumberResponse'
+
+  /grievances:
+    get:
+      summary: List grievances.
+      description: Return all grievances visible to the authenticated grievance portal user.
+      security:
+        - OIDC: [grievance_portal]
+      responses:
+        "200":
+          description: List grievances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Grievance'
+    post:
+      summary: Create a grievance.
+      description: Create a new grievance entry on behalf of the authenticated user.
+      security:
+        - OIDC: [grievance_portal]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewGrievance'
+      responses:
+        "200":
+          description: Created grievance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grievance'
+
+  /grievance/{id}:
+    get:
+      summary: Fetch a grievance.
+      description: Return a single grievance by its identifier.
+      security:
+        - OIDC: [grievance_portal]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Grievance identifier.
+      responses:
+        "200":
+          description: A grievance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grievance'
+    put:
+      summary: Replace a grievance.
+      description: Replace the editable fields of an existing grievance.
+      security:
+        - OIDC: [grievance_portal]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Grievance identifier.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewGrievance'
+      responses:
+        "200":
+          description: Updated grievance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grievance'
+        "404":
+          description: Not found
+    delete:
+      summary: Delete a grievance.
+      description: Delete a grievance by identifier.
+      security:
+        - OIDC: [grievance_portal]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Grievance identifier.
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /healthz:
+    get:
+      summary: Health check endpoint.
+      description: >
+        Returns a 200 OK response if the service is healthy.
+      responses:
+        "200":
+          description: Service is healthy.
+          content:
+            application/json:
+              schema:
+                type: string
+                enum: [OK]
+
+  /calendar/ical/{email}:
+    get:
+      summary: Proxy a public Google Calendar iCal feed.
+      description: >
+        Re-serves a public Google Calendar iCal feed with the API server's CORS
+        headers so static browser clients can render availability without an iframe.
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: iCal feed contents.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: Calendar email is not in the site allowlist.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "502":
+          description: Upstream calendar feed could not be loaded.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /analytics/beacon:
+    post:
+      summary: Store an anonymous analytics event.
+      description: Accept a single frontend analytics event for asynchronous processing.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticsEvent'
+            example:
+              eventName: page_view
+              eventTime: "2026-03-30T18:22:11.384Z"
+              eventId: evt_01HTZVK0M2G5X2DQ3R5K7R0T0A
+              sessionId: sess_01HTZVJH4Y9P72P0P8B7R8Q5JZ
+              page:
+                urlPath: /grievances
+                title: Grievance Portal
+      responses:
+        "202":
+          description: Analytics event accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsAccepted'
+              example:
+                accepted: true
+
+  /.well-known/security.txt:
+    get:
+      summary: security.txt
+      description: Security contact information.
+      responses:
+        "200":
+          description: security.txt contents.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /security.txt:
+    get:
+      summary: security.txt
+      description: Security contact information.
+      responses:
+        "200":
+          description: security.txt contents.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /admin/uid:
+    get:
+      summary: Returns the caller's OIDC subject ID.
+      description: Minimal authenticated identity endpoint useful for debugging and client bootstrap.
+      security:
+        - OIDC: []
+      responses:
+        "200":
+          description: The subject identifier.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [uid]
+                properties:
+                  uid:
+                    type: string
+                    description: Subject identifier from the authenticated token.
+              example:
+                uid: user_2f7a3b91c8d24a7f
+  /me/scopes:
+    get:
+      summary: Returns the caller's OAuth scopes.
+      description: Return the scopes currently granted to the caller's access token.
+      security:
+        - OIDC: []
+      responses:
+        "200":
+          description: The caller's scopes.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [scopes]
+                properties:
+                  scopes:
+                    type: array
+                    items:
+                      type: string
+              example:
+                scopes: [callbox_key, grievance_portal]
+  /admin/users:
+    get:
+      summary: List users
+      description: Return user records that administrators may manage for token exchange.
+      security:
+        - OIDC: [admin_users_read]
+      responses:
+        "200":
+          description: Users configured for token exchange.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a user by email
+      description: Create a new manageable user record keyed by email address.
+      security:
+        - OIDC: [admin_users_manage]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        "200":
+          description: Created user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /admin/analytics/events:
+    get:
+      summary: List analytics events
+      description: Return a paginated stream of raw analytics events for administrators.
+      security:
+        - OIDC: [admin_analytics_read]
+      parameters:
+        - name: startDate
+          in: query
+          description: Inclusive UTC date (YYYY-MM-DD). Must be paired with endDate.
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          description: Exclusive UTC date (YYYY-MM-DD). Must be after startDate.
+          schema:
+            type: string
+        - name: cursor
+          in: query
+          description: Cursor from a previous analytics events response.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of events to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+      responses:
+        "400":
+          description: Invalid date range or cursor.
+        "200":
+          description: Stored analytics events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAnalyticsEventsResponse'
+  /admin/user:
+    put:
+      summary: Update a user
+      description: Replace selected fields on an existing user record.
+      security:
+        - OIDC: [admin_users_manage]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserUpdateRequest'
+      responses:
+        "200":
+          description: Updated user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Not found
+    delete:
+      summary: Delete a user
+      description: Delete an existing user record by local identifier.
+      security:
+        - OIDC: [admin_users_manage]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserDeleteRequest'
+      responses:
+        "200":
+          description: Deleted user.
+          content:
+            application/json:
+              schema:
+                type: string
+  /.well-known/webfinger:
+    get:
+      tags: [Discovery]
+      summary: WebFinger issuer discovery
+      description: |
+        Identifier-to-issuer lookup (spec §2).
+        Safe to coexist with any other `/.well-known/*` handlers because
+        the path and media-type are unique.
+      operationId: getWebFinger
+      parameters:
+        - name: resource
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Normalised End-User identifier (URI or `acct:` form).
+        - name: rel
+          in: query
+          required: false
+          schema:
+            type: string
+            default: http://openid.net/specs/connect/1.0/issuer
+          description: Relation type; leave at default for OIDC usage.
+      responses:
+        '200':
+          description: JSON Resource Descriptor with at least one issuer link.
+          content:
+            application/jrd+json:
+              schema:
+                $ref: '#/components/schemas/JRD'
+        default:
+          description: Error (400/404 etc. depending on implementation policy).
+
+  /.well-known/jwks.json:
+    get:
+      tags: [Discovery]
+      summary: JSON Web Key Set
+      description: Publish the issuer's current public signing keys.
+      operationId: getJWKS
+      responses:
+        '200':
+          description: JSON Web Key Set.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWKS'
+        default:
+          description: Error.
+
+  /.well-known/openid-configuration:
+    get:
+      tags: [Discovery]
+      summary: OP configuration (root issuer)
+      description: |
+        Returned when `issuer` has no path component.
+        If your main spec includes additional root-level `/.well-known`
+        handlers, ensure they use distinct filenames.
+      operationId: getOpenIDConnectRootConfiguration
+      responses:
+        '200':
+          description: OpenID Provider metadata document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OIDCConfiguration'
+        default:
+          description: Discovery failure.
+  /oauth2/token:
+    post:
+      summary: OAuth 2.0 Token Endpoint (incl. RFC8693 Token Exchange)
+      description: >
+        Supports standard grants and `urn:ietf:params:oauth:grant-type:token-exchange`
+        per RFC 8693. Clients authenticate with `client_secret_basic` (recommended),
+        `client_secret_post`, or `private_key_jwt`.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+                $ref: '#/components/schemas/TokenExchangeRequest'
+            example:
+              grant_type: urn:ietf:params:oauth:grant-type:token-exchange
+              subject_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+              subject_token_type: urn:ietf:params:oauth:token-type:id_token
+              requested_token_type: urn:ietf:params:oauth:token-type:access_token
+              scope: callbox_key
+      responses:
+        "200":
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+                issued_token_type: urn:ietf:params:oauth:token-type:access_token
+                token_type: Bearer
+                expires_in: 3600
+                scope: callbox_key
+        "400":
+          description: OAuth error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+              example:
+                error: invalid_request
+                error_description: subject_token_type is required
+        "401":
+          description: Client authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+              example:
+                error: invalid_client
+                error_description: client authentication failed

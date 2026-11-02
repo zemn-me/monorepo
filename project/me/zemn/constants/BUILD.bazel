@@ -1,0 +1,22 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "constants",
+    srcs = ["constants.ts"],
+    visibility = [
+        "//project/me/zemn:__subpackages__",
+    ],
+    deps = ["//:node_modules/@types/node"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["constants.ts"],
+    visibility = ["//:__subpackages__"],
+)

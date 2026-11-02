@@ -1,0 +1,18 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+exports_files(["license.txt"])
+SOURCES = ["rar.cpp", "strlist.cpp", "strfn.cpp", "pathfn.cpp", "smallfn.cpp", "global.cpp", "file.cpp", "filefn.cpp", "filcreat.cpp", "archive.cpp", "arcread.cpp", "unicode.cpp", "system.cpp", "crypt.cpp", "crc.cpp", "rawread.cpp", "encname.cpp", "resource.cpp", "match.cpp", "timefn.cpp", "rdwrfn.cpp", "consio.cpp", "options.cpp", "errhnd.cpp", "rarvm.cpp", "secpassword.cpp", "rijndael.cpp", "getbits.cpp", "sha1.cpp", "sha256.cpp", "blake2s.cpp", "hash.cpp", "extinfo.cpp", "extract.cpp", "volume.cpp", "list.cpp", "find.cpp", "unpack.cpp", "headers.cpp", "threadpool.cpp", "rs16.cpp", "cmddata.cpp", "ui.cpp", "largepage.cpp", "filestr.cpp", "recvol.cpp", "rs.cpp", "scantree.cpp", "qopen.cpp"]
+cc_library(
+    name = "headers",
+    hdrs = glob(["*.hpp"]),
+    textual_hdrs = glob(["*.cpp"], exclude = SOURCES),
+    defines = ["UNRAR", "RAR_SMP", "_FILE_OFFSET_BITS=64", "_LARGEFILE_SOURCE"],
+)
+cc_binary(
+    name = "unrar",
+    srcs = SOURCES,
+    copts = ["-std=c++11", "-O2"],
+    linkopts = ["-pthread"],
+    deps = [":headers"],
+)
