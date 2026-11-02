@@ -403,12 +403,17 @@ func TestGenerateRulesAddsJsdomAttributeWhenDirectivePresent(t *testing.T) {
 		t.Fatalf("expected jest_test rule to have a jsdom attribute")
 	}
 
-	lit, ok := attr.(*bzl.LiteralExpr)
-	if !ok {
-		t.Fatalf("expected jsdom attribute to be a literal, got %T", attr)
-	}
-	if lit.Token != "True" {
-		t.Fatalf("expected jsdom attribute to be True, got %s", lit.Token)
+	switch expr := attr.(type) {
+	case *bzl.Ident:
+		if expr.Name != "True" {
+			t.Fatalf("expected jsdom attribute to be True, got %s", expr.Name)
+		}
+	case *bzl.LiteralExpr:
+		if expr.Token != "True" {
+			t.Fatalf("expected jsdom attribute to be True, got %s", expr.Token)
+		}
+	default:
+		t.Fatalf("expected jsdom attribute to be True, got %T", attr)
 	}
 }
 

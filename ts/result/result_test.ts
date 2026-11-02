@@ -21,6 +21,17 @@ import {
 } from '#root/ts/result/result.js';
 
 describe('Result Utilities', () => {
+	describe('runtime representation', () => {
+		it('does not retain Ok or Err tags, properties, or symbols', () => {
+			for (const result of [Ok('value'), Err('error')]) {
+				expect(result.name).toBe('');
+				expect(Object.keys(result)).toEqual([]);
+				expect(Object.getOwnPropertySymbols(result)).toEqual([]);
+				expect(JSON.stringify(result)).toBeUndefined();
+			}
+		});
+	});
+
 	describe('is_ok', () => {
 		it('returns true for an Ok result', () => {
 			expect(is_ok(Ok('Success'))).toBe(true);

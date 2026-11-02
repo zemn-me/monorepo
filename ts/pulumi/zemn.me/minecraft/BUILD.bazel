@@ -1,5 +1,5 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "minecraft",
@@ -10,17 +10,43 @@ ts_project(
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@pulumi/random",
         "//:node_modules/@types/node",
+        "//project/me/zemn/minecraft:published_image",
         "//ts/pulumi/lib",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["minecraft.ts"],
+    srcs = [
+        "minecraft.ts",
+        "minecraft_test.ts",
+    ],
     visibility = ["//:__subpackages__"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+# gazelle:resolve typescript #root/project/me/zemn/minecraft/MinecraftServerImage.js //project/me/zemn/minecraft:published_image
+
+ts_project(
+    name = "minecraft_tests",
+    srcs = ["minecraft_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":minecraft",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+        "//project/me/zemn/minecraft:published_image",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["minecraft_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":minecraft_tests"],
 )

@@ -2,7 +2,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/transcode_web:rules.bzl", "transcode_web")
 load("//mdx:format.bzl", "mdx_format_test")
 load("//mdx:rules.bzl", "mdx_files")
-load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
+load("//ts/remix:public_assets.bzl", "hashed_public_assets")
 
 transcode_web(
     name = "exploit_mobile_video_sources",

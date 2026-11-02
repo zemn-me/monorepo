@@ -1,13 +1,45 @@
+# gazelle:python_library_naming_convention $package_name$_py
+# gazelle:resolve py md //md:md_py
+# gazelle:resolve py md.readme //md:md_py
+# gazelle:resolve py md.readme.main //md:md_py
+# gazelle:resolve py md.readme.render //md:md_py
+
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+py_binary(
+    name = "readme_main",
+    srcs = ["readme_main.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//md:md_py"],
+)
+
+py_test(
+    name = "readme_test",
+    srcs = ["readme_test.py"],
+    deps = ["//md:md_py"],
+)
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["rules.bzl"],
+    srcs = [
+        "BUILD.bazel",
+        "rules.bzl",
+    ],
 )
 
 md_files(
     name = "md",
     srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)
+
+py_library(
+    name = "md_py",
+    srcs = [
+        "readme.py",
+        "readme_main.py",
+    ],
     visibility = ["//:__subpackages__"],
 )

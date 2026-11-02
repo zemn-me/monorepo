@@ -2,8 +2,8 @@ import { expect, it } from '@jest/globals';
 
 import {
 	accountLinks,
-	experimentLinks,
 	navSections,
+	pageLinks,
 } from '#root/project/me/zemn/navigation/navigation.js';
 
 function allMenuHrefs(): string[] {
@@ -16,57 +16,61 @@ it('keeps menu hrefs unique', () => {
 	expect(new Set(hrefs).size).toBe(hrefs.length);
 });
 
-it('includes the experiment route tree', () => {
-	const hrefs = new Set(experimentLinks.map(link => link.href));
-	const expected = [
-		'/experiments',
-		'/experiments/arena',
-		'/experiments/article',
-		'/experiments/cultist',
-		'/experiments/emoji/flag',
-		'/experiments/factorio',
-		'/experiments/factorio/blueprint',
-		'/experiments/factorio/blueprint/book',
-		'/experiments/factorio/blueprint/parse',
-		'/experiments/factorio/blueprint/request',
-		'/experiments/factorio/blueprint/wall',
-		'/experiments/frame',
-		'/experiments/geometry_of_music',
-		'/experiments/pitch_training',
-		'/experiments/platonics',
-		'/experiments/rays',
-		'/experiments/toc',
-	];
+it('includes public index pages', () => {
+	const hrefs = new Set(allMenuHrefs());
+	const expected = ['/', '/article', '/experiments'];
 
 	expect(expected.filter(href => !hrefs.has(href))).toEqual([]);
+	expect(hrefs).not.toContain('/2026/endings');
+	expect(hrefs).not.toContain('/bluesky');
+	expect(hrefs).not.toContain('/github');
+	expect(hrefs).not.toContain('/linkedin');
+	expect(hrefs).not.toContain('/src');
+	expect(hrefs).not.toContain('/twitter');
+	expect(hrefs).not.toContain('/cv');
+	expect(hrefs).not.toContain('/tool/elastictabs');
 });
 
-it('includes public content and redirect pages', () => {
-	const hrefs = new Set(allMenuHrefs());
-	const expected = [
-		'/',
-		'/2026/endings',
-		'/article',
-		'/article/2014/csp',
-		'/article/2019/cors',
-		'/article/2020/icloud',
-		'/article/2024/clean',
-		'/article/2024/missing',
-		'/availability',
-		'/bluesky',
-		'/cv',
-		'/github',
-		'/linkedin',
-		'/src',
-		'/tool/elastictabs',
-		'/twitter',
-	];
+it('requires authentication for availability in the menu', () => {
+	expect(pageLinks.find(link => link.href === '/availability')).toEqual(
+		expect.objectContaining({
+			requiresAuthentication: true,
+		})
+	);
+});
 
-	expect(expected.filter(href => !hrefs.has(href))).toEqual([]);
+it('uses one article index link instead of individual articles', () => {
+	const articleHrefs = allMenuHrefs().filter(href => href.startsWith('/article'));
+
+	expect(articleHrefs).toEqual(['/article']);
+	expect(navSections.some(section => section.label === 'Articles')).toBe(false);
+});
+
+it('uses one experiment index link instead of individual experiments', () => {
+	const experimentHrefs = allMenuHrefs().filter(href =>
+		href.startsWith('/experiments')
+	);
+
+	expect(experimentHrefs).toEqual(['/experiments']);
+	expect(navSections.some(section => section.label === 'Experiments')).toBe(
+		false
+	);
+});
+
+it('does not include a standalone tools menu section', () => {
+	expect(navSections.some(section => section.label === 'Tools')).toBe(false);
 });
 
 it('keeps private pages scoped', () => {
 	for (const link of accountLinks) {
 		expect(link.requiredScope).toBeDefined();
 	}
+});
+
+it('gates the voice journal with its dedicated scope', () => {
+	expect(accountLinks).toContainEqual({
+		href: '/journal',
+		label: 'Journal',
+		requiredScope: 'journal_read',
+	});
 });

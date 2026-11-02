@@ -1,6 +1,6 @@
 import style from '#root/project/me/zemn/components/Prose/prose.module.css';
 
-type DivAttributes = JSX.IntrinsicElements['div'];
+type DivAttributes = React.JSX.IntrinsicElements['div'];
 
 export interface Props extends DivAttributes {
 	readonly children?: React.ReactElement[] | React.ReactElement;

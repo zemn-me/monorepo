@@ -2,6 +2,7 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactNode } from 'react';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 import style from '#root/project/me/zemn/components/Glade/menu.module.css';
 import { InlineLogin } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
@@ -15,9 +16,19 @@ export interface GladeMenuProps {
 }
 
 export function GladeMenu({ topContent }: GladeMenuProps) {
+	const pathname = useLocation().pathname;
 	const detailsRef = useRef<HTMLDetailsElement | null>(null);
 	const [fut_idToken] = useZemnMeAuth();
 	const fut_scopes = useGetMeScopes(fut_idToken);
+	const isLoggedIn = fut_idToken(
+		() => true,
+		() => false,
+		() => false
+	);
+
+	useEffect(() => {
+		if (detailsRef.current) detailsRef.current.open = false;
+	}, [pathname]);
 
 	useEffect(() => {
 		const onPointerDown = (event: PointerEvent) => {
@@ -46,8 +57,10 @@ export function GladeMenu({ topContent }: GladeMenuProps) {
 	const visibleSections = navSections
 		.map(section => ({
 			...section,
-			links: section.links.filter(link =>
-				isLinkVisible(link.requiredScope)
+			links: section.links.filter(
+				link =>
+					(!link.requiresAuthentication || isLoggedIn) &&
+					isLinkVisible(link.requiredScope)
 			),
 		}))
 		.filter(section => section.links.length > 0);

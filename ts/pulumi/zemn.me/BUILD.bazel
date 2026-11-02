@@ -5,8 +5,8 @@ ts_project(
     name = "zemn.me",
     srcs = ["index.ts"],
     data = [
-        "//project/me/zemn:next",
-        "//ts/pulumi/zemn.me/availability:next",
+        "//project/me/zemn:remix",
+        "//ts/pulumi/zemn.me/availability:remix",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -19,8 +19,8 @@ ts_project(
         "//ts/pulumi/lib/website",
         "//ts/pulumi/zemn.me/api",
         "//ts/pulumi/zemn.me/forge",
+        "//ts/pulumi/zemn.me/hello_world:ts",
         "//ts/pulumi/zemn.me/minecraft",
-        "@monorepo//ts/pulumi/zemn.me/hello_world:ts",
     ],
 )
 

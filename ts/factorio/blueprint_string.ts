@@ -1,5 +1,5 @@
 import b64 from 'base64-js';
-import pako from 'pako';
+import * as pako from 'pako';
 import { z } from 'zod';
 
 import { Blueprint } from '#root/ts/factorio/blueprint.js';

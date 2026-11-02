@@ -4,6 +4,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
 import { H1, H2 } from './heading.js';
+import { Section } from './section.js';
 import { tocSegment } from './toc_context.js';
 
 function TocHarness({ children }: { readonly children?: ReactNode }) {
@@ -126,4 +127,38 @@ it('uses inline heading id markers for table-of-contents links', () => {
 	expect(heading?.id).toBe('legacy_section');
 	expect(link?.getAttribute('href')).toBe('#legacy_section');
 	expect(link?.textContent).toBe('Legacy Section');
+});
+
+it('mirrors nested section headings without stale links after updates', () => {
+	const render = (title: string) => {
+		act(() => {
+			root.render(
+				<DualTocHarness>
+					<Section>
+						<H1 id="outer">Outer</H1>
+						<Section>
+							<H2 id="nested">{title}</H2>
+						</Section>
+					</Section>
+				</DualTocHarness>
+			);
+		});
+	};
+
+	render('Nested');
+	expect(container.querySelectorAll('ul[data-toc]')).toHaveLength(2);
+	for (const toc of container.querySelectorAll('ul[data-toc]')) {
+		const link = toc.querySelector('ol > ol > li > a');
+		expect(link?.getAttribute('href')).toBe('#nested');
+		expect(link?.textContent).toBe('Nested');
+	}
+
+	render('Updated');
+	for (const toc of container.querySelectorAll('ul[data-toc]')) {
+		expect(toc.querySelectorAll('a')).toHaveLength(2);
+		expect(toc.querySelector('a[href="#nested"]')?.textContent).toBe('Updated');
+	}
+
+	act(() => root.render(<DualTocHarness />));
+	expect(container.querySelectorAll('ul[data-toc] a')).toHaveLength(0);
 });

@@ -2,6 +2,8 @@ import * as aws from '@pulumi/aws';
 import * as Pulumi from '@pulumi/pulumi';
 import * as random from '@pulumi/random';
 
+import { MinecraftServerImage } from '#root/project/me/zemn/minecraft/MinecraftServerImage.js';
+
 import {
 	sanitizeAwsAlphaNumericHyphenUnderscoreName,
 	sanitizeAwsEcsTaskFamilyName,
@@ -23,7 +25,6 @@ export interface Args {
 
 const minecraftPort = 25565;
 const minecraftRconPort = 25575;
-const minecraftServerImage = 'itzg/minecraft-server:latest';
 
 function wakeLambdaCode(): string {
 	return `
@@ -366,6 +367,21 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const resourceName = (suffix: string) => `${name}_${suffix}`;
 		const hostedZoneArn = (zoneId: string) =>
 			`arn:aws:route53:::hostedzone/${zoneId.replace(/^\/hostedzone\//, '')}`;
+		const imageRepository = new aws.ecr.Repository(
+			resourceName('image_repository'),
+			{ tags },
+			{ parent: this }
+		);
+		const imageAuth = aws.ecr.getAuthorizationToken();
+		const serverImage = new MinecraftServerImage(
+			resourceName('image'),
+			{
+				repository: imageRepository.repositoryUrl,
+				token: imageAuth.then(auth => auth.authorizationToken),
+			},
+			{ parent: this }
+		);
+
 		const manageDnsWake = args.manageDnsWake ?? true;
 		const minecraftZone = manageDnsWake
 			? new aws.route53.Zone(
@@ -469,7 +485,13 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				toPort: minecraftRconPort,
 				cidrBlocks: ['10.42.0.0/16'],
 			},
-			{ parent: this }
+			{
+				parent: this,
+				// A standalone rule cannot be updated when it has disappeared from
+				// the security group. Recreate it during provider region migrations.
+				deleteBeforeReplace: true,
+				replaceOnChanges: ['region'],
+			}
 		);
 
 		const taskSecurityGroup = new aws.ec2.SecurityGroup(
@@ -637,7 +659,8 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 		const taskLogGroup = new aws.cloudwatch.LogGroup(
 			resourceName('task_logs'),
 			{
-				retentionInDays: 14,
+				// Player activity history must survive server restarts and log aging.
+				retentionInDays: 0,
 				tags,
 			},
 			{ parent: this }
@@ -670,12 +693,13 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 					taskLogGroup.name,
 					args.operators ?? [],
 					rconPassword.result,
-				]).apply(([logGroupName, operators, rconPasswordValue]) => {
+					serverImage.url,
+				]).apply(([logGroupName, operators, password, image]) => {
 					const allowList = [...new Set(operators)];
 					return JSON.stringify([
 						{
 							name: 'minecraft',
-							image: minecraftServerImage,
+							image,
 							essential: true,
 							portMappings: [
 								{
@@ -716,7 +740,7 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 								},
 								{
 									name: 'RCON_PASSWORD',
-									value: rconPasswordValue,
+									value: password,
 								},
 								...(operators.length > 0
 									? [
@@ -966,6 +990,68 @@ export class MinecraftOnDemand extends Pulumi.ComponentResource {
 				rule: taskStateRule.name,
 			},
 			{ parent: this }
+		);
+
+		// Keep recording stops from older revisions during rolling deployments.
+		const historyRule = new aws.cloudwatch.EventRule(
+			resourceName('task_history'),
+			{
+				eventPattern: Pulumi.all([cluster.arn, service.name]).apply(
+					([clusterArn, serviceName]) =>
+						JSON.stringify({
+							source: ['aws.ecs'],
+							'detail-type': ['ECS Task State Change'],
+							detail: {
+								clusterArn: [clusterArn],
+								group: [`service:${serviceName}`],
+								lastStatus: ['RUNNING', 'STOPPED'],
+							},
+						})
+				),
+				tags,
+			},
+			{ parent: this }
+		);
+		const historyLogPolicy = new aws.cloudwatch.LogResourcePolicy(
+			resourceName('history_log_policy'),
+			{
+				policyName: sanitizeAwsLambdaStatementId(
+					resourceName('history_log_policy')
+				),
+				policyDocument: Pulumi.all([
+					taskLogGroup.arn,
+					historyRule.arn,
+				]).apply(([arn, sourceArn]) =>
+					JSON.stringify({
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Principal: {
+									Service: [
+										'events.amazonaws.com',
+										'delivery.logs.amazonaws.com',
+									],
+								},
+								Action: [
+									'logs:CreateLogStream',
+									'logs:PutLogEvents',
+								],
+								Resource: `${arn}:*`,
+								Condition: {
+									ArnEquals: { 'aws:SourceArn': sourceArn },
+								},
+							},
+						],
+					})
+				),
+			},
+			{ parent: this }
+		);
+		new aws.cloudwatch.EventTarget(
+			resourceName('task_history_target'),
+			{ arn: taskLogGroup.arn, rule: historyRule.name },
+			{ parent: this, dependsOn: [historyLogPolicy] }
 		);
 
 		new aws.lambda.Permission(

@@ -46,7 +46,6 @@ var (
 	jsdomDirectivePattern = regexp.MustCompile(`(?m)@jest-environment\s+jsdom`)
 	knownFileExtensions   = []string{".ts", ".tsx", ".js", ".jsx", ".cjs", ".mjs", ".json"}
 	defaultDeps           = []string{"//:node_modules/@types/node"}
-	nextShimDep           = "//ts/next.js/types/next-compiled"
 	builtinModulePrefix   = "node:"
 )
 
@@ -165,6 +164,7 @@ func (p pathPattern) resolve(module string) (string, bool) {
 	middle := module[len(p.prefix) : len(module)-len(p.suffix)]
 	for _, repl := range p.replacements {
 		resolved := strings.ReplaceAll(repl, "*", middle)
+		resolved = strings.TrimPrefix(resolved, "./")
 		return resolved, true
 	}
 
@@ -538,7 +538,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		impSpec := resolve.ImportSpec{Lang: "typescript", Imp: module}
 		if override, ok := resolve.FindRuleWithOverride(c, impSpec, "typescript"); ok {
 			if !override.Equal(from) {
-				deps[formatLabel(override, from)] = struct{}{}
+				deps[formatLabel(override, from, c.RepoName)] = struct{}{}
 			}
 			continue
 		}
@@ -547,7 +547,7 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 				if m.IsSelfImport(from) {
 					continue
 				}
-				deps[formatLabel(m.Label, from)] = struct{}{}
+				deps[formatLabel(m.Label, from, c.RepoName)] = struct{}{}
 			}
 		}
 		if strings.HasPrefix(module, ".") || strings.HasPrefix(module, "/") {
@@ -563,11 +563,6 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 		deps[mainDep] = struct{}{}
 	}
 
-	// If a target depends on Next itself, it also needs the shimmed typings for Next's bundled deps.
-	if _, hasNext := deps["//:node_modules/next"]; hasNext {
-		deps[nextShimDep] = struct{}{}
-	}
-
 	labels := make([]string, 0, len(deps))
 	for dep := range deps {
 		labels = append(labels, dep)
@@ -576,7 +571,11 @@ func (Language) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remote
 	r.SetAttr("deps", labels)
 }
 
-func formatLabel(target label.Label, from label.Label) string {
+func formatLabel(target label.Label, from label.Label, mainRepoName string) string {
+	if target.Repo != "" && target.Repo == mainRepoName {
+		target.Repo = ""
+		target.Canonical = false
+	}
 	if target.Pkg == from.Pkg {
 		return ":" + target.Name
 	}
@@ -872,10 +871,13 @@ func repoPathVariants(repoPath string) []string {
 
 	switch ext {
 	case ".ts", ".tsx":
+		variants = append(variants, repoPath)
 		variants = append(variants, base+".js")
 	case ".mts":
+		variants = append(variants, repoPath)
 		variants = append(variants, base+".mjs")
 	case ".cts":
+		variants = append(variants, repoPath)
 		variants = append(variants, base+".cjs")
 	default:
 		variants = append(variants, repoPath)
@@ -906,6 +908,9 @@ func repoPathVariants(repoPath string) []string {
 }
 
 func matchReplacementPattern(replacement, value string) (string, bool) {
+	replacement = strings.TrimPrefix(replacement, "./")
+	value = strings.TrimPrefix(value, "./")
+
 	first := strings.Index(replacement, "*")
 	last := strings.LastIndex(replacement, "*")
 	if first == -1 {

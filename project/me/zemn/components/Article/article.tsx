@@ -6,12 +6,14 @@ import { schema } from '#root/project/me/zemn/bio/schema.js';
 import style from '#root/project/me/zemn/components/Article/style.module.css';
 import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context.js';
 import { ArticleProps } from '#root/project/me/zemn/components/Article/types/article_types.js';
+import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import { gladeMenuTopContentContext } from '#root/project/me/zemn/components/Glade/menu_top_content_context.js';
 import { Date as LocalizedDate } from '#root/ts/react/lang/date.js';
 import { Schema } from '#root/ts/schema.org/schema.js';
 import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 
 export function Article(props: ArticleProps) {
+	const [article, setArticle] = useState<HTMLElement | null>(null);
 	const [articleToc, setArticleToc] = useState<HTMLUListElement | null>(null);
 	const [menuToc, setMenuToc] = useState<HTMLUListElement | null>(null);
 	const setGladeMenuTopContent = useContext(gladeMenuTopContentContext);
@@ -45,7 +47,7 @@ export function Article(props: ArticleProps) {
 
 	return (
 		<div className={style.container} data-article-layout={props.layout}>
-			<article>
+			<article ref={setArticle}>
 				{props.date ? (
 					<LocalizedDate
 						date={nativeDateFromUnknownSimpleDate.parse(props.date)}
@@ -70,6 +72,7 @@ export function Article(props: ArticleProps) {
 							: undefined,
 					}}
 				</Schema>
+				<FootnotePreviews root={article} />
 			</article>
 		</div>
 	);

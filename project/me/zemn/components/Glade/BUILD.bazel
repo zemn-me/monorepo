@@ -6,6 +6,7 @@ ts_project(
     name = "Glade",
     srcs = [
         "glade.tsx",
+        "heraldic_shield.tsx",
         "menu.tsx",
         "menu_top_content_context.ts",
     ],
@@ -21,10 +22,9 @@ ts_project(
         "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
-        "//:node_modules/@types/react-dom",
-        "//:node_modules/next",
         "//:node_modules/react",
-        "//:node_modules/react-dom",
+        "//:node_modules/react-router",
+        "//:node_modules/react-spring",
         "//project/me/zemn/bio",
         "//project/me/zemn/components/DividerHeading",
         "//project/me/zemn/components/HeroVideo",
@@ -35,7 +35,6 @@ ts_project(
         "//project/me/zemn/hook",
         "//project/me/zemn/navigation",
         "//ts/constants",
-        "//ts/next.js/types/next-compiled",
         "//ts/react/lang",
     ],
 )
@@ -50,6 +49,7 @@ filegroup(
     srcs = [
         "glade.tsx",
         "glade_test.tsx",
+        "heraldic_shield.tsx",
         "menu.tsx",
         "menu_test.tsx",
         "menu_top_content_context.ts",
@@ -67,6 +67,7 @@ ts_project(
     deps = [
         ":Glade",
         "//:node_modules/@jest/globals",
+        "//:node_modules/@react-spring/rafz",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",

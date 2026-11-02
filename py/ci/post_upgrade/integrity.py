@@ -2,9 +2,14 @@
 from __future__ import annotations
 
 from typing import Callable
+import argparse
 import base64
 import hashlib
+import io
+from pathlib import Path
 import re
+import subprocess
+import tokenize
 import urllib.request
 
 
@@ -78,27 +83,76 @@ def _resolve_expr(expr: str, var_values: dict[str, str]) -> str:
     return out
 
 
-def _http_archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
+def _archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
+    # Starlark strings can contain complete BUILD snippets, including closing
+    # parentheses and apparent archive calls. Tokenization keeps those opaque.
+    line_offsets = [0]
+    for line in module_text.splitlines(keepends=True):
+        line_offsets.append(line_offsets[-1] + len(line))
+
+    def offset(position: tuple[int, int]) -> int:
+        row, column = position
+        return line_offsets[row - 1] + column
+
     blocks: list[tuple[int, int, str]] = []
-    offset = 0
-    while True:
-        start = module_text.find("http_archive(", offset)
-        if start == -1:
-            break
-        end_match = re.search(r"^\s*\)\s*$", module_text[start:], re.MULTILINE)
-        if not end_match:
-            raise Exception("Failed to find end of http_archive block")
-        end = start + end_match.end()
-        blocks.append((start, end, module_text[start:end]))
-        offset = end
+    start: int | None = None
+    depth = 0
+    for token in tokenize.generate_tokens(io.StringIO(module_text).readline):
+        if token.type in (tokenize.COMMENT, tokenize.NL, tokenize.NEWLINE):
+            continue
+        if depth:
+            if token.type == tokenize.OP:
+                if token.string == "(":
+                    depth += 1
+                elif token.string == ")":
+                    depth -= 1
+                    if depth == 0:
+                        end = offset(token.end)
+                        assert start is not None
+                        blocks.append((start, end, module_text[start:end]))
+                        start = None
+        elif start is not None and token.type == tokenize.OP and token.string == "(":
+            depth = 1
+        else:
+            start = offset(token.start) if token.type == tokenize.NAME and token.string in ("http_archive", "archive_override") else None
     return blocks
 
 
 def _extract_archive_name(block: str) -> str:
-    match = re.search(r"^\s*name\s*=\s*\"([^\"]+)\"", block, re.MULTILINE)
+    match = re.search(r"^\s*(?:name|module_name)\s*=\s*\"([^\"]+)\"", block, re.MULTILINE)
     if not match:
-        raise Exception("Failed to find http_archive name")
+        raise Exception("Failed to find archive name or module_name")
     return match.group(1)
+
+
+def _first_url_list_entry(source: str) -> str:
+    # Stop at the first list separator, keeping commas in calls and brackets
+    # inside URL strings opaque. Preserve the expression for the URL resolver.
+    source = "[" + source
+    lines = source.splitlines(keepends=True)
+    tokens = tokenize.generate_tokens(io.StringIO(source).readline)
+    next(tokens)  # Opening list bracket keeps multiline entries within one expression.
+    start: tuple[int, int] | None = None
+    depth = 0
+    for token in tokens:
+        if token.type in (tokenize.COMMENT, tokenize.NL, tokenize.NEWLINE):
+            continue
+        if token.type == tokenize.OP:
+            if depth == 0 and token.string in (",", "]"):
+                if start is None:
+                    break
+                row, column = start
+                begin = sum(map(len, lines[:row - 1])) + column
+                row, column = token.start
+                end = sum(map(len, lines[:row - 1])) + column
+                return source[begin:end].strip()
+            if token.string in ("(", "[", "{"):
+                depth += 1
+            elif token.string in (")", "]", "}"):
+                depth -= 1
+        if start is None:
+            start = token.start
+    raise Exception("Failed to find urls entry after auto-integrity")
 
 
 def _extract_url_expr(block: str) -> str:
@@ -112,17 +166,10 @@ def _extract_url_expr(block: str) -> str:
                 url_match = re.match(r"url\s*=\s*(.+?),\s*$", follow)
                 if url_match:
                     return url_match.group(1).strip()
-                if follow.startswith("urls") and follow.endswith("["):
-                    for entry in lines[follow_idx + 1:]:
-                        entry = entry.strip()
-                        if "]" in entry:
-                            break
-                        if not entry or entry == ",":
-                            continue
-                        entry_match = re.match(r"(.+?),\s*$", entry)
-                        if entry_match:
-                            return entry_match.group(1).strip()
-                    raise Exception("Failed to find urls entry after auto-integrity")
+                urls_match = re.match(r"urls\s*=\s*\[", follow)
+                if urls_match:
+                    source = "\n".join([follow[urls_match.end():], *lines[follow_idx + 1:]])
+                    return _first_url_list_entry(source)
                 raise Exception("auto-integrity must be followed by url or urls")
     raise Exception("Missing auto-integrity marker")
 
@@ -157,21 +204,26 @@ def _replace_archive_field_in_block(
 def update_module_bazel_text(
     module_text: str,
     fetcher: Callable[[str], bytes],
+    baseline: str | None = None,
 ) -> str:
     var_values: dict[str, str] = {}
     for match in re.finditer(r"^([A-Z0-9_]+)\s*=\s*\"([^\"]+)\"", module_text, re.MULTILINE):
         var_values[match.group(1)] = match.group(2)
 
+    # Unchanged URLs keep their reviewed checksums. Fetching every archive can
+    # block an unrelated update on an unavailable historical release.
+    baseline_urls = _archive_urls(baseline) if baseline is not None else {}
     updated = module_text
-    blocks = _http_archive_blocks(module_text)
+    blocks = _archive_blocks(module_text)
     for start, end, archive_block in reversed(blocks):
-        try:
-            url_expr = _extract_url_expr(archive_block)
-        except Exception:
+        if "auto-integrity" not in archive_block:
             continue
+        url_expr = _extract_url_expr(archive_block)
         archive_name = _extract_archive_name(archive_block)
         field = _extract_checksum_field(archive_block)
         url = _resolve_expr(url_expr, var_values)
+        if baseline_urls.get(archive_name) == url:
+            continue
         data = fetcher(url)
         value = _sha256_value(data) if field == "sha256" else _integrity_value(data)
         updated_block = _replace_archive_field_in_block(
@@ -184,13 +236,35 @@ def update_module_bazel_text(
     return updated
 
 
+def _archive_urls(module_text: str) -> dict[str, str]:
+    variables = dict(re.findall(r'^([A-Z0-9_]+)\s*=\s*"([^"]+)"', module_text, re.MULTILINE))
+    return {
+        _extract_archive_name(block): _resolve_expr(_extract_url_expr(block), variables)
+        for _, _, block in _archive_blocks(module_text)
+        if "auto-integrity" in block
+    }
+
+
 def _fetch_url(url: str) -> bytes:
-    with urllib.request.urlopen(url) as response:
+    with urllib.request.urlopen(url, timeout=60) as response:
         return response.read()
 
 
-def update_git_refs_archives_file(module_bazel: str) -> None:
+def update_git_refs_archives_file(module_bazel: str, baseline: str | None = None) -> None:
     text = open(module_bazel, "r", encoding="utf-8").read()
-    updated = update_module_bazel_text(text, _fetch_url)
+    updated = update_module_bazel_text(text, _fetch_url, baseline)
     with open(module_bazel, "w", encoding="utf-8") as handle:
         handle.write(updated)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Refresh changed archive checksums before starting Bazel.")
+    parser.add_argument("module", type=Path)
+    parser.add_argument("--baseline-ref", default="HEAD", help="Git revision before the dependency update")
+    args = parser.parse_args()
+    module = args.module.resolve()
+    baseline = subprocess.check_output(
+        ["git", "show", f"{args.baseline_ref}:{module.name}"],
+        cwd=module.parent, text=True,
+    )
+    update_git_refs_archives_file(str(module), baseline)

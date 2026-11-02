@@ -1,3 +1,11 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json"
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"packageRules": [
+		{
+			"description": "Pulumi still loads the TypeScript 5 compiler API through this alias",
+			"enabled": false,
+			"matchDepNames": ["typescript5"],
+			"matchManagers": ["npm"]
+		}
+	]
 }

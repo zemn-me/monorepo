@@ -33,9 +33,9 @@ function useObjectUrl(media: ParsedAnkiMedia | null): string | null {
 			return;
 		}
 
-		const nextUrl = URL.createObjectURL(
-			new Blob([media.bytes], { type: media.mimeType })
-		);
+			const nextUrl = URL.createObjectURL(
+				new Blob([new Uint8Array(media.bytes)], { type: media.mimeType })
+			);
 		setUrl(nextUrl);
 		return () => URL.revokeObjectURL(nextUrl);
 	}, [media]);

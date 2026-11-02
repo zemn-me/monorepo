@@ -1,0 +1,28 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+py_library(
+    name = "cancel_obsolete_staging",
+    srcs = ["__init__.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+py_binary(
+    name = "cancel_obsolete_staging_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [":cancel_obsolete_staging"],
+)
+
+py_test(
+    name = "cancel_obsolete_staging_test",
+    srcs = ["__test__.py"],
+    main = "__test__.py",
+    deps = [":cancel_obsolete_staging"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

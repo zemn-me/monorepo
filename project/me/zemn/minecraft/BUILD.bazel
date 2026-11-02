@@ -1,0 +1,53 @@
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
+load("//py:rules.bzl", "py_test")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+
+# ECS Fargate uses x86_64. Tests and deployments consume this same artifact,
+# including the Minecraft VERSION, rather than overriding it at runtime.
+oci_image(
+    name = "image",
+    base = "@minecraft_server_linux_amd64",
+    env = "minecraft.env",
+    visibility = ["//:__subpackages__"],
+)
+
+oci_load(
+    name = "load",
+    image = ":image",
+    repo_tags = ["zemn-minecraft:test"],
+)
+
+pulumi_image(
+    name = "published_image",
+    src = ":image",
+    component_name = "MinecraftServerImage",
+    visibility = ["//ts/pulumi:__subpackages__"],
+)
+
+py_test(
+    name = "image_test",
+    srcs = ["image_test.py"],
+    args = [
+        "$(rootpath :image)",
+        "$(rootpath @minecraft_server_linux_amd64)",
+        "$(rootpath minecraft.env)",
+    ],
+    data = [
+        "minecraft.env",
+        ":image",
+        "@minecraft_server_linux_amd64",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
+)

@@ -4,7 +4,9 @@ import { describe, expect, test } from '@jest/globals';
 import { parseAnkiPackage } from '#root/ts/anki/anki.js';
 
 function arrayBuffer(bytes: Uint8Array): ArrayBuffer {
-	return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+	const copy = new Uint8Array(bytes.byteLength);
+	copy.set(bytes);
+	return copy.buffer;
 }
 
 function ascii(bytes: Uint8Array, offset: number, length: number): string {

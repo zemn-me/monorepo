@@ -1,6 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//mdx:rules.bzl", "mdx_files")
-load("//ts/next.js:public_assets.bzl", "hashed_public_assets")
+load("//ts/remix:public_assets.bzl", "hashed_public_assets")
 
 hashed_public_assets(
     name = "content_addressed",

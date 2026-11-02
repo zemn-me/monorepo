@@ -15,7 +15,15 @@ type AssignedPorts struct {
 func ApiRoot() (u *url.URL, err error) {
 	ports := os.Getenv("ASSIGNED_PORTS")
 	if ports == "" {
-		return url.Parse("https://api.zemn.me")
+		origin := os.Getenv("ZEMN_API_ORIGIN")
+		if origin == "" {
+			origin = "https://api.zemn.me"
+		}
+		u, err := url.Parse(origin)
+		if err != nil || u.Scheme != "https" || u.Host == "" || u.User != nil || u.Path != "" || u.RawQuery != "" || u.Fragment != "" {
+			return nil, fmt.Errorf("ZEMN_API_ORIGIN must be an HTTPS origin without a path")
+		}
+		return u, nil
 	}
 
 	var assignedPorts AssignedPorts

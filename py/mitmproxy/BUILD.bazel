@@ -1,11 +1,50 @@
-load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
+# The entrypoint belongs only to the secondary Python toolchain.
+# gazelle:exclude main.py
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_python//python:py_binary.bzl", "py_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:pip_requirements_test.bzl", "pip_requirements_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_library")
 
-py_console_script_binary(
+compile_pip_requirements(
+    name = "requirements",
+    timeout = "moderate",
+    src = "requirements.in",
+    env = {"CUSTOM_COMPILE_COMMAND": "pip-compile --allow-unsafe --generate-hashes --resolver=backtracking --output-file=requirements.txt requirements.in"},
+    py_test = pip_requirements_test,
+    python_version = "3.14",
+    requirements_txt = "requirements.txt",
+)
+
+alias(
+    name = "requirements.test.fix",
+    actual = "requirements.update",
+)
+
+js_library(
+    name = "renovate_python_inputs",
+    srcs = [
+        "requirements.in",
+        "requirements.txt",
+    ],
+    visibility = ["//.github:__pkg__"],
+)
+
+py_binary(
     name = "mitmproxy",
-    pkg = "@pip//mitmproxy",
-    script = "mitmproxy",
+    srcs = ["main.py"],  # keep
+    main = "main.py",
+    python_version = "3.14",
     visibility = ["//visibility:public"],
+    deps = ["@mitmproxy_pip//mitmproxy"],  # keep
+)
+
+sh_test(
+    name = "version_test",
+    srcs = ["version_test.sh"],
+    args = ["$(location :mitmproxy)"],
+    data = [":mitmproxy"],
 )
 
 bazel_lint(

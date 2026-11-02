@@ -422,7 +422,7 @@ export function FrameClient() {
 	const errataInfo = overlapAmount.zip(Ok(minimumCutDepth));
 	const frameOptionsInfo = artInfo.zip(errataInfo);
 
-	const frameOptions: JSX.Element = frameOptionsInfo
+	const frameOptions: React.JSX.Element = frameOptionsInfo
 		.and_then(([[artHeight, artWidth], [overlapAmount, minCutDepth]]) =>
 			Iterable(normalisedFrameSizes)
 				.map(f => ({

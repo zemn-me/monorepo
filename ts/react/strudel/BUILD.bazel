@@ -8,6 +8,7 @@ ts_project(
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
+        "//:node_modules/base64-js",
         "//:node_modules/react",
         "//project/me/zemn/components/Link",
     ],

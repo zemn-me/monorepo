@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+---
+
+name: Staging PR gate
+
+on:   # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions: {}
+
+jobs:
+  # Let PRs enter the queue, where staging.yml performs the real deployment.
+  # Keep this in a PR-only workflow: a skipped job also satisfies required checks.
+  Staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Defer staging deployment to the merge queue
+        run: echo "Staging deployment runs in the merge queue via staging.yml."

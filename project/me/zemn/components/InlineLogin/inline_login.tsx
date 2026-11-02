@@ -1,21 +1,20 @@
+import {
+	faRepeat,
+	faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { type ReactNode, useEffect, useState } from 'react';
 import type { z } from 'zod';
-
 import style from '#root/project/me/zemn/components/InlineLogin/inline_login.module.css';
 import { ProgressCircle } from '#root/project/me/zemn/components/ProgressCircle/ProgressCircle.js';
+import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
 	type PosterIdentity,
 	usePosterDisplayName,
 } from '#root/project/me/zemn/hook/usePosterDisplayName.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import {
-	future_and_then,
-	future_error,
-	future_flatten_then,
-	future_resolve,
-} from '#root/ts/future/future.js';
-import { OidcIdTokenClaimsSchema } from '#root/ts/oidc/id_token.js';
+import type { OidcIdTokenClaimsSchema } from '#root/ts/oidc/id_token.js';
 import { background } from '#root/ts/promise/ignore_result.js';
 
 const progressRatio = (min: number, max: number, now: number) => {
@@ -30,12 +29,13 @@ interface TimeLeftIndicatorProps {
 }
 
 function TimeLeftIndicator({ start, end }: TimeLeftIndicatorProps) {
-	const [now, setNow] = useState(Date.now());
+	const [now, setNow] = useState(start.getTime());
 
 	useEffect(() => {
+		setNow(Date.now());
 		const interval = setInterval(() => setNow(Date.now()), 1000);
 		return () => clearInterval(interval);
-	});
+	}, []);
 
 	const done = now >= end.getTime();
 	const progress = progressRatio(start.getTime(), end.getTime(), +now);
@@ -65,8 +65,12 @@ export function PosterDisplayName({
 
 function InlineLoginContent({
 	claims,
+	onLogout,
+	onSwitchUser,
 }: {
 	readonly claims: OidcIdTokenClaims;
+	readonly onLogout: () => Promise<void>;
+	readonly onSwitchUser: () => Promise<void>;
 }) {
 	const poster = {
 		email_address: claims.email,
@@ -75,6 +79,28 @@ function InlineLoginContent({
 		sub: claims.sub,
 	};
 	const displayName = usePosterDisplayName(poster);
+	const accountActions = (
+		<span aria-label="Account actions" className={style.accountActions}>
+			<button
+				aria-label="Log out"
+				className={style.accountAction}
+				onClick={background(onLogout)}
+				title="Log out"
+				type="button"
+			>
+				<FontAwesomeIcon icon={faRightFromBracket} />
+			</button>
+			<button
+				aria-label="Switch user"
+				className={style.accountAction}
+				onClick={background(onSwitchUser)}
+				title="Switch user"
+				type="button"
+			>
+				<FontAwesomeIcon icon={faRepeat} />
+			</button>
+		</span>
+	);
 
 	return displayName ? (
 		<span className={style.loggedIn}>
@@ -94,27 +120,29 @@ function InlineLoginContent({
 					start={new Date(claims.iat * 1000)}
 				/>
 			</sup>
-			.
+			{accountActions}
 		</span>
 	) : (
-		<>Logged in.</>
+		<span className={style.loggedIn}>Logged in. {accountActions}</span>
 	);
 }
 
 export function InlineLogin() {
-	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
+	const [fut_idToken, , fut_promptForLogin, sessionControls] =
+		useZemnMeAuth();
 
-	const idTokenData = future_flatten_then(
-		future_and_then(fut_idToken, tok => {
-			// "unsafely" (not really because on client)
-			// parse id_token
-			const claims = tok.split('.')[1]!;
-			const decoded = atob(claims);
-			const r = OidcIdTokenClaimsSchema.safeParse(JSON.parse(decoded));
-
-			return r.success ? future_resolve(r.data) : future_error(r.error);
-		})
-	);
+	const claims = useSessionClaims(fut_idToken);
+	const [actionError, setActionError] = useState<{
+		retry: () => Promise<void>;
+	}>();
+	const runAction = (action: () => Promise<void>) => async () => {
+		setActionError(undefined);
+		try {
+			await action();
+		} catch {
+			setActionError({ retry: action });
+		}
+	};
 
 	const loginButton = (error: boolean) => (
 		<button
@@ -141,13 +169,33 @@ export function InlineLogin() {
 		</button>
 	);
 
-	return idTokenData(
-		f => <InlineLoginContent claims={f} />,
-		() => loginButton(false),
-		err => {
-			// biome-ignore lint/suspicious/noConsole: this intentionally writes to the console
-			console.error(err);
-			return loginButton(true);
-		}
+	const account = claims ? (
+		<InlineLoginContent
+			claims={claims}
+			onLogout={runAction(sessionControls.logout)}
+			onSwitchUser={runAction(sessionControls.switchUser)}
+		/>
+	) : (
+		fut_idToken(
+			() => loginButton(true),
+			() => loginButton(false),
+			() => loginButton(true)
+		)
+	);
+	return (
+		<>
+			{account}
+			{actionError ? (
+				<span role="alert">
+					Could not update your login.{' '}
+					<button
+						onClick={background(runAction(actionError.retry))}
+						type="button"
+					>
+						Try again
+					</button>
+				</span>
+			) : null}
+		</>
 	);
 }

@@ -43,8 +43,9 @@ java_binary(
 itest_service(
     name = "dynamodb",
     args = [
-        "--dbPath",
-        "$${TMPDIR}",
+        # Each service instance is an ephemeral fixture. Avoid disk-backed SQLite
+        # lock stalls on remote execution filesystems; keep the real DynamoDB API.
+        "--inMemory",
         "--port",
         "$${PORT}",
         "--sharedDb",

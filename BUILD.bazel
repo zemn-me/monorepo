@@ -1,3 +1,4 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
 load("//md:rules.bzl", "md_files")
 load("//py:rules.bzl", "py_library")
@@ -17,7 +18,9 @@ load("@pip//:requirements.bzl", "all_whl_requirements")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:pip_requirements_test.bzl", "pip_requirements_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//bzl/binary_with_args:binary_with_args.bzl", "binary_with_args")
 load("//go/cmd/version_sync:go_version_sync.bzl", "go_version_sync")
@@ -29,7 +32,28 @@ compile_pip_requirements(
     name = "requirements",
     timeout = "moderate",
     src = "requirements.in",
+    # Renovate reads this command to discover the source and solver options.
+    env = {"CUSTOM_COMPILE_COMMAND": "pip-compile --allow-unsafe --generate-hashes --resolver=backtracking --output-file=requirements.txt requirements.in"},
+    py_test = pip_requirements_test,
     requirements_txt = "requirements.txt",
+)
+
+js_library(
+    name = "renovate_bazel_inputs",
+    srcs = [
+        "MODULE.bazel",
+        "go.mod",
+    ],
+    visibility = ["//.github:__pkg__"],
+)
+
+js_library(
+    name = "renovate_python_inputs",
+    srcs = [
+        "requirements.in",
+        "requirements.txt",
+    ],
+    visibility = ["//.github:__pkg__"],
 )
 
 # implement fix api
@@ -87,6 +111,7 @@ exports_files(
         ".gitignore",
         ".editorconfig",
         ".git",
+        "sh/postUpgrade.sh",
     ],
     visibility = ["//visibility:public"],
 )
@@ -100,6 +125,37 @@ sh_test(
         "WORKSPACE_STATUS": "$(rlocationpath //:workspace_status.sh)",
     },
     deps = ["@rules_shell//shell/runfiles"],
+)
+
+sh_test(
+    name = "bazel_source_version_test",
+    size = "small",
+    srcs = ["bazel_source_version_test.sh"],
+    data = [
+        ".bazelversion",
+        "MODULE.bazel",
+    ],
+    env = {
+        "BAZEL_SOURCE_MODULE": "$(rlocationpath //:MODULE.bazel)",
+        "BAZEL_VERSION_FILE": "$(rlocationpath //:.bazelversion)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+sh_binary(
+    name = "bazel_source_version_test.fix",
+    srcs = ["bazel_source_version_test_fix.sh"],
+)
+
+sh_test(
+    name = "bazel_source_version_fix_test",
+    size = "small",
+    srcs = ["bazel_source_version_fix_test.sh"],
+    data = [":bazel_source_version_test.fix"],
+    env = {
+        "BAZEL_SOURCE_VERSION_FIXER": "$(rlocationpath //:bazel_source_version_test.fix)",
+    },
+    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
 copy_to_bin(
@@ -227,22 +283,31 @@ py_venv(
     name = "venv",
     deps = [
         "//bzl/versioning",
+        "//bzl/versioning:release",
         "//ini/git/merge_drivers/bazel_lockfile",
+        "//md:md_py",
+        "//md:readme_main",
         "//project/me/zemn/api/analytics/inject_iservice:inject_iservice_bin",
         "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci",
+        "//py/ci/cancel_obsolete_staging",
+        "//py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin",
         "//py/ci/post_upgrade",
         "//py/ci/post_upgrade:post_upgrade_bin",
         "//py/copy_to_workspace:copy_to_workspace_bin",
         "//py/devtools",
         "//py/devtools/prep",
         "//py/devtools/prep:prep_bin",
+        "//py/doom_wireframe",
+        "//py/doom_wireframe:doom_wireframe_bin",
         "//py/hello_world:hello_world_bin",
         "//py/ibazel:ibazel_bin",
         "//py/ipynb",
         "//py/ipynb:ipynb_bin",
         "//py/time/hemisphere:hemisphere_bin",
+        "//ts/pulumi/eggsfordogs.com:eggsfordogs.com_py",
+        "//ts/pulumi/eggsfordogs.com:static_server",
         "//ts/pulumi/lib/oci/example/python:python_bin",
     ],
 )
@@ -266,7 +331,9 @@ binary_with_args(
     name = "pnpm_lockfile_validation_bin",
     args = [
         "i",
-        #        "--lockfile-only", # https://github.com/pnpm/pnpm/issues/6962#issuecomment-2985146457
+        "--lockfile-only",
+        "--offline",
+        "--ignore-scripts",
         "--frozen-lockfile",
     ],
     binary = "@pnpm",

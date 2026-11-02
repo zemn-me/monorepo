@@ -1,10 +1,10 @@
 'use client';
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { tocSegment } from '#root/project/me/zemn/components/Article/toc_context.js';
 
-export type SectionProps = JSX.IntrinsicElements['section'];
+export type SectionProps = React.JSX.IntrinsicElements['section'];
 
 export function Section({ children, ...props }: SectionProps) {
 	const portals = useContext(tocSegment);
@@ -12,9 +12,25 @@ export function Section({ children, ...props }: SectionProps) {
 		Record<number, HTMLOListElement | null>
 	>({});
 
+	// Keep ref callbacks stable while the set of contents targets is unchanged.
+	const portalCount = portals.length;
+	const childRefs = useMemo(
+		() =>
+			Array.from({ length: portalCount }, (_, index) =>
+				(element: HTMLOListElement | null) => {
+					setChildTocSegments(segments =>
+						segments[index] === element
+							? segments
+							: { ...segments, [index]: element }
+					);
+				}
+			),
+		[portalCount]
+	);
+
 	const childPortals = portals
 		.map((_, index) => childTocSegments[index])
-		.filter((portal): portal is HTMLOListElement => portal !== null);
+		.filter((portal): portal is HTMLOListElement => portal != null);
 
 	return (
 		<section {...props}>
@@ -28,17 +44,9 @@ export function Section({ children, ...props }: SectionProps) {
 		*/}
 			{portals.map((portal, index) =>
 				createPortal(
-					<ol
-						ref={element =>
-							setChildTocSegments(segments =>
-								segments[index] === element
-									? segments
-									: { ...segments, [index]: element }
-							)
-						}
-					/>,
+					<ol ref={childRefs[index]} />,
 					portal,
-					index
+					String(index)
 				)
 			)}
 		</section>

@@ -1,19 +1,9 @@
-import { ChildProcess, spawn } from 'node:child_process';
-import http from 'node:http';
 import Path from 'node:path';
 
 import { runfiles } from '@bazel/runfiles';
-import {
-	afterAll,
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-} from '@jest/globals';
+import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, ThenableWebDriver } from 'selenium-webdriver';
-import handler from 'serve-handler';
+import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
@@ -28,9 +18,7 @@ const pathsThatMayError = new Set(['healthcheck/bad', 'poc/c/', 'callback']);
 
 describe('zemn.me website', () => {
 	describe('Endpoint Tests', () => {
-		let server: http.Server;
 		let origin: string;
-		let apiProc: ChildProcess;
 		let apiOrigin: string;
 		let driver: ThenableWebDriver;
 		const paths = glob
@@ -38,53 +26,29 @@ describe('zemn.me website', () => {
 			.map(path =>
 				Path.relative(base, path).replace(/index.html|.html$/g, '')
 			);
+		paths.push('journal', 'admin', 'callback', 'key', 'healthz');
 		paths.sort();
 
-		beforeAll(async () => {
-			server = http
-				.createServer((rq, rw) => {
-					void handler(rq, rw, { public: base });
-				})
-				.listen();
-
-			const addressInfo = server.address();
-
-			if (addressInfo == null || typeof addressInfo === 'string') {
-				throw new Error('Not AddressInfo');
-			}
-
-			origin = `http://localhost:${addressInfo.port}`;
-
-			const apiBin = resolveRunfilesPath(
-				'project/me/zemn/api/cmd/localserver/localserver_/localserver'
+		beforeAll(() => {
+			const ports = JSON.parse(process.env['ASSIGNED_PORTS'] ?? '{}') as Record<
+				string,
+				string
+			>;
+			const serviceOrigin = (service: string): string => {
+				const port = ports[service];
+				if (!port) throw new Error(`Missing assigned port for ${service}`);
+				return `http://localhost:${port}`;
+			};
+			origin = serviceOrigin(
+				'@@//project/me/zemn:itest_service_calendar_fixture'
 			);
-			apiProc = spawn(apiBin, {
-				stdio: ['ignore', 'pipe', 'inherit'],
-			});
-			apiOrigin = await new Promise<string>((resolve, reject) => {
-				apiProc.stdout!.on('data', chunk => {
-					const m = /PORT=(\d+)/.exec(chunk.toString());
-					if (m) {
-						resolve(`http://localhost:${m[1]}`);
-					}
-				});
-				apiProc.once('error', reject);
-				setTimeout(
-					() => reject(new Error('api server did not start')),
-					10000
-				);
-			});
+			apiOrigin = serviceOrigin(
+				'@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service'
+			);
 		});
 
 		beforeEach(async () => {
 			driver = Driver().forBrowser(Browser.CHROME).build();
-		});
-
-		afterAll(async () => {
-			apiProc.kill();
-			await new Promise<void>((resolve, reject) => {
-				server.close(err => (err ? reject(err) : resolve()));
-			});
 		});
 
 		const testEndpoint = async (endpoint: string) => {
@@ -96,9 +60,7 @@ describe('zemn.me website', () => {
 				const url: string = await driver.getCurrentUrl();
 				if (new URL(url).origin !== origin) return [];
 
-				return logs.length
-					? logs.map(log => ({ url, endpoint, log }))
-					: logs;
+				return logs.map(log => ({ url, endpoint, log }));
 			} finally {
 				await driver.quit();
 			}
@@ -108,12 +70,30 @@ describe('zemn.me website', () => {
 			const logs = await testEndpoint(path);
 			if (pathsThatMayError.has(path)) return;
 			expect(
-				logs.filter(log =>
-					'log' in log
-						? log.log.message.includes('Ignoring event: localhost')
-						: false
+				logs.filter(
+					({ log }) => log.level.value >= logging.Level.SEVERE.value
 				)
-			).toHaveLength(0);
+			).toEqual([]);
+		});
+
+		it('initializes availability dates after hydration', async () => {
+			try {
+				const response = await fetch(`${origin}/availability`);
+				const html = await response.text();
+				// Prerendered dates can be stale before the document is served.
+				expect(html).toContain('Loading your local calendar');
+				await driver.get(`${origin}/availability`);
+				await driver.wait(async () => {
+					const headers = await driver.findElements(
+						By.css('section[aria-label="Availability calendar"] header')
+					);
+					return headers.length === 63;
+				}, 10000);
+				const logs = await driver.manage().logs().get('browser');
+				expect(logs.filter(log => log.level.value >= logging.Level.SEVERE.value)).toEqual([]);
+			} finally {
+				await driver.quit();
+			}
 		});
 
 		it('api server /healthz returns OK', async () => {
@@ -146,6 +126,88 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it.each(['/', '/article', '/experiments'])(
+			'keeps the hero video mounted when using the menu from %s',
+			async start => {
+				try {
+					await driver.manage().setTimeouts({ implicit: 5000 });
+					await driver.get(`${origin}${start}`);
+					// The static document is visible before its client handlers load.
+					await driver.wait(
+						async () => {
+							const login = await driver.findElement(
+								By.css(
+									'nav[aria-label="Site navigation"] button'
+								)
+							);
+							return login.isEnabled();
+						},
+						10000,
+						'Login control did not become ready after hydration'
+					);
+					const video = await driver.findElement(
+						By.css('figure video')
+					);
+
+					for (const destination of [
+						'/article',
+						'/experiments',
+						'/',
+					]) {
+						if (destination === start) continue;
+						await driver
+							.findElement(
+								By.css(
+									'summary[aria-label="Open navigation menu"]'
+								)
+							)
+							.click();
+						await driver
+							.findElement(
+								By.css(
+									`nav[aria-label="Site navigation"] a[href="${destination}"]`
+								)
+							)
+							.click();
+						await driver.wait(
+							async () =>
+								(await driver.getCurrentUrl()) ===
+								`${origin}${destination}`,
+							5000,
+							`Navigation did not reach ${destination}`
+						);
+						// A remount or full-page navigation makes this original
+						// WebElement stale, even if the replacement looks identical.
+						expect(
+							await driver.executeScript(
+								'return arguments[0] === document.querySelector("figure video");',
+								video
+							)
+						).toBe(true);
+						await driver.wait(
+							async () =>
+								(await driver
+									.findElement(
+										By.css(
+											'nav[aria-label="Site navigation"] details'
+										)
+									)
+									.getAttribute('open')) === null,
+							5000,
+							`Navigation menu did not close after reaching ${destination}`
+						);
+					}
+				} catch (error) {
+					throw new Error(
+						`Browser logs: ${JSON.stringify(await driver.manage().logs().get('browser'))}`,
+						{ cause: error }
+					);
+				} finally {
+					await driver.quit();
+				}
+			}
+		);
+
 		it('homepage profile photo has a sampled fallback background', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
@@ -169,27 +231,210 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('2026/endings shows a homepage back link after the story text renders', async () => {
+		it('article index lists every released article and opens one', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
-				await driver.get(`${origin}/2026/endings`);
-				await driver.executeScript(
-					'window.scrollTo(0, document.documentElement.scrollHeight);'
-				);
+				await driver.get(`${origin}/article`);
 
-				const backLink = await driver.findElement(
-					By.css('a[aria-label="Back to homepage"]')
-				);
-				expect(await backLink.getText()).toBe('Back');
+				const heading = await driver.findElement(By.css('h1'));
+				expect(await heading.getText()).toBe('Articles.');
 
-				await backLink.click();
+				const menuButton = await driver.findElement(
+					By.css('summary[aria-label="Open navigation menu"]')
+				);
+				await menuButton.click();
+				const articleMenuLinks = await driver.findElements(
+					By.css(
+						'nav[aria-label="Site navigation"] a[href^="/article"]'
+					)
+				);
+				expect(
+					await Promise.all(
+						articleMenuLinks.map(async link => ({
+							href: await link.getAttribute('href'),
+							text: await link.getText(),
+						}))
+					)
+				).toEqual([{ href: `${origin}/article`, text: 'Articles' }]);
+				await menuButton.click();
+
+				const list = await driver.findElement(
+					By.css('ol[aria-label="Published articles"]')
+				);
+				const links = await list.findElements(By.css('a'));
+				expect(
+					await Promise.all(links.map(link => link.getText()))
+				).toEqual([
+					'Letter to Kasimir',
+					'The Hagiography of Clean',
+					'Missing',
+					"If CORS is just a header, why don't attackers just ignore it?",
+					'When Security Generates Insecurity',
+				]);
+
+				await links[0]!.click();
 				await driver.wait(
-					async () => (await driver.getCurrentUrl()) === `${origin}/`,
+					async () =>
+						(await driver.getCurrentUrl()) ===
+						`${origin}/article/2026/kasimir`,
 					5000
 				);
 			} finally {
 				await driver.quit();
 			}
 		});
+
+		it('experiment index lists every experiment and opens one', async () => {
+			try {
+				await driver.manage().setTimeouts({ implicit: 5000 });
+				await driver.get(`${origin}/tool/elastictabs?input=hello`);
+				await driver.wait(
+					async () =>
+						(await driver.getCurrentUrl()) ===
+						`${origin}/experiments/elastictabs?input=hello`,
+					5000
+				);
+
+				await driver.get(`${origin}/experiments`);
+
+				const heading = await driver.findElement(By.css('h1'));
+				expect(await heading.getText()).toBe('Experiments.');
+
+				const list = await driver.findElement(
+					By.css('ol[aria-label="Experiments"]')
+				);
+				const links = await list.findElements(By.css('a'));
+				expect(
+					await Promise.all(links.map(link => link.getText()))
+				).toEqual([
+					'Rays',
+					'SVG Arena',
+					'Platonic Stress',
+					'Geometry of Music',
+					'Elastic Tabstops',
+					'Flag emoji',
+					'Framing calculator',
+					'Pitch Training',
+					'Factorio',
+					'Factorio blueprints',
+					'Blueprint parser',
+					'Requester chest generator',
+					'Blueprint wall generator',
+					'Blueprint book',
+					'Red Alert',
+					'Command & Conquer',
+					'Tiberian Sun',
+					'Cultist simulator',
+				]);
+
+				const menuButton = await driver.findElement(
+					By.css('summary[aria-label="Open navigation menu"]')
+				);
+				await menuButton.click();
+				const experimentMenuLinks = await driver.findElements(
+					By.css(
+						'nav[aria-label="Site navigation"] a[href^="/experiments"]'
+					)
+				);
+				expect(
+					await Promise.all(
+						experimentMenuLinks.map(async link => ({
+							href: await link.getAttribute('href'),
+							text: await link.getText(),
+						}))
+					)
+				).toEqual([
+					{ href: `${origin}/experiments`, text: 'Experiments' },
+				]);
+				const omittedMenuLinks = await driver.findElements(
+					By.css(
+						'nav[aria-label="Site navigation"] a[href="/cv"], nav[aria-label="Site navigation"] a[href="/tool/elastictabs"]'
+					)
+				);
+				expect(omittedMenuLinks).toHaveLength(0);
+				await menuButton.click();
+
+				await links[0]!.click();
+				await driver.wait(
+					async () =>
+						(await driver.getCurrentUrl()) ===
+						`${origin}/experiments/rays`,
+					5000
+				);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('prerenders the Glade layout only for routes in its group', async () => {
+			try {
+				for (const path of ['/', '/article', '/2026/endings']) {
+					const response = await fetch(`${origin}${path}`);
+					expect(response.ok).toBe(true);
+					const html = await response.text();
+					expect(html.includes('data-glade-layout')).toBe(
+						path !== '/2026/endings'
+					);
+				}
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it.each([
+			{ width: 1280, height: 900 },
+			{ width: 390, height: 844 },
+		])(
+			'keeps Endings standalone and restores Glade on return at $width px',
+			async size => {
+				try {
+					await driver.manage().setTimeouts({ implicit: 5000 });
+					await driver.manage().window().setRect(size);
+					await driver.get(`${origin}/2026/endings`);
+					expect(
+						await driver.findElements(
+							By.css(
+								'[data-glade-layout], nav[aria-label="Site navigation"], figure video'
+							)
+						)
+					).toHaveLength(0);
+					await driver.executeScript(
+						'window.scrollTo(0, document.documentElement.scrollHeight);'
+					);
+
+					const backLink = await driver.findElement(
+						By.css('a[aria-label="Back to homepage"]')
+					);
+					expect(await backLink.getText()).toBe('Back');
+
+					await backLink.click();
+					await driver.wait(
+						async () =>
+							(await driver.getCurrentUrl()) === `${origin}/`,
+						5000
+					);
+					expect(
+						await driver
+							.findElement(By.css('figure video'))
+							.isDisplayed()
+					).toBe(true);
+					expect(
+						await driver.findElements(By.css('[data-glade-layout]'))
+					).toHaveLength(1);
+					await driver.navigate().back();
+					await driver.wait(
+						async () =>
+							(await driver.getCurrentUrl()) ===
+							`${origin}/2026/endings`,
+						5000
+					);
+					expect(
+						await driver.findElements(By.css('[data-glade-layout]'))
+					).toHaveLength(0);
+				} finally {
+					await driver.quit();
+				}
+			}
+		);
 	});
 });

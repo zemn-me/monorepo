@@ -1,3 +1,5 @@
+import { data } from 'react-router';
+
 import style from '#root/project/me/zemn/app/not-found.module.css';
 
 export default function NotFound() {
@@ -6,4 +8,8 @@ export default function NotFound() {
 			<i lang="en-GB">The requested resource was not found.</i>
 		</main>
 	);
+}
+
+export function loader() {
+	return data(null, { status: 404 });
 }

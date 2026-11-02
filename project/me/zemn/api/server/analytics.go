@@ -88,22 +88,44 @@ func (s Server) GetAdminAnalyticsEvents(ctx context.Context, rq GetAdminAnalytic
 		limit = maxAdminAnalyticsEventsLimit
 	}
 
-	exclusiveStartKey, err := decodeAnalyticsCursor(rq.Params.Cursor)
-	if err != nil {
-		return nil, err
+	condition := "feed = :feed"
+	values := map[string]types.AttributeValue{
+		":feed": &types.AttributeValueMemberS{Value: analyticsFeed},
+	}
+	if rq.Params.StartDate != nil || rq.Params.EndDate != nil {
+		if rq.Params.StartDate == nil || rq.Params.EndDate == nil {
+			return GetAdminAnalyticsEvents400Response{}, nil
+		}
+		start, startErr := time.Parse(time.DateOnly, *rq.Params.StartDate)
+		end, endErr := time.Parse(time.DateOnly, *rq.Params.EndDate)
+		if startErr != nil || endErr != nil || !start.Before(end) {
+			return GetAdminAnalyticsEvents400Response{}, nil
+		}
+		// Date prefixes bound whole UTC days, including legacy sort keys with
+		// variable fractional-second precision. No event equals the end prefix.
+		condition += " AND #when BETWEEN :start AND :end"
+		values[":start"] = &types.AttributeValueMemberS{Value: *rq.Params.StartDate}
+		values[":end"] = &types.AttributeValueMemberS{Value: *rq.Params.EndDate}
 	}
 
-	out, err := s.ddb.Query(ctx, &dynamodb.QueryInput{
-		TableName:              aws.String(s.analyticsTableName),
-		IndexName:              aws.String(analyticsFeedIndexName),
-		KeyConditionExpression: aws.String("feed = :feed"),
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":feed": &types.AttributeValueMemberS{Value: analyticsFeed},
-		},
-		ExclusiveStartKey: exclusiveStartKey,
-		Limit:             aws.Int32(limit),
-		ScanIndexForward:  aws.Bool(false),
-	})
+	exclusiveStartKey, err := decodeAnalyticsCursor(rq.Params.Cursor)
+	if err != nil {
+		return GetAdminAnalyticsEvents400Response{}, nil
+	}
+
+	query := &dynamodb.QueryInput{
+		TableName:                 aws.String(s.analyticsTableName),
+		IndexName:                 aws.String(analyticsFeedIndexName),
+		KeyConditionExpression:    aws.String(condition),
+		ExpressionAttributeValues: values,
+		ExclusiveStartKey:         exclusiveStartKey,
+		Limit:                     aws.Int32(limit),
+		ScanIndexForward:          aws.Bool(false),
+	}
+	if rq.Params.StartDate != nil {
+		query.ExpressionAttributeNames = map[string]string{"#when": "when"}
+	}
+	out, err := s.ddb.Query(ctx, query)
 	if err != nil {
 		return nil, err
 	}

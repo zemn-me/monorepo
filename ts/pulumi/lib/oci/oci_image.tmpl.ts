@@ -26,7 +26,11 @@ export class __ClassName extends ComponentResource {
 			{
 				push: '__PUSH_BIN',
 				digest: output(
-					readFile(__ClassName.digestPath).then(f => f.toString())
+					// Pulumi identifies promises with instanceof; normalize Node's
+					// promise into this realm when running inside a test VM.
+					Promise.resolve(readFile(__ClassName.digestPath)).then(f =>
+						f.toString()
+					)
 				),
 				...args,
 			},

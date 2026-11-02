@@ -3,8 +3,6 @@ from subprocess import run as _run
 from os import environ, getenv
 from os.path import exists
 
-from py.ci.post_upgrade.integrity import update_git_refs_archives_file
-
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
 
@@ -48,6 +46,16 @@ def go_mod_tidy():
 	return bazel_run(["@@//sh/bin:go", "--", "mod", "tidy"])
 
 
+def pnpm_lockfile():
+	return bazel_run([
+		"@@//sh/bin:pnpm",
+		"--",
+		"install",
+		"--lockfile-only",
+		"--force",
+	])
+
+
 def sync_go_versions():
 	return bazel_run([
 		"@@//go/cmd/version_sync",
@@ -78,6 +86,7 @@ def bazel_update_modfile():
 	return bazel(["mod", "tidy"])
 
 def modify_non_bazel_lockfiles():
+	pnpm_lockfile()
 	sync_go_versions()
 	go_mod_tidy()
 	sync_go_versions()
@@ -93,5 +102,4 @@ def modify_bazel_lockfiles():
 
 modify_non_bazel_lockfiles()
 modify_bazel_lockfiles()
-update_git_refs_archives_file(f"{wd}/MODULE.bazel")
 run(["rm", "-rf", "dist/"])

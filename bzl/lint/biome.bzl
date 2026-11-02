@@ -106,7 +106,7 @@ def _biome_aspect_impl(target, ctx):
 
     return [info]
 
-def lint_biome_aspect(binary, config, extra_configs = [], rule_kinds = ["js_library", "ts_project", "ts_project_rule"]):
+def lint_biome_aspect(binary, config, extra_configs = [], rule_kinds = ["filegroup", "js_library", "ts_project", "ts_project_rule"]):
     """Create a Biome linter aspect."""
 
     if type(extra_configs) == "string":
