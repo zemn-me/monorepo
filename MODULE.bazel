@@ -1067,8 +1067,21 @@ filegroup(
 """,
     commit = "92f0aa9009506c2c090846d3a924bb5a163c4349",
     patch_args = ["-p1"],
+    # Bazel 9.3.1 discards recursive submodule update failures and puts its
+    # shallow flag before Git's -c argument. Run the update with a checked exit
+    # status and the depth flag in the submodule command instead.
+    patch_cmds = [
+        "git -c core.fsmonitor=false submodule update --init --recursive --checkout --depth=1",
+        "test -f thirdparty/bgfx.cmake/bgfx/scripts/bgfx.idl",
+        "test -f thirdparty/bgfx.cmake/bx/src/bx.cpp",
+        "test -f thirdparty/bgfx.cmake/bimg/src/image.cpp",
+        "test -f thirdparty/freetype/CMakeLists.txt",
+        "test -f thirdparty/RmlUi/CMakeLists.txt",
+        "test -f thirdparty/SDL/CMakeLists.txt",
+        "test -f thirdparty/miniaudio/miniaudio.h",
+        "test -f thirdparty/imgui/imgui.cpp",
+    ],
     patches = ["//third_party/opents:web.patch"],
-    recursive_init_submodules = True,
     remote = "https://github.com/TFrey98/OpenTS_mac.git",
 )
 
