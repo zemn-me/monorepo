@@ -8,7 +8,7 @@ import {
 
 import {
 	oidcSessionQueryKey,
-	readOIDCIdTokenHint,
+	readOIDCLoginHints,
 	readOIDCSession,
 	resetAuthenticationSession,
 } from '#root/project/me/zemn/hook/authentication_session.js';
@@ -26,6 +26,7 @@ import {
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
+import { resolveOIDCLoginHint } from '#root/ts/oidc/login_hint.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
 import * as option from '#root/ts/option/types.js';
 import { Err, Ok } from '#root/ts/result/result.js';
@@ -107,7 +108,7 @@ export function useOIDC(
 	const authRq = future_and_then(
 		entropy,
 		(e: string): OIDCAuthenticationRequest => {
-			const idTokenHint = readOIDCIdTokenHint(
+			const loginHints = readOIDCLoginHints(
 				window.localStorage,
 				issuer,
 				params.client_id
@@ -121,7 +122,7 @@ export function useOIDC(
 				scope: Array.from(
 					new Set(['openid', ...params.scope.split(' ')])
 				).join(' '),
-				...(idTokenHint === null ? {} : { id_token_hint: idTokenHint }),
+				...loginHints,
 			};
 		}
 	);
@@ -189,7 +190,22 @@ export function useOIDC(
 			}
 		);
 
-		return responseParams;
+		const responseIdToken =
+			'id_token' in responseParams ? responseParams.id_token : undefined;
+		const loginHint = responseIdToken
+			? await entropy(
+					nonce =>
+						resolveOIDCLoginHint(
+							issuer,
+							params.client_id,
+							responseIdToken,
+							nonce
+						),
+					() => Promise.resolve(undefined),
+					() => Promise.resolve(undefined)
+				)
+			: undefined;
+		return { ...responseParams, loginHint };
 	};
 
 	const callbackQuery = useQuery({
@@ -243,6 +259,10 @@ export function useOIDC(
 		resetAuthenticationSession({
 			clientId: params.client_id,
 			idTokenHint,
+			loginHint:
+				idTokenHint === null
+					? undefined
+					: callbackQuery.data?.loginHint,
 			issuer,
 			nextSession,
 			queryClient,
@@ -258,6 +278,7 @@ export function useOIDC(
 				url => {
 					const switchUserURL = new URL(url);
 					switchUserURL.searchParams.delete('id_token_hint');
+					switchUserURL.searchParams.delete('login_hint');
 					switchUserURL.searchParams.set('prompt', 'select_account');
 					const authentication = authenticate(switchUserURL)();
 					const nextSession = endSession(null);

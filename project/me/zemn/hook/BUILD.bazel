@@ -66,6 +66,7 @@ ts_project(
         "journal_refresh_test.tsx",
         "journal_upload_test.ts",
         "key_mutation_test.tsx",
+        "oidc_relogin_test.tsx",
         "server_session_test.tsx",
         "session_cookie_test.ts",
     ],
@@ -81,6 +82,7 @@ ts_project(
         "//:node_modules/react-dom",
         "//project/me/zemn/constants",
         "//ts/future",
+        "//ts/oidc",
     ],
 )
 
@@ -92,6 +94,7 @@ jest_test(
         "journal_refresh_test.js",
         "journal_upload_test.js",
         "key_mutation_test.js",
+        "oidc_relogin_test.js",
         "server_session_test.js",
         "session_cookie_test.js",
     ],
@@ -116,6 +119,7 @@ filegroup(
         "journal_upload.ts",
         "journal_upload_test.ts",
         "key_mutation_test.tsx",
+        "oidc_relogin_test.tsx",
         "server_session.tsx",
         "server_session_test.tsx",
         "session.server.ts",

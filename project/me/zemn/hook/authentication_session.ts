@@ -1,9 +1,10 @@
 import { QueryClient, QueryKey } from '@tanstack/react-query';
-
 import { ZEMN_ME_QUERY_CACHE_STORAGE_KEY } from '#root/project/me/zemn/constants/constants.js';
+import { hasOIDCLoginHintStrategy } from '#root/ts/oidc/login_hint.js';
 
 const oidcSessionQueryKeyPrefix = 'oidc-active-session';
 const oidcSessionStorageKeyPrefix = 'zemn-me-oidc-session';
+const oidcLoginHintStorageKeyPrefix = 'zemn-me-oidc-login-hint';
 const oidcIdTokenHintStorageKeyPrefix = 'zemn-me-oidc-id-token-hint';
 
 export function oidcSessionQueryKey(
@@ -39,9 +40,25 @@ export function readOIDCIdTokenHint(
 	return storage.getItem(oidcIdTokenHintStorageKey(issuer, clientId));
 }
 
+/** Persisted hints only preselect an account; the API still verifies authentication. */
+export function readOIDCLoginHints(
+	storage: Pick<Storage, 'getItem'>,
+	issuer: string,
+	clientId: string
+): { login_hint?: string; id_token_hint?: string } {
+	const loginHint = storage.getItem(
+		`${oidcLoginHintStorageKeyPrefix}:${issuer}:${clientId}`
+	);
+	if (hasOIDCLoginHintStrategy(issuer) && loginHint)
+		return { login_hint: loginHint };
+	const idTokenHint = readOIDCIdTokenHint(storage, issuer, clientId);
+	return idTokenHint === null ? {} : { id_token_hint: idTokenHint };
+}
+
 export interface ResetAuthenticationSessionOptions {
 	readonly clientId: string;
 	readonly idTokenHint: string | null;
+	readonly loginHint?: string;
 	readonly issuer: string;
 	readonly nextSession: number;
 	readonly queryClient: QueryClient;
@@ -52,6 +69,7 @@ export interface ResetAuthenticationSessionOptions {
 export function resetAuthenticationSession({
 	clientId,
 	idTokenHint,
+	loginHint,
 	issuer,
 	nextSession,
 	queryClient,
@@ -61,8 +79,15 @@ export function resetAuthenticationSession({
 	// a tab closed immediately after logout must not restore the old session.
 	storage.removeItem(ZEMN_ME_QUERY_CACHE_STORAGE_KEY);
 	const hintKey = oidcIdTokenHintStorageKey(issuer, clientId);
-	if (idTokenHint === null) storage.removeItem(hintKey);
-	else storage.setItem(hintKey, idTokenHint);
+	const loginHintKey = `${oidcLoginHintStorageKeyPrefix}:${issuer}:${clientId}`;
+	if (hasOIDCLoginHintStrategy(issuer) && loginHint && idTokenHint !== null) {
+		storage.setItem(loginHintKey, loginHint);
+		storage.removeItem(hintKey);
+	} else {
+		storage.removeItem(loginHintKey);
+		if (idTokenHint === null) storage.removeItem(hintKey);
+		else storage.setItem(hintKey, idTokenHint);
+	}
 	storage.setItem(
 		oidcSessionStorageKey(issuer, clientId),
 		nextSession.toString()
