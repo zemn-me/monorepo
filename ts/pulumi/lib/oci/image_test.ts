@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { expect, test } from '@jest/globals';
+import { afterAll, expect, test } from '@jest/globals';
 import * as pulumi from '@pulumi/pulumi';
 
 import { OCIImage } from './image.js';
@@ -16,6 +16,8 @@ void pulumi.runtime.setMocks({
 	},
 	call: args => args.inputs,
 });
+
+afterAll(() => pulumi.runtime.disconnect());
 
 test('the provider can run an OCI push from the program runfiles', async () => {
 	const directory = mkdtempSync(
@@ -68,12 +70,14 @@ test('the provider can run an OCI push from the program runfiles', async () => {
 				mode: 0o755,
 			}
 		);
-		new OCIImage('failed_test', {
+		const failedImage = new OCIImage('failed_test', {
 			push: failingPush,
 			repository: 'example.invalid/not-uploaded',
 			digest: `sha256:${'0'.repeat(64)}`,
 		});
-		await pulumi.runtime.disconnect();
+		await new Promise<void>(resolve =>
+			failedImage.uri.apply(() => resolve())
+		);
 		expect(commands).toHaveLength(3);
 		for (const name of ['runfiles_test_push', 'launcher_test_push']) {
 			const command = commands.find(item => item.name === name)!;
@@ -126,6 +130,113 @@ test('the provider can run an OCI push from the program runfiles', async () => {
 		expect(failed.status).toBe(23);
 		expect(failed.stderr).toContain('push failed');
 		expect(failed.stdout).toBe('');
+	} finally {
+		rmSync(directory, { recursive: true, force: true });
+	}
+});
+
+const repository = 'example.invalid/not-uploaded';
+const digest = `sha256:${'0'.repeat(64)}`;
+const imageRef = `${repository}@${digest}`;
+
+test.each([
+	{
+		name: 'successful push',
+		stdout: `${imageRef}\n`,
+		stderr: '',
+		status: 0,
+		expectedStatus: 0,
+		expectedStderr: '',
+	},
+	{
+		name: 'successful push with diagnostics',
+		stdout: `${imageRef}\nstdout diagnostic\n${imageRef} unexpected suffix\n`,
+		stderr: 'stderr diagnostic\n',
+		status: 0,
+		expectedStatus: 0,
+		expectedStderr:
+			`stdout diagnostic\n${imageRef} unexpected suffix\n` +
+			'stderr diagnostic\n',
+	},
+	{
+		name: 'different repository reference',
+		stdout: `${imageRef.replace('example.invalid', 'exampleXinvalid')}\n`,
+		stderr: '',
+		status: 0,
+		expectedStatus: 0,
+		expectedStderr: `${imageRef.replace('example.invalid', 'exampleXinvalid')}\n`,
+	},
+	{
+		name: 'reference reported on stderr',
+		stdout: `${imageRef}\n`,
+		stderr: `${imageRef}\n`,
+		status: 0,
+		expectedStatus: 0,
+		expectedStderr: `${imageRef}\n`,
+	},
+	{
+		name: 'existing image',
+		stdout: `${imageRef}\n`,
+		stderr: `2026/11/04 00:00:00 existing manifest: ${digest}\n`,
+		status: 1,
+		expectedStatus: 0,
+		expectedStderr: '',
+	},
+	{
+		name: 'failed push',
+		stdout: `${imageRef}\nstdout diagnostic\n`,
+		stderr: 'permission denied\n',
+		status: 23,
+		expectedStatus: 23,
+		expectedStderr: `${imageRef}\nstdout diagnostic\npermission denied\n`,
+	},
+])('$name preserves the image result and diagnostics', async scenario => {
+	const directory = mkdtempSync(
+		path.join(process.env['TEST_TMPDIR'] ?? tmpdir(), 'oci-output-')
+	);
+	try {
+		const push = path.join(directory, 'push.sh');
+		writeFileSync(
+			push,
+			[
+				'#!/bin/sh',
+				'printf "%s" "$PUSH_STDOUT"',
+				'printf "%s" "$PUSH_STDERR" >&2',
+				'exit "$PUSH_STATUS"',
+			].join('\n'),
+			{ mode: 0o755 }
+		);
+		const image = new OCIImage(scenario.name, {
+			push,
+			repository,
+			digest: `${digest}\n`,
+		});
+		await new Promise<void>(resolve => image.uri.apply(() => resolve()));
+		const command = commands.find(
+			item => item.name === `${scenario.name}_push`
+		)!;
+		const [executable, ...args] = command.inputs['interpreter'] as string[];
+		for (const lifecycle of ['create', 'update']) {
+			const result = spawnSync(
+				executable!,
+				[...args, command.inputs[lifecycle] as string],
+				{
+					env: {
+						...process.env,
+						PUSH_STDOUT: scenario.stdout,
+						PUSH_STDERR: scenario.stderr,
+						PUSH_STATUS: String(scenario.status),
+					},
+					encoding: 'utf8',
+				}
+			);
+			expect(result.error).toBeUndefined();
+			expect(result.status).toBe(scenario.expectedStatus);
+			expect(result.stderr).toBe(scenario.expectedStderr);
+			expect(result.stdout).toBe(
+				scenario.expectedStatus === 0 ? `${imageRef}\n` : ''
+			);
+		}
 	} finally {
 		rmSync(directory, { recursive: true, force: true });
 	}
