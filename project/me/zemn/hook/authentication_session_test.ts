@@ -70,25 +70,25 @@ it('clears the ID-token hint when switching users', () => {
 	).toBeNull();
 });
 
-it('retains a Google subject through logout and reload, then clears it for account switching', () => {
+it('derives a Google subject from a saved token after logout and reload', () => {
 	const storage = window.localStorage;
 	const google = 'https://accounts.google.com';
+	const rawToken = `eyJhbGciOiJub25lIn0.${Buffer.from(JSON.stringify({ sub: 'old-subject', exp: 1 })).toString('base64url')}.`;
 	const queryClient = new QueryClient();
 	storage.clear();
 	queryClient.setQueryData(['private-data'], 'secret');
 	resetAuthenticationSession({
 		clientId,
 		issuer: google,
-		idTokenHint: 'raw-token',
-		loginHint: 'verified-google-subject',
+		idTokenHint: rawToken,
 		nextSession: 1,
 		queryClient,
 		storage,
 	});
 	expect(readOIDCLoginHints(storage, google, clientId)).toEqual({
-		login_hint: 'verified-google-subject',
+		login_hint: 'old-subject',
 	});
-	expect(readOIDCIdTokenHint(storage, google, clientId)).toBeNull();
+	expect(readOIDCIdTokenHint(storage, google, clientId)).toBe(rawToken);
 	expect(readOIDCLoginHints(storage, google, 'another-client')).toEqual({});
 	expect(readOIDCLoginHints(storage, issuer, clientId)).toEqual({});
 	expect(queryClient.getQueryData(['private-data'])).toBeUndefined();
@@ -103,38 +103,51 @@ it('retains a Google subject through logout and reload, then clears it for accou
 	expect(readOIDCLoginHints(storage, google, clientId)).toEqual({});
 });
 
-it.each(['https://accounts.google.com', 'accounts.google.com', issuer])(
-	'retains the ID-token fallback without a validated hint for %s',
+it.each(['https://accounts.google.com', 'accounts.google.com'])(
+	'ignores malformed saved Google tokens without sending id_token_hint for %s',
 	configuredIssuer => {
 		const storage = window.localStorage;
 		storage.clear();
-		resetAuthenticationSession({
-			clientId,
-			issuer: configuredIssuer,
-			idTokenHint: 'fallback-token',
-			nextSession: 1,
-			queryClient: new QueryClient(),
-			storage,
-		});
+		storage.setItem(
+			`zemn-me-oidc-id-token-hint:${configuredIssuer}:${clientId}`,
+			'malformed'
+		);
 		expect(readOIDCLoginHints(storage, configuredIssuer, clientId)).toEqual(
-			{ id_token_hint: 'fallback-token' }
+			{}
 		);
 	}
 );
 
-it('does not apply Google hints to other issuers', () => {
+it('ignores legacy subjects without a raw token and clears them on session reset', () => {
+	const storage = window.localStorage;
+	const google = 'https://accounts.google.com';
+	const legacyKey = `zemn-me-oidc-login-hint:${google}:${clientId}`;
+	storage.clear();
+	storage.setItem(legacyKey, 'legacy-subject');
+	expect(readOIDCLoginHints(storage, google, clientId)).toEqual({});
+	resetAuthenticationSession({
+		clientId,
+		issuer: google,
+		idTokenHint: null,
+		nextSession: 1,
+		queryClient: new QueryClient(),
+		storage,
+	});
+	expect(storage.getItem(legacyKey)).toBeNull();
+});
+
+it('retains the raw token fallback for issuers without a selector', () => {
 	const storage = window.localStorage;
 	storage.clear();
 	resetAuthenticationSession({
 		clientId,
 		issuer,
-		idTokenHint: 'fallback-token',
-		loginHint: 'google-subject',
+		idTokenHint: 'opaque-token',
 		nextSession: 1,
 		queryClient: new QueryClient(),
 		storage,
 	});
 	expect(readOIDCLoginHints(storage, issuer, clientId)).toEqual({
-		id_token_hint: 'fallback-token',
+		id_token_hint: 'opaque-token',
 	});
 });
