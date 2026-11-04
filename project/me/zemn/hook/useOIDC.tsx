@@ -8,7 +8,7 @@ import {
 
 import {
 	oidcSessionQueryKey,
-	readOIDCLoginHints,
+	readOIDCIdTokenHint,
 	readOIDCSession,
 	resetAuthenticationSession,
 } from '#root/project/me/zemn/hook/authentication_session.js';
@@ -26,6 +26,7 @@ import {
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
+import { selectOIDCLoginHints } from '#root/ts/oidc/login_hint.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
 import * as option from '#root/ts/option/types.js';
 import { Err, Ok } from '#root/ts/result/result.js';
@@ -107,7 +108,7 @@ export function useOIDC(
 	const authRq = future_and_then(
 		entropy,
 		(e: string): OIDCAuthenticationRequest => {
-			const loginHints = readOIDCLoginHints(
+			const idTokenHint = readOIDCIdTokenHint(
 				window.localStorage,
 				issuer,
 				params.client_id
@@ -121,7 +122,7 @@ export function useOIDC(
 				scope: Array.from(
 					new Set(['openid', ...params.scope.split(' ')])
 				).join(' '),
-				...loginHints,
+				...selectOIDCLoginHints(issuer, idTokenHint),
 			};
 		}
 	);

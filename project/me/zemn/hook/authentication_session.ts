@@ -1,10 +1,9 @@
 import { QueryClient, QueryKey } from '@tanstack/react-query';
+
 import { ZEMN_ME_QUERY_CACHE_STORAGE_KEY } from '#root/project/me/zemn/constants/constants.js';
-import { selectOIDCLoginHints } from '#root/ts/oidc/login_hint.js';
 
 const oidcSessionQueryKeyPrefix = 'oidc-active-session';
 const oidcSessionStorageKeyPrefix = 'zemn-me-oidc-session';
-const legacyOIDCLoginHintStorageKeyPrefix = 'zemn-me-oidc-login-hint';
 const oidcIdTokenHintStorageKeyPrefix = 'zemn-me-oidc-id-token-hint';
 
 export function oidcSessionQueryKey(
@@ -40,18 +39,6 @@ export function readOIDCIdTokenHint(
 	return storage.getItem(oidcIdTokenHintStorageKey(issuer, clientId));
 }
 
-/** Persisted hints only preselect an account; the API still verifies authentication. */
-export function readOIDCLoginHints(
-	storage: Pick<Storage, 'getItem'>,
-	issuer: string,
-	clientId: string
-): { login_hint?: string; id_token_hint?: string } {
-	return selectOIDCLoginHints(
-		issuer,
-		readOIDCIdTokenHint(storage, issuer, clientId)
-	);
-}
-
 export interface ResetAuthenticationSessionOptions {
 	readonly clientId: string;
 	readonly idTokenHint: string | null;
@@ -74,11 +61,6 @@ export function resetAuthenticationSession({
 	// a tab closed immediately after logout must not restore the old session.
 	storage.removeItem(ZEMN_ME_QUERY_CACHE_STORAGE_KEY);
 	const hintKey = oidcIdTokenHintStorageKey(issuer, clientId);
-	// Discard the old separately derived hint. Subject-only legacy sessions make
-	// one unhinted login, then retain the raw token for subsequent selection.
-	storage.removeItem(
-		`${legacyOIDCLoginHintStorageKeyPrefix}:${issuer}:${clientId}`
-	);
 	if (idTokenHint === null) storage.removeItem(hintKey);
 	else storage.setItem(hintKey, idTokenHint);
 	storage.setItem(

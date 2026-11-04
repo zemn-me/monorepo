@@ -78,6 +78,11 @@ it.each([
 	async ({ configuredIssuer, savedToken, initialLoginHint, google }) => {
 		jest.useFakeTimers();
 		window.localStorage.clear();
+		// Previously derived hints are ignored, including subject-only storage.
+		window.localStorage.setItem(
+			`zemn-me-oidc-login-hint:${configuredIssuer}:${clientId}`,
+			'ignored-legacy-subject'
+		);
 		if (savedToken !== null) {
 			window.localStorage.setItem(
 				`zemn-me-oidc-id-token-hint:${configuredIssuer}:${clientId}`,
