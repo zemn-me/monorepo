@@ -39,8 +39,8 @@ importers:
         specifier: 10.2.0
         version: 10.2.0(typescript@7.0.2)
       '@pulumi/random':
-        specifier: 4.21.4
-        version: 4.21.4(typescript@7.0.2)
+        specifier: 4.21.6
+        version: 4.21.6(typescript@7.0.2)
       '@radix-ui/react-tooltip':
         specifier: 1.4.1
         version: 1.4.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -2660,8 +2660,8 @@ packages:
       typescript:
         optional: true
 
-  '@pulumi/random@4.21.4':
-    resolution: {integrity: sha512-CKWWZDfIZxdIB8/Xax5IqqGQNyPEdT8TFwJwooK4saU6kU0ozdmrySZ9jt8U1thlYIQTaYitP9EeMBnPbVK+1g==}
+  '@pulumi/random@4.21.6':
+    resolution: {integrity: sha512-HsWUATAcKxceBcvNzPIdkC7sXyWWiGZmd/y4eZKF5nSAwCgpOPReZ+LLFbkl2bvKGHc3nNX5vIM84YU2dpSD1Q==}
 
   '@puppeteer/browsers@3.2.6':
     resolution: {integrity: sha512-MJP29gVoHznmqmwhH1tlZqzfeQ3aylTpSSa6WKZXtkwYUH02i9imBmWGTyZrbnAou5paX78SE4jMAUqnEPf8ug==}
@@ -11963,7 +11963,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@pulumi/random@4.21.4(typescript@7.0.2)':
+  '@pulumi/random@4.21.6(typescript@7.0.2)':
     dependencies:
       '@pulumi/pulumi': 3.273.0(typescript@7.0.2)
     transitivePeerDependencies:
