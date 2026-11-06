@@ -7,9 +7,8 @@ import {
 	jest,
 } from '@jest/globals';
 import { raf } from '@react-spring/rafz';
-import type { AnchorHTMLAttributes, ReactNode } from 'react';
+import { type AnchorHTMLAttributes, act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 import type { GladeProps } from './glade.js';
 

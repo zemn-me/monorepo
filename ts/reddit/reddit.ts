@@ -7,7 +7,7 @@ export const RedditStatusFailed = z.object({
 export const RedditMediaMetadata = z.object({
 	e: z.literal('Image'),
 	s: z.object({
-		u: z.string().url(),
+		u: z.url(),
 		x: z.number(),
 		y: z.number(),
 	}),
@@ -47,7 +47,7 @@ export const RedditPost = z.object({
 							.object({
 								height: z.number(),
 								width: z.number(),
-								url: z.string().url(),
+								url: z.url(),
 							})
 							.optional()
 							.nullable(),

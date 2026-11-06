@@ -6,8 +6,6 @@ export interface cultist {
 	decks: Deck[];
 	elements: Element[];
 	verbs: Verb[];
-	/** @deprecated in-game typo */
-	legcies: Legacy[];
 	legacies: Legacy[];
 	settings: Setting[];
 	recipes: Recipe[];

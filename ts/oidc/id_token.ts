@@ -10,7 +10,6 @@ const NumericDate = z
 	.describe('Seconds since 1970-01-01T00:00:00Z');
 
 const Issuer = z
-	.string()
 	.url()
 	.refine(u => {
 		try {
@@ -76,8 +75,8 @@ export const OidcIdTokenClaimsSchema = z.object({
 	middle_name: z.string().optional(),
 	nickname: z.string().optional(),
 	preferred_username: z.string().optional(),
-	picture: z.string().url().optional(),
-	email: z.string().email().optional(),
+	picture: z.url().optional(),
+	email: z.email().optional(),
 	email_verified: z.boolean().optional(),
 });
 
