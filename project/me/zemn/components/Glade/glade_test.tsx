@@ -323,3 +323,19 @@ it('retracts rays normally after failure and dismisses the warning after two sec
 		container.querySelector('[data-icon="triangle-exclamation"]')
 	).toBeNull();
 });
+
+it('uses one eye in the homepage top bar and keeps the hero name card', () => {
+	pathname = '/';
+	act(() => root.render(<Glade />));
+	expect(
+		container.querySelectorAll('a[aria-label="Go to homepage"] svg')
+	).toHaveLength(1);
+	expect(
+		container.querySelector(
+			'header[data-glade-banner] a[aria-label="Go to homepage"] svg'
+		)
+	).not.toBeNull();
+	const heroCard = container.querySelector('div[data-glade-banner] a');
+	expect(heroCard?.textContent).toContain('Thomas NJ Shadwell');
+	expect(heroCard?.querySelector('svg')).toBeNull();
+});
