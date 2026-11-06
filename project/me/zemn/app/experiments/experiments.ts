@@ -22,7 +22,7 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/arena',
 				title: 'SVG Arena',
-				description: 'FPS-style SVG arena with a pointer-lock camera.',
+				description: 'Doom’s first level, in wireframe.',
 			},
 			{
 				href: '/experiments/platonics',
