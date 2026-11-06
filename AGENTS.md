@@ -108,3 +108,8 @@ required checks. Record the failure class and test coverage in its description.
 - For timezone-aware TypeScript calendar math, use `Temporal.ZonedDateTime`
   from `temporal-polyfill` rather than custom offset or `Intl.formatToParts`
   arithmetic.
+
+## LDML parser
+
+LDML parsing utilities with template-literal type inference live in `ts/ldml`.
+Run their tests with `./sh/bin/bazel test //ts/ldml:tests`.

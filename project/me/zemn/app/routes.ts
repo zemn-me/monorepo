@@ -86,6 +86,10 @@ export default [
 				path: 'experiments',
 			},
 			{
+				file: 'experiments/ldml/page.js',
+				path: 'experiments/ldml',
+			},
+			{
 				file: 'experiments/arena/page.js',
 				path: 'experiments/arena',
 			},
