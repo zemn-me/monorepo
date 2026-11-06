@@ -147,6 +147,17 @@ function Event({ event: e }: { readonly event: Bio.Event }) {
 				</span>
 			) : null}{' '}
 			<SectionLink href={`#${e.id}`}>§{shortIdForEvent(e)}.</SectionLink>
+			{e.location ? (
+				<address lang={lang.get(e.location.address)}>
+					<Link
+						href={`https://maps.google.com?${new URLSearchParams({
+							q: [e.location.latitude, e.location.longitude].join(', '),
+						})}`}
+					>
+						{e.location.address.text}
+					</Link>
+				</address>
+			) : null}
 		</article>
 	);
 }
