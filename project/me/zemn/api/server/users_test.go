@@ -75,7 +75,34 @@ func TestGetAdminUsersIncludesHardcoded(t *testing.T) {
 	}
 }
 
-func TestMaybeResolveUserFromTableMatchesEmailAndBackfillsClaims(t *testing.T) {
+func TestMaybeResolveUserFromTableRejectsMatchingEmail(t *testing.T) {
+	s := newTestServer()
+	ctx := context.Background()
+	response, err := s.PostAdminUsers(ctx, PostAdminUsersRequestObject{
+		Body: &NewUser{Email: "person@example.com", Scopes: &[]string{"admin_uid_read"}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	created := response.(PostAdminUsers200JSONResponse)
+	verified := true
+	resolved, err := s.maybeResolveUserFromTable(ctx, tokenExchangeUserDetails{
+		Issuer: googleOIDCIssuer, Provider: googleOIDCIssuer, Audience: googleClientID,
+		RemoteSubject: "unknown-subject", Email: "Person@Example.COM", EmailVerified: &verified,
+	})
+	if err != nil || resolved != nil {
+		t.Fatalf("email matched an account: %+v, %v", resolved, err)
+	}
+	rec, err := s.findUserByLocalID(ctx, created.Id)
+	if err != nil || rec == nil {
+		t.Fatalf("load original account: %+v, %v", rec, err)
+	}
+	if len(rec.SubjectIds) != 0 || len(rec.Scopes) != 1 || rec.Scopes[0] != "admin_uid_read" {
+		t.Fatalf("email-only login changed account: %+v", rec)
+	}
+}
+
+func TestMaybeResolveUserFromTableMatchesSubjectAndBackfillsClaims(t *testing.T) {
 	s := newTestServer()
 
 	createResp, err := s.PostAdminUsers(context.Background(), PostAdminUsersRequestObject{
@@ -89,13 +116,24 @@ func TestMaybeResolveUserFromTableMatchesEmailAndBackfillsClaims(t *testing.T) {
 	}
 	created := createResp.(PostAdminUsers200JSONResponse)
 
+	subjectIDs := addSubjectID(nil, googleOIDCIssuer, "remote-subject-123")
+	_, err = s.PutAdminUser(context.Background(), PutAdminUserRequestObject{
+		Body: &AdminUserUpdateRequest{
+			Id:         created.Id,
+			SubjectIds: &subjectIDs,
+		},
+	})
+	if err != nil {
+		t.Fatalf("link subject: %v", err)
+	}
+
 	emailVerified := true
 	resolved, err := s.maybeResolveUserFromTable(context.Background(), tokenExchangeUserDetails{
 		Issuer:        "https://accounts.google.com",
 		Provider:      "https://accounts.google.com",
 		Audience:      googleClientID,
 		RemoteSubject: "remote-subject-123",
-		Email:         "person@example.com",
+		Email:         "updated@example.com",
 		Name:          "Person Example",
 		GivenName:     "Person",
 		FamilyName:    "Example",
@@ -121,7 +159,10 @@ func TestMaybeResolveUserFromTableMatchesEmailAndBackfillsClaims(t *testing.T) {
 		t.Fatalf("lookup updated record: %v", err)
 	}
 	if rec == nil {
-		t.Fatalf("expected remote subject mapping to be backfilled")
+		t.Fatalf("expected remote subject mapping to be preserved")
+	}
+	if len(rec.Emails) != 2 || rec.Emails[1] != "updated@example.com" {
+		t.Fatalf("expected profile email to be updated, got %#v", rec.Emails)
 	}
 	if rec.Name != "Person Example" {
 		t.Fatalf("expected name to be backfilled, got %q", rec.Name)
