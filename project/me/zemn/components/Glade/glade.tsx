@@ -10,6 +10,7 @@ import * as bio from '#root/project/me/zemn/bio/index.js';
 import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
 import { HeraldicShield } from '#root/project/me/zemn/components/Glade/heraldic_shield.js';
 import { GladeMenu } from '#root/project/me/zemn/components/Glade/menu.js';
+import { gladeMenuTopContentContext } from '#root/project/me/zemn/components/Glade/menu_top_content_context.js';
 import style from '#root/project/me/zemn/components/Glade/style.module.css';
 import { HeroVideo } from '#root/project/me/zemn/components/HeroVideo/hero_video.js';
 import { InlineLogin } from '#root/project/me/zemn/components/InlineLogin/inline_login.js';
@@ -136,6 +137,7 @@ export interface GladeProps {
 export default function Glade(props: GladeProps) {
 	const pathname = useLocation().pathname;
 	const isHomepage = pathname == '/';
+	const [menuTopContent, setMenuTopContent] = useState<ReactNode | null>(null);
 	const navigate = useNavigate();
 	const [canGoBack, setCanGoBack] = useState(false);
 	useEffect(() => {
@@ -164,9 +166,11 @@ export default function Glade(props: GladeProps) {
 			className={`${style.main} ${isHomepage ? '' : style.compact}`}
 			data-glade-layout
 		>
-			<section className={style.content} data-glade-content>
-				{props.children}
-			</section>
+			<gladeMenuTopContentContext.Provider value={setMenuTopContent}>
+				<section className={style.content} data-glade-content>
+					{props.children}
+				</section>
+			</gladeMenuTopContentContext.Provider>
 			<HeroVideo className={style.headerBgv} data-glade-banner />
 			{isHomepage && (
 				<div className={style.banner} data-glade-banner>
@@ -205,7 +209,7 @@ export default function Glade(props: GladeProps) {
 				) : (
 					<LetterHead compact />
 				)}
-				<GladeMenu />
+				<GladeMenu topContent={menuTopContent} />
 				{!isHomepage && (
 					<NavigationRays
 						loading={loading}

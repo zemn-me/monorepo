@@ -63,7 +63,7 @@ function idPart(value: string): string {
 }
 
 export function Heading({ level, children, id, ...props }: HeadingProps) {
-	const portal = useContext(tocSegment);
+	const portals = useContext(tocSegment);
 	const reactId = useId();
 	const fallbackId = idPart(reactId) || 'heading';
 	const headingId =
@@ -82,14 +82,15 @@ export function Heading({ level, children, id, ...props }: HeadingProps) {
 	return (
 		<>
 			{element}
-			{portal !== null
-				? createPortal(
-						<li data-toc-heading-level={level}>
-							<a href={href}>{children}</a>
-						</li>,
-						portal
-					)
-				: null}
+			{portals.map((portal, index) =>
+				createPortal(
+					<li data-toc-heading-level={level}>
+						<a href={href}>{children}</a>
+					</li>,
+					portal,
+					`${headingId}-${index}`
+				)
+			)}
 		</>
 	);
 }
