@@ -1,7 +1,7 @@
 # Non-root AWS access
 
-Status: proposed migration; merging this document does not create identities,
-grant access, change session settings, or add resources to either Pulumi stack.
+Status: implementation prepared, activation pending. Neither deployed stack
+supplies `journalLogAccess`, so the implementation registers no access resources.
 Complete the approval and verification steps below before activating access.
 
 ## Goal and evidence
@@ -131,6 +131,51 @@ operator supplies a known group name when using `aws logs tail`.
    recovery path; then retire routine root use. Do not delete root MFA or change
    root recovery as part of this migration.
 
+## Implementation and outstanding activation inputs
+
+`journal_log_access.ts` implements the `JournalLogReader` permission set, inline
+policy above, and a single group assignment to account `658613637108`. It uses an
+explicit provider in the verified Identity Center home Region. Its permission
+set is always `PT1H`; the longer interactive sign-in is configured separately.
+It creates no identities, groups, passwords, permanent credentials, or instance.
+The account, actions, and six log groups are fixed rather than configurable.
+
+Both current stack programs omit `journalLogAccess`. Staging also ignores a
+supplied configuration, so it cannot create shared permission sets or assignments.
+Activation requires a separately reviewed change supplying `homeRegion`, the
+organization `instanceArn`, and the verified `groupId` to the production
+`Component` constructor in `stack.ts`. There is no environment-variable switch
+or guessed default identity. Do not insert the synthetic IDs from the tests.
+
+As of 2026-11-05, a fresh AWS identity check returned an expired-login error.
+No new instance/principal inventory or production preview has therefore been
+verified. The following are needed before the implementation can be activated:
+
+- An authenticated read-only inventory across enabled Regions, confirming the
+  existing instance or confirming approval to enable an organization instance.
+- Approval of `us-east-1` as the proposed home Region and the Identity Center
+  directory as the proposed identity source if no instance/provider exists.
+  Record the actual instance ARN and Identity Store ID after approved bootstrap.
+  Enable an organization instance in the AWS console: `sso-admin create-instance`
+  creates only account instances and rejects an Organizations management account.
+- Thomas's chosen login/recovery address and confirmation of the identities
+  allowed in a dedicated `JournalLogReaders` group. A separate dot identity is
+  optional and requires explicit owner-controlled authentication/recovery.
+  Record the real group ID and inspect all members before assignment.
+- Approval of the exact six log groups in staging and production, refreshed
+  against current function names, and the `PT1H` permission-set assignment.
+- Approval of required MFA and the instance-wide 90-day interactive duration;
+  record other affected users and any shorter identity-provider limit.
+- A reviewed production preview showing only the intended permission set,
+  inline policy, provider, and account assignment for this feature. Enqueueing
+  a live activation PR requires action-time approval because CI deploys it.
+
+Keep the implementation PR in draft until these decisions are resolved. Do not
+turn auto-merge on for activation while approval is outstanding. Passing mock
+resource tests establishes the resource contract, not working SSO access or
+observed multi-day refresh. After approved deployment, perform the live
+acceptance steps below before claiming the root-login problem is resolved.
+
 ## CLI configuration and remote sign-in
 
 After activation, run `aws configure sso --profile journal-logs`. Enter the
@@ -194,3 +239,6 @@ for long-running use; let a supported CLI/SDK refresh them.
 - [Session termination effects](https://docs.aws.amazon.com/singlesignon/latest/userguide/authconcept.html)
 - [CloudWatch Logs IAM actions and resources](https://docs.aws.amazon.com/service-authorization/latest/reference/list_logs.html)
 - [SCP scope](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html)
+
+- [Organization instance enablement](https://docs.aws.amazon.com/singlesignon/latest/userguide/enable-identity-center.html)
+- [CreateInstance API limitations](https://docs.aws.amazon.com/singlesignon/latest/APIReference/API_CreateInstance.html)
