@@ -792,11 +792,11 @@ single_version_override(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=bazelbuild/bazel
-BAZEL_SOURCE_VERSION = "9.3.1"
+BAZEL_SOURCE_VERSION = "9.3.2"
 
 http_archive(
     name = "bazel_source",
-    integrity = "sha256-bYk6ocmnimT07ynTztOfLN5VG92oRbz4jvkRAWHcZ9U=",
+    integrity = "sha256-q8FUOS6sSNgputdxpcEBE46CSmebsjbmJrufAXHfwOQ=",
     strip_prefix = "bazel-" + BAZEL_SOURCE_VERSION,
     # auto-integrity
     url = "https://github.com/bazelbuild/bazel/archive/refs/tags/" + BAZEL_SOURCE_VERSION + ".zip",
