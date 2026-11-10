@@ -2,7 +2,7 @@
 
 import { describe, expect, it, test } from '@jest/globals';
 
-import { parse, type SimpleDate } from '#root/ts/time/date.js';
+import { parse, type SimpleDate, utcDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 
 test('date', () => {
 	// @ts-expect-error a generic invalid date
@@ -39,4 +39,10 @@ describe('parse', () => {
 		expect(date.getMonth()).toEqual(0);
 		expect(date.getDate()).toEqual(10);
 	});
+});
+
+it('represents publication calendar dates at midnight UTC in every runtime', () => {
+	const date = utcDateFromUnknownSimpleDate.parse([10, 'jan', 2024]);
+	expect(date.toString()).toBe('2024-01-10T00:00:00+00:00[UTC]');
+	expect(date.toPlainDate().toString()).toBe('2024-01-10');
 });
