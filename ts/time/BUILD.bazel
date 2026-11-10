@@ -17,6 +17,7 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@types/node",
+        "//:node_modules/temporal-polyfill",
         "//:node_modules/zod",
         "//ts/time/hemisphere",
     ],

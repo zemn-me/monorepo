@@ -4,6 +4,7 @@ import { runfiles } from '@bazel/runfiles';
 import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
 import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
+import type { Driver as ChromeDriver } from 'selenium-webdriver/chrome';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
@@ -74,6 +75,64 @@ describe('zemn.me website', () => {
 					({ log }) => log.level.value >= logging.Level.SEVERE.value
 				)
 			).toEqual([]);
+		});
+
+		it.each([
+			['America/Los_Angeles', '/'],
+			['Asia/Tokyo', '/'],
+			['America/Los_Angeles', '/article/2026/kasimir'],
+			['Asia/Tokyo', '/article/2026/kasimir'],
+		]) (
+			'hydrates structured data in %s on %s',
+			async (timezoneId, path) => {
+				try {
+					await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setTimezoneOverride', { timezoneId });
+					await driver.manage().setTimeouts({ implicit: 5000 });
+					await driver.get(`${origin}${path}`);
+					await driver.wait(async () =>
+						(await driver.findElement(By.css('nav[aria-label="Site navigation"] button'))).isEnabled(),
+						10000
+					);
+					const schema = await driver.findElement(By.css('script[type="application/ld+json"]'));
+					expect(JSON.parse((await schema.getAttribute('textContent'))!)).toMatchObject({ '@type': path === '/' ? 'ProfilePage' : 'Article' });
+					const logs = await driver.manage().logs().get('browser');
+					expect(logs.filter(log => log.level.value >= logging.Level.SEVERE.value)).toEqual([]);
+				} finally {
+					await driver.quit();
+				}
+			}
+		);
+
+		it('blocks HTML and script injection without breaking text rendering', async () => {
+			try {
+				await driver.get(`${origin}/`);
+				await driver.wait(async () =>
+					(await driver.findElement(By.css('nav[aria-label="Site navigation"] button'))).isEnabled(),
+					10000
+				);
+				expect(await driver.executeScript(`
+					const rejected = operation => {
+						try { operation(); return false; }
+						catch (error) { return error instanceof TypeError; }
+					};
+					const element = document.createElement('div');
+					element.textContent = '<b>plain text</b>';
+					return {
+						html: rejected(() => { element.innerHTML = '<b>HTML</b>'; }),
+						htmlAfterScript: rejected(() => { element.innerHTML = '<script></script><b>HTML</b>'; }),
+						jsonAsHtml: rejected(() => { element.innerHTML = '{"name":"JSON is data"}'; }),
+						document: rejected(() => new DOMParser().parseFromString('<b>HTML</b>', 'text/html')),
+						script: rejected(() => { document.createElement('script').text = 'alert(1)'; }),
+						url: rejected(() => { document.createElement('script').src = '/injected.js'; }),
+						policy: rejected(() => trustedTypes.createPolicy('bypass', { createHTML: value => value })),
+						text: element.textContent,
+						defaultPolicy: trustedTypes.defaultPolicy !== null,
+					};
+				`)).toEqual({ html: true, htmlAfterScript: true, jsonAsHtml: true, document: true, script: true, url: true, policy: true,
+					text: '<b>plain text</b>', defaultPolicy: true });
+			} finally {
+				await driver.quit();
+			}
 		});
 
 		it('initializes availability dates after hydration', async () => {
@@ -279,6 +338,13 @@ describe('zemn.me website', () => {
 						`${origin}/article/2026/kasimir`,
 					5000
 				);
+				const schema = await driver.findElement(By.css('script[type="application/ld+json"]'));
+				expect(JSON.parse((await schema.getAttribute('textContent'))!)).toMatchObject({
+					'@type': 'Article',
+					headline: 'Letter to Kasimir',
+				});
+				const logs = await driver.manage().logs().get('browser');
+				expect(logs.filter(log => log.level.value >= logging.Level.SEVERE.value)).toEqual([]);
 			} finally {
 				await driver.quit();
 			}

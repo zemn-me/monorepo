@@ -1,5 +1,3 @@
-import { DeclareTrustedTypesPolicy } from '#root/ts/trusted_types/trusted_types.js';
-
 type scheme = 'https:' | 'data:' | 'blob:';
 type schemeSource = scheme;
 type hostSource = `${schemeSource}//${string}`;
@@ -26,7 +24,11 @@ type directives =
 	| 'require-trusted-types-for'
 	| 'trusted-types';
 
-export type CspPolicy = Partial<Record<directives, sourceList>>;
+export type CspPolicy = Partial<
+	Record<Exclude<directives, 'trusted-types'>, sourceList>
+> & {
+	'trusted-types'?: Set<string>;
+};
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
@@ -55,10 +57,7 @@ export const DefaultContentSecurityPolicy: CspPolicy = {
 		'https://*.doubleclick.net',
 	]),
 
-	// temp disabled
-	//'require-trusted-types-for': new Set(["'script'"]),
-	// biome-ignore lint/suspicious/noExplicitAny: this type boundary intentionally uses any
-	'trusted-types': new Set(['default']) as any, // 🤷
+	'trusted-types': new Set(["'none'"]),
 	'script-src': new Set([
 		"'self'",
 		"'unsafe-inline'",
@@ -83,7 +82,6 @@ export function HeaderTagsAppRouter({
 }: HeaderTagsProps) {
 	return (
 		<>
-			<DeclareTrustedTypesPolicy />
 			<meta
 				content={Object.entries(cspPolicy)
 					.map(([k, v]) => [k, ...v].join(' '))

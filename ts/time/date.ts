@@ -3,6 +3,7 @@
  *  type checked date syntax for typescript.
  */
 
+import { Temporal } from 'temporal-polyfill';
 import { z } from 'zod';
 
 export const Month = z
@@ -102,3 +103,13 @@ export function parse([d, m, y]: Date): globalThis.Date {
 }
 
 export const nativeDateFromUnknownSimpleDate = Date.transform(parse);
+
+/** Interpret a calendar date consistently during server and browser rendering. */
+export const utcDateFromUnknownSimpleDate = Date.transform(([day, month, year]) =>
+	Temporal.ZonedDateTime.from({
+		year,
+		month: numericMonthAssociations[month] + 1,
+		day,
+		timeZone: 'UTC',
+	})
+);

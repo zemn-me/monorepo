@@ -176,5 +176,5 @@ js_library(
 js_library(
     name = "vite_config_mjs",
     srcs = ["vite.config.mjs"],
-    deps = [],
+    deps = ["@monorepo//ts/remix:tooling"],
 )
