@@ -5,6 +5,10 @@ import { CostAllocationTag } from '@pulumi/aws/costexplorer/index.js';
 import * as Pulumi from '@pulumi/pulumi';
 import * as random from '@pulumi/random';
 
+import {
+	createJournalLogAccess,
+	type JournalLogAccessConfig,
+} from '#root/ts/pulumi/aws-access/journal_log_access.js';
 import * as Baby from '#root/ts/pulumi/baby.computer/index.js';
 import * as EggsDogs from '#root/ts/pulumi/eggsfordogs.com/index.js';
 import { GitHubActionsSecrets } from '#root/ts/pulumi/github_actions_secrets.js';
@@ -21,6 +25,7 @@ import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
 	staging: boolean;
+	journalLogAccess?: JournalLogAccessConfig;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
 	openAIIdentityProviderId?: Pulumi.Input<string>;
@@ -153,6 +158,11 @@ export class Component extends Pulumi.ComponentResource {
 		opts?: Pulumi.ComponentResourceOptions
 	) {
 		super('ts:pulumi:Component', name, args, opts);
+		createJournalLogAccess(
+			`${name}_journal_log_access`,
+			{ staging: args.staging, assignment: args.journalLogAccess },
+			{ parent: this }
+		);
 		const tag = name;
 		const tagsa = mergeTags(args.tags, tagTrue(tag));
 		const tags = mergeTags(
