@@ -15,8 +15,8 @@ importers:
   .:
     dependencies:
       '@commander-js/extra-typings':
-        specifier: 15.0.0
-        version: 15.0.0(commander@15.1.0)
+        specifier: 15.1.0
+        version: 15.1.0(commander@15.1.0)
       '@hookform/resolvers':
         specifier: 7.0.3
         version: 7.0.3(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(typanion@3.14.0)(valibot@1.5.0(typescript@7.0.2))(zod@4.6.7)
@@ -1122,10 +1122,10 @@ packages:
   '@cdktf/hcl2json@0.21.0':
     resolution: {integrity: sha512-cwX3i/mSJI/cRrtqwEPRfawB7pXgNioriSlkvou8LWiCrrcDe9ZtTbAbu8W1tEJQpe1pnX9VEgpzf/BbM7xF8Q==}
 
-  '@commander-js/extra-typings@15.0.0':
-    resolution: {integrity: sha512-yeJlba62xqmkgELUsn7356MEnzLLu/fw2x4lofFqGnXh6YysRdEs2BaLeLtg1+KU0AXvMeqQvTTp+3hBEBK+EA==}
+  '@commander-js/extra-typings@15.1.0':
+    resolution: {integrity: sha512-FsI7l5tFON52RyyDKyCkvwFl+peHZuP5TZ7AhxbDFGo/5T6KQd4+KE48aJ8jrDSSAQDvZ8hYKX47fmwZ5bGFNw==}
     peerDependencies:
-      commander: ~15.0.0
+      commander: ~15.1.0
 
   '@containerbase/base@14.31.2':
     resolution: {integrity: sha512-toEYMtn8vZNrEcxf3sweq3mZ/2gEHCOaSAfDAyie8M//Y+cGzTX4TOtZpDDoColL2TyKv0+w2T1njjR12QHQAA==}
@@ -10143,7 +10143,7 @@ snapshots:
     dependencies:
       fs-extra: 11.3.0
 
-  '@commander-js/extra-typings@15.0.0(commander@15.1.0)':
+  '@commander-js/extra-typings@15.1.0(commander@15.1.0)':
     dependencies:
       commander: 15.1.0
 
