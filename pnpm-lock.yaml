@@ -132,8 +132,8 @@ importers:
         specifier: 6.0.7
         version: 6.0.7(glob@13.0.6)
       isbot:
-        specifier: 5.2.2
-        version: 5.2.2
+        specifier: 5.2.3
+        version: 5.2.3
       jose:
         specifier: 6.2.16
         version: 6.2.16
@@ -6119,8 +6119,8 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
-  isbot@5.2.2:
-    resolution: {integrity: sha512-iQcBXcd+Rv/pkubRyGh2utW2j1oPG5hZY6TUhVPpqK4G+o3IbxpJNx04hgksjc/N7GK5pEorUxDeg31cFgEk/w==}
+  isbot@5.2.3:
+    resolution: {integrity: sha512-e8gGz3VzAuImtTMnB5PqNRRWGAswObTc+X+X5a8PttKT78VSSFec98w9ZwUoy6jJdlvJkVdLiN+WMgA8TewoZg==}
     engines: {node: '>=18'}
 
   isexe@2.0.0:
@@ -11807,7 +11807,7 @@ snapshots:
       dedent: 1.7.2
       es-module-lexer: 2.3.2
       exit-hook: 5.1.0
-      isbot: 5.2.2
+      isbot: 5.2.3
       jsesc: 3.1.0
       lodash: 4.18.1
       p-map: 7.0.8
@@ -15296,7 +15296,7 @@ snapshots:
 
   isarray@2.0.5: {}
 
-  isbot@5.2.2: {}
+  isbot@5.2.3: {}
 
   isexe@2.0.0: {}
 
