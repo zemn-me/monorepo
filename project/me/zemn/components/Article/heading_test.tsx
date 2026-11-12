@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, expect, it } from '@jest/globals';
-import { ReactNode, useState } from 'react';
+import { act, ReactNode, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 import { H1, H2 } from './heading.js';
 import { tocSegment } from './toc_context.js';

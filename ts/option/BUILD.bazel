@@ -1,12 +1,10 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//md:rules.bzl", "md_files")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "option",
-    srcs = [
-        "option.ts",
-        "types.ts",
-    ],
+    srcs = ["types.ts"],
     visibility = [
         "//:__subpackages__",
     ],
@@ -37,7 +35,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "option.ts",
         "option_test.ts",
         "types.ts",
     ],
@@ -53,4 +50,10 @@ ts_project(
         "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
     ],
+)
+
+md_files(
+    name = "md",
+    srcs = ["AGENTS.md"],
+    visibility = ["//:__subpackages__"],
 )

@@ -26,8 +26,8 @@ ts_project(
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/pulumi",
         "//:node_modules/@types/node",
-        "//ts",
         "//ts/iter",
+        "//ts/result",
     ],
 )
 

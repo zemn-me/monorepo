@@ -31,7 +31,6 @@ import {
 	normalizeJoystickOffset,
 } from '#root/ts/joystick/index.js';
 import { x, y, z } from '#root/ts/math/cartesian.js';
-import { noop } from '#root/ts/noop.js';
 import {
 	and_then,
 	is_err,
@@ -40,11 +39,6 @@ import {
 	unwrap,
 	unwrap_err,
 } from '#root/ts/result/result.js';
-
-type LegacyMediaQueryList = MediaQueryList & {
-	addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
-	removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
-};
 
 const world = createPenguinWorld();
 const LOOK_SENSITIVITY = 0.0025;
@@ -181,34 +175,7 @@ export function PenguinSim() {
 			setMobileControls(coarsePointerQuery.matches);
 		};
 		syncMobileControls();
-		const subscribeToCoarsePointerChanges = (() => {
-			if ('addEventListener' in coarsePointerQuery) {
-				coarsePointerQuery.addEventListener(
-					'change',
-					syncMobileControls
-				);
-				return () => {
-					coarsePointerQuery.removeEventListener(
-						'change',
-						syncMobileControls
-					);
-				};
-			}
-
-			const legacyCoarsePointerQuery =
-				coarsePointerQuery as LegacyMediaQueryList;
-			if (
-				typeof legacyCoarsePointerQuery.addListener !== 'function' ||
-				typeof legacyCoarsePointerQuery.removeListener !== 'function'
-			) {
-				return noop;
-			}
-
-			legacyCoarsePointerQuery.addListener(syncMobileControls);
-			return () => {
-				legacyCoarsePointerQuery.removeListener(syncMobileControls);
-			};
-		})();
+		coarsePointerQuery.addEventListener('change', syncMobileControls);
 
 		function onPointerLockChange() {
 			setLocked(document.pointerLockElement === viewportRef.current);
@@ -369,7 +336,10 @@ export function PenguinSim() {
 				onDeviceOrientation
 			);
 			window.removeEventListener('resize', syncViewportSize);
-			subscribeToCoarsePointerChanges();
+			coarsePointerQuery.removeEventListener(
+				'change',
+				syncMobileControls
+			);
 			if (frameRef.current != null) {
 				window.cancelAnimationFrame(frameRef.current);
 			}

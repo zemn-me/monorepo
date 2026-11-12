@@ -15,7 +15,7 @@ import {
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 
 const addUserSchema = z.object({
-	email: z.string().email(),
+	email: z.email(),
 });
 
 type ApiScopes = components['schemas']['OAuthScopes'];

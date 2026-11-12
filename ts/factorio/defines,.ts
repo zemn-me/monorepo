@@ -6,7 +6,7 @@ export enum _DefinesControlBehaviorTransportBeltContentReadMode {
 	read_contents = 2,
 }
 
-export const DefinesControlBehaviorTransportBeltContentReadMode = z.nativeEnum(
+export const DefinesControlBehaviorTransportBeltContentReadMode = z.enum(
 	_DefinesControlBehaviorTransportBeltContentReadMode
 );
 export type DefinesControlBehaviorTransportBeltContentReadMode = z.TypeOf<
@@ -18,7 +18,7 @@ export enum _DefinesControlBehaviorInserterHandReadMode {
 	pulse = 1,
 }
 
-export const DefinesControlBehaviorInserterHandReadMode = z.nativeEnum(
+export const DefinesControlBehaviorInserterHandReadMode = z.enum(
 	_DefinesControlBehaviorInserterHandReadMode
 );
 export type DefinesControlBehaviorInserterHandReadMode = z.TypeOf<
@@ -30,7 +30,7 @@ export enum _DefinesControlBehaviorMiningDrillResourceReadMode {
 	entire_patch = 2,
 }
 
-export const DefinesControlBehaviorMiningDrillResourceReadMode = z.nativeEnum(
+export const DefinesControlBehaviorMiningDrillResourceReadMode = z.enum(
 	_DefinesControlBehaviorMiningDrillResourceReadMode
 );
 export type DefinesControlBehaviorMiningDrillResourceReadMode = z.TypeOf<
