@@ -3,7 +3,7 @@ import {
 	type PlayerPose,
 	projectWorldPoint,
 	type WorldSegment,
-} from '#root/project/me/zemn/app/experiments/arena/scene.js';
+} from '#root/ts/3d/wireframe_scene.js';
 import {
 	Point2D,
 	Point3D,

@@ -5,7 +5,7 @@ import {
 	type RenderedSegment,
 	renderScene as renderWireframeScene,
 	type WorldSegment,
-} from '#root/project/me/zemn/app/experiments/arena/scene.js';
+} from '#root/ts/3d/wireframe_scene.js';
 import { Point2D, Point3D, point, x, y, z } from '#root/ts/math/cartesian.js';
 import { styleSegment } from '#root/ts/math/wireframe_render.js';
 import {

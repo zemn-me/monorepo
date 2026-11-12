@@ -812,6 +812,14 @@ http_file(
     urls = ["https://archive.org/download/wadarchive/DATA/5b.zip/5b%2F2e249b9c5133ec987b3ea77596381dc0d6bc1d%2F5b2e249b9c5133ec987b3ea77596381dc0d6bc1d.wad.gz"],
 )
 
+# The original shareware release is an immutable build input for E1M1's geometry.
+http_file(
+    name = "doom_shareware",
+    downloaded_file_path = "doom-shareware.zip",
+    sha256 = "734ff1ea57ab0f2210b30a842b8199f0634284223f8138d3ddb450b1a1251763",
+    url = "https://archive.org/download/DoomsharewareEpisode/Doomsw1993idSoftwareInc.action.zip",
+)
+
 # renovate:
 # 	datasource=github-tags
 # 	versioning=loose

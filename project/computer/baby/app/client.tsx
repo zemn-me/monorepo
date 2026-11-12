@@ -21,7 +21,7 @@ import {
 	type RenderedSegment,
 	renderScene,
 	stepPlayer,
-} from '#root/project/me/zemn/app/experiments/arena/scene.js';
+} from '#root/ts/3d/wireframe_scene.js';
 import {
 	initialMovementKeys,
 	type JoystickInput,
