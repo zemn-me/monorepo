@@ -1,3 +1,5 @@
+load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
+
 # the pulumi cli tool
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
@@ -63,6 +65,25 @@ alias(
         ":windows_x64": "@pulumi_cli_windows_x64//:pulumi/bin/pulumi.exe",
         "//conditions:default": "@pulumi_cli_linux_x64//:pulumi/pulumi",
     }),
+)
+
+# Automation API expects an installation root containing bin/pulumi.
+copy_to_directory(
+    name = "installation",
+    srcs = select({
+        ":darwin_arm64": ["@pulumi_cli_darwin_arm64//:distribution"],
+        ":darwin_x64": ["@pulumi_cli_darwin_x64//:distribution"],
+        ":linux_arm64": ["@pulumi_cli_linux_arm64//:distribution"],
+        ":linux_x64": ["@pulumi_cli_linux_x64//:distribution"],
+        ":windows_arm64": ["@pulumi_cli_windows_arm64//:distribution"],
+        ":windows_x64": ["@pulumi_cli_windows_x64//:distribution"],
+        "//conditions:default": ["@pulumi_cli_linux_x64//:distribution"],
+    }),
+    include_external_repositories = ["*pulumi_cli_*"],
+    replace_prefixes = {
+        "pulumi/": "bin/",
+        "pulumi/bin/": "bin/",
+    },
 )
 
 sh_test(
