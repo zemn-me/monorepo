@@ -94,15 +94,11 @@ jobs:
         # dirty used here so the state transition is main -> candidate
         # we test if the script exists so we don't fail as a result of it
         # not yet existing on main.
-        # Older main revisions find Pulumi through PATH. Supply the same
-        # Bazel-pinned CLI for that initial deployment until main uses it directly.
         run: |
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
-            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit //bin/linux/pulumi && \
-            pulumi_binary="$($BAZEL cquery --config=ci --output=files //bin/linux/pulumi)" && \
-            export PATH="$(dirname "$(realpath "$pulumi_binary")"):$PATH" && \
+            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
             $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
