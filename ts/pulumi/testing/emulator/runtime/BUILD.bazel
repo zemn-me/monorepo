@@ -1,0 +1,39 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "ts_project")
+
+package(
+    default_testonly = True,
+    default_visibility = ["//ts/pulumi/testing/emulator:__pkg__"],
+)
+
+ts_project(
+    name = "runtime",
+    srcs = [
+        "configuration.ts",
+        "external_provider.ts",
+        "service.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/command",  # keep: runtime provider metadata
+        "//:node_modules/@pulumi/gcp",  # keep: runtime provider metadata
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "configuration.ts",
+        "external_provider.ts",
+        "service.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
