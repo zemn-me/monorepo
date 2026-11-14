@@ -79,6 +79,7 @@ const envVars = {
 	AWS_SHARED_CREDENTIALS_FILE: config.credentials,
 	AWS_CONFIG_FILE: path.join(root, 'aws-config'),
 	AWS_CA_BUNDLE: config.certificate,
+	SSL_CERT_FILE: config.certificate,
 	AWS_ENDPOINT_URL: config.endpoint,
 	AWS_EC2_METADATA_DISABLED: 'true',
 	AWS_REGION: 'us-east-1',
@@ -154,6 +155,7 @@ const fixtures = await LocalWorkspace.createStack(
 				'pleaseintroducemetoyour.dog',
 				'eggsfordogs.com',
 				'waxingincandescent.com',
+				'baby.computer',
 			]) {
 				zones[domain] = new aws.route53.Zone(
 					domain.replaceAll('.', '-'),
@@ -175,6 +177,8 @@ const fixtures = await LocalWorkspace.createStack(
 			new aws.route53domains.Domain('baby-registration', {
 				domainName: 'baby.computer',
 				durationInYears: 1,
+				transferLock: false,
+				autoRenew: false,
 				adminContact: contact,
 				registrantContact: contact,
 				techContact: contact,
@@ -207,6 +211,11 @@ const stack = await LocalWorkspace.createStack(
 					props: args.props,
 					opts: {
 						...args.opts,
+						customTimeouts: {
+							create: '1m',
+							update: '1m',
+							delete: '1m',
+						},
 						...(args.type.startsWith('gcp:')
 							? { import: undefined }
 							: {}),
@@ -232,7 +241,25 @@ const stack = await LocalWorkspace.createStack(
 	workspace(workDir)
 );
 await stack.setAllConfig(settings);
-await stack.up({ onOutput: console.log });
+let updateError: unknown;
+const diagnostics: { urn?: string; message: string }[] = [];
+try {
+	await stack.up({
+		onOutput: console.log,
+		continueOnError: true,
+		onEvent(event) {
+			const diagnostic = event.diagnosticEvent;
+			if (diagnostic?.severity === 'error') {
+				diagnostics.push({
+					urn: diagnostic.urn,
+					message: diagnostic.message,
+				});
+			}
+		},
+	});
+} catch (error) {
+	updateError = error;
+}
 const state = await stack.exportStack();
 interface StateResource {
 	type: string;
@@ -243,6 +270,31 @@ interface StateResource {
 const { resources } = state.deployment as { resources: StateResource[] };
 assert(Array.isArray(resources), 'Pulumi returned no resource state');
 const actual = resources.filter(resource => resource.type.startsWith('aws:'));
+await writeFile(
+	path.join(
+		process.env['TEST_UNDECLARED_OUTPUTS_DIR'] ?? root,
+		`${scenario}-aws-resources.json`
+	),
+	JSON.stringify(
+		{
+			scenario,
+			declared: expected,
+			resources: actual.map(resource => ({
+				type: resource.type,
+				urn: resource.urn,
+				id: resource.id,
+			})),
+			deploymentSucceeded: updateError === undefined,
+			diagnostics,
+		},
+		null,
+		2
+	)
+);
+console.log(
+	`${scenario}: ${actual.filter(resource => resource.id).length} AWS resources recorded; ${diagnostics.length} errors.`
+);
+if (updateError !== undefined) throw updateError;
 assert(expected.length > 0, 'The infrastructure registered no AWS resources');
 assert.deepEqual(
 	actual
@@ -280,21 +332,6 @@ if (scenario === 'production') {
 }
 console.log(
 	`Created/read all ${actual.length} AWS resources in the ${scenario} configuration.`
-);
-await writeFile(
-	path.join(
-		process.env['TEST_UNDECLARED_OUTPUTS_DIR'] ?? root,
-		`${scenario}-aws-resources.json`
-	),
-	JSON.stringify(
-		actual.map(resource => ({
-			type: resource.type,
-			urn: resource.urn,
-			id: resource.id,
-		})),
-		null,
-		2
-	)
 );
 // Each service_test owns its emulator process. Stopping it discards every resource,
 // including intentionally protected databases and retained domain registrations.
