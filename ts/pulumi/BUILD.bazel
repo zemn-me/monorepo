@@ -96,6 +96,7 @@ ts_project(
     name = "cli",
     srcs = ["cli.ts"],
     data = ["//bin/linux/pulumi:installation"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/pulumi",

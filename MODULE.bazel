@@ -1192,3 +1192,34 @@ cc_binary(
     strip_prefix = "unshieldv3-4e5700fb97ba9f0338b49c1031834ce42177f265",
     url = "https://github.com/wfr/unshieldv3/archive/4e5700fb97ba9f0338b49c1031834ce42177f265.tar.gz",
 )
+
+# Native, checksum-pinned tools for the full AWS infrastructure integration test.
+aws_emulator = use_repo_rule("//bzl/aws_emulator:repositories.bzl", "aws_emulator")
+
+aws_emulator(
+    name = "aws_emulator_linux_amd64",
+    sha256 = "2bd8ace6e2ae46dff07a86b998ed0acbdf64cedfec2401b6691e866a1730805b",
+    url = "https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/aws-emulator_1.0.382-1_amd64.deb",
+)
+
+# renovate: datasource=github-releases depName=pulumi/pulumi-aws
+PULUMI_AWS_PROVIDER_VERSION = "7.54.0"
+
+http_archive(
+    name = "pulumi_aws_provider_linux_amd64",
+    build_file_content = 'exports_files(["pulumi-resource-aws"])',
+    sha256 = "13453de090908f63a0647cce31ba481fc55ee93d2ca51add443bb35f7ffac6cc",
+    # auto-integrity
+    url = "https://github.com/pulumi/pulumi-aws/releases/download/v" + PULUMI_AWS_PROVIDER_VERSION + "/pulumi-resource-aws-v" + PULUMI_AWS_PROVIDER_VERSION + "-linux-amd64.tar.gz",
+)
+
+# renovate: datasource=github-releases depName=pulumi/pulumi-random
+PULUMI_RANDOM_PROVIDER_VERSION = "4.21.6"
+
+http_archive(
+    name = "pulumi_random_provider_linux_amd64",
+    build_file_content = 'exports_files(["pulumi-resource-random"])',
+    sha256 = "d23098a615cd8590e026ec3d36c95f00617d93b0af14164162b81cf1af808174",
+    # auto-integrity
+    url = "https://github.com/pulumi/pulumi-random/releases/download/v" + PULUMI_RANDOM_PROVIDER_VERSION + "/pulumi-resource-random-v" + PULUMI_RANDOM_PROVIDER_VERSION + "-linux-amd64.tar.gz",
+)

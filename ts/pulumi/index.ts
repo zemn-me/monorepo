@@ -21,6 +21,14 @@ import * as ZemnMe from '#root/ts/pulumi/zemn.me/index.js';
 
 export interface Args {
 	staging: boolean;
+	/** Existing resources supplied by the environment containing this stack. */
+	existingZoneIds?: {
+		shadwell: string;
+		zemn: string;
+		pleaseIntroduceMeToYourDog: string;
+	};
+	/** Use an existing phone number instead of provisioning one through Twilio. */
+	callboxPhoneNumber?: Pulumi.Input<string>;
 	tags?: Pulumi.Input<Record<string, Pulumi.Input<string>>>;
 	minecraftOperators?: Pulumi.Input<Pulumi.Input<string>[]>;
 	openAIIdentityProviderId?: Pulumi.Input<string>;
@@ -185,7 +193,9 @@ export class Component extends Pulumi.ComponentResource {
 			openAIOutboundIdentity?.issuerIdentifier;
 
 		if (!args.staging) {
-			const publisher = runfiles.resolve('monorepo/js/npm/publish_/publish');
+			const publisher = runfiles.resolve(
+				'monorepo/js/npm/publish_/publish'
+			);
 			for (const npmPackage of [
 				{
 					name: 'do-sync',
@@ -244,15 +254,21 @@ export class Component extends Pulumi.ComponentResource {
 		const zone = {
 			im: {
 				shadwell: aws.route53.getZone({
-					zoneId: 'Z0819383I2XV8V6UY6NO',
+					zoneId:
+						args.existingZoneIds?.shadwell ??
+						'Z0819383I2XV8V6UY6NO',
 				}),
 			},
 			me: {
-				zemn: aws.route53.getZone({ zoneId: 'ZG99IJ8QHXTSI' }),
+				zemn: aws.route53.getZone({
+					zoneId: args.existingZoneIds?.zemn ?? 'ZG99IJ8QHXTSI',
+				}),
 			},
 			dog: {
 				pleaseintroducemetoyour: aws.route53.getZone({
-					zoneId: 'Z0627984320AKGYW3FTZ5',
+					zoneId:
+						args.existingZoneIds?.pleaseIntroduceMeToYourDog ??
+						'Z0627984320AKGYW3FTZ5',
 				}),
 			},
 		};
@@ -309,16 +325,19 @@ export class Component extends Pulumi.ComponentResource {
 			voiceUrl,
 		}));
 
-		const phoneNumberInfo = isMockRuntime()
-			? { phoneNumber: Pulumi.output('dummy') }
-			: new TwilioPhoneNumber(
-					`callboxphonenumber2`,
-					{
-						countryCode: 'US',
-						options: twilioOptions,
-					},
-					{ parent: this, protect: !args.staging }
-				).id.apply(v => getTwilioPhoneNumber(v));
+		const existingPhoneNumber =
+			args.callboxPhoneNumber ?? (isMockRuntime() ? 'dummy' : undefined);
+		const phoneNumberInfo =
+			existingPhoneNumber !== undefined
+				? { phoneNumber: existingPhoneNumber }
+				: new TwilioPhoneNumber(
+						`callboxphonenumber2`,
+						{
+							countryCode: 'US',
+							options: twilioOptions,
+						},
+						{ parent: this, protect: !args.staging }
+					).id.apply(v => getTwilioPhoneNumber(v));
 
 		this.zemnMe = new ZemnMe.Component(
 			`${name}_zemn.me`,
@@ -332,7 +351,9 @@ export class Component extends Pulumi.ComponentResource {
 				protectDatabases: !args.staging,
 				gcpProjectId: 'extreme-cycling-441523-a9',
 				twilioSharedSecret: twilioSharedSecret.result,
-				journalWorkerEnvironment: args.staging ? 'staging' : 'production',
+				journalWorkerEnvironment: args.staging
+					? 'staging'
+					: 'production',
 				minecraftOnDemand: true,
 				minecraftEnvironment: args.staging ? 'staging' : 'production',
 				minecraftManageDnsWake: !args.staging,

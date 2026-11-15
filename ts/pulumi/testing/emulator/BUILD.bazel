@@ -1,0 +1,154 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary", "js_test")
+load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "ts_project")
+
+package(default_testonly = True)
+
+js_binary(
+    name = "service_bin",
+    data = [
+        ":emulator_binary",
+        "//ts/pulumi/testing/emulator/runtime",
+    ],
+    entry_point = "//ts/pulumi/testing/emulator/runtime:service.js",
+    env = {"EMULATOR_BINARY": "$(rlocationpath :emulator_binary)"},
+)
+
+itest_service(
+    name = "service",
+    autoassign_port = True,
+    exe = ":service_bin",
+    health_check = ":service_bin",
+    health_check_args = ["--health"],
+    health_check_interval = "200ms",
+    health_check_timeout = "30s",
+)
+
+js_binary(
+    name = "gcp_fixture",
+    data = ["//ts/pulumi/testing/emulator/runtime"],
+    entry_point = "//ts/pulumi/testing/emulator/runtime:external_provider.js",
+    env = {"FIXTURE_PROVIDER": "gcp"},
+)
+
+js_binary(
+    name = "command_fixture",
+    data = ["//ts/pulumi/testing/emulator/runtime"],
+    entry_point = "//ts/pulumi/testing/emulator/runtime:external_provider.js",
+    env = {"FIXTURE_PROVIDER": "command"},
+)
+
+[
+    js_test(
+        name = scenario + "_bin",
+        size = "large",
+        timeout = "long",
+        data = [
+            ":aws_provider",
+            ":command_fixture",
+            ":emulator",
+            ":gcp_fixture",
+            ":random_provider",
+        ],
+        entry_point = "driver.js",
+        env = {
+            "EMULATOR_SCENARIO": scenario,
+            "PROVIDER_AWS": "$(rlocationpath :aws_provider)",
+            "PROVIDER_RANDOM": "$(rlocationpath :random_provider)",
+            "PROVIDER_GCP": "$(rlocationpath :gcp_fixture)",
+            "PROVIDER_COMMAND": "$(rlocationpath :command_fixture)",
+        },
+        tags = ["manual"],
+        target_compatible_with = [
+            "@platforms//os:linux",
+            "@platforms//cpu:x86_64",
+        ],
+    )
+    for scenario in [
+        "staging",
+        "production",
+    ]
+]
+
+[
+    service_test(
+        name = scenario + "_test",
+        size = "large",
+        timeout = "long",
+        services = [":service"],
+        target_compatible_with = [
+            "@platforms//os:linux",
+            "@platforms//cpu:x86_64",
+        ],
+        test = ":" + scenario + "_bin",
+    )
+    for scenario in [
+        "staging",
+        "production",
+    ]
+]
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "emulator",
+    srcs = [
+        "driver.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/command",  # keep: runtime fixture provider metadata
+        "//:node_modules/@pulumi/gcp",  # keep: runtime fixture provider metadata
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@pulumi/random",  # keep: runtime provider metadata
+        "//:node_modules/@types/node",
+        "//ts/pulumi",
+        "//ts/pulumi:cli",
+        "//ts/pulumi/testing/emulator/runtime",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "driver.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+genrule(
+    name = "emulator_binary",
+    srcs = ["@aws_emulator_linux_amd64//:data.tar.xz"],
+    outs = ["aws-emulator"],
+    cmd = "$(execpath //bzl/aws_emulator:extract) $(execpath @aws_emulator_linux_amd64//:data.tar.xz) $@",
+    executable = True,
+    tools = ["//bzl/aws_emulator:extract"],
+)
+
+copy_file(
+    name = "aws_provider",
+    src = "@pulumi_aws_provider_linux_amd64//:pulumi-resource-aws",
+    out = "pulumi-resource-aws",
+    is_executable = True,
+)
+
+copy_file(
+    name = "random_provider",
+    src = "@pulumi_random_provider_linux_amd64//:pulumi-resource-random",
+    out = "pulumi-resource-random",
+    is_executable = True,
+)
+
+md_files(
+    name = "md",
+    srcs = ["README.md"],
+    visibility = ["//:__subpackages__"],
+)
