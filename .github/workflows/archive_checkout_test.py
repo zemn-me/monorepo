@@ -55,7 +55,7 @@ class ArchiveCheckoutTest(unittest.TestCase):
 
 
 class PulumiBootstrapTest(unittest.TestCase):
-    def test_main_deployment_finds_execroot_cli_without_host_installation(self):
+    def test_main_cli_survives_nested_build_without_host_installation(self):
         workflow = yaml.safe_load(WORKFLOW.read_text())
         step = next(
             step for step in workflow["jobs"]["Staging"]["steps"]
@@ -76,13 +76,15 @@ class PulumiBootstrapTest(unittest.TestCase):
             host_cli = tools / "pulumi"
             host_cli.write_text("#!/bin/sh\necho 'unexpected host Pulumi' >&2\nexit 97\n")
             host_cli.chmod(0o755)
+            # A nested Bazel invocation prunes the execroot symlink forest.
+            # The exported CLI path must keep working after that happens.
             bazel = tools / "bazel"
             bazel.write_text("""#!/bin/sh
 case "$1" in
   build) exit 0 ;;
   info) printf '%s\n' "$FIXTURE_EXECROOT" ;;
   cquery) printf '%s\n' 'external/pulumi/pulumi' ;;
-  run) pulumi version ;;
+  run) rm "$FIXTURE_EXECROOT/external/pulumi/pulumi"; pulumi version ;;
   *) exit 98 ;;
 esac
 """)
