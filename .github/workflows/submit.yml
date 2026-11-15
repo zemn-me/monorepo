@@ -18,6 +18,11 @@ env:
 jobs:
   UploadToBazelRemoteCache:
     name: Upload to Bazel remote cache
+    # Only the newest main commit needs to warm the shared cache.
+    concurrency:
+      group: bazel-cache-upload-${{ github.ref }}
+      cancel-in-progress: true
+      queue: single
     permissions:
       contents: read
       id-token: write
