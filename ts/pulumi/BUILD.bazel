@@ -57,6 +57,7 @@ ts_project(
         "//:node_modules/@pulumi/random",
         "//:node_modules/@types/node",
         "//ts/github/actions",
+        "//ts/pulumi/aws-access",
         "//ts/pulumi/baby.computer",
         "//ts/pulumi/eggsfordogs.com",
         "//ts/pulumi/lib",

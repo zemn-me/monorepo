@@ -505,6 +505,11 @@ describe('pulumi', () => {
 		expectValidS3BucketNames();
 		expectValidAwsNames();
 		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
+		expect(
+			mockResources.filter(resource =>
+				resource.type.startsWith('aws:ssoadmin/')
+			)
+		).toEqual([]);
 
 		expect(
 			mockResources.some(
@@ -724,6 +729,11 @@ describe('pulumi', () => {
 		expectValidS3BucketNames();
 		expectValidAwsNames();
 		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
+		expect(
+			mockResources.filter(resource =>
+				resource.type.startsWith('aws:ssoadmin/')
+			)
+		).toEqual([]);
 
 		expect(
 			mockResources.find(

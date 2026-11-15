@@ -1,5 +1,6 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 
 md_files(
     name = "aws_access",
@@ -10,4 +11,43 @@ md_files(
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "aws-access",
+    srcs = ["journal_log_access.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@pulumi/aws",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "journal_log_access.ts",
+        "journal_log_access_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "aws-access_tests",
+    srcs = ["journal_log_access_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":aws-access",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["journal_log_access_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":aws-access_tests"],
 )
