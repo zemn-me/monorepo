@@ -1,12 +1,8 @@
-/** GCP/npm fixtures and guarded OCI publishing into AWS Emulator. */
+/** Explicit GCP/npm and OCI publication fixtures. */
 
-import { execFile } from 'node:child_process';
+import { createHash, createHmac } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import path from 'node:path';
-import { promisify } from 'node:util';
-
-import { runfiles } from '@bazel/runfiles';
 import { main, type Provider } from '@pulumi/pulumi/provider/index.js';
 
 const require = createRequire(import.meta.url);
@@ -54,36 +50,101 @@ async function createOutputs(urn: string, inputs: Record<string, unknown>) {
 	) {
 		throw new Error(`Invalid image publisher interpreter: ${urn}`);
 	}
-	const executable = interpreter[0];
-	const publisher = interpreter[4];
-	if (executable !== 'sh' || typeof publisher !== 'string') {
-		throw new Error(`Unexpected OCI publisher invocation: ${urn}`);
-	}
-	const arguments_ = interpreter.slice(1);
-	arguments_[3] = path.isAbsolute(publisher)
-		? publisher
-		: runfiles.resolveWorkspaceRelative(publisher);
 	const repository = new URL(`https://${interpreter[5]}`);
+	if (repository.hostname !== '127.0.0.1')
+		throw new Error('Expected emulator registry');
+	// The emulator cannot accept OCI uploads. Seed its real ECR metadata with a
+	// synthetic manifest so Lambda provisioning still uses the real AWS provider.
+	const configBlob = JSON.stringify({
+		architecture: 'amd64',
+		os: 'linux',
+		config: { Labels: { 'aws-emulator-fixture': urn } },
+	});
+	const configDigest = `sha256:${createHash('sha256').update(configBlob).digest('hex')}`;
+	const manifest = JSON.stringify({
+		schemaVersion: 2,
+		mediaType: 'application/vnd.docker.distribution.manifest.v2+json',
+		config: {
+			mediaType: 'application/vnd.docker.container.image.v1+json',
+			size: Buffer.byteLength(configBlob),
+			digest: configDigest,
+		},
+		layers: [],
+	});
 	const endpoint = new URL(process.env['AWS_ENDPOINT_URL'] ?? '');
-	if (
-		repository.hostname !== '127.0.0.1' ||
-		repository.port !== endpoint.port
-	) {
-		throw new Error(
-			`Image publishing must stay inside AWS Emulator: ${repository}`
-		);
-	}
-	const environment = inputs['environment'] as Record<string, string>;
-	const { stdout, stderr } = await promisify(execFile)(
-		executable,
-		[...arguments_, ''],
-		{
-			env: { ...process.env, ...environment },
-			timeout: 30_000,
-			maxBuffer: 1024 * 1024,
+
+	const date = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
+	const day = date.slice(0, 8);
+	const api = async (action: string, input: unknown) => {
+		const body = JSON.stringify(input);
+		const target = `AmazonEC2ContainerRegistry_V20150921.${action}`;
+		const hash = (value: string) =>
+			createHash('sha256').update(value).digest('hex');
+		const headers = `content-type:application/x-amz-json-1.1\nhost:${endpoint.host}\nx-amz-date:${date}\nx-amz-target:${target}\n`;
+		const signed = 'content-type;host;x-amz-date;x-amz-target';
+		const scope = `${day}/us-east-1/ecr/aws4_request`;
+		let key = Buffer.from(`AWS4${process.env['AWS_SECRET_ACCESS_KEY']}`);
+		for (const value of [day, 'us-east-1', 'ecr', 'aws4_request'])
+			key = Buffer.from(createHmac('sha256', key).update(value).digest());
+		const signature = createHmac('sha256', key)
+			.update(
+				`AWS4-HMAC-SHA256\n${date}\n${scope}\n${hash(`POST\n/\n\n${headers}\n${signed}\n${hash(body)}`)}`
+			)
+			.digest('hex');
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			body,
+			headers: {
+				'content-type': 'application/x-amz-json-1.1',
+				'x-amz-date': date,
+				'x-amz-target': target,
+				authorization: `AWS4-HMAC-SHA256 Credential=${process.env['AWS_ACCESS_KEY_ID']}/${scope}, SignedHeaders=${signed}, Signature=${signature}`,
+				'x-emulator-fixture': 'OCI.Publish',
+			},
+		});
+		const text = await response.text();
+		if (!response.ok) {
+			const error = JSON.parse(text) as { __type?: string };
+			// Identical fixture config blobs are shared by several images. ECR
+			// documents this response when completing an already-present layer.
+			if (
+				action === 'CompleteLayerUpload' &&
+				error.__type === 'LayerAlreadyExistsException'
+			)
+				return {};
+			throw new Error(`ECR fixture ${action} failed: ${text}`);
 		}
+		return JSON.parse(text) as Record<string, unknown>;
+	};
+	const repositoryName = repository.pathname.slice(1);
+	const { uploadId } = await api('InitiateLayerUpload', { repositoryName });
+	await api('UploadLayerPart', {
+		repositoryName,
+		uploadId,
+		partFirstByte: 0,
+		partLastByte: Buffer.byteLength(configBlob) - 1,
+		layerPartBlob: Buffer.from(configBlob).toString('base64'),
+	});
+	await api('CompleteLayerUpload', {
+		repositoryName,
+		uploadId,
+		layerDigests: [configDigest],
+	});
+	const text = JSON.stringify(
+		await api('PutImage', {
+			repositoryName,
+			imageManifest: manifest,
+			imageTag: `fixture-${createHash('sha256').update(urn).digest('hex').slice(0, 16)}`,
+		})
 	);
-	return { ...result, stdout, stderr };
+	const image = JSON.parse(text) as {
+		image: { imageId: { imageDigest: string } };
+	};
+	return {
+		...result,
+		stdout: `${repository.host}${repository.pathname}@${image.image.imageId.imageDigest}`,
+		stderr: '',
+	};
 }
 
 const provider: Provider = {

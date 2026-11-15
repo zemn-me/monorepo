@@ -9,6 +9,7 @@ package(
 ts_project(
     name = "runtime",
     srcs = [
+        "compatibility.ts",
         "configuration.ts",
         "external_provider.ts",
         "service.ts",
@@ -31,6 +32,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "compatibility.ts",
         "configuration.ts",
         "external_provider.ts",
         "service.ts",
