@@ -97,14 +97,17 @@ jobs:
         # Bootstrap the CLI fix: this step deploys old main before the candidate,
         # so main still needs its Bazel-pinned Pulumi CLI supplied through PATH.
         # TODO(#14857): Once merged into main, remove //bin/linux/pulumi from the
-        # build below and delete the pulumi_binary assignment and PATH export.
+        # build below and delete the CLI path setup and version check.
         run: |
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
             $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit //bin/linux/pulumi && \
             pulumi_binary="$($BAZEL cquery --config=ci --output=files //bin/linux/pulumi)" && \
-            export PATH="$(dirname "$(realpath "$pulumi_binary")"):$PATH" && \
+            pulumi_execroot="$($BAZEL info --config=ci execution_root)" && \
+            test -x "$pulumi_execroot/$pulumi_binary" && \
+            export PATH="$(dirname "$pulumi_execroot/$pulumi_binary"):$PATH" && \
+            pulumi version && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
             $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
