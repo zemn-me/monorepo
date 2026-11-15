@@ -94,11 +94,22 @@ jobs:
         # dirty used here so the state transition is main -> candidate
         # we test if the script exists so we don't fail as a result of it
         # not yet existing on main.
+        # Bootstrap the CLI fix: this step deploys old main before the candidate,
+        # so main still needs its Bazel-pinned Pulumi CLI supplied through PATH.
+        # Resolve the real repository path: nested builds prune execroot symlinks.
+        # TODO(#14857): Once merged into main, remove //bin/linux/pulumi from the
+        # build below and delete the CLI path setup and version check.
         run: |
             echo "::group::Presubmit prep" && \
             test -f ./.github/workflows/prepare_ci.sh && \
             ./.github/workflows/prepare_ci.sh && \
-            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit && \
+            $BAZEL build --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit //bin/linux/pulumi && \
+            pulumi_binary="$($BAZEL cquery --config=ci --output=files //bin/linux/pulumi)" && \
+            pulumi_execroot="$($BAZEL info --config=ci execution_root)" && \
+            pulumi_binary="$(realpath "$pulumi_execroot/$pulumi_binary")" && \
+            test -x "$pulumi_binary" && \
+            export PATH="$(dirname "$pulumi_binary"):$PATH" && \
+            pulumi version && \
             echo "::endgroup::" && \
             echo "::group::Presubmit" && \
             $BAZEL run --distdir="$RUNNER_TEMP/bazel-distdir/ape" --distdir="$RUNNER_TEMP/bazel-distdir/rules_diff" --config=ci --tool_tag=staging //ci:presubmit -- --skip-bazel-tests --dirty \
