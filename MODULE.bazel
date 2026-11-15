@@ -693,12 +693,12 @@ filegroup(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_X64 = "3.274.1"
+PULUMI_CLI_VERSION_LINUX_X64 = "3.275.0"
 
 http_archive(
     name = "pulumi_cli_linux_x64",
     build_file_content = PULUMI_CLI_BUILD_FILE,
-    sha256 = "32ae6d09d0df51637db7a0affb3ceb7d0511093b22d477aff5f20214d0b7e471",
+    sha256 = "759920e5f4e2114f50d5b2e876d59b6ff3c00abcf0e75a9529162e8627fe5819",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_X64 + "-linux-x64.tar.gz",
@@ -709,12 +709,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.274.1"
+PULUMI_CLI_VERSION_DARWIN_ARM64 = "3.275.0"
 
 http_archive(
     name = "pulumi_cli_darwin_arm64",
     build_file_content = PULUMI_CLI_BUILD_FILE,
-    sha256 = "053f2b243d09dfc2e83bacd9921f4a5d365bb8804cdc19fa09fb5a1240eb171b",
+    sha256 = "d60e74411c20bb10eabcc89bfc74fd45f81cba0629923827cefc670066b4bfc3",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_ARM64 + "-darwin-arm64.tar.gz",
@@ -725,12 +725,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_DARWIN_X64 = "3.274.1"
+PULUMI_CLI_VERSION_DARWIN_X64 = "3.275.0"
 
 http_archive(
     name = "pulumi_cli_darwin_x64",
     build_file_content = PULUMI_CLI_BUILD_FILE,
-    sha256 = "82be2e37c030737404b2ec6a5581ec76095c824c822b802a22579a95431ff376",
+    sha256 = "355901b635e6b5338f7224c46a45d789787273528037e172b9dd5855aeb3d562",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_DARWIN_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_DARWIN_X64 + "-darwin-x64.tar.gz",
@@ -741,12 +741,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_LINUX_ARM64 = "3.274.1"
+PULUMI_CLI_VERSION_LINUX_ARM64 = "3.275.0"
 
 http_archive(
     name = "pulumi_cli_linux_arm64",
     build_file_content = PULUMI_CLI_BUILD_FILE,
-    sha256 = "3deec71250f46c8f63e2b1f2078b08f5a8df4815d0e5e141420eb4e7f072f36e",
+    sha256 = "cebaa1a3a8ccf36dd46c3c1cc24f63ce7763ca18bd168cc491e8c6960e5ff8aa",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_LINUX_ARM64 + "-linux-arm64.tar.gz",
@@ -757,12 +757,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.274.1"
+PULUMI_CLI_VERSION_WINDOWS_ARM64 = "3.275.0"
 
 http_archive(
     name = "pulumi_cli_windows_arm64",
     build_file_content = PULUMI_CLI_BUILD_FILE,
-    sha256 = "a169cbe828b3638a699fe1627031b8508ba081059256a6f39200e09af8c32006",
+    sha256 = "9035881482ddd4b98c7d5107d531757212ea73703ec51a0300fad327bfa05f88",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_ARM64 + "-windows-arm64.zip",
@@ -773,12 +773,12 @@ http_archive(
 # 	datasource=github-releases
 # 	versioning=semver
 # 	depName=pulumi/pulumi
-PULUMI_CLI_VERSION_WINDOWS_X64 = "3.274.1"
+PULUMI_CLI_VERSION_WINDOWS_X64 = "3.275.0"
 
 http_archive(
     name = "pulumi_cli_windows_x64",
     build_file_content = PULUMI_CLI_BUILD_FILE,
-    sha256 = "5dde4799d366ffe25eb6f6ca3f552a5c1e8ea570953b39e99bbc436b7fbb0df0",
+    sha256 = "2f53098fce564eae4d0f692548488dafc3d14970a85c6fe1efbde83ba64ded53",
     # auto-integrity
     urls = [
         "https://github.com/pulumi/pulumi/releases/download/v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "/pulumi-v" + PULUMI_CLI_VERSION_WINDOWS_X64 + "-windows-x64.zip",
