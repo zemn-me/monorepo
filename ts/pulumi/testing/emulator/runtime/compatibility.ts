@@ -199,8 +199,15 @@ export async function compatibilityGateway() {
 				!query.has('IpPermissions.1.IpRanges.2.CidrIp');
 			forwardedRequests++;
 			const upstream = request(
-				new URL(url.pathname + url.search, config.endpoint),
-				{ method: incoming.method, headers: incoming.headers, ca },
+				{
+					protocol: 'https:',
+					hostname: '127.0.0.1',
+					port: config.port,
+					path: url.pathname + url.search,
+					method: incoming.method,
+					headers: incoming.headers,
+					ca,
+				},
 				forwarded => {
 					const parts: Buffer[] = [];
 					forwarded.on('data', chunk =>
@@ -278,13 +285,15 @@ export async function compatibilityGateway() {
 				}
 			);
 			upstream.on('error', error => {
+				console.error(error);
 				response.writeHead(502);
-				response.end(String(error));
+				response.end('Emulator upstream request failed');
 			});
 			upstream.end(body);
 		} catch (error) {
+			console.error(error);
 			response.writeHead(500);
-			response.end(String(error));
+			response.end('Emulator compatibility handler failed');
 		}
 	});
 	await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));

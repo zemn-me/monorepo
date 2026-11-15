@@ -2,7 +2,9 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, symlink, writeFile } from 'node:fs/promises';
+import { request as httpRequest } from 'node:http';
 import { createRequire } from 'node:module';
+import { createServer as tcpServer } from 'node:net';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
@@ -28,6 +30,57 @@ assert(
 const config = configuration();
 const gateway = await compatibilityGateway();
 try {
+	// A request's path must never become a new upstream authority.
+	let unexpectedConnections = 0;
+	const sentinel = tcpServer(socket => {
+		unexpectedConnections++;
+		socket.destroy();
+	});
+	await new Promise<void>(resolve =>
+		sentinel.listen(0, '127.0.0.1', resolve)
+	);
+	try {
+		const address = sentinel.address();
+		assert(address && typeof address !== 'string');
+		const gatewayHost = new URL(gateway.endpoint).host;
+		const send = (requestPath: string) =>
+			new Promise<{ status: number; body: string }>((resolve, reject) => {
+				const request = httpRequest(
+					gateway.endpoint,
+					{ path: requestPath, headers: { host: gatewayHost } },
+					response => {
+						const chunks: Buffer[] = [];
+						response.on('data', chunk =>
+							chunks.push(Buffer.from(chunk))
+						);
+						response.on('error', reject);
+						response.on('end', () =>
+							resolve({
+								status: response.statusCode ?? 0,
+								body: Buffer.concat(chunks).toString(),
+							})
+						);
+					}
+				);
+				request.on('error', reject);
+				request.end();
+			});
+		await send(
+			`https://${gatewayHost}//127.0.0.1:${address.port}/must-stay-on-emulator`
+		);
+		assert.equal(
+			unexpectedConnections,
+			0,
+			'Gateway connected to a hostname supplied in the request path'
+		);
+		const invalid = await send('https://%');
+		assert.equal(invalid.status, 500);
+		assert.equal(invalid.body, 'Emulator compatibility handler failed');
+	} finally {
+		await new Promise<void>((resolve, reject) =>
+			sentinel.close(error => (error ? reject(error) : resolve()))
+		);
+	}
 	const root = await mkdtemp(path.join(config.directory, `${scenario}-`));
 	const home = path.join(root, 'pulumi-home');
 	const backend = path.join(root, 'state');
