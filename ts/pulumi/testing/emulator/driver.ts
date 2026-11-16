@@ -344,6 +344,7 @@ try {
 	const actual = resources.filter(resource =>
 		resource.type.startsWith('aws:')
 	);
+	const gatewayReport = await gateway.report();
 	await writeFile(
 		path.join(
 			process.env['TEST_UNDECLARED_OUTPUTS_DIR'] ?? root,
@@ -359,9 +360,9 @@ try {
 					id: resource.id,
 				})),
 				deploymentSucceeded: updateError === undefined,
-				mockedOperations: gateway.calls,
+				mockedOperations: gatewayReport.calls,
 				mockedAssetPayloads: assetFixtures,
-				emulatorRequests: gateway.forwardedRequests,
+				emulatorRequests: gatewayReport.forwardedRequests,
 				diagnostics,
 			},
 			null,

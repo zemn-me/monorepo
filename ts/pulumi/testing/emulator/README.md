@@ -5,6 +5,10 @@ production configurations using the real Pulumi CLI and AWS provider, pointed at
 AWS Emulator. They supplement the mock-based unit tests and live staging;
 neither staging nor the merge queue is replaced.
 
+The loopback compatibility gateway runs as a Go subprocess. Its XML requests
+and responses use typed `encoding/xml` decoding and encoding; the Pulumi driver
+and non-AWS fixture providers remain in TypeScript.
+
 ## Explicit compatibility fixtures
 
 The test uses AWS Emulator 1.0.382.1. A loopback adapter supplies the following

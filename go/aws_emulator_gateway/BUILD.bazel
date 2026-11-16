@@ -1,0 +1,29 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+package(default_testonly = True)
+
+go_binary(
+    name = "aws_emulator_gateway",
+    embed = [":aws_emulator_gateway_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "aws_emulator_gateway_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/go/aws_emulator_gateway",
+    visibility = ["//visibility:private"],
+)
+
+go_test(
+    name = "aws_emulator_gateway_test",
+    srcs = ["main_test.go"],
+    embed = [":aws_emulator_gateway_lib"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

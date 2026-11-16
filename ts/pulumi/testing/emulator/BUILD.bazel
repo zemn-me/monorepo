@@ -52,10 +52,12 @@ js_binary(
             ":emulator",
             ":gcp_fixture",
             ":random_provider",
+            "//go/aws_emulator_gateway",
         ],
         entry_point = "driver.js",
         env = {
             "EMULATOR_SCENARIO": scenario,
+            "EMULATOR_GATEWAY": "$(rlocationpath //go/aws_emulator_gateway)",
             "PROVIDER_AWS": "$(rlocationpath :aws_provider)",
             "PROVIDER_RANDOM": "$(rlocationpath :random_provider)",
             "PROVIDER_GCP": "$(rlocationpath :gcp_fixture)",
