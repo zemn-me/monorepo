@@ -74,8 +74,9 @@ try {
 			'Gateway connected to a hostname supplied in the request path'
 		);
 		const invalid = await send('https://%');
-		assert.equal(invalid.status, 500);
-		assert.equal(invalid.body, 'Emulator compatibility handler failed');
+		// Go's HTTP parser rejects malformed authorities before routing.
+		assert.equal(invalid.status, 400);
+		assert.equal(invalid.body, '400 Bad Request');
 	} finally {
 		await new Promise<void>((resolve, reject) =>
 			sentinel.close(error => (error ? reject(error) : resolve()))
