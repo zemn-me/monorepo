@@ -1193,6 +1193,30 @@ cc_binary(
     url = "https://github.com/wfr/unshieldv3/archive/4e5700fb97ba9f0338b49c1031834ce42177f265.tar.gz",
 )
 
+# AWS API models are the source of truth for the emulator gateway's wire types.
+AWS_API_MODELS_COMMIT = "b9e87f8f5cd7416169cd7d99811606cb70337358"
+
+http_file(
+    name = "aws_model_route_53",
+    downloaded_file_path = "route-53.json",
+    sha256 = "200f291208f01654b238db3083b480553157edf0b262049274557ec7ce0dde96",
+    urls = ["https://raw.githubusercontent.com/aws/api-models-aws/" + AWS_API_MODELS_COMMIT + "/models/route-53/service/2013-04-01/route-53-2013-04-01.json"],
+)
+
+http_file(
+    name = "aws_model_s3_control",
+    downloaded_file_path = "s3-control.json",
+    sha256 = "8224b63835b9ea8a4fea41fe22a5c3bc077d654c848856994e5f6494e1cbe022",
+    urls = ["https://raw.githubusercontent.com/aws/api-models-aws/" + AWS_API_MODELS_COMMIT + "/models/s3-control/service/2018-08-20/s3-control-2018-08-20.json"],
+)
+
+http_file(
+    name = "aws_model_ec2",
+    downloaded_file_path = "ec2.json",
+    sha256 = "70c547f48a84e3a294b952d14ed8674e884204ad15a993c715f25768ce5597fd",
+    urls = ["https://raw.githubusercontent.com/aws/api-models-aws/" + AWS_API_MODELS_COMMIT + "/models/ec2/service/2016-11-15/ec2-2016-11-15.json"],
+)
+
 # Native, checksum-pinned tools for the full AWS infrastructure integration test.
 aws_emulator = use_repo_rule("//bzl/aws_emulator:repositories.bzl", "aws_emulator")
 

@@ -17,6 +17,23 @@ import (
 	"testing"
 )
 
+// Independent response views keep the HTTP assertions separate from generated tags.
+const route53Namespace = "https://route53.amazonaws.com/doc/2013-04-01/"
+
+type queryLoggingResponse struct {
+	XMLName xml.Name
+	Config  struct {
+		ID                        string `xml:"Id"`
+		HostedZoneID              string `xml:"HostedZoneId"`
+		CloudWatchLogsLogGroupARN string `xml:"CloudWatchLogsLogGroupArn"`
+	} `xml:"QueryLoggingConfig"`
+}
+
+type egressResponse struct {
+	XMLName xml.Name
+	Return  bool `xml:"return"`
+}
+
 type testGateway struct {
 	url    string
 	client *http.Client

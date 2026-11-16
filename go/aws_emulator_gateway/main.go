@@ -20,42 +20,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws/protocol/ec2query"
+	"github.com/zemn-me/monorepo/go/aws_emulator_gateway/wire"
 )
-
-const route53Namespace = "https://route53.amazonaws.com/doc/2013-04-01/"
-
-type queryLoggingRequest struct {
-	XMLName                   xml.Name `xml:"https://route53.amazonaws.com/doc/2013-04-01/ CreateQueryLoggingConfigRequest"`
-	HostedZoneID              string   `xml:"HostedZoneId"`
-	CloudWatchLogsLogGroupARN string   `xml:"CloudWatchLogsLogGroupArn"`
-}
-
-type queryLoggingConfig struct {
-	ID                        string `xml:"Id"`
-	HostedZoneID              string `xml:"HostedZoneId"`
-	CloudWatchLogsLogGroupARN string `xml:"CloudWatchLogsLogGroupArn"`
-}
-
-type queryLoggingResponse struct {
-	XMLName xml.Name
-	Config  queryLoggingConfig `xml:"QueryLoggingConfig"`
-}
-
-type tagsResponse struct {
-	XMLName xml.Name `xml:"http://awss3control.amazonaws.com/doc/2018-08-20/ ListTagsForResourceResult"`
-	Tags    struct{} `xml:"Tags"`
-}
-
-type egressResponse struct {
-	XMLName xml.Name
-	Return  bool `xml:"return"`
-}
-
-type ec2Error struct {
-	Errors []struct {
-		Code string `xml:"Code"`
-	} `xml:"Errors>Error"`
-}
 
 type event struct {
 	Endpoint  string `json:"endpoint,omitempty"`
@@ -74,7 +42,7 @@ type gateway struct {
 	domainTags        map[string]json.RawMessage
 	operations        map[string]string
 	lockedDomains     map[string]bool
-	queryLogs         map[string]queryLoggingConfig
+	queryLogs         map[string]wire.Route53QueryLoggingConfig
 	mountTargetGroups map[string]json.RawMessage
 }
 
@@ -88,7 +56,7 @@ func newGateway(upstream string, client *http.Client, emit func(event)) *gateway
 		domainTags:        map[string]json.RawMessage{},
 		operations:        map[string]string{},
 		lockedDomains:     map[string]bool{},
-		queryLogs:         map[string]queryLoggingConfig{},
+		queryLogs:         map[string]wire.Route53QueryLoggingConfig{},
 		mountTargetGroups: map[string]json.RawMessage{},
 	}
 }
@@ -267,27 +235,27 @@ func (g *gateway) handle(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Method == http.MethodGet && strings.HasPrefix(r.URL.Path, "/v20180820/tags/") {
 		g.record("S3Control.ListTagsForResource")
-		writeXML(w, 200, tagsResponse{})
+		writeXML(w, 200, wire.S3ControlListTagsForResourceResult{Tags: &wire.S3ControlTagList{}})
 		return
 	}
 	const queryLoggingPath = "/2013-04-01/queryloggingconfig"
 	if r.URL.Path == queryLoggingPath && r.Method == http.MethodPost {
-		var request queryLoggingRequest
+		var request wire.Route53CreateQueryLoggingConfigRequest
 		if err := decodeXML(body, &request); err != nil {
 			http.Error(w, "Malformed query logging XML", 400)
 			return
 		}
-		config := queryLoggingConfig{ID: uuid(), HostedZoneID: request.HostedZoneID, CloudWatchLogsLogGroupARN: request.CloudWatchLogsLogGroupARN}
-		g.queryLogs[config.ID] = config
+		config := wire.Route53QueryLoggingConfig{Id: uuid(), HostedZoneId: request.HostedZoneId, CloudWatchLogsLogGroupArn: request.CloudWatchLogsLogGroupArn}
+		g.queryLogs[config.Id] = config
 		g.record("Route53.CreateQueryLoggingConfig")
-		w.Header().Set("Location", queryLoggingPath+"/"+config.ID)
-		writeXML(w, 201, queryLoggingResponse{XMLName: xml.Name{Space: route53Namespace, Local: "CreateQueryLoggingConfigResponse"}, Config: config})
+		w.Header().Set("Location", queryLoggingPath+"/"+config.Id)
+		writeXML(w, 201, wire.Route53CreateQueryLoggingConfigResponse{QueryLoggingConfig: config})
 		return
 	}
 	if r.Method == http.MethodGet && strings.HasPrefix(r.URL.Path, queryLoggingPath+"/") {
 		if config, ok := g.queryLogs[strings.TrimPrefix(r.URL.Path, queryLoggingPath+"/")]; ok {
 			g.record("Route53.GetQueryLoggingConfig")
-			writeXML(w, 200, queryLoggingResponse{XMLName: xml.Name{Space: route53Namespace, Local: "GetQueryLoggingConfigResponse"}, Config: config})
+			writeXML(w, 200, wire.Route53GetQueryLoggingConfigResponse{QueryLoggingConfig: config})
 			return
 		}
 	}
@@ -332,23 +300,18 @@ func (g *gateway) handle(w http.ResponseWriter, r *http.Request) {
 	}
 	query, _ := url.ParseQuery(string(body))
 	if forwarded.StatusCode == 400 {
-		var failure ec2Error
-		if xml.Unmarshal(result, &failure) == nil {
-			for _, item := range failure.Errors {
-				operation, root := "", ""
-				if defaultEgress(query, "AuthorizeSecurityGroupEgress") && item.Code == "InvalidPermission.Duplicate" {
-					operation = "EC2.AuthorizeExistingDefaultEgress"
-					root = "AuthorizeSecurityGroupEgressResponse"
-				}
-				if defaultEgress(query, "RevokeSecurityGroupEgress") && item.Code == "InvalidPermission.NotFound" {
-					operation = "EC2.RevokeDefaultEgress"
-					root = "RevokeSecurityGroupEgressResponse"
-				}
-				if operation != "" {
-					g.record(operation)
-					writeXML(w, 200, egressResponse{XMLName: xml.Name{Space: "http://ec2.amazonaws.com/doc/2016-11-15/", Local: root}, Return: true})
-					return
-				}
+		failure, err := ec2query.GetErrorResponseComponents(bytes.NewReader(result))
+		if err == nil {
+			succeeded := true
+			if defaultEgress(query, "AuthorizeSecurityGroupEgress") && failure.Code == "InvalidPermission.Duplicate" {
+				g.record("EC2.AuthorizeExistingDefaultEgress")
+				writeXML(w, 200, wire.EC2AuthorizeSecurityGroupEgressResult{Return: &succeeded})
+				return
+			}
+			if defaultEgress(query, "RevokeSecurityGroupEgress") && failure.Code == "InvalidPermission.NotFound" {
+				g.record("EC2.RevokeDefaultEgress")
+				writeXML(w, 200, wire.EC2RevokeSecurityGroupEgressResult{Return: &succeeded})
+				return
 			}
 		}
 	}

@@ -6,8 +6,21 @@ AWS Emulator. They supplement the mock-based unit tests and live staging;
 neither staging nor the merge queue is replaced.
 
 The loopback compatibility gateway runs as a Go subprocess. Its XML requests
-and responses use typed `encoding/xml` decoding and encoding; the Pulumi driver
-and non-AWS fixture providers remain in TypeScript.
+and responses use `encoding/xml` with Go wire structs generated during the Bazel
+build from AWS's published Smithy models. The model commit and per-file checksums
+are pinned in `MODULE.bazel`; `//go/aws_emulator_gateway/wire` selects the XML
+operation inputs and outputs used by the fixtures. Generated files are build
+outputs and are not checked in. The Pulumi driver and non-AWS fixture providers
+remain in TypeScript.
+
+The small `//bzl/aws_xml` projection derives roots, namespaces, XML member names,
+list wrappers, optional members, and HTTP header exclusions from those models.
+It supports the scalar, structure, and list shapes used by the selected REST XML
+and EC2 Query responses; unsupported shape kinds and XML traits fail generation.
+It is not a general Smithy server or request validator. [Smithy Go's published
+protocol implementations](https://github.com/aws/smithy-go#supported-protocols) are currently client-only, so they cannot directly
+supply our server-side codecs. EC2's protocol-level error envelope is decoded by
+the existing AWS Go SDK helper rather than a separate handwritten type.
 
 ## Explicit compatibility fixtures
 

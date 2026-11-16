@@ -15,6 +15,10 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/zemn-me/monorepo/go/aws_emulator_gateway",
     visibility = ["//visibility:private"],
+    deps = [
+        "//go/aws_emulator_gateway/wire",
+        "@com_github_aws_aws_sdk_go_v2//aws/protocol/ec2query",
+    ],
 )
 
 go_test(

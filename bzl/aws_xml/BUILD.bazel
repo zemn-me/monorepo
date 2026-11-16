@@ -1,0 +1,29 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+py_binary(
+    name = "generate",
+    srcs = ["generate.py"],
+    visibility = ["//go/aws_emulator_gateway/wire:__pkg__"],
+    deps = [":aws_xml"],
+)
+
+py_library(
+    name = "aws_xml",
+    srcs = [
+        "generate.py",
+        "projection.py",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "generate_test",
+    srcs = ["generate_test.py"],
+    deps = [":aws_xml"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
