@@ -14,7 +14,7 @@ module(
 # versioning = semver
 # depName = bazel-contrib/rules_oci
 # extractVersion = ^v(?<version>.*)$
-RULES_OCI_VERSION = "2.3.4"
+RULES_OCI_VERSION = "2.3.5"
 
 bazel_dep(name = "rules_oci", version = RULES_OCI_VERSION)
 
@@ -22,7 +22,7 @@ bazel_dep(name = "rules_oci", version = RULES_OCI_VERSION)
 # version together so Renovate can refresh both without a registry publication.
 archive_override(
     module_name = "rules_oci",
-    integrity = "sha256-1PtREc0mMUW+9OOLFny1Dbl7dtTxQTkAMOMlWTv8pUE=",
+    integrity = "sha256-EAtPqQ2afTQcO/AsI1QQbCqH3aqqi5H+9lw5GHd5ejg=",
     strip_prefix = "rules_oci-" + RULES_OCI_VERSION,
     # auto-integrity
     urls = ["https://github.com/bazel-contrib/rules_oci/releases/download/v" + RULES_OCI_VERSION + "/rules_oci-v" + RULES_OCI_VERSION + ".tar.gz"],
