@@ -1,0 +1,6 @@
+load("//csv/lint:rules.bzl", "csv_lint_test")
+
+csv_lint_test(
+	name = "csv_lint",
+	srcs = [ "frame_sizes.csv" ]
+)
