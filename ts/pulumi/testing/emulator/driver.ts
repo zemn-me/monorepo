@@ -74,8 +74,9 @@ try {
 			'Gateway connected to a hostname supplied in the request path'
 		);
 		const invalid = await send('https://%');
-		assert.equal(invalid.status, 500);
-		assert.equal(invalid.body, 'Emulator compatibility handler failed');
+		// Go's HTTP parser rejects malformed authorities before routing.
+		assert.equal(invalid.status, 400);
+		assert.equal(invalid.body, '400 Bad Request');
 	} finally {
 		await new Promise<void>((resolve, reject) =>
 			sentinel.close(error => (error ? reject(error) : resolve()))
@@ -344,6 +345,7 @@ try {
 	const actual = resources.filter(resource =>
 		resource.type.startsWith('aws:')
 	);
+	const gatewayReport = await gateway.report();
 	await writeFile(
 		path.join(
 			process.env['TEST_UNDECLARED_OUTPUTS_DIR'] ?? root,
@@ -359,9 +361,9 @@ try {
 					id: resource.id,
 				})),
 				deploymentSucceeded: updateError === undefined,
-				mockedOperations: gateway.calls,
+				mockedOperations: gatewayReport.calls,
 				mockedAssetPayloads: assetFixtures,
-				emulatorRequests: gateway.forwardedRequests,
+				emulatorRequests: gatewayReport.forwardedRequests,
 				diagnostics,
 			},
 			null,

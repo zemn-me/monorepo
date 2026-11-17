@@ -114,7 +114,7 @@ def _archive_blocks(module_text: str) -> list[tuple[int, int, str]]:
         elif start is not None and token.type == tokenize.OP and token.string == "(":
             depth = 1
         else:
-            start = offset(token.start) if token.type == tokenize.NAME and token.string in ("http_archive", "archive_override") else None
+            start = offset(token.start) if token.type == tokenize.NAME and token.string in ("http_archive", "http_file", "archive_override") else None
     return blocks
 
 
