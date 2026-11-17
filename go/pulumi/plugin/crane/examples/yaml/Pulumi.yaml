@@ -1,0 +1,20 @@
+name: provider-xyz-native
+runtime: yaml
+plugins:
+  providers:
+    - name: xyz
+      path: ../../bin
+
+resources:
+  myRandomResource:
+    type: xyz:Random
+    properties:
+      length: 24
+  myRandomComponent:
+    type: xyz:RandomComponent
+    properties:
+      length: 24
+
+outputs:
+  output:
+    value: ${myRandomResource.result}
