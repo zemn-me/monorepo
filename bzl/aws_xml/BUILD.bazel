@@ -4,7 +4,10 @@ load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 py_binary(
     name = "generate",
     srcs = ["generate.py"],
-    visibility = ["//go/aws_emulator_gateway/wire:__pkg__"],
+    visibility = [
+        "//:__pkg__",
+        "//go/aws_emulator_gateway/wire:__pkg__",
+    ],
     deps = [":aws_xml"],
 )
 
