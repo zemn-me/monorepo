@@ -4,6 +4,7 @@ import { GlobalConfig } from 'renovate/dist/config/global.js';
 import { extractPythonVersion } from 'renovate/dist/modules/manager/pip-compile/common.js';
 import { extractAllPackageFiles } from 'renovate/dist/modules/manager/pip-compile/extract.js';
 import { api as pep440 } from 'renovate/dist/modules/versioning/pep440/index.js';
+import { minimatch } from 'renovate/dist/util/minimatch.js';
 
 // Exercise Renovate's own extractor against the checked-in lock and source.
 // Valid JSON alone did not catch a disabled manager or an unreadable header.
@@ -20,6 +21,16 @@ const files = await extractAllPackageFiles(config['pip-compile'], [
 	'py/mitmproxy/requirements.txt',
 ]);
 assert.equal(files?.length, 2);
+// Post-upgrade generation is ineffective if Renovate discards its nested locks.
+const tasks = config.packageRules.find(rule =>
+	rule.matchManagers?.includes('pip-compile') && rule.postUpgradeTasks
+).postUpgradeTasks;
+for (const lock of [...files.flatMap(file => file.lockFiles), 'new/environment/requirements.txt']) {
+	assert(
+		tasks.fileFilters.some(pattern => minimatch(pattern).match(lock)),
+		`post-upgrade output ${lock} would be discarded`
+	);
+}
 files.sort((a, b) => a.packageFile === 'requirements.in' ? -1 : 1);
 assert.equal(files[0].packageFile, 'requirements.in');
 assert.deepEqual(files[0].lockFiles, ['requirements.txt']);
