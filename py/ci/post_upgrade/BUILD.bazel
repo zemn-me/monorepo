@@ -8,6 +8,7 @@ py_library(
         "__init__.py",
         "integrity.py",
         "pnpm.py",
+        "providers.py",
         "python_artifacts.py",
     ],
     visibility = ["//:__subpackages__"],
@@ -22,8 +23,18 @@ py_binary(
 )
 
 py_test(
+    name = "providers_test",
+    srcs = ["providers_test.py"],
+    main = "providers_test.py",
+    deps = [":post_upgrade"],
+)
+
+py_test(
     name = "post_upgrade_test",
-    srcs = ["__test__.py"],
+    srcs = [
+        "__test__.py",
+        "providers_test.py",
+    ],
     data = [
         "//:MODULE.bazel",
         "//:sh/postUpgrade.sh",
