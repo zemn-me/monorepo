@@ -348,6 +348,7 @@ http_archive(
                 shutil.copyfile(Path(__file__).with_name("integrity.py"), root / "py/ci/post_upgrade/integrity.py")
                 shutil.copyfile(Path(__file__).with_name("pnpm.py"), root / "py/ci/post_upgrade/pnpm.py")
                 shutil.copyfile(Path(__file__).with_name("providers.py"), root / "py/ci/post_upgrade/providers.py")
+                shutil.copyfile(Path(__file__).with_name("python_toolchains.py"), root / "py/ci/post_upgrade/python_toolchains.py")
                 (root / "bzl/pnpm").mkdir(parents=True)
                 (root / "package.json").write_text('{"packageManager":"pnpm@10.34.5"}')
                 (root / "bzl/pnpm/integrity.json").write_text(json.dumps({
@@ -364,6 +365,20 @@ http_archive(
     url = "{payload.as_uri()}.old",
 )
 '''
+                # An aligned publisher runtime exercises the actual bootstrap
+                # without introducing a network dependency into this fixture.
+                runtime = '''# BEGIN default Python runtime archives
+python.single_version_platform_override(
+    platform = "x86_64-unknown-linux-gnu",
+    python_version = "3.18.0",
+    sha256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20290101/cpython-3.18.0%2B20290101-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"],
+)
+# END default Python runtime archives
+PYTHON_VERSION = "3.18.0"
+'''
+                baseline = runtime + baseline
                 current = baseline.replace(payload.as_uri() + ".old", payload.as_uri())
                 (root / "baseline").write_text(baseline)
                 (root / "MODULE.bazel").write_text(current)

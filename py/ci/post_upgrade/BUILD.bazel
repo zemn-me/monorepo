@@ -10,6 +10,7 @@ py_library(
         "pnpm.py",
         "providers.py",
         "python_artifacts.py",
+        "python_toolchains.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -30,10 +31,18 @@ py_test(
 )
 
 py_test(
+    name = "python_toolchains_test",
+    srcs = ["python_toolchains_test.py"],
+    main = "python_toolchains_test.py",
+    deps = [":post_upgrade"],
+)
+
+py_test(
     name = "post_upgrade_test",
     srcs = [
         "__test__.py",
         "providers_test.py",
+        "python_toolchains_test.py",
     ],
     data = [
         "//:MODULE.bazel",
