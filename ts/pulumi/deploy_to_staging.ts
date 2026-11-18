@@ -12,7 +12,6 @@
 import * as pulumi from '@pulumi/pulumi/automation/index.js';
 
 import { Command, Summarize } from '#root/ts/github/actions/index.js';
-import { prepareBoweryBugleRemoval } from '#root/ts/pulumi/retire_bowery_bugle.js';
 import { prepareLuluRetirement } from '#root/ts/pulumi/retire_lulu.js';
 import { staging } from '#root/ts/pulumi/stack.js';
 
@@ -159,7 +158,6 @@ export async function main(args: Args) {
 	const e3 = await waitForLockTask(async () => {
 		const stack = await s;
 		await prepareLuluRetirement(stack);
-		await prepareBoweryBugleRemoval(stack);
 		return stack.up(baseConfig);
 	})('deploying');
 
