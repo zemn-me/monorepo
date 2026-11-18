@@ -82,7 +82,9 @@ func (p *multiplayerBrowser) viewScreenshot() ([]byte, error) {
 		defer cancel()
 		return p.page.ViewScreenshot(ctx)
 	}
-	return p.driver.ViewScreenshot()
+	// Virtual-time peers are paused between commands. Capture their compositor
+	// surface without waiting for a native view repaint from the frozen loop.
+	return p.driver.Screenshot()
 }
 
 func (p *multiplayerBrowser) mouse(x, y int, kind string, buttons int) {
