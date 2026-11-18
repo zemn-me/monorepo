@@ -9,9 +9,48 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 from py.ci.post_upgrade.integrity import update_module_bazel_text
 from py.ci.post_upgrade.pnpm import refresh
+from py.ci.post_upgrade.python_artifacts import refresh as refresh_python_artifacts
+
+
+class TestPythonArtifacts(unittest.TestCase):
+    def test_all_environments_finish_before_dependent_manifests(self):
+        pending_locks = {"//:notebook.update", "//tools/proxy:lock.update", "//new/env:deps.update"}
+        pending_manifests = {"//:imports.update", "//new/env:imports.update"}
+        query = Mock(side_effect=[
+            SimpleNamespace(stdout="\n".join(pending_locks)),
+            SimpleNamespace(stdout="\n".join(pending_manifests)),
+        ])
+
+        def update(args):
+            target, = args
+            if target in pending_locks:
+                pending_locks.remove(target)
+            else:
+                self.assertFalse(pending_locks, "manifest generated before all locks were refreshed")
+                pending_manifests.remove(target)
+
+        refresh_python_artifacts(query, update)
+        self.assertFalse(pending_locks)
+        self.assertFalse(pending_manifests)
+
+    def test_failed_discovery_or_update_cannot_publish_stale_manifests(self):
+        for failure in ("query", "resolve"):
+            with self.subTest(failure=failure):
+                error = subprocess.CalledProcessError(1, failure)
+                query = Mock(side_effect=error if failure == "query" else [
+                    SimpleNamespace(stdout="//isolated:lock.update\n"),
+                    SimpleNamespace(stdout="//:imports.update\n"),
+                ])
+                update = Mock(side_effect=error)
+                with self.assertRaises(subprocess.CalledProcessError):
+                    refresh_python_artifacts(query, update)
+                self.assertEqual(query.call_count, 1)
+                self.assertEqual(update.call_count, int(failure == "resolve"))
 
 
 class TestPnpmIntegrity(unittest.TestCase):

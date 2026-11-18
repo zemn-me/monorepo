@@ -8,6 +8,7 @@ py_library(
         "__init__.py",
         "integrity.py",
         "pnpm.py",
+        "python_artifacts.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -17,6 +18,7 @@ py_binary(
     srcs = ["__main__.py"],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
+    deps = [":post_upgrade"],
 )
 
 py_test(
