@@ -6,6 +6,14 @@ load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
 
+py_test(
+    name = "actionlint_diagnostics_test",
+    size = "small",
+    srcs = ["actionlint_diagnostics_test.py"],
+    args = ["$(rootpath @com_github_rhysd_actionlint//cmd/actionlint)"],
+    data = ["@com_github_rhysd_actionlint//cmd/actionlint"],
+)
+
 filegroup(
     name = "workflow_files",
     srcs = glob(["*.yml"]),

@@ -385,6 +385,14 @@ go_deps.module_override(
     path = "golang.org/x/tools/gopls",
 )
 
+# actionlint 1.7.12 uses the prerelease YAML error API. Preserve structured
+# diagnostic positions with the stable v4 API until upstream adopts it.
+go_deps.module_override(
+    patch_strip = 1,
+    patches = ["//bzl:actionlint_yaml_v4.patch"],
+    path = "github.com/rhysd/actionlint",
+)
+
 # regenerate with bazelisk mod tidy
 use_repo(
     go_deps,
