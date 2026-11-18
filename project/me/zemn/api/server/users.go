@@ -428,7 +428,7 @@ func (s Server) maybeResolveUserFromTable(ctx context.Context, details tokenExch
 	if err != nil {
 		return nil, err
 	}
-	if rec == nil {
+	if rec == nil && details.EmailVerified != nil && *details.EmailVerified {
 		rec, err = s.findUserByEmail(ctx, details.Email)
 		if err != nil {
 			return nil, err

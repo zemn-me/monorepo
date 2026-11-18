@@ -1,0 +1,31 @@
+# @zemnmez/tabwriter
+
+Format tab-separated text into aligned columns using elastic tabstops.
+The formatter is a pure function and works with strings without performing I/O.
+
+```sh
+npm install @zemnmez/tabwriter
+```
+
+```ts
+import { elasticTabstops } from '@zemnmez/tabwriter';
+
+const table = elasticTabstops('name\tcount\napple\t3\npear\t12\n');
+// name  count
+// apple 3
+// pear  12
+```
+
+`elasticTabstops(input, options?)` returns the formatted string. Column widths
+are measured in Unicode code points, rather than terminal display cells.
+ANSI escape sequences and HTML entities receive no special handling.
+
+Options include `minWidth` (minimum column width including padding), `padding`
+(extra space after a cell, default 1), `padChar` (default a space), `alignRight`,
+and `debug` (insert column separators). For tab padding, use `padChar: '\t'`
+and `tabWidth` (default 4). `tabIndent` also selects tab padding.
+
+Both horizontal and vertical tabs delimit cells. Newlines and form feeds delimit
+rows. The current implementation treats vertical tabs as horizontal tabs and
+form feeds as newlines; it does not implement Go tabwriter's escape handling,
+soft-column removal, or form-feed block separation.

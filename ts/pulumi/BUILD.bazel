@@ -1,7 +1,7 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
 load("//md:rules.bzl", "md_files")
-load("//ts:rules.bzl", "ts_project")
+load("//ts:rules.bzl", "jest_test", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
 package(default_visibility = ["//ci:__subpackages__"])
@@ -36,7 +36,6 @@ ts_project(
         "stack.ts",
     ],
     data = [
-        ":pulumi_local",
         "//js/npm:publish",
         "//project/im/shadwell/thomas",
         "//project/me/zemn:remix",
@@ -46,9 +45,11 @@ ts_project(
         "//ts/pulumi/zemn.me/availability:remix",
         "//ts/pulumi/zemn.me/static",
         "//ts/result:npm_pkg_publish_data",
+        "//ts/text/tabwriter:npm_pkg_publish_data",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        ":cli",
         "//:node_modules/@bazel/runfiles",
         "//:node_modules/@pulumi/aws",
         "//:node_modules/@pulumi/gcp",
@@ -71,6 +72,8 @@ ts_project(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "cli.ts",
+        "cli_test.ts",
         "deploy_to_staging.ts",
         "github_actions_secrets.ts",
         "index.ts",
@@ -83,17 +86,35 @@ filegroup(
     visibility = ["//:__subpackages__"],
 )
 
-genrule(
-    name = "pulumi_local",
-    srcs = ["//bin/linux/pulumi"],
-    outs = ["pulumi_bin"],
-    cmd = """
-cp $< $@
-    """,
-)
-
 md_files(
     name = "ts_pulumi",
     srcs = ["AGENTS.md"],
     visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "cli",
+    srcs = ["cli.ts"],
+    data = ["//bin/linux/pulumi:installation"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@pulumi/pulumi",
+    ],
+)
+
+ts_project(
+    name = "cli_tests",
+    srcs = ["cli_test.ts"],
+    deps = [
+        ":cli",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@pulumi/pulumi",
+    ],
+)
+
+jest_test(
+    name = "cli_test",
+    srcs = ["cli_test.js"],
+    deps = [":cli_tests"],
 )

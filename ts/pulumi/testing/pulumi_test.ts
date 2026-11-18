@@ -757,6 +757,7 @@ describe('pulumi', () => {
 			'monorepo_future_npm_publish',
 			'monorepo_knowitwhenyouseeit_npm_publish',
 			'monorepo_result_npm_publish',
+			'monorepo_tabwriter_npm_publish',
 		]);
 		for (const command of npmPublishCommands) {
 			expect(command.inputs['environment']).toEqual({
@@ -1157,7 +1158,7 @@ describe('pulumi', () => {
 		expect(curator?.inputs['environment']).toMatchObject({
 			variables: {
 				JOURNAL_CURATION_ENABLED: 'true',
-				JOURNAL_CURATOR_MODEL: 'gpt-6-astra',
+				JOURNAL_CURATOR_MODEL: 'gpt-5.6',
 				OPENAI_IDENTITY_PROVIDER_ID: 'openai-provider',
 			},
 		});

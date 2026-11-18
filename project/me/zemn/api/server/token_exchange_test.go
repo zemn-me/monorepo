@@ -1,6 +1,18 @@
 package apiserver
 
-import "testing"
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/coreos/go-oidc"
+	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
+	"io"
+	"net/http"
+	"slices"
+	"testing"
+	"time"
+)
 
 func TestConfigureTestOIDCIssuerFromEnv(t *testing.T) {
 	originalIssuers := upstreamOIDCIssuers
@@ -147,5 +159,111 @@ func TestApplyProfileClaimsToIDTokenOmitsEmptyStrings(t *testing.T) {
 	}
 	if token.Picture != nil {
 		t.Fatalf("expected empty picture to be omitted, got %#v", token.Picture)
+	}
+}
+
+// Exercise signed upstream tokens so email recovery remains bound to Google's
+// issuer, our OAuth client, and an explicitly verified email claim.
+func TestGoogleEmailRecoversJournalOwnerAfterSubjectChange(t *testing.T) {
+	for _, tc := range []struct {
+		name, issuer, audience, email        string
+		verified                             *bool
+		usersTable, existingOwner, wantOwner bool
+	}{
+		{verified: ptr(true), name: "without users table", usersTable: false, wantOwner: true},
+		{verified: ptr(true), name: "bootstrap owner", usersTable: true, wantOwner: true},
+		{verified: ptr(true), name: "existing owner", usersTable: true, existingOwner: true, wantOwner: true},
+		{verified: ptr(true), name: "normalized email", email: "Thomas@Shadwell.IM", wantOwner: true},
+		{verified: ptr(true), name: "different email", email: "other@example.com"},
+		{verified: ptr(true), name: "email suffix", email: "thomas@shadwell.im.attacker.example"},
+		{name: "unverified email", verified: ptr(false)},
+		{name: "missing verification"},
+		{name: "stored email without verification", usersTable: true, existingOwner: true},
+		{name: "stored unverified email", verified: ptr(false), usersTable: true, existingOwner: true},
+		{verified: ptr(true), name: "different issuer", issuer: "https://other.example"},
+		{verified: ptr(true), name: "different audience", audience: "other-client"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			issuer, audience, email := tc.issuer, tc.audience, tc.email
+			if issuer == "" {
+				issuer = googleOIDCIssuer
+			}
+			if audience == "" {
+				audience = googleClientID
+			}
+			if email == "" {
+				email = "thomas@shadwell.im"
+			}
+			s, _, ctx, entries, _ := journalKnowledgeFixture(t)
+			if tc.usersTable {
+				s.usersTableName = "users"
+			}
+			if tc.existingOwner {
+				if err := s.putUserRecord(ctx, userRecord{Id: journalOwnerSubject, When: Now(), Emails: []string{"thomas@shadwell.im"}, Scopes: []string{"journal_read", "journal_write"}, SubjectIds: addSubjectID(nil, googleOIDCIssuer, "old-google-subject")}); err != nil {
+					t.Fatal(err)
+				}
+			}
+			signer := newOIDCAuthenticationTestServer(t, NewServerOptions{})
+			token, err := signer.IssueJWT(ctx, map[string]any{
+				"iss": issuer, "sub": "new-google-subject", "aud": audience,
+				"exp": time.Now().Add(time.Hour).Unix(), "email": email, "email_verified": tc.verified,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			client := &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+				var doc any
+				switch r.URL.String() {
+				case issuer + "/.well-known/openid-configuration":
+					doc = map[string]any{"issuer": issuer, "jwks_uri": issuer + "/jwks", "id_token_signing_alg_values_supported": []string{"ES256"}}
+				case issuer + "/jwks":
+					doc = signer.keySet()
+				default:
+					return nil, fmt.Errorf("unexpected URL: %s", r.URL)
+				}
+				data, err := json.Marshal(doc)
+				if err != nil {
+					return nil, err
+				}
+				return &http.Response{StatusCode: 200, Header: http.Header{"Content-Type": {"application/json"}}, Body: io.NopCloser(bytes.NewReader(data))}, nil
+			})}
+			ctx = oidc.ClientContext(ctx, client)
+			provider, err := oidc.NewProvider(ctx, issuer)
+			if err != nil {
+				t.Fatal(err)
+			}
+			cfg := &upstreamIssuerConfig{Provider: issuer, Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{OAuthClientId(audience): {}}}
+			mapped, err := s.translateUpstreamUser(ctx, provider, cfg, token, OIDCIssuer(issuer))
+			if !tc.wantOwner {
+				if err == nil {
+					t.Fatalf("unexpected authorization: %+v", mapped)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			if mapped.LocalID != journalOwnerSubject || !slices.Contains(mapped.Scopes, "journal_read") || !slices.Contains(mapped.Scopes, "journal_write") {
+				t.Fatalf("wrong owner or journal scopes: %+v", mapped)
+			}
+			if tc.existingOwner && len(mapped.Scopes) != 2 {
+				t.Fatalf("changed existing owner scopes: %v", mapped.Scopes)
+			}
+			if tc.usersTable {
+				rec, err := s.findUserByRemoteSubject(ctx, googleOIDCIssuer, "new-google-subject")
+				if err != nil || rec == nil || rec.Id != journalOwnerSubject {
+					t.Fatalf("new subject not linked to owner: %+v, %v", rec, err)
+				}
+			}
+			ctx = context.WithValue(ctx, auth.IDTokenKey, &auth.IDToken{Issuer: "https://api.zemn.me", Subject: string(mapped.LocalID)})
+			response, err := s.GetJournal(ctx, GetJournalRequestObject{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			journal, ok := response.(GetJournal200JSONResponse)
+			if !ok || len(journal.Entries) != len(entries) {
+				t.Fatalf("existing journal unavailable: %+v", response)
+			}
+		})
 	}
 }

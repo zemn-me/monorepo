@@ -9,6 +9,7 @@ import {
 	Outlet,
 	useLoaderData,
 } from 'react-router';
+import { journalBrowseQuery } from '#root/project/me/zemn/app/journal/periods.js';
 import { JournalRenderTime } from '#root/project/me/zemn/app/journal/render_time.js';
 import {
 	privateHeaders,
@@ -30,13 +31,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		const jti = auth.session.claims.jti;
 		const pageId = new URL(request.url).searchParams.get('wiki');
 		if (pageId === null) {
-			const response = await auth.client.GET('/journal');
+			const url = new URL(request.url);
+			const browse = journalBrowseQuery(
+				url.pathname,
+				url.searchParams.get('at')
+			);
+			const response = await auth.client.GET('/journal', {
+				params: { query: browse },
+			});
 			if (!response.data)
 				throw new Response('Journal unavailable', {
 					status: response.response.status,
 					headers: privateHeaders,
 				});
-			queryClient.setQueryData(['get', '/journal', jti], response.data);
+			queryClient.setQueryData(
+				['get', '/journal', jti, browse],
+				response.data
+			);
 		} else if (pageId === 'all') {
 			const response = await auth.client.GET('/journal/wiki');
 			if (!response.data)

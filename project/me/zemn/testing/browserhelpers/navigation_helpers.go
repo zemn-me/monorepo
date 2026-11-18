@@ -26,11 +26,19 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, destination := range []struct{ label, selector, path, query string }{
-		{"Days", "section[aria-label='Create a journal entry']", "/journal/day", ""},
-		{"Wiki", "section[aria-label='Diary wiki']", "/journal", "all"},
+	for _, destination := range []struct{ label, linkSelector, selector, path, query string }{
+		{"Overview", "Browse journal", "nav[aria-label='Choose journal date']", "/journal", ""},
+		{"Day", "a[aria-current='date']", "section[aria-label='Create a journal entry']", "/journal/day", ""},
+		{"Wiki", "nav[aria-label='Browse journal'] a[href='/journal?wiki=all']", "section[aria-label='Diary wiki']", "/journal", "all"},
 	} {
-		link, err := driver.FindElement(selenium.ByLinkText, destination.label)
+		if destination.label != "Overview" {
+			OpenJournalDatePicker(t, driver)
+		}
+		by := selenium.ByCSSSelector
+		if destination.label == "Overview" {
+			by = selenium.ByLinkText
+		}
+		link, err := driver.FindElement(by, destination.linkSelector)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -55,7 +63,7 @@ return rays.length > 0 && [...rays].every(ray => Number(ray.getAttribute('x2')) 
 		}, time.Second); err != nil {
 			t.Fatal("loading rays did not grow to full size", err)
 		}
-		if destination.label == "Days" {
+		if destination.label == "Day" {
 			name := "journal-loading-desktop.png"
 			if width == 390 {
 				name = "journal-loading-phone.png"
@@ -139,13 +147,19 @@ return !!bar && rect.left >= bar.left && rect.right <= bar.right && rect.top >= 
 		}
 		AssertHeroVideoPreserved(t, driver, video)
 		if path == "/" {
-			homeLayout, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
+			// The URL can change before the homepage layout and scroll reset commit.
+			var homeLayout any
+			err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				var err error
+				homeLayout, err = d.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
 const rect = bar.getBoundingClientRect();
 const hero = document.querySelector('figure').getBoundingClientRect();
 const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]');
 const menu = bar.querySelector('summary').getBoundingClientRect();
 return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.right - hero.right) < 1 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
-			if err != nil || homeLayout != true {
+				return homeLayout == true, err
+			}, 10*time.Second)
+			if err != nil {
 				t.Fatalf("homepage does not keep its card and shared top bar at width %d: %v %v", width, homeLayout, err)
 			}
 			SaveNavigationScreenshot(t, driver, fmt.Sprintf("homepage-topbar-%d.png", width))
@@ -166,13 +180,7 @@ return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.ri
 			}
 		}
 	}
-	wikiLink, err := driver.FindElement(selenium.ByLinkText, "Wiki")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := wikiLink.Click(); err != nil {
-		t.Fatal(err)
-	}
+	ClickJournalWiki(t, driver)
 	if _, err := WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
@@ -216,5 +224,71 @@ func AssertJournalNavigationAtTop(t *testing.T, driver selenium.WebDriver, path 
 		return time.Since(stableSince) >= 250*time.Millisecond, nil
 	}, 10*time.Second); err != nil {
 		t.Fatalf("journal navigation to %s did not stay at the top: %v", path, err)
+	}
+}
+
+// OpenJournalDatePicker exposes the calendar's date and view links through the UI.
+func OpenJournalDatePicker(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	picker, err := WaitForElement(driver, selenium.ByCSSSelector, "summary[aria-label='Choose journal date']", 30*time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	open, err := driver.ExecuteScript("return arguments[0].parentElement.open", []any{picker})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if open != true {
+		if err := ClickElementInView(driver, picker); err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+// ClickJournalWiki handles both the loading toolbar and the loaded calendar menu.
+func ClickJournalWiki(t *testing.T, driver selenium.WebDriver) {
+	t.Helper()
+	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		links, err := d.FindElements(selenium.ByCSSSelector, "a[href='/journal?wiki=all']")
+		if err != nil {
+			return false, err
+		}
+		for _, link := range links {
+			visible, err := link.IsDisplayed()
+			if IsStaleElementErr(err) {
+				return false, nil
+			}
+			if err != nil {
+				return false, err
+			}
+			if !visible {
+				continue
+			}
+			err = ClickElementInView(d, link)
+			if IsStaleElementErr(err) {
+				return false, nil
+			}
+			return err == nil, err
+		}
+		pickers, err := d.FindElements(selenium.ByCSSSelector, "summary[aria-label='Choose journal date']")
+		if err != nil || len(pickers) == 0 {
+			return false, err
+		}
+		open, err := d.ExecuteScript("return arguments[0].parentElement.open", []any{pickers[0]})
+		if IsStaleElementErr(err) {
+			return false, nil
+		}
+		if err != nil {
+			return false, err
+		}
+		if open != true {
+			err = ClickElementInView(d, pickers[0])
+			if IsStaleElementErr(err) {
+				return false, nil
+			}
+		}
+		return false, err
+	}, 30*time.Second); err != nil {
+		t.Fatal("open journal wiki: ", err)
 	}
 }

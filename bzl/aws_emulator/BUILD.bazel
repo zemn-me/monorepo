@@ -1,0 +1,25 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library")
+
+exports_files(["repositories.bzl"])
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = [
+        "BUILD.bazel",
+        "repositories.bzl",
+    ],
+)
+
+py_binary(
+    name = "extract",
+    main = "extract.py",
+    visibility = ["//ts/pulumi/testing/emulator:__pkg__"],
+    deps = [":aws_emulator"],
+)
+
+py_library(
+    name = "aws_emulator",
+    srcs = ["extract.py"],
+    visibility = ["//:__subpackages__"],
+)

@@ -41,6 +41,9 @@ required checks. Record the failure class and test coverage in its description.
 - Validate affected packages with `bazel test //path/to/changes/...`.
   Use `bazel query` to select narrower relevant targets when needed;
   let slow Bazel runs finish or time out naturally.
+- Drive integration-test delays with virtual clocks or observable completion;
+  do not add wall-clock sleeps. Keep measurements of native scheduling or
+  throughput in explicit, opt-in performance targets.
 - For features, prefer integration tests of user-visible behaviour.
   Types can cover invariants they enforce. Observe the DOM, network, or
   existing APIs instead of adding custom `window.*` globals for tests.

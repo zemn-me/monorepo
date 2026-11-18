@@ -5,7 +5,9 @@ import { act } from 'react-dom/test-utils';
 
 import { resolve } from '#root/ts/future/future.js';
 
-const fetchJournal = jest.fn<() => Promise<unknown>>();
+const fetchJournal = jest.fn<
+	(path: string, options?: { signal?: AbortSignal }) => Promise<unknown>
+>();
 jest.unstable_mockModule('openapi-fetch', () => ({
 	default: () => ({ GET: fetchJournal }),
 }));
@@ -17,7 +19,7 @@ jest.unstable_mockModule('#root/ts/oidc/oidc.js', () => ({
 		}),
 	},
 }));
-const { useGetJournal } = await import('./useZemnMeApi.js');
+const { useGetJournal, useGetJournalUploads } = await import('./useZemnMeApi.js');
 
 function JournalSummary({ enabled = true }: { readonly enabled?: boolean }) {
 	return useGetJournal(resolve('test-token'), enabled)(
@@ -107,3 +109,46 @@ it('does not fetch or poll the full journal while its observer is disabled', asy
 		client.clear();
 	}
 });
+
+function UploadSummary() {
+	return useGetJournalUploads(resolve('test-token'), true)(
+		value => <output>{value.entries.length}</output>,
+		() => <output>Loading</output>,
+		() => <output>Error</output>
+	);
+}
+
+it.each([JournalSummary, UploadSummary])(
+	'aborts an obsolete journal request when its query is cancelled (%p)',
+	async Summary => {
+		const client = new QueryClient({
+			defaultOptions: { queries: { retry: false } },
+		});
+		let signal: AbortSignal | undefined;
+		fetchJournal.mockImplementation(async (_path, options) => {
+			signal = options?.signal;
+			return new Promise(() => {
+				// Keep the HTTP request pending until React Query cancels it.
+			});
+		});
+		const root = createRoot(document.createElement('div'));
+		try {
+			await act(async () => {
+				root.render(
+					<QueryClientProvider client={client}>
+						<Summary />
+					</QueryClientProvider>
+				);
+			});
+			expect(fetchJournal).toHaveBeenCalledTimes(1);
+			await act(async () => {
+				await client.cancelQueries({ queryKey: ['get', '/journal'] });
+			});
+			expect(signal).toBeDefined();
+			expect(signal?.aborted).toBe(true);
+		} finally {
+			await act(async () => root.unmount());
+			client.clear();
+		}
+	}
+);

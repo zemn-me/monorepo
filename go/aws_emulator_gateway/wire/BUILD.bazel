@@ -1,0 +1,61 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+package(default_testonly = True)
+
+# Keep generation to the XML operations supplied by our explicit fixtures.
+genrule(
+    name = "route53_generate",
+    srcs = ["@aws_model_route_53//file"],
+    outs = ["route53.go"],
+    cmd = "$(execpath //bzl/aws_xml:generate) --model $(location @aws_model_route_53//file) --prefix Route53 --select CreateQueryLoggingConfig:input --select CreateQueryLoggingConfig:output --select GetQueryLoggingConfig:output --output $@ && $(execpath //bin/host/gofmt) -w $@",
+    tools = [
+        "//bin/host/gofmt",
+        "//bzl/aws_xml:generate",
+    ],
+)
+
+genrule(
+    name = "s3control_generate",
+    srcs = ["@aws_model_s3_control//file"],
+    outs = ["s3control.go"],
+    cmd = "$(execpath //bzl/aws_xml:generate) --model $(location @aws_model_s3_control//file) --prefix S3Control --select ListTagsForResource:output --output $@ && $(execpath //bin/host/gofmt) -w $@",
+    tools = [
+        "//bin/host/gofmt",
+        "//bzl/aws_xml:generate",
+    ],
+)
+
+genrule(
+    name = "ec2_generate",
+    srcs = ["@aws_model_ec2//file"],
+    outs = ["ec2.go"],
+    cmd = "$(execpath //bzl/aws_xml:generate) --model $(location @aws_model_ec2//file) --prefix EC2 --select AuthorizeSecurityGroupEgress:output --select RevokeSecurityGroupEgress:output --output $@ && $(execpath //bin/host/gofmt) -w $@",
+    tools = [
+        "//bin/host/gofmt",
+        "//bzl/aws_xml:generate",
+    ],
+)
+
+go_library(
+    name = "wire",
+    srcs = [
+        "ec2.go",
+        "route53.go",
+        "s3control.go",
+    ],
+    importpath = "github.com/zemn-me/monorepo/go/aws_emulator_gateway/wire",
+    visibility = ["//go/aws_emulator_gateway:__pkg__"],
+)
+
+go_test(
+    name = "wire_test",
+    srcs = ["wire_test.go"],
+    embed = [":wire"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

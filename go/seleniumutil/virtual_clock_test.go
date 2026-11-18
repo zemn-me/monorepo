@@ -119,3 +119,110 @@ setTimeout(() => history.back(), 10);
 		t.Fatal(err)
 	}
 }
+
+func TestVirtualBufferedAudio(t *testing.T) {
+	driver, err := selenium.NewWithChromeCapabilities(webdriver.Capabilities{"pageLoadStrategy": "eager"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	clock, err := selenium.NewVirtualClock(driver)
+	if err != nil {
+		t.Fatal(err)
+	}
+	html := `<button id="start">Play</button><output id="events"></output><button id="pause">Pause</button><button id="resume">Resume</button><button id="stop">Stop loop</button><script>
+document.querySelector('#start').onclick=()=>{
+const context=new AudioContext({sampleRate:48000}),events=document.querySelector('#events');
+const buffer=context.createBuffer(1,96000,48000);
+const short=context.createBufferSource();short.buffer=buffer;short.playbackRate.value=2;
+short.onended=()=>events.textContent+='short ';short.connect(context.destination);short.start(1,0.5,1);
+const loop=context.createBufferSource();loop.buffer=buffer;loop.loop=true;
+loop.addEventListener('ended',()=>events.textContent+='loop ');loop.connect(context.destination);loop.start();
+document.querySelector('#pause').onclick=()=>context.suspend();
+document.querySelector('#resume').onclick=()=>context.resume();
+document.querySelector('#stop').onclick=()=>loop.stop(context.currentTime+0.5);
+};
+</script>`
+	if err := driver.Get("data:text/html," + url.PathEscape(html)); err != nil {
+		t.Fatal(err)
+	}
+	play, err := driver.FindElement(webdriver.ByCSSSelector, "#start")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := play.Click(); err != nil {
+		t.Fatal(err)
+	}
+	advance := func(duration time.Duration) {
+		t.Helper()
+		if err := clock.Advance(duration); err != nil {
+			t.Fatal(err)
+		}
+	}
+	click := func(id string) {
+		t.Helper()
+		if _, err := driver.ExecuteScript("document.getElementById(arguments[0]).click()", []interface{}{id}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	assertEvents := func(want string) {
+		t.Helper()
+		got, err := driver.ExecuteScript("return document.querySelector('#events').textContent", nil)
+		if err != nil || got != want {
+			t.Fatalf("audio completions=%v, want %q: %v", got, want, err)
+		}
+	}
+	advance(500 * time.Millisecond)
+	click("pause")
+	advance(time.Minute)
+	assertEvents("")
+	click("resume")
+	advance(999 * time.Millisecond)
+	assertEvents("")
+	advance(time.Millisecond)
+	assertEvents("short ")
+	advance(time.Minute)
+	assertEvents("short ")
+	click("stop")
+	advance(499 * time.Millisecond)
+	assertEvents("short ")
+	advance(time.Millisecond)
+	assertEvents("short loop ")
+}
+
+func TestVirtualClockResourceTiming(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/data" {
+			fmt.Fprint(w, "downloaded")
+			return
+		}
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprint(w, `<output></output><script>fetch('/data').then(r=>r.text()).then(text=>document.querySelector('output').textContent=text)</script>`)
+	}))
+	defer server.Close()
+	driver, err := selenium.NewWithChromeCapabilities(webdriver.Capabilities{"pageLoadStrategy": "eager"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	clock, err := selenium.NewVirtualClock(driver)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.Get(server.URL); err != nil {
+		t.Fatal(err)
+	}
+	const resource = `return performance.getEntriesByType('resource').some(e=>e.name.endsWith('/data') && e.encodedBodySize>0)`
+	if err := driver.WaitWithTimeout(func(w webdriver.WebDriver) (bool, error) {
+		value, err := w.ExecuteScript(resource, nil)
+		return value == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatalf("native network entries unavailable under virtual time: %v", err)
+	}
+	if err := clock.Advance(time.Minute); err != nil {
+		t.Fatal(err)
+	}
+	if value, err := driver.ExecuteScript(resource, nil); err != nil || value != true {
+		t.Fatalf("advancing virtual time lost the download entry: %v, %v", value, err)
+	}
+}

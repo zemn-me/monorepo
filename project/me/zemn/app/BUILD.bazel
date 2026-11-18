@@ -6,6 +6,7 @@ ts_project(
     name = "app",
     srcs = [
         "auth-session.ts",
+        "browser_security.ts",
         "eeg.tsx",
         "glade-layout.tsx",
         "linkset_link.tsx",
@@ -16,6 +17,9 @@ ts_project(
         "root.tsx",
         "routes.ts",
         "schema.ts",
+        "zod.ts",
+        "zod_configuration.ts",
+        "zod_mini.ts",
     ],
     assets = glob(
         [
@@ -30,6 +34,7 @@ ts_project(
         ":style_module_css",
         "//:node_modules/@fontsource/ibm-plex-mono",
         "//:node_modules/@fontsource/lora",
+        "//:node_modules/@fortawesome/fontawesome-svg-core",
         "//:node_modules/@react-router/dev",
         "//:node_modules/@tanstack/query-async-storage-persister",
         "//:node_modules/@tanstack/query-core",
@@ -56,6 +61,8 @@ ts_project(
         "//ts/option",
         "//ts/react/lang",
         "//ts/remix",
+        "//ts/schema.org",
+        "//ts/trusted_types",
     ],
 )
 
@@ -70,6 +77,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "auth-session.ts",
+        "browser_security.ts",
         "eeg.tsx",
         "glade-layout.tsx",
         "linkset_link.tsx",
@@ -81,6 +89,9 @@ filegroup(
         "root.tsx",
         "routes.ts",
         "schema.ts",
+        "zod.ts",
+        "zod_configuration.ts",
+        "zod_mini.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

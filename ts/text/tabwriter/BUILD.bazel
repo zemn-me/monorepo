@@ -1,17 +1,16 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js/npm:rules.bzl", "npm_pkg")
+load("//md:rules.bzl", "md_files", "readme")
 load("//ts:rules.bzl", "jest_test", "ts_project")
 
 ts_project(
     name = "tabwriter",
-    srcs = [
-        "tabwriter.ts",
-        "tabwriter_test.ts",
-    ],
+    srcs = ["tabwriter.ts"],
+    regenerator_runtime = False,
     visibility = [
         "//:__subpackages__",
     ],
     deps = [
-        "//:node_modules/@jest/globals",
         "//:node_modules/@types/node",
     ],
 )
@@ -21,10 +20,50 @@ jest_test(
     srcs = [
         "tabwriter_test.js",
     ],
-    deps = [":tabwriter"],
+    deps = [":tabwriter_tests"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "tabwriter_tests",
+    srcs = ["tabwriter_test.ts"],
+    deps = [
+        ":tabwriter",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+npm_pkg(
+    name = "npm_pkg",
+    srcs = [":tabwriter"],
+    entry_point = "tabwriter.ts",
+    major_version = "version/major",
+    minor_version = "version/minor",
+    patch_version = "version/patch",
+    pkg_json_base = "package.template.json",
+    readme = "README.md",
+    release_lock = ".release.lock",
+    test_version_on_main = True,
+    tgz = "npm_package",
+    visibility = [
+        "//ci:__subpackages__",
+        "//ts/pulumi:__subpackages__",
+    ],
+)
+
+readme(
+    name = "readme",
+    examples = [],
+    template = "README.template",
+)
+
+md_files(
+    name = "ts_text_tabwriter",
+    srcs = [":readme"],
+    visibility = ["//:__subpackages__"],
 )

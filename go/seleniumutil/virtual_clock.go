@@ -10,9 +10,8 @@ import (
 var virtualClockScript string
 
 // VirtualClock drives test-only replacements for browser dates, performance
-// timers, timeouts, intervals, animation frames, and ScriptProcessor audio
-// callbacks. Emscripten shares those
-// clocks, so advancing runs the real WebAssembly engine without wall-clock
+// timers, timeouts, intervals, animation frames, and Web Audio processing/completion
+// callbacks. Emscripten shares those clocks, so advancing runs the real WebAssembly engine without wall-clock
 // sleeps. Network requests, rendering, and CPU work still take real time.
 type VirtualClock struct{ driver *Driver }
 

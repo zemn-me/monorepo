@@ -19,6 +19,7 @@ import { Iterable } from '#root/ts/iter/index.js';
 import { None, Some } from '#root/ts/option/option.js';
 import * as lang from '#root/ts/react/lang/index.js';
 import { Metadata } from '#root/ts/remix/metadata.js';
+import { Schema } from '#root/ts/schema.org/schema.js';
 
 const homepageLinkNames = ['CV', 'linkedin', 'github', 'bluesky', 'twitter'];
 
@@ -117,12 +118,7 @@ export default function Main() {
 				<Timeline />
 			</section>
 
-			<script
-				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(ProfilePageSchema),
-				}}
-				type="application/ld+json"
-			/>
+			<Schema>{ProfilePageSchema}</Schema>
 		</>
 	);
 }

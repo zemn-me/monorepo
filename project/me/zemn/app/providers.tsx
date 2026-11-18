@@ -4,7 +4,6 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v8';
 import { ReactNode, useState } from 'react';
-import z from 'zod';
 
 import { ZEMN_ME_QUERY_CACHE_STORAGE_KEY } from '#root/project/me/zemn/constants/constants.js';
 import { LocalStorageController } from '#root/project/me/zemn/hook/useLocalStorage.js';
@@ -32,9 +31,6 @@ const localStoragePersister = createAsyncStoragePersister({
 	// A completed login must survive an immediate full-document OAuth redirect.
 	throttleTime: 0,
 });
-
-// Prevent CSP issues
-z.config({ jitless: true });
 
 export function Providers({ children }: ProviderProps) {
 	// A warm SSR process serves multiple people; never share its query cache.

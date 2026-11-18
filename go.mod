@@ -3,7 +3,7 @@
 
 module github.com/zemn-me/monorepo
 
-go 1.27.2
+go 1.27.4
 
 ignore (
 	./ci/bazel_bep
@@ -25,44 +25,44 @@ tool (
 
 require (
 	github.com/aws/aws-lambda-go v1.55.1
-	github.com/aws/aws-sdk-go-v2 v1.47.3
-	github.com/aws/aws-sdk-go-v2/config v1.33.9
-	github.com/aws/aws-sdk-go-v2/credentials v1.20.9
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.21.12
-	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.89.3
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.70.3
-	github.com/aws/aws-sdk-go-v2/service/kms v1.61.4
-	github.com/aws/aws-sdk-go-v2/service/lambda v1.113.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
-	github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
+	github.com/aws/aws-sdk-go-v2 v1.48.0
+	github.com/aws/aws-sdk-go-v2/config v1.33.18
+	github.com/aws/aws-sdk-go-v2/credentials v1.21.0
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.21.21
+	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.92.2
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.74.0
+	github.com/aws/aws-sdk-go-v2/service/kms v1.62.6
+	github.com/aws/aws-sdk-go-v2/service/lambda v1.115.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.10
+	github.com/aws/aws-sdk-go-v2/service/sts v1.52.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.54.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
-	github.com/bazelbuild/rules_go v0.64.2
+	github.com/bazelbuild/rules_go v0.65.0
 	github.com/beevik/etree v1.8.1
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.5.0+incompatible
-	github.com/deepteams/webp v1.2.8
-	github.com/getkin/kin-openapi v0.151.0
+	github.com/deepteams/webp v1.2.9
+	github.com/getkin/kin-openapi v0.152.0
 	github.com/go-chi/chi/v5 v5.5.0
 	github.com/go-chi/cors v1.2.2
-	github.com/go-jose/go-jose/v4 v4.1.6
+	github.com/go-jose/go-jose/v4 v4.1.9
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/invopop/jsonschema v0.14.0
 	github.com/modelcontextprotocol/go-sdk v1.8.0
-	github.com/nyaruka/phonenumbers/v2 v2.0.14
-	github.com/oapi-codegen/nethttp-middleware v1.2.0
-	github.com/oapi-codegen/runtime v1.7.0
-	github.com/openai/openai-go/v3 v3.78.0
+	github.com/nyaruka/phonenumbers/v2 v2.0.17
+	github.com/oapi-codegen/nethttp-middleware v1.3.1
+	github.com/oapi-codegen/runtime v1.8.0
+	github.com/openai/openai-go/v3 v3.99.0
 	github.com/sergi/go-diff v1.4.0
-	github.com/tdewolff/parse/v2 v2.8.18
+	github.com/tdewolff/parse/v2 v2.8.20
 	github.com/tebeka/selenium v0.9.9
-	github.com/twilio/twilio-go v1.32.0
+	github.com/twilio/twilio-go v1.33.0
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/image v0.46.0
-	golang.org/x/sync v0.24.0
+	golang.org/x/image v0.48.0
+	golang.org/x/sync v0.25.0
 	google.golang.org/protobuf v1.36.12
 )
 
@@ -70,21 +70,21 @@ require (
 	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/a-h/generate v0.0.0-20220105161013-96c14dfdfb60 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.22 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.46.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.7 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.13.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.10.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.38.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.4 // indirect
-	github.com/aws/smithy-go v1.28.5 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.27 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.9 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.12 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.12 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.47.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.25 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.13 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.13.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.13.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.39.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.44.5 // indirect
+	github.com/aws/smithy-go v1.28.9 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-3 // indirect
 	github.com/bazelbuild/bazel-watcher v0.33.0 // indirect
@@ -114,15 +114,15 @@ require (
 	github.com/google/jsonschema-go v0.4.3 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/itchyny/go-yaml v0.0.0-20251001235044-fca9a0999f15 // indirect
-	github.com/itchyny/gojq v0.12.19 // indirect
-	github.com/itchyny/timefmt-go v0.1.8 // indirect
+	github.com/itchyny/go-yaml v0.0.0-20261030110000-18a91f8189a6 // indirect
+	github.com/itchyny/gojq v0.12.20 // indirect
+	github.com/itchyny/timefmt-go v0.1.9 // indirect
 	github.com/jaschaephraim/lrserver v0.0.0-20240306232639-afed386b3640 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.21 // indirect
+	github.com/mattn/go-isatty v0.0.24 // indirect
+	github.com/mattn/go-runewidth v0.0.31 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
-	github.com/oapi-codegen/oapi-codegen/v2 v2.8.0 // indirect
+	github.com/oapi-codegen/oapi-codegen/v2 v2.8.2 // indirect
 	github.com/oasdiff/yaml v0.1.1 // indirect
 	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
@@ -138,7 +138,7 @@ require (
 	github.com/speakeasy-api/openapi v1.24.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
-	github.com/tidwall/gjson v1.19.0 // indirect
+	github.com/tidwall/gjson v1.20.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
@@ -151,20 +151,20 @@ require (
 	go.yaml.in/yaml/v4 v4.0.0-rc.3 // indirect
 	golang.org/x/arch v0.28.0 // indirect
 	golang.org/x/crypto v0.57.0 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/mod v0.41.0 // indirect
-	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/telemetry v0.0.0-20260811182544-a038080d80e5 // indirect
-	golang.org/x/text v0.42.0 // indirect
-	golang.org/x/time v0.15.0 // indirect
-	golang.org/x/tools v0.49.0 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20260908205506-85c1c2202aba // indirect
+	golang.org/x/mod v0.42.0 // indirect
+	golang.org/x/oauth2 v0.37.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/telemetry v0.0.0-20261009151841-97e8ea77aa2a // indirect
+	golang.org/x/text v0.44.0 // indirect
+	golang.org/x/time v0.16.0 // indirect
+	golang.org/x/tools v0.52.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
-	golang.org/x/tools/gopls v0.23.0 // indirect
-	golang.org/x/vuln v1.4.0 // indirect
+	golang.org/x/tools/gopls v0.24.0 // indirect
+	golang.org/x/vuln v1.8.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	honnef.co/go/tools v0.8.1 // indirect
-	mvdan.cc/gofumpt v0.10.0 // indirect
+	honnef.co/go/tools v0.8.2 // indirect
+	mvdan.cc/gofumpt v0.12.0 // indirect
 	mvdan.cc/xurls/v2 v2.6.0 // indirect
 )

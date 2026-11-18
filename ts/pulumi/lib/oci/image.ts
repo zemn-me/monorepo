@@ -105,8 +105,11 @@ function imagePushInterpreter(
 				'stderr="$(mktemp)"',
 				'cleanup() { rm -f "$stdout" "$stderr"; }',
 				'trap cleanup EXIT',
+				'image_ref="$2@$3"',
 				'emit_push_output() {',
-				'  cat "$stdout" >&2',
+				// Crane prints the pushed reference to stdout on success. Keep
+				// that result out of stderr, which older providers log as errors.
+				'  grep -Fvx -- "$image_ref" "$stdout" >&2 || true',
 				'  grep -Eiv "existing manifest: sha256:[0-9a-f]+|already exists" "$stderr" >&2 || true',
 				'}',
 				'if "$1" --repository "$2" >"$stdout" 2>"$stderr"; then',

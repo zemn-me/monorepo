@@ -22,9 +22,16 @@ previous page, or the experiments index when the tab has no previous page. Menus
 scale from an 800×600 reference to fit the window with centered letterboxing,
 keeping artwork and pointer targets aligned on large displays. Rml setup menus
 and in-game dialogs scale independently of the gameplay resolution.
-Gameplay rendering follows the viewport in CSS pixels, including live window
-resizing, with an 800×600 minimum and a 4096-pixel maximum edge; smaller windows
-scale the minimum frame to fit without distortion.
+Gameplay scales the 800×600 reference to the reported screen size, so units and
+sidebar controls occupy a consistent fraction of the display across resolutions.
+Window resizing changes the visible battlefield at that display scale. Screen
+and viewport measurements use CSS pixels, independent of device pixel density;
+if screen dimensions are unavailable, gameplay falls back to one CSS pixel per
+game pixel. Browsers do not report reliable physical dimensions in inches or cm.
+Desktop gameplay retains an 800×600 minimum. Small touch displays instead target
+1.25 CSS pixels per game pixel with a 360×300 minimum, showing less battlefield
+so units remain readable on phones. Menus keep their 800×600 reference. Both
+layouts preserve aspect ratio and cap the framebuffer edge at 4096 pixels.
 Changes are debounced and applied between game or modal frames because replacing
 drawing surfaces during a suspended paint would invalidate its pointers.
 
@@ -63,8 +70,11 @@ From the monorepo root:
 ```
 
 Open <http://localhost:3000/experiments/tiberian-sun>. Use a keyboard and
-mouse. The full site build is `//project/me/zemn:build`; it includes the
-engine JavaScript, Wasm, bundled open-source UI resources, launcher, freeware data, and
+mouse, or touch: one finger holds the left mouse button; two fingers hold
+the right mouse button until either finger lifts. After a two-finger gesture,
+lift all fingers before starting another left click. The full site build is
+`//project/me/zemn:build`; it includes the engine JavaScript, Wasm, bundled
+open-source UI resources, launcher, freeware data, and
 license notices as content-addressed public assets. The standalone game
 document has its own script policy and opens through a document navigation.
 Leaving the page ends that engine instance.
@@ -192,7 +202,7 @@ For an asset-backed match with two independent browsers and real clocks:
 
 ```sh
 ./sh/bin/bazel test //project/tiberian_sun/testing:integration_test \
-  --test_arg=-test.run=TestBrowserMultiplayer --test_arg=-test.v \
+  --test_arg='-test.run=^TestBrowserMultiplayer$' --test_arg=-test.v \
   --test_env=TIBERIAN_MULTIPLAYER_REALTIME=1 --nocache_test_results
 ```
 
@@ -200,6 +210,36 @@ This uses the same lobby, orders, and checksum assertions as the normal test.
 It retains `performance-host.log` and `performance-guest.log` in undeclared
 outputs and prints performance samples. Headless software rendering can be much
 slower than an interactive browser; compare runs on the same machine.
+
+The normal multiplayer scenario continues the match through hiding and restoring
+the guest tab under virtual time, checking new shared simulation checksums.
+Native browser background scheduling is an opt-in performance measurement,
+excluded from the normal virtual-time integration suite:
+
+```sh
+./sh/bin/bazel test //project/tiberian_sun/testing:background_scheduling_benchmark \
+  --nocache_test_results --test_output=all
+```
+
+This case runs native browser clocks and removes ChromeDriver's
+background-throttling exemptions. It starts a real WebRTC match, measures both
+players for 30 seconds with the game visible, activates a blank tab in the
+guest's browser, waits out the short background grace period, and measures
+another 30 seconds. It checks the actual game document is hidden and unfocused,
+requires matching simulation checksums during the interval, and rejects progress
+below half the foreground baseline. A final visible interval checks recovery.
+No scripts, screenshots, or log polling run during each measurement window.
+The relative threshold allows for software-rendering costs across machines;
+this is a regression check for large slowdowns, not a guarantee of a particular
+frame rate. It covers short-term tab hiding, not OS sleep, discarded pages, or
+Chrome's additional throttling after several minutes. Logs and screenshots are
+saved with the other multiplayer diagnostics.
+
+While a multiplayer match is active and hidden, short native waits resume through
+a MessageChannel task instead of a timer. The native frame pacer still controls
+simulation speed and the browser still receives control between engine slices.
+Visible games and solo games retain their existing timer waits. The channel is
+closed and any suspended continuation released when the engine is unmounted.
 
 During any real match, the browser console logs `Multiplayer performance` every
 120 simulation frames. Each sample includes achieved FPS (after the first sample),
@@ -256,9 +296,10 @@ opens the game through the experiment link, goes back while the engine is
 running, and reopens it without replacing the React document. Download-failure
 cases verify visible, focused error feedback at desktop and phone widths.
 
-The browser tests install a Sinon clock before application scripts load. They
+The normal browser integration tests install a Sinon clock before application
+scripts load. They
 advance dates, performance timers, timeouts, intervals, animation frames, and
-ScriptProcessor audio callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
+Web Audio processing and completion callbacks explicitly; Emscripten reads those same clocks. Input holds, readiness checks,
 and ten seconds of skirmish simulation use simulated time rather than host
 sleeps. The clock initially captures the current date so server-rendered calendar text
 hydrates consistently, then remains frozen between explicit advances.

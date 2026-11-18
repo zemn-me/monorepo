@@ -50,6 +50,73 @@ class TestPnpmIntegrity(unittest.TestCase):
 
 
 class TestAutoIntegrity(unittest.TestCase):
+    def test_archive_override_tracks_release_variable(self):
+        module = '''VERSION = "2.3.3"
+archive_override(
+    module_name = "rules_oci",
+    integrity = "old",
+    strip_prefix = "rules_oci-" + VERSION,
+    # auto-integrity
+    urls = ["https://example.com/v" + VERSION + "/rules_oci-v" + VERSION + ".tar.gz"],
+)
+'''
+        calls = []
+
+        def fetcher(url):
+            calls.append(url)
+            return b"reviewed release"
+
+        updated = update_module_bazel_text(module, fetcher, module.replace('VERSION = "2.3.3"', 'VERSION = "2.3.0"'))
+        self.assertEqual(calls, ["https://example.com/v2.3.3/rules_oci-v2.3.3.tar.gz"])
+        expected = "sha256-" + base64.b64encode(hashlib.sha256(b"reviewed release").digest()).decode()
+        self.assertIn(f'integrity = "{expected}"', updated)
+        calls.clear()
+        self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+        self.assertEqual(calls, [])
+
+    def test_http_files_sharing_a_commit_refresh_all_checksums(self):
+        baseline = '''MODELS_COMMIT = "old"
+http_file(
+    name = "route53_model",
+    sha256 = "route53-old",
+    # auto-integrity
+    urls = ["https://example.com/" + MODELS_COMMIT + "/route53.json"],
+)
+http_file(
+    name = "s3control_model",
+    sha256 = "s3control-old",
+    # auto-integrity
+    urls = ["https://example.com/" + MODELS_COMMIT + "/s3control.json"],
+)
+http_file(
+    name = "ec2_model",
+    sha256 = "ec2-old",
+    # auto-integrity
+    urls = ["https://example.com/" + MODELS_COMMIT + "/ec2.json"],
+)
+'''
+        module = baseline.replace('MODELS_COMMIT = "old"', 'MODELS_COMMIT = "new"')
+        payloads = {
+            "https://example.com/new/route53.json": b"route53 model",
+            "https://example.com/new/s3control.json": b"s3control model",
+            "https://example.com/new/ec2.json": b"ec2 model",
+        }
+        fetched = []
+
+        def fetcher(url):
+            fetched.append(url)
+            return payloads[url]
+
+        updated = update_module_bazel_text(module, fetcher, baseline)
+        expected = module.replace("route53-old", hashlib.sha256(b"route53 model").hexdigest())
+        expected = expected.replace("s3control-old", hashlib.sha256(b"s3control model").hexdigest())
+        expected = expected.replace("ec2-old", hashlib.sha256(b"ec2 model").hexdigest())
+        self.assertEqual(updated, expected)
+        self.assertCountEqual(fetched, payloads)
+        fetched.clear()
+        self.assertEqual(update_module_bazel_text(updated, fetcher, updated), updated)
+        self.assertEqual(fetched, [])
+
     def test_repository_module_baseline(self):
         module = Path("MODULE.bazel").read_text()
 

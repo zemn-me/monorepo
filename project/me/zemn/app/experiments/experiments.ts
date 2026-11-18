@@ -105,6 +105,17 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 		title: 'Games',
 		experiments: [
 			{
+				href: '/experiments/red-alert',
+				title: 'Red Alert',
+				description: 'Play Red Alert in your browser.',
+			},
+			{
+				href: '/experiments/command-and-conquer',
+				title: 'Command & Conquer',
+				description:
+					'Play the original Command & Conquer in your browser.',
+			},
+			{
 				href: '/experiments/tiberian-sun',
 				title: 'Tiberian Sun',
 				description: 'Play the freeware Tiberian Sun in your browser.',

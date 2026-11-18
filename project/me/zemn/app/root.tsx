@@ -1,3 +1,6 @@
+import '#root/project/me/zemn/app/browser_security.js';
+import '#root/ts/trusted_types/trusted_types.js';
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import {
 	data,
 	Links,
@@ -37,6 +40,7 @@ import { Bio } from '#root/project/me/zemn/bio/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import { text } from '#root/ts/react/lang/index.js';
 import {
+	CspPolicy,
 	DefaultContentSecurityPolicy,
 	HeaderTagsAppRouter,
 	SourceExpression,
@@ -56,6 +60,8 @@ const journalObjectStorageSources = [
 
 const csp = {
 	...DefaultContentSecurityPolicy,
+	'require-trusted-types-for': new Set<SourceExpression>(["'script'"]),
+	'trusted-types': new Set(['default']),
 	'script-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['script-src']!,
 		"'wasm-unsafe-eval'",
@@ -81,7 +87,7 @@ const csp = {
 		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		...journalObjectStorageSources,
 	]),
-};
+} satisfies CspPolicy;
 
 export const clientMiddleware = [recoverFailedNavigation];
 

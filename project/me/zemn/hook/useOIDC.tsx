@@ -26,6 +26,7 @@ import {
 import { useQueryFuture } from '#root/ts/future/react-query/useQuery.js';
 import { OIDCAuthenticationRequest } from '#root/ts/oidc/authentication_request.js';
 import { OIDCAuthenticationResponse } from '#root/ts/oidc/authentication_response.js';
+import { selectOIDCLoginHints } from '#root/ts/oidc/login_hint.js';
 import { validateAuthenticationRequest } from '#root/ts/oidc/validate_authentication_request.js';
 import * as option from '#root/ts/option/types.js';
 import { Err, Ok } from '#root/ts/result/result.js';
@@ -121,7 +122,7 @@ export function useOIDC(
 				scope: Array.from(
 					new Set(['openid', ...params.scope.split(' ')])
 				).join(' '),
-				...(idTokenHint === null ? {} : { id_token_hint: idTokenHint }),
+				...selectOIDCLoginHints(issuer, idTokenHint),
 			};
 		}
 	);
@@ -258,6 +259,7 @@ export function useOIDC(
 				url => {
 					const switchUserURL = new URL(url);
 					switchUserURL.searchParams.delete('id_token_hint');
+					switchUserURL.searchParams.delete('login_hint');
 					switchUserURL.searchParams.set('prompt', 'select_account');
 					const authentication = authenticate(switchUserURL)();
 					const nextSession = endSession(null);

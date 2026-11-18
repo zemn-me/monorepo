@@ -24,7 +24,7 @@ func TestJournalAgentsLiveSyntheticSchema(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	curator := &openAIJournalCurator{ai: newOpenAIJournalAI(key).(*openAIJournalAI), model: "gpt-6-astra"}
+	curator := &openAIJournalCurator{ai: newOpenAIJournalAI(key).(*openAIJournalAI), model: "gpt-5.6"}
 	s.journalCurator = curator
 	liveCtx, cancel := context.WithTimeout(ctx, 8*time.Minute)
 	defer cancel()

@@ -1,0 +1,16 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_test")
+
+py_test(
+    name = "staging_gate_test",
+    srcs = ["__test__.py"],
+    args = ["$(rootpaths //.github/workflows:workflow_files)"],
+    data = ["//.github/workflows:workflow_files"],
+    main = "__test__.py",
+    deps = ["@pip//pyyaml"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

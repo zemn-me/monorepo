@@ -1,0 +1,45 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
+load("//bzl:rules.bzl", "bazel_lint")
+
+package(default_visibility = ["//:__subpackages__"])
+
+itest_service(
+    name = "site",
+    args = [
+        "--port",
+        "$${PORT}",
+    ],
+    autoassign_port = True,
+    exe = "//project/me/zemn:start",
+    health_check_timeout = "180s",
+    http_health_check_address = "http://localhost:$${PORT}/experiments/red-alert",
+)
+
+service_test(
+    name = "integration_test",
+    size = "large",
+    args = [
+        "-test.v",
+        "-test.timeout=240s",
+    ],
+    services = [":site"],
+    shard_count = 2,
+    test = ":testing_test",
+)
+
+go_test(
+    name = "testing_test",
+    srcs = ["browser_test.go"],
+    tags = ["manual"],
+    deps = [
+        "//go/seleniumutil",
+        "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

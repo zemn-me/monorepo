@@ -9,7 +9,7 @@ import { ArticleProps } from '#root/project/me/zemn/components/Article/types/art
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import { Date as LocalizedDate } from '#root/ts/react/lang/date.js';
 import { Schema } from '#root/ts/schema.org/schema.js';
-import { nativeDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
+import { utcDateFromUnknownSimpleDate } from '#root/ts/time/date.js';
 
 export function Article(props: ArticleProps) {
 	const [toc, setToc] = useState<HTMLUListElement | null>(null);
@@ -19,7 +19,7 @@ export function Article(props: ArticleProps) {
 			<article ref={setArticle}>
 				{props.date ? (
 					<LocalizedDate
-						date={nativeDateFromUnknownSimpleDate.parse(props.date)}
+						date={utcDateFromUnknownSimpleDate.parse(props.date)}
 					/>
 				) : null}
 				<nav>
@@ -35,9 +35,9 @@ export function Article(props: ArticleProps) {
 						author: [schema],
 						headline: props.title,
 						datePublished: props.date
-							? nativeDateFromUnknownSimpleDate
+							? utcDateFromUnknownSimpleDate
 									.parse(props.date)
-									.toISOString()
+									.toPlainDate().toString()
 							: undefined,
 					}}
 				</Schema>
