@@ -139,12 +139,9 @@ func (p *multiplayerBrowser) captureStep(name string) {
 
 // A diagnostic readback may wait for the compositor. Overlap it only with
 // independent work in the other browser; keep this page unchanged until done.
+// This also applies to paused virtual-time peers: the other browser's input
+// and clipboard work does not need to wait for this browser's screenshot.
 func (p *multiplayerBrowser) captureStepWhile(name string, other func()) {
-	if p.page == nil {
-		p.captureStep(name)
-		other()
-		return
-	}
 	done := make(chan struct{})
 	go func() { defer close(done); p.captureStep(name) }()
 	defer func() { <-done }()
