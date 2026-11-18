@@ -18,6 +18,15 @@ from py.ci.post_upgrade.python_artifacts import refresh as refresh_python_artifa
 
 
 class TestPythonArtifacts(unittest.TestCase):
+    def test_empty_discovery_cannot_silently_skip_generation(self):
+        for groups in ([""], ["//new/env:lock.update\n", ""]):
+            with self.subTest(groups=groups):
+                query = Mock(side_effect=[SimpleNamespace(stdout=value) for value in groups])
+                update = Mock()
+                with self.assertRaisesRegex(RuntimeError, "No .* update targets discovered"):
+                    refresh_python_artifacts(query, update)
+                self.assertEqual(update.call_count, len(groups) - 1)
+
     def test_all_environments_finish_before_dependent_manifests(self):
         pending_locks = {"//:notebook.update", "//tools/proxy:lock.update", "//new/env:deps.update"}
         pending_manifests = {"//:imports.update", "//new/env:imports.update"}

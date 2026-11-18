@@ -17,6 +17,8 @@ def refresh(bazel: Callable, bazel_run: Callable) -> None:
             f'attr(generator_function, "^{generator}$", //...))'
         )
         targets = bazel(["query", query], capture_output=True, text=True).stdout.splitlines()
+        if not targets:
+            raise RuntimeError(f"No {generator} update targets discovered; refusing to publish stale artifacts")
         for target in sorted(targets):
             # Use the updater itself: a nested .fix alias can copy read-only
             # outputs, and the generic fixer can swallow failed pipelines.
