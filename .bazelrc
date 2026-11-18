@@ -65,6 +65,9 @@ build:debug --compilation_mode=dbg
 # This prevents accidentally depending on this feature, which Bazel will remove.
 build --nolegacy_external_runfiles
 
+# Use explicit Python package files and namespace packages, including build tools.
+build --incompatible_default_to_explicit_init_py
+
 # Turn on --incompatible_strict_action_env which was on by default
 # in Bazel 0.21.0 but turned off again in 0.22.0. Follow
 # https://github.com/bazelbuild/bazel/issues/7026 for more details.
