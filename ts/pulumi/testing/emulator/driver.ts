@@ -373,7 +373,18 @@ try {
 	console.log(
 		`${scenario}: ${actual.filter(resource => resource.id).length} AWS resources recorded; ${diagnostics.length} errors.`
 	);
-	if (updateError !== undefined) throw updateError;
+	if (updateError !== undefined) {
+		// Automation CommandError embeds the entire progress stream, which Node
+		// and Actions truncate before the actionable provider diagnostic.
+		const command = updateError as { stdout?: string; stderr?: string };
+		const outputDirectory = process.env['TEST_UNDECLARED_OUTPUTS_DIR'] ?? root;
+		await writeFile(path.join(outputDirectory, `${scenario}-pulumi-stdout.log`), command.stdout ?? '');
+		await writeFile(path.join(outputDirectory, `${scenario}-pulumi-stderr.log`), command.stderr ?? '');
+		const messages = diagnostics.map(diagnostic => `${diagnostic.urn ?? 'stack'}: ${diagnostic.message}`);
+		throw new Error(`${scenario} provisioning failed.\n${
+			(messages.length > 0 ? messages.join('\n') : command.stderr || command.stdout || String(updateError)).slice(-8000)
+		}`);
+	}
 	assert(
 		expected.length > 0,
 		'The infrastructure registered no AWS resources'

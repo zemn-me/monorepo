@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	bzl "github.com/bazelbuild/buildtools/build"
 	bep "github.com/zemn-me/monorepo/ci/bazel_bep/build_event_stream_proto"
@@ -264,7 +265,7 @@ func (a annotator) testSummaryAnnotations(label string, summary *bep.TestSummary
 	}
 
 	logText := failedLogs(summary.GetFailed())
-	body := label + " " + status.String() + logText
+	body := label + " " + status.String() + conciseLog(logText)
 	title := label + " " + strings.ToLower(status.String()) + durationSuffix(summary.GetTotalRunDuration())
 	fallback := params{"title": title}
 	if file, ok := a.workspaceRelativeFile(buildFileForLabel(label)); ok {
@@ -284,6 +285,31 @@ func (a annotator) testSummaryAnnotations(label string, summary *bep.TestSummary
 	}
 
 	return out
+}
+
+// Actions truncates oversized annotation messages. Keep the final diagnostic
+// as well as startup context instead of losing the failure behind progress.
+func conciseLog(text string) string {
+	text = strings.ToValidUTF8(text, "�")
+	if len(escapeData(text)) <= 2800 {
+		return text
+	}
+	head, tail := text[:min(800, len(text))], text[max(0, len(text)-1800):]
+	for !utf8.ValidString(head) {
+		head = head[:len(head)-1]
+	}
+	for !utf8.ValidString(tail) {
+		tail = tail[1:]
+	}
+	for len(escapeData(head)) > 800 {
+		_, size := utf8.DecodeLastRuneInString(head)
+		head = head[:len(head)-size]
+	}
+	for len(escapeData(tail)) > 1800 {
+		_, size := utf8.DecodeRuneInString(tail)
+		tail = tail[size:]
+	}
+	return head + "\n... middle of test log omitted; see full test output ...\n" + tail
 }
 
 func failedLogs(files []*bep.File) string {

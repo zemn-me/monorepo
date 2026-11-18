@@ -5,38 +5,8 @@ import path from 'node:path';
 
 import { runfiles } from '@bazel/runfiles';
 
-/**
- * Drink bytes from the Readable, returning each line.
- */
-async function* byLine(r: NodeJS.ReadableStream) {
-	const chunks: (string | Buffer)[] = [];
-	for await (const chunk of r) {
-		const lines = chunk.toString().split(/\r?\n/g);
+import { byLine } from '#root/ci/lines/index.js';
 
-		// no newlines occurred.
-		// when lines.length == 1, ["something"], no new line must have
-		// happened or we would have ["something", ""]
-		// lines.length == 0 is impossible afaik.
-		// it's probably possible to get an empty chunk, so we filter that out
-		// so we're not waiting forever on a new chunk.
-		if (lines.length < 2) {
-			chunks.push(...lines.filter(v => v.length > 0));
-			continue;
-		}
-
-		const last = lines.pop();
-
-		// at least one new line must have happened. We can flush the chunks
-		// along with all the newlines EXCEPT the last.
-		yield* [chunks.join(''), ...lines];
-
-		if (last) chunks.push(last);
-	}
-
-	// send any extra stuff that was never newline terminated.
-	const text = chunks.join('');
-	if (text.length !== 0) yield text;
-}
 
 /**
  * Interleave the results of two AsyncIterables. Whichever gets there fastest, gets there first.
