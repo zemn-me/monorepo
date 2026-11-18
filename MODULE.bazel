@@ -1234,7 +1234,7 @@ aws_emulator(
     url = "https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/aws-emulator_1.0.382-1_amd64.deb",
 )
 
-# renovate: datasource=github-releases depName=pulumi/pulumi-aws
+# Derived from @pulumi/aws in package.json by the pre-Bazel bootstrap.
 PULUMI_AWS_PROVIDER_VERSION = "7.54.0"
 
 http_archive(
@@ -1245,7 +1245,7 @@ http_archive(
     url = "https://github.com/pulumi/pulumi-aws/releases/download/v" + PULUMI_AWS_PROVIDER_VERSION + "/pulumi-resource-aws-v" + PULUMI_AWS_PROVIDER_VERSION + "-linux-amd64.tar.gz",
 )
 
-# renovate: datasource=github-releases depName=pulumi/pulumi-random
+# Derived from @pulumi/random in package.json by the pre-Bazel bootstrap.
 PULUMI_RANDOM_PROVIDER_VERSION = "4.21.6"
 
 http_archive(
