@@ -14,7 +14,6 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/commander",
         "//:node_modules/mime",
-        "//ci/lines",
         "//ts",
         "//ts/github/actions",
         "//ts/pulumi",

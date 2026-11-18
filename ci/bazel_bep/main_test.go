@@ -7,41 +7,11 @@ import (
 	"strings"
 	"testing"
 	"time"
-	"unicode/utf8"
 
 	bep "github.com/zemn-me/monorepo/ci/bazel_bep/build_event_stream_proto"
 	"google.golang.org/protobuf/encoding/protodelim"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
-
-func TestLargeFailedLogPreservesFinalErrorWithinActionsLimit(t *testing.T) {
-	for name, progress := range map[string]string{
-		"large Unicode log":      strings.Repeat("進捗 %\n", 10000),
-		"short escape-heavy log": strings.Repeat("%", 1000),
-		"invalid UTF-8":          string([]byte{0xff}) + strings.Repeat("progress\n", 1000),
-	} {
-		t.Run(name, func(t *testing.T) {
-			log := filepath.Join(t.TempDir(), "test.log")
-			text := "Starting emulator\n" + progress + "\nFINAL FAILURE: provider connection closed\n"
-			if err := os.WriteFile(log, []byte(text), 0o600); err != nil {
-				t.Fatal(err)
-			}
-			a := annotator{}
-			lines := a.testSummaryAnnotations("//integration:scenario", &bep.TestSummary{
-				OverallStatus: bep.TestStatus_FAILED,
-				Failed:        []*bep.File{{File: &bep.File_Uri{Uri: "file://" + log}}},
-			})
-			for _, line := range lines {
-				if len(line) > 4096 || !utf8.ValidString(line) {
-					t.Fatalf("annotation would be truncated or corrupt: %d bytes", len(line))
-				}
-				if !strings.Contains(line, "Starting emulator") || !strings.Contains(line, "FINAL FAILURE: provider connection closed") {
-					t.Fatal("annotation lost startup context or final error")
-				}
-			}
-		})
-	}
-}
 
 func TestPassedTestIsSilent(t *testing.T) {
 	var stream bytes.Buffer

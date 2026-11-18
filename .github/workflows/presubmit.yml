@@ -86,13 +86,29 @@ jobs:
           BAZEL_CI_CONFIG: >-
             ${{ steps.secrets.outputs.readonly_buildbuddy_api_key != ''
                 && 'ci-presubmit' || 'ci-local' }}
-      - name: Preserve failed emulator diagnostics
-        if: failure()
+      - name: Collect oversized Bazel output
+        if: always()
+        run: |
+          BAZEL_OUTPUT_PATH="$($BAZEL info output_path)" python3 - <<'PYTHON'
+          import os
+          import shutil
+          from pathlib import Path
+
+          root = Path(os.environ["BAZEL_OUTPUT_PATH"])
+          destination = Path(os.environ["RUNNER_TEMP"]) / "bazel-large-output"
+          logs = [*root.glob("*/testlogs/**/test.log"), *root.glob("_tmp/actions/std*")]
+          for log in logs:
+              # Bazel's default console output limit is 1 MiB.
+              if log.is_file() and log.stat().st_size > 1024 * 1024:
+                  target = destination / log.relative_to(root)
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copyfile(log, target)
+          PYTHON
+      - name: Upload oversized Bazel output
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: pulumi-emulator-failure-${{ github.run_id }}-${{ github.run_attempt }}
-          path: |
-            dist/testlogs/ts/pulumi/testing/emulator/*/test.log
-            dist/testlogs/ts/pulumi/testing/emulator/*/test.outputs/**
+          name: bazel-large-output-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/bazel-large-output
           if-no-files-found: ignore
           retention-days: 3
