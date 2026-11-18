@@ -14,4 +14,3 @@ export async function* byLine(r: AsyncIterable<string | Buffer>) {
 	pending += decoder.end();
 	if (pending.length !== 0) yield pending;
 }
-
