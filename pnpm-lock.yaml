@@ -331,8 +331,8 @@ importers:
         specifier: 1.0.5
         version: 1.0.5
       '@sinonjs/fake-timers':
-        specifier: 15.4.0
-        version: 15.4.0
+        specifier: 15.5.0
+        version: 15.5.0
       '@swc/cli':
         specifier: 0.8.2
         version: 0.8.2(@swc/core@1.16.12(@swc/helpers@0.5.23))(chokidar@5.0.0)
@@ -3255,8 +3255,8 @@ packages:
   '@sinonjs/commons@3.0.1':
     resolution: {integrity: sha512-K3mCHKQ9sVh8o1C9cxkwxaOmXoAMlDxC1mYyHrjqOWEcBjYr76t96zL2zlj5dUGZ3HSw240X1qgH3Mjf1yJWpQ==}
 
-  '@sinonjs/fake-timers@15.4.0':
-    resolution: {integrity: sha512-DsG+8/LscQIQg68J6Ef3dv10u6nVyetYn923s3/sus5eaGfTo1of5WMZSLf0UJc9KDuKPilPH0UDJCjvNbDNCA==}
+  '@sinonjs/fake-timers@15.5.0':
+    resolution: {integrity: sha512-i7HpIYIsUmdSTQbtBjs2b3VqMgDsVDWfzVPV3MuUrXVqJNZmzFB8YJeM9SPms2bGg5zg7HvKH31sPS1WoLLRFg==}
 
   '@smithy/core@3.35.0':
     resolution: {integrity: sha512-zRMhfkByhT2snNdr1si24vJitU6Cr9ix2MikUfWmkAgp4jrNP0GcKSP5YvwQ+TlI8AZXER5QOGJn3JsVtSD9/A==}
@@ -10534,7 +10534,7 @@ snapshots:
   '@jest/fake-timers@30.5.2':
     dependencies:
       '@jest/types': 30.5.1
-      '@sinonjs/fake-timers': 15.4.0
+      '@sinonjs/fake-timers': 15.5.0
       '@types/node': 26.6.6
       jest-message-util: 30.5.1
       jest-mock: 30.5.2
@@ -11767,7 +11767,7 @@ snapshots:
       debug: 4.4.3(supports-color@10.2.2)
       invariant: 2.2.4
       metro: 0.87.1
-      semver: 7.8.5
+      semver: 7.8.6
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -12145,7 +12145,7 @@ snapshots:
     dependencies:
       type-detect: 4.0.8
 
-  '@sinonjs/fake-timers@15.4.0':
+  '@sinonjs/fake-timers@15.5.0':
     dependencies:
       '@sinonjs/commons': 3.0.1
 
@@ -17469,7 +17469,7 @@ snapshots:
       react-refresh: 0.14.2
       regenerator-runtime: 0.13.11
       scheduler: 0.27.0
-      semver: 7.8.5
+      semver: 7.8.6
       stacktrace-parser: 0.1.11
       tinyglobby: 0.2.17
       whatwg-fetch: 3.6.20
