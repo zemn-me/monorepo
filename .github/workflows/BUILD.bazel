@@ -31,14 +31,8 @@ py_test(
     name = "archive_checkout_test",
     size = "small",
     srcs = ["archive_checkout_test.py"],
-    args = [
-        "$(rootpath staging.yml)",
-        "$(rootpath //bin/linux/pulumi)",
-    ],
-    data = [
-        "staging.yml",
-        "//bin/linux/pulumi",
-    ],
+    args = ["$(rootpath staging.yml)"],
+    data = ["staging.yml"],
     deps = ["@pip//pyyaml"],
 )
 
