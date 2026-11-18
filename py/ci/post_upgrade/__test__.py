@@ -347,7 +347,6 @@ http_archive(
                 shutil.copyfile("sh/postUpgrade.sh", root / "sh/postUpgrade.sh")
                 shutil.copyfile(Path(__file__).with_name("integrity.py"), root / "py/ci/post_upgrade/integrity.py")
                 shutil.copyfile(Path(__file__).with_name("pnpm.py"), root / "py/ci/post_upgrade/pnpm.py")
-                shutil.copyfile(Path(__file__).with_name("providers.py"), root / "py/ci/post_upgrade/providers.py")
                 shutil.copyfile(Path(__file__).with_name("python_toolchains.py"), root / "py/ci/post_upgrade/python_toolchains.py")
                 (root / "bzl/pnpm").mkdir(parents=True)
                 (root / "package.json").write_text('{"packageManager":"pnpm@10.34.5"}')

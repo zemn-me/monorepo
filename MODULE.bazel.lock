@@ -5230,7 +5230,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "4pUxCNc22K4I+6+4Nxu52Hur12tFRfa1JMsN5mdDv60=",
-        "usagesDigest": "oc+H5DONZ3nvikWHH7nUysEEIMqYwa4WLZDhK1Sb/b4=",
+        "usagesDigest": "livS+HPhxgdZQXzq1t27px+3NnZKnW0Vq2xdr31BTlU=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "nodejs_linux_amd64": {
@@ -5353,6 +5353,128 @@
             "repoRuleId": "@@rules_nodejs+//nodejs/private:nodejs_toolchains_repo.bzl%nodejs_toolchains_repo",
             "attributes": {
               "user_node_repository_name": "nodejs"
+            }
+          },
+          "renovate_test_node_linux_amd64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "linux_amd64"
+            }
+          },
+          "renovate_test_node_linux_arm64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "linux_arm64"
+            }
+          },
+          "renovate_test_node_linux_s390x": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "linux_s390x"
+            }
+          },
+          "renovate_test_node_linux_ppc64le": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "linux_ppc64le"
+            }
+          },
+          "renovate_test_node_darwin_amd64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "darwin_amd64"
+            }
+          },
+          "renovate_test_node_darwin_arm64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "darwin_arm64"
+            }
+          },
+          "renovate_test_node_windows_amd64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "windows_amd64"
+            }
+          },
+          "renovate_test_node_windows_arm64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "24.11.0",
+              "include_headers": false,
+              "platform": "windows_arm64"
+            }
+          },
+          "renovate_test_node": {
+            "repoRuleId": "@@rules_nodejs+//nodejs/private:nodejs_repo_host_os_alias.bzl%nodejs_repo_host_os_alias",
+            "attributes": {
+              "user_node_repository_name": "renovate_test_node"
+            }
+          },
+          "renovate_test_node_host": {
+            "repoRuleId": "@@rules_nodejs+//nodejs/private:nodejs_repo_host_os_alias.bzl%nodejs_repo_host_os_alias",
+            "attributes": {
+              "user_node_repository_name": "renovate_test_node"
+            }
+          },
+          "renovate_test_node_toolchains": {
+            "repoRuleId": "@@rules_nodejs+//nodejs/private:nodejs_toolchains_repo.bzl%nodejs_toolchains_repo",
+            "attributes": {
+              "user_node_repository_name": "renovate_test_node"
             }
           }
         }

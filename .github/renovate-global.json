@@ -28,7 +28,7 @@
 				"/^sh/bin/bazel$/"
 			],
 			"matchStrings": [
-				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:python-version|golang-version|github-releases|github-tags|custom\\.[a-zA-Z0-9_.-]+))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)(?:\n#\\s*extractVersion\\s*=\\s*(?<extractVersion>.*))?\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
+				"#\\s*renovate:\n#\\s*datasource\\s*=\\s*(?<datasource>(?:npm|python-version|golang-version|github-releases|github-tags|custom\\.[a-zA-Z0-9_.-]+))\n#\\s*versioning\\s*=\\s*(?<versioning>.*)\n#\\s*depName\\s*=\\s*(?<depName>.*)(?:\n#\\s*extractVersion\\s*=\\s*(?<extractVersion>.*))?\n[^=]+=\\s*\"(?<currentValue>[^\"]*)\""
 			],
 			"datasourceTemplate": "{{{datasource}}}",
 			"currentValueTemplate": "{{{currentValue}}}",
@@ -107,6 +107,16 @@
 		}
 	},
 	"packageRules": [
+		{
+			"description": "Update each Pulumi SDK and its native provider from the same npm release",
+			"matchPackageNames": [
+				"@pulumi/aws",
+				"@pulumi/random"
+			],
+			"groupName": "{{depName}} SDK and provider",
+			"groupSingleUpdates": true,
+			"minimumGroupSize": 2
+		},
 		{
 			"matchDatasources": ["custom.johnvansickle_ffmpeg_release"],
 			"extractVersion": "^\\s*version:\\s*(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s*$",

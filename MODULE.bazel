@@ -306,6 +306,22 @@ bazel_dep(name = "rules_nodejs", version = "6.7.3")
 node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 node.toolchain()
 
+# The Renovate package requires Node 24; keep its integration test on that
+# runtime without changing the application's default Node toolchain.
+node.toolchain(
+    name = "renovate_test_node",
+    node_version = "24.11.0",
+)
+use_repo(
+    node,
+    "renovate_test_node_darwin_amd64",
+    "renovate_test_node_darwin_arm64",
+    "renovate_test_node_linux_amd64",
+    "renovate_test_node_linux_arm64",
+    "renovate_test_node_windows_amd64",
+    "renovate_test_node_windows_arm64",
+)
+
 pnpm = use_extension("//bzl/pnpm:extensions.bzl", "pnpm", dev_dependency = True)
 pnpm.tool(
     integrity_lock = "//bzl/pnpm:integrity.json",
@@ -1237,7 +1253,10 @@ aws_emulator(
     url = "https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/aws-emulator_1.0.382-1_amd64.deb",
 )
 
-# Derived from @pulumi/aws in package.json by the pre-Bazel bootstrap.
+# renovate:
+#   datasource=npm
+#   versioning=npm
+#   depName=@pulumi/aws
 PULUMI_AWS_PROVIDER_VERSION = "7.54.0"
 
 http_archive(
@@ -1248,7 +1267,10 @@ http_archive(
     url = "https://github.com/pulumi/pulumi-aws/releases/download/v" + PULUMI_AWS_PROVIDER_VERSION + "/pulumi-resource-aws-v" + PULUMI_AWS_PROVIDER_VERSION + "-linux-amd64.tar.gz",
 )
 
-# Derived from @pulumi/random in package.json by the pre-Bazel bootstrap.
+# renovate:
+#   datasource=npm
+#   versioning=npm
+#   depName=@pulumi/random
 PULUMI_RANDOM_PROVIDER_VERSION = "4.21.6"
 
 http_archive(
