@@ -460,8 +460,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 44.239.1
-        version: 44.239.1(typanion@3.14.0)
+        specifier: 44.240.0
+        version: 44.240.0(typanion@3.14.0)
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@26.6.6)
@@ -3043,8 +3043,8 @@ packages:
   '@remix-run/route-pattern@0.22.1':
     resolution: {integrity: sha512-czdGJWh09Lapvcqt7Vb09KlrU2PhRJ8xQaI+AItTuD9aDJ5MAgxnS38lnys6Ll+6RJEqPiaUqTwIQhVLwFvv+w==}
 
-  '@renovatebot/base-image@13.166.4':
-    resolution: {integrity: sha512-rLPcWwxILTjKagwejMpWTiKbKfOQk+8QANr5yymBi6gZkh5BPlqiFfVw5+YRQ8V8SgIdn82CilmvUDWPq6osvA==}
+  '@renovatebot/base-image@13.167.1':
+    resolution: {integrity: sha512-URbOfW9AiBG5bTCAip90ZoiZ9Nihed4qGhBI/Yi/5w8jJI2a8QJvFsVMTytqaypF9Bd9EsXB2QUrdbpvxob8mQ==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -6726,9 +6726,6 @@ packages:
     resolution: {integrity: sha512-+Az7Ojz3iRGu8KYMvJ6xVhvrxP3eE+vEtJX75Ow88XBpcQNV/0lGX5ZynIIBftREo4DC2jsveAMDaeltmm8QvQ==}
     hasBin: true
 
-  markdown-table@3.0.4:
-    resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
-
   markdown-table@3.1.0:
     resolution: {integrity: sha512-xpeSCdM+B+6P3ncfgaB7FoDbtJ30xAe6Z18TGT7AgXJsHqCElCICZovQqdRMm7kHgpTyYv36EupqewoFFSB8vw==}
 
@@ -7200,6 +7197,9 @@ packages:
   nan@2.29.0:
     resolution: {integrity: sha512-GlGk3HIvitbvs+LT3g6XUP1kpirKNvmDFwF/bmo6XNWSb/eYEs/O4bfgIEIXCZ+lIOTS5xNwDvSGMw6FJdAhtA==}
 
+  nan@2.30.0:
+    resolution: {integrity: sha512-P5mokDkSvCGBz6mZDD/2l+w9QoICRXdCyZ9ONGmTePr40oihJg3Kpn0YU3twKd6PJnwSlLBWNQeOT6yWEV2c4A==}
+
   nano-time@1.0.0:
     resolution: {integrity: sha512-flnngywOoQ0lLQOTRNexn2gGSNuM9bKj9RZAWSzhQ+UJYaAFG9bac4DW9VHjUAzrOaIcajHybCTHe/bkvozQqA==}
 
@@ -7250,8 +7250,8 @@ packages:
     resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  node-gyp@13.0.2:
-    resolution: {integrity: sha512-SXTvw3PxznpowYhJSOD9mVQBgDaCTWXffX+wQZsQ7PbcTV86TsXCUcSZhHnskFQvrvn/OdSzJPMsptT2pIj9ww==}
+  node-gyp@13.1.0:
+    resolution: {integrity: sha512-FpNzOLFACKG0oRBYbZ5WOeWD1EqRTIWX90MaRIWTO18lVYPx8fqIjrdS3pihjnCkSmgop6zVGkSqg1vXZLksuw==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
     hasBin: true
 
@@ -7827,8 +7827,8 @@ packages:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
 
-  re2@1.27.0:
-    resolution: {integrity: sha512-z5Vascmj7lQbU3YdfYJUDkBGGTnoAObcVW/CSbpI3WbVb1vZQsSzSWcGkfKU0JKrrGfPZwPr8EVHwYXKQKLVXw==}
+  re2@1.27.1:
+    resolution: {integrity: sha512-J0RHubiwH/isNWD2Z+TX+hpVZCkaS/X30KPtYwckK5sjEaW8BRhnd15EPIjBB5GxD174iEVtJmmCoqfErH1qDQ==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   react-devtools-core@6.1.5:
@@ -8037,8 +8037,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@44.239.1:
-    resolution: {integrity: sha512-sUTtJVAgsly93sQWwe+3CpOCWp5ncadJfnkSIDDvaLcd5boRAYt3NIvWkEKCWetzmQV9tvRqTUVNvrYJ6nQvPw==}
+  renovate@44.240.0:
+    resolution: {integrity: sha512-Mz9NIHYwKQvVdT+8fhYSCE4ZeipnVO1Z6MADeW03eHu5uRm1RVNWwX7+xqvWgTDftM6RHxzjibQx+wnJ/MM7gg==}
     engines: {node: ^24.11.0 || ^26.13.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -11004,7 +11004,7 @@ snapshots:
 
   '@opentelemetry/api-logs@0.220.0':
     dependencies:
-      '@opentelemetry/api': 1.9.1
+      '@opentelemetry/api': 1.10.0
 
   '@opentelemetry/api@1.10.0': {}
 
@@ -11021,12 +11021,12 @@ snapshots:
   '@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/core@3.1.0(@opentelemetry/api@1.10.0)':
     dependencies:
@@ -11070,7 +11070,7 @@ snapshots:
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/instrumentation-bunyan@0.70.0(@opentelemetry/api@1.10.0)':
     dependencies:
@@ -11084,7 +11084,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
     transitivePeerDependencies:
       - supports-color
 
@@ -11205,13 +11205,13 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/resources@2.9.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/resources@3.1.0(@opentelemetry/api@1.10.0)':
     dependencies:
@@ -11225,7 +11225,7 @@ snapshots:
       '@opentelemetry/api-logs': 0.220.0
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/sdk-logs@3.1.0(@opentelemetry/api@1.10.0)':
     dependencies:
@@ -11252,7 +11252,7 @@ snapshots:
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/sdk-trace-node@2.11.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -11266,14 +11266,14 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/sdk-trace@2.9.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
 
   '@opentelemetry/sdk-trace@3.1.0(@opentelemetry/api@1.10.0)':
     dependencies:
@@ -11980,7 +11980,7 @@ snapshots:
 
   '@remix-run/route-pattern@0.22.1': {}
 
-  '@renovatebot/base-image@13.166.4(zod@4.6.7)':
+  '@renovatebot/base-image@13.167.1(zod@4.6.7)':
     dependencies:
       '@containerbase/base': 14.66.25(zod@4.6.7)
     optionalDependencies:
@@ -13591,7 +13591,7 @@ snapshots:
   binary-version-check@6.1.0:
     dependencies:
       binary-version: 7.1.0
-      semver: 7.8.5
+      semver: 7.8.6
       semver-truncate: 3.0.0
 
   binary-version@7.1.0:
@@ -15268,7 +15268,7 @@ snapshots:
       '@babel/parser': 7.29.9
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
-      semver: 7.8.5
+      semver: 7.8.6
     transitivePeerDependencies:
       - supports-color
 
@@ -15573,7 +15573,7 @@ snapshots:
       jest-message-util: 30.5.1
       jest-util: 30.5.1
       pretty-format: 30.5.1
-      semver: 7.8.5
+      semver: 7.8.6
       synckit: 0.11.13
     transitivePeerDependencies:
       - supports-color
@@ -15832,7 +15832,7 @@ snapshots:
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
       ms: 2.1.3
-      semver: 7.8.5
+      semver: 7.8.6
 
   jszip@3.10.2:
     dependencies:
@@ -16029,7 +16029,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.5
+      semver: 7.8.6
 
   make-iterator@1.0.1:
     dependencies:
@@ -16047,8 +16047,6 @@ snapshots:
       mdurl: 2.1.0
       punycode.js: 2.3.1
       uc.micro: 3.0.0
-
-  markdown-table@3.0.4: {}
 
   markdown-table@3.1.0: {}
 
@@ -16130,7 +16128,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      markdown-table: 3.0.4
+      markdown-table: 3.1.0
       mdast-util-from-markdown: 2.0.3
       mdast-util-to-markdown: 2.1.3
     transitivePeerDependencies:
@@ -16846,6 +16844,9 @@ snapshots:
   nan@2.29.0:
     optional: true
 
+  nan@2.30.0:
+    optional: true
+
   nano-time@1.0.0:
     dependencies:
       big-integer: 1.6.52
@@ -16881,7 +16882,7 @@ snapshots:
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
 
-  node-gyp@13.0.2:
+  node-gyp@13.1.0:
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.3
@@ -16916,7 +16917,7 @@ snapshots:
   normalize-package-data@6.0.2:
     dependencies:
       hosted-git-info: 7.0.2
-      semver: 7.8.5
+      semver: 7.8.6
       validate-npm-package-license: 3.0.4
 
   normalize-path@3.0.0: {}
@@ -17374,11 +17375,11 @@ snapshots:
 
   range-parser@1.2.1: {}
 
-  re2@1.27.0:
+  re2@1.27.1:
     dependencies:
       install-artifact-from-github: 1.8.1
-      nan: 2.29.0
-      node-gyp: 13.0.2
+      nan: 2.30.0
+      node-gyp: 13.1.0
     optional: true
 
   react-devtools-core@6.1.5:
@@ -17711,7 +17712,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@44.239.1(typanion@3.14.0):
+  renovate@44.240.0(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -17744,7 +17745,7 @@ snapshots:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 6.3.1(@opentelemetry/api@1.10.0)
-      '@renovatebot/base-image': 13.166.4(zod@4.6.7)
+      '@renovatebot/base-image': 13.167.1(zod@4.6.7)
       '@renovatebot/detect-tools': 5.0.0
       '@renovatebot/good-enough-parser': 4.0.3
       '@renovatebot/osv-offline': 4.5.10(zod@4.6.7)
@@ -17837,7 +17838,7 @@ snapshots:
       zod: 4.6.7
     optionalDependencies:
       openpgp: 6.3.2
-      re2: 1.27.0
+      re2: 1.27.1
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@openpgp/web-stream-tools'
@@ -18007,7 +18008,7 @@ snapshots:
 
   semver-truncate@3.0.0:
     dependencies:
-      semver: 7.8.5
+      semver: 7.8.6
 
   semver-utils@1.1.4: {}
 
