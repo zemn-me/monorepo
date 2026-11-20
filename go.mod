@@ -56,7 +56,7 @@ require (
 	github.com/oapi-codegen/nethttp-middleware v1.3.1
 	github.com/oapi-codegen/runtime v1.8.0
 	github.com/openai/openai-go/v3 v3.99.0
-	github.com/sergi/go-diff v1.4.4
+	github.com/sergi/go-diff v1.4.5
 	github.com/tdewolff/parse/v2 v2.8.20
 	github.com/tebeka/selenium v0.9.9
 	github.com/twilio/twilio-go v1.33.0
