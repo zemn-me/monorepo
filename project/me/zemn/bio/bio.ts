@@ -15,6 +15,7 @@ export type LinkCaption = Text | lang.TextSelection;
 
 const en = lang.tag('en-GB');
 const nl = lang.tag('nl');
+const austrian = lang.tag('de-AT');
 
 const date = (...params: time.date.Date) => time.date.parse(params);
 
@@ -64,6 +65,12 @@ export interface Employment {
 	readonly supercedes?: string;
 }
 
+export interface Location {
+	readonly latitude: number;
+	readonly longitude: number;
+	readonly address: Text;
+}
+
 export interface Event {
 	id: string;
 	readonly date: Date;
@@ -71,6 +78,7 @@ export interface Event {
 	readonly description?: Text;
 	readonly tags?: readonly Tag[];
 	readonly address?: string;
+	readonly location?: Location;
 	readonly title: Text;
 	readonly publisher?: Text;
 	readonly url?: URL | RelativeURL;
@@ -612,6 +620,11 @@ export const Bio = {
 			tags: [talk, gaming, security],
 			description: en`Talk at Game Dev Days 2018 in Graz, Austria summarising some security concepts for game developers.`,
 			url: url`https://www.youtube.com/watch?v=NjMMK-FkTW4&list=PLFqM5L7fs0mO3O3-BBZfA-sHeT86Gesd8&index=15&`,
+			location: {
+				latitude: 47.069408049449336,
+				longitude: 15.450398172503867,
+				address: austrian`Technische Universität Graz, Graz, Österreich`,
+			},
 		},
 		{
 			id: '91956c2c-ebb6-45a1-aca0-065c3cc4b003',
@@ -772,6 +785,11 @@ export const Bio = {
 			tags: [accolade, security],
 			description: en`The highest award given by the world's largest hacker convention. Awarded for the HackFortress CTF.`,
 			url: url`https://defcon.org/html/links/dc-black-badge.html#tab-31`,
+			location: {
+				latitude: 36.118708482032716,
+				longitude: -115.16636901690526,
+				address: en`DEF CON 31, Caesar's Palace, Paradise, Nevada, USA`,
+			},
 		},
 		{
 			id: '957be17b-5e69-4343-ac27-3697aeee2746',
