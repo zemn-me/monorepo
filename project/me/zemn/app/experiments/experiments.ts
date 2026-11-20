@@ -41,6 +41,11 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 		title: 'Generators & tools',
 		experiments: [
 			{
+				href: '/experiments/ldml',
+				title: 'LDML pattern workbench',
+				description: 'Inspect and compose date and time patterns.',
+			},
+			{
 				href: '/experiments/elastictabs',
 				title: 'Elastic Tabstops',
 				description: 'Align tab-delimited text into elastic columns.',
