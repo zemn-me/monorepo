@@ -70,3 +70,24 @@ sh_test(
     env = {"BOOTSTRAP": "$(rlocationpath :bootstrap_bazel_remote_cache.sh)"},
     deps = ["@rules_shell//shell/runfiles"],
 )
+
+py_test(
+    name = "bazel_commands_test",
+    size = "small",
+    srcs = ["bazel_commands_test.py"],  # keep: each test executes the workflow files passed in args
+    args = ["$(rootpath %s)" % path for path in glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    )],
+    data = glob(
+        [
+            "*.yml",
+            "*.yaml",
+        ],
+        allow_empty = True,
+    ),
+    deps = ["@pip//pyyaml"],
+)
