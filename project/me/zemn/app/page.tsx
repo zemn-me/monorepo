@@ -16,7 +16,7 @@ import Link from '#root/project/me/zemn/components/Link/index.js';
 import { Prose } from '#root/project/me/zemn/components/Prose/prose.js';
 import Timeline from '#root/project/me/zemn/components/timeline/index.js';
 import { Iterable } from '#root/ts/iter/index.js';
-import { None, Some } from '#root/ts/option/option.js';
+import { None, Some } from '#root/ts/option/types.js';
 import * as lang from '#root/ts/react/lang/index.js';
 import { Metadata } from '#root/ts/remix/metadata.js';
 import { Schema } from '#root/ts/schema.org/schema.js';

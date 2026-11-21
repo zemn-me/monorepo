@@ -3,9 +3,8 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
-import React from 'react';
+import React, { act } from 'react';
 import { createRoot, Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 import { Canvas } from '#root/ts/math/canvas/element.js';
 import * as Shape from '#root/ts/math/shape/index.js';

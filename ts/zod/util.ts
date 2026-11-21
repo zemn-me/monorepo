@@ -1,7 +1,7 @@
 import b64 from 'base64-js';
 import { ZodError, ZodSafeParseResult, z } from 'zod';
 
-import { Err, Ok, Result } from '#root/ts/result_types.js';
+import { Err, Ok, Result } from '#root/ts/result/result.js';
 
 export function zodUnsafe<T>() {
 	return z.custom<T>(v => v);
@@ -14,7 +14,4 @@ export function resultFromZod<I>(
 	return Err(t.error);
 }
 
-export const Base64 = z
-	.string()
-	.base64()
-	.transform(v => b64.toByteArray(v));
+export const Base64 = z.base64().transform(v => b64.toByteArray(v));

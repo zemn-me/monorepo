@@ -10,9 +10,9 @@ import {
 } from '#root/ts/factorio/blueprint.js';
 import { BlueprintString } from '#root/ts/factorio/blueprint_string';
 import { DisplayBlueprint } from '#root/ts/factorio/react/blueprint.js';
-import { None, Option, Some } from '#root/ts/option/option.js';
+import * as Option from '#root/ts/option/types.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
-import { Err, Ok, Result } from '#root/ts/result.js';
+import * as Result from '#root/ts/result/result.js';
 import { safely } from '#root/ts/safely.js';
 
 const safelyParseBlueprintString = safely((s: string) =>
@@ -33,11 +33,11 @@ class ParseIntError<Cause extends Error = Error> extends Error {
 	}
 }
 
-function ParseInt(i: string): Result<number, ParseIntError<ErrIsNan>> {
+function ParseInt(i: string): Result.Result<number, ParseIntError<ErrIsNan>> {
 	const n = parseInt(i);
-	if (isNaN(n)) return Err(new ParseIntError(i, new ErrIsNan(i)));
+	if (isNaN(n)) return Result.Err(new ParseIntError(i, new ErrIsNan(i)));
 
-	return Ok(n);
+	return Result.Ok(n);
 }
 
 class ErrBlueprintBook extends Error {
@@ -47,35 +47,46 @@ class ErrBlueprintBook extends Error {
 }
 
 export function Client() {
-	const [blueprintString, setBlueprintString] =
-		useState<Option<string>>(None);
-	const [depth, setDepth] = useState<Option<string>>(Some('3'));
+	const [blueprintString, setBlueprintString] = useState<
+		Option.Option<string>
+	>(() => Option.None);
+	const [depth, setDepth] = useState<Option.Option<string>>(() =>
+		Option.Some('3')
+	);
 	const depthInputLabel = useId();
 	const b64InputLabel = useId();
 	const outputLabel = useId();
 	const inputsString = [b64InputLabel, depthInputLabel].join(' ');
 
-	const depthInt = depth
-		.and_then(d => Ok(ParseInt(d)))
-		.unwrap_or_else(() => Err(new Error('Please specify a depth of wall.')))
-		.flatten();
+	const depthInt = Result.and_then_flatten(
+		Option.ok_or_else(
+			depth,
+			() => new Error('Please specify a depth of wall.')
+		),
+		ParseInt
+	);
 
-	const wrapper = blueprintString
-		.and_then(v => safelyParseBlueprintString(v))
-		.unwrap_or_else(() => Err(new Error('Please specify blueprint')));
+	const wrapper = Option.unwrap_or_else(
+		Option.and_then(blueprintString, safelyParseBlueprintString),
+		() => Result.Err(new Error('Please specify blueprint'))
+	);
 
-	const surrounded = depthInt
-		.zip(wrapper)
-		.and_then(([depth, wrapper]) => {
+	const surrounded = Result.and_then_flatten(
+		Result.zipped(
+			depthInt,
+			wrapper,
+			(depth, wrapper) => [depth, wrapper] as const
+		),
+		([depth, wrapper]) => {
 			if (!('blueprint' in wrapper)) {
-				return Err(new ErrBlueprintBook());
+				return Result.Err(new ErrBlueprintBook());
 			}
 
-			return Ok(
+			return Result.Ok(
 				blueprintSurroundedByWall(wrapper.blueprint as Blueprint, depth)
 			);
-		})
-		.flatten();
+		}
+	);
 
 	return (
 		<Prose>
@@ -103,9 +114,13 @@ export function Client() {
 					Factorio blueprint (base64):{' '}
 					<textarea
 						id={b64InputLabel}
-						onChange={e => setBlueprintString(Some(e.target.value))}
+						onChange={e =>
+							setBlueprintString(() =>
+								Option.Some(e.target.value)
+							)
+						}
 						spellCheck="false"
-						value={blueprintString.unwrap_or(undefined)}
+						value={Option.unwrap_or(blueprintString, undefined)}
 					/>
 				</label>
 
@@ -113,19 +128,22 @@ export function Client() {
 					Depth:{' '}
 					<input
 						id={depthInputLabel}
-						onChange={e => setDepth(Some(e.target.value))}
-						value={depth.unwrap_or(undefined)}
+						onChange={e =>
+							setDepth(() => Option.Some(e.target.value))
+						}
+						value={Option.unwrap_or(depth, undefined)}
 					/>
 				</label>
 
 				<output htmlFor={inputsString} id={outputLabel}>
-					{surrounded
-						.and_then(output => (
+					{Result.unwrap_or_else(
+						Result.and_then(surrounded, output => (
 							<DisplayBlueprint blueprint={output} />
-						))
-						.unwrap_or_else(e => (
-							<ErrorDisplay error={e} />
-						))}
+						)),
+						error => (
+							<ErrorDisplay error={error} />
+						)
+					)}
 				</output>
 			</form>
 		</Prose>

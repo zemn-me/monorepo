@@ -2,21 +2,27 @@ import type { Organization, Person } from 'schema-dts';
 
 import { Bio, employment } from '#root/project/me/zemn/bio/bio.js';
 import { Iterable } from '#root/ts/iter/index.js';
-import { None, Some } from '#root/ts/option/option.js';
+import { and_then, None, Some, unwrap_or } from '#root/ts/option/types.js';
 
 export const schema: Person = {
 	'@type': 'Person',
 	alternateName: Bio.who.handle.text,
 	name: Bio.who.fullName.text,
 	birthDate: Bio.birthdate.toISOString(),
-	jobTitle: Iterable(Bio.timeline)
-		.map(v => ('tags' in v && v.tags.includes(employment) ? Some(v) : None))
-		.filter()
-		.map(v => ('until' in v ? None : Some(v)))
-		.filter()
-		.first()
-		.and_then(v => v.title.text)
-		.unwrap_or(undefined),
+	jobTitle: unwrap_or(
+		and_then(
+			Iterable(Bio.timeline)
+				.map(v =>
+					'tags' in v && v.tags.includes(employment) ? Some(v) : None
+				)
+				.filter()
+				.map(v => ('until' in v ? None : Some(v)))
+				.filter()
+				.first(),
+			v => v.title.text
+		),
+		undefined
+	),
 	worksFor: Iterable(Bio.timeline)
 		.map(v => ('tags' in v && v.tags.includes(employment) ? Some(v) : None))
 		.filter()

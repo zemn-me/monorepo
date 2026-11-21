@@ -15,11 +15,8 @@ import {
 	useZemnMeApi,
 } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
-import { future_to_option } from '#root/ts/future/option/future_to_option.js';
 import {
 	and_then as option_and_then,
-	is_some as option_is_some,
-	unwrap as option_unwrap,
 	unwrap_or as option_unwrap_or,
 	Some,
 } from '#root/ts/option/types.js';
@@ -474,38 +471,36 @@ function DisplayAdminUid({ id_token }: { readonly id_token: string }) {
 
 export default function Admin() {
 	const [fut_idToken, , fut_promptForLogin] = useZemnMeAuth();
-	const idToken = future_to_option(fut_idToken);
-	const promptForLogin = future_to_option(fut_promptForLogin);
-	const loginReady = option_is_some(promptForLogin);
-
-	const handleLogin = () => {
-		if (!loginReady) return;
-		const beginLogin = option_unwrap(promptForLogin);
-		void beginLogin();
-	};
-
+	const loginButton = (beginLogin?: () => Promise<void>) => (
+		<button
+			aria-label="Authenticate with OIDC"
+			disabled={beginLogin === undefined}
+			onClick={() => void beginLogin?.()}
+		>
+			<p>You are not authenticated to perform this operation.</p>
+			<p>Please click here to authenticate.</p>
+		</button>
+	);
 	const login = (
 		<div>
-			<button
-				aria-label="Authenticate with OIDC"
-				disabled={!loginReady}
-				onClick={handleLogin}
-			>
-				<p>You are not authenticated to perform this operation.</p>
-				<p>Please click here to authenticate.</p>
-			</button>
+			{fut_promptForLogin(
+				loginButton,
+				() => loginButton(),
+				() => loginButton()
+			)}
 		</div>
 	);
 
-	return option_unwrap_or(
-		option_and_then(idToken, id_token => (
+	return fut_idToken(
+		id_token => (
 			<>
 				<p>You are logged in.</p>
 				<DisplayAdminUid id_token={id_token} />
 				<DisplayPhoneNumber id_token={id_token} />
 				<SettingsEditor id_token={id_token} />
 			</>
-		)),
-		login
+		),
+		() => login,
+		() => login
 	);
 }
