@@ -70,6 +70,7 @@ ts_project(
         "//:node_modules/fast-glob",
         "//:node_modules/jose",
         "//:node_modules/selenium-webdriver",
+        "//project/me/zemn/testing/arena",
         "//ts/selenium",
     ],
 )

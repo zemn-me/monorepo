@@ -1,0 +1,2 @@
+- `:level` generates `level.ts` from the checksum-pinned Doom shareware archive via `//py/doom:doom_bin`; do not check in the WAD or generated mesh.
+- Keep the `dangerouslySetInnerHTML` object stable across HUD renders. Recreating it replaces nodes owned by `createSVGRenderer` and leaves the renderer updating a detached scene.
