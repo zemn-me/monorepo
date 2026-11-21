@@ -2,6 +2,7 @@
 from subprocess import run as _run
 from os import environ, getenv
 from os.path import exists
+from py.ci.post_upgrade.python_artifacts import refresh as refresh_python_artifacts
 
 if __name__ != "__main__":
 	raise Exception("don’t import this!")
@@ -90,6 +91,7 @@ def modify_non_bazel_lockfiles():
 	sync_go_versions()
 	go_mod_tidy()
 	sync_go_versions()
+	refresh_python_artifacts(bazel, bazel_run)
 	autofix_all()
 
 def modify_bazel_lockfiles():

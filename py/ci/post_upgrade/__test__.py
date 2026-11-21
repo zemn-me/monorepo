@@ -9,9 +9,57 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 from py.ci.post_upgrade.integrity import update_module_bazel_text
 from py.ci.post_upgrade.pnpm import refresh
+from py.ci.post_upgrade.python_artifacts import refresh as refresh_python_artifacts
+
+
+class TestPythonArtifacts(unittest.TestCase):
+    def test_empty_discovery_cannot_silently_skip_generation(self):
+        for groups in ([""], ["//new/env:lock.update\n", ""]):
+            with self.subTest(groups=groups):
+                query = Mock(side_effect=[SimpleNamespace(stdout=value) for value in groups])
+                update = Mock()
+                with self.assertRaisesRegex(RuntimeError, "No .* update targets discovered"):
+                    refresh_python_artifacts(query, update)
+                self.assertEqual(update.call_count, len(groups) - 1)
+
+    def test_all_environments_finish_before_dependent_manifests(self):
+        pending_locks = {"//:notebook.update", "//tools/proxy:lock.update", "//new/env:deps.update"}
+        pending_manifests = {"//:imports.update", "//new/env:imports.update"}
+        query = Mock(side_effect=[
+            SimpleNamespace(stdout="\n".join(pending_locks)),
+            SimpleNamespace(stdout="\n".join(pending_manifests)),
+        ])
+
+        def update(args):
+            target, = args
+            if target in pending_locks:
+                pending_locks.remove(target)
+            else:
+                self.assertFalse(pending_locks, "manifest generated before all locks were refreshed")
+                pending_manifests.remove(target)
+
+        refresh_python_artifacts(query, update)
+        self.assertFalse(pending_locks)
+        self.assertFalse(pending_manifests)
+
+    def test_failed_discovery_or_update_cannot_publish_stale_manifests(self):
+        for failure in ("query", "resolve"):
+            with self.subTest(failure=failure):
+                error = subprocess.CalledProcessError(1, failure)
+                query = Mock(side_effect=error if failure == "query" else [
+                    SimpleNamespace(stdout="//isolated:lock.update\n"),
+                    SimpleNamespace(stdout="//:imports.update\n"),
+                ])
+                update = Mock(side_effect=error)
+                with self.assertRaises(subprocess.CalledProcessError):
+                    refresh_python_artifacts(query, update)
+                self.assertEqual(query.call_count, 1)
+                self.assertEqual(update.call_count, int(failure == "resolve"))
 
 
 class TestPnpmIntegrity(unittest.TestCase):
@@ -299,6 +347,7 @@ http_archive(
                 shutil.copyfile("sh/postUpgrade.sh", root / "sh/postUpgrade.sh")
                 shutil.copyfile(Path(__file__).with_name("integrity.py"), root / "py/ci/post_upgrade/integrity.py")
                 shutil.copyfile(Path(__file__).with_name("pnpm.py"), root / "py/ci/post_upgrade/pnpm.py")
+                shutil.copyfile(Path(__file__).with_name("python_toolchains.py"), root / "py/ci/post_upgrade/python_toolchains.py")
                 (root / "bzl/pnpm").mkdir(parents=True)
                 (root / "package.json").write_text('{"packageManager":"pnpm@10.34.5"}')
                 (root / "bzl/pnpm/integrity.json").write_text(json.dumps({
@@ -315,6 +364,20 @@ http_archive(
     url = "{payload.as_uri()}.old",
 )
 '''
+                # An aligned publisher runtime exercises the actual bootstrap
+                # without introducing a network dependency into this fixture.
+                runtime = '''# BEGIN default Python runtime archives
+python.single_version_platform_override(
+    platform = "x86_64-unknown-linux-gnu",
+    python_version = "3.18.0",
+    sha256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    strip_prefix = "python",
+    urls = ["https://github.com/astral-sh/python-build-standalone/releases/download/20290101/cpython-3.18.0%2B20290101-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"],
+)
+# END default Python runtime archives
+PYTHON_VERSION = "3.18.0"
+'''
+                baseline = runtime + baseline
                 current = baseline.replace(payload.as_uri() + ".old", payload.as_uri())
                 (root / "baseline").write_text(baseline)
                 (root / "MODULE.bazel").write_text(current)

@@ -8,6 +8,8 @@ py_library(
         "__init__.py",
         "integrity.py",
         "pnpm.py",
+        "python_artifacts.py",
+        "python_toolchains.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -17,11 +19,22 @@ py_binary(
     srcs = ["__main__.py"],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
+    deps = [":post_upgrade"],
+)
+
+py_test(
+    name = "python_toolchains_test",
+    srcs = ["python_toolchains_test.py"],
+    main = "python_toolchains_test.py",
+    deps = [":post_upgrade"],
 )
 
 py_test(
     name = "post_upgrade_test",
-    srcs = ["__test__.py"],
+    srcs = [
+        "__test__.py",
+        "python_toolchains_test.py",
+    ],
     data = [
         "//:MODULE.bazel",
         "//:sh/postUpgrade.sh",
