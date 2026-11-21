@@ -162,18 +162,22 @@ func TestApplyProfileClaimsToIDTokenOmitsEmptyStrings(t *testing.T) {
 	}
 }
 
-// Exercise signed upstream tokens so email recovery remains bound to Google's
-// issuer, our OAuth client, and an explicitly verified email claim.
-func TestGoogleEmailRecoversJournalOwnerAfterSubjectChange(t *testing.T) {
+// Exercise signed upstream tokens to keep account resolution bound to subjects.
+func TestGoogleJournalOwnerRequiresKnownSubject(t *testing.T) {
 	for _, tc := range []struct {
-		name, issuer, audience, email        string
-		verified                             *bool
-		usersTable, existingOwner, wantOwner bool
+		name, issuer, audience, email                      string
+		verified                                           *bool
+		usersTable, existingOwner, knownSubject, wantOwner bool
 	}{
-		{verified: ptr(true), name: "without users table", usersTable: false, wantOwner: true},
-		{verified: ptr(true), name: "bootstrap owner", usersTable: true, wantOwner: true},
-		{verified: ptr(true), name: "existing owner", usersTable: true, existingOwner: true, wantOwner: true},
-		{verified: ptr(true), name: "normalized email", email: "Thomas@Shadwell.IM", wantOwner: true},
+		{verified: ptr(true), name: "without users table", usersTable: false},
+		{verified: ptr(true), name: "bootstrap owner", usersTable: true},
+		{verified: ptr(true), name: "existing owner", usersTable: true, existingOwner: true},
+		{verified: ptr(true), name: "normalized email", email: "Thomas@Shadwell.IM"},
+		{verified: ptr(true), name: "known configured subject", knownSubject: true, wantOwner: true},
+		{verified: ptr(true), name: "bootstrap configured subject", usersTable: true, knownSubject: true, wantOwner: true},
+		{verified: ptr(true), name: "known stored subject", usersTable: true, existingOwner: true, knownSubject: true, wantOwner: true},
+		{verified: ptr(true), name: "known stored subject with changed email", email: "other@example.com", usersTable: true, existingOwner: true, knownSubject: true, wantOwner: true},
+		{verified: ptr(true), name: "same subject from different issuer", issuer: "https://other.example", usersTable: true, existingOwner: true, knownSubject: true},
 		{verified: ptr(true), name: "different email", email: "other@example.com"},
 		{verified: ptr(true), name: "email suffix", email: "thomas@shadwell.im.attacker.example"},
 		{name: "unverified email", verified: ptr(false)},
@@ -199,7 +203,11 @@ func TestGoogleEmailRecoversJournalOwnerAfterSubjectChange(t *testing.T) {
 				s.usersTableName = "users"
 			}
 			if tc.existingOwner {
-				if err := s.putUserRecord(ctx, userRecord{Id: journalOwnerSubject, When: Now(), Emails: []string{"thomas@shadwell.im"}, Scopes: []string{"journal_read", "journal_write"}, SubjectIds: addSubjectID(nil, googleOIDCIssuer, "old-google-subject")}); err != nil {
+				subject := "old-google-subject"
+				if tc.knownSubject {
+					subject = "new-google-subject"
+				}
+				if err := s.putUserRecord(ctx, userRecord{Id: journalOwnerSubject, When: Now(), Emails: []string{"thomas@shadwell.im"}, Scopes: []string{"journal_read", "journal_write"}, SubjectIds: addSubjectID(nil, googleOIDCIssuer, subject)}); err != nil {
 					t.Fatal(err)
 				}
 			}
@@ -232,11 +240,21 @@ func TestGoogleEmailRecoversJournalOwnerAfterSubjectChange(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			cfg := &upstreamIssuerConfig{Provider: issuer, Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{OAuthClientId(audience): {}}}
+			subjectMappings := map[OIDCSubject]OIDCSubject{}
+			if tc.knownSubject && !tc.existingOwner {
+				subjectMappings["new-google-subject"] = journalOwnerSubject
+			}
+			cfg := &upstreamIssuerConfig{Provider: issuer, Audience: map[OAuthClientId]map[OIDCSubject]OIDCSubject{OAuthClientId(audience): subjectMappings}}
 			mapped, err := s.translateUpstreamUser(ctx, provider, cfg, token, OIDCIssuer(issuer))
 			if !tc.wantOwner {
 				if err == nil {
 					t.Fatalf("unexpected authorization: %+v", mapped)
+				}
+				if tc.usersTable {
+					rec, lookupErr := s.findUserByRemoteSubject(ctx, issuer, "new-google-subject")
+					if lookupErr != nil || rec != nil {
+						t.Fatalf("unexpected subject link: %+v, %v", rec, lookupErr)
+					}
 				}
 				return
 			}
