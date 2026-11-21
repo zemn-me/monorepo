@@ -82,7 +82,9 @@ func (p *multiplayerBrowser) viewScreenshot() ([]byte, error) {
 		defer cancel()
 		return p.page.ViewScreenshot(ctx)
 	}
-	return p.driver.ViewScreenshot()
+	// Virtual-time peers are paused between commands. Capture their compositor
+	// surface without waiting for a native view repaint from the frozen loop.
+	return p.driver.Screenshot()
 }
 
 func (p *multiplayerBrowser) mouse(x, y int, kind string, buttons int) {
@@ -137,12 +139,9 @@ func (p *multiplayerBrowser) captureStep(name string) {
 
 // A diagnostic readback may wait for the compositor. Overlap it only with
 // independent work in the other browser; keep this page unchanged until done.
+// This also applies to paused virtual-time peers: the other browser's input
+// and clipboard work does not need to wait for this browser's screenshot.
 func (p *multiplayerBrowser) captureStepWhile(name string, other func()) {
-	if p.page == nil {
-		p.captureStep(name)
-		other()
-		return
-	}
 	done := make(chan struct{})
 	go func() { defer close(done); p.captureStep(name) }()
 	defer func() { <-done }()
@@ -215,6 +214,15 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 		}
 	}
 	t.Cleanup(func() {
+		// Diagnostic reads can terminate this cleanup with Fatal. Always
+		// release the peer's resources, including on constructor failures.
+		defer driver.Close()
+		defer console.Close()
+		defer func() {
+			if p.page != nil {
+				p.page.Close()
+			}
+		}()
 		if data, err := p.viewScreenshot(); err == nil {
 			if dir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); dir != "" {
 				_ = os.WriteFile(filepath.Join(dir, "multiplayer-"+name+".png"), data, 0644)
@@ -240,11 +248,6 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 			}
 			t.Log(name + ":\n" + text)
 		}
-		if p.page != nil {
-			p.page.Close()
-		}
-		console.Close()
-		driver.Close()
 	})
 	if err := p.command("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
@@ -380,11 +383,31 @@ func startBrowserMultiplayer(t *testing.T, backgroundThrottling bool) (*multipla
 		t.Fatalf("assigned site port: %v", err)
 	}
 	base := "http://localhost:" + ports.Site
-	host := newMultiplayerBrowser(t, base, "host", backgroundThrottling)
-	var guest *multiplayerBrowser
-	host.captureStepWhile("choose", func() {
-		guest = newMultiplayerBrowser(t, base, "guest", backgroundThrottling)
-	})
+	var host, guest *multiplayerBrowser
+	// Native scheduling and explicit real-time debugging retain serial startup.
+	if !backgroundThrottling && os.Getenv("TIBERIAN_MULTIPLAYER_REALTIME") != "1" {
+		// Each paused engine reaches its own Internet dialog before the peers
+		// exchange any clipboard or network state. Load these independent
+		// documents together, retaining each peer's full readiness checks.
+		loaded := make(chan struct{})
+		go func() {
+			defer close(loaded)
+			host = newMultiplayerBrowser(t, base, "host", false)
+		}()
+		func() {
+			defer func() { <-loaded }()
+			guest = newMultiplayerBrowser(t, base, "guest", false)
+		}()
+		if host == nil || guest == nil {
+			t.FailNow()
+		}
+		host.captureStep("choose")
+	} else {
+		host = newMultiplayerBrowser(t, base, "host", backgroundThrottling)
+		host.captureStepWhile("choose", func() {
+			guest = newMultiplayerBrowser(t, base, "guest", backgroundThrottling)
+		})
+	}
 	host.click(210, 244) // Host a game.
 	offer := host.copyCode("")
 	joinGuest := func() {

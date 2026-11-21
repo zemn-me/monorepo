@@ -10,7 +10,9 @@ list(FILTER ENGINE EXCLUDE REGEX "/netsocket_win32.cpp$")
 list(FILTER ENGINE EXCLUDE REGEX "/netsocket_posix.cpp$")
 add_executable(opents ${ENGINE} web/platform.cpp web/network.cpp)
 target_include_directories(opents PRIVATE code web generated code/vqalib)
-target_compile_options(opents PRIVATE -fms-extensions -include ${CMAKE_SOURCE_DIR}/web/platform.h)
+# Let wasm-ld optimize engine bitcode across translation units while retaining
+# the pinned SDK's native system archives from its frozen cache.
+target_compile_options(opents PRIVATE -flto -fms-extensions -include ${CMAKE_SOURCE_DIR}/web/platform.h)
 target_compile_definitions(opents PRIVATE NOMINMAX)
 target_include_directories(opents PRIVATE thirdparty/bgfx.cmake/bgfx/include thirdparty/bgfx.cmake/bx/include)
 set_source_files_properties(code/bgfxbackend.cpp PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/thirdparty/bgfx.cmake/bgfx/examples/common/imgui")

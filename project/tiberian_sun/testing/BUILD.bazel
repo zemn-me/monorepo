@@ -34,8 +34,9 @@ service_test(
         "test.network": "external",
     },
     services = [":site"],
-    # Keep each browser scenario within the test deadline under remote contention.
-    shard_count = 4,
+    # Run each normal browser scenario independently; menu sizing and phone
+    # gameplay are both expensive and must not serialize in one shard.
+    shard_count = 8,
     test = ":testing_test",
 )
 
