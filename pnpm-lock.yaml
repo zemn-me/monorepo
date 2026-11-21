@@ -319,8 +319,8 @@ importers:
         specifier: 5.3.3
         version: 5.3.3(typescript@7.0.2)
       '@pulumi/pulumi':
-        specifier: 3.276.0
-        version: 3.276.0(typescript@7.0.2)
+        specifier: 3.277.0
+        version: 3.277.0(typescript@7.0.2)
       '@react-router/dev':
         specifier: 8.5.1
         version: 8.5.1(react-router@8.5.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(terser@5.51.2)(yaml@2.9.1))
@@ -2389,10 +2389,6 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.10.0 <1.11.0'
 
-  '@opentelemetry/semantic-conventions@1.43.0':
-    resolution: {integrity: sha512-eSYWTm620tTk45EKSedaUL8MFYI8hW164hIXsgIHyxu3VobUB3fFCu5t0hQby6OoWRPsG1KkKUG2M5UadiLiVg==}
-    engines: {node: '>=14'}
-
   '@opentelemetry/semantic-conventions@1.45.0':
     resolution: {integrity: sha512-aOP45mbcOKbQVvFWfQmgoOPT8R2iwbbbgl83k4CujGV9BrJhFr3qG55MFpwFs4YLabpuW3HhzUY9eQxPlDqaZw==}
     engines: {node: '>=14'}
@@ -2605,8 +2601,8 @@ packages:
   '@pulumi/gcp@10.3.0':
     resolution: {integrity: sha512-0wAuI2va7NLzo7c25D1VwqYY+tOb5bMgyePmYSTtAXDxVyjRXr3D/N7Jcz59k6M4kDajbSMYh6sgYWFTL6vhLQ==}
 
-  '@pulumi/pulumi@3.276.0':
-    resolution: {integrity: sha512-8ThwjehdLmmSpcoCtQG/9uxXx5duAsFm1OeMZOEzj9b/V3VdST6baKu51K4HnSTwqRHgH84NDhM2AwAKapTtXQ==}
+  '@pulumi/pulumi@3.277.0':
+    resolution: {integrity: sha512-EvvBo55xmGByLRWjIqp24k4vzmPoKmZ6nTmK8EHzRb9veLCNISN3/Fq4RlJxrEt5+HmNkZveEasI+z0UCgkMxw==}
     engines: {node: '>=22'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
@@ -11279,8 +11275,6 @@ snapshots:
       '@opentelemetry/resources': 3.1.0(@opentelemetry/api@1.10.0)
       '@opentelemetry/semantic-conventions': 1.45.0
 
-  '@opentelemetry/semantic-conventions@1.43.0': {}
-
   '@opentelemetry/semantic-conventions@1.45.0': {}
 
   '@oxc-project/types@0.156.0': {}
@@ -11438,7 +11432,7 @@ snapshots:
 
   '@pulumi/aws@7.54.0(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
       mime: 2.6.0
     transitivePeerDependencies:
       - supports-color
@@ -11451,7 +11445,7 @@ snapshots:
       '@pulumi/aws': 7.54.0(typescript@7.0.2)
       '@pulumi/docker': 4.11.2(typescript@7.0.2)
       '@pulumi/docker-build': 0.0.14(typescript@7.0.2)
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
       '@types/aws-lambda': 8.10.164
       docker-classic: '@pulumi/docker@3.6.1(typescript@7.0.2)'
       mime: 2.6.0
@@ -11462,7 +11456,7 @@ snapshots:
 
   '@pulumi/command@4.5.0(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -11470,7 +11464,7 @@ snapshots:
 
   '@pulumi/dnsimple@5.3.3(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -11478,7 +11472,7 @@ snapshots:
 
   '@pulumi/docker-build@0.0.14(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -11486,7 +11480,7 @@ snapshots:
 
   '@pulumi/docker@3.6.1(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -11495,7 +11489,7 @@ snapshots:
 
   '@pulumi/docker@4.11.2(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
       semver: 5.7.2
     transitivePeerDependencies:
       - supports-color
@@ -11504,14 +11498,14 @@ snapshots:
 
   '@pulumi/gcp@10.3.0(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
       '@types/express': 4.17.25
     transitivePeerDependencies:
       - supports-color
       - ts-node
       - typescript
 
-  '@pulumi/pulumi@3.276.0(typescript@7.0.2)':
+  '@pulumi/pulumi@3.277.0(typescript@7.0.2)':
     dependencies:
       '@grpc/grpc-js': 1.14.5
       '@logdna/tail-file': 2.2.0
@@ -11524,7 +11518,7 @@ snapshots:
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-node': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
+      '@opentelemetry/semantic-conventions': 1.45.0
       '@types/google-protobuf': 3.15.12
       '@types/semver': 7.8.0
       execa: 5.1.1
@@ -11534,7 +11528,7 @@ snapshots:
       minimist: 1.2.8
       normalize-package-data: 6.0.2
       require-from-string: 2.0.2
-      semver: 7.8.5
+      semver: 7.8.6
       source-map-support: 0.5.21
       typescript5: typescript@5.9.3
       upath: 1.2.0
@@ -11545,7 +11539,7 @@ snapshots:
 
   '@pulumi/random@4.21.6(typescript@7.0.2)':
     dependencies:
-      '@pulumi/pulumi': 3.276.0(typescript@7.0.2)
+      '@pulumi/pulumi': 3.277.0(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
