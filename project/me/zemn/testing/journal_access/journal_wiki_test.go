@@ -24,7 +24,10 @@ var seedJournalWikiFixture = sync.OnceValue(func() error {
 		return err
 	}
 	client := http.Client{Timeout: 90 * time.Second}
-	response, err := client.Post(api.String()+"/__local/journal/seed", "application/json", nil)
+	// The Go fixture and its summary refreshes must share a fixed clock;
+	// freezing browser dates alone leaves the corpus dependent on the run date.
+	query := url.Values{"at": {"2026-06-18T19:00:00-07:00"}}
+	response, err := client.Post(api.String()+"/__local/journal/seed?"+query.Encode(), "application/json", nil)
 	if err != nil {
 		return err
 	}
@@ -486,6 +489,9 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	selectedYear, err := driver.ExecuteScript(`return String(new Date(arguments[0]).getFullYear())`, []any{selectedAt})
 	if err != nil {
 		t.Fatal(err)
+	}
+	if selectedMonth != "June 2026" || selectedYear != "2026" {
+		t.Fatalf("fixed fixture calendar selection drifted: %v, %v (%s)", selectedMonth, selectedYear, selectedURL)
 	}
 	for _, view := range []struct{ name, link, visibleDate, period, child, title string }{
 		{"12-months-desktop", "Months", selectedMonth.(string), "month", "day", "Experiments in attention"},

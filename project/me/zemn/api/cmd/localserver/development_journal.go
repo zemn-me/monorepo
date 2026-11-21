@@ -134,6 +134,17 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 			http.Error(response, "method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
+		// Browser tests pin the corpus clock; interactive previews keep rolling
+		// with today. Use one instant for both recordings and derived content.
+		now := time.Now()
+		if value := request.URL.Query().Get("at"); value != "" {
+			var err error
+			now, err = time.Parse(time.RFC3339, value)
+			if err != nil {
+				http.Error(response, "at must be an RFC3339 timestamp", http.StatusBadRequest)
+				return
+			}
+		}
 
 		seedMu.Lock()
 		defer seedMu.Unlock()
@@ -145,7 +156,7 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 		ctx := context.WithValue(request.Context(), auth.IDTokenKey, &auth.IDToken{
 			Issuer: "http://localhost", Subject: "integration-test-local",
 		})
-		for index, recordedAt := range developmentJournalRecordedTimes(time.Now().In(location)) {
+		for index, recordedAt := range developmentJournalRecordedTimes(now.In(location)) {
 			audio := developmentJournalWAV(index + 7)
 			created, err := server.PostJournalEntries(ctx, apiserver.PostJournalEntriesRequestObject{
 				Body: &apiserver.JournalEntryCreate{
@@ -171,14 +182,14 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 				return
 			}
 		}
-		if err := server.RefreshJournalSummaries(ctx, time.Now()); err != nil {
+		if err := server.RefreshJournalSummaries(ctx, now); err != nil {
 			http.Error(response, fmt.Sprintf("refresh summaries: %v", err), http.StatusInternalServerError)
 			return
 		}
 		// Advance the deterministic local session through submit, publish and
 		// cleanup, exercising exactly the same importer as scheduled runs.
 		for range 3 {
-			if err := server.RefreshJournalKnowledge(ctx, time.Now()); err != nil {
+			if err := server.RefreshJournalKnowledge(ctx, now); err != nil {
 				log.Printf("curate journal fixtures: %v", err)
 				http.Error(response, fmt.Sprintf("curate fixtures: %v", err), http.StatusInternalServerError)
 				return
