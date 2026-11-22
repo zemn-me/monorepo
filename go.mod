@@ -26,15 +26,15 @@ tool (
 require (
 	github.com/aws/aws-lambda-go v1.55.1
 	github.com/aws/aws-sdk-go-v2 v1.48.0
-	github.com/aws/aws-sdk-go-v2/config v1.33.20
-	github.com/aws/aws-sdk-go-v2/credentials v1.21.2
+	github.com/aws/aws-sdk-go-v2/config v1.33.21
+	github.com/aws/aws-sdk-go-v2/credentials v1.21.3
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.21.23
 	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.92.2
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.74.1
 	github.com/aws/aws-sdk-go-v2/service/kms v1.63.0
-	github.com/aws/aws-sdk-go-v2/service/lambda v1.117.0
+	github.com/aws/aws-sdk-go-v2/service/lambda v1.118.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.116.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.52.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.53.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/bazelbuild/bazel-gazelle v0.54.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
