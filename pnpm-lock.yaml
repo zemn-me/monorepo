@@ -460,8 +460,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 44.252.8
-        version: 44.252.8(typanion@3.14.0)
+        specifier: 44.253.2
+        version: 44.253.2(typanion@3.14.0)
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@26.6.6)
@@ -1108,15 +1108,6 @@ packages:
     resolution: {integrity: sha512-FsI7l5tFON52RyyDKyCkvwFl+peHZuP5TZ7AhxbDFGo/5T6KQd4+KE48aJ8jrDSSAQDvZ8hYKX47fmwZ5bGFNw==}
     peerDependencies:
       commander: ~15.1.0
-
-  '@containerbase/base@14.67.2':
-    resolution: {integrity: sha512-5eQQwmIIyp7F7+3ywFD17LL50/jXZ9J1D0f33Vw4/9vypt//QqhFuJ0hZpENiF1sYb+E3c0lYZ7Z3mJBaNUnwA==}
-    engines: {node: '>=24.10.0'}
-    peerDependencies:
-      zod: ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
 
   '@containerbase/base@14.67.3':
     resolution: {integrity: sha512-etQY3L81jhTsKSLcOcOyaiziJwn0IPU6ue9gWYqrJAXNzECb4jZ0RD+X11YwJPAuIj7pnhGU+bk1cpchvVAecg==}
@@ -7717,11 +7708,6 @@ packages:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
-  prettier@3.10.0:
-    resolution: {integrity: sha512-mBi4765LgjO1PFjlEs7pUeK0nb1bw71c+N4/ItfeUWNdY5cV2pRKaFpbbFRYmDJMO+5ZwzGxHRqHxFZna7iv5w==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   prettier@3.10.1:
     resolution: {integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==}
     engines: {node: '>=14'}
@@ -8026,8 +8012,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@44.252.8:
-    resolution: {integrity: sha512-4UdKNLUgtG2xbPZdB1ugnkH7ztPMIshAOMLqepXO2pBIcQp+U8I5/BxypCH4ykubCxhVepZ0UMhDDyc1Cle6cQ==}
+  renovate@44.253.2:
+    resolution: {integrity: sha512-2ChcGU7oUzYfHBPMW8KKtvLz9ezywR58PKE7Vop/X8VnHFkL1PxsWaVCxGERxTMzEZV5efZFml9ttV49x/Xaig==}
     engines: {node: ^24.11.0 || ^26.13.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -10037,12 +10023,6 @@ snapshots:
     dependencies:
       commander: 15.1.0
 
-  '@containerbase/base@14.67.2(zod@4.6.7)':
-    dependencies:
-      semver: 7.8.6
-    optionalDependencies:
-      zod: 4.6.7
-
   '@containerbase/base@14.67.3(zod@4.6.7)':
     dependencies:
       semver: 7.8.6
@@ -11978,7 +11958,7 @@ snapshots:
 
   '@renovatebot/osv-offline-db@4.5.10(zod@4.6.7)':
     dependencies:
-      '@containerbase/base': 14.67.2(zod@4.6.7)
+      '@containerbase/base': 14.67.3(zod@4.6.7)
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
@@ -17232,8 +17212,6 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  prettier@3.10.0: {}
-
   prettier@3.10.1: {}
 
   pretty-format@27.5.1:
@@ -17683,7 +17661,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@44.252.8(typanion@3.14.0):
+  renovate@44.253.2(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -17782,7 +17760,7 @@ snapshots:
       p-queue: 9.3.5
       p-throttle: 8.1.1
       parse-link-header: 2.0.0
-      prettier: 3.10.0
+      prettier: 3.10.1
       protobufjs: 8.8.1
       punycode: 2.3.1
       remark: 15.0.1
