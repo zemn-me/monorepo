@@ -610,7 +610,8 @@ func TestCinematicNavigation(t *testing.T) {
 	if err := driver.Get(base + "/experiments"); err != nil {
 		t.Fatal(err)
 	}
-	link, err := driver.FindElement(selenium.ByCSSSelector, `a[href="/experiments/red-alert"]`)
+	const redAlertLink = `a[href="/experiments/red-alert"]`
+	link, err := driver.FindElement(selenium.ByCSSSelector, redAlertLink)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -623,14 +624,18 @@ func TestCinematicNavigation(t *testing.T) {
 	}
 	release()
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-		url, err := w.CurrentURL()
-		return url == base+"/experiments", err
+		advance(t, clock, 100*time.Millisecond)
+		links, err := w.FindElements(selenium.ByCSSSelector, redAlertLink)
+		if err != nil || len(links) == 0 {
+			return false, err
+		}
+		link = links[0]
+		return link.IsDisplayed()
 	}, 10*time.Second); err != nil {
-		t.Fatal(err)
+		t.Fatalf("return to experiments: %v", err)
 	}
-	link, err = driver.FindElement(selenium.ByCSSSelector, `a[href="/experiments/red-alert"]`)
-	if err != nil {
-		t.Fatal(err)
+	if current, err := driver.CurrentURL(); err != nil || current != base+"/experiments" {
+		t.Fatalf("unexpected URL after Back: %q, %v", current, err)
 	}
 	if err := link.Click(); err != nil {
 		t.Fatal(err)
