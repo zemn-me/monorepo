@@ -10,7 +10,7 @@ import {
 import style from '#root/project/me/zemn/app/experiments/tiberian_sun/style.module.css';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
-	type PreparedGame,
+	type GamePreparation,
 	startGame,
 } from '#root/project/tiberian_sun/web/launcher.js';
 import {
@@ -22,27 +22,31 @@ import {
 
 type GameState = Future<void, undefined, string>;
 
-export function TiberianSun({ prepared }: { readonly prepared: PreparedGame }) {
+export function TiberianSun({ prepared, startupError }: GamePreparation) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
 	const [state, setState] = useState<GameState>(() =>
 		future_loading(undefined)
 	);
 	const navigate = useNavigate();
-	const failed = state(
-		() => false,
-		() => false,
-		() => true
-	);
-	const message = state(
-		() => 'Game running. Saves are kept in this browser.',
-		() => '',
-		error => error
-	);
+	const failed =
+		startupError !== undefined ||
+		state(
+			() => false,
+			() => false,
+			() => true
+		);
+	const message =
+		startupError ??
+		state(
+			() => 'Game running. Saves are kept in this browser.',
+			() => '',
+			error => error
+		);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
-		if (!canvas) return;
+		if (!canvas || !prepared) return;
 		const lifetime = new AbortController();
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';

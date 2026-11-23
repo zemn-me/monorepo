@@ -98,17 +98,21 @@ function createMessageYield(signal: AbortSignal): () => Promise<void> {
 		});
 }
 
-export interface PreparedGame {
+interface PreparedGame {
 	readonly createEngine: EngineFactory;
 	readonly wasmBinary: Uint8Array<ArrayBuffer>;
 	readonly engineData: ArrayBuffer;
 	readonly gameData: Uint8Array<ArrayBuffer>;
 }
 
+export type GamePreparation =
+	| { readonly prepared: PreparedGame; readonly startupError?: never }
+	| { readonly prepared?: never; readonly startupError: string };
+
 export async function prepareGame(
 	assets: GameAssets,
 	signal: AbortSignal
-): Promise<PreparedGame> {
+): Promise<GamePreparation> {
 	const downloads = new AbortController();
 	const downloadSignal = AbortSignal.any([signal, downloads.signal]);
 	const fetchBinary = async (url: string) => {
@@ -129,11 +133,18 @@ export async function prepareGame(
 		signal.throwIfAborted();
 		if (!isEngineModule(imported)) throw new Error('Invalid engine module');
 		return {
-			createEngine: imported.default,
-			wasmBinary: new Uint8Array(wasm),
-			engineData,
-			gameData,
+			prepared: {
+				createEngine: imported.default,
+				wasmBinary: new Uint8Array(wasm),
+				engineData,
+				gameData,
+			},
 		};
+	} catch (error) {
+		signal.throwIfAborted();
+		console.error(error);
+		const detail = error instanceof Error ? error.message : String(error);
+		return { startupError: 'Could not start the game: ' + detail + '.' };
 	} finally {
 		downloads.abort();
 	}

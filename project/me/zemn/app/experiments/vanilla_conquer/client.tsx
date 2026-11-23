@@ -13,7 +13,7 @@ import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
 	type CinematicStatus,
 	type GameAssets,
-	type PreparedGame,
+	type GamePreparation,
 	startGame,
 } from '#root/project/vanilla_conquer/web/launcher.js';
 import {
@@ -28,10 +28,8 @@ type GameState = Future<void, undefined, string>;
 export function VanillaConquer({
 	assets,
 	prepared,
-}: {
-	readonly assets: GameAssets;
-	readonly prepared: PreparedGame;
-}) {
+	startupError,
+}: GamePreparation & { readonly assets: GameAssets }) {
 	const title = assets.game === 'ra' ? 'Red Alert' : 'Command & Conquer';
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
@@ -43,20 +41,24 @@ export function VanillaConquer({
 	const [cinematic, setCinematic] = useState<CinematicStatus | undefined>();
 	const skipRef = useRef<HTMLButtonElement>(null);
 	const [start, setStart] = useState<(() => void) | undefined>();
-	const failed = state(
-		() => false,
-		() => false,
-		() => true
-	);
-	const message = state(
-		() => 'Game running. Saves are kept in this browser.',
-		() => `Loading ${title}…`,
-		error => error
-	);
+	const failed =
+		startupError !== undefined ||
+		state(
+			() => false,
+			() => false,
+			() => true
+		);
+	const message =
+		startupError ??
+		state(
+			() => 'Game running. Saves are kept in this browser.',
+			() => `Loading ${title}…`,
+			error => error
+		);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
-		if (!canvas) return;
+		if (!canvas || !prepared) return;
 		const lifetime = new AbortController();
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';

@@ -7,7 +7,7 @@ import {
 import { VanillaConquer } from '#root/project/me/zemn/app/experiments/vanilla_conquer/client.js';
 import {
 	type GameAssets,
-	type PreparedGame,
+	type GamePreparation,
 	prepareGame,
 } from '#root/project/vanilla_conquer/web/launcher.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
@@ -22,7 +22,7 @@ const assets = {
 } satisfies GameAssets;
 export function clientLoader({
 	request,
-}: ClientLoaderFunctionArgs): Promise<PreparedGame> {
+}: ClientLoaderFunctionArgs): Promise<GamePreparation> {
 	return prepareGame(assets, request.signal);
 }
 
@@ -35,8 +35,8 @@ export function HydrateFallback() {
 }
 
 export default function Page() {
-	const prepared = useLoaderData<typeof clientLoader>();
-	return <VanillaConquer assets={assets} prepared={prepared} />;
+	const preparation = useLoaderData<typeof clientLoader>();
+	return <VanillaConquer assets={assets} {...preparation} />;
 }
 export const metadata = {
 	title: 'Command & Conquer',

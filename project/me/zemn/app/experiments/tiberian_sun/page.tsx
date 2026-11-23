@@ -8,7 +8,7 @@ import {
 import { TiberianSun } from '#root/project/me/zemn/app/experiments/tiberian_sun/client.js';
 import {
 	type GameAssets,
-	type PreparedGame,
+	type GamePreparation,
 	prepareGame,
 } from '#root/project/tiberian_sun/web/launcher.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
@@ -24,7 +24,7 @@ const assets = {
 
 export function clientLoader({
 	request,
-}: ClientLoaderFunctionArgs): Promise<PreparedGame> {
+}: ClientLoaderFunctionArgs): Promise<GamePreparation> {
 	return prepareGame(assets, request.signal);
 }
 
@@ -37,8 +37,8 @@ export function HydrateFallback() {
 }
 
 export default function Page() {
-	const prepared = useLoaderData<typeof clientLoader>();
-	return <TiberianSun prepared={prepared} />;
+	const preparation = useLoaderData<typeof clientLoader>();
+	return <TiberianSun {...preparation} />;
 }
 
 export const metadata = {
