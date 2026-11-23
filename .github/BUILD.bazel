@@ -2,9 +2,38 @@ load("@npm//:renovate/package_json.bzl", "bin")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_library", "js_test")
 load("//md:rules.bzl", "md_files")
+load("//ts:rules.bzl", "ts_project")
 load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["renovate-global.json"])
+
+ts_project(
+    name = ".github",
+    srcs = ["renovate_provider_test.ts"],
+    extends = "//:tsconfig",
+    tsconfig = {},
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/renovate"],  # keep: dynamic Renovate imports
+)
+
+js_test(
+    name = "renovate_provider_test",
+    data = [
+        "renovate-global.json",
+        ":.github",
+        "//:package_json",
+        "//:renovate_bazel_inputs",
+    ],
+    entry_point = "renovate_provider_test.js",
+    node_toolchain = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@renovate_test_node_darwin_arm64//:toolchain",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@renovate_test_node_darwin_amd64//:toolchain",
+        "@bazel_tools//src/conditions:linux_aarch64": "@renovate_test_node_linux_arm64//:toolchain",
+        "@bazel_tools//src/conditions:linux_x86_64": "@renovate_test_node_linux_amd64//:toolchain",
+        "@bazel_tools//src/conditions:windows_arm64": "@renovate_test_node_windows_arm64//:toolchain",
+        "@bazel_tools//src/conditions:windows_x64": "@renovate_test_node_windows_amd64//:toolchain",
+    }),
+)
 
 js_test(
     name = "renovate_bazel_releases_test",
@@ -86,4 +115,10 @@ js_library(
     name = "renovate_python_lock_test_mjs",
     srcs = ["renovate_python_lock_test.mjs"],
     deps = ["//:node_modules/renovate"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["renovate_provider_test.ts"],
+    visibility = ["//:__subpackages__"],
 )
