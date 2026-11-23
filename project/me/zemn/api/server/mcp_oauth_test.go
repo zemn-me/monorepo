@@ -139,13 +139,13 @@ func TestMCPOAuthConnectionLifecycle(t *testing.T) {
 			} else {
 				client = "https://client.example/oauth/client.json"
 				// ChatGPT publishes a legacy preference alongside a set of
-				// supported methods. Exercise negotiation through the OAuth routes.
+				// supported methods and grants. Exercise negotiation through the OAuth routes.
 				metadata := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 					if r.URL.Path != "/oauth/client.json" || r.Header.Get("Authorization") != "" || r.Header.Get("Cookie") != "" {
 						t.Error("unexpected metadata request or leaked credentials")
 					}
 					w.Header().Set("Content-Type", "application/json")
-					_, _ = io.WriteString(w, `{"client_id":"https://client.example/oauth/client.json","client_name":"Diary test","redirect_uris":["https://client.example/callback"],"grant_types":["authorization_code","refresh_token"],"response_types":["code"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`)
+					_, _ = io.WriteString(w, `{"client_id":"https://client.example/oauth/client.json","client_name":"Diary test","redirect_uris":["https://client.example/callback"],"grant_types":["authorization_code","refresh_token","urn:ietf:params:oauth:grant-type:jwt-bearer"],"response_types":["code"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`)
 				}))
 				t.Cleanup(metadata.Close)
 				endpoint, _ := url.Parse(metadata.URL)
@@ -157,6 +157,10 @@ func TestMCPOAuthConnectionLifecycle(t *testing.T) {
 					request.URL.Host = endpoint.Host
 					return metadata.Client().Transport.RoundTrip(request)
 				})}
+			}
+			unsupported := url.Values{"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"}, "client_id": {client}, "resource": {oauthURL(journalMCPPath)}}
+			if failure := oauthTestJSON(t, oauthTestRequest(s, "POST", oauthTokenPath, unsupported.Encode(), ""), 400); failure["error"] != "unsupported_grant_type" {
+				t.Fatal(failure)
 			}
 			form := oauthTestCode(t, s, client, strings.Repeat("v", 43))
 			for _, field := range []string{"code_verifier", "client_id", "redirect_uri", "resource", "client_secret", "client_assertion", "client_assertion_type"} {
@@ -221,6 +225,7 @@ func TestMCPOAuthDiscoveryAndValidation(t *testing.T) {
 		oauthTestJSON(t, oauthTestRequest(s, "POST", "/oauth2/register", string(body), ""), 400)
 	}
 	oauthTestJSON(t, oauthTestRequest(s, "POST", "/oauth2/register", `{"client_name":"DCR private client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`, ""), 400)
+	oauthTestJSON(t, oauthTestRequest(s, "POST", "/oauth2/register", `{"client_name":"DCR unsupported grant","redirect_uris":["https://client.example/callback"],"grant_types":["authorization_code","urn:ietf:params:oauth:grant-type:jwt-bearer"]}`, ""), 400)
 	for _, ip := range []string{"127.0.0.1", "::1", "10.1.1.1", "169.254.169.254", "100.100.100.200", "::ffff:127.0.0.1", "64:ff9b::a00:1"} {
 		if oauthPublicIP(netip.MustParseAddr(ip)) {
 			t.Fatalf("private metadata destination accepted: %s", ip)
@@ -247,6 +252,8 @@ func TestMCPOAuthClientMetadata(t *testing.T) {
 		{"valid", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["http://127.0.0.1:3000/callback"],"token_endpoint_auth_method":"none"}`, true},
 		{"multiple methods", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_methods_supported":["none","private_key_jwt"]}`, true},
 		{"plural only", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_methods_supported":["private_key_jwt","none"]}`, true},
+		{"additional grants", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"grant_types":["authorization_code","refresh_token","urn:ietf:params:oauth:grant-type:jwt-bearer"]}`, true},
+		{"missing authorization code grant", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"grant_types":["refresh_token","urn:ietf:params:oauth:grant-type:jwt-bearer"]}`, false},
 		{"private key only", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"private_key_jwt"}`, false},
 		{"no mutual method", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"none","token_endpoint_auth_methods_supported":["private_key_jwt"]}`, false},
 		{"empty methods", `{"client_id":"https://client.example/oauth/client.json","client_name":"Metadata client","redirect_uris":["https://client.example/callback"],"token_endpoint_auth_method":"none","token_endpoint_auth_methods_supported":[]}`, false},
@@ -265,6 +272,13 @@ func TestMCPOAuthClientMetadata(t *testing.T) {
 			resolved, err := oauthFetchClientMetadata(t.Context(), id, client)
 			if (err == nil) != test.valid {
 				t.Fatalf("metadata validation: %v", err)
+			}
+			if test.valid {
+				for _, grant := range resolved.GrantTypes {
+					if grant != "authorization_code" && grant != "refresh_token" {
+						t.Fatalf("negotiated unsupported grant: %s", grant)
+					}
+				}
 			}
 			if test.valid && resolved.TokenEndpointAuthMethod != "none" {
 				t.Fatalf("negotiated unsupported method: %s", resolved.TokenEndpointAuthMethod)

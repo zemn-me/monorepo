@@ -26,6 +26,9 @@ sharing private entries.
   metadata documents. Their `client_id` must match the URL exactly. Fetches are
   bounded, disallow redirects, and resolve and dial only public IP addresses.
   Metadata is fetched anew for authorization and held in the consent request.
+  Documents may advertise additional grant types; Journal selects
+  `authorization_code` and optionally `refresh_token` from those capabilities.
+  Other grants remain unsupported at registration and token exchange.
 - Authorization: `GET /oauth2/authorize`, with `response_type=code`, a registered
   `redirect_uri`, `scope=journal_read`, and mandatory S256 PKCE. Redirect URIs
   match exactly and must use HTTPS or HTTP loopback for local clients.

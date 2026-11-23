@@ -152,5 +152,15 @@ func oauthFetchClientMetadata(ctx context.Context, id string, client *http.Clien
 		}
 		c.TokenEndpointAuthMethod = "none"
 	}
+	// A CIMD document can advertise grants for other authorization servers.
+	// Retain the mutual grants without enabling unsupported token exchanges.
+	if len(c.GrantTypes) > 0 {
+		if !slices.Contains(c.GrantTypes, "authorization_code") {
+			return c, errors.New("authorization_code is required")
+		}
+		c.GrantTypes = slices.DeleteFunc(c.GrantTypes, func(grant string) bool {
+			return grant != "authorization_code" && grant != "refresh_token"
+		})
+	}
 	return c, c.validate()
 }
