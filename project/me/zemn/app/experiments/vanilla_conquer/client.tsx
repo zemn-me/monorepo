@@ -33,14 +33,12 @@ export function VanillaConquer({
 	const title = assets.game === 'ra' ? 'Red Alert' : 'Command & Conquer';
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
-	const startRef = useRef<HTMLButtonElement>(null);
 	const [state, setState] = useState<GameState>(() =>
 		future_loading(undefined)
 	);
 	const navigate = useNavigate();
 	const [cinematic, setCinematic] = useState<CinematicStatus | undefined>();
 	const skipRef = useRef<HTMLButtonElement>(null);
-	const [start, setStart] = useState<(() => void) | undefined>();
 	const failed =
 		startupError !== undefined ||
 		state(
@@ -63,7 +61,6 @@ export function VanillaConquer({
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';
 		setState(() => future_loading(undefined));
-		setStart(undefined);
 		setCinematic(undefined);
 		startGame(
 			canvas,
@@ -73,14 +70,9 @@ export function VanillaConquer({
 				cinematic: value => {
 					if (!lifetime.signal.aborted) setCinematic(value);
 				},
-				ready: begin => {
-					if (!lifetime.signal.aborted) setStart(() => begin);
-				},
 				running: () => {
-					if (!lifetime.signal.aborted) {
-						setStart(undefined);
+					if (!lifetime.signal.aborted)
 						setState(() => future_resolve(undefined));
-					}
 				},
 				error: value => setState(() => future_error(value)),
 				exit: () => {
@@ -99,10 +91,6 @@ export function VanillaConquer({
 	useEffect(() => {
 		if (failed) statusRef.current?.focus();
 	}, [failed]);
-
-	useEffect(() => {
-		if (start) startRef.current?.focus();
-	}, [start]);
 
 	const cinematicKind = cinematic?.kind;
 	useEffect(() => {
@@ -123,7 +111,7 @@ export function VanillaConquer({
 			/>
 			<main
 				className={style.feedback}
-				hidden={!failed && !start && !cinematic}
+				hidden={!failed && !cinematic}
 				onKeyDown={event => {
 					if (cinematic && event.key === 'Escape') {
 						event.preventDefault();
@@ -137,26 +125,14 @@ export function VanillaConquer({
 							? cinematic.kind === 'error'
 								? 'Could not load this cinematic.'
 								: 'Loading cinematic…'
-							: start
-								? 'Red Alert is ready.'
-								: message}
+							: message}
 					</p>
-					{start && (
-						<button
-							type="button"
-							ref={startRef}
-							className={style.start}
-							onClick={start}
-						>
-							Start Red Alert
-						</button>
-					)}
 					{cinematic && (
 						<div className={style.actions}>
 							{cinematic.kind === 'error' && (
 								<button
 									type="button"
-									className={style.start}
+									className={style.action}
 									onClick={cinematic.retry}
 								>
 									Retry
@@ -165,7 +141,7 @@ export function VanillaConquer({
 							<button
 								type="button"
 								ref={skipRef}
-								className={style.start}
+								className={style.action}
 								onClick={cinematic.skip}
 							>
 								Skip cinematic
