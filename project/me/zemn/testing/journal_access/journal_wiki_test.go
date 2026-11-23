@@ -323,6 +323,16 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		if err := driver.ResizeWindow("", width, height); err != nil {
 			t.Fatal(err)
 		}
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		defer func() {
+			if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+				t.Error(err)
+			}
+		}()
 		el := find(selenium.ByCSSSelector, selector)
 		if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start', behavior:'instant'}); window.scrollBy(0,-90);`, []any{el}); err != nil {
 			t.Fatal(err)
@@ -345,7 +355,22 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	click(selenium.ByLinkText, "Overview")
-	capture("01-overview-desktop", "section[aria-labelledby='recent-journal-entries']", 1440, 1000, false)
+	find(selenium.ByID, "recent-journal-entries")
+	capture("01-overview-desktop", "[data-journal-page]", 1440, 1000, false)
+	capture("01-overview-phone", "[data-journal-page]", 390, 844, false)
+	recentLink := find(selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] li a")
+	recentTitle := find(selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] li strong")
+	wantTitle, err := recentTitle.Text()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, recentLink); err != nil {
+		t.Fatal(err)
+	}
+	selectedTitle := find(selenium.ByCSSSelector, "details[id^='entry-'][open] > summary strong")
+	if got, err := selectedTitle.Text(); err != nil || got != wantTitle {
+		t.Fatalf("recent entry opened %q, want %q: %v", got, wantTitle, err)
+	}
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	capture("02-wiki-index-desktop", "section[aria-label='Diary wiki']", 1440, 1000, true)

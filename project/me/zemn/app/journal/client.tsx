@@ -2,6 +2,7 @@
 
 import {
 	faBookOpen,
+	faCalendarDays,
 	faChevronDown,
 	faMicrophone,
 	faSpinner,
@@ -76,6 +77,7 @@ import {
 	Time as LocalizedTime,
 	MonthYear,
 } from '#root/ts/react/lang/date.js';
+import { useLocale } from '#root/ts/react/lang/useLocale.js';
 
 type Journal = components['schemas']['Journal'];
 type JournalCitation = components['schemas']['JournalCitation'];
@@ -1479,7 +1481,6 @@ function EntryCard({
 					}
 				/>
 			)}
-			<JournalMap entries={[entry]} />
 			{entry.audioUrl && (
 				<JournalAudio
 					audioURL={entry.audioUrl}
@@ -1507,6 +1508,7 @@ function EntryCard({
 			{entry.transcript.length > 0 && (
 				<Transcript entry={entry} playback={playback} />
 			)}
+			<JournalMap entries={[entry]} />
 			{entry.status === 'ready' && updateEntryDate && (
 				<EntryDateEditor entry={entry} onUpdate={updateEntryDate} />
 			)}
@@ -1551,7 +1553,7 @@ const journalSelectionQuery = {
 };
 
 type JournalSelection = Partial<
-	Record<'at' | 'year' | 'month' | 'week' | 'day', string>
+	Record<'at' | 'year' | 'month' | 'week' | 'day' | 'entry', string>
 >;
 type AggregatePeriod = Exclude<JournalSummary['period'], 'entry' | 'journal'>;
 
@@ -2004,15 +2006,13 @@ function JournalToolbar({
 			) : (
 				<Link href="/journal">Browse journal</Link>
 			)}
-			{!journal && (
-				<Link
-					className={style.wikiNavigation}
-					href="/journal?wiki=all"
-					aria-current={wiki ? 'page' : undefined}
-				>
-					Wiki
-				</Link>
-			)}
+			<Link
+				className={style.wikiNavigation}
+				href="/journal?wiki=all"
+				aria-current={wiki ? 'page' : undefined}
+			>
+				Wiki
+			</Link>
 			{actions}
 		</div>
 	);
@@ -2084,13 +2084,6 @@ function PeriodList({
 						)}
 					</>
 				)}
-				<JournalMap
-					entries={
-						period === 'day'
-							? entries
-							: (journal.browse?.locations ?? [])
-					}
-				/>
 				{period === 'day' && (
 					<>
 						{entries.length === 0 && (
@@ -2109,6 +2102,13 @@ function PeriodList({
 						))}
 					</>
 				)}
+				<JournalMap
+					entries={
+						period === 'day'
+							? entries
+							: (journal.browse?.locations ?? [])
+					}
+				/>
 			</section>
 		</div>
 	);
@@ -2184,6 +2184,12 @@ function CalendarNavigation({
 				key={`${route}-${focus}`}
 			>
 				<summary aria-label="Choose journal date">
+					{!route && (
+						<FontAwesomeIcon
+							aria-hidden="true"
+							icon={faCalendarDays}
+						/>
+					)}
 					{route
 						? Temporal.Instant.from(focus)
 								.toZonedDateTimeISO(browse.timeZone)
@@ -2199,7 +2205,7 @@ function CalendarNavigation({
 													day: 'numeric',
 												}
 								)
-						: 'Overview'}{' '}
+						: 'Calendar'}{' '}
 					<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
 				</summary>
 				<div
@@ -2239,6 +2245,7 @@ function CalendarNavigation({
 }
 
 function RecentEntries({ journal }: { readonly journal: Journal }) {
+	const [language] = useLocale();
 	const entries = [...journal.entries]
 		.filter(entry => entry.status === 'ready')
 		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))
@@ -2252,29 +2259,48 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 			<header>
 				<h2 id="recent-journal-entries">Recent entries</h2>
 				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
-					View all days
+					Browse days
 				</Link>
 			</header>
 			<ol>
-				{entries.map(entry => (
-					<li key={entry.id}>
-						<Link
-							href={journalHref('day', { at: entry.recordedAt })}
-						>
-							<span className={style.recentDate}>
-								<LocalizedDate date={journalEntryDate(entry)} />
-							</span>
-							<strong>
-								{entry.title ??
-									entry.summary?.title ??
-									'Untitled entry'}
-							</strong>
-							<span className={style.recentTime}>
-								<LocalizedTime date={journalEntryDate(entry)} />
-							</span>
-						</Link>
-					</li>
-				))}
+				{entries.map(entry => {
+					const date = journalEntryDate(entry);
+					return (
+						<li key={entry.id}>
+							<Link
+								href={
+									journalHref('day', {
+										at: entry.recordedAt,
+										entry: entry.id,
+									}) + `#entry-${entry.id}`
+								}
+							>
+								<strong>
+									{entry.title ??
+										entry.summary?.title ??
+										'Untitled entry'}
+								</strong>
+								<span className={style.recentMeta}>
+									<time dateTime={entry.recordedAt}>
+										{date.toLocaleString(language, {
+											weekday: 'short',
+											day: 'numeric',
+											month: 'short',
+											year: 'numeric',
+										})}
+									</time>
+									<span aria-hidden="true">·</span>
+									<LocalizedTime date={date} />
+								</span>
+								<FontAwesomeIcon
+									className={style.recentChevron}
+									aria-hidden="true"
+									icon={faChevronDown}
+								/>
+							</Link>
+						</li>
+					);
+				})}
 			</ol>
 		</section>
 	);
@@ -2590,22 +2616,17 @@ function JournalBrowser({
 				/>
 				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
+				<RecentEntries journal={journal} />
 				{summary ? (
 					<SummaryCard
 						playback={playback}
 						showPeriod={false}
 						summary={summary}
 					/>
-				) : journal.curation ? (
-					<p className={style.wikiIntro}>
-						<Link href="/journal?wiki=all">
-							Explore the diary wiki
-						</Link>{' '}
-						for people, places, and projects across your recordings.
-					</p>
-				) : readyEntries.length > 1 ? (
+				) : !journal.curation && readyEntries.length > 1 ? (
 					<JournalPlaceholder label="Preparing journal overview" />
 				) : (
+					readyEntries.length === 0 &&
 					pendingEntries.length === 0 &&
 					localEntryIDs.length === 0 && (
 						<div className={style.empty}>
@@ -2618,7 +2639,6 @@ function JournalBrowser({
 					)
 				)}
 				<JournalMap entries={readyEntries} />
-				<RecentEntries journal={journal} />
 			</div>
 		);
 	}

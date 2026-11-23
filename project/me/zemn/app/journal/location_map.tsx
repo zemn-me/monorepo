@@ -1,5 +1,10 @@
 'use client';
 
+import {
+	faChevronDown,
+	faMapLocationDot,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { mapViewport } from '#root/project/me/zemn/app/journal/location_geometry.js';
@@ -76,42 +81,49 @@ export function JournalMap({
 		}
 	}
 	return (
-		<div
-			className={style.locationMap}
-			ref={container}
-			role="region"
-			aria-label={`Recording locations: ${located.length} ${located.length === 1 ? 'voice note' : 'voice notes'}`}
-		>
-			{tiles}
-			{width > 0 &&
-				located.map((entry, index) => {
-					const point = view.points[index];
-					if (!point) return null;
-					const label = `${entry.title ?? entry.summary?.title ?? 'Voice note'} — ${entry.location.latitude.toFixed(4)}, ${entry.location.longitude.toFixed(4)} (accuracy ${Math.round(entry.location.accuracyMeters)} m)`;
-					return (
-						<a
-							key={entry.id}
-							className={style.mapPin}
-							style={{ left: point.x, top: point.y }}
-							href={`/journal/day?at=${encodeURIComponent(entry.recordedAt)}&entry=${encodeURIComponent(entry.id)}`}
-							aria-label={label}
-							title={label}
-						>
-							<span aria-hidden="true">●</span>
-						</a>
-					);
-				})}
-			<span className={style.mapAttribution}>
-				©{' '}
-				<a
-					href="https://www.openstreetmap.org/copyright"
-					target="_blank"
-					rel="noreferrer"
-				>
-					OpenStreetMap
-				</a>{' '}
-				contributors
-			</span>
-		</div>
+		<details className={style.mapDisclosure}>
+			<summary>
+				<FontAwesomeIcon aria-hidden="true" icon={faMapLocationDot} />
+				Recording locations
+				<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
+			</summary>
+			<div
+				className={style.locationMap}
+				ref={container}
+				role="region"
+				aria-label={`Recording locations: ${located.length} ${located.length === 1 ? 'voice note' : 'voice notes'}`}
+			>
+				{tiles}
+				{width > 0 &&
+					located.map((entry, index) => {
+						const point = view.points[index];
+						if (!point) return null;
+						const label = `${entry.title ?? entry.summary?.title ?? 'Voice note'} — ${entry.location.latitude.toFixed(4)}, ${entry.location.longitude.toFixed(4)} (accuracy ${Math.round(entry.location.accuracyMeters)} m)`;
+						return (
+							<a
+								key={entry.id}
+								className={style.mapPin}
+								style={{ left: point.x, top: point.y }}
+								href={`/journal/day?at=${encodeURIComponent(entry.recordedAt)}&entry=${encodeURIComponent(entry.id)}`}
+								aria-label={label}
+								title={label}
+							>
+								<span aria-hidden="true">●</span>
+							</a>
+						);
+					})}
+				<span className={style.mapAttribution}>
+					©{' '}
+					<a
+						href="https://www.openstreetmap.org/copyright"
+						target="_blank"
+						rel="noreferrer"
+					>
+						OpenStreetMap
+					</a>{' '}
+					contributors
+				</span>
+			</div>
+		</details>
 	);
 }

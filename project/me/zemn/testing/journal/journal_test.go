@@ -2444,6 +2444,9 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 		if err := driver.Get(root.String()); err != nil {
 			t.Fatal(err)
 		}
+		if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//details[not(@open)]/summary[normalize-space()='Recording locations']", 60*time.Second); err != nil {
+			t.Fatalf("open recording locations on %s: %v", route, err)
+		}
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label^='Recording locations:'] a[aria-label*='40.7000, -74.0000']", 60*time.Second); err != nil {
 			browserhelpers.DumpPageDiagnostics(t, driver)
 			t.Fatalf("recording pin missing on %s: %v", route, err)
@@ -2484,7 +2487,7 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err := pin.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[open] [role='region'][aria-label^='Recording locations:']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[id^='entry-'][open] > summary", 30*time.Second); err != nil {
 		t.Fatalf("map pin did not open its note: %v", err)
 	}
 }
