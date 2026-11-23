@@ -146,13 +146,15 @@ func TestGameDownloadFailure(t *testing.T) {
 			g.navigate()
 			// Fail the actual download at the network layer; no app state is seeded.
 			if err := g.wait(func(w selenium.WebDriver) (bool, error) {
-				status, err := w.FindElement(selenium.ByCSSSelector, "[role='status']")
-				if err != nil {
-					return false, nil
-				}
-				text, _ := status.Text()
-				valid, err := w.ExecuteScript(`const s=arguments[0],r=s.getBoundingClientRect();return document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{status})
-				return strings.Contains(text, "Could not start the game") && valid == true, err
+				visibleAndFocused, err := w.ExecuteScript(`
+					const status = document.activeElement;
+					const bounds = status.getBoundingClientRect();
+					return status.matches('[role=status]') &&
+						status.textContent.includes('Could not start the game') &&
+						bounds.top >= 0 && bounds.bottom <= innerHeight &&
+						document.documentElement.scrollWidth <= innerWidth;
+				`, nil)
+				return visibleAndFocused == true, err
 			}, 30*time.Second); err != nil {
 				t.Fatalf("download failure is not visible and focused at width %d: %v", viewport.width, err)
 			}
