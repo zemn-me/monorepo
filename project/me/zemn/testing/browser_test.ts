@@ -6,6 +6,8 @@ import glob from 'fast-glob';
 import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
 import type { Driver as ChromeDriver } from 'selenium-webdriver/chrome';
 
+import { testDoomArena } from '#root/project/me/zemn/testing/arena/browser.js';
+
 import { Driver } from '#root/ts/selenium/webdriver.js';
 
 const resolveRunfilesPath = (candidate: string): string => {
@@ -150,6 +152,14 @@ describe('zemn.me website', () => {
 				}, 10000);
 				const logs = await driver.manage().logs().get('browser');
 				expect(logs.filter(log => log.level.value >= logging.Level.SEVERE.value)).toEqual([]);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('Doom arena supports orbit, textured walking, collision and reset', async () => {
+			try {
+				await testDoomArena(driver, origin);
 			} finally {
 				await driver.quit();
 			}
