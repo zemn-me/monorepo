@@ -14,12 +14,7 @@ export interface GameAssets {
 	readonly engineData: string;
 	readonly gameData: string;
 }
-export interface DownloadProgress {
-	readonly received: number;
-	readonly total?: number;
-}
 export interface GameCallbacks {
-	readonly progress: (progress: DownloadProgress | undefined) => void;
 	readonly running: () => void;
 	readonly error: (message: string) => void;
 	readonly exit: () => void;
@@ -54,7 +49,8 @@ interface EngineOptions {
 	readonly webYield: () => Promise<void>;
 	readonly webHasMouseHover: () => boolean;
 	readonly noInitialRun: true;
-	readonly locateFile: (name: string) => string;
+	readonly wasmBinary: Uint8Array<ArrayBuffer>;
+	readonly getPreloadedPackage: () => ArrayBuffer;
 	readonly print: (message: string) => void;
 	readonly printErr: (message: string) => void;
 	readonly onAbort: (message: string) => void;
@@ -102,13 +98,54 @@ function createMessageYield(signal: AbortSignal): () => Promise<void> {
 		});
 }
 
+export interface PreparedGame {
+	readonly createEngine: EngineFactory;
+	readonly wasmBinary: Uint8Array<ArrayBuffer>;
+	readonly engineData: ArrayBuffer;
+	readonly gameData: Uint8Array<ArrayBuffer>;
+}
+
+export async function prepareGame(
+	assets: GameAssets,
+	signal: AbortSignal
+): Promise<PreparedGame> {
+	const downloads = new AbortController();
+	const downloadSignal = AbortSignal.any([signal, downloads.signal]);
+	const fetchBinary = async (url: string) => {
+		const response = await fetch(url, { signal: downloadSignal });
+		if (!response.ok)
+			throw new Error('Engine download failed (' + response.status + ')');
+		return response.arrayBuffer();
+	};
+	try {
+		const [imported, wasm, engineData, gameData] = await Promise.all([
+			import(
+				/* @vite-ignore */ assets.engineJavaScript
+			) as Promise<unknown>,
+			fetchBinary(assets.engineWasm),
+			fetchBinary(assets.engineData),
+			downloadGame(assets.gameData, downloadSignal),
+		]);
+		signal.throwIfAborted();
+		if (!isEngineModule(imported)) throw new Error('Invalid engine module');
+		return {
+			createEngine: imported.default,
+			wasmBinary: new Uint8Array(wasm),
+			engineData,
+			gameData,
+		};
+	} finally {
+		downloads.abort();
+	}
+}
+
 // SDL owns document-level listeners and audio. A replacement mount waits for
 // the previous native shutdown before creating another engine in this document.
 let previousExit: Promise<void> = Promise.resolve();
 
 export function startGame(
 	canvas: HTMLCanvasElement,
-	assets: GameAssets,
+	prepared: PreparedGame,
 	callbacks: GameCallbacks,
 	signal: AbortSignal
 ): void {
@@ -151,51 +188,34 @@ export function startGame(
 		try {
 			await preceding;
 			signal.throwIfAborted();
-			const imported: unknown = await import(
-				/* @vite-ignore */ assets.engineJavaScript
-			);
-			if (!isEngineModule(imported))
-				throw new Error('Invalid engine module');
-			const [loaded, data] = await Promise.all([
-				imported.default({
-					canvas,
-					webNetwork,
-					webYield,
-					webHasMouseHover,
-					noInitialRun: true,
-					locateFile: name =>
-						name.endsWith('.wasm')
-							? assets.engineWasm
-							: assets.engineData,
-					print: message => console.info(message),
-					// Routine engine diagnostics also use stderr; it is not a severity signal.
-					printErr: message => console.info(message),
-					onAbort: message => {
-						console.error('The game aborted:', message);
-						fail(`The game stopped: ${message}.`);
-					},
-					onExit: code => {
-						const cancelled =
-							signal.aborted || lifetime.signal.aborted;
-						exited = true;
-						lifetime.abort();
-						stopped();
-						console.info('Tiberian Sun runtime stopped');
-						if (cancelled) return;
-						if (code !== 0) {
-							console.error(
-								`The game stopped (exit code ${code}).`
-							);
-							fail(`The game stopped (exit code ${code}).`);
-						} else callbacks.exit();
-					},
-				}),
-				downloadGame(
-					assets.gameData,
-					lifetime.signal,
-					callbacks.progress
-				),
-			]);
+			const loaded = await prepared.createEngine({
+				canvas,
+				webNetwork,
+				webYield,
+				webHasMouseHover,
+				noInitialRun: true,
+				wasmBinary: prepared.wasmBinary,
+				getPreloadedPackage: () => prepared.engineData,
+				print: message => console.info(message),
+				// Routine engine diagnostics also use stderr; it is not a severity signal.
+				printErr: message => console.info(message),
+				onAbort: message => {
+					console.error('The game aborted:', message);
+					fail(`The game stopped: ${message}.`);
+				},
+				onExit: code => {
+					const cancelled = signal.aborted || lifetime.signal.aborted;
+					exited = true;
+					lifetime.abort();
+					stopped();
+					console.info('Tiberian Sun runtime stopped');
+					if (cancelled) return;
+					if (code !== 0) {
+						console.error(`The game stopped (exit code ${code}).`);
+						fail(`The game stopped (exit code ${code}).`);
+					} else callbacks.exit();
+				},
+			});
 			engine = loaded;
 			signal.throwIfAborted();
 			loaded.FS.mkdirTree('/game');
@@ -207,7 +227,7 @@ export function startGame(
 				)
 			);
 			signal.throwIfAborted();
-			importGame(loaded, data);
+			importGame(loaded, prepared.gameData);
 			if (!loaded.FS.analyzePath('/save/SUN.INI').exists) {
 				loaded.FS.writeFile(
 					'/save/SUN.INI',
@@ -244,29 +264,15 @@ export function startGame(
 
 async function downloadGame(
 	url: string,
-	signal: AbortSignal,
-	progress: GameCallbacks['progress']
+	signal: AbortSignal
 ): Promise<Uint8Array<ArrayBuffer>> {
 	const response = await fetch(url, { signal });
 	if (!response.ok)
-		throw new Error(`Game download failed (${response.status})`);
+		throw new Error('Game download failed (' + response.status + ')');
 	if (!response.body) throw new Error('Game download has no response body');
-	const total = Number(response.headers.get('content-length'));
-	progress({ received: 0, ...(total > 0 ? { total } : {}) });
-	let received = 0;
-	const measured = response.body.pipeThrough(
-		new TransformStream<Uint8Array<ArrayBuffer>, BufferSource>({
-			transform(chunk, controller) {
-				received += chunk.byteLength;
-				progress({ received, ...(total > 0 ? { total } : {}) });
-				controller.enqueue(chunk);
-			},
-		})
-	);
 	const bytes = await new Response(
-		measured.pipeThrough(new DecompressionStream('gzip'))
+		response.body.pipeThrough(new DecompressionStream('gzip'))
 	).arrayBuffer();
-	progress(undefined);
 	return new Uint8Array(bytes);
 }
 

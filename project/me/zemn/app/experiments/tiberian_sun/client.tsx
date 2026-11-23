@@ -10,8 +10,7 @@ import {
 import style from '#root/project/me/zemn/app/experiments/tiberian_sun/style.module.css';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import {
-	type DownloadProgress,
-	type GameAssets,
+	type PreparedGame,
 	startGame,
 } from '#root/project/tiberian_sun/web/launcher.js';
 import {
@@ -21,33 +20,23 @@ import {
 	future_resolve,
 } from '#root/ts/future/future.js';
 
-type GameState = Future<void, DownloadProgress | undefined, string>;
+type GameState = Future<void, undefined, string>;
 
-export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
+export function TiberianSun({ prepared }: { readonly prepared: PreparedGame }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
 	const [state, setState] = useState<GameState>(() =>
 		future_loading(undefined)
 	);
 	const navigate = useNavigate();
-	const running = state(
-		() => true,
-		() => false,
-		() => false
-	);
 	const failed = state(
 		() => false,
 		() => false,
 		() => true
 	);
-	const progress = state(
-		() => undefined,
-		value => value,
-		() => undefined
-	);
 	const message = state(
 		() => 'Game running. Saves are kept in this browser.',
-		() => 'Loading Tiberian Sun…',
+		() => '',
 		error => error
 	);
 
@@ -60,12 +49,8 @@ export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
 		setState(() => future_loading(undefined));
 		startGame(
 			canvas,
-			assets,
+			prepared,
 			{
-				progress: value => {
-					if (!lifetime.signal.aborted)
-						setState(() => future_loading(value));
-				},
 				running: () => {
 					if (!lifetime.signal.aborted)
 						setState(() => future_resolve(undefined));
@@ -82,7 +67,7 @@ export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
 			lifetime.abort();
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [assets, navigate]);
+	}, [prepared, navigate]);
 
 	useEffect(() => {
 		if (failed) statusRef.current?.focus();
@@ -99,17 +84,11 @@ export function TiberianSun({ assets }: { readonly assets: GameAssets }) {
 				tabIndex={0}
 				aria-label="Tiberian Sun game"
 			/>
-			<main className={style.feedback} hidden={running}>
+			<main className={style.feedback} hidden={!failed}>
 				<div>
 					<p ref={statusRef} role="status" tabIndex={-1}>
 						{message}
 					</p>
-					<progress
-						aria-label="Downloading game files"
-						hidden={!progress}
-						max={progress?.total}
-						value={progress?.total ? progress.received : undefined}
-					/>
 					<section className={style.details} hidden={!failed}>
 						<h1>Tiberian Sun</h1>
 						<Link href="/experiments">← Experiments</Link>
