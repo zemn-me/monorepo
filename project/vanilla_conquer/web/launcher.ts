@@ -28,7 +28,6 @@ export type CinematicStatus =
 
 export interface GameCallbacks {
 	readonly progress: (progress: DownloadProgress | undefined) => void;
-	readonly ready: (start: () => void) => void;
 	readonly cinematic: (status: CinematicStatus | undefined) => void;
 	readonly running: () => void;
 	readonly error: (message: string) => void;
@@ -279,18 +278,6 @@ export function startGame(
 					}
 				}
 			};
-			if (assets.game === 'ra') {
-				// Start the intro from a user gesture so browser audio can play.
-				await new Promise<void>((resolve, reject) => {
-					lifetime.signal.addEventListener(
-						'abort',
-						() => reject(lifetime.signal.reason),
-						{ once: true }
-					);
-					callbacks.ready(resolve);
-				});
-				signal.throwIfAborted();
-			}
 			started = true;
 			callbacks.running();
 			canvas.focus();

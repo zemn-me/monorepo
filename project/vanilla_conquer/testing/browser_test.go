@@ -6,10 +6,15 @@ import (
 	"image"
 	"image/png"
 	"math"
+	"net/http"
+	"net/http/httptest"
+	"net/http/httputil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -320,40 +325,11 @@ func testBrowserCampaigns(t *testing.T, phone bool) {
 				t.Fatal(err)
 			}
 			if game.route == "red-alert" {
-				if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-					button, err := w.FindElement(selenium.ByCSSSelector, "button")
-					if err != nil {
-						return false, nil
-					}
-					return button.IsDisplayed()
-				}, 90*time.Second); err != nil {
-					t.Fatalf("start button: %v", err)
-				}
-				button, err := driver.FindElement(selenium.ByCSSSelector, "button")
-				if err != nil {
-					t.Fatal(err)
-				}
-				if count := movieRequests(t, driver); count != 0 {
-					t.Fatalf("cinematics downloaded before starting: %d", count)
-				}
+				waitMovie(t, driver, clock, 1)
 				value, err := driver.ExecuteScript(`return performance.getEntriesByType('resource').filter(r=>r.name.endsWith('.gz')&&!r.name.includes('.cinematic.gz')).reduce((n,r)=>n+r.encodedBodySize,0)`, nil)
 				if err != nil || value.(float64) > 30*1024*1024 {
 					t.Fatalf("initial game data exceeds 30 MiB: %v, %v", value, err)
 				}
-				for _, viewport := range []struct{ width, height int }{{390, 844}, {800, 600}} {
-					if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": viewport.width, "height": viewport.height, "screenWidth": 390, "screenHeight": 844, "deviceScaleFactor": 1, "mobile": false}); err != nil {
-						t.Fatal(err)
-					}
-					value, err := driver.ExecuteScript(`const b=arguments[0],r=b.getBoundingClientRect();return document.activeElement===b&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight&&r.height>=44&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{button})
-					if err != nil || value != true {
-						t.Fatalf("start button visibility/focus at width %d: %v, %v", viewport.width, value, err)
-					}
-					snapshot(t, driver, game.name+"-ready-"+strconv.Itoa(viewport.width))
-				}
-				if err := button.SendKeys(selenium.EnterKey); err != nil {
-					t.Fatal(err)
-				}
-				waitMovie(t, driver, clock, 1)
 				advance(t, clock, 3*time.Second)
 				snapshot(t, driver, game.name+"-intro")
 				advance(t, clock, 10*time.Second) // Let the intro finish naturally.
@@ -543,9 +519,6 @@ func TestCinematicDownloadFailure(t *testing.T) {
 			if err := driver.Get(siteURL(t) + "/experiments/red-alert"); err != nil {
 				t.Fatal(err)
 			}
-			if err := button(t, driver, clock, "Start Red Alert").Click(); err != nil {
-				t.Fatal(err)
-			}
 			button(t, driver, clock, "Retry")
 			if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
 				value, err := w.ExecuteScript(`const s=document.querySelector('[role=status]'),r=s.getBoundingClientRect();return s.textContent.includes('Could not load this cinematic')&&document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, nil)
@@ -583,19 +556,36 @@ func TestCinematicDownloadFailure(t *testing.T) {
 	}
 }
 
+func holdCinematics(t *testing.T) (string, func()) {
+	t.Helper()
+	upstream, err := url.Parse(siteURL(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	proxy := httputil.NewSingleHostReverseProxy(upstream)
+	released := make(chan struct{})
+	release := sync.OnceFunc(func() { close(released) })
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, ".cinematic.gz") {
+			select {
+			case <-released:
+			case <-r.Context().Done():
+				return
+			}
+		}
+		proxy.ServeHTTP(w, r)
+	}))
+	t.Cleanup(func() {
+		release()
+		server.Close()
+	})
+	return server.URL, release
+}
+
 func TestSkipDownloadingCinematic(t *testing.T) {
 	driver, clock := newBrowser(t, 390, 844)
-	if err := driver.Get(siteURL(t) + "/experiments/red-alert"); err != nil {
-		t.Fatal(err)
-	}
-	start := button(t, driver, clock, "Start Red Alert")
-	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ExecuteChromiumCommand("Network.emulateNetworkConditions", map[string]any{"offline": false, "latency": 30000, "downloadThroughput": -1, "uploadThroughput": -1}); err != nil {
-		t.Fatal(err)
-	}
-	if err := start.Click(); err != nil {
+	base, _ := holdCinematics(t)
+	if err := driver.Get(base + "/experiments/red-alert"); err != nil {
 		t.Fatal(err)
 	}
 	skip := button(t, driver, clock, "Skip cinematic")
@@ -609,9 +599,6 @@ func TestSkipDownloadingCinematic(t *testing.T) {
 	if err := skip.SendKeys(selenium.EscapeKey); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.ExecuteChromiumCommand("Network.emulateNetworkConditions", map[string]any{"offline": false, "latency": 0, "downloadThroughput": -1, "uploadThroughput": -1}); err != nil {
-		t.Fatal(err)
-	}
 	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{"width": 800, "height": 600, "deviceScaleFactor": 1, "mobile": false}); err != nil {
 		t.Fatal(err)
 	}
@@ -620,7 +607,7 @@ func TestSkipDownloadingCinematic(t *testing.T) {
 
 func TestCinematicNavigation(t *testing.T) {
 	driver, clock := newBrowser(t, 800, 600)
-	base := siteURL(t)
+	base, release := holdCinematics(t)
 	if err := driver.Get(base + "/experiments"); err != nil {
 		t.Fatal(err)
 	}
@@ -631,23 +618,11 @@ func TestCinematicNavigation(t *testing.T) {
 	if err := link.Click(); err != nil {
 		t.Fatal(err)
 	}
-	start := button(t, driver, clock, "Start Red Alert")
-	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ExecuteChromiumCommand("Network.emulateNetworkConditions", map[string]any{"offline": false, "latency": 30000, "downloadThroughput": -1, "uploadThroughput": -1}); err != nil {
-		t.Fatal(err)
-	}
-	if err := start.Click(); err != nil {
-		t.Fatal(err)
-	}
 	button(t, driver, clock, "Skip cinematic")
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.ExecuteChromiumCommand("Network.emulateNetworkConditions", map[string]any{"offline": false, "latency": 0, "downloadThroughput": -1, "uploadThroughput": -1}); err != nil {
-		t.Fatal(err)
-	}
+	release()
 	if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
 		url, err := w.CurrentURL()
 		return url == base+"/experiments", err
@@ -661,5 +636,6 @@ func TestCinematicNavigation(t *testing.T) {
 	if err := link.Click(); err != nil {
 		t.Fatal(err)
 	}
-	button(t, driver, clock, "Start Red Alert") // A second engine can start after the pending one shuts down.
+	waitMovie(t, driver, clock, 1)
+	waitMenu(t, driver, clock, "cinematic-navigation-restarted", 268)
 }

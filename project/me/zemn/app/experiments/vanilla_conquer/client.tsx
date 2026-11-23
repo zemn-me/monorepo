@@ -29,14 +29,12 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 	const title = assets.game === 'ra' ? 'Red Alert' : 'Command & Conquer';
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const statusRef = useRef<HTMLParagraphElement>(null);
-	const startRef = useRef<HTMLButtonElement>(null);
 	const [state, setState] = useState<GameState>(() =>
 		future_loading(undefined)
 	);
 	const navigate = useNavigate();
 	const [cinematic, setCinematic] = useState<CinematicStatus | undefined>();
 	const skipRef = useRef<HTMLButtonElement>(null);
-	const [start, setStart] = useState<(() => void) | undefined>();
 	const running = state(
 		() => true,
 		() => false,
@@ -65,7 +63,6 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';
 		setState(() => future_loading(undefined));
-		setStart(undefined);
 		setCinematic(undefined);
 		startGame(
 			canvas,
@@ -74,18 +71,13 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 				cinematic: value => {
 					if (!lifetime.signal.aborted) setCinematic(value);
 				},
-				ready: begin => {
-					if (!lifetime.signal.aborted) setStart(() => begin);
-				},
 				progress: value => {
 					if (!lifetime.signal.aborted)
 						setState(() => future_loading(value));
 				},
 				running: () => {
-					if (!lifetime.signal.aborted) {
-						setStart(undefined);
+					if (!lifetime.signal.aborted)
 						setState(() => future_resolve(undefined));
-					}
 				},
 				error: value => setState(() => future_error(value)),
 				exit: () => {
@@ -104,10 +96,6 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 	useEffect(() => {
 		if (failed) statusRef.current?.focus();
 	}, [failed]);
-
-	useEffect(() => {
-		if (start) startRef.current?.focus();
-	}, [start]);
 
 	const cinematicKind = cinematic?.kind;
 	useEffect(() => {
@@ -144,26 +132,14 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 							? cinematic.kind === 'error'
 								? 'Could not load this cinematic.'
 								: 'Loading cinematic…'
-							: start
-								? 'Red Alert is ready.'
-								: message}
+							: message}
 					</p>
-					{start && (
-						<button
-							type="button"
-							ref={startRef}
-							className={style.start}
-							onClick={start}
-						>
-							Start Red Alert
-						</button>
-					)}
 					{cinematic && (
 						<div className={style.actions}>
 							{cinematic.kind === 'error' && (
 								<button
 									type="button"
-									className={style.start}
+									className={style.action}
 									onClick={cinematic.retry}
 								>
 									Retry
@@ -172,7 +148,7 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 							<button
 								type="button"
 								ref={skipRef}
-								className={style.start}
+								className={style.action}
 								onClick={cinematic.skip}
 							>
 								Skip cinematic
@@ -187,7 +163,6 @@ export function VanillaConquer({ assets }: { readonly assets: GameAssets }) {
 						}
 						hidden={
 							(!cinematic && !progress) ||
-							!!start ||
 							cinematic?.kind === 'error'
 						}
 						max={displayedProgress?.total}

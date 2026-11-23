@@ -306,7 +306,7 @@ diff --git a/redalert/conquer.cpp b/redalert/conquer.cpp
 index 4825ba4..c1f83f2 100644
 --- a/redalert/conquer.cpp
 +++ b/redalert/conquer.cpp
-@@ -2355,6 +2355,13 @@ extern void Resume_Audio_Thread(void);
+@@ -2355,6 +2355,18 @@ extern void Resume_Audio_Thread(void);
  extern GraphicBufferClass VQ640;
  #endif
  
@@ -315,12 +315,17 @@ index 4825ba4..c1f83f2 100644
 +EM_ASYNC_JS(int, Web_LoadMovie, (const char* name), {
 +    return Module.webLoadMovie ? await Module.webLoadMovie(UTF8ToString(name)) : 0;
 +});
++
++EM_JS_DEPS(movie_audio, "$AL");
++EM_JS(int, Web_MovieAudioReady, (), {
++    return AL.currentCtx?.audioCtx.state === 'running';
++});
 +#endif
 +
  extern void Play_Movie_GlyphX(const char* movie_name, ThemeType theme, bool immediate);
  
  void Play_Movie(char const* name, ThemeType theme, bool clrscrn, bool immediate)
-@@ -2391,6 +2398,13 @@ void Play_Movie(char const* name, ThemeType theme, bool clrscrn, bool immediate)
+@@ -2391,6 +2403,13 @@ void Play_Movie(char const* name, ThemeType theme, bool clrscrn, bool immediate)
  #endif // CHEAT_KEYS
  
      if (name) {
@@ -334,7 +339,19 @@ index 4825ba4..c1f83f2 100644
          char fullname[_MAX_FNAME + _MAX_EXT];
          _makepath(fullname, NULL, NULL, name, ".VQA");
          char palname[_MAX_FNAME + _MAX_EXT];
-@@ -2514,6 +2528,9 @@ void Play_Movie(char const* name, ThemeType theme, bool clrscrn, bool immediate)
+@@ -2446,5 +2465,10 @@
+-        if (!Debug_Quiet && Get_Digi_Handle() != -1) {
++        bool playAudio = !Debug_Quiet && Get_Digi_Handle() != -1;
++#ifdef __EMSCRIPTEN__
++        // Use the video timer while the browser is blocking audio autoplay.
++        playAudio = playAudio && Web_MovieAudioReady();
++#endif
++        if (playAudio) {
+             AnimControl.OptionFlags |= VQAOPTF_AUDIO;
+         } else {
+             AnimControl.OptionFlags &= ~VQAOPTF_AUDIO;
+         }
+@@ -2514,6 +2538,9 @@ void Play_Movie(char const* name, ThemeType theme, bool clrscrn, bool immediate)
              BlackPalette.Adjust(0xFF);
              BlackPalette.Set();
          }
