@@ -9,9 +9,10 @@ Python toolchains used by the Tiberian Sun experiment. No Windows executable
 or CPU emulator runs in the browser.
 
 The standalone React routes are `/experiments/red-alert` and
-`/experiments/command-and-conquer`. They automatically download their
-content-addressed engine and gzip game package. Red Alert then shows a Start
-button so its intro can begin with browser audio enabled. Escape skips movies.
+`/experiments/command-and-conquer`. The route loader downloads the
+content-addressed engine and gzip game package. Red Alert starts automatically
+when those assets are ready. If the browser blocks audio, the intro plays
+silently. Escape skips movies.
 Each game has a separate IndexedDB save directory. Clearing site data removes local saves. Use a
 keyboard and mouse, or touch: one finger holds the left mouse button; two fingers
 hold the right mouse button until either finger lifts. After a two-finger gesture,
@@ -79,8 +80,8 @@ original VQA and its matching VQP palette when available. The catalog covers
 named movies from both the Allied and Soviet discs; shared filenames use
 Soviet-disc precedence, matching the native engine's archive order.
 
-Starting the page downloads no cinematics. After Start, the engine requests
-its intro, then requests briefing, action, and ending clips only when it
+The engine requests its intro on startup, then requests briefing, action,
+and ending clips only when it
 reaches their playback calls. Asyncify suspends the native call while React
 shows download progress. Retry repeats only the failed movie; Skip or Escape
 cancels that request and lets the native game continue. Navigating away aborts

@@ -27,7 +27,6 @@ export type CinematicStatus =
 	  };
 
 export interface GameCallbacks {
-	readonly progress: (progress: DownloadProgress | undefined) => void;
 	readonly cinematic: (status: CinematicStatus | undefined) => void;
 	readonly running: () => void;
 	readonly error: (message: string) => void;
@@ -64,7 +63,7 @@ interface EngineOptions {
 	readonly canvas: HTMLCanvasElement;
 	readonly webHasMouseHover: () => boolean;
 	readonly noInitialRun: true;
-	readonly locateFile: (name: string) => string;
+	readonly wasmBinary: Uint8Array<ArrayBuffer>;
 	readonly print: (message: string) => void;
 	readonly printErr: (message: string) => void;
 	readonly onAbort: (message: string) => void;
@@ -81,6 +80,55 @@ function isEngineModule(value: unknown): value is { default: EngineFactory } {
 	);
 }
 
+interface PreparedGame {
+	readonly createEngine: EngineFactory;
+	readonly wasmBinary: Uint8Array<ArrayBuffer>;
+	readonly gameData: Uint8Array<ArrayBuffer>;
+}
+
+export type GamePreparation =
+	| { readonly prepared: PreparedGame; readonly startupError?: never }
+	| { readonly prepared?: never; readonly startupError: string };
+
+export async function prepareGame(
+	assets: GameAssets,
+	signal: AbortSignal
+): Promise<GamePreparation> {
+	const downloads = new AbortController();
+	const downloadSignal = AbortSignal.any([signal, downloads.signal]);
+	const fetchBinary = async (url: string) => {
+		const response = await fetch(url, { signal: downloadSignal });
+		if (!response.ok)
+			throw new Error('Engine download failed (' + response.status + ')');
+		return response.arrayBuffer();
+	};
+	try {
+		const [imported, wasm, gameData] = await Promise.all([
+			import(
+				/* @vite-ignore */ assets.engineJavaScript
+			) as Promise<unknown>,
+			fetchBinary(assets.engineWasm),
+			downloadGame(assets.gameData, downloadSignal),
+		]);
+		signal.throwIfAborted();
+		if (!isEngineModule(imported)) throw new Error('Invalid engine module');
+		return {
+			prepared: {
+				createEngine: imported.default,
+				wasmBinary: new Uint8Array(wasm),
+				gameData,
+			},
+		};
+	} catch (error) {
+		signal.throwIfAborted();
+		console.error(error);
+		const detail = error instanceof Error ? error.message : String(error);
+		return { startupError: 'Could not start the game: ' + detail + '.' };
+	} finally {
+		downloads.abort();
+	}
+}
+
 // SDL owns document-level listeners and audio. A replacement mount waits for
 // the previous native shutdown before creating another engine in this document.
 let previousExit: Promise<void> = Promise.resolve();
@@ -88,6 +136,7 @@ let previousExit: Promise<void> = Promise.resolve();
 export function startGame(
 	canvas: HTMLCanvasElement,
 	assets: GameAssets,
+	prepared: PreparedGame,
 	callbacks: GameCallbacks,
 	signal: AbortSignal
 ): void {
@@ -128,46 +177,31 @@ export function startGame(
 		try {
 			await preceding;
 			signal.throwIfAborted();
-			const imported: unknown = await import(
-				/* @vite-ignore */ assets.engineJavaScript
-			);
-			if (!isEngineModule(imported))
-				throw new Error('Invalid engine module');
-			const [loaded, data] = await Promise.all([
-				imported.default({
-					canvas,
-					webHasMouseHover,
-					noInitialRun: true,
-					locateFile: () => assets.engineWasm,
-					print: message => console.info(message),
-					// Routine engine diagnostics also use stderr; it is not a severity signal.
-					printErr: message => console.info(message),
-					onAbort: message => {
-						console.error('The game aborted:', message);
-						fail(`The game stopped: ${message}.`);
-					},
-					onExit: code => {
-						const cancelled =
-							signal.aborted || lifetime.signal.aborted;
-						exited = true;
-						lifetime.abort();
-						stopped();
-						console.info('Vanilla Conquer runtime stopped');
-						if (cancelled) return;
-						if (code !== 0) {
-							console.error(
-								`The game stopped (exit code ${code}).`
-							);
-							fail(`The game stopped (exit code ${code}).`);
-						} else callbacks.exit();
-					},
-				}),
-				downloadGame(
-					assets.gameData,
-					lifetime.signal,
-					callbacks.progress
-				),
-			]);
+			const loaded = await prepared.createEngine({
+				canvas,
+				webHasMouseHover,
+				noInitialRun: true,
+				wasmBinary: prepared.wasmBinary,
+				print: message => console.info(message),
+				// Routine engine diagnostics also use stderr; it is not a severity signal.
+				printErr: message => console.info(message),
+				onAbort: message => {
+					console.error('The game aborted:', message);
+					fail(`The game stopped: ${message}.`);
+				},
+				onExit: code => {
+					const cancelled = signal.aborted || lifetime.signal.aborted;
+					exited = true;
+					lifetime.abort();
+					stopped();
+					console.info('Vanilla Conquer runtime stopped');
+					if (cancelled) return;
+					if (code !== 0) {
+						console.error(`The game stopped (exit code ${code}).`);
+						fail(`The game stopped (exit code ${code}).`);
+					} else callbacks.exit();
+				},
+			});
 			engine = loaded;
 			signal.throwIfAborted();
 			loaded.FS.mkdirTree('/game');
@@ -180,7 +214,7 @@ export function startGame(
 				)
 			);
 			signal.throwIfAborted();
-			importGame(loaded, data, assets.game);
+			importGame(loaded, prepared.gameData, assets.game);
 			const ini = assets.game === 'ra' ? 'redalert.ini' : 'conquer.ini';
 			loaded.FS.writeFile(
 				`/game/${ini}`,
@@ -303,16 +337,34 @@ export function startGame(
 async function downloadGame(
 	url: string,
 	signal: AbortSignal,
-	progress: GameCallbacks['progress']
+	progress?: (progress: DownloadProgress | undefined) => void
 ): Promise<Uint8Array<ArrayBuffer>> {
 	const response = await fetch(url, { signal, cache: 'force-cache' });
 	if (!response.ok)
 		throw new Error(`Game download failed (${response.status})`);
 	if (!response.body) throw new Error('Game download has no response body');
-	const total = Number(response.headers.get('content-length'));
+	const body = progress
+		? measureDownload(
+				response.body,
+				Number(response.headers.get('content-length')),
+				progress
+			)
+		: response.body;
+	const bytes = await new Response(
+		body.pipeThrough(new DecompressionStream('gzip'))
+	).arrayBuffer();
+	progress?.(undefined);
+	return new Uint8Array(bytes);
+}
+
+function measureDownload(
+	body: ReadableStream<Uint8Array<ArrayBuffer>>,
+	total: number,
+	progress: (progress: DownloadProgress) => void
+) {
 	progress({ received: 0, ...(total > 0 ? { total } : {}) });
 	let received = 0;
-	const measured = response.body.pipeThrough(
+	return body.pipeThrough(
 		new TransformStream<Uint8Array<ArrayBuffer>, BufferSource>({
 			transform(chunk, controller) {
 				received += chunk.byteLength;
@@ -321,11 +373,6 @@ async function downloadGame(
 			},
 		})
 	);
-	const bytes = await new Response(
-		measured.pipeThrough(new DecompressionStream('gzip'))
-	).arrayBuffer();
-	progress(undefined);
-	return new Uint8Array(bytes);
 }
 
 function importGame(

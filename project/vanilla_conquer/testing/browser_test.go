@@ -486,16 +486,15 @@ func TestDownloadFailure(t *testing.T) {
 				t.Fatal(err)
 			}
 			if err := driver.WaitWithTimeout(func(w selenium.WebDriver) (bool, error) {
-				status, err := w.FindElement(selenium.ByCSSSelector, "[role=status]")
-				if err != nil {
-					return false, nil
-				}
-				text, err := status.Text()
-				if err != nil || !strings.Contains(text, "Could not start the game") {
-					return false, err
-				}
-				value, err := w.ExecuteScript(`const s=arguments[0],r=s.getBoundingClientRect();return document.activeElement===s&&r.top>=0&&r.bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth`, []interface{}{status})
-				return value == true, err
+				visibleAndFocused, err := w.ExecuteScript(`
+					const status = document.activeElement;
+					const bounds = status.getBoundingClientRect();
+					return status.matches('[role=status]') &&
+						status.textContent.includes('Could not start the game') &&
+						bounds.top >= 0 && bounds.bottom <= innerHeight &&
+						document.documentElement.scrollWidth <= innerWidth;
+				`, nil)
+				return visibleAndFocused == true, err
 			}, 30*time.Second); err != nil {
 				t.Fatalf("download error is not visible and focused: %v", err)
 			}

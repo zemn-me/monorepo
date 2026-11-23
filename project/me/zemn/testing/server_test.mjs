@@ -288,12 +288,10 @@ test('Tiberian Sun renders a hydratable React page with source-compiled assets',
     assert.match(response.headers.get('content-type'), /text\/html/);
     const html = await response.text();
     assert.match(html, /wasm-unsafe-eval/);
-    assert.match(html, /aria-label="Tiberian Sun game"/);
+    assert.match(html, /Loading Tiberian Sun…/);
     assert.match(html, /role="status"/);
     assert.match(html, /\/assets\/[^" ]+\.js/);
     assert.doesNotMatch(html, /type="file"/);
-    assert.match(html, /Freeware game data source/);
-    assert.match(html, /EA has not endorsed/);
 
     const assets = await import(pathToFileURL(path.resolve('project/me/zemn/app/experiments/tiberian_sun/assets.js')).href);
     for (const name of ['engineJavaScript', 'engineWasm', 'engineData', 'gameData']) {

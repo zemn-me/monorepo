@@ -1,3 +1,4 @@
+import { type ClientLoaderFunctionArgs, useLoaderData } from 'react-router';
 import {
 	raData,
 	raJavaScript,
@@ -5,8 +6,14 @@ import {
 } from '#root/project/me/zemn/app/experiments/vanilla_conquer/assets.js';
 import { VanillaConquer } from '#root/project/me/zemn/app/experiments/vanilla_conquer/client.js';
 import { raCinematics } from '#root/project/vanilla_conquer/assets/cinematics.js';
-import type { GameAssets } from '#root/project/vanilla_conquer/web/launcher.js';
+import {
+	type GameAssets,
+	type GamePreparation,
+	prepareGame,
+} from '#root/project/vanilla_conquer/web/launcher.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
+
+export { ErrorBoundary } from '#root/ts/remix/error.js';
 
 const assets = {
 	game: 'ra',
@@ -15,11 +22,26 @@ const assets = {
 	gameData: raData,
 	cinematics: raCinematics,
 } satisfies GameAssets;
-export default function Page() {
-	return <VanillaConquer assets={assets} />;
+export function clientLoader({
+	request,
+}: ClientLoaderFunctionArgs): Promise<GamePreparation> {
+	return prepareGame(assets, request.signal);
 }
-export const metadata: Metadata = {
+
+export function shouldRevalidate() {
+	return false;
+}
+
+export function HydrateFallback() {
+	return <main role="status">{`Loading ${metadata.title}…`}</main>;
+}
+
+export default function Page() {
+	const preparation = useLoaderData<typeof clientLoader>();
+	return <VanillaConquer assets={assets} {...preparation} />;
+}
+export const metadata = {
 	title: 'Red Alert',
 	description: 'Play Red Alert in your browser.',
-};
+} satisfies Metadata;
 export const handle = { metadata };
