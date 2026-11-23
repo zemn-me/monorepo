@@ -1,6 +1,6 @@
 import * as functional from '#root/ts/iter/iterable_functional.js';
 import { NewType } from '#root/ts/NewType.js';
-import { None, type Option, Some } from '#root/ts/option/option.js';
+import { is_none, None, type Option, Some } from '#root/ts/option/types.js';
 
 export * as dict from '#root/ts/iter/dict.js';
 
@@ -340,7 +340,7 @@ export function* zip2<A, B>(
 
 		yield ret;
 
-		if (ret.every(v => v.is_none())) break;
+		if (ret.every(is_none)) break;
 	}
 }
 
@@ -358,7 +358,7 @@ class impl<T> extends NewType<T> {
 		return new impl(map(this.value, f));
 	}
 	filter<T>(this: _Iterable<Option<T>>): _Iterable<T> {
-		return new impl(functional.filter<T>(this.map(v => v.value).value));
+		return new impl(functional.filter<T>(this.value));
 	}
 	sort<T>(this: _Iterable<T>, compareFn?: (a: T, b: T) => number): impl<T[]> {
 		return new impl([...this.value].sort(compareFn));

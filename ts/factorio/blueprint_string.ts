@@ -6,7 +6,7 @@ import { Blueprint } from '#root/ts/factorio/blueprint.js';
 import { BlueprintBook } from '#root/ts/factorio/blueprint_book.js';
 import { BlueprintWrapper } from '#root/ts/factorio/blueprint_wrapper.js';
 import { safeParseJSON } from '#root/ts/json.js';
-import { Ok } from '#root/ts/result.js';
+import { Err, Ok, unwrap_or_else } from '#root/ts/result/result.js';
 import { Base64 } from '#root/ts/zod/util.js';
 
 // The version byte is currently 0 (for all Factorio versions through 1.1)
@@ -19,23 +19,29 @@ export const BlueprintString = z
 	})
 	.transform(v => v.slice(1))
 	.pipe(Base64)
-	.transform((val, ctx) =>
-		Ok(() => pako.inflate(val))
-			.safely()
-			.unwrap_or_else(e => {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: `invalid flate compression: ${e}`,
-				});
+	.transform((val, ctx) => {
+		const inflated = (() => {
+			try {
+				return Ok(pako.inflate(val));
+			} catch (error) {
+				return Err(error);
+			}
+		})();
 
-				return z.NEVER;
-			})
-	)
-	.transform((val, ctx) =>
-		safeParseJSON(new TextDecoder().decode(val)).unwrap_or_else(e => {
+		return unwrap_or_else(inflated, error => {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: `invalid JSON: ${e}`,
+				code: 'custom',
+				message: `invalid flate compression: ${error}`,
+			});
+
+			return z.NEVER;
+		});
+	})
+	.transform((val, ctx) =>
+		unwrap_or_else(safeParseJSON(new TextDecoder().decode(val)), error => {
+			ctx.addIssue({
+				code: 'custom',
+				message: `invalid JSON: ${error}`,
 				fatal: true,
 			});
 			return z.NEVER;

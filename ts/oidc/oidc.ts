@@ -26,7 +26,7 @@ export const stringToJSON = z.string().transform((s, ctx) => {
 		return JSON.parse(s);
 	} catch {
 		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
+			code: 'custom',
 			message: 'Expected a valid JSON string.',
 		});
 		return z.NEVER;
@@ -126,7 +126,7 @@ const base64UrlBytes = z.string().transform((value, ctx) => {
 		return b64.toByteArray(normalized + padding);
 	} catch (_error) {
 		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
+			code: 'custom',
 			message: 'Expected base64url payload',
 		});
 		return z.NEVER;

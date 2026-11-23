@@ -6,9 +6,8 @@ import {
 	it,
 	jest,
 } from '@jest/globals';
-import type { AnchorHTMLAttributes, ReactNode } from 'react';
+import { type AnchorHTMLAttributes, act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 
 jest.unstable_mockModule(
 	'#root/project/me/zemn/components/Glade/menu.module.css',

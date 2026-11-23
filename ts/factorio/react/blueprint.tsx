@@ -14,10 +14,10 @@ import { Color } from '#root/ts/factorio/color.js';
 import { Entity } from '#root/ts/factorio/entity.js';
 import { Tile } from '#root/ts/factorio/tile.js';
 import { UpgradePlanner } from '#root/ts/factorio/upgrade_planner.js';
-import { Some } from '#root/ts/option/option.js';
+import * as Option from '#root/ts/option/types.js';
 import { CopyToClipboard } from '#root/ts/react/CopyToClipboard/CopyToClipboard.js';
 import { ErrorDisplay } from '#root/ts/react/ErrorDisplay/error_display.js';
-import { and_then, unwrap_or_else, zip } from '#root/ts/result_types.js';
+import { and_then, unwrap_or_else, zip } from '#root/ts/result/result.js';
 import { resultFromZod } from '#root/ts/zod/util.js';
 
 export interface RenderBlueprintProps {
@@ -113,10 +113,12 @@ export interface DisplayUpgradePlannerProps {
 export function DisplayUpgradePlanner({ planner }: DisplayUpgradePlannerProps) {
 	return (
 		<figure>
-			{Some(planner.label)
-				.from()
-				.and_then(l => <figcaption>{l}</figcaption>)
-				.unwrap_or(null)}
+			{Option.unwrap_or(
+				Option.and_then(Option.from(planner.label), label => (
+					<figcaption>{label}</figcaption>
+				)),
+				null
+			)}
 			<ul>
 				{planner.settings.mappers.map(v => (
 					<li key={v.index}>
@@ -163,12 +165,17 @@ export function DisplayBlueprintBook({ book }: DisplayBlueprintBookProps) {
 									book={blueprint.blueprint_book}
 								/>
 							) : null}
-							{Some(blueprint.upgrade_planner)
-								.from()
-								.and_then(planner => (
-									<DisplayUpgradePlanner planner={planner} />
-								))
-								.unwrap_or(null)}
+							{Option.unwrap_or(
+								Option.and_then(
+									Option.from(blueprint.upgrade_planner),
+									planner => (
+										<DisplayUpgradePlanner
+											planner={planner}
+										/>
+									)
+								),
+								null
+							)}
 						</li>
 					))}
 				</ol>
