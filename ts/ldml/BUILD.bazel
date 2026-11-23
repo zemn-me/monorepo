@@ -1,0 +1,42 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+ts_project(
+    name = "ldml",
+    srcs = ["index.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "index.ts",
+        "ldml_test.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "ldml_tests",
+    srcs = ["ldml_test.ts"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":ldml",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["ldml_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":ldml_tests"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+    visibility = ["//:__subpackages__"],
+)
