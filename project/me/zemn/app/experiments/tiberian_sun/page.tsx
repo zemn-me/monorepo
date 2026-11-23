@@ -13,6 +13,8 @@ import {
 } from '#root/project/tiberian_sun/web/launcher.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 
+export { ErrorBoundary } from '#root/ts/remix/error.js';
+
 const assets = {
 	engineJavaScript,
 	engineWasm,

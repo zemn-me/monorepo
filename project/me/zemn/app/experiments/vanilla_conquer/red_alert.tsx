@@ -13,6 +13,8 @@ import {
 } from '#root/project/vanilla_conquer/web/launcher.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 
+export { ErrorBoundary } from '#root/ts/remix/error.js';
+
 const assets = {
 	game: 'ra',
 	engineJavaScript: raJavaScript,
