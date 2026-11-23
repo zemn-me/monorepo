@@ -162,6 +162,100 @@
 	counter-reset: toc-h1 toc-h2 toc-h3 toc-h4 toc-h5;
 }
 
+.menuTocSection {
+	display: grid;
+	gap: 0.35rem;
+	margin-bottom: 0.6rem;
+	padding-bottom: 0.6rem;
+	border-bottom: 1px solid
+		color-mix(in srgb, var(--foreground-color) 16%, transparent);
+}
+
+.menuTocHeading {
+	margin: 0;
+	color: color-mix(in srgb, var(--foreground-color) 72%, transparent);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.menuToc ul {
+	display: grid;
+	gap: 0.35rem;
+	margin: 0;
+	padding: 0;
+	counter-reset: toc-h1 toc-h2 toc-h3 toc-h4 toc-h5;
+}
+
+.menuToc li {
+	font-variant-numeric: tabular-nums;
+	list-style: none;
+}
+
+.menuToc li[data-toc-heading-level="1"] {
+	counter-increment: toc-h1;
+	counter-reset: toc-h2 toc-h3 toc-h4 toc-h5;
+}
+
+.menuToc li[data-toc-heading-level="2"] {
+	counter-increment: toc-h2;
+	counter-reset: toc-h3 toc-h4 toc-h5;
+	padding-inline-start: 0.8rem;
+}
+
+.menuToc li[data-toc-heading-level="3"] {
+	counter-increment: toc-h3;
+	counter-reset: toc-h4 toc-h5;
+	padding-inline-start: 1.6rem;
+}
+
+.menuToc li[data-toc-heading-level="4"] {
+	counter-increment: toc-h4;
+	counter-reset: toc-h5;
+	padding-inline-start: 2.4rem;
+}
+
+.menuToc li[data-toc-heading-level="5"] {
+	counter-increment: toc-h5;
+	padding-inline-start: 3.2rem;
+}
+
+.menuToc a {
+	color: inherit;
+	letter-spacing: 0;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+	text-decoration-color: var(--link-color);
+}
+
+.menuToc a::before {
+	margin-inline-end: 0.35rem;
+	opacity: 0.6;
+}
+
+.menuToc li[data-toc-heading-level="1"] > a::before {
+	content: counter(toc-h1, upper-roman) ".";
+}
+
+.menuToc li[data-toc-heading-level="2"] > a::before {
+	content: counter(toc-h2) ".";
+}
+
+.menuToc li[data-toc-heading-level="3"] > a::before {
+	content: counter(toc-h2) "." counter(toc-h3) ".";
+}
+
+.menuToc li[data-toc-heading-level="4"] > a::before {
+	content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) ".";
+}
+
+.menuToc li[data-toc-heading-level="5"] > a::before {
+	content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "."
+		counter(toc-h5) ".";
+}
+
 .container nav li {
 	font-variant-numeric: tabular-nums;
 }
