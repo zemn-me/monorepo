@@ -1331,7 +1331,7 @@
 	justify-content: center;
 	min-inline-size: 44px;
 	padding-inline: 0.5rem;
-	text-decoration: none;
+	text-decoration-line: none;
 }
 
 @media (max-width: 24rem) {
@@ -1342,7 +1342,7 @@
 
 .wikiNavigation[aria-current="page"] {
 	background: var(--journal-surface);
-	text-decoration: underline;
+	text-decoration-line: underline;
 	text-underline-offset: 0.3em;
 }
 

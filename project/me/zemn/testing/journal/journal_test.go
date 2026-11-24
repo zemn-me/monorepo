@@ -2444,7 +2444,12 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 		if err := driver.Get(root.String()); err != nil {
 			t.Fatal(err)
 		}
-		if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//details[not(@open)]/summary[normalize-space()='Recording locations']", 60*time.Second); err != nil {
+		disclosure, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//summary[normalize-space()='Recording locations']", 60*time.Second)
+		if err != nil {
+			browserhelpers.DumpPageDiagnostics(t, driver)
+			t.Fatalf("find recording locations on %s: %v", route, err)
+		}
+		if err := browserhelpers.ClickElementInView(driver, disclosure); err != nil {
 			t.Fatalf("open recording locations on %s: %v", route, err)
 		}
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label^='Recording locations:'] a[aria-label*='40.7000, -74.0000']", 60*time.Second); err != nil {
