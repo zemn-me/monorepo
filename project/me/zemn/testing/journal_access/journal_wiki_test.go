@@ -198,7 +198,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := reference.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "audio", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal player'] input[aria-label='Seek recording']", 30*time.Second); err != nil {
 		t.Fatal("citation did not open source audio: ", err)
 	}
 	root.Path, root.RawQuery = "/journal", "wiki=00000000-0000-0000-0000-000000000000"
@@ -529,6 +529,43 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
+	click(selenium.ByCSSSelector, "button[aria-label='Play A quieter kind of launch']")
+	slider := find(selenium.ByCSSSelector, "input[aria-label='Seek recording']")
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		value, err := wd.ExecuteScript(`
+			const canvas = document.querySelector('[aria-label="Journal player"] canvas');
+			if (!canvas || !canvas.width || !canvas.height) return false;
+			const row = canvas.getContext('2d').getImageData(0, Math.floor(canvas.height / 3), canvas.width, 1).data;
+			return row.some((value, index) => index % 4 === 3 && value > 0);
+		`, nil)
+		return value == true, err
+	}, 15*time.Second); err != nil {
+		t.Fatal("recording waveform did not show audible peaks", err)
+	}
+	if buttons, _ := driver.FindElements(selenium.ByCSSSelector, "button[aria-label='Pause recording']"); len(buttons) > 0 {
+		if err := browserhelpers.ClickElementInView(driver, buttons[0]); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := slider.SendKeys(selenium.HomeKey + selenium.RightArrowKey); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		v, err := wd.ExecuteScript("const a=document.querySelector('main audio'); return a.paused && Math.abs(a.currentTime - 0.1) < 0.05", nil)
+		return v == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatal("keyboard scrubbing did not seek the paused recording", err)
+	}
+	capture("16-player-desktop", "[data-journal-page]", 1440, 1000, false)
+	capture("17-player-phone", "[data-journal-page]", 390, 844, false)
+	click(selenium.ByLinkText, "Wiki")
+	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
+	find(selenium.ByCSSSelector, "[aria-label='Journal player'] [aria-label='Transcript']")
+	if err := driver.Back(); err != nil {
+		t.Fatal(err)
+	}
+	find(selenium.ByCSSSelector, "[aria-label='Journal day']")
+	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	// Use the rehearsal day for aggregate screenshots. Its week and month
 	// always contain another fixture day, even when the launch is the only
 	// day in a new month and correctly reuses its day summary instead.
