@@ -1,16 +1,79 @@
 .locationMap {
+	--map-land: color-mix(
+		in srgb,
+		var(--background-color) 95%,
+		var(--foreground-color)
+	);
 	position: relative;
 	block-size: 144px;
 	overflow: hidden;
-	border-radius: 0.5rem;
-	margin-block: 0.75rem;
-	background: #e6e9e5;
+	border-radius: 0.375rem;
+	margin-block: 0.75rem 1rem;
+	background: var(--map-land);
 	isolation: isolate;
 }
-.locationMap > img {
+
+.mapTiles {
 	position: absolute;
-	max-width: none;
+	inset: 0;
+	pointer-events: none;
 }
+
+.green {
+	fill: color-mix(in srgb, var(--link-color) 17%, var(--map-land));
+}
+
+.water {
+	fill: color-mix(in srgb, var(--foreground-color) 32%, var(--map-land));
+}
+
+.river,
+.boundary,
+.road,
+.arterial {
+	fill: none;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.river {
+	stroke: color-mix(in srgb, var(--foreground-color) 43%, var(--map-land));
+	stroke-width: 1.35px;
+}
+.boundary {
+	stroke: var(--journal-line);
+	stroke-width: 1px;
+	stroke-dasharray: 3 3;
+}
+.road {
+	stroke: color-mix(in srgb, var(--foreground-color) 31%, var(--map-land));
+	stroke-width: 0.8px;
+}
+.arterial {
+	stroke: color-mix(in srgb, var(--foreground-color) 55%, var(--map-land));
+	stroke-width: 1.65px;
+}
+
+.mapTiles text {
+	fill: var(--foreground-color);
+	stroke: var(--map-land);
+	stroke-width: 2.5px;
+	stroke-linejoin: round;
+	paint-order: stroke;
+	font:
+		11px / 1.25 system-ui,
+		sans-serif;
+}
+
+.mapError {
+	position: absolute;
+	inset-block-end: 0.4rem;
+	inset-inline-start: 0.5rem;
+	color: var(--journal-muted);
+	font: var(--journal-control-font);
+	font-size: 0.75rem;
+}
+
 .mapPin {
 	position: absolute;
 	transform: translate(-50%, -50%);
@@ -19,37 +82,43 @@
 	inline-size: 44px;
 	block-size: 44px;
 	border-radius: 50%;
-	text-decoration: none;
 }
+
 .mapPin > span {
 	display: grid;
 	place-items: center;
 	box-sizing: border-box;
-	inline-size: 24px;
-	block-size: 24px;
-	border: 2px solid white;
+	inline-size: 21px;
+	block-size: 21px;
+	border: 2px solid var(--background-color);
+	border-radius: 50% 50% 50% 0;
+	background: var(--foreground-color);
+	transform: translateY(-14px) rotate(-45deg);
+	box-shadow: 0 1px 3px #0004;
+}
+
+.mapPin > span::after {
+	content: "";
+	inline-size: 7px;
+	block-size: 7px;
 	border-radius: 50%;
-	background: #9b3232;
-	color: white;
-	box-shadow: 0 1px 4px #0006;
-	font-size: 10px;
+	background: var(--highlight-color);
 }
+
+.mapPin:hover > span,
+.mapPin:focus-visible > span {
+	background: var(--highlight-color);
+}
+
+.mapPin:hover > span::after,
+.mapPin:focus-visible > span::after {
+	background: var(--highlight-foreground-color);
+}
+
 .mapPin:focus-visible {
-	outline: 2px solid #152e56;
-	outline-offset: 0;
+	outline: 2px solid var(--foreground-color);
+	outline-offset: -2px;
 	z-index: 1;
-}
-.mapAttribution {
-	position: absolute;
-	inset-block-end: 0;
-	inset-inline-end: 0;
-	background: #fffffff0;
-	color: #222;
-	font: 12px / 1.5 sans-serif;
-	padding-inline: 4px;
-}
-.mapAttribution a {
-	color: inherit;
 }
 
 .page {

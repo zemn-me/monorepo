@@ -2391,16 +2391,26 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 			browserhelpers.DumpPageDiagnostics(t, driver)
 			t.Fatalf("recording pin missing on %s: %v", route, err)
 		}
+		if route == "/journal" {
+			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] > header + [aria-label^='Recording locations:'] + ol", 30*time.Second); err != nil {
+				t.Fatalf("recent entries map must sit between the heading and list: %v", err)
+			}
+		}
 		thin, err := driver.ExecuteScript(`return Array.from(document.querySelectorAll('[role="region"][aria-label^="Recording locations:"]')).every(map => map.getBoundingClientRect().height === 144)`, nil)
 		if err != nil || thin != true {
 			t.Fatalf("map height on %s: %v, %v", route, thin, err)
 		}
 		for _, width := range []int{1280, 390} {
-			if err := driver.ResizeWindow("", width, 844); err != nil {
+			if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+				"width": width, "height": 844, "deviceScaleFactor": 1, "mobile": false,
+			}); err != nil {
 				t.Fatal(err)
 			}
 			if _, err := driver.ExecuteScript(`document.querySelector('[role="region"][aria-label^="Recording locations:"]').scrollIntoView({block: 'center', behavior: 'instant'})`, nil); err != nil {
 				t.Fatal(err)
+			}
+			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "aside[aria-label='Copyright notices'] a[href='https://www.openstreetmap.org/copyright']", 10*time.Second); err != nil {
+				t.Fatalf("visible map has no copyright notice: %v", err)
 			}
 			usable, err := driver.ExecuteScript(`
 				const pins = [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"] a[aria-label]')];
@@ -2414,8 +2424,32 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 				t.Fatalf("map targets or layout on %s at %dpx: %v, %v", route, width, usable, err)
 			}
 			if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" && route == "/journal/year" {
-				if screenshot, err := driver.Screenshot(); err == nil {
-					_ = os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-map-%d.png", width)), screenshot, 0600)
+				if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "svg[aria-label='Location map'][aria-busy='false']", 30*time.Second); err != nil {
+					t.Fatal("map did not finish loading its vector tiles", err)
+				}
+
+				for _, scheme := range []string{"light", "dark"} {
+					if err := driver.ExecuteChromiumCommand("Emulation.setEmulatedMedia", map[string]any{
+						"features": []map[string]string{{"name": "prefers-color-scheme", "value": scheme}},
+					}); err != nil {
+						t.Fatal(err)
+					}
+					// Allow the new media query to paint before capturing its palette.
+					painted, err := driver.ExecuteScriptAsync(`
+						const [scheme, done] = arguments;
+						requestAnimationFrame(() => requestAnimationFrame(() =>
+							done(matchMedia('(prefers-color-scheme: ' + scheme + ')').matches)));
+					`, []any{scheme})
+					if err != nil || painted != true {
+						t.Fatalf("map did not switch to %s: %v %v", scheme, painted, err)
+					}
+					screenshot, err := driver.Screenshot()
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err := os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-map-%s-%d.png", scheme, width)), screenshot, 0600); err != nil {
+						t.Fatal(err)
+					}
 				}
 			}
 		}
@@ -2424,19 +2458,43 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	href, err := pin.GetAttribute("href")
+	destination, err := pin.GetAttribute("href")
 	if err != nil {
 		t.Fatal(err)
 	}
-	target, err := url.Parse(href)
-	if err != nil || target.Query().Get("entry") == "" {
-		t.Fatalf("missing recording in map link %q: %v", href, err)
+	mapLink, err := url.Parse(destination)
+	if err != nil || mapLink.Fragment == "" {
+		t.Fatalf("map pin needs a recording anchor: %s %v", destination, err)
 	}
 	if err := pin.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByID, "entry-"+target.Query().Get("entry"), 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByID, mapLink.Fragment, 30*time.Second); err != nil {
 		t.Fatalf("map pin did not open its note: %v", err)
+	}
+	entry, err := driver.FindElement(selenium.ByID, mapLink.Fragment)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := entry.FindElement(selenium.ByCSSSelector, ":scope > header + [role='region'][aria-label^='Recording locations:']"); err != nil {
+		t.Fatalf("recording map must immediately follow its title and controls: %v", err)
+	}
+	browserhelpers.SaveNavigationScreenshot(t, driver, "journal-entry-map.png")
+	// The day may contain just this one entry. Use a short viewport so
+	// scrolling to the site's header puts the entire map out of view.
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+		"width": 390, "height": 220, "deviceScaleFactor": 1, "mobile": false,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := driver.ExecuteScript("window.scrollTo({top: 0, behavior: 'instant'})", nil); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		value, err := wd.ExecuteScript(`return [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"]')].every(map => map.getBoundingClientRect().top >= innerHeight || map.getBoundingClientRect().bottom <= 0) && !document.querySelector('aside[aria-label="Copyright notices"]')`, nil)
+		return value == true, err
+	}, 10*time.Second); err != nil {
+		t.Fatalf("copyright remained after scrolling away from maps: %v", err)
 	}
 }
 

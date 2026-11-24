@@ -760,6 +760,7 @@ function EntryCard({
 						</details>
 					)}
 			</header>
+			{entry.location && <JournalMap entries={[entry]} />}
 			{entry.status === 'processing' ? (
 				<JournalProcessingStatus progress={entry.processingProgress} />
 			) : (
@@ -802,7 +803,6 @@ function EntryCard({
 					timeZone={entry.timeZone}
 				/>
 			)}
-			{entry.status !== 'ready' && <JournalMap entries={[entry]} />}
 		</article>
 	);
 }
@@ -940,6 +940,7 @@ function periodMidpoint(period: Pick<JournalPeriodNode, 'start' | 'end'>) {
 }
 
 function PeriodOverview({
+	locations,
 	timeZone,
 	curation,
 	children,
@@ -950,6 +951,7 @@ function PeriodOverview({
 	readonly timeZone?: string;
 	readonly curation: boolean;
 	readonly children: readonly JournalPeriodNode[];
+	readonly locations: readonly JournalEntry[];
 	readonly nextRoute: JournalRoute;
 	readonly node: JournalPeriodNode;
 	readonly playback: JournalPlayback;
@@ -969,6 +971,7 @@ function PeriodOverview({
 				</h2>
 			</header>
 			<div className={style.periodBody}>
+				<JournalMap entries={locations} />
 				{node.summary && (
 					<SummaryCard
 						playback={playback}
@@ -1334,6 +1337,7 @@ function PeriodList({
 			>
 				{nextRoute ? (
 					<PeriodOverview
+						locations={journal.browse?.locations ?? []}
 						timeZone={journal.browse?.timeZone}
 						key={node.id}
 						curation={journal.curation !== undefined}
@@ -1371,13 +1375,6 @@ function PeriodList({
 						))}
 					</>
 				)}
-				<JournalMap
-					entries={
-						period === 'day'
-							? entries
-							: (journal.browse?.locations ?? [])
-					}
-				/>
 			</section>
 		</div>
 	);
@@ -1516,10 +1513,13 @@ function CalendarNavigation({
 	);
 }
 
-function RecentEntries({ journal }: { readonly journal: Journal }) {
+function RecentEntries({
+	entries,
+}: {
+	readonly entries: readonly JournalEntry[];
+}) {
 	const [language] = useLocale();
-	const entries = [...journal.entries]
-		.filter(entry => entry.status === 'ready')
+	const recent = [...entries]
 		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))
 		.slice(0, 5);
 	if (entries.length === 0) return null;
@@ -1530,12 +1530,13 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 		>
 			<header>
 				<h2 id="recent-journal-entries">Recent entries</h2>
-				<Link href={journalHref('day', entries[0]?.recordedAt)}>
+				<Link href={journalHref('day', recent[0]?.recordedAt)}>
 					Browse days
 				</Link>
 			</header>
+			<JournalMap entries={entries} />
 			<ol>
-				{entries.map(entry => {
+				{recent.map(entry => {
 					const date = journalEntryDate(entry);
 					return (
 						<li key={entry.id}>
@@ -1836,7 +1837,7 @@ function JournalBrowser({
 				/>
 				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
-				<RecentEntries journal={journal} />
+				<RecentEntries entries={readyEntries} />
 				{summary ? (
 					<SummaryCard
 						playback={playback}
@@ -1858,7 +1859,6 @@ function JournalBrowser({
 						</div>
 					)
 				)}
-				<JournalMap entries={readyEntries} />
 			</div>
 		);
 	}
