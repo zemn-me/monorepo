@@ -1,0 +1,61 @@
+load("@aspect_rules_js//js:defs.bzl", "js_image_layer")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "js_binary")
+load("//ts:rules.bzl", "ts_project")
+
+ts_project(
+    name = "deploy_lib",
+    srcs = ["deploy.ts"],
+    deps = [
+        "//ts/pulumi",
+        "//ts/pulumi:cli",
+    ],
+)
+
+js_binary(
+    name = "deploy",
+    data = [":deploy_lib"],
+    entry_point = "deploy.js",
+)
+
+# Keep the launcher, its Node runtime, pnpm links and Pulumi assets together.
+js_image_layer(
+    name = "layers",
+    binary = ":deploy",
+    layer_groups = {"bundle": ""},
+    tags = ["manual"],
+)
+
+filegroup(
+    name = "bundle",
+    srcs = [":layers"],
+    output_group = "bundle",
+    tags = ["manual"],
+)
+
+sh_test(
+    name = "bundle_test",
+    size = "medium",
+    srcs = ["bundle_test.sh"],
+    args = [
+        "$(rootpath run.sh)",
+        "$(rootpath :bundle)",
+    ],
+    data = [
+        "run.sh",
+        ":bundle",
+    ],
+    tags = ["manual"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = ["deploy.ts"],
+    visibility = ["//:__subpackages__"],
+)
