@@ -198,7 +198,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := reference.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "audio", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal player'] input[aria-label='Seek recording']", 30*time.Second); err != nil {
 		t.Fatal("citation did not open source audio: ", err)
 	}
 	root.Path, root.RawQuery = "/journal", "wiki=00000000-0000-0000-0000-000000000000"
@@ -386,6 +386,8 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if got, err := selectedTitle.Text(); err != nil || got != wantTitle {
 		t.Fatalf("recent entry opened %q, want %q: %v", got, wantTitle, err)
 	}
+	find(selenium.ByXPATH, "//*[@aria-label='Journal player']//strong/a[normalize-space()='"+wantTitle+"']")
+	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	capture("02-wiki-index-desktop", "section[aria-label='Diary wiki']", 1440, 1000, true)
@@ -448,6 +450,115 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
+	click(selenium.ByCSSSelector, "button[aria-label='Play A quieter kind of launch']")
+	slider := find(selenium.ByCSSSelector, "input[aria-label='Seek recording']")
+	waitForWaveform := func() {
+		t.Helper()
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			value, err := wd.ExecuteScript(`
+			const canvas = document.querySelector('[aria-label="Journal player"] canvas');
+			if (!canvas || !canvas.width || !canvas.height) return false;
+			const row = canvas.getContext('2d').getImageData(0, Math.floor(canvas.height / 3), canvas.width, 1).data;
+			return row.some((value, index) => index % 4 === 3 && value > 0);
+		`, nil)
+			return value == true, err
+		}, 15*time.Second); err != nil {
+			t.Fatal("recording waveform did not show audible peaks", err)
+		}
+	}
+	waitForWaveform()
+	if buttons, _ := driver.FindElements(selenium.ByCSSSelector, "button[aria-label='Pause recording']"); len(buttons) > 0 {
+		if err := browserhelpers.ClickElementInView(driver, buttons[0]); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := slider.SendKeys(selenium.HomeKey + selenium.RightArrowKey); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		v, err := wd.ExecuteScript("const a=document.querySelector('main audio'); return a.paused && Math.abs(a.currentTime - 0.1) < 0.05", nil)
+		return v == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatal("keyboard scrubbing did not seek the paused recording", err)
+	}
+	for _, size := range []struct{ width, height int }{{1440, 1000}, {390, 844}} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": size.width, "height": size.height, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		for _, title := range []string{"Coffee with Maya before the pilot", "A quieter kind of launch"} {
+			titleLink := find(selenium.ByXPATH, "//article/header/h3/a[normalize-space()='"+title+"']")
+			if err := browserhelpers.ClickElementInView(driver, titleLink); err != nil {
+				t.Fatal(err)
+			}
+			valid, err := driver.ExecuteScript(`
+				const player = document.querySelector('[aria-label="Journal player"]');
+				return document.querySelectorAll('main audio').length === 1 &&
+					document.querySelectorAll('[aria-label="Seek recording"]').length === 1 &&
+					document.querySelectorAll('[aria-label="Transcript"]').length === 1 &&
+					player.querySelector('strong').textContent === arguments[0];
+			`, []any{title})
+			if err != nil || valid != true {
+				t.Fatalf("switch to %s left duplicate or stale controls: %v %v", title, valid, err)
+			}
+		}
+		if _, err := driver.ExecuteScript(`
+			const heading = document.querySelector("article[id^='entry-'] > header");
+			const toolbar = document.querySelector('[data-journal-toolbar]');
+			const pinnedHeight = parseFloat(getComputedStyle(toolbar).top) + toolbar.offsetHeight;
+			window.scrollBy({top: heading.getBoundingClientRect().top - pinnedHeight - 12, behavior: 'instant'});
+		`, nil); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			state, err := wd.ExecuteScript(`
+				const player=document.querySelector('[aria-label="Journal player"]').getBoundingClientRect();
+				const banner=document.querySelector('header[data-glade-banner]').getBoundingClientRect();
+				const toolbar=document.querySelector('[data-journal-toolbar]').getBoundingClientRect();
+				if (scrollY <= 0 || toolbar.bottom >= innerHeight) return false;
+				if (arguments[0]) return player.right < toolbar.left && player.top >= banner.bottom && player.bottom <= innerHeight;
+				return Math.abs(player.top-banner.bottom) <= 1 && Math.abs(toolbar.top-player.bottom) <= 1;
+			`, []any{size.width == 1440})
+			return state == true, err
+		}, 5*time.Second); err != nil {
+			t.Fatalf("pinned controls at width %d: %v", size.width, err)
+		}
+		if size.width == 390 {
+			waitForWaveform()
+			shot, err := driver.Screenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			save("18-pinned-player-phone", shot)
+		}
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	capture("16-player-desktop", "[data-journal-page]", 1440, 1000, false)
+	capture("17-player-phone", "[data-journal-page]", 390, 844, false)
+	click(selenium.ByLinkText, "Wiki")
+	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
+	find(selenium.ByCSSSelector, "[aria-label='Journal player'] [aria-label='Transcript']")
+	click(selenium.ByCSSSelector, "[aria-label='Journal player'] strong a")
+	find(selenium.ByCSSSelector, "[aria-label='Journal day']")
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		result, err := wd.ExecuteScript(`
+			const entry = document.getElementById(location.hash.slice(1));
+			const heading = entry?.querySelector('header h3');
+			const player = document.querySelector('[aria-label="Journal player"] strong a');
+			const toolbar = document.querySelector('[data-journal-toolbar]');
+			if (!heading || !player || !toolbar) return false;
+			const rect = heading.getBoundingClientRect();
+			return heading.textContent === player.textContent &&
+				rect.top >= toolbar.getBoundingClientRect().bottom && rect.bottom <= innerHeight;
+		`, nil)
+		return result == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatal("player title did not bring the selected entry into view", err)
+	}
+	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	// Use the rehearsal day for aggregate screenshots. Its week and month
 	// always contain another fixture day, even when the launch is the only
 	// day in a new month and correctly reuses its day summary instead.
