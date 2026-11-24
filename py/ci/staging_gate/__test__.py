@@ -1,8 +1,10 @@
-"""Keep the required Staging check tied to deployment in the merge queue."""
+"""Check the merge queue and production deployment gates."""
 
+import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 import unittest
 
 import yaml
@@ -64,6 +66,35 @@ class StagingGateTest(unittest.TestCase):
             staging_providers(self.workflows, "pull_request"), {"staging-pr.yml"}
         )
         self.assertNotIn("merge_group", self.workflows["staging-pr.yml"]["on"])
+
+    def test_production_deploys_only_the_current_main_bundle(self):
+        jobs = self.workflows["submit.yml"]["jobs"]
+        deploy = jobs["Submit"]
+        self.assertEqual(deploy["concurrency"]["group"], "pulumi_deploy")
+        publisher = jobs[deploy["needs"]]
+        self.assertNotEqual(publisher["concurrency"]["group"], "pulumi_deploy")
+        revision, *steps = deploy["steps"]
+        for step in steps:
+            self.assertEqual(step["if"], f"steps.{revision['id']}.outputs.current == 'true'")
+
+        for main_sha, api_status, should_deploy in [
+            ("candidate", 0, True), ("newer", 0, False), ("", 1, False),
+        ]:
+            with self.subTest(main_sha=main_sha), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                gh = root / "gh"
+                gh.write_text('#!/bin/sh\necho "$MAIN_SHA"\nexit "$API_STATUS"\n')
+                gh.chmod(0o755)
+                output = root / "output"
+                output.touch()
+                result = subprocess.run(["bash", "-ec", revision["run"]], env={
+                    **os.environ, "PATH": directory + os.pathsep + os.environ["PATH"],
+                    "GITHUB_REPOSITORY": "owner/repo", "GITHUB_SHA": "candidate",
+                    "GITHUB_OUTPUT": str(output), "GITHUB_STEP_SUMMARY": str(root / "summary"),
+                    "MAIN_SHA": main_sha, "API_STATUS": str(api_status),
+                })
+                self.assertEqual(result.returncode, api_status)
+                self.assertEqual("current=true" in output.read_text().splitlines(), should_deploy)
 
 
 if __name__ == "__main__":

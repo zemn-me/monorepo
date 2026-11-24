@@ -1,4 +1,4 @@
-"""Find an unexpired staging bundle published by Submit for this main commit."""
+"""Find an unexpired deployment bundle published by Submit for this main commit."""
 
 import json
 import os
@@ -9,7 +9,7 @@ def published_run(api, sha):
     runs = api(
         "workflows/submit.yml/runs", branch="main", event="push", head_sha=sha,
     )["workflow_runs"]
-    name = f"staging-main-{sha}"
+    name = f"deploy-main-{sha}"
     for run in runs:
         artifacts = api(f"runs/{run['id']}/artifacts", name=name)["artifacts"]
         if any(a["name"] == name and not a["expired"] for a in artifacts):

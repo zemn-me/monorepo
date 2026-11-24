@@ -11,9 +11,10 @@ are accessible to PR code; cache only non-sensitive outputs. Presubmit uses
 falls back to `ci-local` when credentials are unavailable. Staging and submit
 retain their writable key and use `ci`.
 
-Submit publishes the main staging bundle on push. Reuse it only from a Submit
-push run for the pinned main SHA. Build missing bundles and candidates outside
-`pulumi_deploy`. Deploy main and then the candidate under the same lock as Submit.
+Submit publishes one bundle per main SHA for both production and staging. Reuse
+it only from a Submit push run for that SHA. Build outside `pulumi_deploy`.
+Under that lock, production checks the SHA is still current before deploying.
+Staging deploys main and then the candidate while holding the same lock.
 Recheck the merge-group ref on acquiring the lock because cleanup preserves
 Staging runs already in progress.
 Keep `cancel-obsolete-staging.yml` outside the lock and execute only trusted

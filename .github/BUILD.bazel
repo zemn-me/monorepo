@@ -8,8 +8,8 @@ exports_files(["renovate-global.json"])
 
 exports_files(
     [
-        "actions/build-staging-bundle/action.yml",
-        "actions/build-staging-bundle/build.sh",
+        "actions/build-deploy-bundle/action.yml",
+        "actions/build-deploy-bundle/build.sh",
     ],
     visibility = ["//.github/workflows:__pkg__"],
 )

@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-      - uses: ./.github/actions/build-staging-bundle
+      - uses: ./.github/actions/build-deploy-bundle
         with:
           artifact-name: staging-candidate
 
@@ -45,7 +45,7 @@ jobs:
     # A push starts the publisher immediately. Queue here while it builds,
     # before allocating a runner or taking the Pulumi lock.
     concurrency:
-      group: staging-main-bundle-${{ needs.PinMain.outputs.commit }}
+      group: deploy-main-bundle-${{ needs.PinMain.outputs.commit }}
       cancel-in-progress: false
       queue: max
     permissions:
@@ -55,14 +55,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       run-id: ${{ steps.published.outputs.run-id || github.run_id }}
-      artifact-name: staging-main-${{ needs.PinMain.outputs.commit }}
+      artifact-name: deploy-main-${{ needs.PinMain.outputs.commit }}
     steps:
       - name: Checkout staging workflow tools
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           sparse-checkout: |
             .github
-            ci/staging/deploy
+            ci/deploy
             py/ci
             third_party/bazel_distdir
           persist-credentials: false
@@ -71,7 +71,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           MAIN_SHA: ${{ needs.PinMain.outputs.commit }}
-        run: python3 py/ci/find_staging_bundle.py
+        run: python3 py/ci/find_deploy_bundle.py
       - name: Checkout pinned main for a missing bundle
         if: steps.published.outputs.run-id == ''
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -81,9 +81,9 @@ jobs:
           persist-credentials: false
       - name: Build a run-local fallback
         if: steps.published.outputs.run-id == ''
-        uses: ./.github/actions/build-staging-bundle
+        uses: ./.github/actions/build-deploy-bundle
         with:
-          artifact-name: staging-main-${{ needs.PinMain.outputs.commit }}
+          artifact-name: deploy-main-${{ needs.PinMain.outputs.commit }}
           source-directory: main
 
   Deploy:
@@ -104,7 +104,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           ref: ${{ github.ref }}
-          sparse-checkout: ci/staging/deploy
+          sparse-checkout: ci/deploy
           persist-credentials: false
       - name: Verify the merge group is still current
         run: test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
@@ -148,7 +148,7 @@ jobs:
           role-session-name: github-actions-${{ github.run_id }}
           aws-region: us-east-1
       - name: Deploy main to staging
-        run: ci/staging/deploy/run.sh "$RUNNER_TEMP/bundles/staging-main/layers_bundle.tar.gz" main
+        run: ci/deploy/run.sh "$RUNNER_TEMP/bundles/staging-main/layers_bundle.tar.gz" main
         env:
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
           TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
@@ -168,7 +168,7 @@ jobs:
           role-session-name: github-actions-${{ github.run_id }}
           aws-region: us-east-1
       - name: Deploy candidate branch to Staging
-        run: ci/staging/deploy/run.sh "$RUNNER_TEMP/bundles/staging-candidate/layers_bundle.tar.gz" candidate
+        run: ci/deploy/run.sh "$RUNNER_TEMP/bundles/staging-candidate/layers_bundle.tar.gz" candidate
         env:
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
           TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}

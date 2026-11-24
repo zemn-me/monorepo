@@ -13,12 +13,12 @@ class ArchiveCheckoutTest(unittest.TestCase):
         for has_launcher in (False, True):
             with self.subTest(has_launcher=has_launcher), tempfile.TemporaryDirectory() as root:
                 workspace = Path(root)
-                candidate = workspace / "ci/staging/deploy"
+                candidate = workspace / "ci/deploy"
                 candidate.mkdir(parents=True)
                 (candidate / "deploy.ts").write_text("candidate")
                 main = workspace / "main"
-                (main / "ci/staging").mkdir(parents=True)
-                launcher = main / "ci/staging/deploy"
+                (main / "ci").mkdir(parents=True)
+                launcher = main / "ci/deploy"
                 if has_launcher:
                     launcher.mkdir()
                     (launcher / "deploy.ts").write_text("main")
