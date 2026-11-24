@@ -713,6 +713,12 @@
 	overflow-wrap: anywhere;
 }
 
+.recordingTitle:hover,
+.recordingTitle:focus-visible {
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
 .entryHeading:has(.entryOptions) h3 {
 	padding-inline-end: 3rem;
 }

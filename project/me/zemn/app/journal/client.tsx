@@ -46,6 +46,7 @@ import {
 	type JournalCitationPlayback,
 	type JournalPlayback,
 	JournalPlayerProvider,
+	journalEntryHref,
 	journalPlaybackHref,
 	mediaTimestamp,
 	useJournalPlayer,
@@ -685,7 +686,25 @@ function EntryCard({
 			id={`entry-${entry.id}`}
 		>
 			<header className={style.entryHeading}>
-				<h3 id={`entry-title-${entry.id}`}>{title}</h3>
+				<h3 id={`entry-title-${entry.id}`}>
+					{entry.audioUrl ? (
+						<Link
+							className={style.recordingTitle}
+							href={journalEntryHref(entry, 0)}
+							styleless
+							title="Play from beginning"
+							onClick={event => {
+								if (followsLinkNormally(event)) return;
+								event.preventDefault();
+								playback.playFromStart(entry);
+							}}
+						>
+							{title}
+						</Link>
+					) : (
+						title
+					)}
+				</h3>
 				{entry.audioUrl && (
 					<button
 						type="button"
@@ -1516,14 +1535,7 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 					const date = journalEntryDate(entry);
 					return (
 						<li key={entry.id}>
-							<Link
-								href={
-									journalHref('day', {
-										at: entry.recordedAt,
-										entry: entry.id,
-									}) + `#entry-${entry.id}`
-								}
-							>
+							<Link href={journalEntryHref(entry, 0)}>
 								<strong>
 									{entry.title ??
 										entry.summary?.title ??

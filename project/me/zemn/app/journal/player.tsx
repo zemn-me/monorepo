@@ -19,6 +19,7 @@ import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
 import { Waveform } from '#root/project/me/zemn/app/journal/waveform.js';
+import Link from '#root/project/me/zemn/components/Link/index.js';
 import { useFetchClient } from '#root/project/me/zemn/hook/useZemnMeApi.js';
 import { useZemnMeAuth } from '#root/project/me/zemn/hook/useZemnMeAuth.js';
 
@@ -45,6 +46,19 @@ export function journalPlaybackHref(
 		entry: entryID,
 		t: String(roundedMediaTime(time)),
 	})}`;
+}
+
+export function journalEntryHref(
+	entry: JournalEntry,
+	seconds?: number
+): string {
+	const query = new URLSearchParams({
+		at: entry.recordedAt,
+		entry: entry.id,
+	});
+	if (seconds !== undefined)
+		query.set('t', String(roundedMediaTime(seconds)));
+	return `/journal/day?${query}#entry-${entry.id}`;
 }
 
 export function mediaTimestamp(milliseconds: number): string {
@@ -80,6 +94,7 @@ export interface JournalCitationPlayback {
 }
 
 export interface JournalPlayback extends JournalCitationPlayback {
+	playFromStart(entry: JournalEntry): void;
 	toggle(entry: JournalEntry): void;
 	removeEntry(entryID: string): void;
 }
@@ -562,6 +577,7 @@ export function JournalPlayerProvider({
 		const segment = (id: string, sid: string) =>
 			find(id)?.transcript.find(part => part.id === sid);
 		return {
+			playFromStart: track => select(track, 0, true),
 			toggle,
 			removeEntry: dismiss,
 			playingEntryID: playing ? entry?.id : undefined,
@@ -706,9 +722,16 @@ export function JournalPlayerProvider({
 								/>
 							</button>
 							<strong>
-								{entry.title ??
-									entry.summary?.title ??
-									'Voice note'}
+								<Link
+									className={style.recordingTitle}
+									href={journalEntryHref(entry)}
+									styleless
+									title="Go to journal entry"
+								>
+									{entry.title ??
+										entry.summary?.title ??
+										'Voice note'}
+								</Link>
 							</strong>
 							<button
 								className={style.playerClose}

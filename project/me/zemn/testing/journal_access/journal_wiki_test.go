@@ -521,6 +521,8 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if got, err := selectedTitle.Text(); err != nil || got != wantTitle {
 		t.Fatalf("recent entry opened %q, want %q: %v", got, wantTitle, err)
 	}
+	find(selenium.ByXPATH, "//*[@aria-label='Journal player']//strong/a[normalize-space()='"+wantTitle+"']")
+	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	capture("02-wiki-index-desktop", "section[aria-label='Diary wiki']", 1440, 1000, true)
@@ -621,8 +623,8 @@ func TestJournalReviewScreenshots(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, title := range []string{"Coffee with Maya before the pilot", "A quieter kind of launch"} {
-			button := find(selenium.ByCSSSelector, "button[aria-label='Play "+title+"']")
-			if err := browserhelpers.ClickElementInView(driver, button); err != nil {
+			titleLink := find(selenium.ByXPATH, "//article/header/h3/a[normalize-space()='"+title+"']")
+			if err := browserhelpers.ClickElementInView(driver, titleLink); err != nil {
 				t.Fatal(err)
 			}
 			valid, err := driver.ExecuteScript(`
@@ -673,10 +675,23 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
 	find(selenium.ByCSSSelector, "[aria-label='Journal player'] [aria-label='Transcript']")
-	if err := driver.Back(); err != nil {
-		t.Fatal(err)
-	}
+	click(selenium.ByCSSSelector, "[aria-label='Journal player'] strong a")
 	find(selenium.ByCSSSelector, "[aria-label='Journal day']")
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		result, err := wd.ExecuteScript(`
+			const entry = document.getElementById(location.hash.slice(1));
+			const heading = entry?.querySelector('header h3');
+			const player = document.querySelector('[aria-label="Journal player"] strong a');
+			const toolbar = document.querySelector('[data-journal-toolbar]');
+			if (!heading || !player || !toolbar) return false;
+			const rect = heading.getBoundingClientRect();
+			return heading.textContent === player.textContent &&
+				rect.top >= toolbar.getBoundingClientRect().bottom && rect.bottom <= innerHeight;
+		`, nil)
+		return result == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatal("player title did not bring the selected entry into view", err)
+	}
 	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	// Use the rehearsal day for aggregate screenshots. Its week and month
 	// always contain another fixture day, even when the launch is the only
