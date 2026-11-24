@@ -1,6 +1,6 @@
 ---
 name: Build staging bundle
-description: Check, package and publish one revision for staging.
+description: Package, verify and publish one revision for staging.
 inputs:
   artifact-name:
     required: true
@@ -34,7 +34,7 @@ runs:
       with:
         secrets: |-
           buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
-    - name: Check repository, build and verify staging bundle
+    - name: Build and verify staging bundle
       shell: bash
       working-directory: ${{ inputs.source-directory }}
       env:
