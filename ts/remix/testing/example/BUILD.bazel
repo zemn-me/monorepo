@@ -1,7 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
-load("@rules_itest//private:itest.bzl", "service_test")
+load("@rules_itest//private:itest.bzl", "itest_task", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
-load("//js:rules.bzl", "js_library")
+load("//js:rules.bzl", "js_binary", "js_library")
 load("//ts/remix:rules.bzl", "remix_itest_service", "remix_project")
 
 remix_project(
@@ -31,11 +31,28 @@ remix_itest_service(
     http_health_check_address = "http://localhost:$${PORT}/",
 )
 
+js_binary(
+    name = "probe_reserved_port",
+    entry_point = "probe_reserved_port.mjs",
+)
+
+# Probe the assigned port before the frontend process exists.
+itest_task(
+    name = "check_reservation",
+    args = ["$${@@//ts/remix/testing/example:production_service}"],
+    exe = ":probe_reserved_port",
+)
+
 remix_itest_service(
     name = "production_service",
     exe = ":start",
     health_check_timeout = "20s",
     http_health_check_address = "http://localhost:$${PORT}/",
+    socket_activation = True,
+    deps = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": [":check_reservation"],
+    }),
 )
 
 service_test(
@@ -68,3 +85,4 @@ js_library(
 )
 
 # gazelle:exclude launch_server_test.go
+# gazelle:exclude probe_reserved_port.mjs

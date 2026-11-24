@@ -3,12 +3,16 @@
 load("@rules_itest//private:itest.bzl", "itest_service")
 load("//js:rules.bzl", "js_binary", "js_run_binary")
 
-def remix_itest_service(name, exe = None, args = [], health_check_timeout = "120s", **kwargs):
+def remix_itest_service(name, exe = None, args = [], health_check_timeout = "120s", socket_activation = False, **kwargs):
     itest_service(
         name = name,
         args = args + ["--port", "$${PORT}"],
         health_check_timeout = health_check_timeout,
         autoassign_port = True,
+        socket_activation = select({
+            "@platforms//os:windows": False,
+            "//conditions:default": socket_activation,
+        }),
         exe = exe,
         **kwargs
     )

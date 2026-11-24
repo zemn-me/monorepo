@@ -73,6 +73,9 @@ if (command === 'dev' || command === 'build-start') {
 }
 const portIndex = args.lastIndexOf('--port');
 const port = portIndex < 0 ? 3000 : Number(args[portIndex + 1]);
+const listenOptions = process.env.SVCINIT_LISTEN_FD
+	? { fd: Number(process.env.SVCINIT_LISTEN_FD) }
+	: { port, host: 'localhost' };
 if (command === 'start' && args.includes('--server')) {
 	const { handleRequest, staticPaths } = await import(
 		pathToFileURL(path.join(root, 'server/handler.mjs')).href
@@ -86,7 +89,7 @@ if (command === 'start' && args.includes('--server')) {
 				cleanUrls: false,
 			});
 		return listener(request, response);
-	}).listen(port, 'localhost', () => console.log(`http://localhost:${port}`));
+	}).listen(listenOptions, () => console.log(`http://localhost:${port}`));
 } else if (command === 'start') {
 	const serverFile = path.join(root, 'server_build/handler.mjs');
 	const renderer = existsSync(serverFile)
@@ -117,7 +120,7 @@ if (command === 'start' && args.includes('--server')) {
 			response.writeHead(500);
 			response.end('Unable to render page');
 		}
-	}).listen(port, 'localhost', () => console.log(`http://localhost:${port}`));
+	}).listen(listenOptions, () => console.log(`http://localhost:${port}`));
 } else {
 	const require = createRequire(import.meta.url);
 	const cli = path.join(
