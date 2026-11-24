@@ -412,12 +412,6 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Helper()
 		if by == selenium.ByLinkText {
 			switch selector {
-			case "Overview":
-				if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "h1 a[href='/journal']", 10*time.Second); err != nil {
-					t.Fatal(err)
-				}
-				browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
-				return
 			case "Days", "Months", "Weeks", "Years":
 				if links, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-toolbar] a[href='/journal']"); err == nil && len(links) > 0 {
 					if err := browserhelpers.ClickElementInView(driver, links[0]); err != nil {
@@ -493,7 +487,8 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
-	click(selenium.ByLinkText, "Overview")
+	click(selenium.ByCSSSelector, "[data-journal-toolbar] a[aria-label='Journal']:has(svg[data-icon='calendar-days'])")
+	browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
 	find(selenium.ByID, "recent-journal-entries")
 	capture("01-overview-desktop", "[data-journal-page]", 1440, 1000, false)
 	capture("01-overview-phone", "[data-journal-page]", 390, 844, false)

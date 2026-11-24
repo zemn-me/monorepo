@@ -1277,7 +1277,9 @@ function JournalToolbar({
 					route={route}
 				/>
 			) : (
-				<Link href="/journal">Journal</Link>
+				<Link href="/journal" aria-label="Journal" title="Journal">
+					<FontAwesomeIcon aria-hidden="true" icon={faCalendarDays} />
+				</Link>
 			)}
 			<Link
 				className={style.wikiNavigation}
