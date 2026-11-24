@@ -275,14 +275,16 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Helper()
 		if by == selenium.ByLinkText {
 			switch selector {
-			case "Overview", "Days", "Months", "Weeks", "Years":
-				if links, err := driver.FindElements(selenium.ByLinkText, "Browse journal"); err == nil && len(links) > 0 {
+			case "Overview":
+				if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "h1 a[href='/journal']", 10*time.Second); err != nil {
+					t.Fatal(err)
+				}
+				browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
+				return
+			case "Days", "Months", "Weeks", "Years":
+				if links, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-toolbar] a[href='/journal']"); err == nil && len(links) > 0 {
 					if err := browserhelpers.ClickElementInView(driver, links[0]); err != nil {
 						t.Fatal(err)
-					}
-					if selector == "Overview" {
-						browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
-						return
 					}
 				}
 				browserhelpers.OpenJournalDatePicker(t, driver)
@@ -323,6 +325,16 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		if err := driver.ResizeWindow("", width, height); err != nil {
 			t.Fatal(err)
 		}
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		defer func() {
+			if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+				t.Error(err)
+			}
+		}()
 		el := find(selenium.ByCSSSelector, selector)
 		if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start', behavior:'instant'}); window.scrollBy(0,-90);`, []any{el}); err != nil {
 			t.Fatal(err)
@@ -345,7 +357,35 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	click(selenium.ByLinkText, "Overview")
-	capture("01-overview-desktop", "section[aria-labelledby='recent-journal-entries']", 1440, 1000, false)
+	find(selenium.ByID, "recent-journal-entries")
+	capture("01-overview-desktop", "[data-journal-page]", 1440, 1000, false)
+	capture("01-overview-phone", "[data-journal-page]", 390, 844, false)
+	recentLink := find(selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] li a")
+	recentTitle := find(selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] li strong")
+	wantTitle, err := recentTitle.Text()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, recentLink); err != nil {
+		t.Fatal(err)
+	}
+	find(selenium.ByCSSSelector, "[aria-label='Journal day'] article[id^='entry-']")
+	address, err := driver.CurrentURL()
+	if err != nil {
+		t.Fatal(err)
+	}
+	selected, err := url.Parse(address)
+	if err != nil || selected.Fragment == "" || selected.Fragment != "entry-"+selected.Query().Get("entry") {
+		t.Fatalf("recent entry destination: %s %v", address, err)
+	}
+	selectedArticle := find(selenium.ByID, selected.Fragment)
+	selectedTitle, err := selectedArticle.FindElement(selenium.ByCSSSelector, "header h3")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, err := selectedTitle.Text(); err != nil || got != wantTitle {
+		t.Fatalf("recent entry opened %q, want %q: %v", got, wantTitle, err)
+	}
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	capture("02-wiki-index-desktop", "section[aria-label='Diary wiki']", 1440, 1000, true)
@@ -389,74 +429,22 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	save("08-citation-preview-desktop", data)
 	click(selenium.ByLinkText, "Days")
-	launch := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
-	if err := launch.Click(); err != nil {
-		t.Fatal(err)
-	}
-	// Read the selected day's section from the visible entry's enclosing DOM.
-	section, err := launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = section.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("09-launch-day-desktop", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='A quieter kind of launch']")
+	capture("09-launch-day-desktop", "[data-journal-page]", 1440, 1000, false)
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
-	if err := earlier.Click(); err != nil {
-		t.Fatal(err)
-	}
-	earlierSection, err := earlier.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{earlierSection}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = earlierSection.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("10-earlier-day-clarification-desktop", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='An argument on the river path']")
+	capture("10-earlier-day-clarification-desktop", "[aria-label='Journal day']", 1440, 1000, false)
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	launch = find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
-	open, err := driver.ExecuteScript("return arguments[0].parentElement.open", []any{launch})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if open != true {
-		if err := browserhelpers.ClickElementInView(driver, launch); err != nil {
-			t.Fatal(err)
-		}
-	}
-	section, err = launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ResizeWindow("", 390, 1400); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = section.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("11-launch-day-phone", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='A quieter kind of launch']")
+	capture("11-launch-day-phone", "[data-journal-page]", 390, 844, false)
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
@@ -464,7 +452,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	// always contain another fixture day, even when the launch is the only
 	// day in a new month and correctly reuses its day summary instead.
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	// The date picker preserves the selected day, which can be in the
 	// previous month or year. Format that route date in the browser's time zone.
 	selectedURL, err := driver.CurrentURL()
@@ -498,18 +486,13 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		if sections, err := driver.FindElements(selenium.ByCSSSelector, regionSelector+" > section"); err != nil || len(sections) != 1 {
 			t.Fatalf("selected %s should render one period: %d %v", view.period, len(sections), err)
 		}
-		var heading selenium.WebElement
-		if view.link == "Years" {
-			heading = find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
-		} else {
-			heading = find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
-		}
-		if _, err := heading.FindElement(selenium.ByXPATH, ".//strong[normalize-space()='"+view.title+"']"); err != nil {
-			t.Fatal("calendar period should show its summary title: ", err)
-		}
-		period, err := heading.FindElement(selenium.ByXPATH, "parent::details")
+		period := find(selenium.ByCSSSelector, regionSelector+" > section")
+		heading, err := period.FindElement(selenium.ByXPATH, ".//header[h2[normalize-space()='"+view.title+"'] and span[contains(.,'"+view.visibleDate+"')]]")
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal("missing calendar period heading: ", err)
+		}
+		if visible, err := heading.IsDisplayed(); err != nil || !visible {
+			t.Fatalf("calendar period heading should be visible: %v %v", visible, err)
 		}
 		if articles, err := period.FindElements(selenium.ByTagName, "article"); err != nil || len(articles) != 1 {
 			t.Fatalf("calendar period should contain its summary: %d %v", len(articles), err)
@@ -617,12 +600,13 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	selector := "[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='2008-05-13'])"
+	selector := "[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time[datetime^='2008-05-13'])"
 	entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 	if err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatal("confirmed recording was not ready in the journal: ", err)
 	}
-	summary, err := entry.FindElement(selenium.ByCSSSelector, ":scope > summary")
+	summary, err := entry.FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
 		t.Fatal(err)
 	}

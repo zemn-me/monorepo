@@ -234,29 +234,22 @@ func TestJournalEndToEnd(t *testing.T) {
 	if len(failedEntries) != 1 {
 		t.Fatalf("failed journal entry was not displayed in unfinished voice notes")
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "#entry-"+failedEntryID+"[open] [role='alert']", 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "#entry-"+failedEntryID+" [role='alert']", 10*time.Second); err != nil {
 		t.Fatalf("processing error was not visible: %v", err)
 	}
-	pendingEntryStatus, err := browserhelpers.WaitForElement(
+	_, err = browserhelpers.WaitForElement(
 		driver,
 		selenium.ByXPATH,
-		fmt.Sprintf("//details[@id='entry-%s']//span[@role='status' and @aria-label='Transcribing voice note']", pendingEntryID),
+		fmt.Sprintf("//article[@id='entry-%s']//span[@role='status' and @aria-label='Transcribing voice note']", pendingEntryID),
 		30*time.Second,
 	)
 	if err != nil {
 		t.Fatalf("existing processing journal entry was not shown: %v", err)
 	}
-	pendingEntrySummary, err := pendingEntryStatus.FindElement(selenium.ByXPATH, "ancestor::summary")
-	if err != nil {
-		t.Fatalf("find processing journal entry summary: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, pendingEntrySummary); err != nil {
-		t.Fatalf("open processing journal entry: %v", err)
-	}
 	if _, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByXPATH,
-		fmt.Sprintf("//details[@id='entry-%s' and @open]/div[@role='status' and @aria-label='Preparing transcript']", pendingEntryID),
+		fmt.Sprintf("//article[@id='entry-%s']/div[@role='status' and @aria-label='Preparing transcript']", pendingEntryID),
 		10*time.Second,
 	); err != nil {
 		t.Fatalf("opened processing journal entry did not show transcription status: %v", err)
@@ -412,40 +405,13 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("return to journal before checking scheduled refresh: %v", err)
 	}
 	browseJournalView(t, driver, "Years")
-	yearDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='year']", 30*time.Second)
+	yearDate, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal year'] header time", 30*time.Second)
 	if err != nil {
-		t.Fatalf("journal year disappeared: %v", err)
-	}
-	yearSummary, err := yearDisclosure.FindElement(selenium.ByCSSSelector, "summary")
-	if err != nil {
-		t.Fatalf("find journal year disclosure: %v", err)
-	}
-	yearDate, err := yearSummary.FindElement(selenium.ByCSSSelector, "time")
-	if err != nil {
-		t.Fatalf("find journal year date: %v", err)
+		t.Fatal(err)
 	}
 	yearDateText, err := yearDate.Text()
-	if err != nil {
-		t.Fatalf("read journal year date: %v", err)
-	}
-	if len(yearDateText) != 4 || strings.Trim(yearDateText, "0123456789") != "" {
-		t.Fatalf("journal year date = %q, want a bare four-digit year", yearDateText)
-	}
-	usesPeriodDisclosure, err := driver.ExecuteScript(`
-		const disclosure = document.querySelector(
-			"details[data-journal-period-disclosure='year']"
-		);
-		const summary = disclosure?.querySelector(':scope > summary');
-		return summary !== null &&
-			summary.querySelector('a') === null &&
-			summary.querySelector('strong')?.textContent.trim().length > 0 &&
-			getComputedStyle(disclosure).borderBottomStyle !== 'none';
-	`, nil)
-	if err != nil {
-		t.Fatalf("inspect journal year disclosure: %v", err)
-	}
-	if usesPeriodDisclosure != true {
-		t.Fatalf("journal year was not a titled, underlined disclosure")
+	if err != nil || len(yearDateText) != 4 || strings.Trim(yearDateText, "0123456789") != "" {
+		t.Fatalf("journal year date = %q, want a bare four-digit year: %v", yearDateText, err)
 	}
 	apiBase, err := browserhelpers.APIRoot()
 	if err != nil {
@@ -458,24 +424,9 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err := waitForScheduledJournalSummaries(driver, apiBase.String(), 4, 30*time.Second); err != nil {
 		t.Fatalf("immediate journal summaries did not survive scheduled refresh: %v", err)
 	}
-	yearDisclosure, err = browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='year']", 10*time.Second)
+	monthLink, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal year'] a[data-journal-period-link='month']", 10*time.Second)
 	if err != nil {
-		t.Fatalf("find refreshed journal year disclosure: %v", err)
-	}
-	monthLink, err := yearDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
-	if err != nil {
-		t.Fatalf("journal year did not list its months: %v", err)
-	}
-	if displayed, err := monthLink.IsDisplayed(); err != nil {
-		t.Fatalf("inspect journal year expansion: %v", err)
-	} else if !displayed {
-		yearSummary, err = yearDisclosure.FindElement(selenium.ByCSSSelector, "summary")
-		if err != nil {
-			t.Fatalf("find refreshed journal year summary: %v", err)
-		}
-		if err := browserhelpers.ClickElementInView(driver, yearSummary); err != nil {
-			t.Fatalf("expand refreshed journal year: %v", err)
-		}
+		t.Fatal(err)
 	}
 	if _, err := driver.ExecuteScript("arguments[0].click()", []any{monthLink}); err != nil {
 		t.Fatalf("open a journal month from its year: %v", err)
@@ -487,11 +438,11 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("journal month route: %v", err)
 	}
 	browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal/month")
-	monthDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='month'][open]", 10*time.Second)
+	monthRegion, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal month']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("selected journal month did not open on arrival: %v", err)
 	}
-	if _, err := monthDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']"); err != nil {
+	if _, err := monthRegion.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']"); err != nil {
 		t.Fatal("month did not offer days", err)
 	}
 	openJournalDatePicker(t, driver)
@@ -510,16 +461,13 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal/week")
 	usesWeeklyDateRange, err := driver.ExecuteScript(`
-		const disclosure = document.querySelector(
-			"details[data-journal-period-disclosure='week']"
-		);
-		const summary = disclosure?.querySelector(':scope > summary');
+		const summary = document.querySelector('[aria-label="Journal week"] header');
 		const range = summary?.querySelector('span[aria-label]');
 		return range !== null &&
 			range.textContent.includes('–') &&
 			!range.textContent.includes('Week starting') &&
 			summary.querySelector('a') === null &&
-			summary.querySelector('strong')?.textContent.trim().length > 0;
+			summary.querySelector('h2')?.textContent.trim().length > 0;
 	`, nil)
 	if err != nil {
 		t.Fatalf("inspect journal week date range: %v", err)
@@ -527,11 +475,11 @@ func TestJournalEndToEnd(t *testing.T) {
 	if usesWeeklyDateRange != true {
 		t.Fatalf("journal week did not use a titled, non-link date range")
 	}
-	weekDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='week'][open]", 10*time.Second)
+	weekRegion, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal week']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("selected journal week did not open on arrival: %v", err)
 	}
-	dayLink, err := weekDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']")
+	dayLink, err := weekRegion.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='day']")
 	if err != nil {
 		t.Fatalf("journal week did not list its days: %v", err)
 	}
@@ -558,7 +506,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatal(err)
 	}
 	clickJournalControl(t, driver, "a[aria-label='Month summary']")
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[data-journal-period-start^='2025-07'] details[data-journal-period-disclosure='month']", 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal month'] [data-journal-period-start^='2025-07'] h2", 10*time.Second); err != nil {
 		t.Fatal("calendar did not open July summary", err)
 	}
 	if err := waitForJournalAudioCount(driver, 0, 10*time.Second); err != nil {
@@ -566,14 +514,17 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	openJournalDatePicker(t, driver)
 	clickJournalControl(t, driver, "button[aria-label='Choose month']")
-	august, err := driver.FindElement(selenium.ByXPATH, "//div[@role='group']//button[normalize-space()='Aug']")
+	august, err := driver.FindElement(selenium.ByXPATH, "//div[@role='group']//button[@aria-description='Has recordings' and normalize-space()='Aug']")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if err := august.Click(); err != nil {
 		t.Fatal(err)
 	}
-	clickJournalControl(t, driver, "a[aria-label='13 August 2025']")
+	if _, err := driver.FindElement(selenium.ByCSSSelector, "a[aria-label='1 August 2025']:not([aria-description])"); err != nil {
+		t.Fatal("empty dates should not have recording indicators", err)
+	}
+	clickJournalControl(t, driver, "a[aria-label='13 August 2025'][aria-description='Has recordings']")
 
 	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatal("day selector did not open selected recordings", err)
@@ -610,11 +561,24 @@ func TestJournalEndToEnd(t *testing.T) {
 		if err := driver.ResizeWindow("", width, 900); err != nil {
 			t.Fatal(err)
 		}
-		usable, err := driver.ExecuteScript(`const nav = document.querySelector('nav[aria-label="Choose journal date"]');
-		return !nav.querySelector('details').open && nav.closest('[data-journal-toolbar]').getBoundingClientRect().height <= 60 && document.documentElement.scrollWidth <= innerWidth &&
-		[...nav.querySelectorAll(':scope > a, summary')].every(control => control.getBoundingClientRect().height >= 44);`, nil)
-		if err != nil || usable != true {
-			t.Fatalf("compact calendar navigation at %dpx: %v %v", width, usable, err)
+		layout, err := driver.ExecuteScript(`
+			const nav = document.querySelector('nav[aria-label="Choose journal date"]');
+			return {
+				open: nav.querySelector('details').open,
+				toolbarHeight: nav.closest('[data-journal-toolbar]').getBoundingClientRect().height,
+				pageWidth: document.documentElement.scrollWidth,
+				viewportWidth: innerWidth,
+				minTargetHeight: Math.min(...Array.from(nav.querySelectorAll(':scope > a, summary'),
+					control => control.getBoundingClientRect().height))
+			};
+		`, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		bounds := layout.(map[string]any)
+		if bounds["open"] != false || bounds["toolbarHeight"].(float64) > 60 ||
+			bounds["pageWidth"].(float64) > bounds["viewportWidth"].(float64) || bounds["minTargetHeight"].(float64) < 44 {
+			t.Fatalf("compact calendar navigation at %dpx: %v", width, bounds)
 		}
 		openJournalDatePicker(t, driver)
 		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-picker-default-%d.png", width))
@@ -651,14 +615,14 @@ func TestJournalEndToEnd(t *testing.T) {
 			t.Fatal(err)
 		}
 		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-picker-years-%d.png", width))
-		year, err := driver.FindElement(selenium.ByXPATH, "//div[@role='group' and @aria-label='Choose a year']//button[normalize-space()='2025']")
+		year, err := driver.FindElement(selenium.ByXPATH, "//div[@role='group' and @aria-label='Choose a year']//button[@aria-description='Has recordings' and normalize-space()='2025']")
 		if err != nil {
 			t.Fatal(err)
 		}
 		if err := year.SendKeys(selenium.EnterKey); err != nil {
 			t.Fatal(err)
 		}
-		month, err := driver.FindElement(selenium.ByXPATH, "//div[@role='group']//button[normalize-space()='Aug']")
+		month, err := driver.FindElement(selenium.ByXPATH, "//div[@role='group']//button[@aria-description='Has recordings' and normalize-space()='Aug']")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -707,7 +671,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	usesTimeOnlyEntryHeadings, err := driver.ExecuteScript(`
 		const times = [...document.querySelectorAll(
-			"details[id^='entry-'] > summary > time"
+			"article[id^='entry-'] > header > time"
 		)];
 		return times.length === 2 && times.every(time =>
 			time.lang === 'en-GB' &&
@@ -720,32 +684,23 @@ func TestJournalEndToEnd(t *testing.T) {
 	if usesTimeOnlyEntryHeadings != true {
 		t.Fatalf("journal entry headings repeated their parent day")
 	}
-	usesPeriodDisclosureLayout, err := driver.ExecuteScript(`
-		const summaries = [...document.querySelectorAll(
-			"details[id^='entry-'] > summary"
-		)];
-		return summaries.length === 2 && summaries.every(summary => {
-			const style = getComputedStyle(summary);
-			const detailsStyle = getComputedStyle(summary.parentElement);
-			return style.display === 'grid' &&
-				style.gridTemplateColumns.split(' ').length === 3 &&
-				summary.children.length === 3 &&
-				detailsStyle.borderBottomStyle !== 'none';
-		});
+	visibleEntries, err := driver.ExecuteScript(`
+		const entries = [...document.querySelectorAll("article[id^='entry-']")];
+		return entries.length === 2 && entries.every(entry =>
+			[entry.querySelector('header h3'), entry.querySelector('audio'), entry.querySelector('[aria-label="Transcript"]')]
+				.every(element => element?.checkVisibility())
+		);
 	`, nil)
-	if err != nil {
-		t.Fatalf("inspect journal entry disclosure layout: %v", err)
-	}
-	if usesPeriodDisclosureLayout != true {
-		t.Fatalf("journal day entries did not use the period disclosure layout")
+	if err != nil || visibleEntries != true {
+		t.Fatalf("day should immediately show both recordings and transcripts: %v %v", visibleEntries, err)
 	}
 	entrySummaryDates, err := driver.ExecuteScript(`
 		const day = document.querySelector(
 			'[data-journal-period-start^="2025-08-13"]'
 		);
-		const entries = [...(day?.querySelectorAll("details[id^='entry-']") ?? [])];
+		const entries = [...(day?.querySelectorAll("article[id^='entry-']") ?? [])];
 		const dates = entries.map(entry => {
-			const entryDate = entry.querySelector(':scope > summary > time');
+			const entryDate = entry.querySelector(':scope > header > time');
 			const summaryDate = entry.querySelector(
 				":scope > article header > p > time"
 			);
@@ -759,7 +714,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		return {
 			dates,
 			valid: entries.length === 2 && entries.every(entry => {
-				const entryDate = entry.querySelector(':scope > summary > time');
+				const entryDate = entry.querySelector(':scope > header > time');
 				const summaryDate = entry.querySelector(
 					":scope > article header > p > time"
 				);
@@ -1054,13 +1009,6 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err != nil {
 		t.Fatalf("find second journal transcript: %v", err)
 	}
-	secondEntrySummary, err := driver.FindElement(selenium.ByCSSSelector, fmt.Sprintf("details[id='entry-%s'] > summary", secondEntryID))
-	if err != nil {
-		t.Fatalf("find second journal entry disclosure: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, secondEntrySummary); err != nil {
-		t.Fatalf("open second journal entry: %v", err)
-	}
 	secondTranscriptSegment, err := secondTranscript.FindElement(selenium.ByCSSSelector, "a[data-journal-transcript-segment]")
 	if err != nil {
 		t.Fatalf("find second journal transcript segment: %v", err)
@@ -1097,6 +1045,13 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	}
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "[data-journal-currently-spoken]", 10*time.Second); err != nil {
 		t.Fatalf("paused journal transcript remained highlighted: %v", err)
+	}
+	options, err := driver.FindElement(selenium.ByCSSSelector, "#entry-"+firstEntryID+" summary[aria-label='Recording options']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, options); err != nil {
+		t.Fatal(err)
 	}
 	deleteThumb, err := browserhelpers.WaitForElement(
 		driver,
@@ -1246,23 +1201,16 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 		t.Fatalf("return to journal before checking current-month summary: %v", err)
 	}
 	browseJournalView(t, driver, "Years")
-	currentYearDisclosure, err := browserhelpers.WaitForElement(
+	currentYearRegion, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByXPATH,
-		fmt.Sprintf("//details[@data-journal-period-disclosure='year'][summary[contains(normalize-space(), '%d')]]", localNow.Year()),
+		fmt.Sprintf("//*[@aria-label='Journal year'][.//header//time[normalize-space()='%d']]", localNow.Year()),
 		30*time.Second,
 	)
 	if err != nil {
 		t.Fatalf("current journal year was not displayed: %v", err)
 	}
-	currentYearSummary, err := currentYearDisclosure.FindElement(selenium.ByCSSSelector, "summary")
-	if err != nil {
-		t.Fatalf("find current journal year disclosure: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, currentYearSummary); err != nil {
-		t.Fatalf("expand current journal year: %v", err)
-	}
-	currentMonthLink, err := currentYearDisclosure.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
+	currentMonthLink, err := currentYearRegion.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
 	if err != nil {
 		t.Fatalf("current journal year did not list its months: %v", err)
 	}
@@ -1296,17 +1244,17 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	).UTC().Format("2006-01-02T15:04:05Z")
 	currentEntries, err := driver.FindElements(
 		selenium.ByCSSSelector,
-		fmt.Sprintf("[data-journal-period-start='%s'] details:has(audio)", currentDayStart),
+		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(audio)", currentDayStart),
 	)
 	if err != nil || len(currentEntries) != 2 {
 		t.Fatalf("find current-day journal entries: count %d, error %v", len(currentEntries), err)
 	}
-	entrySummary, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "summary")
+	entrySummary, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
-		t.Fatalf("find journal entry disclosure: %v", err)
+		t.Fatalf("find recording options: %v", err)
 	}
 	if err := browserhelpers.ClickElementInView(driver, entrySummary); err != nil {
-		t.Fatalf("open journal entry: %v", err)
+		t.Fatalf("open recording options: %v", err)
 	}
 	dateInputs, err := currentEntries[0].FindElements(selenium.ByCSSSelector, "input[type='date']")
 	if err != nil {
@@ -1381,26 +1329,15 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	targetYear, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByXPATH,
-		fmt.Sprintf("//details[@data-journal-period-disclosure='year'][summary[contains(normalize-space(), '%d')]]", targetDate.Year()),
+		fmt.Sprintf("//*[@aria-label='Journal year'][.//header//time[normalize-space()='%d']]", targetDate.Year()),
 		30*time.Second,
 	)
 	if err != nil {
 		t.Fatalf("corrected journal year was not displayed: %v", err)
 	}
-	targetYearSummary, err := targetYear.FindElement(selenium.ByCSSSelector, "summary")
-	if err != nil {
-		t.Fatalf("find corrected journal year disclosure: %v", err)
-	}
 	targetMonth, err := targetYear.FindElement(selenium.ByCSSSelector, "a[data-journal-period-link='month']")
 	if err != nil {
 		t.Fatalf("corrected journal year did not list its months: %v", err)
-	}
-	if displayed, err := targetMonth.IsDisplayed(); err != nil {
-		t.Fatalf("inspect corrected journal year expansion: %v", err)
-	} else if !displayed {
-		if err := browserhelpers.ClickElementInView(driver, targetYearSummary); err != nil {
-			t.Fatalf("expand corrected journal year: %v", err)
-		}
 	}
 	targetMonthHref, err := targetMonth.GetAttribute("href")
 	if err != nil || !strings.Contains(targetMonthHref, "/journal/month?") {
@@ -1419,7 +1356,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label='Journal month']", 30*time.Second); err != nil {
 		t.Fatalf("corrected journal month did not finish opening: %v", err)
 	}
-	targetMonthDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='month'][open]", 30*time.Second)
+	targetMonthDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal month']", 30*time.Second)
 	if err != nil {
 		t.Fatalf("corrected journal month did not open on arrival: %v", err)
 	}
@@ -1448,7 +1385,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label='Journal week']", 30*time.Second); err != nil {
 		t.Fatalf("corrected journal week did not finish opening: %v", err)
 	}
-	targetWeekDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[data-journal-period-disclosure='week'][open]", 30*time.Second)
+	targetWeekDisclosure, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal week']", 30*time.Second)
 	if err != nil {
 		t.Fatalf("corrected journal week did not open on arrival: %v", err)
 	}
@@ -1479,18 +1416,18 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	correctedEntry, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByCSSSelector,
-		fmt.Sprintf("[data-journal-period-start='%s'] details:has(audio)", targetDayStart),
+		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(audio)", targetDayStart),
 		30*time.Second,
 	)
 	if err != nil {
 		t.Fatalf("find corrected journal entry: %v", err)
 	}
-	correctedSummary, err := correctedEntry.FindElement(selenium.ByCSSSelector, "summary")
+	correctedSummary, err := correctedEntry.FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
-		t.Fatalf("find corrected journal entry disclosure: %v", err)
+		t.Fatalf("find corrected recording options: %v", err)
 	}
 	if err := browserhelpers.ClickElementInView(driver, correctedSummary); err != nil {
-		t.Fatalf("open corrected journal entry: %v", err)
+		t.Fatalf("open corrected recording options: %v", err)
 	}
 	correctedEditDate, err := correctedEntry.FindElement(selenium.ByXPATH, ".//button[normalize-space()='Edit recording date']")
 	if err != nil {
@@ -1697,7 +1634,7 @@ func waitForScheduledJournalSummaries(driver selenium.WebDriver, refreshURL stri
 		for time.Now().Before(pageDeadline) {
 			stateValue, err := driver.ExecuteScript(`
 				const yearSummaryCount = [...document.querySelectorAll(
-					"details[data-journal-period-disclosure='year'] > summary > strong"
+					"[aria-label='Journal year'] header h2"
 				)]
 					.filter(heading => heading.textContent?.trim() === 'A life with more room in it')
 					.length;
@@ -1969,8 +1906,8 @@ func waitForCurrentlySpokenTranscript(driver selenium.WebDriver, entryID string,
 				.find(value => value.dataset.entryId === arguments[0]);
 			return {
 				matches: highlighted.length === 1 &&
-					highlighted[0].closest('details[id]')?.id === 'entry-' + arguments[0],
-				highlightedEntries: highlighted.map(value => value.closest('details[id]')?.id),
+					highlighted[0].closest('article[id]')?.id === 'entry-' + arguments[0],
+				highlightedEntries: highlighted.map(value => value.closest('article[id]')?.id),
 				currentTime: audio?.currentTime,
 				paused: audio?.paused,
 				ended: audio?.ended,
@@ -2481,10 +2418,18 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	href, err := pin.GetAttribute("href")
+	if err != nil {
+		t.Fatal(err)
+	}
+	target, err := url.Parse(href)
+	if err != nil || target.Query().Get("entry") == "" {
+		t.Fatalf("missing recording in map link %q: %v", href, err)
+	}
 	if err := pin.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[open] [role='region'][aria-label^='Recording locations:']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByID, "entry-"+target.Query().Get("entry"), 30*time.Second); err != nil {
 		t.Fatalf("map pin did not open its note: %v", err)
 	}
 }

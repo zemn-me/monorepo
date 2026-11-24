@@ -1042,6 +1042,12 @@ components:
       type: object
       required: [focus, timeZone, periods, sources, locations]
       properties:
+        recordingDaysByMonth:
+          type: object
+          description: Distinct day numbers with visible recordings, grouped by YYYY-MM in the calendar time zone.
+          additionalProperties:
+            type: array
+            items: {type: integer, minimum: 1, maximum: 31}
         locations:
           type: array
           items: {$ref: '#/components/schemas/JournalEntry'}
