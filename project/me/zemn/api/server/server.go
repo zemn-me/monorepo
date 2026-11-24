@@ -201,7 +201,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
 	}
 
-	s.signingKey, err = provisionSigningKey(ctx, cfg)
+	s.signingKey, err = provisionSigningKey(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -308,14 +308,6 @@ func analyticsBeaconHostAllowed(host string) bool {
 	return false
 }
 
-func provisionSigningKey(ctx context.Context, cfg aws.Config) (k jose.JSONWebKey, err error) {
-	if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
-		return provisionKMSSigningKey(cfg)
-	}
-
-	return provisionTestingSigningKey(ctx)
-}
-
 func newOpaqueSignerJWK(keyID string, signer jose.OpaqueSigner) jose.JSONWebKey {
 	alg := string(jose.ES256)
 	if algs := signer.Algs(); len(algs) > 0 {
@@ -330,38 +322,24 @@ func newOpaqueSignerJWK(keyID string, signer jose.OpaqueSigner) jose.JSONWebKey 
 	}
 }
 
-func provisionTestingSigningKey(_ context.Context) (k jose.JSONWebKey, err error) {
-	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+func provisionSigningKey(cfg aws.Config) (jose.JSONWebKey, error) {
+	keyID := os.Getenv("OIDC_JWT_KMS_KEY_ID")
+	if keyID == "" {
+		privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+		if err != nil {
+			return jose.JSONWebKey{}, err
+		}
+		return newOpaqueSignerJWK("fake123", cryptosigner.Opaque(privateKey)), nil
+	}
+	publicKey := os.Getenv("OIDC_JWT_PUBLIC_KEY")
+	if publicKey == "" {
+		return jose.JSONWebKey{}, errors.New("OIDC_JWT_PUBLIC_KEY not set")
+	}
+	signer, err := newKMSOpaqueSigner(cfg, keyID, publicKey)
 	if err != nil {
-		return
+		return jose.JSONWebKey{}, err
 	}
-
-	signer := cryptosigner.Opaque(priv)
-	k = newOpaqueSignerJWK("fake123", signer)
-	return
-}
-
-func provisionKMSSigningKey(cfg aws.Config) (k jose.JSONWebKey, err error) {
-	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
-	if jwtKmsKeyId == "" {
-		err = errors.New("OIDC_JWT_KMS_KEY_ID not set")
-		return
-	}
-
-	jwtKmsPublicKey := os.Getenv("OIDC_JWT_PUBLIC_KEY")
-
-	if jwtKmsPublicKey == "" {
-		err = errors.New("OIDC_JWT_PUBLIC_KEY not set")
-		return
-	}
-
-	signer, err := newKMSOpaqueSigner(cfg, jwtKmsKeyId, jwtKmsPublicKey)
-	if err != nil {
-		return
-	}
-	k = newOpaqueSignerJWK(jwtKmsKeyId, signer)
-
-	return
+	return newOpaqueSignerJWK(keyID, signer), nil
 }
 
 // ProvisionTables creates missing tables and waits until they are ACTIVE.

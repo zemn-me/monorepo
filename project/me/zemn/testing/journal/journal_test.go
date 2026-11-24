@@ -16,7 +16,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
@@ -24,7 +23,6 @@ import (
 	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"
 
-	"github.com/zemn-me/monorepo/go/awsemulator"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
@@ -97,23 +95,29 @@ func browseJournalView(t *testing.T, driver selenium.WebDriver, level string) {
 }
 
 func TestJournalEndToEnd(t *testing.T) {
-	bucket := journalBucket(t)
+	deployment, err := itestconfig.Load(t.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	bucket := deployment.Environment["JOURNAL_BUCKET_NAME"]
 	logJournalRunnerResources(t)
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatalf("could not find frontend root: %v", err)
 	}
+	db := dynamodb.NewFromConfig(deployment.AWS)
+	table := deployment.Environment["JOURNAL_TABLE_NAME"]
 	const pendingEntryID = "00000000-0000-4000-8000-000000000001"
 	const failedEntryID = "00000000-0000-4000-8000-000000000002"
-	if err := putProcessingJournalEntry(t.Context(), pendingEntryID); err != nil {
+	if err := putJournalEntry(t.Context(), db, table, pendingEntryID, apiserver.JournalEntryStatusProcessing); err != nil {
 		t.Fatalf("seed processing journal entry: %v", err)
 	}
-	if err := putJournalEntry(t.Context(), failedEntryID, apiserver.JournalEntryStatusFailed); err != nil {
+	if err := putJournalEntry(t.Context(), db, table, failedEntryID, apiserver.JournalEntryStatusFailed); err != nil {
 		t.Fatalf("seed failed journal entry: %v", err)
 	}
 	t.Cleanup(func() {
-		_ = deleteJournalEntry(context.Background(), pendingEntryID)
-		_ = deleteJournalEntry(context.Background(), failedEntryID)
+		_ = deleteJournalEntry(context.Background(), db, table, pendingEntryID)
+		_ = deleteJournalEntry(context.Background(), db, table, failedEntryID)
 	})
 
 	driver, err := seleniumpkg.NewWithChromeCapabilities(
@@ -266,13 +270,13 @@ func TestJournalEndToEnd(t *testing.T) {
 	); err != nil {
 		t.Fatalf("opened processing journal entry did not show transcription status: %v", err)
 	}
-	if err := deleteJournalEntry(t.Context(), failedEntryID); err != nil {
+	if err := deleteJournalEntry(t.Context(), db, table, failedEntryID); err != nil {
 		t.Fatalf("remove failed journal fixture: %v", err)
 	}
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByID, "entry-"+failedEntryID, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if err := deleteJournalEntry(t.Context(), pendingEntryID); err != nil {
+	if err := deleteJournalEntry(t.Context(), db, table, pendingEntryID); err != nil {
 		t.Fatalf("remove processing journal fixture: %v", err)
 	}
 	if err := browserhelpers.WaitForNoElement(
@@ -1528,19 +1532,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	}
 }
 
-func putProcessingJournalEntry(ctx context.Context, entryID string) error {
-	return putJournalEntry(ctx, entryID, apiserver.JournalEntryStatusProcessing)
-}
-
-func putJournalEntry(ctx context.Context, entryID string, status apiserver.JournalEntryStatus) error {
-	deployment, err := itestconfig.Load()
-	if err != nil {
-		return err
-	}
-	client, err := browserhelpers.DynamoDBClient(ctx)
-	if err != nil {
-		return err
-	}
+func putJournalEntry(ctx context.Context, client *dynamodb.Client, table, entryID string, status apiserver.JournalEntryStatus) error {
 	item, err := attributevalue.MarshalMap(apiserver.JournalStoredRecord{
 		Id:   "thomas",
 		When: "ENTRY#" + entryID,
@@ -1560,23 +1552,15 @@ func putJournalEntry(ctx context.Context, entryID string, status apiserver.Journ
 		return err
 	}
 	_, err = client.PutItem(ctx, &dynamodb.PutItemInput{
-		TableName: aws.String(deployment.Environment["JOURNAL_TABLE_NAME"]),
+		TableName: &table,
 		Item:      item,
 	})
 	return err
 }
 
-func deleteJournalEntry(ctx context.Context, entryID string) error {
-	deployment, err := itestconfig.Load()
-	if err != nil {
-		return err
-	}
-	client, err := browserhelpers.DynamoDBClient(ctx)
-	if err != nil {
-		return err
-	}
-	_, err = client.DeleteItem(ctx, &dynamodb.DeleteItemInput{
-		TableName: aws.String(deployment.Environment["JOURNAL_TABLE_NAME"]),
+func deleteJournalEntry(ctx context.Context, client *dynamodb.Client, table, entryID string) error {
+	_, err := client.DeleteItem(ctx, &dynamodb.DeleteItemInput{
+		TableName: &table,
 		Key: map[string]types.AttributeValue{
 			"id":   &types.AttributeValueMemberS{Value: "thomas"},
 			"when": &types.AttributeValueMemberS{Value: "ENTRY#" + entryID},
@@ -2584,7 +2568,11 @@ func TestJournalLocationPermissionError(t *testing.T) {
 }
 
 func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
-	bucket := journalBucket(t)
+	deployment, err := itestconfig.Load(t.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	bucket := deployment.Environment["JOURNAL_BUCKET_NAME"]
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
@@ -2657,11 +2645,7 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 			t.Fatalf("upload %d was not accepted: %v", attempt, err)
 		}
 		if attempt == 0 {
-			cfg, err := awsemulator.Config(t.Context())
-			if err != nil {
-				t.Fatal(err)
-			}
-			objects := s3.NewFromConfig(cfg, func(o *s3.Options) { o.UsePathStyle = true })
+			objects := s3.NewFromConfig(deployment.AWS, func(o *s3.Options) { o.UsePathStyle = true })
 			object, err := objects.GetObject(t.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &acceptedKey})
 			if err != nil {
 				t.Fatalf("read browser upload from S3: %v", err)
@@ -2783,7 +2767,6 @@ func logJournalRunnerResources(t *testing.T) {
 }
 
 func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
-	bucket := journalBucket(t)
 	t.Helper()
 	logs, err := driver.Log(log.Performance)
 	if err != nil {
@@ -2820,7 +2803,7 @@ func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
 		}
 		if event.Message.Method == "Network.requestWillBeSent" {
 			u, err := url.Parse(p.Request.URL)
-			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || strings.HasPrefix(u.Path, "/"+bucket+"/entries/")) {
+			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || u.Query().Has("X-Amz-Signature")) {
 				continue
 			}
 			// Log only the path: signed URL parameters and headers are private.
@@ -2856,13 +2839,4 @@ func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
 		}
 		t.Logf("journal request %s %s: elapsed=%.3fs status=%d completed=%v failure=%q", request.method, request.path, elapsed(request), request.status, request.end > 0, request.failure)
 	}
-}
-
-func journalBucket(t *testing.T) string {
-	t.Helper()
-	deployment, err := itestconfig.Load()
-	if err != nil {
-		t.Fatal(err)
-	}
-	return deployment.Environment["JOURNAL_BUCKET_NAME"]
 }

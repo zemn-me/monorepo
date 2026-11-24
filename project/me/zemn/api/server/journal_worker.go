@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -66,4 +67,18 @@ func (w *JournalWorker) RefreshSummaries(ctx context.Context, now time.Time) err
 
 func (w *JournalWorker) RunCuration(ctx context.Context, now time.Time, requestID string) error {
 	return w.server.RunJournalCuration(ctx, now, requestID)
+}
+
+// ProcessJournalUploadEvent delivers the S3 records in order, stopping on the first failed upload.
+func ProcessJournalUploadEvent(ctx context.Context, event events.S3Event, process func(context.Context, string, string, int64) error) error {
+	if len(event.Records) == 0 {
+		return errors.New("journal upload event has no S3 records")
+	}
+	for _, record := range event.Records {
+		object := record.S3.Object
+		if err := process(ctx, record.S3.Bucket.Name, object.URLDecodedKey, object.Size); err != nil {
+			return err
+		}
+	}
+	return nil
 }

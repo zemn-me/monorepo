@@ -29,7 +29,6 @@ itest_service(
         "@platforms//os:linux",
         "@platforms//cpu:x86_64",
     ],
-    visibility = ["//project/me/zemn/api:__subpackages__"],
 )
 
 js_binary(
@@ -84,10 +83,6 @@ itest_task(
     name = "zemn_deployment",
     args = ["--zemn-features"],
     exe = ":staging_bin",
-    target_compatible_with = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
     visibility = ["//project/me/zemn/api:__subpackages__"],
     deps = [":service"],
 )
@@ -119,6 +114,7 @@ ts_project(
     name = "emulator",
     srcs = [
         "driver.ts",
+        "zemn.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -132,6 +128,7 @@ ts_project(
         "//ts/pulumi",
         "//ts/pulumi:cli",
         "//ts/pulumi/testing/emulator/runtime",
+        "//ts/pulumi/zemn.me/api",
     ],
 )
 
@@ -139,6 +136,7 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "driver.ts",
+        "zemn.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

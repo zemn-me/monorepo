@@ -363,7 +363,7 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
-		this.journalWorkerRoleArn = this.zemnMe.journalWorkerRoleArn;
+		this.journalWorkerRoleArn = this.zemnMe.api.journalWorkerRole.arn;
 		this.openAIWorkloadIdentityAudience =
 			this.zemnMe.openAIWorkloadIdentityAudience;
 

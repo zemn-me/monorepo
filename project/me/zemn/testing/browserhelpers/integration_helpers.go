@@ -2,7 +2,6 @@ package browserhelpers
 
 import (
 	"bytes"
-	"context"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
@@ -13,69 +12,43 @@ import (
 	"time"
 	_ "time/tzdata" // Date assertions must not depend on executor zoneinfo packages.
 
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"
 
-	"github.com/zemn-me/monorepo/go/awsemulator"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
-type ServicePorts struct {
-	FrontendPort         string `json:"@@//project/me/zemn:itest_service"`
-	CalendarFrontendPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
-	APIPort              string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
-	CalendarAPIPort      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
-	OIDCProvider         string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
+type servicePorts struct {
+	Frontend string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
+	API      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
 }
 
-func servicePorts() (p ServicePorts, err error) {
-	if err = json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &p); err != nil {
-		return
-	}
-	if p.FrontendPort == "" {
-		p.FrontendPort = p.CalendarFrontendPort
-	}
-	if p.APIPort == "" {
-		p.APIPort = p.CalendarAPIPort
-	}
-
-	return
+func assignedPorts() (servicePorts, error) {
+	var ports servicePorts
+	err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports)
+	return ports, err
 }
 
-func FrontendRoot() (u url.URL, err error) {
-	ports, err := servicePorts()
-	if err != nil {
-		return
-	}
-
-	return url.URL{
-		Scheme: "http",
-		Host:   "localhost:" + ports.FrontendPort,
-	}, nil
-}
-
-func APIRoot() (url.URL, error) {
-	ports, err := servicePorts()
+func FrontendRoot() (url.URL, error) {
+	ports, err := assignedPorts()
 	if err != nil {
 		return url.URL{}, err
 	}
-	if ports.APIPort == "" {
-		return url.URL{}, fmt.Errorf("api port not found in ASSIGNED_PORTS")
+	if ports.Frontend == "" {
+		return url.URL{}, fmt.Errorf("frontend port not found in ASSIGNED_PORTS")
 	}
-
-	return url.URL{
-		Scheme: "http",
-		Host:   "localhost:" + ports.APIPort,
-	}, nil
+	return url.URL{Scheme: "http", Host: "localhost:" + ports.Frontend}, nil
 }
 
-func DynamoDBClient(ctx context.Context) (*dynamodb.Client, error) {
-	cfg, err := awsemulator.Config(ctx)
+func APIRoot() (url.URL, error) {
+	ports, err := assignedPorts()
 	if err != nil {
-		return nil, err
+		return url.URL{}, err
 	}
-	return dynamodb.NewFromConfig(cfg), nil
+	if ports.API == "" {
+		return url.URL{}, fmt.Errorf("api port not found in ASSIGNED_PORTS")
+	}
+	return url.URL{Scheme: "http", Host: "localhost:" + ports.API}, nil
 }
 
 func AssertEndpointHasNoLogErrors(t *testing.T, ep string) {

@@ -13,7 +13,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zemn-me/monorepo/go/awsemulator"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
@@ -103,19 +102,15 @@ func main() {
 	apiOrigin := fmt.Sprintf("http://localhost:%d", addr.Port)
 	var startWorker func(*apiserver.Server)
 	if useAWSEmulator {
-		cfg, err := awsemulator.Config(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
-		opts.AWSConfig = &cfg
-		deployment, err := itestconfig.Load()
+		deployment, err := itestconfig.Load(ctx)
 		if err != nil {
 			log.Fatal(err)
 		}
 		for name, value := range deployment.Environment {
 			mustSetEnv(name, value)
 		}
-		startWorker, err = configureEmulatedJournal(ctx, cfg, deployment.JournalQueueURL, apiOrigin, mux, &opts)
+		opts.AWSConfig = &deployment.AWS
+		startWorker, err = configureEmulatedJournal(ctx, deployment.AWS, deployment.JournalQueueURL, apiOrigin, mux, &opts)
 		if err != nil {
 			log.Fatalf("configure emulated journal: %v", err)
 		}

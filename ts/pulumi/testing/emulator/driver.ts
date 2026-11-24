@@ -14,12 +14,14 @@ import * as pulumi from '@pulumi/pulumi';
 import {
 	type ConfigMap,
 	LocalWorkspace,
+	type UpResult,
 } from '@pulumi/pulumi/automation/index.js';
 
 import { pulumiCommand } from '#root/ts/pulumi/cli.js';
 import { Component } from '#root/ts/pulumi/index.js';
 import { compatibilityGateway } from '#root/ts/pulumi/testing/emulator/runtime/compatibility.js';
 import { configuration } from '#root/ts/pulumi/testing/emulator/runtime/configuration.js';
+import { zemnFeatureDeployment } from './zemn.js';
 
 const require = createRequire(import.meta.url);
 const scenario = process.env['EMULATOR_SCENARIO'];
@@ -253,8 +255,7 @@ try {
 		workspace(seedDir)
 	);
 	await fixtures.setAllConfig(settings);
-	await fixtures.up({ onOutput });
-	const zones = await fixtures.outputs();
+	const { outputs: zones } = await fixtures.up({ onOutput });
 	const zone = (domain: string): string => {
 		const value: unknown = zones[domain]?.value;
 		assert.equal(typeof value, 'string', `Missing fixture zone ${domain}`);
@@ -311,82 +312,26 @@ try {
 					openAIIdentityProviderId: 'emulator-idp',
 					openAIServiceAccountId: 'emulator-service-account',
 				});
-				const outputs = {
-					journalWorkerRoleArn: component.journalWorkerRoleArn,
-				};
-				if (!featureTests) return outputs;
-
-				// S3 invokes the deployed worker. Its image cannot run in the emulator,
-				// so forward Lambda's invocation record to the local Go worker.
-				const api = component.zemnMe.api;
-				const queue = new aws.sqs.Queue('journal-worker-invocations');
-				const grant = new aws.iam.RolePolicy(
-					'journal-invocation-delivery',
-					{
-						role: api.journalWorkerRole.name,
-						policy: pulumi.jsonStringify({
-							Version: '2012-10-17',
-							Statement: [
-								{
-									Effect: 'Allow',
-									Action: 'sqs:SendMessage',
-									Resource: queue.arn,
-								},
-							],
-						}),
-					}
-				);
-				new aws.lambda.FunctionEventInvokeConfig(
-					'journal-worker-invocations',
-					{
-						functionName: api.journalWorker.name,
-						maximumRetryAttempts: 0,
-						destinationConfig: {
-							onFailure: { destination: queue.arn },
-						},
-					},
-					{ dependsOn: grant }
-				);
-				const environment = api.lambdaFunction.environment.apply(env =>
-					Object.fromEntries(
-						[
-							'DYNAMODB_TABLE_NAME',
-							'ANALYTICS_TABLE_NAME',
-							'GRIEVANCES_TABLE_NAME',
-							'USERS_TABLE_NAME',
-							'CALLBOX_KEY_TABLE_NAME',
-							'OAUTH_TABLE_NAME',
-							'JOURNAL_TABLE_NAME',
-							'JOURNAL_BUCKET_NAME',
-							'OIDC_JWT_KMS_KEY_ID',
-							'OIDC_JWT_PUBLIC_KEY',
-						].map(name => {
-							const value = env?.variables?.[name];
-							assert(
-								value,
-								`Missing Lambda environment variable ${name}`
-							);
-							return [name, value];
-						})
-					)
-				);
-				// Only these public resource names and the public signing key leave Pulumi.
 				return {
-					...outputs,
-					deployment: {
-						environment: pulumi.unsecret(environment),
-						journalQueueURL: queue.url,
-					},
+					journalWorkerRoleArn: component.journalWorkerRoleArn,
+					...(featureTests
+						? {
+								deployment: zemnFeatureDeployment(
+									component.zemnMe.api
+								),
+							}
+						: {}),
 				};
 			},
 		},
 		workspace(workDir)
 	);
 	await stack.setAllConfig(settings);
+	let update: UpResult | undefined;
 	let updateError: unknown;
 	const diagnostics: { urn?: string; message: string }[] = [];
 	try {
-		await stack.up({
+		update = await stack.up({
 			onOutput,
 			continueOnError: !featureTests,
 			onEvent(event) {
@@ -497,14 +442,20 @@ try {
 		`Created/read all ${actual.length} AWS resources in the ${scenario} configuration.`
 	);
 	if (featureTests) {
-		const deployment = (await stack.outputs())['deployment'];
+		const deployment = update?.outputs['deployment'];
 		assert(
 			deployment && !deployment.secret,
 			'Missing public zemn.me deployment outputs'
 		);
 		await writeFile(
 			path.join(config.directory, 'zemn-deployment.json'),
-			JSON.stringify(deployment.value),
+			JSON.stringify({
+				...deployment.value,
+				endpoint: config.endpoint,
+				region: envVars.AWS_REGION,
+				credentialsFile: config.credentials,
+				certificateFile: config.certificate,
+			}),
 			{ flag: 'wx' }
 		);
 	}

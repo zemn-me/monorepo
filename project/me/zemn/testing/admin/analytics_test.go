@@ -89,15 +89,11 @@ func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time
 }
 
 func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.Duration) error {
-	client, err := browserhelpers.DynamoDBClient(ctx)
+	deployment, err := itestconfig.Load(ctx)
 	if err != nil {
 		return err
 	}
-
-	deployment, err := itestconfig.Load()
-	if err != nil {
-		return err
-	}
+	client := dynamodb.NewFromConfig(deployment.AWS)
 	table := deployment.Environment["ANALYTICS_TABLE_NAME"]
 	deadline := time.Now().Add(timeout)
 	var lastErr error

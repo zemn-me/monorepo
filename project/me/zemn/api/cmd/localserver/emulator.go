@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -141,13 +140,5 @@ func processJournalNotification(ctx context.Context, body string, srv *apiserver
 	if err := json.Unmarshal([]byte(body), &invocation); err != nil {
 		return err
 	}
-	if len(invocation.RequestPayload.Records) == 0 {
-		return errors.New("Lambda invocation has no S3 records")
-	}
-	for _, record := range invocation.RequestPayload.Records {
-		if err := srv.ProcessJournalUpload(ctx, record.S3.Bucket.Name, record.S3.Object.URLDecodedKey, record.S3.Object.Size); err != nil {
-			return err
-		}
-	}
-	return nil
+	return apiserver.ProcessJournalUploadEvent(ctx, invocation.RequestPayload, srv.ProcessJournalUpload)
 }

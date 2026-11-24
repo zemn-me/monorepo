@@ -39,7 +39,6 @@ export interface Args {
 export class Component extends Pulumi.ComponentResource {
 	site: Website;
 	readonly api: ApiZemnMe;
-	readonly journalWorkerRoleArn: Pulumi.Output<string>;
 	readonly openAIWorkloadIdentityAudience = openAIWorkloadIdentityAudience;
 	constructor(
 		name: string,
@@ -153,7 +152,7 @@ export class Component extends Pulumi.ComponentResource {
 				)
 			: undefined;
 
-		const api = new ApiZemnMe(
+		this.api = new ApiZemnMe(
 			`${name}_api`,
 			{
 				domain: ['api', args.domain].join('.'),
@@ -176,8 +175,6 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this, dependsOn: Static }
 		);
-		this.api = api;
-		this.journalWorkerRoleArn = api.journalWorkerRoleArn;
 
 		if (args.cloudWorkstations)
 			new GcpWorkstation(
@@ -194,7 +191,7 @@ export class Component extends Pulumi.ComponentResource {
 			availability,
 			Static,
 			minecraft,
-			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			journalWorkerRoleArn: this.api.journalWorkerRole.arn,
 			openAIWorkloadIdentityAudience: this.openAIWorkloadIdentityAudience,
 		});
 	}

@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"net/url"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -22,10 +21,10 @@ type journalEventProcessor interface {
 
 func handleEvent(ctx context.Context, worker journalEventProcessor, event json.RawMessage) error {
 	var envelope struct {
-		Records   []json.RawMessage `json:"Records"`
-		Source    string            `json:"source"`
-		Time      time.Time         `json:"time"`
-		RequestID string            `json:"requestId"`
+		events.S3Event
+		Source    string    `json:"source"`
+		Time      time.Time `json:"time"`
+		RequestID string    `json:"requestId"`
 	}
 	if err := json.Unmarshal(event, &envelope); err != nil {
 		return err
@@ -39,20 +38,7 @@ func handleEvent(ctx context.Context, worker journalEventProcessor, event json.R
 		return worker.RunCuration(ctx, time.Now().UTC(), envelope.RequestID)
 	}
 	if len(envelope.Records) > 0 {
-		var upload events.S3Event
-		if err := json.Unmarshal(event, &upload); err != nil {
-			return err
-		}
-		for _, record := range upload.Records {
-			key, err := url.QueryUnescape(record.S3.Object.Key)
-			if err != nil {
-				return err
-			}
-			if err := worker.ProcessUpload(ctx, record.S3.Bucket.Name, key, record.S3.Object.Size); err != nil {
-				return err
-			}
-		}
-		return nil
+		return apiserver.ProcessJournalUploadEvent(ctx, envelope.S3Event, worker.ProcessUpload)
 	}
 	if envelope.Source == "aws.events" && !envelope.Time.IsZero() {
 		return worker.RefreshSummaries(ctx, envelope.Time)

@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"reflect"
@@ -13,7 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/google/uuid"
-	"github.com/zemn-me/monorepo/go/awsemulator"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
 )
@@ -30,15 +28,11 @@ type contractRecord struct {
 func TestDynamoDBContract(t *testing.T) {
 	t.Run("in_memory", func(t *testing.T) { checkDynamoDBContract(t, &inMemoryDDB{}, "keys") })
 	t.Run("aws_emulator", func(t *testing.T) {
-		cfg, err := awsemulator.Config(t.Context())
+		deployment, err := itestconfig.Load(t.Context())
 		if err != nil {
 			t.Fatal(err)
 		}
-		deployment, err := itestconfig.Load()
-		if err != nil {
-			t.Fatal(err)
-		}
-		checkDynamoDBContract(t, dynamodb.NewFromConfig(cfg), deployment.Environment["CALLBOX_KEY_TABLE_NAME"])
+		checkDynamoDBContract(t, dynamodb.NewFromConfig(deployment.AWS), deployment.Environment["CALLBOX_KEY_TABLE_NAME"])
 	})
 }
 
@@ -132,7 +126,7 @@ func queryContractRecords(t *testing.T, db DynamoDBClient, table, id string, inp
 	input.ConsistentRead = aws.Bool(true)
 	result, err := db.Query(t.Context(), &input)
 	if err != nil {
-		t.Fatal(fmt.Errorf("query partition %s: %w", id, err))
+		t.Fatalf("query partition %s: %v", id, err)
 	}
 	var records []contractRecord
 	if err := attributevalue.UnmarshalListOfMaps(result.Items, &records); err != nil {
