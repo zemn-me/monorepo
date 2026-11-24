@@ -2405,14 +2405,6 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 		if err := driver.Get(root.String()); err != nil {
 			t.Fatal(err)
 		}
-		disclosure, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//summary[normalize-space()='Recording locations']", 60*time.Second)
-		if err != nil {
-			browserhelpers.DumpPageDiagnostics(t, driver)
-			t.Fatalf("find recording locations on %s: %v", route, err)
-		}
-		if err := browserhelpers.ClickElementInView(driver, disclosure); err != nil {
-			t.Fatalf("open recording locations on %s: %v", route, err)
-		}
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label^='Recording locations:'] a[aria-label*='40.7000, -74.0000']", 60*time.Second); err != nil {
 			browserhelpers.DumpPageDiagnostics(t, driver)
 			t.Fatalf("recording pin missing on %s: %v", route, err)
@@ -2430,6 +2422,9 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 			if _, err := driver.ExecuteScript(`document.querySelector('[role="region"][aria-label^="Recording locations:"]').scrollIntoView({block: 'center', behavior: 'instant'})`, nil); err != nil {
 				t.Fatal(err)
 			}
+			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "aside[aria-label='Copyright notices'] a[href='https://www.openstreetmap.org/copyright']", 10*time.Second); err != nil {
+				t.Fatalf("visible map has no copyright notice: %v", err)
+			}
 			usable, err := driver.ExecuteScript(`
 				const pins = [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"] a[aria-label]')];
 				return document.documentElement.scrollWidth <= window.innerWidth && pins.length > 0 &&
@@ -2445,10 +2440,7 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 				if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "svg[aria-label='Location map'][aria-busy='false']", 30*time.Second); err != nil {
 					t.Fatal("map did not finish loading its vector tiles", err)
 				}
-				mapSection, err := disclosure.FindElement(selenium.ByXPATH, "..")
-				if err != nil {
-					t.Fatal(err)
-				}
+
 				for _, scheme := range []string{"light", "dark"} {
 					if err := driver.ExecuteChromiumCommand("Emulation.setEmulatedMedia", map[string]any{
 						"features": []map[string]string{{"name": "prefers-color-scheme", "value": scheme}},
@@ -2464,7 +2456,7 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 					if err != nil || painted != true {
 						t.Fatalf("map did not switch to %s: %v %v", scheme, painted, err)
 					}
-					screenshot, err := mapSection.Screenshot(false)
+					screenshot, err := driver.Screenshot()
 					if err != nil {
 						t.Fatal(err)
 					}
@@ -2492,6 +2484,30 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByID, mapLink.Fragment, 30*time.Second); err != nil {
 		t.Fatalf("map pin did not open its note: %v", err)
+	}
+	entry, err := driver.FindElement(selenium.ByID, mapLink.Fragment)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := entry.FindElement(selenium.ByCSSSelector, ":scope > header + [role='region'][aria-label^='Recording locations:']"); err != nil {
+		t.Fatalf("recording map must immediately follow its title and controls: %v", err)
+	}
+	browserhelpers.SaveNavigationScreenshot(t, driver, "journal-entry-map.png")
+	// The day may contain just this one entry. Use a short viewport so
+	// scrolling to the site's header puts the entire map out of view.
+	if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+		"width": 390, "height": 220, "deviceScaleFactor": 1, "mobile": false,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := driver.ExecuteScript("window.scrollTo({top: 0, behavior: 'instant'})", nil); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		value, err := wd.ExecuteScript(`return [...document.querySelectorAll('[role="region"][aria-label^="Recording locations:"]')].every(map => map.getBoundingClientRect().top >= innerHeight || map.getBoundingClientRect().bottom <= 0) && !document.querySelector('aside[aria-label="Copyright notices"]')`, nil)
+		return value == true, err
+	}, 10*time.Second); err != nil {
+		t.Fatalf("copyright remained after scrolling away from maps: %v", err)
 	}
 }
 

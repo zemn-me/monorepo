@@ -759,6 +759,7 @@ function EntryCard({
 						</details>
 					)}
 			</header>
+			{entry.location && <JournalMap entries={[entry]} />}
 			{entry.status === 'processing' ? (
 				<JournalProcessingStatus progress={entry.processingProgress} />
 			) : (
@@ -801,7 +802,6 @@ function EntryCard({
 					timeZone={entry.timeZone}
 				/>
 			)}
-			{entry.status !== 'ready' && <JournalMap entries={[entry]} />}
 		</article>
 	);
 }
@@ -947,6 +947,7 @@ function periodMidpoint(period: Pick<JournalPeriodNode, 'start' | 'end'>) {
 }
 
 function PeriodDisclosure({
+	locations,
 	timeZone,
 	curation,
 	children,
@@ -958,6 +959,7 @@ function PeriodDisclosure({
 	readonly timeZone?: string;
 	readonly curation: boolean;
 	readonly children: readonly JournalPeriodNode[];
+	readonly locations: readonly JournalEntry[];
 	readonly initiallyOpen: boolean;
 	readonly nextRoute: JournalRoute;
 	readonly node: JournalPeriodNode;
@@ -993,6 +995,7 @@ function PeriodDisclosure({
 				/>
 			</summary>
 			<div className={style.periodDisclosureBody}>
+				<JournalMap entries={locations} />
 				{node.summary && (
 					<SummaryCard
 						playback={playback}
@@ -1331,6 +1334,7 @@ function PeriodList({
 			>
 				{nextRoute ? (
 					<PeriodDisclosure
+						locations={journal.browse?.locations ?? []}
 						timeZone={journal.browse?.timeZone}
 						key={node.id}
 						curation={journal.curation !== undefined}
@@ -1369,13 +1373,6 @@ function PeriodList({
 						))}
 					</>
 				)}
-				<JournalMap
-					entries={
-						period === 'day'
-							? entries
-							: (journal.browse?.locations ?? [])
-					}
-				/>
 			</section>
 		</div>
 	);
@@ -1833,6 +1830,7 @@ function JournalBrowser({
 				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
 				<RecentEntries journal={journal} />
+				<JournalMap entries={readyEntries} />
 				{summary ? (
 					<SummaryCard
 						playback={playback}
@@ -1854,7 +1852,6 @@ function JournalBrowser({
 						</div>
 					)
 				)}
-				<JournalMap entries={readyEntries} />
 			</div>
 		);
 	}
