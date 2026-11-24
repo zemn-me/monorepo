@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { mapViewport } from '#root/project/me/zemn/app/journal/location_geometry.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
+import { VectorMap } from '#root/project/me/zemn/app/journal/vector_map.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 
 type Entry = components['schemas']['JournalEntry'];
@@ -49,38 +50,7 @@ export function JournalMap({
 		width,
 		mapHeight
 	);
-	const count = 2 ** view.zoom;
-	const tiles = [];
-	if (visible && width > 0) {
-		for (
-			let x = Math.floor(view.left / 256);
-			x <= Math.floor((view.left + width) / 256);
-			x++
-		) {
-			for (
-				let y = Math.max(0, Math.floor(view.top / 256));
-				y <=
-				Math.min(count - 1, Math.floor((view.top + mapHeight) / 256));
-				y++
-			) {
-				tiles.push(
-					<img
-						key={`${x}/${y}`}
-						alt=""
-						aria-hidden="true"
-						width={256}
-						height={256}
-						referrerPolicy="strict-origin-when-cross-origin"
-						src={`https://tile.openstreetmap.org/${view.zoom}/${((x % count) + count) % count}/${y}.png`}
-						style={{
-							left: x * 256 - view.left,
-							top: y * 256 - view.top,
-						}}
-					/>
-				);
-			}
-		}
-	}
+
 	return (
 		<details className={style.mapDisclosure}>
 			<summary>
@@ -94,7 +64,9 @@ export function JournalMap({
 				role="region"
 				aria-label={`Recording locations: ${located.length} ${located.length === 1 ? 'voice note' : 'voice notes'}`}
 			>
-				{tiles}
+				{visible && width > 0 && (
+					<VectorMap {...view} width={width} height={mapHeight} />
+				)}
 				{width > 0 &&
 					located.map((entry, index) => {
 						const point = view.points[index];
@@ -109,22 +81,22 @@ export function JournalMap({
 								aria-label={label}
 								title={label}
 							>
-								<span aria-hidden="true">●</span>
+								<span aria-hidden="true" />
 							</Link>
 						);
 					})}
-				<span className={style.mapAttribution}>
-					©{' '}
-					<a
-						href="https://www.openstreetmap.org/copyright"
-						target="_blank"
-						rel="noreferrer"
-					>
-						OpenStreetMap
-					</a>{' '}
-					contributors
-				</span>
 			</div>
+			<span className={style.mapAttribution}>
+				©{' '}
+				<a
+					href="https://www.openstreetmap.org/copyright"
+					target="_blank"
+					rel="noreferrer"
+				>
+					OpenStreetMap
+				</a>{' '}
+				contributors
+			</span>
 		</details>
 	);
 }

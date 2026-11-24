@@ -2422,7 +2422,9 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 			t.Fatalf("map height on %s: %v, %v", route, thin, err)
 		}
 		for _, width := range []int{1280, 390} {
-			if err := driver.ResizeWindow("", width, 844); err != nil {
+			if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+				"width": width, "height": 844, "deviceScaleFactor": 1, "mobile": false,
+			}); err != nil {
 				t.Fatal(err)
 			}
 			if _, err := driver.ExecuteScript(`document.querySelector('[role="region"][aria-label^="Recording locations:"]').scrollIntoView({block: 'center', behavior: 'instant'})`, nil); err != nil {
@@ -2440,8 +2442,35 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 				t.Fatalf("map targets or layout on %s at %dpx: %v, %v", route, width, usable, err)
 			}
 			if outputDir := os.Getenv("TEST_UNDECLARED_OUTPUTS_DIR"); outputDir != "" && route == "/journal/year" {
-				if screenshot, err := driver.Screenshot(); err == nil {
-					_ = os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-map-%d.png", width)), screenshot, 0600)
+				if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "svg[aria-label='Location map'][aria-busy='false']", 30*time.Second); err != nil {
+					t.Fatal("map did not finish loading its vector tiles", err)
+				}
+				mapSection, err := disclosure.FindElement(selenium.ByXPATH, "..")
+				if err != nil {
+					t.Fatal(err)
+				}
+				for _, scheme := range []string{"light", "dark"} {
+					if err := driver.ExecuteChromiumCommand("Emulation.setEmulatedMedia", map[string]any{
+						"features": []map[string]string{{"name": "prefers-color-scheme", "value": scheme}},
+					}); err != nil {
+						t.Fatal(err)
+					}
+					// Allow the new media query to paint before capturing its palette.
+					painted, err := driver.ExecuteScriptAsync(`
+						const [scheme, done] = arguments;
+						requestAnimationFrame(() => requestAnimationFrame(() =>
+							done(matchMedia('(prefers-color-scheme: ' + scheme + ')').matches)));
+					`, []any{scheme})
+					if err != nil || painted != true {
+						t.Fatalf("map did not switch to %s: %v %v", scheme, painted, err)
+					}
+					screenshot, err := mapSection.Screenshot(false)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err := os.WriteFile(filepath.Join(outputDir, fmt.Sprintf("journal-location-map-%s-%d.png", scheme, width)), screenshot, 0600); err != nil {
+						t.Fatal(err)
+					}
 				}
 			}
 		}

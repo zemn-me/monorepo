@@ -70,6 +70,7 @@ const csp = {
 		...DefaultContentSecurityPolicy['connect-src']!,
 		'https://accounts.google.com',
 		'https://people.googleapis.com',
+		'https://vector.openstreetmap.org',
 		'http://localhost:*' as 'https://localhost',
 		ZEMN_ME_API_BASE as 'https://api.zemn.me',
 		'https://www.googleapis.com', // dub-dub-dub?? what year is it?
@@ -78,7 +79,6 @@ const csp = {
 	'img-src': new Set<SourceExpression>([
 		...DefaultContentSecurityPolicy['img-src']!,
 		'https://*.googleusercontent.com',
-		'https://tile.openstreetmap.org',
 	]),
 	'media-src': new Set<SourceExpression>([
 		...(DefaultContentSecurityPolicy['media-src'] ?? []),
