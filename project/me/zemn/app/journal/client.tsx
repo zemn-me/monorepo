@@ -2315,21 +2315,13 @@ function WikiHeader({
 }) {
 	return (
 		<>
-			<header className={style.wikiHeader}>
-				<h2>
-					{index ? (
-						'Wiki'
-					) : (
-						<Link href="/journal?wiki=all">Wiki</Link>
-					)}
-				</h2>
-				{curation?.updatedAt && (
-					<small>
-						Updated{' '}
-						<LocalizedDate date={new Date(curation.updatedAt)} />
-					</small>
+			<h2 className={style.wikiHeading}>
+				{index ? (
+					'Wiki'
+				) : (
+					<Link href="/journal?wiki=all">Wiki</Link>
 				)}
-			</header>
+			</h2>
 			{curation?.status === 'failed' && (
 				<p role="status">
 					The latest update could not finish. It will retry

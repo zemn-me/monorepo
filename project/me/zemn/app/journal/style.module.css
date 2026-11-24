@@ -1023,7 +1023,7 @@
 }
 
 .recent > header h2,
-.wikiHeader h2 {
+.wikiHeading {
 	font-size: 1.45rem;
 	line-height: 1.25;
 	margin: 0;
@@ -1350,15 +1350,6 @@
 	margin-block: 1.5rem;
 }
 
-.wikiHeader {
-	align-items: baseline;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.25rem 1rem;
-	justify-content: space-between;
-}
-
-.wikiHeader small,
 .wikiKind,
 .wikiIndex a span {
 	color: var(--journal-muted);
