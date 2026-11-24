@@ -11,10 +11,14 @@ are accessible to PR code; cache only non-sensitive outputs. Presubmit uses
 falls back to `ci-local` when credentials are unavailable. Staging and submit
 retain their writable key and use `ci`.
 
-Staging and Submit share `pulumi_deploy`; obsolete pending merge-group runs are
-removed by `cancel-obsolete-staging.yml`. Keep cleanup outside that concurrency
-group and execute only trusted workflow code through Bazel when using its Actions
-write token. Cleanup also cancels obsolete running Presubmits, which only run checks.
+Submit publishes the main staging bundle on push. Reuse it only from a Submit
+push run for the pinned main SHA. Build missing bundles and candidates outside
+`pulumi_deploy`. Deploy main and then the candidate under the same lock as Submit.
+Recheck the merge-group ref on acquiring the lock because cleanup preserves
+Staging runs already in progress.
+Keep `cancel-obsolete-staging.yml` outside the lock and execute only trusted
+workflow code through Bazel with its Actions write token. Cleanup also cancels
+obsolete running Presubmits, which only run checks.
 
 Renovate's container entrypoint installs bootstrap tools as root, then runs the
 bot as `ubuntu`. Keep post-upgrade checksum repair before Bazel and refresh stale

@@ -16,6 +16,30 @@ env:
 
 
 jobs:
+  PublishStagingBundle:
+    name: Publish main staging bundle
+    concurrency:
+      group: staging-main-bundle-${{ github.sha }}
+      cancel-in-progress: false
+      queue: max
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Check for a published bundle for this commit
+        id: published
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAIN_SHA: ${{ github.sha }}
+        run: python3 py/ci/find_staging_bundle.py
+      - uses: ./.github/actions/build-staging-bundle
+        if: steps.published.outputs.run-id == ''
+        with:
+          artifact-name: staging-main-${{ github.sha }}
+
   UploadToBazelRemoteCache:
     name: Upload to Bazel remote cache
     # Only the newest main commit needs to warm the shared cache.
