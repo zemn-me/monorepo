@@ -722,7 +722,7 @@ export function JournalPlayerProvider({
 						</div>
 						{audioRef.current && (
 							<Waveform
-								key={entry.id}
+								key={`waveform-${entry.id}`}
 								audio={audioRef.current}
 								source={source}
 								durationMs={entry.durationMs}
@@ -740,7 +740,7 @@ export function JournalPlayerProvider({
 						)}
 						{entry.transcript.length > 0 && (
 							<Transcript
-								key={entry.id}
+								key={`transcript-${entry.id}`}
 								entry={entry}
 								playback={playback}
 							/>

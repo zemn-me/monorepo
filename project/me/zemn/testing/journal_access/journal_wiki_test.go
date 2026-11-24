@@ -531,17 +531,21 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	click(selenium.ByCSSSelector, "button[aria-label='Play A quieter kind of launch']")
 	slider := find(selenium.ByCSSSelector, "input[aria-label='Seek recording']")
-	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
-		value, err := wd.ExecuteScript(`
+	waitForWaveform := func() {
+		t.Helper()
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			value, err := wd.ExecuteScript(`
 			const canvas = document.querySelector('[aria-label="Journal player"] canvas');
 			if (!canvas || !canvas.width || !canvas.height) return false;
 			const row = canvas.getContext('2d').getImageData(0, Math.floor(canvas.height / 3), canvas.width, 1).data;
 			return row.some((value, index) => index % 4 === 3 && value > 0);
 		`, nil)
-		return value == true, err
-	}, 15*time.Second); err != nil {
-		t.Fatal("recording waveform did not show audible peaks", err)
+			return value == true, err
+		}, 15*time.Second); err != nil {
+			t.Fatal("recording waveform did not show audible peaks", err)
+		}
 	}
+	waitForWaveform()
 	if buttons, _ := driver.FindElements(selenium.ByCSSSelector, "button[aria-label='Pause recording']"); len(buttons) > 0 {
 		if err := browserhelpers.ClickElementInView(driver, buttons[0]); err != nil {
 			t.Fatal(err)
@@ -555,6 +559,60 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		return v == true, err
 	}, 5*time.Second); err != nil {
 		t.Fatal("keyboard scrubbing did not seek the paused recording", err)
+	}
+	for _, size := range []struct{ width, height int }{{1440, 1000}, {390, 844}} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": size.width, "height": size.height, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		for _, title := range []string{"Coffee with Maya before the pilot", "A quieter kind of launch"} {
+			button := find(selenium.ByCSSSelector, "button[aria-label='Play "+title+"']")
+			if err := browserhelpers.ClickElementInView(driver, button); err != nil {
+				t.Fatal(err)
+			}
+			valid, err := driver.ExecuteScript(`
+				const player = document.querySelector('[aria-label="Journal player"]');
+				return document.querySelectorAll('main audio').length === 1 &&
+					document.querySelectorAll('[aria-label="Seek recording"]').length === 1 &&
+					document.querySelectorAll('[aria-label="Transcript"]').length === 1 &&
+					player.querySelector('strong').textContent === arguments[0];
+			`, []any{title})
+			if err != nil || valid != true {
+				t.Fatalf("switch to %s left duplicate or stale controls: %v %v", title, valid, err)
+			}
+		}
+		if _, err := driver.ExecuteScript(`
+			const heading = document.querySelector("article[id^='entry-'] > header");
+			const toolbar = document.querySelector('[data-journal-toolbar]');
+			const pinnedHeight = parseFloat(getComputedStyle(toolbar).top) + toolbar.offsetHeight;
+			window.scrollBy({top: heading.getBoundingClientRect().top - pinnedHeight - 12, behavior: 'instant'});
+		`, nil); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			state, err := wd.ExecuteScript(`
+				const player=document.querySelector('[aria-label="Journal player"]').getBoundingClientRect();
+				const banner=document.querySelector('header[data-glade-banner]').getBoundingClientRect();
+				const toolbar=document.querySelector('[data-journal-toolbar]').getBoundingClientRect();
+				return scrollY > 120 && Math.abs(player.top-banner.bottom) <= 1 &&
+					Math.abs(toolbar.top-player.bottom) <= 1 && toolbar.bottom < innerHeight;
+			`, nil)
+			return state == true, err
+		}, 5*time.Second); err != nil {
+			t.Fatalf("pinned controls at width %d: %v", size.width, err)
+		}
+		if size.width == 390 {
+			waitForWaveform()
+			shot, err := driver.Screenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			save("18-pinned-player-phone", shot)
+		}
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+		t.Fatal(err)
 	}
 	capture("16-player-desktop", "[data-journal-page]", 1440, 1000, false)
 	capture("17-player-phone", "[data-journal-page]", 390, 844, false)

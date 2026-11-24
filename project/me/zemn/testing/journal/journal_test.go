@@ -928,7 +928,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		const toolbar = document.querySelector('[data-journal-toolbar]');
 		return player && title.compareDocumentPosition(player) & Node.DOCUMENT_POSITION_FOLLOWING &&
 			Boolean(player.compareDocumentPosition(toolbar) & Node.DOCUMENT_POSITION_FOLLOWING) &&
-			getComputedStyle(player).position === 'static' &&
+			getComputedStyle(player.parentElement).position === 'sticky' &&
 			document.querySelectorAll('main audio').length === 1;
 	`, nil)
 	if err != nil || playerInHeader != true {

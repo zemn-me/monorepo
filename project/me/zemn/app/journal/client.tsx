@@ -2114,6 +2114,19 @@ export default function JournalPageClient({
 export function JournalReaderLayout() {
 	const { pathname } = useLocation();
 	const [playerHost, setPlayerHost] = useState<HTMLDivElement | null>(null);
+	useEffect(() => {
+		const page = playerHost?.parentElement;
+		if (!playerHost || !page) return;
+		const observer = new ResizeObserver(([size]) => {
+			if (size)
+				page.style.setProperty(
+					'--journal-player-height',
+					`${size.contentRect.height}px`
+				);
+		});
+		observer.observe(playerHost);
+		return () => observer.disconnect();
+	}, [playerHost]);
 	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
@@ -2478,8 +2491,8 @@ export function JournalReaderLayout() {
 			)}
 			<header className={style.hero}>
 				<h1>Journal</h1>
-				<div ref={setPlayerHost} />
 			</header>
+			<div className={style.playerDock} ref={setPlayerHost} />
 			{!isLoggedIn ? (
 				<button
 					aria-label="Authenticate with OIDC"
