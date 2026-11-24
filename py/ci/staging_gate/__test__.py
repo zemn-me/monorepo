@@ -38,7 +38,10 @@ class StagingGateTest(unittest.TestCase):
         self.assertEqual(staging["if"], "always()")
         self.assertNotIn("if", deploy)
         self.assertEqual(deploy["concurrency"]["group"], "pulumi_deploy")
-        self.assertNotIn("concurrency", jobs[deploy["needs"]])
+        for prerequisite in deploy["needs"]:
+            self.assertNotEqual(
+                jobs[prerequisite].get("concurrency", {}).get("group"), "pulumi_deploy"
+            )
         self.assertIn(
             "Deploy candidate branch to Staging",
             [step.get("name") for step in deploy["steps"]],

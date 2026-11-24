@@ -1,4 +1,4 @@
-"""Exercise the candidate-to-main staging build handoff without credentials."""
+"""Exercise the pinned main build in a checkout separate from its workflow tools."""
 
 import os
 import subprocess
@@ -7,47 +7,39 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import yaml
-
 
 class ArchiveCheckoutTest(unittest.TestCase):
-    def test_saved_inputs_survive_replacing_candidate_with_main(self):
-        workflow = yaml.safe_load(WORKFLOW.read_text())
-        seed = next(
-            step for step in workflow["jobs"]["Build"]["steps"]
-            if step.get("name") == "Save candidate build inputs for main"
-        )
-        for has_archives in (True, False):
-            with self.subTest(has_archives=has_archives), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                runner_temp = root / "runner-temp"
-                runner_temp.mkdir()
-                with tempfile.TemporaryDirectory(dir=root) as checkout:
-                    workspace = Path(checkout)
-                    launcher = workspace / "ci/staging/deploy"
-                    launcher.mkdir(parents=True)
-                    (launcher / "BUILD.bazel").write_text("# launcher\n")
-                    if has_archives:
-                        for archive in ("ape", "rules_diff"):
-                            source = workspace / "third_party/bazel_distdir" / archive
-                            source.mkdir(parents=True)
-                            (source / "archive.tar.gz").write_bytes(archive.encode())
-                    subprocess.run(
-                        ["bash", "-eo", "pipefail", "-c", seed["run"]],
-                        cwd=workspace,
-                        env={**os.environ, "RUNNER_TEMP": str(runner_temp)},
-                        check=True,
-                    )
-
-                self.assertTrue((runner_temp / "deploy/BUILD.bazel").is_file())
+    def test_main_uses_candidate_archives_and_only_bootstraps_a_missing_launcher(self):
+        for has_launcher in (False, True):
+            with self.subTest(has_launcher=has_launcher), tempfile.TemporaryDirectory() as root:
+                workspace = Path(root)
+                candidate = workspace / "ci/staging/deploy"
+                candidate.mkdir(parents=True)
+                (candidate / "deploy.ts").write_text("candidate")
+                main = workspace / "main"
+                (main / "ci/staging").mkdir(parents=True)
+                launcher = main / "ci/staging/deploy"
+                if has_launcher:
+                    launcher.mkdir()
+                    (launcher / "deploy.ts").write_text("main")
+                prepare = main / ".github/workflows/prepare_ci.sh"
+                prepare.parent.mkdir(parents=True)
+                prepare.write_text("#!/bin/sh\nexit 0\n")
+                prepare.chmod(0o755)
+                bazel = main / "sh/bin/bazel"
+                bazel.parent.mkdir(parents=True)
+                bazel.write_text("#!/bin/sh\nprintf '%s\\n' \"$@\" >> bazel-args\n")
+                bazel.chmod(0o755)
+                subprocess.run(
+                    [BUILD_SCRIPT], cwd=main, check=True,
+                    env={**os.environ, "GITHUB_WORKSPACE": str(workspace)},
+                )
+                args = (main / "bazel-args").read_text().splitlines()
                 for archive in ("ape", "rules_diff"):
-                    saved = runner_temp / "bazel-distdir" / archive / "archive.tar.gz"
-                    if has_archives:
-                        self.assertEqual(archive.encode(), saved.read_bytes())
-                    else:
-                        self.assertFalse(saved.exists())
+                    self.assertIn(f"--distdir={workspace}/third_party/bazel_distdir/{archive}", args)
+                self.assertEqual((launcher / "deploy.ts").read_text(), "main" if has_launcher else "candidate")
 
 
 if __name__ == "__main__":
-    WORKFLOW = Path(sys.argv[1])
+    BUILD_SCRIPT = Path(sys.argv[1]).resolve()
     unittest.main(argv=[sys.argv[0]])
