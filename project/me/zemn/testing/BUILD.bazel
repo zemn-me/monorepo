@@ -13,6 +13,7 @@ test_suite(
         ":journal_access_integration_test",
         ":journal_integration_test",
         ":site_integration_test",
+        "//project/me/zemn/api/server:journal_worker_integration_test",
     ],
 )
 

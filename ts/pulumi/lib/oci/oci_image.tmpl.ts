@@ -17,6 +17,7 @@ export interface Args {
 
 export class __ClassName extends ComponentResource {
 	url: Output<string>;
+	// __BINARY_RUNTIME
 	static digestPath: string = '__DIGEST';
 	constructor(name: string, args: Args, opts?: ComponentResourceOptions) {
 		super('__TYPE', name, args, opts);

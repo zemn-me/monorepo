@@ -18,70 +18,37 @@ import (
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
-type ServicePorts struct {
-	FrontendPort         string `json:"@@//project/me/zemn:itest_service"`
-	CalendarFrontendPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
-	APIPort              string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
-	CalendarAPIPort      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
-	// The beacon transport test checks ingestion independently of admin authentication.
-	DynamoDBPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
-	OIDCProvider string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
+type servicePorts struct {
+	Frontend string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
+	API      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
 }
 
-func servicePorts() (p ServicePorts, err error) {
-	if err = json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &p); err != nil {
-		return
-	}
-	if p.FrontendPort == "" {
-		p.FrontendPort = p.CalendarFrontendPort
-	}
-	if p.APIPort == "" {
-		p.APIPort = p.CalendarAPIPort
-	}
-
-	return
+func assignedPorts() (servicePorts, error) {
+	var ports servicePorts
+	err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports)
+	return ports, err
 }
 
-func FrontendRoot() (u url.URL, err error) {
-	ports, err := servicePorts()
+func FrontendRoot() (url.URL, error) {
+	ports, err := assignedPorts()
 	if err != nil {
-		return
+		return url.URL{}, err
 	}
-
-	return url.URL{
-		Scheme: "http",
-		Host:   "localhost:" + ports.FrontendPort,
-	}, nil
+	if ports.Frontend == "" {
+		return url.URL{}, fmt.Errorf("frontend port not found in ASSIGNED_PORTS")
+	}
+	return url.URL{Scheme: "http", Host: "localhost:" + ports.Frontend}, nil
 }
 
 func APIRoot() (url.URL, error) {
-	ports, err := servicePorts()
+	ports, err := assignedPorts()
 	if err != nil {
 		return url.URL{}, err
 	}
-	if ports.APIPort == "" {
+	if ports.API == "" {
 		return url.URL{}, fmt.Errorf("api port not found in ASSIGNED_PORTS")
 	}
-
-	return url.URL{
-		Scheme: "http",
-		Host:   "localhost:" + ports.APIPort,
-	}, nil
-}
-
-func DynamoDBRoot() (url.URL, error) {
-	ports, err := servicePorts()
-	if err != nil {
-		return url.URL{}, err
-	}
-	if ports.DynamoDBPort == "" {
-		return url.URL{}, fmt.Errorf("dynamodb port not found in ASSIGNED_PORTS")
-	}
-
-	return url.URL{
-		Scheme: "http",
-		Host:   "localhost:" + ports.DynamoDBPort,
-	}, nil
+	return url.URL{Scheme: "http", Host: "localhost:" + ports.API}, nil
 }
 
 func AssertEndpointHasNoLogErrors(t *testing.T, ep string) {

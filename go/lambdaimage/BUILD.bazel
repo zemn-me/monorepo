@@ -1,0 +1,30 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "lambdaimage",
+    srcs = ["runtime.go"],
+    importpath = "github.com/zemn-me/monorepo/go/lambdaimage",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_service_sqs//:sqs",
+        "@io_bazel_rules_go//go/runfiles",
+    ],
+)
+
+go_test(
+    name = "lambdaimage_test",
+    srcs = ["runtime_test.go"],
+    embed = [":lambdaimage"],
+    deps = [
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_aws_aws_lambda_go//lambdacontext",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

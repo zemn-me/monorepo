@@ -58,7 +58,12 @@ async function createOutputs(urn: string, inputs: Record<string, unknown>) {
 	const configBlob = JSON.stringify({
 		architecture: 'amd64',
 		os: 'linux',
-		config: { Labels: { 'aws-emulator-fixture': urn } },
+		config: {
+			Labels: {
+				'aws-emulator-fixture': urn,
+				'bazel-image-digest': String(interpreter[6]).trim(),
+			},
+		},
 	});
 	const configDigest = `sha256:${createHash('sha256').update(configBlob).digest('hex')}`;
 	const manifest = JSON.stringify({

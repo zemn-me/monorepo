@@ -1,5 +1,5 @@
 load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
-load("@rules_itest//private:itest.bzl", "itest_service", "service_test")
+load("@rules_itest//private:itest.bzl", "itest_service", "itest_task", "service_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary", "js_test")
 load("//md:rules.bzl", "md_files")
@@ -25,6 +25,10 @@ itest_service(
     health_check_args = ["--health"],
     health_check_interval = "200ms",
     health_check_timeout = "30s",
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
 )
 
 js_binary(
@@ -75,6 +79,14 @@ js_binary(
     ]
 ]
 
+itest_task(
+    name = "zemn_deployment",
+    args = ["--zemn-features"],
+    exe = ":staging_bin",
+    visibility = ["//project/me/zemn/api:__subpackages__"],
+    deps = [":service"],
+)
+
 [
     service_test(
         name = scenario + "_test",
@@ -101,7 +113,9 @@ bazel_lint(
 ts_project(
     name = "emulator",
     srcs = [
+        "binary_function.ts",
         "driver.ts",
+        "zemn.ts",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -114,14 +128,18 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/pulumi",
         "//ts/pulumi:cli",
+        "//ts/pulumi/lib",
         "//ts/pulumi/testing/emulator/runtime",
+        "//ts/pulumi/zemn.me/api",
     ],
 )
 
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "binary_function.ts",
         "driver.ts",
+        "zemn.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

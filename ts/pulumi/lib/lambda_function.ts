@@ -1,5 +1,9 @@
 import * as aws from '@pulumi/aws';
-import { ComponentResource, ComponentResourceOptions } from '@pulumi/pulumi';
+import {
+	ComponentResource,
+	ComponentResourceOptions,
+	type Output,
+} from '@pulumi/pulumi';
 
 function clampLambdaFunctionName(name: string): string {
 	// Define constraints
@@ -42,6 +46,28 @@ export class LambdaFunction extends ComponentResource {
 			clampLambdaFunctionName(name),
 			args,
 			{ ...opts, parent: this }
+		);
+	}
+}
+
+/** A Lambda deployed from the image containing this Bazel executable. */
+export class BinaryImageFunction extends LambdaFunction {
+	constructor(
+		name: string,
+		readonly image: {
+			url: Output<string>;
+			binary: string;
+		},
+		args: Omit<
+			aws.lambda.FunctionArgs,
+			'packageType' | 'imageUri' | 'code' | 'imageConfig'
+		>,
+		opts?: ComponentResourceOptions
+	) {
+		super(
+			name,
+			{ ...args, packageType: 'Image', imageUri: image.url },
+			opts
 		);
 	}
 }

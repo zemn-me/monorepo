@@ -20,12 +20,9 @@ import (
 )
 
 const (
-	localJournalObjectPath       = "/__local/journal/object"
-	localJournalRefreshPath      = "/__local/journal/refresh"
-	localJournalAudioDelayEnv    = "JOURNAL_LOCAL_AUDIO_DELAY_MS"
-	localJournalAudioLifetimeEnv = "JOURNAL_LOCAL_AUDIO_LIFETIME_MS"
-	localJournalMaxBytes         = 25 * 1024 * 1024
-	localJournalMaximumReadDelay = 5 * time.Second
+	localJournalObjectPath  = "/__local/journal/object"
+	localJournalRefreshPath = "/__local/journal/refresh"
+	localJournalMaxBytes    = 25 * 1024 * 1024
 )
 
 type localJournalUploadProcessor func(context.Context, string, string, int64) error
@@ -39,8 +36,6 @@ type localJournalStore struct {
 	mu           sync.RWMutex
 	contentTypes map[string]string
 	processor    localJournalUploadProcessor
-	readDelay    time.Duration
-	readLifetime time.Duration
 }
 
 func newLocalJournalStore(baseURL string, logger *log.Logger) (*localJournalStore, error) {
@@ -48,16 +43,9 @@ func newLocalJournalStore(baseURL string, logger *log.Logger) (*localJournalStor
 	if err != nil {
 		return nil, err
 	}
-	store := &localJournalStore{
+	return &localJournalStore{
 		baseURL: baseURL, directory: directory, logger: logger, contentTypes: map[string]string{},
-	}
-	if milliseconds, err := strconv.Atoi(os.Getenv(localJournalAudioDelayEnv)); err == nil && milliseconds > 0 {
-		store.readDelay = min(time.Duration(milliseconds)*time.Millisecond, localJournalMaximumReadDelay)
-	}
-	if milliseconds, err := strconv.Atoi(os.Getenv(localJournalAudioLifetimeEnv)); err == nil && milliseconds > 0 {
-		store.readLifetime = time.Duration(milliseconds) * time.Millisecond
-	}
-	return store, nil
+	}, nil
 }
 
 func (s *localJournalStore) Close() error {
@@ -199,15 +187,8 @@ func (s *localJournalStore) PresignGetObject(_ context.Context, input *s3.GetObj
 	for _, apply := range optionFunctions {
 		apply(&options)
 	}
-	lifetime := options.Expires
-	if s.readLifetime > 0 {
-		lifetime = s.readLifetime
-	}
-	if lifetime > 0 {
-		objectURL += "&expiresAt=" + strconv.FormatInt(time.Now().Add(lifetime).UnixMilli(), 10)
-	}
-	if s.readDelay > 0 {
-		objectURL += "&delayMs=" + strconv.FormatInt(s.readDelay.Milliseconds(), 10)
+	if options.Expires > 0 {
+		objectURL += "&expiresAt=" + strconv.FormatInt(time.Now().Add(options.Expires).UnixMilli(), 10)
 	}
 	return &v4.PresignedHTTPRequest{
 		Method: http.MethodGet, URL: objectURL, SignedHeader: http.Header{},
@@ -254,16 +235,6 @@ func (s *localJournalStore) ServeHTTP(response http.ResponseWriter, request *htt
 		if expiresAt, err := strconv.ParseInt(request.URL.Query().Get("expiresAt"), 10, 64); err == nil && time.Now().UnixMilli() >= expiresAt {
 			http.Error(response, "presigned URL has expired", http.StatusForbidden)
 			return
-		}
-		if delayMilliseconds, err := strconv.Atoi(request.URL.Query().Get("delayMs")); err == nil && delayMilliseconds > 0 {
-			delay := min(time.Duration(delayMilliseconds)*time.Millisecond, localJournalMaximumReadDelay)
-			timer := time.NewTimer(delay)
-			defer timer.Stop()
-			select {
-			case <-timer.C:
-			case <-request.Context().Done():
-				return
-			}
 		}
 		file, contentType, err := s.openObject(bucket, key)
 		if err != nil {

@@ -1,9 +1,8 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
-load("@rules_oci//oci:defs.bzl", "oci_image")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
-load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+load("//py:rules.bzl", "py_test")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_binary_image")
 
 package(default_visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"])
 
@@ -16,41 +15,24 @@ go_library(
         "//project/me/zemn/api/server",
         "@com_github_aws_aws_lambda_go//events",
         "@com_github_aws_aws_lambda_go//lambda",
+        "@io_bazel_rules_go//go/runfiles",
     ],
 )
 
 go_binary(
     name = "journal_worker",
+    data = ["//bin/host/ffmpeg"],
     embed = [":journal_worker_lib"],
     visibility = ["//visibility:public"],
+    x_defs = {"main.ffmpegRunfile": "$(rlocationpath //bin/host/ffmpeg)"},
 )
 
-pkg_tar(
-    name = "ffmpeg_tar",
-    srcs = ["//bin/host/ffmpeg"],
-    mode = "0755",
-    package_dir = "/usr/local/bin",
-)
-
-pkg_tar(
-    name = "tar",
-    srcs = [":journal_worker"],
-)
-
-oci_image(
-    name = "image",
-    base = "@distroless_cc_debian12",
-    entrypoint = ["/journal_worker"],
-    tars = [
-        ":tar",
-        ":ffmpeg_tar",
-    ],
-)
-
-pulumi_image(
+pulumi_binary_image(
     name = "oci_image",
-    src = ":image",
+    srcs = [":journal_worker"],
+    base = "@distroless_cc_debian12",
     component_name = "JournalWorkerLambdaImage",
+    image_name = "image",
     visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"],
 )
 
@@ -63,4 +45,20 @@ go_test(
     name = "journal_worker_test",
     srcs = ["main_test.go"],
     embed = [":journal_worker_lib"],
+)
+
+py_test(
+    name = "image_test",
+    srcs = ["image_test.py"],
+    args = [
+        "$(rootpath :image)",
+        "$(rootpath :journal_worker)",
+        "$(rootpath //bin/host/ffmpeg)",
+        "$(rlocationpath //bin/host/ffmpeg)",
+    ],
+    data = [
+        ":image",
+        ":journal_worker",
+        "//bin/host/ffmpeg",
+    ],
 )

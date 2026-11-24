@@ -84,8 +84,9 @@ func TestLocalJournalStoreUploadsProcessesAndServesAudio(t *testing.T) {
 		t.Fatalf("playback returned content type %q and %d bytes", response.Header.Get("Content-Type"), len(played))
 	}
 
-	store.readLifetime = 5 * time.Millisecond
-	expiringPlayback, err := store.PresignGetObject(t.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &key})
+	expiringPlayback, err := store.PresignGetObject(t.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &key}, func(opts *s3.PresignOptions) {
+		opts.Expires = 5 * time.Millisecond
+	})
 	if err != nil {
 		t.Fatal(err)
 	}

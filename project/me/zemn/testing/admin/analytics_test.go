@@ -13,13 +13,13 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
@@ -89,27 +89,17 @@ func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time
 }
 
 func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.Duration) error {
-	ddbRoot, err := browserhelpers.DynamoDBRoot()
+	deployment, err := itestconfig.Load(ctx)
 	if err != nil {
 		return err
 	}
-
-	client := dynamodb.New(dynamodb.Options{
-		EndpointResolver: dynamodb.EndpointResolverFromURL(ddbRoot.String()),
-		Retryer:          aws.NopRetryer{},
-		Credentials: credentials.StaticCredentialsProvider{
-			Value: aws.Credentials{
-				AccessKeyID:     "LOCALSTACK",
-				SecretAccessKey: "LOCALSTACK",
-			},
-		},
-	})
-
+	client := dynamodb.NewFromConfig(deployment.AWS)
+	table := deployment.Environment["ANALYTICS_TABLE_NAME"]
 	deadline := time.Now().Add(timeout)
 	var lastErr error
 	for time.Now().Before(deadline) {
 		out, err := client.Query(ctx, &dynamodb.QueryInput{
-			TableName:              aws.String("table2"),
+			TableName:              &table,
 			ConsistentRead:         aws.Bool(true),
 			KeyConditionExpression: aws.String("id = :id"),
 			ExpressionAttributeValues: map[string]types.AttributeValue{
@@ -128,7 +118,7 @@ func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.
 	}
 
 	scanOut, scanErr := client.Scan(ctx, &dynamodb.ScanInput{
-		TableName:      aws.String("table2"),
+		TableName:      &table,
 		ConsistentRead: aws.Bool(true),
 		Limit:          aws.Int32(10),
 	})

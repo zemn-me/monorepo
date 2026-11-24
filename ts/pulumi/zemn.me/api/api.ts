@@ -5,7 +5,7 @@ import { ApiZemnMeLambdaImage } from '#root/project/me/zemn/api/cmd/api/ApiZemnM
 import { JournalWorkerLambdaImage } from '#root/project/me/zemn/api/cmd/journal_worker/JournalWorkerLambdaImage.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
-import { LambdaFunction } from '#root/ts/pulumi/lib/lambda_function.js';
+import { BinaryImageFunction } from '#root/ts/pulumi/lib/lambda_function.js';
 
 const pick_env = <T extends string>(
 	k: T
@@ -43,7 +43,9 @@ const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
 const journalWorkerImageCache = new Map<string, JournalWorkerLambdaImage>();
 
 export class ApiZemnMe extends Pulumi.ComponentResource {
-	readonly journalWorkerRoleArn: Pulumi.Output<string>;
+	readonly lambdaFunction: aws.lambda.Function;
+	readonly journalWorker: BinaryImageFunction;
+	readonly journalWorkerRole: aws.iam.Role;
 
 	constructor(
 		name: string,
@@ -443,7 +445,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
-		const journalWorkerRole = new aws.iam.Role(
+		this.journalWorkerRole = new aws.iam.Role(
 			`${name}-journal-worker-role`,
 			{
 				// Staging and production share an AWS account, so their IAM role
@@ -523,7 +525,6 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
-		this.journalWorkerRoleArn = journalWorkerRole.arn;
 
 		const repo = new aws.ecr.Repository(
 			`${name}_repo`,
@@ -606,12 +607,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 		const PERSONAL_PHONE_NUMBER = process.env['PERSONAL_PHONE_NUMBER'];
 
 		// Pass the DynamoDB table name to your Lambda environment.
-		const lambdaFn = new LambdaFunction(
+		this.lambdaFunction = new BinaryImageFunction(
 			`apizemnmelambdafunction`,
+			image,
 			{
-				packageType: 'Image',
 				role: lambdaRole.arn,
-				imageUri: image.url,
 				timeout: 30,
 				memorySize: 512,
 				environment: {
@@ -671,12 +671,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this }
 		).function;
 
-		const journalWorker = new LambdaFunction(
+		this.journalWorker = new BinaryImageFunction(
 			`journalworkerlambda`,
+			journalWorkerImage,
 			{
-				packageType: 'Image',
-				role: journalWorkerRole.arn,
-				imageUri: journalWorkerImage.url,
+				role: this.journalWorkerRole.arn,
 				timeout: 900,
 				memorySize: 1024,
 				// Aggregate summaries are read-modify-write projections. Keep uploads
@@ -699,13 +698,13 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				},
 			},
 			{ parent: this }
-		).function;
+		);
 
 		const permitJournalBucket = new aws.lambda.Permission(
 			`${name}-journal-bucket-permission`,
 			{
 				action: 'lambda:InvokeFunction',
-				function: journalWorker.name,
+				function: this.journalWorker.function.name,
 				principal: 's3.amazonaws.com',
 				sourceArn: journalBucket.arn,
 				statementId: 'journal-s3-invoke',
@@ -719,7 +718,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				bucket: journalBucket.id,
 				lambdaFunctions: [
 					{
-						lambdaFunctionArn: journalWorker.arn,
+						lambdaFunctionArn: this.journalWorker.function.arn,
 						events: ['s3:ObjectCreated:*'],
 						filterPrefix: 'entries/',
 						filterSuffix: 'source',
@@ -731,12 +730,11 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 
 		// The coordinator returns while its cloud session runs. Keep it separate
 		// from audio processing so long uploads cannot delay run reconciliation.
-		const journalCurator = new LambdaFunction(
+		const journalCurator = new BinaryImageFunction(
 			'journalcuratorlambda',
+			journalWorkerImage,
 			{
-				packageType: 'Image',
-				role: journalWorkerRole.arn,
-				imageUri: journalWorkerImage.url,
+				role: this.journalWorkerRole.arn,
 				timeout: 120,
 				memorySize: 1024,
 				reservedConcurrentExecutions: 1,
@@ -807,7 +805,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{
 				apiId: gateway.id,
 				integrationType: 'AWS_PROXY',
-				integrationUri: lambdaFn.arn,
+				integrationUri: this.lambdaFunction.arn,
 			},
 			{ parent: this }
 		);
@@ -816,7 +814,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			`zemnmeapipermission`,
 			{
 				action: 'lambda:InvokeFunction',
-				function: lambdaFn.name,
+				function: this.lambdaFunction.name,
 				principal: 'apigateway.amazonaws.com',
 				sourceArn: Pulumi.interpolate`${gateway.executionArn}/*/*`,
 			},
@@ -908,14 +906,14 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 		);
 
 		super.registerOutputs({
-			lambdaEnvironment: lambdaFn.environment,
+			lambdaEnvironment: this.lambdaFunction.environment,
 			callboxPhoneNumber: args.callboxPhoneNumber,
 			dynamoDBTableName: dynamoTable.name,
 			grievancesTableName: grievancesTable.name,
 			usersTableName: usersTable.name,
 			journalTableName: journalTable.name,
 			journalBucketName: journalBucket.bucket,
-			journalWorkerRoleArn: this.journalWorkerRoleArn,
+			journalWorkerRoleArn: this.journalWorkerRole.arn,
 		});
 	}
 }

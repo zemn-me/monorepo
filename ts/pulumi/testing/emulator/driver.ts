@@ -14,12 +14,14 @@ import * as pulumi from '@pulumi/pulumi';
 import {
 	type ConfigMap,
 	LocalWorkspace,
+	type UpResult,
 } from '@pulumi/pulumi/automation/index.js';
 
 import { pulumiCommand } from '#root/ts/pulumi/cli.js';
 import { Component } from '#root/ts/pulumi/index.js';
 import { compatibilityGateway } from '#root/ts/pulumi/testing/emulator/runtime/compatibility.js';
 import { configuration } from '#root/ts/pulumi/testing/emulator/runtime/configuration.js';
+import { zemnFeatureDeployment } from './zemn.js';
 
 const require = createRequire(import.meta.url);
 const scenario = process.env['EMULATOR_SCENARIO'];
@@ -27,6 +29,8 @@ assert(
 	scenario === 'staging' || scenario === 'production',
 	'Expected staging or production'
 );
+const featureTests = process.argv.includes('--zemn-features');
+const onOutput = featureTests ? undefined : console.log;
 const config = configuration();
 const gateway = await compatibilityGateway();
 try {
@@ -189,7 +193,8 @@ try {
 	};
 	const settings: ConfigMap = {
 		'aws:region': { value: 'us-east-1' },
-		'aws:maxRetries': { value: '1' },
+		// A dropped loopback connection during the update can be retried by the provider.
+		'aws:maxRetries': { value: '3' },
 		'aws:endpoints': { value: JSON.stringify([endpoints]) },
 		'aws:s3UsePathStyle': { value: 'true' },
 		'aws:customCaBundle': { value: config.certificate },
@@ -250,8 +255,7 @@ try {
 		workspace(seedDir)
 	);
 	await fixtures.setAllConfig(settings);
-	await fixtures.up({ onOutput: console.log });
-	const zones = await fixtures.outputs();
+	const { outputs: zones } = await fixtures.up({ onOutput });
 	const zone = (domain: string): string => {
 		const value: unknown = zones[domain]?.value;
 		assert.equal(typeof value, 'string', `Missing fixture zone ${domain}`);
@@ -308,18 +312,28 @@ try {
 					openAIIdentityProviderId: 'emulator-idp',
 					openAIServiceAccountId: 'emulator-service-account',
 				});
-				return { journalWorkerRoleArn: component.journalWorkerRoleArn };
+				return {
+					journalWorkerRoleArn: component.journalWorkerRoleArn,
+					...(featureTests
+						? {
+								deployment: zemnFeatureDeployment(
+									component.zemnMe.api
+								),
+							}
+						: {}),
+				};
 			},
 		},
 		workspace(workDir)
 	);
 	await stack.setAllConfig(settings);
+	let update: UpResult | undefined;
 	let updateError: unknown;
 	const diagnostics: { urn?: string; message: string }[] = [];
 	try {
-		await stack.up({
-			onOutput: console.log,
-			continueOnError: true,
+		update = await stack.up({
+			onOutput,
+			continueOnError: !featureTests,
 			onEvent(event) {
 				const diagnostic = event.diagnosticEvent;
 				if (diagnostic?.severity === 'error') {
@@ -373,7 +387,13 @@ try {
 	console.log(
 		`${scenario}: ${actual.filter(resource => resource.id).length} AWS resources recorded; ${diagnostics.length} errors.`
 	);
-	if (updateError !== undefined) throw updateError;
+	if (updateError !== undefined) {
+		if (featureTests && diagnostics.length > 0)
+			throw new Error(
+				diagnostics.map(diagnostic => diagnostic.message).join('\n')
+			);
+		throw updateError;
+	}
 	assert(
 		expected.length > 0,
 		'The infrastructure registered no AWS resources'
@@ -421,6 +441,24 @@ try {
 	console.log(
 		`Created/read all ${actual.length} AWS resources in the ${scenario} configuration.`
 	);
+	if (featureTests) {
+		const deployment = update?.outputs['deployment'];
+		assert(
+			deployment && !deployment.secret,
+			'Missing public zemn.me deployment outputs'
+		);
+		await writeFile(
+			path.join(config.directory, 'zemn-deployment.json'),
+			JSON.stringify({
+				...deployment.value,
+				endpoint: config.endpoint,
+				region: envVars.AWS_REGION,
+				credentialsFile: config.credentials,
+				certificateFile: config.certificate,
+			}),
+			{ flag: 'wx' }
+		);
+	}
 	// Each service_test owns its emulator process. Stopping it discards every resource,
 	// including intentionally protected databases and retained domain registrations.
 } finally {

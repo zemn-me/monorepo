@@ -15,7 +15,7 @@
   compatibility, but its access token is not a Google API token. Gate
   browser Google API calls on the real Google issuer.
 
-- `:integration_test` collects the surface-specific browser targets. Each has
+- `:integration_test` collects the worker and browser integration tests. Each browser surface has
   its own production bundle and service stack. The frontend builds after
   `rules_itest` assigns the API/OIDC ports; keep it on the deployment build
   pipeline, not Vite dev.
@@ -24,3 +24,13 @@
   `browser_test` rule through `gazelle:map_kind`; the macro provides the
   service harness. Add tests to the matching package and let Gazelle manage
   sources and dependencies.
+
+- The Go browser suites and JavaScript endpoint tests share the calendar fixture
+  API. A rules_itest task deploys the staging Pulumi stack to each test’s AWS
+  Emulator and publishes the API Lambda’s resource bindings. Run on macOS with
+  `--config=remote`. Journal PUTs and GETs carry SDK signatures through the
+  local API to S3. The API signs identity tokens with an emulated KMS key.
+  S3 invokes the deployed worker Lambda. A test SQS destination forwards the
+  invocation to the native executable declared by `pulumi_binary_image`. The
+  runner supplies its Lambda Runtime API and Bazel runfiles. Declare runtime
+  tools such as FFmpeg in the worker binary’s `data`.

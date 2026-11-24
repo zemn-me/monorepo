@@ -16,7 +16,7 @@ func TestJournalWorkerCuratorCredentialIsolation(t *testing.T) {
 			} {
 				t.Setenv(name, value)
 			}
-			worker, err := NewJournalWorker(t.Context())
+			worker, err := NewJournalWorker(t.Context(), "ffmpeg")
 			if err != nil {
 				t.Fatal(err)
 			}
