@@ -793,10 +793,11 @@ export function useGetJournal<A, B>(
 		: future_declare_dependency(id_token, useQueryFuture(query));
 }
 
-export function useGetJournalWikiIndex<A, B>(
-	idToken: Future<string, A, B>,
-	enabled = true
-) {
+export function journalWikiQueryKey(jti: string | undefined, pageId: string) {
+	return ['get', '/journal', 'wiki', jti, pageId] as const;
+}
+
+export function useGetJournalWikiIndex<A, B>(idToken: Future<string, A, B>) {
 	const token = idToken(
 		value => value,
 		() => undefined,
@@ -805,13 +806,14 @@ export function useGetJournalWikiIndex<A, B>(
 	const claims = useSessionClaims(idToken);
 	const client = useFetchClient(token);
 	const query = useQuery({
-		queryKey: ['get', '/journal', 'wiki', claims?.jti],
-		queryFn: async () => {
-			const response = await client.GET('/journal/wiki');
+		queryKey: journalWikiQueryKey(claims?.jti, 'all'),
+		staleTime: 10_000,
+		queryFn: async ({ signal }) => {
+			const response = await client.GET('/journal/wiki', { signal });
 			if (!response.data) throw new Error('Could not load the wiki.');
 			return response.data;
 		},
-		enabled: enabled && token !== undefined,
+		enabled: token !== undefined,
 		refetchInterval: 10000,
 	});
 	return claims
@@ -847,8 +849,7 @@ export function useGetJournalUploads<A, B>(
 
 export function useGetJournalWikiPage<A, B>(
 	idToken: Future<string, A, B>,
-	pageId: string,
-	generation?: string
+	pageId: string
 ) {
 	const token = idToken(
 		value => value,
@@ -858,18 +859,14 @@ export function useGetJournalWikiPage<A, B>(
 	const claims = useSessionClaims(idToken);
 	const client = useFetchClient(token);
 	const query = useQuery({
-		queryKey: [
-			'get',
-			'/journal',
-			'wiki-page',
-			claims?.jti,
-			pageId,
-			generation,
-		],
-		queryFn: async () => {
+		queryKey: journalWikiQueryKey(claims?.jti, pageId),
+		staleTime: 10_000,
+		queryFn: async ({ signal }) => {
 			const response = await client.GET('/journal/wiki/{pageId}', {
+				signal,
 				params: { path: { pageId } },
 			});
+			if (response.response.status === 404) return null;
 			if (!response.data)
 				throw new Error(
 					'This page is unavailable or awaiting an update.'
