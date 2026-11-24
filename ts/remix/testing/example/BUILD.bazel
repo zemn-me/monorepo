@@ -48,11 +48,7 @@ remix_itest_service(
     exe = ":start",
     health_check_timeout = "20s",
     http_health_check_address = "http://localhost:$${PORT}/",
-    socket_activation = True,
-    deps = select({
-        "@platforms//os:windows": [],
-        "//conditions:default": [":check_reservation"],
-    }),
+    deps = [":check_reservation"],
 )
 
 service_test(
