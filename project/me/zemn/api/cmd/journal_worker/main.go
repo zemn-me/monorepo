@@ -38,7 +38,13 @@ func handleEvent(ctx context.Context, worker journalEventProcessor, event json.R
 		return worker.RunCuration(ctx, time.Now().UTC(), envelope.RequestID)
 	}
 	if len(envelope.Records) > 0 {
-		return apiserver.ProcessJournalUploadEvent(ctx, envelope.S3Event, worker.ProcessUpload)
+		for _, record := range envelope.Records {
+			object := record.S3.Object
+			if err := worker.ProcessUpload(ctx, record.S3.Bucket.Name, object.URLDecodedKey, object.Size); err != nil {
+				return err
+			}
+		}
+		return nil
 	}
 	if envelope.Source == "aws.events" && !envelope.Time.IsZero() {
 		return worker.RefreshSummaries(ctx, envelope.Time)

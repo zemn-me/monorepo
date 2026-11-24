@@ -18,12 +18,14 @@ import (
 )
 
 var (
-	address        string
-	ddbAddress     string
-	useAWSEmulator bool
+	address          string
+	ddbAddress       string
+	useAWSEmulator   bool
+	runJournalWorker bool
 )
 
 func init() {
+	flag.BoolVar(&runJournalWorker, "journal-worker", false, "Run the deployed journal image entrypoint against AWS Emulator")
 	flag.BoolVar(&useAWSEmulator, "aws-emulator", false, "Run against the rules_itest AWS Emulator service")
 	flag.StringVar(&address, "address", ":0", "Address to listen on")
 	flag.StringVar(&ddbAddress, "ddb-address", "", "Address of the DynamoDB server.")
@@ -38,6 +40,12 @@ type AssignedPorts struct {
 
 func main() {
 	flag.Parse()
+	if runJournalWorker {
+		if err := runEmulatedJournalWorker(context.Background()); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
 
 	assignedPorts := os.Getenv("ASSIGNED_PORTS")
 	if assignedPorts != "" {
@@ -100,7 +108,7 @@ func main() {
 	ctx := context.Background()
 	mux := http.NewServeMux()
 	apiOrigin := fmt.Sprintf("http://localhost:%d", addr.Port)
-	var startWorker func(*apiserver.Server)
+	var localStore *localJournalStore
 	if useAWSEmulator {
 		deployment, err := itestconfig.Load(ctx)
 		if err != nil {
@@ -110,8 +118,7 @@ func main() {
 			mustSetEnv(name, value)
 		}
 		opts.AWSConfig = &deployment.AWS
-		startWorker, err = configureEmulatedJournal(ctx, deployment.AWS, deployment.JournalQueueURL, apiOrigin, mux, &opts)
-		if err != nil {
+		if err := configureEmulatedJournal(ctx, deployment.AWS, apiOrigin, mux, &opts); err != nil {
 			log.Fatalf("configure emulated journal: %v", err)
 		}
 	} else {
@@ -131,7 +138,7 @@ func main() {
 		defer store.Close()
 		opts.JournalObjects, opts.JournalPresigner = store, store
 		mux.Handle(localJournalObjectPath, store)
-		startWorker = func(srv *apiserver.Server) { store.SetUploadProcessor(srv.ProcessJournalUpload) }
+		localStore = store
 	}
 	srv, err := apiserver.NewServer(ctx, opts)
 	if err != nil {
@@ -144,7 +151,9 @@ func main() {
 		}
 	}
 
-	startWorker(srv)
+	if localStore != nil {
+		localStore.SetUploadProcessor(srv.ProcessJournalUpload)
+	}
 	mux.Handle(localJournalSeedPath, newDevelopmentJournalSeedHandler(srv))
 	mux.HandleFunc(localJournalRefreshPath, func(w http.ResponseWriter, request *http.Request) {
 		if request.Method != http.MethodPost {

@@ -30,6 +30,6 @@
   Emulator and publishes the API Lambda’s resource bindings. Run on macOS with
   `--config=remote`. Journal PUTs and GETs carry SDK signatures through the
   local API to S3. The API signs identity tokens with an emulated KMS key.
-  S3 invokes the deployed worker Lambda. A test-only SQS destination passes
-  the invocation payload to the local Go worker because the emulator cannot
-  execute its OCI image.
+  S3 invokes the deployed worker Lambda. A test SQS destination forwards the
+  invocation to the native executable declared by `pulumi_binary_image`. The
+  runner supplies its Lambda Runtime API and packaged tools, including FFmpeg.

@@ -7,7 +7,7 @@ import {
 } from '@pulumi/pulumi';
 
 import { ExpireOnDeleteLambdaImage } from '#root/ts/pulumi/lib/expire_on_delete/cmd/expire_on_delete/ExpireOnDeleteLambdaImage.js';
-import { LambdaFunction } from '#root/ts/pulumi/lib/lambda_function.js';
+import { BinaryImageFunction } from '#root/ts/pulumi/lib/lambda_function.js';
 import { TagSet } from '#root/ts/pulumi/lib/tags.js';
 
 export interface S3ExpireOnDeletePolicyArgs {
@@ -111,12 +111,11 @@ export class S3ExpireOnDeletePolicy extends ComponentResource {
 		}
 
 		// Create the Lambda function
-		this.lambda = new LambdaFunction(
+		this.lambda = new BinaryImageFunction(
 			clampString(`${name}-lambda`, 64 - 8),
+			image,
 			{
-				packageType: 'Image',
 				role: lambdaRole.arn,
-				imageUri: image.url,
 				timeout: 30,
 				memorySize: 512,
 				tags: args.tags,

@@ -14,19 +14,32 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/zemn-me/monorepo/go/lambdaimage"
 )
 
 type Deployment struct {
-	Environment     map[string]string `json:"environment"`
-	JournalQueueURL string            `json:"journalQueueURL"`
-	AWS             aws.Config        `json:"-"`
+	Environment                      map[string]string    `json:"environment"`
+	JournalWorker                    lambdaimage.Function `json:"journalWorker"`
+	CertificateFile, CredentialsFile string
+	AWS                              aws.Config `json:"-"`
+}
+
+// LambdaEnvironment configures the child SDK with the same endpoints and identity as the test.
+func (d *Deployment) LambdaEnvironment() []string {
+	return []string{
+		"AWS_REGION=" + d.AWS.Region,
+		"AWS_ENDPOINT_URL=" + *d.AWS.BaseEndpoint,
+		"AWS_SHARED_CREDENTIALS_FILE=" + d.CredentialsFile,
+		"AWS_CA_BUNDLE=" + d.CertificateFile,
+		"AWS_EC2_METADATA_DISABLED=true",
+	}
 }
 
 // Load connects to the same emulator that Pulumi used for this test's deployment.
 func Load(ctx context.Context) (*Deployment, error) {
 	var manifest struct {
 		Deployment
-		Endpoint, Region, CredentialsFile, CertificateFile string
+		Endpoint, Region string
 	}
 	dir := os.Getenv("TEST_TMPDIR")
 	if dir == "" {
@@ -39,7 +52,7 @@ func Load(ctx context.Context) (*Deployment, error) {
 	if err := json.Unmarshal(data, &manifest); err != nil {
 		return nil, err
 	}
-	if manifest.Endpoint == "" || manifest.Region == "" || manifest.JournalQueueURL == "" || len(manifest.Environment) == 0 {
+	if manifest.Endpoint == "" || manifest.Region == "" || manifest.JournalWorker.Binary == "" || len(manifest.Environment) == 0 {
 		return nil, fmt.Errorf("incomplete zemn.me Pulumi deployment")
 	}
 	profile, err := config.LoadSharedConfigProfile(ctx, "default", func(o *config.LoadSharedConfigOptions) {

@@ -30,10 +30,20 @@ Each test owns its emulator and stack. The API and browser assertions read the
 table names, bucket name, and signing key from the deployed API Lambda’s
 environment. Browser uploads and playback use signed S3 PUTs and GETs.
 
-Journal uploads follow the stack’s S3 notification to the worker Lambda. The
-emulator cannot execute the Go container image. In feature tests Pulumi adds an
-asynchronous failure destination and grants the worker role permission to send
-to it. The local Go worker processes the original S3 payload from that queue.
+Native Lambda images use `pulumi_binary_image` to declare their executable,
+base image, and any tools installed in `/usr/local/bin`. `BinaryImageFunction`
+uses the published image URI for deployment and carries the matching Bazel
+runfiles for execution in a test. The journal worker includes FFmpeg this way.
+
+Journal uploads follow the deployed S3 notification to the image Lambda. AWS
+Emulator delivers its asynchronous invocation record to a test SQS destination.
+The synthetic ECR manifest records the Bazel image digest.
+The test runner checks the function ARN and starts the image’s executable with
+its deployed journal bindings, tools, and a loopback Lambda Runtime API. It
+acknowledges the message after the executable reports success. Each invocation
+starts a fresh process on the Linux test executor. The browser suite uses a
+local OpenAI HTTPS fixture and enables immediate summaries for its playback
+and calendar assertions. STS, S3, and DynamoDB requests go to AWS Emulator.
 The browser’s loopback relay uses the bucket’s deployed CORS rules for its
 assigned frontend origin.
 

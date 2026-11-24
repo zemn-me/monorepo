@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -12,12 +10,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
 
@@ -29,10 +25,9 @@ func (p browserPresigner) PresignGetObject(ctx context.Context, input *s3.GetObj
 	return p.PresignClient.PresignGetObject(ctx, input, append(options, func(o *s3.PresignOptions) { o.Expires = 8 * time.Second })...)
 }
 
-func configureEmulatedJournal(ctx context.Context, cfg aws.Config, queueURL, apiOrigin string, mux *http.ServeMux, opts *apiserver.NewServerOptions) (func(*apiserver.Server), error) {
+func configureEmulatedJournal(ctx context.Context, cfg aws.Config, apiOrigin string, mux *http.ServeMux, opts *apiserver.NewServerOptions) error {
 	bucket := os.Getenv("JOURNAL_BUCKET_NAME")
 	objects := s3.NewFromConfig(cfg, func(o *s3.Options) { o.UsePathStyle = true })
-	queue := sqs.NewFromConfig(cfg)
 
 	opts.JournalObjects = objects
 	opts.JournalPresigner = browserPresigner{s3.NewPresignClient(objects, func(o *s3.PresignOptions) {
@@ -41,18 +36,9 @@ func configureEmulatedJournal(ctx context.Context, cfg aws.Config, queueURL, api
 
 	cors, err := objects.GetBucketCors(ctx, &s3.GetBucketCorsInput{Bucket: &bucket})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if err := mountBrowserObjects(cfg, bucket, cors.CORSRules, mux); err != nil {
-		return nil, err
-	}
-	return func(srv *apiserver.Server) {
-		go func() {
-			if err := consumeJournalUploads(ctx, queue, queueURL, srv); err != nil {
-				log.Fatalf("journal notification consumer: %v", err)
-			}
-		}()
-	}, nil
+	return mountBrowserObjects(cfg, bucket, cors.CORSRules, mux)
 }
 
 func mountBrowserObjects(cfg aws.Config, bucket string, cors []s3types.CORSRule, mux *http.ServeMux) error {
@@ -112,33 +98,4 @@ func mountBrowserObjects(cfg aws.Config, bucket string, cors []s3types.CORSRule,
 		}
 	})
 	return nil
-}
-
-func consumeJournalUploads(ctx context.Context, queue *sqs.Client, queueURL string, srv *apiserver.Server) error {
-	for {
-		messages, err := queue.ReceiveMessage(ctx, &sqs.ReceiveMessageInput{QueueUrl: &queueURL, WaitTimeSeconds: 10, VisibilityTimeout: 600})
-		if err != nil {
-			return err
-		}
-		for _, message := range messages.Messages {
-			if err := processJournalNotification(ctx, aws.ToString(message.Body), srv); err != nil {
-				// Leave failed deliveries available for retry after the visibility timeout.
-				log.Printf("process journal notification %s: %v", aws.ToString(message.MessageId), err)
-				continue
-			}
-			if _, err := queue.DeleteMessage(ctx, &sqs.DeleteMessageInput{QueueUrl: &queueURL, ReceiptHandle: message.ReceiptHandle}); err != nil {
-				return err
-			}
-		}
-	}
-}
-
-func processJournalNotification(ctx context.Context, body string, srv *apiserver.Server) error {
-	var invocation struct {
-		RequestPayload events.S3Event `json:"requestPayload"`
-	}
-	if err := json.Unmarshal([]byte(body), &invocation); err != nil {
-		return err
-	}
-	return apiserver.ProcessJournalUploadEvent(ctx, invocation.RequestPayload, srv.ProcessJournalUpload)
 }

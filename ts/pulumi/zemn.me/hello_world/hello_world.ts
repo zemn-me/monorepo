@@ -1,7 +1,7 @@
 import * as aws from '@pulumi/aws';
 import { ComponentResource, ComponentResourceOptions } from '@pulumi/pulumi';
 
-import { LambdaFunction } from '#root/ts/pulumi/lib/lambda_function.js';
+import { BinaryImageFunction } from '#root/ts/pulumi/lib/lambda_function.js';
 import { mergeTags, TagSet, tagTrue } from '#root/ts/pulumi/lib/tags.js';
 import { HelloWorldImage } from '#root/ts/pulumi/zemn.me/hello_world/HelloWorldImage.js';
 
@@ -35,11 +35,7 @@ export class LambdaHelloWorld extends ComponentResource {
 				Service: 'lambda.amazonaws.com',
 			}),
 		});
-		const lambda = new LambdaFunction(`${name}_lambda`, {
-			packageType: 'Image',
-			// e.g. --
-			// https://658613637108.dkr.ecr.us-east-1.amazonaws.com/repo-fe6824f@sha256:c61c4b619733eb59d7c68a34d7b56e562894c9d777f26e982bc453bbcf57ab5b
-			imageUri: img.url,
+		const lambda = new BinaryImageFunction(`${name}_lambda`, img, {
 			role: role.arn,
 			timeout: 30,
 			memorySize: 512,

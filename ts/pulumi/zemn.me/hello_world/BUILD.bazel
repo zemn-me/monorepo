@@ -1,9 +1,7 @@
-load("@rules_oci//oci:defs.bzl", "oci_image")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//go:rules.bzl", "go_binary", "go_library")
 load("//ts:rules.bzl", "ts_project")
-load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_image")
+load("//ts/pulumi/lib/oci:rules.bzl", "pulumi_binary_image")
 
 go_library(
     name = "hello_world_lib",
@@ -24,22 +22,12 @@ bazel_lint(
     srcs = ["BUILD.bazel"],
 )
 
-pkg_tar(
-    name = "tar",
-    srcs = [":hello_world"],
-)
-
-oci_image(
-    name = "image",
-    base = "@distroless_debian12",
-    entrypoint = ["/hello_world"],
-    tars = [":tar"],
-)
-
-pulumi_image(
+pulumi_binary_image(
     name = "oci_image",
-    src = ":image",
+    base = "@distroless_debian12",
+    binary = ":hello_world",
     component_name = "HelloWorldImage",
+    image_name = "image",
 )
 
 ts_project(

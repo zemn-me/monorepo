@@ -113,6 +113,7 @@ bazel_lint(
 ts_project(
     name = "emulator",
     srcs = [
+        "binary_function.ts",
         "driver.ts",
         "zemn.ts",
     ],
@@ -127,6 +128,7 @@ ts_project(
         "//:node_modules/@types/node",
         "//ts/pulumi",
         "//ts/pulumi:cli",
+        "//ts/pulumi/lib",
         "//ts/pulumi/testing/emulator/runtime",
         "//ts/pulumi/zemn.me/api",
     ],
@@ -135,6 +137,7 @@ ts_project(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "binary_function.ts",
         "driver.ts",
         "zemn.ts",
     ],
