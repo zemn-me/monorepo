@@ -1075,7 +1075,11 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "[data-journal-currently-spoken]", 10*time.Second); err != nil {
 		t.Fatalf("paused journal transcript remained highlighted: %v", err)
 	}
-	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "#entry-"+firstEntryID+" summary[aria-label='Recording options']", 10*time.Second); err != nil {
+	options, err := driver.FindElement(selenium.ByCSSSelector, "#entry-"+firstEntryID+" summary[aria-label='Recording options']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, options); err != nil {
 		t.Fatal(err)
 	}
 	deleteThumb, err := browserhelpers.WaitForElement(
