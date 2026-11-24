@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"encoding/pem"
 	"encoding/xml"
@@ -281,9 +283,10 @@ func TestGatewayProcess(t *testing.T) {
 	main()
 }
 
-func TestProcessReadinessAndReporting(t *testing.T) {
-	backend := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(404) }))
-	defer backend.Close()
+func startGatewayProcess(t *testing.T, handler http.HandlerFunc) (event, io.Writer, *json.Decoder) {
+	t.Helper()
+	backend := httptest.NewTLSServer(handler)
+	t.Cleanup(backend.Close)
 	ca := filepath.Join(t.TempDir(), "ca.pem")
 	if err := os.WriteFile(ca, pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: backend.Certificate().Raw}), 0600); err != nil {
 		t.Fatal(err)
@@ -308,7 +311,7 @@ func TestProcessReadinessAndReporting(t *testing.T) {
 	if err := command.Start(); err != nil {
 		t.Fatal(err)
 	}
-	defer func() { _ = command.Process.Kill(); _ = command.Wait() }()
+	t.Cleanup(func() { _ = command.Process.Kill(); _ = command.Wait() })
 	decoder := json.NewDecoder(stdout)
 	var ready event
 	if err := decoder.Decode(&ready); err != nil {
@@ -317,6 +320,11 @@ func TestProcessReadinessAndReporting(t *testing.T) {
 	if ready.Endpoint == "" {
 		t.Fatal("no readiness endpoint")
 	}
+	return ready, stdin, decoder
+}
+
+func TestProcessReadinessAndReporting(t *testing.T) {
+	ready, stdin, decoder := startGatewayProcess(t, func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(404) })
 	g := testGateway{url: ready.Endpoint, client: http.DefaultClient}
 	g.request(t, "GET", "/v20180820/tags/example", "", "")
 	status, _, _ := g.request(t, "GET", "/not-a-fixture", "", "")
@@ -345,5 +353,45 @@ func TestProcessReadinessAndReporting(t *testing.T) {
 	}
 	if len(operations) != 1 || operations[0] != "S3Control.ListTagsForResource" || forwarded != 1 {
 		t.Fatalf("unexpected report: %v %d", operations, forwarded)
+	}
+}
+
+// Exercise the provider-facing TLS hop, not the separately pooled upstream hop.
+func TestCloudFrontHTTP2CreateResponse(t *testing.T) {
+	const createPath = "/2020-05-31/distribution?WithTags="
+	const requestBody = "<DistributionConfigWithTags/>"
+	body := "<Distribution><Comment>" + strings.Repeat("x", 32<<10) + "</Comment></Distribution>"
+	ready, _, _ := startGatewayProcess(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.RequestURI() != createPath {
+			t.Errorf("unexpected upstream request: %s %s", r.Method, r.URL)
+		}
+		payload, err := io.ReadAll(r.Body)
+		if err != nil || string(payload) != requestBody {
+			t.Errorf("changed create payload: %q, %v", payload, err)
+		}
+		w.Header().Set("ETag", `"distribution-v1"`)
+		w.WriteHeader(http.StatusCreated)
+		_, _ = io.WriteString(w, body)
+	})
+	roots := x509.NewCertPool()
+	if !roots.AppendCertsFromPEM([]byte(ready.Certificate)) {
+		t.Fatal("missing gateway certificate")
+	}
+	client := &http.Client{Transport: &http.Transport{
+		TLSClientConfig:   &tls.Config{RootCAs: roots, MinVersion: tls.VersionTLS12},
+		ForceAttemptHTTP2: true,
+	}}
+	defer client.CloseIdleConnections()
+	response, err := client.Post(ready.HTTP2Endpoint+createPath, "application/xml", strings.NewReader(requestBody))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer response.Body.Close()
+	result, err := io.ReadAll(response.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response.ProtoMajor != 2 || response.StatusCode != http.StatusCreated || response.Header.Get("ETag") != `"distribution-v1"` || string(result) != body {
+		t.Fatalf("unexpected create response: %s %s, ETag %q, body length %d", response.Proto, response.Status, response.Header.Get("ETag"), len(result))
 	}
 }

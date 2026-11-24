@@ -30,7 +30,12 @@ export async function compatibilityGateway() {
 		child.kill();
 	};
 	process.once('exit', cleanup);
-	const endpoint = await new Promise<string>((resolve, reject) => {
+	type Ready = {
+		endpoint: string;
+		http2Endpoint: string;
+		certificate: string;
+	};
+	const ready = await new Promise<Ready>((resolve, reject) => {
 		const fail = (error: Error) => {
 			failure = error;
 			reportFailed?.(error);
@@ -44,8 +49,7 @@ export async function compatibilityGateway() {
 		});
 		lines.on('line', line => {
 			try {
-				const event = JSON.parse(line) as {
-					endpoint?: string;
+				const event = JSON.parse(line) as Partial<Ready> & {
 					operation?: string;
 					forwarded?: boolean;
 					report?: boolean;
@@ -53,7 +57,12 @@ export async function compatibilityGateway() {
 				if (event.operation) calls.push(event.operation);
 				if (event.forwarded) forwardedRequests++;
 				if (event.report) reportReady?.();
-				if (event.endpoint) resolve(event.endpoint);
+				if (event.endpoint) {
+					const { endpoint, http2Endpoint, certificate } = event;
+					if (!http2Endpoint || !certificate)
+						throw new Error('Missing gateway HTTP/2 endpoint or certificate');
+					resolve({ endpoint, http2Endpoint, certificate });
+				}
 			} catch (error) {
 				cleanup();
 				fail(error instanceof Error ? error : new Error(String(error)));
@@ -61,7 +70,7 @@ export async function compatibilityGateway() {
 		});
 	});
 	return {
-		endpoint,
+		...ready,
 		async report() {
 			if (failure) throw failure;
 			await new Promise<void>((resolve, reject) => {

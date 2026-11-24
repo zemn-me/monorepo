@@ -4,10 +4,12 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"encoding/xml"
 	"flag"
 	"fmt"
@@ -26,10 +28,12 @@ import (
 )
 
 type event struct {
-	Endpoint  string `json:"endpoint,omitempty"`
-	Operation string `json:"operation,omitempty"`
-	Forwarded bool   `json:"forwarded,omitempty"`
-	Report    bool   `json:"report,omitempty"`
+	Endpoint      string `json:"endpoint,omitempty"`
+	HTTP2Endpoint string `json:"http2Endpoint,omitempty"`
+	Certificate   string `json:"certificate,omitempty"`
+	Operation     string `json:"operation,omitempty"`
+	Forwarded     bool   `json:"forwarded,omitempty"`
+	Report        bool   `json:"report,omitempty"`
 }
 
 type gateway struct {
@@ -370,6 +374,44 @@ func (g *gateway) forward(request *http.Request) (*http.Response, []byte, error)
 	return response, body, err
 }
 
+// A fresh loopback leaf is trusted only by this test's provider. Its private
+// key stays in this process, separate from the upstream emulator's credentials.
+func serveHTTP2(handler http.Handler) (endpoint, certificate string, err error) {
+	pub, key, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		return "", "", err
+	}
+	now := time.Now()
+	leaf := &x509.Certificate{
+		NotBefore:   now.Add(-time.Minute),
+		NotAfter:    now.Add(24 * time.Hour),
+		IPAddresses: []net.IP{net.IPv4(127, 0, 0, 1)},
+		KeyUsage:    x509.KeyUsageDigitalSignature,
+		ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+	}
+	der, err := x509.CreateCertificate(rand.Reader, leaf, leaf, pub, key)
+	if err != nil {
+		return "", "", err
+	}
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	if err != nil {
+		return "", "", err
+	}
+	protocols := new(http.Protocols)
+	protocols.SetHTTP2(true)
+	server := &http.Server{
+		Handler:           handler,
+		ReadHeaderTimeout: 30 * time.Second,
+		Protocols:         protocols,
+		TLSConfig: &tls.Config{
+			MinVersion:   tls.VersionTLS12,
+			Certificates: []tls.Certificate{{Certificate: [][]byte{der}, PrivateKey: key}},
+		},
+	}
+	go func() { log.Fatal(server.ServeTLS(listener, "", "")) }()
+	return "https://" + listener.Addr().String(), string(pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: der})), nil
+}
+
 func main() {
 	port := flag.Int("upstream-port", 0, "Pinned emulator's loopback port")
 	certificate := flag.String("certificate", "", "Emulator CA certificate")
@@ -399,8 +441,12 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-	emit(event{Endpoint: "http://" + listener.Addr().String()})
 	gateway := newGateway(fmt.Sprintf("https://127.0.0.1:%d", *port), client, emit)
+	http2Endpoint, providerCA, err := serveHTTP2(gateway)
+	if err != nil {
+		log.Fatal(err)
+	}
+	emit(event{Endpoint: "http://" + listener.Addr().String(), HTTP2Endpoint: http2Endpoint, Certificate: providerCA})
 	// A report marker fences stdout events before the driver saves its report.
 	go func() {
 		commands := bufio.NewScanner(os.Stdin)

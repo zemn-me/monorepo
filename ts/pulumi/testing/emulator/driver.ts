@@ -124,6 +124,11 @@ try {
 		assert(value, `Missing emulator ${name}`);
 		return value;
 	};
+	const providerCA = path.join(root, 'provider-ca.pem');
+	await writeFile(
+		providerCA,
+		[await readFile(config.certificate, 'utf8'), gateway.certificate].join('\n')
+	);
 	const envVars = {
 		PULUMI_HOME: home,
 		PULUMI_BACKEND_URL: `file://${backend}`,
@@ -158,7 +163,9 @@ try {
 		appautoscaling: endpoint,
 		autoscaling: endpoint,
 		budgets: endpoint,
-		cloudfront: endpoint,
+		// Avoid Smithy's HTTP/1 request-body close race after a successful create.
+		// HTTP/2 still forwards the original request exactly once to the emulator.
+		cloudfront: gateway.http2Endpoint,
 		cloudwatch: endpoint,
 		cloudwatchlogs: endpoint,
 		connect: endpoint,
@@ -192,7 +199,7 @@ try {
 		'aws:maxRetries': { value: '1' },
 		'aws:endpoints': { value: JSON.stringify([endpoints]) },
 		'aws:s3UsePathStyle': { value: 'true' },
-		'aws:customCaBundle': { value: config.certificate },
+		'aws:customCaBundle': { value: providerCA },
 		'aws:allowedAccountIds': { value: JSON.stringify(['000000000000']) },
 	};
 	const cli = await pulumiCommand();
