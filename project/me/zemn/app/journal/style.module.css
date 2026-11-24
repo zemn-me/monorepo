@@ -144,15 +144,8 @@
 	);
 	--journal-control-font: 400 0.9375rem / 1.35 system-ui, sans-serif;
 	--journal-recording: #d70015;
-	--journal-player-height: 0px;
-	--journal-sticky-navigation-height: calc(
-		3.5rem +
-		var(--journal-player-height)
-	);
-	box-sizing: border-box;
-	margin-inline: auto;
-	max-inline-size: 47rem;
-	padding: 0 clamp(1rem, 4vw, 2rem) 3rem;
+	--reading-top-inset: var(--glade-bar-block-size, 0px);
+	padding-block-end: 3rem;
 }
 
 .page :where(h1, h2, h3, h4, h5, h6, strong, b) {
@@ -182,15 +175,11 @@
 	z-index: 19;
 }
 
-.hero {
-	margin-block-end: 0.75rem;
-}
-
-.hero h1 {
+.journalTitle {
 	font-size: clamp(2.5rem, 5vw, 3.5rem);
 	letter-spacing: -0.045em;
 	line-height: 1.15;
-	margin-block: 0;
+	margin-block: 0 0.75rem;
 }
 
 .recorder {
@@ -224,7 +213,7 @@
 }
 
 .recorder button,
-.page > button,
+.signIn,
 .uploadButton {
 	align-items: center;
 	background: var(--foreground-color);
@@ -373,7 +362,7 @@
 }
 
 .recorder button:disabled,
-.page > button:disabled {
+.signIn:disabled {
 	cursor: wait;
 	opacity: 0.55;
 }
@@ -398,7 +387,7 @@
 	margin-block-end: 1.5rem;
 	min-block-size: 56px;
 	position: sticky;
-	top: calc(var(--glade-bar-block-size, 0px) + var(--journal-player-height));
+	top: calc(var(--glade-bar-block-size, 0px) + var(--reading-stacked-height));
 	z-index: 7;
 }
 
@@ -476,7 +465,7 @@
 	max-block-size: calc(
 		100dvh -
 		var(--glade-bar-block-size, 0px) -
-		var(--journal-sticky-navigation-height) -
+		calc(3.5rem + var(--reading-stacked-height)) -
 		1em
 	);
 	overflow-y: auto;
@@ -587,7 +576,7 @@
 
 .period {
 	min-width: 0;
-	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
+	scroll-margin-block: calc(3.5rem + var(--reading-stacked-height) + 1em);
 }
 
 .period > h3 {
@@ -712,7 +701,8 @@
 	font: inherit;
 	padding: 0;
 	scroll-margin-block-start: calc(
-		var(--journal-sticky-navigation-height) +
+		3.5rem +
+		var(--reading-stacked-height) +
 		0.5rem
 	);
 	text-decoration: underline;
@@ -730,7 +720,8 @@
 	padding-block: 1.75rem;
 	scroll-margin-block-start: calc(
 		var(--glade-bar-block-size, 0px) +
-		var(--journal-sticky-navigation-height) +
+		3.5rem +
+		var(--reading-stacked-height) +
 		1rem
 	);
 }
@@ -826,13 +817,6 @@
 .entryPlay:hover,
 .playerClose:hover {
 	background: var(--journal-surface);
-}
-
-.playerDock {
-	position: sticky;
-	top: var(--glade-bar-block-size, 0px);
-	z-index: 8;
-	background: var(--background-color);
 }
 
 .player {
@@ -948,6 +932,35 @@
 
 .transcriptFollowing {
 	padding-block: calc(min(12dvh, 5.5rem) / 2 - 0.875em);
+}
+
+@container reading-sidebar (min-height: 0px) {
+	.player {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		block-size: 100%;
+		overflow: auto;
+		border: 1px solid var(--journal-line);
+		border-radius: 0.65rem;
+		background: var(--journal-surface);
+		padding: clamp(0.875rem, 4cqi, 1.5rem);
+	}
+
+	.player > :not(.transcriptScroller) {
+		flex: none;
+	}
+
+	.transcriptScroller {
+		flex: 1 1 auto;
+		min-block-size: 3rem;
+		max-block-size: none;
+		overscroll-behavior-y: contain;
+	}
+
+	.transcriptFollowing {
+		padding-block: 1em;
+	}
 }
 
 .transcriptParagraph {

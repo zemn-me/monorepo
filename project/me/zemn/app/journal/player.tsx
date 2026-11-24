@@ -143,16 +143,20 @@ function TranscriptView({
 			citationID(entry.id, currentlySpokenSegmentID)
 		);
 		if (!container || !segment || !container.contains(segment)) return;
-		const containerBounds = container.getBoundingClientRect();
-		const segmentBounds = segment.getBoundingClientRect();
-		container.scrollTo({
-			top:
-				container.scrollTop +
-				segmentBounds.top -
-				containerBounds.top -
-				container.clientHeight / 2 +
-				segmentBounds.height / 2,
+		const observer = new ResizeObserver(() => {
+			const containerBounds = container.getBoundingClientRect();
+			const segmentBounds = segment.getBoundingClientRect();
+			container.scrollTo({
+				top:
+					container.scrollTop +
+					segmentBounds.top -
+					containerBounds.top -
+					container.clientHeight / 2 +
+					segmentBounds.height / 2,
+			});
 		});
+		observer.observe(container);
+		return () => observer.disconnect();
 	}, [currentlySpokenSegmentID, entry.id]);
 	return (
 		<div

@@ -922,17 +922,42 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	playerInHeader, err := driver.ExecuteScript(`
-		const player = document.querySelector('section[aria-label="Journal player"]');
-		const title = document.querySelector('main h1');
-		const toolbar = document.querySelector('[data-journal-toolbar]');
-		return player && title.compareDocumentPosition(player) & Node.DOCUMENT_POSITION_FOLLOWING &&
-			Boolean(player.compareDocumentPosition(toolbar) & Node.DOCUMENT_POSITION_FOLLOWING) &&
-			getComputedStyle(player.parentElement).position === 'sticky' &&
-			document.querySelectorAll('main audio').length === 1;
-	`, nil)
-	if err != nil || playerInHeader != true {
-		t.Fatalf("journal player is not under the heading: %v %v", playerInHeader, err)
+	player, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Journal player']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, width := range []int{1440, 390, 1440} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": 900, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := driver.ExecuteScript("window.scrollTo({top: 320, behavior: 'instant'})", nil); err != nil {
+			t.Fatal(err)
+		}
+		err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			result, err := wd.ExecuteScript(`
+				const [player, audio, wide] = arguments;
+				const panel = player.getBoundingClientRect();
+				const toolbar = document.querySelector('[data-journal-toolbar]').getBoundingClientRect();
+				const transcript = player.querySelector('[aria-label="Transcript"]').getBoundingClientRect();
+				if (document.querySelector('main audio') !== audio || document.querySelectorAll('section[aria-label="Journal player"]').length !== 1 ||
+					document.documentElement.scrollWidth > innerWidth || panel.top < 0 || panel.bottom > innerHeight + 1) return false;
+				return wide
+					? panel.right < toolbar.left && transcript.height > innerHeight / 2 && toolbar.top < panel.bottom
+					: panel.bottom <= toolbar.top + 1 && transcript.height < innerHeight / 4;
+			`, []any{player, originalAudio, width > 1000})
+			return result == true, err
+		}, 10*time.Second)
+		if err != nil {
+			browserhelpers.SaveNavigationScreenshot(t, driver, "journal-reader-layout-failure.png")
+			bounds, _ := driver.ExecuteScript(`return [...document.querySelectorAll('section[aria-label="Journal player"], [aria-label="Transcript"], [data-journal-toolbar]')].map(e => [e.getAttribute('aria-label'), e.getBoundingClientRect().toJSON()])`, nil)
+			t.Fatalf("shared player layout after scrolling at %dpx: %v, bounds: %v", width, err, bounds)
+		}
+		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-reader-%d.png", width))
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(
 		driver,
@@ -1957,7 +1982,7 @@ func waitForCenteredJournalTranscript(driver selenium.WebDriver, entryID string,
 			const transcript = [...document.querySelectorAll('[data-journal-transcript]')]
 				.find(value => value.dataset.journalTranscript === arguments[0]);
 			const highlighted = transcript?.querySelector('[data-journal-currently-spoken]');
-			if (!transcript || !highlighted || transcript.scrollHeight <= transcript.clientHeight) {
+			if (!transcript || !highlighted) {
 				return false;
 			}
 			const transcriptBounds = transcript.getBoundingClientRect();
@@ -1966,7 +1991,11 @@ func waitForCenteredJournalTranscript(driver selenium.WebDriver, entryID string,
 				(highlightedBounds.top + highlightedBounds.height / 2) -
 				(transcriptBounds.top + transcriptBounds.height / 2)
 			);
-			return distanceFromCenter < transcript.clientHeight * 0.1;
+			// At either end of the transcript the browser clamps the scroll.
+			const visible = highlightedBounds.bottom > transcriptBounds.top && highlightedBounds.top < transcriptBounds.bottom;
+			return visible && (distanceFromCenter < transcript.clientHeight * 0.1 ||
+				(transcript.scrollTop <= 1 && highlightedBounds.top < transcriptBounds.top + transcriptBounds.height / 2) ||
+				(transcript.scrollTop + transcript.clientHeight >= transcript.scrollHeight - 1 && highlightedBounds.bottom > transcriptBounds.top + transcriptBounds.height / 2));
 		`, []any{entryID})
 		if err != nil {
 			return false, err

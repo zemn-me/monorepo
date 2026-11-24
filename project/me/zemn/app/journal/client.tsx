@@ -75,6 +75,7 @@ import {
 } from '#root/project/me/zemn/components/Article/markdown_components.js';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { ReadingLayout } from '#root/project/me/zemn/components/ReadingLayout/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
@@ -1448,29 +1449,31 @@ function CalendarNavigation({
 				className={style.datePicker}
 				key={`${route}-${focus}`}
 			>
-				<summary aria-label="Choose journal date">
-					{!route && (
+				<summary
+					aria-label="Choose journal date"
+					title="Choose journal date"
+				>
+					{route ? (
+						Temporal.Instant.from(focus)
+							.toZonedDateTimeISO(browse.timeZone)
+							.toLocaleString(
+								language,
+								route === 'year'
+									? { year: 'numeric' }
+									: route === 'month'
+										? { year: 'numeric', month: 'long' }
+										: {
+												year: 'numeric',
+												month: 'short',
+												day: 'numeric',
+											}
+							)
+					) : (
 						<FontAwesomeIcon
 							aria-hidden="true"
 							icon={faCalendarDays}
 						/>
 					)}
-					{route
-						? Temporal.Instant.from(focus)
-								.toZonedDateTimeISO(browse.timeZone)
-								.toLocaleString(
-									language,
-									route === 'year'
-										? { year: 'numeric' }
-										: route === 'month'
-											? { year: 'numeric', month: 'long' }
-											: {
-													year: 'numeric',
-													month: 'short',
-													day: 'numeric',
-												}
-								)
-						: 'Calendar'}{' '}
 					<FontAwesomeIcon aria-hidden="true" icon={faChevronDown} />
 				</summary>
 				<div
@@ -2112,19 +2115,6 @@ export default function JournalPageClient({
 export function JournalReaderLayout() {
 	const { pathname } = useLocation();
 	const [playerHost, setPlayerHost] = useState<HTMLDivElement | null>(null);
-	useEffect(() => {
-		const page = playerHost?.parentElement;
-		if (!playerHost || !page) return;
-		const observer = new ResizeObserver(([size]) => {
-			if (size)
-				page.style.setProperty(
-					'--journal-player-height',
-					`${size.contentRect.height}px`
-				);
-		});
-		observer.observe(playerHost);
-		return () => observer.disconnect();
-	}, [playerHost]);
 	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
@@ -2487,121 +2477,125 @@ export function JournalReaderLayout() {
 					Drop voice memo
 				</div>
 			)}
-			<header className={style.hero}>
-				<h1>Journal</h1>
-			</header>
-			<div className={style.playerDock} ref={setPlayerHost} />
-			{!isLoggedIn ? (
-				<button
-					aria-label="Authenticate with OIDC"
-					disabled={promptForLogin === undefined}
-					onClick={() => void promptForLogin?.()}
-					type="button"
-				>
-					Sign in
-				</button>
-			) : !hasReadScope ? (
-				<p className={style.notice}>
-					<FontAwesomeIcon icon={faTriangleExclamation} />
-					This journal is restricted to its owner.
-				</p>
-			) : (
-				<JournalPlayerProvider
-					portalTarget={playerHost}
-					key={owner}
-					journal={
-						wiki === null
-							? journal(
-									value => value,
-									() => undefined,
-									() => undefined
-								)
-							: undefined
-					}
-				>
-					{isDevelopment && <DevelopmentJournalTools />}
-					{wiki !== null ? (
-						<div>
-							<JournalToolbar
-								actions={captureControls}
-								focus={at ?? ''}
-								route={route}
-								wiki
-							/>
-							<LocalRecordings
-								queue={queue}
-								activeID={recorder.current?.id}
-							/>
-							<JournalWiki pageID={wiki} />
-						</div>
-					) : (
-						journal(
-							value => (
-								<Outlet
-									context={
-										{
-											localRecordings: (
-												<LocalRecordings
-													queue={queue}
-													activeID={
-														recorder.current?.id
-													}
-												/>
-											),
-											localEntryIDs: queue.recordings.map(
-												draft => draft.remoteEntryID
-											),
-											actions: captureControls,
-											deleteEntry: hasWriteScope
-												? deleteJournalEntry
-												: undefined,
-											journal: value,
-											updateEntryDate: hasWriteScope
-												? updateJournalEntryDate
-												: undefined,
-										} satisfies JournalReaderContext
-									}
+			<ReadingLayout
+				heading={<h1 className={style.journalTitle}>Journal</h1>}
+				companionRef={setPlayerHost}
+			>
+				{!isLoggedIn ? (
+					<button
+						aria-label="Authenticate with OIDC"
+						className={style.signIn}
+						disabled={promptForLogin === undefined}
+						onClick={() => void promptForLogin?.()}
+						type="button"
+					>
+						Sign in
+					</button>
+				) : !hasReadScope ? (
+					<p className={style.notice}>
+						<FontAwesomeIcon icon={faTriangleExclamation} />
+						This journal is restricted to its owner.
+					</p>
+				) : (
+					<JournalPlayerProvider
+						portalTarget={playerHost}
+						key={owner}
+						journal={
+							wiki === null
+								? journal(
+										value => value,
+										() => undefined,
+										() => undefined
+									)
+								: undefined
+						}
+					>
+						{isDevelopment && <DevelopmentJournalTools />}
+						{wiki !== null ? (
+							<div>
+								<JournalToolbar
+									actions={captureControls}
+									focus={at ?? ''}
+									route={route}
+									wiki
 								/>
-							),
-							() => (
-								<>
-									<JournalToolbar
-										route={route}
-										actions={captureControls}
-										focus={new Date(
-											renderTime
-										).toISOString()}
+								<LocalRecordings
+									queue={queue}
+									activeID={recorder.current?.id}
+								/>
+								<JournalWiki pageID={wiki} />
+							</div>
+						) : (
+							journal(
+								value => (
+									<Outlet
+										context={
+											{
+												localRecordings: (
+													<LocalRecordings
+														queue={queue}
+														activeID={
+															recorder.current?.id
+														}
+													/>
+												),
+												localEntryIDs:
+													queue.recordings.map(
+														draft =>
+															draft.remoteEntryID
+													),
+												actions: captureControls,
+												deleteEntry: hasWriteScope
+													? deleteJournalEntry
+													: undefined,
+												journal: value,
+												updateEntryDate: hasWriteScope
+													? updateJournalEntryDate
+													: undefined,
+											} satisfies JournalReaderContext
+										}
 									/>
-									<LocalRecordings
-										queue={queue}
-										activeID={recorder.current?.id}
-									/>
-									<JournalPlaceholder label="Loading journal" />
-								</>
-							),
-							error => (
-								<>
-									<JournalToolbar
-										route={route}
-										actions={captureControls}
-										focus={new Date(
-											renderTime
-										).toISOString()}
-									/>
-									<LocalRecordings
-										queue={queue}
-										activeID={recorder.current?.id}
-									/>
-									<p className={style.notice}>
-										{errorMessage(error)}
-									</p>
-								</>
+								),
+								() => (
+									<>
+										<JournalToolbar
+											route={route}
+											actions={captureControls}
+											focus={new Date(
+												renderTime
+											).toISOString()}
+										/>
+										<LocalRecordings
+											queue={queue}
+											activeID={recorder.current?.id}
+										/>
+										<JournalPlaceholder label="Loading journal" />
+									</>
+								),
+								error => (
+									<>
+										<JournalToolbar
+											route={route}
+											actions={captureControls}
+											focus={new Date(
+												renderTime
+											).toISOString()}
+										/>
+										<LocalRecordings
+											queue={queue}
+											activeID={recorder.current?.id}
+										/>
+										<p className={style.notice}>
+											{errorMessage(error)}
+										</p>
+									</>
+								)
 							)
-						)
-					)}
-					<JournalMCPSetup />
-				</JournalPlayerProvider>
-			)}
+						)}
+						<JournalMCPSetup />
+					</JournalPlayerProvider>
+				)}
+			</ReadingLayout>
 		</main>
 	);
 }
