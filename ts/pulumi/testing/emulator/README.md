@@ -13,6 +13,14 @@ operation inputs and outputs used by the fixtures. Generated files are build
 outputs and are not checked in. The Pulumi driver and non-AWS fixture providers
 remain in TypeScript.
 
+CloudFront uses a separate loopback HTTP/2 listener on the same gateway.
+The pinned AWS provider contains [Smithy's HTTP/1 request-close
+race](https://github.com/aws/smithy-go/issues/751): a fast create can return
+201, then lose the response body while the SDK is decoding it. HTTP/2 avoids
+the affected request-write path without replaying a successful create. The
+provider trusts the listener's ephemeral certificate only for this run; the
+upstream emulator connection and compatibility fixtures are unchanged.
+
 The small `//bzl/aws_xml` projection derives roots, namespaces, XML member names,
 list wrappers, optional members, and HTTP header exclusions from those models.
 It supports the scalar, structure, and list shapes used by the selected REST XML
