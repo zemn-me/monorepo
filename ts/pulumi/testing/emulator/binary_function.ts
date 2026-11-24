@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 
-import { runfiles } from '@bazel/runfiles';
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 
@@ -55,10 +54,8 @@ export function asyncBinaryFunction(
 		},
 		{ dependsOn: grant }
 	);
-	const { binary, tools } = target.image.runtime;
 	return {
-		binary: runfiles.resolve(binary),
-		tools: tools.map(tool => runfiles.resolve(tool)),
+		binary: target.image.binary,
 		arn: target.function.arn,
 		name: target.function.name,
 		memorySize: target.function.memorySize,

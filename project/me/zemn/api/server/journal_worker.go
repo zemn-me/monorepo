@@ -18,7 +18,7 @@ type JournalWorker struct {
 	server *Server
 }
 
-func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
+func NewJournalWorker(ctx context.Context, ffmpegPath string) (*JournalWorker, error) {
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,9 @@ func NewJournalWorker(ctx context.Context) (*JournalWorker, error) {
 	if err != nil {
 		return nil, err
 	}
-	curatorAI := journalAI.(*openAIJournalAI)
+	audioAI := journalAI.(*openAIJournalAI)
+	audioAI.ffmpegPath = ffmpegPath
+	curatorAI := audioAI
 	// Hosted curation can use a dedicated key while audio processing continues
 	// to authenticate with workload identity. Removing the key restores WIF.
 	if apiKey := strings.TrimSpace(os.Getenv("OPENAI_CURATOR_API_KEY")); apiKey != "" {

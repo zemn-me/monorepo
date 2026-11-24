@@ -15,7 +15,7 @@
   compatibility, but its access token is not a Google API token. Gate
   browser Google API calls on the real Google issuer.
 
-- `:integration_test` collects the surface-specific browser targets. Each has
+- `:integration_test` collects the worker and browser integration tests. Each browser surface has
   its own production bundle and service stack. The frontend builds after
   `rules_itest` assigns the API/OIDC ports; keep it on the deployment build
   pipeline, not Vite dev.
@@ -32,4 +32,5 @@
   local API to S3. The API signs identity tokens with an emulated KMS key.
   S3 invokes the deployed worker Lambda. A test SQS destination forwards the
   invocation to the native executable declared by `pulumi_binary_image`. The
-  runner supplies its Lambda Runtime API and packaged tools, including FFmpeg.
+  runner supplies its Lambda Runtime API and Bazel runfiles. Declare runtime
+  tools such as FFmpeg in the worker binary’s `data`.

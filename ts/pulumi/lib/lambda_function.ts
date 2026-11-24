@@ -56,7 +56,7 @@ export class BinaryImageFunction extends LambdaFunction {
 		name: string,
 		readonly image: {
 			url: Output<string>;
-			runtime: { binary: string; tools: string[] };
+			binary: string;
 		},
 		args: Omit<
 			aws.lambda.FunctionArgs,

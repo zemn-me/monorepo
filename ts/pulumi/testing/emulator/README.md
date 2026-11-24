@@ -30,16 +30,19 @@ Each test owns its emulator and stack. The API and browser assertions read the
 table names, bucket name, and signing key from the deployed API Lambda’s
 environment. Browser uploads and playback use signed S3 PUTs and GETs.
 
-Native Lambda images use `pulumi_binary_image` to declare their executable,
-base image, and any tools installed in `/usr/local/bin`. `BinaryImageFunction`
-uses the published image URI for deployment and carries the matching Bazel
-runfiles for execution in a test. The journal worker includes FFmpeg this way.
+The journal worker declares FFmpeg in its Bazel `go_binary.data`.
+`pulumi_binary_image` packages the entrypoint with its runfiles.
+`BinaryImageFunction` deploys the resulting image and identifies the same
+entrypoint for the emulator. Both executions resolve FFmpeg as a Bazel runfile.
+The journal worker integration test uploads a 13-minute WAV in two S3 parts
+to fit the emulator’s 16 MiB request limit. It checks that the deployed worker
+produces a transcript with the full decoded duration.
 
 Journal uploads follow the deployed S3 notification to the image Lambda. AWS
 Emulator delivers its asynchronous invocation record to a test SQS destination.
 The synthetic ECR manifest records the Bazel image digest.
 The test runner checks the function ARN and starts the image’s executable with
-its deployed journal bindings, tools, and a loopback Lambda Runtime API. It
+its deployed journal bindings, Bazel runfiles, and a loopback Lambda Runtime API. It
 acknowledges the message after the executable reports success. Each invocation
 starts a fresh process on the Linux test executor. The browser suite uses a
 local OpenAI HTTPS fixture and enables immediate summaries for its playback

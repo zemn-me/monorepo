@@ -1,4 +1,4 @@
-"""Check the packaged worker and its PATH tool against their Bazel executables."""
+"""Check the packaged worker and its FFmpeg runfile against their Bazel executables."""
 
 import hashlib
 import json
@@ -7,7 +7,7 @@ import tarfile
 from pathlib import Path
 
 
-def check_image(layout: Path, binary: Path, ffmpeg: Path) -> None:
+def check_image(layout: Path, binary: Path, ffmpeg: Path, ffmpeg_runfile: Path) -> None:
     def blob(descriptor: dict) -> Path:
         algorithm, digest = descriptor["digest"].split(":")
         return layout / "blobs" / algorithm / digest
@@ -17,7 +17,10 @@ def check_image(layout: Path, binary: Path, ffmpeg: Path) -> None:
     manifest = json.loads(blob(descriptor).read_text())
     config = json.loads(blob(manifest["config"]).read_text())
     assert config["config"]["Entrypoint"] == ["/journal_worker"]
-    expected = {"journal_worker": binary, "usr/local/bin/ffmpeg": ffmpeg}
+    expected = {
+        "journal_worker": binary,
+        f"journal_worker.runfiles/{ffmpeg_runfile}": ffmpeg,
+    }
     for layer in reversed(manifest["layers"]):
         with tarfile.open(blob(layer)) as archive:
             for member in archive:

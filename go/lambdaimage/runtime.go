@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"sync/atomic"
@@ -19,12 +18,12 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
+	"github.com/bazelbuild/rules_go/go/runfiles"
 )
 
 // Function is the executable and deployment configuration of one image Lambda.
 type Function struct {
 	Binary, ARN, Name, QueueURL string
-	Tools                       []string
 	Timeout, MemorySize         int32
 	Environment                 map[string]string
 }
@@ -40,7 +39,11 @@ func (f Function) Consume(ctx context.Context, cfg aws.Config, extraEnv []string
 	if f.Binary == "" || f.ARN == "" || f.QueueURL == "" || f.Timeout <= 0 {
 		return errors.New("incomplete image Lambda deployment")
 	}
-	if _, err := os.Stat(f.Binary); err != nil {
+	binary, err := runfiles.Rlocation(f.Binary)
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(binary); err != nil {
 		return err
 	}
 	queue := sqs.NewFromConfig(cfg)
@@ -56,7 +59,7 @@ func (f Function) Consume(ctx context.Context, cfg aws.Config, extraEnv []string
 			if err := json.Unmarshal([]byte(aws.ToString(msg.Body)), &event); err != nil {
 				return err
 			}
-			if err := f.invoke(ctx, event, extraEnv); err != nil {
+			if err := f.invoke(ctx, binary, event, extraEnv); err != nil {
 				return fmt.Errorf("%s invocation %s: %w", f.ARN, event.RequestContext.RequestID, err)
 			}
 			if _, err := queue.DeleteMessage(ctx, &sqs.DeleteMessageInput{QueueUrl: &f.QueueURL, ReceiptHandle: msg.ReceiptHandle}); err != nil {
@@ -66,7 +69,7 @@ func (f Function) Consume(ctx context.Context, cfg aws.Config, extraEnv []string
 	}
 }
 
-func (f Function) invoke(parent context.Context, event invocation, extraEnv []string) error {
+func (f Function) invoke(parent context.Context, binary string, event invocation, extraEnv []string) error {
 	id := event.RequestContext.RequestID
 	if id == "" || strings.Contains(id, "/") || strings.TrimSuffix(event.RequestContext.FunctionARN, ":$LATEST") != f.ARN || len(event.RequestPayload) == 0 {
 		return errors.New("invalid invocation record for deployed function")
@@ -117,17 +120,16 @@ func (f Function) invoke(parent context.Context, event invocation, extraEnv []st
 	defer server.Close()
 	go server.Serve(listener)
 
-	cmd := exec.CommandContext(ctx, f.Binary)
+	cmd := exec.CommandContext(ctx, binary)
+	cmd.Env, err = runfiles.Env()
+	if err != nil {
+		return err
+	}
 	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 	for name, value := range f.Environment {
 		cmd.Env = append(cmd.Env, name+"="+value)
 	}
-	var dirs []string
-	for _, tool := range f.Tools {
-		dirs = append(dirs, filepath.Dir(tool))
-	}
 	cmd.Env = append(cmd.Env,
-		"PATH="+strings.Join(dirs, string(os.PathListSeparator)),
 		"AWS_LAMBDA_RUNTIME_API="+listener.Addr().String(),
 		"AWS_LAMBDA_FUNCTION_NAME="+f.Name,
 		"AWS_LAMBDA_FUNCTION_VERSION=$LATEST",

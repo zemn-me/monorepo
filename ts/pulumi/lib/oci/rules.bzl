@@ -22,9 +22,9 @@ def pulumi_image(
         visibility: bazel visibility
     """
 
-    _pulumi_image(name, src, component_name, out, visibility, [], "")
+    _pulumi_image(name, src, component_name, out, visibility)
 
-def pulumi_binary_image(name, image_name, srcs, base, component_name, deps = [], visibility = None):
+def pulumi_binary_image(name, image_name, srcs, base, component_name, visibility = None):
     """Package a native executable and expose the same executable to local Lambda runtimes.
 
     Args:
@@ -33,38 +33,33 @@ def pulumi_binary_image(name, image_name, srcs, base, component_name, deps = [],
         srcs: Exactly one executable target, used as the image entrypoint.
         base: Base OCI image.
         component_name: Generated Pulumi class name.
-        deps: Runtime executables installed in /usr/local/bin and available on PATH.
         visibility: Visibility of the Pulumi component.
     """
     if len(srcs) != 1:
         fail("pulumi_binary_image srcs must contain exactly one entrypoint executable")
     entrypoint = srcs[0]
-    pkg_tar(name = image_name + "_entrypoint", srcs = srcs)
-    layers = [":" + image_name + "_entrypoint"]
-    if deps:
-        pkg_tar(name = image_name + "_tools", srcs = deps, mode = "0755", package_dir = "/usr/local/bin")
-        layers.append(":" + image_name + "_tools")
+    pkg_tar(
+        name = image_name + "_entrypoint",
+        srcs = srcs,
+        include_runfiles = True,
+        mode = "",  # Preserve which runfiles are executable.
+    )
     oci_image(
         name = image_name,
         base = base,
         entrypoint = ["/" + native.package_relative_label(entrypoint).name],
-        tars = layers,
+        tars = [":" + image_name + "_entrypoint"],
     )
-    runtime = {
-        "binary": "$(rlocationpath " + entrypoint + ")",
-        "tools": ["$(rlocationpath " + tool + ")" for tool in deps],
-    }
     _pulumi_image(
         name = name,
         src = ":" + image_name,
         component_name = component_name,
         out = None,
         visibility = visibility,
-        runtime_files = srcs + deps,
-        runtime_declaration = "readonly runtime = " + json.encode(runtime) + ";",
+        entrypoint = entrypoint,
     )
 
-def _pulumi_image(name, src, component_name, out, visibility, runtime_files, runtime_declaration):
+def _pulumi_image(name, src, component_name, out, visibility, entrypoint = None):
     if component_name == None:
         component_name = "".join([
             segment.capitalize()
@@ -87,10 +82,10 @@ def _pulumi_image(name, src, component_name, out, visibility, runtime_files, run
         data = [
             ":" + name + "_push_bin",
             src + ".digest",
-        ] + runtime_files,
+        ] + ([entrypoint] if entrypoint else []),
         substitutions = {
             "__ClassName": component_name,
-            "// __BINARY_RUNTIME": runtime_declaration,
+            "// __BINARY_RUNTIME": 'readonly binary = "$(rlocationpath {})";'.format(entrypoint) if entrypoint else "",
             "__TYPE": native.package_name().replace("/", ":"),
             "__PUSH_BIN": "$(rootpath :" + name + "_push_bin" + ")",
             "__DIGEST": "$(rootpath " + src + ".digest)",

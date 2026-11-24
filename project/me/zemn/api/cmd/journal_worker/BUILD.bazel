@@ -15,13 +15,16 @@ go_library(
         "//project/me/zemn/api/server",
         "@com_github_aws_aws_lambda_go//events",
         "@com_github_aws_aws_lambda_go//lambda",
+        "@io_bazel_rules_go//go/runfiles",
     ],
 )
 
 go_binary(
     name = "journal_worker",
+    data = ["//bin/host/ffmpeg"],
     embed = [":journal_worker_lib"],
     visibility = ["//visibility:public"],
+    x_defs = {"main.ffmpegRunfile": "$(rlocationpath //bin/host/ffmpeg)"},
 )
 
 pulumi_binary_image(
@@ -31,7 +34,6 @@ pulumi_binary_image(
     component_name = "JournalWorkerLambdaImage",
     image_name = "image",
     visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"],
-    deps = ["//bin/host/ffmpeg"],
 )
 
 bazel_lint(
@@ -52,6 +54,7 @@ py_test(
         "$(rootpath :image)",
         "$(rootpath :journal_worker)",
         "$(rootpath //bin/host/ffmpeg)",
+        "$(rlocationpath //bin/host/ffmpeg)",
     ],
     data = [
         ":image",

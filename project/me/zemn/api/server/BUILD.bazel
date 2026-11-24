@@ -6,8 +6,9 @@ load("//bzl/go:oapi_codegen.bzl", "go_oapi_codegen")
 load("//go:rules.bzl", "go_library")
 load("//md:rules.bzl", "md_files")
 
-# The shared contracts require the dedicated DynamoDB service harness.
+# These tests need their rules_itest deployments.
 # gazelle:exclude ddb_contract_test.go
+# gazelle:exclude journal_worker_integration_test.go
 
 bazel_lint(
     name = "bazel_lint",
@@ -246,4 +247,27 @@ service_test(
     size = "large",
     services = ["//ts/pulumi/testing/emulator:zemn_deployment"],
     test = ":ddb_contract_test",
+)
+
+go_test(
+    name = "journal_worker_integration_bin",
+    srcs = ["journal_worker_integration_test.go"],  # keep
+    embed = [":server"],
+    tags = ["manual"],
+    deps = [
+        "//project/me/zemn/api/itestconfig",
+        "//project/me/zemn/api/server/auth",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//types",
+    ],
+)
+
+service_test(
+    name = "journal_worker_integration_test",
+    size = "large",
+    services = ["//project/me/zemn/api/cmd/localserver:journal_worker_itest_service"],
+    test = ":journal_worker_integration_bin",
+    visibility = ["//project/me/zemn/testing:__pkg__"],
 )

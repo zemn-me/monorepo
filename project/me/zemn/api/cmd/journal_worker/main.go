@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/bazelbuild/rules_go/go/runfiles"
 
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
@@ -52,8 +53,19 @@ func handleEvent(ctx context.Context, worker journalEventProcessor, event json.R
 	return errors.New("unsupported journal worker event")
 }
 
+// Bazel sets this to the runfile selected for the worker's target platform.
+var ffmpegRunfile string
+
 func main() {
-	worker, err := apiserver.NewJournalWorker(context.Background())
+	ffmpeg := "ffmpeg"
+	if ffmpegRunfile != "" {
+		var err error
+		ffmpeg, err = runfiles.Rlocation(ffmpegRunfile)
+		if err != nil {
+			panic(err)
+		}
+	}
+	worker, err := apiserver.NewJournalWorker(context.Background(), ffmpeg)
 	if err != nil {
 		panic(err)
 	}

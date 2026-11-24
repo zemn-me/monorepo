@@ -34,20 +34,20 @@ func TestBinaryInvocation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fn := Function{ARN: "function", Binary: binary, Timeout: 10, Environment: map[string]string{"DEPLOYED_SETTING": "expected"}}
+	fn := Function{ARN: "function", Timeout: 10, Environment: map[string]string{"DEPLOYED_SETTING": "expected"}}
 	event := invocation{RequestPayload: json.RawMessage(`"expected"`)}
 	event.RequestContext.RequestID = "request-id"
 	event.RequestContext.FunctionARN = fn.ARN + ":$LATEST"
 	env := []string{"LAMBDA_IMAGE_TEST_PROCESS=1"}
-	if err := fn.invoke(t.Context(), event, env); err != nil {
+	if err := fn.invoke(t.Context(), binary, event, env); err != nil {
 		t.Fatal(err)
 	}
 	event.RequestPayload = json.RawMessage(`"unexpected"`)
-	if err := fn.invoke(t.Context(), event, env); err == nil || !strings.Contains(err.Error(), "unexpected payload") {
+	if err := fn.invoke(t.Context(), binary, event, env); err == nil || !strings.Contains(err.Error(), "unexpected payload") {
 		t.Fatalf("expected the binary's handler error, got %v", err)
 	}
 	event.RequestContext.FunctionARN = "other-function"
-	if err := fn.invoke(t.Context(), event, env); err == nil || !strings.Contains(err.Error(), "invalid invocation") {
+	if err := fn.invoke(t.Context(), binary, event, env); err == nil || !strings.Contains(err.Error(), "invalid invocation") {
 		t.Fatalf("accepted another function's invocation: %v", err)
 	}
 }
