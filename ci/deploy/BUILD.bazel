@@ -5,9 +5,20 @@ load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
 
 ts_project(
+    name = "production",
+    srcs = ["production.ts"],
+    visibility = ["//ci:__pkg__"],
+    deps = [
+        "//ts/github/actions",
+        "//ts/pulumi",
+    ],
+)
+
+ts_project(
     name = "deploy_lib",
     srcs = ["deploy.ts"],
     deps = [
+        ":production",
         "//ts/pulumi",
         "//ts/pulumi:cli",
     ],
@@ -15,7 +26,10 @@ ts_project(
 
 js_binary(
     name = "deploy",
-    data = [":deploy_lib"],
+    data = [
+        ":deploy_lib",
+        "//VERSION",
+    ],
     entry_point = "deploy.js",
 )
 
@@ -56,6 +70,9 @@ bazel_lint(
 
 filegroup(
     name = "all_ts_srcs",
-    srcs = ["deploy.ts"],
+    srcs = [
+        "deploy.ts",
+        "production.ts",
+    ],
     visibility = ["//:__subpackages__"],
 )

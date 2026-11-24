@@ -16,10 +16,13 @@ env:
 
 
 jobs:
-  PublishStagingBundle:
-    name: Publish main staging bundle
+  PublishBundle:
+    name: Publish main deployment bundle
+    outputs:
+      run-id: ${{ steps.published.outputs.run-id || github.run_id }}
+      artifact-name: deploy-main-${{ github.sha }}
     concurrency:
-      group: staging-main-bundle-${{ github.sha }}
+      group: deploy-main-bundle-${{ github.sha }}
       cancel-in-progress: false
       queue: max
     permissions:
@@ -34,11 +37,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           MAIN_SHA: ${{ github.sha }}
-        run: python3 py/ci/find_staging_bundle.py
-      - uses: ./.github/actions/build-staging-bundle
+        run: python3 py/ci/find_deploy_bundle.py
+      - uses: ./.github/actions/build-deploy-bundle
         if: steps.published.outputs.run-id == ''
         with:
-          artifact-name: staging-main-${{ github.sha }}
+          artifact-name: deploy-main-${{ github.sha }}
 
   UploadToBazelRemoteCache:
     name: Upload to Bazel remote cache
@@ -90,7 +93,9 @@ jobs:
         env:
           BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
   Submit:
+    needs: PublishBundle
     permissions:
+      actions: read
       contents: read
       id-token: write
     concurrency:
@@ -101,29 +106,44 @@ jobs:
     # Attempts to submit changes to production.
     runs-on: ubuntu-latest
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # main
+      - name: Check whether this commit still heads main
+        id: revision
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          main_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
+          if [[ "$main_sha" == "$GITHUB_SHA" ]]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipped production deploy of $GITHUB_SHA. The head of main is $main_sha." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Checkout deployment launcher
+        if: steps.revision.outputs.current == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          android: true
-          dotnet: true
-          haskell: true
-          docker-images: true
-          swap-storage: true
-          large-packages: false
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          sparse-checkout: ci/deploy
+          persist-credentials: false
+      - name: Download verified main bundle
+        if: steps.revision.outputs.current == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.PublishBundle.outputs.run-id }}
+          name: ${{ needs.PublishBundle.outputs.artifact-name }}
+          path: ${{ runner.temp }}/bundle
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets...
         id: secret_auth
+        if: steps.revision.outputs.current == 'true'
         with:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
       - uses: 'google-github-actions/get-secretmanager-secrets@bc9c54b29fdffb8a47776820a7d26e77b379d262' # v3.0.0
         name: Read CI secrets from Secret Manager
         id: secrets
+        if: steps.revision.outputs.current == 'true'
         with:
           secrets: |-
-            buildbuddy_api_key:extreme-cycling-441523-a9/github-actions-buildbuddy-api-key
             personal_phone_number:extreme-cycling-441523-a9/github-actions-personal-phone-number
             openai_curator_api_key:extreme-cycling-441523-a9/github-actions-openai-curator-api-key
             pulumi_access_token:extreme-cycling-441523-a9/github-actions-pulumi-access-token
@@ -133,30 +153,23 @@ jobs:
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud deploy credentials...
         id: auth
+        if: steps.revision.outputs.current == 'true'
         with:
           project_id: 'extreme-cycling-441523-a9'
           workload_identity_provider: 'projects/845702659200/locations/global/workloadIdentityPools/github/providers/my-repo'
           service_account: monorepo-root@extreme-cycling-441523-a9.iam.gserviceaccount.com
       - name: Configure AWS credentials via OIDC
+        if: steps.revision.outputs.current == 'true'
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: arn:aws:iam::658613637108:role/monorepo_github_actions_role-4ad3390
           role-session-name: github-actions-${{ github.run_id }}
           aws-region: us-east-1
       - name: Submit
-        # Use npx to try to generate only
-        # $BAZEL generated node_modules
-        run: |
-          ./.github/workflows/prepare_ci.sh
-          $BAZEL run \
-            --config=ci \
-            --run_env=ACTIONS_ID_TOKEN_REQUEST_TOKEN \
-            --run_env=ACTIONS_ID_TOKEN_REQUEST_URL \
-            --tool_tag=submit \
-            //ci:submit
+        if: steps.revision.outputs.current == 'true'
+        run: ci/deploy/run.sh "$RUNNER_TEMP/bundle/layers_bundle.tar.gz" production
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}
           TWILIO_ACCOUNT_SID: ${{ steps.secrets.outputs.twilio_account_sid }}
           TWILIO_API_KEY_SID: ${{ steps.secrets.outputs.twilio_api_key_sid }}
