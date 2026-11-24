@@ -232,6 +232,7 @@ go_test(
     tags = ["manual"],
     deps = [
         "//go/awsemulator",
+        "//project/me/zemn/api/itestconfig",
         "//project/me/zemn/api/server/auth",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
@@ -243,6 +244,7 @@ go_test(
 
 service_test(
     name = "ddb_contract_integration_test",
-    services = ["//ts/pulumi/testing/emulator:service"],
+    size = "large",
+    services = ["//ts/pulumi/testing/emulator:zemn_deployment"],
     test = ":ddb_contract_test",
 )

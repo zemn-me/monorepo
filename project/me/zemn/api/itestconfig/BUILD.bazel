@@ -1,0 +1,14 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "itestconfig",
+    srcs = ["deployment.go"],
+    importpath = "github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig",
+    visibility = ["//project/me/zemn:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

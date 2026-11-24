@@ -38,6 +38,7 @@ export interface Args {
 
 export class Component extends Pulumi.ComponentResource {
 	site: Website;
+	readonly api: ApiZemnMe;
 	readonly journalWorkerRoleArn: Pulumi.Output<string>;
 	readonly openAIWorkloadIdentityAudience = openAIWorkloadIdentityAudience;
 	constructor(
@@ -175,6 +176,7 @@ export class Component extends Pulumi.ComponentResource {
 			},
 			{ parent: this, dependsOn: Static }
 		);
+		this.api = api;
 		this.journalWorkerRoleArn = api.journalWorkerRoleArn;
 
 		if (args.cloudWorkstations)

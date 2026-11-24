@@ -26,8 +26,10 @@
   sources and dependencies.
 
 - The Go browser suites and JavaScript endpoint tests share the calendar fixture
-  API backed by AWS Emulator on Linux x86-64. Run them on macOS with
+  API. A rules_itest task deploys the staging Pulumi stack to each test’s AWS
+  Emulator and publishes the API Lambda’s resource bindings. Run on macOS with
   `--config=remote`. Journal PUTs and GETs carry SDK signatures through the
   local API to S3. The API signs identity tokens with an emulated KMS key.
-  S3 publishes upload notifications to an emulated SQS queue
-  that drives the local journal worker.
+  S3 invokes the deployed worker Lambda. A test-only SQS destination passes
+  the invocation payload to the local Go worker because the emulator cannot
+  execute its OCI image.

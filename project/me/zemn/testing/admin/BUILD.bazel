@@ -13,6 +13,7 @@ browser_test(
     ],
     deps = [
         "//go/seleniumutil",
+        "//project/me/zemn/api/itestconfig",
         "//project/me/zemn/testing/browserhelpers",
         "//project/me/zemn/testing/oidc",
         "@com_github_aws_aws_sdk_go_v2//aws",

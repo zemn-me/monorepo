@@ -27,6 +27,8 @@ assert(
 	scenario === 'staging' || scenario === 'production',
 	'Expected staging or production'
 );
+const featureTests = process.argv.includes('--zemn-features');
+const onOutput = featureTests ? undefined : console.log;
 const config = configuration();
 const gateway = await compatibilityGateway();
 try {
@@ -189,7 +191,8 @@ try {
 	};
 	const settings: ConfigMap = {
 		'aws:region': { value: 'us-east-1' },
-		'aws:maxRetries': { value: '1' },
+		// A dropped loopback connection during the update can be retried by the provider.
+		'aws:maxRetries': { value: '3' },
 		'aws:endpoints': { value: JSON.stringify([endpoints]) },
 		'aws:s3UsePathStyle': { value: 'true' },
 		'aws:customCaBundle': { value: config.certificate },
@@ -250,7 +253,7 @@ try {
 		workspace(seedDir)
 	);
 	await fixtures.setAllConfig(settings);
-	await fixtures.up({ onOutput: console.log });
+	await fixtures.up({ onOutput });
 	const zones = await fixtures.outputs();
 	const zone = (domain: string): string => {
 		const value: unknown = zones[domain]?.value;
@@ -308,7 +311,73 @@ try {
 					openAIIdentityProviderId: 'emulator-idp',
 					openAIServiceAccountId: 'emulator-service-account',
 				});
-				return { journalWorkerRoleArn: component.journalWorkerRoleArn };
+				const outputs = {
+					journalWorkerRoleArn: component.journalWorkerRoleArn,
+				};
+				if (!featureTests) return outputs;
+
+				// S3 invokes the deployed worker. Its image cannot run in the emulator,
+				// so forward Lambda's invocation record to the local Go worker.
+				const api = component.zemnMe.api;
+				const queue = new aws.sqs.Queue('journal-worker-invocations');
+				const grant = new aws.iam.RolePolicy(
+					'journal-invocation-delivery',
+					{
+						role: api.journalWorkerRole.name,
+						policy: pulumi.jsonStringify({
+							Version: '2012-10-17',
+							Statement: [
+								{
+									Effect: 'Allow',
+									Action: 'sqs:SendMessage',
+									Resource: queue.arn,
+								},
+							],
+						}),
+					}
+				);
+				new aws.lambda.FunctionEventInvokeConfig(
+					'journal-worker-invocations',
+					{
+						functionName: api.journalWorker.name,
+						maximumRetryAttempts: 0,
+						destinationConfig: {
+							onFailure: { destination: queue.arn },
+						},
+					},
+					{ dependsOn: grant }
+				);
+				const environment = api.lambdaFunction.environment.apply(env =>
+					Object.fromEntries(
+						[
+							'DYNAMODB_TABLE_NAME',
+							'ANALYTICS_TABLE_NAME',
+							'GRIEVANCES_TABLE_NAME',
+							'USERS_TABLE_NAME',
+							'CALLBOX_KEY_TABLE_NAME',
+							'OAUTH_TABLE_NAME',
+							'JOURNAL_TABLE_NAME',
+							'JOURNAL_BUCKET_NAME',
+							'OIDC_JWT_KMS_KEY_ID',
+							'OIDC_JWT_PUBLIC_KEY',
+						].map(name => {
+							const value = env?.variables?.[name];
+							assert(
+								value,
+								`Missing Lambda environment variable ${name}`
+							);
+							return [name, value];
+						})
+					)
+				);
+				// Only these public resource names and the public signing key leave Pulumi.
+				return {
+					...outputs,
+					deployment: {
+						environment: pulumi.unsecret(environment),
+						journalQueueURL: queue.url,
+					},
+				};
 			},
 		},
 		workspace(workDir)
@@ -318,8 +387,8 @@ try {
 	const diagnostics: { urn?: string; message: string }[] = [];
 	try {
 		await stack.up({
-			onOutput: console.log,
-			continueOnError: true,
+			onOutput,
+			continueOnError: !featureTests,
 			onEvent(event) {
 				const diagnostic = event.diagnosticEvent;
 				if (diagnostic?.severity === 'error') {
@@ -373,7 +442,13 @@ try {
 	console.log(
 		`${scenario}: ${actual.filter(resource => resource.id).length} AWS resources recorded; ${diagnostics.length} errors.`
 	);
-	if (updateError !== undefined) throw updateError;
+	if (updateError !== undefined) {
+		if (featureTests && diagnostics.length > 0)
+			throw new Error(
+				diagnostics.map(diagnostic => diagnostic.message).join('\n')
+			);
+		throw updateError;
+	}
 	assert(
 		expected.length > 0,
 		'The infrastructure registered no AWS resources'
@@ -421,6 +496,18 @@ try {
 	console.log(
 		`Created/read all ${actual.length} AWS resources in the ${scenario} configuration.`
 	);
+	if (featureTests) {
+		const deployment = (await stack.outputs())['deployment'];
+		assert(
+			deployment && !deployment.secret,
+			'Missing public zemn.me deployment outputs'
+		);
+		await writeFile(
+			path.join(config.directory, 'zemn-deployment.json'),
+			JSON.stringify(deployment.value),
+			{ flag: 'wx' }
+		);
+	}
 	// Each service_test owns its emulator process. Stopping it discards every resource,
 	// including intentionally protected databases and retained domain registrations.
 } finally {

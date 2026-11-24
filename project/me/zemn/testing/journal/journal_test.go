@@ -26,6 +26,7 @@ import (
 
 	"github.com/zemn-me/monorepo/go/awsemulator"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
@@ -96,6 +97,7 @@ func browseJournalView(t *testing.T, driver selenium.WebDriver, level string) {
 }
 
 func TestJournalEndToEnd(t *testing.T) {
+	bucket := journalBucket(t)
 	logJournalRunnerResources(t)
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
@@ -904,7 +906,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err := driver.ExecuteChromiumCommand("Network.emulateNetworkConditionsByRule", map[string]any{
 		"offline": false,
 		"matchedNetworkConditions": []map[string]any{{
-			"urlPattern": "*/local-journal/entries/*/source*", "latency": 1500,
+			"urlPattern": "*/" + bucket + "/entries/*/source*", "latency": 1500,
 			"downloadThroughput": -1, "uploadThroughput": -1,
 		}},
 	}); err != nil {
@@ -936,7 +938,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	source, _ := audioSource.(string)
 	playbackURL, err := url.Parse(source)
-	if err != nil || playbackURL.Path != "/local-journal/entries/"+firstEntryID+"/source" || playbackURL.Query().Get("X-Amz-Expires") != "8" || playbackURL.Query().Get("X-Amz-Signature") == "" {
+	if err != nil || playbackURL.Path != "/"+bucket+"/entries/"+firstEntryID+"/source" || playbackURL.Query().Get("X-Amz-Expires") != "8" || playbackURL.Query().Get("X-Amz-Signature") == "" {
 		t.Fatal("journal playback did not use a short-lived presigned S3 source")
 	}
 	// Check transcript tracking while the short clip is playing, before the
@@ -1531,6 +1533,10 @@ func putProcessingJournalEntry(ctx context.Context, entryID string) error {
 }
 
 func putJournalEntry(ctx context.Context, entryID string, status apiserver.JournalEntryStatus) error {
+	deployment, err := itestconfig.Load()
+	if err != nil {
+		return err
+	}
 	client, err := browserhelpers.DynamoDBClient(ctx)
 	if err != nil {
 		return err
@@ -1554,19 +1560,23 @@ func putJournalEntry(ctx context.Context, entryID string, status apiserver.Journ
 		return err
 	}
 	_, err = client.PutItem(ctx, &dynamodb.PutItemInput{
-		TableName: aws.String("table6"),
+		TableName: aws.String(deployment.Environment["JOURNAL_TABLE_NAME"]),
 		Item:      item,
 	})
 	return err
 }
 
 func deleteJournalEntry(ctx context.Context, entryID string) error {
+	deployment, err := itestconfig.Load()
+	if err != nil {
+		return err
+	}
 	client, err := browserhelpers.DynamoDBClient(ctx)
 	if err != nil {
 		return err
 	}
 	_, err = client.DeleteItem(ctx, &dynamodb.DeleteItemInput{
-		TableName: aws.String("table6"),
+		TableName: aws.String(deployment.Environment["JOURNAL_TABLE_NAME"]),
 		Key: map[string]types.AttributeValue{
 			"id":   &types.AttributeValueMemberS{Value: "thomas"},
 			"when": &types.AttributeValueMemberS{Value: "ENTRY#" + entryID},
@@ -2574,6 +2584,7 @@ func TestJournalLocationPermissionError(t *testing.T) {
 }
 
 func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
+	bucket := journalBucket(t)
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
@@ -2629,8 +2640,8 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 				message := event.Message
 				if message.Method == "Network.requestWillBeSent" && message.Params.Request.Method == "PUT" {
 					u, err := url.Parse(message.Params.Request.URL)
-					if err == nil && strings.HasPrefix(u.Path, "/local-journal/entries/") && u.Query().Get("X-Amz-Signature") != "" {
-						requests[message.Params.RequestID] = strings.TrimPrefix(u.Path, "/local-journal/")
+					if err == nil && strings.HasPrefix(u.Path, "/"+bucket+"/entries/") && u.Query().Get("X-Amz-Signature") != "" {
+						requests[message.Params.RequestID] = strings.TrimPrefix(u.Path, "/"+bucket+"/")
 					}
 				}
 				if message.Method == "Network.responseReceived" && requests[message.Params.RequestID] != "" {
@@ -2651,7 +2662,7 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 				t.Fatal(err)
 			}
 			objects := s3.NewFromConfig(cfg, func(o *s3.Options) { o.UsePathStyle = true })
-			object, err := objects.GetObject(t.Context(), &s3.GetObjectInput{Bucket: aws.String("local-journal"), Key: &acceptedKey})
+			object, err := objects.GetObject(t.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &acceptedKey})
 			if err != nil {
 				t.Fatalf("read browser upload from S3: %v", err)
 			}
@@ -2772,6 +2783,7 @@ func logJournalRunnerResources(t *testing.T) {
 }
 
 func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
+	bucket := journalBucket(t)
 	t.Helper()
 	logs, err := driver.Log(log.Performance)
 	if err != nil {
@@ -2808,7 +2820,7 @@ func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
 		}
 		if event.Message.Method == "Network.requestWillBeSent" {
 			u, err := url.Parse(p.Request.URL)
-			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || strings.HasPrefix(u.Path, "/local-journal/entries/")) {
+			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || strings.HasPrefix(u.Path, "/"+bucket+"/entries/")) {
 				continue
 			}
 			// Log only the path: signed URL parameters and headers are private.
@@ -2844,4 +2856,13 @@ func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
 		}
 		t.Logf("journal request %s %s: elapsed=%.3fs status=%d completed=%v failure=%q", request.method, request.path, elapsed(request), request.status, request.end > 0, request.failure)
 	}
+}
+
+func journalBucket(t *testing.T) string {
+	t.Helper()
+	deployment, err := itestconfig.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return deployment.Environment["JOURNAL_BUCKET_NAME"]
 }

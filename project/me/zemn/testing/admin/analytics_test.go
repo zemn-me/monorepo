@@ -19,6 +19,7 @@ import (
 	"github.com/tebeka/selenium/log"
 
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
+	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
@@ -93,11 +94,16 @@ func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.
 		return err
 	}
 
+	deployment, err := itestconfig.Load()
+	if err != nil {
+		return err
+	}
+	table := deployment.Environment["ANALYTICS_TABLE_NAME"]
 	deadline := time.Now().Add(timeout)
 	var lastErr error
 	for time.Now().Before(deadline) {
 		out, err := client.Query(ctx, &dynamodb.QueryInput{
-			TableName:              aws.String("table2"),
+			TableName:              &table,
 			ConsistentRead:         aws.Bool(true),
 			KeyConditionExpression: aws.String("id = :id"),
 			ExpressionAttributeValues: map[string]types.AttributeValue{
@@ -116,7 +122,7 @@ func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.
 	}
 
 	scanOut, scanErr := client.Scan(ctx, &dynamodb.ScanInput{
-		TableName:      aws.String("table2"),
+		TableName:      &table,
 		ConsistentRead: aws.Bool(true),
 		Limit:          aws.Int32(10),
 	})

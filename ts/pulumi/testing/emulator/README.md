@@ -22,6 +22,21 @@ protocol implementations](https://github.com/aws/smithy-go#supported-protocols) 
 supply our server-side codecs. EC2's protocol-level error envelope is decoded by
 the existing AWS Go SDK helper rather than a separate handwritten type.
 
+## zemn.me feature tests
+
+The `zemn_deployment` rules_itest task runs the staging program and checks the
+deployed resource state before the feature API or persistence contract starts.
+Each test owns its emulator and stack. The API and browser assertions read the
+table names, bucket name, and signing key from the deployed API Lambda’s
+environment. Browser uploads and playback use signed S3 PUTs and GETs.
+
+Journal uploads follow the stack’s S3 notification to the worker Lambda. The
+emulator cannot execute the Go container image. In feature tests Pulumi adds an
+asynchronous failure destination and grants the worker role permission to send
+to it. The local Go worker processes the original S3 payload from that queue.
+The browser’s loopback relay uses the bucket’s deployed CORS rules for its
+assigned frontend origin.
+
 ## Explicit compatibility fixtures
 
 The test uses AWS Emulator 1.0.382.1. A loopback adapter supplies the following

@@ -43,6 +43,9 @@ const lambdaImageCache = new Map<string, ApiZemnMeLambdaImage>();
 const journalWorkerImageCache = new Map<string, JournalWorkerLambdaImage>();
 
 export class ApiZemnMe extends Pulumi.ComponentResource {
+	readonly lambdaFunction: aws.lambda.Function;
+	readonly journalWorker: aws.lambda.Function;
+	readonly journalWorkerRole: aws.iam.Role;
 	readonly journalWorkerRoleArn: Pulumi.Output<string>;
 
 	constructor(
@@ -523,6 +526,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		);
+		this.journalWorkerRole = journalWorkerRole;
 		this.journalWorkerRoleArn = journalWorkerRole.arn;
 
 		const repo = new aws.ecr.Repository(
@@ -671,6 +675,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this }
 		).function;
 
+		this.lambdaFunction = lambdaFn;
+
 		const journalWorker = new LambdaFunction(
 			`journalworkerlambda`,
 			{
@@ -700,6 +706,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			},
 			{ parent: this }
 		).function;
+
+		this.journalWorker = journalWorker;
 
 		const permitJournalBucket = new aws.lambda.Permission(
 			`${name}-journal-bucket-permission`,

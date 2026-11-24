@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/zemn-me/monorepo/go/awsemulator"
+	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
 
@@ -72,18 +73,9 @@ func main() {
 		mustSetEnv("ZEMN_TEST_OIDC_LOCAL_SUBJECT", "integration-test-local")
 	}
 
-	mustSetEnv("DYNAMODB_ENDPOINT", ddbAddress)
-	mustSetEnv("DYNAMODB_TABLE_NAME", "table1")
-	mustSetEnv("ANALYTICS_TABLE_NAME", "table2")
-	mustSetEnv("GRIEVANCES_TABLE_NAME", "table3")
-	mustSetEnv("USERS_TABLE_NAME", "table4")
-	mustSetEnv("CALLBOX_KEY_TABLE_NAME", "table5")
-	mustSetEnv("JOURNAL_TABLE_NAME", "table6")
-	mustSetEnv("OAUTH_TABLE_NAME", "oauth")
 	if os.Getenv("OAUTH_FRONTEND_ORIGIN") == "" {
 		mustSetEnv("OAUTH_FRONTEND_ORIGIN", "http://localhost:3000")
 	}
-	mustSetEnv("JOURNAL_BUCKET_NAME", "local-journal")
 
 	ln, err := net.Listen("tcp", address)
 	if err != nil {
@@ -116,14 +108,27 @@ func main() {
 			log.Fatal(err)
 		}
 		opts.AWSConfig = &cfg
-		if err := configureEmulatedSigningKey(ctx, cfg); err != nil {
-			log.Fatalf("configure emulated signing key: %v", err)
+		deployment, err := itestconfig.Load()
+		if err != nil {
+			log.Fatal(err)
 		}
-		startWorker, err = configureEmulatedJournal(ctx, cfg, apiOrigin, mux, &opts)
+		for name, value := range deployment.Environment {
+			mustSetEnv(name, value)
+		}
+		startWorker, err = configureEmulatedJournal(ctx, cfg, deployment.JournalQueueURL, apiOrigin, mux, &opts)
 		if err != nil {
 			log.Fatalf("configure emulated journal: %v", err)
 		}
 	} else {
+		mustSetEnv("DYNAMODB_ENDPOINT", ddbAddress)
+		mustSetEnv("DYNAMODB_TABLE_NAME", "table1")
+		mustSetEnv("ANALYTICS_TABLE_NAME", "table2")
+		mustSetEnv("GRIEVANCES_TABLE_NAME", "table3")
+		mustSetEnv("USERS_TABLE_NAME", "table4")
+		mustSetEnv("CALLBOX_KEY_TABLE_NAME", "table5")
+		mustSetEnv("JOURNAL_TABLE_NAME", "table6")
+		mustSetEnv("OAUTH_TABLE_NAME", "oauth")
+		mustSetEnv("JOURNAL_BUCKET_NAME", "local-journal")
 		store, err := newLocalJournalStore(apiOrigin, log.Default())
 		if err != nil {
 			log.Fatal(err)
@@ -138,7 +143,7 @@ func main() {
 		log.Fatalf("failed to create server: %v", err)
 	}
 
-	if assignedPorts != "" {
+	if assignedPorts != "" && !useAWSEmulator {
 		if err = srv.ProvisionTables(context.Background()); err != nil {
 			log.Fatalf("failed to provision tables: %v", err)
 		}
