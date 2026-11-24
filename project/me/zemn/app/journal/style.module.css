@@ -512,6 +512,21 @@
 	grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
+.recordedDate > span {
+	display: grid;
+	place-items: center;
+	box-sizing: border-box;
+	inline-size: 1.95em;
+	block-size: 1.95em;
+	border: 1px solid currentColor;
+	border-radius: 50%;
+}
+
+.calendarPeriods .recordedDate > span {
+	inline-size: 2.85em;
+	block-size: 2.85em;
+}
+
 .calendarWeekday {
 	color: var(--journal-muted);
 	font-size: 0.75em;
@@ -583,23 +598,16 @@
 	margin-block: 0 0.75em;
 }
 
-.periodDisclosure {
+.periodOverview {
 	border-block-end: 1px solid var(--journal-soft-line);
 }
 
-.periodDisclosure > summary {
-	align-items: center;
-	cursor: pointer;
+.periodHeading {
+	align-items: baseline;
 	display: grid;
 	gap: 0.8em;
-	grid-template-columns: minmax(7em, 10em) minmax(0, 1fr) auto;
-	list-style: none;
-	min-block-size: 3.25em;
-	padding: 0.65em 0.25em;
-}
-
-.periodDisclosure > summary::-webkit-details-marker {
-	display: none;
+	grid-template-columns: minmax(7em, 10em) minmax(0, 1fr);
+	padding-block: 0.65em;
 }
 
 .periodDate,
@@ -610,21 +618,18 @@
 }
 
 .periodTitle {
+	font-size: 1.2em;
+	margin: 0;
 	min-width: 0;
 }
 
-.periodChevron,
 .periodChildChevron {
 	color: var(--journal-muted);
 	font-size: 0.8em;
 	transition: transform 160ms ease;
 }
 
-.periodDisclosure[open] > summary .periodChevron {
-	transform: rotate(180deg);
-}
-
-.periodDisclosureBody {
+.periodBody {
 	padding-block-end: 0.75em;
 }
 
@@ -726,7 +731,6 @@
 	);
 }
 
-.periodDisclosure > summary:hover,
 .periodChildren a:hover {
 	background: var(--journal-surface);
 }
@@ -1280,7 +1284,7 @@
 }
 
 @media (max-width: 40rem) {
-	.periodDisclosure > summary,
+	.periodHeading,
 	.periodChildren a {
 		align-items: baseline;
 		gap: 0.25em 0.65em;

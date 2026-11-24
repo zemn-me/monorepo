@@ -49,8 +49,17 @@ func journalBrowse(records []JournalStoredRecord, view string, at *time.Time, no
 		}
 		choices[id] = choice
 	}
+	recordingDays := map[string][]int{}
+	seenDates := map[string]bool{}
 	for _, record := range records {
 		if entry := record.Entry; entry != nil && entry.Status != JournalEntryStatusFailed && journalEntryIsVisible(*entry, now) {
+			local := entry.RecordedAt.In(location)
+			date := local.Format(time.DateOnly)
+			if !seenDates[date] {
+				seenDates[date] = true
+				month := local.Format("2006-01")
+				recordingDays[month] = append(recordingDays[month], local.Day())
+			}
 			for _, period := range []string{"year", "month", "week", "day"} {
 				var title *string
 				if period == "day" {
@@ -69,7 +78,10 @@ func journalBrowse(records []JournalStoredRecord, view string, at *time.Time, no
 	if view != "overview" {
 		add(view, focus, nil)
 	}
-	result := JournalBrowse{Focus: focus, TimeZone: location.String(), Periods: []JournalBrowsePeriod{}, Locations: []JournalEntry{}}
+	for _, days := range recordingDays {
+		sort.Ints(days)
+	}
+	result := JournalBrowse{RecordingDaysByMonth: &recordingDays, Focus: focus, TimeZone: location.String(), Periods: []JournalBrowsePeriod{}, Locations: []JournalEntry{}}
 	if view == "year" || view == "month" || view == "week" {
 		for _, record := range records {
 			entry := record.Entry

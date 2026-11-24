@@ -947,12 +947,11 @@ function periodMidpoint(period: Pick<JournalPeriodNode, 'start' | 'end'>) {
 	).toISOString();
 }
 
-function PeriodDisclosure({
+function PeriodOverview({
 	locations,
 	timeZone,
 	curation,
 	children,
-	initiallyOpen,
 	nextRoute,
 	node,
 	playback,
@@ -961,41 +960,25 @@ function PeriodDisclosure({
 	readonly curation: boolean;
 	readonly children: readonly JournalPeriodNode[];
 	readonly locations: readonly JournalEntry[];
-	readonly initiallyOpen: boolean;
 	readonly nextRoute: JournalRoute;
 	readonly node: JournalPeriodNode;
 	readonly playback: JournalPlayback;
 }) {
-	const [open, setOpen] = useState(initiallyOpen);
-	useEffect(() => {
-		if (initiallyOpen) setOpen(true);
-	}, [initiallyOpen]);
-
 	return (
-		<details
-			className={style.periodDisclosure}
-			data-journal-period-disclosure={node.period}
-			onToggle={event => setOpen(event.currentTarget.open)}
-			open={open}
-		>
-			<summary>
+		<div className={style.periodOverview}>
+			<header className={style.periodHeading}>
 				<span className={style.periodDate}>
 					<PeriodDate summary={node} timeZone={timeZone} />
 				</span>
-				<strong className={style.periodTitle}>
+				<h2 className={style.periodTitle}>
 					{node.summary?.title ??
 						node.title ??
 						(curation
 							? 'Browse recordings'
 							: 'Summary in progress…')}
-				</strong>
-				<FontAwesomeIcon
-					aria-hidden="true"
-					className={style.periodChevron}
-					icon={faChevronDown}
-				/>
-			</summary>
-			<div className={style.periodDisclosureBody}>
+				</h2>
+			</header>
+			<div className={style.periodBody}>
 				<JournalMap entries={locations} />
 				{node.summary && (
 					<SummaryCard
@@ -1042,7 +1025,7 @@ function PeriodDisclosure({
 					</ol>
 				)}
 			</div>
-		</details>
+		</div>
 	);
 }
 
@@ -1074,6 +1057,12 @@ function JournalDatePicker({
 		.toInstant()
 		.toString();
 	const selectedDay = selected.toPlainDate().toString();
+	const daysByMonth = journal.browse?.recordingDaysByMonth ?? {};
+	const recordingDays =
+		daysByMonth[firstDay.toPlainDate().toPlainYearMonth().toString()];
+	const recordingYears = new Set(
+		Object.keys(daysByMonth).map(month => month.slice(0, 4))
+	);
 	const changeView = (next: typeof view) => {
 		setView(next);
 		heading.current?.focus();
@@ -1151,9 +1140,18 @@ function JournalDatePicker({
 						const day = firstDay
 							.add({ days: index })
 							.with({ hour: 12 });
+						const hasRecordings = recordingDays?.includes(day.day);
 						return (
 							<Link
 								key={day.day}
+								className={
+									hasRecordings
+										? style.recordedDate
+										: undefined
+								}
+								aria-description={
+									hasRecordings ? 'Has recordings' : undefined
+								}
 								href={journalHref('day', {
 									at: day.toInstant().toString(),
 								})}
@@ -1168,7 +1166,7 @@ function JournalDatePicker({
 										: undefined
 								}
 							>
-								{day.day}
+								<span>{day.day}</span>
 							</Link>
 						);
 					})}
@@ -1190,6 +1188,17 @@ function JournalDatePicker({
 							view === 'month'
 								? date.with({ month: value })
 								: date.with({ year: value });
+						const hasRecordings =
+							view === 'month'
+								? Boolean(
+										daysByMonth[
+											period
+												.toPlainDate()
+												.toPlainYearMonth()
+												.toString()
+										]?.length
+									)
+								: recordingYears.has(String(value));
 						const current =
 							view === 'month'
 								? value === selected.month &&
@@ -1200,6 +1209,14 @@ function JournalDatePicker({
 								key={value}
 								type="button"
 								aria-pressed={current}
+								className={
+									hasRecordings
+										? style.recordedDate
+										: undefined
+								}
+								aria-description={
+									hasRecordings ? 'Has recordings' : undefined
+								}
 								onClick={() => {
 									setDate(period);
 									changeView(
@@ -1207,11 +1224,13 @@ function JournalDatePicker({
 									);
 								}}
 							>
-								{view === 'month'
-									? period.toLocaleString(language, {
-											month: 'short',
-										})
-									: value}
+								<span>
+									{view === 'month'
+										? period.toLocaleString(language, {
+												month: 'short',
+											})
+										: value}
+								</span>
 							</button>
 						);
 					})}
@@ -1226,8 +1245,7 @@ function JournalDatePicker({
 						at: monthAt,
 					})}
 				>
-					{view === 'day' ? monthName : date.year} summary{' '}
-					<span aria-hidden="true">↗</span>
+					{view === 'day' ? monthName : date.year} summary
 				</Link>
 				{view === 'day' && (
 					<Link
@@ -1334,13 +1352,12 @@ function PeriodList({
 				data-journal-period-start={node.start}
 			>
 				{nextRoute ? (
-					<PeriodDisclosure
+					<PeriodOverview
 						locations={journal.browse?.locations ?? []}
 						timeZone={journal.browse?.timeZone}
 						key={node.id}
 						curation={journal.curation !== undefined}
 						children={children}
-						initiallyOpen
 						nextRoute={nextRoute}
 						node={node}
 						playback={playback}
@@ -2481,7 +2498,13 @@ export function JournalReaderLayout() {
 				</div>
 			)}
 			<ReadingLayout
-				heading={<h1 className={style.journalTitle}>Journal</h1>}
+				heading={
+					<h1 className={style.journalTitle}>
+						<Link href="/journal" styleless>
+							Journal
+						</Link>
+					</h1>
+				}
 				companionRef={setPlayerHost}
 			>
 				{!isLoggedIn ? (
@@ -2595,7 +2618,9 @@ export function JournalReaderLayout() {
 								)
 							)
 						)}
-						<JournalMCPSetup />
+						{route === undefined && wiki === null && (
+							<JournalMCPSetup />
+						)}
 					</JournalPlayerProvider>
 				)}
 			</ReadingLayout>
