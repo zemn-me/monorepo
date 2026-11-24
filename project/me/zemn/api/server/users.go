@@ -359,29 +359,6 @@ func (s Server) findUserByLocalID(ctx context.Context, localID string) (*userRec
 	return &rec, nil
 }
 
-func (s Server) findUserByEmail(ctx context.Context, email string) (*userRecord, error) {
-	e := canonicalEmail(email)
-	if e == "" {
-		return nil, nil
-	}
-	recs, err := s.latestUserRecords(ctx)
-	if err != nil {
-		return nil, err
-	}
-	for _, rec := range recs {
-		if rec.Deleted {
-			continue
-		}
-		for _, addr := range rec.Emails {
-			if canonicalEmail(addr) == e {
-				r := rec
-				return &r, nil
-			}
-		}
-	}
-	return nil, nil
-}
-
 func mergeTokenExchangeDetails(rec *userRecord, details tokenExchangeUserDetails) {
 	rec.When = Now()
 	rec.Deleted = false
@@ -427,12 +404,6 @@ func (s Server) maybeResolveUserFromTable(ctx context.Context, details tokenExch
 	rec, err := s.findUserByRemoteSubject(ctx, details.Issuer, details.RemoteSubject)
 	if err != nil {
 		return nil, err
-	}
-	if rec == nil && details.EmailVerified != nil && *details.EmailVerified {
-		rec, err = s.findUserByEmail(ctx, details.Email)
-		if err != nil {
-			return nil, err
-		}
 	}
 	if rec == nil {
 		return nil, nil

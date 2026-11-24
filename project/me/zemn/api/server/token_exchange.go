@@ -401,7 +401,7 @@ func (s *Server) translateUpstreamUser(
 			continue
 		}
 
-		details := tokenExchangeUserDetails{
+		rec, err := s.maybeResolveUserFromTable(ctx, tokenExchangeUserDetails{
 			Issuer:        string(issuer),
 			Provider:      cfg.Provider,
 			Audience:      string(audience),
@@ -412,25 +412,7 @@ func (s *Server) translateUpstreamUser(
 			FamilyName:    claims.FamilyName,
 			Picture:       claims.Picture,
 			EmailVerified: claims.EmailVerified,
-		}
-		// Google subject IDs can change while Thomas retains the same verified
-		// email. Resolve to the stable local account so its diary and grants survive.
-		ownerEmail := issuer == googleOIDCIssuer && audience == googleClientID &&
-			claims.EmailVerified != nil && *claims.EmailVerified &&
-			canonicalEmail(claims.Email) == "thomas@shadwell.im"
-		var rec *userRecord
-		if ownerEmail {
-			if s.usersTableName != "" {
-				rec, err = s.findUserByLocalID(ctx, journalOwnerSubject)
-				if err == nil && rec != nil {
-					mergeTokenExchangeDetails(rec, details)
-					err = s.putUserRecord(ctx, *rec)
-				}
-			}
-		} else {
-			rec, err = s.maybeResolveUserFromTable(ctx, details)
-		}
-
+		})
 		if err != nil {
 			lastErr = err
 			continue
@@ -442,11 +424,7 @@ func (s *Server) translateUpstreamUser(
 				Profile: resolveProfileClaims(claims, rec),
 			}, nil
 		}
-		subject, knownSubject := subjectMappings[OIDCSubject(token.Subject)]
-		if ownerEmail {
-			subject, knownSubject = journalOwnerSubject, true
-		}
-		if knownSubject {
+		if subject, ok := subjectMappings[OIDCSubject(token.Subject)]; ok {
 			scopes := hardcodedScopesForSubject(subject)
 			if s.usersTableName != "" {
 				rec := userRecordFromTokenExchange(subject, tokenExchangeUserDetails{
