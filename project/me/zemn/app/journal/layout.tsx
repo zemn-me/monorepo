@@ -24,51 +24,29 @@ export const metadata: Metadata = {
 
 export const headers = () => privateHeaders;
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	const auth = await readSession(request);
+export async function loader({ request, url }: LoaderFunctionArgs) {
 	const queryClient = new QueryClient();
+	const auth = url.searchParams.has('wiki')
+		? null
+		: await readSession(request);
 	if (auth?.session.scopes.includes('journal_read')) {
 		const jti = auth.session.claims.jti;
-		const pageId = new URL(request.url).searchParams.get('wiki');
-		if (pageId === null) {
-			const url = new URL(request.url);
-			const browse = journalBrowseQuery(
-				url.pathname,
-				url.searchParams.get('at')
-			);
-			const response = await auth.client.GET('/journal', {
-				params: { query: browse },
+		const browse = journalBrowseQuery(
+			url.pathname,
+			url.searchParams.get('at')
+		);
+		const response = await auth.client.GET('/journal', {
+			params: { query: browse },
+		});
+		if (!response.data)
+			throw new Response('Journal unavailable', {
+				status: response.response.status,
+				headers: privateHeaders,
 			});
-			if (!response.data)
-				throw new Response('Journal unavailable', {
-					status: response.response.status,
-					headers: privateHeaders,
-				});
-			queryClient.setQueryData(
-				['get', '/journal', jti, browse],
-				response.data
-			);
-		} else if (pageId === 'all') {
-			const response = await auth.client.GET('/journal/wiki');
-			if (!response.data)
-				throw new Response('Wiki unavailable', {
-					status: response.response.status,
-					headers: privateHeaders,
-				});
-			queryClient.setQueryData(
-				['get', '/journal', 'wiki', jti],
-				response.data
-			);
-		} else {
-			const page = await auth.client.GET('/journal/wiki/{pageId}', {
-				params: { path: { pageId } },
-			});
-			if (page.data)
-				queryClient.setQueryData(
-					['get', '/journal', 'wiki-page', jti, pageId, undefined],
-					page.data
-				);
-		}
+		queryClient.setQueryData(
+			['get', '/journal', jti, browse],
+			response.data
+		);
 	}
 	return data(
 		{ dehydratedState: dehydrate(queryClient), renderedAt: Date.now() },

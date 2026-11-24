@@ -1,0 +1,62 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "CopyrightNotices",
+    srcs = ["index.tsx"],
+    assets = ["style.module.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+    ],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "index.tsx",
+        "index_test.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+ts_project(
+    name = "CopyrightNotices_tests",
+    srcs = ["index_test.tsx"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":CopyrightNotices",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    size = "small",
+    srcs = ["index_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":CopyrightNotices_tests"],
+)

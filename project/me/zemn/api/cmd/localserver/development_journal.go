@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"sync"
 	"time"
@@ -102,7 +103,16 @@ func developmentJournalWAV(seconds int) []byte {
 	_ = binary.Write(buffer, binary.LittleEndian, uint16(8*bytesPerSample))
 	buffer.WriteString("data")
 	_ = binary.Write(buffer, binary.LittleEndian, uint32(dataSize))
-	buffer.Write(make([]byte, dataSize))
+	// Quiet, separated tones give the fixture an audible timeline to scrub.
+	samples := make([]byte, dataSize)
+	for i := 0; i < dataSize/bytesPerSample; i++ {
+		t := float64(i) / sampleRate
+		pulse := math.Max(0, math.Sin(t*5)+0.35*math.Sin(t*11))
+		amplitude := 2600 * math.Min(1, pulse) * math.Min(1, t*20) * math.Min(1, (float64(seconds)-t)*20)
+		tone := math.Sin(2 * math.Pi * float64(175+seconds*5) * t)
+		binary.LittleEndian.PutUint16(samples[i*bytesPerSample:], uint16(int16(amplitude*tone)))
+	}
+	buffer.Write(samples)
 	return buffer.Bytes()
 }
 

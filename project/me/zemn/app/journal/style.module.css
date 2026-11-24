@@ -1,16 +1,79 @@
 .locationMap {
+	--map-land: color-mix(
+		in srgb,
+		var(--background-color) 95%,
+		var(--foreground-color)
+	);
 	position: relative;
 	block-size: 144px;
 	overflow: hidden;
-	border-radius: 0.5rem;
-	margin-block: 0.75rem;
-	background: #e6e9e5;
+	border-radius: 0.375rem;
+	margin-block: 0.75rem 1rem;
+	background: var(--map-land);
 	isolation: isolate;
 }
-.locationMap > img {
+
+.mapTiles {
 	position: absolute;
-	max-width: none;
+	inset: 0;
+	pointer-events: none;
 }
+
+.green {
+	fill: color-mix(in srgb, var(--link-color) 17%, var(--map-land));
+}
+
+.water {
+	fill: color-mix(in srgb, var(--foreground-color) 32%, var(--map-land));
+}
+
+.river,
+.boundary,
+.road,
+.arterial {
+	fill: none;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.river {
+	stroke: color-mix(in srgb, var(--foreground-color) 43%, var(--map-land));
+	stroke-width: 1.35px;
+}
+.boundary {
+	stroke: var(--journal-line);
+	stroke-width: 1px;
+	stroke-dasharray: 3 3;
+}
+.road {
+	stroke: color-mix(in srgb, var(--foreground-color) 31%, var(--map-land));
+	stroke-width: 0.8px;
+}
+.arterial {
+	stroke: color-mix(in srgb, var(--foreground-color) 55%, var(--map-land));
+	stroke-width: 1.65px;
+}
+
+.mapTiles text {
+	fill: var(--foreground-color);
+	stroke: var(--map-land);
+	stroke-width: 2.5px;
+	stroke-linejoin: round;
+	paint-order: stroke;
+	font:
+		11px / 1.25 system-ui,
+		sans-serif;
+}
+
+.mapError {
+	position: absolute;
+	inset-block-end: 0.4rem;
+	inset-inline-start: 0.5rem;
+	color: var(--journal-muted);
+	font: var(--journal-control-font);
+	font-size: 0.75rem;
+}
+
 .mapPin {
 	position: absolute;
 	transform: translate(-50%, -50%);
@@ -19,37 +82,43 @@
 	inline-size: 44px;
 	block-size: 44px;
 	border-radius: 50%;
-	text-decoration: none;
 }
+
 .mapPin > span {
 	display: grid;
 	place-items: center;
 	box-sizing: border-box;
-	inline-size: 24px;
-	block-size: 24px;
-	border: 2px solid white;
+	inline-size: 21px;
+	block-size: 21px;
+	border: 2px solid var(--background-color);
+	border-radius: 50% 50% 50% 0;
+	background: var(--foreground-color);
+	transform: translateY(-14px) rotate(-45deg);
+	box-shadow: 0 1px 3px #0004;
+}
+
+.mapPin > span::after {
+	content: "";
+	inline-size: 7px;
+	block-size: 7px;
 	border-radius: 50%;
-	background: #9b3232;
-	color: white;
-	box-shadow: 0 1px 4px #0006;
-	font-size: 10px;
+	background: var(--highlight-color);
 }
+
+.mapPin:hover > span,
+.mapPin:focus-visible > span {
+	background: var(--highlight-color);
+}
+
+.mapPin:hover > span::after,
+.mapPin:focus-visible > span::after {
+	background: var(--highlight-foreground-color);
+}
+
 .mapPin:focus-visible {
-	outline: 2px solid #152e56;
-	outline-offset: 0;
+	outline: 2px solid var(--foreground-color);
+	outline-offset: -2px;
 	z-index: 1;
-}
-.mapAttribution {
-	position: absolute;
-	inset-block-end: 0;
-	inset-inline-end: 0;
-	background: #fffffff0;
-	color: #222;
-	font: 12px / 1.5 sans-serif;
-	padding-inline: 4px;
-}
-.mapAttribution a {
-	color: inherit;
 }
 
 .page {
@@ -73,12 +142,10 @@
 		var(--foreground-color) 4%,
 		var(--background-color)
 	);
+	--journal-control-font: 400 0.9375rem / 1.35 system-ui, sans-serif;
 	--journal-recording: #d70015;
-	--journal-sticky-navigation-height: 3.5rem;
-	box-sizing: border-box;
-	margin-inline: auto;
-	max-width: 52em;
-	padding: 0 1.25em 4em;
+	--reading-top-inset: var(--glade-bar-block-size, 0px);
+	padding-block-end: 3rem;
 }
 
 .page :where(h1, h2, h3, h4, h5, h6, strong, b) {
@@ -108,13 +175,11 @@
 	z-index: 19;
 }
 
-.hero {
-	max-width: 42em;
-	margin-block-end: 1.5em;
-}
-
-.hero h1 {
-	margin-block: 0;
+.journalTitle {
+	font-size: clamp(2.5rem, 5vw, 3.5rem);
+	letter-spacing: -0.045em;
+	line-height: 1.15;
+	margin-block: 0 0.75rem;
 }
 
 .recorder {
@@ -148,7 +213,7 @@
 }
 
 .recorder button,
-.page > button,
+.signIn,
 .uploadButton {
 	align-items: center;
 	background: var(--foreground-color);
@@ -165,15 +230,22 @@
 }
 
 .uploadButton {
+	background: transparent;
+	border-color: var(--journal-line);
+	color: var(--foreground-color);
 	position: relative;
+}
+
+.uploadButton:hover {
+	background: var(--journal-surface);
 }
 
 .recorder button,
 .uploadButton {
-	block-size: 2.75em;
+	block-size: max(44px, 2.75rem);
 	border-radius: 999px;
 	box-sizing: border-box;
-	inline-size: 2.75em;
+	inline-size: max(44px, 2.75rem);
 	justify-content: center;
 	padding: 0;
 }
@@ -290,7 +362,7 @@
 }
 
 .recorder button:disabled,
-.page > button:disabled {
+.signIn:disabled {
 	cursor: wait;
 	opacity: 0.55;
 }
@@ -303,24 +375,19 @@
 	padding: 1em;
 }
 
-.entry > summary {
-	cursor: pointer;
-	padding-block: 0.5em;
-}
-
 .journalToolbar {
+	font: var(--journal-control-font);
 	align-items: center;
 	background: var(--background-color);
 	border-block-end: 1px solid var(--journal-soft-line);
 	box-sizing: border-box;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.5em;
-	margin-block-end: 1.5em;
-	max-width: 42em;
+	gap: 0.375rem;
+	margin-block-end: 1.5rem;
 	min-block-size: 56px;
 	position: sticky;
-	top: var(--glade-bar-block-size, 0px);
+	top: calc(var(--glade-bar-block-size, 0px) + var(--reading-stacked-height));
 	z-index: 7;
 }
 
@@ -336,7 +403,6 @@
 .calendarNavigation {
 	display: flex;
 	align-items: center;
-	flex: 1;
 	min-inline-size: 0;
 }
 
@@ -367,8 +433,24 @@
 	display: none;
 }
 
-.datePicker > summary svg {
-	font-size: 0.6em;
+.datePicker > summary svg:last-child {
+	font-size: 0.65em;
+}
+
+.datePicker > summary,
+.wikiNavigation,
+.journalToolbar > a {
+	border-radius: 0.35rem;
+	font-style: normal;
+}
+
+.datePicker > summary:hover,
+.journalToolbar > a:hover {
+	background: var(--journal-surface);
+}
+
+.datePicker[open] > summary svg:last-child {
+	transform: rotate(180deg);
 }
 
 .dateChoices {
@@ -383,7 +465,7 @@
 	max-block-size: calc(
 		100dvh -
 		var(--glade-bar-block-size, 0px) -
-		var(--journal-sticky-navigation-height) -
+		calc(3.5rem + var(--reading-stacked-height)) -
 		1em
 	);
 	overflow-y: auto;
@@ -428,6 +510,21 @@
 .calendarDays {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.recordedDate > span {
+	display: grid;
+	place-items: center;
+	box-sizing: border-box;
+	inline-size: 1.95em;
+	block-size: 1.95em;
+	border: 1px solid currentColor;
+	border-radius: 50%;
+}
+
+.calendarPeriods .recordedDate > span {
+	inline-size: 2.85em;
+	block-size: 2.85em;
 }
 
 .calendarWeekday {
@@ -494,32 +591,23 @@
 
 .period {
 	min-width: 0;
-	scroll-margin-block: calc(var(--journal-sticky-navigation-height) + 1em);
+	scroll-margin-block: calc(3.5rem + var(--reading-stacked-height) + 1em);
 }
 
 .period > h3 {
 	margin-block: 0 0.75em;
 }
 
-.periodDisclosure {
+.periodOverview {
 	border-block-end: 1px solid var(--journal-soft-line);
 }
 
-.periodDisclosure > summary,
-.entry > summary {
-	align-items: center;
-	cursor: pointer;
+.periodHeading {
+	align-items: baseline;
 	display: grid;
 	gap: 0.8em;
-	grid-template-columns: minmax(9em, 15em) minmax(0, 1fr) auto;
-	list-style: none;
-	min-block-size: 3.25em;
-	padding: 0.65em 0.25em;
-}
-
-.periodDisclosure > summary::-webkit-details-marker,
-.entry > summary::-webkit-details-marker {
-	display: none;
+	grid-template-columns: minmax(7em, 10em) minmax(0, 1fr);
+	padding-block: 0.65em;
 }
 
 .periodDate,
@@ -530,21 +618,18 @@
 }
 
 .periodTitle {
+	font-size: 1.2em;
+	margin: 0;
 	min-width: 0;
 }
 
-.periodChevron,
 .periodChildChevron {
 	color: var(--journal-muted);
 	font-size: 0.8em;
 	transition: transform 160ms ease;
 }
 
-.periodDisclosure[open] > summary .periodChevron {
-	transform: rotate(180deg);
-}
-
-.periodDisclosureBody {
+.periodBody {
 	padding-block-end: 0.75em;
 }
 
@@ -562,7 +647,7 @@
 	align-items: center;
 	display: grid;
 	gap: 0.8em;
-	grid-template-columns: minmax(9em, 15em) minmax(0, 1fr) auto;
+	grid-template-columns: minmax(7em, 10em) minmax(0, 1fr) auto;
 	padding: 0.8em 0.25em;
 	text-decoration: none;
 }
@@ -577,12 +662,12 @@
 }
 
 .summary {
-	background: var(--journal-surface);
-	border: 1px solid var(--journal-soft-line);
-	border-radius: 1rem;
-	margin-block: 0.75em 1.25em;
-	max-width: 42em;
-	padding: 1.1em 1.25em;
+	line-height: 1.65;
+	margin-block: 1.25rem 1.75rem;
+}
+
+.summary > :last-child {
+	margin-block-end: 0;
 }
 
 .summaryEmbedded {
@@ -604,7 +689,6 @@
 }
 
 .summary h4 {
-	border-block-end: 1px solid var(--journal-soft-line);
 	font-size: 1.05em;
 	margin-block: 1.5em 0.65em;
 	padding-block-end: 0.35em;
@@ -622,7 +706,8 @@
 	font: inherit;
 	padding: 0;
 	scroll-margin-block-start: calc(
-		var(--journal-sticky-navigation-height) +
+		3.5rem +
+		var(--reading-stacked-height) +
 		0.5rem
 	);
 	text-decoration: underline;
@@ -636,33 +721,72 @@
 }
 
 .entry {
-	border-block-end: 1px solid var(--journal-soft-line);
-	max-width: 42em;
+	border-block-start: 1px solid var(--journal-soft-line);
+	padding-block: 1.75rem;
+	scroll-margin-block-start: calc(
+		var(--glade-bar-block-size, 0px) +
+		3.5rem +
+		var(--reading-stacked-height) +
+		1rem
+	);
+}
+
+.periodChildren a:hover {
+	background: var(--journal-surface);
 }
 
 .pendingEntries {
-	display: grid;
-	gap: 0.5em;
 	margin-block-end: 1.5em;
 }
 
-.pendingEntries .entry {
-	margin-inline-start: 0;
+.entryHeading {
+	position: relative;
+}
+
+.entryHeading h3 {
+	font-size: clamp(1.3rem, 3vw, 1.65rem);
+	line-height: 1.25;
+	margin: 0 0 0.25rem;
+	overflow-wrap: anywhere;
+}
+
+.recordingTitle:hover,
+.recordingTitle:focus-visible {
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+.entryHeading:has(.entryOptions) h3 {
+	padding-inline-end: 3rem;
 }
 
 .entryTime {
+	font: var(--journal-control-font);
 	font-variant-numeric: tabular-nums;
 }
 
-.entryHeading {
-	align-items: baseline;
+.entryOptions > summary {
+	align-items: center;
+	border-radius: 50%;
+	color: var(--journal-muted);
+	cursor: pointer;
 	display: flex;
-	gap: 0.75em;
-	min-width: 0;
+	height: 44px;
+	inset-block-start: 0;
+	inset-inline-end: 0;
+	justify-content: center;
+	list-style: none;
+	position: absolute;
+	width: 44px;
 }
 
-.entryTitle {
-	min-width: 0;
+.entryOptions > summary::-webkit-details-marker {
+	display: none;
+}
+
+.entryOptions > summary:hover,
+.entryOptions[open] > summary {
+	background: var(--journal-surface);
 }
 
 .entryChevron {
@@ -671,21 +795,61 @@
 	transition: transform 160ms ease;
 }
 
-.entry[open] > summary .entryChevron {
-	transform: rotate(180deg);
+.entryPlay,
+.playerToggle,
+.playerClose {
+	align-items: center;
+	background: transparent;
+	border: 0;
+	border-radius: 50%;
+	color: inherit;
+	cursor: pointer;
+	display: inline-flex;
+	justify-content: center;
+	block-size: 44px;
+	inline-size: 44px;
+	padding: 0;
 }
 
-.audioDock {
-	background: var(--background-color);
-	box-sizing: border-box;
-	max-width: 42em;
-	padding-block: 0.5em;
-	position: sticky;
-	top: calc(
-		var(--glade-bar-block-size, 0px) +
-		var(--journal-sticky-navigation-height)
-	);
-	z-index: 5;
+.entryPlay {
+	border: 1px solid var(--journal-line);
+	font-size: 0.8rem;
+	margin-inline-end: 0.65rem;
+	vertical-align: middle;
+}
+
+.entryPlay:hover,
+.playerClose:hover {
+	background: var(--journal-surface);
+}
+
+.player {
+	border-block: 1px solid var(--journal-line);
+	margin: 0;
+	padding-block: 0.375rem;
+}
+
+.playerHeader {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+.playerHeader strong {
+	font-size: 1.25rem;
+	line-height: 1.2;
+	overflow-wrap: anywhere;
+}
+
+.playerToggle {
+	background: var(--foreground-color);
+	color: var(--background-color);
+	font-size: 0.9rem;
+}
+
+.playerClose {
+	color: var(--journal-muted);
 }
 
 .audio {
@@ -693,9 +857,71 @@
 	width: 100%;
 }
 
+.waveSeek {
+	margin-block: 0.45rem 0.65rem;
+}
+
+.waveTrack {
+	position: relative;
+}
+
+.waveTrack canvas {
+	display: block;
+	inline-size: 100%;
+	block-size: 44px;
+}
+
+.waveTrack input {
+	appearance: none;
+	cursor: pointer;
+	inset: 0;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.waveTrack input:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+.waveTrack input::-webkit-slider-runnable-track {
+	background: transparent;
+	height: 100%;
+}
+.waveTrack input::-moz-range-track {
+	background: transparent;
+}
+.waveTrack input::-webkit-slider-thumb {
+	appearance: none;
+	height: 100%;
+	width: 3px;
+	border: 0;
+	border-radius: 2px;
+	background: currentColor;
+}
+.waveTrack input::-moz-range-thumb {
+	height: 44px;
+	width: 3px;
+	border: 0;
+	border-radius: 2px;
+	background: currentColor;
+}
+
+.playerTimes {
+	display: flex;
+	justify-content: space-between;
+	color: var(--journal-muted);
+	font: var(--journal-control-font);
+	font-size: 0.75rem;
+	font-variant-numeric: tabular-nums;
+}
 .transcriptScroller {
-	border-block: 1px solid var(--journal-line);
-	max-block-size: min(45vh, 22rem);
+	border-block-start: 1px solid var(--journal-soft-line);
+	max-block-size: min(12dvh, 5.5rem);
 	max-width: 42em;
 	overflow-y: auto;
 	scrollbar-gutter: stable;
@@ -709,7 +935,34 @@
 }
 
 .transcriptFollowing {
-	padding-block: calc(min(45vh, 22rem) / 2 - 0.875em);
+	padding-block: calc(min(12dvh, 5.5rem) / 2 - 0.875em);
+}
+
+@container reading-sidebar (min-height: 0px) {
+	.player {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		block-size: 100%;
+		overflow: auto;
+		border: 0;
+		padding-block: 0.375rem 0;
+	}
+
+	.player > :not(.transcriptScroller) {
+		flex: none;
+	}
+
+	.transcriptScroller {
+		flex: 1 1 auto;
+		min-block-size: 3rem;
+		max-block-size: none;
+		overscroll-behavior-y: contain;
+	}
+
+	.transcriptFollowing {
+		padding-block: 1em;
+	}
 }
 
 .transcriptParagraph {
@@ -947,23 +1200,40 @@
 }
 
 .recent {
-	margin-block-start: 2.5em;
-	max-width: 42em;
+	margin-block: 0 1.5rem;
 }
 
 .recent > header {
-	align-items: baseline;
+	align-items: center;
 	display: flex;
+	gap: 1rem;
 	justify-content: space-between;
 }
 
-.recent > header h2 {
+.recent > header h2,
+.wikiHeading {
+	font-size: 1.45rem;
+	line-height: 1.25;
 	margin: 0;
 }
 
+.recent > header a,
+.journalToolbar > a {
+	align-items: center;
+	color: var(--journal-muted);
+	display: inline-flex;
+	font: var(--journal-control-font);
+	min-block-size: 44px;
+}
+
+.recent > header a {
+	text-underline-offset: 0.25em;
+}
+
 .recent ol {
+	border-block-end: 1px solid var(--journal-soft-line);
 	list-style: none;
-	margin: 0.75em 0 0;
+	margin: 0.25rem 0 0;
 	padding: 0;
 }
 
@@ -972,45 +1242,49 @@
 }
 
 .recent li a {
-	align-items: baseline;
+	align-items: center;
+	box-sizing: border-box;
 	display: grid;
-	gap: 0.25em 1em;
-	grid-template-columns: minmax(7em, auto) 1fr auto;
-	padding: 0.9em 0.25em;
+	font-style: normal;
+	gap: 0.35rem 1.25rem;
+	grid-template-columns: minmax(0, 1fr) auto;
+	padding: 0.925rem 0.25rem;
 	text-decoration: none;
 }
 
-.recent li a:hover strong,
-.recent li a:focus-visible strong {
-	text-decoration: underline;
+.recent li a:hover,
+.wikiIndex a:hover {
+	background: var(--journal-surface);
 }
 
-.recentDate,
-.recentTime {
+.recent li strong {
+	font-size: 1.1875rem;
+	line-height: 1.35;
+	overflow-wrap: anywhere;
+}
+
+.recentMeta {
+	align-items: baseline;
 	color: var(--journal-muted);
-	font-size: 0.85em;
+	display: flex;
+	flex-wrap: wrap;
+	font: var(--journal-control-font);
+	font-size: 0.875rem;
+	font-variant-numeric: tabular-nums;
+	gap: 0.4rem;
+	grid-column: 1;
 }
 
-.recentTime {
-	font-variant-numeric: tabular-nums;
+.recentChevron {
+	color: var(--journal-muted);
+	font-size: 0.65rem;
+	grid-column: 2;
+	grid-row: 1 / 3;
+	transform: rotate(-90deg);
 }
 
 @media (max-width: 40rem) {
-	.entry > summary {
-		align-items: baseline;
-		gap: 0.25em 0.65em;
-		grid-template-columns: 1fr auto;
-	}
-
-	.entryTime {
-		grid-column: 1 / -1;
-	}
-
-	.entryHeading {
-		gap: 0.5em;
-	}
-
-	.periodDisclosure > summary,
+	.periodHeading,
 	.periodChildren a {
 		align-items: baseline;
 		gap: 0.25em 0.65em;
@@ -1021,26 +1295,21 @@
 	.periodChildDate {
 		grid-column: 1 / -1;
 	}
-
-	.recent li a {
-		grid-template-columns: 1fr auto;
-	}
-
-	.recentDate {
-		grid-column: 1 / -1;
-	}
 }
 
 .mcpSetup {
 	border-block-start: 1px solid var(--journal-line);
-	margin-block-start: 3em;
-	max-width: 42em;
-	padding-block-start: 1em;
+	margin-block-start: 2rem;
+	padding-block-start: 0.5rem;
 }
 
 .mcpSetup summary {
+	box-sizing: border-box;
+	color: var(--journal-muted);
 	cursor: pointer;
-	padding-block: 0.5em;
+	font: var(--journal-control-font);
+	min-block-size: 44px;
+	padding-block: 0.75rem;
 }
 
 .mcpSetup li + li {
@@ -1233,70 +1502,83 @@
 }
 
 .wikiNavigation {
-	display: inline-flex;
-	align-items: center;
+	box-sizing: border-box;
 	justify-content: center;
 	min-inline-size: 44px;
-	min-block-size: 44px;
 	padding-inline: 0.5rem;
-	flex-shrink: 0;
+	text-decoration-line: none;
 }
+
+@media (max-width: 27rem) {
+	.journalToolbar {
+		column-gap: 0;
+	}
+
+	.calendarNavigation:has(> :is(a, span)) + .wikiNavigation {
+		display: none;
+	}
+}
+
 .wikiNavigation[aria-current="page"] {
-	font-weight: 700;
+	background: var(--journal-surface);
+	text-decoration-line: underline;
 	text-underline-offset: 0.3em;
 }
+
 .wiki {
-	max-inline-size: 48rem;
 	margin-block: 1.5rem;
 }
-.wikiHeader {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 1rem;
+
+.wikiKind,
+.wikiIndex a span {
+	color: var(--journal-muted);
+	font: var(--journal-control-font);
+	font-size: 0.875rem;
 }
-.wikiHeader h2 {
-	margin: 0;
-}
+
 .wikiSearch {
-	display: grid;
-	gap: 0.5rem;
-	margin-block: 1.5rem;
-}
-.wikiSearch input {
+	background: var(--journal-surface);
+	border: 1px solid var(--journal-line);
+	border-radius: 0.4rem;
 	box-sizing: border-box;
-	inline-size: 100%;
-	min-block-size: 44px;
-	font: inherit;
-	padding: 0.5rem 0.75rem;
 	color: inherit;
-	background: transparent;
-	border: 1px solid currentColor;
-	border-radius: 0.5rem;
-}
-.wikiIndex {
-	list-style: none;
-	padding: 0;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-	gap: 0.75rem;
-}
-.wikiIndex a {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	display: block;
+	font: var(--journal-control-font);
+	font-size: 1rem;
+	inline-size: 100%;
+	margin-block: 1rem 1.5rem;
 	min-block-size: 44px;
-	padding: 0.75rem;
-	border: 1px solid currentColor;
-	border-radius: 0.5rem;
+	padding: 0.55rem 0.75rem;
+}
+
+.wikiIndex {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+	list-style: none;
+	column-gap: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.wikiIndex li {
+	border-block-start: 1px solid var(--journal-soft-line);
+}
+
+.wikiIndex a {
+	align-items: baseline;
+	box-sizing: border-box;
+	display: flex;
+	font-style: normal;
+	gap: 1rem;
+	justify-content: space-between;
+	min-block-size: 44px;
+	padding: 0.85rem 0.125rem;
 	text-decoration: none;
 }
-.wikiIndex a span,
-.wikiKind {
-	font-size: 0.85em;
-}
-.wikiIntro {
-	margin-block: 1.5rem;
+
+.wikiIndex strong {
+	min-inline-size: 0;
+	overflow-wrap: anywhere;
 }
 
 .recordingFailure {

@@ -306,12 +306,15 @@ func (s *Server) GetJournal(ctx context.Context, request GetJournalRequestObject
 		return summaries[i].Start.After(summaries[j].Start)
 	})
 	result := GetJournal200JSONResponse{Entries: entries, Summaries: summaries, Browse: browse}
-	wiki := make([]JournalWikiIndexEntry, 0, len(generation.Result.Pages))
-	for _, page := range generation.Result.Pages {
-		wiki = append(wiki, JournalWikiIndexEntry{Id: page.Id, Title: page.Title, Kind: string(page.Kind), Aliases: page.Aliases})
+	// Keep the full export compatible. Browsing loads the index only at /journal/wiki.
+	if browse == nil {
+		wiki := make([]JournalWikiIndexEntry, 0, len(generation.Result.Pages))
+		for _, page := range generation.Result.Pages {
+			wiki = append(wiki, JournalWikiIndexEntry{Id: page.Id, Title: page.Title, Kind: string(page.Kind), Aliases: page.Aliases})
+		}
+		sort.Slice(wiki, func(i, j int) bool { return wiki[i].Title < wiki[j].Title })
+		result.Wiki = &wiki
 	}
-	sort.Slice(wiki, func(i, j int) bool { return wiki[i].Title < wiki[j].Title })
-	result.Wiki = &wiki
 	if s.journalCurationEnabled || curationState.Version != "" {
 		status := JournalCurationStatus{Status: JournalCurationStatusStatusPending}
 		_, fingerprint := journalCorpusHashes(journalCorpusFromRecords(records))

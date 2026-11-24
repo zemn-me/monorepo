@@ -27,18 +27,14 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 		t.Fatal(err)
 	}
 	for _, destination := range []struct{ label, linkSelector, selector, path, query string }{
-		{"Overview", "Browse journal", "nav[aria-label='Choose journal date']", "/journal", ""},
+		{"Overview", "h1 a[href='/journal']", "nav[aria-label='Choose journal date']", "/journal", ""},
 		{"Day", "a[aria-current='date']", "section[aria-label='Create a journal entry']", "/journal/day", ""},
 		{"Wiki", "nav[aria-label='Browse journal'] a[href='/journal?wiki=all']", "section[aria-label='Diary wiki']", "/journal", "all"},
 	} {
 		if destination.label != "Overview" {
 			OpenJournalDatePicker(t, driver)
 		}
-		by := selenium.ByCSSSelector
-		if destination.label == "Overview" {
-			by = selenium.ByLinkText
-		}
-		link, err := driver.FindElement(by, destination.linkSelector)
+		link, err := driver.FindElement(selenium.ByCSSSelector, destination.linkSelector)
 		if err != nil {
 			t.Fatal(err)
 		}

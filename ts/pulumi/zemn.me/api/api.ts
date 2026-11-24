@@ -262,7 +262,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				corsRules: [
 					{
 						allowedHeaders: ['content-type', 'if-none-match'],
-						allowedMethods: ['PUT'],
+						allowedMethods: ['PUT', 'GET'],
 						allowedOrigins: [
 							'https://zemn.me',
 							'https://staging.zemn.me',
