@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { mapViewport } from '#root/project/me/zemn/app/journal/location_geometry.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
+import Link from '#root/project/me/zemn/components/Link/index.js';
 
 type Entry = components['schemas']['JournalEntry'];
 const mapHeight = 144;
@@ -100,16 +101,16 @@ export function JournalMap({
 						if (!point) return null;
 						const label = `${entry.title ?? entry.summary?.title ?? 'Voice note'} — ${entry.location.latitude.toFixed(4)}, ${entry.location.longitude.toFixed(4)} (accuracy ${Math.round(entry.location.accuracyMeters)} m)`;
 						return (
-							<a
+							<Link
 								key={entry.id}
 								className={style.mapPin}
 								style={{ left: point.x, top: point.y }}
-								href={`/journal/day?at=${encodeURIComponent(entry.recordedAt)}&entry=${encodeURIComponent(entry.id)}`}
+								href={`/journal/day?at=${encodeURIComponent(entry.recordedAt)}&entry=${encodeURIComponent(entry.id)}#entry-${entry.id}`}
 								aria-label={label}
 								title={label}
 							>
 								<span aria-hidden="true">●</span>
-							</a>
+							</Link>
 						);
 					})}
 				<span className={style.mapAttribution}>

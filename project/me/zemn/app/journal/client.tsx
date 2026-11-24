@@ -4,6 +4,7 @@ import {
 	faBookOpen,
 	faCalendarDays,
 	faChevronDown,
+	faEllipsis,
 	faMicrophone,
 	faSpinner,
 	faTrashCan,
@@ -25,6 +26,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
+import { useSearchParams } from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -270,12 +272,6 @@ function useJournalPlayback(
 				if (pendingPlayback.current?.entryID === entryID) {
 					const { time } = pendingPlayback.current;
 					pendingPlayback.current = undefined;
-					let parent: HTMLElement | null = audio;
-					while (parent) {
-						if (parent instanceof HTMLDetailsElement)
-							parent.open = true;
-						parent = parent.parentElement;
-					}
 					play(time);
 				}
 			} else {
@@ -417,11 +413,6 @@ function useJournalPlayback(
 			const target = document.getElementById(
 				citationID(entryID, segmentID)
 			);
-			let parent = target?.parentElement;
-			while (parent) {
-				if (parent instanceof HTMLDetailsElement) parent.open = true;
-				parent = parent.parentElement;
-			}
 			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			const audio = audioElements.current.get(entryID);
 			if (!audio || !segment) return false;
@@ -473,11 +464,6 @@ function useJournalPlayback(
 			const target = segment
 				? document.getElementById(citationID(entry.id, segment.id))
 				: document.getElementById(`entry-${entryID}`);
-			let parent: HTMLElement | null = target;
-			while (parent) {
-				if (parent instanceof HTMLDetailsElement) parent.open = true;
-				parent = parent.parentElement;
-			}
 			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			// Back can arrive before a newly selected day's audio mounts.
 			// Leave the cursor pending until that recording is available.
@@ -1429,47 +1415,59 @@ function EntryCard({
 }) {
 	const title = entry.title ?? entry.summary?.title ?? 'Voice note';
 	return (
-		<details
+		<article
+			aria-labelledby={`entry-title-${entry.id}`}
 			className={style.entry}
 			id={`entry-${entry.id}`}
-			open={
-				entry.status === 'failed' ||
-				playback.activeEntryID === entry.id ||
-				undefined
-			}
 		>
-			<summary>
+			<header className={style.entryHeading}>
+				<h3 id={`entry-title-${entry.id}`}>{title}</h3>
 				<LocalizedTime
 					className={style.entryTime}
 					date={journalEntryDate(entry)}
 				/>
-				<span className={style.entryHeading}>
-					<strong className={style.entryTitle}>{title}</strong>
-					{entry.status === 'processing' ? (
-						<JournalProcessingStatus
-							progress={entry.processingProgress}
-						/>
-					) : (
-						entry.status !== 'ready' && (
-							<JournalStatus
-								label={
-									entry.status === 'failed'
-										? 'Processing failed'
-										: 'Uploading voice note'
-								}
-								state={
-									entry.status === 'failed' ? 'error' : 'busy'
-								}
-							/>
-						)
+				{entry.status === 'ready' &&
+					(updateEntryDate || deleteEntry) && (
+						<details className={style.entryOptions}>
+							<summary
+								aria-label="Recording options"
+								title="Recording options"
+							>
+								<FontAwesomeIcon
+									aria-hidden="true"
+									icon={faEllipsis}
+								/>
+							</summary>
+							{updateEntryDate && (
+								<EntryDateEditor
+									entry={entry}
+									onUpdate={updateEntryDate}
+								/>
+							)}
+							{deleteEntry && (
+								<SwipeToDelete
+									entryID={entry.id}
+									onDelete={deleteEntry}
+									onDeleting={playback.removeEntry}
+								/>
+							)}
+						</details>
 					)}
-				</span>
-				<FontAwesomeIcon
-					aria-hidden="true"
-					className={style.entryChevron}
-					icon={faChevronDown}
-				/>
-			</summary>
+			</header>
+			{entry.status === 'processing' ? (
+				<JournalProcessingStatus progress={entry.processingProgress} />
+			) : (
+				entry.status !== 'ready' && (
+					<JournalStatus
+						label={
+							entry.status === 'failed'
+								? 'Processing failed'
+								: 'Uploading voice note'
+						}
+						state={entry.status === 'failed' ? 'error' : 'busy'}
+					/>
+				)
+			)}
 			{['processing', 'awaiting_upload'].includes(entry.status) && (
 				<JournalPlaceholder
 					label={
@@ -1508,18 +1506,8 @@ function EntryCard({
 			{entry.transcript.length > 0 && (
 				<Transcript entry={entry} playback={playback} />
 			)}
-			<JournalMap entries={[entry]} />
-			{entry.status === 'ready' && updateEntryDate && (
-				<EntryDateEditor entry={entry} onUpdate={updateEntryDate} />
-			)}
-			{entry.status === 'ready' && deleteEntry && (
-				<SwipeToDelete
-					entryID={entry.id}
-					onDelete={deleteEntry}
-					onDeleting={playback.removeEntry}
-				/>
-			)}
-		</details>
+			{entry.status !== 'ready' && <JournalMap entries={[entry]} />}
+		</article>
 	);
 }
 
@@ -1542,15 +1530,6 @@ function PendingEntries({
 		</section>
 	);
 }
-
-const journalSelectionQuery = {
-	wiki: parseAsString,
-	at: parseAsString,
-	year: parseAsString,
-	month: parseAsString,
-	week: parseAsString,
-	day: parseAsString,
-};
 
 type JournalSelection = Partial<
 	Record<'at' | 'year' | 'month' | 'week' | 'day' | 'entry', string>
@@ -1785,6 +1764,7 @@ function JournalDatePicker({
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
+	const [language] = useLocale();
 	const timeZone = journal.browse?.timeZone ?? 'UTC';
 	const selected = Temporal.Instant.from(focus).toZonedDateTimeISO(timeZone);
 	const [date, setDate] = useState(selected.with({ day: 1 }));
@@ -1793,7 +1773,7 @@ function JournalDatePicker({
 	);
 	const heading = useRef<HTMLButtonElement>(null);
 	const yearStart = Math.floor(date.year / 12) * 12;
-	const monthName = date.toLocaleString(undefined, { month: 'long' });
+	const monthName = date.toLocaleString(language, { month: 'long' });
 	const firstDay = date.with({ day: 1 }).startOfDay();
 	const monthAt = (
 		date.year === selected.year && date.month === selected.month
@@ -1865,7 +1845,7 @@ function JournalDatePicker({
 						<span className={style.calendarWeekday} key={index}>
 							{firstDay
 								.add({ days: index + 1 - firstDay.dayOfWeek })
-								.toLocaleString(undefined, {
+								.toLocaleString(language, {
 									weekday: 'narrow',
 								})}
 						</span>
@@ -1937,7 +1917,7 @@ function JournalDatePicker({
 								}}
 							>
 								{view === 'month'
-									? period.toLocaleString(undefined, {
+									? period.toLocaleString(language, {
 											month: 'short',
 										})
 									: value}
@@ -2123,6 +2103,7 @@ function CalendarNavigation({
 	readonly focus: string;
 	readonly route?: JournalRoute;
 }) {
+	const [language] = useLocale();
 	const picker = useRef<HTMLDetailsElement>(null);
 	const fitPicker = useCallback(() => {
 		if (!picker.current?.open) return;
@@ -2194,7 +2175,7 @@ function CalendarNavigation({
 						? Temporal.Instant.from(focus)
 								.toZonedDateTimeISO(browse.timeZone)
 								.toLocaleString(
-									undefined,
+									language,
 									route === 'year'
 										? { year: 'numeric' }
 										: route === 'month'
@@ -2533,11 +2514,8 @@ function JournalBrowser({
 	) => Promise<void>;
 }) {
 	const renderTime = useJournalRenderTime();
-	const [rawSelection] = useQueryStates(journalSelectionQuery, {
-		history: 'replace',
-		shallow: true,
-		throttleMs: 250,
-	});
+	const [selection] = useSearchParams();
+	const at = selection.get('at');
 	const aggregateCitationDestination = useCallback(
 		(entryID: string) => citationDestination(journal, entryID),
 		[journal]
@@ -2548,7 +2526,7 @@ function JournalBrowser({
 			entries: [...(journal.browse?.sources ?? []), ...journal.entries],
 		},
 		aggregateCitationDestination,
-		`${route ?? 'overview'}:${journal.browse?.focus ?? rawSelection.at ?? ''}`
+		`${route ?? 'overview'}:${journal.browse?.focus ?? at ?? ''}`
 	);
 	const pendingEntries = journal.entries.filter(
 		entry =>
@@ -2557,10 +2535,10 @@ function JournalBrowser({
 			) && !localEntryIDs.includes(entry.id)
 	);
 	const legacyFocus = (['day', 'week', 'month', 'year'] as const)
-		.filter(period => rawSelection[period] !== null)
+		.filter(period => selection.has(period))
 		.map(period =>
 			periodsFor(journal, period).find(
-				node => node.id === rawSelection[period]
+				node => node.id === selection.get(period)
 			)
 		)
 		.find(node => node !== undefined)?.start;
@@ -2575,9 +2553,7 @@ function JournalBrowser({
 		[journal.entries]
 	);
 	const focus =
-		(rawSelection.at && Number.isFinite(Date.parse(rawSelection.at))
-			? rawSelection.at
-			: undefined) ??
+		(at && Number.isFinite(Date.parse(at)) ? at : undefined) ??
 		legacyFocus ??
 		journal.browse?.focus ??
 		newestEntry?.recordedAt ??
@@ -2876,13 +2852,14 @@ export default function JournalPageClient({
 	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
-	const [selection] = useQueryStates(journalSelectionQuery);
-	const isWiki = selection.wiki !== null;
+	const [selection] = useSearchParams();
+	const wiki = selection.get('wiki');
+	const at = selection.get('at');
 	const [hasLocalRecordings, setHasLocalRecordings] = useState(false);
 	const journal = useGetJournal(
 		idToken,
-		!isWiki,
-		journalBrowseQuery(`/journal/${route ?? ''}`, selection.at)
+		wiki === null,
+		journalBrowseQuery(`/journal/${route ?? ''}`, at)
 	);
 	const uploads = useGetJournalUploads(idToken, hasLocalRecordings);
 	const createEntry = usePostJournalEntry(idToken);
@@ -3256,11 +3233,11 @@ export default function JournalPageClient({
 			) : (
 				<>
 					{isDevelopment && <DevelopmentJournalTools />}
-					{isWiki ? (
+					{wiki !== null ? (
 						<div>
 							<JournalToolbar
 								actions={captureControls}
-								focus={selection.at ?? ''}
+								focus={at ?? ''}
 								route={route}
 								wiki
 							/>
@@ -3268,7 +3245,7 @@ export default function JournalPageClient({
 								queue={queue}
 								activeID={recorder.current?.id}
 							/>
-							<JournalWiki pageID={selection.wiki ?? 'all'} />
+							<JournalWiki pageID={wiki} />
 						</div>
 					) : (
 						journal(

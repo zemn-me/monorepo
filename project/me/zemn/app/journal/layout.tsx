@@ -24,14 +24,13 @@ export const metadata: Metadata = {
 
 export const headers = () => privateHeaders;
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, url }: LoaderFunctionArgs) {
 	const auth = await readSession(request);
 	const queryClient = new QueryClient();
 	if (auth?.session.scopes.includes('journal_read')) {
 		const jti = auth.session.claims.jti;
-		const pageId = new URL(request.url).searchParams.get('wiki');
+		const pageId = url.searchParams.get('wiki');
 		if (pageId === null) {
-			const url = new URL(request.url);
 			const browse = journalBrowseQuery(
 				url.pathname,
 				url.searchParams.get('at')

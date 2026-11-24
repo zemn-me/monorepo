@@ -806,8 +806,9 @@ export function useGetJournalWikiIndex<A, B>(
 	const client = useFetchClient(token);
 	const query = useQuery({
 		queryKey: ['get', '/journal', 'wiki', claims?.jti],
-		queryFn: async () => {
-			const response = await client.GET('/journal/wiki');
+		staleTime: 10_000,
+		queryFn: async ({ signal }) => {
+			const response = await client.GET('/journal/wiki', { signal });
 			if (!response.data) throw new Error('Could not load the wiki.');
 			return response.data;
 		},
@@ -866,8 +867,10 @@ export function useGetJournalWikiPage<A, B>(
 			pageId,
 			generation,
 		],
-		queryFn: async () => {
+		staleTime: 10_000,
+		queryFn: async ({ signal }) => {
 			const response = await client.GET('/journal/wiki/{pageId}', {
+				signal,
 				params: { path: { pageId } },
 			});
 			if (!response.data)

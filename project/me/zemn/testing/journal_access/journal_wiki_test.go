@@ -222,6 +222,89 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	}
 }
 
+func TestJournalDayNavigationLoadsWithRoute(t *testing.T) {
+	if err := seedJournalWikiFixture(); err != nil {
+		t.Fatal(err)
+	}
+	root, err := browserhelpers.FrontendRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByLinkText, "Browse days", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		_, err := d.GetCookie("__Host-zemn-authorization")
+		return err == nil, nil
+	}, 10*time.Second); err != nil {
+		t.Fatal("expected a signed-in journal session", err)
+	}
+	document, err := driver.FindElement(selenium.ByTagName, "html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, step := range []struct{ link, title string }{
+		{"section[aria-labelledby='recent-journal-entries'] header a", "A quieter kind of launch"},
+		{"a[aria-label='Previous day']", "The rehearsal found the wrong problem"},
+	} {
+		link, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, step.link, 10*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		start, err := driver.ExecuteScript(`
+			const title = arguments[0];
+			const observer = new MutationObserver(() => {
+				if (document.querySelector('[aria-label="Loading journal"]')) {
+					performance.mark('journal-placeholder');
+				}
+				if ([...document.querySelectorAll('article > header h3')].some(h => h.textContent === title)) {
+					observer.disconnect();
+				}
+			});
+			observer.observe(document.body, {childList: true, subtree: true});
+			return performance.now();
+		`, []any{step.title})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := browserhelpers.ClickElementInView(driver, link); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//article/header/h3[text()='"+step.title+"']", 10*time.Second); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := document.TagName(); err != nil {
+			t.Fatal("day navigation replaced the document", err)
+		}
+		placeholder, err := driver.ExecuteScript("return performance.getEntriesByName('journal-placeholder').length > 0", nil)
+		if err != nil || placeholder != false {
+			t.Fatalf("day navigation showed a second loading state: %v %v", placeholder, err)
+		}
+		requests, err := driver.ExecuteScript(`
+			return performance.getEntriesByType('resource')
+				.filter(resource => resource.startTime >= arguments[0])
+				.map(resource => new URL(resource.name))
+				.filter(url => url.pathname === '/journal' && url.searchParams.get('view') === 'day')
+				.map(url => url.search);
+		`, []any{start})
+		if err != nil || len(requests.([]any)) != 0 {
+			t.Errorf("opening %s fetched day data again after navigation: %v %v", step.title, requests, err)
+		}
+	}
+}
+
 // These screenshots use authored fictional content through the normal local
 // sample-data flow, so UI reviews do not require a paid model or private diary.
 func TestJournalReviewScreenshots(t *testing.T) {
@@ -367,7 +450,20 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	if err := browserhelpers.ClickElementInView(driver, recentLink); err != nil {
 		t.Fatal(err)
 	}
-	selectedTitle := find(selenium.ByCSSSelector, "details[id^='entry-'][open] > summary strong")
+	find(selenium.ByCSSSelector, "[aria-label='Journal day'] article[id^='entry-']")
+	address, err := driver.CurrentURL()
+	if err != nil {
+		t.Fatal(err)
+	}
+	selected, err := url.Parse(address)
+	if err != nil || selected.Fragment == "" || selected.Fragment != "entry-"+selected.Query().Get("entry") {
+		t.Fatalf("recent entry destination: %s %v", address, err)
+	}
+	selectedArticle := find(selenium.ByID, selected.Fragment)
+	selectedTitle, err := selectedArticle.FindElement(selenium.ByCSSSelector, "header h3")
+	if err != nil {
+		t.Fatal(err)
+	}
 	if got, err := selectedTitle.Text(); err != nil || got != wantTitle {
 		t.Fatalf("recent entry opened %q, want %q: %v", got, wantTitle, err)
 	}
@@ -414,74 +510,22 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	save("08-citation-preview-desktop", data)
 	click(selenium.ByLinkText, "Days")
-	launch := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
-	if err := launch.Click(); err != nil {
-		t.Fatal(err)
-	}
-	// Read the selected day's section from the visible entry's enclosing DOM.
-	section, err := launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = section.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("09-launch-day-desktop", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='A quieter kind of launch']")
+	capture("09-launch-day-desktop", "[data-journal-page]", 1440, 1000, false)
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
-	if err := earlier.Click(); err != nil {
-		t.Fatal(err)
-	}
-	earlierSection, err := earlier.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{earlierSection}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = earlierSection.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("10-earlier-day-clarification-desktop", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='An argument on the river path']")
+	capture("10-earlier-day-clarification-desktop", "[aria-label='Journal day']", 1440, 1000, false)
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	launch = find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
-	open, err := driver.ExecuteScript("return arguments[0].parentElement.open", []any{launch})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if open != true {
-		if err := browserhelpers.ClickElementInView(driver, launch); err != nil {
-			t.Fatal(err)
-		}
-	}
-	section, err = launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ResizeWindow("", 390, 1400); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = section.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("11-launch-day-phone", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='A quieter kind of launch']")
+	capture("11-launch-day-phone", "[data-journal-page]", 390, 844, false)
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
@@ -489,7 +533,7 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	// always contain another fixture day, even when the launch is the only
 	// day in a new month and correctly reuses its day summary instead.
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	// The date picker preserves the selected day, which can be in the
 	// previous month or year. Format that route date in the browser's time zone.
 	selectedURL, err := driver.CurrentURL()
@@ -642,12 +686,13 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	selector := "[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='2008-05-13'])"
+	selector := "[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time[datetime^='2008-05-13'])"
 	entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 	if err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatal("confirmed recording was not ready in the journal: ", err)
 	}
-	summary, err := entry.FindElement(selenium.ByCSSSelector, ":scope > summary")
+	summary, err := entry.FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
 		t.Fatal(err)
 	}

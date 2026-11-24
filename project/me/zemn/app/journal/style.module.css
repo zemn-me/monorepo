@@ -340,11 +340,6 @@
 	padding: 1em;
 }
 
-.entry > summary {
-	cursor: pointer;
-	padding-block: 0.5em;
-}
-
 .journalToolbar {
 	font: var(--journal-control-font);
 	align-items: center;
@@ -557,8 +552,7 @@
 	border-block-end: 1px solid var(--journal-soft-line);
 }
 
-.periodDisclosure > summary,
-.entry > summary {
+.periodDisclosure > summary {
 	align-items: center;
 	cursor: pointer;
 	display: grid;
@@ -569,8 +563,7 @@
 	padding: 0.65em 0.25em;
 }
 
-.periodDisclosure > summary::-webkit-details-marker,
-.entry > summary::-webkit-details-marker {
+.periodDisclosure > summary::-webkit-details-marker {
 	display: none;
 }
 
@@ -687,31 +680,37 @@
 }
 
 .entry {
-	border-block-end: 1px solid var(--journal-soft-line);
+	border-block-start: 1px solid var(--journal-soft-line);
+	padding-block: 1.75rem;
 	scroll-margin-block-start: calc(
+		var(--glade-bar-block-size, 0px) +
 		var(--journal-sticky-navigation-height) +
 		1rem
 	);
 }
 
-.entry > summary {
-	grid-template-columns: 4rem minmax(0, 1fr) auto;
-}
-
-.entry > summary:hover,
 .periodDisclosure > summary:hover,
 .periodChildren a:hover {
 	background: var(--journal-surface);
 }
 
 .pendingEntries {
-	display: grid;
-	gap: 0.5em;
 	margin-block-end: 1.5em;
 }
 
-.pendingEntries .entry {
-	margin-inline-start: 0;
+.entryHeading {
+	position: relative;
+}
+
+.entryHeading h3 {
+	font-size: clamp(1.3rem, 3vw, 1.65rem);
+	line-height: 1.25;
+	margin: 0 0 0.25rem;
+	overflow-wrap: anywhere;
+}
+
+.entryHeading:has(.entryOptions) h3 {
+	padding-inline-end: 3rem;
 }
 
 .entryTime {
@@ -719,25 +718,34 @@
 	font-variant-numeric: tabular-nums;
 }
 
-.entryHeading {
-	align-items: baseline;
+.entryOptions > summary {
+	align-items: center;
+	border-radius: 50%;
+	color: var(--journal-muted);
+	cursor: pointer;
 	display: flex;
-	gap: 0.75em;
-	min-width: 0;
+	height: 44px;
+	inset-block-start: 0;
+	inset-inline-end: 0;
+	justify-content: center;
+	list-style: none;
+	position: absolute;
+	width: 44px;
 }
 
-.entryTitle {
-	min-width: 0;
+.entryOptions > summary::-webkit-details-marker {
+	display: none;
+}
+
+.entryOptions > summary:hover,
+.entryOptions[open] > summary {
+	background: var(--journal-surface);
 }
 
 .entryChevron {
 	color: var(--journal-muted);
 	font-size: 0.8em;
 	transition: transform 160ms ease;
-}
-
-.entry[open] > summary .entryChevron {
-	transform: rotate(180deg);
 }
 
 .audioDock {
@@ -1096,20 +1104,6 @@
 }
 
 @media (max-width: 40rem) {
-	.entry > summary {
-		align-items: baseline;
-		gap: 0.25em 0.65em;
-		grid-template-columns: 1fr auto;
-	}
-
-	.entryTime {
-		grid-column: 1 / -1;
-	}
-
-	.entryHeading {
-		gap: 0.5em;
-	}
-
 	.periodDisclosure > summary,
 	.periodChildren a {
 		align-items: baseline;
@@ -1328,10 +1322,17 @@
 }
 
 .wikiNavigation {
+	box-sizing: border-box;
 	justify-content: center;
 	min-inline-size: 44px;
 	padding-inline: 0.5rem;
 	text-decoration-line: none;
+}
+
+@media (max-width: 27rem) {
+	.journalToolbar {
+		column-gap: 0;
+	}
 }
 
 @media (max-width: 24rem) {

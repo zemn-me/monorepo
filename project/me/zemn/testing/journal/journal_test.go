@@ -234,29 +234,22 @@ func TestJournalEndToEnd(t *testing.T) {
 	if len(failedEntries) != 1 {
 		t.Fatalf("failed journal entry was not displayed in unfinished voice notes")
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "#entry-"+failedEntryID+"[open] [role='alert']", 10*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "#entry-"+failedEntryID+" [role='alert']", 10*time.Second); err != nil {
 		t.Fatalf("processing error was not visible: %v", err)
 	}
-	pendingEntryStatus, err := browserhelpers.WaitForElement(
+	_, err = browserhelpers.WaitForElement(
 		driver,
 		selenium.ByXPATH,
-		fmt.Sprintf("//details[@id='entry-%s']//span[@role='status' and @aria-label='Transcribing voice note']", pendingEntryID),
+		fmt.Sprintf("//article[@id='entry-%s']//span[@role='status' and @aria-label='Transcribing voice note']", pendingEntryID),
 		30*time.Second,
 	)
 	if err != nil {
 		t.Fatalf("existing processing journal entry was not shown: %v", err)
 	}
-	pendingEntrySummary, err := pendingEntryStatus.FindElement(selenium.ByXPATH, "ancestor::summary")
-	if err != nil {
-		t.Fatalf("find processing journal entry summary: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, pendingEntrySummary); err != nil {
-		t.Fatalf("open processing journal entry: %v", err)
-	}
 	if _, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByXPATH,
-		fmt.Sprintf("//details[@id='entry-%s' and @open]/div[@role='status' and @aria-label='Preparing transcript']", pendingEntryID),
+		fmt.Sprintf("//article[@id='entry-%s']/div[@role='status' and @aria-label='Preparing transcript']", pendingEntryID),
 		10*time.Second,
 	); err != nil {
 		t.Fatalf("opened processing journal entry did not show transcription status: %v", err)
@@ -707,7 +700,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	usesTimeOnlyEntryHeadings, err := driver.ExecuteScript(`
 		const times = [...document.querySelectorAll(
-			"details[id^='entry-'] > summary > time"
+			"article[id^='entry-'] > header > time"
 		)];
 		return times.length === 2 && times.every(time =>
 			time.lang === 'en-GB' &&
@@ -720,32 +713,23 @@ func TestJournalEndToEnd(t *testing.T) {
 	if usesTimeOnlyEntryHeadings != true {
 		t.Fatalf("journal entry headings repeated their parent day")
 	}
-	usesPeriodDisclosureLayout, err := driver.ExecuteScript(`
-		const summaries = [...document.querySelectorAll(
-			"details[id^='entry-'] > summary"
-		)];
-		return summaries.length === 2 && summaries.every(summary => {
-			const style = getComputedStyle(summary);
-			const detailsStyle = getComputedStyle(summary.parentElement);
-			return style.display === 'grid' &&
-				style.gridTemplateColumns.split(' ').length === 3 &&
-				summary.children.length === 3 &&
-				detailsStyle.borderBottomStyle !== 'none';
-		});
+	visibleEntries, err := driver.ExecuteScript(`
+		const entries = [...document.querySelectorAll("article[id^='entry-']")];
+		return entries.length === 2 && entries.every(entry =>
+			[entry.querySelector('header h3'), entry.querySelector('audio'), entry.querySelector('[aria-label="Transcript"]')]
+				.every(element => element?.checkVisibility())
+		);
 	`, nil)
-	if err != nil {
-		t.Fatalf("inspect journal entry disclosure layout: %v", err)
-	}
-	if usesPeriodDisclosureLayout != true {
-		t.Fatalf("journal day entries did not use the period disclosure layout")
+	if err != nil || visibleEntries != true {
+		t.Fatalf("day should immediately show both recordings and transcripts: %v %v", visibleEntries, err)
 	}
 	entrySummaryDates, err := driver.ExecuteScript(`
 		const day = document.querySelector(
 			'[data-journal-period-start^="2025-08-13"]'
 		);
-		const entries = [...(day?.querySelectorAll("details[id^='entry-']") ?? [])];
+		const entries = [...(day?.querySelectorAll("article[id^='entry-']") ?? [])];
 		const dates = entries.map(entry => {
-			const entryDate = entry.querySelector(':scope > summary > time');
+			const entryDate = entry.querySelector(':scope > header > time');
 			const summaryDate = entry.querySelector(
 				":scope > article header > p > time"
 			);
@@ -759,7 +743,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		return {
 			dates,
 			valid: entries.length === 2 && entries.every(entry => {
-				const entryDate = entry.querySelector(':scope > summary > time');
+				const entryDate = entry.querySelector(':scope > header > time');
 				const summaryDate = entry.querySelector(
 					":scope > article header > p > time"
 				);
@@ -1054,13 +1038,6 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err != nil {
 		t.Fatalf("find second journal transcript: %v", err)
 	}
-	secondEntrySummary, err := driver.FindElement(selenium.ByCSSSelector, fmt.Sprintf("details[id='entry-%s'] > summary", secondEntryID))
-	if err != nil {
-		t.Fatalf("find second journal entry disclosure: %v", err)
-	}
-	if err := browserhelpers.ClickElementInView(driver, secondEntrySummary); err != nil {
-		t.Fatalf("open second journal entry: %v", err)
-	}
 	secondTranscriptSegment, err := secondTranscript.FindElement(selenium.ByCSSSelector, "a[data-journal-transcript-segment]")
 	if err != nil {
 		t.Fatalf("find second journal transcript segment: %v", err)
@@ -1097,6 +1074,9 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	}
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "[data-journal-currently-spoken]", 10*time.Second); err != nil {
 		t.Fatalf("paused journal transcript remained highlighted: %v", err)
+	}
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "#entry-"+firstEntryID+" summary[aria-label='Recording options']", 10*time.Second); err != nil {
+		t.Fatal(err)
 	}
 	deleteThumb, err := browserhelpers.WaitForElement(
 		driver,
@@ -1296,17 +1276,17 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	).UTC().Format("2006-01-02T15:04:05Z")
 	currentEntries, err := driver.FindElements(
 		selenium.ByCSSSelector,
-		fmt.Sprintf("[data-journal-period-start='%s'] details:has(audio)", currentDayStart),
+		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(audio)", currentDayStart),
 	)
 	if err != nil || len(currentEntries) != 2 {
 		t.Fatalf("find current-day journal entries: count %d, error %v", len(currentEntries), err)
 	}
-	entrySummary, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "summary")
+	entrySummary, err := currentEntries[0].FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
-		t.Fatalf("find journal entry disclosure: %v", err)
+		t.Fatalf("find recording options: %v", err)
 	}
 	if err := browserhelpers.ClickElementInView(driver, entrySummary); err != nil {
-		t.Fatalf("open journal entry: %v", err)
+		t.Fatalf("open recording options: %v", err)
 	}
 	dateInputs, err := currentEntries[0].FindElements(selenium.ByCSSSelector, "input[type='date']")
 	if err != nil {
@@ -1479,18 +1459,18 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	correctedEntry, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByCSSSelector,
-		fmt.Sprintf("[data-journal-period-start='%s'] details:has(audio)", targetDayStart),
+		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(audio)", targetDayStart),
 		30*time.Second,
 	)
 	if err != nil {
 		t.Fatalf("find corrected journal entry: %v", err)
 	}
-	correctedSummary, err := correctedEntry.FindElement(selenium.ByCSSSelector, "summary")
+	correctedSummary, err := correctedEntry.FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
-		t.Fatalf("find corrected journal entry disclosure: %v", err)
+		t.Fatalf("find corrected recording options: %v", err)
 	}
 	if err := browserhelpers.ClickElementInView(driver, correctedSummary); err != nil {
-		t.Fatalf("open corrected journal entry: %v", err)
+		t.Fatalf("open corrected recording options: %v", err)
 	}
 	correctedEditDate, err := correctedEntry.FindElement(selenium.ByXPATH, ".//button[normalize-space()='Edit recording date']")
 	if err != nil {
@@ -1969,8 +1949,8 @@ func waitForCurrentlySpokenTranscript(driver selenium.WebDriver, entryID string,
 				.find(value => value.dataset.entryId === arguments[0]);
 			return {
 				matches: highlighted.length === 1 &&
-					highlighted[0].closest('details[id]')?.id === 'entry-' + arguments[0],
-				highlightedEntries: highlighted.map(value => value.closest('details[id]')?.id),
+					highlighted[0].closest('article[id]')?.id === 'entry-' + arguments[0],
+				highlightedEntries: highlighted.map(value => value.closest('article[id]')?.id),
 				currentTime: audio?.currentTime,
 				paused: audio?.paused,
 				ended: audio?.ended,
@@ -2489,10 +2469,18 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	destination, err := pin.GetAttribute("href")
+	if err != nil {
+		t.Fatal(err)
+	}
+	mapLink, err := url.Parse(destination)
+	if err != nil || mapLink.Fragment == "" {
+		t.Fatalf("map pin needs a recording anchor: %s %v", destination, err)
+	}
 	if err := pin.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "details[id^='entry-'][open] > summary", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByID, mapLink.Fragment, 30*time.Second); err != nil {
 		t.Fatalf("map pin did not open its note: %v", err)
 	}
 }
