@@ -19,7 +19,7 @@ def browser_test(name, tags = [], **kwargs):
         # container, so local API uploads remain queued without being attempted.
         exec_properties = {
             # This action runs Chromium, the production frontend, the API and
-            # DynamoDB together; reserve capacity for the complete service stack.
+            # AWS Emulator together; reserve capacity for the complete service stack.
             "test.EstimatedCPU": "4",
             "test.EstimatedMemory": "4GB",
             "test.network": "external",

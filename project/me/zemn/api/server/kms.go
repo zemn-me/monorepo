@@ -11,6 +11,7 @@ import (
 	"io"
 	"math/big"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/aws/aws-sdk-go-v2/service/kms/types"
@@ -92,6 +93,10 @@ func NewKMSOpaqueSigner(ctx context.Context, keyID, publicPEM string) (*kmsOpaqu
 	if err != nil {
 		return nil, err
 	}
+	return newKMSOpaqueSigner(cfg, keyID, publicPEM)
+}
+
+func newKMSOpaqueSigner(cfg aws.Config, keyID, publicPEM string) (*kmsOpaqueSigner, error) {
 	pub, err := parseECDSAPublicKeyFromPEM(publicPEM)
 	if err != nil {
 		return nil, err

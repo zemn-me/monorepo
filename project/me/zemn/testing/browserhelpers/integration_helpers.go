@@ -2,6 +2,7 @@ package browserhelpers
 
 import (
 	"bytes"
+	"context"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
@@ -12,9 +13,11 @@ import (
 	"time"
 	_ "time/tzdata" // Date assertions must not depend on executor zoneinfo packages.
 
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"
 
+	"github.com/zemn-me/monorepo/go/awsemulator"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 )
 
@@ -23,9 +26,7 @@ type ServicePorts struct {
 	CalendarFrontendPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
 	APIPort              string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_itest_service"`
 	CalendarAPIPort      string `json:"@@//project/me/zemn/api/cmd/localserver:localserver_calendar_fixture_itest_service"`
-	// The beacon transport test checks ingestion independently of admin authentication.
-	DynamoDBPort string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
-	OIDCProvider string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
+	OIDCProvider         string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
 }
 
 func servicePorts() (p ServicePorts, err error) {
@@ -69,19 +70,12 @@ func APIRoot() (url.URL, error) {
 	}, nil
 }
 
-func DynamoDBRoot() (url.URL, error) {
-	ports, err := servicePorts()
+func DynamoDBClient(ctx context.Context) (*dynamodb.Client, error) {
+	cfg, err := awsemulator.Config(ctx)
 	if err != nil {
-		return url.URL{}, err
+		return nil, err
 	}
-	if ports.DynamoDBPort == "" {
-		return url.URL{}, fmt.Errorf("dynamodb port not found in ASSIGNED_PORTS")
-	}
-
-	return url.URL{
-		Scheme: "http",
-		Host:   "localhost:" + ports.DynamoDBPort,
-	}, nil
+	return dynamodb.NewFromConfig(cfg), nil
 }
 
 func AssertEndpointHasNoLogErrors(t *testing.T, ep string) {

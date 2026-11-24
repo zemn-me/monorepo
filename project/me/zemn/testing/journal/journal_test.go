@@ -1,10 +1,12 @@
 package selenium_test
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -15,13 +17,14 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/tebeka/selenium"
 	"github.com/tebeka/selenium/log"
 
+	"github.com/zemn-me/monorepo/go/awsemulator"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
@@ -898,6 +901,15 @@ func TestJournalEndToEnd(t *testing.T) {
 	// the cached URL expire before following the citation so this exercises the
 	// same renewal path as an old production journal tab. Look the link up in
 	// the click script because journal query updates may replace its DOM node.
+	if err := driver.ExecuteChromiumCommand("Network.emulateNetworkConditionsByRule", map[string]any{
+		"offline": false,
+		"matchedNetworkConditions": []map[string]any{{
+			"urlPattern": "*/local-journal/entries/*/source*", "latency": 1500,
+			"downloadThroughput": -1, "uploadThroughput": -1,
+		}},
+	}); err != nil {
+		t.Fatalf("apply journal playback latency: %v", err)
+	}
 	time.Sleep(9 * time.Second)
 	clickedCitation, err := driver.ExecuteScript(`
 		const citation = [...document.querySelectorAll(
@@ -914,16 +926,18 @@ func TestJournalEndToEnd(t *testing.T) {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("first cited journal audio did not play exclusively: %v", err)
 	}
-	delayedAudioSource, err := driver.ExecuteScript(`
+	audioSource, err := driver.ExecuteScript(`
 		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
 			.find(value => value.dataset.entryId === arguments[0]);
 		return audio?.currentSrc ?? '';
 	`, []any{firstEntryID})
 	if err != nil {
-		t.Fatalf("inspect delayed journal audio source: %v", err)
+		t.Fatalf("inspect journal audio source: %v", err)
 	}
-	if source, _ := delayedAudioSource.(string); !strings.Contains(source, "delayMs=1500") || !strings.Contains(source, "expiresAt=") {
-		t.Fatalf("journal integration audio was not delayed: %q", source)
+	source, _ := audioSource.(string)
+	playbackURL, err := url.Parse(source)
+	if err != nil || playbackURL.Path != "/local-journal/entries/"+firstEntryID+"/source" || playbackURL.Query().Get("X-Amz-Expires") != "8" || playbackURL.Query().Get("X-Amz-Signature") == "" {
+		t.Fatal("journal playback did not use a short-lived presigned S3 source")
 	}
 	// Check transcript tracking while the short clip is playing, before the
 	// separate advance and URL-recovery checks consume its remaining duration.
@@ -935,7 +949,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	if err := waitForJournalAudioAdvance(driver, firstEntryID, 2750*time.Millisecond, 8*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
-		t.Fatalf("delayed journal audio did not advance continuously while updating its URL: %v", err)
+		t.Fatalf("journal audio did not advance continuously while updating its URL: %v", err)
 	}
 	if err := waitForJournalAudioStallRecovery(driver, firstEntryID, 3*time.Second, 12*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
@@ -1512,26 +1526,12 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	}
 }
 
-func journalDynamoDBClient() (*dynamodb.Client, error) {
-	root, err := browserhelpers.DynamoDBRoot()
-	if err != nil {
-		return nil, err
-	}
-	return dynamodb.New(dynamodb.Options{
-		EndpointResolver: dynamodb.EndpointResolverFromURL(root.String()),
-		Retryer:          aws.NopRetryer{},
-		Credentials: credentials.StaticCredentialsProvider{Value: aws.Credentials{
-			AccessKeyID: "LOCALSTACK", SecretAccessKey: "LOCALSTACK",
-		}},
-	}), nil
-}
-
 func putProcessingJournalEntry(ctx context.Context, entryID string) error {
 	return putJournalEntry(ctx, entryID, apiserver.JournalEntryStatusProcessing)
 }
 
 func putJournalEntry(ctx context.Context, entryID string, status apiserver.JournalEntryStatus) error {
-	client, err := journalDynamoDBClient()
+	client, err := browserhelpers.DynamoDBClient(ctx)
 	if err != nil {
 		return err
 	}
@@ -1561,7 +1561,7 @@ func putJournalEntry(ctx context.Context, entryID string, status apiserver.Journ
 }
 
 func deleteJournalEntry(ctx context.Context, entryID string) error {
-	client, err := journalDynamoDBClient()
+	client, err := browserhelpers.DynamoDBClient(ctx)
 	if err != nil {
 		return err
 	}
@@ -2605,7 +2605,8 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 		if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", []string{path}, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
-		requests := map[string]bool{}
+		requests := map[string]string{}
+		var acceptedKey string
 		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
 			entries, err := wd.Log(log.Performance)
 			if err != nil {
@@ -2626,10 +2627,14 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 					return false, err
 				}
 				message := event.Message
-				if message.Method == "Network.requestWillBeSent" && message.Params.Request.Method == "PUT" && strings.Contains(message.Params.Request.URL, "/__local/journal/object?") {
-					requests[message.Params.RequestID] = true
+				if message.Method == "Network.requestWillBeSent" && message.Params.Request.Method == "PUT" {
+					u, err := url.Parse(message.Params.Request.URL)
+					if err == nil && strings.HasPrefix(u.Path, "/local-journal/entries/") && u.Query().Get("X-Amz-Signature") != "" {
+						requests[message.Params.RequestID] = strings.TrimPrefix(u.Path, "/local-journal/")
+					}
 				}
-				if message.Method == "Network.responseReceived" && requests[message.Params.RequestID] {
+				if message.Method == "Network.responseReceived" && requests[message.Params.RequestID] != "" {
+					acceptedKey = requests[message.Params.RequestID]
 					if message.Params.Response.Status < 200 || message.Params.Response.Status >= 300 {
 						return false, fmt.Errorf("upload returned HTTP %d", message.Params.Response.Status)
 					}
@@ -2639,6 +2644,22 @@ func TestJournalDuplicateUploadClearsLocalCopy(t *testing.T) {
 			return false, nil
 		}, 10*time.Second); err != nil {
 			t.Fatalf("upload %d was not accepted: %v", attempt, err)
+		}
+		if attempt == 0 {
+			cfg, err := awsemulator.Config(t.Context())
+			if err != nil {
+				t.Fatal(err)
+			}
+			objects := s3.NewFromConfig(cfg, func(o *s3.Options) { o.UsePathStyle = true })
+			object, err := objects.GetObject(t.Context(), &s3.GetObjectInput{Bucket: aws.String("local-journal"), Key: &acceptedKey})
+			if err != nil {
+				t.Fatalf("read browser upload from S3: %v", err)
+			}
+			stored, err := io.ReadAll(object.Body)
+			object.Body.Close()
+			if err != nil || !bytes.Equal(stored, audio) {
+				t.Fatalf("S3 returned %d bytes, expected original recording: %v", len(stored), err)
+			}
 		}
 		if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
 			browserhelpers.DumpPageDiagnostics(t, driver)
@@ -2787,7 +2808,7 @@ func logJournalNetworkRequests(t *testing.T, driver selenium.WebDriver) {
 		}
 		if event.Message.Method == "Network.requestWillBeSent" {
 			u, err := url.Parse(p.Request.URL)
-			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || strings.HasPrefix(u.Path, "/__local/journal/object")) {
+			if err != nil || !(strings.HasPrefix(u.Path, "/journal") || strings.HasPrefix(u.Path, "/local-journal/entries/")) {
 				continue
 			}
 			// Log only the path: signed URL parameters and headers are private.

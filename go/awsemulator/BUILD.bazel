@@ -1,0 +1,19 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_library")
+
+go_library(
+    name = "awsemulator",
+    srcs = ["config.go"],
+    importpath = "github.com/zemn-me/monorepo/go/awsemulator",
+    visibility = ["//project/me/zemn:__subpackages__"],
+    deps = [
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_aws_aws_sdk_go_v2_credentials//:credentials",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

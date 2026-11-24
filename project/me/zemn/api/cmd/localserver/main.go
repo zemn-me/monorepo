@@ -13,15 +13,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zemn-me/monorepo/go/awsemulator"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
 
 var (
-	address    string
-	ddbAddress string
+	address        string
+	ddbAddress     string
+	useAWSEmulator bool
 )
 
 func init() {
+	flag.BoolVar(&useAWSEmulator, "aws-emulator", false, "Run against the rules_itest AWS Emulator service")
 	flag.StringVar(&address, "address", ":0", "Address to listen on")
 	flag.StringVar(&ddbAddress, "ddb-address", "", "Address of the DynamoDB server.")
 }
@@ -29,7 +32,7 @@ func init() {
 type AssignedPorts struct {
 	NextPort         string `json:"@@//project/me/zemn:itest_service"`
 	CalendarNextPort string `json:"@@//project/me/zemn:itest_service_calendar_fixture"`
-	APIPort          string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
+	DynamoDBPort     string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
 	OIDCProviderPort string `json:"@@//project/me/zemn/testing:oidc_provider_itest_service"`
 }
 
@@ -40,10 +43,12 @@ func main() {
 	if assignedPorts != "" {
 		var ports AssignedPorts
 		if err := json.Unmarshal([]byte(assignedPorts), &ports); err != nil {
-			log.Fatalf("failed to parse ASSIGNED_PORTS: %v (%s)", err)
+			log.Fatalf("failed to parse ASSIGNED_PORTS: %v", err)
 		}
 
-		ddbAddress = "http://localhost:" + ports.APIPort
+		if ports.DynamoDBPort != "" {
+			ddbAddress = "http://localhost:" + ports.DynamoDBPort
+		}
 		if ports.NextPort == "" {
 			ports.NextPort = ports.CalendarNextPort
 		}
@@ -86,28 +91,49 @@ func main() {
 	}
 	defer ln.Close()
 	addr := ln.Addr().(*net.TCPAddr)
-	journalStore, err := newLocalJournalStore(fmt.Sprintf("http://localhost:%d", addr.Port), log.Default())
-	if err != nil {
-		log.Fatalf("create local journal storage: %v", err)
-	}
-	defer journalStore.Close()
 	var journalAI apiserver.JournalAI = localJournalAI{}
-	if apiKey := strings.TrimSpace(os.Getenv("OPENAI_API_KEY")); apiKey != "" {
+	if apiKey := strings.TrimSpace(os.Getenv("OPENAI_API_KEY")); apiKey != "" && !useAWSEmulator {
 		journalAI = apiserver.NewOpenAIJournalAI(apiKey)
 		log.Print("local journal will use OpenAI for transcription and summaries")
 	} else {
-		log.Print("local journal will use deterministic development transcripts; set OPENAI_API_KEY for live processing")
+		log.Print("local journal will use deterministic development transcripts")
 	}
 
-	srv, err := apiserver.NewServer(context.Background(), apiserver.NewServerOptions{
+	opts := apiserver.NewServerOptions{
 		LocalStack:                 true,
 		AllowRequestHostOIDCIssuer: true,
 		AllowLocalhostAnalytics:    true,
 		JournalAI:                  journalAI,
 		JournalCurator:             &localJournalCurator{},
-		JournalObjects:             journalStore,
-		JournalPresigner:           journalStore,
-	})
+	}
+	ctx := context.Background()
+	mux := http.NewServeMux()
+	apiOrigin := fmt.Sprintf("http://localhost:%d", addr.Port)
+	var startWorker func(*apiserver.Server)
+	if useAWSEmulator {
+		cfg, err := awsemulator.Config(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+		opts.AWSConfig = &cfg
+		if err := configureEmulatedSigningKey(ctx, cfg); err != nil {
+			log.Fatalf("configure emulated signing key: %v", err)
+		}
+		startWorker, err = configureEmulatedJournal(ctx, cfg, apiOrigin, mux, &opts)
+		if err != nil {
+			log.Fatalf("configure emulated journal: %v", err)
+		}
+	} else {
+		store, err := newLocalJournalStore(apiOrigin, log.Default())
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer store.Close()
+		opts.JournalObjects, opts.JournalPresigner = store, store
+		mux.Handle(localJournalObjectPath, store)
+		startWorker = func(srv *apiserver.Server) { store.SetUploadProcessor(srv.ProcessJournalUpload) }
+	}
+	srv, err := apiserver.NewServer(ctx, opts)
 	if err != nil {
 		log.Fatalf("failed to create server: %v", err)
 	}
@@ -118,10 +144,8 @@ func main() {
 		}
 	}
 
-	journalStore.SetUploadProcessor(srv.ProcessJournalUpload)
-	mux := http.NewServeMux()
-	mux.Handle(localJournalObjectPath, journalStore)
-	mux.Handle(localJournalSeedPath, newDevelopmentJournalSeedHandler(srv, journalStore))
+	startWorker(srv)
+	mux.Handle(localJournalSeedPath, newDevelopmentJournalSeedHandler(srv))
 	mux.HandleFunc(localJournalRefreshPath, func(w http.ResponseWriter, request *http.Request) {
 		if request.Method != http.MethodPost {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)

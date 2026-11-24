@@ -3,16 +3,16 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"sync"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
 )
@@ -121,7 +121,7 @@ func developmentJournalRecordedTimes(now time.Time) []time.Time {
 	}
 }
 
-func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJournalStore) http.Handler {
+func newDevelopmentJournalSeedHandler(server *apiserver.Server) http.Handler {
 	var seedMu sync.Mutex
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		response.Header().Set("Access-Control-Allow-Origin", "*")
@@ -158,16 +158,8 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 				http.Error(response, fmt.Sprintf("create fixture %d: %v", index, err), http.StatusInternalServerError)
 				return
 			}
-			entryID := created.(apiserver.PostJournalEntries201JSONResponse).Entry.Id.String()
-			key := "entries/" + entryID + "/source"
-			if _, err := store.PutObject(ctx, &s3.PutObjectInput{
-				Bucket: aws.String("local-journal"), Key: aws.String(key), Body: bytes.NewReader(audio), ContentType: aws.String("audio/wav"),
-			}); err != nil {
-				http.Error(response, fmt.Sprintf("store fixture %d: %v", index, err), http.StatusInternalServerError)
-				return
-			}
-			if err := server.ProcessJournalUpload(ctx, "local-journal", key, int64(len(audio))); err != nil {
-				http.Error(response, fmt.Sprintf("process fixture %d: %v", index, err), http.StatusInternalServerError)
+			if err := uploadDevelopmentFixture(ctx, server, created.(apiserver.PostJournalEntries201JSONResponse), audio); err != nil {
+				http.Error(response, fmt.Sprintf("upload fixture %d: %v", index, err), http.StatusInternalServerError)
 				return
 			}
 		}
@@ -187,4 +179,50 @@ func newDevelopmentJournalSeedHandler(server *apiserver.Server, store *localJour
 		response.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(response).Encode(map[string]int{"entries": len(developmentJournalFixtures)})
 	})
+}
+
+// Use the same upload URL and completion signal as the browser. A repeated
+// seed can be acknowledged by the ready entry that already owns these bytes.
+func uploadDevelopmentFixture(ctx context.Context, server *apiserver.Server, created apiserver.PostJournalEntries201JSONResponse, audio []byte) error {
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+	request, err := http.NewRequestWithContext(ctx, http.MethodPut, created.Upload.Url, bytes.NewReader(audio))
+	if err != nil {
+		return err
+	}
+	request.Header.Set("Content-Type", "audio/wav")
+	for name, value := range created.Upload.Headers {
+		request.Header.Set(name, value)
+	}
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+	if response.StatusCode/100 != 2 {
+		message, _ := io.ReadAll(io.LimitReader(response.Body, 1024))
+		return fmt.Errorf("object upload: %s: %s", response.Status, message)
+	}
+	hash := fmt.Sprintf("%x", sha256.Sum256(audio))
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+	for {
+		result, err := server.GetJournalEntries(ctx, apiserver.GetJournalEntriesRequestObject{})
+		if err != nil {
+			return err
+		}
+		for _, entry := range result.(apiserver.GetJournalEntries200JSONResponse).Entries {
+			if entry.Status == apiserver.JournalEntryStatusReady && entry.ContentSha256 == hash {
+				return nil
+			}
+			if entry.Id == created.Entry.Id && entry.Status == apiserver.JournalEntryStatusFailed {
+				return fmt.Errorf("journal worker failed for entry %s", entry.Id)
+			}
+		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-ticker.C:
+		}
+	}
 }

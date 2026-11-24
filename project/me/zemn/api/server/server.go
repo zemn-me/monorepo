@@ -86,6 +86,7 @@ type Server struct {
 }
 
 type NewServerOptions struct {
+	AWSConfig  *aws.Config
 	LocalStack bool
 	// AllowRequestHostOIDCIssuer permits request-derived issuers for local
 	// development. Leave false in deployed servers.
@@ -116,7 +117,9 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	// Optional endpoint override (DynamoDB Local / LocalStack).
 	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
 	var cfg aws.Config
-	if endpoint != "" {
+	if opts.AWSConfig != nil {
+		cfg = *opts.AWSConfig
+	} else if endpoint != "" {
 		loadOpts := []func(*config.LoadOptions) error{
 			config.WithEndpointResolver(aws.EndpointResolverFunc(
 				func(service, region string) (aws.Endpoint, error) {
@@ -198,7 +201,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		return sendSMSWithTwilio(ctx, s.twilioClient, to, from, body)
 	}
 
-	s.signingKey, err = provisionSigningKey(ctx)
+	s.signingKey, err = provisionSigningKey(ctx, cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -305,9 +308,9 @@ func analyticsBeaconHostAllowed(host string) bool {
 	return false
 }
 
-func provisionSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
+func provisionSigningKey(ctx context.Context, cfg aws.Config) (k jose.JSONWebKey, err error) {
 	if os.Getenv("OIDC_JWT_KMS_KEY_ID") != "" {
-		return provisionKMSSigningKey(ctx)
+		return provisionKMSSigningKey(cfg)
 	}
 
 	return provisionTestingSigningKey(ctx)
@@ -338,7 +341,7 @@ func provisionTestingSigningKey(_ context.Context) (k jose.JSONWebKey, err error
 	return
 }
 
-func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) {
+func provisionKMSSigningKey(cfg aws.Config) (k jose.JSONWebKey, err error) {
 	jwtKmsKeyId := os.Getenv("OIDC_JWT_KMS_KEY_ID")
 	if jwtKmsKeyId == "" {
 		err = errors.New("OIDC_JWT_KMS_KEY_ID not set")
@@ -352,7 +355,7 @@ func provisionKMSSigningKey(ctx context.Context) (k jose.JSONWebKey, err error) 
 		return
 	}
 
-	signer, err := NewKMSOpaqueSigner(ctx, jwtKmsKeyId, jwtKmsPublicKey)
+	signer, err := newKMSOpaqueSigner(cfg, jwtKmsKeyId, jwtKmsPublicKey)
 	if err != nil {
 		return
 	}

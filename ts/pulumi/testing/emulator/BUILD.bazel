@@ -25,6 +25,11 @@ itest_service(
     health_check_args = ["--health"],
     health_check_interval = "200ms",
     health_check_timeout = "30s",
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//project/me/zemn/api:__subpackages__"],
 )
 
 js_binary(

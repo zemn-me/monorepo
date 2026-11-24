@@ -24,3 +24,10 @@
   `browser_test` rule through `gazelle:map_kind`; the macro provides the
   service harness. Add tests to the matching package and let Gazelle manage
   sources and dependencies.
+
+- The Go browser suites and JavaScript endpoint tests share the calendar fixture
+  API backed by AWS Emulator on Linux x86-64. Run them on macOS with
+  `--config=remote`. Journal PUTs and GETs carry SDK signatures through the
+  local API to S3. The API signs identity tokens with an emulated KMS key.
+  S3 publishes upload notifications to an emulated SQS queue
+  that drives the local journal worker.

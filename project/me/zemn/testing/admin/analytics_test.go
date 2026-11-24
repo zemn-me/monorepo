@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/tebeka/selenium"
@@ -89,21 +88,10 @@ func waitForPersistedAnalyticsSessionID(driver *seleniumpkg.Driver, timeout time
 }
 
 func waitForAnalyticsRecord(ctx context.Context, sessionID string, timeout time.Duration) error {
-	ddbRoot, err := browserhelpers.DynamoDBRoot()
+	client, err := browserhelpers.DynamoDBClient(ctx)
 	if err != nil {
 		return err
 	}
-
-	client := dynamodb.New(dynamodb.Options{
-		EndpointResolver: dynamodb.EndpointResolverFromURL(ddbRoot.String()),
-		Retryer:          aws.NopRetryer{},
-		Credentials: credentials.StaticCredentialsProvider{
-			Value: aws.Credentials{
-				AccessKeyID:     "LOCALSTACK",
-				SecretAccessKey: "LOCALSTACK",
-			},
-		},
-	})
 
 	deadline := time.Now().Add(timeout)
 	var lastErr error

@@ -231,6 +231,7 @@ go_test(
     embed = [":server"],
     tags = ["manual"],
     deps = [
+        "//go/awsemulator",
         "//project/me/zemn/api/server/auth",
         "@com_github_aws_aws_sdk_go_v2//aws",
         "@com_github_aws_aws_sdk_go_v2_feature_dynamodb_attributevalue//:attributevalue",
@@ -242,6 +243,6 @@ go_test(
 
 service_test(
     name = "ddb_contract_integration_test",
-    services = ["//java/software/amazon/dynamodb:dynamodb"],
+    services = ["//ts/pulumi/testing/emulator:service"],
     test = ":ddb_contract_test",
 )

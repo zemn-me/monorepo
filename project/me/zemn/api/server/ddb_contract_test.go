@@ -2,11 +2,9 @@ package apiserver
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -16,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/google/uuid"
+	"github.com/zemn-me/monorepo/go/awsemulator"
 	"github.com/zemn-me/monorepo/project/me/zemn/api/server/auth"
 )
 
@@ -25,24 +24,18 @@ type contractRecord struct {
 	Value string `dynamodbav:"value"`
 }
 
-// Run identical persistence scenarios against the fake and DynamoDB Local.
-// The integration target owns an isolated service, port, and database directory;
+// Run identical persistence scenarios against the fake and emulated DynamoDB.
+// The integration target owns an isolated service, port, and database;
 // each scenario also uses a separate partition, independent of other records.
 func TestDynamoDBContract(t *testing.T) {
 	t.Run("in_memory", func(t *testing.T) { checkDynamoDBContract(t, &inMemoryDDB{}) })
-	t.Run("dynamodb_local", func(t *testing.T) {
-		var ports struct {
-			DynamoDB string `json:"@@//java/software/amazon/dynamodb:dynamodb"`
+	t.Run("aws_emulator", func(t *testing.T) {
+		cfg, err := awsemulator.Config(t.Context())
+		if err != nil {
+			t.Fatal(err)
 		}
-		if err := json.Unmarshal([]byte(os.Getenv("ASSIGNED_PORTS")), &ports); err != nil || ports.DynamoDB == "" {
-			t.Fatalf("assigned DynamoDB port: %v", err)
-		}
-		db := dynamodb.NewFromConfig(aws.Config{Region: "us-east-1", Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
-			return aws.Credentials{AccessKeyID: "test", SecretAccessKey: "test"}, nil
-		})}, func(options *dynamodb.Options) {
-			options.BaseEndpoint = aws.String("http://localhost:" + ports.DynamoDB)
-		})
-		_, err := db.CreateTable(t.Context(), &dynamodb.CreateTableInput{
+		db := dynamodb.NewFromConfig(cfg)
+		_, err = db.CreateTable(t.Context(), &dynamodb.CreateTableInput{
 			TableName: aws.String("keys"), BillingMode: types.BillingModePayPerRequest,
 			AttributeDefinitions: []types.AttributeDefinition{{AttributeName: aws.String("id"), AttributeType: types.ScalarAttributeTypeS}, {AttributeName: aws.String("when"), AttributeType: types.ScalarAttributeTypeS}},
 			KeySchema:            []types.KeySchemaElement{{AttributeName: aws.String("id"), KeyType: types.KeyTypeHash}, {AttributeName: aws.String("when"), KeyType: types.KeyTypeRange}},
