@@ -1275,7 +1275,7 @@ function JournalToolbar({
 					route={route}
 				/>
 			) : (
-				<Link href="/journal">Browse journal</Link>
+				<Link href="/journal">Journal</Link>
 			)}
 			<Link
 				className={style.wikiNavigation}
@@ -1512,10 +1512,13 @@ function CalendarNavigation({
 	);
 }
 
-function RecentEntries({ journal }: { readonly journal: Journal }) {
+function RecentEntries({
+	entries,
+}: {
+	readonly entries: readonly JournalEntry[];
+}) {
 	const [language] = useLocale();
-	const entries = [...journal.entries]
-		.filter(entry => entry.status === 'ready')
+	const recent = [...entries]
 		.sort((a, b) => Date.parse(b.recordedAt) - Date.parse(a.recordedAt))
 		.slice(0, 5);
 	if (entries.length === 0) return null;
@@ -1526,12 +1529,13 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 		>
 			<header>
 				<h2 id="recent-journal-entries">Recent entries</h2>
-				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
+				<Link href={journalHref('day', { at: recent[0]?.recordedAt })}>
 					Browse days
 				</Link>
 			</header>
+			<JournalMap entries={entries} />
 			<ol>
-				{entries.map(entry => {
+				{recent.map(entry => {
 					const date = journalEntryDate(entry);
 					return (
 						<li key={entry.id}>
@@ -1832,8 +1836,7 @@ function JournalBrowser({
 				/>
 				{localRecordings}
 				<PendingEntries entries={pendingEntries} playback={playback} />
-				<RecentEntries journal={journal} />
-				<JournalMap entries={readyEntries} />
+				<RecentEntries entries={readyEntries} />
 				{summary ? (
 					<SummaryCard
 						playback={playback}

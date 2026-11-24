@@ -2438,6 +2438,11 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 			browserhelpers.DumpPageDiagnostics(t, driver)
 			t.Fatalf("recording pin missing on %s: %v", route, err)
 		}
+		if route == "/journal" {
+			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] > header + [aria-label^='Recording locations:'] + ol", 30*time.Second); err != nil {
+				t.Fatalf("recent entries map must sit between the heading and list: %v", err)
+			}
+		}
 		thin, err := driver.ExecuteScript(`return Array.from(document.querySelectorAll('[role="region"][aria-label^="Recording locations:"]')).every(map => map.getBoundingClientRect().height === 144)`, nil)
 		if err != nil || thin != true {
 			t.Fatalf("map height on %s: %v, %v", route, thin, err)

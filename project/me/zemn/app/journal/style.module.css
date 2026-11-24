@@ -941,10 +941,8 @@
 		flex-direction: column;
 		block-size: 100%;
 		overflow: auto;
-		border: 1px solid var(--journal-line);
-		border-radius: 0.65rem;
-		background: var(--journal-surface);
-		padding: clamp(0.875rem, 4cqi, 1.5rem);
+		border: 0;
+		padding-block: 0.375rem 0;
 	}
 
 	.player > :not(.transcriptScroller) {
