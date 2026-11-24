@@ -1,0 +1,247 @@
+diff --git a/cmd/svcinit/main.go b/cmd/svcinit/main.go
+--- a/cmd/svcinit/main.go
++++ b/cmd/svcinit/main.go
+@@ -17,4 +17,5 @@
+ 	"strconv"
+ 	"strings"
++	"sync"
+ 	"syscall"
+ 	"text/tabwriter"
+@@ -119,5 +120,15 @@
+ 	must(err)
+ 
+-	ports, err := assignPorts(unversionedSpecs)
++	reservations := make(map[string][]func() error)
++	defer func() {
++		for _, releasePorts := range reservations {
++			for _, release := range releasePorts {
++				if err := release(); err != nil {
++					log.Printf("closing port reservation: %v", err)
++				}
++			}
++		}
++	}()
++	ports, err := assignPorts(unversionedSpecs, reservations)
+ 	must(err)
+ 
+@@ -132,5 +143,5 @@
+ 	}
+ 
+-	serviceSpecs, err := augmentServiceSpecs(unversionedSpecs, ports, svcctlPortStr)
++	serviceSpecs, err := augmentServiceSpecs(unversionedSpecs, ports, svcctlPortStr, reservations)
+ 	must(err)
+ 
+@@ -266,5 +277,5 @@
+ 			must(err)
+ 
+-			serviceSpecs, err := augmentServiceSpecs(unversionedSpecs, ports, svcctlPortStr)
++			serviceSpecs, err := augmentServiceSpecs(unversionedSpecs, ports, svcctlPortStr, reservations)
+ 			must(err)
+ 
+@@ -354,8 +365,8 @@
+ func assignPorts(
+ 	serviceSpecs map[string]svclib.ServiceSpec,
++	reservations map[string][]func() error,
+ ) (
+ 	svclib.Ports, error,
+ ) {
+-	var toClose []net.Listener
+ 	ports := svclib.Ports{}
+ 
+@@ -366,34 +377,11 @@
+ 		}
+ 
+-		// Note, this can cause collisions. So be careful!
+-		// To avoid port collisions, set the `so_reuseport_aware` option on the service definition
+-		// and use the SO_REUSEPORT socket option in your services.
+ 		for _, portName := range namedPorts {
+-			// We do a bit of a dance here to set SO_LINGER to 0. For details, see
+-			// https://stackoverflow.com/questions/71975992/what-really-is-the-linger-time-that-can-be-set-with-so-linger-on-sockets
+-			lc := net.ListenConfig{
+-				Control: func(network, address string, conn syscall.RawConn) error {
+-					var setSockoptErr error
+-					err := conn.Control(func(fd uintptr) {
+-						setSockoptErr = setSockoptsForPortAssignment(fd, &syscall.Linger{
+-							Onoff:  1,
+-							Linger: 0,
+-						})
+-					})
+-					if err != nil {
+-						return err
+-					}
+-					return setSockoptErr
+-				},
+-			}
+-
+-			listener, err := lc.Listen(context.Background(), "tcp", "127.0.0.1:0")
++			port, closePort, err := reservePort(spec.SoReuseportAware)
+ 			if err != nil {
+-				return nil, err
+-			}
+-			_, port, err := net.SplitHostPort(listener.Addr().String())
+-			if err != nil {
+-				return nil, err
+-			}
++				return nil, fmt.Errorf("reserving port for %s: %w", label, err)
++			}
++			// Startup, reload and teardown may all visit the same reservation.
++			reservations[label] = append(reservations[label], sync.OnceValue(closePort))
+ 
+ 			qualifiedPortName := label
+@@ -408,14 +396,4 @@
+ 			ports.Set(qualifiedPortName, port)
+ 
+-			if !spec.SoReuseportAware {
+-				toClose = append(toClose, listener)
+-			}
+-		}
+-	}
+-
+-	for _, listener := range toClose {
+-		err := listener.Close()
+-		if err != nil {
+-			return nil, err
+ 		}
+ 	}
+@@ -432,8 +410,4 @@
+ 	}
+ 
+-	// Complete hack - we have observed that the ports may not be ready immediately after closing, even with SO_LINGER set to 0.
+-	// Give the kernel a bit of time to figure out what we've done.
+-	time.Sleep(10 * time.Millisecond)
+-
+ 	serializedPorts, err := ports.Marshal()
+ 	if err != nil {
+@@ -442,4 +416,48 @@
+ 	os.Setenv("ASSIGNED_PORTS", string(serializedPorts))
+ 	return ports, nil
++}
++
++// Bind ordinary reservations without listening so TCP probes cannot report
++// readiness before the service starts.
++func reservePort(reusable bool) (string, func() error, error) {
++	if !reusable {
++		fd, err := openReservationSocket()
++		if err != nil {
++			return "", nil, err
++		}
++		closePort := func() error { return closeReservationSocket(fd) }
++		if err := syscall.Bind(fd, &syscall.SockaddrInet4{Addr: [4]byte{127, 0, 0, 1}}); err != nil {
++			closePort()
++			return "", nil, err
++		}
++		addr, err := syscall.Getsockname(fd)
++		if err != nil {
++			closePort()
++			return "", nil, err
++		}
++		return strconv.Itoa(addr.(*syscall.SockaddrInet4).Port), closePort, nil
++	}
++	// Reuse-aware services keep their original shared listener for the run.
++	lc := net.ListenConfig{
++		Control: func(network, address string, conn syscall.RawConn) error {
++			var setSockoptErr error
++			err := conn.Control(func(fd uintptr) {
++				setSockoptErr = setSockoptsForPortAssignment(fd, &syscall.Linger{
++					Onoff:  1,
++					Linger: 0,
++				})
++			})
++			if err != nil {
++				return err
++			}
++			return setSockoptErr
++		},
++	}
++
++	listener, err := lc.Listen(context.Background(), "tcp", "127.0.0.1:0")
++	if err != nil {
++		return "", nil, err
++	}
++	return strconv.Itoa(listener.Addr().(*net.TCPAddr).Port), listener.Close, nil
+ }
+ 
+@@ -448,4 +466,5 @@
+ 	ports svclib.Ports,
+ 	svcctlPort string,
++	reservations map[string][]func() error,
+ ) (
+ 	map[string]svclib.VersionedServiceSpec, error,
+@@ -460,4 +479,7 @@
+ 		}
+ 
++		if !s.SoReuseportAware {
++			s.ReleasePorts = reservations[label]
++		}
+ 		if s.Type == "group" {
+ 			versionedServiceSpecs[label] = s
+diff --git a/svclib/types.go b/svclib/types.go
+--- a/svclib/types.go
++++ b/svclib/types.go
+@@ -34,6 +34,7 @@
+ type VersionedServiceSpec struct {
+ 	ServiceSpec
+-	Version string
+-	Color   string
++	ReleasePorts []func() error `json:"-"`
++	Version      string
++	Color        string
+ }
+ 
+diff --git a/runner/runner.go b/runner/runner.go
+--- a/runner/runner.go
++++ b/runner/runner.go
+@@ -280,5 +280,12 @@
+ 	instance.cmd = cmd
+ 	instance.killed = false
+-	instance.startErrFn = sync.OnceValue(cmd.Start)
++	instance.startErrFn = sync.OnceValue(func() error {
++		for _, release := range s.ReleasePorts {
++			if err := release(); err != nil {
++				return fmt.Errorf("releasing port for %s: %w", s.Label, err)
++			}
++		}
++		return cmd.Start()
++	})
+ 	instance.waitErrFn = sync.OnceValue(func() error {
+ 		res := cmd.Wait()
+diff --git a/cmd/svcinit/set_sockopts_for_port_assignment_unix.go b/cmd/svcinit/set_sockopts_for_port_assignment_unix.go
+--- a/cmd/svcinit/set_sockopts_for_port_assignment_unix.go
++++ b/cmd/svcinit/set_sockopts_for_port_assignment_unix.go
+@@ -18,2 +18,14 @@
+ 	return syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, unix.SO_REUSEPORT, 1)
+ }
++
++func openReservationSocket() (int, error) {
++	syscall.ForkLock.RLock()
++	defer syscall.ForkLock.RUnlock()
++	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_STREAM, syscall.IPPROTO_TCP)
++	if err == nil {
++		syscall.CloseOnExec(fd)
++	}
++	return fd, err
++}
++
++func closeReservationSocket(fd int) error { return syscall.Close(fd) }
+diff --git a/cmd/svcinit/set_sockopts_for_port_assignment_windows.go b/cmd/svcinit/set_sockopts_for_port_assignment_windows.go
+--- a/cmd/svcinit/set_sockopts_for_port_assignment_windows.go
++++ b/cmd/svcinit/set_sockopts_for_port_assignment_windows.go
+@@ -9,2 +9,18 @@
+ 	return syscall.SetsockoptLinger(syscall.Handle(fd), syscall.SOL_SOCKET, syscall.SO_LINGER, l)
+ }
++
++func openReservationSocket() (syscall.Handle, error) {
++	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_STREAM, syscall.IPPROTO_TCP)
++	if err != nil {
++		return fd, err
++	}
++	syscall.CloseOnExec(fd)
++	// Winsock defines SO_EXCLUSIVEADDRUSE as the complement of SO_REUSEADDR.
++	if err := syscall.SetsockoptInt(fd, syscall.SOL_SOCKET, ^syscall.SO_REUSEADDR, 1); err != nil {
++		syscall.Closesocket(fd)
++		return syscall.InvalidHandle, err
++	}
++	return fd, nil
++}
++
++func closeReservationSocket(fd syscall.Handle) error { return syscall.Closesocket(fd) }
