@@ -1654,22 +1654,16 @@ function WikiArticle({ page }: { readonly page: JournalWikiPageView }) {
 function JournalWikiPage({ pageID }: { readonly pageID: string }) {
 	const [token] = useZemnMeAuth();
 	const page = useGetJournalWikiPage(token, pageID);
+	const unavailable = (
+		<>
+			<WikiHeader />
+			<p role="status">This page is unavailable or awaiting an update.</p>
+		</>
+	);
 	return page(
-		value => <WikiArticle page={value} />,
-		() => (
-			<>
-				<WikiHeader />
-				<JournalPlaceholder label="Loading wiki page" />
-			</>
-		),
-		() => (
-			<>
-				<WikiHeader />
-				<p role="status">
-					This page is unavailable or awaiting an update.
-				</p>
-			</>
-		)
+		value => (value ? <WikiArticle page={value} /> : unavailable),
+		() => <WikiHeader />,
+		() => unavailable
 	);
 }
 
@@ -1729,12 +1723,7 @@ function JournalWikiIndex({
 	const index = useGetJournalWikiIndex(token);
 	return index(
 		value => <WikiIndex index={value} query={query} setQuery={setQuery} />,
-		() => (
-			<>
-				<WikiHeader index />
-				<JournalPlaceholder label="Loading wiki" />
-			</>
-		),
+		() => <WikiHeader index />,
 		() => (
 			<>
 				<WikiHeader index />

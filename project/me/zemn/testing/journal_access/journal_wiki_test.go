@@ -36,7 +36,16 @@ var seedJournalWikiFixture = sync.OnceValue(func() error {
 	return nil
 })
 
+func TestJournalWikiNavigationWithoutSessionCookie(t *testing.T) {
+	testWikiNavigation(t, true)
+}
+
 func TestJournalWikiNavigationAndCitations(t *testing.T) {
+	testWikiNavigation(t, false)
+}
+
+func testWikiNavigation(t *testing.T, browserOnly bool) {
+	t.Helper()
 	if err := seedJournalWikiFixture(); err != nil {
 		t.Fatal(err)
 	}
@@ -51,6 +60,14 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	defer driver.Close()
 	if err := driver.ResizeWindow("", 390, 900); err != nil {
 		t.Fatal(err)
+	}
+	if browserOnly {
+		if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/auth/session"}}); err != nil {
+			t.Fatal(err)
+		}
 	}
 	var originalVideo selenium.WebElement
 	assertWikiRequests := func() {
@@ -113,12 +130,36 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err != nil || focused != true {
 		t.Fatalf("wiki page is not keyboard reachable: %v %v", focused, err)
 	}
+	// Keep observing the content itself while the router transitions. Both the
+	// previous and the next screen are valid, a header-only screen is not.
+	_, err = driver.ExecuteScript(`
+		const check = () => {
+			const wiki = document.querySelector('section[aria-label="Diary wiki"]');
+			if (wiki && !wiki.querySelector('article h3, input[type="search"]')) {
+				performance.mark('wiki-incomplete', {detail: wiki.innerText});
+			}
+		};
+		new MutationObserver(check).observe(document.body, {childList: true, subtree: true});
+		performance.mark('wiki-start');
+	`, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertWikiLoadedWithRoute := func() {
+		t.Helper()
+		gaps, err := driver.ExecuteScript(`return performance.getEntriesByName('wiki-start').length === 1 ?
+			performance.getEntriesByName('wiki-incomplete').map(mark => mark.detail) : ['document reloaded'];`, nil)
+		if err != nil || len(gaps.([]any)) != 0 {
+			t.Fatalf("wiki navigation had an intermediate screen: %v %v", gaps, err)
+		}
+	}
 	if err := page.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
+	assertWikiLoadedWithRoute()
 	assertWikiNavigation()
 	for _, step := range []struct {
 		link, destination string
@@ -137,7 +178,20 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
+		assertWikiLoadedWithRoute()
 		assertWikiNavigation()
+	}
+	if browserOnly {
+		cookies, err := driver.GetCookies()
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, cookie := range cookies {
+			if cookie.Name == "__Host-zemn-authorization" {
+				t.Fatal("expected a browser-only sign-in")
+			}
+		}
+		return
 	}
 	for _, width := range []int{1280, 390} {
 		if err := driver.ResizeWindow("", width, 900); err != nil {

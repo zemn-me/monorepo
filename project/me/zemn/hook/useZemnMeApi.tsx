@@ -873,6 +873,7 @@ export function useGetJournalWikiPage<A, B>(
 				signal,
 				params: { path: { pageId } },
 			});
+			if (response.response.status === 404) return null;
 			if (!response.data)
 				throw new Error(
 					'This page is unavailable or awaiting an update.'
