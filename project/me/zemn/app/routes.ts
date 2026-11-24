@@ -178,10 +178,6 @@ export default [
 				file: 'journal/layout.js',
 				children: [
 					{
-						file: 'journal/page.js',
-						index: true,
-					},
-					{
 						path: 'connect',
 						file: 'journal/connect/layout.js',
 						children: [
@@ -192,20 +188,29 @@ export default [
 						],
 					},
 					{
-						file: 'journal/day/page.js',
-						path: 'day',
-					},
-					{
-						file: 'journal/month/page.js',
-						path: 'month',
-					},
-					{
-						file: 'journal/week/page.js',
-						path: 'week',
-					},
-					{
-						file: 'journal/year/page.js',
-						path: 'year',
+						file: 'journal/reader.js',
+						children: [
+							{
+								file: 'journal/page.js',
+								index: true,
+							},
+							{
+								file: 'journal/day/page.js',
+								path: 'day',
+							},
+							{
+								file: 'journal/month/page.js',
+								path: 'month',
+							},
+							{
+								file: 'journal/week/page.js',
+								path: 'week',
+							},
+							{
+								file: 'journal/year/page.js',
+								path: 'year',
+							},
+						],
 					},
 				],
 			},

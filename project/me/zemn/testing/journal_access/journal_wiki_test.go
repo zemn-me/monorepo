@@ -36,7 +36,16 @@ var seedJournalWikiFixture = sync.OnceValue(func() error {
 	return nil
 })
 
+func TestJournalWikiNavigationWithoutSessionCookie(t *testing.T) {
+	testWikiNavigation(t, true)
+}
+
 func TestJournalWikiNavigationAndCitations(t *testing.T) {
+	testWikiNavigation(t, false)
+}
+
+func testWikiNavigation(t *testing.T, browserOnly bool) {
+	t.Helper()
 	if err := seedJournalWikiFixture(); err != nil {
 		t.Fatal(err)
 	}
@@ -51,6 +60,14 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	defer driver.Close()
 	if err := driver.ResizeWindow("", 390, 900); err != nil {
 		t.Fatal(err)
+	}
+	if browserOnly {
+		if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/auth/session"}}); err != nil {
+			t.Fatal(err)
+		}
 	}
 	var originalVideo selenium.WebElement
 	assertWikiRequests := func() {
@@ -113,12 +130,36 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err != nil || focused != true {
 		t.Fatalf("wiki page is not keyboard reachable: %v %v", focused, err)
 	}
+	// Keep observing the content itself while the router transitions. Both the
+	// previous and the next screen are valid, a header-only screen is not.
+	_, err = driver.ExecuteScript(`
+		const check = () => {
+			const wiki = document.querySelector('section[aria-label="Diary wiki"]');
+			if (wiki && !wiki.querySelector('article h3, input[type="search"]')) {
+				performance.mark('wiki-incomplete', {detail: wiki.innerText});
+			}
+		};
+		new MutationObserver(check).observe(document.body, {childList: true, subtree: true});
+		performance.mark('wiki-start');
+	`, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertWikiLoadedWithRoute := func() {
+		t.Helper()
+		gaps, err := driver.ExecuteScript(`return performance.getEntriesByName('wiki-start').length === 1 ?
+			performance.getEntriesByName('wiki-incomplete').map(mark => mark.detail) : ['document reloaded'];`, nil)
+		if err != nil || len(gaps.([]any)) != 0 {
+			t.Fatalf("wiki navigation had an intermediate screen: %v %v", gaps, err)
+		}
+	}
 	if err := page.SendKeys(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
+	assertWikiLoadedWithRoute()
 	assertWikiNavigation()
 	for _, step := range []struct {
 		link, destination string
@@ -137,7 +178,20 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
+		assertWikiLoadedWithRoute()
 		assertWikiNavigation()
+	}
+	if browserOnly {
+		cookies, err := driver.GetCookies()
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, cookie := range cookies {
+			if cookie.Name == "__Host-zemn-authorization" {
+				t.Fatal("expected a browser-only sign-in")
+			}
+		}
+		return
 	}
 	for _, width := range []int{1280, 390} {
 		if err := driver.ResizeWindow("", width, 900); err != nil {
@@ -198,7 +252,7 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	if err := reference.Click(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "audio", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal player'] input[aria-label='Seek recording']", 30*time.Second); err != nil {
 		t.Fatal("citation did not open source audio: ", err)
 	}
 	root.Path, root.RawQuery = "/journal", "wiki=00000000-0000-0000-0000-000000000000"
@@ -218,6 +272,89 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 		}
 		if err := os.WriteFile(filepath.Join(directory, "journal-wiki-unavailable.png"), screenshot, 0600); err != nil {
 			t.Fatal(err)
+		}
+	}
+}
+
+func TestJournalDayNavigationLoadsWithRoute(t *testing.T) {
+	if err := seedJournalWikiFixture(); err != nil {
+		t.Fatal(err)
+	}
+	root, err := browserhelpers.FrontendRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	driver, err := seleniumpkg.NewWithChromeArguments()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer driver.Close()
+	root.Path = "/journal"
+	if err := driver.Get(root.String()); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByLinkText, "Browse days", 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		_, err := d.GetCookie("__Host-zemn-authorization")
+		return err == nil, nil
+	}, 10*time.Second); err != nil {
+		t.Fatal("expected a signed-in journal session", err)
+	}
+	document, err := driver.FindElement(selenium.ByTagName, "html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, step := range []struct{ link, title string }{
+		{"section[aria-labelledby='recent-journal-entries'] header a", "A quieter kind of launch"},
+		{"a[aria-label='Previous day']", "The rehearsal found the wrong problem"},
+	} {
+		link, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, step.link, 10*time.Second)
+		if err != nil {
+			t.Fatal(err)
+		}
+		start, err := driver.ExecuteScript(`
+			const title = arguments[0];
+			const observer = new MutationObserver(() => {
+				if (document.querySelector('[aria-label="Loading journal"]')) {
+					performance.mark('journal-placeholder');
+				}
+				if ([...document.querySelectorAll('article > header h3')].some(h => h.textContent === title)) {
+					observer.disconnect();
+				}
+			});
+			observer.observe(document.body, {childList: true, subtree: true});
+			return performance.now();
+		`, []any{step.title})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := browserhelpers.ClickElementInView(driver, link); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//article/header/h3[normalize-space()='"+step.title+"']", 10*time.Second); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := document.TagName(); err != nil {
+			t.Fatal("day navigation replaced the document", err)
+		}
+		placeholder, err := driver.ExecuteScript("return performance.getEntriesByName('journal-placeholder').length > 0", nil)
+		if err != nil || placeholder != false {
+			t.Fatalf("day navigation showed a second loading state: %v %v", placeholder, err)
+		}
+		requests, err := driver.ExecuteScript(`
+			return performance.getEntriesByType('resource')
+				.filter(resource => resource.startTime >= arguments[0])
+				.map(resource => new URL(resource.name))
+				.filter(url => url.pathname === '/journal' && url.searchParams.get('view') === 'day')
+				.map(url => url.search);
+		`, []any{start})
+		if err != nil || len(requests.([]any)) != 0 {
+			t.Errorf("opening %s fetched day data again after navigation: %v %v", step.title, requests, err)
 		}
 	}
 }
@@ -275,14 +412,16 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		t.Helper()
 		if by == selenium.ByLinkText {
 			switch selector {
-			case "Overview", "Days", "Months", "Weeks", "Years":
-				if links, err := driver.FindElements(selenium.ByLinkText, "Browse journal"); err == nil && len(links) > 0 {
+			case "Overview":
+				if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "h1 a[href='/journal']", 10*time.Second); err != nil {
+					t.Fatal(err)
+				}
+				browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
+				return
+			case "Days", "Months", "Weeks", "Years":
+				if links, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-toolbar] a[href='/journal']"); err == nil && len(links) > 0 {
 					if err := browserhelpers.ClickElementInView(driver, links[0]); err != nil {
 						t.Fatal(err)
-					}
-					if selector == "Overview" {
-						browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal")
-						return
 					}
 				}
 				browserhelpers.OpenJournalDatePicker(t, driver)
@@ -323,6 +462,16 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		if err := driver.ResizeWindow("", width, height); err != nil {
 			t.Fatal(err)
 		}
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": height, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		defer func() {
+			if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+				t.Error(err)
+			}
+		}()
 		el := find(selenium.ByCSSSelector, selector)
 		if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start', behavior:'instant'}); window.scrollBy(0,-90);`, []any{el}); err != nil {
 			t.Fatal(err)
@@ -345,7 +494,37 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	click(selenium.ByLinkText, "Overview")
-	capture("01-overview-desktop", "section[aria-labelledby='recent-journal-entries']", 1440, 1000, false)
+	find(selenium.ByID, "recent-journal-entries")
+	capture("01-overview-desktop", "[data-journal-page]", 1440, 1000, false)
+	capture("01-overview-phone", "[data-journal-page]", 390, 844, false)
+	recentLink := find(selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] li a")
+	recentTitle := find(selenium.ByCSSSelector, "section[aria-labelledby='recent-journal-entries'] li strong")
+	wantTitle, err := recentTitle.Text()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.ClickElementInView(driver, recentLink); err != nil {
+		t.Fatal(err)
+	}
+	find(selenium.ByCSSSelector, "[aria-label='Journal day'] article[id^='entry-']")
+	address, err := driver.CurrentURL()
+	if err != nil {
+		t.Fatal(err)
+	}
+	selected, err := url.Parse(address)
+	if err != nil || selected.Fragment == "" || selected.Fragment != "entry-"+selected.Query().Get("entry") {
+		t.Fatalf("recent entry destination: %s %v", address, err)
+	}
+	selectedArticle := find(selenium.ByID, selected.Fragment)
+	selectedTitle, err := selectedArticle.FindElement(selenium.ByCSSSelector, "header h3")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, err := selectedTitle.Text(); err != nil || got != wantTitle {
+		t.Fatalf("recent entry opened %q, want %q: %v", got, wantTitle, err)
+	}
+	find(selenium.ByXPATH, "//*[@aria-label='Journal player']//strong/a[normalize-space()='"+wantTitle+"']")
+	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	click(selenium.ByLinkText, "Wiki")
 	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input")
 	capture("02-wiki-index-desktop", "section[aria-label='Diary wiki']", 1440, 1000, true)
@@ -389,82 +568,139 @@ func TestJournalReviewScreenshots(t *testing.T) {
 	}
 	save("08-citation-preview-desktop", data)
 	click(selenium.ByLinkText, "Days")
-	launch := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
-	if err := launch.Click(); err != nil {
-		t.Fatal(err)
-	}
-	// Read the selected day's section from the visible entry's enclosing DOM.
-	section, err := launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = section.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("09-launch-day-desktop", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='A quieter kind of launch']")
+	capture("09-launch-day-desktop", "[data-journal-page]", 1440, 1000, false)
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	earlier := find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='An argument on the river path']]")
-	if err := earlier.Click(); err != nil {
-		t.Fatal(err)
-	}
-	earlierSection, err := earlier.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{earlierSection}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = earlierSection.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("10-earlier-day-clarification-desktop", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='An argument on the river path']")
+	capture("10-earlier-day-clarification-desktop", "[aria-label='Journal day']", 1440, 1000, false)
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	launch = find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='A quieter kind of launch']]")
-	open, err := driver.ExecuteScript("return arguments[0].parentElement.open", []any{launch})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if open != true {
-		if err := browserhelpers.ClickElementInView(driver, launch); err != nil {
-			t.Fatal(err)
-		}
-	}
-	section, err = launch.FindElement(selenium.ByXPATH, "ancestor::section[1]")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ResizeWindow("", 390, 1400); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := driver.ExecuteScript(`arguments[0].scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy(0,-90);`, []any{section}); err != nil {
-		t.Fatal(err)
-	}
-	data, err = section.Screenshot(false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	save("11-launch-day-phone", data)
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='A quieter kind of launch']")
+	capture("11-launch-day-phone", "[data-journal-page]", 390, 844, false)
 	if err := driver.ResizeWindow("", 1440, 1100); err != nil {
 		t.Fatal(err)
 	}
+	click(selenium.ByCSSSelector, "button[aria-label='Play A quieter kind of launch']")
+	slider := find(selenium.ByCSSSelector, "input[aria-label='Seek recording']")
+	waitForWaveform := func() {
+		t.Helper()
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			value, err := wd.ExecuteScript(`
+			const canvas = document.querySelector('[aria-label="Journal player"] canvas');
+			if (!canvas || !canvas.width || !canvas.height) return false;
+			const row = canvas.getContext('2d').getImageData(0, Math.floor(canvas.height / 3), canvas.width, 1).data;
+			return row.some((value, index) => index % 4 === 3 && value > 0);
+		`, nil)
+			return value == true, err
+		}, 15*time.Second); err != nil {
+			t.Fatal("recording waveform did not show audible peaks", err)
+		}
+	}
+	waitForWaveform()
+	if buttons, _ := driver.FindElements(selenium.ByCSSSelector, "button[aria-label='Pause recording']"); len(buttons) > 0 {
+		if err := browserhelpers.ClickElementInView(driver, buttons[0]); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := slider.SendKeys(selenium.HomeKey + selenium.RightArrowKey); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		v, err := wd.ExecuteScript("const a=document.querySelector('main audio'); return a.paused && Math.abs(a.currentTime - 0.1) < 0.05", nil)
+		return v == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatal("keyboard scrubbing did not seek the paused recording", err)
+	}
+	for _, size := range []struct{ width, height int }{{1440, 1000}, {390, 844}} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": size.width, "height": size.height, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		for _, title := range []string{"Coffee with Maya before the pilot", "A quieter kind of launch"} {
+			titleLink := find(selenium.ByXPATH, "//article/header/h3/a[normalize-space()='"+title+"']")
+			if err := browserhelpers.ClickElementInView(driver, titleLink); err != nil {
+				t.Fatal(err)
+			}
+			valid, err := driver.ExecuteScript(`
+				const player = document.querySelector('[aria-label="Journal player"]');
+				return document.querySelectorAll('main audio').length === 1 &&
+					document.querySelectorAll('[aria-label="Seek recording"]').length === 1 &&
+					document.querySelectorAll('[aria-label="Transcript"]').length === 1 &&
+					player.querySelector('strong').textContent === arguments[0];
+			`, []any{title})
+			if err != nil || valid != true {
+				t.Fatalf("switch to %s left duplicate or stale controls: %v %v", title, valid, err)
+			}
+		}
+		if _, err := driver.ExecuteScript(`
+			const heading = document.querySelector("article[id^='entry-'] > header");
+			const toolbar = document.querySelector('[data-journal-toolbar]');
+			const pinnedHeight = parseFloat(getComputedStyle(toolbar).top) + toolbar.offsetHeight;
+			window.scrollBy({top: heading.getBoundingClientRect().top - pinnedHeight - 12, behavior: 'instant'});
+		`, nil); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			state, err := wd.ExecuteScript(`
+				const player=document.querySelector('[aria-label="Journal player"]').getBoundingClientRect();
+				const banner=document.querySelector('header[data-glade-banner]').getBoundingClientRect();
+				const toolbar=document.querySelector('[data-journal-toolbar]').getBoundingClientRect();
+				if (scrollY <= 0 || toolbar.bottom >= innerHeight) return false;
+				if (arguments[0]) return player.right < toolbar.left && player.top >= banner.bottom && player.bottom <= innerHeight;
+				return Math.abs(player.top-banner.bottom) <= 1 && Math.abs(toolbar.top-player.bottom) <= 1;
+			`, []any{size.width == 1440})
+			return state == true, err
+		}, 5*time.Second); err != nil {
+			t.Fatalf("pinned controls at width %d: %v", size.width, err)
+		}
+		if size.width == 390 {
+			waitForWaveform()
+			shot, err := driver.Screenshot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			save("18-pinned-player-phone", shot)
+		}
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	capture("16-player-desktop", "[data-journal-page]", 1440, 1000, false)
+	capture("17-player-phone", "[data-journal-page]", 390, 844, false)
+	click(selenium.ByLinkText, "Wiki")
+	find(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
+	find(selenium.ByCSSSelector, "[aria-label='Journal player'] [aria-label='Transcript']")
+	click(selenium.ByCSSSelector, "[aria-label='Journal player'] strong a")
+	find(selenium.ByCSSSelector, "[aria-label='Journal day']")
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		result, err := wd.ExecuteScript(`
+			const entry = document.getElementById(location.hash.slice(1));
+			const heading = entry?.querySelector('header h3');
+			const player = document.querySelector('[aria-label="Journal player"] strong a');
+			const toolbar = document.querySelector('[data-journal-toolbar]');
+			if (!heading || !player || !toolbar) return false;
+			const rect = heading.getBoundingClientRect();
+			return heading.textContent === player.textContent &&
+				rect.top >= toolbar.getBoundingClientRect().bottom && rect.bottom <= innerHeight;
+		`, nil)
+		return result == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatal("player title did not bring the selected entry into view", err)
+	}
+	click(selenium.ByCSSSelector, "button[aria-label='Close player']")
 	// Use the rehearsal day for aggregate screenshots. Its week and month
 	// always contain another fixture day, even when the launch is the only
 	// day in a new month and correctly reuses its day summary instead.
 	click(selenium.ByCSSSelector, "a[aria-label='Previous day']")
-	find(selenium.ByXPATH, "//summary[.//strong[normalize-space()='The rehearsal found the wrong problem']]")
+	find(selenium.ByXPATH, "//article/header/h3[normalize-space()='The rehearsal found the wrong problem']")
 	// The date picker preserves the selected day, which can be in the
 	// previous month or year. Format that route date in the browser's time zone.
 	selectedURL, err := driver.CurrentURL()
@@ -498,18 +734,13 @@ func TestJournalReviewScreenshots(t *testing.T) {
 		if sections, err := driver.FindElements(selenium.ByCSSSelector, regionSelector+" > section"); err != nil || len(sections) != 1 {
 			t.Fatalf("selected %s should render one period: %d %v", view.period, len(sections), err)
 		}
-		var heading selenium.WebElement
-		if view.link == "Years" {
-			heading = find(selenium.ByXPATH, "//summary[.//time[normalize-space()='"+view.visibleDate+"']]")
-		} else {
-			heading = find(selenium.ByXPATH, "//summary[span[contains(.,'"+view.visibleDate+"')]]")
-		}
-		if _, err := heading.FindElement(selenium.ByXPATH, ".//strong[normalize-space()='"+view.title+"']"); err != nil {
-			t.Fatal("calendar period should show its summary title: ", err)
-		}
-		period, err := heading.FindElement(selenium.ByXPATH, "parent::details")
+		period := find(selenium.ByCSSSelector, regionSelector+" > section")
+		heading, err := period.FindElement(selenium.ByXPATH, ".//header[h2[normalize-space()='"+view.title+"'] and span[contains(.,'"+view.visibleDate+"')]]")
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal("missing calendar period heading: ", err)
+		}
+		if visible, err := heading.IsDisplayed(); err != nil || !visible {
+			t.Fatalf("calendar period heading should be visible: %v %v", visible, err)
 		}
 		if articles, err := period.FindElements(selenium.ByTagName, "article"); err != nil || len(articles) != 1 {
 			t.Fatalf("calendar period should contain its summary: %d %v", len(articles), err)
@@ -617,12 +848,13 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	selector := "[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='2008-05-13'])"
+	selector := "[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time[datetime^='2008-05-13'])"
 	entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 	if err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatal("confirmed recording was not ready in the journal: ", err)
 	}
-	summary, err := entry.FindElement(selenium.ByCSSSelector, ":scope > summary")
+	summary, err := entry.FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 	if err != nil {
 		t.Fatal(err)
 	}

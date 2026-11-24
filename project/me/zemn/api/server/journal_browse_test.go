@@ -14,6 +14,9 @@ func TestJournalCalendarLoadsOnlySelectedDay(t *testing.T) {
 		t.Fatal(err)
 	}
 	journal := response.(GetJournal200JSONResponse)
+	if journal.Wiki != nil {
+		t.Fatal("opening a journal entry also returned the wiki index")
+	}
 	if len(journal.Entries) != 1 || journal.Entries[0].Id.String() != entries[0].Id || len(journal.Entries[0].Transcript) == 0 {
 		t.Fatalf("selected day should load its own transcript: %#v", journal.Entries)
 	}

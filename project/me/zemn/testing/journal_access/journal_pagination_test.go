@@ -74,13 +74,13 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 				t.Errorf("open cleanup day %d: %v", index, err)
 				continue
 			}
-			selector := fmt.Sprintf("[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='%s'])", date.Format("2006-01-02"))
+			selector := fmt.Sprintf("[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time[datetime^='%s'])", date.Format("2006-01-02"))
 			entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
 			if err != nil {
 				t.Errorf("find cleanup recording %d: %v", index, err)
 				continue
 			}
-			summary, err := entry.FindElement(selenium.ByCSSSelector, ":scope > summary")
+			summary, err := entry.FindElement(selenium.ByCSSSelector, "summary[aria-label='Recording options']")
 			if err != nil {
 				t.Error(err)
 				continue
@@ -105,7 +105,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 	}()
 
 	entrySelector := func(index int) string {
-		return fmt.Sprintf("[role='region'][aria-label='Journal day'] details:has(> summary time[datetime^='%s'])", dates[index].Format(time.DateOnly))
+		return fmt.Sprintf("[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time[datetime^='%s'])", dates[index].Format(time.DateOnly))
 	}
 	assertSelectedDay := func(index int) {
 		t.Helper()
@@ -116,7 +116,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 		if err != nil || len(sections) != 1 {
 			t.Fatalf("expected one selected day, got %d: %v", len(sections), err)
 		}
-		entries, err := driver.FindElements(selenium.ByCSSSelector, "[role='region'][aria-label='Journal day'] details:has(> summary time)")
+		entries, err := driver.FindElements(selenium.ByCSSSelector, "[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time)")
 		if err != nil || len(entries) != 1 {
 			t.Fatalf("selected day mounted neighboring recordings: %d %v", len(entries), err)
 		}

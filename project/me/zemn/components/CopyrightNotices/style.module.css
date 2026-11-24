@@ -1,0 +1,30 @@
+.notices {
+	position: fixed;
+	inset-inline-end: env(safe-area-inset-right, 0px);
+	inset-block-end: env(safe-area-inset-bottom, 0px);
+	z-index: 10;
+	box-sizing: border-box;
+	max-inline-size: 100%;
+	padding: 0.2rem 0.5rem;
+	border-start-start-radius: 0.3rem;
+	background: var(--background-color);
+	color: var(--foreground-color);
+	font:
+		400 0.75rem / 1.35 system-ui,
+		sans-serif;
+}
+
+.notices ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: end;
+	gap: 0.15rem 1rem;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.notices a {
+	color: inherit;
+	text-underline-offset: 0.15em;
+}
