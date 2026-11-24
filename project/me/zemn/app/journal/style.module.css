@@ -1367,21 +1367,16 @@
 }
 
 .wikiSearch {
-	display: grid;
-	font: var(--journal-control-font);
-	gap: 0.5rem;
-	margin-block: 1rem 1.5rem;
-}
-
-.wikiSearch input {
 	background: var(--journal-surface);
 	border: 1px solid var(--journal-line);
 	border-radius: 0.4rem;
 	box-sizing: border-box;
 	color: inherit;
-	font: inherit;
+	display: block;
+	font: var(--journal-control-font);
 	font-size: 1rem;
 	inline-size: 100%;
+	margin-block: 1rem 1.5rem;
 	min-block-size: 44px;
 	padding: 0.55rem 0.75rem;
 }

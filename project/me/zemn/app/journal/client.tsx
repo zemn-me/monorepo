@@ -2455,14 +2455,14 @@ function WikiIndex({
 	return (
 		<>
 			<WikiHeader curation={index.curation} index />
-			<label className={style.wikiSearch}>
-				Find a person, place, or project
-				<input
-					type="search"
-					value={query}
-					onChange={event => setQuery(event.currentTarget.value)}
-				/>
-			</label>
+			<input
+				aria-label="Search wiki"
+				className={style.wikiSearch}
+				placeholder="Search"
+				type="search"
+				value={query}
+				onChange={event => setQuery(event.currentTarget.value)}
+			/>
 			{matches.length > 0 ? (
 				<ul className={style.wikiIndex}>
 					{matches.map(page => (
@@ -2475,13 +2475,7 @@ function WikiIndex({
 					))}
 				</ul>
 			) : (
-				<p>
-					{pages.length
-						? 'No matching pages.'
-						: index.hasEntries
-							? 'Wiki pages will appear after the diary is analyzed.'
-							: 'Record a diary entry to begin.'}
-				</p>
+				<p>{pages.length ? 'No matching pages.' : 'No pages yet.'}</p>
 			)}
 		</>
 	);
