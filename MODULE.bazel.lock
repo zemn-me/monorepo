@@ -13720,6 +13720,40 @@
     }
   },
   "facts": {
+    "//bzl/pulumi_providers:extensions.bzl%pulumi_providers": {
+      "aws@7.54.0": {
+        "pulumi-resource-aws-v7.54.0-darwin-amd64.tar.gz": "2062f3db6095a7bbd1c9fdc529f3e0da1999e38f988c1662a8d02a69b2c7a214",
+        "pulumi-resource-aws-v7.54.0-darwin-arm64.tar.gz": "3ae0be98b1cf5f3214d7e15fc060eee2410b7ea5c900d4dff0f9a592b56b69cf",
+        "pulumi-resource-aws-v7.54.0-linux-amd64.tar.gz": "13453de090908f63a0647cce31ba481fc55ee93d2ca51add443bb35f7ffac6cc",
+        "pulumi-resource-aws-v7.54.0-linux-arm64.tar.gz": "d98ac4df1281ee7707797e5cdd29cea3966f6ed98f9f652332d3ad25792c3d82",
+        "pulumi-resource-aws-v7.54.0-windows-amd64.tar.gz": "add4b26e0ac6017a0fafc63899b3397270c7b1b5afdc93e4c80498b46cf82fcc",
+        "pulumi-resource-aws-v7.54.0-windows-arm64.tar.gz": "161c6f2003bde74dce404530bd2696e28274958cc582a244d67c3f899e9b03a6"
+      },
+      "command@4.5.0": {
+        "pulumi-resource-command-v4.5.0-darwin-amd64.tar.gz": "b870741e11486c3e88b1477ee8b72f729c38357f0899cadd6c5e49008a213a82",
+        "pulumi-resource-command-v4.5.0-darwin-arm64.tar.gz": "686255082d8e057b029876c8fd5fbcf8f1f579a2c111e3ff9ea5ee1cfd44539c",
+        "pulumi-resource-command-v4.5.0-linux-amd64.tar.gz": "69955ff3de53aa940c14d09c1f92482de8378c2882032839ff40b82b20c1ef22",
+        "pulumi-resource-command-v4.5.0-linux-arm64.tar.gz": "33579e13df461bbcaa8a62acfd5faaf7928fbb74d7bb7ca95ad25840e5fb49b3",
+        "pulumi-resource-command-v4.5.0-windows-amd64.tar.gz": "8f407592adf355533f142551277b076e3e2b70103e6b858c52d0de4a7d462fb8",
+        "pulumi-resource-command-v4.5.0-windows-arm64.tar.gz": "8e73c034de7b68103f85fddeacb0e1e574183af46306ebd822e22c565663766f"
+      },
+      "gcp@10.5.0": {
+        "pulumi-resource-gcp-v10.5.0-darwin-amd64.tar.gz": "83d1f4534476466c6c857fb4d88f2847dea5faf2b45e3c582eedb4e5834242c5",
+        "pulumi-resource-gcp-v10.5.0-darwin-arm64.tar.gz": "efe95767f1039896915b696e2820911376b0d0f27a5a4866035169a294081e38",
+        "pulumi-resource-gcp-v10.5.0-linux-amd64.tar.gz": "a284dcde1140de4367db385cd779d86e8e16ca8421ccd155b02934f5880019cc",
+        "pulumi-resource-gcp-v10.5.0-linux-arm64.tar.gz": "3728c5cfd145d9993bab761bee449b9ea1d278e77511d9cb8674722f21a4b49d",
+        "pulumi-resource-gcp-v10.5.0-windows-amd64.tar.gz": "6fa70e250633fc1361f7eca8047876f0e149e1c69cb22db85930dddc4759d0a2",
+        "pulumi-resource-gcp-v10.5.0-windows-arm64.tar.gz": "f4842c311c110887f7222f3cb5d203667bbdee2d15f1577b2a9b6f1c429501d4"
+      },
+      "random@4.21.6": {
+        "pulumi-resource-random-v4.21.6-darwin-amd64.tar.gz": "6c352166709f3539475ce61a098b0b7f152f40f830eae21fe895fd7ab3ada191",
+        "pulumi-resource-random-v4.21.6-darwin-arm64.tar.gz": "f2228a848abed33e3cdd9eb14d501a2861525cfbcc81ccefd371ae642784b456",
+        "pulumi-resource-random-v4.21.6-linux-amd64.tar.gz": "d23098a615cd8590e026ec3d36c95f00617d93b0af14164162b81cf1af808174",
+        "pulumi-resource-random-v4.21.6-linux-arm64.tar.gz": "ca8f2f5cb0a9e162be0fa559b90b3e35c9283df763e27c49ea78638b633984bd",
+        "pulumi-resource-random-v4.21.6-windows-amd64.tar.gz": "5c7f5e39829ce7a5dca85f2362269e9d04a39c87431a400c806c836a342d4c59",
+        "pulumi-resource-random-v4.21.6-windows-arm64.tar.gz": "c682e37dd957499f89d46586bd3fbf6bebd314f2150b067ca9580096eaa0996b"
+      }
+    },
     "@@aspect_tools_telemetry+//:extension.bzl%telemetry": {
       "notice_version": "1"
     },

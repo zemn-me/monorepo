@@ -1235,24 +1235,10 @@ aws_emulator(
     url = "https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/aws-emulator_1.0.382-1_amd64.deb",
 )
 
-# renovate: datasource=github-releases depName=pulumi/pulumi-aws
-PULUMI_AWS_PROVIDER_VERSION = "7.54.0"
-
-http_archive(
-    name = "pulumi_aws_provider_linux_amd64",
-    build_file_content = 'exports_files(["pulumi-resource-aws"])',
-    sha256 = "13453de090908f63a0647cce31ba481fc55ee93d2ca51add443bb35f7ffac6cc",
-    # auto-integrity
-    url = "https://github.com/pulumi/pulumi-aws/releases/download/v" + PULUMI_AWS_PROVIDER_VERSION + "/pulumi-resource-aws-v" + PULUMI_AWS_PROVIDER_VERSION + "-linux-amd64.tar.gz",
-)
-
-# renovate: datasource=github-releases depName=pulumi/pulumi-random
-PULUMI_RANDOM_PROVIDER_VERSION = "4.21.6"
-
-http_archive(
-    name = "pulumi_random_provider_linux_amd64",
-    build_file_content = 'exports_files(["pulumi-resource-random"])',
-    sha256 = "d23098a615cd8590e026ec3d36c95f00617d93b0af14164162b81cf1af808174",
-    # auto-integrity
-    url = "https://github.com/pulumi/pulumi-random/releases/download/v" + PULUMI_RANDOM_PROVIDER_VERSION + "/pulumi-resource-random-v" + PULUMI_RANDOM_PROVIDER_VERSION + "-linux-amd64.tar.gz",
+pulumi_providers = use_extension("//bzl/pulumi_providers:extensions.bzl", "pulumi_providers")
+use_repo(
+    pulumi_providers,
+    "pulumi_aws_provider_linux_amd64",
+    "pulumi_providers",
+    "pulumi_random_provider_linux_amd64",
 )
