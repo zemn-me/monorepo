@@ -1055,18 +1055,36 @@ func TestJournalEndToEnd(t *testing.T) {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("Back did not restore the first cited journal audio: %v", err)
 	}
-	if _, err := driver.ExecuteScript(`
-		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
-			.find(value => value.dataset.entryId === arguments[0]);
-		audio?.pause();
-	`, []any{firstEntryID}); err != nil {
-		t.Fatalf("pause restored journal audio: %v", err)
-	}
+	const playerButton = "section[aria-label='Journal player'] button"
+	const pauseButton = playerButton + "[aria-label='Pause recording']:has(svg[data-icon='pause'])"
+	const playButton = playerButton + "[aria-label='Play recording']:has(svg[data-icon='play'])"
+	clickJournalControl(t, driver, pauseButton)
 	if err := journalAudioRemainsPaused(driver, firstEntryID, time.Second); err != nil {
 		t.Fatalf("paused journal audio restarted from URL state: %v", err)
 	}
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "[data-journal-currently-spoken]", 10*time.Second); err != nil {
 		t.Fatalf("paused journal transcript remained highlighted: %v", err)
+	}
+	pausedAt, err := driver.ExecuteScript("return arguments[0].currentTime", []any{originalAudio})
+	if err != nil {
+		t.Fatal(err)
+	}
+	clickJournalControl(t, driver, playButton)
+	if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		result, err := wd.ExecuteScript("return !arguments[0].paused && arguments[0].currentTime > arguments[1]", []any{originalAudio, pausedAt})
+		return result == true, err
+	}, 5*time.Second); err != nil {
+		t.Fatalf("player did not resume the recording from %v: %v", pausedAt, err)
+	}
+	clickJournalControl(t, driver, pauseButton)
+	// Browser media controls can resume the element independently of the widget.
+	if _, err := driver.ExecuteScript("return arguments[0].play()", []any{originalAudio}); err != nil {
+		t.Fatalf("resume through the browser media API: %v", err)
+	}
+	clickJournalControl(t, driver, pauseButton)
+	paused, err := driver.ExecuteScript("return arguments[0].paused", []any{originalAudio})
+	if err != nil || paused != true {
+		t.Fatalf("widget did not pause browser-initiated playback: %v, %v", paused, err)
 	}
 	options, err := driver.FindElement(selenium.ByCSSSelector, "#entry-"+firstEntryID+" summary[aria-label='Recording options']")
 	if err != nil {

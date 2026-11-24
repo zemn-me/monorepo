@@ -32,6 +32,10 @@ function citationID(entryID: string, segmentID: string) {
 	return `transcript-${entryID}-${segmentID}`;
 }
 
+function audioIsPlaying(audio: HTMLAudioElement) {
+	return !audio.paused && !audio.ended && !audio.error;
+}
+
 function roundedMediaTime(time: number): number {
 	return Math.max(0, Math.round(time * 10) / 10);
 }
@@ -316,6 +320,10 @@ export function JournalPlayerProvider({
 	const [failure, setFailure] = useState(false);
 	const pendingTime = useRef<number | undefined>(undefined);
 	const wantsPlay = useRef(false);
+	const setPlaybackActive = useCallback((active: boolean) => {
+		wantsPlay.current = active;
+		setPlaying(active);
+	}, []);
 	const renewal = useRef<AbortController | undefined>(undefined);
 	const renewed = useRef(false);
 	const stallTimer = useRef<number | undefined>(undefined);
@@ -373,21 +381,23 @@ export function JournalPlayerProvider({
 		[setCursor]
 	);
 
-	const startAudio = useCallback((audio: HTMLAudioElement) => {
-		const requestedSource = audio.src;
-		void audio.play().catch((error: Error) => {
-			if (
-				audio.src !== requestedSource ||
-				error.name === 'AbortError' ||
-				audio.error
-			)
-				return;
-			wantsPlay.current = false;
-			setPlaying(false);
-			// Direct timestamp links can require a user gesture to start audio.
-			setFailure(error.name !== 'NotAllowedError');
-		});
-	}, []);
+	const startAudio = useCallback(
+		(audio: HTMLAudioElement) => {
+			const requestedSource = audio.src;
+			void audio.play().catch((error: Error) => {
+				if (
+					audio.src !== requestedSource ||
+					error.name === 'AbortError' ||
+					audio.error
+				)
+					return;
+				setPlaybackActive(false);
+				// Direct timestamp links can require a user gesture to start audio.
+				setFailure(error.name !== 'NotAllowedError');
+			});
+		},
+		[setPlaybackActive]
+	);
 
 	const loadSource = useCallback(
 		(audio: HTMLAudioElement, url: string, seconds: number) => {
@@ -405,10 +415,13 @@ export function JournalPlayerProvider({
 		const audio = audioRef.current;
 		if (!track || !audio || renewal.current) return;
 		clearTimer();
-		if (renewed.current) {
+		const failPlayback = () => {
+			audio.pause();
+			setPlaybackActive(false);
 			setFailure(true);
-			wantsPlay.current = false;
-			setPlaying(false);
+		};
+		if (renewed.current) {
+			failPlayback();
 			return;
 		}
 		const controller = new AbortController();
@@ -432,15 +445,11 @@ export function JournalPlayerProvider({
 				pendingTime.current ?? audio.currentTime
 			);
 		} catch {
-			if (!controller.signal.aborted) {
-				setFailure(true);
-				wantsPlay.current = false;
-				setPlaying(false);
-			}
+			if (!controller.signal.aborted) failPlayback();
 		} finally {
 			if (renewal.current === controller) renewal.current = undefined;
 		}
-	}, [api, clearTimer, loadSource]);
+	}, [api, clearTimer, loadSource, setPlaybackActive]);
 
 	const seek = useCallback((seconds: number) => {
 		const audio = audioRef.current;
@@ -465,7 +474,7 @@ export function JournalPlayerProvider({
 			if (!audio || !track.audioUrl) return;
 			clearTimer();
 			setFailure(false);
-			wantsPlay.current = true;
+			setPlaybackActive(true);
 			if (updateURL) writeCursor(track.id, seconds, 'push');
 			if (track.id === selected.current?.id) {
 				seek(seconds);
@@ -482,19 +491,29 @@ export function JournalPlayerProvider({
 			renewed.current = false;
 			selected.current = track;
 			setEntry(track);
-			setPlaying(false);
 			setSegmentID(undefined);
 			loadSource(audio, track.audioUrl, seconds);
 		},
-		[clearTimer, loadSource, recover, seek, startAudio, writeCursor]
+		[
+			clearTimer,
+			loadSource,
+			recover,
+			setPlaybackActive,
+			seek,
+			startAudio,
+			writeCursor,
+		]
 	);
 
 	const toggle = useCallback(
 		(track: JournalEntry) => {
 			const audio = audioRef.current;
 			if (!audio) return;
-			if (selected.current?.id === track.id && wantsPlay.current) {
-				wantsPlay.current = false;
+			if (
+				selected.current?.id === track.id &&
+				(wantsPlay.current || audioIsPlaying(audio))
+			) {
+				setPlaybackActive(false);
 				audio.pause();
 				return;
 			}
@@ -506,7 +525,7 @@ export function JournalPlayerProvider({
 				true
 			);
 		},
-		[select]
+		[setPlaybackActive, select]
 	);
 
 	const dismiss = useCallback(
@@ -515,11 +534,10 @@ export function JournalPlayerProvider({
 			clearTimer();
 			renewal.current?.abort();
 			renewal.current = undefined;
-			wantsPlay.current = false;
+			setPlaybackActive(false);
 			selected.current = undefined;
 			pendingTime.current = undefined;
 			setEntry(undefined);
-			setPlaying(false);
 			setSegmentID(undefined);
 			setFailure(false);
 			const audio = audioRef.current;
@@ -536,7 +554,7 @@ export function JournalPlayerProvider({
 				);
 			}
 		},
-		[clearTimer, setCursor]
+		[clearTimer, setPlaybackActive, setCursor]
 	);
 
 	const applyURL = useCallback(
@@ -644,23 +662,25 @@ export function JournalPlayerProvider({
 							'replace'
 						);
 				}}
-				onPlay={() => {
-					if (wantsPlay.current) setPlaying(true);
+				onPlay={event => {
+					if (audioIsPlaying(event.currentTarget))
+						setPlaybackActive(true);
 				}}
-				onPlaying={() => {
+				onPlaying={event => {
+					if (!audioIsPlaying(event.currentTarget)) return;
+					setPlaybackActive(true);
 					clearTimer();
 					renewed.current = false;
 					setFailure(false);
 				}}
 				onPause={event => {
 					if (!event.currentTarget.paused) return;
-					setPlaying(false);
 					if (
 						!renewal.current &&
 						!event.currentTarget.error &&
 						pendingTime.current === undefined
 					)
-						wantsPlay.current = false;
+						setPlaybackActive(false);
 					if (
 						!wantsPlay.current &&
 						selected.current &&
@@ -673,10 +693,10 @@ export function JournalPlayerProvider({
 						);
 					}
 				}}
-				onEnded={() => {
+				onEnded={event => {
+					if (!event.currentTarget.ended) return;
 					clearTimer();
-					wantsPlay.current = false;
-					setPlaying(false);
+					setPlaybackActive(false);
 				}}
 				onError={() => {
 					if (selected.current) void recover();
