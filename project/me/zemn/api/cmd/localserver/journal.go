@@ -146,15 +146,20 @@ func (s *localJournalStore) DeleteObject(_ context.Context, input *s3.DeleteObje
 	return &s3.DeleteObjectOutput{}, nil
 }
 
-func (s *localJournalStore) GetObject(_ context.Context, input *s3.GetObjectInput, _ ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
-	if input.Bucket == nil || input.Key == nil {
-		return nil, errors.New("bucket and key are required")
-	}
-	id := localJournalObjectID(*input.Bucket, *input.Key)
+func (s *localJournalStore) openObject(bucket, key string) (*os.File, string, error) {
+	id := localJournalObjectID(bucket, key)
 	s.mu.RLock()
 	file, err := os.Open(filepath.Join(s.directory, id))
 	contentType := s.contentTypes[id]
 	s.mu.RUnlock()
+	return file, contentType, err
+}
+
+func (s *localJournalStore) GetObject(_ context.Context, input *s3.GetObjectInput, _ ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
+	if input.Bucket == nil || input.Key == nil {
+		return nil, errors.New("bucket and key are required")
+	}
+	file, contentType, err := s.openObject(*input.Bucket, *input.Key)
 	if err != nil {
 		return nil, err
 	}
@@ -260,19 +265,14 @@ func (s *localJournalStore) ServeHTTP(response http.ResponseWriter, request *htt
 				return
 			}
 		}
-		object, err := s.GetObject(request.Context(), &s3.GetObjectInput{Bucket: &bucket, Key: &key})
+		file, contentType, err := s.openObject(bucket, key)
 		if err != nil {
 			http.NotFound(response, request)
 			return
 		}
-		defer object.Body.Close()
-		if object.ContentType != nil {
-			response.Header().Set("Content-Type", *object.ContentType)
-		}
-		if object.ContentLength != nil {
-			response.Header().Set("Content-Length", fmt.Sprint(*object.ContentLength))
-		}
-		_, _ = io.Copy(response, object.Body)
+		defer file.Close()
+		response.Header().Set("Content-Type", contentType)
+		http.ServeContent(response, request, key, time.Time{}, file)
 	default:
 		response.Header().Set("Allow", "GET, PUT, OPTIONS")
 		http.Error(response, "method not allowed", http.StatusMethodNotAllowed)

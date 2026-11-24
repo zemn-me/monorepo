@@ -6,18 +6,19 @@ import {
 	faChevronDown,
 	faEllipsis,
 	faMicrophone,
+	faPause,
+	faPlay,
 	faSpinner,
 	faTrashCan,
 	faTriangleExclamation,
 	faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { parseAsFloat, parseAsString, useQueryStates } from 'nuqs';
 import {
 	ChangeEvent,
+	type ComponentProps,
 	memo,
 	KeyboardEvent as ReactKeyboardEvent,
-	MouseEvent as ReactMouseEvent,
 	type ReactNode,
 	PointerEvent as ReactPointerEvent,
 	useCallback,
@@ -26,7 +27,12 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { useSearchParams } from 'react-router';
+import {
+	Outlet,
+	useLocation,
+	useOutletContext,
+	useSearchParams,
+} from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import { JournalMap } from '#root/project/me/zemn/app/journal/location_map.js';
@@ -35,6 +41,16 @@ import {
 	childPeriodsFor,
 	journalBrowseQuery,
 } from '#root/project/me/zemn/app/journal/periods.js';
+import {
+	followsLinkNormally,
+	type JournalCitationPlayback,
+	type JournalPlayback,
+	JournalPlayerProvider,
+	journalEntryHref,
+	journalPlaybackHref,
+	mediaTimestamp,
+	useJournalPlayer,
+} from '#root/project/me/zemn/app/journal/player.js';
 import { JournalProcessingStatus } from '#root/project/me/zemn/app/journal/processing_status.js';
 import {
 	type RecordingSession,
@@ -59,6 +75,7 @@ import {
 } from '#root/project/me/zemn/components/Article/markdown_components.js';
 import { FootnotePreviews } from '#root/project/me/zemn/components/FootnotePreviews/footnote_previews.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
+import { ReadingLayout } from '#root/project/me/zemn/components/ReadingLayout/index.js';
 import { ZEMN_ME_API_BASE } from '#root/project/me/zemn/constants/constants.js';
 import { useSessionClaims } from '#root/project/me/zemn/hook/server_session.js';
 import {
@@ -87,7 +104,6 @@ type JournalWikiPageView = components['schemas']['JournalWikiPageView'];
 type JournalWikiIndex = components['schemas']['JournalWikiIndex'];
 type JournalCurationStatus = components['schemas']['JournalCurationStatus'];
 type JournalEntry = components['schemas']['JournalEntry'];
-type JournalTranscriptSegment = JournalEntry['transcript'][number];
 type JournalSummary = components['schemas']['JournalSummary'];
 type JournalSummaryBlock = components['schemas']['JournalSummaryBlock'];
 type JournalContentType =
@@ -97,10 +113,8 @@ export type JournalRoute = 'year' | 'month' | 'week' | 'day';
 
 const journalReadScope = 'journal_read';
 const journalWriteScope = 'journal_write';
-const transcriptParagraphPauseMs = 3_000;
 const uploadErrorLifetimeMs = 8_000;
 const isDevelopment = process.env.NODE_ENV === 'development';
-const playbackStallRecoveryDelayMs = 1_500;
 
 function errorMessage(value: unknown): string {
 	return value instanceof Error
@@ -154,372 +168,6 @@ function PeriodDate({
 function journalEntryDate(entry: JournalEntry): Temporal.ZonedDateTime {
 	return Temporal.Instant.from(entry.recordedAt).toZonedDateTimeISO(
 		entry.timeZone
-	);
-}
-
-function citationID(entryID: string, segmentID: string) {
-	return `transcript-${entryID}-${segmentID}`;
-}
-
-const journalPlaybackQuery = {
-	entry: parseAsString,
-	t: parseAsFloat,
-};
-
-function roundedMediaTime(time: number): number {
-	return Math.max(0, Math.round(time * 10) / 10);
-}
-
-function journalPlaybackHref(
-	entryID: string,
-	time: number,
-	basePath = ''
-): string {
-	const separator = basePath.includes('?') ? '&' : '?';
-	return `${basePath}${separator}${new URLSearchParams({
-		entry: entryID,
-		t: String(roundedMediaTime(time)),
-	})}`;
-}
-
-function mediaTimestamp(milliseconds: number): string {
-	const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
-	const hours = Math.floor(totalSeconds / 3600);
-	const minutes = Math.floor((totalSeconds % 3600) / 60);
-	const seconds = totalSeconds % 60;
-	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
-		2,
-		'0'
-	)}:${String(seconds).padStart(2, '0')}`;
-}
-
-function followsLinkNormally(event: ReactMouseEvent<HTMLAnchorElement>) {
-	return (
-		event.defaultPrevented ||
-		event.button !== 0 ||
-		event.altKey ||
-		event.ctrlKey ||
-		event.metaKey ||
-		event.shiftKey
-	);
-}
-
-type JournalCitationPlayback = Pick<
-	JournalPlayback,
-	| 'hrefForSegment'
-	| 'labelForSegment'
-	| 'playSegment'
-	| 'playingEntryID'
-	| 'playingSegmentID'
-	| 'quoteForSegment'
-	| 'titleForEntry'
->;
-
-interface JournalPlayback {
-	readonly activeEntryID: string | undefined;
-	readonly hrefForSegment: (entryID: string, segmentID: string) => string;
-	readonly labelForSegment: (entryID: string, segmentID: string) => string;
-	readonly playSegment: (entryID: string, segmentID: string) => boolean;
-	readonly playingEntryID: string | undefined;
-	readonly playingSegmentID: string | undefined;
-	readonly progressed: (entryID: string, time: number) => void;
-	readonly quoteForSegment: (entryID: string, segmentID: string) => string;
-	readonly removeEntry: (entryID: string) => void;
-	readonly registerAudio: (
-		entryID: string,
-		audio: HTMLAudioElement | null,
-		play: (time: number) => void
-	) => void;
-	readonly started: (entryID: string) => void;
-	readonly stopped: (entryID: string, time: number) => void;
-	readonly titleForEntry: (entryID: string) => string;
-}
-
-function useJournalPlayback(
-	journal: Journal,
-	citationDestination?: (entryID: string) => string | undefined,
-	navigationKey = ''
-): JournalPlayback {
-	const audioElements = useRef(new Map<string, HTMLAudioElement>());
-	const audioPlayRequests = useRef(new Map<string, (time: number) => void>());
-	const pendingPlayback = useRef<
-		{ entryID: string; time: number } | undefined
-	>(undefined);
-	const appliedNavigation = useRef<string | undefined>(undefined);
-	const entriesRef = useRef(journal.entries);
-	entriesRef.current = journal.entries;
-	const [cursor, setCursor] = useQueryStates(journalPlaybackQuery, {
-		history: 'replace',
-		shallow: true,
-		throttleMs: 250,
-	});
-	const cursorRef = useRef(cursor);
-	const [playing, setPlaying] = useState<{
-		readonly entryID: string;
-		readonly segmentID: string | undefined;
-	}>();
-	const playingRef = useRef(playing);
-	playingRef.current = playing;
-	const registerAudio = useCallback(
-		(
-			entryID: string,
-			audio: HTMLAudioElement | null,
-			play: (time: number) => void
-		) => {
-			if (audio) {
-				audioElements.current.set(entryID, audio);
-				audioPlayRequests.current.set(entryID, play);
-				if (pendingPlayback.current?.entryID === entryID) {
-					const { time } = pendingPlayback.current;
-					pendingPlayback.current = undefined;
-					play(time);
-				}
-			} else {
-				audioElements.current.delete(entryID);
-				audioPlayRequests.current.delete(entryID);
-			}
-		},
-		[]
-	);
-	const pauseOthers = useCallback((entryID: string) => {
-		for (const [otherEntryID, audio] of audioElements.current) {
-			if (otherEntryID !== entryID && !audio.paused) audio.pause();
-		}
-	}, []);
-	const seekAndPlay = useCallback((entryID: string, time: number) => {
-		const play = audioPlayRequests.current.get(entryID);
-		if (!play) return false;
-		play(Math.max(0, time));
-		return true;
-	}, []);
-	const updateCursor = useCallback(
-		(entryID: string, time: number, history: 'push' | 'replace') => {
-			const next = { entry: entryID, t: roundedMediaTime(time) };
-			const previous = cursorRef.current;
-			if (previous.entry === next.entry && previous.t === next.t) return;
-			cursorRef.current = next;
-			void setCursor(next, {
-				history,
-				throttleMs: history === 'push' ? 50 : 250,
-			});
-		},
-		[setCursor]
-	);
-	const segmentAt = useCallback((entryID: string, time: number) => {
-		const milliseconds = time * 1000;
-		return entriesRef.current
-			.find(entry => entry.id === entryID)
-			?.transcript.find(
-				segment =>
-					milliseconds >= segment.startMs &&
-					milliseconds < segment.endMs
-			);
-	}, []);
-	const setPlayingSegment = useCallback(
-		(entryID: string, time: number) => {
-			const segmentID = segmentAt(entryID, time)?.id;
-			const current = playingRef.current;
-			if (
-				current?.entryID === entryID &&
-				current.segmentID === segmentID
-			) {
-				return false;
-			}
-			const next = { entryID, segmentID };
-			playingRef.current = next;
-			setPlaying(next);
-			return true;
-		},
-		[segmentAt]
-	);
-	const started = useCallback(
-		(entryID: string) => {
-			pauseOthers(entryID);
-			const audio = audioElements.current.get(entryID);
-			if (!audio) return;
-			setPlayingSegment(entryID, audio.currentTime);
-			if (cursorRef.current.entry !== entryID) {
-				updateCursor(entryID, audio.currentTime, 'push');
-			}
-		},
-		[pauseOthers, setPlayingSegment, updateCursor]
-	);
-	const progressed = useCallback(
-		(entryID: string, time: number) => {
-			const audio = audioElements.current.get(entryID);
-			if (!audio || audio.paused) return;
-			if (!setPlayingSegment(entryID, time)) return;
-			if (cursorRef.current.entry !== entryID) return;
-			const segment = segmentAt(entryID, time);
-			updateCursor(
-				entryID,
-				(segment?.startMs ?? time * 1000) / 1000,
-				'replace'
-			);
-		},
-		[segmentAt, setPlayingSegment, updateCursor]
-	);
-	const stopped = useCallback(
-		(entryID: string, time: number) => {
-			if (cursorRef.current.entry === entryID) {
-				updateCursor(entryID, time, 'replace');
-			}
-			if (playingRef.current?.entryID !== entryID) return;
-			playingRef.current = undefined;
-			setPlaying(undefined);
-		},
-		[updateCursor]
-	);
-	const segmentFor = useCallback(
-		(entryID: string, segmentID: string) =>
-			journal.entries
-				.find(value => value.id === entryID)
-				?.transcript.find(value => value.id === segmentID),
-		[journal.entries]
-	);
-	const hrefForSegment = useCallback(
-		(entryID: string, segmentID: string) => {
-			const segment = segmentFor(entryID, segmentID);
-			return journalPlaybackHref(
-				entryID,
-				(segment?.startMs ?? 0) / 1000,
-				citationDestination?.(entryID)
-			);
-		},
-		[citationDestination, segmentFor]
-	);
-	const labelForSegment = useCallback(
-		(entryID: string, segmentID: string) =>
-			mediaTimestamp(segmentFor(entryID, segmentID)?.startMs ?? 0),
-		[segmentFor]
-	);
-	const quoteForSegment = useCallback(
-		(entryID: string, segmentID: string) =>
-			segmentFor(entryID, segmentID)?.text ?? '',
-		[segmentFor]
-	);
-	const titleForEntry = useCallback(
-		(entryID: string) => {
-			const entry = journal.entries.find(value => value.id === entryID);
-			if (!entry) return '';
-			const date = journalEntryDate(entry).toPlainDate().toString();
-			return entry.summary ? `${date}: ${entry.summary.title}` : date;
-		},
-		[journal.entries]
-	);
-	const playSegment = useCallback(
-		(entryID: string, segmentID: string) => {
-			const segment = segmentFor(entryID, segmentID);
-			const target = document.getElementById(
-				citationID(entryID, segmentID)
-			);
-			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			const audio = audioElements.current.get(entryID);
-			if (!audio || !segment) return false;
-			updateCursor(entryID, segment.startMs / 1000, 'push');
-			pauseOthers(entryID);
-			return seekAndPlay(entryID, segment.startMs / 1000);
-		},
-		[pauseOthers, seekAndPlay, segmentFor, updateCursor]
-	);
-	const removeEntry = useCallback(
-		(entryID: string) => {
-			const audio = audioElements.current.get(entryID);
-			audio?.pause();
-			if (playingRef.current?.entryID === entryID) {
-				playingRef.current = undefined;
-				setPlaying(undefined);
-			}
-			if (cursorRef.current.entry !== entryID) return;
-			const next = { entry: null, t: null };
-			cursorRef.current = next;
-			void setCursor(next, { history: 'replace' });
-		},
-		[setCursor]
-	);
-	const applyURLCursor = useCallback(
-		(force = false) => {
-			const location = `${window.location.pathname}${window.location.search}`;
-			if (!force && appliedNavigation.current === location) return;
-			const parameters = new URLSearchParams(window.location.search);
-			const entryID = parameters.get('entry');
-			const timeValue = parameters.get('t');
-			if (!entryID || timeValue === null) {
-				pendingPlayback.current = undefined;
-				return;
-			}
-			const time = Number(timeValue);
-			if (!Number.isFinite(time)) return;
-			pendingPlayback.current = { entryID, time };
-			cursorRef.current = { entry: entryID, t: time };
-			const entry = entriesRef.current.find(
-				value => value.id === entryID
-			);
-			if (!entry) return;
-			pauseOthers(entryID);
-			const targetMilliseconds = time * 1000;
-			const segment = entry.transcript.findLast(
-				value => value.startMs <= targetMilliseconds
-			);
-			const target = segment
-				? document.getElementById(citationID(entry.id, segment.id))
-				: document.getElementById(`entry-${entryID}`);
-			target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			// Back can arrive before a newly selected day's audio mounts.
-			// Leave the cursor pending until that recording is available.
-			if (seekAndPlay(entryID, time)) {
-				pendingPlayback.current = undefined;
-				appliedNavigation.current = location;
-			}
-		},
-		[pauseOthers, seekAndPlay]
-	);
-	useEffect(() => {
-		applyURLCursor();
-	}, [applyURLCursor, navigationKey]);
-	useEffect(() => {
-		const applyBrowserNavigation = () => applyURLCursor(true);
-		const restorePage = (event: PageTransitionEvent) => {
-			if (event.persisted) applyURLCursor(true);
-		};
-		window.addEventListener('popstate', applyBrowserNavigation);
-		window.addEventListener('pageshow', restorePage);
-		return () => {
-			window.removeEventListener('popstate', applyBrowserNavigation);
-			window.removeEventListener('pageshow', restorePage);
-		};
-	}, [applyURLCursor]);
-	return useMemo(
-		() => ({
-			activeEntryID: cursor.entry ?? undefined,
-			hrefForSegment,
-			labelForSegment,
-			playSegment,
-			playingEntryID: playing?.entryID,
-			playingSegmentID: playing?.segmentID,
-			progressed,
-			quoteForSegment,
-			removeEntry,
-			registerAudio,
-			started,
-			stopped,
-			titleForEntry,
-		}),
-		[
-			cursor.entry,
-			hrefForSegment,
-			labelForSegment,
-			playSegment,
-			playing?.entryID,
-			playing?.segmentID,
-			progressed,
-			quoteForSegment,
-			removeEntry,
-			registerAudio,
-			started,
-			stopped,
-			titleForEntry,
-		]
 	);
 }
 
@@ -759,192 +407,6 @@ const SummaryCard = memo(
 		previous.showPeriod === next.showPeriod &&
 		previous.showTitle === next.showTitle &&
 		previous.timeZone === next.timeZone
-);
-
-function transcriptParagraphs(
-	segments: readonly JournalTranscriptSegment[]
-): JournalTranscriptSegment[][] {
-	const paragraphs: JournalTranscriptSegment[][] = [];
-	for (const segment of segments) {
-		const previous = paragraphs.at(-1)?.at(-1);
-		if (
-			!previous ||
-			segment.startMs - previous.endMs > transcriptParagraphPauseMs
-		) {
-			paragraphs.push([]);
-		}
-		paragraphs.at(-1)?.push(segment);
-	}
-	return paragraphs;
-}
-
-function TranscriptView({
-	entry,
-	playback,
-}: {
-	readonly entry: JournalEntry;
-	readonly playback: JournalPlayback;
-}) {
-	const currentlySpokenSegmentID =
-		playback.playingEntryID === entry.id
-			? playback.playingSegmentID
-			: undefined;
-	const paragraphs = transcriptParagraphs(entry.transcript);
-	const scroller = useRef<HTMLDivElement>(null);
-	useEffect(() => {
-		if (!currentlySpokenSegmentID) return;
-		const container = scroller.current;
-		const segment = document.getElementById(
-			citationID(entry.id, currentlySpokenSegmentID)
-		);
-		if (!container || !segment || !container.contains(segment)) return;
-		const containerBounds = container.getBoundingClientRect();
-		const segmentBounds = segment.getBoundingClientRect();
-		container.scrollTo({
-			top:
-				container.scrollTop +
-				segmentBounds.top -
-				containerBounds.top -
-				container.clientHeight / 2 +
-				segmentBounds.height / 2,
-		});
-	}, [currentlySpokenSegmentID, entry.id]);
-	return (
-		<div
-			aria-label="Transcript"
-			className={style.transcriptScroller}
-			data-journal-transcript={entry.id}
-			ref={scroller}
-			role="region"
-		>
-			<div
-				className={`${style.transcript} ${currentlySpokenSegmentID ? style.transcriptFollowing : ''}`}
-				data-journal-transcript-text
-			>
-				{paragraphs.map((paragraph, paragraphIndex) => {
-					const firstSegment = paragraph[0];
-					const paragraphTimestamp = mediaTimestamp(
-						firstSegment?.startMs ?? 0
-					);
-					return (
-						<p
-							className={style.transcriptParagraph}
-							key={paragraphIndex}
-						>
-							{firstSegment && (
-								<>
-									<a
-										aria-label={`Play paragraph at ${paragraphTimestamp}`}
-										className={
-											style.transcriptParagraphTimestamp
-										}
-										data-journal-transcript-paragraph=""
-										href={playback.hrefForSegment(
-											entry.id,
-											firstSegment.id
-										)}
-										onClick={event => {
-											if (followsLinkNormally(event))
-												return;
-											if (
-												playback.playSegment(
-													entry.id,
-													firstSegment.id
-												)
-											) {
-												event.preventDefault();
-											}
-										}}
-									>
-										<time
-											dateTime={`PT${firstSegment.startMs / 1000}S`}
-										>
-											{paragraphTimestamp}
-										</time>
-									</a>{' '}
-								</>
-							)}
-							{paragraph.map((segment, segmentIndex) => {
-								const timestamp = mediaTimestamp(
-									segment.startMs
-								);
-								const currentlySpoken =
-									segment.id === currentlySpokenSegmentID;
-								return (
-									<span
-										className={style.transcriptSegment}
-										data-journal-currently-spoken={
-											currentlySpoken || undefined
-										}
-										id={citationID(entry.id, segment.id)}
-										key={segment.id}
-									>
-										{segmentIndex > 0 && ' '}
-										<a
-											aria-current={
-												currentlySpoken
-													? 'true'
-													: undefined
-											}
-											aria-label={`Play at ${timestamp}: ${segment.text}`}
-											data-journal-transcript-segment={
-												segment.id
-											}
-											href={playback.hrefForSegment(
-												entry.id,
-												segment.id
-											)}
-											onClick={event => {
-												if (followsLinkNormally(event))
-													return;
-												if (
-													playback.playSegment(
-														entry.id,
-														segment.id
-													)
-												) {
-													event.preventDefault();
-												}
-											}}
-										>
-											<span
-												aria-hidden="true"
-												className={
-													style.transcriptTimestamp
-												}
-											>
-												{timestamp}
-											</span>
-											{segment.text}
-										</a>
-									</span>
-								);
-							})}
-						</p>
-					);
-				})}
-			</div>
-		</div>
-	);
-}
-
-function spokenSegmentFor(
-	entry: JournalEntry,
-	playback: JournalPlayback
-): string | undefined {
-	return playback.playingEntryID === entry.id
-		? playback.playingSegmentID
-		: undefined;
-}
-
-const Transcript = memo(
-	TranscriptView,
-	(previous, next) =>
-		previous.entry === next.entry &&
-		previous.playback.hrefForSegment === next.playback.hrefForSegment &&
-		previous.playback.playSegment === next.playback.playSegment &&
-		spokenSegmentFor(previous.entry, previous.playback) ===
-			spokenSegmentFor(next.entry, next.playback)
 );
 
 const deleteThreshold = 90;
@@ -1203,202 +665,6 @@ function EntryDateEditor({
 	);
 }
 
-function JournalAudio({
-	audioURL,
-	entry,
-	playback,
-}: {
-	readonly audioURL: string;
-	readonly entry: JournalEntry;
-	readonly playback: JournalPlayback;
-}) {
-	const refreshJournal = useRefreshJournal();
-	const audioRef = useRef<HTMLAudioElement | null>(null);
-	const playRequested = useRef(false);
-	const pendingSeek = useRef<number | undefined>(undefined);
-	const stallRecoveryTimer = useRef<number | undefined>(undefined);
-	const [source, setSource] = useState(audioURL);
-	const [recovery, setRecovery] = useState<{
-		readonly failedSource: string;
-		readonly play: boolean;
-		readonly time: number;
-	}>();
-	const recoveryRef = useRef(recovery);
-	recoveryRef.current = recovery;
-
-	const cancelStallRecovery = useCallback(() => {
-		if (stallRecoveryTimer.current === undefined) return;
-		window.clearTimeout(stallRecoveryTimer.current);
-		stallRecoveryTimer.current = undefined;
-	}, []);
-	const recoverPlayback = useCallback(
-		(audio: HTMLAudioElement, time = audio.currentTime) => {
-			cancelStallRecovery();
-			if (recoveryRef.current?.failedSource === source) return;
-			const next = {
-				failedSource: source,
-				play: playRequested.current && !audio.ended,
-				time: pendingSeek.current ?? time,
-			};
-			recoveryRef.current = next;
-			setRecovery(next);
-			void refreshJournal().catch(() => {
-				if (recoveryRef.current?.failedSource !== next.failedSource)
-					return;
-				recoveryRef.current = undefined;
-				setRecovery(undefined);
-			});
-		},
-		[cancelStallRecovery, refreshJournal, source]
-	);
-	const requestPlayback = useCallback(
-		(time: number) => {
-			const audio = audioRef.current;
-			if (!audio) return;
-			// Record intent before play(): an already-failed element can reject
-			// without emitting a play event, and a refresh may already be pending.
-			playRequested.current = true;
-			pendingSeek.current = time;
-			const recovering = recoveryRef.current;
-			if (recovering) {
-				const next = { ...recovering, play: true, time };
-				recoveryRef.current = next;
-				setRecovery(next);
-				return;
-			}
-			if (audio.error) {
-				recoverPlayback(audio, time);
-				return;
-			}
-			const seek = () => {
-				if (audioRef.current !== audio) return;
-				const target = pendingSeek.current;
-				if (target === undefined) return;
-				pendingSeek.current = undefined;
-				if (Math.abs(audio.currentTime - target) >= 0.25)
-					audio.currentTime = target;
-			};
-			if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
-				audio.addEventListener('loadedmetadata', seek, { once: true });
-			} else {
-				seek();
-			}
-			void audio.play().catch(() => undefined);
-		},
-		[recoverPlayback]
-	);
-	const scheduleStallRecovery = useCallback(
-		(audio: HTMLAudioElement) => {
-			cancelStallRecovery();
-			if (!playRequested.current || audio.ended || audio.currentTime <= 0)
-				return;
-			stallRecoveryTimer.current = window.setTimeout(() => {
-				stallRecoveryTimer.current = undefined;
-				if (
-					playRequested.current &&
-					!audio.ended &&
-					audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA
-				) {
-					recoverPlayback(audio);
-				}
-			}, playbackStallRecoveryDelayMs);
-		},
-		[cancelStallRecovery, recoverPlayback]
-	);
-
-	useEffect(() => {
-		if (!recovery || audioURL === source) return;
-		setSource(audioURL);
-	}, [audioURL, recovery, source]);
-
-	useEffect(() => {
-		if (!recovery || source === recovery.failedSource) return;
-		const audio = audioRef.current;
-		if (!audio) return;
-		const restore = () => {
-			if (recoveryRef.current !== recovery) return;
-			if (Math.abs(audio.currentTime - recovery.time) >= 0.25) {
-				audio.currentTime = recovery.time;
-			}
-			recoveryRef.current = undefined;
-			pendingSeek.current = undefined;
-			setRecovery(undefined);
-			if (recovery.play) {
-				void audio.play().catch(() => undefined);
-			}
-		};
-		if (audio.readyState === HTMLMediaElement.HAVE_NOTHING) {
-			audio.addEventListener('loadedmetadata', restore, { once: true });
-			return () => audio.removeEventListener('loadedmetadata', restore);
-		}
-		restore();
-	}, [recovery, source]);
-
-	useEffect(() => cancelStallRecovery, [cancelStallRecovery]);
-
-	return (
-		<div className={style.audioDock} data-journal-audio-dock>
-			<audio
-				className={style.audio}
-				controls
-				data-entry-id={entry.id}
-				data-playback-active={
-					playback.activeEntryID === entry.id || undefined
-				}
-				onEnded={event => {
-					cancelStallRecovery();
-					playRequested.current = false;
-					playback.stopped(entry.id, event.currentTarget.currentTime);
-				}}
-				onError={event => {
-					recoverPlayback(event.currentTarget);
-				}}
-				onPause={event => {
-					cancelStallRecovery();
-					if (
-						!event.currentTarget.error &&
-						recoveryRef.current === undefined
-					) {
-						playRequested.current = false;
-					}
-					playback.stopped(entry.id, event.currentTarget.currentTime);
-				}}
-				onPlay={event => {
-					playRequested.current = true;
-					cancelStallRecovery();
-					playback.started(entry.id);
-					if (
-						event.currentTarget.readyState <
-						HTMLMediaElement.HAVE_FUTURE_DATA
-					) {
-						scheduleStallRecovery(event.currentTarget);
-					}
-				}}
-				onPlaying={cancelStallRecovery}
-				onStalled={event => {
-					if (playRequested.current && !event.currentTarget.ended) {
-						recoverPlayback(event.currentTarget);
-					}
-				}}
-				onTimeUpdate={event => {
-					cancelStallRecovery();
-					playback.progressed(
-						entry.id,
-						event.currentTarget.currentTime
-					);
-				}}
-				onWaiting={event => scheduleStallRecovery(event.currentTarget)}
-				preload="metadata"
-				ref={audio => {
-					audioRef.current = audio;
-					playback.registerAudio(entry.id, audio, requestPlayback);
-				}}
-				src={source}
-			/>
-		</div>
-	);
-}
-
 function EntryCard({
 	deleteEntry,
 	entry,
@@ -1421,7 +687,47 @@ function EntryCard({
 			id={`entry-${entry.id}`}
 		>
 			<header className={style.entryHeading}>
-				<h3 id={`entry-title-${entry.id}`}>{title}</h3>
+				<h3 id={`entry-title-${entry.id}`}>
+					{entry.audioUrl ? (
+						<Link
+							className={style.recordingTitle}
+							href={journalEntryHref(entry, 0)}
+							styleless
+							title="Play from beginning"
+							onClick={event => {
+								if (followsLinkNormally(event)) return;
+								event.preventDefault();
+								playback.playFromStart(entry);
+							}}
+						>
+							{title}
+						</Link>
+					) : (
+						title
+					)}
+				</h3>
+				{entry.audioUrl && (
+					<button
+						type="button"
+						className={style.entryPlay}
+						aria-label={`${playback.playingEntryID === entry.id ? 'Pause' : 'Play'} ${title}`}
+						title={
+							playback.playingEntryID === entry.id
+								? 'Pause recording'
+								: 'Play recording'
+						}
+						onClick={() => playback.toggle(entry)}
+					>
+						<FontAwesomeIcon
+							aria-hidden="true"
+							icon={
+								playback.playingEntryID === entry.id
+									? faPause
+									: faPlay
+							}
+						/>
+					</button>
+				)}
 				<LocalizedTime
 					className={style.entryTime}
 					date={journalEntryDate(entry)}
@@ -1479,13 +785,6 @@ function EntryCard({
 					}
 				/>
 			)}
-			{entry.audioUrl && (
-				<JournalAudio
-					audioURL={entry.audioUrl}
-					entry={entry}
-					playback={playback}
-				/>
-			)}
 			{(entry.error || entry.status === 'failed') && (
 				<p className={style.recordingFailure} role="alert">
 					{entry.error || 'Could not process this voice note.'}
@@ -1502,9 +801,6 @@ function EntryCard({
 					summary={entry.summary}
 					timeZone={entry.timeZone}
 				/>
-			)}
-			{entry.transcript.length > 0 && (
-				<Transcript entry={entry} playback={playback} />
 			)}
 			{entry.status !== 'ready' && <JournalMap entries={[entry]} />}
 		</article>
@@ -1531,9 +827,6 @@ function PendingEntries({
 	);
 }
 
-type JournalSelection = Partial<
-	Record<'at' | 'entry', string>
->;
 type AggregatePeriod = Exclude<JournalSummary['period'], 'entry' | 'journal'>;
 
 interface JournalPeriodNode {
@@ -1635,14 +928,9 @@ function periodsFor(
 	);
 }
 
-function journalHref(route: JournalRoute, selection: JournalSelection = {}) {
-	const pathname = `/journal/${route}`;
-	const query = new URLSearchParams(
-		Object.entries(selection).filter(
-			(value): value is [string, string] => value[1] !== undefined
-		)
-	);
-	return query.size > 0 ? `${pathname}?${query}` : pathname;
+function journalHref(route: JournalRoute, at?: string) {
+	const path = `/journal/${route}`;
+	return at ? `${path}?${new URLSearchParams({ at })}` : path;
 }
 
 function periodMidpoint(period: Pick<JournalPeriodNode, 'start' | 'end'>) {
@@ -1698,9 +986,7 @@ function PeriodOverview({
 							<li key={child.id}>
 								<Link
 									data-journal-period-link={nextRoute}
-									href={journalHref(nextRoute, {
-										at: periodMidpoint(child),
-									})}
+									href={journalHref(nextRoute, periodMidpoint(child))}
 								>
 									<span className={style.periodChildDate}>
 										<PeriodDate
@@ -1728,14 +1014,6 @@ function PeriodOverview({
 			</div>
 		</div>
 	);
-}
-
-function citationDestination(journal: Journal, entryID: string) {
-	const entry = [...journal.entries, ...(journal.browse?.sources ?? [])].find(
-		value => value.id === entryID
-	);
-	if (!entry) return '/journal';
-	return journalHref('day', { at: entry.recordedAt });
 }
 
 function JournalDatePicker({
@@ -1861,9 +1139,7 @@ function JournalDatePicker({
 								aria-description={
 									hasRecordings ? 'Has recordings' : undefined
 								}
-								href={journalHref('day', {
-									at: day.toInstant().toString(),
-								})}
+								href={journalHref('day', day.toInstant().toString())}
 								aria-label={day.toLocaleString('en-GB', {
 									day: 'numeric',
 									month: 'long',
@@ -1950,18 +1226,14 @@ function JournalDatePicker({
 					aria-label={
 						view === 'day' ? 'Month summary' : 'Year summary'
 					}
-					href={journalHref(view === 'day' ? 'month' : 'year', {
-						at: monthAt,
-					})}
+					href={journalHref(view === 'day' ? 'month' : 'year', monthAt)}
 				>
 					{view === 'day' ? monthName : date.year} summary
 				</Link>
 				{view === 'day' && (
 					<Link
 						aria-label="Week summary"
-						href={journalHref('week', {
-							at: monthAt,
-						})}
+						href={journalHref('week', monthAt)}
 					>
 						Week summary
 					</Link>
@@ -2166,7 +1438,7 @@ function CalendarNavigation({
 					<Link
 						aria-label={`Previous ${route}`}
 						title={`Previous ${route}`}
-						href={journalHref(route, { at: browse.previous })}
+						href={journalHref(route, browse.previous)}
 					>
 						←
 					</Link>
@@ -2231,7 +1503,7 @@ function CalendarNavigation({
 					<Link
 						aria-label={`Next ${route}`}
 						title={`Next ${route}`}
-						href={journalHref(route, { at: browse.next })}
+						href={journalHref(route, browse.next)}
 					>
 						→
 					</Link>
@@ -2258,7 +1530,7 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 		>
 			<header>
 				<h2 id="recent-journal-entries">Recent entries</h2>
-				<Link href={journalHref('day', { at: entries[0]?.recordedAt })}>
+				<Link href={journalHref('day', entries[0]?.recordedAt)}>
 					Browse days
 				</Link>
 			</header>
@@ -2267,14 +1539,7 @@ function RecentEntries({ journal }: { readonly journal: Journal }) {
 					const date = journalEntryDate(entry);
 					return (
 						<li key={entry.id}>
-							<Link
-								href={
-									journalHref('day', {
-										at: entry.recordedAt,
-										entry: entry.id,
-									}) + `#entry-${entry.id}`
-								}
-							>
+							<Link href={journalEntryHref(entry, 0)}>
 								<strong>
 									{entry.title ??
 										entry.summary?.title ??
@@ -2316,11 +1581,7 @@ function WikiHeader({
 	return (
 		<>
 			<h2 className={style.wikiHeading}>
-				{index ? (
-					'Wiki'
-				) : (
-					<Link href="/journal?wiki=all">Wiki</Link>
-				)}
+				{index ? 'Wiki' : <Link href="/journal?wiki=all">Wiki</Link>}
 			</h2>
 			{curation?.status === 'failed' && (
 				<p role="status">
@@ -2359,7 +1620,7 @@ function WikiArticle({ page }: { readonly page: JournalWikiPageView }) {
 				return journalPlaybackHref(
 					entryID,
 					(source?.startMs ?? 0) / 1000,
-					journalHref('day', { at: source?.recordedAt })
+					journalHref('day', source?.recordedAt)
 				);
 			},
 			labelForSegment: (entryID, segmentID) =>
@@ -2535,18 +1796,7 @@ function JournalBrowser({
 	const renderTime = useJournalRenderTime();
 	const [selection] = useSearchParams();
 	const at = selection.get('at');
-	const aggregateCitationDestination = useCallback(
-		(entryID: string) => citationDestination(journal, entryID),
-		[journal]
-	);
-	const playback = useJournalPlayback(
-		{
-			...journal,
-			entries: [...(journal.browse?.sources ?? []), ...journal.entries],
-		},
-		aggregateCitationDestination,
-		`${route ?? 'overview'}:${journal.browse?.focus ?? at ?? ''}`
-	);
+	const playback = useJournalPlayer();
 	const pendingEntries = journal.entries.filter(
 		entry =>
 			['awaiting_upload', 'processing', 'failed'].includes(
@@ -2863,11 +2113,23 @@ function DevelopmentJournalTools() {
 	);
 }
 
+type JournalReaderContext = Omit<
+	ComponentProps<typeof JournalBrowser>,
+	'route'
+>;
+
 export default function JournalPageClient({
 	route,
 }: {
 	readonly route?: JournalRoute;
 }) {
+	const props = useOutletContext<JournalReaderContext>();
+	return <JournalBrowser {...props} route={route} />;
+}
+
+export function JournalReaderLayout() {
+	const { pathname } = useLocation();
+	const [playerHost, setPlayerHost] = useState<HTMLDivElement | null>(null);
 	const renderTime = useJournalRenderTime();
 	const [idToken, , promptForLoginFuture] = useZemnMeAuth();
 	const scopes = useGetMeScopes(idToken);
@@ -2875,11 +2137,9 @@ export default function JournalPageClient({
 	const wiki = selection.get('wiki');
 	const at = selection.get('at');
 	const [hasLocalRecordings, setHasLocalRecordings] = useState(false);
-	const journal = useGetJournal(
-		idToken,
-		wiki === null,
-		journalBrowseQuery(`/journal/${route ?? ''}`, at)
-	);
+	const browse = journalBrowseQuery(pathname, at);
+	const route = browse.view === 'overview' ? undefined : browse.view;
+	const journal = useGetJournal(idToken, wiki === null, browse);
 	const uploads = useGetJournalUploads(idToken, hasLocalRecordings);
 	const createEntry = usePostJournalEntry(idToken);
 	const deleteEntry = useDeleteJournalEntry(idToken);
@@ -3232,107 +2492,133 @@ export default function JournalPageClient({
 					Drop voice memo
 				</div>
 			)}
-			<header className={style.hero}>
-				<h1><Link href="/journal" styleless>Journal</Link></h1>
-			</header>
-			{!isLoggedIn ? (
-				<button
-					aria-label="Authenticate with OIDC"
-					disabled={promptForLogin === undefined}
-					onClick={() => void promptForLogin?.()}
-					type="button"
-				>
-					Sign in
-				</button>
-			) : !hasReadScope ? (
-				<p className={style.notice}>
-					<FontAwesomeIcon icon={faTriangleExclamation} />
-					This journal is restricted to its owner.
-				</p>
-			) : (
-				<>
-					{isDevelopment && <DevelopmentJournalTools />}
-					{wiki !== null ? (
-						<div>
-							<JournalToolbar
-								actions={captureControls}
-								focus={at ?? ''}
-								route={route}
-								wiki
-							/>
-							<LocalRecordings
-								queue={queue}
-								activeID={recorder.current?.id}
-							/>
-							<JournalWiki pageID={wiki} />
-						</div>
-					) : (
-						journal(
-							value => (
-								<JournalBrowser
-									localRecordings={
+			<ReadingLayout
+				heading={
+					<h1 className={style.journalTitle}>
+						<Link href="/journal" styleless>
+							Journal
+						</Link>
+					</h1>
+				}
+				companionRef={setPlayerHost}
+			>
+				{!isLoggedIn ? (
+					<button
+						aria-label="Authenticate with OIDC"
+						className={style.signIn}
+						disabled={promptForLogin === undefined}
+						onClick={() => void promptForLogin?.()}
+						type="button"
+					>
+						Sign in
+					</button>
+				) : !hasReadScope ? (
+					<p className={style.notice}>
+						<FontAwesomeIcon icon={faTriangleExclamation} />
+						This journal is restricted to its owner.
+					</p>
+				) : (
+					<JournalPlayerProvider
+						portalTarget={playerHost}
+						key={owner}
+						journal={
+							wiki === null
+								? journal(
+										value => value,
+										() => undefined,
+										() => undefined
+									)
+								: undefined
+						}
+					>
+						{isDevelopment && <DevelopmentJournalTools />}
+						{wiki !== null ? (
+							<div>
+								<JournalToolbar
+									actions={captureControls}
+									focus={at ?? ''}
+									route={route}
+									wiki
+								/>
+								<LocalRecordings
+									queue={queue}
+									activeID={recorder.current?.id}
+								/>
+								<JournalWiki pageID={wiki} />
+							</div>
+						) : (
+							journal(
+								value => (
+									<Outlet
+										context={
+											{
+												localRecordings: (
+													<LocalRecordings
+														queue={queue}
+														activeID={
+															recorder.current?.id
+														}
+													/>
+												),
+												localEntryIDs:
+													queue.recordings.map(
+														draft =>
+															draft.remoteEntryID
+													),
+												actions: captureControls,
+												deleteEntry: hasWriteScope
+													? deleteJournalEntry
+													: undefined,
+												journal: value,
+												updateEntryDate: hasWriteScope
+													? updateJournalEntryDate
+													: undefined,
+											} satisfies JournalReaderContext
+										}
+									/>
+								),
+								() => (
+									<>
+										<JournalToolbar
+											route={route}
+											actions={captureControls}
+											focus={new Date(
+												renderTime
+											).toISOString()}
+										/>
 										<LocalRecordings
 											queue={queue}
 											activeID={recorder.current?.id}
 										/>
-									}
-									localEntryIDs={queue.recordings.map(
-										draft => draft.remoteEntryID
-									)}
-									actions={captureControls}
-									deleteEntry={
-										hasWriteScope
-											? deleteJournalEntry
-											: undefined
-									}
-									journal={value}
-									route={route}
-									updateEntryDate={
-										hasWriteScope
-											? updateJournalEntryDate
-											: undefined
-									}
-								/>
-							),
-							() => (
-								<>
-									<JournalToolbar
-										route={route}
-										actions={captureControls}
-										focus={new Date(
-											renderTime
-										).toISOString()}
-									/>
-									<LocalRecordings
-										queue={queue}
-										activeID={recorder.current?.id}
-									/>
-									<JournalPlaceholder label="Loading journal" />
-								</>
-							),
-							error => (
-								<>
-									<JournalToolbar
-										route={route}
-										actions={captureControls}
-										focus={new Date(
-											renderTime
-										).toISOString()}
-									/>
-									<LocalRecordings
-										queue={queue}
-										activeID={recorder.current?.id}
-									/>
-									<p className={style.notice}>
-										{errorMessage(error)}
-									</p>
-								</>
+										<JournalPlaceholder label="Loading journal" />
+									</>
+								),
+								error => (
+									<>
+										<JournalToolbar
+											route={route}
+											actions={captureControls}
+											focus={new Date(
+												renderTime
+											).toISOString()}
+										/>
+										<LocalRecordings
+											queue={queue}
+											activeID={recorder.current?.id}
+										/>
+										<p className={style.notice}>
+											{errorMessage(error)}
+										</p>
+									</>
+								)
 							)
-						)
-					)}
-					{route === undefined && wiki === null && <JournalMCPSetup />}
-				</>
-			)}
+						)}
+						{route === undefined && wiki === null && (
+							<JournalMCPSetup />
+						)}
+					</JournalPlayerProvider>
+				)}
+			</ReadingLayout>
 		</main>
 	);
 }

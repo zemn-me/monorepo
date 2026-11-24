@@ -493,7 +493,7 @@ func TestJournalEndToEnd(t *testing.T) {
 		t.Fatalf("journal day list route: %v", err)
 	}
 	browserhelpers.AssertJournalNavigationAtTop(t, driver, "/journal/day")
-	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatalf("journal day timeline did not contain its entries: %v", err)
 	}
 	openJournalDatePicker(t, driver)
@@ -509,7 +509,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal month'] [data-journal-period-start^='2025-07'] h2", 10*time.Second); err != nil {
 		t.Fatal("calendar did not open July summary", err)
 	}
-	if err := waitForJournalAudioCount(driver, 0, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 0, 10*time.Second); err != nil {
 		t.Fatal("month loaded recording players", err)
 	}
 	openJournalDatePicker(t, driver)
@@ -526,7 +526,7 @@ func TestJournalEndToEnd(t *testing.T) {
 	}
 	clickJournalControl(t, driver, "a[aria-label='13 August 2025'][aria-description='Has recordings']")
 
-	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatal("day selector did not open selected recordings", err)
 	}
 	if single, err := driver.ExecuteScript(`return document.querySelectorAll('[data-journal-period-start]').length === 1`, nil); err != nil || single != true {
@@ -539,19 +539,19 @@ func TestJournalEndToEnd(t *testing.T) {
 	if err := browserhelpers.ClickElementInView(driver, previousDay); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForJournalAudioCount(driver, 1, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 1, 10*time.Second); err != nil {
 		t.Fatal("previous day retained neighboring recordings", err)
 	}
 	if err := driver.Back(); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatal("Back did not restore selected day", err)
 	}
 	if err := driver.Refresh(); err != nil {
 		t.Fatal(err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatal("reload lost selected day", err)
 	}
 	for _, width := range []int{1280, 390} {
@@ -687,12 +687,12 @@ func TestJournalEndToEnd(t *testing.T) {
 	visibleEntries, err := driver.ExecuteScript(`
 		const entries = [...document.querySelectorAll("article[id^='entry-']")];
 		return entries.length === 2 && entries.every(entry =>
-			[entry.querySelector('header h3'), entry.querySelector('audio'), entry.querySelector('[aria-label="Transcript"]')]
+			[entry.querySelector('header h3'), entry.querySelector('button[title="Play recording"]')]
 				.every(element => element?.checkVisibility())
 		);
 	`, nil)
 	if err != nil || visibleEntries != true {
-		t.Fatalf("day should immediately show both recordings and transcripts: %v %v", visibleEntries, err)
+		t.Fatalf("day should immediately show both recordings and their play buttons: %v %v", visibleEntries, err)
 	}
 	entrySummaryDates, err := driver.ExecuteScript(`
 		const day = document.querySelector(
@@ -731,19 +731,12 @@ func TestJournalEndToEnd(t *testing.T) {
 	if entrySummaryDates.(map[string]interface{})["valid"] != true {
 		t.Fatalf("journal entries repeated their parent date or used the wrong recording time zone: %#v", entrySummaryDates)
 	}
-	transcriptsScrollable, err := driver.ExecuteScript(`
-		const transcripts = [...document.querySelectorAll('[data-journal-transcript]')];
-		return transcripts.length === 2 && transcripts.every(transcript =>
-			transcript.tagName === 'DIV' &&
-			transcript.getAttribute('role') === 'region' &&
-			getComputedStyle(transcript).overflowY === 'auto'
-		);
+	idle, err := driver.ExecuteScript(`
+		return document.querySelectorAll('main audio').length === 1 &&
+			!document.querySelector('main audio[src], [aria-label="Transcript"], article audio');
 	`, nil)
-	if err != nil {
-		t.Fatalf("inspect journal transcripts: %v", err)
-	}
-	if transcriptsScrollable != true {
-		t.Fatalf("journal transcripts were not rendered as scrollable regions")
+	if err != nil || idle != true {
+		t.Fatalf("idle journal loaded recording audio or transcripts: %v %v", idle, err)
 	}
 	for _, level := range []string{"Weeks", "Months", "Years", "Overview"} {
 		browseJournalView(t, driver, level)
@@ -896,43 +889,46 @@ func TestJournalEndToEnd(t *testing.T) {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("journal audio did not recover from a playback stall: %v", err)
 	}
-	stickyNavigationAndAudio, err := driver.ExecuteScript(`
-		const audio = [...document.querySelectorAll('audio[data-entry-id]')]
-			.find(value => value.dataset.entryId === arguments[0]);
-		const dock = audio?.closest('[data-journal-audio-dock]');
-		const toolbar = document.querySelector('[data-journal-toolbar]');
-		if (!dock || !toolbar) return false;
-		const dockStyle = getComputedStyle(dock);
-		const toolbarStyle = getComputedStyle(toolbar);
-		const barHeight = document.querySelector('header[data-glade-banner]').getBoundingClientRect().height;
-		const initialScroll = scrollY;
-		const toolbarDocumentTop = toolbar.getBoundingClientRect().top + scrollY;
-		window.scrollTo(0, toolbarDocumentTop + 100);
-		const toolbarPinned = Math.abs(
-			toolbar.getBoundingClientRect().top - barHeight
-		) < 0.5;
-		window.scrollTo(0, initialScroll);
-		return toolbarPinned &&
-			toolbarStyle.position === 'sticky' &&
-			Math.abs(parseFloat(toolbarStyle.top) - barHeight) < 0.5 &&
-			dockStyle.position === 'sticky' &&
-			Math.abs(
-				Number.parseFloat(dockStyle.top) -
-					barHeight - toolbar.getBoundingClientRect().height
-			) < 0.5 &&
-			Number(toolbarStyle.zIndex) > Number(dockStyle.zIndex);
-	`, []any{firstEntryID})
+	originalAudio, err := driver.FindElement(selenium.ByCSSSelector, "audio[data-entry-id]")
 	if err != nil {
-		t.Fatalf("inspect sticky journal navigation and audio: %v", err)
+		t.Fatal(err)
 	}
-	if stickyNavigationAndAudio != true {
-		dimensions, _ := driver.ExecuteScript(`
-const bar = document.querySelector('header[data-glade-banner]');
-const toolbar = document.querySelector('[data-journal-toolbar]');
-const dock = document.querySelector('[data-journal-audio-dock]');
-return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.getBoundingClientRect().height, toolbarTop: getComputedStyle(toolbar).top, dockTop: getComputedStyle(dock).top};
-`, nil)
-		t.Fatalf("journal navigation and audio did not remain stacked while reading: %v", dimensions)
+	player, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Journal player']")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, width := range []int{1440, 390, 1440} {
+		if err := driver.ExecuteChromiumCommand("Emulation.setDeviceMetricsOverride", map[string]any{
+			"width": width, "height": 900, "deviceScaleFactor": 1, "mobile": false,
+		}); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := driver.ExecuteScript("window.scrollTo({top: 320, behavior: 'instant'})", nil); err != nil {
+			t.Fatal(err)
+		}
+		err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+			result, err := wd.ExecuteScript(`
+				const [player, audio, wide] = arguments;
+				const panel = player.getBoundingClientRect();
+				const toolbar = document.querySelector('[data-journal-toolbar]').getBoundingClientRect();
+				const transcript = player.querySelector('[aria-label="Transcript"]').getBoundingClientRect();
+				if (document.querySelector('main audio') !== audio || document.querySelectorAll('section[aria-label="Journal player"]').length !== 1 ||
+					document.documentElement.scrollWidth > innerWidth || panel.top < 0 || panel.bottom > innerHeight + 1) return false;
+				return wide
+					? panel.right < toolbar.left && transcript.height > innerHeight / 2 && toolbar.top < panel.bottom
+					: panel.bottom <= toolbar.top + 1 && transcript.height < innerHeight / 4;
+			`, []any{player, originalAudio, width > 1000})
+			return result == true, err
+		}, 10*time.Second)
+		if err != nil {
+			browserhelpers.SaveNavigationScreenshot(t, driver, "journal-reader-layout-failure.png")
+			bounds, _ := driver.ExecuteScript(`return [...document.querySelectorAll('section[aria-label="Journal player"], [aria-label="Transcript"], [data-journal-toolbar]')].map(e => [e.getAttribute('aria-label'), e.getBoundingClientRect().toJSON()])`, nil)
+			t.Fatalf("shared player layout after scrolling at %dpx: %v, bounds: %v", width, err, bounds)
+		}
+		browserhelpers.SaveNavigationScreenshot(t, driver, fmt.Sprintf("journal-reader-%d.png", width))
+	}
+	if err := driver.ExecuteChromiumCommand("Emulation.clearDeviceMetricsOverride", map[string]any{}); err != nil {
+		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(
 		driver,
@@ -950,18 +946,23 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := browserhelpers.ClickElementInView(driver, newerDays); err != nil {
 		t.Fatalf("browse newer days after following a citation: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 10*time.Second); err != nil {
 		t.Fatalf("next day did not replace the selected recordings: %v", err)
 	}
-	transcripts, err := driver.FindElements(selenium.ByCSSSelector, "[data-journal-transcript]")
-	if err != nil || len(transcripts) != 2 {
-		t.Fatalf("selected day transcripts: found %d, error %v", len(transcripts), err)
+	persisted, err := driver.ExecuteScript(`
+		return arguments[0] === document.querySelector('main audio') &&
+			arguments[0].dataset.entryId === arguments[1] &&
+			document.querySelectorAll('[aria-label="Transcript"]').length === 1 &&
+			document.querySelector('[aria-label="Transcript"]').dataset.journalTranscript === arguments[1];
+	`, []any{originalAudio, firstEntryID})
+	if err != nil || persisted != true {
+		t.Fatalf("changing days replaced the shared player or transcript: %v %v", persisted, err)
 	}
 	structuredTranscripts, err := driver.ExecuteScript(`
 		const transcripts = [...document.querySelectorAll(
 			'[data-journal-transcript]'
 		)];
-		return transcripts.length === 2 && transcripts.every(transcript => {
+		return transcripts.length === 1 && transcripts.every(transcript => {
 			const text = transcript.querySelector('[data-journal-transcript-text]');
 			const paragraphs = text?.querySelectorAll(':scope > p');
 			return text !== null &&
@@ -1005,9 +1006,10 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if secondEntryID == "" {
 		t.Fatalf("individual day citations did not address the second journal entry")
 	}
-	secondTranscript, err := driver.FindElement(selenium.ByCSSSelector, fmt.Sprintf("[data-journal-transcript='%s']", secondEntryID))
+	clickJournalControl(t, driver, "#entry-"+secondEntryID+" button[title='Play recording']")
+	secondTranscript, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, fmt.Sprintf("[data-journal-transcript='%s']", secondEntryID), 10*time.Second)
 	if err != nil {
-		t.Fatalf("find second journal transcript: %v", err)
+		t.Fatal(err)
 	}
 	secondTranscriptSegment, err := secondTranscript.FindElement(selenium.ByCSSSelector, "a[data-journal-transcript-segment]")
 	if err != nil {
@@ -1065,7 +1067,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := browserhelpers.ClickElementInView(driver, deleteThumb); err != nil {
 		t.Fatalf("click swipe-to-delete thumb: %v", err)
 	}
-	if err := journalAudioCountRemains(driver, 1, time.Second); err != nil {
+	if err := journalRecordingCountRemains(driver, 1, time.Second); err != nil {
 		t.Fatalf("ordinary click deleted a journal entry: %v", err)
 	}
 	if _, err := driver.ExecuteScript(`
@@ -1091,7 +1093,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("swiped journal entry was not deleted: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 0, 10*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 0, 10*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("journal did not remove exactly one swiped entry: %v", err)
 	}
@@ -1125,7 +1127,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label='Journal day']", 30*time.Second); err != nil {
 		t.Fatalf("submitted recording days were not selected: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 1, 30*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 1, 30*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("submitted recording did not become a journal entry: %v", err)
 	}
@@ -1148,7 +1150,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := currentDayImport.SendKeys(currentDayFile.Name()); err != nil {
 		t.Fatalf("import second current-day voice memo: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 30*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("second current-day voice memo did not become a journal entry: %v", err)
 	}
@@ -1236,7 +1238,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := driver.Get(currentDayURL); err != nil {
 		t.Fatalf("return to current journal day: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, 2, 30*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, 2, 30*time.Second); err != nil {
 		t.Fatalf("selected day did not retain its two recordings: %v", err)
 	}
 	currentDayStart := time.Date(
@@ -1244,7 +1246,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	).UTC().Format("2006-01-02T15:04:05Z")
 	currentEntries, err := driver.FindElements(
 		selenium.ByCSSSelector,
-		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(audio)", currentDayStart),
+		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(header button[title$=' recording'])", currentDayStart),
 	)
 	if err != nil || len(currentEntries) != 2 {
 		t.Fatalf("find current-day journal entries: count %d, error %v", len(currentEntries), err)
@@ -1310,7 +1312,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	if err := browserhelpers.ClickElementInView(driver, saveDate); err != nil {
 		t.Fatalf("save corrected journal recording date: %v", err)
 	}
-	if err := waitForJournalPeriodAudioCount(driver, currentDayStart, 1, 30*time.Second); err != nil {
+	if err := waitForJournalPeriodRecordingCount(driver, currentDayStart, 1, 30*time.Second); err != nil {
 		browserhelpers.DumpPageDiagnostics(t, driver)
 		t.Fatalf("corrected entry did not leave its original day: %v", err)
 	}
@@ -1416,7 +1418,7 @@ return {barHeight: bar.getBoundingClientRect().height, toolbarHeight: toolbar.ge
 	correctedEntry, err := browserhelpers.WaitForElement(
 		driver,
 		selenium.ByCSSSelector,
-		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(audio)", targetDayStart),
+		fmt.Sprintf("[data-journal-period-start='%s'] article[id^='entry-']:has(header button[title$=' recording'])", targetDayStart),
 		30*time.Second,
 	)
 	if err != nil {
@@ -1707,7 +1709,7 @@ func waitForExclusiveJournalAudioPlayback(driver selenium.WebDriver, entryID str
 			if (!audio) return null;
 			const playbackQuery = new URLSearchParams(window.location.search);
 			const urlTime = playbackQuery.get('t');
-			const spokenLink = document.getElementById('entry-' + arguments[0])
+			const spokenLink = document.querySelector('[aria-label="Transcript"]')
 				?.querySelector('[data-journal-currently-spoken] a[href]');
 			const segmentTime = spokenLink ? new URL(spokenLink.href).searchParams.get('t') : null;
 			return {
@@ -1906,8 +1908,8 @@ func waitForCurrentlySpokenTranscript(driver selenium.WebDriver, entryID string,
 				.find(value => value.dataset.entryId === arguments[0]);
 			return {
 				matches: highlighted.length === 1 &&
-					highlighted[0].closest('article[id]')?.id === 'entry-' + arguments[0],
-				highlightedEntries: highlighted.map(value => value.closest('article[id]')?.id),
+					highlighted[0].closest('[data-journal-transcript]')?.dataset.journalTranscript === arguments[0],
+				highlightedEntries: highlighted.map(value => value.closest('[data-journal-transcript]')?.dataset.journalTranscript),
 				currentTime: audio?.currentTime,
 				paused: audio?.paused,
 				ended: audio?.ended,
@@ -1933,7 +1935,7 @@ func waitForCenteredJournalTranscript(driver selenium.WebDriver, entryID string,
 			const transcript = [...document.querySelectorAll('[data-journal-transcript]')]
 				.find(value => value.dataset.journalTranscript === arguments[0]);
 			const highlighted = transcript?.querySelector('[data-journal-currently-spoken]');
-			if (!transcript || !highlighted || transcript.scrollHeight <= transcript.clientHeight) {
+			if (!transcript || !highlighted) {
 				return false;
 			}
 			const transcriptBounds = transcript.getBoundingClientRect();
@@ -1942,7 +1944,11 @@ func waitForCenteredJournalTranscript(driver selenium.WebDriver, entryID string,
 				(highlightedBounds.top + highlightedBounds.height / 2) -
 				(transcriptBounds.top + transcriptBounds.height / 2)
 			);
-			return distanceFromCenter < transcript.clientHeight * 0.1;
+			// At either end of the transcript the browser clamps the scroll.
+			const visible = highlightedBounds.bottom > transcriptBounds.top && highlightedBounds.top < transcriptBounds.bottom;
+			return visible && (distanceFromCenter < transcript.clientHeight * 0.1 ||
+				(transcript.scrollTop <= 1 && highlightedBounds.top < transcriptBounds.top + transcriptBounds.height / 2) ||
+				(transcript.scrollTop + transcript.clientHeight >= transcript.scrollHeight - 1 && highlightedBounds.bottom > transcriptBounds.top + transcriptBounds.height / 2));
 		`, []any{entryID})
 		if err != nil {
 			return false, err
@@ -1972,18 +1978,18 @@ func waitForJournalWaveform(driver selenium.WebDriver, timeout time.Duration) er
 	}, timeout)
 }
 
-func journalAudioCount(driver selenium.WebDriver) (int, error) {
-	elements, err := driver.FindElements(selenium.ByCSSSelector, "audio[data-entry-id]")
+func journalRecordingCount(driver selenium.WebDriver) (int, error) {
+	elements, err := driver.FindElements(selenium.ByCSSSelector, "article header button[title$=' recording']")
 	if err != nil {
 		return 0, err
 	}
 	return len(elements), nil
 }
 
-func journalAudioCountRemains(driver selenium.WebDriver, want int, duration time.Duration) error {
+func journalRecordingCountRemains(driver selenium.WebDriver, want int, duration time.Duration) error {
 	deadline := time.Now().Add(duration)
 	for time.Now().Before(deadline) {
-		count, err := journalAudioCount(driver)
+		count, err := journalRecordingCount(driver)
 		if err != nil {
 			return err
 		}
@@ -2015,18 +2021,18 @@ func journalAudioRemainsPaused(driver selenium.WebDriver, entryID string, durati
 	return nil
 }
 
-func waitForJournalAudioCount(driver selenium.WebDriver, want int, timeout time.Duration) error {
+func waitForJournalRecordingCount(driver selenium.WebDriver, want int, timeout time.Duration) error {
 	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
-		count, err := journalAudioCount(webDriver)
+		count, err := journalRecordingCount(webDriver)
 		return count == want, err
 	}, timeout)
 }
 
-func waitForJournalPeriodAudioCount(driver selenium.WebDriver, start string, want int, timeout time.Duration) error {
+func waitForJournalPeriodRecordingCount(driver selenium.WebDriver, start string, want int, timeout time.Duration) error {
 	return driver.WaitWithTimeout(func(webDriver selenium.WebDriver) (bool, error) {
 		elements, err := webDriver.FindElements(
 			selenium.ByCSSSelector,
-			fmt.Sprintf("[data-journal-period-start='%s'] audio[data-entry-id]", start),
+			fmt.Sprintf("[data-journal-period-start='%s'] article header button[title$=' recording']", start),
 		)
 		return len(elements) == want, err
 	}, timeout)
@@ -2055,7 +2061,7 @@ func TestJournalRecordingControls(t *testing.T) {
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label='Journal day']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	baselineAudioCount, err := journalAudioCount(driver)
+	baselineRecordingCount, err := journalRecordingCount(driver)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2094,7 +2100,7 @@ func TestJournalRecordingControls(t *testing.T) {
 	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "canvas[aria-label='Live recording waveform']", 10*time.Second); err != nil {
 		t.Fatalf("waveform remained after recording stopped: %v", err)
 	}
-	if err := journalAudioCountRemains(driver, baselineAudioCount, 2*time.Second); err != nil {
+	if err := journalRecordingCountRemains(driver, baselineRecordingCount, 2*time.Second); err != nil {
 		t.Fatalf("cancelled recording was submitted: %v", err)
 	}
 
@@ -2127,7 +2133,7 @@ func TestJournalRecordingControls(t *testing.T) {
 	if _, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
 		t.Fatalf("submitted recording upload did not finish: %v", err)
 	}
-	if err := waitForJournalAudioCount(driver, baselineAudioCount+1, 30*time.Second); err != nil {
+	if err := waitForJournalRecordingCount(driver, baselineRecordingCount+1, 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 }
