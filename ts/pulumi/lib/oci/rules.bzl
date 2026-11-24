@@ -24,32 +24,35 @@ def pulumi_image(
 
     _pulumi_image(name, src, component_name, out, visibility, [], "")
 
-def pulumi_binary_image(name, image_name, binary, base, component_name, tools = [], visibility = None):
+def pulumi_binary_image(name, image_name, srcs, base, component_name, deps = [], visibility = None):
     """Package a native executable and expose the same executable to local Lambda runtimes.
 
     Args:
         name: Pulumi image component target.
         image_name: OCI image target.
-        binary: Executable target whose basename is the image entrypoint.
+        srcs: Exactly one executable target, used as the image entrypoint.
         base: Base OCI image.
         component_name: Generated Pulumi class name.
-        tools: Additional executables installed in /usr/local/bin.
+        deps: Runtime executables installed in /usr/local/bin and available on PATH.
         visibility: Visibility of the Pulumi component.
     """
-    pkg_tar(name = image_name + "_entrypoint", srcs = [binary])
+    if len(srcs) != 1:
+        fail("pulumi_binary_image srcs must contain exactly one entrypoint executable")
+    entrypoint = srcs[0]
+    pkg_tar(name = image_name + "_entrypoint", srcs = srcs)
     layers = [":" + image_name + "_entrypoint"]
-    if tools:
-        pkg_tar(name = image_name + "_tools", srcs = tools, mode = "0755", package_dir = "/usr/local/bin")
+    if deps:
+        pkg_tar(name = image_name + "_tools", srcs = deps, mode = "0755", package_dir = "/usr/local/bin")
         layers.append(":" + image_name + "_tools")
     oci_image(
         name = image_name,
         base = base,
-        entrypoint = ["/" + native.package_relative_label(binary).name],
+        entrypoint = ["/" + native.package_relative_label(entrypoint).name],
         tars = layers,
     )
     runtime = {
-        "binary": "$(rlocationpath " + binary + ")",
-        "tools": ["$(rlocationpath " + tool + ")" for tool in tools],
+        "binary": "$(rlocationpath " + entrypoint + ")",
+        "tools": ["$(rlocationpath " + tool + ")" for tool in deps],
     }
     _pulumi_image(
         name = name,
@@ -57,7 +60,7 @@ def pulumi_binary_image(name, image_name, binary, base, component_name, tools = 
         component_name = component_name,
         out = None,
         visibility = visibility,
-        runtime_files = [binary] + tools,
+        runtime_files = srcs + deps,
         runtime_declaration = "readonly runtime = " + json.encode(runtime) + ";",
     )
 

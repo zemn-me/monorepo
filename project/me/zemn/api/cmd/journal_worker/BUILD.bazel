@@ -26,12 +26,12 @@ go_binary(
 
 pulumi_binary_image(
     name = "oci_image",
+    srcs = [":journal_worker"],
     base = "@distroless_cc_debian12",
-    binary = ":journal_worker",
     component_name = "JournalWorkerLambdaImage",
     image_name = "image",
-    tools = ["//bin/host/ffmpeg"],
     visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"],
+    deps = ["//bin/host/ffmpeg"],
 )
 
 bazel_lint(

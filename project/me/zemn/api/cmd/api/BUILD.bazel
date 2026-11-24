@@ -19,8 +19,8 @@ go_library(
 
 pulumi_binary_image(
     name = "oci_image",
+    srcs = [":api"],
     base = "@distroless_debian12",
-    binary = ":api",
     component_name = "ApiZemnMeLambdaImage",
     image_name = "image",
     visibility = ["//ts/pulumi/zemn.me/api:__subpackages__"],

@@ -24,8 +24,8 @@ bazel_lint(
 
 pulumi_binary_image(
     name = "oci_image",
+    srcs = [":hello_world"],
     base = "@distroless_debian12",
-    binary = ":hello_world",
     component_name = "HelloWorldImage",
     image_name = "image",
 )

@@ -6,8 +6,8 @@ package(default_visibility = ["//:__subpackages__"])
 
 pulumi_binary_image(
     name = "oci_image",
+    srcs = [":expire_on_delete"],
     base = "@distroless_debian12",
-    binary = ":expire_on_delete",
     component_name = "ExpireOnDeleteLambdaImage",
     image_name = "image",
 )
