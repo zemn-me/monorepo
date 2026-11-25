@@ -5,6 +5,8 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 
+import { runfiles } from '@bazel/runfiles';
+
 import { pulumiCommand } from '#root/ts/pulumi/cli.js';
 
 const exec = promisify(execFile);
@@ -16,15 +18,35 @@ export async function verifyBundle(home: string) {
 	const versions = JSON.parse(
 		await readFile(path.join(home, 'plugins', 'versions.json'), 'utf8')
 	) as Record<string, string>;
+	const checkpointVersions = JSON.parse(
+		await readFile(
+			runfiles.resolveWorkspaceRelative(
+				'bzl/pulumi_providers/checkpoint_versions.json'
+			),
+			'utf8'
+		)
+	) as Record<string, string[]>;
+	const { stdout } = await run(['plugin', 'ls', '--json'], home, {});
+	const installed = JSON.parse(stdout) as {
+		kind: string;
+		name: string;
+		version: string;
+	}[];
 
-	for (const [name, version] of Object.entries(versions)) {
-		await run(
-			['package', 'info', `${name}@${version}`],
-			process.cwd(),
-			{
-				PULUMI_DISABLE_REGISTRY_RESOLVE: 'true',
-			}
-		);
+	for (const [name, retained] of Object.entries(checkpointVersions)) {
+		for (const version of new Set([versions[name], ...retained])) {
+			assert(
+				installed.some(
+					p => p.kind === 'resource' && p.name === name && p.version === version
+				),
+				`Bundle is missing ${name}@${version}`
+			);
+			await run(
+				['package', 'info', `${name}@${version}`],
+				process.cwd(),
+				{ PULUMI_DISABLE_REGISTRY_RESOLVE: 'true' }
+			);
+		}
 	}
 
 	// A checkpoint can reference a provider older than the current SDK.

@@ -35,6 +35,7 @@ js_binary(
         ":deploy_lib",
         "//VERSION",
         "//bin/linux/pulumi:providers",
+        "//bzl/pulumi_providers:checkpoint_versions",
     ],
     entry_point = "deploy.js",
     env = {

@@ -1,4 +1,11 @@
 load("//bzl:rules.bzl", "bazel_lint")
+load("//js:rules.bzl", "copy_to_bin")
+
+copy_to_bin(
+    name = "checkpoint_versions",
+    srcs = ["checkpoint_versions.json"],
+    visibility = ["//ci/deploy:__pkg__"],
+)
 
 bazel_lint(
     name = "bazel_lint",

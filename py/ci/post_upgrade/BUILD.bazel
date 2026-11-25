@@ -8,6 +8,7 @@ py_library(
         "__init__.py",
         "integrity.py",
         "pnpm.py",
+        "pulumi.py",
     ],
     visibility = ["//:__subpackages__"],
 )

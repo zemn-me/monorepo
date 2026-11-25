@@ -3,7 +3,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import shlex
 import shutil
 import subprocess
 import sys
@@ -12,6 +11,22 @@ import unittest
 
 from py.ci.post_upgrade.integrity import update_module_bazel_text
 from py.ci.post_upgrade.pnpm import refresh
+from py.ci.post_upgrade.pulumi import retain_checkpoint_versions
+
+
+class TestPulumiProviders(unittest.TestCase):
+    def test_repeated_upgrade_retains_versions_needed_by_skipped_deployments(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "checkpoint_versions.json"
+            path.write_text('{"aws": ["7.53.0"], "random": []}')
+            previous = {
+                "dependencies": {"@pulumi/aws": "7.54.0"},
+                "devDependencies": {"@pulumi/random": "4.21.6"},
+            }
+            current = {**previous, "dependencies": {"@pulumi/aws": "7.55.0"}}
+            retain_checkpoint_versions(previous, current, path)
+            retain_checkpoint_versions(previous, current, path)
+            self.assertEqual(json.loads(path.read_text()), {"aws": ["7.53.0", "7.54.0"], "random": []})
 
 
 class TestPnpmIntegrity(unittest.TestCase):
@@ -297,10 +312,20 @@ http_archive(
                 (root / "sh/bin").mkdir(parents=True)
                 (root / "py/ci/post_upgrade").mkdir(parents=True)
                 shutil.copyfile("sh/postUpgrade.sh", root / "sh/postUpgrade.sh")
-                shutil.copyfile(Path(__file__).with_name("integrity.py"), root / "py/ci/post_upgrade/integrity.py")
-                shutil.copyfile(Path(__file__).with_name("pnpm.py"), root / "py/ci/post_upgrade/pnpm.py")
+                for script in ("integrity.py", "pnpm.py", "pulumi.py"):
+                    shutil.copyfile(Path(__file__).with_name(script), root / "py/ci/post_upgrade" / script)
                 (root / "bzl/pnpm").mkdir(parents=True)
-                (root / "package.json").write_text('{"packageManager":"pnpm@10.34.5"}')
+                (root / "bzl/pulumi_providers").mkdir()
+                (root / "bzl/pulumi_providers/checkpoint_versions.json").write_text('{"aws":[]}')
+                (root / "baseline").mkdir()
+                package = {
+                    "packageManager": "pnpm@10.34.5",
+                    "dependencies": {"@pulumi/aws": "7.54.0"},
+                    "devDependencies": {},
+                }
+                (root / "baseline/package.json").write_text(json.dumps(package))
+                package["dependencies"]["@pulumi/aws"] = "7.55.0"
+                (root / "package.json").write_text(json.dumps(package))
                 (root / "bzl/pnpm/integrity.json").write_text(json.dumps({
                     "version": "10.34.5",
                     "integrity": "sha512-" + base64.b64encode(hashlib.sha512(b"release").digest()).decode(),
@@ -316,12 +341,12 @@ http_archive(
 )
 '''
                 current = baseline.replace(payload.as_uri() + ".old", payload.as_uri())
-                (root / "baseline").write_text(baseline)
+                (root / "baseline/MODULE.bazel").write_text(baseline)
                 (root / "MODULE.bazel").write_text(current)
                 (root / "bin").mkdir()
                 (root / "bin/python3").symlink_to(sys.executable)
                 git = root / "bin/git"
-                git.write_text(f"#!/bin/sh\ncat {shlex.quote(str(root / 'baseline'))}\n")
+                git.write_text('#!/bin/sh\ncat "baseline/${2#HEAD:}"\n')
                 git.chmod(0o755)
                 bazel = root / "sh/bin/bazel"
                 bazel.write_text("#!/bin/sh\ncp MODULE.bazel observed-by-bazel\n")
@@ -333,6 +358,8 @@ http_archive(
                 )
                 if available:
                     self.assertEqual(result.returncode, 0, result.stderr)
+                    checkpoints = root / "bzl/pulumi_providers/checkpoint_versions.json"
+                    self.assertEqual(json.loads(checkpoints.read_text()), {"aws": ["7.54.0"]})
                     self.assertIn(hashlib.sha256(b"release bytes").hexdigest(), (root / "observed-by-bazel").read_text())
                 else:
                     self.assertNotEqual(result.returncode, 0)
