@@ -813,6 +813,14 @@ http_archive(
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
+# Jonathan McDowell's GCAT, CC BY 4.0. Pin the daily mirror for reproducible birthdays.
+http_file(
+    name = "gcat_standard_catalog",
+    downloaded_file_path = "satcat.tsv",
+    sha256 = "6929bd83abb87f6721ccdd270cfe903417dcddcfe7157a706fa8942281b30d96",
+    urls = ["https://raw.githubusercontent.com/sizhewang25/jonathon-space-archive/654637aa28c72733ffbf69709f530e5712ce02a6/data/satcat.tsv"],
+)
+
 # Doom shareware 1.9, archived by the SHA-1 of its uncompressed WAD.
 http_file(
     name = "doom1_shareware",

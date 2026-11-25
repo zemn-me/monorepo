@@ -1,0 +1,28 @@
+# gazelle:resolve py project.me.zemn.app.experiments.space_junk.importer.catalogue //project/me/zemn/app/experiments/space_junk/importer
+
+load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+
+py_binary(
+    name = "catalogue",
+    srcs = ["catalogue.py"],
+    main = "catalogue.py",
+    visibility = ["//:__subpackages__"],
+)
+
+py_library(
+    name = "importer",
+    srcs = ["catalogue.py"],
+    visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "catalogue_test",
+    srcs = ["catalogue_test.py"],
+    deps = ["//project/me/zemn/app/experiments/space_junk/importer"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)

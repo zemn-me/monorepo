@@ -428,13 +428,13 @@ describe('zemn.me website', () => {
 						`${origin}/experiments/space-junk`,
 					5000
 				);
-				await driver.findElement(By.css('input[type="date"]')).sendKeys('12121990');
+				await driver.findElement(By.css('input[type="date"]')).sendKeys('08012006');
 				await driver.findElement(By.xpath('//button[.="Draw my chart"]')).click();
 				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
-				expect(await reading.getText()).toContain('12 December 1990');
-				expect(await reading.getText()).toContain('COSMOS 886 fragment');
+				expect(await reading.getText()).toContain('1 August 2006');
+				expect(await reading.getText()).toContain('There was a spatula in orbit');
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
-					'15 days after your birthday'
+					'12 July 2006 through 29 September 2006'
 				);
 			} finally {
 				await driver.quit();

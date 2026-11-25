@@ -291,6 +291,8 @@ py_venv(
         "//md:md_py",
         "//md:readme_main",
         "//project/me/zemn/api/analytics/inject_iservice:inject_iservice_bin",
+        "//project/me/zemn/app/experiments/space_junk/importer",
+        "//project/me/zemn/app/experiments/space_junk/importer:catalogue",
         "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci",

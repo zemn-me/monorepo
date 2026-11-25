@@ -1,6 +1,6 @@
 import { Temporal } from 'temporal-polyfill';
 
-import { objects, type SpaceObject } from './chart.js';
+import type { SpaceObject } from './chart.js';
 import style from './style.module.css';
 
 function point(date: Temporal.PlainDate, radius: number) {
@@ -14,17 +14,18 @@ function point(date: Temporal.PlainDate, radius: number) {
 // The same silhouettes key each catalogue entry to its place on the wheel.
 export function ObjectGlyph({ object }: { object: SpaceObject }) {
 	const paths = {
-		'1976-126V':
-			'M-9 -4 1 -9 8 -3 4 6 -4 9Z M-9 -4 0 -1 1 -9 M0 -1 4 6 M0 -1 -4 9',
-		'1984-008A':
-			'M-4 -4H4V4H-4Z M-11 -3H-6V3H-11Z M6 -3H11V3H6Z M-6 0H-4 M4 0H6 M0 -4V-9 M-3 -9Q0 -5 3 -9',
-		'2009-011C':
-			'M-4 -7Q0 -10 4 -7V5H-4Z M-4 -5Q0 -3 4 -5 M-4 3H4 M-2 5 -4 9H4L2 5',
+		D: 'M-9 -4 1 -9 8 -3 4 6 -4 9Z M-9 -4 0 -1 1 -9 M0 -1 4 6 M0 -1 -4 9',
+		C:
+			object.id === 29257
+				? 'M-6 -9H2V-2Q2 0 -1 1L-1 9H-3V1Q-6 0 -6 -2Z M-4 -7V-3 M-1 -7V-3'
+				: 'M-8 -4 -2 -8 8 -3 8 4 2 8 -8 3Z M-8 -4 2 1 8 -3 M2 1V8',
+		P: 'M-4 -4H4V4H-4Z M-11 -3H-6V3H-11Z M6 -3H11V3H6Z M-6 0H-4 M4 0H6 M0 -4V-9 M-3 -9Q0 -5 3 -9',
+		R: 'M-4 -7Q0 -10 4 -7V5H-4Z M-4 -5Q0 -3 4 -5 M-4 3H4 M-2 5 -4 9H4L2 5',
 	};
 	return (
 		<svg aria-hidden="true" height="26" viewBox="-13 -13 26 26" width="26">
 			<path
-				d={paths[object.designator]}
+				d={paths[object.kind]}
 				fill="none"
 				stroke="currentColor"
 				strokeLinejoin="round"
@@ -35,13 +36,19 @@ export function ObjectGlyph({ object }: { object: SpaceObject }) {
 	);
 }
 
-export function Wheel({ birthday }: { birthday?: Temporal.PlainDate }) {
+export function Wheel({
+	birthday,
+	objects,
+}: {
+	birthday?: Temporal.PlainDate;
+	objects: SpaceObject[];
+}) {
 	const year = birthday?.year ?? 2019;
 	const january = Temporal.PlainDate.from({ year, month: 1, day: 1 });
 	const marker = birthday && point(birthday, 136);
 	return (
 		<svg
-			aria-label="Launch anniversaries on a circular calendar"
+			aria-label="Orbital release anniversaries on a circular calendar"
 			role="img"
 			className={style.wheel}
 			viewBox="-175 -175 350 350"
@@ -94,9 +101,15 @@ export function Wheel({ birthday }: { birthday?: Temporal.PlainDate }) {
 				</g>
 			</g>
 			{objects.map(object => {
-				const pos = point(object.launched.with({ year }), 111);
+				const release = Temporal.PlainDate.from(
+					object.start.slice(0, 10)
+				);
+				const pos = point(
+					release.with({ year }),
+					{ C: 111, P: 111, D: 77, R: 45 }[object.kind]
+				);
 				return (
-					<g key={object.designator}>
+					<g key={object.id}>
 						{marker && (
 							<line
 								x1={marker.x}

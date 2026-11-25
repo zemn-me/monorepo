@@ -197,3 +197,51 @@
 		text-align: center;
 	}
 }
+
+.form .example {
+	background: transparent;
+	color: inherit;
+	border-color: transparent;
+	text-decoration: underline;
+}
+
+.sky {
+	margin-block: 1.5rem;
+}
+.sky summary {
+	cursor: pointer;
+	padding-block: 0.8rem;
+	font-size: 1.2rem;
+}
+.sky input {
+	max-width: 9rem;
+}
+.sky li {
+	margin-block: 0.65rem;
+}
+.skyMap {
+	display: block;
+	max-width: 20rem;
+	width: 100%;
+	color: #f0e8d1;
+	background: #18273b;
+}
+.credit {
+	font-size: 0.85rem;
+	margin-top: 2rem;
+	line-height: 1.5;
+}
+
+.collection {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin: 1rem 0;
+}
+.collection select {
+	min-height: 44px;
+	padding: 0.4rem;
+	color: var(--foreground-color);
+	background: var(--background-color);
+	font: inherit;
+}

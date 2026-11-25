@@ -1,6 +1,10 @@
 import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
+	{
+		path: 'experiments/space-junk/orbit/:id/:minute',
+		file: 'experiments/space_junk/elements.js',
+	},
 	{ path: 'auth/session', file: 'auth-session.js' },
 	{
 		path: 'experiments/red-alert',

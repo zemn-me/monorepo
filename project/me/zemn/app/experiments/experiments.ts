@@ -43,7 +43,7 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 			{
 				href: '/experiments/space-junk',
 				title: 'Space junk star chart',
-				description: 'Find your birthday’s closest space-junk launch anniversary.',
+				description: 'Find the space junk that was in orbit when you were born.',
 			},
 			{
 				href: '/experiments/elastictabs',
