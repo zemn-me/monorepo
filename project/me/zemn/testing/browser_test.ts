@@ -622,15 +622,20 @@ describe('zemn.me website', () => {
 				const day = await driver.findElement(By.name('day'));
 				const clock = await driver.findElement(By.name('time'));
 				const readings = () => Promise.all(rulers.map(r => r.getAttribute('value').then(Number)));
+				const waitForRulers = (instant: number) => driver.wait(
+					async () => (await readings()).every(t => t === instant),
+					5000, `Waiting for all four rulers to show ${new Date(instant).toISOString()}`
+				);
 				await day.sendKeys(Key.ARROW_LEFT);
 				const july = Date.parse('2006-07-31T12:00Z');
-				expect(await readings()).toEqual([july, july, july, july]);
+				await waitForRulers(july);
 				await day.sendKeys(Key.ARROW_RIGHT);
+				await waitForRulers(Date.parse('2006-08-01T12:00Z'));
 				const midnight = await driver.findElement(By.xpath('//*[local-name()="fieldset"]//*[local-name()="text" and .="1"]'));
 				await midnight.click();
 				await clock.sendKeys(Key.ARROW_LEFT);
 				const end = Date.parse('2006-07-31T23:59Z');
-				expect(await readings()).toEqual([end, end, end, end]);
+				await waitForRulers(end);
 				await driver.wait(async () =>
 					(await driver.findElement(By.css('figcaption time')).getAttribute('datetime')) === new Date(end).toISOString(), 5000);
 
@@ -638,6 +643,7 @@ describe('zemn.me website', () => {
 					`//fieldset//*[local-name()="text" and .="${n}"]`
 				));
 				await yearMark(2006).click();
+				await waitForRulers(Date.parse('2006-01-01T00:00Z'));
 				const year = await driver.findElement(By.name('year'));
 				const start = await yearMark(2006).getRect();
 				const next = await yearMark(2007).getRect();
@@ -645,7 +651,7 @@ describe('zemn.me website', () => {
 				await driver.actions().move({ origin: year }).press()
 					.move({ origin: year, x: -halfYear, y: 0 }).perform();
 				const midyear = Date.parse('2006-07-01T00:00Z');
-				await driver.wait(async () => (await readings()).every(t => t === midyear), 5000);
+				await waitForRulers(midyear);
 				await driver.actions().release().perform();
 				expect(await readings()).toEqual([midyear, midyear, midyear, midyear]);
 			} finally {

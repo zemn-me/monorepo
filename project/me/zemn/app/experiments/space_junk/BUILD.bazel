@@ -49,6 +49,7 @@ ts_project(
         "sky.tsx",
         "snapshot.ts",
         "use_debris_positions.ts",
+        "use_ruler_clock.ts",
         "zodiac.ts",
         "zodiac_wheel.tsx",
         ":catalogue_assets_generated",
@@ -114,6 +115,8 @@ filegroup(
         "snapshot.ts",
         "use_debris_positions.ts",
         "use_debris_positions_test.tsx",
+        "use_ruler_clock.ts",
+        "use_ruler_clock_test.tsx",
         "zodiac.ts",
         "zodiac_wheel.tsx",
     ],
@@ -125,12 +128,14 @@ ts_project(
     srcs = [
         "chart_test.ts",
         "use_debris_positions_test.tsx",
+        "use_ruler_clock_test.tsx",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":space_junk",
         "//:node_modules/@jest/globals",
         "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@testing-library/react",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/@types/react-dom",
@@ -150,6 +155,14 @@ jest_test(
 jest_test(
     name = "debris_positions_test",
     srcs = ["use_debris_positions_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":space_junk_tests"],
+)
+
+jest_test(
+    name = "ruler_clock_test",
+    srcs = ["use_ruler_clock_test.js"],
     jsdom = True,
     visibility = ["//:__subpackages__"],
     deps = [":space_junk_tests"],

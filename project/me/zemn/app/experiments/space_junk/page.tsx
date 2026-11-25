@@ -24,13 +24,14 @@ import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
-import { firstInstant, zonedTime } from './ruler_time.js';
 import { Globe } from './globe.js';
 import { groundLocation } from './globe_geometry.js';
-import { bodyPositions, classical, modern, type ChartBody } from './planets.js';
+import { bodyPositions, type ChartBody, classical, modern } from './planets.js';
+import { firstInstant, zonedTime } from './ruler_time.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
+import { useRulerClock } from './use_ruler_clock.js';
 import { type Birthplace, zodiacFrame } from './zodiac.js';
 import { ZodiacWheel } from './zodiac_wheel.js';
 
@@ -155,11 +156,13 @@ const BirthdayChart = memo(function BirthdayChart({
 	);
 	const placements = useMemo(
 		() =>
-			markers.map(marker => ({
-				marker,
-				...debrisZodiac.direction(marker.fixed),
-			})),
-		[markers, debrisZodiac]
+			view === 'wheel'
+				? markers.map(marker => ({
+						marker,
+						...debrisZodiac.direction(marker.fixed),
+					}))
+				: [],
+		[view, markers, debrisZodiac]
 	);
 	const focus =
 		placements.find(p => p.marker.object.id === selected?.object.id) ??
@@ -450,9 +453,7 @@ const BirthdayChart = memo(function BirthdayChart({
 });
 
 export default function Page() {
-	const [instant, setInstant] = useState(() =>
-		Date.parse('2006-08-01T12:00:00Z')
-	);
+	const { instant, clock } = useRulerClock(Date.UTC(2006, 7, 1, 12));
 	const [junk, setJunk] = useState(true);
 	const [deviceZone, setDeviceZone] = useState('UTC');
 	useEffect(
@@ -473,12 +474,12 @@ export default function Page() {
 			// A birthday is entered as a wall time, so changing the city keeps the
 			// date and clock reading and resolves them to an instant in the new zone.
 			if (nextZone !== zone)
-				setInstant(current =>
+				clock.commit(
 					Math.max(
 						firstInstant,
 						Math.min(
 							Date.parse(catalogueDate + 'T23:59:59.999Z'),
-							zonedTime(current, zone)
+							zonedTime(clock.read(), zone)
 								.toPlainDateTime()
 								.toZonedDateTime(nextZone).epochMilliseconds
 						)
@@ -486,7 +487,7 @@ export default function Page() {
 				);
 			setPlace(next);
 		},
-		[deviceZone, zone]
+		[clock, deviceZone, zone]
 	);
 
 	const catalogue = useQuery({
@@ -509,7 +510,7 @@ export default function Page() {
 				epoch={instant}
 				asOf={catalogueDate}
 				zone={zone}
-				onChange={setInstant}
+				clock={clock}
 			/>
 			<BirthdayChart
 				{...chart}

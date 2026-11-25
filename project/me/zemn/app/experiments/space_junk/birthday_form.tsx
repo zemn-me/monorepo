@@ -1,21 +1,16 @@
-import {
-	type Dispatch,
-	type SetStateAction,
-	useEffect,
-	useMemo,
-	useRef,
-} from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import {
 	dayMs,
 	firstInstant,
 	instantAtPosition,
 	minuteMs,
+	type RulerUnit,
 	rulerPosition,
 	zonedTime,
-	type RulerUnit,
 } from './ruler_time.js';
 import style from './style.module.css';
+import type { RulerClock, TimeScale } from './use_ruler_clock.js';
 
 const scales = {
 	year: { label: 'Year', pitch: 72, tick: 1 / 12, major: 1, page: 5 },
@@ -23,7 +18,6 @@ const scales = {
 	day: { label: 'Day', pitch: 40, tick: 0.25, major: 1, page: 7 },
 	minute: { label: 'Time', pitch: 1.1, tick: 5, major: 60, page: 60 },
 } as const;
-type ChangeInstant = Dispatch<SetStateAction<number>>;
 
 function Ruler({
 	unit,
@@ -35,7 +29,7 @@ function Ruler({
 	zone,
 	tickOrigin = 0,
 	zoneName,
-	onChange,
+	clock,
 }: {
 	unit: RulerUnit;
 	epoch: number;
@@ -46,25 +40,25 @@ function Ruler({
 	zone: string;
 	tickOrigin?: number;
 	zoneName?: string;
-	onChange: ChangeInstant;
+	clock: RulerClock;
 }) {
 	const { label, pitch, tick, major, page } = scales[unit];
-	const centre = rulerPosition(unit, epoch, zone);
-	const limits = useMemo(
-		() => ({
-			min: rulerPosition(unit, firstInstant, zone),
-			max: rulerPosition(unit, lastInstant, zone),
-		}),
-		[unit, lastInstant, zone]
-	);
-	const at = useMemo(
-		() => (position: number) => {
-			if (position <= limits.min) return firstInstant;
-			if (position >= limits.max) return lastInstant;
-			return instantAtPosition(unit, position, zone);
-		},
-		[limits, unit, lastInstant, zone]
-	);
+	const scale = useMemo<TimeScale>(() => {
+		const position = (time: number) => rulerPosition(unit, time, zone);
+		const min = position(firstInstant);
+		const max = position(lastInstant);
+		return {
+			min,
+			max,
+			position,
+			instant: mark => {
+				if (mark <= min) return firstInstant;
+				if (mark >= max) return lastInstant;
+				return instantAtPosition(unit, mark, zone);
+			},
+		};
+	}, [unit, lastInstant, zone]);
+	const centre = scale.position(epoch);
 	const input = useRef<HTMLInputElement>(null);
 	const track = useRef<HTMLDivElement>(null);
 	const drag = useRef<{
@@ -90,25 +84,20 @@ function Ruler({
 					: event.deltaMode === WheelEvent.DOM_DELTA_PAGE
 						? strip.clientWidth
 						: 1;
-			onChange(current =>
-				at(
-					rulerPosition(unit, current, zone) +
-						(delta * pixels) / pitch
-				)
-			);
+			clock.seek(clock.position(scale) + (delta * pixels) / pitch, scale);
 		};
 		strip.addEventListener('wheel', scroll, { passive: false });
 		return () => strip.removeEventListener('wheel', scroll);
-	}, [at, unit, pitch, onChange, zone]);
+	}, [clock, scale, pitch]);
 
 	const ticks = [];
 	const radius = 430 / pitch;
 	// An integer tick index avoids drift at twelfths of a year.
 	const first = Math.ceil(
-		(Math.max(limits.min, centre - radius) - tickOrigin) / tick
+		(Math.max(scale.min, centre - radius) - tickOrigin) / tick
 	);
 	const last = Math.floor(
-		(Math.min(limits.max, centre + radius) - tickOrigin) / tick
+		(Math.min(scale.max, centre + radius) - tickOrigin) / tick
 	);
 	for (let i = first; i <= last; i++) {
 		const mark = i * tick + tickOrigin;
@@ -154,7 +143,7 @@ function Ruler({
 					drag.current = {
 						id: e.pointerId,
 						x: e.clientX,
-						origin: centre,
+						origin: clock.position(scale),
 						moved: false,
 						mark: tick == null ? undefined : Number(tick),
 					};
@@ -167,20 +156,22 @@ function Ruler({
 					const threshold = e.pointerType === 'touch' ? 3 : 0.5;
 					if (!start.moved && Math.abs(dx) < threshold) return;
 					start.moved = true;
-					onChange(at(start.origin - dx / pitch));
+					clock.seek(start.origin - dx / pitch, scale);
 				}}
 				onPointerUp={e => {
 					const start = drag.current;
 					if (!start || start.id !== e.pointerId) return;
 					if (start.moved) {
-						onChange(
-							at(start.origin - (e.clientX - start.x) / pitch)
+						clock.seek(
+							start.origin - (e.clientX - start.x) / pitch,
+							scale
 						);
 					} else {
 						const box = e.currentTarget.getBoundingClientRect();
 						const offset = e.clientX - box.left - box.width / 2;
-						onChange(
-							at(start.mark ?? start.origin + offset / pitch)
+						clock.seek(
+							start.mark ?? start.origin + offset / pitch,
+							scale
 						);
 					}
 				}}
@@ -198,7 +189,7 @@ function Ruler({
 					max={lastInstant}
 					step="1"
 					value={epoch}
-					onChange={e => onChange(e.currentTarget.valueAsNumber)}
+					onChange={e => clock.seek(e.currentTarget.valueAsNumber)}
 					onKeyDown={e => {
 						const increments: Record<string, number> = {
 							ArrowRight: 1,
@@ -211,21 +202,22 @@ function Ruler({
 						const increment = increments[e.key];
 						if (increment === undefined) return;
 						e.preventDefault();
-						onChange(current => {
-							if (unit === 'day')
-								return Math.max(
+						if (unit === 'day') {
+							const time = zonedTime(clock.read(), zone).add({
+								days: increment,
+							}).epochMilliseconds;
+							clock.seek(
+								Math.max(
 									firstInstant,
-									Math.min(
-										lastInstant,
-										zonedTime(current, zone).add({
-											days: increment,
-										}).epochMilliseconds
-									)
-								);
-							return at(
-								rulerPosition(unit, current, zone) + increment
+									Math.min(lastInstant, time)
+								)
 							);
-						});
+						} else {
+							clock.seek(
+								clock.position(scale) + increment,
+								scale
+							);
+						}
 					}}
 				/>
 				<svg aria-hidden="true" width="100%" height="44">
@@ -239,16 +231,16 @@ function Ruler({
 	);
 }
 
-export function BirthdayRulers({
+export const BirthdayRulers = memo(function BirthdayRulers({
 	epoch,
 	asOf,
 	zone,
-	onChange,
+	clock,
 }: {
 	epoch: number;
 	asOf: string;
 	zone: string;
-	onChange: ChangeInstant;
+	clock: RulerClock;
 }) {
 	const languages = useLocale();
 	const numbers = useMemo(
@@ -270,7 +262,7 @@ export function BirthdayRulers({
 		});
 	}, [languages]);
 	const date = zonedTime(epoch, zone);
-	const clock = date.toPlainTime().toString({ smallestUnit: 'second' });
+	const localTime = date.toPlainTime().toString({ smallestUnit: 'second' });
 	const zoneFormat = useMemo(
 		() =>
 			new Intl.DateTimeFormat(languages, {
@@ -305,9 +297,10 @@ export function BirthdayRulers({
 	const common = {
 		epoch,
 		lastInstant: Date.parse(asOf + 'T23:59:59.999Z'),
-		accessibleTime: fullDate.format(epoch) + ' · ' + clock + ' ' + zoneName,
+		accessibleTime:
+			fullDate.format(epoch) + ' · ' + localTime + ' ' + zoneName,
 		zone,
-		onChange,
+		clock,
 	};
 	return (
 		<fieldset className={style.rulers} aria-label="Chart date and time">
@@ -334,11 +327,11 @@ export function BirthdayRulers({
 			<Ruler
 				{...common}
 				unit="minute"
-				readout={clock}
+				readout={localTime}
 				zoneName={zoneName}
 				tickOrigin={-(date.offsetNanoseconds / 60e9) % 60}
 				tickLabel={mark => tickTime.format(mark * minuteMs)}
 			/>
 		</fieldset>
 	);
-}
+});

@@ -17,9 +17,9 @@ import {
 	width,
 } from './globe_scene.js';
 import { GlobeZodiac } from './globe_zodiac.js';
+import { OrbitScene } from './orbit_scene.js';
 import { PlanetPositions } from './planet_layer.js';
 import type { BodyPosition } from './planets.js';
-import { OrbitScene } from './orbit_scene.js';
 import style from './style.module.css';
 import type { Birthplace } from './zodiac.js';
 
@@ -116,13 +116,10 @@ export function Globe({
 		previousHome.current = homeView;
 	}, [birthplace, homeView]);
 	const [extent, setExtent] = useState(initialExtent);
+	// A moving outermost object must not invalidate the projection of every coastline.
 	const frame = useMemo(
-		() =>
-			globeFrame(
-				globeCamera(view.turn, view.tilt, extent),
-				Math.max(maxExtent, extent)
-			),
-		[view, extent, maxExtent]
+		() => globeFrame(globeCamera(view.turn, view.tilt, extent), Infinity),
+		[view, extent]
 	);
 	const world = useMemo(
 		() => (coastline.data ? globeWorld(coastline.data) : baseWorld),
