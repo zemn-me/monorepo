@@ -394,3 +394,62 @@
 	margin: 0;
 	cursor: pointer;
 }
+
+.chartModes {
+	display: flex;
+	gap: 0.4rem;
+	margin: 1rem 0 0.65rem;
+}
+.chartModes button {
+	min-height: 44px;
+	padding: 0.4rem 0.9rem;
+	font: inherit;
+	border: 1px solid currentColor;
+	color: var(--foreground-color);
+	background: var(--background-color);
+	cursor: pointer;
+}
+.chartModes button[aria-pressed='true'] {
+	background: var(--foreground-color);
+	color: var(--background-color);
+}
+.origin {
+	border-block: 1px solid #697a7c;
+	margin: 0.75rem 0;
+	padding: 0.3rem 0;
+}
+.origin input {
+	width: 6.5rem;
+}
+.origin summary,
+.wheelReading summary {
+	cursor: pointer;
+	padding-block: 0.7rem;
+}
+.wheelReading {
+	margin: 0.7rem 0.4rem 0;
+	border-top: 1px solid #546874;
+	padding-top: 0.65rem;
+	font-size: 0.9rem;
+	line-height: 1.4;
+}
+.wheelReading strong {
+	color: var(--gold);
+}
+.wheelReading dl {
+	margin: 0.5rem 0;
+}
+.wheelReading dl div {
+	margin: 0.4rem 0;
+}
+.wheelReading dd {
+	margin-inline-start: 0.7rem;
+}
+.viewControls button[aria-pressed='true'] {
+	color: var(--gold);
+	font-weight: bold;
+}
+
+.page :is(button, summary, input, svg[tabindex]) {
+	scroll-margin-block-start: calc(var(--glade-bar-block-size, 4rem) + 1rem);
+}

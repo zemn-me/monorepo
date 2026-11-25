@@ -152,14 +152,13 @@ function SkyReading({
 
 export function Sky({
 	birthday,
-	defaultTime,
+	observer,
 	objects,
 }: {
 	birthday: string;
-	defaultTime: string;
+	observer?: Observer;
 	objects: SpaceObject[];
 }) {
-	const [observer, setObserver] = useState<Observer>();
 	const [open, setOpen] = useState(false);
 	return (
 		<details
@@ -167,57 +166,18 @@ export function Sky({
 			onToggle={e => setOpen(e.currentTarget.open)}
 		>
 			<summary>See the sky from your birthplace</summary>
-			<p>
-				To locate the objects on this results page, enter the UTC time
-				on {birthday} and the coordinates of your birthplace. If
-				converting to UTC changes the date, enter the UTC date above.
-				Use negative numbers for south and west.
-			</p>
-			<form
-				className={style.form}
-				onSubmit={e => {
-					e.preventDefault();
-					const data = new FormData(e.currentTarget);
-					setObserver({
-						time: String(data.get('time')),
-						latitude: Number(data.get('latitude')),
-						longitude: Number(data.get('longitude')),
-					});
-				}}
-			>
-				<label>
-					Birth time (UTC)
-					<input
-						type="time"
-						name="time"
-						defaultValue={defaultTime}
-						required
-					/>
-				</label>
-				<label>
-					Latitude (°)
-					<input
-						type="number"
-						name="latitude"
-						min="-90"
-						max="90"
-						step="any"
-						required
-					/>
-				</label>
-				<label>
-					Longitude (°)
-					<input
-						type="number"
-						name="longitude"
-						min="-180"
-						max="180"
-						step="any"
-						required
-					/>
-				</label>
-				<button type="submit">Draw local sky</button>
-			</form>
+			{observer ? (
+				<p>
+					Objects on this results page, viewed from{' '}
+					{observer.latitude}°, {observer.longitude}°.
+				</p>
+			) : (
+				<p>
+					Enter your coordinates under{' '}
+					<a href="#chart-birthplace">Set birthplace</a> to see the
+					objects above your horizon.
+				</p>
+			)}
 			{open && observer && (
 				<SkyReading
 					birthday={birthday}

@@ -139,7 +139,11 @@ export function globeCamera(
 	};
 }
 
-export function globeFrame(camera: OrbitCamera, maxRadius: number) {
+export function globeFrame(
+	camera: OrbitCamera,
+	maxRadius: number,
+	solidEarth = true
+) {
 	const pose = orbitPose(camera);
 	const toCamera = unwrap(cameraSpaceTransformFromPose(pose));
 	const orientation = unwrap(orientationFromYawPitch(pose.yaw, pose.pitch));
@@ -167,7 +171,8 @@ export function globeFrame(camera: OrbitCamera, maxRadius: number) {
 		const visible =
 			depth >= projection.nearPlane &&
 			depth <= projection.farPlane &&
-			(distance * depth >= length2 ||
+			(!solidEarth ||
+				distance * depth >= length2 ||
 				distance ** 2 * lateral2 >= length2);
 		return { center, x: x(pixels), y: y(pixels), depth, visible };
 	}

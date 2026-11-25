@@ -10,6 +10,8 @@ import {
 import { globeCamera, globeFrame, height, width } from './globe_scene.js';
 import { archivedOrbit, lookFrom, snapshotPositions } from './orbit.js';
 
+import { nearestAspects, signPosition, zodiacFrame } from './zodiac.js';
+
 const spatula: SpaceObject = {
 	id: 29257,
 	name: 'EVA debris (spatula)',
@@ -165,5 +167,60 @@ describe('orbital globe', () => {
 		expect(
 			(frame.project(marker).x - width / 2) * frame.kmPerPixel
 		).toBeCloseTo(7378.137);
+	});
+});
+
+describe('birthday wheel', () => {
+	const time = new Date('2000-01-01T12:00:00Z');
+	// At J2000.0 Greenwich sidereal time is 280.460618 degrees. At this meridian
+	// the local zenith points at the equinox and due east points at RA 90 degrees.
+	const meridian = 79.539382;
+	const a = (meridian * Math.PI) / 180;
+	it('orients the wheel to the eastern intersection with the horizon', () => {
+		const earth = zodiacFrame(time);
+		expect(earth.ascendant).toBeUndefined();
+		const longitude = earth.direction({
+			x: Math.cos(a),
+			y: Math.sin(a),
+			z: 0,
+		}).longitude;
+		expect(Math.min(longitude, 360 - longitude)).toBeCloseTo(0, 3);
+		const local = zodiacFrame(time, { latitude: 0, longitude: meridian });
+		expect(local.ascendant).toBeCloseTo(90, 4);
+		expect(
+			zodiacFrame(time, { latitude: 90, longitude: 0 }).ascendant
+		).toBeUndefined();
+		const fixed = {
+			x: 6378.137 * Math.cos(a) - 500 * Math.sin(a),
+			y: 6378.137 * Math.sin(a) + 500 * Math.cos(a),
+			z: 0,
+		};
+		expect(local.direction(fixed).longitude).toBeCloseTo(90, 4);
+		expect(local.direction(fixed).latitude).toBeCloseTo(-23.43929, 4);
+		expect(earth.direction(fixed).longitude).toBeLessThan(5);
+	});
+	it('assigns signs at wraparound and chooses the nearest other object per aspect', () => {
+		expect(signPosition(360)).toBe('0° Aries');
+		expect(signPosition(-1)).toBe('29° Pisces');
+		const placement = (id: number, longitude: number) => ({
+			marker: markerFrom({ ...spatula, id }, [id, 7000, 0, 0]),
+			longitude,
+			latitude: 0,
+		});
+		const focus = placement(1, 359.8);
+		const aspects = nearestAspects(focus, [
+			focus,
+			placement(2, 0.1),
+			placement(3, 60.5),
+			placement(4, 59.85),
+			placement(5, 177),
+		]);
+		expect(
+			aspects.map(a => [a.name, a.placement.marker.object.id])
+		).toEqual([
+			['Conjunction', 2],
+			['Sextile', 4],
+		]);
+		expect(aspects[0]?.separation).toBeCloseTo(0.3);
 	});
 });

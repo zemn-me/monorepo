@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { createSVGRenderer, svgSnapshotPaths } from '#root/ts/3d/svg_scene.js';
+import { useMemo, useRef, useState } from 'react';
+import { svgSnapshotPaths } from '#root/ts/3d/svg_scene.js';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { coastlineUrl } from './assets.js';
 import {
@@ -16,6 +16,7 @@ import {
 	height,
 	width,
 } from './globe_scene.js';
+import { OrbitScene } from './orbit_scene.js';
 import style from './style.module.css';
 
 const empty: Marker[] = [];
@@ -94,9 +95,6 @@ export function Globe({
 		() => globeFrame(globeCamera(view.turn, view.tilt, extent), maxExtent),
 		[view, extent, maxExtent]
 	);
-	const svg = useRef<SVGSVGElement>(null);
-	const scene = useRef<SVGGElement>(null);
-	const renderer = useRef<ReturnType<typeof createSVGRenderer> | null>(null);
 	const world = useMemo(
 		() => (coastline.data ? globeWorld(coastline.data) : baseWorld),
 		[coastline.data]
@@ -122,24 +120,6 @@ export function Globe({
 		return { faces, hits };
 	}, [markers, frame]);
 
-	useLayoutEffect(() => {
-		const live = createSVGRenderer(svg.current!, scene.current!);
-		renderer.current = live;
-		return () => {
-			live.dispose(true);
-			renderer.current = null;
-		};
-	}, []);
-	useLayoutEffect(() => {
-		renderer.current!.setWorld(world);
-	}, [world]);
-	useLayoutEffect(() => {
-		renderer.current!.render(
-			frame.camera,
-			projected.faces,
-			frame.projection
-		);
-	}, [world, frame, projected]);
 	const focus = selected && frame.project(selected);
 	const ground =
 		location &&
@@ -157,7 +137,6 @@ export function Globe({
 	return (
 		<div className={style.viewer}>
 			<svg
-				ref={svg}
 				id="orbital-globe"
 				tabIndex={-1}
 				className={style.globe}
@@ -219,9 +198,14 @@ export function Globe({
 					drag.current = null;
 				}}
 			>
-				<g ref={scene} aria-label="Earth and orbiting debris">
+				<OrbitScene
+					label="Earth and orbiting debris"
+					world={world}
+					faces={projected.faces}
+					frame={frame}
+				>
 					{initialScene}
-				</g>
+				</OrbitScene>
 				{focus?.visible && (
 					<>
 						{ground?.visible && (

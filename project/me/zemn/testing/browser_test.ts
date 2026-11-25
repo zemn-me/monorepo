@@ -435,6 +435,15 @@ describe('zemn.me website', () => {
 				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
 				expect(await reading.getText()).toContain('1 August 2006');
 				expect(await reading.getText()).toContain('There was a spatula in orbit');
+				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
+				expect(await wheel.getText()).toContain('ARIES');
+				await driver.findElement(By.xpath('//button[.="Explore in 3D"]')).click();
+				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
+				await driver.findElement(By.xpath('//button[.="Return to wheel"]')).click();
+				expect(await wheel.getAttribute('aria-label')).toContain('Face-on');
+				const earthView = await driver.findElement(By.xpath('//button[.="Earth orbits"]'));
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthView);
+				await earthView.click();
 				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
 				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting debris"]'));
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>

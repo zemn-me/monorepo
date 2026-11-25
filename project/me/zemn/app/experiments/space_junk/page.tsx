@@ -5,6 +5,7 @@ import { Temporal } from 'temporal-polyfill';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
 import { BirthdayForm } from './birthday_form.js';
+import { BirthplaceForm } from './birthplace.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import { Globe } from './globe.js';
 import { catalogueMarkers, groundLocation } from './globe_geometry.js';
@@ -12,6 +13,8 @@ import { ObjectGlyph } from './object_glyph.js';
 import type { PositionRow } from './orbit.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
+import { type Birthplace, zodiacFrame } from './zodiac.js';
+import { ZodiacWheel } from './zodiac_wheel.js';
 
 function displayDate(day: string) {
 	return Temporal.PlainDate.from(day.slice(0, 10)).toLocaleString('en-GB', {
@@ -34,6 +37,8 @@ function BirthdayChart({
 	);
 	const day = birthday.toString();
 	const [time, setTime] = useState('12:00');
+	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
+	const [place, setPlace] = useState<Birthplace>();
 	const [selection, setSelection] = useState<{
 		id: number;
 		revision: number;
@@ -71,6 +76,21 @@ function BirthdayChart({
 		[markers]
 	);
 	const selected = selection && byId.get(selection.id);
+	const zodiac = useMemo(
+		() => zodiacFrame(new Date(minute * 60000), place),
+		[minute, place]
+	);
+	const placements = useMemo(
+		() =>
+			markers.map(marker => ({
+				marker,
+				...zodiac.direction(marker.fixed),
+			})),
+		[markers, zodiac]
+	);
+	const focus =
+		placements.find(p => p.marker.object.id === selected?.object.id) ??
+		placements[0];
 	const location = selected && groundLocation(selected);
 	const filtered = useMemo(() => {
 		const term = search.trim().toLowerCase();
@@ -95,13 +115,43 @@ function BirthdayChart({
 		);
 	return (
 		<>
+			<div
+				className={style.chartModes}
+				role="group"
+				aria-label="Chart view"
+			>
+				<button
+					type="button"
+					aria-pressed={view === 'wheel'}
+					onClick={() => setView('wheel')}
+				>
+					Zodiac wheel
+				</button>
+				<button
+					type="button"
+					aria-pressed={view === 'earth'}
+					onClick={() => setView('earth')}
+				>
+					Earth orbits
+				</button>
+			</div>
 			<figure className={style.plate}>
-				<Globe
-					key={selected ? selection?.revision : 'earth'}
-					markers={markers}
-					selected={selected}
-					onSelect={m => locate(m.object.id)}
-				/>
+				{view === 'wheel' ? (
+					<ZodiacWheel
+						placements={placements}
+						ascendant={zodiac.ascendant}
+						selected={focus}
+						onSelect={m => locate(m.object.id)}
+					/>
+				) : (
+					<Globe
+						key={selected ? selection?.revision : 'earth'}
+						markers={markers}
+						selected={selected}
+						onSelect={m => locate(m.object.id)}
+					/>
+				)}
+
 				<figcaption aria-live="polite">
 					<time dateTime={birthday.toString()}>
 						✦ {displayDate(birthday.toString())}
@@ -111,6 +161,13 @@ function BirthdayChart({
 							? `${count.toLocaleString('en-GB')} ${count === 1 ? 'object' : 'objects'} in orbit`
 							: 'A quiet sky'}
 					</h2>
+					{view === 'wheel' && (
+						<p>
+							The wheel looks down on Earth’s orbital plane from
+							the north. Tilt it to see each object’s direction on
+							a sky sphere, all drawn at equal distance.
+						</p>
+					)}
 					{lead?.id === 29257 && (
 						<p>
 							There was a spatula in orbit the day you were born.
@@ -139,7 +196,7 @@ function BirthdayChart({
 								}}
 							>
 								<label>
-									Globe time (UTC)
+									Chart time (UTC)
 									<input
 										type="time"
 										name="globe-time"
@@ -149,6 +206,12 @@ function BirthdayChart({
 								</label>
 								<button type="submit">Set time</button>
 							</form>
+							<BirthplaceForm
+								place={place}
+								onPlace={setPlace}
+								wheel={view === 'wheel'}
+								ascendant={zodiac.ascendant}
+							/>
 							{snapshot.isError ? (
 								<p role="alert">
 									Orbit archive unavailable.{' '}
@@ -160,7 +223,7 @@ function BirthdayChart({
 									</button>
 								</p>
 							) : (
-								<p role="status" aria-label="Globe coverage">
+								<p role="status" aria-label="Chart coverage">
 									{snapshot.data
 										? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} located at ${time} UTC.`
 										: 'Loading archived orbital positions…'}
@@ -188,7 +251,7 @@ function BirthdayChart({
 									</span>
 								</div>
 							)}
-							{location && selected && (
+							{view === 'earth' && location && selected && (
 								<p className={style.location}>
 									<strong>{selected.object.name}</strong>
 									<br />
@@ -252,8 +315,7 @@ function BirthdayChart({
 					</div>
 					{rows.length > 0 && (
 						<Sky
-							key={time}
-							defaultTime={time}
+							observer={place && { ...place, time }}
 							birthday={birthday.toString()}
 							objects={rows.map(row => row.object)}
 						/>
@@ -287,10 +349,16 @@ function BirthdayChart({
 									{byId.has(object.id) && (
 										<a
 											className={style.locate}
-											href="#orbital-globe"
+											href={
+												view === 'earth'
+													? '#orbital-globe'
+													: '#zodiac-wheel'
+											}
 											onClick={() => locate(object.id)}
 										>
-											Locate on globe
+											{view === 'earth'
+												? 'Locate on globe'
+												: 'Locate on wheel'}
 										</a>
 									)}
 								</div>
@@ -324,18 +392,19 @@ export default function Page() {
 				Space junk <i>star chart</i>
 			</h1>
 			<p className={style.intro}>
-				Find the spent rockets, loose equipment and satellite fragments
-				that shared your birthday in Earth orbit.
+				See where spent rockets, loose equipment and satellite fragments
+				fell in the zodiac on your birthday.
 			</p>
 			<BirthdayForm asOf={catalogue.data?.asOf} onDraw={setBirthday} />
 			{!birthday ? (
 				<figure className={style.plate}>
-					<Globe />
+					<ZodiacWheel />
 					<figcaption>
-						<h2>Earth orbit</h2>
+						<h2>Your birthday wheel</h2>
 						<p>
-							Enter your birthday to see where debris was orbiting
-							Earth. Drag the globe to explore.
+							Enter your birthday to place debris around the
+							zodiac. Add a birthplace to put the rising sign on
+							the left.
 						</p>
 					</figcaption>
 				</figure>
@@ -371,7 +440,7 @@ export default function Page() {
 				).
 				{catalogue.data &&
 					` Edition of ${displayDate(catalogue.data.asOf)}.`}{' '}
-				Globe positions use SGP4 and orbital elements within three days
+				Debris positions use SGP4 and orbital elements within three days
 				of the chosen time from{' '}
 				<a href="https://spacebook.com/">COMSPOC Spacebook</a>.
 				Coastlines from{' '}
