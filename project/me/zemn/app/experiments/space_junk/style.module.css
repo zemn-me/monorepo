@@ -427,3 +427,12 @@
 		column-gap: 0;
 	}
 }
+
+.globeSign {
+	font-size: 9px;
+	letter-spacing: 0.04em;
+	fill: currentColor;
+	stroke: var(--background-color);
+	stroke-width: 2.5;
+	paint-order: stroke;
+}

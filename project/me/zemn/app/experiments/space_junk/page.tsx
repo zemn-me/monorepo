@@ -92,14 +92,12 @@ const BirthdayChart = memo(function BirthdayChart({
 	const [extra, setExtra] = useState<ChartBody[]>([]);
 	const bodies = useMemo(
 		() =>
-			view === 'wheel'
-				? bodyPositions(
-						[...(traditional ? classical : []), ...extra],
-						new Date(instant),
-						place
-					)
-				: [],
-		[view, traditional, extra, instant, place]
+			bodyPositions(
+				[...(traditional ? classical : []), ...extra],
+				new Date(instant),
+				place
+			),
+		[traditional, extra, instant, place]
 	);
 	const [selection, setSelection] = useState<{
 		id: number;
@@ -158,34 +156,27 @@ const BirthdayChart = memo(function BirthdayChart({
 					role="group"
 					aria-label="Chart layers"
 				>
-					{view === 'wheel' && (
-						<LayerSwitch
-							label="Zodiac"
-							checked={traditional}
-							onChange={setTraditional}
-							title="Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn"
-						/>
-					)}
+					<LayerSwitch
+						label="Zodiac"
+						checked={traditional}
+						onChange={setTraditional}
+						title="Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn"
+					/>
 					<LayerSwitch
 						label="Space junk"
 						checked={junk}
 						onChange={setJunk}
 					/>
-					{view === 'wheel' && (
-						<button
-							type="button"
-							title="More bodies"
-							aria-label="More bodies"
-							aria-expanded={more}
-							aria-controls="additional-chart-bodies"
-							onClick={() => setMore(!more)}
-						>
-							<FontAwesomeIcon
-								icon={faEllipsis}
-								aria-hidden="true"
-							/>
-						</button>
-					)}
+					<button
+						type="button"
+						title="More bodies"
+						aria-label="More bodies"
+						aria-expanded={more}
+						aria-controls="additional-chart-bodies"
+						onClick={() => setMore(!more)}
+					>
+						<FontAwesomeIcon icon={faEllipsis} aria-hidden="true" />
+					</button>
 				</div>
 				<div
 					className={style.chartModes}
@@ -218,30 +209,28 @@ const BirthdayChart = memo(function BirthdayChart({
 					</button>
 				</div>
 			</div>
-			{view === 'wheel' && (
-				<div id="additional-chart-bodies" hidden={!more}>
-					<div
-						className={style.extraBodies}
-						role="group"
-						aria-label="Additional bodies"
-					>
-						{modern.map(body => (
-							<LayerSwitch
-								key={body}
-								label={body}
-								checked={extra.includes(body)}
-								onChange={on =>
-									setExtra(current =>
-										on
-											? [...current, body]
-											: current.filter(b => b !== body)
-									)
-								}
-							/>
-						))}
-					</div>
+			<div id="additional-chart-bodies" hidden={!more}>
+				<div
+					className={style.extraBodies}
+					role="group"
+					aria-label="Additional bodies"
+				>
+					{modern.map(body => (
+						<LayerSwitch
+							key={body}
+							label={body}
+							checked={extra.includes(body)}
+							onChange={on =>
+								setExtra(current =>
+									on
+										? [...current, body]
+										: current.filter(b => b !== body)
+								)
+							}
+						/>
+					))}
 				</div>
-			)}
+			</div>
 			<figure className={style.figure}>
 				{view === 'wheel' ? (
 					<ZodiacWheel
@@ -254,6 +243,9 @@ const BirthdayChart = memo(function BirthdayChart({
 				) : (
 					<Globe
 						key={selection?.revision}
+						instant={instant}
+						bodies={bodies}
+						showSigns={traditional}
 						markers={markers}
 						selected={selected}
 						onSelect={m => locate(m.object.id)}
@@ -457,7 +449,9 @@ export default function Page() {
 					<a href="https://github.com/cosinekitty/astronomy">
 						Astronomy Engine
 					</a>
-					. Lines between these bodies show major aspects within 6°.
+					. Lines on the wheel show major aspects within 6°. The globe
+					marks their sky directions on a reference sphere. Dashed
+					arcs and hollow dots indicate directions behind Earth.
 				</p>
 				<p>
 					Dated Earth-orbit records from{' '}

@@ -16,7 +16,7 @@ import {
 	snapshotPositions,
 } from './orbit.js';
 
-import { bodyPositions, classical } from './planets.js';
+import { bodyPositions, classical, earthFixedSky } from './planets.js';
 import {
 	dayMs,
 	firstInstant,
@@ -202,6 +202,22 @@ describe('birthday wheel', () => {
 	// the local zenith points at the equinox and due east points at RA 90 degrees.
 	const meridian = 79.539382;
 	const a = (meridian * Math.PI) / 180;
+	it('places the zodiac on the rotating globe with the equinox over its sidereal meridian', () => {
+		const fixed = earthFixedSky(time);
+		const aries = fixed(0, 0, 1);
+		expect((Math.atan2(aries.y, aries.x) * 180) / Math.PI).toBeCloseTo(
+			meridian,
+			2
+		);
+		expect(aries.z).toBeCloseTo(0, 5);
+		const solstice = fixed(90, 0, 1);
+		expect((Math.asin(solstice.z) * 180) / Math.PI).toBeCloseTo(23.44, 2);
+		const later = earthFixedSky(new Date(+time + 6 * 3600000))(0, 0, 1);
+		expect((Math.atan2(later.y, later.x) * 180) / Math.PI).toBeCloseTo(
+			meridian - 90.246,
+			2
+		);
+	});
 	it('orients the wheel to the eastern intersection with the horizon', () => {
 		const earth = zodiacFrame(time);
 		expect(earth.ascendant).toBeUndefined();

@@ -498,7 +498,7 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('switches traditional bodies and debris independently on the birthday wheel', async () => {
+		it('switches traditional bodies and debris independently on the wheel and globe', async () => {
 			try {
 				await driver.get(`${origin}/experiments/space-junk`);
 				const toggle = (name: string) => driver.findElement(By.xpath(
@@ -516,12 +516,28 @@ describe('zemn.me website', () => {
 				await driver.findElement(By.css('button[aria-label="More bodies"]')).click();
 				await (await toggle('Pluto')).sendKeys(Key.SPACE);
 				expect((await bodies()).length).toBe(8);
-				await (await toggle('Zodiac')).click();
+				const wheelMoon = await moon();
+				await driver.findElement(By.css('button[aria-label="Earth orbits"]')).click();
+				const globe = await driver.findElement(By.id('orbital-globe'));
+				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] text'));
+				expect(await signs()).toHaveLength(12);
+				expect(await bodies()).toHaveLength(8);
+				expect(await moon()).toBe(wheelMoon);
+				const moonX = () => globe.findElement(By.css('g[aria-label^="Moon ·"] circle')).getAttribute('cx');
+				const beforeTurn = await moonX();
+				await globe.sendKeys(Key.ARROW_RIGHT);
+				expect(await moonX()).not.toBe(beforeTurn);
+				const zodiac = await toggle('Zodiac');
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zodiac);
+				await zodiac.click();
 				expect(await (await bodies())[0]!.getAttribute('aria-label')).toMatch(/^Pluto ·/);
 				expect((await bodies()).length).toBe(1);
+				expect(await signs()).toHaveLength(0);
 				await (await toggle('Pluto')).click();
 				expect(await bodies()).toHaveLength(0);
 				await (await toggle('Space junk')).click();
+				expect(await bodies()).toHaveLength(0);
+				await driver.findElement(By.css('button[aria-label="Zodiac wheel"]')).click();
 				expect(await bodies()).toHaveLength(0);
 			} finally {
 				await driver.quit();

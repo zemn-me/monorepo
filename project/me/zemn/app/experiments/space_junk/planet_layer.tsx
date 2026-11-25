@@ -6,17 +6,25 @@ import style from './style.module.css';
 interface Point {
 	x: number;
 	y: number;
+	visible?: boolean;
 }
 
 export function PlanetLayer({
 	positions,
 	project,
+	showAspects = true,
+	labelObstacles = [],
 }: {
 	positions: BodyPosition[];
 	project: (body: BodyPosition) => Point;
+	showAspects?: boolean;
+	labelObstacles?: readonly Point[];
 }) {
-	const aspects = useMemo(() => bodyAspects(positions), [positions]);
-	const occupied: Point[] = [];
+	const aspects = useMemo(
+		() => (showAspects ? bodyAspects(positions) : []),
+		[positions, showAspects]
+	);
+	const occupied = [...labelObstacles];
 	return (
 		<g aria-label="Zodiac bodies" fill="currentColor">
 			{aspects.map(({ a, b, name, angle }) => {
@@ -67,6 +75,7 @@ export function PlanetLayer({
 					<g
 						key={body.name}
 						role="img"
+						opacity={point.visible === false ? 0.6 : 1}
 						aria-label={
 							body.name + ' · ' + signPosition(body.longitude)
 						}
@@ -82,7 +91,22 @@ export function PlanetLayer({
 							stroke="currentColor"
 							strokeWidth=".6"
 						/>
-						<circle cx={point.x} cy={point.y} r="1.7" />
+						<circle
+							cx={point.x}
+							cy={point.y}
+							r="1.7"
+							fill={
+								point.visible === false
+									? 'var(--background-color)'
+									: 'currentColor'
+							}
+							stroke={
+								point.visible === false
+									? 'currentColor'
+									: undefined
+							}
+							strokeWidth=".65"
+						/>
 						<text
 							x={label.x}
 							y={label.y}
@@ -97,5 +121,26 @@ export function PlanetLayer({
 				);
 			})}
 		</g>
+	);
+}
+
+export function PlanetPositions({ bodies }: { bodies: BodyPosition[] }) {
+	return (
+		bodies.length > 0 && (
+			<details className={style.reading}>
+				<summary>Planet positions</summary>
+				<dl>
+					{bodies.map(body => (
+						<div key={body.name}>
+							<dt>
+								{body.glyph}
+								{'\uFE0E'} {body.name}
+							</dt>
+							<dd>{signPosition(body.longitude)}</dd>
+						</div>
+					))}
+				</dl>
+			</details>
+		)
 	);
 }

@@ -16,6 +16,9 @@ import {
 	height,
 	width,
 } from './globe_scene.js';
+import { GlobeZodiac } from './globe_zodiac.js';
+import { PlanetPositions } from './planet_layer.js';
+import type { BodyPosition } from './planets.js';
 import { OrbitScene } from './orbit_scene.js';
 import style from './style.module.css';
 
@@ -55,10 +58,16 @@ const initialScene = (
 );
 
 export function Globe({
+	instant,
+	bodies,
+	showSigns,
 	markers = empty,
 	selected,
 	onSelect,
 }: {
+	instant: number;
+	bodies: BodyPosition[];
+	showSigns: boolean;
 	markers?: Marker[];
 	selected?: Marker;
 	onSelect?: (marker: Marker) => void;
@@ -93,7 +102,11 @@ export function Globe({
 	const [view, setView] = useState(startingView);
 	const [extent, setExtent] = useState(initialExtent);
 	const frame = useMemo(
-		() => globeFrame(globeCamera(view.turn, view.tilt, extent), maxExtent),
+		() =>
+			globeFrame(
+				globeCamera(view.turn, view.tilt, extent),
+				Math.max(maxExtent, extent)
+			),
 		[view, extent, maxExtent]
 	);
 	const world = useMemo(
@@ -157,7 +170,7 @@ export function Globe({
 				className={style.globe}
 				viewBox={`0 0 ${width} ${height}`}
 				role="img"
-				aria-label="Earth and debris at their estimated orbital positions. Drag or use the arrow keys to rotate."
+				aria-label="Earth and orbital chart. Drag or use the arrow keys to rotate."
 				onPointerDown={e => {
 					if (!e.isPrimary || e.button !== 0) return;
 					drag.current = {
@@ -213,6 +226,10 @@ export function Globe({
 					drag.current = null;
 				}}
 			>
+				<desc>
+					Zodiac marks show sky directions. The distance scale
+					measures Earth and debris.
+				</desc>
 				<defs>
 					<mask
 						id={mask}
@@ -238,6 +255,15 @@ export function Globe({
 					mask={`url(#${mask})`}
 					fill="currentColor"
 				/>
+				{(showSigns || bodies.length > 0) && (
+					<GlobeZodiac
+						instant={instant}
+						frame={frame}
+						radius={extent * 0.9}
+						bodies={bodies}
+						showSigns={showSigns}
+					/>
+				)}
 				{focus?.visible && (
 					<>
 						{ground?.visible && (
@@ -293,6 +319,7 @@ export function Globe({
 					<text y="-8">{scaleKm.toLocaleString('en-GB')} km</text>
 				</g>
 			</svg>
+			<PlanetPositions bodies={bodies} />
 			<details className={style.camera}>
 				<summary>View controls</summary>
 				<div className={style.viewControls}>

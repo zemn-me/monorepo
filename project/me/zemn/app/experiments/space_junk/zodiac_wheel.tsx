@@ -1,7 +1,7 @@
 import { type PointerEvent, useEffect, useMemo, useRef, useState } from 'react';
 import type { Marker } from './globe_geometry.js';
 import { globeCamera, globeFrame, height, width } from './globe_scene.js';
-import { PlanetLayer } from './planet_layer.js';
+import { PlanetLayer, PlanetPositions } from './planet_layer.js';
 import type { BodyPosition } from './planets.js';
 import { OrbitScene } from './orbit_scene.js';
 import style from './style.module.css';
@@ -541,22 +541,7 @@ export function ZodiacWheel({
 					</button>
 				</div>
 			)}
-			{bodies.length > 0 && (
-				<details className={style.reading}>
-					<summary>Planet positions</summary>
-					<dl>
-						{bodies.map(body => (
-							<div key={body.name}>
-								<dt>
-									{body.glyph}
-									{'\uFE0E'} {body.name}
-								</dt>
-								<dd>{signPosition(body.longitude)}</dd>
-							</div>
-						))}
-					</dl>
-				</details>
-			)}
+			<PlanetPositions bodies={bodies} />
 			{selected && (
 				<details className={style.reading}>
 					<summary>
