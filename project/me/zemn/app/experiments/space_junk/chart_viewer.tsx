@@ -2,6 +2,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
 	defaultTurn,
 	flat,
+	orbitalTiltLimit,
 	type PickMarker,
 	useChartCamera,
 	wrap,
@@ -82,7 +83,10 @@ export function ChartViewer({
 		move({
 			...flat,
 			turn: wrap(longitude),
-			tilt: Math.max(-89.9, Math.min(89.9, latitude)),
+			tilt: Math.max(
+				-orbitalTiltLimit,
+				Math.min(orbitalTiltLimit, latitude)
+			),
 		});
 		setExtent(zoom);
 	}

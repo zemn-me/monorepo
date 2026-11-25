@@ -499,8 +499,16 @@ describe('zemn.me website', () => {
 				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
 				await tilt.sendKeys(Key.ARROW_LEFT);
 				await driver.wait(async () => await tilt.getAttribute('value') === '89', 5000);
-				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000,
-					'A one-degree tilt completes the transition to physical distances');
+				const shallowX = await moonDot.getAttribute('cx');
+				expect(shallowX).not.toBe(initialX);
+				expect(await wheel.getText()).not.toContain('km');
+				await driver.sleep(650);
+				expect(await moonDot.getAttribute('cx')).toBe(shallowX);
+				await wheel.sendKeys(Key.ARROW_DOWN.repeat(2));
+				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000);
+				await wheel.sendKeys(Key.ARROW_UP.repeat(2));
+				await driver.wait(async () => await moonDot.getAttribute('cx') === shallowX, 5000,
+					'Returning to the same tilt restores the same intermediate position');
 				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting debris"]'));
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
 					(await Promise.all(paths.slice(0, 6).map(path => path.getAttribute('d')))).join('')

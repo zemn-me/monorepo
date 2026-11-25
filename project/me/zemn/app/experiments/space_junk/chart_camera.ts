@@ -22,36 +22,11 @@ const clamp = (n: number, limit: number) =>
 export const wrap = (turn: number) => degrees(turn + 180) - 180;
 const revolutionMs = 120_000;
 
-// Both poles show the symbolic disc. Once tilted, even a stationary camera
-// finishes unfolding the scene. Reversing direction retraces the same geometry.
-function useUnfold(faceOn: boolean) {
-	const phase = useRef(0);
-	const [amount, setAmount] = useState(0);
-	useEffect(() => {
-		const target = faceOn ? 0 : 1;
-		if (phase.current === target) return;
-		const motion = matchMedia('(prefers-reduced-motion: reduce)');
-		if (motion.matches) {
-			phase.current = target;
-			setAmount(target);
-			return;
-		}
-		const start = phase.current;
-		const since = performance.now();
-		let frame = requestAnimationFrame(function advance(now) {
-			const step = Math.max(0, now - since) / 500;
-			const t = motion.matches
-				? target
-				: faceOn
-					? Math.max(0, start - step)
-					: Math.min(1, start + step);
-			phase.current = t;
-			setAmount(t * t * (3 - 2 * t));
-			if (t !== target) frame = requestAnimationFrame(advance);
-		});
-		return () => cancelAnimationFrame(frame);
-	}, [faceOn]);
-	return amount;
+// Ease symmetrically into the disc near either pole.
+export const orbitalTiltLimit = 82;
+function orbitalBlend(tilt: number) {
+	const t = Math.min(1, (90 - Math.abs(tilt)) / (90 - orbitalTiltLimit));
+	return t * t * (3 - 2 * t);
 }
 
 export function useChartCamera() {
@@ -70,7 +45,8 @@ export function useChartCamera() {
 	} | null>(null);
 	const [spin, setSpin] = useState(true);
 	const faceOn = Math.abs(camera.tilt) === 90;
-	const unfold = useUnfold(faceOn);
+	const unfold = orbitalBlend(camera.tilt);
+	const orbiting = unfold === 1;
 
 	// Keys accumulate and absolute drags replace the target, including between paints.
 	const move = useCallback((next: Camera) => {
@@ -90,7 +66,7 @@ export function useChartCamera() {
 	);
 
 	useEffect(() => {
-		if (!spin || faceOn) return;
+		if (!spin || !orbiting) return;
 		const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		let visible = false;
 		let animation: number | undefined;
@@ -100,7 +76,7 @@ export function useChartCamera() {
 			if (
 				fingers.current.size ||
 				now < resumeAt.current ||
-				Math.abs(latest.current.tilt) === 90
+				Math.abs(latest.current.tilt) > orbitalTiltLimit
 			) {
 				last = undefined;
 				return;
@@ -139,7 +115,7 @@ export function useChartCamera() {
 			document.removeEventListener('visibilitychange', sync);
 			if (animation !== undefined) cancelAnimationFrame(animation);
 		};
-	}, [faceOn, spin]);
+	}, [orbiting, spin]);
 
 	function center() {
 		const [a, b] = fingers.current.values();
