@@ -493,6 +493,36 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('switches traditional bodies and debris independently on the birthday wheel', async () => {
+			try {
+				await driver.get(`${origin}/experiments/space-junk`);
+				const toggle = (name: string) => driver.findElement(By.xpath(
+					`//label[normalize-space(.)="${name}"]/input[@role="switch"]`
+				));
+				const bodies = () => driver.findElements(By.css('svg g[aria-label="Zodiac bodies"] g[role="img"]'));
+				await driver.wait(async () => (await bodies()).length === 7, 5000);
+				await (await toggle('Space junk')).click();
+				expect((await bodies()).length).toBe(7);
+				expect(await driver.findElements(By.css('[aria-label="Chart coverage"]'))).toHaveLength(0);
+				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
+				const initial = await moon();
+				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => await moon() !== initial, 5000);
+				await driver.findElement(By.css('button[aria-label="More bodies"]')).click();
+				await (await toggle('Pluto')).sendKeys(Key.SPACE);
+				expect((await bodies()).length).toBe(8);
+				await (await toggle('Zodiac')).click();
+				expect(await (await bodies())[0]!.getAttribute('aria-label')).toMatch(/^Pluto ·/);
+				expect((await bodies()).length).toBe(1);
+				await (await toggle('Pluto')).click();
+				expect(await bodies()).toHaveLength(0);
+				await (await toggle('Space junk')).click();
+				expect(await bodies()).toHaveLength(0);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it.each([
 			['en-US', 'August'],
 			['en-GB', 'August'],

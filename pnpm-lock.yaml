@@ -113,6 +113,9 @@ importers:
       '@types/trusted-types':
         specifier: 2.0.7
         version: 2.0.7
+      astronomy-engine:
+        specifier: 2.1.19
+        version: 2.1.19
       base64-js:
         specifier: 1.5.1
         version: 1.5.1
@@ -4460,6 +4463,9 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
+
+  astronomy-engine@2.1.19:
+    resolution: {integrity: sha512-8yWKNf7UeNbH458h3sAJ6ZgAjE5jTXp/mNNRFoC20j2SHwZIjAQeEsBB2Q3uCFRaTCCJRv33K2XhkhZQMXoX6w==}
 
   async-mutex@0.5.0:
     resolution: {integrity: sha512-1A94B18jkJ3DYq284ohPxoXbfTA5HsQ7/Mf4DEhcyLx3Bz27Rh59iScbB6EPiP+B+joue6YCxcMXSbFC1tZKwA==}
@@ -13461,6 +13467,8 @@ snapshots:
   asap@2.0.6: {}
 
   astring@1.9.0: {}
+
+  astronomy-engine@2.1.19: {}
 
   async-mutex@0.5.0:
     dependencies:

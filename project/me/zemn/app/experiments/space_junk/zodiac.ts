@@ -90,7 +90,7 @@ export function signPosition(longitude: number) {
 	return `${Math.floor((value % 30) * 10) / 10}° ${signs[Math.floor(value / 30)]}`;
 }
 
-const aspects = [
+export const aspectAngles = [
 	['Conjunction', 0],
 	['Sextile', 60],
 	['Square', 90],
@@ -99,7 +99,7 @@ const aspects = [
 ] as const;
 
 export function nearestAspects(selected: Placement, placements: Placement[]) {
-	return aspects.flatMap(([name, angle]) => {
+	return aspectAngles.flatMap(([name, angle]) => {
 		let nearest: Placement | undefined;
 		let separation = 0;
 		let error = Infinity;

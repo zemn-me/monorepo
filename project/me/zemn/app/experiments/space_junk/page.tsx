@@ -1,6 +1,7 @@
 import {
 	faDharmachakra,
 	faEarthAmericas,
+	faEllipsis,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
@@ -12,9 +13,11 @@ import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
 import { BirthdayRulers } from './birthday_form.js';
 import { ChartSettings } from './birthplace.js';
+import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import { Globe } from './globe.js';
 import { groundLocation } from './globe_geometry.js';
+import { bodyPositions, classical, modern, type ChartBody } from './planets.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
@@ -27,12 +30,44 @@ function displayDate(day: string) {
 	});
 }
 
+function LayerSwitch({
+	label,
+	checked,
+	onChange,
+	title,
+}: {
+	label: string;
+	checked: boolean;
+	onChange: (value: boolean) => void;
+	title?: string;
+}) {
+	return (
+		<label className={style.switch} title={title}>
+			<input
+				type="checkbox"
+				role="switch"
+				checked={checked}
+				onChange={e => onChange(e.currentTarget.checked)}
+			/>
+			{label}
+		</label>
+	);
+}
+
 const BirthdayChart = memo(function BirthdayChart({
 	catalogue,
 	instant,
+	junk,
+	setJunk,
+	catalogueFailed,
+	retryCatalogue,
 }: {
-	catalogue: Catalogue;
+	catalogue?: Catalogue;
 	instant: number;
+	junk: boolean;
+	setJunk: (value: boolean) => void;
+	catalogueFailed: boolean;
+	retryCatalogue: () => void;
 }) {
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(0);
@@ -40,14 +75,32 @@ const BirthdayChart = memo(function BirthdayChart({
 	const iso = new Date(instant).toISOString();
 	const day = iso.slice(0, 10);
 	const time = iso.slice(11, 19);
-	const { matches } = useMemo(
-		() => readChart(catalogue.objects, Temporal.PlainDate.from(day)),
-		[catalogue, day]
+	const matches = useMemo(
+		() =>
+			junk && catalogue
+				? readChart(catalogue.objects, Temporal.PlainDate.from(day))
+						.matches
+				: [],
+		[catalogue, day, junk]
 	);
-	const coverage = useDebrisPositions(matches, instant, day, catalogue.asOf);
+	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
 	const { markers } = coverage;
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [place, setPlace] = useState<Birthplace>();
+	const [traditional, setTraditional] = useState(true);
+	const [more, setMore] = useState(false);
+	const [extra, setExtra] = useState<ChartBody[]>([]);
+	const bodies = useMemo(
+		() =>
+			view === 'wheel'
+				? bodyPositions(
+						[...(traditional ? classical : []), ...extra],
+						new Date(instant),
+						place
+					)
+				: [],
+		[view, traditional, extra, instant, place]
+	);
 	const [selection, setSelection] = useState<{
 		id: number;
 		revision: number;
@@ -99,36 +152,100 @@ const BirthdayChart = memo(function BirthdayChart({
 	const count = matches.length;
 	return (
 		<>
-			<div
-				className={style.chartModes}
-				role="group"
-				aria-label="Chart view"
-			>
-				<button
-					type="button"
-					aria-label="Zodiac wheel"
-					title="Zodiac wheel"
-					aria-pressed={view === 'wheel'}
-					onClick={() => setView('wheel')}
+			<div className={style.chartToolbar}>
+				<div
+					className={style.layers}
+					role="group"
+					aria-label="Chart layers"
 				>
-					<FontAwesomeIcon icon={faDharmachakra} aria-hidden="true" />
-				</button>
-				<button
-					type="button"
-					aria-label="Earth orbits"
-					title="Earth orbits"
-					aria-pressed={view === 'earth'}
-					onClick={() => setView('earth')}
-				>
-					<FontAwesomeIcon
-						icon={faEarthAmericas}
-						aria-hidden="true"
+					{view === 'wheel' && (
+						<LayerSwitch
+							label="Zodiac"
+							checked={traditional}
+							onChange={setTraditional}
+							title="Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn"
+						/>
+					)}
+					<LayerSwitch
+						label="Space junk"
+						checked={junk}
+						onChange={setJunk}
 					/>
-				</button>
+					{view === 'wheel' && (
+						<button
+							type="button"
+							title="More bodies"
+							aria-label="More bodies"
+							aria-expanded={more}
+							aria-controls="additional-chart-bodies"
+							onClick={() => setMore(!more)}
+						>
+							<FontAwesomeIcon
+								icon={faEllipsis}
+								aria-hidden="true"
+							/>
+						</button>
+					)}
+				</div>
+				<div
+					className={style.chartModes}
+					role="group"
+					aria-label="Chart view"
+				>
+					<button
+						type="button"
+						aria-label="Zodiac wheel"
+						title="Zodiac wheel"
+						aria-pressed={view === 'wheel'}
+						onClick={() => setView('wheel')}
+					>
+						<FontAwesomeIcon
+							icon={faDharmachakra}
+							aria-hidden="true"
+						/>
+					</button>
+					<button
+						type="button"
+						aria-label="Earth orbits"
+						title="Earth orbits"
+						aria-pressed={view === 'earth'}
+						onClick={() => setView('earth')}
+					>
+						<FontAwesomeIcon
+							icon={faEarthAmericas}
+							aria-hidden="true"
+						/>
+					</button>
+				</div>
 			</div>
+			{view === 'wheel' && (
+				<div id="additional-chart-bodies" hidden={!more}>
+					<div
+						className={style.extraBodies}
+						role="group"
+						aria-label="Additional bodies"
+					>
+						{modern.map(body => (
+							<LayerSwitch
+								key={body}
+								label={body}
+								checked={extra.includes(body)}
+								onChange={on =>
+									setExtra(current =>
+										on
+											? [...current, body]
+											: current.filter(b => b !== body)
+									)
+								}
+							/>
+						))}
+					</div>
+				</div>
+			)}
 			<figure className={style.figure}>
 				{view === 'wheel' ? (
 					<ZodiacWheel
+						bodies={bodies}
 						placements={placements}
 						ascendant={zodiac.ascendant}
 						selected={focus}
@@ -152,26 +269,41 @@ const BirthdayChart = memo(function BirthdayChart({
 					</time>
 					{' · '}
 					{time} UTC
-					{!count ? (
-						<p>No catalogued debris in orbit on this date.</p>
-					) : !markers.length &&
-					  coverage.failed &&
-					  !coverage.pending ? (
-						<p role="alert">
-							Orbit archive unavailable.{' '}
-							<button type="button" onClick={coverage.retry}>
-								Retry
-							</button>
-						</p>
-					) : (
-						<p role="status" aria-label="Chart coverage">
-							{markers.length
-								? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
-								: coverage.pending
-									? 'Loading orbital positions…'
-									: 'No archived positions available for this time.'}
-						</p>
-					)}
+					{junk &&
+						(!catalogue ? (
+							catalogueFailed ? (
+								<p role="alert">
+									Debris catalogue unavailable.{' '}
+									<button
+										type="button"
+										onClick={retryCatalogue}
+									>
+										Retry
+									</button>
+								</p>
+							) : (
+								<p role="status">Loading debris catalogue…</p>
+							)
+						) : !count ? (
+							<p>No catalogued debris in orbit on this date.</p>
+						) : !markers.length &&
+						  coverage.failed &&
+						  !coverage.pending ? (
+							<p role="alert">
+								Orbit archive unavailable.{' '}
+								<button type="button" onClick={coverage.retry}>
+									Retry
+								</button>
+							</p>
+						) : (
+							<p role="status" aria-label="Chart coverage">
+								{markers.length
+									? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
+									: coverage.pending
+										? 'Loading orbital positions…'
+										: 'No archived positions available for this time.'}
+							</p>
+						))}
 					{view === 'earth' && location && selected && (
 						<p>
 							{selected.object.name} ·{' '}
@@ -192,87 +324,90 @@ const BirthdayChart = memo(function BirthdayChart({
 				ascendant={zodiac.ascendant}
 				onPlace={setPlace}
 			/>
-			<details className={style.disclosure}>
-				<summary>Object catalogue</summary>
-				<input
-					className={style.search}
-					type="search"
-					aria-label="Search by name, catalog number, designator or object type"
-					placeholder="Search objects"
-					value={search}
-					onChange={event => {
-						setSearch(event.target.value);
-						setPage(0);
-					}}
-				/>
-				<div className={style.paging}>
-					<span role="status" aria-label="Catalogue results">
-						{rows.length
-							? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
-							: 'No matching objects'}
-					</span>
-					{filtered.length > pageSize && (
-						<>
-							<button
-								type="button"
-								disabled={!pageIndex}
-								onClick={() => setPage(pageIndex - 1)}
-							>
-								Previous
-							</button>
-							<button
-								type="button"
-								disabled={
-									offset + rows.length >= filtered.length
-								}
-								onClick={() => setPage(pageIndex + 1)}
-							>
-								Next
-							</button>
-						</>
-					)}
-				</div>
-				{rows.length > 0 && (
-					<Sky
-						observer={place && { ...place, instant }}
-						objects={rows.map(row => row.object)}
+			{junk && catalogue && (
+				<details className={style.disclosure}>
+					<summary>Object catalogue</summary>
+					<input
+						className={style.search}
+						type="search"
+						aria-label="Search by name, catalog number, designator or object type"
+						placeholder="Search objects"
+						value={search}
+						onChange={event => {
+							setSearch(event.target.value);
+							setPage(0);
+						}}
 					/>
-				)}
+					<div className={style.paging}>
+						<span role="status" aria-label="Catalogue results">
+							{rows.length
+								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
+								: 'No matching objects'}
+						</span>
+						{filtered.length > pageSize && (
+							<>
+								<button
+									type="button"
+									disabled={!pageIndex}
+									onClick={() => setPage(pageIndex - 1)}
+								>
+									Previous
+								</button>
+								<button
+									type="button"
+									disabled={
+										offset + rows.length >= filtered.length
+									}
+									onClick={() => setPage(pageIndex + 1)}
+								>
+									Next
+								</button>
+							</>
+						)}
+					</div>
+					{rows.length > 0 && (
+						<Sky
+							observer={place && { ...place, instant }}
+							objects={rows.map(row => row.object)}
+						/>
+					)}
 
-				<ul className={style.catalogue}>
-					{rows.map(({ object, days }) => (
-						<li key={object.id}>
-							<h3>
-								{byId.has(object.id) ? (
-									<a
-										href={
-											view === 'earth'
-												? '#orbital-globe'
-												: '#zodiac-wheel'
-										}
-										onClick={() => locate(object.id)}
-									>
-										{object.name}
-									</a>
-								) : (
-									object.name
-								)}
-							</h3>
-							<p>
-								{kinds[object.kind]} · {object.piece} · NORAD{' '}
-								{object.id}
-							</p>
-							<p>
-								{displayDate(object.start)} –{' '}
-								{displayDate(object.end ?? catalogue.asOf)} ·{' '}
-								{days === 0
-									? 'Shares your birthday'
-									: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
-							</p>
-						</li>
-					))}
-				</ul>
-			</details>
+					<ul className={style.catalogue}>
+						{rows.map(({ object, days }) => (
+							<li key={object.id}>
+								<h3>
+									{byId.has(object.id) ? (
+										<a
+											href={
+												view === 'earth'
+													? '#orbital-globe'
+													: '#zodiac-wheel'
+											}
+											onClick={() => locate(object.id)}
+										>
+											{object.name}
+										</a>
+									) : (
+										object.name
+									)}
+								</h3>
+								<p>
+									{kinds[object.kind]} · {object.piece} ·
+									NORAD {object.id}
+								</p>
+								<p>
+									{displayDate(object.start)} –{' '}
+									{displayDate(object.end ?? catalogue.asOf)}{' '}
+									·{' '}
+									{days === 0
+										? 'Shares your birthday'
+										: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
+								</p>
+							</li>
+						))}
+					</ul>
+				</details>
+			)}
 		</>
 	);
 });
@@ -281,10 +416,12 @@ export default function Page() {
 	const [instant, setInstant] = useState(() =>
 		Date.parse('2006-08-01T12:00:00Z')
 	);
+	const [junk, setJunk] = useState(true);
 	const chartInstant = useDeferredValue(instant);
 
 	const catalogue = useQuery({
 		queryKey: ['space-junk-catalogue', catalogueUrl],
+		enabled: junk,
 		staleTime: Infinity,
 		meta: { persist: false },
 		retry: false,
@@ -297,33 +434,31 @@ export default function Page() {
 	return (
 		<article className={style.page}>
 			<h1>Space junk star chart</h1>
-			{catalogue.data ? (
-				<>
-					<BirthdayRulers
-						epoch={instant}
-						asOf={catalogue.data.asOf}
-						onChange={setInstant}
-					/>
-					<BirthdayChart
-						instant={chartInstant}
-						catalogue={catalogue.data}
-					/>
-				</>
-			) : catalogue.isError ? (
-				<p role="alert">
-					The catalog could not be loaded.{' '}
-					<button
-						type="button"
-						onClick={() => void catalogue.refetch()}
-					>
-						Try again
-					</button>
-				</p>
-			) : (
-				<p role="status">Loading the orbital catalog…</p>
-			)}
+			<BirthdayRulers
+				epoch={instant}
+				asOf={catalogueDate}
+				onChange={setInstant}
+			/>
+			<BirthdayChart
+				instant={chartInstant}
+				catalogue={catalogue.data}
+				junk={junk}
+				setJunk={setJunk}
+				catalogueFailed={catalogue.isError}
+				retryCatalogue={catalogue.refetch}
+			/>
 			<details className={style.disclosure}>
 				<summary>Sources</summary>
+				<p>
+					The tropical zodiac divides the ecliptic into twelve equal
+					signs. Zodiac shows the Sun, Moon and five classical
+					planets. Add Uranus, Neptune or Pluto under More bodies.
+					Positions come from{' '}
+					<a href="https://github.com/cosinekitty/astronomy">
+						Astronomy Engine
+					</a>
+					. Lines between these bodies show major aspects within 6°.
+				</p>
 				<p>
 					Dated Earth-orbit records from{' '}
 					<a href="https://planet4589.org/space/gcat/">

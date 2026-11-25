@@ -32,6 +32,7 @@ function useMarkers(
 ) {
 	const elements = useMemo(
 		() =>
+			matches.length > 0 &&
 			text &&
 			Array.from(
 				readElements(text, new Set(matches.map(m => m.object.id)))

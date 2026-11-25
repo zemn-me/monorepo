@@ -16,6 +16,7 @@ import {
 	snapshotPositions,
 } from './orbit.js';
 
+import { bodyPositions, classical } from './planets.js';
 import {
 	dayMs,
 	firstInstant,
@@ -290,5 +291,22 @@ describe('linked UTC rulers', () => {
 				rulerPosition('minute', midnight - 1000) + 0.1
 			)
 		).toBe(midnight + 5000);
+	});
+});
+
+describe('traditional chart', () => {
+	it('reproduces the Moon crossing a sign boundary when observed from the birthplace', () => {
+		// JPL Horizons observer quantity 31, JD 2453949.0 UT, centres 500@399 and geodetic 0°, 0°, 0 km.
+		const date = new Date('2006-08-01T12:00Z');
+		for (const [place, longitude, latitude] of [
+			[undefined, 209.43253, -2.82317],
+			[{ latitude: 0, longitude: 0 }, 210.2832, -2.55361],
+		] as const) {
+			const moon = bodyPositions(classical, date, place).find(
+				p => p.name === 'Moon'
+			)!;
+			expect(Math.abs(moon.longitude - longitude)).toBeLessThan(0.02);
+			expect(Math.abs(moon.latitude - latitude)).toBeLessThan(0.02);
+		}
 	});
 });

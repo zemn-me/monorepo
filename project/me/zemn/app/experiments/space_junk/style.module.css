@@ -339,3 +339,96 @@
 		padding-inline: 0.5rem;
 	}
 }
+
+.layers,
+.extraBodies {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 0 1.2rem;
+	font: var(--controls);
+}
+.switch {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	cursor: pointer;
+	gap: 0.4rem;
+}
+.page .switch input {
+	appearance: none;
+	position: relative;
+	border: 1px solid var(--muted);
+	border-radius: 1rem;
+	width: 1.9rem;
+	height: 1.1rem;
+	min-height: 0;
+	margin: 0;
+	color: inherit;
+	background: transparent;
+	cursor: inherit;
+}
+.switch input::after {
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	height: calc(100% - 4px);
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: currentColor;
+}
+.page .switch input:checked {
+	background: currentColor;
+	border-color: currentColor;
+}
+.switch input:checked::after {
+	left: auto;
+	right: 2px;
+	background: var(--background-color);
+}
+.planetGlyph {
+	font:
+		17px 'Apple Symbols',
+		'Segoe UI Symbol',
+		'Noto Sans Symbols 2',
+		sans-serif;
+	fill: currentColor;
+	stroke: var(--background-color);
+	stroke-width: 3;
+	paint-order: stroke;
+}
+@media (forced-colors: active) {
+	.page .switch input:checked {
+		background: Highlight;
+	}
+	.switch input:checked::after {
+		background: HighlightText;
+	}
+}
+.chartToolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	column-gap: 0.5rem;
+}
+.layers {
+	gap: 0 0.8rem;
+}
+.layers button {
+	min-width: 44px;
+}
+.extraBodies {
+	justify-content: start;
+	border-block-start: 1px solid var(--line);
+}
+@media (width <= 26rem) {
+	.layers {
+		gap: 0 0.45rem;
+	}
+	.chartToolbar {
+		column-gap: 0;
+	}
+}

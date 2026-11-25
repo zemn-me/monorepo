@@ -51,5 +51,10 @@ def read_catalogue(stream):
 
 
 if __name__ == "__main__":
-    with open(sys.argv[1], encoding="utf-8") as source, open(sys.argv[2], "w", encoding="utf-8") as output:
-        json.dump(read_catalogue(source), output, ensure_ascii=False, separators=(",", ":"))
+    with open(sys.argv[1], encoding="utf-8") as source:
+        catalogue = read_catalogue(source)
+    with open(sys.argv[2], "w", encoding="utf-8") as output:
+        json.dump(catalogue, output, ensure_ascii=False, separators=(",", ":"))
+    if len(sys.argv) > 3:
+        with open(sys.argv[3], "w", encoding="utf-8") as metadata:
+            metadata.write(f"export const catalogueDate = {json.dumps(catalogue['asOf'])};\n")
