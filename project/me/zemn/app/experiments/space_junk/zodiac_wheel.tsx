@@ -4,6 +4,7 @@ import { globeCamera, globeFrame, height, width } from './globe_scene.js';
 import { PlanetLayer, PlanetPositions } from './planet_layer.js';
 import type { BodyPosition } from './planets.js';
 import { OrbitScene } from './orbit_scene.js';
+import { SignCaption } from './sign_caption.js';
 import style from './style.module.css';
 import {
 	degrees,
@@ -137,15 +138,11 @@ export function ZodiacWheel({
 		[selected, placements]
 	);
 	const focus = selected && marks.find(m => m.p === selected)?.at;
-	const labels = signs.map((sign, i) => {
-		const mid = i * 30 + 15,
-			p = at(mid, 1.335),
-			q = at(mid + 0.1, 1.335);
-		let angle = Math.atan2(q.y - p.y, q.x - p.x) / radians;
-		if (angle > 90) angle -= 180;
-		if (angle < -90) angle += 180;
-		return { sign, p, angle, visible: true };
-	});
+	const labels = signs.map((sign, i) => ({
+		sign,
+		p: at(i * 30 + 15, 1.335),
+		visible: true,
+	}));
 	if (spatial) {
 		const shown: typeof labels = [];
 		for (const label of [...labels].sort((a, b) => a.p.depth - b.p.depth)) {
@@ -334,7 +331,7 @@ export function ZodiacWheel({
 							))}
 						</g>
 					)}
-					{labels.map(({ sign, p, angle, visible }, i) => {
+					{labels.map(({ sign, visible }, i) => {
 						const start = i * 30,
 							end = start + 30;
 						return (
@@ -353,16 +350,11 @@ export function ZodiacWheel({
 									strokeWidth=".65"
 								/>
 								{visible && (
-									<text
-										transform={`translate(${xy(p)}) rotate(${angle})`}
-										textAnchor="middle"
-										dominantBaseline="central"
-										fill="currentColor"
-										fontSize="11.5"
-										letterSpacing=".45"
-									>
-										{sign.toUpperCase()}
-									</text>
+									<SignCaption
+										name={sign}
+										start={start}
+										project={lon => at(lon, 1.335)}
+									/>
 								)}
 							</g>
 						);

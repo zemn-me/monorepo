@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { globeFrame } from './globe_scene.js';
 import { PlanetLayer } from './planet_layer.js';
 import { earthFixedSky, type BodyPosition } from './planets.js';
-import style from './style.module.css';
+import { SignCaption } from './sign_caption.js';
 import { signs } from './zodiac.js';
 
 export function GlobeZodiac({
@@ -67,19 +67,15 @@ export function GlobeZodiac({
 							opacity=".5"
 						/>
 					</g>
-					{labels.map(({ name, x, y, visible }) => (
-						<text
+					{labels.map(({ name, visible }, i) => (
+						<SignCaption
 							key={name}
-							x={x}
-							y={y}
-							textAnchor="middle"
-							dominantBaseline="central"
-							className={style.globeSign}
+							name={name}
+							start={30 * i}
+							compact
+							project={lon => project(lon, -6)}
 							opacity={visible ? 1 : 0.6}
-						>
-							<title>{name}</title>
-							{name.slice(0, 3).toUpperCase()}
-						</text>
+						/>
 					))}
 				</g>
 			)}

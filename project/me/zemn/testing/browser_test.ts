@@ -458,6 +458,13 @@ describe('zemn.me website', () => {
 				expect(await driver.findElement(By.css('article input[type="search"]')).isDisplayed()).toBe(false);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
+				const captions = () => wheel.findElements(By.css('textPath'));
+				expect(await captions()).toHaveLength(12);
+				const letterRotation = await driver.executeScript<number>(`
+					const text = arguments[0];
+					return Math.abs(text.getRotationOfChar(0) - text.getRotationOfChar(text.getNumberOfChars() - 1));
+				`, (await captions())[0]);
+				expect(letterRotation).toBeGreaterThan(3);
 				await driver.findElement(By.xpath('//button[.="Explore in 3D"]')).click();
 				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
 				expect(await driver.findElements(By.xpath('//button[.="Pan" or .="Return to wheel"]'))).toHaveLength(0);
@@ -465,6 +472,7 @@ describe('zemn.me website', () => {
 				expect(await wheel.getAttribute('aria-label')).toContain('wheel from above');
 				await wheel.sendKeys(Key.ARROW_DOWN.repeat(36));
 				expect(await wheel.getAttribute('aria-label')).toContain('wheel from below');
+				expect(await captions()).toHaveLength(12);
 				await wheel.sendKeys(Key.ARROW_UP);
 				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
 				const earthView = await driver.findElement(By.css('button[aria-label="Earth orbits"]'));
@@ -519,7 +527,7 @@ describe('zemn.me website', () => {
 				const wheelMoon = await moon();
 				await driver.findElement(By.css('button[aria-label="Earth orbits"]')).click();
 				const globe = await driver.findElement(By.id('orbital-globe'));
-				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] text'));
+				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));
 				expect(await signs()).toHaveLength(12);
 				expect(await bodies()).toHaveLength(8);
 				expect(await moon()).toBe(wheelMoon);
