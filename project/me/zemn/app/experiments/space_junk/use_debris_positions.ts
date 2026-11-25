@@ -1,5 +1,17 @@
-import { queryOptions, useQueries, useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+	queryOptions,
+	useQueries,
+	useQuery,
+	type UseQueryResult,
+} from '@tanstack/react-query';
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { Temporal } from 'temporal-polyfill';
 
 import type { SpaceObject } from './chart.js';
@@ -76,32 +88,65 @@ export function useDebrisPositions(
 	const primary = useMarkers(exact.data, matches, instant);
 	const neighbors = useMemo(() => {
 		const date = Temporal.PlainDate.from(day);
-		return [-1, 1]
-			.map(days => date.add({ days }).toString())
-			.filter(d => d >= '1957-01-01' && d <= lastDay);
+		return [-1, 1, -2, 2, -3, 3]
+			.map(days => ({
+				day: date.add({ days }).toString(),
+				adjacent: Math.abs(days) === 1,
+			}))
+			.filter(d => d.day >= '1957-01-01' && d.day <= lastDay);
 	}, [day, lastDay]);
-	// Observe both adjacent days in the cache during a handoff. Fetch them only
-	// if the selected day's archive couldn't supply any usable positions.
 	const needNearby = matches.length > 0 && !primary.length;
+	// Reuse cached measurements across the propagation window. Only the
+	// immediately adjacent archives are downloaded to fill a missing day.
 	const nearby = useQueries({
 		queries: neighbors.map(d =>
-			archiveQuery(d, enabled && needNearby && !exact.isPending)
+			archiveQuery(
+				d.day,
+				enabled && d.adjacent && needNearby && !exact.isPending
+			)
+		),
+		combine: useCallback(
+			(results: UseQueryResult<string>[]) => {
+				const adjacent = results.filter(
+					(_, i) => neighbors[i]!.adjacent
+				);
+				return {
+					text: needNearby
+						? results
+								.map(q => q.data)
+								.filter(Boolean)
+								.join('\n')
+						: '',
+					pending: adjacent.some(q => q.isPending || q.isFetching),
+					errors: adjacent.filter(q => q.isError).map(q => q.refetch),
+				};
+			},
+			[neighbors, needNearby]
 		),
 	});
-	const [first, second] = nearby.map(q => (needNearby ? q.data : undefined));
-	const text = useMemo(
-		() => [first, second].filter(Boolean).join('\n'),
-		[first, second]
+	const fallback = useMarkers(nearby.text, matches, instant);
+	const markers = primary.length ? primary : fallback;
+	const pending =
+		needNearby && (exact.isPending || exact.isFetching || nearby.pending);
+
+	// During a long jump, keep the last committed layer at its own timestamp
+	// until the archive supplies positions or confirms that there are none.
+	const previous = useRef<{ markers: typeof markers; instant: number }>(
+		undefined
 	);
-	const fallback = useMarkers(text, matches, instant);
-	const queries = [exact, ...nearby];
+	useLayoutEffect(() => {
+		if (markers.length) previous.current = { markers, instant };
+		else if (!pending) previous.current = undefined;
+	}, [markers, instant, pending]);
+	const held = !markers.length && pending ? previous.current : undefined;
 	return {
-		markers: primary.length ? primary : fallback,
-		pending: needNearby && queries.some(q => q.isPending || q.isFetching),
-		failed: needNearby && queries.some(q => q.isError),
+		markers: held?.markers ?? markers,
+		instant: held?.instant ?? instant,
+		pending,
+		failed: needNearby && (exact.isError || nearby.errors.length > 0),
 		retry: () => {
-			for (const query of queries)
-				if (query.isError) void query.refetch();
+			if (exact.isError) void exact.refetch();
+			for (const refetch of nearby.errors) void refetch();
 		},
 	};
 }

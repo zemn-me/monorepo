@@ -84,7 +84,7 @@ const BirthdayChart = memo(function BirthdayChart({
 		[catalogue, day, junk]
 	);
 	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
-	const { markers } = coverage;
+	const { markers, instant: debrisInstant } = coverage;
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [place, setPlace] = useState<Birthplace>();
 	const [traditional, setTraditional] = useState(true);
@@ -114,17 +114,24 @@ const BirthdayChart = memo(function BirthdayChart({
 		[markers]
 	);
 	const selected = selection && byId.get(selection.id);
-	const zodiac = useMemo(
-		() => zodiacFrame(new Date(instant), place),
-		[instant, place]
+	const debrisZodiac = useMemo(
+		() => zodiacFrame(new Date(debrisInstant), place),
+		[debrisInstant, place]
+	);
+	const ascendant = useMemo(
+		() =>
+			place && debrisInstant !== instant
+				? zodiacFrame(new Date(instant), place).ascendant
+				: debrisZodiac.ascendant,
+		[place, debrisInstant, instant, debrisZodiac]
 	);
 	const placements = useMemo(
 		() =>
 			markers.map(marker => ({
 				marker,
-				...zodiac.direction(marker.fixed),
+				...debrisZodiac.direction(marker.fixed),
 			})),
-		[markers, zodiac]
+		[markers, debrisZodiac]
 	);
 	const focus =
 		placements.find(p => p.marker.object.id === selected?.object.id) ??
@@ -236,7 +243,7 @@ const BirthdayChart = memo(function BirthdayChart({
 					<ZodiacWheel
 						bodies={bodies}
 						placements={placements}
-						ascendant={zodiac.ascendant}
+						ascendant={ascendant}
 						selected={focus}
 						onSelect={m => locate(m.object.id)}
 					/>
@@ -279,8 +286,8 @@ const BirthdayChart = memo(function BirthdayChart({
 						) : !count ? (
 							<p>No catalogued debris in orbit on this date.</p>
 						) : !markers.length &&
-						  coverage.failed &&
-						  !coverage.pending ? (
+							coverage.failed &&
+							!coverage.pending ? (
 							<p role="alert">
 								Orbit archive unavailable.{' '}
 								<button type="button" onClick={coverage.retry}>
@@ -289,11 +296,32 @@ const BirthdayChart = memo(function BirthdayChart({
 							</p>
 						) : (
 							<p role="status" aria-label="Chart coverage">
-								{markers.length
-									? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
-									: coverage.pending
-										? 'Loading orbital positions…'
-										: 'No archived positions available for this time.'}
+								{debrisInstant !== instant ? (
+									<>
+										Updating debris… Showing{' '}
+										<time
+											dateTime={new Date(
+												debrisInstant
+											).toISOString()}
+										>
+											{new Intl.DateTimeFormat(
+												languages,
+												{
+													dateStyle: 'medium',
+													timeStyle: 'medium',
+													timeZone: 'UTC',
+												}
+											).format(debrisInstant)}{' '}
+											UTC
+										</time>
+									</>
+								) : markers.length ? (
+									`${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
+								) : coverage.pending ? (
+									'Loading orbital positions…'
+								) : (
+									'No archived positions available for this time.'
+								)}
 							</p>
 						))}
 					{view === 'earth' && location && selected && (
@@ -313,7 +341,7 @@ const BirthdayChart = memo(function BirthdayChart({
 			</figure>
 			<ChartSettings
 				place={place}
-				ascendant={zodiac.ascendant}
+				ascendant={ascendant}
 				onPlace={setPlace}
 			/>
 			{junk && catalogue && (
