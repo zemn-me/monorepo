@@ -377,7 +377,7 @@ describe('zemn.me website', () => {
 					'SVG Arena',
 					'Platonic Stress',
 					'Geometry of Music',
-					'Space junk star chart',
+					'Star chart generator',
 					'Elastic Tabstops',
 					'Flag emoji',
 					'Framing calculator',
@@ -421,7 +421,7 @@ describe('zemn.me website', () => {
 				expect(omittedMenuLinks).toHaveLength(0);
 				await menuButton.click();
 
-				await list.findElement(By.linkText('Space junk star chart')).click();
+				await list.findElement(By.linkText('Star chart generator')).click();
 				await driver.wait(
 					async () =>
 						(await driver.getCurrentUrl()) ===
@@ -460,8 +460,13 @@ describe('zemn.me website', () => {
 				expect(await wheel.getText()).toContain('ARIES');
 				await driver.findElement(By.xpath('//button[.="Explore in 3D"]')).click();
 				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
-				await driver.findElement(By.xpath('//button[.="Return to wheel"]')).click();
-				expect(await wheel.getAttribute('aria-label')).toContain('Face-on');
+				expect(await driver.findElements(By.xpath('//button[.="Pan" or .="Return to wheel"]'))).toHaveLength(0);
+				await wheel.sendKeys(Key.ARROW_UP.repeat(10));
+				expect(await wheel.getAttribute('aria-label')).toContain('wheel from above');
+				await wheel.sendKeys(Key.ARROW_DOWN.repeat(36));
+				expect(await wheel.getAttribute('aria-label')).toContain('wheel from below');
+				await wheel.sendKeys(Key.ARROW_UP);
+				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
 				const earthView = await driver.findElement(By.css('button[aria-label="Earth orbits"]'));
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthView);
 				await earthView.click();

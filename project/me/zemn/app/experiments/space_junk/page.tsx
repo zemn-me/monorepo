@@ -433,7 +433,7 @@ export default function Page() {
 	});
 	return (
 		<article className={style.page}>
-			<h1>Space junk star chart</h1>
+			<h1>Star chart generator</h1>
 			<BirthdayRulers
 				epoch={instant}
 				asOf={catalogueDate}
@@ -487,8 +487,8 @@ export default function Page() {
 	);
 }
 export const metadata: Metadata = {
-	title: 'Space junk star chart',
+	title: 'Star chart generator',
 	description:
-		'Find the space junk that shared your birthday in Earth orbit.',
+		'Plot the Sun, Moon, planets, and space junk for your birthday.',
 };
 export const handle = { metadata };

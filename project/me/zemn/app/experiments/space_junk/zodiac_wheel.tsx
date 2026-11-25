@@ -15,10 +15,16 @@ import {
 } from './zodiac.js';
 
 const empty: Placement[] = [];
-const flat = { turn: 0, tilt: 0, spatial: false, panX: 0, panY: 0 };
+const flat = { turn: 0, tilt: 0, panX: 0, panY: 0 };
 const band = { D: 1.025, R: 1.055, C: 1.085 };
 const clamp = (n: number, min: number, max: number) =>
 	Math.max(min, Math.min(max, n));
+const poleSnap = 3;
+function snapTilt(tilt: number) {
+	if (tilt <= poleSnap) return 0;
+	if (tilt >= 180 - poleSnap) return 180;
+	return tilt;
+}
 function direction(lon: number, lat: number, r: number) {
 	const a = lon * radians,
 		b = lat * radians;
@@ -70,10 +76,14 @@ export function ZodiacWheel({
 	onSelect?: (m: Marker) => void;
 }) {
 	const [view, setView] = useState(flat);
-	const [pan, setPan] = useState(false);
-	const skyDepth = useSkyDepth(view.spatial);
+	const wheel = useRef<SVGSVGElement>(null);
+	const distanceToPole = Math.min(view.tilt, 180 - view.tilt);
+	const spatial = distanceToPole > 0;
+	// Bring latitude back into the wheel gradually near either ecliptic pole.
+	const t = clamp((distanceToPole - poleSnap) / 12, 0, 1);
+	const skyDepth = useSkyDepth(spatial) * t * t * (3 - 2 * t);
+	const pointers = useRef(new Map<number, { x: number; y: number }>());
 	const drag = useRef<{
-		id: number;
 		x: number;
 		y: number;
 		view: typeof flat;
@@ -136,7 +146,7 @@ export function ZodiacWheel({
 		if (angle < -90) angle += 180;
 		return { sign, p, angle, visible: true };
 	});
-	if (view.spatial) {
+	if (spatial) {
 		const shown: typeof labels = [];
 		for (const label of [...labels].sort((a, b) => a.p.depth - b.p.depth)) {
 			label.visible = !shown.some(
@@ -148,27 +158,40 @@ export function ZodiacWheel({
 			if (label.visible) shown.push(label);
 		}
 	}
-	function reset() {
-		setView(flat);
-		setPan(false);
+	function pointerCenter(e: PointerEvent<SVGSVGElement>) {
+		const point = { x: e.clientX, y: e.clientY };
+		pointers.current.set(e.pointerId, point);
+		const [a, b] = pointers.current.values();
+		return a && b ? { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 } : point;
 	}
 	function pointerDown(e: PointerEvent<SVGSVGElement>) {
-		if (!e.isPrimary || e.button !== 0) return;
+		const secondTouch =
+			e.pointerType === 'touch' &&
+			!e.isPrimary &&
+			pointers.current.size === 1;
+		if (
+			e.button !== 0 ||
+			!(secondTouch || (e.isPrimary && pointers.current.size === 0))
+		)
+			return;
 		drag.current = {
-			id: e.pointerId,
-			x: e.clientX,
-			y: e.clientY,
+			...pointerCenter(e),
 			view,
-			pan: pan || e.shiftKey,
-			moved: false,
+			pan: secondTouch || e.shiftKey,
+			moved: secondTouch,
 		};
 		e.currentTarget.setPointerCapture(e.pointerId);
 	}
+	function endPointer(e: PointerEvent<SVGSVGElement>) {
+		if (pointers.current.delete(e.pointerId)) drag.current = null;
+	}
 	function pointerMove(e: PointerEvent<SVGSVGElement>) {
+		if (!pointers.current.has(e.pointerId)) return;
+		const point = pointerCenter(e);
 		const start = drag.current;
-		if (!start || start.id !== e.pointerId) return;
-		const dx = e.clientX - start.x,
-			dy = e.clientY - start.y;
+		if (!start) return;
+		const dx = point.x - start.x,
+			dy = point.y - start.y;
 		if (!start.moved && Math.hypot(dx, dy) < 4) return;
 		start.moved = true;
 		const scale = width / e.currentTarget.getBoundingClientRect().width;
@@ -186,31 +209,28 @@ export function ZodiacWheel({
 					height / 2
 				),
 			});
-		else
+		else {
+			const tilt = start.view.tilt;
+			const delta = dy * scale * 0.5;
 			setView({
 				...start.view,
-				spatial: true,
 				turn: degrees(start.view.turn - dx * scale * 0.6 + 180) - 180,
-				tilt: clamp(
-					start.view.spatial
-						? start.view.tilt + dy * scale * 0.5
-						: Math.abs(dy) * scale * 0.5,
-					0,
-					175
+				tilt: snapTilt(
+					tilt === 0
+						? Math.abs(delta)
+						: tilt === 180
+							? 180 - Math.abs(delta)
+							: tilt + delta
 				),
 			});
+		}
 	}
 	function pointerUp(e: PointerEvent<SVGSVGElement>) {
-		const start = drag.current,
-			transform = e.currentTarget.getScreenCTM();
-		if (
-			!start ||
-			start.id !== e.pointerId ||
-			start.moved ||
-			!transform ||
-			!onSelect
-		)
-			return;
+		if (!pointers.current.has(e.pointerId)) return;
+		const start = drag.current;
+		endPointer(e);
+		const transform = e.currentTarget.getScreenCTM();
+		if (!start || start.moved || !transform || !onSelect) return;
 		const at = new DOMPoint(e.clientX, e.clientY).matrixTransform(
 			transform.inverse()
 		);
@@ -232,6 +252,7 @@ export function ZodiacWheel({
 	return (
 		<div className={style.viewer}>
 			<svg
+				ref={wheel}
 				id="zodiac-wheel"
 				className={style.globe}
 				tabIndex={onSelect ? 0 : undefined}
@@ -239,21 +260,20 @@ export function ZodiacWheel({
 				aria-label={
 					!onSelect
 						? 'The twelve signs of the zodiac'
-						: view.spatial
-							? '3D zodiac sky. Drag to orbit. Use arrow keys to rotate or pan.'
-							: 'Face-on zodiac wheel. Drag to explore sky directions in 3D.'
+						: spatial
+							? '3D zodiac sky. Drag or use arrow keys to rotate. Hold Shift or drag with two fingers to pan.'
+							: `Face-on zodiac wheel from ${view.tilt === 180 ? 'below' : 'above'}. Tilt to explore in 3D.`
 				}
 				viewBox={`0 0 ${width} ${height}`}
 				onPointerDown={onSelect && pointerDown}
 				onPointerMove={onSelect && pointerMove}
 				onPointerUp={onSelect && pointerUp}
-				onLostPointerCapture={() => {
-					drag.current = null;
-				}}
+				onPointerCancel={endPointer}
+				onLostPointerCapture={endPointer}
 				onKeyDown={e => {
 					if (e.key === 'Home') {
 						e.preventDefault();
-						reset();
+						setView(flat);
 						return;
 					}
 					const dx =
@@ -265,7 +285,7 @@ export function ZodiacWheel({
 					if (!dx && !dy) return;
 					e.preventDefault();
 					setView(v =>
-						pan || e.shiftKey
+						e.shiftKey
 							? {
 									...v,
 									panX: clamp(
@@ -281,15 +301,14 @@ export function ZodiacWheel({
 								}
 							: {
 									...v,
-									spatial: true,
 									turn: degrees(v.turn + dx * 5 + 180) - 180,
-									tilt: clamp(v.tilt + dy * 5, 0, 175),
+									tilt: snapTilt(v.tilt + dy * 5),
 								}
 					);
 				}}
 			>
 				<g transform={`translate(${view.panX} ${view.panY})`}>
-					{view.spatial && (
+					{spatial && (
 						<g
 							fill="none"
 							stroke="currentColor"
@@ -453,7 +472,7 @@ export function ZodiacWheel({
 					)}
 					{focus && selected && (
 						<g>
-							{view.spatial && (
+							{spatial && (
 								<path
 									d={
 										'M' +
@@ -506,29 +525,20 @@ export function ZodiacWheel({
 					</circle>
 				</g>
 			</svg>
-			{onSelect && (
+			{onSelect && !spatial && (
 				<div className={style.viewControls}>
 					<button
 						type="button"
-						onClick={() =>
-							view.spatial || view.panX || view.panY
-								? reset()
-								: setView({ ...flat, spatial: true, tilt: 52 })
-						}
+						onClick={() => {
+							wheel.current?.focus({ preventScroll: true });
+							setView(v => ({
+								...v,
+								tilt: v.tilt === 180 ? 128 : 52,
+							}));
+						}}
 					>
-						{view.spatial || view.panX || view.panY
-							? 'Return to wheel'
-							: 'Explore in 3D'}
+						Explore in 3D
 					</button>
-					{view.spatial && (
-						<button
-							type="button"
-							aria-pressed={pan}
-							onClick={() => setPan(!pan)}
-						>
-							Pan
-						</button>
-					)}
 				</div>
 			)}
 			{bodies.length > 0 && (

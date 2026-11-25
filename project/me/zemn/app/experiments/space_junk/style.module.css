@@ -182,11 +182,6 @@
 .chartModes button[aria-pressed='true'] {
 	border-bottom-color: currentColor;
 }
-.viewControls button[aria-pressed='true'] {
-	text-decoration: underline;
-	text-underline-offset: 0.4rem;
-	text-decoration-thickness: 2px;
-}
 .figure {
 	margin: 0.5rem auto 1.25rem;
 	text-align: center;
