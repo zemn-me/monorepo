@@ -11,6 +11,7 @@ import {
 	useDeferredValue,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
 import { Temporal } from 'temporal-polyfill';
@@ -22,9 +23,9 @@ import { BirthdayRulers } from './birthday_form.js';
 import { ChartSettings } from './birthplace.js';
 import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
+import { ChartViewer, type ChartViewerHandle } from './chart_viewer.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
-import { Globe } from './globe.js';
 import { groundLocation } from './globe_geometry.js';
 import { bodyPositions, type ChartBody, classical, modern } from './planets.js';
 import { firstInstant, zonedTime } from './ruler_time.js';
@@ -33,7 +34,6 @@ import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
 import { useRulerClock } from './use_ruler_clock.js';
 import { type Birthplace, zodiacFrame } from './zodiac.js';
-import { ZodiacWheel } from './zodiac_wheel.js';
 
 function displayDate(day: string) {
 	return Temporal.PlainDate.from(day.slice(0, 10)).toLocaleString('en-GB', {
@@ -115,6 +115,7 @@ const BirthdayChart = memo(function BirthdayChart({
 	);
 	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
 	const { markers, instant: debrisInstant } = coverage;
+	const viewer = useRef<ChartViewerHandle>(null);
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [traditional, setTraditional] = useState(true);
 	const [more, setMore] = useState(false);
@@ -154,19 +155,6 @@ const BirthdayChart = memo(function BirthdayChart({
 				: debrisZodiac.ascendant,
 		[place, debrisInstant, instant, debrisZodiac]
 	);
-	const placements = useMemo(
-		() =>
-			view === 'wheel'
-				? markers.map(marker => ({
-						marker,
-						...debrisZodiac.direction(marker.fixed),
-					}))
-				: [],
-		[view, markers, debrisZodiac]
-	);
-	const focus =
-		placements.find(p => p.marker.object.id === selected?.object.id) ??
-		placements[0];
 	const location = selected && groundLocation(selected);
 	const filtered = useMemo(() => {
 		const term = search.trim().toLowerCase();
@@ -226,7 +214,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						aria-label="Zodiac wheel"
 						title="Zodiac wheel"
 						aria-pressed={view === 'wheel'}
-						onClick={() => setView('wheel')}
+						onClick={() => viewer.current?.show('wheel')}
 					>
 						<FontAwesomeIcon
 							icon={faDharmachakra}
@@ -238,7 +226,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						aria-label="Earth orbits"
 						title="Earth orbits"
 						aria-pressed={view === 'earth'}
-						onClick={() => setView('earth')}
+						onClick={() => viewer.current?.show('earth')}
 					>
 						<FontAwesomeIcon
 							icon={faEarthAmericas}
@@ -270,27 +258,20 @@ const BirthdayChart = memo(function BirthdayChart({
 				</div>
 			</div>
 			<figure className={style.figure}>
-				{view === 'wheel' ? (
-					<ZodiacWheel
-						bodies={bodies}
-						placements={placements}
-						ascendant={ascendant}
-						selected={focus}
-						onSelect={m => locate(m.object.id)}
-					/>
-				) : (
-					<Globe
-						key={selection?.revision}
-						instant={instant}
-						bodies={bodies}
-						showSigns={traditional}
-						birthplace={place}
-						markers={markers}
-						selected={selected}
-						onSelect={m => locate(m.object.id)}
-					/>
-				)}
-
+				<ChartViewer
+					ref={viewer}
+					onMode={setView}
+					instant={instant}
+					bodies={bodies}
+					showSigns={traditional}
+					birthplace={place}
+					markers={markers}
+					selected={selected}
+					revision={selection?.revision}
+					zodiac={debrisZodiac}
+					ascendant={ascendant}
+					onSelect={m => locate(m.object.id)}
+				/>
 				<figcaption aria-live="polite" className={style.caption}>
 					<time dateTime={iso}>{localFormat.format(instant)}</time>
 					{junk &&

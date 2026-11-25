@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { svgSnapshotPaths } from '#root/ts/3d/svg_scene.js';
+import { type Ref, useId, useImperativeHandle, useMemo } from 'react';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { coastlineUrl } from './assets.js';
+import type { Camera, PickMarker } from './chart_camera.js';
 import {
 	groundLocation,
 	type Marker,
@@ -18,62 +18,30 @@ import {
 } from './globe_scene.js';
 import { GlobeZodiac } from './globe_zodiac.js';
 import { OrbitScene } from './orbit_scene.js';
-import { PlanetPositions } from './planet_layer.js';
 import type { BodyPosition } from './planets.js';
-import style from './style.module.css';
 import type { Birthplace } from './zodiac.js';
 
-const empty: Marker[] = [];
-const initialView = { turn: 12, tilt: 24 };
-const clamp = (n: number, min: number, max: number) =>
-	Math.max(min, Math.min(max, n));
-const wrap = (n: number) => ((((n + 180) % 360) + 360) % 360) - 180;
-const size = (p: Vector) => Math.hypot(p.x, p.y, p.z);
-
-const closeExtent = 1.5;
 const baseWorld = globeWorld();
-const initialFrame = globeFrame(
-	globeCamera(initialView.turn, initialView.tilt, closeExtent),
-	2
-);
-const initialScene = (
-	<g
-		className="park-scene"
-		aria-hidden="true"
-		strokeWidth=".4"
-		strokeLinejoin="round"
-	>
-		{svgSnapshotPaths(
-			baseWorld,
-			[],
-			initialFrame.camera,
-			initialFrame.projection
-		).map((batch, i) => (
-			<g key={i}>
-				{batch.map(([path, fill], j) => (
-					<path key={j} d={path} fill={fill} stroke={fill} />
-				))}
-			</g>
-		))}
-	</g>
-);
-
 export function Globe({
 	instant,
 	bodies,
 	showSigns,
 	birthplace,
-	markers = empty,
+	markers,
 	selected,
-	onSelect,
+	camera,
+	extent,
+	pick,
 }: {
 	instant: number;
 	bodies: BodyPosition[];
 	showSigns: boolean;
 	birthplace?: Birthplace & { name?: string };
-	markers?: Marker[];
+	markers: Marker[];
 	selected?: Marker;
-	onSelect?: (marker: Marker) => void;
+	camera: Camera;
+	extent: number;
+	pick: Ref<PickMarker>;
 }) {
 	const mask = useId();
 	const coastline = useQuery({
@@ -92,47 +60,16 @@ export function Globe({
 		},
 	});
 	const location = selected && groundLocation(selected);
-	const homeView = useMemo(
-		() =>
-			birthplace
-				? { turn: birthplace.longitude, tilt: birthplace.latitude }
-				: initialView,
-		[birthplace]
-	);
-	const startingView = location
-		? { turn: wrap(location.longitude - 24), tilt: location.latitude * 0.8 }
-		: homeView;
-	const maxExtent = useMemo(
-		() => markers.reduce((m, p) => Math.max(m, size(p) * 1.05), 2),
-		[markers]
-	);
-	const initialExtent = selected
-		? Math.max(closeExtent, size(selected) * 1.05)
-		: closeExtent;
-	const [view, setView] = useState(startingView);
-	const previousHome = useRef(homeView);
-	useLayoutEffect(() => {
-		if (birthplace && homeView !== previousHome.current) setView(homeView);
-		previousHome.current = homeView;
-	}, [birthplace, homeView]);
-	const [extent, setExtent] = useState(initialExtent);
 	// A moving outermost object must not invalidate the projection of every coastline.
 	const frame = useMemo(
-		() => globeFrame(globeCamera(view.turn, view.tilt, extent), Infinity),
-		[view, extent]
+		() =>
+			globeFrame(globeCamera(camera.turn, camera.tilt, extent), Infinity),
+		[camera.turn, camera.tilt, extent]
 	);
 	const world = useMemo(
 		() => (coastline.data ? globeWorld(coastline.data) : baseWorld),
 		[coastline.data]
 	);
-	const drag = useRef<{
-		id: number;
-		x: number;
-		y: number;
-		turn: number;
-		tilt: number;
-		moved: boolean;
-	} | null>(null);
 	const projected = useMemo(() => {
 		const faces: StyledFace3D[] = [];
 		const hits: { x: number; y: number; marker: Marker }[] = [];
@@ -166,266 +103,126 @@ export function Globe({
 			? selected.object.name
 			: `NORAD ${selected.object.id}`);
 	const scaleKm = 10 ** Math.floor(Math.log10(45 * frame.kmPerPixel));
+	useImperativeHandle(
+		pick,
+		() => at => {
+			let distance = 6;
+			let closest: Marker | undefined;
+			for (const hit of projected.hits) {
+				const d = Math.hypot(at.x - hit.x, at.y - hit.y);
+				if (d < distance) {
+					closest = hit.marker;
+					distance = d;
+				}
+			}
+			return closest;
+		},
+		[projected]
+	);
 	return (
-		<div className={style.viewer}>
-			<svg
-				id="orbital-globe"
-				tabIndex={0}
-				onKeyDown={e => {
-					const dx =
-						Number(e.key === 'ArrowRight') -
-						Number(e.key === 'ArrowLeft');
-					const dy =
-						Number(e.key === 'ArrowUp') -
-						Number(e.key === 'ArrowDown');
-					if (!dx && !dy) return;
-					e.preventDefault();
-					setView(v => ({
-						turn: wrap(v.turn + 5 * dx),
-						tilt: clamp(v.tilt + 5 * dy, -90, 90),
-					}));
-				}}
-				className={style.globe}
-				viewBox={`0 0 ${width} ${height}`}
-				role="img"
-				aria-label="Earth and orbital chart. Drag or use the arrow keys to rotate."
-				onPointerDown={e => {
-					if (!e.isPrimary || e.button !== 0) return;
-					drag.current = {
-						id: e.pointerId,
-						x: e.clientX,
-						y: e.clientY,
-						...view,
-						moved: false,
-					};
-					e.currentTarget.setPointerCapture(e.pointerId);
-				}}
-				onPointerMove={e => {
-					const start = drag.current;
-					if (!start || start.id !== e.pointerId) return;
-					const dx = e.clientX - start.x,
-						dy = e.clientY - start.y;
-					if (!start.moved && Math.hypot(dx, dy) < 3) return;
-					start.moved = true;
-					const scale =
-						220 / e.currentTarget.getBoundingClientRect().width;
-					setView({
-						turn: wrap(start.turn - dx * scale),
-						tilt: clamp(start.tilt + dy * scale, -90, 90),
-					});
-				}}
-				onPointerUp={e => {
-					const start = drag.current;
-					if (
-						!onSelect ||
-						!start ||
-						start.id !== e.pointerId ||
-						start.moved
-					)
-						return;
-					const transform = e.currentTarget.getScreenCTM();
-					if (!transform) return;
-					const at = new DOMPoint(
-						e.clientX,
-						e.clientY
-					).matrixTransform(transform.inverse());
-					let distance = 6;
-					let closest: Marker | undefined;
-					for (const hit of projected.hits) {
-						const d = Math.hypot(at.x - hit.x, at.y - hit.y);
-						if (d < distance) {
-							closest = hit.marker;
-							distance = d;
-						}
-					}
-					if (closest) onSelect(closest);
-				}}
-				onLostPointerCapture={() => {
-					drag.current = null;
-				}}
-			>
-				<desc>
-					Zodiac marks show sky directions. The distance scale
-					measures Earth and debris.
-					{birthplace &&
-						` The red dot marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
-				</desc>
-				<defs>
-					<mask
-						id={mask}
-						maskUnits="userSpaceOnUse"
-						x="0"
-						y="0"
-						width={width}
-						height={height}
-					>
-						<OrbitScene
-							label="Earth and orbiting debris"
-							world={world}
-							faces={projected.faces}
-							frame={frame}
-						>
-							{initialScene}
-						</OrbitScene>
-					</mask>
-				</defs>
-				<rect
+		<g>
+			<desc>
+				Zodiac marks show sky directions. The distance scale measures
+				Earth and debris.
+				{birthplace &&
+					` The red dot marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
+			</desc>
+			<defs>
+				<mask
+					id={mask}
+					maskUnits="userSpaceOnUse"
+					x="0"
+					y="0"
 					width={width}
 					height={height}
-					mask={`url(#${mask})`}
-					fill="currentColor"
-				/>
-				{(showSigns || bodies.length > 0) && (
-					<GlobeZodiac
-						instant={instant}
-						frame={frame}
-						radius={extent * 0.9}
-						bodies={bodies}
-						showSigns={showSigns}
-					/>
-				)}
-				{birthPoint?.visible && (
-					<circle
-						cx={birthPoint.x}
-						cy={birthPoint.y}
-						r="3.5"
-						fill="#cb3434"
-						stroke="var(--background-color)"
-						strokeWidth="1.2"
-						role="img"
-						aria-label={birthLabel}
-					>
-						<title>{birthLabel}</title>
-					</circle>
-				)}
-				{focus?.visible && (
-					<>
-						{ground?.visible && (
-							<line
-								x1={ground.x}
-								y1={ground.y}
-								x2={focus.x}
-								y2={focus.y}
-								stroke="currentColor"
-							/>
-						)}
-						<g transform={`translate(${focusX} ${focusY})`}>
-							<path
-								d={`M${labelSide * 4},${Math.sign(labelOffset) * 4} L${labelSide * 23},${labelOffset}h${labelSide * 9}`}
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="1.25"
-							/>
-							<circle
-								r="5"
-								fill="var(--background-color)"
-								stroke="currentColor"
-								strokeWidth="1.6"
-							/>
-							<circle r="1.7" fill="currentColor" />
-							<text
-								x={labelSide * 35}
-								y={labelOffset}
-								textAnchor={labelSide === 1 ? 'start' : 'end'}
-								dominantBaseline="middle"
-								fill="currentColor"
-								stroke="var(--background-color)"
-								strokeWidth="3.5"
-								paintOrder="stroke"
-								strokeLinejoin="round"
-								fontSize="11"
-							>
-								{label}
-							</text>
-						</g>
-					</>
-				)}
-				<g
-					transform="translate(15 362)"
-					fill="currentColor"
-					fontSize="9"
 				>
-					<path
-						d={`M0,-4v4h${scaleKm / frame.kmPerPixel}v-4`}
-						stroke="currentColor"
-						fill="none"
+					<OrbitScene
+						label="Earth and orbiting debris"
+						world={world}
+						faces={projected.faces}
+						frame={frame}
 					/>
-					<text y="-8">{scaleKm.toLocaleString('en-GB')} km</text>
-				</g>
-			</svg>
-			<PlanetPositions bodies={bodies} />
-			<details className={style.camera}>
-				<summary>View controls</summary>
-				<div className={style.viewControls}>
-					<label>
-						Rotation
-						<input
-							type="range"
-							min="-180"
-							max="180"
-							value={Math.round(view.turn)}
-							aria-valuetext={`${Math.round(view.turn)} degrees longitude`}
-							onChange={e =>
-								setView({
-									...view,
-									turn: e.target.valueAsNumber,
-								})
-							}
+				</mask>
+			</defs>
+			<rect
+				width={width}
+				height={height}
+				mask={`url(#${mask})`}
+				fill="currentColor"
+			/>
+			{(showSigns || bodies.length > 0) && (
+				<GlobeZodiac
+					instant={instant}
+					frame={frame}
+					radius={extent * 0.9}
+					bodies={bodies}
+					showSigns={showSigns}
+				/>
+			)}
+			{birthPoint?.visible && (
+				<circle
+					cx={birthPoint.x}
+					cy={birthPoint.y}
+					r="3.5"
+					fill="#cb3434"
+					stroke="var(--background-color)"
+					strokeWidth="1.2"
+					role="img"
+					aria-label={birthLabel}
+				>
+					<title>{birthLabel}</title>
+				</circle>
+			)}
+			{focus?.visible && (
+				<>
+					{ground?.visible && (
+						<line
+							x1={ground.x}
+							y1={ground.y}
+							x2={focus.x}
+							y2={focus.y}
+							stroke="currentColor"
 						/>
-					</label>
-					<label>
-						Tilt
-						<input
-							type="range"
-							min="-90"
-							max="90"
-							value={Math.round(view.tilt)}
-							aria-valuetext={`${Math.round(view.tilt)} degrees latitude`}
-							onChange={e =>
-								setView({
-									...view,
-									tilt: e.target.valueAsNumber,
-								})
-							}
-						/>
-					</label>
-					{markers.length > 0 && (
-						<label>
-							Zoom
-							<input
-								type="range"
-								min="0"
-								max="100"
-								step=".1"
-								value={
-									100 -
-									(100 * Math.log(extent / closeExtent)) /
-										Math.log(maxExtent / closeExtent)
-								}
-								aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
-								onChange={e =>
-									setExtent(
-										closeExtent *
-											(maxExtent / closeExtent) **
-												(1 -
-													e.target.valueAsNumber /
-														100)
-									)
-								}
-							/>
-						</label>
 					)}
-					<button
-						type="button"
-						onClick={() => {
-							setView(homeView);
-							setExtent(closeExtent);
-						}}
-					>
-						Reset view
-					</button>
-				</div>
-			</details>
-		</div>
+					<g transform={`translate(${focusX} ${focusY})`}>
+						<path
+							d={`M${labelSide * 4},${Math.sign(labelOffset) * 4} L${labelSide * 23},${labelOffset}h${labelSide * 9}`}
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="1.25"
+						/>
+						<circle
+							r="5"
+							fill="var(--background-color)"
+							stroke="currentColor"
+							strokeWidth="1.6"
+						/>
+						<circle r="1.7" fill="currentColor" />
+						<text
+							x={labelSide * 35}
+							y={labelOffset}
+							textAnchor={labelSide === 1 ? 'start' : 'end'}
+							dominantBaseline="middle"
+							fill="currentColor"
+							stroke="var(--background-color)"
+							strokeWidth="3.5"
+							paintOrder="stroke"
+							strokeLinejoin="round"
+							fontSize="11"
+						>
+							{label}
+						</text>
+					</g>
+				</>
+			)}
+			<g transform="translate(15 362)" fill="currentColor" fontSize="9">
+				<path
+					d={`M0,-4v4h${scaleKm / frame.kmPerPixel}v-4`}
+					stroke="currentColor"
+					fill="none"
+				/>
+				<text y="-8">{scaleKm.toLocaleString('en-GB')} km</text>
+			</g>
+		</g>
 	);
 }

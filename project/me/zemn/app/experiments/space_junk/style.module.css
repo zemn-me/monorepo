@@ -477,3 +477,24 @@
 	text-decoration: underline;
 	text-underline-offset: 0.22em;
 }
+
+.projection {
+	transition: opacity 320ms ease-in-out;
+}
+.viewControls .spin {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+.spin input {
+	width: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.projection {
+		transition: none;
+	}
+	.viewControls .spin {
+		display: none;
+	}
+}

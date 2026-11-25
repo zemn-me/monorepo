@@ -1,4 +1,4 @@
-import { type ReactNode, useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { createSVGRenderer } from '#root/ts/3d/svg_scene.js';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import type { globeFrame } from './globe_scene.js';
@@ -10,13 +10,11 @@ export function OrbitScene({
 	world = emptyWorld,
 	faces,
 	frame,
-	children,
 }: {
 	label: string;
 	world?: StyledFace3D[];
 	faces: StyledFace3D[];
 	frame: ReturnType<typeof globeFrame>;
-	children?: ReactNode;
 }) {
 	const host = useRef<SVGGElement>(null);
 	const renderer = useRef<ReturnType<typeof createSVGRenderer> | null>(null);
@@ -37,9 +35,5 @@ export function OrbitScene({
 	useLayoutEffect(() => {
 		renderer.current!.render(frame.camera, faces, frame.projection);
 	}, [world, faces, frame]);
-	return (
-		<g ref={host} aria-label={label}>
-			{children}
-		</g>
-	);
+	return <g ref={host} aria-label={label} />;
 }

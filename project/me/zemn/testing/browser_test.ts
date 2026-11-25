@@ -465,16 +465,31 @@ describe('zemn.me website', () => {
 					return Math.abs(text.getRotationOfChar(0) - text.getRotationOfChar(text.getNumberOfChars() - 1));
 				`, (await captions())[0]);
 				expect(letterRotation).toBeGreaterThan(3);
-				await driver.findElement(By.xpath('//button[.="Explore in 3D"]')).click();
-				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
-				expect(await driver.findElements(By.xpath('//button[.="Pan" or .="Return to wheel"]'))).toHaveLength(0);
-				await wheel.sendKeys(Key.ARROW_UP.repeat(10));
-				expect(await wheel.getAttribute('aria-label')).toContain('wheel from above');
+				const projection = (label: string) => driver.wait(async () =>
+					(await wheel.getAttribute('aria-label'))?.includes(label), 5000, `Expected the camera to reach ${label}`);
+				const centre = await driver.executeScript<{ x: number; y: number }>(`
+					arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});
+					const r = arguments[0].getBoundingClientRect();
+					return {x: r.x + r.width / 2, y: r.y + r.height / 2};
+				`, wheel);
+				const mouse = (type: string, dy: number, buttons: number) =>
+					chrome.sendDevToolsCommand('Input.dispatchMouseEvent', {
+						type, x: centre.x, y: centre.y + dy, button: 'left', buttons, clickCount: 1,
+					});
+				// A fixed screen position stays meaningful throughout the uninterrupted drag.
+				await mouse('mousePressed', 0, 1);
+				await mouse('mouseMoved', 72, 1);
+				await projection('Earth and orbital chart');
+				await mouse('mouseMoved', 0, 1);
+				await mouse('mouseReleased', 0, 0);
+				await projection('wheel from above');
 				await wheel.sendKeys(Key.ARROW_DOWN.repeat(36));
-				expect(await wheel.getAttribute('aria-label')).toContain('wheel from below');
-				expect(await captions()).toHaveLength(12);
+				await projection('wheel from below');
 				await wheel.sendKeys(Key.ARROW_UP);
-				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
+				await projection('Earth and orbital chart');
+				await wheel.sendKeys(Key.HOME);
+				await projection('wheel from above');
+
 				const earthView = await driver.findElement(By.css('button[aria-label="Earth orbits"]'));
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthView);
 				await earthView.click();
@@ -484,12 +499,15 @@ describe('zemn.me website', () => {
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
 					(await Promise.all(paths.slice(0, 6).map(path => path.getAttribute('d')))).join('')
 				);
+				const initialRotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
+				await initialRotation.click();
+				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
 				const original = await geometry();
 				expect(original.length).toBeGreaterThan(0);
 				await tilt.sendKeys(Key.ARROW_RIGHT);
-				expect(await geometry()).not.toBe(original);
+				await driver.wait(async () => await geometry() !== original, 5000);
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				expect(await geometry()).toBe(original);
+				await driver.wait(async () => await geometry() === original, 5000, 'Reset restores the original Earth geometry');
 
 				await driver.findElement(By.xpath('//summary[.="Object catalogue"]')).click();
 				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain(
@@ -512,12 +530,12 @@ describe('zemn.me website', () => {
 				const toggle = (name: string) => driver.findElement(By.xpath(
 					`//label[normalize-space(.)="${name}"]/input[@role="switch"]`
 				));
-				const bodies = () => driver.findElements(By.css('svg g[aria-label="Zodiac bodies"] g[role="img"]'));
+				const bodies = () => driver.findElements(By.css('svg g[aria-hidden="false"] g[aria-label="Zodiac bodies"] g[role="img"]'));
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
 				await (await toggle('Space junk')).click();
 				expect((await bodies()).length).toBe(7);
 				expect(await driver.findElements(By.css('[aria-label="Chart coverage"]'))).toHaveLength(0);
-				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
+				const moon = () => driver.findElement(By.css('svg g[aria-hidden="false"] g[aria-label^="Moon ·"]')).getAttribute('aria-label');
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moon() !== initial, 5000);
@@ -526,7 +544,7 @@ describe('zemn.me website', () => {
 				expect((await bodies()).length).toBe(8);
 				const wheelMoon = await moon();
 				await driver.findElement(By.css('button[aria-label="Earth orbits"]')).click();
-				const globe = await driver.findElement(By.id('orbital-globe'));
+				const globe = await driver.wait(until.elementLocated(By.id('orbital-globe')), 5000);
 				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));
 				expect(await signs()).toHaveLength(12);
 				expect(await bodies()).toHaveLength(8);
@@ -534,7 +552,7 @@ describe('zemn.me website', () => {
 				const moonX = () => globe.findElement(By.css('g[aria-label^="Moon ·"] circle')).getAttribute('cx');
 				const beforeTurn = await moonX();
 				await globe.sendKeys(Key.ARROW_RIGHT);
-				expect(await moonX()).not.toBe(beforeTurn);
+				await driver.wait(async () => await moonX() !== beforeTurn, 5000);
 				const zodiac = await toggle('Zodiac');
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zodiac);
 				await zodiac.click();
@@ -552,12 +570,50 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('rotates an idle Earth and respects the rotation and reduced-motion controls', async () => {
+			try {
+				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.findElement(By.xpath('//label[normalize-space(.)="Space junk"]/input')).click();
+				await driver.findElement(By.css('button[aria-label="Earth orbits"]')).click();
+				const globe = await driver.wait(until.elementLocated(By.id('orbital-globe')), 5000);
+				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
+				const rotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Rotation"]/input'));
+				const spin = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
+				const angle = () => rotation.getAttribute('value');
+				const time = await driver.findElement(By.css('figcaption > time'));
+				const birthday = await time.getAttribute('datetime');
+				const initial = await angle();
+				await driver.wait(async () => await angle() !== initial, 5000);
+				await spin.click();
+				const stopped = await angle();
+				const chrome = driver as unknown as ChromeDriver;
+				const reducedMotion = (value: string) => chrome.sendDevToolsCommand('Emulation.setEmulatedMedia', {
+					features: [{name: 'prefers-reduced-motion', value}],
+				});
+				await driver.sleep(800);
+				expect(await angle()).toBe(stopped);
+				await spin.click();
+				await reducedMotion('reduce');
+				const reduced = await angle();
+				// At three degrees per second this spans more than two visible degree ticks.
+				await driver.sleep(800);
+				expect(await angle()).toBe(reduced);
+				await reducedMotion('no-preference');
+				await driver.wait(async () => await angle() !== reduced, 5000);
+				expect(await time.getAttribute('datetime')).toBe(birthday);
+				await globe.sendKeys(Key.HOME);
+				await driver.wait(until.elementLocated(By.id('zodiac-wheel')), 5000);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('pins the birthplace to the visible surface of Earth as the globe turns', async () => {
 			try {
 				await driver.get(`${origin}/experiments/space-junk`);
 				await driver.findElement(By.xpath('//label[normalize-space(.)="Space junk"]/input')).click();
 				await driver.findElement(By.css('button[aria-label="Earth orbits"]')).click();
-				const globe = await driver.findElement(By.id('orbital-globe'));
+				const globe = await driver.wait(until.elementLocated(By.id('orbital-globe')), 5000);
 				const pin = By.css('circle[aria-label="Birthplace"]');
 				expect(await globe.findElements(pin)).toHaveLength(0);
 				const birthplace = await driver.findElement(By.id('chart-birthplace'));
@@ -568,12 +624,12 @@ describe('zemn.me website', () => {
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
 				const center = Number(await marker.getAttribute('cx'));
 				await globe.sendKeys(Key.ARROW_RIGHT);
-				expect(Number(await marker.getAttribute('cx'))).toBeLessThan(center);
+				await driver.wait(async () => Number(await marker.getAttribute('cx')) < center, 5000);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(20));
-				expect(await globe.findElements(pin)).toHaveLength(0);
+				await driver.wait(async () => (await globe.findElements(pin)).length === 0, 5000);
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				expect(Number(await globe.findElement(pin).getAttribute('cx'))).toBe(center);
+				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Number(await globe.findElement(pin).getAttribute('cx')) === center, 5000);
 				await birthplace.click();
 				await driver.findElement(By.name('latitude')).sendKeys(Key.END, Key.BACK_SPACE);
 				await driver.findElement(By.name('longitude')).sendKeys(Key.END, Key.BACK_SPACE.repeat(3));
