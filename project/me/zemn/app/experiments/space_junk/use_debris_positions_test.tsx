@@ -1,5 +1,6 @@
 import { expect, it, jest } from '@jest/globals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { waitFor } from '@testing-library/react';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { SpaceObject } from './chart.js';
@@ -19,11 +20,6 @@ const spatula: SpaceObject = {
 	start: '2006-07-12',
 	end: '2006-09-29',
 };
-
-Object.defineProperty(globalThis, 'IS_REACT_ACT_ENVIRONMENT', {
-	value: true,
-	configurable: true,
-});
 
 function Positions({ iso, object }: { iso: string; object?: SpaceObject }) {
 	const { markers, instant } = useDebrisPositions(
@@ -142,6 +138,61 @@ it('dates the last debris frame while the next archive loads and clears it on se
 		expect(held.textContent).toBe('');
 	} finally {
 		await view.close();
+		jest.useRealTimers();
+	}
+});
+
+it('loads the neighboring archives ahead of a day change and reuses them when the ruler reverses', async () => {
+	jest.useFakeTimers();
+	const view = chart();
+	const originalFetch = globalThis.fetch;
+	const requests: string[] = [];
+	const nextTle = tle.replace('308.9779', '208.9779');
+	globalThis.fetch = async url => {
+		const day = String(url).split('/').pop()!;
+		requests.push(day);
+		return {
+			ok: true,
+			text: async () => (day === '2006-08-03' ? nextTle : tle),
+		} as Response;
+	};
+	const settle = () => act(async () => jest.advanceTimersByTimeAsync(1000));
+	try {
+		const noon = '2006-08-02T12:00Z';
+		const nextNoon = '2006-08-03T12:00Z';
+		await view.show(noon, spatula);
+		await waitFor(() => expect(requests).toHaveLength(3));
+		expect(requests.toSorted()).toEqual([
+			'2006-08-01',
+			'2006-08-02',
+			'2006-08-03',
+		]);
+
+		const next = await view.show(nextNoon, spatula);
+		expect(next.textContent).toBe(
+			snapshotPositions(nextTle, new Date(nextNoon))[0]!
+				.slice(1)
+				.join(',')
+		);
+		await waitFor(() => expect(requests).toHaveLength(4));
+		expect(requests.toSorted()).toEqual([
+			'2006-08-01',
+			'2006-08-02',
+			'2006-08-03',
+			'2006-08-04',
+		]);
+
+		await view.show(noon, spatula);
+		await settle();
+		expect(requests).toHaveLength(4);
+
+		await view.show('2006-08-04T12:00Z', spatula);
+		await view.show('2006-08-04T12:00Z', undefined);
+		await settle();
+		expect(requests).toHaveLength(4);
+	} finally {
+		await view.close();
+		globalThis.fetch = originalFetch;
 		jest.useRealTimers();
 	}
 });

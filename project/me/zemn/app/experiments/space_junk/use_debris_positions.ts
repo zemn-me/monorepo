@@ -2,6 +2,7 @@ import {
 	queryOptions,
 	useQueries,
 	useQuery,
+	useQueryClient,
 	type UseQueryResult,
 } from '@tanstack/react-query';
 import {
@@ -18,7 +19,7 @@ import type { SpaceObject } from './chart.js';
 import { catalogueMarkers } from './globe_geometry.js';
 import { positionsAt, readElements } from './orbit.js';
 
-function archiveQuery(day: string, enabled: boolean) {
+function archiveQuery(day: string, enabled = true) {
 	return queryOptions({
 		queryKey: ['space-junk-elements', day],
 		enabled,
@@ -96,8 +97,21 @@ export function useDebrisPositions(
 			.filter(d => d.day >= '1957-01-01' && d.day <= lastDay);
 	}, [day, lastDay]);
 	const needNearby = matches.length > 0 && !primary.length;
-	// Reuse cached measurements across the propagation window. Only the
-	// immediately adjacent archives are downloaded to fill a missing day.
+	const client = useQueryClient();
+	// Give the selected day priority. Warm one day on either side only after
+	// the ruler settles, so a long scrub doesn't download every day it passes.
+	useEffect(() => {
+		if (!enabled || needNearby) return;
+		const timer = window.setTimeout(() => {
+			for (const neighbor of neighbors) {
+				if (neighbor.adjacent)
+					void client.prefetchQuery(archiveQuery(neighbor.day));
+			}
+		}, 400);
+		return () => window.clearTimeout(timer);
+	}, [client, enabled, needNearby, neighbors]);
+
+	// A missing day can use nearby measurements immediately.
 	const nearby = useQueries({
 		queries: neighbors.map(d =>
 			archiveQuery(
