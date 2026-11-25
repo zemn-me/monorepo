@@ -478,8 +478,8 @@ importers:
         specifier: 4.6.0
         version: 4.6.0(stylelint@18.0.0)
       stylelint-config-recommended:
-        specifier: 19.0.0
-        version: 19.0.0(stylelint@18.0.0)
+        specifier: 19.1.0
+        version: 19.1.0(stylelint@18.0.0)
       stylelint-config-standard:
         specifier: 41.1.0
         version: 41.1.0(stylelint@18.0.0)
@@ -8530,8 +8530,8 @@ packages:
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  stylelint-config-recommended@19.0.0:
-    resolution: {integrity: sha512-Y15XB19RManqBOpbRC42tF8R/Hfe314xYLzedRlnnYxYzZ0777RakDQIGcqYfrz9jWGoVyjaGTdpSl9F+roOOw==}
+  stylelint-config-recommended@19.1.0:
+    resolution: {integrity: sha512-DurXBzvz2cmVX2rM1JMDCbPIq+MRKhIPY743lFk1DjUoyx7giLfN+HR8Hilw+kE2nE5blaXhVf66edvQGnLdwA==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
     peerDependencies:
       stylelint: ^18.0.0
@@ -18365,14 +18365,14 @@ snapshots:
     optionalDependencies:
       stylelint-scss: 7.3.0(stylelint@18.0.0)
 
-  stylelint-config-recommended@19.0.0(stylelint@18.0.0):
+  stylelint-config-recommended@19.1.0(stylelint@18.0.0):
     dependencies:
       stylelint: 18.0.0
 
   stylelint-config-standard@41.1.0(stylelint@18.0.0):
     dependencies:
       stylelint: 18.0.0
-      stylelint-config-recommended: 19.0.0(stylelint@18.0.0)
+      stylelint-config-recommended: 19.1.0(stylelint@18.0.0)
 
   stylelint-scss@7.3.0(stylelint@18.0.0):
     dependencies:
