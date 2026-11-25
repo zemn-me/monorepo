@@ -1,17 +1,17 @@
 import {
+	degreesToRadians,
+	type EcfVec3,
 	ecfToLookAngles,
 	eciToEcf,
 	gstime,
 	jday,
 	json2satrec,
-	propagate,
-	radiansToDegrees,
-	degreesToRadians,
-	twoline2satrec,
-	type EcfVec3,
 	type Kilometer,
 	type OMMJsonObject,
+	propagate,
+	radiansToDegrees,
 	type SatRec,
+	twoline2satrec,
 } from 'satellite.js';
 
 export interface Orbit {
@@ -27,6 +27,64 @@ interface ArchiveRecord {
 	tle_line1?: string;
 	tle_line2?: string;
 	orbital_elements?: OMMJsonObject;
+}
+
+// Keep propagation close to the epoch of the measured elements.
+function usableEpoch(sat: SatRec, julianDay: number) {
+	return (
+		Number.isFinite(sat.jdsatepoch) &&
+		Math.abs(julianDay - sat.jdsatepoch) <= 3
+	);
+}
+
+function earthFixed(sat: SatRec, time: Date, siderealTime: number) {
+	const state = propagate(sat, time);
+	if (!state) return null;
+	const point = eciToEcf(state.position, siderealTime);
+	return Object.values(point).every(Number.isFinite) ? point : null;
+}
+
+export type PositionRow = [id: number, x: number, y: number, z: number];
+
+// TLE Alpha-5 skips I and O in its leading catalog digit.
+function catalogNumber(field: string) {
+	if (/^\d{5}$/.test(field)) return Number(field);
+	const leading = 'ABCDEFGHJKLMNPQRSTUVWXYZ'.indexOf(field[0] ?? '');
+	return leading >= 0 && /^.\d{4}$/.test(field)
+		? (leading + 10) * 10000 + Number(field.slice(1))
+		: NaN;
+}
+
+export function snapshotPositions(text: string, time: Date): PositionRow[] {
+	const lines = text.split(/\r?\n/);
+	const julianDay = jday(time);
+	const siderealTime = gstime(time);
+	const positions = new Map<number, { age: number; row: PositionRow }>();
+	for (let i = 1; i < lines.length; i++) {
+		const a = lines[i - 1]!;
+		const b = lines[i]!;
+		if (
+			!a.startsWith('1 ') ||
+			!b.startsWith('2 ') ||
+			a.length < 68 ||
+			b.length < 68
+		)
+			continue;
+		const field = a.slice(2, 7);
+		const id = catalogNumber(field);
+		if (!Number.isFinite(id) || field !== b.slice(2, 7)) continue;
+		const sat = twoline2satrec(a, b);
+		if (!usableEpoch(sat, julianDay)) continue;
+		const age = Math.abs(julianDay - sat.jdsatepoch);
+		if ((positions.get(id)?.age ?? Infinity) <= age) continue;
+		const p = earthFixed(sat, time, siderealTime);
+		if (p)
+			positions.set(id, {
+				age,
+				row: [id, Math.round(p.x), Math.round(p.y), Math.round(p.z)],
+			});
+	}
+	return Array.from(positions.values(), p => p.row);
 }
 
 export function archivedOrbit(
@@ -51,24 +109,11 @@ export function archivedOrbit(
 	} else {
 		return null;
 	}
-	// The nearest archived record can be years away. Keep SGP4 estimates local to its epoch.
-	if (
-		!Number.isFinite(sat.jdsatepoch) ||
-		Math.abs(jday(time) - sat.jdsatepoch) > 3
-	)
-		return null;
+	if (!usableEpoch(sat, jday(time))) return null;
 	const later = new Date(time.getTime() + 1000);
-	const a = propagate(sat, time);
-	const b = propagate(sat, later);
-	if (!a || !b) return null;
-	const position = eciToEcf(a.position, gstime(time));
-	const next = eciToEcf(b.position, gstime(later));
-	if (
-		![...Object.values(position), ...Object.values(next)].every(
-			Number.isFinite
-		)
-	)
-		return null;
+	const position = earthFixed(sat, time, gstime(time));
+	const next = earthFixed(sat, later, gstime(later));
+	if (!position || !next) return null;
 	return {
 		position,
 		next,

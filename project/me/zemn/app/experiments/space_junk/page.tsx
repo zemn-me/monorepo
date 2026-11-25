@@ -6,9 +6,12 @@ import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
 import { BirthdayForm } from './birthday_form.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
+import { Globe } from './globe.js';
+import { catalogueMarkers, groundLocation } from './globe_geometry.js';
+import { ObjectGlyph } from './object_glyph.js';
+import type { PositionRow } from './orbit.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
-import { ObjectGlyph, Wheel } from './wheel.js';
 
 function displayDate(day: string) {
 	return Temporal.PlainDate.from(day.slice(0, 10)).toLocaleString('en-GB', {
@@ -25,10 +28,50 @@ function BirthdayChart({
 }) {
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(0);
-	const { matches, releases } = useMemo(
+	const { matches } = useMemo(
 		() => readChart(catalogue.objects, birthday),
 		[catalogue, birthday]
 	);
+	const day = birthday.toString();
+	const [time, setTime] = useState('12:00');
+	const [selection, setSelection] = useState<{
+		id: number;
+		revision: number;
+	}>();
+	function locate(id: number) {
+		setSelection(previous => ({
+			id,
+			revision: (previous?.revision ?? 0) + 1,
+		}));
+	}
+	const instant = day + 'T' + time;
+	const minute = Date.parse(instant + ':00Z') / 60000;
+	const snapshot = useQuery({
+		queryKey: ['space-junk-positions', minute],
+		networkMode: 'always',
+		enabled: matches.length > 0 && day <= catalogue.asOf,
+		staleTime: 86400000,
+		meta: { persist: false },
+		retry: false,
+		queryFn: async ({ signal }): Promise<PositionRow[]> => {
+			const response = await fetch(
+				`/experiments/space-junk/positions/${minute}`,
+				{ signal }
+			);
+			if (!response.ok) throw new Error('Unable to load archived orbits');
+			return response.json();
+		},
+	});
+	const markers = useMemo(
+		() => catalogueMarkers(matches, snapshot.data ?? [], instant),
+		[matches, snapshot.data, instant]
+	);
+	const byId = useMemo(
+		() => new Map(markers.map(m => [m.object.id, m])),
+		[markers]
+	);
+	const selected = selection && byId.get(selection.id);
+	const location = selected && groundLocation(selected);
 	const filtered = useMemo(() => {
 		const term = search.trim().toLowerCase();
 		if (!term) return matches;
@@ -53,7 +96,12 @@ function BirthdayChart({
 	return (
 		<>
 			<figure className={style.plate}>
-				<Wheel birthday={birthday} releases={releases} />
+				<Globe
+					key={selected ? selection?.revision : 'earth'}
+					markers={markers}
+					selected={selected}
+					onSelect={m => locate(m.object.id)}
+				/>
 				<figcaption aria-live="polite">
 					<time dateTime={birthday.toString()}>
 						✦ {displayDate(birthday.toString())}
@@ -76,11 +124,87 @@ function BirthdayChart({
 					)}
 
 					{lead && (
-						<small>
-							The gold star marks your birthday. Taller columns
-							mean more pieces share that release anniversary.
-							Drag the calendar to rotate it.
-						</small>
+						<>
+							<form
+								className={style.instant}
+								onSubmit={e => {
+									e.preventDefault();
+									setTime(
+										String(
+											new FormData(e.currentTarget).get(
+												'globe-time'
+											)
+										)
+									);
+								}}
+							>
+								<label>
+									Globe time (UTC)
+									<input
+										type="time"
+										name="globe-time"
+										defaultValue={time}
+										required
+									/>
+								</label>
+								<button type="submit">Set time</button>
+							</form>
+							{snapshot.isError ? (
+								<p role="alert">
+									Orbit archive unavailable.{' '}
+									<button
+										type="button"
+										onClick={() => void snapshot.refetch()}
+									>
+										Retry
+									</button>
+								</p>
+							) : (
+								<p role="status" aria-label="Globe coverage">
+									{snapshot.data
+										? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} located at ${time} UTC.`
+										: 'Loading archived orbital positions…'}
+								</p>
+							)}
+							{snapshot.data && markers.length < count && (
+								<small>
+									Other objects lack a recent orbit or
+									confirmed flight time.
+								</small>
+							)}
+							{markers.length > 0 && (
+								<div className={style.legend}>
+									<span>
+										<i />
+										Fragment
+									</span>
+									<span>
+										<i />
+										Rocket stage
+									</span>
+									<span>
+										<i />
+										Equipment
+									</span>
+								</div>
+							)}
+							{location && selected && (
+								<p className={style.location}>
+									<strong>{selected.object.name}</strong>
+									<br />
+									{Math.abs(location.latitude).toFixed(
+										2
+									)}° {location.latitude < 0 ? 'S' : 'N'},{' '}
+									{Math.abs(location.longitude).toFixed(2)}°{' '}
+									{location.longitude < 0 ? 'W' : 'E'}
+									<br />
+									{Math.round(location.height).toLocaleString(
+										'en-GB'
+									)}{' '}
+									km above Earth
+								</p>
+							)}
+						</>
 					)}
 				</figcaption>
 			</figure>
@@ -100,7 +224,7 @@ function BirthdayChart({
 						/>
 					</label>
 					<div className={style.paging}>
-						<span role="status">
+						<span role="status" aria-label="Catalogue results">
 							{rows.length
 								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
 								: 'No matching objects'}
@@ -128,6 +252,8 @@ function BirthdayChart({
 					</div>
 					{rows.length > 0 && (
 						<Sky
+							key={time}
+							defaultTime={time}
 							birthday={birthday.toString()}
 							objects={rows.map(row => row.object)}
 						/>
@@ -158,6 +284,15 @@ function BirthdayChart({
 											: ` through the ${displayDate(catalogue.asOf)} catalog edition`}
 										.
 									</small>
+									{byId.has(object.id) && (
+										<a
+											className={style.locate}
+											href="#orbital-globe"
+											onClick={() => locate(object.id)}
+										>
+											Locate on globe
+										</a>
+									)}
 								</div>
 							</li>
 						))}
@@ -195,12 +330,12 @@ export default function Page() {
 			<BirthdayForm asOf={catalogue.data?.asOf} onDraw={setBirthday} />
 			{!birthday ? (
 				<figure className={style.plate}>
-					<Wheel />
+					<Globe />
 					<figcaption>
-						<h2>The orbital calendar</h2>
+						<h2>Earth orbit</h2>
 						<p>
-							Drag to turn the calendar. Enter your birthday to
-							see the release anniversaries rise around the globe.
+							Enter your birthday to see where debris was orbiting
+							Earth. Drag the globe to explore.
 						</p>
 					</figcaption>
 				</figure>
@@ -235,7 +370,12 @@ export default function Page() {
 				</a>
 				).
 				{catalogue.data &&
-					` Edition of ${displayDate(catalogue.data.asOf)}.`}
+					` Edition of ${displayDate(catalogue.data.asOf)}.`}{' '}
+				Globe positions use SGP4 and orbital elements within three days
+				of the chosen time from{' '}
+				<a href="https://spacebook.com/">COMSPOC Spacebook</a>.
+				Coastlines from{' '}
+				<a href="https://www.naturalearthdata.com/">Natural Earth</a>.
 			</p>
 		</article>
 	);

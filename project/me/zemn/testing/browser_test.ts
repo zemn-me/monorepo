@@ -436,19 +436,19 @@ describe('zemn.me website', () => {
 				expect(await reading.getText()).toContain('1 August 2006');
 				expect(await reading.getText()).toContain('There was a spatula in orbit');
 				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
-				const dial = await driver.findElement(By.css('article figure ellipse'));
-				const originalHeight = await dial.getAttribute('ry');
+				const grid = await driver.findElement(By.css('path[aria-label="Latitude and longitude grid"]'));
+				const originalGrid = await grid.getAttribute('d');
 				await tilt.sendKeys(Key.ARROW_RIGHT);
-				expect(await dial.getAttribute('ry')).not.toBe(originalHeight);
+				expect(await grid.getAttribute('d')).not.toBe(originalGrid);
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				expect(await dial.getAttribute('ry')).toBe(originalHeight);
+				expect(await grid.getAttribute('d')).toBe(originalGrid);
 
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
 					'12 July 2006 through 29 September 2006'
 				);
-				expect(await driver.findElement(By.css('article [role="status"]')).getText()).toContain('1–12 of 6,989');
+				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('1–12 of 6,989');
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
-				expect(await driver.findElement(By.css('article [role="status"]')).getText()).toContain('13–24 of 6,989');
+				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('13–24 of 6,989');
 				await driver.findElement(By.css('article input[type="search"]')).sendKeys('1976-126V');
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain('NORAD 9724');
 

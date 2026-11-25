@@ -1,0 +1,86 @@
+import { eciToGeodetic, radiansToDegrees } from 'satellite.js';
+
+import { inOrbitAt, type SpaceObject } from './chart.js';
+import type { PositionRow } from './orbit.js';
+
+const equatorialRadius = 6378.137;
+const polarRadius = 6356.752314245;
+const radians = Math.PI / 180;
+
+export interface Vector {
+	x: number;
+	y: number;
+	z: number;
+}
+export interface Marker extends Vector {
+	object: SpaceObject;
+	fixed: Vector;
+}
+
+export function markerFrom(
+	object: SpaceObject,
+	[, x, y, z]: PositionRow
+): Marker {
+	// The WGS84 ellipsoid becomes a unit sphere in these drawing coordinates.
+	return {
+		object,
+		fixed: { x, y, z },
+		x: x / equatorialRadius,
+		y: y / equatorialRadius,
+		z: z / polarRadius,
+	};
+}
+
+export function catalogueMarkers(
+	matches: { object: SpaceObject }[],
+	positions: PositionRow[],
+	instant: string
+) {
+	const rows = new Map(positions.map(row => [row[0], row]));
+	return matches.flatMap(({ object }) => {
+		const row = rows.get(object.id);
+		return row && inOrbitAt(object, instant)
+			? [markerFrom(object, row)]
+			: [];
+	});
+}
+
+export function groundLocation(marker: Marker) {
+	// The input is already Earth-fixed, so the sidereal rotation is zero.
+	const p = eciToGeodetic(marker.fixed, 0);
+	return {
+		longitude: radiansToDegrees(p.longitude),
+		latitude: radiansToDegrees(p.latitude),
+		height: p.height,
+	};
+}
+
+export function surface(longitude: number, latitude: number): Vector {
+	const lon = longitude * radians;
+	const lat = latitude * radians;
+	const angle = Math.atan2(
+		polarRadius * Math.sin(lat),
+		equatorialRadius * Math.cos(lat)
+	);
+	return {
+		x: Math.cos(angle) * Math.cos(lon),
+		y: Math.cos(angle) * Math.sin(lon),
+		z: Math.sin(angle),
+	};
+}
+
+export function camera(turn: number, tilt: number) {
+	const lon = turn * radians;
+	const lat = tilt * radians;
+	const sinLon = Math.sin(lon);
+	const cosLon = Math.cos(lon);
+	const sinLat = Math.sin(lat);
+	const cosLat = Math.cos(lat);
+	return (p: Vector) => {
+		const near = cosLon * p.x + sinLon * p.y;
+		const x = -sinLon * p.x + cosLon * p.y;
+		const y = sinLat * near - cosLat * p.z;
+		const depth = cosLat * near + sinLat * p.z;
+		return { x, y, depth, visible: depth >= 0 || x * x + y * y > 1 };
+	};
+}

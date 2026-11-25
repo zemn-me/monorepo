@@ -14,7 +14,10 @@ genrule(
 hashed_public_assets(
     name = "catalogue_assets",
     outs = ["assets.ts"],
-    assets = {":catalogue": "catalogueUrl"},
+    assets = {
+        ":catalogue": "catalogueUrl",
+        "@natural_earth_coastline//file": "coastlineUrl",
+    },
     public_dir = "sha256",
 )
 
@@ -24,10 +27,13 @@ ts_project(
         "birthday_form.tsx",
         "chart.ts",
         "elements.ts",
+        "globe.tsx",
+        "globe_geometry.ts",
+        "object_glyph.tsx",
         "orbit.ts",
         "page.tsx",
         "sky.tsx",
-        "wheel.tsx",
+        "snapshot.ts",
         ":catalogue_assets_generated",
     ],
     assets = ["style.module.css"],
@@ -64,10 +70,13 @@ filegroup(
         "chart.ts",
         "chart_test.ts",
         "elements.ts",
+        "globe.tsx",
+        "globe_geometry.ts",
+        "object_glyph.tsx",
         "orbit.ts",
         "page.tsx",
         "sky.tsx",
-        "wheel.tsx",
+        "snapshot.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

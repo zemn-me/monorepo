@@ -1,9 +1,9 @@
 import { useQueries } from '@tanstack/react-query';
 import { useState } from 'react';
 import { inOrbitAt, type SpaceObject } from './chart.js';
+import { ObjectGlyph } from './object_glyph.js';
 import { lookFrom, type Orbit } from './orbit.js';
 import style from './style.module.css';
-import { ObjectGlyph } from './wheel.js';
 
 interface Observer {
 	time: string;
@@ -152,9 +152,11 @@ function SkyReading({
 
 export function Sky({
 	birthday,
+	defaultTime,
 	objects,
 }: {
 	birthday: string;
+	defaultTime: string;
 	objects: SpaceObject[];
 }) {
 	const [observer, setObserver] = useState<Observer>();
@@ -185,7 +187,12 @@ export function Sky({
 			>
 				<label>
 					Birth time (UTC)
-					<input type="time" name="time" required />
+					<input
+						type="time"
+						name="time"
+						defaultValue={defaultTime}
+						required
+					/>
 				</label>
 				<label>
 					Latitude (°)

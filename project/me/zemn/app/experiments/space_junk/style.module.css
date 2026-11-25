@@ -102,46 +102,80 @@
 .viewer {
 	min-width: 0;
 }
-.wheel {
+.globe {
 	display: block;
 	width: 100%;
 	cursor: grab;
 	touch-action: none;
 	user-select: none;
 }
-.wheel:active {
+.globe:active {
 	cursor: grabbing;
 }
-.dial ellipse,
-.dial path {
-	stroke: #77939c;
-	stroke-width: 0.65;
+.instant {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: 0.45rem;
+	margin: 1rem 0 0.65rem;
 }
-.month {
-	fill: var(--paper);
-	font-size: 9px;
-	paint-order: stroke;
-	stroke: var(--ink);
-	stroke-width: 1.8px;
-	stroke-linejoin: round;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
+.instant label {
+	display: grid;
+	gap: 0.3rem;
+	font-size: 0.9rem;
 }
-.earth {
-	stroke: #a3bfb1;
-	stroke-width: 0.8;
+.instant input,
+.instant button {
+	box-sizing: border-box;
+	min-height: 44px;
+	border: 1px solid #8b9b9a;
+	border-radius: 0.25rem;
+	background: var(--ink);
+	color: var(--paper);
+	padding: 0.4rem 0.55rem;
+	font: inherit;
+	color-scheme: dark;
 }
-.graticule path {
-	stroke: #adccb4;
-	stroke-width: 0.6;
-	opacity: 0.75;
+.instant button {
+	cursor: pointer;
 }
-.bar:hover path {
-	fill: var(--gold);
+.legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.7rem;
+	font-size: 0.8rem;
+	margin-block: 0.8rem;
 }
-.star {
-	fill: var(--gold);
-	stroke: var(--ink);
+.legend span {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.32rem;
+}
+.legend i {
+	width: 0.35rem;
+	height: 0.35rem;
+	border-radius: 50%;
+	background: #8dc7bf;
+}
+.legend span:nth-child(2) i {
+	background: #f2ca84;
+	border-radius: 0;
+	transform: rotate(-45deg);
+	width: 0.55rem;
+}
+.legend span:nth-child(3) i {
+	background: #f5e6d1;
+	border-radius: 0;
+	transform: rotate(45deg);
+}
+.location {
+	border-inline-start: 2px solid var(--gold);
+	padding-inline-start: 0.7rem;
+	font-variant-numeric: tabular-nums;
+}
+.locate {
+	display: table;
+	padding: 0.6rem 0;
 }
 .viewControls {
 	display: flex;
@@ -227,11 +261,15 @@
 		gap: 0;
 	}
 
-	.wheel {
+	.globe {
 		max-width: 23rem;
 		margin-inline: auto;
 	}
 
+	.instant,
+	.legend {
+		justify-content: center;
+	}
 	.plate figcaption {
 		padding-block-start: 1rem;
 		text-align: center;

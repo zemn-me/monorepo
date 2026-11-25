@@ -42,16 +42,13 @@ export function readChart(
 ) {
 	const day = birthday.toString();
 	const matches: { object: SpaceObject; days: number }[] = [];
-	const releases = Array<number>(birthday.daysInYear).fill(0);
-	const anniversaries = new Map<
-		string,
-		{ days: number; dayOfYear: number }
-	>();
+
+	const anniversaries = new Map<string, number>();
 	for (const object of objects) {
 		if (!inOrbit(object, day)) continue;
 		const monthDay = object.start.slice(5, 10);
 		let anniversary = anniversaries.get(monthDay);
-		if (!anniversary) {
+		if (anniversary === undefined) {
 			const month = Number(monthDay.slice(0, 2));
 			const dayOfMonth = Number(monthDay.slice(3));
 			// A leap-day release falls on February 28 in common years.
@@ -60,17 +57,12 @@ export function readChart(
 			const offsets = [-1, 0, 1].map(
 				delta => birthday.until(dateIn(birthday.year + delta)).days
 			);
-			anniversary = {
-				days: offsets.reduce((a, b) =>
-					Math.abs(a) <= Math.abs(b) ? a : b
-				),
-				dayOfYear: dateIn(birthday.year).dayOfYear,
-			};
+			anniversary = offsets.reduce((a, b) =>
+				Math.abs(a) <= Math.abs(b) ? a : b
+			);
 			anniversaries.set(monthDay, anniversary);
 		}
-		const index = anniversary.dayOfYear - 1;
-		releases[index] = (releases[index] ?? 0) + 1;
-		matches.push({ object, days: anniversary.days });
+		matches.push({ object, days: anniversary });
 	}
 	matches.sort(
 		(a, b) =>
@@ -79,5 +71,5 @@ export function readChart(
 			b.object.start.localeCompare(a.object.start) ||
 			a.object.id - b.object.id
 	);
-	return { matches, releases };
+	return { matches };
 }

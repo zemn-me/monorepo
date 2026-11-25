@@ -2,6 +2,10 @@ import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
 	{
+		path: 'experiments/space-junk/positions/:minute',
+		file: 'experiments/space_junk/snapshot.js',
+	},
+	{
 		path: 'experiments/space-junk/orbit/:id/:minute',
 		file: 'experiments/space_junk/elements.js',
 	},
