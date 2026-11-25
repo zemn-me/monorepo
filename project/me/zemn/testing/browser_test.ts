@@ -431,10 +431,10 @@ describe('zemn.me website', () => {
 				await driver.findElement(By.name('month')).sendKeys('8');
 				await driver.findElement(By.name('day')).sendKeys('1');
 				await driver.findElement(By.name('year')).sendKeys('2006');
-				await driver.findElement(By.xpath('//button[.="Draw my chart"]')).click();
+				await driver.findElement(By.css('button[aria-label="Draw my chart"]')).click();
 				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
 				expect(await reading.getText()).toContain('1 August 2006');
-				expect(await reading.getText()).toContain('There was a spatula in orbit');
+				expect(await driver.findElement(By.css('article input[type="search"]')).isDisplayed()).toBe(false);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
 				await driver.findElement(By.xpath('//button[.="Explore in 3D"]')).click();
@@ -444,6 +444,7 @@ describe('zemn.me website', () => {
 				const earthView = await driver.findElement(By.xpath('//button[.="Earth orbits"]'));
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthView);
 				await earthView.click();
+				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
 				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
 				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting debris"]'));
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
@@ -456,8 +457,9 @@ describe('zemn.me website', () => {
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
 				expect(await geometry()).toBe(original);
 
+				await driver.findElement(By.xpath('//summary[.="Object catalogue"]')).click();
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
-					'12 July 2006 through 29 September 2006'
+					'12 July 2006 – 29 September 2006'
 				);
 				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('1–12 of 6,989');
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
@@ -488,7 +490,7 @@ describe('zemn.me website', () => {
 				await driver.findElement(By.name('year')).sendKeys('2006');
 				await driver.findElement(By.name('month')).sendKeys('8');
 				await driver.findElement(By.name('day')).sendKeys('1');
-				await driver.findElement(By.xpath('//button[.="Draw my chart"]')).click();
+				await driver.findElement(By.css('button[aria-label="Draw my chart"]')).click();
 				await driver.wait(async () => (await driver.findElements(By.css('figcaption time[datetime="2006-08-01"]'))).length > 0, 5000);
 			} finally {
 				await driver.quit();

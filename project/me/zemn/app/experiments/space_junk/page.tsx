@@ -5,11 +5,10 @@ import { Temporal } from 'temporal-polyfill';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
 import { BirthdayForm } from './birthday_form.js';
-import { BirthplaceForm } from './birthplace.js';
+import { ChartSettings } from './birthplace.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import { Globe } from './globe.js';
 import { catalogueMarkers, groundLocation } from './globe_geometry.js';
-import { ObjectGlyph } from './object_glyph.js';
 import type { PositionRow } from './orbit.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
@@ -104,13 +103,19 @@ function BirthdayChart({
 	const pageSize = 12;
 	const offset = page * pageSize;
 	const rows = filtered.slice(offset, offset + pageSize);
-	const lead = matches[0]?.object;
+
 	const count = matches.length;
 	if (birthday.toString() > catalogue.asOf)
 		return (
 			<p role="status">
 				Choose a date on or before {displayDate(catalogue.asOf)}, the
 				date of this catalog edition.
+			</p>
+		);
+	if (!count)
+		return (
+			<p role="status">
+				No catalogued debris in orbit on {displayDate(day)}.
 			</p>
 		);
 	return (
@@ -135,7 +140,7 @@ function BirthdayChart({
 					Earth orbits
 				</button>
 			</div>
-			<figure className={style.plate}>
+			<figure className={style.figure}>
 				{view === 'wheel' ? (
 					<ZodiacWheel
 						placements={placements}
@@ -152,221 +157,131 @@ function BirthdayChart({
 					/>
 				)}
 
-				<figcaption aria-live="polite">
-					<time dateTime={birthday.toString()}>
-						✦ {displayDate(birthday.toString())}
-					</time>
-					<h2>
-						{count
-							? `${count.toLocaleString('en-GB')} ${count === 1 ? 'object' : 'objects'} in orbit`
-							: 'A quiet sky'}
-					</h2>
-					{view === 'wheel' && (
-						<p>
-							The wheel looks down on Earth’s orbital plane from
-							the north. Tilt it to see each object’s direction on
-							a sky sphere, all drawn at equal distance.
-						</p>
-					)}
-					{lead?.id === 29257 && (
-						<p>
-							There was a spatula in orbit the day you were born.
-						</p>
-					)}
-					{!count && (
-						<p>
-							No debris with confirmed flight dates was in orbit
-							on your birthday in this catalog.
-						</p>
-					)}
-
-					{lead && (
-						<>
-							<form
-								className={style.instant}
-								onSubmit={e => {
-									e.preventDefault();
-									setTime(
-										String(
-											new FormData(e.currentTarget).get(
-												'globe-time'
-											)
-										)
-									);
-								}}
+				<figcaption aria-live="polite" className={style.caption}>
+					<time dateTime={day}>{displayDate(day)}</time>
+					{' · '}
+					{time} UTC
+					{snapshot.isError ? (
+						<p role="alert">
+							Orbit archive unavailable.{' '}
+							<button
+								type="button"
+								onClick={() => void snapshot.refetch()}
 							>
-								<label>
-									Chart time (UTC)
-									<input
-										type="time"
-										name="globe-time"
-										defaultValue={time}
-										required
-									/>
-								</label>
-								<button type="submit">Set time</button>
-							</form>
-							<BirthplaceForm
-								place={place}
-								onPlace={setPlace}
-								wheel={view === 'wheel'}
-								ascendant={zodiac.ascendant}
-							/>
-							{snapshot.isError ? (
-								<p role="alert">
-									Orbit archive unavailable.{' '}
-									<button
-										type="button"
-										onClick={() => void snapshot.refetch()}
-									>
-										Retry
-									</button>
-								</p>
-							) : (
-								<p role="status" aria-label="Chart coverage">
-									{snapshot.data
-										? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} located at ${time} UTC.`
-										: 'Loading archived orbital positions…'}
-								</p>
-							)}
-							{snapshot.data && markers.length < count && (
-								<small>
-									Other objects lack a recent orbit or
-									confirmed flight time.
-								</small>
-							)}
-							{markers.length > 0 && (
-								<div className={style.legend}>
-									<span>
-										<i />
-										Fragment
-									</span>
-									<span>
-										<i />
-										Rocket stage
-									</span>
-									<span>
-										<i />
-										Equipment
-									</span>
-								</div>
-							)}
-							{view === 'earth' && location && selected && (
-								<p className={style.location}>
-									<strong>{selected.object.name}</strong>
-									<br />
-									{Math.abs(location.latitude).toFixed(
-										2
-									)}° {location.latitude < 0 ? 'S' : 'N'},{' '}
-									{Math.abs(location.longitude).toFixed(2)}°{' '}
-									{location.longitude < 0 ? 'W' : 'E'}
-									<br />
-									{Math.round(location.height).toLocaleString(
-										'en-GB'
-									)}{' '}
-									km above Earth
-								</p>
-							)}
-						</>
+								Retry
+							</button>
+						</p>
+					) : (
+						<p role="status" aria-label="Chart coverage">
+							{snapshot.data
+								? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
+								: 'Loading orbital positions…'}
+						</p>
+					)}
+					{view === 'earth' && location && selected && (
+						<p>
+							{selected.object.name} ·{' '}
+							{Math.abs(location.latitude).toFixed(2)}°
+							{location.latitude < 0 ? 'S' : 'N'},{' '}
+							{Math.abs(location.longitude).toFixed(2)}°
+							{location.longitude < 0 ? 'W' : 'E'} ·{' '}
+							{Math.round(location.height).toLocaleString(
+								'en-GB'
+							)}{' '}
+							km above Earth
+						</p>
 					)}
 				</figcaption>
 			</figure>
-			{lead && (
-				<>
-					<h2 className={style.sectionTitle}>Objects in orbit</h2>
-					<label className={style.search}>
-						Search by name, catalog number, designator or object
-						type
-						<input
-							type="search"
-							value={search}
-							onChange={event => {
-								setSearch(event.target.value);
-								setPage(0);
-							}}
-						/>
-					</label>
-					<div className={style.paging}>
-						<span role="status" aria-label="Catalogue results">
-							{rows.length
-								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
-								: 'No matching objects'}
-						</span>
-						{filtered.length > pageSize && (
-							<>
-								<button
-									type="button"
-									disabled={!page}
-									onClick={() => setPage(page - 1)}
-								>
-									Previous
-								</button>
-								<button
-									type="button"
-									disabled={
-										offset + rows.length >= filtered.length
-									}
-									onClick={() => setPage(page + 1)}
-								>
-									Next
-								</button>
-							</>
-						)}
-					</div>
-					{rows.length > 0 && (
-						<Sky
-							observer={place && { ...place, time }}
-							birthday={birthday.toString()}
-							objects={rows.map(row => row.object)}
-						/>
+			<ChartSettings
+				time={time}
+				place={place}
+				ascendant={zodiac.ascendant}
+				onTime={setTime}
+				onPlace={setPlace}
+			/>
+			<details className={style.disclosure}>
+				<summary>Object catalogue</summary>
+				<input
+					className={style.search}
+					type="search"
+					aria-label="Search by name, catalog number, designator or object type"
+					placeholder="Search objects"
+					value={search}
+					onChange={event => {
+						setSearch(event.target.value);
+						setPage(0);
+					}}
+				/>
+				<div className={style.paging}>
+					<span role="status" aria-label="Catalogue results">
+						{rows.length
+							? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
+							: 'No matching objects'}
+					</span>
+					{filtered.length > pageSize && (
+						<>
+							<button
+								type="button"
+								disabled={!page}
+								onClick={() => setPage(page - 1)}
+							>
+								Previous
+							</button>
+							<button
+								type="button"
+								disabled={
+									offset + rows.length >= filtered.length
+								}
+								onClick={() => setPage(page + 1)}
+							>
+								Next
+							</button>
+						</>
 					)}
+				</div>
+				{rows.length > 0 && (
+					<Sky
+						observer={place && { ...place, time }}
+						birthday={birthday.toString()}
+						objects={rows.map(row => row.object)}
+					/>
+				)}
 
-					<ul className={style.catalogue}>
-						{rows.map(({ object, days }) => (
-							<li key={object.id}>
-								<span className={style.icon}>
-									<ObjectGlyph object={object} />
-								</span>
-								<div>
-									<h3>{object.name}</h3>
-									<p>
-										{kinds[object.kind]} · {object.piece} ·
-										NORAD {object.id}
-									</p>
-									<p className={style.relation}>
-										{days === 0
-											? 'Shares your birthday'
-											: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
-									</p>
-									<small>
-										In free flight from{' '}
-										{displayDate(object.start)}
-										{object.end
-											? ` through ${displayDate(object.end)}`
-											: ` through the ${displayDate(catalogue.asOf)} catalog edition`}
-										.
-									</small>
-									{byId.has(object.id) && (
-										<a
-											className={style.locate}
-											href={
-												view === 'earth'
-													? '#orbital-globe'
-													: '#zodiac-wheel'
-											}
-											onClick={() => locate(object.id)}
-										>
-											{view === 'earth'
-												? 'Locate on globe'
-												: 'Locate on wheel'}
-										</a>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</>
-			)}
+				<ul className={style.catalogue}>
+					{rows.map(({ object, days }) => (
+						<li key={object.id}>
+							<h3>
+								{byId.has(object.id) ? (
+									<a
+										href={
+											view === 'earth'
+												? '#orbital-globe'
+												: '#zodiac-wheel'
+										}
+										onClick={() => locate(object.id)}
+									>
+										{object.name}
+									</a>
+								) : (
+									object.name
+								)}
+							</h3>
+							<p>
+								{kinds[object.kind]} · {object.piece} · NORAD{' '}
+								{object.id}
+							</p>
+							<p>
+								{displayDate(object.start)} –{' '}
+								{displayDate(object.end ?? catalogue.asOf)} ·{' '}
+								{days === 0
+									? 'Shares your birthday'
+									: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
+							</p>
+						</li>
+					))}
+				</ul>
+			</details>
 		</>
 	);
 }
@@ -388,25 +303,15 @@ export default function Page() {
 	});
 	return (
 		<article className={style.page}>
-			<h1>
-				Space junk <i>star chart</i>
-			</h1>
-			<p className={style.intro}>
-				See where spent rockets, loose equipment and satellite fragments
-				fell in the zodiac on your birthday.
-			</p>
-			<BirthdayForm asOf={catalogue.data?.asOf} onDraw={setBirthday} />
+			<h1>Space junk star chart</h1>
+			<BirthdayForm
+				asOf={catalogue.data?.asOf}
+				showExample={!birthday}
+				onDraw={setBirthday}
+			/>
 			{!birthday ? (
-				<figure className={style.plate}>
+				<figure className={style.figure}>
 					<ZodiacWheel />
-					<figcaption>
-						<h2>Your birthday wheel</h2>
-						<p>
-							Enter your birthday to place debris around the
-							zodiac. Add a birthplace to put the rising sign on
-							the left.
-						</p>
-					</figcaption>
 				</figure>
 			) : catalogue.data ? (
 				<BirthdayChart
@@ -427,25 +332,32 @@ export default function Page() {
 			) : (
 				<p role="status">Loading the orbital catalog…</p>
 			)}
-			<p className={style.credit}>
-				Dated Earth-orbit records from{' '}
-				<a href="https://planet4589.org/space/gcat/">
-					Jonathan McDowell’s General Catalog of Artificial Space
-					Objects
-				</a>{' '}
-				(
-				<a href="https://creativecommons.org/licenses/by/4.0/">
-					CC BY 4.0
-				</a>
-				).
-				{catalogue.data &&
-					` Edition of ${displayDate(catalogue.data.asOf)}.`}{' '}
-				Debris positions use SGP4 and orbital elements within three days
-				of the chosen time from{' '}
-				<a href="https://spacebook.com/">COMSPOC Spacebook</a>.
-				Coastlines from{' '}
-				<a href="https://www.naturalearthdata.com/">Natural Earth</a>.
-			</p>
+			<details className={style.disclosure}>
+				<summary>Sources</summary>
+				<p>
+					Dated Earth-orbit records from{' '}
+					<a href="https://planet4589.org/space/gcat/">
+						Jonathan McDowell’s General Catalog of Artificial Space
+						Objects
+					</a>{' '}
+					(
+					<a href="https://creativecommons.org/licenses/by/4.0/">
+						CC BY 4.0
+					</a>
+					).
+					{catalogue.data &&
+						` Edition of ${displayDate(catalogue.data.asOf)}.`}{' '}
+					Only objects with confirmed flight times and an orbit within
+					three days appear on the chart. Positions use SGP4 and
+					historical elements from{' '}
+					<a href="https://spacebook.com/">COMSPOC Spacebook</a>.
+					Coastlines from{' '}
+					<a href="https://www.naturalearthdata.com/">
+						Natural Earth
+					</a>
+					.
+				</p>
+			</details>
 		</article>
 	);
 }

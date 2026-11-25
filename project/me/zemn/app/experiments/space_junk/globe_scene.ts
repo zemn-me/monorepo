@@ -35,7 +35,6 @@ export const width = 416,
 const focalScale = 0.95;
 const focal = height * focalScale;
 const radians = Math.PI / 180;
-const colors = { D: '#80adae', R: '#e4bf80', C: '#f5e6d1' };
 const layers = { D: 3, R: 4, C: 5 };
 const shapes = {
 	D: [
@@ -95,8 +94,9 @@ function ribbon(
 	return faces;
 }
 
+// These opaque grayscale paints encode ink density in the globe’s luminance mask.
 const earth: StyledFace3D[] = [];
-appendMesh(earth, sphere(32, 16), rgb(0x426472), {
+appendMesh(earth, sphere(32, 16), rgb(0x262626), {
 	position: [0, 0, 0],
 	scale: [1, 1, 1],
 	layer: 0,
@@ -105,7 +105,7 @@ for (let lat = -60; lat <= 60; lat += 30)
 	earth.push(
 		...ribbon(
 			Array.from({ length: 181 }, (_, j) => surface(j * 2, lat)),
-			'#637f87',
+			'#454545',
 			0.0014,
 			1
 		)
@@ -114,7 +114,7 @@ for (let lon = 0; lon < 360; lon += 30)
 	earth.push(
 		...ribbon(
 			Array.from({ length: 91 }, (_, j) => surface(lon, j * 2 - 90)),
-			'#637f87',
+			'#454545',
 			0.0014,
 			1
 		)
@@ -122,7 +122,7 @@ for (let lon = 0; lon < 360; lon += 30)
 
 export function globeWorld(coastlines: Vector[][] = []) {
 	return earth.concat(
-		coastlines.flatMap(line => ribbon(line, '#b7cebb', 0.0024, 2))
+		coastlines.flatMap(line => ribbon(line, '#858585', 0.0024, 2))
 	);
 }
 
@@ -179,10 +179,11 @@ export function globeFrame(
 	function symbol(
 		center: Point3D,
 		depth: number,
-		kind: Marker['object']['kind']
+		kind: Marker['object']['kind'],
+		size = 1
 	) {
 		// Billboard sizes are in screen pixels so a fragment is selectable at every zoom.
-		const unit = depth / focal;
+		const unit = (size * depth) / focal;
 		const vertex = (dx: number, dy: number) =>
 			point<3>(
 				x(center) + unit * (dx * x(right) + dy * x(up)),
@@ -190,7 +191,7 @@ export function globeFrame(
 				z(center) + unit * (dx * z(right) + dy * z(up))
 			);
 		const vertices = shapes[kind].map(([dx, dy]) => vertex(dx, dy));
-		return styledFace(vertices, colors[kind], layers[kind], true);
+		return styledFace(vertices, '#ffffff', layers[kind], true);
 	}
 	return {
 		camera,

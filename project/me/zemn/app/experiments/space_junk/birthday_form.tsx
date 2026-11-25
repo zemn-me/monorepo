@@ -5,17 +5,19 @@ import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import style from './style.module.css';
 
 const fields = {
-	year: { label: 'Year', max: 9999 },
-	month: { label: 'Month', max: 12 },
-	day: { label: 'Day', max: 31 },
+	year: { label: 'Year', placeholder: 'YYYY', max: 9999 },
+	month: { label: 'Month', placeholder: 'MM', max: 12 },
+	day: { label: 'Day', placeholder: 'DD', max: 31 },
 };
 type Field = keyof typeof fields;
 
 export function BirthdayForm({
 	asOf,
+	showExample,
 	onDraw,
 }: {
 	asOf?: string;
+	showExample: boolean;
 	onDraw: (date: Temporal.PlainDate) => void;
 }) {
 	const languages = useLocale();
@@ -78,8 +80,9 @@ export function BirthdayForm({
 				<div className={style.dateFields}>
 					{order.map(name => (
 						<label key={name}>
-							{fields[name].label}
 							<input
+								aria-label={fields[name].label}
+								placeholder={fields[name].placeholder}
 								type="number"
 								inputMode="numeric"
 								required
@@ -98,8 +101,22 @@ export function BirthdayForm({
 							/>
 						</label>
 					))}
-					<label className={style.calendar}>
-						Calendar
+					<label
+						className={style.calendar}
+						title="Choose birthday from calendar"
+					>
+						<svg
+							viewBox="0 0 24 24"
+							width="18"
+							height="18"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="1.5"
+							aria-hidden="true"
+						>
+							<rect x="4" y="5" width="16" height="15" rx="2" />
+							<path d="M8 3v5m8-5v5M4 10h16" />
+						</svg>
 						<input
 							type="date"
 							aria-label="Choose birthday from calendar"
@@ -111,17 +128,38 @@ export function BirthdayForm({
 					</label>
 				</div>
 			</fieldset>
-			<button type="submit">Draw my chart</button>
 			<button
-				type="button"
-				className={style.example}
-				onClick={() => {
-					setDate('2006-08-01');
-					onDraw(Temporal.PlainDate.from('2006-08-01'));
-				}}
+				type="submit"
+				className={style.draw}
+				aria-label="Draw my chart"
+				title="Draw my chart"
 			>
-				Try 1 August 2006
+				<svg
+					viewBox="0 0 24 24"
+					width="20"
+					height="20"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="1.6"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M5 12h14m-6-6 6 6-6 6" />
+				</svg>
 			</button>
+			{showExample && (
+				<button
+					type="button"
+					className={style.example}
+					onClick={() => {
+						setDate('2006-08-01');
+						onDraw(Temporal.PlainDate.from('2006-08-01'));
+					}}
+				>
+					Try an example
+				</button>
+			)}
 			{error && <p role="alert">{error}</p>}
 		</form>
 	);

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import { svgSnapshotPaths } from '#root/ts/3d/svg_scene.js';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { coastlineUrl } from './assets.js';
@@ -63,6 +63,7 @@ export function Globe({
 	selected?: Marker;
 	onSelect?: (marker: Marker) => void;
 }) {
+	const mask = useId();
 	const coastline = useQuery({
 		queryKey: ['space-junk-coastline', coastlineUrl],
 		staleTime: Infinity,
@@ -138,11 +139,25 @@ export function Globe({
 		<div className={style.viewer}>
 			<svg
 				id="orbital-globe"
-				tabIndex={-1}
+				tabIndex={0}
+				onKeyDown={e => {
+					const dx =
+						Number(e.key === 'ArrowRight') -
+						Number(e.key === 'ArrowLeft');
+					const dy =
+						Number(e.key === 'ArrowUp') -
+						Number(e.key === 'ArrowDown');
+					if (!dx && !dy) return;
+					e.preventDefault();
+					setView(v => ({
+						turn: wrap(v.turn + 5 * dx),
+						tilt: clamp(v.tilt + 5 * dy, -90, 90),
+					}));
+				}}
 				className={style.globe}
 				viewBox={`0 0 ${width} ${height}`}
 				role="img"
-				aria-label="Earth and debris at their estimated orbital positions. Drag to rotate or use the view controls."
+				aria-label="Earth and debris at their estimated orbital positions. Drag or use the arrow keys to rotate."
 				onPointerDown={e => {
 					if (!e.isPrimary || e.button !== 0) return;
 					drag.current = {
@@ -198,14 +213,31 @@ export function Globe({
 					drag.current = null;
 				}}
 			>
-				<OrbitScene
-					label="Earth and orbiting debris"
-					world={world}
-					faces={projected.faces}
-					frame={frame}
-				>
-					{initialScene}
-				</OrbitScene>
+				<defs>
+					<mask
+						id={mask}
+						maskUnits="userSpaceOnUse"
+						x="0"
+						y="0"
+						width={width}
+						height={height}
+					>
+						<OrbitScene
+							label="Earth and orbiting debris"
+							world={world}
+							faces={projected.faces}
+							frame={frame}
+						>
+							{initialScene}
+						</OrbitScene>
+					</mask>
+				</defs>
+				<rect
+					width={width}
+					height={height}
+					mask={`url(#${mask})`}
+					fill="currentColor"
+				/>
 				{focus?.visible && (
 					<>
 						{ground?.visible && (
@@ -214,30 +246,30 @@ export function Globe({
 								y1={ground.y}
 								x2={focus.x}
 								y2={focus.y}
-								stroke="#fff1bb"
+								stroke="currentColor"
 							/>
 						)}
 						<g transform={`translate(${focusX} ${focusY})`}>
 							<path
 								d={`M${labelSide * 4},${Math.sign(labelOffset) * 4} L${labelSide * 23},${labelOffset}h${labelSide * 9}`}
 								fill="none"
-								stroke="#ffd484"
+								stroke="currentColor"
 								strokeWidth="1.25"
 							/>
 							<circle
 								r="5"
-								fill="#18273b"
-								stroke="#ffd484"
+								fill="var(--background-color)"
+								stroke="currentColor"
 								strokeWidth="1.6"
 							/>
-							<circle r="1.7" fill="#ffd484" />
+							<circle r="1.7" fill="currentColor" />
 							<text
 								x={labelSide * 35}
 								y={labelOffset}
 								textAnchor={labelSide === 1 ? 'start' : 'end'}
 								dominantBaseline="middle"
-								fill="#ffe5ad"
-								stroke="#18273b"
+								fill="currentColor"
+								stroke="var(--background-color)"
 								strokeWidth="3.5"
 								paintOrder="stroke"
 								strokeLinejoin="round"
@@ -248,7 +280,11 @@ export function Globe({
 						</g>
 					</>
 				)}
-				<g transform="translate(15 362)" fill="#d5d8cd" fontSize="9">
+				<g
+					transform="translate(15 362)"
+					fill="currentColor"
+					fontSize="9"
+				>
 					<path
 						d={`M0,-4v4h${scaleKm / frame.kmPerPixel}v-4`}
 						stroke="currentColor"
@@ -257,67 +293,78 @@ export function Globe({
 					<text y="-8">{scaleKm.toLocaleString('en-GB')} km</text>
 				</g>
 			</svg>
-			<div className={style.viewControls}>
-				<label>
-					Rotation
-					<input
-						type="range"
-						min="-180"
-						max="180"
-						value={Math.round(view.turn)}
-						aria-valuetext={`${Math.round(view.turn)} degrees longitude`}
-						onChange={e =>
-							setView({ ...view, turn: e.target.valueAsNumber })
-						}
-					/>
-				</label>
-				<label>
-					Tilt
-					<input
-						type="range"
-						min="-90"
-						max="90"
-						value={Math.round(view.tilt)}
-						aria-valuetext={`${Math.round(view.tilt)} degrees latitude`}
-						onChange={e =>
-							setView({ ...view, tilt: e.target.valueAsNumber })
-						}
-					/>
-				</label>
-				{markers.length > 0 && (
+			<details className={style.camera}>
+				<summary>View controls</summary>
+				<div className={style.viewControls}>
 					<label>
-						Zoom
+						Rotation
 						<input
 							type="range"
-							min="0"
-							max="100"
-							step=".1"
-							value={
-								100 -
-								(100 * Math.log(extent / closeExtent)) /
-									Math.log(maxExtent / closeExtent)
-							}
-							aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
+							min="-180"
+							max="180"
+							value={Math.round(view.turn)}
+							aria-valuetext={`${Math.round(view.turn)} degrees longitude`}
 							onChange={e =>
-								setExtent(
-									closeExtent *
-										(maxExtent / closeExtent) **
-											(1 - e.target.valueAsNumber / 100)
-								)
+								setView({
+									...view,
+									turn: e.target.valueAsNumber,
+								})
 							}
 						/>
 					</label>
-				)}
-				<button
-					type="button"
-					onClick={() => {
-						setView(initialView);
-						setExtent(closeExtent);
-					}}
-				>
-					Reset view
-				</button>
-			</div>
+					<label>
+						Tilt
+						<input
+							type="range"
+							min="-90"
+							max="90"
+							value={Math.round(view.tilt)}
+							aria-valuetext={`${Math.round(view.tilt)} degrees latitude`}
+							onChange={e =>
+								setView({
+									...view,
+									tilt: e.target.valueAsNumber,
+								})
+							}
+						/>
+					</label>
+					{markers.length > 0 && (
+						<label>
+							Zoom
+							<input
+								type="range"
+								min="0"
+								max="100"
+								step=".1"
+								value={
+									100 -
+									(100 * Math.log(extent / closeExtent)) /
+										Math.log(maxExtent / closeExtent)
+								}
+								aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
+								onChange={e =>
+									setExtent(
+										closeExtent *
+											(maxExtent / closeExtent) **
+												(1 -
+													e.target.valueAsNumber /
+														100)
+									)
+								}
+							/>
+						</label>
+					)}
+					<button
+						type="button"
+						onClick={() => {
+							setView(initialView);
+							setExtent(closeExtent);
+						}}
+					>
+						Reset view
+					</button>
+				</div>
+			</details>
 		</div>
 	);
 }

@@ -165,7 +165,7 @@ export function Sky({
 			className={style.sky}
 			onToggle={e => setOpen(e.currentTarget.open)}
 		>
-			<summary>See the sky from your birthplace</summary>
+			<summary>Local horizon</summary>
 			{observer ? (
 				<p>
 					Objects on this results page, viewed from{' '}
@@ -174,8 +174,8 @@ export function Sky({
 			) : (
 				<p>
 					Enter your coordinates under{' '}
-					<a href="#chart-birthplace">Set birthplace</a> to see the
-					objects above your horizon.
+					<a href="#chart-birthplace">Time and birthplace</a> to see
+					the objects above your horizon.
 				</p>
 			)}
 			{open && observer && (

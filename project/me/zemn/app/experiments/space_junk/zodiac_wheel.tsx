@@ -114,7 +114,7 @@ export function ZodiacWheel({
 	const faces = useMemo(
 		() =>
 			marks.map(({ p, at }) =>
-				frame.symbol(at.center, at.depth, p.marker.object.kind)
+				frame.symbol(at.center, at.depth, p.marker.object.kind, 0.58)
 			),
 		[marks, frame]
 	);
@@ -230,17 +230,19 @@ export function ZodiacWheel({
 			<svg
 				id="zodiac-wheel"
 				className={style.globe}
-				tabIndex={0}
+				tabIndex={onSelect ? 0 : undefined}
 				role="img"
 				aria-label={
-					view.spatial
-						? '3D zodiac sky. Drag to orbit. Use arrow keys to rotate or pan.'
-						: 'Face-on zodiac wheel. Drag to explore sky directions in 3D.'
+					!onSelect
+						? 'The twelve signs of the zodiac'
+						: view.spatial
+							? '3D zodiac sky. Drag to orbit. Use arrow keys to rotate or pan.'
+							: 'Face-on zodiac wheel. Drag to explore sky directions in 3D.'
 				}
 				viewBox={`0 0 ${width} ${height}`}
-				onPointerDown={pointerDown}
-				onPointerMove={pointerMove}
-				onPointerUp={pointerUp}
+				onPointerDown={onSelect && pointerDown}
+				onPointerMove={onSelect && pointerMove}
+				onPointerUp={onSelect && pointerUp}
 				onLostPointerCapture={() => {
 					drag.current = null;
 				}}
@@ -286,7 +288,7 @@ export function ZodiacWheel({
 					{view.spatial && (
 						<g
 							fill="none"
-							stroke="#718f98"
+							stroke="currentColor"
 							strokeWidth=".6"
 							opacity={skyDepth * 0.5}
 						>
@@ -322,8 +324,9 @@ export function ZodiacWheel({
 										arc(end, start, 1.205) +
 										'Z'
 									}
-									fill={i % 2 ? '#243d4a' : '#203440'}
-									stroke="#9caea6"
+									fill="none"
+									stroke="currentColor"
+									strokeOpacity=".52"
 									strokeWidth=".65"
 								/>
 								{visible && (
@@ -331,9 +334,9 @@ export function ZodiacWheel({
 										transform={`translate(${xy(p)}) rotate(${angle})`}
 										textAnchor="middle"
 										dominantBaseline="central"
-										fill="#f0e8d1"
+										fill="currentColor"
 										fontSize="11.5"
-										letterSpacing=".35"
+										letterSpacing=".45"
 									>
 										{sign.toUpperCase()}
 									</text>
@@ -350,13 +353,15 @@ export function ZodiacWheel({
 								'L' +
 								xy(at(i * 5, i % 6 ? 1.17 : 1.12))
 						).join('')}
-						stroke="#b5c4b7"
+						stroke="currentColor"
+						strokeOpacity=".55"
 						strokeWidth=".65"
 					/>
 					<path
 						d={'M' + arc(0, 360, 0.97) + 'Z'}
 						fill="none"
-						stroke="#839995"
+						stroke="currentColor"
+						strokeOpacity=".4"
 						strokeWidth=".65"
 					/>
 					{selected &&
@@ -369,11 +374,8 @@ export function ZodiacWheel({
 									'L' +
 									xy(at(placement.longitude, 0.97))
 								}
-								stroke={
-									angle === 180 || angle === 90
-										? '#e2b778'
-										: '#92b6b8'
-								}
+								stroke="currentColor"
+								strokeOpacity=".72"
 								strokeWidth="1"
 								strokeDasharray={
 									angle === 60
@@ -389,11 +391,13 @@ export function ZodiacWheel({
 								</title>
 							</path>
 						))}
-					<OrbitScene
-						label="Debris directions"
-						faces={faces}
-						frame={frame}
-					/>
+					<g className={style.directions}>
+						<OrbitScene
+							label="Debris directions"
+							faces={faces}
+							frame={frame}
+						/>
+					</g>
 					{aspects.map(({ name, placement }) => {
 						const p = at(placement.longitude, 0.97);
 						return (
@@ -402,7 +406,7 @@ export function ZodiacWheel({
 								cx={p.x}
 								cy={p.y}
 								r="2"
-								fill="#f3ddaf"
+								fill="currentColor"
 							>
 								<title>
 									{name} · {shortName(placement)}
@@ -411,7 +415,7 @@ export function ZodiacWheel({
 						);
 					})}
 					{ascendant !== undefined && (
-						<g fill="#ffd28a">
+						<g fill="currentColor">
 							<path
 								d={
 									'M' +
@@ -442,7 +446,7 @@ export function ZodiacWheel({
 										xy(focus)
 									}
 									fill="none"
-									stroke="#f6ca80"
+									stroke="currentColor"
 									strokeDasharray="2 3"
 								/>
 							)}
@@ -450,25 +454,25 @@ export function ZodiacWheel({
 								cx={focus.x}
 								cy={focus.y}
 								r="4"
-								fill="#18273b"
-								stroke="#ffda90"
+								fill="var(--background-color)"
+								stroke="currentColor"
 								strokeWidth="1.7"
 							/>
 							<circle
 								cx={focus.x}
 								cy={focus.y}
 								r="1.3"
-								fill="#ffda90"
+								fill="currentColor"
 							/>
 							<text
-								x={focus.x + (focus.x > width / 2 ? -7 : 7)}
-								y={focus.y - 6}
+								x={focus.x + (focus.x > width / 2 ? -9 : 9)}
+								y={focus.y + (focus.y < height / 2 ? 16 : -8)}
 								textAnchor={
 									focus.x > width / 2 ? 'end' : 'start'
 								}
 								fontSize="9.5"
-								fill="#ffe3a6"
-								stroke="#18273b"
+								fill="currentColor"
+								stroke="var(--background-color)"
 								strokeWidth="3"
 								paintOrder="stroke"
 							>
@@ -476,64 +480,55 @@ export function ZodiacWheel({
 							</text>
 						</g>
 					)}
-					<circle cx={width / 2} cy={height / 2} r="2" fill="#f0e8d1">
+					<circle
+						cx={width / 2}
+						cy={height / 2}
+						r="2"
+						fill="currentColor"
+					>
 						<title>Chart origin</title>
 					</circle>
 				</g>
 			</svg>
-			<div className={style.viewControls}>
-				<button
-					type="button"
-					onClick={() =>
-						view.spatial || view.panX || view.panY
-							? reset()
-							: setView({ ...flat, spatial: true, tilt: 52 })
-					}
-				>
-					{view.spatial || view.panX || view.panY
-						? 'Return to wheel'
-						: 'Explore in 3D'}
-				</button>
-				<button
-					type="button"
-					aria-pressed={pan}
-					onClick={() => setPan(!pan)}
-				>
-					Pan
-				</button>
-				{view.spatial && (
-					<label>
-						Tilt
-						<input
-							type="range"
-							min="0"
-							max="175"
-							value={Math.round(view.tilt)}
-							aria-valuetext={`${Math.round(view.tilt)} degrees from face-on`}
-							onChange={e =>
-								setView({
-									...view,
-									tilt: e.target.valueAsNumber,
-								})
-							}
-						/>
-					</label>
-				)}
-			</div>
+			{onSelect && (
+				<div className={style.viewControls}>
+					<button
+						type="button"
+						onClick={() =>
+							view.spatial || view.panX || view.panY
+								? reset()
+								: setView({ ...flat, spatial: true, tilt: 52 })
+						}
+					>
+						{view.spatial || view.panX || view.panY
+							? 'Return to wheel'
+							: 'Explore in 3D'}
+					</button>
+					{view.spatial && (
+						<button
+							type="button"
+							aria-pressed={pan}
+							onClick={() => setPan(!pan)}
+						>
+							Pan
+						</button>
+					)}
+				</div>
+			)}
 			{selected && (
-				<div className={style.wheelReading}>
-					<strong>{shortName(selected)}</strong> ·{' '}
-					{signPosition(selected.longitude)}
-					<br />
-					{Math.abs(selected.latitude).toFixed(1)}°{' '}
-					{selected.latitude < 0 ? 'below' : 'above'} the ecliptic
+				<details className={style.reading}>
+					<summary>
+						{shortName(selected)} ·{' '}
+						{signPosition(selected.longitude)}
+					</summary>
+					<p>
+						{Math.abs(selected.latitude).toFixed(1)}°{' '}
+						{selected.latitude < 0 ? 'below' : 'above'} the
+						ecliptic.
+					</p>
 					{aspects.length > 0 && (
-						<details>
-							<summary>Aspects to this object</summary>
-							<small>
-								Closest match within 1° of each major aspect,
-								measured around the wheel.
-							</small>
+						<>
+							<p>Closest aspects within 1°</p>
 							<dl>
 								{aspects.map(a => (
 									<div key={a.name}>
@@ -548,9 +543,9 @@ export function ZodiacWheel({
 									</div>
 								))}
 							</dl>
-						</details>
+						</>
 					)}
-				</div>
+				</details>
 			)}
 		</div>
 	);
