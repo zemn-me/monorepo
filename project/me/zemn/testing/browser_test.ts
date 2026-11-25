@@ -350,7 +350,7 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('experiment index lists every experiment and opens one', async () => {
+		it('lists every experiment and draws a birthday chart from the index', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
 				await driver.get(`${origin}/tool/elastictabs?input=hello`);
@@ -377,6 +377,7 @@ describe('zemn.me website', () => {
 					'SVG Arena',
 					'Platonic Stress',
 					'Geometry of Music',
+					'Space junk star chart',
 					'Elastic Tabstops',
 					'Flag emoji',
 					'Framing calculator',
@@ -420,12 +421,20 @@ describe('zemn.me website', () => {
 				expect(omittedMenuLinks).toHaveLength(0);
 				await menuButton.click();
 
-				await links[0]!.click();
+				await list.findElement(By.linkText('Space junk star chart')).click();
 				await driver.wait(
 					async () =>
 						(await driver.getCurrentUrl()) ===
-						`${origin}/experiments/rays`,
+						`${origin}/experiments/space-junk`,
 					5000
+				);
+				await driver.findElement(By.css('input[type="date"]')).sendKeys('12121990');
+				await driver.findElement(By.xpath('//button[.="Draw my chart"]')).click();
+				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
+				expect(await reading.getText()).toContain('12 December 1990');
+				expect(await reading.getText()).toContain('COSMOS 886 fragment');
+				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
+					'15 days after your birthday'
 				);
 			} finally {
 				await driver.quit();

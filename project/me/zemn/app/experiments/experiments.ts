@@ -41,6 +41,11 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 		title: 'Generators & tools',
 		experiments: [
 			{
+				href: '/experiments/space-junk',
+				title: 'Space junk star chart',
+				description: 'Find your birthday’s closest space-junk launch anniversary.',
+			},
+			{
 				href: '/experiments/elastictabs',
 				title: 'Elastic Tabstops',
 				description: 'Align tab-delimited text into elastic columns.',

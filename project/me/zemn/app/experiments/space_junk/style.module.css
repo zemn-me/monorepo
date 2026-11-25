@@ -1,0 +1,199 @@
+.page {
+	box-sizing: border-box;
+	max-width: 54rem;
+	margin: 0 auto;
+	padding: 1.25rem clamp(1rem, 4vw, 3rem) 4rem;
+}
+
+.page h1 {
+	margin: 0;
+	font-size: clamp(2.2rem, 6vw, 4.5rem);
+	font-weight: 400;
+	line-height: 1;
+}
+
+.intro {
+	max-width: 34rem;
+	line-height: 1.5;
+}
+
+.form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: 0.6rem;
+	margin: 1.5rem 0;
+}
+
+.form label {
+	display: grid;
+	gap: 0.3rem;
+	font-weight: bold;
+}
+
+.form input,
+.form button {
+	box-sizing: border-box;
+	min-height: 44px;
+	border: 1px solid currentColor;
+	border-radius: 0.25rem;
+	padding: 0.5rem 0.9rem;
+	font: inherit;
+}
+
+.form input {
+	background: var(--background-color);
+	color: var(--foreground-color);
+}
+
+.form button {
+	background: var(--foreground-color);
+	color: var(--background-color);
+	cursor: pointer;
+}
+
+.form :focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+.form button:focus-visible {
+	outline-color: var(--foreground-color);
+}
+
+.plate {
+	--ink: #18273b;
+	--paper: #f0e8d1;
+	--gold: #f6c878;
+	display: grid;
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(0.8rem, 2vw, 2rem);
+	margin: 0;
+	padding: clamp(0.8rem, 2.5vw, 2rem);
+	border: 1px solid var(--paper);
+	outline: 3px double var(--paper);
+	outline-offset: -7px;
+	background: var(--ink);
+	color: var(--paper);
+}
+
+.plate figcaption {
+	padding: 0.75rem;
+}
+
+.plate h2 {
+	margin: 0.35rem 0;
+	font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+	font-weight: 400;
+	line-height: 1.05;
+}
+
+.plate p {
+	margin: 0.6rem 0;
+	line-height: 1.4;
+}
+
+.plate small,
+.plate time {
+	color: var(--gold);
+}
+
+.wheel {
+	display: block;
+	width: 100%;
+}
+
+.grid {
+	color: #94a3ae;
+	stroke-width: 0.65;
+}
+
+.month {
+	color: var(--paper);
+	font-size: 9px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.earth {
+	color: var(--paper);
+	stroke-width: 0.85;
+}
+
+.aspect {
+	stroke: var(--gold);
+	stroke-dasharray: 2 3;
+}
+
+.medallion {
+	fill: var(--ink);
+	stroke: currentColor;
+}
+
+.star {
+	fill: var(--gold);
+	stroke: var(--ink);
+}
+
+.sectionTitle {
+	margin: 2rem 0 0.5rem;
+	font-size: 1.45rem;
+	font-weight: 400;
+}
+
+.catalogue {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.catalogue li {
+	display: flex;
+	gap: 1rem;
+	padding: 1rem 0;
+	border-top: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+}
+
+.icon {
+	display: grid;
+	flex: 0 0 2.4rem;
+	place-items: center;
+	height: 2.4rem;
+	border: 1px solid currentColor;
+	border-radius: 50%;
+}
+
+.catalogue h3,
+.catalogue p {
+	margin: 0 0 0.35rem;
+}
+
+.catalogue p {
+	line-height: 1.4;
+}
+
+.catalogue small {
+	font-variant-numeric: tabular-nums;
+}
+
+.relation {
+	font-style: italic;
+}
+
+@media (width <= 38rem) {
+	.plate {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0;
+	}
+
+	.wheel {
+		max-width: 23rem;
+		margin-inline: auto;
+	}
+
+	.plate figcaption {
+		padding-block-start: 0;
+		text-align: center;
+	}
+}

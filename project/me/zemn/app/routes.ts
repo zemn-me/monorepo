@@ -154,6 +154,10 @@ export default [
 				path: 'experiments/rays',
 			},
 			{
+				file: 'experiments/space_junk/page.js',
+				path: 'experiments/space-junk',
+			},
+			{
 				file: 'experiments/toc/page.js',
 				path: 'experiments/toc',
 			},
