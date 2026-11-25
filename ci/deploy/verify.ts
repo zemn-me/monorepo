@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { execFile } from 'node:child_process';
+import { type ExecException, execFile } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -47,6 +47,12 @@ resources:
 	await run(['stack', 'init', 'dev'], home, env);
 	await assert.rejects(
 		run(['preview', '--stack', 'dev'], home, env),
-		/no resource plugin 'pulumi-resource-random' found in the workspace at version v0\.0\.0-missing/
+		(error: ExecException) =>
+			error.code === 1 &&
+			[error.stdout, error.stderr].some(output =>
+				output?.includes(
+					"no resource plugin 'pulumi-resource-random' found in the workspace at version v0.0.0-missing"
+				)
+			)
 	);
 }
