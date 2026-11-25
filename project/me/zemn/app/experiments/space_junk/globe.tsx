@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useId, useMemo, useRef, useState } from 'react';
+import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { svgSnapshotPaths } from '#root/ts/3d/svg_scene.js';
 import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { coastlineUrl } from './assets.js';
@@ -21,6 +21,7 @@ import { PlanetPositions } from './planet_layer.js';
 import type { BodyPosition } from './planets.js';
 import { OrbitScene } from './orbit_scene.js';
 import style from './style.module.css';
+import type { Birthplace } from './zodiac.js';
 
 const empty: Marker[] = [];
 const initialView = { turn: 12, tilt: 24 };
@@ -61,6 +62,7 @@ export function Globe({
 	instant,
 	bodies,
 	showSigns,
+	birthplace,
 	markers = empty,
 	selected,
 	onSelect,
@@ -68,6 +70,7 @@ export function Globe({
 	instant: number;
 	bodies: BodyPosition[];
 	showSigns: boolean;
+	birthplace?: Birthplace & { name?: string };
 	markers?: Marker[];
 	selected?: Marker;
 	onSelect?: (marker: Marker) => void;
@@ -89,9 +92,16 @@ export function Globe({
 		},
 	});
 	const location = selected && groundLocation(selected);
+	const homeView = useMemo(
+		() =>
+			birthplace
+				? { turn: birthplace.longitude, tilt: birthplace.latitude }
+				: initialView,
+		[birthplace]
+	);
 	const startingView = location
 		? { turn: wrap(location.longitude - 24), tilt: location.latitude * 0.8 }
-		: initialView;
+		: homeView;
 	const maxExtent = useMemo(
 		() => markers.reduce((m, p) => Math.max(m, size(p) * 1.05), 2),
 		[markers]
@@ -100,6 +110,11 @@ export function Globe({
 		? Math.max(closeExtent, size(selected) * 1.05)
 		: closeExtent;
 	const [view, setView] = useState(startingView);
+	const previousHome = useRef(homeView);
+	useLayoutEffect(() => {
+		if (birthplace && homeView !== previousHome.current) setView(homeView);
+		previousHome.current = homeView;
+	}, [birthplace, homeView]);
 	const [extent, setExtent] = useState(initialExtent);
 	const frame = useMemo(
 		() =>
@@ -134,6 +149,12 @@ export function Globe({
 		return { faces, hits };
 	}, [markers, frame]);
 
+	const birthPoint =
+		birthplace &&
+		frame.project(surface(birthplace.longitude, birthplace.latitude));
+	const birthLabel = birthplace?.name
+		? 'Birthplace · ' + birthplace.name
+		: 'Birthplace';
 	const focus = selected && frame.project(selected);
 	const ground =
 		location &&
@@ -229,6 +250,8 @@ export function Globe({
 				<desc>
 					Zodiac marks show sky directions. The distance scale
 					measures Earth and debris.
+					{birthplace &&
+						` The red dot marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
 				</desc>
 				<defs>
 					<mask
@@ -263,6 +286,20 @@ export function Globe({
 						bodies={bodies}
 						showSigns={showSigns}
 					/>
+				)}
+				{birthPoint?.visible && (
+					<circle
+						cx={birthPoint.x}
+						cy={birthPoint.y}
+						r="3.5"
+						fill="#cb3434"
+						stroke="var(--background-color)"
+						strokeWidth="1.2"
+						role="img"
+						aria-label={birthLabel}
+					>
+						<title>{birthLabel}</title>
+					</circle>
 				)}
 				{focus?.visible && (
 					<>
@@ -384,7 +421,7 @@ export function Globe({
 					<button
 						type="button"
 						onClick={() => {
-							setView(initialView);
+							setView(homeView);
 							setExtent(closeExtent);
 						}}
 					>

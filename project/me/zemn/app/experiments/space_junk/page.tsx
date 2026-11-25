@@ -281,6 +281,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						instant={instant}
 						bodies={bodies}
 						showSigns={traditional}
+						birthplace={place}
 						markers={markers}
 						selected={selected}
 						onSelect={m => locate(m.object.id)}

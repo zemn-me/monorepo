@@ -3,7 +3,7 @@ import Path from 'node:path';
 import { runfiles } from '@bazel/runfiles';
 import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, Key, logging, ThenableWebDriver } from 'selenium-webdriver';
+import { Browser, By, Key, logging, ThenableWebDriver, until } from 'selenium-webdriver';
 import type { Driver as ChromeDriver } from 'selenium-webdriver/chrome';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -547,6 +547,38 @@ describe('zemn.me website', () => {
 				expect(await bodies()).toHaveLength(0);
 				await driver.findElement(By.css('button[aria-label="Zodiac wheel"]')).click();
 				expect(await bodies()).toHaveLength(0);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('pins the birthplace to the visible surface of Earth as the globe turns', async () => {
+			try {
+				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.findElement(By.xpath('//label[normalize-space(.)="Space junk"]/input')).click();
+				await driver.findElement(By.css('button[aria-label="Earth orbits"]')).click();
+				const globe = await driver.findElement(By.id('orbital-globe'));
+				const pin = By.css('circle[aria-label="Birthplace"]');
+				expect(await globe.findElements(pin)).toHaveLength(0);
+				const birthplace = await driver.findElement(By.id('chart-birthplace'));
+				await birthplace.click();
+				await driver.findElement(By.name('latitude')).sendKeys('0');
+				await driver.findElement(By.name('longitude')).sendKeys('140');
+				await driver.findElement(By.xpath('//button[.="Apply"]')).click();
+				const marker = await driver.wait(until.elementLocated(pin), 5000);
+				const center = Number(await marker.getAttribute('cx'));
+				await globe.sendKeys(Key.ARROW_RIGHT);
+				expect(Number(await marker.getAttribute('cx'))).toBeLessThan(center);
+				await globe.sendKeys(Key.ARROW_RIGHT.repeat(20));
+				expect(await globe.findElements(pin)).toHaveLength(0);
+				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
+				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
+				expect(Number(await globe.findElement(pin).getAttribute('cx'))).toBe(center);
+				await birthplace.click();
+				await driver.findElement(By.name('latitude')).sendKeys(Key.END, Key.BACK_SPACE);
+				await driver.findElement(By.name('longitude')).sendKeys(Key.END, Key.BACK_SPACE.repeat(3));
+				await driver.findElement(By.xpath('//button[.="Apply"]')).click();
+				await driver.wait(async () => !(await globe.findElements(pin)).length, 5000, 'The marker should disappear when both coordinates are cleared');
 			} finally {
 				await driver.quit();
 			}
