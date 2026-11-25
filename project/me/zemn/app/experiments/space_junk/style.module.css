@@ -12,6 +12,10 @@
 	padding: 1.25rem clamp(1rem, 4vw, 2rem) 4rem;
 	color: var(--foreground-color);
 }
+.page ::selection {
+	background: var(--foreground-color);
+	color: var(--background-color);
+}
 .page h1 {
 	margin: 0 0 1rem;
 	font-size: clamp(2.5rem, 5vw, 3.5rem);
@@ -188,6 +192,9 @@
 .globe[tabindex] {
 	touch-action: none;
 	cursor: grab;
+}
+.globe[tabindex]:focus:not(:focus-visible) {
+	outline: none;
 }
 .globe[tabindex]:active {
 	cursor: grabbing;
