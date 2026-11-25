@@ -36,11 +36,18 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		direct(req)
 		req.Host = upstream.Host
 	}
-	var delayNavigation atomic.Bool
+	// Keep route data pending until Selenium has inspected the loading feedback.
+	var navigationRelease atomic.Pointer[chan struct{}]
+	withNavigationPaused := func(inspect func()) {
+		release := make(chan struct{})
+		navigationRelease.Store(&release)
+		defer close(release)
+		inspect()
+	}
 	transport := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		if delayNavigation.Load() && strings.HasSuffix(req.URL.Path, ".data") {
+		if release := navigationRelease.Load(); release != nil && strings.HasSuffix(req.URL.Path, ".data") {
 			select {
-			case <-time.After(2 * time.Second):
+			case <-*release:
 			case <-req.Context().Done():
 				return
 			}
@@ -129,9 +136,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		delayNavigation.Store(true)
-		browserhelpers.AssertSharedNavigation(t, driver, publicOrigin, width)
-		delayNavigation.Store(false)
+		browserhelpers.AssertSharedNavigation(t, driver, publicOrigin, width, withNavigationPaused)
 		wiki, err = driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
 		if err != nil {
 			t.Fatal(err)

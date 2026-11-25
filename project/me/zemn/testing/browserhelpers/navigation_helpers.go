@@ -13,8 +13,8 @@ import (
 
 const pageLoadingSelector = "[role='status'][aria-label='Loading page']"
 
-// AssertSharedNavigation runs after login with navigation responses delayed by the caller.
-func AssertSharedNavigation(t *testing.T, driver selenium.WebDriver, publicOrigin string, width int) {
+// AssertSharedNavigation checks pending and completed navigations after login.
+func AssertSharedNavigation(t *testing.T, driver selenium.WebDriver, publicOrigin string, width int, withNavigationPaused func(func())) {
 	t.Helper()
 	compact, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect();
 const heading = document.querySelector('h1').getBoundingClientRect();
@@ -25,6 +25,19 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 	video, err := driver.FindElement(selenium.ByCSSSelector, "figure video")
 	if err != nil {
 		t.Fatal(err)
+	}
+	clickAndInspectLoading := func(link selenium.WebElement, destination string, inspect func(selenium.WebElement)) {
+		t.Helper()
+		withNavigationPaused(func() {
+			if err := link.Click(); err != nil {
+				t.Fatal(err)
+			}
+			status, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 10*time.Second)
+			if err != nil {
+				t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination, width, err)
+			}
+			inspect(status)
+		})
 	}
 	for _, destination := range []struct{ label, linkSelector, selector, path, query string }{
 		{"Overview", "h1 a[href='/journal']", "nav[aria-label='Choose journal date']", "/journal", ""},
@@ -38,34 +51,35 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := link.Click(); err != nil {
-			t.Fatal(err)
-		}
-		if _, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second); err != nil {
-			t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination.label, width, err)
-		}
-		logoFeedback, err := driver.ExecuteScript(`const header = document.querySelector('header[data-glade-banner]');
-const status = header?.querySelector('[role="status"][aria-label="Loading page"]');
-const rays = status?.querySelectorAll('svg line');
-const rect = status?.getBoundingClientRect();
-return rays?.length > 0 && rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= header.getBoundingClientRect().bottom && getComputedStyle(status).overflow === 'hidden' && status.querySelector('svg').getBoundingClientRect().height > header.getBoundingClientRect().height && header.querySelector('a[aria-label="Go to homepage"] > svg').getBoundingClientRect().width >= 64;`, nil)
-		if err != nil || logoFeedback != true {
-			t.Fatalf("loading rays are not visible around the logo at width %d: %v %v", width, logoFeedback, err)
-		}
-		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-			fullSize, err := d.ExecuteScript(`const rays = document.querySelectorAll('header [role="status"][aria-label="Loading page"] svg line');
-return rays.length > 0 && [...rays].every(ray => Number(ray.getAttribute('x2')) >= 75 && ray.getTotalLength() > 10);`, nil)
-			return fullSize == true, err
-		}, time.Second); err != nil {
-			t.Fatal("loading rays did not grow to full size", err)
-		}
-		if destination.label == "Day" {
-			name := "journal-loading-desktop.png"
-			if width == 390 {
-				name = "journal-loading-phone.png"
+		clickAndInspectLoading(link, destination.label, func(status selenium.WebElement) {
+			logoFeedback, err := driver.ExecuteScript(`const status = arguments[0];
+const header = status.closest('header');
+const rect = status.getBoundingClientRect();
+const bar = header.getBoundingClientRect();
+const rayHeight = status.querySelector('svg')?.getBoundingClientRect().height;
+const logoWidth = header.querySelector('a[aria-label="Go to homepage"] > svg')?.getBoundingClientRect().width;
+const rays = status.querySelectorAll('svg line').length;
+const overflow = getComputedStyle(status).overflow;
+if (rays > 0 && rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= bar.bottom && overflow === 'hidden' && rayHeight > bar.height && logoWidth >= 64) return true;
+return {rays, status: rect.toJSON(), bar: bar.toJSON(), rayHeight, logoWidth, overflow};`, []any{status})
+			if err != nil || logoFeedback != true {
+				t.Fatalf("%s loading rays at width %d: %v %v", destination.label, width, logoFeedback, err)
 			}
-			SaveNavigationScreenshot(t, driver, name)
-		}
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				fullSize, err := d.ExecuteScript(`const rays = document.querySelectorAll('header [role="status"][aria-label="Loading page"] svg line');
+return rays.length > 0 && [...rays].every(ray => Number(ray.getAttribute('x2')) >= 75 && ray.getTotalLength() > 10);`, nil)
+				return fullSize == true, err
+			}, time.Second); err != nil {
+				t.Fatal("loading rays did not grow to full size", err)
+			}
+			if destination.label == "Day" {
+				name := "journal-loading-desktop.png"
+				if width == 390 {
+					name = "journal-loading-phone.png"
+				}
+				SaveNavigationScreenshot(t, driver, name)
+			}
+		})
 		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
 			pending, err := d.FindElements(selenium.ByCSSSelector, pageLoadingSelector)
 			return len(pending) == 0, err
@@ -116,25 +130,20 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := link.Click(); err != nil {
-			t.Fatal(err)
-		}
-		pending, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second)
-		if err != nil {
-			t.Fatalf("menu navigation to %s at width %d gave no loading feedback: %v", path, width, err)
-		}
-		if visible, err := pending.IsDisplayed(); err != nil || !visible {
-			t.Fatal("page loading feedback is hidden", err)
-		}
-		contained, err := driver.ExecuteScript(`
+		clickAndInspectLoading(link, path, func(pending selenium.WebElement) {
+			if visible, err := pending.IsDisplayed(); err != nil || !visible {
+				t.Fatal("page loading feedback is hidden", err)
+			}
+			contained, err := driver.ExecuteScript(`
 const status = document.querySelector('[role="status"][aria-label="Loading page"]');
 const bar = status?.closest('header')?.getBoundingClientRect();
 const rect = status?.getBoundingClientRect();
 return !!bar && rect.left >= bar.left && rect.right <= bar.right && rect.top >= bar.top && rect.bottom <= bar.bottom;
 `, nil)
-		if err != nil || contained != true {
-			t.Fatalf("loading feedback escaped the navigation bar: %v %v", contained, err)
-		}
+			if err != nil || contained != true {
+				t.Fatalf("loading feedback escaped the navigation bar: %v %v", contained, err)
+			}
+		})
 		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
 			current, err := d.CurrentURL()
 			return current == publicOrigin+path, err
