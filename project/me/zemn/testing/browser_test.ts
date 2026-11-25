@@ -377,7 +377,7 @@ describe('zemn.me website', () => {
 					'SVG Arena',
 					'Platonic Stress',
 					'Geometry of Music',
-					'Star chart generator',
+					'Star Chart',
 					'Elastic Tabstops',
 					'Flag emoji',
 					'Framing calculator',
@@ -421,7 +421,7 @@ describe('zemn.me website', () => {
 				expect(omittedMenuLinks).toHaveLength(0);
 				await menuButton.click();
 
-				await list.findElement(By.linkText('Star chart generator')).click();
+				await list.findElement(By.linkText('Star Chart')).click();
 				await driver.wait(
 					async () =>
 						(await driver.getCurrentUrl()) ===
