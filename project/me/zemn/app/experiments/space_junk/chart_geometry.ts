@@ -1,4 +1,4 @@
-import { type Camera, defaultTurn, wrap } from './chart_camera.js';
+import { type Camera, wrap } from './chart_camera.js';
 import type { Marker, Vector } from './globe_geometry.js';
 import { globeCamera, globeFrame } from './globe_scene.js';
 import type { earthFixedSky } from './planets.js';
@@ -11,20 +11,15 @@ export function chartGeometry(
 	camera: Pick<Camera, 'turn' | 'tilt'>,
 	extent: number,
 	unfold: number,
-	anchor: number,
 	fixed: ReturnType<typeof earthFixedSky>
 ) {
 	const equinox = fixed(0, 0, 1);
 	const zero = Math.atan2(equinox.y, equinox.x) / radians;
-	// The wheel anchors the ascendant at the left. Bring that heading around to
-	// geographic longitude as the Earth and its ecliptic become visible.
-	const turn =
-		camera.turn + (1 - unfold) * wrap(zero + anchor + 90 - defaultTurn);
 	// The renderer keeps a unit Earth mesh. Changing the camera distance and
 	// all object coordinates together grows Earth out of the chart origin.
 	const unit = unfold || 1;
 	const frame = globeFrame(
-		globeCamera(turn, camera.tilt, mix(1.41, extent, unfold) / unit),
+		globeCamera(camera.turn, camera.tilt, mix(1.41, extent, unfold) / unit),
 		Infinity,
 		unfold > 0
 	);

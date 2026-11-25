@@ -184,15 +184,16 @@ describe('orbital globe', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
 		const marker = markerFrom(spatula, [spatula.id, 7200, 3210, 4500]);
 		const camera = { turn: 12, tilt: 90 };
-		const longitude = 70,
-			ascendant = 32;
-		const flat = chartGeometry(camera, 1.5, 0, ascendant, fixed).debris(
+		const longitude = 70;
+		const flat = chartGeometry(camera, 1.5, 0, fixed).debris(
 			marker,
 			longitude
 		);
-		const a = (longitude * Math.PI) / 180;
+		const equinox = fixed(0, 0, 1);
+		const a =
+			(longitude * Math.PI) / 180 + Math.atan2(equinox.y, equinox.x);
 		const wheel = globeFrame(
-			globeCamera(ascendant + 90, 90, 1.41),
+			globeCamera(camera.turn, camera.tilt, 1.41),
 			2,
 			false
 		);
@@ -207,10 +208,7 @@ describe('orbital globe', () => {
 		const tilted = { ...camera, tilt: 89 };
 		const accurate = globeFrame(globeCamera(12, 89, 1.5), Infinity);
 		const projected = (t: number) =>
-			chartGeometry(tilted, 1.5, t, ascendant, fixed).debris(
-				marker,
-				longitude
-			);
+			chartGeometry(tilted, 1.5, t, fixed).debris(marker, longitude);
 		expect(projected(1)).toEqual(accurate.project(marker));
 		const halfway = projected(0.5);
 		expect(
@@ -227,9 +225,26 @@ describe('orbital globe', () => {
 			expect(projected(progress).x).toBeCloseTo(projected(end).x, 2);
 			expect(projected(progress).y).toBeCloseTo(projected(end).y, 2);
 		}
-		expect(
-			chartGeometry(tilted, 1.5, 1, ascendant, fixed).sky(70, 0.87, 12)
-		).toEqual(accurate.project(fixed(70, 12, 1.5 * 0.9)));
+		expect(chartGeometry(tilted, 1.5, 1, fixed).sky(70, 0.87, 12)).toEqual(
+			accurate.project(fixed(70, 12, 1.5 * 0.9))
+		);
+	});
+	it('keeps the camera heading through the entire morph at either pole', () => {
+		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
+		for (const tilt of [-90, 90]) {
+			for (const turn of [-179, 47, 179]) {
+				const expected = globeCamera(turn, tilt, 1.5).yaw;
+				for (const amount of [0, 0.25, 0.5, 0.75, 1]) {
+					const { frame } = chartGeometry(
+						{ turn, tilt },
+						1.5,
+						amount,
+						fixed
+					);
+					expect(frame.camera.yaw).toBe(expected);
+				}
+			}
+		}
 	});
 	it('keeps Greenwich in front, north up and east right, and hides debris behind Earth', () => {
 		const { project } = globeFrame(globeCamera(0, 0, 2), 20);

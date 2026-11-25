@@ -218,7 +218,7 @@ export function useChartCamera() {
 	function keyDown(e: KeyboardEvent<SVGSVGElement>) {
 		if (e.key === 'Home') {
 			e.preventDefault();
-			move(flat);
+			move({ ...flat, turn: latest.current.turn });
 			return;
 		}
 		const dx =

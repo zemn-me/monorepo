@@ -49,15 +49,8 @@ export function ChartViewer({
 	const fixed = useMemo(() => earthFixedSky(new Date(instant)), [instant]);
 	const { turn, tilt } = camera;
 	const geometry = useMemo(
-		() =>
-			chartGeometry(
-				{ turn, tilt },
-				extent,
-				unfold,
-				ascendant ?? 0,
-				fixed
-			),
-		[turn, tilt, extent, unfold, ascendant, fixed]
+		() => chartGeometry({ turn, tilt }, extent, unfold, fixed),
+		[turn, tilt, extent, unfold, fixed]
 	);
 	const symbolic = unfold < 1;
 	const maxExtent = useMemo(
