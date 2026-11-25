@@ -18,6 +18,7 @@ browser_test(
         "//project/me/zemn/testing/browserhelpers",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
         "@com_github_tebeka_selenium//:selenium",
+        "@com_github_tebeka_selenium//log",
     ],
 )
 

@@ -310,11 +310,8 @@ func IsStaleElementErr(err error) bool {
 
 func WaitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
 	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
-		_, err := wd.FindElement(by, value)
-		if err != nil {
-			return true, nil
-		}
-		return false, nil
+		elements, err := wd.FindElements(by, value)
+		return len(elements) == 0, err
 	}, timeout)
 }
 

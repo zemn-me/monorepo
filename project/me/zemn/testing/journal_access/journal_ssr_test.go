@@ -155,16 +155,17 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			}
 		}
 	}
-	logout, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := logout.Click(); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-		_, err := d.GetCookie("__Host-zemn-authorization")
-		return err != nil, nil
+		cookies, err := d.GetCookies()
+		for _, cookie := range cookies {
+			if cookie.Name == "__Host-zemn-authorization" {
+				return false, nil
+			}
+		}
+		return true, err
 	}, 10*time.Second); err != nil {
 		t.Fatal("logout did not remove the cookie", err)
 	}

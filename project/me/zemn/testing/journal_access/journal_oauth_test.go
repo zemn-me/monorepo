@@ -83,11 +83,7 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err = browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	approve, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Allow journal access']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err = approve.Click(); err != nil {
+	if err = browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//button[normalize-space(.)='Allow journal access']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	var code string
@@ -136,15 +132,11 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err = driver.Get(api.String() + "/oauth2/authorize?" + params.Encode()); err != nil {
 		t.Fatal(err)
 	}
-	cancel, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']", 30*time.Second)
-	if err != nil {
+	if err = browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']", 30*time.Second); err != nil {
 		if body, bodyErr := driver.FindElement(selenium.ByTagName, "body"); bodyErr == nil {
 			text, _ := body.Text()
 			t.Logf("connection page: %s", text)
 		}
-		t.Fatal(err)
-	}
-	if err = cancel.Click(); err != nil {
 		t.Fatal(err)
 	}
 	if err = driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {

@@ -1,17 +1,20 @@
 package selenium_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
+	"slices"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/tebeka/selenium"
+	"github.com/tebeka/selenium/log"
 	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
@@ -44,6 +47,38 @@ func TestJournalWikiNavigationAndCitations(t *testing.T) {
 	testWikiNavigation(t, false)
 }
 
+type journalRequest struct{ method, path string }
+
+// Read requests when Chrome sends them, including requests still in flight.
+func readJournalAPIRequests(t *testing.T, driver selenium.WebDriver, api url.URL) []journalRequest {
+	t.Helper()
+	entries, err := driver.Log(log.Performance)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var requests []journalRequest
+	for _, entry := range entries {
+		var event struct {
+			Message struct {
+				Method string
+				Params struct{ Request struct{ Method, URL string } }
+			}
+		}
+		if err := json.Unmarshal([]byte(entry.Message), &event); err != nil {
+			t.Fatal(err)
+		}
+		if event.Message.Method != "Network.requestWillBeSent" {
+			continue
+		}
+		request := event.Message.Params.Request
+		u, err := url.Parse(request.URL)
+		if err == nil && u.Scheme == api.Scheme && u.Host == api.Host {
+			requests = append(requests, journalRequest{request.Method, u.Path})
+		}
+	}
+	return requests
+}
+
 func testWikiNavigation(t *testing.T, browserOnly bool) {
 	t.Helper()
 	if err := seedJournalWikiFixture(); err != nil {
@@ -53,7 +88,7 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	driver, err := seleniumpkg.NewWithChromeArguments()
+	driver, err := seleniumpkg.NewWithChromeCapabilities(selenium.Capabilities{"goog:loggingPrefs": map[string]string{"performance": "ALL"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -70,26 +105,19 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 		}
 	}
 	var originalVideo selenium.WebElement
-	assertWikiRequests := func() {
+	api, err := browserhelpers.APIRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertWikiRequests := func() []journalRequest {
 		t.Helper()
-		api, err := browserhelpers.APIRoot()
-		if err != nil {
-			t.Fatal(err)
+		requests := readJournalAPIRequests(t, driver, api)
+		for _, request := range requests {
+			if request.path == "/journal" || request.path == "/journal/entries" {
+				t.Fatalf("wiki loaded recording data: %v", request)
+			}
 		}
-		requests, err := driver.ExecuteScript(`
-			const api = new URL(arguments[0]);
-			return performance.getEntriesByType('resource')
-				.map(entry => new URL(entry.name))
-				.filter(url => url.origin === api.origin &&
-					(url.pathname === '/journal' || url.pathname === '/journal/entries'))
-				.map(url => url.href);
-		`, []any{api.String()})
-		if err != nil {
-			t.Fatal(err)
-		}
-		if len(requests.([]any)) != 0 {
-			t.Fatalf("wiki loaded recording data: %v", requests)
-		}
+		return requests
 	}
 	assertWikiNavigation := func() {
 		t.Helper()
@@ -119,8 +147,7 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 	if err := search.SendKeys("Maya"); err != nil {
 		t.Fatal(err)
 	}
-	page, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", 30*time.Second)
-	if err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if err := search.SendKeys(selenium.TabKey); err != nil {
@@ -153,7 +180,10 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 			t.Fatalf("wiki navigation had an intermediate screen: %v %v", gaps, err)
 		}
 	}
-	if err := page.SendKeys(selenium.EnterKey); err != nil {
+	if err := driver.KeyDown(selenium.EnterKey); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.KeyUp(selenium.EnterKey); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
@@ -168,11 +198,7 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 		{"//section[@aria-label='Diary wiki']//h2/a[normalize-space()='Wiki']", "//section[@aria-label='Diary wiki']//input[@type='search']"},
 		{"//section[@aria-label='Diary wiki']//a[strong[normalize-space()='Maya']]", "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']"},
 	} {
-		link, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, step.link, 30*time.Second)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := link.Click(); err != nil {
+		if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, step.link, 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, step.destination, 30*time.Second); err != nil {
@@ -222,8 +248,30 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 			}
 		}
 	}
-	time.Sleep(11 * time.Second)
+	// Observe a fresh poll of this article before checking for unwanted recording requests.
+	address, err := driver.CurrentURL()
+	if err != nil {
+		t.Fatal(err)
+	}
+	current, err := url.Parse(address)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pageRequest := journalRequest{"GET", "/journal/wiki/" + current.Query().Get("wiki")}
 	assertWikiRequests()
+	waitForArticleRequest := func() {
+		t.Helper()
+		if err := driver.WaitWithTimeout(func(selenium.WebDriver) (bool, error) {
+			requests := assertWikiRequests()
+			if slices.Contains(requests, journalRequest{"GET", "/journal/wiki"}) {
+				t.Fatal("individual page loaded the whole wiki index")
+			}
+			return slices.Contains(requests, pageRequest), nil
+		}, 30*time.Second); err != nil {
+			t.Fatalf("did not observe %s %s: %v", pageRequest.method, pageRequest.path, err)
+		}
+	}
+	waitForArticleRequest()
 	// A reload of an individual page should fetch that page alone.
 	if err := driver.Refresh(); err != nil {
 		t.Fatal(err)
@@ -231,25 +279,9 @@ func testWikiNavigation(t *testing.T, browserOnly bool) {
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//section[@aria-label='Diary wiki']//h3[normalize-space()='Maya']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	assertWikiRequests()
-	api, err := browserhelpers.APIRoot()
-	if err != nil {
-		t.Fatal(err)
-	}
-	indexRequests, err := driver.ExecuteScript(`
-		return performance.getEntriesByType('resource').filter(entry =>
-			entry.name.startsWith(arguments[0]) && new URL(entry.name).pathname === '/journal/wiki'
-		).length;
-	`, []any{api.String()})
-	if err != nil || indexRequests != float64(0) {
-		t.Fatalf("individual page loaded the whole wiki index: %v %v", indexRequests, err)
-	}
+	waitForArticleRequest()
 	// Follow an inline citation as a user would, through the footnote preview.
-	reference, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] a[aria-label^='Play source']")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := reference.Click(); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki'] a[aria-label^='Play source']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[aria-label='Journal player'] input[aria-label='Seek recording']", 30*time.Second); err != nil {
@@ -629,15 +661,17 @@ func TestJournalReviewScreenshots(t *testing.T) {
 			if err := browserhelpers.ClickElementInView(driver, titleLink); err != nil {
 				t.Fatal(err)
 			}
-			valid, err := driver.ExecuteScript(`
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				valid, err := d.ExecuteScript(`
 				const player = document.querySelector('[aria-label="Journal player"]');
 				return document.querySelectorAll('main audio').length === 1 &&
 					document.querySelectorAll('[aria-label="Seek recording"]').length === 1 &&
 					document.querySelectorAll('[aria-label="Transcript"]').length === 1 &&
-					player.querySelector('strong').textContent === arguments[0];
+					player?.querySelector('strong')?.textContent === arguments[0];
 			`, []any{title})
-			if err != nil || valid != true {
-				t.Fatalf("switch to %s left duplicate or stale controls: %v %v", title, valid, err)
+				return valid == true, err
+			}, 10*time.Second); err != nil {
+				t.Fatalf("switch to %s left duplicate or stale controls: %v", title, err)
 			}
 		}
 		if _, err := driver.ExecuteScript(`
@@ -767,7 +801,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	driver, err := seleniumpkg.NewWithChromeArguments()
+	driver, err := seleniumpkg.NewWithChromeCapabilities(selenium.Capabilities{"goog:loggingPrefs": map[string]string{"performance": "ALL"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -796,31 +830,7 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err := os.Chtimes(path, date, date); err != nil {
 		t.Fatal(err)
 	}
-	input, err := driver.FindElement(selenium.ByCSSSelector, "input[aria-label='Import voice memo']")
-	if err != nil {
-		t.Fatal(err)
-	}
-	// Hold the real upload endpoint until the saved local recording is observed.
-	// A fast local service can otherwise confirm it before WebDriver's next lookup.
-	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/journal/entries"}}); err != nil {
-		t.Fatal(err)
-	}
-	if err := input.SendKeys(path); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{}}); err != nil {
-		t.Fatal(err)
-	}
-	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
-		browserhelpers.DumpPageDiagnostics(t, driver)
-		t.Fatal("wiki upload was not confirmed: ", err)
-	}
+	importJournalFiles(t, driver, []string{path})
 	if _, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Diary wiki'] input[type='search']"); err != nil {
 		t.Fatal("upload left the wiki: ", err)
 	}
@@ -828,19 +838,11 @@ func TestJournalWikiUploadConfirmation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	requests, err := driver.ExecuteScript(`
-		const api = new URL(arguments[0]);
-		const paths = performance.getEntriesByType('resource')
-			.map(entry => new URL(entry.name)).filter(url => url.origin === api.origin).map(url => url.pathname);
-		return { journal: paths.filter(path => path === '/journal').length,
-			uploads: paths.filter(path => path === '/journal/entries').length };
-	`, []any{api.String()})
-	if err != nil {
-		t.Fatal(err)
-	}
-	counts := requests.(map[string]any)
-	if counts["journal"] != float64(0) || counts["uploads"].(float64) < 2 {
-		t.Fatalf("wiki confirmation did not use lightweight metadata: %v", counts)
+	requests := readJournalAPIRequests(t, driver, api)
+	if slices.Contains(requests, journalRequest{"GET", "/journal"}) ||
+		!slices.Contains(requests, journalRequest{"POST", "/journal/entries"}) ||
+		!slices.Contains(requests, journalRequest{"GET", "/journal/entries"}) {
+		t.Fatalf("wiki confirmation did not use lightweight metadata: %v", requests)
 	}
 
 	// Confirm the recording exists in the journal before removing the fixture.

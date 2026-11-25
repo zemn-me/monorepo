@@ -13,6 +13,32 @@ import (
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
+// Let the whole selection reach local storage before allowing remote confirmation
+// to remove any rows. The queue can otherwise drain between two imported files.
+func importJournalFiles(t *testing.T, driver *seleniumpkg.Driver, paths []string) {
+	t.Helper()
+	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/journal/entries"}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", paths, 30*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	lastRow := fmt.Sprintf("section[aria-label='Local recordings'] > ul > li:nth-child(%d)", len(paths))
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, lastRow, 30*time.Second); err != nil {
+		t.Fatal("selection did not reach the local queue", err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 120*time.Second); err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
+		t.Fatal("recordings were not confirmed", err)
+	}
+}
+
 func TestJournalSelectedDayNavigation(t *testing.T) {
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
@@ -55,16 +81,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 		paths = append(paths, path)
 		dates = append(dates, date)
 	}
-	if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", paths, 30*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 120*time.Second); err != nil {
-		browserhelpers.DumpPageDiagnostics(t, driver)
-		t.Fatal(err)
-	}
+	importJournalFiles(t, driver, paths)
 
 	defer func() {
 		for index, date := range dates {
