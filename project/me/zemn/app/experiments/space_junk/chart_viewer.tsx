@@ -120,7 +120,11 @@ export function ChartViewer({
 	}, [birthplace, revision, faceOn]);
 
 	return (
-		<div className={style.viewer}>
+		<div
+			className={style.viewer}
+			onKeyUp={controls.keyUp}
+			onBlur={() => controls.settle()}
+		>
 			<svg
 				id="star-chart"
 				ref={controls.svg}
@@ -172,6 +176,7 @@ export function ChartViewer({
 					<label>
 						Rotation
 						<input
+							{...controls.rangeEvents}
 							type="range"
 							min="-180"
 							max="180"
@@ -188,6 +193,7 @@ export function ChartViewer({
 					<label>
 						Tilt
 						<input
+							{...controls.rangeEvents}
 							type="range"
 							min="-90"
 							max="90"
@@ -205,6 +211,7 @@ export function ChartViewer({
 						<label>
 							Zoom
 							<input
+								{...controls.rangeEvents}
 								type="range"
 								min="0"
 								max="100"

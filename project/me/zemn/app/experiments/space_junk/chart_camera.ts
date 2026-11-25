@@ -24,9 +24,10 @@ const revolutionMs = 120_000;
 
 // Ease symmetrically into the disc near either pole.
 export const orbitalTiltLimit = 82;
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
 function orbitalBlend(tilt: number) {
 	const t = Math.min(1, (90 - Math.abs(tilt)) / (90 - orbitalTiltLimit));
-	return t * t * (3 - 2 * t);
+	return smoothstep(t);
 }
 
 export function useChartCamera() {
@@ -34,6 +35,8 @@ export function useChartCamera() {
 	const [camera, render] = useState(flat);
 	const latest = useRef(flat);
 	const frame = useRef<number | null>(null);
+	const settleFrame = useRef<number | null>(null);
+	const rangePointers = useRef(new Set<number>());
 	const resumeAt = useRef(0);
 	const fingers = useRef(new Map<number, { x: number; y: number }>());
 	const drag = useRef<{
@@ -48,21 +51,69 @@ export function useChartCamera() {
 	const unfold = orbitalBlend(camera.tilt);
 	const orbiting = unfold === 1;
 
-	// Keys accumulate and absolute drags replace the target, including between paints.
-	const move = useCallback((next: Camera) => {
-		resumeAt.current = performance.now() + 1500;
-		latest.current = next;
-		frame.current ??= requestAnimationFrame(() => {
-			frame.current = null;
-			render(latest.current);
-		});
+	const stopSettling = useCallback(() => {
+		if (settleFrame.current !== null)
+			cancelAnimationFrame(settleFrame.current);
+		settleFrame.current = null;
 	}, []);
+
+	function settle(delay = 0) {
+		stopSettling();
+		const start = latest.current.tilt;
+		const blend = orbitalBlend(start);
+		if (
+			blend === 0 ||
+			blend === 1 ||
+			fingers.current.size ||
+			rangePointers.current.size
+		)
+			return;
+		const target = Math.sign(start) * (blend < 0.5 ? 90 : orbitalTiltLimit);
+		const since = performance.now() + delay;
+		const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+		function tick(now: number) {
+			if (now >= since) {
+				const t = motion.matches
+					? 1
+					: Math.min(1, (now - since) / 1000);
+				latest.current = {
+					...latest.current,
+					tilt:
+						t === 1
+							? target
+							: start + (target - start) * smoothstep(t),
+				};
+				render(latest.current);
+				if (t === 1) {
+					settleFrame.current = null;
+					return;
+				}
+			}
+			settleFrame.current = requestAnimationFrame(tick);
+		}
+		settleFrame.current = requestAnimationFrame(tick);
+	}
+
+	// Keys accumulate and absolute drags replace the target, including between paints.
+	const move = useCallback(
+		(next: Camera) => {
+			stopSettling();
+			resumeAt.current = performance.now() + 1500;
+			latest.current = next;
+			frame.current ??= requestAnimationFrame(() => {
+				frame.current = null;
+				render(latest.current);
+			});
+		},
+		[stopSettling]
+	);
 	useEffect(
 		() => () => {
+			stopSettling();
 			if (frame.current !== null) cancelAnimationFrame(frame.current);
 			frame.current = null;
 		},
-		[]
+		[stopSettling]
 	);
 
 	useEffect(() => {
@@ -75,6 +126,7 @@ export function useChartCamera() {
 			animation = requestAnimationFrame(tick);
 			if (
 				fingers.current.size ||
+				rangePointers.current.size ||
 				now < resumeAt.current ||
 				Math.abs(latest.current.tilt) > orbitalTiltLimit
 			) {
@@ -128,6 +180,7 @@ export function useChartCamera() {
 			(!e.isPrimary && e.pointerType !== 'touch')
 		)
 			return;
+		stopSettling();
 		fingers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 		const two = fingers.current.size === 2;
 		drag.current = {
@@ -176,6 +229,7 @@ export function useChartCamera() {
 		drag.current = fingers.current.size
 			? { ...center(), camera: latest.current, pan: false, moved: true }
 			: null;
+		settle();
 	}
 	function pointerUp(e: PointerEvent<SVGSVGElement>, pick: PickMarker) {
 		if (!fingers.current.has(e.pointerId)) return;
@@ -217,6 +271,20 @@ export function useChartCamera() {
 					}
 		);
 	}
+	function endRange(e: PointerEvent<HTMLInputElement>) {
+		if (rangePointers.current.delete(e.pointerId)) settle();
+	}
+	const rangeEvents = {
+		onPointerDown(e: PointerEvent<HTMLInputElement>) {
+			stopSettling();
+			rangePointers.current.add(e.pointerId);
+			e.currentTarget.setPointerCapture(e.pointerId);
+		},
+		onPointerUp: endRange,
+		onPointerCancel: endRange,
+		onLostPointerCapture: endRange,
+	};
+
 	return {
 		svg,
 		camera,
@@ -230,5 +298,15 @@ export function useChartCamera() {
 		pointerUp,
 		endPointer,
 		keyDown,
+		rangeEvents,
+		keyUp(e: KeyboardEvent) {
+			// Leave time for successive arrow taps on the one-degree tilt ruler.
+			if (
+				e.key.startsWith('Arrow') ||
+				['Home', 'End', 'PageUp', 'PageDown'].includes(e.key)
+			)
+				settle(250);
+		},
+		settle,
 	};
 }

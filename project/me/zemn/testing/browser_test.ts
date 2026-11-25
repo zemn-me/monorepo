@@ -467,10 +467,10 @@ describe('zemn.me website', () => {
 				expect(letterRotation).toBeGreaterThan(3);
 				const projection = (label: string) => driver.wait(async () =>
 					(await wheel.getAttribute('aria-label'))?.includes(label), 5000, `Expected the camera to reach ${label}`);
-				const centre = await driver.executeScript<{ x: number; y: number }>(`
+				const centre = await driver.executeScript<{ x: number; y: number; width: number }>(`
 					arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});
 					const r = arguments[0].getBoundingClientRect();
-					return {x: r.x + r.width / 2, y: r.y + r.height / 2};
+					return {x: r.x + r.width / 2, y: r.y + r.height / 2, width: r.width};
 				`, wheel);
 				const mouse = (type: string, dy: number, buttons: number) =>
 					chrome.sendDevToolsCommand('Input.dispatchMouseEvent', {
@@ -488,6 +488,22 @@ describe('zemn.me website', () => {
 				await mouse('mouseReleased', 0, 0);
 				await projection('wheel from above');
 				await driver.wait(async () => await moonDot.getAttribute('cx') === initialX, 5000);
+				// Release on either side of the midpoint of the near-pole blend.
+				for (const [fraction, endpoint] of [[0.014, 'wheel'], [0.028, 'globe']] as const) {
+					const dy = Math.round(centre.width * fraction);
+					await mouse('mousePressed', 0, 1);
+					await mouse('mouseMoved', dy, 1);
+					await projection('Earth and orbital chart');
+					expect(await wheel.getText()).not.toContain('km');
+					await mouse('mouseReleased', dy, 0);
+					if (endpoint === 'wheel') {
+						await projection('wheel from above');
+						expect(await moonDot.getAttribute('cx')).toBe(initialX);
+					} else {
+						await driver.wait(async () => (await wheel.getText()).includes('km'), 5000);
+					}
+				}
+				await wheel.sendKeys(Key.HOME);
 				await wheel.sendKeys(Key.ARROW_DOWN.repeat(36));
 				await projection('wheel from below');
 				await wheel.sendKeys(Key.ARROW_UP);
@@ -497,18 +513,15 @@ describe('zemn.me website', () => {
 
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
 				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
+				const wheelX = await moonDot.getAttribute('cx');
 				await tilt.sendKeys(Key.ARROW_LEFT);
-				await driver.wait(async () => await tilt.getAttribute('value') === '89', 5000);
-				const shallowX = await moonDot.getAttribute('cx');
-				expect(shallowX).not.toBe(initialX);
-				expect(await wheel.getText()).not.toContain('km');
-				await driver.sleep(650);
-				expect(await moonDot.getAttribute('cx')).toBe(shallowX);
-				await wheel.sendKeys(Key.ARROW_DOWN.repeat(2));
-				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000);
-				await wheel.sendKeys(Key.ARROW_UP.repeat(2));
-				await driver.wait(async () => await moonDot.getAttribute('cx') === shallowX, 5000,
-					'Returning to the same tilt restores the same intermediate position');
+				await projection('Earth and orbital chart');
+				await projection('wheel from above');
+				expect(await moonDot.getAttribute('cx')).toBe(wheelX);
+				await wheel.sendKeys(Key.ARROW_DOWN);
+				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000,
+					'Releasing five degrees from the pole settles into the full orbital view');
+				expect(await tilt.getAttribute('value')).toBe('82');
 				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting debris"]'));
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
 					(await Promise.all(paths.slice(0, 6).map(path => path.getAttribute('d')))).join('')
