@@ -3,7 +3,7 @@ import Path from 'node:path';
 import { runfiles } from '@bazel/runfiles';
 import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
+import { Browser, By, Key, logging, ThenableWebDriver } from 'selenium-webdriver';
 import type { Driver as ChromeDriver } from 'selenium-webdriver/chrome';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -435,6 +435,14 @@ describe('zemn.me website', () => {
 				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
 				expect(await reading.getText()).toContain('1 August 2006');
 				expect(await reading.getText()).toContain('There was a spatula in orbit');
+				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
+				const dial = await driver.findElement(By.css('article figure ellipse'));
+				const originalHeight = await dial.getAttribute('ry');
+				await tilt.sendKeys(Key.ARROW_RIGHT);
+				expect(await dial.getAttribute('ry')).not.toBe(originalHeight);
+				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
+				expect(await dial.getAttribute('ry')).toBe(originalHeight);
+
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
 					'12 July 2006 through 29 September 2006'
 				);

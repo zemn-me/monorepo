@@ -66,7 +66,7 @@
 	--paper: #f0e8d1;
 	--gold: #f6c878;
 	display: grid;
-	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
 	align-items: center;
 	gap: clamp(0.8rem, 2vw, 2rem);
 	margin: 0;
@@ -99,42 +99,83 @@
 	color: var(--gold);
 }
 
+.viewer {
+	min-width: 0;
+}
 .wheel {
 	display: block;
 	width: 100%;
+	cursor: grab;
+	touch-action: none;
+	user-select: none;
 }
-
-.grid {
-	color: #94a3ae;
+.wheel:active {
+	cursor: grabbing;
+}
+.dial ellipse,
+.dial path {
+	stroke: #77939c;
 	stroke-width: 0.65;
 }
-
 .month {
-	color: var(--paper);
+	fill: var(--paper);
 	font-size: 9px;
+	paint-order: stroke;
+	stroke: var(--ink);
+	stroke-width: 1.8px;
+	stroke-linejoin: round;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 }
-
 .earth {
-	color: var(--paper);
-	stroke-width: 0.85;
+	stroke: #a3bfb1;
+	stroke-width: 0.8;
 }
-
-.spokes line {
-	stroke: #a7cdbd;
-	stroke-width: 1.1;
+.graticule path {
+	stroke: #adccb4;
+	stroke-width: 0.6;
+	opacity: 0.75;
 }
-.spokes line:hover {
-	stroke: var(--gold);
-	stroke-width: 2;
+.bar:hover path {
+	fill: var(--gold);
 }
-
 .star {
 	fill: var(--gold);
 	stroke: var(--ink);
 }
-
+.viewControls {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 0.25rem 1rem;
+	color: var(--paper);
+	font-size: 0.85rem;
+}
+.viewControls label {
+	display: grid;
+}
+.viewControls input {
+	width: clamp(3.5rem, 7vw, 5.25rem);
+	min-height: 44px;
+	margin: 0;
+	accent-color: var(--gold);
+	cursor: pointer;
+}
+.viewControls button {
+	min-height: 44px;
+	padding: 0 0.2rem;
+	background: none;
+	border: 0;
+	color: var(--paper);
+	font: inherit;
+	text-decoration: underline;
+	cursor: pointer;
+}
+.viewControls :focus-visible {
+	outline: 2px solid var(--gold);
+	outline-offset: 2px;
+}
 .sectionTitle {
 	margin: 2rem 0 0.5rem;
 	font-size: 1.45rem;
@@ -192,7 +233,7 @@
 	}
 
 	.plate figcaption {
-		padding-block-start: 0;
+		padding-block-start: 1rem;
 		text-align: center;
 	}
 }

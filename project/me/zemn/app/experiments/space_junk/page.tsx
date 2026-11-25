@@ -77,8 +77,9 @@ function BirthdayChart({
 
 					{lead && (
 						<small>
-							The star marks your birthday. Taller spokes mark
-							dates with more release anniversaries.
+							The gold star marks your birthday. Taller columns
+							mean more pieces share that release anniversary.
+							Drag the calendar to rotate it.
 						</small>
 					)}
 				</figcaption>
@@ -198,8 +199,8 @@ export default function Page() {
 					<figcaption>
 						<h2>The orbital calendar</h2>
 						<p>
-							Your star marks your birthday. The spokes show when
-							the pieces in orbit that day were released.
+							Drag to turn the calendar. Enter your birthday to
+							see the release anniversaries rise around the globe.
 						</p>
 					</figcaption>
 				</figure>
