@@ -428,7 +428,9 @@ describe('zemn.me website', () => {
 						`${origin}/experiments/space-junk`,
 					5000
 				);
-				await driver.findElement(By.css('input[type="date"]')).sendKeys('08012006');
+				await driver.findElement(By.name('month')).sendKeys('8');
+				await driver.findElement(By.name('day')).sendKeys('1');
+				await driver.findElement(By.name('year')).sendKeys('2006');
 				await driver.findElement(By.xpath('//button[.="Draw my chart"]')).click();
 				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
 				expect(await reading.getText()).toContain('1 August 2006');
@@ -436,6 +438,37 @@ describe('zemn.me website', () => {
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
 					'12 July 2006 through 29 September 2006'
 				);
+				expect(await driver.findElement(By.css('article [role="status"]')).getText()).toContain('1–12 of 6,989');
+				await driver.findElement(By.xpath('//button[.="Next"]')).click();
+				expect(await driver.findElement(By.css('article [role="status"]')).getText()).toContain('13–24 of 6,989');
+				await driver.findElement(By.css('article input[type="search"]')).sendKeys('1976-126V');
+				expect(await driver.findElement(By.css('article ul')).getText()).toContain('NORAD 9724');
+
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it.each([
+			['en-US', 'month,day,year'],
+			['en-GB', 'day,month,year'],
+			['ja-JP', 'year,month,day'],
+		])('orders the birthday fields for %s', async (locale, expectedOrder) => {
+			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Network.setUserAgentOverride', {
+					userAgent: await driver.executeScript<string>('return navigator.userAgent'),
+					acceptLanguage: locale,
+				});
+				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.wait(async () => {
+					const names = await driver.findElements(By.css('fieldset input[type="number"]'));
+					return (await Promise.all(names.map(field => field.getAttribute('name')))).join(',') === expectedOrder;
+				}, 5000);
+				await driver.findElement(By.name('year')).sendKeys('2006');
+				await driver.findElement(By.name('month')).sendKeys('8');
+				await driver.findElement(By.name('day')).sendKeys('1');
+				await driver.findElement(By.xpath('//button[.="Draw my chart"]')).click();
+				await driver.wait(async () => (await driver.findElements(By.css('figcaption time[datetime="2006-08-01"]'))).length > 0, 5000);
 			} finally {
 				await driver.quit();
 			}

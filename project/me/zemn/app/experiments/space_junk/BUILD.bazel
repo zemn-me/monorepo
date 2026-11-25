@@ -21,6 +21,7 @@ hashed_public_assets(
 ts_project(
     name = "space_junk",
     srcs = [
+        "birthday_form.tsx",
         "chart.ts",
         "elements.ts",
         "orbit.ts",
@@ -40,6 +41,7 @@ ts_project(
         "//:node_modules/react-router",
         "//:node_modules/satellite.js",
         "//:node_modules/temporal-polyfill",
+        "//ts/react/lang",
         "//ts/remix",
     ],
 )
@@ -58,6 +60,7 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
+        "birthday_form.tsx",
         "chart.ts",
         "chart_test.ts",
         "elements.ts",

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Temporal } from 'temporal-polyfill';
 
 import type { SpaceObject } from './chart.js';
@@ -11,7 +12,7 @@ function point(date: Temporal.PlainDate, radius: number) {
 	};
 }
 
-// The same silhouettes key each catalogue entry to its place on the wheel.
+// Use the same silhouettes for catalogue entries and their local sky positions.
 export function ObjectGlyph({ object }: { object: SpaceObject }) {
 	const paths = {
 		D: 'M-9 -4 1 -9 8 -3 4 6 -4 9Z M-9 -4 0 -1 1 -9 M0 -1 4 6 M0 -1 -4 9',
@@ -19,7 +20,6 @@ export function ObjectGlyph({ object }: { object: SpaceObject }) {
 			object.id === 29257
 				? 'M-6 -9H2V-2Q2 0 -1 1L-1 9H-3V1Q-6 0 -6 -2Z M-4 -7V-3 M-1 -7V-3'
 				: 'M-8 -4 -2 -8 8 -3 8 4 2 8 -8 3Z M-8 -4 2 1 8 -3 M2 1V8',
-		P: 'M-4 -4H4V4H-4Z M-11 -3H-6V3H-11Z M6 -3H11V3H6Z M-6 0H-4 M4 0H6 M0 -4V-9 M-3 -9Q0 -5 3 -9',
 		R: 'M-4 -7Q0 -10 4 -7V5H-4Z M-4 -5Q0 -3 4 -5 M-4 3H4 M-2 5 -4 9H4L2 5',
 	};
 	return (
@@ -36,19 +36,20 @@ export function ObjectGlyph({ object }: { object: SpaceObject }) {
 	);
 }
 
-export function Wheel({
+export const Wheel = memo(function Wheel({
 	birthday,
-	objects,
+	releases = [],
 }: {
 	birthday?: Temporal.PlainDate;
-	objects: SpaceObject[];
+	releases?: number[];
 }) {
 	const year = birthday?.year ?? 2019;
 	const january = Temporal.PlainDate.from({ year, month: 1, day: 1 });
 	const marker = birthday && point(birthday, 136);
+	const peak = Math.max(1, ...releases);
 	return (
 		<svg
-			aria-label="Orbital release anniversaries on a circular calendar"
+			aria-label="Release anniversaries by calendar day, with a star marking your birthday"
 			role="img"
 			className={style.wheel}
 			viewBox="-175 -175 350 350"
@@ -100,34 +101,34 @@ export function Wheel({
 					<path d="M-27 0H27 M-23 -14Q0 -7 23 -14 M-23 14Q0 21 23 14" />
 				</g>
 			</g>
-			{objects.map(object => {
-				const release = Temporal.PlainDate.from(
-					object.start.slice(0, 10)
-				);
-				const pos = point(
-					release.with({ year }),
-					{ C: 111, P: 111, D: 77, R: 45 }[object.kind]
-				);
-				return (
-					<g key={object.id}>
-						{marker && (
-							<line
-								x1={marker.x}
-								y1={marker.y}
-								x2={pos.x}
-								y2={pos.y}
-								className={style.aspect}
-							/>
-						)}
-						<g transform={`translate(${pos.x},${pos.y})`}>
-							<circle className={style.medallion} r="15" />
-							<g transform="translate(-13,-13)">
-								<ObjectGlyph object={object} />
-							</g>
-						</g>
-					</g>
-				);
-			})}
+			<g className={style.spokes}>
+				{releases.map((count, i) => {
+					if (!count) return null;
+					const angle = (360 * i) / releases.length;
+					const length = 92 * Math.sqrt(count / peak);
+					const date = january
+						.add({ days: i })
+						.toLocaleString('en-GB', {
+							day: 'numeric',
+							month: 'long',
+						});
+					return (
+						<line
+							key={i}
+							transform={`rotate(${angle})`}
+							x1="0"
+							x2="0"
+							y1="-36"
+							y2={-36 - length}
+						>
+							<title>
+								{date} · {count.toLocaleString('en-GB')}{' '}
+								{count === 1 ? 'object' : 'objects'}
+							</title>
+						</line>
+					);
+				})}
+			</g>
 			{marker && (
 				<g transform={`translate(${marker.x},${marker.y})`}>
 					<path
@@ -138,4 +139,4 @@ export function Wheel({
 			)}
 		</svg>
 	);
-}
+});

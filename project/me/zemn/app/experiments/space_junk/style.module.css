@@ -121,14 +121,13 @@
 	stroke-width: 0.85;
 }
 
-.aspect {
-	stroke: var(--gold);
-	stroke-dasharray: 2 3;
+.spokes line {
+	stroke: #a7cdbd;
+	stroke-width: 1.1;
 }
-
-.medallion {
-	fill: var(--ink);
-	stroke: currentColor;
+.spokes line:hover {
+	stroke: var(--gold);
+	stroke-width: 2;
 }
 
 .star {
@@ -232,16 +231,87 @@
 	line-height: 1.5;
 }
 
-.collection {
+.paging {
 	display: flex;
 	align-items: center;
-	gap: 0.65rem;
-	margin: 1rem 0;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0.75rem 0;
 }
-.collection select {
+.paging button {
 	min-height: 44px;
-	padding: 0.4rem;
-	color: var(--foreground-color);
-	background: var(--background-color);
+	padding: 0.4rem 0.7rem;
 	font: inherit;
+}
+.search {
+	display: grid;
+	gap: 0.4rem;
+}
+.search input {
+	box-sizing: border-box;
+	width: min(100%, 24rem);
+	min-height: 44px;
+	padding: 0.4rem 0.65rem;
+	font: inherit;
+}
+
+.birthday {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	min-width: 0;
+}
+.birthday legend {
+	padding: 0;
+	margin-bottom: 0.45rem;
+	font-weight: bold;
+}
+.dateFields {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: 0.4rem;
+}
+.dateFields label {
+	font-weight: normal;
+}
+.dateFields input[type='number'] {
+	width: 4.2rem;
+	padding-inline: 0.45rem;
+}
+.dateFields input[name='year'] {
+	width: 5.5rem;
+}
+.dateFields .calendar {
+	position: relative;
+	display: grid;
+	place-items: center;
+	box-sizing: border-box;
+	min-height: 44px;
+	padding: 0 0.65rem;
+	border: 1px solid currentColor;
+	border-radius: 0.25rem;
+	overflow: hidden;
+}
+.calendar input {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+.calendar:focus-within {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.calendar input::-webkit-calendar-picker-indicator {
+	position: absolute;
+	inset: 0;
+	width: auto;
+	height: auto;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
 }

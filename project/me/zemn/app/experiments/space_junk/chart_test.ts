@@ -17,14 +17,26 @@ const objects = [spatula];
 describe('free flight on the birthday', () => {
 	it('includes the spatula during its flight and omits it before release and after reentry', () => {
 		expect(
-			readChart(objects, Temporal.PlainDate.from('2006-07-04')).count
+			readChart(objects, Temporal.PlainDate.from('2006-07-04')).matches
+				.length
 		).toBe(0);
 		expect(
-			readChart(objects, Temporal.PlainDate.from('2006-08-01')).featured
+			readChart(objects, Temporal.PlainDate.from('2006-08-01')).matches
 		).toEqual([{ object: spatula, days: -20 }]);
 		expect(
-			readChart(objects, Temporal.PlainDate.from('2006-09-30')).count
+			readChart(objects, Temporal.PlainDate.from('2006-09-30')).matches
+				.length
 		).toBe(0);
+	});
+	it('counts every object sharing a class and a release date in the list and wheel', () => {
+		const objects = [1, 2, 3, 4, 5].map(id => ({ ...spatula, id }));
+		const { matches, releases } = readChart(
+			objects,
+			Temporal.PlainDate.from('2006-08-01')
+		);
+		expect(matches.map(row => row.object.id)).toEqual([1, 2, 3, 4, 5]);
+		expect(releases[192]).toBe(5);
+		expect(releases.reduce((total, count) => total + count)).toBe(5);
 	});
 	it('uses only confirmed minutes on boundary days', () => {
 		expect(inOrbitAt(spatula, '2006-07-12T08:00')).toBe(false);
@@ -42,7 +54,7 @@ describe('free flight on the birthday', () => {
 			[{ ...spatula, start: '1999-12-28', end: null }],
 			Temporal.PlainDate.from('2000-01-01')
 		);
-		expect(result.featured[0]?.days).toBe(-4);
+		expect(result.matches[0]?.days).toBe(-4);
 	});
 });
 

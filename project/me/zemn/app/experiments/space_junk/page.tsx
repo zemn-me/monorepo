@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 
 import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
+import { BirthdayForm } from './birthday_form.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
@@ -22,16 +23,26 @@ function BirthdayChart({
 	catalogue: Catalogue;
 	birthday: Temporal.PlainDate;
 }) {
-	const [originals, setOriginals] = useState(false);
-	const objects = originals ? catalogue.originals : catalogue.objects;
-	const { count, featured } = useMemo(
-		() => readChart(objects, birthday),
-		[objects, birthday]
+	const [search, setSearch] = useState('');
+	const [page, setPage] = useState(0);
+	const { matches, releases } = useMemo(
+		() => readChart(catalogue.objects, birthday),
+		[catalogue, birthday]
 	);
-	const lead = featured[0]?.object;
-	const population = originals
-		? `${count} of Carrie’s three ${count === 1 ? 'was' : 'were'}`
-		: `${count.toLocaleString('en-GB')} catalogued ${count === 1 ? 'object was' : 'objects were'}`;
+	const filtered = useMemo(() => {
+		const term = search.trim().toLowerCase();
+		if (!term) return matches;
+		return matches.filter(({ object }) =>
+			`${object.name} ${object.piece} ${object.id} ${kinds[object.kind]}`
+				.toLowerCase()
+				.includes(term)
+		);
+	}, [matches, search]);
+	const pageSize = 12;
+	const offset = page * pageSize;
+	const rows = filtered.slice(offset, offset + pageSize);
+	const lead = matches[0]?.object;
+	const count = matches.length;
 	if (birthday.toString() > catalogue.asOf)
 		return (
 			<p role="status">
@@ -41,59 +52,88 @@ function BirthdayChart({
 		);
 	return (
 		<>
-			<label className={style.collection}>
-				Collection
-				<select
-					value={originals ? 'original' : 'catalogue'}
-					onChange={e => setOriginals(e.target.value === 'original')}
-				>
-					<option value="catalogue">Full debris catalog</option>
-					<option value="original">Carrie’s original three</option>
-				</select>
-			</label>
 			<figure className={style.plate}>
-				<Wheel
-					birthday={birthday}
-					objects={featured.map(row => row.object)}
-				/>
+				<Wheel birthday={birthday} releases={releases} />
 				<figcaption aria-live="polite">
 					<time dateTime={birthday.toString()}>
 						✦ {displayDate(birthday.toString())}
 					</time>
 					<h2>
-						{lead?.id === 29257
-							? 'The spacewalk spatula'
-							: (lead?.name ?? 'A quiet sky')}
+						{count
+							? `${count.toLocaleString('en-GB')} ${count === 1 ? 'object' : 'objects'} in orbit`
+							: 'A quiet sky'}
 					</h2>
 					{lead?.id === 29257 && (
 						<p>
 							There was a spatula in orbit the day you were born.
 						</p>
 					)}
-					<p>
-						{lead
-							? `${population} in Earth orbit that day.`
-							: 'No pieces with confirmed dates in this collection were in orbit on your birthday.'}
-					</p>
+					{!count && (
+						<p>
+							No debris with confirmed flight dates was in orbit
+							on your birthday in this catalog.
+						</p>
+					)}
+
 					{lead && (
 						<small>
-							{lead.eva
-								? 'Lost or discarded on a spacewalk'
-								: kinds[lead.kind]}
+							The star marks your birthday. Taller spokes mark
+							dates with more release anniversaries.
 						</small>
 					)}
 				</figcaption>
 			</figure>
 			{lead && (
 				<>
-					<h2 className={style.sectionTitle}>Your objects</h2>
-					<p>
-						{originals
-							? 'The objects from Carrie’s original chart that were in orbit on your birthday.'
-							: 'One from each available class, matched by release anniversary. Spacewalk equipment gets first pick.'}
-					</p>
+					<h2 className={style.sectionTitle}>Objects in orbit</h2>
+					<label className={style.search}>
+						Search by name, catalog number, designator or object
+						type
+						<input
+							type="search"
+							value={search}
+							onChange={event => {
+								setSearch(event.target.value);
+								setPage(0);
+							}}
+						/>
+					</label>
+					<div className={style.paging}>
+						<span role="status">
+							{rows.length
+								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
+								: 'No matching objects'}
+						</span>
+						{filtered.length > pageSize && (
+							<>
+								<button
+									type="button"
+									disabled={!page}
+									onClick={() => setPage(page - 1)}
+								>
+									Previous
+								</button>
+								<button
+									type="button"
+									disabled={
+										offset + rows.length >= filtered.length
+									}
+									onClick={() => setPage(page + 1)}
+								>
+									Next
+								</button>
+							</>
+						)}
+					</div>
+					{rows.length > 0 && (
+						<Sky
+							birthday={birthday.toString()}
+							objects={rows.map(row => row.object)}
+						/>
+					)}
+
 					<ul className={style.catalogue}>
-						{featured.map(({ object, days }) => (
+						{rows.map(({ object, days }) => (
 							<li key={object.id}>
 								<span className={style.icon}>
 									<ObjectGlyph object={object} />
@@ -121,10 +161,6 @@ function BirthdayChart({
 							</li>
 						))}
 					</ul>
-					<Sky
-						birthday={birthday.toString()}
-						objects={featured.map(row => row.object)}
-					/>
 				</>
 			)}
 		</>
@@ -133,7 +169,7 @@ function BirthdayChart({
 
 export default function Page() {
 	const [birthday, setBirthday] = useState<Temporal.PlainDate>();
-	const input = useRef<HTMLInputElement>(null);
+
 	const catalogue = useQuery({
 		queryKey: ['space-junk-catalogue', catalogueUrl],
 		enabled: Boolean(birthday),
@@ -155,51 +191,24 @@ export default function Page() {
 				Find the spent rockets, loose equipment and satellite fragments
 				that shared your birthday in Earth orbit.
 			</p>
-			<form
-				className={style.form}
-				onSubmit={event => {
-					event.preventDefault();
-					if (input.current)
-						setBirthday(
-							Temporal.PlainDate.from(input.current.value)
-						);
-				}}
-			>
-				<label>
-					Your birthday
-					<input
-						type="date"
-						required
-						ref={input}
-						min="0001-01-01"
-						max={catalogue.data?.asOf ?? '9999-12-31'}
-					/>
-				</label>
-				<button type="submit">Draw my chart</button>
-				<button
-					type="button"
-					className={style.example}
-					onClick={() => {
-						if (input.current) input.current.value = '2006-08-01';
-						setBirthday(Temporal.PlainDate.from('2006-08-01'));
-					}}
-				>
-					Try 1 August 2006
-				</button>
-			</form>
+			<BirthdayForm asOf={catalogue.data?.asOf} onDraw={setBirthday} />
 			{!birthday ? (
 				<figure className={style.plate}>
-					<Wheel objects={[]} />
+					<Wheel />
 					<figcaption>
 						<h2>The orbital calendar</h2>
 						<p>
-							Your star marks your birthday. Each symbol marks the
-							anniversary of a piece breaking free.
+							Your star marks your birthday. The spokes show when
+							the pieces in orbit that day were released.
 						</p>
 					</figcaption>
 				</figure>
 			) : catalogue.data ? (
-				<BirthdayChart birthday={birthday} catalogue={catalogue.data} />
+				<BirthdayChart
+					key={birthday.toString()}
+					birthday={birthday}
+					catalogue={catalogue.data}
+				/>
 			) : catalogue.isError ? (
 				<p role="alert">
 					The catalog could not be loaded.{' '}

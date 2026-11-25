@@ -4,7 +4,7 @@ export interface SpaceObject {
 	id: number;
 	name: string;
 	piece: string;
-	kind: 'C' | 'D' | 'R' | 'P';
+	kind: 'C' | 'D' | 'R';
 	eva: boolean;
 	start: string;
 	end: string | null;
@@ -13,14 +13,12 @@ export interface SpaceObject {
 export interface Catalogue {
 	asOf: string;
 	objects: SpaceObject[];
-	originals: SpaceObject[];
 }
 
 export const kinds = {
 	C: 'Discarded equipment',
 	D: 'Breakup fragment',
 	R: 'Rocket stage',
-	P: 'Communications satellite',
 };
 
 export function inOrbit(object: SpaceObject, day: string) {
@@ -43,52 +41,43 @@ export function readChart(
 	birthday: Temporal.PlainDate
 ) {
 	const day = birthday.toString();
-	const inOrbitThen = objects.filter(object => inOrbit(object, day));
-	const yearStart = birthday.with({ month: 1, day: 1 });
-	const offsets = new Map<string, number>();
-	const featured = new Map<
-		SpaceObject['kind'],
-		{ object: SpaceObject; days: number }
+	const matches: { object: SpaceObject; days: number }[] = [];
+	const releases = Array<number>(birthday.daysInYear).fill(0);
+	const anniversaries = new Map<
+		string,
+		{ days: number; dayOfYear: number }
 	>();
-	for (const object of inOrbitThen) {
+	for (const object of objects) {
+		if (!inOrbit(object, day)) continue;
 		const monthDay = object.start.slice(5, 10);
-		let days = offsets.get(monthDay);
-		if (days === undefined) {
+		let anniversary = anniversaries.get(monthDay);
+		if (!anniversary) {
 			const month = Number(monthDay.slice(0, 2));
 			const dayOfMonth = Number(monthDay.slice(3));
-			// A leap-day release is marked on February 28 in common years.
-			const candidates = [-1, 0, 1].map(delta => {
-				const anniversary = yearStart.with({
-					year: birthday.year + delta,
-					month,
-					day: dayOfMonth,
-				});
-				return birthday.until(anniversary).days;
-			});
-			days = candidates.reduce((a, b) =>
-				Math.abs(a) <= Math.abs(b) ? a : b
+			// A leap-day release falls on February 28 in common years.
+			const dateIn = (year: number) =>
+				birthday.with({ year, month, day: dayOfMonth });
+			const offsets = [-1, 0, 1].map(
+				delta => birthday.until(dateIn(birthday.year + delta)).days
 			);
-			offsets.set(monthDay, days);
+			anniversary = {
+				days: offsets.reduce((a, b) =>
+					Math.abs(a) <= Math.abs(b) ? a : b
+				),
+				dayOfYear: dateIn(birthday.year).dayOfYear,
+			};
+			anniversaries.set(monthDay, anniversary);
 		}
-		const previous = featured.get(object.kind);
-		// Give things dropped on spacewalks first pick among equipment. Within
-		// each class choose the closest anniversary, then the latest release.
-		const better =
-			!previous ||
-			(object.eva !== previous.object.eva
-				? object.eva
-				: Math.abs(days) < Math.abs(previous.days) ||
-					(Math.abs(days) === Math.abs(previous.days) &&
-						object.start > previous.object.start));
-		if (better) featured.set(object.kind, { object, days });
+		const index = anniversary.dayOfYear - 1;
+		releases[index] = (releases[index] ?? 0) + 1;
+		matches.push({ object, days: anniversary.days });
 	}
-	return {
-		count: inOrbitThen.length,
-		featured: Array.from(featured.values()).sort(
-			(a, b) =>
-				Number(b.object.eva) - Number(a.object.eva) ||
-				Math.abs(a.days) - Math.abs(b.days) ||
-				a.object.id - b.object.id
-		),
-	};
+	matches.sort(
+		(a, b) =>
+			Number(b.object.eva) - Number(a.object.eva) ||
+			Math.abs(a.days) - Math.abs(b.days) ||
+			b.object.start.localeCompare(a.object.start) ||
+			a.object.id - b.object.id
+	);
+	return { matches, releases };
 }

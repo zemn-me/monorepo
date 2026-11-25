@@ -7,14 +7,6 @@ import re
 import sys
 
 
-# NORAD identifiers of the three objects in the November 2019 star-chart thread.
-ORIGINAL_NAMES = {
-    9724: "COSMOS 886 fragment",
-    14670: "STTW-T1",
-    34382: "Delta II rocket body",
-}
-
-
 def iso_date(value):
     # GCAT also has ranges, approximate days and month-only dates. Keep only
     # definite days; retain a clock time only if it too is definite.
@@ -32,15 +24,12 @@ def read_catalogue(stream):
     updated = next(stream).split()
     as_of = datetime.strptime(" ".join(updated[2:5]), "%Y %b %d").date().isoformat()
     objects = []
-    originals = []
     for row in csv.DictReader(stream, fieldnames=columns, delimiter="\t"):
         kind = row["Type"].strip()
         number = row["Satcat"].strip()
         if not number.isdecimal() or row["Primary"].strip() != "Earth":
             continue
-        catalog_id = int(number)
-        debris = kind[:1] in {"C", "D", "R"}
-        if not debris and catalog_id not in ORIGINAL_NAMES:
+        if kind[:1] not in {"C", "D", "R"}:
             continue
         start = iso_date(row["SDate"].strip())
         end = iso_date(row["DDate"].strip())
@@ -49,20 +38,16 @@ def read_catalogue(stream):
             continue
         if end and end[:10] < start[:10]:
             continue
-        obj = {
-            "id": catalog_id,
+        objects.append({
+            "id": int(number),
             "name": row["Name"].strip(),
             "piece": row["Piece"].strip(),
             "kind": kind[:1],
             "eva": kind.startswith("C  H E"),
             "start": start,
             "end": end,
-        }
-        if debris:
-            objects.append(obj)
-        if catalog_id in ORIGINAL_NAMES:
-            originals.append({**obj, "name": ORIGINAL_NAMES[catalog_id]})
-    return {"asOf": as_of, "objects": objects, "originals": originals}
+        })
+    return {"asOf": as_of, "objects": objects}
 
 
 if __name__ == "__main__":

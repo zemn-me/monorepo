@@ -158,13 +158,18 @@ export function Sky({
 	objects: SpaceObject[];
 }) {
 	const [observer, setObserver] = useState<Observer>();
+	const [open, setOpen] = useState(false);
 	return (
-		<details className={style.sky}>
+		<details
+			className={style.sky}
+			onToggle={e => setOpen(e.currentTarget.open)}
+		>
 			<summary>See the sky from your birthplace</summary>
 			<p>
-				Enter the UTC time on {birthday} and the coordinates of your
-				birthplace. If converting to UTC changes the date, enter the UTC
-				date above. Use negative numbers for south and west.
+				To locate the objects on this results page, enter the UTC time
+				on {birthday} and the coordinates of your birthplace. If
+				converting to UTC changes the date, enter the UTC date above.
+				Use negative numbers for south and west.
 			</p>
 			<form
 				className={style.form}
@@ -206,7 +211,7 @@ export function Sky({
 				</label>
 				<button type="submit">Draw local sky</button>
 			</form>
-			{observer && (
+			{open && observer && (
 				<SkyReading
 					birthday={birthday}
 					objects={objects}
