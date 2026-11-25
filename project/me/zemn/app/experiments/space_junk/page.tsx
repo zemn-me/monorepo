@@ -4,14 +4,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
-import {
-	memo,
-	useDeferredValue,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { memo, useDeferredValue, useMemo, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 
 import { useLocale } from '#root/ts/react/lang/useLocale.js';
@@ -21,10 +14,10 @@ import { BirthdayRulers } from './birthday_form.js';
 import { ChartSettings } from './birthplace.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import { Globe } from './globe.js';
-import { catalogueMarkers, groundLocation } from './globe_geometry.js';
-import { positionsAt, readElements } from './orbit.js';
+import { groundLocation } from './globe_geometry.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
+import { useDebrisPositions } from './use_debris_positions.js';
 import { type Birthplace, zodiacFrame } from './zodiac.js';
 import { ZodiacWheel } from './zodiac_wheel.js';
 
@@ -47,66 +40,12 @@ const BirthdayChart = memo(function BirthdayChart({
 	const iso = new Date(instant).toISOString();
 	const day = iso.slice(0, 10);
 	const time = iso.slice(11, 19);
-	const dayTime = iso.slice(0, -1);
-	const [archiveDay, setArchiveDay] = useState(day);
-	const lastRequest = useRef(0);
-	useEffect(() => {
-		if (archiveDay === day) return;
-		// Scrubbing can cross many dates per frame. Sample the latest date even
-		// while the pointer is held, and always pick up the final one.
-		const timer = window.setTimeout(
-			() => {
-				lastRequest.current = performance.now();
-				setArchiveDay(day);
-			},
-			Math.max(0, 200 - (performance.now() - lastRequest.current))
-		);
-		return () => window.clearTimeout(timer);
-	}, [archiveDay, day]);
-	const snapshot = useQuery({
-		queryKey: ['space-junk-elements', archiveDay],
-		enabled: archiveDay >= '1957-01-01',
-		staleTime: 86400000,
-		gcTime: 60000,
-		meta: { persist: false },
-		retry: false,
-		queryFn: async ({ signal }) => {
-			const response = await fetch(
-				`/experiments/space-junk/elements/${archiveDay}`,
-				{ signal }
-			);
-			if (!response.ok) throw new Error('Unable to load archived orbits');
-			return { day: archiveDay, text: await response.text() };
-		},
-	});
-	// Every mark and caption refers to the selected instant, including while a
-	// new day's elements are in flight.
-	const archive = snapshot.data?.day === day ? snapshot.data : undefined;
 	const { matches } = useMemo(
 		() => readChart(catalogue.objects, Temporal.PlainDate.from(day)),
 		[catalogue, day]
 	);
-	const elements = useMemo(
-		() =>
-			archive
-				? Array.from(
-						readElements(
-							archive.text,
-							new Set(matches.map(m => m.object.id))
-						)
-					)
-				: [],
-		[archive, matches]
-	);
-	const markers = useMemo(
-		() =>
-			catalogueMarkers(
-				matches,
-				positionsAt(elements, new Date(instant)),
-				dayTime
-			),
-		[matches, elements, instant, dayTime]
-	);
+	const coverage = useDebrisPositions(matches, instant, day, catalogue.asOf);
+	const { markers } = coverage;
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [place, setPlace] = useState<Birthplace>();
 	const [selection, setSelection] = useState<{
@@ -215,21 +154,22 @@ const BirthdayChart = memo(function BirthdayChart({
 					{time} UTC
 					{!count ? (
 						<p>No catalogued debris in orbit on this date.</p>
-					) : snapshot.isError && archiveDay === day ? (
+					) : !markers.length &&
+					  coverage.failed &&
+					  !coverage.pending ? (
 						<p role="alert">
 							Orbit archive unavailable.{' '}
-							<button
-								type="button"
-								onClick={() => void snapshot.refetch()}
-							>
+							<button type="button" onClick={coverage.retry}>
 								Retry
 							</button>
 						</p>
 					) : (
 						<p role="status" aria-label="Chart coverage">
-							{archive
+							{markers.length
 								? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
-								: 'Loading orbital positions…'}
+								: coverage.pending
+									? 'Loading orbital positions…'
+									: 'No archived positions available for this time.'}
 						</p>
 					)}
 					{view === 'earth' && location && selected && (
