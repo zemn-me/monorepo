@@ -428,12 +428,33 @@ describe('zemn.me website', () => {
 						`${origin}/experiments/space-junk`,
 					5000
 				);
-				await driver.findElement(By.name('month')).sendKeys('8');
-				await driver.findElement(By.name('day')).sendKeys('1');
-				await driver.findElement(By.name('year')).sendKeys('2006');
-				await driver.findElement(By.css('button[aria-label="Draw my chart"]')).click();
-				const reading = await driver.findElement(By.css('figcaption[aria-live="polite"]'));
-				expect(await reading.getText()).toContain('1 August 2006');
+				const time = await driver.findElement(By.name('time'));
+				const chartTime = () => driver.findElement(By.css('figcaption time')).getAttribute('datetime');
+				await time.sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => await chartTime() === '2006-08-01T12:01Z', 5000);
+				await time.sendKeys(Key.ARROW_LEFT);
+
+				const chrome = driver as unknown as ChromeDriver;
+				const { x, y } = await driver.executeScript<{ x: number; y: number }>(`
+					arguments[0].scrollIntoView({block: 'center'});
+					const r = arguments[0].getBoundingClientRect();
+					return {x: r.left + r.width / 2, y: r.top + r.height / 2};
+				`, time);
+				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: true });
+				const touch = (type: string, touchPoints: { x: number; y: number }[]) =>
+					chrome.sendDevToolsCommand('Input.dispatchTouchEvent', { type, touchPoints });
+				await touch('touchStart', [{ x, y }]);
+				await touch('touchMove', [{ x: x - 20, y }]);
+				const minutes = () => time.getAttribute('value').then(Number);
+				await driver.wait(async () => await minutes() > 720, 5000);
+				const firstMinute = await minutes();
+				await touch('touchMove', [{ x: x - 40, y }]);
+				await driver.wait(async () => await minutes() > firstMinute, 5000);
+				const scrubbed = await time.getAttribute('aria-valuetext');
+				await driver.wait(async () => await chartTime() === `2006-08-01T${scrubbed}Z`, 5000);
+				await touch('touchEnd', []);
+				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
+				expect(await time.getAttribute('aria-valuetext')).toBe(scrubbed);
 				expect(await driver.findElement(By.css('article input[type="search"]')).isDisplayed()).toBe(false);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
@@ -441,7 +462,7 @@ describe('zemn.me website', () => {
 				expect(await wheel.getAttribute('aria-label')).toContain('3D zodiac sky');
 				await driver.findElement(By.xpath('//button[.="Return to wheel"]')).click();
 				expect(await wheel.getAttribute('aria-label')).toContain('Face-on');
-				const earthView = await driver.findElement(By.xpath('//button[.="Earth orbits"]'));
+				const earthView = await driver.findElement(By.css('button[aria-label="Earth orbits"]'));
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthView);
 				await earthView.click();
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
@@ -473,25 +494,32 @@ describe('zemn.me website', () => {
 		});
 
 		it.each([
-			['en-US', 'month,day,year'],
-			['en-GB', 'day,month,year'],
-			['ja-JP', 'year,month,day'],
-		])('orders the birthday fields for %s', async (locale, expectedOrder) => {
+			['en-US', 'August'],
+			['en-GB', 'August'],
+			['ja-JP', '8月'],
+		])('scrubs the birthday rulers in %s', async (locale, monthName) => {
 			try {
 				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Network.setUserAgentOverride', {
 					userAgent: await driver.executeScript<string>('return navigator.userAgent'),
 					acceptLanguage: locale,
 				});
 				await driver.get(`${origin}/experiments/space-junk`);
-				await driver.wait(async () => {
-					const names = await driver.findElements(By.css('fieldset input[type="number"]'));
-					return (await Promise.all(names.map(field => field.getAttribute('name')))).join(',') === expectedOrder;
-				}, 5000);
-				await driver.findElement(By.name('year')).sendKeys('2006');
-				await driver.findElement(By.name('month')).sendKeys('8');
-				await driver.findElement(By.name('day')).sendKeys('1');
-				await driver.findElement(By.css('button[aria-label="Draw my chart"]')).click();
-				await driver.wait(async () => (await driver.findElements(By.css('figcaption time[datetime="2006-08-01"]'))).length > 0, 5000);
+				await driver.wait(async () => (await driver.findElements(By.css('fieldset input[type="range"]'))).length === 4, 5000);
+				const rulers = await driver.findElements(By.css('fieldset input[type="range"]'));
+				expect(await Promise.all(rulers.map(r => r.getAttribute('name')))).toEqual(['year', 'month', 'day', 'time']);
+				const month = await driver.findElement(By.name('month'));
+				await driver.wait(async () => (await month.getAttribute('aria-valuetext')) === monthName, 5000);
+				const year = await driver.findElement(By.name('year'));
+				const day = await driver.findElement(By.name('day'));
+				await year.sendKeys(Key.ARROW_RIGHT, Key.ARROW_RIGHT);
+				await month.sendKeys(Key.HOME);
+				await day.sendKeys(Key.END);
+				await month.sendKeys(Key.ARROW_RIGHT);
+				expect(await day.getAttribute('value')).toBe('29');
+				await year.sendKeys(Key.ARROW_RIGHT);
+				expect(await day.getAttribute('value')).toBe('28');
+				await driver.wait(async () =>
+					(await driver.findElement(By.css('figcaption time')).getAttribute('datetime')) === '2009-02-28T12:00Z', 20000);
 			} finally {
 				await driver.quit();
 			}

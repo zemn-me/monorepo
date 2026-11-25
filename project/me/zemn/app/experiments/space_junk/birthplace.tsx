@@ -4,16 +4,12 @@ import style from './style.module.css';
 import { type Birthplace, signPosition } from './zodiac.js';
 
 export function ChartSettings({
-	time,
 	place,
 	ascendant,
-	onTime,
 	onPlace,
 }: {
-	time: string;
 	place?: Birthplace;
 	ascendant?: number;
-	onTime: (time: string) => void;
 	onPlace: (place?: Birthplace) => void;
 }) {
 	const summary = useRef<HTMLElement>(null);
@@ -24,15 +20,12 @@ export function ChartSettings({
 	return (
 		<details className={style.disclosure}>
 			<summary ref={summary} id="chart-birthplace">
-				Time and birthplace
+				Birthplace
 			</summary>
 			<form
 				className={style.settings}
 				onSubmit={event => {
 					event.preventDefault();
-					onTime(
-						String(new FormData(event.currentTarget).get('time'))
-					);
 					onPlace(
 						latitude && longitude
 							? {
@@ -45,15 +38,6 @@ export function ChartSettings({
 					summary.current?.focus();
 				}}
 			>
-				<label>
-					Chart time (UTC)
-					<input
-						type="time"
-						name="time"
-						defaultValue={time}
-						required
-					/>
-				</label>
 				<label>
 					Latitude (°N)
 					<input

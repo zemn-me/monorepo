@@ -1,15 +1,28 @@
-import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import {
+	faDharmachakra,
+	faEarthAmericas,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+	memo,
+	useDeferredValue,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { Temporal } from 'temporal-polyfill';
 
+import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
-import { BirthdayForm } from './birthday_form.js';
+import { BirthdayRulers } from './birthday_form.js';
 import { ChartSettings } from './birthplace.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
 import { Globe } from './globe.js';
 import { catalogueMarkers, groundLocation } from './globe_geometry.js';
-import type { PositionRow } from './orbit.js';
+import { positionsAt, readElements } from './orbit.js';
 import { Sky } from './sky.js';
 import style from './style.module.css';
 import { type Birthplace, zodiacFrame } from './zodiac.js';
@@ -21,21 +34,81 @@ function displayDate(day: string) {
 	});
 }
 
-function BirthdayChart({
+const BirthdayChart = memo(function BirthdayChart({
 	catalogue,
-	birthday,
+	instant,
 }: {
 	catalogue: Catalogue;
-	birthday: Temporal.PlainDate;
+	instant: Temporal.PlainDateTime;
 }) {
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(0);
+	const languages = useLocale();
+	const targetDay = instant.toPlainDate().toString();
+	const time = instant.toPlainTime().toString({ smallestUnit: 'minute' });
+	const [archiveDay, setArchiveDay] = useState(targetDay);
+	const lastRequest = useRef(0);
+	useEffect(() => {
+		if (archiveDay === targetDay) return;
+		// Scrubbing can cross many dates per frame. Sample the latest date even
+		// while the pointer is held, and always pick up the final one.
+		const timer = window.setTimeout(
+			() => {
+				lastRequest.current = performance.now();
+				setArchiveDay(targetDay);
+			},
+			Math.max(0, 200 - (performance.now() - lastRequest.current))
+		);
+		return () => window.clearTimeout(timer);
+	}, [archiveDay, targetDay]);
+	const snapshot = useQuery({
+		queryKey: ['space-junk-elements', archiveDay],
+		enabled: archiveDay >= '1957-01-01',
+		staleTime: 86400000,
+		gcTime: 60000,
+		placeholderData: keepPreviousData,
+		meta: { persist: false },
+		retry: false,
+		queryFn: async ({ signal }) => {
+			const response = await fetch(
+				`/experiments/space-junk/elements/${archiveDay}`,
+				{ signal }
+			);
+			if (!response.ok) throw new Error('Unable to load archived orbits');
+			return { day: archiveDay, text: await response.text() };
+		},
+	});
+	// Keep the previous drawing and its actual date together while the next
+	// archive loads. A missing or failed archive must never inherit its points.
+	const archive = targetDay >= '1957-01-01' ? snapshot.data : undefined;
+	const day = archive?.day ?? targetDay;
+	const dayTime = day + 'T' + time;
+	const epoch = Date.parse(dayTime + 'Z');
 	const { matches } = useMemo(
-		() => readChart(catalogue.objects, birthday),
-		[catalogue, birthday]
+		() => readChart(catalogue.objects, Temporal.PlainDate.from(day)),
+		[catalogue, day]
 	);
-	const day = birthday.toString();
-	const [time, setTime] = useState('12:00');
+	const elements = useMemo(
+		() =>
+			archive
+				? Array.from(
+						readElements(
+							archive.text,
+							new Set(matches.map(m => m.object.id))
+						)
+					)
+				: [],
+		[archive, matches]
+	);
+	const markers = useMemo(
+		() =>
+			catalogueMarkers(
+				matches,
+				positionsAt(elements, new Date(epoch)),
+				dayTime
+			),
+		[matches, elements, epoch, dayTime]
+	);
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [place, setPlace] = useState<Birthplace>();
 	const [selection, setSelection] = useState<{
@@ -48,36 +121,14 @@ function BirthdayChart({
 			revision: (previous?.revision ?? 0) + 1,
 		}));
 	}
-	const instant = day + 'T' + time;
-	const minute = Date.parse(instant + ':00Z') / 60000;
-	const snapshot = useQuery({
-		queryKey: ['space-junk-positions', minute],
-		networkMode: 'always',
-		enabled: matches.length > 0 && day <= catalogue.asOf,
-		staleTime: 86400000,
-		meta: { persist: false },
-		retry: false,
-		queryFn: async ({ signal }): Promise<PositionRow[]> => {
-			const response = await fetch(
-				`/experiments/space-junk/positions/${minute}`,
-				{ signal }
-			);
-			if (!response.ok) throw new Error('Unable to load archived orbits');
-			return response.json();
-		},
-	});
-	const markers = useMemo(
-		() => catalogueMarkers(matches, snapshot.data ?? [], instant),
-		[matches, snapshot.data, instant]
-	);
 	const byId = useMemo(
 		() => new Map(markers.map(m => [m.object.id, m])),
 		[markers]
 	);
 	const selected = selection && byId.get(selection.id);
 	const zodiac = useMemo(
-		() => zodiacFrame(new Date(minute * 60000), place),
-		[minute, place]
+		() => zodiacFrame(new Date(epoch), place),
+		[epoch, place]
 	);
 	const placements = useMemo(
 		() =>
@@ -101,23 +152,14 @@ function BirthdayChart({
 		);
 	}, [matches, search]);
 	const pageSize = 12;
-	const offset = page * pageSize;
+	const pageIndex = Math.min(
+		page,
+		Math.max(0, Math.ceil(filtered.length / pageSize) - 1)
+	);
+	const offset = pageIndex * pageSize;
 	const rows = filtered.slice(offset, offset + pageSize);
 
 	const count = matches.length;
-	if (birthday.toString() > catalogue.asOf)
-		return (
-			<p role="status">
-				Choose a date on or before {displayDate(catalogue.asOf)}, the
-				date of this catalog edition.
-			</p>
-		);
-	if (!count)
-		return (
-			<p role="status">
-				No catalogued debris in orbit on {displayDate(day)}.
-			</p>
-		);
 	return (
 		<>
 			<div
@@ -127,17 +169,24 @@ function BirthdayChart({
 			>
 				<button
 					type="button"
+					aria-label="Zodiac wheel"
+					title="Zodiac wheel"
 					aria-pressed={view === 'wheel'}
 					onClick={() => setView('wheel')}
 				>
-					Zodiac wheel
+					<FontAwesomeIcon icon={faDharmachakra} aria-hidden="true" />
 				</button>
 				<button
 					type="button"
+					aria-label="Earth orbits"
+					title="Earth orbits"
 					aria-pressed={view === 'earth'}
 					onClick={() => setView('earth')}
 				>
-					Earth orbits
+					<FontAwesomeIcon
+						icon={faEarthAmericas}
+						aria-hidden="true"
+					/>
 				</button>
 			</div>
 			<figure className={style.figure}>
@@ -150,7 +199,7 @@ function BirthdayChart({
 					/>
 				) : (
 					<Globe
-						key={selected ? selection?.revision : 'earth'}
+						key={selection?.revision}
 						markers={markers}
 						selected={selected}
 						onSelect={m => locate(m.object.id)}
@@ -158,10 +207,17 @@ function BirthdayChart({
 				)}
 
 				<figcaption aria-live="polite" className={style.caption}>
-					<time dateTime={day}>{displayDate(day)}</time>
+					<time dateTime={dayTime + 'Z'}>
+						{Temporal.PlainDate.from(day).toLocaleString(
+							languages,
+							{ dateStyle: 'long' }
+						)}
+					</time>
 					{' · '}
 					{time} UTC
-					{snapshot.isError ? (
+					{!count && targetDay === day ? (
+						<p>No catalogued debris in orbit on this date.</p>
+					) : snapshot.isError && archiveDay === targetDay ? (
 						<p role="alert">
 							Orbit archive unavailable.{' '}
 							<button
@@ -173,7 +229,7 @@ function BirthdayChart({
 						</p>
 					) : (
 						<p role="status" aria-label="Chart coverage">
-							{snapshot.data
+							{archive?.day === targetDay
 								? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
 								: 'Loading orbital positions…'}
 						</p>
@@ -194,10 +250,8 @@ function BirthdayChart({
 				</figcaption>
 			</figure>
 			<ChartSettings
-				time={time}
 				place={place}
 				ascendant={zodiac.ascendant}
-				onTime={setTime}
 				onPlace={setPlace}
 			/>
 			<details className={style.disclosure}>
@@ -223,8 +277,8 @@ function BirthdayChart({
 						<>
 							<button
 								type="button"
-								disabled={!page}
-								onClick={() => setPage(page - 1)}
+								disabled={!pageIndex}
+								onClick={() => setPage(pageIndex - 1)}
 							>
 								Previous
 							</button>
@@ -233,7 +287,7 @@ function BirthdayChart({
 								disabled={
 									offset + rows.length >= filtered.length
 								}
-								onClick={() => setPage(page + 1)}
+								onClick={() => setPage(pageIndex + 1)}
 							>
 								Next
 							</button>
@@ -243,7 +297,7 @@ function BirthdayChart({
 				{rows.length > 0 && (
 					<Sky
 						observer={place && { ...place, time }}
-						birthday={birthday.toString()}
+						birthday={day}
 						objects={rows.map(row => row.object)}
 					/>
 				)}
@@ -284,14 +338,16 @@ function BirthdayChart({
 			</details>
 		</>
 	);
-}
+});
 
 export default function Page() {
-	const [birthday, setBirthday] = useState<Temporal.PlainDate>();
+	const [instant, setInstant] = useState(() =>
+		Temporal.PlainDateTime.from('2006-08-01T12:00')
+	);
+	const chartInstant = useDeferredValue(instant);
 
 	const catalogue = useQuery({
 		queryKey: ['space-junk-catalogue', catalogueUrl],
-		enabled: Boolean(birthday),
 		staleTime: Infinity,
 		meta: { persist: false },
 		retry: false,
@@ -304,21 +360,18 @@ export default function Page() {
 	return (
 		<article className={style.page}>
 			<h1>Space junk star chart</h1>
-			<BirthdayForm
-				asOf={catalogue.data?.asOf}
-				showExample={!birthday}
-				onDraw={setBirthday}
-			/>
-			{!birthday ? (
-				<figure className={style.figure}>
-					<ZodiacWheel />
-				</figure>
-			) : catalogue.data ? (
-				<BirthdayChart
-					key={birthday.toString()}
-					birthday={birthday}
-					catalogue={catalogue.data}
-				/>
+			{catalogue.data ? (
+				<>
+					<BirthdayRulers
+						value={instant}
+						asOf={Temporal.PlainDate.from(catalogue.data.asOf)}
+						onChange={setInstant}
+					/>
+					<BirthdayChart
+						instant={chartInstant}
+						catalogue={catalogue.data}
+					/>
+				</>
 			) : catalogue.isError ? (
 				<p role="alert">
 					The catalog could not be loaded.{' '}

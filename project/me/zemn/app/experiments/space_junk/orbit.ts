@@ -55,11 +55,8 @@ function catalogNumber(field: string) {
 		: NaN;
 }
 
-export function snapshotPositions(text: string, time: Date): PositionRow[] {
+export function* readElements(text: string, ids?: ReadonlySet<number>) {
 	const lines = text.split(/\r?\n/);
-	const julianDay = jday(time);
-	const siderealTime = gstime(time);
-	const positions = new Map<number, { age: number; row: PositionRow }>();
 	for (let i = 1; i < lines.length; i++) {
 		const a = lines[i - 1]!;
 		const b = lines[i]!;
@@ -73,7 +70,19 @@ export function snapshotPositions(text: string, time: Date): PositionRow[] {
 		const field = a.slice(2, 7);
 		const id = catalogNumber(field);
 		if (!Number.isFinite(id) || field !== b.slice(2, 7)) continue;
-		const sat = twoline2satrec(a, b);
+		if (ids && !ids.has(id)) continue;
+		yield { id, sat: twoline2satrec(a, b) };
+	}
+}
+
+export function positionsAt(
+	records: Iterable<{ id: number; sat: SatRec }>,
+	time: Date
+): PositionRow[] {
+	const julianDay = jday(time);
+	const siderealTime = gstime(time);
+	const positions = new Map<number, { age: number; row: PositionRow }>();
+	for (const { id, sat } of records) {
 		if (!usableEpoch(sat, julianDay)) continue;
 		const age = Math.abs(julianDay - sat.jdsatepoch);
 		if ((positions.get(id)?.age ?? Infinity) <= age) continue;
@@ -85,6 +94,10 @@ export function snapshotPositions(text: string, time: Date): PositionRow[] {
 			});
 	}
 	return Array.from(positions.values(), p => p.row);
+}
+
+export function snapshotPositions(text: string, time: Date) {
+	return positionsAt(readElements(text), time);
 }
 
 export function archivedOrbit(

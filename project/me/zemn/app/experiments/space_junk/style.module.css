@@ -51,8 +51,7 @@
 	text-decoration: underline;
 	text-underline-offset: 0.24em;
 }
-.page :is(button, input, summary, a, svg[tabindex]):focus-visible,
-.calendar:focus-within {
+.page :is(button, input, summary, a, svg[tabindex]):focus-visible {
 	outline: 2px solid var(--foreground-color);
 	outline-offset: 2px;
 }
@@ -63,8 +62,6 @@
 	cursor: pointer;
 	align-content: center;
 }
-.form,
-.dateFields,
 .chartModes,
 .viewControls,
 .paging,
@@ -73,99 +70,118 @@
 	align-items: center;
 	flex-wrap: wrap;
 }
-.form {
-	align-items: end;
-	gap: 0.25rem 0.5rem;
-}
-.form p[role='alert'] {
-	flex-basis: 100%;
-	margin: 0.5rem 0;
-}
-.birthday {
+.rulers {
+	margin: 1.3rem 0 0.6rem;
 	padding: 0;
-	margin: 0;
 	border: 0;
-	min-width: 0;
+	min-inline-size: 0;
 }
-.birthday legend,
-.settings label {
-	padding: 0;
-	color: var(--muted);
-	font: var(--controls);
-}
-.dateFields {
-	border-bottom: 1px solid var(--line);
-	flex-wrap: nowrap;
-}
-.dateFields label {
-	display: flex;
+.rulerRow {
+	display: grid;
+	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);
 	align-items: center;
+	min-height: 48px;
+	border-block-start: 1px solid var(--line);
 }
-.dateFields label + label:not(.calendar)::before {
-	content: '/';
+.rulerRow:last-child {
+	border-block-end: 1px solid var(--line);
+}
+.rulerValue {
+	display: grid;
+	gap: 0.05rem;
+	padding-inline-end: 0.35rem;
+}
+.rulerValue span {
+	font: var(--controls);
+	font-size: 0.72rem;
 	color: var(--muted);
 }
-.dateFields input[type='number'] {
-	width: 44px;
-	text-align: center;
-	border: none;
-	background: transparent;
-	padding: 0;
-	appearance: textfield;
+.rulerValue strong {
+	font-weight: 400;
+	font-size: 1.1rem;
+	line-height: 1.15;
 	font-variant-numeric: tabular-nums;
 }
-.dateFields input[name='year'] {
-	width: 3.5rem;
-}
-.dateFields input::placeholder,
-.search::placeholder {
-	color: var(--muted);
-	opacity: 1;
-}
-.dateFields input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
-.calendar {
+.rulerTrack {
 	position: relative;
-	display: grid;
-	justify-content: center;
-	width: 44px;
-	height: 44px;
+	min-width: 0;
+	height: 46px;
+	cursor: grab;
+	touch-action: pan-y;
+	user-select: none;
 }
-.calendar input,
-.calendar input::-webkit-calendar-picker-indicator {
+.rulerTrack:active {
+	cursor: grabbing;
+}
+.rulerTrack:has(input:focus-visible) {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+.rulerTrack input {
 	position: absolute;
 	inset: 0;
-	box-sizing: border-box;
 	width: 100%;
 	height: 100%;
 	margin: 0;
-	padding: 0;
 	opacity: 0;
-	cursor: pointer;
+	/* Pointer gestures slide the engraved strip. The native range handles keys and assistive input. */
+	pointer-events: none;
 }
-.form .draw {
-	display: grid;
-	place-items: center;
-	height: 44px;
-	width: 44px;
-	border-radius: 50%;
-	background: var(--foreground-color);
-	color: var(--background-color);
+.rulerTrack > svg {
+	display: block;
+	overflow: hidden;
+	mask-image: linear-gradient(
+		90deg,
+		transparent,
+		currentColor 5%,
+		currentColor 95%,
+		transparent
+	);
 }
-.form .example {
-	text-decoration: underline;
-	text-underline-offset: 0.2em;
+.rulerTrack path {
+	stroke: currentColor;
+	opacity: 0.6;
+}
+.rulerTrack text {
+	fill: currentColor;
+	text-anchor: middle;
+	font:
+		11px system-ui,
+		sans-serif;
+	font-variant-numeric: tabular-nums;
+}
+.rulerTrack i {
+	position: absolute;
+	inset: 20px auto 3px 50%;
+	width: 1.5px;
+	background: currentColor;
+	pointer-events: none;
+	transform: translateX(-50%);
+}
+.rulerTrack i::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	border-inline: 3px solid transparent;
+	border-bottom: 5px solid currentColor;
 }
 .chartModes {
-	margin-top: 1.25rem;
 	justify-content: center;
-	gap: 1.25rem;
+	gap: 0.35rem;
 }
 .chartModes button {
+	display: grid;
+	place-items: center;
+	width: 44px;
 	padding: 0;
+	font-size: 1.2rem;
+	border-bottom: 2px solid transparent;
 }
-.chartModes button[aria-pressed='true'],
+.chartModes button[aria-pressed='true'] {
+	border-bottom-color: currentColor;
+}
 .viewControls button[aria-pressed='true'] {
 	text-decoration: underline;
 	text-underline-offset: 0.4rem;
@@ -174,9 +190,6 @@
 .figure {
 	margin: 0.5rem auto 1.25rem;
 	text-align: center;
-}
-.form + .figure {
-	margin-block-start: 1.25rem;
 }
 .viewer {
 	min-width: 0;
@@ -280,9 +293,6 @@
 .settings input {
 	width: 7rem;
 }
-.settings input[type='time'] {
-	width: 9rem;
-}
 .settings button,
 .paging button {
 	text-decoration: underline;
@@ -327,8 +337,5 @@
 @media (width <= 38rem) {
 	.page {
 		padding-inline: 0.5rem;
-	}
-	.form {
-		column-gap: 0.35rem;
 	}
 }

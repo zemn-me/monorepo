@@ -174,8 +174,8 @@ export function Sky({
 			) : (
 				<p>
 					Enter your coordinates under{' '}
-					<a href="#chart-birthplace">Time and birthplace</a> to see
-					the objects above your horizon.
+					<a href="#chart-birthplace">Birthplace</a> to see the
+					objects above your horizon.
 				</p>
 			)}
 			{open && observer && (

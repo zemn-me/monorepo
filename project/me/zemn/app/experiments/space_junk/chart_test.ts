@@ -8,7 +8,13 @@ import {
 	surface,
 } from './globe_geometry.js';
 import { globeCamera, globeFrame, height, width } from './globe_scene.js';
-import { archivedOrbit, lookFrom, snapshotPositions } from './orbit.js';
+import {
+	archivedOrbit,
+	lookFrom,
+	positionsAt,
+	readElements,
+	snapshotPositions,
+} from './orbit.js';
 
 import { nearestAspects, signPosition, zodiacFrame } from './zodiac.js';
 
@@ -87,6 +93,18 @@ describe('historical sky', () => {
 		expect(look.elevation).toBeCloseTo(-43, 1);
 		expect(look.azimuth).toBeCloseTo(334.8, 1);
 		expect(look.rising).toBe(true);
+	});
+	it('scrubs back to the same position using one set of parsed elements', () => {
+		const tle = [record.tle_line1, record.tle_line2].join('\n');
+		const elements = [...readElements(tle, new Set([29257]))];
+		const noon = new Date('2006-08-02T12:00:00Z');
+		const later = new Date('2006-08-02T18:15:00Z');
+		const initial = positionsAt(elements, noon);
+		expect(initial).toHaveLength(1);
+		expect(positionsAt(elements, later)).toEqual(
+			snapshotPositions(tle, later)
+		);
+		expect(positionsAt(elements, noon)).toEqual(initial);
 	});
 	it('places a daily TLE in the same Earth-fixed frame as the Greenwich observation', () => {
 		const time = new Date('2006-08-02T12:00:00Z');
