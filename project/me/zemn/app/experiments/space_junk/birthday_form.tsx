@@ -12,6 +12,7 @@ import {
 	instantAtPosition,
 	minuteMs,
 	rulerPosition,
+	zonedTime,
 	type RulerUnit,
 } from './ruler_time.js';
 import style from './style.module.css';
@@ -20,7 +21,7 @@ const scales = {
 	year: { label: 'Year', pitch: 72, tick: 1 / 12, major: 1, page: 5 },
 	month: { label: 'Month', pitch: 64, tick: 0.25, major: 1, page: 3 },
 	day: { label: 'Day', pitch: 40, tick: 0.25, major: 1, page: 7 },
-	minute: { label: 'Time (UTC)', pitch: 1.1, tick: 5, major: 60, page: 60 },
+	minute: { label: 'Time', pitch: 1.1, tick: 5, major: 60, page: 60 },
 } as const;
 type ChangeInstant = Dispatch<SetStateAction<number>>;
 
@@ -31,6 +32,9 @@ function Ruler({
 	readout,
 	accessibleTime,
 	tickLabel,
+	zone,
+	tickOrigin = 0,
+	zoneName,
 	onChange,
 }: {
 	unit: RulerUnit;
@@ -39,24 +43,27 @@ function Ruler({
 	readout: string;
 	accessibleTime: string;
 	tickLabel: (tick: number) => string;
+	zone: string;
+	tickOrigin?: number;
+	zoneName?: string;
 	onChange: ChangeInstant;
 }) {
 	const { label, pitch, tick, major, page } = scales[unit];
-	const centre = rulerPosition(unit, epoch);
+	const centre = rulerPosition(unit, epoch, zone);
 	const limits = useMemo(
 		() => ({
-			min: rulerPosition(unit, firstInstant),
-			max: rulerPosition(unit, lastInstant),
+			min: rulerPosition(unit, firstInstant, zone),
+			max: rulerPosition(unit, lastInstant, zone),
 		}),
-		[unit, lastInstant]
+		[unit, lastInstant, zone]
 	);
 	const at = useMemo(
 		() => (position: number) => {
 			if (position <= limits.min) return firstInstant;
 			if (position >= limits.max) return lastInstant;
-			return instantAtPosition(unit, position);
+			return instantAtPosition(unit, position, zone);
 		},
-		[limits, unit, lastInstant]
+		[limits, unit, lastInstant, zone]
 	);
 	const input = useRef<HTMLInputElement>(null);
 	const track = useRef<HTMLDivElement>(null);
@@ -84,20 +91,27 @@ function Ruler({
 						? strip.clientWidth
 						: 1;
 			onChange(current =>
-				at(rulerPosition(unit, current) + (delta * pixels) / pitch)
+				at(
+					rulerPosition(unit, current, zone) +
+						(delta * pixels) / pitch
+				)
 			);
 		};
 		strip.addEventListener('wheel', scroll, { passive: false });
 		return () => strip.removeEventListener('wheel', scroll);
-	}, [at, unit, pitch, onChange]);
+	}, [at, unit, pitch, onChange, zone]);
 
 	const ticks = [];
 	const radius = 430 / pitch;
 	// An integer tick index avoids drift at twelfths of a year.
-	const first = Math.ceil(Math.max(limits.min, centre - radius) / tick);
-	const last = Math.floor(Math.min(limits.max, centre + radius) / tick);
+	const first = Math.ceil(
+		(Math.max(limits.min, centre - radius) - tickOrigin) / tick
+	);
+	const last = Math.floor(
+		(Math.min(limits.max, centre + radius) - tickOrigin) / tick
+	);
 	for (let i = first; i <= last; i++) {
-		const mark = i * tick;
+		const mark = i * tick + tickOrigin;
 		const labelled = i % Math.round(major / tick) === 0;
 		ticks.push(
 			<g
@@ -124,7 +138,7 @@ function Ruler({
 	return (
 		<div className={style.rulerRow}>
 			<div className={style.rulerValue} aria-hidden="true">
-				<span>{label}</span>
+				<span>{zoneName ? label + ' (' + zoneName + ')' : label}</span>
 				<strong>{readout}</strong>
 			</div>
 			<div
@@ -197,9 +211,21 @@ function Ruler({
 						const increment = increments[e.key];
 						if (increment === undefined) return;
 						e.preventDefault();
-						onChange(current =>
-							at(rulerPosition(unit, current) + increment)
-						);
+						onChange(current => {
+							if (unit === 'day')
+								return Math.max(
+									firstInstant,
+									Math.min(
+										lastInstant,
+										zonedTime(current, zone).add({
+											days: increment,
+										}).epochMilliseconds
+									)
+								);
+							return at(
+								rulerPosition(unit, current, zone) + increment
+							);
+						});
 					}}
 				/>
 				<svg aria-hidden="true" width="100%" height="44">
@@ -216,10 +242,12 @@ function Ruler({
 export function BirthdayRulers({
 	epoch,
 	asOf,
+	zone,
 	onChange,
 }: {
 	epoch: number;
 	asOf: string;
+	zone: string;
 	onChange: ChangeInstant;
 }) {
 	const languages = useLocale();
@@ -241,21 +269,44 @@ export function BirthdayRulers({
 			return { short: short.format(date), long: long.format(date) };
 		});
 	}, [languages]);
-	const date = new Date(epoch);
-	const clock = date.toISOString().slice(11, 19);
+	const date = zonedTime(epoch, zone);
+	const clock = date.toPlainTime().toString({ smallestUnit: 'second' });
+	const zoneFormat = useMemo(
+		() =>
+			new Intl.DateTimeFormat(languages, {
+				timeZone: zone,
+				timeZoneName: 'short',
+			}),
+		[languages, zone]
+	);
+	const zoneName =
+		zoneFormat
+			.formatToParts(epoch)
+			.find(part => part.type === 'timeZoneName')?.value ?? zone;
+	const tickTime = useMemo(
+		() =>
+			new Intl.DateTimeFormat(languages, {
+				timeZone: zone,
+				hourCycle: 'h23',
+				hour: '2-digit',
+				minute: '2-digit',
+			}),
+		[languages, zone]
+	);
 	const fullDate = useMemo(
 		() =>
 			new Intl.DateTimeFormat(languages, {
 				calendar: 'gregory',
 				dateStyle: 'long',
-				timeZone: 'UTC',
+				timeZone: zone,
 			}),
-		[languages]
+		[languages, zone]
 	);
 	const common = {
 		epoch,
 		lastInstant: Date.parse(asOf + 'T23:59:59.999Z'),
-		accessibleTime: fullDate.format(date) + ' · ' + clock + ' UTC',
+		accessibleTime: fullDate.format(epoch) + ' · ' + clock + ' ' + zoneName,
+		zone,
 		onChange,
 	};
 	return (
@@ -263,19 +314,19 @@ export function BirthdayRulers({
 			<Ruler
 				{...common}
 				unit="year"
-				readout={numbers.format(date.getUTCFullYear())}
+				readout={numbers.format(date.year)}
 				tickLabel={numbers.format}
 			/>
 			<Ruler
 				{...common}
 				unit="month"
-				readout={months[date.getUTCMonth()]!.long}
+				readout={months[date.month - 1]!.long}
 				tickLabel={mark => months[mark % 12]!.short}
 			/>
 			<Ruler
 				{...common}
 				unit="day"
-				readout={numbers.format(date.getUTCDate())}
+				readout={numbers.format(date.day)}
 				tickLabel={mark =>
 					numbers.format(new Date(mark * dayMs).getUTCDate())
 				}
@@ -284,9 +335,9 @@ export function BirthdayRulers({
 				{...common}
 				unit="minute"
 				readout={clock}
-				tickLabel={mark =>
-					new Date(mark * minuteMs).toISOString().slice(11, 16)
-				}
+				zoneName={zoneName}
+				tickOrigin={-(date.offsetNanoseconds / 60e9) % 60}
+				tickLabel={mark => tickTime.format(mark * minuteMs)}
 			/>
 		</fieldset>
 	);

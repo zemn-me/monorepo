@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import style from './style.module.css';
 import { type Birthplace, signPosition } from './zodiac.js';
@@ -17,6 +17,10 @@ export function ChartSettings({
 	const [longitude, setLongitude] = useState(
 		place?.longitude.toString() ?? ''
 	);
+	useEffect(() => {
+		setLatitude(place?.latitude.toString() ?? '');
+		setLongitude(place?.longitude.toString() ?? '');
+	}, [place]);
 	return (
 		<details className={style.disclosure}>
 			<summary ref={summary} id="chart-birthplace">
@@ -26,14 +30,18 @@ export function ChartSettings({
 				className={style.settings}
 				onSubmit={event => {
 					event.preventDefault();
-					onPlace(
+					const next =
 						latitude && longitude
 							? {
 									latitude: Number(latitude),
 									longitude: Number(longitude),
 								}
-							: undefined
-					);
+							: undefined;
+					if (
+						next?.latitude !== place?.latitude ||
+						next?.longitude !== place?.longitude
+					)
+						onPlace(next);
 					event.currentTarget.closest('details')!.open = false;
 					summary.current?.focus();
 				}}

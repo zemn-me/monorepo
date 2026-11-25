@@ -5,7 +5,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
-import { memo, useDeferredValue, useMemo, useState } from 'react';
+import {
+	memo,
+	useCallback,
+	useDeferredValue,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { Temporal } from 'temporal-polyfill';
 
 import { useLocale } from '#root/ts/react/lang/useLocale.js';
@@ -15,6 +22,9 @@ import { BirthdayRulers } from './birthday_form.js';
 import { ChartSettings } from './birthplace.js';
 import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
+import type { City } from './cities.js';
+import { CitySearch } from './city_search.js';
+import { firstInstant, zonedTime } from './ruler_time.js';
 import { Globe } from './globe.js';
 import { groundLocation } from './globe_geometry.js';
 import { bodyPositions, classical, modern, type ChartBody } from './planets.js';
@@ -57,6 +67,9 @@ function LayerSwitch({
 const BirthdayChart = memo(function BirthdayChart({
 	catalogue,
 	instant,
+	zone,
+	place,
+	onPlace,
 	junk,
 	setJunk,
 	catalogueFailed,
@@ -64,6 +77,9 @@ const BirthdayChart = memo(function BirthdayChart({
 }: {
 	catalogue?: Catalogue;
 	instant: number;
+	zone: string;
+	place?: Birthplace;
+	onPlace: (place?: Birthplace) => void;
 	junk: boolean;
 	setJunk: (value: boolean) => void;
 	catalogueFailed: boolean;
@@ -74,19 +90,31 @@ const BirthdayChart = memo(function BirthdayChart({
 	const languages = useLocale();
 	const iso = new Date(instant).toISOString();
 	const day = iso.slice(0, 10);
-	const time = iso.slice(11, 19);
+	const birthday = zonedTime(instant, zone).toPlainDate().toString();
+	const localFormat = useMemo(
+		() =>
+			new Intl.DateTimeFormat(languages, {
+				calendar: 'gregory',
+				dateStyle: 'long',
+				timeStyle: 'long',
+				timeZone: zone,
+			}),
+		[languages, zone]
+	);
 	const matches = useMemo(
 		() =>
 			junk && catalogue
-				? readChart(catalogue.objects, Temporal.PlainDate.from(day))
-						.matches
+				? readChart(
+						catalogue.objects,
+						Temporal.PlainDate.from(birthday),
+						day
+					).matches
 				: [],
-		[catalogue, day, junk]
+		[catalogue, birthday, day, junk]
 	);
 	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
 	const { markers, instant: debrisInstant } = coverage;
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
-	const [place, setPlace] = useState<Birthplace>();
 	const [traditional, setTraditional] = useState(true);
 	const [more, setMore] = useState(false);
 	const [extra, setExtra] = useState<ChartBody[]>([]);
@@ -260,14 +288,7 @@ const BirthdayChart = memo(function BirthdayChart({
 				)}
 
 				<figcaption aria-live="polite" className={style.caption}>
-					<time dateTime={iso}>
-						{Temporal.PlainDate.from(day).toLocaleString(
-							languages,
-							{ dateStyle: 'long', calendar: 'gregory' }
-						)}
-					</time>
-					{' · '}
-					{time} UTC
+					<time dateTime={iso}>{localFormat.format(instant)}</time>
 					{junk &&
 						(!catalogue ? (
 							catalogueFailed ? (
@@ -304,15 +325,7 @@ const BirthdayChart = memo(function BirthdayChart({
 												debrisInstant
 											).toISOString()}
 										>
-											{new Intl.DateTimeFormat(
-												languages,
-												{
-													dateStyle: 'medium',
-													timeStyle: 'medium',
-													timeZone: 'UTC',
-												}
-											).format(debrisInstant)}{' '}
-											UTC
+											{localFormat.format(debrisInstant)}
 										</time>
 									</>
 								) : markers.length ? (
@@ -342,7 +355,7 @@ const BirthdayChart = memo(function BirthdayChart({
 			<ChartSettings
 				place={place}
 				ascendant={ascendant}
-				onPlace={setPlace}
+				onPlace={onPlace}
 			/>
 			{junk && catalogue && (
 				<details className={style.disclosure}>
@@ -387,12 +400,15 @@ const BirthdayChart = memo(function BirthdayChart({
 					</div>
 					{rows.length > 0 && (
 						<Sky
-							observer={place && { ...place, instant }}
+							observer={place && { ...place, instant, zone }}
 							objects={rows.map(row => row.object)}
 						/>
 					)}
 
-					<ul className={style.catalogue}>
+					<ul
+						className={style.catalogue}
+						aria-label="Objects in orbit"
+					>
 						{rows.map(({ object, days }) => (
 							<li key={object.id}>
 								<h3>
@@ -437,7 +453,40 @@ export default function Page() {
 		Date.parse('2006-08-01T12:00:00Z')
 	);
 	const [junk, setJunk] = useState(true);
-	const chartInstant = useDeferredValue(instant);
+	const [deviceZone, setDeviceZone] = useState('UTC');
+	useEffect(
+		() => setDeviceZone(Intl.DateTimeFormat().resolvedOptions().timeZone),
+		[]
+	);
+	const [place, setPlace] = useState<City | Birthplace>();
+	const city = place && 'timezone' in place ? place : undefined;
+	const zone = city?.timezone ?? deviceZone;
+	const chart = useDeferredValue(
+		useMemo(() => ({ instant, zone, place }), [instant, zone, place])
+	);
+
+	const setBirthplace = useCallback(
+		(next?: Birthplace | City) => {
+			const nextZone =
+				next && 'timezone' in next ? next.timezone : deviceZone;
+			// A birthday is entered as a wall time, so changing the city keeps the
+			// date and clock reading and resolves them to an instant in the new zone.
+			if (nextZone !== zone)
+				setInstant(current =>
+					Math.max(
+						firstInstant,
+						Math.min(
+							Date.parse(catalogueDate + 'T23:59:59.999Z'),
+							zonedTime(current, zone)
+								.toPlainDateTime()
+								.toZonedDateTime(nextZone).epochMilliseconds
+						)
+					)
+				);
+			setPlace(next);
+		},
+		[deviceZone, zone]
+	);
 
 	const catalogue = useQuery({
 		queryKey: ['space-junk-catalogue', catalogueUrl],
@@ -454,13 +503,16 @@ export default function Page() {
 	return (
 		<article className={style.page}>
 			<h1>Star Chart</h1>
+			<CitySearch city={city} onSelect={setBirthplace} />
 			<BirthdayRulers
 				epoch={instant}
 				asOf={catalogueDate}
+				zone={zone}
 				onChange={setInstant}
 			/>
 			<BirthdayChart
-				instant={chartInstant}
+				{...chart}
+				onPlace={setBirthplace}
 				catalogue={catalogue.data}
 				junk={junk}
 				setJunk={setJunk}
@@ -469,6 +521,13 @@ export default function Page() {
 			/>
 			<details className={style.disclosure}>
 				<summary>Sources</summary>
+				<p>
+					Birthplace search uses{' '}
+					<a href="https://open-meteo.com/en/docs/geocoding-api">
+						Open-Meteo
+					</a>{' '}
+					and <a href="https://www.geonames.org/">GeoNames</a>.
+				</p>
 				<p>
 					The tropical zodiac divides the ecliptic into twelve equal
 					signs. Zodiac shows the Sun, Moon and five classical

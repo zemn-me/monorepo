@@ -58,6 +58,20 @@ describe('free flight on the birthday', () => {
 		);
 		expect(matches.map(row => row.object.id)).toEqual([1, 2, 3, 4, 5]);
 	});
+	it('compares the local birthday to anniversaries while filtering orbit coverage by UTC date', () => {
+		const { matches } = readChart(
+			[
+				{
+					...spatula,
+					start: '1999-08-01',
+					end: '2006-07-31T23:59',
+				},
+			],
+			Temporal.PlainDate.from('2006-08-01'),
+			'2006-07-31'
+		);
+		expect(matches.map(row => row.days)).toEqual([0]);
+	});
 	it('uses only confirmed minutes on boundary days', () => {
 		expect(inOrbitAt(spatula, '2006-07-12T08:00')).toBe(false);
 		expect(inOrbitAt(spatula, '2006-07-12T23:59:59.999')).toBe(false);
@@ -267,7 +281,7 @@ describe('birthday wheel', () => {
 	});
 });
 
-describe('linked UTC rulers', () => {
+describe('linked calendar rulers', () => {
 	it('aligns the middle of a year with July and divides February by its actual length', () => {
 		expect(instantAtPosition('year', 2008.5)).toBe(
 			Date.parse('2008-07-01T00:00Z')
@@ -295,6 +309,45 @@ describe('linked UTC rulers', () => {
 				).toBe(epoch);
 			}
 		}
+	});
+	it('round-trips local calendar gears across DST gaps, repeated hours and fractional offsets', () => {
+		for (const [zone, instants] of [
+			[
+				'America/New_York',
+				[
+					'2024-03-10T06:59:59.999Z',
+					'2024-03-10T07:00Z',
+					'2024-11-03T05:30Z',
+					'2024-11-03T06:30Z',
+				],
+			],
+			['Asia/Kathmandu', ['2006-07-31T18:15Z']],
+			['Australia/Lord_Howe', ['2024-10-05T15:30Z']],
+		] as const) {
+			for (const iso of instants) {
+				const epoch = Date.parse(iso);
+				for (const unit of ['year', 'month', 'day', 'minute'] as const)
+					expect(
+						instantAtPosition(
+							unit,
+							rulerPosition(unit, epoch, zone),
+							zone
+						)
+					).toBe(epoch);
+			}
+		}
+		expect(
+			instantAtPosition('month', 2006 * 12 + 7, 'Asia/Kathmandu')
+		).toBe(Date.parse('2006-07-31T18:15Z'));
+		const midnight = rulerPosition(
+			'day',
+			Date.parse('2024-03-10T05:00Z'),
+			'America/New_York'
+		);
+		expect(Number.isInteger(midnight)).toBe(true);
+		expect(instantAtPosition('day', midnight + 1, 'America/New_York')).toBe(
+			Date.parse('2024-03-11T04:00Z')
+		);
 	});
 	it('carries and borrows fractions across midnight and New Year', () => {
 		const midnight = Date.parse('2007-01-01T00:00Z');

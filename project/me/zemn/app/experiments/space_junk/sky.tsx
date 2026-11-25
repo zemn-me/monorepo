@@ -7,6 +7,7 @@ import style from './style.module.css';
 
 interface Observer {
 	instant: number;
+	zone: string;
 	latitude: number;
 	longitude: number;
 }
@@ -60,7 +61,13 @@ function SkyReading({
 	});
 	return (
 		<div aria-live="polite">
-			<h3>Sky at {instant.slice(11, 19)} UTC</h3>
+			<h3>
+				Sky at{' '}
+				{new Intl.DateTimeFormat(undefined, {
+					timeZone: observer.zone,
+					timeStyle: 'long',
+				}).format(observer.instant)}
+			</h3>
 			<svg
 				viewBox="-128 -128 256 256"
 				className={style.skyMap}

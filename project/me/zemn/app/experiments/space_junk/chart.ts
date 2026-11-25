@@ -38,14 +38,14 @@ export function inOrbitAt(object: SpaceObject, instant: string) {
 
 export function readChart(
 	objects: SpaceObject[],
-	birthday: Temporal.PlainDate
+	birthday: Temporal.PlainDate,
+	orbitDay = birthday.toString()
 ) {
-	const day = birthday.toString();
 	const matches: { object: SpaceObject; days: number }[] = [];
 
 	const anniversaries = new Map<string, number>();
 	for (const object of objects) {
-		if (!inOrbit(object, day)) continue;
+		if (!inOrbit(object, orbitDay)) continue;
 		const monthDay = object.start.slice(5, 10);
 		let anniversary = anniversaries.get(monthDay);
 		if (anniversary === undefined) {

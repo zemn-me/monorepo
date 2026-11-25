@@ -433,3 +433,47 @@
 	stroke-width: 2.5;
 	paint-order: stroke;
 }
+
+.citySearch {
+	display: grid;
+	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);
+	align-items: center;
+	border-block-start: 1px solid var(--line);
+	margin-block-start: 1.3rem;
+}
+.citySearch + .rulers {
+	margin-block-start: 0;
+}
+.citySearch label {
+	font: var(--controls);
+	color: var(--muted);
+	font-size: 0.72rem;
+}
+.citySearch input {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	width: 100%;
+	padding: 0 0.35rem;
+	font-family: inherit;
+	font-size: 1.1rem;
+}
+.citySearch :is(ul, small) {
+	grid-column: 2;
+	margin: 0;
+	padding: 0;
+	font: var(--controls);
+}
+.citySearch ul {
+	list-style: none;
+}
+.citySearch li {
+	align-content: center;
+	min-height: 44px;
+	padding-inline: 0.35rem;
+	cursor: pointer;
+}
+.citySearch li:is(:hover, [aria-selected="true"]) {
+	text-decoration: underline;
+	text-underline-offset: 0.22em;
+}

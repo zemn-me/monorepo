@@ -455,7 +455,7 @@ describe('zemn.me website', () => {
 				await touch('touchEnd', []);
 				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
 				expect(await timestamp()).toBe(scrubbed);
-				expect(await driver.findElement(By.css('article input[type="search"]')).isDisplayed()).toBe(false);
+				expect(await driver.findElement(By.css('article input[aria-label^="Search by name"]')).isDisplayed()).toBe(false);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
 				const captions = () => wheel.findElements(By.css('textPath'));
@@ -492,14 +492,14 @@ describe('zemn.me website', () => {
 				expect(await geometry()).toBe(original);
 
 				await driver.findElement(By.xpath('//summary[.="Object catalogue"]')).click();
-				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
+				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
 				);
 				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('1–12 of 6,989');
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
 				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('13–24 of 6,989');
-				await driver.findElement(By.css('article input[type="search"]')).sendKeys('1976-126V');
-				expect(await driver.findElement(By.css('article ul')).getText()).toContain('NORAD 9724');
+				await driver.findElement(By.css('article input[aria-label^="Search by name"]')).sendKeys('1976-126V');
+				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain('NORAD 9724');
 
 			} finally {
 				await driver.quit();
@@ -552,12 +552,31 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('uses local midnight for the day ruler before a birth city is chosen', async () => {
+			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setTimezoneOverride', { timezoneId: 'Asia/Kathmandu' });
+				await driver.get(`${origin}/experiments/space-junk`);
+				const city = await driver.findElement(By.css('input[role="combobox"]'));
+				expect(await city.getAccessibleName()).toBe('City of birth');
+				const clock = await driver.findElement(By.name('time'));
+				await driver.wait(async () => (await clock.getAttribute('aria-valuetext'))?.includes('17:45:00'), 5000);
+				const midnight = await driver.findElement(By.xpath('//fieldset//*[local-name()="text" and .="1"]'));
+				await midnight.click();
+				const chart = await driver.findElement(By.css('figcaption > time'));
+				await driver.wait(async () => (await chart.getAttribute('datetime')) === '2006-07-31T18:15:00.000Z', 5000);
+				expect(await clock.getAttribute('aria-valuetext')).toContain('00:00:00');
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it.each([
 			['en-US', 'August'],
 			['en-GB', 'August'],
 			['ja-JP', '8月'],
 		])('scrubs the birthday rulers in %s', async (locale, monthName) => {
 			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setTimezoneOverride', { timezoneId: 'UTC' });
 				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Network.setUserAgentOverride', {
 					userAgent: await driver.executeScript<string>('return navigator.userAgent'),
 					acceptLanguage: locale,

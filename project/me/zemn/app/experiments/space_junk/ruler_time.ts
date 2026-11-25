@@ -4,30 +4,56 @@ export type RulerUnit = 'year' | 'month' | 'day' | 'minute';
 export const minuteMs = 60_000;
 export const dayMs = 1440 * minuteMs;
 export const firstInstant = Date.parse('0001-01-01T00:00:00Z');
+const epochDate = Temporal.PlainDate.from('1970-01-01');
 
-// Calendar gears give each year twelve equal divisions. A month division
-// spans its actual number of UTC days, including February 29 in leap years.
-export function rulerPosition(unit: RulerUnit, epoch: number) {
-	if (unit === 'minute') return epoch / minuteMs;
-	if (unit === 'day') return epoch / dayMs;
-	const utc =
-		Temporal.Instant.fromEpochMilliseconds(epoch).toZonedDateTimeISO('UTC');
-	const dayFraction = (epoch - utc.startOfDay().epochMilliseconds) / dayMs;
-	const fraction = (utc.day - 1 + dayFraction) / utc.daysInMonth;
-	const months = utc.year * 12 + utc.month - 1 + fraction;
-	return unit === 'year' ? months / 12 : months;
+export function zonedTime(epoch: number, zone: string) {
+	return Temporal.Instant.fromEpochMilliseconds(epoch).toZonedDateTimeISO(
+		zone
+	);
 }
 
-export function instantAtPosition(unit: RulerUnit, position: number) {
+// Year and month gears divide the local calendar. A day fills one division
+// even when its clock skips or repeats an hour. The minute gear tracks elapsed time.
+export function rulerPosition(unit: RulerUnit, epoch: number, zone = 'UTC') {
+	if (unit === 'minute') return epoch / minuteMs;
+	const local = zonedTime(epoch, zone);
+	const fraction =
+		(epoch - local.startOfDay().epochMilliseconds) /
+		(local.hoursInDay * 3600000);
+	if (unit === 'day')
+		return epochDate.until(local.toPlainDate()).days + fraction;
+	const month =
+		local.year * 12 +
+		local.month -
+		1 +
+		(local.day - 1 + fraction) / local.daysInMonth;
+	return unit === 'year' ? month / 12 : month;
+}
+
+export function instantAtPosition(
+	unit: RulerUnit,
+	position: number,
+	zone = 'UTC'
+) {
 	if (unit === 'minute') return Math.round(position * minuteMs);
-	if (unit === 'day') return Math.round(position * dayMs);
-	const months = unit === 'year' ? position * 12 : position;
-	const whole = Math.floor(months);
-	const start = Temporal.PlainDate.from({
-		year: Math.floor(whole / 12),
-		month: (whole % 12) + 1,
-		day: 1,
-	});
-	const elapsed = Math.round((months - whole) * start.daysInMonth * dayMs);
-	return start.toZonedDateTime('UTC').epochMilliseconds + elapsed;
+	const divisions = unit === 'year' ? position * 12 : position;
+	const whole = Math.floor(divisions);
+	let fraction = divisions - whole;
+	let date: Temporal.PlainDate;
+	if (unit === 'day') date = epochDate.add({ days: whole });
+	else {
+		const month = Temporal.PlainDate.from({
+			year: Math.floor(whole / 12),
+			month: (((whole % 12) + 12) % 12) + 1,
+			day: 1,
+		});
+		const days = fraction * month.daysInMonth;
+		date = month.add({ days: Math.floor(days) });
+		fraction = days - Math.floor(days);
+	}
+	const start = date.toZonedDateTime(zone);
+	return (
+		start.epochMilliseconds +
+		Math.round(fraction * start.hoursInDay * 3600000)
+	);
 }
