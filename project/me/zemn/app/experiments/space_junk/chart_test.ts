@@ -2,12 +2,12 @@ import { describe, expect, it } from '@jest/globals';
 import { Temporal } from 'temporal-polyfill';
 import { inOrbitAt, readChart, type SpaceObject } from './chart.js';
 import {
-	camera,
 	catalogueMarkers,
 	groundLocation,
 	markerFrom,
 	surface,
 } from './globe_geometry.js';
+import { globeCamera, globeFrame, height, width } from './globe_scene.js';
 import { archivedOrbit, lookFrom, snapshotPositions } from './orbit.js';
 
 const spatula: SpaceObject = {
@@ -138,18 +138,22 @@ describe('orbital globe', () => {
 		);
 	});
 	it('keeps Greenwich in front, north up and east right, and hides debris behind Earth', () => {
-		const project = camera(0, 0);
-		expect(project(surface(0, 0))).toMatchObject({
-			x: 0,
-			y: 0,
-			depth: 1,
-			visible: true,
-		});
-		expect(project(surface(90, 0)).x).toBeCloseTo(1);
-		expect(project(surface(0, 90)).y).toBeCloseTo(-1);
+		const { project } = globeFrame(globeCamera(0, 0, 2), 20);
+		const prime = project(surface(0, 0));
+		expect(prime.x).toBeCloseTo(width / 2);
+		expect(prime.y).toBeCloseTo(height / 2);
+		expect(prime.visible).toBe(true);
+		expect(project(surface(40, 0)).x).toBeGreaterThan(prime.x);
+		expect(project(surface(0, 40)).y).toBeLessThan(prime.y);
 		expect(project({ x: -1.3, y: 0.4, z: 0 }).visible).toBe(false);
-		expect(project({ x: -1.3, y: 1.2, z: 0 }).visible).toBe(true);
-		expect(camera(180, 0)({ x: -1.3, y: 0.4, z: 0 }).visible).toBe(true);
+		expect(project({ x: -1.3, y: 1.8, z: 0 }).visible).toBe(true);
+		expect(
+			globeFrame(globeCamera(180, 0, 2), 20).project({
+				x: -1.3,
+				y: 0.4,
+				z: 0,
+			}).visible
+		).toBe(true);
 	});
 	it('preserves physical altitude and Earth-fixed longitude', () => {
 		const marker = markerFrom(spatula, [29257, 0, 7378.137, 0]);
@@ -157,6 +161,9 @@ describe('orbital globe', () => {
 		expect(location.longitude).toBeCloseTo(90);
 		expect(location.latitude).toBeCloseTo(0);
 		expect(location.height).toBeCloseTo(1000);
-		expect(camera(0, 0)(marker).x).toBeCloseTo(7378.137 / 6378.137);
+		const frame = globeFrame(globeCamera(0, 0, 2), 20);
+		expect(
+			(frame.project(marker).x - width / 2) * frame.kmPerPixel
+		).toBeCloseTo(7378.137);
 	});
 });

@@ -436,12 +436,16 @@ describe('zemn.me website', () => {
 				expect(await reading.getText()).toContain('1 August 2006');
 				expect(await reading.getText()).toContain('There was a spatula in orbit');
 				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
-				const grid = await driver.findElement(By.css('path[aria-label="Latitude and longitude grid"]'));
-				const originalGrid = await grid.getAttribute('d');
+				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting debris"]'));
+				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
+					(await Promise.all(paths.slice(0, 6).map(path => path.getAttribute('d')))).join('')
+				);
+				const original = await geometry();
+				expect(original.length).toBeGreaterThan(0);
 				await tilt.sendKeys(Key.ARROW_RIGHT);
-				expect(await grid.getAttribute('d')).not.toBe(originalGrid);
+				expect(await geometry()).not.toBe(original);
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				expect(await grid.getAttribute('d')).toBe(originalGrid);
+				expect(await geometry()).toBe(original);
 
 				expect(await driver.findElement(By.css('article ul')).getText()).toContain(
 					'12 July 2006 through 29 September 2006'

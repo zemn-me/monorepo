@@ -68,19 +68,3 @@ export function surface(longitude: number, latitude: number): Vector {
 		z: Math.sin(angle),
 	};
 }
-
-export function camera(turn: number, tilt: number) {
-	const lon = turn * radians;
-	const lat = tilt * radians;
-	const sinLon = Math.sin(lon);
-	const cosLon = Math.cos(lon);
-	const sinLat = Math.sin(lat);
-	const cosLat = Math.cos(lat);
-	return (p: Vector) => {
-		const near = cosLon * p.x + sinLon * p.y;
-		const x = -sinLon * p.x + cosLon * p.y;
-		const y = sinLat * near - cosLat * p.z;
-		const depth = cosLat * near + sinLat * p.z;
-		return { x, y, depth, visible: depth >= 0 || x * x + y * y > 1 };
-	};
-}

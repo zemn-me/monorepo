@@ -5,6 +5,7 @@ import { type OrbitCamera } from '#root/ts/3d/low_poly.js';
 import { createSVGRenderer, renderSVGSnapshot } from '#root/ts/3d/svg_scene.js';
 import { point } from '#root/ts/math/cartesian.js';
 import {
+	perspective,
 	type StyledFace3D,
 	styledFace,
 } from '#root/ts/math/wireframe_render.js';
@@ -83,6 +84,26 @@ test('moving geometry keeps the static SVG paths intact and preserves front/back
 	renderer.dispose();
 	expect(svg.children).toHaveLength(0);
 	svg.remove();
+});
+
+test('a fixed SVG viewport uses its own lens and clipping on each draw', () => {
+	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	const renderer = createSVGRenderer(svg);
+	renderer.setWorld([quad('blue', 0)]);
+	const lens = perspective(400, 300, { focalScale: 1 });
+	renderer.render(camera, [], lens);
+	const path = svg.querySelector('path')!;
+	expect(svg.getAttribute('viewBox')).toBe('0 0 400 300');
+	const original = path.getAttribute('d');
+	expect(original).toBeTruthy();
+	renderer.render(camera, [], { ...lens, focalScale: 0.5 });
+	expect(path.getAttribute('d')).not.toBe(original);
+	renderer.render(camera, [], { ...lens, farPlane: 5 });
+	expect(path.getAttribute('display')).toBe('none');
+	renderer.render(camera, [], lens);
+	expect(path.hasAttribute('display')).toBe(false);
+	expect(path.getAttribute('d')).toBe(original);
+	renderer.dispose();
 });
 
 test('adopts the serialized frame without replacing its groups or paths', () => {

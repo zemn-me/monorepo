@@ -1,23 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { useId, useMemo, useRef, useState } from 'react';
-
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createSVGRenderer, svgSnapshotPaths } from '#root/ts/3d/svg_scene.js';
+import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { coastlineUrl } from './assets.js';
 import {
-	camera,
 	groundLocation,
 	type Marker,
 	surface,
 	type Vector,
 } from './globe_geometry.js';
+import {
+	globeCamera,
+	globeFrame,
+	globeWorld,
+	height,
+	width,
+} from './globe_scene.js';
 import style from './style.module.css';
 
-const grid: Vector[][] = [];
-for (let lat = -60; lat <= 60; lat += 30)
-	grid.push(Array.from({ length: 181 }, (_, j) => surface(j * 2, lat)));
-for (let lon = 0; lon < 360; lon += 30)
-	grid.push(Array.from({ length: 91 }, (_, j) => surface(lon, j * 2 - 90)));
-
-const colors = { D: '#8dc7bf', R: '#f2ca84', C: '#f5e6d1' };
 const empty: Marker[] = [];
 const initialView = { turn: 12, tilt: 24 };
 const clamp = (n: number, min: number, max: number) =>
@@ -25,28 +25,33 @@ const clamp = (n: number, min: number, max: number) =>
 const wrap = (n: number) => ((((n + 180) % 360) + 360) % 360) - 180;
 const size = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
-function visibleLines(
-	lines: Vector[][],
-	project: ReturnType<typeof camera>,
-	radius: number
-) {
-	let path = '';
-	for (const line of lines) {
-		let drawing = false;
-		for (const p of line) {
-			const point = project(p);
-			if (point.depth >= 0) {
-				path +=
-					(drawing ? 'L' : 'M') +
-					(point.x * radius).toFixed(1) +
-					',' +
-					(point.y * radius).toFixed(1);
-			}
-			drawing = point.depth >= 0;
-		}
-	}
-	return path;
-}
+const closeExtent = 1.5;
+const baseWorld = globeWorld();
+const initialFrame = globeFrame(
+	globeCamera(initialView.turn, initialView.tilt, closeExtent),
+	2
+);
+const initialScene = (
+	<g
+		className="park-scene"
+		aria-hidden="true"
+		strokeWidth=".4"
+		strokeLinejoin="round"
+	>
+		{svgSnapshotPaths(
+			baseWorld,
+			[],
+			initialFrame.camera,
+			initialFrame.projection
+		).map((batch, i) => (
+			<g key={i}>
+				{batch.map(([path, fill], j) => (
+					<path key={j} d={path} fill={fill} stroke={fill} />
+				))}
+			</g>
+		))}
+	</g>
+);
 
 export function Globe({
 	markers = empty,
@@ -80,15 +85,22 @@ export function Globe({
 		() => markers.reduce((m, p) => Math.max(m, size(p) * 1.05), 2),
 		[markers]
 	);
-	const closeExtent = 1.5;
 	const initialExtent = selected
-		? Math.max(closeExtent, size(selected) * 0.65)
+		? Math.max(closeExtent, size(selected) * 1.05)
 		: closeExtent;
 	const [view, setView] = useState(startingView);
 	const [extent, setExtent] = useState(initialExtent);
-	const radius = 184 / extent;
-	const project = useMemo(() => camera(view.turn, view.tilt), [view]);
-	const gradient = useId();
+	const frame = useMemo(
+		() => globeFrame(globeCamera(view.turn, view.tilt, extent), maxExtent),
+		[view, extent, maxExtent]
+	);
+	const svg = useRef<SVGSVGElement>(null);
+	const scene = useRef<SVGGElement>(null);
+	const renderer = useRef<ReturnType<typeof createSVGRenderer> | null>(null);
+	const world = useMemo(
+		() => (coastline.data ? globeWorld(coastline.data) : baseWorld),
+		[coastline.data]
+	);
 	const drag = useRef<{
 		id: number;
 		x: number;
@@ -98,52 +110,58 @@ export function Globe({
 		moved: boolean;
 	} | null>(null);
 	const projected = useMemo(() => {
-		const paths = { D: '', R: '', C: '' };
+		const faces: StyledFace3D[] = [];
 		const hits: { x: number; y: number; marker: Marker }[] = [];
 		for (const marker of markers) {
-			const p = project(marker);
-			if (!p.visible) continue;
-			const x = p.x * radius;
-			const y = p.y * radius;
-			if (Math.abs(x) > 207 || Math.abs(y) > 187) continue;
-			const kind = marker.object.kind;
-			// One SVG path per class keeps rotation responsive with large catalogues.
-			const start = 'M' + x.toFixed(1) + ',' + y.toFixed(1);
-			paths[kind] +=
-				start +
-				(kind === 'D' ? 'h.01' : kind === 'R' ? 'l.7,-.8' : 'l.9,.9');
-			hits.push({ x, y, marker });
+			const p = frame.project(marker);
+			if (!p.visible || p.x < 0 || p.x > width || p.y < 0 || p.y > height)
+				continue;
+			faces.push(frame.symbol(p.center, p.depth, marker.object.kind));
+			hits.push({ x: p.x, y: p.y, marker });
 		}
-		return { paths, hits };
-	}, [markers, project, radius]);
-	const gridPath = useMemo(
-		() => visibleLines(grid, project, radius),
-		[project, radius]
-	);
-	const coastPath = useMemo(
-		() => visibleLines(coastline.data ?? [], project, radius),
-		[coastline.data, project, radius]
-	);
-	const focus = selected && project(selected);
+		return { faces, hits };
+	}, [markers, frame]);
+
+	useLayoutEffect(() => {
+		const live = createSVGRenderer(svg.current!, scene.current!);
+		renderer.current = live;
+		return () => {
+			live.dispose(true);
+			renderer.current = null;
+		};
+	}, []);
+	useLayoutEffect(() => {
+		renderer.current!.setWorld(world);
+	}, [world]);
+	useLayoutEffect(() => {
+		renderer.current!.render(
+			frame.camera,
+			projected.faces,
+			frame.projection
+		);
+	}, [world, frame, projected]);
+	const focus = selected && frame.project(selected);
 	const ground =
-		location && project(surface(location.longitude, location.latitude));
-	const focusX = (focus?.x ?? 0) * radius;
-	const focusY = (focus?.y ?? 0) * radius;
-	const labelSide = focusX > 65 ? -1 : 1;
-	const labelOffset = focusY < -145 ? 22 : -22;
+		location &&
+		frame.project(surface(location.longitude, location.latitude));
+	const focusX = focus?.x ?? 0;
+	const focusY = focus?.y ?? 0;
+	const labelSide = focusX > width / 2 + 65 ? -1 : 1;
+	const labelOffset = focusY < 43 ? 22 : -22;
 	const label =
 		selected &&
 		(selected.object.name.length <= 20
 			? selected.object.name
 			: `NORAD ${selected.object.id}`);
-	const scaleKm = 10 ** Math.floor(Math.log10((45 * 6378.137) / radius));
+	const scaleKm = 10 ** Math.floor(Math.log10(45 * frame.kmPerPixel));
 	return (
 		<div className={style.viewer}>
 			<svg
+				ref={svg}
 				id="orbital-globe"
 				tabIndex={-1}
 				className={style.globe}
-				viewBox="-208 -188 416 376"
+				viewBox={`0 0 ${width} ${height}`}
 				role="img"
 				aria-label="Earth and debris at their estimated orbital positions. Drag to rotate or use the view controls."
 				onPointerDown={e => {
@@ -201,54 +219,17 @@ export function Globe({
 					drag.current = null;
 				}}
 			>
-				<defs>
-					<radialGradient id={gradient} cx="36%" cy="30%" r="76%">
-						<stop offset="0" stopColor="#456b70" />
-						<stop offset=".76" stopColor="#294858" />
-						<stop offset="1" stopColor="#192f42" />
-					</radialGradient>
-				</defs>
-				<circle
-					r={radius}
-					fill={`url(#${gradient})`}
-					stroke="#73959b"
-					strokeWidth=".9"
-				/>
-				<path
-					aria-label="Latitude and longitude grid"
-					d={gridPath}
-					fill="none"
-					stroke="#8bafb0"
-					strokeWidth=".55"
-					opacity=".50"
-				/>
-				<path
-					aria-label="Coastlines"
-					d={coastPath}
-					fill="none"
-					stroke="#c1d5bb"
-					strokeWidth="1"
-					strokeLinejoin="round"
-				/>
-				{(['D', 'R', 'C'] as const).map(kind => (
-					<path
-						key={kind}
-						d={projected.paths[kind]}
-						fill="none"
-						stroke={colors[kind]}
-						strokeOpacity={kind === 'D' ? 0.63 : 0.88}
-						strokeWidth={kind === 'D' ? 1.5 : 1.7}
-						strokeLinecap="round"
-					/>
-				))}
+				<g ref={scene} aria-label="Earth and orbiting debris">
+					{initialScene}
+				</g>
 				{focus?.visible && (
 					<>
-						{ground && ground.depth >= 0 && (
+						{ground?.visible && (
 							<line
-								x1={ground.x * radius}
-								y1={ground.y * radius}
-								x2={focus.x * radius}
-								y2={focus.y * radius}
+								x1={ground.x}
+								y1={ground.y}
+								x2={focus.x}
+								y2={focus.y}
 								stroke="#fff1bb"
 							/>
 						)}
@@ -283,9 +264,9 @@ export function Globe({
 						</g>
 					</>
 				)}
-				<g transform="translate(-193 174)" fill="#d5d8cd" fontSize="9">
+				<g transform="translate(15 362)" fill="#d5d8cd" fontSize="9">
 					<path
-						d={`M0,-4v4h${(radius * scaleKm) / 6378.137}v-4`}
+						d={`M0,-4v4h${scaleKm / frame.kmPerPixel}v-4`}
 						stroke="currentColor"
 						fill="none"
 					/>
