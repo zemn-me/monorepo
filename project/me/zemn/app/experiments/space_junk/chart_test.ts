@@ -16,6 +16,12 @@ import {
 	snapshotPositions,
 } from './orbit.js';
 
+import {
+	dayMs,
+	firstInstant,
+	instantAtPosition,
+	rulerPosition,
+} from './ruler_time.js';
 import { nearestAspects, signPosition, zodiacFrame } from './zodiac.js';
 
 const spatula: SpaceObject = {
@@ -53,6 +59,7 @@ describe('free flight on the birthday', () => {
 	});
 	it('uses only confirmed minutes on boundary days', () => {
 		expect(inOrbitAt(spatula, '2006-07-12T08:00')).toBe(false);
+		expect(inOrbitAt(spatula, '2006-07-12T23:59:59.999')).toBe(false);
 		expect(inOrbitAt(spatula, '2006-08-01T08:00')).toBe(true);
 		expect(inOrbitAt(spatula, '2006-09-29T23:00')).toBe(false);
 		expect(
@@ -240,5 +247,48 @@ describe('birthday wheel', () => {
 			['Sextile', 4],
 		]);
 		expect(aspects[0]?.separation).toBeCloseTo(0.3);
+	});
+});
+
+describe('linked UTC rulers', () => {
+	it('aligns the middle of a year with July and divides February by its actual length', () => {
+		expect(instantAtPosition('year', 2008.5)).toBe(
+			Date.parse('2008-07-01T00:00Z')
+		);
+		for (const [year, midpoint] of [
+			[2008, '2008-02-15T12:00Z'],
+			[2009, '2009-02-15T00:00Z'],
+		] as const) {
+			const epoch = Date.parse(midpoint);
+			expect(instantAtPosition('month', year * 12 + 1.5)).toBe(epoch);
+			expect(rulerPosition('month', epoch)).toBe(year * 12 + 1.5);
+		}
+	});
+	it('round-trips one timestamp across all four scales to the millisecond', () => {
+		for (const unit of ['year', 'month', 'day', 'minute'] as const) {
+			for (const epoch of [
+				firstInstant,
+				-1,
+				0,
+				Date.parse('2008-02-29T23:59:59.999Z'),
+				Date.parse('2026-11-23T23:59:59.999Z'),
+			]) {
+				expect(
+					instantAtPosition(unit, rulerPosition(unit, epoch))
+				).toBe(epoch);
+			}
+		}
+	});
+	it('carries and borrows fractions across midnight and New Year', () => {
+		const midnight = Date.parse('2007-01-01T00:00Z');
+		expect(
+			instantAtPosition('day', rulerPosition('day', midnight) - 0.25)
+		).toBe(midnight - dayMs / 4);
+		expect(
+			instantAtPosition(
+				'minute',
+				rulerPosition('minute', midnight - 1000) + 0.1
+			)
+		).toBe(midnight + 5000);
 	});
 });

@@ -6,26 +6,25 @@ import { lookFrom, type Orbit } from './orbit.js';
 import style from './style.module.css';
 
 interface Observer {
-	time: string;
+	instant: number;
 	latitude: number;
 	longitude: number;
 }
 
 function SkyReading({
-	birthday,
 	objects,
 	observer,
 }: {
-	birthday: string;
 	objects: SpaceObject[];
 	observer: Observer;
 }) {
-	const instant = birthday + 'T' + observer.time;
-	const minute = Date.parse(instant + 'Z') / 60000;
+	const instant = new Date(observer.instant).toISOString().slice(0, -1);
+	const minute = Math.floor(observer.instant / 60_000);
+	const offset = observer.instant - minute * 60_000;
 	const eligible = objects.filter(object => inOrbitAt(object, instant));
 	const queries = useQueries({
 		queries: eligible.map(object => ({
-			queryKey: ['space-junk-orbit', object.id, minute],
+			queryKey: ['space-junk-orbit-at', object.id, observer.instant],
 			meta: { persist: false },
 			retry: false,
 			staleTime: Infinity,
@@ -35,7 +34,7 @@ function SkyReading({
 				signal: AbortSignal;
 			}): Promise<Orbit | null> => {
 				const response = await fetch(
-					`/experiments/space-junk/orbit/${object.id}/${minute}`,
+					`/experiments/space-junk/orbit/${object.id}/${minute}?offsetMs=${offset}`,
 					{ signal }
 				);
 				if (!response.ok) throw new Error('Archive unavailable');
@@ -61,7 +60,7 @@ function SkyReading({
 	});
 	return (
 		<div aria-live="polite">
-			<h3>Sky at {observer.time} UTC</h3>
+			<h3>Sky at {instant.slice(11, 19)} UTC</h3>
 			<svg
 				viewBox="-128 -128 256 256"
 				className={style.skyMap}
@@ -126,7 +125,7 @@ function SkyReading({
 									</small>
 								</>
 							) : i < 0 ? (
-								'Free flight is unconfirmed at this minute.'
+								'Free flight is unconfirmed at this time.'
 							) : q?.isError ? (
 								<>
 									Archive unavailable.{' '}
@@ -151,11 +150,9 @@ function SkyReading({
 }
 
 export function Sky({
-	birthday,
 	observer,
 	objects,
 }: {
-	birthday: string;
 	observer?: Observer;
 	objects: SpaceObject[];
 }) {
@@ -179,11 +176,7 @@ export function Sky({
 				</p>
 			)}
 			{open && observer && (
-				<SkyReading
-					birthday={birthday}
-					objects={objects}
-					observer={observer}
-				/>
+				<SkyReading objects={objects} observer={observer} />
 			)}
 			<small>
 				Positions estimated with SGP4 using historical elements from{' '}

@@ -431,7 +431,7 @@ describe('zemn.me website', () => {
 				const time = await driver.findElement(By.name('time'));
 				const chartTime = () => driver.findElement(By.css('figcaption time')).getAttribute('datetime');
 				await time.sendKeys(Key.ARROW_RIGHT);
-				await driver.wait(async () => await chartTime() === '2006-08-01T12:01Z', 5000);
+				await driver.wait(async () => await chartTime() === '2006-08-01T12:01:00.000Z', 5000);
 				await time.sendKeys(Key.ARROW_LEFT);
 
 				const chrome = driver as unknown as ChromeDriver;
@@ -445,16 +445,16 @@ describe('zemn.me website', () => {
 					chrome.sendDevToolsCommand('Input.dispatchTouchEvent', { type, touchPoints });
 				await touch('touchStart', [{ x, y }]);
 				await touch('touchMove', [{ x: x - 20, y }]);
-				const minutes = () => time.getAttribute('value').then(Number);
-				await driver.wait(async () => await minutes() > 720, 5000);
-				const firstMinute = await minutes();
+				const timestamp = () => time.getAttribute('value').then(Number);
+				await driver.wait(async () => await timestamp() > Date.parse('2006-08-01T12:00Z'), 5000);
+				const firstMove = await timestamp();
 				await touch('touchMove', [{ x: x - 40, y }]);
-				await driver.wait(async () => await minutes() > firstMinute, 5000);
-				const scrubbed = await time.getAttribute('aria-valuetext');
-				await driver.wait(async () => await chartTime() === `2006-08-01T${scrubbed}Z`, 5000);
+				await driver.wait(async () => await timestamp() > firstMove, 5000);
+				const scrubbed = await timestamp();
+				await driver.wait(async () => await chartTime() === new Date(scrubbed).toISOString(), 5000);
 				await touch('touchEnd', []);
 				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
-				expect(await time.getAttribute('aria-valuetext')).toBe(scrubbed);
+				expect(await timestamp()).toBe(scrubbed);
 				expect(await driver.findElement(By.css('article input[type="search"]')).isDisplayed()).toBe(false);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
@@ -508,18 +508,36 @@ describe('zemn.me website', () => {
 				const rulers = await driver.findElements(By.css('fieldset input[type="range"]'));
 				expect(await Promise.all(rulers.map(r => r.getAttribute('name')))).toEqual(['year', 'month', 'day', 'time']);
 				const month = await driver.findElement(By.name('month'));
-				await driver.wait(async () => (await month.getAttribute('aria-valuetext')) === monthName, 5000);
-				const year = await driver.findElement(By.name('year'));
+				await driver.wait(async () => (await month.getAttribute('aria-valuetext'))?.includes(monthName), 5000);
 				const day = await driver.findElement(By.name('day'));
-				await year.sendKeys(Key.ARROW_RIGHT, Key.ARROW_RIGHT);
-				await month.sendKeys(Key.HOME);
-				await day.sendKeys(Key.END);
-				await month.sendKeys(Key.ARROW_RIGHT);
-				expect(await day.getAttribute('value')).toBe('29');
-				await year.sendKeys(Key.ARROW_RIGHT);
-				expect(await day.getAttribute('value')).toBe('28');
+				const clock = await driver.findElement(By.name('time'));
+				const readings = () => Promise.all(rulers.map(r => r.getAttribute('value').then(Number)));
+				await day.sendKeys(Key.ARROW_LEFT);
+				const july = Date.parse('2006-07-31T12:00Z');
+				expect(await readings()).toEqual([july, july, july, july]);
+				await day.sendKeys(Key.ARROW_RIGHT);
+				const midnight = await driver.findElement(By.xpath('//*[local-name()="fieldset"]//*[local-name()="text" and .="1"]'));
+				await midnight.click();
+				await clock.sendKeys(Key.ARROW_LEFT);
+				const end = Date.parse('2006-07-31T23:59Z');
+				expect(await readings()).toEqual([end, end, end, end]);
 				await driver.wait(async () =>
-					(await driver.findElement(By.css('figcaption time')).getAttribute('datetime')) === '2009-02-28T12:00Z', 20000);
+					(await driver.findElement(By.css('figcaption time')).getAttribute('datetime')) === new Date(end).toISOString(), 5000);
+
+				const yearMark = (n: number) => driver.findElement(By.xpath(
+					`//fieldset//*[local-name()="text" and .="${n}"]`
+				));
+				await yearMark(2006).click();
+				const year = await driver.findElement(By.name('year'));
+				const start = await yearMark(2006).getRect();
+				const next = await yearMark(2007).getRect();
+				const halfYear = Math.round((next.x - start.x) / 2);
+				await driver.actions().move({ origin: year }).press()
+					.move({ origin: year, x: -halfYear, y: 0 }).perform();
+				const midyear = Date.parse('2006-07-01T00:00Z');
+				await driver.wait(async () => (await readings()).every(t => t === midyear), 5000);
+				await driver.actions().release().perform();
+				expect(await readings()).toEqual([midyear, midyear, midyear, midyear]);
 			} finally {
 				await driver.quit();
 			}

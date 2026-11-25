@@ -1,124 +1,204 @@
-import { useMemo, useRef, useState } from 'react';
-import { Temporal } from 'temporal-polyfill';
-
+import {
+	type Dispatch,
+	type SetStateAction,
+	useEffect,
+	useMemo,
+	useRef,
+} from 'react';
 import { useLocale } from '#root/ts/react/lang/useLocale.js';
+import {
+	dayMs,
+	firstInstant,
+	instantAtPosition,
+	minuteMs,
+	rulerPosition,
+	type RulerUnit,
+} from './ruler_time.js';
 import style from './style.module.css';
 
-interface Scale {
-	label: string;
-	min: number;
-	max: number;
-	value: number;
-	pixelsPerUnit: number;
-	tick: number;
-	major: number;
-	format: (value: number) => string;
-	tickLabel?: (value: number) => string;
-	onChange: (value: number) => void;
-}
+const scales = {
+	year: { label: 'Year', pitch: 72, tick: 1 / 12, major: 1, page: 5 },
+	month: { label: 'Month', pitch: 64, tick: 0.25, major: 1, page: 3 },
+	day: { label: 'Day', pitch: 40, tick: 0.25, major: 1, page: 7 },
+	minute: { label: 'Time (UTC)', pitch: 1.1, tick: 5, major: 60, page: 60 },
+} as const;
+type ChangeInstant = Dispatch<SetStateAction<number>>;
 
 function Ruler({
-	label,
-	min,
-	max,
-	value,
-	pixelsPerUnit,
-	tick,
-	major,
-	format,
-	tickLabel = format,
+	unit,
+	epoch,
+	lastInstant,
+	readout,
+	accessibleTime,
+	tickLabel,
 	onChange,
-}: Scale) {
+}: {
+	unit: RulerUnit;
+	epoch: number;
+	lastInstant: number;
+	readout: string;
+	accessibleTime: string;
+	tickLabel: (tick: number) => string;
+	onChange: ChangeInstant;
+}) {
+	const { label, pitch, tick, major, page } = scales[unit];
+	const centre = rulerPosition(unit, epoch);
+	const limits = useMemo(
+		() => ({
+			min: rulerPosition(unit, firstInstant),
+			max: rulerPosition(unit, lastInstant),
+		}),
+		[unit, lastInstant]
+	);
+	const at = useMemo(
+		() => (position: number) => {
+			if (position <= limits.min) return firstInstant;
+			if (position >= limits.max) return lastInstant;
+			return instantAtPosition(unit, position);
+		},
+		[limits, unit, lastInstant]
+	);
 	const input = useRef<HTMLInputElement>(null);
+	const track = useRef<HTMLDivElement>(null);
 	const drag = useRef<{
 		id: number;
 		x: number;
-		value: number;
+		origin: number;
 		moved: boolean;
+		mark?: number;
 	} | null>(null);
-	const [position, setPosition] = useState<number>();
-	const centre = position ?? value;
-	const clamp = (n: number) => Math.max(min, Math.min(max, n));
-	// The page is at most 46rem wide. Only engrave the strip around the cursor.
-	const radius = 430 / pixelsPerUnit;
+	useEffect(() => {
+		const strip = track.current!;
+		const scroll = (event: WheelEvent) => {
+			if (event.ctrlKey || !event.cancelable) return;
+			const delta =
+				Math.abs(event.deltaX) > Math.abs(event.deltaY)
+					? event.deltaX
+					: event.deltaY;
+			if (!delta) return;
+			event.preventDefault();
+			const pixels =
+				event.deltaMode === WheelEvent.DOM_DELTA_LINE
+					? 16
+					: event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+						? strip.clientWidth
+						: 1;
+			onChange(current =>
+				at(rulerPosition(unit, current) + (delta * pixels) / pitch)
+			);
+		};
+		strip.addEventListener('wheel', scroll, { passive: false });
+		return () => strip.removeEventListener('wheel', scroll);
+	}, [at, unit, pitch, onChange]);
+
 	const ticks = [];
-	const firstTick = Math.ceil(Math.max(min, centre - radius) / tick) * tick;
-	const lastTick = Math.min(max, centre + radius);
-	for (let n = firstTick; n <= lastTick; n += tick) {
-		const majorTick = n % major === 0 || n === min;
-		const x = (n - centre) * pixelsPerUnit;
+	const radius = 430 / pitch;
+	// An integer tick index avoids drift at twelfths of a year.
+	const first = Math.ceil(Math.max(limits.min, centre - radius) / tick);
+	const last = Math.floor(Math.min(limits.max, centre + radius) / tick);
+	for (let i = first; i <= last; i++) {
+		const mark = i * tick;
+		const labelled = i % Math.round(major / tick) === 0;
 		ticks.push(
-			<g key={n} transform={`translate(${x} 0)`}>
-				<path d={majorTick ? 'M0 23v11' : 'M0 28v6'} />
-				{majorTick && <text y="17">{tickLabel(n)}</text>}
+			<g
+				key={i}
+				transform={`translate(${(mark - centre) * pitch} 0)`}
+				data-position={mark}
+			>
+				<path d={labelled ? 'M0 23v11' : 'M0 28v6'} />
+				{labelled && (
+					<>
+						<rect
+							x="-16"
+							width="32"
+							height="20"
+							fill="transparent"
+						/>
+						<text y="17">{tickLabel(mark)}</text>
+					</>
+				)}
 			</g>
 		);
 	}
 
 	return (
 		<div className={style.rulerRow}>
-			<div aria-hidden="true" className={style.rulerValue}>
+			<div className={style.rulerValue} aria-hidden="true">
 				<span>{label}</span>
-				<strong>{format(value)}</strong>
+				<strong>{readout}</strong>
 			</div>
 			<div
+				ref={track}
 				className={style.rulerTrack}
 				onPointerDown={e => {
 					if (!e.isPrimary || e.button !== 0) return;
 					e.preventDefault();
 					input.current?.focus({ preventScroll: true });
-					e.currentTarget.setPointerCapture(e.pointerId);
+					const tick = (e.target as Element)
+						.closest('g[data-position]')
+						?.getAttribute('data-position');
 					drag.current = {
 						id: e.pointerId,
 						x: e.clientX,
-						value,
+						origin: centre,
 						moved: false,
+						mark: tick == null ? undefined : Number(tick),
 					};
+					e.currentTarget.setPointerCapture(e.pointerId);
 				}}
 				onPointerMove={e => {
 					const start = drag.current;
 					if (!start || start.id !== e.pointerId) return;
 					const dx = e.clientX - start.x;
-					if (!start.moved && Math.abs(dx) < 3) return;
+					const threshold = e.pointerType === 'touch' ? 3 : 0.5;
+					if (!start.moved && Math.abs(dx) < threshold) return;
 					start.moved = true;
-					const next = clamp(start.value - dx / pixelsPerUnit);
-					setPosition(next);
-					onChange(Math.round(next));
+					onChange(at(start.origin - dx / pitch));
 				}}
 				onPointerUp={e => {
 					const start = drag.current;
 					if (!start || start.id !== e.pointerId) return;
-					if (!start.moved) {
+					if (start.moved) {
+						onChange(
+							at(start.origin - (e.clientX - start.x) / pitch)
+						);
+					} else {
 						const box = e.currentTarget.getBoundingClientRect();
 						const offset = e.clientX - box.left - box.width / 2;
 						onChange(
-							clamp(
-								Math.round(start.value + offset / pixelsPerUnit)
-							)
+							at(start.mark ?? start.origin + offset / pitch)
 						);
 					}
 				}}
 				onLostPointerCapture={() => {
 					drag.current = null;
-					setPosition(undefined);
 				}}
 			>
 				<input
-					ref={input}
 					type="range"
-					name={label.split(' ')[0]!.toLowerCase()}
+					ref={input}
+					name={unit === 'minute' ? 'time' : unit}
 					aria-label={label}
-					aria-valuetext={format(value)}
-					min={min}
-					max={max}
-					step={1}
-					value={value}
+					aria-valuetext={accessibleTime}
+					min={firstInstant}
+					max={lastInstant}
+					step="1"
+					value={epoch}
 					onChange={e => onChange(e.currentTarget.valueAsNumber)}
 					onKeyDown={e => {
-						if (e.key !== 'PageUp' && e.key !== 'PageDown') return;
+						const increments: Record<string, number> = {
+							ArrowRight: 1,
+							ArrowUp: 1,
+							ArrowLeft: -1,
+							ArrowDown: -1,
+							PageUp: page,
+							PageDown: -page,
+						};
+						const increment = increments[e.key];
+						if (increment === undefined) return;
 						e.preventDefault();
-						onChange(
-							clamp(value + (e.key === 'PageUp' ? major : -major))
+						onChange(current =>
+							at(rulerPosition(unit, current) + increment)
 						);
 					}}
 				/>
@@ -134,99 +214,78 @@ function Ruler({
 }
 
 export function BirthdayRulers({
-	value,
+	epoch,
 	asOf,
 	onChange,
 }: {
-	value: Temporal.PlainDateTime;
-	asOf: Temporal.PlainDate;
-	onChange: (value: Temporal.PlainDateTime) => void;
+	epoch: number;
+	asOf: string;
+	onChange: ChangeInstant;
 }) {
 	const languages = useLocale();
 	const numbers = useMemo(
 		() => new Intl.NumberFormat(languages, { useGrouping: false }),
 		[languages]
 	);
-	const months = useMemo(
+	const months = useMemo(() => {
+		const formatter = (month: 'short' | 'long') =>
+			new Intl.DateTimeFormat(languages, {
+				calendar: 'gregory',
+				month,
+				timeZone: 'UTC',
+			});
+		const short = formatter('short'),
+			long = formatter('long');
+		return Array.from({ length: 12 }, (_, index) => {
+			const date = Date.UTC(2000, index, 1);
+			return { short: short.format(date), long: long.format(date) };
+		});
+	}, [languages]);
+	const date = new Date(epoch);
+	const clock = date.toISOString().slice(11, 19);
+	const fullDate = useMemo(
 		() =>
-			Array.from({ length: 12 }, (_, i) => {
-				const date = Temporal.PlainDate.from({
-					year: 2000,
-					month: i + 1,
-					day: 1,
-				});
-				return {
-					short: date.toLocaleString(languages, { month: 'short' }),
-					long: date.toLocaleString(languages, { month: 'long' }),
-				};
+			new Intl.DateTimeFormat(languages, {
+				calendar: 'gregory',
+				dateStyle: 'long',
+				timeZone: 'UTC',
 			}),
 		[languages]
 	);
-	function change(fields: Parameters<typeof value.with>[0]) {
-		let next = value.with(fields, { overflow: 'constrain' });
-		if (Temporal.PlainDate.compare(next, asOf) > 0)
-			next = asOf.toPlainDateTime(next.toPlainTime());
-		if (!next.equals(value)) onChange(next);
-	}
+	const common = {
+		epoch,
+		lastInstant: Date.parse(asOf + 'T23:59:59.999Z'),
+		accessibleTime: fullDate.format(date) + ' · ' + clock + ' UTC',
+		onChange,
+	};
 	return (
 		<fieldset className={style.rulers} aria-label="Chart date and time">
 			<Ruler
-				label="Year"
-				min={1}
-				max={asOf.year}
-				value={value.year}
-				pixelsPerUnit={13}
-				tick={1}
-				major={5}
-				format={numbers.format}
-				onChange={year => change({ year })}
+				{...common}
+				unit="year"
+				readout={numbers.format(date.getUTCFullYear())}
+				tickLabel={numbers.format}
 			/>
 			<Ruler
-				label="Month"
-				min={1}
-				max={value.year === asOf.year ? asOf.month : 12}
-				value={value.month}
-				pixelsPerUnit={56}
-				tick={1}
-				major={1}
-				format={m => months[m - 1]!.long}
-				tickLabel={m => months[m - 1]!.short}
-				onChange={month => change({ month })}
+				{...common}
+				unit="month"
+				readout={months[date.getUTCMonth()]!.long}
+				tickLabel={mark => months[mark % 12]!.short}
 			/>
 			<Ruler
-				label="Day"
-				min={1}
-				max={
-					value.year === asOf.year && value.month === asOf.month
-						? asOf.day
-						: value.daysInMonth
+				{...common}
+				unit="day"
+				readout={numbers.format(date.getUTCDate())}
+				tickLabel={mark =>
+					numbers.format(new Date(mark * dayMs).getUTCDate())
 				}
-				value={value.day}
-				pixelsPerUnit={15}
-				tick={1}
-				major={5}
-				format={numbers.format}
-				onChange={day => change({ day })}
 			/>
 			<Ruler
-				label="Time (UTC)"
-				min={0}
-				max={1439}
-				value={value.hour * 60 + value.minute}
-				pixelsPerUnit={1.1}
-				tick={5}
-				major={60}
-				format={minutes =>
-					Temporal.PlainTime.from({
-						hour: Math.floor(minutes / 60),
-						minute: minutes % 60,
-					}).toString({ smallestUnit: 'minute' })
-				}
-				onChange={minutes =>
-					change({
-						hour: Math.floor(minutes / 60),
-						minute: minutes % 60,
-					})
+				{...common}
+				unit="minute"
+				readout={clock}
+				tickLabel={mark =>
+					new Date(mark * minuteMs).toISOString().slice(11, 16)
 				}
 			/>
 		</fieldset>

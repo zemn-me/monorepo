@@ -3,7 +3,7 @@ import {
 	faEarthAmericas,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
 	memo,
 	useDeferredValue,
@@ -39,34 +39,35 @@ const BirthdayChart = memo(function BirthdayChart({
 	instant,
 }: {
 	catalogue: Catalogue;
-	instant: Temporal.PlainDateTime;
+	instant: number;
 }) {
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(0);
 	const languages = useLocale();
-	const targetDay = instant.toPlainDate().toString();
-	const time = instant.toPlainTime().toString({ smallestUnit: 'minute' });
-	const [archiveDay, setArchiveDay] = useState(targetDay);
+	const iso = new Date(instant).toISOString();
+	const day = iso.slice(0, 10);
+	const time = iso.slice(11, 19);
+	const dayTime = iso.slice(0, -1);
+	const [archiveDay, setArchiveDay] = useState(day);
 	const lastRequest = useRef(0);
 	useEffect(() => {
-		if (archiveDay === targetDay) return;
+		if (archiveDay === day) return;
 		// Scrubbing can cross many dates per frame. Sample the latest date even
 		// while the pointer is held, and always pick up the final one.
 		const timer = window.setTimeout(
 			() => {
 				lastRequest.current = performance.now();
-				setArchiveDay(targetDay);
+				setArchiveDay(day);
 			},
 			Math.max(0, 200 - (performance.now() - lastRequest.current))
 		);
 		return () => window.clearTimeout(timer);
-	}, [archiveDay, targetDay]);
+	}, [archiveDay, day]);
 	const snapshot = useQuery({
 		queryKey: ['space-junk-elements', archiveDay],
 		enabled: archiveDay >= '1957-01-01',
 		staleTime: 86400000,
 		gcTime: 60000,
-		placeholderData: keepPreviousData,
 		meta: { persist: false },
 		retry: false,
 		queryFn: async ({ signal }) => {
@@ -78,12 +79,9 @@ const BirthdayChart = memo(function BirthdayChart({
 			return { day: archiveDay, text: await response.text() };
 		},
 	});
-	// Keep the previous drawing and its actual date together while the next
-	// archive loads. A missing or failed archive must never inherit its points.
-	const archive = targetDay >= '1957-01-01' ? snapshot.data : undefined;
-	const day = archive?.day ?? targetDay;
-	const dayTime = day + 'T' + time;
-	const epoch = Date.parse(dayTime + 'Z');
+	// Every mark and caption refers to the selected instant, including while a
+	// new day's elements are in flight.
+	const archive = snapshot.data?.day === day ? snapshot.data : undefined;
 	const { matches } = useMemo(
 		() => readChart(catalogue.objects, Temporal.PlainDate.from(day)),
 		[catalogue, day]
@@ -104,10 +102,10 @@ const BirthdayChart = memo(function BirthdayChart({
 		() =>
 			catalogueMarkers(
 				matches,
-				positionsAt(elements, new Date(epoch)),
+				positionsAt(elements, new Date(instant)),
 				dayTime
 			),
-		[matches, elements, epoch, dayTime]
+		[matches, elements, instant, dayTime]
 	);
 	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [place, setPlace] = useState<Birthplace>();
@@ -127,8 +125,8 @@ const BirthdayChart = memo(function BirthdayChart({
 	);
 	const selected = selection && byId.get(selection.id);
 	const zodiac = useMemo(
-		() => zodiacFrame(new Date(epoch), place),
-		[epoch, place]
+		() => zodiacFrame(new Date(instant), place),
+		[instant, place]
 	);
 	const placements = useMemo(
 		() =>
@@ -207,17 +205,17 @@ const BirthdayChart = memo(function BirthdayChart({
 				)}
 
 				<figcaption aria-live="polite" className={style.caption}>
-					<time dateTime={dayTime + 'Z'}>
+					<time dateTime={iso}>
 						{Temporal.PlainDate.from(day).toLocaleString(
 							languages,
-							{ dateStyle: 'long' }
+							{ dateStyle: 'long', calendar: 'gregory' }
 						)}
 					</time>
 					{' · '}
 					{time} UTC
-					{!count && targetDay === day ? (
+					{!count ? (
 						<p>No catalogued debris in orbit on this date.</p>
-					) : snapshot.isError && archiveDay === targetDay ? (
+					) : snapshot.isError && archiveDay === day ? (
 						<p role="alert">
 							Orbit archive unavailable.{' '}
 							<button
@@ -229,7 +227,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						</p>
 					) : (
 						<p role="status" aria-label="Chart coverage">
-							{archive?.day === targetDay
+							{archive
 								? `${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
 								: 'Loading orbital positions…'}
 						</p>
@@ -296,8 +294,7 @@ const BirthdayChart = memo(function BirthdayChart({
 				</div>
 				{rows.length > 0 && (
 					<Sky
-						observer={place && { ...place, time }}
-						birthday={day}
+						observer={place && { ...place, instant }}
 						objects={rows.map(row => row.object)}
 					/>
 				)}
@@ -342,7 +339,7 @@ const BirthdayChart = memo(function BirthdayChart({
 
 export default function Page() {
 	const [instant, setInstant] = useState(() =>
-		Temporal.PlainDateTime.from('2006-08-01T12:00')
+		Date.parse('2006-08-01T12:00:00Z')
 	);
 	const chartInstant = useDeferredValue(instant);
 
@@ -363,8 +360,8 @@ export default function Page() {
 			{catalogue.data ? (
 				<>
 					<BirthdayRulers
-						value={instant}
-						asOf={Temporal.PlainDate.from(catalogue.data.asOf)}
+						epoch={instant}
+						asOf={catalogue.data.asOf}
 						onChange={setInstant}
 					/>
 					<BirthdayChart

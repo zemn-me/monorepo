@@ -28,12 +28,12 @@ export function inOrbit(object: SpaceObject, day: string) {
 	);
 }
 
-// On a boundary day a date-only entry cannot establish presence at an exact minute.
-export function inOrbitAt(object: SpaceObject, minute: string) {
-	const start = object.start.includes('T')
-		? object.start
-		: object.start + 'T23:59:59';
-	return start <= minute && (!object.end || minute < object.end);
+// A date-only release is certain only once that entire UTC day has passed.
+export function inOrbitAt(object: SpaceObject, instant: string) {
+	const released = object.start.includes('T')
+		? object.start <= instant
+		: object.start < instant.slice(0, 10);
+	return released && (!object.end || instant < object.end);
 }
 
 export function readChart(

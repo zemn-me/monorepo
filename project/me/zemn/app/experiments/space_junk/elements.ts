@@ -5,10 +5,13 @@ import { archivedOrbit } from './orbit.js';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const id = Number(params.id);
-	const date = new Date(Number(params.minute) * 60000);
+	const offset = new URL(request.url).searchParams.get('offsetMs') ?? '0';
+	const date = new Date(Number(params.minute) * 60000 + Number(offset));
 	if (
 		!/^\d{1,5}$/.test(params.id ?? '') ||
 		!id ||
+		!/^\d{1,5}$/.test(offset) ||
+		Number(offset) >= 60000 ||
 		!/^-?\d{1,9}$/.test(params.minute ?? '') ||
 		date.getUTCFullYear() < 1957 ||
 		date.getTime() > Date.now()
