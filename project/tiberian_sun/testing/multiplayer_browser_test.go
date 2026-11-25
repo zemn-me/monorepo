@@ -269,6 +269,9 @@ func newMultiplayerBrowser(t *testing.T, base, name string, backgroundThrottling
 		t.Fatal(err)
 	}
 
+	// The route's loading page can match a white menu highlight before the
+	// engine receives input. Start probing the selector once the game is running.
+	p.wait("game initialization", func() bool { return strings.Contains(p.logs(), "Game Init Completed.") })
 	p.wait("game selector", func() bool { p.mouse(120, 110, "mouseMoved", 0); return p.white(120, 110) })
 	p.click(240, 300)
 	p.wait("Internet button highlight", func() bool { p.mouse(400, 350, "mouseMoved", 0); return p.white(400, 350) })

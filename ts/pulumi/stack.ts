@@ -11,7 +11,6 @@ export async function program() {
 export const projectName = 'monorepo-2';
 
 async function provisionStack(s: Promise<Stack>): Promise<Stack> {
-	await (await s).workspace.installPlugin('aws', 'v7.41.0');
 	await (await s).setConfig('aws:region', { value: 'us-east-1' });
 
 	return s;

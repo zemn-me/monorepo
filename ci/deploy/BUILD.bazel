@@ -16,9 +16,14 @@ ts_project(
 
 ts_project(
     name = "deploy_lib",
-    srcs = ["deploy.ts"],
+    srcs = [
+        "deploy.ts",
+        "verify.ts",
+    ],
     deps = [
         ":production",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
         "//ts/pulumi",
         "//ts/pulumi:cli",
     ],
@@ -29,8 +34,13 @@ js_binary(
     data = [
         ":deploy_lib",
         "//VERSION",
+        "//bin/linux/pulumi:providers",
     ],
     entry_point = "deploy.js",
+    env = {
+        "PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION": "true",
+        "PULUMI_IGNORE_AMBIENT_PLUGINS": "true",
+    },
 )
 
 # Keep the launcher, its Node runtime, pnpm links and Pulumi assets together.
@@ -73,6 +83,7 @@ filegroup(
     srcs = [
         "deploy.ts",
         "production.ts",
+        "verify.ts",
     ],
     visibility = ["//:__subpackages__"],
 )
