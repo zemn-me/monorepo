@@ -17,13 +17,42 @@ export type PickMarker = (point: {
 	x: number;
 	y: number;
 }) => Marker | undefined;
-export type ChartMode = 'wheel' | 'earth';
 const clamp = (n: number, limit: number) =>
 	Math.max(-limit, Math.min(limit, n));
 export const wrap = (turn: number) => degrees(turn + 180) - 180;
-export const modeAt = (tilt: number): ChartMode =>
-	Math.abs(tilt) >= 87 ? 'wheel' : 'earth';
 const revolutionMs = 120_000;
+
+// Both poles show the symbolic disc. Once tilted, even a stationary camera
+// finishes unfolding the scene. Reversing direction retraces the same geometry.
+function useUnfold(faceOn: boolean) {
+	const phase = useRef(0);
+	const [amount, setAmount] = useState(0);
+	useEffect(() => {
+		const target = faceOn ? 0 : 1;
+		if (phase.current === target) return;
+		const motion = matchMedia('(prefers-reduced-motion: reduce)');
+		if (motion.matches) {
+			phase.current = target;
+			setAmount(target);
+			return;
+		}
+		const start = phase.current;
+		const since = performance.now();
+		let frame = requestAnimationFrame(function advance(now) {
+			const step = Math.max(0, now - since) / 500;
+			const t = motion.matches
+				? target
+				: faceOn
+					? Math.max(0, start - step)
+					: Math.min(1, start + step);
+			phase.current = t;
+			setAmount(t * t * (3 - 2 * t));
+			if (t !== target) frame = requestAnimationFrame(advance);
+		});
+		return () => cancelAnimationFrame(frame);
+	}, [faceOn]);
+	return amount;
+}
 
 export function useChartCamera() {
 	const svg = useRef<SVGSVGElement>(null);
@@ -40,7 +69,8 @@ export function useChartCamera() {
 		moved: boolean;
 	} | null>(null);
 	const [spin, setSpin] = useState(true);
-	const mode = modeAt(camera.tilt);
+	const faceOn = Math.abs(camera.tilt) === 90;
+	const unfold = useUnfold(faceOn);
 
 	// Keys accumulate and absolute drags replace the target, including between paints.
 	const move = useCallback((next: Camera) => {
@@ -60,7 +90,7 @@ export function useChartCamera() {
 	);
 
 	useEffect(() => {
-		if (!spin || mode !== 'earth') return;
+		if (!spin || faceOn) return;
 		const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		let visible = false;
 		let animation: number | undefined;
@@ -70,7 +100,7 @@ export function useChartCamera() {
 			if (
 				fingers.current.size ||
 				now < resumeAt.current ||
-				modeAt(latest.current.tilt) === 'wheel'
+				Math.abs(latest.current.tilt) === 90
 			) {
 				last = undefined;
 				return;
@@ -109,7 +139,7 @@ export function useChartCamera() {
 			document.removeEventListener('visibilitychange', sync);
 			if (animation !== undefined) cancelAnimationFrame(animation);
 		};
-	}, [mode, spin]);
+	}, [faceOn, spin]);
 
 	function center() {
 		const [a, b] = fingers.current.values();
@@ -177,8 +207,6 @@ export function useChartCamera() {
 		const tap = !drag.current?.moved;
 		endPointer(e);
 		const v = latest.current;
-		if (modeAt(v.tilt) === 'wheel' && !fingers.current.size)
-			move({ ...v, tilt: Math.sign(v.tilt) * 90 });
 		const transform = e.currentTarget.getScreenCTM();
 		if (tap && transform) {
 			const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(
@@ -216,9 +244,9 @@ export function useChartCamera() {
 	return {
 		svg,
 		camera,
-		latest,
 		move,
-		mode,
+		faceOn,
+		unfold,
 		spin,
 		setSpin,
 		pointerDown,

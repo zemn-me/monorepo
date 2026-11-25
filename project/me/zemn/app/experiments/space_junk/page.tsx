@@ -1,8 +1,4 @@
-import {
-	faDharmachakra,
-	faEarthAmericas,
-	faEllipsis,
-} from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -11,7 +7,6 @@ import {
 	useDeferredValue,
 	useEffect,
 	useMemo,
-	useRef,
 	useState,
 } from 'react';
 import { Temporal } from 'temporal-polyfill';
@@ -23,7 +18,7 @@ import { BirthdayRulers } from './birthday_form.js';
 import { ChartSettings } from './birthplace.js';
 import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart } from './chart.js';
-import { ChartViewer, type ChartViewerHandle } from './chart_viewer.js';
+import { ChartViewer } from './chart_viewer.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
 import { groundLocation } from './globe_geometry.js';
@@ -115,8 +110,6 @@ const BirthdayChart = memo(function BirthdayChart({
 	);
 	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
 	const { markers, instant: debrisInstant } = coverage;
-	const viewer = useRef<ChartViewerHandle>(null);
-	const [view, setView] = useState<'wheel' | 'earth'>('wheel');
 	const [traditional, setTraditional] = useState(true);
 	const [more, setMore] = useState(false);
 	const [extra, setExtra] = useState<ChartBody[]>([]);
@@ -176,64 +169,32 @@ const BirthdayChart = memo(function BirthdayChart({
 	const count = matches.length;
 	return (
 		<>
-			<div className={style.chartToolbar}>
-				<div
-					className={style.layers}
-					role="group"
-					aria-label="Chart layers"
+			<div
+				className={style.layers}
+				role="group"
+				aria-label="Chart layers"
+			>
+				<LayerSwitch
+					label="Zodiac"
+					checked={traditional}
+					onChange={setTraditional}
+					title="Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn"
+				/>
+				<LayerSwitch
+					label="Space junk"
+					checked={junk}
+					onChange={setJunk}
+				/>
+				<button
+					type="button"
+					title="More bodies"
+					aria-label="More bodies"
+					aria-expanded={more}
+					aria-controls="additional-chart-bodies"
+					onClick={() => setMore(!more)}
 				>
-					<LayerSwitch
-						label="Zodiac"
-						checked={traditional}
-						onChange={setTraditional}
-						title="Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn"
-					/>
-					<LayerSwitch
-						label="Space junk"
-						checked={junk}
-						onChange={setJunk}
-					/>
-					<button
-						type="button"
-						title="More bodies"
-						aria-label="More bodies"
-						aria-expanded={more}
-						aria-controls="additional-chart-bodies"
-						onClick={() => setMore(!more)}
-					>
-						<FontAwesomeIcon icon={faEllipsis} aria-hidden="true" />
-					</button>
-				</div>
-				<div
-					className={style.chartModes}
-					role="group"
-					aria-label="Chart view"
-				>
-					<button
-						type="button"
-						aria-label="Zodiac wheel"
-						title="Zodiac wheel"
-						aria-pressed={view === 'wheel'}
-						onClick={() => viewer.current?.show('wheel')}
-					>
-						<FontAwesomeIcon
-							icon={faDharmachakra}
-							aria-hidden="true"
-						/>
-					</button>
-					<button
-						type="button"
-						aria-label="Earth orbits"
-						title="Earth orbits"
-						aria-pressed={view === 'earth'}
-						onClick={() => viewer.current?.show('earth')}
-					>
-						<FontAwesomeIcon
-							icon={faEarthAmericas}
-							aria-hidden="true"
-						/>
-					</button>
-				</div>
+					<FontAwesomeIcon icon={faEllipsis} aria-hidden="true" />
+				</button>
 			</div>
 			<div id="additional-chart-bodies" hidden={!more}>
 				<div
@@ -259,8 +220,6 @@ const BirthdayChart = memo(function BirthdayChart({
 			</div>
 			<figure className={style.figure}>
 				<ChartViewer
-					ref={viewer}
-					onMode={setView}
 					instant={instant}
 					bodies={bodies}
 					showSigns={traditional}
@@ -322,7 +281,7 @@ const BirthdayChart = memo(function BirthdayChart({
 								)}
 							</p>
 						))}
-					{view === 'earth' && location && selected && (
+					{location && selected && (
 						<p>
 							{selected.object.name} ·{' '}
 							{Math.abs(location.latitude).toFixed(2)}°
@@ -399,11 +358,7 @@ const BirthdayChart = memo(function BirthdayChart({
 								<h3>
 									{byId.has(object.id) ? (
 										<a
-											href={
-												view === 'earth'
-													? '#orbital-globe'
-													: '#zodiac-wheel'
-											}
+											href="#star-chart"
 											onClick={() => locate(object.id)}
 										>
 											{object.name}
@@ -519,9 +474,10 @@ export default function Page() {
 					<a href="https://github.com/cosinekitty/astronomy">
 						Astronomy Engine
 					</a>
-					. Lines on the wheel show major aspects within 6°. The globe
-					marks their sky directions on a reference sphere. Dashed
-					arcs and hollow dots indicate directions behind Earth.
+					. Face-on, lines show major aspects within 6°. Tilting the
+					chart places debris at its orbital position and planets on a
+					reference sphere. Dashed arcs and hollow dots indicate
+					directions behind Earth.
 				</p>
 				<p>
 					Dated Earth-orbit records from{' '}

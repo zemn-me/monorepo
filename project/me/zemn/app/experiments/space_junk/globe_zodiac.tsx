@@ -1,32 +1,29 @@
-import { useMemo } from 'react';
-import type { globeFrame } from './globe_scene.js';
+import type { ChartGeometry } from './chart_geometry.js';
 import { PlanetLayer } from './planet_layer.js';
-import { earthFixedSky, type BodyPosition } from './planets.js';
+import type { BodyPosition } from './planets.js';
 import { SignCaption } from './sign_caption.js';
 import { signs } from './zodiac.js';
 
 export function GlobeZodiac({
-	instant,
-	frame,
-	radius,
+	geometry,
 	bodies,
 	showSigns,
 }: {
-	instant: number;
-	frame: ReturnType<typeof globeFrame>;
-	radius: number;
+	geometry: ChartGeometry;
 	bodies: BodyPosition[];
 	showSigns: boolean;
 }) {
-	const fixed = useMemo(() => earthFixedSky(new Date(instant)), [instant]);
+	const { sky, unfold } = geometry;
 	const project = (longitude: number, latitude: number) =>
-		frame.project(fixed(longitude, latitude, radius));
-	const labels = showSigns
-		? signs.map((name, i) => ({ name, ...project(30 * i + 15, -6) }))
-		: [];
+		sky(longitude, 0.97, latitude);
+	const ink = showSigns ? 1 : 1 - unfold;
+	const labels =
+		ink > 0
+			? signs.map((name, i) => ({ name, ...sky(30 * i + 15, 1.335, -6) }))
+			: [];
 	// Use the globe's line-of-sight test to dash the part of the ecliptic behind Earth.
 	const strokes: [string, string] = ['', ''];
-	if (showSigns) {
+	if (ink > 0) {
 		let previousStroke: number | undefined;
 		const ticks: [string, string] = ['', ''];
 		const xy = (p: ReturnType<typeof project>) =>
@@ -44,7 +41,7 @@ export function GlobeZodiac({
 		for (let longitude = 2; longitude <= 360; longitude += 2) {
 			const next = project(longitude, 0);
 			segment(last, next);
-			if (longitude % 30 === 0) {
+			if (unfold && longitude % 30 === 0) {
 				const lower = project(longitude, -1.5),
 					upper = project(longitude, 1.5);
 				ticks[next.visible ? 0 : 1] +=
@@ -57,9 +54,14 @@ export function GlobeZodiac({
 	}
 	return (
 		<g>
-			{showSigns && (
-				<g aria-label="Zodiac signs">
-					<g fill="none" stroke="currentColor" strokeWidth=".9">
+			{ink > 0 && (
+				<g aria-label="Zodiac signs" opacity={ink}>
+					<g
+						fill="none"
+						stroke="currentColor"
+						strokeWidth={0.65 + 0.25 * unfold}
+						opacity={0.4 + 0.6 * unfold}
+					>
 						<path d={strokes[0]} />
 						<path
 							d={strokes[1]}
@@ -72,8 +74,8 @@ export function GlobeZodiac({
 							key={name}
 							name={name}
 							start={30 * i}
-							compact
-							project={lon => project(lon, -6)}
+							compact={unfold === 1}
+							project={lon => sky(lon, 1.335, -6)}
 							opacity={visible ? 1 : 0.6}
 						/>
 					))}
@@ -82,8 +84,8 @@ export function GlobeZodiac({
 			{bodies.length > 0 && (
 				<PlanetLayer
 					positions={bodies}
-					project={b => project(b.longitude, b.latitude)}
-					showAspects={false}
+					project={b => sky(b.longitude, 0.87, b.latitude)}
+					aspectOpacity={1 - unfold}
 					labelObstacles={labels}
 				/>
 			)}

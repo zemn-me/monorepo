@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { Temporal } from 'temporal-polyfill';
 import { inOrbitAt, readChart, type SpaceObject } from './chart.js';
+import { chartGeometry } from './chart_geometry.js';
 import {
 	catalogueMarkers,
 	groundLocation,
@@ -178,6 +179,57 @@ describe('orbital globe', () => {
 		expect(markers.map(m => m.object.id)).toEqual(
 			matches.slice(1, 20).map(m => m.object.id)
 		);
+	});
+	it('unfolds a single placement from its wheel band to its actual Earth-fixed position', () => {
+		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
+		const marker = markerFrom(spatula, [spatula.id, 7200, 3210, 4500]);
+		const camera = { turn: 12, tilt: 90 };
+		const longitude = 70,
+			ascendant = 32;
+		const flat = chartGeometry(camera, 1.5, 0, ascendant, fixed).debris(
+			marker,
+			longitude
+		);
+		const a = (longitude * Math.PI) / 180;
+		const wheel = globeFrame(
+			globeCamera(ascendant + 90, 90, 1.41),
+			2,
+			false
+		);
+		const band = wheel.project({
+			x: 1.085 * Math.cos(a),
+			y: 1.085 * Math.sin(a),
+			z: 0,
+		});
+		expect(flat.x).toBeCloseTo(band.x, 8);
+		expect(flat.y).toBeCloseTo(band.y, 8);
+
+		const tilted = { ...camera, tilt: 89 };
+		const accurate = globeFrame(globeCamera(12, 89, 1.5), Infinity);
+		const projected = (t: number) =>
+			chartGeometry(tilted, 1.5, t, ascendant, fixed).debris(
+				marker,
+				longitude
+			);
+		expect(projected(1)).toEqual(accurate.project(marker));
+		const halfway = projected(0.5);
+		expect(
+			Math.hypot(halfway.x - projected(0).x, halfway.y - projected(0).y)
+		).toBeGreaterThan(1);
+		expect(
+			Math.hypot(halfway.x - projected(1).x, halfway.y - projected(1).y)
+		).toBeGreaterThan(1);
+		// Approaching either endpoint retains the same screen position through the change of units.
+		for (const [progress, end] of [
+			[0.000001, 0],
+			[0.999999, 1],
+		] as const) {
+			expect(projected(progress).x).toBeCloseTo(projected(end).x, 2);
+			expect(projected(progress).y).toBeCloseTo(projected(end).y, 2);
+		}
+		expect(
+			chartGeometry(tilted, 1.5, 1, ascendant, fixed).sky(70, 0.87, 12)
+		).toEqual(accurate.project(fixed(70, 12, 1.5 * 0.9)));
 	});
 	it('keeps Greenwich in front, north up and east right, and hides debris behind Earth', () => {
 		const { project } = globeFrame(globeCamera(0, 0, 2), 20);

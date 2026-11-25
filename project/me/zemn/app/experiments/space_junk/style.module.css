@@ -62,7 +62,6 @@
 	cursor: pointer;
 	align-content: center;
 }
-.chartModes,
 .viewControls,
 .paging,
 .settings {
@@ -167,21 +166,6 @@
 	border-inline: 3px solid transparent;
 	border-bottom: 5px solid currentColor;
 }
-.chartModes {
-	justify-content: center;
-	gap: 0.35rem;
-}
-.chartModes button {
-	display: grid;
-	place-items: center;
-	width: 44px;
-	padding: 0;
-	font-size: 1.2rem;
-	border-bottom: 2px solid transparent;
-}
-.chartModes button[aria-pressed='true'] {
-	border-bottom-color: currentColor;
-}
 .figure {
 	margin: 0.5rem auto 1.25rem;
 	text-align: center;
@@ -206,10 +190,6 @@
 }
 .globe[tabindex]:active {
 	cursor: grabbing;
-}
-.directions path {
-	fill: currentColor;
-	stroke: currentColor;
 }
 .caption,
 .reading,
@@ -402,14 +382,8 @@
 		background: HighlightText;
 	}
 }
-.chartToolbar {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	column-gap: 0.5rem;
-}
 .layers {
+	justify-content: start;
 	gap: 0 0.8rem;
 }
 .layers button {
@@ -422,9 +396,6 @@
 @media (width <= 26rem) {
 	.layers {
 		gap: 0 0.45rem;
-	}
-	.chartToolbar {
-		column-gap: 0;
 	}
 }
 
@@ -478,9 +449,6 @@
 	text-underline-offset: 0.22em;
 }
 
-.projection {
-	transition: opacity 320ms ease-in-out;
-}
 .viewControls .spin {
 	display: inline-flex;
 	align-items: center;
@@ -491,9 +459,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.projection {
-		transition: none;
-	}
 	.viewControls .spin {
 		display: none;
 	}

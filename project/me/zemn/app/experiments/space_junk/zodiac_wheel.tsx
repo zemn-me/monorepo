@@ -1,67 +1,30 @@
-import { type Ref, useImperativeHandle, useMemo } from 'react';
-import { type Camera, defaultTurn, type PickMarker } from './chart_camera.js';
-import { globeCamera, globeFrame, height, width } from './globe_scene.js';
-import { OrbitScene } from './orbit_scene.js';
-import { PlanetLayer } from './planet_layer.js';
-import type { BodyPosition } from './planets.js';
-import { SignCaption } from './sign_caption.js';
+import type { ChartGeometry } from './chart_geometry.js';
 import style from './style.module.css';
 import {
 	type nearestAspects,
 	type Placement,
-	radians,
 	signPosition,
 	signs,
 } from './zodiac.js';
 
-const band = { D: 1.025, R: 1.055, C: 1.085 };
-function direction(lon: number, lat: number, r: number) {
-	const a = lon * radians,
-		b = lat * radians;
-	return {
-		x: r * Math.cos(b) * Math.cos(a),
-		y: r * Math.cos(b) * Math.sin(a),
-		z: r * Math.sin(b),
-	};
-}
 function shortName(p: Placement) {
 	const name = p.marker.object.name;
 	return name.length > 24 ? 'NORAD ' + p.marker.object.id : name;
 }
 
-export function ZodiacWheel({
-	placements,
+export function WheelGuides({
+	geometry,
 	aspects,
-	bodies,
 	selected,
 	ascendant,
-	camera,
-	pick,
 }: {
-	placements: Placement[];
+	geometry: ChartGeometry;
 	aspects: ReturnType<typeof nearestAspects>;
-	bodies: BodyPosition[];
 	selected?: Placement;
 	ascendant?: number;
-	camera: Camera;
-	pick: Ref<PickMarker>;
 }) {
+	const at = geometry.sky;
 	const anchor = ascendant ?? 0;
-	const frame = useMemo(
-		() =>
-			globeFrame(
-				globeCamera(
-					anchor + 90 + camera.turn - defaultTurn,
-					camera.tilt,
-					1.41
-				),
-				2,
-				false
-			),
-		[anchor, camera.turn, camera.tilt]
-	);
-	const at = (lon: number, r: number, lat = 0) =>
-		frame.project(direction(lon, lat, r));
 	const xy = (p: { x: number; y: number }) =>
 		p.x.toFixed(2) + ',' + p.y.toFixed(2);
 	function arc(start: number, end: number, r: number, lat = 0) {
@@ -70,44 +33,8 @@ export function ZodiacWheel({
 			xy(at(start + ((end - start) * i) / steps, r, lat))
 		).join('L');
 	}
-	const marks = useMemo(
-		() =>
-			placements.map(p => {
-				const at = frame.project(
-					direction(p.longitude, 0, band[p.marker.object.kind])
-				);
-				return { p, at };
-			}),
-		[frame, placements]
-	);
-	const faces = useMemo(
-		() =>
-			marks.map(({ p, at }) =>
-				frame.symbol(at.center, at.depth, p.marker.object.kind, 0.58)
-			),
-		[marks, frame]
-	);
-	const focus = selected && marks.find(m => m.p === selected)?.at;
-
-	useImperativeHandle(
-		pick,
-		() => at => {
-			let nearest: Placement | undefined;
-			let radius = 6;
-			for (const m of marks) {
-				const distance = Math.hypot(m.at.x - at.x, m.at.y - at.y);
-				if (distance < radius) {
-					nearest = m.p;
-					radius = distance;
-				}
-			}
-			return nearest?.marker;
-		},
-		[marks]
-	);
-
 	return (
-		<g>
+		<g opacity={1 - geometry.unfold}>
 			{signs.map((sign, i) => {
 				const start = i * 30,
 					end = start + 30;
@@ -126,11 +53,6 @@ export function ZodiacWheel({
 							strokeOpacity=".52"
 							strokeWidth=".65"
 						/>
-						<SignCaption
-							name={sign}
-							start={start}
-							project={lon => at(lon, 1.335)}
-						/>
 					</g>
 				);
 			})}
@@ -145,13 +67,6 @@ export function ZodiacWheel({
 				).join('')}
 				stroke="currentColor"
 				strokeOpacity=".55"
-				strokeWidth=".65"
-			/>
-			<path
-				d={'M' + arc(0, 360, 0.97) + 'Z'}
-				fill="none"
-				stroke="currentColor"
-				strokeOpacity=".4"
 				strokeWidth=".65"
 			/>
 			{selected &&
@@ -181,13 +96,6 @@ export function ZodiacWheel({
 						</title>
 					</path>
 				))}
-			<g className={style.directions}>
-				<OrbitScene
-					label="Debris directions"
-					faces={faces}
-					frame={frame}
-				/>
-			</g>
 			{aspects.map(({ name, placement }) => {
 				const p = at(placement.longitude, 0.97);
 				return (
@@ -204,12 +112,6 @@ export function ZodiacWheel({
 					</circle>
 				);
 			})}
-			{bodies.length > 0 && (
-				<PlanetLayer
-					positions={bodies}
-					project={body => at(body.longitude, 0.87)}
-				/>
-			)}
 			{ascendant !== undefined && (
 				<g fill="currentColor">
 					<path
@@ -231,39 +133,6 @@ export function ZodiacWheel({
 					</text>
 				</g>
 			)}
-			{focus && selected && (
-				<g>
-					<circle
-						cx={focus.x}
-						cy={focus.y}
-						r="4"
-						fill="var(--background-color)"
-						stroke="currentColor"
-						strokeWidth="1.7"
-					/>
-					<circle
-						cx={focus.x}
-						cy={focus.y}
-						r="1.3"
-						fill="currentColor"
-					/>
-					<text
-						x={focus.x + (focus.x > width / 2 ? -9 : 9)}
-						y={focus.y + (focus.y < height / 2 ? 16 : -8)}
-						textAnchor={focus.x > width / 2 ? 'end' : 'start'}
-						fontSize="9.5"
-						fill="currentColor"
-						stroke="var(--background-color)"
-						strokeWidth="3"
-						paintOrder="stroke"
-					>
-						{shortName(selected)}
-					</text>
-				</g>
-			)}
-			<circle cx={width / 2} cy={height / 2} r="2" fill="currentColor">
-				<title>Chart origin</title>
-			</circle>
 		</g>
 	);
 }

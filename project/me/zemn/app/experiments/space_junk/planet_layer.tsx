@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { bodyAspects, type BodyPosition } from './planets.js';
-import { signPosition } from './zodiac.js';
+import { type BodyPosition, bodyAspects } from './planets.js';
 import style from './style.module.css';
+import { signPosition } from './zodiac.js';
 
 interface Point {
 	x: number;
@@ -12,14 +12,15 @@ interface Point {
 export function PlanetLayer({
 	positions,
 	project,
-	showAspects = true,
+	aspectOpacity = 1,
 	labelObstacles = [],
 }: {
 	positions: BodyPosition[];
 	project: (body: BodyPosition) => Point;
-	showAspects?: boolean;
+	aspectOpacity?: number;
 	labelObstacles?: readonly Point[];
 }) {
+	const showAspects = aspectOpacity > 0;
 	const aspects = useMemo(
 		() => (showAspects ? bodyAspects(positions) : []),
 		[positions, showAspects]
@@ -39,7 +40,7 @@ export function PlanetLayer({
 						y2={end.y}
 						stroke="currentColor"
 						strokeWidth=".8"
-						opacity=".55"
+						opacity={0.55 * aspectOpacity}
 						strokeDasharray={
 							angle === 60
 								? '2 3'
