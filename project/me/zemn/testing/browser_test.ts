@@ -429,9 +429,12 @@ describe('zemn.me website', () => {
 					5000
 				);
 				const time = await driver.findElement(By.name('time'));
-				const chartTime = () => driver.findElement(By.css('figcaption time')).getAttribute('datetime');
+				const timestamp = () => time.getAttribute('value').then(Number);
+				const sources = await driver.findElement(By.css('section[aria-labelledby="chart-sources"]'));
+				expect(await sources.findElement(By.linkText('CC BY 4.0')).isDisplayed()).toBe(true);
+				expect(await driver.findElements(By.css('article figcaption, summary#chart-birthplace'))).toHaveLength(0);
 				await time.sendKeys(Key.ARROW_RIGHT);
-				await driver.wait(async () => await chartTime() === '2006-08-01T12:01:00.000Z', 5000);
+				await driver.wait(async () => await timestamp() === Date.parse('2006-08-01T12:01:00.000Z'), 5000);
 				await time.sendKeys(Key.ARROW_LEFT);
 
 				const chrome = driver as unknown as ChromeDriver;
@@ -445,13 +448,11 @@ describe('zemn.me website', () => {
 					chrome.sendDevToolsCommand('Input.dispatchTouchEvent', { type, touchPoints });
 				await touch('touchStart', [{ x, y }]);
 				await touch('touchMove', [{ x: x - 20, y }]);
-				const timestamp = () => time.getAttribute('value').then(Number);
 				await driver.wait(async () => await timestamp() > Date.parse('2006-08-01T12:00Z'), 5000);
 				const firstMove = await timestamp();
 				await touch('touchMove', [{ x: x - 40, y }]);
 				await driver.wait(async () => await timestamp() > firstMove, 5000);
 				const scrubbed = await timestamp();
-				await driver.wait(async () => await chartTime() === new Date(scrubbed).toISOString(), 5000);
 				await touch('touchEnd', []);
 				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
 				expect(await timestamp()).toBe(scrubbed);
@@ -567,7 +568,7 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
 				await (await toggle('Space junk')).click();
 				expect((await bodies()).length).toBe(7);
-				expect(await driver.findElements(By.css('[aria-label="Chart coverage"]'))).toHaveLength(0);
+				expect(await driver.findElements(By.xpath('//summary[.="Object catalogue"]'))).toHaveLength(0);
 				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
@@ -651,7 +652,7 @@ describe('zemn.me website', () => {
 				await (await toggle('Space junk')).sendKeys(Key.SPACE);
 				expect(await (await toggle('Spacecraft payloads')).isSelected()).toBe(true);
 				await driver.wait(() => onlyKind('Spacecraft payload'), 5000);
-				await driver.wait(async () => (await driver.findElement(By.css('[aria-label="Chart coverage"]')).getText()).includes('objects located'), 10000);
+				await driver.wait(async () => (await driver.findElements(By.css('ul[aria-label="Objects in orbit"] a[href="#star-chart"]'))).length > 0, 10000);
 				await globe.sendKeys(Key.HOME);
 				expect(await bodies()).toHaveLength(0);
 			} finally {
@@ -670,8 +671,8 @@ describe('zemn.me website', () => {
 				const rotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Rotation"]/input'));
 				const spin = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
 				const angle = () => rotation.getAttribute('value');
-				const time = await driver.findElement(By.css('figcaption > time'));
-				const birthday = await time.getAttribute('datetime');
+				const time = await driver.findElement(By.name('time'));
+				const birthday = await time.getAttribute('value');
 				const initial = await angle();
 				await driver.wait(async () => await angle() !== initial, 5000);
 				await spin.click();
@@ -690,7 +691,7 @@ describe('zemn.me website', () => {
 				expect(await angle()).toBe(reduced);
 				await reducedMotion('no-preference');
 				await driver.wait(async () => await angle() !== reduced, 5000);
-				expect(await time.getAttribute('datetime')).toBe(birthday);
+				expect(await time.getAttribute('value')).toBe(birthday);
 				await globe.sendKeys(Key.HOME);
 				await driver.wait(async () => (await globe.getAttribute('aria-label'))?.includes('wheel from above'), 5000);
 			} finally {
@@ -705,13 +706,11 @@ describe('zemn.me website', () => {
 				const globe = await driver.findElement(By.id('star-chart'));
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
 				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
-				const pin = By.css('circle[aria-label="Birthplace"]');
+				const pin = By.css('circle[aria-label^="Birthplace ·"]');
 				expect(await globe.findElements(pin)).toHaveLength(0);
-				const birthplace = await driver.findElement(By.id('chart-birthplace'));
-				await birthplace.click();
-				await driver.findElement(By.name('latitude')).sendKeys('0');
-				await driver.findElement(By.name('longitude')).sendKeys('140');
-				await driver.findElement(By.xpath('//button[.="Apply"]')).click();
+				const birthplace = await driver.findElement(By.css('input[role="combobox"]'));
+				await birthplace.sendKeys('Singapore');
+				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
 				const center = Number(await marker.getAttribute('cx'));
 				await globe.sendKeys(Key.ARROW_RIGHT);
@@ -721,11 +720,8 @@ describe('zemn.me website', () => {
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
 				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Number(await globe.findElement(pin).getAttribute('cx')) === center, 5000);
-				await birthplace.click();
-				await driver.findElement(By.name('latitude')).sendKeys(Key.END, Key.BACK_SPACE);
-				await driver.findElement(By.name('longitude')).sendKeys(Key.END, Key.BACK_SPACE.repeat(3));
-				await driver.findElement(By.xpath('//button[.="Apply"]')).click();
-				await driver.wait(async () => !(await globe.findElements(pin)).length, 5000, 'The marker should disappear when both coordinates are cleared');
+				await birthplace.sendKeys(Key.END, Key.BACK_SPACE.repeat('Singapore'.length));
+				await driver.wait(async () => !(await globe.findElements(pin)).length, 5000, 'The marker should disappear when the birth city is cleared');
 			} finally {
 				await driver.quit();
 			}
@@ -741,8 +737,7 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await clock.getAttribute('aria-valuetext'))?.includes('17:45:00'), 5000);
 				const midnight = await driver.findElement(By.xpath('//fieldset//*[local-name()="text" and .="1"]'));
 				await midnight.click();
-				const chart = await driver.findElement(By.css('figcaption > time'));
-				await driver.wait(async () => (await chart.getAttribute('datetime')) === '2006-07-31T18:15:00.000Z', 5000);
+				await driver.wait(async () => Number(await clock.getAttribute('value')) === Date.parse('2006-07-31T18:15:00.000Z'), 5000);
 				expect(await clock.getAttribute('aria-valuetext')).toContain('00:00:00');
 			} finally {
 				await driver.quit();
@@ -783,8 +778,6 @@ describe('zemn.me website', () => {
 				await clock.sendKeys(Key.ARROW_LEFT);
 				const end = Date.parse('2006-07-31T23:59Z');
 				await waitForRulers(end);
-				await driver.wait(async () =>
-					(await driver.findElement(By.css('figcaption time')).getAttribute('datetime')) === new Date(end).toISOString(), 5000);
 
 				const yearMark = (n: number) => driver.findElement(By.xpath(
 					`//fieldset//*[local-name()="text" and .="${n}"]`

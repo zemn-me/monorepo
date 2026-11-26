@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import type { City } from './cities.js';
 import style from './style.module.css';
@@ -16,7 +16,7 @@ export function CitySearch({
 	city?: City;
 	onSelect: (city?: City) => void;
 }) {
-	const id = useId();
+	const id = 'chart-birth-city';
 	const languages = useLocale();
 	const language = new Intl.Locale(languages[0]).language;
 	const [draft, setDraft] = useState<string | null>(null);

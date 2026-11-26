@@ -28,7 +28,6 @@ ts_project(
     name = "space_junk",
     srcs = [
         "birthday_form.tsx",
-        "birthplace.tsx",
         "body_filters.tsx",
         "chart.ts",
         "chart_camera.ts",
@@ -96,7 +95,6 @@ filegroup(
     name = "all_ts_srcs",
     srcs = [
         "birthday_form.tsx",
-        "birthplace.tsx",
         "body_filters.tsx",
         "chart.ts",
         "chart_camera.ts",

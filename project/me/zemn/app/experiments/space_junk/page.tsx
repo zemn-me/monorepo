@@ -9,18 +9,15 @@ import {
 } from 'react';
 import { Temporal } from 'temporal-polyfill';
 
-import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
 import { BirthdayRulers } from './birthday_form.js';
 import { BodyFilters } from './body_filters.js';
-import { ChartSettings } from './birthplace.js';
 import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, type SpaceObject, kinds, readChart } from './chart.js';
 import { ChartViewer } from './chart_viewer.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
-import { groundLocation } from './globe_geometry.js';
 import { bodyPositions, type ChartBody, classical, modern } from './planets.js';
 import { firstInstant, zonedTime } from './ruler_time.js';
 import { Sky } from './sky.js';
@@ -51,7 +48,6 @@ const BirthdayChart = memo(function BirthdayChart({
 	instant,
 	zone,
 	place,
-	onPlace,
 	selectedKinds,
 	setSelectedKinds,
 	catalogueFailed,
@@ -61,7 +57,6 @@ const BirthdayChart = memo(function BirthdayChart({
 	instant: number;
 	zone: string;
 	place?: Birthplace;
-	onPlace: (place?: Birthplace) => void;
 	selectedKinds: readonly ObjectKind[];
 	setSelectedKinds: (value: ObjectKind[]) => void;
 	catalogueFailed: boolean;
@@ -70,20 +65,8 @@ const BirthdayChart = memo(function BirthdayChart({
 	const hasObjects = selectedKinds.length > 0;
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(0);
-	const languages = useLocale();
-	const iso = new Date(instant).toISOString();
-	const day = iso.slice(0, 10);
+	const day = new Date(instant).toISOString().slice(0, 10);
 	const birthday = zonedTime(instant, zone).toPlainDate().toString();
-	const localFormat = useMemo(
-		() =>
-			new Intl.DateTimeFormat(languages, {
-				calendar: 'gregory',
-				dateStyle: 'long',
-				timeStyle: 'long',
-				timeZone: zone,
-			}),
-		[languages, zone]
-	);
 	const selectedObjects = useMemo(
 		() =>
 			catalogue?.objects.filter(object =>
@@ -136,7 +119,6 @@ const BirthdayChart = memo(function BirthdayChart({
 				: debrisZodiac.ascendant,
 		[place, debrisInstant, instant, debrisZodiac]
 	);
-	const location = selected && groundLocation(selected);
 	const filtered = useMemo(() => {
 		const term = search.trim().toLowerCase();
 		if (!term) return matches;
@@ -154,7 +136,6 @@ const BirthdayChart = memo(function BirthdayChart({
 	const offset = pageIndex * pageSize;
 	const rows = filtered.slice(offset, offset + pageSize);
 
-	const count = matches.length;
 	return (
 		<>
 			<div
@@ -198,80 +179,26 @@ const BirthdayChart = memo(function BirthdayChart({
 					ascendant={ascendant}
 					onSelect={m => locate(m.object.id)}
 				/>
-				<figcaption aria-live="polite" className={style.caption}>
-					<time dateTime={iso}>{localFormat.format(instant)}</time>
-					{hasObjects &&
-						(!catalogue ? (
-							catalogueFailed ? (
-								<p role="alert">
-									Object catalogue unavailable.{' '}
-									<button
-										type="button"
-										onClick={retryCatalogue}
-									>
-										Retry
-									</button>
-								</p>
-							) : (
-								<p role="status">Loading object catalogue…</p>
-							)
-						) : !count ? (
-							<p>
-								No objects of the selected types in orbit on
-								this date.
-							</p>
-						) : !markers.length &&
-							coverage.failed &&
-							!coverage.pending ? (
-							<p role="alert">
-								Orbit archive unavailable.{' '}
-								<button type="button" onClick={coverage.retry}>
-									Retry
-								</button>
-							</p>
-						) : (
-							<p role="status" aria-label="Chart coverage">
-								{debrisInstant !== instant &&
-								markers.length > 0 ? (
-									<>
-										Updating orbits… Showing{' '}
-										<time
-											dateTime={new Date(
-												debrisInstant
-											).toISOString()}
-										>
-											{localFormat.format(debrisInstant)}
-										</time>
-									</>
-								) : markers.length ? (
-									`${markers.length.toLocaleString('en-GB')} of ${count.toLocaleString('en-GB')} objects located`
-								) : coverage.pending ? (
-									'Loading orbital positions…'
-								) : (
-									'No archived positions available for this time.'
-								)}
-							</p>
-						))}
-					{location && selected && (
-						<p>
-							{selected.object.name} ·{' '}
-							{Math.abs(location.latitude).toFixed(2)}°
-							{location.latitude < 0 ? 'S' : 'N'},{' '}
-							{Math.abs(location.longitude).toFixed(2)}°
-							{location.longitude < 0 ? 'W' : 'E'} ·{' '}
-							{Math.round(location.height).toLocaleString(
-								'en-GB'
-							)}{' '}
-							km above Earth
-						</p>
-					)}
-				</figcaption>
 			</figure>
-			<ChartSettings
-				place={place}
-				ascendant={ascendant}
-				onPlace={onPlace}
-			/>
+			{hasObjects && catalogueFailed && !catalogue && (
+				<p role="alert">
+					Object catalogue unavailable.{' '}
+					<button type="button" onClick={retryCatalogue}>
+						Retry
+					</button>
+				</p>
+			)}
+			{hasObjects &&
+				!markers.length &&
+				coverage.failed &&
+				!coverage.pending && (
+					<p role="alert">
+						Orbit archive unavailable.{' '}
+						<button type="button" onClick={coverage.retry}>
+							Retry
+						</button>
+					</p>
+				)}
 			{hasObjects && catalogue && (
 				<details className={style.disclosure}>
 					<summary>Object catalogue</summary>
@@ -368,17 +295,15 @@ export default function Page() {
 		() => setDeviceZone(Intl.DateTimeFormat().resolvedOptions().timeZone),
 		[]
 	);
-	const [place, setPlace] = useState<City | Birthplace>();
-	const city = place && 'timezone' in place ? place : undefined;
+	const [city, setCity] = useState<City>();
 	const zone = city?.timezone ?? deviceZone;
 	const chart = useDeferredValue(
-		useMemo(() => ({ instant, zone, place }), [instant, zone, place])
+		useMemo(() => ({ instant, zone, place: city }), [instant, zone, city])
 	);
 
 	const setBirthplace = useCallback(
-		(next?: Birthplace | City) => {
-			const nextZone =
-				next && 'timezone' in next ? next.timezone : deviceZone;
+		(next?: City) => {
+			const nextZone = next?.timezone ?? deviceZone;
 			// A birthday is entered as a wall time, so changing the city keeps the
 			// date and clock reading and resolves them to an instant in the new zone.
 			if (nextZone !== zone)
@@ -393,7 +318,7 @@ export default function Page() {
 						)
 					)
 				);
-			setPlace(next);
+			setCity(next);
 		},
 		[clock, deviceZone, zone]
 	);
@@ -422,60 +347,78 @@ export default function Page() {
 			/>
 			<BirthdayChart
 				{...chart}
-				onPlace={setBirthplace}
 				catalogue={catalogue.data}
 				selectedKinds={selectedKinds}
 				setSelectedKinds={setSelectedKinds}
 				catalogueFailed={catalogue.isError}
 				retryCatalogue={catalogue.refetch}
 			/>
-			<details className={style.disclosure}>
-				<summary>Sources</summary>
-				<p>
-					Birthplace search uses{' '}
-					<a href="https://open-meteo.com/en/docs/geocoding-api">
-						Open-Meteo
-					</a>{' '}
-					and <a href="https://www.geonames.org/">GeoNames</a>.
-				</p>
-				<p>
-					The tropical zodiac divides the ecliptic into twelve equal
-					signs. Zodiac shows the Sun, Moon and five classical
-					planets. Uranus, Neptune and Pluto can be selected
-					individually. Positions come from{' '}
-					<a href="https://github.com/cosinekitty/astronomy">
-						Astronomy Engine
-					</a>
-					. Lines connect planetary bodies whose longitudes form a
-					major aspect within 6°. Tilting the chart shows positions to
-					scale from Earth’s center. Zoom out to see distant planets.
-					Dashed arcs and hollow dots indicate directions behind
-					Earth.
-				</p>
-				<p>
-					Dated Earth-orbit records from{' '}
-					<a href="https://planet4589.org/space/gcat/">
-						Jonathan McDowell’s General Catalog of Artificial Space
-						Objects
-					</a>{' '}
-					(
-					<a href="https://creativecommons.org/licenses/by/4.0/">
-						CC BY 4.0
-					</a>
-					).
-					{catalogue.data &&
-						` Edition of ${displayDate(catalogue.data.asOf)}.`}{' '}
-					Only objects with confirmed flight times and an orbit within
-					three days appear on the chart. Positions use SGP4 and
-					historical elements from{' '}
-					<a href="https://spacebook.com/">COMSPOC Spacebook</a>.
-					Coastlines from{' '}
-					<a href="https://www.naturalearthdata.com/">
-						Natural Earth
-					</a>
-					.
-				</p>
-			</details>
+			<section className={style.sources} aria-labelledby="chart-sources">
+				<h2 id="chart-sources">Sources</h2>
+				<dl>
+					<div>
+						<dt>Birth cities</dt>
+						<dd>
+							<a href="https://open-meteo.com/en/docs/geocoding-api">
+								Open-Meteo
+							</a>{' '}
+							and <a href="https://www.geonames.org/">GeoNames</a>
+						</dd>
+					</div>
+					<div>
+						<dt>Planet positions</dt>
+						<dd>
+							<a href="https://github.com/cosinekitty/astronomy">
+								Astronomy Engine
+							</a>
+						</dd>
+					</div>
+					<div>
+						<dt>Object catalogue</dt>
+						<dd>
+							<a href="https://planet4589.org/space/gcat/">
+								Jonathan McDowell’s General Catalog of
+								Artificial Space Objects
+							</a>
+							{catalogue.data &&
+								` · ${displayDate(catalogue.data.asOf)}`}{' '}
+							·{' '}
+							<a href="https://creativecommons.org/licenses/by/4.0/">
+								CC BY 4.0
+							</a>
+						</dd>
+					</div>
+					<div>
+						<dt>Orbital elements</dt>
+						<dd>
+							<a href="https://spacebook.com/">
+								COMSPOC Spacebook
+							</a>
+						</dd>
+					</div>
+					<div>
+						<dt>Local horizon</dt>
+						<dd>
+							<a href="https://satchecker.cps.iau.org/">
+								IAU CPS SatChecker
+							</a>{' '}
+							using{' '}
+							<a href="https://www.space-track.org/">
+								Space-Track
+							</a>{' '}
+							and <a href="https://celestrak.org/">CelesTrak</a>
+						</dd>
+					</div>
+					<div>
+						<dt>Coastlines</dt>
+						<dd>
+							<a href="https://www.naturalearthdata.com/">
+								Natural Earth
+							</a>
+						</dd>
+					</div>
+				</dl>
+			</section>
 		</article>
 	);
 }

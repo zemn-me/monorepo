@@ -63,8 +63,7 @@
 	align-content: center;
 }
 .viewControls,
-.paging,
-.settings {
+.paging {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
@@ -191,7 +190,7 @@
 .globe[tabindex]:active {
 	cursor: grabbing;
 }
-.caption,
+.sources,
 .reading,
 .camera,
 .sky,
@@ -200,11 +199,6 @@
 .disclosure {
 	font: var(--controls);
 }
-.caption {
-	color: var(--muted);
-	margin-block: 0.65rem 1.5rem;
-}
-.caption p,
 .reading p {
 	margin: 0.25rem 0;
 }
@@ -215,8 +209,7 @@
 .viewControls {
 	justify-content: center;
 }
-.viewControls label,
-.settings label {
+.viewControls label {
 	display: grid;
 	gap: 0.15rem;
 }
@@ -250,25 +243,37 @@
 .disclosure > summary {
 	padding-block: 0.55rem;
 }
-.disclosure p {
+.sources {
+	border-block-start: 1px solid var(--line);
+	padding-block-start: 0.75rem;
+}
+.sources h2 {
+	margin: 0;
+	font: inherit;
+}
+.sources dl {
+	margin: 0.5rem 0 0;
+	font-size: 0.875rem;
 	line-height: 1.5;
 }
-.settings {
-	align-items: end;
+.sources dl div {
+	display: grid;
+	grid-template-columns: 7rem minmax(0, 1fr);
 	gap: 0.5rem;
-	margin-block: 0.5rem;
+	padding-block: 0.15rem;
 }
-.settings input,
+.sources dt {
+	color: var(--muted);
+}
+.sources dd {
+	margin: 0;
+}
 .search {
 	padding: 0.4rem 0.5rem;
 	border: 1px solid var(--line);
 	border-radius: 0.3rem;
 	background: var(--background-color);
 }
-.settings input {
-	width: 7rem;
-}
-.settings button,
 .paging button {
 	text-decoration: underline;
 	text-underline-offset: 0.2em;

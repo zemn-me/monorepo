@@ -177,21 +177,13 @@ export function Sky({
 				</p>
 			) : (
 				<p>
-					Enter your coordinates under{' '}
-					<a href="#chart-birthplace">Birthplace</a> to see the
-					objects above your horizon.
+					Choose your <a href="#chart-birth-city">city of birth</a> to
+					see the objects above your horizon.
 				</p>
 			)}
 			{open && observer && (
 				<SkyReading objects={objects} observer={observer} />
 			)}
-			<small>
-				Positions estimated with SGP4 using historical elements from{' '}
-				<a href="https://satchecker.cps.iau.org/">IAU CPS SatChecker</a>
-				, which archives{' '}
-				<a href="https://www.space-track.org/">Space-Track</a> and{' '}
-				<a href="https://celestrak.org/">CelesTrak</a> data.
-			</small>
 		</details>
 	);
 }
