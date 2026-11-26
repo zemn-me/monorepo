@@ -133,6 +133,7 @@ filegroup(
         "chart_viewer.tsx",
         "cities.ts",
         "city_search.tsx",
+        "city_search_test.tsx",
         "daily_elements.ts",
         "globe.tsx",
         "globe_geometry.ts",
@@ -165,6 +166,7 @@ ts_project(
     testonly = True,
     srcs = [
         "chart_test.ts",
+        "city_search_test.tsx",
         "use_debris_positions_test.tsx",
         "use_ruler_clock_test.tsx",
         ":orbit_fixture.ts",  # keep
@@ -204,5 +206,12 @@ jest_test(
     srcs = ["use_ruler_clock_test.js"],
     jsdom = True,
     visibility = ["//:__subpackages__"],
+    deps = [":space_junk_tests"],
+)
+
+jest_test(
+    name = "city_search_test",
+    srcs = ["city_search_test.js"],
+    jsdom = True,
     deps = [":space_junk_tests"],
 )
