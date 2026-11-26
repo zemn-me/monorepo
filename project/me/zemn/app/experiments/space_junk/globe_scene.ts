@@ -151,6 +151,11 @@ export function globeCamera(
 	};
 }
 
+// Horizontal span in the plane through Earth's centre, perpendicular to the camera.
+export function viewWidthKm(camera: OrbitCamera) {
+	return (width * equatorialRadius * camera.distance) / focal;
+}
+
 export function globeFrame(
 	camera: OrbitCamera,
 	maxRadius: number,
@@ -234,6 +239,6 @@ export function globeFrame(
 		project,
 		segment,
 		symbol,
-		kmPerPixel: (equatorialRadius * camera.distance) / focal,
+		kmPerPixel: viewWidthKm(camera) / width,
 	};
 }

@@ -200,7 +200,12 @@
 }
 .viewControls {
 	text-align: start;
+}
+.viewControls > .switch {
 	font: var(--controls);
+}
+.viewControls .rulerRow {
+	grid-template-columns: minmax(7rem, 20%) minmax(0, 1fr);
 }
 .objectCatalogue,
 .sources {

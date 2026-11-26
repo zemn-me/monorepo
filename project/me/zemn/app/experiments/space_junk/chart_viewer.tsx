@@ -16,7 +16,7 @@ import {
 	type Marker,
 	type Vector,
 } from './globe_geometry.js';
-import { height, width } from './globe_scene.js';
+import { globeCamera, height, viewWidthKm, width } from './globe_scene.js';
 import { type BodyPosition, earthFixedSky } from './planets.js';
 import { SlideRule } from './slide_rule.js';
 import style from './style.module.css';
@@ -25,6 +25,19 @@ import { type Birthplace, nearestAspects, type zodiacFrame } from './zodiac.js';
 const closeExtent = 1.5;
 // Keep the ruler in physical units even when the visible catalogue changes.
 const maxExtent = (60 * KM_PER_AU) / equatorialRadius;
+const kmAcrossPerExtent = viewWidthKm(globeCamera(0, 0, 1));
+const distanceFormat = new Intl.NumberFormat('en-GB', {
+	maximumSignificantDigits: 3,
+});
+function formatViewWidth(extent: number) {
+	const km = kmAcrossPerExtent * extent;
+	return km < 1_000_000
+		? `${distanceFormat.format(km)} km`
+		: `${distanceFormat.format(km / KM_PER_AU)} AU`;
+}
+function extentAtZoom(zoom: number) {
+	return closeExtent * (maxExtent / closeExtent) ** (1 - zoom / 100);
+}
 const radius = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
 export function ChartViewer({
@@ -54,6 +67,7 @@ export function ChartViewer({
 	const { camera, move, faceOn, unfold } = controls;
 	const pick = useRef<PickMarker>(null);
 	const [extent, setExtent] = useState(closeExtent);
+	const viewWidth = formatViewWidth(extent);
 	const zoomValue =
 		100 -
 		(100 * Math.log(extent / closeExtent)) /
@@ -138,7 +152,7 @@ export function ChartViewer({
 	}
 	function zoomTo(value: number) {
 		const zoom = Math.max(0, Math.min(100, value));
-		setExtent(closeExtent * (maxExtent / closeExtent) ** (1 - zoom / 100));
+		setExtent(extentAtZoom(zoom));
 	}
 
 	return (
@@ -238,15 +252,15 @@ export function ChartViewer({
 				/>
 				<SlideRule
 					{...rulerEvents}
-					label="Zoom"
-					readout={`${Math.round(zoomValue)}%`}
+					label="Orbit view width"
+					readout={viewWidth}
 					centre={zoomValue}
 					min={0}
 					max={100}
-					pitch={6}
+					pitch={8}
 					tick={2}
 					major={10}
-					tickLabel={mark => `${mark}%`}
+					tickLabel={mark => formatViewWidth(extentAtZoom(mark))}
 					readPosition={() => zoomValue}
 					seek={zoomTo}
 					inputProps={{
@@ -254,7 +268,7 @@ export function ChartViewer({
 						max: 100,
 						step: 0.1,
 						value: zoomValue,
-						'aria-valuetext': `${extent.toFixed(1)} Earth radii from centre to edge`,
+						'aria-valuetext': `${viewWidth} across at Earth’s centre`,
 						onChange: e => zoomTo(e.currentTarget.valueAsNumber),
 					}}
 				/>

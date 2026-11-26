@@ -656,10 +656,11 @@ describe('zemn.me website', () => {
 				const beforeTurn = await moonX();
 				await globe.sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moonX() !== beforeTurn, 5000);
-				const zoom = await driver.findElement(By.css('input[type="range"][aria-label="Zoom"]'));
+				const zoom = await driver.findElement(By.css('input[type="range"][aria-label="Orbit view width"]'));
 				expect(await zoom.getAttribute('value')).toBe('100');
 				const zoomExtent = () => zoom.getAttribute('aria-valuetext');
 				const close = await zoomExtent();
+				expect(close).toBe('24,300 km across at Earth’s centre');
 				const junk = await toggle('Space junk');
 				await junk.sendKeys(Key.SPACE);
 				expect(await zoomExtent()).toBe(close);
@@ -672,6 +673,7 @@ describe('zemn.me website', () => {
 				const earth = await globe.findElement(By.css('g[aria-label="Earth"] text'));
 				expect(await earth.getText()).toBe('Earth');
 				const far = await zoomExtent();
+				expect(far).toBe('153 AU across at Earth’s centre');
 				const zodiac = await toggle('Zodiac');
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zodiac);
 				await zodiac.click();
