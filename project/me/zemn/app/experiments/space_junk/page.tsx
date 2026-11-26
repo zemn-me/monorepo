@@ -62,7 +62,7 @@ const BirthdayChart = memo(function BirthdayChart({
 	retryCatalogue: () => void;
 }) {
 	const hasObjects = selectedKinds.length > 0;
-	const [search, setSearch] = useState('');
+	const [search, setSearch] = useState('spatula');
 	const [page, setPage] = useState(0);
 	const day = new Date(instant).toISOString().slice(0, 10);
 	const birthday = zonedTime(instant, zone).toPlainDate().toString();

@@ -456,7 +456,13 @@ describe('zemn.me website', () => {
 				await touch('touchEnd', []);
 				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
 				expect(await timestamp()).toBe(scrubbed);
-				expect(await driver.findElement(By.css('article input[aria-label^="Search by name"]')).isDisplayed()).toBe(true);
+				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				expect(await search.getProperty('value')).toBe('spatula');
+				const objects = await driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));
+				expect(objects).toHaveLength(1);
+				expect(await objects[0]!.getText()).toContain('EVA debris (spatula)');
+				await driver.wait(until.elementLocated(By.css('svg [aria-label="Selected object · EVA debris (spatula)"]')), 10000);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('spatula'.length));
 				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual(['View controls']);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
@@ -558,7 +564,6 @@ describe('zemn.me website', () => {
 						n + (p.getAttribute('d').match(/M/g) || []).length, 0);
 				`, wheel);
 				const unfiltered = await markerCount();
-				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
 				await search.sendKeys('MoToR');
 				const motors = await markerCount();
 				expect(motors).toBeGreaterThan(12);
@@ -657,6 +662,8 @@ describe('zemn.me website', () => {
 				await (await toggle('Space junk')).click();
 				await (await toggle('Rocket stages')).click();
 				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
+				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('spatula'.length));
 				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));
 				const onlyKind = async (kind: string) => {
 					const rows = await catalogueRows();
