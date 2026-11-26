@@ -48,6 +48,8 @@ function BirthplacePin({
 	}
 	const tip = endpoint(8),
 		base = endpoint(-5);
+	const dotSize =
+		1.6 * Math.min(unfold, equatorialRadius / (30 * frame.kmPerPixel));
 	const label = place.name ? 'Birthplace · ' + place.name : 'Birthplace';
 	return (
 		<g
@@ -55,10 +57,8 @@ function BirthplacePin({
 			aria-label={label}
 			stroke="currentColor"
 			strokeLinecap="round"
-			strokeWidth={
-				3.5 *
-				Math.min(unfold, equatorialRadius / (30 * frame.kmPerPixel))
-			}
+			strokeWidth={dotSize}
+			strokeDasharray={`0 ${2 * dotSize}`}
 		>
 			<title>{label}</title>
 			<line
