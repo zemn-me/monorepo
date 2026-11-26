@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -99,140 +100,102 @@ func filterErrorsWeDontCareAbout(in []log.Message) (out []log.Message) {
 
 const loginButtonSelector = "button[aria-label='Authenticate with OIDC']"
 
-func WaitForLoginButtonReady(driver selenium.WebDriver, timeout time.Duration) (selenium.WebElement, error) {
-	deadline := time.Now().Add(timeout)
-	for time.Now().Before(deadline) {
-		button, err := driver.FindElement(selenium.ByCSSSelector, loginButtonSelector)
-		if err == nil {
-			enabled, err := button.IsEnabled()
-			if err == nil && enabled {
-				return button, nil
-			}
-		}
-		time.Sleep(250 * time.Millisecond)
-	}
-	return nil, fmt.Errorf("login button did not become enabled")
+func WaitForLoginButtonReady(driver selenium.WebDriver, timeout ...time.Duration) (selenium.WebElement, error) {
+	return WaitForEnabledElement(driver, selenium.ByCSSSelector, loginButtonSelector, timeout...)
 }
 
-func PerformOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout time.Duration) error {
+func PerformOIDCLogin(driver selenium.WebDriver, loginLabel string, timeout ...time.Duration) error {
 	originalHandle, err := driver.CurrentWindowHandle()
 	if err != nil {
 		return fmt.Errorf("current window handle: %w", err)
 	}
-
 	existingHandles, err := driver.WindowHandles()
 	if err != nil {
 		return fmt.Errorf("list window handles: %w", err)
 	}
-
-	loginButton, err := WaitForLoginButtonReady(driver, timeout)
-	if err != nil {
-		return fmt.Errorf("prepare login button: %w", err)
-	}
-	if err := loginButton.Click(); err != nil {
+	if err := ClickElementWithRetry(driver, selenium.ByCSSSelector, loginButtonSelector, timeout...); err != nil {
 		return fmt.Errorf("click login button: %w", err)
 	}
 
-	newHandle, err := waitForNewWindow(driver, existingHandles, timeout)
-	if err != nil {
-		return err
+	var popup string
+	if err := waitFor(driver, func(d selenium.WebDriver) (bool, error) {
+		handles, err := d.WindowHandles()
+		for _, h := range handles {
+			if !slices.Contains(existingHandles, h) {
+				popup = h
+				break
+			}
+		}
+		return popup != "", err
+	}, timeout); err != nil {
+		return fmt.Errorf("wait for provider window: %w", err)
 	}
-	if err := driver.SwitchWindow(newHandle); err != nil {
+	if err := driver.SwitchWindow(popup); err != nil {
 		return fmt.Errorf("switch to provider window: %w", err)
 	}
-
 	loginButtonXPath := fmt.Sprintf("//button[contains(normalize-space(.), '%s')]", loginLabel)
-	quickButton, err := WaitForElement(driver, selenium.ByXPATH, loginButtonXPath, 10*time.Second)
-	if err != nil {
-		return fmt.Errorf("locate quick login button: %w", err)
-	}
-	if err := quickButton.Click(); err != nil {
+	if err := ClickElementWithRetry(driver, selenium.ByXPATH, loginButtonXPath, timeout...); err != nil {
 		return fmt.Errorf("submit quick login: %w", err)
 	}
-
-	deadline := time.Now().Add(timeout)
-	for time.Now().Before(deadline) {
-		handles, err := driver.WindowHandles()
-		if err == nil {
-			if len(handles) == 1 && handles[0] == originalHandle {
-				if err := driver.SwitchWindow(originalHandle); err != nil {
-					return fmt.Errorf("return to original window: %w", err)
-				}
-				// Popup closure can precede the main page's authenticated render.
-				// Observe the signed-in control before using account-owned inputs.
-				remaining := time.Until(deadline)
-				if remaining <= 0 {
-					return fmt.Errorf("signed-in page was not ready before the login deadline")
-				}
-				if err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
-					button, err := wd.FindElement(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
-					if err != nil {
-						return false, nil
-					}
-					visible, err := button.IsDisplayed()
-					if IsStaleElementErr(err) {
-						return false, nil
-					}
-					return visible, err
-				}, remaining); err != nil {
-					return fmt.Errorf("wait for signed-in page: %w", err)
-				}
-				return nil
-			}
-		}
-		time.Sleep(200 * time.Millisecond)
+	if err := driver.SwitchWindow(originalHandle); err != nil {
+		return fmt.Errorf("return to original window: %w", err)
 	}
-
-	_ = driver.SwitchWindow(originalHandle)
-	return fmt.Errorf("login window did not close")
+	// Popup closure can precede the main page's signed-in render.
+	if err := waitFor(driver, func(d selenium.WebDriver) (bool, error) {
+		handles, err := d.WindowHandles()
+		if err != nil || slices.Contains(handles, popup) {
+			return false, err
+		}
+		buttons, err := d.FindElements(selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']")
+		if err != nil || len(buttons) == 0 {
+			return false, err
+		}
+		visible, err := buttons[0].IsDisplayed()
+		if IsStaleElementErr(err) {
+			return false, nil
+		}
+		return visible, err
+	}, timeout); err != nil {
+		return fmt.Errorf("wait for signed-in page: %w", err)
+	}
+	return nil
 }
 
-func waitForNewWindow(driver selenium.WebDriver, existing []string, timeout time.Duration) (string, error) {
-	existingSet := make(map[string]struct{}, len(existing))
-	for _, h := range existing {
-		existingSet[h] = struct{}{}
-	}
-
-	deadline := time.Now().Add(timeout)
-	for time.Now().Before(deadline) {
-		handles, err := driver.WindowHandles()
-		if err == nil {
-			for _, h := range handles {
-				if _, ok := existingSet[h]; !ok {
-					return h, nil
-				}
-			}
+func WaitForElement(driver selenium.WebDriver, by, value string, timeout ...time.Duration) (selenium.WebElement, error) {
+	var element selenium.WebElement
+	err := waitFor(driver, func(d selenium.WebDriver) (bool, error) {
+		elements, err := d.FindElements(by, value)
+		if err == nil && len(elements) > 0 {
+			element = elements[0]
 		}
-		time.Sleep(200 * time.Millisecond)
+		return element != nil, err
+	}, timeout)
+	if err != nil {
+		return nil, fmt.Errorf("find %s:%s: %w", by, value, err)
 	}
-	return "", fmt.Errorf("timed out waiting for login window")
+	return element, nil
 }
 
-func WaitForElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
-	deadline := time.Now().Add(timeout)
-	for time.Now().Before(deadline) {
-		elem, err := driver.FindElement(by, value)
-		if err == nil {
-			return elem, nil
+func WaitForEnabledElement(driver selenium.WebDriver, by, value string, timeout ...time.Duration) (selenium.WebElement, error) {
+	var element selenium.WebElement
+	err := waitFor(driver, func(d selenium.WebDriver) (bool, error) {
+		elements, err := d.FindElements(by, value)
+		if err != nil || len(elements) == 0 {
+			return false, err
 		}
-		time.Sleep(250 * time.Millisecond)
-	}
-	return nil, fmt.Errorf("element %s:%s not found", by, value)
-}
-
-func WaitForEnabledElement(driver selenium.WebDriver, by, value string, timeout time.Duration) (selenium.WebElement, error) {
-	deadline := time.Now().Add(timeout)
-	for time.Now().Before(deadline) {
-		elem, err := driver.FindElement(by, value)
-		if err == nil {
-			enabled, err := elem.IsEnabled()
-			if err == nil && enabled {
-				return elem, nil
-			}
+		enabled, err := elements[0].IsEnabled()
+		if IsStaleElementErr(err) {
+			return false, nil
 		}
-		time.Sleep(250 * time.Millisecond)
+		if enabled {
+			element = elements[0]
+		}
+		return enabled, err
+	}, timeout)
+	if err != nil {
+		return nil, fmt.Errorf("find enabled %s:%s: %w", by, value, err)
 	}
-	return nil, fmt.Errorf("enabled element %s:%s not found", by, value)
+	return element, nil
 }
 
 // Selenium's default scrolling can leave a control beneath a sticky toolbar.
@@ -245,50 +208,31 @@ func ClickElementInView(driver selenium.WebDriver, element selenium.WebElement) 
 
 // React may replace an element between lookup and click. Only retry stale
 // references and wait for enabled controls; other click failures still fail.
-func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout time.Duration) error {
-	deadline := time.Now().Add(timeout)
-	var lastErr error
-	for time.Now().Before(deadline) {
-		elem, err := driver.FindElement(by, selector)
-		if err != nil {
-			lastErr = err
-			time.Sleep(200 * time.Millisecond)
-			continue
+func ClickElementWithRetry(driver selenium.WebDriver, by, selector string, timeout ...time.Duration) error {
+	err := waitFor(driver, func(d selenium.WebDriver) (bool, error) {
+		elements, err := d.FindElements(by, selector)
+		if err != nil || len(elements) == 0 {
+			return false, err
 		}
-		enabled, err := elem.IsEnabled()
-		if err != nil {
-			if !IsStaleElementErr(err) {
-				return fmt.Errorf("enabled %s:%s: %w", by, selector, err)
-			}
-			lastErr = err
-			time.Sleep(150 * time.Millisecond)
-			continue
+		enabled, err := elements[0].IsEnabled()
+		if err == nil && enabled {
+			err = elements[0].Click()
 		}
-		if !enabled {
-			lastErr = fmt.Errorf("element is disabled")
-			time.Sleep(150 * time.Millisecond)
-			continue
+		if IsStaleElementErr(err) {
+			return false, nil
 		}
-		if err := elem.Click(); err != nil {
-			lastErr = err
-			if IsStaleElementErr(err) {
-				time.Sleep(150 * time.Millisecond)
-				continue
-			}
-			return fmt.Errorf("click %s:%s: %w", by, selector, err)
-		}
-		return nil
+		return enabled, err
+	}, timeout)
+	if err != nil {
+		return fmt.Errorf("click %s:%s: %w", by, selector, err)
 	}
-	if lastErr == nil {
-		lastErr = fmt.Errorf("element never located")
-	}
-	return fmt.Errorf("click %s:%s: %w", by, selector, lastErr)
+	return nil
 }
 
 // SelectFiles reacquires file inputs replaced during rendering. A stale file
 // selection has not selected files; other errors are terminal.
-func SelectFiles(driver selenium.WebDriver, by, selector string, paths []string, timeout time.Duration) error {
-	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+func SelectFiles(driver selenium.WebDriver, by, selector string, paths []string, timeout ...time.Duration) error {
+	return waitFor(driver, func(wd selenium.WebDriver) (bool, error) {
 		element, err := wd.FindElement(by, selector)
 		if err != nil {
 			if strings.Contains(err.Error(), "no such element") {
@@ -308,8 +252,8 @@ func IsStaleElementErr(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "stale element reference")
 }
 
-func WaitForNoElement(driver selenium.WebDriver, by, value string, timeout time.Duration) error {
-	return driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+func WaitForNoElement(driver selenium.WebDriver, by, value string, timeout ...time.Duration) error {
+	return waitFor(driver, func(wd selenium.WebDriver) (bool, error) {
 		elements, err := wd.FindElements(by, value)
 		return len(elements) == 0, err
 	}, timeout)

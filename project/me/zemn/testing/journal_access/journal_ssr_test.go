@@ -11,12 +11,28 @@ import (
 	"strings"
 	"sync/atomic"
 	"testing"
-	"time"
 
 	"github.com/tebeka/selenium"
-	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
+
+func waitForJournalSessionCookie(t *testing.T, driver selenium.WebDriver) selenium.Cookie {
+	t.Helper()
+	var session selenium.Cookie
+	if err := browserhelpers.WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
+		cookies, err := d.GetCookies()
+		for _, cookie := range cookies {
+			if cookie.Name == "__Host-zemn-authorization" {
+				session = cookie
+				return true, err
+			}
+		}
+		return false, err
+	}); err != nil {
+		t.Fatal("read journal session cookie", err)
+	}
+	return session
+}
 
 func TestJournalAuthenticatedServerRendering(t *testing.T) {
 	root, err := browserhelpers.FrontendRoot()
@@ -62,7 +78,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 	}
 	root = *publicURL
 	root.Path, root.RawQuery = "/journal", "wiki=all"
-	driver, err := seleniumpkg.NewWithChromeArguments("--ignore-certificate-errors")
+	driver, err := browserhelpers.NewClockedBrowser(nil, "--ignore-certificate-errors")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,19 +87,13 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject"); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']"); err != nil {
 		t.Fatal(err)
 	}
-	var cookie selenium.Cookie
-	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-		cookie, err = d.GetCookie("__Host-zemn-authorization")
-		return err == nil, nil
-	}, 10*time.Second); err != nil {
-		t.Fatal("login did not synchronize the SSR cookie", err)
-	}
+	cookie := waitForJournalSessionCookie(t, driver)
 	if !cookie.Secure || cookie.Path != "/" {
 		t.Fatal("SSR cookie is not host-scoped and secure")
 	}
@@ -132,7 +142,7 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 		if err := driver.Refresh(); err != nil {
 			t.Fatal(err)
 		}
-		wiki, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second)
+		wiki, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -155,10 +165,10 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			}
 		}
 	}
-	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']", 30*time.Second); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "[data-glade-footer] button[aria-label='Log out']"); err != nil {
 		t.Fatal(err)
 	}
-	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+	if err := browserhelpers.WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 		cookies, err := d.GetCookies()
 		for _, cookie := range cookies {
 			if cookie.Name == "__Host-zemn-authorization" {
@@ -166,13 +176,13 @@ func TestJournalAuthenticatedServerRendering(t *testing.T) {
 			}
 		}
 		return true, err
-	}, 10*time.Second); err != nil {
+	}); err != nil {
 		t.Fatal("logout did not remove the cookie", err)
 	}
 	if err := driver.Refresh(); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := browserhelpers.WaitForLoginButtonReady(driver, 30*time.Second); err != nil {
+	if _, err := browserhelpers.WaitForLoginButtonReady(driver); err != nil {
 		t.Fatal(err)
 	}
 	if elements, err := driver.FindElements(selenium.ByCSSSelector, "section[aria-label='Diary wiki']"); err != nil || len(elements) != 0 {

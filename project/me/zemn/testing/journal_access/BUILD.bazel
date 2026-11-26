@@ -14,7 +14,6 @@ browser_test(
         "journal_wiki_test.go",
     ],
     deps = [
-        "//go/seleniumutil",
         "//project/me/zemn/testing/browserhelpers",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
         "@com_github_tebeka_selenium//:selenium",

@@ -9,11 +9,9 @@ import (
 	"net/url"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/tebeka/selenium"
-	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
 
@@ -69,7 +67,7 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	verifier := strings.Repeat("v", 43)
 	hash := sha256.Sum256([]byte(verifier))
 	params := url.Values{"client_id": {client}, "redirect_uri": {callback}, "response_type": {"code"}, "resource": {resource}, "scope": {"journal_read"}, "state": {"browser-connection-state"}, "code_challenge_method": {"S256"}, "code_challenge": {base64.RawURLEncoding.EncodeToString(hash[:])}}
-	driver, err := seleniumpkg.New()
+	driver, err := browserhelpers.NewClockedBrowser(nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,17 +75,17 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err = driver.Get(api.String() + "/oauth2/authorize?" + params.Encode()); err != nil {
 		t.Fatal(err)
 	}
-	if _, err = browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//p[contains(.,'Browser diary assistant')]", 30*time.Second); err != nil {
+	if _, err = browserhelpers.WaitForElement(driver, selenium.ByXPATH, "//p[contains(.,'Browser diary assistant')]"); err != nil {
 		t.Fatalf("consent details: %v", err)
 	}
-	if err = browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err = browserhelpers.PerformOIDCLogin(driver, "Login as local subject"); err != nil {
 		t.Fatal(err)
 	}
-	if err = browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//button[normalize-space(.)='Allow journal access']", 30*time.Second); err != nil {
+	if err = browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//button[normalize-space(.)='Allow journal access']"); err != nil {
 		t.Fatal(err)
 	}
 	var code string
-	if err = driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+	if err = browserhelpers.WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 		current, err := d.CurrentURL()
 		if err != nil {
 			return false, err
@@ -101,7 +99,7 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 			t.Fatal("authorization response lost state or issuer")
 		}
 		return code != "", nil
-	}, 30*time.Second); err != nil {
+	}); err != nil {
 		t.Fatal("consent did not return an authorization code", err)
 	}
 	form := url.Values{"grant_type": {"authorization_code"}, "client_id": {client}, "code": {code}, "redirect_uri": {callback}, "resource": {resource}, "code_verifier": {verifier}}
@@ -132,14 +130,14 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 	if err = driver.Get(api.String() + "/oauth2/authorize?" + params.Encode()); err != nil {
 		t.Fatal(err)
 	}
-	if err = browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']", 30*time.Second); err != nil {
+	if err = browserhelpers.ClickElementWithRetry(driver, selenium.ByXPATH, "//button[normalize-space(.)='Cancel connection']"); err != nil {
 		if body, bodyErr := driver.FindElement(selenium.ByTagName, "body"); bodyErr == nil {
 			text, _ := body.Text()
 			t.Logf("connection page: %s", text)
 		}
 		t.Fatal(err)
 	}
-	if err = driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+	if err = browserhelpers.WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 		current, err := d.CurrentURL()
 		if err != nil {
 			return false, err
@@ -149,7 +147,7 @@ func TestJournalMCPOAuthBrowserConnection(t *testing.T) {
 			return false, err
 		}
 		return u.Query().Get("error") == "access_denied" && u.Query().Get("code") == "" && u.Query().Get("state") == "browser-connection-state", nil
-	}, 30*time.Second); err != nil {
+	}); err != nil {
 		t.Fatal("denied connection did not return access_denied", err)
 	}
 }
