@@ -821,6 +821,14 @@ http_file(
     urls = ["https://raw.githubusercontent.com/sizhewang25/jonathon-space-archive/654637aa28c72733ffbf69709f530e5712ce02a6/data/satcat.tsv"],
 )
 
+# The chart browser suite prints and explores this day through the normal API.
+http_file(
+    name = "spacebook_2006_08_01",
+    downloaded_file_path = "2006-08-01",
+    sha256 = "2894ced4c768cb3a01fdd39e7689bdce50efccfa99636547f5b14ec7bb3a78be",
+    urls = ["https://spacebook.com/api/entity/tle/2006-08-01"],
+)
+
 # Historical elements for the chart's propagation regression tests.
 http_file(
     name = "spacebook_2006_08_03",

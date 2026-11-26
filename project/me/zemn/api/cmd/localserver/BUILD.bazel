@@ -26,6 +26,7 @@ go_library(
         "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
         "@com_github_aws_aws_sdk_go_v2_service_s3//types",
         "@com_github_google_uuid//:uuid",
+        "@io_bazel_rules_go//go/runfiles",
     ],
 )
 
@@ -66,10 +67,13 @@ itest_service(
     testonly = True,
     args = [
         "--aws-emulator",
+        "--orbit-fixture",
+        "$(rlocationpath @spacebook_2006_08_01//file)",
         "--address",
         ":$${PORT}",
     ],
     autoassign_port = True,
+    data = ["@spacebook_2006_08_01//file"],
     env = {
         "ZEMN_TEST_CALENDAR_ICAL_ROLLING_FIXTURE": "1",
     },

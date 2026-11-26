@@ -87,8 +87,10 @@ type Server struct {
 }
 
 type NewServerOptions struct {
-	AWSConfig  *aws.Config
-	LocalStack bool
+	// OrbitElementsTransport lets integration tests supply an archive for a known date.
+	OrbitElementsTransport http.RoundTripper
+	AWSConfig              *aws.Config
+	LocalStack             bool
 	// AllowRequestHostOIDCIssuer permits request-derived issuers for local
 	// development. Leave false in deployed servers.
 	AllowRequestHostOIDCIssuer bool
@@ -172,7 +174,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	}
 	s := &Server{
 		orbitArchive: orbitArchive{
-			client: &http.Client{Timeout: 18 * time.Second},
+			client: &http.Client{Timeout: 18 * time.Second, Transport: opts.OrbitElementsTransport},
 		},
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
