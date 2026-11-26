@@ -19,6 +19,7 @@ export function SlideRule({
 	tick,
 	major,
 	tickOrigin = 0,
+	bands,
 	tickLabel,
 	readPosition,
 	seek,
@@ -38,6 +39,12 @@ export function SlideRule({
 	tick: number;
 	major: number;
 	tickOrigin?: number;
+	bands?: readonly {
+		start: number;
+		end: number;
+		startLabel: string;
+		endLabel: string;
+	}[];
 	tickLabel: (mark: number) => string;
 	readPosition: () => number;
 	seek: (mark: number) => void;
@@ -172,6 +179,33 @@ export function SlideRule({
 				/>
 				<svg aria-hidden="true" width="100%" height="44">
 					<svg x="50%" width="1" height="44" overflow="visible">
+						{bands?.map(({ start, end, startLabel, endLabel }) => {
+							const span = (end - start) * pitch;
+							return (
+								<g
+									key={start}
+									className={style.rulerBand}
+									transform={`translate(${(start - centre) * pitch} 0)`}
+									pointerEvents="none"
+								>
+									<rect
+										y="21"
+										width={span}
+										height="12"
+										fill="currentColor"
+										opacity=".15"
+									/>
+									<path
+										d={`M0 21v12h${span}V21`}
+										fill="none"
+									/>
+									<text y="43">{startLabel}</text>
+									<text x={span} y="43">
+										{endLabel}
+									</text>
+								</g>
+							);
+						})}
 						{ticks}
 					</svg>
 				</svg>

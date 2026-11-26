@@ -23,7 +23,7 @@ export const wrap = (turn: number) => degrees(turn + 180) - 180;
 const revolutionMs = 120_000;
 
 // Ease symmetrically into the disc near either pole.
-export const orbitalTiltLimit = 82;
+export const orbitalTiltLimit = 60;
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
 function orbitalBlend(tilt: number) {
 	const t = Math.min(1, (90 - Math.abs(tilt)) / (90 - orbitalTiltLimit));

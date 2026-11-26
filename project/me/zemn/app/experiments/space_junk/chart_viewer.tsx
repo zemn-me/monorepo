@@ -23,6 +23,20 @@ import style from './style.module.css';
 import { type Birthplace, nearestAspects, type zodiacFrame } from './zodiac.js';
 
 const closeExtent = 1.5;
+const tiltBands = [
+	{
+		start: -90,
+		end: -orbitalTiltLimit,
+		startLabel: 'Wheel',
+		endLabel: 'Orbit',
+	},
+	{
+		start: orbitalTiltLimit,
+		end: 90,
+		startLabel: 'Orbit',
+		endLabel: 'Wheel',
+	},
+];
 // Keep the ruler in physical units even when the visible catalogue changes.
 const maxExtent = (60 * KM_PER_AU) / equatorialRadius;
 const kmAcrossPerExtent = viewWidthKm(globeCamera(0, 0, 1));
@@ -240,6 +254,7 @@ export function ChartViewer({
 				<SlideRule
 					{...rulerEvents}
 					label="Tilt"
+					bands={tiltBands}
 					readout={`${Math.round(tilt)}°`}
 					centre={tilt}
 					min={-90}
@@ -256,6 +271,7 @@ export function ChartViewer({
 						max: 90,
 						value: Math.round(tilt),
 						'aria-valuetext': `${Math.round(tilt)} degrees latitude`,
+						'aria-description': `The chart blends from orbit to wheel between ${orbitalTiltLimit} and 90 degrees in either direction. Release to settle into the nearer view.`,
 						onChange: e => tiltTo(e.currentTarget.valueAsNumber),
 					}}
 				/>

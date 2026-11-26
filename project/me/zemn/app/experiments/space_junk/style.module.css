@@ -166,6 +166,12 @@
 	border-inline: 3px solid transparent;
 	border-bottom: 5px solid currentColor;
 }
+.rulerBand text {
+	font-size: 10px;
+}
+.rulerTrack:has(.rulerBand) i {
+	bottom: 12px;
+}
 .figure {
 	margin: 0.5rem auto 1.25rem;
 	text-align: center;

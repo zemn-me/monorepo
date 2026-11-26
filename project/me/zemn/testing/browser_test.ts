@@ -503,7 +503,7 @@ describe('zemn.me website', () => {
 				await projection('wheel from above');
 				await driver.wait(async () => await moonDot.getAttribute('cx') === initialX, 5000);
 				// Release on either side of the midpoint of the near-pole blend.
-				for (const [fraction, endpoint] of [[0.014, 'wheel'], [0.028, 'globe']] as const) {
+				for (const [fraction, endpoint] of [[0.04, 'wheel'], [0.105, 'globe']] as const) {
 					const dy = Math.round(centre.width * fraction);
 					await mouse('mousePressed', 0, 1);
 					await mouse('mouseMoved', dy, 1);
@@ -531,10 +531,10 @@ describe('zemn.me website', () => {
 				await projection('Earth and orbital chart');
 				await projection('wheel from above');
 				expect(await moonDot.getAttribute('cx')).toBe(wheelX);
-				await wheel.sendKeys(Key.ARROW_DOWN);
+				await wheel.sendKeys(Key.ARROW_DOWN.repeat(4));
 				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000,
-					'Releasing five degrees from the pole settles into the full orbital view');
-				expect(await tilt.getAttribute('value')).toBe('82');
+					'Releasing twenty degrees from the pole settles into the full orbital view');
+				expect(await tilt.getAttribute('value')).toBe('60');
 				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting objects"]'));
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
 					(await Promise.all(paths.slice(0, 6).map(path => path.getAttribute('d')))).join('')
@@ -542,8 +542,10 @@ describe('zemn.me website', () => {
 				const initialRotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
 				await initialRotation.click();
 				const tiltTrack = await tilt.findElement(By.xpath('..'));
-				await tiltTrack.findElement(By.xpath('.//*[local-name()="text" and .="60°"]')).click();
-				await driver.wait(async () => await tilt.getAttribute('value') === '60', 5000);
+				const bands = await tiltTrack.findElements(By.css('g[pointer-events="none"] text'));
+				expect(await Promise.all(bands.map(label => label.getProperty('textContent')))).toEqual(['Wheel', 'Orbit', 'Orbit', 'Wheel']);
+				await tiltTrack.findElement(By.xpath('.//*[local-name()="text" and .="45°"]')).click();
+				await driver.wait(async () => await tilt.getAttribute('value') === '45', 5000);
 				const original = await geometry();
 				expect(original.length).toBeGreaterThan(0);
 				await tilt.sendKeys(Key.ARROW_RIGHT);
