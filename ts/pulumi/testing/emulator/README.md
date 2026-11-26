@@ -21,6 +21,12 @@ the affected request-write path without replaying a successful create. The
 provider trusts the listener's ephemeral certificate only for this run; the
 upstream emulator connection and compatibility fixtures are unchanged.
 
+Both deployments also send a viewer request to the API distribution's alias.
+CloudFront must reject a POST to the read-only orbit archive at the edge.
+The browser feature tests run the Go API on a separate port because the
+emulator cannot execute its container image. Its CloudFront forwards requests
+only to origins served inside the emulator.
+
 The small `//bzl/aws_xml` projection derives roots, namespaces, XML member names,
 list wrappers, optional members, and HTTP header exclusions from those models.
 It supports the scalar, structure, and list shapes used by the selected REST XML
