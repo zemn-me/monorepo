@@ -83,8 +83,12 @@
 .rulerRow:last-child {
 	border-block-end: 1px solid var(--line);
 }
-.rulerValue {
+.rulerRow > .rulerValue {
 	display: grid;
+	align-content: center;
+	grid-template-rows: auto minmax(1lh, auto);
+	font-size: 1.1rem;
+	line-height: 1.15;
 	gap: 0.05rem;
 	padding-inline-end: 0.35rem;
 }
@@ -95,8 +99,6 @@
 }
 .rulerValue strong {
 	font-weight: 400;
-	font-size: 1.1rem;
-	line-height: 1.15;
 	font-variant-numeric: tabular-nums;
 }
 .rulerTrack {
@@ -202,12 +204,8 @@
 	text-align: start;
 }
 .viewControls .rulerRow > .switch {
-	flex-direction: column-reverse;
-	justify-content: center;
-	gap: 0.15rem;
-	padding-inline-start: 0.5rem;
-	font: var(--controls);
-	font-size: 0.72rem;
+	justify-items: end;
+	padding-inline: 0.5rem 0;
 }
 .viewControls .rulerRow {
 	grid-auto-flow: column;

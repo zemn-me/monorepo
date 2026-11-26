@@ -228,13 +228,13 @@ export function ChartViewer({
 						onChange: e => rotate(e.currentTarget.valueAsNumber),
 					}}
 				>
-					<label className={style.switch}>
+					<label className={`${style.rulerValue} ${style.switch}`}>
+						<span>Auto-rotate</span>
 						<input
 							type="checkbox"
 							checked={controls.spin}
 							onChange={e => controls.setSpin(e.target.checked)}
 						/>
-						Auto-rotate
 					</label>
 				</SlideRule>
 				<SlideRule
