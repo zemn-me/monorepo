@@ -722,20 +722,25 @@ describe('zemn.me website', () => {
 				const globe = await driver.findElement(By.id('star-chart'));
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
 				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
-				const pin = By.css('circle[aria-label^="Birthplace ·"]');
+				const pin = By.css('g[role="img"][aria-label^="Birthplace ·"] > line:last-of-type');
 				expect(await globe.findElements(pin)).toHaveLength(0);
 				const birthplace = await driver.findElement(By.css('input[role="combobox"]'));
 				await birthplace.sendKeys('Singapore');
 				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
-				const center = Number(await marker.getAttribute('cx'));
+				const center = Number(await marker.getAttribute('x1'));
+				const pinLengths = await driver.executeScript<number[]>(`
+					return Array.from(arguments[0].parentElement.querySelectorAll('line'), line => line.getTotalLength());
+				`, marker);
+				expect(pinLengths).toHaveLength(2);
+				expect(Math.min(...pinLengths)).toBeGreaterThan(1);
 				await globe.sendKeys(Key.ARROW_RIGHT);
-				await driver.wait(async () => Number(await marker.getAttribute('cx')) < center, 5000);
+				await driver.wait(async () => Number(await marker.getAttribute('x1')) < center, 5000);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(20));
 				await driver.wait(async () => (await globe.findElements(pin)).length === 0, 5000);
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Number(await globe.findElement(pin).getAttribute('cx')) === center, 5000);
+				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Number(await globe.findElement(pin).getAttribute('x1')) === center, 5000);
 				await birthplace.sendKeys(Key.END, Key.BACK_SPACE.repeat('Singapore'.length));
 				await driver.wait(async () => !(await globe.findElements(pin)).length, 5000, 'The marker should disappear when the birth city is cleared');
 			} finally {

@@ -5,6 +5,7 @@ import { coastlineUrl } from './assets.js';
 import type { PickMarker } from './chart_camera.js';
 import type { ChartGeometry } from './chart_geometry.js';
 import {
+	earthRadii,
 	equatorialRadius,
 	groundLocation,
 	type Marker,
@@ -24,6 +25,69 @@ import {
 import { WheelGuides } from './zodiac_wheel.js';
 
 const baseWorld = globeWorld();
+function BirthplacePin({
+	place,
+	frame,
+	unfold,
+}: {
+	place: Birthplace & { name?: string };
+	frame: ChartGeometry['frame'];
+	unfold: number;
+}) {
+	const anchor = surface(place.longitude, place.latitude);
+	const point = frame.project(anchor);
+	if (!point.visible) return null;
+
+	// A slight northward lean gives the pin a profile even when looking
+	// straight down at the birthplace. Altitudes are relative to local level.
+	const latitude = (place.latitude * Math.PI) / 180;
+	const longitude = (place.longitude * Math.PI) / 180;
+	const lean = Math.tan(Math.PI / 6);
+	const horizontal = Math.cos(latitude) - lean * Math.sin(latitude);
+	const step = earthRadii({
+		x: horizontal * Math.cos(longitude),
+		y: horizontal * Math.sin(longitude),
+		z: Math.sin(latitude) + lean * Math.cos(latitude),
+	});
+	function endpoint(altitudeKm: number) {
+		const p = frame.project({
+			x: anchor.x + altitudeKm * step.x,
+			y: anchor.y + altitudeKm * step.y,
+			z: anchor.z + altitudeKm * step.z,
+		});
+		// Exaggerate the symbol around its surveyed point at whole-globe zoom.
+		return {
+			x: point.x + 80 * (p.x - point.x),
+			y: point.y + 80 * (p.y - point.y),
+		};
+	}
+	const tip = endpoint(8),
+		base = endpoint(-5);
+	const label = place.name ? 'Birthplace · ' + place.name : 'Birthplace';
+	return (
+		<g
+			role="img"
+			aria-label={label}
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeWidth={
+				3.5 *
+				Math.min(unfold, equatorialRadius / (30 * frame.kmPerPixel))
+			}
+		>
+			<title>{label}</title>
+			<line
+				x1={point.x}
+				y1={point.y}
+				x2={base.x}
+				y2={base.y}
+				opacity=".42"
+			/>
+			<line x1={point.x} y1={point.y} x2={tip.x} y2={tip.y} />
+		</g>
+	);
+}
+
 export function Globe({
 	geometry,
 	placements,
@@ -96,13 +160,6 @@ export function Globe({
 		return { faces, hits, focus };
 	}, [markers, placements, selected, geometry, frame, unfold]);
 
-	const birthPoint =
-		unfold > 0 && birthplace
-			? frame.project(surface(birthplace.longitude, birthplace.latitude))
-			: undefined;
-	const birthLabel = birthplace?.name
-		? 'Birthplace · ' + birthplace.name
-		: 'Birthplace';
 	const focus = projected.focus;
 	const ground =
 		location &&
@@ -141,7 +198,7 @@ export function Globe({
 				The zodiac ring marks sky directions. In 3D the distance scale
 				applies to all bodies.
 				{birthplace &&
-					` The red dot marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
+					` The pin marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
 			</desc>
 			<defs>
 				<mask
@@ -215,19 +272,12 @@ export function Globe({
 					</text>
 				</g>
 			)}
-			{birthPoint?.visible && (
-				<circle
-					cx={birthPoint.x}
-					cy={birthPoint.y}
-					r={3.5 * unfold}
-					fill="#cb3434"
-					stroke="var(--background-color)"
-					strokeWidth="1.2"
-					role="img"
-					aria-label={birthLabel}
-				>
-					<title>{birthLabel}</title>
-				</circle>
+			{unfold > 0 && birthplace && (
+				<BirthplacePin
+					place={birthplace}
+					frame={frame}
+					unfold={unfold}
+				/>
 			)}
 			{focus?.visible && (
 				<>
