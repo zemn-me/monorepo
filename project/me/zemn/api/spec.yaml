@@ -3568,7 +3568,7 @@ paths:
               schema:
                 type: string
 
-  /space-junk/elements/{day}:
+  /earth-orbits/elements/{day}:
     get:
       operationId: GetOrbitElements
       summary: Daily Earth-orbiting object elements from the Spacebook archive.

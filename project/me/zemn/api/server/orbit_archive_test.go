@@ -61,7 +61,7 @@ func TestOrbitArchiveHTTP(t *testing.T) {
 				}
 				s.orbitArchive.client = client
 				s.orbitArchive.bucket = "orbit-test"
-				r := httptest.NewRequest("GET", "/space-junk/elements/"+day, nil)
+				r := httptest.NewRequest("GET", "/earth-orbits/elements/"+day, nil)
 				r.Header.Set("Origin", "https://zemn.me")
 				w := httptest.NewRecorder()
 				s.ServeHTTP(w, r)
