@@ -173,15 +173,6 @@ const BirthdayChart = memo(function BirthdayChart({
 
 	return (
 		<>
-			<BodyFilters
-				group="Planetary bodies"
-				presetName="Zodiac"
-				preset={classical}
-				options={planetaryBodies}
-				glyphs={planetGlyphs}
-				selected={selectedBodies}
-				onChange={setSelectedBodies}
-			/>
 			<figure className={style.figure}>
 				<ChartViewer
 					instant={instant}
@@ -198,6 +189,15 @@ const BirthdayChart = memo(function BirthdayChart({
 					ascendant={natalZodiac.ascendant}
 					onSelect={m => locate(m.object.id)}
 				>
+					<BodyFilters
+						group="Planetary bodies"
+						presetName="Zodiac"
+						preset={classical}
+						options={planetaryBodies}
+						glyphs={planetGlyphs}
+						selected={selectedBodies}
+						onChange={setSelectedBodies}
+					/>
 					<BodyFilters
 						group="Man-made bodies"
 						presetName="Space junk"
@@ -276,14 +276,11 @@ const BirthdayChart = memo(function BirthdayChart({
 									<PlacementEntry
 										key={object.id}
 										name={object.name}
+										designator={object.piece}
 										longitude={longitude}
 										house={debrisZodiac.house(longitude)}
 										locate={() => locate(object.id)}
 									>
-										<p>
-											{kinds[object.kind]} ·{' '}
-											{object.piece} · NORAD {object.id}
-										</p>
 										<p>
 											{displayDate(object.start)} –{' '}
 											{displayDate(

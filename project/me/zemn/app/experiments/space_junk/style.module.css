@@ -328,6 +328,12 @@
 	font-size: 1rem;
 	margin: 0;
 }
+.designator {
+	white-space: nowrap;
+	font-size: 0.875rem;
+	font-weight: 400;
+	color: var(--muted);
+}
 .catalogue p {
 	max-inline-size: 66ch;
 	line-height: 1.45;
@@ -418,8 +424,6 @@
 .objectBand {
 	grid-template-columns: 5.4rem minmax(6rem, 1.4fr) minmax(0, 4fr) minmax(4.5rem, 1fr);
 	gap: 0.3rem;
-	border-block-start: 1px solid var(--line);
-	border-block-end: 0;
 	padding-block: 0.45rem;
 }
 :is(.planetBand, .objectBand) > .switch {

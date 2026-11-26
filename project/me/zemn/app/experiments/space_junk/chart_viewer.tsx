@@ -257,7 +257,6 @@ export function ChartViewer({
 					/>
 				</g>
 			</svg>
-			{children}
 			<div
 				role="group"
 				aria-label="View controls"
@@ -345,6 +344,7 @@ export function ChartViewer({
 					}}
 				/>
 			</div>
+			{children}
 		</div>
 	);
 }

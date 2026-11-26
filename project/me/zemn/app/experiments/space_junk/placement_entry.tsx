@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
+import style from './style.module.css';
 import { degrees, signs } from './zodiac.js';
 
 export function PlacementEntry({
 	name,
 	glyph,
+	designator,
 	longitude,
 	house,
 	locate,
@@ -11,6 +13,7 @@ export function PlacementEntry({
 }: {
 	name: string;
 	glyph?: string;
+	designator?: string;
 	longitude: number;
 	house?: number;
 	locate?: () => void;
@@ -29,6 +32,11 @@ export function PlacementEntry({
 							{glyph}
 							{'\uFE0E'}{' '}
 						</span>
+					)}
+					{designator && (
+						<>
+							<span className={style.designator}>{designator}</span>{' '}
+						</>
 					)}
 					{locate ? (
 						<a href="#star-chart" onClick={locate}>

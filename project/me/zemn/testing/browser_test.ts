@@ -568,7 +568,7 @@ describe('zemn.me website', () => {
 				expect(await driver.findElement(By.css('ul[aria-label="Chart placements"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
 				);
-				const firstObject = () => grid.findElement(By.css('li:has(h3 a) p')).getText();
+				const firstObject = () => grid.findElement(By.css('li:has(h3 a) h3')).getText();
 				const firstOnPage = await firstObject();
 				const previous = await driver.findElement(By.xpath('//button[.="Previous"]'));
 				expect(await previous.isEnabled()).toBe(false);
@@ -596,7 +596,13 @@ describe('zemn.me website', () => {
 				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat(8));
 				expect(await markerCount()).toBe(unfiltered);
 				await search.sendKeys('1976-126V');
-				expect(await driver.findElement(By.css('ul[aria-label="Chart placements"]')).getText()).toContain('NORAD 9724');
+				const entry = await grid.findElement(By.css('li:has(h3 a)'));
+				const name = await entry.findElement(By.css('h3 a')).getText();
+				expect(await entry.findElement(By.css('h3')).getAccessibleName()).toBe(`1976-126V ${name}`);
+				expect(await entry.getText()).not.toContain('NORAD');
+				const details = await entry.findElements(By.css('p'));
+				expect(details).toHaveLength(1);
+				expect(await details[0]!.getText()).toMatch(/^\d{1,2} \w+ \d{4} – \d{1,2} \w+ \d{4}$/);
 				expect(await markerCount()).toBe(1);
 
 			} finally {
@@ -633,7 +639,7 @@ describe('zemn.me website', () => {
 				const zodiacGroup = await planets.findElement(By.css('[role="group"][aria-label="Zodiac"]'));
 				expect(await zodiacGroup.findElements(By.css('input[role="switch"]'))).toHaveLength(7);
 				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
-				expect(await driver.findElements(By.css('figure #star-chart + [aria-label="Man-made bodies"]:has(+ [aria-label="View controls"])'))).toHaveLength(1);
+				expect(await driver.findElements(By.css('figure [aria-label="View controls"] + [aria-label="Planetary bodies"] + [aria-label="Man-made bodies"]'))).toHaveLength(1);
 				await (await toggle('Moon')).click();
 				expect(await bodies()).toHaveLength(6);
 				expect(await placements()).toHaveLength(6);
@@ -738,17 +744,15 @@ describe('zemn.me website', () => {
 				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
 				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
 				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li:has(h3 a)'));
-				const onlyKind = async (kind: string) => {
-					const rows = await catalogueRows();
-					return rows.length > 0 && (await Promise.all(rows.map(row => row.getText()))).every(text => text.includes(kind));
-				};
-				await driver.wait(() => onlyKind('Rocket stage'), 5000);
+				await search.sendKeys('Rocket stage');
+				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
 				await (await toggle('Spacecraft payloads')).sendKeys(Key.SPACE);
 				await (await toggle('Space junk')).sendKeys(Key.SPACE);
 				await (await toggle('Space junk')).sendKeys(Key.SPACE);
 				expect(await (await toggle('Spacecraft payloads')).isSelected()).toBe(true);
-				await driver.wait(() => onlyKind('Spacecraft payload'), 5000);
-				await driver.wait(async () => (await driver.findElements(By.css('ul[aria-label="Chart placements"] h3 a[href="#star-chart"]'))).length > 0, 10000);
+				await driver.wait(async () => (await catalogueRows()).length === 0, 5000);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('Rocket stage'.length), 'Spacecraft payload');
+				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
 				await globe.sendKeys(Key.HOME);
 				expect(await bodies()).toHaveLength(0);
 			} finally {
