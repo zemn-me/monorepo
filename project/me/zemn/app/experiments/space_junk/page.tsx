@@ -329,20 +329,20 @@ export default function Page() {
 	const { instant, clock } = useRulerClock(Date.UTC(2006, 7, 1, 12));
 	const [selectedKinds, setSelectedKinds] =
 		useState<readonly ObjectKind[]>(debrisTypes);
-	const [deviceZone, setDeviceZone] = useState('UTC');
+	const [deviceZone, setDeviceZone] = useState<string>();
 	useEffect(
 		() => setDeviceZone(Intl.DateTimeFormat().resolvedOptions().timeZone),
 		[]
 	);
 	const [city, setCity] = useState<City>();
-	const zone = city?.timezone ?? deviceZone;
+	const zone = city?.timezone ?? deviceZone ?? 'UTC';
 	const chart = useDeferredValue(
 		useMemo(() => ({ instant, zone, place: city }), [instant, zone, city])
 	);
 
 	const setBirthplace = useCallback(
 		(next?: City) => {
-			const nextZone = next?.timezone ?? deviceZone;
+			const nextZone = next?.timezone ?? deviceZone ?? 'UTC';
 			// A birthday is entered as a wall time, so changing the city keeps the
 			// date and clock reading and resolves them to an instant in the new zone.
 			if (nextZone !== zone)
@@ -381,7 +381,7 @@ export default function Page() {
 			<BirthdayRulers
 				epoch={instant}
 				asOf={catalogueDate}
-				zone={zone}
+				zone={city?.timezone ?? deviceZone}
 				clock={clock}
 			/>
 			<BirthdayChart

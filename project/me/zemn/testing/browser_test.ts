@@ -817,6 +817,28 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('serves numeric month ticks before localizing them in the browser', async () => {
+			try {
+				const chrome = driver as unknown as ChromeDriver;
+				await chrome.sendDevToolsCommand('Emulation.setScriptExecutionDisabled', { value: true });
+				await driver.get(`${origin}/experiments/space-junk`);
+				const ticks = By.css('input[name="month"] + svg text');
+				const labels = async () => Promise.all((await driver.findElements(ticks)).map(tick => tick.getProperty('textContent')));
+				const initial = await labels();
+				expect(initial).toContain('9');
+				expect(initial.every(label => /^\d+$/.test(label))).toBe(true);
+				await chrome.sendDevToolsCommand('Emulation.setScriptExecutionDisabled', { value: false });
+				await driver.navigate().refresh();
+				const september = await driver.executeScript<string>(`
+					return new Intl.DateTimeFormat(navigator.languages, {calendar:'gregory', month:'short', timeZone:'UTC'})
+						.format(Date.UTC(2000, 8, 1));
+				`);
+				await driver.wait(async () => (await labels()).includes(september), 5000);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it.each([
 			['en-US', 'August'],
 			['en-GB', 'August'],

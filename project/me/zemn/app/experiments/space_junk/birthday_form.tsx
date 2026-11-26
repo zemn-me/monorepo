@@ -234,71 +234,68 @@ function Ruler({
 export const BirthdayRulers = memo(function BirthdayRulers({
 	epoch,
 	asOf,
-	zone,
+	zone: localZone,
 	clock,
 }: {
 	epoch: number;
 	asOf: string;
-	zone: string;
+	zone?: string;
 	clock: RulerClock;
 }) {
 	const languages = useLocale();
-	const numbers = useMemo(
-		() => new Intl.NumberFormat(languages, { useGrouping: false }),
-		[languages]
-	);
-	const months = useMemo(() => {
-		const formatter = (month: 'short' | 'long') =>
+	// The server and browser can abbreviate the same month differently.
+	// Use numeric UTC labels for the shared first render, then localize them.
+	const zone = localZone ?? 'UTC';
+	const formats = useMemo(() => {
+		if (!localZone) return;
+		const monthFormat = (month: 'short' | 'long') =>
 			new Intl.DateTimeFormat(languages, {
 				calendar: 'gregory',
 				month,
 				timeZone: 'UTC',
 			});
-		const short = formatter('short'),
-			long = formatter('long');
-		return Array.from({ length: 12 }, (_, index) => {
-			const date = Date.UTC(2000, index, 1);
-			return { short: short.format(date), long: long.format(date) };
-		});
-	}, [languages]);
-	const date = zonedTime(epoch, zone);
-	const localTime = date.toPlainTime().toString({ smallestUnit: 'second' });
-	const zoneFormat = useMemo(
-		() =>
-			new Intl.DateTimeFormat(languages, {
-				timeZone: zone,
+		const short = monthFormat('short'),
+			long = monthFormat('long');
+		return {
+			number: new Intl.NumberFormat(languages, { useGrouping: false })
+				.format,
+			months: Array.from({ length: 12 }, (_, index) => {
+				const date = Date.UTC(2000, index, 1);
+				return { short: short.format(date), long: long.format(date) };
+			}),
+			zone: new Intl.DateTimeFormat(languages, {
+				timeZone: localZone,
 				timeZoneName: 'short',
 			}),
-		[languages, zone]
-	);
-	const zoneName =
-		zoneFormat
-			.formatToParts(epoch)
-			.find(part => part.type === 'timeZoneName')?.value ?? zone;
-	const tickTime = useMemo(
-		() =>
-			new Intl.DateTimeFormat(languages, {
-				timeZone: zone,
+			time: new Intl.DateTimeFormat(languages, {
+				timeZone: localZone,
 				hourCycle: 'h23',
 				hour: '2-digit',
 				minute: '2-digit',
 			}),
-		[languages, zone]
-	);
-	const fullDate = useMemo(
-		() =>
-			new Intl.DateTimeFormat(languages, {
+			date: new Intl.DateTimeFormat(languages, {
 				calendar: 'gregory',
 				dateStyle: 'long',
-				timeZone: zone,
+				timeZone: localZone,
 			}),
-		[languages, zone]
-	);
+		};
+	}, [languages, localZone]);
+	const number = formats?.number ?? String;
+	const date = zonedTime(epoch, zone);
+	const localTime = date.toPlainTime().toString({ smallestUnit: 'second' });
+	const zoneName =
+		formats?.zone
+			.formatToParts(epoch)
+			.find(part => part.type === 'timeZoneName')?.value ?? zone;
 	const common = {
 		epoch,
 		lastInstant: Date.parse(asOf + 'T23:59:59.999Z'),
 		accessibleTime:
-			fullDate.format(epoch) + ' · ' + localTime + ' ' + zoneName,
+			(formats?.date.format(epoch) ?? date.toPlainDate().toString()) +
+			' · ' +
+			localTime +
+			' ' +
+			zoneName,
 		zone,
 		clock,
 	};
@@ -307,22 +304,24 @@ export const BirthdayRulers = memo(function BirthdayRulers({
 			<Ruler
 				{...common}
 				unit="year"
-				readout={numbers.format(date.year)}
-				tickLabel={numbers.format}
+				readout={number(date.year)}
+				tickLabel={number}
 			/>
 			<Ruler
 				{...common}
 				unit="month"
-				readout={months[date.month - 1]!.long}
-				tickLabel={mark => months[mark % 12]!.short}
+				readout={
+					formats?.months[date.month - 1]?.long ?? String(date.month)
+				}
+				tickLabel={mark =>
+					formats?.months[mark % 12]?.short ?? String((mark % 12) + 1)
+				}
 			/>
 			<Ruler
 				{...common}
 				unit="day"
-				readout={numbers.format(date.day)}
-				tickLabel={mark =>
-					numbers.format(new Date(mark * dayMs).getUTCDate())
-				}
+				readout={number(date.day)}
+				tickLabel={mark => number(new Date(mark * dayMs).getUTCDate())}
 			/>
 			<Ruler
 				{...common}
@@ -330,7 +329,10 @@ export const BirthdayRulers = memo(function BirthdayRulers({
 				readout={localTime}
 				zoneName={zoneName}
 				tickOrigin={-(date.offsetNanoseconds / 60e9) % 60}
-				tickLabel={mark => tickTime.format(mark * minuteMs)}
+				tickLabel={mark =>
+					formats?.time.format(mark * minuteMs) ??
+					new Date(mark * minuteMs).toISOString().slice(11, 16)
+				}
 			/>
 		</fieldset>
 	);
