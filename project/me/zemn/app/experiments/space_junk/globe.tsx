@@ -15,6 +15,7 @@ import { globeWorld, height, width } from './globe_scene.js';
 import { GlobeZodiac } from './globe_zodiac.js';
 import { OrbitScene } from './orbit_scene.js';
 import type { BodyPosition } from './planets.js';
+import style from './style.module.css';
 import {
 	type Birthplace,
 	type nearestAspects,
@@ -235,6 +236,7 @@ export function Globe({
 					role="img"
 					aria-label="Earth"
 				>
+					<title>Earth</title>
 					<circle r="2" fill="currentColor" />
 					<path
 						d="M-2,2 l-20,23 h-5"
@@ -247,13 +249,9 @@ export function Globe({
 						y="25"
 						textAnchor="end"
 						dominantBaseline="central"
-						fontSize="11"
-						fill="currentColor"
-						stroke="var(--background-color)"
-						strokeWidth="3"
-						paintOrder="stroke"
+						className={style.planetGlyph}
 					>
-						Earth
+						⊕
 					</text>
 				</g>
 			)}

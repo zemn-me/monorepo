@@ -671,7 +671,7 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => await moonX() !== closeX, 5000);
 				expect(await planetLinks()).toEqual(wheelLinks);
 				const earth = await globe.findElement(By.css('g[aria-label="Earth"] text'));
-				expect(await earth.getText()).toBe('Earth');
+				expect(await earth.getText()).toBe('⊕');
 				const far = await zoomExtent();
 				expect(far).toBe('153 AU across at Earth’s centre');
 				const zodiac = await toggle('Zodiac');
