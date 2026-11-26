@@ -218,6 +218,22 @@
 	grid-auto-columns: max-content;
 	grid-template-columns: minmax(7rem, 20%) minmax(0, 1fr);
 }
+.rulerRow:has(> .switch) {
+	grid-template-rows: repeat(2, 1fr);
+	row-gap: 0.05rem;
+}
+.rulerRow:has(> .switch) > * {
+	grid-row: 1 / -1;
+}
+.rulerRow:has(> .switch) > .rulerValue {
+	grid-template-rows: subgrid;
+	align-self: stretch;
+	align-items: center;
+	row-gap: inherit;
+}
+.rulerRow:has(> .switch) > .rulerValue > span {
+	align-self: end;
+}
 .objectCatalogue,
 .sources {
 	border-block-start: 1px solid var(--line);
