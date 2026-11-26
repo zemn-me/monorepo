@@ -34,6 +34,7 @@ export function BodyFilters<T extends string>({
 		const mixed = !all && items.some(item => selected.includes(item));
 		return (
 			<label className={style.switch}>
+				<span>{name}</span>
 				<input
 					type="checkbox"
 					checked={all}
@@ -42,19 +43,12 @@ export function BodyFilters<T extends string>({
 					}}
 					onChange={e => toggle(items, e.currentTarget.checked)}
 				/>
-				{name}
 			</label>
 		);
 	}
 	function optionSwitch(item: T) {
 		return (
 			<label key={item} className={style.switch}>
-				<input
-					type="checkbox"
-					role="switch"
-					checked={selected.includes(item)}
-					onChange={e => toggle([item], e.currentTarget.checked)}
-				/>
 				<span className={glyphs ? style.planetName : undefined}>
 					{glyphs && (
 						<span className={style.toggleGlyph} aria-hidden="true">
@@ -64,6 +58,12 @@ export function BodyFilters<T extends string>({
 					)}
 					{labels?.[item] ?? item}
 				</span>
+				<input
+					type="checkbox"
+					role="switch"
+					checked={selected.includes(item)}
+					onChange={e => toggle([item], e.currentTarget.checked)}
+				/>
 			</label>
 		);
 	}
