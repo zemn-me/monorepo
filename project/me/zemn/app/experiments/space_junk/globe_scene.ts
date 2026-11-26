@@ -23,6 +23,7 @@ import {
 import { rotateVector } from '#root/ts/math/quaternion.js';
 import {
 	cameraProjector,
+	clipSegmentToNearPlane,
 	perspective,
 	type StyledFace3D,
 	styledFace,
@@ -194,6 +195,22 @@ export function globeFrame(
 			inFront: depth >= projection.nearPlane,
 		};
 	}
+	function segment(
+		start: ReturnType<typeof project>,
+		end: ReturnType<typeof project>
+	) {
+		if (start.inFront && end.inFront)
+			return { x1: start.x, y1: start.y, x2: end.x, y2: end.y };
+		const clipped = clipSegmentToNearPlane(
+			toCamera(start.center),
+			toCamera(end.center),
+			projection.nearPlane
+		);
+		if (!clipped) return null;
+		const a = toScreen(clipped[0]),
+			b = toScreen(clipped[1]);
+		return { x1: x(a), y1: y(a), x2: x(b), y2: y(b) };
+	}
 	function symbol(
 		center: Point3D,
 		depth: number,
@@ -215,6 +232,7 @@ export function globeFrame(
 		camera,
 		projection,
 		project,
+		segment,
 		symbol,
 		kmPerPixel: (equatorialRadius * camera.distance) / focal,
 	};

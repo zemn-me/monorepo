@@ -65,16 +65,13 @@ export function ChartViewer({
 		() => chartGeometry({ turn, tilt }, extent, unfold, fixed),
 		[turn, tilt, extent, unfold, fixed]
 	);
-	const symbolic = unfold < 1;
 	const placements = useMemo(
 		() =>
-			symbolic
-				? markers.map(marker => ({
-						marker,
-						...zodiac.direction(marker.fixed),
-					}))
-				: [],
-		[symbolic, markers, zodiac]
+			markers.map(marker => ({
+				marker,
+				...zodiac.direction(marker.fixed),
+			})),
+		[markers, zodiac]
 	);
 	const focus = useMemo(
 		() => placements.find(p => p.marker === selected) ?? placements[0],
@@ -170,7 +167,7 @@ export function ChartViewer({
 						placements={placements}
 						ascendant={ascendant}
 						aspects={aspects}
-						selected={selected ?? markers[0]}
+						selection={focus}
 					/>
 				</g>
 			</svg>

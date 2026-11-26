@@ -22,51 +22,52 @@ export function WheelGuides({
 	const anchor = ascendant ?? 0;
 	const xy = (p: { x: number; y: number }) =>
 		p.x.toFixed(2) + ',' + p.y.toFixed(2);
+	const start =
+		selected && geometry.aspectEnd(selected.marker, selected.longitude);
 	return (
-		<g opacity={1 - geometry.unfold}>
-			{selected &&
-				aspects.map(({ angle, name, placement }) => (
-					<path
-						key={name}
-						d={
-							'M' +
-							xy(at(selected.longitude, 0.97)) +
-							'L' +
-							xy(at(placement.longitude, 0.97))
-						}
-						stroke="currentColor"
-						strokeOpacity=".72"
-						strokeWidth="1"
-						strokeDasharray={
-							angle === 60
-								? '2 3'
-								: angle === 120
-									? '6 3'
-									: undefined
-						}
-						fill="none"
-					>
-						<title>
-							{name} · {placement.marker.object.name}
-						</title>
-					</path>
-				))}
-			{aspects.map(({ name, placement }) => {
-				const p = at(placement.longitude, 0.97);
-				return (
-					<circle
-						key={name}
-						cx={p.x}
-						cy={p.y}
-						r="2"
-						fill="currentColor"
-					>
-						<title>
-							{name} · {shortName(placement)}
-						</title>
-					</circle>
-				);
-			})}
+		<g aria-label="Selected object aspects and ascendant">
+			{start &&
+				aspects.map(({ angle, name, placement }) => {
+					const end = geometry.aspectEnd(
+						placement.marker,
+						placement.longitude
+					);
+					const line = geometry.frame.segment(start, end);
+					if (!line) return null;
+					return (
+						<g key={name}>
+							<line
+								{...line}
+								stroke="currentColor"
+								strokeOpacity=".72"
+								strokeWidth="1"
+								strokeDasharray={
+									angle === 60
+										? '2 3'
+										: angle === 120
+											? '6 3'
+											: undefined
+								}
+							>
+								<title>
+									{name} · {placement.marker.object.name}
+								</title>
+							</line>
+							{end.visible && (
+								<circle
+									cx={end.x}
+									cy={end.y}
+									r="2"
+									fill="currentColor"
+								>
+									<title>
+										{name} · {shortName(placement)}
+									</title>
+								</circle>
+							)}
+						</g>
+					);
+				})}
 			{ascendant !== undefined && (
 				<g fill="currentColor">
 					<path

@@ -77,6 +77,9 @@ export function chartGeometry(
 			position(longitude, bands[marker.object.kind], marker)
 		);
 	}
-	return { frame, ring, planet, debris, unfold };
+	function aspectEnd(marker: Marker, longitude: number) {
+		return frame.project(position(longitude, 0.97, marker));
+	}
+	return { frame, ring, planet, debris, aspectEnd, unfold };
 }
 export type ChartGeometry = ReturnType<typeof chartGeometry>;

@@ -33,7 +33,7 @@ export function Globe({
 	showSigns,
 	birthplace,
 	markers,
-	selected,
+	selection,
 	pick,
 }: {
 	geometry: ChartGeometry;
@@ -44,11 +44,12 @@ export function Globe({
 	showSigns: boolean;
 	birthplace?: Birthplace & { name?: string };
 	markers: Marker[];
-	selected?: Marker;
+	selection?: Placement;
 
 	pick: Ref<PickMarker>;
 }) {
 	const mask = useId();
+	const selected = selection?.marker;
 	const { frame, unfold } = geometry;
 	const coastline = useQuery({
 		queryKey: ['space-junk-coastline', coastlineUrl],
@@ -165,14 +166,12 @@ export function Globe({
 				mask={`url(#${mask})`}
 				fill="currentColor"
 			/>
-			{unfold < 1 && (
-				<WheelGuides
-					geometry={geometry}
-					selected={placements.find(p => p.marker === selected)}
-					aspects={aspects}
-					ascendant={ascendant}
-				/>
-			)}
+			<WheelGuides
+				geometry={geometry}
+				selected={selection}
+				aspects={aspects}
+				ascendant={ascendant}
+			/>
 			<GlobeZodiac
 				geometry={geometry}
 				bodies={bodies}

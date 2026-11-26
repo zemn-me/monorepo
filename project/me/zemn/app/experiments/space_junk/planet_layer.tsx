@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import type { ChartGeometry } from './chart_geometry.js';
 import { type BodyPosition, bodyAspects, earthDistance } from './planets.js';
 import style from './style.module.css';
 import { signPosition } from './zodiac.js';
@@ -6,42 +7,34 @@ import { signPosition } from './zodiac.js';
 interface Point {
 	x: number;
 	y: number;
-	visible?: boolean;
-	inFront?: boolean;
 }
 
 export function PlanetLayer({
 	positions,
-	project,
-	aspectOpacity = 1,
+	geometry,
 	labelObstacles = [],
 }: {
 	positions: BodyPosition[];
-	project: (body: BodyPosition) => Point;
-	aspectOpacity?: number;
+	geometry: ChartGeometry;
 	labelObstacles?: readonly Point[];
 }) {
-	const showAspects = aspectOpacity > 0;
-	const aspects = useMemo(
-		() => (showAspects ? bodyAspects(positions) : []),
-		[positions, showAspects]
-	);
+	const aspects = useMemo(() => bodyAspects(positions), [positions]);
 	const occupied = [...labelObstacles];
 	return (
 		<g aria-label="Zodiac bodies" fill="currentColor">
 			{aspects.map(({ a, b, name, angle }) => {
-				const start = project(a),
-					end = project(b);
+				const line = geometry.frame.segment(
+					geometry.planet(a),
+					geometry.planet(b)
+				);
+				if (!line) return null;
 				return (
 					<line
 						key={a.name + b.name}
-						x1={start.x}
-						y1={start.y}
-						x2={end.x}
-						y2={end.y}
+						{...line}
 						stroke="currentColor"
 						strokeWidth=".8"
-						opacity={0.55 * aspectOpacity}
+						opacity=".55"
 						strokeDasharray={
 							angle === 60
 								? '2 3'
@@ -55,7 +48,7 @@ export function PlanetLayer({
 				);
 			})}
 			{positions.map(body => {
-				const point = project(body);
+				const point = geometry.planet(body);
 				// Keep the dot at its exact position when glyphs coincide in projection.
 				let label = { x: point.x, y: point.y - 9 };
 				for (

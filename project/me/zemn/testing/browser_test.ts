@@ -480,10 +480,15 @@ describe('zemn.me website', () => {
 				expect(await driver.findElements(By.css('button[aria-label="Earth orbits"],button[aria-label="Zodiac wheel"]'))).toHaveLength(0);
 				const moonDot = await wheel.findElement(By.css('g[aria-label^="Moon ·"] circle'));
 				const initialX = await moonDot.getAttribute('cx');
+				const debrisLinks = () => wheel.findElements(By.css('g[aria-label="Selected object aspects and ascendant"] line title'))
+					.then(lines => Promise.all(lines.map(line => line.getAttribute('textContent'))));
+				await driver.wait(async () => (await debrisLinks()).length > 0, 10000);
+				const wheelLinks = await debrisLinks();
 				await mouse('mousePressed', 0, 1);
 				await mouse('mouseMoved', 72, 1);
 				await projection('Earth and orbital chart');
 				await driver.wait(async () => await moonDot.getAttribute('cx') !== initialX, 5000);
+				expect(await debrisLinks()).toEqual(wheelLinks);
 				await mouse('mouseMoved', 0, 1);
 				await mouse('mouseReleased', 0, 0);
 				await projection('wheel from above');
@@ -580,6 +585,10 @@ describe('zemn.me website', () => {
 				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));
 				const captions = () => signs().then(all => Promise.all(all.map(sign => sign.getAttribute('textContent'))));
 				const wheelCaptions = await captions();
+				const planetLinks = () => globe.findElements(By.css('g[aria-label="Zodiac bodies"] > line title'))
+					.then(lines => Promise.all(lines.map(line => line.getAttribute('textContent'))));
+				const wheelLinks = await planetLinks();
+				expect(wheelLinks.length).toBeGreaterThan(0);
 				expect(wheelCaptions).toHaveLength(12);
 				expect(wheelCaptions).toContain('SAGITTARIUS');
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
@@ -607,6 +616,7 @@ describe('zemn.me website', () => {
 				const closeX = await moonX();
 				await zoom.sendKeys(Key.HOME);
 				await driver.wait(async () => await moonX() !== closeX, 5000);
+				expect(await planetLinks()).toEqual(wheelLinks);
 				const earth = await globe.findElement(By.css('g[aria-label="Earth"] text'));
 				expect(await earth.getText()).toBe('Earth');
 				const far = await zoomExtent();

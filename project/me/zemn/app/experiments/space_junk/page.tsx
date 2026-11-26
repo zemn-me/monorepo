@@ -446,10 +446,11 @@ export default function Page() {
 					<a href="https://github.com/cosinekitty/astronomy">
 						Astronomy Engine
 					</a>
-					. Face-on, lines show major aspects within 6°. Tilting the
-					chart shows positions to scale from Earth’s center. Zoom out
-					to see distant planets. Dashed arcs and hollow dots indicate
-					directions behind Earth.
+					. Lines connect planetary bodies whose longitudes form a
+					major aspect within 6°. Tilting the chart shows positions to
+					scale from Earth’s center. Zoom out to see distant planets.
+					Dashed arcs and hollow dots indicate directions behind
+					Earth.
 				</p>
 				<p>
 					Dated Earth-orbit records from{' '}
