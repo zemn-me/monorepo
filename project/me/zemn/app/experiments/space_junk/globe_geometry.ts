@@ -34,18 +34,22 @@ export function markerFrom(
 	return { object, fixed, ...earthRadii(fixed) };
 }
 
+const maxManMadeBodies = 250;
+
 export function catalogueMarkers(
 	matches: { object: SpaceObject }[],
-	positions: PositionRow[],
+	positionFor: (id: number) => PositionRow | undefined,
 	instant: string
 ) {
-	const rows = new Map(positions.map(row => [row[0], row]));
-	return matches.flatMap(({ object }) => {
-		const row = rows.get(object.id);
-		return row && inOrbitAt(object, instant)
-			? [markerFrom(object, row)]
-			: [];
-	});
+	const markers: Marker[] = [];
+	for (const { object } of matches) {
+		if (!inOrbitAt(object, instant)) continue;
+		const row = positionFor(object.id);
+		if (!row) continue;
+		markers.push(markerFrom(object, row));
+		if (markers.length === maxManMadeBodies) break;
+	}
+	return markers;
 }
 
 export function groundLocation(marker: Marker) {

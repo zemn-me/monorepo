@@ -147,23 +147,24 @@ describe('historical debris positions', () => {
 });
 
 describe('orbital globe', () => {
-	it('includes positions beyond the first results page and skips objects without a position or confirmed flight', () => {
-		const matches = Array.from({ length: 20 }, (_, i) => ({
-			object: { ...spatula, id: i + 1 },
+	it('plots the first 250 filtered bodies with a position and confirmed flight', () => {
+		const matches = Array.from({ length: 300 }, (_, id) => ({
+			object: { ...spatula, id },
 		}));
-		matches.push({ object: { ...spatula, id: 24, start: '2006-08-01' } });
-		const rows = matches
-			.slice(1)
-			.map(({ object }): [number, number, number, number] => [
-				object.id,
-				6778,
-				0,
-				0,
-			]);
-		const markers = catalogueMarkers(matches, rows, '2006-08-01T12:00');
-		expect(markers.map(m => m.object.id)).toEqual(
-			matches.slice(1, 20).map(m => m.object.id)
+		matches[1]!.object.start = '2006-08-01';
+		const queried: number[] = [];
+		const markers = catalogueMarkers(
+			matches,
+			id => {
+				queried.push(id);
+				return id === 0 ? undefined : [id, 6778, 0, 0];
+			},
+			'2006-08-01T12:00'
 		);
+		expect(markers.map(m => m.object.id)).toEqual(
+			matches.slice(2, 252).map(m => m.object.id)
+		);
+		expect(queried).toHaveLength(251);
 	});
 	it('unfolds a single placement from its wheel band to its actual Earth-fixed position', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));

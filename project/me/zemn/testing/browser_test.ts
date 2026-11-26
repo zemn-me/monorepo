@@ -584,10 +584,11 @@ describe('zemn.me website', () => {
 						n + (p.getAttribute('d').match(/M/g) || []).length, 0);
 				`, wheel);
 				const unfiltered = await markerCount();
+				expect(unfiltered).toBe(250);
 				await search.sendKeys('MoToR');
 				const motors = await markerCount();
 				expect(motors).toBeGreaterThan(12);
-				expect(motors).toBeLessThan(unfiltered);
+				expect(motors).toBeLessThanOrEqual(unfiltered);
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
 				expect(await markerCount()).toBe(motors);
 				await search.sendKeys('xyz');

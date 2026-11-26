@@ -74,6 +74,7 @@ export function BodyFilters<T extends string>({
 			className={glyphs ? style.planetBand : style.objectBand}
 		>
 			{groupSwitch(group, options)}
+			{children}
 			<div
 				role="group"
 				aria-label={presetName}
@@ -87,7 +88,6 @@ export function BodyFilters<T extends string>({
 					.filter(item => !preset.includes(item))
 					.map(optionSwitch)}
 			</div>
-			{children}
 		</div>
 	);
 }

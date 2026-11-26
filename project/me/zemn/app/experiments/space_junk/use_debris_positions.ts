@@ -45,19 +45,20 @@ function useMarkers(
 ) {
 	const elements = useMemo(
 		() =>
-			matches.length > 0 &&
-			text &&
-			Array.from(
-				readElements(text, new Set(matches.map(m => m.object.id)))
-			),
-		[text, matches]
+			text
+				? Map.groupBy(readElements(text), record => record.id)
+				: undefined,
+		[text]
 	);
 	return useMemo(() => {
 		if (!elements) return [];
 		const time = new Date(instant);
 		return catalogueMarkers(
 			matches,
-			positionsAt(elements, time),
+			id => {
+				const records = elements.get(id);
+				return records && positionsAt(records, time)[0];
+			},
 			time.toISOString().slice(0, -1)
 		);
 	}, [matches, elements, instant]);

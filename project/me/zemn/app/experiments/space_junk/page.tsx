@@ -97,8 +97,6 @@ const BirthdayChart = memo(function BirthdayChart({
 				.matches,
 		[selectedObjects, birthday, day]
 	);
-	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
-	const { instant: debrisInstant } = coverage;
 	const filtered = useMemo(() => {
 		const term = search.trim().toLowerCase();
 		if (!term) return matches;
@@ -108,6 +106,8 @@ const BirthdayChart = memo(function BirthdayChart({
 				.includes(term)
 		);
 	}, [matches, search]);
+	const coverage = useDebrisPositions(filtered, instant, day, catalogueDate);
+	const { instant: debrisInstant } = coverage;
 	const filteredIds = useMemo(
 		() => new Set(filtered.map(({ object }) => object.id)),
 		[filtered]

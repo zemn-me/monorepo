@@ -49,7 +49,14 @@ export function* readElements(text: string, ids?: ReadonlySet<number>) {
 		const id = catalogNumber(field);
 		if (!Number.isFinite(id) || field !== b.slice(2, 7)) continue;
 		if (ids && !ids.has(id)) continue;
-		yield { id, sat: twoline2satrec(a, b) };
+		// Index the archive once and initialize only orbits the chart actually visits.
+		let sat: SatRec | undefined;
+		yield {
+			id,
+			get sat() {
+				return (sat ??= twoline2satrec(a, b));
+			},
+		};
 	}
 }
 
