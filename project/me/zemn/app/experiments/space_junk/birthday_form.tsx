@@ -166,11 +166,12 @@ export const BirthdayRulers = memo(function BirthdayRulers({
 		formats?.zone
 			.formatToParts(epoch)
 			.find(part => part.type === 'timeZoneName')?.value ?? zone;
+	const dateLabel = formats?.date.format(epoch) ?? date.toPlainDate().toString();
 	const common = {
 		epoch,
 		lastInstant: Date.parse(asOf + 'T23:59:59.999Z'),
 		accessibleTime:
-			(formats?.date.format(epoch) ?? date.toPlainDate().toString()) +
+			dateLabel +
 			' · ' +
 			localTime +
 			' ' +
@@ -180,6 +181,9 @@ export const BirthdayRulers = memo(function BirthdayRulers({
 	};
 	return (
 		<fieldset className={style.rulers} aria-label="Chart date and time">
+			<time className={style.printDate} dateTime={new Date(epoch).toISOString()}>
+				{dateLabel} · {localTime} UTC{date.offset}
+			</time>
 			<Ruler
 				{...common}
 				unit="year"

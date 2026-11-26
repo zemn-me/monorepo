@@ -45,6 +45,7 @@ export function CitySearch({
 			}}
 		>
 			<label htmlFor={id}>City</label>
+			{city && <span className={style.printCity}>{cityName(city)}</span>}
 			<input
 				id={id}
 				type="search"

@@ -239,6 +239,9 @@ const BirthdayChart = memo(function BirthdayChart({
 							}}
 						/>
 					</BodyFilters>
+					{hasObjects && search.trim() && (
+						<p className={style.printFilter}>Object filter · {search.trim()}</p>
+					)}
 				</ChartViewer>
 			</figure>
 			{hasObjects && catalogueFailed && !catalogue && (

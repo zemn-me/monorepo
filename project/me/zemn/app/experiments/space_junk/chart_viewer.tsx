@@ -281,6 +281,9 @@ export function ChartViewer({
 					/>
 				</g>
 			</svg>
+			<p className={style.printView}>
+				{faceOn ? 'Zodiac wheel' : `Earth orbits · ${viewWidth} across`}
+			</p>
 			<div
 				role="group"
 				aria-label="View controls"

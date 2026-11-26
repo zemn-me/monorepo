@@ -603,14 +603,146 @@
 	}
 }
 
+.printDate, .printCity, .printView, .printFilter {
+	display: none;
+}
+
+@page astrological-chart {
+	margin: 12mm 14mm 16mm;
+}
+
 @media print {
-	.paging {
+	:global(:root):has(.page) {
+		--print-footer-inset: 0pt;
+	}
+	:global([data-glade-layout]):has(.page) {
+		page: astrological-chart;
+	}
+	:global([data-glade-content]):has(.page) {
+		padding: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global(header[data-glade-banner]) {
+		min-height: 0;
+		height: 9mm;
+		padding: 0;
+		border: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global(header[data-glade-banner] a[aria-label="Go to homepage"]) {
+		min-height: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global(header[data-glade-banner]) svg {
+		max-height: 8mm;
+	}
+	.page {
+		width: 100%;
+		padding: 0;
+		font-size: 10pt;
+	}
+	.page h1 {
+		margin: 3mm 0 1mm;
+		font-size: 27pt;
+	}
+	.citySearch, .rulers, .figure {
+		margin: 0;
+		border: 0;
+	}
+	.citySearch, .rulers {
+		display: block;
+		padding: 0;
+	}
+	.citySearch > :not(.printCity), .rulers > :not(.printDate),
+	.viewControls, .paging, .objectBand .search {
 		display: none;
+	}
+	.printDate, .printCity, .printView, .printFilter {
+		display: block;
+	}
+	.printDate, .printCity {
+		line-height: 1.5;
+	}
+	.globe {
+		width: 113mm;
+		max-width: 100%;
+		outline: none !important;
+	}
+	.figure {
+		margin: 2mm 0 4mm;
+		break-inside: avoid;
+	}
+	.printView, .printFilter {
+		margin: 0;
+		font-size: 10pt;
+	}
+	.printView {
+		margin-bottom: 3mm;
+	}
+	.printFilter {
+		margin-top: 1.5mm;
+		text-align: start;
+	}
+	.planetBand, .objectBand {
+		break-inside: avoid;
+		padding-block: 1mm;
+		border-top: 1px solid var(--line);
+	}
+	.objectBand {
+		grid-template-columns: 6.2rem 1fr 6rem;
+		border-top: none;
+	}
+	:is(.planetBand, .objectBand) .switch {
+		min-height: 0;
+		gap: 1mm;
+		padding-block: 0;
 	}
 	.switch input::after {
 		print-color-adjust: exact;
 	}
+	.placements {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: 4mm;
+	}
 	.placements li {
+		padding-block: 2mm;
 		break-inside: avoid;
+	}
+	.placements h3 {
+		font-size: 9pt;
+	}
+	.position {
+		font-size: 11pt;
+	}
+	.sources {
+		break-inside: avoid;
+		margin-block-start: 4mm;
+		padding-block-start: 2mm;
+	}
+	.sources h2 {
+		font-size: 13pt;
+	}
+	.sources dl {
+		font-size: 9pt;
+		line-height: 1.35;
+		margin-block-start: 1.5mm;
+	}
+	.sources dl div {
+		padding-block: 0.4mm;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) {
+		break-inside: avoid;
+		break-before: avoid;
+		grid-template-rows: auto 10mm auto 1mm auto;
+		grid-template-columns: 1fr 9mm 1fr;
+		margin-top: 3mm;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) h2 {
+		grid-template-rows: 1mm auto 1mm;
+		margin: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) small {
+		max-width: none;
+		font-size: 8pt;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) small > :not(br:first-of-type) {
+		display: none;
 	}
 }
