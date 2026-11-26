@@ -553,9 +553,9 @@ describe('zemn.me website', () => {
 				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
 				);
-				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('1–12 of 6,989');
+				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toMatch(/^1–12 of [\d,]+ orbiting objects$/);
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
-				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('13–24 of 6,989');
+				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toMatch(/^13–24 of [\d,]+ orbiting objects$/);
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
 				const markerCount = () => driver.executeScript<number>(`
@@ -595,6 +595,9 @@ describe('zemn.me website', () => {
 				expect((await bodies()).length).toBe(7);
 				expect(await driver.findElements(By.css('ul[aria-label="Objects in orbit"]'))).toHaveLength(0);
 				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
+				const placements = () => driver.findElements(By.css('ul[aria-label="Natal placements"] li'));
+				expect(await placements()).toHaveLength(7);
+				expect(await (await placements())[0]!.getText()).toMatch(/Sun in Leo[\s\S]*° \d+′ \d+″/);
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moon() !== initial, 5000);
@@ -610,6 +613,7 @@ describe('zemn.me website', () => {
 				expect(await driver.findElements(By.css('section[aria-labelledby="object-catalogue"] [aria-label="Man-made bodies"]'))).toHaveLength(1);
 				await (await toggle('Moon')).click();
 				expect(await bodies()).toHaveLength(6);
+				expect(await placements()).toHaveLength(6);
 				expect(await (await toggle('Zodiac')).getProperty('indeterminate')).toBe(true);
 				await (await toggle('Zodiac')).click();
 				expect(await bodies()).toHaveLength(7);
@@ -760,6 +764,8 @@ describe('zemn.me website', () => {
 				await birthplace.sendKeys('Singapore');
 				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
+				const natal = await driver.findElement(By.css('ul[aria-label="Natal placements"]'));
+				expect(await natal.getText()).toMatch(/Ascendant in \w+[\s\S]*House 1\b/);
 				const center = Number(await marker.getAttribute('x1'));
 				expect(await driver.executeScript<number>('return arguments[0].getTotalLength()', marker)).toBeLessThan(0.1);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(4));

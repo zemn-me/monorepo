@@ -274,11 +274,27 @@
 	padding-block: 0.8rem;
 	border-top: 1px solid var(--line);
 }
+.catalogue li > header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0.15rem 1rem;
+}
+.catalogue header > span {
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+.search + .catalogue {
+	margin-block-start: 0.75rem;
+}
 .catalogue h3 {
 	font-size: 1rem;
 	margin: 0;
 }
 .catalogue p {
+	max-inline-size: 66ch;
+	line-height: 1.45;
 	margin: 0.2rem 0 0;
 	color: var(--muted);
 }

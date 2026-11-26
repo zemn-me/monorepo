@@ -67,6 +67,7 @@ export function zodiacFrame(time: Date, place?: Birthplace) {
 	}
 
 	let ascendant: number | undefined;
+	let houseCusps: number[] | undefined;
 	if (place && Math.abs(place.latitude) < 90) {
 		const theta = sidereal + place.longitude * radians;
 		const lat = place.latitude * radians;
@@ -78,11 +79,34 @@ export function zodiacFrame(time: Date, place?: Birthplace) {
 			const east =
 				-Math.sin(theta) * Math.cos(candidate) +
 				Math.cos(theta) * cos * Math.sin(candidate);
-			if (Math.abs(east) > 1e-10)
+			if (Math.abs(east) > 1e-10) {
 				ascendant = degrees(candidate / radians + (east < 0 ? 180 : 0));
+				const midheaven =
+					Math.atan2(Math.sin(theta), Math.cos(theta) * cos) /
+					radians;
+				// Porphyry trisects each quadrant. Choose the meridian intersection
+				// following the eastern horizon, including inside the polar circles.
+				const fourth = degrees(midheaven - ascendant) % 180;
+				if (fourth > 1e-8 && fourth < 180 - 1e-8) {
+					const axes = [0, fourth, 180, fourth + 180, 360];
+					houseCusps = axes
+						.slice(0, 4)
+						.flatMap((start, i) =>
+							[0, 1, 2].map(
+								third =>
+									start + (third * (axes[i + 1]! - start)) / 3
+							)
+						);
+				}
+			}
 		}
 	}
-	return { direction, ascendant };
+	function house(longitude: number) {
+		if (ascendant === undefined || !houseCusps) return undefined;
+		const offset = degrees(longitude - ascendant);
+		return houseCusps.filter(cusp => cusp <= offset).length;
+	}
+	return { direction, ascendant, house };
 }
 
 export function signPosition(longitude: number) {

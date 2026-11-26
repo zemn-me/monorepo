@@ -14,10 +14,11 @@ import { catalogueUrl } from './assets.js';
 import { BirthdayRulers } from './birthday_form.js';
 import { BodyFilters } from './body_filters.js';
 import { catalogueDate } from './catalogue_date.js';
-import { type Catalogue, type SpaceObject, kinds, readChart } from './chart.js';
+import { type Catalogue, kinds, readChart, type SpaceObject } from './chart.js';
 import { ChartViewer } from './chart_viewer.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
+import { PlacementEntry } from './placement_entry.js';
 import {
 	bodyPositions,
 	type ChartBody,
@@ -130,20 +131,24 @@ const BirthdayChart = memo(function BirthdayChart({
 		() => zodiacFrame(new Date(debrisInstant), place),
 		[debrisInstant, place]
 	);
-	const ascendant = useMemo(
+	const natalZodiac = useMemo(
 		() =>
 			place && debrisInstant !== instant
-				? zodiacFrame(new Date(instant), place).ascendant
-				: debrisZodiac.ascendant,
+				? zodiacFrame(new Date(instant), place)
+				: debrisZodiac,
 		[place, debrisInstant, instant, debrisZodiac]
+	);
+	const plotted = useMemo(
+		() => filtered.filter(({ object }) => byId.has(object.id)),
+		[filtered, byId]
 	);
 	const pageSize = 12;
 	const pageIndex = Math.min(
 		page,
-		Math.max(0, Math.ceil(filtered.length / pageSize) - 1)
+		Math.max(0, Math.ceil(plotted.length / pageSize) - 1)
 	);
 	const offset = pageIndex * pageSize;
-	const rows = filtered.slice(offset, offset + pageSize);
+	const rows = plotted.slice(offset, offset + pageSize);
 
 	return (
 		<>
@@ -169,7 +174,7 @@ const BirthdayChart = memo(function BirthdayChart({
 					selected={selected}
 					revision={selection?.revision}
 					zodiac={debrisZodiac}
-					ascendant={ascendant}
+					ascendant={natalZodiac.ascendant}
 					onSelect={m => locate(m.object.id)}
 				/>
 			</figure>
@@ -212,25 +217,52 @@ const BirthdayChart = memo(function BirthdayChart({
 					/>
 				</div>
 				{hasObjects && catalogue && (
+					<input
+						className={style.search}
+						type="search"
+						aria-label="Search by name, catalog number, designator or object type"
+						placeholder="Search objects"
+						value={search}
+						onChange={event => {
+							setSearch(event.target.value);
+							setPage(0);
+						}}
+					/>
+				)}
+				{(bodies.length > 0 || natalZodiac.ascendant !== undefined) && (
+					<ul
+						className={style.catalogue}
+						aria-label="Natal placements"
+					>
+						{bodies.map(body => (
+							<PlacementEntry
+								key={body.name}
+								name={body.name}
+								glyph={body.glyph}
+								longitude={body.longitude}
+								house={natalZodiac.house(body.longitude)}
+							/>
+						))}
+						{natalZodiac.ascendant !== undefined && (
+							<PlacementEntry
+								name="Ascendant"
+								longitude={natalZodiac.ascendant}
+								house={natalZodiac.house(natalZodiac.ascendant)}
+							/>
+						)}
+					</ul>
+				)}
+				{hasObjects && catalogue && (
 					<>
-						<input
-							className={style.search}
-							type="search"
-							aria-label="Search by name, catalog number, designator or object type"
-							placeholder="Search objects"
-							value={search}
-							onChange={event => {
-								setSearch(event.target.value);
-								setPage(0);
-							}}
-						/>
 						<div className={style.paging}>
 							<span role="status" aria-label="Catalogue results">
 								{rows.length
-									? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
-									: 'No matching objects'}
+									? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${plotted.length.toLocaleString('en-GB')} orbiting objects`
+									: filtered.length && coverage.pending
+										? 'Locating objects…'
+										: 'No matching objects on the chart'}
 							</span>
-							{filtered.length > pageSize && (
+							{plotted.length > pageSize && (
 								<>
 									<button
 										type="button"
@@ -243,7 +275,7 @@ const BirthdayChart = memo(function BirthdayChart({
 										type="button"
 										disabled={
 											offset + rows.length >=
-											filtered.length
+											plotted.length
 										}
 										onClick={() => setPage(pageIndex + 1)}
 									>
@@ -256,38 +288,35 @@ const BirthdayChart = memo(function BirthdayChart({
 							className={style.catalogue}
 							aria-label="Objects in orbit"
 						>
-							{rows.map(({ object, days }) => (
-								<li key={object.id}>
-									<h3>
-										{byId.has(object.id) ? (
-											<a
-												href="#star-chart"
-												onClick={() =>
-													locate(object.id)
-												}
-											>
-												{object.name}
-											</a>
-										) : (
-											object.name
-										)}
-									</h3>
-									<p>
-										{kinds[object.kind]} · {object.piece} ·
-										NORAD {object.id}
-									</p>
-									<p>
-										{displayDate(object.start)} –{' '}
-										{displayDate(
-											object.end ?? catalogue.asOf
-										)}{' '}
-										·{' '}
-										{days === 0
-											? 'Shares your birthday'
-											: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
-									</p>
-								</li>
-							))}
+							{rows.map(({ object, days }) => {
+								const { longitude } = debrisZodiac.direction(
+									byId.get(object.id)!.fixed
+								);
+								return (
+									<PlacementEntry
+										key={object.id}
+										name={object.name}
+										longitude={longitude}
+										house={debrisZodiac.house(longitude)}
+										locate={() => locate(object.id)}
+									>
+										<p>
+											{kinds[object.kind]} ·{' '}
+											{object.piece} · NORAD {object.id}
+										</p>
+										<p>
+											{displayDate(object.start)} –{' '}
+											{displayDate(
+												object.end ?? catalogue.asOf
+											)}{' '}
+											·{' '}
+											{days === 0
+												? 'Shares your birthday'
+												: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
+										</p>
+									</PlacementEntry>
+								);
+							})}
 						</ul>
 					</>
 				)}
@@ -380,6 +409,14 @@ export default function Page() {
 						<dd>
 							<a href="https://github.com/cosinekitty/astronomy">
 								Astronomy Engine
+							</a>
+						</dd>
+					</div>
+					<div>
+						<dt>Houses</dt>
+						<dd>
+							<a href="https://www.astro.com/astrowiki/en/Porphyry_House_System">
+								Porphyry house system
 							</a>
 						</dd>
 					</div>

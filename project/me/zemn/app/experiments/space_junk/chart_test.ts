@@ -290,6 +290,17 @@ describe('birthday wheel', () => {
 		expect(Math.min(longitude, 360 - longitude)).toBeCloseTo(0, 3);
 		const local = zodiacFrame(time, { latitude: 0, longitude: meridian });
 		expect(local.ascendant).toBeCloseTo(90, 4);
+		expect(earth.house(90)).toBeUndefined();
+		expect(local.house(local.ascendant!)).toBe(1);
+		expect(local.house(local.ascendant! - 0.01)).toBe(12);
+		expect(local.house(180.01)).toBe(4);
+		expect(local.house(270.01)).toBe(7);
+		expect(local.house(0.01)).toBe(10);
+		// Away from the equator, trisect the unequal quadrants.
+		const north = zodiacFrame(time, { latitude: 50, longitude: meridian });
+		const fourth = 180 - north.ascendant!;
+		expect(north.house(north.ascendant! + fourth / 3 - 0.01)).toBe(1);
+		expect(north.house(north.ascendant! + fourth / 3 + 0.01)).toBe(2);
 		expect(
 			zodiacFrame(time, { latitude: 90, longitude: 0 }).ascendant
 		).toBeUndefined();
