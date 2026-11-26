@@ -497,7 +497,15 @@ describe('pulumi', () => {
 		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
 	});
 
-	function expectOrbitCache(domain: string) {
+	function expectOrbitCache(siteDomain: string) {
+		const domain = `api.${siteDomain}`;
+		const api = mockResources.find(
+			r => r.type === 'aws:lambda/function:Function' && r.name === 'apizemnmelambdafunction'
+		);
+		expect(api?.inputs.environment.variables).toMatchObject({
+			ZEMN_API_ORIGIN: `https://${domain}`,
+			OAUTH_FRONTEND_ORIGIN: `https://${siteDomain}`,
+		});
 		const edge = mockResources.find(
 			r =>
 				r.type === 'aws:cloudfront/distribution:Distribution' &&
@@ -519,6 +527,8 @@ describe('pulumi', () => {
 			defaultTtl: 0,
 			maxTtl: 31536000,
 			parametersInCacheKeyAndForwardedToOrigin: {
+				enableAcceptEncodingGzip: true,
+				enableAcceptEncodingBrotli: true,
 				cookiesConfig: { cookieBehavior: 'none' },
 				headersConfig: { headerBehavior: 'none' },
 				queryStringsConfig: { queryStringBehavior: 'none' },
@@ -547,6 +557,7 @@ describe('pulumi', () => {
 			orderedCacheBehaviors: [
 				{
 					pathPattern: '/earth-orbits/elements/*',
+					compress: true,
 					cachePolicyId: `${cache!.name}-id`,
 					originRequestPolicyId: `${origin!.name}-id`,
 					cachedMethods: ['GET', 'HEAD'],
@@ -560,7 +571,7 @@ describe('pulumi', () => {
 		mockCalls.splice(0);
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
-		expectOrbitCache('api.staging.zemn.me');
+		expectOrbitCache('staging.zemn.me');
 		expectValidS3BucketNames();
 		expectValidAwsNames();
 		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
@@ -780,7 +791,7 @@ describe('pulumi', () => {
 			openAIServiceAccountId: 'openai-production-service-account',
 		});
 		await pulumi.runtime.disconnect();
-		expectOrbitCache('api.zemn.me');
+		expectOrbitCache('zemn.me');
 		expectValidS3BucketNames();
 		expectValidAwsNames();
 		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);

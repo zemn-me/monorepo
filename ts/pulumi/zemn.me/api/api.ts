@@ -22,6 +22,7 @@ export const openAIWorkloadIdentityAudience = 'https://api.openai.com/v1';
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
+	frontendOrigin: string;
 	journalWorkerEnvironment: 'staging' | 'production';
 	callboxPhoneNumber: Pulumi.Input<string>;
 	protectDatabases: boolean;
@@ -631,10 +632,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						JOURNAL_CURATION_ENABLED: 'true',
 						OAUTH_TABLE_NAME: oauthTable.name,
 						ZEMN_API_ORIGIN: `https://${args.domain}`,
-						OAUTH_FRONTEND_ORIGIN:
-							args.journalWorkerEnvironment === 'staging'
-								? 'https://staging.zemn.me'
-								: 'https://zemn.me',
+						OAUTH_FRONTEND_ORIGIN: args.frontendOrigin,
 						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 						...(args.minecraftRconBridgeFunctionName === undefined
@@ -897,6 +895,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				defaultTtl: 0,
 				maxTtl: 365 * 24 * 60 * 60,
 				parametersInCacheKeyAndForwardedToOrigin: {
+					enableAcceptEncodingGzip: true,
+					enableAcceptEncodingBrotli: true,
 					cookiesConfig: { cookieBehavior: 'none' },
 					headersConfig: { headerBehavior: 'none' },
 					queryStringsConfig: { queryStringBehavior: 'none' },
@@ -967,6 +967,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					{
 						...apiBehavior,
 						pathPattern: '/earth-orbits/elements/*',
+						compress: true,
 						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
 						cachePolicyId: orbitCachePolicy.id,
 						originRequestPolicyId: orbitOriginPolicy.id,

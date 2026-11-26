@@ -3573,9 +3573,9 @@ paths:
       operationId: GetOrbitElements
       summary: Daily Earth-orbiting object elements from the Spacebook archive.
       description: >-
-        Public and shared across viewers. Completed archives at least seven days
-        old are cacheable for one year. Recent dates and missing archives are
-        cacheable for 15 minutes.
+        Shared across viewers, with browser access allowed for the configured
+        frontend origin. Completed archives at least seven days old are cacheable
+        for one year. Recent dates and missing archives are cacheable for 15 minutes.
       parameters:
         - name: day
           in: path
@@ -3584,10 +3584,9 @@ paths:
           description: UTC date in YYYY-MM-DD form, from 1957 through today.
       responses:
         "200":
-          description: Gzip-encoded two-line orbital elements.
+          description: Two-line orbital elements.
           headers:
             Cache-Control: { schema: { type: string } }
-            Content-Encoding: { schema: { type: string } }
           content:
             text/plain:
               schema: { type: string }

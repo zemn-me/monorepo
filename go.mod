@@ -24,6 +24,7 @@ tool (
 )
 
 require (
+	github.com/NYTimes/gziphandler v1.1.1
 	github.com/aws/aws-lambda-go v1.55.1
 	github.com/aws/aws-sdk-go-v2 v1.48.0
 	github.com/aws/aws-sdk-go-v2/config v1.33.21

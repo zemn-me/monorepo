@@ -2,13 +2,13 @@ package apiserver
 
 import (
 	"bytes"
-	"compress/gzip"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"regexp"
+	"strconv"
 	"time"
 
 	"golang.org/x/sync/singleflight"
@@ -20,8 +20,8 @@ type orbitArchive struct {
 }
 
 type orbitDay struct {
-	compressed []byte
-	maxAge     time.Duration
+	elements []byte
+	maxAge   time.Duration
 }
 
 func orbitMaxAge(day, fetched time.Time, empty bool) time.Duration {
@@ -34,23 +34,21 @@ func orbitMaxAge(day, fetched time.Time, empty bool) time.Duration {
 }
 
 func (d orbitDay) VisitGetOrbitElementsResponse(w http.ResponseWriter) error {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	seconds := int(d.maxAge.Seconds())
 	w.Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", seconds))
-	if len(d.compressed) == 0 {
+	if len(d.elements) == 0 {
 		w.WriteHeader(http.StatusNoContent)
 		return nil
 	}
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.Header().Set("Content-Encoding", "gzip")
-	_, err := w.Write(d.compressed)
+	w.Header().Set("Content-Length", strconv.Itoa(len(d.elements)))
+	_, err := w.Write(d.elements)
 	return err
 }
 
 type orbitError int
 
 func (e orbitError) VisitGetOrbitElementsResponse(w http.ResponseWriter) error {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Cache-Control", "no-store")
 	http.Error(w, http.StatusText(int(e)), int(e))
 	return nil
@@ -66,7 +64,7 @@ func (s *Server) GetOrbitElements(ctx context.Context, req GetOrbitElementsReque
 		load, cancel := context.WithTimeout(context.WithoutCancel(ctx), 25*time.Second)
 		defer cancel()
 		body, err := s.orbitArchive.fetch(load, day)
-		return orbitDay{compressed: body, maxAge: orbitMaxAge(day, time.Now(), len(body) == 0)}, err
+		return orbitDay{elements: body, maxAge: orbitMaxAge(day, time.Now(), len(body) == 0)}, err
 	})
 	select {
 	case <-ctx.Done():
@@ -109,13 +107,5 @@ func (a *orbitArchive) fetch(ctx context.Context, day time.Time) ([]byte, error)
 	if len(raw) > maxBytes || !orbitElementPair.Match(raw) {
 		return nil, errors.New("invalid Spacebook archive")
 	}
-	var out bytes.Buffer
-	zw := gzip.NewWriter(&out)
-	if _, err := zw.Write(raw); err != nil {
-		return nil, err
-	}
-	if err := zw.Close(); err != nil {
-		return nil, err
-	}
-	return out.Bytes(), nil
+	return raw, nil
 }

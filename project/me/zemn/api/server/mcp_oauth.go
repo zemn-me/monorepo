@@ -6,7 +6,6 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
-	"os"
 	"slices"
 	"strings"
 	"time"
@@ -52,12 +51,6 @@ func oauthURL(path string) string {
 	root.Path = path
 	return root.String()
 }
-func oauthFrontendOrigin() string {
-	if origin := os.Getenv("OAUTH_FRONTEND_ORIGIN"); origin != "" {
-		return origin
-	}
-	return "https://zemn.me"
-}
 func (s *Server) oauthRegister(ctx context.Context, body MCPOAuthClient) (MCPOAuthClient, *oauthFailure) {
 	client := oauthClient(body)
 	if err := client.validate(); err != nil {
@@ -94,7 +87,7 @@ func (s *Server) oauthAuthorize(ctx context.Context, q AuthorizeMCPClientParams)
 	if err = s.oauthPut(ctx, "request", id, request, time.Now().Add(10*time.Minute), ""); err != nil {
 		return oauthFail[string](503, "temporarily_unavailable", "Authorization unavailable")
 	}
-	return oauthFrontendOrigin() + "/journal/connect?request=" + url.QueryEscape(id), nil
+	return frontendOrigin() + "/journal/connect?request=" + url.QueryEscape(id), nil
 }
 func oauthChallengeValid(s string) bool {
 	if len(s) != 43 {

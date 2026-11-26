@@ -12,8 +12,11 @@ import (
 )
 
 func TestOrbitArchiveHTTP(t *testing.T) {
-	const tle = "1 00005U 58002B   06211.82084541  .00000209  00000-0  23809-3 0   988\n2 00005  34.2592 354.7131 1852499 234.8007 106.4984 10.83903604654908\n"
+	const pair = "1 00005U 58002B   06211.82084541  .00000209  00000-0  23809-3 0   988\n2 00005  34.2592 354.7131 1852499 234.8007 106.4984 10.83903604654908\n"
 	const day = "2006-08-01"
+	const site = "http://localhost:4867"
+	t.Setenv("OAUTH_FRONTEND_ORIGIN", site)
+	tle := strings.Repeat(pair, 20)
 	for _, tc := range []struct {
 		name, body       string
 		upstream, status int
@@ -26,7 +29,7 @@ func TestOrbitArchiveHTTP(t *testing.T) {
 		{"invalid", "<html>error</html>", 200, 502},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			client := &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+			transport := roundTripFunc(func(r *http.Request) (*http.Response, error) {
 				if r.Header.Get("Cookie") != "" || r.Header.Get("Authorization") != "" {
 					t.Error("forwarded viewer credentials to Spacebook")
 				}
@@ -34,20 +37,24 @@ func TestOrbitArchiveHTTP(t *testing.T) {
 					t.Errorf("upstream: %s", r.URL)
 				}
 				return &http.Response{StatusCode: tc.upstream, Body: io.NopCloser(strings.NewReader(tc.body))}, nil
-			})}
-			for _, origin := range []string{"", "https://zemn.me"} {
-				s, err := NewServer(t.Context(), NewServerOptions{})
-				if err != nil {
-					t.Fatal(err)
-				}
-				s.orbitArchive.client = client
+			})
+			s, err := NewServer(t.Context(), NewServerOptions{OrbitElementsTransport: transport})
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, viewer := range []struct{ origin, accept, encoding string }{
+				{"", "", ""},
+				{site, "br, gzip", "gzip"},
+				{"https://elsewhere.example", "gzip;q=0", ""},
+			} {
 				r := httptest.NewRequest("GET", "/earth-orbits/elements/"+day, nil)
-				r.Header.Set("Origin", origin)
+				r.Header.Set("Origin", viewer.origin)
+				r.Header.Set("Accept-Encoding", viewer.accept)
 				r.Header.Set("Cookie", "session=viewer")
 				r.Header.Set("Authorization", "Bearer viewer")
 				w := httptest.NewRecorder()
 				s.ServeHTTP(w, r)
-				if w.Code != tc.status || w.Header().Get("Access-Control-Allow-Origin") != "*" {
+				if w.Code != tc.status || w.Header().Get("Access-Control-Allow-Origin") != site {
 					t.Fatalf("status %d headers %v", w.Code, w.Header())
 				}
 				cache := w.Header().Get("Cache-Control")
@@ -67,20 +74,44 @@ func TestOrbitArchiveHTTP(t *testing.T) {
 					}
 					continue
 				}
-				if seconds < 364*86400 || w.Header().Get("Content-Encoding") != "gzip" {
+				if seconds < 364*86400 || w.Header().Get("Content-Encoding") != viewer.encoding {
 					t.Fatal(w.Header())
 				}
-				z, err := gzip.NewReader(w.Body)
-				if err != nil {
-					t.Fatal(err)
+				var body io.Reader = w.Body
+				if viewer.encoding == "gzip" {
+					z, err := gzip.NewReader(body)
+					if err != nil {
+						t.Fatal(err)
+					}
+					defer z.Close()
+					body = z
 				}
-				data, err := io.ReadAll(z)
+				data, err := io.ReadAll(body)
 				if err != nil || string(data) != tle {
 					t.Fatalf("archive bytes: %v", err)
 				}
-				z.Close()
 			}
 		})
+	}
+}
+
+func TestOrbitArchivePreflight(t *testing.T) {
+	for _, site := range []string{"https://zemn.me", "https://staging.zemn.me", "http://localhost:49822"} {
+		t.Setenv("OAUTH_FRONTEND_ORIGIN", site)
+		s, err := NewServer(t.Context(), NewServerOptions{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, tc := range []struct{ origin, want string }{{site, site}, {"https://unrelated.example", ""}} {
+			r := httptest.NewRequest(http.MethodOptions, "/earth-orbits/elements/2006-08-01", nil)
+			r.Header.Set("Origin", tc.origin)
+			r.Header.Set("Access-Control-Request-Method", "GET")
+			w := httptest.NewRecorder()
+			s.ServeHTTP(w, r)
+			if got := w.Header().Get("Access-Control-Allow-Origin"); got != tc.want {
+				t.Errorf("site %s, origin %s: got %q, want %q", site, tc.origin, got, tc.want)
+			}
+		}
 	}
 }
 

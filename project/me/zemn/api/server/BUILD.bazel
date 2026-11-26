@@ -130,6 +130,7 @@ go_library(
         "@com_github_modelcontextprotocol_go_sdk//auth",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
         "@com_github_nyaruka_phonenumbers_v2//:phonenumbers",
+        "@com_github_nytimes_gziphandler//:gziphandler",
         "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
