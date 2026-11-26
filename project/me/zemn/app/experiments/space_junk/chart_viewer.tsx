@@ -227,7 +227,16 @@ export function ChartViewer({
 						'aria-valuetext': `${Math.round(turn)} degrees longitude`,
 						onChange: e => rotate(e.currentTarget.valueAsNumber),
 					}}
-				/>
+				>
+					<label className={style.switch}>
+						<input
+							type="checkbox"
+							checked={controls.spin}
+							onChange={e => controls.setSpin(e.target.checked)}
+						/>
+						Auto-rotate
+					</label>
+				</SlideRule>
 				<SlideRule
 					{...rulerEvents}
 					label="Tilt"
@@ -272,14 +281,6 @@ export function ChartViewer({
 						onChange: e => zoomTo(e.currentTarget.valueAsNumber),
 					}}
 				/>
-				<label className={style.switch}>
-					<input
-						type="checkbox"
-						checked={controls.spin}
-						onChange={e => controls.setSpin(e.target.checked)}
-					/>
-					Auto-rotate
-				</label>
 			</div>
 		</div>
 	);

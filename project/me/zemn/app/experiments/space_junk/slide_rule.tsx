@@ -1,5 +1,6 @@
 import {
 	type ComponentPropsWithoutRef,
+	type ReactNode,
 	useEffect,
 	useEffectEvent,
 	useRef,
@@ -9,6 +10,7 @@ import style from './style.module.css';
 export function SlideRule({
 	label,
 	caption,
+	children,
 	readout,
 	centre,
 	min,
@@ -27,6 +29,7 @@ export function SlideRule({
 }: {
 	label: string;
 	caption?: string;
+	children?: ReactNode;
 	readout: string;
 	centre: number;
 	min: number;
@@ -174,6 +177,7 @@ export function SlideRule({
 				</svg>
 				<i aria-hidden="true" />
 			</div>
+			{children}
 		</div>
 	);
 }

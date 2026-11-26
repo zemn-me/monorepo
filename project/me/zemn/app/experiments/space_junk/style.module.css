@@ -201,10 +201,17 @@
 .viewControls {
 	text-align: start;
 }
-.viewControls > .switch {
+.viewControls .rulerRow > .switch {
+	flex-direction: column-reverse;
+	justify-content: center;
+	gap: 0.15rem;
+	padding-inline-start: 0.5rem;
 	font: var(--controls);
+	font-size: 0.72rem;
 }
 .viewControls .rulerRow {
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
 	grid-template-columns: minmax(7rem, 20%) minmax(0, 1fr);
 }
 .objectCatalogue,
@@ -497,7 +504,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.viewControls > .switch {
+	.viewControls .rulerRow > .switch {
 		display: none;
 	}
 }
