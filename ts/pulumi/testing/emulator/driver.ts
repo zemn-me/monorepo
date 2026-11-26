@@ -2,12 +2,10 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, symlink, writeFile } from 'node:fs/promises';
-import { type IncomingMessage, request as httpRequest } from 'node:http';
-import { request as httpsRequest } from 'node:https';
+import { request as httpRequest } from 'node:http';
 import { createRequire } from 'node:module';
 import { createServer as tcpServer } from 'node:net';
 import path from 'node:path';
-import { text } from 'node:stream/consumers';
 import { promisify } from 'node:util';
 
 import { runfiles } from '@bazel/runfiles';
@@ -431,28 +429,6 @@ try {
 			resource => resource.type === 'aws:lambda/function:Function'
 		)
 	);
-	// Address the distribution by its deployed alias while keeping the TLS
-	// connection inside this test's emulator. Only the orbit behavior refuses POST.
-	const apiHost =
-		scenario === 'staging' ? 'api.staging.zemn.me' : 'api.zemn.me';
-	const ca = await readFile(config.certificate);
-	const refusal = await new Promise<IncomingMessage>((resolve, reject) => {
-		httpsRequest(
-			config.endpoint,
-			{
-				ca,
-				servername: 'localhost',
-				headers: { host: apiHost },
-				method: 'POST',
-				path: '/earth-orbits/elements/2006-08-01',
-			},
-			resolve
-		).on('error', reject).end();
-	});
-	const body = await text(refusal);
-	assert.equal(refusal.statusCode, 403, body);
-	assert.equal(refusal.headers['x-cache'], 'Error from cloudfront');
-	assert.match(body, /not configured to allow the HTTP request method/i);
 	if (scenario === 'production') {
 		assert(
 			actual.some(

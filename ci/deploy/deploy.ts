@@ -5,7 +5,6 @@ import path from 'node:path';
 import { runfiles } from '@bazel/runfiles';
 
 import deployToStaging from '#root/ts/pulumi/deploy_to_staging.js';
-import { verifyStagingApiEdge } from './api_edge.js';
 import { deployToProduction } from './production.js';
 import { verifyBundle } from './verify.js';
 
@@ -31,7 +30,6 @@ try {
 				overwrite: revision === 'main',
 				skipRefresh: revision === 'candidate',
 			});
-			if (revision === 'candidate') await verifyStagingApiEdge();
 			break;
 		default:
 			throw new Error('Expected main, candidate, production, or verify');

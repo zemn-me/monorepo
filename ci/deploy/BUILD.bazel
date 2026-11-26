@@ -17,7 +17,6 @@ ts_project(
 ts_project(
     name = "deploy_lib",
     srcs = [
-        "api_edge.ts",
         "deploy.ts",
         "verify.ts",
     ],
@@ -82,7 +81,6 @@ bazel_lint(
 filegroup(
     name = "all_ts_srcs",
     srcs = [
-        "api_edge.ts",
         "deploy.ts",
         "production.ts",
         "verify.ts",

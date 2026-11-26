@@ -135,6 +135,9 @@ func main() {
 		for name, value := range deployment.Environment {
 			mustSetEnv(name, value)
 		}
+		if err := mountEmulatedAPI(deployment.AWS, deployment.Environment["ZEMN_API_ORIGIN"], mux); err != nil {
+			log.Fatal(err)
+		}
 		opts.AWSConfig = &deployment.AWS
 		if err := configureEmulatedJournal(ctx, deployment.AWS, apiOrigin, mux, &opts); err != nil {
 			log.Fatalf("configure emulated journal: %v", err)
@@ -193,7 +196,9 @@ func main() {
 		}
 		w.WriteHeader(http.StatusNoContent)
 	})
-	mux.Handle("/", srv)
+	if !useAWSEmulator {
+		mux.Handle("/", srv)
+	}
 	fmt.Printf("PORT=%d\n", addr.Port)
 	if err := http.Serve(ln, mux); err != nil {
 		log.Fatalf("serve: %v", err)

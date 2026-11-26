@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -16,6 +17,30 @@ import (
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
+
+// Browsers use the assigned loopback port. The emulator needs its own CA for
+// TLS and the distribution alias as the HTTP Host to route a viewer request.
+func mountEmulatedAPI(cfg aws.Config, origin string, mux *http.ServeMux) error {
+	viewer, err := url.Parse(origin)
+	if err != nil || viewer.Scheme != "https" || viewer.Host == "" {
+		return fmt.Errorf("invalid deployed API origin %q", origin)
+	}
+	endpoint, err := url.Parse(*cfg.BaseEndpoint)
+	if err != nil {
+		return err
+	}
+	mux.Handle("/", &httputil.ReverseProxy{
+		Transport: cfg.HTTPClient.(*http.Client).Transport,
+		Rewrite: func(r *httputil.ProxyRequest) {
+			r.SetURL(endpoint)
+			r.Out.Host = viewer.Host
+		},
+	})
+	mux.HandleFunc("GET /__local/ready", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	return nil
+}
 
 // Keep the browser's real SigV4 playback URLs short-lived so the journal
 // exercises recovery from an expired URL within one browser session.

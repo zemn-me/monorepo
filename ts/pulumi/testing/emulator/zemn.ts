@@ -8,6 +8,7 @@ export function zemnFeatureDeployment(api: ApiZemnMe) {
 	new aws.iam.OutboundWebIdentityFederation('fixture-outbound-identity');
 	return {
 		environment: publicEnvironment(api.lambdaFunction, [
+			'ZEMN_API_ORIGIN',
 			'DYNAMODB_TABLE_NAME',
 			'ANALYTICS_TABLE_NAME',
 			'GRIEVANCES_TABLE_NAME',
