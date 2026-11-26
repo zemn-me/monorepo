@@ -268,6 +268,7 @@
 	margin: 0;
 }
 .search {
+	align-self: stretch;
 	width: min(100%, 9rem);
 	min-width: 0;
 	padding: 0.4rem 0.5rem;
@@ -429,7 +430,8 @@
 }
 @media (width < 40rem) {
 	.objectBand {
-		grid-template-columns: 5.4rem minmax(0, 1fr) minmax(4.5rem, 20%);
+		grid-template-columns: 5.4rem minmax(0, 1fr) minmax(min-content, 20%);
+		grid-auto-rows: 1fr;
 	}
 	.objectBand .search {
 		grid-column: 2 / -1;
@@ -438,7 +440,7 @@
 		grid-column: 1 / 3;
 	}
 }
-@media (width < 32rem) {
+@media (width < 20rem) {
 	.objectBand .zodiacGroup {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}

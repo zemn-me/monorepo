@@ -214,7 +214,7 @@ const BirthdayChart = memo(function BirthdayChart({
 							className={style.search}
 							type="search"
 							aria-label="Search by name, catalog number, designator or object type"
-							placeholder="Search objects"
+							placeholder="Search"
 							value={search}
 							onChange={event => {
 								setSearch(event.target.value);
