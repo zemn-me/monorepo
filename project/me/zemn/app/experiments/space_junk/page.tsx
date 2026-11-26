@@ -22,7 +22,12 @@ import { BirthdayRulers } from './birthday_form.js';
 import { BodyFilters } from './body_filters.js';
 import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart, type SpaceObject } from './chart.js';
-import { birthInstant, catalogueId } from './chart_query.js';
+import {
+	birthInstant,
+	catalogueId,
+	objectAnchor,
+	objectFromHash,
+} from './chart_query.js';
 import { ChartViewer } from './chart_viewer.js';
 import { type City, cityShard, lookupCity, sharedCityShard } from './cities.js';
 import { CitySearch } from './city_search.js';
@@ -125,11 +130,24 @@ const BirthdayChart = memo(function BirthdayChart({
 		() => bodyPositions(selectedBodies, new Date(instant), place),
 		[selectedBodies, instant, place]
 	);
-	const [selectedId, setSelectedId] = useQueryState('object', catalogueId);
+	const [legacyId] = useQueryState('object', catalogueId);
 	const [revision, setRevision] = useState(0);
-	function locate(id: number) {
-		void setSelectedId(id);
+	const [anchorId, setAnchorId] = useState<number | null>(null);
+	useEffect(() => {
+		const readHash = () =>
+			setAnchorId(objectFromHash(window.location.hash));
+		readHash();
+		window.addEventListener('hashchange', readHash);
+		return () => window.removeEventListener('hashchange', readHash);
+	}, []);
+	const selectedId = anchorId ?? legacyId;
+	function revisit() {
 		setRevision(previous => previous + 1);
+	}
+	function locate(id: number) {
+		const hash = '#' + objectAnchor(id);
+		if (window.location.hash === hash) revisit();
+		else window.location.hash = hash;
 	}
 	const byId = useMemo(
 		() => new Map(markers.map(m => [m.object.id, m])),
@@ -184,6 +202,7 @@ const BirthdayChart = memo(function BirthdayChart({
 					markers={markers}
 					selected={selected}
 					revision={revision}
+					linkedId={anchorId}
 					cityRevision={cityRevision}
 					zodiac={debrisZodiac}
 					ascendant={natalZodiac.ascendant}
@@ -279,7 +298,8 @@ const BirthdayChart = memo(function BirthdayChart({
 										designator={object.piece}
 										longitude={longitude}
 										house={debrisZodiac.house(longitude)}
-										locate={() => locate(object.id)}
+										target={objectAnchor(object.id)}
+										onRevisit={revisit}
 									>
 										<p>
 											{displayDate(object.start)} –{' '}

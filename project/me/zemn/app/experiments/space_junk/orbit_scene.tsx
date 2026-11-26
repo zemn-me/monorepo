@@ -8,12 +8,10 @@ const emptyWorld: StyledFace3D[] = [];
 export function OrbitScene({
 	label,
 	world = emptyWorld,
-	faces,
 	frame,
 }: {
 	label: string;
 	world?: StyledFace3D[];
-	faces: StyledFace3D[];
 	frame: ReturnType<typeof globeFrame>;
 }) {
 	const host = useRef<SVGGElement>(null);
@@ -33,7 +31,7 @@ export function OrbitScene({
 		renderer.current!.setWorld(world);
 	}, [world]);
 	useLayoutEffect(() => {
-		renderer.current!.render(frame.camera, faces, frame.projection);
-	}, [world, faces, frame]);
+		renderer.current!.render(frame.camera, emptyWorld, frame.projection);
+	}, [world, frame]);
 	return <g ref={host} aria-label={label} />;
 }

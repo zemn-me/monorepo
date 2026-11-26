@@ -5,13 +5,13 @@ import {
 	defaultTurn,
 	flat,
 	orbitalTiltLimit,
-	settlingMidpoint,
 	type PickMarker,
+	settlingMidpoint,
 	useChartCamera,
 	wrap,
 } from './chart_camera.js';
 import { chartGeometry } from './chart_geometry.js';
-import { boundedNumber } from './chart_query.js';
+import { boundedNumber, objectAnchor } from './chart_query.js';
 import { Globe } from './globe.js';
 import {
 	equatorialRadius,
@@ -81,6 +81,7 @@ export function ChartViewer({
 	showSigns,
 	birthplace,
 	cityRevision,
+	linkedId,
 	markers,
 	selected,
 	revision,
@@ -96,7 +97,8 @@ export function ChartViewer({
 	birthplace?: Birthplace & { name?: string };
 	markers: Marker[];
 	selected?: Marker;
-	revision?: number;
+	revision: number;
+	linkedId: number | null;
 	zodiac: ReturnType<typeof zodiacFrame>;
 	ascendant?: number;
 	onSelect: (marker: Marker) => void;
@@ -181,18 +183,40 @@ export function ChartViewer({
 			Math.max(closeExtent, radius(selected) * 1.05)
 		);
 	}
-	const previous = useRef({ cityRevision, revision });
+	const target =
+		selected && selected.object.id === linkedId ? linkedId : null;
+	const previous = useRef({
+		cityRevision,
+		revision,
+		target: null as number | null,
+	});
 	useLayoutEffect(() => {
-		if (!faceOn) {
-			if (revision !== previous.current.revision) locate();
-			else if (
-				birthplace &&
-				cityRevision !== previous.current.cityRevision
+		if (
+			target !== null &&
+			(target !== previous.current.target ||
+				revision !== previous.current.revision)
+		) {
+			if (!faceOn) locate();
+			// Resolve the native target if the browser first saw this URL before the archive loaded.
+			const id = objectAnchor(target);
+			const marker = document.getElementById(id);
+			if (
+				window.location.hash === '#' + id &&
+				marker &&
+				!marker.matches(':target')
 			)
-				home();
+				window.location.replace(window.location.hash);
+			controls.svg.current?.scrollIntoView({ block: 'center' });
+			controls.svg.current?.focus({ preventScroll: true });
+		} else if (
+			!faceOn &&
+			birthplace &&
+			cityRevision !== previous.current.cityRevision
+		) {
+			home();
 		}
-		previous.current = { cityRevision, revision };
-	}, [birthplace, cityRevision, revision, faceOn]);
+		previous.current = { cityRevision, revision, target };
+	}, [birthplace, cityRevision, revision, faceOn, target]);
 
 	const rulerEvents = {
 		onGrab: controls.grabRuler,

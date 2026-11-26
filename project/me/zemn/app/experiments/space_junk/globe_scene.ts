@@ -5,14 +5,10 @@ import {
 	rgb,
 	sphere,
 } from '#root/ts/3d/low_poly.js';
-import {
-	cameraSpaceTransformFromPose,
-	orientationFromYawPitch,
-} from '#root/ts/math/camera_pose.js';
+import { cameraSpaceTransformFromPose } from '#root/ts/math/camera_pose.js';
 import {
 	cross,
 	magnitude,
-	type Point3D,
 	point,
 	scale,
 	translate,
@@ -20,7 +16,6 @@ import {
 	y,
 	z,
 } from '#root/ts/math/cartesian.js';
-import { rotateVector } from '#root/ts/math/quaternion.js';
 import {
 	cameraProjector,
 	clipSegmentToNearPlane,
@@ -29,12 +24,7 @@ import {
 	styledFace,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
-import {
-	equatorialRadius,
-	type Marker,
-	surface,
-	type Vector,
-} from './globe_geometry.js';
+import { equatorialRadius, surface, type Vector } from './globe_geometry.js';
 
 export const width = 416,
 	height = 376;
@@ -42,33 +32,6 @@ const focalScale = 0.95;
 const focal = height * focalScale;
 const radians = Math.PI / 180;
 const distancePerExtent = Math.hypot(1, focal / 184);
-const layers = { D: 3, R: 4, C: 5, P: 6 };
-const shapes = {
-	P: [
-		[-0.9, -0.9],
-		[0.9, -0.9],
-		[0.9, 0.9],
-		[-0.9, 0.9],
-	],
-	D: [
-		[-0.65, -0.5],
-		[0.65, -0.5],
-		[0, 0.7],
-	],
-	R: [
-		[-1.1, -0.5],
-		[0.35, 1.15],
-		[1.1, 0.5],
-		[-0.35, -1.15],
-	],
-	C: [
-		[-1.25, 0],
-		[0, 1.25],
-		[1.25, 0],
-		[0, -1.25],
-	],
-} as const;
-
 // The renderer looks down +Z with Y up. From Greenwich, east must appear to the right.
 function world(p: Vector) {
 	return point<3>(-p.y, p.z, p.x);
@@ -164,9 +127,6 @@ export function globeFrame(
 ) {
 	const pose = orbitPose(camera);
 	const toCamera = unwrap(cameraSpaceTransformFromPose(pose));
-	const orientation = unwrap(orientationFromYawPitch(pose.yaw, pose.pitch));
-	const right = unwrap(rotateVector(orientation, point<3>(1, 0, 0)));
-	const up = unwrap(rotateVector(orientation, point<3>(0, 1, 0)));
 	const projection = perspective(width, height, {
 		focalScale,
 		farPlane: camera.distance + maxRadius + 1,
@@ -235,30 +195,13 @@ export function globeFrame(
 			b = toScreen(clipped[1]);
 		return { x1: x(a), y1: y(a), x2: x(b), y2: y(b) };
 	}
-	function symbol(
-		center: Point3D,
-		depth: number,
-		kind: Marker['object']['kind'],
-		size = 1
-	) {
-		// Billboard sizes are in screen pixels so a fragment is selectable at every zoom.
-		const unit = (size * depth) / focal;
-		const vertex = (dx: number, dy: number) =>
-			point<3>(
-				x(center) + unit * (dx * x(right) + dy * x(up)),
-				y(center) + unit * (dx * y(right) + dy * y(up)),
-				z(center) + unit * (dx * z(right) + dy * z(up))
-			);
-		const vertices = shapes[kind].map(([dx, dy]) => vertex(dx, dy));
-		return styledFace(vertices, '#ffffff', layers[kind], true);
-	}
+
 	return {
 		camera,
 		projection,
 		project,
 		extentToFrame,
 		segment,
-		symbol,
 		kmPerPixel: viewWidthKm(camera) / width,
 	};
 }

@@ -38,3 +38,14 @@ export const catalogueId = createParser<number>({
 			: null,
 	serialize: String,
 });
+
+const objectPrefix = 'object-';
+export function objectAnchor(id: number) {
+	return objectPrefix + id;
+}
+export function objectFromHash(hash: string) {
+	const prefix = '#' + objectPrefix;
+	return hash.startsWith(prefix)
+		? catalogueId.parse(hash.slice(prefix.length))
+		: null;
+}

@@ -547,7 +547,7 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000,
 					'Releasing twenty degrees from the pole settles into the full orbital view');
 				expect(await tilt.getAttribute('value')).toBe('60');
-				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting objects"]'));
+				const scene = await driver.findElement(By.css('g[aria-label="Earth surface"]'));
 				const geometry = () => driver.executeScript<string>(`
 					const visible = arguments[0].querySelectorAll('path[fill="#454545"]:not([display="none"])');
 					return Array.from(visible, path => path.getAttribute('d')).join('');
@@ -578,11 +578,7 @@ describe('zemn.me website', () => {
 				expect(await previous.isEnabled()).toBe(true);
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
-				const markerCount = () => driver.executeScript<number>(`
-					const paths = arguments[0].querySelectorAll('g[aria-label="Earth and orbiting objects"] path');
-					return Array.from(paths).filter(p => !p.closest('[display="none"]')).reduce((n, p) =>
-						n + (p.getAttribute('d').match(/M/g) || []).length, 0);
-				`, wheel);
+				const markerCount = () => wheel.findElements(By.css('g[aria-label="Orbiting objects"] path:not([display="none"])')).then(paths => paths.length);
 				const unfiltered = await markerCount();
 				expect(unfiltered).toBe(250);
 				await search.sendKeys('MoToR');
@@ -755,6 +751,29 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
 				await globe.sendKeys(Key.HOME);
 				expect(await bodies()).toHaveLength(0);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('links directly to the plotted orbital object and restores its selection from the fragment', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart?spin=false`);
+				const links = await driver.wait(until.elementsLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
+				const link = links[1]!;
+				const url = new URL(await link.getAttribute('href'));
+				expect(url.hash).toMatch(/^#object-\d+$/);
+				const name = await link.getText();
+				expect(await driver.findElement(By.css('svg path' + url.hash)).getAttribute('aria-label')).toBe(name);
+				const selected = By.css('svg g[aria-label^="Selected object · "]');
+				const isSelected = async () => (await driver.findElements(selected))[0]?.getAttribute('aria-label');
+				await link.click();
+				await driver.wait(async () => await isSelected() === 'Selected object · ' + name, 5000);
+				expect(new URL(await driver.getCurrentUrl()).hash).toBe(url.hash);
+				await driver.get('about:blank');
+				await driver.get(url.href);
+				await driver.wait(async () => await isSelected() === 'Selected object · ' + name, 10000);
+				expect(await driver.findElement(By.css(':target')).getAttribute('id')).toBe(url.hash.slice(1));
 			} finally {
 				await driver.quit();
 			}

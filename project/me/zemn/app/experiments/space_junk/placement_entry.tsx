@@ -8,7 +8,8 @@ export function PlacementEntry({
 	designator,
 	longitude,
 	house,
-	locate,
+	target,
+	onRevisit,
 	children,
 }: {
 	name: string;
@@ -16,7 +17,8 @@ export function PlacementEntry({
 	designator?: string;
 	longitude: number;
 	house?: number;
-	locate?: () => void;
+	target?: string;
+	onRevisit?: () => void;
 	children?: ReactNode;
 }) {
 	const value = degrees(longitude);
@@ -35,11 +37,26 @@ export function PlacementEntry({
 					)}
 					{designator && (
 						<>
-							<span className={style.designator}>{designator}</span>{' '}
+							<span className={style.designator}>
+								{designator}
+							</span>{' '}
 						</>
 					)}
-					{locate ? (
-						<a href="#star-chart" onClick={locate}>
+					{target ? (
+						<a
+							href={'#' + target}
+							onClick={event => {
+								if (
+									event.currentTarget.hash ===
+										window.location.hash &&
+									!event.metaKey &&
+									!event.ctrlKey &&
+									!event.shiftKey &&
+									!event.altKey
+								)
+									onRevisit?.();
+							}}
+						>
 							{name}
 						</a>
 					) : (

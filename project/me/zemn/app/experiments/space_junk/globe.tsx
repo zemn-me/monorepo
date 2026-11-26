@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { type Ref, useId, useImperativeHandle, useMemo } from 'react';
-import type { StyledFace3D } from '#root/ts/math/wireframe_render.js';
 import { coastlineUrl } from './assets.js';
 import type { PickMarker } from './chart_camera.js';
 import type { ChartGeometry } from './chart_geometry.js';
+import { objectAnchor } from './chart_query.js';
 import {
 	equatorialRadius,
 	groundLocation,
@@ -24,6 +24,13 @@ import {
 
 import { WheelGuides } from './zodiac_wheel.js';
 
+// The billboards use screen coordinates (positive Y points down).
+const markerPaths = {
+	P: 'M-.9,.9 H.9 V-.9 H-.9 Z',
+	D: 'M-.65,.5 H.65 L0,-.7 Z',
+	R: 'M-1.1,.5 L.35,-1.15 1.1,-.5 -.35,1.15 Z',
+	C: 'M-1.25,0 L0,-1.25 1.25,0 0,1.25 Z',
+};
 const baseWorld = globeWorld();
 function BirthplacePin({
 	place,
@@ -121,32 +128,30 @@ export function Globe({
 		() => (coastline.data ? globeWorld(coastline.data) : baseWorld),
 		[coastline.data]
 	);
-	const projected = useMemo(() => {
-		const faces: StyledFace3D[] = [];
-		const hits: { x: number; y: number; marker: Marker }[] = [];
-		let focus: ReturnType<typeof frame.project> | undefined;
-		for (const [i, marker] of markers.entries()) {
-			const p =
-				unfold === 1
-					? frame.project(marker)
-					: geometry.debris(marker, placements[i]!.longitude);
-			if (marker === selected) focus = p;
-			if (!p.visible || p.x < 0 || p.x > width || p.y < 0 || p.y > height)
-				continue;
-			faces.push(
-				frame.symbol(
-					p.center,
-					p.depth,
-					marker.object.kind,
-					0.58 + 0.42 * unfold
-				)
-			);
-			hits.push({ x: p.x, y: p.y, marker });
-		}
-		return { faces, hits, focus };
-	}, [markers, placements, selected, geometry, frame, unfold]);
+	const projected = useMemo(
+		() =>
+			markers.map((marker, i) => {
+				const p =
+					unfold === 1
+						? frame.project(marker)
+						: geometry.debris(marker, placements[i]!.longitude);
+				return {
+					marker,
+					x: p.x,
+					y: p.y,
+					visible: p.visible,
+					inView:
+						p.visible &&
+						p.x >= 0 &&
+						p.x <= width &&
+						p.y >= 0 &&
+						p.y <= height,
+				};
+			}),
+		[markers, placements, geometry, frame, unfold]
+	);
 
-	const focus = projected.focus;
+	const focus = projected.find(p => p.marker === selected);
 	const ground =
 		location &&
 		frame.project(surface(location.longitude, location.latitude));
@@ -167,7 +172,8 @@ export function Globe({
 		() => at => {
 			let distance = 6;
 			let closest: Marker | undefined;
-			for (const hit of projected.hits) {
+			for (const hit of projected) {
+				if (!hit.inView) continue;
 				const d = Math.hypot(at.x - hit.x, at.y - hit.y);
 				if (d < distance) {
 					closest = hit.marker;
@@ -196,9 +202,8 @@ export function Globe({
 					height={height}
 				>
 					<OrbitScene
-						label="Earth and orbiting objects"
+						label="Earth surface"
 						world={unfold ? world : undefined}
-						faces={projected.faces}
 						frame={frame}
 					/>
 				</mask>
@@ -209,6 +214,30 @@ export function Globe({
 				mask={`url(#${mask})`}
 				fill="currentColor"
 			/>
+			<g
+				aria-label="Orbiting objects"
+				fill="currentColor"
+				stroke="currentColor"
+				strokeWidth=".4"
+				strokeLinejoin="round"
+			>
+				{projected.map(({ marker: { object }, x, y, inView }) => (
+					<path
+						key={object.id}
+						id={objectAnchor(object.id)}
+						role="img"
+						aria-label={object.name}
+						display={inView ? undefined : 'none'}
+						transform={
+							inView
+								? `translate(${x} ${y}) scale(${0.58 + 0.42 * unfold})`
+								: undefined
+						}
+						vectorEffect="non-scaling-stroke"
+						d={markerPaths[object.kind]}
+					/>
+				))}
+			</g>
 			<WheelGuides
 				geometry={geometry}
 				selected={selection}
