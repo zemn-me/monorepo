@@ -5,6 +5,7 @@ import { coastlineUrl } from './assets.js';
 import type { PickMarker } from './chart_camera.js';
 import type { ChartGeometry } from './chart_geometry.js';
 import {
+	equatorialRadius,
 	groundLocation,
 	type Marker,
 	surface,
@@ -184,20 +185,36 @@ export function Globe({
 					r={2 * (1 - unfold)}
 					fill="currentColor"
 				>
-					<title>Chart origin</title>
+					<title>Earth · chart origin</title>
 				</circle>
 			)}
-			{unfold === 1 && frame.kmPerPixel > 6378.137 && (
-				<circle
-					cx={width / 2}
-					cy={height / 2}
-					r="1.7"
+			{unfold === 1 && frame.kmPerPixel > equatorialRadius / 4 && (
+				<g
+					transform={`translate(${width / 2} ${height / 2})`}
 					role="img"
 					aria-label="Earth"
-					fill="currentColor"
 				>
-					<title>Earth</title>
-				</circle>
+					<circle r="2" fill="currentColor" />
+					<path
+						d="M-2,2 l-20,23 h-5"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth=".8"
+					/>
+					<text
+						x="-30"
+						y="25"
+						textAnchor="end"
+						dominantBaseline="central"
+						fontSize="11"
+						fill="currentColor"
+						stroke="var(--background-color)"
+						strokeWidth="3"
+						paintOrder="stroke"
+					>
+						Earth
+					</text>
+				</g>
 			)}
 			{birthPoint?.visible && (
 				<circle

@@ -185,7 +185,6 @@ const BirthdayChart = memo(function BirthdayChart({
 			</div>
 			<figure className={style.figure}>
 				<ChartViewer
-					includeEarthOrbits={hasObjects}
 					instant={instant}
 					bodies={bodies}
 					showSigns={classical.some(body =>

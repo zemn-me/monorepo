@@ -28,7 +28,12 @@ import {
 	styledFace,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
-import { type Marker, surface, type Vector } from './globe_geometry.js';
+import {
+	equatorialRadius,
+	type Marker,
+	surface,
+	type Vector,
+} from './globe_geometry.js';
 
 export const width = 416,
 	height = 376;
@@ -211,6 +216,6 @@ export function globeFrame(
 		projection,
 		project,
 		symbol,
-		kmPerPixel: (6378.137 * camera.distance) / focal,
+		kmPerPixel: (equatorialRadius * camera.distance) / focal,
 	};
 }

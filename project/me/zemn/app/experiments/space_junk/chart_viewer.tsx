@@ -1,3 +1,4 @@
+import { KM_PER_AU } from 'astronomy-engine';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
 	defaultTurn,
@@ -9,7 +10,12 @@ import {
 } from './chart_camera.js';
 import { chartGeometry } from './chart_geometry.js';
 import { Globe } from './globe.js';
-import { groundLocation, type Marker, type Vector } from './globe_geometry.js';
+import {
+	equatorialRadius,
+	groundLocation,
+	type Marker,
+	type Vector,
+} from './globe_geometry.js';
 import { height, width } from './globe_scene.js';
 import { PlanetPositions } from './planet_layer.js';
 import { type BodyPosition, earthFixedSky } from './planets.js';
@@ -18,10 +24,11 @@ import { type Birthplace, nearestAspects, type zodiacFrame } from './zodiac.js';
 import { WheelReading } from './zodiac_wheel.js';
 
 const closeExtent = 1.5;
+// Keep the ruler in physical units even when the visible catalogue changes.
+const maxExtent = (60 * KM_PER_AU) / equatorialRadius;
 const radius = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
 export function ChartViewer({
-	includeEarthOrbits,
 	instant,
 	bodies,
 	showSigns,
@@ -33,7 +40,6 @@ export function ChartViewer({
 	ascendant,
 	onSelect,
 }: {
-	includeEarthOrbits: boolean;
 	instant: number;
 	bodies: BodyPosition[];
 	showSigns: boolean;
@@ -48,18 +54,11 @@ export function ChartViewer({
 	const controls = useChartCamera();
 	const { camera, move, faceOn, unfold } = controls;
 	const pick = useRef<PickMarker>(null);
-	const [zoom, setZoom] = useState<number>();
-	const maxExtent = useMemo(
-		() =>
-			Math.max(
-				markers.reduce((m, p) => Math.max(m, radius(p) * 1.05), 2),
-				...bodies.map(b => radius(b.position) * 1.1)
-			),
-		[markers, bodies]
-	);
-	const zoomValue = zoom ?? (includeEarthOrbits ? 100 : 0);
-	const extent =
-		closeExtent * (maxExtent / closeExtent) ** (1 - zoomValue / 100);
+	const [extent, setExtent] = useState(closeExtent);
+	const zoomValue =
+		100 -
+		(100 * Math.log(extent / closeExtent)) /
+			Math.log(maxExtent / closeExtent);
 	const fixed = useMemo(() => earthFixedSky(new Date(instant)), [instant]);
 	const { turn, tilt } = camera;
 	const geometry = useMemo(
@@ -97,11 +96,7 @@ export function ChartViewer({
 				Math.min(orbitalTiltLimit, latitude)
 			),
 		});
-		setZoom(
-			100 -
-				(100 * Math.log(radius / closeExtent)) /
-					Math.log(maxExtent / closeExtent)
-		);
+		setExtent(radius);
 	}
 	function home() {
 		faceEarth(
@@ -220,21 +215,25 @@ export function ChartViewer({
 							}
 						/>
 					</label>
-					{(markers.length > 0 || bodies.length > 0) && (
-						<label>
-							Zoom
-							<input
-								{...controls.rangeEvents}
-								type="range"
-								min="0"
-								max="100"
-								step=".1"
-								value={zoomValue}
-								aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
-								onChange={e => setZoom(e.target.valueAsNumber)}
-							/>
-						</label>
-					)}
+					<label>
+						Zoom
+						<input
+							{...controls.rangeEvents}
+							type="range"
+							min="0"
+							max="100"
+							step=".1"
+							value={zoomValue}
+							aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
+							onChange={e =>
+								setExtent(
+									closeExtent *
+										(maxExtent / closeExtent) **
+											(1 - e.target.valueAsNumber / 100)
+								)
+							}
+						/>
+					</label>
 					<label className={style.spin}>
 						<input
 							type="checkbox"
