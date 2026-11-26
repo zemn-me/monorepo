@@ -16,8 +16,8 @@ import {
 	VectorFromSphere,
 } from 'astronomy-engine';
 import { eciToEcf } from 'satellite.js';
-import { earthRadii } from './globe_geometry.js';
-import { aspectAngles, degrees, radians, type Birthplace } from './zodiac.js';
+import { earthRadii, radians } from './globe_geometry.js';
+import { aspects, degrees, type Birthplace } from './zodiac.js';
 
 export const classical = [
 	Body.Sun,
@@ -100,10 +100,12 @@ export function bodyAspects(positions: BodyPosition[]) {
 			const separation = Math.abs(
 				degrees(a.longitude - b.longitude + 180) - 180
 			);
-			const aspect = aspectAngles.find(
+			const aspect = aspects.find(
 				([, angle]) => Math.abs(separation - angle) <= 6
 			);
-			return aspect ? [{ a, b, name: aspect[0], angle: aspect[1] }] : [];
+			if (!aspect) return [];
+			const [name, angle, dash] = aspect;
+			return [{ a, b, name, angle, dash }];
 		})
 	);
 }

@@ -21,7 +21,15 @@ import { catalogueUrl } from './assets.js';
 import { BirthdayRulers } from './birthday_form.js';
 import { BodyFilters } from './body_filters.js';
 import { catalogueDate } from './catalogue_date.js';
-import { type Catalogue, kinds, readChart, type SpaceObject } from './chart.js';
+import {
+	artificialTypes,
+	type Catalogue,
+	debrisTypes,
+	kindLabels,
+	matchesSearch,
+	type ObjectKind,
+	readChart,
+} from './chart.js';
 import {
 	birthInstant,
 	catalogueId,
@@ -33,7 +41,7 @@ import { type City, cityShard, lookupCity, sharedCityShard } from './cities.js';
 import { CitySearch } from './city_search.js';
 import { PlacementEntry } from './placement_entry.js';
 import { bodyPositions, classical, modern, planetGlyphs } from './planets.js';
-import { firstInstant, zonedTime } from './ruler_time.js';
+import { firstInstant, lastInstant, zonedTime } from './ruler_time.js';
 import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
 import { useRulerClock } from './use_ruler_clock.js';
@@ -45,14 +53,6 @@ function displayDate(day: string) {
 	});
 }
 
-const debrisTypes = ['C', 'D', 'R'] as const;
-const artificialTypes = [...debrisTypes, 'P'] as const;
-const typeLabels = {
-	C: 'Discarded equipment',
-	D: 'Breakup fragments',
-	R: 'Rocket stages',
-	P: 'Spacecraft payloads',
-};
 const planetaryBodies = [...classical, ...modern];
 const bodyList = parseAsArrayOf(
 	parseAsStringLiteral(planetaryBodies)
@@ -61,7 +61,6 @@ const kindList = parseAsArrayOf(
 	parseAsStringLiteral(artificialTypes)
 ).withDefault([...debrisTypes]);
 const searchText = parseAsString.withDefault('motor');
-type ObjectKind = SpaceObject['kind'];
 
 const BirthdayChart = memo(function BirthdayChart({
 	catalogue,
@@ -105,23 +104,10 @@ const BirthdayChart = memo(function BirthdayChart({
 	const filtered = useMemo(() => {
 		const term = search.trim().toLowerCase();
 		if (!term) return matches;
-		return matches.filter(({ object }) =>
-			`${object.name} ${object.piece} ${object.id} ${kinds[object.kind]}`
-				.toLowerCase()
-				.includes(term)
-		);
+		return matches.filter(({ object }) => matchesSearch(object, term));
 	}, [matches, search]);
 	const coverage = useDebrisPositions(filtered, instant, day, catalogueDate);
 	const { instant: debrisInstant } = coverage;
-	const filteredIds = useMemo(
-		() => new Set(filtered.map(({ object }) => object.id)),
-		[filtered]
-	);
-	const markers = useMemo(
-		() =>
-			coverage.markers.filter(({ object }) => filteredIds.has(object.id)),
-		[coverage.markers, filteredIds]
-	);
 	const [selectedBodies, setSelectedBodies] = useQueryState(
 		'bodies',
 		bodyList
@@ -149,11 +135,6 @@ const BirthdayChart = memo(function BirthdayChart({
 		if (window.location.hash === hash) revisit();
 		else window.location.hash = hash;
 	}
-	const byId = useMemo(
-		() => new Map(markers.map(m => [m.object.id, m])),
-		[markers]
-	);
-	const selected = selectedId === null ? undefined : byId.get(selectedId);
 	const debrisZodiac = useMemo(
 		() => zodiacFrame(new Date(debrisInstant), place),
 		[debrisInstant, place]
@@ -165,12 +146,16 @@ const BirthdayChart = memo(function BirthdayChart({
 				: debrisZodiac,
 		[place, debrisInstant, instant, debrisZodiac]
 	);
-	const plotted = useMemo(
-		() => filtered.filter(({ object }) => byId.has(object.id)),
-		[filtered, byId]
+	const placements = useMemo(
+		() =>
+			coverage.markers.map(marker => ({
+				marker,
+				...debrisZodiac.direction(marker.fixed),
+			})),
+		[coverage.markers, debrisZodiac]
 	);
 	const pageSize = 12;
-	const pageCount = Math.ceil(plotted.length / pageSize);
+	const pageCount = Math.ceil(placements.length / pageSize);
 	const pageIndex = Math.min(page, Math.max(0, pageCount - 1));
 	const offset = pageIndex * pageSize;
 	const [printing, setPrinting] = useState(false);
@@ -185,7 +170,7 @@ const BirthdayChart = memo(function BirthdayChart({
 			window.removeEventListener('afterprint', after);
 		};
 	}, []);
-	const rows = printing ? plotted : plotted.slice(offset, offset + pageSize);
+	const rows = printing ? placements : placements.slice(offset, offset + pageSize);
 
 	return (
 		<>
@@ -197,12 +182,11 @@ const BirthdayChart = memo(function BirthdayChart({
 						selectedBodies.includes(body)
 					)}
 					birthplace={place}
-					markers={markers}
-					selected={selected}
+					placements={placements}
+					selectedId={selectedId}
 					revision={revision}
 					linkedId={anchorId}
 					cityRevision={cityRevision}
-					zodiac={debrisZodiac}
 					ascendant={natalZodiac.ascendant}
 					onSelect={m => locate(m.object.id)}
 				>
@@ -220,7 +204,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						presetName="Space junk"
 						preset={debrisTypes}
 						options={artificialTypes}
-						labels={typeLabels}
+						labels={kindLabels}
 						selected={selectedKinds}
 						onChange={next => {
 							setSelectedKinds(next);
@@ -253,7 +237,7 @@ const BirthdayChart = memo(function BirthdayChart({
 				</p>
 			)}
 			{filtered.length > 0 &&
-				!markers.length &&
+				!placements.length &&
 				coverage.failed &&
 				!coverage.pending && (
 					<p role="alert">
@@ -287,22 +271,17 @@ const BirthdayChart = memo(function BirthdayChart({
 								house={natalZodiac.house(natalZodiac.ascendant)}
 							/>
 						)}
-						{rows.map(({ object }) => {
-							const { longitude } = debrisZodiac.direction(
-								byId.get(object.id)!.fixed
-							);
-							return (
-								<PlacementEntry
-									key={object.id}
-									name={object.name}
-									designator={object.piece}
-									longitude={longitude}
-									house={debrisZodiac.house(longitude)}
-									target={objectAnchor(object.id)}
-									onRevisit={revisit}
-								/>
-							);
-						})}
+						{rows.map(({ marker: { object }, longitude }) => (
+							<PlacementEntry
+								key={object.id}
+								name={object.name}
+								designator={object.piece}
+								longitude={longitude}
+								house={debrisZodiac.house(longitude)}
+								target={objectAnchor(object.id)}
+								onRevisit={revisit}
+							/>
+						))}
 					</ul>
 				)}
 				{hasObjects && catalogue && !rows.length && (
@@ -388,7 +367,7 @@ export default function Page() {
 					Math.max(
 						firstInstant,
 						Math.min(
-							Date.parse(catalogueDate + 'T23:59:59.999Z'),
+							lastInstant,
 							zonedTime(clock.read(), zone)
 								.toPlainDateTime()
 								.toZonedDateTime(nextZone).epochMilliseconds
@@ -431,7 +410,6 @@ export default function Page() {
 			)}
 			<BirthdayRulers
 				epoch={instant}
-				asOf={catalogueDate}
 				zone={city?.timezone ?? deviceZone}
 				clock={clock}
 			/>

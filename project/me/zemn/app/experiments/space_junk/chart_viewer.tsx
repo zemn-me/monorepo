@@ -23,7 +23,7 @@ import { globeCamera, height, viewWidthKm, width } from './globe_scene.js';
 import { type BodyPosition, earthFixedSky } from './planets.js';
 import { SlideRule } from './slide_rule.js';
 import style from './style.module.css';
-import { type Birthplace, nearestAspects, type zodiacFrame } from './zodiac.js';
+import { type Birthplace, nearestAspects, type Placement } from './zodiac.js';
 
 const closeExtent = 1.5;
 const tiltBands = [
@@ -82,10 +82,9 @@ export function ChartViewer({
 	birthplace,
 	cityRevision,
 	linkedId,
-	markers,
-	selected,
+	placements,
+	selectedId,
 	revision,
-	zodiac,
 	ascendant,
 	onSelect,
 }: {
@@ -95,11 +94,10 @@ export function ChartViewer({
 	showSigns: boolean;
 	cityRevision: number;
 	birthplace?: Birthplace & { name?: string };
-	markers: Marker[];
-	selected?: Marker;
+	placements: Placement[];
+	selectedId: number | null;
 	revision: number;
 	linkedId: number | null;
-	zodiac: ReturnType<typeof zodiacFrame>;
 	ascendant?: number;
 	onSelect: (marker: Marker) => void;
 }) {
@@ -134,18 +132,11 @@ export function ChartViewer({
 		];
 	});
 	zoomMarks.push(earthZoomMark);
-	const placements = useMemo(
-		() =>
-			markers.map(marker => ({
-				marker,
-				...zodiac.direction(marker.fixed),
-			})),
-		[markers, zodiac]
+	const selectedPlacement = placements.find(
+		p => p.marker.object.id === selectedId
 	);
-	const focus = useMemo(
-		() => placements.find(p => p.marker === selected) ?? placements[0],
-		[placements, selected]
-	);
+	const selected = selectedPlacement?.marker;
+	const focus = selectedPlacement ?? placements[0];
 
 	const aspects = useMemo(
 		() => (focus ? nearestAspects(focus, placements) : []),
@@ -273,7 +264,6 @@ export function ChartViewer({
 						bodies={bodies}
 						showSigns={showSigns}
 						birthplace={birthplace}
-						markers={markers}
 						placements={placements}
 						ascendant={ascendant}
 						aspects={aspects}

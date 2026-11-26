@@ -17,11 +17,20 @@ py_binary(
     visibility = ["//:__subpackages__"],
 )
 
+py_binary(
+    name = "orbit_fixture",
+    testonly = True,
+    srcs = ["orbit_fixture.py"],
+    main = "orbit_fixture.py",
+    visibility = ["//project/me/zemn/app/experiments/space_junk:__pkg__"],
+)
+
 py_library(
     name = "importer",
     srcs = [
         "catalogue.py",
         "cities.py",
+        "orbit_fixture.py",
     ],
     visibility = ["//:__subpackages__"],
 )

@@ -1,9 +1,11 @@
 import { Temporal } from 'temporal-polyfill';
+import { catalogueDate } from './catalogue_date.js';
 
 export type RulerUnit = 'year' | 'month' | 'day' | 'minute';
 export const minuteMs = 60_000;
 export const dayMs = 1440 * minuteMs;
 export const firstInstant = Date.parse('0001-01-01T00:00:00Z');
+export const lastInstant = Date.parse(catalogueDate + 'T23:59:59.999Z');
 const epochDate = Temporal.PlainDate.from('1970-01-01');
 
 export function zonedTime(epoch: number, zone: string) {

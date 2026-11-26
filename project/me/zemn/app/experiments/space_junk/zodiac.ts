@@ -1,5 +1,5 @@
 import { ecfToEci, geodeticToEcf, gstime, jday } from 'satellite.js';
-import type { Marker, Vector } from './globe_geometry.js';
+import { radians, type Marker, type Vector } from './globe_geometry.js';
 
 export const signs = [
 	'Aries',
@@ -15,7 +15,6 @@ export const signs = [
 	'Aquarius',
 	'Pisces',
 ];
-export const radians = Math.PI / 180;
 export const degrees = (angle: number) => ((angle % 360) + 360) % 360;
 export interface Birthplace {
 	latitude: number;
@@ -114,16 +113,16 @@ export function signPosition(longitude: number) {
 	return `${Math.floor((value % 30) * 10) / 10}° ${signs[Math.floor(value / 30)]}`;
 }
 
-export const aspectAngles = [
+export const aspects = [
 	['Conjunction', 0],
-	['Sextile', 60],
+	['Sextile', 60, '2 3'],
 	['Square', 90],
-	['Trine', 120],
+	['Trine', 120, '6 3'],
 	['Opposition', 180],
 ] as const;
 
 export function nearestAspects(selected: Placement, placements: Placement[]) {
-	return aspectAngles.flatMap(([name, angle]) => {
+	return aspects.flatMap(([name, angle, dash]) => {
 		let nearest: Placement | undefined;
 		let separation = 0;
 		let error = Infinity;
@@ -139,6 +138,8 @@ export function nearestAspects(selected: Placement, placements: Placement[]) {
 				separation = delta;
 			}
 		}
-		return nearest ? [{ name, angle, placement: nearest, separation }] : [];
+		return nearest
+			? [{ name, angle, dash, placement: nearest, separation }]
+			: [];
 	});
 }

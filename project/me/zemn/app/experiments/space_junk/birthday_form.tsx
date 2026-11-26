@@ -3,6 +3,7 @@ import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import {
 	dayMs,
 	firstInstant,
+	lastInstant,
 	instantAtPosition,
 	minuteMs,
 	type RulerUnit,
@@ -23,7 +24,6 @@ const scales = {
 function Ruler({
 	unit,
 	epoch,
-	lastInstant,
 	readout,
 	accessibleTime,
 	tickLabel,
@@ -34,7 +34,6 @@ function Ruler({
 }: {
 	unit: RulerUnit;
 	epoch: number;
-	lastInstant: number;
 	readout: string;
 	accessibleTime: string;
 	tickLabel: (tick: number) => string;
@@ -58,7 +57,7 @@ function Ruler({
 				return instantAtPosition(unit, mark, zone);
 			},
 		};
-	}, [unit, lastInstant, zone]);
+	}, [unit, zone]);
 	return (
 		<SlideRule
 			label={label}
@@ -112,12 +111,10 @@ function Ruler({
 
 export const BirthdayRulers = memo(function BirthdayRulers({
 	epoch,
-	asOf,
 	zone: localZone,
 	clock,
 }: {
 	epoch: number;
-	asOf: string;
 	zone?: string;
 	clock: RulerClock;
 }) {
@@ -169,7 +166,6 @@ export const BirthdayRulers = memo(function BirthdayRulers({
 	const dateLabel = formats?.date.format(epoch) ?? date.toPlainDate().toString();
 	const common = {
 		epoch,
-		lastInstant: Date.parse(asOf + 'T23:59:59.999Z'),
 		accessibleTime:
 			dateLabel +
 			' · ' +

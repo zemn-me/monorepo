@@ -1,9 +1,7 @@
 import { createParser } from 'nuqs';
 import { Temporal } from 'temporal-polyfill';
-import { catalogueDate } from './catalogue_date.js';
-import { firstInstant } from './ruler_time.js';
+import { firstInstant, lastInstant } from './ruler_time.js';
 
-const lastInstant = Date.parse(catalogueDate + 'T23:59:59.999Z');
 export const birthInstant = createParser<number>({
 	parse(value) {
 		try {

@@ -4,7 +4,7 @@ export interface SpaceObject {
 	id: number;
 	name: string;
 	piece: string;
-	kind: 'C' | 'D' | 'R' | 'P';
+	kind: ObjectKind;
 	eva: boolean;
 	start: string;
 	end: string | null;
@@ -15,12 +15,22 @@ export interface Catalogue {
 	objects: SpaceObject[];
 }
 
-export const kinds = {
+export const debrisTypes = ['C', 'D', 'R'] as const;
+export const artificialTypes = [...debrisTypes, 'P'] as const;
+export type ObjectKind = (typeof artificialTypes)[number];
+
+export const kindLabels: Record<ObjectKind, string> = {
 	C: 'Discarded equipment',
-	D: 'Breakup fragment',
-	R: 'Rocket stage',
-	P: 'Spacecraft payload',
+	D: 'Breakup fragments',
+	R: 'Rocket stages',
+	P: 'Spacecraft payloads',
 };
+
+export function matchesSearch(object: SpaceObject, term: string) {
+	return `${object.name} ${object.piece} ${object.id} ${kindLabels[object.kind]}`
+		.toLowerCase()
+		.includes(term);
+}
 
 export function inOrbit(object: SpaceObject, day: string) {
 	return (

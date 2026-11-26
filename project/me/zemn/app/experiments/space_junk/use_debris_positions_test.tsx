@@ -4,22 +4,9 @@ import { waitFor } from '@testing-library/react';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { SpaceObject } from './chart.js';
+import { spatula, tle } from './orbit_fixture.js';
 import { snapshotPositions } from './orbit.js';
 import { useDebrisPositions } from './use_debris_positions.js';
-
-const tle = [
-	'1 29257U 98067AJ  06214.42846098  .00093793  00000-0  49733-3 0  9999',
-	'2 29257 051.6364 308.9779 0007048 137.1293 223.0259 15.79733247  4533',
-].join('\n');
-const spatula: SpaceObject = {
-	id: 29257,
-	name: 'Spatula',
-	piece: '1998-067AJ',
-	kind: 'C',
-	eva: true,
-	start: '2006-07-12',
-	end: '2006-09-29',
-};
 
 function Positions({ iso, object }: { iso: string; object?: SpaceObject }) {
 	const { markers, instant } = useDebrisPositions(
@@ -147,7 +134,7 @@ it('loads the neighboring archives ahead of a day change and reuses them when th
 	const view = chart();
 	const originalFetch = globalThis.fetch;
 	const requests: string[] = [];
-	const nextTle = tle.replace('308.9779', '208.9779');
+	const nextTle = tle.replace('307.6701', '207.6701');
 	globalThis.fetch = async url => {
 		const day = String(url).split('/').pop()!;
 		requests.push(day);

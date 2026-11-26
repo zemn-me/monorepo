@@ -821,6 +821,14 @@ http_file(
     urls = ["https://raw.githubusercontent.com/sizhewang25/jonathon-space-archive/654637aa28c72733ffbf69709f530e5712ce02a6/data/satcat.tsv"],
 )
 
+# Historical elements for the chart's propagation regression tests.
+http_file(
+    name = "spacebook_2006_08_03",
+    downloaded_file_path = "elements.tle",
+    sha256 = "65db14dc363ae2e03d7648200f86244163839f9896b35d4286d4b821a9d34083",
+    urls = ["https://spacebook.com/api/entity/tle/2006-08-03"],
+)
+
 # GeoNames cities500 and first-level regions for the browser birthplace index.
 http_file(
     name = "geonames_cities",

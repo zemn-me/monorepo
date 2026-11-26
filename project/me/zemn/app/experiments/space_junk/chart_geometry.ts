@@ -1,8 +1,7 @@
 import { type Camera, wrap } from './chart_camera.js';
-import type { Marker, Vector } from './globe_geometry.js';
+import { radians, type Marker, type Vector } from './globe_geometry.js';
 import { globeCamera, globeFrame } from './globe_scene.js';
 import type { BodyPosition, earthFixedSky } from './planets.js';
-import { radians } from './zodiac.js';
 
 const bands = { D: 1.025, R: 1.055, C: 1.085, P: 1.105 };
 // Interpolate scale logarithmically from the wheel out to planetary distances.

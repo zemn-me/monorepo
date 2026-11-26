@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { Temporal } from 'temporal-polyfill';
-import { inOrbitAt, readChart, type SpaceObject } from './chart.js';
+import { inOrbitAt, matchesSearch, readChart } from './chart.js';
 import { chartGeometry } from './chart_geometry.js';
 import {
 	catalogueMarkers,
@@ -9,6 +9,7 @@ import {
 	surface,
 } from './globe_geometry.js';
 import { globeCamera, globeFrame, height, width } from './globe_scene.js';
+import { spatula, tle, tleLines } from './orbit_fixture.js';
 import { positionsAt, readElements, snapshotPositions } from './orbit.js';
 
 import { bodyPositions, classical, earthFixedSky, modern } from './planets.js';
@@ -20,15 +21,6 @@ import {
 } from './ruler_time.js';
 import { nearestAspects, signPosition, zodiacFrame } from './zodiac.js';
 
-const spatula: SpaceObject = {
-	id: 29257,
-	name: 'EVA debris (spatula)',
-	piece: '1998-067AJ',
-	kind: 'C',
-	eva: true,
-	start: '2006-07-12',
-	end: '2006-09-29',
-};
 const objects = [spatula];
 
 it('marks the orbit view width where a planet fits into the panned viewport', () => {
@@ -52,6 +44,13 @@ it('marks the orbit view width where a planet fits into the panned viewport', ()
 		expect(onScreen(1)).toBe(true);
 		expect(onScreen(0.7)).toBe(false);
 	}
+});
+
+it('finds a rocket stage by its singular or plural filter label', () => {
+	const stage = { ...spatula, name: 'Upper motor', kind: 'R' } as const;
+	expect(matchesSearch(stage, 'rocket stages')).toBe(true);
+	expect(matchesSearch(stage, 'rocket stage')).toBe(true);
+	expect(matchesSearch(stage, 'payload')).toBe(false);
 });
 
 describe('free flight on the birthday', () => {
@@ -112,11 +111,6 @@ describe('free flight on the birthday', () => {
 });
 
 describe('historical debris positions', () => {
-	// Space-Track elements for the spatula on 2 August 2006.
-	const tle = [
-		'1 29257U 98067AJ  06214.42846098  .00093793  00000-0  49733-3 0  9999',
-		'2 29257 051.6364 308.9779 0007048 137.1293 223.0259 15.79733247  4533',
-	].join('\n');
 	it('scrubs back to the same position using one set of parsed elements', () => {
 		const elements = [...readElements(tle, new Set([29257]))];
 		const noon = new Date('2006-08-02T12:00:00Z');
@@ -130,10 +124,11 @@ describe('historical debris positions', () => {
 	});
 	it('places a daily TLE in Earth-fixed kilometres and skips stale or mismatched elements', () => {
 		const time = new Date('2006-08-02T12:00:00Z');
-		const windowsTle = tle.replace('\n', '\r\n');
+		const windowsTle = tleLines.join('\r\n');
 		const rows = snapshotPositions(windowsTle + '\r\n' + windowsTle, time);
 		expect(rows).toHaveLength(1);
-		expect(rows[0]).toEqual([29257, -4682, -2863, 3852]);
+		// Reference SGP4 (Vallado) propagated to noon UTC, then rotated by GMST.
+		expect(rows[0]).toEqual([29257, -4676, -2866, 3856]);
 		expect(snapshotPositions(tle, new Date(+time + 60000))).not.toEqual(
 			rows
 		);

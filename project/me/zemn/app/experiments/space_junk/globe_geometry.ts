@@ -1,11 +1,12 @@
-import { eciToGeodetic, radiansToDegrees } from 'satellite.js';
+import { constants, eciToGeodetic, radiansToDegrees } from 'satellite.js';
 
 import { inOrbitAt, type SpaceObject } from './chart.js';
 import type { PositionRow } from './orbit.js';
 
+export const radians = constants.deg2rad;
 export const equatorialRadius = 6378.137;
 const polarRadius = 6356.752314245;
-const radians = Math.PI / 180;
+
 
 export interface Vector {
 	x: number;

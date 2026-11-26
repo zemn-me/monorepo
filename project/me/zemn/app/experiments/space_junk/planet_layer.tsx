@@ -22,7 +22,7 @@ export function PlanetLayer({
 	const occupied = [...labelObstacles];
 	return (
 		<g aria-label="Zodiac bodies" fill="currentColor">
-			{aspects.map(({ a, b, name, angle }) => {
+			{aspects.map(({ a, b, name, dash }) => {
 				const line = geometry.frame.segment(
 					geometry.planet(a),
 					geometry.planet(b)
@@ -35,13 +35,7 @@ export function PlanetLayer({
 						stroke="currentColor"
 						strokeWidth=".8"
 						opacity=".55"
-						strokeDasharray={
-							angle === 60
-								? '2 3'
-								: angle === 120
-									? '6 3'
-									: undefined
-						}
+						strokeDasharray={dash}
 					>
 						<title>{`${a.name} · ${name} · ${b.name}`}</title>
 					</line>

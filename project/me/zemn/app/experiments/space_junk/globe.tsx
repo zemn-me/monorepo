@@ -89,7 +89,6 @@ export function Globe({
 	bodies,
 	showSigns,
 	birthplace,
-	markers,
 	selection,
 	pick,
 }: {
@@ -100,7 +99,6 @@ export function Globe({
 	bodies: BodyPosition[];
 	showSigns: boolean;
 	birthplace?: Birthplace & { name?: string };
-	markers: Marker[];
 	selection?: Placement;
 
 	pick: Ref<PickMarker>;
@@ -130,11 +128,11 @@ export function Globe({
 	);
 	const projected = useMemo(
 		() =>
-			markers.map((marker, i) => {
+			placements.map(({ marker, longitude }) => {
 				const p =
 					unfold === 1
 						? frame.project(marker)
-						: geometry.debris(marker, placements[i]!.longitude);
+						: geometry.debris(marker, longitude);
 				return {
 					marker,
 					x: p.x,
@@ -148,7 +146,7 @@ export function Globe({
 						p.y <= height,
 				};
 			}),
-		[markers, placements, geometry, frame, unfold]
+		[placements, geometry, frame, unfold]
 	);
 
 	const focus = projected.find(p => p.marker === selected);

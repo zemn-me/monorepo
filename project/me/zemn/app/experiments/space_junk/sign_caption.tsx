@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import type { ChartGeometry } from './chart_geometry.js';
-import { radians } from './zodiac.js';
+import { radians } from './globe_geometry.js';
 
 export const captionRadius = 1.335;
 // Draw the type in hundredths of a ring unit before applying its 3D projection.

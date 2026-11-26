@@ -14,6 +14,18 @@ genrule(
     tools = ["//project/me/zemn/app/experiments/space_junk/importer:catalogue"],
 )
 
+genrule(
+    name = "orbit_test_fixture",
+    testonly = True,
+    srcs = [
+        ":catalogue.json",
+        "@spacebook_2006_08_03//file",
+    ],
+    outs = ["orbit_fixture.ts"],
+    cmd = "$(execpath //project/me/zemn/app/experiments/space_junk/importer:orbit_fixture) $(location :catalogue.json) $(location @spacebook_2006_08_03//file) $@",
+    tools = ["//project/me/zemn/app/experiments/space_junk/importer:orbit_fixture"],
+)
+
 CITY_SHARDS = ["city-%d.json" % i for i in range(64)]
 
 genrule(
@@ -150,10 +162,12 @@ filegroup(
 
 ts_project(
     name = "space_junk_tests",
+    testonly = True,
     srcs = [
         "chart_test.ts",
         "use_debris_positions_test.tsx",
         "use_ruler_clock_test.tsx",
+        ":orbit_fixture.ts",  # keep
     ],
     visibility = ["//:__subpackages__"],
     deps = [

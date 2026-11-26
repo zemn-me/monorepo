@@ -153,8 +153,20 @@ export function useDebrisPositions(
 		else if (!pending) previous.current = undefined;
 	}, [markers, instant, pending]);
 	const held = !markers.length && pending ? previous.current : undefined;
+	// A held frame belongs to an earlier date or search. Keep only objects
+	// still requested, in the catalogue order for the new date.
+	const displayed = useMemo(() => {
+		if (!held) return markers;
+		const byId = new Map(
+			held.markers.map(marker => [marker.object.id, marker])
+		);
+		return matches.flatMap(({ object }) => {
+			const marker = byId.get(object.id);
+			return marker ? [marker] : [];
+		});
+	}, [held, markers, matches]);
 	return {
-		markers: held?.markers ?? markers,
+		markers: displayed,
 		instant: held?.instant ?? instant,
 		pending,
 		failed: needNearby && (exact.isError || nearby.errors.length > 0),

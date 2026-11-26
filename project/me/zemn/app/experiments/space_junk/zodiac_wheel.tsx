@@ -21,7 +21,7 @@ export function WheelGuides({
 	return (
 		<g aria-label="Selected object aspects and ascendant">
 			{start &&
-				aspects.map(({ angle, name, placement }) => {
+				aspects.map(({ dash, name, placement }) => {
 					const end = geometry.aspectEnd(
 						placement.marker,
 						placement.longitude
@@ -37,13 +37,7 @@ export function WheelGuides({
 								stroke="currentColor"
 								strokeOpacity=".72"
 								strokeWidth="1"
-								strokeDasharray={
-									angle === 60
-										? '2 3'
-										: angle === 120
-											? '6 3'
-											: undefined
-								}
+								strokeDasharray={dash}
 							>
 								<title>{title}</title>
 							</line>

@@ -24,13 +24,13 @@ import {
 	styledFace,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
-import { equatorialRadius, surface, type Vector } from './globe_geometry.js';
+import { equatorialRadius, radians, surface, type Vector } from './globe_geometry.js';
 
 export const width = 416,
 	height = 376;
 const focalScale = 0.95;
 const focal = height * focalScale;
-const radians = Math.PI / 180;
+
 const distancePerExtent = Math.hypot(1, focal / 184);
 // The renderer looks down +Z with Y up. From Greenwich, east must appear to the right.
 function world(p: Vector) {
