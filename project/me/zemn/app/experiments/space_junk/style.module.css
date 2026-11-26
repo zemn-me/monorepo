@@ -208,8 +208,7 @@
 	cursor: grabbing;
 }
 .sources,
-.paging,
-.catalogue {
+.paging {
 	font: var(--controls);
 }
 .paging {
@@ -287,58 +286,103 @@
 .paging {
 	justify-content: flex-end;
 }
-.catalogue {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-.catalogue li {
-	padding-block: 0.8rem;
-	border-top: 1px solid var(--line);
-}
-.catalogue li > header {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 0.15rem 1rem;
-}
-.catalogue header > span {
-	font-variant-numeric: tabular-nums;
-	white-space: nowrap;
-}
 .placements {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
-	column-gap: 1.25rem;
-}
-.placements li > header {
-	display: grid;
-	gap: 0.2rem;
-	justify-content: start;
-}
-.placements header > span {
-	white-space: normal;
-	font-size: 0.875rem;
-}
-.placements header > span > span {
-	white-space: nowrap;
-}
-.catalogue h3 {
-	font-size: 1rem;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	column-gap: 1rem;
 	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.placements li {
+	min-width: 0;
+	padding-block: 0.65rem 0.8rem;
+	border-block-start: 1px solid var(--line);
+}
+.skyEntry {
+	grid-column: span 2;
+}
+.orbitalEntry {
+	grid-column: span 3;
+}
+.skyEntry + .orbitalEntry {
+	grid-column: 1 / span 3;
+}
+.placements header {
+	display: grid;
+	gap: 0.18rem;
+}
+.skyEntry header:has(small) {
+	height: 100%;
+	grid-template-rows: auto 1fr auto;
+}
+.orbitalEntry header {
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: baseline;
+	column-gap: 0.5rem;
+}
+.orbitalEntry h3 {
+	grid-column: 1 / -1;
+}
+.orbitalEntry h3 a {
+	text-decoration: none;
+}
+.orbitalEntry h3 a > span:last-child {
+	text-decoration: underline;
+	text-underline-offset: 0.16em;
+}
+.placements h3 {
+	margin: 0;
+	font: var(--controls);
+	font-size: 0.875rem;
+	font-weight: 550;
+	line-height: 1.45;
+	overflow-wrap: anywhere;
+}
+.placementGlyph {
+	display: inline-block;
+	min-width: 1.15em;
+	font: 1.05rem / 1 "Apple Symbols", "Segoe UI Symbol", sans-serif;
 }
 .designator {
+	margin-inline-end: 0.2rem;
 	white-space: nowrap;
-	font-size: 0.875rem;
+	color: var(--muted);
+	font-size: 0.75rem;
 	font-weight: 400;
-	color: var(--muted);
+	font-variant-numeric: tabular-nums;
 }
-.catalogue p {
-	max-inline-size: 66ch;
-	line-height: 1.45;
-	margin: 0.2rem 0 0;
+.position {
+	font-size: 1.05rem;
+	line-height: 1.4;
+	font-variant-numeric: lining-nums tabular-nums;
+}
+.position > span, .placements time {
+	white-space: nowrap;
+}
+.placements small, .placements p {
 	color: var(--muted);
+	font: var(--controls);
+	font-size: 0.75rem;
+}
+.placements p {
+	margin: 0.25rem 0 0;
+}
+@media (width < 36rem) {
+	.skyEntry {
+		grid-column: span 3;
+	}
+	.orbitalEntry, .skyEntry + .orbitalEntry {
+		grid-column: 1 / -1;
+	}
+}
+@media (width < 22rem) {
+	.placements {
+		column-gap: 0.625rem;
+	}
+	.position {
+		font-size: 0.9375rem;
+	}
 }
 @media (width <= 38rem) {
 	.page {

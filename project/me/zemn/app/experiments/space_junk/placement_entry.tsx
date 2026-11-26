@@ -26,21 +26,14 @@ export function PlacementEntry({
 	const seconds = Math.floor((value % 30) * 3600);
 	const angle = `${Math.floor(seconds / 3600)}° ${Math.floor(seconds / 60) % 60}′ ${seconds % 60}″`;
 	return (
-		<li>
+		<li className={target ? style.orbitalEntry : style.skyEntry}>
 			<header>
 				<h3>
 					{glyph && (
-						<span aria-hidden="true">
+						<span aria-hidden="true" className={style.placementGlyph}>
 							{glyph}
 							{'\uFE0E'}{' '}
 						</span>
-					)}
-					{designator && (
-						<>
-							<span className={style.designator}>
-								{designator}
-							</span>{' '}
-						</>
 					)}
 					{target ? (
 						<a
@@ -57,21 +50,23 @@ export function PlacementEntry({
 									onRevisit?.();
 							}}
 						>
-							{name}
+							{designator && (
+								<>
+									<span className={style.designator}>
+										{designator}
+									</span>{' '}
+								</>
+							)}
+							<span>{name}</span>
 						</a>
 					) : (
 						name
 					)}
 				</h3>
-				<span>
-					{signs[sign]} {angle}
-					{house !== undefined && (
-						<>
-							{' '}
-							<span>· House {house}</span>
-						</>
-					)}
+				<span className={style.position}>
+					{signs[sign]} <span>{angle}</span>
 				</span>
+				{house !== undefined && <small>House {house}</small>}
 			</header>
 			{children}
 		</li>

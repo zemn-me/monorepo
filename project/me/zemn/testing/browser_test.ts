@@ -593,7 +593,9 @@ describe('zemn.me website', () => {
 				expect(await markerCount()).toBe(unfiltered);
 				await search.sendKeys('1976-126V');
 				const entry = await grid.findElement(By.css('li:has(h3 a)'));
-				const name = await entry.findElement(By.css('h3 a')).getText();
+				const link = await entry.findElement(By.css('h3 a'));
+				const name = await link.findElement(By.css('span:last-child')).getText();
+				expect(await link.getAccessibleName()).toBe(`1976-126V ${name}`);
 				expect(await entry.findElement(By.css('h3')).getAccessibleName()).toBe(`1976-126V ${name}`);
 				expect(await entry.getText()).not.toContain('NORAD');
 				const details = await entry.findElements(By.css('p'));
@@ -763,7 +765,7 @@ describe('zemn.me website', () => {
 				const link = links[1]!;
 				const url = new URL(await link.getAttribute('href'));
 				expect(url.hash).toMatch(/^#object-\d+$/);
-				const name = await link.getText();
+				const name = await link.findElement(By.css('span:last-child')).getText();
 				expect(await driver.findElement(By.css('svg path' + url.hash)).getAttribute('aria-label')).toBe(name);
 				const selected = By.css('svg g[aria-label^="Selected object · "]');
 				const isSelected = async () => (await driver.findElements(selected))[0]?.getAttribute('aria-label');
@@ -881,7 +883,8 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => new URL(await driver.getCurrentUrl()).searchParams.get('city') === 'Asia/Singapore', 5000);
 				const natal = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
 				const rising = await natal.findElement(By.xpath('.//li[.//h3[.="Rising sign"]]'));
-				expect(await rising.getText()).toMatch(/\w+ \d+° \d+′ \d+″ · House 1\b/);
+				expect(await rising.findElement(By.css('header > span')).getText()).toMatch(/^\w+ \d+° \d+′ \d+″$/);
+				expect(await rising.findElement(By.css('small')).getText()).toBe('House 1');
 				const center = Number(await marker.getAttribute('x1'));
 				expect(await driver.executeScript<number>('return arguments[0].getTotalLength()', marker)).toBeLessThan(0.1);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(4));

@@ -267,7 +267,7 @@ const BirthdayChart = memo(function BirthdayChart({
 					natalZodiac.ascendant !== undefined ||
 					rows.length > 0) && (
 					<ul
-						className={`${style.catalogue} ${style.placements}`}
+						className={style.placements}
 						aria-label="Chart placements"
 					>
 						{bodies.map(body => (
@@ -288,6 +288,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						)}
 						{catalogue &&
 							rows.map(({ object }) => {
+								const end = object.end ?? catalogue.asOf;
 								const { longitude } = debrisZodiac.direction(
 									byId.get(object.id)!.fixed
 								);
@@ -302,10 +303,13 @@ const BirthdayChart = memo(function BirthdayChart({
 										onRevisit={revisit}
 									>
 										<p>
-											{displayDate(object.start)} –{' '}
-											{displayDate(
-												object.end ?? catalogue.asOf
-											)}
+											<time dateTime={object.start.slice(0, 10)}>
+												{displayDate(object.start)}
+											</time>
+											{' – '}
+											<time dateTime={end.slice(0, 10)}>
+												{displayDate(end)}
+											</time>
 										</p>
 									</PlacementEntry>
 								);
