@@ -237,142 +237,138 @@ export function ChartViewer({
 	}
 
 	return (
-		<>
-			<figure className={style.figure}>
-				<svg
-					id="star-chart"
-					onKeyUp={controls.keyUp}
-					onBlur={() => controls.settle()}
-					ref={controls.svg}
-					className={style.globe}
-					tabIndex={0}
-					role="img"
-					aria-label={
-						faceOn
-							? `Face-on zodiac wheel from ${camera.tilt < 0 ? 'below' : 'above'}. Tilt to see Earth orbits.`
-							: 'Earth and orbital chart. Drag or use the arrow keys to rotate. Tilt face-on to see the zodiac wheel.'
-					}
-					viewBox={`0 0 ${width} ${height}`}
-					onKeyDown={controls.keyDown}
-					onPointerDown={controls.pointerDown}
-					onPointerMove={controls.pointerMove}
-					onPointerUp={e => {
-						const hit = controls.pointerUp(e, p => pick.current?.(p));
-						if (hit) onSelect(hit);
+		<div className={style.viewer}>
+			<svg
+				id="star-chart"
+				onKeyUp={controls.keyUp}
+				onBlur={() => controls.settle()}
+				ref={controls.svg}
+				className={style.globe}
+				tabIndex={0}
+				role="img"
+				aria-label={
+					faceOn
+						? `Face-on zodiac wheel from ${camera.tilt < 0 ? 'below' : 'above'}. Tilt to see Earth orbits.`
+						: 'Earth and orbital chart. Drag or use the arrow keys to rotate. Tilt face-on to see the zodiac wheel.'
+				}
+				viewBox={`0 0 ${width} ${height}`}
+				onKeyDown={controls.keyDown}
+				onPointerDown={controls.pointerDown}
+				onPointerMove={controls.pointerMove}
+				onPointerUp={e => {
+					const hit = controls.pointerUp(e, p => pick.current?.(p));
+					if (hit) onSelect(hit);
+				}}
+				onPointerCancel={controls.endPointer}
+				onLostPointerCapture={controls.endPointer}
+			>
+				<desc>
+					Use Shift and the arrow keys, Shift-drag, or drag with two
+					fingers to pan.
+				</desc>
+				<g transform={`translate(${camera.panX} ${camera.panY})`}>
+					<Globe
+						geometry={geometry}
+						pick={pick}
+						bodies={bodies}
+						showSigns={showSigns}
+						birthplace={birthplace}
+						markers={markers}
+						placements={placements}
+						ascendant={ascendant}
+						aspects={aspects}
+						selection={focus}
+					/>
+				</g>
+			</svg>
+			<div
+				role="group"
+				aria-label="View controls"
+				onKeyUp={controls.keyUp}
+				onBlur={() => controls.settle()}
+				className={style.viewControls}
+			>
+				<SlideRule
+					{...rulerEvents}
+					label="Rotation"
+					readout={`${Math.round(turn)}°`}
+					centre={turn}
+					min={-Infinity}
+					max={Infinity}
+					pitch={4}
+					tick={5}
+					major={15}
+					tickLabel={mark => `${wrap(mark)}°`}
+					readPosition={() => controls.readCamera().turn}
+					seek={value => rotate(wrap(value))}
+					inputProps={{
+						min: -180,
+						max: 180,
+						value: Math.round(turn),
+						'aria-valuetext': `${Math.round(turn)} degrees longitude`,
+						onChange: e => rotate(e.currentTarget.valueAsNumber),
 					}}
-					onPointerCancel={controls.endPointer}
-					onLostPointerCapture={controls.endPointer}
 				>
-					<desc>
-						Use Shift and the arrow keys, Shift-drag, or drag with two
-						fingers to pan.
-					</desc>
-					<g transform={`translate(${camera.panX} ${camera.panY})`}>
-						<Globe
-							geometry={geometry}
-							pick={pick}
-							bodies={bodies}
-							showSigns={showSigns}
-							birthplace={birthplace}
-							markers={markers}
-							placements={placements}
-							ascendant={ascendant}
-							aspects={aspects}
-							selection={focus}
+					<label className={`${style.rulerValue} ${style.switch}`}>
+						<span>Auto-rotate</span>
+						<input
+							type="checkbox"
+							checked={controls.spin}
+							onChange={e => controls.setSpin(e.target.checked)}
 						/>
-					</g>
-				</svg>
-			</figure>
-			<div className={style.chartControls}>
-				<div
-					role="group"
-					aria-label="View controls"
-					onKeyUp={controls.keyUp}
-					onBlur={() => controls.settle()}
-					className={style.viewControls}
-				>
-					<SlideRule
-						{...rulerEvents}
-						label="Rotation"
-						readout={`${Math.round(turn)}°`}
-						centre={turn}
-						min={-Infinity}
-						max={Infinity}
-						pitch={4}
-						tick={5}
-						major={15}
-						tickLabel={mark => `${wrap(mark)}°`}
-						readPosition={() => controls.readCamera().turn}
-						seek={value => rotate(wrap(value))}
-						inputProps={{
-							min: -180,
-							max: 180,
-							value: Math.round(turn),
-							'aria-valuetext': `${Math.round(turn)} degrees longitude`,
-							onChange: e => rotate(e.currentTarget.valueAsNumber),
-						}}
-					>
-						<label className={`${style.rulerValue} ${style.switch}`}>
-							<span>Auto-rotate</span>
-							<input
-								type="checkbox"
-								checked={controls.spin}
-								onChange={e => controls.setSpin(e.target.checked)}
-							/>
-						</label>
-					</SlideRule>
-					<SlideRule
-						{...rulerEvents}
-						label="Tilt"
-						bands={tiltBands}
-						readout={`${Math.round(tilt)}°`}
-						centre={tilt}
-						min={-90}
-						max={90}
-						pitch={4}
-						tick={5}
-						major={15}
-						tickLabel={mark => `${mark}°`}
-						readPosition={() => controls.readCamera().tilt}
-						seek={tiltTo}
-						inputProps={{
-							min: -90,
-							max: 90,
-							value: Math.round(tilt),
-							'aria-valuetext': `${Math.round(tilt)} degrees latitude`,
-							'aria-description': `The chart blends from orbit to wheel between ${orbitalTiltLimit} and 90 degrees in either direction. Release past ${settlingMidpoint} degrees toward either pole to settle into Wheel. The other half settles into Orbit.`,
-							onChange: e => tiltTo(e.currentTarget.valueAsNumber),
-						}}
-					/>
-					<SlideRule
-						{...rulerEvents}
-						label="Orbit view width"
-						marks={zoomMarks}
-						readout={viewWidth}
-						centre={zoomValue}
-						min={0}
-						max={100}
-						pitch={8}
-						tick={2}
-						major={10}
-						tickLabel={mark => formatViewWidth(extentAtZoom(mark))}
-						readPosition={() => zoomValue}
-						seek={zoomTo}
-						inputProps={{
-							min: 0,
-							max: 100,
-							step: 0.1,
-							value: zoomValue,
-							'aria-valuetext': `${viewWidth} across at Earth’s centre`,
-							'aria-description':
-								'Orbit view widths: ' +
-								zoomMarks.map(mark => mark.label).join('; '),
-							onChange: e => zoomTo(e.currentTarget.valueAsNumber),
-						}}
-					/>
-				</div>
-				{children}
+					</label>
+				</SlideRule>
+				<SlideRule
+					{...rulerEvents}
+					label="Tilt"
+					bands={tiltBands}
+					readout={`${Math.round(tilt)}°`}
+					centre={tilt}
+					min={-90}
+					max={90}
+					pitch={4}
+					tick={5}
+					major={15}
+					tickLabel={mark => `${mark}°`}
+					readPosition={() => controls.readCamera().tilt}
+					seek={tiltTo}
+					inputProps={{
+						min: -90,
+						max: 90,
+						value: Math.round(tilt),
+						'aria-valuetext': `${Math.round(tilt)} degrees latitude`,
+						'aria-description': `The chart blends from orbit to wheel between ${orbitalTiltLimit} and 90 degrees in either direction. Release past ${settlingMidpoint} degrees toward either pole to settle into Wheel. The other half settles into Orbit.`,
+						onChange: e => tiltTo(e.currentTarget.valueAsNumber),
+					}}
+				/>
+				<SlideRule
+					{...rulerEvents}
+					label="Orbit view width"
+					marks={zoomMarks}
+					readout={viewWidth}
+					centre={zoomValue}
+					min={0}
+					max={100}
+					pitch={8}
+					tick={2}
+					major={10}
+					tickLabel={mark => formatViewWidth(extentAtZoom(mark))}
+					readPosition={() => zoomValue}
+					seek={zoomTo}
+					inputProps={{
+						min: 0,
+						max: 100,
+						step: 0.1,
+						value: zoomValue,
+						'aria-valuetext': `${viewWidth} across at Earth’s centre`,
+						'aria-description':
+							'Orbit view widths: ' +
+							zoomMarks.map(mark => mark.label).join('; '),
+						onChange: e => zoomTo(e.currentTarget.valueAsNumber),
+					}}
+				/>
 			</div>
-		</>
+			{children}
+		</div>
 	);
 }

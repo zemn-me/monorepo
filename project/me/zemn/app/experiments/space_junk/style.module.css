@@ -190,14 +190,11 @@
 	bottom: 12px;
 }
 .figure {
-	margin: 0.5rem 0 0;
+	margin: 0.5rem auto 1.25rem;
 	text-align: center;
 }
-.chartControls {
-	container-type: inline-size;
+.viewer {
 	min-width: 0;
-	margin-block-end: 1.25rem;
-	text-align: center;
 }
 .globe {
 	display: block;
@@ -394,7 +391,7 @@
 	max-inline-size: 10ch;
 	text-wrap: balance;
 }
-@container (width < 44rem) {
+@media (width < 44rem) {
 	.planetBand .zodiacGroup > .switch:nth-child(n + 5),
 	.planetBand .outerBodies > .switch:nth-child(n + 3) {
 		grid-template-rows: minmax(1lh, auto) auto;
@@ -412,7 +409,7 @@
 		grid-template-columns: repeat(2, auto);
 	}
 }
-@container (width < 32rem) {
+@media (width < 32rem) {
 	.planetBand {
 		grid-template-columns: 5.4rem minmax(0, 1fr);
 	}
@@ -451,7 +448,7 @@
 .objectBand .outerBodies {
 	grid-template-columns: 1fr;
 }
-@container (width < 40rem) {
+@media (width < 40rem) {
 	.objectBand {
 		grid-template-columns: 5.4rem minmax(0, 1fr) minmax(min-content, 20%);
 		grid-auto-rows: 1fr;
@@ -463,7 +460,7 @@
 		grid-column: 1 / 3;
 	}
 }
-@container (width < 20rem) {
+@media (width < 20rem) {
 	.objectBand .zodiacGroup {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
@@ -598,49 +595,6 @@
 .citySearch li:is(:hover, [aria-selected="true"]) {
 	text-decoration: underline;
 	text-underline-offset: 0.22em;
-}
-
-@media screen and (min-width: 64rem) and (orientation: landscape) {
-	.page {
-		width: min(100%, 100rem);
-		display: grid;
-		grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-		grid-template-rows: auto max-content minmax(0, 1fr);
-		grid-template-areas:
-			"title title"
-			"chart birth"
-			"chart controls";
-		column-gap: clamp(1.5rem, 3vw, 3.5rem);
-	}
-	.page > * {
-		grid-column: 1 / -1;
-		min-width: 0;
-	}
-	.page > h1 {
-		grid-area: title;
-	}
-	.birthControls {
-		grid-area: birth;
-	}
-	.birthControls .citySearch {
-		margin-block-start: 0;
-	}
-	.figure {
-		grid-area: chart;
-		align-self: center;
-		margin: 0;
-	}
-	.globe {
-		width: min(100%, 48rem);
-	}
-	.chartControls {
-		grid-area: controls;
-		align-self: start;
-		margin-block-start: 0.75rem;
-	}
-	.figure, .chartControls {
-		margin-block-end: 1.5rem;
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {
