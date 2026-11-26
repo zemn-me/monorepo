@@ -798,6 +798,46 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('scrolls the page vertically over the chart and rotates it with a sideways touch', async () => {
+			try {
+				const chrome = driver as unknown as ChromeDriver;
+				await chrome.sendDevToolsCommand('Emulation.setDeviceMetricsOverride', {
+					width: 390, height: 844, deviceScaleFactor: 2, mobile: true,
+				});
+				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: true });
+				await driver.get(`${origin}/experiments/astrological-chart?spin=false&tilt=30&bodies=&kinds=`);
+				const chart = await driver.findElement(By.id('star-chart'));
+				await driver.wait(until.elementLocated(By.css('#star-chart mask path')), 5000);
+				const tilt = await driver.findElement(By.css('input[aria-label="Tilt"]'));
+				const rotation = await driver.findElement(By.css('input[aria-label="Rotation"]'));
+				const { x, y, scroll } = await driver.executeScript<{ x: number; y: number; scroll: number }>(`
+					arguments[0].scrollIntoView({ block: 'center', behavior: 'instant' });
+					const rect = arguments[0].getBoundingClientRect();
+					return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, scroll: window.scrollY };
+				`, chart);
+				const touch = (type: string, touchPoints: { x: number; y: number }[]) =>
+					chrome.sendDevToolsCommand('Input.dispatchTouchEvent', { type, touchPoints });
+				const angle = await rotation.getAttribute('value');
+
+				await touch('touchStart', [{ x, y }]);
+				await touch('touchMove', [{ x: x + 60, y: y + 12 }]);
+				await touch('touchEnd', []);
+				await driver.wait(async () => await rotation.getAttribute('value') !== angle, 5000);
+				expect(await tilt.getAttribute('value')).toBe('30');
+				const rotated = await rotation.getAttribute('value');
+
+				await touch('touchStart', [{ x, y }]);
+				await touch('touchMove', [{ x: x + 2, y: y - 45 }]);
+				await touch('touchMove', [{ x: x + 4, y: y - 90 }]);
+				await touch('touchEnd', []);
+				await driver.wait(async () => await driver.executeScript<number>('return window.scrollY') > scroll + 20, 5000);
+				expect(await tilt.getAttribute('value')).toBe('30');
+				expect(await rotation.getAttribute('value')).toBe(rotated);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('rotates the idle wheel and Earth and respects the rotation and reduced-motion controls', async () => {
 			try {
 				await driver.get(`${origin}/experiments/astrological-chart`);

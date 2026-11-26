@@ -259,6 +259,12 @@ export function useChartCamera() {
 				panY: clamp(v.panY + dy * scale, height / 2),
 			});
 		} else {
+			const turn = wrap(v.turn - dx * scale * 0.6);
+			if (e.pointerType === 'touch') {
+				// A vertical swipe can deliver pointer moves before native scrolling takes over.
+				if (Math.abs(dx) > Math.abs(dy)) move({ ...v, turn });
+				return;
+			}
 			const delta = dy * scale * 0.5;
 			const tilt =
 				v.tilt === 90
@@ -268,7 +274,7 @@ export function useChartCamera() {
 						: v.tilt - delta;
 			move({
 				...v,
-				turn: wrap(v.turn - dx * scale * 0.6),
+				turn,
 				tilt: clamp(tilt, 90),
 			});
 		}
