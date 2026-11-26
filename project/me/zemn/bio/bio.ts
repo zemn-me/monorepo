@@ -195,6 +195,15 @@ export const Bio = {
 	],
 	timeline: [
 		{
+			id: '77f3f120-3d60-44a9-afe7-be1d62c88b7f',
+			date: date(25, 'nov', 2026),
+			title: en`Astrological Chart`,
+			description: en`extended zodiac star chart including space debris and other celestial bodies.`,
+			publisher: en`zemn.me`,
+			url: new RelativeURL('/experiments/astrological-chart'),
+			tags: [software, design],
+		},
+		{
 			id: '3eb9b53b-a3d3-44e5-b1e9-62fe75d2eb87',
 			date: date(9, 'sep', 2026),
 			title: en`Stanford Security Lunch`,

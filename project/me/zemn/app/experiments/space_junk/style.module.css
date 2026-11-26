@@ -1,0 +1,745 @@
+.page {
+	--line: color-mix(in srgb, currentColor 22%, transparent);
+	--muted: color-mix(
+		in srgb,
+		var(--foreground-color) 80%,
+		var(--background-color)
+	);
+	--controls: 400 0.9375rem / 1.35 system-ui, sans-serif;
+	box-sizing: border-box;
+	width: min(100%, 46rem);
+	margin-inline: auto;
+	padding: 1.25rem clamp(1rem, 4vw, 2rem) 4rem;
+	color: var(--foreground-color);
+}
+.page ::selection {
+	background: var(--foreground-color);
+	color: var(--background-color);
+}
+.page h1 {
+	margin: 0 0 1rem;
+	font-size: clamp(2.5rem, 5vw, 3.5rem);
+	line-height: 1.15;
+	letter-spacing: -0.045em;
+	font-weight: normal;
+}
+.page :is(a, a:visited) {
+	color: inherit;
+	background: none;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+.page :is(button, input, summary) {
+	box-sizing: border-box;
+	min-height: 44px;
+	font: var(--controls);
+	color: inherit;
+	accent-color: var(--foreground-color);
+}
+.page button {
+	border: 0;
+	background: transparent;
+	padding: 0 0.6rem;
+	cursor: pointer;
+}
+.page button:disabled {
+	opacity: 0.46;
+	cursor: default;
+}
+.page button:hover:enabled,
+.page summary:hover {
+	text-decoration: underline;
+	text-underline-offset: 0.24em;
+}
+.page :is(button, input, summary, a, svg[tabindex]):focus-visible {
+	outline: 2px solid var(--foreground-color);
+	outline-offset: 2px;
+}
+.page :is(button, input, summary, a, svg[tabindex]) {
+	scroll-margin-block: calc(var(--glade-bar-block-size, 4rem) + 0.5rem) 0.5rem;
+}
+.page summary {
+	cursor: pointer;
+	align-content: center;
+}
+.paging {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.375rem;
+	margin-block: 0.5rem;
+	font-variant-numeric: tabular-nums;
+}
+.paging button {
+	min-width: 44px;
+	font: inherit;
+}
+.rulers {
+	margin: 1.3rem 0 0;
+	padding: 0;
+	border: 0;
+	min-inline-size: 0;
+}
+.rulerRow {
+	display: grid;
+	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);
+	align-items: center;
+	min-height: 48px;
+	border-block-start: 1px solid var(--line);
+}
+.rulerRow:last-child {
+	border-block-end: 1px solid var(--line);
+}
+.rulerRow > .rulerValue {
+	display: grid;
+	align-content: center;
+	grid-template-rows: auto minmax(1lh, auto);
+	font-size: 1.1rem;
+	line-height: 1.15;
+	gap: 0.05rem;
+	padding-inline-end: 0.35rem;
+}
+.rulerValue span,
+:is(.planetBand, .objectBand) .switch > span {
+	font: var(--controls);
+	font-size: 0.72rem;
+	color: var(--muted);
+}
+.rulerValue strong {
+	font-weight: 400;
+	font-variant-numeric: tabular-nums;
+}
+.rulerTrack {
+	position: relative;
+	min-width: 0;
+	height: 46px;
+	cursor: grab;
+	touch-action: pan-y;
+	user-select: none;
+}
+.rulerTrack:active {
+	cursor: grabbing;
+}
+.rulerTrack:has(input:focus-visible) {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+.rulerTrack input {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+	/* Pointer gestures slide the engraved strip. The native range handles keys and assistive input. */
+	pointer-events: none;
+}
+.rulerTrack > svg {
+	display: block;
+	overflow: hidden;
+	mask-image: linear-gradient(
+		90deg,
+		transparent,
+		currentColor 5%,
+		currentColor 95%,
+		transparent
+	);
+}
+.rulerTrack[data-planet-marks] > svg {
+	mask-image: none;
+}
+.rulerTrack path {
+	stroke: currentColor;
+	opacity: 0.6;
+}
+.rulerTrack text {
+	fill: currentColor;
+	text-anchor: middle;
+	font:
+		11px system-ui,
+		sans-serif;
+	font-variant-numeric: tabular-nums;
+}
+.rulerTrack i {
+	position: absolute;
+	inset: 20px auto 3px 50%;
+	width: 1.5px;
+	background: currentColor;
+	pointer-events: none;
+	transform: translateX(-50%);
+}
+.rulerTrack i::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	border-inline: 3px solid transparent;
+	border-bottom: 5px solid currentColor;
+}
+.rulerBand text {
+	font-size: 10px;
+}
+.rulerTrack:has(.rulerMark) {
+	height: 64px;
+}
+.rulerTrack:has(.rulerMark) i {
+	bottom: 29px;
+}
+.rulerTrack:has(.rulerBand) i {
+	bottom: 12px;
+}
+.figure {
+	margin: 0.5rem auto 1.25rem;
+	text-align: center;
+}
+.viewer {
+	min-width: 0;
+}
+.globe {
+	display: block;
+	margin-inline: auto;
+	width: min(100%, 32rem);
+	height: auto;
+	font-family: inherit;
+	user-select: none;
+}
+.globe[tabindex] {
+	touch-action: none;
+	cursor: grab;
+}
+.globe[tabindex]:focus:not(:focus-visible) {
+	outline: none;
+}
+.globe[tabindex]:active {
+	cursor: grabbing;
+}
+.viewControls {
+	text-align: start;
+}
+.viewControls .rulerRow > .switch {
+	justify-items: center;
+	padding-inline: 0.5rem 0;
+}
+.viewControls .rulerRow {
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	grid-template-columns: minmax(7rem, 20%) minmax(0, 1fr);
+}
+.rulerRow:has(> .switch) {
+	grid-template-rows: repeat(2, 1fr);
+	row-gap: 0.05rem;
+}
+.rulerRow:has(> .switch) > * {
+	grid-row: 1 / -1;
+}
+.rulerRow:has(> .switch) > .rulerValue {
+	grid-template-rows: subgrid;
+	align-self: stretch;
+	align-items: center;
+	row-gap: inherit;
+}
+.rulerRow:has(> .switch) > .rulerValue > span {
+	align-self: end;
+}
+.sources {
+	border-block-start: 1px solid var(--line);
+	padding-block-start: 0.75rem;
+}
+.sources h2 {
+	margin: 0;
+	font: inherit;
+}
+.sources dl {
+	margin: 0.5rem 0 0;
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+.sources dl div {
+	display: grid;
+	grid-template-columns: 7rem minmax(0, 1fr);
+	gap: 0.5rem;
+	padding-block: 0.15rem;
+}
+.sources dt {
+	color: var(--muted);
+}
+.sources dd {
+	margin: 0;
+}
+.search {
+	align-self: stretch;
+	width: min(100%, 9rem);
+	min-width: 0;
+	padding: 0.4rem 0.5rem;
+	border: 1px solid var(--line);
+	border-radius: 0;
+	background: var(--background-color);
+}
+.placements {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.25rem), 1fr));
+	column-gap: 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.placements li {
+	min-width: 0;
+	padding-block: 0.65rem 0.8rem;
+	border-block-start: 1px solid var(--line);
+}
+.placements header {
+	display: grid;
+	gap: 0.18rem;
+}
+.placements h3 a {
+	text-decoration: none;
+}
+.placements h3 a > span:last-child {
+	text-decoration: underline;
+	text-underline-offset: 0.16em;
+}
+.placements h3 {
+	margin: 0;
+	font: var(--controls);
+	font-size: 0.875rem;
+	font-weight: 550;
+	line-height: 1.45;
+	overflow-wrap: anywhere;
+}
+.placementGlyph {
+	display: inline-block;
+	min-width: 1.15em;
+	font: 1.05rem / 1 "Apple Symbols", "Segoe UI Symbol", sans-serif;
+}
+.designator {
+	margin-inline-end: 0.2rem;
+	white-space: nowrap;
+	color: var(--muted);
+	font-size: 0.75rem;
+	font-weight: 400;
+	font-variant-numeric: tabular-nums;
+}
+.position {
+	font-size: 1.05rem;
+	line-height: 1.4;
+	font-variant-numeric: lining-nums tabular-nums;
+}
+.position > span {
+	white-space: nowrap;
+}
+.placements small {
+	color: var(--muted);
+	font: var(--controls);
+	font-size: 0.75rem;
+}
+@media (width < 22rem) {
+	.placements {
+		column-gap: 0.625rem;
+	}
+	.position {
+		font-size: 0.9375rem;
+	}
+}
+@media (width <= 38rem) {
+	.page {
+		padding-inline: 0.5rem;
+	}
+}
+
+.planetBand,
+.objectBand {
+	display: grid;
+	grid-template-columns: 6.2rem minmax(0, 8fr) minmax(0, 3.2fr);
+	align-items: center;
+	column-gap: 0.2rem;
+	padding-block: 0.25rem;
+	border-block-end: 1px solid var(--line);
+	font: var(--controls);
+}
+.zodiacGroup,
+.outerBodies {
+	display: grid;
+	align-self: stretch;
+	align-items: stretch;
+}
+.zodiacGroup {
+	grid-template-columns: repeat(8, minmax(44px, auto));
+	outline: 1px solid var(--line);
+	outline-offset: -1px;
+}
+.outerBodies {
+	grid-template-columns: repeat(3, minmax(44px, auto));
+}
+:is(.planetBand, .objectBand) .switch {
+	display: grid;
+	grid-template-rows: minmax(2lh, auto) auto;
+	justify-items: center;
+	align-items: end;
+	align-content: start;
+	padding-block: 0.25rem 0.4rem;
+	gap: 0.2rem;
+	font-size: 0.72rem;
+	text-align: center;
+}
+:is(.planetBand, .objectBand) > .switch > span,
+.zodiacGroup > .switch:first-child > span {
+	font-weight: 550;
+}
+:is(.planetBand, .objectBand) > .switch > span {
+	max-inline-size: 10ch;
+	text-wrap: balance;
+}
+@media (width < 44rem) {
+	.planetBand .zodiacGroup > .switch:nth-child(n + 5),
+	.planetBand .outerBodies > .switch:nth-child(n + 3) {
+		grid-template-rows: minmax(1lh, auto) auto;
+	}
+	.planetBand {
+		grid-template-columns: minmax(0, 1.2fr) minmax(0, 4.2fr) minmax(
+				0,
+				2.25fr
+			);
+	}
+	.zodiacGroup {
+		grid-template-columns: repeat(4, auto);
+	}
+	.outerBodies {
+		grid-template-columns: repeat(2, auto);
+	}
+}
+@media (width < 32rem) {
+	.planetBand {
+		grid-template-columns: 5.4rem minmax(0, 1fr);
+	}
+	.planetBand > .switch {
+		grid-row: span 2;
+	}
+	.planetBand .outerBodies > .switch {
+		grid-template-rows: minmax(1lh, auto) auto;
+	}
+	.planetBand .outerBodies {
+		grid-column: 2;
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.viewControls .rulerRow:has([data-planet-marks]) {
+		grid-template-columns: 1fr;
+		grid-auto-flow: row;
+	}
+	.rulerRow:has([data-planet-marks]) > .rulerValue {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		padding-block: 0.35rem;
+	}
+}
+.objectBand {
+	grid-template-columns: 6.2rem minmax(6rem, 1.4fr) minmax(0, 4fr) minmax(4.5rem, 1fr);
+	gap: 0.3rem;
+	padding-block: 0.45rem;
+}
+:is(.planetBand, .objectBand) > .switch {
+	align-self: start;
+}
+.objectBand .zodiacGroup {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.objectBand .outerBodies {
+	grid-template-columns: 1fr;
+}
+@media (width < 40rem) {
+	.objectBand {
+		grid-template-columns: 5.4rem minmax(0, 1fr) minmax(min-content, 20%);
+		grid-auto-rows: 1fr;
+	}
+	.objectBand .search {
+		grid-column: 2 / -1;
+	}
+	.objectBand .zodiacGroup {
+		grid-column: 1 / 3;
+	}
+}
+@media (width < 20rem) {
+	.objectBand .zodiacGroup {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+.switch {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	cursor: pointer;
+	gap: 0.4rem;
+}
+.page .switch input {
+	--thumb: 0.8125rem;
+	appearance: none;
+	position: relative;
+	box-sizing: border-box;
+	width: 1.875rem;
+	height: 1rem;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 2px;
+	color: inherit;
+	background: transparent;
+	cursor: inherit;
+}
+.switch input::before,
+.switch input::after {
+	content: "";
+	position: absolute;
+	box-sizing: border-box;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.switch input::before {
+	inset-inline: 1px;
+	height: 0.3125rem;
+	border: 1px solid var(--muted);
+	border-radius: 1rem;
+}
+.switch input::after {
+	left: 0;
+	width: var(--thumb);
+	height: var(--thumb);
+	border: 1.25px solid currentColor;
+	border-radius: 50%;
+	background: var(--background-color);
+}
+.switch input:checked::after {
+	left: calc(100% - var(--thumb));
+	border-width: 0.3125rem;
+}
+.switch input:indeterminate::after {
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: linear-gradient(currentColor, currentColor) center / 6px 1.5px
+		no-repeat var(--background-color);
+}
+@media (forced-colors: active) {
+	.page .switch input {
+		--muted: CanvasText;
+		--background-color: Canvas;
+		color: CanvasText;
+		forced-color-adjust: none;
+	}
+}
+
+.planetName {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.12em;
+}
+.rulerMark text,
+.toggleGlyph,
+.planetGlyph {
+	font:
+		17px "Apple Symbols",
+		"Segoe UI Symbol",
+		"Noto Sans Symbols 2",
+		sans-serif;
+}
+.toggleGlyph {
+	font-size: 0.85rem;
+	line-height: 1;
+}
+.planetGlyph {
+	fill: currentColor;
+	stroke: var(--background-color);
+	stroke-width: 3;
+	paint-order: stroke;
+}
+.citySearch {
+	display: grid;
+	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);
+	align-items: center;
+	border-block-start: 1px solid var(--line);
+	margin-block-start: 1.3rem;
+}
+.citySearch + .rulers {
+	margin-block-start: 0;
+}
+.citySearch label {
+	font: var(--controls);
+	color: var(--muted);
+	font-size: 0.72rem;
+}
+.citySearch input {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	width: 100%;
+	padding: 0 0.35rem;
+	font-family: inherit;
+	font-size: 1.1rem;
+}
+.citySearch :is(ul, small) {
+	grid-column: 2;
+	margin: 0;
+	padding: 0;
+	font: var(--controls);
+}
+.citySearch ul {
+	list-style: none;
+}
+.citySearch li {
+	align-content: center;
+	min-height: 44px;
+	padding-inline: 0.35rem;
+	cursor: pointer;
+}
+.citySearch li:is(:hover, [aria-selected="true"]) {
+	text-decoration: underline;
+	text-underline-offset: 0.22em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.viewControls .rulerRow > .switch {
+		display: none;
+	}
+}
+
+.printCity, .printFilter {
+	display: none;
+}
+
+@page astrological-chart {
+	margin: 12mm 14mm 16mm;
+}
+
+@media print {
+	:global(:root):has(.page) {
+		--print-footer-inset: 0pt;
+	}
+	:global([data-glade-layout]):has(.page) {
+		page: astrological-chart;
+	}
+	:global([data-glade-content]):has(.page) {
+		padding: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global(header[data-glade-banner]) {
+		min-height: 0;
+		height: 9mm;
+		padding: 0;
+		border: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global(header[data-glade-banner] a[aria-label="Go to homepage"]) {
+		min-height: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global(header[data-glade-banner]) svg {
+		max-height: 8mm;
+	}
+	.page {
+		width: 100%;
+		padding: 0;
+		font-size: 10pt;
+	}
+	.page h1 {
+		margin: 3mm 0 1mm;
+		font-size: 27pt;
+	}
+	.citySearch, .rulers, .viewControls {
+		zoom: 0.88;
+		break-inside: avoid;
+	}
+	.citySearch {
+		margin-block-start: 2mm;
+		min-height: 10mm;
+	}
+	.printCity {
+		display: block;
+		padding-inline: 0.35rem;
+		font-size: 1.1rem;
+	}
+	.citySearch :is(input, ul, small), .paging, .objectBand .search {
+		display: none;
+	}
+	.rulerTrack i {
+		print-color-adjust: exact;
+	}
+	.globe {
+		width: 113mm;
+		max-width: 100%;
+		break-after: avoid;
+		outline: none !important;
+	}
+	.figure {
+		margin: 2mm 0 4mm;
+	}
+	.printFilter {
+		display: block;
+		margin: 1.5mm 0 0;
+		font-size: 10pt;
+		text-align: start;
+	}
+	.planetBand, .objectBand {
+		break-inside: avoid;
+		break-after: avoid;
+		padding-block: 1mm;
+		border-top: 1px solid var(--line);
+	}
+	.objectBand {
+		grid-template-columns: 6.2rem 1fr 6rem;
+		border-top: none;
+	}
+	:is(.planetBand, .objectBand) .switch {
+		min-height: 0;
+		gap: 1mm;
+		padding-block: 0;
+	}
+	.switch input::after {
+		print-color-adjust: exact;
+	}
+	.placements {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: 4mm;
+	}
+	.placements li {
+		padding-block: 2mm;
+		break-inside: avoid;
+	}
+	.placements h3 {
+		font-size: 9pt;
+	}
+	.position {
+		font-size: 11pt;
+	}
+	.sources {
+		break-inside: avoid;
+		margin-block-start: 4mm;
+		padding-block-start: 2mm;
+	}
+	.sources h2 {
+		font-size: 13pt;
+	}
+	.sources dl {
+		font-size: 9pt;
+		line-height: 1.35;
+		margin-block-start: 1.5mm;
+	}
+	.sources dl div {
+		padding-block: 0.4mm;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) {
+		break-inside: avoid;
+		break-before: avoid;
+		grid-template-rows: auto 10mm auto 1mm auto;
+		grid-template-columns: 1fr 9mm 1fr;
+		margin-top: 3mm;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) h2 {
+		grid-template-rows: 1mm auto 1mm;
+		margin: 0;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) small {
+		max-width: none;
+		font-size: 8pt;
+	}
+	:global([data-glade-layout]):has(.page) :global([data-glade-footer]) small > :not(br:first-of-type) {
+		display: none;
+	}
+}

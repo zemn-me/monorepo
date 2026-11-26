@@ -1,6 +1,19 @@
 import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
+	{
+		path: 'experiments/space-junk',
+		file: 'experiments/space_junk/redirect.js',
+	},
+	{
+		path: 'experiments/space-junk/elements/:day',
+		file: 'experiments/space_junk/daily_elements.js',
+	},
+	{
+		path: 'experiments/space-junk/positions/:minute',
+		file: 'experiments/space_junk/snapshot.js',
+	},
+
 	{ path: 'auth/session', file: 'auth-session.js' },
 	{
 		path: 'experiments/red-alert',
@@ -152,6 +165,10 @@ export default [
 			{
 				file: 'experiments/rays/page.js',
 				path: 'experiments/rays',
+			},
+			{
+				file: 'experiments/space_junk/page.js',
+				path: 'experiments/astrological-chart',
 			},
 			{
 				file: 'experiments/toc/page.js',

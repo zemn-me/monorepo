@@ -10,14 +10,19 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
+	"testing/fstest"
 	"time"
+
+	"github.com/bazelbuild/rules_go/go/runfiles"
 
 	"github.com/zemn-me/monorepo/project/me/zemn/api/itestconfig"
 	apiserver "github.com/zemn-me/monorepo/project/me/zemn/api/server"
 )
 
 var (
+	orbitFixture     string
 	address          string
 	ddbAddress       string
 	useAWSEmulator   bool
@@ -25,6 +30,7 @@ var (
 )
 
 func init() {
+	flag.StringVar(&orbitFixture, "orbit-fixture", "", "Bazel runfile with archived orbital elements, named by UTC day")
 	flag.BoolVar(&runJournalWorker, "journal-worker", false, "Run the deployed journal image entrypoint against AWS Emulator")
 	flag.BoolVar(&useAWSEmulator, "aws-emulator", false, "Run against the rules_itest AWS Emulator service")
 	flag.StringVar(&address, "address", ":0", "Address to listen on")
@@ -104,6 +110,18 @@ func main() {
 		AllowLocalhostAnalytics:    true,
 		JournalAI:                  journalAI,
 		JournalCurator:             &localJournalCurator{},
+	}
+	if orbitFixture != "" {
+		file, err := runfiles.Rlocation(orbitFixture)
+		if err != nil {
+			log.Fatal(err)
+		}
+		data, err := os.ReadFile(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+		archive := fstest.MapFS{"api/entity/tle/" + filepath.Base(file): &fstest.MapFile{Data: data}}
+		opts.OrbitElementsTransport = http.NewFileTransportFS(archive)
 	}
 	ctx := context.Background()
 	mux := http.NewServeMux()

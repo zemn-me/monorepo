@@ -3,7 +3,7 @@ import Path from 'node:path';
 import { runfiles } from '@bazel/runfiles';
 import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import glob from 'fast-glob';
-import { Browser, By, logging, ThenableWebDriver } from 'selenium-webdriver';
+import { Browser, By, Key, logging, ThenableWebDriver, until } from 'selenium-webdriver';
 import type { Driver as ChromeDriver } from 'selenium-webdriver/chrome';
 
 import { Driver } from '#root/ts/selenium/webdriver.js';
@@ -350,7 +350,7 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('experiment index lists every experiment and opens one', async () => {
+		it('lists every experiment and draws a birthday chart from the index', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
 				await driver.get(`${origin}/tool/elastictabs?input=hello`);
@@ -377,6 +377,7 @@ describe('zemn.me website', () => {
 					'SVG Arena',
 					'Platonic Stress',
 					'Geometry of Music',
+					'Astrological Chart',
 					'Elastic Tabstops',
 					'Flag emoji',
 					'Framing calculator',
@@ -420,13 +421,664 @@ describe('zemn.me website', () => {
 				expect(omittedMenuLinks).toHaveLength(0);
 				await menuButton.click();
 
-				await links[0]!.click();
+				await list.findElement(By.linkText('Astrological Chart')).click();
 				await driver.wait(
 					async () =>
 						(await driver.getCurrentUrl()) ===
-						`${origin}/experiments/rays`,
+						`${origin}/experiments/astrological-chart`,
 					5000
 				);
+				const time = await driver.findElement(By.name('time'));
+				const timestamp = () => time.getAttribute('value').then(Number);
+				const sources = await driver.findElement(By.css('section[aria-labelledby="chart-sources"]'));
+				expect(await sources.findElement(By.linkText('CC BY 4.0')).isDisplayed()).toBe(true);
+				expect(await driver.findElements(By.css('article figcaption, summary#chart-birthplace'))).toHaveLength(0);
+				await time.sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => await timestamp() === Date.parse('2006-08-01T12:01:00.000Z'), 5000);
+				await time.sendKeys(Key.ARROW_LEFT);
+
+				const chrome = driver as unknown as ChromeDriver;
+				const { x, y } = await driver.executeScript<{ x: number; y: number }>(`
+					arguments[0].scrollIntoView({block: 'center'});
+					const r = arguments[0].getBoundingClientRect();
+					return {x: r.left + r.width / 2, y: r.top + r.height / 2};
+				`, time);
+				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: true });
+				const touch = (type: string, touchPoints: { x: number; y: number }[]) =>
+					chrome.sendDevToolsCommand('Input.dispatchTouchEvent', { type, touchPoints });
+				await touch('touchStart', [{ x, y }]);
+				await touch('touchMove', [{ x: x - 20, y }]);
+				await driver.wait(async () => await timestamp() > Date.parse('2006-08-01T12:00Z'), 5000);
+				const firstMove = await timestamp();
+				await touch('touchMove', [{ x: x - 40, y }]);
+				await driver.wait(async () => await timestamp() > firstMove, 5000);
+				const scrubbed = await timestamp();
+				await touch('touchEnd', []);
+				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
+				expect(await timestamp()).toBe(scrubbed);
+				const scrollTop = () => driver.executeScript<number>('return window.scrollY');
+				const beforeScroll = await scrollTop();
+				await chrome.sendDevToolsCommand('Input.dispatchMouseEvent', {
+					type: 'mouseWheel', x, y, deltaX: 0, deltaY: 120,
+				});
+				await driver.wait(async () => await scrollTop() > beforeScroll, 5000, 'Scrolling over the time ruler moves the page');
+				expect(await timestamp()).toBe(scrubbed);
+				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				expect(await search.getProperty('value')).toBe('motor');
+				const grid = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
+				await driver.wait(until.elementLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
+				const motorsOnPage = await grid.findElements(By.css('h3 a'));
+				expect(motorsOnPage).toHaveLength(12);
+				const entries = await driver.executeScript<{ width: number; y: number }[]>(
+					'return Array.from(arguments[0].children, entry => entry.getBoundingClientRect().toJSON())',
+					grid
+				);
+				const columns = entries.filter(entry => entry.y === entries[0]!.y).length;
+				for (const [i, entry] of entries.entries()) {
+					expect(Math.abs(entry.width - entries[0]!.width)).toBeLessThan(1);
+					expect(entry.y).toBe(entries[i - i % columns]!.y);
+				}
+				expect((await grid.findElement(By.css('h3')).getText())).toContain('Sun');
+				for (const name of await Promise.all(motorsOnPage.map(link => link.getText()))) expect(name).toMatch(/motor/i);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
+				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual([]);
+				expect(await driver.findElements(By.xpath('//button[.="Reset view"]'))).toHaveLength(0);
+				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
+				expect(await wheel.getText()).toContain('ARIES');
+				const captions = () => wheel.findElements(By.css('textPath'));
+				expect(await captions()).toHaveLength(12);
+				const letterRotation = await driver.executeScript<number>(`
+					const text = arguments[0];
+					return Math.abs(text.getRotationOfChar(0) - text.getRotationOfChar(text.getNumberOfChars() - 1));
+				`, (await captions())[0]);
+				expect(letterRotation).toBeGreaterThan(3);
+				const projection = (label: string) => driver.wait(async () =>
+					(await wheel.getAttribute('aria-label'))?.includes(label), 5000, `Expected the camera to reach ${label}`);
+				const initialRotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
+				await initialRotation.sendKeys(Key.SPACE);
+				expect(await initialRotation.isSelected()).toBe(false);
+				const centre = await driver.executeScript<{ x: number; y: number; width: number }>(`
+					arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});
+					const r = arguments[0].getBoundingClientRect();
+					return {x: r.x + r.width / 2, y: r.y + r.height / 2, width: r.width};
+				`, wheel);
+				const mouse = (type: string, dy: number, buttons: number) =>
+					chrome.sendDevToolsCommand('Input.dispatchMouseEvent', {
+						type, x: centre.x, y: centre.y + dy, button: 'left', buttons, clickCount: 1,
+					});
+				// A fixed screen position stays meaningful throughout the uninterrupted drag.
+				expect(await driver.findElements(By.css('button[aria-label="Earth orbits"],button[aria-label="Zodiac wheel"]'))).toHaveLength(0);
+				const moonDot = await wheel.findElement(By.css('g[aria-label^="Moon ·"] circle'));
+				const initialX = await moonDot.getAttribute('cx');
+				const debrisLinks = () => wheel.findElements(By.css('g[aria-label="Selected object aspects and ascendant"] line title'))
+					.then(lines => Promise.all(lines.map(line => line.getAttribute('textContent'))));
+				await driver.wait(async () => (await debrisLinks()).length > 0, 10000);
+				const wheelLinks = await debrisLinks();
+				await mouse('mousePressed', 0, 1);
+				await mouse('mouseMoved', 72, 1);
+				await projection('Earth and orbital chart');
+				await driver.wait(async () => await moonDot.getAttribute('cx') !== initialX, 5000);
+				expect(await debrisLinks()).toEqual(wheelLinks);
+				await mouse('mouseMoved', 0, 1);
+				await mouse('mouseReleased', 0, 0);
+				await projection('wheel from above');
+				await driver.wait(async () => await moonDot.getAttribute('cx') === initialX, 5000);
+				// Release on either side of the midpoint of the near-pole blend.
+				for (const [fraction, endpoint] of [[0.04, 'wheel'], [0.105, 'globe']] as const) {
+					const dy = Math.round(centre.width * fraction);
+					await mouse('mousePressed', 0, 1);
+					await mouse('mouseMoved', dy, 1);
+					await projection('Earth and orbital chart');
+					expect(await wheel.getText()).not.toContain('km');
+					await mouse('mouseReleased', dy, 0);
+					if (endpoint === 'wheel') {
+						await projection('wheel from above');
+						expect(await moonDot.getAttribute('cx')).toBe(initialX);
+					} else {
+						await driver.wait(async () => (await wheel.getText()).includes('km'), 5000);
+					}
+				}
+				await wheel.sendKeys(Key.HOME);
+				await wheel.sendKeys(Key.ARROW_DOWN.repeat(36));
+				await projection('wheel from below');
+				await wheel.sendKeys(Key.ARROW_UP);
+				await projection('Earth and orbital chart');
+				await wheel.sendKeys(Key.HOME);
+				await projection('wheel from above');
+
+				const tilt = await driver.findElement(By.css('input[type="range"][aria-label="Tilt"]'));
+				const wheelX = await moonDot.getAttribute('cx');
+				await tilt.sendKeys(Key.ARROW_LEFT);
+				await projection('Earth and orbital chart');
+				await projection('wheel from above');
+				expect(await moonDot.getAttribute('cx')).toBe(wheelX);
+				await wheel.sendKeys(Key.ARROW_DOWN.repeat(4));
+				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000,
+					'Releasing twenty degrees from the pole settles into the full orbital view');
+				expect(await tilt.getAttribute('value')).toBe('60');
+				const scene = await driver.findElement(By.css('g[aria-label="Earth surface"]'));
+				const geometry = () => driver.executeScript<string>(`
+					const visible = arguments[0].querySelectorAll('path[fill="#454545"]:not([display="none"])');
+					return Array.from(visible, path => path.getAttribute('d')).join('');
+				`, scene);
+
+				const tiltTrack = await tilt.findElement(By.xpath('..'));
+				const bands = await tiltTrack.findElements(By.css('g[pointer-events="none"] text'));
+				expect(await Promise.all(bands.map(label => label.getProperty('textContent')))).toEqual(['Wheel', 'Orbit →', '← Orbit', 'Wheel']);
+				await tiltTrack.findElement(By.xpath('.//*[local-name()="text" and .="45°"]')).click();
+				await driver.wait(async () => await tilt.getAttribute('value') === '45', 5000);
+				const original = await geometry();
+				expect(original.length).toBeGreaterThan(0);
+				await tilt.sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => await geometry() !== original, 5000);
+				await tilt.sendKeys(Key.ARROW_LEFT);
+				await driver.wait(async () => await geometry() === original, 5000, 'Returning the tilt ruler restores the Earth grid');
+
+				expect(await grid.findElements(By.css('time'))).toHaveLength(0);
+				const firstObject = () => grid.findElement(By.css('li:has(h3 a) h3')).getText();
+				const firstOnPage = await firstObject();
+				const pager = await driver.findElement(By.css('nav[aria-label="Chart placement pages"]'));
+				const previous = await pager.findElement(By.css('button[aria-label="Previous page"]'));
+				const nextPage = () => pager.findElement(By.css('button[aria-label="Next page"]'));
+				const pageNumber = () => pager.findElement(By.css('[role="status"]')).getText();
+				expect(await pageNumber()).toBe('Pg. 1/21');
+				expect(await previous.isEnabled()).toBe(false);
+				await (await nextPage()).click();
+				await driver.wait(async () => await firstObject() !== firstOnPage, 5000);
+				expect(await grid.findElements(By.css('h3 a'))).toHaveLength(12);
+				expect(await previous.isEnabled()).toBe(true);
+				expect(await pageNumber()).toBe('Pg. 2/21');
+				await wheel.sendKeys(Key.HOME);
+				await projection('wheel from above');
+				const markerCount = () => wheel.findElements(By.css('g[aria-label="Orbiting objects"] path:not([display="none"])')).then(paths => paths.length);
+				const unfiltered = await markerCount();
+				expect(unfiltered).toBe(250);
+				await search.sendKeys('MoToR');
+				const motors = await markerCount();
+				expect(motors).toBeGreaterThan(12);
+				expect(motors).toBeLessThanOrEqual(unfiltered);
+				await (await nextPage()).click();
+				expect(await markerCount()).toBe(motors);
+				await search.sendKeys('xyz');
+				expect(await markerCount()).toBe(0);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat(8));
+				expect(await markerCount()).toBe(unfiltered);
+				await search.sendKeys('1976-126V');
+				const entry = await grid.findElement(By.css('li:has(h3 a)'));
+				const link = await entry.findElement(By.css('h3 a'));
+				const name = await link.findElement(By.css('span:last-child')).getText();
+				expect(await link.getAccessibleName()).toBe(`1976-126V ${name}`);
+				expect(await entry.findElement(By.css('h3')).getAccessibleName()).toBe(`1976-126V ${name}`);
+				expect(await entry.getText()).not.toContain('NORAD');
+
+				expect(await markerCount()).toBe(1);
+
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('switches traditional bodies and debris independently on the wheel and globe', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart`);
+				const toggle = (name: string) => driver.findElement(By.xpath(
+					`//label[.//text()[normalize-space(.)="${name}"]]/input[@type="checkbox"]`
+				));
+				const bodies = () => driver.findElements(By.css('svg g[aria-label="Zodiac bodies"] g[role="img"]'));
+				await driver.wait(async () => (await bodies()).length === 7, 5000);
+				await (await toggle('Space junk')).click();
+				expect((await bodies()).length).toBe(7);
+				expect(await driver.findElements(By.css('ul[aria-label="Chart placements"] h3 a'))).toHaveLength(0);
+				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
+				const placements = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li'));
+				expect(await placements()).toHaveLength(7);
+				const sun = (await placements())[0]!;
+				expect(await sun.findElement(By.css('h3')).getAccessibleName()).toBe('Sun');
+				expect(await sun.findElement(By.css('header > span')).getText()).toMatch(/^Leo \d+° \d+′ \d+″$/);
+				const initial = await moon();
+				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => await moon() !== initial, 5000);
+				const planets = await driver.findElement(By.css('div[role="group"][aria-label="Planetary bodies"]'));
+				const switches = await planets.findElements(By.css('input[role="switch"]'));
+				expect(switches).toHaveLength(10);
+				const moonToggle = await toggle('Moon');
+				expect(await moonToggle.getAccessibleName()).toBe('Moon');
+				expect(await moonToggle.findElement(By.xpath('..')).getText()).toContain('☽');
+				const zodiacGroup = await planets.findElement(By.css('[role="group"][aria-label="Zodiac"]'));
+				expect(await zodiacGroup.findElements(By.css('input[role="switch"]'))).toHaveLength(7);
+				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
+				expect(await driver.findElements(By.css('figure [aria-label="View controls"] + [aria-label="Planetary bodies"] + [aria-label="Man-made bodies"]'))).toHaveLength(1);
+				await (await toggle('Moon')).click();
+				expect(await bodies()).toHaveLength(6);
+				expect(await placements()).toHaveLength(6);
+				expect(await (await toggle('Zodiac')).getProperty('indeterminate')).toBe(true);
+				await (await toggle('Zodiac')).click();
+				expect(await bodies()).toHaveLength(7);
+				await (await toggle('Pluto')).sendKeys(Key.SPACE);
+				expect((await bodies()).length).toBe(8);
+				const master = await toggle('Planetary bodies');
+				expect(await master.getProperty('indeterminate')).toBe(true);
+				await master.sendKeys(Key.SPACE);
+				expect(await bodies()).toHaveLength(10);
+				expect(await master.isSelected()).toBe(true);
+				expect(await master.getProperty('indeterminate')).toBe(false);
+				await master.sendKeys(Key.SPACE);
+				expect(await bodies()).toHaveLength(0);
+				expect(await master.isSelected()).toBe(false);
+				expect(await master.getProperty('indeterminate')).toBe(false);
+				await (await toggle('Zodiac')).sendKeys(Key.SPACE);
+				expect(await bodies()).toHaveLength(7);
+				expect(await master.getProperty('indeterminate')).toBe(true);
+				await (await toggle('Pluto')).sendKeys(Key.SPACE);
+				const wheelMoon = await moon();
+				const globe = await driver.findElement(By.id('star-chart'));
+				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));
+				const captions = () => signs().then(all => Promise.all(all.map(sign => sign.getAttribute('textContent'))));
+				const wheelCaptions = await captions();
+				const planetLinks = () => globe.findElements(By.css('g[aria-label="Zodiac bodies"] > line title'))
+					.then(lines => Promise.all(lines.map(line => line.getAttribute('textContent'))));
+				const wheelLinks = await planetLinks();
+				expect(wheelLinks.length).toBeGreaterThan(0);
+				expect(wheelCaptions).toHaveLength(12);
+				expect(wheelCaptions).toContain('SAGITTARIUS');
+				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
+				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
+				expect(await captions()).toEqual(wheelCaptions);
+				expect(await bodies()).toHaveLength(8);
+				expect(await moon()).toBe(wheelMoon);
+				const moonX = () => globe.findElement(By.css('g[aria-label^="Moon ·"] circle')).getAttribute('cx');
+				const beforeTurn = await moonX();
+				await globe.sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => await moonX() !== beforeTurn, 5000);
+				const zoom = await driver.findElement(By.css('input[type="range"][aria-label="Orbit view width"]'));
+				expect(await zoom.getAttribute('value')).toBe('100');
+				const zoomExtent = () => zoom.getAttribute('aria-valuetext');
+				const close = await zoomExtent();
+				expect(close).toBe('24,300 km across at Earth’s centre');
+				const visibleMarks = await driver.executeScript<number>(`
+					const track = arguments[0].parentElement.getBoundingClientRect();
+					return [...arguments[0].parentElement.querySelectorAll('g:has(> title) > text')].filter(el => {
+						const box = el.getBoundingClientRect();
+						return box.width > 0 && box.left >= track.left && box.right <= track.right;
+					}).length;
+				`, zoom);
+				expect(visibleMarks).toBe(9);
+				const zoomTrack = await zoom.findElement(By.xpath('..'));
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zoomTrack);
+				const tick = await zoomTrack.findElement(By.css('g[data-position="100"] > path'));
+				const pointer = await zoomTrack.findElement(By.css('i'));
+				const tickStart = await tick.getRect();
+				const pointerStart = await pointer.getRect();
+				await driver.actions().move({origin: zoomTrack}).press()
+					.move({origin: zoomTrack, x: 64, y: 0}).release().perform();
+				await driver.wait(async () => Number(await zoom.getAttribute('value')) < 100, 5000);
+				expect((await tick.getRect()).x - tickStart.x).toBeCloseTo(64, 0);
+				expect((await pointer.getRect()).x).toBe(pointerStart.x);
+				await zoom.sendKeys(Key.END);
+				const junk = await toggle('Space junk');
+				await junk.sendKeys(Key.SPACE);
+				expect(await zoomExtent()).toBe(close);
+				await junk.sendKeys(Key.SPACE);
+				expect(await zoomExtent()).toBe(close);
+				const closeX = await moonX();
+				await zoom.sendKeys(Key.HOME);
+				await driver.wait(async () => await moonX() !== closeX, 5000);
+				expect(await planetLinks()).toEqual(wheelLinks);
+				const earth = await globe.findElement(By.css('g[aria-label="Earth"] text'));
+				expect(await earth.getText()).toBe('⊕');
+				const far = await zoomExtent();
+				expect(far).toBe('153 AU across at Earth’s centre');
+				const zodiac = await toggle('Zodiac');
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zodiac);
+				await zodiac.click();
+				expect(await (await bodies())[0]!.getAttribute('aria-label')).toMatch(/^Pluto ·/);
+				expect((await bodies()).length).toBe(1);
+				expect(await signs()).toHaveLength(0);
+				await (await toggle('Pluto')).click();
+				expect(await bodies()).toHaveLength(0);
+				expect(await zoomExtent()).toBe(far);
+				expect(await earth.isDisplayed()).toBe(true);
+				const earthMark = await zoomTrack.findElement(By.css('g:has(>title) > text'));
+				expect(await earthMark.getText()).toContain('⊕');
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthMark);
+				await earthMark.click();
+				await driver.wait(async () => await zoomExtent() === close, 5000);
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", junk);
+				await junk.click();
+				expect(await bodies()).toHaveLength(0);
+				await (await toggle('Space junk')).click();
+				await (await toggle('Rocket stages')).click();
+				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
+				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
+				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li:has(h3 a)'));
+				await search.sendKeys('Rocket stage');
+				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
+				await (await toggle('Spacecraft payloads')).sendKeys(Key.SPACE);
+				await (await toggle('Space junk')).sendKeys(Key.SPACE);
+				await (await toggle('Space junk')).sendKeys(Key.SPACE);
+				expect(await (await toggle('Spacecraft payloads')).isSelected()).toBe(true);
+				await driver.wait(async () => (await catalogueRows()).length === 0, 5000);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('Rocket stage'.length), 'Spacecraft payload');
+				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
+				await globe.sendKeys(Key.HOME);
+				expect(await bodies()).toHaveLength(0);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('links directly to the plotted orbital object and restores its selection from the fragment', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart?spin=false`);
+				const links = await driver.wait(until.elementsLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
+				const link = links[1]!;
+				const href = await link.getAttribute('href');
+				if (!href) throw new Error('Chart object link is missing its href');
+				const url = new URL(href);
+				expect(url.hash).toMatch(/^#object-\d+$/);
+				const name = await link.findElement(By.css('span:last-child')).getText();
+				const piece = await link.findElement(By.css('span:first-child')).getText();
+				const caption = name + ' · ' + piece;
+				expect(await driver.findElement(By.css('svg path' + url.hash)).getAttribute('aria-label')).toBe(caption);
+				const selected = By.css('svg g[aria-label^="Selected object · "]');
+				const isSelected = async () => (await driver.findElements(selected))[0]?.getAttribute('aria-label');
+				await link.click();
+				await driver.wait(async () => await isSelected() === 'Selected object · ' + caption, 5000);
+				const lines = await driver.findElement(selected).findElements(By.css('text tspan'));
+				expect(await Promise.all(lines.map(line => line.getText()))).toEqual([name, piece]);
+				expect((await lines[1]!.getRect()).y).toBeGreaterThan((await lines[0]!.getRect()).y);
+				expect(new URL(await driver.getCurrentUrl()).hash).toBe(url.hash);
+				await driver.get('about:blank');
+				await driver.get(url.href);
+				await driver.wait(async () => await isSelected() === 'Selected object · ' + caption, 10000);
+				expect(await driver.findElement(By.css(':target')).getAttribute('id')).toBe(url.hash.slice(1));
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('rotates the idle wheel and Earth and respects the rotation and reduced-motion controls', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart`);
+				await driver.findElement(By.xpath('//label[normalize-space(.)="Space junk"]/input')).click();
+				const globe = await driver.findElement(By.id('star-chart'));
+				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
+				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
+				const rotation = await driver.findElement(By.css('input[type="range"][aria-label="Rotation"]'));
+				const spin = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
+				const angle = () => rotation.getAttribute('value');
+				const time = await driver.findElement(By.name('time'));
+				const birthday = await time.getAttribute('value');
+				const initial = await angle();
+				await driver.wait(async () => await angle() !== initial, 5000);
+				await spin.click();
+				const stopped = await angle();
+				const chrome = driver as unknown as ChromeDriver;
+				const reducedMotion = (value: string) => chrome.sendDevToolsCommand('Emulation.setEmulatedMedia', {
+					features: [{name: 'prefers-reduced-motion', value}],
+				});
+				await driver.sleep(800);
+				expect(await angle()).toBe(stopped);
+				await spin.click();
+				await reducedMotion('reduce');
+				const reduced = await angle();
+				// At three degrees per second this spans more than two visible degree ticks.
+				await driver.sleep(800);
+				expect(await angle()).toBe(reduced);
+				await reducedMotion('no-preference');
+				await driver.wait(async () => await angle() !== reduced, 5000);
+				expect(await time.getAttribute('value')).toBe(birthday);
+				await globe.sendKeys(Key.HOME);
+				await driver.wait(async () => (await globe.getAttribute('aria-label'))?.includes('wheel from above'), 5000);
+				const moon = await globe.findElement(By.css('g[aria-label^="Moon ·"] circle'));
+				const wheelX = await moon.getAttribute('cx');
+				await driver.wait(async () => await moon.getAttribute('cx') !== wheelX, 5000, 'The face-on wheel rotates while idle');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('prints the city, date and view slide rules with the chart', async () => {
+			try {
+				const params = new URLSearchParams({
+					time: '2006-08-01T12:00:00Z', city: 'Europe/London',
+					q: '1990-046C', tilt: '30', spin: 'false',
+				});
+				await driver.get(`${origin}/experiments/astrological-chart?${params}`);
+				const city = await driver.findElement(By.css('[role="combobox"]'));
+				await driver.wait(async () => (await city.getAttribute('value'))?.includes('London'), 10000);
+				const chrome = driver as unknown as ChromeDriver;
+				await chrome.sendDevToolsCommand('Emulation.setEmulatedMedia', {media: 'print'});
+
+				const chart = await driver.findElement(By.css('article'));
+				expect(await chart.findElement(By.css('label[for="chart-birth-city"]')).isDisplayed()).toBe(true);
+				expect(await chart.getText()).toContain('London, England, United Kingdom');
+				for (const label of ['Year', 'Month', 'Day', 'Time', 'Rotation', 'Tilt', 'Orbit view width']) {
+					const input = await chart.findElement(By.css(`input[type="range"][aria-label="${label}"]`));
+					const scale = await input.findElement(By.xpath('following-sibling::*[local-name()="svg"]'));
+					expect(await scale.isDisplayed()).toBe(true);
+				}
+				expect(await chart.getText()).toContain('13:00:00');
+				expect(await chart.getText()).toContain('Object filter · 1990-046C');
+				const header = await driver.findElement(By.css('header[data-glade-banner]')).getRect();
+				const title = await chart.findElement(By.css('h1')).getRect();
+				expect(header.y + header.height).toBeLessThanOrEqual(title.y);
+				expect(await driver.findElement(By.id('star-chart')).isDisplayed()).toBe(true);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('restores a shared Astrological Chart and saves edits to the same URL', async () => {
+			try {
+				const params = new URLSearchParams({
+					time: '2006-08-01T04:15:16.789Z', city: '1880252', bodies: 'Sun,Pluto',
+					kinds: 'C,R', q: 'motor', rotation: '-32', tilt: '12', zoom: '80', spin: 'false',
+					panX: '-8.76543', panY: '19.10001',
+				});
+				await driver.get(`${origin}/experiments/space-junk?${params}#star-chart`);
+				expect(new URL(await driver.getCurrentUrl()).pathname).toBe('/experiments/astrological-chart');
+				const field = (label: string) => driver.findElement(By.css(`input[aria-label="${label}"]`));
+				const city = await driver.findElement(By.css('input[role="combobox"]'));
+				await driver.wait(async () => (await city.getAttribute('value'))?.includes('Singapore'), 10000);
+				await driver.wait(async () => new URL(await driver.getCurrentUrl()).searchParams.get('city') === 'Asia/Singapore', 5000);
+				const time = await driver.findElement(By.name('time'));
+				expect(await time.getAttribute('aria-valuetext')).toContain('12:15:16');
+				expect(await time.getAttribute('value')).toBe(String(Date.parse(params.get('time')!)));
+				const widthTrack = await (await field('Orbit view width')).findElement(By.xpath('..'));
+				const marks = await widthTrack.findElements(By.css('g[data-position] title'));
+				expect(marks).toHaveLength(3);
+				expect(await Promise.all(marks.map(mark => mark.getProperty('textContent')))).toEqual(
+					expect.arrayContaining(['Earth · 24,300 km across', expect.stringMatching(/^Sun · /), expect.stringMatching(/^Pluto · /)])
+				);
+				const placements = () => driver.findElements(By.css('ul[aria-label="Chart placements"] h3:not(:has(a))')).then(headings => Promise.all(headings.map(h => h.getText())));
+				expect((await placements()).join(' ')).toMatch(/Sun.*Pluto.*Rising sign/);
+				expect(await placements()).toHaveLength(3);
+				for (const [label, value] of [['Rotation', '-32'], ['Tilt', '12'], ['Orbit view width', '80']] as const)
+					expect(await (await field(label)).getAttribute('value')).toBe(value);
+				const search = await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000);
+				expect(await search.getAttribute('value')).toBe('motor');
+				await search.clear();
+				await search.sendKeys('spat');
+				await (await field('Rotation')).sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => {
+					const url = new URL(await driver.getCurrentUrl());
+					return url.searchParams.get('q') === 'spat' && url.searchParams.get('rotation') === '-31' && url.hash === '#star-chart';
+				}, 5000);
+				const shared = new URL(await driver.getCurrentUrl()).searchParams;
+				expect(shared.get('panX')).toBe('-8.77');
+				expect(shared.get('panY')).toBe('19.1');
+				expect(shared.get('time')).toBe(params.get('time'));
+				await driver.navigate().refresh();
+				expect(await (await field('Rotation')).getAttribute('value')).toBe('-31');
+				expect(await (await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000)).getAttribute('value')).toBe('spat');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('pins the birthplace to the visible surface of Earth as the globe turns', async () => {
+			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setEmulatedMedia', {
+					features: [{name: 'prefers-reduced-motion', value: 'reduce'}],
+				});
+				await driver.get(`${origin}/experiments/astrological-chart`);
+				const globe = await driver.findElement(By.id('star-chart'));
+				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
+				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
+				const pin = By.css('g[role="img"][aria-label^="Birthplace ·"] > line:last-of-type');
+				expect(await globe.findElements(pin)).toHaveLength(0);
+				const birthplace = await driver.findElement(By.css('input[role="combobox"]'));
+				await birthplace.sendKeys('Singapore');
+				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
+				const marker = await driver.wait(until.elementLocated(pin), 5000);
+				await driver.wait(async () => new URL(await driver.getCurrentUrl()).searchParams.get('city') === 'Asia/Singapore', 5000);
+				const natal = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
+				const rising = await natal.findElement(By.xpath('.//li[.//h3[.="Rising sign"]]'));
+				expect(await rising.findElement(By.css('header > span')).getText()).toMatch(/^\w+ \d+° \d+′ \d+″$/);
+				expect(await rising.findElement(By.css('small')).getText()).toBe('House 1');
+				const center = Number(await marker.getAttribute('x1'));
+				expect(await driver.executeScript<number>('return arguments[0].getTotalLength()', marker)).toBeLessThan(0.1);
+				await globe.sendKeys(Key.ARROW_RIGHT.repeat(4));
+				await driver.wait(async () => Number(await marker.getAttribute('x1')) < center, 5000);
+				const segments = await driver.executeScript<{ along: number; across: number }[]>(`
+					const tip = arguments[0], box = tip.ownerSVGElement.viewBox.baseVal;
+					const rx = tip.x1.baseVal.value - box.width / 2;
+					const ry = tip.y1.baseVal.value - box.height / 2;
+					const r = Math.hypot(rx, ry);
+					return Array.from(tip.parentElement.querySelectorAll('line'), line => {
+						const dx = line.x2.baseVal.value - line.x1.baseVal.value;
+						const dy = line.y2.baseVal.value - line.y1.baseVal.value;
+						return { along: (rx * dx + ry * dy) / r, across: (rx * dy - ry * dx) / r };
+					});
+				`, marker);
+				expect(segments).toHaveLength(2);
+				expect(segments[0]!.along).toBeLessThan(-1);
+				expect(segments[1]!.along).toBeGreaterThan(1);
+				for (const segment of segments) expect(Math.abs(segment.across)).toBeLessThan(0.01);
+				await globe.sendKeys(Key.ARROW_RIGHT.repeat(20));
+				await driver.wait(async () => (await globe.findElements(pin)).length === 0, 5000);
+				await globe.sendKeys(Key.ARROW_LEFT.repeat(24));
+				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Math.abs(Number(await globe.findElement(pin).getAttribute('x1')) - center) < 0.01, 5000);
+				await birthplace.sendKeys(Key.END, Key.BACK_SPACE.repeat('Singapore'.length));
+				await driver.wait(async () => !(await globe.findElements(pin)).length, 5000, 'The marker should disappear when the birth city is cleared');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('uses local midnight for the day ruler before a birth city is chosen', async () => {
+			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setTimezoneOverride', { timezoneId: 'Asia/Kathmandu' });
+				await driver.get(`${origin}/experiments/astrological-chart`);
+				const city = await driver.findElement(By.css('input[role="combobox"]'));
+				expect(await city.getAccessibleName()).toBe('City');
+				const clock = await driver.findElement(By.name('time'));
+				await driver.wait(async () => (await clock.getAttribute('aria-valuetext'))?.includes('17:45:00'), 5000);
+				const midnight = await driver.findElement(By.xpath('//fieldset//*[local-name()="text" and .="1"]'));
+				await midnight.click();
+				await driver.wait(async () => Number(await clock.getAttribute('value')) === Date.parse('2006-07-31T18:15:00.000Z'), 5000);
+				expect(await clock.getAttribute('aria-valuetext')).toContain('00:00:00');
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('serves numeric month ticks before localizing them in the browser', async () => {
+			try {
+				const chrome = driver as unknown as ChromeDriver;
+				await chrome.sendDevToolsCommand('Emulation.setScriptExecutionDisabled', { value: true });
+				await driver.get(`${origin}/experiments/astrological-chart`);
+				const ticks = By.css('input[name="month"] + svg text');
+				const labels = async () => Promise.all((await driver.findElements(ticks)).map(tick => tick.getProperty('textContent')));
+				const initial = await labels();
+				expect(initial).toContain('9');
+				expect(initial.every(label => /^\d+$/.test(label))).toBe(true);
+				await chrome.sendDevToolsCommand('Emulation.setScriptExecutionDisabled', { value: false });
+				await driver.navigate().refresh();
+				const september = await driver.executeScript<string>(`
+					return new Intl.DateTimeFormat(navigator.languages, {calendar:'gregory', month:'short', timeZone:'UTC'})
+						.format(Date.UTC(2000, 8, 1));
+				`);
+				await driver.wait(async () => (await labels()).includes(september), 5000);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it.each([
+			['en-US', 'August'],
+			['en-GB', 'August'],
+			['ja-JP', '8月'],
+		])('scrubs the birthday rulers in %s', async (locale, monthName) => {
+			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setTimezoneOverride', { timezoneId: 'UTC' });
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Network.setUserAgentOverride', {
+					userAgent: await driver.executeScript<string>('return navigator.userAgent'),
+					acceptLanguage: locale,
+				});
+				await driver.get(`${origin}/experiments/astrological-chart`);
+				await driver.wait(async () => (await driver.findElements(By.css('fieldset input[type="range"]'))).length === 4, 5000);
+				const rulers = await driver.findElements(By.css('fieldset input[type="range"]'));
+				expect(await Promise.all(rulers.map(r => r.getAttribute('name')))).toEqual(['year', 'month', 'day', 'time']);
+				const month = await driver.findElement(By.name('month'));
+				await driver.wait(async () => (await month.getAttribute('aria-valuetext'))?.includes(monthName), 5000);
+				const day = await driver.findElement(By.name('day'));
+				const clock = await driver.findElement(By.name('time'));
+				const readings = () => Promise.all(rulers.map(r => r.getAttribute('value').then(Number)));
+				const waitForRulers = (instant: number) => driver.wait(
+					async () => (await readings()).every(t => t === instant),
+					5000, `Waiting for all four rulers to show ${new Date(instant).toISOString()}`
+				);
+				await day.sendKeys(Key.ARROW_LEFT);
+				const july = Date.parse('2006-07-31T12:00Z');
+				await waitForRulers(july);
+				await day.sendKeys(Key.ARROW_RIGHT);
+				await waitForRulers(Date.parse('2006-08-01T12:00Z'));
+				const midnight = await driver.findElement(By.xpath('//*[local-name()="fieldset"]//*[local-name()="text" and .="1"]'));
+				await midnight.click();
+				await clock.sendKeys(Key.ARROW_LEFT);
+				const end = Date.parse('2006-07-31T23:59Z');
+				await waitForRulers(end);
+
+				const yearMark = (n: number) => driver.findElement(By.xpath(
+					`//fieldset//*[local-name()="text" and .="${n}"]`
+				));
+				await yearMark(2006).click();
+				await waitForRulers(Date.parse('2006-01-01T00:00Z'));
+				const year = await driver.findElement(By.name('year'));
+				const start = await yearMark(2006).getRect();
+				const next = await yearMark(2007).getRect();
+				const halfYear = Math.round((next.x - start.x) / 2);
+				await driver.actions().move({ origin: year }).press()
+					.move({ origin: year, x: -halfYear, y: 0 }).perform();
+				const midyear = Date.parse('2006-07-01T00:00Z');
+				await waitForRulers(midyear);
+				await driver.actions().release().perform();
+				expect(await readings()).toEqual([midyear, midyear, midyear, midyear]);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('places the whole footer at the bottom on a short page and follows the content on a long page', async () => {
+			try {
+				await driver.manage().window().setRect({ width: 1280, height: 900 });
+				const footer = By.css('[data-glade-footer]');
+				await driver.get(`${origin}/healthz`);
+				const viewport = await driver.executeScript<number>('return innerHeight');
+				const shortFooter = await driver.findElement(footer);
+				const short = await shortFooter.getRect();
+				expect(Math.abs(short.y + short.height - viewport)).toBeLessThan(1);
+				const divider = await shortFooter.findElement(By.css('h2')).getRect();
+				expect(divider.y).toBeGreaterThanOrEqual(short.y);
+
+				await driver.get(`${origin}/article/2026/kasimir`);
+				const long = await driver.findElement(footer).getRect();
+				const content = await driver.findElement(By.css('[data-glade-content]')).getRect();
+				expect(long.y).toBeGreaterThan(viewport);
+				expect(long.y).toBeGreaterThanOrEqual(content.y + content.height - 1);
 			} finally {
 				await driver.quit();
 			}

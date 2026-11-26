@@ -497,11 +497,81 @@ describe('pulumi', () => {
 		expect(sanitizeAwsLambdaStatementId('x'.repeat(101))).toHaveLength(100);
 	});
 
+	function expectOrbitCache(siteDomain: string) {
+		const domain = `api.${siteDomain}`;
+		const api = mockResources.find(
+			r => r.type === 'aws:lambda/function:Function' && r.name === 'apizemnmelambdafunction'
+		);
+		expect(api?.inputs.environment.variables).toMatchObject({
+			ZEMN_API_ORIGIN: `https://${domain}`,
+			OAUTH_FRONTEND_ORIGIN: `https://${siteDomain}`,
+		});
+		const edge = mockResources.find(
+			r =>
+				r.type === 'aws:cloudfront/distribution:Distribution' &&
+				r.inputs.aliases?.includes(domain)
+		);
+		const cache = mockResources.find(
+			r =>
+				r.type === 'aws:cloudfront/cachePolicy:CachePolicy' &&
+				r.name.endsWith('-orbit-elements')
+		);
+		const origin = mockResources.find(
+			r =>
+				r.type ===
+					'aws:cloudfront/originRequestPolicy:OriginRequestPolicy' &&
+				r.name.endsWith('-orbit-elements-origin')
+		);
+		expect(cache?.inputs).toMatchObject({
+			minTtl: 0,
+			defaultTtl: 0,
+			maxTtl: 31536000,
+			parametersInCacheKeyAndForwardedToOrigin: {
+				enableAcceptEncodingGzip: true,
+				enableAcceptEncodingBrotli: true,
+				cookiesConfig: { cookieBehavior: 'none' },
+				headersConfig: { headerBehavior: 'none' },
+				queryStringsConfig: { queryStringBehavior: 'none' },
+			},
+		});
+		expect(origin?.inputs).toMatchObject({
+			cookiesConfig: { cookieBehavior: 'none' },
+			queryStringsConfig: { queryStringBehavior: 'none' },
+			headersConfig: {
+				headerBehavior: 'whitelist',
+				headers: {
+					items: [
+						'Host',
+						'Origin',
+						'Access-Control-Request-Method',
+						'Access-Control-Request-Headers',
+					],
+				},
+			},
+		});
+		expect(edge?.inputs).toMatchObject({
+			defaultCacheBehavior: {
+				cachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad',
+				originRequestPolicyId: '216adef6-5c7f-47e4-b989-5492eafa07d3',
+			},
+			orderedCacheBehaviors: [
+				{
+					pathPattern: '/earth-orbits/elements/*',
+					compress: true,
+					cachePolicyId: `${cache!.name}-id`,
+					originRequestPolicyId: `${origin!.name}-id`,
+					cachedMethods: ['GET', 'HEAD'],
+				},
+			],
+		});
+	}
+
 	test('staging uses staging-specific resources', async () => {
 		mockResources.splice(0);
 		mockCalls.splice(0);
 		new project.Component('monorepo', { staging: true });
 		await pulumi.runtime.disconnect();
+		expectOrbitCache('staging.zemn.me');
 		expectValidS3BucketNames();
 		expectValidAwsNames();
 		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);
@@ -721,6 +791,7 @@ describe('pulumi', () => {
 			openAIServiceAccountId: 'openai-production-service-account',
 		});
 		await pulumi.runtime.disconnect();
+		expectOrbitCache('zemn.me');
 		expectValidS3BucketNames();
 		expectValidAwsNames();
 		expect(await lambdaArchiveViolations(mockResources)).toEqual([]);

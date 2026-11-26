@@ -1,0 +1,208 @@
+load("//bzl:rules.bzl", "bazel_lint")
+load("//css/module:rules.bzl", "css_module")
+load("//ts:rules.bzl", "jest_test", "ts_project")
+load("//ts/remix:public_assets.bzl", "hashed_public_assets")
+
+genrule(
+    name = "catalogue",
+    srcs = ["@gcat_standard_catalog//file"],
+    outs = [
+        "catalogue.json",
+        "catalogue_date.ts",
+    ],
+    cmd = "$(execpath //project/me/zemn/app/experiments/space_junk/importer:catalogue) $(location @gcat_standard_catalog//file) $(location :catalogue.json) $(location :catalogue_date.ts)",
+    tools = ["//project/me/zemn/app/experiments/space_junk/importer:catalogue"],
+)
+
+genrule(
+    name = "orbit_test_fixture",
+    testonly = True,
+    srcs = [
+        ":catalogue.json",
+        "@spacebook_2006_08_03//file",
+    ],
+    outs = ["orbit_fixture.ts"],
+    cmd = "$(execpath //project/me/zemn/app/experiments/space_junk/importer:orbit_fixture) $(location :catalogue.json) $(location @spacebook_2006_08_03//file) $@",
+    tools = ["//project/me/zemn/app/experiments/space_junk/importer:orbit_fixture"],
+)
+
+CITY_SHARDS = ["city-%d.json" % i for i in range(64)]
+
+genrule(
+    name = "city_index",
+    srcs = [
+        "@geonames_cities//file",
+        "@geonames_regions//file",
+    ],
+    outs = CITY_SHARDS,
+    cmd = "$(execpath //project/me/zemn/app/experiments/space_junk/importer:cities) $(location @geonames_cities//file) $(location @geonames_regions//file) $(OUTS)",
+    tools = ["//project/me/zemn/app/experiments/space_junk/importer:cities"],
+)
+
+hashed_public_assets(
+    name = "catalogue_assets",
+    outs = ["assets.ts"],
+    assets = {":" + filename: "cityShard%d" % i for i, filename in enumerate(CITY_SHARDS)} | {
+        ":catalogue.json": "catalogueUrl",
+        "@natural_earth_coastline//file": "coastlineUrl",
+    },
+    public_dir = "sha256",
+)
+
+ts_project(
+    name = "space_junk",
+    srcs = [
+        "birthday_form.tsx",
+        "body_filters.tsx",
+        "chart.ts",
+        "chart_camera.ts",
+        "chart_geometry.ts",
+        "chart_query.ts",
+        "chart_viewer.tsx",
+        "cities.ts",
+        "city_search.tsx",
+        "daily_elements.ts",
+        "globe.tsx",
+        "globe_geometry.ts",
+        "globe_scene.ts",
+        "globe_zodiac.tsx",
+        "orbit.ts",
+        "orbit_archive.ts",
+        "orbit_scene.tsx",
+        "page.tsx",
+        "placement_entry.tsx",
+        "planet_layer.tsx",
+        "planets.ts",
+        "redirect.ts",
+        "ruler_time.ts",
+        "sign_caption.tsx",
+        "slide_rule.tsx",
+        "snapshot.ts",
+        "use_debris_positions.ts",
+        "use_ruler_clock.ts",
+        "zodiac.ts",
+        "zodiac_wheel.tsx",
+        ":catalogue_assets_generated",
+        ":catalogue_date.ts",
+    ],
+    assets = ["style.module.css"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":style_module_css",
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/astronomy-engine",
+        "//:node_modules/nuqs",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//:node_modules/react-router",
+        "//:node_modules/satellite.js",
+        "//:node_modules/temporal-polyfill",
+        "//project/me/zemn/constants",
+        "//ts/3d",
+        "//ts/math",
+        "//ts/react/lang",
+        "//ts/remix",
+        "//ts/result",
+    ],
+)
+
+css_module(
+    name = "style_module_css",
+    src = "style.module.css",
+    visibility = ["//:__subpackages__"],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "all_ts_srcs",
+    srcs = [
+        "birthday_form.tsx",
+        "body_filters.tsx",
+        "chart.ts",
+        "chart_camera.ts",
+        "chart_geometry.ts",
+        "chart_query.ts",
+        "chart_test.ts",
+        "chart_viewer.tsx",
+        "cities.ts",
+        "city_search.tsx",
+        "daily_elements.ts",
+        "globe.tsx",
+        "globe_geometry.ts",
+        "globe_scene.ts",
+        "globe_zodiac.tsx",
+        "orbit.ts",
+        "orbit_archive.ts",
+        "orbit_scene.tsx",
+        "page.tsx",
+        "placement_entry.tsx",
+        "planet_layer.tsx",
+        "planets.ts",
+        "redirect.ts",
+        "ruler_time.ts",
+        "sign_caption.tsx",
+        "slide_rule.tsx",
+        "snapshot.ts",
+        "use_debris_positions.ts",
+        "use_debris_positions_test.tsx",
+        "use_ruler_clock.ts",
+        "use_ruler_clock_test.tsx",
+        "zodiac.ts",
+        "zodiac_wheel.tsx",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_project(
+    name = "space_junk_tests",
+    testonly = True,
+    srcs = [
+        "chart_test.ts",
+        "use_debris_positions_test.tsx",
+        "use_ruler_clock_test.tsx",
+        ":orbit_fixture.ts",  # keep
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":space_junk",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@tanstack/react-query",
+        "//:node_modules/@testing-library/react",
+        "//:node_modules/@types/node",
+        "//:node_modules/@types/react",
+        "//:node_modules/@types/react-dom",
+        "//:node_modules/react",
+        "//:node_modules/react-dom",
+        "//:node_modules/temporal-polyfill",
+    ],
+)
+
+jest_test(
+    name = "tests",
+    srcs = ["chart_test.js"],
+    visibility = ["//:__subpackages__"],
+    deps = [":space_junk_tests"],
+)
+
+jest_test(
+    name = "debris_positions_test",
+    srcs = ["use_debris_positions_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":space_junk_tests"],
+)
+
+jest_test(
+    name = "ruler_clock_test",
+    srcs = ["use_ruler_clock_test.js"],
+    jsdom = True,
+    visibility = ["//:__subpackages__"],
+    deps = [":space_junk_tests"],
+)

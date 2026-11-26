@@ -113,6 +113,9 @@ importers:
       '@types/trusted-types':
         specifier: 2.0.7
         version: 2.0.7
+      astronomy-engine:
+        specifier: 2.1.19
+        version: 2.1.19
       base64-js:
         specifier: 1.5.1
         version: 1.5.1
@@ -212,6 +215,9 @@ importers:
       remark-sectionize:
         specifier: 2.1.0
         version: 2.1.0
+      satellite.js:
+        specifier: 6.0.1
+        version: 6.0.1
       schema-dts:
         specifier: 2.1.0
         version: 2.1.0
@@ -4458,6 +4464,9 @@ packages:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
 
+  astronomy-engine@2.1.19:
+    resolution: {integrity: sha512-8yWKNf7UeNbH458h3sAJ6ZgAjE5jTXp/mNNRFoC20j2SHwZIjAQeEsBB2Q3uCFRaTCCJRv33K2XhkhZQMXoX6w==}
+
   async-mutex@0.5.0:
     resolution: {integrity: sha512-1A94B18jkJ3DYq284ohPxoXbfTA5HsQ7/Mf4DEhcyLx3Bz27Rh59iScbB6EPiP+B+joue6YCxcMXSbFC1tZKwA==}
 
@@ -8132,6 +8141,9 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  satellite.js@6.0.1:
+    resolution: {integrity: sha512-T0qpKYSlNIH9L0yY1SRF2J6XfV9TToZuDNBXSeTW9K6fN5kwf4uidzk3+q6Rg4KVHibcLaire910C47yai0W9A==}
 
   sax@1.6.1:
     resolution: {integrity: sha512-42tBVwLWnaQvW5zc4HbZrTuWccECCZfBi92FDuwtqxasH+JbPB3/FOKb1m222K42R4WxuxzzMsTswfzgtSu64Q==}
@@ -13456,6 +13468,8 @@ snapshots:
 
   astring@1.9.0: {}
 
+  astronomy-engine@2.1.19: {}
+
   async-mutex@0.5.0:
     dependencies:
       tslib: 2.8.1
@@ -17939,6 +17953,8 @@ snapshots:
   safe-stable-stringify@2.5.0: {}
 
   safer-buffer@2.1.2: {}
+
+  satellite.js@6.0.1: {}
 
   sax@1.6.1: {}
 

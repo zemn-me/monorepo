@@ -421,6 +421,7 @@ use_repo(
     "com_github_itchyny_gojq",
     "com_github_modelcontextprotocol_go_sdk",
     "com_github_nyaruka_phonenumbers_v2",
+    "com_github_nytimes_gziphandler",
     "com_github_oapi_codegen_nethttp_middleware",
     "com_github_oapi_codegen_oapi_codegen_v2",
     "com_github_oapi_codegen_runtime",
@@ -812,6 +813,52 @@ http_archive(
 )
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
+# Jonathan McDowell's GCAT, CC BY 4.0. Pin the daily mirror for reproducible birthdays.
+http_file(
+    name = "gcat_standard_catalog",
+    downloaded_file_path = "satcat.tsv",
+    sha256 = "6929bd83abb87f6721ccdd270cfe903417dcddcfe7157a706fa8942281b30d96",
+    urls = ["https://raw.githubusercontent.com/sizhewang25/jonathon-space-archive/654637aa28c72733ffbf69709f530e5712ce02a6/data/satcat.tsv"],
+)
+
+# The chart browser suite prints and explores this day through the normal API.
+http_file(
+    name = "spacebook_2006_08_01",
+    downloaded_file_path = "2006-08-01",
+    sha256 = "2894ced4c768cb3a01fdd39e7689bdce50efccfa99636547f5b14ec7bb3a78be",
+    urls = ["https://spacebook.com/api/entity/tle/2006-08-01"],
+)
+
+# Historical elements for the chart's propagation regression tests.
+http_file(
+    name = "spacebook_2006_08_03",
+    downloaded_file_path = "elements.tle",
+    sha256 = "65db14dc363ae2e03d7648200f86244163839f9896b35d4286d4b821a9d34083",
+    urls = ["https://spacebook.com/api/entity/tle/2006-08-03"],
+)
+
+# GeoNames cities500 and first-level regions for the browser birthplace index.
+http_file(
+    name = "geonames_cities",
+    downloaded_file_path = "geonamescache.whl",
+    sha256 = "b830e8942f2d58c7e68782dcf4dff2ffe8c4104a35ee881ed1ad4023cefcdba4",
+    urls = ["https://files.pythonhosted.org/packages/48/c2/52f1b29de8839b4b55cd2641dfd722a6a94953d74fa82514e26084a92318/geonamescache-3.0.2-py3-none-any.whl"],
+)
+
+http_file(
+    name = "geonames_regions",
+    downloaded_file_path = "admin1.txt",
+    sha256 = "1da92a6323a5fec3176f3f743bf4cf4040fd56a876da55e46fbca23c863aa60a",
+    urls = ["https://huggingface.co/datasets/yuiseki/geonames/resolve/f11302971633d42c2f9d806862f62b299e92852b/raw/20261001/admin1CodesASCII.txt"],
+)
+
+http_file(
+    name = "natural_earth_coastline",
+    downloaded_file_path = "coastline.geojson",
+    sha256 = "851f581ff5ffb844deed8ae1a9ce22e3c4bb3d74fa342cadb5d8e39b41ae7c3c",
+    urls = ["https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_coastline.geojson"],
+)
 
 # Doom shareware 1.9, archived by the SHA-1 of its uncompressed WAD.
 http_file(
