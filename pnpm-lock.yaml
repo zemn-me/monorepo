@@ -225,8 +225,8 @@ importers:
         specifier: 3.0.5
         version: 3.0.5
       selenium-webdriver:
-        specifier: 4.53.0
-        version: 4.53.0
+        specifier: 4.54.0
+        version: 4.54.0
       serve-handler:
         specifier: 6.1.8
         version: 6.1.8
@@ -8187,8 +8187,8 @@ packages:
     resolution: {integrity: sha512-SMguiTnYrhpLdk3PwfzHeotrcwi8bNV4iemL9tx9poR/yeaMYwB9VzR1w7b57DuWpuqR8n6oZboi0hj3AxZxQg==}
     hasBin: true
 
-  selenium-webdriver@4.53.0:
-    resolution: {integrity: sha512-ALleUcuuTm+olxZLEVqSkE+kW4V3MWy6GuiPEP+RUAT9B4omCRgGgOvrqD0S7iZeWuzyZ1bvydd+HfluIvJJ0A==}
+  selenium-webdriver@4.54.0:
+    resolution: {integrity: sha512-3bj6apWpjpdc6rpovyJ3Tj5CHYAAyt3XE/us3FS0Ea0mUqPV8c2JCZLUfcAjESxJUbtxdKu7IxpG5TrioNsHww==}
     engines: {node: ^22.23.4 || ^24.22.1 || >= 26.12.1}
 
   semver-compare@1.0.0:
@@ -18000,7 +18000,7 @@ snapshots:
     dependencies:
       commander: 6.2.1
 
-  selenium-webdriver@4.53.0:
+  selenium-webdriver@4.54.0:
     dependencies:
       '@bazel/runfiles': 6.5.0
       jszip: 3.10.2
