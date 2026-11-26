@@ -463,7 +463,8 @@ describe('zemn.me website', () => {
 				expect(await objects[0]!.getText()).toContain('EVA debris (spatula)');
 				await driver.wait(until.elementLocated(By.css('svg [aria-label="Selected object · EVA debris (spatula)"]')), 10000);
 				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('spatula'.length));
-				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual(['View controls']);
+				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual([]);
+				expect(await driver.findElements(By.xpath('//button[.="Reset view"]'))).toHaveLength(0);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
 				const captions = () => wheel.findElements(By.css('textPath'));
@@ -524,8 +525,7 @@ describe('zemn.me website', () => {
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
 
-				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
-				const tilt = await driver.findElement(By.xpath('//label[normalize-space(.)="Tilt"]/input'));
+				const tilt = await driver.findElement(By.css('input[type="range"][aria-label="Tilt"]'));
 				const wheelX = await moonDot.getAttribute('cx');
 				await tilt.sendKeys(Key.ARROW_LEFT);
 				await projection('Earth and orbital chart');
@@ -541,14 +541,15 @@ describe('zemn.me website', () => {
 				);
 				const initialRotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
 				await initialRotation.click();
-				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				await driver.wait(async () => await tilt.getAttribute('value') === '24', 5000);
+				const tiltTrack = await tilt.findElement(By.xpath('..'));
+				await tiltTrack.findElement(By.xpath('.//*[local-name()="text" and .="60°"]')).click();
+				await driver.wait(async () => await tilt.getAttribute('value') === '60', 5000);
 				const original = await geometry();
 				expect(original.length).toBeGreaterThan(0);
 				await tilt.sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await geometry() !== original, 5000);
-				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				await driver.wait(async () => await geometry() === original, 5000, 'Reset restores the original Earth geometry');
+				await tilt.sendKeys(Key.ARROW_LEFT);
+				await driver.wait(async () => await geometry() === original, 5000, 'Returning the tilt ruler restores the Earth geometry');
 
 				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
@@ -655,8 +656,7 @@ describe('zemn.me website', () => {
 				const beforeTurn = await moonX();
 				await globe.sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moonX() !== beforeTurn, 5000);
-				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
-				const zoom = await driver.findElement(By.xpath('//label[normalize-space(.)="Zoom"]/input'));
+				const zoom = await driver.findElement(By.css('input[type="range"][aria-label="Zoom"]'));
 				expect(await zoom.getAttribute('value')).toBe('100');
 				const zoomExtent = () => zoom.getAttribute('aria-valuetext');
 				const close = await zoomExtent();
@@ -719,8 +719,7 @@ describe('zemn.me website', () => {
 				const globe = await driver.findElement(By.id('star-chart'));
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
 				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
-				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
-				const rotation = await driver.findElement(By.xpath('//label[normalize-space(.)="Rotation"]/input'));
+				const rotation = await driver.findElement(By.css('input[type="range"][aria-label="Rotation"]'));
 				const spin = await driver.findElement(By.xpath('//label[normalize-space(.)="Auto-rotate"]/input'));
 				const angle = () => rotation.getAttribute('value');
 				const time = await driver.findElement(By.name('time'));
@@ -790,9 +789,8 @@ describe('zemn.me website', () => {
 				for (const segment of segments) expect(Math.abs(segment.across)).toBeLessThan(0.01);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(20));
 				await driver.wait(async () => (await globe.findElements(pin)).length === 0, 5000);
-				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
-				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
-				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Number(await globe.findElement(pin).getAttribute('x1')) === center, 5000);
+				await globe.sendKeys(Key.ARROW_LEFT.repeat(24));
+				await driver.wait(async () => (await globe.findElements(pin)).length > 0 && Math.abs(Number(await globe.findElement(pin).getAttribute('x1')) - center) < 0.01, 5000);
 				await birthplace.sendKeys(Key.END, Key.BACK_SPACE.repeat('Singapore'.length));
 				await driver.wait(async () => !(await globe.findElements(pin)).length, 5000, 'The marker should disappear when the birth city is cleared');
 			} finally {

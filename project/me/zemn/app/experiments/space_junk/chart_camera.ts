@@ -271,19 +271,13 @@ export function useChartCamera() {
 					}
 		);
 	}
-	function endRange(e: PointerEvent<HTMLInputElement>) {
-		if (rangePointers.current.delete(e.pointerId)) settle();
+	function grabRuler(id: number) {
+		stopSettling();
+		rangePointers.current.add(id);
 	}
-	const rangeEvents = {
-		onPointerDown(e: PointerEvent<HTMLInputElement>) {
-			stopSettling();
-			rangePointers.current.add(e.pointerId);
-			e.currentTarget.setPointerCapture(e.pointerId);
-		},
-		onPointerUp: endRange,
-		onPointerCancel: endRange,
-		onLostPointerCapture: endRange,
-	};
+	function releaseRuler(id: number) {
+		if (rangePointers.current.delete(id)) settle();
+	}
 
 	return {
 		svg,
@@ -298,7 +292,9 @@ export function useChartCamera() {
 		pointerUp,
 		endPointer,
 		keyDown,
-		rangeEvents,
+		grabRuler,
+		releaseRuler,
+		readCamera: () => latest.current,
 		keyUp(e: KeyboardEvent) {
 			// Leave time for successive arrow taps on the one-degree tilt ruler.
 			if (

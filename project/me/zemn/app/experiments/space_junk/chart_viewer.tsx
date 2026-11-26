@@ -18,6 +18,7 @@ import {
 } from './globe_geometry.js';
 import { height, width } from './globe_scene.js';
 import { type BodyPosition, earthFixedSky } from './planets.js';
+import { SlideRule } from './slide_rule.js';
 import style from './style.module.css';
 import { type Birthplace, nearestAspects, type zodiacFrame } from './zodiac.js';
 
@@ -122,6 +123,24 @@ export function ChartViewer({
 		previous.current = { birthplace, revision };
 	}, [birthplace, revision, faceOn]);
 
+	const rulerEvents = {
+		onGrab: controls.grabRuler,
+		onRelease: controls.releaseRuler,
+	};
+	function rotate(value: number) {
+		move({ ...controls.readCamera(), turn: value });
+	}
+	function tiltTo(value: number) {
+		move({
+			...controls.readCamera(),
+			tilt: Math.max(-90, Math.min(90, value)),
+		});
+	}
+	function zoomTo(value: number) {
+		const zoom = Math.max(0, Math.min(100, value));
+		setExtent(closeExtent * (maxExtent / closeExtent) ** (1 - zoom / 100));
+	}
+
 	return (
 		<div
 			className={style.viewer}
@@ -169,75 +188,85 @@ export function ChartViewer({
 					/>
 				</g>
 			</svg>
-			<details className={style.camera}>
-				<summary>View controls</summary>
-				<div className={style.viewControls}>
-					<label>
-						Rotation
-						<input
-							{...controls.rangeEvents}
-							type="range"
-							min="-180"
-							max="180"
-							value={Math.round(camera.turn)}
-							aria-valuetext={`${Math.round(camera.turn)} degrees longitude`}
-							onChange={e =>
-								move({
-									...camera,
-									turn: e.target.valueAsNumber,
-								})
-							}
-						/>
-					</label>
-					<label>
-						Tilt
-						<input
-							{...controls.rangeEvents}
-							type="range"
-							min="-90"
-							max="90"
-							value={Math.round(camera.tilt)}
-							aria-valuetext={`${Math.round(camera.tilt)} degrees latitude`}
-							onChange={e =>
-								move({
-									...camera,
-									tilt: e.target.valueAsNumber,
-								})
-							}
-						/>
-					</label>
-					<label>
-						Zoom
-						<input
-							{...controls.rangeEvents}
-							type="range"
-							min="0"
-							max="100"
-							step=".1"
-							value={zoomValue}
-							aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
-							onChange={e =>
-								setExtent(
-									closeExtent *
-										(maxExtent / closeExtent) **
-											(1 - e.target.valueAsNumber / 100)
-								)
-							}
-						/>
-					</label>
-					<label className={style.spin}>
-						<input
-							type="checkbox"
-							checked={controls.spin}
-							onChange={e => controls.setSpin(e.target.checked)}
-						/>
-						Auto-rotate
-					</label>
-					<button type="button" onClick={home}>
-						Reset view
-					</button>
-				</div>
-			</details>
+			<div
+				role="group"
+				aria-label="View controls"
+				className={style.viewControls}
+			>
+				<SlideRule
+					{...rulerEvents}
+					label="Rotation"
+					readout={`${Math.round(turn)}°`}
+					centre={turn}
+					min={-Infinity}
+					max={Infinity}
+					pitch={4}
+					tick={5}
+					major={15}
+					tickLabel={mark => `${wrap(mark)}°`}
+					readPosition={() => controls.readCamera().turn}
+					seek={value => rotate(wrap(value))}
+					inputProps={{
+						min: -180,
+						max: 180,
+						value: Math.round(turn),
+						'aria-valuetext': `${Math.round(turn)} degrees longitude`,
+						onChange: e => rotate(e.currentTarget.valueAsNumber),
+					}}
+				/>
+				<SlideRule
+					{...rulerEvents}
+					label="Tilt"
+					readout={`${Math.round(tilt)}°`}
+					centre={tilt}
+					min={-90}
+					max={90}
+					pitch={4}
+					tick={5}
+					major={15}
+					tickLabel={mark => `${mark}°`}
+					readPosition={() => controls.readCamera().tilt}
+					seek={tiltTo}
+					afterWheel={() => controls.settle(250)}
+					inputProps={{
+						min: -90,
+						max: 90,
+						value: Math.round(tilt),
+						'aria-valuetext': `${Math.round(tilt)} degrees latitude`,
+						onChange: e => tiltTo(e.currentTarget.valueAsNumber),
+					}}
+				/>
+				<SlideRule
+					{...rulerEvents}
+					label="Zoom"
+					readout={`${Math.round(zoomValue)}%`}
+					centre={zoomValue}
+					min={0}
+					max={100}
+					pitch={6}
+					tick={2}
+					major={10}
+					tickLabel={mark => `${mark}%`}
+					readPosition={() => zoomValue}
+					seek={zoomTo}
+					inputProps={{
+						min: 0,
+						max: 100,
+						step: 0.1,
+						value: zoomValue,
+						'aria-valuetext': `${extent.toFixed(1)} Earth radii from centre to edge`,
+						onChange: e => zoomTo(e.currentTarget.valueAsNumber),
+					}}
+				/>
+				<label className={style.switch}>
+					<input
+						type="checkbox"
+						checked={controls.spin}
+						onChange={e => controls.setSpin(e.target.checked)}
+					/>
+					Auto-rotate
+				</label>
+			</div>
 		</div>
 	);
 }

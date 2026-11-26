@@ -62,7 +62,6 @@
 	cursor: pointer;
 	align-content: center;
 }
-.viewControls,
 .paging {
 	display: flex;
 	align-items: center;
@@ -191,31 +190,17 @@
 	cursor: grabbing;
 }
 .sources,
-.camera,
 .paging,
 .catalogue,
 .objectCatalogue {
 	font: var(--controls);
 }
-.viewControls,
 .paging {
 	gap: 0.25rem 1rem;
 }
 .viewControls {
-	justify-content: center;
-}
-.viewControls label {
-	display: grid;
-	gap: 0.15rem;
-}
-.viewControls input {
-	width: 6rem;
-	margin: 0;
-}
-.camera {
-	width: fit-content;
-	max-width: 100%;
-	margin: 0 auto;
+	text-align: start;
+	font: var(--controls);
 }
 .objectCatalogue,
 .sources {
@@ -506,17 +491,8 @@
 	text-underline-offset: 0.22em;
 }
 
-.viewControls .spin {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.35rem;
-}
-.spin input {
-	width: auto;
-}
-
 @media (prefers-reduced-motion: reduce) {
-	.viewControls .spin {
+	.viewControls > .switch {
 		display: none;
 	}
 }

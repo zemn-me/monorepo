@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useMemo } from 'react';
 import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import {
 	dayMs,
@@ -9,6 +9,7 @@ import {
 	rulerPosition,
 	zonedTime,
 } from './ruler_time.js';
+import { SlideRule } from './slide_rule.js';
 import style from './style.module.css';
 import type { RulerClock, TimeScale } from './use_ruler_clock.js';
 
@@ -58,176 +59,54 @@ function Ruler({
 			},
 		};
 	}, [unit, lastInstant, zone]);
-	const centre = scale.position(epoch);
-	const input = useRef<HTMLInputElement>(null);
-	const track = useRef<HTMLDivElement>(null);
-	const drag = useRef<{
-		id: number;
-		x: number;
-		origin: number;
-		moved: boolean;
-		mark?: number;
-	} | null>(null);
-	useEffect(() => {
-		const strip = track.current!;
-		const scroll = (event: WheelEvent) => {
-			if (event.ctrlKey || !event.cancelable) return;
-			const delta =
-				Math.abs(event.deltaX) > Math.abs(event.deltaY)
-					? event.deltaX
-					: event.deltaY;
-			if (!delta) return;
-			event.preventDefault();
-			const pixels =
-				event.deltaMode === WheelEvent.DOM_DELTA_LINE
-					? 16
-					: event.deltaMode === WheelEvent.DOM_DELTA_PAGE
-						? strip.clientWidth
-						: 1;
-			clock.seek(clock.position(scale) + (delta * pixels) / pitch, scale);
-		};
-		strip.addEventListener('wheel', scroll, { passive: false });
-		return () => strip.removeEventListener('wheel', scroll);
-	}, [clock, scale, pitch]);
-
-	const ticks = [];
-	const radius = 430 / pitch;
-	// An integer tick index avoids drift at twelfths of a year.
-	const first = Math.ceil(
-		(Math.max(scale.min, centre - radius) - tickOrigin) / tick
-	);
-	const last = Math.floor(
-		(Math.min(scale.max, centre + radius) - tickOrigin) / tick
-	);
-	for (let i = first; i <= last; i++) {
-		const mark = i * tick + tickOrigin;
-		const labelled = i % Math.round(major / tick) === 0;
-		ticks.push(
-			<g
-				key={i}
-				transform={`translate(${(mark - centre) * pitch} 0)`}
-				data-position={mark}
-			>
-				<path d={labelled ? 'M0 23v11' : 'M0 28v6'} />
-				{labelled && (
-					<>
-						<rect
-							x="-16"
-							width="32"
-							height="20"
-							fill="transparent"
-						/>
-						<text y="17">{tickLabel(mark)}</text>
-					</>
-				)}
-			</g>
-		);
-	}
-
 	return (
-		<div className={style.rulerRow}>
-			<div className={style.rulerValue} aria-hidden="true">
-				<span>{zoneName ? label + ' (' + zoneName + ')' : label}</span>
-				<strong>{readout}</strong>
-			</div>
-			<div
-				ref={track}
-				className={style.rulerTrack}
-				onPointerDown={e => {
-					if (!e.isPrimary || e.button !== 0) return;
-					e.preventDefault();
-					input.current?.focus({ preventScroll: true });
-					const tick = (e.target as Element)
-						.closest('g[data-position]')
-						?.getAttribute('data-position');
-					drag.current = {
-						id: e.pointerId,
-						x: e.clientX,
-						origin: clock.position(scale),
-						moved: false,
-						mark: tick == null ? undefined : Number(tick),
+		<SlideRule
+			label={label}
+			caption={zoneName ? label + ' (' + zoneName + ')' : undefined}
+			readout={readout}
+			centre={scale.position(epoch)}
+			min={scale.min}
+			max={scale.max}
+			pitch={pitch}
+			tick={tick}
+			major={major}
+			tickOrigin={tickOrigin}
+			tickLabel={tickLabel}
+			readPosition={() => clock.position(scale)}
+			seek={mark => clock.seek(mark, scale)}
+			inputProps={{
+				name: unit === 'minute' ? 'time' : unit,
+				'aria-valuetext': accessibleTime,
+				min: firstInstant,
+				max: lastInstant,
+				step: 1,
+				value: epoch,
+				onChange: e => clock.seek(e.currentTarget.valueAsNumber),
+				onKeyDown: e => {
+					const increments: Record<string, number> = {
+						ArrowRight: 1,
+						ArrowUp: 1,
+						ArrowLeft: -1,
+						ArrowDown: -1,
+						PageUp: page,
+						PageDown: -page,
 					};
-					e.currentTarget.setPointerCapture(e.pointerId);
-				}}
-				onPointerMove={e => {
-					const start = drag.current;
-					if (!start || start.id !== e.pointerId) return;
-					const dx = e.clientX - start.x;
-					const threshold = e.pointerType === 'touch' ? 3 : 0.5;
-					if (!start.moved && Math.abs(dx) < threshold) return;
-					start.moved = true;
-					clock.seek(start.origin - dx / pitch, scale);
-				}}
-				onPointerUp={e => {
-					const start = drag.current;
-					if (!start || start.id !== e.pointerId) return;
-					if (start.moved) {
+					const increment = increments[e.key];
+					if (increment === undefined) return;
+					e.preventDefault();
+					if (unit === 'day') {
+						const time = zonedTime(clock.read(), zone).add({
+							days: increment,
+						}).epochMilliseconds;
 						clock.seek(
-							start.origin - (e.clientX - start.x) / pitch,
-							scale
+							Math.max(firstInstant, Math.min(lastInstant, time))
 						);
 					} else {
-						const box = e.currentTarget.getBoundingClientRect();
-						const offset = e.clientX - box.left - box.width / 2;
-						clock.seek(
-							start.mark ?? start.origin + offset / pitch,
-							scale
-						);
+						clock.seek(clock.position(scale) + increment, scale);
 					}
-				}}
-				onLostPointerCapture={() => {
-					drag.current = null;
-				}}
-			>
-				<input
-					type="range"
-					ref={input}
-					name={unit === 'minute' ? 'time' : unit}
-					aria-label={label}
-					aria-valuetext={accessibleTime}
-					min={firstInstant}
-					max={lastInstant}
-					step="1"
-					value={epoch}
-					onChange={e => clock.seek(e.currentTarget.valueAsNumber)}
-					onKeyDown={e => {
-						const increments: Record<string, number> = {
-							ArrowRight: 1,
-							ArrowUp: 1,
-							ArrowLeft: -1,
-							ArrowDown: -1,
-							PageUp: page,
-							PageDown: -page,
-						};
-						const increment = increments[e.key];
-						if (increment === undefined) return;
-						e.preventDefault();
-						if (unit === 'day') {
-							const time = zonedTime(clock.read(), zone).add({
-								days: increment,
-							}).epochMilliseconds;
-							clock.seek(
-								Math.max(
-									firstInstant,
-									Math.min(lastInstant, time)
-								)
-							);
-						} else {
-							clock.seek(
-								clock.position(scale) + increment,
-								scale
-							);
-						}
-					}}
-				/>
-				<svg aria-hidden="true" width="100%" height="44">
-					<svg x="50%" width="1" height="44" overflow="visible">
-						{ticks}
-					</svg>
-				</svg>
-				<i aria-hidden="true" />
-			</div>
-		</div>
+				},
+			}}
+		/>
 	);
 }
 
