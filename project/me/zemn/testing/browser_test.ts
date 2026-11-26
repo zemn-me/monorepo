@@ -773,7 +773,9 @@ describe('zemn.me website', () => {
 				await driver.get(`${origin}/experiments/astrological-chart?spin=false`);
 				const links = await driver.wait(until.elementsLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
 				const link = links[1]!;
-				const url = new URL(await link.getAttribute('href'));
+				const href = await link.getAttribute('href');
+				if (!href) throw new Error('Chart object link is missing its href');
+				const url = new URL(href);
 				expect(url.hash).toMatch(/^#object-\d+$/);
 				const name = await link.findElement(By.css('span:last-child')).getText();
 				const piece = await link.findElement(By.css('span:first-child')).getText();
