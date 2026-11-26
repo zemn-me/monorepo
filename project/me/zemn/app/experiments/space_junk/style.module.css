@@ -399,12 +399,6 @@
 	}
 }
 
-.globeSign {
-	stroke: var(--background-color);
-	stroke-width: 2.5;
-	paint-order: stroke;
-}
-
 .citySearch {
 	display: grid;
 	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);

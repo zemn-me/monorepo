@@ -572,10 +572,14 @@ describe('zemn.me website', () => {
 				expect((await bodies()).length).toBe(8);
 				const wheelMoon = await moon();
 				const globe = await driver.findElement(By.id('star-chart'));
+				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));
+				const captions = () => signs().then(all => Promise.all(all.map(sign => sign.getAttribute('textContent'))));
+				const wheelCaptions = await captions();
+				expect(wheelCaptions).toHaveLength(12);
+				expect(wheelCaptions).toContain('SAGITTARIUS');
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
 				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
-				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));
-				expect(await signs()).toHaveLength(12);
+				expect(await captions()).toEqual(wheelCaptions);
 				expect(await bodies()).toHaveLength(8);
 				expect(await moon()).toBe(wheelMoon);
 				const moonX = () => globe.findElement(By.css('g[aria-label^="Moon ·"] circle')).getAttribute('cx');

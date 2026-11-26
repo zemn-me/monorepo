@@ -229,6 +229,27 @@ describe('orbital globe', () => {
 			accurate.project(fixed(70, 12, 1.5 * 0.9))
 		);
 	});
+	it('keeps both zodiac rims at distinct radii in the ecliptic plane', () => {
+		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
+		const extent = 2;
+		const { frame, ring } = chartGeometry(
+			{ turn: 35, tilt: 22 },
+			extent,
+			1,
+			fixed
+		);
+		for (const longitude of [0, 70, 180, 270]) {
+			for (const radius of [1.205, 1.45]) {
+				const expected = frame.project(
+					fixed(longitude, 0, (radius * extent) / 1.41)
+				);
+				const point = ring(longitude, radius);
+				expect(point.x).toBeCloseTo(expected.x, 5);
+				expect(point.y).toBeCloseTo(expected.y, 5);
+				expect(point.visible).toBe(expected.visible);
+			}
+		}
+	});
 	it('keeps the camera heading through the entire morph at either pole', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
 		for (const tilt of [-90, 90]) {

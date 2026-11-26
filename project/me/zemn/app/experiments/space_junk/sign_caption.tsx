@@ -1,63 +1,60 @@
 import { useId } from 'react';
-import style from './style.module.css';
+import type { ChartGeometry } from './chart_geometry.js';
+import { radians } from './zodiac.js';
 
-interface Point {
-	x: number;
-	y: number;
-}
+export const captionRadius = 1.335;
+// Draw the type in hundredths of a ring unit before applying its 3D projection.
+const radius = 100 * captionRadius;
+const halfWidth = radius * Math.sin(15 * radians);
+const sagitta = radius * (1 - Math.cos(15 * radians));
 
 export function SignCaption({
 	name,
-	start,
-	project,
-	compact = false,
-	opacity,
+	longitude,
+	ring,
 }: {
 	name: string;
-	start: number;
-	project: (longitude: number) => Point;
-	compact?: boolean;
-	opacity?: number;
+	longitude: number;
+	ring: ChartGeometry['ring'];
 }) {
 	const id = useId();
-	const points = Array.from({ length: 21 }, (_, i) =>
-		project(start + i * 1.5)
-	);
-	const first = points[0]!,
-		last = points[points.length - 1]!;
-	const dx = last.x - first.x,
-		dy = last.y - first.y;
-	// Reverse the baseline on the lower half of the ring so the letters stay upright.
-	if (Math.abs(dx) < 1e-6 ? dy > 0 : dx < 0) points.reverse();
-
-	// The chord is a conservative measure of usable space, even when the
-	// projected arc folds back on itself near an edge-on view.
-	const room = Math.hypot(dx, dy) - 3;
-	const short = compact || room < name.length * 5.2;
-	const caption = (short ? name.slice(0, 3) : name).toUpperCase();
-	const size = Math.min(
-		compact ? 9 : 11.5,
-		room / (caption.length * (short ? 0.8 : 0.7))
-	);
-	if (size < 7) return null;
-	const path =
-		'M' + points.map(p => p.x.toFixed(2) + ',' + p.y.toFixed(2)).join('L');
+	const center = ring(longitude, captionRadius);
+	const before = ring(longitude - 1, captionRadius);
+	const after = ring(longitude + 1, captionRadius);
+	const outer = ring(longitude, captionRadius + 0.01);
+	// The projected tangent and radius put the letters in the plane of their
+	// sector. Orient the type for reading from either face of the annulus.
+	const dx = after.x - before.x,
+		dy = after.y - before.y;
+	const direction = (Math.abs(dx) < 1e-6 ? -dy : dx) < 0 ? -1 : 1;
+	const chord = 2 * radius * Math.sin(radians);
+	const a = (direction * dx) / chord,
+		b = (direction * dy) / chord;
+	const rx = outer.x - center.x,
+		ry = outer.y - center.y;
+	const side = a * ry - b * rx < 0 ? -1 : 1;
+	const endY = -side * sagitta;
 	return (
-		<g opacity={opacity}>
+		<g
+			opacity={center.visible ? 1 : 0.5}
+			transform={`matrix(${a} ${b} ${side * rx} ${side * ry} ${center.x} ${center.y})`}
+		>
 			<defs>
-				<path id={id} d={path} />
+				<path
+					id={id}
+					d={`M${-halfWidth},${endY} A${radius},${radius} 0 0 ${side > 0 ? 0 : 1} ${halfWidth},${endY}`}
+				/>
 			</defs>
 			<text
 				textAnchor="middle"
 				dominantBaseline="central"
 				fill="currentColor"
-				fontSize={size}
+				fontSize="10"
 				letterSpacing=".04em"
-				className={compact ? style.globeSign : undefined}
 			>
 				<title>{name}</title>
 				<textPath href={'#' + id} startOffset="50%">
-					{caption}
+					{name.toUpperCase()}
 				</textPath>
 			</text>
 		</g>

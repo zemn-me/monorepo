@@ -1,7 +1,7 @@
 import type { ChartGeometry } from './chart_geometry.js';
 import { PlanetLayer } from './planet_layer.js';
 import type { BodyPosition } from './planets.js';
-import { SignCaption } from './sign_caption.js';
+import { captionRadius, SignCaption } from './sign_caption.js';
 import { signs } from './zodiac.js';
 
 export function GlobeZodiac({
@@ -13,44 +13,39 @@ export function GlobeZodiac({
 	bodies: BodyPosition[];
 	showSigns: boolean;
 }) {
-	const { sky, unfold } = geometry;
-	const project = (longitude: number, latitude: number) =>
-		sky(longitude, 0.97, latitude);
+	const { sky, ring, unfold } = geometry;
 	const ink = showSigns ? 1 : 1 - unfold;
 	const labels =
 		ink > 0
-			? signs.map((name, i) => ({ name, ...sky(30 * i + 15, 1.335, -6) }))
+			? signs.map((name, i) => ({
+					name,
+					longitude: 30 * i + 15,
+					...ring(30 * i + 15, captionRadius),
+				}))
 			: [];
-	// Use the globe's line-of-sight test to dash the part of the ecliptic behind Earth.
 	const strokes: [string, string] = ['', ''];
 	if (ink > 0) {
-		let previousStroke: number | undefined;
-		const ticks: [string, string] = ['', ''];
-		const xy = (p: ReturnType<typeof project>) =>
-			`${p.x.toFixed(2)},${p.y.toFixed(2)}`;
-		const segment = (
-			a: ReturnType<typeof project>,
-			b: ReturnType<typeof project>
-		) => {
-			const i = a.visible && b.visible ? 0 : 1;
-			if (i !== previousStroke) strokes[i] += 'M' + xy(a);
-			strokes[i] += 'L' + xy(b);
-			previousStroke = i;
-		};
-		let last = project(0, 0);
-		for (let longitude = 2; longitude <= 360; longitude += 2) {
-			const next = project(longitude, 0);
-			segment(last, next);
-			if (unfold && longitude % 30 === 0) {
-				const lower = project(longitude, -1.5),
-					upper = project(longitude, 1.5);
-				ticks[next.visible ? 0 : 1] +=
-					'M' + xy(lower) + 'L' + xy(upper);
+		const xy = (p: ReturnType<typeof ring>) =>
+			p.x.toFixed(2) + ',' + p.y.toFixed(2);
+		for (const radius of [0.97, 1.205, 1.45]) {
+			let previous = ring(0, radius);
+			let lastInk: number | undefined;
+			for (let longitude = 2; longitude <= 360; longitude += 2) {
+				const next = ring(longitude, radius);
+				const i = previous.visible && next.visible ? 0 : 1;
+				if (i !== lastInk) strokes[i] += 'M' + xy(previous);
+				strokes[i] += 'L' + xy(next);
+				lastInk = i;
+				previous = next;
 			}
-			last = next;
 		}
-		strokes[0] += ticks[0];
-		strokes[1] += ticks[1];
+		for (let longitude = 0; longitude < 360; longitude += 5) {
+			const divider = longitude % 30 === 0;
+			const start = ring(longitude, divider ? 1.12 : 1.17);
+			const end = ring(longitude, divider ? 1.45 : 1.205);
+			strokes[start.visible && end.visible ? 0 : 1] +=
+				'M' + xy(start) + 'L' + xy(end);
+		}
 	}
 	return (
 		<g>
@@ -59,8 +54,8 @@ export function GlobeZodiac({
 					<g
 						fill="none"
 						stroke="currentColor"
-						strokeWidth={0.65 + 0.25 * unfold}
-						opacity={0.4 + 0.6 * unfold}
+						strokeWidth=".65"
+						opacity=".52"
 					>
 						<path d={strokes[0]} />
 						<path
@@ -69,14 +64,12 @@ export function GlobeZodiac({
 							opacity=".5"
 						/>
 					</g>
-					{labels.map(({ name, visible }, i) => (
+					{labels.map(({ name, longitude }) => (
 						<SignCaption
 							key={name}
 							name={name}
-							start={30 * i}
-							compact={unfold === 1}
-							project={lon => sky(lon, 1.335, -6)}
-							opacity={visible ? 1 : 0.6}
+							longitude={longitude}
+							ring={ring}
 						/>
 					))}
 				</g>

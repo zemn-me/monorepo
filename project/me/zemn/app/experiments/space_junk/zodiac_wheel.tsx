@@ -1,11 +1,6 @@
 import type { ChartGeometry } from './chart_geometry.js';
 import style from './style.module.css';
-import {
-	type nearestAspects,
-	type Placement,
-	signPosition,
-	signs,
-} from './zodiac.js';
+import { type nearestAspects, type Placement, signPosition } from './zodiac.js';
 
 function shortName(p: Placement) {
 	const name = p.marker.object.name;
@@ -27,48 +22,8 @@ export function WheelGuides({
 	const anchor = ascendant ?? 0;
 	const xy = (p: { x: number; y: number }) =>
 		p.x.toFixed(2) + ',' + p.y.toFixed(2);
-	function arc(start: number, end: number, r: number, lat = 0) {
-		const steps = Math.max(1, Math.ceil(Math.abs(end - start) / 4));
-		return Array.from({ length: steps + 1 }, (_, i) =>
-			xy(at(start + ((end - start) * i) / steps, r, lat))
-		).join('L');
-	}
 	return (
 		<g opacity={1 - geometry.unfold}>
-			{signs.map((sign, i) => {
-				const start = i * 30,
-					end = start + 30;
-				return (
-					<g key={sign}>
-						<path
-							d={
-								'M' +
-								arc(start, end, 1.45) +
-								'L' +
-								arc(end, start, 1.205) +
-								'Z'
-							}
-							fill="none"
-							stroke="currentColor"
-							strokeOpacity=".52"
-							strokeWidth=".65"
-						/>
-					</g>
-				);
-			})}
-			<path
-				d={Array.from(
-					{ length: 72 },
-					(_, i) =>
-						'M' +
-						xy(at(i * 5, 1.205)) +
-						'L' +
-						xy(at(i * 5, i % 6 ? 1.17 : 1.12))
-				).join('')}
-				stroke="currentColor"
-				strokeOpacity=".55"
-				strokeWidth=".65"
-			/>
 			{selected &&
 				aspects.map(({ angle, name, placement }) => (
 					<path

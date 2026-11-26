@@ -18,8 +18,9 @@ export function chartGeometry(
 	// The renderer keeps a unit Earth mesh. Changing the camera distance and
 	// all object coordinates together grows Earth out of the chart origin.
 	const unit = unfold || 1;
+	const viewRadius = mix(1.41, extent, unfold) / unit;
 	const frame = globeFrame(
-		globeCamera(camera.turn, camera.tilt, mix(1.41, extent, unfold) / unit),
+		globeCamera(camera.turn, camera.tilt, viewRadius),
 		Infinity,
 		unfold > 0
 	);
@@ -47,8 +48,27 @@ export function chartGeometry(
 		};
 	}
 
+	// Tilt the entire annulus about the equinox into the ecliptic plane.
+	// Its radii stay proportional as the camera scales from wheel to Earth units.
+	const inclination = Math.asin(fixed(90, 0, 1).z) * unfold;
+	const cosZero = Math.cos(zero * radians),
+		sinZero = Math.sin(zero * radians);
+	const cosTilt = Math.cos(inclination),
+		sinTilt = Math.sin(inclination);
+	function ring(longitude: number, radius: number) {
+		const angle = longitude * radians;
+		const scale = (radius * viewRadius) / 1.41;
+		const x = Math.cos(angle) * scale,
+			y = Math.sin(angle) * scale;
+		return frame.project({
+			x: cosZero * x - sinZero * y * cosTilt,
+			y: sinZero * x + cosZero * y * cosTilt,
+			z: y * sinTilt,
+		});
+	}
+
 	function sky(longitude: number, band: number, latitude = 0) {
-		// Planet glyphs and signs share a reference sphere for sky directions.
+		// Planet glyphs mark directions on the reference sphere.
 		const physical = unfold
 			? fixed(longitude, latitude, extent * 0.9)
 			: equinox;
@@ -59,6 +79,6 @@ export function chartGeometry(
 			position(longitude, bands[marker.object.kind], marker)
 		);
 	}
-	return { frame, sky, debris, unfold };
+	return { frame, ring, sky, debris, unfold };
 }
 export type ChartGeometry = ReturnType<typeof chartGeometry>;
