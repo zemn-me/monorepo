@@ -51,11 +51,8 @@ export function cityShard(key: number | null) {
 		queryFn: async ({ signal }): Promise<CityRow[]> => {
 			if (!url) throw new Error('Unknown city index shard');
 			const response = await fetch(url, { signal });
-			if (!response.ok || !response.body)
-				throw new Error('City index unavailable');
-			return new Response(
-				response.body.pipeThrough(new DecompressionStream('gzip'))
-			).json();
+			if (!response.ok) throw new Error('City index unavailable');
+			return response.json();
 		},
 	});
 }

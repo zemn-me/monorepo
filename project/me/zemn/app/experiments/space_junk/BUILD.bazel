@@ -14,7 +14,7 @@ genrule(
     tools = ["//project/me/zemn/app/experiments/space_junk/importer:catalogue"],
 )
 
-CITY_SHARDS = ["city-%d.gz" % i for i in range(64)]
+CITY_SHARDS = ["city-%d.json" % i for i in range(64)]
 
 genrule(
     name = "city_index",

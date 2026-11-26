@@ -1,7 +1,6 @@
 """Build population-ranked GeoNames shards for local prefix search and shared chart links."""
 
 import csv
-import gzip
 import json
 import sys
 import unicodedata
@@ -52,8 +51,7 @@ def build(archive, region_file, outputs):
         for key, aliases in groups.items():
             shards[key].append([*record, aliases, place_key])
     for output, rows in zip(outputs, shards, strict=True):
-        data = json.dumps(rows, ensure_ascii=False, separators=(",", ":")).encode()
-        Path(output).write_bytes(gzip.compress(data, compresslevel=6, mtime=0))
+        Path(output).write_text(json.dumps(rows, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
 
 if __name__ == "__main__":
