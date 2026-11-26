@@ -99,11 +99,15 @@ const BirthdayChart = memo(function BirthdayChart({
 			coverage.markers.filter(({ object }) => filteredIds.has(object.id)),
 		[coverage.markers, filteredIds]
 	);
+	const [planetsEnabled, setPlanetsEnabled] = useState(true);
 	const [selectedBodies, setSelectedBodies] =
 		useState<readonly ChartBody[]>(classical);
 	const bodies = useMemo(
-		() => bodyPositions(selectedBodies, new Date(instant), place),
-		[selectedBodies, instant, place]
+		() =>
+			planetsEnabled
+				? bodyPositions(selectedBodies, new Date(instant), place)
+				: [],
+		[planetsEnabled, selectedBodies, instant, place]
 	);
 	const [selection, setSelection] = useState<{
 		id: number;
@@ -142,7 +146,7 @@ const BirthdayChart = memo(function BirthdayChart({
 	return (
 		<>
 			<BodyFilters
-				inline
+				layer={{ enabled: planetsEnabled, onChange: setPlanetsEnabled }}
 				group="Planetary bodies"
 				presetName="Zodiac"
 				preset={classical}
@@ -154,9 +158,10 @@ const BirthdayChart = memo(function BirthdayChart({
 				<ChartViewer
 					instant={instant}
 					bodies={bodies}
-					showSigns={classical.some(body =>
-						selectedBodies.includes(body)
-					)}
+					showSigns={
+						planetsEnabled &&
+						classical.some(body => selectedBodies.includes(body))
+					}
 					birthplace={place}
 					markers={markers}
 					selected={selected}

@@ -5,7 +5,7 @@ import style from './style.module.css';
 
 export function BodyFilters<T extends string>({
 	group,
-	inline = false,
+	layer,
 	presetName,
 	preset,
 	options,
@@ -14,7 +14,7 @@ export function BodyFilters<T extends string>({
 	onChange,
 }: {
 	group: string;
-	inline?: boolean;
+	layer?: { enabled: boolean; onChange: (enabled: boolean) => void };
 	presetName: string;
 	preset: readonly T[];
 	options: readonly T[];
@@ -33,55 +33,78 @@ export function BodyFilters<T extends string>({
 			)
 		);
 	}
-	return (
-		<div
-			role="group"
-			aria-label={group}
-			className={inline ? style.planetBand : style.filterGroup}
-		>
-			<div className={style.filterHeading}>
-				{inline && <span className={style.filterLabel}>{group}</span>}
+	const presetSwitch = (
+		<label className={style.switch}>
+			<input
+				type="checkbox"
+				checked={all}
+				disabled={layer?.enabled === false}
+				ref={el => {
+					if (el) el.indeterminate = mixed;
+				}}
+				onChange={e => toggle(preset, e.currentTarget.checked)}
+			/>
+			{presetName}
+		</label>
+	);
+	function optionSwitch(item: T) {
+		return (
+			<label key={item} className={style.switch}>
+				<input
+					type="checkbox"
+					role="switch"
+					checked={selected.includes(item)}
+					disabled={layer?.enabled === false}
+					onChange={e => toggle([item], e.currentTarget.checked)}
+				/>
+				{labels?.[item] ?? item}
+			</label>
+		);
+	}
+	if (layer)
+		return (
+			<div role="group" aria-label={group} className={style.planetBand}>
 				<label className={style.switch}>
 					<input
 						type="checkbox"
-						checked={all}
-						ref={el => {
-							if (el) el.indeterminate = mixed;
-						}}
-						onChange={e => toggle(preset, e.currentTarget.checked)}
+						role="switch"
+						checked={layer.enabled}
+						onChange={e => layer.onChange(e.currentTarget.checked)}
 					/>
-					{presetName}
+					<span>{group}</span>
 				</label>
-				{!inline && (
-					<button
-						type="button"
-						aria-label={'Choose ' + group.toLowerCase()}
-						aria-expanded={open}
-						aria-controls={id}
-						onClick={() => setOpen(!open)}
-					>
-						<FontAwesomeIcon
-							icon={faChevronDown}
-							aria-hidden="true"
-						/>
-					</button>
-				)}
+				<div
+					role="group"
+					aria-label={presetName}
+					className={style.zodiacGroup}
+				>
+					{presetSwitch}
+					{preset.map(optionSwitch)}
+				</div>
+				<div className={style.outerBodies}>
+					{options
+						.filter(item => !preset.includes(item))
+						.map(optionSwitch)}
+				</div>
 			</div>
-			<div id={id} hidden={!inline && !open}>
+		);
+	return (
+		<div role="group" aria-label={group} className={style.filterGroup}>
+			<div className={style.filterHeading}>
+				{presetSwitch}
+				<button
+					type="button"
+					aria-label={'Choose ' + group.toLowerCase()}
+					aria-expanded={open}
+					aria-controls={id}
+					onClick={() => setOpen(!open)}
+				>
+					<FontAwesomeIcon icon={faChevronDown} aria-hidden="true" />
+				</button>
+			</div>
+			<div id={id} hidden={!open}>
 				<div className={style.filterOptions}>
-					{options.map(item => (
-						<label key={item} className={style.switch}>
-							<input
-								type="checkbox"
-								role="switch"
-								checked={selected.includes(item)}
-								onChange={e =>
-									toggle([item], e.currentTarget.checked)
-								}
-							/>
-							{labels?.[item] ?? item}
-						</label>
-					))}
+					{options.map(optionSwitch)}
 				</div>
 			</div>
 		</div>

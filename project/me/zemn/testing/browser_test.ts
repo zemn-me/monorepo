@@ -600,7 +600,9 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => await moon() !== initial, 5000);
 				const planets = await driver.findElement(By.css('div[role="group"][aria-label="Planetary bodies"]'));
 				const switches = await planets.findElements(By.css('input[role="switch"]'));
-				expect(switches).toHaveLength(10);
+				expect(switches).toHaveLength(11);
+				const zodiacGroup = await planets.findElement(By.css('[role="group"][aria-label="Zodiac"]'));
+				expect(await zodiacGroup.findElements(By.css('input[role="switch"]'))).toHaveLength(7);
 				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
 				expect(await driver.findElements(By.css('section[aria-labelledby="object-catalogue"] [aria-label="Man-made bodies"]'))).toHaveLength(1);
 				await (await toggle('Moon')).click();
@@ -610,6 +612,13 @@ describe('zemn.me website', () => {
 				expect(await bodies()).toHaveLength(7);
 				await (await toggle('Pluto')).sendKeys(Key.SPACE);
 				expect((await bodies()).length).toBe(8);
+				const master = await toggle('Planetary bodies');
+				await master.sendKeys(Key.SPACE);
+				expect(await bodies()).toHaveLength(0);
+				expect(await (await toggle('Zodiac')).isEnabled()).toBe(false);
+				await master.sendKeys(Key.SPACE);
+				expect(await bodies()).toHaveLength(8);
+				expect(await (await toggle('Pluto')).isSelected()).toBe(true);
 				const wheelMoon = await moon();
 				const globe = await driver.findElement(By.id('star-chart'));
 				const signs = () => globe.findElements(By.css('g[aria-label="Zodiac signs"] textPath'));

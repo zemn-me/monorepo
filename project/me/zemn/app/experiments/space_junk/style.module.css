@@ -290,50 +290,63 @@
 
 .planetBand {
 	display: grid;
-	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);
+	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 8fr) minmax(0, 3fr);
 	align-items: center;
+	column-gap: 0.2rem;
+	padding-block: 0.25rem;
 	border-block-end: 1px solid var(--line);
 	font: var(--controls);
 }
-.planetBand .filterHeading {
-	position: relative;
-}
-.filterLabel {
-	position: absolute;
-	inset-block-start: 0.15rem;
-	color: var(--muted);
-	font-size: 0.72rem;
-}
-.planetBand .filterHeading .switch {
-	box-sizing: border-box;
-	min-height: 48px;
-	padding-block-start: 0.9rem;
-}
-.planetBand .filterOptions {
+.zodiacGroup,
+.outerBodies {
 	display: grid;
-	grid-template-columns: repeat(10, minmax(0, 1fr));
+	align-items: center;
 }
-.planetBand .filterOptions .switch {
+.zodiacGroup {
+	grid-template-columns: repeat(8, minmax(0, 1fr));
+	border: 1px solid var(--line);
+	border-radius: 0.25rem;
+}
+.outerBodies {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.planetBand .switch {
 	flex-direction: column;
 	justify-content: center;
 	gap: 0.2rem;
-	min-height: 48px;
+	min-height: 46px;
 	font-size: 0.72rem;
+	text-align: center;
+}
+.planetBand > .switch {
+	align-items: flex-start;
+	text-align: start;
+}
+.planetBand .switch:has(:disabled) {
+	opacity: 0.6;
+	cursor: default;
 }
 @media (width < 42rem) {
-	.planetBand .filterHeading {
-		flex-direction: column;
-		align-items: flex-start;
+	.planetBand {
+		grid-template-columns: minmax(4.2rem, 20%) minmax(0, 4fr) minmax(0, 2fr);
 	}
-	.filterLabel {
-		position: static;
+	.zodiacGroup {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
-	.planetBand .filterHeading .switch {
-		min-height: 44px;
-		padding: 0;
+	.outerBodies {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
-	.planetBand .filterOptions {
-		grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+@media (width < 22rem) {
+	.planetBand {
+		grid-template-columns: minmax(0, 4fr) minmax(0, 2fr);
+	}
+	.planetBand > .switch {
+		grid-column: 1 / -1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.4rem;
 	}
 }
 .catalogueHeading {
