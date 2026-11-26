@@ -9,6 +9,9 @@
   expose it usefully in the UI rather than adding test-only attributes,
   classes, IDs, or globals. Assert that UI state instead of polling internal
   APIs or databases when the UI can expose it.
+- Journal access tests use `browserhelpers.ClockedBrowser`. Advance application
+  delays on its virtual clock, wait for observable UI or network state, and
+  let the test runner enforce the deadline.
 - Group tests by surface (for example, `/admin` or `/grievanceportal`), with
   shared helpers in the test-only `browserhelpers` package.
 - The local OIDC provider advertises Google contact scopes for auth-flow

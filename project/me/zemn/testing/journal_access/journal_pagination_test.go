@@ -9,16 +9,44 @@ import (
 	"time"
 
 	"github.com/tebeka/selenium"
-	seleniumpkg "github.com/zemn-me/monorepo/go/seleniumutil"
 	"github.com/zemn-me/monorepo/project/me/zemn/testing/browserhelpers"
 )
+
+// Let the whole selection reach local storage before allowing remote confirmation
+// to remove any rows. The queue can otherwise drain between two imported files.
+func importJournalFiles(t *testing.T, driver *browserhelpers.ClockedBrowser, paths []string) {
+	t.Helper()
+	if err := driver.ExecuteChromiumCommand("Network.enable", map[string]any{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{"*/journal/entries"}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", paths); err != nil {
+		t.Fatal(err)
+	}
+	lastRow := fmt.Sprintf("section[aria-label='Local recordings'] > ul > li:nth-child(%d)", len(paths))
+	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, lastRow); err != nil {
+		t.Fatal("selection did not reach the local queue", err)
+	}
+	if err := driver.ExecuteChromiumCommand("Network.setBlockedURLs", map[string]any{"urls": []string{}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := driver.Advance(15 * time.Second); err != nil {
+		t.Fatal(err)
+	}
+	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']"); err != nil {
+		browserhelpers.DumpPageDiagnostics(t, driver)
+		t.Fatal("recordings were not confirmed", err)
+	}
+}
 
 func TestJournalSelectedDayNavigation(t *testing.T) {
 	root, err := browserhelpers.FrontendRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
-	driver, err := seleniumpkg.NewWithChromeArguments("--force-device-scale-factor=1")
+	driver, err := browserhelpers.NewClockedBrowser(nil, "--force-device-scale-factor=1")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +58,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 	if err := driver.Get(root.String()); err != nil {
 		t.Fatal(err)
 	}
-	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
+	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject"); err != nil {
 		t.Fatal(err)
 	}
 
@@ -55,16 +83,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 		paths = append(paths, path)
 		dates = append(dates, date)
 	}
-	if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", paths, 30*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 120*time.Second); err != nil {
-		browserhelpers.DumpPageDiagnostics(t, driver)
-		t.Fatal(err)
-	}
+	importJournalFiles(t, driver, paths)
 
 	defer func() {
 		for index, date := range dates {
@@ -75,7 +94,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 				continue
 			}
 			selector := fmt.Sprintf("[role='region'][aria-label='Journal day'] article[id^='entry-']:has(> header time[datetime^='%s'])", date.Format("2006-01-02"))
-			entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector, 30*time.Second)
+			entry, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, selector)
 			if err != nil {
 				t.Errorf("find cleanup recording %d: %v", index, err)
 				continue
@@ -98,7 +117,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 				t.Error(err)
 				continue
 			}
-			if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, selector, 30*time.Second); err != nil {
+			if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, selector); err != nil {
 				t.Errorf("delete cleanup recording %d: %v", index, err)
 			}
 		}
@@ -109,7 +128,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 	}
 	assertSelectedDay := func(index int) {
 		t.Helper()
-		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, entrySelector(index), 30*time.Second); err != nil {
+		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, entrySelector(index)); err != nil {
 			t.Fatal(err)
 		}
 		sections, err := driver.FindElements(selenium.ByCSSSelector, "[role='region'][aria-label='Journal day'] > section")
@@ -155,7 +174,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 			t.Fatal(err)
 		}
 		visitDay(6)
-		previous, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Previous day']", 10*time.Second)
+		previous, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Previous day']")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -171,7 +190,7 @@ func TestJournalSelectedDayNavigation(t *testing.T) {
 			t.Fatal(err)
 		}
 		assertSelectedDay(5)
-		next, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Next day']", 10*time.Second)
+		next, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "a[aria-label='Next day']")
 		if err != nil {
 			t.Fatal(err)
 		}

@@ -13,8 +13,8 @@ import (
 
 const pageLoadingSelector = "[role='status'][aria-label='Loading page']"
 
-// AssertSharedNavigation runs after login with navigation responses delayed by the caller.
-func AssertSharedNavigation(t *testing.T, driver selenium.WebDriver, publicOrigin string, width int) {
+// AssertSharedNavigation checks pending and completed navigations after login.
+func AssertSharedNavigation(t *testing.T, driver *ClockedBrowser, publicOrigin string, width int, withNavigationPaused func(func())) {
 	t.Helper()
 	compact, err := driver.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]').getBoundingClientRect();
 const heading = document.querySelector('h1').getBoundingClientRect();
@@ -26,6 +26,23 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 	if err != nil {
 		t.Fatal(err)
 	}
+	checkLoading := func(linkSelector, destination, script string) {
+		t.Helper()
+		if err := ClickElementWithRetry(driver, selenium.ByCSSSelector, linkSelector); err != nil {
+			t.Fatal(err)
+		}
+		if err := driver.Advance(200 * time.Millisecond); err != nil {
+			t.Fatal(err)
+		}
+		var observed any
+		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
+			var err error
+			observed, err = d.ExecuteScript(script, []any{pageLoadingSelector})
+			return observed != nil, err
+		}); err != nil || observed != true {
+			t.Fatalf("%s loading feedback at width %d: %v (%v)", destination, width, observed, err)
+		}
+	}
 	for _, destination := range []struct{ label, linkSelector, selector, path, query string }{
 		{"Overview", "h1 a[href='/journal']", "nav[aria-label='Choose journal date']", "/journal", ""},
 		{"Day", "a[aria-current='date']", "section[aria-label='Create a journal entry']", "/journal/day", ""},
@@ -34,52 +51,42 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 		if destination.label != "Overview" {
 			OpenJournalDatePicker(t, driver)
 		}
-		link, err := driver.FindElement(selenium.ByCSSSelector, destination.linkSelector)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := link.Click(); err != nil {
-			t.Fatal(err)
-		}
-		if _, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second); err != nil {
-			t.Fatalf("%s navigation at width %d gave no loading feedback: %v", destination.label, width, err)
-		}
-		logoFeedback, err := driver.ExecuteScript(`const header = document.querySelector('header[data-glade-banner]');
-const status = header?.querySelector('[role="status"][aria-label="Loading page"]');
-const rays = status?.querySelectorAll('svg line');
-const rect = status?.getBoundingClientRect();
-return rays?.length > 0 && rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= header.getBoundingClientRect().bottom && getComputedStyle(status).overflow === 'hidden' && status.querySelector('svg').getBoundingClientRect().height > header.getBoundingClientRect().height && header.querySelector('a[aria-label="Go to homepage"] > svg').getBoundingClientRect().width >= 64;`, nil)
-		if err != nil || logoFeedback != true {
-			t.Fatalf("loading rays are not visible around the logo at width %d: %v %v", width, logoFeedback, err)
-		}
-		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-			fullSize, err := d.ExecuteScript(`const rays = document.querySelectorAll('header [role="status"][aria-label="Loading page"] svg line');
-return rays.length > 0 && [...rays].every(ray => Number(ray.getAttribute('x2')) >= 75 && ray.getTotalLength() > 10);`, nil)
-			return fullSize == true, err
-		}, time.Second); err != nil {
-			t.Fatal("loading rays did not grow to full size", err)
-		}
-		if destination.label == "Day" {
-			name := "journal-loading-desktop.png"
-			if width == 390 {
-				name = "journal-loading-phone.png"
+		withNavigationPaused(func() {
+			checkLoading(destination.linkSelector, destination.label, `const status = document.querySelector(arguments[0]);
+if (!status) return null;
+const header = status.closest('header');
+const rect = status.getBoundingClientRect();
+const bar = header.getBoundingClientRect();
+const rayHeight = status.querySelector('svg')?.getBoundingClientRect().height;
+const logoWidth = header.querySelector('a[aria-label="Go to homepage"] > svg')?.getBoundingClientRect().width;
+const rays = [...status.querySelectorAll('svg line')];
+const grown = rays.length > 0 && rays.every(ray => Number(ray.getAttribute('x2')) >= 75 && ray.getTotalLength() > 10);
+if (rays.length > 0 && !grown) return null;
+const overflow = getComputedStyle(status).overflow;
+if (grown && rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= bar.bottom && overflow === 'hidden' && rayHeight > bar.height && logoWidth >= 64) return true;
+return {grown, rays: rays.length, status: rect.toJSON(), bar: bar.toJSON(), rayHeight, logoWidth, overflow};`)
+			if destination.label == "Day" {
+				name := "journal-loading-desktop.png"
+				if width == 390 {
+					name = "journal-loading-phone.png"
+				}
+				SaveNavigationScreenshot(t, driver, name)
 			}
-			SaveNavigationScreenshot(t, driver, name)
-		}
-		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		})
+		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 			pending, err := d.FindElements(selenium.ByCSSSelector, pageLoadingSelector)
 			return len(pending) == 0, err
-		}, 30*time.Second); err != nil {
+		}); err != nil {
 			t.Fatal(err)
 		}
-		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 			shrunk, err := d.ExecuteScript(`const rays = document.querySelectorAll('header [aria-label="Loading page"][aria-hidden="true"] svg line');
 return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`, nil)
 			return shrunk == true, err
-		}, time.Second); err != nil {
+		}); err != nil {
 			t.Fatal("loading rays did not shrink after navigation", err)
 		}
-		if _, err := WaitForElement(driver, selenium.ByCSSSelector, destination.selector, 30*time.Second); err != nil {
+		if _, err := WaitForElement(driver, selenium.ByCSSSelector, destination.selector); err != nil {
 			t.Fatal(err)
 		}
 		currentURL, err := driver.CurrentURL()
@@ -112,40 +119,26 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err := menu.Click(); err != nil {
 			t.Fatal(err)
 		}
-		link, err := driver.FindElement(selenium.ByCSSSelector, "nav[aria-label='Site navigation'] a[href='"+path+"']")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := link.Click(); err != nil {
-			t.Fatal(err)
-		}
-		pending, err := WaitForElement(driver, selenium.ByCSSSelector, pageLoadingSelector, 5*time.Second)
-		if err != nil {
-			t.Fatalf("menu navigation to %s at width %d gave no loading feedback: %v", path, width, err)
-		}
-		if visible, err := pending.IsDisplayed(); err != nil || !visible {
-			t.Fatal("page loading feedback is hidden", err)
-		}
-		contained, err := driver.ExecuteScript(`
-const status = document.querySelector('[role="status"][aria-label="Loading page"]');
-const bar = status?.closest('header')?.getBoundingClientRect();
-const rect = status?.getBoundingClientRect();
-return !!bar && rect.left >= bar.left && rect.right <= bar.right && rect.top >= bar.top && rect.bottom <= bar.bottom;
-`, nil)
-		if err != nil || contained != true {
-			t.Fatalf("loading feedback escaped the navigation bar: %v %v", contained, err)
-		}
-		if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+		withNavigationPaused(func() {
+			checkLoading("nav[aria-label='Site navigation'] a[href='"+path+"']", path, `
+const status = document.querySelector(arguments[0]);
+if (!status) return null;
+if (!status.checkVisibility({opacityProperty: true, visibilityProperty: true})) return 'loading status hidden';
+const bar = status.closest('header').getBoundingClientRect();
+const rect = status.getBoundingClientRect();
+return rect.width > 0 && rect.height > 0 && rect.left >= bar.left && rect.right <= bar.right && rect.top >= bar.top && rect.bottom <= bar.bottom;`)
+		})
+		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 			current, err := d.CurrentURL()
 			return current == publicOrigin+path, err
-		}, 30*time.Second); err != nil {
+		}); err != nil {
 			t.Fatal(err)
 		}
 		AssertHeroVideoPreserved(t, driver, video)
 		if path == "/" {
 			// The URL can change before the homepage layout and scroll reset commit.
 			var homeLayout any
-			err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+			err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 				var err error
 				homeLayout, err = d.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
 const rect = bar.getBoundingClientRect();
@@ -154,30 +147,30 @@ const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to h
 const menu = bar.querySelector('summary').getBoundingClientRect();
 return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.right - hero.right) < 1 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
 				return homeLayout == true, err
-			}, 10*time.Second)
+			})
 			if err != nil {
 				t.Fatalf("homepage does not keep its card and shared top bar at width %d: %v %v", width, homeLayout, err)
 			}
 			SaveNavigationScreenshot(t, driver, fmt.Sprintf("homepage-topbar-%d.png", width))
 		}
 		if path == "/article" {
-			back, err := WaitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Go back']", 10*time.Second)
+			back, err := WaitForElement(driver, selenium.ByCSSSelector, "button[aria-label='Go back']")
 			if err != nil {
 				t.Fatal(err)
 			}
 			if err := back.Click(); err != nil {
 				t.Fatal(err)
 			}
-			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+			if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 				current, err := d.CurrentURL()
 				return current == previousURL, err
-			}, 30*time.Second); err != nil {
+			}); err != nil {
 				t.Fatal("top bar did not go back", err)
 			}
 		}
 	}
 	ClickJournalWiki(t, driver)
-	if _, err := WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']", 30*time.Second); err != nil {
+	if _, err := WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Diary wiki']"); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -207,18 +200,20 @@ func SaveNavigationScreenshot(t *testing.T, driver selenium.WebDriver, name stri
 
 func AssertJournalNavigationAtTop(t *testing.T, driver selenium.WebDriver, path string) {
 	t.Helper()
-	var stableSince time.Time
-	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
-		atTop, err := d.ExecuteScript(`return window.location.pathname === arguments[0] && window.scrollY <= 1;`, []any{path})
-		if err != nil || atTop != true {
-			stableSince = time.Time{}
-			return false, err
+	// Observe the scroll position across layout and two browser frames.
+	if _, err := driver.ExecuteScriptAsync("document.fonts.ready.then(() => arguments[0](true));", nil); err != nil {
+		t.Fatal(err)
+	}
+	framesAtTop := 0
+	if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
+		atTop, err := d.ExecuteScript("return location.pathname === arguments[0] && scrollY <= 1;", []any{path})
+		if atTop == true {
+			framesAtTop++
+		} else {
+			framesAtTop = 0
 		}
-		if stableSince.IsZero() {
-			stableSince = time.Now()
-		}
-		return time.Since(stableSince) >= 250*time.Millisecond, nil
-	}, 10*time.Second); err != nil {
+		return framesAtTop == 3, err
+	}); err != nil {
 		t.Fatalf("journal navigation to %s did not stay at the top: %v", path, err)
 	}
 }
@@ -226,7 +221,7 @@ func AssertJournalNavigationAtTop(t *testing.T, driver selenium.WebDriver, path 
 // OpenJournalDatePicker exposes the calendar's date and view links through the UI.
 func OpenJournalDatePicker(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
-	picker, err := WaitForElement(driver, selenium.ByCSSSelector, "summary[aria-label='Choose journal date']", 30*time.Second)
+	picker, err := WaitForElement(driver, selenium.ByCSSSelector, "summary[aria-label='Choose journal date']")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -244,7 +239,7 @@ func OpenJournalDatePicker(t *testing.T, driver selenium.WebDriver) {
 // ClickJournalWiki handles both the loading toolbar and the loaded calendar menu.
 func ClickJournalWiki(t *testing.T, driver selenium.WebDriver) {
 	t.Helper()
-	if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+	if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 		links, err := d.FindElements(selenium.ByCSSSelector, "a[href='/journal?wiki=all']")
 		if err != nil {
 			return false, err
@@ -284,7 +279,7 @@ func ClickJournalWiki(t *testing.T, driver selenium.WebDriver) {
 			}
 		}
 		return false, err
-	}, 30*time.Second); err != nil {
+	}); err != nil {
 		t.Fatal("open journal wiki: ", err)
 	}
 }

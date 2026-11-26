@@ -212,6 +212,9 @@ func TestVirtualClockResourceTiming(t *testing.T) {
 	if err := driver.Get(server.URL); err != nil {
 		t.Fatal(err)
 	}
+	if _, err := driver.ExecuteScript("performance.mark('navigation-start');", nil); err != nil {
+		t.Fatal(err)
+	}
 	const resource = `return performance.getEntriesByType('resource').some(e=>e.name.endsWith('/data') && e.encodedBodySize>0)`
 	if err := driver.WaitWithTimeout(func(w webdriver.WebDriver) (bool, error) {
 		value, err := w.ExecuteScript(resource, nil)
@@ -224,5 +227,8 @@ func TestVirtualClockResourceTiming(t *testing.T) {
 	}
 	if value, err := driver.ExecuteScript(resource, nil); err != nil || value != true {
 		t.Fatalf("advancing virtual time lost the download entry: %v, %v", value, err)
+	}
+	if marks, err := driver.ExecuteScript("return performance.getEntriesByName('navigation-start', 'mark').length;", nil); err != nil || marks != float64(1) {
+		t.Fatalf("advancing virtual time lost the user timing mark: %v, %v", marks, err)
 	}
 }
