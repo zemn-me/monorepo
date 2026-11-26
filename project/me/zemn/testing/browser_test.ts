@@ -647,7 +647,7 @@ describe('zemn.me website', () => {
 				const zodiacGroup = await planets.findElement(By.css('[role="group"][aria-label="Zodiac"]'));
 				expect(await zodiacGroup.findElements(By.css('input[role="switch"]'))).toHaveLength(7);
 				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
-				expect(await driver.findElements(By.css('figure [aria-label="View controls"] + [aria-label="Planetary bodies"] + [aria-label="Man-made bodies"]'))).toHaveLength(1);
+				expect(await driver.findElements(By.css('article [aria-label="View controls"] + [aria-label="Planetary bodies"] + [aria-label="Man-made bodies"]'))).toHaveLength(1);
 				await (await toggle('Moon')).click();
 				expect(await bodies()).toHaveLength(6);
 				expect(await placements()).toHaveLength(6);
@@ -763,6 +763,26 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
 				await globe.sendKeys(Key.HOME);
 				expect(await bodies()).toHaveLength(0);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('places controls beside the chart on wide screens and stacks them on phones', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart?spin=false`);
+				const chart = await driver.findElement(By.id('star-chart'));
+				const birth = await driver.findElement(By.css('fieldset[aria-label="Chart date and time"]'));
+				const controls = await driver.findElement(By.css('[aria-label="View controls"]'));
+				await driver.manage().window().setRect({ width: 1440, height: 900 });
+				const wide = await chart.getRect();
+				expect(wide.x + wide.width).toBeLessThanOrEqual((await birth.getRect()).x + 1);
+				expect(wide.x + wide.width).toBeLessThanOrEqual((await controls.getRect()).x + 1);
+				await driver.manage().window().setRect({ width: 390, height: 844 });
+				const narrow = await chart.getRect();
+				const date = await birth.getRect();
+				expect(narrow.y).toBeGreaterThanOrEqual(date.y + date.height - 1);
+				expect((await controls.getRect()).y).toBeGreaterThanOrEqual(narrow.y + narrow.height - 1);
 			} finally {
 				await driver.quit();
 			}

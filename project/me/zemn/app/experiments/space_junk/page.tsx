@@ -189,58 +189,56 @@ const BirthdayChart = memo(function BirthdayChart({
 
 	return (
 		<>
-			<figure className={style.figure}>
-				<ChartViewer
-					instant={instant}
-					bodies={bodies}
-					showSigns={classical.some(body =>
-						selectedBodies.includes(body)
-					)}
-					birthplace={place}
-					markers={markers}
-					selected={selected}
-					revision={revision}
-					linkedId={anchorId}
-					cityRevision={cityRevision}
-					zodiac={debrisZodiac}
-					ascendant={natalZodiac.ascendant}
-					onSelect={m => locate(m.object.id)}
+			<ChartViewer
+				instant={instant}
+				bodies={bodies}
+				showSigns={classical.some(body =>
+					selectedBodies.includes(body)
+				)}
+				birthplace={place}
+				markers={markers}
+				selected={selected}
+				revision={revision}
+				linkedId={anchorId}
+				cityRevision={cityRevision}
+				zodiac={debrisZodiac}
+				ascendant={natalZodiac.ascendant}
+				onSelect={m => locate(m.object.id)}
+			>
+				<BodyFilters
+					group="Planetary bodies"
+					presetName="Zodiac"
+					preset={classical}
+					options={planetaryBodies}
+					glyphs={planetGlyphs}
+					selected={selectedBodies}
+					onChange={setSelectedBodies}
+				/>
+				<BodyFilters
+					group="Man-made bodies"
+					presetName="Space junk"
+					preset={debrisTypes}
+					options={artificialTypes}
+					labels={typeLabels}
+					selected={selectedKinds}
+					onChange={next => {
+						setSelectedKinds(next);
+						setPage(0);
+					}}
 				>
-					<BodyFilters
-						group="Planetary bodies"
-						presetName="Zodiac"
-						preset={classical}
-						options={planetaryBodies}
-						glyphs={planetGlyphs}
-						selected={selectedBodies}
-						onChange={setSelectedBodies}
-					/>
-					<BodyFilters
-						group="Man-made bodies"
-						presetName="Space junk"
-						preset={debrisTypes}
-						options={artificialTypes}
-						labels={typeLabels}
-						selected={selectedKinds}
-						onChange={next => {
-							setSelectedKinds(next);
+					<input
+						className={style.search}
+						type="search"
+						aria-label="Search by name, catalog number, designator or object type"
+						placeholder="Search"
+						value={search}
+						onChange={event => {
+							setSearch(event.target.value);
 							setPage(0);
 						}}
-					>
-						<input
-							className={style.search}
-							type="search"
-							aria-label="Search by name, catalog number, designator or object type"
-							placeholder="Search"
-							value={search}
-							onChange={event => {
-								setSearch(event.target.value);
-								setPage(0);
-							}}
-						/>
-					</BodyFilters>
-				</ChartViewer>
-			</figure>
+					/>
+				</BodyFilters>
+			</ChartViewer>
 			{hasObjects && catalogueFailed && !catalogue && (
 				<p role="alert">
 					Orbiting objects unavailable.{' '}
@@ -414,24 +412,26 @@ export default function Page() {
 	return (
 		<article className={style.page}>
 			<h1>Astrological Chart</h1>
-			<CitySearch city={city} onSelect={setBirthplace} />
-			{cityKey !== null && birthplace.isError && (
-				<p role="alert">
-					Birth city unavailable.{' '}
-					<button
-						type="button"
-						onClick={() => void birthplace.refetch()}
-					>
-						Retry
-					</button>
-				</p>
-			)}
-			<BirthdayRulers
-				epoch={instant}
-				asOf={catalogueDate}
-				zone={city?.timezone ?? deviceZone}
-				clock={clock}
-			/>
+			<div className={style.birthControls}>
+				<CitySearch city={city} onSelect={setBirthplace} />
+				{cityKey !== null && birthplace.isError && (
+					<p role="alert">
+						Birth city unavailable.{' '}
+						<button
+							type="button"
+							onClick={() => void birthplace.refetch()}
+						>
+							Retry
+						</button>
+					</p>
+				)}
+				<BirthdayRulers
+					epoch={instant}
+					asOf={catalogueDate}
+					zone={city?.timezone ?? deviceZone}
+					clock={clock}
+				/>
+			</div>
 			<BirthdayChart
 				{...chart}
 				catalogue={catalogue.data}
