@@ -2,6 +2,8 @@ import {
 	type ComponentPropsWithoutRef,
 	type ReactNode,
 	useId,
+	useLayoutEffect,
+	useState,
 	useRef,
 } from 'react';
 import style from './style.module.css';
@@ -63,22 +65,55 @@ export function SlideRule({
 		mark?: number;
 	} | null>(null);
 
+	const fullScale = marks !== undefined;
+	const track = useRef<HTMLDivElement>(null);
+	const [trackWidth, setTrackWidth] = useState(0);
+	useLayoutEffect(() => {
+		const el = track.current;
+		if (!el || !fullScale) return;
+		const measure = () => setTrackWidth(el.clientWidth);
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(el);
+		return () => observer.disconnect();
+	}, [fullScale]);
+
+	// Keep distant planets visible on the zoom scale even at Earth-scale zoom.
+	const inset = 10;
+	const pixelsPerUnit = fullScale
+		? Math.max(1, trackWidth - 2 * inset) / (max - min)
+		: pitch;
+	const at = (value: number) =>
+		fullScale
+			? inset + (value - min) * pixelsPerUnit
+			: (value - centre) * pitch;
+	const pointerValue = (x: number) =>
+		min +
+		(x - track.current!.getBoundingClientRect().left - inset) /
+			pixelsPerUnit;
+	const labelStep = fullScale
+		? major * Math.max(1, Math.ceil(70 / (major * pixelsPerUnit)))
+		: major;
+
 	const ticks = [];
 	const radius = 430 / pitch;
 	// An integer tick index avoids drift at twelfths of a year.
 	const first = Math.ceil(
-		(Math.max(min, centre - radius) - tickOrigin) / tick
+		((fullScale ? min : Math.max(min, centre - radius)) - tickOrigin) / tick
 	);
 	const last = Math.floor(
-		(Math.min(max, centre + radius) - tickOrigin) / tick
+		((fullScale ? max : Math.min(max, centre + radius)) - tickOrigin) / tick
 	);
 	for (let i = first; i <= last; i++) {
 		const mark = i * tick + tickOrigin;
-		const labelled = i % Math.round(major / tick) === 0;
+		const majorTick = i % Math.round(labelStep / tick) === 0;
+		const labelled = fullScale
+			? mark === max || (majorTick && at(max) - at(mark) >= 70)
+			: majorTick;
 		ticks.push(
 			<g
 				key={i}
-				transform={`translate(${(mark - centre) * pitch} 0)`}
+				transform={`translate(${at(mark)} 0)`}
 				data-position={mark}
 			>
 				<path d={labelled ? 'M0 23v11' : 'M0 28v6'} />
@@ -90,7 +125,23 @@ export function SlideRule({
 							height="20"
 							fill="transparent"
 						/>
-						<text y="17">{tickLabel(mark)}</text>
+						<text
+							y="17"
+							style={
+								fullScale
+									? {
+											textAnchor:
+												mark === min
+													? 'start'
+													: mark === max
+														? 'end'
+														: 'middle',
+										}
+									: undefined
+							}
+						>
+							{tickLabel(mark)}
+						</text>
 					</>
 				)}
 			</g>
@@ -101,9 +152,16 @@ export function SlideRule({
 	let lastLabel = -Infinity;
 	const annotations = marks
 		?.toSorted((a, b) => a.position - b.position)
-		.map(mark => {
-			const x = (mark.position - centre) * pitch;
-			const labelX = Math.max(x, lastLabel + 17);
+		.map((mark, i, all) => {
+			const x = at(mark.position);
+			const gap = Math.min(
+				18,
+				(trackWidth - 2 * inset) / Math.max(1, all.length - 1)
+			);
+			const labelX = Math.min(
+				trackWidth - inset - (all.length - 1 - i) * gap,
+				Math.max(x, lastLabel + gap)
+			);
 			lastLabel = labelX;
 			return (
 				<g
@@ -128,7 +186,9 @@ export function SlideRule({
 				<strong>{readout}</strong>
 			</div>
 			<div
+				ref={track}
 				className={style.rulerTrack}
+				data-full-scale={fullScale || undefined}
 				onPointerDown={e => {
 					if (!e.isPrimary || e.button !== 0) return;
 					e.preventDefault();
@@ -153,17 +213,30 @@ export function SlideRule({
 					const threshold = e.pointerType === 'touch' ? 3 : 0.5;
 					if (!start.moved && Math.abs(dx) < threshold) return;
 					start.moved = true;
-					seek(start.origin - dx / pitch);
+					seek(
+						fullScale
+							? pointerValue(e.clientX)
+							: start.origin - dx / pitch
+					);
 				}}
 				onPointerUp={e => {
 					const start = drag.current;
 					if (!start || start.id !== e.pointerId) return;
 					if (start.moved) {
-						seek(start.origin - (e.clientX - start.x) / pitch);
+						seek(
+							fullScale
+								? pointerValue(e.clientX)
+								: start.origin - (e.clientX - start.x) / pitch
+						);
 					} else {
 						const box = e.currentTarget.getBoundingClientRect();
 						const offset = e.clientX - box.left - box.width / 2;
-						seek(start.mark ?? start.origin + offset / pitch);
+						seek(
+							start.mark ??
+								(fullScale
+									? pointerValue(e.clientX)
+									: start.origin + offset / pitch)
+						);
 					}
 				}}
 				onLostPointerCapture={e => {
@@ -192,7 +265,12 @@ export function SlideRule({
 							</pattern>
 						</defs>
 					)}
-					<svg x="50%" width="1" height={height} overflow="visible">
+					<svg
+						x={fullScale ? 0 : '50%'}
+						width="1"
+						height={height}
+						overflow="visible"
+					>
 						{bands?.map(
 							({ start, split, end, startLabel, endLabel }) => {
 								const span = (end - start) * pitch;
@@ -240,7 +318,10 @@ export function SlideRule({
 						{annotations}
 					</svg>
 				</svg>
-				<i aria-hidden="true" />
+				<i
+					aria-hidden="true"
+					style={fullScale ? { left: at(centre) } : undefined}
+				/>
 			</div>
 			{children}
 		</div>

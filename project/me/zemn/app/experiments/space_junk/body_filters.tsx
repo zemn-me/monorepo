@@ -1,11 +1,9 @@
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useId, useState } from 'react';
+import type { ReactNode } from 'react';
 import style from './style.module.css';
 
 export function BodyFilters<T extends string>({
 	group,
-	grouped,
+	children,
 	presetName,
 	preset,
 	options,
@@ -15,7 +13,7 @@ export function BodyFilters<T extends string>({
 	onChange,
 }: {
 	group: string;
-	grouped?: boolean;
+	children?: ReactNode;
 	presetName: string;
 	preset: readonly T[];
 	options: readonly T[];
@@ -24,8 +22,6 @@ export function BodyFilters<T extends string>({
 	selected: readonly T[];
 	onChange: (selection: T[]) => void;
 }) {
-	const [open, setOpen] = useState(false);
-	const id = useId();
 	function toggle(items: readonly T[], on: boolean) {
 		onChange(
 			options.filter(item =>
@@ -71,44 +67,27 @@ export function BodyFilters<T extends string>({
 			</label>
 		);
 	}
-	if (grouped)
-		return (
-			<div role="group" aria-label={group} className={style.planetBand}>
-				{groupSwitch(group, options)}
-				<div
-					role="group"
-					aria-label={presetName}
-					className={style.zodiacGroup}
-				>
-					{groupSwitch(presetName, preset)}
-					{preset.map(optionSwitch)}
-				</div>
-				<div className={style.outerBodies}>
-					{options
-						.filter(item => !preset.includes(item))
-						.map(optionSwitch)}
-				</div>
-			</div>
-		);
 	return (
-		<div role="group" aria-label={group} className={style.filterGroup}>
-			<div className={style.filterHeading}>
+		<div
+			role="group"
+			aria-label={group}
+			className={glyphs ? style.planetBand : style.objectBand}
+		>
+			{groupSwitch(group, options)}
+			<div
+				role="group"
+				aria-label={presetName}
+				className={style.zodiacGroup}
+			>
 				{groupSwitch(presetName, preset)}
-				<button
-					type="button"
-					aria-label={'Choose ' + group.toLowerCase()}
-					aria-expanded={open}
-					aria-controls={id}
-					onClick={() => setOpen(!open)}
-				>
-					<FontAwesomeIcon icon={faChevronDown} aria-hidden="true" />
-				</button>
+				{preset.map(optionSwitch)}
 			</div>
-			<div id={id} hidden={!open}>
-				<div className={style.filterOptions}>
-					{options.map(optionSwitch)}
-				</div>
+			<div className={style.outerBodies}>
+				{options
+					.filter(item => !preset.includes(item))
+					.map(optionSwitch)}
 			</div>
+			{children}
 		</div>
 	);
 }

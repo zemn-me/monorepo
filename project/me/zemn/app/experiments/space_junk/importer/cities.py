@@ -1,4 +1,4 @@
-"""Build population-ranked GeoNames shards for local prefix search and ID lookup."""
+"""Build population-ranked GeoNames shards for local prefix search and shared chart links."""
 
 import csv
 import gzip
@@ -23,12 +23,24 @@ def build(archive, region_file, outputs):
     with open(region_file, encoding="utf-8") as source:
         regions = {row[0]: row[1] for row in csv.reader(source, delimiter="\t")}
     shards = [[] for _ in outputs]
+    reserved_zones = {city["timezone"] for city in cities.values()}
+    used_keys = set()
     for city in sorted(cities.values(), key=lambda c: -c["population"]):
         if not city["timezone"]:
             continue
         city_id = city["geonameid"]
         names = {fold(n) for n in [city["name"], *city["alternatenames"]]}
-        groups = {city_id % len(outputs): []}
+        zone = city["timezone"]
+        zone_city = fold(zone.split("/")[-1].replace("_", " "))
+        if zone_city in names and zone not in used_keys:
+            place_key = zone
+        else:
+            place_key = zone + "/" + city["name"].replace(" ", "_")
+            if place_key in used_keys or place_key in reserved_zones:
+                place_key += "~" + str(city_id)
+        used_keys.add(place_key)
+        key_shard = sum(map(ord, place_key)) % len(outputs)
+        groups = {city_id % len(outputs): [], key_shard: []}
         for name in sorted(names):
             if len(name) >= 2:
                 key = (ord(name[0]) * 31 + ord(name[1])) % len(outputs)
@@ -38,7 +50,7 @@ def build(archive, region_file, outputs):
                   countries.get(cc, {}).get("name", cc), city["latitude"],
                   city["longitude"], city["timezone"]]
         for key, aliases in groups.items():
-            shards[key].append([*record, aliases])
+            shards[key].append([*record, aliases, place_key])
     for output, rows in zip(outputs, shards, strict=True):
         data = json.dumps(rows, ensure_ascii=False, separators=(",", ":")).encode()
         Path(output).write_bytes(gzip.compress(data, compresslevel=6, mtime=0))

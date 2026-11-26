@@ -5,7 +5,7 @@
 		var(--foreground-color) 80%,
 		var(--background-color)
 	);
-	--controls: 400 0.9375rem/1.35 system-ui, sans-serif;
+	--controls: 400 0.9375rem / 1.35 system-ui, sans-serif;
 	box-sizing: border-box;
 	width: min(100%, 46rem);
 	margin-inline: auto;
@@ -137,6 +137,9 @@
 		transparent
 	);
 }
+.rulerTrack[data-full-scale] > svg {
+	mask-image: none;
+}
 .rulerTrack path {
 	stroke: currentColor;
 	opacity: 0.6;
@@ -158,7 +161,7 @@
 	transform: translateX(-50%);
 }
 .rulerTrack i::after {
-	content: '';
+	content: "";
 	position: absolute;
 	bottom: 0;
 	left: 50%;
@@ -205,8 +208,7 @@
 }
 .sources,
 .paging,
-.catalogue,
-.objectCatalogue {
+.catalogue {
 	font: var(--controls);
 }
 .paging {
@@ -240,12 +242,10 @@
 .rulerRow:has(> .switch) > .rulerValue > span {
 	align-self: end;
 }
-.objectCatalogue,
 .sources {
 	border-block-start: 1px solid var(--line);
 	padding-block-start: 0.75rem;
 }
-.objectCatalogue h2,
 .sources h2 {
 	margin: 0;
 	font: inherit;
@@ -279,14 +279,14 @@
 }
 .search {
 	display: block;
-	width: min(100%, 24rem);
-	margin-block-start: 0.5rem;
+	width: 100%;
+	grid-column: 1 / -1;
 }
 .paging {
 	margin-block: 0.5rem;
 }
-.paging span {
-	margin-inline-end: auto;
+.paging {
+	justify-content: flex-end;
 }
 .catalogue {
 	list-style: none;
@@ -307,9 +307,6 @@
 .catalogue header > span {
 	font-variant-numeric: tabular-nums;
 	white-space: nowrap;
-}
-.search + .catalogue {
-	margin-block-start: 0.75rem;
 }
 .placements {
 	display: grid;
@@ -344,9 +341,13 @@
 	}
 }
 
-.planetBand {
+.planetBand,
+.objectBand {
 	display: grid;
-	grid-template-columns: minmax(5.4rem, 1.55fr) minmax(0, 8fr) minmax(0, 3.2fr);
+	grid-template-columns: minmax(5.4rem, 1.55fr) minmax(0, 8fr) minmax(
+			0,
+			3.2fr
+		);
 	align-items: center;
 	column-gap: 0.2rem;
 	padding-block: 0.25rem;
@@ -356,7 +357,8 @@
 .zodiacGroup,
 .outerBodies {
 	display: grid;
-	align-items: center;
+	align-self: stretch;
+	align-items: stretch;
 }
 .zodiacGroup {
 	grid-template-columns: repeat(8, auto);
@@ -366,21 +368,25 @@
 .outerBodies {
 	grid-template-columns: repeat(3, auto);
 }
-.planetBand .switch {
+:is(.planetBand, .objectBand) .switch {
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
+	padding-block: 0.35rem;
 	gap: 0.2rem;
 	min-height: 46px;
 	font-size: 0.72rem;
 	text-align: center;
 }
-.planetBand > .switch {
+:is(.planetBand, .objectBand) > .switch {
 	align-items: flex-start;
 	text-align: start;
 }
 @media (width < 42rem) {
 	.planetBand {
-		grid-template-columns: minmax(0, 1.2fr) minmax(0, 4.2fr) minmax(0, 2.25fr);
+		grid-template-columns: minmax(0, 1.2fr) minmax(0, 4.2fr) minmax(
+				0,
+				2.25fr
+			);
 	}
 	.zodiacGroup {
 		grid-template-columns: repeat(4, auto);
@@ -389,39 +395,58 @@
 		grid-template-columns: repeat(2, auto);
 	}
 }
-@media (width < 24rem) {
+@media (width < 32rem) {
 	.planetBand {
-		grid-template-columns: minmax(0, 4.2fr) minmax(0, 2.25fr);
+		grid-template-columns: 4.5rem minmax(0, 1fr);
 	}
 	.planetBand > .switch {
-		grid-column: 1 / -1;
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-start;
-		gap: 0.4rem;
+		align-self: start;
+		grid-row: span 2;
+	}
+	.planetBand .outerBodies {
+		grid-column: 2;
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.viewControls .rulerRow:has([data-full-scale]) {
+		grid-template-columns: 1fr;
+		grid-auto-flow: row;
+	}
+	.rulerRow:has([data-full-scale]) > .rulerValue {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		padding-block: 0.35rem;
 	}
 }
-.catalogueHeading {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 0 1rem;
-}
-.filterHeading {
-	display: flex;
-	align-items: center;
-}
-.filterHeading button {
-	min-width: 44px;
-	font-size: 0.75rem;
-}
-.filterHeading button[aria-expanded="true"] svg {
-	transform: rotate(180deg);
-}
-.filterGroup .filterOptions {
-	display: grid;
+.objectBand {
+	grid-template-columns: minmax(4.5rem, 1fr) minmax(0, 4fr) minmax(0, 1fr);
+	gap: 0.3rem;
 	border-block-start: 1px solid var(--line);
+	border-block-end: 0;
+	padding-block: 0.45rem;
+}
+.objectBand > .switch {
+	align-self: start;
+}
+.objectBand .zodiacGroup {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.objectBand .outerBodies {
+	grid-template-columns: 1fr;
+}
+@media (width < 32rem) {
+	.objectBand {
+		grid-template-columns: minmax(0, 1fr) minmax(4.5rem, 24%);
+	}
+	.objectBand > .switch {
+		grid-column: 1 / -1;
+		flex-direction: row;
+		justify-content: start;
+		align-items: center;
+	}
+	.objectBand .zodiacGroup {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 .switch {
 	display: inline-flex;
@@ -433,34 +458,28 @@
 .page .switch input {
 	appearance: none;
 	position: relative;
-	border: 1px solid var(--muted);
-	border-radius: 1rem;
-	width: 1.9rem;
-	height: 1.1rem;
+	box-sizing: border-box;
+	border: 1.5px solid currentColor;
+	border-radius: 50%;
+	width: 1rem;
+	height: 1rem;
 	min-height: 0;
+	padding: 0;
 	margin: 0;
 	color: inherit;
 	background: transparent;
 	cursor: inherit;
 }
-.switch input::after {
-	content: '';
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	height: calc(100% - 4px);
-	aspect-ratio: 1;
-	border-radius: 50%;
-	background: currentColor;
-}
 .page .switch input:checked {
-	background: currentColor;
-	border-color: currentColor;
+	/* A solid border keeps the filled circle visible when print backgrounds are off. */
+	border-width: 0.5rem;
 }
-.switch input:checked::after {
-	left: auto;
-	right: 2px;
-	background: var(--background-color);
+.switch input:indeterminate::after {
+	content: "";
+	position: absolute;
+	inset: 50% 20% auto;
+	border-top: 2px solid currentColor;
+	transform: translateY(-50%);
 }
 .planetName {
 	display: inline-flex;
@@ -471,9 +490,9 @@
 .toggleGlyph,
 .planetGlyph {
 	font:
-		17px 'Apple Symbols',
-		'Segoe UI Symbol',
-		'Noto Sans Symbols 2',
+		17px "Apple Symbols",
+		"Segoe UI Symbol",
+		"Noto Sans Symbols 2",
 		sans-serif;
 }
 .toggleGlyph {
@@ -486,23 +505,6 @@
 	stroke-width: 3;
 	paint-order: stroke;
 }
-@media (forced-colors: active) {
-	.page .switch input:checked {
-		background: Highlight;
-	}
-	.switch input:checked::after {
-		background: HighlightText;
-	}
-}
-.switch input:indeterminate::after {
-	left: 50%;
-	top: 50%;
-	width: 0.65rem;
-	height: 2px;
-	border-radius: 0;
-	transform: translate(-50%, -50%);
-}
-
 .citySearch {
 	display: grid;
 	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 1fr);
@@ -556,20 +558,6 @@
 @media print {
 	.paging {
 		display: none;
-	}
-	.page .switch input,
-	.page .switch input:checked {
-		background: transparent;
-		border-color: currentColor;
-	}
-	.page .switch input::after {
-		box-sizing: border-box;
-		background: transparent;
-		border: 2px solid currentColor;
-	}
-	.page .switch input:indeterminate::after {
-		border: 0;
-		border-top: 2px solid currentColor;
 	}
 	.placements li {
 		break-inside: avoid;

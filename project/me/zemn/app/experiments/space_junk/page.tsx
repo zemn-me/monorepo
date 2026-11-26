@@ -24,7 +24,7 @@ import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart, type SpaceObject } from './chart.js';
 import { birthInstant, catalogueId } from './chart_query.js';
 import { ChartViewer } from './chart_viewer.js';
-import { type City, cityShard, cityShardCount, readCity } from './cities.js';
+import { type City, cityShard, lookupCity, sharedCityShard } from './cities.js';
 import { CitySearch } from './city_search.js';
 import { PlacementEntry } from './placement_entry.js';
 import { bodyPositions, classical, modern, planetGlyphs } from './planets.js';
@@ -174,7 +174,6 @@ const BirthdayChart = memo(function BirthdayChart({
 	return (
 		<>
 			<BodyFilters
-				grouped
 				group="Planetary bodies"
 				presetName="Zodiac"
 				preset={classical}
@@ -198,11 +197,36 @@ const BirthdayChart = memo(function BirthdayChart({
 					zodiac={debrisZodiac}
 					ascendant={natalZodiac.ascendant}
 					onSelect={m => locate(m.object.id)}
-				/>
+				>
+					<BodyFilters
+						group="Man-made bodies"
+						presetName="Space junk"
+						preset={debrisTypes}
+						options={artificialTypes}
+						labels={typeLabels}
+						selected={selectedKinds}
+						onChange={next => {
+							setSelectedKinds(next);
+							setPage(0);
+						}}
+					>
+						<input
+							className={style.search}
+							type="search"
+							aria-label="Search by name, catalog number, designator or object type"
+							placeholder="Search objects"
+							value={search}
+							onChange={event => {
+								setSearch(event.target.value);
+								setPage(0);
+							}}
+						/>
+					</BodyFilters>
+				</ChartViewer>
 			</figure>
 			{hasObjects && catalogueFailed && !catalogue && (
 				<p role="alert">
-					Object catalogue unavailable.{' '}
+					Orbiting objects unavailable.{' '}
 					<button type="button" onClick={retryCatalogue}>
 						Retry
 					</button>
@@ -219,38 +243,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						</button>
 					</p>
 				)}
-			<section
-				className={style.objectCatalogue}
-				aria-labelledby="object-catalogue"
-			>
-				<div className={style.catalogueHeading}>
-					<h2 id="object-catalogue">Object catalogue</h2>
-					<BodyFilters
-						group="Man-made bodies"
-						presetName="Space junk"
-						preset={debrisTypes}
-						options={artificialTypes}
-						labels={typeLabels}
-						selected={selectedKinds}
-						onChange={next => {
-							setSelectedKinds(next);
-							setPage(0);
-						}}
-					/>
-				</div>
-				{hasObjects && catalogue && (
-					<input
-						className={style.search}
-						type="search"
-						aria-label="Search by name, catalog number, designator or object type"
-						placeholder="Search objects"
-						value={search}
-						onChange={event => {
-							setSearch(event.target.value);
-							setPage(0);
-						}}
-					/>
-				)}
+			<div>
 				{(bodies.length > 0 ||
 					natalZodiac.ascendant !== undefined ||
 					rows.length > 0) && (
@@ -302,38 +295,32 @@ const BirthdayChart = memo(function BirthdayChart({
 							})}
 					</ul>
 				)}
-				{hasObjects && catalogue && (
+				{hasObjects && catalogue && !rows.length && (
+					<p role="status">
+						{filtered.length && coverage.pending
+							? 'Locating objects…'
+							: 'No matching objects on the chart'}
+					</p>
+				)}
+				{plotted.length > pageSize && (
 					<div className={style.paging}>
-						<span role="status" aria-label="Catalogue results">
-							{rows.length
-								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${plotted.length.toLocaleString('en-GB')} orbiting objects`
-								: filtered.length && coverage.pending
-									? 'Locating objects…'
-									: 'No matching objects on the chart'}
-						</span>
-						{plotted.length > pageSize && (
-							<>
-								<button
-									type="button"
-									disabled={!pageIndex}
-									onClick={() => setPage(pageIndex - 1)}
-								>
-									Previous
-								</button>
-								<button
-									type="button"
-									disabled={
-										offset + rows.length >= plotted.length
-									}
-									onClick={() => setPage(pageIndex + 1)}
-								>
-									Next
-								</button>
-							</>
-						)}
+						<button
+							type="button"
+							disabled={!pageIndex}
+							onClick={() => setPage(pageIndex - 1)}
+						>
+							Previous
+						</button>
+						<button
+							type="button"
+							disabled={offset + rows.length >= plotted.length}
+							onClick={() => setPage(pageIndex + 1)}
+						>
+							Next
+						</button>
 					</div>
 				)}
-			</section>
+			</div>
 		</>
 	);
 });
@@ -347,25 +334,29 @@ export default function Page() {
 		() => setDeviceZone(Intl.DateTimeFormat().resolvedOptions().timeZone),
 		[]
 	);
-	const [cityId, setCityId] = useQueryState('city', catalogueId);
+	const [cityKey, setCityKey] = useQueryState('city', parseAsString);
 	const [cityRevision, setCityRevision] = useState(0);
 	const client = useQueryClient();
 	const birthplace = useQuery({
-		queryKey: ['birth-city', cityId],
-		enabled: cityId !== null,
+		queryKey: ['birth-city', cityKey],
+		enabled: cityKey !== null,
 		staleTime: Infinity,
 		retry: false,
 		meta: { persist: false },
 		queryFn: async () => {
 			const rows = await client.ensureQueryData(
-				cityShard(cityId! % cityShardCount)
+				cityShard(sharedCityShard(cityKey!))
 			);
-			const row = rows.find(row => row[0] === cityId);
-			if (!row) throw new Error('Birth city unavailable');
-			return readCity(row);
+			return lookupCity(rows, cityKey!);
 		},
 	});
 	const city = birthplace.data;
+	useEffect(() => {
+		if (city && cityKey !== city.key) {
+			client.setQueryData(['birth-city', city.key], city);
+			void setCityKey(city.key);
+		}
+	}, [city, cityKey, client, setCityKey]);
 	const zone = city?.timezone ?? deviceZone ?? 'UTC';
 	const chart = useDeferredValue(
 		useMemo(
@@ -391,11 +382,11 @@ export default function Page() {
 						)
 					)
 				);
-			if (next) client.setQueryData(['birth-city', next.id], next);
-			void setCityId(next?.id ?? null);
+			if (next) client.setQueryData(['birth-city', next.key], next);
+			void setCityKey(next?.key ?? null);
 			setCityRevision(revision => revision + 1);
 		},
-		[clock, deviceZone, zone, setCityId, client]
+		[clock, deviceZone, zone, setCityKey, client]
 	);
 
 	const catalogue = useQuery({
@@ -414,7 +405,7 @@ export default function Page() {
 		<article className={style.page}>
 			<h1>Astrological Chart</h1>
 			<CitySearch city={city} onSelect={setBirthplace} />
-			{cityId !== null && birthplace.isError && (
+			{cityKey !== null && birthplace.isError && (
 				<p role="alert">
 					Birth city unavailable.{' '}
 					<button
@@ -468,7 +459,7 @@ export default function Page() {
 						</dd>
 					</div>
 					<div>
-						<dt>Object catalogue</dt>
+						<dt>Orbiting objects</dt>
 						<dd>
 							<a href="https://planet4589.org/space/gcat/">
 								Jonathan McDowell’s General Catalog of

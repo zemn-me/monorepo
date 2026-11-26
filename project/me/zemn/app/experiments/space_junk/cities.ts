@@ -3,6 +3,7 @@ import * as assets from './assets.js';
 
 export interface City {
 	id: number;
+	key: string;
 	name: string;
 	admin1: string;
 	country: string;
@@ -20,6 +21,7 @@ type CityRow = [
 	longitude: number,
 	zone: string,
 	names: string[],
+	key: string,
 ];
 const shardUrls = Object.entries(assets)
 	.filter(([key]) => key.startsWith('cityShard'))
@@ -29,7 +31,7 @@ const shardUrls = Object.entries(assets)
 			Number(b.slice('cityShard'.length))
 	)
 	.map(([, url]) => url);
-export const cityShardCount = shardUrls.length;
+const cityShardCount = shardUrls.length;
 export function foldCityName(name: string) {
 	return name.toLowerCase().normalize('NFKD').replace(/\p{M}/gu, '').trim();
 }
@@ -57,7 +59,23 @@ export function cityShard(key: number | null) {
 		},
 	});
 }
-export function readCity([
+// Older shared links used the GeoNames ID. Both forms resolve through a single shard.
+export function sharedCityShard(key: string) {
+	return (
+		(/^\d+$/.test(key)
+			? Number(key)
+			: Array.from(key).reduce(
+					(sum, char) => sum + char.codePointAt(0)!,
+					0
+				)) % cityShardCount
+	);
+}
+export function lookupCity(rows: CityRow[], key: string) {
+	const row = rows.find(row => row[8] === key || String(row[0]) === key);
+	if (!row) throw new Error('Birth city unavailable');
+	return readCity(row);
+}
+function readCity([
 	id,
 	name,
 	admin1,
@@ -65,8 +83,10 @@ export function readCity([
 	latitude,
 	longitude,
 	timezone,
+	,
+	key,
 ]: CityRow): City {
-	return { id, name, admin1, country, latitude, longitude, timezone };
+	return { id, key, name, admin1, country, latitude, longitude, timezone };
 }
 export function findCities(rows: CityRow[], term: string) {
 	// Rows are population-ranked. Prefer exact names, then alternate names,

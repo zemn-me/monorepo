@@ -1,6 +1,6 @@
 import { KM_PER_AU } from 'astronomy-engine';
 import { useQueryState } from 'nuqs';
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { type ReactNode, useLayoutEffect, useMemo, useRef } from 'react';
 import {
 	defaultTurn,
 	flat,
@@ -48,11 +48,13 @@ const kmAcrossPerExtent = viewWidthKm(globeCamera(0, 0, 1));
 const distanceFormat = new Intl.NumberFormat('en-GB', {
 	maximumSignificantDigits: 3,
 });
-function formatViewWidth(extent: number) {
-	const km = kmAcrossPerExtent * extent;
+function formatDistance(km: number) {
 	return km < 1_000_000
 		? `${distanceFormat.format(km)} km`
 		: `${distanceFormat.format(km / KM_PER_AU)} AU`;
+}
+function formatViewWidth(extent: number) {
+	return formatDistance(kmAcrossPerExtent * extent);
 }
 function extentAtZoom(zoom: number) {
 	return closeExtent * (maxExtent / closeExtent) ** (1 - zoom / 100);
@@ -68,6 +70,7 @@ function zoomAtExtent(extent: number) {
 const radius = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
 export function ChartViewer({
+	children,
 	instant,
 	bodies,
 	showSigns,
@@ -80,6 +83,7 @@ export function ChartViewer({
 	ascendant,
 	onSelect,
 }: {
+	children: ReactNode;
 	instant: number;
 	bodies: BodyPosition[];
 	showSigns: boolean;
@@ -118,7 +122,7 @@ export function ChartViewer({
 			{
 				position: zoomAtExtent(extent),
 				glyph: body.glyph,
-				label: `${body.name} · ${formatViewWidth(extent)}`,
+				label: `${body.name} · ${formatDistance(body.distanceKm)} from Earth · ${formatViewWidth(extent)} across`,
 			},
 		];
 	});
@@ -203,13 +207,11 @@ export function ChartViewer({
 	}
 
 	return (
-		<div
-			className={style.viewer}
-			onKeyUp={controls.keyUp}
-			onBlur={() => controls.settle()}
-		>
+		<div className={style.viewer}>
 			<svg
 				id="star-chart"
+				onKeyUp={controls.keyUp}
+				onBlur={() => controls.settle()}
 				ref={controls.svg}
 				className={style.globe}
 				tabIndex={0}
@@ -249,9 +251,12 @@ export function ChartViewer({
 					/>
 				</g>
 			</svg>
+			{children}
 			<div
 				role="group"
 				aria-label="View controls"
+				onKeyUp={controls.keyUp}
+				onBlur={() => controls.settle()}
 				className={style.viewControls}
 			>
 				<SlideRule

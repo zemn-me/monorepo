@@ -76,8 +76,6 @@ ts_project(
     visibility = ["//:__subpackages__"],
     deps = [
         ":style_module_css",
-        "//:node_modules/@fortawesome/free-solid-svg-icons",
-        "//:node_modules/@fortawesome/react-fontawesome",
         "//:node_modules/@tanstack/react-query",
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",

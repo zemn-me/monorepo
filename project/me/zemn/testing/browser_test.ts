@@ -568,9 +568,14 @@ describe('zemn.me website', () => {
 				expect(await driver.findElement(By.css('ul[aria-label="Chart placements"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
 				);
-				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toMatch(/^1–12 of [\d,]+ orbiting objects$/);
+				const firstObject = () => grid.findElement(By.css('li:has(h3 a) p')).getText();
+				const firstOnPage = await firstObject();
+				const previous = await driver.findElement(By.xpath('//button[.="Previous"]'));
+				expect(await previous.isEnabled()).toBe(false);
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
-				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toMatch(/^13–24 of [\d,]+ orbiting objects$/);
+				await driver.wait(async () => await firstObject() !== firstOnPage, 5000);
+				expect(await grid.findElements(By.css('h3 a'))).toHaveLength(12);
+				expect(await previous.isEnabled()).toBe(true);
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
 				const markerCount = () => driver.executeScript<number>(`
@@ -627,7 +632,7 @@ describe('zemn.me website', () => {
 				const zodiacGroup = await planets.findElement(By.css('[role="group"][aria-label="Zodiac"]'));
 				expect(await zodiacGroup.findElements(By.css('input[role="switch"]'))).toHaveLength(7);
 				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
-				expect(await driver.findElements(By.css('section[aria-labelledby="object-catalogue"] [aria-label="Man-made bodies"]'))).toHaveLength(1);
+				expect(await driver.findElements(By.css('figure #star-chart + [aria-label="Man-made bodies"]:has(+ [aria-label="View controls"])'))).toHaveLength(1);
 				await (await toggle('Moon')).click();
 				expect(await bodies()).toHaveLength(6);
 				expect(await placements()).toHaveLength(6);
@@ -675,6 +680,14 @@ describe('zemn.me website', () => {
 				const zoomExtent = () => zoom.getAttribute('aria-valuetext');
 				const close = await zoomExtent();
 				expect(close).toBe('24,300 km across at Earth’s centre');
+				const visibleMarks = await driver.executeScript<number>(`
+					const track = arguments[0].parentElement.getBoundingClientRect();
+					return [...arguments[0].parentElement.querySelectorAll('g:has(> title) > text')].filter(el => {
+						const box = el.getBoundingClientRect();
+						return box.width > 0 && box.left >= track.left && box.right <= track.right;
+					}).length;
+				`, zoom);
+				expect(visibleMarks).toBe(8);
 				const junk = await toggle('Space junk');
 				await junk.sendKeys(Key.SPACE);
 				expect(await zoomExtent()).toBe(close);
@@ -703,7 +716,6 @@ describe('zemn.me website', () => {
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", junk);
 				await junk.click();
 				expect(await bodies()).toHaveLength(0);
-				await driver.findElement(By.css('button[aria-label="Choose man-made bodies"]')).click();
 				await (await toggle('Space junk')).click();
 				await (await toggle('Rocket stages')).click();
 				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
@@ -776,10 +788,11 @@ describe('zemn.me website', () => {
 					kinds: 'C,R', q: 'motor', rotation: '-32', tilt: '12', zoom: '80', spin: 'false',
 				});
 				await driver.get(`${origin}/experiments/space-junk?${params}#star-chart`);
-				expect(await driver.getCurrentUrl()).toBe(`${origin}/experiments/astrological-chart?${params}#star-chart`);
+				expect(new URL(await driver.getCurrentUrl()).pathname).toBe('/experiments/astrological-chart');
 				const field = (label: string) => driver.findElement(By.css(`input[aria-label="${label}"]`));
 				const city = await driver.findElement(By.css('input[role="combobox"]'));
 				await driver.wait(async () => (await city.getAttribute('value'))?.includes('Singapore'), 10000);
+				await driver.wait(async () => new URL(await driver.getCurrentUrl()).searchParams.get('city') === 'Asia/Singapore', 5000);
 				const time = await driver.findElement(By.name('time'));
 				expect(await time.getAttribute('aria-valuetext')).toContain('12:15:16');
 				expect(await time.getAttribute('value')).toBe(String(Date.parse(params.get('time')!)));
@@ -826,6 +839,7 @@ describe('zemn.me website', () => {
 				await birthplace.sendKeys('Singapore');
 				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
+				await driver.wait(async () => new URL(await driver.getCurrentUrl()).searchParams.get('city') === 'Asia/Singapore', 5000);
 				const natal = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
 				const rising = await natal.findElement(By.xpath('.//li[.//h3[.="Rising sign"]]'));
 				expect(await rising.getText()).toMatch(/\w+ \d+° \d+′ \d+″ · House 1\b/);
