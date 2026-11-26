@@ -689,6 +689,18 @@ describe('zemn.me website', () => {
 					}).length;
 				`, zoom);
 				expect(visibleMarks).toBe(8);
+				const zoomTrack = await zoom.findElement(By.xpath('..'));
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zoomTrack);
+				const tick = await zoomTrack.findElement(By.css('g[data-position="100"] > path'));
+				const pointer = await zoomTrack.findElement(By.css('i'));
+				const tickStart = await tick.getRect();
+				const pointerStart = await pointer.getRect();
+				await driver.actions().move({origin: zoomTrack}).press()
+					.move({origin: zoomTrack, x: 64, y: 0}).release().perform();
+				await driver.wait(async () => Number(await zoom.getAttribute('value')) < 100, 5000);
+				expect((await tick.getRect()).x - tickStart.x).toBeCloseTo(64, 0);
+				expect((await pointer.getRect()).x).toBe(pointerStart.x);
+				await zoom.sendKeys(Key.END);
 				const junk = await toggle('Space junk');
 				await junk.sendKeys(Key.SPACE);
 				expect(await zoomExtent()).toBe(close);

@@ -244,8 +244,19 @@ html:has(.main) {
 }
 
 @media print {
-	.topbar {
+	.topbar,
+	.banner,
+	.headerBgv {
 		position: relative;
+	}
+	.topbar {
+		grid-template-columns: 1fr;
+		justify-items: center;
+	}
+	.topbar > nav,
+	.topbar .backSlot,
+	.homeTopbar {
+		display: none;
 	}
 }
 
