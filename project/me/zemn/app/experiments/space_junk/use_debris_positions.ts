@@ -2,7 +2,6 @@ import {
 	queryOptions,
 	useQueries,
 	useQuery,
-	useQueryClient,
 	type UseQueryResult,
 } from '@tanstack/react-query';
 import {
@@ -20,9 +19,14 @@ import { catalogueMarkers } from './globe_geometry.js';
 import { positionsAt, readElements } from './orbit.js';
 import { orbitElementsUrl } from './orbit_archive.js';
 
+function indexElements(text: string) {
+	return Map.groupBy(readElements(text), record => record.id);
+}
+
 function archiveQuery(day: string, enabled = true) {
 	return queryOptions({
 		queryKey: ['space-junk-elements', day],
+		select: indexElements,
 		enabled,
 		// The browser's HTTP cache retains historical archives after this in-memory entry is evicted.
 		staleTime: 15 * 60000,
@@ -35,32 +39,6 @@ function archiveQuery(day: string, enabled = true) {
 			return response.text();
 		},
 	});
-}
-
-function useMarkers(
-	text: string | undefined,
-	matches: { object: SpaceObject }[],
-	instant: number
-) {
-	const elements = useMemo(
-		() =>
-			text
-				? Map.groupBy(readElements(text), record => record.id)
-				: undefined,
-		[text]
-	);
-	return useMemo(() => {
-		if (!elements) return [];
-		const time = new Date(instant);
-		return catalogueMarkers(
-			matches,
-			id => {
-				const records = elements.get(id);
-				return records && positionsAt(records, time)[0];
-			},
-			time.toISOString().slice(0, -1)
-		);
-	}, [matches, elements, instant]);
 }
 
 export function useDebrisPositions(
@@ -86,7 +64,6 @@ export function useDebrisPositions(
 
 	const enabled = day === archiveDay && matches.length > 0;
 	const exact = useQuery(archiveQuery(day, enabled));
-	const primary = useMarkers(exact.data, matches, instant);
 	const neighbors = useMemo(() => {
 		const date = Temporal.PlainDate.from(day);
 		return [-1, 1, -2, 2, -3, 3]
@@ -96,52 +73,59 @@ export function useDebrisPositions(
 			}))
 			.filter(d => d.day >= '1957-01-01' && d.day <= lastDay);
 	}, [day, lastDay]);
-	const needNearby = matches.length > 0 && !primary.length;
-	const client = useQueryClient();
-	// Give the selected day priority. Warm one day on either side only after
-	// the ruler settles, so a long scrub doesn't download every day it passes.
+	// Warm only the immediate neighbors and only when the selected day has
+	// settled. More distant archives are useful if they are already cached.
+	const [settledDay, setSettledDay] = useState('');
 	useEffect(() => {
-		if (!enabled || needNearby) return;
-		const timer = window.setTimeout(() => {
-			for (const neighbor of neighbors) {
-				if (neighbor.adjacent)
-					void client.prefetchQuery(archiveQuery(neighbor.day));
-			}
-		}, 400);
+		if (!enabled || exact.isPending) return;
+		const timer = window.setTimeout(() => setSettledDay(day), 400);
 		return () => window.clearTimeout(timer);
-	}, [client, enabled, needNearby, neighbors]);
+	}, [day, enabled, exact.isPending]);
 
-	// A missing day can use nearby measurements immediately.
 	const nearby = useQueries({
 		queries: neighbors.map(d =>
-			archiveQuery(
-				d.day,
-				enabled && d.adjacent && needNearby && !exact.isPending
-			)
+			archiveQuery(d.day, enabled && d.adjacent && settledDay === day)
 		),
 		combine: useCallback(
-			(results: UseQueryResult<string>[]) => {
+			(results: UseQueryResult<ReturnType<typeof indexElements>>[]) => {
 				const adjacent = results.filter(
 					(_, i) => neighbors[i]!.adjacent
 				);
 				return {
-					text: needNearby
-						? results
-								.map(q => q.data)
-								.filter(Boolean)
-								.join('\n')
-						: '',
+					indexes: results.flatMap(q =>
+						q.data?.size ? [q.data] : []
+					),
 					pending: adjacent.some(q => q.isPending || q.isFetching),
 					errors: adjacent.filter(q => q.isError).map(q => q.refetch),
 				};
 			},
-			[neighbors, needNearby]
+			[neighbors]
 		),
 	});
-	const fallback = useMarkers(nearby.text, matches, instant);
-	const markers = primary.length ? primary : fallback;
+	const markers = useMemo(() => {
+		if (!exact.data?.size && !nearby.indexes.length) return [];
+		const time = new Date(instant);
+		return catalogueMarkers(
+			matches,
+			id => {
+				const primary = exact.data?.get(id);
+				if (primary) {
+					const [row] = positionsAt(primary, time);
+					if (row) return row;
+				}
+				const alternatives = nearby.indexes.flatMap(
+					index => index.get(id) ?? []
+				);
+				return alternatives.length
+					? positionsAt(alternatives, time)[0]
+					: undefined;
+			},
+			time.toISOString().slice(0, -1)
+		);
+	}, [exact.data, nearby.indexes, matches, instant]);
+	const missing = matches.length > 0 && !markers.length;
 	const pending =
-		needNearby && (exact.isPending || exact.isFetching || nearby.pending);
+		missing && (exact.isPending || exact.isFetching || nearby.pending);
 
 	// During a long jump, keep the last committed layer at its own timestamp
 	// until the archive supplies positions or confirms that there are none.
@@ -169,7 +153,7 @@ export function useDebrisPositions(
 		markers: displayed,
 		instant: held?.instant ?? instant,
 		pending,
-		failed: needNearby && (exact.isError || nearby.errors.length > 0),
+		failed: missing && (exact.isError || nearby.errors.length > 0),
 		retry: () => {
 			if (exact.isError) void exact.refetch();
 			for (const refetch of nearby.errors) void refetch();

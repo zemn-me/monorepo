@@ -8,9 +8,9 @@ import { spatula, tle } from './orbit_fixture.js';
 import { snapshotPositions } from './orbit.js';
 import { useDebrisPositions } from './use_debris_positions.js';
 
-function Positions({ iso, object }: { iso: string; object?: SpaceObject }) {
+function Positions({ iso, objects }: { iso: string; objects: SpaceObject[] }) {
 	const { markers, instant } = useDebrisPositions(
-		object ? [{ object }] : [],
+		objects.map(object => ({ object })),
 		Date.parse(iso),
 		iso.slice(0, 10),
 		'2006-09-29'
@@ -32,11 +32,11 @@ function chart() {
 		archive(day: string, text: string) {
 			client.setQueryData(['space-junk-elements', day], text);
 		},
-		async show(iso: string, object: SpaceObject | undefined) {
+		async show(iso: string, ...objects: SpaceObject[]) {
 			await act(async () =>
 				root.render(
 					<QueryClientProvider client={client}>
-						<Positions iso={iso} object={object} />
+						<Positions iso={iso} objects={objects} />
 					</QueryClientProvider>
 				)
 			);
@@ -88,6 +88,31 @@ it('propagates cached measurements in both directions, only during flight and wi
 	}
 });
 
+it('keeps a neighboring measurement when the filter broadens to include an exact-day object', async () => {
+	const view = chart();
+	try {
+		const day = '2006-08-02';
+		const iso = day + 'T12:00Z';
+		const second = { ...spatula, id: 29258 };
+		const secondTle = tle
+			.replaceAll('29257', '29258')
+			.replace('307.6701', '207.6701');
+		const otherOrbit = tle.replace('307.6701', '107.6701');
+		view.archive(day, tle);
+		view.archive('2006-08-01', secondTle + '\n' + otherOrbit);
+		const expected = snapshotPositions(
+			secondTle + '\n' + tle,
+			new Date(iso)
+		).map(row => row.slice(1).join(','));
+		expect((await view.show(iso, second)).textContent).toBe(expected[0]);
+		expect((await view.show(iso, second, spatula)).textContent).toBe(
+			expected.join(' ')
+		);
+	} finally {
+		await view.close();
+	}
+});
+
 it('dates the last debris frame while the next archive loads and clears it on settled gaps or switch-off', async () => {
 	jest.useFakeTimers();
 	const view = chart();
@@ -119,7 +144,7 @@ it('dates the last debris frame while the next archive loads and clears it on se
 		});
 		expect(held.textContent).toBe('');
 		await view.show(original, spatula);
-		await view.show(later, undefined);
+		await view.show(later);
 		expect(held.textContent).toBe('');
 		await view.show('2006-09-25T12:00Z', spatula);
 		expect(held.textContent).toBe('');
@@ -174,7 +199,7 @@ it('loads the neighboring archives ahead of a day change and reuses them when th
 		expect(requests).toHaveLength(4);
 
 		await view.show('2006-08-04T12:00Z', spatula);
-		await view.show('2006-08-04T12:00Z', undefined);
+		await view.show('2006-08-04T12:00Z');
 		await settle();
 		expect(requests).toHaveLength(4);
 	} finally {
