@@ -207,11 +207,8 @@
 .globe[tabindex]:active {
 	cursor: grabbing;
 }
-.sources,
 .paging {
 	font: var(--controls);
-}
-.paging {
 	gap: 0.25rem 1rem;
 }
 .viewControls {
