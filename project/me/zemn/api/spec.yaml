@@ -3572,6 +3572,10 @@ paths:
     get:
       operationId: GetOrbitElements
       summary: Daily Earth-orbiting object elements from the Spacebook archive.
+      description: >-
+        Public and shared across viewers. Completed archives at least seven days
+        old are cacheable for one year. Recent dates and missing archives are
+        cacheable for 15 minutes.
       parameters:
         - name: day
           in: path

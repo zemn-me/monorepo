@@ -15,7 +15,6 @@ export function zemnFeatureDeployment(api: ApiZemnMe) {
 			'CALLBOX_KEY_TABLE_NAME',
 			'OAUTH_TABLE_NAME',
 			'JOURNAL_TABLE_NAME',
-			'ORBIT_CACHE_BUCKET_NAME',
 			'JOURNAL_BUCKET_NAME',
 			'OIDC_JWT_KMS_KEY_ID',
 			'OIDC_JWT_PUBLIC_KEY',

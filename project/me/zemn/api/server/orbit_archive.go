@@ -8,39 +8,34 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"regexp"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"golang.org/x/sync/singleflight"
 )
 
 type orbitArchive struct {
-	bucket  string
-	objects JournalObjectStore
-	client  *http.Client
-	loads   singleflight.Group
+	client *http.Client
+	loads  singleflight.Group
 }
 
 type orbitDay struct {
 	compressed []byte
-	expires    time.Time
+	maxAge     time.Duration
 }
 
-func orbitExpiry(day, fetched time.Time, empty bool) time.Time {
+func orbitMaxAge(day, fetched time.Time, empty bool) time.Duration {
 	// A file fetched while the day was still being filled must be refreshed
 	// before it can qualify for the historical TTL.
 	if empty || fetched.Before(day.AddDate(0, 0, 7)) {
-		return fetched.Add(15 * time.Minute)
+		return 15 * time.Minute
 	}
-	return fetched.Add(365 * 24 * time.Hour)
+	return 365 * 24 * time.Hour
 }
 
 func (d orbitDay) VisitGetOrbitElementsResponse(w http.ResponseWriter) error {
-	seconds := max(0, int(time.Until(d.expires).Seconds()))
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	seconds := int(d.maxAge.Seconds())
 	w.Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", seconds))
 	if len(d.compressed) == 0 {
 		w.WriteHeader(http.StatusNoContent)
@@ -55,6 +50,7 @@ func (d orbitDay) VisitGetOrbitElementsResponse(w http.ResponseWriter) error {
 type orbitError int
 
 func (e orbitError) VisitGetOrbitElementsResponse(w http.ResponseWriter) error {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Cache-Control", "no-store")
 	http.Error(w, http.StatusText(int(e)), int(e))
 	return nil
@@ -69,7 +65,8 @@ func (s *Server) GetOrbitElements(ctx context.Context, req GetOrbitElementsReque
 		// A second reader may still need this file after the first one cancels.
 		load, cancel := context.WithTimeout(context.WithoutCancel(ctx), 25*time.Second)
 		defer cancel()
-		return s.orbitArchive.load(load, day)
+		body, err := s.orbitArchive.fetch(load, day)
+		return orbitDay{compressed: body, maxAge: orbitMaxAge(day, time.Now(), len(body) == 0)}, err
 	})
 	select {
 	case <-ctx.Done():
@@ -81,34 +78,6 @@ func (s *Server) GetOrbitElements(ctx context.Context, req GetOrbitElementsReque
 		}
 		return res.Val.(orbitDay), nil
 	}
-}
-
-func (a *orbitArchive) load(ctx context.Context, day time.Time) (orbitDay, error) {
-	key := "tle/" + day.Format(time.DateOnly) + ".gz"
-	cached, err := a.objects.GetObject(ctx, &s3.GetObjectInput{Bucket: &a.bucket, Key: &key})
-	if err == nil {
-		defer cached.Body.Close()
-		expires := orbitExpiry(day, aws.ToTime(cached.LastModified), aws.ToInt64(cached.ContentLength) == 0)
-		if time.Now().Before(expires) {
-			body, err := io.ReadAll(cached.Body)
-			return orbitDay{body, expires}, err
-		}
-	} else {
-		var missing *s3types.NoSuchKey
-		if !errors.As(err, &missing) && !errors.Is(err, os.ErrNotExist) {
-			return orbitDay{}, err
-		}
-	}
-
-	body, err := a.fetch(ctx, day)
-	if err != nil {
-		return orbitDay{}, err
-	}
-	_, err = a.objects.PutObject(ctx, &s3.PutObjectInput{
-		Bucket: &a.bucket, Key: &key, Body: bytes.NewReader(body),
-		ContentType: aws.String("application/gzip"),
-	})
-	return orbitDay{body, orbitExpiry(day, time.Now(), len(body) == 0)}, err
 }
 
 var orbitElementPair = regexp.MustCompile(`(?m)^1 .{5}[^\r\n]*\r?\n2 `)

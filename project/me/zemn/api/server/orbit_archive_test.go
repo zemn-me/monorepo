@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"compress/gzip"
-	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,59 +9,42 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
-
-type orbitTestObjects struct {
-	fakeJournalObjects
-	modified time.Time
-}
-
-func (f *orbitTestObjects) GetObject(ctx context.Context, input *s3.GetObjectInput, opts ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
-	if _, exists := f.objects[*input.Key]; !exists {
-		return nil, &s3types.NoSuchKey{}
-	}
-	out, err := f.fakeJournalObjects.GetObject(ctx, input, opts...)
-	out.LastModified = &f.modified
-	return out, err
-}
 
 func TestOrbitArchiveHTTP(t *testing.T) {
 	const tle = "1 00005U 58002B   06211.82084541  .00000209  00000-0  23809-3 0   988\n2 00005  34.2592 354.7131 1852499 234.8007 106.4984 10.83903604654908\n"
 	const day = "2006-08-01"
 	for _, tc := range []struct {
-		name, body              string
-		upstream, status, calls int
+		name, body       string
+		upstream, status int
 	}{
-		{"archive", tle, 200, 200, 1},
-		{"missing", "", 404, 204, 1},
-		{"no content", "", 204, 204, 1},
-		{"empty", "\n", 200, 204, 1},
-		{"unavailable", "", 503, 502, 2},
-		{"invalid", "<html>error</html>", 200, 502, 2},
+		{"archive", tle, 200, 200},
+		{"missing", "", 404, 204},
+		{"no content", "", 204, 204},
+		{"empty", "\n", 200, 204},
+		{"unavailable", "", 503, 502},
+		{"invalid", "<html>error</html>", 200, 502},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			store := &orbitTestObjects{modified: time.Now()}
-			calls := 0
 			client := &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
-				calls++
+				if r.Header.Get("Cookie") != "" || r.Header.Get("Authorization") != "" {
+					t.Error("forwarded viewer credentials to Spacebook")
+				}
 				if r.URL.String() != "https://spacebook.com/api/entity/tle/"+day {
 					t.Errorf("upstream: %s", r.URL)
 				}
 				return &http.Response{StatusCode: tc.upstream, Body: io.NopCloser(strings.NewReader(tc.body))}, nil
 			})}
-			// Separate API instances must share the on-demand cache.
-			for range 2 {
-				s, err := NewServer(t.Context(), NewServerOptions{JournalObjects: store})
+			for _, origin := range []string{"", "https://zemn.me"} {
+				s, err := NewServer(t.Context(), NewServerOptions{})
 				if err != nil {
 					t.Fatal(err)
 				}
 				s.orbitArchive.client = client
-				s.orbitArchive.bucket = "orbit-test"
 				r := httptest.NewRequest("GET", "/earth-orbits/elements/"+day, nil)
-				r.Header.Set("Origin", "https://zemn.me")
+				r.Header.Set("Origin", origin)
+				r.Header.Set("Cookie", "session=viewer")
+				r.Header.Set("Authorization", "Bearer viewer")
 				w := httptest.NewRecorder()
 				s.ServeHTTP(w, r)
 				if w.Code != tc.status || w.Header().Get("Access-Control-Allow-Origin") != "*" {
@@ -98,32 +80,18 @@ func TestOrbitArchiveHTTP(t *testing.T) {
 				}
 				z.Close()
 			}
-			if calls != tc.calls {
-				t.Fatalf("Spacebook requests %d, want %d", calls, tc.calls)
-			}
 		})
 	}
 }
 
-func TestOrbitArchiveRefresh(t *testing.T) {
+func TestOrbitArchiveTTLAndDateBounds(t *testing.T) {
 	today := time.Now().UTC().Truncate(24 * time.Hour)
 	// A partial file fetched on its own date must not become a year-long cache hit later.
-	if got := orbitExpiry(today, today, false).Sub(today); got != 15*time.Minute {
+	if got := orbitMaxAge(today, today, false); got != 15*time.Minute {
 		t.Fatal(got)
 	}
-	if got := orbitExpiry(today.AddDate(0, 0, -8), today, false).Sub(today); got != 365*24*time.Hour {
+	if got := orbitMaxAge(today.AddDate(0, 0, -8), today, false); got != 365*24*time.Hour {
 		t.Fatal(got)
-	}
-	storage := &orbitTestObjects{modified: time.Now().Add(-time.Hour)}
-	day := today.AddDate(0, 0, -30)
-	storage.objects = map[string][]byte{"tle/" + day.Format(time.DateOnly) + ".gz": nil}
-	fetched := false
-	archive := orbitArchive{objects: storage, bucket: "test", client: &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
-		fetched = true
-		return &http.Response{StatusCode: 404, Body: http.NoBody}, nil
-	})}}
-	if _, err := archive.load(t.Context(), day); err != nil || !fetched {
-		t.Fatalf("expired miss did not refresh: %v", err)
 	}
 	s := &Server{}
 	for _, invalid := range []string{"yesterday", "1956-12-31", "2025-02-30", today.AddDate(0, 0, 1).Format(time.DateOnly)} {

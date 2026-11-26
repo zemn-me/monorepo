@@ -161,20 +161,18 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		MaxAge:         300,
 	}))
 
-	objects := opts.JournalObjects
+	journalObjects := opts.JournalObjects
 	journalPresigner := opts.JournalPresigner
-	if objects == nil {
+	if journalObjects == nil {
 		s3Objects := s3.NewFromConfig(cfg)
-		objects = s3Objects
+		journalObjects = s3Objects
 		if journalPresigner == nil {
 			journalPresigner = s3.NewPresignClient(s3Objects)
 		}
 	}
 	s := &Server{
 		orbitArchive: orbitArchive{
-			objects: objects,
-			bucket:  os.Getenv("ORBIT_CACHE_BUCKET_NAME"),
-			client:  &http.Client{Timeout: 18 * time.Second},
+			client: &http.Client{Timeout: 18 * time.Second},
 		},
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
@@ -200,7 +198,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		journalAI:              opts.JournalAI,
 		journalCurator:         opts.JournalCurator,
 		journalCurationEnabled: opts.JournalCurationEnabled || os.Getenv("JOURNAL_CURATION_ENABLED") == "true",
-		journalObjects:         objects,
+		journalObjects:         journalObjects,
 		journalPresigner:       journalPresigner,
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {
