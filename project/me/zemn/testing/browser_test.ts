@@ -870,6 +870,7 @@ describe('zemn.me website', () => {
 				const params = new URLSearchParams({
 					time: '2006-08-01T04:15:16.789Z', city: '1880252', bodies: 'Sun,Pluto',
 					kinds: 'C,R', q: 'motor', rotation: '-32', tilt: '12', zoom: '80', spin: 'false',
+					panX: '-8.76543', panY: '19.10001',
 				});
 				await driver.get(`${origin}/experiments/space-junk?${params}#star-chart`);
 				expect(new URL(await driver.getCurrentUrl()).pathname).toBe('/experiments/astrological-chart');
@@ -900,6 +901,10 @@ describe('zemn.me website', () => {
 					const url = new URL(await driver.getCurrentUrl());
 					return url.searchParams.get('q') === 'spat' && url.searchParams.get('rotation') === '-31' && url.hash === '#star-chart';
 				}, 5000);
+				const shared = new URL(await driver.getCurrentUrl()).searchParams;
+				expect(shared.get('panX')).toBe('-8.77');
+				expect(shared.get('panY')).toBe('19.1');
+				expect(shared.get('time')).toBe(params.get('time'));
 				await driver.navigate().refresh();
 				expect(await (await field('Rotation')).getAttribute('value')).toBe('-31');
 				expect(await (await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000)).getAttribute('value')).toBe('spat');

@@ -26,7 +26,7 @@ export function boundedNumber(min: number, max: number) {
 				? n
 				: null;
 		},
-		serialize: String,
+		serialize: value => String(Number(value.toFixed(2))),
 	});
 }
 export const catalogueId = createParser<number>({
