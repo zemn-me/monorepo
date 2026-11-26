@@ -350,6 +350,28 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('loads the astrological chart with orbiting objects and no browser errors', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart?time=2006-08-01T12:00:00Z&q=motor`);
+				const wheel = await driver.wait(until.elementLocated(
+					By.css('svg[aria-label^="Face-on zodiac wheel"]')
+				), 10000);
+				await driver.wait(async () => {
+					const markers = await wheel.findElements(
+						By.css('[aria-label="Orbiting objects"] [role="img"][aria-label*="motor" i]')
+					);
+					return (await Promise.all(markers.map(marker => marker.isDisplayed()))).some(Boolean);
+				}, 15000, 'The chart should display an orbiting motor from the historical archive');
+			} finally {
+				try {
+					const logs = await driver.manage().logs().get('browser');
+					expect(logs.filter(log => log.level.value >= logging.Level.SEVERE.value)).toEqual([]);
+				} finally {
+					await driver.quit();
+				}
+			}
+		});
+
 		it('lists every experiment and draws a birthday chart from the index', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });

@@ -78,7 +78,7 @@ itest_service(
         "ZEMN_TEST_CALENDAR_ICAL_ROLLING_FIXTURE": "1",
     },
     exe = ":localserver",
-    http_health_check_address = "http://localhost:$${PORT}/healthz",
+    http_health_check_address = "http://localhost:$${PORT}/__local/ready",
     deps = [":journal_worker_itest_service"],
 )
 

@@ -60,7 +60,7 @@ assigned frontend origin.
 
 ## Explicit compatibility fixtures
 
-The test uses AWS Emulator 1.0.382.1. A loopback adapter supplies the following
+The test builds AWS Emulator v1.0.382 from source. Bazel applies the [regional origin routing patch](../../../../bzl/aws_emulator/regional_origin.patch) before compiling the Linux binary. The patch lets CloudFront resolve a regional API Gateway custom-domain listener through its published address and port. See [upstream issue #683](https://github.com/aws/aws-emulator/issues/683). A loopback adapter supplies the following
 operations missing from that pinned release; all other API requests are forwarded
 to the emulator and their failures remain test failures:
 
@@ -97,7 +97,7 @@ Run on Linux x86-64:
 With the repository's authenticated BuildBuddy execution configuration, macOS
 users can run the same tests with `--config=remote --remote_timeout=30m`.
 
-The emulator and AWS/Random provider binaries are versioned and checksum-pinned
+The emulator source and AWS/Random provider binaries are versioned and checksum-pinned
 in `MODULE.bazel`. Provider versions must match the SDK versions in
 `package.json`. No tools are installed globally and Pulumi's automatic plugin
 acquisition is disabled. Each test has its own emulator process, assigned port,
