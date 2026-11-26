@@ -18,20 +18,19 @@ import { Temporal } from 'temporal-polyfill';
 import type { SpaceObject } from './chart.js';
 import { catalogueMarkers } from './globe_geometry.js';
 import { positionsAt, readElements } from './orbit.js';
+import { orbitElementsUrl } from './orbit_archive.js';
 
 function archiveQuery(day: string, enabled = true) {
 	return queryOptions({
 		queryKey: ['space-junk-elements', day],
 		enabled,
-		staleTime: 86400000,
+		// The browser's HTTP cache retains historical archives after this in-memory entry is evicted.
+		staleTime: 15 * 60000,
 		gcTime: 60000,
 		meta: { persist: false },
 		retry: false,
 		queryFn: async ({ signal }) => {
-			const response = await fetch(
-				`/experiments/space-junk/elements/${day}`,
-				{ signal }
-			);
+			const response = await fetch(orbitElementsUrl(day), { signal });
 			if (!response.ok) throw new Error('Unable to load archived orbits');
 			return response.text();
 		},

@@ -52,6 +52,7 @@ var _ JournalPresigner = (*s3.PresignClient)(nil)
 
 // Server holds the DynamoDB client and table names.
 type Server struct {
+	orbitArchive         orbitArchive
 	ddb                  DynamoDBClient
 	analyticsTableName   string
 	settingsTableName    string
@@ -160,16 +161,21 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		MaxAge:         300,
 	}))
 
-	journalObjects := opts.JournalObjects
+	objects := opts.JournalObjects
 	journalPresigner := opts.JournalPresigner
-	if journalObjects == nil {
+	if objects == nil {
 		s3Objects := s3.NewFromConfig(cfg)
-		journalObjects = s3Objects
+		objects = s3Objects
 		if journalPresigner == nil {
 			journalPresigner = s3.NewPresignClient(s3Objects)
 		}
 	}
 	s := &Server{
+		orbitArchive: orbitArchive{
+			objects: objects,
+			bucket:  os.Getenv("ORBIT_CACHE_BUCKET_NAME"),
+			client:  &http.Client{Timeout: 18 * time.Second},
+		},
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
 		analyticsTableName:   analyticsTableName,
@@ -194,7 +200,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		journalAI:              opts.JournalAI,
 		journalCurator:         opts.JournalCurator,
 		journalCurationEnabled: opts.JournalCurationEnabled || os.Getenv("JOURNAL_CURATION_ENABLED") == "true",
-		journalObjects:         journalObjects,
+		journalObjects:         objects,
 		journalPresigner:       journalPresigner,
 	}
 	s.sendText = func(ctx context.Context, to, from, body string) error {

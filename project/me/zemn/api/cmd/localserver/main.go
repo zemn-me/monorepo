@@ -131,6 +131,7 @@ func main() {
 		mustSetEnv("JOURNAL_TABLE_NAME", "table6")
 		mustSetEnv("OAUTH_TABLE_NAME", "oauth")
 		mustSetEnv("JOURNAL_BUCKET_NAME", "local-journal")
+		mustSetEnv("ORBIT_CACHE_BUCKET_NAME", "local-orbit-cache")
 		store, err := newLocalJournalStore(apiOrigin, log.Default())
 		if err != nil {
 			log.Fatal(err)

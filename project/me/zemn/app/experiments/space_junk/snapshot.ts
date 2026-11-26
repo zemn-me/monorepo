@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router';
 
-import { fetchDayElements } from './daily_elements.js';
+import { orbitElementsUrl } from './orbit_archive.js';
 import { snapshotPositions } from './orbit.js';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -14,13 +14,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	const day = time.toISOString().slice(0, 10);
 	try {
-		const rows = snapshotPositions(
-			await fetchDayElements(day, request.signal),
-			time
-		);
+		const response = await fetch(orbitElementsUrl(day), {
+			signal: request.signal,
+		});
+		if (!response.ok) throw new Error('Archive unavailable');
+		const rows = snapshotPositions(await response.text(), time);
 		return Response.json(rows, {
 			headers: {
-				'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+				'Cache-Control':
+					response.headers.get('Cache-Control') ?? 'no-store',
 			},
 		});
 	} catch {

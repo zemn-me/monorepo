@@ -213,6 +213,12 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this, protect: args.protectDatabases }
 		);
 
+		const orbitCache = new aws.s3.BucketV2(
+			deriveBucketName(`${name}-orbit-cache`),
+			{ forceDestroy: !args.protectDatabases },
+			{ parent: this }
+		);
+
 		const journalBucket = new aws.s3.BucketV2(
 			deriveBucketName(`${name}-journal-audio`),
 			{},
@@ -286,6 +292,29 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 					aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole,
 				],
 				inlinePolicies: [
+					{
+						name: 'orbit-cache',
+						policy: orbitCache.arn.apply(arn =>
+							JSON.stringify({
+								Version: '2012-10-17',
+								Statement: [
+									{
+										Effect: 'Allow',
+										Action: 's3:ListBucket',
+										Resource: arn,
+									},
+									{
+										Effect: 'Allow',
+										Action: [
+											's3:GetObject',
+											's3:PutObject',
+										],
+										Resource: `${arn}/tle/*`,
+									},
+								],
+							})
+						),
+					},
 					{
 						name: `${name}-dynamodb-inline-policy`,
 						policy: Pulumi.all([
@@ -634,6 +663,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 							args.journalWorkerEnvironment === 'staging'
 								? 'https://staging.zemn.me'
 								: 'https://zemn.me',
+						ORBIT_CACHE_BUCKET_NAME: orbitCache.bucket,
 						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 						...(args.minecraftRconBridgeFunctionName === undefined

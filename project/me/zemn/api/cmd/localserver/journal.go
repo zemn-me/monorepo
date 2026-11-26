@@ -15,6 +15,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
@@ -158,7 +159,7 @@ func (s *localJournalStore) GetObject(_ context.Context, input *s3.GetObjectInpu
 	}
 	length := info.Size()
 	return &s3.GetObjectOutput{
-		Body: file, ContentLength: &length, ContentType: &contentType,
+		Body: file, ContentLength: &length, ContentType: &contentType, LastModified: aws.Time(info.ModTime()),
 	}, nil
 }
 

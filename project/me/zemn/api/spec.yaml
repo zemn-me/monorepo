@@ -3568,6 +3568,34 @@ paths:
               schema:
                 type: string
 
+  /space-junk/elements/{day}:
+    get:
+      operationId: GetOrbitElements
+      summary: Daily Earth-orbiting object elements from the Spacebook archive.
+      parameters:
+        - name: day
+          in: path
+          required: true
+          schema: { type: string }
+          description: UTC date in YYYY-MM-DD form, from 1957 through today.
+      responses:
+        "200":
+          description: Gzip-encoded two-line orbital elements.
+          headers:
+            Cache-Control: { schema: { type: string } }
+            Content-Encoding: { schema: { type: string } }
+          content:
+            text/plain:
+              schema: { type: string }
+        "204":
+          description: No archive for this day.
+          headers:
+            Cache-Control: { schema: { type: string } }
+        "400":
+          description: Invalid archive date.
+        "502":
+          description: Archive unavailable.
+
   /healthz:
     get:
       summary: Health check endpoint.
