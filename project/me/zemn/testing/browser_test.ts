@@ -456,6 +456,13 @@ describe('zemn.me website', () => {
 				await touch('touchEnd', []);
 				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
 				expect(await timestamp()).toBe(scrubbed);
+				const scrollTop = () => driver.executeScript<number>('return window.scrollY');
+				const beforeScroll = await scrollTop();
+				await chrome.sendDevToolsCommand('Input.dispatchMouseEvent', {
+					type: 'mouseWheel', x, y, deltaX: 0, deltaY: 120,
+				});
+				await driver.wait(async () => await scrollTop() > beforeScroll, 5000, 'Scrolling over the time ruler moves the page');
+				expect(await timestamp()).toBe(scrubbed);
 				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
 				expect(await search.getProperty('value')).toBe('spatula');
 				const objects = await driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));

@@ -265,7 +265,6 @@ export function ChartViewer({
 					tickLabel={mark => `${mark}°`}
 					readPosition={() => controls.readCamera().tilt}
 					seek={tiltTo}
-					afterWheel={() => controls.settle(250)}
 					inputProps={{
 						min: -90,
 						max: 90,

@@ -1,10 +1,4 @@
-import {
-	type ComponentPropsWithoutRef,
-	type ReactNode,
-	useEffect,
-	useEffectEvent,
-	useRef,
-} from 'react';
+import { type ComponentPropsWithoutRef, type ReactNode, useRef } from 'react';
 import style from './style.module.css';
 
 export function SlideRule({
@@ -26,7 +20,6 @@ export function SlideRule({
 	inputProps,
 	onGrab,
 	onRelease,
-	afterWheel,
 }: {
 	label: string;
 	caption?: string;
@@ -51,10 +44,8 @@ export function SlideRule({
 	inputProps: ComponentPropsWithoutRef<'input'>;
 	onGrab?: (id: number) => void;
 	onRelease?: (id: number) => void;
-	afterWheel?: () => void;
 }) {
 	const input = useRef<HTMLInputElement>(null);
-	const track = useRef<HTMLDivElement>(null);
 	const drag = useRef<{
 		id: number;
 		x: number;
@@ -62,28 +53,6 @@ export function SlideRule({
 		moved: boolean;
 		mark?: number;
 	} | null>(null);
-	const scroll = useEffectEvent((event: WheelEvent) => {
-		if (event.ctrlKey || !event.cancelable) return;
-		const delta =
-			Math.abs(event.deltaX) > Math.abs(event.deltaY)
-				? event.deltaX
-				: event.deltaY;
-		if (!delta) return;
-		event.preventDefault();
-		const pixels =
-			event.deltaMode === WheelEvent.DOM_DELTA_LINE
-				? 16
-				: event.deltaMode === WheelEvent.DOM_DELTA_PAGE
-					? track.current!.clientWidth
-					: 1;
-		seek(readPosition() + (delta * pixels) / pitch);
-		afterWheel?.();
-	});
-	useEffect(() => {
-		const strip = track.current!;
-		strip.addEventListener('wheel', scroll, { passive: false });
-		return () => strip.removeEventListener('wheel', scroll);
-	}, []);
 
 	const ticks = [];
 	const radius = 430 / pitch;
@@ -126,7 +95,6 @@ export function SlideRule({
 				<strong>{readout}</strong>
 			</div>
 			<div
-				ref={track}
 				className={style.rulerTrack}
 				onPointerDown={e => {
 					if (!e.isPrimary || e.button !== 0) return;
