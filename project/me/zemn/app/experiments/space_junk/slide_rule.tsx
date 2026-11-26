@@ -1,4 +1,9 @@
-import { type ComponentPropsWithoutRef, type ReactNode, useRef } from 'react';
+import {
+	type ComponentPropsWithoutRef,
+	type ReactNode,
+	useId,
+	useRef,
+} from 'react';
 import style from './style.module.css';
 
 export function SlideRule({
@@ -34,6 +39,7 @@ export function SlideRule({
 	tickOrigin?: number;
 	bands?: readonly {
 		start: number;
+		split: number;
 		end: number;
 		startLabel: string;
 		endLabel: string;
@@ -45,6 +51,7 @@ export function SlideRule({
 	onGrab?: (id: number) => void;
 	onRelease?: (id: number) => void;
 }) {
+	const hatchId = useId();
 	const input = useRef<HTMLInputElement>(null);
 	const drag = useRef<{
 		id: number;
@@ -146,34 +153,63 @@ export function SlideRule({
 					aria-label={label}
 				/>
 				<svg aria-hidden="true" width="100%" height="44">
+					{bands && (
+						<defs>
+							<pattern
+								id={hatchId}
+								patternUnits="userSpaceOnUse"
+								width="6"
+								height="6"
+								patternTransform="rotate(35)"
+							>
+								<path d="M3 0v6" />
+							</pattern>
+						</defs>
+					)}
 					<svg x="50%" width="1" height="44" overflow="visible">
-						{bands?.map(({ start, end, startLabel, endLabel }) => {
-							const span = (end - start) * pitch;
-							return (
-								<g
-									key={start}
-									className={style.rulerBand}
-									transform={`translate(${(start - centre) * pitch} 0)`}
-									pointerEvents="none"
-								>
-									<rect
-										y="21"
-										width={span}
-										height="12"
-										fill="currentColor"
-										opacity=".15"
-									/>
-									<path
-										d={`M0 21v12h${span}V21`}
-										fill="none"
-									/>
-									<text y="43">{startLabel}</text>
-									<text x={span} y="43">
-										{endLabel}
-									</text>
-								</g>
-							);
-						})}
+						{bands?.map(
+							({ start, split, end, startLabel, endLabel }) => {
+								const span = (end - start) * pitch;
+								const divider = (split - start) * pitch;
+								return (
+									<g
+										key={start}
+										className={style.rulerBand}
+										transform={`translate(${(start - centre) * pitch} 0)`}
+										pointerEvents="none"
+									>
+										<rect
+											y="21"
+											width={span}
+											height="12"
+											fill="currentColor"
+											opacity=".08"
+										/>
+										<g fill={`url(#${hatchId})`}>
+											<rect
+												y="21"
+												width={divider}
+												height="12"
+											/>
+											<rect
+												y="21"
+												width={span - divider}
+												height="12"
+												transform={`translate(${span} 0) scale(-1 1)`}
+											/>
+										</g>
+										<path
+											d={`M0 21v12h${span}V21 M${divider} 21v12`}
+											fill="none"
+										/>
+										<text y="43">{startLabel}</text>
+										<text x={span} y="43">
+											{endLabel}
+										</text>
+									</g>
+								);
+							}
+						)}
 						{ticks}
 					</svg>
 				</svg>

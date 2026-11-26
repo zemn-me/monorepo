@@ -5,6 +5,7 @@ import {
 	defaultTurn,
 	flat,
 	orbitalTiltLimit,
+	settlingMidpoint,
 	type PickMarker,
 	useChartCamera,
 	wrap,
@@ -28,12 +29,14 @@ const closeExtent = 1.5;
 const tiltBands = [
 	{
 		start: -90,
+		split: -settlingMidpoint,
 		end: -orbitalTiltLimit,
 		startLabel: 'Wheel',
 		endLabel: 'Orbit →',
 	},
 	{
 		start: orbitalTiltLimit,
+		split: settlingMidpoint,
 		end: 90,
 		startLabel: '← Orbit',
 		endLabel: 'Wheel',
@@ -282,7 +285,7 @@ export function ChartViewer({
 						max: 90,
 						value: Math.round(tilt),
 						'aria-valuetext': `${Math.round(tilt)} degrees latitude`,
-						'aria-description': `The chart blends from orbit to wheel between ${orbitalTiltLimit} and 90 degrees in either direction. Release to settle into the nearer view.`,
+						'aria-description': `The chart blends from orbit to wheel between ${orbitalTiltLimit} and 90 degrees in either direction. Release past ${settlingMidpoint} degrees toward either pole to settle into Wheel. The other half settles into Orbit.`,
 						onChange: e => tiltTo(e.currentTarget.valueAsNumber),
 					}}
 				/>

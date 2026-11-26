@@ -28,6 +28,7 @@ const revolutionMs = 120_000;
 
 // Ease symmetrically into the disc near either pole.
 export const orbitalTiltLimit = 60;
+export const settlingMidpoint = (orbitalTiltLimit + 90) / 2;
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
 function orbitalBlend(tilt: number) {
 	const t = Math.min(1, (90 - Math.abs(tilt)) / (90 - orbitalTiltLimit));
@@ -75,7 +76,6 @@ export function useChartCamera() {
 	}
 	const faceOn = Math.abs(camera.tilt) === 90;
 	const unfold = orbitalBlend(camera.tilt);
-	const orbiting = unfold === 1;
 
 	const stopSettling = useCallback(() => {
 		if (settleFrame.current !== null)
@@ -94,7 +94,9 @@ export function useChartCamera() {
 			rangePointers.current.size
 		)
 			return;
-		const target = Math.sign(start) * (blend < 0.5 ? 90 : orbitalTiltLimit);
+		const target =
+			Math.sign(start) *
+			(Math.abs(start) > settlingMidpoint ? 90 : orbitalTiltLimit);
 		const since = performance.now() + delay;
 		const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		function tick(now: number) {
@@ -165,7 +167,7 @@ export function useChartCamera() {
 	);
 
 	useEffect(() => {
-		if (!spin || !orbiting) return;
+		if (!spin) return;
 		const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		let visible = false;
 		let animation: number | undefined;
@@ -176,7 +178,7 @@ export function useChartCamera() {
 				fingers.current.size ||
 				rangePointers.current.size ||
 				now < resumeAt.current ||
-				Math.abs(latest.current.tilt) > orbitalTiltLimit
+				settleFrame.current !== null
 			) {
 				last = undefined;
 				return;
@@ -215,7 +217,7 @@ export function useChartCamera() {
 			document.removeEventListener('visibilitychange', sync);
 			if (animation !== undefined) cancelAnimationFrame(animation);
 		};
-	}, [orbiting, spin]);
+	}, [spin]);
 
 	function center() {
 		const [a, b] = fingers.current.values();
