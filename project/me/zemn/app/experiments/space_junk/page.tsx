@@ -20,7 +20,6 @@ import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
 import { bodyPositions, type ChartBody, classical, modern } from './planets.js';
 import { firstInstant, zonedTime } from './ruler_time.js';
-import { Sky } from './sky.js';
 import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
 import { useRulerClock } from './use_ruler_clock.js';
@@ -82,10 +81,23 @@ const BirthdayChart = memo(function BirthdayChart({
 	);
 	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
 	const { instant: debrisInstant } = coverage;
+	const filtered = useMemo(() => {
+		const term = search.trim().toLowerCase();
+		if (!term) return matches;
+		return matches.filter(({ object }) =>
+			`${object.name} ${object.piece} ${object.id} ${kinds[object.kind]}`
+				.toLowerCase()
+				.includes(term)
+		);
+	}, [matches, search]);
+	const filteredIds = useMemo(
+		() => new Set(filtered.map(({ object }) => object.id)),
+		[filtered]
+	);
 	const markers = useMemo(
 		() =>
-			coverage.markers.filter(m => selectedKinds.includes(m.object.kind)),
-		[coverage.markers, selectedKinds]
+			coverage.markers.filter(({ object }) => filteredIds.has(object.id)),
+		[coverage.markers, filteredIds]
 	);
 	const [selectedBodies, setSelectedBodies] =
 		useState<readonly ChartBody[]>(classical);
@@ -119,15 +131,6 @@ const BirthdayChart = memo(function BirthdayChart({
 				: debrisZodiac.ascendant,
 		[place, debrisInstant, instant, debrisZodiac]
 	);
-	const filtered = useMemo(() => {
-		const term = search.trim().toLowerCase();
-		if (!term) return matches;
-		return matches.filter(({ object }) =>
-			`${object.name} ${object.piece} ${object.id} ${kinds[object.kind]}`
-				.toLowerCase()
-				.includes(term)
-		);
-	}, [matches, search]);
 	const pageSize = 12;
 	const pageIndex = Math.min(
 		page,
@@ -188,7 +191,7 @@ const BirthdayChart = memo(function BirthdayChart({
 					</button>
 				</p>
 			)}
-			{hasObjects &&
+			{filtered.length > 0 &&
 				!markers.length &&
 				coverage.failed &&
 				!coverage.pending && (
@@ -200,8 +203,11 @@ const BirthdayChart = memo(function BirthdayChart({
 					</p>
 				)}
 			{hasObjects && catalogue && (
-				<details className={style.disclosure}>
-					<summary>Object catalogue</summary>
+				<section
+					className={style.objectCatalogue}
+					aria-labelledby="object-catalogue"
+				>
+					<h2 id="object-catalogue">Object catalogue</h2>
 					<input
 						className={style.search}
 						type="search"
@@ -240,13 +246,6 @@ const BirthdayChart = memo(function BirthdayChart({
 							</>
 						)}
 					</div>
-					{rows.length > 0 && (
-						<Sky
-							observer={place && { ...place, instant, zone }}
-							objects={rows.map(row => row.object)}
-						/>
-					)}
-
 					<ul
 						className={style.catalogue}
 						aria-label="Objects in orbit"
@@ -280,7 +279,7 @@ const BirthdayChart = memo(function BirthdayChart({
 							</li>
 						))}
 					</ul>
-				</details>
+				</section>
 			)}
 		</>
 	);
@@ -394,19 +393,6 @@ export default function Page() {
 							<a href="https://spacebook.com/">
 								COMSPOC Spacebook
 							</a>
-						</dd>
-					</div>
-					<div>
-						<dt>Local horizon</dt>
-						<dd>
-							<a href="https://satchecker.cps.iau.org/">
-								IAU CPS SatChecker
-							</a>{' '}
-							using{' '}
-							<a href="https://www.space-track.org/">
-								Space-Track
-							</a>{' '}
-							and <a href="https://celestrak.org/">CelesTrak</a>
 						</dd>
 					</div>
 					<div>

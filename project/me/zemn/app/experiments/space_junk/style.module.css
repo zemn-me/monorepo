@@ -191,16 +191,11 @@
 	cursor: grabbing;
 }
 .sources,
-.reading,
 .camera,
-.sky,
 .paging,
 .catalogue,
-.disclosure {
+.objectCatalogue {
 	font: var(--controls);
-}
-.reading p {
-	margin: 0.25rem 0;
 }
 .viewControls,
 .paging {
@@ -217,36 +212,17 @@
 	width: 6rem;
 	margin: 0;
 }
-.reading,
 .camera {
 	width: fit-content;
 	max-width: 100%;
 	margin: 0 auto;
 }
-.reading dl {
-	text-align: left;
-	margin: 0.75rem auto;
-	width: fit-content;
-}
-.reading dl div {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0 0.7rem;
-	margin-block: 0.25rem;
-}
-.reading dd {
-	margin: 0;
-}
-.disclosure {
-	border-top: 1px solid var(--line);
-}
-.disclosure > summary {
-	padding-block: 0.55rem;
-}
+.objectCatalogue,
 .sources {
 	border-block-start: 1px solid var(--line);
 	padding-block-start: 0.75rem;
 }
+.objectCatalogue h2,
 .sources h2 {
 	margin: 0;
 	font: inherit;
@@ -305,14 +281,6 @@
 .catalogue p {
 	margin: 0.2rem 0 0;
 	color: var(--muted);
-}
-.skyMap {
-	display: block;
-	margin-inline: auto;
-	width: min(100%, 18rem);
-}
-.sky li {
-	margin-block: 0.5rem;
 }
 @media (width <= 38rem) {
 	.page {

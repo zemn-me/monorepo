@@ -1,6 +1,5 @@
 import type { ChartGeometry } from './chart_geometry.js';
-import style from './style.module.css';
-import { type nearestAspects, type Placement, signPosition } from './zodiac.js';
+import { type nearestAspects, type Placement } from './zodiac.js';
 
 function shortName(p: Placement) {
 	const name = p.marker.object.name;
@@ -90,43 +89,5 @@ export function WheelGuides({
 				</g>
 			)}
 		</g>
-	);
-}
-
-export function WheelReading({
-	selected,
-	aspects,
-}: {
-	selected: Placement;
-	aspects: ReturnType<typeof nearestAspects>;
-}) {
-	return (
-		<details className={style.reading}>
-			<summary>
-				{shortName(selected)} · {signPosition(selected.longitude)}
-			</summary>
-			<p>
-				{Math.abs(selected.latitude).toFixed(1)}°{' '}
-				{selected.latitude < 0 ? 'below' : 'above'} the ecliptic.
-			</p>
-			{aspects.length > 0 && (
-				<>
-					<p>Closest aspects within 1°</p>
-					<dl>
-						{aspects.map(a => (
-							<div key={a.name}>
-								<dt>
-									{a.name} · {a.separation.toFixed(1)}°
-								</dt>
-								<dd>
-									{a.placement.marker.object.name} ·{' '}
-									{a.placement.marker.object.id}
-								</dd>
-							</div>
-						))}
-					</dl>
-				</>
-			)}
-		</details>
 	);
 }

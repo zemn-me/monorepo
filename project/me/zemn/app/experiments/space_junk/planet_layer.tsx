@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { ChartGeometry } from './chart_geometry.js';
-import { type BodyPosition, bodyAspects, earthDistance } from './planets.js';
+import { type BodyPosition, bodyAspects } from './planets.js';
 import style from './style.module.css';
 import { signPosition } from './zodiac.js';
 
@@ -117,38 +117,5 @@ export function PlanetLayer({
 				);
 			})}
 		</g>
-	);
-}
-
-export function PlanetPositions({
-	bodies,
-	physical,
-}: {
-	bodies: BodyPosition[];
-	physical: boolean;
-}) {
-	return (
-		bodies.length > 0 && (
-			<details className={style.reading}>
-				<summary>Planet positions</summary>
-				<dl>
-					{bodies.map(body => (
-						<div key={body.name}>
-							<dt>
-								{body.glyph}
-								{'\uFE0E'} {body.name}
-							</dt>
-							<dd>
-								{signPosition(body.longitude)}
-								{physical &&
-									' · ' +
-										earthDistance(body.distanceKm) +
-										' from Earth'}
-							</dd>
-						</div>
-					))}
-				</dl>
-			</details>
-		)
 	);
 }

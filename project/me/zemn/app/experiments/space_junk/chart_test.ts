@@ -9,13 +9,7 @@ import {
 	surface,
 } from './globe_geometry.js';
 import { globeCamera, globeFrame, height, width } from './globe_scene.js';
-import {
-	archivedOrbit,
-	lookFrom,
-	positionsAt,
-	readElements,
-	snapshotPositions,
-} from './orbit.js';
+import { positionsAt, readElements, snapshotPositions } from './orbit.js';
 
 import { bodyPositions, classical, earthFixedSky, modern } from './planets.js';
 import {
@@ -94,31 +88,13 @@ describe('free flight on the birthday', () => {
 	});
 });
 
-describe('historical sky', () => {
-	// Space-Track elements from IAU CPS SatChecker; its independent ephemeris
-	// for JD 2453950 at 51.48 N, 0 E gives -42.996° altitude and 334.801° azimuth.
-	const record = {
-		satellite_id: 29257,
-		data_source: 'spacetrack',
-		tle_line1:
-			'1 29257U 98067AJ  06214.42846098  .00093793  00000-0  49733-3 0  9999',
-		tle_line2:
-			'2 29257 051.6364 308.9779 0007048 137.1293 223.0259 15.79733247  4533',
-	};
-	it('reproduces the archived observation from Greenwich', () => {
-		const orbit = archivedOrbit(
-			record,
-			29257,
-			new Date('2006-08-02T12:00:00Z')
-		);
-		expect(orbit).toBeTruthy();
-		const look = lookFrom(orbit!, 51.48, 0);
-		expect(look.elevation).toBeCloseTo(-43, 1);
-		expect(look.azimuth).toBeCloseTo(334.8, 1);
-		expect(look.rising).toBe(true);
-	});
+describe('historical debris positions', () => {
+	// Space-Track elements for the spatula on 2 August 2006.
+	const tle = [
+		'1 29257U 98067AJ  06214.42846098  .00093793  00000-0  49733-3 0  9999',
+		'2 29257 051.6364 308.9779 0007048 137.1293 223.0259 15.79733247  4533',
+	].join('\n');
 	it('scrubs back to the same position using one set of parsed elements', () => {
-		const tle = [record.tle_line1, record.tle_line2].join('\n');
 		const elements = [...readElements(tle, new Set([29257]))];
 		const noon = new Date('2006-08-02T12:00:00Z');
 		const later = new Date('2006-08-02T18:15:00Z');
@@ -129,18 +105,12 @@ describe('historical sky', () => {
 		);
 		expect(positionsAt(elements, noon)).toEqual(initial);
 	});
-	it('places a daily TLE in the same Earth-fixed frame as the Greenwich observation', () => {
+	it('places a daily TLE in Earth-fixed kilometres and skips stale or mismatched elements', () => {
 		const time = new Date('2006-08-02T12:00:00Z');
-		const tle = [record.tle_line1, record.tle_line2].join('\r\n');
-		const rows = snapshotPositions(tle + '\r\n' + tle, time);
+		const windowsTle = tle.replace('\n', '\r\n');
+		const rows = snapshotPositions(windowsTle + '\r\n' + windowsTle, time);
 		expect(rows).toHaveLength(1);
-		const orbit = archivedOrbit(record, 29257, time)!;
-		expect(rows[0]).toEqual([
-			29257,
-			...[orbit.position.x, orbit.position.y, orbit.position.z].map(
-				Math.round
-			),
-		]);
+		expect(rows[0]).toEqual([29257, -4682, -2863, 3852]);
 		expect(snapshotPositions(tle, new Date(+time + 60000))).not.toEqual(
 			rows
 		);
@@ -150,14 +120,6 @@ describe('historical sky', () => {
 		expect(
 			snapshotPositions(tle.replace('2 29257', '2 29259'), time)
 		).toEqual([]);
-	});
-	it('rejects distant epochs and mismatched objects', () => {
-		expect(
-			archivedOrbit(record, 29257, new Date('1990-01-01T00:00:00Z'))
-		).toBeNull();
-		expect(
-			archivedOrbit(record, 9724, new Date('2006-08-02T12:00:00Z'))
-		).toBeNull();
 	});
 });
 

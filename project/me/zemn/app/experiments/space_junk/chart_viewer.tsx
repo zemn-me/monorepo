@@ -17,11 +17,9 @@ import {
 	type Vector,
 } from './globe_geometry.js';
 import { height, width } from './globe_scene.js';
-import { PlanetPositions } from './planet_layer.js';
 import { type BodyPosition, earthFixedSky } from './planets.js';
 import style from './style.module.css';
 import { type Birthplace, nearestAspects, type zodiacFrame } from './zodiac.js';
-import { WheelReading } from './zodiac_wheel.js';
 
 const closeExtent = 1.5;
 // Keep the ruler in physical units even when the visible catalogue changes.
@@ -171,10 +169,6 @@ export function ChartViewer({
 					/>
 				</g>
 			</svg>
-			<PlanetPositions bodies={bodies} physical={unfold === 1} />
-			{faceOn && focus && (
-				<WheelReading selected={focus} aspects={aspects} />
-			)}
 			<details className={style.camera}>
 				<summary>View controls</summary>
 				<div className={style.viewControls}>

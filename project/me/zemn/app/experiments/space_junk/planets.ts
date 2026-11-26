@@ -94,13 +94,6 @@ export function bodyPositions(
 	});
 }
 
-export function earthDistance(km: number) {
-	const options = { maximumSignificantDigits: 4 };
-	return km < KM_PER_AU / 100
-		? km.toLocaleString('en-GB', options) + ' km'
-		: (km / KM_PER_AU).toLocaleString('en-GB', options) + ' AU';
-}
-
 export function bodyAspects(positions: BodyPosition[]) {
 	return positions.flatMap((a, index) =>
 		positions.slice(index + 1).flatMap(b => {

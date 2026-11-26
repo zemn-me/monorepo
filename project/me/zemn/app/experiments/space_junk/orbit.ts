@@ -1,33 +1,11 @@
 import {
-	degreesToRadians,
-	type EcfVec3,
-	ecfToLookAngles,
 	eciToEcf,
 	gstime,
 	jday,
-	json2satrec,
-	type Kilometer,
-	type OMMJsonObject,
 	propagate,
-	radiansToDegrees,
 	type SatRec,
 	twoline2satrec,
 } from 'satellite.js';
-
-export interface Orbit {
-	position: EcfVec3<Kilometer>;
-	next: EcfVec3<Kilometer>;
-	epoch: string;
-	source: string;
-}
-
-interface ArchiveRecord {
-	satellite_id: number;
-	data_source: string;
-	tle_line1?: string;
-	tle_line2?: string;
-	orbital_elements?: OMMJsonObject;
-}
 
 // Keep propagation close to the epoch of the measured elements.
 function usableEpoch(sat: SatRec, julianDay: number) {
@@ -98,54 +76,4 @@ export function positionsAt(
 
 export function snapshotPositions(text: string, time: Date) {
 	return positionsAt(readElements(text), time);
-}
-
-export function archivedOrbit(
-	record: ArchiveRecord,
-	id: number,
-	time: Date
-): Orbit | null {
-	if (record.satellite_id !== id) return null;
-	let sat: SatRec;
-	if (
-		record.orbital_elements &&
-		Number(record.orbital_elements.NORAD_CAT_ID) === id
-	) {
-		sat = json2satrec(record.orbital_elements);
-	} else if (
-		record.tle_line1 &&
-		record.tle_line2 &&
-		Number(record.tle_line1.slice(2, 7)) === id &&
-		Number(record.tle_line2.slice(2, 7)) === id
-	) {
-		sat = twoline2satrec(record.tle_line1, record.tle_line2);
-	} else {
-		return null;
-	}
-	if (!usableEpoch(sat, jday(time))) return null;
-	const later = new Date(time.getTime() + 1000);
-	const position = earthFixed(sat, time, gstime(time));
-	const next = earthFixed(sat, later, gstime(later));
-	if (!position || !next) return null;
-	return {
-		position,
-		next,
-		source: record.data_source,
-		epoch: new Date((sat.jdsatepoch - 2440587.5) * 86400000).toISOString(),
-	};
-}
-
-export function lookFrom(orbit: Orbit, latitude: number, longitude: number) {
-	const observer = {
-		latitude: degreesToRadians(latitude),
-		longitude: degreesToRadians(longitude),
-		height: 0,
-	};
-	const { azimuth, elevation } = ecfToLookAngles(observer, orbit.position);
-	const later = ecfToLookAngles(observer, orbit.next).elevation;
-	return {
-		azimuth: radiansToDegrees(azimuth),
-		elevation: radiansToDegrees(elevation),
-		rising: later > elevation,
-	};
 }

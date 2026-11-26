@@ -456,7 +456,8 @@ describe('zemn.me website', () => {
 				await touch('touchEnd', []);
 				await chrome.sendDevToolsCommand('Emulation.setTouchEmulationEnabled', { enabled: false });
 				expect(await timestamp()).toBe(scrubbed);
-				expect(await driver.findElement(By.css('article input[aria-label^="Search by name"]')).isDisplayed()).toBe(false);
+				expect(await driver.findElement(By.css('article input[aria-label^="Search by name"]')).isDisplayed()).toBe(true);
+				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual(['View controls']);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
 				expect(await wheel.getText()).toContain('ARIES');
 				const captions = () => wheel.findElements(By.css('textPath'));
@@ -543,15 +544,34 @@ describe('zemn.me website', () => {
 				await driver.findElement(By.xpath('//button[.="Reset view"]')).click();
 				await driver.wait(async () => await geometry() === original, 5000, 'Reset restores the original Earth geometry');
 
-				await driver.findElement(By.xpath('//summary[.="Object catalogue"]')).click();
 				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
 				);
 				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('1–12 of 6,989');
 				await driver.findElement(By.xpath('//button[.="Next"]')).click();
 				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toContain('13–24 of 6,989');
-				await driver.findElement(By.css('article input[aria-label^="Search by name"]')).sendKeys('1976-126V');
+				await wheel.sendKeys(Key.HOME);
+				await projection('wheel from above');
+				const markerCount = () => driver.executeScript<number>(`
+					const paths = arguments[0].querySelectorAll('g[aria-label="Earth and orbiting objects"] path');
+					return Array.from(paths).filter(p => !p.closest('[display="none"]')).reduce((n, p) =>
+						n + (p.getAttribute('d').match(/M/g) || []).length, 0);
+				`, wheel);
+				const unfiltered = await markerCount();
+				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				await search.sendKeys('MoToR');
+				const motors = await markerCount();
+				expect(motors).toBeGreaterThan(12);
+				expect(motors).toBeLessThan(unfiltered);
+				await driver.findElement(By.xpath('//button[.="Next"]')).click();
+				expect(await markerCount()).toBe(motors);
+				await search.sendKeys('xyz');
+				expect(await markerCount()).toBe(0);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat(8));
+				expect(await markerCount()).toBe(unfiltered);
+				await search.sendKeys('1976-126V');
 				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain('NORAD 9724');
+				expect(await markerCount()).toBe(1);
 
 			} finally {
 				await driver.quit();
@@ -568,7 +588,7 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
 				await (await toggle('Space junk')).click();
 				expect((await bodies()).length).toBe(7);
-				expect(await driver.findElements(By.xpath('//summary[.="Object catalogue"]'))).toHaveLength(0);
+				expect(await driver.findElements(By.id('object-catalogue'))).toHaveLength(0);
 				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
@@ -601,9 +621,6 @@ describe('zemn.me website', () => {
 				const beforeTurn = await moonX();
 				await globe.sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moonX() !== beforeTurn, 5000);
-				await driver.findElement(By.xpath('//summary[.="Planet positions"]')).click();
-				const plutoRow = await driver.findElement(By.xpath('//dt[contains(., "Pluto")]/following-sibling::dd[1]'));
-				expect(await plutoRow.getText()).toContain('AU from Earth');
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
 				const zoom = await driver.findElement(By.xpath('//label[normalize-space(.)="Zoom"]/input'));
 				expect(await zoom.getAttribute('value')).toBe('100');
@@ -640,7 +657,6 @@ describe('zemn.me website', () => {
 				await (await toggle('Space junk')).click();
 				await (await toggle('Rocket stages')).click();
 				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
-				await driver.findElement(By.xpath('//summary[.="Object catalogue"]')).click();
 				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));
 				const onlyKind = async (kind: string) => {
 					const rows = await catalogueRows();
