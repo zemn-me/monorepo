@@ -9,7 +9,7 @@ const mixRadius = (from: number, to: number, t: number) =>
 	t === 1 ? to : from * (to / from) ** t;
 
 export function chartGeometry(
-	camera: Pick<Camera, 'turn' | 'tilt'>,
+	camera: Camera,
 	extent: number,
 	unfold: number,
 	fixed: ReturnType<typeof earthFixedSky>
@@ -23,7 +23,8 @@ export function chartGeometry(
 	const frame = globeFrame(
 		globeCamera(camera.turn, camera.tilt, viewRadius),
 		Infinity,
-		unfold > 0
+		unfold > 0,
+		camera
 	);
 
 	function position(longitude: number, band: number, target: Vector): Vector {

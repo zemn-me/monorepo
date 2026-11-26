@@ -25,7 +25,8 @@ export function PlanetLayer({
 			{aspects.map(({ a, b, name, dash }) => {
 				const line = geometry.frame.segment(
 					geometry.planet(a),
-					geometry.planet(b)
+					geometry.planet(b),
+					dash
 				);
 				if (!line) return null;
 				return (
@@ -35,7 +36,6 @@ export function PlanetLayer({
 						stroke="currentColor"
 						strokeWidth=".8"
 						opacity=".55"
-						strokeDasharray={dash}
 					>
 						<title>{`${a.name} · ${name} · ${b.name}`}</title>
 					</line>

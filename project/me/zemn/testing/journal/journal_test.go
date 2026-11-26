@@ -2150,6 +2150,26 @@ func TestJournalRecordingControls(t *testing.T) {
 	}
 }
 
+// Journal upload retries can rerender the recording controls while Selenium
+// is using them. Reacquire a stale element, but preserve all other failures.
+func withJournalElement(driver selenium.WebDriver, selector string, timeout time.Duration, action func(selenium.WebElement) error) error {
+	err := driver.WaitWithTimeout(func(wd selenium.WebDriver) (bool, error) {
+		elements, err := wd.FindElements(selenium.ByCSSSelector, selector)
+		if err != nil || len(elements) == 0 {
+			return false, err
+		}
+		err = action(elements[0])
+		if browserhelpers.IsStaleElementErr(err) {
+			return false, nil
+		}
+		return err == nil, err
+	}, timeout)
+	if err != nil {
+		return fmt.Errorf("use journal element %s: %w", selector, err)
+	}
+	return nil
+}
+
 func TestJournalRecordingSurvivesFailedUploadAndReload(t *testing.T) {
 	testJournalUploadSurvivesFailureAndReload(t, true)
 }
@@ -2200,11 +2220,7 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 		t.Fatal(err)
 	}
 	if recordAudio {
-		record, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := record.Click(); err != nil {
+		if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
 			t.Fatal(err)
 		}
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='timer'][aria-label='Recording duration']", 15*time.Second); err != nil {
@@ -2213,11 +2229,7 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 		}
 		time.Sleep(2200 * time.Millisecond)
 		capture("journal-recording")
-		submit, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Stop and upload']")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := submit.Click(); err != nil {
+		if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second); err != nil {
 			t.Fatal(err)
 		}
 	} else {
@@ -2231,23 +2243,19 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 			t.Fatal(err)
 		}
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings'] details[open] [role='alert']", 20*time.Second); err != nil {
-		t.Fatal(err)
-	}
-	alert, err := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Local recordings'] [role='alert']")
-	if err != nil {
-		t.Fatal(err)
-	}
-	message, err := alert.Text()
+	var message string
+	err = withJournalElement(driver, "section[aria-label='Local recordings'] details[open] [role='alert']", 20*time.Second, func(alert selenium.WebElement) error {
+		text, err := alert.Text()
+		message = text
+		return err
+	})
 	if err != nil || !strings.Contains(message, "Failed to fetch") || !strings.Contains(message, "Will retry automatically.") {
 		t.Fatalf("upload error did not explain the failure and recovery: %q, %v", message, err)
 	}
 	capture("journal-sync-error-desktop")
-	retry, err := driver.FindElement(selenium.ByCSSSelector, "button[aria-label='Retry sync']")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := retry.SendKeys(selenium.TabKey); err != nil {
+	if err := withJournalElement(driver, "button[aria-label='Retry sync']", 10*time.Second, func(retry selenium.WebElement) error {
+		return retry.SendKeys(selenium.TabKey)
+	}); err != nil {
 		t.Fatal(err)
 	}
 	focused, err := driver.ExecuteScript(`return document.activeElement?.getAttribute('aria-label')`, nil)
@@ -2261,18 +2269,18 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 	const downloadSelector = "section[aria-label='Local recordings'] a[download]"
 	fingerprint := func() string {
 		t.Helper()
-		row, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings'] li > details > summary", 10*time.Second)
-		if err != nil {
-			t.Fatal(err)
-		}
-		details, err := row.FindElement(selenium.ByXPATH, "..")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if open, _ := details.GetAttribute("open"); open == "" {
-			if err := row.Click(); err != nil {
-				t.Fatal(err)
+		if err := withJournalElement(driver, "section[aria-label='Local recordings'] li > details > summary", 10*time.Second, func(row selenium.WebElement) error {
+			details, err := row.FindElement(selenium.ByXPATH, "..")
+			if err != nil {
+				return err
 			}
+			open, err := details.GetAttribute("open")
+			if err != nil || open != "" {
+				return err
+			}
+			return row.Click()
+		}); err != nil {
+			t.Fatal(err)
 		}
 		if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "audio[aria-label='Preview local recording']", 10*time.Second); err != nil {
 			t.Fatal(err)
@@ -2293,11 +2301,9 @@ func testJournalUploadSurvivesFailureAndReload(t *testing.T, recordAudio bool) {
 		if err := driver.ExecuteChromiumCommand("Page.setDownloadBehavior", map[string]any{"behavior": "allow", "downloadPath": directory}); err != nil {
 			t.Fatal(err)
 		}
-		link, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, downloadSelector+"[href^='blob:']", 10*time.Second)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := browserhelpers.ClickElementInView(driver, link); err != nil {
+		if err := withJournalElement(driver, downloadSelector+"[href^='blob:']", 10*time.Second, func(link selenium.WebElement) error {
+			return browserhelpers.ClickElementInView(driver, link)
+		}); err != nil {
 			t.Fatal(err)
 		}
 		var audio []byte
@@ -2532,11 +2538,7 @@ func TestJournalLocationPermissionError(t *testing.T) {
 	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	record, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := record.Click(); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	const noticeSelector = "section[aria-label='Create a journal entry'] [role='status']"
@@ -2582,11 +2584,7 @@ func TestJournalLocationPermissionError(t *testing.T) {
 			}
 		}
 	}
-	stop, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := stop.Click(); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 10*time.Second); err != nil {

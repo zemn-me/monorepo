@@ -115,9 +115,9 @@ export function signPosition(longitude: number) {
 
 export const aspects = [
 	['Conjunction', 0],
-	['Sextile', 60, '2 3'],
+	['Sextile', 60, [2, 3]],
 	['Square', 90],
-	['Trine', 120, '6 3'],
+	['Trine', 120, [6, 3]],
 	['Opposition', 180],
 ] as const;
 
