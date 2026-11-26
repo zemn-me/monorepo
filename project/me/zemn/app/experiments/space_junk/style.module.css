@@ -326,16 +326,13 @@
 	line-height: 1.4;
 	font-variant-numeric: lining-nums tabular-nums;
 }
-.position > span, .placements time {
+.position > span {
 	white-space: nowrap;
 }
-.placements small, .placements p {
+.placements small {
 	color: var(--muted);
 	font: var(--controls);
 	font-size: 0.75rem;
-}
-.placements p {
-	margin: 0.25rem 0 0;
 }
 @media (width < 22rem) {
 	.placements {

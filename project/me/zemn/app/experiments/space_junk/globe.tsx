@@ -157,15 +157,12 @@ export function Globe({
 		frame.project(surface(location.longitude, location.latitude));
 	const focusX = focus?.x ?? 0;
 	const focusY = focus?.y ?? 0;
-	const labelSide = focusX > width / 2 + 65 ? -1 : 1;
+	const labelSide = focusX > width / 2 ? -1 : 1;
 	const labelOffset = focusY < 43 ? 22 : -22;
 	const textOffset =
-		(1 - unfold) * (focusY < height / 2 ? 16 : -8) + unfold * labelOffset;
-	const label =
-		selected &&
-		(selected.object.name.length <= 20
-			? selected.object.name
-			: `NORAD ${selected.object.id}`);
+		(1 - unfold) * (focusY < height / 2 ? 16 : -20) +
+		unfold * (labelOffset < 0 ? labelOffset - 12 : labelOffset);
+	const labelX = labelSide * (9 + 26 * unfold);
 	const scaleKm = 10 ** Math.floor(Math.log10(45 * frame.kmPerPixel));
 	useImperativeHandle(
 		pick,
@@ -226,7 +223,7 @@ export function Globe({
 						key={object.id}
 						id={objectAnchor(object.id)}
 						role="img"
-						aria-label={object.name}
+						aria-label={`${object.name} · ${object.piece}`}
 						display={inView ? undefined : 'none'}
 						transform={
 							inView
@@ -305,9 +302,7 @@ export function Globe({
 					)}
 					<g
 						role="img"
-						aria-label={
-							'Selected object · ' + selected?.object.name
-						}
+						aria-label={`Selected object · ${focus.marker.object.name} · ${focus.marker.object.piece}`}
 						transform={`translate(${focusX} ${focusY})`}
 					>
 						<path
@@ -325,7 +320,6 @@ export function Globe({
 						/>
 						<circle r="1.7" fill="currentColor" />
 						<text
-							x={labelSide * (9 + 26 * unfold)}
 							y={textOffset}
 							textAnchor={labelSide === 1 ? 'start' : 'end'}
 							dominantBaseline="middle"
@@ -336,7 +330,10 @@ export function Globe({
 							strokeLinejoin="round"
 							fontSize="11"
 						>
-							{label}
+							<tspan x={labelX}>{focus.marker.object.name}</tspan>
+							<tspan x={labelX} dy="12" fontSize="10">
+								{focus.marker.object.piece}
+							</tspan>
 						</text>
 					</g>
 				</>

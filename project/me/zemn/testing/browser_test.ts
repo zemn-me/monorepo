@@ -574,9 +574,7 @@ describe('zemn.me website', () => {
 				await tilt.sendKeys(Key.ARROW_LEFT);
 				await driver.wait(async () => await geometry() === original, 5000, 'Returning the tilt ruler restores the Earth grid');
 
-				expect(await driver.findElement(By.css('ul[aria-label="Chart placements"]')).getText()).toContain(
-					'12 July 2006 – 29 September 2006'
-				);
+				expect(await grid.findElements(By.css('time'))).toHaveLength(0);
 				const firstObject = () => grid.findElement(By.css('li:has(h3 a) h3')).getText();
 				const firstOnPage = await firstObject();
 				const pager = await driver.findElement(By.css('nav[aria-label="Chart placement pages"]'));
@@ -612,9 +610,7 @@ describe('zemn.me website', () => {
 				expect(await link.getAccessibleName()).toBe(`1976-126V ${name}`);
 				expect(await entry.findElement(By.css('h3')).getAccessibleName()).toBe(`1976-126V ${name}`);
 				expect(await entry.getText()).not.toContain('NORAD');
-				const details = await entry.findElements(By.css('p'));
-				expect(details).toHaveLength(1);
-				expect(await details[0]!.getText()).toMatch(/^\d{1,2} \w+ \d{4} – \d{1,2} \w+ \d{4}$/);
+
 				expect(await markerCount()).toBe(1);
 
 			} finally {
@@ -780,15 +776,20 @@ describe('zemn.me website', () => {
 				const url = new URL(await link.getAttribute('href'));
 				expect(url.hash).toMatch(/^#object-\d+$/);
 				const name = await link.findElement(By.css('span:last-child')).getText();
-				expect(await driver.findElement(By.css('svg path' + url.hash)).getAttribute('aria-label')).toBe(name);
+				const piece = await link.findElement(By.css('span:first-child')).getText();
+				const caption = name + ' · ' + piece;
+				expect(await driver.findElement(By.css('svg path' + url.hash)).getAttribute('aria-label')).toBe(caption);
 				const selected = By.css('svg g[aria-label^="Selected object · "]');
 				const isSelected = async () => (await driver.findElements(selected))[0]?.getAttribute('aria-label');
 				await link.click();
-				await driver.wait(async () => await isSelected() === 'Selected object · ' + name, 5000);
+				await driver.wait(async () => await isSelected() === 'Selected object · ' + caption, 5000);
+				const lines = await driver.findElement(selected).findElements(By.css('text tspan'));
+				expect(await Promise.all(lines.map(line => line.getText()))).toEqual([name, piece]);
+				expect((await lines[1]!.getRect()).y).toBeGreaterThan((await lines[0]!.getRect()).y);
 				expect(new URL(await driver.getCurrentUrl()).hash).toBe(url.hash);
 				await driver.get('about:blank');
 				await driver.get(url.href);
-				await driver.wait(async () => await isSelected() === 'Selected object · ' + name, 10000);
+				await driver.wait(async () => await isSelected() === 'Selected object · ' + caption, 10000);
 				expect(await driver.findElement(By.css(':target')).getAttribute('id')).toBe(url.hash.slice(1));
 			} finally {
 				await driver.quit();

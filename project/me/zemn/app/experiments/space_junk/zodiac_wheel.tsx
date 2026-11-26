@@ -1,11 +1,6 @@
 import type { ChartGeometry } from './chart_geometry.js';
 import { type nearestAspects, type Placement } from './zodiac.js';
 
-function shortName(p: Placement) {
-	const name = p.marker.object.name;
-	return name.length > 24 ? 'NORAD ' + p.marker.object.id : name;
-}
-
 export function WheelGuides({
 	geometry,
 	aspects,
@@ -31,6 +26,8 @@ export function WheelGuides({
 						placement.marker,
 						placement.longitude
 					);
+					const { object } = placement.marker;
+					const title = `${name} · ${object.name}\n${object.piece}`;
 					const line = geometry.frame.segment(start, end);
 					if (!line) return null;
 					return (
@@ -48,9 +45,7 @@ export function WheelGuides({
 											: undefined
 								}
 							>
-								<title>
-									{name} · {placement.marker.object.name}
-								</title>
+								<title>{title}</title>
 							</line>
 							{end.visible && (
 								<circle
@@ -59,9 +54,7 @@ export function WheelGuides({
 									r="2"
 									fill="currentColor"
 								>
-									<title>
-										{name} · {shortName(placement)}
-									</title>
+									<title>{title}</title>
 								</circle>
 							)}
 						</g>

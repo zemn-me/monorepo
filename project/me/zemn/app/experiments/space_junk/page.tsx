@@ -284,34 +284,22 @@ const BirthdayChart = memo(function BirthdayChart({
 								house={natalZodiac.house(natalZodiac.ascendant)}
 							/>
 						)}
-						{catalogue &&
-							rows.map(({ object }) => {
-								const end = object.end ?? catalogue.asOf;
-								const { longitude } = debrisZodiac.direction(
-									byId.get(object.id)!.fixed
-								);
-								return (
-									<PlacementEntry
-										key={object.id}
-										name={object.name}
-										designator={object.piece}
-										longitude={longitude}
-										house={debrisZodiac.house(longitude)}
-										target={objectAnchor(object.id)}
-										onRevisit={revisit}
-									>
-										<p>
-											<time dateTime={object.start.slice(0, 10)}>
-												{displayDate(object.start)}
-											</time>
-											{' – '}
-											<time dateTime={end.slice(0, 10)}>
-												{displayDate(end)}
-											</time>
-										</p>
-									</PlacementEntry>
-								);
-							})}
+						{rows.map(({ object }) => {
+							const { longitude } = debrisZodiac.direction(
+								byId.get(object.id)!.fixed
+							);
+							return (
+								<PlacementEntry
+									key={object.id}
+									name={object.name}
+									designator={object.piece}
+									longitude={longitude}
+									house={debrisZodiac.house(longitude)}
+									target={objectAnchor(object.id)}
+									onRevisit={revisit}
+								/>
+							);
+						})}
 					</ul>
 				)}
 				{hasObjects && catalogue && !rows.length && (
