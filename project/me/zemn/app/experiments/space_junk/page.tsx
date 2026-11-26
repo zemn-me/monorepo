@@ -13,6 +13,7 @@ import {
 	useMemo,
 	useState,
 } from 'react';
+import { flushSync } from 'react-dom';
 import { Temporal } from 'temporal-polyfill';
 
 import type { Metadata } from '#root/ts/remix/metadata.js';
@@ -54,7 +55,7 @@ const bodyList = parseAsArrayOf(
 const kindList = parseAsArrayOf(
 	parseAsStringLiteral(artificialTypes)
 ).withDefault([...debrisTypes]);
-const searchText = parseAsString.withDefault('spatula');
+const searchText = parseAsString.withDefault('motor');
 type ObjectKind = SpaceObject['kind'];
 
 const BirthdayChart = memo(function BirthdayChart({
@@ -156,7 +157,19 @@ const BirthdayChart = memo(function BirthdayChart({
 		Math.max(0, Math.ceil(plotted.length / pageSize) - 1)
 	);
 	const offset = pageIndex * pageSize;
-	const rows = plotted.slice(offset, offset + pageSize);
+	const [printing, setPrinting] = useState(false);
+	useEffect(() => {
+		// The browser snapshots the DOM immediately after beforeprint returns.
+		const before = () => flushSync(() => setPrinting(true));
+		const after = () => setPrinting(false);
+		window.addEventListener('beforeprint', before);
+		window.addEventListener('afterprint', after);
+		return () => {
+			window.removeEventListener('beforeprint', before);
+			window.removeEventListener('afterprint', after);
+		};
+	}, []);
+	const rows = printing ? plotted : plotted.slice(offset, offset + pageSize);
 
 	return (
 		<>
@@ -238,10 +251,12 @@ const BirthdayChart = memo(function BirthdayChart({
 						}}
 					/>
 				)}
-				{(bodies.length > 0 || natalZodiac.ascendant !== undefined) && (
+				{(bodies.length > 0 ||
+					natalZodiac.ascendant !== undefined ||
+					rows.length > 0) && (
 					<ul
 						className={`${style.catalogue} ${style.placements}`}
-						aria-label="Natal placements"
+						aria-label="Chart placements"
 					>
 						{bodies.map(body => (
 							<PlacementEntry
@@ -259,45 +274,8 @@ const BirthdayChart = memo(function BirthdayChart({
 								house={natalZodiac.house(natalZodiac.ascendant)}
 							/>
 						)}
-					</ul>
-				)}
-				{hasObjects && catalogue && (
-					<>
-						<div className={style.paging}>
-							<span role="status" aria-label="Catalogue results">
-								{rows.length
-									? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${plotted.length.toLocaleString('en-GB')} orbiting objects`
-									: filtered.length && coverage.pending
-										? 'Locating objects…'
-										: 'No matching objects on the chart'}
-							</span>
-							{plotted.length > pageSize && (
-								<>
-									<button
-										type="button"
-										disabled={!pageIndex}
-										onClick={() => setPage(pageIndex - 1)}
-									>
-										Previous
-									</button>
-									<button
-										type="button"
-										disabled={
-											offset + rows.length >=
-											plotted.length
-										}
-										onClick={() => setPage(pageIndex + 1)}
-									>
-										Next
-									</button>
-								</>
-							)}
-						</div>
-						<ul
-							className={style.catalogue}
-							aria-label="Objects in orbit"
-						>
-							{rows.map(({ object }) => {
+						{catalogue &&
+							rows.map(({ object }) => {
 								const { longitude } = debrisZodiac.direction(
 									byId.get(object.id)!.fixed
 								);
@@ -322,8 +300,38 @@ const BirthdayChart = memo(function BirthdayChart({
 									</PlacementEntry>
 								);
 							})}
-						</ul>
-					</>
+					</ul>
+				)}
+				{hasObjects && catalogue && (
+					<div className={style.paging}>
+						<span role="status" aria-label="Catalogue results">
+							{rows.length
+								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${plotted.length.toLocaleString('en-GB')} orbiting objects`
+								: filtered.length && coverage.pending
+									? 'Locating objects…'
+									: 'No matching objects on the chart'}
+						</span>
+						{plotted.length > pageSize && (
+							<>
+								<button
+									type="button"
+									disabled={!pageIndex}
+									onClick={() => setPage(pageIndex - 1)}
+								>
+									Previous
+								</button>
+								<button
+									type="button"
+									disabled={
+										offset + rows.length >= plotted.length
+									}
+									onClick={() => setPage(pageIndex + 1)}
+								>
+									Next
+								</button>
+							</>
+						)}
+					</div>
 				)}
 			</section>
 		</>
@@ -404,7 +412,7 @@ export default function Page() {
 	});
 	return (
 		<article className={style.page}>
-			<h1>Star Chart</h1>
+			<h1>Astrological Chart</h1>
 			<CitySearch city={city} onSelect={setBirthplace} />
 			{cityId !== null && birthplace.isError && (
 				<p role="alert">
@@ -496,7 +504,7 @@ export default function Page() {
 	);
 }
 export const metadata: Metadata = {
-	title: 'Star Chart',
+	title: 'Astrological Chart',
 	description:
 		'Plot the Sun, Moon, planets, and space junk for your birthday.',
 };

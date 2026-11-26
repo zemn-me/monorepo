@@ -2,6 +2,10 @@ import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
 	{
+		path: 'experiments/space-junk',
+		file: 'experiments/space_junk/redirect.js',
+	},
+	{
 		path: 'experiments/space-junk/elements/:day',
 		file: 'experiments/space_junk/daily_elements.js',
 	},
@@ -164,7 +168,7 @@ export default [
 			},
 			{
 				file: 'experiments/space_junk/page.js',
-				path: 'experiments/space-junk',
+				path: 'experiments/astrological-chart',
 			},
 			{
 				file: 'experiments/toc/page.js',

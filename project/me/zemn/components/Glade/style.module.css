@@ -243,6 +243,12 @@ html:has(.main) {
 	align-self: start;
 }
 
+@media print {
+	.topbar {
+		position: relative;
+	}
+}
+
 .compact .content {
 	padding-top: 1.5rem;
 }

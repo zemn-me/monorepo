@@ -104,6 +104,24 @@ export function ChartViewer({
 		() => chartGeometry({ turn, tilt }, extent, unfold, fixed),
 		[turn, tilt, extent, unfold, fixed]
 	);
+	const zoomMarks = bodies.flatMap(body => {
+		const extent = Math.max(
+			closeExtent,
+			geometry.frame.extentToFrame(
+				body.position,
+				camera.panX,
+				camera.panY
+			)
+		);
+		if (extent > maxExtent) return [];
+		return [
+			{
+				position: zoomAtExtent(extent),
+				glyph: body.glyph,
+				label: `${body.name} · ${formatViewWidth(extent)}`,
+			},
+		];
+	});
 	const placements = useMemo(
 		() =>
 			markers.map(marker => ({
@@ -292,6 +310,7 @@ export function ChartViewer({
 				<SlideRule
 					{...rulerEvents}
 					label="Orbit view width"
+					marks={zoomMarks}
 					readout={viewWidth}
 					centre={zoomValue}
 					min={0}
@@ -308,6 +327,10 @@ export function ChartViewer({
 						step: 0.1,
 						value: zoomValue,
 						'aria-valuetext': `${viewWidth} across at Earth’s centre`,
+						'aria-description': zoomMarks.length
+							? 'Orbit view widths for selected bodies: ' +
+								zoomMarks.map(mark => mark.label).join('; ')
+							: undefined,
 						onChange: e => zoomTo(e.currentTarget.valueAsNumber),
 					}}
 				/>

@@ -7,6 +7,7 @@ export default {
 		...getStaticPaths().filter(
 			path =>
 				!/^\/(auth|journal|admin|callback|key|healthz)(\/|$)/.test(path) &&
+				path !== '/experiments/space-junk' &&
 				path !== '/experiments/tiberian-sun'
 		),
 		...[

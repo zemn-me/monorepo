@@ -169,6 +169,12 @@
 .rulerBand text {
 	font-size: 10px;
 }
+.rulerTrack:has(.rulerMark) {
+	height: 64px;
+}
+.rulerTrack:has(.rulerMark) i {
+	bottom: 29px;
+}
 .rulerTrack:has(.rulerBand) i {
 	bottom: 12px;
 }
@@ -461,6 +467,7 @@
 	align-items: baseline;
 	gap: 0.12em;
 }
+.rulerMark text,
 .toggleGlyph,
 .planetGlyph {
 	font:
@@ -543,5 +550,28 @@
 @media (prefers-reduced-motion: reduce) {
 	.viewControls .rulerRow > .switch {
 		display: none;
+	}
+}
+
+@media print {
+	.paging {
+		display: none;
+	}
+	.page .switch input,
+	.page .switch input:checked {
+		background: transparent;
+		border-color: currentColor;
+	}
+	.page .switch input::after {
+		box-sizing: border-box;
+		background: transparent;
+		border: 2px solid currentColor;
+	}
+	.page .switch input:indeterminate::after {
+		border: 0;
+		border-top: 2px solid currentColor;
+	}
+	.placements li {
+		break-inside: avoid;
 	}
 }

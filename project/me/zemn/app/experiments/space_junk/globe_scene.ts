@@ -41,6 +41,7 @@ export const width = 416,
 const focalScale = 0.95;
 const focal = height * focalScale;
 const radians = Math.PI / 180;
+const distancePerExtent = Math.hypot(1, focal / 184);
 const layers = { D: 3, R: 4, C: 5, P: 6 };
 const shapes = {
 	P: [
@@ -146,7 +147,7 @@ export function globeCamera(
 	return {
 		yaw: -turn * radians,
 		pitch: tilt * radians,
-		distance: extent * Math.hypot(1, focal / 184),
+		distance: extent * distancePerExtent,
 		target: [0, 0, 0],
 	};
 }
@@ -200,6 +201,24 @@ export function globeFrame(
 			inFront: depth >= projection.nearPlane,
 		};
 	}
+	// Solve the same perspective projection for camera distance, keeping the
+	// marker just inside the nearest edge of the panned viewport.
+	function extentToFrame(p: Vector, panX: number, panY: number) {
+		const eye = toCamera(world(p));
+		function depthAtEdge(offset: number, half: number, pan: number) {
+			if (!offset) return 0;
+			return (
+				(focal * Math.abs(offset)) /
+				(0.96 * (half - Math.sign(offset) * pan))
+			);
+		}
+		const depth = Math.max(
+			projection.nearPlane,
+			depthAtEdge(x(eye), width / 2, panX),
+			depthAtEdge(-y(eye), height / 2, panY)
+		);
+		return (camera.distance - z(eye) + depth) / distancePerExtent;
+	}
 	function segment(
 		start: ReturnType<typeof project>,
 		end: ReturnType<typeof project>
@@ -237,6 +256,7 @@ export function globeFrame(
 		camera,
 		projection,
 		project,
+		extentToFrame,
 		segment,
 		symbol,
 		kmPerPixel: viewWidthKm(camera) / width,

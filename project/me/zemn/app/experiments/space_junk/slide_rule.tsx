@@ -19,6 +19,7 @@ export function SlideRule({
 	major,
 	tickOrigin = 0,
 	bands,
+	marks,
 	tickLabel,
 	readPosition,
 	seek,
@@ -37,6 +38,7 @@ export function SlideRule({
 	tick: number;
 	major: number;
 	tickOrigin?: number;
+	marks?: readonly { position: number; glyph: string; label: string }[];
 	bands?: readonly {
 		start: number;
 		split: number;
@@ -95,6 +97,30 @@ export function SlideRule({
 		);
 	}
 
+	const height = marks?.length ? 62 : 44;
+	let lastLabel = -Infinity;
+	const annotations = marks
+		?.toSorted((a, b) => a.position - b.position)
+		.map(mark => {
+			const x = (mark.position - centre) * pitch;
+			const labelX = Math.max(x, lastLabel + 17);
+			lastLabel = labelX;
+			return (
+				<g
+					key={mark.glyph}
+					className={style.rulerMark}
+					data-position={mark.position}
+				>
+					<title>{mark.label}</title>
+					<path d={`M${x} 34v3L${labelX} 44`} fill="none" />
+					<text x={labelX} y="57">
+						{mark.glyph}
+						{'\uFE0E'}
+					</text>
+				</g>
+			);
+		});
+
 	return (
 		<div className={style.rulerRow}>
 			<div className={style.rulerValue} aria-hidden="true">
@@ -152,7 +178,7 @@ export function SlideRule({
 					{...inputProps}
 					aria-label={label}
 				/>
-				<svg aria-hidden="true" width="100%" height="44">
+				<svg aria-hidden="true" width="100%" height={height}>
 					{bands && (
 						<defs>
 							<pattern
@@ -166,7 +192,7 @@ export function SlideRule({
 							</pattern>
 						</defs>
 					)}
-					<svg x="50%" width="1" height="44" overflow="visible">
+					<svg x="50%" width="1" height={height} overflow="visible">
 						{bands?.map(
 							({ start, split, end, startLabel, endLabel }) => {
 								const span = (end - start) * pitch;
@@ -211,6 +237,7 @@ export function SlideRule({
 							}
 						)}
 						{ticks}
+						{annotations}
 					</svg>
 				</svg>
 				<i aria-hidden="true" />

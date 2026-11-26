@@ -41,8 +41,8 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 		title: 'Generators & tools',
 		experiments: [
 			{
-				href: '/experiments/space-junk',
-				title: 'Star Chart',
+				href: '/experiments/astrological-chart',
+				title: 'Astrological Chart',
 				description: 'Plot the Sun, Moon, planets, and space junk for your birthday.',
 			},
 			{

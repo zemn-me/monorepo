@@ -31,6 +31,29 @@ const spatula: SpaceObject = {
 };
 const objects = [spatula];
 
+it('marks the orbit view width where a planet fits into the panned viewport', () => {
+	const p = { x: 500, y: 2000, z: -730 };
+	for (const [turn, tilt, panX, panY] of [
+		[0, 0, 0, 0],
+		[55, -30, 70, -50],
+		[-121, 90, -32, 71],
+	] as const) {
+		const frame = (extent: number) =>
+			globeFrame(globeCamera(turn, tilt, extent), Infinity);
+		const extent = frame(1).extentToFrame(p, panX, panY);
+		const onScreen = (scale: number) => {
+			const pt = frame(extent * scale).project(p);
+			return (
+				pt.inFront &&
+				Math.abs(pt.x + panX - width / 2) <= width / 2 &&
+				Math.abs(pt.y + panY - height / 2) <= height / 2
+			);
+		};
+		expect(onScreen(1)).toBe(true);
+		expect(onScreen(0.7)).toBe(false);
+	}
+});
+
 describe('free flight on the birthday', () => {
 	it('includes the spatula during its flight and omits it before release and after reentry', () => {
 		expect(

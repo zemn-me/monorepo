@@ -377,7 +377,7 @@ describe('zemn.me website', () => {
 					'SVG Arena',
 					'Platonic Stress',
 					'Geometry of Music',
-					'Star Chart',
+					'Astrological Chart',
 					'Elastic Tabstops',
 					'Flag emoji',
 					'Framing calculator',
@@ -421,11 +421,11 @@ describe('zemn.me website', () => {
 				expect(omittedMenuLinks).toHaveLength(0);
 				await menuButton.click();
 
-				await list.findElement(By.linkText('Star Chart')).click();
+				await list.findElement(By.linkText('Astrological Chart')).click();
 				await driver.wait(
 					async () =>
 						(await driver.getCurrentUrl()) ===
-						`${origin}/experiments/space-junk`,
+						`${origin}/experiments/astrological-chart`,
 					5000
 				);
 				const time = await driver.findElement(By.name('time'));
@@ -464,12 +464,14 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => await scrollTop() > beforeScroll, 5000, 'Scrolling over the time ruler moves the page');
 				expect(await timestamp()).toBe(scrubbed);
 				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
-				expect(await search.getProperty('value')).toBe('spatula');
-				const objects = await driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));
-				expect(objects).toHaveLength(1);
-				expect(await objects[0]!.getText()).toContain('EVA debris (spatula)');
-				await driver.wait(until.elementLocated(By.css('svg [aria-label="Selected object · EVA debris (spatula)"]')), 10000);
-				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('spatula'.length));
+				expect(await search.getProperty('value')).toBe('motor');
+				const grid = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
+				await driver.wait(until.elementLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
+				const motorsOnPage = await grid.findElements(By.css('h3 a'));
+				expect(motorsOnPage).toHaveLength(12);
+				expect((await grid.findElement(By.css('h3')).getText())).toContain('Sun');
+				for (const name of await Promise.all(motorsOnPage.map(link => link.getText()))) expect(name).toMatch(/motor/i);
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
 				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual([]);
 				expect(await driver.findElements(By.xpath('//button[.="Reset view"]'))).toHaveLength(0);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
@@ -563,7 +565,7 @@ describe('zemn.me website', () => {
 				await tilt.sendKeys(Key.ARROW_LEFT);
 				await driver.wait(async () => await geometry() === original, 5000, 'Returning the tilt ruler restores the Earth grid');
 
-				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain(
+				expect(await driver.findElement(By.css('ul[aria-label="Chart placements"]')).getText()).toContain(
 					'12 July 2006 – 29 September 2006'
 				);
 				expect(await driver.findElement(By.css('article [aria-label="Catalogue results"]')).getText()).toMatch(/^1–12 of [\d,]+ orbiting objects$/);
@@ -588,7 +590,7 @@ describe('zemn.me website', () => {
 				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat(8));
 				expect(await markerCount()).toBe(unfiltered);
 				await search.sendKeys('1976-126V');
-				expect(await driver.findElement(By.css('ul[aria-label="Objects in orbit"]')).getText()).toContain('NORAD 9724');
+				expect(await driver.findElement(By.css('ul[aria-label="Chart placements"]')).getText()).toContain('NORAD 9724');
 				expect(await markerCount()).toBe(1);
 
 			} finally {
@@ -598,7 +600,7 @@ describe('zemn.me website', () => {
 
 		it('switches traditional bodies and debris independently on the wheel and globe', async () => {
 			try {
-				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.get(`${origin}/experiments/astrological-chart`);
 				const toggle = (name: string) => driver.findElement(By.xpath(
 					`//label[.//text()[normalize-space(.)="${name}"]]/input[@type="checkbox"]`
 				));
@@ -606,9 +608,9 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
 				await (await toggle('Space junk')).click();
 				expect((await bodies()).length).toBe(7);
-				expect(await driver.findElements(By.css('ul[aria-label="Objects in orbit"]'))).toHaveLength(0);
+				expect(await driver.findElements(By.css('ul[aria-label="Chart placements"] h3 a'))).toHaveLength(0);
 				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
-				const placements = () => driver.findElements(By.css('ul[aria-label="Natal placements"] li'));
+				const placements = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li'));
 				expect(await placements()).toHaveLength(7);
 				const sun = (await placements())[0]!;
 				expect(await sun.findElement(By.css('h3')).getAccessibleName()).toBe('Sun');
@@ -706,8 +708,8 @@ describe('zemn.me website', () => {
 				await (await toggle('Rocket stages')).click();
 				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
 				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
-				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('spatula'.length));
-				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));
+				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
+				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li:has(h3 a)'));
 				const onlyKind = async (kind: string) => {
 					const rows = await catalogueRows();
 					return rows.length > 0 && (await Promise.all(rows.map(row => row.getText()))).every(text => text.includes(kind));
@@ -718,7 +720,7 @@ describe('zemn.me website', () => {
 				await (await toggle('Space junk')).sendKeys(Key.SPACE);
 				expect(await (await toggle('Spacecraft payloads')).isSelected()).toBe(true);
 				await driver.wait(() => onlyKind('Spacecraft payload'), 5000);
-				await driver.wait(async () => (await driver.findElements(By.css('ul[aria-label="Objects in orbit"] a[href="#star-chart"]'))).length > 0, 10000);
+				await driver.wait(async () => (await driver.findElements(By.css('ul[aria-label="Chart placements"] h3 a[href="#star-chart"]'))).length > 0, 10000);
 				await globe.sendKeys(Key.HOME);
 				expect(await bodies()).toHaveLength(0);
 			} finally {
@@ -728,7 +730,7 @@ describe('zemn.me website', () => {
 
 		it('rotates the idle wheel and Earth and respects the rotation and reduced-motion controls', async () => {
 			try {
-				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.get(`${origin}/experiments/astrological-chart`);
 				await driver.findElement(By.xpath('//label[normalize-space(.)="Space junk"]/input')).click();
 				const globe = await driver.findElement(By.id('star-chart'));
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
@@ -767,20 +769,27 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('restores a shared Star Chart and saves edits to the same URL', async () => {
+		it('restores a shared Astrological Chart and saves edits to the same URL', async () => {
 			try {
 				const params = new URLSearchParams({
 					time: '2006-08-01T04:15:16.789Z', city: '1880252', bodies: 'Sun,Pluto',
 					kinds: 'C,R', q: 'motor', rotation: '-32', tilt: '12', zoom: '80', spin: 'false',
 				});
 				await driver.get(`${origin}/experiments/space-junk?${params}#star-chart`);
+				expect(await driver.getCurrentUrl()).toBe(`${origin}/experiments/astrological-chart?${params}#star-chart`);
 				const field = (label: string) => driver.findElement(By.css(`input[aria-label="${label}"]`));
 				const city = await driver.findElement(By.css('input[role="combobox"]'));
 				await driver.wait(async () => (await city.getAttribute('value'))?.includes('Singapore'), 10000);
 				const time = await driver.findElement(By.name('time'));
 				expect(await time.getAttribute('aria-valuetext')).toContain('12:15:16');
 				expect(await time.getAttribute('value')).toBe(String(Date.parse(params.get('time')!)));
-				const placements = () => driver.findElements(By.css('ul[aria-label="Natal placements"] h3')).then(headings => Promise.all(headings.map(h => h.getText())));
+				const widthTrack = await (await field('Orbit view width')).findElement(By.xpath('..'));
+				const marks = await widthTrack.findElements(By.css('g[data-position] title'));
+				expect(marks).toHaveLength(2);
+				expect(await Promise.all(marks.map(mark => mark.getProperty('textContent')))).toEqual(
+					expect.arrayContaining([expect.stringMatching(/^Sun · /), expect.stringMatching(/^Pluto · /)])
+				);
+				const placements = () => driver.findElements(By.css('ul[aria-label="Chart placements"] h3:not(:has(a))')).then(headings => Promise.all(headings.map(h => h.getText())));
 				expect((await placements()).join(' ')).toMatch(/Sun.*Pluto.*Rising sign/);
 				expect(await placements()).toHaveLength(3);
 				for (const [label, value] of [['Rotation', '-32'], ['Tilt', '12'], ['Orbit view width', '80']] as const)
@@ -807,7 +816,7 @@ describe('zemn.me website', () => {
 				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setEmulatedMedia', {
 					features: [{name: 'prefers-reduced-motion', value: 'reduce'}],
 				});
-				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.get(`${origin}/experiments/astrological-chart`);
 				const globe = await driver.findElement(By.id('star-chart'));
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
 				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
@@ -817,7 +826,7 @@ describe('zemn.me website', () => {
 				await birthplace.sendKeys('Singapore');
 				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
-				const natal = await driver.findElement(By.css('ul[aria-label="Natal placements"]'));
+				const natal = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
 				const rising = await natal.findElement(By.xpath('.//li[.//h3[.="Rising sign"]]'));
 				expect(await rising.getText()).toMatch(/\w+ \d+° \d+′ \d+″ · House 1\b/);
 				const center = Number(await marker.getAttribute('x1'));
@@ -853,9 +862,9 @@ describe('zemn.me website', () => {
 		it('uses local midnight for the day ruler before a birth city is chosen', async () => {
 			try {
 				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setTimezoneOverride', { timezoneId: 'Asia/Kathmandu' });
-				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.get(`${origin}/experiments/astrological-chart`);
 				const city = await driver.findElement(By.css('input[role="combobox"]'));
-				expect(await city.getAccessibleName()).toBe('City of birth');
+				expect(await city.getAccessibleName()).toBe('City');
 				const clock = await driver.findElement(By.name('time'));
 				await driver.wait(async () => (await clock.getAttribute('aria-valuetext'))?.includes('17:45:00'), 5000);
 				const midnight = await driver.findElement(By.xpath('//fieldset//*[local-name()="text" and .="1"]'));
@@ -871,7 +880,7 @@ describe('zemn.me website', () => {
 			try {
 				const chrome = driver as unknown as ChromeDriver;
 				await chrome.sendDevToolsCommand('Emulation.setScriptExecutionDisabled', { value: true });
-				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.get(`${origin}/experiments/astrological-chart`);
 				const ticks = By.css('input[name="month"] + svg text');
 				const labels = async () => Promise.all((await driver.findElements(ticks)).map(tick => tick.getProperty('textContent')));
 				const initial = await labels();
@@ -900,7 +909,7 @@ describe('zemn.me website', () => {
 					userAgent: await driver.executeScript<string>('return navigator.userAgent'),
 					acceptLanguage: locale,
 				});
-				await driver.get(`${origin}/experiments/space-junk`);
+				await driver.get(`${origin}/experiments/astrological-chart`);
 				await driver.wait(async () => (await driver.findElements(By.css('fieldset input[type="range"]'))).length === 4, 5000);
 				const rulers = await driver.findElements(By.css('fieldset input[type="range"]'));
 				expect(await Promise.all(rulers.map(r => r.getAttribute('name')))).toEqual(['year', 'month', 'day', 'time']);

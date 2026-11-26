@@ -44,7 +44,7 @@ export function CitySearch({
 					setDraft(null);
 			}}
 		>
-			<label htmlFor={id}>City of birth</label>
+			<label htmlFor={id}>City</label>
 			<input
 				id={id}
 				type="search"
