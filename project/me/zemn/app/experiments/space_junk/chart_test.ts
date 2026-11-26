@@ -17,7 +17,7 @@ import {
 	snapshotPositions,
 } from './orbit.js';
 
-import { bodyPositions, classical, earthFixedSky } from './planets.js';
+import { bodyPositions, classical, earthFixedSky, modern } from './planets.js';
 import {
 	dayMs,
 	firstInstant,
@@ -225,9 +225,6 @@ describe('orbital globe', () => {
 			expect(projected(progress).x).toBeCloseTo(projected(end).x, 2);
 			expect(projected(progress).y).toBeCloseTo(projected(end).y, 2);
 		}
-		expect(chartGeometry(tilted, 1.5, 1, fixed).sky(70, 0.87, 12)).toEqual(
-			accurate.project(fixed(70, 12, 1.5 * 0.9))
-		);
 	});
 	it('keeps both zodiac rims at distinct radii in the ecliptic plane', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
@@ -452,6 +449,38 @@ describe('linked calendar rulers', () => {
 });
 
 describe('traditional chart', () => {
+	it('places Pluto at its geometric distance and direction independent of birthplace and zoom', () => {
+		const date = new Date('2006-08-01T12:00Z');
+		const [pluto] = bodyPositions([modern[2]], date);
+		// JPL Horizons geometric vectors, Pluto (999) relative to Earth (399),
+		// JD 2453949.0 UT. Earth-fixed axes use the same ellipsoid as the debris.
+		expect(Math.abs(pluto!.distanceKm - 4_551_707_967)).toBeLessThan(
+			50_000
+		);
+		expect(
+			Math.hypot(
+				pluto!.position.x + 479080,
+				pluto!.position.y - 491884,
+				pluto!.position.z + 195122
+			)
+		).toBeLessThan(10);
+		const local = bodyPositions([modern[2]], date, {
+			latitude: 25,
+			longitude: 100,
+		})[0]!;
+		expect(local.position).toEqual(pluto!.position);
+		for (const extent of [1.5, 800000]) {
+			const scene = chartGeometry(
+				{ turn: 80, tilt: 23 },
+				extent,
+				1,
+				earthFixedSky(date)
+			);
+			expect(scene.planet(local)).toEqual(
+				scene.frame.project(local.position)
+			);
+		}
+	});
 	it('reproduces the Moon crossing a sign boundary when observed from the birthplace', () => {
 		// JPL Horizons observer quantity 31, JD 2453949.0 UT, centres 500@399 and geodetic 0°, 0°, 0 km.
 		const date = new Date('2006-08-01T12:00Z');

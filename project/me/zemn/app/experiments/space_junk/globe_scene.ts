@@ -180,7 +180,14 @@ export function globeFrame(
 			(!solidEarth ||
 				distance * depth >= length2 ||
 				distance ** 2 * lateral2 >= length2);
-		return { center, x: x(pixels), y: y(pixels), depth, visible };
+		return {
+			center,
+			x: x(pixels),
+			y: y(pixels),
+			depth,
+			visible,
+			inFront: depth >= projection.nearPlane,
+		};
 	}
 	function symbol(
 		center: Point3D,

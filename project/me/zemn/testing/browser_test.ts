@@ -591,6 +591,17 @@ describe('zemn.me website', () => {
 				const beforeTurn = await moonX();
 				await globe.sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moonX() !== beforeTurn, 5000);
+				await driver.findElement(By.xpath('//summary[.="Planet positions"]')).click();
+				const plutoRow = await driver.findElement(By.xpath('//dt[contains(., "Pluto")]/following-sibling::dd[1]'));
+				expect(await plutoRow.getText()).toContain('AU from Earth');
+				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();
+				const zoom = await driver.findElement(By.xpath('//label[normalize-space(.)="Zoom"]/input'));
+				expect(await zoom.getAttribute('value')).toBe('0');
+				const distantX = await moonX();
+				await zoom.sendKeys(Key.END);
+				await driver.wait(async () => await moonX() !== distantX, 5000);
+				await zoom.sendKeys(Key.HOME);
+				await driver.wait(async () => await zoom.getAttribute('value') === '0', 5000);
 				const zodiac = await toggle('Zodiac');
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zodiac);
 				await zodiac.click();

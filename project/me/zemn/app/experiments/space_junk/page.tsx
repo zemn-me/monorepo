@@ -185,6 +185,7 @@ const BirthdayChart = memo(function BirthdayChart({
 			</div>
 			<figure className={style.figure}>
 				<ChartViewer
+					includeEarthOrbits={hasObjects}
 					instant={instant}
 					bodies={bodies}
 					showSigns={classical.some(body =>
@@ -447,9 +448,9 @@ export default function Page() {
 						Astronomy Engine
 					</a>
 					. Face-on, lines show major aspects within 6°. Tilting the
-					chart places artificial objects at their orbital positions
-					and planets on a reference sphere. Dashed arcs and hollow
-					dots indicate directions behind Earth.
+					chart shows positions to scale from Earth’s center. Zoom out
+					to see distant planets. Dashed arcs and hollow dots indicate
+					directions behind Earth.
 				</p>
 				<p>
 					Dated Earth-orbit records from{' '}

@@ -13,7 +13,7 @@ export function GlobeZodiac({
 	bodies: BodyPosition[];
 	showSigns: boolean;
 }) {
-	const { sky, ring, unfold } = geometry;
+	const { planet, ring, unfold } = geometry;
 	const ink = showSigns ? 1 : 1 - unfold;
 	const labels =
 		ink > 0
@@ -77,7 +77,7 @@ export function GlobeZodiac({
 			{bodies.length > 0 && (
 				<PlanetLayer
 					positions={bodies}
-					project={b => sky(b.longitude, 0.87, b.latitude)}
+					project={planet}
 					aspectOpacity={1 - unfold}
 					labelObstacles={labels}
 				/>

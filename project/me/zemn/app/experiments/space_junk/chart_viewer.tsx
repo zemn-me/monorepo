@@ -21,6 +21,7 @@ const closeExtent = 1.5;
 const radius = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
 export function ChartViewer({
+	includeEarthOrbits,
 	instant,
 	bodies,
 	showSigns,
@@ -32,6 +33,7 @@ export function ChartViewer({
 	ascendant,
 	onSelect,
 }: {
+	includeEarthOrbits: boolean;
 	instant: number;
 	bodies: BodyPosition[];
 	showSigns: boolean;
@@ -46,7 +48,18 @@ export function ChartViewer({
 	const controls = useChartCamera();
 	const { camera, move, faceOn, unfold } = controls;
 	const pick = useRef<PickMarker>(null);
-	const [extent, setExtent] = useState(closeExtent);
+	const [zoom, setZoom] = useState<number>();
+	const maxExtent = useMemo(
+		() =>
+			Math.max(
+				markers.reduce((m, p) => Math.max(m, radius(p) * 1.05), 2),
+				...bodies.map(b => radius(b.position) * 1.1)
+			),
+		[markers, bodies]
+	);
+	const zoomValue = zoom ?? (includeEarthOrbits ? 100 : 0);
+	const extent =
+		closeExtent * (maxExtent / closeExtent) ** (1 - zoomValue / 100);
 	const fixed = useMemo(() => earthFixedSky(new Date(instant)), [instant]);
 	const { turn, tilt } = camera;
 	const geometry = useMemo(
@@ -54,10 +67,6 @@ export function ChartViewer({
 		[turn, tilt, extent, unfold, fixed]
 	);
 	const symbolic = unfold < 1;
-	const maxExtent = useMemo(
-		() => markers.reduce((m, p) => Math.max(m, radius(p) * 1.05), 2),
-		[markers]
-	);
 	const placements = useMemo(
 		() =>
 			symbolic
@@ -78,7 +87,7 @@ export function ChartViewer({
 		[focus, placements]
 	);
 
-	function faceEarth(longitude: number, latitude: number, zoom: number) {
+	function faceEarth(longitude: number, latitude: number, radius: number) {
 		// Frame a polar birthplace just off the pole so its surface marker stays visible.
 		move({
 			...flat,
@@ -88,7 +97,11 @@ export function ChartViewer({
 				Math.min(orbitalTiltLimit, latitude)
 			),
 		});
-		setExtent(zoom);
+		setZoom(
+			100 -
+				(100 * Math.log(radius / closeExtent)) /
+					Math.log(maxExtent / closeExtent)
+		);
 	}
 	function home() {
 		faceEarth(
@@ -166,7 +179,7 @@ export function ChartViewer({
 					/>
 				</g>
 			</svg>
-			<PlanetPositions bodies={bodies} />
+			<PlanetPositions bodies={bodies} physical={unfold === 1} />
 			{faceOn && focus && (
 				<WheelReading selected={focus} aspects={aspects} />
 			)}
@@ -207,7 +220,7 @@ export function ChartViewer({
 							}
 						/>
 					</label>
-					{markers.length > 0 && (
+					{(markers.length > 0 || bodies.length > 0) && (
 						<label>
 							Zoom
 							<input
@@ -216,21 +229,9 @@ export function ChartViewer({
 								min="0"
 								max="100"
 								step=".1"
-								value={
-									100 -
-									(100 * Math.log(extent / closeExtent)) /
-										Math.log(maxExtent / closeExtent)
-								}
+								value={zoomValue}
 								aria-valuetext={`${extent.toFixed(1)} Earth radii from centre to edge`}
-								onChange={e =>
-									setExtent(
-										closeExtent *
-											(maxExtent / closeExtent) **
-												(1 -
-													e.target.valueAsNumber /
-														100)
-									)
-								}
+								onChange={e => setZoom(e.target.valueAsNumber)}
 							/>
 						</label>
 					)}

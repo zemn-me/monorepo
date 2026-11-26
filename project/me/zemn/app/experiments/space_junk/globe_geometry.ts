@@ -17,18 +17,21 @@ export interface Marker extends Vector {
 	fixed: Vector;
 }
 
-export function markerFrom(
-	object: SpaceObject,
-	[, x, y, z]: PositionRow
-): Marker {
-	// The WGS84 ellipsoid becomes a unit sphere in these drawing coordinates.
+// The WGS84 ellipsoid becomes a unit sphere in these drawing coordinates.
+export function earthRadii({ x, y, z }: Vector): Vector {
 	return {
-		object,
-		fixed: { x, y, z },
 		x: x / equatorialRadius,
 		y: y / equatorialRadius,
 		z: z / polarRadius,
 	};
+}
+
+export function markerFrom(
+	object: SpaceObject,
+	[, x, y, z]: PositionRow
+): Marker {
+	const fixed = { x, y, z };
+	return { object, fixed, ...earthRadii(fixed) };
 }
 
 export function catalogueMarkers(

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { type BodyPosition, bodyAspects } from './planets.js';
+import { type BodyPosition, bodyAspects, earthDistance } from './planets.js';
 import style from './style.module.css';
 import { signPosition } from './zodiac.js';
 
@@ -7,6 +7,7 @@ interface Point {
 	x: number;
 	y: number;
 	visible?: boolean;
+	inFront?: boolean;
 }
 
 export function PlanetLayer({
@@ -71,10 +72,11 @@ export function PlanetLayer({
 						y: point.y + radius * Math.sin(angle),
 					};
 				}
-				occupied.push(label);
+				if (point.inFront !== false) occupied.push(label);
 				return (
 					<g
 						key={body.name}
+						display={point.inFront === false ? 'none' : undefined}
 						role="img"
 						opacity={point.visible === false ? 0.6 : 1}
 						aria-label={
@@ -125,7 +127,13 @@ export function PlanetLayer({
 	);
 }
 
-export function PlanetPositions({ bodies }: { bodies: BodyPosition[] }) {
+export function PlanetPositions({
+	bodies,
+	physical,
+}: {
+	bodies: BodyPosition[];
+	physical: boolean;
+}) {
 	return (
 		bodies.length > 0 && (
 			<details className={style.reading}>
@@ -137,7 +145,13 @@ export function PlanetPositions({ bodies }: { bodies: BodyPosition[] }) {
 								{body.glyph}
 								{'\uFE0E'} {body.name}
 							</dt>
-							<dd>{signPosition(body.longitude)}</dd>
+							<dd>
+								{signPosition(body.longitude)}
+								{physical &&
+									' · ' +
+										earthDistance(body.distanceKm) +
+										' from Earth'}
+							</dd>
 						</div>
 					))}
 				</dl>

@@ -18,7 +18,7 @@ export function WheelGuides({
 	selected?: Placement;
 	ascendant?: number;
 }) {
-	const at = geometry.sky;
+	const at = geometry.ring;
 	const anchor = ascendant ?? 0;
 	const xy = (p: { x: number; y: number }) =>
 		p.x.toFixed(2) + ',' + p.y.toFixed(2);

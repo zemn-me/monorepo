@@ -1,11 +1,13 @@
 import { type Camera, wrap } from './chart_camera.js';
 import type { Marker, Vector } from './globe_geometry.js';
 import { globeCamera, globeFrame } from './globe_scene.js';
-import type { earthFixedSky } from './planets.js';
+import type { BodyPosition, earthFixedSky } from './planets.js';
 import { radians } from './zodiac.js';
 
 const bands = { D: 1.025, R: 1.055, C: 1.085, P: 1.105 };
-const mix = (from: number, to: number, t: number) => from + (to - from) * t;
+// Interpolate scale logarithmically from the wheel out to planetary distances.
+const mixRadius = (from: number, to: number, t: number) =>
+	t === 1 ? to : from * (to / from) ** t;
 
 export function chartGeometry(
 	camera: Pick<Camera, 'turn' | 'tilt'>,
@@ -18,7 +20,7 @@ export function chartGeometry(
 	// The renderer keeps a unit Earth mesh. Changing the camera distance and
 	// all object coordinates together grows Earth out of the chart origin.
 	const unit = unfold || 1;
-	const viewRadius = mix(1.41, extent, unfold) / unit;
+	const viewRadius = mixRadius(1.41, extent, unfold) / unit;
 	const frame = globeFrame(
 		globeCamera(camera.turn, camera.tilt, viewRadius),
 		Infinity,
@@ -38,7 +40,7 @@ export function chartGeometry(
 				radians *
 				wrap(Math.atan2(target.y, target.x) / radians - start);
 			lat = unfold * Math.atan2(target.z, xy);
-			radius = mix(band, Math.hypot(xy, target.z), unfold) / unit;
+			radius = mixRadius(band, Math.hypot(xy, target.z), unfold) / unit;
 		}
 		const parallel = radius * Math.cos(lat);
 		return {
@@ -67,18 +69,14 @@ export function chartGeometry(
 		});
 	}
 
-	function sky(longitude: number, band: number, latitude = 0) {
-		// Planet glyphs mark directions on the reference sphere.
-		const physical = unfold
-			? fixed(longitude, latitude, extent * 0.9)
-			: equinox;
-		return frame.project(position(longitude, band, physical));
+	function planet(body: BodyPosition) {
+		return frame.project(position(body.longitude, 0.87, body.position));
 	}
 	function debris(marker: Marker, longitude: number) {
 		return frame.project(
 			position(longitude, bands[marker.object.kind], marker)
 		);
 	}
-	return { frame, ring, sky, debris, unfold };
+	return { frame, ring, planet, debris, unfold };
 }
 export type ChartGeometry = ReturnType<typeof chartGeometry>;

@@ -136,8 +136,8 @@ export function Globe({
 	return (
 		<g>
 			<desc>
-				Zodiac marks show sky directions. The distance scale measures
-				Earth and orbiting objects.
+				The zodiac ring marks sky directions. In 3D the distance scale
+				applies to all bodies.
 				{birthplace &&
 					` The red dot marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
 			</desc>
@@ -185,6 +185,18 @@ export function Globe({
 					fill="currentColor"
 				>
 					<title>Chart origin</title>
+				</circle>
+			)}
+			{unfold === 1 && frame.kmPerPixel > 6378.137 && (
+				<circle
+					cx={width / 2}
+					cy={height / 2}
+					r="1.7"
+					role="img"
+					aria-label="Earth"
+					fill="currentColor"
+				>
+					<title>Earth</title>
 				</circle>
 			)}
 			{birthPoint?.visible && (

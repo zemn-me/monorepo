@@ -3,6 +3,10 @@ import {
 	Ecliptic,
 	Equator,
 	GeoVector,
+	HelioVector,
+	KM_PER_AU,
+	Rotation_EQJ_EQD,
+	Vector,
 	MakeTime,
 	Observer,
 	RotateVector,
@@ -12,6 +16,7 @@ import {
 	VectorFromSphere,
 } from 'astronomy-engine';
 import { eciToEcf } from 'satellite.js';
+import { earthRadii } from './globe_geometry.js';
 import { aspectAngles, degrees, radians, type Birthplace } from './zodiac.js';
 
 export const classical = [
@@ -44,6 +49,8 @@ export interface BodyPosition {
 	glyph: string;
 	longitude: number;
 	latitude: number;
+	position: ReturnType<typeof earthRadii>;
+	distanceKm: number;
 }
 
 export function bodyPositions(
@@ -51,15 +58,47 @@ export function bodyPositions(
 	date: Date,
 	place?: Birthplace
 ): BodyPosition[] {
+	if (!bodies.length) return [];
 	const time = MakeTime(date);
 	const observer = place && new Observer(place.latitude, place.longitude, 0);
+	const earth = HelioVector(Body.Earth, time);
+	const ofDate = Rotation_EQJ_EQD(time);
+	const sidereal = SiderealTime(time) * 15 * radians;
 	return bodies.map(name => {
 		const equatorial = observer
 			? Equator(name, time, observer, false, true).vec
 			: GeoVector(name, time, true);
 		const { elon, elat } = Ecliptic(equatorial);
-		return { name, glyph: glyphs[name], longitude: elon, latitude: elat };
+		// The wheel uses the apparent sky at the birthplace. The physical
+		// scene uses both bodies at the same instant, measured from Earth's center.
+		const target = HelioVector(name, time);
+		const relative = new Vector(
+			target.x - earth.x,
+			target.y - earth.y,
+			target.z - earth.z,
+			time
+		);
+		const fixed = eciToEcf(RotateVector(ofDate, relative), sidereal);
+		return {
+			name,
+			glyph: glyphs[name],
+			longitude: elon,
+			latitude: elat,
+			position: earthRadii({
+				x: fixed.x * KM_PER_AU,
+				y: fixed.y * KM_PER_AU,
+				z: fixed.z * KM_PER_AU,
+			}),
+			distanceKm: relative.Length() * KM_PER_AU,
+		};
 	});
+}
+
+export function earthDistance(km: number) {
+	const options = { maximumSignificantDigits: 4 };
+	return km < KM_PER_AU / 100
+		? km.toLocaleString('en-GB', options) + ' km'
+		: (km / KM_PER_AU).toLocaleString('en-GB', options) + ' AU';
 }
 
 export function bodyAspects(positions: BodyPosition[]) {
