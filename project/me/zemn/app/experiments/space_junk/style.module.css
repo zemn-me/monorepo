@@ -603,7 +603,7 @@
 	}
 }
 
-.printDate, .printCity, .printView, .printFilter {
+.printCity, .printFilter {
 	display: none;
 }
 
@@ -642,46 +642,43 @@
 		margin: 3mm 0 1mm;
 		font-size: 27pt;
 	}
-	.citySearch, .rulers, .figure {
-		margin: 0;
-		border: 0;
+	.citySearch, .rulers, .viewControls {
+		zoom: 0.88;
+		break-inside: avoid;
 	}
-	.citySearch, .rulers {
+	.citySearch {
+		margin-block-start: 2mm;
+		min-height: 10mm;
+	}
+	.printCity {
 		display: block;
-		padding: 0;
+		padding-inline: 0.35rem;
+		font-size: 1.1rem;
 	}
-	.citySearch > :not(.printCity), .rulers > :not(.printDate),
-	.viewControls, .paging, .objectBand .search {
+	.citySearch :is(input, ul, small), .paging, .objectBand .search {
 		display: none;
 	}
-	.printDate, .printCity, .printView, .printFilter {
-		display: block;
-	}
-	.printDate, .printCity {
-		line-height: 1.5;
+	.rulerTrack i {
+		print-color-adjust: exact;
 	}
 	.globe {
 		width: 113mm;
 		max-width: 100%;
+		break-after: avoid;
 		outline: none !important;
 	}
 	.figure {
 		margin: 2mm 0 4mm;
-		break-inside: avoid;
-	}
-	.printView, .printFilter {
-		margin: 0;
-		font-size: 10pt;
-	}
-	.printView {
-		margin-bottom: 3mm;
 	}
 	.printFilter {
-		margin-top: 1.5mm;
+		display: block;
+		margin: 1.5mm 0 0;
+		font-size: 10pt;
 		text-align: start;
 	}
 	.planetBand, .objectBand {
 		break-inside: avoid;
+		break-after: avoid;
 		padding-block: 1mm;
 		border-top: 1px solid var(--line);
 	}

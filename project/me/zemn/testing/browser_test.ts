@@ -837,7 +837,7 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('prints the chart masthead, local instant and filter with the chart', async () => {
+		it('prints the city, date and view slide rules with the chart', async () => {
 			try {
 				const params = new URLSearchParams({
 					time: '2006-08-01T12:00:00Z', city: 'Europe/London',
@@ -846,15 +846,18 @@ describe('zemn.me website', () => {
 				await driver.get(`${origin}/experiments/astrological-chart?${params}`);
 				const city = await driver.findElement(By.css('[role="combobox"]'));
 				await driver.wait(async () => (await city.getAttribute('value'))?.includes('London'), 10000);
-				const instant = await driver.findElement(By.css('fieldset time'));
-				expect(await instant.isDisplayed()).toBe(false);
 				const chrome = driver as unknown as ChromeDriver;
 				await chrome.sendDevToolsCommand('Emulation.setEmulatedMedia', {media: 'print'});
 
-				expect(await city.isDisplayed()).toBe(false);
-				expect(await instant.getText()).toContain('13:00:00 UTC+01:00');
 				const chart = await driver.findElement(By.css('article'));
+				expect(await chart.findElement(By.css('label[for="chart-birth-city"]')).isDisplayed()).toBe(true);
 				expect(await chart.getText()).toContain('London, England, United Kingdom');
+				for (const label of ['Year', 'Month', 'Day', 'Time', 'Rotation', 'Tilt', 'Orbit view width']) {
+					const input = await chart.findElement(By.css(`input[type="range"][aria-label="${label}"]`));
+					const scale = await input.findElement(By.xpath('following-sibling::*[local-name()="svg"]'));
+					expect(await scale.isDisplayed()).toBe(true);
+				}
+				expect(await chart.getText()).toContain('13:00:00');
 				expect(await chart.getText()).toContain('Object filter · 1990-046C');
 				const header = await driver.findElement(By.css('header[data-glade-banner]')).getRect();
 				const title = await chart.findElement(By.css('h1')).getRect();

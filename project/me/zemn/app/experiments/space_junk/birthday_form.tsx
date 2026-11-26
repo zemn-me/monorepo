@@ -181,9 +181,6 @@ export const BirthdayRulers = memo(function BirthdayRulers({
 	};
 	return (
 		<fieldset className={style.rulers} aria-label="Chart date and time">
-			<time className={style.printDate} dateTime={new Date(epoch).toISOString()}>
-				{dateLabel} · {localTime} UTC{date.offset}
-			</time>
 			<Ruler
 				{...common}
 				unit="year"
