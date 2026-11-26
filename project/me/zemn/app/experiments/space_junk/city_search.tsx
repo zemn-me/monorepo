@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
 	type City,
 	cityShard,
@@ -24,6 +24,25 @@ export function CitySearch({
 	const id = 'chart-birth-city';
 	const [draft, setDraft] = useState<string | null>(null);
 	const [active, setActive] = useState(0);
+	const picker = useRef<HTMLDivElement>(null);
+	const editing = draft !== null;
+	useEffect(() => {
+		if (!editing) return;
+		// iOS Safari can blur the input before dispatching the tapped option’s click.
+		function dismissOutside(event: Event) {
+			if (
+				event.target instanceof Node &&
+				!picker.current?.contains(event.target)
+			)
+				setDraft(null);
+		}
+		document.addEventListener('pointerdown', dismissOutside, true);
+		document.addEventListener('focusin', dismissOutside, true);
+		return () => {
+			document.removeEventListener('pointerdown', dismissOutside, true);
+			document.removeEventListener('focusin', dismissOutside, true);
+		};
+	}, [editing]);
 	const term = foldCityName(draft ?? '');
 	const shard = nameShard(term);
 	const ready = shard !== null;
@@ -37,13 +56,7 @@ export function CitySearch({
 		setDraft(null);
 	}
 	return (
-		<div
-			className={style.citySearch}
-			onBlur={event => {
-				if (!event.currentTarget.contains(event.relatedTarget))
-					setDraft(null);
-			}}
-		>
+		<div className={style.citySearch} ref={picker}>
 			<label htmlFor={id}>City</label>
 			{city && <span className={style.printCity}>{cityName(city)}</span>}
 			<input
@@ -100,7 +113,7 @@ export function CitySearch({
 						role="option"
 						id={id + '-' + option.id}
 						aria-selected={index === active}
-						onPointerDown={event => event.preventDefault()}
+						onMouseDown={event => event.preventDefault()}
 						onClick={() => choose(option)}
 					>
 						{cityName(option)}
