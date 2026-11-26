@@ -110,17 +110,13 @@ export function ChartViewer({
 	const fixed = useMemo(() => earthFixedSky(new Date(instant)), [instant]);
 	const { turn, tilt } = camera;
 	const geometry = useMemo(
-		() => chartGeometry({ turn, tilt }, extent, unfold, fixed),
-		[turn, tilt, extent, unfold, fixed]
+		() => chartGeometry(camera, extent, unfold, fixed),
+		[camera, extent, unfold, fixed]
 	);
 	const zoomMarks = bodies.flatMap(body => {
 		const extent = Math.max(
 			closeExtent,
-			geometry.frame.extentToFrame(
-				body.position,
-				camera.panX,
-				camera.panY
-			)
+			geometry.frame.extentToFrame(body.position)
 		);
 		if (extent > maxExtent) return [];
 		return [

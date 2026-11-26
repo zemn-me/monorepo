@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { Temporal } from 'temporal-polyfill';
 import { inOrbitAt, matchesSearch, readChart } from './chart.js';
+import { flat as defaultCamera } from './chart_camera.js';
 import { chartGeometry } from './chart_geometry.js';
 import {
 	catalogueMarkers,
@@ -31,8 +32,11 @@ it('marks the orbit view width where a planet fits into the panned viewport', ()
 		[-121, 90, -32, 71],
 	] as const) {
 		const frame = (extent: number) =>
-			globeFrame(globeCamera(turn, tilt, extent), Infinity);
-		const extent = frame(1).extentToFrame(p, panX, panY);
+			globeFrame(globeCamera(turn, tilt, extent), Infinity, true, {
+				panX,
+				panY,
+			});
+		const extent = frame(1).extentToFrame(p);
 		const onScreen = (scale: number) => {
 			const pt = frame(extent * scale).project(p);
 			return (
@@ -142,6 +146,51 @@ describe('historical debris positions', () => {
 });
 
 describe('orbital globe', () => {
+	it('omits the offscreen Mars–Jupiter aspect at 60° tilt on the default chart', () => {
+		const date = new Date('2006-08-01T12:00:00Z');
+		const bodies = bodyPositions(classical, date);
+		const mars = bodies.find(body => body.name === 'Mars')!;
+		const jupiter = bodies.find(body => body.name === 'Jupiter')!;
+		const fixed = earthFixedSky(date);
+		const wheel = chartGeometry(defaultCamera, 1.5, 0, fixed);
+		const orbit = chartGeometry(
+			{ ...defaultCamera, tilt: 60 },
+			1.5,
+			1,
+			fixed
+		);
+
+		expect(
+			wheel.frame.segment(wheel.planet(mars), wheel.planet(jupiter))
+		).not.toBeNull();
+		expect(
+			orbit.frame.segment(orbit.planet(mars), orbit.planet(jupiter))
+		).toBeNull();
+	});
+	it('clips a crossing aspect to the panned viewport and keeps its dash phase', () => {
+		const panX = 40,
+			panY = -20;
+		const frame = globeFrame(globeCamera(0, 0, 1.5), Infinity, true, {
+			panX,
+			panY,
+		});
+		const left = frame.project({ x: 0, y: -100, z: 0 });
+		const right = frame.project({ x: 0, y: 100, z: 0 });
+		const line = frame.segment(right, left, [2, 3])!;
+		expect(line.x1).toBeCloseTo(width - panX);
+		expect(line.x2).toBeCloseTo(-panX);
+		expect(line.y1).toBeCloseTo(height / 2);
+		expect(line.y2).toBeCloseTo(height / 2);
+		expect(line.strokeDashoffset).toBeCloseTo(
+			(right.x - (width - panX)) % 5
+		);
+
+		const north = frame.project({ x: 0, y: 0, z: 100 });
+		const south = frame.project({ x: 0, y: 0, z: -100 });
+		const meridian = frame.segment(north, south)!;
+		expect(meridian.y1).toBeCloseTo(-panY);
+		expect(meridian.y2).toBeCloseTo(height - panY);
+	});
 	it('plots the first 250 filtered bodies with a position and confirmed flight', () => {
 		const matches = Array.from({ length: 300 }, (_, id) => ({
 			object: { ...spatula, id },
@@ -164,7 +213,7 @@ describe('orbital globe', () => {
 	it('unfolds a single placement from its wheel band to its actual Earth-fixed position', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
 		const marker = markerFrom(spatula, [spatula.id, 7200, 3210, 4500]);
-		const camera = { turn: 12, tilt: 90 };
+		const camera = defaultCamera;
 		const longitude = 70;
 		const flat = chartGeometry(camera, 1.5, 0, fixed).debris(
 			marker,
@@ -211,7 +260,7 @@ describe('orbital globe', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));
 		const extent = 2;
 		const { frame, ring } = chartGeometry(
-			{ turn: 35, tilt: 22 },
+			{ ...defaultCamera, turn: 35, tilt: 22 },
 			extent,
 			1,
 			fixed
@@ -235,7 +284,7 @@ describe('orbital globe', () => {
 				const expected = globeCamera(turn, tilt, 1.5).yaw;
 				for (const amount of [0, 0.25, 0.5, 0.75, 1]) {
 					const { frame } = chartGeometry(
-						{ turn, tilt },
+						{ ...defaultCamera, turn, tilt },
 						1.5,
 						amount,
 						fixed
@@ -463,7 +512,7 @@ describe('traditional chart', () => {
 		expect(local.position).toEqual(pluto!.position);
 		for (const extent of [1.5, 800000]) {
 			const scene = chartGeometry(
-				{ turn: 80, tilt: 23 },
+				{ ...defaultCamera, turn: 80, tilt: 23 },
 				extent,
 				1,
 				earthFixedSky(date)

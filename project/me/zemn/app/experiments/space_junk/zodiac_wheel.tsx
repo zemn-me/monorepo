@@ -28,19 +28,19 @@ export function WheelGuides({
 					);
 					const { object } = placement.marker;
 					const title = `${name} · ${object.name}\n${object.piece}`;
-					const line = geometry.frame.segment(start, end);
-					if (!line) return null;
+					const line = geometry.frame.segment(start, end, dash);
 					return (
 						<g key={name}>
-							<line
-								{...line}
-								stroke="currentColor"
-								strokeOpacity=".72"
-								strokeWidth="1"
-								strokeDasharray={dash}
-							>
-								<title>{title}</title>
-							</line>
+							{line && (
+								<line
+									{...line}
+									stroke="currentColor"
+									strokeOpacity=".72"
+									strokeWidth="1"
+								>
+									<title>{title}</title>
+								</line>
+							)}
 							{end.visible && (
 								<circle
 									cx={end.x}

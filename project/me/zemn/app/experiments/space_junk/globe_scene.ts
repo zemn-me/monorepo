@@ -24,7 +24,12 @@ import {
 	styledFace,
 } from '#root/ts/math/wireframe_render.js';
 import { unwrap } from '#root/ts/result/result.js';
-import { equatorialRadius, radians, surface, type Vector } from './globe_geometry.js';
+import {
+	equatorialRadius,
+	radians,
+	surface,
+	type Vector,
+} from './globe_geometry.js';
 
 export const width = 416,
 	height = 376;
@@ -123,7 +128,8 @@ export function viewWidthKm(camera: OrbitCamera) {
 export function globeFrame(
 	camera: OrbitCamera,
 	maxRadius: number,
-	solidEarth = true
+	solidEarth = true,
+	{ panX, panY } = { panX: 0, panY: 0 }
 ) {
 	const pose = orbitPose(camera);
 	const toCamera = unwrap(cameraSpaceTransformFromPose(pose));
@@ -163,7 +169,7 @@ export function globeFrame(
 	}
 	// Solve the same perspective projection for camera distance, keeping the
 	// marker just inside the nearest edge of the panned viewport.
-	function extentToFrame(p: Vector, panX: number, panY: number) {
+	function extentToFrame(p: Vector) {
 		const eye = toCamera(world(p));
 		function depthAtEdge(offset: number, half: number, pan: number) {
 			if (!offset) return 0;
@@ -181,19 +187,59 @@ export function globeFrame(
 	}
 	function segment(
 		start: ReturnType<typeof project>,
-		end: ReturnType<typeof project>
+		end: ReturnType<typeof project>,
+		dash?: readonly [number, number]
 	) {
-		if (start.inFront && end.inFront)
-			return { x1: start.x, y1: start.y, x2: end.x, y2: end.y };
-		const clipped = clipSegmentToNearPlane(
-			toCamera(start.center),
-			toCamera(end.center),
-			projection.nearPlane
-		);
-		if (!clipped) return null;
-		const a = toScreen(clipped[0]),
-			b = toScreen(clipped[1]);
-		return { x1: x(a), y1: y(a), x2: x(b), y2: y(b) };
+		let x1 = start.x,
+			y1 = start.y,
+			x2 = end.x,
+			y2 = end.y;
+		if (!start.inFront || !end.inFront) {
+			const clipped = clipSegmentToNearPlane(
+				toCamera(start.center),
+				toCamera(end.center),
+				projection.nearPlane
+			);
+			if (!clipped) return null;
+			const a = toScreen(clipped[0]),
+				b = toScreen(clipped[1]);
+			x1 = x(a);
+			y1 = y(a);
+			x2 = x(b);
+			y2 = y(b);
+		}
+
+		// Near-plane intersections at planetary distances can project millions of
+		// chart widths away. Bound the stroke before SVG expands its dash pattern.
+		const dx = x2 - x1,
+			dy = y2 - y1;
+		let enter = 0,
+			leave = 1;
+		for (const [origin, delta, min, max] of [
+			[x1, dx, -panX, width - panX],
+			[y1, dy, -panY, height - panY],
+		] as const) {
+			if (delta === 0) {
+				if (origin < min || origin > max) return null;
+				continue;
+			}
+			const a = (min - origin) / delta,
+				b = (max - origin) / delta;
+			enter = Math.max(enter, Math.min(a, b));
+			leave = Math.min(leave, Math.max(a, b));
+			if (enter > leave) return null;
+		}
+		return {
+			x1: x1 + enter * dx,
+			y1: y1 + enter * dy,
+			x2: x1 + leave * dx,
+			y2: y1 + leave * dy,
+			strokeDasharray: dash?.join(' '),
+			strokeDashoffset:
+				dash && enter > 0
+					? (enter * Math.hypot(dx, dy)) % (dash[0] + dash[1])
+					: undefined,
+		};
 	}
 
 	return {
