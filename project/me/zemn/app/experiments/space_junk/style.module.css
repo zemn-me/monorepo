@@ -274,7 +274,7 @@
 	min-width: 0;
 	padding: 0.4rem 0.5rem;
 	border: 1px solid var(--line);
-	border-radius: 0.3rem;
+	border-radius: 0;
 	background: var(--background-color);
 }
 .paging button {
@@ -349,10 +349,7 @@
 .planetBand,
 .objectBand {
 	display: grid;
-	grid-template-columns: minmax(5.4rem, 1.55fr) minmax(0, 8fr) minmax(
-			0,
-			3.2fr
-		);
+	grid-template-columns: 6.2rem minmax(0, 8fr) minmax(0, 3.2fr);
 	align-items: center;
 	column-gap: 0.2rem;
 	padding-block: 0.25rem;
@@ -366,13 +363,12 @@
 	align-items: stretch;
 }
 .zodiacGroup {
-	grid-template-columns: repeat(8, auto);
+	grid-template-columns: repeat(8, minmax(44px, auto));
 	outline: 1px solid var(--line);
 	outline-offset: -1px;
-	border-radius: 0.25rem;
 }
 .outerBodies {
-	grid-template-columns: repeat(3, auto);
+	grid-template-columns: repeat(3, minmax(44px, auto));
 }
 :is(.planetBand, .objectBand) .switch {
 	display: grid;
@@ -385,7 +381,19 @@
 	font-size: 0.72rem;
 	text-align: center;
 }
-@media (width < 42rem) {
+:is(.planetBand, .objectBand) > .switch > span,
+.zodiacGroup > .switch:first-child > span {
+	font-weight: 550;
+}
+:is(.planetBand, .objectBand) > .switch > span {
+	max-inline-size: 10ch;
+	text-wrap: balance;
+}
+@media (width < 44rem) {
+	.planetBand .zodiacGroup > .switch:nth-child(n + 5),
+	.planetBand .outerBodies > .switch:nth-child(n + 3) {
+		grid-template-rows: minmax(1lh, auto) auto;
+	}
 	.planetBand {
 		grid-template-columns: minmax(0, 1.2fr) minmax(0, 4.2fr) minmax(
 				0,
@@ -401,10 +409,13 @@
 }
 @media (width < 32rem) {
 	.planetBand {
-		grid-template-columns: 4.5rem minmax(0, 1fr);
+		grid-template-columns: 5.4rem minmax(0, 1fr);
 	}
 	.planetBand > .switch {
 		grid-row: span 2;
+	}
+	.planetBand .outerBodies > .switch {
+		grid-template-rows: minmax(1lh, auto) auto;
 	}
 	.planetBand .outerBodies {
 		grid-column: 2;
@@ -422,7 +433,7 @@
 	}
 }
 .objectBand {
-	grid-template-columns: 5.4rem minmax(6rem, 1.4fr) minmax(0, 4fr) minmax(4.5rem, 1fr);
+	grid-template-columns: 6.2rem minmax(6rem, 1.4fr) minmax(0, 4fr) minmax(4.5rem, 1fr);
 	gap: 0.3rem;
 	padding-block: 0.45rem;
 }
@@ -460,54 +471,60 @@
 	gap: 0.4rem;
 }
 .page .switch input {
+	--thumb: 0.8125rem;
 	appearance: none;
 	position: relative;
 	box-sizing: border-box;
-	border: 1px solid var(--muted);
-	border-radius: 1rem;
-	width: 1.9rem;
-	height: 1.1rem;
+	width: 1.875rem;
+	height: 1rem;
 	min-height: 0;
-	padding: 0;
 	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 2px;
 	color: inherit;
 	background: transparent;
 	cursor: inherit;
 }
+.switch input::before,
 .switch input::after {
 	content: "";
 	position: absolute;
-	top: 2px;
-	left: 2px;
-	height: calc(100% - 4px);
-	aspect-ratio: 1;
+	box-sizing: border-box;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.switch input::before {
+	inset-inline: 1px;
+	height: 0.3125rem;
+	border: 1px solid var(--muted);
+	border-radius: 1rem;
+}
+.switch input::after {
+	left: 0;
+	width: var(--thumb);
+	height: var(--thumb);
+	border: 1.25px solid currentColor;
 	border-radius: 50%;
-	background: currentColor;
-}
-.page .switch input:checked {
-	background: currentColor;
-	border-color: currentColor;
-}
-.switch input:checked::after {
-	left: auto;
-	right: 2px;
 	background: var(--background-color);
 }
-@media (forced-colors: active) {
-	.page .switch input:checked {
-		background: Highlight;
-	}
-	.switch input:checked::after {
-		background: HighlightText;
-	}
+.switch input:checked::after {
+	left: calc(100% - var(--thumb));
+	border-width: 0.3125rem;
 }
 .switch input:indeterminate::after {
 	left: 50%;
-	top: 50%;
-	width: 0.65rem;
-	height: 2px;
-	border-radius: 0;
 	transform: translate(-50%, -50%);
+	background: linear-gradient(currentColor, currentColor) center / 6px 1.5px
+		no-repeat var(--background-color);
+}
+@media (forced-colors: active) {
+	.page .switch input {
+		--muted: CanvasText;
+		--background-color: Canvas;
+		color: CanvasText;
+		forced-color-adjust: none;
+	}
 }
 
 .planetName {
@@ -588,19 +605,8 @@
 	.paging {
 		display: none;
 	}
-	.page .switch input,
-	.page .switch input:checked {
-		background: transparent;
-		border-color: currentColor;
-	}
-	.page .switch input::after {
-		box-sizing: border-box;
-		background: transparent;
-		border: 2px solid currentColor;
-	}
-	.page .switch input:indeterminate::after {
-		border: 0;
-		border-top: 2px solid currentColor;
+	.switch input::after {
+		print-color-adjust: exact;
 	}
 	.placements li {
 		break-inside: avoid;
