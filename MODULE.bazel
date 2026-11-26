@@ -821,6 +821,21 @@ http_file(
     urls = ["https://raw.githubusercontent.com/sizhewang25/jonathon-space-archive/654637aa28c72733ffbf69709f530e5712ce02a6/data/satcat.tsv"],
 )
 
+# GeoNames cities500 and first-level regions for the browser birthplace index.
+http_file(
+    name = "geonames_cities",
+    downloaded_file_path = "geonamescache.whl",
+    sha256 = "b830e8942f2d58c7e68782dcf4dff2ffe8c4104a35ee881ed1ad4023cefcdba4",
+    urls = ["https://files.pythonhosted.org/packages/48/c2/52f1b29de8839b4b55cd2641dfd722a6a94953d74fa82514e26084a92318/geonamescache-3.0.2-py3-none-any.whl"],
+)
+
+http_file(
+    name = "geonames_regions",
+    downloaded_file_path = "admin1.txt",
+    sha256 = "1da92a6323a5fec3176f3f743bf4cf4040fd56a876da55e46fbca23c863aa60a",
+    urls = ["https://huggingface.co/datasets/yuiseki/geonames/resolve/f11302971633d42c2f9d806862f62b299e92852b/raw/20261001/admin1CodesASCII.txt"],
+)
+
 http_file(
     name = "natural_earth_coastline",
     downloaded_file_path = "coastline.geojson",

@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { useLocale } from '#root/ts/react/lang/useLocale.js';
-import type { City } from './cities.js';
+import { useMemo, useState } from 'react';
+import {
+	type City,
+	cityShard,
+	findCities,
+	foldCityName,
+	nameShard,
+} from './cities.js';
 import style from './style.module.css';
 
 const cityName = (city: City) =>
@@ -17,36 +22,16 @@ export function CitySearch({
 	onSelect: (city?: City) => void;
 }) {
 	const id = 'chart-birth-city';
-	const languages = useLocale();
-	const language = new Intl.Locale(languages[0]).language;
 	const [draft, setDraft] = useState<string | null>(null);
-	const [term, setTerm] = useState('');
 	const [active, setActive] = useState(0);
-	const input = draft?.trim() ?? '';
-	useEffect(() => {
-		const timer = setTimeout(() => setTerm(input), 200);
-		return () => clearTimeout(timer);
-	}, [input]);
-	const ready = input.length >= 2 && input === term;
-	const search = useQuery({
-		queryKey: ['star-chart-cities', language, term],
-		enabled: ready,
-		staleTime: 86400000,
-		retry: false,
-		meta: { persist: false },
-		queryFn: async ({ signal }): Promise<City[]> => {
-			const response = await fetch(
-				'/experiments/space-junk/cities/' +
-					encodeURIComponent(term) +
-					'?lang=' +
-					encodeURIComponent(language),
-				{ signal }
-			);
-			if (!response.ok) throw new Error('City search unavailable');
-			return response.json();
-		},
-	});
-	const options = ready ? (search.data ?? []) : [];
+	const term = foldCityName(draft ?? '');
+	const shard = nameShard(term);
+	const ready = shard !== null;
+	const search = useQuery(cityShard(shard));
+	const options = useMemo(
+		() => (ready && search.data ? findCities(search.data, term) : []),
+		[ready, search.data, term]
+	);
 	function choose(candidate: City) {
 		onSelect(candidate);
 		setDraft(null);

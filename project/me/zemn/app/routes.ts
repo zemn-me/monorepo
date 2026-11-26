@@ -2,10 +2,6 @@ import type { RouteConfig } from '@react-router/dev/routes';
 
 export default [
 	{
-		path: 'experiments/space-junk/cities/:name',
-		file: 'experiments/space_junk/cities.js',
-	},
-	{
 		path: 'experiments/space-junk/elements/:day',
 		file: 'experiments/space_junk/daily_elements.js',
 	},

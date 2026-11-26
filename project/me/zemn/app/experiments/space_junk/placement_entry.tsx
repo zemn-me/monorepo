@@ -40,7 +40,12 @@ export function PlacementEntry({
 				</h3>
 				<span>
 					{signs[sign]} {angle}
-					{house !== undefined && ` · House ${house}`}
+					{house !== undefined && (
+						<>
+							{' '}
+							<span>· House {house}</span>
+						</>
+					)}
 				</span>
 			</header>
 			{children}

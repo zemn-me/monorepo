@@ -1,7 +1,12 @@
 import { afterEach, beforeEach, expect, it, jest } from '@jest/globals';
 import { act, renderHook } from '@testing-library/react';
+import { useState } from 'react';
 import { type TimeScale, useRulerClock } from './use_ruler_clock.js';
 
+function useTestClock() {
+	const [instant, publish] = useState(0);
+	return { instant, clock: useRulerClock(instant, publish) };
+}
 const minutes: TimeScale = {
 	min: 0,
 	max: 120,
@@ -20,7 +25,7 @@ afterEach(() => {
 it('coalesces a burst into one frame and converts only its final ruler position', () => {
 	const frames = jest.spyOn(window, 'requestAnimationFrame');
 	const scale = { ...minutes, instant: jest.fn(minutes.instant) };
-	const { result } = renderHook(() => useRulerClock(0));
+	const { result } = renderHook(useTestClock);
 	const { clock } = result.current;
 
 	clock.seek(27, scale);
@@ -40,7 +45,7 @@ it('coalesces a burst into one frame and converts only its final ruler position'
 });
 
 it('uses the pending time when switching rulers or changing the birthplace', () => {
-	const { result, unmount } = renderHook(() => useRulerClock(0));
+	const { result, unmount } = renderHook(useTestClock);
 	const { clock } = result.current;
 	clock.seek(60000);
 	clock.seek(clock.position(minutes) + 2, minutes);

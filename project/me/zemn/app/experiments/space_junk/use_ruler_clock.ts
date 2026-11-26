@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 
 export interface TimeScale {
 	min: number;
@@ -14,9 +14,11 @@ const milliseconds: TimeScale = {
 	instant: time => time,
 };
 
-export function useRulerClock(initial: number) {
-	const [instant, publish] = useState(initial);
-	const last = useRef(initial);
+export function useRulerClock(
+	instant: number,
+	publish: (value: number) => void
+) {
+	const last = useRef(instant);
 	const pending = useRef<{
 		scale: TimeScale;
 		position: number;
@@ -48,8 +50,7 @@ export function useRulerClock(initial: number) {
 					: scale.position(read());
 			},
 			seek(position: number, scale = milliseconds) {
-				// Retain one target in the active ruler's units. Wheel deltas add
-				// to it and pointer moves replace it before the next paint.
+				// Retain the latest target in the active ruler’s units until the next paint.
 				const frame =
 					pending.current?.frame ??
 					requestAnimationFrame(() => {
@@ -67,9 +68,15 @@ export function useRulerClock(initial: number) {
 				};
 			},
 		};
-	}, []);
+	}, [publish]);
 	useEffect(() => clock.cancel, [clock]);
-	return { instant, clock };
+	useLayoutEffect(() => {
+		if (instant !== last.current) {
+			clock.cancel();
+			last.current = instant;
+		}
+	}, [instant, clock]);
+	return clock;
 }
 
-export type RulerClock = ReturnType<typeof useRulerClock>['clock'];
+export type RulerClock = ReturnType<typeof useRulerClock>;

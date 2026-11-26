@@ -761,6 +761,41 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('restores a shared Star Chart and saves edits to the same URL', async () => {
+			try {
+				const params = new URLSearchParams({
+					time: '2006-08-01T04:15:16.789Z', city: '1880252', bodies: 'Sun,Pluto',
+					kinds: 'C,R', q: 'motor', rotation: '-32', tilt: '12', zoom: '80', spin: 'false',
+				});
+				await driver.get(`${origin}/experiments/space-junk?${params}#star-chart`);
+				const field = (label: string) => driver.findElement(By.css(`input[aria-label="${label}"]`));
+				const city = await driver.findElement(By.css('input[role="combobox"]'));
+				await driver.wait(async () => (await city.getAttribute('value'))?.includes('Singapore'), 10000);
+				const time = await driver.findElement(By.name('time'));
+				expect(await time.getAttribute('aria-valuetext')).toContain('12:15:16');
+				expect(await time.getAttribute('value')).toBe(String(Date.parse(params.get('time')!)));
+				const placements = () => driver.findElements(By.css('ul[aria-label="Natal placements"] h3')).then(headings => Promise.all(headings.map(h => h.getText())));
+				expect((await placements()).join(' ')).toMatch(/Sun.*Pluto.*Rising sign/);
+				expect(await placements()).toHaveLength(3);
+				for (const [label, value] of [['Rotation', '-32'], ['Tilt', '12'], ['Orbit view width', '80']] as const)
+					expect(await (await field(label)).getAttribute('value')).toBe(value);
+				const search = await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000);
+				expect(await search.getAttribute('value')).toBe('motor');
+				await search.clear();
+				await search.sendKeys('spat');
+				await (await field('Rotation')).sendKeys(Key.ARROW_RIGHT);
+				await driver.wait(async () => {
+					const url = new URL(await driver.getCurrentUrl());
+					return url.searchParams.get('q') === 'spat' && url.searchParams.get('rotation') === '-31' && url.hash === '#star-chart';
+				}, 5000);
+				await driver.navigate().refresh();
+				expect(await (await field('Rotation')).getAttribute('value')).toBe('-31');
+				expect(await (await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000)).getAttribute('value')).toBe('spat');
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('pins the birthplace to the visible surface of Earth as the globe turns', async () => {
 			try {
 				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setEmulatedMedia', {

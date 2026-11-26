@@ -1,4 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+	parseAsArrayOf,
+	parseAsString,
+	parseAsStringLiteral,
+	useQueryState,
+} from 'nuqs';
 import {
 	memo,
 	useCallback,
@@ -15,17 +21,12 @@ import { BirthdayRulers } from './birthday_form.js';
 import { BodyFilters } from './body_filters.js';
 import { catalogueDate } from './catalogue_date.js';
 import { type Catalogue, kinds, readChart, type SpaceObject } from './chart.js';
+import { birthInstant, catalogueId } from './chart_query.js';
 import { ChartViewer } from './chart_viewer.js';
-import type { City } from './cities.js';
+import { type City, cityShard, cityShardCount, readCity } from './cities.js';
 import { CitySearch } from './city_search.js';
 import { PlacementEntry } from './placement_entry.js';
-import {
-	bodyPositions,
-	type ChartBody,
-	classical,
-	modern,
-	planetGlyphs,
-} from './planets.js';
+import { bodyPositions, classical, modern, planetGlyphs } from './planets.js';
 import { firstInstant, zonedTime } from './ruler_time.js';
 import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
@@ -47,6 +48,13 @@ const typeLabels = {
 	P: 'Spacecraft payloads',
 };
 const planetaryBodies = [...classical, ...modern];
+const bodyList = parseAsArrayOf(
+	parseAsStringLiteral(planetaryBodies)
+).withDefault([...classical]);
+const kindList = parseAsArrayOf(
+	parseAsStringLiteral(artificialTypes)
+).withDefault([...debrisTypes]);
+const searchText = parseAsString.withDefault('spatula');
 type ObjectKind = SpaceObject['kind'];
 
 const BirthdayChart = memo(function BirthdayChart({
@@ -54,6 +62,7 @@ const BirthdayChart = memo(function BirthdayChart({
 	instant,
 	zone,
 	place,
+	cityRevision,
 	selectedKinds,
 	setSelectedKinds,
 	catalogueFailed,
@@ -63,13 +72,14 @@ const BirthdayChart = memo(function BirthdayChart({
 	instant: number;
 	zone: string;
 	place?: Birthplace;
+	cityRevision: number;
 	selectedKinds: readonly ObjectKind[];
 	setSelectedKinds: (value: ObjectKind[]) => void;
 	catalogueFailed: boolean;
 	retryCatalogue: () => void;
 }) {
 	const hasObjects = selectedKinds.length > 0;
-	const [search, setSearch] = useState('spatula');
+	const [search, setSearch] = useQueryState('q', searchText);
 	const [page, setPage] = useState(0);
 	const day = new Date(instant).toISOString().slice(0, 10);
 	const birthday = zonedTime(instant, zone).toPlainDate().toString();
@@ -106,27 +116,25 @@ const BirthdayChart = memo(function BirthdayChart({
 			coverage.markers.filter(({ object }) => filteredIds.has(object.id)),
 		[coverage.markers, filteredIds]
 	);
-	const [selectedBodies, setSelectedBodies] =
-		useState<readonly ChartBody[]>(classical);
+	const [selectedBodies, setSelectedBodies] = useQueryState(
+		'bodies',
+		bodyList
+	);
 	const bodies = useMemo(
 		() => bodyPositions(selectedBodies, new Date(instant), place),
 		[selectedBodies, instant, place]
 	);
-	const [selection, setSelection] = useState<{
-		id: number;
-		revision: number;
-	}>();
+	const [selectedId, setSelectedId] = useQueryState('object', catalogueId);
+	const [revision, setRevision] = useState(0);
 	function locate(id: number) {
-		setSelection(previous => ({
-			id,
-			revision: (previous?.revision ?? 0) + 1,
-		}));
+		void setSelectedId(id);
+		setRevision(previous => previous + 1);
 	}
 	const byId = useMemo(
 		() => new Map(markers.map(m => [m.object.id, m])),
 		[markers]
 	);
-	const selected = selection && byId.get(selection.id);
+	const selected = selectedId === null ? undefined : byId.get(selectedId);
 	const debrisZodiac = useMemo(
 		() => zodiacFrame(new Date(debrisInstant), place),
 		[debrisInstant, place]
@@ -172,7 +180,8 @@ const BirthdayChart = memo(function BirthdayChart({
 					birthplace={place}
 					markers={markers}
 					selected={selected}
-					revision={selection?.revision}
+					revision={revision}
+					cityRevision={cityRevision}
 					zodiac={debrisZodiac}
 					ascendant={natalZodiac.ascendant}
 					onSelect={m => locate(m.object.id)}
@@ -231,7 +240,7 @@ const BirthdayChart = memo(function BirthdayChart({
 				)}
 				{(bodies.length > 0 || natalZodiac.ascendant !== undefined) && (
 					<ul
-						className={style.catalogue}
+						className={`${style.catalogue} ${style.placements}`}
 						aria-label="Natal placements"
 					>
 						{bodies.map(body => (
@@ -288,7 +297,7 @@ const BirthdayChart = memo(function BirthdayChart({
 							className={style.catalogue}
 							aria-label="Objects in orbit"
 						>
-							{rows.map(({ object, days }) => {
+							{rows.map(({ object }) => {
 								const { longitude } = debrisZodiac.direction(
 									byId.get(object.id)!.fixed
 								);
@@ -308,11 +317,7 @@ const BirthdayChart = memo(function BirthdayChart({
 											{displayDate(object.start)} –{' '}
 											{displayDate(
 												object.end ?? catalogue.asOf
-											)}{' '}
-											·{' '}
-											{days === 0
-												? 'Shares your birthday'
-												: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
+											)}
 										</p>
 									</PlacementEntry>
 								);
@@ -326,18 +331,39 @@ const BirthdayChart = memo(function BirthdayChart({
 });
 
 export default function Page() {
-	const { instant, clock } = useRulerClock(Date.UTC(2006, 7, 1, 12));
-	const [selectedKinds, setSelectedKinds] =
-		useState<readonly ObjectKind[]>(debrisTypes);
+	const [instant, setInstant] = useQueryState('time', birthInstant);
+	const clock = useRulerClock(instant, setInstant);
+	const [selectedKinds, setSelectedKinds] = useQueryState('kinds', kindList);
 	const [deviceZone, setDeviceZone] = useState<string>();
 	useEffect(
 		() => setDeviceZone(Intl.DateTimeFormat().resolvedOptions().timeZone),
 		[]
 	);
-	const [city, setCity] = useState<City>();
+	const [cityId, setCityId] = useQueryState('city', catalogueId);
+	const [cityRevision, setCityRevision] = useState(0);
+	const client = useQueryClient();
+	const birthplace = useQuery({
+		queryKey: ['birth-city', cityId],
+		enabled: cityId !== null,
+		staleTime: Infinity,
+		retry: false,
+		meta: { persist: false },
+		queryFn: async () => {
+			const rows = await client.ensureQueryData(
+				cityShard(cityId! % cityShardCount)
+			);
+			const row = rows.find(row => row[0] === cityId);
+			if (!row) throw new Error('Birth city unavailable');
+			return readCity(row);
+		},
+	});
+	const city = birthplace.data;
 	const zone = city?.timezone ?? deviceZone ?? 'UTC';
 	const chart = useDeferredValue(
-		useMemo(() => ({ instant, zone, place: city }), [instant, zone, city])
+		useMemo(
+			() => ({ instant, zone, place: city, cityRevision }),
+			[instant, zone, city, cityRevision]
+		)
 	);
 
 	const setBirthplace = useCallback(
@@ -357,9 +383,11 @@ export default function Page() {
 						)
 					)
 				);
-			setCity(next);
+			if (next) client.setQueryData(['birth-city', next.id], next);
+			void setCityId(next?.id ?? null);
+			setCityRevision(revision => revision + 1);
 		},
-		[clock, deviceZone, zone]
+		[clock, deviceZone, zone, setCityId, client]
 	);
 
 	const catalogue = useQuery({
@@ -378,6 +406,17 @@ export default function Page() {
 		<article className={style.page}>
 			<h1>Star Chart</h1>
 			<CitySearch city={city} onSelect={setBirthplace} />
+			{cityId !== null && birthplace.isError && (
+				<p role="alert">
+					Birth city unavailable.{' '}
+					<button
+						type="button"
+						onClick={() => void birthplace.refetch()}
+					>
+						Retry
+					</button>
+				</p>
+			)}
 			<BirthdayRulers
 				epoch={instant}
 				asOf={catalogueDate}
@@ -398,10 +437,10 @@ export default function Page() {
 					<div>
 						<dt>Birth cities</dt>
 						<dd>
-							<a href="https://open-meteo.com/en/docs/geocoding-api">
-								Open-Meteo
-							</a>{' '}
-							and <a href="https://www.geonames.org/">GeoNames</a>
+							<a href="https://www.geonames.org/">GeoNames</a> ·{' '}
+							<a href="https://creativecommons.org/licenses/by/4.0/">
+								CC BY 4.0
+							</a>
 						</dd>
 					</div>
 					<div>

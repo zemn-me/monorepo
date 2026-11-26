@@ -1,5 +1,6 @@
 import { KM_PER_AU } from 'astronomy-engine';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useQueryState } from 'nuqs';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import {
 	defaultTurn,
 	flat,
@@ -9,6 +10,7 @@ import {
 	wrap,
 } from './chart_camera.js';
 import { chartGeometry } from './chart_geometry.js';
+import { boundedNumber } from './chart_query.js';
 import { Globe } from './globe.js';
 import {
 	equatorialRadius,
@@ -52,6 +54,14 @@ function formatViewWidth(extent: number) {
 function extentAtZoom(zoom: number) {
 	return closeExtent * (maxExtent / closeExtent) ** (1 - zoom / 100);
 }
+const zoomParser = boundedNumber(0, 100).withDefault(100);
+function zoomAtExtent(extent: number) {
+	return (
+		100 -
+		(100 * Math.log(extent / closeExtent)) /
+			Math.log(maxExtent / closeExtent)
+	);
+}
 const radius = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
 export function ChartViewer({
@@ -59,6 +69,7 @@ export function ChartViewer({
 	bodies,
 	showSigns,
 	birthplace,
+	cityRevision,
 	markers,
 	selected,
 	revision,
@@ -69,6 +80,7 @@ export function ChartViewer({
 	instant: number;
 	bodies: BodyPosition[];
 	showSigns: boolean;
+	cityRevision: number;
 	birthplace?: Birthplace & { name?: string };
 	markers: Marker[];
 	selected?: Marker;
@@ -80,12 +92,9 @@ export function ChartViewer({
 	const controls = useChartCamera();
 	const { camera, move, faceOn, unfold } = controls;
 	const pick = useRef<PickMarker>(null);
-	const [extent, setExtent] = useState(closeExtent);
+	const [zoomValue, setZoom] = useQueryState('zoom', zoomParser);
+	const extent = extentAtZoom(zoomValue);
 	const viewWidth = formatViewWidth(extent);
-	const zoomValue =
-		100 -
-		(100 * Math.log(extent / closeExtent)) /
-			Math.log(maxExtent / closeExtent);
 	const fixed = useMemo(() => earthFixedSky(new Date(instant)), [instant]);
 	const { turn, tilt } = camera;
 	const geometry = useMemo(
@@ -120,7 +129,7 @@ export function ChartViewer({
 				Math.min(orbitalTiltLimit, latitude)
 			),
 		});
-		setExtent(radius);
+		zoomTo(zoomAtExtent(radius));
 	}
 	function home() {
 		faceEarth(
@@ -141,15 +150,18 @@ export function ChartViewer({
 			Math.max(closeExtent, radius(selected) * 1.05)
 		);
 	}
-	const previous = useRef({ birthplace, revision });
+	const previous = useRef({ cityRevision, revision });
 	useLayoutEffect(() => {
 		if (!faceOn) {
 			if (revision !== previous.current.revision) locate();
-			else if (birthplace && birthplace !== previous.current.birthplace)
+			else if (
+				birthplace &&
+				cityRevision !== previous.current.cityRevision
+			)
 				home();
 		}
-		previous.current = { birthplace, revision };
-	}, [birthplace, revision, faceOn]);
+		previous.current = { cityRevision, revision };
+	}, [birthplace, cityRevision, revision, faceOn]);
 
 	const rulerEvents = {
 		onGrab: controls.grabRuler,
@@ -166,7 +178,7 @@ export function ChartViewer({
 	}
 	function zoomTo(value: number) {
 		const zoom = Math.max(0, Math.min(100, value));
-		setExtent(extentAtZoom(zoom));
+		void setZoom(zoom);
 	}
 
 	return (

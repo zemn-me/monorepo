@@ -305,6 +305,23 @@
 .search + .catalogue {
 	margin-block-start: 0.75rem;
 }
+.placements {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+	column-gap: 1.25rem;
+}
+.placements li > header {
+	display: grid;
+	gap: 0.2rem;
+	justify-content: start;
+}
+.placements header > span {
+	white-space: normal;
+	font-size: 0.875rem;
+}
+.placements header > span > span {
+	white-space: nowrap;
+}
 .catalogue h3 {
 	font-size: 1rem;
 	margin: 0;

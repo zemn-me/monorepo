@@ -14,10 +14,23 @@ genrule(
     tools = ["//project/me/zemn/app/experiments/space_junk/importer:catalogue"],
 )
 
+CITY_SHARDS = ["city-%d.gz" % i for i in range(64)]
+
+genrule(
+    name = "city_index",
+    srcs = [
+        "@geonames_cities//file",
+        "@geonames_regions//file",
+    ],
+    outs = CITY_SHARDS,
+    cmd = "$(execpath //project/me/zemn/app/experiments/space_junk/importer:cities) $(location @geonames_cities//file) $(location @geonames_regions//file) $(OUTS)",
+    tools = ["//project/me/zemn/app/experiments/space_junk/importer:cities"],
+)
+
 hashed_public_assets(
     name = "catalogue_assets",
     outs = ["assets.ts"],
-    assets = {
+    assets = {":" + filename: "cityShard%d" % i for i, filename in enumerate(CITY_SHARDS)} | {
         ":catalogue.json": "catalogueUrl",
         "@natural_earth_coastline//file": "coastlineUrl",
     },
@@ -32,6 +45,7 @@ ts_project(
         "chart.ts",
         "chart_camera.ts",
         "chart_geometry.ts",
+        "chart_query.ts",
         "chart_viewer.tsx",
         "cities.ts",
         "city_search.tsx",
@@ -67,6 +81,7 @@ ts_project(
         "//:node_modules/@types/node",
         "//:node_modules/@types/react",
         "//:node_modules/astronomy-engine",
+        "//:node_modules/nuqs",
         "//:node_modules/react",
         "//:node_modules/react-router",
         "//:node_modules/satellite.js",
@@ -98,6 +113,7 @@ filegroup(
         "chart.ts",
         "chart_camera.ts",
         "chart_geometry.ts",
+        "chart_query.ts",
         "chart_test.ts",
         "chart_viewer.tsx",
         "cities.ts",

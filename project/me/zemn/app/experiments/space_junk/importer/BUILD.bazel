@@ -10,9 +10,19 @@ py_binary(
     visibility = ["//:__subpackages__"],
 )
 
+py_binary(
+    name = "cities",
+    srcs = ["cities.py"],
+    main = "cities.py",
+    visibility = ["//:__subpackages__"],
+)
+
 py_library(
     name = "importer",
-    srcs = ["catalogue.py"],
+    srcs = [
+        "catalogue.py",
+        "cities.py",
+    ],
     visibility = ["//:__subpackages__"],
 )
 

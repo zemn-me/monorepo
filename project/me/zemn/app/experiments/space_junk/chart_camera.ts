@@ -1,11 +1,15 @@
+import { parseAsBoolean, useQueryState, useQueryStates } from 'nuqs';
 import {
 	type KeyboardEvent,
 	type PointerEvent,
 	useCallback,
 	useEffect,
+	useEffectEvent,
+	useLayoutEffect,
 	useRef,
 	useState,
 } from 'react';
+import { boundedNumber } from './chart_query.js';
 import type { Marker } from './globe_geometry.js';
 import { height, width } from './globe_scene.js';
 import { degrees } from './zodiac.js';
@@ -30,10 +34,28 @@ function orbitalBlend(tilt: number) {
 	return smoothstep(t);
 }
 
+const poseParams = {
+	turn: boundedNumber(-180, 180).withDefault(flat.turn),
+	tilt: boundedNumber(-90, 90).withDefault(flat.tilt),
+	panX: boundedNumber(-width / 2, width / 2).withDefault(0),
+	panY: boundedNumber(-height / 2, height / 2).withDefault(0),
+};
+const spinParam = parseAsBoolean.withDefault(true);
 export function useChartCamera() {
+	const [pose, setPose] = useQueryStates(poseParams, {
+		urlKeys: { turn: 'rotation' },
+	});
+	const saved = useRef<Camera | null>(null);
+	const savePose = useCallback(
+		(next: Camera) => {
+			saved.current = next;
+			void setPose(next);
+		},
+		[setPose]
+	);
 	const svg = useRef<SVGSVGElement>(null);
-	const [camera, render] = useState(flat);
-	const latest = useRef(flat);
+	const [camera, render] = useState(pose);
+	const latest = useRef(pose);
 	const frame = useRef<number | null>(null);
 	const settleFrame = useRef<number | null>(null);
 	const rangePointers = useRef(new Set<number>());
@@ -46,7 +68,11 @@ export function useChartCamera() {
 		pan: boolean;
 		moved: boolean;
 	} | null>(null);
-	const [spin, setSpin] = useState(true);
+	const [spin, setAutoRotate] = useQueryState('spin', spinParam);
+	function setSpin(enabled: boolean) {
+		savePose(latest.current);
+		void setAutoRotate(enabled);
+	}
 	const faceOn = Math.abs(camera.tilt) === 90;
 	const unfold = orbitalBlend(camera.tilt);
 	const orbiting = unfold === 1;
@@ -85,6 +111,7 @@ export function useChartCamera() {
 				};
 				render(latest.current);
 				if (t === 1) {
+					savePose(latest.current);
 					settleFrame.current = null;
 					return;
 				}
@@ -93,6 +120,26 @@ export function useChartCamera() {
 		}
 		settleFrame.current = requestAnimationFrame(tick);
 	}
+
+	const settleRestoredPose = useEffectEvent(() => settle());
+	// Restore an incoming link or history entry without feeding animation frames back into the URL.
+	useLayoutEffect(() => {
+		const previous = saved.current;
+		if (
+			previous &&
+			pose.turn === previous.turn &&
+			pose.tilt === previous.tilt &&
+			pose.panX === previous.panX &&
+			pose.panY === previous.panY
+		)
+			return;
+		stopSettling();
+		if (frame.current !== null) cancelAnimationFrame(frame.current);
+		frame.current = null;
+		saved.current = latest.current = pose;
+		render(pose);
+		settleRestoredPose();
+	}, [pose, stopSettling]);
 
 	// Keys accumulate and absolute drags replace the target, including between paints.
 	const move = useCallback(
@@ -103,9 +150,10 @@ export function useChartCamera() {
 			frame.current ??= requestAnimationFrame(() => {
 				frame.current = null;
 				render(latest.current);
+				savePose(latest.current);
 			});
 		},
-		[stopSettling]
+		[stopSettling, savePose]
 	);
 	useEffect(
 		() => () => {
