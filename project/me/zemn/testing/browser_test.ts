@@ -469,6 +469,15 @@ describe('zemn.me website', () => {
 				await driver.wait(until.elementLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
 				const motorsOnPage = await grid.findElements(By.css('h3 a'));
 				expect(motorsOnPage).toHaveLength(12);
+				const entries = await driver.executeScript<{ width: number; y: number }[]>(
+					'return Array.from(arguments[0].children, entry => entry.getBoundingClientRect().toJSON())',
+					grid
+				);
+				const columns = entries.filter(entry => entry.y === entries[0]!.y).length;
+				for (const [i, entry] of entries.entries()) {
+					expect(Math.abs(entry.width - entries[0]!.width)).toBeLessThan(1);
+					expect(entry.y).toBe(entries[i - i % columns]!.y);
+				}
 				expect((await grid.findElement(By.css('h3')).getText())).toContain('Sun');
 				for (const name of await Promise.all(motorsOnPage.map(link => link.getText()))) expect(name).toMatch(/motor/i);
 				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));

@@ -26,7 +26,7 @@ export function PlacementEntry({
 	const seconds = Math.floor((value % 30) * 3600);
 	const angle = `${Math.floor(seconds / 3600)}° ${Math.floor(seconds / 60) % 60}′ ${seconds % 60}″`;
 	return (
-		<li className={target ? style.orbitalEntry : style.skyEntry}>
+		<li>
 			<header>
 				<h3>
 					{glyph && (
