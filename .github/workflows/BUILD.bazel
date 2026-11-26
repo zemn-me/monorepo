@@ -31,8 +31,9 @@ py_test(
     name = "archive_checkout_test",
     size = "small",
     srcs = ["archive_checkout_test.py"],
-    args = ["$(rootpath //.github:actions/build-deploy-bundle/build.sh)"],
-    data = ["//.github:actions/build-deploy-bundle/build.sh"],
+    args = ["$(rootpath staging.yml)"],
+    data = ["staging.yml"],
+    deps = ["@pip//pyyaml"],
 )
 
 sh_test(
@@ -53,7 +54,6 @@ sh_test(
         ],
         allow_empty = True,
     ) + [
-        "//.github:actions/build-deploy-bundle/action.yml",
         "@com_github_rhysd_actionlint//cmd/actionlint",
     ],
     env = {

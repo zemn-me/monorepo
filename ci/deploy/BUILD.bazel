@@ -1,4 +1,3 @@
-load("@aspect_rules_js//js:defs.bzl", "js_image_layer")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
@@ -44,34 +43,20 @@ js_binary(
     },
 )
 
-# Keep the launcher, its Node runtime, pnpm links and Pulumi assets together.
-js_image_layer(
-    name = "layers",
-    binary = ":deploy",
-    layer_groups = {"bundle": ""},
-    tags = ["manual"],
-)
-
-filegroup(
-    name = "bundle",
-    srcs = [":layers"],
-    output_group = "bundle",
-    tags = ["manual"],
+sh_test(
+    name = "providers_test",
+    size = "medium",
+    srcs = ["providers_test.sh"],
+    args = ["$(rootpath :deploy)"],
+    data = [":deploy"],
 )
 
 sh_test(
-    name = "bundle_test",
+    name = "deploy_failure_test",
     size = "medium",
-    srcs = ["bundle_test.sh"],
-    args = [
-        "$(rootpath run.sh)",
-        "$(rootpath :bundle)",
-    ],
-    data = [
-        "run.sh",
-        ":bundle",
-    ],
-    tags = ["manual"],
+    srcs = ["deploy_failure_test.sh"],
+    args = ["$(rootpath :deploy)"],
+    data = [":deploy"],
 )
 
 bazel_lint(
