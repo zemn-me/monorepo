@@ -322,10 +322,6 @@
 	align-items: flex-start;
 	text-align: start;
 }
-.planetBand .switch:has(:disabled) {
-	opacity: 0.6;
-	cursor: default;
-}
 @media (width < 42rem) {
 	.planetBand {
 		grid-template-columns: minmax(4.2rem, 20%) minmax(0, 4fr) minmax(0, 2fr);

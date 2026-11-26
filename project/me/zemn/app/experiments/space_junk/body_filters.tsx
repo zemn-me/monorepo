@@ -5,7 +5,7 @@ import style from './style.module.css';
 
 export function BodyFilters<T extends string>({
 	group,
-	layer,
+	grouped,
 	presetName,
 	preset,
 	options,
@@ -14,7 +14,7 @@ export function BodyFilters<T extends string>({
 	onChange,
 }: {
 	group: string;
-	layer?: { enabled: boolean; onChange: (enabled: boolean) => void };
+	grouped?: boolean;
 	presetName: string;
 	preset: readonly T[];
 	options: readonly T[];
@@ -24,8 +24,6 @@ export function BodyFilters<T extends string>({
 }) {
 	const [open, setOpen] = useState(false);
 	const id = useId();
-	const all = preset.every(item => selected.includes(item));
-	const mixed = !all && preset.some(item => selected.includes(item));
 	function toggle(items: readonly T[], on: boolean) {
 		onChange(
 			options.filter(item =>
@@ -33,20 +31,23 @@ export function BodyFilters<T extends string>({
 			)
 		);
 	}
-	const presetSwitch = (
-		<label className={style.switch}>
-			<input
-				type="checkbox"
-				checked={all}
-				disabled={layer?.enabled === false}
-				ref={el => {
-					if (el) el.indeterminate = mixed;
-				}}
-				onChange={e => toggle(preset, e.currentTarget.checked)}
-			/>
-			{presetName}
-		</label>
-	);
+	function groupSwitch(name: string, items: readonly T[]) {
+		const all = items.every(item => selected.includes(item));
+		const mixed = !all && items.some(item => selected.includes(item));
+		return (
+			<label className={style.switch}>
+				<input
+					type="checkbox"
+					checked={all}
+					ref={el => {
+						if (el) el.indeterminate = mixed;
+					}}
+					onChange={e => toggle(items, e.currentTarget.checked)}
+				/>
+				{name}
+			</label>
+		);
+	}
 	function optionSwitch(item: T) {
 		return (
 			<label key={item} className={style.switch}>
@@ -54,31 +55,22 @@ export function BodyFilters<T extends string>({
 					type="checkbox"
 					role="switch"
 					checked={selected.includes(item)}
-					disabled={layer?.enabled === false}
 					onChange={e => toggle([item], e.currentTarget.checked)}
 				/>
 				{labels?.[item] ?? item}
 			</label>
 		);
 	}
-	if (layer)
+	if (grouped)
 		return (
 			<div role="group" aria-label={group} className={style.planetBand}>
-				<label className={style.switch}>
-					<input
-						type="checkbox"
-						role="switch"
-						checked={layer.enabled}
-						onChange={e => layer.onChange(e.currentTarget.checked)}
-					/>
-					<span>{group}</span>
-				</label>
+				{groupSwitch(group, options)}
 				<div
 					role="group"
 					aria-label={presetName}
 					className={style.zodiacGroup}
 				>
-					{presetSwitch}
+					{groupSwitch(presetName, preset)}
 					{preset.map(optionSwitch)}
 				</div>
 				<div className={style.outerBodies}>
@@ -91,7 +83,7 @@ export function BodyFilters<T extends string>({
 	return (
 		<div role="group" aria-label={group} className={style.filterGroup}>
 			<div className={style.filterHeading}>
-				{presetSwitch}
+				{groupSwitch(presetName, preset)}
 				<button
 					type="button"
 					aria-label={'Choose ' + group.toLowerCase()}
