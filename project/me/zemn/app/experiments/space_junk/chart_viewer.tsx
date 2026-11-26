@@ -67,6 +67,11 @@ function zoomAtExtent(extent: number) {
 			Math.log(maxExtent / closeExtent)
 	);
 }
+const earthZoomMark = {
+	position: zoomAtExtent(closeExtent),
+	glyph: '⊕',
+	label: `Earth · ${formatViewWidth(closeExtent)} across`,
+};
 const radius = (p: Vector) => Math.hypot(p.x, p.y, p.z);
 
 export function ChartViewer({
@@ -126,6 +131,7 @@ export function ChartViewer({
 			},
 		];
 	});
+	zoomMarks.push(earthZoomMark);
 	const placements = useMemo(
 		() =>
 			markers.map(marker => ({
@@ -332,10 +338,9 @@ export function ChartViewer({
 						step: 0.1,
 						value: zoomValue,
 						'aria-valuetext': `${viewWidth} across at Earth’s centre`,
-						'aria-description': zoomMarks.length
-							? 'Orbit view widths for selected bodies: ' +
-								zoomMarks.map(mark => mark.label).join('; ')
-							: undefined,
+						'aria-description':
+							'Orbit view widths: ' +
+							zoomMarks.map(mark => mark.label).join('; '),
 						onChange: e => zoomTo(e.currentTarget.valueAsNumber),
 					}}
 				/>

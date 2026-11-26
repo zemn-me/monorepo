@@ -688,7 +688,7 @@ describe('zemn.me website', () => {
 						return box.width > 0 && box.left >= track.left && box.right <= track.right;
 					}).length;
 				`, zoom);
-				expect(visibleMarks).toBe(8);
+				expect(visibleMarks).toBe(9);
 				const zoomTrack = await zoom.findElement(By.xpath('..'));
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", zoomTrack);
 				const tick = await zoomTrack.findElement(By.css('g[data-position="100"] > path'));
@@ -724,7 +724,10 @@ describe('zemn.me website', () => {
 				expect(await bodies()).toHaveLength(0);
 				expect(await zoomExtent()).toBe(far);
 				expect(await earth.isDisplayed()).toBe(true);
-				await zoom.sendKeys(Key.END);
+				const earthMark = await zoomTrack.findElement(By.css('g:has(>title) > text'));
+				expect(await earthMark.getText()).toContain('⊕');
+				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", earthMark);
+				await earthMark.click();
 				await driver.wait(async () => await zoomExtent() === close, 5000);
 				await driver.executeScript("arguments[0].scrollIntoView({block:'center'})", junk);
 				await junk.click();
@@ -811,9 +814,9 @@ describe('zemn.me website', () => {
 				expect(await time.getAttribute('value')).toBe(String(Date.parse(params.get('time')!)));
 				const widthTrack = await (await field('Orbit view width')).findElement(By.xpath('..'));
 				const marks = await widthTrack.findElements(By.css('g[data-position] title'));
-				expect(marks).toHaveLength(2);
+				expect(marks).toHaveLength(3);
 				expect(await Promise.all(marks.map(mark => mark.getProperty('textContent')))).toEqual(
-					expect.arrayContaining([expect.stringMatching(/^Sun · /), expect.stringMatching(/^Pluto · /)])
+					expect.arrayContaining(['Earth · 24,300 km across', expect.stringMatching(/^Sun · /), expect.stringMatching(/^Pluto · /)])
 				);
 				const placements = () => driver.findElements(By.css('ul[aria-label="Chart placements"] h3:not(:has(a))')).then(headings => Promise.all(headings.map(h => h.getText())));
 				expect((await placements()).join(' ')).toMatch(/Sun.*Pluto.*Rising sign/);
