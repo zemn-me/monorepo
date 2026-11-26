@@ -290,7 +290,7 @@
 
 .planetBand {
 	display: grid;
-	grid-template-columns: minmax(5.4rem, 20%) minmax(0, 8fr) minmax(0, 3fr);
+	grid-template-columns: minmax(5.4rem, 1.55fr) minmax(0, 8fr) minmax(0, 3.2fr);
 	align-items: center;
 	column-gap: 0.2rem;
 	padding-block: 0.25rem;
@@ -303,12 +303,12 @@
 	align-items: center;
 }
 .zodiacGroup {
-	grid-template-columns: repeat(8, minmax(0, 1fr));
+	grid-template-columns: repeat(8, auto);
 	border: 1px solid var(--line);
 	border-radius: 0.25rem;
 }
 .outerBodies {
-	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-columns: repeat(3, auto);
 }
 .planetBand .switch {
 	flex-direction: column;
@@ -324,18 +324,18 @@
 }
 @media (width < 42rem) {
 	.planetBand {
-		grid-template-columns: minmax(4.2rem, 20%) minmax(0, 4fr) minmax(0, 2fr);
+		grid-template-columns: minmax(0, 1.2fr) minmax(0, 4.2fr) minmax(0, 2.25fr);
 	}
 	.zodiacGroup {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
+		grid-template-columns: repeat(4, auto);
 	}
 	.outerBodies {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(2, auto);
 	}
 }
-@media (width < 22rem) {
+@media (width < 24rem) {
 	.planetBand {
-		grid-template-columns: minmax(0, 4fr) minmax(0, 2fr);
+		grid-template-columns: minmax(0, 4.2fr) minmax(0, 2.25fr);
 	}
 	.planetBand > .switch {
 		grid-column: 1 / -1;
@@ -406,12 +406,24 @@
 	right: 2px;
 	background: var(--background-color);
 }
+.planetName {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.12em;
+}
+.toggleGlyph,
 .planetGlyph {
 	font:
 		17px 'Apple Symbols',
 		'Segoe UI Symbol',
 		'Noto Sans Symbols 2',
 		sans-serif;
+}
+.toggleGlyph {
+	font-size: 0.85rem;
+	line-height: 1;
+}
+.planetGlyph {
 	fill: currentColor;
 	stroke: var(--background-color);
 	stroke-width: 3;

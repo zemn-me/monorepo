@@ -31,7 +31,7 @@ export const classical = [
 export const modern = [Body.Uranus, Body.Neptune, Body.Pluto] as const;
 export type ChartBody = (typeof classical)[number] | (typeof modern)[number];
 
-const glyphs: Record<ChartBody, string> = {
+export const planetGlyphs: Record<ChartBody, string> = {
 	Sun: '☉',
 	Moon: '☽',
 	Mercury: '☿',
@@ -81,7 +81,7 @@ export function bodyPositions(
 		const fixed = eciToEcf(RotateVector(ofDate, relative), sidereal);
 		return {
 			name,
-			glyph: glyphs[name],
+			glyph: planetGlyphs[name],
 			longitude: elon,
 			latitude: elat,
 			position: earthRadii({

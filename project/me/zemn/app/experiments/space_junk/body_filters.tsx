@@ -10,6 +10,7 @@ export function BodyFilters<T extends string>({
 	preset,
 	options,
 	labels,
+	glyphs,
 	selected,
 	onChange,
 }: {
@@ -19,6 +20,7 @@ export function BodyFilters<T extends string>({
 	preset: readonly T[];
 	options: readonly T[];
 	labels?: Record<T, string>;
+	glyphs?: Record<T, string>;
 	selected: readonly T[];
 	onChange: (selection: T[]) => void;
 }) {
@@ -57,7 +59,15 @@ export function BodyFilters<T extends string>({
 					checked={selected.includes(item)}
 					onChange={e => toggle([item], e.currentTarget.checked)}
 				/>
-				{labels?.[item] ?? item}
+				<span className={glyphs ? style.planetName : undefined}>
+					{glyphs && (
+						<span className={style.toggleGlyph} aria-hidden="true">
+							{glyphs[item]}
+							{'\uFE0E'}
+						</span>
+					)}
+					{labels?.[item] ?? item}
+				</span>
 			</label>
 		);
 	}

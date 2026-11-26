@@ -587,7 +587,7 @@ describe('zemn.me website', () => {
 			try {
 				await driver.get(`${origin}/experiments/space-junk`);
 				const toggle = (name: string) => driver.findElement(By.xpath(
-					`//label[normalize-space(.)="${name}"]/input[@type="checkbox"]`
+					`//label[.//text()[normalize-space(.)="${name}"]]/input[@type="checkbox"]`
 				));
 				const bodies = () => driver.findElements(By.css('svg g[aria-label="Zodiac bodies"] g[role="img"]'));
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
@@ -601,6 +601,9 @@ describe('zemn.me website', () => {
 				const planets = await driver.findElement(By.css('div[role="group"][aria-label="Planetary bodies"]'));
 				const switches = await planets.findElements(By.css('input[role="switch"]'));
 				expect(switches).toHaveLength(10);
+				const moonToggle = await toggle('Moon');
+				expect(await moonToggle.getAccessibleName()).toBe('Moon');
+				expect(await moonToggle.findElement(By.xpath('..')).getText()).toContain('☽');
 				const zodiacGroup = await planets.findElement(By.css('[role="group"][aria-label="Zodiac"]'));
 				expect(await zodiacGroup.findElements(By.css('input[role="switch"]'))).toHaveLength(7);
 				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
@@ -744,8 +747,10 @@ describe('zemn.me website', () => {
 
 		it('pins the birthplace to the visible surface of Earth as the globe turns', async () => {
 			try {
+				await (driver as unknown as ChromeDriver).sendDevToolsCommand('Emulation.setEmulatedMedia', {
+					features: [{name: 'prefers-reduced-motion', value: 'reduce'}],
+				});
 				await driver.get(`${origin}/experiments/space-junk`);
-				await driver.findElement(By.xpath('//label[normalize-space(.)="Space junk"]/input')).click();
 				const globe = await driver.findElement(By.id('star-chart'));
 				await globe.sendKeys(Key.ARROW_DOWN.repeat(12));
 				await driver.wait(async () => (await globe.getText()).includes('km'), 5000);
@@ -756,13 +761,24 @@ describe('zemn.me website', () => {
 				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
 				const center = Number(await marker.getAttribute('x1'));
-				const pinLengths = await driver.executeScript<number[]>(`
-					return Array.from(arguments[0].parentElement.querySelectorAll('line'), line => line.getTotalLength());
-				`, marker);
-				expect(pinLengths).toHaveLength(2);
-				expect(Math.min(...pinLengths)).toBeGreaterThan(1);
-				await globe.sendKeys(Key.ARROW_RIGHT);
+				expect(await driver.executeScript<number>('return arguments[0].getTotalLength()', marker)).toBeLessThan(0.1);
+				await globe.sendKeys(Key.ARROW_RIGHT.repeat(4));
 				await driver.wait(async () => Number(await marker.getAttribute('x1')) < center, 5000);
+				const segments = await driver.executeScript<{ along: number; across: number }[]>(`
+					const tip = arguments[0], box = tip.ownerSVGElement.viewBox.baseVal;
+					const rx = tip.x1.baseVal.value - box.width / 2;
+					const ry = tip.y1.baseVal.value - box.height / 2;
+					const r = Math.hypot(rx, ry);
+					return Array.from(tip.parentElement.querySelectorAll('line'), line => {
+						const dx = line.x2.baseVal.value - line.x1.baseVal.value;
+						const dy = line.y2.baseVal.value - line.y1.baseVal.value;
+						return { along: (rx * dx + ry * dy) / r, across: (rx * dy - ry * dx) / r };
+					});
+				`, marker);
+				expect(segments).toHaveLength(2);
+				expect(segments[0]!.along).toBeLessThan(-1);
+				expect(segments[1]!.along).toBeGreaterThan(1);
+				for (const segment of segments) expect(Math.abs(segment.across)).toBeLessThan(0.01);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(20));
 				await driver.wait(async () => (await globe.findElements(pin)).length === 0, 5000);
 				await driver.findElement(By.xpath('//summary[.="View controls"]')).click();

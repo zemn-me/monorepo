@@ -18,7 +18,13 @@ import { type Catalogue, type SpaceObject, kinds, readChart } from './chart.js';
 import { ChartViewer } from './chart_viewer.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
-import { bodyPositions, type ChartBody, classical, modern } from './planets.js';
+import {
+	bodyPositions,
+	type ChartBody,
+	classical,
+	modern,
+	planetGlyphs,
+} from './planets.js';
 import { firstInstant, zonedTime } from './ruler_time.js';
 import style from './style.module.css';
 import { useDebrisPositions } from './use_debris_positions.js';
@@ -147,6 +153,7 @@ const BirthdayChart = memo(function BirthdayChart({
 				presetName="Zodiac"
 				preset={classical}
 				options={planetaryBodies}
+				glyphs={planetGlyphs}
 				selected={selectedBodies}
 				onChange={setSelectedBodies}
 			/>
