@@ -28,12 +28,12 @@ const tiltBands = [
 		start: -90,
 		end: -orbitalTiltLimit,
 		startLabel: 'Wheel',
-		endLabel: 'Orbit',
+		endLabel: 'Orbit →',
 	},
 	{
 		start: orbitalTiltLimit,
 		end: 90,
-		startLabel: 'Orbit',
+		startLabel: '← Orbit',
 		endLabel: 'Wheel',
 	},
 ];

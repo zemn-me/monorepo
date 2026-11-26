@@ -543,7 +543,7 @@ describe('zemn.me website', () => {
 				await initialRotation.click();
 				const tiltTrack = await tilt.findElement(By.xpath('..'));
 				const bands = await tiltTrack.findElements(By.css('g[pointer-events="none"] text'));
-				expect(await Promise.all(bands.map(label => label.getProperty('textContent')))).toEqual(['Wheel', 'Orbit', 'Orbit', 'Wheel']);
+				expect(await Promise.all(bands.map(label => label.getProperty('textContent')))).toEqual(['Wheel', 'Orbit →', '← Orbit', 'Wheel']);
 				await tiltTrack.findElement(By.xpath('.//*[local-name()="text" and .="45°"]')).click();
 				await driver.wait(async () => await tilt.getAttribute('value') === '45', 5000);
 				const original = await geometry();
