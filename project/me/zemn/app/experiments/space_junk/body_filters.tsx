@@ -5,6 +5,7 @@ import style from './style.module.css';
 
 export function BodyFilters<T extends string>({
 	group,
+	inline = false,
 	presetName,
 	preset,
 	options,
@@ -13,6 +14,7 @@ export function BodyFilters<T extends string>({
 	onChange,
 }: {
 	group: string;
+	inline?: boolean;
 	presetName: string;
 	preset: readonly T[];
 	options: readonly T[];
@@ -32,9 +34,13 @@ export function BodyFilters<T extends string>({
 		);
 	}
 	return (
-		<fieldset className={style.filterGroup}>
-			<legend>{group}</legend>
+		<div
+			role="group"
+			aria-label={group}
+			className={inline ? style.planetBand : style.filterGroup}
+		>
 			<div className={style.filterHeading}>
+				{inline && <span className={style.filterLabel}>{group}</span>}
 				<label className={style.switch}>
 					<input
 						type="checkbox"
@@ -46,17 +52,22 @@ export function BodyFilters<T extends string>({
 					/>
 					{presetName}
 				</label>
-				<button
-					type="button"
-					aria-label={'Choose ' + group.toLowerCase()}
-					aria-expanded={open}
-					aria-controls={id}
-					onClick={() => setOpen(!open)}
-				>
-					<FontAwesomeIcon icon={faChevronDown} aria-hidden="true" />
-				</button>
+				{!inline && (
+					<button
+						type="button"
+						aria-label={'Choose ' + group.toLowerCase()}
+						aria-expanded={open}
+						aria-controls={id}
+						onClick={() => setOpen(!open)}
+					>
+						<FontAwesomeIcon
+							icon={faChevronDown}
+							aria-hidden="true"
+						/>
+					</button>
+				)}
 			</div>
-			<div id={id} hidden={!open}>
+			<div id={id} hidden={!inline && !open}>
 				<div className={style.filterOptions}>
 					{options.map(item => (
 						<label key={item} className={style.switch}>
@@ -73,6 +84,6 @@ export function BodyFilters<T extends string>({
 					))}
 				</div>
 			</div>
-		</fieldset>
+		</div>
 	);
 }

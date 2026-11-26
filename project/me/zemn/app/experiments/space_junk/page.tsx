@@ -141,32 +141,15 @@ const BirthdayChart = memo(function BirthdayChart({
 
 	return (
 		<>
-			<div
-				className={style.layers}
-				role="group"
-				aria-label="Chart layers"
-			>
-				<BodyFilters
-					group="Planetary bodies"
-					presetName="Zodiac"
-					preset={classical}
-					options={planetaryBodies}
-					selected={selectedBodies}
-					onChange={setSelectedBodies}
-				/>
-				<BodyFilters
-					group="Man-made bodies"
-					presetName="Space junk"
-					preset={debrisTypes}
-					options={artificialTypes}
-					labels={typeLabels}
-					selected={selectedKinds}
-					onChange={next => {
-						setSelectedKinds(next);
-						setPage(0);
-					}}
-				/>
-			</div>
+			<BodyFilters
+				inline
+				group="Planetary bodies"
+				presetName="Zodiac"
+				preset={classical}
+				options={planetaryBodies}
+				selected={selectedBodies}
+				onChange={setSelectedBodies}
+			/>
 			<figure className={style.figure}>
 				<ChartViewer
 					instant={instant}
@@ -202,85 +185,106 @@ const BirthdayChart = memo(function BirthdayChart({
 						</button>
 					</p>
 				)}
-			{hasObjects && catalogue && (
-				<section
-					className={style.objectCatalogue}
-					aria-labelledby="object-catalogue"
-				>
+			<section
+				className={style.objectCatalogue}
+				aria-labelledby="object-catalogue"
+			>
+				<div className={style.catalogueHeading}>
 					<h2 id="object-catalogue">Object catalogue</h2>
-					<input
-						className={style.search}
-						type="search"
-						aria-label="Search by name, catalog number, designator or object type"
-						placeholder="Search objects"
-						value={search}
-						onChange={event => {
-							setSearch(event.target.value);
+					<BodyFilters
+						group="Man-made bodies"
+						presetName="Space junk"
+						preset={debrisTypes}
+						options={artificialTypes}
+						labels={typeLabels}
+						selected={selectedKinds}
+						onChange={next => {
+							setSelectedKinds(next);
 							setPage(0);
 						}}
 					/>
-					<div className={style.paging}>
-						<span role="status" aria-label="Catalogue results">
-							{rows.length
-								? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
-								: 'No matching objects'}
-						</span>
-						{filtered.length > pageSize && (
-							<>
-								<button
-									type="button"
-									disabled={!pageIndex}
-									onClick={() => setPage(pageIndex - 1)}
-								>
-									Previous
-								</button>
-								<button
-									type="button"
-									disabled={
-										offset + rows.length >= filtered.length
-									}
-									onClick={() => setPage(pageIndex + 1)}
-								>
-									Next
-								</button>
-							</>
-						)}
-					</div>
-					<ul
-						className={style.catalogue}
-						aria-label="Objects in orbit"
-					>
-						{rows.map(({ object, days }) => (
-							<li key={object.id}>
-								<h3>
-									{byId.has(object.id) ? (
-										<a
-											href="#star-chart"
-											onClick={() => locate(object.id)}
-										>
-											{object.name}
-										</a>
-									) : (
-										object.name
-									)}
-								</h3>
-								<p>
-									{kinds[object.kind]} · {object.piece} ·
-									NORAD {object.id}
-								</p>
-								<p>
-									{displayDate(object.start)} –{' '}
-									{displayDate(object.end ?? catalogue.asOf)}{' '}
-									·{' '}
-									{days === 0
-										? 'Shares your birthday'
-										: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
-								</p>
-							</li>
-						))}
-					</ul>
-				</section>
-			)}
+				</div>
+				{hasObjects && catalogue && (
+					<>
+						<input
+							className={style.search}
+							type="search"
+							aria-label="Search by name, catalog number, designator or object type"
+							placeholder="Search objects"
+							value={search}
+							onChange={event => {
+								setSearch(event.target.value);
+								setPage(0);
+							}}
+						/>
+						<div className={style.paging}>
+							<span role="status" aria-label="Catalogue results">
+								{rows.length
+									? `${(offset + 1).toLocaleString('en-GB')}–${(offset + rows.length).toLocaleString('en-GB')} of ${filtered.length.toLocaleString('en-GB')}`
+									: 'No matching objects'}
+							</span>
+							{filtered.length > pageSize && (
+								<>
+									<button
+										type="button"
+										disabled={!pageIndex}
+										onClick={() => setPage(pageIndex - 1)}
+									>
+										Previous
+									</button>
+									<button
+										type="button"
+										disabled={
+											offset + rows.length >=
+											filtered.length
+										}
+										onClick={() => setPage(pageIndex + 1)}
+									>
+										Next
+									</button>
+								</>
+							)}
+						</div>
+						<ul
+							className={style.catalogue}
+							aria-label="Objects in orbit"
+						>
+							{rows.map(({ object, days }) => (
+								<li key={object.id}>
+									<h3>
+										{byId.has(object.id) ? (
+											<a
+												href="#star-chart"
+												onClick={() =>
+													locate(object.id)
+												}
+											>
+												{object.name}
+											</a>
+										) : (
+											object.name
+										)}
+									</h3>
+									<p>
+										{kinds[object.kind]} · {object.piece} ·
+										NORAD {object.id}
+									</p>
+									<p>
+										{displayDate(object.start)} –{' '}
+										{displayDate(
+											object.end ?? catalogue.asOf
+										)}{' '}
+										·{' '}
+										{days === 0
+											? 'Shares your birthday'
+											: `Release anniversary ${Math.abs(days)} ${Math.abs(days) === 1 ? 'day' : 'days'} ${days < 0 ? 'before' : 'after'} your birthday`}
+									</p>
+								</li>
+							))}
+						</ul>
+					</>
+				)}
+			</section>
 		</>
 	);
 });

@@ -593,12 +593,16 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
 				await (await toggle('Space junk')).click();
 				expect((await bodies()).length).toBe(7);
-				expect(await driver.findElements(By.id('object-catalogue'))).toHaveLength(0);
+				expect(await driver.findElements(By.css('ul[aria-label="Objects in orbit"]'))).toHaveLength(0);
 				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moon() !== initial, 5000);
-				await driver.findElement(By.css('button[aria-label="Choose planetary bodies"]')).click();
+				const planets = await driver.findElement(By.css('div[role="group"][aria-label="Planetary bodies"]'));
+				const switches = await planets.findElements(By.css('input[role="switch"]'));
+				expect(switches).toHaveLength(10);
+				expect(await Promise.all(switches.map(input => input.isDisplayed()))).not.toContain(false);
+				expect(await driver.findElements(By.css('section[aria-labelledby="object-catalogue"] [aria-label="Man-made bodies"]'))).toHaveLength(1);
 				await (await toggle('Moon')).click();
 				expect(await bodies()).toHaveLength(6);
 				expect(await (await toggle('Zodiac')).getProperty('indeterminate')).toBe(true);
