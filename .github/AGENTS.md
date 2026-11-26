@@ -11,10 +11,12 @@ are accessible to PR code; cache only non-sensitive outputs. Presubmit uses
 falls back to `ci-local` when credentials are unavailable. Staging and submit
 retain their writable key and use `ci`.
 
-Run staging and production directly through Bazel under the shared
-`pulumi_deploy` lock so child tools inherit Bazel's runfiles. Check the
-main or merge-group ref after acquiring the lock. Staging deploys main
-and then the candidate without releasing the lock.
+Submit publishes one bundle per main SHA for both production and staging. Reuse
+it only from a Submit push run for that SHA. Build outside `pulumi_deploy`.
+Under that lock, production checks the SHA is still current before deploying.
+Staging deploys main and then the candidate while holding the same lock.
+Recheck the merge-group ref on acquiring the lock because cleanup preserves
+Staging runs already in progress.
 Keep `cancel-obsolete-staging.yml` outside the lock and execute only trusted
 workflow code through Bazel with its Actions write token. Cleanup also cancels
 obsolete running Presubmits, which only run checks.

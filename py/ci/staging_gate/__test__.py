@@ -34,40 +34,58 @@ class StagingGateTest(unittest.TestCase):
         self.assertEqual(
             staging_providers(self.workflows, "merge_group"), {"staging.yml"}
         )
-        staging = self.workflows["staging.yml"]["jobs"]["Staging"]
-        self.assertNotIn("if", staging)
-        self.assertEqual(staging["concurrency"]["group"], "pulumi_deploy")
-        steps = [step.get("name") for step in staging["steps"]]
-        self.assertLess(
-            steps.index("Pulumi up from origin/main to staging"),
-            steps.index("Deploy candidate branch to Staging"),
+        jobs = self.workflows["staging.yml"]["jobs"]
+        staging = jobs["Staging"]
+        deploy = jobs[staging["needs"]]
+        self.assertEqual(staging["if"], "always()")
+        self.assertNotIn("if", deploy)
+        self.assertEqual(deploy["concurrency"]["group"], "pulumi_deploy")
+        for prerequisite in deploy["needs"]:
+            self.assertNotEqual(
+                jobs[prerequisite].get("concurrency", {}).get("group"), "pulumi_deploy"
+            )
+        self.assertIn(
+            "Deploy candidate branch to Staging",
+            [step.get("name") for step in deploy["steps"]],
         )
 
-    def test_failed_bazel_deploy_fails_the_workflow_step(self):
-        for workflow, job, step_name, revision in (
-            ("staging.yml", "Staging", "Pulumi up from origin/main to staging", "main"),
-            ("staging.yml", "Staging", "Deploy candidate branch to Staging", "candidate"),
-            ("submit.yml", "Submit", "Submit", "production"),
-        ):
-            steps = self.workflows[workflow]["jobs"][job]["steps"]
-            step = next(step for step in steps if step.get("name") == step_name)
-            with self.subTest(revision=revision), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                prepare = root / ".github/workflows/prepare_ci.sh"
-                prepare.parent.mkdir(parents=True)
-                prepare.write_text("#!/bin/sh\nexit 0\n")
-                prepare.chmod(0o755)
-                bazel = root / "bazel"
-                bazel.write_text('#!/bin/sh\nprintf "%s\\n" "$@" > args\nexit 23\n')
-                bazel.chmod(0o755)
-                result = subprocess.run(
-                    ["bash", "-eo", "pipefail", "-c", step["run"]], cwd=root,
-                    env={"BAZEL": str(bazel), "RUNNER_TEMP": directory},
-                )
-                self.assertEqual(result.returncode, 23)
-                args = (root / "args").read_text().splitlines()
-                self.assertEqual(args[0], "run")
-                self.assertEqual(args[-3:], ["//ci/deploy:deploy", "--", revision])
+    def test_required_check_propagates_deployment_result(self):
+        gate = self.workflows["staging.yml"]["jobs"]["Staging"]
+        (step,) = gate["steps"]
+        self.assertEqual(gate["needs"], "Deploy")
+        self.assertEqual(step["env"]["DEPLOY_RESULT"], "${{ needs.Deploy.result }}")
+        for result in ("success", "failure", "skipped", "cancelled"):
+            with self.subTest(result=result):
+                status = subprocess.run(
+                    ["bash", "-ec", step["run"]], env={"DEPLOY_RESULT": result},
+                ).returncode
+                self.assertEqual(status == 0, result == "success")
+
+    def test_failed_bundle_launcher_fails_the_deployment_step(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner = root / "ci/deploy/run.sh"
+            runner.parent.mkdir(parents=True)
+            runner.write_text(
+                '#!/bin/sh\n'
+                'test "$1" = "$RUNNER_TEMP/$BUNDLE" && test "$2" = ci/deploy/deploy '
+                '&& test "$3" = "$REVISION" || exit 2\n'
+                'exit 23\n'
+            )
+            runner.chmod(0o755)
+            for workflow, job, step_name, bundle, revision in (
+                ("staging.yml", "Deploy", "Deploy main to staging", "bundles/staging-main", "main"),
+                ("staging.yml", "Deploy", "Deploy candidate branch to Staging", "bundles/staging-candidate", "candidate"),
+                ("submit.yml", "Submit", "Submit", "bundle", "production"),
+            ):
+                with self.subTest(revision=revision):
+                    steps = self.workflows[workflow]["jobs"][job]["steps"]
+                    step = next(step for step in steps if step.get("name") == step_name)
+                    result = subprocess.run(
+                        ["bash", "-eo", "pipefail", "-c", step["run"]], cwd=root,
+                        env={"RUNNER_TEMP": directory, "BUNDLE": bundle, "REVISION": revision},
+                    )
+                    self.assertEqual(result.returncode, 23)
 
     def test_pull_requests_can_enter_queue_without_deploying(self):
         self.assertEqual(
@@ -75,10 +93,12 @@ class StagingGateTest(unittest.TestCase):
         )
         self.assertNotIn("merge_group", self.workflows["staging-pr.yml"]["on"])
 
-    def test_production_deploys_only_the_current_main(self):
+    def test_production_deploys_only_the_current_main_bundle(self):
         jobs = self.workflows["submit.yml"]["jobs"]
         deploy = jobs["Submit"]
         self.assertEqual(deploy["concurrency"]["group"], "pulumi_deploy")
+        publisher = jobs[deploy["needs"]]
+        self.assertNotEqual(publisher["concurrency"]["group"], "pulumi_deploy")
         revision, *steps = deploy["steps"]
         for step in steps:
             self.assertEqual(step["if"], f"steps.{revision['id']}.outputs.current == 'true'")

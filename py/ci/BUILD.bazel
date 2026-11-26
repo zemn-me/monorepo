@@ -1,13 +1,29 @@
 load("//bzl:rules.bzl", "bazel_lint")
-load("//py:rules.bzl", "py_library")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
 py_library(
     name = "ci",
-    srcs = ["__init__.py"],
+    srcs = [
+        "__init__.py",
+        "find_deploy_bundle.py",
+    ],
     visibility = ["//:__subpackages__"],
+)
+
+py_test(
+    name = "find_deploy_bundle_test",
+    size = "small",
+    srcs = ["find_deploy_bundle_test.py"],
+    deps = [":ci"],
 )
 
 bazel_lint(
     name = "bazel_lint",
     srcs = ["BUILD.bazel"],
+)
+
+py_binary(
+    name = "find_deploy_bundle",
+    srcs = ["find_deploy_bundle.py"],
+    visibility = ["//:__subpackages__"],
 )

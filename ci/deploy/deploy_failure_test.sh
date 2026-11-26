@@ -14,7 +14,7 @@ export PULUMI_BACKEND_URL="file://$backend"
 failed=0
 for revision in main candidate production; do
   status=0
-  "$1" "$revision" > "$TEST_TMPDIR/output" 2>&1 || status=$?
+  "$@" "$revision" > "$TEST_TMPDIR/output" 2>&1 || status=$?
   if ! grep -Fq "$backend is not a directory" "$TEST_TMPDIR/output"; then
     cat "$TEST_TMPDIR/output" >&2
     exit 1
