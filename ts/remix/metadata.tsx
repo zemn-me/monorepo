@@ -58,12 +58,16 @@ export function resolveMetadata(handles: MetadataHandle[]) {
 	return { metadata, viewport, title };
 }
 
-export function DocumentMeta() {
+export function useDocumentMetadata() {
 	const matches = useMatches();
-	const { pathname } = useLocation();
-	const { metadata, viewport, title } = resolveMetadata(
+	return resolveMetadata(
 		matches.map(match => (match.handle ?? {}) as MetadataHandle)
 	);
+}
+
+export function DocumentMeta() {
+	const { pathname } = useLocation();
+	const { metadata, viewport, title } = useDocumentMetadata();
 	const canonical = metadata.alternates?.canonical;
 	const canonicalURL =
 		canonical === './' && metadata.metadataBase

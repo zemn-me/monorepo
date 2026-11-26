@@ -16,7 +16,7 @@ import {
 	privateHeaders,
 	readSession,
 } from '#root/project/me/zemn/hook/session.server.js';
-import { DocumentMeta } from '#root/ts/remix/metadata.js';
+import { DocumentMeta, useDocumentMetadata } from '#root/ts/remix/metadata.js';
 
 export { ErrorBoundary } from '#root/ts/remix/error.js';
 
@@ -104,11 +104,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export function Layout({ children }: Props) {
 	const initial = useRouteLoaderData<typeof loader>('root');
+	const { title } = useDocumentMetadata().metadata;
 	return (
 		<>
 			<ServerSessionProvider session={initial?.session ?? null}>
 				<Providers>
-					<html style={{ fontFamily: '"IBM Plex Mono", monospace' }}>
+					<html
+						data-print-title={
+							typeof title === 'string' ? title : title?.default
+						}
+						style={{ fontFamily: '"IBM Plex Mono", monospace' }}
+					>
 						<head>
 							<DocumentMeta />
 							<Links />
