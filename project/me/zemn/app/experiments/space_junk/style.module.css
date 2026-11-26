@@ -65,7 +65,14 @@
 .paging {
 	display: flex;
 	align-items: center;
-	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 0.375rem;
+	margin-block: 0.5rem;
+	font-variant-numeric: tabular-nums;
+}
+.paging button {
+	min-width: 44px;
+	font: inherit;
 }
 .rulers {
 	margin: 1.3rem 0 0;
@@ -207,10 +214,6 @@
 .globe[tabindex]:active {
 	cursor: grabbing;
 }
-.paging {
-	font: var(--controls);
-	gap: 0.25rem 1rem;
-}
 .viewControls {
 	text-align: start;
 }
@@ -272,16 +275,6 @@
 	border: 1px solid var(--line);
 	border-radius: 0;
 	background: var(--background-color);
-}
-.paging button {
-	text-decoration: underline;
-	text-underline-offset: 0.2em;
-}
-.paging {
-	margin-block: 0.5rem;
-}
-.paging {
-	justify-content: flex-end;
 }
 .placements {
 	display: grid;

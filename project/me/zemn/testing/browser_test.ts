@@ -579,12 +579,17 @@ describe('zemn.me website', () => {
 				);
 				const firstObject = () => grid.findElement(By.css('li:has(h3 a) h3')).getText();
 				const firstOnPage = await firstObject();
-				const previous = await driver.findElement(By.xpath('//button[.="Previous"]'));
+				const pager = await driver.findElement(By.css('nav[aria-label="Chart placement pages"]'));
+				const previous = await pager.findElement(By.css('button[aria-label="Previous page"]'));
+				const nextPage = () => pager.findElement(By.css('button[aria-label="Next page"]'));
+				const pageNumber = () => pager.findElement(By.css('[role="status"]')).getText();
+				expect(await pageNumber()).toBe('Pg. 1/21');
 				expect(await previous.isEnabled()).toBe(false);
-				await driver.findElement(By.xpath('//button[.="Next"]')).click();
+				await (await nextPage()).click();
 				await driver.wait(async () => await firstObject() !== firstOnPage, 5000);
 				expect(await grid.findElements(By.css('h3 a'))).toHaveLength(12);
 				expect(await previous.isEnabled()).toBe(true);
+				expect(await pageNumber()).toBe('Pg. 2/21');
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
 				const markerCount = () => wheel.findElements(By.css('g[aria-label="Orbiting objects"] path:not([display="none"])')).then(paths => paths.length);
@@ -594,7 +599,7 @@ describe('zemn.me website', () => {
 				const motors = await markerCount();
 				expect(motors).toBeGreaterThan(12);
 				expect(motors).toBeLessThanOrEqual(unfiltered);
-				await driver.findElement(By.xpath('//button[.="Next"]')).click();
+				await (await nextPage()).click();
 				expect(await markerCount()).toBe(motors);
 				await search.sendKeys('xyz');
 				expect(await markerCount()).toBe(0);

@@ -170,10 +170,8 @@ const BirthdayChart = memo(function BirthdayChart({
 		[filtered, byId]
 	);
 	const pageSize = 12;
-	const pageIndex = Math.min(
-		page,
-		Math.max(0, Math.ceil(plotted.length / pageSize) - 1)
-	);
+	const pageCount = Math.ceil(plotted.length / pageSize);
+	const pageIndex = Math.min(page, Math.max(0, pageCount - 1));
 	const offset = pageIndex * pageSize;
 	const [printing, setPrinting] = useState(false);
 	useEffect(() => {
@@ -323,23 +321,26 @@ const BirthdayChart = memo(function BirthdayChart({
 							: 'No matching objects on the chart'}
 					</p>
 				)}
-				{plotted.length > pageSize && (
-					<div className={style.paging}>
+				{pageCount > 1 && (
+					<nav className={style.paging} aria-label="Chart placement pages">
 						<button
 							type="button"
+							aria-label="Previous page"
 							disabled={!pageIndex}
 							onClick={() => setPage(pageIndex - 1)}
 						>
-							Previous
+							←
 						</button>
+						<span role="status">Pg. {pageIndex + 1}/{pageCount}</span>
 						<button
 							type="button"
-							disabled={offset + rows.length >= plotted.length}
+							aria-label="Next page"
+							disabled={pageIndex + 1 === pageCount}
 							onClick={() => setPage(pageIndex + 1)}
 						>
-							Next
+							→
 						</button>
-					</div>
+					</nav>
 				)}
 			</div>
 		</>
