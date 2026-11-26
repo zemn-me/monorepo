@@ -1,5 +1,3 @@
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 import {
 	memo,
@@ -15,9 +13,10 @@ import { useLocale } from '#root/ts/react/lang/useLocale.js';
 import type { Metadata } from '#root/ts/remix/metadata.js';
 import { catalogueUrl } from './assets.js';
 import { BirthdayRulers } from './birthday_form.js';
+import { BodyFilters } from './body_filters.js';
 import { ChartSettings } from './birthplace.js';
 import { catalogueDate } from './catalogue_date.js';
-import { type Catalogue, kinds, readChart } from './chart.js';
+import { type Catalogue, type SpaceObject, kinds, readChart } from './chart.js';
 import { ChartViewer } from './chart_viewer.js';
 import type { City } from './cities.js';
 import { CitySearch } from './city_search.js';
@@ -36,29 +35,16 @@ function displayDate(day: string) {
 	});
 }
 
-function LayerSwitch({
-	label,
-	checked,
-	onChange,
-	title,
-}: {
-	label: string;
-	checked: boolean;
-	onChange: (value: boolean) => void;
-	title?: string;
-}) {
-	return (
-		<label className={style.switch} title={title}>
-			<input
-				type="checkbox"
-				role="switch"
-				checked={checked}
-				onChange={e => onChange(e.currentTarget.checked)}
-			/>
-			{label}
-		</label>
-	);
-}
+const debrisTypes = ['C', 'D', 'R'] as const;
+const artificialTypes = [...debrisTypes, 'P'] as const;
+const typeLabels = {
+	C: 'Discarded equipment',
+	D: 'Breakup fragments',
+	R: 'Rocket stages',
+	P: 'Spacecraft payloads',
+};
+const planetaryBodies = [...classical, ...modern];
+type ObjectKind = SpaceObject['kind'];
 
 const BirthdayChart = memo(function BirthdayChart({
 	catalogue,
@@ -66,8 +52,8 @@ const BirthdayChart = memo(function BirthdayChart({
 	zone,
 	place,
 	onPlace,
-	junk,
-	setJunk,
+	selectedKinds,
+	setSelectedKinds,
 	catalogueFailed,
 	retryCatalogue,
 }: {
@@ -76,11 +62,12 @@ const BirthdayChart = memo(function BirthdayChart({
 	zone: string;
 	place?: Birthplace;
 	onPlace: (place?: Birthplace) => void;
-	junk: boolean;
-	setJunk: (value: boolean) => void;
+	selectedKinds: readonly ObjectKind[];
+	setSelectedKinds: (value: ObjectKind[]) => void;
 	catalogueFailed: boolean;
 	retryCatalogue: () => void;
 }) {
+	const hasObjects = selectedKinds.length > 0;
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(0);
 	const languages = useLocale();
@@ -97,30 +84,31 @@ const BirthdayChart = memo(function BirthdayChart({
 			}),
 		[languages, zone]
 	);
+	const selectedObjects = useMemo(
+		() =>
+			catalogue?.objects.filter(object =>
+				selectedKinds.includes(object.kind)
+			) ?? [],
+		[catalogue, selectedKinds]
+	);
 	const matches = useMemo(
 		() =>
-			junk && catalogue
-				? readChart(
-						catalogue.objects,
-						Temporal.PlainDate.from(birthday),
-						day
-					).matches
-				: [],
-		[catalogue, birthday, day, junk]
+			readChart(selectedObjects, Temporal.PlainDate.from(birthday), day)
+				.matches,
+		[selectedObjects, birthday, day]
 	);
 	const coverage = useDebrisPositions(matches, instant, day, catalogueDate);
-	const { markers, instant: debrisInstant } = coverage;
-	const [traditional, setTraditional] = useState(true);
-	const [more, setMore] = useState(false);
-	const [extra, setExtra] = useState<ChartBody[]>([]);
-	const bodies = useMemo(
+	const { instant: debrisInstant } = coverage;
+	const markers = useMemo(
 		() =>
-			bodyPositions(
-				[...(traditional ? classical : []), ...extra],
-				new Date(instant),
-				place
-			),
-		[traditional, extra, instant, place]
+			coverage.markers.filter(m => selectedKinds.includes(m.object.kind)),
+		[coverage.markers, selectedKinds]
+	);
+	const [selectedBodies, setSelectedBodies] =
+		useState<readonly ChartBody[]>(classical);
+	const bodies = useMemo(
+		() => bodyPositions(selectedBodies, new Date(instant), place),
+		[selectedBodies, instant, place]
 	);
 	const [selection, setSelection] = useState<{
 		id: number;
@@ -174,55 +162,34 @@ const BirthdayChart = memo(function BirthdayChart({
 				role="group"
 				aria-label="Chart layers"
 			>
-				<LayerSwitch
-					label="Zodiac"
-					checked={traditional}
-					onChange={setTraditional}
-					title="Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn"
+				<BodyFilters
+					group="Planetary bodies"
+					presetName="Zodiac"
+					preset={classical}
+					options={planetaryBodies}
+					selected={selectedBodies}
+					onChange={setSelectedBodies}
 				/>
-				<LayerSwitch
-					label="Space junk"
-					checked={junk}
-					onChange={setJunk}
+				<BodyFilters
+					group="Man-made bodies"
+					presetName="Space junk"
+					preset={debrisTypes}
+					options={artificialTypes}
+					labels={typeLabels}
+					selected={selectedKinds}
+					onChange={next => {
+						setSelectedKinds(next);
+						setPage(0);
+					}}
 				/>
-				<button
-					type="button"
-					title="More bodies"
-					aria-label="More bodies"
-					aria-expanded={more}
-					aria-controls="additional-chart-bodies"
-					onClick={() => setMore(!more)}
-				>
-					<FontAwesomeIcon icon={faEllipsis} aria-hidden="true" />
-				</button>
-			</div>
-			<div id="additional-chart-bodies" hidden={!more}>
-				<div
-					className={style.extraBodies}
-					role="group"
-					aria-label="Additional bodies"
-				>
-					{modern.map(body => (
-						<LayerSwitch
-							key={body}
-							label={body}
-							checked={extra.includes(body)}
-							onChange={on =>
-								setExtra(current =>
-									on
-										? [...current, body]
-										: current.filter(b => b !== body)
-								)
-							}
-						/>
-					))}
-				</div>
 			</div>
 			<figure className={style.figure}>
 				<ChartViewer
 					instant={instant}
 					bodies={bodies}
-					showSigns={traditional}
+					showSigns={classical.some(body =>
+						selectedBodies.includes(body)
+					)}
 					birthplace={place}
 					markers={markers}
 					selected={selected}
@@ -233,11 +200,11 @@ const BirthdayChart = memo(function BirthdayChart({
 				/>
 				<figcaption aria-live="polite" className={style.caption}>
 					<time dateTime={iso}>{localFormat.format(instant)}</time>
-					{junk &&
+					{hasObjects &&
 						(!catalogue ? (
 							catalogueFailed ? (
 								<p role="alert">
-									Debris catalogue unavailable.{' '}
+									Object catalogue unavailable.{' '}
 									<button
 										type="button"
 										onClick={retryCatalogue}
@@ -246,10 +213,13 @@ const BirthdayChart = memo(function BirthdayChart({
 									</button>
 								</p>
 							) : (
-								<p role="status">Loading debris catalogue…</p>
+								<p role="status">Loading object catalogue…</p>
 							)
 						) : !count ? (
-							<p>No catalogued debris in orbit on this date.</p>
+							<p>
+								No objects of the selected types in orbit on
+								this date.
+							</p>
 						) : !markers.length &&
 							coverage.failed &&
 							!coverage.pending ? (
@@ -261,9 +231,10 @@ const BirthdayChart = memo(function BirthdayChart({
 							</p>
 						) : (
 							<p role="status" aria-label="Chart coverage">
-								{debrisInstant !== instant ? (
+								{debrisInstant !== instant &&
+								markers.length > 0 ? (
 									<>
-										Updating debris… Showing{' '}
+										Updating orbits… Showing{' '}
 										<time
 											dateTime={new Date(
 												debrisInstant
@@ -301,7 +272,7 @@ const BirthdayChart = memo(function BirthdayChart({
 				ascendant={ascendant}
 				onPlace={onPlace}
 			/>
-			{junk && catalogue && (
+			{hasObjects && catalogue && (
 				<details className={style.disclosure}>
 					<summary>Object catalogue</summary>
 					<input
@@ -390,7 +361,8 @@ const BirthdayChart = memo(function BirthdayChart({
 
 export default function Page() {
 	const { instant, clock } = useRulerClock(Date.UTC(2006, 7, 1, 12));
-	const [junk, setJunk] = useState(true);
+	const [selectedKinds, setSelectedKinds] =
+		useState<readonly ObjectKind[]>(debrisTypes);
 	const [deviceZone, setDeviceZone] = useState('UTC');
 	useEffect(
 		() => setDeviceZone(Intl.DateTimeFormat().resolvedOptions().timeZone),
@@ -428,7 +400,7 @@ export default function Page() {
 
 	const catalogue = useQuery({
 		queryKey: ['space-junk-catalogue', catalogueUrl],
-		enabled: junk,
+		enabled: selectedKinds.length > 0,
 		staleTime: Infinity,
 		meta: { persist: false },
 		retry: false,
@@ -452,8 +424,8 @@ export default function Page() {
 				{...chart}
 				onPlace={setBirthplace}
 				catalogue={catalogue.data}
-				junk={junk}
-				setJunk={setJunk}
+				selectedKinds={selectedKinds}
+				setSelectedKinds={setSelectedKinds}
 				catalogueFailed={catalogue.isError}
 				retryCatalogue={catalogue.refetch}
 			/>
@@ -469,15 +441,15 @@ export default function Page() {
 				<p>
 					The tropical zodiac divides the ecliptic into twelve equal
 					signs. Zodiac shows the Sun, Moon and five classical
-					planets. Add Uranus, Neptune or Pluto under More bodies.
-					Positions come from{' '}
+					planets. Uranus, Neptune and Pluto can be selected
+					individually. Positions come from{' '}
 					<a href="https://github.com/cosinekitty/astronomy">
 						Astronomy Engine
 					</a>
 					. Face-on, lines show major aspects within 6°. Tilting the
-					chart places debris at its orbital position and planets on a
-					reference sphere. Dashed arcs and hollow dots indicate
-					directions behind Earth.
+					chart places artificial objects at their orbital positions
+					and planets on a reference sphere. Dashed arcs and hollow
+					dots indicate directions behind Earth.
 				</p>
 				<p>
 					Dated Earth-orbit records from{' '}

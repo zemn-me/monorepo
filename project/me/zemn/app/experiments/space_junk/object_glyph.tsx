@@ -2,6 +2,7 @@ import type { SpaceObject } from './chart.js';
 
 export function ObjectGlyph({ object }: { object: SpaceObject }) {
 	const paths = {
+		P: 'M-3 -4H3V4H-3Z M-10 -3H-5V3H-10Z M5 -3H10V3H5Z M-5 0H-3 M3 0H5',
 		D: 'M-9 -4 1 -9 8 -3 4 6 -4 9Z M-9 -4 0 -1 1 -9 M0 -1 4 6 M0 -1 -4 9',
 		C:
 			object.id === 29257

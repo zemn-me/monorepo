@@ -4,7 +4,7 @@ export interface SpaceObject {
 	id: number;
 	name: string;
 	piece: string;
-	kind: 'C' | 'D' | 'R';
+	kind: 'C' | 'D' | 'R' | 'P';
 	eva: boolean;
 	start: string;
 	end: string | null;
@@ -19,6 +19,7 @@ export const kinds = {
 	C: 'Discarded equipment',
 	D: 'Breakup fragment',
 	R: 'Rocket stage',
+	P: 'Spacecraft payload',
 };
 
 export function inOrbit(object: SpaceObject, day: string) {

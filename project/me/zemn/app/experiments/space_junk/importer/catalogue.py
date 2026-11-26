@@ -29,7 +29,7 @@ def read_catalogue(stream):
         number = row["Satcat"].strip()
         if not number.isdecimal() or row["Primary"].strip() != "Earth":
             continue
-        if kind[:1] not in {"C", "D", "R"}:
+        if kind[:1] not in {"C", "D", "R", "P"}:
             continue
         start = iso_date(row["SDate"].strip())
         end = iso_date(row["DDate"].strip())

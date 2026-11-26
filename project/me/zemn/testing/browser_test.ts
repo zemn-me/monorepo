@@ -522,7 +522,7 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => (await wheel.getText()).includes('km'), 5000,
 					'Releasing five degrees from the pole settles into the full orbital view');
 				expect(await tilt.getAttribute('value')).toBe('82');
-				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting debris"]'));
+				const scene = await driver.findElement(By.css('g[aria-label="Earth and orbiting objects"]'));
 				const geometry = () => scene.findElements(By.css('path')).then(async paths =>
 					(await Promise.all(paths.slice(0, 6).map(path => path.getAttribute('d')))).join('')
 				);
@@ -556,7 +556,7 @@ describe('zemn.me website', () => {
 			try {
 				await driver.get(`${origin}/experiments/space-junk`);
 				const toggle = (name: string) => driver.findElement(By.xpath(
-					`//label[normalize-space(.)="${name}"]/input[@role="switch"]`
+					`//label[normalize-space(.)="${name}"]/input[@type="checkbox"]`
 				));
 				const bodies = () => driver.findElements(By.css('svg g[aria-label="Zodiac bodies"] g[role="img"]'));
 				await driver.wait(async () => (await bodies()).length === 7, 5000);
@@ -567,7 +567,12 @@ describe('zemn.me website', () => {
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moon() !== initial, 5000);
-				await driver.findElement(By.css('button[aria-label="More bodies"]')).click();
+				await driver.findElement(By.css('button[aria-label="Choose planetary bodies"]')).click();
+				await (await toggle('Moon')).click();
+				expect(await bodies()).toHaveLength(6);
+				expect(await (await toggle('Zodiac')).getProperty('indeterminate')).toBe(true);
+				await (await toggle('Zodiac')).click();
+				expect(await bodies()).toHaveLength(7);
 				await (await toggle('Pluto')).sendKeys(Key.SPACE);
 				expect((await bodies()).length).toBe(8);
 				const wheelMoon = await moon();
@@ -596,6 +601,23 @@ describe('zemn.me website', () => {
 				expect(await bodies()).toHaveLength(0);
 				await (await toggle('Space junk')).click();
 				expect(await bodies()).toHaveLength(0);
+				await driver.findElement(By.css('button[aria-label="Choose man-made bodies"]')).click();
+				await (await toggle('Space junk')).click();
+				await (await toggle('Rocket stages')).click();
+				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
+				await driver.findElement(By.xpath('//summary[.="Object catalogue"]')).click();
+				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Objects in orbit"] li'));
+				const onlyKind = async (kind: string) => {
+					const rows = await catalogueRows();
+					return rows.length > 0 && (await Promise.all(rows.map(row => row.getText()))).every(text => text.includes(kind));
+				};
+				await driver.wait(() => onlyKind('Rocket stage'), 5000);
+				await (await toggle('Spacecraft payloads')).sendKeys(Key.SPACE);
+				await (await toggle('Space junk')).sendKeys(Key.SPACE);
+				await (await toggle('Space junk')).sendKeys(Key.SPACE);
+				expect(await (await toggle('Spacecraft payloads')).isSelected()).toBe(true);
+				await driver.wait(() => onlyKind('Spacecraft payload'), 5000);
+				await driver.wait(async () => (await driver.findElement(By.css('[aria-label="Chart coverage"]')).getText()).includes('objects located'), 10000);
 				await globe.sendKeys(Key.HOME);
 				expect(await bodies()).toHaveLength(0);
 			} finally {

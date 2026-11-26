@@ -315,14 +315,45 @@
 	}
 }
 
-.layers,
-.extraBodies {
+.layers {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	align-items: start;
+	gap: 0.75rem;
+	font: var(--controls);
+}
+.filterGroup {
+	margin: 0;
+	border: 0;
+	padding: 0;
+	min-width: 0;
+}
+.filterGroup legend {
+	padding: 0;
+	color: var(--muted);
+	font-size: 0.78rem;
+}
+.filterHeading {
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	flex-wrap: wrap;
-	gap: 0 1.2rem;
-	font: var(--controls);
+	gap: 0;
+}
+.filterHeading button {
+	min-width: 44px;
+	font-size: 0.75rem;
+}
+.filterHeading button[aria-expanded="true"] svg {
+	transform: rotate(180deg);
+}
+.filterOptions {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.5rem), 1fr));
+	column-gap: 0.25rem;
+	border-top: 1px solid var(--line);
+}
+.filterGroup:last-child .filterOptions {
+	grid-template-columns: 1fr;
 }
 .switch {
 	display: inline-flex;
@@ -382,21 +413,13 @@
 		background: HighlightText;
 	}
 }
-.layers {
-	justify-content: start;
-	gap: 0 0.8rem;
-}
-.layers button {
-	min-width: 44px;
-}
-.extraBodies {
-	justify-content: start;
-	border-block-start: 1px solid var(--line);
-}
-@media (width <= 26rem) {
-	.layers {
-		gap: 0 0.45rem;
-	}
+.switch input:indeterminate::after {
+	left: 50%;
+	top: 50%;
+	width: 0.65rem;
+	height: 2px;
+	border-radius: 0;
+	transform: translate(-50%, -50%);
 }
 
 .citySearch {

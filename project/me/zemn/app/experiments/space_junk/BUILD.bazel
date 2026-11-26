@@ -29,6 +29,7 @@ ts_project(
     srcs = [
         "birthday_form.tsx",
         "birthplace.tsx",
+        "body_filters.tsx",
         "chart.ts",
         "chart_camera.ts",
         "chart_geometry.ts",
@@ -96,6 +97,7 @@ filegroup(
     srcs = [
         "birthday_form.tsx",
         "birthplace.tsx",
+        "body_filters.tsx",
         "chart.ts",
         "chart_camera.ts",
         "chart_geometry.ts",

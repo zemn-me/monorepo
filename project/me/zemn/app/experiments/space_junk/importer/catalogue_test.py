@@ -5,7 +5,7 @@ from project.me.zemn.app.experiments.space_junk.importer.catalogue import read_c
 
 
 class CatalogueTest(unittest.TestCase):
-    def test_dated_debris_only(self):
+    def test_dated_debris_and_payloads(self):
         source = io.StringIO(
             "Satcat\tType\tName\tPiece\tPrimary\tSDate\tDDate\tStatus\n"
             "# Updated 2026 Nov 23\n"
@@ -16,7 +16,8 @@ class CatalogueTest(unittest.TestCase):
         )
         catalogue = read_catalogue(source)
         self.assertEqual(catalogue["asOf"], "2026-11-23")
-        self.assertEqual([obj["id"] for obj in catalogue["objects"]], [29257])
+        self.assertEqual([obj["id"] for obj in catalogue["objects"]], [29257, 14670])
+        self.assertEqual(catalogue["objects"][1]["kind"], "P")
         spatula = catalogue["objects"][0]
         self.assertEqual((spatula["start"], spatula["end"], spatula["eva"]),
                          ("2006-07-12", "2006-09-29", True))

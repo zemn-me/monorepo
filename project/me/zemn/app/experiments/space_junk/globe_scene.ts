@@ -35,8 +35,14 @@ export const width = 416,
 const focalScale = 0.95;
 const focal = height * focalScale;
 const radians = Math.PI / 180;
-const layers = { D: 3, R: 4, C: 5 };
+const layers = { D: 3, R: 4, C: 5, P: 6 };
 const shapes = {
+	P: [
+		[-0.9, -0.9],
+		[0.9, -0.9],
+		[0.9, 0.9],
+		[-0.9, 0.9],
+	],
 	D: [
 		[-0.65, -0.5],
 		[0.65, -0.5],

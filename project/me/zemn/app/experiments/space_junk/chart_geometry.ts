@@ -4,7 +4,7 @@ import { globeCamera, globeFrame } from './globe_scene.js';
 import type { earthFixedSky } from './planets.js';
 import { radians } from './zodiac.js';
 
-const bands = { D: 1.025, R: 1.055, C: 1.085 };
+const bands = { D: 1.025, R: 1.055, C: 1.085, P: 1.105 };
 const mix = (from: number, to: number, t: number) => from + (to - from) * t;
 
 export function chartGeometry(

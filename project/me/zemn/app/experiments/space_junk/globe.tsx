@@ -137,7 +137,7 @@ export function Globe({
 		<g>
 			<desc>
 				Zodiac marks show sky directions. The distance scale measures
-				Earth and debris.
+				Earth and orbiting objects.
 				{birthplace &&
 					` The red dot marks the birthplace at ${birthplace.latitude}° latitude, ${birthplace.longitude}° longitude.`}
 			</desc>
@@ -151,7 +151,7 @@ export function Globe({
 					height={height}
 				>
 					<OrbitScene
-						label="Earth and orbiting debris"
+						label="Earth and orbiting objects"
 						world={unfold ? world : undefined}
 						faces={projected.faces}
 						frame={frame}
@@ -216,7 +216,7 @@ export function Globe({
 					<g
 						role="img"
 						aria-label={
-							'Selected debris · ' + selected?.object.name
+							'Selected object · ' + selected?.object.name
 						}
 						transform={`translate(${focusX} ${focusY})`}
 					>
