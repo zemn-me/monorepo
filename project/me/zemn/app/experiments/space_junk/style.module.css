@@ -205,7 +205,7 @@
 	user-select: none;
 }
 .globe[tabindex] {
-	touch-action: none;
+	touch-action: pan-y;
 	cursor: grab;
 }
 .globe[tabindex]:focus:not(:focus-visible) {
