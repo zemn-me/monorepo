@@ -245,7 +245,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						))}
 						{natalZodiac.ascendant !== undefined && (
 							<PlacementEntry
-								name="Ascendant"
+								name="Rising sign"
 								longitude={natalZodiac.ascendant}
 								house={natalZodiac.house(natalZodiac.ascendant)}
 							/>

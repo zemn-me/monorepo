@@ -69,6 +69,7 @@ export function WheelGuides({
 				})}
 			{ascendant !== undefined && (
 				<g fill="currentColor">
+					<title>Rising sign (Ascendant) · Eastern horizon</title>
 					<path
 						d={
 							'M' +

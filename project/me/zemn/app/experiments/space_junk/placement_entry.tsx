@@ -36,11 +36,10 @@ export function PlacementEntry({
 						</a>
 					) : (
 						name
-					)}{' '}
-					in {signs[sign]}
+					)}
 				</h3>
 				<span>
-					{angle}
+					{signs[sign]} {angle}
 					{house !== undefined && ` · House ${house}`}
 				</span>
 			</header>

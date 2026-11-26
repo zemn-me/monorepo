@@ -597,7 +597,9 @@ describe('zemn.me website', () => {
 				const moon = () => driver.findElement(By.css('svg g[aria-label^="Moon ·"]')).getAttribute('aria-label');
 				const placements = () => driver.findElements(By.css('ul[aria-label="Natal placements"] li'));
 				expect(await placements()).toHaveLength(7);
-				expect(await (await placements())[0]!.getText()).toMatch(/Sun in Leo[\s\S]*° \d+′ \d+″/);
+				const sun = (await placements())[0]!;
+				expect(await sun.findElement(By.css('h3')).getAccessibleName()).toBe('Sun');
+				expect(await sun.findElement(By.css('header > span')).getText()).toMatch(/^Leo \d+° \d+′ \d+″$/);
 				const initial = await moon();
 				await driver.findElement(By.name('day')).sendKeys(Key.ARROW_RIGHT);
 				await driver.wait(async () => await moon() !== initial, 5000);
@@ -765,7 +767,8 @@ describe('zemn.me website', () => {
 				await (await driver.wait(until.elementLocated(By.css('[role="listbox"] [role="option"]')), 10000)).click();
 				const marker = await driver.wait(until.elementLocated(pin), 5000);
 				const natal = await driver.findElement(By.css('ul[aria-label="Natal placements"]'));
-				expect(await natal.getText()).toMatch(/Ascendant in \w+[\s\S]*House 1\b/);
+				const rising = await natal.findElement(By.xpath('.//li[.//h3[.="Rising sign"]]'));
+				expect(await rising.getText()).toMatch(/\w+ \d+° \d+′ \d+″ · House 1\b/);
 				const center = Number(await marker.getAttribute('x1'));
 				expect(await driver.executeScript<number>('return arguments[0].getTotalLength()', marker)).toBeLessThan(0.1);
 				await globe.sendKeys(Key.ARROW_RIGHT.repeat(4));
