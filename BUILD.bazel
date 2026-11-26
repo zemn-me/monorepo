@@ -298,6 +298,7 @@ py_venv(
         "//project/me/zemn/inject_iservice:inject_iservice_bin",
         "//py",
         "//py/ci",
+        "//py/ci:find_deploy_bundle",
         "//py/ci/cancel_obsolete_staging",
         "//py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin",
         "//py/ci/post_upgrade",

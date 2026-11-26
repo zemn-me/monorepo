@@ -1,4 +1,4 @@
-"""Exercise staging archive checkout without cloud credentials."""
+"""Exercise the pinned main build in a checkout separate from its workflow tools."""
 
 import os
 import subprocess
@@ -7,53 +7,50 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import yaml
-
 
 class ArchiveCheckoutTest(unittest.TestCase):
-    def test_seeded_archives_survive_checkout_cleanup(self):
-        workflow = yaml.safe_load(WORKFLOW.read_text())
-        job = workflow["jobs"]["Staging"]
-        steps = job["steps"]
-        checkout = next(
-            step for step in steps
-            if step.get("name") == "Checkout candidate dependency archives"
-        )
-        seed = next(
-            step for step in steps
-            if step.get("name") == "Seed dependency archives for both staging builds"
-        )
-        for has_archives in (True, False):
-            with self.subTest(has_archives=has_archives), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                workspace = root / "workspace"
-                workspace.mkdir()
-                runner_temp = root / "runner-temp"
-                candidate = workspace / checkout["with"]["path"]
-                candidate.mkdir()
-                # Sparse checkouts include root files. Gazelle must not see this
-                # second BUILD file when it scans the main workspace.
-                (candidate / "BUILD.bazel").write_text("# candidate root BUILD\n")
-                if has_archives:
-                    for archive in ("ape", "rules_diff"):
-                        source = candidate / "third_party/bazel_distdir" / archive
-                        source.mkdir(parents=True)
-                        (source / "archive.tar.gz").write_bytes(archive.encode())
+    def test_pinned_main_keeps_its_program_when_bootstrapping_bundle_rules(self):
+        for has_packager in (False, True):
+            with self.subTest(has_packager=has_packager), tempfile.TemporaryDirectory() as root:
+                workspace = Path(root)
+                candidate = workspace / "ci/deploy"
+                candidate.mkdir(parents=True)
+                packaging = ("bundle.bzl", "bundle_test.sh", "deploy_failure_test.sh", "run.sh")
+                for name in packaging:
+                    (candidate / name).write_text("candidate")
+                (candidate / "deploy.ts").write_text("candidate program")
+                main = workspace / "main"
+                launcher = main / "ci/deploy"
+                launcher.mkdir(parents=True)
+                (launcher / "deploy.ts").write_text("main program")
+                build_file = launcher / "BUILD.bazel"
+                build_file.write_text("# main targets\n")
+                if has_packager:
+                    for name in packaging:
+                        (launcher / name).write_text("main")
+                prepare = main / ".github/workflows/prepare_ci.sh"
+                prepare.parent.mkdir(parents=True)
+                prepare.write_text("#!/bin/sh\nexit 0\n")
+                prepare.chmod(0o755)
+                bazel = main / "sh/bin/bazel"
+                bazel.parent.mkdir(parents=True)
+                bazel.write_text("#!/bin/sh\nprintf '%s\\n' \"$@\" >> bazel-args\n")
+                bazel.chmod(0o755)
                 subprocess.run(
-                    ["bash", "-eo", "pipefail", "-c", seed["run"]],
-                    cwd=workspace,
-                    env={**os.environ, "RUNNER_TEMP": str(runner_temp)},
-                    check=True,
-                    capture_output=True,
+                    [BUILD_SCRIPT], cwd=main, check=True,
+                    env={**os.environ, "GITHUB_WORKSPACE": str(workspace)},
                 )
-                self.assertFalse(candidate.exists(), "candidate checkout pollutes Gazelle input")
-                self.assertEqual([], list(workspace.rglob("BUILD.bazel")))
-                if has_archives:
-                    for archive in ("ape", "rules_diff"):
-                        seeded = runner_temp / "bazel-distdir" / archive / "archive.tar.gz"
-                        self.assertEqual(archive.encode(), seeded.read_bytes())
+                args = (main / "bazel-args").read_text().splitlines()
+                for archive in ("ape", "rules_diff"):
+                    self.assertIn(f"--distdir={workspace}/third_party/bazel_distdir/{archive}", args)
+                self.assertEqual((launcher / "deploy.ts").read_text(), "main program")
+                self.assertIn("# main targets", build_file.read_text())
+                self.assertEqual("deploy_bundle()" in build_file.read_text(), not has_packager)
+                for name in packaging:
+                    self.assertEqual((launcher / name).read_text(), "main" if has_packager else "candidate")
+                self.assertIn("//ci/deploy:bundle_test", args)
 
 
 if __name__ == "__main__":
-    WORKFLOW = Path(sys.argv[1])
+    BUILD_SCRIPT = Path(sys.argv[1]).resolve()
     unittest.main(argv=[sys.argv[0]])
