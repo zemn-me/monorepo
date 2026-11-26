@@ -11,7 +11,7 @@ import { pulumiCommand } from '#root/ts/pulumi/cli.js';
 
 const exec = promisify(execFile);
 
-export async function verifyBundle(home: string) {
+export async function verifyProviders(home: string) {
 	const { command } = await pulumiCommand();
 	const run = (args: string[], cwd: string, env: NodeJS.ProcessEnv) =>
 		exec(command, args, { cwd, env: { ...process.env, ...env } });
@@ -39,7 +39,7 @@ export async function verifyBundle(home: string) {
 				installed.some(
 					p => p.kind === 'resource' && p.name === name && p.version === version
 				),
-				`Bundle is missing ${name}@${version}`
+				`Missing Pulumi provider ${name}@${version}`
 			);
 			await run(
 				['package', 'info', `${name}@${version}`],
@@ -64,7 +64,7 @@ resources:
 	);
 	const env = {
 		PULUMI_BACKEND_URL: pathToFileURL(home).href,
-		PULUMI_CONFIG_PASSPHRASE: 'bundle-test',
+		PULUMI_CONFIG_PASSPHRASE: 'provider-test',
 	};
 	await run(['stack', 'init', 'dev'], home, env);
 	await assert.rejects(
