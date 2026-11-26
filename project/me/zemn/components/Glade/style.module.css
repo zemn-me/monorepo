@@ -213,6 +213,13 @@ html:has(.main) {
 	grid: "topbar" auto "content" auto "footer" auto / minmax(0, 1fr);
 }
 
+@media screen {
+	.main.compact {
+		min-block-size: 100dvh;
+		grid-template-rows: auto 1fr auto;
+	}
+}
+
 .compact .headerBgv {
 	display: none;
 }

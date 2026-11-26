@@ -1044,6 +1044,28 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('places the whole footer at the bottom on a short page and follows the content on a long page', async () => {
+			try {
+				await driver.manage().window().setRect({ width: 1280, height: 900 });
+				const footer = By.css('[data-glade-footer]');
+				await driver.get(`${origin}/healthz`);
+				const viewport = await driver.executeScript<number>('return innerHeight');
+				const shortFooter = await driver.findElement(footer);
+				const short = await shortFooter.getRect();
+				expect(Math.abs(short.y + short.height - viewport)).toBeLessThan(1);
+				const divider = await shortFooter.findElement(By.css('h2')).getRect();
+				expect(divider.y).toBeGreaterThanOrEqual(short.y);
+
+				await driver.get(`${origin}/article/2026/kasimir`);
+				const long = await driver.findElement(footer).getRect();
+				const content = await driver.findElement(By.css('[data-glade-content]')).getRect();
+				expect(long.y).toBeGreaterThan(viewport);
+				expect(long.y).toBeGreaterThanOrEqual(content.y + content.height - 1);
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('prerenders the Glade layout only for routes in its group', async () => {
 			try {
 				for (const path of ['/', '/article', '/2026/endings']) {
