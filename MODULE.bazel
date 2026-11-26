@@ -1281,8 +1281,8 @@ aws_emulator = use_repo_rule("//bzl/aws_emulator:repositories.bzl", "aws_emulato
 
 aws_emulator(
     name = "aws_emulator_linux_amd64",
-    sha256 = "2bd8ace6e2ae46dff07a86b998ed0acbdf64cedfec2401b6691e866a1730805b",
-    url = "https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/aws-emulator_1.0.382-1_amd64.deb",
+    commit = "a978cc2cde36a474352a49bb53f79b30030a6585",  # v1.0.382
+    sha256 = "b3640a9060ffe02f78ea5536c782fbe90888b051076562d7ddf3530d3e1f9af6",
 )
 
 pulumi_providers = use_extension("//bzl/pulumi_providers:extensions.bzl", "pulumi_providers")

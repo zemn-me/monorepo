@@ -1,0 +1,264 @@
+diff --git a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/domain_name_socket.rs b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/domain_name_socket.rs
+index 7e60678..553cbda 100644
+--- a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/domain_name_socket.rs
++++ b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/domain_name_socket.rs
+@@ -60,8 +60,8 @@ const FORBIDDEN_MESSAGE: &str = super::data_plane::FORBIDDEN_MESSAGE;
+ /// The status a request whose `Host` is not the name this address was published for is
+ /// answered with — the status for a request that reached a server unwilling to answer for the
+ /// authority it named (RFC 9110 §15.5.22) — and the sentence beside it.
+-const MISDIRECTED_REQUEST: u16 = 421;
+-const NOT_THIS_DOMAIN_NAME: &str = "Misdirected Request";
++pub(super) const MISDIRECTED_REQUEST: u16 = 421;
++pub(super) const NOT_THIS_DOMAIN_NAME: &str = "Misdirected Request";
+
+ /// Open the socket `domain_name` is reached on, answering the socket itself and the
+ /// `host:port` it landed on — the address that record publishes as its `ApiGatewayDomainName`.
+@@ -221,8 +221,12 @@ fn addressed_to_this_domain_name(domain_name: &str, parts: &::http::request::Par
+         .get(::http::header::HOST)
+         .and_then(|value| value.to_str().ok())
+         .or_else(|| parts.uri.host())
+-        .map(::service_common::data_plane_addressing::host_only)
+         .unwrap_or_default();
++    accepts_host(domain_name, host)
++}
++
++pub(super) fn accepts_host(domain_name: &str, authority: &str) -> bool {
++    let host = ::service_common::data_plane_addressing::host_only(authority);
+     if host.is_empty() {
+         return false;
+     }
+@@ -305,10 +309,10 @@ fn addressed_mapping(record: &crate::state::DomainName, target: &::http::Uri) ->
+ /// an api the mapping does not name. The reading is the tree's one
+ /// (`service_common::data_plane_addressing::carries_a_dot_segment`), which resolves the
+ /// escapes before it splits the path, so a separator hidden in an escape is seen too.
+-fn matching_mapping<'r>(
++pub(super) fn matching_mapping<'r, 'p>(
+     record: &'r crate::state::DomainName,
+-    path: &'r str,
+-) -> Option<(&'r crate::state::ApiMapping, &'r str)> {
++    path: &'p str,
++) -> Option<(&'r crate::state::ApiMapping, &'p str)> {
+     if ::service_common::data_plane_addressing::carries_a_dot_segment(path) {
+         return None;
+     }
+diff --git a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke.rs b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke.rs
+index 5e063df..3014a1d 100644
+--- a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke.rs
++++ b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke.rs
+@@ -337,14 +337,32 @@ struct Addressed<'r> {
+     method: &'r str,
+     /// `None` when the request carries no host at all, which names no api and no service.
+     host: Option<&'r str>,
++    target_authority: Option<&'r str>,
+     path: &'r str,
+ }
+
+ impl<'r> Addressed<'r> {
++    fn regional_domain<'s>(
++        &self,
++        store: &'s ComAmazonawsApigatewayv2Apigatewayv2State,
++    ) -> Option<&'s crate::state::DomainName> {
++        let authority = self.target_authority.or(self.host)?;
++        authority.parse::<std::net::SocketAddr>().ok()?;
++        let key = store.domain_name_transport.key_at(authority)?;
++        store.domain_names.get(key)
++    }
++
++    fn accepts_regional_host(&self, domain: &crate::state::DomainName) -> bool {
++        self.host.is_some_and(|host| {
++            super::domain_name_socket::accepts_host(&domain.domain_name, host)
++        })
++    }
++
+     /// The reading of the request parts `Service::can_handle` is handed.
+     fn of_parts(parts: &'r http::request::Parts) -> Self {
+         Self {
+             method: parts.method.as_str(),
++            target_authority: parts.uri.authority().map(http::uri::Authority::as_str),
+             host: header_of(&parts.headers, "host")
+                 .or_else(|| parts.uri.authority().map(http::uri::Authority::as_str)),
+             path: parts.uri.path(),
+@@ -355,6 +373,7 @@ impl<'r> Addressed<'r> {
+     fn of_request(req: &'r RtRequest) -> Self {
+         Self {
+             method: req.method(),
++            target_authority: authority_of(req.uri()),
+             host: req.headers().get("host").or_else(|| authority_of(req.uri())),
+             path: path_of(req.uri()),
+         }
+@@ -367,6 +386,16 @@ impl<'r> Addressed<'r> {
+ struct Resolved<'s, 'r> {
+     api: &'s Api,
+     invoke_path: &'r str,
++    mapped_stage: Option<&'s str>,
++}
++
++impl<'s> Resolved<'s, '_> {
++    fn stage(&self) -> Option<(&'s Stage, String)> {
++        match self.mapped_stage {
++            Some(name) => Some((self.api.stages.get(name)?, normalised_path(self.invoke_path))),
++            None => stage_of(self.api, self.invoke_path),
++        }
++    }
+ }
+
+ /// The HTTP api `addressed` addresses, or `None` when this data plane serves it not at all.
+@@ -419,6 +448,19 @@ fn resolve<'s, 'r>(
+     store: &'s ComAmazonawsApigatewayv2Apigatewayv2State,
+     addressed: &Addressed<'r>,
+ ) -> Option<Resolved<'s, 'r>> {
++    // A relayed request reaches the exact address published for one domain. Its path
++    // is relative to that domain's mapping, even if it resembles a stage or an API ID.
++    if let Some(domain) = addressed.regional_domain(store) {
++        if !addressed.accepts_regional_host(domain) {
++            return None;
++        }
++        let (mapping, under) = super::domain_name_socket::matching_mapping(domain, addressed.path)?;
++        return Some(Resolved {
++            api: servable(store.apis.get(&mapping.api_id))?,
++            invoke_path: under,
++            mapped_stage: Some(&mapping.stage),
++        });
++    }
+     // The `@connections` path space belongs to ApiGatewayManagementApi, on either host.
+     if addresses_connections(addressed.path) {
+         return None;
+@@ -433,12 +475,17 @@ fn resolve<'s, 'r>(
+     }
+     // LOCAL-ENDPOINT style first, because its marker is unambiguous on any host.
+     if let Some((api_id, invoke_path)) = local_endpoint_path(addressed.path) {
+-        return servable(store.apis.get(api_id)).map(|api| Resolved { api, invoke_path });
++        return servable(store.apis.get(api_id)).map(|api| Resolved {
++            api,
++            invoke_path,
++            mapped_stage: None,
++        });
+     }
+     if let Some(api_id) = addressed.host.and_then(api_id_of_host) {
+         return servable(store.apis.get(api_id)).map(|api| Resolved {
+             api,
+             invoke_path: addressed.path,
++            mapped_stage: None,
+         });
+     }
+     let (first, rest) = split_first_segment(addressed.path)?;
+@@ -457,6 +504,7 @@ fn resolve<'s, 'r>(
+         return Some(Resolved {
+             api,
+             invoke_path: rest,
++            mapped_stage: None,
+         });
+     }
+     if host_service.is_some() {
+@@ -473,6 +521,7 @@ fn resolve<'s, 'r>(
+     holding.next().is_none().then_some(Resolved {
+         api,
+         invoke_path: addressed.path,
++        mapped_stage: None,
+     })
+ }
+
+@@ -613,7 +662,10 @@ fn addressed_endpoint_api_id<'r>(addressed: &Addressed<'r>) -> Option<&'r str> {
+ /// Whether this data plane serves `addressed`.
+ fn claims<Eng: Send + Sync + 'static>(engine: &Eng, addressed: &Addressed<'_>) -> bool {
+     crate::state::service_state(engine)
+-        .is_some_and(|state| resolve(&state.lock(), addressed).is_some())
++        .is_some_and(|state| {
++            let store = state.lock();
++            addressed.regional_domain(&store).is_some() || resolve(&store, addressed).is_some()
++        })
+ }
+
+ /// Whether the request presents a SigV4 credential at all — in the `Authorization` header a
+@@ -936,6 +988,16 @@ fn resolved<Eng: Send + Sync + 'static>(
+     // `execute-api` endpoint that resolves to no api `404` `{"message": "Not Found"}`, and
+     // an endpoint that resolves to nothing has no CORS configuration to decorate it with.
+     let Some(resolved) = resolve(&store, &addressed) else {
++        if let Some(domain) = addressed.regional_domain(&store) {
++            if !addressed.accepts_regional_host(domain) {
++                return Err(Box::new(json_response(
++                    super::domain_name_socket::MISDIRECTED_REQUEST,
++                    super::domain_name_socket::NOT_THIS_DOMAIN_NAME,
++                    None,
++                )));
++            }
++            return Err(Box::new(forbidden()));
++        }
+         return Err(Box::new(not_found()));
+     };
+     // The DEFAULT endpoint this request was addressed at serves nothing while the api turned
+@@ -946,7 +1008,7 @@ fn resolved<Eng: Send + Sync + 'static>(
+     // endpoint, so what the endpoint answers is the SAME answer as for an endpoint that
+     // serves no such api ([`not_found`]): a client probing the default endpoint cannot tell a
+     // disabled one from one that was never there, which is the point of the member.
+-    if !super::data_plane::serves_default_endpoint(resolved.api) {
++    if resolved.mapped_stage.is_none() && !super::data_plane::serves_default_endpoint(resolved.api) {
+         tracing::debug!(
+             api_id = %resolved.api.api_id,
+             "this api's default execute-api endpoint is disabled, so it serves nothing"
+@@ -994,7 +1056,7 @@ fn resolve_answer(
+     // that is not there — the same thing a path no route matches names — so it is the
+     // endpoint's `404`: that is what makes a DELETED stage stop serving, rather than keep
+     // answering for an api whose records no longer hold it.
+-    let Some((stage, route_path)) = stage_of(api, resolved.invoke_path) else {
++    let Some((stage, route_path)) = resolved.stage() else {
+         tracing::debug!(
+             api_id = %api.api_id,
+             path = %resolved.invoke_path,
+diff --git a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/access_logs.rs b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/access_logs.rs
+index f97ab50..ebd89f1 100644
+--- a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/access_logs.rs
++++ b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/access_logs.rs
+@@ -108,7 +108,7 @@ fn planned<Eng: Send + Sync + 'static>(
+     let store = state.lock();
+     let resolved = super::resolve(&store, &super::Addressed::of_request(req))?;
+     let api = resolved.api;
+-    let (stage, route_path) = super::stage_of(api, resolved.invoke_path)?;
++    let (stage, route_path) = resolved.stage()?;
+     let settings = stage.access_log_settings.as_ref()?;
+     let destination = settings.destination_arn.as_deref()?;
+     let format = settings.format.as_deref()?;
+diff --git a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/request_metrics.rs b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/request_metrics.rs
+index a6a6e8c..898fb05 100644
+--- a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/request_metrics.rs
++++ b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/src/service/invoke/request_metrics.rs
+@@ -162,7 +162,7 @@ fn planned<Eng: Send + Sync + 'static>(
+     let resolved = super::resolve(&store, &super::Addressed::of_request(req))?;
+     let api = resolved.api;
+     let mut series = vec![api_series(&api.api_id)];
+-    if let Some((stage, route_path)) = super::stage_of(api, resolved.invoke_path) {
++    if let Some((stage, route_path)) = resolved.stage() {
+         let mut stage_series = api_series(&api.api_id);
+         stage_series.insert(STAGE_DIMENSION.to_string(), stage.stage_name.clone());
+         series.push(stage_series.clone());
+diff --git a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/tests/all/custom_domain_mapping_invoke.rs b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/tests/all/custom_domain_mapping_invoke.rs
+index bd51b44..db71229 100644
+--- a/services/service-com-amazonaws-apigatewayv2-apigatewayv2/tests/all/custom_domain_mapping_invoke.rs
++++ b/services/service-com-amazonaws-apigatewayv2-apigatewayv2/tests/all/custom_domain_mapping_invoke.rs
+@@ -391,6 +391,26 @@ async fn a_request_to_a_custom_domain_name_is_served_by_the_stage_its_mapping_na
+         }
+     }
+
++    // CloudFront dispatches to the origin's absolute URI in-process, while its policy
++    // independently chooses which Host header the origin receives.
++    for host in [domain, authority.as_str(), "other.api.example.com"] {
++        let request = http::Request::builder()
++            .uri(format!("https://{authority}/shop/eu/items?q=orbital"))
++            .header("host", host)
++            .body(bytes::Bytes::new())
++            .expect("valid origin request");
++        let response = emulator.dispatch(request).await;
++        if host == "other.api.example.com" {
++            assert_eq!(response.status().as_u16(), MISDIRECTED);
++        } else {
++            assert_eq!(response.status().as_u16(), SERVED);
++            let answer: Value = serde_json::from_slice(response.body()).unwrap();
++            assert_eq!(answer["api"], keyed_api);
++            assert_eq!(answer["stage"], "prod");
++            assert_eq!(answer["query"], "q=orbital");
++        }
++    }
++
+     // A mapping that is DELETED stops routing: the path it answered reaches no api of the
+     // account, while the mapping beside it serves as before.
+     let (status, deleted) = control(

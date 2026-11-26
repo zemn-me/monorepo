@@ -283,6 +283,7 @@ py_venv(
     name = "venv",
     deps = [
         "//bzl/aws_emulator",
+        "//bzl/aws_emulator:build_emulator",
         "//bzl/aws_xml",
         "//bzl/aws_xml:generate",
         "//bzl/versioning",
