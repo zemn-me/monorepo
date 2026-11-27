@@ -360,6 +360,13 @@ go_deps.gazelle_override(
     directives = ["gazelle:proto_rule @com_google_protobuf//bazel:proto_library.bzl%proto_library"],
     path = "github.com/bazelbuild/buildtools",
 )
+
+# Keep Compose's embedded JSON schemas in their parent Bazel package.
+# The data directory contains only schemas and a package documentation stub.
+go_deps.gazelle_override(
+    directives = ["gazelle:exclude cli/compose/schema/data/doc.go"],
+    path = "github.com/docker/cli",
+)
 go_deps.gazelle_override(
     directives = ["gazelle:proto disable_global"],
     path = "github.com/nyaruka/phonenumbers/v2",
@@ -420,6 +427,7 @@ use_repo(
     "com_github_invopop_jsonschema",
     "com_github_itchyny_gojq",
     "com_github_modelcontextprotocol_go_sdk",
+    "com_github_nektos_act",
     "com_github_nyaruka_phonenumbers_v2",
     "com_github_nytimes_gziphandler",
     "com_github_oapi_codegen_nethttp_middleware",
@@ -428,10 +436,13 @@ use_repo(
     "com_github_openai_openai_go_v3",
     "com_github_rhysd_actionlint",
     "com_github_sergi_go_diff",
+    "com_github_sirupsen_logrus",
+    "com_github_stretchr_testify",
     "com_github_tdewolff_parse_v2",
     "com_github_tebeka_selenium",
     "com_github_twilio_twilio_go",
     "com_github_xeipuuv_gojsonschema",
+    "in_gopkg_yaml_v3",
     "org_golang_google_protobuf",
     "org_golang_x_image",
     "org_golang_x_sync",
@@ -441,6 +452,13 @@ use_repo(
 
 bazel_dep(name = "rules_python_gazelle_plugin", version = "2.4.2")
 bazel_dep(name = "aspect_rules_py", version = "1.8.4")
+
+github_action_archives = use_repo_rule("//ci/workflows:action_cache.bzl", "github_action_archives")
+
+github_action_archives(
+    name = "workflow_action_archives",
+    lock = "//ci/workflows:actions.lock.json",
+)
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 

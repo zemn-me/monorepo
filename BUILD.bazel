@@ -287,6 +287,8 @@ py_venv(
         "//bzl/aws_xml:generate",
         "//bzl/versioning",
         "//bzl/versioning:release",
+        "//ci/workflows",
+        "//ci/workflows:action_lock",
         "//ini/git/merge_drivers/bazel_lockfile",
         "//md:md_py",
         "//md:readme_main",

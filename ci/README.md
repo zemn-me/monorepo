@@ -11,6 +11,22 @@ sizes on the combined commit, including the deployment bundle and its smoke test
 Both stages run the Go module and Gazelle checks. After they pass, the merge-group
 Presubmit publishes its bundle for Staging to deploy from that exact run.
 
+Run `./sh/bin/go test ./ci/workflows` or
+`./sh/bin/bazel test //ci/workflows:workflows_test` to exercise Presubmit,
+Staging, and Submit. The Go tests import the `act` workflow planner and runner
+at the version pinned in `go.mod`. They run jobs in temporary workspaces with
+fixture build outputs and cloud services, then check which revision reaches
+deployment. The tests read permissions and queue settings directly from the
+workflow files because GitHub enforces them.
+
+`//ci/workflows:action_cache` supplies the emulator with the complete source
+archive for each pinned action. Bazel verifies each ZIP against its SHA-256
+in `ci/workflows/actions.lock.json` and converts it to the tar format act
+expects. The emulator reads upstream action metadata and uses fixtures for
+Node execution and hosted-runner disk cleanup. To refresh the lock after a
+`uses:` change, run `./sh/bin/bazel run //ci/workflows:action_lock`.
+Renovate refreshes this lock through the shared `./sh/postUpgrade.sh` hook.
+
 The merge queue repeats the Tiberian Sun browser integration test five times through
 `ci-local` (also inherited by both remote CI profiles). Every run must pass;
 automatic test retries are disabled. The BEP annotator emits an error for any

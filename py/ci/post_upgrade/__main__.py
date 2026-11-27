@@ -86,6 +86,7 @@ def bazel_update_modfile():
 	return bazel(["mod", "tidy"])
 
 def modify_non_bazel_lockfiles():
+	bazel_run(["@@//ci/workflows:action_lock"])
 	pnpm_lockfile()
 	sync_go_versions()
 	go_mod_tidy()

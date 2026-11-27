@@ -1,6 +1,11 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
+exports_files(
+    ["find_deploy_bundle.py"],
+    visibility = ["//ci/workflows:__pkg__"],
+)
+
 py_library(
     name = "ci",
     srcs = [
