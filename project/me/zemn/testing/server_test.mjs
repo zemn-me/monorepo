@@ -36,6 +36,21 @@ test('print footers receive the page title in the initial HTML', async () => {
 	}
 });
 
+test('the Latin motto appears wherever the shared site footer is rendered', async () => {
+	const motto = /<i\b[^>]*lang="la"[^>]*>fortis esto; mitis esto<\/i>/g;
+	for (const [route, expected] of [
+		['/', 1],
+		['/article', 1],
+		['/experiments/astrological-chart', 1],
+		['/2026/endings', 0],
+		['/experiments/tiberian-sun', 0],
+	]) {
+		const response = await request(route);
+		assert.equal(response.status, 200, route);
+		assert.equal((await response.text()).match(motto)?.length ?? 0, expected, route);
+	}
+});
+
 test('unprerendered routes and query-dependent loader requests reach the live router', async () => {
 	await assert.rejects(access(path.join(server, 'prerendered/healthz.html')));
 	await assert.rejects(access(path.join(server, 'prerendered/journal.html')));
