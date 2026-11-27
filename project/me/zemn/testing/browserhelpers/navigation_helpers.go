@@ -11,6 +11,7 @@ import (
 	"github.com/tebeka/selenium"
 )
 
+const homepageCardSelector = "div[data-glade-banner] > a[aria-label='Go to homepage']"
 const pageLoadingSelector = "[role='status'][aria-label='Loading page']"
 
 // AssertSharedNavigation checks pending and completed navigations after login.
@@ -37,7 +38,7 @@ return bar.top >= 0 && bar.height < 100 && heading.top >= bar.bottom && heading.
 		var observed any
 		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 			var err error
-			observed, err = d.ExecuteScript(script, []any{pageLoadingSelector})
+			observed, err = d.ExecuteScript(script, []any{pageLoadingSelector, homepageCardSelector})
 			return observed != nil, err
 		}); err != nil || observed != true {
 			t.Fatalf("%s loading feedback at width %d: %v (%v)", destination, width, observed, err)
@@ -112,6 +113,13 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err != nil {
 			t.Fatal(err)
 		}
+		if previousURL == publicOrigin+"/" {
+			// Back updates the URL before the router commits the homepage card.
+			// Let that navigation finish before pausing the next route request.
+			if _, err := WaitForElement(driver, selenium.ByCSSSelector, homepageCardSelector); err != nil {
+				t.Fatal(err)
+			}
+		}
 		menu, err := driver.FindElement(selenium.ByCSSSelector, "summary[aria-label='Open navigation menu']")
 		if err != nil {
 			t.Fatal(err)
@@ -126,10 +134,10 @@ if (!status) return null;
 if (!status.checkVisibility({opacityProperty: true, visibilityProperty: true})) return 'loading status hidden';
 const rect = status.getBoundingClientRect();
 if (location.pathname === '/') {
-	const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]');
-	const logo = card.querySelector(':scope > svg').getBoundingClientRect();
+	const card = document.querySelector(arguments[1]);
 	const rays = status.querySelector('svg');
-	if (!card.contains(status) || !rays) return 'expected loading rays on the homepage logo';
+	if (!card?.contains(status) || !rays) return 'expected loading rays on the homepage logo';
+	const logo = card.querySelector(':scope > svg').getBoundingClientRect();
 	if (!Array.from(rays.querySelectorAll('line')).some(line => line.getTotalLength() > 10)) return null;
 	const bounds = rays.getBoundingClientRect();
 	return Math.abs((bounds.left + bounds.right) - (logo.left + logo.right)) < 1 &&
@@ -153,9 +161,9 @@ return rect.width > 0 && rect.height > 0 && rect.left >= bar.left && rect.right 
 				homeLayout, err = d.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
 const rect = bar.getBoundingClientRect();
 const hero = document.querySelector('figure').getBoundingClientRect();
-const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]');
+const card = document.querySelector(arguments[0]);
 const menu = bar.querySelector('summary').getBoundingClientRect();
-return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.right - hero.right) < 1 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, nil)
+return rect.top === 0 && Math.abs(rect.left - hero.left) < 1 && Math.abs(rect.right - hero.right) < 1 && rect.height < 100 && !bar.querySelector('a[aria-label="Go to homepage"]') && !!card && card.textContent.includes('Thomas') && getComputedStyle(document.querySelector('figure')).display !== 'none' && menu.width >= 44 && menu.height >= 44 && !!bar.querySelector('button[aria-label="Go back"]');`, []any{homepageCardSelector})
 				return homeLayout == true, err
 			})
 			if err != nil {
