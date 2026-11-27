@@ -272,6 +272,30 @@ it('grows and retracts ray geometry with the navigation state', () => {
 	expect(rayLength()).toBe(0);
 });
 
+it.each([
+	['/', '/article'],
+	['/article', '/'],
+])('finishes the same ray animation when navigating from %s to %s', (from, to) => {
+	pathname = from;
+	act(() => root.render(<Glade navigationPending />));
+	act(() => jest.advanceTimersByTime(200));
+	advanceSpring(80);
+	const ray = loadingStatus()?.querySelector('line');
+	const lengthBeforeNavigation = rayLength();
+	expect(lengthBeforeNavigation).toBeGreaterThan(0);
+
+	pathname = to;
+	act(() => root.render(<Glade />));
+	expect(loadingStatus()).toBeNull();
+	expect(container.querySelector('svg line')).toBe(ray);
+	expect(rayLength()).toBe(lengthBeforeNavigation);
+	advanceSpring(80);
+	expect(rayLength()).toBeGreaterThan(0);
+	expect(rayLength()).toBeLessThan(lengthBeforeNavigation);
+	advanceSpring(600);
+	expect(rayLength()).toBe(0);
+});
+
 it('shows and hides full ray geometry immediately with reduced motion', () => {
 	reducedMotion = true;
 	act(() => root.render(<Glade navigationPending />));
