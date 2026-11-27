@@ -16,7 +16,11 @@ on: # yamllint disable-line rule:truthy
     - cron: '0/15 * * * *'
 jobs:
   renovate:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     permissions:
+      actions: read
+      issues: read
+      pull-requests: read
       contents: read
       id-token: write
     runs-on: ubuntu-latest
@@ -30,6 +34,51 @@ jobs:
           with open("package.json") as manifest:
               print("RENOVATE_VERSION=" + json.load(manifest)["devDependencies"]["renovate"])
           PYTHON
+      - name: Prepare release lookup
+        run: install -d -m 0777 "$RUNNER_TEMP/renovate-lookup"
+      - name: Look up candidate pins without creating update branches
+        uses: renovatebot/github-action@acdd6bda8b035c99ce59d5675816af2aa65a1774 # v46.3.14
+        with:
+          configurationFile: .github/renovate-global.json
+          docker-cmd-file: .github/renovate-entrypoint.sh
+          docker-user: root
+          docker-volumes: ${{ runner.temp }}/renovate-lookup:/observations
+          renovate-version: ${{ env.RENOVATE_VERSION }}
+          token: ${{ github.token }}
+        env:
+          RENOVATE_AUTODISCOVER: 'false'
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_DRY_RUN: lookup
+          RENOVATE_REPORT_TYPE: file
+          RENOVATE_REPORT_PATH: /observations/lookup.json
+      - name: Restore the previous default-branch observation
+        if: github.run_attempt == 1
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          # An expired or missing snapshot starts a fresh wait. Never fall back to an older digest.
+          previous=$(gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/renovate.yml/runs" \
+            -f branch="$DEFAULT_BRANCH" -f status=completed -F per_page=100 \
+            --jq '[.workflow_runs[] | select((.event == "schedule" or .event == "workflow_dispatch") and .head_repository.id == .repository.id)] | max_by(.updated_at) | select(.) | [.id, .run_attempt, .head_sha] | @tsv')
+          if [[ -n "$previous" ]]; then
+            read -r run attempt previous_sha <<< "$previous"
+            artifact="renovate-observations-$attempt"
+            available=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts" \
+              --jq ".artifacts[] | select(.name == \"$artifact\" and (.expired | not)) | .id")
+            if [[ -n "$available" ]]; then
+              # A dispatch can target a tag with the same name as the default branch.
+              ancestry=$(gh api "repos/$GITHUB_REPOSITORY/compare/$previous_sha...$GITHUB_SHA" --jq .status)
+              if [[ "$ancestry" == identical || "$ancestry" == ahead ]]; then
+                gh run download "$run" --name "$artifact" --dir "$RUNNER_TEMP/renovate-history"
+              fi
+            fi
+          fi
+      - name: Age the exact candidate pins
+        run: |
+          mkdir -p "$RUNNER_TEMP/renovate-history"
+          node .github/renovate-observations.mjs "$RUNNER_TEMP/renovate-lookup/lookup.json" \
+            "$RUNNER_TEMP/renovate-history/observations.json" "$RUNNER_TEMP/renovate-aged.json"
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3.0.0
         name: Acquire federated GCloud credentials for secrets...
         id: secret_auth
@@ -45,10 +94,27 @@ jobs:
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@acdd6bda8b035c99ce59d5675816af2aa65a1774 # v46.3.14
         with:
-          configurationFile: .github/renovate-global.json
+          configurationFile: ${{ runner.temp }}/renovate-aged.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
+          docker-volumes: |
+            /tmp:/tmp
+            ${{ runner.temp }}/renovate-lookup:/observations
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
+        env:
+          RENOVATE_REPORT_TYPE: file
+          RENOVATE_REPORT_PATH: /observations/update.json
+      - name: Discard pins that changed during the update run
+        run: |
+          node .github/renovate-observations.mjs "$RUNNER_TEMP/renovate-lookup/update.json" \
+            "$RUNNER_TEMP/renovate-history/observations.json"
+      - name: Save confirmed observations
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: renovate-observations-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/renovate-history/observations.json
+          if-no-files-found: error
+          retention-days: 14
     env:
       LOG_LEVEL: 'debug'

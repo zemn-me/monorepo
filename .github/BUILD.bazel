@@ -16,6 +16,24 @@ exports_files(
 )
 
 js_test(
+    name = "renovate_observations_test",
+    size = "small",
+    data = [
+        "renovate-global.json",
+        "renovate-observations.mjs",
+        "//:node_modules/renovate",
+    ],
+    entry_point = "renovate_observations_test.mjs",
+    node_toolchain = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@renovate_node_darwin_arm64//:toolchain",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@renovate_node_darwin_amd64//:toolchain",
+        "@bazel_tools//src/conditions:linux_aarch64": "@renovate_node_linux_arm64//:toolchain",
+        "@bazel_tools//src/conditions:linux_x86_64": "@renovate_node_linux_amd64//:toolchain",
+        "@bazel_tools//src/conditions:windows_x64": "@renovate_node_windows_amd64//:toolchain",
+    }),
+)
+
+js_test(
     name = "renovate_bazel_releases_test",
     size = "small",
     data = [

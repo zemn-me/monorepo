@@ -13,8 +13,8 @@ const goMod = await readFile('go.mod', 'utf8');
 GlobalConfig.set({ localDir: process.cwd() });
 
 assert.equal(config.minimumReleaseAge, '3 days');
-assert.equal(config.minimumReleaseAgeBehaviour, 'timestamp-optional');
-assert.equal(checkMinimumReleaseAge(config, undefined).isPending, false);
+assert.equal(config.minimumReleaseAgeBehaviour, 'timestamp-required');
+assert.equal(checkMinimumReleaseAge(config, undefined).isPending, true);
 const daysAgo = days => new Date(Date.now() - days * 86_400_000).toISOString();
 assert.equal(checkMinimumReleaseAge(config, daysAgo(2)).isPending, true);
 assert.equal(checkMinimumReleaseAge(config, daysAgo(4)).isPending, false);
