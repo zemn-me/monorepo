@@ -221,11 +221,9 @@ export default function Glade(props: GladeProps) {
 					<span>⁂</span>
 				</h2>
 				<FooterEmblem />
-				{isHomepage ? (
-					<i className={style.tagline}>
-						This is what we become, when our eyes are open.
-					</i>
-				) : null}
+				<i className={style.tagline} lang="la">
+					fortis esto; mitis esto
+				</i>
 				{/* The <small> HTML element represents side-comments and
 					small print, like copyright and legal text, independent of
 					its styled presentation. By default, it renders text within
