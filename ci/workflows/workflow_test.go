@@ -23,42 +23,68 @@ func (f *fixture) deployments(t *testing.T) []string {
 	return strings.FieldsFunc(readFile(t, filepath.Join(f.root, "deployments")), func(r rune) bool { return r == '\n' })
 }
 
+func (f *fixture) statuses(t *testing.T) []string {
+	t.Helper()
+	return strings.FieldsFunc(readFile(t, filepath.Join(f.root, "statuses")), func(r rune) bool { return r == '\n' })
+}
+
 func TestMergeGroupDeploysTestedBundleAfterMain(t *testing.T) {
 	f := newFixture(t)
 	f.publishMain(t, "pinned-main")
-	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
-	f.run(t, "staging", "merge_group", "Staging", "success", map[string]string{"MAIN_SHA": "pinned-main"})
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "success", nil)
+	f.run(t, "staging", "workflow_dispatch", "ReportStaging", "success", map[string]string{"MAIN_SHA": "pinned-main"})
 	require.Equal(t, []string{"main pinned-main", "candidate " + f.sha}, f.deployments(t))
+	require.Equal(t, []string{"Staging pending " + dispatchedURL, "Staging success " + dispatchedURL}, f.statuses(t))
 }
 
 func TestStagingRejectsAdvancedQueueRef(t *testing.T) {
 	f := newFixture(t)
 	f.publishMain(t, "pinned-main")
-	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "success", nil)
 	f.git(t, "checkout", "-q", queueBranch)
 	f.git(t, "commit", "--allow-empty", "-qm", "queue advanced")
 	f.git(t, "checkout", "-q", "main")
-	f.run(t, "staging", "merge_group", "Staging", "failure", map[string]string{"MAIN_SHA": "pinned-main"})
+	f.run(t, "staging", "workflow_dispatch", "ReportStaging", "failure", map[string]string{"MAIN_SHA": "pinned-main"})
 	require.Empty(t, f.deployments(t))
+	require.Equal(t, []string{"Staging pending " + dispatchedURL, "Staging failure " + dispatchedURL}, f.statuses(t))
+}
+
+func TestOlderDispatchCannotOverwriteAnotherRunsPendingStatus(t *testing.T) {
+	f := newFixture(t)
+	f.publishMain(t, "pinned-main")
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "success", nil)
+	newer := "Staging pending https://github.com/owner/repo/actions/runs/74"
+	require.NoError(t, appendLine(filepath.Join(f.root, "statuses"), newer))
+	f.run(t, "staging", "workflow_dispatch", "ReportStaging", "success", nil)
+	require.Equal(t, []string{"Staging pending " + dispatchedURL, newer}, f.statuses(t))
+}
+
+func TestFailedDispatchFailsRequiredPresubmit(t *testing.T) {
+	f := newFixture(t)
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "failure", map[string]string{"FAIL_DISPATCH": "true"})
+	require.NoFileExists(t, filepath.Join(f.root, "dispatch.json"))
+	require.Empty(t, f.statuses(t))
 }
 
 func TestFailuresReachRequiredGate(t *testing.T) {
 	f := newFixture(t)
 	f.publishMain(t, "pinned-main")
-	f.run(t, "presubmit", "merge_group", "Presubmit", "failure", map[string]string{"FAIL_PRESUBMIT": "true"})
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "failure", map[string]string{"FAIL_PRESUBMIT": "true"})
 	require.NoDirExists(t, filepath.Join(f.root, "artifacts", "42"))
+	require.NoFileExists(t, filepath.Join(f.root, "dispatch.json"))
+	require.Empty(t, f.statuses(t))
 	// A producer can publish its candidate before a later step fails or is cancelled.
-	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "success", nil)
 	for _, result := range []string{"failure", "cancelled"} {
 		t.Run(result, func(t *testing.T) {
-			f.run(t, "staging", "merge_group", "Staging", "failure", map[string]string{"MAIN_SHA": "pinned-main", "PRODUCER_RESULT": result})
+			f.run(t, "staging", "workflow_dispatch", "ReportStaging", "failure", map[string]string{"MAIN_SHA": "pinned-main", "PRODUCER_RESULT": result})
 			require.Empty(t, f.deployments(t))
 		})
 	}
 	for _, stage := range []string{"main", "candidate"} {
 		t.Run(stage, func(t *testing.T) {
 			require.NoError(t, writeFile(filepath.Join(f.root, "deployments"), "", 0600))
-			f.run(t, "staging", "merge_group", "Staging", "failure", map[string]string{"MAIN_SHA": "pinned-main", "FAIL_DEPLOY": stage})
+			f.run(t, "staging", "workflow_dispatch", "ReportStaging", "failure", map[string]string{"MAIN_SHA": "pinned-main", "FAIL_DEPLOY": stage})
 			want := []string{"main pinned-main"}
 			if stage == "candidate" {
 				want = append(want, "candidate "+f.sha)
@@ -70,15 +96,17 @@ func TestFailuresReachRequiredGate(t *testing.T) {
 
 func TestStagingRejectsCancelledDeployment(t *testing.T) {
 	f := newFixture(t)
-	plan := f.planJob(t, "staging", "merge_group", "Staging")
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "success", nil)
+	plan := f.planJob(t, "staging", "workflow_dispatch", "ReportStaging")
 	// GitHub can cancel Deploy while the required gate still runs with always().
 	// Resume the real plan at the gate with that hosted-runner result.
 	plan.Stages = plan.Stages[len(plan.Stages)-1:]
 	gate := plan.Stages[0].Runs[0]
-	require.Equal(t, "Staging", gate.JobID)
+	require.Equal(t, "ReportStaging", gate.JobID)
 	require.Contains(t, gate.Job().Needs(), "Deploy")
 	gate.Workflow.Jobs["Deploy"].Result = "cancelled"
-	f.runPlan(t, "staging", "merge_group", "Staging", "failure", nil, plan)
+	f.runPlan(t, "staging", "workflow_dispatch", "ReportStaging", "failure", nil, plan)
+	require.Equal(t, []string{"Staging pending " + dispatchedURL, "Staging failure " + dispatchedURL}, f.statuses(t))
 }
 
 func TestPullRequestChecksWithoutPublishingOrDeploying(t *testing.T) {
@@ -86,6 +114,8 @@ func TestPullRequestChecksWithoutPublishingOrDeploying(t *testing.T) {
 	f.run(t, "presubmit", "pull_request", "Presubmit", "success", nil)
 	f.run(t, "staging-pr", "pull_request", "Staging", "success", nil)
 	require.NoDirExists(t, filepath.Join(f.root, "artifacts"))
+	require.NoFileExists(t, filepath.Join(f.root, "dispatch.json"))
+	require.Empty(t, f.statuses(t))
 	require.Empty(t, f.deployments(t))
 }
 
@@ -116,6 +146,7 @@ func TestPresubmitCache(t *testing.T) {
 
 func TestMissingMainArtifactBuildsPinnedProgram(t *testing.T) {
 	f := newFixture(t)
+	f.run(t, "presubmit", "merge_group", "DispatchStaging", "success", nil)
 	deploy := filepath.Join(f.repo, "ci/deploy")
 	var candidatePackaging []string
 	for _, name := range packaging {
@@ -142,7 +173,7 @@ func TestMissingMainArtifactBuildsPinnedProgram(t *testing.T) {
 			f.git(t, "commit", "-qm", name)
 			revision := f.git(t, "rev-parse", "HEAD")
 			f.git(t, "checkout", "-q", "main")
-			f.run(t, "staging", "merge_group", "MainBundle", "success", map[string]string{"MAIN_SHA": revision})
+			f.run(t, "staging", "workflow_dispatch", "MainBundle", "success", map[string]string{"MAIN_SHA": revision})
 			build := f.build(t)
 			require.Contains(t, build.Args, "//ci/deploy:bundle_test")
 			require.Contains(t, build.Args, "--config=ci")
@@ -255,11 +286,20 @@ func TestHostedRunnerContracts(t *testing.T) {
 		}
 		if name == "staging" {
 			var permissions map[string]string
-			job := workflow.Jobs["CandidateBundle"]
-			require.NoError(t, job.Permissions.Decode(&permissions))
-			require.Equal(t, map[string]string{"actions": "read"}, permissions)
+			verify := workflow.Jobs["PinMain"]
+			require.NoError(t, verify.Permissions.Decode(&permissions))
+			require.Equal(t, map[string]string{"actions": "read", "contents": "read"}, permissions)
+		}
+		if name == "presubmit" {
+			require.Equal(t, "${{ github.event_name == 'merge_group' && 'Build candidate' || 'Presubmit' }}", workflow.Jobs["Presubmit"].Name)
+			require.Equal(t, "${{ github.event_name == 'merge_group' && 'Presubmit' || 'Dispatch staging' }}", workflow.Jobs["DispatchStaging"].Name)
+			var permissions map[string]string
+			dispatch := workflow.Jobs["DispatchStaging"]
+			require.NoError(t, dispatch.Permissions.Decode(&permissions))
+			require.Equal(t, map[string]string{"actions": "write", "statuses": "write"}, permissions)
 		}
 	}
-	require.Equal(t, []string{"staging"}, providers["merge_group"])
+	require.Empty(t, providers["merge_group"])
+	require.Empty(t, providers["workflow_dispatch"])
 	require.Equal(t, []string{"staging-pr"}, providers["pull_request"])
 }

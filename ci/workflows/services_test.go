@@ -15,6 +15,8 @@ import (
 
 const marker = "test-only-cache-credential"
 const queueBranch = "gh-readonly-queue/main/pr-1"
+const candidateArtifactID = "456"
+const dispatchedURL = "https://github.com/owner/repo/actions/runs/73"
 
 var archives = []string{"layers_bundle.tar.gz", "runfile_aliases.tar"}
 var packaging = []string{"bundle.bzl", "bundle_test.sh", "deploy_failure_test.sh", "run.sh"}
@@ -131,6 +133,12 @@ func nodeAction(args []string) error {
 				return err
 			}
 		}
+		if name := os.Getenv("INPUT_NAME"); strings.HasPrefix(name, "staging-candidate-") {
+			if err := writeFile(artifact(os.Getenv("GITHUB_RUN_ID"), candidateArtifactID), name, 0644); err != nil {
+				return err
+			}
+			return appendLine(os.Getenv("GITHUB_OUTPUT"), "artifact-id="+candidateArtifactID)
+		}
 		return nil
 	case "actions/download-artifact":
 		run := os.Getenv("GITHUB_RUN_ID")
@@ -138,6 +146,16 @@ func nodeAction(args []string) error {
 			run = id
 		}
 		name := os.Getenv("INPUT_NAME")
+		if ids := os.Getenv("INPUT_ARTIFACT-IDS"); ids != "" {
+			if name != "" || ids != candidateArtifactID {
+				return fmt.Errorf("unexpected artifact selection: name %q, IDs %q", name, ids)
+			}
+			data, err := os.ReadFile(artifact(run, ids))
+			if err != nil {
+				return err
+			}
+			name = string(data)
+		}
 		if err := os.CopyFS(os.Getenv("INPUT_PATH"), os.DirFS(artifact(run, name))); err != nil {
 			return fmt.Errorf("download %q from run %s: %w", name, run, err)
 		}
@@ -171,33 +189,68 @@ func appendLine(path, value string) error {
 func artifact(run, name string) string { return filepath.Join(os.Getenv("FIXTURE_STORE"), run, name) }
 
 func github(args []string) error {
-	if len(args) >= 2 && slices.Equal(args[:2], []string{"run", "list"}) {
-		for flag, value := range map[string]string{
-			"--repo": "owner/repo", "--workflow": "presubmit.yml", "--event": "merge_group",
-			"--commit": os.Getenv("FIXTURE_SHA"), "--branch": queueBranch,
-		} {
-			i := slices.Index(args, flag)
-			if i < 0 || i+1 >= len(args) || args[i+1] != value {
-				return fmt.Errorf("unexpected run lookup: %v", args)
+	form := map[string]string{}
+	for i, arg := range args {
+		if arg == "-f" && i+1 < len(args) {
+			key, value, ok := strings.Cut(args[i+1], "=")
+			if ok {
+				form[key] = value
 			}
 		}
-		// The producer first appears, starts running, then finishes.
-		state := filepath.Join(os.Getenv("RUNNER_TEMP"), "lookups")
-		seen, err := os.ReadFile(state)
-		if err != nil && !os.IsNotExist(err) {
-			return err
-		}
-		switch len(seen) {
-		case 0:
-		case 1:
-			fmt.Println("42\t3\tin_progress\t")
-		default:
-			fmt.Println("42\t3\tcompleted\t" + os.Getenv("PRODUCER_RESULT"))
-		}
-		return writeFile(state, string(seen)+".", 0600)
 	}
 	for _, arg := range args {
 		switch {
+		case arg == "repos/owner/repo/actions/workflows/staging.yml/dispatches":
+			if !slices.Contains(args, "POST") || !slices.Contains(args, ".html_url") || form["ref"] != queueBranch || form["inputs[artifact-id]"] == "" {
+				return fmt.Errorf("invalid workflow dispatch: %q", args)
+			}
+			if os.Getenv("FAIL_DISPATCH") == "true" {
+				return fmt.Errorf("workflow dispatch rejected")
+			}
+			event, err := json.Marshal(map[string]any{
+				"ref": "refs/heads/" + form["ref"], "inputs": map[string]string{"artifact-id": form["inputs[artifact-id]"]},
+			})
+			if err != nil {
+				return err
+			}
+			fmt.Println(dispatchedURL)
+			return writeFile(os.Getenv("FIXTURE_DISPATCH"), string(event), 0600)
+		case arg == "repos/owner/repo/statuses/"+os.Getenv("FIXTURE_SHA"):
+			if !slices.Contains(args, "POST") {
+				return fmt.Errorf("expected a status POST: %q", args)
+			}
+			return appendLine(os.Getenv("FIXTURE_STATUSES"), strings.Join([]string{form["context"], form["state"], form["target_url"]}, " "))
+		case arg == "repos/owner/repo/commits/"+os.Getenv("FIXTURE_SHA")+"/status":
+			statuses, err := os.ReadFile(os.Getenv("FIXTURE_STATUSES"))
+			if err != nil {
+				return err
+			}
+			var owner string
+			for line := range strings.SplitSeq(string(statuses), "\n") {
+				fields := strings.Fields(line)
+				if len(fields) == 3 && fields[0] == "Staging" {
+					owner = fields[2]
+				}
+			}
+			fmt.Println(owner)
+			return nil
+		case strings.HasSuffix(arg, "/actions/artifacts/"+candidateArtifactID):
+			name, err := os.ReadFile(artifact("42", candidateArtifactID))
+			if err != nil {
+				return err
+			}
+			return json.NewEncoder(os.Stdout).Encode(map[string]any{
+				"name": string(name), "expired": false, "workflow_run": map[string]int{"id": 42},
+			})
+		case strings.HasSuffix(arg, "/actions/runs/42/attempts/3"):
+			return json.NewEncoder(os.Stdout).Encode(map[string]any{
+				"event": "merge_group", "path": ".github/workflows/presubmit.yml", "run_attempt": 3,
+				"head_branch": queueBranch, "head_sha": os.Getenv("FIXTURE_SHA"),
+			})
+		case strings.HasSuffix(arg, "/actions/runs/42/attempts/3/jobs"):
+			return json.NewEncoder(os.Stdout).Encode(map[string]any{"jobs": []map[string]string{
+				{"name": "Build candidate", "conclusion": os.Getenv("PRODUCER_RESULT")},
+			}})
 		case strings.HasSuffix(arg, "/git/ref/heads/main"):
 			if os.Getenv("MAIN_SHA") == "api-error" {
 				return fmt.Errorf("fixture main lookup failed")
