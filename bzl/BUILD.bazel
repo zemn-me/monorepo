@@ -12,6 +12,7 @@ exports_files([
     "rules_itest_http_timeout.patch",
     "rules_itest_port_reservations.patch",
     "rules_distroless_ubuntu_fallback.patch",
+    "rules_lint_format_test_attrs.patch",
     "rules_python_installer.patch",
 ])
 

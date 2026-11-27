@@ -95,7 +95,8 @@ copy_to_bin(
 
 js_test(
     name = "server_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     data = [":tooling"],
     entry_point = "server_test.mjs",
 )

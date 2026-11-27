@@ -64,6 +64,7 @@ alias(
 
 sh_test(
     name = "smoke",
+    size = "small",
     srcs = ["smoke.sh"],
     data = [":chromedriver"],
     env = {

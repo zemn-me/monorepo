@@ -17,6 +17,7 @@ go_library(
 
 go_test(
     name = "public_assets_test",
+    size = "small",
     srcs = ["public_assets_test.go"],
     embed = [":public_assets_lib"],
 )

@@ -54,7 +54,7 @@ def deploy_bundle():
     )
     sh_test(
         name = "bundle_test",
-        size = "medium",
+        size = "large",
         srcs = ["bundle_test.sh"],
         args = [
             "$(rootpath run.sh)",

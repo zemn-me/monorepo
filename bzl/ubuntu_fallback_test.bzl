@@ -1,3 +1,4 @@
+load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@rules_distroless//apt/private:deb_import.bzl", "deb_package_urls")
 
@@ -33,4 +34,4 @@ def _policy_test_impl(ctx):
 _policy_test = unittest.make(_policy_test_impl)
 
 def ubuntu_fallback_test_suite(name):
-    unittest.suite(name, _policy_test)
+    unittest.suite(name, partial.make(_policy_test, size = "small"))

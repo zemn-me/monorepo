@@ -156,6 +156,7 @@ def npm_pkg(
 
     _release_files_test(
         name = name + "_release_inputs_test",
+        size = "small",
         forbidden = ["//:package_json"],
         release_files = ":" + name + "_version_lock_files",
     )

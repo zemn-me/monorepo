@@ -12,7 +12,8 @@ def jsonschema_test(name, srcs, schema):
 
         sh_test(
             name = batch_name,
-            size = "small",
+            size = "medium",
+            timeout = "short",
             srcs = ["//go/cmd/jsonschemavalidator:jsonschema_test.sh"],
             data = batch + [
                 schema,

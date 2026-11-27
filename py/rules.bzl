@@ -11,6 +11,7 @@ def py_test(name, **kwargs):
 
     ruff_test(
         name = name + "_ruff_lint",
+        size = "small",
         srcs = [name],
     )
 
@@ -22,6 +23,7 @@ def py_library(name, **kwargs):
 
     ruff_test(
         name = name + "_ruff_lint",
+        size = "small",
         srcs = [name],
     )
 
@@ -33,5 +35,6 @@ def py_binary(name, **kwargs):
 
     ruff_test(
         name = name + "_ruff_lint",
+        size = "small",
         srcs = [name],
     )

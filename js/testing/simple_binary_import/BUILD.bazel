@@ -30,6 +30,7 @@ genrule(
 
 diff_test(
     name = "hello_gen_test",
+    size = "small",
     file1 = "golden.txt",
     file2 = "hello_gen_out.txt",
 )
