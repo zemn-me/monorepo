@@ -61,16 +61,17 @@ const prCachePrincipal = `principalSet://iam.googleapis.com/projects/${gcpProjec
 const githubActionsServiceAccountEmail = `monorepo-root@${gcpProjectId}.iam.gserviceaccount.com`;
 const githubActionsServiceAccountName = `projects/${gcpProjectId}/serviceAccounts/${githubActionsServiceAccountEmail}`;
 const presubmitWorkflowRef = `${githubRepository}/.github/workflows/presubmit.yml`;
-// Workflow guards are editable by PRs; enforce the event boundary in GCP too.
-const presubmitMergeQueueCondition = [
-	'assertion.event_name == "merge_group"',
-	`assertion.workflow_ref.startsWith("${presubmitWorkflowRef}@refs/heads/gh-readonly-queue/")`,
-].join(' && ');
+const stagingWorkflowRef = `${githubRepository}/.github/workflows/staging.yml`;
+const queueEvent = 'assertion.event_name == "merge_group"';
+const queueRef = 'assertion.ref.startsWith("refs/heads/gh-readonly-queue/")';
+const queueStaging = `(${queueEvent} && ${queueRef} && assertion.workflow_ref == "${stagingWorkflowRef}@" + assertion.ref)`;
+const presubmitSubject = `repo:${githubRepository}:environment:presubmit`;
 
+// The full test job shares Staging's workflow file but has its own OIDC subject.
 const workflowConditions = {
-	presubmit: presubmitMergeQueueCondition,
+	presubmit: `(${queueEvent} && ${queueRef} && assertion.workflow_ref == "${presubmitWorkflowRef}@" + assertion.ref) || (${queueStaging} && assertion.sub == "${presubmitSubject}")`,
 	renovate: `assertion.workflow_ref == "${githubRepository}/.github/workflows/renovate.yml@refs/heads/main"`,
-	staging: `assertion.workflow_ref.startsWith("${githubRepository}/.github/workflows/staging.yml@refs/heads/gh-readonly-queue/")`,
+	staging: `${queueStaging} && assertion.sub == "repo:${githubRepository}:ref:" + assertion.ref`,
 	submit: `assertion.workflow_ref == "${githubRepository}/.github/workflows/submit.yml@refs/heads/main"`,
 } as const satisfies Record<GitHubActionsWorkflowScope, string>;
 

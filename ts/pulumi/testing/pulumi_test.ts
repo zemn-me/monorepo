@@ -998,7 +998,10 @@ describe('pulumi', () => {
 			repository_id: '275403409',
 			repository_owner: 'zemn-me',
 			repository_owner_id: '145876100',
-			sub: 'repo:zemn-me/monorepo:pull_request',
+			sub:
+				event === 'pull_request'
+					? 'repo:zemn-me/monorepo:pull_request'
+					: `repo:zemn-me/monorepo:ref:${ref}`,
 			workflow_ref: `zemn-me/monorepo/.github/workflows/${workflow}.yml@${ref}`,
 		});
 		// These generated CEL expressions use the common JS/CEL subset:
@@ -1021,6 +1024,26 @@ describe('pulumi', () => {
 		// Queue-shaped workflow refs cannot turn a PR event into a merge group.
 		for (const event of ['pull_request', 'pull_request_target', 'push']) {
 			const assertion = identity('presubmit', queueRef, event);
+			expect(evaluate(providerCondition as string, assertion)).toBe(
+				false
+			);
+			expect(evaluate(scopeExpression, assertion)).toBe('unknown');
+		}
+		const queueBuild = {
+			...identity('staging', queueRef, 'merge_group'),
+			sub: 'repo:zemn-me/monorepo:environment:presubmit',
+		};
+		expect(evaluate(providerCondition as string, queueBuild)).toBe(true);
+		expect(evaluate(scopeExpression, queueBuild)).toBe('presubmit');
+		for (const override of [
+			{ event_name: 'pull_request_target' },
+			{ sub: 'repo:zemn-me/monorepo:environment:unknown' },
+			{
+				workflow_ref:
+					'zemn-me/monorepo/.github/workflows/staging.yml@refs/heads/main',
+			},
+		]) {
+			const assertion = { ...queueBuild, ...override };
 			expect(evaluate(providerCondition as string, assertion)).toBe(
 				false
 			);
