@@ -350,7 +350,7 @@ describe('zemn.me website', () => {
 			}
 		});
 
-		it('lists every experiment and draws a birthday chart from the index', async () => {
+		it('opens the birthday chart from the experiments index and scrubs its time ruler', async () => {
 			try {
 				await driver.manage().setTimeouts({ implicit: 5000 });
 				await driver.get(`${origin}/tool/elastictabs?input=hello`);
@@ -463,12 +463,25 @@ describe('zemn.me website', () => {
 				});
 				await driver.wait(async () => await scrollTop() > beforeScroll, 5000, 'Scrolling over the time ruler moves the page');
 				expect(await timestamp()).toBe(scrubbed);
+			} finally {
+				await driver.quit();
+			}
+		});
+
+		it('plots the ten closest debris release dates and preserves their aspects across views', async () => {
+			try {
+				// The noon fixture has a trine between two of the ten closest objects.
+				await driver.get(`${origin}/experiments/astrological-chart?time=2006-08-01T12:00:00Z`);
+				const chrome = driver as unknown as ChromeDriver;
 				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
-				expect(await search.getProperty('value')).toBe('motor');
+				expect(await search.getProperty('value')).toBe('');
 				const grid = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
 				await driver.wait(until.elementLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
-				const motorsOnPage = await grid.findElements(By.css('h3 a'));
-				expect(motorsOnPage).toHaveLength(12);
+				const objectNames = () => grid.findElements(By.css('h3 a')).then(links => Promise.all(links.map(link => link.getText())));
+				const initialNames = await objectNames();
+				expect(initialNames).toHaveLength(10);
+				expect(initialNames[0]).toContain('Briz-KM No. 72504');
+				expect(initialNames[1]).toContain('Molniya-M 36-691 Blok-I');
 				const entries = await driver.executeScript<{ width: number; y: number }[]>(
 					'return Array.from(arguments[0].children, entry => entry.getBoundingClientRect().toJSON())',
 					grid
@@ -479,8 +492,6 @@ describe('zemn.me website', () => {
 					expect(entry.y).toBe(entries[i - i % columns]!.y);
 				}
 				expect((await grid.findElement(By.css('h3')).getText())).toContain('Sun');
-				for (const name of await Promise.all(motorsOnPage.map(link => link.getText()))) expect(name).toMatch(/motor/i);
-				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
 				expect(await driver.findElements(By.css('article details > summary')).then(items => Promise.all(items.map(item => item.getText())))).toEqual([]);
 				expect(await driver.findElements(By.xpath('//button[.="Reset view"]'))).toHaveLength(0);
 				const wheel = await driver.findElement(By.css('svg[aria-label^="Face-on zodiac wheel"]'));
@@ -575,30 +586,17 @@ describe('zemn.me website', () => {
 				await driver.wait(async () => await geometry() === original, 5000, 'Returning the tilt ruler restores the Earth grid');
 
 				expect(await grid.findElements(By.css('time'))).toHaveLength(0);
-				const firstObject = () => grid.findElement(By.css('li:has(h3 a) h3')).getText();
-				const firstOnPage = await firstObject();
-				const pager = await driver.findElement(By.css('nav[aria-label="Chart placement pages"]'));
-				const previous = await pager.findElement(By.css('button[aria-label="Previous page"]'));
-				const nextPage = () => pager.findElement(By.css('button[aria-label="Next page"]'));
-				const pageNumber = () => pager.findElement(By.css('[role="status"]')).getText();
-				expect(await pageNumber()).toBe('Pg. 1/21');
-				expect(await previous.isEnabled()).toBe(false);
-				await (await nextPage()).click();
-				await driver.wait(async () => await firstObject() !== firstOnPage, 5000);
-				expect(await grid.findElements(By.css('h3 a'))).toHaveLength(12);
-				expect(await previous.isEnabled()).toBe(true);
-				expect(await pageNumber()).toBe('Pg. 2/21');
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
 				const markerCount = () => wheel.findElements(By.css('g[aria-label="Orbiting objects"] path:not([display="none"])')).then(paths => paths.length);
 				const unfiltered = await markerCount();
-				expect(unfiltered).toBe(250);
+				expect(unfiltered).toBe(10);
 				await search.sendKeys('MoToR');
-				const motors = await markerCount();
-				expect(motors).toBeGreaterThan(12);
-				expect(motors).toBeLessThanOrEqual(unfiltered);
-				await (await nextPage()).click();
-				expect(await markerCount()).toBe(motors);
+				await driver.wait(async () => {
+					const names = await objectNames();
+					return names.length === 10 && names.every(name => /motor/i.test(name));
+				}, 5000);
+				expect(await markerCount()).toBe(10);
 				await search.sendKeys('xyz');
 				expect(await markerCount()).toBe(0);
 				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat(8));
@@ -750,7 +748,6 @@ describe('zemn.me website', () => {
 				await (await toggle('Rocket stages')).click();
 				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
 				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
-				await search.sendKeys(Key.END, Key.BACK_SPACE.repeat('motor'.length));
 				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li:has(h3 a)'));
 				await search.sendKeys('Rocket stage');
 				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);

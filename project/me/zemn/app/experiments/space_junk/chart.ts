@@ -1,4 +1,5 @@
-import { Temporal } from 'temporal-polyfill';
+import type { Temporal } from 'temporal-polyfill';
+import { dayMs } from './ruler_time.js';
 
 export interface SpaceObject {
 	id: number;
@@ -54,30 +55,15 @@ export function readChart(
 ) {
 	const matches: { object: SpaceObject; days: number }[] = [];
 
-	const anniversaries = new Map<string, number>();
+	// Comparing ISO dates at UTC midnight gives calendar days even across DST.
+	const birthDay = Date.parse(birthday.toString());
 	for (const object of objects) {
 		if (!inOrbit(object, orbitDay)) continue;
-		const monthDay = object.start.slice(5, 10);
-		let anniversary = anniversaries.get(monthDay);
-		if (anniversary === undefined) {
-			const month = Number(monthDay.slice(0, 2));
-			const dayOfMonth = Number(monthDay.slice(3));
-			// A leap-day release falls on February 28 in common years.
-			const dateIn = (year: number) =>
-				birthday.with({ year, month, day: dayOfMonth });
-			const offsets = [-1, 0, 1].map(
-				delta => birthday.until(dateIn(birthday.year + delta)).days
-			);
-			anniversary = offsets.reduce((a, b) =>
-				Math.abs(a) <= Math.abs(b) ? a : b
-			);
-			anniversaries.set(monthDay, anniversary);
-		}
-		matches.push({ object, days: anniversary });
+		const releaseDay = Date.parse(object.start.slice(0, 10));
+		matches.push({ object, days: (releaseDay - birthDay) / dayMs });
 	}
 	matches.sort(
 		(a, b) =>
-			Number(b.object.eva) - Number(a.object.eva) ||
 			Math.abs(a.days) - Math.abs(b.days) ||
 			b.object.start.localeCompare(a.object.start) ||
 			a.object.id - b.object.id

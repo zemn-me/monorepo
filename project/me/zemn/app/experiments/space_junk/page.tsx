@@ -13,7 +13,6 @@ import {
 	useMemo,
 	useState,
 } from 'react';
-import { flushSync } from 'react-dom';
 import { Temporal } from 'temporal-polyfill';
 
 import type { Metadata } from '#root/ts/remix/metadata.js';
@@ -60,7 +59,7 @@ const bodyList = parseAsArrayOf(
 const kindList = parseAsArrayOf(
 	parseAsStringLiteral(artificialTypes)
 ).withDefault([...debrisTypes]);
-const searchText = parseAsString.withDefault('motor');
+const searchText = parseAsString.withDefault('');
 
 const BirthdayChart = memo(function BirthdayChart({
 	catalogue,
@@ -85,7 +84,6 @@ const BirthdayChart = memo(function BirthdayChart({
 }) {
 	const hasObjects = selectedKinds.length > 0;
 	const [search, setSearch] = useQueryState('q', searchText);
-	const [page, setPage] = useState(0);
 	const day = new Date(instant).toISOString().slice(0, 10);
 	const birthday = zonedTime(instant, zone).toPlainDate().toString();
 	const selectedObjects = useMemo(
@@ -154,23 +152,6 @@ const BirthdayChart = memo(function BirthdayChart({
 			})),
 		[coverage.markers, debrisZodiac]
 	);
-	const pageSize = 12;
-	const pageCount = Math.ceil(placements.length / pageSize);
-	const pageIndex = Math.min(page, Math.max(0, pageCount - 1));
-	const offset = pageIndex * pageSize;
-	const [printing, setPrinting] = useState(false);
-	useEffect(() => {
-		// The browser snapshots the DOM immediately after beforeprint returns.
-		const before = () => flushSync(() => setPrinting(true));
-		const after = () => setPrinting(false);
-		window.addEventListener('beforeprint', before);
-		window.addEventListener('afterprint', after);
-		return () => {
-			window.removeEventListener('beforeprint', before);
-			window.removeEventListener('afterprint', after);
-		};
-	}, []);
-	const rows = printing ? placements : placements.slice(offset, offset + pageSize);
 
 	return (
 		<>
@@ -206,10 +187,7 @@ const BirthdayChart = memo(function BirthdayChart({
 						options={artificialTypes}
 						labels={kindLabels}
 						selected={selectedKinds}
-						onChange={next => {
-							setSelectedKinds(next);
-							setPage(0);
-						}}
+						onChange={setSelectedKinds}
 					>
 						<input
 							className={style.search}
@@ -217,10 +195,7 @@ const BirthdayChart = memo(function BirthdayChart({
 							aria-label="Search by name, catalog number, designator or object type"
 							placeholder="Search"
 							value={search}
-							onChange={event => {
-								setSearch(event.target.value);
-								setPage(0);
-							}}
+							onChange={event => setSearch(event.target.value)}
 						/>
 					</BodyFilters>
 					{hasObjects && search.trim() && (
@@ -250,7 +225,7 @@ const BirthdayChart = memo(function BirthdayChart({
 			<div>
 				{(bodies.length > 0 ||
 					natalZodiac.ascendant !== undefined ||
-					rows.length > 0) && (
+					placements.length > 0) && (
 					<ul
 						className={style.placements}
 						aria-label="Chart placements"
@@ -271,7 +246,7 @@ const BirthdayChart = memo(function BirthdayChart({
 								house={natalZodiac.house(natalZodiac.ascendant)}
 							/>
 						)}
-						{rows.map(({ marker: { object }, longitude }) => (
+						{placements.map(({ marker: { object }, longitude }) => (
 							<PlacementEntry
 								key={object.id}
 								name={object.name}
@@ -284,33 +259,12 @@ const BirthdayChart = memo(function BirthdayChart({
 						))}
 					</ul>
 				)}
-				{hasObjects && catalogue && !rows.length && (
+				{hasObjects && catalogue && !placements.length && (
 					<p role="status">
 						{filtered.length && coverage.pending
 							? 'Locating objects…'
 							: 'No matching objects on the chart'}
 					</p>
-				)}
-				{pageCount > 1 && (
-					<nav className={style.paging} aria-label="Chart placement pages">
-						<button
-							type="button"
-							aria-label="Previous page"
-							disabled={!pageIndex}
-							onClick={() => setPage(pageIndex - 1)}
-						>
-							←
-						</button>
-						<span role="status">Pg. {pageIndex + 1}/{pageCount}</span>
-						<button
-							type="button"
-							aria-label="Next page"
-							disabled={pageIndex + 1 === pageCount}
-							onClick={() => setPage(pageIndex + 1)}
-						>
-							→
-						</button>
-					</nav>
 				)}
 			</div>
 		</>
