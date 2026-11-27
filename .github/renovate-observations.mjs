@@ -7,23 +7,28 @@ import { pathToFileURL } from 'node:url';
 const fullDigest =
 	/^(?:[a-f0-9]{40}|(?:sha256:)?[a-f0-9]{64}|sha512:[a-f0-9]{128})$/;
 const isDigest = value => typeof value === 'string' && fullDigest.test(value);
-const updateTypes = new Set(['major', 'minor', 'patch', 'digest', 'pinDigest']);
+// These direct dependency updates bypass upstream's native release-age lookup.
+const nativeExempt = [
+	'pin',
+	'rollback',
+	'replacement',
+	'bump',
+	'lockfileUpdate',
+];
+const updateTypes = new Set([
+	'major',
+	'minor',
+	'patch',
+	'digest',
+	'pinDigest',
+	...nativeExempt,
+]);
 
-export function observe(packageFiles, previous, now) {
-	const observations = new Map();
+function* candidates(packageFiles) {
 	for (const [manager, files] of Object.entries(packageFiles)) {
 		for (const { packageFile, deps } of files) {
 			for (const dep of deps) {
 				for (const update of dep.updates ?? []) {
-					const { updateType, newDigest, newVersion, newValue } =
-						update;
-					if (update.releaseTimestamp || !updateTypes.has(updateType))
-						continue;
-					if (
-						!isDigest(dep.currentDigest) &&
-						updateType !== 'pinDigest'
-					)
-						continue;
 					const scope = {
 						manager,
 						packageFile,
@@ -32,37 +37,51 @@ export function observe(packageFiles, previous, now) {
 						packageName: dep.packageName ?? dep.depName,
 						currentDigest: dep.currentDigest ?? null,
 						currentValue: dep.currentValue ?? null,
-						updateType,
+						updateType: update.updateType,
 					};
-					const key = JSON.stringify({
-						scope,
-						registryUrl:
-							update.registryUrl ?? dep.registryUrl ?? null,
-						newVersion: newVersion ?? null,
-						newValue: newValue ?? null,
-					});
-					// Two conflicting observations in one lookup cannot establish continuity.
-					if (
-						!isDigest(newDigest) ||
-						(observations.has(key) &&
-							observations.get(key)?.digest !== newDigest)
-					) {
-						observations.set(key, null);
-						continue;
-					}
-					const old = previous[historyKey(key)];
-					const same =
-						old?.digest === newDigest &&
-						Number.isSafeInteger(old.firstSeen) &&
-						old.firstSeen >= 0 &&
-						old.firstSeen <= now;
-					observations.set(key, {
-						digest: newDigest,
-						firstSeen: same ? old.firstSeen : now,
-					});
+					const target = {
+						newVersion: update.newVersion ?? null,
+						newValue: update.newValue ?? null,
+						newName: update.newName ?? null,
+					};
+					yield { dep, update, scope, target };
 				}
 			}
 		}
+	}
+}
+
+export function observe(packageFiles, previous, now) {
+	const observations = new Map();
+	for (const { dep, update, scope, target } of candidates(packageFiles)) {
+		const { updateType, newDigest } = update;
+		if (update.releaseTimestamp || !updateTypes.has(updateType)) continue;
+		if (!isDigest(dep.currentDigest) && updateType !== 'pinDigest')
+			continue;
+		const key = JSON.stringify({
+			scope,
+			target,
+			registryUrl: update.registryUrl ?? dep.registryUrl ?? null,
+		});
+		// Two conflicting observations in one lookup cannot establish continuity.
+		if (
+			!isDigest(newDigest) ||
+			(observations.has(key) &&
+				observations.get(key)?.digest !== newDigest)
+		) {
+			observations.set(key, null);
+			continue;
+		}
+		const old = previous[historyKey(key)];
+		const same =
+			old?.digest === newDigest &&
+			Number.isSafeInteger(old.firstSeen) &&
+			old.firstSeen >= 0 &&
+			old.firstSeen <= now;
+		observations.set(key, {
+			digest: newDigest,
+			firstSeen: same ? old.firstSeen : now,
+		});
 	}
 	return Object.fromEntries(
 		[...observations].filter(([, value]) => value !== null)
@@ -90,7 +109,13 @@ function equal(field, value) {
 		: `${field} = ${JSON.stringify(value)}`;
 }
 
-export function observationRules(observations, now, config) {
+function matches(fields) {
+	return Object.entries(fields)
+		.map(([field, value]) => equal(field, value))
+		.join(' and ');
+}
+
+export function observationRules(observations, now, config, files = {}) {
 	// Match the effective policy too. A stricter package rule must continue to win.
 	const days = /^(\d+) days?$/.exec(config.minimumReleaseAge);
 	const buffer = /^(\d+) minutes?$/.exec(config.minimumReleaseAgeBuffer);
@@ -98,22 +123,56 @@ export function observationRules(observations, now, config) {
 		days && buffer
 			? (Number(days[1]) * 1440 + Number(buffer[1])) * 60_000
 			: Infinity;
+	const policy = {
+		minimumReleaseAge: config.minimumReleaseAge,
+		minimumReleaseAgeBuffer: config.minimumReleaseAgeBuffer,
+		minimumReleaseAgeExtracted: null,
+	};
+	const approvedExempt = [];
+	for (const { dep, update, scope, target } of candidates(files)) {
+		if (!nativeExempt.includes(update.updateType)) continue;
+		// A range pin freezes the resolved version. Only that exact version may
+		// use its dependency timestamp; a rollback or replacement targets other code.
+		const useCurrent =
+			update.updateType === 'pin' &&
+			target.newVersion &&
+			target.newVersion === dep.currentVersion &&
+			!update.releaseTimestamp;
+		const field = useCurrent
+			? 'currentVersionTimestamp'
+			: 'releaseTimestamp';
+		const timestamp = useCurrent
+			? dep.currentVersionTimestamp
+			: update.releaseTimestamp;
+		if (
+			typeof timestamp === 'string' &&
+			/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)$/.test(
+				timestamp
+			) &&
+			Date.parse(timestamp) <= now - wait
+		) {
+			approvedExempt.push(
+				`(${matches({ ...scope, ...target, newDigest: update.newDigest ?? null, ...policy, [field]: timestamp, ...(useCurrent ? { currentVersion: target.newVersion } : {}) })})`
+			);
+		}
+	}
 	const groups = new Map();
 	for (const [key, { digest, firstSeen }] of Object.entries(observations)) {
 		if (now - firstSeen < wait) continue;
-		const { scope, newVersion, newValue } = JSON.parse(key);
+		const { scope, target } = JSON.parse(key);
 		const groupKey = JSON.stringify(scope);
 		if (!groups.has(groupKey))
 			groups.set(groupKey, { scope, lookup: [], resolved: [] });
 		const group = groups.get(groupKey);
 		const type = scope.updateType;
 		const pin = equal('newDigest', digest);
-		const target = [
-			equal('newVersion', newVersion),
-			equal('newValue', newValue),
-			pin,
-		].join(' and ');
-		group.resolved.push(`(${target})`);
+		const resolved = `(${matches({ ...target, newDigest: digest })})`;
+		group.resolved.push(resolved);
+		if (nativeExempt.includes(type)) {
+			approvedExempt.push(
+				`(${matches({ ...scope, ...policy })} and ${resolved})`
+			);
+		}
 		// Version selection precedes digest resolution for some registries. Renovate
 		// reapplies package rules to the resolved pin before grouping or creating a branch.
 		if (type === 'pinDigest') {
@@ -123,9 +182,9 @@ export function observationRules(observations, now, config) {
 			group.lookup.push(
 				`$exists(updates[updateType = "${type}" and ${pin}])`
 			);
-		} else if (newVersion !== null) {
+		} else if (!nativeExempt.includes(type) && target.newVersion !== null) {
 			group.lookup.push(
-				`(${equal('version', newVersion)} and ($not($exists(newDigest)) or ${pin}))`
+				`(${equal('version', target.newVersion)} and ($not($exists(newDigest)) or ${pin}))`
 			);
 		}
 	}
@@ -137,16 +196,9 @@ export function observationRules(observations, now, config) {
 			matchDatasources: [datasource],
 			matchUpdateTypes: [updateType],
 		};
-		const policy = {
-			...fields,
-			minimumReleaseAge: config.minimumReleaseAge,
-			minimumReleaseAgeBuffer: config.minimumReleaseAgeBuffer,
-			minimumReleaseAgeExtracted: null,
-		};
-		const condition = Object.entries(policy)
-			.map(([field, value]) => equal(field, value))
-			.join(' and ');
+		const condition = matches({ ...fields, ...policy, updateType });
 		const pinned = resolved.join(' or ');
+		if (nativeExempt.includes(updateType)) continue;
 		if (updateType === 'pinDigest') {
 			approvedInitialPins.push(
 				`(datasource = ${JSON.stringify(datasource)} and ${condition} and (${pinned}))`
@@ -169,6 +221,15 @@ export function observationRules(observations, now, config) {
 			}
 		);
 	}
+	// For a version-resolved initial pin the worker keeps the publication date
+	// on the dependency, while its downstream branch check only sees the update.
+	rules.push({
+		matchUpdateTypes: ['pinDigest'],
+		matchJsonata: [
+			'$exists(depIndex) and $type(currentVersionTimestamp) = "string" and $not(pendingChecks = true)',
+		],
+		minimumReleaseAgeBehaviour: 'timestamp-optional',
+	});
 	// Renovate exempts initial pins of unversioned refs from its native age check.
 	// They can enter CI only after the observer has seen the SHA that will be written.
 	rules.push({
@@ -177,8 +238,33 @@ export function observationRules(observations, now, config) {
 			[
 				'$exists(depIndex)',
 				equal('releaseTimestamp', null),
+				// This exists only on Renovate's version-resolved lookup path,
+				// where its native check ages the newest matching release.
+				equal('currentVersionTimestamp', null),
 				...(approvedInitialPins.length
 					? [`$not(${approvedInitialPins.join(' or ')})`]
+					: []),
+			].join(' and '),
+		],
+		enabled: false,
+	});
+	if (approvedExempt.length) {
+		rules.push({
+			matchUpdateTypes: nativeExempt,
+			matchJsonata: [
+				`$exists(depIndex) and (${approvedExempt.join(' or ')})`,
+			],
+			minimumReleaseAgeBehaviour: 'timestamp-optional',
+		});
+	}
+	rules.push({
+		matchUpdateTypes: nativeExempt,
+		matchJsonata: [
+			[
+				'$exists(depIndex)',
+				`updateType in ${JSON.stringify(nativeExempt)}`,
+				...(approvedExempt.length
+					? [`$not(${approvedExempt.join(' or ')})`]
 					: []),
 			].join(' and '),
 		],
@@ -208,7 +294,7 @@ if (
 	if (outputConfig) {
 		const config = await readJson('.github/renovate-global.json');
 		config.packageRules.push(
-			...observationRules(observations, now, config)
+			...observationRules(observations, now, config, files)
 		);
 		await writeFile(outputConfig, JSON.stringify(config));
 	} else {

@@ -190,7 +190,10 @@ await writeFile(statePath, JSON.stringify(stored));
 run([configPath]);
 const aged = JSON.parse(await readFile(configPath, 'utf8'));
 assert(aged.packageRules.length > base.packageRules.length);
-assert.deepEqual((await validateConfig('global', massageConfig(aged))).errors, []);
+assert.deepEqual(
+	(await validateConfig('global', massageConfig(aged))).errors,
+	[]
+);
 await writeReport([{ ...pinned, newDigest: other }, minor]);
 run([]);
 assert.deepEqual(Object.values(JSON.parse(await readFile(statePath, 'utf8'))), [
@@ -212,4 +215,70 @@ for (const [age, pin, count] of [
 			.length,
 		count
 	);
+}
+
+// Renovate stores dates for versioned initial pins on the dependency. The
+// native lookup checks the newest matching version separately, including ranges.
+for (const [days, pending] of [
+	[7, false],
+	[1, true],
+]) {
+	const published = new Date(now - days * 86_400_000).toISOString();
+	const versioned = { ...unpinned, currentVersionTimestamp: published };
+	const update = { ...initialPin };
+	const strict = { ...config, packageRules: observationRules({}, now, base) };
+	await applyMinimumReleaseAgeToDigestUpdate(
+		update,
+		{ ...lookup, ...versioned, packageRules: strict.packageRules },
+		{ updates: [] },
+		true,
+		published
+	);
+	assert.equal(Boolean(update.pendingChecks), pending);
+	const [branch] = await flattenUpdates(strict, files([update], versioned));
+	assert.ok(branch);
+	assert.equal(Boolean(branch.pendingChecks), pending);
+}
+
+const rollback = {
+	updateType: 'rollback',
+	newVersion: '0.9.0',
+	newValue: 'v0.9.0',
+};
+const oldDate = new Date(now - wait - 1000).toISOString();
+for (const [date, expectedCount] of [
+	[undefined, 0],
+	[new Date(now).toISOString(), 0],
+	[oldDate, 1],
+]) {
+	const updates = files([{ ...rollback, releaseTimestamp: date }], unpinned);
+	const rules = observationRules({}, now, base, updates);
+	const branches = await flattenUpdates(
+		{ ...config, packageRules: rules },
+		updates
+	);
+	assert.equal(branches.length, expectedCount);
+}
+const rollbackFiles = files([{ ...rollback, newDigest: digest }]);
+const rollbackObs = observe(rollbackFiles, {}, now);
+const rollbackRules = observationRules(
+	rollbackObs,
+	now + wait,
+	base,
+	rollbackFiles
+);
+for (const [pin, count] of [
+	[digest, 1],
+	[other, 0],
+]) {
+	const branches = await flattenUpdates(
+		{ ...config, packageRules: rollbackRules },
+		files([{ ...rollback, newDigest: pin }])
+	);
+	assert.equal(branches.length, count);
+	if (count)
+		assert.equal(
+			branches[0].minimumReleaseAgeBehaviour,
+			'timestamp-optional'
+		);
 }

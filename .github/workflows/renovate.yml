@@ -97,9 +97,7 @@ jobs:
           configurationFile: ${{ runner.temp }}/renovate-aged.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
-          docker-volumes: |
-            /tmp:/tmp
-            ${{ runner.temp }}/renovate-lookup:/observations
+          docker-volumes: /tmp:/tmp;${{ runner.temp }}/renovate-lookup:/observations
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
         env:
