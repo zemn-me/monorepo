@@ -192,8 +192,8 @@ const BirthdayChart = memo(function BirthdayChart({
 						<input
 							className={style.search}
 							type="search"
-							aria-label="Search by name, catalog number, designator or object type"
-							placeholder="Search"
+							aria-label="Filter man-made bodies by name, catalog number, designator or object type"
+							placeholder="Filter"
 							value={search}
 							onChange={event => setSearch(event.target.value)}
 						/>
@@ -255,7 +255,21 @@ const BirthdayChart = memo(function BirthdayChart({
 								house={debrisZodiac.house(longitude)}
 								target={objectAnchor(object.id)}
 								onRevisit={revisit}
-							/>
+							>
+								<small>
+									<time dateTime={object.start.slice(0, 10)}>
+										{displayDate(object.start)}
+									</time>
+									{' – '}
+									{object.end ? (
+										<time dateTime={object.end.slice(0, 10)}>
+											{displayDate(object.end)}
+										</time>
+									) : (
+										'Still in orbit'
+									)}
+								</small>
+							</PlacementEntry>
 						))}
 					</ul>
 				)}
