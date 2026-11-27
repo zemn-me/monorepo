@@ -45,7 +45,13 @@ function FooterEmblem() {
 /**
  * LetterHead is the inner part of the heading with the name and logo.
  */
-function LetterHead({ compact = false }: { readonly compact?: boolean }) {
+function LetterHead({
+	compact = false,
+	children,
+}: {
+	readonly compact?: boolean;
+	readonly children?: ReactNode;
+}) {
 	return (
 		<Link
 			aria-label="Go to homepage"
@@ -58,6 +64,7 @@ function LetterHead({ compact = false }: { readonly compact?: boolean }) {
 					{lang.text(bio.Bio.who.handle)}
 				</div>
 			)}
+			{children}
 			<TimeEye className={style.logo} />
 			{!compact && (
 				<div className={style.fullName}>Thomas NJ Shadwell</div>
@@ -158,7 +165,12 @@ export default function Glade(props: GladeProps) {
 		return () => window.clearTimeout(timer);
 	}, [props.navigationPending]);
 
-	const loading = !!props.navigationPending && showNavigationStatus;
+	const navigationRays = (
+		<NavigationRays
+			loading={!!props.navigationPending && showNavigationStatus}
+			failed={!!props.navigationFailed && !props.navigationPending}
+		/>
+	);
 	return (
 		<main
 			className={`${style.main} ${isHomepage ? '' : style.compact}`}
@@ -170,7 +182,7 @@ export default function Glade(props: GladeProps) {
 			<HeroVideo className={style.headerBgv} data-glade-banner />
 			{isHomepage && (
 				<div className={style.banner} data-glade-banner>
-					<LetterHead />
+					<LetterHead>{navigationRays}</LetterHead>
 				</div>
 			)}
 			<header
@@ -190,30 +202,9 @@ export default function Glade(props: GladeProps) {
 						</button>
 					)}
 				</div>
-				{isHomepage ? (
-					loading ? (
-						<span
-							className={style.navigationStatus}
-							role="status"
-							aria-label="Loading page"
-						>
-							Loading…
-						</span>
-					) : (
-						<span />
-					)
-				) : (
-					<LetterHead compact />
-				)}
+				{!isHomepage && <LetterHead compact />}
 				<GladeMenu />
-				{!isHomepage && (
-					<NavigationRays
-						loading={loading}
-						failed={
-							!!props.navigationFailed && !props.navigationPending
-						}
-					/>
-				)}
+				{!isHomepage && navigationRays}
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>

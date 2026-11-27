@@ -124,8 +124,18 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 const status = document.querySelector(arguments[0]);
 if (!status) return null;
 if (!status.checkVisibility({opacityProperty: true, visibilityProperty: true})) return 'loading status hidden';
-const bar = status.closest('header').getBoundingClientRect();
 const rect = status.getBoundingClientRect();
+if (location.pathname === '/') {
+	const card = document.querySelector('[data-glade-banner] > a[aria-label="Go to homepage"]');
+	const logo = card.querySelector(':scope > svg').getBoundingClientRect();
+	const rays = status.querySelector('svg');
+	if (!card.contains(status) || !rays) return 'expected loading rays on the homepage logo';
+	if (!Array.from(rays.querySelectorAll('line')).some(line => line.getTotalLength() > 10)) return null;
+	const bounds = rays.getBoundingClientRect();
+	return Math.abs((bounds.left + bounds.right) - (logo.left + logo.right)) < 1 &&
+		Math.abs((bounds.top + bounds.bottom) - (logo.top + logo.bottom)) < 1;
+}
+const bar = status.closest('header').getBoundingClientRect();
 return rect.width > 0 && rect.height > 0 && rect.left >= bar.left && rect.right <= bar.right && rect.top >= bar.top && rect.bottom <= bar.bottom;`)
 		})
 		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
