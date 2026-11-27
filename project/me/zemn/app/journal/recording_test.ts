@@ -28,6 +28,13 @@ class Recorder {
 	start() {
 		this.state = 'recording';
 	}
+	pause() {
+		this.state = 'paused';
+	}
+	resume() {
+		this.state = 'recording';
+	}
+	requestData() {}
 	chunk(text: string | Blob) {
 		this.ondataavailable?.({
 			data: typeof text === 'string' ? new Blob([text]) : text,
@@ -40,6 +47,7 @@ class Recorder {
 	}
 }
 const stopTrack = jest.fn();
+const micTrack = { enabled: true, stop: stopTrack };
 const originalRecorder = Object.getOwnPropertyDescriptor(
 	globalThis,
 	'MediaRecorder'
@@ -67,6 +75,7 @@ beforeEach(() => {
 	save.mockReset().mockResolvedValue('saved');
 	remove.mockReset().mockResolvedValue(undefined);
 	stopTrack.mockReset();
+	micTrack.enabled = true;
 	locate.mockReset();
 	Object.defineProperty(navigator, 'geolocation', {
 		configurable: true,
@@ -80,7 +89,8 @@ beforeEach(() => {
 		configurable: true,
 		value: {
 			getUserMedia: async () => ({
-				getTracks: () => [{ stop: stopTrack }],
+				getTracks: () => [micTrack],
+				getAudioTracks: () => [micTrack],
 			}),
 		},
 	});
@@ -108,10 +118,9 @@ it('keeps recording beyond thirty minutes and the transcription file limit', asy
 	const tick = jest.fn();
 	const session = await startLocalRecording('owner', { tick, finished });
 	Recorder.latest.chunk(new Blob([new Uint8Array(26_000_000)]));
-	jest.setSystemTime(Date.now() + 2 * 60 * 60 * 1000);
-	await jest.advanceTimersByTimeAsync(250);
+	jest.advanceTimersByTime(2 * 60 * 60 * 1000 + 250);
 	expect(Recorder.latest.state).toBe('recording');
-	expect(tick).toHaveBeenLastCalledWith(2 * 60 * 60 * 1000 + 250);
+	expect(tick).toHaveBeenLastCalledWith(2 * 60 * 60 * 1000 + 250, false);
 	expect(finished).not.toHaveBeenCalled();
 	session.stop();
 	await session.done;
@@ -119,6 +128,39 @@ it('keeps recording beyond thirty minutes and the transcription file limit', asy
 	expect(final?.state).toBe('queued');
 	expect(final?.parts.map(part => part.size)).toEqual([26_000_000, 5]);
 	expect(finished).toHaveBeenCalledWith(final, true, undefined);
+});
+
+it('omits pauses from the timer and saves both recording intervals in one draft', async () => {
+	const tick = jest.fn();
+	const finished = jest.fn();
+	const session = await startLocalRecording('owner', { tick, finished });
+	const recorder = Recorder.latest;
+	const first = new Blob(['before']);
+	const second = new Blob(['after']);
+
+	jest.advanceTimersByTime(1500);
+	recorder.chunk(first);
+	session.togglePause();
+	expect(recorder.state).toBe('paused');
+	expect(micTrack.enabled).toBe(false);
+	jest.advanceTimersByTime(8000);
+	expect(tick).toHaveBeenLastCalledWith(1500, true);
+	expect(finished).not.toHaveBeenCalled();
+
+	session.togglePause();
+	expect(recorder.state).toBe('recording');
+	expect(micTrack.enabled).toBe(true);
+	jest.advanceTimersByTime(750);
+	recorder.chunk(second);
+	session.togglePause();
+	expect(tick).toHaveBeenLastCalledWith(2250, true);
+
+	session.stop();
+	await session.done;
+	const draft = save.mock.calls.at(-1)?.[0];
+	expect(draft?.id).toBe(session.id);
+	expect(draft?.parts.slice(0, 2)).toEqual([first, second]);
+	expect(finished).toHaveBeenCalledWith(draft, true, undefined);
 });
 
 it('retains completed audio for download if a checkpoint and final save fail', async () => {
@@ -175,6 +217,7 @@ it('cancelling removes the draft even when the recorder emits its final chunk', 
 		finished,
 	});
 	Recorder.latest.chunk('discard this');
+	session.togglePause();
 	session.stop(true);
 	await session.done;
 	expect(remove).toHaveBeenCalled();
