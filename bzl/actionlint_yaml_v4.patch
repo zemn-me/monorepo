@@ -1,0 +1,78 @@
+diff --git a/parse.go b/parse.go
+--- a/parse.go
++++ b/parse.go
+@@ -1,6 +1,7 @@
+ package actionlint
+ 
+ import (
++	"errors"
+ 	"fmt"
+ 	"iter"
+ 	"math"
+@@ -1548,34 +1549,30 @@
+ // }
+ 
+ func handleYAMLUnmarshalError(err error) []*Error {
+-	if te, ok := err.(*yaml.TypeError); ok {
+-		errs := make([]*Error, 0, len(te.Errors))
+-		for _, e := range te.Errors {
+-			errs = append(errs, &Error{
+-				Message: fmt.Sprintf("could not parse as YAML: %s", e.Err.Error()),
+-				Line:    e.Line,
+-				Column:  e.Column,
+-				Kind:    "syntax-check",
+-			})
++	toError := func(e *yaml.LoadError) *Error {
++		return &Error{
++			Message: fmt.Sprintf("could not parse as YAML: %s", e.Message),
++			Line:    e.Mark.Line,
++			Column:  e.Mark.Column,
++			Kind:    "syntax-check",
++		}
++	}
++
++	var multiple *yaml.LoadErrors
++	if errors.As(err, &multiple) {
++		errs := make([]*Error, 0, len(multiple.Errors))
++		for _, e := range multiple.Errors {
++			errs = append(errs, toError(e))
+ 		}
+ 		return errs
+ 	}
+-
+-	var m string
+-	var l int
+-	var c int
+-	if pe, ok := err.(*yaml.ParserError); ok {
+-		l = pe.Line
+-		c = pe.Column
+-		m = pe.Message
+-	} else {
+-		m = err.Error() // Fallback. I believe this line should be unreachable
+-	}
+-	return []*Error{&Error{
+-		Message: fmt.Sprintf("could not parse as YAML: %s", m),
++	var single *yaml.LoadError
++	if errors.As(err, &single) {
++		return []*Error{toError(single)}
++	}
++	return []*Error{{
++		Message: fmt.Sprintf("could not parse as YAML: %s", err.Error()),
+ 		Kind:    "syntax-check",
+-		Line:    l,
+-		Column:  c,
+ 	}}
+ }
+ 
+diff --git a/action_metadata.go b/action_metadata.go
+--- a/action_metadata.go
++++ b/action_metadata.go
+@@ -270,7 +270,7 @@
+ 		var m string
+ 		if te, ok := err.(*yaml.TypeError); ok {
+ 			if len(te.Errors) == 1 {
+-				m = te.Errors[0].Error()
++				m = te.Errors[0]
+ 			} else {
+ 				m = strings.ReplaceAll(te.Error(), "\n", "")
+ 			}

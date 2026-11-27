@@ -4,6 +4,7 @@ load("//bzl:rules.bzl", "bazel_lint")
 load(":ubuntu_fallback_test.bzl", "ubuntu_fallback_test_suite")
 
 exports_files([
+    "actionlint_yaml_v4.patch",
     "bazel_watcher_proto_rule.patch",
     "buildifier_remote_runfiles.patch",
     "curl_sys_link_curl.patch",
