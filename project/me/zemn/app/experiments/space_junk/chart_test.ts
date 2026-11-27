@@ -79,19 +79,19 @@ describe('free flight on the birthday', () => {
 		);
 		expect(matches.map(row => row.object.id)).toEqual([1, 2, 3, 4, 5]);
 	});
-	it('compares the local birthday to anniversaries while filtering orbit coverage by UTC date', () => {
+	it('compares release dates to the local birthday while filtering orbit coverage by UTC date', () => {
 		const { matches } = readChart(
 			[
 				{
 					...spatula,
-					start: '1999-08-01',
+					start: '2006-07-30',
 					end: '2006-07-31T23:59',
 				},
 			],
 			Temporal.PlainDate.from('2006-08-01'),
 			'2006-07-31'
 		);
-		expect(matches.map(row => row.days)).toEqual([0]);
+		expect(matches.map(row => row.days)).toEqual([-2]);
 	});
 	it('uses only confirmed minutes on boundary days', () => {
 		expect(inOrbitAt(spatula, '2006-07-12T08:00')).toBe(false);
@@ -105,12 +105,18 @@ describe('free flight on the birthday', () => {
 			)
 		).toBe(true);
 	});
-	it('finds an anniversary across New Year', () => {
-		const result = readChart(
-			[{ ...spatula, start: '1999-12-28', end: null }],
+	it('ranks full release dates across New Year, including older objects with a matching anniversary', () => {
+		const { matches } = readChart(
+			[
+				{ ...spatula, id: 1, start: '1999-01-01', eva: true },
+				{ ...spatula, id: 3, start: '1999-12-31', eva: false },
+				{ ...spatula, id: 2, start: '1999-12-31', eva: false },
+			],
 			Temporal.PlainDate.from('2000-01-01')
 		);
-		expect(result.matches[0]?.days).toBe(-4);
+		expect(matches.map(({ object, days }) => [object.id, days])).toEqual([
+			[2, -1], [3, -1], [1, -365],
+		]);
 	});
 });
 
@@ -191,8 +197,8 @@ describe('orbital globe', () => {
 		expect(meridian.y1).toBeCloseTo(-panY);
 		expect(meridian.y2).toBeCloseTo(height - panY);
 	});
-	it('plots the first 250 filtered bodies with a position and confirmed flight', () => {
-		const matches = Array.from({ length: 300 }, (_, id) => ({
+	it('plots the first ten filtered bodies with a position and confirmed flight', () => {
+		const matches = Array.from({ length: 20 }, (_, id) => ({
 			object: { ...spatula, id },
 		}));
 		matches[1]!.object.start = '2006-08-01';
@@ -206,9 +212,9 @@ describe('orbital globe', () => {
 			'2006-08-01T12:00'
 		);
 		expect(markers.map(m => m.object.id)).toEqual(
-			matches.slice(2, 252).map(m => m.object.id)
+			matches.slice(2, 12).map(m => m.object.id)
 		);
-		expect(queried).toHaveLength(251);
+		expect(queried).toHaveLength(11);
 	});
 	it('unfolds a single placement from its wheel band to its actual Earth-fixed position', () => {
 		const fixed = earthFixedSky(new Date('2006-08-01T12:00:00Z'));

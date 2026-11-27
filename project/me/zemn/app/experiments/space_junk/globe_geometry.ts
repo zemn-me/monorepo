@@ -35,7 +35,7 @@ export function markerFrom(
 	return { object, fixed, ...earthRadii(fixed) };
 }
 
-const maxManMadeBodies = 250;
+const maxManMadeBodies = 10;
 
 export function catalogueMarkers(
 	matches: { object: SpaceObject }[],
