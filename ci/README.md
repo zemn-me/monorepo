@@ -25,7 +25,7 @@ in `ci/workflows/actions.lock.json` and converts it to the tar format act
 expects. The emulator reads upstream action metadata and uses fixtures for
 Node execution and hosted-runner disk cleanup. To refresh the lock after a
 `uses:` change, run `./sh/bin/bazel run //ci/workflows:action_lock`.
-Renovate runs the same command for GitHub Actions updates.
+Renovate refreshes this lock through the shared `./sh/postUpgrade.sh` hook.
 
 The merge queue repeats the Tiberian Sun browser integration test five times through
 `ci-local` (also inherited by both remote CI profiles). Every run must pass;

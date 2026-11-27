@@ -6,10 +6,7 @@
 	"autodiscoverFilter": ["zemn-me/monorepo"],
 	"allowScripts": true,
 	"allowedUnsafeExecutions": ["bazelModDeps"],
-	"allowedCommands": [
-		"^\\./sh/postUpgrade\\.sh$",
-		"^\\./sh/bin/bazel run //ci/workflows:action_lock$"
-	],
+	"allowedCommands": ["^\\./sh/postUpgrade\\.sh$"],
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": "enabled",
@@ -132,14 +129,6 @@
 		},
 		{
 			"matchManagers": ["github-actions"],
-			"postUpgradeTasks": {
-				"commands": ["./sh/bin/bazel run //ci/workflows:action_lock"],
-				"executionMode": "branch",
-				"fileFilters": ["ci/workflows/actions.lock.json"]
-			}
-		},
-		{
-			"matchManagers": ["github-actions"],
 			"matchPackageNames": ["jlumbroso/free-disk-space"],
 			"versioning": "loose"
 		},
@@ -208,6 +197,7 @@
 				"npm",
 				"bazel",
 				"custom.regex",
+				"github-actions",
 				"gomod",
 				"pip-compile",
 				"pip_requirements",
@@ -228,6 +218,7 @@
 					"MODULE.bazel.lock",
 					"bzl/pnpm/integrity.json",
 					"bzl/pulumi_providers/checkpoint_versions.json",
+					"ci/workflows/actions.lock.json",
 					"gazelle_python.yaml",
 					"go.sum",
 					"pnpm-lock.yaml",
