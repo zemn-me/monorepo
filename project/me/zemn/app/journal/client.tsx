@@ -2508,6 +2508,7 @@ export function JournalReaderLayout() {
 					</p>
 				) : (
 					<JournalPlayerProvider
+						capturing={recordingBusy || recording}
 						portalTarget={playerHost}
 						key={owner}
 						journal={
