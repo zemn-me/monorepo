@@ -15,6 +15,11 @@ html:has(.main) {
 	display: grid;
 }
 
+/* The same logo participates in the hero grid or the sticky bar. */
+.layoutContents {
+	display: contents;
+}
+
 .banner,
 .headerBgv {
 	grid-area: banner;
@@ -222,7 +227,7 @@ html:has(.main) {
 	align-self: start;
 }
 
-.homeTopbar > nav {
+.topbar nav {
 	grid-column: 3;
 }
 
@@ -236,7 +241,7 @@ html:has(.main) {
 		grid-template-columns: 1fr;
 		justify-items: center;
 	}
-	.topbar > nav,
+	.topbar nav,
 	.topbar .backSlot,
 	.homeTopbar {
 		display: none;
@@ -248,7 +253,7 @@ html:has(.main) {
 }
 
 .compactLetterHead {
-	position: relative;
+	grid-area: 1 / 2;
 	display: grid;
 	place-items: center;
 	width: 88px;
@@ -261,12 +266,19 @@ html:has(.main) {
 	z-index: 1;
 }
 
+@media print {
+	.compactLetterHead {
+		grid-column: 1;
+	}
+}
+
 .compactLetterHead .logo {
 	width: 64px;
 	height: 42.667px;
 }
 
 .backSlot {
+	grid-area: 1 / 1;
 	display: grid;
 	justify-self: start;
 	width: var(--glade-control-size);
@@ -304,8 +316,12 @@ html:has(.main) {
 	fill: var(--background-color);
 }
 
+.logoRays line {
+	animation: rayFlow 650ms linear infinite paused;
+}
+
 .active line {
-	animation: rayFlow 650ms linear infinite;
+	animation-play-state: running;
 }
 
 .logoRays line:nth-child(3n) {

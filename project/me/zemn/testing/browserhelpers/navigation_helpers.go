@@ -127,6 +127,7 @@ return rays.length > 0 && [...rays].every(ray => ray.getTotalLength() <= 0.01);`
 		if err := menu.Click(); err != nil {
 			t.Fatal(err)
 		}
+		var ray selenium.WebElement
 		withNavigationPaused(func() {
 			checkLoading("nav[aria-label='Site navigation'] a[href='"+path+"']", path, `
 const status = document.querySelector(arguments[0]);
@@ -145,6 +146,10 @@ if (location.pathname === '/') {
 }
 const bar = status.closest('header').getBoundingClientRect();
 return rect.width > 0 && rect.height > 0 && rect.left >= bar.left && rect.right <= bar.right && rect.top >= bar.top && rect.bottom <= bar.bottom;`)
+			ray, err = driver.FindElement(selenium.ByCSSSelector, pageLoadingSelector+" svg line")
+			if err != nil {
+				t.Fatal(err)
+			}
 		})
 		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 			current, err := d.CurrentURL()
@@ -152,13 +157,21 @@ return rect.width > 0 && rect.height > 0 && rect.left >= bar.left && rect.right 
 		}); err != nil {
 			t.Fatal(err)
 		}
+		if err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
+			preserved, err := d.ExecuteScript(`return (!!document.querySelector(arguments[1]) === arguments[2]) &&
+				arguments[0] === document.querySelector('[aria-label="Loading page"] svg line');`,
+				[]any{ray, homepageCardSelector, path == "/"})
+			return preserved == true, err
+		}); err != nil {
+			t.Fatalf("navigation to %s replaced the animated logo: %v", path, err)
+		}
 		AssertHeroVideoPreserved(t, driver, video)
 		if path == "/" {
 			// The URL can change before the homepage layout and scroll reset commit.
 			var homeLayout any
 			err := WaitUntil(driver, func(d selenium.WebDriver) (bool, error) {
 				var err error
-				homeLayout, err = d.ExecuteScript(`const bar = document.querySelector('header[data-glade-banner]');
+				homeLayout, err = d.ExecuteScript(`const bar = document.querySelector('nav[aria-label="Site navigation"]').parentElement;
 const rect = bar.getBoundingClientRect();
 const hero = document.querySelector('figure').getBoundingClientRect();
 const card = document.querySelector(arguments[0]);

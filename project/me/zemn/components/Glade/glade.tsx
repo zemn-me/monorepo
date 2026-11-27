@@ -46,10 +46,10 @@ function FooterEmblem() {
  * LetterHead is the inner part of the heading with the name and logo.
  */
 function LetterHead({
-	compact = false,
+	compact,
 	children,
 }: {
-	readonly compact?: boolean;
+	readonly compact: boolean;
 	readonly children?: ReactNode;
 }) {
 	return (
@@ -165,12 +165,6 @@ export default function Glade(props: GladeProps) {
 		return () => window.clearTimeout(timer);
 	}, [props.navigationPending]);
 
-	const navigationRays = (
-		<NavigationRays
-			loading={!!props.navigationPending && showNavigationStatus}
-			failed={!!props.navigationFailed && !props.navigationPending}
-		/>
-	);
 	return (
 		<main
 			className={`${style.main} ${isHomepage ? '' : style.compact}`}
@@ -180,31 +174,47 @@ export default function Glade(props: GladeProps) {
 				{props.children}
 			</section>
 			<HeroVideo className={style.headerBgv} data-glade-banner />
-			{isHomepage && (
-				<div className={style.banner} data-glade-banner>
-					<LetterHead>{navigationRays}</LetterHead>
-				</div>
-			)}
 			<header
-				className={`${style.topbar} ${isHomepage ? style.homeTopbar : ''}`}
+				className={isHomepage ? style.layoutContents : style.topbar}
 				data-glade-banner
 			>
-				<div className={style.backSlot}>
-					{canGoBack && (
-						<button
-							type="button"
-							className={style.backButton}
-							aria-label="Go back"
-							title="Go back"
-							onClick={() => void navigate(-1)}
-						>
-							<span aria-hidden="true">←</span>
-						</button>
-					)}
+				<div
+					className={isHomepage ? style.banner : style.layoutContents}
+					data-glade-banner={isHomepage || undefined}
+				>
+					<LetterHead compact={!isHomepage}>
+						<NavigationRays
+							loading={
+								!!props.navigationPending && showNavigationStatus
+							}
+							failed={
+								!!props.navigationFailed && !props.navigationPending
+							}
+						/>
+					</LetterHead>
 				</div>
-				{!isHomepage && <LetterHead compact />}
-				<GladeMenu />
-				{!isHomepage && navigationRays}
+				<div
+					className={
+						isHomepage
+							? `${style.topbar} ${style.homeTopbar}`
+							: style.layoutContents
+					}
+				>
+					<div className={style.backSlot}>
+						{canGoBack && (
+							<button
+								type="button"
+								className={style.backButton}
+								aria-label="Go back"
+								title="Go back"
+								onClick={() => void navigate(-1)}
+							>
+								<span aria-hidden="true">←</span>
+							</button>
+						)}
+					</div>
+					<GladeMenu />
+				</div>
 			</header>
 			<section className={style.footer} data-glade-footer>
 				<h2 className={dividerHeadingClass}>
