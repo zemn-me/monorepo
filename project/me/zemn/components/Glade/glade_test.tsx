@@ -41,13 +41,6 @@ jest.unstable_mockModule(
 );
 
 jest.unstable_mockModule(
-	'#root/project/me/zemn/components/DividerHeading/index.js',
-	() => ({
-		dividerHeadingClass: 'dividerHeading',
-	})
-);
-
-jest.unstable_mockModule(
 	'#root/project/me/zemn/components/Glade/menu.js',
 	() => ({
 		GladeMenu: () => <nav aria-label="Site" />,

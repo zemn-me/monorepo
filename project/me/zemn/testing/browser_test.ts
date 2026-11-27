@@ -1133,8 +1133,9 @@ describe('zemn.me website', () => {
 				const shortFooter = await driver.findElement(footer);
 				const short = await shortFooter.getRect();
 				expect(Math.abs(short.y + short.height - viewport)).toBeLessThan(1);
-				const divider = await shortFooter.findElement(By.css('h2')).getRect();
-				expect(divider.y).toBeGreaterThanOrEqual(short.y);
+				const emblem = await shortFooter.findElement(By.css('svg')).getRect();
+				expect(emblem.y).toBeGreaterThanOrEqual(short.y);
+				expect(await shortFooter.getText()).not.toContain('⁂');
 
 				await driver.get(`${origin}/article/2026/kasimir`);
 				const long = await driver.findElement(footer).getRect();

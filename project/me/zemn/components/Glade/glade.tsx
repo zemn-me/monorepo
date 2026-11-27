@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from 'react-router';
 import { animated, useReducedMotion, useSpring } from 'react-spring';
 
 import * as bio from '#root/project/me/zemn/bio/index.js';
-import { dividerHeadingClass } from '#root/project/me/zemn/components/DividerHeading/index.js';
 import { HeraldicShield } from '#root/project/me/zemn/components/Glade/heraldic_shield.js';
 import { GladeMenu } from '#root/project/me/zemn/components/Glade/menu.js';
 import style from '#root/project/me/zemn/components/Glade/style.module.css';
@@ -217,9 +216,6 @@ export default function Glade(props: GladeProps) {
 				</div>
 			</header>
 			<section className={style.footer} data-glade-footer>
-				<h2 className={dividerHeadingClass}>
-					<span>⁂</span>
-				</h2>
 				<FooterEmblem />
 				{isHomepage ? (
 					<i className={style.tagline}>
