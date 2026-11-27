@@ -20,9 +20,9 @@ jobs:
     name: Publish main deployment bundle
     outputs:
       run-id: ${{ steps.published.outputs.run-id || github.run_id }}
-      artifact-name: deploy-main-${{ github.sha }}
+      artifact-name: deploy-v2-main-${{ github.sha }}
     concurrency:
-      group: deploy-main-bundle-${{ github.sha }}
+      group: deploy-v2-main-bundle-${{ github.sha }}
       cancel-in-progress: false
       queue: max
     permissions:
@@ -41,7 +41,7 @@ jobs:
       - uses: ./.github/actions/build-deploy-bundle
         if: steps.published.outputs.run-id == ''
         with:
-          artifact-name: deploy-main-${{ github.sha }}
+          artifact-name: deploy-v2-main-${{ github.sha }}
 
   UploadToBazelRemoteCache:
     name: Upload to Bazel remote cache
@@ -167,7 +167,7 @@ jobs:
           aws-region: us-east-1
       - name: Submit
         if: steps.revision.outputs.current == 'true'
-        run: ci/deploy/run.sh "$RUNNER_TEMP/bundle/layers_bundle.tar.gz" production
+        run: ci/deploy/run.sh "$RUNNER_TEMP/bundle" ci/deploy/deploy production
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PULUMI_ACCESS_TOKEN: ${{ steps.secrets.outputs.pulumi_access_token }}

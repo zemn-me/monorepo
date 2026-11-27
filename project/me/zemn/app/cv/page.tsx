@@ -521,6 +521,8 @@ function CV({ content }: { readonly content: CVContent }) {
 	);
 }
 
+export const handle = { metadata: { title: `${Bio.who.name.text} · CV` } };
+
 export default function Page() {
 	return (
 		<main className={style.page}>

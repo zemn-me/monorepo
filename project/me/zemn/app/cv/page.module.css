@@ -320,6 +320,10 @@
 }
 
 @media print {
+	:global(:root):has(.cv) {
+		--print-footer-inset: 30mm;
+	}
+
 	:global(body):has(.page) > :global(:not([data-glade-layout])) {
 		display: none !important;
 	}
@@ -363,13 +367,4 @@
 
 @page {
 	size: A4;
-	margin: 0 0 12mm;
-
-	@bottom-right {
-		content: "Pg. " counter(page) "/" counter(pages);
-		padding-right: 30mm;
-		font-family: Lora, Georgia, "Times New Roman", serif;
-		font-size: 8pt;
-		vertical-align: middle;
-	}
 }

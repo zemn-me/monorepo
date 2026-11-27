@@ -74,18 +74,23 @@ const cmd = new Command('presubmit')
 					'--noshow_loading_progress'
 				)
 			);
-			await Task('Run all bazel tests.')(
+			const pullRequest = process.env['GITHUB_EVENT_NAME'] === 'pull_request';
+			await Task(
+				pullRequest ? 'Run small and medium Bazel tests.' : 'Run all Bazel tests.'
+			)(
 				Bazel.Bazel(
 					cwd,
 					'test',
 					'//...',
 					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
+					...(pullRequest
+						? ['--build_tests_only', '--test_size_filters=small,medium']
+						: []),
 					...(process.env['BAZEL_TEST_UNCACHED'] === 'true'
 						? ['--nocache_test_results']
 						: [])
 				)
 			);
-			// perform all the normal tests
 		}
 
 		await Task('check if we might need to run go.mod')(

@@ -40,7 +40,7 @@ func protocolHTTPContext(next http.Handler) http.Handler {
 		w.Header().Set("Referrer-Policy", "no-referrer")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		if strings.HasPrefix(r.URL.Path, oauthRequestPath) {
-			if origin := r.Header.Get("Origin"); origin != "" && origin != oauthFrontendOrigin() {
+			if origin := r.Header.Get("Origin"); origin != "" && origin != frontendOrigin() {
 				_, failure := oauthFail[struct{}](403, "access_denied", "Origin not allowed")
 				_ = failure.write(w)
 				return

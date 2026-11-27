@@ -156,6 +156,7 @@ export class Component extends Pulumi.ComponentResource {
 			`${name}_api`,
 			{
 				domain: ['api', args.domain].join('.'),
+				frontendOrigin: `https://${args.domain}`,
 				zoneId: args.zoneId,
 				journalWorkerEnvironment: args.journalWorkerEnvironment,
 				callboxPhoneNumber: args.callboxPhoneNumber,

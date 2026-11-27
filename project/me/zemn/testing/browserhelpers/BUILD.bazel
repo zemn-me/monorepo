@@ -9,6 +9,7 @@ package(
 go_library(
     name = "browserhelpers",
     srcs = [
+        "clocked_browser.go",
         "integration_helpers.go",
         "navigation_helpers.go",
     ],

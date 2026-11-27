@@ -61,6 +61,32 @@ class StagingGateTest(unittest.TestCase):
                 ).returncode
                 self.assertEqual(status == 0, result == "success")
 
+    def test_failed_bundle_launcher_fails_the_deployment_step(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner = root / "ci/deploy/run.sh"
+            runner.parent.mkdir(parents=True)
+            runner.write_text(
+                '#!/bin/sh\n'
+                'test "$1" = "$RUNNER_TEMP/$BUNDLE" && test "$2" = ci/deploy/deploy '
+                '&& test "$3" = "$REVISION" || exit 2\n'
+                'exit 23\n'
+            )
+            runner.chmod(0o755)
+            for workflow, job, step_name, bundle, revision in (
+                ("staging.yml", "Deploy", "Deploy main to staging", "bundles/staging-main", "main"),
+                ("staging.yml", "Deploy", "Deploy candidate branch to Staging", "bundles/staging-candidate", "candidate"),
+                ("submit.yml", "Submit", "Submit", "bundle", "production"),
+            ):
+                with self.subTest(revision=revision):
+                    steps = self.workflows[workflow]["jobs"][job]["steps"]
+                    step = next(step for step in steps if step.get("name") == step_name)
+                    result = subprocess.run(
+                        ["bash", "-eo", "pipefail", "-c", step["run"]], cwd=root,
+                        env={"RUNNER_TEMP": directory, "BUNDLE": bundle, "REVISION": revision},
+                    )
+                    self.assertEqual(result.returncode, 23)
+
     def test_pull_requests_can_enter_queue_without_deploying(self):
         self.assertEqual(
             staging_providers(self.workflows, "pull_request"), {"staging-pr.yml"}

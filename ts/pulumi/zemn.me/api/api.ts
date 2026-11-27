@@ -3,6 +3,7 @@ import * as Pulumi from '@pulumi/pulumi';
 
 import { ApiZemnMeLambdaImage } from '#root/project/me/zemn/api/cmd/api/ApiZemnMeLambdaImage.js';
 import { JournalWorkerLambdaImage } from '#root/project/me/zemn/api/cmd/journal_worker/JournalWorkerLambdaImage.js';
+import { sanitizeAwsAlphaNumericHyphenUnderscoreName } from '#root/ts/pulumi/lib/awsNames.js';
 import { deriveBucketName } from '#root/ts/pulumi/lib/bucketName.js';
 import Certificate from '#root/ts/pulumi/lib/certificate.js';
 import { BinaryImageFunction } from '#root/ts/pulumi/lib/lambda_function.js';
@@ -21,6 +22,7 @@ export const openAIWorkloadIdentityAudience = 'https://api.openai.com/v1';
 export interface Args {
 	zoneId: Pulumi.Input<string>;
 	domain: string;
+	frontendOrigin: string;
 	journalWorkerEnvironment: 'staging' | 'production';
 	callboxPhoneNumber: Pulumi.Input<string>;
 	protectDatabases: boolean;
@@ -630,10 +632,7 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 						JOURNAL_CURATION_ENABLED: 'true',
 						OAUTH_TABLE_NAME: oauthTable.name,
 						ZEMN_API_ORIGIN: `https://${args.domain}`,
-						OAUTH_FRONTEND_ORIGIN:
-							args.journalWorkerEnvironment === 'staging'
-								? 'https://staging.zemn.me'
-								: 'https://zemn.me',
+						OAUTH_FRONTEND_ORIGIN: args.frontendOrigin,
 						JOURNAL_BUCKET_NAME: journalBucket.bucket,
 						TWILIO_SHARED_SECRET: args.twilioSharedSecret,
 						...(args.minecraftRconBridgeFunctionName === undefined
@@ -886,6 +885,107 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 			{ parent: this }
 		);
 
+		const orbitPolicyName = sanitizeAwsAlphaNumericHyphenUnderscoreName(
+			`${name}-orbit-elements`
+		);
+		const orbitCachePolicy = new aws.cloudfront.CachePolicy(
+			orbitPolicyName,
+			{
+				minTtl: 0,
+				defaultTtl: 0,
+				maxTtl: 365 * 24 * 60 * 60,
+				parametersInCacheKeyAndForwardedToOrigin: {
+					enableAcceptEncodingGzip: true,
+					enableAcceptEncodingBrotli: true,
+					cookiesConfig: { cookieBehavior: 'none' },
+					headersConfig: { headerBehavior: 'none' },
+					queryStringsConfig: { queryStringBehavior: 'none' },
+				},
+			},
+			{ parent: this }
+		);
+		const orbitOriginPolicy = new aws.cloudfront.OriginRequestPolicy(
+			`${orbitPolicyName}-origin`,
+			{
+				cookiesConfig: { cookieBehavior: 'none' },
+				queryStringsConfig: { queryStringBehavior: 'none' },
+				headersConfig: {
+					headerBehavior: 'whitelist',
+					headers: {
+						items: [
+							'Host',
+							'Origin',
+							'Access-Control-Request-Method',
+							'Access-Control-Request-Headers',
+						],
+					},
+				},
+			},
+			{ parent: this }
+		);
+		// Keep the regional custom-domain mapping and the viewer Host for signed API calls.
+		const apiBehavior = {
+			targetOriginId: 'regional-api',
+			viewerProtocolPolicy: 'https-only',
+			cachedMethods: ['GET', 'HEAD'],
+		};
+		const distribution = new aws.cloudfront.Distribution(
+			`${name}-edge`,
+			{
+				enabled: true,
+				aliases: [args.domain],
+				origins: [
+					{
+						originId: apiBehavior.targetOriginId,
+						domainName:
+							customDomain.domainNameConfiguration
+								.targetDomainName,
+						customOriginConfig: {
+							httpPort: 80,
+							httpsPort: 443,
+							originProtocolPolicy: 'https-only',
+							originSslProtocols: ['TLSv1.2'],
+						},
+					},
+				],
+				defaultCacheBehavior: {
+					...apiBehavior,
+					allowedMethods: [
+						'GET',
+						'HEAD',
+						'OPTIONS',
+						'POST',
+						'PUT',
+						'PATCH',
+						'DELETE',
+					],
+					cachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad', // AWS CachingDisabled
+					originRequestPolicyId:
+						'216adef6-5c7f-47e4-b989-5492eafa07d3', // AWS AllViewer
+				},
+				orderedCacheBehaviors: [
+					{
+						...apiBehavior,
+						pathPattern: '/earth-orbits/elements/*',
+						compress: true,
+						allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+						cachePolicyId: orbitCachePolicy.id,
+						originRequestPolicyId: orbitOriginPolicy.id,
+					},
+				],
+				customErrorResponses: [
+					400, 403, 404, 405, 414, 416, 500, 501, 502, 503, 504,
+				].map(errorCode => ({ errorCode, errorCachingMinTtl: 0 })),
+				restrictions: { geoRestriction: { restrictionType: 'none' } },
+				viewerCertificate: {
+					acmCertificateArn: cert.validation.certificateArn,
+					sslSupportMethod: 'sni-only',
+					minimumProtocolVersion: 'TLSv1.2_2021',
+				},
+			},
+			{ parent: this }
+		);
+
 		new aws.route53.Record(
 			`${name}-dns`,
 			{
@@ -894,10 +994,8 @@ export class ApiZemnMe extends Pulumi.ComponentResource {
 				type: 'A',
 				aliases: [
 					{
-						name: customDomain.domainNameConfiguration
-							.targetDomainName,
-						zoneId: customDomain.domainNameConfiguration
-							.hostedZoneId,
+						name: distribution.domainName,
+						zoneId: distribution.hostedZoneId,
 						evaluateTargetHealth: false,
 					},
 				],

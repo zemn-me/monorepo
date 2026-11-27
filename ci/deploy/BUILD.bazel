@@ -1,8 +1,8 @@
-load("@aspect_rules_js//js:defs.bzl", "js_image_layer")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//js:rules.bzl", "js_binary")
 load("//ts:rules.bzl", "ts_project")
+load(":bundle.bzl", "deploy_bundle")
 
 ts_project(
     name = "production",
@@ -16,9 +16,14 @@ ts_project(
 
 ts_project(
     name = "deploy_lib",
-    srcs = ["deploy.ts"],
+    srcs = [
+        "deploy.ts",
+        "verify.ts",
+    ],
     deps = [
         ":production",
+        "//:node_modules/@bazel/runfiles",
+        "//:node_modules/@types/node",
         "//ts/pulumi",
         "//ts/pulumi:cli",
     ],
@@ -29,43 +34,40 @@ js_binary(
     data = [
         ":deploy_lib",
         "//VERSION",
+        "//bin/linux/pulumi:providers",
+        "//bzl/pulumi_providers:checkpoint_versions",
     ],
     entry_point = "deploy.js",
-)
-
-# Keep the launcher, its Node runtime, pnpm links and Pulumi assets together.
-js_image_layer(
-    name = "layers",
-    binary = ":deploy",
-    layer_groups = {"bundle": ""},
-    tags = ["manual"],
-)
-
-filegroup(
-    name = "bundle",
-    srcs = [":layers"],
-    output_group = "bundle",
-    tags = ["manual"],
+    env = {
+        "PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION": "true",
+        "PULUMI_IGNORE_AMBIENT_PLUGINS": "true",
+    },
 )
 
 sh_test(
-    name = "bundle_test",
+    name = "providers_test",
     size = "medium",
-    srcs = ["bundle_test.sh"],
-    args = [
-        "$(rootpath run.sh)",
-        "$(rootpath :bundle)",
-    ],
-    data = [
-        "run.sh",
-        ":bundle",
-    ],
-    tags = ["manual"],
+    srcs = ["providers_test.sh"],
+    args = ["$(rootpath :deploy)"],
+    data = [":deploy"],
 )
+
+sh_test(
+    name = "deploy_failure_test",
+    size = "medium",
+    srcs = ["deploy_failure_test.sh"],
+    args = ["$(rootpath :deploy)"],
+    data = [":deploy"],
+)
+
+deploy_bundle()
 
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    srcs = [
+        "BUILD.bazel",
+        "bundle.bzl",
+    ],
 )
 
 filegroup(
@@ -73,6 +75,7 @@ filegroup(
     srcs = [
         "deploy.ts",
         "production.ts",
+        "verify.ts",
     ],
     visibility = ["//:__subpackages__"],
 )

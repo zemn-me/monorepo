@@ -41,6 +41,11 @@ export const experimentGroups: readonly ExperimentGroup[] = [
 		title: 'Generators & tools',
 		experiments: [
 			{
+				href: '/experiments/astrological-chart',
+				title: 'Astrological Chart',
+				description: 'Plot the Sun, Moon, planets, and space junk for your birthday.',
+			},
+			{
 				href: '/experiments/elastictabs',
 				title: 'Elastic Tabstops',
 				description: 'Align tab-delimited text into elastic columns.',

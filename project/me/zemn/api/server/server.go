@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/NYTimes/gziphandler"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -52,6 +53,7 @@ var _ JournalPresigner = (*s3.PresignClient)(nil)
 
 // Server holds the DynamoDB client and table names.
 type Server struct {
+	orbitArchive         orbitArchive
 	ddb                  DynamoDBClient
 	analyticsTableName   string
 	settingsTableName    string
@@ -86,8 +88,10 @@ type Server struct {
 }
 
 type NewServerOptions struct {
-	AWSConfig  *aws.Config
-	LocalStack bool
+	// OrbitElementsTransport lets integration tests supply an archive for a known date.
+	OrbitElementsTransport http.RoundTripper
+	AWSConfig              *aws.Config
+	LocalStack             bool
 	// AllowRequestHostOIDCIssuer permits request-derived issuers for local
 	// development. Leave false in deployed servers.
 	AllowRequestHostOIDCIssuer bool
@@ -153,12 +157,7 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	r := chi.NewRouter()
 	r.Use(analyticsRequestContext)
 	r.Use(protocolHTTPContext)
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions, http.MethodPatch},
-		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
-		MaxAge:         300,
-	}))
+	r.Use(apiHTTPPolicy)
 
 	journalObjects := opts.JournalObjects
 	journalPresigner := opts.JournalPresigner
@@ -170,6 +169,9 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 		}
 	}
 	s := &Server{
+		orbitArchive: orbitArchive{
+			client: &http.Client{Timeout: 18 * time.Second, Transport: opts.OrbitElementsTransport},
+		},
 		log:                  log.New(os.Stderr, "Server ", log.Ldate|log.Ltime|log.Llongfile|log.LUTC),
 		ddb:                  dynamodb.NewFromConfig(cfg),
 		analyticsTableName:   analyticsTableName,
@@ -216,6 +218,43 @@ func NewServer(ctx context.Context, opts NewServerOptions) (*Server, error) {
 	baseHandler := journalPrivateCacheHandler(HandlerFromMux(NewStrictHandler(s, nil), r))
 	s.Handler = analyticsBeaconHandler(baseHandler, opts.AllowLocalhostAnalytics)
 	return s, nil
+}
+
+func frontendOrigin() string {
+	if origin := os.Getenv("OAUTH_FRONTEND_ORIGIN"); origin != "" {
+		return origin
+	}
+	return "https://zemn.me"
+}
+
+func apiHTTPPolicy(next http.Handler) http.Handler {
+	options := cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions, http.MethodPatch},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
+		MaxAge:         300,
+	}
+	public := cors.Handler(options)(next)
+	origin := frontendOrigin()
+	options.AllowedOrigins = []string{origin}
+	options.AllowedMethods = []string{http.MethodGet, http.MethodHead}
+	preflight := cors.Handler(options)(next)
+	// Compress before the buffered Lambda response limit when the viewer accepts gzip.
+	archive := gziphandler.GzipHandler(next)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.HasPrefix(r.URL.Path, "/earth-orbits/elements/") {
+			public.ServeHTTP(w, r)
+			return
+		}
+		if r.Method == http.MethodOptions {
+			preflight.ServeHTTP(w, r)
+			return
+		}
+		// Every cached representation names the same site, even if the cache was
+		// filled by a request without an Origin header.
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		archive.ServeHTTP(w, r)
+	})
 }
 
 func journalPrivateCacheHandler(next http.Handler) http.Handler {

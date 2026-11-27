@@ -25,6 +25,17 @@ test('production artifact serves prerendered HTML and navigation data', async ()
 	assert.equal(await head.text(), '');
 });
 
+test('print footers receive the page title in the initial HTML', async () => {
+	for (const [route, title] of [
+		['/article', 'Articles'],
+		['/experiments/astrological-chart', 'Astrological Chart'],
+		['/2026/endings', 'Endings'],
+	]) {
+		const response = await request(route);
+		assert.ok((await response.text()).includes(`data-print-title="${title}"`), route);
+	}
+});
+
 test('unprerendered routes and query-dependent loader requests reach the live router', async () => {
 	await assert.rejects(access(path.join(server, 'prerendered/healthz.html')));
 	await assert.rejects(access(path.join(server, 'prerendered/journal.html')));

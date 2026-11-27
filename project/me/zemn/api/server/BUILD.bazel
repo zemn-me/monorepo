@@ -80,6 +80,7 @@ go_library(
         "minecraft.go",
         "oidc.go",
         "oidc_configuration.go",
+        "orbit_archive.go",
         "phone.go",
         "protocol_http.go",
         "security_txt.go",
@@ -129,6 +130,7 @@ go_library(
         "@com_github_modelcontextprotocol_go_sdk//auth",
         "@com_github_modelcontextprotocol_go_sdk//mcp",
         "@com_github_nyaruka_phonenumbers_v2//:phonenumbers",
+        "@com_github_nytimes_gziphandler//:gziphandler",
         "@com_github_oapi_codegen_nethttp_middleware//:nethttp-middleware",
         "@com_github_oapi_codegen_runtime//:runtime",
         "@com_github_oapi_codegen_runtime//strictmiddleware/nethttp",
@@ -141,6 +143,7 @@ go_library(
         "@com_github_twilio_twilio_go//twiml",
         "@com_github_xeipuuv_gojsonschema//:gojsonschema",
         "@org_golang_x_sync//errgroup",
+        "@org_golang_x_sync//singleflight",
     ],
 )
 
@@ -169,6 +172,7 @@ go_test(
         "mcp_oauth_test.go",
         "minecraft_test.go",
         "oidc_authentication_test.go",
+        "orbit_archive_test.go",
         "phone_features_test.go",
         "protocol_http_test.go",
         "salutation_test.go",

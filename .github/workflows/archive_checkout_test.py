@@ -9,19 +9,25 @@ from pathlib import Path
 
 
 class ArchiveCheckoutTest(unittest.TestCase):
-    def test_main_uses_candidate_archives_and_only_bootstraps_a_missing_launcher(self):
-        for has_launcher in (False, True):
-            with self.subTest(has_launcher=has_launcher), tempfile.TemporaryDirectory() as root:
+    def test_pinned_main_keeps_its_program_when_bootstrapping_bundle_rules(self):
+        for has_packager in (False, True):
+            with self.subTest(has_packager=has_packager), tempfile.TemporaryDirectory() as root:
                 workspace = Path(root)
                 candidate = workspace / "ci/deploy"
                 candidate.mkdir(parents=True)
-                (candidate / "deploy.ts").write_text("candidate")
+                packaging = ("bundle.bzl", "bundle_test.sh", "deploy_failure_test.sh", "run.sh")
+                for name in packaging:
+                    (candidate / name).write_text("candidate")
+                (candidate / "deploy.ts").write_text("candidate program")
                 main = workspace / "main"
-                (main / "ci").mkdir(parents=True)
                 launcher = main / "ci/deploy"
-                if has_launcher:
-                    launcher.mkdir()
-                    (launcher / "deploy.ts").write_text("main")
+                launcher.mkdir(parents=True)
+                (launcher / "deploy.ts").write_text("main program")
+                build_file = launcher / "BUILD.bazel"
+                build_file.write_text("# main targets\n")
+                if has_packager:
+                    for name in packaging:
+                        (launcher / name).write_text("main")
                 prepare = main / ".github/workflows/prepare_ci.sh"
                 prepare.parent.mkdir(parents=True)
                 prepare.write_text("#!/bin/sh\nexit 0\n")
@@ -37,7 +43,12 @@ class ArchiveCheckoutTest(unittest.TestCase):
                 args = (main / "bazel-args").read_text().splitlines()
                 for archive in ("ape", "rules_diff"):
                     self.assertIn(f"--distdir={workspace}/third_party/bazel_distdir/{archive}", args)
-                self.assertEqual((launcher / "deploy.ts").read_text(), "main" if has_launcher else "candidate")
+                self.assertEqual((launcher / "deploy.ts").read_text(), "main program")
+                self.assertIn("# main targets", build_file.read_text())
+                self.assertEqual("deploy_bundle()" in build_file.read_text(), not has_packager)
+                for name in packaging:
+                    self.assertEqual((launcher / name).read_text(), "main" if has_packager else "candidate")
+                self.assertIn("//ci/deploy:bundle_test", args)
 
 
 if __name__ == "__main__":

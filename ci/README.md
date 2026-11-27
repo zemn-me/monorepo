@@ -5,7 +5,11 @@ For more detail, it's best to read [presubmit.yml].
 
 [presubmit.yml]: /.github/workflows/presubmit.yml
 
-Presubmit repeats the Tiberian Sun browser integration test five times through
+Pull requests run Bazel tests sized `small` or `medium` and build only the
+targets those tests need. The merge queue builds and tests `//...` across all
+sizes on the combined commit. Both stages run the Go module and Gazelle checks.
+
+The merge queue repeats the Tiberian Sun browser integration test five times through
 `ci-local` (also inherited by both remote CI profiles). Every run must pass;
 automatic test retries are disabled. The BEP annotator emits an error for any
 `FLAKY` summary, which the presubmit runner treats as a failure even if Bazel

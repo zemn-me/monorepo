@@ -8,6 +8,7 @@ import {
 } from '#root/ts/math/face_bsp.js';
 import {
 	faceLayer,
+	type Perspective,
 	perspective,
 	type RenderedFace2D,
 	renderedSource,
@@ -47,14 +48,13 @@ function paintRuns(
 	return runs;
 }
 
-/** Serialize an initial frame without a DOM; geometry and batching match live rendering. */
-export function renderSVGSnapshot(
+/** Ordered SVG paint runs for a declarative first frame that the live renderer can adopt. */
+export function svgSnapshotPaths(
 	worldFaces: readonly StyledFace3D[],
 	faces: readonly StyledFace3D[],
 	camera: OrbitCamera,
-	width: number,
-	height: number
-): string {
+	projection: Perspective
+) {
 	const world = new Map(
 		[...byLayer(worldFaces)].map(([layer, polygons]) => [
 			layer,
@@ -74,15 +74,27 @@ export function renderSVGSnapshot(
 			(_node, _kind, polygons) => batches.push(polygons)
 		);
 	const rendered = unwrap(
-		renderFaces(
-			batches.flat(),
-			pose,
-			perspective(width, height, { focalScale: 0.95 }),
-			{ preserveOrder: true }
-		)
+		renderFaces(batches.flat(), pose, projection, { preserveOrder: true })
 	);
 	const bySource = new Map(
 		rendered.map(face => [renderedSource(face), face])
+	);
+	return batches.map(batch => paintRuns(batch, bySource));
+}
+
+/** Serialize an initial frame without a DOM; geometry and batching match live rendering. */
+export function renderSVGSnapshot(
+	worldFaces: readonly StyledFace3D[],
+	faces: readonly StyledFace3D[],
+	camera: OrbitCamera,
+	width: number,
+	height: number
+): string {
+	const batches = svgSnapshotPaths(
+		worldFaces,
+		faces,
+		camera,
+		perspective(width, height, { focalScale: 0.95 })
 	);
 	const attribute = (value: string) =>
 		value
@@ -96,7 +108,7 @@ export function renderSVGSnapshot(
 			.map(
 				batch =>
 					'<g>' +
-					paintRuns(batch, bySource)
+					batch
 						.map(
 							([path, fill]) =>
 								`<path d="${attribute(path)}" fill="${attribute(fill)}" stroke="${attribute(fill)}"></path>`
@@ -219,13 +231,19 @@ export function createSVGRenderer(svg: SVGSVGElement, host: SVGElement = svg) {
 			used = 0;
 			cameraKey = '';
 		},
-		render(camera: OrbitCamera, faces: readonly StyledFace3D[]) {
+		render(
+			camera: OrbitCamera,
+			faces: readonly StyledFace3D[],
+			projection: Perspective = perspective(
+				Math.max(1, svg.clientWidth),
+				Math.max(1, svg.clientHeight),
+				{ focalScale: 0.95 }
+			)
+		) {
 			frame++;
-			const width = Math.max(1, svg.clientWidth),
-				height = Math.max(1, svg.clientHeight);
-			const projection = perspective(width, height, { focalScale: 0.95 }),
-				pose = orbitPose(camera);
-			const key = JSON.stringify([camera, width, height]);
+			const { width, height } = projection;
+			const pose = orbitPose(camera);
+			const key = JSON.stringify([camera, projection]);
 			if (key !== cameraKey) {
 				// BSP planes are independent of the eye; orbiting only changes traversal
 				// and projection. Keep their SVG slots and geometry alive across views.

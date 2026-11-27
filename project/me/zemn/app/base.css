@@ -102,15 +102,28 @@ body::selection {
 	color: var(--highlight-foreground-color);
 }
 
+@media print {
+	:root {
+		--print-page-title: attr(data-print-title);
+		--print-footer-inset: 2rem;
+	}
+}
+
 @page {
 	margin: 0 0 12mm;
+	color: black;
+	font-family: Lora, Georgia, "Times New Roman", serif;
+	font-size: 8pt;
+
+	@bottom-left {
+		content: var(--print-page-title);
+		padding-left: var(--print-footer-inset);
+		vertical-align: middle;
+	}
 
 	@bottom-right {
 		content: "Pg. " counter(page) "/" counter(pages);
-		padding-right: 2rem;
-		color: black;
-		font-family: Lora, Georgia, "Times New Roman", serif;
-		font-size: 8pt;
+		padding-right: var(--print-footer-inset);
 		vertical-align: middle;
 		white-space: nowrap;
 	}

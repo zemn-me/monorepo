@@ -40,7 +40,6 @@ jobs:
         ${{ github.workflow }}-
         ${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
-    # Performs all offline testing.
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)

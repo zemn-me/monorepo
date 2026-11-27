@@ -2148,8 +2148,12 @@ export function JournalReaderLayout() {
 	const recorder = useRef<RecordingSession | undefined>(undefined);
 	const [recordingBusy, setRecordingBusy] = useState(false);
 	const [recordingElapsed, setRecordingElapsed] = useState(0);
-	const [recording, setRecording] = useState(false);
+	const [recordingPaused, setRecordingPaused] = useState(false);
 	const [recordingStream, setRecordingStream] = useState<MediaStream>();
+	const recording = recordingStream !== undefined;
+	const pauseLabel = recordingPaused
+		? 'Resume recording'
+		: 'Pause recording';
 	const [recordingError, setRecordingError] = useState<string>();
 	const [recordingLocationError, setRecordingLocationError] =
 		useState<string>();
@@ -2333,7 +2337,10 @@ export function JournalReaderLayout() {
 		let session: RecordingSession | undefined;
 		try {
 			session = await startLocalRecording(owner, {
-				tick: setRecordingElapsed,
+				tick: (elapsed, paused) => {
+					setRecordingElapsed(elapsed);
+					setRecordingPaused(paused);
+				},
 				locationError: message => {
 					if (currentOwner.current === owner)
 						setRecordingLocationError(message);
@@ -2342,7 +2349,6 @@ export function JournalReaderLayout() {
 					if (recorder.current === session) {
 						recorder.current = undefined;
 						setRecordingStream(undefined);
-						setRecording(false);
 						setRecordingBusy(false);
 					}
 					if (message) setRecordingError(message);
@@ -2356,7 +2362,6 @@ export function JournalReaderLayout() {
 			}
 			recorder.current = session;
 			setRecordingStream(session.stream);
-			setRecording(true);
 			setRecordingBusy(false);
 		} catch (error) {
 			setRecordingBusy(false);
@@ -2383,7 +2388,7 @@ export function JournalReaderLayout() {
 			aria-label="Create a journal entry"
 			aria-busy={recordingBusy || queue.syncing !== undefined}
 			className={style.recorder}
-			data-recording={recordingStream ? '' : undefined}
+			data-recording={recording ? '' : undefined}
 			data-notice={
 				recordingError || recordingLocationError ? '' : undefined
 			}
@@ -2446,7 +2451,25 @@ export function JournalReaderLayout() {
 			</button>
 			{recordingStream && (
 				<>
-					<RecordingWaveform stream={recordingStream} />
+					<button
+						aria-label={pauseLabel}
+						disabled={recordingBusy}
+						onClick={() => recorder.current?.togglePause()}
+						title={pauseLabel}
+						type="button"
+					>
+						<FontAwesomeIcon
+							aria-hidden="true"
+							icon={recordingPaused ? faPlay : faPause}
+						/>
+					</button>
+					{recordingPaused ? (
+						<span className={style.pausedWaveform} role="status">
+							Paused
+						</span>
+					) : (
+						<RecordingWaveform stream={recordingStream} />
+					)}
 					<div className={style.recordingTime}>
 						<span role="timer" aria-label="Recording duration">
 							{mediaTimestamp(recordingElapsed)}
@@ -2510,6 +2533,7 @@ export function JournalReaderLayout() {
 					</p>
 				) : (
 					<JournalPlayerProvider
+						capturing={recordingBusy || recording}
 						portalTarget={playerHost}
 						key={owner}
 						journal={

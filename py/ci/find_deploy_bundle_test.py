@@ -12,8 +12,8 @@ class PublishedBundleTest(unittest.TestCase):
                 self.assertEqual(query, dict(branch="main", event="push", head_sha="abc"))
                 return {"workflow_runs": [{"id": 42}]}
             self.assertEqual(path, "runs/42/artifacts")
-            self.assertEqual(query, {"name": "deploy-main-abc"})
-            return {"artifacts": [{"name": "deploy-main-abc", "expired": False}]}
+            self.assertEqual(query, {"name": "deploy-v2-main-abc"})
+            return {"artifacts": [{"name": "deploy-v2-main-abc", "expired": False}]}
 
         self.assertEqual(published_run(api, "abc"), 42)
 
@@ -22,8 +22,9 @@ class PublishedBundleTest(unittest.TestCase):
 
     def test_expired_bundle_and_other_revisions_are_misses(self):
         artifacts = [
-            {"name": "deploy-main-abc", "expired": True},
-            {"name": "deploy-main-older", "expired": False},
+            {"name": "deploy-v2-main-abc", "expired": True},
+            {"name": "deploy-main-abc", "expired": False},
+            {"name": "deploy-v2-main-older", "expired": False},
             {"name": "staging-main-abc", "expired": False},
             {"name": "staging-candidate", "expired": False},
         ]
@@ -41,7 +42,7 @@ class PublishedBundleTest(unittest.TestCase):
             if path == "runs/99/artifacts":
                 return {"artifacts": []}
             self.assertEqual(path, "runs/42/artifacts")
-            return {"artifacts": [{"name": "deploy-main-abc", "expired": False}]}
+            return {"artifacts": [{"name": "deploy-v2-main-abc", "expired": False}]}
 
         self.assertEqual(published_run(api, "abc"), 42)
 
