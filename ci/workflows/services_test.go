@@ -28,6 +28,13 @@ type buildRecord struct {
 }
 
 func TestMain(m *testing.M) {
+	if filepath.Base(os.Args[0]) == "node" {
+		if err := nodeAction(os.Args[1:]); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if len(os.Args) >= 3 && os.Args[1] == "--service" {
 		if err := service(os.Args[2], os.Args[3:]); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -36,6 +43,86 @@ func TestMain(m *testing.M) {
 		return
 	}
 	os.Exit(m.Run())
+}
+
+// act resolves Node once, then invokes the entrypoint from the upstream
+// action.yml with INPUT_* variables and GitHub's output and state files.
+func nodeAction(args []string) error {
+	if slices.Equal(args, []string{"--no-warnings", "-e", "console.log(process.execPath)"}) {
+		fmt.Println(os.Args[0])
+		return nil
+	}
+	if len(args) != 1 {
+		return fmt.Errorf("unexpected node invocation: %q", args)
+	}
+	if info, err := os.Stat(args[0]); err != nil || !info.Mode().IsRegular() {
+		return fmt.Errorf("missing action entrypoint %s", args[0])
+	}
+	if os.Getenv("STATE_fixture_main_ran") == "true" {
+		return nil // Post-action cleanup of the fixture services.
+	}
+	if err := appendLine(os.Getenv("GITHUB_STATE"), "fixture_main_ran=true"); err != nil {
+		return err
+	}
+	switch repo := os.Getenv("GITHUB_ACTION_REPOSITORY"); repo {
+	case "actions/checkout":
+		src := os.Getenv("FIXTURE_REPO")
+		if ref := os.Getenv("INPUT_REF"); ref != "" && ref == os.Getenv("MAIN_SHA") {
+			src = os.Getenv("FIXTURE_MAIN")
+		}
+		dest := os.Getenv("INPUT_PATH")
+		if dest == "" {
+			dest = "."
+		}
+		return os.CopyFS(dest, os.DirFS(src))
+	case "google-github-actions/get-secretmanager-secrets":
+		if os.Getenv("CACHE_SECRET") == "missing" {
+			return fmt.Errorf("fixture cache key unavailable")
+		}
+		for line := range strings.SplitSeq(os.Getenv("INPUT_SECRETS"), "\n") {
+			alias, _, _ := strings.Cut(line, ":")
+			switch alias {
+			case "buildbuddy_api_key":
+				if err := appendLine(os.Getenv("GITHUB_OUTPUT"), "buildbuddy_api_key="+marker); err != nil {
+					return err
+				}
+			case "readonly_buildbuddy_api_key":
+				if err := appendLine(os.Getenv("GITHUB_OUTPUT"), "readonly_buildbuddy_api_key="+marker); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	case "actions/upload-artifact":
+		dest := artifact(os.Getenv("GITHUB_RUN_ID"), os.Getenv("INPUT_NAME"))
+		for path := range strings.SplitSeq(strings.TrimSpace(os.Getenv("INPUT_PATH")), "\n") {
+			data, err := os.ReadFile(path)
+			if os.IsNotExist(err) && os.Getenv("INPUT_IF-NO-FILES-FOUND") == "ignore" {
+				continue
+			}
+			if err != nil {
+				return err
+			}
+			if err := writeFile(filepath.Join(dest, filepath.Base(path)), string(data), 0644); err != nil {
+				return err
+			}
+		}
+		return nil
+	case "actions/download-artifact":
+		run := os.Getenv("INPUT_RUN-ID")
+		if run == "" {
+			run = os.Getenv("GITHUB_RUN_ID")
+		}
+		name := os.Getenv("INPUT_NAME")
+		if err := os.CopyFS(os.Getenv("INPUT_PATH"), os.DirFS(artifact(run, name))); err != nil {
+			return fmt.Errorf("download %q from run %s: %w", name, run, err)
+		}
+		return nil
+	case "google-github-actions/auth", "aws-actions/configure-aws-credentials":
+		return nil
+	default:
+		return fmt.Errorf("no Node service fixture for %s", repo)
+	}
 }
 
 func writeFile(path, value string, mode os.FileMode) error {
@@ -179,58 +266,6 @@ func service(name string, args []string) error {
 		return github(args)
 	case "bazel":
 		return bazel(args)
-	case "checkout":
-		src := os.Getenv("FIXTURE_REPO")
-		if args[1] != "" && args[1] == os.Getenv("MAIN_SHA") {
-			src = os.Getenv("FIXTURE_MAIN")
-		}
-		dest := args[0]
-		if dest == "" {
-			dest = "."
-		}
-		return os.CopyFS(dest, os.DirFS(src))
-	case "secrets":
-		if os.Getenv("CACHE_SECRET") == "missing" {
-			return fmt.Errorf("fixture cache key unavailable")
-		}
-		for line := range strings.SplitSeq(args[0], "\n") {
-			alias, _, _ := strings.Cut(line, ":")
-			switch alias {
-			case "buildbuddy_api_key":
-				if err := appendLine(os.Getenv("GITHUB_OUTPUT"), "buildbuddy_api_key="+marker); err != nil {
-					return err
-				}
-			case "readonly_buildbuddy_api_key":
-				if err := appendLine(os.Getenv("GITHUB_OUTPUT"), "readonly_buildbuddy_api_key="+marker); err != nil {
-					return err
-				}
-			}
-		}
-		return nil
-	case "upload":
-		dest := artifact(os.Getenv("GITHUB_RUN_ID"), args[0])
-		for path := range strings.SplitSeq(strings.TrimSpace(args[1]), "\n") {
-			data, err := os.ReadFile(path)
-			if os.IsNotExist(err) && args[2] == "ignore" {
-				continue
-			}
-			if err != nil {
-				return err
-			}
-			if err := writeFile(filepath.Join(dest, filepath.Base(path)), string(data), 0644); err != nil {
-				return err
-			}
-		}
-		return nil
-	case "download":
-		run := args[0]
-		if run == "" {
-			run = os.Getenv("GITHUB_RUN_ID")
-		}
-		if err := os.CopyFS(args[2], os.DirFS(artifact(run, args[1]))); err != nil {
-			return fmt.Errorf("download %q from run %s: %w", args[1], run, err)
-		}
-		return nil
 	case "deploy":
 		if args[1] != "ci/deploy/deploy" {
 			return fmt.Errorf("unexpected launcher %s", args[1])

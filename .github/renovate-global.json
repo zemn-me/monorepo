@@ -6,7 +6,10 @@
 	"autodiscoverFilter": ["zemn-me/monorepo"],
 	"allowScripts": true,
 	"allowedUnsafeExecutions": ["bazelModDeps"],
-	"allowedCommands": ["^\\./sh/postUpgrade\\.sh$"],
+	"allowedCommands": [
+		"^\\./sh/postUpgrade\\.sh$",
+		"^\\./sh/bin/bazel run //ci/workflows:action_lock$"
+	],
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": "enabled",
@@ -126,6 +129,14 @@
 			"matchManagers": ["bazel-module"],
 			"matchPackageNames": ["rules_oci"],
 			"allowedVersions": "!/1.8.0$/"
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"postUpgradeTasks": {
+				"commands": ["./sh/bin/bazel run //ci/workflows:action_lock"],
+				"executionMode": "branch",
+				"fileFilters": ["ci/workflows/actions.lock.json"]
+			}
 		},
 		{
 			"matchManagers": ["github-actions"],

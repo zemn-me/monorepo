@@ -1,15 +1,27 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("//bzl:rules.bzl", "bazel_lint")
+load("//py:rules.bzl", "py_binary", "py_library", "py_test")
+load(":action_cache.bzl", "github_action_cache")
+
+exports_files(["actions.lock.json"])
+
+github_action_cache(
+    name = "action_cache",
+    archives = "@workflow_action_archives//:archives",
+)
 
 go_test(
     name = "workflows_test",
     size = "medium",
     srcs = [
+        "action_cache_test.go",
         "runner_test.go",
         "services_test.go",
         "workflow_test.go",
     ],
     data = [
+        "actions.lock.json",
+        ":action_cache",
         "//.github/workflows:workflow_test_files",
         "//py/ci:find_deploy_bundle.py",
     ],
@@ -23,7 +35,38 @@ go_test(
     ],
 )
 
+py_binary(
+    name = "action_lock",
+    srcs = ["action_lock.py"],
+    main = "action_lock.py",
+    visibility = ["//:__subpackages__"],
+    deps = ["@pip//pyyaml"],
+)
+
+py_test(
+    name = "action_lock_test",
+    size = "small",
+    srcs = ["action_lock.py"],
+    args = ["--check"],
+    data = [
+        "actions.lock.json",
+        "//.github/workflows:workflow_test_files",
+    ],
+    main = "action_lock.py",
+    deps = ["@pip//pyyaml"],
+)
+
 bazel_lint(
     name = "bazel_lint",
-    srcs = ["BUILD.bazel"],
+    srcs = [
+        "BUILD.bazel",
+        "action_cache.bzl",
+    ],
+)
+
+py_library(
+    name = "workflows",
+    srcs = ["action_lock.py"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@pip//pyyaml"],
 )

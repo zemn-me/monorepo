@@ -453,6 +453,13 @@ use_repo(
 bazel_dep(name = "rules_python_gazelle_plugin", version = "2.4.2")
 bazel_dep(name = "aspect_rules_py", version = "1.8.4")
 
+github_action_archives = use_repo_rule("//ci/workflows:action_cache.bzl", "github_action_archives")
+
+github_action_archives(
+    name = "workflow_action_archives",
+    lock = "//ci/workflows:actions.lock.json",
+)
+
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")

@@ -1,11 +1,8 @@
 package workflows_test
 
 import (
-	"archive/tar"
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"maps"
 	"os"
@@ -20,78 +17,11 @@ import (
 	"github.com/nektos/act/pkg/runner"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/yaml.v3"
 )
-
-// act asks this cache for action.yml by itself and for the whole action archive.
-// Both requests return the same one-file tar. An unexpected action fails offline.
-type actionCache map[string][]byte
-
-func (a actionCache) Fetch(_ context.Context, name, url, ref, _ string) (string, error) {
-	if _, ok := a[name]; !ok || url != "https://github.com/"+name {
-		return "", fmt.Errorf("no fixture for %s@%s", url, ref)
-	}
-	return ref, nil
-}
-
-func (a actionCache) GetTarArchive(_ context.Context, name, _, path string) (io.ReadCloser, error) {
-	if path != "" && path != "action.yml" {
-		return nil, os.ErrNotExist
-	}
-	return io.NopCloser(bytes.NewReader(a[name])), nil
-}
-
-func externalActions(t *testing.T) actionCache {
-	t.Helper()
-	cache := actionCache{}
-	for name, args := range map[string][]string{
-		"actions/checkout":                                {"checkout", "path", "ref"},
-		"actions/upload-artifact":                         {"upload", "name", "path", "if-no-files-found"},
-		"actions/download-artifact":                       {"download", "run-id", "name", "path"},
-		"google-github-actions/get-secretmanager-secrets": {"secrets", "secrets"},
-		"google-github-actions/auth":                      nil,
-		"aws-actions/configure-aws-credentials":           nil,
-		"jlumbroso/free-disk-space":                       nil,
-	} {
-		inputs := map[string]model.Input{}
-		outputs := map[string]model.Output{}
-		step := map[string]any{"shell": "bash", "run": "true"}
-		if len(args) != 0 {
-			env := map[string]string{}
-			command := []string{`"$FIXTURE_BIN" --service`, args[0]}
-			for i, key := range args[1:] {
-				inputs[key] = model.Input{Description: key}
-				arg := fmt.Sprintf("ARG_%d", i)
-				env[arg] = "${{ inputs." + key + " }}"
-				command = append(command, `"$`+arg+`"`)
-			}
-			step["env"], step["run"] = env, strings.Join(command, " ")
-			if args[0] == "secrets" {
-				step["id"] = "result"
-				for _, key := range []string{"buildbuddy_api_key", "readonly_buildbuddy_api_key"} {
-					outputs[key] = model.Output{Description: key, Value: "${{ steps.result.outputs." + key + " }}"}
-				}
-			}
-		}
-		data, err := yaml.Marshal(map[string]any{
-			"name": name, "description": "Offline service fixture", "inputs": inputs, "outputs": outputs,
-			"runs": map[string]any{"using": "composite", "steps": []any{step}},
-		})
-		require.NoError(t, err)
-		var buf bytes.Buffer
-		tw := tar.NewWriter(&buf)
-		require.NoError(t, tw.WriteHeader(&tar.Header{Name: "action.yml", Mode: 0644, Size: int64(len(data))}))
-		_, err = tw.Write(data)
-		require.NoError(t, err)
-		require.NoError(t, tw.Close())
-		cache[name] = buf.Bytes()
-	}
-	return cache
-}
 
 type fixture struct {
 	root, repo, sha string
-	actions         actionCache
+	actions         runner.ActionCache
 }
 
 func sourceRoot(t *testing.T) string {
@@ -115,7 +45,29 @@ func newFixture(t *testing.T) *fixture {
 	t.Helper()
 	src := sourceRoot(t)
 	root := t.TempDir()
-	f := &fixture{root: root, repo: filepath.Join(root, "repo"), actions: externalActions(t)}
+	cache := bazelActions(t)
+	local := &runner.LocalRepositoryCache{
+		Parent:            cache,
+		LocalRepositories: map[string]string{},
+		CacheDirCache:     map[string]string{},
+	}
+	f := &fixture{root: root, repo: filepath.Join(root, "repo"), actions: local}
+	// The disk cleanup composite would remove system packages on the host.
+	// Keep its pin in the cache but give this workflow fixture a harmless step.
+	for pin := range cache {
+		if strings.HasPrefix(pin, "jlumbroso/free-disk-space@") {
+			dir := filepath.Join(root, "disk-cleanup")
+			require.NoError(t, writeFile(filepath.Join(dir, "action.yml"), `name: Disk cleanup fixture
+description: Skip cleanup on the test host
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: "true"
+`, 0644))
+			local.LocalRepositories["https://github.com/"+pin] = dir
+		}
+	}
 	// act's host executor passes the test process environment to every step.
 	// Give it a private home and only the commands these workflows exercise.
 	for _, entry := range os.Environ() {
@@ -151,6 +103,9 @@ func newFixture(t *testing.T) *fixture {
 	} {
 		require.NoError(t, writeFile(path, "#!/bin/sh\nexec \"$FIXTURE_BIN\" --service "+service+" \"$@\"\n", 0755))
 	}
+	binary, err := os.Executable()
+	require.NoError(t, err)
+	require.NoError(t, os.Symlink(binary, filepath.Join(root, "bin/node")))
 	require.NoError(t, writeFile(filepath.Join(root, "bin/sleep"), "#!/bin/sh\ntest \"$1\" = 30\n", 0755))
 	require.NoError(t, writeFile(filepath.Join(root, "deployments"), "", 0600))
 	f.git(t, "init", "-q", "-b", "main")

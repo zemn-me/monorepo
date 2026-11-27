@@ -19,6 +19,14 @@ fixture build outputs and cloud services, then check which revision reaches
 deployment. The tests read permissions and queue settings directly from the
 workflow files because GitHub enforces them.
 
+`//ci/workflows:action_cache` supplies the emulator with the complete source
+archive for each pinned action. Bazel verifies each ZIP against its SHA-256
+in `ci/workflows/actions.lock.json` and converts it to the tar format act
+expects. The emulator reads upstream action metadata and uses fixtures for
+Node execution and hosted-runner disk cleanup. To refresh the lock after a
+`uses:` change, run `./sh/bin/bazel run //ci/workflows:action_lock`.
+Renovate runs the same command for GitHub Actions updates.
+
 The merge queue repeats the Tiberian Sun browser integration test five times through
 `ci-local` (also inherited by both remote CI profiles). Every run must pass;
 automatic test retries are disabled. The BEP annotator emits an error for any
