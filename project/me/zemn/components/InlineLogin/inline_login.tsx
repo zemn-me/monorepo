@@ -114,12 +114,10 @@ function InlineLoginContent({
 			<span className={style.loggedInText}>
 				Logged in as <i>{displayName}</i>
 			</span>
-			<sup>
-				<TimeLeftIndicator
-					end={new Date(claims.exp * 1000)}
-					start={new Date(claims.iat * 1000)}
-				/>
-			</sup>
+			<TimeLeftIndicator
+				end={new Date(claims.exp * 1000)}
+				start={new Date(claims.iat * 1000)}
+			/>
 			{accountActions}
 		</span>
 	) : (
