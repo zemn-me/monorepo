@@ -54,5 +54,6 @@ def md_files(name, srcs = None, refs = [], visibility = None, lint = True, **kwa
     if lint:
         markdown_references_test(
             name = name + "_markdown_references_lint",
+            size = "small",
             srcs = [name],
         )

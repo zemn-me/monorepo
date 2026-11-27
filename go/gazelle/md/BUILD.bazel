@@ -19,6 +19,7 @@ go_library(
 
 go_test(
     name = "md_test",
+    size = "small",
     srcs = ["md_test.go"],
     embed = [":md"],
     deps = [

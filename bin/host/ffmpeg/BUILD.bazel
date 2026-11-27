@@ -66,6 +66,7 @@ alias(
 
 sh_test(
     name = "smoke",
+    size = "small",
     srcs = ["ffmpeg_smoke.sh"],
     data = [":ffmpeg"],
     env = {

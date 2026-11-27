@@ -26,6 +26,7 @@ go_library(
 
 go_test(
     name = "ts_test",
+    size = "small",
     srcs = [
         "label_test.go",
         "ts_test.go",

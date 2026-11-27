@@ -18,6 +18,7 @@ go_library(
 
 go_test(
     name = "version_sync_test",
+    size = "small",
     srcs = ["main_test.go"],
     embed = [":version_sync_lib"],
 )

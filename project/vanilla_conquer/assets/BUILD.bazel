@@ -42,6 +42,7 @@ py_binary(
 
 py_test(
     name = "package_data_test",
+    size = "small",
     srcs = ["package_data_test.py"],
     deps = ["//project/vanilla_conquer/assets:package_data_lib"],
 )

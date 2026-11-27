@@ -47,6 +47,7 @@ py_library(
 
 py_test(
     name = "build_engine_test",
+    size = "small",
     srcs = ["build_engine_test.py"],
     deps = ["//project/tiberian_sun/web:build_engine_lib"],
 )

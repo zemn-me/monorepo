@@ -6,11 +6,13 @@ load("//ts:rules.bzl", "jest_test", "ts_project")
 
 go_test(
     name = "go_basic_test",
+    size = "small",
     srcs = ["go_basic_test.go"],
 )
 
 py_test(
     name = "python_basic_test",
+    size = "small",
     srcs = ["python_basic_test.py"],
 )
 
@@ -32,6 +34,7 @@ jest_test(
 
 go_test(
     name = "testing_test",
+    size = "small",
     srcs = ["go_basic_test.go"],
 )
 

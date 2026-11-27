@@ -54,7 +54,8 @@ ts_project(
 
 jest_test(
     name = "tests",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     srcs = ["index_test.js"],
     jsdom = True,
     visibility = ["//:__subpackages__"],

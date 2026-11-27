@@ -11,6 +11,7 @@ go_library(
 
 go_test(
     name = "acnh_test",
+    size = "small",
     srcs = ["acnh_track_test.go"],
     embed = [":acnh"],
 )

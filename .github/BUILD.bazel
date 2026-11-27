@@ -17,7 +17,8 @@ exports_files(
 
 js_test(
     name = "renovate_bazel_releases_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     data = [
         "renovate-global.json",
         "//:node_modules/renovate",
@@ -34,7 +35,8 @@ js_library(
 
 js_test(
     name = "renovate_pnpm_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     data = [
         ":renovate_pnpm_test_mjs",
         "//:package_json",

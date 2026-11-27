@@ -39,6 +39,8 @@ remix_itest_service(
 
 service_test(
     name = "analytics_integration_test",
+    size = "large",
+    timeout = "moderate",
     flaky = True,
     services = [":itest_service"],
     test = ":analytics_test",

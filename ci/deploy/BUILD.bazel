@@ -46,7 +46,8 @@ js_binary(
 
 sh_test(
     name = "providers_test",
-    size = "medium",
+    size = "large",
+    timeout = "short",
     srcs = ["providers_test.sh"],
     args = ["$(rootpath :deploy)"],
     data = [":deploy"],

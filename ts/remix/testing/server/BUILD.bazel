@@ -12,7 +12,8 @@ remix_project(
 
 js_test(
     name = "server_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     data = [":build"],
     entry_point = "server_test.mjs",
 )
