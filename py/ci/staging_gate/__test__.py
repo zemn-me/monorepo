@@ -49,6 +49,51 @@ class StagingGateTest(unittest.TestCase):
             [step.get("name") for step in deploy["steps"]],
         )
 
+    def test_candidate_comes_from_the_successful_presubmit_attempt(self):
+        jobs = self.workflows["staging.yml"]["jobs"]
+        deploy = jobs["Deploy"]
+        self.assertIn("CandidateBundle", deploy["needs"])
+        download = next(s for s in deploy["steps"] if s.get("name") == "Download candidate bundle")
+        producer = jobs["CandidateBundle"]
+        (wait,) = producer["steps"]
+        self.assertEqual(producer["permissions"], {"actions": "read"})
+        self.assertEqual(download["with"]["run-id"], "${{ needs.CandidateBundle.outputs.run-id }}")
+        self.assertEqual(download["with"]["name"], "${{ needs.CandidateBundle.outputs.artifact-name }}")
+        presubmit = self.workflows["presubmit.yml"]["jobs"]["Presubmit"]["steps"]
+        upload = next(s for s in presubmit if s.get("uses") == "./.github/actions/upload-deploy-bundle")
+        self.assertLess(next(i for i, s in enumerate(presubmit) if s.get("name") == "Presubmit"), presubmit.index(upload))
+        self.assertEqual(upload["if"], "github.event_name == 'merge_group'")
+        self.assertEqual(upload["with"]["artifact-name"].replace("github.run_attempt", "steps.producer.outputs.attempt"),
+                         producer["outputs"]["artifact-name"])
+
+        for conclusion in ("success", "failure", "cancelled"):
+            with self.subTest(conclusion=conclusion), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                gh = root / "gh"
+                gh.write_text(
+                    '#!/bin/sh\n'
+                    'echo "$@" >> calls\n'
+                    'case $(wc -l < calls) in\n'
+                    '  *1) exit 0 ;;\n'
+                    "  *2) printf '42\\t3\\tin_progress\\t\\n' ;;\n"
+                    """  *3) printf '42\\t3\\tcompleted\\t%s\\n' "$CONCLUSION" ;;\n"""
+                    '  *) exit 2 ;;\nesac\n'
+                )
+                gh.chmod(0o755)
+                (root / "sleep").write_text("#!/bin/sh\nexit 0\n")
+                (root / "sleep").chmod(0o755)
+                output = root / "output"
+                output.touch()
+                result = subprocess.run(["bash", "-ec", wait["run"]], cwd=root, env={
+                    **os.environ, "PATH": directory + os.pathsep + os.environ["PATH"],
+                    "GITHUB_REPOSITORY": "owner/repo", "GITHUB_REF_NAME": "gh-readonly-queue/main/group",
+                    "GITHUB_SHA": "candidate-sha", "GITHUB_OUTPUT": str(output), "CONCLUSION": conclusion,
+                })
+                for call in (root / "calls").read_text().splitlines():
+                    self.assertIn("--workflow presubmit.yml --event merge_group --branch gh-readonly-queue/main/group --commit candidate-sha", call)
+                self.assertEqual(result.returncode == 0, conclusion == "success")
+                self.assertEqual(output.read_text().splitlines(), ["run-id=42", "attempt=3"] if conclusion == "success" else [])
+
     def test_required_check_propagates_deployment_result(self):
         gate = self.workflows["staging.yml"]["jobs"]["Staging"]
         (step,) = gate["steps"]

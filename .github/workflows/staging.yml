@@ -16,16 +16,33 @@ permissions:
   contents: read
 
 jobs:
-  BuildCandidate:
+  CandidateBundle:
     permissions:
-      contents: read
-      id-token: write
+      actions: read
     runs-on: ubuntu-latest
+    outputs:
+      run-id: ${{ steps.producer.outputs.run-id }}
+      artifact-name: staging-candidate-${{ steps.producer.outputs.attempt }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-      - uses: ./.github/actions/build-deploy-bundle
-        with:
-          artifact-name: staging-candidate
+      - name: Wait for the full Presubmit on this merge group
+        id: producer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          while true; do
+            producer=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow presubmit.yml \
+              --event merge_group --branch "$GITHUB_REF_NAME" --commit "$GITHUB_SHA" --limit 1 \
+              --json databaseId,attempt,status,conclusion --jq '.[0] // empty | [.databaseId,.attempt,.status,.conclusion] | @tsv')
+            read -r run_id attempt status conclusion <<< "$producer"
+            if [[ "$status" == completed ]]; then
+              echo "Presubmit run $run_id attempt $attempt concluded $conclusion"
+              [[ "$conclusion" == success ]] || exit 1
+              echo "run-id=$run_id" >> "$GITHUB_OUTPUT"
+              echo "attempt=$attempt" >> "$GITHUB_OUTPUT"
+              break
+            fi
+            sleep 30
+          done
 
   PinMain:
     runs-on: ubuntu-latest
@@ -87,7 +104,7 @@ jobs:
           source-directory: main
 
   Deploy:
-    needs: [MainBundle, BuildCandidate]
+    needs: [MainBundle, CandidateBundle]
     permissions:
       actions: read
       contents: read
@@ -118,7 +135,9 @@ jobs:
       - name: Download candidate bundle
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
-          name: staging-candidate
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.CandidateBundle.outputs.run-id }}
+          name: ${{ needs.CandidateBundle.outputs.artifact-name }}
           path: ${{ runner.temp }}/bundles/staging-candidate
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093'  # v3.0.0
         name: Acquire federated GCloud credentials for secrets.

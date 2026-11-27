@@ -54,6 +54,7 @@ sh_test(
         allow_empty = True,
     ) + [
         "//.github:actions/build-deploy-bundle/action.yml",
+        "//.github:actions/upload-deploy-bundle/action.yml",
         "@com_github_rhysd_actionlint//cmd/actionlint",
     ],
     env = {
