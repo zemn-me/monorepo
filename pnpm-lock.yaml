@@ -472,8 +472,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       renovate:
-        specifier: 44.259.0
-        version: 44.259.0(typanion@3.14.0)
+        specifier: 44.259.1
+        version: 44.259.1(typanion@3.14.0)
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@26.6.6)
@@ -5941,6 +5941,10 @@ packages:
     resolution: {integrity: sha512-wCBiZ77u1tuWde6G/nfOtLaCTYcFDU5yCzARzK10y+rLhzYoL7a7yEemcopcc2Mzow7gZOIjnV2ym1NYmdiJOQ==}
     engines: {node: '>= 4'}
 
+  ignore@7.0.16:
+    resolution: {integrity: sha512-52N+Y4HRMOJmbLmr+DqO4iSRyyB7N52gm7PWCT6h0p978+oKbqHCB7gIJIwZvBUsjlSdWbrBFqUSmIFNZMpn0A==}
+    engines: {node: '>= 4'}
+
   immediate@3.0.6:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
 
@@ -8046,8 +8050,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  renovate@44.259.0:
-    resolution: {integrity: sha512-L4Ebgq4PE/QphZMsu+eHeYDp3ApJUrtyniHeqx3UGO5aqBLV/48YSB0kb6G0RMV8BYXDfEym9rGmUMdh7qoTQA==}
+  renovate@44.259.1:
+    resolution: {integrity: sha512-XkCG1H8ya3JFhEGuKB4CrQoogpV+aPl8eFmke+y22+iDQ+XzLdHTr5ISN+WMFdic5La07SL1v5QZsC9NbGJPAQ==}
     engines: {node: ^24.11.0 || ^26.13.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -15119,6 +15123,8 @@ snapshots:
 
   ignore@7.0.14: {}
 
+  ignore@7.0.16: {}
+
   immediate@3.0.6: {}
 
   immutable@5.2.1: {}
@@ -17722,7 +17728,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  renovate@44.259.0(typanion@3.14.0):
+  renovate@44.259.1(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -17800,7 +17806,7 @@ snapshots:
       got: 16.2.0
       graph-data-structure: 4.5.0
       handlebars: 4.7.10
-      ignore: 7.0.14
+      ignore: 7.0.16
       ini: 6.0.0
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 4.0.0
