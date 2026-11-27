@@ -473,7 +473,7 @@ describe('zemn.me website', () => {
 				// The noon fixture has a trine between two of the ten closest objects.
 				await driver.get(`${origin}/experiments/astrological-chart?time=2006-08-01T12:00:00Z`);
 				const chrome = driver as unknown as ChromeDriver;
-				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				const search = await driver.findElement(By.css('article input[aria-label^="Filter man-made bodies"]'));
 				expect(await search.getProperty('value')).toBe('');
 				const grid = await driver.findElement(By.css('ul[aria-label="Chart placements"]'));
 				await driver.wait(until.elementLocated(By.css('ul[aria-label="Chart placements"] h3 a')), 10000);
@@ -585,7 +585,11 @@ describe('zemn.me website', () => {
 				await tilt.sendKeys(Key.ARROW_LEFT);
 				await driver.wait(async () => await geometry() === original, 5000, 'Returning the tilt ruler restores the Earth grid');
 
-				expect(await grid.findElements(By.css('time'))).toHaveLength(0);
+				const [briz, molniya] = await grid.findElements(By.css('li:has(h3 a)'));
+				expect(await briz!.getText()).toContain('28 July 2006 – Still in orbit');
+				const dates = await molniya!.findElements(By.css('time'));
+				expect(await Promise.all(dates.map(date => date.getAttribute('datetime')))).toEqual(['2006-07-21', '2006-09-30']);
+				expect(await grid.findElements(By.css('li:not(:has(h3 a)) time'))).toHaveLength(0);
 				await wheel.sendKeys(Key.HOME);
 				await projection('wheel from above');
 				const markerCount = () => wheel.findElements(By.css('g[aria-label="Orbiting objects"] path:not([display="none"])')).then(paths => paths.length);
@@ -747,7 +751,7 @@ describe('zemn.me website', () => {
 				await (await toggle('Space junk')).click();
 				await (await toggle('Rocket stages')).click();
 				expect(await (await toggle('Space junk')).getProperty('indeterminate')).toBe(true);
-				const search = await driver.findElement(By.css('article input[aria-label^="Search by name"]'));
+				const search = await driver.findElement(By.css('article input[aria-label^="Filter man-made bodies"]'));
 				const catalogueRows = () => driver.findElements(By.css('ul[aria-label="Chart placements"] li:has(h3 a)'));
 				await search.sendKeys('Rocket stage');
 				await driver.wait(async () => (await catalogueRows()).length > 0, 5000);
@@ -934,7 +938,7 @@ describe('zemn.me website', () => {
 				expect(await placements()).toHaveLength(3);
 				for (const [label, value] of [['Rotation', '-32'], ['Tilt', '12'], ['Orbit view width', '80']] as const)
 					expect(await (await field(label)).getAttribute('value')).toBe(value);
-				const search = await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000);
+				const search = await driver.wait(until.elementLocated(By.css('article input[aria-label^="Filter man-made bodies"]')), 10000);
 				expect(await search.getAttribute('value')).toBe('motor');
 				await search.clear();
 				await search.sendKeys('spat');
@@ -949,7 +953,7 @@ describe('zemn.me website', () => {
 				expect(shared.get('time')).toBe(params.get('time'));
 				await driver.navigate().refresh();
 				expect(await (await field('Rotation')).getAttribute('value')).toBe('-31');
-				expect(await (await driver.wait(until.elementLocated(By.css('article input[aria-label^="Search by name"]')), 10000)).getAttribute('value')).toBe('spat');
+				expect(await (await driver.wait(until.elementLocated(By.css('article input[aria-label^="Filter man-made bodies"]')), 10000)).getAttribute('value')).toBe('spat');
 			} finally {
 				await driver.quit();
 			}
