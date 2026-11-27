@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import style from './style.module.css';
 import { degrees, signs } from './zodiac.js';
 
@@ -9,6 +10,7 @@ export function PlacementEntry({
 	house,
 	target,
 	onRevisit,
+	children,
 }: {
 	name: string;
 	glyph?: string;
@@ -17,6 +19,7 @@ export function PlacementEntry({
 	house?: number;
 	target?: string;
 	onRevisit?: () => void;
+	children?: ReactNode;
 }) {
 	const value = degrees(longitude);
 	const sign = Math.floor(value / 30);
@@ -65,6 +68,7 @@ export function PlacementEntry({
 				</span>
 				{house !== undefined && <small>House {house}</small>}
 			</header>
+			{children}
 		</li>
 	);
 }
