@@ -799,6 +799,26 @@ describe('zemn.me website', () => {
 			}
 		});
 
+		it('increases chart tilt on a downward mouse drag and decreases it on an upward drag', async () => {
+			try {
+				await driver.get(`${origin}/experiments/astrological-chart?spin=false&tilt=0&bodies=&kinds=`);
+				const chart = await driver.findElement(By.id('star-chart'));
+				await driver.wait(until.elementLocated(By.css('#star-chart mask path')), 5000);
+				const tilt = await driver.findElement(By.css('input[aria-label="Tilt"]'));
+				const rotation = await driver.findElement(By.css('input[aria-label="Rotation"]'));
+				const initialRotation = await rotation.getAttribute('value');
+
+				for (const dy of [24, -48]) {
+					await driver.actions().move({ origin: chart }).press()
+						.move({ origin: chart, x: 0, y: dy }).release().perform();
+					await driver.wait(async () => Math.sign(Number(await tilt.getAttribute('value'))) === Math.sign(dy), 5000);
+					expect(await rotation.getAttribute('value')).toBe(initialRotation);
+				}
+			} finally {
+				await driver.quit();
+			}
+		});
+
 		it('scrolls the page vertically over the chart and rotates it with a sideways touch', async () => {
 			try {
 				const chrome = driver as unknown as ChromeDriver;
