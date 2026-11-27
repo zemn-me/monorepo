@@ -4,31 +4,21 @@
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_test")
 
-alias(
-    name = "act",
-    actual = select({
-        "@bazel_tools//src/conditions:darwin_arm64": "@act_darwin_arm64//:act",
-        "@bazel_tools//src/conditions:darwin_x86_64": "@act_darwin_x86_64//:act",
-        "@bazel_tools//src/conditions:linux_aarch64": "@act_linux_arm64//:act",
-        "@bazel_tools//src/conditions:linux_x86_64": "@act_linux_x86_64//:act",
-    }),
-)
-
 py_test(
     name = "staging_gate_test",
     size = "medium",
     srcs = ["__test__.py"],
     args = [
-        "$(rootpath :act)",
+        "$(rootpath @com_github_nektos_act//:act)",
         "$(rootpath :service_fixture.py)",
         "$(rootpaths //.github/workflows:workflow_test_files)",
         "$(rootpath //py/ci:find_deploy_bundle.py)",
     ],
     data = [
         "service_fixture.py",
-        ":act",
         "//.github/workflows:workflow_test_files",
         "//py/ci:find_deploy_bundle.py",
+        "@com_github_nektos_act//:act",
     ],
     main = "__test__.py",
     visibility = ["//.github/workflows:__pkg__"],

@@ -12,7 +12,8 @@ Both stages run the Go module and Gazelle checks. After they pass, the merge-gro
 Presubmit publishes its bundle for Staging to deploy from that exact run.
 
 Run `./sh/bin/bazel test //py/ci/staging_gate:staging_gate_test` to exercise
-Presubmit, Staging, and Submit with the pinned `act` GitHub Actions emulator.
+Presubmit, Staging, and Submit with `act`. Bazel builds the GitHub Actions
+emulator from the Go tool dependency pinned in `go.mod`.
 The test runs jobs in temporary workspaces, supplies fixture build outputs and
 cloud services, and checks which revision reaches deployment. Permissions and
 queue settings are checked against the workflow files because GitHub enforces them.

@@ -360,6 +360,13 @@ go_deps.gazelle_override(
     directives = ["gazelle:proto_rule @com_google_protobuf//bazel:proto_library.bzl%proto_library"],
     path = "github.com/bazelbuild/buildtools",
 )
+
+# Keep Compose's embedded JSON schemas in their parent Bazel package.
+# The data directory contains only schemas and a package documentation stub.
+go_deps.gazelle_override(
+    directives = ["gazelle:exclude cli/compose/schema/data/doc.go"],
+    path = "github.com/docker/cli",
+)
 go_deps.gazelle_override(
     directives = ["gazelle:proto disable_global"],
     path = "github.com/nyaruka/phonenumbers/v2",
@@ -420,6 +427,7 @@ use_repo(
     "com_github_invopop_jsonschema",
     "com_github_itchyny_gojq",
     "com_github_modelcontextprotocol_go_sdk",
+    "com_github_nektos_act",
     "com_github_nyaruka_phonenumbers_v2",
     "com_github_nytimes_gziphandler",
     "com_github_oapi_codegen_nethttp_middleware",
@@ -950,44 +958,6 @@ bindeps.from_specs(
     host_tools = "@rust_host_tools_nightly",
 )
 use_repo(bindeps, "bindeps")
-
-# renovate:
-# 	datasource=github-releases
-# 	versioning=semver
-# 	depName=nektos/act
-ACT_VERSION = "v0.2.98"
-
-http_archive(
-    name = "act_darwin_arm64",
-    build_file_content = "exports_files(['act'])",
-    integrity = "sha256-FEd9fgdrEqiFxUMBvv8rUkqQXkI4orPsmz0f0O/cEA8=",
-    # auto-integrity
-    url = "https://github.com/nektos/act/releases/download/" + ACT_VERSION + "/act_Darwin_arm64.tar.gz",
-)
-
-http_archive(
-    name = "act_darwin_x86_64",
-    build_file_content = "exports_files(['act'])",
-    integrity = "sha256-oIhReXBdDz9dJyAc76AwmseOP8zaRH7N+5aHe2a1ZbA=",
-    # auto-integrity
-    url = "https://github.com/nektos/act/releases/download/" + ACT_VERSION + "/act_Darwin_x86_64.tar.gz",
-)
-
-http_archive(
-    name = "act_linux_arm64",
-    build_file_content = "exports_files(['act'])",
-    integrity = "sha256-owuhoVgsuTgQx390NBXKwzwW9g/CiBFqjglDFEtqak8=",
-    # auto-integrity
-    url = "https://github.com/nektos/act/releases/download/" + ACT_VERSION + "/act_Linux_arm64.tar.gz",
-)
-
-http_archive(
-    name = "act_linux_x86_64",
-    build_file_content = "exports_files(['act'])",
-    integrity = "sha256-0zRL0IEMBLAA0kRAMLCMkKufv5Bbviw+JimL4AxiDWU=",
-    # auto-integrity
-    url = "https://github.com/nektos/act/releases/download/" + ACT_VERSION + "/act_Linux_x86_64.tar.gz",
-)
 
 ###############################################################################
 #                                     ruff                                    #
