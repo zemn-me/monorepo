@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nektos/act/pkg/model"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )
@@ -28,6 +29,17 @@ func TestMergeGroupDeploysTestedBundleAfterMain(t *testing.T) {
 	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
 	f.run(t, "staging", "merge_group", "Staging", "success", map[string]string{"MAIN_SHA": "pinned-main"})
 	require.Equal(t, []string{"main pinned-main", "candidate " + f.sha}, f.deployments(t))
+}
+
+func TestStagingRejectsAdvancedQueueRef(t *testing.T) {
+	f := newFixture(t)
+	f.publishMain(t, "pinned-main")
+	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
+	f.git(t, "checkout", "-q", queueBranch)
+	f.git(t, "commit", "--allow-empty", "-qm", "queue advanced")
+	f.git(t, "checkout", "-q", "main")
+	f.run(t, "staging", "merge_group", "Staging", "failure", map[string]string{"MAIN_SHA": "pinned-main"})
+	require.Empty(t, f.deployments(t))
 }
 
 func TestFailuresReachRequiredGate(t *testing.T) {
@@ -90,17 +102,20 @@ func TestPresubmitCache(t *testing.T) {
 
 func TestMissingMainArtifactBuildsPinnedProgram(t *testing.T) {
 	f := newFixture(t)
+	deploy := filepath.Join(f.repo, "ci/deploy")
+	var candidatePackaging []string
 	for _, name := range packaging {
-		require.NoError(t, writeFile(filepath.Join(f.repo, "ci/deploy", name), "candidate packaging", 0644))
+		candidatePackaging = append(candidatePackaging, readFile(t, filepath.Join(deploy, name)))
 	}
-	pinned := filepath.Join(f.root, "pinned")
-	require.NoError(t, os.CopyFS(pinned, os.DirFS(f.repo)))
-	deploy := filepath.Join(pinned, "ci/deploy")
-	require.NoError(t, writeFile(filepath.Join(deploy, "deploy.ts"), "pinned program", 0644))
-	require.NoError(t, writeFile(filepath.Join(deploy, "BUILD.bazel"), "# pinned targets\n", 0644))
-	for _, revision := range []string{"with-packager", "before-packager"} {
-		t.Run(revision, func(t *testing.T) {
-			hasPackager := revision == "with-packager"
+	for _, hasPackager := range []bool{true, false} {
+		name := "before-packager"
+		if hasPackager {
+			name = "with-packager"
+		}
+		t.Run(name, func(t *testing.T) {
+			f.git(t, "checkout", "-q", "--detach", f.sha)
+			require.NoError(t, writeFile(filepath.Join(deploy, "deploy.ts"), "pinned program", 0644))
+			require.NoError(t, writeFile(filepath.Join(deploy, "BUILD.bazel"), "# pinned targets\n", 0644))
 			for _, name := range packaging {
 				path := filepath.Join(deploy, name)
 				if hasPackager {
@@ -109,6 +124,10 @@ func TestMissingMainArtifactBuildsPinnedProgram(t *testing.T) {
 					require.NoError(t, os.Remove(path))
 				}
 			}
+			f.git(t, "add", "-A")
+			f.git(t, "commit", "-qm", name)
+			revision := f.git(t, "rev-parse", "HEAD")
+			f.git(t, "checkout", "-q", "main")
 			f.run(t, "staging", "merge_group", "MainBundle", "success", map[string]string{"MAIN_SHA": revision})
 			build := f.build(t)
 			require.Contains(t, build.Args, "//ci/deploy:bundle_test")
@@ -121,19 +140,28 @@ func TestMissingMainArtifactBuildsPinnedProgram(t *testing.T) {
 				require.Contains(t, build.Args, "--distdir="+build.Workspace+"/third_party/bazel_distdir/"+archive)
 			}
 			require.Contains(t, build.BuildFile, "# pinned targets")
-			wantPackaging := "candidate packaging"
+			wantPackaging := candidatePackaging
 			if hasPackager {
 				require.NotContains(t, build.BuildFile, "deploy_bundle()")
-				wantPackaging = "main packaging"
+				wantPackaging = slices.Repeat([]string{"main packaging"}, len(packaging))
 			} else {
 				require.Contains(t, build.BuildFile, "deploy_bundle()")
 			}
-			require.Equal(t, slices.Repeat([]string{wantPackaging}, len(packaging)), build.Packaging)
+			require.Equal(t, wantPackaging, build.Packaging)
 			for _, name := range archives {
 				require.Equal(t, "pinned program", readFile(t, filepath.Join(f.root, "artifacts", "73", "deploy-v2-main-"+revision, name)))
 			}
 		})
 	}
+}
+
+func TestSubmitPublishesAndDeploysNewMain(t *testing.T) {
+	f := newFixture(t)
+	f.run(t, "submit", "push", "Submit", "success", nil)
+	for _, archive := range archives {
+		require.Equal(t, "candidate program", readFile(t, filepath.Join(f.root, "artifacts", "42", "deploy-v2-main-"+f.sha, archive)))
+	}
+	require.Equal(t, []string{"production candidate program"}, f.deployments(t))
 }
 
 func TestProductionChecksMainBeforeDeploying(t *testing.T) {
@@ -150,11 +178,15 @@ func TestProductionChecksMainBeforeDeploying(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			require.NoError(t, writeFile(filepath.Join(f.root, "deployments"), "", 0600))
+			actions := filepath.Join(f.root, "submit-actions")
+			require.NoError(t, writeFile(actions, "", 0600))
 			f.run(t, "submit", "push", "Submit", tc.result, map[string]string{"MAIN_SHA": tc.current, "FAIL_DEPLOY": tc.failDeploy})
 			if tc.deployed {
+				require.Contains(t, readFile(t, actions), "aws-actions/configure-aws-credentials")
 				require.Equal(t, []string{"production " + f.sha}, f.deployments(t))
 			} else {
 				require.Empty(t, f.deployments(t))
+				require.Empty(t, readFile(t, actions))
 			}
 		})
 	}
@@ -162,23 +194,29 @@ func TestProductionChecksMainBeforeDeploying(t *testing.T) {
 
 func TestHostedRunnerContracts(t *testing.T) {
 	// GitHub controls permissions, the deploy lock, and which jobs satisfy a required check.
-	paths, err := filepath.Glob(filepath.Join(sourceRoot(t), ".github/workflows/*.yml"))
+	dir := filepath.Join(sourceRoot(t), ".github/workflows")
+	entries, err := os.ReadDir(dir)
 	require.NoError(t, err)
 	providers := map[string][]string{}
-	for _, path := range paths {
-		name := strings.TrimSuffix(filepath.Base(path), ".yml")
+	for _, entry := range entries {
+		ext := filepath.Ext(entry.Name())
+		if ext != ".yml" && ext != ".yaml" {
+			continue
+		}
+		path := filepath.Join(dir, entry.Name())
+		name := strings.TrimSuffix(entry.Name(), ext)
 		var workflow struct {
-			On   map[string]any
+			On   yaml.Node
 			Jobs map[string]struct {
 				Name        string
-				Permissions map[string]string
-				Concurrency struct{ Group, Queue string }
+				Permissions yaml.Node
+				Concurrency yaml.Node
 			}
 		}
 		require.NoError(t, yaml.Unmarshal([]byte(readFile(t, path)), &workflow))
 		for id, job := range workflow.Jobs {
 			if job.Name == "Staging" || (job.Name == "" && id == "Staging") {
-				for event := range workflow.On {
+				for _, event := range (&model.Workflow{RawOn: workflow.On}).On() {
 					providers[event] = append(providers[event], name)
 				}
 			}
@@ -186,16 +224,26 @@ func TestHostedRunnerContracts(t *testing.T) {
 		if deploy, ok := map[string]string{"staging": "Deploy", "submit": "Submit"}[name]; ok {
 			require.Contains(t, workflow.Jobs, deploy)
 			for id, job := range workflow.Jobs {
+				var concurrency struct{ Group, Queue string }
+				switch job.Concurrency.Kind {
+				case yaml.MappingNode:
+					require.NoError(t, job.Concurrency.Decode(&concurrency))
+				case yaml.ScalarNode:
+					concurrency.Group = job.Concurrency.Value
+				}
 				if id == deploy {
-					require.Equal(t, "pulumi_deploy", job.Concurrency.Group)
-					require.Equal(t, "max", job.Concurrency.Queue)
+					require.Equal(t, "pulumi_deploy", concurrency.Group)
+					require.Equal(t, "max", concurrency.Queue)
 				} else {
-					require.NotEqual(t, "pulumi_deploy", job.Concurrency.Group)
+					require.NotEqual(t, "pulumi_deploy", concurrency.Group)
 				}
 			}
 		}
 		if name == "staging" {
-			require.Equal(t, map[string]string{"actions": "read"}, workflow.Jobs["CandidateBundle"].Permissions)
+			var permissions map[string]string
+			job := workflow.Jobs["CandidateBundle"]
+			require.NoError(t, job.Permissions.Decode(&permissions))
+			require.Equal(t, map[string]string{"actions": "read"}, permissions)
 		}
 	}
 	require.Equal(t, []string{"staging"}, providers["merge_group"])

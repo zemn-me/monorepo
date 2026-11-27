@@ -110,9 +110,20 @@ runs:
 	require.NoError(t, writeFile(filepath.Join(root, "deployments"), "", 0600))
 	f.git(t, "init", "-q", "-b", "main")
 	f.git(t, "remote", "add", "origin", "https://github.com/owner/repo")
+	// The fixture Bazel packages deploy.ts so a deployed bundle identifies its source.
+	require.NoError(t, writeFile(filepath.Join(f.repo, "ci/deploy/deploy.ts"), "candidate program", 0644))
+	require.NoError(t, writeFile(filepath.Join(f.repo, "ci/deploy/BUILD.bazel"), "# candidate targets\n", 0644))
+	for _, name := range packaging {
+		if name != "run.sh" {
+			require.NoError(t, writeFile(filepath.Join(f.repo, "ci/deploy", name), "candidate packaging", 0644))
+		}
+	}
+	f.git(t, "config", "user.name", "Test")
+	f.git(t, "config", "user.email", "test@example.org")
 	f.git(t, "add", ".")
-	f.git(t, "-c", "user.name=Test", "-c", "user.email=test@example.org", "commit", "-qm", "workflow fixture")
+	f.git(t, "commit", "-qm", "workflow fixture")
 	f.sha = f.git(t, "rev-parse", "HEAD")
+	f.git(t, "branch", queueBranch, f.sha)
 	event, err := json.Marshal(map[string]any{
 		"ref":          "refs/heads/main",
 		"after":        f.sha,
@@ -164,26 +175,26 @@ func (f *fixture) run(t *testing.T, name, event, job, want string, overrides map
 	binary, err := os.Executable()
 	require.NoError(t, err)
 	env := map[string]string{
-		"GITHUB_RUN_ID":       "42",
-		"GITHUB_RUN_ATTEMPT":  "3",
-		"FIXTURE_BIN":         binary,
-		"FIXTURE_REPO":        f.repo,
-		"FIXTURE_STORE":       filepath.Join(f.root, "artifacts"),
-		"FIXTURE_DEPLOYMENTS": filepath.Join(f.root, "deployments"),
-		"FIXTURE_BUILD":       filepath.Join(f.root, "build.json"),
-		"FIXTURE_MAIN":        filepath.Join(f.root, "pinned"),
-		"FIXTURE_SHA":         f.sha,
-		"MAIN_SHA":            f.sha,
-		"CACHE_SECRET":        "available",
-		"PRODUCER_RESULT":     "success",
+		"GITHUB_RUN_ID":          "42",
+		"GITHUB_RUN_ATTEMPT":     "3",
+		"FIXTURE_BIN":            binary,
+		"FIXTURE_REPO":           f.repo,
+		"FIXTURE_STORE":          filepath.Join(f.root, "artifacts"),
+		"FIXTURE_DEPLOYMENTS":    filepath.Join(f.root, "deployments"),
+		"FIXTURE_BUILD":          filepath.Join(f.root, "build.json"),
+		"FIXTURE_SUBMIT_ACTIONS": filepath.Join(f.root, "submit-actions"),
+		"FIXTURE_SHA":            f.sha,
+		"MAIN_SHA":               f.sha,
+		"CACHE_SECRET":           "available",
+		"PRODUCER_RESULT":        "success",
 	}
 	if name == "staging" {
 		env["GITHUB_RUN_ID"] = "73"
 		env["GITHUB_RUN_ATTEMPT"] = "1"
 	}
 	if event == "merge_group" {
-		// act does not derive the synthetic ref from the merge_group event.
-		f.git(t, "checkout", "-qB", queueBranch)
+		// act does not derive the synthetic ref and event SHA for merge_group.
+		env["SHA_REF"] = f.sha
 		env["GITHUB_REF"], env["GITHUB_REF_NAME"] = "refs/heads/"+queueBranch, queueBranch
 	}
 	maps.Copy(env, overrides)
@@ -200,6 +211,7 @@ func (f *fixture) run(t *testing.T, name, event, job, want string, overrides map
 		RemoteName:     "origin",
 		DefaultBranch:  "main",
 		Actor:          "workflow-test",
+		Token:          "offline-workflow-token",
 		NoSkipCheckout: true,
 		LogOutput:      true,
 	})

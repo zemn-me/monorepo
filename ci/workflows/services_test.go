@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -64,17 +65,40 @@ func nodeAction(args []string) error {
 	if err := appendLine(os.Getenv("GITHUB_STATE"), "fixture_main_ran=true"); err != nil {
 		return err
 	}
-	switch repo := os.Getenv("GITHUB_ACTION_REPOSITORY"); repo {
-	case "actions/checkout":
-		src := os.Getenv("FIXTURE_REPO")
-		if ref := os.Getenv("INPUT_REF"); ref != "" && ref == os.Getenv("MAIN_SHA") {
-			src = os.Getenv("FIXTURE_MAIN")
+	repo := os.Getenv("GITHUB_ACTION_REPOSITORY")
+	if os.Getenv("GITHUB_JOB") == "Submit" {
+		if err := appendLine(os.Getenv("FIXTURE_SUBMIT_ACTIONS"), repo); err != nil {
+			return err
 		}
+	}
+	switch repo {
+	case "actions/checkout":
 		dest := os.Getenv("INPUT_PATH")
 		if dest == "" {
 			dest = "."
 		}
-		return os.CopyFS(dest, os.DirFS(src))
+		if !filepath.IsLocal(dest) {
+			return fmt.Errorf("invalid checkout path %q", dest)
+		}
+		ref := os.Getenv("INPUT_REF")
+		if ref == "" {
+			ref = os.Getenv("GITHUB_SHA")
+		}
+		if err := os.MkdirAll(dest, 0755); err != nil {
+			return err
+		}
+		for _, args := range [][]string{
+			{"init", "-q"},
+			{"fetch", "-q", "--depth=1", "--", os.Getenv("FIXTURE_REPO"), ref},
+			{"checkout", "-q", "--detach", "FETCH_HEAD"},
+		} {
+			cmd := exec.Command("git", args...)
+			cmd.Dir = dest
+			if output, err := cmd.CombinedOutput(); err != nil {
+				return fmt.Errorf("checkout %q: %w: %s", ref, err, output)
+			}
+		}
+		return nil
 	case "google-github-actions/get-secretmanager-secrets":
 		if os.Getenv("CACHE_SECRET") == "missing" {
 			return fmt.Errorf("fixture cache key unavailable")
@@ -109,9 +133,9 @@ func nodeAction(args []string) error {
 		}
 		return nil
 	case "actions/download-artifact":
-		run := os.Getenv("INPUT_RUN-ID")
-		if run == "" {
-			run = os.Getenv("GITHUB_RUN_ID")
+		run := os.Getenv("GITHUB_RUN_ID")
+		if id := os.Getenv("INPUT_RUN-ID"); os.Getenv("INPUT_GITHUB-TOKEN") != "" && id != "" {
+			run = id
 		}
 		name := os.Getenv("INPUT_NAME")
 		if err := os.CopyFS(os.Getenv("INPUT_PATH"), os.DirFS(artifact(run, name))); err != nil {

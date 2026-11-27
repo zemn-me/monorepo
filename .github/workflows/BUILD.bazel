@@ -7,7 +7,13 @@ exports_files(["presubmit.yml"])
 
 filegroup(
     name = "workflow_test_files",
-    srcs = glob(["*.yml"]) + [
+    srcs = glob(
+        [
+            "*.yaml",
+            "*.yml",
+        ],
+        allow_empty = True,
+    ) + [
         "bootstrap_bazel_remote_cache.sh",
         "prepare_ci.sh",
         "//.github:actions/build-deploy-bundle/action.yml",
