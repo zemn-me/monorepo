@@ -5,6 +5,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getConfig } from 'renovate/dist/config/defaults.js';
+import { mergeChildConfig } from 'renovate/dist/config/index.js';
+import { resolveConfigPresets } from 'renovate/dist/config/presets/index.js';
+import { applyPackageRules } from 'renovate/dist/util/package-rules/index.js';
 import { massageConfig } from 'renovate/dist/config/massage.js';
 import { validateConfig } from 'renovate/dist/config/validation.js';
 import { get as getVersioning } from 'renovate/dist/modules/versioning/index.js';
@@ -282,3 +285,82 @@ for (const [pin, count] of [
 			'timestamp-optional'
 		);
 }
+
+// Resolve the same presets as the bot. best-practices ordinarily switches off
+// minimumReleaseAge for npm range pins, even with a repository-wide floor.
+const { config: withPresets, visitedPresets } = await resolveConfigPresets(
+	massageConfig(structuredClone(base))
+);
+assert(visitedPresets.merged.includes('security:minimumReleaseAgeNpm'));
+const effective = mergeChildConfig(getConfig(), withPresets);
+assert.equal(
+	effective.vulnerabilityAlerts.minimumReleaseAge,
+	base.minimumReleaseAge
+);
+const vulnerable = await applyPackageRules({
+	...effective,
+	datasource: 'npm',
+	depName: 'example',
+	packageName: 'example',
+	currentVersion: '1.0.0',
+	updateType: 'minor',
+	packageRules: [
+		...effective.packageRules,
+		{
+			matchPackageNames: ['example'],
+			isVulnerabilityAlert: true,
+			force: effective.vulnerabilityAlerts,
+		},
+	],
+});
+assert.equal(vulnerable.minimumReleaseAge, base.minimumReleaseAge);
+assert.equal(
+	(
+		await select(
+			{ version: '1.1.0', releaseTimestamp: new Date(now).toISOString() },
+			vulnerable
+		)
+	).pendingChecks,
+	true
+);
+
+const npm = {
+	datasource: 'npm',
+	depName: 'example',
+	packageName: 'example',
+	currentValue: '^1.0.0',
+	currentVersion: '1.1.0',
+	currentVersionTimestamp: oldDate,
+};
+const npmFiles = {
+	npm: [
+		{
+			packageFile: 'package.json',
+			deps: [
+				{
+					...npm,
+					updates: [
+						{
+							updateType: 'pin',
+							newVersion: '1.1.0',
+							newValue: '1.1.0',
+							isPin: true,
+						},
+					],
+				},
+			],
+		},
+	],
+};
+const resolvedConfig = {
+	...effective,
+	semanticCommits: 'disabled',
+	packageRules: [
+		...effective.packageRules,
+		...observationRules({}, now, base, npmFiles),
+	],
+};
+const [npmPin] = await flattenUpdates(resolvedConfig, npmFiles);
+assert.ok(npmPin);
+assert.equal(npmPin.minimumReleaseAge, base.minimumReleaseAge);
+assert.equal(npmPin.minimumReleaseAgeBehaviour, 'timestamp-optional');

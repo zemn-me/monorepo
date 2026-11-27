@@ -13,6 +13,9 @@
 	"minimumReleaseAge": "3 days",
 	"minimumReleaseAgeBuffer": "30 minutes",
 	"minimumReleaseAgeBehaviour": "timestamp-required",
+	"vulnerabilityAlerts": {
+		"minimumReleaseAge": "3 days"
+	},
 	"prConcurrentLimit": 0,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
@@ -109,6 +112,13 @@
 		}
 	},
 	"packageRules": [
+		{
+			"description": "Keep the release-age floor for direct npm updates exempted by the best-practices preset",
+			"matchDatasources": ["npm"],
+			"matchUpdateTypes": ["pin", "replacement", "bump", "rollback", "lockfileUpdate"],
+			"matchJsonata": ["minimumReleaseAge = null or $not($exists(minimumReleaseAge))"],
+			"minimumReleaseAge": "3 days"
+		},
 		{
 			"matchDatasources": ["custom.johnvansickle_ffmpeg_release"],
 			"extractVersion": "^\\s*version:\\s*(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s*$",
