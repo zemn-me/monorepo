@@ -173,9 +173,10 @@ export async function main(args: Args) {
 			);
 		}
 	}
-	const e4 = await waitForLockTask(async () =>
-		s.then(v => console.log(v.outputs()))
-	)('outputs testing');
+	const e4 = await waitForLockTask(async () => {
+		const stack = await s;
+		await stack.outputs();
+	})('outputs testing');
 	const e5 = !args.doNotTearDown
 		? await waitForLockTask(async () => s.then(v => v.destroy(baseConfig)))(
 				'destroy new state'
