@@ -40,7 +40,10 @@ md_files(
 
 test_suite(
     name = "workflow_behavior_tests",
-    tests = ["//ci/workflows:workflows_test"],
+    tests = [
+        "//ci/workflows:action_lock_test",
+        "//ci/workflows:workflows_test",
+    ],
 )
 
 sh_test(

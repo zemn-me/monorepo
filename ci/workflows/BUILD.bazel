@@ -53,6 +53,7 @@ py_test(
         "//.github/workflows:workflow_test_files",
     ],
     main = "action_lock.py",
+    visibility = ["//.github/workflows:__pkg__"],
     deps = ["@pip//pyyaml"],
 )
 

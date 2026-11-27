@@ -47,13 +47,14 @@ func TestFailuresReachRequiredGate(t *testing.T) {
 	f.publishMain(t, "pinned-main")
 	f.run(t, "presubmit", "merge_group", "Presubmit", "failure", map[string]string{"FAIL_PRESUBMIT": "true"})
 	require.NoDirExists(t, filepath.Join(f.root, "artifacts", "42"))
+	// A producer can publish its candidate before a later step fails or is cancelled.
+	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
 	for _, result := range []string{"failure", "cancelled"} {
 		t.Run(result, func(t *testing.T) {
 			f.run(t, "staging", "merge_group", "Staging", "failure", map[string]string{"MAIN_SHA": "pinned-main", "PRODUCER_RESULT": result})
 			require.Empty(t, f.deployments(t))
 		})
 	}
-	f.run(t, "presubmit", "merge_group", "Presubmit", "success", nil)
 	for _, stage := range []string{"main", "candidate"} {
 		t.Run(stage, func(t *testing.T) {
 			require.NoError(t, writeFile(filepath.Join(f.root, "deployments"), "", 0600))
