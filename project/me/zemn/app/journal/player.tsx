@@ -18,6 +18,7 @@ import { useLocation } from 'react-router';
 import { Temporal } from 'temporal-polyfill';
 import type { components } from '#root/project/me/zemn/api/api_client.gen.js';
 import style from '#root/project/me/zemn/app/journal/style.module.css';
+import { useJournalAudio } from '#root/project/me/zemn/app/journal/use_journal_audio.js';
 import { Waveform } from '#root/project/me/zemn/app/journal/waveform.js';
 import Link from '#root/project/me/zemn/components/Link/index.js';
 import { useFetchClient } from '#root/project/me/zemn/hook/useZemnMeApi.js';
@@ -303,15 +304,17 @@ const Transcript = memo(
 const playbackQuery = { entry: parseAsString, t: parseAsFloat };
 
 export function JournalPlayerProvider({
+	capturing,
 	portalTarget,
 	journal,
 	children,
 }: {
+	readonly capturing: boolean;
 	readonly portalTarget: HTMLDivElement | null;
 	readonly journal?: Journal;
 	readonly children: ReactNode;
 }) {
-	const audioRef = useRef<HTMLAudioElement>(null);
+	const audioRef = useJournalAudio(capturing);
 	const [entry, setEntry] = useState<JournalEntry>();
 	const selected = useRef<JournalEntry | undefined>(undefined);
 	const [source, setSource] = useState('');
