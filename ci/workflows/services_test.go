@@ -241,7 +241,11 @@ func bazel(args []string) error {
 		fmt.Println(dir)
 		return nil
 	case "run":
-		if !slices.Contains(args, "//ci:presubmit") || os.Getenv("FAIL_PRESUBMIT") == "true" {
+		separator := slices.Index(args, "--")
+		if separator < 0 || !slices.Contains(args[:separator], "//ci:presubmit") || !slices.Contains(args[separator+1:], "--skip-pulumi-deploy") {
+			return fmt.Errorf("expected a presubmit run with deployment disabled, got %q", args)
+		}
+		if os.Getenv("FAIL_PRESUBMIT") == "true" {
 			return fmt.Errorf("fixture presubmit failed")
 		}
 		if os.Getenv("GITHUB_EVENT_NAME") == "merge_group" {

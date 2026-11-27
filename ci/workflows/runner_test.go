@@ -164,7 +164,7 @@ func (l stepLog) Fire(e *logrus.Entry) error {
 // GitHub enforces concurrency.queue. act v0.2.98 rejects it during parsing.
 var queueSetting = regexp.MustCompile("(?m)^ +queue: (max|single)\n")
 
-func (f *fixture) run(t *testing.T, name, event, job, want string, overrides map[string]string) {
+func (f *fixture) planJob(t *testing.T, name, event, job string) *model.Plan {
 	t.Helper()
 	path := filepath.Join(f.repo, ".github/workflows", name+".yml")
 	planner, err := model.NewSingleWorkflowPlanner(path, strings.NewReader(queueSetting.ReplaceAllString(readFile(t, path), "")))
@@ -172,6 +172,16 @@ func (f *fixture) run(t *testing.T, name, event, job, want string, overrides map
 	require.Contains(t, planner.GetEvents(), event)
 	plan, err := planner.PlanJob(job)
 	require.NoError(t, err)
+	return plan
+}
+
+func (f *fixture) run(t *testing.T, name, event, job, want string, overrides map[string]string) {
+	t.Helper()
+	f.runPlan(t, name, event, job, want, overrides, f.planJob(t, name, event, job))
+}
+
+func (f *fixture) runPlan(t *testing.T, name, event, job, want string, overrides map[string]string, plan *model.Plan) {
+	t.Helper()
 	binary, err := os.Executable()
 	require.NoError(t, err)
 	env := map[string]string{

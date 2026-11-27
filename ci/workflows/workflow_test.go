@@ -67,6 +67,19 @@ func TestFailuresReachRequiredGate(t *testing.T) {
 	}
 }
 
+func TestStagingRejectsCancelledDeployment(t *testing.T) {
+	f := newFixture(t)
+	plan := f.planJob(t, "staging", "merge_group", "Staging")
+	// GitHub can cancel Deploy while the required gate still runs with always().
+	// Resume the real plan at the gate with that hosted-runner result.
+	plan.Stages = plan.Stages[len(plan.Stages)-1:]
+	gate := plan.Stages[0].Runs[0]
+	require.Equal(t, "Staging", gate.JobID)
+	require.Contains(t, gate.Job().Needs(), "Deploy")
+	gate.Workflow.Jobs["Deploy"].Result = "cancelled"
+	f.runPlan(t, "staging", "merge_group", "Staging", "failure", nil, plan)
+}
+
 func TestPullRequestChecksWithoutPublishingOrDeploying(t *testing.T) {
 	f := newFixture(t)
 	f.run(t, "presubmit", "pull_request", "Presubmit", "success", nil)
