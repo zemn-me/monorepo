@@ -19,13 +19,6 @@
 	color: var(--error-color);
 }
 
-.indicator {
-	display: inline-block;
-	height: auto;
-	width: 0.6em;
-	vertical-align: middle;
-}
-
 .loggedIn {
 	display: inline-flex;
 	flex-wrap: wrap;
@@ -47,11 +40,15 @@
 	gap: 0.15em;
 }
 
+.indicator,
+.accountAction {
+	width: 1.6em;
+	height: 1.6em;
+}
+
 .accountAction {
 	display: inline-grid;
 	place-items: center;
-	width: 1.6em;
-	height: 1.6em;
 	padding: 0;
 	border: 0;
 	border-radius: 0.25em;
