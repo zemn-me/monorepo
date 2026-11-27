@@ -42,7 +42,7 @@ jobs:
           configurationFile: .github/renovate-global.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
-          docker-volumes: ${{ runner.temp }}/renovate-lookup:/observations
+          docker-volumes: ${{ runner.temp }}/renovate-lookup:/observations;${{ github.workspace }}/.github/renovate-rollback-date.patch:/renovate-rollback-date.patch:ro
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ github.token }}
         env:
@@ -97,7 +97,7 @@ jobs:
           configurationFile: ${{ runner.temp }}/renovate-aged.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
-          docker-volumes: /tmp:/tmp;${{ runner.temp }}/renovate-lookup:/observations
+          docker-volumes: /tmp:/tmp;${{ runner.temp }}/renovate-lookup:/observations;${{ github.workspace }}/.github/renovate-rollback-date.patch:/renovate-rollback-date.patch:ro
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
         env:

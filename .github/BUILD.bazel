@@ -4,7 +4,10 @@ load("//js:rules.bzl", "js_library", "js_test")
 load("//md:rules.bzl", "md_files")
 load("//yml:test.bzl", "yaml_lint_test")
 
-exports_files(["renovate-global.json"])
+exports_files([
+    "renovate-global.json",
+    "renovate-rollback-date.patch",
+])
 
 exports_files(
     [

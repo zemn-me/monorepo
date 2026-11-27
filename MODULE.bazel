@@ -329,10 +329,12 @@ npm.npm_translate_lock(
     npmrc = "@@//:.npmrc",
     patch_args = {
         "@pulumi/pulumi": ["-p0"],
+        "renovate": ["-p0"],
         "openapi-typescript@7.13.0": ["-p0"],
     },
     patches = {
         "@pulumi/pulumi": ["//bzl:pulumi_typescript5.patch"],
+        "renovate": ["//.github:renovate-rollback-date.patch"],
         "openapi-typescript@7.13.0": ["//bzl:openapi_typescript_ts5_peer.patch"],
     },
     pnpm_lock = "//:pnpm-lock.yaml",

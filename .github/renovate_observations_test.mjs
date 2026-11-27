@@ -13,8 +13,10 @@ import { validateConfig } from 'renovate/dist/config/validation.js';
 import { get as getVersioning } from 'renovate/dist/modules/versioning/index.js';
 import { applyMinimumReleaseAgeToDigestUpdate } from 'renovate/dist/workers/repository/process/lookup/digest.js';
 import { filterInternalChecks } from 'renovate/dist/workers/repository/process/lookup/filter-checks.js';
+import { getRollbackUpdate } from 'renovate/dist/workers/repository/process/lookup/rollback.js';
+import { addReplacementUpdateIfValid } from 'renovate/dist/workers/repository/process/lookup/utils.js';
 import { flattenUpdates } from 'renovate/dist/workers/repository/updates/flatten.js';
-const { history, observationRules, observe } = await import(
+const { history, lookupNpmDates, observationRules, observe } = await import(
 	new URL('./renovate-observations.mjs', import.meta.url)
 );
 
@@ -249,19 +251,15 @@ const rollback = {
 	newValue: 'v0.9.0',
 };
 const oldDate = new Date(now - wait - 1000).toISOString();
-for (const [date, expectedCount] of [
-	[undefined, 0],
-	[new Date(now).toISOString(), 0],
-	[oldDate, 1],
-]) {
-	const updates = files([{ ...rollback, releaseTimestamp: date }], unpinned);
-	const rules = observationRules({}, now, base, updates);
-	const branches = await flattenUpdates(
-		{ ...config, packageRules: rules },
-		updates
-	);
-	assert.equal(branches.length, expectedCount);
-}
+assert.equal(
+	(
+		await flattenUpdates(
+			{ ...config, packageRules: observationRules({}, now, base) },
+			files([rollback], unpinned)
+		)
+	).length,
+	0
+);
 const rollbackFiles = files([{ ...rollback, newDigest: digest }]);
 const rollbackObs = observe(rollbackFiles, {}, now);
 const rollbackRules = observationRules(
@@ -364,3 +362,83 @@ const [npmPin] = await flattenUpdates(resolvedConfig, npmFiles);
 assert.ok(npmPin);
 assert.equal(npmPin.minimumReleaseAge, base.minimumReleaseAge);
 assert.equal(npmPin.minimumReleaseAgeBehaviour, 'timestamp-optional');
+
+// Exercise the update shapes emitted by Renovate, including omission of the
+// target time. Bind the second lookup to the exact registry, name and version.
+const registry = 'https://registry.npmjs.org';
+const original = {
+	...npm,
+	registryUrl: registry,
+	currentValue: '2.0.0',
+	currentVersion: '2.0.0',
+};
+const workerConfig = {
+	...original,
+	versioning: 'npm',
+	manager: 'npm',
+	rangeStrategy: 'pin',
+	packageFile: 'package.json',
+};
+const npmReport = (date, registryUrl = registry) => {
+	const updates = [
+		getRollbackUpdate(
+			workerConfig,
+			[{ version: '1.0.0', releaseTimestamp: date }],
+			getVersioning('npm')
+		),
+	];
+	addReplacementUpdateIfValid(updates, {
+		...workerConfig,
+		replacementName: 'next-example',
+		replacementVersion: '1.0.0',
+	});
+	assert.deepEqual(
+		updates.map(u => u.updateType),
+		['rollback', 'replacement']
+	);
+	assert.equal(updates[0].releaseTimestamp, date);
+	return {
+		npm: [
+			{
+				packageFile: 'package.json',
+				deps: [{ ...original, registryUrl, updates }],
+			},
+		],
+	};
+};
+for (const [date, expected] of [
+	[oldDate, ['rollback', 'replacement']],
+	[new Date(now).toISOString(), []],
+]) {
+	const report = npmReport(date);
+	const names = [];
+	const published = await lookupNpmDates(report, async url => {
+		const name = decodeURIComponent(new URL(url).pathname.slice(1));
+		names.push(name);
+		return Response.json({
+			name,
+			versions: { '1.0.0': { version: '1.0.0' } },
+			time: { '1.0.0': date },
+		});
+	});
+	assert.deepEqual(names, ['next-example']);
+	const rules = observationRules({}, now, base, report, published);
+	const liveConfig = {
+		...resolvedConfig,
+		packageRules: [...effective.packageRules, ...rules],
+	};
+	const direct = async reports =>
+		(await flattenUpdates(liveConfig, reports))
+			.filter(u => !u.isLockFileMaintenance)
+			.map(u => u.updateType);
+	assert.deepEqual(await direct(npmReport(date)), expected);
+	assert.deepEqual(
+		await direct(npmReport(undefined, 'https://registry.example.org')),
+		[]
+	);
+}
+let privateRequests = 0;
+await lookupNpmDates(npmReport(oldDate, 'https://registry.example.org'), () => {
+	privateRequests++;
+});
+assert.equal(privateRequests, 0);

@@ -51,6 +51,76 @@ function* candidates(packageFiles) {
 	}
 }
 
+// Renovate omits the target timestamp for replacements. The public npm registry
+// records publication time by exact version. Only query verified public names.
+export async function lookupNpmDates(files, request = fetch) {
+	const dates = new Map();
+	const packages = new Map();
+	const namespace = name => (name.startsWith('@') ? name.split('/')[0] : '');
+	for (const { dep, update, scope } of candidates(files)) {
+		if (
+			scope.datasource !== 'npm' ||
+			update.releaseTimestamp ||
+			update.updateType !== 'replacement'
+		)
+			continue;
+		const registryUrl = update.registryUrl ?? dep.registryUrl;
+		if (
+			registryUrl !== 'https://registry.npmjs.org' &&
+			registryUrl !== 'https://registry.npmjs.org/'
+		)
+			continue;
+		const name = update.newName ?? scope.packageName;
+		if (
+			typeof name !== 'string' ||
+			typeof scope.packageName !== 'string' ||
+			!/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/.test(name)
+		)
+			continue;
+		// A different npm scope can have a different registry in the same checkout.
+		if (namespace(name) !== namespace(scope.packageName)) continue;
+		const version = update.newVersion ?? update.newValue;
+		if (
+			typeof version !== 'string' ||
+			!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(
+				version
+			) ||
+			![version, '=' + version].includes(update.newValue)
+		)
+			continue;
+		if (!packages.has(name)) packages.set(name, []);
+		packages.get(name).push({ update, registryUrl, version });
+	}
+	for (const [name, targets] of packages) {
+		let packument;
+		try {
+			const response = await request(
+				`https://registry.npmjs.org/${encodeURIComponent(name)}`,
+				{
+					redirect: 'error',
+					signal: AbortSignal.timeout(10_000),
+				}
+			);
+			if (response.ok) packument = await response.json();
+		} catch {
+			// A failed lookup leaves only the ordinary digest fallback available.
+		}
+		if (packument?.name !== name) continue;
+		for (const { update, registryUrl, version } of targets) {
+			if (
+				packument.versions?.[version]?.version === version &&
+				typeof packument.time?.[version] === 'string'
+			) {
+				dates.set(update, {
+					registryUrl,
+					timestamp: packument.time[version],
+				});
+			}
+		}
+	}
+	return dates;
+}
+
 export function observe(packageFiles, previous, now) {
 	const observations = new Map();
 	for (const { dep, update, scope, target } of candidates(packageFiles)) {
@@ -115,7 +185,13 @@ function matches(fields) {
 		.join(' and ');
 }
 
-export function observationRules(observations, now, config, files = {}) {
+export function observationRules(
+	observations,
+	now,
+	config,
+	files = {},
+	npmDates = new Map()
+) {
 	// Match the effective policy too. A stricter package rule must continue to win.
 	const days = /^(\d+) days?$/.exec(config.minimumReleaseAge);
 	const buffer = /^(\d+) minutes?$/.exec(config.minimumReleaseAgeBuffer);
@@ -141,9 +217,12 @@ export function observationRules(observations, now, config, files = {}) {
 		const field = useCurrent
 			? 'currentVersionTimestamp'
 			: 'releaseTimestamp';
-		const timestamp = useCurrent
-			? dep.currentVersionTimestamp
-			: update.releaseTimestamp;
+		const registry = npmDates.get(update);
+		const timestamp =
+			registry?.timestamp ??
+			(useCurrent
+				? dep.currentVersionTimestamp
+				: update.releaseTimestamp);
 		if (
 			typeof timestamp === 'string' &&
 			/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)$/.test(
@@ -152,7 +231,7 @@ export function observationRules(observations, now, config, files = {}) {
 			Date.parse(timestamp) <= now - wait
 		) {
 			approvedExempt.push(
-				`(${matches({ ...scope, ...target, newDigest: update.newDigest ?? null, ...policy, [field]: timestamp, ...(useCurrent ? { currentVersion: target.newVersion } : {}) })})`
+				`(${matches({ ...scope, ...target, newDigest: update.newDigest ?? null, ...policy, ...(registry ? { registryUrl: registry.registryUrl } : { [field]: timestamp }), ...(useCurrent ? { currentVersion: target.newVersion } : {}) })})`
 			);
 		}
 	}
@@ -294,7 +373,13 @@ if (
 	if (outputConfig) {
 		const config = await readJson('.github/renovate-global.json');
 		config.packageRules.push(
-			...observationRules(observations, now, config, files)
+			...observationRules(
+				observations,
+				now,
+				config,
+				files,
+				await lookupNpmDates(files)
+			)
 		);
 		await writeFile(outputConfig, JSON.stringify(config));
 	} else {
