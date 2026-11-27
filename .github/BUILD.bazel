@@ -9,6 +9,7 @@ exports_files(["renovate-global.json"])
 exports_files(
     [
         "actions/build-deploy-bundle/action.yml",
+        "actions/upload-deploy-bundle/action.yml",
         "actions/build-deploy-bundle/build.sh",
     ],
     visibility = ["//.github/workflows:__pkg__"],

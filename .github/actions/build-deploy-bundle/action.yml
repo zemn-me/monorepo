@@ -40,14 +40,7 @@ runs:
       env:
         BUILDBUDDY_API_KEY: ${{ steps.secrets.outputs.buildbuddy_api_key }}
       run: '"$GITHUB_ACTION_PATH/build.sh"'
-    - name: Upload deployment bundle
-      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+    - uses: ./.github/actions/upload-deploy-bundle
       with:
-        name: ${{ inputs.artifact-name }}
-        path: |
-          ${{ inputs.source-directory }}/dist/bin/ci/deploy/layers_bundle.tar.gz
-          ${{ inputs.source-directory }}/dist/bin/ci/deploy/runfile_aliases.tar
-        compression-level: 0
-        if-no-files-found: error
-        overwrite: true
-        retention-days: 1
+        artifact-name: ${{ inputs.artifact-name }}
+        bundle-directory: ${{ inputs.source-directory }}/dist/bin/ci/deploy

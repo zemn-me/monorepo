@@ -82,6 +82,11 @@ const cmd = new Command('presubmit')
 					cwd,
 					'test',
 					'//...',
+					// Request the manual archive target as a top-level output so RBE
+					// downloads both files. Later Bazel runs update the default symlinks.
+					...(process.env['GITHUB_EVENT_NAME'] === 'merge_group'
+						? ['//ci/deploy:bundle', '--symlink_prefix=dist/candidate-']
+						: []),
 					`--config=${process.env['BAZEL_CI_CONFIG'] ?? 'ci'}`,
 					...(pullRequest
 						? ['--build_tests_only', '--test_size_filters=small,medium']
