@@ -807,6 +807,7 @@ describe('zemn.me website', () => {
 				const tilt = await driver.findElement(By.css('input[aria-label="Tilt"]'));
 				const rotation = await driver.findElement(By.css('input[aria-label="Rotation"]'));
 				const initialRotation = await rotation.getAttribute('value');
+				await driver.executeScript("arguments[0].scrollIntoView({ block: 'center', behavior: 'instant' })", chart);
 
 				for (const dy of [24, -48]) {
 					await driver.actions().move({ origin: chart }).press()
