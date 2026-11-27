@@ -88,7 +88,10 @@ runs:
 		".github/actions/build-deploy-bundle/action.yml",
 		".github/actions/build-deploy-bundle/build.sh",
 		".github/actions/upload-deploy-bundle/action.yml",
+		"py/__init__.py",
+		"py/ci/__init__.py",
 		"py/ci/find_deploy_bundle.py",
+		"py/ci/verify_staging_candidate.py",
 	} {
 		mode := os.FileMode(0644)
 		if filepath.Ext(rel) == ".sh" {
@@ -106,7 +109,7 @@ runs:
 	binary, err := os.Executable()
 	require.NoError(t, err)
 	require.NoError(t, os.Symlink(binary, filepath.Join(root, "bin/node")))
-	require.NoError(t, writeFile(filepath.Join(root, "bin/sleep"), "#!/bin/sh\ntest \"$1\" = 30\n", 0755))
+	require.NoError(t, writeFile(filepath.Join(root, "statuses"), "", 0600))
 	require.NoError(t, writeFile(filepath.Join(root, "deployments"), "", 0600))
 	f.git(t, "init", "-q", "-b", "main")
 	f.git(t, "remote", "add", "origin", "https://github.com/owner/repo")
@@ -190,6 +193,8 @@ func (f *fixture) runPlan(t *testing.T, name, event, job, want string, overrides
 		"FIXTURE_BIN":            binary,
 		"FIXTURE_REPO":           f.repo,
 		"FIXTURE_STORE":          filepath.Join(f.root, "artifacts"),
+		"FIXTURE_DISPATCH":       filepath.Join(f.root, "dispatch.json"),
+		"FIXTURE_STATUSES":       filepath.Join(f.root, "statuses"),
 		"FIXTURE_DEPLOYMENTS":    filepath.Join(f.root, "deployments"),
 		"FIXTURE_BUILD":          filepath.Join(f.root, "build.json"),
 		"FIXTURE_SUBMIT_ACTIONS": filepath.Join(f.root, "submit-actions"),
@@ -198,7 +203,10 @@ func (f *fixture) runPlan(t *testing.T, name, event, job, want string, overrides
 		"CACHE_SECRET":           "available",
 		"PRODUCER_RESULT":        "success",
 	}
-	if name == "staging" {
+	eventFile := "event.json"
+	if event == "workflow_dispatch" {
+		eventFile = "dispatch.json"
+		env["SHA_REF"] = f.sha
 		env["GITHUB_RUN_ID"] = "73"
 		env["GITHUB_RUN_ATTEMPT"] = "1"
 	}
@@ -214,7 +222,7 @@ func (f *fixture) runPlan(t *testing.T, name, event, job, want string, overrides
 		ActionCache:    f.actions,
 		ConcurrentJobs: 1,
 		EventName:      event,
-		EventPath:      filepath.Join(f.root, "event.json"),
+		EventPath:      filepath.Join(f.root, eventFile),
 		Env:            env,
 		Platforms:      map[string]string{"ubuntu-latest": "-self-hosted"},
 		GitHubInstance: "github.com",

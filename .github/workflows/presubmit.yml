@@ -25,6 +25,9 @@ env:
 
 jobs:
   Presubmit:
+    name: ${{ github.event_name == 'merge_group' && 'Build candidate' || 'Presubmit' }}
+    outputs:
+      artifact-id: ${{ steps.candidate.outputs.artifact-id }}
     permissions:
       contents: read
       id-token: write
@@ -86,6 +89,7 @@ jobs:
             ${{ steps.secrets.outputs.readonly_buildbuddy_api_key != ''
                 && 'ci-presubmit' || 'ci-local' }}
       - name: Publish the tested merge-group bundle
+        id: candidate
         if: github.event_name == 'merge_group'
         uses: ./.github/actions/upload-deploy-bundle
         with:
@@ -117,3 +121,32 @@ jobs:
           path: ${{ runner.temp }}/bazel-large-output
           if-no-files-found: ignore
           retention-days: 3
+
+  DispatchStaging:
+    # The required Presubmit check includes successful dispatch on the queue.
+    name: ${{ github.event_name == 'merge_group' && 'Presubmit' || 'Dispatch staging' }}
+    if: always() && github.event_name == 'merge_group'
+    needs: Presubmit
+    concurrency:
+      group: staging-status-${{ github.sha }}
+      cancel-in-progress: false
+      queue: max
+    permissions:
+      actions: write
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start staging on the tested queue ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUILD_RESULT: ${{ needs.Presubmit.result }}
+          ARTIFACT_ID: ${{ needs.Presubmit.outputs.artifact-id }}
+        run: |
+          [[ "$BUILD_RESULT" == success && "$ARTIFACT_ID" =~ ^[1-9][0-9]*$ ]]
+          run_url=$(gh api --method POST -H 'X-GitHub-Api-Version: 2026-03-10' \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/staging.yml/dispatches" \
+            -f "ref=$GITHUB_REF_NAME" -f "inputs[artifact-id]=$ARTIFACT_ID" --jq .html_url)
+          [[ -n "$run_url" ]]
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
+            -f context=Staging -f state=pending -f description="Waiting for staging deployment" \
+            -f "target_url=$run_url" --silent

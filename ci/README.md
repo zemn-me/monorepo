@@ -9,7 +9,8 @@ Pull requests run Bazel tests sized `small` or `medium` and build only the
 targets those tests need. The merge queue builds and tests `//...` across all
 sizes on the combined commit, including the deployment bundle and its smoke test.
 Both stages run the Go module and Gazelle checks. After they pass, the merge-group
-Presubmit publishes its bundle for Staging to deploy from that exact run.
+Presubmit publishes its bundle and dispatches Staging on the tested queue ref.
+Staging verifies the artifact against the successful build, ref and commit before deploying.
 
 Run `./sh/bin/go test ./ci/workflows` or
 `./sh/bin/bazel test //ci/workflows:workflows_test` to exercise Presubmit,

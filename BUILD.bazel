@@ -301,6 +301,7 @@ py_venv(
         "//py",
         "//py/ci",
         "//py/ci:find_deploy_bundle",
+        "//py/ci:verify_staging_candidate",
         "//py/ci/cancel_obsolete_staging",
         "//py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin",
         "//py/ci/post_upgrade",
