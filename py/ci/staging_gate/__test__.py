@@ -16,12 +16,12 @@ import yaml
 # act evaluates the real job graph and expressions. Replace only external actions
 # and service entry points. An unknown action must not silently become a no-op.
 ACTIONS = {
-    "actions/checkout": ("checkout", ["path"]),
+    "actions/checkout": ("checkout", ["path", "ref"]),
     "actions/upload-artifact": ("upload", ["name", "path", "if-no-files-found"]),
     "actions/download-artifact": ("download", ["run-id", "name", "path"]),
     "aws-actions/configure-aws-credentials": None,
     "google-github-actions/auth": None,
-    "google-github-actions/get-secretmanager-secrets": None,
+    "google-github-actions/get-secretmanager-secrets": ("secrets", ["secrets"]),
     "jlumbroso/free-disk-space": None,
 }
 QUEUE_BRANCH = "gh-readonly-queue/main/pr-1"
@@ -91,10 +91,15 @@ class WorkflowTest(unittest.TestCase):
             environment = {f"ARG_{i}": "${{ inputs." + key + " }}" for i, key in enumerate(inputs)}
             arguments = " ".join(f'"${key}"' for key in environment)
             step.update(env=environment, run=f'"$FIXTURE_PYTHON" "$FIXTURE_SERVICE" {spec[0]} {arguments}')
+        outputs = {}
+        if spec and spec[0] == "secrets":
+            step["id"] = "result"
+            for key in ("buildbuddy_api_key", "readonly_buildbuddy_api_key"):
+                outputs[key] = {"description": key, "value": "${{ steps.result.outputs." + key + " }}"}
         (dest / "action.yml").write_text(yaml.safe_dump({
             "name": name, "description": "Local service fixture",
             "inputs": {key: {"description": key, "default": ""} for key in inputs},
-            "runs": {"using": "composite", "steps": [step]},
+            "outputs": outputs, "runs": {"using": "composite", "steps": [step]},
         }))
         return dest
 
@@ -122,6 +127,8 @@ class WorkflowTest(unittest.TestCase):
             "FIXTURE_PYTHON": sys.executable, "FIXTURE_SERVICE": str(FIXTURE),
             "FIXTURE_REPO": str(self.repo), "FIXTURE_STORE": str(self.store),
             "FIXTURE_DEPLOYMENTS": str(self.trace), "FIXTURE_SHA": self.sha,
+            "FIXTURE_BUILD": str(self.root / "build.json"), "FIXTURE_MAIN": str(self.root / "pinned"),
+            "CACHE_SECRET": "available",
             "MAIN_SHA": self.sha, "PRODUCER_RESULT": "success", "FAIL_DEPLOY": "", "FAIL_PRESUBMIT": "false",
             **overrides,
         })
@@ -130,6 +137,9 @@ class WorkflowTest(unittest.TestCase):
         # An earlier failure can set the process exit code even if act skipped
         # the required gate. Check the result of the requested job itself.
         records = [json.loads(line) for line in log.splitlines() if line.startswith("{")]
+        for record in records:
+            if record.get("raw_output"):
+                self.assertNotIn("test-only-cache-credential", record["msg"])
         outcomes = [r["jobResult"] for r in records if r.get("jobID") == job and "jobResult" in r]
         self.assertEqual(outcomes, ["success" if success else "failure"], log)
 
@@ -165,6 +175,66 @@ class WorkflowTest(unittest.TestCase):
         self.workflow("staging-pr", "pull_request", "Staging")
         self.assertFalse(self.store.exists())
         self.assertEqual(self.trace.read_text(), "")
+
+    def cache_config(self, mode):
+        build = json.loads((self.root / "build.json").read_text())
+        config = build["config"]
+        if mode == "missing":
+            self.assertIsNone(config)
+            self.assertIn("--config=ci-local", build["args"])
+        else:
+            self.assertIn("--remote_cache=grpcs://remote.buildbuddy.io", config)
+            if mode == "readonly":
+                self.assertIn("--config=ci-presubmit", build["args"])
+                self.assertIn("--remote_upload_local_results=false", config)
+                for service in ("cache", "exec"):
+                    self.assertIn(f"--remote_{service}_header=x-buildbuddy-api-key=test-only-cache-credential", config)
+                self.assertNotIn("--remote_header=", config)
+                self.assertNotIn("--bes_backend=", config)
+            else:
+                self.assertIn("--config=ci", build["args"])
+                self.assertIn("--remote_header=x-buildbuddy-api-key=test-only-cache-credential", config)
+                self.assertIn("--bes_backend=grpcs://remote.buildbuddy.io", config)
+                self.assertNotIn("--remote_upload_local_results=false", config)
+        return build
+
+    def test_presubmit_uses_the_readonly_cache_or_runs_without_credentials(self):
+        self.workflow("presubmit", "pull_request", "Presubmit")
+        self.cache_config("readonly")
+        self.workflow("presubmit", "pull_request", "Presubmit", CACHE_SECRET="missing")
+        self.cache_config("missing")
+
+    def test_missing_main_artifact_builds_the_pinned_program(self):
+        # The checkout action supplies two distinguishable revisions. The real
+        # build-deploy-bundle action selects its working directory and packages it.
+        deploy = self.repo / "ci/deploy"
+        packaging = ("bundle.bzl", "bundle_test.sh", "deploy_failure_test.sh", "run.sh")
+        for name in packaging:
+            (deploy / name).write_text("candidate")
+        pinned = self.root / "pinned"
+        shutil.copytree(self.repo, pinned)
+        main = pinned / "ci/deploy"
+        (main / "deploy.ts").write_text("pinned program")
+        (main / "BUILD.bazel").write_text("# pinned targets\n")
+        for has_packager in (True, False):
+            with self.subTest(has_packager=has_packager):
+                for name in packaging:
+                    if has_packager:
+                        (main / name).write_text("main")
+                    else:
+                        (main / name).unlink()
+                sha = "with-packager" if has_packager else "before-packager"
+                self.workflow("staging", "merge_group", "MainBundle", MAIN_SHA=sha)
+                build = self.cache_config("writable")
+                self.assertIn("//ci/deploy:bundle_test", build["args"])
+                for archive in ("ape", "rules_diff"):
+                    self.assertIn(f"--distdir={build['workspace']}/third_party/bazel_distdir/{archive}", build["args"])
+                self.assertIn("# pinned targets", build["buildfile"])
+                self.assertEqual("deploy_bundle()" in build["buildfile"], not has_packager)
+                self.assertEqual(build["packaging"], ["main" if has_packager else "candidate"] * len(packaging))
+                archives = self.store / "42" / f"deploy-v2-main-{sha}"
+                for filename in ("layers_bundle.tar.gz", "runfile_aliases.tar"):
+                    self.assertEqual((archives / filename).read_text(), "pinned program")
 
     def test_production_checks_main_before_deploying(self):
         self.publish_main(self.sha)

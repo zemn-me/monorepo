@@ -31,6 +31,7 @@ py_test(
         "//py/ci:find_deploy_bundle.py",
     ],
     main = "__test__.py",
+    visibility = ["//.github/workflows:__pkg__"],
     deps = ["@pip//pyyaml"],
 )
 

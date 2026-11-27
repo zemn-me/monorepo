@@ -53,9 +53,32 @@ def main(service, args):
         gh(args)
     elif service == "checkout":
         dest = Path(args[0] or ".")
-        shutil.copytree(env["FIXTURE_REPO"], dest, dirs_exist_ok=True)
+        ref = args[1]
+        source = env["FIXTURE_MAIN"] if ref == env["MAIN_SHA"] and ref else env["FIXTURE_REPO"]
+        shutil.copytree(source, dest, dirs_exist_ok=True)
+    elif service == "secrets":
+        if env["CACHE_SECRET"] == "missing":
+            sys.exit(1)
+        with open(env["GITHUB_OUTPUT"], "a") as output:
+            for secret in args[0].splitlines():
+                key = secret.partition(":")[0]
+                if key in ("buildbuddy_api_key", "readonly_buildbuddy_api_key"):
+                    print(f"{key}=test-only-cache-credential", file=output)
     elif service == "bazel":
-        if args[0] == "info":
+        if args[0] in ("build", "test"):
+            config = Path(".auth.bazelrc")
+            record = {"args": args, "config": config.read_text() if config.exists() else None}
+            if args[0] == "test":
+                deploy = Path("ci/deploy")
+                record.update(workspace=env["GITHUB_WORKSPACE"], buildfile=(deploy / "BUILD.bazel").read_text(),
+                              packaging=[(deploy / n).read_text() for n in
+                                         ("bundle.bzl", "bundle_test.sh", "deploy_failure_test.sh", "run.sh")])
+                folder = Path("dist/bin/ci/deploy")
+                folder.mkdir(parents=True)
+                for name in ARCHIVES:
+                    (folder / name).write_text((deploy / "deploy.ts").read_text())
+            Path(env["FIXTURE_BUILD"]).write_text(json.dumps(record))
+        elif args[0] == "info":
             print(Path.cwd() / "dist")
         elif args[0] == "run" and "//ci:presubmit" in args:
             if env["FAIL_PRESUBMIT"] == "true":
@@ -65,7 +88,7 @@ def main(service, args):
                 folder.mkdir(parents=True)
                 for filename in ARCHIVES:
                     (folder / filename).write_text(env["GITHUB_SHA"])
-        elif args[0] != "build":
+        else:
             raise ValueError(args)
     elif service == "upload":
         name, paths, missing = args

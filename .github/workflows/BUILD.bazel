@@ -1,7 +1,6 @@
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//bzl:rules.bzl", "bazel_lint")
 load("//md:rules.bzl", "md_files")
-load("//py:rules.bzl", "py_test")
 load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files(["presubmit.yml"])
@@ -33,12 +32,9 @@ md_files(
     visibility = ["//:__subpackages__"],
 )
 
-py_test(
-    name = "archive_checkout_test",
-    size = "small",
-    srcs = ["archive_checkout_test.py"],
-    args = ["$(rootpath //.github:actions/build-deploy-bundle/build.sh)"],
-    data = ["//.github:actions/build-deploy-bundle/build.sh"],
+test_suite(
+    name = "workflow_behavior_tests",
+    tests = ["//py/ci/staging_gate:staging_gate_test"],
 )
 
 sh_test(
@@ -66,14 +62,5 @@ sh_test(
     env = {
         "ACTIONLINT": "$(rlocationpath @com_github_rhysd_actionlint//cmd/actionlint)",
     },
-    deps = ["@rules_shell//shell/runfiles"],
-)
-
-sh_test(
-    name = "bootstrap_bazel_remote_cache_test",
-    size = "small",
-    srcs = ["bootstrap_bazel_remote_cache_test.sh"],
-    data = ["bootstrap_bazel_remote_cache.sh"],
-    env = {"BOOTSTRAP": "$(rlocationpath :bootstrap_bazel_remote_cache.sh)"},
     deps = ["@rules_shell//shell/runfiles"],
 )
