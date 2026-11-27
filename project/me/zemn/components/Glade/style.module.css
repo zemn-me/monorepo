@@ -135,7 +135,6 @@ html:has(.main) {
 	z-index: 3;
 	display: grid;
 	grid:
-		"divider divider divider"
 		"....... shield  ......." 6rem
 		"tagline tagline tagline"
 		"....... ....... ......." 1em
@@ -143,10 +142,6 @@ html:has(.main) {
 		"....... ....... ......." 4rem
 		/ 1fr 4.5rem 1fr;
 	background-color: var(--background-color);
-}
-
-.footer > h2 {
-	grid-area: divider;
 }
 
 .copyright {
