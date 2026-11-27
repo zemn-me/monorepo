@@ -6,7 +6,7 @@ load("//yml:test.bzl", "yaml_lint_test")
 
 exports_files([
     "renovate-global.json",
-    "renovate-rollback-date.patch",
+    "renovate-target-dates.patch",
 ])
 
 exports_files(

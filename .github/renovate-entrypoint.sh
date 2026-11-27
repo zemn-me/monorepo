@@ -5,7 +5,7 @@ set -euo pipefail
 # Install bootstrap tools before dropping back to the image's normal user.
 apt-get update
 apt-get install -y --no-install-recommends patch python3
-# Renovate already selected a dated release for a rollback. Preserve that date
-# in the report and the branch candidate, as in the Bazel-tested npm package.
-patch --batch --forward --fuzz=0 -d /usr/local/renovate -p0 < /renovate-rollback-date.patch
+# Keep the exact selected release’s date on range pins and rollbacks, as in
+# the Bazel-tested npm package.
+patch --batch --forward --fuzz=0 -d /usr/local/renovate -p0 < /renovate-target-dates.patch
 exec runuser -u ubuntu -- renovate "$@"

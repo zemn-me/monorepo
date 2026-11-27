@@ -42,7 +42,7 @@ jobs:
           configurationFile: .github/renovate-global.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
-          docker-volumes: ${{ runner.temp }}/renovate-lookup:/observations;${{ github.workspace }}/.github/renovate-rollback-date.patch:/renovate-rollback-date.patch:ro
+          docker-volumes: ${{ runner.temp }}/renovate-lookup:/observations;${{ github.workspace }}/.github/renovate-target-dates.patch:/renovate-target-dates.patch:ro
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ github.token }}
         env:
@@ -75,6 +75,8 @@ jobs:
             fi
           fi
       - name: Age the exact candidate pins
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p "$RUNNER_TEMP/renovate-history"
           node .github/renovate-observations.mjs "$RUNNER_TEMP/renovate-lookup/lookup.json" \
@@ -97,7 +99,7 @@ jobs:
           configurationFile: ${{ runner.temp }}/renovate-aged.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
-          docker-volumes: /tmp:/tmp;${{ runner.temp }}/renovate-lookup:/observations;${{ github.workspace }}/.github/renovate-rollback-date.patch:/renovate-rollback-date.patch:ro
+          docker-volumes: /tmp:/tmp;${{ runner.temp }}/renovate-lookup:/observations;${{ github.workspace }}/.github/renovate-target-dates.patch:/renovate-target-dates.patch:ro
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
         env:

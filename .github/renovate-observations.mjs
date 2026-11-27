@@ -6,7 +6,17 @@ import { pathToFileURL } from 'node:url';
 // A version, tag, short SHA, or checksum calculated later by CI is insufficient.
 const fullDigest =
 	/^(?:[a-f0-9]{40}|(?:sha256:)?[a-f0-9]{64}|sha512:[a-f0-9]{128})$/;
-const isDigest = value => typeof value === 'string' && fullDigest.test(value);
+function isDigest(value) {
+	if (typeof value !== 'string') return false;
+	if (fullDigest.test(value)) return true;
+	const match = /^(sha256|sha384|sha512)-([A-Za-z0-9+/]+={0,2})$/.exec(value);
+	if (!match) return false;
+	const bytes = Buffer.from(match[2], 'base64');
+	return (
+		bytes.length === Number(match[1].slice(3)) / 8 &&
+		bytes.toString('base64') === match[2]
+	);
+}
 // These direct dependency updates bypass upstream's native release-age lookup.
 const nativeExempt = [
 	'pin',
@@ -49,6 +59,101 @@ function* candidates(packageFiles) {
 			}
 		}
 	}
+}
+
+// Git tag and commit dates can be set by the publisher. A date on a version
+// that compares equal can also belong to a different SHA than the one written.
+const gitDatasources = ['git-refs', 'github-digest', 'github-tags'];
+const digestTypes = ['digest', 'pinDigest'];
+function needsDigestProof({ manager, datasource, updateType, currentDigest }) {
+	return (
+		(manager === 'github-actions' && isDigest(currentDigest)) ||
+		gitDatasources.includes(datasource) ||
+		digestTypes.includes(updateType)
+	);
+}
+
+function observationKey(scope, target, registryUrl) {
+	return JSON.stringify({ scope, target, registryUrl: registryUrl ?? null });
+}
+
+export async function githubPublicationDates(files, request = fetch, token) {
+	const dates = new Map();
+	const cache = new Map();
+	const headers = { Accept: 'application/vnd.github+json' };
+	if (token) headers.Authorization = `Bearer ${token}`;
+	const json = async url => {
+		const response = await request(url, {
+			headers,
+			redirect: 'error',
+			signal: AbortSignal.timeout(10_000),
+		});
+		return response.ok ? response.json() : null;
+	};
+	for (const { dep, update, scope, target } of candidates(files)) {
+		if (
+			scope.manager !== 'github-actions' ||
+			!isDigest(update.newDigest) ||
+			!gitDatasources.includes(scope.datasource)
+		)
+			continue;
+		const registry = update.registryUrl ?? dep.registryUrl;
+		if (
+			registry &&
+			!['https://github.com', 'https://github.com/'].includes(registry)
+		)
+			continue;
+		if (
+			typeof scope.packageName !== 'string' ||
+			!/^[a-z\d_-]+\/[a-z\d_.-]+$/i.test(scope.packageName) ||
+			scope.packageName
+				.split('/')
+				.some(part => part === '.' || part === '..')
+		)
+			continue;
+		if (
+			!registry &&
+			dep.sourceUrl !== `https://github.com/${scope.packageName}`
+		)
+			continue;
+		const tag = update.newValue ?? dep.currentValue;
+		if (typeof tag !== 'string' || !tag || tag === '.' || tag === '..')
+			continue;
+		const repo = `https://api.github.com/repos/${scope.packageName}`;
+		const path = `${repo}/releases/tags/${encodeURIComponent(tag)}`;
+		if (!cache.has(path)) {
+			let verified;
+			try {
+				const release = await json(path);
+				if (
+					release?.immutable === true &&
+					release.draft === false &&
+					release.tag_name === tag &&
+					typeof release.published_at === 'string'
+				) {
+					const commit = await json(
+						`${repo}/commits/${encodeURIComponent('refs/tags/' + tag)}`
+					);
+					if (isDigest(commit?.sha))
+						verified = {
+							digest: commit.sha,
+							published: Date.parse(release.published_at),
+						};
+				}
+			} catch {
+				// Missing GitHub evidence leaves this SHA on the local clock.
+			}
+			cache.set(path, verified);
+		}
+		const proof = cache.get(path);
+		if (
+			proof?.digest === update.newDigest &&
+			Number.isFinite(proof.published)
+		) {
+			dates.set(observationKey(scope, target, registry), proof.published);
+		}
+	}
+	return dates;
 }
 
 // Renovate omits the target timestamp for replacements. The public npm registry
@@ -125,14 +230,18 @@ export function observe(packageFiles, previous, now) {
 	const observations = new Map();
 	for (const { dep, update, scope, target } of candidates(packageFiles)) {
 		const { updateType, newDigest } = update;
-		if (update.releaseTimestamp || !updateTypes.has(updateType)) continue;
+		if (
+			!updateTypes.has(updateType) ||
+			(update.releaseTimestamp && !needsDigestProof(scope))
+		)
+			continue;
 		if (!isDigest(dep.currentDigest) && updateType !== 'pinDigest')
 			continue;
-		const key = JSON.stringify({
+		const key = observationKey(
 			scope,
 			target,
-			registryUrl: update.registryUrl ?? dep.registryUrl ?? null,
-		});
+			update.registryUrl ?? dep.registryUrl
+		);
 		// Two conflicting observations in one lookup cannot establish continuity.
 		if (
 			!isDigest(newDigest) ||
@@ -190,7 +299,8 @@ export function observationRules(
 	now,
 	config,
 	files = {},
-	npmDates = new Map()
+	npmDates = new Map(),
+	githubDates = new Map()
 ) {
 	// Match the effective policy too. A stricter package rule must continue to win.
 	const days = /^(\d+) days?$/.exec(config.minimumReleaseAge);
@@ -206,23 +316,13 @@ export function observationRules(
 	};
 	const approvedExempt = [];
 	for (const { dep, update, scope, target } of candidates(files)) {
-		if (!nativeExempt.includes(update.updateType)) continue;
-		// A range pin freezes the resolved version. Only that exact version may
-		// use its dependency timestamp; a rollback or replacement targets other code.
-		const useCurrent =
-			update.updateType === 'pin' &&
-			target.newVersion &&
-			target.newVersion === dep.currentVersion &&
-			!update.releaseTimestamp;
-		const field = useCurrent
-			? 'currentVersionTimestamp'
-			: 'releaseTimestamp';
+		if (
+			!nativeExempt.includes(update.updateType) ||
+			needsDigestProof(scope)
+		)
+			continue;
 		const registry = npmDates.get(update);
-		const timestamp =
-			registry?.timestamp ??
-			(useCurrent
-				? dep.currentVersionTimestamp
-				: update.releaseTimestamp);
+		const timestamp = registry?.timestamp ?? update.releaseTimestamp;
 		if (
 			typeof timestamp === 'string' &&
 			/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)$/.test(
@@ -231,13 +331,13 @@ export function observationRules(
 			Date.parse(timestamp) <= now - wait
 		) {
 			approvedExempt.push(
-				`(${matches({ ...scope, ...target, newDigest: update.newDigest ?? null, ...policy, ...(registry ? { registryUrl: registry.registryUrl } : { [field]: timestamp }), ...(useCurrent ? { currentVersion: target.newVersion } : {}) })})`
+				`(${matches({ ...scope, ...target, newDigest: update.newDigest ?? null, ...policy, ...(registry ? { registryUrl: registry.registryUrl } : { releaseTimestamp: timestamp }) })})`
 			);
 		}
 	}
 	const groups = new Map();
 	for (const [key, { digest, firstSeen }] of Object.entries(observations)) {
-		if (now - firstSeen < wait) continue;
+		if (now - (githubDates.get(key) ?? firstSeen) < wait) continue;
 		const { scope, target } = JSON.parse(key);
 		const groupKey = JSON.stringify(scope);
 		if (!groups.has(groupKey))
@@ -268,7 +368,7 @@ export function observationRules(
 		}
 	}
 	const rules = [];
-	const approvedInitialPins = [];
+	const approvedPins = [];
 	for (const { scope, lookup, resolved } of groups.values()) {
 		const { datasource, updateType, ...fields } = scope;
 		const match = {
@@ -277,12 +377,12 @@ export function observationRules(
 		};
 		const condition = matches({ ...fields, ...policy, updateType });
 		const pinned = resolved.join(' or ');
-		if (nativeExempt.includes(updateType)) continue;
-		if (updateType === 'pinDigest') {
-			approvedInitialPins.push(
+		if (needsDigestProof(scope)) {
+			approvedPins.push(
 				`(datasource = ${JSON.stringify(datasource)} and ${condition} and (${pinned}))`
 			);
 		}
+		if (nativeExempt.includes(updateType)) continue;
 		rules.push(
 			{
 				...match,
@@ -300,28 +400,15 @@ export function observationRules(
 			}
 		);
 	}
-	// For a version-resolved initial pin the worker keeps the publication date
-	// on the dependency, while its downstream branch check only sees the update.
+	// Recheck the exact output before any branch can execute it. Native age
+	// checks can use a different ref's timestamp even for a versioned initial pin.
 	rules.push({
-		matchUpdateTypes: ['pinDigest'],
-		matchJsonata: [
-			'$exists(depIndex) and $type(currentVersionTimestamp) = "string" and $not(pendingChecks = true)',
-		],
-		minimumReleaseAgeBehaviour: 'timestamp-optional',
-	});
-	// Renovate exempts initial pins of unversioned refs from its native age check.
-	// They can enter CI only after the observer has seen the SHA that will be written.
-	rules.push({
-		matchUpdateTypes: ['pinDigest'],
 		matchJsonata: [
 			[
 				'$exists(depIndex)',
-				equal('releaseTimestamp', null),
-				// This exists only on Renovate's version-resolved lookup path,
-				// where its native check ages the newest matching release.
-				equal('currentVersionTimestamp', null),
-				...(approvedInitialPins.length
-					? [`$not(${approvedInitialPins.join(' or ')})`]
+				`((manager = "github-actions" and $type(currentDigest) = "string") or updateType in ${JSON.stringify(digestTypes)} or datasource in ${JSON.stringify(gitDatasources)})`,
+				...(approvedPins.length
+					? [`$not(${approvedPins.join(' or ')})`]
 					: []),
 			].join(' and '),
 		],
@@ -378,7 +465,8 @@ if (
 				now,
 				config,
 				files,
-				await lookupNpmDates(files)
+				await lookupNpmDates(files),
+				await githubPublicationDates(files, fetch, process.env.GH_TOKEN)
 			)
 		);
 		await writeFile(outputConfig, JSON.stringify(config));

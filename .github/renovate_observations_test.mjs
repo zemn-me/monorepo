@@ -16,9 +16,13 @@ import { filterInternalChecks } from 'renovate/dist/workers/repository/process/l
 import { getRollbackUpdate } from 'renovate/dist/workers/repository/process/lookup/rollback.js';
 import { addReplacementUpdateIfValid } from 'renovate/dist/workers/repository/process/lookup/utils.js';
 import { flattenUpdates } from 'renovate/dist/workers/repository/updates/flatten.js';
-const { history, lookupNpmDates, observationRules, observe } = await import(
-	new URL('./renovate-observations.mjs', import.meta.url)
-);
+const {
+	githubPublicationDates,
+	history,
+	lookupNpmDates,
+	observationRules,
+	observe,
+} = await import(new URL('./renovate-observations.mjs', import.meta.url));
 
 const base = JSON.parse(await readFile('.github/renovate-global.json', 'utf8'));
 const now = Date.now();
@@ -183,7 +187,11 @@ const writeReport = updates =>
 	writeFile(
 		reportPath,
 		JSON.stringify({
-			repositories: { 'org/repo': { packageFiles: files(updates) } },
+			repositories: {
+				'org/repo': {
+					packageFiles: { regex: files(updates)['github-actions'] },
+				},
+			},
 		})
 	);
 await writeReport([pinned, minor]);
@@ -222,27 +230,50 @@ for (const [age, pin, count] of [
 	);
 }
 
-// Renovate stores dates for versioned initial pins on the dependency. The
-// native lookup checks the newest matching version separately, including ranges.
-for (const [days, pending] of [
-	[7, false],
-	[1, true],
+// The GitHub Actions versioning worker considers v1 and v1.0.0 equal, but
+// Renovate resolves their Git SHAs independently. An alias date cannot age a pin.
+assert.equal(getVersioning('github-actions').equals('v1', 'v1.0.0'), true);
+const datedDep = {
+	...unpinned,
+	registryUrl: 'https://github.com',
+	currentVersionTimestamp: new Date(now - wait).toISOString(),
+};
+const shaReport = files([initialPin], datedDep);
+const shaObserved = observe(shaReport, {}, now);
+const publication = async (sha, daysAgo, immutable = true) =>
+	githubPublicationDates(shaReport, async url => {
+		if (url.endsWith('/releases/tags/v1.0.0')) {
+			return Response.json({
+				tag_name: 'v1.0.0',
+				immutable,
+				draft: false,
+				published_at: new Date(now - daysAgo * 86400000).toISOString(),
+			});
+		}
+		assert(url.endsWith('/commits/refs%2Ftags%2Fv1.0.0'));
+		return Response.json({ sha });
+	});
+for (const [proof, expected] of [
+	[new Map(), 0],
+	[await publication(other, 7), 0],
+	[await publication(digest, 1), 0],
+	[await publication(digest, 7, false), 0],
+	[await publication(digest, 7), 1],
 ]) {
-	const published = new Date(now - days * 86_400_000).toISOString();
-	const versioned = { ...unpinned, currentVersionTimestamp: published };
-	const update = { ...initialPin };
-	const strict = { ...config, packageRules: observationRules({}, now, base) };
-	await applyMinimumReleaseAgeToDigestUpdate(
-		update,
-		{ ...lookup, ...versioned, packageRules: strict.packageRules },
-		{ updates: [] },
-		true,
-		published
+	const rules = observationRules(
+		shaObserved,
+		now,
+		base,
+		shaReport,
+		new Map(),
+		proof
 	);
-	assert.equal(Boolean(update.pendingChecks), pending);
-	const [branch] = await flattenUpdates(strict, files([update], versioned));
-	assert.ok(branch);
-	assert.equal(Boolean(branch.pendingChecks), pending);
+	const result = await flattenUpdates(
+		{ ...config, packageRules: rules },
+		structuredClone(shaReport)
+	);
+	assert.equal(result.length, expected);
+	if (expected) assert.equal(result[0].newDigest, digest);
 }
 
 const rollback = {
@@ -342,6 +373,7 @@ const npmFiles = {
 							updateType: 'pin',
 							newVersion: '1.1.0',
 							newValue: '1.1.0',
+							releaseTimestamp: oldDate,
 							isPin: true,
 						},
 					],
