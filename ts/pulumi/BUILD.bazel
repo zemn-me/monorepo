@@ -74,6 +74,7 @@ filegroup(
         "cli.ts",
         "cli_test.ts",
         "deploy_to_staging.ts",
+        "deploy_to_staging_test.ts",
         "github_actions_secrets.ts",
         "index.ts",
         "preview.ts",
@@ -115,4 +116,21 @@ jest_test(
     name = "cli_test",
     srcs = ["cli_test.js"],
     deps = [":cli_tests"],
+)
+
+ts_project(
+    name = "deploy_to_staging_tests",
+    testonly = True,
+    srcs = ["deploy_to_staging_test.ts"],
+    deps = [
+        ":pulumi",
+        "//:node_modules/@jest/globals",
+        "//:node_modules/@types/node",
+    ],
+)
+
+jest_test(
+    name = "deploy_to_staging_test",
+    srcs = ["deploy_to_staging_test.js"],
+    deps = [":deploy_to_staging_tests"],
 )

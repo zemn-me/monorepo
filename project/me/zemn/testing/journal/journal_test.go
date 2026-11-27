@@ -2106,6 +2106,14 @@ func TestJournalRecordingControls(t *testing.T) {
 	} else if label != "" {
 		t.Fatalf("cancel recording button had visible text %q", label)
 	}
+	const pause = "button[aria-label='Pause recording']"
+	const resume = "button[aria-label='Resume recording']"
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, pause, 10*time.Second); err != nil {
+		t.Fatalf("pause before cancelling: %v", err)
+	}
+	if _, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, resume, 10*time.Second); err != nil {
+		t.Fatalf("resume control while paused: %v", err)
+	}
 	if err := browserhelpers.ClickElementInView(driver, cancelButton); err != nil {
 		t.Fatalf("cancel recording: %v", err)
 	}
@@ -2129,6 +2137,18 @@ func TestJournalRecordingControls(t *testing.T) {
 	// Chromium's fake microphone needs a recording timeslice before stopping to
 	// emit a non-empty MediaRecorder chunk.
 	time.Sleep(1500 * time.Millisecond)
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, pause, 10*time.Second); err != nil {
+		t.Fatalf("pause recording: %v", err)
+	}
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, resume, 10*time.Second); err != nil {
+		t.Fatalf("resume recording: %v", err)
+	}
+	if err := waitForJournalWaveform(driver, 10*time.Second); err != nil {
+		t.Fatalf("resumed recording waveform: %v", err)
+	}
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, pause, 10*time.Second); err != nil {
+		t.Fatalf("pause before submitting: %v", err)
+	}
 	submitButton, err = browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Stop and upload']", 10*time.Second)
 	if err != nil {
 		t.Fatalf("submit recording button: %v", err)
