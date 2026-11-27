@@ -3,7 +3,7 @@ load("//py:rules.bzl", "py_binary", "py_library", "py_test")
 
 exports_files(
     ["find_deploy_bundle.py"],
-    visibility = ["//py/ci/staging_gate:__pkg__"],
+    visibility = ["//ci/workflows:__pkg__"],
 )
 
 py_library(

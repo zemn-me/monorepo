@@ -14,7 +14,7 @@ filegroup(
         "//.github:actions/build-deploy-bundle/build.sh",
         "//.github:actions/upload-deploy-bundle/action.yml",
     ],
-    visibility = ["//py/ci/staging_gate:__pkg__"],
+    visibility = ["//ci/workflows:__pkg__"],
 )
 
 yaml_lint_test(
@@ -34,7 +34,7 @@ md_files(
 
 test_suite(
     name = "workflow_behavior_tests",
-    tests = ["//py/ci/staging_gate:staging_gate_test"],
+    tests = ["//ci/workflows:workflows_test"],
 )
 
 sh_test(
