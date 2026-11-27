@@ -1,11 +1,35 @@
+# The offline service fixture is invoked by act inside the test workspace.
+# gazelle:exclude service_fixture.py
+
 load("//bzl:rules.bzl", "bazel_lint")
 load("//py:rules.bzl", "py_test")
 
+alias(
+    name = "act",
+    actual = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@act_darwin_arm64//:act",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@act_darwin_x86_64//:act",
+        "@bazel_tools//src/conditions:linux_aarch64": "@act_linux_arm64//:act",
+        "@bazel_tools//src/conditions:linux_x86_64": "@act_linux_x86_64//:act",
+    }),
+)
+
 py_test(
     name = "staging_gate_test",
+    size = "medium",
     srcs = ["__test__.py"],
-    args = ["$(rootpaths //.github/workflows:workflow_files)"],
-    data = ["//.github/workflows:workflow_files"],
+    args = [
+        "$(rootpath :act)",
+        "$(rootpath :service_fixture.py)",
+        "$(rootpaths //.github/workflows:workflow_test_files)",
+        "$(rootpath //py/ci:find_deploy_bundle.py)",
+    ],
+    data = [
+        "service_fixture.py",
+        ":act",
+        "//.github/workflows:workflow_test_files",
+        "//py/ci:find_deploy_bundle.py",
+    ],
     main = "__test__.py",
     deps = ["@pip//pyyaml"],
 )

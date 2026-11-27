@@ -7,8 +7,14 @@ load("//yml:test.bzl", "yaml_lint_test")
 exports_files(["presubmit.yml"])
 
 filegroup(
-    name = "workflow_files",
-    srcs = glob(["*.yml"]),
+    name = "workflow_test_files",
+    srcs = glob(["*.yml"]) + [
+        "bootstrap_bazel_remote_cache.sh",
+        "prepare_ci.sh",
+        "//.github:actions/build-deploy-bundle/action.yml",
+        "//.github:actions/build-deploy-bundle/build.sh",
+        "//.github:actions/upload-deploy-bundle/action.yml",
+    ],
     visibility = ["//py/ci/staging_gate:__pkg__"],
 )
 

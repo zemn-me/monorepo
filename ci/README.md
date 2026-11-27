@@ -11,6 +11,12 @@ sizes on the combined commit, including the deployment bundle and its smoke test
 Both stages run the Go module and Gazelle checks. After they pass, the merge-group
 Presubmit publishes its bundle for Staging to deploy from that exact run.
 
+Run `./sh/bin/bazel test //py/ci/staging_gate:staging_gate_test` to exercise
+Presubmit, Staging, and Submit with the pinned `act` GitHub Actions emulator.
+The test runs jobs in temporary workspaces, supplies fixture build outputs and
+cloud services, and checks which revision reaches deployment. Permissions and
+queue settings are checked against the workflow files because GitHub enforces them.
+
 The merge queue repeats the Tiberian Sun browser integration test five times through
 `ci-local` (also inherited by both remote CI profiles). Every run must pass;
 automatic test retries are disabled. The BEP annotator emits an error for any

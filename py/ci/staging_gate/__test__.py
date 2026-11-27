@@ -1,7 +1,10 @@
-"""Check the merge queue and production deployment gates."""
+"""Run the checked-in deployment workflows through act with offline service fixtures."""
 
+import json
 import os
+import re
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -10,164 +13,187 @@ import unittest
 import yaml
 
 
-def staging_providers(workflows, event):
-    return {
-        filename
-        for filename, workflow in workflows.items()
-        if event in workflow["on"]
-        for job_id, job in workflow["jobs"].items()
-        if job.get("name", job_id) == "Staging"
-    }
+# act evaluates the real job graph and expressions. Replace only external actions
+# and service entry points. An unknown action must not silently become a no-op.
+ACTIONS = {
+    "actions/checkout": ("checkout", ["path"]),
+    "actions/upload-artifact": ("upload", ["name", "path", "if-no-files-found"]),
+    "actions/download-artifact": ("download", ["run-id", "name", "path"]),
+    "aws-actions/configure-aws-credentials": None,
+    "google-github-actions/auth": None,
+    "google-github-actions/get-secretmanager-secrets": None,
+    "jlumbroso/free-disk-space": None,
+}
+QUEUE_BRANCH = "gh-readonly-queue/main/pr-1"
 
 
-class StagingGateTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        # BaseLoader preserves GitHub's "on" key instead of YAML 1.1 booleans.
-        cls.workflows = {
-            Path(filename).name: yaml.load(Path(filename).read_text(), Loader=yaml.BaseLoader)
-            for filename in WORKFLOW_PATHS
-        }
+class WorkflowTest(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.repo = self.root / "repo"
+        self.repo.mkdir()
+        self.store = self.root / "artifacts"
+        self.trace = self.root / "deployments"
+        self.trace.touch()
+        self.actions = {}
+        for source in SOURCES:
+            dest = self.repo / source
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(source, dest)
+            if source.suffix == ".yml":
+                doc = yaml.load(source.read_text(), Loader=yaml.BaseLoader)
+                if source.parent.name == "workflows":
+                    # act 0.2.98 rejects the hosted runner's concurrency.queue key.
+                    # Strip just that scheduler setting from the emulator copy.
+                    dest.write_text(re.sub(r"^ +queue: (max|single)\n", "", source.read_text(), flags=re.MULTILINE))
+                if source.parent.name == "workflows" and source.stem not in ("presubmit", "staging", "staging-pr", "submit"):
+                    continue
+                jobs = doc.get("jobs", {"action": doc.get("runs", {})})
+                for job in jobs.values():
+                    for step in job.get("steps", []):
+                        uses = step.get("uses", "")
+                        action = uses.partition("@")[0]
+                        if "@" in uses and uses not in self.actions:
+                            self.actions[uses] = self.action(action)
+        self.bin = self.root / "bin"
+        self.launcher(self.bin / "gh", "gh")
+        # Advance the polling loop immediately between fixture responses.
+        (self.bin / "sleep").write_text('#!/bin/sh\ntest "$1" = 30\n')
+        (self.bin / "sleep").chmod(0o755)
+        self.launcher(self.repo / "sh/bin/bazel", "bazel")
+        self.launcher(self.repo / "ci/deploy/run.sh", "deploy")
+        # Only the fixture repo is visible to workflow checkouts.
+        self.git("init", "-q", "-b", "main")
+        self.git("remote", "add", "origin", "https://github.com/owner/repo")
+        self.git("add", ".")
+        self.git("-c", "user.name=Test", "-c", "user.email=test@example.org",
+                 "-c", "commit.gpgsign=false", "commit", "-qm", "workflow fixture")
+        self.sha = self.git("rev-parse", "HEAD")
 
-    def test_merge_queue_requires_deployment_workflow(self):
-        # Conditions are deliberately ignored: skipped jobs satisfy required checks too.
-        self.assertEqual(
-            staging_providers(self.workflows, "merge_group"), {"staging.yml"}
-        )
-        jobs = self.workflows["staging.yml"]["jobs"]
-        staging = jobs["Staging"]
-        deploy = jobs[staging["needs"]]
-        self.assertEqual(staging["if"], "always()")
-        self.assertNotIn("if", deploy)
-        self.assertEqual(deploy["concurrency"]["group"], "pulumi_deploy")
-        for prerequisite in deploy["needs"]:
-            self.assertNotEqual(
-                jobs[prerequisite].get("concurrency", {}).get("group"), "pulumi_deploy"
-            )
-        self.assertIn(
-            "Deploy candidate branch to Staging",
-            [step.get("name") for step in deploy["steps"]],
-        )
+    def git(self, *args):
+        return subprocess.check_output(["git", *args], cwd=self.repo, text=True,
+                                       env={"PATH": os.defpath, "HOME": str(self.root), "GIT_CONFIG_NOSYSTEM": "1"}).strip()
 
-    def test_candidate_comes_from_the_successful_presubmit_attempt(self):
-        jobs = self.workflows["staging.yml"]["jobs"]
-        deploy = jobs["Deploy"]
-        self.assertIn("CandidateBundle", deploy["needs"])
-        download = next(s for s in deploy["steps"] if s.get("name") == "Download candidate bundle")
-        producer = jobs["CandidateBundle"]
-        (wait,) = producer["steps"]
-        self.assertEqual(producer["permissions"], {"actions": "read"})
-        self.assertEqual(download["with"]["run-id"], "${{ needs.CandidateBundle.outputs.run-id }}")
-        self.assertEqual(download["with"]["name"], "${{ needs.CandidateBundle.outputs.artifact-name }}")
-        presubmit = self.workflows["presubmit.yml"]["jobs"]["Presubmit"]["steps"]
-        upload = next(s for s in presubmit if s.get("uses") == "./.github/actions/upload-deploy-bundle")
-        self.assertLess(next(i for i, s in enumerate(presubmit) if s.get("name") == "Presubmit"), presubmit.index(upload))
-        self.assertEqual(upload["if"], "github.event_name == 'merge_group'")
-        self.assertEqual(upload["with"]["artifact-name"].replace("github.run_attempt", "steps.producer.outputs.attempt"),
-                         producer["outputs"]["artifact-name"])
+    def launcher(self, path, service):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f'#!/bin/sh\nexec "$FIXTURE_PYTHON" "$FIXTURE_SERVICE" {service} "$@"\n')
+        path.chmod(0o755)
 
-        for conclusion in ("success", "failure", "cancelled"):
-            with self.subTest(conclusion=conclusion), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                gh = root / "gh"
-                gh.write_text(
-                    '#!/bin/sh\n'
-                    'echo "$@" >> calls\n'
-                    'case $(wc -l < calls) in\n'
-                    '  *1) exit 0 ;;\n'
-                    "  *2) printf '42\\t3\\tin_progress\\t\\n' ;;\n"
-                    """  *3) printf '42\\t3\\tcompleted\\t%s\\n' "$CONCLUSION" ;;\n"""
-                    '  *) exit 2 ;;\nesac\n'
-                )
-                gh.chmod(0o755)
-                (root / "sleep").write_text("#!/bin/sh\nexit 0\n")
-                (root / "sleep").chmod(0o755)
-                output = root / "output"
-                output.touch()
-                result = subprocess.run(["bash", "-ec", wait["run"]], cwd=root, env={
-                    **os.environ, "PATH": directory + os.pathsep + os.environ["PATH"],
-                    "GITHUB_REPOSITORY": "owner/repo", "GITHUB_REF_NAME": "gh-readonly-queue/main/group",
-                    "GITHUB_SHA": "candidate-sha", "GITHUB_OUTPUT": str(output), "CONCLUSION": conclusion,
-                })
-                for call in (root / "calls").read_text().splitlines():
-                    self.assertIn("--workflow presubmit.yml --event merge_group --branch gh-readonly-queue/main/group --commit candidate-sha", call)
-                self.assertEqual(result.returncode == 0, conclusion == "success")
-                self.assertEqual(output.read_text().splitlines(), ["run-id=42", "attempt=3"] if conclusion == "success" else [])
+    def action(self, name):
+        dest = self.root / "actions" / name
+        dest.mkdir(parents=True, exist_ok=True)
+        spec = ACTIONS[name]
+        inputs = spec[1] if spec else []
+        step = {"shell": "bash", "run": "true"}
+        if spec:
+            environment = {f"ARG_{i}": "${{ inputs." + key + " }}" for i, key in enumerate(inputs)}
+            arguments = " ".join(f'"${key}"' for key in environment)
+            step.update(env=environment, run=f'"$FIXTURE_PYTHON" "$FIXTURE_SERVICE" {spec[0]} {arguments}')
+        (dest / "action.yml").write_text(yaml.safe_dump({
+            "name": name, "description": "Local service fixture",
+            "inputs": {key: {"description": key, "default": ""} for key in inputs},
+            "runs": {"using": "composite", "steps": [step]},
+        }))
+        return dest
 
-    def test_required_check_propagates_deployment_result(self):
-        gate = self.workflows["staging.yml"]["jobs"]["Staging"]
-        (step,) = gate["steps"]
-        self.assertEqual(gate["needs"], "Deploy")
-        self.assertEqual(step["env"]["DEPLOY_RESULT"], "${{ needs.Deploy.result }}")
-        for result in ("success", "failure", "skipped", "cancelled"):
-            with self.subTest(result=result):
-                status = subprocess.run(
-                    ["bash", "-ec", step["run"]], env={"DEPLOY_RESULT": result},
-                ).returncode
-                self.assertEqual(status == 0, result == "success")
+    def workflow(self, name, event, job, *, success=True, **overrides):
+        if event == "merge_group":
+            self.git("checkout", "-qB", QUEUE_BRANCH)
+        payload = {"ref": "refs/heads/main", "after": self.sha, "number": 1,
+                   "pull_request": {"number": 1, "base": {"ref": "main"}}}
+        event_path = self.root / "event.json"
+        event_path.write_text(json.dumps(payload))
+        command = [
+            str(ACT), event, "-W", f".github/workflows/{name}.yml", "-j", job,
+            "-P", "ubuntu-latest=-self-hosted", "-e", str(event_path),
+            "--json", "--no-cache-server", "--action-offline-mode", "--no-skip-checkout",
+            "--action-cache-path", str(self.root / "cache"),
+            "--env", "GITHUB_RUN_ID=42", "--env", "GITHUB_RUN_ATTEMPT=3",
+        ]
+        if event == "merge_group":
+            # act does not derive the synthetic queue ref from the merge_group payload.
+            command.extend(["--env", f"GITHUB_REF=refs/heads/{QUEUE_BRANCH}", "--env", f"GITHUB_REF_NAME={QUEUE_BRANCH}"])
+        for uses, path in self.actions.items():
+            command.extend(["--local-repository", f"{uses}={path}"])
+        result = subprocess.run(command, cwd=self.repo, capture_output=True, text=True, timeout=40, env={
+            "PATH": str(self.bin) + os.pathsep + os.defpath, "HOME": str(self.root),
+            "FIXTURE_PYTHON": sys.executable, "FIXTURE_SERVICE": str(FIXTURE),
+            "FIXTURE_REPO": str(self.repo), "FIXTURE_STORE": str(self.store),
+            "FIXTURE_DEPLOYMENTS": str(self.trace), "FIXTURE_SHA": self.sha,
+            "MAIN_SHA": self.sha, "PRODUCER_RESULT": "success", "FAIL_DEPLOY": "", "FAIL_PRESUBMIT": "false",
+            **overrides,
+        })
+        log = result.stdout + result.stderr
+        self.assertEqual(result.returncode == 0, success, log)
+        # An earlier failure can set the process exit code even if act skipped
+        # the required gate. Check the result of the requested job itself.
+        records = [json.loads(line) for line in log.splitlines() if line.startswith("{")]
+        outcomes = [r["jobResult"] for r in records if r.get("jobID") == job and "jobResult" in r]
+        self.assertEqual(outcomes, ["success" if success else "failure"], log)
 
-    def test_failed_bundle_launcher_fails_the_deployment_step(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            runner = root / "ci/deploy/run.sh"
-            runner.parent.mkdir(parents=True)
-            runner.write_text(
-                '#!/bin/sh\n'
-                'test "$1" = "$RUNNER_TEMP/$BUNDLE" && test "$2" = ci/deploy/deploy '
-                '&& test "$3" = "$REVISION" || exit 2\n'
-                'exit 23\n'
-            )
-            runner.chmod(0o755)
-            for workflow, job, step_name, bundle, revision in (
-                ("staging.yml", "Deploy", "Deploy main to staging", "bundles/staging-main", "main"),
-                ("staging.yml", "Deploy", "Deploy candidate branch to Staging", "bundles/staging-candidate", "candidate"),
-                ("submit.yml", "Submit", "Submit", "bundle", "production"),
-            ):
-                with self.subTest(revision=revision):
-                    steps = self.workflows[workflow]["jobs"][job]["steps"]
-                    step = next(step for step in steps if step.get("name") == step_name)
-                    result = subprocess.run(
-                        ["bash", "-eo", "pipefail", "-c", step["run"]], cwd=root,
-                        env={"RUNNER_TEMP": directory, "BUNDLE": bundle, "REVISION": revision},
-                    )
-                    self.assertEqual(result.returncode, 23)
+    def publish_main(self, sha):
+        dest = self.store / "11" / ("deploy-v2-main-" + sha)
+        dest.mkdir(parents=True)
+        for filename in ("layers_bundle.tar.gz", "runfile_aliases.tar"):
+            (dest / filename).write_text(sha)
 
-    def test_pull_requests_can_enter_queue_without_deploying(self):
-        self.assertEqual(
-            staging_providers(self.workflows, "pull_request"), {"staging-pr.yml"}
-        )
-        self.assertNotIn("merge_group", self.workflows["staging-pr.yml"]["on"])
+    def test_merge_group_deploys_the_tested_bundle_after_main(self):
+        self.publish_main("pinned-main")
+        self.workflow("presubmit", "merge_group", "Presubmit")
+        self.workflow("staging", "merge_group", "Staging", MAIN_SHA="pinned-main")
+        self.assertEqual(self.trace.read_text().splitlines(), ["main pinned-main", f"candidate {self.sha}"])
 
-    def test_production_deploys_only_the_current_main_bundle(self):
-        jobs = self.workflows["submit.yml"]["jobs"]
-        deploy = jobs["Submit"]
-        self.assertEqual(deploy["concurrency"]["group"], "pulumi_deploy")
-        publisher = jobs[deploy["needs"]]
-        self.assertNotEqual(publisher["concurrency"]["group"], "pulumi_deploy")
-        revision, *steps = deploy["steps"]
-        for step in steps:
-            self.assertEqual(step["if"], f"steps.{revision['id']}.outputs.current == 'true'")
+    def test_failed_checks_and_deployments_fail_the_required_gate(self):
+        self.publish_main("pinned-main")
+        self.workflow("presubmit", "merge_group", "Presubmit", success=False, FAIL_PRESUBMIT="true")
+        self.assertFalse((self.store / "42").exists())
+        for conclusion in ("failure", "cancelled"):
+            self.workflow("staging", "merge_group", "Staging", success=False,
+                                MAIN_SHA="pinned-main", PRODUCER_RESULT=conclusion)
+            self.assertEqual(self.trace.read_text(), "")
+        self.workflow("presubmit", "merge_group", "Presubmit")
+        for failure, deployed in (("main", ["main pinned-main"]),
+                                  ("candidate", ["main pinned-main", f"candidate {self.sha}"])):
+            self.trace.write_text("")
+            self.workflow("staging", "merge_group", "Staging", success=False, MAIN_SHA="pinned-main", FAIL_DEPLOY=failure)
+            self.assertEqual(self.trace.read_text().splitlines(), deployed)
 
-        for main_sha, api_status, should_deploy in [
-            ("candidate", 0, True), ("newer", 0, False), ("", 1, False),
-        ]:
-            with self.subTest(main_sha=main_sha), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                gh = root / "gh"
-                gh.write_text('#!/bin/sh\necho "$MAIN_SHA"\nexit "$API_STATUS"\n')
-                gh.chmod(0o755)
-                output = root / "output"
-                output.touch()
-                result = subprocess.run(["bash", "-ec", revision["run"]], env={
-                    **os.environ, "PATH": directory + os.pathsep + os.environ["PATH"],
-                    "GITHUB_REPOSITORY": "owner/repo", "GITHUB_SHA": "candidate",
-                    "GITHUB_OUTPUT": str(output), "GITHUB_STEP_SUMMARY": str(root / "summary"),
-                    "MAIN_SHA": main_sha, "API_STATUS": str(api_status),
-                })
-                self.assertEqual(result.returncode, api_status)
-                self.assertEqual("current=true" in output.read_text().splitlines(), should_deploy)
+    def test_pull_request_runs_checks_without_publishing_or_deploying(self):
+        self.workflow("presubmit", "pull_request", "Presubmit")
+        self.workflow("staging-pr", "pull_request", "Staging")
+        self.assertFalse(self.store.exists())
+        self.assertEqual(self.trace.read_text(), "")
+
+    def test_production_checks_main_before_deploying(self):
+        self.publish_main(self.sha)
+        for current, success, failure in (("newer", True, ""), ("api-error", False, ""),
+                                         (self.sha, False, "production"), (self.sha, True, "")):
+            self.trace.write_text("")
+            self.workflow("submit", "push", "Submit", success=success, MAIN_SHA=current, FAIL_DEPLOY=failure)
+            expected = [f"production {self.sha}"] if current == self.sha else []
+            self.assertEqual(self.trace.read_text().splitlines(), expected)
+
+    def test_hosted_runner_contracts(self):
+        # act ignores permissions and concurrency. GitHub also treats skipped
+        # jobs as successful required checks, regardless of duplicate providers.
+        workflows = {p.stem: yaml.load(p.read_text(), Loader=yaml.BaseLoader)
+                     for p in SOURCES if p.parent.name == "workflows" and p.suffix == ".yml"}
+        for event, expected in (("merge_group", "staging"), ("pull_request", "staging-pr")):
+            providers = [name for name, workflow in workflows.items() if event in workflow["on"]
+                         for key, job in workflow["jobs"].items() if job.get("name", key) == "Staging"]
+            self.assertEqual(providers, [expected])
+        for workflow, deploy in (("staging", "Deploy"), ("submit", "Submit")):
+            jobs = workflows[workflow]["jobs"]
+            self.assertEqual(jobs[deploy]["concurrency"]["queue"], "max")
+            for key, job in jobs.items():
+                self.assertEqual(job.get("concurrency", {}).get("group") == "pulumi_deploy", key == deploy)
+        self.assertEqual(workflows["staging"]["jobs"]["CandidateBundle"]["permissions"], {"actions": "read"})
 
 
 if __name__ == "__main__":
-    WORKFLOW_PATHS = sys.argv[1:]
+    ACT = Path(sys.argv[1]).resolve()
+    FIXTURE = Path(sys.argv[2]).resolve()
+    SOURCES = [Path(name) for name in sys.argv[3:]]
     unittest.main(argv=[sys.argv[0]])
