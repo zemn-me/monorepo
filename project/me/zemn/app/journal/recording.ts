@@ -15,11 +15,12 @@ export interface RecordingSession {
 	readonly stream: MediaStream;
 	readonly id: string;
 	readonly done: Promise<void>;
+	togglePause(): void;
 	stop(discard?: boolean): void;
 }
 
 interface RecordingCallbacks {
-	tick(elapsed: number): void;
+	tick(elapsed: number, paused: boolean): void;
 	locationError?(message: string): void;
 	finished(
 		recording: LocalRecording | undefined,
@@ -93,7 +94,8 @@ async function capture(
 	let message: string | undefined;
 	let writes = Promise.resolve();
 	const parts: Blob[] = [];
-	const start = Date.now();
+	let recordedMs = 0;
+	let resumedAt = performance.now();
 	let finish!: () => void;
 	const done = new Promise<void>(resolve => {
 		finish = resolve;
@@ -104,14 +106,32 @@ async function capture(
 			recorder.stop();
 		}
 	};
+	const elapsedMs = () =>
+		recordedMs +
+		(recorder.state === 'recording' ? performance.now() - resumedAt : 0);
 	const checkLimit = () => {
 		if (recorder.state === 'inactive') return;
-		callbacks.tick(Math.max(0, Date.now() - start));
+		callbacks.tick(elapsedMs(), recorder.state === 'paused');
 		if (bytes >= stopRecordingBytes) {
 			message =
 				'Recording reached the 256 MiB upload limit. Your voice note has been kept; you can start another.';
 			stop();
 		}
+	};
+	const togglePause = () => {
+		if (recorder.state === 'inactive') return;
+		const pausing = recorder.state === 'recording';
+		if (pausing) {
+			recordedMs = elapsedMs();
+			recorder.pause();
+			// Checkpoint the last partial timeslice before a long pause.
+			recorder.requestData();
+		} else {
+			recorder.resume();
+			resumedAt = performance.now();
+		}
+		for (const track of stream.getAudioTracks()) track.enabled = !pausing;
+		checkLimit();
 	};
 	const timer = window.setInterval(checkLimit, 250);
 	recorder.ondataavailable = event => {
@@ -222,7 +242,7 @@ async function capture(
 		);
 	}
 	checkLimit();
-	return { stream, id: draft.id, done, stop };
+	return { stream, id: draft.id, done, togglePause, stop };
 }
 
 // Keep other tabs from recovering or discarding a recording still being captured.

@@ -343,6 +343,7 @@
 	outline-offset: 3px;
 }
 
+.pausedWaveform,
 .waveform {
 	block-size: 3em;
 	color: var(--journal-recording);
@@ -350,6 +351,16 @@
 	flex: 1 1 4em;
 	inline-size: 100%;
 	min-inline-size: 3em;
+}
+
+.pausedWaveform {
+	align-content: center;
+	color: var(--journal-muted);
+	text-align: center;
+}
+
+.pausedWaveform + .recordingTime::before {
+	background: var(--journal-muted);
 }
 
 .uploadButton input {
