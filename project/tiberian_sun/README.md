@@ -184,8 +184,9 @@ The test connects two production peer adapters in one headless Chromium document
 using the real invitation/answer flow and WebRTC stack with host-only ICE
 (no external STUN dependency). It checks ping/echo latency
 with 1 ms and 16 ms receive polling, then sends 2,048 packets in each direction
-at 64, 512, and 1,536 bytes. Bursts yield every 32 packets, so reported throughput
-is achieved application goodput for that offered load, not link capacity. Payload,
+at 64, 512, and 1,536 bytes. After each burst of 32 packets per direction, the
+sender waits until both receivers observe traffic from that burst. The reported
+throughput measures application goodput under that pacing. Payload,
 sequence, duplicate, and loss checks run alongside measurements. A separate
 queued burst verifies partial draining, compaction, and refilling without losing
 or duplicating datagrams. The JSON report

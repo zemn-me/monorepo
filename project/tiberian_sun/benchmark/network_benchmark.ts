@@ -87,34 +87,41 @@ async function throughput(
 	size: number
 ) {
 	const count = 2048;
-	const seen = [new Set<number>(), new Set<number>()];
-	const peers = [host, guest];
+	const receivers = [host, guest].map(peer => ({
+		peer,
+		seen: new Set<number>(),
+		highestSequence: -1,
+	}));
 	let received = 0;
 	let lastArrival = performance.now();
 	const start = performance.now();
 	function drain() {
-		for (const [index, peer] of peers.entries()) {
+		for (const receiver of receivers) {
 			let bytes: Uint8Array | undefined;
-			while ((bytes = peer.receive())) {
+			while ((bytes = receiver.peer.receive())) {
 				const sequence = check(bytes, size);
-				const sequences = seen[index];
-				if (!sequences || sequence >= count || sequences.has(sequence))
+				if (sequence >= count || receiver.seen.has(sequence))
 					throw new Error('Duplicate or invalid sequence');
-				sequences.add(sequence);
+				receiver.seen.add(sequence);
+				receiver.highestSequence = Math.max(receiver.highestSequence, sequence);
 				received++;
 				lastArrival = performance.now();
 			}
 		}
 	}
-	for (let i = 0; i < count; i++) {
-		for (const peer of peers)
-			if (!peer.send(packet(size, i)))
-				throw new Error('Burst send blocked');
-		// Keep the real browser event loop and SCTP delivery running during bursts.
-		if (i % 32 === 31) {
-			await sleep(0);
-			drain();
+	const burstSize = 32;
+	for (let first = 0; first < count; first += burstSize) {
+		for (let i = first; i < first + burstSize; i++) {
+			for (const { peer } of receivers)
+				if (!peer.send(packet(size, i)))
+					throw new Error('Burst send blocked');
 		}
+		// A timer yield can let the producer flood SCTP before either peer
+		// runs. Pace the next burst on actual progress in both directions.
+		await until(() => {
+			drain();
+			return receivers.every(receiver => receiver.highestSequence >= first);
+		}, 'bidirectional burst delivery');
 	}
 	const deadline = performance.now() + 5000;
 	while (received < count * 2 && performance.now() < deadline) {
