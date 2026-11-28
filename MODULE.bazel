@@ -459,7 +459,7 @@ use_repo(
 )
 
 bazel_dep(name = "rules_python_gazelle_plugin", version = "2.5.1")
-bazel_dep(name = "aspect_rules_py", version = "1.8.4")
+bazel_dep(name = "aspect_rules_py", version = "1.13.0")
 
 github_action_archives = use_repo_rule("//ci/workflows:action_cache.bzl", "github_action_archives")
 
