@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { getConfig as getDefaults } from 'renovate/dist/config/defaults.js';
 import { GlobalConfig } from 'renovate/dist/config/global.js';
+import { CustomDatasource } from 'renovate/dist/modules/datasource/custom/index.js';
 import { extractPackageFile as extractBazel } from 'renovate/dist/modules/manager/bazel-module/extract.js';
+import { setCustomEnv } from 'renovate/dist/util/env.js';
+import { createSimpleGit } from 'renovate/dist/util/git/index.js';
+import { checkMinimumReleaseAge } from 'renovate/dist/util/minimum-release-age.js';
 import { applyPackageRules } from 'renovate/dist/util/package-rules/index.js';
 
 const config = JSON.parse(
@@ -11,28 +18,72 @@ const module = await readFile('MODULE.bazel', 'utf8');
 const goMod = await readFile('go.mod', 'utf8');
 GlobalConfig.set({ localDir: process.cwd() });
 
-// GitHub publishes the release dates needed by our age policy; BCR does not.
 const bazel = await extractBazel(module, 'MODULE.bazel', {});
 assert(bazel?.deps.length, 'Bazel extraction must succeed');
-for (const name of ['rules_go']) {
-	const dependencies = bazel.deps.filter(dep => dep.depName === name);
+const defaults = getDefaults();
+const configure = dep => applyPackageRules({
+	...defaults,
+	...dep,
+	packageName: dep.depName,
+	manager: 'bazel-module',
+	rollbackPrs: config.rollbackPrs,
+	minimumReleaseAge: config.minimumReleaseAge,
+	packageRules: config.packageRules,
+});
+for (const name of ['aspect_rules_lint', 'rules_oci', 'rules_go']) {
+	const dependencies = bazel.deps.filter(dep => dep.depName === name && dep.datasource === 'bazel');
 	assert.equal(dependencies.length, 1);
-	const configured = await applyPackageRules({
-		...dependencies[0],
-		packageName: dependencies[0].packageName ?? name,
-		manager: 'bazel-module',
-		packageRules: config.packageRules,
-	});
-	assert.equal(configured.datasource, 'github-releases');
-	assert.equal(configured.packageName, `bazel-contrib/${name}`);
-	assert.equal(configured.extractVersion, '^v(?<version>.*)$');
+	const dep = dependencies[0];
+	const configured = await configure(dep);
+	assert.equal(configured.datasource, 'custom.bcr');
+	assert.equal(configured.versioning, 'bazel-module');
+	assert.equal(configured.minimumReleaseAge, config.minimumReleaseAge);
 	if (name === 'rules_go') {
 		assert.equal(configured.groupName, 'Go toolchain');
-		assert.equal(
-			configured.currentValue,
-			goMod.match(/github\.com\/bazelbuild\/rules_go v([^\s]+)/)[1]
-		);
+		assert.equal(configured.currentValue, goMod.match(/github\.com\/bazelbuild\/rules_go v([^\s]+)/)[1]);
 	}
+}
+const publicRegistry = 'https://bcr.bazel.build/';
+const privateRegistry = 'https://registry.example.test';
+const example = bazel.deps.find(dep => dep.depName === 'aspect_rules_lint');
+const explicit = await configure({ ...example, registryUrls: [publicRegistry] });
+assert.equal(explicit.datasource, 'custom.bcr');
+// A version can reach the registry before it appears in the frontend index.
+assert.equal(explicit.rollbackPrs, false);
+assert.deepEqual(explicit.registryUrls, []);
+for (const registryUrls of [[privateRegistry], [privateRegistry, publicRegistry]]) {
+	const configured = await configure({ ...example, registryUrls });
+	assert.equal(configured.datasource, 'bazel');
+	assert.equal(configured.rollbackPrs, config.rollbackPrs);
+	assert.deepEqual(configured.registryUrls, registryUrls);
+}
+
+// Check that a fresh Renovate clone can read the files supplied as a Git template.
+const directory = await mkdtemp(join(tmpdir(), 'renovate-bcr-'));
+try {
+	const template = join(directory, 'template');
+	const clone = join(directory, 'clone');
+	const origin = join(directory, 'origin');
+	await mkdir(origin);
+	await createSimpleGit({ config: { baseDir: origin } }).init(true);
+	await mkdir(join(template, 'bcr'), { recursive: true });
+	await writeFile(join(template, 'bcr', 'aspect_rules_lint.json'), JSON.stringify({ releases: [
+		{ version: '1.0', releaseTimestamp: '2020-01-01T00:00:00Z' },
+		{ version: '1.0.bcr.1', releaseTimestamp: new Date().toISOString() },
+		{ version: '1.1' },
+	] }));
+	setCustomEnv({ GIT_TEMPLATE_DIR: template });
+	await createSimpleGit().clone(origin, clone);
+	GlobalConfig.set({ localDir: clone });
+	const result = await new CustomDatasource().getReleases({ ...explicit, customDatasources: config.customDatasources });
+	assert.equal(explicit.minimumReleaseAge, '3 days');
+	assert.deepEqual(result.releases.map(release => [
+		release.version, checkMinimumReleaseAge(explicit, release.releaseTimestamp).isPending,
+	]), [['1.0', false], ['1.0.bcr.1', true], ['1.1', true]]);
+} finally {
+	setCustomEnv({});
+	GlobalConfig.set({ localDir: process.cwd() });
+	await rm(directory, { recursive: true, force: true });
 }
 
 // Updating the SDK without its build rules broke cgo response-file parsing.
@@ -46,11 +97,10 @@ for (const name of ['go', 'github.com/bazelbuild/rules_go']) {
 	assert.equal(grouped.groupName, 'Go toolchain');
 }
 
-// Every browser and driver archive must move to the same Stable release.
 const { extractPackageFile: extractRegex } = await import(
 	'renovate/dist/modules/manager/custom/regex/index.js'
 );
-// Archive overrides use the same published dates and release-age policy.
+// The rules_oci archive override follows GitHub releases.
 const releaseManager = config.customManagers.find(
 	manager => manager.description === 'Renovate directives'
 );
@@ -69,6 +119,7 @@ const configuredOci = await applyPackageRules({
 });
 assert.equal(configuredOci.minimumReleaseAge, config.minimumReleaseAge);
 
+// Every browser and driver archive must move to the same Stable release.
 const chromeManager = config.customManagers.find(
 	manager => manager.depNameTemplate === 'chrome-for-testing'
 );

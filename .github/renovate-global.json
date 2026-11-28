@@ -1,7 +1,6 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:best-practices", ":maintainLockFilesWeekly"],
-	"ignorePresets": ["security:minimumReleaseAgeNpm"],
 	"automerge": true,
 	"autodiscover": true,
 	"autodiscoverFilter": ["zemn-me/monorepo"],
@@ -11,6 +10,7 @@
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": "enabled",
+	"minimumReleaseAge": "3 days",
 	"prConcurrentLimit": 0,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
@@ -79,6 +79,9 @@
 		}
 	],
 	"customDatasources": {
+		"bcr": {
+			"defaultRegistryUrlTemplate": "file://.git/bcr/{{packageName}}.json"
+		},
 		"johnvansickle_ffmpeg_release": {
 			"defaultRegistryUrlTemplate": "https://johnvansickle.com/ffmpeg/release-readme.txt",
 			"format": "plain"
@@ -145,20 +148,14 @@
 			"rangeStrategy": "bump"
 		},
 		{
-			"description": "Use published upstream dates for the rules_oci release-age check",
+			"description": "Age public Bazel modules from BCR dates and avoid rollbacks while the index catches up",
 			"matchManagers": ["bazel-module"],
-			"matchPackageNames": ["rules_oci"],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "bazel-contrib/rules_oci",
-			"extractVersion": "^v(?<version>.*)$"
-		},
-		{
-			"description": "Use published upstream dates for the rules_go release-age check",
-			"matchManagers": ["bazel-module"],
-			"matchPackageNames": ["rules_go"],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "bazel-contrib/rules_go",
-			"extractVersion": "^v(?<version>.*)$"
+			"matchDatasources": ["bazel"],
+			"matchJsonata": ["registryUrls = null or $count(registryUrls[$not($ in [\"https://bcr.bazel.build\", \"https://bcr.bazel.build/\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/\"])]) = 0"],
+			"overrideDatasource": "custom.bcr",
+			"rollbackPrs": false,
+			"registryUrls": [],
+			"versioning": "bazel-module"
 		},
 		{
 			"description": "Keep the Go SDK and both references to its Bazel build rules compatible",
@@ -166,7 +163,6 @@
 			"matchPackageNames": [
 				"go",
 				"github.com/bazelbuild/rules_go",
-				"bazel-contrib/rules_go",
 				"rules_go"
 			]
 		},
