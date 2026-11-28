@@ -58,7 +58,7 @@ require (
 	github.com/nyaruka/phonenumbers/v2 v2.1.0
 	github.com/oapi-codegen/nethttp-middleware v1.3.1
 	github.com/oapi-codegen/runtime v1.8.0
-	github.com/openai/openai-go/v3 v3.106.0
+	github.com/openai/openai-go/v3 v3.108.0
 	github.com/sergi/go-diff v1.4.5
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
