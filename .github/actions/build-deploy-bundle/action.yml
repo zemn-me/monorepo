@@ -13,7 +13,7 @@ runs:
   using: composite
   steps:
     - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be  # main
+      uses: jlumbroso/free-disk-space@cf1e78c50ca91e757bab3edc229027eebfc07871  # main
       with:
         android: true
         dotnet: true
