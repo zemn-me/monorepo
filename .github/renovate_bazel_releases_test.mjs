@@ -67,6 +67,7 @@ const configuredOci = await applyPackageRules({
 	minimumReleaseAge: config.minimumReleaseAge,
 	packageRules: config.packageRules,
 });
+assert(config.minimumReleaseAge);
 assert.equal(configuredOci.minimumReleaseAge, config.minimumReleaseAge);
 
 const chromeManager = config.customManagers.find(
