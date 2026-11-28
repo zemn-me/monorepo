@@ -60,7 +60,7 @@ require (
 	github.com/oapi-codegen/runtime v1.8.0
 	github.com/openai/openai-go/v3 v3.108.0
 	github.com/sergi/go-diff v1.4.5
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.10.2
 	github.com/stretchr/testify v1.12.1
 	github.com/tdewolff/parse/v2 v2.25.0
 	github.com/tebeka/selenium v0.9.9
