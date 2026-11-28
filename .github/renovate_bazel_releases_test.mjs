@@ -33,7 +33,7 @@ for (const name of ['aspect_rules_lint', 'rules_oci', 'rules_go']) {
 	const configured = await configure(dep);
 	assert.equal(configured.datasource, 'custom.bcr');
 	assert.equal(configured.versioning, 'bazel-module');
-	assert.equal(configured.minimumReleaseAge, '3 days');
+	assert.equal(configured.minimumReleaseAge, config.minimumReleaseAge);
 	if (name === 'rules_go') {
 		assert.equal(configured.groupName, 'Go toolchain');
 		assert.equal(configured.currentValue, goMod.match(/github\.com\/bazelbuild\/rules_go v([^\s]+)/)[1]);
@@ -67,7 +67,7 @@ try {
 		{ version: '1.1' },
 	] }));
 	const result = await new CustomDatasource().getReleases({ ...lookup, ...explicit });
-	const age = { ...explicit, minimumReleaseAgeBehaviour: getDefaults().minimumReleaseAgeBehaviour };
+	const age = { ...getDefaults(), ...explicit, minimumReleaseAge: '3 days' };
 	assert.deepEqual(result.releases.map(release => [
 		release.version, checkMinimumReleaseAge(age, release.releaseTimestamp).isPending,
 	]), [['1.0', false], ['1.0.bcr.1', true], ['1.1', true]]);
