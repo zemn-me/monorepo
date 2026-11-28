@@ -458,7 +458,7 @@ use_repo(
     "org_golang_x_tools_gopls",
 )
 
-bazel_dep(name = "rules_python_gazelle_plugin", version = "2.4.2")
+bazel_dep(name = "rules_python_gazelle_plugin", version = "2.5.1")
 bazel_dep(name = "aspect_rules_py", version = "1.8.4")
 
 github_action_archives = use_repo_rule("//ci/workflows:action_cache.bzl", "github_action_archives")
