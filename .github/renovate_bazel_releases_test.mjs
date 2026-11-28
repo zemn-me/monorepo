@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { getConfig as getDefaults } from 'renovate/dist/config/defaults.js';
 import { GlobalConfig } from 'renovate/dist/config/global.js';
+import { mergeChildConfig } from 'renovate/dist/config/utils.js';
+import { CustomDatasource } from 'renovate/dist/modules/datasource/custom/index.js';
 import { extractPackageFile as extractBazel } from 'renovate/dist/modules/manager/bazel-module/extract.js';
 import { checkMinimumReleaseAge } from 'renovate/dist/util/minimum-release-age.js';
 import { applyPackageRules } from 'renovate/dist/util/package-rules/index.js';
@@ -12,43 +17,63 @@ const module = await readFile('MODULE.bazel', 'utf8');
 const goMod = await readFile('go.mod', 'utf8');
 GlobalConfig.set({ localDir: process.cwd() });
 
-assert.equal(config.minimumReleaseAge, '3 days');
-assert.equal(config.minimumReleaseAgeBehaviour, 'timestamp-required');
-assert.equal(checkMinimumReleaseAge(config, undefined).isPending, true);
-const daysAgo = days => new Date(Date.now() - days * 86_400_000).toISOString();
-assert.equal(checkMinimumReleaseAge(config, daysAgo(2)).isPending, true);
-assert.equal(checkMinimumReleaseAge(config, daysAgo(4)).isPending, false);
-
-// GitHub publishes the release dates needed by our age policy; BCR does not.
 const bazel = await extractBazel(module, 'MODULE.bazel', {});
 assert(bazel?.deps.length, 'Bazel extraction must succeed');
-for (const [name, repo] of [
-	['rules_go', 'bazel-contrib/rules_go'],
-	['aspect_rules_lint', 'bazel-contrib/rules_lint'],
-]) {
-	const dependencies = bazel.deps.filter(dep => dep.depName === name);
+const configure = dep => applyPackageRules({
+	...dep,
+	packageName: dep.depName,
+	manager: 'bazel-module',
+	minimumReleaseAge: config.minimumReleaseAge,
+	packageRules: config.packageRules,
+});
+for (const name of ['aspect_rules_lint', 'rules_oci', 'rules_go']) {
+	const dependencies = bazel.deps.filter(dep => dep.depName === name && dep.datasource === 'bazel');
 	assert.equal(dependencies.length, 1);
-	const configured = await applyPackageRules({
-		...dependencies[0],
-		packageName: dependencies[0].packageName ?? name,
-		manager: 'bazel-module',
-		packageRules: config.packageRules,
-	});
-	assert.equal(configured.datasource, 'github-releases');
-	assert.equal(configured.packageName, repo);
-	const tag = new RegExp(configured.extractVersion);
-	assert.equal(
-		tag.exec(`v${configured.currentValue}`)?.groups?.version,
-		configured.currentValue
-	);
-	assert.equal(tag.test('rust-v0.0.3'), false);
+	const dep = dependencies[0];
+	const configured = await configure(dep);
+	assert.equal(configured.datasource, 'custom.bcr');
+	assert.equal(configured.versioning, 'bazel-module');
+	assert.equal(configured.minimumReleaseAge, '3 days');
 	if (name === 'rules_go') {
 		assert.equal(configured.groupName, 'Go toolchain');
-		assert.equal(
-			configured.currentValue,
-			goMod.match(/github\.com\/bazelbuild\/rules_go v([^\s]+)/)[1]
-		);
+		assert.equal(configured.currentValue, goMod.match(/github\.com\/bazelbuild\/rules_go v([^\s]+)/)[1]);
 	}
+}
+const publicRegistry = 'https://bcr.bazel.build/';
+const privateRegistry = 'https://registry.example.test';
+const example = bazel.deps.find(dep => dep.depName === 'aspect_rules_lint');
+const explicit = await configure({ ...example, registryUrls: [publicRegistry] });
+assert.equal(explicit.datasource, 'custom.bcr');
+assert.deepEqual(explicit.registryUrls, []);
+for (const registryUrls of [[privateRegistry], [privateRegistry, publicRegistry]]) {
+	const configured = await configure({ ...example, registryUrls });
+	assert.equal(configured.datasource, 'bazel');
+	assert.deepEqual(configured.registryUrls, registryUrls);
+}
+
+// Exercise the same custom datasource config merge and age check used by the bot.
+const directory = await mkdtemp(join(tmpdir(), 'renovate-bcr-'));
+try {
+	GlobalConfig.set({ localDir: directory });
+	const lookup = mergeChildConfig(config, {
+		customDatasources: {
+			bcr: { defaultRegistryUrlTemplate: 'file://{{packageName}}.json' },
+		},
+	});
+	assert.deepEqual(lookup.customDatasources.chrome_stable, config.customDatasources.chrome_stable);
+	await writeFile(join(directory, 'aspect_rules_lint.json'), JSON.stringify({ releases: [
+		{ version: '1.0', releaseTimestamp: '2020-01-01T00:00:00Z' },
+		{ version: '1.0.bcr.1', releaseTimestamp: new Date().toISOString() },
+		{ version: '1.1' },
+	] }));
+	const result = await new CustomDatasource().getReleases({ ...lookup, ...explicit });
+	const age = { ...explicit, minimumReleaseAgeBehaviour: getDefaults().minimumReleaseAgeBehaviour };
+	assert.deepEqual(result.releases.map(release => [
+		release.version, checkMinimumReleaseAge(age, release.releaseTimestamp).isPending,
+	]), [['1.0', false], ['1.0.bcr.1', true], ['1.1', true]]);
+} finally {
+	GlobalConfig.set({ localDir: process.cwd() });
+	await rm(directory, { recursive: true, force: true });
 }
 
 // Updating the SDK without its build rules broke cgo response-file parsing.
@@ -62,11 +87,10 @@ for (const name of ['go', 'github.com/bazelbuild/rules_go']) {
 	assert.equal(grouped.groupName, 'Go toolchain');
 }
 
-// Every browser and driver archive must move to the same Stable release.
 const { extractPackageFile: extractRegex } = await import(
 	'renovate/dist/modules/manager/custom/regex/index.js'
 );
-// Archive overrides use the same published dates and release-age policy.
+// The rules_oci archive override follows GitHub releases.
 const releaseManager = config.customManagers.find(
 	manager => manager.description === 'Renovate directives'
 );
@@ -86,6 +110,7 @@ const configuredOci = await applyPackageRules({
 assert(config.minimumReleaseAge);
 assert.equal(configuredOci.minimumReleaseAge, config.minimumReleaseAge);
 
+// Every browser and driver archive must move to the same Stable release.
 const chromeManager = config.customManagers.find(
 	manager => manager.depNameTemplate === 'chrome-for-testing'
 );
@@ -101,7 +126,7 @@ for (const dep of chrome.deps) {
 		packageRules: config.packageRules,
 	});
 	assert.equal(configured.groupName, 'Chrome for Testing');
-	assert.equal(configured.minimumReleaseAge, config.minimumReleaseAge);
+	assert.equal(configured.minimumReleaseAge, null);
 }
 assert.equal(
 	config.customDatasources.chrome_stable.defaultRegistryUrlTemplate,

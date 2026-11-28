@@ -305,6 +305,8 @@ py_venv(
         "//py/ci/cancel_obsolete_staging:cancel_obsolete_staging_bin",
         "//py/ci/post_upgrade",
         "//py/ci/post_upgrade:post_upgrade_bin",
+        "//py/ci/renovate_bcr",
+        "//py/ci/renovate_bcr:feed",
         "//py/copy_to_workspace:copy_to_workspace_bin",
         "//py/devtools",
         "//py/devtools/prep",

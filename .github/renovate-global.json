@@ -11,11 +11,6 @@
 	"platformAutomerge": true,
 	"platformCommit": "enabled",
 	"minimumReleaseAge": "3 days",
-	"minimumReleaseAgeBuffer": "30 minutes",
-	"minimumReleaseAgeBehaviour": "timestamp-required",
-	"vulnerabilityAlerts": {
-		"minimumReleaseAge": "3 days"
-	},
 	"prConcurrentLimit": 0,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
@@ -113,13 +108,6 @@
 	},
 	"packageRules": [
 		{
-			"description": "Keep the release-age floor for direct npm updates exempted by the best-practices preset",
-			"matchDatasources": ["npm"],
-			"matchUpdateTypes": ["pin", "replacement", "bump", "rollback", "lockfileUpdate"],
-			"matchJsonata": ["minimumReleaseAge = null or $not($exists(minimumReleaseAge))"],
-			"minimumReleaseAge": "3 days"
-		},
-		{
 			"matchDatasources": ["custom.johnvansickle_ffmpeg_release"],
 			"extractVersion": "^\\s*version:\\s*(?<version>\\d+\\.\\d+(?:\\.\\d+)?)\\s*$",
 			"versioning": "loose"
@@ -157,28 +145,13 @@
 			"rangeStrategy": "bump"
 		},
 		{
-			"description": "Use published upstream dates for the rules_oci release-age check",
+			"description": "Age public Bazel modules from their BCR submission dates",
 			"matchManagers": ["bazel-module"],
-			"matchPackageNames": ["rules_oci"],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "bazel-contrib/rules_oci",
-			"extractVersion": "^v(?<version>.*)$"
-		},
-		{
-			"description": "Use published upstream dates for the aspect_rules_lint release-age check",
-			"matchManagers": ["bazel-module"],
-			"matchPackageNames": ["aspect_rules_lint"],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "bazel-contrib/rules_lint",
-			"extractVersion": "^v(?<version>.*)$"
-		},
-		{
-			"description": "Use published upstream dates for the rules_go release-age check",
-			"matchManagers": ["bazel-module"],
-			"matchPackageNames": ["rules_go"],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "bazel-contrib/rules_go",
-			"extractVersion": "^v(?<version>.*)$"
+			"matchDatasources": ["bazel"],
+			"matchJsonata": ["$count(registryUrls[$not($ in [\"https://bcr.bazel.build\", \"https://bcr.bazel.build/\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/\"])]) = 0"],
+			"overrideDatasource": "custom.bcr",
+			"registryUrls": [],
+			"versioning": "bazel-module"
 		},
 		{
 			"description": "Keep the Go SDK and both references to its Bazel build rules compatible",
@@ -255,8 +228,10 @@
 			"matchPackageNames": ["/pulumi_cli_.*/"]
 		},
 		{
+			"description": "The Stable channel feed has no per-release timestamps",
 			"groupName": "Chrome for Testing",
-			"matchPackageNames": ["chrome-for-testing"]
+			"matchPackageNames": ["chrome-for-testing"],
+			"minimumReleaseAge": null
 		},
 		{
 			"description": "Keep the Bazel executable and downloaded Bazel source on the same release",

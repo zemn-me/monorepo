@@ -4,10 +4,7 @@ load("//js:rules.bzl", "js_library", "js_test")
 load("//md:rules.bzl", "md_files")
 load("//yml:test.bzl", "yaml_lint_test")
 
-exports_files([
-    "renovate-global.json",
-    "renovate-target-dates.patch",
-])
+exports_files(["renovate-global.json"])
 
 exports_files(
     [
@@ -16,24 +13,6 @@ exports_files(
         "actions/build-deploy-bundle/build.sh",
     ],
     visibility = ["//.github/workflows:__pkg__"],
-)
-
-js_test(
-    name = "renovate_observations_test",
-    size = "small",
-    data = [
-        "renovate-global.json",
-        "renovate-observations.mjs",
-        "//:node_modules/renovate",
-    ],
-    entry_point = "renovate_observations_test.mjs",
-    node_toolchain = select({
-        "@bazel_tools//src/conditions:darwin_arm64": "@renovate_node_darwin_arm64//:toolchain",
-        "@bazel_tools//src/conditions:darwin_x86_64": "@renovate_node_darwin_amd64//:toolchain",
-        "@bazel_tools//src/conditions:linux_aarch64": "@renovate_node_linux_arm64//:toolchain",
-        "@bazel_tools//src/conditions:linux_x86_64": "@renovate_node_linux_amd64//:toolchain",
-        "@bazel_tools//src/conditions:windows_x64": "@renovate_node_windows_amd64//:toolchain",
-    }),
 )
 
 js_test(
