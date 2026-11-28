@@ -175,7 +175,7 @@ use_repo(
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
 
 # Keep APE runtime downloads available when cosmo.zip is unreachable.
-bazel_dep(name = "ape", version = "1.0.1")
+bazel_dep(name = "ape", version = "1.1.0")
 
 cosmos = use_extension("@ape//ape/cosmos:defs.bzl", "ape_cosmos")
 cosmos.url(
