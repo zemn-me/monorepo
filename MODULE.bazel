@@ -1069,7 +1069,7 @@ single_version_override(
 )
 
 bazel_dep(name = "rules_jvm_external", version = "6.9")
-bazel_dep(name = "rules_java", version = "9.3.0")
+bazel_dep(name = "rules_java", version = "9.9.0")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
