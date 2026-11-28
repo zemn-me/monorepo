@@ -298,7 +298,7 @@ bazel_dep(name = "aspect_rules_swc", version = "2.6.0")
 bazel_dep(name = "aspect_rules_js", version = "2.9.3")
 
 # Keep the repository's default Node version; SDK dependencies must not select an older one.
-bazel_dep(name = "rules_nodejs", version = "6.7.3")
+bazel_dep(name = "rules_nodejs", version = "6.7.7")
 
 node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 node.toolchain()
