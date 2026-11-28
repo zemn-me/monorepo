@@ -45,7 +45,7 @@ require (
 	github.com/blang/semver/v4 v4.0.0
 	github.com/coreos/go-oidc v2.5.0+incompatible
 	github.com/deepteams/webp v1.2.9
-	github.com/getkin/kin-openapi v0.152.0
+	github.com/getkin/kin-openapi v0.153.0
 	github.com/go-chi/chi/v5 v5.5.0
 	github.com/go-chi/cors v1.2.2
 	github.com/go-jose/go-jose/v4 v4.1.9
@@ -170,8 +170,6 @@ require (
 	github.com/moby/sys/user v0.4.1 // indirect
 	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/oapi-codegen/oapi-codegen/v2 v2.8.2 // indirect
-	github.com/oasdiff/yaml v0.1.1 // indirect
-	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/selinux v1.13.1 // indirect
@@ -207,7 +205,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.47.0 // indirect
 	go.starlark.net v0.0.0-20231101134539-556fd59b42f6 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	go.yaml.in/yaml/v4 v4.0.0-rc.3 // indirect
+	go.yaml.in/yaml/v4 v4.0.0 // indirect
 	golang.org/x/arch v0.28.0 // indirect
 	golang.org/x/crypto v0.58.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20260908205506-85c1c2202aba // indirect
