@@ -129,8 +129,35 @@ func touch(t *testing.T, driver *seleniumutil.Driver, x, y int, kind string) {
 	}
 }
 
+// Explosions can shake the whole framebuffer by two native pixels in either
+// direction. At the phone's 2.5x scale two screenshots can be 10 pixels apart.
+// The fixed Options toolbar moves with screen shake and stays put on a map pan.
+func toolbarShift(before, after image.Image) int {
+	matches := func(dy int) int {
+		count := 0
+		for y := 52; y < 70; y++ {
+			for x := 20; x < 180; x += 3 {
+				pixel := before.At(x, y)
+				r, g, b, _ := pixel.RGBA()
+				if max(r, g, b) > 32*257 && pixel == after.At(x, y+dy) {
+					count++
+				}
+			}
+		}
+		return count
+	}
+	shift, best := 0, matches(0)
+	for dy := -10; dy <= 10; dy++ {
+		if score := matches(dy); score > best {
+			shift, best = dy, score
+		}
+	}
+	return shift
+}
+
 func stationaryTerrain(t *testing.T, before, after image.Image) float64 {
 	t.Helper()
+	dy := toolbarShift(before, after)
 	total, matched := 0, 0
 	for y := 100; y < 480; y += 3 {
 		for x := 50; x < 580; x += 3 {
@@ -140,7 +167,7 @@ func stationaryTerrain(t *testing.T, before, after image.Image) float64 {
 				continue
 			}
 			total++
-			r2, g2, b2, _ := after.At(x, y).RGBA()
+			r2, g2, b2, _ := after.At(x, y+dy).RGBA()
 			if math.Abs(float64(r)-float64(r2))+math.Abs(float64(g)-float64(g2))+math.Abs(float64(b)-float64(b2)) < 30*257 {
 				matched++
 			}
