@@ -141,10 +141,10 @@ oci.pull(
 # Keep a release tag for Renovate; the digest is the immutable build input.
 oci.pull(
     name = "minecraft_server",
-    digest = "sha256:e8640538dac5d54c2838d57fa9641e735ad0cf2b71fb0e8a68da3b542a315749",
+    digest = "sha256:0634ff76eee896c7e9760a35117d24fad394857d10bc8c1d9bc7f7ff7deef3c2",
     image = "docker.io/itzg/minecraft-server",
     platforms = ["linux/amd64"],
-    tag = "2026.9.1",
+    tag = "2026.11.1",
 )
 
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
