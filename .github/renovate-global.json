@@ -79,6 +79,9 @@
 		}
 	],
 	"customDatasources": {
+		"bcr": {
+			"defaultRegistryUrlTemplate": "file://.git/bcr/{{packageName}}.json"
+		},
 		"johnvansickle_ffmpeg_release": {
 			"defaultRegistryUrlTemplate": "https://johnvansickle.com/ffmpeg/release-readme.txt",
 			"format": "plain"
@@ -148,7 +151,7 @@
 			"description": "Age public Bazel modules from their BCR submission dates",
 			"matchManagers": ["bazel-module"],
 			"matchDatasources": ["bazel"],
-			"matchJsonata": ["$count(registryUrls[$not($ in [\"https://bcr.bazel.build\", \"https://bcr.bazel.build/\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/\"])]) = 0"],
+			"matchJsonata": ["registryUrls = null or $count(registryUrls[$not($ in [\"https://bcr.bazel.build\", \"https://bcr.bazel.build/\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/\"])]) = 0"],
 			"overrideDatasource": "custom.bcr",
 			"registryUrls": [],
 			"versioning": "bazel-module"

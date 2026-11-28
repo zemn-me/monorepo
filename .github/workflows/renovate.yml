@@ -23,6 +23,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Prepare Bazel registry dates
+        run: |
+          mkdir -p "$RUNNER_TEMP/bcr"
+          if curl --fail --silent --show-error --location --retry 3 \
+            https://registry.bazel.build/registry.pb.gz -o "$RUNNER_TEMP/registry.pb.gz"; then
+            ./sh/bin/bazel run --config=ci-local //py/ci/renovate_bcr:feed -- \
+              "$RUNNER_TEMP/registry.pb.gz" "$RUNNER_TEMP/bcr"
+          else
+            echo "::warning::BCR index unavailable. Public Bazel module lookups will be skipped."
+          fi
       - name: Read tested Renovate version
         run: |
           python3 - <<'PYTHON' >> "$GITHUB_ENV"
@@ -44,11 +54,15 @@ jobs:
             gh_pat:extreme-cycling-441523-a9/github-actions-gh-pat
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@acdd6bda8b035c99ce59d5675816af2aa65a1774 # v46.3.14
+        env:
+          # The file datasource reads from the bot's own clone. Git copies the
+          # template's bcr directory into .git when it creates that clone.
+          RENOVATE_CUSTOM_ENV_VARIABLES: '{"GIT_TEMPLATE_DIR":"/renovate-git-template"}'
         with:
           configurationFile: .github/renovate-global.json
           docker-cmd-file: .github/renovate-entrypoint.sh
           docker-user: root
-          docker-volumes: /tmp:/tmp;${{ github.workspace }}/py/ci/renovate_bcr:/bcr-adapter/py/ci/renovate_bcr:ro
+          docker-volumes: /tmp:/tmp;${{ runner.temp }}/bcr:/renovate-git-template/bcr:ro
           renovate-version: ${{ env.RENOVATE_VERSION }}
           token: ${{ steps.secrets.outputs.gh_pat }}
     env:

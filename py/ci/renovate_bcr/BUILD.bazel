@@ -20,10 +20,7 @@ py_library(
     name = "renovate_bcr",
     srcs = ["feed.py"],
     visibility = ["//:__subpackages__"],
-    deps = [
-        "//py/ci/renovate_bcr:registry_py_proto",
-        "@com_google_protobuf//:protobuf_python",
-    ],
+    deps = ["//py/ci/renovate_bcr:registry_py_proto"],
 )
 
 py_test(
@@ -45,8 +42,5 @@ py_binary(
     name = "feed",
     srcs = ["feed.py"],
     visibility = ["//:__subpackages__"],
-    deps = [
-        "//py/ci/renovate_bcr:registry_py_proto",
-        "@com_google_protobuf//:protobuf_python",
-    ],
+    deps = ["//py/ci/renovate_bcr:registry_py_proto"],
 )

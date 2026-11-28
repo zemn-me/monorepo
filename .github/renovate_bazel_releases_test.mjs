@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { getConfig as getDefaults } from 'renovate/dist/config/defaults.js';
 import { GlobalConfig } from 'renovate/dist/config/global.js';
-import { mergeChildConfig } from 'renovate/dist/config/utils.js';
 import { CustomDatasource } from 'renovate/dist/modules/datasource/custom/index.js';
 import { extractPackageFile as extractBazel } from 'renovate/dist/modules/manager/bazel-module/extract.js';
+import { setCustomEnv } from 'renovate/dist/util/env.js';
+import { createSimpleGit } from 'renovate/dist/util/git/index.js';
 import { checkMinimumReleaseAge } from 'renovate/dist/util/minimum-release-age.js';
 import { applyPackageRules } from 'renovate/dist/util/package-rules/index.js';
 
@@ -19,7 +20,9 @@ GlobalConfig.set({ localDir: process.cwd() });
 
 const bazel = await extractBazel(module, 'MODULE.bazel', {});
 assert(bazel?.deps.length, 'Bazel extraction must succeed');
+const defaults = getDefaults();
 const configure = dep => applyPackageRules({
+	...defaults,
 	...dep,
 	packageName: dep.depName,
 	manager: 'bazel-module',
@@ -51,27 +54,30 @@ for (const registryUrls of [[privateRegistry], [privateRegistry, publicRegistry]
 	assert.deepEqual(configured.registryUrls, registryUrls);
 }
 
-// Exercise the same custom datasource config merge and age check used by the bot.
+// Check that a fresh Renovate clone can read the files supplied as a Git template.
 const directory = await mkdtemp(join(tmpdir(), 'renovate-bcr-'));
 try {
-	GlobalConfig.set({ localDir: directory });
-	const lookup = mergeChildConfig(config, {
-		customDatasources: {
-			bcr: { defaultRegistryUrlTemplate: 'file://{{packageName}}.json' },
-		},
-	});
-	assert.deepEqual(lookup.customDatasources.chrome_stable, config.customDatasources.chrome_stable);
-	await writeFile(join(directory, 'aspect_rules_lint.json'), JSON.stringify({ releases: [
+	const template = join(directory, 'template');
+	const clone = join(directory, 'clone');
+	const origin = join(directory, 'origin');
+	await mkdir(origin);
+	await createSimpleGit({ config: { baseDir: origin } }).init(true);
+	await mkdir(join(template, 'bcr'), { recursive: true });
+	await writeFile(join(template, 'bcr', 'aspect_rules_lint.json'), JSON.stringify({ releases: [
 		{ version: '1.0', releaseTimestamp: '2020-01-01T00:00:00Z' },
 		{ version: '1.0.bcr.1', releaseTimestamp: new Date().toISOString() },
 		{ version: '1.1' },
 	] }));
-	const result = await new CustomDatasource().getReleases({ ...lookup, ...explicit });
-	const age = { ...getDefaults(), ...explicit, minimumReleaseAge: '3 days' };
+	setCustomEnv({ GIT_TEMPLATE_DIR: template });
+	await createSimpleGit().clone(origin, clone);
+	GlobalConfig.set({ localDir: clone });
+	const result = await new CustomDatasource().getReleases({ ...explicit, customDatasources: config.customDatasources });
+	const age = { ...explicit, minimumReleaseAge: '3 days' };
 	assert.deepEqual(result.releases.map(release => [
 		release.version, checkMinimumReleaseAge(age, release.releaseTimestamp).isPending,
 	]), [['1.0', false], ['1.0.bcr.1', true], ['1.1', true]]);
 } finally {
+	setCustomEnv({});
 	GlobalConfig.set({ localDir: process.cwd() });
 	await rm(directory, { recursive: true, force: true });
 }
