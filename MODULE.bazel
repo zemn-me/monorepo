@@ -666,12 +666,12 @@ http_archive(
 # 	datasource=custom.evermeet_ffmpeg_pub
 # 	versioning=loose
 # 	depName=ffmpeg-macos-x64
-FFMPEG_MACOS_X64_VERSION = "8.1.2"
+FFMPEG_MACOS_X64_VERSION = "9.1"
 
 http_archive(
     name = "ffmpeg_macos_x64",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    sha256 = "e91df72a1ee7c26606f90dd2dd4dcccc6a75140ff9ea6fdd50faae828b82ba69",
+    sha256 = "9962f7b3c01af9ac89673c91df9ef998343a280ac0857c295e2d2a301820598a",
     # auto-integrity
     url = "https://evermeet.cx/pub/ffmpeg/ffmpeg-" + FFMPEG_MACOS_X64_VERSION + ".zip",
 )
