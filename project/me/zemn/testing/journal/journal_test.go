@@ -2726,14 +2726,18 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 			if err := driver.ResizeWindow("", width, 844); err != nil {
 				t.Fatal(err)
 			}
-			if err := driver.Get(root.String()); err != nil {
+			// Give each viewport its own year so only its imports can populate the month list.
+			focus := time.Date(2001+sizeIndex, time.July, 16, 12, 0, 0, 0, time.UTC)
+			yearURL := root
+			yearURL.Path = "/journal/year"
+			yearURL.RawQuery = url.Values{"at": {focus.Format(time.RFC3339)}}.Encode()
+			if err := driver.Get(yearURL.String()); err != nil {
 				t.Fatal(err)
 			}
 			if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 				t.Fatal(err)
 			}
-			_, err = browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", 30*time.Second)
-			if err != nil {
+			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "[role='region'][aria-label='Journal year']", 30*time.Second); err != nil {
 				t.Fatal(err)
 			}
 			var paths []string
@@ -2744,7 +2748,7 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 				if err := os.WriteFile(path, audio, 0600); err != nil {
 					t.Fatal(err)
 				}
-				at := time.Date(2025, time.July, 16, 12, 0, 0, 0, time.UTC).AddDate(0, -i, 0)
+				at := focus.AddDate(0, -i, 0)
 				if err := os.Chtimes(path, at, at); err != nil {
 					t.Fatal(err)
 				}
@@ -2753,8 +2757,12 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 			if err := browserhelpers.SelectFiles(driver, selenium.ByCSSSelector, "input[aria-label='Import voice memo']", paths, 30*time.Second); err != nil {
 				t.Fatal(err)
 			}
-			if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 10*time.Second); err != nil {
-				t.Fatal(err)
+			if err := driver.WaitWithTimeout(func(d selenium.WebDriver) (bool, error) {
+				months, err := d.FindElements(selenium.ByCSSSelector, "ol[aria-label='Browse months'] li a")
+				return len(months) == len(paths), err
+			}, 60*time.Second); err != nil {
+				browserhelpers.DumpPageDiagnostics(t, driver)
+				t.Fatalf("imported recordings did not appear in all %d months: %v", len(paths), err)
 			}
 			if err := browserhelpers.WaitForNoElement(driver, selenium.ByCSSSelector, "section[aria-label='Local recordings']", 60*time.Second); err != nil {
 				if queue, findErr := driver.FindElement(selenium.ByCSSSelector, "section[aria-label='Local recordings']"); findErr == nil {
@@ -2762,6 +2770,14 @@ func TestJournalNavigationReturnsToTop(t *testing.T) {
 					t.Logf("remaining local recordings: %s (error=%v)", text, textErr)
 				}
 				browserhelpers.DumpPageDiagnostics(t, driver)
+				t.Fatal(err)
+			}
+			overview := yearURL
+			overview.Path = "/journal"
+			if err := driver.Get(overview.String()); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := browserhelpers.WaitForElement(driver, selenium.ByID, "recent-journal-entries", 30*time.Second); err != nil {
 				t.Fatal(err)
 			}
 			for _, destination := range []struct{ label, path string }{
