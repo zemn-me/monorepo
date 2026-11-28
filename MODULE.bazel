@@ -486,12 +486,12 @@ use_repo(
 # 	versioning=git
 # 	depName=https://github.com/openai/openai-openapi
 # 	refs-from=main
-OPENAI_OPENAPI_COMMIT = "c6d56281af688d522bb6baf6fc8fb3daae273820"
+OPENAI_OPENAPI_COMMIT = "4f17927eb7dc9208b17cfeacf0a125a649850ebc"
 
 http_archive(
     name = "com_github_openai_openai_openapi",
     build_file_content = """exports_files(glob(["**/*"], allow_empty=True))""",
-    integrity = "sha256-ozS1SpmoxOL7y3I9uvvK7xt0wcue2lEKGAJBzoTpQv4=",
+    integrity = "sha256-JgsjoNHb/aGdILIL21BHUYNgP7yuuBcgtYlkr8JDWQo=",
     strip_prefix = "openai-openapi-" + OPENAI_OPENAPI_COMMIT,
     # auto-integrity
     url = "https://github.com/openai/openai-openapi/archive/" + OPENAI_OPENAPI_COMMIT + ".zip",
