@@ -148,11 +148,12 @@
 			"rangeStrategy": "bump"
 		},
 		{
-			"description": "Age public Bazel modules from their BCR submission dates",
+			"description": "Age public Bazel modules from BCR dates and avoid rollbacks while the index catches up",
 			"matchManagers": ["bazel-module"],
 			"matchDatasources": ["bazel"],
 			"matchJsonata": ["registryUrls = null or $count(registryUrls[$not($ in [\"https://bcr.bazel.build\", \"https://bcr.bazel.build/\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main\", \"https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/\"])]) = 0"],
 			"overrideDatasource": "custom.bcr",
+			"rollbackPrs": false,
 			"registryUrls": [],
 			"versioning": "bazel-module"
 		},

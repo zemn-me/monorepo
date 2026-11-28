@@ -26,6 +26,7 @@ const configure = dep => applyPackageRules({
 	...dep,
 	packageName: dep.depName,
 	manager: 'bazel-module',
+	rollbackPrs: config.rollbackPrs,
 	minimumReleaseAge: config.minimumReleaseAge,
 	packageRules: config.packageRules,
 });
@@ -47,10 +48,13 @@ const privateRegistry = 'https://registry.example.test';
 const example = bazel.deps.find(dep => dep.depName === 'aspect_rules_lint');
 const explicit = await configure({ ...example, registryUrls: [publicRegistry] });
 assert.equal(explicit.datasource, 'custom.bcr');
+// A version can reach the registry before it appears in the frontend index.
+assert.equal(explicit.rollbackPrs, false);
 assert.deepEqual(explicit.registryUrls, []);
 for (const registryUrls of [[privateRegistry], [privateRegistry, publicRegistry]]) {
 	const configured = await configure({ ...example, registryUrls });
 	assert.equal(configured.datasource, 'bazel');
+	assert.equal(configured.rollbackPrs, config.rollbackPrs);
 	assert.deepEqual(configured.registryUrls, registryUrls);
 }
 
