@@ -1,7 +1,6 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:best-practices", ":maintainLockFilesWeekly"],
-	"ignorePresets": ["security:minimumReleaseAgeNpm"],
 	"automerge": true,
 	"autodiscover": true,
 	"autodiscoverFilter": ["zemn-me/monorepo"],
@@ -11,6 +10,7 @@
 	"configMigration": true,
 	"platformAutomerge": true,
 	"platformCommit": "enabled",
+	"minimumReleaseAge": "3 days",
 	"prConcurrentLimit": 0,
 	"rollbackPrs": true,
 	"rangeStrategy": "pin",
