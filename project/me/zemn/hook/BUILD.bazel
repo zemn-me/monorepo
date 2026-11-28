@@ -63,6 +63,7 @@ ts_project(
     srcs = [
         "auth_cookie_sync_test.tsx",
         "authentication_session_test.ts",
+        "grievance_refresh_test.tsx",
         "journal_refresh_test.tsx",
         "journal_upload_test.ts",
         "key_mutation_test.tsx",
@@ -90,6 +91,7 @@ jest_test(
     srcs = [
         "auth_cookie_sync_test.js",
         "authentication_session_test.js",
+        "grievance_refresh_test.js",
         "journal_refresh_test.js",
         "journal_upload_test.js",
         "key_mutation_test.js",
@@ -114,6 +116,7 @@ filegroup(
         "auth_cookie_sync_test.tsx",
         "authentication_session.ts",
         "authentication_session_test.ts",
+        "grievance_refresh_test.tsx",
         "journal_refresh_test.tsx",
         "journal_upload.ts",
         "journal_upload_test.ts",
