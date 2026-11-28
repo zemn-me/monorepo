@@ -30,6 +30,18 @@ production, and verify that the test rejects the configuration that failed.
 Run the affected checks and enable auto-merge on the follow-up PR; do not bypass
 required checks. Record the failure class and test coverage in its description.
 
+## PR submission and review
+
+Before merging a PR or setting it to automerge, engage in a review process. This process involves an "amender", and a number of "critics". If the number of critics is five, the diff will be put to the first sub-agent critic, which has an otherwise clear context. If the first critic disapproves, the feedback goes back to the amender, and the process begins again from critic one. If the critic approves, critic two is asked in the same independent manner; and so on until all five have given approval in this turn (of course, if one vetoes, an amendment is made, and we go back to critic one following amendments). One all five approve, the PR can be set to merge or automerge.
+
+The number of critics is five.
+
+Critics should review for (1) correctness; (2) DRY and vestigial code removal; (3) abstraction quality; (4) security and safety; (5) privacy; (6) test quality and superfluous test removal; and (7) obviation.
+
+## Independent and dependent changes
+
+If changes are dependent, they should be merged using a native GitHub merge stack. If changes are independent, they should be queued separately and independently.
+
 ## Build and test
 
 - This is a Bazel monorepo. Use the wrappers in `sh/bin` (on `$PATH`);
