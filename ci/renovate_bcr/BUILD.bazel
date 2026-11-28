@@ -1,0 +1,36 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//bzl:rules.bzl", "bazel_lint")
+load("//go:rules.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "renovate_bcr_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/zemn-me/monorepo/ci/renovate_bcr",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_bazel_contrib_bcr_frontend//build/stack/bazel/registry/v1:registry",
+        "@org_golang_google_protobuf//proto",
+    ],
+)
+
+go_binary(
+    name = "renovate_bcr",
+    embed = [":renovate_bcr_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "renovate_bcr_test",
+    srcs = ["main_test.go"],
+    embed = [":renovate_bcr_lib"],
+    deps = [
+        "@com_github_bazel_contrib_bcr_frontend//build/stack/bazel/registry/v1:registry",
+        "@com_github_stretchr_testify//require",
+        "@org_golang_google_protobuf//proto",
+    ],
+)
+
+bazel_lint(
+    name = "bazel_lint",
+    srcs = ["BUILD.bazel"],
+)
