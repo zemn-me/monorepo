@@ -76,9 +76,9 @@ try {
 	await createSimpleGit().clone(origin, clone);
 	GlobalConfig.set({ localDir: clone });
 	const result = await new CustomDatasource().getReleases({ ...explicit, customDatasources: config.customDatasources });
-	const age = { ...explicit, minimumReleaseAge: '3 days' };
+	assert.equal(explicit.minimumReleaseAge, '3 days');
 	assert.deepEqual(result.releases.map(release => [
-		release.version, checkMinimumReleaseAge(age, release.releaseTimestamp).isPending,
+		release.version, checkMinimumReleaseAge(explicit, release.releaseTimestamp).isPending,
 	]), [['1.0', false], ['1.0.bcr.1', true], ['1.1', true]]);
 } finally {
 	setCustomEnv({});
@@ -117,7 +117,6 @@ const configuredOci = await applyPackageRules({
 	minimumReleaseAge: config.minimumReleaseAge,
 	packageRules: config.packageRules,
 });
-assert(config.minimumReleaseAge);
 assert.equal(configuredOci.minimumReleaseAge, config.minimumReleaseAge);
 
 // Every browser and driver archive must move to the same Stable release.
