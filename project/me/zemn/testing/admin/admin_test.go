@@ -132,13 +132,25 @@ func TestAdminSettingsEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("submit button: %v", err)
 	}
+	// Keep the real save in flight so a fast response cannot clear the busy
+	// indicator between the WebDriver click and the assertion.
+	if err := driver.ExecuteChromiumCommand("Fetch.enable", map[string]any{
+		"patterns": []map[string]string{{
+			"urlPattern": "*/callbox/settings", "resourceType": "Fetch", "requestStage": "Response",
+		}},
+	}); err != nil {
+		t.Fatalf("pause callbox settings response: %v", err)
+	}
 	if err := submit.Click(); err != nil {
 		t.Fatalf("submit admin form: %v", err)
 	}
 	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, syncIndicatorBusySelector, 5*time.Second); err != nil {
 		t.Fatalf("settings sync indicator did not enter pending state: %v", err)
 	}
-	if _, err := browserhelpers.WaitForElement(driver, selenium.ByCSSSelector, syncIndicatorSyncedSelector, 30*time.Second); err != nil {
+	if err := driver.ExecuteChromiumCommand("Fetch.disable", map[string]any{}); err != nil {
+		t.Fatalf("release callbox settings response: %v", err)
+	}
+	if err := expectElementText(driver, syncIndicatorSyncedSelector, "Sync status: synced", 30*time.Second); err != nil {
 		t.Fatalf("settings sync indicator did not return to synced: %v", err)
 	}
 
