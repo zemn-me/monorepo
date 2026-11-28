@@ -183,8 +183,8 @@ importers:
         specifier: 3.0.3
         version: 3.0.3
       pbf:
-        specifier: 5.2.0
-        version: 5.2.0
+        specifier: 5.2.1
+        version: 5.2.1
       ramda:
         specifier: 0.32.0
         version: 0.32.0
@@ -7676,8 +7676,8 @@ packages:
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
-  pbf@5.2.0:
-    resolution: {integrity: sha512-R6YptaRZl0t9SVO6MllszYq1IkaOQawzprndmvQxEoFrtvX7fT+oNIPoVD152NOllmLWEC3ThxzUTqBX12q5FQ==}
+  pbf@5.2.1:
+    resolution: {integrity: sha512-5s6y6g3akGMF98eemb+3QZAWTCUHyox40TJOwcY4M1w40RvoXrfbRUVmY02RlRiEPyE6KVaM0xxfF4+4vjSJTQ==}
     hasBin: true
 
   pend@1.2.0:
@@ -10740,7 +10740,7 @@ snapshots:
     dependencies:
       '@mapbox/point-geometry': 1.1.0
       '@types/geojson': 7946.0.16
-      pbf: 5.2.0
+      pbf: 5.2.1
 
   '@mdx-js/mdx@3.1.1':
     dependencies:
@@ -17213,7 +17213,7 @@ snapshots:
 
   pathe@2.0.3: {}
 
-  pbf@5.2.0:
+  pbf@5.2.1:
     dependencies:
       protocol-buffers-schema: 3.6.1
 
