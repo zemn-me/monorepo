@@ -1276,12 +1276,12 @@ cc_binary(
 # versioning=git
 # depName=https://github.com/aws/api-models-aws
 # refs-from=main
-AWS_API_MODELS_COMMIT = "b9e87f8f5cd7416169cd7d99811606cb70337358"
+AWS_API_MODELS_COMMIT = "c017e19db1da3c456cbf8f8cd3f6a4b9922c5bcf"
 
 http_file(
     name = "aws_model_route_53",
     downloaded_file_path = "route-53.json",
-    sha256 = "200f291208f01654b238db3083b480553157edf0b262049274557ec7ce0dde96",
+    sha256 = "b4936bb06c2fc2afa562b0d5e399192e948625219e0953ee23ca123885dd17df",
     # auto-integrity
     urls = ["https://raw.githubusercontent.com/aws/api-models-aws/" + AWS_API_MODELS_COMMIT + "/models/route-53/service/2013-04-01/route-53-2013-04-01.json"],
 )
@@ -1289,7 +1289,7 @@ http_file(
 http_file(
     name = "aws_model_s3_control",
     downloaded_file_path = "s3-control.json",
-    sha256 = "8224b63835b9ea8a4fea41fe22a5c3bc077d654c848856994e5f6494e1cbe022",
+    sha256 = "833c0de5d28bb6827b1b7dcd4d3bea30cdd687aa99cbe3193fdc575b3e4e5b68",
     # auto-integrity
     urls = ["https://raw.githubusercontent.com/aws/api-models-aws/" + AWS_API_MODELS_COMMIT + "/models/s3-control/service/2018-08-20/s3-control-2018-08-20.json"],
 )
@@ -1297,7 +1297,7 @@ http_file(
 http_file(
     name = "aws_model_ec2",
     downloaded_file_path = "ec2.json",
-    sha256 = "70c547f48a84e3a294b952d14ed8674e884204ad15a993c715f25768ce5597fd",
+    sha256 = "6771e74890531a60a8af24543a75c8300962fce23738f408dd1100cf1ce194f2",
     # auto-integrity
     urls = ["https://raw.githubusercontent.com/aws/api-models-aws/" + AWS_API_MODELS_COMMIT + "/models/ec2/service/2016-11-15/ec2-2016-11-15.json"],
 )
