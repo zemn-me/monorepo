@@ -1,0 +1,10 @@
+--- a/format/defs.bzl
++++ b/format/defs.bzl
+@@ -195,6 +195,6 @@
+             deps = [Label("@bazel_tools//tools/bash/runfiles")],
+             tags = unique(tags + (["no-sandbox", "no-cache", "external"] if workspace else [])),
+-            **attrs
++            **(common_attrs | attrs)
+         )
+         test_targets.append(attrs["name"])
+     native.test_suite(

@@ -110,7 +110,8 @@ md_files(
 
 js_test(
     name = "server_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     data = [
         "//project/me/zemn:build",
         "//project/me/zemn/app/experiments/tiberian_sun",

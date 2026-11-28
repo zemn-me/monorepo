@@ -65,7 +65,8 @@ ts_project(
 
 jest_test(
     name = "tests",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     srcs = [
         "code_highlight_test.js",
         "heading_test.js",

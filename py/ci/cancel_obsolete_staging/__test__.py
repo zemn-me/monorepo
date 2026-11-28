@@ -17,8 +17,8 @@ RUN = {
     "head_branch": "gh-readonly-queue/main/pr-42-old",
     "head_sha": "candidate-sha",
 }
-def listing(workflow="staging.yml", status="pending"):
-    return f"/actions/workflows/{workflow}/runs?event=merge_group&status={status}&per_page=100&page="
+def listing(workflow="staging.yml", status="pending", event="merge_group"):
+    return f"/actions/workflows/{workflow}/runs?event={event}&status={status}&per_page=100&page="
 
 
 LIST = listing()
@@ -40,6 +40,8 @@ class CleanupTest(unittest.TestCase):
         }.items():
             for status in statuses:
                 self.responses["GET", listing(workflow, status) + "1"] = (200, {"workflow_runs": []})
+        for status in ("pending", "queued"):
+            self.responses["GET", listing(status=status, event="workflow_dispatch") + "1"] = (200, {"workflow_runs": []})
         test = self
 
         class Handler(BaseHTTPRequestHandler):
@@ -142,6 +144,14 @@ class CleanupTest(unittest.TestCase):
     def test_preview_does_not_cancel(self):
         cleanup(self.github)
         self.assertEqual(self.cancellations(), [])
+
+    def test_obsolete_dispatched_staging_is_cancelled_while_pending(self):
+        run = RUN | {"event": "workflow_dispatch"}
+        self.responses["GET", LIST + "1"] = (200, {"workflow_runs": []})
+        self.responses["GET", listing(event="workflow_dispatch") + "1"] = (200, {"workflow_runs": [run]})
+        self.responses["GET", "/actions/runs/1"] = (200, run)
+        cleanup(self.github, execute=True)
+        self.assertEqual(self.cancellations(), ["/actions/runs/1/cancel"])
 
     def test_started_or_finished_run_is_preserved(self):
         for status in ["in_progress", "completed", "waiting"]:

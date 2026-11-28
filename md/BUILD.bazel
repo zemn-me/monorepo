@@ -17,6 +17,7 @@ py_binary(
 
 py_test(
     name = "readme_test",
+    size = "small",
     srcs = ["readme_test.py"],
     deps = ["//md:md_py"],
 )

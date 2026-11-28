@@ -11,6 +11,7 @@ py_library(
     srcs = [
         "__init__.py",
         "find_deploy_bundle.py",
+        "verify_staging_candidate.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -31,4 +32,18 @@ py_binary(
     name = "find_deploy_bundle",
     srcs = ["find_deploy_bundle.py"],
     visibility = ["//:__subpackages__"],
+)
+
+py_binary(
+    name = "verify_staging_candidate",
+    srcs = ["verify_staging_candidate.py"],
+    visibility = ["//:__subpackages__"],
+    deps = [":ci"],
+)
+
+py_test(
+    name = "verify_staging_candidate_test",
+    size = "small",
+    srcs = ["verify_staging_candidate_test.py"],
+    deps = [":ci"],
 )

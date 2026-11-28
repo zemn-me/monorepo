@@ -36,6 +36,7 @@ py_library(
 
 py_test(
     name = "catalogue_test",
+    size = "small",
     srcs = ["catalogue_test.py"],
     deps = ["//project/me/zemn/app/experiments/space_junk/importer"],
 )

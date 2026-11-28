@@ -84,6 +84,7 @@ def bump_on_change_test(name, srcs = [], version_lock = None, version = None, ru
 
     diff_test(
         name = name,
+        size = "small",
         file1 = hashes_name,
         file2 = version_lock,
         tags = tags + ["version_check", "fixable"],

@@ -11,6 +11,7 @@ go_binary(
 
 go_test(
     name = "cssmoduledts_test",
+    size = "small",
     srcs = ["main_test.go"],
     embed = [":cssmoduledts_lib"],
 )

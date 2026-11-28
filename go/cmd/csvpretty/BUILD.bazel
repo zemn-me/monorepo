@@ -21,6 +21,7 @@ $(execpath :csvpretty) --input $(rootpath :test.csv) --output $@
 
 diff_test(
     name = "csvpretty_integration",
+    size = "small",
     file1 = "test_output.csv",
     file2 = "test_out.csv",
 )

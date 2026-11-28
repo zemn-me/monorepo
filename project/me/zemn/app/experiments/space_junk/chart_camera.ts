@@ -271,7 +271,7 @@ export function useChartCamera() {
 					? 90 - Math.abs(delta)
 					: v.tilt === -90
 						? -90 + Math.abs(delta)
-						: v.tilt - delta;
+						: v.tilt + delta;
 			move({
 				...v,
 				turn,

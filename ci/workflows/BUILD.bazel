@@ -23,7 +23,8 @@ go_test(
         "actions.lock.json",
         ":action_cache",
         "//.github/workflows:workflow_test_files",
-        "//py/ci:find_deploy_bundle.py",
+        "//py",
+        "//py/ci",
     ],
     visibility = ["//.github/workflows:__pkg__"],
     deps = [

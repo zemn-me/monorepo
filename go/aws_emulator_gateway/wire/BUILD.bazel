@@ -51,6 +51,7 @@ go_library(
 
 go_test(
     name = "wire_test",
+    size = "small",
     srcs = ["wire_test.go"],
     embed = [":wire"],
 )

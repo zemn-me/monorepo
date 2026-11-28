@@ -11,6 +11,7 @@ def csv_lint_test(name, srcs = [], **kwargs):
 
         diff_test(
             name = name + src + "_test",
+            size = "small",
             file1 = name + src + "_format",
             file2 = src,
         )

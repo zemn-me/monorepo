@@ -9,7 +9,8 @@ biome_bin.biome_binary(name = "biome")
 
 sh_test(
     name = "biome_unsorted_imports_fail_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     srcs = ["unsorted_imports_fail_test.sh"],
     data = [
         ":biome",

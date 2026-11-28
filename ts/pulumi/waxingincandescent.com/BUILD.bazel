@@ -37,7 +37,8 @@ filegroup(
 
 go_test(
     name = "waxingincandescent_com_test",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     srcs = ["site_test.go"],
     data = [":remix"],
     deps = [

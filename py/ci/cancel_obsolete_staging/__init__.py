@@ -6,11 +6,13 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 
-# Presubmit only runs checks, so obsolete running attempts can be cancelled.
+# Presubmit runs checks and dispatches a separate staging workflow; cancelling
+# an obsolete Presubmit leaves any deployment already underway alone.
 # Staging deploys infrastructure; preserve deployments already underway.
 CANCELLABLE_STATUSES = {
-    "staging.yml": ("pending", "queued"),
-    "presubmit.yml": ("pending", "queued", "in_progress"),
+    ("staging.yml", "merge_group"): ("pending", "queued"),
+    ("staging.yml", "workflow_dispatch"): ("pending", "queued"),
+    ("presubmit.yml", "merge_group"): ("pending", "queued", "in_progress"),
 }
 
 
@@ -41,13 +43,13 @@ class GitHub:
         # Finish pagination before cancelling: cancellations remove entries from
         # these filtered lists and would otherwise shift subsequent pages.
         runs = {}
-        for workflow, statuses in CANCELLABLE_STATUSES.items():
+        for (workflow, event), statuses in CANCELLABLE_STATUSES.items():
             for status in statuses:
                 page = 1
                 while True:
                     result = self.request(
                         f"/actions/workflows/{workflow}/runs"
-                        f"?event=merge_group&status={status}&per_page=100&page={page}"
+                        f"?event={event}&status={status}&per_page=100&page={page}"
                     )["workflow_runs"]
                     # A run may move between status lists while we paginate.
                     runs.update((run["id"], run) for run in result)
@@ -68,14 +70,9 @@ class GitHub:
 
 
 def is_cancellable(run):
-    return (
-        run["event"] == "merge_group"
-        and run["head_branch"].startswith("gh-readonly-queue/")
-        and any(
-            run["path"] == f".github/workflows/{workflow}"
-            and run["status"] in statuses
-            for workflow, statuses in CANCELLABLE_STATUSES.items()
-        )
+    return run["head_branch"].startswith("gh-readonly-queue/") and any(
+        run["event"] == event and run["path"] == f".github/workflows/{workflow}" and run["status"] in statuses
+        for (workflow, event), statuses in CANCELLABLE_STATUSES.items()
     )
 
 

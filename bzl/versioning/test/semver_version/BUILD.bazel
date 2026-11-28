@@ -11,6 +11,7 @@ semver_version(
 
 diff_test(
     name = "version_concat_test",
+    size = "small",
     file1 = "expected.txt",
     file2 = ":version",
 )

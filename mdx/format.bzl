@@ -158,7 +158,8 @@ def mdx_format_test(name, srcs):
     _mdx_format_test(
         name = name,
         srcs = srcs,
-        size = "small",
+        size = "medium",
+        timeout = "short",
     )
     _mdx_format_fix(
         name = name + ".fix",

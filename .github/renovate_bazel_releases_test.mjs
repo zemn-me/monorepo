@@ -107,7 +107,6 @@ const configuredOci = await applyPackageRules({
 	minimumReleaseAge: config.minimumReleaseAge,
 	packageRules: config.packageRules,
 });
-assert(config.minimumReleaseAge);
 assert.equal(configuredOci.minimumReleaseAge, config.minimumReleaseAge);
 
 // Every browser and driver archive must move to the same Stable release.

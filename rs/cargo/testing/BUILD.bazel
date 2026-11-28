@@ -23,6 +23,7 @@ genrule(
 
 diff_test(
     name = "hello_world_test",
+    size = "small",
     file1 = "hello_world_expected.txt",
     file2 = ":hello_world_output",
 )

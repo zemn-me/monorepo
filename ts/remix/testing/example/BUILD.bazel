@@ -53,6 +53,8 @@ remix_itest_service(
 
 service_test(
     name = "development_test",
+    size = "large",
+    timeout = "moderate",
     # Vite compiles while Chromium exercises the development server.
     exec_properties = {
         "test.EstimatedCPU": "4",

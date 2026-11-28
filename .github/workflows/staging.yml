@@ -6,49 +6,37 @@ name: Staging
 #
 
 on:   # yamllint disable-line rule:truthy
-  merge_group:
-    branches:
-      # presubmit
-      - main
-      - renovate/**
+  workflow_dispatch:
+    inputs:
+      artifact-id:
+        description: Immutable candidate artifact from the successful merge-group build
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 jobs:
-  CandidateBundle:
+  PinMain:
     permissions:
       actions: read
-    runs-on: ubuntu-latest
-    outputs:
-      run-id: ${{ steps.producer.outputs.run-id }}
-      artifact-name: staging-candidate-${{ steps.producer.outputs.attempt }}
-    steps:
-      - name: Wait for the full Presubmit on this merge group
-        id: producer
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          while true; do
-            producer=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow presubmit.yml \
-              --event merge_group --branch "$GITHUB_REF_NAME" --commit "$GITHUB_SHA" --limit 1 \
-              --json databaseId,attempt,status,conclusion --jq '.[0] // empty | [.databaseId,.attempt,.status,.conclusion] | @tsv')
-            read -r run_id attempt status conclusion <<< "$producer"
-            if [[ "$status" == completed ]]; then
-              echo "Presubmit run $run_id attempt $attempt concluded $conclusion"
-              [[ "$conclusion" == success ]] || exit 1
-              echo "run-id=$run_id" >> "$GITHUB_OUTPUT"
-              echo "attempt=$attempt" >> "$GITHUB_OUTPUT"
-              break
-            fi
-            sleep 30
-          done
-
-  PinMain:
+      contents: read
     runs-on: ubuntu-latest
     outputs:
       commit: ${{ steps.main.outputs.commit }}
+      candidate-run: ${{ steps.candidate.outputs.run-id }}
     steps:
+      - name: Checkout artifact verification tools
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          sparse-checkout: py/ci
+          persist-credentials: false
+      - name: Verify the successful Presubmit build for this queue ref and commit
+        id: candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ inputs.artifact-id }}
+        run: python3 -m py.ci.verify_staging_candidate
       - name: Pin main for this staging run
         id: main
         env:
@@ -104,7 +92,7 @@ jobs:
           source-directory: main
 
   Deploy:
-    needs: [MainBundle, CandidateBundle]
+    needs: [PinMain, MainBundle]
     permissions:
       actions: read
       contents: read
@@ -136,8 +124,8 @@ jobs:
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           github-token: ${{ github.token }}
-          run-id: ${{ needs.CandidateBundle.outputs.run-id }}
-          name: ${{ needs.CandidateBundle.outputs.artifact-name }}
+          run-id: ${{ needs.PinMain.outputs.candidate-run }}
+          artifact-ids: ${{ inputs.artifact-id }}
           path: ${{ runner.temp }}/bundles/staging-candidate
       - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093'  # v3.0.0
         name: Acquire federated GCloud credentials for secrets.
@@ -195,14 +183,32 @@ jobs:
           TWILIO_AUTH_TOKEN: ${{ steps.secrets.outputs.twilio_auth_token }}
           PERSONAL_PHONE_NUMBER: ${{ steps.secrets.outputs.personal_phone_number }}
 
-  # A skipped job satisfies a required check. Propagate build and deploy
-  # failures even when Actions skipped the dependent deployment entirely.
-  Staging:
-    if: always()
+  # Dispatch jobs are not merge-queue check providers. Publish a commit status
+  # for the tested SHA, including when a failed prerequisite skipped Deploy.
+  ReportStaging:
+    if: always() && startsWith(github.ref, 'refs/heads/gh-readonly-queue/')
     needs: Deploy
+    concurrency:
+      group: staging-status-${{ github.sha }}
+      cancel-in-progress: false
+      queue: max
+    permissions:
+      statuses: write
     runs-on: ubuntu-latest
     steps:
-      - name: Require a successful deployment
+      - name: Report the staging deployment
         env:
+          GH_TOKEN: ${{ github.token }}
           DEPLOY_RESULT: ${{ needs.Deploy.result }}
-        run: test "$DEPLOY_RESULT" = success
+        run: |
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          owner=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/status" \
+            --jq '.statuses[] | select(.context == "Staging") | .target_url')
+          # A newer dispatch can take ownership while this deployment is running.
+          if [[ "$owner" != "$run_url" ]]; then exit 0; fi
+          state=failure
+          if [[ "$DEPLOY_RESULT" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
+            -f context=Staging -f "state=$state" -f "description=Staging deployment $DEPLOY_RESULT" \
+            -f "target_url=$run_url" --silent
+          [[ "$state" == success ]]
