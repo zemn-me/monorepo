@@ -127,8 +127,8 @@ export function useGetGrievances(id_token: string) {
 	const fetchClient = useFetchClient(id_token);
 	return useQuery({
 		queryKey: ['get', '/grievances'],
-		queryFn: async () => {
-			const v = await fetchClient.GET('/grievances');
+		queryFn: async ({ signal }) => {
+			const v = await fetchClient.GET('/grievances', { signal });
 			return v.data;
 		},
 		enabled: id_token !== '',
@@ -222,12 +222,14 @@ export function useGetMeScopes<L, E>(id_token: Future<string, L, E>) {
 		: future_declare_dependency(id_token, useQueryFuture(qr));
 }
 
-function useinvalidateGrievances() {
+function useRefreshGrievances() {
 	const queryClient = useQueryClient();
-	return () =>
-		void queryClient.invalidateQueries({
-			queryKey: ['get', '/grievances'],
-		});
+	return async () => {
+		const list = { queryKey: ['get', '/grievances'] };
+		// Invalidation alone reuses a pending first read, even if it predates the write.
+		await queryClient.cancelQueries(list);
+		await queryClient.invalidateQueries(list);
+	};
 }
 
 function useinvalidateAdminUsers() {
@@ -298,16 +300,16 @@ export function useRefreshJournal() {
 }
 
 export function usePostGrievances(id_token: string) {
-	const invalidateGrievances = useinvalidateGrievances();
+	const refreshGrievances = useRefreshGrievances();
 	return useZemnMeApi(id_token).useMutation('post', '/grievances', {
-		onSuccess: () => void invalidateGrievances(),
+		onSuccess: refreshGrievances,
 	});
 }
 
 export function useDeleteGrievances(id_token: string) {
-	const invalidateGrievances = useinvalidateGrievances();
+	const refreshGrievances = useRefreshGrievances();
 	return useZemnMeApi(id_token).useMutation('delete', '/grievance/{id}', {
-		onSuccess: () => void invalidateGrievances(),
+		onSuccess: refreshGrievances,
 	});
 }
 
