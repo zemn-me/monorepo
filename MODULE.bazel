@@ -910,7 +910,7 @@ exports_files(glob(["**/*"]))""",
     url = "https://github.com/eggert/tz/archive/refs/tags/" + TZ_VERSION + ".zip",
 )
 
-bazel_dep(name = "rules_rust", version = "0.68.1")
+bazel_dep(name = "rules_rust", version = "0.75.0")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 
