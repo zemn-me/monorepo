@@ -339,7 +339,7 @@ rules_ts_ext.deps(
 )
 use_repo(rules_ts_ext, "npm_typescript")
 
-bazel_dep(name = "aspect_rules_lint", version = "1.13.0")
+bazel_dep(name = "aspect_rules_lint", version = "2.9.1")
 
 # Forward size to format_test's sh_test (aspect-build/rules_lint#1030).
 single_version_override(
