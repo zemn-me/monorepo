@@ -217,10 +217,10 @@ func TestReactNavigation(t *testing.T) {
 	g := newFreewareBrowser(t)
 	g.installClock()
 	var documentOrigin interface{}
-	if err := g.driver.Get(g.base + "/"); err != nil {
+	if err := g.driver.GetWithNetworkRetry(g.base + "/"); err != nil {
 		t.Fatal(err)
 	}
-	if err := g.driver.Get(g.base + "/experiments?from=react-game-test"); err != nil {
+	if err := g.driver.GetWithNetworkRetry(g.base + "/experiments?from=react-game-test"); err != nil {
 		t.Fatal(err)
 	}
 	if err := g.wait(func(w selenium.WebDriver) (bool, error) {
