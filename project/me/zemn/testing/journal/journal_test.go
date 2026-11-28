@@ -2401,11 +2401,7 @@ func TestJournalRecordingLocationMaps(t *testing.T) {
 	if err := browserhelpers.PerformOIDCLogin(driver, "Login as local subject", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	record, err := browserhelpers.WaitForEnabledElement(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := record.Click(); err != nil {
+	if err := browserhelpers.ClickElementWithRetry(driver, selenium.ByCSSSelector, "button[aria-label='Record a note']", 30*time.Second); err != nil {
 		t.Fatal(err)
 	}
 	const captureDuration = 1500 * time.Millisecond
